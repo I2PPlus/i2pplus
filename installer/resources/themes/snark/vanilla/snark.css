@@ -12,6 +12,8 @@
 --btnAction_active:linear-gradient(180deg,#e1d8d1,#fff2e6);
 --btnAction_hover:linear-gradient(180deg,#ffeee6,#ffeadf 50%,#ffdecc 50%,#ae836b);
 --btnAction:linear-gradient(180deg,#f4f2f1,#e9e4e2 50%,#d2cbc6 50%,#bcb1a9);
+--btn_border:1px solid #674a32;
+--btn_border_hover:1px solid #4f3927;
 --highlight:inset 0 0 0 1px #ffefe6;
 --ink:#331700;
 --monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
@@ -27,6 +29,8 @@
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 --tab:linear-gradient(to top,#ffeadf,#cfb6a8);
 --th:linear-gradient(180deg,#efefef,#cfc7c2);
+--th_config:linear-gradient(180deg,#efefef 51%,#cfc7c2 52%);
+--th_config:linear-gradient(180deg,#f4f2f1,#cfc7c2 50%,#bcb0a9);
 }
 
 /* globals */
@@ -112,8 +116,8 @@ tfoot tr:first-child th{vertical-align:middle;font-weight:700;color:#4d2200}
 #snarkSearch:hover input[type="submit"],#snarkSearch:focus-within input[type="submit"]{font-size:0;opacity:.8}
 #searchwrap{position:relative}
 #searchwrap a[href="/i2psnark"]{height:12px;width:12px;position:absolute;top:calc(50% - 10px);right:4px;display:inline-block;font-size:0;background:url(images/delete.svg) no-repeat center center/12px;border:0;box-shadow:none;opacity:0;filter:none}
-#snarkSearch input[type=search]:focus:not(:placeholder-shown) + a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown) + a[href="/i2psnark"]{opacity:.6}
-#snarkSearch input[type=search]:focus:not(:placeholder-shown) + a[href="/i2psnark"]:hover{opacity:.8}
+#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"]{opacity:.6}
+#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover{opacity:.8}
 
 /* screenlog */
 .logshim{margin-top:-14px}
@@ -140,9 +144,9 @@ tfoot tr:first-child th{vertical-align:middle;font-weight:700;color:#4d2200}
 #torrentDisplay label{padding:2px 10px;min-width:80px;display:inline-block;font-weight:700;color:#3f271b;text-shadow:0 0 1px #fff5ef;border-right:var(--border_hard);box-shadow:inset 0 0 0 1px rgba(255,245,239,.5);background:var(--nav);opacity:.8}
 #torrentDisplay label:hover{color:#930;box-shadow:var(--highlight);background:var(--nav_hover);opacity:1}
 #torrentDisplay label:active{box-shadow:var(--highlight),inset 2px 2px 3px 1px #59513b,0 0 0 1px rgba(77,69,62,.1);background:var(--nav_active)}
-#torrentDisplay input:checked + label{box-shadow:inset 0 0 0 1px #efe6e0,inset 2px 2px 3px 1px #59513b,0 0 0 1px rgba(77,69,62,0.1)}
+#torrentDisplay input:checked+label{box-shadow:inset 0 0 0 1px #efe6e0,inset 2px 2px 3px 1px #59513b,0 0 0 1px rgba(77,69,62,0.1)}
 #torrentDisplay label[for="all"]{border-left:var(--border_hard)}
-#torrentDisplay input:checked + .filterbutton{text-shadow:0 1px 1px #ebe5e0;background:linear-gradient(180deg,rgba(207,193,181,.6),#d7cbc1),repeating-linear-gradient(45deg,#75604e 1px,#a09286 1px,#bfafa2 2px);transition:ease background .15s;pointer-events:none}
+#torrentDisplay input:checked+.filterbutton{text-shadow:0 1px 1px #ebe5e0;background:linear-gradient(180deg,rgba(207,193,181,.6),#d7cbc1),repeating-linear-gradient(45deg,#75604e 1px,#a09286 1px,#bfafa2 2px);transition:ease background .15s;pointer-events:none}
 #filtercount:not(:empty){margin-left:4px;padding:0 3px;min-width:18px;display:inline-block!important;line-height:1.1;font-size:90%;border-radius:1px;box-shadow:0 0 0 1px #59513b,var(--highlight);background:#efe6e0}
 #filtercount+#filtercount,#torrentDisplay input:not(:checked)+label>#filtercount,label[for="all"] #filtercount{display:none!important}
 
@@ -262,6 +266,7 @@ th.peerCount{text-align:center}
 
 /* details */
 audio,video{width:240px;background:#000}
+audio{background:#896343}
 audio::-webkit-media-controls-enclosure{border-radius:0;filter:invert(1)}
 video:fullscreen,video:fullscreen:hover,video:fullscreen:focus{padding:none;box-shadow:none;border:0}
 video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-panel{display:flex}
@@ -290,12 +295,18 @@ thead img.disable,img.disable:hover{opacity:.4}
 .magnetlink img,.torrentlink img{margin:-2px 0;padding:0}
 .magnetlink,.torrentlink{margin:0 0 0 5px;padding:4px;display:inline-block;line-height:1.3;box-shadow:0 0 0 1px #cfc6c0;background:#fff5ef}
 .mainsection #torrentInfo td{padding:4px 3px 4px 1px;vertical-align:middle;text-align:left;background:#efe6e0}
-.ParentDir{padding:4px 0 4px 4px;text-align:left}
-.ParentDir img{filter:sepia(100%) hue-rotate(340deg)}
-.ParentDir.playlist a{margin-left:-3px;white-space:nowrap}
+.ParentDir{padding:4px 0 4px 4px;text-align:left;border-bottom:var(--border)}
+.ParentDir img{width:18px;filter:sepia(100%) hue-rotate(340deg)}
+.ParentDir.playlist a{margin:0 6px 0 0;white-space:nowrap}
 .ParentDir.playlist a img{margin-right:-3px}
+.priority{padding-left:5px;padding-right:5px;width:2%;white-space:nowrap;vertical-align:middle;text-align:center;font-size:8pt}
+.priority::after{min-height:30px;display:inline-block;vertical-align:middle;content:""}
+.priority .optbox[type=radio]{text-align:left;margin:3px}
+.priorityHigh{background:url(/i2psnark/.resources/icons/clock_red.png) no-repeat left 26px center}
+.priorityNormal{background:url(/i2psnark/.resources/icons/clock.png) no-repeat left 26px center}
+.prioritySkip{background:url(/i2psnark/.resources/icons/block.png) no-repeat left 26px center}
+.priorityHigh,.priorityNormal,.prioritySkip{padding:0;width:52px;display:inline-block;overflow:hidden;vertical-align:middle;text-align:left;font-size:0;color:transparent;background-size:18px}
 .priorityIndicator{display:none}
-.priority{padding-left:5px;padding-right:5px}
 .snarkAddInfo{margin-top:7px;padding-left:20px;min-height:16px;display:inline-block;background:url(images/details.svg) no-repeat left center/14px}
 .snarkAddInfo code{font-size:9pt}
 .snarkNewTorrent{font-size:9pt}
@@ -320,7 +331,7 @@ thead img.disable,img.disable:hover{opacity:.4}
 #setPriority input.disabled,#setPriority a.controld{display:none}
 #setPriority th{padding:8px 5px;text-align:right;border-bottom:0}
 #setPriority th,#torrentInfoControl td{box-shadow:inset 0 0 0 1px #efe8e0;border-top:var(--border_hard)}
-#snarkInfo .thumb,audio,video{margin:1px 1px 2px 0;padding:1px;border:var(--border_hard);box-shadow:inset 0 0 0 2px #fff}
+#snarkInfo .thumb,audio,video{margin:4px 4px -2px;padding:1px;border:var(--border_hard);box-shadow:inset 0 0 0 2px #fff}
 #snarkInfo .thumb:hover,#snarkInfo .thumb:focus,audio:hover,video:hover,audio:focus,video:focus{border-color:#df0067}
 #torrentInfoControl{border-top:var(--border_hard)}
 #torrentInfoControl td{padding-right:6px;text-align:left;border-bottom:0;background:#cfc7c2;background:var(--th)}
@@ -337,18 +348,18 @@ thead img.disable,img.disable:hover{opacity:.4}
 /* buttons & inputs */
 .script{display:inline-block;vertical-align:top}
 a.control,input[type=submit],input[type=reset]{display:inline-block;font:8pt var(--bodyfont);font-weight:400;box-shadow:var(--highlight),0 0 1px 0 rgba(77,69,62,.3);background-size:14px,100%}
-a.control,a.controld{margin:2px 4px 2px 3px;padding:5px 6px 5px 2px;display:inline-block;white-space:nowrap;font-weight:400;color:#4d2200;border:1px solid #4f3927;border-radius:2px;background:linear-gradient(180deg,#f4f2f1,#ded9d5);background-size:100%}
+a.control,a.controld{margin:2px 4px 2px 3px;padding:5px 6px 5px 2px;display:inline-block;white-space:nowrap;font-weight:400;color:#4d2200;border:var(--btn_border_hover);border-radius:2px;background:linear-gradient(180deg,#f4f2f1,#ded9d5);background-size:100%}
 a.controld{font-weight:400;color:#f60}
 a.control:hover,a.control:focus{color:#930;background:linear-gradient(180deg,#fff7ef 51%,#ffe6cc 52%);filter:drop-shadow(0px 0 1px #f60)}
 a.control img,a.controld img{height:14px;width:14px;vertical-align:top;mix-blend-mode:normal;filter:none}
 a.control:active{color:#f30}
 button::-moz-focus-inner,input::-moz-focus-inner{outline:none;border:0}
-input{margin:2px 4px;font-size:8pt;font-weight:400;text-align:left;padding:5px 4px;border-radius:2px;border:1px solid #4d2200;background:#efe6e0;color:#4d2200;font-family:var(--bodyfont)}
+input{margin:2px 4px;font-size:8pt;font-weight:400;text-align:left;padding:5px 4px;border-radius:2px;border:var(--btn_border);background:#efe6e0;color:#4d2200;font-family:var(--bodyfont)}
 input.r{text-align:right;background:#efe6e0}
 input.r,input[type=text],select{min-width:120px}
 input[name="nofilter_commentsName"]{width:250px}
-input[type=submit]{color:#4d2200;border:1px solid #4f3927}
-input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:#4d2100;border:1px solid #2f1a09;box-shadow:var(--highlight)7ef,inset 0 0 0 2px #d50;-webkit-text-stroke:1px rgba(77,34,0,.1);background-blend-mode:luminosity}
+input[type=submit]{color:#4d2200;border:var(--btn_border)}
+input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:#4d2100;border:var(--btn_border_hover);box-shadow:var(--highlight)7ef,inset 0 0 0 2px #d50;-webkit-text-stroke:1px rgba(77,34,0,.1);background-blend-mode:luminosity}
 input[type=submit]:active,a.control:active{color:#70645c;box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.5);-webkit-text-stroke:0}
 input[type=text],input.r,textarea,input[name="nofilter_dataDir"]{padding:5px 8px;vertical-align:middle;box-shadow:var(--highlight),inset 3px 3px 3px rgba(16,12,0,.25)}
 input[type=text]:focus,input[type=text]:focus,input.r:focus,textarea:focus,input[name="nofilter_dataDir"]:focus{background:#fffcdf;color:#5f1227;text-shadow:none;transition:ease box-shadow .3s}
@@ -382,17 +393,17 @@ input.starttorrent:active{background:var(--start) no-repeat 8px center/10px,line
 input.stoptorrent{margin:4px 5px;padding:5px 8px 5px 22px;background:var(--stop) no-repeat 8px center/10px,linear-gradient(180deg,#f4f2f1,#ded9d5)}
 input.stoptorrent:hover,input.stoptorrent:focus{background:var(--stop_hover) no-repeat 8px center/10px,linear-gradient(180deg,#fff7ef 51%,#ffe6cc 52%)}
 input.stoptorrent:active{background:var(--stop) no-repeat 8px center/10px,linear-gradient(180deg,#e1d8d1,#fff2e6)}
-select{margin:2px 0 2px 4px;padding:5px 22px 5px 5px;font:8pt var(--bodyfont);font-weight:400;color:#4d2200;border-radius:2px;border:1px solid #2f1500;box-shadow:var(--highlight),0 0 1px 0 rgba(77,69,62,.3);background:#efe6e0 var(--dropdown) no-repeat right 7px center;background-size:10px;appearance:none}
-select:hover,select:focus{color:#5f1227;background:#fffcdf var(--dropdown_hover) no-repeat right 7px center;background-size:10px}
-textarea,input[name="nofilter_dataDir"]{margin-left:4px;padding:5px 8px;width:70%;font-family:var(--bodyfont);font-size:8pt;font-weight:400;border-radius:2px;border:1px solid #2f1500;background:#efe6e0}
-.r:focus,input[type=text]:focus,select:focus,input[name="nofilter_dataDir"]:focus,.optbox[type=checkbox]:focus,.optbox[type=radio]:focus{box-shadow:var(--highlight),inset 0 0 0 1px rgba(16,12,0,.25),0 0 1px rgba(223,0,103,.6);transition:ease box-shadow .15s}
+select{margin:2px 0 2px 4px;padding:5px 22px 5px 5px;font:8pt var(--bodyfont);font-weight:400;color:#4d2200;border-radius:2px;border:var(--btn_border);box-shadow:var(--highlight),0 0 1px 0 rgba(77,69,62,.3);background:#efe6e0 var(--dropdown) no-repeat right 7px center;background-size:10px;appearance:none}
+select:hover,select:focus{color:#5f1227;border:var(--btn_border_hover);background:#fffcdf var(--dropdown_hover) no-repeat right 7px center/10px}
+textarea,input[name="nofilter_dataDir"]{margin-left:4px;padding:5px 8px;width:70%;font-family:var(--bodyfont);font-size:8pt;font-weight:400;border-radius:2px;border:var(--btn_border);background:#efe6e0}
+.r:focus,input[type=text]:focus,select:focus,input[name="nofilter_dataDir"]:focus,.optbox[type=checkbox]:focus,.optbox[type=radio]:focus{border:var(--btn_border_hover);box-shadow:var(--highlight),inset 0 0 0 1px rgba(16,12,0,.25),0 0 1px rgba(223,0,103,.6);transition:ease box-shadow .15s}
 textarea{margin-top:2px;padding:4px;height:26px;resize:none;font-size:8pt;color:#4d2200}
 
 /* panel titles */
 .toggleview,#config,{will-change:transform}
 .toggleview,#tab_config{margin:-1px auto -3px;padding:4px 1px 2px;min-width:300px;display:inline-block;vertical-align:middle;text-shadow:0 0 1px #fff5ef;color:#444039;border:1px solid #111;border-top:0;box-shadow:0 0 2px rgba(77,69,62,.3),var(--highlight);background:linear-gradient(90deg,rgba(0,0,0,0),rgba(255,255,255,.2) 20%,rgba(255,255,255,.2) 80%,rgba(0,0,0,0)),linear-gradient(180deg,#fff7ef 50%,rgba(207,193,181,.6) 50%),repeating-linear-gradient(135deg,#75604e 1px,#a09286 1px,#bfafa2 2px)}
 #tab_config{margin-top:0;padding-top:3px}
-#tab_config:hover,.toggleview:hover,input.toggle_input:focus + .toggleview{background:linear-gradient(180deg,#ffeadf 50%,#cfb6a8 50%)}
+#tab_config:hover,.toggleview:hover,input.toggle_input:focus+.toggleview{background:linear-gradient(180deg,#ffeadf 50%,#cfb6a8 50%)}
 .configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active,.configPanel .configTitle:focus{margin:0 -11px;padding:5px 8px 5px 29px;display:block;letter-spacing:.15em;text-align:left;text-transform:uppercase;font-size:11pt;font-weight:700;color:#4d2200;border:1px solid #1f1400;border-top:0;border-radius:2px 2px 0 0;box-shadow:var(--highlight);background:var(--snark) no-repeat 8px center,radial-gradient(circle at left bottom,#f9f8f2,#f7f6ee 400px);background-size:18px,100%;background-blend-mode:luminosity}
 .configTitle a{width:100%;display:inline-block}
 .snarkConfig{width:100%;font-size:8pt}
@@ -409,10 +420,10 @@ textarea{margin-top:2px;padding:4px;height:26px;resize:none;font-size:8pt;color:
 #tab_config a::after{box-shadow:inset 0 0 0 2px #ffeadf;background:var(--configure) no-repeat center center,var(--tab);background-size:16px,100%}
 #tab_config:active,.toggleview:active{box-shadow:0 0 2px #4d453e,inset 0 0 0 1px #f0e9e4,inset 2px 2px 3px 1px #59513b;background:linear-gradient(180deg,#e5d2c8,#baa397)}
 #tab_config a:active::after,.toggleview:active::after{transform:rotate(90deg) scale(.9);transition:ease transform .15s}
-input:checked + .toggleview:active::after{transform:rotate(-90deg) scale(.9);transition:ease transform .15s}
+input:checked+.toggleview:active::after{transform:rotate(-90deg) scale(.9);transition:ease transform .15s}
 
 /* panels */
-.configPanel,#addSection,#configSection,#createSection,#mainsection + form .configPanel{background:var(--panel)}
+.configPanel,#addSection,#configSection,#createSection,#mainsection+form .configPanel{background:var(--panel)}
 .configPanel,.mainsection,.section,#addSection,#configSection,#createSection{margin:0 0 10px;padding:0 10px;text-align:center;word-wrap:break-word;color:#ddd;border:1px solid #1f1400;border-radius:2px;box-shadow:var(--highlight),0 0 1px 0 rgba(77,61,51,.3);background:#dfd7d1}
 .mainsection,.section{padding:10px;background:var(--panel)}
 .configPanel table{margin-bottom:8px}
@@ -429,8 +440,8 @@ input:checked + .toggleview:active::after{transform:rotate(-90deg) scale(.9);tra
 .trackerconfig input[type=text]{margin-left:0}
 .trackerconfig{margin-top:11px;text-align:left;border-collapse:separate;border-spacing:0}
 .trackerconfig td:first-child{text-align:right}
-.trackerconfig th{background:linear-gradient(180deg,#efefef 51%,#cfc7c2 52%)}
-.trackerconfig th:first-child{border-radius:2px 0 0 0;border-left:var(--border_hard);background:var(--nuke) center right 8px no-repeat,linear-gradient(180deg,#efefef 51%,#cfc7c2 52%);background-size:14px,100%}
+.trackerconfig th{font-size:90%;background:var(--th_config)}
+.trackerconfig th:first-child{border-radius:2px 0 0 0;border-left:var(--border_hard);background:var(--nuke) center right 8px no-repeat,var(--th_config);background-size:14px,100%}
 .trackerconfig th:first-child,.trackerconfig td:first-child{padding-left:0;width:1%;white-space:nowrap}
 .trackerconfig th:last-child{border-radius:0 2px 0 0;border-right:var(--border_hard)}
 .trackerconfig th:nth-child(n+4),.trackerconfig th:nth-child(n+5),.trackerconfig td:nth-child(n+4),.trackerconfig td:nth-child(n+5){text-align:center}
@@ -448,7 +459,7 @@ input:checked + .toggleview:active::after{transform:rotate(-90deg) scale(.9);tra
 #createSection td:nth-child(n+2),#addSection td:nth-child(n+2){text-align:left}
 #createSection #trackerselect{margin:10px 0 5px 0;width:calc(100% - 202px);border:var(--border_hard);margin-left:5px;border-collapse:separate;border-spacing:0;border-radius:2px;box-shadow:0 0 2px 1px rgba(77,69,62,.3)}
 #createSection #trackerselect th,#createSection #trackerselect td{text-align:center}
-#mainsection + form .configPanel{background-size:100%}
+#mainsection+form .configPanel{background-size:100%}
 #trackerselect .optbox[type=radio],#trackerselect .optbox[type=checkbox]{margin:4px}
 #trackerselect td{white-space:nowrap;text-align:center}
 #trackerselect td:first-child,#trackerselect td:last-child{width:30%;font-weight:400}
@@ -462,16 +473,15 @@ input:checked + .toggleview:active::after{transform:rotate(-90deg) scale(.9);tra
 .iframed #snarkInfo ~ #commentSection{margin-top:-11px;margin-bottom:1px}
 .iframed #snarkInfo ~ .mainsection{margin-top:-1px}
 
-
 /* toggle create/add panel view */
 .mainsection .toggleview{margin:-10px auto 0;display:block;width:20%;min-width:300px;max-width:600px}
 input.toggle_input{width:0;height:0;position:absolute;z-index:-1;opacity:0}
 .toggle_input::before{display:none}
 .toggleview:hover{color:#f90;cursor:pointer}
-input:not(checked) + label + hr + table,input:not(checked) + label + hr + table + table{display:none}
-input:checked + label + hr + table,input:checked + label + hr + table + table{display:table}
-.mainsection input:not(checked) + .toggleview{margin-bottom:-12px}
-.mainsection input:checked + .toggleview{margin-bottom:-5px}
+input:not(checked)+label+hr+table,input:not(checked)+label+hr+table+table{display:none}
+input:checked+label+hr+table,input:checked+label+hr+table+table{display:table}
+.mainsection input:not(checked)+.toggleview{margin-bottom:-12px}
+.mainsection input:checked+.toggleview{margin-bottom:-5px}
 .toggleview,.configTitle a:visited{color:#930}
 .toggleview:active,.configTitle a:active{color:#603110}
 .toggleview img:active,.toggleview:active img,.configTitle a:active img{transform:rotate(90deg);transition:ease transform .3s 0s}
@@ -484,14 +494,6 @@ input:checked + label + hr + table,input:checked + label + hr + table + table{di
 .debuginfo b{text-transform:capitalize;font-family:var(--bodyfont)}
 #dhtDebug th{ text-align:center;font-weight:400}
 hr.debug{margin:5px 0;width:100%;height:1px;display:none;position:relative;z-index:10}
-
-.priority{width:2%;white-space:nowrap;vertical-align:middle;text-align:center;font-size:8pt}
-.priority::after{min-height:30px;display:inline-block;vertical-align:middle;content:""}
-.priority .optbox[type=radio]{text-align:left;margin:3px}
-.priorityHigh{background:url(/i2psnark/.resources/icons/clock_red.png) no-repeat left 26px center}
-.priorityNormal{background:url(/i2psnark/.resources/icons/clock.png) no-repeat left 26px center}
-.prioritySkip{background:url(/i2psnark/.resources/icons/block.png) no-repeat left 26px center}
-.priorityHigh,.priorityNormal,.prioritySkip{padding:0;width:52px;display:inline-block;overflow:hidden;vertical-align:middle;text-align:left;font-size:0;color:transparent;background-size:18px}
 
 /* Comments Section */
 #commentInfo,#userComments,#mediaContainer{margin:10px 0 0;border:var(--border_hard);border-top:0;border-bottom:0;border-collapse:separate}
@@ -531,7 +533,7 @@ hr.debug{margin:5px 0;width:100%;height:1px;display:none;position:relative;z-ind
 td .commentAuthorName{margin-left:8px;width:120px;overflow:hidden;text-overflow:ellipsis;text-align:left;border-radius:1px;box-shadow:0 0 0 1px rgba(77,69,62,.7);background:var(--user) no-repeat 4px center,linear-gradient(180deg,#fff5ef,#fff4de);background-size:16px}
 .commentAuthorName:empty{display:none}
 .commentText{padding-right:0;white-space:normal;text-align:justify}
-.commentText:empty + .commentDelete{background:none}
+.commentText:empty+.commentDelete{background:none}
 .commentWrapper{margin:4px 2px;padding:8px 10px 8px 26px;height:28px;max-height:300px;overflow:auto;resize:vertical;text-align:left;border:var(--border_hard);border-radius:2px;box-shadow:0 0 0 1px #fff inset;background:var(--chat) no-repeat 6px center #fff6df;background-size:16px;background-blend-mode:luminosity}
 .commentText .commentWrapper{height:auto;resize:none}
 #commentsConfig .optbox{vertical-align:middle;margin-left:0}
@@ -571,7 +573,7 @@ td#bwHelp a{margin-left:4px;display:inline-block;white-space:nowrap;font-style:n
 #configs input,#configs select{margin-top:0;margin-bottom:0;vertical-align:middle}
 #configs td,#configs td:first-child{padding:0;padding-right:0;text-align:left}
 #configs tr:nth-last-child(2) td{padding:12px 0 4px;text-align:right}
-#configs th{padding:4px 8px;font-size:9pt;color:var(--ink);border:var(--border_hard);border-radius:2px;background:linear-gradient(180deg,#efefef 51%,#cfc7c2 52%);filter:drop-shadow(0 0 1px #aaa)}
+#configs th{padding:4px 8px;font-size:9pt;color:var(--ink);border:var(--border_hard);border-radius:2px;background:var(--th_config);filter:drop-shadow(0 0 1px #aaa)}
 .optionlist{margin:0;padding:7px 6px 6px;columns:400px 3;column-gap:5px;transition:ease-in-out .5s box-shadow}
 .configOption{margin:5px 0;padding:4px 5px 4px 0;width:calc(100% - 10px);display:inline-block;white-space:nowrap;vertical-align:middle;border-radius:2px;box-shadow:0 0 0 1px #afa399,inset 0 0 0 1px #fef6f0,0 0 2px #aaa;background:#bfb8b3;transition:ease-in-out box-shadow .1s}
 .configOption:hover{box-shadow:0 0 0 1px #afa399,inset 0 0 0 1px #f90,0 0 2px #aaa;transition:ease-in-out box-shadow .1s}
@@ -617,7 +619,7 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 #bwHoverHelp{position:relative;display:inline-block}
 #bwHoverHelp img{width:16px;height:16px;margin-right:4px;opacity:0}
 #bwHoverHelp::after{margin-left:-20px;width:16px;height:16px;display:inline-block;vertical-align:middle;background:url(images/details.svg) no-repeat center center;content:""}
-#bwHoverHelp:hover + #bwHelp{padding:20px;display:block;float:left;position:fixed;top:48px;left:0;z-index:9999;white-space:nowrap;text-align:center;font-size:12pt;border-bottom:5px solid #212;border-top:5px solid #212;box-shadow:0 1px 3px #101;background:#313}
+#bwHoverHelp:hover+#bwHelp{padding:20px;display:block;float:left;position:fixed;top:48px;left:0;z-index:9999;white-space:nowrap;text-align:center;font-size:12pt;border-bottom:5px solid #212;border-top:5px solid #212;box-shadow:0 1px 3px #101;background:#313}
 
 /* tracker config */
 #addtracker td{padding-top:5px;padding-bottom:6px}
@@ -720,7 +722,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{con
 .snarkCommented img{padding:0;height:9px;width:auto;border:0;box-shadow:none}
 
 #torrentOrderControl .optbox[type=checkbox],#torrentOrderControl .optbox[type=checkbox]:checked,#torrentOrderControl .optbox[type=checkbox][disabled],#torrentOrderControl .optbox[type=checkbox][disabled]:checked{border:1px solid #bbb}
-.optbox{margin:4px;width:19px;height:19px;position:relative;box-sizing:border-box;border:1px solid #512f15;box-shadow:inset 2px 2px 2px #b2a499;background:#faf1eb;appearance:none}
+.optbox{margin:4px;width:19px;height:19px;position:relative;box-sizing:border-box;border:var(--btn_border);box-shadow:inset 2px 2px 2px #b2a499;background:#faf1eb;appearance:none}
 .optbox[type=radio]{border-radius:50%}
 .optbox:hover,.optbox:focus{border:1px solid #b32;background:#fff}
 .optbox:checked,.optbox:not(:checked):hover,.optbox:not(:checked):focus{box-shadow:var(--highlight)}
@@ -739,12 +741,12 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{con
 .configOption .optbox[type=checkbox]:hover,.configOption .optbox[type=checkbox]:focus,#commentsToggle .optbox[type=checkbox]:hover,#commentsToggle .optbox[type=checkbox]:focus{box-shadow:0 0 0 1px #6f645d,0 0 0 2px #f60,var(--highlight),inset 3px 3px 3px rgba(0,0,0,.2)}
 .configOption .optbox[type=checkbox]::before,.configOption .optbox[type=checkbox]:hover::before,.configOption .optbox[type=checkbox]:focus::before,.configOption .optbox[type=checkbox]:active::before,#commentsToggle .optbox[type=checkbox]::before,#commentsToggle .optbox[type=checkbox]:hover::before,#commentsToggle .optbox[type=checkbox]:focus::before,#commentsToggle .optbox[type=checkbox]:active::before{width:20px;height:100%;position:absolute;top:0;left:0;border-radius:1px;box-shadow:inset 0 0 0 1px #74573e,inset 0 0 0 2px #f6f1ee,0 2px 5px rgba(0,0,0,.2);background:linear-gradient(#fff,#f6f1ee,#efe6e0,#e5d6cd);content:"";transform:scale(.85);transition:ease-in left .15s}
 .configOption .optbox[type=checkbox]:checked::before,#commentsToggle .optbox[type=checkbox]:checked::before{left:19px}
-.configOption .optbox[type=checkbox]:disabled,.configOption .optbox[type=checkbox]:disabled + label{opacity:.45;pointer-events:none}
+.configOption .optbox[type=checkbox]:disabled,.configOption .optbox[type=checkbox]:disabled+label{opacity:.45;pointer-events:none}
 
 .snarkFilename .targetfile,.snarkFilename:hover .tags,.snarkFileName a:empty{display:none}
 .snarkFilename:hover .targetfile{display:inline-block}
 #snarkFiles .toggleview img{margin-right:0}
-#snarkInfo + #commentSection,.iframed #snarkInfo + #commentSection{margin-top:-1px}
+#snarkInfo+#commentSection,.iframed #snarkInfo+#commentSection{margin-top:-1px}
 #completion{position:relative}
 #metainfo{padding:2px 8px 2px 4px;background:#ffffee;border:1px solid #886;box-shadow:var(--highlight)}
 #completion:not(:hover) #metainfo{display:none}
@@ -785,7 +787,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{con
 #actionStopAll:active{background:var(--stopall) no-repeat center center/auto 12px,var(--btnAction_active)}
 
 /* torrent edit */
-.iframed #editSection + #snarkFiles{margin-top:-11px}
+.iframed #editSection+#snarkFiles{margin-top:-11px}
 #stopfirst::before{display:inline-block;width:20px;height:20px;vertical-align:middle;background:url(images/details.svg) no-repeat left center/16px;content:""}
 #torrentEdit{margin:10px 0 0;border-top:0}
 #torrentEdit th,#torrentEdit td{padding:8px 20px;width:25%;text-align:center}
@@ -834,7 +836,7 @@ tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{con
 @supports not (-moz-appearance:none){.peerinfo .torrentDownloaded .percentBarText{line-height:normal}}
 @-moz-document url-prefix(){select option{color:#5f1227;box-shadow:inset 0 0 20px 20px #fffcdf;background:#fffcdf}select option:hover,select option:checked{box-shadow:inset 0 0 20px 20px #5f1227;background:#f60}}
 @supports not (-moz-appearance:none){#torrents tbody tr:hover,.dirInfo tbody tr:hover{background:#f9efcf}}
-@supports not (-moz-appearance:none){.rowEven + .rowEven:nth-child(even),.rowOdd + .rowOdd:nth-child(even){background:#e8dfda}.rowEven + .rowEven:nth-child(odd),.rowOdd + .rowOdd:nth-child(odd){background:#e0d9d5}}
+@supports not (-moz-appearance:none){.rowEven+.rowEven:nth-child(even),.rowOdd+.rowOdd:nth-child(even){background:#e8dfda}.rowEven+.rowEven:nth-child(odd),.rowOdd+.rowOdd:nth-child(odd){background:#e0d9d5}}
 
 /* responsive layout */
 @media (max-width:1500px){
@@ -999,6 +1001,7 @@ thead a img,thead img{max-height:21px}
 body:not(.iframed) .uploaded{margin:-1px 0 2px}
 body,#torrents td,.snarkAddInfo,th,td,.snarkFileName,a.control,input[type=submit],input[type="reset"],select,button,code,#pagenavbottom{font-size:10pt}
 img[src$="details.png"]{max-height:18px}
+select{padding-left:8px}
 textarea,#torrents code,#screenlog{font-size:9pt}
 thead a img,thead img{max-height:22px}
 .configTitle,.configTitle:hover,.configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active,.toggleview,#tab_config{min-width:400px}
@@ -1018,6 +1021,7 @@ thead a img,thead img{max-height:22px}
 .snarkFileName:hover a{padding-right:0}
 .snarkNav{font-size:11.5pt;background-size:17px,100%,100%}
 .snarkNav:first-child,.snarkNav:hover:first-child{padding-left:28px;background-size:17px,100%,100%}
+.txBarText{padding:0 0 4px}
 td.graphicStatus img{width:auto;height:23px}
 td.torrentDetails img,.dirInfo td:first-child img:not(.thumb){width:22px;height:22px}
 td.torrentDetails img{margin-top:-3px;margin-bottom:-3px}
@@ -1027,6 +1031,7 @@ td.torrentDetails img{margin-top:-3px;margin-bottom:-3px}
 .torrentName:hover a,.snarkFileName:hover a{border-radius:2px 20px 20px 2px;background:rgba(207,193,181,.4)}
 .torrentName:active a,.snarkFileName:active a{border:1px solid #ff2f85;box-shadow:inset 4px 4px 4px rgba(64,52,31,.3)}
 .torrentUploaded{padding-left:5px}
+.trackerconfig th{font-size:9pt}
 .trackerhome,.trackerannounce,.knownTracker a{width:400px;max-width:400px}
 #configs th{font-size:10pt}
 #fullscreen,#embed{font-size:8.5pt}
