@@ -1399,7 +1399,8 @@ img.unknownflag{opacity:.8}
 #stats input:checked+h3+ul#statlist{display:block;margin-bottom:-13px}
 #stats label{display:inline-block}
 #stats ul#statlist{margin:-7px 0 0;padding:0;width:calc(100% - 2px);box-shadow:var(--highlight),inset 0 0 2px 1px var(--bg4)}
-#stats .tab,#stats .tab2{margin:-1px -1px -1px 0;padding:6px 14px;font-size:90%}
+#stats .confignav{padding:0 1px;display:flex;flex-wrap:wrap}
+#stats .tab,#stats .tab2{margin:-1px -1px 0 0;padding:6px;font-size:90%;flex-grow:.2}
 #stats .tab:not(.tab2){color:var(--a)}
 #stats .tab:not(.tab2):hover{color:var(--hover)}
 #stats .tab:not(.tab2):active{color:var(--bg);box-shadow:var(--btn_shadow_active);background:var(--hover);transition:ease box-shadow .05s}

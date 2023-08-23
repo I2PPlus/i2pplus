@@ -2092,7 +2092,7 @@ h3.stats{border:var(--border_inner);border-radius:0}
 #stats #statlist li li::before{content:"\279F\00A0";vertical-align:baseline}
 #stats #statlist li li:last-child::before{content:"\27A1\00A0"}
 #gatherstats{margin:19px 10px 20px}
-#stats .confignav{position:sticky;top:-1px;z-index:999}
+#stats .confignav{padding:0 1px;display:flex;flex-wrap:wrap;position:sticky;top:-1px;z-index:999}
 #stats form{border:var(--border_inner);padding:10px;margin:-15px 0 10px}
 #stats form{display:none}
 #stats h3{margin:8px 10px 4px;border-width:1px}
@@ -2109,7 +2109,7 @@ h3.stats{border:var(--border_inner);border-radius:0}
 #stats .tab:not(.tab2):active{color:var(--ink)}
 #stats .tab:not(.tab2){color:var(--a)}
 #stats .tab:not(.tab2):hover{color:var(--a)}
-#stats .tab,#stats .tab2{padding:4px 14px 6px;font-size:90%}
+#stats .tab,#stats .tab2{padding:4px 6px 6px;font-size:90%;flex-grow:.2}
 #stats .toggle_input{width:0;height:0;position:absolute;top:-99999px;left:-99999px;opacity:0}
 #stats input:checked+h3+#stats #statlist{margin-bottom:-3px;display:block}
 #stats input:not(:checked)+h3,#stats input:not(:checked)+h3+#statlist,#stats input:not(:checked)+h3+#statlist+br{display:none}

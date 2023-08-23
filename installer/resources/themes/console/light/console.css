@@ -391,6 +391,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 .tab:active a,.tab a:active{color:#ffecdf;text-shadow:none}
 .tab2{padding:5px 12px;position:relative;z-index:50;color:#fafaff;text-shadow:0 1px 1px #113;box-shadow:0 0 0 1px rgba(255,255,255,.8) inset,3px 3px 3px rgba(0,0,16,.5) inset;background:radial-gradient(at center bottom,rgba(128,128,172,.6) 0,rgba(0,0,0,0) 50%),linear-gradient(180deg,rgba(31,43,63,.7),rgba(31,43,63,.5)),linear-gradient( 90deg,#6288cb,#7fadff,#6288cb);pointer-events:none}
 div[id^="config_"] .tab:not(:hover)::before{filter:saturate(.3)!important}
+#stats .confignav{display:flex;flex-wrap:wrap}
 
 /* main content div & variations */
 h3,#config_family th,#routerinformation h2{margin:12px 0 15px;padding:7px 5px 6px 7px;word-spacing:.1em;text-transform:uppercase;letter-spacing:.08em;font-size:11pt;color:var(--ink_light);border:var(--border_inner);box-shadow:var(--highlight),0 0 1px rgba(220,220,220,.3)}
@@ -1724,7 +1725,7 @@ a[href^="configpeer?peer"]:hover::after{background:var(--edit_hover) no-repeat c
 #stats input:not(:checked)+h3,#stats input:not(:checked)+h3+ul#statlist,#stats input:not(:checked)+h3+ul#statlist+br{display:none}
 #stats label{display:inline-block}
 #stats{padding-bottom:15px}
-#stats .tab,#stats .tab2{margin:0 -1px -1px 0;padding:4px 14px 6px}
+#stats .tab,#stats .tab2{margin:0 -1px -1px 0;padding:4px 6px 6px;flex-grow:.1}
 #stats .tab:not(.tab2){color:var(--a)}
 #stats .tab2:hover{color:#fafaff;text-shadow:0 1px 1px #113;box-shadow:inset 2px 2px 2px rgba(31,43,63,.7);cursor:default}
 #stats .tab:not(.tab2):hover{color:var(--hover)}
