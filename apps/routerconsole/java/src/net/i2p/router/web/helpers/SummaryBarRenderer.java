@@ -593,7 +593,7 @@ class SummaryBarRenderer {
                 .append("\" href=\"/javadoc/index.html\" target=_blank>")
                 .append(nbsp(tx))
                 .append("</a>\n")
-                .append("<a class=sb_icon target=_top href=/javadoc/index.html title=\"").append(tx)
+                .append("<a class=sb_icon target=_blank href=/javadoc/index.html title=\"").append(tx)
                 .append("\" hidden><span><img src=/themes/console/images/help.svg></span></a>\n");
             svcs.put(tx, rbuf.toString());
         }
