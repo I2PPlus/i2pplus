@@ -627,7 +627,7 @@ h3.stats{border:var(--border);border-radius:0}
 #statlist li li{margin:10px -20px -10px 16px;line-height:1.4;list-style:none}
 #statlist li li::before,#statlist li li:last-child::before{margin-top:2px;margin-bottom:-12px;vertical-align:bottom;display:inline-block;color:#994;content:"\279F\00A0"}
 #statlist li li b{font-size:100%}
-#statlist li li:last-child{margin-bottom:-20px}
+#statlist li li:last-child{margin-bottom:-12px}
 #statlist li li:last-child::before{margin-top:3px;vertical-align:top;color:#994;content:"\27A1\00A0"}
 #statlist li li:last-child::after{margin-top:6px;margin-bottom:-12px;display:block;content:""}
 #statlist li li:not(.noevents):first-child{margin-top:-10px}
@@ -637,7 +637,7 @@ h3.stats{border:var(--border);border-radius:0}
 #statlist li.statsName ul li b{background:none}
 #statlist ul li:last-child b{padding-left:0;width:auto}
 .statsLongName{margin-left:15px;margin-bottom:-24px;padding-bottom:8px;width:calc(100% - 27px);display:block;line-height:1.2;font-weight:700;color:#dd0;border-bottom:var(--border_soft)}
-.statsViewGraphs{margin:2px 0 2px -3px;width:100%;display:inline-block;font-size:90%}
+.statsViewGraphs{margin:8px 0 -12px -4px;width:100%;display:block;font-size:90%}
 .statvalue{padding:0 2px 0 0;font-weight:700;font-style:italic;color:var(--ink)}
 #stats form{margin:-13px 0 -11px;padding:10px;border:var(--border);background:#000}
 #stats form,#stats .toggle_input,#stats input:not(:checked)+h3,#stats input:not(:checked)+h3+#statlist,#stats input:not(:checked)+h3+#statlist+br{display:none}
@@ -646,9 +646,9 @@ h3.stats{border:var(--border);border-radius:0}
 #stats h3 a:hover{color:var(--ink)}
 #stats input:checked+h3+#statlist{margin-bottom:-13px;display:block}
 #stats label{display:inline-block}
-#stats .confignav{position:sticky;top:-1px;z-index:999}
+#stats .confignav{display:flex;position:sticky;top:-1px;z-index:999;flex-wrap:wrap}
 #stats .noevents,#statlist li li:last-child::after{margin-bottom:0}
-#stats .noevents{margin-bottom:5px;padding:5px 0 24px}
+#stats .noevents{margin-bottom:5px;padding:5px 0 20px}
 #stats .noevents::after,#statlist li li:last-child::after{margin-bottom:0;padding-bottom:0;border-bottom-color:transparent}
 #stats .noevents::after{margin-top:6px;margin-bottom:0;margin-right:20px;padding-bottom:10px}
 #stats #statlist{margin:0 0 50px;padding:0;border:0;background:none}
@@ -656,7 +656,7 @@ h3.stats{border:var(--border);border-radius:0}
 #stats .statsName::before{content:none}
 #stats .statsName b,.statsName i{display:inline-block}
 #stats .statsName b{width:calc(100% - 24px)}
-#stats .tab,#stats .tab2{margin:0 -1px -1px 0;padding:5px 14px;font-size:90%}
+#stats .tab,#stats .tab2{margin:0 -1px -1px 0;padding:5px 8px;font-size:90%;flex-grow:0.5;flex-shrink:1}
 #stats .tab:not(.tab2){color:var(--a)}
 #stats .tab:not(.tab2):hover{color:var(--hover)}
 #stats .tab:not(.tab2):active{color:var(--ink)}
@@ -2639,10 +2639,6 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #statlist{padding:10px;columns:auto 520px;column-gap:10px;text-align:center}
 }
 
-@media (min-width:1280px){
-#submitconsolepass{margin-bottom:0}
-}
-
 @media (max-width:1240px){
 #peers .confignav,#tunnels .confignav{margin:-6px -6px 5px}
 #peers #udpcon{margin-top:-5px}
@@ -2665,6 +2661,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #profiles_overview{margin:5px 0 -5px}
 #profiles,#peers{padding:5px 5px 0}
 #profiles #thresholds+h3{margin-top:-5px}
+#stats .tab, #stats .tab2{padding:5px 6px}
 #tunnels .tab,#tunnels .tab2{margin-top:5px}
 #upnpscan{margin-bottom:5px}
 #upnpstatus,#peers .infohelp{margin:0}
@@ -2763,6 +2760,10 @@ th{font-size:8pt}
 #terms{padding:5px 0 15px;columns:2 auto;column-gap:35px;column-rule:1px solid #020}
 #terms p{break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid}
 #terms p:first-child{margin-top:0}
+}
+
+@media (min-width:1280px){
+#submitconsolepass{margin-bottom:0}
 }
 
 @media (min-width:1200px) and (max-width:1499px){
