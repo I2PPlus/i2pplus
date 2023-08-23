@@ -1150,7 +1150,7 @@ p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,l
 .netdbentry tr:nth-child(2) td:last-child{text-align:right;white-space:nowrap;min-width:140px}
 .netdbentry .tunnel_cap,.netdbentry .tier,.netdbentry .ff,.netdbentry .reachable,.netdbentry .unreachable,.netdbentry .version,.sybil_routerinfo .tunnel_cap,.sybil_routerinfo .tier,.sybil_routerinfo .ff,.sybil_routerinfo .reachable,.sybil_routerinfo .unreachable,.sybil_routerinfo .version{margin:0 2px;padding:2px 4px;vertical-align:middle}
 .netdbentry .version{padding:3px 8px}
-.netdb_family{vertical-align:middle}
+.netdb_family,.netdb_family>*{margin-bottom:-2px;display:inline-block;vertical-align:top}
 .netdb_header .configpeer,.netdb_header .configpeer{margin-right:5px}
 .netdb_header>*{display:inline-block;vertical-align:middle;line-height:0;font-size:0}
 .netdb_header img[src^="/flags"]{margin:0 0 0 4px}
