@@ -1409,7 +1409,7 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .netdbentry tr:nth-child(2) td:last-child{min-width:140px;white-space:nowrap;text-align:right}
 .netdbentry td:first-child{text-align:right}
 .netdbentry .familyname{max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:text-bottom}
-.netdbStats{margin:0;columns:250px auto;column-gap:20px}
+.netdbStats{margin:0;columns:auto;column-gap:20px}
 .netdbStats li{margin:0;padding:1px 10px 1px 0;white-space:normal;line-height:1.4;list-style:none}
 .netdb_family{vertical-align:middle}
 .familyname .verified{margin-top:-2px;height:12px;width:12px;display:inline-block;vertical-align:middle;font-size:0;background:var(--verified) no-repeat center center/11px}
@@ -1467,6 +1467,7 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 #netdb .leaseset th:nth-child(2) code,#netdb .leaseset th:nth-child(2) code:hover{width:auto;letter-spacing:.1em}
 #netdb .netdbentry th code:hover,#netdb .netdbentry th code:active,.leaseset th code:hover,.leaseset th code:active,#netdb .sybil_routerinfo th code:hover,#netdb .sybil_routerinfo th code:active{width:auto;letter-spacing:0}
 #netdb .netdbentry th code::selection,#netdb .sybil_routerinfo th code::selection,.leaseset th code::selection{background:var(--ink_code);color:#fff}
+#netdb .netdbStats .hide,#netdb .netdbStats .cap_stat.hide,#netdb .netdbStats .cap_stat.hide+hr{display:none}
 
 .configpeer,.familysearch,.viewprofile{margin:1px 2px;padding:4px;width:12px;height:12px;vertical-align:middle;display:inline-block;line-height:0;font-size:0;border:1px solid #bbd;border-radius:2px;box-shadow:var(--btn_shadow)}
 .configpeer:hover,.familysearch:hover,.viewprofile:hover,.configpeer:focus,.familysearch:focus,.viewprofile:focus{border-color:var(--hover);box-shadow:var(--btn_shadow_hover)}
