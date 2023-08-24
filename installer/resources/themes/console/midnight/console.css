@@ -1722,8 +1722,9 @@ b.netdb_transport{margin:2px 8px 2px 0;padding:2px;min-width:60px;display:inline
 .netdbentry th:last-child>*,.sybil_router th:last-child>*{line-height:1}
 .netdbentry td:first-child{padding-right:5px;text-align:right}
 .netdb_expiry{margin-left:5px}
-.netdb_header .viewprofile,.netdb_header .configpeer,.netdb_header .familysearch,.sybil_routerinfo .viewprofile,.sybil_routerinfo .configpeer,.sybil_routerinfo .familysearch{margin:0 3px;width:14px;height:14px;display:inline-block}
 .netdb_header{margin:0;min-width:100px;display:inline-block;vertical-align:middle;white-space:nowrap}
+.netdb_header .viewprofile,.netdb_header .configpeer,.netdb_header .familysearch,.sybil_routerinfo .viewprofile,.sybil_routerinfo .configpeer,.sybil_routerinfo .familysearch{margin:0 3px;width:14px;height:14px;display:inline-block}
+.netdb_header .familysearch{background:var(--family) no-repeat center center/12px,var(--element)}
 .netdb_info{margin-right:1px}
 .netdb_name{color:#dfe2ff;text-transform:capitalize;font-weight:700}
 #netdb td{border-right:0}
