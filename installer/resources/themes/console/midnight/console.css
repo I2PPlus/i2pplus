@@ -90,7 +90,7 @@ ul{margin:0;padding:0}
 .main:not([id^="config"]) th,#jobs th,#netdboverview th,#tunnels #transitSummary th,#profiles th{position:relative}
 #newtab:hover{filter:drop-shadow(0 0 3px var(--hover))}
 #newtab{margin-top:2px;float:right;letter-spacing:0;text-align:right;font-size:8pt}
-#sidebar img[src$="i2plogo.png"],#sidebar h3,.confignav,*::before,*::after,h1,h2,h3,h4,.applink,.clearer,#sidebar  img,.formaction,label,#themeoptions,#helptranslate,#consolepass,.applink,#sitemapcontainer{user-select:none}
+#sb_logo img,#sidebar h3,.confignav,*::before,*::after,h1,h2,h3,h4,.applink,.clearer,#sidebar img,.formaction,label,#themeoptions,#helptranslate,#consolepass,.applink,#sitemapcontainer{user-select:none}
 
 /* standard buttons and inputs */
 input[name="refreshInterval"]{margin-right:3px;margin-left:0;width:80px;text-align:right}
@@ -234,7 +234,7 @@ button.download.control:active{background:var(--download) no-repeat center cente
 #sidebar{margin-left:-3px;margin-bottom:7px;padding:8px 10px 8px;width:184px;overflow:hidden;text-align:center;font-size:8pt;color:var(--ink);border:var(--border)}
 #sidebar #sb_logo{height:37px!important}
 #sidebar img[src*="i2plogo"]{margin-top:0;margin-left:-7px;width:190px;height:auto;font-size:0;opacity:.7;transition:ease-out opacity .2s,ease filter .2s;filter:sepia(1) hue-rotate(180deg);filter:saturate(0) sepia(1) hue-rotate(180deg)}
-#error500 #sidebar img[src$="i2plogo.png"]{margin-bottom:-7px}
+#error500 #sidebar #sb_logo img{margin-bottom:-7px}
 #sidebar img[src*="i2plogo"]:hover{opacity:.5;transition:ease-in opacity .15s;filter:saturate(.2) drop-shadow(0 0 1px #450519) drop-shadow(0 0 3px #450519);filter:saturate(.7) opacity(.7)}
 #sidebar a:hover img[src*="i2plogo"],a:focus img[src*="i2plogo"]{opacity:.8;transition:ease filter .15s;filter:saturate(.8)}
 #sidebar a:active img[src*="i2plogo"]{opacity:.5;filter:saturate(.4);transition:none;transform:scale(.97)}
@@ -255,6 +255,7 @@ button.download.control:active{background:var(--download) no-repeat center cente
 #sidebar tr{box-shadow:none}
 .sb td{padding:0 2px;max-width:180px;word-spacing:-0.1em;border:0;background-image:none}
 .sb td:first-child{max-width:90px;text-transform:capitalize}
+#sidebar a{padding:1px 2px;display:inline-block;line-height:1.2;word-spacing:0}
 #sidebar td:first-child,#sb_localtunnels td:nth-child(2){text-align:left}
 #sidebar td:last-child{text-align:right}
 #sidebar .sb_notice:empty,#sidebar .sb_notice:empty+hr{display:none}
@@ -300,7 +301,6 @@ p:empty+.sb_notice{margin-top:10px}
 #sidebar form:first-child{margin:6px 0 -5px 0}
 #sidebar p{padding:0}
 .refresh{margin-top:-10px;margin-bottom:-4px;padding:2px 0 0}
-#sidebar a{padding:1px 2px;display:inline-block;line-height:1.2;word-spacing:0}
 #sidebar #sb_advancedgeneral a,#sidebar #sb_general a,#sidebar #sb_shortgeneral a,#sidebar #sb_queue a{padding:0;display:inline-block}
 #sidebar a:hover{color:var(--a_hover)}
 #sidebar hr:last-child{margin-top:5px;margin-bottom:-5px}
@@ -2708,6 +2708,8 @@ h4#updateplugins{margin-top:-15px}
 #sidebar td:nth-child(2)::before{min-height:23px}
 #sb_internals,#sb_advanced,#sb_help{width:240px}
 #sb_localtunnels a{max-width:188px}
+#sb_logo img{margin:-2px 0 -8px -8px;width:230px;transform:none}
+#sb_logo{margin-top:2px;height:41px!important}
 #sb_memoryBar.percentBarOuter,#sb_CPUBar.percentBarOuter{margin:-5px -8px -8px}
 #sb_newsheadings{margin-left:-1px;margin-bottom:-10px;width:200px}
 #sb_newsheadings table{width:218px}
@@ -2723,8 +2725,6 @@ h4#updateplugins{margin-top:-15px}
 #sidebar h3 a{font-size:10.5pt}
 #sidebar h4{margin:-9px -11px -10px}
 #sidebar hr{margin-top:9px}
-#sidebar img[src$="i2plogo.png"]{margin:-2px 0 -8px -8px;width:230px;transform:none}
-#sidebar #sb_logo{margin-top:2px;height:41px!important}
 #sidebar{width:220px}
 #sitemap h3{font-size:11pt}
 #newtab{margin-top:5px}
@@ -2773,7 +2773,7 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #config_advanced #advconf td.tabletextarea{padding-top:0;padding-bottom:0}
 #config_service .h3navlinks a{padding:9px 16px}
 #enviro td{font-size:10.5pt}
-#error500 #sidebar img[src$="i2plogo.png"]{margin-top:-1px;margin-bottom:-9px}
+#error500 #sidebar #sb_logo img{margin-top:-1px;margin-bottom:-9px}
 #joinfamily tr:last-child td,#newfamily tr:last-child td,#plugininstall tr:nth-child(n+2) td{padding:8px}
 #logs li,pre#service_logs,#routerlogs li{font-size:10pt}
 #newsStatus,#news #newsDisplay a,.newsAuthor{font-size:9pt}
@@ -2789,7 +2789,6 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #sidebar button,#sidebar .stop,#sidebar .reload{min-width:121px}
 #sidebar form{margin-bottom:-8px}
 #sidebar h3 a{margin-top:3px;display:inline-block;font-size:10.5pt}
-#sidebar img[src$="i2plogo.png"]{margin-top:-1px;margin-left:-6px;width:244px;transform:none}
 #sidebar #minigraphcontainer{width:264px;background-size:256px 40px}
 #sidebar #minigraph{margin-left:-1px;width:252px}
 #sidebar #sb_internals,#sidebar #sb_advanced,#sidebar #sb_help{margin:-3px 0 -9px -7px;width:255px}
@@ -2801,7 +2800,8 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #sidebar #sb_localtunnels td:first-child{padding:2px 0 2px 5px;width:16px}
 #sidebar #sb_localtunnels td:first-child img{margin-left:2px}
 #sidebar #sb_localtunnels td:last-child{padding-right:5px}
-#sidebar #sb_internals.collapsed td,#sidebar #sb_advanced.collapsed td,#sidebar #sb_services.collapsed td{width:257px}
+#sidebar #sb_logo img{margin-top:-1px;margin-left:-6px;width:244px;transform:none}
+#sidebar #sb_advanced.collapsed td,#sidebar #sb_internals.collapsed td,#sidebar #sb_services.collapsed td{width:257px}
 #tunnels h3 a:not(.lsview),#criticallogs+h3.tabletitle a,#iptransport a,#advancedconfig a,#reseedsetup a{font-size:0}
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#i2pupdates .nowrap::after{min-height:60px}
 #warning h3{padding:10px 15px 9px;font-size:12pt}
