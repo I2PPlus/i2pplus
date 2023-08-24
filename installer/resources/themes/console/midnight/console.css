@@ -1686,6 +1686,7 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 
 /* peers - sort icons */
 #udpconnections th{vertical-align:top;text-align:center}
+#ntcpconnections .tablefooter td::before,#udpconnections .tablefooter td::before{display:none}
 .sortup,.sortdown,.sortupactive,.sortdownactive{margin:4px 1px 0;padding:1px 0;width:16px;height:12px;display:inline-block;vertical-align:middle;text-align:center;border:1px solid #117;border:var(--border_inner);border-radius:1px;background-size:10px auto,100%}
 .sortup,.sortdown{box-shadow:var(--highlight);opacity:.5}
 .sortup img,.sortdown img,.sortupactive img,.sortdownactive img{margin:0;padding:0;opacity:0;width:16px;height:14px;vertical-align:middle;text-align:center}
