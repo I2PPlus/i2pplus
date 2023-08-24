@@ -1565,6 +1565,7 @@ span#distance{color:#d6fffd}
 .leaseset td:first-child img{margin-left:3px;margin-right:2px;vertical-align:middle}
 .viewfullentry,.viewprofile,.configpeer{font-size:0}
 #leasesetdebug{margin:-4px 0 10px}
+#netdb .netdbentry tr:nth-child(2) td:nth-child(2){border-right:0!important}
 .leaseset+#leasesetdebug{column-span:all;margin:10px 0 0}
 #leasesetdebug th,#leasesetsummary th{font-weight:700;text-transform:uppercase;font-size:10pt;letter-spacing:.08em;word-spacing:.1em;padding:8px 10px}
 #leasesetdebug th a,#leasesetsummary a{font-size:9pt;text-transform:capitalize;letter-spacing:normal;word-spacing:normal}
@@ -1712,7 +1713,7 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #banlist li a[href^="configpeer"]:active{box-shadow:var(--btn_shadow_active);background:linear-gradient(180deg,var(--hover) 50%,#501f6c 50%)}
 
 /* netdb */
-b.netdb_transport{margin:2px 8px 2px 0;padding:2px;min-width:60px;display:inline-block;vertical-align:middle;text-align:center;border:var(--border_inner);box-shadow:var(--bevel);background:var(--element)}
+b.netdb_transport{margin:2px 8px 2px 0;padding:2px;min-width:64px;display:inline-block;vertical-align:middle;text-align:center;border:var(--border_inner);background:#002}
 .leasesets_container{columns:550px 2;column-gap:10px}
 .leasesets_container table{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 .leasesets_container table:first-child{margin-top:0}
@@ -1759,7 +1760,7 @@ b.netdb_transport{margin:2px 8px 2px 0;padding:2px;min-width:60px;display:inline
 .netdbStats li .bullet:last-of-type{opacity:0}
 .netdb_tunnel{margin-right:3px;margin-left:-5px;display:inline-block}
 .signingkey.encryption{padding-left:18px;background:var(--lock) 4px calc(50% - 1px) no-repeat,var(--element);background-size:12px,100%}
-.signingkey{margin:2px 0;padding:2px 4px 2px 16px;display:inline-block;font-size:90%;border:var(--border_badge);border-radius:1px;box-shadow:var(--highlight);background:var(--crypto) no-repeat 3px center,var(--element);background-size:12px,100%}
+.signingkey{margin:2px 2px 2px 0;padding:2px 4px 2px 16px;display:inline-block;font-size:90%;border:var(--border_badge);border-radius:1px;box-shadow:var(--highlight);background:var(--crypto) no-repeat 3px center,var(--element);background-size:12px,100%}
 .netdbentry tr:nth-child(2) td:last-child b,.netdbentry .familyname,.netdbStats li,.netdbStats b,#netdb .netdbentry th b,#netdb .netdbentry td:first-child b,#netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code,.netdb_addressesli,.netdb_ouraddresses,.netdb_ouraddresses .netdb_transport{display:inline-block}
 .familyname .verified{margin-top:-2px;height:12px;width:12px;display:inline-block;vertical-align:middle;font-size:0;background:var(--verified) no-repeat center center/11px}
 #netdb .longstat{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1778,7 +1779,7 @@ b.netdb_transport{margin:2px 8px 2px 0;padding:2px;min-width:60px;display:inline
 #netdb_ourinfo .version{margin-right:4px}
 #netdboverview #netdbcountrylist td:first-child{padding-left:6px}
 #netdboverview td,.sybil_addresses td{line-height:1.6}
-#netdb_ram{margin:0 0 0 -2px;padding:2px 6px;display:inline-block;font-size:90%;border:var(--border_badge);border-radius:2px;box-shadow:var(--highlight);background:var(--element)}
+#netdb_ram{margin:0 2px 0 -2px;padding:2px 6px;display:inline-block;vertical-align:middle;line-height:1.4;font-size:90%;border:var(--border_badge);box-shadow:var(--highlight);background:var(--element)}
 
 #profiles .ok,#ntcpconnections td.queue:empty::before{display:inline-block;font-size:0;width:12px;height:12px;background-size:11px}
 #profiles .version{margin:0 2px}
@@ -1863,7 +1864,6 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 .sybil_routerinfo hr{margin:-2px 0}
 .sybil_routerinfo .netdb_header img[src^="/flags.jsp?c="]{margin:0 5px 0 3px}
 .sybil_routerinfo .netdbheader{padding:3px;text-align:right;margin-right:0}
-.sybil_routerinfo .netdb_transport{margin:0 3px;display:inline-block}
 .sybilscan table,.sybilscan tr{border:0;background:none;box-shadow:none}
 .sybilscan tr td{border:0}
 .threatpoints+ul{padding-top:3px;padding-bottom:3px}
