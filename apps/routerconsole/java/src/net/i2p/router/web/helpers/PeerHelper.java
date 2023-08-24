@@ -458,7 +458,7 @@ public class PeerHelper extends HelperBase {
         buf.append("</tbody>");
 
         if (!peers.isEmpty()) {
-            buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=6><b>")
+            buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=5><b>")
                .append(ngettext("{0} peer", "{0} peers", nt.countActivePeers()));
             String rx = formatRate(bpsRecv/1000).replace(".00", "");
             String tx = formatRate(bpsSend/1000).replace(".00", "");
@@ -473,7 +473,7 @@ public class PeerHelper extends HelperBase {
                        "<td class=skew><span><b>").append(DataHelper.formatDuration2(offsetTotal*1000/peers.size())).append("</b></span></td>" +
                        "<td class=tx><span><b>").append(totalSend).append("</b></span></td>" +
                        "<td class=rx><span><b>").append(totalRecv).append("</b></span></td>" +
-                       "<td>&nbsp;</td><td class=edit>&nbsp;</td></tr>\n");
+                       "<td colspan=2></td></tr>\n");
         }
         buf.append("</tfoot></table>\n</div></div>\n");
         out.write(buf.toString());
@@ -840,7 +840,7 @@ public class PeerHelper extends HelperBase {
             if (debugmode) {
                 buf.append("6");
             } else {
-                buf.append("5");
+                buf.append("4");
             }
             buf.append("><b>")
                .append(ngettext("{0} peer", "{0} peers", ut.countActivePeers()))
