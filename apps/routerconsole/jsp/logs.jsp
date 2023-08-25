@@ -175,7 +175,7 @@
 
         if (criticallogs) {
           var criticallogsResponse = xhr.responseXML.getElementById("criticallogs");
-          if (criticallogsResponse !== null && !criticallogs && criticallogsResponse) {
+          if (criticallogsResponse !== null && !criticallogs) {
             mainLogs.innerHTML = mainLogsResponse.innerHTML;
           } else if (criticallogsResponse !== null && criticallogs !== criticallogsResponse && !noCritLogs) {
             criticallogs.innerHTML = criticallogsResponse.innerHTML;
