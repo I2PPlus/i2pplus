@@ -43,7 +43,7 @@ td{padding:4px 6px;vertical-align:middle;border-top:var(--border_softer)}
 th[aria-sort]{font-style:italic}
 th code{user-select:all}
 th.options{padding:8px 5px 8px 10px;font-size:9pt}
-th{padding:7px 5px;position:relative;line-height:1.1;text-align:center;font-size:90%;border-top:var(--border);border-bottom:var(--border);background:var(--th)}
+th{padding:7px 5px;position:relative;line-height:1.1;text-align:center;font-size:85%;border-top:var(--border);border-bottom:var(--border);background:var(--th)}
 tr:first-child td{border-top:var(--border)}
 tr:nth-child(even),tr:nth-child(odd){background:var(--row)}
 tr{vertical-align:middle;contain:layout}
@@ -603,7 +603,7 @@ h3[id*="jobs"]{clear:both;margin-top:25px}
 #jobstats tbody td:nth-last-child(n+2){border-right:var(--border_softer)}
 #jobstats tbody tr{border-top:var(--border_softer)}
 #jobstats td{padding-top:6px;padding-bottom:6px;border-bottom:0}
-#jobstats thead th{font-size:90%}
+#jobstats thead th{font-size:85%}
 #jobstats thead th,#jobstats tfoot td{font-weight:700;background:var(--th)}
 #jobstats tfoot td{border-top:var(--border)}
 #jobstats th,#jobstats td{text-align:right;padding-right:12px}
@@ -731,12 +731,12 @@ td.ipv6{width:1%;max-width:24px}
 #peers .tab,#peers .tab2{min-width:96px}
 #peers .tab,#peers .tab2,#profiles .tab,#profiles .tab2{margin-top:-1px}
 #peers .tablefooter{box-shadow:var(--highlight),inset -1px -1px 0 1px #000}
-#peers td.direction i{margin:3px -3px -4px;width:100%;display:inline-block;text-align:center;font-size:90%;font-style:normal;color:#990;border-top:var(--border_badge);border-radius:2px}
+#peers td.direction i{margin:3px -3px -4px;width:100%;display:inline-block;text-align:center;font-size:85%;font-style:normal;color:#990;border-top:var(--border_badge);border-radius:2px}
 #peers tfoot{background:var(--th)}
 #peers tfoot td:not(first-child),#ntcpconnections tfoot td:not(first-child){border-left:0}
 #peers tfoot td,#ntcpconnections tfoot td,#transportSummary .tablefooter td{padding:7px 5px;color:var(--ink);text-align:center;font-weight:700}
 #peers th.caps{padding-left:0;text-align:left}
-#peers th{font-size:90%}
+#peers th{font-size:85%}
 #peers th,#peers td{text-align:center}
 #peers tr{border-left:var(--border);border-right:var(--border)}
 #peers tr,#peers th:first-child,#peers td:first-child,#profiles tr,#profiles th:first-child,#profiles td:first-child{border-left:var(--border)}
@@ -786,7 +786,7 @@ td.ipv6{width:1%;max-width:24px}
 #peerprofiles.widescroll{margin-top:-10px;padding-top:112px;position:relative}
 #peer_thresholds{width:100%;position:absolute;top:0}
 #profilelist{margin:1px 0 10px}
-#profilelist th{font-size:90%}
+#profilelist th{font-size:85%}
 #profilelist th:first-child,#profilelist th:nth-last-child(2),#profilelist td:not(.rif):first-child,#profilelist td:nth-last-child(2){white-space:nowrap;text-align:center}
 #profilelist th:first-child,#profilelist th:nth-child(2),#profilelist th:nth-child(3),#profilelist th:nth-child(4),#profilelist td:not(.rif):first-child,#profilelist td:not(.rih):nth-child(2),#profilelist td:nth-child(3),#profilelist td:nth-child(4){width:1%;white-space:nowrap;text-align:center}
 #profilelist th:nth-child(4),#profilelist td:nth-child(4){width:15%}
@@ -877,7 +877,7 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 
 /* floodfills */
 #floodfills{margin:12px 0 10px}
-#floodfills th{padding:6px 4px;white-space:normal;text-align:center}
+#floodfills th{padding:6px 4px;white-space:normal;text-align:center;font-size:85%}
 #floodfills td:not(.rid td){padding:4px;vertical-align:middle;white-space:nowrap;color:#bb7}
 #floodfills td:first-child,#floodfills td:not(.rid td):nth-child(2){padding:4px 3px;width:1%;white-space:nowrap}
 #floodfills td:not(.rid td):nth-child(2){padding:4px;width:7%;min-width:64px;max-width:128px}
@@ -1004,7 +1004,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels td:not(.rif):not(.rih):not(.rbw):first-child,#tunnels #tunnelPeerCount td:first-child{border-left:var(--border)}
 #tunnels td:not(.rif):not(.rih):not(.rbw):last-child,#tunnels #tunnelPeerCount td:last-child{border-right:var(--border)}
 #tunnels td:not(.rif):not(.rih):not(.rbw)>*{vertical-align:middle}
-#tunnels th{font-size:90%;position:relative;user-select:none}
+#tunnels th{font-size:85%;position:relative;user-select:none}
 #tunnels th#tier[role="columnheader"]:not([data-sort-method="none"])::after,#tunnels th#router[role="columnheader"]:not([data-sort-method="none"])::after,#tunnels th#version[role="columnheader"]:not([data-sort-method="none"])::after{right:-2px;z-index:999}
 #tunnels .tunnel_cap{padding:3px 2px;border-radius:0}
 #tunnels .tunnels_client th:first-child{font-size:0}
@@ -1052,7 +1052,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnelPeerCount tbody tr td:not(.rih):not(.rbw),#transitSummary tbody tr td:not(.rih):not(.rbw){padding:4px;border:var(--border_softer)}
 #tunnels #tunnelPeerCount td.bar{border-left:0}
 #tunnels #tunnelPeerCount td.tcount{padding:3px 0 3px 4px;min-width:16px;text-align:right;border-right:0}
-#tunnelPeerCount tfoot td{padding:3px 5px 6px;font-size:90%;border-top:var(--border);background:#000}
+#tunnelPeerCount tfoot td{padding:3px 5px 6px;font-size:85%;border-top:var(--border);background:#000}
 #tunnelPeerCount tr:last-child td:not(.rih):not(.rbw),#transitSummary tr:last-child td:not(.rih):not(.rbw){border-bottom:var(--border)}
 
 /* transit summary */
@@ -1423,7 +1423,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #ipv4,#ipv6,#permabanned tr:nth-child(2){border-top:var(--border);border-bottom:var(--border);background:var(--th)}
 #sessionBanned {margin:11px auto 9px}
 #sessionBanned th,#sessionBanned td{padding:6px 12px}
-#sessionBanned thead th{font-size:90%;text-align:left}
+#sessionBanned thead th{font-size:85%;text-align:left}
 #profiles #sessionBanned tfoot th{padding:8px 12px;text-align:center}
 #sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0}
 #sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
@@ -1635,8 +1635,7 @@ th.th_title{padding:8px 10px;position:static;text-align:left;background:var(--h1
 #servicedebug+p.infohelp{padding:20px 24px 20px 58px;background:var(--bug) no-repeat 15px center/28px,var(--msg_nohat)}
 #shutdownrouter+p.infohelp{padding:20px 24px 20px 58px;background:var(--power) no-repeat 15px center/28px,var(--msg_nohat)}
 #systray+p.infohelp{padding:20px 24px 20px 58px;background:var(--systray) no-repeat 15px center/28px,var(--msg_nohat)}
-#transports{margin-bottom:-1px}
-#tunnelconfigsave,#homeapps{margin-bottom:-2px}
+#transports,#tunnelconfigsave,#homeapps{margin-bottom:-2px}
 #tunnelconfig td:nth-child(n+2){text-align:left}
 #tunnelconfig th{padding:10px;letter-spacing:.08em;text-transform:uppercase}
 #upnpscan{margin:1px 0 -10px;padding:15px 25px 5px;border:var(--border);background:#000}
@@ -1929,7 +1928,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #webappconfig{border-left-width:1px}
 #webappconfig+#webappconfigtext{margin-top:-11px}
 #webappconfig tr:last-child,#clientconfig tr:last-child{border-top:1px inset #131}
-#webappconfig th,#clientconfig th{font-size:90%}
+#webappconfig th,#clientconfig th{font-size:85%}
 
 /* clients */
 #webappconfigactions,#pluginconfigactions{margin-top:-2px}
