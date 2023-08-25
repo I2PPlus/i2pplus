@@ -29,7 +29,7 @@
 <tr><td class=infohelp>
 <%=intl._t("Please include your I2P version and running environment information in bug reports")%>.
 <%=intl._t("Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report.")%>
-<%=intl._t("Please report bugs on {0} or {1}.", "<a href=\"http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues\">git.idk.i2p</a>", "<a href=\"https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues\">i2pgit.org</a>")%>
+<%=intl._t("Please report bugs on {0} or {1}.", "<a href=\"http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues\">git.idk.i2p</a>", "<a href=\"https://gitlab.com/i2pplus/I2P.Plus/-/issues\">I2P+ Gitlab</a>")%>
 </td></tr>
 </tbody>
 </table>
@@ -73,7 +73,7 @@
     int last = logsHelper.getLastCriticalMessageNumber();
     if (last >= 0) {
 %>
-<h3 class=tabletitle><%=intl._t("Critical / Error Level Logs")%>
+<h3 id=critLogsHead class=tabletitle><%=intl._t("Critical / Error Level Logs")%>
 <%
     }
     if ((ct1 != null || ct2 != null || (ct3 != null && ct4 != null && ct5 != null)) && ctn != null) {
@@ -87,7 +87,7 @@
     }
     if (last >= 0) {
 %>
-&nbsp;<a class=delete title="<%=intl._t("Clear logs")%>" href="logs?crit=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
+&nbsp;<a id=clearCritical class=delete title="<%=intl._t("Clear logs")%>" href="logs?crit=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
 </h3>
 <table id=criticallogs class=logtable>
 <tbody>
@@ -153,6 +153,8 @@
   import {onVisible} from "/js/onVisible.js";
   var mainLogs = document.getElementById("logs");
   var criticallogs = document.getElementById("criticallogs");
+  var critLogsHead = document.getElementById("critLogsHead");
+  var noCritLogs = document.querySelector("#criticallogs .nologs");
   var routerlogs = document.getElementById("routerlogs");
   var servicelogs = document.getElementById("wrapperlogs");
   var visible = document.visibilityState;
@@ -173,12 +175,13 @@
 
         if (criticallogs) {
           var criticallogsResponse = xhr.responseXML.getElementById("criticallogs");
-          if (!criticallogs && criticallogsResponse) {
+          if (criticallogsResponse !== null && !criticallogs && criticallogsResponse) {
             mainLogs.innerHTML = mainLogsResponse.innerHTML;
-          } else {
-            if (criticallogs !== criticallogsResponse) {
-              criticallogs.innerHTML = criticallogsResponse.innerHTML;
-            }
+          } else if (criticallogsResponse !== null && criticallogs !== criticallogsResponse && !noCritLogs) {
+            criticallogs.innerHTML = criticallogsResponse.innerHTML;
+          } else if (noCritLogs) {
+            critLogsHead.remove();
+            criticallogs.remove();
           }
         }
         if (routerlogs) {
