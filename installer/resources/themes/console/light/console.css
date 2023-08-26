@@ -2770,7 +2770,7 @@ body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_int
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#i2pupdates .nowrap::after{min-height:60px}
 #webappconfiguration a,#config_plugins .h3navlinks a{margin-top:-8px;padding:12px 8px 8px}
 #xhr>hr+#sb_shortgeneral{margin-top:-7px}
-#sidebar form button.download{margin:-3px 0 -7px}
+#sidebar form button.download{margin:-3px 0 -4px}
 #sidebar #sb_updateprogress+.percentBarOuter{width:232px;margin:-1px 2px 0}
 #sidebar #sb_advancedgeneral:not([hidden])~#sb_updatesection #sb_updateprogress+.percentBarOuter{margin-bottom:-3px}
 }
