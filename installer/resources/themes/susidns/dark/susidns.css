@@ -133,7 +133,7 @@ td.checkbox{padding:3px 10px;width:1%}
 #book input[type=checkbox]{margin:0}
 #book p,p.messages{font-size:10pt}
 #book table{width:100%;border:var(--border);border-collapse:separate}
-#book table th{padding:10px 0;border-bottom:var(--border)}
+#book table th{font-size:90%;border-bottom:var(--border)}
 #book th:last-child{background:var(--nuke) no-repeat center center/15px}
 #book tr.head{background:linear-gradient(180deg,rgba(0,0,0,0) 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 4px),linear-gradient(180deg,#002000,#000 75%);background-size:100%,4px 100%,100%}
 #host_list tr,#host_details tr{background:#010 var(--row)}
