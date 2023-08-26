@@ -2033,14 +2033,13 @@ select[name="newlogclass"]{margin-left:3px}
 .langselect:hover>input[name="lang"]~.ui_lang{color:var(--hover);border-top:1px solid var(--hover);background:linear-gradient(180deg,#fff 50%,#ffe8bf 50%,#efd9b3 100%)}
 .langselect:hover .langflag{transform:scale(1.15)}
 .langselect img[src^="/flags"]{z-index:3;position:relative}
-.langselect img{width:40px;height:30px;vertical-align:middle;border-radius:4px}
+.langselect img{width:40px;height:30px;vertical-align:middle;border-radius:3px}
 .langselect input:hover+.langflag{box-shadow:0 0 0 1px var(--hover);opacity:1}
 .langselect input,.themechoice input{cursor:pointer}
 .langselect{margin:4px;padding:4px 4px 0;width:128px;min-height:64px;float:left;text-align:center;border:var(--border_inner);box-shadow:var(--highlight);background:#f8f8ff;transition:ease transform .05s;filter:var(--filter_shadow)}
 .langselect .optbox{display:none}
 .langselect .optbox:checked+.langflag{transform:scale(.8);opacity:1}
 .langselect .optbox:checked~.langflag::after{padding:2px;width:16px;height:16px;display:inline-block;position:absolute;right:-14px;bottom:calc(50% - 10px);z-index:20;border-radius:50%;box-shadow:0 0 0 2px #bbc,0 0 0 5px #fff;background:#f2f2ff var(--yes) no-repeat center center/10px;content:""}
-.langselect .optbox:checked~.ui_lang{font-size:95%}
 .langselect .optbox:checked~.ui_lang{z-index:2;font-weight:700;color:#338;background:#e2e2ff}
 .langselect .optbox:focus~.ui_lang{color:var(--hover);box-shadow:var(--highlight);background:linear-gradient(90deg,#eef,#fff,#eef)}
 .langselect .optbox:active~.ui_lang{color:#fff;box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.2);background:var(--hover)}
@@ -2063,7 +2062,7 @@ select[name="newlogclass"]{margin-left:3px}
 .themechoice .optbox:active+img~.themelabel{color:#fff;box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.2);background:var(--hover)}
 .themechoice .optbox:checked:active+img~.themelabel{color:var(--hover);box-shadow:var(--highlight);background:linear-gradient(90deg,#eef,#fff,#eef)}
 .themelabel{margin:-24px -4px 0;padding:3px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:9pt;border-top:var(--border_inner);box-shadow:var(--highlight);background:#f8f8ff}
-.ui_lang{margin:0 -4px;padding:3px 2px;z-index:2;white-space:nowrap;text-align:center;overflow:hidden;text-overflow:ellipsis;font-size:9pt;text-transform:capitalize;border-top:var(--border_inner);border-top:var(--border_inner);border-radius:0 0 2px 2px;box-shadow:var(--highlight);background:#f8f8ff}
+.ui_lang{margin:0 -4px;padding:3px 2px 4px;white-space:nowrap;text-align:center;overflow:hidden;text-overflow:ellipsis;font-size:9pt;text-transform:capitalize;border-top:var(--border_inner);border-top:var(--border_inner);border-radius:0 0 2px 2px;box-shadow:var(--highlight);background:#f8f8ff}
 #config_ui p.infohelp{margin-bottom:10px;padding:20px 20px 20px 53px;background:var(--ui) no-repeat 15px center/28px,var(--div_infohelp)}
 #consolepass.formaction{margin-top:-6px;margin-bottom:-3px}
 #consolepass tr:first-child td{padding:20px 20px 20px 53px;background:var(--useradd) no-repeat 15px center/28px,var(--div_infohelp)}

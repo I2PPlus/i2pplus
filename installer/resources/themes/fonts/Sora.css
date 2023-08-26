@@ -9,7 +9,7 @@ h2,.headline h3,.tab2,#sidebar h3,#sidebar h3 a,.main h3,.main h4{font-weight:70
 input[type=password],input[type=text],label,.infohash,.infohelp,.infowarn,.listDate,#navi a,#torrents .infohash,.names a[href$=".i2p/"],#host_list td.b32link a,#host_list td.helper a{font-weight:500}
 .tab a{padding:4px 12px}
 .tunnel_id{min-width:102px;font-size:90%}
-.ui_lang{font-size:90%}
+.ui_lang{font-size:88%}
 .uploaded{min-width:74px}
 #dologin td{font-weight:500}
 #torrents tfoot .RateDown:not(:empty)::before,tfoot .torrentDownloaded:not(:empty)::before,tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{margin-right:2px}
