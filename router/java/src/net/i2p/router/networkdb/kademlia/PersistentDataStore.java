@@ -337,7 +337,6 @@ public class PersistentDataStore extends TransientDataStore {
         v = ri.getVersion();
         String caps = ri.getCapabilities();
         unreachable = caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
-        ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
         String country = "unknown";
         boolean noCountry = true;
         if (caps.contains("f")) {
@@ -351,6 +350,13 @@ public class PersistentDataStore extends TransientDataStore {
         }
         bw = ri.getBandwidthTier();
         for (RouterAddress ra : ri.getAddresses()) {
+            ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
+            if (enableReverseLookups()) {
+                ip = (ri != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri)) : null;
+                String rl = ip != null ? getCanonicalHostName(ip) : null;
+                if (_log.shouldInfo() && ip != null && rl != null)
+                    _log.info("Reverse lookup of Router [" + key.toBase64().substring(0,6) + "] resolves to: " + (rl != null ? rl : ip));
+            }
             if (ra.getTransportStyle().equals("SSU") ||
                 ra.getTransportStyle().equals("SSU2")) {
                     noSSU = false;
@@ -387,12 +393,6 @@ public class PersistentDataStore extends TransientDataStore {
                     dbFile.setLastModified(dataPublishDate);
                     if (_log.shouldDebug())
                         _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
-                    if (enableReverseLookups()) {
-                        ip = (ri != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri)) : null;
-                        String rl = ip != null ? getCanonicalHostName(ip) : null;
-                        if (_log.shouldInfo() && ip != null && rl != null)
-                            _log.info("Reverse lookup of Router [" + key.toBase64().substring(0,6) + "] resolves to: " + (rl != null ? rl : ip));
-                    }
                 } catch (DataFormatException dfe) {
                     _log.error("Error writing out malformed object as [" + key.toBase64().substring(0,6) + "]: " + data, dfe);
                     dbFile.delete();

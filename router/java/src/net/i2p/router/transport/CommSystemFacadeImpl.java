@@ -529,7 +529,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
-                if (enableReverseLookups() && uptime < 5*60*1000) {
+                if (enableReverseLookups() && uptime < 60*60*1000) {
                     try {
                         InetAddress ipAddress = InetAddress.getByAddress(ip);
                         String ipString = ipAddress.getHostAddress();
@@ -565,7 +565,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             long start = System.currentTimeMillis();
             long uptime = _context.router().getUptime();
             _geoIP.blockingLookup();
-            if (enableReverseLookups() && uptime < 5*60*1000) {
+            if (enableReverseLookups() && uptime < 60*60*1000) {
                 if (_log.shouldInfo())
                     _log.info("GeoIP and reverse DNS lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
             } else {
@@ -602,18 +602,19 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public String getCanonicalHostName(String ipAddress) {
         cleanupDNSCache();
         CacheEntry cacheEntry = cache.get(ipAddress); // is address cached?
+
         if (cacheEntry != null && !cacheEntry.isExpired()) {
             if (_log.shouldInfo())
-                _log.info("Reverse DNS for [" + ipAddress + "] is: " + cacheEntry.getHostName() + " (cached)");
+                _log.info("Reverse DNS for [" + ipAddress + "] is " + cacheEntry.getHostName() + " (cached)");
             return cacheEntry.getHostName();
         } else { // if not cached, perform lookup and cache result
             try {
                 String hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
                 if (_log.shouldInfo())
-                    _log.info("Reverse DNS for [" + ipAddress + "] is: " + hostName);
+                    _log.info("Reverse DNS for [" + ipAddress + "] is " + hostName);
                 cache.put(ipAddress, new CacheEntry(hostName));
                 return hostName;
-            } catch(UnknownHostException exception) {
+            } catch (UnknownHostException exception) {
                 cache.put(ipAddress, new CacheEntry(ipAddress)); // store the ip as a pair if no result
                 if (_log.shouldInfo())
                     _log.info("Reverse DNS for [" + ipAddress + "] is unknown");
@@ -636,10 +637,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 iterator.remove();
                 if (entry.getValue().isExpired()) {
                     if (_log.shouldInfo())
-                    _log.info("Removing expired reverse DNS entry from cache for: " + entry.getValue());
+                    _log.info("Removing expired reverse DNS entry from cache for [" + entry.getValue() + "]");
                 } else {
                     if (_log.shouldInfo())
-                    _log.info("Removing older reverse DNS entry from cache for: " + entry.getValue() + " -> Cache is full");
+                    _log.info("Removing older reverse DNS entry from cache for [" + entry.getValue() + "] -> Cache is full");
                 }
             } else {
                 break; // Stop removing entries once a non-stale entry is encountered
