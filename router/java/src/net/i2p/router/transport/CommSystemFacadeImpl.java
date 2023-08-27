@@ -522,17 +522,21 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             for (Hash h : _context.netDb().getAllRouters()) {
 //                RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
                 RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
+                long uptime = _context.router().getUptime();
                 if (ri == null)
                     continue;
                 byte[] ip = getIP(ri);
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
-                if (enableReverseLookups()) {
+                if (enableReverseLookups() && uptime < 5*60*1000) {
                     try {
                         InetAddress ipAddress = InetAddress.getByAddress(ip);
                         String ipString = ipAddress.getHostAddress();
                         getCanonicalHostName(ipString);
+                        try {
+                            Thread.sleep(1); // 1000 lookups/s max
+                        } catch (InterruptedException e) {}
                     } catch(UnknownHostException exception) {}
                 }
             }
@@ -559,8 +563,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         public void run() {
             long start = System.currentTimeMillis();
+            long uptime = _context.router().getUptime();
             _geoIP.blockingLookup();
-            if (enableReverseLookups()) {
+            if (enableReverseLookups() && uptime < 5*60*1000) {
                 if (_log.shouldInfo())
                     _log.info("GeoIP and reverse DNS lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
             } else {
