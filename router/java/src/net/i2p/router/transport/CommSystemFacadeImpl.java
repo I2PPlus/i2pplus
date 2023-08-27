@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -300,8 +303,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         List<RouterAddress> addresses = new ArrayList<RouterAddress>(_manager.getAddresses());
         if (addresses.size() > 1)
             Collections.sort(addresses, new AddrComparator());
-        if (_log.shouldInfo())
-            _log.info("Creating addresses: " + addresses, new Exception("creator"));
+        //if (_log.shouldDebug())
+        //    _log.debug("Creating addresses: " + addresses, new Exception("creator"));
         return addresses;
     }
 
@@ -569,17 +572,73 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
+     *  Cache for storing reverse dns lookup results
+     *
+     *  @since 0.9.60+
+     */
+    private static Map<String, CacheEntry> cache = new LinkedHashMap<String, CacheEntry>(16, 0.75f, true) {
+        int maxEntries = 16384;
+        protected boolean removeEldestEntry(Map.Entry<String, CacheEntry> eldest) {
+            return size() > maxEntries;
+        }
+    };
+
+    /**
      *  @return reverse dns hostname or ip address if unresolvable
      *  @since 0.9.58+
      */
-    public String getCanonicalHostName(String hostName) {
-        try {
-            return InetAddress.getByName(hostName).getCanonicalHostName();
-        } catch(UnknownHostException exception) {
-            return hostName;
+    public static String getCanonicalHostName(String ipAddress) {
+        cleanupDNSCache();
+        CacheEntry cacheEntry = cache.get(ipAddress); // is address cached?
+        if (cacheEntry != null && !cacheEntry.isExpired()) {
+            return cacheEntry.getHostName();
+        } else { // if not cached, perform lookup and cache result
+            try {
+                String hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
+                cache.put(ipAddress, new CacheEntry(hostName));
+                return hostName;
+            } catch(UnknownHostException exception) {
+                return ipAddress;
+            }
         }
     }
 
+    /**
+     *  Cleanup stale and older entries in DNS reverse lookup cache
+     *
+     *  @since 0.9.60+
+     */
+    private static void cleanupDNSCache() {
+        Iterator<Map.Entry<String, CacheEntry>> iterator = cache.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry<String, CacheEntry> entry = iterator.next();
+            if (entry.getValue().isExpired() || cache.size() > 16384) {
+                iterator.remove();
+            } else {
+                break; // Stop removing entries once a non-stale entry is encountered
+            }
+        }
+    }
+
+    /* @since 0.9.60+ */
+    private static class CacheEntry {
+        private String hostName;
+        private long expirationTime;
+
+        public CacheEntry(String hostName) {
+            this.hostName = hostName;
+            this.expirationTime = System.currentTimeMillis() + (24 * 60 * 60 * 1000); // Set expiration time to 24 hours from now
+        }
+
+        public String getHostName() {
+            return hostName;
+        }
+
+        public boolean isExpired() {
+            return System.currentTimeMillis() > expirationTime;
+        }
+    }
 
     /**
      *  @return domain name only from reverse dns hostname lookups
