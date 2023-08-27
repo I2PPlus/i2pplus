@@ -503,7 +503,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /* We hope the routerinfos are read in and things have settled down by now, but it's not required to be so */
-    // TODO: Run this job on a schedule so country count doesn't become stale
     private static final int START_DELAY = SystemVersion.isSlow() ? 5*60*1000 : 15*1000;
 //    private static final int LOOKUP_TIME = 30*60*1000;
     private static final int LOOKUP_TIME = 5*60*1000;
@@ -529,10 +528,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
-/*
-                if (enableReverseLookups())
-                    getCanonicalHostName(ip.toString());
-*/
+                if (enableReverseLookups()) {
+                    try {
+                        InetAddress ipAddress = InetAddress.getByAddress(ip);
+                        String ipString = ipAddress.getHostAddress();
+                        getCanonicalHostName(ipString);
+                    } catch(UnknownHostException exception) {}
+                }
             }
             _context.simpleTimer2().addPeriodicEvent(new Lookup(), 5000, LOOKUP_TIME);
         }
@@ -558,8 +560,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         public void run() {
             long start = System.currentTimeMillis();
             _geoIP.blockingLookup();
-            if (_log.shouldInfo())
-                _log.info("GeoIP lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
+            if (enableReverseLookups()) {
+                if (_log.shouldInfo())
+                    _log.info("GeoIP and reverse DNS lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
+            } else {
+                if (_log.shouldInfo())
+                    _log.info("GeoIP lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
+            }
         }
     }
 
@@ -587,17 +594,24 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @return reverse dns hostname or ip address if unresolvable
      *  @since 0.9.58+
      */
-    public static String getCanonicalHostName(String ipAddress) {
+    public String getCanonicalHostName(String ipAddress) {
         cleanupDNSCache();
         CacheEntry cacheEntry = cache.get(ipAddress); // is address cached?
         if (cacheEntry != null && !cacheEntry.isExpired()) {
+            if (_log.shouldInfo())
+                _log.info("Reverse DNS for [" + ipAddress + "] is: " + cacheEntry.getHostName() + " (cached)");
             return cacheEntry.getHostName();
         } else { // if not cached, perform lookup and cache result
             try {
                 String hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
+                if (_log.shouldInfo())
+                    _log.info("Reverse DNS for [" + ipAddress + "] is: " + hostName);
                 cache.put(ipAddress, new CacheEntry(hostName));
                 return hostName;
             } catch(UnknownHostException exception) {
+                cache.put(ipAddress, new CacheEntry(ipAddress)); // store the ip as a pair if no result
+                if (_log.shouldInfo())
+                    _log.info("Reverse DNS for [" + ipAddress + "] is unknown");
                 return ipAddress;
             }
         }
@@ -608,13 +622,20 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      *  @since 0.9.60+
      */
-    private static void cleanupDNSCache() {
+    private void cleanupDNSCache() {
         Iterator<Map.Entry<String, CacheEntry>> iterator = cache.entrySet().iterator();
 
         while (iterator.hasNext()) {
             Map.Entry<String, CacheEntry> entry = iterator.next();
             if (entry.getValue().isExpired() || cache.size() > 16384) {
                 iterator.remove();
+                if (entry.getValue().isExpired()) {
+                    if (_log.shouldInfo())
+                    _log.info("Removing expired reverse DNS entry from cache for: " + entry.getValue());
+                } else {
+                    if (_log.shouldInfo())
+                    _log.info("Removing older reverse DNS entry from cache for: " + entry.getValue() + " -> Cache is full");
+                }
             } else {
                 break; // Stop removing entries once a non-stale entry is encountered
             }
