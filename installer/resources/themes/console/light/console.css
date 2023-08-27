@@ -325,7 +325,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sb_services a[href="/webmail"]::before{background-image:var(--mail)}
 #sb_services a[href="/torrents"]::before{background-image:var(--snark)}
 #sb_services a[href="/dns"]::before{background-image:var(--abook)}
-#sb_services a[href="/i2ptunnelmgr"]::before{background-image:var(--tunnman)}
+#sb_services a[href="/tunnelmanager"]::before{background-image:var(--tunnman)}
 #sb_services a[href$=":7658/"]::before,#sb_services a[href$=":7668/"]::before{background-image:var(--webserver)}
 #sb_services a[href="/orchid/"]::before,#sb_services a[href*="/orchid/"]::before{background-image:var(--orchid)}
 #sb_services a[href*="bote"]::before{background-image:var(--bote)}
