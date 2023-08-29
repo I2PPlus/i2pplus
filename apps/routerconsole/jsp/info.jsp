@@ -63,8 +63,8 @@
       if (xhrInfo.readyState === 4 && xhrInfo.status === 200) {
         progressx.show();
         progressx.progress(0.5);
-        var updating = document.querySelectorAll(".volatile");
-        var updatingResponse = xhrInfo.responseXML.querySelectorAll(".volatile");
+        var updating = document.querySelectorAll("#routerinformation .volatile");
+        var updatingResponse = xhrInfo.responseXML.querySelectorAll("#routerinformation .volatile");
         var i;
         for (i = 0; i < updating.length; i += 1) {
           if (updating[i] !== null) {

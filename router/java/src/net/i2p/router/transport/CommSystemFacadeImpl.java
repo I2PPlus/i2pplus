@@ -622,14 +622,18 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
     };
 
+    /* @since 0.9.60+ */
     public static int countRdnsCacheEntries() {
         return rdnsCache.size();
     }
 
+    /* @since 0.9.60+ */
     public static String rdnsCacheSize() {
         File cache = new File(RDNS_CACHE_FILE);
         long fileSize = cache != null ? cache.length() / 1024 : 0;
-        if (cache != null) {
+        if (uptime < 30*1000) {
+            return "0";
+        } else if (cache != null) {
             return String.valueOf(fileSize) + "KB";
         } else {
             return "Cache file not found";
@@ -673,6 +677,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
     }
 
+    /* @since 0.9.60+ */
     private static void writeCacheToFile() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(RDNS_CACHE_FILE))) {
             out.writeObject(rdnsCache);
@@ -681,6 +686,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
     }
 
+    /* @since 0.9.60+ */
     @SuppressWarnings("unchecked")
     private static void readCacheFromFile() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(RDNS_CACHE_FILE))) {
