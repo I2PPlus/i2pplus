@@ -86,7 +86,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     public synchronized void startup() {
-        _log.info("Starting up the comm system...");
+        _log.info("Starting up the Comm System...");
         _manager.startListening();
         startTimestamper();
         startNetMonitor();
@@ -529,14 +529,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
-                if (enableReverseLookups() && uptime < 60*60*1000) {
+                if (enableReverseLookups() && uptime > 2*60*1000 && uptime < 10*60*1000) {
                     try {
                         InetAddress ipAddress = InetAddress.getByAddress(ip);
                         String ipString = ipAddress.getHostAddress();
                         getCanonicalHostName(ipString);
-                        try {
-                            Thread.sleep(1); // 1000 lookups/s max
-                        } catch (InterruptedException e) {}
+                        //try {
+                        //    Thread.sleep(1); // 1000 lookups/s max
+                        //} catch (InterruptedException e) {}
                     } catch(UnknownHostException exception) {}
                 }
             }
@@ -565,7 +565,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             long start = System.currentTimeMillis();
             long uptime = _context.router().getUptime();
             _geoIP.blockingLookup();
-            if (enableReverseLookups() && uptime < 60*60*1000) {
+            if (enableReverseLookups() && uptime > 2*60*1000 && uptime < 10*60*1000) {
                 if (_log.shouldInfo())
                     _log.info("GeoIP and reverse DNS lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
             } else {
@@ -588,35 +588,40 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      *  @since 0.9.60+
      */
-    private static Map<String, CacheEntry> cache = new LinkedHashMap<String, CacheEntry>(16, 0.75f, true) {
+    private static Map<String, CacheEntry> rdnsCache = new LinkedHashMap<String, CacheEntry>(16, 0.75f, true) {
         int maxEntries = 16384;
         protected boolean removeEldestEntry(Map.Entry<String, CacheEntry> eldest) {
             return size() > maxEntries;
         }
     };
 
+    public static int countRdnsCacheEntries() {
+        return rdnsCache.size();
+    }
+
     /**
      *  @return reverse dns hostname or ip address if unresolvable
      *  @since 0.9.58+
      */
+    @Override
     public String getCanonicalHostName(String ipAddress) {
-        cleanupDNSCache();
-        CacheEntry cacheEntry = cache.get(ipAddress); // is address cached?
+        cleanupRDNSCache();
+        CacheEntry cacheEntry = rdnsCache.get(ipAddress); // is address cached?
 
         if (cacheEntry != null && !cacheEntry.isExpired()) {
-            if (_log.shouldInfo())
+            if (_log.shouldInfo() && !cacheEntry.getHostName().equals("null"))
                 _log.info("Reverse DNS for [" + ipAddress + "] is " + cacheEntry.getHostName() + " (cached)");
             return cacheEntry.getHostName();
         } else { // if not cached, perform lookup and cache result
             try {
                 String hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
-                if (_log.shouldInfo())
+                rdnsCache.put(ipAddress, new CacheEntry(hostName));
+                if (_log.shouldInfo() && cacheEntry != null && !cacheEntry.getHostName().equals("null"))
                     _log.info("Reverse DNS for [" + ipAddress + "] is " + hostName);
-                cache.put(ipAddress, new CacheEntry(hostName));
                 return hostName;
             } catch (UnknownHostException exception) {
-                cache.put(ipAddress, new CacheEntry(ipAddress)); // store the ip as a pair if no result
-                if (_log.shouldInfo())
+                rdnsCache.put(ipAddress, new CacheEntry(ipAddress)); // store the ip as a pair if no result
+                if (_log.shouldInfo() && cacheEntry != null && !cacheEntry.getHostName().equals("null"))
                     _log.info("Reverse DNS for [" + ipAddress + "] is unknown");
                 return ipAddress;
             }
@@ -628,12 +633,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      *  @since 0.9.60+
      */
-    private void cleanupDNSCache() {
-        Iterator<Map.Entry<String, CacheEntry>> iterator = cache.entrySet().iterator();
+    private void cleanupRDNSCache() {
+        Iterator<Map.Entry<String, CacheEntry>> iterator = rdnsCache.entrySet().iterator();
 
         while (iterator.hasNext()) {
             Map.Entry<String, CacheEntry> entry = iterator.next();
-            if (entry.getValue().isExpired() || cache.size() > 16384) {
+            if (entry.getValue().isExpired() || rdnsCache.size() > 16384) {
                 iterator.remove();
                 if (entry.getValue().isExpired()) {
                     if (_log.shouldInfo())

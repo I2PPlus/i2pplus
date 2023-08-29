@@ -350,13 +350,6 @@ public class PersistentDataStore extends TransientDataStore {
         }
         bw = ri.getBandwidthTier();
         for (RouterAddress ra : ri.getAddresses()) {
-            ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
-            if (enableReverseLookups()) {
-                ip = (ri != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri)) : null;
-                String rl = ip != null ? getCanonicalHostName(ip) : null;
-                if (_log.shouldInfo() && ip != null && rl != null)
-                    _log.info("Reverse lookup of Router [" + key.toBase64().substring(0,6) + "] resolves to: " + (rl != null ? rl : ip));
-            }
             if (ra.getTransportStyle().equals("SSU") ||
                 ra.getTransportStyle().equals("SSU2")) {
                     noSSU = false;
@@ -368,8 +361,10 @@ public class PersistentDataStore extends TransientDataStore {
             noCountry = false;
         }
 
+//        boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") ||
+//                         bw.equals("M") || bw.equals("N") || isBadFF || noSSU || hasSalt || !hasIP;
         boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") ||
-                         bw.equals("M") || bw.equals("N") || isBadFF || noSSU || hasSalt || !hasIP;
+                         bw.equals("M") || bw.equals("N");
         boolean isLTier = bw.equals("L");
         boolean isBanned = ri != null && (_context.banlist().isBanlistedForever(key) ||
                            _context.banlist().isBanlisted(key) ||
@@ -383,7 +378,13 @@ public class PersistentDataStore extends TransientDataStore {
             }
             dbFile = new File(_dbDir, filename);
             long dataPublishDate = getPublishDate(data);
-            if ((dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && (!isOld || isFF) && !isBadFF && !noSSU && !isSlow && !isBanned) || isUs) {
+            if (enableReverseLookups() && uptime > 2*60*1000 && hasIP) {
+                ip = (ri != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri)) : null;
+                String rl = ip != null ? _context.commSystem().getCanonicalHostName(ip) : null;
+            }
+//            if ((dbFile.lastModified() < dataPublishDate && ri != null && !unreachable && (!isOld || isFF) &&
+//                !isBadFF && !noSSU && !isSlow && !isBanned) || isUs) {
+            if (dbFile.lastModified() < dataPublishDate) {
                 // our filesystem is out of date, let's replace it
                 fos = new SecureFileOutputStream(dbFile);
                 fos = new BufferedOutputStream(fos);
@@ -954,6 +955,7 @@ public class PersistentDataStore extends TransientDataStore {
     /**
      * @since 0.9.58+
      */
+/**
     public String getCanonicalHostName(String hostName) {
         try {
             return InetAddress.getByName(hostName).getCanonicalHostName();
@@ -961,6 +963,7 @@ public class PersistentDataStore extends TransientDataStore {
             return hostName;
         }
     }
+**/
 
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;

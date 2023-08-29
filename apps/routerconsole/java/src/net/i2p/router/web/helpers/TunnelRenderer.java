@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.Collator;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +38,7 @@ import net.i2p.router.web.Messages;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Addresses;
+import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.ObjectCounterUnsafe;
 
@@ -44,6 +48,7 @@ import net.i2p.util.ObjectCounterUnsafe;
  */
 class TunnelRenderer {
     private final RouterContext _context;
+    private final Log _log;
 
     private int DISPLAY_LIMIT = 200;
     private final DecimalFormat fmt = new DecimalFormat("#0.00");
@@ -55,6 +60,7 @@ class TunnelRenderer {
 
     public TunnelRenderer(RouterContext ctx) {
         _context = ctx;
+        _log = _context.logManager().getLog(TunnelRenderer.class);
     }
 
     public void renderStatusHTML(Writer out) throws IOException {
@@ -346,7 +352,7 @@ class TunnelRenderer {
                 //String rl = _context.namingService().reverseLookup(h);
                 String truncHash = h.toBase64().substring(0,4);
                 String ip = (info != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
-                String rl = ip != null ? getCanonicalHostName(ip) : null;
+                String rl = ip != null ? _context.commSystem().getCanonicalHostName(ip) : null;
                 String v = info != null ? info.getOption("router.version") : null;
                 int inactive = 0;
                 if (count <= 0 && (participating.size() == 0))
@@ -493,7 +499,7 @@ class TunnelRenderer {
                 String ip = (info != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
                 String v = info != null ? info.getOption("router.version") : null;
                 String truncHash = h.toBase64().substring(0,4);
-                String rl = ip != null ? getCanonicalHostName(ip) : null;
+                String rl = ip != null ? _context.commSystem().getCanonicalHostName(ip) : null;
                 out.write("<tr class=lazy><td>");
                 out.write(peerFlag(h));
                 out.write("</td><td>");
@@ -983,6 +989,7 @@ class TunnelRenderer {
     /**
      * @since 0.9.58+
      */
+/**
     public String getCanonicalHostName(String hostName) {
         try {
             return InetAddress.getByName(hostName).getCanonicalHostName();
@@ -990,5 +997,6 @@ class TunnelRenderer {
             return hostName;
         }
     }
+**/
 
 }

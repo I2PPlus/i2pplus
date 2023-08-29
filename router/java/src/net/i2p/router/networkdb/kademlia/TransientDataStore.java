@@ -21,6 +21,7 @@ import net.i2p.data.LeaseSet;
 import net.i2p.data.LeaseSet2;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
+import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.util.Log;
 
 /**
@@ -40,6 +41,11 @@ class TransientDataStore implements DataStore {
     }
 
     public boolean isInitialized() { return true; }
+
+    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    public boolean enableReverseLookups() {
+        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
+    }
 
     public void stop() {
         _data.clear();
@@ -155,6 +161,12 @@ class TransientDataStore implements DataStore {
                     _log.info("New RouterInfo [" + key.toBase64().substring(0,6) + "] -> " + v + " / " + caps +
                               "\n* Published: " + new Date(ri.getPublished()));
                 rv = true;
+                long uptime = _context.router().getUptime();
+                if (enableReverseLookups() && uptime > 2*60*1000) {
+                    String ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
+                    ip = (ri != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri)) : null;
+                    String rl = ip != null ? _context.commSystem().getCanonicalHostName(ip) : null;
+                }
             }
         } else if (DatabaseEntry.isLeaseSet(type)) {
             LeaseSet ls = (LeaseSet)data;
