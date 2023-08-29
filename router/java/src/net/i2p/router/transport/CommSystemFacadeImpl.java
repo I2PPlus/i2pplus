@@ -626,6 +626,16 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return rdnsCache.size();
     }
 
+    public static String rdnsCacheSize() {
+        File cache = new File(RDNS_CACHE_FILE);
+        long fileSize = cache != null ? cache.length() / 1024 : 0;
+        if (cache != null) {
+            return String.valueOf(fileSize) + "KB";
+        } else {
+            return "Cache file not found";
+        }
+    }
+
     /**
      *  @return reverse dns hostname or ip address if unresolvable
      *  @since 0.9.58+
