@@ -496,7 +496,7 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 #enviro tr:first-child td,#jobstats tr:first-child td,#routerinformation tr:first-child td{border-top:var(--border_inner)}
 #enviro #revision{padding-left:14px;background:var(--gitlab) no-repeat left center;background-size:11px}
 #routerinformation{padding-top:4px}
-#routerinformation td:first-child{padding-top:8px;padding-bottom:8px}
+#routerinformation td:first-child{padding-top:8px;padding-bottom:8px;min-width:100px}
 #routerinformation #portmapper th,#routerinformation #portmapper td:nth-child(n+2){text-align:center}
 #routerinformation #revision:active{color:#d30;border:0;box-shadow:none;background:none}
 #routerinformation tr:nth-child(n+2) a:not(#revision){font-size:90%;margin:-1px 0 -1px 2px;display:none}

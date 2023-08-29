@@ -1940,7 +1940,7 @@ html,body{height:100%}
 #routerinformation table:hover tr:nth-child(n+2) a:not(#revision){display:inline;margin:-3px 0 -3px 4px}
 #routerinformation th,#routerinformation td{padding:8px 12px}
 #routerinfo td{width:25%;border-bottom:1px inset #225}
-#routerinformation td:first-child{padding-left:12px;width:1%;white-space:nowrap}
+#routerinformation td:first-child{padding-left:12px;width:1%;min-width:100px;white-space:nowrap}
 #routerinfo td:first-child,#routerinfo td:nth-child(3){white-space:nowrap;text-align:right}
 #routerinfo td:nth-child(2):not([colspan]){white-space:nowrap;border-right:1px inset #225}
 p#upnpstatus{margin-top:10px;padding-left:50px}
