@@ -268,8 +268,9 @@ public class SummaryHelper extends HelperBase {
 
     /** allowReseed */
     public boolean allowReseed() {
+        long uptime = _context.router().getUptime();
         return _context.netDb().isInitialized() &&
-               (_context.netDb().getKnownRouters() < ReseedChecker.MINIMUM) ||
+               (_context.netDb().getKnownRouters() < ReseedChecker.MINIMUM && uptime > 60*1000) ||
                 _context.getBooleanProperty("i2p.alwaysAllowReseed");
     }
 
