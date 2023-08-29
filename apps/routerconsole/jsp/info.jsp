@@ -54,6 +54,32 @@
 <h3 class=tabletitle><%=intl._t("Router Information")%></h3>
 <jsp:getProperty name="infohelper" property="console" />
 </div>
-<script nonce=<%=cspNonce%> type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%> type=text/javascript>
+  function refreshInfo() {
+    var xhrInfo = new XMLHttpRequest();
+    xhrInfo.open('GET', '/info?t=' + new Date().getTime(), true);
+    xhrInfo.responseType = "document";
+    xhrInfo.onreadystatechange = function () {
+      if (xhrInfo.readyState === 4 && xhrInfo.status === 200) {
+        progressx.show();
+        progressx.progress(0.5);
+        var updating = document.querySelectorAll(".volatile");
+        var updatingResponse = xhrInfo.responseXML.querySelectorAll(".volatile");
+        var i;
+        for (i = 0; i < updating.length; i += 1) {
+          if (updating[i] !== null) {
+            if (updatingResponse[i] !== null && updating[i] !== updatingResponse[i]) {
+              updating[i].innerHTML = updatingResponse[i].innerHTML;
+            }
+          }
+        }
+        progressx.hide();
+      }
+    }
+    xhrInfo.send();
+  }
+  setInterval(refreshInfo, 30000);
+  window.addEventListener("DOMContentLoaded", progressx.hide());
+</script>
 </body>
 </html>

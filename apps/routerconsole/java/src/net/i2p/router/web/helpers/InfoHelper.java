@@ -191,7 +191,7 @@ public class InfoHelper extends HelperBase {
             buf.append("<tr><td><b>" + _t("Identity") + ":</b></td><td><code><a href=\"/netdb?r=.\" title =\"" +
                        _t("Network Database entry") + "\">" + h.toBase64() + "</a></code></td></tr>\n");
         if (getUdpIP() != null && getUdpPort() != null) {
-            buf.append("<tr><td><b>" + _t("IP Address") + ":</b></td><td>" + getUdpIP());
+            buf.append("<tr><td><b>" + _t("IP Address") + ":</b></td><td class=volatile>" + getUdpIP());
             if (lastCountry() != null)
                 buf.append(" &ensp;<img width=20 height=15 src=\"/flags.jsp?c=" + lastCountry() + "\">");
             buf.append(" &ensp;<b>" + _t("UDP Port") + ":</b> " + getUdpPort() + " &ensp;<b>" + _t("Status") +
@@ -227,7 +227,7 @@ public class InfoHelper extends HelperBase {
         Boolean rdnsEnabled = _context.getBooleanProperty("routerconsole.enableReverseLookups");
         if (rdnsEnabled) {
             int rdnsCacheSize = CommSystemFacadeImpl.countRdnsCacheEntries();
-            buf.append("<tr><td><b>RDNS Cache:</b></td><td>" + rdnsCacheSize + " / 16384 entries</td></tr>\n");
+            buf.append("<tr><td><b>RDNS Cache:</b></td><td class=volatile>" + rdnsCacheSize + " / 16384 entries</td></tr>\n");
         }
         if (firstInstalled() != null && firstVersion() != null && lastUpdated() != null) {
             buf.append("<tr><td><b>" + _t("Installed") + ":</b></td><td>" + installDate + " (" + firstVersion() + ")" +
@@ -240,12 +240,12 @@ public class InfoHelper extends HelperBase {
                 buf.append(" (" + _t("Development updates enabled") + ")");
             buf.append(" &ensp;<a href=\"/configupdate\">" + _t("Configure") + "</a></td></tr>\n");
         }
-        buf.append("<tr><td><b>" + _t("Started") + ":</b></td><td>" + new Date(_context.router().getWhenStarted()) +
+        buf.append("<tr><td><b>" + _t("Started") + ":</b></td><td class=volatile>" + new Date(_context.router().getWhenStarted()) +
                    " &ensp;<b>" + _t("Uptime") + ":</b> " + DataHelper.formatDuration(_context.router().getUptime()) +
                    " &ensp;<b>" + _t("Clock Skew") + ":</b> " + _context.clock().getOffset() + "ms</td></tr>\n");
         buf.append("</table>\n");
 
-        buf.append("<h3 id=transports>").append(_t("Router Transport Addresses")).append("</h3>\n<pre id=activetransports>\n");
+        buf.append("<h3 id=transports>").append(_t("Router Transport Addresses")).append("</h3>\n<pre id=activetransports class=volatile>\n");
         SortedMap<String, Transport> transports = _context.commSystem().getTransports();
         if (!transports.isEmpty()) {
             for (Transport t : transports.values()) {
