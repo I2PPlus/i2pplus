@@ -492,11 +492,11 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 #bandwidthconfig tr{box-shadow:var(--highlight),inset 0 0 2px 2px #f2f2ff,inset 0 0 0 3px #eef;background:#f4f4ff}
 #enviro td,#jardump td,#jardump th,#jobstats td,#routerinformation td{border-top:var(--border_soft);border-bottom:var(--border_soft)}
 #enviro td,#routerinformation td{padding-top:6px;padding-bottom:6px}
-#enviro td:first-child,#routerinformation td:first-child{padding-right:5px;padding-left:10px;width:1%;min-width:70px;white-space:nowrap;text-align:right}
+#enviro td:first-child,#routerinformation td:first-child{padding-right:5px;padding-left:10px;width:1%;white-space:nowrap;text-align:right}
 #enviro tr:first-child td,#jobstats tr:first-child td,#routerinformation tr:first-child td{border-top:var(--border_inner)}
 #enviro #revision{padding-left:14px;background:var(--gitlab) no-repeat left center;background-size:11px}
 #routerinformation{padding-top:4px}
-#routerinformation td:first-child{min-width:90px;padding-top:8px;padding-bottom:8px}
+#routerinformation td:first-child{padding-top:8px;padding-bottom:8px}
 #routerinformation #portmapper th,#routerinformation #portmapper td:nth-child(n+2){text-align:center}
 #routerinformation #revision:active{color:#d30;border:0;box-shadow:none;background:none}
 #routerinformation tr:nth-child(n+2) a:not(#revision){font-size:90%;margin:-1px 0 -1px 2px;display:none}
