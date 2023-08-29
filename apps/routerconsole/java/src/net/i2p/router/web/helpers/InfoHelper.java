@@ -227,7 +227,9 @@ public class InfoHelper extends HelperBase {
         Boolean rdnsEnabled = _context.getBooleanProperty("routerconsole.enableReverseLookups");
         if (rdnsEnabled) {
             int rdnsCacheSize = CommSystemFacadeImpl.countRdnsCacheEntries();
-            buf.append("<tr><td><b>RDNS Cache:</b></td><td class=volatile>" + rdnsCacheSize + " / 16384 entries</td></tr>\n");
+            String rdnsFileSize = CommSystemFacadeImpl.rdnsCacheSize();
+            buf.append("<tr><td><b>RDNS Cache:</b></td><td class=volatile>" + rdnsCacheSize + " / 16384 entries (" + rdnsFileSize + ") &ensp;" +
+                       "<b>" + _t("Cache file") + ":</b> " + configDir + "rdnscache.dat</td></tr>\n");
         }
         if (firstInstalled() != null && firstVersion() != null && lastUpdated() != null) {
             buf.append("<tr><td><b>" + _t("Installed") + ":</b></td><td>" + installDate + " (" + firstVersion() + ")" +
