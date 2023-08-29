@@ -8,6 +8,15 @@ package net.i2p.router.transport;
  *
  */
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
@@ -41,6 +50,7 @@ import net.i2p.router.util.EventLog;
 import net.i2p.util.Addresses;
 import net.i2p.util.AddressType;
 import net.i2p.util.ArraySet;
+import net.i2p.I2PAppContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
@@ -529,6 +539,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
+                if (enableReverseLookups() && uptime < 60*1000) {
+                    readCacheFromFile();
+                if (_log.shouldInfo())
+                    _log.info("Attempting to read reverse DNS cache from: " + RDNS_CACHE_FILE);
+                }
                 if (enableReverseLookups() && uptime > 2*60*1000 && uptime < 10*60*1000) {
                     try {
                         InetAddress ipAddress = InetAddress.getByAddress(ip);
@@ -588,6 +603,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      *  @since 0.9.60+
      */
+    private static final String RDNS_CACHE_FILE = I2PAppContext.getGlobalContext().getConfigDir() +
+                                                  File.separator + "rdnscache.dat"; // File name for cache serialization
+    //File file = new File(dir, PFX + date + SFX);
     private static Map<String, CacheEntry> rdnsCache = new LinkedHashMap<String, CacheEntry>(16, 0.75f, true) {
         int maxEntries = 16384;
         protected boolean removeEldestEntry(Map.Entry<String, CacheEntry> eldest) {
@@ -610,13 +628,16 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         if (cacheEntry != null && !cacheEntry.isExpired()) {
             cacheEntry.refreshExpirationTime();
-            if (_log.shouldInfo() && !cacheEntry.getHostName().equals("null")) {
+            if (_log.shouldInfo() && !cacheEntry.getHostName().equals("null") && !ipAddress.equals(cacheEntry.getHostName())) {
                 _log.info("Reverse DNS for [" + ipAddress + "] is " + cacheEntry.getHostName() + " (cached)");
+            } else if (_log.shouldInfo() && !cacheEntry.getHostName().equals("null")) {
+                _log.info("Reverse DNS for [" + ipAddress + "] is unknown (cached)");
             }
             return cacheEntry.getHostName();
         } else { // if not cached, perform lookup and cache result
             try {
                 String hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
+                writeCacheToFile(); // Write cache to disk after adding a new entry
                 if (_log.shouldInfo() && hostName != null && !hostName.equals(ipAddress)) {
                     _log.info("Reverse DNS for [" + ipAddress + "] is " + hostName);
                 }
@@ -629,6 +650,23 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 rdnsCache.put(ipAddress, new CacheEntry(ipAddress)); // store the ip as a pair if no result
                 return ipAddress;
             }
+        }
+    }
+
+    private static void writeCacheToFile() {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(RDNS_CACHE_FILE))) {
+            out.writeObject(rdnsCache);
+        } catch (IOException ex) {
+            System.err.println("Error writing reverse DNS cache to disk: " + ex.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void readCacheFromFile() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(RDNS_CACHE_FILE))) {
+            rdnsCache = (Map<String, CacheEntry>) in.readObject();
+        } catch (IOException | ClassNotFoundException ex) {
+            //System.err.println("Error reading reverse DNS cache from disk: " + ex.getMessage());
         }
     }
 
@@ -658,7 +696,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /* @since 0.9.60+ */
-    private static class CacheEntry {
+    private static class CacheEntry implements Serializable {
         private String hostName;
         private long expirationTime;
 
