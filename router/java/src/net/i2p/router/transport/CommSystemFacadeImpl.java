@@ -529,21 +529,22 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     private class QueueAll implements SimpleTimer.TimedEvent {
         public void timeReached() {
+            long uptime = _context.router().getUptime();
+            if (enableReverseLookups() && uptime < 5*60*1000) {
+                readCacheFromFile();
+                if (_log.shouldInfo()) {
+                    _log.info("Attempting to read reverse DNS cache from: " + RDNS_CACHE_FILE);
+                }
+            }
             for (Hash h : _context.netDb().getAllRouters()) {
 //                RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
                 RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
-                long uptime = _context.router().getUptime();
                 if (ri == null)
                     continue;
                 byte[] ip = getIP(ri);
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
-                if (enableReverseLookups() && uptime < 60*1000) {
-                    readCacheFromFile();
-                if (_log.shouldInfo())
-                    _log.info("Attempting to read reverse DNS cache from: " + RDNS_CACHE_FILE);
-                }
                 if (enableReverseLookups() && uptime > 2*60*1000 && uptime < 10*60*1000) {
                     try {
                         InetAddress ipAddress = InetAddress.getByAddress(ip);
@@ -582,10 +583,19 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             _geoIP.blockingLookup();
             if (enableReverseLookups() && uptime > 2*60*1000 && uptime < 10*60*1000) {
                 if (_log.shouldInfo())
-                    _log.info("GeoIP and reverse DNS lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
+                    _log.info("GeoIP and reverse DNS lookup for all routers in NetDb took " + (System.currentTimeMillis() - start) + "ms");
+            } else if (enableReverseLookups() && uptime > 5*60*1000) {
+                if (_log.shouldInfo())
+                    _log.info("GeoIP lookup and writing reverse DNS cache for all routers in NetDb took " + (System.currentTimeMillis() - start) + "ms");
             } else {
                 if (_log.shouldInfo())
                     _log.info("GeoIP lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
+            }
+            if (enableReverseLookups() && uptime > 5*60*1000) {
+                writeCacheToFile(); // Write cache to disk
+                if (_log.shouldInfo()) {
+                    _log.info("Writing reverse DNS cache (" + countRdnsCacheEntries() + " entries) to : " + RDNS_CACHE_FILE);
+                }
             }
         }
     }
@@ -605,7 +615,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     private static final String RDNS_CACHE_FILE = I2PAppContext.getGlobalContext().getConfigDir() +
                                                   File.separator + "rdnscache.dat"; // File name for cache serialization
-    //File file = new File(dir, PFX + date + SFX);
     private static Map<String, CacheEntry> rdnsCache = new LinkedHashMap<String, CacheEntry>(16, 0.75f, true) {
         int maxEntries = 16384;
         protected boolean removeEldestEntry(Map.Entry<String, CacheEntry> eldest) {
@@ -637,9 +646,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         } else { // if not cached, perform lookup and cache result
             try {
                 String hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
-                writeCacheToFile(); // Write cache to disk after adding a new entry
                 if (_log.shouldInfo() && hostName != null && !hostName.equals(ipAddress)) {
                     _log.info("Reverse DNS for [" + ipAddress + "] is " + hostName);
+                } else if (_log.shouldInfo() && hostName == ipAddress) {
+                    _log.info("Reverse DNS for [" + ipAddress + "] is unknown");
                 }
                 rdnsCache.put(ipAddress, new CacheEntry(hostName));
                 return hostName;
