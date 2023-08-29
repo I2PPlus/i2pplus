@@ -631,9 +631,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public static String rdnsCacheSize() {
         File cache = new File(RDNS_CACHE_FILE);
         long fileSize = cache != null ? cache.length() / 1024 : 0;
-        if (uptime < 30*1000) {
-            return "0";
-        } else if (cache != null) {
+        if (cache != null) {
             return String.valueOf(fileSize) + "KB";
         } else {
             return "Cache file not found";
