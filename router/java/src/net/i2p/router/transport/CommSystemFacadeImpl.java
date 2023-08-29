@@ -609,6 +609,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         CacheEntry cacheEntry = rdnsCache.get(ipAddress); // is address cached?
 
         if (cacheEntry != null && !cacheEntry.isExpired()) {
+            cacheEntry.refreshExpirationTime();
             if (_log.shouldInfo() && !cacheEntry.getHostName().equals("null")) {
                 _log.info("Reverse DNS for [" + ipAddress + "] is " + cacheEntry.getHostName() + " (cached)");
             }
@@ -672,6 +673,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         public boolean isExpired() {
             return System.currentTimeMillis() > expirationTime;
+        }
+
+        public void refreshExpirationTime() {
+            expirationTime = System.currentTimeMillis() + (24 * 60 * 60 * 1000);
         }
     }
 
