@@ -15,6 +15,7 @@ import net.i2p.data.router.RouterInfo;
 
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterVersion;
+import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.web.HelperBase;
@@ -222,6 +223,11 @@ public class InfoHelper extends HelperBase {
         if (isAdvanced) {
             buf.append("<tr><td><b>CoDel:</b></td><td><b>" + _t("Target") + ":</b> " + codelTarget() + "ms &ensp;<b>" +
                        _t("Interval") + ":</b> " + codelInterval() + "ms</td></tr>\n");
+        }
+        Boolean rdnsEnabled = _context.getBooleanProperty("routerconsole.enableReverseLookups");
+        if (rdnsEnabled) {
+            int rdnsCacheSize = CommSystemFacadeImpl.countRdnsCacheEntries();
+            buf.append("<tr><td><b>RDNS Cache</b></td><td>" + rdnsCacheSize + " / 16384 entries</td></tr>\n");
         }
         if (firstInstalled() != null && firstVersion() != null && lastUpdated() != null) {
             buf.append("<tr><td><b>" + _t("Installed") + ":</b></td><td>" + installDate + " (" + firstVersion() + ")" +
