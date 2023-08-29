@@ -609,20 +609,23 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         CacheEntry cacheEntry = rdnsCache.get(ipAddress); // is address cached?
 
         if (cacheEntry != null && !cacheEntry.isExpired()) {
-            if (_log.shouldInfo() && !cacheEntry.getHostName().equals("null"))
+            if (_log.shouldInfo() && !cacheEntry.getHostName().equals("null")) {
                 _log.info("Reverse DNS for [" + ipAddress + "] is " + cacheEntry.getHostName() + " (cached)");
+            }
             return cacheEntry.getHostName();
         } else { // if not cached, perform lookup and cache result
             try {
                 String hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
-                rdnsCache.put(ipAddress, new CacheEntry(hostName));
-                if (_log.shouldInfo() && cacheEntry != null && !cacheEntry.getHostName().equals("null"))
+                if (_log.shouldInfo() && hostName != null && !hostName.equals(ipAddress)) {
                     _log.info("Reverse DNS for [" + ipAddress + "] is " + hostName);
+                }
+                rdnsCache.put(ipAddress, new CacheEntry(hostName));
                 return hostName;
             } catch (UnknownHostException exception) {
-                rdnsCache.put(ipAddress, new CacheEntry(ipAddress)); // store the ip as a pair if no result
-                if (_log.shouldInfo() && cacheEntry != null && !cacheEntry.getHostName().equals("null"))
+                if (_log.shouldInfo()) {
                     _log.info("Reverse DNS for [" + ipAddress + "] is unknown");
+                }
+                rdnsCache.put(ipAddress, new CacheEntry(ipAddress)); // store the ip as a pair if no result
                 return ipAddress;
             }
         }
