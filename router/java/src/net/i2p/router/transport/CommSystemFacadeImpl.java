@@ -594,7 +594,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             if (enableReverseLookups() && uptime > 5*60*1000) {
                 writeCacheToFile(); // Write cache to disk
                 if (_log.shouldInfo()) {
-                    _log.info("Writing reverse DNS cache (" + countRdnsCacheEntries() + " entries) to : " + RDNS_CACHE_FILE);
+                    _log.info("Writing reverse DNS cache (" + countRdnsCacheEntries() + " entries) to: " + RDNS_CACHE_FILE);
                 }
             }
         }
