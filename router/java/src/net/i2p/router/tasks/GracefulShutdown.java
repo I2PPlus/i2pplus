@@ -31,9 +31,9 @@ public class GracefulShutdown implements Runnable {
                     else if (gracefulExitCode == Router.EXIT_HARD_RESTART)
                         log.log(Log.CRIT, "Restarting after a brief delay...");
                     else if (gracefulExitCode == Router.EXIT_GRACEFUL)
-                        log.log(Log.CRIT, "Graceful restart -> No more tunnels, restarting...");
+                        log.log(Log.CRIT, "Graceful restart -> No active transit tunnels, restarting...");
                     else
-                        log.log(Log.CRIT, "Graceful shutdown -> No more tunnels, starting final shutdown...");
+                        log.log(Log.CRIT, "Graceful shutdown -> No active transit tunnels, starting final shutdown...");
                     // Allow time for a UI reponse
                     try {
                         synchronized (Thread.currentThread()) {
