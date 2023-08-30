@@ -16,6 +16,9 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -593,7 +596,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             }
             if (enableReverseLookups() && uptime > 5*60*1000) {
                 writeCacheToFile(); // Write cache to disk
-                readCacheFromFile();
+                //readCacheFromFile();
                 if (_log.shouldInfo()) {
                     _log.info("Writing reverse DNS cache (" + countRdnsCacheEntries() + " entries) to: " + RDNS_CACHE_FILE);
                 }
@@ -678,10 +681,19 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /* @since 0.9.60+ */
     private static void writeCacheToFile() {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(RDNS_CACHE_FILE))) {
+        File tempFile = new File(RDNS_CACHE_FILE + ".tmp");
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(tempFile))) {
             out.writeObject(rdnsCache);
         } catch (IOException ex) {
-            System.err.println("Error writing reverse DNS cache to disk: " + ex.getMessage());
+            System.err.println("Error writing reverse DNS cache to temp file: " + ex.getMessage());
+            return;
+        }
+
+        try {
+            Files.move(tempFile.toPath(), Paths.get(RDNS_CACHE_FILE), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("Reverse DNS cache written to file.");
+        } catch (IOException ex) {
+            System.err.println("Error moving reverse DNS cache from temp file to actual file: " + ex.getMessage());
         }
     }
 
