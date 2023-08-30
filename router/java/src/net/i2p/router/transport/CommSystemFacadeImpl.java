@@ -691,7 +691,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         try {
             Files.move(tempFile.toPath(), Paths.get(RDNS_CACHE_FILE), StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("Reverse DNS cache written to file.");
+            //System.out.println("Reverse DNS cache written to file.");
         } catch (IOException ex) {
             System.err.println("Error moving reverse DNS cache from temp file to actual file: " + ex.getMessage());
         }
