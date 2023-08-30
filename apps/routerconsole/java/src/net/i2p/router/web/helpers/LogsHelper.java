@@ -188,7 +188,7 @@ public class LogsHelper extends HelperBase {
                 if (prop != null)
                     _context.router().saveConfig(PROP_LAST_WRAPPER, null);
             } else {
-                str = buf.toString();
+                str = buf.toString().replace("| |", "|").replace("| INFO   | INFO:", "| INFO   |").replace("| INFO   | CRIT", "| CRIT   |");
             }
             toSkip = ntoSkip;
         }
