@@ -596,7 +596,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             }
             if (enableReverseLookups() && uptime > 5*60*1000) {
                 writeCacheToFile(); // Write cache to disk
-                //readCacheFromFile();
                 if (_log.shouldInfo()) {
                     _log.info("Writing reverse DNS cache (" + countRdnsCacheEntries() + " entries) to: " + RDNS_CACHE_FILE);
                 }
@@ -614,6 +613,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      *  Cache for storing reverse dns lookup results
+     *  Implements persistent cache file with an intermediary
+     *  write to temp file to avoid file corruption
      *
      *  @since 0.9.60+
      */
@@ -691,7 +692,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         try {
             Files.move(tempFile.toPath(), Paths.get(RDNS_CACHE_FILE), StandardCopyOption.REPLACE_EXISTING);
-            //System.out.println("Reverse DNS cache written to file.");
+            //System.out.println("Reverse DNS cache written to file");
         } catch (IOException ex) {
             System.err.println("Error moving reverse DNS cache from temp file to actual file: " + ex.getMessage());
         }
