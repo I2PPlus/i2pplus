@@ -162,7 +162,7 @@ class TransientDataStore implements DataStore {
                               "\n* Published: " + new Date(ri.getPublished()));
                 rv = true;
                 long uptime = _context.router().getUptime();
-                if (enableReverseLookups() && uptime > 2*60*1000) {
+                if (enableReverseLookups() && uptime > 30*1000) {
                     String ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
                     ip = (ri != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri)) : null;
                     String rl = ip != null ? _context.commSystem().getCanonicalHostName(ip) : null;

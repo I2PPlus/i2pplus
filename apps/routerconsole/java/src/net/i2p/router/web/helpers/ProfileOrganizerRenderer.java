@@ -172,8 +172,9 @@ class ProfileOrganizerRenderer {
                     buf.append("<span>&ensp;</span>");
                 }
                 buf.append("</td><td>");
+                long uptime = _context.router().getUptime();
                 String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
-                String rl = ip != null ? getCanonicalHostName(ip) : null;
+                String rl = (ip != null && enableReverseLookups() && uptime > 30*1000) ? _context.commSystem().getCanonicalHostName(ip) : null;
                 if (enableReverseLookups()) {
                     if (rl != null && rl != "null" && rl.length() != 0 && !ip.toString().equals(rl)) {
                         buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(rl).append("\">");
@@ -624,15 +625,6 @@ class ProfileOrganizerRenderer {
     /** translate (ngettext) @since 0.8.5 */
     public String ngettext(String s, String p, int n) {
         return Messages.getString(n, s, p, _context);
-    }
-
-    /** @since 0.9.58+ */
-    public String getCanonicalHostName(String hostName) {
-        try {
-            return InetAddress.getByName(hostName).getCanonicalHostName();
-        } catch(IOException exception) {
-            return hostName;
-        }
     }
 
 }

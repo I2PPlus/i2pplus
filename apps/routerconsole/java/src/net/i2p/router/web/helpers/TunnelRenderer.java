@@ -342,6 +342,7 @@ class TunnelRenderer {
                       "</tr></thead>\n<tbody id=transitPeers>\n");
             displayed = 0;
             List<Hash> sort = counts.sortedObjects();
+            long uptime = _context.router().getUptime();
             for (Hash h : sort) {
                 DISPLAY_LIMIT = 50;
                 int count = counts.count(h);
@@ -352,7 +353,7 @@ class TunnelRenderer {
                 //String rl = _context.namingService().reverseLookup(h);
                 String truncHash = h.toBase64().substring(0,4);
                 String ip = (info != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
-                String rl = ip != null ? _context.commSystem().getCanonicalHostName(ip) : null;
+                String rl = (ip != null && enableReverseLookups() && uptime > 30*1000) ? _context.commSystem().getCanonicalHostName(ip) : null;
                 String v = info != null ? info.getOption("router.version") : null;
                 int inactive = 0;
                 if (count <= 0 && (participating.size() == 0))
@@ -464,6 +465,7 @@ class TunnelRenderer {
         // count up the peers in the participating tunnels
         ObjectCounter<Hash> pc = new ObjectCounter();
         int partCount = countParticipatingPerPeer(pc);
+        long uptime = _context.router().getUptime();
 
         Set<Hash> peers = new HashSet(lc.objects());
         peers.addAll(pc.objects());
@@ -499,7 +501,7 @@ class TunnelRenderer {
                 String ip = (info != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
                 String v = info != null ? info.getOption("router.version") : null;
                 String truncHash = h.toBase64().substring(0,4);
-                String rl = ip != null ? _context.commSystem().getCanonicalHostName(ip) : null;
+                String rl = (ip != null && enableReverseLookups() && uptime > 30*1000) ? _context.commSystem().getCanonicalHostName(ip) : null;
                 out.write("<tr class=lazy><td>");
                 out.write(peerFlag(h));
                 out.write("</td><td>");
@@ -985,18 +987,5 @@ class TunnelRenderer {
     public String _t(String s, Object o) {
         return Messages.getString(s, o, _context);
     }
-
-    /**
-     * @since 0.9.58+
-     */
-/**
-    public String getCanonicalHostName(String hostName) {
-        try {
-            return InetAddress.getByName(hostName).getCanonicalHostName();
-        } catch(IOException exception) {
-            return hostName;
-        }
-    }
-**/
 
 }

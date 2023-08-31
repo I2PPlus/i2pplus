@@ -378,7 +378,7 @@ public class PersistentDataStore extends TransientDataStore {
             }
             dbFile = new File(_dbDir, filename);
             long dataPublishDate = getPublishDate(data);
-            if (enableReverseLookups() && uptime > 2*60*1000 && hasIP) {
+            if (enableReverseLookups() && uptime > 30*1000 && hasIP) {
                 ip = (ri != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri)) : null;
                 String rl = ip != null ? _context.commSystem().getCanonicalHostName(ip) : null;
             }
@@ -951,19 +951,6 @@ public class PersistentDataStore extends TransientDataStore {
             return;
         }
     }
-
-    /**
-     * @since 0.9.58+
-     */
-/**
-    public String getCanonicalHostName(String hostName) {
-        try {
-            return InetAddress.getByName(hostName).getCanonicalHostName();
-        } catch(IOException exception) {
-            return hostName;
-        }
-    }
-**/
 
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;

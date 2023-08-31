@@ -1368,8 +1368,9 @@ class NetDbRenderer {
             String address = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
             //String caps = DataHelper.stripHTML(info.getCapabilities());
             boolean isUnreachable = caps.contains("U") || caps.contains("H");
-            if (enableReverseLookups() && !isUnreachable && address != null) {
-                String rdns = getCanonicalHostName(address);
+            long uptime = _context.router().getUptime();
+            if (enableReverseLookups() && uptime > 30*1000 && !isUnreachable && address != null) {
+                String rdns = _context.commSystem().getCanonicalHostName(address);
                 if (!rdns.equals(address)) {
                     buf.append("<span class=netdb_info><b>").append(_t("Hostname")).append(":</b> <span class=rdns>")
                        .append(rdns).append("</span></span>&nbsp;&nbsp;");
@@ -1723,15 +1724,4 @@ class NetDbRenderer {
         return Messages.getString(s, o, _context);
     }
 
-    /**
-     *  @return reverse dns hostname or ip address if unresolvable
-     *  @since 0.9.58+
-     */
-    public String getCanonicalHostName(String hostName) {
-        try {
-            return InetAddress.getByName(hostName).getCanonicalHostName();
-        } catch(IOException exception) {
-            return hostName;
-        }
-    }
 }

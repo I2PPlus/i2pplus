@@ -516,7 +516,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /* We hope the routerinfos are read in and things have settled down by now, but it's not required to be so */
-    private static final int START_DELAY = SystemVersion.isSlow() ? 5*60*1000 : 15*1000;
+    private static final int START_DELAY = SystemVersion.isSlow() ? 30*1000 : 10*1000;
 //    private static final int LOOKUP_TIME = 30*60*1000;
     private static final int LOOKUP_TIME = 5*60*1000;
 
@@ -548,7 +548,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
-                if (enableReverseLookups() && uptime > 2*60*1000 && uptime < 10*60*1000) {
+                if (enableReverseLookups() && uptime > 60*1000 && uptime < 10*60*1000) {
                     try {
                         InetAddress ipAddress = InetAddress.getByAddress(ip);
                         String ipString = ipAddress.getHostAddress();
@@ -584,7 +584,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             long start = System.currentTimeMillis();
             long uptime = _context.router().getUptime();
             _geoIP.blockingLookup();
-            if (enableReverseLookups() && uptime > 2*60*1000 && uptime < 10*60*1000) {
+            if (uptime < 60*1000) {
+                readCacheFromFile();
+            }
+            if (enableReverseLookups() && uptime > 60*1000 && uptime < 10*60*1000) {
                 if (_log.shouldInfo())
                     _log.info("GeoIP and reverse DNS lookup for all routers in NetDb took " + (System.currentTimeMillis() - start) + "ms");
             } else if (enableReverseLookups() && uptime > 5*60*1000) {
