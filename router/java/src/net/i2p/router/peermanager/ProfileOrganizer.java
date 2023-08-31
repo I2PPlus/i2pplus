@@ -1539,7 +1539,7 @@ public class ProfileOrganizer {
     }
 
     public boolean isSelectable(Hash peer) {
-        NetworkDatabaseFacade netDb = _context.netDb();
+        NetworkDatabaseFacade netDb = _context.floodfillNetDb();
         // the CLI shouldn't depend upon the netDb
         if (netDb == null) return true;
         if (_context.router() == null) return true;
@@ -1549,7 +1549,7 @@ public class ProfileOrganizer {
             return false; // never select a banlisted peer
         }
 
-        RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo info = (RouterInfo) _context.floodfillNetDb().lookupLocallyWithoutValidation(peer);
 //        String caps = DataHelper.stripHTML(info.getCapabilities());
         if (null != info) {
             String tier = DataHelper.stripHTML(info.getBandwidthTier());

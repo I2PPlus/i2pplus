@@ -79,10 +79,11 @@ class StartExplorersJob extends JobImpl {
     public String getName() { return "Start NetDb Explorers"; }
 
     public void runJob() {
+        int count = _facade.getDataStore().size();
         boolean forceExplore = getContext().getBooleanProperty(PROP_FORCE_EXPLORE);
         boolean isFF = _facade.floodfillEnabled();
         boolean isCpuHighLoad = SystemVersion.getCPULoad() > 90 && SystemVersion.getCPULoadAvg() > 90;
-        if (!isFF || forceExplore) {
+        if (!isFF || forceExplore || _facade.isClientDb()) {
             if (!(getContext().jobQueue().getMaxLag() > MAX_LAG ||
                   getContext().throttle().getMessageDelay() > MAX_MSG_DELAY ||
                   // getContext().router().gracefulShutdownInProgress()

@@ -190,6 +190,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             if (_log.shouldDebug())
                 _log.debug("[SSU2] Processed " + blocks + " blocks on " + this);
         } catch (RIException rie) {
+            if (_log.shouldWarn())
+                _log.warn("RouterInfo error: " + rie.getMessage());
             int reason = rie.getReason();
             PeerStateDestroyed psd = createPeerStateDestroyed(reason);
             _transport.addRecentlyClosed(psd);
@@ -314,7 +316,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         // because we have his ikey and we verified he's the owner of the RI
 
         Hash h = _receivedUnconfirmedIdentity.calculateHash();
-        boolean isBanned = _context.banlist().isBanlistedForever(h);
+        boolean isBanned = _context.banlist().isBanlistedHard(h);
         if (isBanned) {
             // validate sig to prevent spoofing
             if (ri.verifySignature())
@@ -329,7 +331,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
         if (mismatchMessage != null) {
             _context.banlist().banlistRouter(h, " <b>➜</b> Wrong IP address in RouterInfo (SSU2)",
-                                             null, null, _context.clock().now() + 4*60*60*1000);
+                                             null, _context.banlist().BANLIST_CODE_HARD, null, _context.clock().now() + 4*60*60*1000);
             _context.commSystem().forceDisconnect(h);
             if (_log.shouldWarn())
                 _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
@@ -377,7 +379,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         try {
             RouterInfo old = _context.netDb().store(h, ri);
             if (flood && !ri.equals(old)) {
-                FloodfillNetworkDatabaseFacade fndf = (FloodfillNetworkDatabaseFacade) _context.netDb();
+                FloodfillNetworkDatabaseFacade fndf = (FloodfillNetworkDatabaseFacade) _context.floodfillNetDb();
                 if (fndf.floodConditional(ri)) {
                     if (_log.shouldDebug())
                         _log.debug("[SSU2] Flooded the RouterInfo: " + h);

@@ -39,8 +39,10 @@ public class Banlist {
         public long expireOn;
         /** why they were banlisted */
         public String cause;
-        /** separate code so cause can contain {0} for translation */
-        public String causeCode;
+        /** separate comment so cause can contain {0} for translation */
+        public String causeComment;
+        /** Code used for classifying the handling of the ban */
+        public Integer causeCode;
         /** what transports they were banlisted for (String), or null for all transports */
         public Set<String> transports;
     }
@@ -52,14 +54,17 @@ public class Banlist {
     public final static long BANLIST_DURATION_MS = 7*60*1000;
     public final static long BANLIST_DURATION_MAX = 30*60*1000;
     public final static long BANLIST_DURATION_PARTIAL = 10*60*1000;
-    public final static long BANLIST_DURATION_FOREVER = 181l*24*60*60*1000; // will get rounded down to 180d on console
+    public final static long BANLIST_DURATION_HARD = 181l*24*60*60*1000; // will get rounded down to 180d on console
     /**
      *  Buggy i2pd fork
      *  @since 0.9.52
      */
     public final static long BANLIST_DURATION_NO_NETWORK = 30*24*60*60*1000L;
-    public final static long BANLIST_DURATION_PRIVATE = 2*60*60*1000;
+    public final static long BANLIST_DURATION_LOCALHOST = 2*60*60*1000;
     private final static long BANLIST_CLEANER_START_DELAY = BANLIST_DURATION_PARTIAL;
+
+    public final static Integer BANLIST_CODE_SOFT = 0;
+    public final static Integer BANLIST_CODE_HARD = 1;
 
     public Banlist(RouterContext context) {
         _context = context;
@@ -67,7 +72,7 @@ public class Banlist {
         _entries = new ConcurrentHashMap<Hash, Entry>(16);
         _context.jobQueue().addJob(new Cleanup(_context));
         // i2pd bug?
-        banlistRouterForever(Hash.FAKE_HASH, " <b>➜</b> " + "Invalid Hash");
+        banlistRouterHard(Hash.FAKE_HASH, " <b>➜</b> " + "Invalid Hash");
     }
 
     private class Cleanup extends JobImpl {
@@ -130,8 +135,8 @@ public class Banlist {
     /**
      *  @return true if it WAS previously on the list
      */
-    public boolean banlistRouter(String reasonCode, Hash peer, String reason) {
-        return banlistRouter(peer, reason, reasonCode, null, false);
+    public boolean banlistRouter(String reasonComment, Hash peer, String reason) {
+        return banlistRouter(peer, reason, reasonComment, null, false);
     }
 
     /**
@@ -144,53 +149,72 @@ public class Banlist {
     /**
      *  @return true if it WAS previously on the list
      */
-    public boolean banlistRouterForever(Hash peer, String reason) {
+    public boolean banlistRouterHard(Hash peer, String reason) {
         return banlistRouter(peer, reason, null, true);
     }
 
     /**
      *  @return true if it WAS previously on the list
      */
-    public boolean banlistRouterForever(Hash peer, String reason, String reasonCode) {
-        return banlistRouter(peer, reason, reasonCode, null, true);
+    public boolean banlistRouterHard(Hash peer, String reason, String reasonComment) {
+        return banlistRouter(peer, reason, reasonComment, null, true);
     }
 
     /**
      *  @return true if it WAS previously on the list
      */
-    public boolean banlistRouter(Hash peer, String reason, String transport, boolean forever) {
-        return banlistRouter(peer, reason, null, transport, forever);
+    public boolean banlistRouter(Hash peer, String reason, String transport, boolean hard) {
+        return banlistRouter(peer, reason, null, transport, hard);
     }
 
     /**
      *  @return true if it WAS previously on the list
      */
-    private boolean banlistRouter(Hash peer, String reason, String reasonCode, String transport, boolean forever) {
+    private boolean banlistRouter(Hash peer, String reason, String reasonComment, String transport, boolean hard) {
         long expireOn;
-        if (forever) {
-            expireOn = _context.clock().now() + BANLIST_DURATION_FOREVER;
+        Integer reasonCode;
+        if (hard) {
+            expireOn = _context.clock().now() + BANLIST_DURATION_HARD;
+            reasonCode = BANLIST_CODE_HARD;
         } else if (transport != null) {
             expireOn = _context.clock().now() + BANLIST_DURATION_PARTIAL;
+            reasonCode = BANLIST_CODE_SOFT;
         } else {
             long period = BANLIST_DURATION_MS + _context.random().nextLong(BANLIST_DURATION_MS / 4);
             if (period > BANLIST_DURATION_MAX)
                 period = BANLIST_DURATION_MAX;
             expireOn = _context.clock().now() + period;
+            reasonCode = BANLIST_CODE_SOFT;
         }
-        return banlistRouter(peer, reason, reasonCode, transport, expireOn);
+        return banlistRouter(peer, reason, reasonComment, reasonCode, transport, expireOn);
+    }
+
+    /**
+     *  @return true if it WAS previously on the list
+     */
+    public boolean banlistRouter(Hash peer, String reason, String reasonComment, String transport, long expireOn) {
+        Integer reasonCode = BANLIST_CODE_SOFT;  // Default
+        // To maintain legacy behavior, set reasonCode to BANLIST_CODE_HARD
+        // if expireOn is longer than 2 days.
+        if (expireOn > _context.clock().now() + 2*24*60*60*1000L)
+            reasonCode = BANLIST_CODE_HARD;
+        return banlistRouter(peer, reason, reasonComment, reasonCode, transport, expireOn);
     }
 
     /**
      *  So that we may specify an expiration
      *
      *  @param reason may be null
-     *  @param reasonCode may be null
+     *  @param reasonComment may be null
+     *  @param reasonCode Integer handling code.
+     *         BANLIST_CODE_SOFT - 0 - SOFT ban handling
+     *         BANLIST_CODE_HARD - 1 - HARD ban handling (corresponds to legacy 'forever' ban handling)
      *  @param expireOn absolute time, not a duration
      *  @param transport may be null
      *  @return true if it WAS previously on the list
      *  @since 0.9.18
      */
-    public boolean banlistRouter(Hash peer, String reason, String reasonCode, String transport, long expireOn) {
+    public boolean banlistRouter(Hash peer, String reason, String reasonComment, Integer reasonCode, String transport, long expireOn) {
         long banDuration =  ((expireOn - _context.clock().now()) / 1000) / 60;
         if (peer == null) {
 //            _log.error("Cannot apply Router ban, peer is null", new Exception());
@@ -213,6 +237,7 @@ public class Banlist {
         Entry e = new Entry();
         e.expireOn = expireOn;
         e.cause = reason;
+        e.causeComment = reasonComment;
         e.causeCode = reasonCode;
         e.transports = null;
         if (transport != null) {
@@ -227,15 +252,21 @@ public class Banlist {
                 if (old.expireOn > e.expireOn) {
                     e.expireOn = old.expireOn;
                     e.cause = old.cause;
-                    e.causeCode = old.causeCode;
+                e.causeComment = old.causeComment;
                 }
+            // Preserve BANLIST_CODE_HARD over BANLIST_CODE_SOFT
+            // Otherwise, take the highest banlist handling code.
+            if ((e.causeCode == 1) || (old.causeCode == 1))
+                e.causeCode = 1;
+            else
+                e.causeCode = Math.max(e.causeCode, old.causeCode);
                 if (e.transports != null) {
                     if (old.transports != null)
                         e.transports.addAll(old.transports);
                     else {
                         e.transports = null;
                         e.cause = reason;
-                        e.causeCode = reasonCode;
+                        e.causeComment = reasonComment;
                     }
                 }
             }
@@ -324,12 +355,18 @@ public class Banlist {
         return rv;
     }
 
-    public boolean isBanlistedForever(Hash peer) {
+    public boolean isBanlistedHard(Hash peer) {
+        boolean rv = false;
         if (peer != null) {
             Entry entry = _entries.get(peer);
-            return entry != null && entry.expireOn > _context.clock().now() + 2*24*60*60*1000L;
-        } else {
-            return false;
+            if (entry == null)
+                rv = false;
+            else if (entry.causeCode == BANLIST_CODE_HARD)
+                rv = true;
+            else
+                rv = (entry.expireOn > _context.clock().now() + 2*24*60*60*1000L);
+
+            return rv;
         }
     }
 

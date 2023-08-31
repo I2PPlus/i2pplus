@@ -2003,7 +2003,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
 
         _activeThrottle.unchoke(peer.getRemotePeer());
         markReachable(peer.getRemotePeer(), peer.isInbound());
-        //_context.banlist().unbanlistRouter(peer.getRemotePeer(), STYLE);
 
         //if (SHOULD_FLOOD_PEERS)
         //    _flooder.addPeer(peer);
@@ -2075,26 +2074,26 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 RouterInfo ri = (RouterInfo) entry;
                 int id = ri.getNetworkId();
                 if (id != _networkID) {
-                Hash peerHash = entry.getHash();
+                    Hash peerHash = entry.getHash();
                     if (peerHash.equals(remoteIdentHash)) {
-                PeerState peer = getPeerState(peerHash);
-                if (peer != null) {
-                    RemoteHostId remote = peer.getRemoteHostId();
-                    _dropList.add(remote);
-                    _context.statManager().addRateData("udp.dropPeerDroplist", 1);
-                    _context.simpleTimer2().addEvent(new RemoveDropList(remote), DROPLIST_PERIOD);
-                }
-                markUnreachable(peerHash);
+                        PeerState peer = getPeerState(peerHash);
+                        if (peer != null) {
+                            RemoteHostId remote = peer.getRemoteHostId();
+                            _dropList.add(remote);
+                            _context.statManager().addRateData("udp.dropPeerDroplist", 1);
+                            _context.simpleTimer2().addEvent(new RemoveDropList(remote), DROPLIST_PERIOD);
+                        }
+                        markUnreachable(peerHash);
                         if (id == -1)
                             _context.banlist().banlistRouter(peerHash, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
                         else
-                            _context.banlist().banlistRouterForever(peerHash, " <b>➜</b> Not in our network: " + id);
-                if (peer != null)
+                            _context.banlist().banlistRouterHard(peerHash, " <b>➜</b> Not in our network: " + id);
+                        if (peer != null)
                             sendDestroy(peer, SSU2Util.REASON_NETID);
-                dropPeer(peerHash, false, "Not in our network");
-                if (_log.shouldWarn())
-                    _log.warn("Not in our network: " + entry, new Exception());
-                return;
+                        dropPeer(peerHash, false, "Not in our network");
+                        if (_log.shouldWarn())
+                            _log.warn("Not in our network: " + entry, new Exception());
+                        return;
                     } // else will be invalidated and handled by netdb
                 }
             }
@@ -2476,7 +2475,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 if (nid == -1)
                     _context.banlist().banlistRouter(to, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
                 else
-                    _context.banlist().banlistRouterForever(to, " <b>➜</b> Not in our network: " + nid);
+                    _context.banlist().banlistRouterHard(to, " <b>➜</b> Not in our network: " + nid);
                 markUnreachable(to);
                 return null;
             }
@@ -4231,7 +4230,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 }
             }
             // enforce IPv4/v6 advertised for all
-            RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer.getRemotePeer());
+            RouterInfo peerInfo = _context.floodfillNetDb().lookupRouterInfoLocally(peer.getRemotePeer());
             if (peerInfo == null)
                 continue;
             if (isIPv6) {

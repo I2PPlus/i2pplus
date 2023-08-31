@@ -16,7 +16,6 @@ import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
@@ -32,6 +31,14 @@ import net.i2p.util.VersionComparator;
  * up for an hour.
  * To improve integration even more, we fetch the floodfills first.
  * Ideally this should complete within the first half-hour of uptime.
+ *
+ * As of 0.9.45, periodically rerun, to maintain a minimum number of
+ * floodfills, primarily for hidden mode. StartExplorersJob will get us
+ * to about 100 ffs and maintain that for a while, but they will eventually
+ * start to expire. Use this to get us to 300 or more. Each pass of this
+ * will gain us about 150 ffs. If we have more than 300 ffs, we just
+ * requeue to check later. Otherwise this will grow our netdb
+ * almost unbounded, as it prevents most normal expiration.
  *
  * @since 0.8.8
  */

@@ -168,7 +168,12 @@ public class TunnelDispatcher implements Service {
         ctx.statManager().createRateStat("tunnel.dropDangerousExplTunnelMessage", "Dropped dangerous Exploratory messages", "Tunnels [Exploratory]", RATES);
         ctx.statManager().createRateStat("tunnel.handleLoadClove", "How often we load test cloves", "Tunnels", RATES);
         // following is for PumpedTunnelGateway
-        ctx.statManager().createRateStat("tunnel.dropGatewayOverflow", "Dropped messages at gateway (queue full)", "Tunnels", RATES);
+        ctx.statManager().createRateStat("tunnel.dropGatewayOverflow", "Messages dropped at gateway (queue full)", "Tunnels", RATES);
+        ctx.statManager().createRateStat("tunnel.inboundI2NPGarlicRIDSM", "IBMD Storing Garlic RI DSM",
+                                         "Tunnels", RATES);
+        ctx.statManager().createRateStat("tunnel.outboundTunnelEndpointFwdRIDSM", "OBTE Forwarding RI DSM",
+                                         "Tunnels", RATES);
+
     }
 
     /** for IBGW */

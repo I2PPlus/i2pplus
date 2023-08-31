@@ -180,7 +180,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                         Hash h = Hash.create(b);
                         long until = e.getValue().longValue();
                         String reason = " <b>➜</b> Sybil Analysis";
-                        ban.banlistRouter(h, reason, null, null, until);
+                        ban.banlistRouter(h, reason, null, ban.BANLIST_CODE_HARD, null, until);
                     }
                 }
             }
@@ -339,7 +339,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         for (Hash ff : ffs) {
              if (ff.equals(us))
                  continue;
-             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(ff);
+             RouterInfo ri = _context.floodfillNetDb().lookupRouterInfoLocally(ff);
              if (ri != null)
                  ris.add(ri);
         }
@@ -351,7 +351,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      *  @since 0.9.41
      */
     public List<RouterInfo> getAllRouters(Hash us) {
-        Set<RouterInfo> set = _context.netDb().getRouters();
+        Set<RouterInfo> set = _context.floodfillNetDb().getRouters();
         List<RouterInfo> ris = new ArrayList<RouterInfo>(set.size());
         for (RouterInfo ri : set) {
             if (!ri.getIdentity().getHash().equals(us))
@@ -487,7 +487,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             if (p >= threshold) {
                 Hash h = e.getKey();
                 blocks.add(h.toBase64());
-                RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
+                RouterInfo ri = _context.floodfillNetDb().lookupRouterInfoLocally(h);
                 if (ri != null) {
                     for (RouterAddress ra : ri.getAddresses()) {
                         byte[] ip = ra.getIP();
@@ -498,7 +498,6 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                             blocks.add(host);
                     }
                 }
-//                String reason = " <b>➜</b> " + day + ": Sybil scan (" + fmt.format(p) + " threat points)";
                 String reason = " <b>➜</b> " + day + ": Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)";
                 if (_log.shouldWarn()) {
                     if (ri != null)
@@ -506,7 +505,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                     else
                         _log.warn("Banning " + h.toBase64() + ' ' + reason.replace("<b>➜</b>", "->"));
                 }
-                _context.banlist().banlistRouter(h, reason, null, null, blockUntil);
+                _context.banlist().banlistRouter(h, reason, null, Banlist.BANLIST_CODE_HARD, null, blockUntil);
             }
         }
         if (!blocks.isEmpty())
@@ -1070,8 +1069,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 if (entry != null) {
                     if (entry.cause != null) {
 //                        buf.append(": ");
-                        if (entry.causeCode != null)
-                            buf.append(_t(entry.cause, entry.causeCode));
+                        if (entry.causeComment != null)
+                            buf.append(_t(entry.cause, entry.causeComment));
                         else
                             buf.append(_t(entry.cause));
                     }

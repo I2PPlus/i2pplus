@@ -65,11 +65,12 @@ class ProfileOrganizerRenderer {
         for (Hash peer : peers) {
             if (_organizer.getUs().equals(peer)) continue;
             PeerProfile prof = _organizer.getProfileNonblocking(peer);
-            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+            RouterInfo info = (RouterInfo) _context.floodfillNetDb().lookupLocallyWithoutValidation(peer);
             boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
             if (prof == null)
                 continue;
-            if (mode == 2 && isFF) {
+            if (mode == 2) {
+                if (info != null && info.getCapabilities().indexOf('f') >= 0)
                 order.add(prof);
                 ff++;
                 continue;
@@ -407,7 +408,7 @@ class ProfileOrganizerRenderer {
             for (PeerProfile prof : order) {
                 Hash peer = prof.getPeer();
                 DBHistory dbh = prof.getDBHistory();
-                RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+                RouterInfo info = (RouterInfo) _context.floodfillNetDb().lookupLocallyWithoutValidation(peer);
                 boolean isBanned = _context.banlist().isBanlisted(peer);
                 boolean isUnreachable = info != null && info.getCapabilities().indexOf('U') >= 0;
                 boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;

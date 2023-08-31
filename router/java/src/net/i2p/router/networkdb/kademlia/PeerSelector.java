@@ -128,7 +128,7 @@ abstract class PeerSelector {
             //    return;
             if (_toIgnore.contains(entry))
                 return;
-            RouterInfo info = _context.netDb().lookupRouterInfoLocally(entry);
+            RouterInfo info = _context.floodfillNetDb().lookupRouterInfoLocally(entry);
             if (info == null)
                 return;
             if (info.isHidden())

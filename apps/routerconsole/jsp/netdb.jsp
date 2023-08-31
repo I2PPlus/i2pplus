@@ -100,7 +100,7 @@
         formhandler.allowGraphical();
 %>
 <%@include file="formhandler.jsi" %>
-<jsp:getProperty name="formhandler" property="netDbSummary" />
+ <jsp:getProperty name="formhandler" property="floodfillNetDbSummary" />
 </div>
 <script nonce=<%=cspNonce%> src=/js/lazyload.js type=text/javascript></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js type=text/javascript></script>

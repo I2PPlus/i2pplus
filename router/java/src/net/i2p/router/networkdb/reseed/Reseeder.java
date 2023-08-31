@@ -743,7 +743,7 @@ public class Reseeder {
                 System.err.println("Reseed acquired " + fetched + " router infos with " + errors + " errors " + s);
 
                 if (fetched > 0)
-                    _context.netDb().rescan();
+                    _context.floodfillNetDb().rescan();
                 return fetched;
             } catch (Throwable t) {
                 if (_log.shouldWarn())
@@ -960,7 +960,7 @@ public class Reseeder {
             }
 
             if (fetched > 0)
-                _context.netDb().rescan();
+                _context.floodfillNetDb().rescan();
             int[] rv = new int[2];
             rv[0] = fetched;
             rv[1] = errors;

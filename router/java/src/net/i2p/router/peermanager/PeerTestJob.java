@@ -171,7 +171,7 @@ class PeerTestJob extends JobImpl {
         List<Hash> peerHashes = _manager.selectPeers(criteria);
         Set<RouterInfo> peers = new HashSet<RouterInfo>(peerHashes.size());
         for (Hash peer : peerHashes) {
-            RouterInfo peerInfo = getContext().netDb().lookupRouterInfoLocally(peer);
+            RouterInfo peerInfo = getContext().floodfillNetDb().lookupRouterInfoLocally(peer);
             PeerProfile prof = getContext().profileOrganizer().getProfile(peer);
             String cap = null;
             String bw = "";
@@ -216,7 +216,7 @@ class PeerTestJob extends JobImpl {
         }
         TunnelId inTunnelId = inTunnel.getReceiveTunnelId(0);
 
-        RouterInfo inGateway = getContext().netDb().lookupRouterInfoLocally(inTunnel.getPeer(0));
+        RouterInfo inGateway = getContext().floodfillNetDb().lookupRouterInfoLocally(inTunnel.getPeer(0));
         if (inGateway == null) {
             if (_log.shouldWarn())
                 _log.warn("We can't find the gateway to our inbound tunnel?! Impossible?");

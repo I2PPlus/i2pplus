@@ -9,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
@@ -763,7 +764,7 @@ public class GeoIP {
         for (Hash h : ctx.netDb().getAllRouters()) {
             String hisCountry = ctx.commSystem().getCountry(h);
             if (country.equals(hisCountry)) {
-                ctx.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");
+                ctx.banlist().banlistRouterHard(h, " <b>➜</b> In our country (we are in Hidden mode)");
             }
         }
     }

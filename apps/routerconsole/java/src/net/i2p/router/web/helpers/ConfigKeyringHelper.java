@@ -85,7 +85,7 @@ public class ConfigKeyringHelper extends HelperBase {
                 continue;
             buf.append("\n<tr><td>");
 
-            Destination dest = _context.netDb().lookupDestinationLocally(h);
+            Destination dest = _context.floodfillNetDb().lookupDestinationLocally(h);
             if (dest != null && local) {
                 TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(h);
                 if (in != null && in.getDestinationNickname() != null)
@@ -112,7 +112,7 @@ public class ConfigKeyringHelper extends HelperBase {
         }
         // LS2
         if (!local) {
-            List<BlindData> bdata = _context.netDb().getBlindData();
+            List<BlindData> bdata = _context.netDb().getLocalClientsBlindData();
             if (bdata.size() > 1)
                 Collections.sort(bdata, new BDComparator());
             for (BlindData bd : bdata) {

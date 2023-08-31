@@ -28,6 +28,7 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
+import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
 
 import net.i2p.router.CommSystemFacade.Status;
@@ -37,6 +38,7 @@ import net.i2p.util.VersionComparator;
  *  The network database
  */
 public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacade {
+    private static final String MINIMUM_SUBDB_PEERS = "router.subDbMinimumPeers";
     public static final char CAPABILITY_FLOODFILL = 'f';
     public static final char CAPABILITY_UNREACHABLE = 'U';
     public static final char CAPABILITY_BW12 = 'K';
@@ -75,8 +77,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static final int NEXT_FLOOD_QTY = SystemVersion.isSlow() ? 2 : 3;
     private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 600 : 300;
 
-    public FloodfillNetworkDatabaseFacade(RouterContext context) {
-        super(context);
+    public FloodfillNetworkDatabaseFacade(RouterContext context, String dbid) {
+        super(context, dbid);
         _activeFloodQueries = new HashMap<Hash, FloodSearchJob>();
          _verifiesInProgress = new ConcurrentHashSet<Hash>(8);
 
@@ -96,17 +98,27 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _context.statManager().createRateStat("netDb.republishQuantity", "Number of peers we need to send a found LeaseSet to", "NetworkDatabase", rate);
         // for ISJ
         _context.statManager().createRateStat("netDb.RILookupDirect", "Number of direct Iterative RouterInfo lookups", "NetworkDatabase", rate);
-        _ffMonitor = new FloodfillMonitorJob(_context, this);
+        // No need to start the FloodfillMonitorJob for client subDb.
+        if (super.isClientDb())
+            _ffMonitor = null;
+        else
+            _ffMonitor = new FloodfillMonitorJob(_context, this);
     }
 
     @Override
     public synchronized void startup() {
+        boolean isFF;
         super.startup();
-        _context.jobQueue().addJob(_ffMonitor);
+        if (_ffMonitor != null)
+            _context.jobQueue().addJob(_ffMonitor);
+        if (super.isClientDb())
+            isFF = false;
+        else
+            isFF = _context.getBooleanProperty(FloodfillMonitorJob.PROP_FLOODFILL_PARTICIPANT);
+
         _lookupThrottler = new LookupThrottler();
         _lookupBanner = new LookupBanHammer();
 
-        boolean isFF = _context.getBooleanProperty(FloodfillMonitorJob.PROP_FLOODFILL_PARTICIPANT);
         long down = _context.router().getEstimatedDowntime();
         if (!_context.commSystem().isDummy() &&
             (down == 0 || (!isFF && down > 30*60*1000) || (isFF && down > 24*60*60*1000))) {
@@ -119,8 +131,13 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     @Override
     protected void createHandlers() {
+        // Only initialize the handlers for the flooodfill netDb.
+        if (super._dbid.equals("floodfill")) {
+            if (_log.shouldInfo())
+                _log.info("[dbid: " + super._dbid +  "] Initializing the message handlers");
         _context.inNetMessagePool().registerHandlerJobBuilder(DatabaseLookupMessage.MESSAGE_TYPE, new FloodfillDatabaseLookupMessageHandler(_context, this));
         _context.inNetMessagePool().registerHandlerJobBuilder(DatabaseStoreMessage.MESSAGE_TYPE, new FloodfillDatabaseStoreMessageHandler(_context, this));
+        }
     }
 
     /**
@@ -149,7 +166,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 } catch (InterruptedException ie) {}
             }
         }
-        _context.jobQueue().removeJob(_ffMonitor);
+        if (_ffMonitor != null)
+            _context.jobQueue().removeJob(_ffMonitor);
         super.shutdown();
     }
 
@@ -246,7 +264,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (!floodfillEnabled())
             return false;
         Hash h = ds.getHash();
-        if (_context.banlist().isBanlistedForever(h) || _context.banlist().isBanlistedHostile(h))
+        if (_context.banlist().isBanlistedFHard(h) || _context.banlist().isBanlistedHostile(h))
             return false;
         if (shouldThrottleFlood(h)) {
             _context.statManager().addRateData("netDb.floodThrottled", 1);
@@ -254,6 +272,37 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
         flood(ds);
         return true;
+    }
+
+    public int minFloodfillPeers() {
+        int mfp = _context.getProperty(MINIMUM_SUBDB_PEERS, 0);
+        return mfp;
+    }
+
+    public List<RouterInfo> pickRandomFloodfillPeers() {
+        List<RouterInfo> list = new ArrayList<RouterInfo>();
+        // In normal operation, client subDb do not need RI.
+        // pickRandomFloodfillPeers() is provided for future use cases.
+
+        // get the total number of known routers
+        int count = getFloodfillPeers().size();
+        if ((count == 0) || (minFloodfillPeers() == 0))
+            return list;  // Return empty list.
+        // pick a random number of routers between 4 and 4+1% of the total routers we know about.
+        int max = minFloodfillPeers() + (count / 100);
+        while (list.size() < max) {
+            int randVal = new RandomSource(_context).nextInt(count);
+            RouterInfo ri = lookupRouterInfoLocally(getFloodfillPeers().get(randVal));
+            if (ri != null) {
+                if (!list.contains(ri)) {
+                    if (validate(ri) == null) {
+                        list.add(ri);
+                    }
+                }
+            }
+            
+        }
+        return list;
     }
 
     /**
@@ -404,7 +453,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     @Override
-    protected PeerSelector createPeerSelector() { return new FloodfillPeerSelector(_context); }
+    protected PeerSelector createPeerSelector() { 
+        if (_peerSelector != null)
+            return _peerSelector;
+        return new FloodfillPeerSelector(_context);
+    }
 
     /**
      *  Public, called from console. This wakes up the floodfill monitor,
@@ -412,7 +465,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  and call setFloodfillEnabledFromMonitor which really sets it.
      */
     public synchronized void setFloodfillEnabled(boolean yes) {
-        if (yes != _floodfillEnabled) {
+        if ((yes != _floodfillEnabled) && (_ffMonitor != null)) {
             _context.jobQueue().removeJob(_ffMonitor);
             _ffMonitor.getTiming().setStartAfter(_context.clock().now() + 1000);
             _context.jobQueue().addJob(_ffMonitor);
@@ -483,6 +536,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * @return null always
      * @since 0.9.10
      */
+    // ToDo: With repect to segmented netDb clients, this framework needs
+    // refinement.  A client with a segmented netDb can not use exploratory
+    // tunnels.  The return messages will not have sufficient information
+    // to be directed back to the clientmaking the query.
     SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease, Hash fromLocalDest) {
         //if (true) return super.search(key, onFindJob, onFailedLookupJob, timeoutMs, isLease);
 //        if (key == null) throw new IllegalArgumentException("Searchin' for nothing, eh?");
@@ -510,7 +567,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
         if (isNew) {
             if (_log.shouldDebug())
-                _log.debug("Started new IterativeSearchJob for key [" + key.toBase64().substring(0,6) + "]");
+                _log.debug("[dbid: " + super._dbid
+                           + "]: New ISJ ("
+                           + ((fromLocalDest != null) ? "through client tunnels" : "through exploratory tunnels")
+                           + ") for " + key.toBase64());
             _context.jobQueue().addJob(searchJob);
         } else {
             if (_log.shouldDebug())
