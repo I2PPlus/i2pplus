@@ -747,7 +747,7 @@ public class Reseeder {
                 return fetched;
             } catch (Throwable t) {
                 if (_log.shouldWarn())
-                    _log.warn("Error reseeding", t);
+                    _log.warn("Error reseeding (" + t.getMessage() + ")");
                 System.err.println("No router infos " + s);
                 return 0;
             }
@@ -834,7 +834,7 @@ public class Reseeder {
                 }
             } catch (Throwable t) {
                 String s = getDisplayString(seedURL);
-                System.err.println("Error reseeding " + s + ": " + t);
+                System.err.println("Error reseeding " + s + "(" + t.getMessage() + ")");
                 _log.error("Error reseeding " + s + " (" + t.getMessage() + ")");
                 errors++;
             } finally {
@@ -843,10 +843,13 @@ public class Reseeder {
             }
             if (errors <= 0) {
                 _checker.setStatus(_t("Acquired {0} router infos from reseed hosts", fetched));
+                System.out.println("Acquired " + fetched + " router infos from " + getDisplayString(seedURL));
+
             } else {
                 _checker.setStatus(_t("Acquired {0} router infos from reseed hosts ({1} errors)", fetched, errors));
+                System.err.println("Acquired " + fetched + " router infos from " + getDisplayString(seedURL)
+                                   .replace("/i2pseeds.su3?netid=2", "") + " (" + errors + " errors)");
             }
-            System.err.println("Reseed got " + fetched + " router infos " + getDisplayString(seedURL) + " with " + errors + " errors");
             return fetched;
         }
 
