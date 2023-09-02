@@ -73,7 +73,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
 
     public void runJob() {
         long recvBegin = System.currentTimeMillis();
-        
+
         String invalidMessage = null;
         // set if invalid store but not his fault
         boolean dontBlamePeer = false;
@@ -84,7 +84,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         DatabaseEntry entry = _message.getEntry();
         int type = entry.getType();
         long now = getContext().clock().now();
-        boolean isBanned = getContext().banlist().isBanlistedForever(key) ||
+        boolean isBanned = getContext().banlist().isBanlistedHard(key) ||
                            getContext().banlist().isBanlisted(key) ||
                            getContext().banlist().isBanlistedHostile(key);
         if (DatabaseEntry.isLeaseSet(type)) {
@@ -133,8 +133,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 // FloodOnlyLookupMatchJob called setReceivedAsReply(),
                 // and we are seeing this only as a duplicate,
                 // so we don't set the receivedAsPublished() flag.
-                // Otherwise, mark it as something we received unsolicited, so we'll answer queries 
-                // for it.  This flag must NOT get set on entries that we 
+                // Otherwise, mark it as something we received unsolicited, so we'll answer queries
+                // for it.  This flag must NOT get set on entries that we
                 // receive in response to our own lookups.
                 // See ../HDLMJ for more info
                 if (!ls.getReceivedAsReply())
@@ -278,8 +278,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 // If we're in the client netDb context, log a warning since
                 // it should be rare that RI DSM are handled in the client context.
                 if (_facade.isClientDb() && _log.shouldWarn())
-                    _log.warn("[DbId: " + _facade._dbid
-                              + "] Handling RouterInfo [" key.toBase64().substring(0,6) + "] store request in client NetDb context of router");
+                    _log.warn("[DbId: " + _facade._dbid + "] Handling RouterInfo [" + key.toBase64().substring(0,6) +
+                              "] store request in client NetDb context of router");
                 boolean shouldStore = true;
                 if (ri.getReceivedAsPublished()) {
                     // these are often just dup stores from concurrent lookups
@@ -483,17 +483,14 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         shouldStore = false;
                     } else {
                         if (_log.shouldInfo()) {
-                            _log.info("[DbId: " + _facade._dbid + "]
-                                      + " Newer RouterInfo encountered in dbStore Message (for router "
-                                      + key.toBase64()
-                                      + ") with a pulished date ("
-                                      + ri.getPublished()
-                                      + ") newer than the one for the RI already stored in our database ("
+                            _log.info("[DbId: " + _facade._dbid + "]"
+                                      + " Newer RouterInfo [" + key.toBase64().substring(0,6) + "] encountered in DbStore Message"
+                                      + ") with a newer published date (" + ri.getPublished() + ") than our local copy ("
                                       + prevNetDb.getPublished() + ")");
                             // new RouterIdentity prevIdentity = prevNetDb.getIdentity();
                             // new RouterIdentity newIdentity = ri.getIdentity();
                             if (!ri.getIdentity().getPublicKey().equals(prevNetDb.getIdentity().getPublicKey()))
-                                _log.info("[DbId: " + _facade._dbid + "]
+                                _log.info("[DbId: " + _facade._dbid + "]"
                                           + " Warning! The old ("
                                           + prevNetDb.getIdentity().getPublicKey()
                                           + ") and new ("
@@ -510,11 +507,11 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 }
                 if (shouldStore) {
                     if (_log.shouldDebug())
-                        _log.debug("[DbId: " + _facade._dbid + "]
+                        _log.debug("[DbId: " + _facade._dbid + "]"
                                    + " Storing RI with the context netDb " + key.toBase64());
                     prevNetDb = _facade.store(key, ri);
                     if (_facade.isClientDb() && _log.shouldWarn())
-                        _log.warn("[DbId: " + _facade._dbid + "]
+                        _log.warn("[DbId: " + _facade._dbid + "]"
                                   + " Storing RI to client netDb (this is rare, should have been handled by IBMD) "
                                   + key.toBase64());
                     wasNew = ((null == prevNetDb) || (prevNetDb.getPublished() < ri.getPublished()));
@@ -677,7 +674,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         if (toUs) {
             if (_facade.isClientDb()) {
                 _log.error("[DbId: " + _facade._dbid + "] Error! SendMessageDirectJob (toUs) attempted in Client NetDb! " + 
-                           "\n* Message: " + msg);
+                       "\n* Message: " + msg);
                 return;
             }
             Job send = new SendMessageDirectJob(getContext(), msg, toPeer, REPLY_TIMEOUT, MESSAGE_PRIORITY, _msgIDBloomXor);

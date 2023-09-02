@@ -1026,7 +1026,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public String renderPeerHTML(Hash peer, boolean extended) {
         StringBuilder buf = new StringBuilder(128);
 //        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
-        RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo ri = (RouterInfo) _context.floodfillNetDb().lookupLocallyWithoutValidation(peer);
         String c = getCountry(peer);
         String h = peer.toBase64();
         if (ri != null) {
@@ -1092,7 +1092,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public String renderPeerCaps(Hash peer, boolean inline) {
         StringBuilder buf = new StringBuilder(128);
-        RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo ri = (RouterInfo) _context.floodfillNetDb().lookupLocallyWithoutValidation(peer);
         String c = getCountry(peer);
         String h = peer.toBase64();
         if (!inline) {
@@ -1151,7 +1151,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /** @return cap char or '?' */
     private char getCapacity(Hash peer) {
-        RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo info = (RouterInfo) _context.floodfillNetDb().lookupLocallyWithoutValidation(peer);
         if (info != null) {
             String caps = info.getCapabilities();
             for (int i = 0; i < RouterInfo.BW_CAPABILITY_CHARS.length(); i++) {
@@ -1169,7 +1169,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public String renderPeerFlag(Hash peer) {
         StringBuilder buf = new StringBuilder(128);
-        RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo ri = (RouterInfo) _context.floodfillNetDb().lookupLocallyWithoutValidation(peer);
         String c = getCountry(peer);
         String countryName = getCountryName(c);
         String h = peer.toBase64();

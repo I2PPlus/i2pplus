@@ -398,7 +398,7 @@ abstract class StoreJob extends JobImpl {
                 // and issue a warning.
                 sendStoreThroughExploratory(msg, peer, expiration);
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("[JobId: " + getJobId() + " [DbId: " + _facade._dbid + "] 
+                    _log.warn("[JobId: " + getJobId() + " [DbId: " + _facade._dbid + "]"
                               + " Sending RI store (though exploratory tunnels) in a client context to "
                               + peer.getIdentity().getHash() + " with message " + msg);
             }

@@ -60,7 +60,7 @@ public class Banlist {
      *  @since 0.9.52
      */
     public final static long BANLIST_DURATION_NO_NETWORK = 30*24*60*60*1000L;
-    public final static long BANLIST_DURATION_LOCALHOST = 2*60*60*1000;
+    public final static long BANLIST_DURATION_PRIVATE = 2*60*60*1000;
     private final static long BANLIST_CLEANER_START_DELAY = BANLIST_DURATION_PARTIAL;
 
     public final static Integer BANLIST_CODE_SOFT = 0;
@@ -365,9 +365,8 @@ public class Banlist {
                 rv = true;
             else
                 rv = (entry.expireOn > _context.clock().now() + 2*24*60*60*1000L);
-
-            return rv;
         }
+        return rv;
     }
 
     /** @since 0.9.58+ */

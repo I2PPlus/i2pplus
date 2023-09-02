@@ -264,7 +264,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (!floodfillEnabled())
             return false;
         Hash h = ds.getHash();
-        if (_context.banlist().isBanlistedFHard(h) || _context.banlist().isBanlistedHostile(h))
+        if (_context.banlist().isBanlistedHard(h) || _context.banlist().isBanlistedHostile(h))
             return false;
         if (shouldThrottleFlood(h)) {
             _context.statManager().addRateData("netDb.floodThrottled", 1);
@@ -300,7 +300,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                     }
                 }
             }
-            
+
         }
         return list;
     }
@@ -453,7 +453,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     @Override
-    protected PeerSelector createPeerSelector() { 
+    protected PeerSelector createPeerSelector() {
         if (_peerSelector != null)
             return _peerSelector;
         return new FloodfillPeerSelector(_context);
@@ -768,7 +768,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
         boolean isBadFF = isFF && noSSU;
         if ((_floodfillEnabled && !forceExplore) || _context.jobQueue().getMaxLag() > MAX_LAG_BEFORE_SKIP_SEARCH ||
-            _context.banlist().isBanlistedForever(peer) || _context.banlist().isBanlisted(peer) || uninteresting ||
+            _context.banlist().isBanlistedHard(peer) || _context.banlist().isBanlisted(peer) || uninteresting ||
             isBadFF || _context.router().gracefulShutdownInProgress()) {
             // don't try to overload ourselves (e.g. failing 3000 router refs at
             // once, and then firing off 3000 netDb lookup tasks)
@@ -777,7 +777,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             if (_log.shouldInfo()) {
                 if (_floodfillEnabled && !forceExplore) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Floodfill mode active");
-                } else if (_context.banlist().isBanlistedForever(peer)) {
+                } else if (_context.banlist().isBanlistedHard(peer)) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Banlisted");
                 } else if (uninteresting) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Uninteresting");

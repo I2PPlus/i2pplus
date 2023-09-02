@@ -366,7 +366,7 @@ public class PersistentDataStore extends TransientDataStore {
         boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") ||
                          bw.equals("M") || bw.equals("N");
         boolean isLTier = bw.equals("L");
-        boolean isBanned = ri != null && (_context.banlist().isBanlistedForever(key) ||
+        boolean isBanned = ri != null && (_context.banlist().isBanlistedHard(key) ||
                            _context.banlist().isBanlisted(key) ||
                            _context.banlist().isBanlistedHostile(key));
 
@@ -607,7 +607,7 @@ public class PersistentDataStore extends TransientDataStore {
                     }
                 }
             }
-            
+
             if (!_initialized) {
                 _initialized = true;
                 if (_facade.isClientDb()) {
@@ -624,7 +624,7 @@ public class PersistentDataStore extends TransientDataStore {
             } else if (_lastReseed < _context.clock().now() - MIN_RESEED_INTERVAL) {
                 int count = Math.min(routerCount, size());
                 int known = _context.netDb().getKnownRouters();
-                if (_facade.isClientDb())
+                if (_facade.isClientDb()) {
                     _lastReseed = _context.clock().now();
                 } else if (known < MIN_ROUTERS) {
                     if (_facade.reseedChecker().checkReseed(count))

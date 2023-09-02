@@ -333,7 +333,7 @@ class SearchJob extends JobImpl {
                         if (_log.shouldInfo())
                             _log.info("[DbId: " + _facade._dbid + "] Next closest peer [" + peer.toBase64().substring(0,6) +
                                       "] was only recently referred to us, sending a search for them");
-                        getContext().netDb().lookupRouterInfo(peer, null, null, _timeoutMs);
+                        getContext().floodfillNetDb().lookupRouterInfo(peer, null, null, _timeoutMs);
                     } else if (!(ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {
                         if (_log.shouldWarn())
                             _log.warn("[DbId: " + _facade._dbid + "] Error selecting closest hash that wasn't a router! "
@@ -465,7 +465,7 @@ class SearchJob extends JobImpl {
         // this will fail if we've banlisted our inbound gateway, but the gw may not necessarily
         // be banlisted by whomever needs to contact them, so we don't need to check this
 
-        //RouterInfo inGateway = getContext().netDb().lookupRouterInfoLocally(inTunnel.getPeer(0));
+        //RouterInfo inGateway = getContext().floodfillNetDb().lookupRouterInfoLocally(inTunnel.getPeer(0));
         //if (inGateway == null) {
         //    _log.error("We can't find the gateway to our inbound tunnel?!");
         //    getContext().jobQueue().addJob(new FailedJob(getContext(), router));

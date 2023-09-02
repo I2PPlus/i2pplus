@@ -198,7 +198,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     private static final long[] RATES = { 60*1000, 60*60*1000, 24*60*60*1000 };
 
-    public KademliaNetworkDatabaseFacade(RouterContext context) {
+    public KademliaNetworkDatabaseFacade(RouterContext context, String dbid) {
         _context = context;
         _log = _context.logManager().getLog(getClass());
         _networkID = context.router().getNetworkID();
@@ -210,7 +210,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _dbid = dbid;
         _localKey = null;
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Created KademliaNetworkDatabaseFacade for id: " + dbid);
+            _log.debug("Created KademliaNetworkDatabaseFacade for id: " + _dbid);
         context.statManager().createRateStat("netDb.lookupDeferred", "Deferred NetDb lookups", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.exploreKeySet", "NetDb keys queued for exploration", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.negativeCache", "Aborted NetDb lookups (already cached)", "NetworkDatabase", RATES);
@@ -331,7 +331,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     subDir.mkdirs();
                 dbDir = subDir.toString();
             }
-            return dbDir; 
+            return dbDir;
         }
         return _dbDir;
     }

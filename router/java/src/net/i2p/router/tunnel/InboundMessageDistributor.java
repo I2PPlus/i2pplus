@@ -438,7 +438,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                                         if (_log.shouldLog(Log.ERROR))
                                             _log.error("No handling provisions for message: " + data);
                                     }
-                            } else {                                        
+                            } else {
                                 if (_client != null) {
                                     // drop it, since the data we receive shouldn't include router
                                     // references, as that might get us to talk to them (and therefore
@@ -459,7 +459,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                                 // ... and inject it.
                                 _context.statManager().addRateData("tunnel.inboundI2NPGarlicRIDSM", 1);
                                 if (_log.shouldInfo())
-                                    _log.info("Received DBStoreMessage from exploratory tunnel for RouterInfo [" + dsm.getKey() + "]" + );
+                                    _log.info("Received DBStoreMessage from exploratory tunnel for RouterInfo [" + dsm.getKey() + "]");
                                 _context.inNetMessagePool().add(dsm, null, null, _msgIDBloomXor);
                             }
                 } else if (_client != null && type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {

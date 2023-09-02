@@ -471,7 +471,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 isDirect = true;
                 if (_facade.isClientDb() && _log.shouldLog(Log.WARN))
                     _log.warn("[JobId: " + getJobId() + "] [DbId: " + _facade._dbid + "]" +
-                              + " Warning! Direct search selected in a client NetDb context!");
+                              " Warning! Direct search selected in a client NetDb context!");
                 ctx.statManager().addRateData("netDb.RILookupDirect", 1);
             } else {
                 if (previouslyTried <= 0) {

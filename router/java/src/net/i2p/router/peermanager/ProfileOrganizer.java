@@ -221,7 +221,7 @@ public class ProfileOrganizer {
             return null;
         }
 
-        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+        RouterInfo peerInfo = _context.floodfillNetDb().lookupRouterInfoLocally(peer);
         String bw = null;
         String cap = null;
         String version = "0.8";
@@ -317,7 +317,7 @@ public class ProfileOrganizer {
         if (profile == null) return null;
 
         Hash peer = profile.getPeer();
-        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+        RouterInfo peerInfo = _context.floodfillNetDb().lookupRouterInfoLocally(peer);
         String bw = "K";
         String cap = "";
         String version = "0.8";
@@ -325,7 +325,7 @@ public class ProfileOrganizer {
         boolean hasSalt = false;
         boolean isFF = false;
         boolean reachable = true;
-        RouterInfo us = _context.netDb().lookupRouterInfoLocally(_context.routerHash());
+        RouterInfo us = _context.floodfillNetDb().lookupRouterInfoLocally(_context.routerHash());
         boolean isUs = us != null && us.equals(_context.routerHash());
         PeerProfile prof = getProfile(peer);
 
@@ -1138,7 +1138,7 @@ public class ProfileOrganizer {
      */
     private void locked_demoteHighCapAsNecessary() {
         int maxHighCapPeers = getMaximumHighCapPeers();
-        NetworkDatabaseFacade netDb = _context.netDb();
+        NetworkDatabaseFacade netDb = _context.floodfillNetDb();
         int numToDemote = _highCapacityPeers.size() - maxHighCapPeers;
         if (numToDemote > 0) {
             // sorted by capacity, highest-first
@@ -1191,7 +1191,7 @@ public class ProfileOrganizer {
             if (profile.getPeer() == null)
                 continue;
 
-            RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
+            RouterInfo peerInfo = _context.floodfillNetDb().lookupRouterInfoLocally(profile.getPeer());
             String bw = "K";
             if (peerInfo != null && peerInfo.getBandwidthTier() != null) {
                 bw = peerInfo.getBandwidthTier();

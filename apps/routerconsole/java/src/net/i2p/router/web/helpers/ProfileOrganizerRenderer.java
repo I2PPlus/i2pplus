@@ -52,7 +52,7 @@ class ProfileOrganizerRenderer {
     public void renderStatusHTML(Writer out, int mode) throws IOException {
         boolean full = mode == 0;
         Hash us = _context.routerHash();
-        RouterInfo local = _context.netDb().lookupRouterInfoLocally(us);
+        RouterInfo local = _context.floodfillNetDb().lookupRouterInfoLocally(us);
         boolean ffmode = local != null && local.getCapabilities().indexOf('f') >= 0;
         Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
@@ -158,7 +158,7 @@ class ProfileOrganizerRenderer {
                 // debug
                 //if(prof.getIsExpandedDB())
                 //   buf.append(" ** ");
-                RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+                RouterInfo info = (RouterInfo) _context.floodfillNetDb().lookupLocallyWithoutValidation(peer);
                 buf.append("<td>");
                 if (info != null) {
                     buf.append(_context.commSystem().renderPeerCaps(peer, false));

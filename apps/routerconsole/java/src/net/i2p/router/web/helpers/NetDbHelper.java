@@ -73,7 +73,7 @@ public class NetDbHelper extends FormHandler {
                                            "?f=6",                              // 11
                                            "?l=7",                              // 12
                                           };
-                                           
+
 
     public void setRouter(String r) {
         if (r != null && r.length() > 0)
@@ -241,7 +241,7 @@ public class NetDbHelper extends FormHandler {
     public void setSort(String f) {
         _sort = f;
     }
-    
+
     /** @since 0.9.58 */
     public void setIntros(String f) {
         try {
@@ -256,7 +256,7 @@ public class NetDbHelper extends FormHandler {
             //if (_log.shouldLog)
         }
     }
-    
+
     /**
      *  call for non-text-mode browsers
      *  @since 0.9.1
@@ -447,7 +447,7 @@ public class NetDbHelper extends FormHandler {
             }
             if (span) {
                 buf.append("</span>\n");
-            } else if (i != titles.length - 1)
+            } else if (i != titles.length - 1) {
                 buf.append("&nbsp;&nbsp;\n");
             }
         }

@@ -244,7 +244,7 @@ class NetDbRenderer {
                     routers.addAll(_context.floodfillNetDb().getRouters());
                 else
                     routers.addAll(_context.clientNetDb(client).getRouters());
-                    
+
             }
             int ipMode = 0;
             String ipArg = ip;  // save for error message
@@ -600,11 +600,12 @@ class NetDbRenderer {
         StringBuilder buf = new StringBuilder(4*1024);
         if (debug) {
             buf.append("<p id=debugmode>Debug mode - Sorted by hash distance, closest first. <a href=\"/netdb?l=1\">[Compact mode]</a></p>\n");
+        }
         Hash ourRKey;
         Set<LeaseSet> leases;
         DecimalFormat fmt;
         FloodfillNetworkDatabaseFacade netdb = null;
-        if (clientsOnly){
+        if (clientsOnly) {
             netdb = _context.floodfillNetDb();
         } else {
             if (client != null)
@@ -1024,7 +1025,7 @@ class NetDbRenderer {
         if (client != null) {
             routers.addAll(_context.clientNetDb(client).getRouters());
         } else if (clientsOnly) {
-            routers.addAll(_context.netDb().getRoutersKnownToClients());   
+            routers.addAll(_context.netDb().getRoutersKnownToClients());
         } else {
             routers.addAll(_context.floodfillNetDb().getRouters());
         }
