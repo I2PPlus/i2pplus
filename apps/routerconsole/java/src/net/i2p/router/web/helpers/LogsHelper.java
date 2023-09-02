@@ -194,7 +194,9 @@ public class LogsHelper extends HelperBase {
                                     .replace("| INFO   | ERROR", "| ERROR  |")
                                     .replace("| INFO   | Error", "| ERROR  | Error")
                                     .replace("| INFO   | java.lang", "| ERROR  | java.lang")
-                                    .replace("| INFO   | \tat", "| ERROR  | \tat");
+                                    .replace("| INFO   | \tat", "| ERROR  | \tat")
+                                    .replace("| ERROR  | [Reseed     ] ....reseed.Reseeder:", "| WARN   |")
+                                    .replace(" |[", " | [");
             }
             toSkip = ntoSkip;
         }

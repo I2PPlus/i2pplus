@@ -175,6 +175,9 @@ class ProfileOrganizerRenderer {
                 long uptime = _context.router().getUptime();
                 String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
                 String rl = (ip != null && enableReverseLookups() && uptime > 30*1000) ? _context.commSystem().getCanonicalHostName(ip) : null;
+                if (rl != null && rl.equals("unknown")) {
+                    rl = ip;
+                }
                 if (enableReverseLookups()) {
                     if (rl != null && rl != "null" && rl.length() != 0 && !ip.toString().equals(rl)) {
                         buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(rl).append("\">");
