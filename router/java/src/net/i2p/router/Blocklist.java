@@ -964,7 +964,8 @@ public class Blocklist {
      * Will not contain duplicates.
      */
     private List<byte[]> getAddresses(Hash peer) {
-        RouterInfo pinfo = _context.netDb().lookupRouterInfoLocally(peer, null);
+//        RouterInfo pinfo = _context.netDb().lookupRouterInfoLocally(peer, null);
+        RouterInfo pinfo = _context.mainNetDb().lookupRouterInfoLocally(peer);
         if (pinfo == null)
             return Collections.emptyList();
         return getAddresses(pinfo);

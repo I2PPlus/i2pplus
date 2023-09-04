@@ -223,10 +223,10 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                // It is not expected to happen since we check if it was sent directly.
                 if (_facade.isClientDb())
                     if (_log.shouldInfo())
-                        _log.info("LeaseSet Store IAE (safely handled): ", iae);
+                        _log.info("LeaseSet Store IAE (safely handled): " + iae.getMessage());
                 else
-                    if (_log.shouldError())
-                        _log.error("LeaseSet Store IAE (unexpected): ", iae);
+                    if (_log.shouldWarn())
+                        _log.warn("LeaseSet Store IAE (unexpected): " + iae.getMessage());
                 invalidMessage = iae.getMessage();
             }
         } else if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
@@ -673,7 +673,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         }
         if (toUs) {
             if (_facade.isClientDb()) {
-                _log.error("[DbId: " + _facade._dbid + "] Error! SendMessageDirectJob (toUs) attempted in Client NetDb! " + 
+                _log.error("[DbId: " + _facade._dbid + "] Error! SendMessageDirectJob (toUs) attempted in Client NetDb! " +
                        "\n* Message: " + msg);
                 return;
             }

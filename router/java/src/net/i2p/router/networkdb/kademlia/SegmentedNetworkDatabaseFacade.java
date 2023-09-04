@@ -57,7 +57,7 @@ public abstract class SegmentedNetworkDatabaseFacade { // extends FloodfillNetwo
 
     /**
      * Not for use without validation
-     * 
+     *
      * @return RouterInfo, LeaseSet, or null, NOT validated
      * @since 0.9.59
      */
@@ -67,7 +67,7 @@ public abstract class SegmentedNetworkDatabaseFacade { // extends FloodfillNetwo
 
     /**
      * Lookup using the client's tunnels
-     * 
+     *
      * @param fromLocalDest use these tunnels for the lookup, or null for
      *                      exploratory
      * @since 0.9.59
@@ -116,8 +116,7 @@ public abstract class SegmentedNetworkDatabaseFacade { // extends FloodfillNetwo
      *                      exploratory
      * @since 0.9.59
      */
-    public abstract void lookupDestination(Hash key, Job onFinishedJob, long timeoutMs, Hash fromLocalDest,
-            String dbid);
+    public abstract void lookupDestination(Hash key, Job onFinishedJob, long timeoutMs, Hash fromLocalDest, String dbid);
 
     /**
      * Lookup locally in netDB and in badDest cache
@@ -179,7 +178,7 @@ public abstract class SegmentedNetworkDatabaseFacade { // extends FloodfillNetwo
 
     /**
      * The last time we successfully published our RI.
-     * 
+     *
      * @since 0.9.59
      */
     public long getLastRouterInfoPublishTime(String dbid) {
@@ -295,7 +294,7 @@ public abstract class SegmentedNetworkDatabaseFacade { // extends FloodfillNetwo
 
     /**
      * For console ConfigKeyringHelper
-     * 
+     *
      * @since 0.9.59
      */
     public List<BlindData> getBlindData(String dbid) {
@@ -304,7 +303,7 @@ public abstract class SegmentedNetworkDatabaseFacade { // extends FloodfillNetwo
 
     /**
      * For console ConfigKeyringHelper
-     * 
+     *
      * @return true if removed
      * @since 0.9.59
      */

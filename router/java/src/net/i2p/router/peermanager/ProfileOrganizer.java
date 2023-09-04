@@ -221,7 +221,7 @@ public class ProfileOrganizer {
             return null;
         }
 
-        RouterInfo peerInfo = _context.floodfillNetDb().lookupRouterInfoLocally(peer);
+        RouterInfo peerInfo = _context.mainNetDb().lookupRouterInfoLocally(peer);
         String bw = null;
         String cap = null;
         String version = "0.8";
@@ -317,7 +317,7 @@ public class ProfileOrganizer {
         if (profile == null) return null;
 
         Hash peer = profile.getPeer();
-        RouterInfo peerInfo = _context.floodfillNetDb().lookupRouterInfoLocally(peer);
+        RouterInfo peerInfo = _context.mainNetDb().lookupRouterInfoLocally(peer);
         String bw = "K";
         String cap = "";
         String version = "0.8";
@@ -325,7 +325,7 @@ public class ProfileOrganizer {
         boolean hasSalt = false;
         boolean isFF = false;
         boolean reachable = true;
-        RouterInfo us = _context.floodfillNetDb().lookupRouterInfoLocally(_context.routerHash());
+        RouterInfo us = _context.mainNetDb().lookupRouterInfoLocally(_context.routerHash());
         boolean isUs = us != null && us.equals(_context.routerHash());
         PeerProfile prof = getProfile(peer);
 
@@ -1138,7 +1138,7 @@ public class ProfileOrganizer {
      */
     private void locked_demoteHighCapAsNecessary() {
         int maxHighCapPeers = getMaximumHighCapPeers();
-        NetworkDatabaseFacade netDb = _context.floodfillNetDb();
+        NetworkDatabaseFacade netDb = _context.mainNetDb();
         int numToDemote = _highCapacityPeers.size() - maxHighCapPeers;
         if (numToDemote > 0) {
             // sorted by capacity, highest-first
@@ -1191,7 +1191,7 @@ public class ProfileOrganizer {
             if (profile.getPeer() == null)
                 continue;
 
-            RouterInfo peerInfo = _context.floodfillNetDb().lookupRouterInfoLocally(profile.getPeer());
+            RouterInfo peerInfo = _context.mainNetDb().lookupRouterInfoLocally(profile.getPeer());
             String bw = "K";
             if (peerInfo != null && peerInfo.getBandwidthTier() != null) {
                 bw = peerInfo.getBandwidthTier();
@@ -1539,7 +1539,7 @@ public class ProfileOrganizer {
     }
 
     public boolean isSelectable(Hash peer) {
-        NetworkDatabaseFacade netDb = _context.floodfillNetDb();
+        NetworkDatabaseFacade netDb = _context.mainNetDb();
         // the CLI shouldn't depend upon the netDb
         if (netDb == null) return true;
         if (_context.router() == null) return true;
@@ -1549,7 +1549,7 @@ public class ProfileOrganizer {
             return false; // never select a banlisted peer
         }
 
-        RouterInfo info = (RouterInfo) _context.floodfillNetDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo info = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(peer);
 //        String caps = DataHelper.stripHTML(info.getCapabilities());
         if (null != info) {
             String tier = DataHelper.stripHTML(info.getBandwidthTier());

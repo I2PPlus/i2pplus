@@ -32,7 +32,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         _context = ctx;
         _log = ctx.logManager().getLog(OutboundReceiver.class);
         _config = cfg;
-        _nextHopCache = _context.floodfillNetDb().lookupRouterInfoLocally(_config.getPeer(1));
+        _nextHopCache = _context.mainNetDb().lookupRouterInfoLocally(_config.getPeer(1));
         _priority = PRIORITY + cfg.getPriority();
         _sendFailJob = new SendFailedJob(ctx);
         // all createRateStat() in TunnelDispatcher
@@ -47,7 +47,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
             _log.debug("Received encrypted message, sending out via " + _config + ": " + msg);
         RouterInfo ri = _nextHopCache;
         if (ri == null) {
-            ri = _context.floodfillNetDb().lookupRouterInfoLocally(_config.getPeer(1));
+            ri = _context.mainNetDb().lookupRouterInfoLocally(_config.getPeer(1));
             _nextHopCache = ri;
         }
         if (ri != null) {
@@ -57,7 +57,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
             // It should be rare to forget the router info for a peer in our own tunnel.
             if (_log.shouldWarn())
                 _log.warn("Lookup of [" + _config.getPeer(1).toBase64().substring(0,6) + "] required for " + msg);
-            _context.floodfillNetDb().lookupRouterInfo(_config.getPeer(1), new SendJob(_context, msg),
+            _context.mainNetDb().lookupRouterInfo(_config.getPeer(1), new SendJob(_context, msg),
                                               new LookupFailedJob(_context), MAX_LOOKUP_TIME);
             return -1;
         }
@@ -93,7 +93,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         public String getName() { return "Send to OBGW after Lookup"; }
 
         public void runJob() {
-            RouterInfo ri = _context.floodfillNetDb().lookupRouterInfoLocally(_config.getPeer(1));
+            RouterInfo ri = _context.mainNetDb().lookupRouterInfoLocally(_config.getPeer(1));
             if (_log.shouldDebug())
                 _log.debug("Lookup of [" + _config.getPeer(1).toBase64().substring(0,6) + "] successful? " + (ri != null));
             int stat;

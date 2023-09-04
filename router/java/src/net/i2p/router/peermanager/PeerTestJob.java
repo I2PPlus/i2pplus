@@ -171,7 +171,7 @@ class PeerTestJob extends JobImpl {
         List<Hash> peerHashes = _manager.selectPeers(criteria);
         Set<RouterInfo> peers = new HashSet<RouterInfo>(peerHashes.size());
         for (Hash peer : peerHashes) {
-            RouterInfo peerInfo = getContext().floodfillNetDb().lookupRouterInfoLocally(peer);
+            RouterInfo peerInfo = getContext().mainNetDb().lookupRouterInfoLocally(peer);
             PeerProfile prof = getContext().profileOrganizer().getProfile(peer);
             String cap = null;
             String bw = "";
@@ -216,7 +216,7 @@ class PeerTestJob extends JobImpl {
         }
         TunnelId inTunnelId = inTunnel.getReceiveTunnelId(0);
 
-        RouterInfo inGateway = getContext().floodfillNetDb().lookupRouterInfoLocally(inTunnel.getPeer(0));
+        RouterInfo inGateway = getContext().mainNetDb().lookupRouterInfoLocally(inTunnel.getPeer(0));
         if (inGateway == null) {
             if (_log.shouldWarn())
                 _log.warn("We can't find the gateway to our inbound tunnel?! Impossible?");
@@ -308,7 +308,7 @@ class PeerTestJob extends JobImpl {
                 if (_nonce == msg.getMessageId()) {
                     long timeLeft = _expiration - getContext().clock().now();
                     PeerProfile prof = getContext().profileOrganizer().getProfile(_peer);
-                    RouterInfo peerInfo = getContext().floodfillNetDb().lookupRouterInfoLocally(_peer);
+                    RouterInfo peerInfo = getContext().mainNetDb().lookupRouterInfoLocally(_peer);
                     if (peerInfo != null && prof != null) {
                         int speedBonus = prof.getSpeedBonus();
                         String cap = peerInfo.getCapabilities();
@@ -416,7 +416,7 @@ class PeerTestJob extends JobImpl {
 
             Hash h = _peer.getIdentity().getHash();
             if (h != null) {
-                RouterInfo peerInfo = getContext().floodfillNetDb().lookupRouterInfoLocally(h);
+                RouterInfo peerInfo = getContext().mainNetDb().lookupRouterInfoLocally(h);
                 if (peerInfo != null) {
                     String cap = peerInfo.getCapabilities();
                     boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
@@ -501,7 +501,7 @@ class PeerTestJob extends JobImpl {
             Hash h = _peer.getIdentity().getHash();
             if (h != null) {
                 PeerProfile prof = getContext().profileOrganizer().getProfile(h);
-                RouterInfo peerInfo = getContext().floodfillNetDb().lookupRouterInfoLocally(h);
+                RouterInfo peerInfo = getContext().mainNetDb().lookupRouterInfoLocally(h);
                 if (peerInfo != null) {
                     String cap = peerInfo.getCapabilities();
                     boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;

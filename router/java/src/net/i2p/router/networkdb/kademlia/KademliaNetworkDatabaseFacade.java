@@ -325,7 +325,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     String getDbDir() {
         if (_dbDir == null) {
             String dbDir = _context.getProperty(PROP_DB_DIR, DEFAULT_DB_DIR);
-            if (!_dbid.equals("floodfill") && _dbid != null) {
+            if (!_dbid.equals(FloodfillNetworkDatabaseSegmentor.MAIN_DBID) && _dbid != null) {
                 File subDir = new File(dbDir, _dbid);
                 if (!subDir.exists())
                     subDir.mkdirs();
@@ -416,7 +416,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _log.warn("Operating in QUIET MODE - not exploring or pushing data proactively, simply reactively " +
                       "\n* This should NOT be used in production!");
         }
-        if (_dbid == null || _dbid.equals("floodfill") || _dbid.isEmpty()) {
+        if (_dbid == null || _dbid.equals(FloodfillNetworkDatabaseSegmentor.MAIN_DBID) || _dbid.isEmpty()) {
             // periodically update and resign the router's 'published date', which basically
             // serves as a version
             Job plrij = new PublishLocalRouterInfoJob(_context);
@@ -880,7 +880,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!_initialized) return null;
         // Client netDb shouldn't have RI, search for RI in the floodfill netDb.
         if (isClientDb())
-            return _context.floodfillNetDb().lookupRouterInfoLocally(key);
+            return _context.mainNetDb().lookupRouterInfoLocally(key);
         DatabaseEntry ds = _ds.get(key);
         if (ds != null) {
             if (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
@@ -1288,7 +1288,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!key.equals(routerInfo.getIdentity().getHash())) {
             if (_log.shouldWarn())
                 _log.warn("Invalid NetDbStore attempt! Key [" + key.toBase64().substring(0,6) + "] " +
-                          "does not match identity for RouterInfo [" + routerInfo.toBase64().substring(0,6) + "]");
+                          "does not match identity for RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]");
             return "Key does not match routerInfo.identity";
         }
         // todo experimental sig types
@@ -1296,8 +1296,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             // throws UnsupportedCryptoException
             processStoreFailure(key, routerInfo);
             if (_log.shouldWarn())
-                _log.warn("Invalid RouterInfo signature detected for [" + routerInfo.toBase64().substring(0,6) + "]");
-                //_log.warn("Banning [" + routerInfo.toBase64().substring(0,6) + "] for duration of session -> Malformed RouterInfo");
+                _log.warn("Invalid RouterInfo signature detected for [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]");
+                //_log.warn("Banning [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] for duration of session -> Malformed RouterInfo");
             //_context.banlist().banlistRouter(key, " <b>➜</b> Malformed RouterInfo", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_FOREVER);
             return "Invalid RouterInfo signature";
         }
@@ -1310,7 +1310,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _context.banlist().banlistRouterHard(key, " <b>➜</b> " + "Not in our Network: " + id);
             }
             if (_log.shouldWarn())
-                _log.warn("BAD Network detected for [" + routerInfo.toBase64().substring(0,6) + "]");
+                _log.warn("BAD Network detected for [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]");
             return "Not in our network";
         }
         FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
@@ -1387,7 +1387,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean isOld = routerInfo != null && !isUs && VersionComparator.comp(v, MIN_VERSION) < 0;
         boolean isOlderThanCurrent = routerInfo != null && !isUs && VersionComparator.comp(v, CURRENT_VERSION) < 0;
         if (routerInfo != null) {
-            routerId = routerInfo.toBase64().substring(0,6);
+            //routerId = routerInfo.getIdentity().getHash().toBase64().substring(0,6);
+            routerId = routerInfo.getIdentity().getHash().toBase64().substring(0,6);
             caps = routerInfo.getCapabilities().toUpperCase();
             h = routerInfo.getIdentity().getHash();
             if (caps.contains("F")) {
@@ -1430,7 +1431,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 return "Published " + DataHelper.formatDuration(age) + " ago";
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Even though peer [" + routerInfo.toBase64().substring(0,6) + "] is stale, we have only " + existing
+                    _log.warn("Even though peer [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] is stale, we have only " + existing
                               + " peers left - not dropping...");
             }
         }

@@ -1029,7 +1029,7 @@ public abstract class TransportImpl implements Transport {
             }
         }
 /*
-        RouterInfo ri = _context.floodfillNetDb().lookupRouterInfoLocally(peer);
+        RouterInfo ri = _context.mainNetDb().lookupRouterInfoLocally(peer);
         if (ri == null)
             return false;
         String alt = getAltStyle();

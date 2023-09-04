@@ -71,7 +71,7 @@ class ParticipatingThrottler {
 
     /** increments before checking */
     Result shouldThrottle(Hash h) {
-        RouterInfo ri = context.floodfillNetDb().lookupRouterInfoLocally(h);
+        RouterInfo ri = context.mainNetDb().lookupRouterInfoLocally(h);
         Hash us = context.routerHash();
         String caps = ri != null ? ri.getCapabilities() : "";
         boolean isUs = ri != null && us.equals(ri.getIdentity().getHash());

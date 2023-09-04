@@ -62,7 +62,7 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
 
     public void timeReached() {
         StatManager sm = _ctx.statManager();
-        int known = _ctx.floodfillNetDb().getKnownRouters() - 1;
+        int known = _ctx.mainNetDb().getKnownRouters() - 1;
         sm.addRateData("router.knownPeers", known, 60*1000);
 
         int active = _ctx.commSystem().countActivePeers();

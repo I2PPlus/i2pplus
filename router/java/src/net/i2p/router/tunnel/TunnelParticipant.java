@@ -66,9 +66,9 @@ class TunnelParticipant {
             _inboundDistributor = null; // final
 
         if ( (_config != null) && (_config.getSendTo() != null) ) {
-            _nextHopCache = _context.floodfillNetDb().lookupRouterInfoLocally(_config.getSendTo());
+            _nextHopCache = _context.mainNetDb().lookupRouterInfoLocally(_config.getSendTo());
             if (_nextHopCache == null)
-                _context.floodfillNetDb().lookupRouterInfo(_config.getSendTo(), new Found(_context), null, LONG_MAX_LOOKUP_TIME);
+                _context.mainNetDb().lookupRouterInfo(_config.getSendTo(), new Found(_context), null, LONG_MAX_LOOKUP_TIME);
         }
         // all createRateStat() in TunnelDispatcher
     }
@@ -78,7 +78,7 @@ class TunnelParticipant {
         public String getName() { return "Verify Next Hop Info Found"; }
         public void runJob() {
             if (_nextHopCache == null) {
-                _nextHopCache = _context.floodfillNetDb().lookupRouterInfoLocally(_config.getSendTo());
+                _nextHopCache = _context.mainNetDb().lookupRouterInfoLocally(_config.getSendTo());
                 // nothing for failure since fail job is null
                 _context.statManager().addRateData("tunnel.participantLookupSuccess", 1);
             }
@@ -106,7 +106,7 @@ class TunnelParticipant {
             _config.incrementProcessedMessages();
             RouterInfo ri = _nextHopCache;
             if (ri == null)
-                ri = _context.floodfillNetDb().lookupRouterInfoLocally(_config.getSendTo());
+                ri = _context.mainNetDb().lookupRouterInfoLocally(_config.getSendTo());
             if (ri != null) {
                 if (_log.shouldDebug())
                     _log.debug("Dispatched " + msg + " directly to nextHop [" + _config.getSendTo().toBase64().substring(0,6) + "]");
@@ -118,7 +118,7 @@ class TunnelParticipant {
                 // It should be rare to forget the router info for the next peer
                 if (_log.shouldInfo())
                     _log.info("Looking up nextHop [" + _config.getSendTo().toBase64().substring(0,6) + "] for " + msg);
-                _context.floodfillNetDb().lookupRouterInfo(_config.getSendTo(), new SendJob(_context, msg),
+                _context.mainNetDb().lookupRouterInfo(_config.getSendTo(), new SendJob(_context, msg),
                                                   new TimeoutJob(_context, msg), MAX_LOOKUP_TIME);
             }
         } else {
@@ -229,7 +229,7 @@ class TunnelParticipant {
             if (_nextHopCache != null) {
                 send(_config, _msg, _nextHopCache);
             } else {
-                RouterInfo ri = _context.floodfillNetDb().lookupRouterInfoLocally(_config.getSendTo());
+                RouterInfo ri = _context.mainNetDb().lookupRouterInfoLocally(_config.getSendTo());
                 int stat;
                 if (ri != null) {
                     _nextHopCache = ri;
@@ -260,7 +260,7 @@ class TunnelParticipant {
             if (_nextHopCache != null)
                 return;
 
-            RouterInfo ri = _context.floodfillNetDb().lookupRouterInfoLocally(_config.getSendTo());
+            RouterInfo ri = _context.mainNetDb().lookupRouterInfoLocally(_config.getSendTo());
             if (ri != null) {
                 _nextHopCache = ri;
                 if (_log.shouldWarn())
