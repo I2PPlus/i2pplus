@@ -227,9 +227,9 @@ public class InfoHelper extends HelperBase {
         Boolean rdnsEnabled = _context.getBooleanProperty("routerconsole.enableReverseLookups");
         if (rdnsEnabled) {
             int rdnsCacheSize = CommSystemFacadeImpl.countRdnsCacheEntries();
-            String rdnsFileSize = _context.router().getUptime() > 30 * 1000 ? CommSystemFacadeImpl.rdnsCacheSize() : _t("initializing") + "&hellip;";
-            buf.append("<tr><td><b>RDNS Cache:</b></td><td class=ajax>" + rdnsCacheSize + " / 16384 entries (" + rdnsFileSize + ") &ensp;" +
-                       "<b>" + _t("Cache file") + ":</b> " + configDir + "rdnscache.txt</td></tr>\n");
+            String rdnsFileSize = _context.router().getUptime() > 5 * 1000 ? CommSystemFacadeImpl.rdnsCacheSize() : _t("initializing") + "&hellip;";
+            buf.append("<tr><td><b>RDNS Cache:</b></td><td class=ajax>" + rdnsCacheSize + " / 16384 entries &ensp;" +
+                       "<b>" + _t("Cache file") + ":</b> " + configDir + "rdnscache.txt (" + rdnsFileSize + ")</td></tr>\n");
         }
         if (firstInstalled() != null && firstVersion() != null && lastUpdated() != null) {
             buf.append("<tr><td><b>" + _t("Installed") + ":</b></td><td>" + installDate + " (" + firstVersion() + ")" +

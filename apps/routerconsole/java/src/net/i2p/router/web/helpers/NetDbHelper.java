@@ -41,21 +41,24 @@ public class NetDbHelper extends FormHandler {
     private static final int DEFAULT_LIMIT = SystemVersion.isSlow() ? 250 : 1000;
     private static final int DEFAULT_PAGE = 0;
 
+    public boolean isFloodfill() {
+        return _context.netDb().floodfillEnabled();
+    }
+
     private static final String titles[] =
-                                          {_x("Summary"),                       // 0
-                                           _x("Local Router"),                  // 1
-                                           _x("Router Lookup"),                 // 2
-                                           // advanced below here
-                                           _x("All Routers in Floodfill NetDB"),                   // 3
-                                           _x("All Routers in Floodfill NetDB with Full Stats"),   // 4
-                                           _x("LeaseSets"),                     // 5
-                                           "LeaseSet Debug",                    // 6
-                                           "Sybil",                             // 7
-                                           "Advanced Lookup",                   // 8
-                                           "LeaseSet Lookup",                   // 9
-                                           _x("All Routers in Client NetDBs"),   // 10
-                                           _x("All Routers in Client NetDBs with Full Stats"),   // 11
-                                           _x("LeaseSets in Client NetDBs"),                     // 12
+                                          {_x("Summary"),                       // 0  -
+                                           _x("Local Router"),                  // 1  - r=.
+                                           _x("Router Lookup"),                 // 2  -
+                                           _x("All Routers"),                   // 3  - f=2
+                                           _x("All Routers"),                   // 4  - f=1 (debug)
+                                           _x("LeaseSets"),                     // 5  - l=1
+                                           _x("LeaseSets"),                     // 6  - l=2 (debug)
+                                           _x("LeaseSets"),                     // 7  - l=3
+                                           _x("Advanced Lookup"),               // 8  - f=4
+                                           _x("LeaseSet Lookup"),               // 9  -
+                                           _x("All Routers (Client NetDb)"),    // 10 - f=5
+                                           _x("All Routers (Client NetDb)"),    // 11 - f=6 (debug)
+                                           _x("Sybil Analysis"),                // 12 - f=3
                                           };
 
     private static final String links[] =
@@ -66,12 +69,12 @@ public class NetDbHelper extends FormHandler {
                                            "?f=1",                              // 4
                                            "?l=1",                              // 5
                                            "?l=2",                              // 6
-                                           "?f=3",                              // 7
+                                           "?l=3",                              // 7
                                            "?f=4",                              // 8
                                            "",                                  // 9
                                            "?f=5",                              // 10
                                            "?f=6",                              // 11
-                                           "?l=7",                              // 12
+                                           "?f=3",                              // 12
                                           };
 
 
@@ -206,7 +209,7 @@ public class NetDbHelper extends FormHandler {
     }
 
     public void setLease(String l) {
-        _clientOnly = "7".equals(l);
+        _clientOnly = "3".equals(l);
         _debug = "2".equals(l);
         _lease = _debug || "1".equals(l);
     }
@@ -360,7 +363,7 @@ public class NetDbHelper extends FormHandler {
                 renderer.renderStatusHTML(_out, _limit, _page, _full, null, true);
             } else if (_clientOnly && client == null) {
                 for (String _client : _context.netDb().getClients()) {
-                    renderer.renderLeaseSetHTML(_out, _debug, _client, _clientOnly);
+                    renderer.renderLeaseSetHTML(_out, _debug, _client, clientOnly);
                 }
             } else {
                 if (_full == 0 && _sort != null)
@@ -396,7 +399,7 @@ public class NetDbHelper extends FormHandler {
             return 3;
         if (_full == 1)
             return 4;
-        if (_full == 3)
+        if (_clientOnly)
             return 7;
         if (_full == 4)
             return 8;
@@ -406,7 +409,7 @@ public class NetDbHelper extends FormHandler {
             return 10;
         if (_full == 6)
             return 11;
-        if (_clientOnly)
+        if (_full == 3)
             return 12;
         return 0;
     }
@@ -430,9 +433,13 @@ public class NetDbHelper extends FormHandler {
                 continue; // only show All Routers (with full stats) in adv. mode
             if (i == 4 && !isAdvanced())
                 continue; // and hide Routers (with full stats) from normal mode
-            if (i == 5 && isAdvanced())
-                continue; // hide standard Leasesets tab in adv. mode
-            if (i > 5 && !isAdvanced())
+            if (i == 5 || i== 6)
+                continue; // hide standard Leasesets tab in normal/adv. mode,
+                          // default to client LSs. TODO: Add link to main when ff
+                          // on client page.
+            //if (i > 5 && !isAdvanced())
+            //    continue;
+            if (i == 10 || i == 11)
                 continue;
             if (i == tab) {
                 // we are there

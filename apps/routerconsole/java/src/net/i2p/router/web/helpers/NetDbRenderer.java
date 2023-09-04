@@ -77,6 +77,12 @@ class NetDbRenderer {
         return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
     }
 
+    public static final int LOOKUP_WAIT = 8 * 1000;
+
+    public boolean isFloodfill() {
+        return _context.netDb().floodfillEnabled();
+    }
+
     /**
      *  Inner class, can't be Serializable
      */
@@ -125,7 +131,7 @@ class NetDbRenderer {
                                      String ip, String sybil, int port, int highPort, SigType type, EncType etype,
                                      String mtu, String ipv6, String ssucaps,
                                      String tr, int cost, int icount) throws IOException {
-                                        renderRouterInfoHTML(out, pageSize, page,
+                                            renderRouterInfoHTML(out, pageSize, page,
                                                                  routerPrefix, version,
                                                                  country, family, caps,
                                                                  ip, sybil, port, highPort, type, etype,
@@ -140,14 +146,14 @@ class NetDbRenderer {
                                      String tr, int cost, int icount, String client, boolean allClients) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
         List<Hash> sybils = sybil != null ? new ArrayList<Hash>(128) : null;
-        FloodfillNetworkDatabaseFacade netdb = _context.floodfillNetDb();
+        FloodfillNetworkDatabaseFacade netdb = _context.mainNetDb();
         if (allClients) {
-            netdb = _context.floodfillNetDb();
+            netdb = _context.mainNetDb();
         } else {
             if (client != null)
                 netdb = _context.clientNetDb(client);
             else
-                netdb = _context.floodfillNetDb();
+                netdb = _context.mainNetDb();
         }
 
         if (".".equals(routerPrefix)) {
@@ -167,10 +173,10 @@ class NetDbRenderer {
                     if (!banned) {
                         // remote lookup
                         LookupWaiter lw = new LookupWaiter();
-                        netdb.lookupRouterInfo(hash, lw, lw, 8*1000);
+                        netdb.lookupRouterInfo(hash, lw, lw, LOOKUP_WAIT);
                         // just wait right here in the middle of the rendering, sure
                         synchronized(lw) {
-                            try { lw.wait(9*1000); } catch (InterruptedException ie) {}
+                            try { lw.wait(LOOKUP_WAIT); } catch (InterruptedException ie) {}
                         }
                         ri = (RouterInfo) netdb.lookupLocallyWithoutValidation(hash);
                     }
@@ -241,7 +247,7 @@ class NetDbRenderer {
                     routers.addAll(_context.netDb().getRoutersKnownToClients());
             } else {
                 if (client == null)
-                    routers.addAll(_context.floodfillNetDb().getRouters());
+                    routers.addAll(_context.mainNetDb().getRouters());
                 else
                     routers.addAll(_context.clientNetDb(client).getRouters());
 
@@ -606,12 +612,12 @@ class NetDbRenderer {
         DecimalFormat fmt;
         FloodfillNetworkDatabaseFacade netdb = null;
         if (clientsOnly) {
-            netdb = _context.floodfillNetDb();
+            netdb = _context.mainNetDb();
         } else {
             if (client != null)
                 netdb = _context.clientNetDb(client);
             else
-                netdb = _context.floodfillNetDb();
+                netdb = _context.mainNetDb();
         }
         if (debug) {
             ourRKey = _context.routerHash();
@@ -631,27 +637,31 @@ class NetDbRenderer {
         BigInteger median = null;
         int c = 0;
 
-
         // Summary
         if (debug) {
             buf.append("<table id=leasesetdebug>\n");
-        } else {
+        } else if (client == null) {
             buf.append("<table id=leasesetsummary>\n");
         }
-        if (clientsOnly)
-            buf.append("<tr><th colspan=3>Leaseset Summary for All Clients: ").append(client).append("</th>");
-        else if (client != null)
-            buf.append("<tr><th colspan=3>Leaseset Summary for Client: ").append(client).append("</th>");
-        else
-            buf.append("<tr><th colspan=3>Leaseset Summary for Floodfill</th>");
-           buf.append("<th><a href=\"/configadvanced\" title=\"").append(_t("Manually Configure Floodfill Participation")).append("\">[")
-           .append(_t("Configure Floodfill Participation"))
-           .append("]</a></th></tr>\n")
-           .append("<tr><td><b>Total Leasesets:</b></td><td colspan=3>").append(leases.size()).append("</td></tr>\n");
+/**
+        if (clientsOnly) {
+            buf.append("<tr><th colspan=4>Leaseset Summary for All Clients: ").append(client).append("</th><tr>\n");
+        } else if (client != null) {
+            buf.append("<tr><th colspan=4>Leaseset Summary for Client: ").append(client).append("</th></tr>\n");
+        } else {
+            buf.append("<tr><th colspan=4>Leaseset Summary for Floodfill</th></tr>\n");
+        }
+        buf.append("<tr><td><b>Total Leasesets:</b></td><td colspan=3>").append(leases.size()).append("</td></tr>\n");
+**/
+        if (debug || client == null) {
+            buf.append("<tr><th><b>Total Leasesets:</b></th><th colspan=3>").append(leases.size()).append("</th></tr>\n");
+        }
         if (debug) {
             RouterKeyGenerator gen = _context.routerKeyGenerator();
-            buf.append("<tr><td><b>Published (RAP) Leasesets:</b></td><td colspan=3>").append(leases).append("</td></tr>\n")
-               .append("<tr><td><b>Mod Data:</b></td><td>").append(DataHelper.getUTF8(gen.getModData())).append("</td>")
+            if (leases.size() > 0) {
+                buf.append("<tr><td><b>Published (RAP) Leasesets:</b></td><td colspan=3>").append(leases).append("</td></tr>\n");
+            }
+            buf.append("<tr><td><b>Mod Data:</b></td><td>").append(DataHelper.getUTF8(gen.getModData())).append("</td>")
                .append("<td><b>Last Changed:</b></td><td>").append(DataHelper.formatTime(gen.getLastChanged())).append("</td></tr>\n")
                .append("<tr><td><b>Next Mod Data:</b></td><td>").append(DataHelper.getUTF8(gen.getNextModData())).append("</td>")
                .append("<td><b>Change in:</b></td><td>").append(DataHelper.formatDuration(gen.getTimeTillMidnight())).append("</td></tr>\n");
@@ -662,35 +672,30 @@ class NetDbRenderer {
             buf.append("<tr><td><b>Known Floodfills:</b></td><td colspan=3>").append(ff).append("</td></tr>\n");
             buf.append("<tr><td><b>Currently Floodfill?</b></td><td>").append(netdb.floodfillEnabled() ? "yes" : "no");
         }
-        if (debug)
+        if (debug) {
             buf.append("</td><td><b>Routing Key:</b></td><td>").append(ourRKey.toBase64());
-        else
-            buf.append("</td><td colspan=\"2\">");
+        } else {
+            buf.append("</td><td colspan=2>");
+        }
         buf.append("</td></tr>\n</table>\n");
-
-        if (leases.isEmpty()) {
-            if (!debug)
+            if (leases.isEmpty()) {
+            if (!debug && client == null)
                 buf.append("<div id=noleasesets><i>").append(_t("No Leasesets currently active.")).append("</i></div>");
         } else {
-            if (debug) {
-                // Find the center of the RAP leasesets
-                for (LeaseSet ls : leases) {
-                    if (ls.getReceivedAsPublished())
-                       rapCount++;
-                }
-                medianCount = rapCount / 2;
-            }
-
             boolean linkSusi = _context.portMapper().isRegistered("susidns");
             long now = _context.clock().now();
             buf.append("<div class=leasesets_container>");
             for (LeaseSet ls : leases) {
                 String distance;
                 if (debug) {
+                    medianCount = rapCount / 2;
                     BigInteger dist = HashDistance.getDistance(ourRKey, ls.getRoutingKey());
+                    // Find the center of the RAP leasesets
                     if (ls.getReceivedAsPublished()) {
-                        if (c++ == medianCount)
+                       rapCount++;
+                        if (c++ == medianCount) {
                             median = dist;
+                        }
                     }
                     distance = fmt.format(biLog2(dist));
                 } else {
@@ -700,8 +705,8 @@ class NetDbRenderer {
                 out.write(buf.toString());
                 buf.setLength(0);
               } // for each
-              if (debug) {
-                  buf.append("<table id=leasesetdebug><tr><td><b>").append(_t("Network data (only valid if floodfill)")).append(":</b></td><td colspan=3>");
+              if (debug && isFloodfill()) {
+                  buf.append("<table id=leasesetdebug><tr><td><b>").append(_t("Network data")).append(":</b></td><td colspan=3>");
                   //buf.append("</b></p><p><b>Center of Key Space (router hash): " + ourRKey.toBase64());
                   if (median != null) {
                       double log2 = biLog2(median);
@@ -713,7 +718,7 @@ class NetDbRenderer {
                       buf.append("<tr><td><b>").append(_t("Estimated total floodfills")).append(":</b></td><td colspan=3>").append(total).append("</td></tr>\n");
                       buf.append("<tr><td><b>").append(_t("Estimated total leasesets")).append(":</b></td><td colspan=3>").append(total * rapCount / 4);
                   } else {
-                      buf.append("<i>Not floodfill or no data.</i>");
+                      buf.append("<i>No data available.</i>");
                   }
                   buf.append("</td></tr></table>\n");
               } // median table
@@ -741,10 +746,10 @@ class NetDbRenderer {
                 // remote lookup
                 LookupWaiter lw = new LookupWaiter();
                 // use-case for the exploratory netDb here?
-                _context.exploratoryNetDb().lookupLeaseSetRemotely(hash, lw, lw, 8*1000, null);
+                _context.exploratoryNetDb().lookupLeaseSetRemotely(hash, lw, lw, LOOKUP_WAIT, null);
                 // just wait right here in the middle of the rendering, sure
                 synchronized(lw) {
-                    try { lw.wait(9*1000); } catch (InterruptedException ie) {}
+                    try { lw.wait(LOOKUP_WAIT); } catch (InterruptedException ie) {}
                 }
                 ls = _context.exploratoryNetDb().lookupLeaseSetLocally(hash);
             }
@@ -768,237 +773,197 @@ class NetDbRenderer {
     }
 
     /** @since 0.9.57 split out from above */
-    private void renderLeaseSet(StringBuilder buf, LeaseSet ls, boolean debug, long now,
-                                boolean linkSusi, String distance) {
-
-                // warning - will be null for non-local encrypted
-                Destination dest = ls.getDestination();
-                Hash key = ls.getHash();
-                if (key != null)
-                    buf.append("<table class=leaseset id=\"ls_").append(key.toBase32().substring(0,4)).append("\">\n");
+    private void renderLeaseSet(StringBuilder buf, LeaseSet ls, boolean debug,
+                                long now, boolean linkSusi, String distance) {
+        // warning - will be null for non-local encrypted
+        Destination dest = ls.getDestination();
+        Hash key = ls.getHash();
+        if (key != null)
+            buf.append("<table class=leaseset id=\"ls_").append(key.toBase32().substring(0,4)).append("\">\n");
+        else
+            buf.append("<table class=leaseset>\n");
+        buf.append("<tr><th><b class=lskey>").append(_t("LeaseSet")).append(":</b> <code title =\"")
+           .append(_t("LeaseSet Key")).append("\">").append(key.toBase64()).append("</code>");
+        int type = ls.getType();
+        if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 || _context.keyRing().get(key) != null)
+            buf.append(" <b class=encls>(").append(_t("Encrypted")).append(")</b>");
+        buf.append("</th>");
+        if (_context.clientManager().isLocal(key)) {
+            buf.append("<th>");
+            boolean unpublished = !_context.clientManager().shouldPublishLeaseSet(key);
+            TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(key);
+            buf.append("<a href=\"tunnels#" + key.toBase64().substring(0,4) + "\"><span class=\"lsdest");
+            if (!unpublished)
+                buf.append(" published");
+            buf.append("\" title=\"")
+               .append(_t("View local tunnels for destination"));
+            if (!unpublished)
+                buf.append(" (").append(_t("published")).append(")");
+            buf.append("\">");
+            if (in != null && in.getDestinationNickname() != null)
+                buf.append(DataHelper.escapeHTML(in.getDestinationNickname()));
+            else
+                buf.append(dest.toBase64().substring(0, 6));
+            buf.append("</span></a></th></tr>\n");
+            // we don't show a b32 or addressbook links if encrypted
+            if (type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
+                buf.append("<tr><td");
+                // If the dest is published but not in the addressbook, an extra
+                // <td> is appended with an "Add to addressbook" link, so this
+                // <td> should not span 2 columns.
+                String host = null;
+                if (!unpublished) {
+                    host = _context.namingService().reverseLookup(dest);
+                }
+                if (unpublished || host != null || !linkSusi) {
+                    buf.append(" colspan=2");
+                }
+                buf.append(">");
+                String b32 = key.toBase32();
+                String truncb32 = b32.substring(0, 24);
+                buf.append("<a href=\"http://").append(b32).append("/\">").append(truncb32).append("&hellip;b32.i2p</a></td>");
+                if (linkSusi && !unpublished && host == null) {
+                    buf.append("<td class=addtobook colspan=2>").append("<a title=\"").append(_t("Add to addressbook"))
+                       .append("\" href=\"/susidns/addressbook.jsp?book=private&amp;destination=")
+                       .append(dest.toBase64()).append("#add\">").append(_t("Add to local addressbook")).append("</a></td>");
+                } // else probably a client
+            }
+        } else {
+            buf.append("<th>");
+            String host = (dest != null) ? _context.namingService().reverseLookup(dest) : null;
+            if (host != null) {
+                buf.append("<a class=destlink href=\"http://").append(host).append("/\">").append(host).append("</a></th>");
+            } else {
+                String b32 = key.toBase32();
+                String truncb32 = b32.substring(0, 24);
+                buf.append("<code title=\"").append(_t("Destination")).append("\">");
+                if (dest != null)
+                    buf.append(dest.toBase64().substring(0, 6));
                 else
-                    buf.append("<table class=leaseset>\n");
-                buf.append("<tr><th><b class=lskey>").append(_t("LeaseSet")).append(":</b> <code title =\"")
-                   .append(_t("LeaseSet Key")).append("\">").append(key.toBase64()).append("</code>");
-                int type = ls.getType();
-                if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 || _context.keyRing().get(key) != null)
-                    buf.append(" <b class=encls>(").append(_t("Encrypted")).append(")</b>");
-                buf.append("</th>");
-                if (_context.clientManager().isLocal(key)) {
-                    //buf.append("<th><a href=\"tunnels#" + key.toBase64().substring(0,4) + "\">" + _t("Local") + "</a> ");
-                    buf.append("<th>");
-                    boolean unpublished = !_context.clientManager().shouldPublishLeaseSet(key);
-                    //if (unpublished)
-                        //buf.append("<b>").append(_t("Unpublished")).append("</b>: ");
-                    //buf.append("<b>").append(_t("Destination")).append(":</b> ");
-                    TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(key);
-                    buf.append("<a href=\"tunnels#" + key.toBase64().substring(0,4) + "\"><span class=\"lsdest");
-                    if (!unpublished)
-                        buf.append(" published");
-                    buf.append("\" title=\"")
-                       .append(_t("View local tunnels for destination"));
-                    if (!unpublished)
-                        buf.append(" (").append(_t("published")).append(")");
-                    buf.append("\">");
-                    if (in != null && in.getDestinationNickname() != null)
-                        buf.append(DataHelper.escapeHTML(in.getDestinationNickname()));
+                    buf.append("n/a");
+                buf.append("</code></th></tr>\n<tr><td");
+                if (!linkSusi)
+                    buf.append(" colspan=2");
+                buf.append("><a href=\"http://").append(b32).append("\">").append(truncb32).append("&hellip;b32.i2p</a></td>");
+                if (linkSusi && dest != null) {
+                    buf.append("<td class=addtobook><a title=\"").append(_t("Add to addressbook"))
+                       .append("\" href=\"/susidns/addressbook.jsp?book=private&amp;destination=")
+                       .append(dest.toBase64()).append("#add\">").append(_t("Add to local addressbook")).append("</a></td></tr>\n");
+                }
+            }
+        }
+        long exp;
+        buf.append("<tr><td colspan=2>");
+        if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
+            exp = ls.getLatestLeaseDate() - now;
+        } else {
+            LeaseSet2 ls2 = (LeaseSet2) ls;
+            long pub = now - ls2.getPublished();
+            buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Type")).append(":</b> ").append(type)
+               .append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Published{0} ago", ":</b> " + DataHelper.formatDuration2(pub)));
+            exp = ((LeaseSet2)ls).getExpires()-now;
+        }
+        buf.append(" &nbsp; &bullet; &nbsp;<b>");
+        if (exp > 0)
+            buf.append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)).replace(" in", ""));
+        else
+            buf.append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));
+        if (debug) {
+            buf.append(" &nbsp; &bullet; &nbsp;<b title=\"").append(_t("Received as published?")).append("\">RAP:</b> ").append(ls.getReceivedAsPublished());
+            buf.append(" &nbsp; &bullet; &nbsp;<b title=\"").append(_t("Received as reply?")).append("\">RAR:</b> ").append(ls.getReceivedAsReply());
+            buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Distance")).append(":</b> ").append(distance);
+            if (type != DatabaseEntry.KEY_TYPE_LEASESET) {
+                LeaseSet2 ls2 = (LeaseSet2) ls;
+                if (ls2.isOffline()) {
+                    buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Offline signed")).append(":</b> ");
+                    exp = ls2.getTransientExpiration() - now;
+                    if (exp > 0)
+                        buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)));
                     else
-                        buf.append(dest.toBase64().substring(0, 6));
-                    buf.append("</span></a></th></tr>\n");
-                    // we don't show a b32 or addressbook links if encrypted
-                    if (type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
-                        buf.append("<tr><td");
-                        // If the dest is published but not in the addressbook, an extra
-                        // <td> is appended with an "Add to addressbook" link, so this
-                        // <td> should not span 2 columns.
-                        String host = null;
-                        if (!unpublished) {
-                            host = _context.namingService().reverseLookup(dest);
-                        }
-                        if (unpublished || host != null || !linkSusi) {
-                            buf.append(" colspan=2");
-                        }
-                        buf.append(">");
-                        String b32 = key.toBase32();
-                        String truncb32 = b32.substring(0, 24);
-                        buf.append("<a href=\"http://").append(b32).append("/\">").append(truncb32).append("&hellip;b32.i2p</a></td>");
-                        if (linkSusi && !unpublished && host == null) {
-                            buf.append("<td class=addtobook colspan=2>").append("<a title=\"").append(_t("Add to addressbook"))
-                               .append("\" href=\"/susidns/addressbook.jsp?book=private&amp;destination=")
-                               .append(dest.toBase64()).append("#add\">").append(_t("Add to local addressbook")).append("</a></td>");
-                        } // else probably a client
-                    }
-                } else {
-                    //buf.append("<th><b>").append(_t("Destination")).append(":</b> ");
-                    buf.append("<th>");
-                    String host = (dest != null) ? _context.namingService().reverseLookup(dest) : null;
-                    if (host != null) {
-                        buf.append("<a class=destlink href=\"http://").append(host).append("/\">").append(host).append("</a></th>");
-                    } else {
-                        String b32 = key.toBase32();
-                        String truncb32 = b32.substring(0, 24);
-                        buf.append("<code title=\"").append(_t("Destination")).append("\">");
-                        if (dest != null)
-                            buf.append(dest.toBase64().substring(0, 6));
-                        else
-                            buf.append("n/a");
-                        buf.append("</code></th></tr>\n<tr><td");
-                        if (!linkSusi)
-                            buf.append(" colspan=2");
-                        buf.append("><a href=\"http://").append(b32).append("\">").append(truncb32).append("&hellip;b32.i2p</a></td>");
-                        if (linkSusi && dest != null) {
-                            buf.append("<td class=addtobook><a title=\"").append(_t("Add to addressbook"))
-                               .append("\" href=\"/susidns/addressbook.jsp?book=private&amp;destination=")
-                               .append(dest.toBase64()).append("#add\">").append(_t("Add to local addressbook")).append("</a></td></tr>\n");
-                        }
-                    }
+                        buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));
+                    buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Type")).append(":</b> ").append(ls2.getTransientSigningKey().getType());
                 }
-                long exp;
-                buf.append("<tr><td colspan=2>");
-                if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                    exp = ls.getLatestLeaseDate() - now;
-                } else {
-                    LeaseSet2 ls2 = (LeaseSet2) ls;
-                    long pub = now - ls2.getPublished();
-                    buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Type")).append(":</b> ").append(type)
-                       .append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Published{0} ago", ":</b> " + DataHelper.formatDuration2(pub)));
-                    exp = ((LeaseSet2)ls).getExpires()-now;
+            }
+            buf.append("</td></tr>\n<tr><td colspan=2><span class=ls_crypto>");
+            buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
+            if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
+                buf.append(dest.getSigningPublicKey().getType()).append("</span>");
+            } else {
+                // encrypted, show blinded key type
+                buf.append(ls.getSigningKey().getType()).append("</span>");
+            }
+            if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
+                buf.append("<br><span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key"))
+                   .append(":</b> ELGAMAL_2048 [").append(ls.getEncryptionKey().toBase64().substring(0, 8))
+                   .append("&hellip;]</span>");
+            } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
+                LeaseSet2 ls2 = (LeaseSet2) ls;
+                for (PublicKey pk : ls2.getEncryptionKeys()) {
+                    buf.append("<br><span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
+                    EncType etype = pk.getType();
+                    if (etype != null)
+                        buf.append(etype);
+                    else
+                        buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());
+                    buf.append(" [").append(pk.toBase64().substring(0, 8)).append("&hellip;]</span>");
                 }
-                buf.append(" &nbsp; &bullet; &nbsp;<b>");
-                if (exp > 0)
-                    buf.append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)).replace(" in", ""));
+            }
+            buf.append("<br><span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Routing Key"))
+               .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16))
+               .append("&hellip;</span></td></tr>\n");
+        } else {
+            buf.append("</td></tr>\n<tr><td colspan=2>");
+            buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
+            if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
+                buf.append(dest.getSigningPublicKey().getType());
+            } else {
+                // encrypted, show blinded key type
+                buf.append(ls.getSigningKey().getType());
+            }
+            buf.append("</span> ");
+            if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
+                buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048</span>");
+            } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
+                LeaseSet2 ls2 = (LeaseSet2) ls;
+                for (PublicKey pk : ls2.getEncryptionKeys()) {
+                    buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
+                    EncType etype = pk.getType();
+                    if (etype != null)
+                        buf.append(etype).append("</span> ");
+                    else
+                        buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode()).append("</span> ");
+                }
+            }
+            buf.append("</span></td></tr>");
+        }
+        buf.append("<tr");
+        if (debug)
+            buf.append(" class=\"debugMode\"");
+        buf.append("><td colspan=2>\n<ul class=netdb_leases>\n");
+        boolean isMeta = ls.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
+        for (int i = 0; i < ls.getLeaseCount(); i++) {
+            Lease lease = ls.getLease(i);
+            buf.append("<li title=\"").append(_t("Lease")).append("\"><b");
+            buf.append(" class=\"leaseNumber\">");
+            buf.append(i + 1);
+            buf.append("</b> <span class=tunnel_peer title=\"Gateway\">");
+            buf.append(_context.commSystem().renderPeerHTML(lease.getGateway(), false));
+            buf.append("</span> ");
+            if (!isMeta && debug) {
+                buf.append("<span class=netdb_tunnel title=\"Tunnel ID\">").append(" <span class=tunnel_id>")
+                   .append(lease.getTunnelId().getTunnelId()).append("</span></span> ");
+            }
+            long exl = lease.getEndTime() - now;
+            if (debug) {
+                if (exl > 0)
+                    buf.append("&#10140; <b class=netdb_expiry>").append(_t("Expires in {0}", DataHelper.formatDuration2(exl))).append("</b>");
                 else
-                    buf.append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));
-                if (debug) {
-                    buf.append(" &nbsp; &bullet; &nbsp;<b title=\"").append(_t("Received as published?")).append("\">RAP:</b> ").append(ls.getReceivedAsPublished());
-                    buf.append(" &nbsp; &bullet; &nbsp;<b title=\"").append(_t("Received as reply?")).append("\">RAR:</b> ").append(ls.getReceivedAsReply());
-/*
-                    BigInteger dist = HashDistance.getDistance(ourRKey, ls.getRoutingKey());
-                    if (ls.getReceivedAsPublished()) {
-                        if (c++ == medianCount)
-                            median = dist;
-                    }
-*/
-//                    buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Distance")).append(":</b> ").append(fmt.format(biLog2(dist)));
-                    buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Distance")).append(":</b> ").append(distance);
-
-                    if (type != DatabaseEntry.KEY_TYPE_LEASESET) {
-                        LeaseSet2 ls2 = (LeaseSet2) ls;
-                        if (ls2.isOffline()) {
-                            buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Offline signed")).append(":</b> ");
-                            exp = ls2.getTransientExpiration() - now;
-                            if (exp > 0)
-                                buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)));
-                            else
-                                buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));
-                            buf.append(" &nbsp; &bullet; &nbsp;<b>").append(_t("Type")).append(":</b> ").append(ls2.getTransientSigningKey().getType());
-                        }
-                    }
-                    buf.append("</td></tr>\n<tr><td colspan=2><span class=ls_crypto>");
-                    //buf.append(dest.toBase32()).append("<br>");
-                    buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
-                    if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
-                        buf.append(dest.getSigningPublicKey().getType()).append("</span>");
-                    } else {
-                        // encrypted, show blinded key type
-                        buf.append(ls.getSigningKey().getType()).append("</span>");
-                    }
-                    if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                        buf.append("<br><span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key"))
-                           .append(":</b> ELGAMAL_2048 [").append(ls.getEncryptionKey().toBase64().substring(0, 8))
-                           .append("&hellip;]</span>");
-                    } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
-                        LeaseSet2 ls2 = (LeaseSet2) ls;
-                        for (PublicKey pk : ls2.getEncryptionKeys()) {
-                            buf.append("<br><span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
-                            EncType etype = pk.getType();
-                            if (etype != null)
-                                buf.append(etype);
-                            else
-                                buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());
-                            buf.append(" [").append(pk.toBase64().substring(0, 8)).append("&hellip;]</span>");
-                        }
-                    }
-                    buf.append("<br><span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Routing Key"))
-                       .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16))
-                       .append("&hellip;</span></td></tr>\n");
-                } else {
-                    buf.append("</td></tr>\n<tr><td colspan=2>");
-                    buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
-                    if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
-                        buf.append(dest.getSigningPublicKey().getType());
-                    } else {
-                        // encrypted, show blinded key type
-                        buf.append(ls.getSigningKey().getType());
-                    }
-                    buf.append("</span> ");
-                    if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                        buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048</span>");
-                    } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
-                        LeaseSet2 ls2 = (LeaseSet2) ls;
-                        for (PublicKey pk : ls2.getEncryptionKeys()) {
-                            buf.append("<span class=nowrap>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
-                            EncType etype = pk.getType();
-                            if (etype != null)
-                                buf.append(etype).append("</span> ");
-                            else
-                                buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode()).append("</span> ");
-                        }
-                    }
-                    buf.append("</span></td></tr>");
-                }
-                buf.append("<tr");
-                if (debug)
-                    buf.append(" class=\"debugMode\"");
-                buf.append("><td colspan=2>\n<ul class=netdb_leases>\n");
-                boolean isMeta = ls.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
-                for (int i = 0; i < ls.getLeaseCount(); i++) {
-                    Lease lease = ls.getLease(i);
-                    buf.append("<li title=\"").append(_t("Lease")).append("\"><b");
-                    buf.append(" class=\"leaseNumber\">");
-                    buf.append(i + 1);
-                    buf.append("</b> <span class=tunnel_peer title=\"Gateway\">");
-                    buf.append(_context.commSystem().renderPeerHTML(lease.getGateway(), false));
-                    buf.append("</span> ");
-                    if (!isMeta && debug) {
-                        buf.append("<span class=netdb_tunnel title=\"Tunnel ID\">").append(" <span class=tunnel_id>")
-                           .append(lease.getTunnelId().getTunnelId()).append("</span></span> ");
-                    }
-                    long exl = lease.getEndTime() - now;
-                    if (debug) {
-                        if (exl > 0)
-                            buf.append("&#10140; <b class=netdb_expiry>").append(_t("Expires in {0}", DataHelper.formatDuration2(exl))).append("</b>");
-                        else
-                            buf.append("&#10140; <b class=netdb_expiry>").append(_t("Expired {0} ago", DataHelper.formatDuration2(0-exl))).append("</b>");
-                    }
-                    buf.append("</li>\n");
-                }
-                buf.append("</ul>\n</td></tr>\n");
-                buf.append("</table>\n");
-/**
-                out.write(buf.toString());
-                buf.setLength(0);
-            } // for each
-            buf.append("</div>"); // close leaseset container
-            if (debug && median != null) {
-                buf.append("<table class=leaseset id=leasesetsummary>");
-                buf.append("<tr><th colspan=3>").append(_t("Network Summary")).append("</th><th></th></tr>\n");
-                buf.append("<tr><td><b>").append(_t("Network Data")).append(":</b></td><td colspan=3>");
-                //buf.append("</b></p><p><b>Center of Key Space (router hash): " + ourRKey.toBase64());
-                double log2 = biLog2(median);
-                buf.append("</td></tr>\n")
-                   .append("<tr><td><b>").append(_t("Median distance (bits)")).append(":</b></td><td colspan=3>").append(fmt.format(log2)).append("</td></tr>\n");
-                // 2 for 4 floodfills... -1 for median
-                // this can be way off for unknown reasons
-                int total = (int) Math.round(Math.pow(2, 2 + 256 - 1 - log2));
-                buf.append("<tr><td><b>").append(_t("Estimated total floodfills")).append(":</b></td><td colspan=3>").append(total).append("</td></tr>\n");
-                buf.append("<tr><td><b>").append(_t("Estimated total leasesets")).append(":</b></td><td colspan=3>").append(total * rapCount / 4);
-                buf.append("</td></tr>\n</table>\n");
-            } // median table
-        }  // !empty
-        out.write(buf.toString());
-        out.flush();
-**/
+                    buf.append("&#10140; <b class=netdb_expiry>").append(_t("Expired {0} ago", DataHelper.formatDuration2(0-exl))).append("</b>");
+            }
+            buf.append("</li>\n");
+        }
+        buf.append("</ul>\n</td></tr>\n");
+        buf.append("</table>\n");
     }
 
     /**
@@ -1006,7 +971,7 @@ class NetDbRenderer {
      *         mode 3: Same as 0 but sort countries by count
      */
     public void renderStatusHTML(Writer out, int pageSize, int page, int mode, String client, boolean clientsOnly) throws IOException {
-        if (!_context.floodfillNetDb().isInitialized()) {
+        if (!_context.mainNetDb().isInitialized()) {
             out.write("<div id=notinitialized>");
             out.write(_t("Not initialized"));
             out.write("</div>");
@@ -1027,7 +992,7 @@ class NetDbRenderer {
         } else if (clientsOnly) {
             routers.addAll(_context.netDb().getRoutersKnownToClients());
         } else {
-            routers.addAll(_context.floodfillNetDb().getRouters());
+            routers.addAll(_context.mainNetDb().getRouters());
         }
         int toSkip = pageSize * page;
         boolean nextpg = routers.size() > toSkip + pageSize;
@@ -1118,14 +1083,17 @@ class NetDbRenderer {
         if (!showStats) {
 
             // the summary table
-        buf.append("<table id=netdboverview width=100%>\n<tr><th colspan=3>");
-        if (client != null) {
-               buf.append(_t("Network Database Router Statistics for Client " + client));
-        } else if (clientsOnly) {
-            buf.append(_t("Network Database Router Statistics for all Clients" + client));
-        } else {
-            buf.append(_t("Network Database Router Statistics for Floodfill Router"));
-        }
+            buf.append("<table id=netdboverview width=100%>\n<tr><th colspan=3>");
+/*
+            if (client != null) {
+                   buf.append(_t("Network Database Router Statistics for Client " + client));
+            } else if (clientsOnly) {
+                buf.append(_t("Network Database Router Statistics for all Clients" + client));
+            } else {
+                buf.append(_t("Network Database Router Statistics"));
+           }
+*/
+        buf.append(_t("Network Database Router Statistics"));
         buf.append("</th></tr>\n<tr><td style=vertical-align:top>");
             // versions table
             List<String> versionList = new ArrayList<String>(versions.objects());
@@ -1228,10 +1196,10 @@ class NetDbRenderer {
 
             // country table
             List<String> countryList = new ArrayList<String>(countries.objects());
+            buf.append("<table id=netdbcountrylist data-sortable>\n");
+            buf.append("<thead>\n<tr><th>" + _t("Country") + "</th><th data-sort-default>" + _t("Count") + "</th></tr>\n</thead>\n");
             if (!countryList.isEmpty()) {
                 Collections.sort(countryList, new CountryComparator());
-                buf.append("<table id=netdbcountrylist data-sortable>\n");
-                buf.append("<thead>\n<tr><th>" + _t("Country") + "</th><th data-sort-default>" + _t("Count") + "</th></tr>\n</thead>\n");
                 buf.append("<tbody id=cclist>");
                 for (String country : countryList) {
                     int num = countries.count(country);
@@ -1242,6 +1210,9 @@ class NetDbRenderer {
                     buf.append("</a></td><td>").append(num).append("</td></tr>\n");
                 }
                 buf.append("</tbody></table>\n");
+            } else {
+                buf.append("<tbody><tr><td colspan=2>").append(_t("Initializing"))
+                   .append("&hellip;</td></tr></tbody></table>\n");
             }
             buf.append("</td></tr>\n</table>\n");
 /*
