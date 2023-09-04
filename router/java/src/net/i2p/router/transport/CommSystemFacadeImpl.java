@@ -10,6 +10,7 @@ package net.i2p.router.transport;
 
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
@@ -35,6 +37,9 @@ import java.nio.channels.FileLockInterruptionException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -45,12 +50,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.locks.Lock;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.SortedMap;
 
 import net.i2p.data.Hash;
@@ -95,11 +105,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
     private static final String COUNTRY_BUNDLE_NAME = "net.i2p.router.countries.messages";
     private static final Object DUMMY = Integer.valueOf(0);
-
-    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
-    public boolean enableReverseLookups() {
-        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
-    }
 
     public CommSystemFacadeImpl(RouterContext context) {
         _context = context;
@@ -414,7 +419,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public void exemptIncoming(Hash peer) {
         if (_manager.isEstablished(peer))
             return;
-        RouterInfo ri = (RouterInfo) _context.floodfillNetDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo ri = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(peer);
         if (ri == null)
             return;
         Collection<RouterAddress> addrs = ri.getAddresses();
@@ -529,11 +534,22 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /* We hope the routerinfos are read in and things have settled down by now, but it's not required to be so */
-    private static final int START_DELAY = SystemVersion.isSlow() ? 30*1000 : 10*1000;
+    private static final int START_DELAY = SystemVersion.isSlow() ? 60*1000 : 10*1000;
 //    private static final int LOOKUP_TIME = 30*60*1000;
     private static final int LOOKUP_TIME = 5*60*1000;
+    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    public boolean enableReverseLookups() {
+        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
+    }
+
+    private static final Charset ENCODING = StandardCharsets.UTF_8;
+    private static final String NEWLINE = "\n";
+
 
     private void startGeoIP() {
+        if (enableReverseLookups()) {
+            readRDNSCacheFromFile();
+        }
         _context.simpleTimer2().addEvent(new QueueAll(), START_DELAY);
     }
 
@@ -546,20 +562,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private class QueueAll implements SimpleTimer.TimedEvent {
         public void timeReached() {
             long uptime = _context.router().getUptime();
-           for (Hash h : _context.floodfillNetDb().getAllRouters()) {
-                RouterInfo ri = _context.floodfillNetDb().lookupRouterInfoLocally(h);
+            for (Hash h : _context.mainNetDb().getAllRouters()) {
+                RouterInfo ri = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(h);
                 if (ri == null)
                     continue;
                 byte[] ip = getIP(ri);
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
-                if (enableReverseLookups()) {
-                    readRDNSCacheFromFile();
-                    //if (_log.shouldInfo()) {
-                    //    _log.info("Attempting to read reverse DNS cache from: " + RDNS_CACHE_FILE);
-                    //}
-                }
                 if (enableReverseLookups() && uptime > 60*1000 && uptime < 10*60*1000) {
                     try {
                         InetAddress ipAddress = InetAddress.getByAddress(ip);
@@ -591,28 +601,19 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             super("GeoIP Lookup");
             setDaemon(true);
         }
+    }
 
-        public void run() {
-            long start = System.currentTimeMillis();
-            long uptime = _context.router().getUptime();
-            _geoIP.blockingLookup();
-            if (enableReverseLookups() && uptime > 60*1000 && uptime < 10*60*1000) {
-                if (_log.shouldInfo())
-                    _log.info("GeoIP and reverse DNS lookup for all routers in NetDb took " + (System.currentTimeMillis() - start) + "ms");
-            } else if (enableReverseLookups() && uptime > 5*60*1000) {
-                if (_log.shouldInfo())
-                    _log.info("NetDb GeoIP lookup and writing reverse DNS cache took " + (System.currentTimeMillis() - start) + "ms");
-            } else {
-                if (_log.shouldInfo())
-                    _log.info("GeoIP lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
-            }
-            if (enableReverseLookups() && uptime > 2*60*1000) {
-                //Thread.sleep(2*1000); // allow for the cache file to be read
-                writeRDNSCacheToFile();
-                if (_log.shouldInfo()) {
-                    _log.info("Writing reverse DNS cache (" + countRdnsCacheEntries() + " entries) to: " + RDNS_CACHE_FILE);
-                }
-            }
+    public void run() {
+        long start = System.currentTimeMillis();
+        long uptime = _context.router().getUptime();
+        _geoIP.blockingLookup();
+        if (enableReverseLookups() && uptime > 60*1000 && uptime < 6*60*1000) {
+            readRDNSCacheFromFile();
+            if (_log.shouldInfo())
+                _log.info("NetDb GeoIP lookup and reading reverse DNS cache took " + (System.currentTimeMillis() - start) + "ms");
+        } else {
+            if (_log.shouldInfo())
+                _log.info("GeoIP lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
         }
     }
 
@@ -635,6 +636,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                                                   File.separator + "rdnscache.txt"; // File name for cache serialization
     private static final long EXPIRE_TIME = 24*60*60*1000;
     private static final long EXPIRE_TIME_SHORT = 60*60*1000;
+    private static final int MAX_RDNS_CACHE_SIZE = SystemVersion.getMaxMemory() < 512*1024*1024 ? 16384 : 32768;
 
     public static class CacheEntry {
         private String ipAddress;
@@ -642,7 +644,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         public CacheEntry(String ipAddress, String hostname) {
             this.ipAddress = ipAddress;
-            this.hostname = hostname != null ? hostname : "unknown";
+            this.hostname = (hostname != null) ? hostname : "unknown";
         }
 
         public String getIpAddress() {
@@ -658,19 +660,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
     }
 
-    private static final Map<String, CacheEntry> rdnsCache = new LinkedHashMap<String, CacheEntry>(16384, 0.75f, true) {
-        @Override
-        protected boolean removeEldestEntry(Map.Entry<String, CacheEntry> eldest) {
-            return size() > 16384;
-        }
-    };
+    private static Map<String, CacheEntry> rdnsCache = new HashMap<>();
 
-    private static Map<String, String> getRDNSCache() {
-        Map<String, String> cache = new HashMap<>();
-        for (CacheEntry entry : rdnsCache.values()) {
-            cache.put(entry.getIpAddress(), entry.getHostname());
-        }
-        return cache;
+    private static Map<String, CacheEntry> getRDNSCache() {
+        // Return the reference to the existing rdnsCache map
+        return rdnsCache;
     }
 
     public static String rdnsCacheSize() {
@@ -680,44 +674,47 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     private static void readRDNSCacheFromFile() {
-        Map<String, CacheEntry> fileCache = new HashMap<>();
         File fCache = new File(RDNS_CACHE_FILE);
         try (BufferedReader reader = new BufferedReader(new FileReader(fCache))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 2) {
-                    String key = parts[0];
-                    CacheEntry value = rdnsEntryFromString(parts[1]);
-                    if (!key.equals("null") && value != null) {
-                        fileCache.put(key, value);
-                    }
-                }
-            }
-            if (!fileCache.isEmpty()) {
-                rdnsCache.putAll(fileCache);
-                //if (_log.shouldInfo()) {
-                //    _log.info("Imported " + fileCache.size() + " entries from cache file");
-                //}
-            }
+           String line;
+           while ((line = reader.readLine()) != null) {
+              if (!line.matches("^([0-9a-fA-F]).*")) {
+                 System.out.println("Line doesn't start with a digit or a-f (skipping line): " + line);
+                 line = line.replaceFirst("^[^0-9a-fA-F]*", "");
+              }
+              CacheEntry cacheEntry = rdnsEntryFromString(line);
+              if (cacheEntry != null) {
+                 rdnsCache.put(cacheEntry.getIpAddress(), cacheEntry);
+              }
+           }
+           // Log the number of entries imported from file cache
+           //System.out.println("Imported " + rdnsCache.size() + " entries from cache file");
         } catch (IOException ex) {
-            //if (_log.shouldError()) {
-            //    _log.error("Error reading RDNS cache file. Creating new file...");
-            //}
-            createRdnsCacheFile();
-            writeRDNSCacheToFile();
+           System.err.println("Error reading RDNS cache file. Creating new file...");
+           createRdnsCacheFile();
+           ex.printStackTrace();
         }
-        //if (_log.shouldInfo()) {
-        //    _log.info("RDNS cache: " + rdnsCache);
+        // Print the contents of the rdnsCache map to the console
+        //System.out.println("RDNS cache: " + rdnsCache);
+        //for (Map.Entry<String, CacheEntry> entry : rdnsCache.entrySet()) {
+        //   System.out.println(entry.getKey() + "=" + entry.getValue().getHostname());
         //}
+
+        // Schedule the cache writer to run every 5 minutes
+        // TODO: Convert to a standard job
+        Timer timer = new Timer();
+        long delay = 5 * 60 * 1000 + 30;
+        timer.schedule(new RDNSCacheFileWriter(new HashMap<>(rdnsCache)), delay, delay);
     }
 
+    // method to convert a CacheEntry to a string representation (for file storage)
     private static String rdnsEntryToString(CacheEntry entry) {
-        return entry.getHostname();
+        return entry.getIpAddress() + "," + entry.getHostname();
     }
 
-    private static CacheEntry rdnsEntryFromString(String str) {
-        String[] parts = str.split(",");
+    // method to convert a string representation of a CacheEntry (from file) to a CacheEntry object
+    private static CacheEntry rdnsEntryFromString(String s) {
+        String[] parts = s.split(",", 2); // use 2 as second parameter to limit split to 2 parts
         if (parts.length == 2) {
             String ipAddress = parts[0];
             String hostname = parts[1];
@@ -726,103 +723,95 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return null;
     }
 
-    private static boolean isDuplicateEntry(File file, String ip, String domain) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 2 && parts[0].equals(ip) && parts[1].equals(rdnsEntryToString(new CacheEntry(ip, domain)))) {
-                    return true;
-                }
-            }
-        } catch (IOException ex) {
-            //if (_log.shouldError()) {
-            //    _log.error("Error checking for duplicate entry in file: " + ex.getMessage());
-            //}
-        }
-        return false;
-    }
-
     private static void createRdnsCacheFile() {
         File cacheFile = new File(RDNS_CACHE_FILE);
         if (!cacheFile.exists()) {
             try {
                 cacheFile.createNewFile();
             } catch (IOException ex) {
-                //if (_log.shouldError()) {
-                //    _log.error("Error creating cache file: " + ex.getMessage());
-                //}
+                System.err.println("Error creating cache file: " + ex.getMessage());
             }
+        } else {
+            readRDNSCacheFromFile();
         }
     }
 
+    private static class RDNSCacheFileWriter extends TimerTask {
+       private final Map<String, CacheEntry> cacheToWrite;
+
+       public RDNSCacheFileWriter(Map<String, CacheEntry> cacheToWrite) {
+          this.cacheToWrite = cacheToWrite;
+       }
+
+       @Override
+       public void run() {
+          File cacheFile = new File(RDNS_CACHE_FILE);
+          int cacheEntries = countRdnsCacheEntries();
+          try (FileOutputStream fos = new FileOutputStream(cacheFile)) {
+             for (Map.Entry<String, CacheEntry> entry : cacheToWrite.entrySet()) {
+                String line = entry.getKey() + "," + entry.getValue().getHostname() + "\n";
+                fos.write(line.getBytes());
+             }
+             System.err.println("Reverse DNS cache written to file (" + cacheEntries + ")");
+          } catch (IOException ex) {
+             System.err.println("Error updating reverse DNS cache file: " + ex.getMessage());
+          }
+       }
+    }
+
     private static void writeRDNSCacheToFile() {
-        File cacheFile = new File(RDNS_CACHE_FILE);
-        if (!cacheFile.exists()) {
-            try {
-                cacheFile.createNewFile();
-                //if (_log.shouldInfo()) {
-                //    _log.info("Cache file created");
-                //}
-            } catch (IOException ex) {
-                //if (_log.shouldError()) {
-                //    _log.error("Error creating cache file: " + ex.getMessage());
-                //}
-                return;
-            }
-        }
-        FileOutputStream fos = null;
-        FileLock lock = null;
-        try {
-            fos = new FileOutputStream(cacheFile);
-            FileChannel channel = fos.getChannel();
-            lock = channel.lock();
-            Map<String, String> cacheEntries = getRDNSCache();
-            boolean isDuplicate = false;
+       try {
+          File cacheFile = new File(RDNS_CACHE_FILE);
+          if (!cacheFile.exists()) {
+             cacheFile.createNewFile();
+             System.err.println("Cache file created");
+          }
 
-            for (Map.Entry<String, String> entry : cacheEntries.entrySet()) {
-                String ipAddress = entry.getKey();
-                String hostname = entry.getValue();
-                if (isDuplicateEntry(cacheFile, ipAddress, hostname)) {
-                    cacheEntries.remove(ipAddress); // remove the earlier entry
-                    isDuplicate = true;
-                } else {
-                    fos.write((ipAddress + "," + hostname + "\n").getBytes()); // write ipAddress and hostName
-                }
-            }
+          // create a buffered writer with UTF-8 encoding and "\n" as the newline character
+          BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+                  new FileOutputStream(cacheFile), ENCODING));
+          Map<String, CacheEntry> cacheEntries = rdnsCache;
 
-            if (isDuplicate) {
-                // append the new entry to the bottom of the file
-                for (Map.Entry<String, String> entry : cacheEntries.entrySet()) {
-                    String ipAddress = entry.getKey();
-                    String hostname = entry.getValue();
-                    fos.write((ipAddress + "," + hostname + "\n").getBytes());
-                }
-            }
-            //if (_log.shouldInfo()) {
-            //    _log.info("Reverse DNS cache written to file");
-            //}
-        } catch (IOException ex) {
-            //if (_log.shouldError()) {
-            //    _log.error("Error updating reverse DNS cache file: " + ex.getMessage());
-            //}
-        } finally {
-            try {
-                if (lock != null)
-                    lock.release();
-                if (fos != null)
-                    fos.close();
-            } catch (IOException ex) {
-                //if (_log.shouldError()) {
-                //    _log.error("Error locking file: " + ex.getMessage());
-                //}
-            }
-        }
+          for (Map.Entry<String, CacheEntry> entry : cacheEntries.entrySet()) {
+             String ipAddress = entry.getKey();
+             CacheEntry cacheEntry = entry.getValue();
+
+             if (!isDuplicateEntry(cacheFile, ipAddress, cacheEntry.getHostname())) {
+                String line = ipAddress + "," + cacheEntry.getHostname() + NEWLINE;
+                writer.write(line);
+                // flush the writer to ensure that all data is written to the file
+                writer.flush();
+             }
+          }
+          // close the writer
+          writer.close();
+          //System.err.println("Reverse DNS cache written to file (" + countRdnsCacheEntries() + ")");
+       } catch (IOException ex) {
+          System.err.println("Error updating reverse DNS cache file: " + ex.getMessage());
+       }
+    }
+
+    private static boolean isDuplicateEntry(File file, String ip, String domain) {
+       String entryStr = ip + "," + domain;
+       try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+               new FileInputStream(file), ENCODING))) {
+          String line;
+          while ((line = reader.readLine()) != null) {
+             String[] parts = line.split(",");
+             if (parts.length == 2 && parts[0].equals(ip) && parts[1].equals(domain)) {
+                System.out.println("Found duplicate entry: " + line);
+                return true;
+             }
+          }
+       } catch (IOException ex) {
+          System.err.println("Error checking for duplicate entry in file: " + ex.getMessage());
+       }
+       return false;
     }
 
     private static void cleanupRDNSCache() {
         Iterator<Map.Entry<String, CacheEntry>> it = rdnsCache.entrySet().iterator();
-        while (it.hasNext() && rdnsCache.size() > 16384) {
+        while (it.hasNext() && rdnsCache.size() > MAX_RDNS_CACHE_SIZE) {
             it.next();
             it.remove();
         }
@@ -952,7 +941,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         //if (ip != null && ip.length == 4)
         if (ip != null)
             return _geoIP.get(ip);
-        RouterInfo ri = _context.floodfillNetDb().lookupRouterInfoLocally(peer);
+        RouterInfo ri = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(peer);
         if (ri == null)
             return null;
         ip = getValidIP(ri);
@@ -1025,8 +1014,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public String renderPeerHTML(Hash peer, boolean extended) {
         StringBuilder buf = new StringBuilder(128);
-//        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
-        RouterInfo ri = (RouterInfo) _context.floodfillNetDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo ri = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(peer);
         String c = getCountry(peer);
         String h = peer.toBase64();
         if (ri != null) {
@@ -1092,7 +1080,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public String renderPeerCaps(Hash peer, boolean inline) {
         StringBuilder buf = new StringBuilder(128);
-        RouterInfo ri = (RouterInfo) _context.floodfillNetDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo ri = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(peer);
         String c = getCountry(peer);
         String h = peer.toBase64();
         if (!inline) {
@@ -1151,7 +1139,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /** @return cap char or '?' */
     private char getCapacity(Hash peer) {
-        RouterInfo info = (RouterInfo) _context.floodfillNetDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo info = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(peer);
         if (info != null) {
             String caps = info.getCapabilities();
             for (int i = 0; i < RouterInfo.BW_CAPABILITY_CHARS.length(); i++) {
@@ -1169,7 +1157,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public String renderPeerFlag(Hash peer) {
         StringBuilder buf = new StringBuilder(128);
-        RouterInfo ri = (RouterInfo) _context.floodfillNetDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo ri = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(peer);
         String c = getCountry(peer);
         String countryName = getCountryName(c);
         String h = peer.toBase64();
