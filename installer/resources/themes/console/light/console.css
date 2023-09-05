@@ -160,7 +160,7 @@ h4.sb_info{margin-top:-11px}
 #sidebar .sb_notice:empty,#sidebar .sb_notice:empty+hr{display:none}
 #sidebar #sb_internals td,#sidebar #sb_advanced td,#sidebar #sb_services td,#sidebar #sb_help td{text-align:center}
 #sidebar #sb_localtunnels{margin-top:-9px}
-#sidebar #sb_localtunnels td[colspan=3"]::after{min-height:12px;display:inline-block;vertical-align:middle;content:""}
+#sidebar #sb_localtunnels td[colspan="3"]::after{min-height:12px;display:inline-block;vertical-align:middle;content:""}
 #sidebar #sb_shutdownStatus{margin:-7px -6px;padding:7px 4px;box-shadow:0 0 0 1px #bbc inset,0 0 0 2px #fff inset,0 0 0 3px rgba(148,0,0,.5) inset}
 #sidebar #sb_routerControl{margin-top:-5px}
 
