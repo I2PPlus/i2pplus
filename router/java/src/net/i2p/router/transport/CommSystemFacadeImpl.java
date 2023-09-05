@@ -8,7 +8,6 @@ package net.i2p.router.transport;
  *
  */
 
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -34,16 +33,17 @@ import java.net.URISyntaxException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.channels.FileLockInterruptionException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
@@ -59,13 +59,15 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.SortedMap;
 
+import net.i2p.data.DataHelper; // required for requestURI
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.I2PAppContext;
 import net.i2p.router.CommSystemFacade;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
@@ -76,7 +78,6 @@ import net.i2p.router.util.EventLog;
 import net.i2p.util.Addresses;
 import net.i2p.util.AddressType;
 import net.i2p.util.ArraySet;
-import net.i2p.I2PAppContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
@@ -85,7 +86,6 @@ import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 
-import net.i2p.data.DataHelper; // required for requestURI
 
 public class CommSystemFacadeImpl extends CommSystemFacade {
     private final Log _log;
@@ -534,7 +534,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /* We hope the routerinfos are read in and things have settled down by now, but it's not required to be so */
-    private static final int START_DELAY = SystemVersion.isSlow() ? 60*1000 : 10*1000;
+    private static final int START_DELAY = SystemVersion.isSlow() ? 60*1000 : 5*1000;
 //    private static final int LOOKUP_TIME = 30*60*1000;
     private static final int LOOKUP_TIME = 5*60*1000;
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
@@ -547,10 +547,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
 
     private void startGeoIP() {
+        _context.simpleTimer2().addEvent(new QueueAll(), START_DELAY);
         if (enableReverseLookups()) {
             readRDNSCacheFromFile();
         }
-        _context.simpleTimer2().addEvent(new QueueAll(), START_DELAY);
     }
 
     /**
@@ -563,14 +563,15 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         public void timeReached() {
             long uptime = _context.router().getUptime();
             for (Hash h : _context.mainNetDb().getAllRouters()) {
-                RouterInfo ri = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(h);
+                //RouterInfo ri = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(h);
+                RouterInfo ri = _context.mainNetDb().lookupRouterInfoLocally(h);
                 if (ri == null)
                     continue;
                 byte[] ip = getIP(ri);
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
-                if (enableReverseLookups() && uptime > 60*1000 && uptime < 10*60*1000) {
+                if (enableReverseLookups() && uptime > 3*60*1000 && uptime < 10*60*1000) {
                     try {
                         InetAddress ipAddress = InetAddress.getByAddress(ip);
                         String ipString = ipAddress.getHostAddress();
@@ -752,13 +753,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 String line = entry.getKey() + "," + entry.getValue().getHostname() + "\n";
                 fos.write(line.getBytes());
              }
-             System.err.println("Reverse DNS cache written to file (" + cacheEntries + ")");
+             //System.err.println("Reverse DNS cache written to file (" + cacheEntries + ")");
           } catch (IOException ex) {
              System.err.println("Error updating reverse DNS cache file: " + ex.getMessage());
           }
        }
     }
 
+/**
     private static void writeRDNSCacheToFile() {
        try {
           File cacheFile = new File(RDNS_CACHE_FILE);
@@ -785,6 +787,44 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
           }
           // close the writer
           writer.close();
+          //System.err.println("Reverse DNS cache written to file (" + countRdnsCacheEntries() + ")");
+       } catch (IOException ex) {
+          System.err.println("Error updating reverse DNS cache file: " + ex.getMessage());
+       }
+    }
+**/
+
+    private static void writeRDNSCacheToFile() {
+       try {
+          File cacheFile = new File(RDNS_CACHE_FILE);
+          if (!cacheFile.exists()) {
+             cacheFile.createNewFile();
+             System.err.println("Cache file created");
+          }
+          // create a temporary file
+          File tmpFile = new File(RDNS_CACHE_FILE + ".tmp");
+          // create a buffered writer with UTF-8 encoding and "\n" as the newline character
+          BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+                  new FileOutputStream(tmpFile), ENCODING));
+          Map<String, CacheEntry> cacheEntries = rdnsCache;
+
+          for (Map.Entry<String, CacheEntry> entry : cacheEntries.entrySet()) {
+             String ipAddress = entry.getKey();
+             CacheEntry cacheEntry = entry.getValue();
+
+             if (!isDuplicateEntry(cacheFile, ipAddress, cacheEntry.getHostname())) {
+                String line = ipAddress + "," + cacheEntry.getHostname() + NEWLINE;
+                writer.write(line);
+                // flush the writer to ensure that all data is written to the file
+                writer.flush();
+             }
+          }
+          // close the writer
+          writer.close();
+          // copy the tmp file to the actual cache file location
+          Files.copy(tmpFile.toPath(), cacheFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+          // delete the tmp file
+          tmpFile.delete();
           //System.err.println("Reverse DNS cache written to file (" + countRdnsCacheEntries() + ")");
        } catch (IOException ex) {
           System.err.println("Error updating reverse DNS cache file: " + ex.getMessage());
@@ -935,6 +975,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @param peer not ourselves - use getOurCountry() for that
      *  @return two-letter lower-case country code or null
      */
+
+/**
     @Override
     public String getCountry(Hash peer) {
         byte[] ip = TransportImpl.getIP(peer);
@@ -947,6 +989,36 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         ip = getValidIP(ri);
         if (ip != null)
             return _geoIP.get(ip);
+        return null;
+    }
+**/
+
+    @Override
+    public String getCountry(Hash peer) {
+        byte[] ip = TransportImpl.getIP(peer);
+        if (ip != null) {
+            String country = _geoIP.get(ip);
+            return country;
+        }
+        RouterInfo ri = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(peer);
+        if (ri == null) {
+            return null;
+        }
+        ip = getValidIP(ri);
+        if (ip != null) {
+            String country = _geoIP.get(ip);
+            try {
+                if (country == null) {
+                    System.out.println("Country not found for IP: " + InetAddress.getByAddress(ip).getHostAddress());
+                } else {
+                    System.out.println("Country found for IP: " + InetAddress.getByAddress(ip).getHostAddress() + " - " + country);
+                }
+            } catch (UnknownHostException e) {
+                System.out.println("Unknown host exception for IP: " + Arrays.toString(ip));
+                e.printStackTrace();
+            }
+            return country;
+        }
         return null;
     }
 
