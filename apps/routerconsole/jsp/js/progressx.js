@@ -59,7 +59,8 @@
       style.top = style.left = style.right = style.margin = style.padding = 0
       style.zIndex = 100001
       style.display = "none"
-      document.body.appendChild(canvas)
+      var body = document.body; // cache the selector
+      body.appendChild(canvas)
       addEvent(window, "resize", repaint)
     },
     progressx = {
@@ -83,7 +84,6 @@
         }
       },
       progress: function(to) {
-        if (typeof to === "undefined") return currentProgress
         if (typeof to === "string") {
           to = (to.indexOf("+") >= 0 || to.indexOf("-") >= 0 ? currentProgress : 0) + parseFloat(to)
         }
@@ -120,5 +120,4 @@
   } else {
     this.progressx = progressx
   }
-})
-.call(this, window, document)
+}).call(this, window, document);
