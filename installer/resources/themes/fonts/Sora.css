@@ -11,6 +11,7 @@ input[type=password],input[type=text],label,.infohash,.infohelp,.infowarn,.listD
 .tunnel_id{min-width:102px;font-size:90%}
 .ui_lang{font-size:88%}
 .uploaded{min-width:74px}
+#configstats label b{font-size:90%;overflow:hidden;text-overflow:ellipsis}
 #dologin td{font-weight:500}
 #torrents tfoot .RateDown:not(:empty)::before,tfoot .torrentDownloaded:not(:empty)::before,tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{margin-right:2px}
 #torrents tfoot tr:first-child th{min-width:80px}

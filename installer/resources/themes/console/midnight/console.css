@@ -1219,6 +1219,7 @@ td.optionsave{padding:7px 5px;text-align:right;border-top:var(--border_inner);ba
 #netdbversions{border-left:0}
 #netdbcongestion,#netdbtransports{border-left:0;border-right:0}
 #netdbcountrylist{border-right:0}
+#netdb #netdbcountrylist td[colspan="2"]{text-align:center}
 #netdbcongestion th,#netdbversions th,#netdbtransports th,#netdbcountrylist th,#netdbtiers,#netdbtiers th{border-top:0}
 #netdboverview table th,#netdboverview table td{padding:2px 15px}
 #netdboverview table th:first-child,#netdboverview table td:first-child{text-align:left}

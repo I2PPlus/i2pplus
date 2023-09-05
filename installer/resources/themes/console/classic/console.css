@@ -1360,6 +1360,7 @@ img.unknownflag{opacity:.8}
 #netdbcongestion,#netdbversions,#netdbcountrylist,#netdbtransports,#netdbtiers{border-left:0;border-right:0;border-bottom:var(--border)}
 #netdbversions,#netdbcountrylist,#netdbtiers{margin-top:-7px}
 #netdbcountrylist{margin-bottom:-7px}
+#netdb #netdbcountrylist td[colspan="2"]{text-align:center}
 #netdbcongestion td:first-child,#netdbcountrylist td:first-child,#netdbtransports td:first-child,#netdbtiers td:first-child,#netdbversions td:first-child{border-left:0}
 #netdbcongestion td:last-child,#netdbcountrylist td:last-child,#netdbtransports td:last-child,#netdbtiers td:last-child,#netdbversions td:last-child{border-right:0}
 #netdbtransports{position:relative}

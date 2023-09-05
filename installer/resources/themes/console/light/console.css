@@ -103,10 +103,11 @@ h4.sb_info{margin-top:-11px}
 #sb_internals td{padding:0}
 #sb_localtunnels:not([hidden])+#localtunnelSummary{display:none}
 #sb_localtunnels a{width:100%;max-width:158px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
-#sb_localtunnels #routerdown td,#sb_localtunnels #routerdown tr:hover td{padding:5px;box-shadow:0 0 0 1px #bbc inset,0 0 0 2px #fff inset,var(--btn_shadow_active);font-size:0;background:repeating-linear-gradient(135deg,#fffff2,#fffff2 10px,#ddddd2 10px,#ddddd2 20px);background-size:300%;animation:down linear 9s reverse infinite}
+#sb_localtunnels td{vertical-align:middle;line-height:1.05}
 #sb_localtunnels td:first-child img{margin:0 0 2px}
 #sb_localtunnels td:first-child{padding:1px 2px;width:16px;text-align:left;border-radius:2px 0 0 2px}
 #sb_localtunnels td:first-child,#sb_localtunnels tr:hover td:first-child{background-image:var(--client);background-position:center center;background-repeat:no-repeat;background-size:16px}
+#sb_localtunnels td[colspan="3"],#sb_localtunnels #routerdown td,#sb_localtunnels #routerdown tr:hover td{padding:5px;box-shadow:0 0 0 1px #bbc inset,0 0 0 2px #fff inset,var(--btn_shadow_active);font-size:0;background:repeating-linear-gradient(135deg,#fffff2,#fffff2 10px,#ddddd2 10px,#ddddd2 20px);background-size:300%;animation:down linear 9s reverse infinite}
 #sb_localtunnels td img::after{content:"";display:inline-block;height:16px}
 #sb_localtunnels td img{opacity:0}
 #sb_localtunnels td:last-child{padding:2px 0 2px 2px;width:16px;text-align:right;border-radius:0 2px 2px 0;background-image:var(--local_inprogress);background-position:right center;background-repeat:no-repeat;background-size:16px}
@@ -115,7 +116,6 @@ h4.sb_info{margin-top:-11px}
 #sb_localtunnels td.tunnelReady{background-image:var(--local_up)}
 #sb_localtunnels td.tunnelRebuilding{background-image:var(--local_down)}
 #sb_localtunnels td.tunnelServer,#sb_localtunnels tr:hover td.tunnelServer{background-image:var(--server)}
-#sb_localtunnels td{vertical-align:middle;line-height:1.05}
 #sb_localtunnels tr:hover{background:#ffd}
 #sb_localtunnels tr:nth-child(even){background:var(--row_even)}
 #sb_localtunnels tr:nth-child(n+2){border-top:1px solid #ededff}
@@ -793,9 +793,6 @@ p.infohelp,p.sybilinfo,p#debugmode,p#upnpstatus,p#pluginconfigtext,p#gatherstats
 p.infowarn{padding:20px 20px 20px 53px;line-height:1.3;border:var(--border_inner);background:var(--infowarn) no-repeat 15px center/28px,var(--div_infohelp)}
 div[id^="config_"] p.infohelp{box-shadow:inset 0 0 0 1px #7e7,inset 0 0 1px 1px var(--border)}
 .infohelp+hr{display:none}
-.infohelp#pagenav:first-of-type{margin-top:-6px}
-.infohelp#pagenav:last-of-type{margin-bottom:4px}
-.infohelp#pagenav{text-align:center;font-weight:700;background:var(--p)}
 .optionsave form{margin:0;padding:0}
 #installPluginUrl .cancel{display:none}
 #joinfamily .infohelp{padding:20px 20px 20px 53px;background:var(--joinfamily) no-repeat 15px center/28px,var(--div_infohelp)}
@@ -806,8 +803,10 @@ div[id^="config_"] p.infohelp{box-shadow:inset 0 0 0 1px #7e7,inset 0 0 1px 1px 
 p#clientconf.infohelp,p#webappconfigtext.infohelp{padding:20px 20px 20px 53px;background:var(--editclient) no-repeat 15px center/28px,var(--div_infohelp)}
 p#debugmode{padding:20px 20px 20px 53px;background:var(--bug) no-repeat 15px center/28px,var(--div_infohelp)}
 p#enablefullstats,p#gatherstats{padding:20px 20px 20px 53px;background:var(--stats) no-repeat 15px center/28px,var(--div_infohelp)}
-#plugininstall .infohelp{padding:20px 20px 20px 53px;background:var(--plugin) no-repeat 15px center/28px,var(--div_infohelp)}
 p#pluginconfigtext{margin-top:14px;padding:20px 20px 20px 53px;box-shadow:none;background:var(--pluginconfig) no-repeat 15px center/28px,var(--div_infohelp)}
+#pagenav.infohelp:first-of-type{margin-top:-6px}
+#pagenav.infohelp{text-align:center;font-weight:700;background:var(--p)}
+#plugininstall .infohelp{padding:20px 20px 20px 53px;background:var(--plugin) no-repeat 15px center/28px,var(--div_infohelp)}
 
 /* h1 */
 h1{margin:0 0 10px 214px;padding:16px 15px 15px 52px;min-width:546px;z-index:999;line-height:.9;letter-spacing:.12em;white-space:normal;text-transform:uppercase;font-size:18pt;text-align:left;color:#54586F;text-shadow:0 0 2px #fff;border:var(--border);border-radius:2px 2px 0 0;box-shadow:var(--bevel);background:var(--h1_network) no-repeat 10px center/38px,var(--h1) #fafaff}
@@ -1458,6 +1457,7 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 #netdbcongestion a:hover b,#netdbtiers a:hover b{color:var(--hover)}
 #netdbversions th:first-child,#netdbversions td:first-child{text-align:center}
 #netdbcountrylist img{margin-right:8px;padding:1px;vertical-align:middle;text-align:right;border:1px solid #d0d0db;border-radius:3px}
+#netdb #netdbcountrylist td[colspan="2"]{text-align:center}
 #netdb th span,#netdb th img,#netdb th code,#netdb th a,#netdb th b{vertical-align:middle}
 #netdb code{font-weight:400}
 #netdb .netdbentry th{padding-top:2px;padding-bottom:2px}
