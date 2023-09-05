@@ -107,7 +107,6 @@ h4.sb_info{margin-top:-11px}
 #sb_localtunnels td:first-child img{margin:0 0 2px}
 #sb_localtunnels td:first-child{padding:1px 2px;width:16px;text-align:left;border-radius:2px 0 0 2px}
 #sb_localtunnels td:first-child,#sb_localtunnels tr:hover td:first-child{background-image:var(--client);background-position:center center;background-repeat:no-repeat;background-size:16px}
-#sb_localtunnels td[colspan="3"],#sb_localtunnels #routerdown td,#sb_localtunnels #routerdown tr:hover td{padding:5px;box-shadow:0 0 0 1px #bbc inset,0 0 0 2px #fff inset,var(--btn_shadow_active);font-size:0;background:repeating-linear-gradient(135deg,#fffff2,#fffff2 10px,#ddddd2 10px,#ddddd2 20px);background-size:300%;animation:down linear 9s reverse infinite}
 #sb_localtunnels td img::after{content:"";display:inline-block;height:16px}
 #sb_localtunnels td img{opacity:0}
 #sb_localtunnels td:last-child{padding:2px 0 2px 2px;width:16px;text-align:right;border-radius:0 2px 2px 0;background-image:var(--local_inprogress);background-position:right center;background-repeat:no-repeat;background-size:16px}
@@ -160,6 +159,7 @@ h4.sb_info{margin-top:-11px}
 #sidebar .sb_notice:empty,#sidebar .sb_notice:empty+hr{display:none}
 #sidebar #sb_internals td,#sidebar #sb_advanced td,#sidebar #sb_services td,#sidebar #sb_help td{text-align:center}
 #sidebar #sb_localtunnels{margin-top:-9px}
+#sidebar #sb_localtunnels td[colspan="3"],#sb_localtunnels #routerdown td,#sb_localtunnels #routerdown tr:hover td{padding:5px;box-shadow:0 0 0 1px #bbc inset,0 0 0 2px #fff inset,var(--btn_shadow_active);font-size:0;background:repeating-linear-gradient(135deg,#fffff2,#fffff2 10px,#ddddd2 10px,#ddddd2 20px);background-size:300%;animation:down linear 9s reverse infinite}
 #sidebar #sb_localtunnels td[colspan="3"]::after{min-height:12px;display:inline-block;vertical-align:middle;content:""}
 #sidebar #sb_shutdownStatus{margin:-7px -6px;padding:7px 4px;box-shadow:0 0 0 1px #bbc inset,0 0 0 2px #fff inset,0 0 0 3px rgba(148,0,0,.5) inset}
 #sidebar #sb_routerControl{margin-top:-5px}
