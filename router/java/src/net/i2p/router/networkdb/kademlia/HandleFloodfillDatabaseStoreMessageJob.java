@@ -171,7 +171,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 getContext().clientMessagePool().getCache().multihomedCache.put(key, ls);
                         }
                     }
-                    throw new IllegalArgumentException("(DbId: " + _facade._dbid + "] Peer attempted to store LOCAL LeaseSet [" + key.toBase64().substring(0, 6) + "]");
+                    throw new IllegalArgumentException("Peer attempted to store LOCAL LeaseSet [" + key.toBase64().substring(0,6) + "]" +
+                                                        "\n* DbId: " + _facade._dbid);
                 }
                 //boolean oldrar = ls.getReceivedAsReply();
                 //boolean oldrap = ls.getReceivedAsPublished();
