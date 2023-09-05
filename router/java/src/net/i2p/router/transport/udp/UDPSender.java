@@ -46,6 +46,7 @@ class UDPSender {
     private static final int CODEL_INTERVAL = 750;
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
+    static final long[] RATES = { 60*1000, 10*60*1000 };
 
     public boolean fullStats() {
         return _context.getBooleanProperty("stat.full");
@@ -69,33 +70,33 @@ class UDPSender {
         _runner = new Runner();
         _name = name;
         _endpoint = lsnr;
-        _context.statManager().createRateStat("udp.pushTime", "Time taken for a UDP packet get pushed out", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendQueueSize", "Number of packets queued on the UDP sender", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendQueueFailed", "Failed to add a new packet to the queue", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendQueueTrimmed", "Stale packets removed from queue", "Transport [UDP]", UDPTransport.RATES);
-//        _context.statManager().createRequiredRateStat("udp.sendPacketSize", "Size of sent packets (bytes)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize", "Size of sent packets (bytes)", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.socketSendTime", "How long the actual socket.send took", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendBWThrottleTime", "How long send is blocked by bandwidth throttle", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendACKTime", "How long an ACK packet is blocked for", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendFailsafe", "Time bandwidth limiter is stuck", "Transport [UDP]", new long[] { 24*60*60*1000L });
+        _context.statManager().createRateStat("udp.pushTime", "Time taken for a UDP packet get pushed out", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendQueueSize", "Number of packets queued on the UDP sender", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendQueueFailed", "Failed to add a new packet to the queue", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendQueueTrimmed", "Stale packets removed from queue", "Transport [UDP]", RATES);
+//        _context.statManager().createRequiredRateStat("udp.sendPacketSize", "Size of sent packets (bytes)", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendPacketSize", "Size of sent packets (bytes)", "Transport [UDP]", RATES);
+        //_context.statManager().createRateStat("udp.socketSendTime", "How long the actual socket.send took", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendBWThrottleTime", "How long send is blocked by bandwidth throttle", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendACKTime", "How long an ACK packet is blocked for", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendFailsafe", "Time bandwidth limiter is stuck", "Transport [UDP]", RATES);
         // used in RouterWatchdog
         if (fullStats())
-            _context.statManager().createRequiredRateStat("udp.sendException", "Send fails (Windows exception?)", "Transport [UDP]", new long[] { 60*1000, 10*60*1000 });
+            _context.statManager().createRequiredRateStat("udp.sendException", "Send fails (Windows exception?)", "Transport [UDP]", RATES);
         else
-            _context.statManager().createRequiredRateStat("udp.sendException", "Send fails (Windows exception?)", "Transport", new long[] { 60*1000, 10*60*1000 });
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_ACK, "ACK-only UDP packet size", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_PUNCH, "Hole punch UDP packet size", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_RESP, "Relay response UDP packet size", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_INTRO, "Relay introduction UDP packet size", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_RREQ, "Relay request UDP packet size", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_TCB, "Peer test Charlie to Bob UDP packet size", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_TBC, "Peer test Bob to Charlie UDP packet size", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_TTA, "Peer test to Alice UDP packet size", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_TFA, "Peer test from Alice UDP packet size", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_CONF, "Session confirmed UDP packet size", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_SREQ, "Session request UDP packet size", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_CREAT, "Session created UDP packet size", "Transport [UDP]", UDPTransport.RATES);
+            _context.statManager().createRequiredRateStat("udp.sendException", "Send fails (Windows exception?)", "Transport", RATES);
+        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_ACK, "ACK-only UDP packet size", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_PUNCH, "Hole punch UDP packet size", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_RESP, "Relay response UDP packet size", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_INTRO, "Relay introduction UDP packet size", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_RREQ, "Relay request UDP packet size", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_TCB, "Peer test Charlie to Bob UDP packet size", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_TBC, "Peer test Bob to Charlie UDP packet size", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_TTA, "Peer test to Alice UDP packet size", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_TFA, "Peer test from Alice UDP packet size", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_CONF, "Session confirmed UDP packet size", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_SREQ, "Session request UDP packet size", "Transport [UDP]", RATES);
+        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_CREAT, "Session created UDP packet size", "Transport [UDP]", RATES);
     }
 
     /**
