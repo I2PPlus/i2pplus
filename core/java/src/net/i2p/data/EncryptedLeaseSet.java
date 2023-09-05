@@ -575,8 +575,8 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         ciphertext = new byte[SALT_LEN + plaintext.length];
         System.arraycopy(salt, 0, ciphertext, 0, SALT_LEN);
         if (_log.shouldDebug()) {
-            _log.debug("Encrypt: chacha20 key:\n" + net.i2p.util.HexDump.dump(key));
-            _log.debug("Encrypt: chacha20 IV:\n" + net.i2p.util.HexDump.dump(iv));
+            _log.debug("Encrypt: ChaCha20 key:\n" + net.i2p.util.HexDump.dump(key));
+            _log.debug("Encrypt: ChaCha20 IV:\n" + net.i2p.util.HexDump.dump(iv));
         }
         ChaCha20.encrypt(key, iv, plaintext, 0, ciphertext, SALT_LEN, plaintext.length);
         if (_log.shouldDebug())
@@ -622,8 +622,8 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         // first 32 bytes of ciphertext are the salt
         hkdf.calculate(ciphertext, authInput, ELS2L1K, key, iv, 0);
         if (_log.shouldDebug()) {
-            _log.debug("Decrypt: chacha20 key:\n" + net.i2p.util.HexDump.dump(key));
-            _log.debug("Decrypt: chacha20 IV:\n" + net.i2p.util.HexDump.dump(iv));
+            _log.debug("Decrypt: ChaCha20 key:\n" + net.i2p.util.HexDump.dump(key));
+            _log.debug("Decrypt: ChaCha20 IV:\n" + net.i2p.util.HexDump.dump(iv));
         }
         ChaCha20.decrypt(key, iv, ciphertext, SALT_LEN, plaintext, 0, plaintext.length);
         if (_log.shouldDebug()) {

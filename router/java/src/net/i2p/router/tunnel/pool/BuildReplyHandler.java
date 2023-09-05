@@ -156,7 +156,7 @@ class BuildReplyHandler {
             SessionKey replyKey = cfg.getChaChaReplyKey(hop);
             byte[] replyIV = cfg.getChaChaReplyAD(hop);
             if (log.shouldDebug())
-                log.debug(reply.getUniqueId() + ": Decrypting chacha/poly record " + recordNum + "/" + hop + " with replyKey "
+                log.debug(reply.getUniqueId() + ": Decrypting ChaCha/Poly record " + recordNum + "/" + hop + " with replyKey "
                           + replyKey.toBase64() + "/" + Base64.encode(replyIV) + ": " + cfg);
             boolean ok;
             if (isShort)

@@ -226,9 +226,9 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                     _receiver.receive((GarlicMessage)msg);
             } else {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Distributing Inbound tunnel message into our inNetMessagePool" +
-                              " for " + _clientNickname + " [" + ((_client != null) ? _client.toBase32().substring(0,12) : "null") +
-                              "] to target=NULL / tunnel=NULL " + msg);
+                    _log.info("Passing InboundTunnelMessage to InboundNetMessagePool for " + _clientNickname +
+                              " [" + ((_client != null) ? _client.toBase32().substring(0,12) + "..." : "null") +
+                              "]\n* Target: NULL; Tunnel: NULL \n* Message: " + msg);
                 // Tunnel Build Messages and Delivery Status Messages (used for tunnel
                 // testing) need to go back to the inNetMessagePool, whether or not
                 // they came through a client tunnel.
