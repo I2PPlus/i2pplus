@@ -248,8 +248,8 @@ function refreshSidebar() {
         function checkSections() {
           var updating = document.querySelectorAll(".volatile");
           var updatingResponse = xhr.responseXML.querySelectorAll(".volatile");
-          var i;
-          for (i = 0; i < updating.length; i += 1) {
+          var i, len = updating.length;
+          for (i = 0; i < len; i++) {
             if (updating[i] !== null) {
               if (updatingResponse[i] !== null) {
                 updateVolatile();
@@ -258,7 +258,9 @@ function refreshSidebar() {
                 countNewsItems();
               }
               if (localTunnels !== null && localTunnels.hidden !== true) {
-                if (localTunnels.hidden !== true && updating.length !== updatingResponse.length) {
+                var updatingLen = updating.length;  // Cache the length of updating array
+                var updatingResponseLen = updatingResponse.length;  // Cache the length of updatingResponse array
+                if (localTunnels.hidden !== true && updatingLen !== updatingResponseLen) {
                   refreshAll();
                 }
               }
@@ -301,6 +303,7 @@ function refreshSidebar() {
               minigraph.width = 245;
               minigraph.height = 50;
               ctx.drawImage(this, 0, 0, 245, 50);
+              requestAnimationFrame(refreshGraph);
             }
           }
         }
@@ -339,10 +342,6 @@ function refreshSidebar() {
 
           function modElements() {
             var sectionTitle = document.querySelectorAll("#sidebar h3, #sidebar a");
-            //var a;
-            //for (a = 1; a < sectionTitle.length - 1; a += 1) {
-            //  sectionTitle[a].setAttribute("style", "pointer-events: none");
-            //}
             var digits = document.querySelectorAll(".digits");
             var i;
             for (i = 0; i < digits.length; i += 1) {
