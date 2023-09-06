@@ -59,31 +59,62 @@ function initFilterBar() {
   }
 
   function clean() {
-    var cssfilter = document.getElementById("cssfilter");
+    const cssFilter = document.getElementById("cssfilter");
     checkIfActive();
-    if (cssfilter.innerText !== null) {cssfilter.innerText = "";}
-    if (badge !== null) {badge.innerHTML = "";}
-    allOdd.forEach((element) => {element.classList.remove("filtered");});
-    allEven.forEach((element) => {element.classList.remove("filtered");});
-    if (pagenav) {
-      if (storage !== null) {pagenav.style.display = "none";}
-      else {pagenav.style.display = "";}
+    cssFilter.textContent = "";
+    allOdd.forEach(element => element.classList.remove("filtered"));
+    allEven.forEach(element => element.classList.remove("filtered"));
+    if (storage === null && pagenav) {
+      pagenav.style.display = "";
+    } else if (pagenav) {
+      pagenav.style.display = "none";
     }
-    if (badge) {badges.forEach((element) => {element.remove();});}
+    badges.forEach(element => element.remove());
     initLinkToggler();
   }
 
+/**
   function showBadge() {
-    var filtered = document.querySelectorAll(".filtered");
-    var activeFilter = document.querySelector("#torrentDisplay input:checked + .filterbutton");
-    var inactiveFilters = document.querySelectorAll("#torrentDisplay input:not(checked) + .filterbutton");
-    var count = filtered.length;
+    const filtered = document.querySelectorAll(".filtered");
+    const activeFilter = document.querySelector("#torrentDisplay input:checked + .filterbutton");
+    const count = filtered.length;
     activeFilter.classList.add("enabled");
-    activeFilter.innerHTML += "<span id=filtercount class=badge></span>";
     if (count > 0) {
-      var badge = document.getElementById("filtercount");
-      badge.innerHTML = count;
+      const badge = document.createElement("span");
+      badge.classList.add("badge");
+      badge.textContent = count;
+      badge.setAttribute("id", "filtercount");
+      activeFilter.appendChild(badge);
     }
+  }
+**/
+
+  function showBadge() {
+    const filtered = document.querySelectorAll(".filtered");
+    const activeFilter = document.querySelector("#torrentDisplay input:checked + .filterbutton");
+    const count = filtered.length;
+    activeFilter.classList.add("enabled");
+    if (count > 0) {
+      const badge = document.createElement("span");
+      badge.classList.add("badge");
+      badge.setAttribute("id", "filtercount");
+      activeFilter.appendChild(badge);
+      getCount(filtered, count).then((result) => {
+        badge.textContent = result;
+      });
+    }
+  }
+
+  function getCount(filtered, count) {
+    return new Promise((resolve) => {
+      if (filtered.length === count) {
+        resolve(count);
+      } else {
+        setTimeout(() => {
+          resolve(getCount(filtered, count));
+        }, 50);
+      }
+    });
   }
 
   function injectCSS() {
@@ -99,6 +130,7 @@ function initFilterBar() {
     filterbar.classList.remove("noPointer");
   }
 
+/**
   function showAll() {
     clean();
     checkPagenav();
@@ -189,6 +221,59 @@ function initFilterBar() {
     var count = filtered.length;
     showBadge();
   }
+**/
+
+  function showFiltered(filterClass, filterButton) {
+    clean();
+    const state = `.${filterClass}{visibility:visible}`;
+    rules += state;
+    injectCSS();
+    filterButton.checked = true;
+    window.localStorage.setItem(storageFilter, filterButton.id);
+    const filteredElements = document.querySelectorAll(`.${filterClass}`);
+    filteredElements.forEach(element => element.classList.add("filtered"));
+    showBadge();
+  }
+
+  function showAll() {
+    clean();
+    checkPagenav();
+    if (pagenav !== null) {
+      pagenav.removeAttribute("hidden");
+      pagenav.style.display = "";
+    }
+    window.localStorage.removeItem(storageFilter);
+    btnAll.checked = true;
+    btnAll.classList.add("noPointer");
+  }
+
+  function showActive() {
+    showFiltered("active", btnActive);
+  }
+
+  function showInactive() {
+    showFiltered("inactive", btnInactive);
+  }
+
+  function showDownloading() {
+    showFiltered("downloading", btnDownloading);
+  }
+
+  function showSeeding() {
+    showFiltered("seeding", btnSeeding);
+  }
+
+  function showComplete() {
+    showFiltered("complete", btnComplete);
+  }
+
+  function showIncomplete() {
+    showFiltered("incomplete", btnIncomplete);
+  }
+
+  function showStopped() {
+    showFiltered("stopped", btnStopped);
+  }
 
   function onClick() {
     if (xhrsnark.status !== null) {xhrsnark.abort();}
@@ -197,52 +282,47 @@ function initFilterBar() {
   }
 
   if (filterbar) {
-     btnAll.addEventListener("click", () => {disableBar();onClick();showAll();enableBar();});
-     btnActive.addEventListener("click", () => {disableBar();onClick();showActive();enableBar();});
-     btnInactive.addEventListener("click", () => {disableBar();onClick();showInactive();enableBar();});
-     btnDownloading.addEventListener("click", () => {disableBar();onClick();showDownloading();enableBar();});
-     btnSeeding.addEventListener("click", () => {disableBar();onClick();showSeeding();enableBar();});
-     btnComplete.addEventListener("click", () => {disableBar();onClick();showComplete();enableBar();});
-     btnIncomplete.addEventListener("click", () => {disableBar();onClick();showIncomplete();enableBar();});
-     btnStopped.addEventListener("click", () => {disableBar();onClick();showStopped();enableBar();});
-     switch (window.localStorage.getItem(storageFilter)) {
-       case "all":
-         btnAll.checked = true;
-         showAll();
-         break;
-       case "active":
-         btnActive.checked = true;
-         showActive();
-         break;
-       case "inactive":
-         btnInactive.checked = true;
-         showInactive();
-         break;
-       case "downloading":
-         btnDownloading.checked = true;
-         showDownloading();
-         break;
-       case "seeding":
-         btnSeeding.checked = true;
-         showSeeding();
-         break;
-       case "complete":
-         btnComplete.checked = true;
-         showComplete();
-         break;
-       case "incomplete":
-         btnIncomplete.checked = true;
-         showIncomplete();
-         break;
-       case "stopped":
-         btnStopped.checked = true;
-         showStopped();
-         break;
-       default:
-         btnAll.checked = true;
-         showAll();
-     }
-     initLinkToggler();
+    function addFilterEventListeners() {
+      function handleFilterClick(filterFunction) {
+        disableBar();
+        onClick();
+        filterFunction();
+        enableBar();
+      }
+
+      btnAll.addEventListener("click", () => handleFilterClick(showAll));
+      btnActive.addEventListener("click", () => handleFilterClick(showActive));
+      btnInactive.addEventListener("click", () => handleFilterClick(showInactive));
+      btnDownloading.addEventListener("click", () => handleFilterClick(showDownloading));
+      btnSeeding.addEventListener("click", () => handleFilterClick(showSeeding));
+      btnComplete.addEventListener("click", () => handleFilterClick(showComplete));
+      btnIncomplete.addEventListener("click", () => handleFilterClick(showIncomplete));
+      btnStopped.addEventListener("click", () => handleFilterClick(showStopped));
+    }
+
+    function selectFilter() {
+      const filter = window.localStorage.getItem(storageFilter);
+      const btnFilters = {
+        "all": btnAll,
+        "active": btnActive,
+        "inactive": btnInactive,
+        "downloading": btnDownloading,
+        "seeding": btnSeeding,
+        "complete": btnComplete,
+        "incomplete": btnIncomplete,
+        "stopped": btnStopped
+      };
+      const selectedBtn = btnFilters[filter] || btnAll;
+
+      selectedBtn.checked = true;
+      selectedBtn.click();
+    }
+
+    addFilterEventListeners();
+    selectFilter();
+
+    }
+    initLinkToggler();
   }
 }
 
