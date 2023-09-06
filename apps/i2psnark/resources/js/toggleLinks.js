@@ -40,6 +40,7 @@ function initLinkToggler() {
       toggle.addEventListener("click", linkToggle, true);
     }
   }, 15000);
+}
 
 function linkToggle() {
   var config = window.localStorage.getItem("linkToggle");
@@ -66,12 +67,10 @@ function linkToggle() {
   var toggleCss = document.getElementById("toggleLinks");
   if (toggle !== null) {
     if (config === "links" || config === null) {
-      //console.log("LinkToggle set to magnets");
       localStorage.setItem("linkToggle", "magnets");
       toggle.checked = false;
       toggleCss.innerHTML = showSwitch + showMagnets;
     } else {
-      //console.log("LinkToggle set to links");
       localStorage.setItem("linkToggle", "links");
       toggle.checked = true;
       toggleCss.innerHTML = showSwitch + showLinks;

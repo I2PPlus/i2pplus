@@ -349,17 +349,21 @@ public class I2PSnarkServlet extends BasicServlet {
         String jsPfx = _context.isRouterContext() ? "" : ".resources";
         debug = false;
         if (!isConfigure) {
+            out.write("<script nonce=" + cspNonce + " type=module ");
+            if (debug && _context.isRouterContext()) {
+                out.write("src=/themes/js/toggleLinks.js></script>\n"); // debug
+            } else {
+                out.write("src=\"" + _contextPath + WARBASE + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
+            }
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
                 // fallback to metarefresh when javascript is disabled
-                out.write("<noscript><meta http-equiv=\"refresh\" content=\"" + delay + ";" + _contextPath + "/" + peerString + "\"></noscript>\n");
-                out.write("<script nonce=\"" + cspNonce + "\" type=module>\n");
+                out.write("<noscript><meta http-equiv=refresh content=\"" + delay + ";" + _contextPath + "/" + peerString + "\"></noscript>\n");
+                out.write("<script nonce=" + cspNonce + " type=module>\n");
                 if (debug && _context.isRouterContext()) {
                     out.write("  import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
-                              "  import {onVisible} from \"/themes/js/onVisible.js?" + CoreVersion.VERSION + "\";\n" +
-                              "</script>\n");
-                    out.write("<script nonce=" + cspNonce + " type=module charset=utf-8 src=/themes/js/toggleLinks.js></script>\n"); // debug
+                              "  import {onVisible} from \"/themes/js/onVisible.js?" + CoreVersion.VERSION + "\";\n");
                 } else {
                     out.write("  import {refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
                               "  import {onVisible} from \"" + _contextPath + WARBASE + "js/onVisible.js?" + CoreVersion.VERSION + "\";\n");
@@ -380,17 +384,15 @@ public class I2PSnarkServlet extends BasicServlet {
                           "  document.addEventListener(\"DOMContentLoaded\", updateIfVisible, true);\n" +
                           "</script>\n");
             }
-            out.write("<script nonce=\"" + cspNonce + "\" type=module>\n");
-            if (debug && _context.isRouterContext()) {
-                out.write("  import {initLinkToggler} from \"/themes/js/toggleLinks.js?" + CoreVersion.VERSION + "\";\n");
-            } else {
-                out.write("  import {initLinkToggler} from \"" + _contextPath + WARBASE + "js/toggleLinks.js?" + CoreVersion.VERSION + "\";\n");
-            }
-            out.write("  const deleteMessage1 = \"" + _t("Are you sure you want to delete the file \\''{0}\\'' " +
+            out.write("<script nonce=" + cspNonce + " type=text/javascript>\n" +
+                      "  const deleteMessage1 = \"" + _t("Are you sure you want to delete the file \\''{0}\\'' " +
                       "(downloaded data will not be deleted) ?") + "\";\n" +
                       "  const deleteMessage2 = \"" + _t("Are you sure you want to delete the torrent \\''{0}\\'' " +
-                      "and all downloaded data?") + "\";\n" +
-                      "  document.addEventListener(\"DOMContentLoaded\", initLinkToggler, true);\n</script>\n");
+                      "and all downloaded data?") + "\";\n</script>\n");
+            if (!isConfigure && _context.isRouterContext()) {
+                out.write("<script charset=utf-8 src=\"" + _contextPath + WARBASE + "js/delete.js?" +
+                           CoreVersion.VERSION + "\" type=text/javascript></script>\n");
+            }
         }
         // custom dialog boxes for javascript alerts
         //out.write("<script charset=utf-8 src=\"" + jsPfx + "/js/custom-alert.js\" type=text/javascript></script>\n");
@@ -679,6 +681,8 @@ public class I2PSnarkServlet extends BasicServlet {
                               "<input type=radio name=torrentDisplay id=stopped hidden><label for=stopped class=filterbutton>Stopped</label>\n" +
                               "</div>\n");
                 }
+            } else if (showStatusFilter) {
+                out.write("<div id=torrentDisplay hidden></div>\n");
             }
             writeHiddenInputs(out, req, null);
         }
@@ -4822,36 +4826,36 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<link type=text/css rel=stylesheet href=").append(_contextPath).append(WARBASE + "lightbox.css>\n");
             buf.append("<script charset=utf-8 src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js?" + CoreVersion.VERSION +
                        "\" type=text/javascript></script>\n")
-               .append("<script nonce=\"" + cspNonce + "\" type=text/javascript>\n" +
+               .append("<script nonce=" + cspNonce + " type=text/javascript>\n" +
                        "var lightbox = new Lightbox();lightbox.load();\n" +
                        "</script>\n");
         }
         int delay = _manager.getRefreshDelaySeconds();
         if (delay > 0) {
-            buf.append("<script nonce=\"" + cspNonce + "\" type=module>\n");
+            buf.append("<script nonce=" + cspNonce + " type=module>\n");
             if (debug && _context.isRouterContext()) {
-                buf.append("import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n"); // debugging
+                buf.append("  import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n"); // debugging
             } else {
-                buf.append("import {refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
+                buf.append("  import {refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
             }
             if (enableLightbox) {
-                buf.append("import {Lightbox} from \"" + _contextPath + WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\";\n" +
-                           "var lightbox = new Lightbox();\nlightbox.load();\n");
+                buf.append("  import {Lightbox} from \"" + _contextPath + WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\";\n" +
+                           "  var lightbox = new Lightbox();\nlightbox.load();\n");
             }
-            buf.append("var ajaxDelay = " + (delay * 1000) + ";\n" +
-                       "var main = document.getElementById(\"mainsection\");\n" +
-                       "var details = document.getElementById(\"snarkInfo\");\n" +
-                       "function updateIfVisible() {\n" +
-                       "  if (!timerId) {\n" +
-                       "    var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
+            buf.append("  var ajaxDelay = " + (delay * 1000) + ";\n" +
+                       "  var main = document.getElementById(\"mainsection\");\n" +
+                       "  var details = document.getElementById(\"snarkInfo\");\n" +
+                       "  function updateIfVisible() {\n" +
+                       "    if (!timerId) {\n" +
+                       "      var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
+                       "    }\n" +
                        "  }\n" +
-                       "}\n" +
-                       "if (main) {\n" +
-                       "  onVisible(main, () => {updateIfVisible();});\n" +
-                       "} else if (details) {\n" +
-                       "  onVisible(details, () => {updateIfVisible();});\n" +
-                       "}\n" +
-                       "document.addEventListener(\"DOMContentLoaded\", updateIfVisible, true);\n" +
+                       "  if (main) {\n" +
+                       "    onVisible(main, () => {updateIfVisible();});\n" +
+                       "  } else if (details) {\n" +
+                       "    onVisible(details, () => {updateIfVisible();});\n" +
+                       "  }\n" +
+                       "  document.addEventListener(\"DOMContentLoaded\", updateIfVisible, true);\n" +
                        "</script>\n");
         }
         if (!isStandalone())

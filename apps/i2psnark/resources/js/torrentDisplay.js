@@ -383,7 +383,7 @@ function refreshAll() {
     if (filterbar !== null) {
       filterbarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
       if (filterbar.innerHTML != filterbarResponse.innerHTML) {
-        filterbar.innerHTML = filterbarResponse.innerHTML;
+        filterbar.outerHTML = filterbarResponse.outerHTML;
       }
     }
   }
