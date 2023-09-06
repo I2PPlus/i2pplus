@@ -138,7 +138,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      * Convenience method, is the type any variant of router info?
      *
      * @return true for any type of RouterInfo, false for LeaseSet, false for others
-     * @since x.x.x
+     * @since 0.9.60
      */
     public boolean isRouterInfo() {
         return (getType() == KEY_TYPE_ROUTERINFO);
@@ -265,7 +265,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
             return false;
         return DSAEngine.getInstance().verifySignature(_signature, data, spk);
     }
-    
+
     /**
      * If true, we received this LeaseSet by a remote peer publishing it to
      * us, rather than by searching for it ourselves or locally creating it.
@@ -273,19 +273,19 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      *
      * @since 0.9.58 moved up from LeaseSet
      */
-    public boolean getReceivedAsPublished() { 
+    public boolean getReceivedAsPublished() {
         return _receivedAsPublished;
     }
 
     /**
      * @since 0.9.58 moved up from LeaseSet
-     * 
+     *
      * use this carefully, when updating the flags make sure the old and new
      * leaseSet are actually equivalent, or simply copy over the reply value,
      * see KademliaNetworkDatabaseFacade.java line 997 for more information.
      */
     public void setReceivedAsPublished() {
-        _receivedAsPublished = true; 
+        _receivedAsPublished = true;
     }
 
     /**
@@ -295,7 +295,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      * @since 0.7.14, moved up from LeaseSet in 0.9.58
      */
     public boolean getReceivedAsReply() {
-        return _receivedAsReply; 
+        return _receivedAsReply;
     }
 
     /**
