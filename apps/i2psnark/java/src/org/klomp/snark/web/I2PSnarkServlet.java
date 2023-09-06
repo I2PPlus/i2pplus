@@ -347,49 +347,37 @@ public class I2PSnarkServlet extends BasicServlet {
         // we want it to go to the base URI so we don't refresh with some funky action= value
         int delay = 0;
         String jsPfx = _context.isRouterContext() ? "" : ".resources";
+        debug = false;
         if (!isConfigure) {
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
                 // fallback to metarefresh when javascript is disabled
                 out.write("<noscript><meta http-equiv=\"refresh\" content=\"" + delay + ";" + _contextPath + "/" + peerString + "\"></noscript>\n");
-            }
-            out.write("<script nonce=\"" + cspNonce + "\" type=text/javascript>\n"  +
-                      "var deleteMessage1 = \"" + _t("Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?") + "\";\n" +
-                      "var deleteMessage2 = \"" + _t("Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?") + "\";\n" +
-                      "</script>\n" +
-                      "<script charset=utf-8 src=\".resources/js/delete.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>\n");
-            if (delay > 0) {
                 out.write("<script nonce=\"" + cspNonce + "\" type=module>\n");
-                debug = false;
                 if (debug && _context.isRouterContext()) {
-                    out.write("import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
-                    out.write("import {onVisible} from \"/themes/js/onVisible.js?" + CoreVersion.VERSION + "\";\n");
-                    out.write("</script>\n");
+                    out.write("  import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
+                              "  import {onVisible} from \"/themes/js/onVisible.js?" + CoreVersion.VERSION + "\";\n" +
+                              "</script>\n");
                     out.write("<script nonce=" + cspNonce + " type=module charset=utf-8 src=/themes/js/toggleLinks.js></script>\n"); // debug
                 } else {
-
-                    out.write("import {refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
-                    out.write("import {onVisible} from \"" + _contextPath + WARBASE + "js/onVisible.js?" + CoreVersion.VERSION + "\";\n");
-                    out.write("</script>\n");
-                    out.write("<script nonce=" + cspNonce + " type=module charset=utf-8 src=\"" +
-                              _contextPath + WARBASE + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
+                    out.write("  import {refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
+                              "  import {onVisible} from \"" + _contextPath + WARBASE + "js/onVisible.js?" + CoreVersion.VERSION + "\";\n");
                 }
-            } else {
-                out.write("var ajaxDelay = " + (delay * 1000) + ";\n" +
-                          "var main = document.getElementById(\"mainsection\");\n" +
-                          "var details = document.getElementById(\"snarkInfo\");\n" +
-                          "function updateIfVisible() {\n" +
-                          "  if (!timerId) {\n" +
-                          "    var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
+                out.write("  var ajaxDelay = " + (delay * 1000) + ";\n" +
+                          "  var main = document.getElementById(\"mainsection\");\n" +
+                          "  var details = document.getElementById(\"snarkInfo\");\n" +
+                          "  function updateIfVisible() {\n" +
+                          "    if (!timerId) {\n" +
+                          "      var timerId = setInterval(refreshTorrents, ajaxDelay);\n" +
+                          "    }\n" +
                           "  }\n" +
-                          "}\n" +
-                          "if (main) {\n" +
-                          "  onVisible(main, () => {updateIfVisible();});\n" +
-                          "} else if (details) {\n" +
-                          "  onVisible(details, () => {updateIfVisible();});\n" +
-                          "}\n" +
-                          "document.addEventListener(\"DOMContentLoaded\", updateIfVisible, true);\n" +
+                          "  if (main) {\n" +
+                          "    onVisible(main, () => {updateIfVisible();});\n" +
+                          "  } else if (details) {\n" +
+                          "    onVisible(details, () => {updateIfVisible();});\n" +
+                          "  }\n" +
+                          "  document.addEventListener(\"DOMContentLoaded\", updateIfVisible, true);\n" +
                           "</script>\n");
             }
             out.write("<script nonce=\"" + cspNonce + "\" type=module>\n");
@@ -398,8 +386,11 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 out.write("  import {initLinkToggler} from \"" + _contextPath + WARBASE + "js/toggleLinks.js?" + CoreVersion.VERSION + "\";\n");
             }
-            out.write("  document.addEventListener(\"DOMContentLoaded\", initLinkToggler, true);\n");
-            out.write("</script>\n");
+            out.write("  const deleteMessage1 = \"" + _t("Are you sure you want to delete the file \\''{0}\\'' " +
+                      "(downloaded data will not be deleted) ?") + "\";\n" +
+                      "  const deleteMessage2 = \"" + _t("Are you sure you want to delete the torrent \\''{0}\\'' " +
+                      "and all downloaded data?") + "\";\n" +
+                      "  document.addEventListener(\"DOMContentLoaded\", initLinkToggler, true);\n</script>\n");
         }
         // custom dialog boxes for javascript alerts
         //out.write("<script charset=utf-8 src=\"" + jsPfx + "/js/custom-alert.js\" type=text/javascript></script>\n");
@@ -415,7 +406,10 @@ public class I2PSnarkServlet extends BasicServlet {
         File override = new File(themeBase + "override.css");
         int rnd = _context.random().nextInt(3);
         if (!isStandalone() && rnd == 0 && _manager.getTheme().equals("light")) {
-            out.write("<style type=text/css>#screenlog{background:url(/themes/snark/light/images/k2.webp) no-repeat right bottom,repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),var(--snarkGraph) no-repeat,var(--th);background-size:72px auto,100%,calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom,center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n");
+            out.write("<style type=text/css>#screenlog{background:url(/themes/snark/light/images/k2.webp) no-repeat right bottom," +
+                      "repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),var(--snarkGraph) no-repeat," +
+                      "var(--th);background-size:72px auto,100%,calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom," +
+                      "center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n");
         }
         if (!isStandalone() && useSoraFont()) {
             out.write("<link rel=stylesheet type=text/css href=/themes/fonts/Sora.css>");
