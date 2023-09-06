@@ -109,7 +109,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public CommSystemFacadeImpl(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(CommSystemFacadeImpl.class);
-        //_context.statManager().createRateStat("transport.getBidsJobTime", "How long does it take?", "Transport", new long[] { 10*60*1000l });
         _netMonitorStatus = true;
         _geoIP = new GeoIP(_context);
         _manager = new TransportManager(_context);
@@ -200,8 +199,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         long sum = 0;
         for (int i = first; i <= last; i++) {
             long value = skews.get(i).longValue();
-            //if (_log.shouldDebug())
-            //    _log.debug("Adding clock skew " + i + " valued " + value + " s.");
             sum = sum + value;
         }
         // Calculate average
@@ -215,12 +212,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             GetBidsJob.fail(_context, msg);
             return;
         }
-        //GetBidsJob j = new GetBidsJob(_context, this, msg);
-        //j.runJob();
-        //long before = _context.clock().now();
         GetBidsJob.getBids(_context, _manager, msg);
-        // < 0.4 ms
-        //_context.statManager().addRateData("transport.getBidsJobTime", _context.clock().now() - before);
     }
 
     @Override
@@ -535,7 +527,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /* We hope the routerinfos are read in and things have settled down by now, but it's not required to be so */
     private static final int START_DELAY = SystemVersion.isSlow() ? 60*1000 : 5*1000;
-//    private static final int LOOKUP_TIME = 30*60*1000;
     private static final int LOOKUP_TIME = 5*60*1000;
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {
@@ -563,14 +554,15 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         public void timeReached() {
             long uptime = _context.router().getUptime();
             for (Hash h : _context.mainNetDb().getAllRouters()) {
-                //RouterInfo ri = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(h);
-                RouterInfo ri = _context.mainNetDb().lookupRouterInfoLocally(h);
+                RouterInfo ri = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(h);
+//                RouterInfo ri = _context.mainNetDb().lookupRouterInfoLocally(h);
                 if (ri == null)
                     continue;
                 byte[] ip = getIP(ri);
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
+/**
                 if (enableReverseLookups() && uptime > 3*60*1000 && uptime < 10*60*1000) {
                     try {
                         InetAddress ipAddress = InetAddress.getByAddress(ip);
@@ -581,6 +573,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                         //} catch (InterruptedException e) {}
                     } catch(UnknownHostException exception) {}
                 }
+**/
             }
             _context.simpleTimer2().addPeriodicEvent(new Lookup(), 5000, LOOKUP_TIME);
         }
@@ -608,6 +601,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         long start = System.currentTimeMillis();
         long uptime = _context.router().getUptime();
         _geoIP.blockingLookup();
+/*
         if (enableReverseLookups() && uptime > 60*1000 && uptime < 6*60*1000) {
             readRDNSCacheFromFile();
             if (_log.shouldInfo())
@@ -616,6 +610,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             if (_log.shouldInfo())
                 _log.info("GeoIP lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
         }
+*/
+        if (_log.shouldInfo())
+            _log.info("GeoIP lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
     }
 
     /**
@@ -1008,15 +1005,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         if (ip != null) {
             String country = _geoIP.get(ip);
             try {
-                if (country == null) {
-                    System.out.println("Country not found for IP: " + InetAddress.getByAddress(ip).getHostAddress());
-                } else {
-                    System.out.println("Country found for IP: " + InetAddress.getByAddress(ip).getHostAddress() + " - " + country);
+                if (_log.shouldDebug() && country == null) {
+                    _log.debug("Country not found for IP address: " + InetAddress.getByAddress(ip).getHostAddress());
                 }
-            } catch (UnknownHostException e) {
-                System.out.println("Unknown host exception for IP: " + Arrays.toString(ip));
-                e.printStackTrace();
-            }
+            } catch (UnknownHostException e) {}
             return country;
         }
         return null;
