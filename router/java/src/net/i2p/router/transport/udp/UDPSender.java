@@ -85,18 +85,6 @@ class UDPSender {
             _context.statManager().createRequiredRateStat("udp.sendException", "Send fails (Windows exception?)", "Transport [UDP]", RATES);
         else
             _context.statManager().createRequiredRateStat("udp.sendException", "Send fails (Windows exception?)", "Transport", RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_ACK, "ACK-only UDP packet size", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_PUNCH, "Hole punch UDP packet size", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_RESP, "Relay response UDP packet size", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_INTRO, "Relay introduction UDP packet size", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_RREQ, "Relay request UDP packet size", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_TCB, "Peer test Charlie to Bob UDP packet size", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_TBC, "Peer test Bob to Charlie UDP packet size", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_TTA, "Peer test to Alice UDP packet size", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_TFA, "Peer test from Alice UDP packet size", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_CONF, "Session confirmed UDP packet size", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_SREQ, "Session request UDP packet size", "Transport [UDP]", RATES);
-        _context.statManager().createRateStat("udp.sendPacketSize." + PacketBuilder.TYPE_CREAT, "Session created UDP packet size", "Transport [UDP]", RATES);
     }
 
     /**
@@ -278,32 +266,9 @@ class UDPSender {
                     }
 
                     long afterBW = _context.clock().now();
-
-                    //if (_log.shouldDebug()) {
-                        //if (len > 128)
-                        //    len = 128;
-                        //_log.debug("Sending packet: (size="+size + "/"+size2 +")\nraw: " + Base64.encode(packet.getPacket().getData(), 0, size));
-                    //}
-
-                    if (packet.getMessageType() >= PacketBuilder.TYPE_FIRST)
-                        _context.statManager().addRateData("udp.sendPacketSize." + packet.getMessageType(), size, packet.getFragmentCount());
-
-                    //packet.getPacket().setLength(size);
                     try {
-                        //long before = _context.clock().now();
-                        //synchronized (Runner.this) {
-                            // synchronization lets us update safely
-                            //_log.debug("Break out datagram for " + packet);
-                            DatagramPacket dp = packet.getPacket();
-                            //if (_log.shouldDebug())
-                            //    _log.debug("Just before socket.send of " + packet);
-                            _socket.send(dp);
-                            //if (_log.shouldDebug())
-                            //    _log.debug("Just after socket.send of " + packet);
-                        //}
-                        //long sendTime = _context.clock().now() - before;
-                        // less than 50 microsec
-                        //_context.statManager().addRateData("udp.socketSendTime", sendTime, packet.getLifetime());
+                        DatagramPacket dp = packet.getPacket();
+                         _socket.send(dp);
                         if (_log.shouldDebug())
                             _log.debug("Sent UDP packet " + packet);
                         long throttleTime = afterBW - acquireTime;
@@ -316,7 +281,6 @@ class UDPSender {
                     } catch (IOException ioe) {
                         String ipaddress = packet.getPacket().getAddress().toString().replace("/", "");
                         if (_log.shouldWarn())
-//                            _log.warn("Error sending to " + packet.getPacket().getAddress(), ioe);
                             _log.warn("Error sending to " + ipaddress + "\n* Error: " + ioe.getMessage());
                         _context.statManager().addRateData("udp.sendException", 1);
                         if (_socket.isClosed()) {
@@ -355,18 +319,5 @@ class UDPSender {
             }
             return packet;
         }
-
-     /******
-        public DatagramSocket updateListeningPort(DatagramSocket socket, int newPort) {
-            _name = "UDPSend on " + newPort;
-            DatagramSocket old = null;
-            synchronized (Runner.this) {
-                old = _socket;
-                _socket = socket;
-            }
-            _socketChanged = true;
-            return old;
-        }
-      *****/
     }
 }
