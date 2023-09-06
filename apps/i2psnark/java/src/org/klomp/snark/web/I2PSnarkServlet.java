@@ -479,7 +479,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         if (_manager.getTorrents().size() > 1) {
             out.write("<form id=snarkSearch action=\"" + _contextPath + "\" method=GET hidden>\n" +
-                      "<span id=searchwrap><input type=search required name=s size=20 placeholder=\"");
+                      "<span id=searchwrap><input id=searchInput type=search required name=s size=20 placeholder=\"");
             out.write(_t("Search torrents"));
             out.write("\"");
             String s = req.getParameter("s");
@@ -489,6 +489,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("><a href=" + _contextPath + " title=\"");
             out.write(_t("Clear search"));
             out.write("\" hidden>x</a></span><input type=submit value=\"Search\">\n</form>\n");
+            //out.write("<script src=/themes/js/search.js type=text/javascript></script>");
         }
         out.write("\n</div>\n");
         String newURL = req.getParameter("newURL");
