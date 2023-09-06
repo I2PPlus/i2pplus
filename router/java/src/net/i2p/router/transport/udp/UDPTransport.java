@@ -244,7 +244,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
 
     public static final int DEFAULT_COST = 5;
     private static final int SSU_OUTBOUND_COST = 14;
-    static final long[] RATES = { 60*1000, 10*60*1000 };
+    static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
     /** minimum active peers to maintain IP detection, etc. */
 //    private static final int MIN_PEERS = 5;
     private static final int MIN_PEERS = 10;

@@ -258,7 +258,7 @@ class EstablishmentManager {
         _context.statManager().createRateStat("udp.dupDHX", "Session request replay (duplicate X)", "Transport [UDP]", UDPTransport.RATES);
         if (_enableSSU2)
             _context.statManager().createRequiredRateStat("udp.inboundTokenLifetime", "SSU2 Token lifetime (ms)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRequiredRateStat("udp.inboundConn", "Inbound UDP Connection", "Transport [UDP]", new long[] { 60*1000L } );
+        _context.statManager().createRequiredRateStat("udp.inboundConn", "Inbound UDP Connection", "Transport [UDP]", UDPTransport.RATES);
     }
 
     public synchronized void startup() {

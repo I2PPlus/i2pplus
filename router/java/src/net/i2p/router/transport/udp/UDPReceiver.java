@@ -52,7 +52,7 @@ class UDPReceiver {
         //_context.statManager().createRateStat("udp.droppedInbound", "How many packet are queued up but not yet received when we drop", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.receiveHolePunch", "How often we receive a NAT hole punch", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.ignorePacketFromDroplist", "Packet lifetime for those dropped on the drop list", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receiveFailsafe", "limiter stuck?", "Transport [UDP]", new long[] { 24*60*60*1000L });
+        _context.statManager().createRateStat("udp.receiveFailsafe", "limiter stuck?", "Transport [UDP]", UDPTransport.RATES);
     }
 
     /**
