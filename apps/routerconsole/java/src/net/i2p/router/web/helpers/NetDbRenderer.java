@@ -147,13 +147,8 @@ class NetDbRenderer {
         StringBuilder buf = new StringBuilder(4*1024);
         List<Hash> sybils = sybil != null ? new ArrayList<Hash>(128) : null;
         FloodfillNetworkDatabaseFacade netdb = _context.mainNetDb();
-        if (allClients) {
-            netdb = _context.mainNetDb();
-        } else {
-            if (client != null)
-                netdb = _context.clientNetDb(client);
-            else
-                netdb = _context.mainNetDb();
+        if (client != null) {
+            netdb = _context.clientNetDb(client);
         }
 
         if (".".equals(routerPrefix)) {
