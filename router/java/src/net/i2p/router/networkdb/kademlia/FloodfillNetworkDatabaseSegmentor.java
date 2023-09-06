@@ -880,8 +880,11 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     public List<BlindData> getLocalClientsBlindData() {
         ArrayList<BlindData> rv = new ArrayList<>();
         for (String subdb : _subDBs.keySet()) {
-            if (subdb.startsWith("clients_"))
-                ;
+            // if (subdb.startsWith("clients_"))
+            // TODO: see if we can access only one subDb at a time when we need
+            // to look up a client by SPK. We mostly need this for managing blinded
+            // and encrypted keys in the Keyring Config UI page. See also
+            // ConfigKeyringHelper
             rv.addAll(_subDBs.get(subdb).getBlindData());
         }
         return rv;
@@ -891,8 +894,11 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     public List<String> lookupClientBySigningPublicKey(SigningPublicKey spk) {
         List<String> rv = new ArrayList<>();
         for (String subdb : _subDBs.keySet()) {
-            if (subdb.startsWith("clients_"))
-                ;
+            // if (subdb.startsWith("clients_"))
+            // TODO: see if we can access only one subDb at a time when we need
+            // to look up a client by SPK. We mostly need this for managing blinded
+            // and encrypted keys in the Keyring Config UI page. See also
+            // ConfigKeyringHelper
             BlindData bd = _subDBs.get(subdb).getBlindData(spk);
             if (bd != null) {
                 rv.add(subdb);

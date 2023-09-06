@@ -125,7 +125,8 @@ public class RouterInfoHandler implements RequestHandler {
 
         if (inParams.containsKey("i2p.router.netdb.knownpeers")) {
             // Why max(-1, 0) is used I don't know, it is the implementation used in the router console.
-            outParams.put("i2p.router.netdb.knownpeers", Math.max(_context.netDb().getKnownRouters(null) - 1, 0));
+//            outParams.put("i2p.router.netdb.knownpeers", Math.max(_context.netDb().getKnownRouters(null) - 1, 0));
+            outParams.put("i2p.router.netdb.knownpeers", Math.max(_context.mainNetDb().getKnownRouters() -1, 0));
         }
 
         if (inParams.containsKey("i2p.router.netdb.activepeers")) {

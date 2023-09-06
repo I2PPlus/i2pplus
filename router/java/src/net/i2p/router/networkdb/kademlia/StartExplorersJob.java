@@ -90,7 +90,8 @@ class StartExplorersJob extends JobImpl {
                   getContext().commSystem().getStatus() == Status.DISCONNECTED)) {
                 int num = MAX_PER_RUN;
 //                int count = _facade.getDataStore().size();
-                count = getContext().netDb().getKnownRouters();
+//                count = getContext().netDb().getKnownRouters();
+                count = getContext().mainNetDb().getKnownRouters();
                 String exploreBuckets = getContext().getProperty(PROP_EXPLORE_BUCKETS);
                 if (exploreBuckets == null) {
                     if (count < MIN_ROUTERS)
@@ -127,14 +128,15 @@ class StartExplorersJob extends JobImpl {
                     // Last param false means get floodfills (non-explore)
                     // This is very effective so we don't need to do it often
                     boolean realexpl = !((needffs && getContext().random().nextInt(2) == 0) ||
-                                        (lowffs && getContext().random().nextInt(4) == 0));
+                                        (lowffs && getContext().random().nextInt(3) == 0));
                     ExploreJob j = new ExploreJob(getContext(), _facade, key, realexpl, _msgIDBloomXor);
                     // spread them out
                     Random random = getContext().random();
-                    delay += 100 + (random.nextInt(250));
-                    if (delay > 0)
+                    delay += 500 + (random.nextInt(250));
+                    if (delay > 0) {
                         j.getTiming().setStartAfter(getContext().clock().now() + delay);
-                    getContext().jobQueue().addJob(j);
+                        getContext().jobQueue().addJob(j);
+                    }
 
                     if (_log.shouldInfo() && realexpl)
                         _log.info("Exploring for new peers in " + delay + "ms");
@@ -192,7 +194,8 @@ class StartExplorersJob extends JobImpl {
         Boolean isK = ri != null && ri.getCapabilities().contains("" + Router.CAPABILITY_BW12);
 
 //        int netDbSize = _facade.getDataStore().size();
-        int netDbSize = getContext().netDb().getKnownRouters();
+//        int netDbSize = getContext().netDb().getKnownRouters();
+        int netDbSize = getContext().mainNetDb().getKnownRouters();
         long uptime = getContext().router().getUptime();
         long delay = getContext().clock().now() - _facade.getLastExploreNewDate();
         if (exploreDelay == null) {

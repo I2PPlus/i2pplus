@@ -250,7 +250,8 @@ class EventPumper implements Runnable {
                 }
 
                 long now = System.currentTimeMillis();
-                int known = _context.netDb().getKnownRouters();
+//                int known = _context.netDb().getKnownRouters();
+                int known = _context.mainNetDb().getKnownRouters();
                 int loopFreq = FAILSAFE_ITERATION_FREQ;
                 if (known > 6000)
                     loopFreq = FAILSAFE_ITERATION_FREQ * 2;

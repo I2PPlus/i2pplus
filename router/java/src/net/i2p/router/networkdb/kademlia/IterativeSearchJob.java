@@ -157,7 +157,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, isLease);
         //RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
         //String MIN_VERSION = "0.9.57";
-        int known = ctx.netDb().getKnownRouters();
+//        int known = ctx.netDb().getKnownRouters();
+        int known = ctx.mainNetDb().getKnownRouters();
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
         boolean isHidden = ctx.router().isHidden();
@@ -223,6 +224,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         boolean isHidden = getContext().router().isHidden();
         RouterInfo ri = _facade.lookupRouterInfoLocally(_key);
         RouterInfo isUs = _facade.lookupRouterInfoLocally(getContext().routerHash());
+        long uptime = getContext().router().getUptime();
         if (ri != null && ri != isUs) {
             String v = ri.getVersion();
             String caps = ri.getCapabilities();
@@ -232,7 +234,8 @@ public class IterativeSearchJob extends FloodSearchJob {
                                      //caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                      //caps.indexOf(Router.CAPABILITY_BW64) >= 0 ||
                                      (v.equals("") || VersionComparator.comp(v, MIN_VERSION) < 0)) &&
-                                     !isHidden && getContext().netDb().getKnownRouters() > 1000;
+//                                     !isHidden && getContext().netDb().getKnownRouters() > 1000;
+                                     !isHidden && getContext().mainNetDb().getKnownRouters() > 1000;
             if (uninteresting) {
                 if (_log.shouldInfo())
                     _log.info("[Job " + getJobId() + "] Skipping search for uninteresting Router [" + _key.toBase64().substring(0,6) + "]");
@@ -267,11 +270,11 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (floodfillPeers.isEmpty()) {
             // ask anybody, they may not return the answer but they will return a few ff peers we can go look up,
             // so this situation should be temporary
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldLog(Log.WARN) && uptime > 60*1000)
                 _log.warn("Running NetDb searches against the Floodfill peers, but we don't know any");
             List<Hash> all = new ArrayList<Hash>(_facade.getAllRouters());
             if (all.isEmpty()) {
-                if (_log.shouldLog(Log.ERROR))
+                if (_log.shouldLog(Log.ERROR) && uptime > 3*60*1000)
                     _log.error("No peers in NetDb - reseed required");
                 failed();
                 return;

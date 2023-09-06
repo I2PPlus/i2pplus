@@ -623,7 +623,8 @@ public class PersistentDataStore extends TransientDataStore {
                 }
             } else if (_lastReseed < _context.clock().now() - MIN_RESEED_INTERVAL) {
                 int count = Math.min(routerCount, size());
-                int known = _context.netDb().getKnownRouters();
+//                int known = _context.netDb().getKnownRouters();
+                int known = _context.mainNetDb().getKnownRouters();
                 if (_facade.isClientDb()) {
                     _lastReseed = _context.clock().now();
                 } else if (known < MIN_ROUTERS) {
@@ -640,7 +641,8 @@ public class PersistentDataStore extends TransientDataStore {
                 // second time through, reseed called wakeup()
                 if (!_setNetDbReady) {
 //                    int count = Math.min(routerCount, size());
-                    int known = _context.netDb().getKnownRouters();
+//                    int known = _context.netDb().getKnownRouters();
+                    int known = _context.mainNetDb().getKnownRouters();
                     if (known >= MIN_ROUTERS) {
                         _setNetDbReady = true;
                         _context.router().setNetDbReady();
