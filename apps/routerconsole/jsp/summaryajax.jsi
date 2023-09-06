@@ -10,11 +10,12 @@
   var refreshInterval = refresh * 1000;
   var sb = document.getElementById("sidebar");
   var visible = document.visibilityState;
-  function initRefresh() {
-    var timerId = setInterval(refreshSidebar, refreshInterval);
-    stickySidebar();
+  function initSidebarRefresh() {
+    var timerId = setInterval(function() {
+      return requestAnimationFrame(refreshSidebar);
+    }, refreshInterval);
   }
-  onVisible(sb, () => {initRefresh();});
+  onVisible(sb, () => {initSidebarRefresh();});
   document.addEventListener("DOMContentLoaded", sectionToggler);
   window.addEventListener("DOMContentLoaded", stickySidebar);
   window.addEventListener("resize", stickySidebar);
@@ -29,7 +30,7 @@
   import {refreshSidebar} from "/js/refreshSidebar.js";
   import {sectionToggler} from "/js/sectionToggle.js";
   import {stickySidebar} from "/js/stickySidebar.js";
-  refreshSidebar();
+  requestAnimationFrame(refreshSidebar);
   document.addEventListener("DOMContentLoaded", sectionToggler);
   window.addEventListener("DOMContentLoaded", stickySidebar);
   window.addEventListener("resize", stickySidebar);

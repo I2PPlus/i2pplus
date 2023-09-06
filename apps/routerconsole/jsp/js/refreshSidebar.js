@@ -280,6 +280,12 @@ function refreshSidebar() {
           }
         }
 
+        const graphCanvas = document.getElementById("minigraph");
+        const ctx = graphCanvas ? graphCanvas.getContext("2d") : null;
+        const minigraph_width = 245;
+        const minigraph_height = 50;
+        const image = new Image(minigraph_width, minigraph_height);
+
         function refreshGraph() {
           var graphContainer = document.getElementById("sb_graphcontainer");
           var graphContainerHR = document.querySelector("#sb_graphcontainer + hr");
@@ -289,21 +295,25 @@ function refreshSidebar() {
               graphContainer.hidden = null;
               graphContainerHR.hidden = null;
             }
-            const ctx = minigraph.getContext("2d");
-            const image = new Image(245, 50);
             image.onload = renderGraph;
-            image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + new Date().getTime();
-            ctx.imageSmoothingEnabled = false;
-            ctx.imageSmoothingQuality = "high";
-            ctx.globalCompositeOperation = "copy";
-            ctx.globalAlpha = 1;
-            //minigraph.style.background = image.src;
+            image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + Date.now();
+            if (ctx) {
+              ctx.imageSmoothingEnabled = false;
+              ctx.imageSmoothingQuality = "medium";
+              ctx.globalCompositeOperation = "copy";
+              ctx.globalAlpha = 1;
+              //minigraph.style.background = image.src;
+            }
 
             function renderGraph() {
-              minigraph.width = 245;
-              minigraph.height = 50;
-              ctx.drawImage(this, 0, 0, 245, 50);
-              requestAnimationFrame(refreshGraph);
+              minigraph.width = minigraph_width;
+              minigraph.height = minigraph_height;
+              if (ctx) {
+                ctx.drawImage(image, 0, 0, minigraph_width, minigraph_height);
+              }
+              if (!document.hidden && minigraph) {
+                requestAnimationFrame(refreshGraph);
+              }
             }
           }
         }
