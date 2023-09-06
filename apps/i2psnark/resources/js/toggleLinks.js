@@ -21,8 +21,10 @@ function initLinkToggler() {
   var toggle = document.getElementById("linkswitch");
   var toggleCss = document.getElementById("toggleLinks");
 
-  function initToggle() {
-    if (toggle !== null) {
+  var checkToggle = setInterval(function() {
+    var toggle = document.getElementById("toggle");
+    if (toggle) {
+      clearInterval(checkToggle);
       toggle.removeAttribute("hidden");
       if (config === null || config === "magnets") {
         localStorage.setItem("linkToggle", "magnets");
@@ -35,11 +37,9 @@ function initLinkToggler() {
         toggle.setAttribute("checked", "");
         toggleCss.innerHTML = showSwitch + showLinks;
       }
+      toggle.addEventListener("click", linkToggle, true);
     }
-  }
-  initToggle();
-  toggle.addEventListener("click", linkToggle, true);
-}
+  }, 15000);
 
 function linkToggle() {
   var config = window.localStorage.getItem("linkToggle");
