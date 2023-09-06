@@ -312,6 +312,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             _log.warn("Dropping unsolicited NetDbStore of banned " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "]" + ((isFF && noSSU) ? " -> SSU transport disabled" : ""));
                         }
+
+/** TODO: re-enable when GEOIP lookups fixed
+
                     } else if (noCountry && uptime > 45*1000) {
                         shouldStore = false;
                         wasNew = false;
@@ -319,6 +322,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "] -> Address not resolvable via GeoIP");
                         }
+**/
+
+
 /**
                         if (isFF)
                             getContext().banlist().banlistRouter(key, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, now + 4*60*60*1000);
@@ -329,6 +335,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                       " [" + key.toBase64().substring(0,6) + "] and banning for 4h -> Address not resolvable via GeoIP");
                         }
 **/
+
+
                     } else if ((isFF && noSSU) || (isFF && isUnreachable)) {
                         shouldStore = false;
                         wasNew = false;
