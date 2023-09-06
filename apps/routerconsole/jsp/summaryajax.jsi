@@ -7,33 +7,43 @@
   import {stickySidebar} from "/js/stickySidebar.js";
   import {onVisible} from "/js/onVisible.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
-  var refreshInterval = refresh * 1000;
-  var sb = document.getElementById("sidebar");
-  var visible = document.visibilityState;
-  function initSidebarRefresh() {
-    var timerId = setInterval(function() {
-      return requestAnimationFrame(refreshSidebar);
-    }, refreshInterval);
+  const refreshInterval = refresh * 1000;
+  let timerId = null;
+  const sb = document.getElementById("sidebar");
+  const visible = document.visibilityState;
+  function initSidebarRefresh() {timerId = setInterval(() => requestAnimationFrame(refreshSidebar), refreshInterval);}
+  function stopSidebarRefresh() {clearInterval(timerId);}
+  onVisible(sb, () => {
+    if (timerId === null) {
+      initSidebarRefresh();
+    }
+  });
+  function onDomContentLoaded() {
+    sectionToggler();
+    stickySidebar();
   }
-  onVisible(sb, () => {initSidebarRefresh();});
-  document.addEventListener("DOMContentLoaded", sectionToggler);
-  window.addEventListener("DOMContentLoaded", stickySidebar);
-  window.addEventListener("resize", stickySidebar);
-  if (visible === "hidden") {
-    clearInterval(timerId);
+  function onWindowResize() {
+    stickySidebar();
   }
+  document.addEventListener("DOMContentLoaded", onDomContentLoaded);
+  window.addEventListener("DOMContentLoaded", onDomContentLoaded);
+  window.addEventListener("resize", onWindowResize);
+  if (visible === "hidden") {stopSidebarRefresh();}
 </script>
 <%
     } else {
 %>
 <script nonce="<%=cspNonce%>" type="module">
-  import {refreshSidebar} from "/js/refreshSidebar.js";
-  import {sectionToggler} from "/js/sectionToggle.js";
-  import {stickySidebar} from "/js/stickySidebar.js";
-  requestAnimationFrame(refreshSidebar);
-  document.addEventListener("DOMContentLoaded", sectionToggler);
-  window.addEventListener("DOMContentLoaded", stickySidebar);
-  window.addEventListener("resize", stickySidebar);
+  function onDomContentLoaded() {
+    sectionToggler();
+    stickySidebar();
+  }
+  function onWindowResize() {
+    stickySidebar();
+  }
+  document.addEventListener("DOMContentLoaded", onDomContentLoaded);
+  window.addEventListener("DOMContentLoaded", onDomContentLoaded);
+  window.addEventListener("resize", onWindowResize);
 </script>
 <%
     }
