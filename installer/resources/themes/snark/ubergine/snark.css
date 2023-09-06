@@ -21,6 +21,7 @@
 --hover:#f60;
 --ink:#e4d3d7;
 --ink_btn:#2f1d30;
+--isDown:repeating-linear-gradient(90deg,#101,rgba(0,0,0,0),#101),linear-gradient(90deg,#303,#101,#303) center center,#101;
 --link:linear-gradient(180deg,#313 50%,#101 50%);
 --monospaced:FiraCode,Noto Mono,Lucida Console,DejaVu Sans Mono,monospace;
 --nav_active:radial-gradient(at center bottom,rgba(255,200,0,.5) 0,rgba(0,0,0,0) 70%),linear-gradient(180deg,#f50,#f70);
@@ -85,8 +86,8 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 .notify td{background:linear-gradient(to bottom,rgba(72,0,72,.2),rgba(24,0,24,.3))}
 .page{margin:5px 0 0 0;padding:10px 10px 0;border:var(--border_hard);border-radius:4px;box-shadow:inset 0 0 3px 0 #101,0 0 2px 2px rgba(16,0,16,.4);background:repeating-linear-gradient(180deg,#2b172f 2px,#1f081f 4px);background-size:100% 4px}
-.routerdown{padding:15px 10px;color:#ee9;font-size:10pt;border:1px solid #202;border-radius:3px;box-shadow:inset 0 0 0 1px #313,inset 0 0 6px 4px #101,inset 0 0 0 8px rgba(0,0,0,.7);background:linear-gradient(90deg,#101,rgba(64,16,64,.5),#101),linear-gradient(90deg,#303,#000,#303) center center;background-size:100%;animation:ease-in-out routerdown 1s forwards infinite}
-.routerdown::after{content:"";display:inline-block;width:40px;height:40px;background:var(--offline) no-repeat center center;background-size:40px;mix-blend-mode:difference;animation:linear spin 5s reverse infinite}
+.routerdown{padding:15px 10px;vertical-align:middle;color:#ee9;font-size:10pt;border:1px solid #202;border-radius:3px;box-shadow:inset 0 0 0 1px #313,inset 0 0 6px 4px #101,inset 0 0 0 8px rgba(0,0,0,.7);background:var(--isDown)}
+.routerdown::after{display:inline-block;width:40px;height:40px;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:40px;content:"";mix-blend-mode:difference;animation:linear spin 5s reverse infinite}
 .routerdown span{display:none}
 .rowOdd,.rowEven{background:var(--row)}
 .rowEven td,.rowOdd td{border-top:0;border-bottom:0}
@@ -976,7 +977,7 @@ hr.debug{display:none}
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
 @keyframes fade-in{0%{filter:opacity(0)}100%{filter:opacity(1)}}
 @keyframes initializing{from{background-position:200% 100%}}
-@keyframes routerdown{from{background-size:100%,15% 100%}}
+@keyframes routerdown{from{background-size:50% 100%,200% 100%}}
 @keyframes scale{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
 @keyframes seeding{from{box-shadow:inset 0 0 0 1px rgba(16,0,16,.9),inset 0 1px 3px rgba(255,96,0,.4),inset 0 -1px 4px rgba(128,48,0,.4);background:radial-gradient(at center bottom,rgba(128,32,64,.6) 10%,rgba(0,0,0,0) 60%),linear-gradient(180deg,rgba(80,16,48,.9),rgba(16,0,16,.9))}}
 @keyframes slide-in{0%{transform:translateY(-50px)}100%{transform:translateY(0)}}
