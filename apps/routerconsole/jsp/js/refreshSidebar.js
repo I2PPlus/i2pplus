@@ -90,17 +90,21 @@ function refreshSidebar() {
 
         function updateVolatile() {
           uncollapse();
-
-          var b;
-          for (b = 0; b < badges.length; b++) {
-            if (badges !== null && badgesResponse !== null) {
-              if (badges.length !== badgesResponse.length) {
-                refreshAll();
-              } else if (badgesResponse !== null && badges[b] !== badgesResponse[b]) {
-                badges[b].innerHTML = badgesResponse[b].innerHTML;
+          function compareBadges() {
+            const length = Math.min(badges.length, badgesResponse.length);
+            if (badgesResponse === null) {
+              return;
+            }
+            for (let i = 0; i < length; i++) {
+              if (badges[i].innerHTML !== badgesResponse[i].innerHTML) {
+                badges[i].innerHTML = badgesResponse[i].innerHTML;
               }
             }
+            if (badges.length !== badgesResponse.length) {
+              refreshAll();
+            }
           }
+          compareBadges();
 
           if (clock !== null && clockResponse !== null) {
             clock.innerHTML = clockResponse.innerHTML;
@@ -311,27 +315,17 @@ function refreshSidebar() {
               if (ctx) {
                 ctx.drawImage(image, 0, 0, minigraph_width, minigraph_height);
               }
-              if (!document.hidden && minigraph) {
-                requestAnimationFrame(refreshGraph);
-              }
             }
           }
         }
+        requestAnimationFrame(refreshGraph);
 
         function uncollapse() {
           sectionToggler();
           countTunnels();
           countNewsItems();
         }
-
         checkSections();
-
-        if (minigraph) {
-          refreshGraph();
-          var minigraphResponse = xhr.responseXML.getElementById("minigraph");
-          minigraph = minigraphResponse;
-        }
-
       } else {
 
         function isDown() {
@@ -351,24 +345,21 @@ function refreshSidebar() {
           }
 
           function modElements() {
-            var sectionTitle = document.querySelectorAll("#sidebar h3, #sidebar a");
-            var digits = document.querySelectorAll(".digits");
-            var i;
-            for (i = 0; i < digits.length; i += 1) {
-              digits[i].innerHTML = "---&nbsp;";
-            }
+            const sectionTitle = document.querySelectorAll("#sidebar h3, #sidebar a");
+            const digits = document.querySelectorAll(".digits");
+            const badges = document.querySelectorAll(".badge, #tunnelCount, #newsCount");
+            const downStatus = '<span id="down">Router is down</span>';
+            const netStatus = document.getElementById("netStatus");
+            digits.forEach(digit => (digit.innerHTML = "---&nbsp;"));
             if (clock !== null) {
               clock.innerHTML = "--:--:--";
             }
-            var badges = document.querySelectorAll(".badge, #tunnelCount, #newsCount");
-            var b;
-            for (b = 0; b < badges.length; b += 1) {
-              if (badges[b] !== null) {
-                badges[b].innerHTML = "";
-              }
+            badges.forEach(badge => (badge.innerHTML = ""));
+            if (netStatus) {
+              netStatus.innerHTML = downStatus;
             }
-            netStatus.innerHTML = '<span id="down">Router is down</span>';
           }
+
           hideSections();
           modElements();
         }
@@ -376,7 +367,6 @@ function refreshSidebar() {
       }
     }
   };
-
   xhr.addEventListener("loaded", () => {
     sectionToggler();
     countTunnels();
@@ -389,7 +379,6 @@ function refreshSidebar() {
   } else if (xhr.status !== null) {
     xhr.abort();
   }
-
 }
 
 export {refreshSidebar};
