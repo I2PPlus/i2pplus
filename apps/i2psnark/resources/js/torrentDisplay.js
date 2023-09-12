@@ -12,7 +12,7 @@ function initFilterBar() {
   let badges = document.querySelectorAll("#filtercount.badge");
   let snarkFilter = "snarkfilter";
   let stylesheet = document.getElementById("cssfilter");
-  const cssFilter = ".rowOdd,.rowEven,.peerinfo,.debuginfo{visibility: collapse;}";
+  const cssFilter = ".rowOdd,.rowEven,.peerinfo,.debuginfo{visibility:collapse;}";
   let linkToggled = false;
   checkIfActive();
   checkFilterBar();
@@ -112,27 +112,12 @@ function checkIfActive() {
   return isActive;
 }
 
-/**
 function selectFilter() {
   const filterbar = document.getElementById("torrentDisplay");
   const buttons = filterbar.querySelectorAll("input[type='radio']");
   const storage = window.localStorage.getItem("snarkfilter");
   const selectedBtn = buttons[storage && parseInt(storage.replace("btn", "")) || 0];
   selectedBtn.checked = true;
-  selectedBtn.click();
-}
-**/
-
-function selectFilter() {
-  const filterbar = document.getElementById("torrentDisplay");
-  const buttons = filterbar.querySelectorAll("input[type='radio']");
-  console.log("Number of radio buttons:", buttons.length);
-  const storage = window.localStorage.getItem("snarkfilter");
-  console.log("Storage value:", storage);
-  const selectedBtn = buttons[storage && parseInt(storage.replace("btn", "")) || 0];
-  console.log("Selected button index:", storage && parseInt(storage.replace("btn", "")) || 0);
-  selectedBtn.checked = true;
-  console.log("Is selected button checked?:", selectedBtn.checked);
   selectedBtn.click();
 }
 
@@ -140,13 +125,8 @@ function refreshFilters() {
   const storage = window.localStorage.getItem("snarkfilter");
   const filterbar = document.getElementById("torrentDisplay");
   const pagenav = document.getElementById("pagenavtop");
-  //const url = getURL();
-
-  //debouncedRefreshTorrents();
-
-//  refreshTorrents();
-
   checkPagenav();
+  selectFilter();
 }
 
 function checkFilterBar() {
@@ -157,20 +137,13 @@ function checkFilterBar() {
   const query = window.location.search;
   const sortIcon = document.querySelectorAll(".sortIcon");
   if (filterbar) {
-    refreshFilters();
     document.querySelectorAll(".sortIcon").forEach(sort => {
       sort.addEventListener("click", refreshFilters);
     });
-  } else if (noload || down) {
-    refreshAll();
   }
 }
 
 function refreshAll() {
-  //debouncedRefreshTorrents();
-
-//  refreshTorrents();
-
   initLinkToggler();
   checkFilterBar();
 }
@@ -196,8 +169,8 @@ function checkPagenav() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  initLinkToggler();
   initFilterBar();
+  checkFilterBar();
 }, true);
 
 export {initFilterBar, checkFilterBar, refreshFilters, selectFilter, checkPagenav};

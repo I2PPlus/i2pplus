@@ -69,8 +69,10 @@ function initToggleLog() {
     localStorage.setItem("screenlog", "collapsed");
   }
 
-  sh.addEventListener("click", handleShrinkClick, false);
-  ex.addEventListener("click", handleExpandClick, false);
+  if (sh != null && ex !== null) {
+    sh.addEventListener("click", handleShrinkClick, false);
+    ex.addEventListener("click", handleExpandClick, false);
+  }
 
   if (mainsection) {
     if (localStorage.getItem("screenlog")) {

@@ -15,19 +15,19 @@ const showMagnets = "#torrents #linkswitch::before{background:url(/i2psnark/.res
                     "@media(min-width:1500px){#torrents td.magnet img{margin:0;width:20px!important;height:20px!important}}";
 
 function initLinkToggler() {
-  var config = localStorage.getItem("linkToggle");
+  var config = localStorage.getItem("linkToggle").toString();
   var mlinks = document.querySelectorAll("#snarkTbody .magnet");
   var tlinks = document.querySelectorAll("#snarkTbody .trackerLink");
   var toggle = document.getElementById("linkswitch");
 
   if (toggle) {
     toggle.removeAttribute("hidden");
-    if (config === null || config === "magnets") {
-      localStorage.setItem("linkToggle", "magnets");
+    if (config === "links" || config === "") {
+      localStorage.setItem("linkToggle", "links");
       toggle.checked = true;
       toggle.setAttribute("checked", "checked");
     } else {
-      localStorage.setItem("linkToggle", "links");
+      localStorage.setItem("linkToggle", "magnets");
       toggle.checked = false;
       toggle.setAttribute("checked", "");
     }
@@ -36,31 +36,27 @@ function initLinkToggler() {
 }
 
 function linkToggle() {
-  var config = window.localStorage.getItem("linkToggle");
+  var config = window.localStorage.getItem("linkToggle").toString();
   var mlinks = document.querySelectorAll("#snarkTbody .magnet");
   var tlinks = document.querySelectorAll("#snarkTbody .trackerLink");
   var toggle = document.getElementById("linkswitch");
   var toggleCss = document.getElementById("toggleLinks");
 
   if (toggle !== null) {
-    if (config === "links" || config === null) {
-      localStorage.setItem("linkToggle", "magnets");
-      toggle.checked = false;
-
+    if (config === "links" || config === "") {
       const expectedHtml = showMagnets;
       if (toggleCss.innerHTML !== expectedHtml) {
         toggleCss.innerHTML = expectedHtml;
       }
-
+      localStorage.setItem("linkToggle", "magnets");
+      toggle.checked = false;
     } else {
-      localStorage.setItem("linkToggle", "links");
-      toggle.checked = true;
-
       const expectedHtml = showLinks;
       if (toggleCss.innerHTML !== expectedHtml) {
         toggleCss.innerHTML = expectedHtml;
       }
-
+      localStorage.setItem("linkToggle", "links");
+      toggle.checked = true;
     }
   }
 }
