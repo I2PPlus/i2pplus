@@ -64,7 +64,7 @@ public class ConfigNavHelper extends HelperBase {
         if (!span)
             buf.append("<center>");
         else {
-            buf.append("<link rel=stylesheet type=text/css href=/themes/console/confignav.css>\n");
+            buf.append("<link rel=stylesheet href=/themes/console/confignav.css>\n");
         }
         List<Tab> tabs = new ArrayList<Tab>(pages.length);
         boolean hidePlugins = !PluginStarter.pluginsEnabled(_context);
