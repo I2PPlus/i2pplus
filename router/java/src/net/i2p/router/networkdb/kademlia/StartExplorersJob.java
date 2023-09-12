@@ -90,7 +90,7 @@ class StartExplorersJob extends JobImpl {
                   getContext().commSystem().getStatus() == Status.DISCONNECTED)) {
                 int num = MAX_PER_RUN;
 //                int count = _facade.getDataStore().size();
-//                count = getContext().netDb().getKnownRouters();
+//                count = getContext().netDbSegmentor().getKnownRouters();
                 count = getContext().mainNetDb().getKnownRouters();
                 String exploreBuckets = getContext().getProperty(PROP_EXPLORE_BUCKETS);
                 if (exploreBuckets == null) {
@@ -194,7 +194,7 @@ class StartExplorersJob extends JobImpl {
         Boolean isK = ri != null && ri.getCapabilities().contains("" + Router.CAPABILITY_BW12);
 
 //        int netDbSize = _facade.getDataStore().size();
-//        int netDbSize = getContext().netDb().getKnownRouters();
+//        int netDbSize = getContext().netDbSegmentor().getKnownRouters();
         int netDbSize = getContext().mainNetDb().getKnownRouters();
         long uptime = getContext().router().getUptime();
         long delay = getContext().clock().now() - _facade.getLastExploreNewDate();

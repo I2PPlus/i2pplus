@@ -74,7 +74,7 @@ class RefreshRoutersJob extends JobImpl {
     public void runJob() {
         Random rand = new Random();
         long lag = getContext().jobQueue().getMaxLag();
-//        int netDbCount = getContext().netDb().getKnownRouters();
+//        int netDbCount = getContext().netDbSegmentor().getKnownRouters();
         int netDbCount = getContext().mainNetDb().getKnownRouters();
         long uptime = getContext().router().getUptime();
         boolean isCpuHighLoad = SystemVersion.getCPULoad() > 80;
@@ -139,7 +139,7 @@ class RefreshRoutersJob extends JobImpl {
                                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                          VersionComparator.comp(v, MIN_VERSION) < 0) &&
-//                                         getContext().netDb().getKnownRouters() > 3000 &&
+//                                         getContext().netDbSegmentor().getKnownRouters() > 3000 &&
                                          getContext().mainNetDb().getKnownRouters() > 3000 &&
                                          uptime > 15*60*1000 && !isHidden && !isUs;
                 boolean refreshUninteresting = getContext().getBooleanProperty(PROP_ROUTER_REFRESH_UNINTERESTING);

@@ -808,7 +808,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) &&
                                      isOld && (uptime > 15*60*1000 ||
-//                                     _context.netDb().getKnownRouters() > 1500) && !isUs;
+//                                     _context.netDbSegmentor().getKnownRouters() > 1500) && !isUs;
                                      _context.mainNetDb().getKnownRouters() > 1500) && !isUs;
             boolean isLTier =  ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;

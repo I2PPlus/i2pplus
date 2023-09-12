@@ -373,7 +373,7 @@ public class TunnelPool {
             return rv;
         }
         // TODO high-bw non-ff also
-        if (((_context.netDb().floodfillEnabled() && _context.router().getUptime() > 5*60*1000) ||
+        if (((_context.netDbSegmentor().floodfillEnabled() && _context.router().getUptime() > 5*60*1000) ||
             SystemVersion.getMaxMemory() >= 1024*1024*1024) && rv < 4) {
             rv += 2;
        // Since we're running RefreshRouters on a repeat cycle (I2P+) let's keep a couple of extras available

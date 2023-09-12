@@ -749,7 +749,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
         boolean uninteresting = info != null && !isHidden && (VersionComparator.comp(v, MIN_VERSION) < 0 && !fast) &&
-//                                _context.netDb().getKnownRouters() > 2000 && !isUs;
+//                                _context.netDbSegmentor().getKnownRouters() > 2000 && !isUs;
                                 _context.mainNetDb().getKnownRouters() > 2000 && !isUs;
         boolean isFF = false;
         boolean noSSU = true;

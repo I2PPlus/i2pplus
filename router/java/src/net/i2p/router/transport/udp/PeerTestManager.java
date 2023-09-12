@@ -2570,7 +2570,7 @@ class PeerTestManager {
                 Hash h = ri.getHash();
                 if (h.equals(_context.routerHash()))
                     return;
-                _context.netDb().store(h, ri);
+                _context.netDbSegmentor().store(h, ri);
                 // ignore flood request
             } catch (IllegalArgumentException iae) {
                 if (_log.shouldInfo())

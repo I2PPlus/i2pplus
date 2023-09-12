@@ -274,7 +274,7 @@ public class Banlist {
 
         if (transport == null) {
             // we hate the peer on *any* transport
-            _context.netDb().fail(peer);
+            _context.netDbSegmentor().fail(peer);
             _context.tunnelManager().fail(peer);
         }
         //_context.tunnelManager().peerFailed(peer);

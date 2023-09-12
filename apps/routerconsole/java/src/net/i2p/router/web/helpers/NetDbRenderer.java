@@ -80,7 +80,7 @@ class NetDbRenderer {
     public static final int LOOKUP_WAIT = 8 * 1000;
 
     public boolean isFloodfill() {
-        return _context.netDb().floodfillEnabled();
+        return _context.netDbSegmentor().floodfillEnabled();
     }
 
     /**
@@ -239,7 +239,7 @@ class NetDbRenderer {
             boolean notFound = true;
             Set<RouterInfo> routers = new HashSet<RouterInfo>();
             if (allClients){
-                    routers.addAll(_context.netDb().getRoutersKnownToClients());
+                    routers.addAll(_context.netDbSegmentor().getRoutersKnownToClients());
             } else {
                 if (client == null)
                     routers.addAll(_context.mainNetDb().getRouters());
@@ -624,7 +624,7 @@ class NetDbRenderer {
             fmt = null;
         }
         if (clientsOnly)
-            leases.addAll(_context.netDb().getLeasesKnownToClients());
+            leases.addAll(_context.netDbSegmentor().getLeasesKnownToClients());
         else
             leases.addAll(netdb.getLeases());
         int medianCount = 0;
@@ -736,7 +736,7 @@ class NetDbRenderer {
             buf.append(hostname);
             buf.append("</div>");
         } else {
-            LeaseSet ls = _context.netDb().lookupLeaseSetLocally(hash);
+            LeaseSet ls = _context.netDbSegmentor().lookupLeaseSetLocally(hash);
             if (ls == null) {
                 // remote lookup
                 LookupWaiter lw = new LookupWaiter();
@@ -985,7 +985,7 @@ class NetDbRenderer {
         if (client != null) {
             routers.addAll(_context.clientNetDb(client).getRouters());
         } else if (clientsOnly) {
-            routers.addAll(_context.netDb().getRoutersKnownToClients());
+            routers.addAll(_context.netDbSegmentor().getRoutersKnownToClients());
         } else {
             routers.addAll(_context.mainNetDb().getRouters());
         }

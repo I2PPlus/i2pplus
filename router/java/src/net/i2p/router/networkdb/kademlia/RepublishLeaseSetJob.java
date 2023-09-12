@@ -46,7 +46,7 @@ class RepublishLeaseSetJob extends JobImpl {
 
         try {
             if (getContext().clientManager().isLocal(_dest)) {
-                LeaseSet ls = getContext().netDb().lookupLeaseSetLocally(_dest, _dest.toBase32());
+                LeaseSet ls = getContext().netDbSegmentor().lookupLeaseSetLocally(_dest, _dest.toBase32());
                 if (ls != null) {
                     if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR*2)) {
                         if (_log.shouldWarn())
@@ -106,9 +106,9 @@ class RepublishLeaseSetJob extends JobImpl {
             // Don't requeue if there's a newer LS, KNDF will have already done that
             LeaseSet ls = null;
             if (_dest != null)
-                ls = getContext().netDb().lookupLeaseSetLocally(_ls.getHash(), _dest.toBase32());
+                ls = getContext().netDbSegmentor().lookupLeaseSetLocally(_ls.getHash(), _dest.toBase32());
             else
-                getContext().netDb().lookupLeaseSetLocally(_ls.getHash(), null);
+                getContext().netDbSegmentor().lookupLeaseSetLocally(_ls.getHash(), null);
                 // ^ _dest should never be null here, right? So maybe instead we return immediately?
             if (ls != null && ls.getEarliestLeaseDate() == _ls.getEarliestLeaseDate()) {
                 requeueRepublish();

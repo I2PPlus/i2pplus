@@ -1662,7 +1662,7 @@ public class ProfileOrganizer {
         ClientManagerFacade cm = _context.clientManager();
         if (cm == null)
             return DEFAULT_MAXIMUM_FAST_PEERS;
-        //int known = _context.netDb().getKnownRouters();
+        //int known = _context.netDbSegmentor().getKnownRouters();
         int known = _context.mainNetDb().getKnownRouters();
         int def = Math.max(DEFAULT_MAXIMUM_FAST_PEERS, (10 * cm.listClients().size()) + DEFAULT_MINIMUM_FAST_PEERS - 2);
         if (known > 3000)
@@ -1674,7 +1674,7 @@ public class ProfileOrganizer {
 
     /** fixme add config  @since 0.7.10 */
     protected int getMaximumFastPeers() {
-//        int known = _context.netDb().getKnownRouters();
+//        int known = _context.netDbSegmentor().getKnownRouters();
         int known = _context.mainNetDb().getKnownRouters();
         if (known > 3000)
             return known / 20;
@@ -1684,7 +1684,7 @@ public class ProfileOrganizer {
 
     /** fixme add config  @since 0.7.11 */
     protected int getMaximumHighCapPeers() {
-//        int known = _context.netDb().getKnownRouters();
+//        int known = _context.netDbSegmentor().getKnownRouters();
         int known = _context.mainNetDb().getKnownRouters();
         if (known > 3000)
             return (Math.min(known / 10, ABSOLUTE_MAX_HIGHCAP_PEERS));
@@ -1702,7 +1702,7 @@ public class ProfileOrganizer {
      * @return minimum number of peers to be placed in the 'high capacity' group
      */
     protected int getMinimumHighCapacityPeers() {
-//        int known = _context.netDb().getKnownRouters();
+//        int known = _context.netDbSegmentor().getKnownRouters();
         int known = _context.mainNetDb().getKnownRouters();
         if (known > 3000)
             return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, Math.max(known / 15, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS));

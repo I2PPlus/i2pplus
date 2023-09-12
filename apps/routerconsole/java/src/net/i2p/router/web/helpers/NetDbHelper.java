@@ -42,7 +42,7 @@ public class NetDbHelper extends FormHandler {
     private static final int DEFAULT_PAGE = 0;
 
     public boolean isFloodfill() {
-        return _context.netDb().floodfillEnabled();
+        return _context.netDbSegmentor().floodfillEnabled();
     }
 
     private static final String titles[] =
@@ -362,7 +362,7 @@ public class NetDbHelper extends FormHandler {
             } else if (_full == 6) {
                 renderer.renderStatusHTML(_out, _limit, _page, _full, null, true);
             } else if (_clientOnly && client == null) {
-                for (String _client : _context.netDb().getClients()) {
+                for (String _client : _context.netDbSegmentor().getClients()) {
                     renderer.renderLeaseSetHTML(_out, _debug, _client, clientOnly);
                 }
             } else {
