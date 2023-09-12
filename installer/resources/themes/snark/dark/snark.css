@@ -2,6 +2,7 @@
 /* Author: dr|z3d */
 
 @import url(/themes/console/dark/global.css);
+@import url(/i2psnark/.resources/linkToggle.css);
 
 :root{
 --bevel_notify:var(--bevel),inset 0 0 3px 3px #131,inset 0 0 1px 5px rgba(16,48,16,.1);

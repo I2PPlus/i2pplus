@@ -1,0 +1,12 @@
+#torrents #linkswitch.optbox{display:inline-block!important;background:none!important;box-shadow:none!important;border:0!important}
+#linkswitch::before,#linkswitch:not(:checked)::before{width:20px;height:20px;display:inline-block;position:relative;top:calc(50% - 10px);left:calc(50% - 10px);transform:none!important;border:0!important;box-shadow:none!important;content:""!important;background:url(/i2psnark/.resources/icons/link.svg) no-repeat center center/20px!important}}
+#linkswitch:checked::before{background:url(/i2psnark/.resources/icons/magnet.svg) no-repeat center center/20px!important}}
+.magnetlink,.torrentink a,.torrentink img,.trackerLink a,.trackerLink img,#linkswitch{text-align:center;border:0;box-shadow:none;background:none}
+.trackerLink,.magnet{padding:2px;text-align:center}
+#torrents .magnetlink,#torrents .magnetlink a,#torrents .magnetlink img,#torrents .trackerlink{margin:0;padding:0;white-space:normal;border:0;box-shadow:none;background:none}
+#snarkTbody .magnet,#snarkTbody .magnet:empty{padding:0;width:0;font-size:0}
+#snarkTbody .magnet>*{display:none}
+#snarkTbody .trackerLink{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}
+#snarkTbody .trackerLink>*{display:inline-block}
+#torrents td.trackerLink img{margin:0;width:18px!important;height:18px!important}
+@media(min-width:1500px){#torrents td.trackerLink img{margin:0;width:20px!important;height:20px!important}#torrents td.magnet img{margin:0;width:20px!important;height:20px!important}}

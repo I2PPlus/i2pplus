@@ -4,6 +4,7 @@
 /* Thanks to http://www.luxphile.com/2011/01/creative-commons-cat.html for the kitty image */
 
 @import url(/themes/console/light/global.css);
+@import url(/i2psnark/.resources/linkToggle.css);
 
 :root{
 --bevel_notify:inset 0 0 0 3px #fff,inset 0 0 0 5px #99f;

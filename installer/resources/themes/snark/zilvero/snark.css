@@ -3,6 +3,7 @@
 /* Copyright 2018 and beyond */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(/i2psnark/.resources/linkToggle.css);
 
 :root{
 --a:#d23;

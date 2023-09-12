@@ -2,12 +2,26 @@
 /* Enable toggling height of I2PSnark's screenlog */
 /* License: AGPL3 or later */
 
-var mainsection = document.getElementById("mainsection");
-var screenlog = document.getElementById("screenlog");
-var ex = document.getElementById("expand");
-var sh = document.getElementById("shrink");
+function initToggleLog() {
 
-function initToggle() {
+  const baseUrl = "/i2psnark/.resources/";
+  const mainsection = document.getElementById("mainsection");
+  const screenlog = document.getElementById("screenlog");
+  const toggleLogCss = document.getElementById("toggleLogCss");
+  const sh = document.getElementById("shrink");
+  const ex = document.getElementById("expand");
+
+  const expandCss = "#screenlog.xpanded{height:auto!important;max-height:300px!important;min-height:56px}" +
+                    "#screenlog:hover,#screenlog:focus{overflow-y:auto}" +
+                    "#expand{display:none}" +
+                    "#shrink{display:inline-block}" +
+                    "@media (min-width:1500px){#screenlog.xpanded{min-height:60px!important}}";
+
+  const collapseCss = "#screenlog.collapsed{height:56px!important;min-height:56px}" +
+                      "#shrink{display:none}" +
+                      "#expand{display:inline-block}" +
+                      "@media (min-width:1500px){#screenlog.collapsed{height:60px!important;min-height:60px}}";
+
   function clean() {
     var expandLog = document.getElementById("expandLog");
     var shrinkLog = document.getElementById("shrinkLog");
@@ -15,46 +29,56 @@ function initToggle() {
     if (screenlog.classList.contains("collapsed")) {screenlog.classList.remove("collapsed");}
     if (expandLog) {expandLog.remove();}
     if (shrinkLog) {shrinkLog.remove();}
-    localStorage.removeItem("screenlog");
   }
+
+  function expand() {
+    clean();
+    if (toggleLogCss) {
+      toggleLogCss.innerHTML = expandCss;
+    }
+    screenlog.classList.add("xpanded");
+    localStorage.setItem("screenlog", "expanded");
+  }
+
+  function shrink() {
+    clean();
+    if (toggleLogCss) {
+      toggleLogCss.innerHTML = collapseCss;
+    }
+    screenlog.classList.add("collapsed");
+    localStorage.setItem("screenlog", "collapsed");
+  }
+
+  function handleShrinkClick() {
+    if (localStorage.getItem("screenlog") === "expanded") {
+      shrink();
+      ex.removeEventListener("click", handleExpandClick);
+      ex.addEventListener("click", handleExpandClick, false);
+    }
+  }
+
+  function handleExpandClick() {
+    if (localStorage.getItem("screenlog") !== "expanded") {
+      expand();
+      sh.removeEventListener("click", handleShrinkClick);
+      sh.addEventListener("click", handleShrinkClick, false);
+    }
+  }
+
+  if (!localStorage.getItem("screenlog")) {
+    localStorage.setItem("screenlog", "collapsed");
+  }
+
+  sh.addEventListener("click", handleShrinkClick, false);
+  ex.addEventListener("click", handleExpandClick, false);
+
   if (mainsection) {
-    function expand() {
-      clean();
-      var x = document.createElement("link");
-      x.type="text/css";
-      x.rel="stylesheet";
-      x.href=".resources/expand.css";
-      x.setAttribute("id", "expandLog");
-      document.head.appendChild(x);
-      screenlog.classList.add("xpanded");
-      localStorage.setItem("screenlog", "expanded")
-    }
-    function shrink() {
-      clean();
-      var s = document.createElement("link");
-      s.type="text/css";
-      s.rel="stylesheet";
-      s.href=".resources/shrink.css";
-      s.setAttribute("id", "shrinkLog");
-      document.head.appendChild(s);
-      screenlog.classList.add("collapsed");
-    }
-    function checkStatus() {
-      var logStatus = localStorage.getItem("screenlog");
-      switch (logStatus) {
-        case "expanded":
-          expand();
-          break;
-        default:
-          shrink();
-      }
+    if (localStorage.getItem("screenlog")) {
+      [shrink, expand][localStorage.getItem("screenlog") === "expanded" ? 1 : 0]();
+    } else {
+      shrink();
     }
   }
-  checkStatus();
-  sh.addEventListener("click", shrink, false);
-  ex.addEventListener("click", expand, false);
 }
-document.addEventListener("DOMContentLoaded", () => {
-  sh.addEventListener("click", initToggle, false);
-  ex.addEventListener("click", initToggle, false);
-});
+
+export {initToggleLog};

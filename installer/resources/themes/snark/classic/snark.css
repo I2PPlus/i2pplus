@@ -2,6 +2,7 @@
 /* Author: dr|z3d */
 
 @import url(/themes/console/classic/global.css);
+@import url(/i2psnark/.resources/linkToggle.css);
 
 :root{
 --bevel_notify:0 0 0 1px #bfc3d9,var(--highlight);
