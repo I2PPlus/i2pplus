@@ -64,7 +64,7 @@
 <link rel=preload href="<%=themePath%>images/i2plogo.png" as=image>
 <link rel=preload href="/themes/console/images/images.css" as=style>
 <link rel=preload href="<%=themePath%>images/images.css" as=style>
-<script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
+<script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <%
     if (hasOverride) {
 %>
@@ -72,9 +72,9 @@
 <%
     }
 %>
-<noscript><style type=text/css>.script{display:none!important}</style></noscript>
-<link rel="icon" href="<%=themePath%>images/favicon.svg">
-<script nonce="<%=cspNonce%>" type=text/javascript>if (top.location != location) {top.location.href = location.href;}</script>
+<noscript><style>.script{display:none!important}</style></noscript>
+<link rel=icon href="<%=themePath%>images/favicon.svg">
+<script nonce="<%=cspNonce%>">if (top.location != location) {top.location.href = location.href;}</script>
 <%
     response.setHeader("Accept-Ranges", "bytes");
     // clickjacking
@@ -105,45 +105,45 @@
         intl.setNews(request.getParameter("news"));
     }
 %>
-<link href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css title="<%=theme%>">
+<link href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet title="<%=theme%>">
 <%
     if (useSoraFont) {
 %>
-<link href="/themes/fonts/Sora.css" rel=stylesheet type=text/css>
+<link href="/themes/fonts/Sora.css" rel=stylesheet>
 <%
     } else {
 %>
-<link href="/themes/fonts/DroidSans.css" rel=stylesheet type=text/css>
+<link href="/themes/fonts/DroidSans.css" rel=stylesheet>
 <%
     }
 %>
-<link href="/themes/console/images/images.css" rel=stylesheet type=text/css>
-<link href="<%=themePath%>images/images.css" rel=stylesheet type=text/css>
+<link href="/themes/console/images/images.css" rel=stylesheet>
+<link href="<%=themePath%>images/images.css" rel=stylesheet>
 <%
     if (intl.getLang().equals("zh")) {
        // make the fonts bigger for chinese
 %>
-<link href="<%=themePath%>console_big.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=themePath%>console_big.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <%
     } else if (intl.getLang().equals("ar")) {
       // Use RTL theme for Arabic
 %>
-<link href="<%=themePath%>console_ar.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=themePath%>console_ar.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <%
     }
     if (!intl.allowIFrame(UA)) {
 %>
-<link href="<%=themePath%>mobile.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=themePath%>mobile.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <%
     }
     if (hasOverride) {
 %>
-<link href="<%=themePath%>override.css" rel=stylesheet type=text/css>
+<link href="<%=themePath%>override.css" rel=stylesheet>
 <%
     }
     if (uri.endsWith("wizard") || uri.endsWith("wizard.jsp")) {
 %>
-<link href="<%=themePath%>wizard.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=themePath%>wizard.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <%
     }
 %>    
