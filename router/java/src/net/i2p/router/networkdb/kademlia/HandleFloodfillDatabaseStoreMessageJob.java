@@ -222,12 +222,13 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                // and safely handled.
                // This is more worrisome in the floodfill netDb context.
                // It is not expected to happen since we check if it was sent directly.
-                if (_facade.isClientDb())
+                if (_facade.isClientDb()) {
                     if (_log.shouldInfo())
                         _log.info("LeaseSet Store IAE (safely handled): " + iae.getMessage());
-                else
+                } else {
                     if (_log.shouldWarn())
                         _log.warn("LeaseSet Store IAE (unexpected): " + iae.getMessage());
+                }
                 invalidMessage = iae.getMessage();
             }
         } else if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO) {

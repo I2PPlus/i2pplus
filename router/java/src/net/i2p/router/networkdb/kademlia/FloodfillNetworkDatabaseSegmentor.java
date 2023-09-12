@@ -345,21 +345,8 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      */
     @Override
     public DatabaseEntry lookupLocallyWithoutValidation(Hash key, String dbid) {
-        if (dbid == null || dbid.isEmpty()) {
-            DatabaseEntry rv = null;
-            for (FloodfillNetworkDatabaseFacade subdb : _subDBs.values()) {
-                //if (_log.shouldLog(Log.DEBUG))
-                //    _log.debug("[DbId: " + subdb._dbid + "] Deprecated! Arbitrary selection of this subDb", new Exception());
-                rv = subdb.lookupLocallyWithoutValidation(key);
-                if (rv != null) {
-                    return rv;
-                }
-            }
-            rv = this.lookupLocallyWithoutValidation(key, MAIN_DBID);
-            if (rv != null) {
-                return rv;
-            }
-        }
+        if (dbid == null || dbid.isEmpty())
+            return this.lookupLocallyWithoutValidation(key, MAIN_DBID);
         return this.getSubNetDB(dbid).lookupLocallyWithoutValidation(key);
     }
 
