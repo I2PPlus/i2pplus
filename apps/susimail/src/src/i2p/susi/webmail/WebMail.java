@@ -2333,33 +2333,33 @@ public class WebMail extends HttpServlet
                     "<title>" + _t("I2PMail") + " - " + subtitle + "</title>\n" +
                     "<link rel=preload as=style href=\"" + sessionObject.themePath + "../images/images.css?" + CoreVersion.VERSION + "\">\n" +
                     "<link rel=preload as=style href=\"" + sessionObject.themePath + "images/images.css?" + CoreVersion.VERSION + "\">\n" +
-                    "<link rel=stylesheet type=text/css href=\"" + sessionObject.themePath + "susimail.css?" + CoreVersion.VERSION + "\">\n" +
-                    "<link rel=stylesheet type=text/css href=\"" + sessionObject.themePath + "override.css?" + CoreVersion.VERSION + "\">\n" + 
+                    "<link rel=stylesheet href=\"" + sessionObject.themePath + "susimail.css?" + CoreVersion.VERSION + "\">\n" +
+                    "<link rel=stylesheet href=\"" + sessionObject.themePath + "override.css?" + CoreVersion.VERSION + "\">\n" + 
                     "<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"" + sessionObject.themePath + "images/favicon.svg\">\n");
                 if (sessionObject.isMobile) {
                     out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes\" />\n" +
-                        "<link rel=stylesheet type=text/css href=\"" + sessionObject.themePath + "mobile.css?" + CoreVersion.VERSION + "\" />");
+                        "<link rel=stylesheet href=\"" + sessionObject.themePath + "mobile.css?" + CoreVersion.VERSION + "\" />");
                 }
                 if (enableSoraFont) {
-                    out.println("<link rel=stylesheet type=text/css href=\"" + sessionObject.themePath + "../../fonts/Sora.css?" + CoreVersion.VERSION + "\">");
+                    out.println("<link rel=stylesheet href=\"" + sessionObject.themePath + "../../fonts/Sora.css?" + CoreVersion.VERSION + "\">");
                 }
                 if(state == State.LIST)
-                    out.println("<link rel=stylesheet href=\"/susimail/css/print.css?" + CoreVersion.VERSION + "\" type=text/css media=\"print\" />");
+                    out.println("<link rel=stylesheet href=\"/susimail/css/print.css?" + CoreVersion.VERSION + "\" media=\"print\" />");
                 if (state == State.NEW || state == State.CONFIG) {
                     // TODO cancel if to and body are empty
-                    out.println("<script charset=utf-8 src=\"/susimail/js/compose.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>");
+                    out.println("<script charset=utf-8 src=\"/susimail/js/compose.js?" + CoreVersion.VERSION + "\"></script>");
                 } else if (state == State.LIST) {
-                    out.println("<script charset=utf-8 src=\"/susimail/js/folder.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>");
-                    out.println("<script charset=utf-8 src=\"/js/scrollTo.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>");
+                    out.println("<script charset=utf-8 src=\"/susimail/js/folder.js?" + CoreVersion.VERSION + "\"></script>");
+                    out.println("<script charset=utf-8 src=\"/js/scrollTo.js?" + CoreVersion.VERSION + "\"></script>");
                 } else if (state == State.LOADING) {
                     // TODO JS?
                     out.println("<noscript><meta http-equiv=\"refresh\" content=\"5;url=" + myself + "\"></noscript>");
                 }
                 // setup noscript style so we can hide js buttons when js is disabled
-                out.println("<noscript><style type=text/css>.script{display: none !important}</style></noscript>");
-                out.println("<script charset=utf-8 type=text/javascript src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>");
-//                out.println("<script charset=utf-8 src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>");
-                out.println("<style type=text/css>body{display:none;pointer-events:none}</style>");
+                out.println("<noscript><style>.script{display: none !important}</style></noscript>");
+                out.println("<script charset=utf-8 src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>");
+//                out.println("<script charset=utf-8 src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\"></script>");
+                out.println("<style>body{display:none;pointer-events:none}</style>");
                 out.println("</head>");
                 if (state == State.LIST)
                     out.print("<body id=main>\n");
@@ -2461,8 +2461,8 @@ public class WebMail extends HttpServlet
 
                 else if (state == State.SHOW) {
                     showMessage(out, sessionObject, mc, showUIDL, buttonPressed(request, DELETE));
-                    out.println("<script charset=utf-8 src=\"/susimail/js/toggleHeaders.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>");
-                    //out.println("<script charset=utf-8 src=\"/themes/toggleHeaders.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>"); // debug
+                    out.println("<script charset=utf-8 src=\"/susimail/js/toggleHeaders.js?" + CoreVersion.VERSION + "\"></script>");
+                    //out.println("<script charset=utf-8 src=\"/themes/toggleHeaders.js?" + CoreVersion.VERSION + "\"></script>"); // debug
 
                 } else if (state == State.NEW)
                     showCompose(out, sessionObject, request);
@@ -2473,7 +2473,7 @@ public class WebMail extends HttpServlet
                 if (state == State.AUTH) {
                 out.println("\n<div class=\"footer\">\n" +
                     //"<p class=\"footer\">susimail &copy; 2004-2005 susi</p>" +
-                    "<script charset=utf-8 src=\"/js/togglePassword.js?" + CoreVersion.VERSION + "\" type=text/javascript></script>" +
+                    "<script charset=utf-8 src=\"/js/togglePassword.js?" + CoreVersion.VERSION + "\"></script>" +
                     "<p class=\"footer\">" +
                     _t("{0} is an I2P-exclusive service provided by {1}.", "<b>I2PMail</b>",
                         "<a href=\"http://hq.postman.i2p/\" target=_blank>Postman</a>") + ' ' +
@@ -2483,7 +2483,7 @@ public class WebMail extends HttpServlet
                 out.println("</form>\n</div>\n<span data-iframe-height></span>\n");
                 if (sessionObject.isFetching)
                     out.println("<script id=autorefresh type=module src=\"/susimail/js/refreshInbox.js?" + CoreVersion.VERSION + "\"></script>");
-                out.println("<style type=text/css>body{display:block;pointer-events:auto}</style>\n");
+                out.println("<style>body{display:block;pointer-events:auto}</style>\n");
                 out.println("</body>\n</html>");
                 out.flush();
         }  // synch sessionObject
