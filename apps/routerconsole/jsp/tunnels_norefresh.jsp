@@ -15,7 +15,7 @@
 <%=intl.title("tunnel summary")%>
 </head>
 <body id=routertunnels>
-<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=netwrk><%=intl._t("Tunnel Summary")%></h1>
 <div class=main id=tunnels>
@@ -29,6 +29,6 @@
 <% tunnelHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelHelper" property="tunnelSummary" />
 </div>
-<script nonce=<%=cspNonce%> type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

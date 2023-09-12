@@ -12,11 +12,11 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("config i2cp")%>
-<style type=text/css>button span.hide{display:none}input.default{width:1px;height:1px;visibility:hidden}</style>
+<style>button span.hide{display:none}input.default{width:1px;height:1px;visibility:hidden}</style>
 </head>
 <body>
 
-<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request" />
@@ -117,6 +117,6 @@
 </form>
 </div>
 </div>
-<script nonce=<%=cspNonce%> type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

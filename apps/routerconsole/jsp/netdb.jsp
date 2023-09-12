@@ -13,10 +13,10 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("network database")%>
-<link href=/themes/console/tablesort.css rel=stylesheet type=text/css>
+<link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body>
-<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.NetDbHelper" id="formhandler" scope="request" />
 <jsp:setProperty name="formhandler" property="full" value="<%=request.getParameter(\"f\")%>" />
@@ -102,10 +102,10 @@
 <%@include file="formhandler.jsi" %>
  <jsp:getProperty name="formhandler" property="floodfillNetDbSummary" />
 </div>
-<script nonce=<%=cspNonce%> src=/js/lazyload.js type=text/javascript></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js type=text/javascript></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js type=text/javascript></script>
-<script nonce=<%=cspNonce%> type=text/javascript>
+<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
+<script nonce=<%=cspNonce%>>
   var countries = document.getElementById("netdbcountrylist");
   var ccsorter = countries !== null ? new Tablesort(countries, {descending: true}) : null;
   function initRefresh() {

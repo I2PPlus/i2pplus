@@ -38,17 +38,17 @@
 <head>
 <meta charset=utf-8>
 <title><%=intl._t("subscription log")%> - susidns</title>
-<link rel=stylesheet type=text/css href="<%=log.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet href="<%=log.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <%
     if (base.useSoraFont()) {
 %>
-<link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet type=text/css>
+<link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet>
 <%
     }
 %>
-<link rel=stylesheet type=text/css href="<%=log.getTheme()%>override.css">
-<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<style type=text/css>body{display:none;pointer-events:none}</style>
+<link rel=stylesheet href="<%=log.getTheme()%>override.css">
+<script charset=utf-8 src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<style>body{display:none;pointer-events:none}</style>
 </head>
 <body id=subsLog>
 <div class=page>
@@ -72,7 +72,7 @@
 </div>
 </div>
 <span data-iframe-height></span>
-<script charset=utf-8 nonce="<%=cspNonce%>" src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
-<style type=text/css>body{display:block;pointer-events:auto}</style>
+<script charset=utf-8 nonce="<%=cspNonce%>" src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<style>body{display:block;pointer-events:auto}</style>
 </body>
 </html>

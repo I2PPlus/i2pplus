@@ -18,10 +18,10 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("Debug")%>
-<link href=/themes/console/tablesort.css rel=stylesheet type=text/css>
+<link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body>
-<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class="conf adv debug">Debug</h1>
 <div class=main id=debug>
@@ -130,6 +130,6 @@ if (dd == null || dd.equals("0")) {
 
 %>
 </div>
-<script nonce=<%=cspNonce%> type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html>

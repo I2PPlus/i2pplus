@@ -50,7 +50,7 @@
 <%=intl.title(name)%>
 </head>
 <body>
-<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <%
         if (url == null) {
@@ -81,9 +81,9 @@
                 appname = "imagegen";
 %>
 <div class=main id="<%=appname%>">
-<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset=utf-8 type=text/javascript src="/js/iframedClassInjectTheme.js"></script>
-<script nonce=<%=cspNonce%> type=text/javascript>
+<script charset=utf-8 src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset=utf-8 src="/js/iframedClassInjectTheme.js"></script>
+<script nonce=<%=cspNonce%>>
 function setupFrame() {
       f = document.getElementById("<%=appname%>_frame");
       t = "<%=tester.getTheme(request.getHeader("User-Agent")).replaceAll("/", "").replaceAll("console","").replaceAll("themes","")%>";
@@ -92,9 +92,9 @@ function setupFrame() {
 }
 </script>
 <style>iframe {width: 1px; min-width: 100%;}</style>
-<noscript><style type=text/css>iframe {width: 100%; height: 100%;}</style></noscript>
+<noscript><style>iframe {width: 100%; height: 100%;}</style></noscript>
 <iframe src="<%=url%>" title="<%=appname%>" width=100% frameborder=0 border=0 scrolling=no name="<%=appname%>_frame" id="<%=appname%>_frame" onload="setupFrame();" allowtransparency=true></iframe>
-<script nonce=<%=cspNonce%> type=text/javascript>
+<script nonce=<%=cspNonce%>>
 var isOldIE = (navigator.userAgent.indexOf("MSIE") !== -1); // Detect IE10 and below
 document.addEventListener('DOMContentLoaded', function(event) {
 var iframes = iFrameResize({interval: 0, heightCalculationMethod: isOldIE ? 'max' : 'taggedElement'}, '#<%=appname%>_frame')
@@ -113,9 +113,9 @@ var iframes = iFrameResize({interval: 0, heightCalculationMethod: isOldIE ? 'max
             else appname = "iframedapp";
 %>
 <div class="main embedded" id="<%=appname%>">
-<script charset=utf-8 type=text/javascript src="/js/iframedClassInjectTheme.js"></script>
-<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script nonce=<%=cspNonce%> type=text/javascript>
+<script charset=utf-8 src="/js/iframedClassInjectTheme.js"></script>
+<script charset=utf-8 src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script nonce=<%=cspNonce%>>
   function setupFrame() {
       f = document.getElementById("<%=appname%>_frame");
       u = "<%=url%>";
@@ -146,7 +146,7 @@ var iframes = iFrameResize({interval: 0, heightCalculationMethod: isOldIE ? 'max
 <style>iframe {width: 1px; min-width: 100%;}</style>
 <noscript><style>iframe {width: 100%; height: 100%;}</style></noscript>
 <iframe src="<%=url%>" title="<%=appname%>" width=100% frameborder=0 border=0 scrolling=no name="<%=appname%>_frame" id="<%=appname%>_frame" onload="setupFrame();scrollToEnd();" allowtransparency=true></iframe>
-<script nonce=<%=cspNonce%> type=text/javascript>iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#<%=appname%>_frame');</script>
+<script nonce=<%=cspNonce%>>iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#<%=appname%>_frame');</script>
 <%
         }
 %>
@@ -155,7 +155,7 @@ var iframes = iFrameResize({interval: 0, heightCalculationMethod: isOldIE ? 'max
 %>
 </div>
 <span id=endOfPage></span>
-<script nonce=<%=cspNonce%> type=text/javascript>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
 </body>
 </html><%
   }

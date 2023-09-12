@@ -13,10 +13,10 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("Most Recent Transit Tunnels")%>
-<link href=/themes/console/tablesort.css rel=stylesheet type=text/css>
+<link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=transit>
-<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=netwrk><%=intl._t("Most Recent Transit Tunnels")%></h1>
 <div class=main id=tunnels>
@@ -33,10 +33,10 @@
     tunnelParticipatingHelper.storeWriter(out);
 %>
 <jsp:getProperty name="tunnelParticipatingHelper" property="tunnelsParticipating" />
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js type=text/javascript></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js type=text/javascript></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js type=text/javascript></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.dotsep.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.dotsep.js></script>
 <script nonce=<%=cspNonce%> type=module>
   import {onVisible} from "/js/onVisible.js";
   var main = document.getElementById("tunnels");
@@ -110,6 +110,6 @@
   document.addEventListener("DOMContentLoaded", initRefresh(), true);
 </script>
 </div>
-<script nonce=<%=cspNonce%> src=/js/lazyload.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
 </body>
 </html>

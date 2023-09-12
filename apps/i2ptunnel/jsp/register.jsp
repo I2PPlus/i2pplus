@@ -28,21 +28,21 @@
 <head>
 <title><%=intl._t("Tunnel Manager")%> - <%=intl._t("Registration Helper")%></title>
 <meta charset=utf-8>
-<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset=utf-8 src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <link rel=icon href="<%=editBean.getTheme()%>images/favicon.svg">
-<link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
-<link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
-<link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
-<link href="<%=editBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet type=text/css>
+<link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
+<link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
+<link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
+<link href="<%=editBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <%
     if (indexBean.useSoraFont()) {
 %>
-<link href="<%=indexBean.getTheme()%>../../fonts/Sora.css" rel=stylesheet type=text/css>
+<link href="<%=indexBean.getTheme()%>../../fonts/Sora.css" rel=stylesheet>
 <%
     }
 %>
-<link href="<%=editBean.getTheme()%>override.css" rel=stylesheet type=text/css>
-<style type=text/css>body{display:none;pointer-events:none}input.default{width:1px;height:1px;visibility:hidden}</style>
+<link href="<%=editBean.getTheme()%>override.css" rel=stylesheet>
+<style>body{display:none;pointer-events:none}input.default{width:1px;height:1px;visibility:hidden}</style>
 </head>
 <body id=tunnelRegistration>
 <%
@@ -328,7 +328,7 @@
   } else {
 %>
 <div id=notReady><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
-<script nonce="<%=cspNonce%>" type=text/javascript>
+<script nonce="<%=cspNonce%>">
   setInterval(function() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/i2ptunnel/?' + new Date().getTime(), true);
@@ -345,6 +345,6 @@
   }  // isInitialized()
 %>
 <span data-iframe-height></span>
-<style type=text/css>body{display:block;pointer-events:auto}</style>
+<style>body{display:block;pointer-events:auto}</style>
 </body>
 </html>

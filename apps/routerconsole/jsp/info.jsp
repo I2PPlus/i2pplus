@@ -15,7 +15,7 @@
 <%=intl.title("router information")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=nfo><%=intl._t("Router Summary")%></h1>
 <div class=main id=routerinformation>
@@ -54,7 +54,7 @@
 <h3 class=tabletitle><%=intl._t("Router Information")%></h3>
 <jsp:getProperty name="infohelper" property="console" />
 </div>
-<script nonce=<%=cspNonce%> type=text/javascript>
+<script nonce=<%=cspNonce%>>
   function refreshInfo() {
     var xhrInfo = new XMLHttpRequest();
     xhrInfo.open('GET', '/info?t=' + new Date().getTime(), true);

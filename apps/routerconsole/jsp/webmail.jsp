@@ -35,22 +35,22 @@
 <%=intl.title("webmail")%>
 </head>
 <body class=embed>
-<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=mail><%=intl._t("Webmail")%> <a href="/susimail/" target=_blank title="<%=intl._t("Open in new tab")%>"><span id=newtab><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
 <div class=main id=webmail>
 <style>iframe{display:none;pointer-events:none}</style>
 <noscript>
-<style type=text/css>iframe {display: none}</style>
+<style>iframe{display:none}</style>
 <p class=infohelp id=jsRequired style=margin:10px>Javascript is required to view <a href="/susimail/" target=_blank rel=noreferrer>the webmail client</a> in embedded mode.</p>
 </noscript>
 <iframe id=susimailframe class=embed src="/susimail/" title="I2P+ <%=intl._t("webmail")%>" width=100% frameborder=0 border=0 scrolling=no name="susimailframe" allowtransparency=true>
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/susimail/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
-<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset=utf-8 type=text/javascript src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script nonce=<%=cspNonce%> type=text/javascript>
+<script charset=utf-8 src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script charset=utf-8 src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script nonce=<%=cspNonce%>>
   function setupFrame() {
     f = document.getElementById("susimailframe");
     f.addEventListener("load", function() {
@@ -63,7 +63,7 @@
   });
 </script>
 </div>
-<style type=text/css>iframe{display:block;pointer-events:auto}#webmail::before{width:100%;animation:fade .3s linear .7s both}</style>
+<style>iframe{display:block;pointer-events:auto}#webmail::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
 </html><%
     }

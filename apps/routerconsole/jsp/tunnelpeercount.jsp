@@ -13,10 +13,10 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("tunnel peer count")%>
-<link href=/themes/console/tablesort.css rel=stylesheet type=text/css>
+<link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=routertunnels>
-<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=netwrk><%=intl._t("Tunnel Count by Peer")%></h1>
 <div class=main id=tunnels>
@@ -32,9 +32,9 @@
 <% tunnelPeerCountHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelPeerCountHelper" property="tunnelPeerCount" />
 </div>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js type=text/javascript></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js type=text/javascript></script>
-<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.js></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
+<script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js></script>
 <script nonce=<%=cspNonce%> type=module>
   import {onVisible} from "/js/onVisible.js";
   var main = document.getElementById("tunnels");
@@ -96,6 +96,6 @@
   window.addEventListener("DOMContentLoaded", progressx.hide(), true);
   document.addEventListener("DOMContentLoaded", initRefresh(), true);
 </script>
-<script nonce=<%=cspNonce%> src=/js/lazyload.js type=text/javascript></script>
+<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
 </body>
 </html>

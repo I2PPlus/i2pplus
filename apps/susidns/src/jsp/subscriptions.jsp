@@ -37,17 +37,17 @@
 <head>
 <meta charset=utf-8>
 <title><%=intl._t("subscriptions")%> - susidns</title>
-<link rel=stylesheet type=text/css href="<%=subs.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet href="<%=subs.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <%
     if (base.useSoraFont()) {
 %>
-<link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet type=text/css>
+<link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet>
 <%
     }
 %>
-<link rel=stylesheet type=text/css href="<%=subs.getTheme()%>override.css">
-<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<style type=text/css>body{display:none;pointer-events:none}</style>
+<link rel=stylesheet href="<%=subs.getTheme()%>override.css">
+<script charset=utf-8 src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<style>body{display:none;pointer-events:none}</style>
 </head>
 <body id=sbs>
 <div class=page>
@@ -65,7 +65,7 @@
 <h3><%=intl._t("Subscriptions")%>&nbsp;&nbsp;<span><a href="log.jsp">View Log</a></span></h3>
 <h4><%=intl._t("File location")%>: <span class=storage>${subs.fileName}</span></h4>
 </div>
-<script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type=text/javascript></script>
+<script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <div id=messages>${subs.messages}</div>
 <form method=POST action="subscriptions#navi">
 <div id=content>
@@ -87,6 +87,6 @@
 </div>
 </div>
 <span data-iframe-height></span>
-<style type=text/css>body{display:block;pointer-events:auto}</style>
+<style>body{display:block;pointer-events:auto}</style>
 </body>
 </html>

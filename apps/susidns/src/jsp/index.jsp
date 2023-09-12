@@ -36,17 +36,17 @@
 <link rel=preload href="images/how.svg" as="object">
 <meta charset=utf-8>
 <title><%=intl._t("Introduction")%> - SusiDNS</title>
-<link rel=stylesheet type=text/css href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel=stylesheet href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <%
     if (base.useSoraFont()) {
 %>
-<link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet type=text/css>
+<link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet>
 <%
     }
 %>
-<link rel=stylesheet type=text/css href="<%=base.getTheme()%>override.css">
-<script charset=utf-8 type=text/javascript src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<style type=text/css>body{display:none;pointer-events:none}</style>
+<link rel=stylesheet href="<%=base.getTheme()%>override.css">
+<script charset=utf-8 src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<style>body{display:none;pointer-events:none}</style>
 </head>
 <body id=ovrvw>
 <div class=page>
@@ -81,7 +81,7 @@
 </p>
 <div class=illustrate id=svg>
 <% /* load svg via ajax (with noscript fallback) so we can style per theme */ %>
-<script nonce="<%=cspNonce%>" type=text/javascript>
+<script nonce="<%=cspNonce%>">
 var now = Date.now();
 xhr = new XMLHttpRequest();
 xhr.open("GET","/susidns/images/how.svg?time=" + now, false);
@@ -91,9 +91,9 @@ document.getElementById("svg").appendChild(xhr.responseXML.documentElement);
 <noscript>
 <%  String theme = base.getTheme();
     if (theme.contains("midnight")) { %>
-<style type=text/css>.illustrate {border: 1px solid #010011 !important; background: #fff !important; filter: sepia(100%) invert(100%);}</style>
+<style>.illustrate {border: 1px solid #010011 !important; background: #fff !important; filter: sepia(100%) invert(100%);}</style>
 <%  } else if (theme.contains("dark")) { %>
-<style type=text/css>.illustrate {border: 1px solid #111 !important; box-shadow: none !important; background: #fff !important; background: rgba(255,255,255,0.3) !important; filter: invert(1) sepia(100%) hue-rotate(30deg);}</style>
+<style>.illustrate {border: 1px solid #111 !important; box-shadow: none !important; background: #fff !important; background: rgba(255,255,255,0.3) !important; filter: invert(1) sepia(100%) hue-rotate(30deg);}</style>
 <%  } %>
 <object type="image/svg+xml" data="images/how.svg?<%=net.i2p.CoreVersion.VERSION%>">
 <img src="/themes/susidns/images/how.png" border="0" alt="How the address book works" title="How the address book works" />
@@ -103,6 +103,6 @@ document.getElementById("svg").appendChild(xhr.responseXML.documentElement);
 </div>
 </div>
 <span data-iframe-height></span>
-<style type=text/css>body{display:block;pointer-events:auto}</style>
+<style>body{display:block;pointer-events:auto}</style>
 </body>
 </html>

@@ -22,7 +22,7 @@
 %>
 <!DOCTYPE html><html lang="<%=lang%>">
 <head>
-<style type=text/css>
+<style>
 html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#041804}
 #sitesearch{position:relative}
 #sitesearch table{width:100%;height:100%;position:absolute;top:0;left:0;right:0;bottom:0}

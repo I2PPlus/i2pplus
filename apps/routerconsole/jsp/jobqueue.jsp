@@ -15,7 +15,7 @@
 <%=intl.title("job queue stats")%>
 </head>
 <body id=routerjobqueue>
-<script nonce=<%=cspNonce%> type=text/javascript>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %><h1 class=sched><%=intl._t("Job Queue")%></h1>
 <div class=main id=jobs>
 <div class=confignav>
@@ -27,7 +27,7 @@
 <% jobQueueHelper.storeWriter(out); %>
 <jsp:getProperty name="jobQueueHelper" property="jobQueueSummary" />
 </div>
-<script nonce=<%=cspNonce%> type=text/javascript>
+<script nonce=<%=cspNonce%>>
   var visibility = document.visibilityState;
   if (visibility == "visible") {
     setInterval(function() {
