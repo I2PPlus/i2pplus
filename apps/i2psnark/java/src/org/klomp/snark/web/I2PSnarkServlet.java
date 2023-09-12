@@ -574,7 +574,7 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setHeader("Accept-Ranges", "bytes");
         resp.setHeader("Cache-Control", "no-cache, private, max-age=60");
         //resp.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'self';");
-        resp.setHeader("Content-Security-Policy", "default-src 'self'; base-uri 'self'");
+        resp.setHeader("Content-Security-Policy", "default-src 'none'; base-uri 'self'");
         resp.setHeader("Referrer-Policy", "same-origin");
         resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
