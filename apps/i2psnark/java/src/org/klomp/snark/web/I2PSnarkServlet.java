@@ -89,7 +89,8 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final char HELLIP = '\u2026';
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
-    private boolean debug;
+    private boolean debug = false;
+    private String resourcePath = debug && _context.isRouterContext() ? "/themes/" : _contextPath + WARBASE;
 
     String cspNonce = Integer.toHexString(_context.random().nextInt());
     public I2PSnarkServlet() {
@@ -346,67 +347,30 @@ public class I2PSnarkServlet extends BasicServlet {
         // we want it to go to the base URI so we don't refresh with some funky action= value
         int delay = 0;
         String jsPfx = _context.isRouterContext() ? "" : ".resources";
-        debug = false;
         if (!isConfigure) {
             out.write("<script nonce=" + cspNonce + " type=module ");
-            if (debug && _context.isRouterContext()) {
-                out.write("src=/themes/js/toggleLinks.js defer></script>\n"); // debug
-            } else {
-                out.write("src=\"" + _contextPath + WARBASE + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
-            }
+            out.write("src=\"" + resourcePath + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
                 // fallback to metarefresh when javascript is disabled
                 out.write("<noscript><meta http-equiv=refresh content=\"" + delay + ";" + _contextPath + "/" + peerString + "\"></noscript>\n");
-                //out.write("<script nonce=" + cspNonce + " type=module>\n" +
-                //          "  var ajaxDelay = " + (delay * 1000) + ";\n" +
-                //          "  export {ajaxDelay};\n" +
-                //          "</script>\n");
-                out.write("<script nonce=" + cspNonce + " src=\"" + _contextPath + WARBASE + "js/xhrQueue.js?" + CoreVersion.VERSION + "\" type=module></script>\n");
-                //out.write("<script nonce=" + cspNonce + " src=\"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\" type=module></script>\n");
                 out.write("<script nonce=" + cspNonce + " type=module>\n" +
-                          "  import {initSnarkRefresh, refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
+                          "  import {initSnarkRefresh} from \"" + resourcePath + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
                           "  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh, true);\n</script>\n");
             }
-/**
-                out.write("<script nonce=" + cspNonce + " type=module>\n");
-                if (debug && _context.isRouterContext()) {
-                    out.write("  import {xhrQueue, processXhrQueue, addToXhrQueue} from \"/themes/js/xhrQueue.js\";\n" +
-                              "  import {refreshTorrents} from \"/themes/js/refreshTorrents.js\";\n" +
-                              "  import {onVisible} from \"/themes/js/onVisible.js\";\n");
-                } else {
-                    out.write("  import {xhrQueue, processXhrQueue, addToXhrQueue} from \"" + _contextPath + WARBASE + "js/xhrQueue.js?" + CoreVersion.VERSION + "\";\n" +
-                              "  import {refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
-                              "  import {onVisible} from \"" + _contextPath + WARBASE + "js/onVisible.js?" + CoreVersion.VERSION + "\";\n");
-                }
-                out.write("  var ajaxDelay = " + (delay * 1000) + ";\n" +
-                          "  var main = document.getElementById(\"mainsection\");\n" +
-                          "  var details = document.getElementById(\"snarkInfo\");\n" +
-                          "  function updateIfVisible() {\n" +
-                          "    let snarkRefreshId = setInterval(refreshTorrents, ajaxDelay);\n" +
-                          "  }\n" +
-                          "  if (main) {\n" +
-                          "    onVisible(main, () => {updateIfVisible();});\n" +
-                          "  } else if (details) {\n" +
-                          "    onVisible(details, () => {updateIfVisible();});\n" +
-                          "  }\n" +
-                          "  document.addEventListener(\"DOMContentLoaded\", updateIfVisible, true);\n" +
-                          "</script>\n");
-            }
-**/
+
             out.write("<script nonce=" + cspNonce + ">\n" +
                       "  const deleteMessage1 = \"" + _t("Are you sure you want to delete the file \\''{0}\\'' " +
                       "(downloaded data will not be deleted) ?") + "\";\n" +
                       "  const deleteMessage2 = \"" + _t("Are you sure you want to delete the torrent \\''{0}\\'' " +
                       "and all downloaded data?") + "\";\n</script>\n");
-            if (!isConfigure && _context.isRouterContext()) {
-                out.write("<script charset=utf-8 src=\"" + _contextPath + WARBASE + "js/delete.js?" +
-                           CoreVersion.VERSION + "\"></script>\n");
+            if (!isConfigure) {
+                out.write("<script src=\"" + resourcePath + "js/delete.js?" + CoreVersion.VERSION + "\"></script>\n");
             }
         }
         // custom dialog boxes for javascript alerts
-        //out.write("<script charset=utf-8 src=\"" + jsPfx + "/js/custom-alert.js\"></script>\n");
+        //out.write("<script src=\"" + jsPfx + "/js/custom-alert.js\"></script>\n");
         //out.write("<link rel=stylesheet href=\"" + _contextPath + WARBASE + "custom-alert.css\">\n");
 
         // selected theme inserted here
@@ -441,8 +405,9 @@ public class I2PSnarkServlet extends BasicServlet {
         if (noCollapse || !collapsePanels) {
             out.write(HEADER_A + _themePath + HEADER_C + "\n");
         }
-        // add placeholder for filterbar css
+        // add placeholders for filterbar and toggleLog css
         out.write("<style id=cssfilter></style>\n");
+        out.write("<style id=toggleLogCss></style>\n");
         // add style for inbound data graph
         out.write("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp" +
                   "?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160" +
@@ -496,11 +461,10 @@ public class I2PSnarkServlet extends BasicServlet {
             String s = req.getParameter("s");
             if (s != null)
                 out.write(" value=\"" + DataHelper.escapeHTML(s) + '"');
-            //out.write("><a href=/i2psnark title=\"");
             out.write("><a href=" + _contextPath + " title=\"");
             out.write(_t("Clear search"));
             out.write("\" hidden>x</a></span><input type=submit value=\"Search\">\n</form>\n");
-            //out.write("<script src=/themes/js/search.js></script>");
+            //out.write("<script src=\"" + resourcePath + "js/search.js?" + CoreVersion.VERSION + "\"></script>");
         }
         out.write("\n</div>\n");
         String newURL = req.getParameter("newURL");
@@ -515,7 +479,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<div class=logshim></div>\n</div>\n");
             writeConfigForm(out, req);
             writeTrackerForm(out, req);
-//            out.write("<script charset=utf-8 src=\".resources/js/previewTheme.js?" + CoreVersion.VERSION + "\"></script>\n");
+
         } else {
             boolean canWrite;
             synchronized(this) {
@@ -573,7 +537,6 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setContentType("text/html; charset=utf-8");
         resp.setHeader("Accept-Ranges", "bytes");
         resp.setHeader("Cache-Control", "no-cache, private, max-age=60");
-        //resp.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'self';");
         resp.setHeader("Content-Security-Policy", "default-src 'none'; base-uri 'self'");
         resp.setHeader("Referrer-Policy", "same-origin");
         resp.setHeader("X-Content-Type-Options", "nosniff");
@@ -590,10 +553,6 @@ public class I2PSnarkServlet extends BasicServlet {
             if (isConfigure) {
                 out.write(" class=configpage");
             }
-            //if (!_manager.util().connected())
-            //    out.write(" init");
-            //if (isConfigure || !_manager.util().connected())
-            //    out.write("\"");
             out.write(" tabindex=0>\n");
             out.write("<a id=closelog href=\"" + _contextPath + '/');
             if (isConfigure) {
@@ -637,24 +596,12 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<li class=msg>" + msg + "</li>\n");
             }
             out.write("</ul>\n</div>\n");
-            debug = false;
-            if (debug && _context.isRouterContext()) {
-                out.write("<script charset=utf-8 src=/themes/js/toggleLog.js type=module defer></script>\n");
-            } else {
-                out.write("<script charset=utf-8 src=\"" + _contextPath + WARBASE +
-                          "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=module defer></script>\n");
-            }
+            out.write("<script src=\"" + resourcePath + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=module defer></script>\n");
             int delay = 0;
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0 && _context.isRouterContext()) {
-                if (debug) {
-                    out.write("<script charset=utf-8 src=/themes/js/graphRefresh.js defer></script>\n");
-                } else {
-                    out.write("<script charset=utf-8 src=\"" + _contextPath + WARBASE +
-                              "js/graphRefresh.js?" + CoreVersion.VERSION + "\" defer></script>\n");
-                }
+                out.write("<script src=\"" + resourcePath + "js/graphRefresh.js?" + CoreVersion.VERSION + "\" defer></script>\n");
             }
-            out.write("<style id=toggleLogCss></style>");
         }
     }
 
@@ -1107,15 +1054,8 @@ public class I2PSnarkServlet extends BasicServlet {
             String IPString = _manager.util().getOurIPString();
             if (!IPString.equals("unknown")) {
                 // Only truncate if it's an actual dest
-                out.write("&nbsp;<span id=ourDest title=\"");
-                out.write(_t("Our destination (identity) for this session"));
-                out.write("\">");
-                out.write(_t("Dest."));
-                out.write("<code title=\"");
-                out.write(_t("Our destination (identity) for this session"));
-                out.write("\">");
-                out.write(IPString.substring(0, 4));
-                out.write("</code></span>");
+                out.write("&nbsp;<span id=ourDest title=\"" + _t("Our destination (identity) for this session") + "\">" +
+                          _t("Dest.") + "<code>" + IPString.substring(0, 4) + "</code></span>");
             }
             out.write("</span>");
             out.write("</th>\n");
@@ -1221,7 +1161,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("</form>\n");
 
             // link/magnet toggle js and css placeholder
-            debug = false;
             out.write("<style id=toggleLinks></style>\n");
 
             return start == 0;
@@ -3134,15 +3073,8 @@ public class I2PSnarkServlet extends BasicServlet {
         //          "title=\"");
         //out.write(_t("Specify custom tracker announce URL"));
         //out.write("\" > " +
-        out.write("</td>\n</tr>\n" +
-                  "</table>\n" +
-                  "</form>\n</div>\n<span id=createNotify class=notify hidden></span>\n</div>\n");
-        debug = false;
-        if (debug && _context.isRouterContext()) {
-            out.write("<script charset=utf-8 src=/themes/js/snarkAlert.js type=module></script>\n");
-        } else {
-            out.write("<script charset=utf-8 src=\"" + _contextPath + WARBASE + "js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=module></script>\n");
-        }
+        out.write("</td>\n</tr>\n</table>\n</form>\n</div>\n<span id=createNotify class=notify hidden></span>\n</div>\n");
+        out.write("<script src=\"" + resourcePath + "js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=module></script>\n");
     }
 
     private static final int[] times = { 5, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
@@ -3806,7 +3738,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_Z = "override.css\" rel=stylesheet>";
     private static final String TABLE_HEADER = "<table id=torrents width=100% border=0>\n" + "<thead id=snarkHead>\n";
     private static final String FOOTER = "</div>\n</center>\n<span id=endOfPage data-iframe-height></span>\n" +
-                                         "<script charset=utf-8 src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
+                                         "<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
                                          CoreVersion.VERSION + "\" id=iframeResizer></script>\n" +
                                          "<style>body{display:block!important;pointer-events:auto!important}</style>\n</body>\n</html>";
     private static final String FTR_STD = "</div>\n</center><style>body{display:block!important;pointer-events:auto!important}</style>\n</body>\n</html>";
@@ -3955,11 +3887,10 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<noscript><style>.script{display:none}</style></noscript>\n")
            .append("<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
         //if (showPriority) // TODO fixup with ajax refresh
-            //buf.append("<script charset=utf-8 src=\"").append(_contextPath).append(WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\" async></script>\n");
-            //buf.append("<script charset=utf-8 src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
-        buf.append("</head>\n<body display:none;pointer-events:none class=\"lang_" + lang + "\">\n" +
-                   "<center>\n<div id=navbar><a href=\"").append(_contextPath).append("/\" title=\"Torrents\"" +
-                   " class=\"snarkNav nav_main\">");
+            //buf.append("<script src=\"").append(_contextPath + WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\" async></script>\n");
+            //buf.append("<script src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
+        buf.append("</head>\n<body display:none;pointer-events:none class=lang_" + lang + ">\n" +
+                   "<center>\n<div id=navbar><a href=\"").append(_contextPath).append("/\" title=Torrents class=\"snarkNav nav_main\">");
         if (_contextName.equals(DEFAULT_NAME))
             buf.append(_t("I2PSnark"));
         else
@@ -4438,7 +4369,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("</audio>");
                     } else {
                         buf.append("</video>")
-                           .append("<script charset=utf-8 src=\"").append(_contextPath).append(WARBASE + "js/getMetadata.js?" + CoreVersion.VERSION +
+                           .append("<script src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION +
                                    "\"></script>\n");
                     }
                     buf.append("</td></tr>\n</table>\n</div>\n");
@@ -4717,13 +4648,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 else if (isVideo)
                     buf.append("</video>");
                 if (videoCount == 1) {
-                    debug = false;
-                    if (debug) {
-                        buf.append("<script charset=utf-8 src=/themes/js/getMetadata.js></script>\n");
-                    } else {
-                    buf.append("<script charset=utf-8 src=\"").append(_contextPath).append(WARBASE + "js/getMetadata.js?" + CoreVersion.VERSION +
-                               "\"></script>\n");
-                    }
+                    buf.append("<script src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");
                 }
             } else {
                 buf.append(toSVG(icon));
@@ -4838,42 +4763,15 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean enableLightbox = _manager.util().enableLightbox();
         if (enableLightbox) {
             buf.append("<link rel=stylesheet href=" + _contextPath + WARBASE + "lightbox.css>\n");
-            buf.append("<script charset=utf-8 src=" + _contextPath + WARBASE + "js/lightbox.js type=module>" +
+            buf.append("<script src=" + resourcePath + "js/lightbox.js type=module>\n" +
                        "  import {Lightbox} from \"" + _contextPath + WARBASE + "js/lightbox.js\";\n" +
                        "  var lightbox = new Lightbox();lightbox.load();\n" +
                        "</script>\n");
         }
         buf.append("<script nonce=" + cspNonce + " type=module>\n" +
-                          "  import {initSnarkRefresh, refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
+                          "  import {initSnarkRefresh} from \"" + resourcePath + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
                           "  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh, true);\n</script>\n");
         int delay = _manager.getRefreshDelaySeconds();
-        //if (delay > 0) {
-        //    buf.append("<script nonce=" + cspNonce + " type=module>\n" +
-        //               "  var ajaxDelay = " + (delay * 1000) + ";\n" +
-        //               "  export {ajaxDelay};\n" +
-        //               "</script>\n");
-        //}
-/**
-            if (debug && _context.isRouterContext()) {
-                buf.append("  import {refreshTorrents} from \"/themes/js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n"); // debugging
-            } else {
-                buf.append("  import {refreshTorrents} from \"" + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n");
-            }
-            buf.append("  var ajaxDelay = " + (delay * 1000) + ";\n" +
-                       "  var main = document.getElementById(\"mainsection\");\n" +
-                       "  var details = document.getElementById(\"snarkInfo\");\n" +
-                       "  function updateIfVisible() {\n" +
-                       "    let snarkRefreshId = setInterval(refreshTorrents, ajaxDelay);\n" +
-                       "  }\n" +
-                       "  if (main) {\n" +
-                       "    onVisible(main, () => {updateIfVisible();});\n" +
-                       "  } else if (details) {\n" +
-                       "    onVisible(details, () => {updateIfVisible();});\n" +
-                       "  }\n" +
-                       "  document.addEventListener(\"DOMContentLoaded\", updateIfVisible, true);\n" +
-                       "</script>\n");
-        }
-**/
         if (!isStandalone())
             buf.append(FOOTER);
         else
@@ -5519,7 +5417,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.51 (I2P+)
      */
     private void toSVG(StringBuilder buf, String image, String altText, String titleText) {
-        buf.append("<img alt=\"").append(altText).append("\" src=\"").append(_contextPath).append(WARBASE)
+        buf.append("<img alt=\"").append(altText).append("\" src=\"").append(_contextPath + WARBASE)
            .append("icons/").append(image).append(".svg\"");
         if (titleText.length() > 0)
             buf.append(" title=\"").append(titleText).append('"');
