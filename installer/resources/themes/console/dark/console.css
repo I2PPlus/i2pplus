@@ -2940,3 +2940,7 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #banlist li .rid{margin-right:5px;margin-left:-4px;float:left}
 #floodfills .rif img{box-shadow:0 0 0 1px rgba(0,0,0,.3)}
 #jobs label{float:right}
+
+/* router down */
+#sidebar #sb_status.statusDown,#sidebar #sb_tunnelstatus.statusDown,#sidebar #sb_routerControl.statusDown {padding:18px;border:0;box-shadow:none;background:var(--isdown);opacity:.3}
+#sidebar #sb_status.statusDown>*,#sidebar #sb_tunnelstatus.statusDown>*,#sidebar #sb_routerControl.statusDown>*,#sidebar #sb_status.statusDown::before,#sidebar #sb_tunnelstatus.statusDown::before,#sidebar #sb_routerControl.statusDown::before,#sidebar #sb_status.statusDown::after,#sidebar #sb_tunnelstatus.statusDown::after,#sidebar #sb_routerControl.statusDown::before {display:none}
