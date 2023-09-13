@@ -64,7 +64,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
             subdb.startup();
             subdb.createHandlers();
             if (subdb.getFloodfillPeers().size() == 0) {
-                List<RouterInfo> ris = floodfillNetDB().pickRandomFloodfillPeers();
+                List<RouterInfo> ris = mainNetDB().pickRandomFloodfillPeers();
                 for (RouterInfo ri : ris) {
                     if (_log.shouldLog(_log.DEBUG))
                         _log.debug("Seeding: " + id + " with " + ris.size() + " peers " + ri.getHash());
@@ -127,7 +127,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
         if (localRouterInfo == null)
             throw new IllegalArgumentException("Local RouterInfo must not be null");
         if (localRouterInfo.getReceivedBy() == null)
-            floodfillNetDB().publish(localRouterInfo);
+            mainNetDB().publish(localRouterInfo);
     }
 
     /**
@@ -156,7 +156,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      * and call setFloodfillEnabledFromMonitor which really sets it.
      */
     public synchronized void setFloodfillEnabled(boolean yes) {
-        floodfillNetDB().setFloodfillEnabled(yes);
+        mainNetDB().setFloodfillEnabled(yes);
     }
 
     /**
@@ -166,18 +166,18 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      * @since 0.9.34
      */
     synchronized void setFloodfillEnabledFromMonitor(boolean yes) {
-        floodfillNetDB().setFloodfillEnabledFromMonitor(yes);
+        mainNetDB().setFloodfillEnabledFromMonitor(yes);
     }
 
     public boolean floodfillEnabled() {
-        return floodfillNetDB().floodfillEnabled();
+        return mainNetDB().floodfillEnabled();
     }
 
     /**
      * @param peer may be null, returns false if null
      */
     public boolean isFloodfill(RouterInfo peer) {
-        return floodfillNetDB().isFloodfill(peer);
+        return mainNetDB().isFloodfill(peer);
     }
 
     public List<RouterInfo> getKnownRouterData() {
@@ -414,7 +414,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     @Override
     public RouterInfo lookupRouterInfoLocally(Hash key, String dbid) {
         if (dbid == null || dbid.isEmpty()) {
-            RouterInfo ri = floodfillNetDB().lookupRouterInfoLocally(key);
+            RouterInfo ri = mainNetDB().lookupRouterInfoLocally(key);
             if (ri != null) {
                 return ri;
             }
@@ -623,7 +623,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     }
 
     public long getLastRouterInfoPublishTime() {
-        return this.floodfillNetDB().getLastRouterInfoPublishTime();
+        return this.mainNetDB().getLastRouterInfoPublishTime();
     }
 
     @Override
@@ -760,7 +760,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     /** @since 0.9 */
     @Override
     public ReseedChecker reseedChecker() {
-        return floodfillNetDB().reseedChecker();
+        return mainNetDB().reseedChecker();
     };
 
     /**
@@ -820,7 +820,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      */
     @Override
     public void routingKeyChanged() {
-        this.floodfillNetDB().routingKeyChanged();
+        this.mainNetDB().routingKeyChanged();
     }
 
     // @Override
@@ -833,7 +833,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      */
 
     @Override
-    public FloodfillNetworkDatabaseFacade floodfillNetDB() {
+    public FloodfillNetworkDatabaseFacade mainNetDB() {
         return this.getSubNetDB(MAIN_DBID);
     }
 
