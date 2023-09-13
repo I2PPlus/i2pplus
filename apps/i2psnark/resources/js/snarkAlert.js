@@ -2,7 +2,7 @@
 /* Author: dr|z3d */
 /* License: AGPL3 or later */
 
-import {initSnarkRefresh, refreshTorrents, debouncedRefreshTorrents} from "./refreshTorrents.js";
+import {initSnarkRefresh, refreshTorrents, debouncedRefreshTorrents, xhrsnark} from "./refreshTorrents.js";
 
 "use strict";
 
@@ -17,101 +17,27 @@ const messages = document.getElementById("screenlog");
 const processForm = document.querySelector("iframe");
 let url = ".ajax/xhr1.html";
 
-
-/**
-async function updateLog() {
-  try {
-    const xhrAlert = new XMLHttpRequest();
-    xhrAlert.open("GET", url, true);
-    xhrAlert.responseType = "document";
-    xhrAlert.onload = function () {
-      const response = xhrAlert.response;
-      if (messages !== null && response !== null) {
-        const screenLog = response.querySelector("#screenlog");
-        if (screenLog !== null) {
-          const newLogEntry = screenLog.querySelectorAll("li.msg")[0].innerText.substring(21);
-          if (messages) {
-            console.log(newLogEntry);
-          }
-          if (!addNotify.hidden) {
-            addNotify.innerHTML = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
-          }
-          if (!createNotify.hidden) {
-            createNotify.innerHTML = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
-          }
-        }
-      }
-    };
-    xhrAlert.onerror = function(error) {
-      console.error("Error updating log:", error);
-    };
-    xhrAlert.send();
-  } catch (error) {
-    console.error("Error updating log:", error);
+function updateLog() {
+  const logEntryEl = xhrsnark.responseXML.querySelectorAll("#screenlog li.msg")[0];
+  if (messages && logEntryEl) {
+    const newLogEntry = logEntryEl.innerHTML.substring(21);
+    //console.log(newLogEntry);
+    const newTable = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
+    if (!addNotify.hidden) addNotify.innerHTML = newTable;
+    if (!createNotify.hidden) createNotify.innerHTML = newTable;
   }
-}
-**/
-
-/**
-function updateLog() {
-  const xhrAlert = new XMLHttpRequest();
-  xhrAlert.open("GET", url, true);
-  xhrAlert.responseType = "document";
-  function reload() {
-    xhrAlert.onload = function () {
-      if (messages !== null) {
-        if (xhrResponse.querySelectorAll("#screenlog li.msg")[0] !== null) {
-          var newLogEntry = xhrResponse.querySelectorAll("#screenlog li.msg")[0].innerHTML.substring(21);
-          if (messages) {
-            console.log(newLogEntry);
-          }
-        }
-        if (!addNotify.hidden)
-          addNotify.innerHTML = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
-          if (!createNotify.hidden)
-          createNotify.innerHTML = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
-      }
-    }
-  };
-  xhrAlert.send();
-}
-**/
-
-function updateLog() {
-  return new Promise((resolve, reject) => {
-    const xhrAlert = new XMLHttpRequest();
-    const xhrResponse = xhrAlert.responseXML;
-    xhrAlert.open("GET", url, true);
-    xhrAlert.responseType = "document";
-    xhrAlert.onload = function() {
-      const logEntryEl = xhrResponse.querySelectorAll("#screenlog li.msg")[0];
-      if (messages && logEntryEl) {
-        const newLogEntry = logEntryEl.innerHTML.substring(21);
-        console.log(newLogEntry);
-        const newTable = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
-        if (!addNotify.hidden) addNotify.innerHTML = newTable;
-        if (!createNotify.hidden) createNotify.innerHTML = newTable;
-      }
-      resolve();
-    }
-    xhrAlert.onerror = function(error) {
-      console.error("Error updating log:", error);
-      reject(error);
-    };
-    xhrAlert.send();
-  });
 }
 
 function addTorrentNotify() {
   addNotify.removeAttribute("hidden");
-  processForm.onload = function () {updateLog().catch(error => console.error("Error updating log:", error))};
+  processForm.onload = function () {refreshTorrents(updateLog);};
   hideAlert();
   setTimeout(() => (inputAddFile.value = "", inputAddFile.focus()), 3000);
 }
 
 function createTorrentNotify() {
   createNotify.removeAttribute("hidden");
-  processForm.onload = function () {updateLog().catch(error => console.error("Error updating log:", error))};
+  processForm.onload = function () {refreshTorrents(updateLog);};
   hideAlert();
   setTimeout(() => (inputNewFile.value = "", inputNewFile.focus()), 3000);
 }
