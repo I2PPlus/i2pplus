@@ -15,7 +15,8 @@ const showMagnets = "#torrents #linkswitch::before{background:url(/i2psnark/.res
                     "@media(min-width:1500px){#torrents td.magnet img{margin:0;width:20px!important;height:20px!important}}";
 
 function initLinkToggler() {
-  var config = localStorage.getItem("linkToggle").toString();
+  var config = localStorage.getItem("linkToggle");
+  if (config !== null) {config = config.toString();}
   var mlinks = document.querySelectorAll("#snarkTbody .magnet");
   var tlinks = document.querySelectorAll("#snarkTbody .trackerLink");
   var toggle = document.getElementById("linkswitch");

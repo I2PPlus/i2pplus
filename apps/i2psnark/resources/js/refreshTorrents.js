@@ -53,7 +53,7 @@ function refreshTorrents(callback) {
   }
 
   if (document.getElementById("ourDest") === null) {
-    const childElems = document.querySelectorAll("#snarkHead th>*");
+    const childElems = document.querySelectorAll("#snarkHead th:not(.torrentAction)>*");
     document.getElementById("snarkHead").classList.add("initializing");
     childElems.forEach(elem => {elem.style.opacity = "0";});
   }
@@ -272,4 +272,4 @@ document.addEventListener("DOMContentLoaded", function() {
   setupPage();
 });
 
-export {initSnarkRefresh, refreshTorrents, debouncedRefreshTorrents};
+export {initSnarkRefresh, refreshTorrents, debouncedRefreshTorrents, xhrsnark};
