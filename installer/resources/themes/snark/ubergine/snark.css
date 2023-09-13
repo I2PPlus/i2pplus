@@ -89,7 +89,8 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .notify td{background:linear-gradient(to bottom,rgba(72,0,72,.2),rgba(24,0,24,.3))}
 .page{margin:5px 0 0 0;padding:10px 10px 0;border:var(--border_hard);border-radius:4px;box-shadow:inset 0 0 3px 0 #101,0 0 2px 2px rgba(16,0,16,.4);background:repeating-linear-gradient(180deg,#2b172f 2px,#1f081f 4px);background-size:100% 4px}
 .routerdown{padding:15px 10px;vertical-align:middle;color:#ee9;font-size:10pt;border:1px solid #202;border-radius:3px;box-shadow:inset 0 0 0 1px #313,inset 0 0 6px 4px #101,inset 0 0 0 8px rgba(0,0,0,.7);background:var(--isDown)}
-.routerdown::after{display:inline-block;width:40px;height:40px;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:40px;content:"";mix-blend-mode:difference;animation:linear spin 5s reverse infinite}
+.routerdown::after,#snarkHead.initializing::after{display:inline-block;width:40px;height:40px;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:40px;content:"";mix-blend-mode:difference;animation:linear spin 5s reverse infinite}
+#snarkHead.initializing::after{width:24px;height:24px;position:absolute;top:calc(50% - 12px);left:calc(50% - 12px);background-size:24px}
 .routerdown span{display:none}
 .rowOdd,.rowEven{background:var(--row)}
 .rowEven td,.rowOdd td{border-top:0;border-bottom:0}
@@ -209,6 +210,7 @@ td.graphicStatus img{margin:-2px 3px -2px 1px;height:23px;width:auto;display:inl
 #torrentlist{margin:0 1px 2px;padding:0 1px;display:block;border:1px solid rgba(119,102,119,.7);border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.5),0 0 1px 1px #323;background:#202}
 #torrents{margin:1px 0 0;width:calc(100% - 2px);width:100%;border-collapse:separate;border:var(--border_inner);border-spacing:0;border-radius:4px;box-shadow:0 0 0 1px #101;background:#212}
 #torrents thead{filter:drop-shadow(0 1px 1px #101)}
+#torrents thead.initializing{position:relative}
 #torrents thead th:nth-child(3){max-width:40px;overflow:visible;white-space:nowrap}
 #torrents thead th{padding-top:3px;padding-bottom:4px;vertical-align:middle;border-top:0;border-bottom:var(--border_inner)}
 #torrents th:empty,#torrents td:empty{width:0!important;min-width:0!important;padding-left:0;padding-right:0}
@@ -222,7 +224,7 @@ td.graphicStatus img{margin:-2px 3px -2px 1px;height:23px;width:auto;display:inl
 #torrents code{font:8.5pt var(--monospaced);font-weight:700;color:#cc0;margin-right:2px;letter-spacing:.1em}
 #torrents .infohash{margin-right:2px;padding-left:15px;background:var(--hash) no-repeat 2px center/12px,linear-gradient(180deg,#cc0,#aa0)}
 #torrentSort{text-align:right}
-#totals{display:inline-block;margin:6px 0 6px 6px;font-weight:700;vertical-align:middle}
+#totals{display:inline-block;margin:6px 0 6px 6px;font-weight:700;vertical-align:middle;line-height:1.6}
 #totals span,#ourDest{white-space:nowrap}
 .iframed #torrentlist{border-radius:0}
 .iframed #torrents{margin:1px 0;border-radius:0}
