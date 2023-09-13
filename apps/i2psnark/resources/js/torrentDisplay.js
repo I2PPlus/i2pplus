@@ -1,93 +1,117 @@
-/* I2PSnark torrentDisplay.js by dr|3d */
+/* torrentDisplay.js by dr|3d */
 /* Setup torrent display buttons so we can show/hide snarks based on status */
 /* License: AGPL3 or later */
 
-import {initLinkToggler} from "./toggleLinks.js";
-import {initSnarkRefresh, refreshTorrents,  debouncedRefreshTorrents} from "./refreshTorrents.js";
+import {refreshTorrents} from "./refreshTorrents.js";
+import {onVisible} from "./onVisible.js";
+import {initLinkToggler, linkToggle} from "./toggleLinks.js";
 
 function initFilterBar() {
-  let filterbar = document.getElementById("torrentDisplay");
-  if (!filterbar) {return;}
-  let buttons = filterbar.querySelectorAll("input[type='radio']");
-  let badges = document.querySelectorAll("#filtercount.badge");
-  let snarkFilter = "snarkfilter";
-  let stylesheet = document.getElementById("cssfilter");
-  const cssFilter = ".rowOdd,.rowEven,.peerinfo,.debuginfo{visibility:collapse;}";
-  let linkToggled = false;
+
+  var active = document.querySelectorAll(".active:not(.peerinfo)");
+  var allEven = document.querySelectorAll(".rowEven");
+  var allOdd = document.querySelectorAll(".rowOdd");
+  var btnActive = document.getElementById("active");
+  var btnAll = document.getElementById("all");
+  var btnComplete = document.getElementById("complete");
+  var btnDownloading = document.getElementById("downloading");
+  var btnInactive = document.getElementById("inactive");
+  var btnIncomplete = document.getElementById("incomplete");
+  var btnSeeding = document.getElementById("seeding");
+  var btnStopped = document.getElementById("stopped");
+  var complete = document.querySelectorAll(".complete");
+  var debuginfo = document.querySelectorAll(".debuginfo");
+  var downloading = document.querySelectorAll(".downloading");
+  var inactive = document.querySelectorAll(".inactive:not(.peerinfo)");
+  var incomplete = document.querySelectorAll(".incomplete");
+  var mainsection = document.getElementById("mainsection");
+  var pagenav = document.getElementById("pagenavtop");
+  var peerinfo = document.querySelectorAll(".peerinfo");
+  var screenlog = document.getElementById("screenlog");
+  var seeding = document.querySelectorAll(".seeding");
+  var stopped = document.querySelectorAll(".stopped");
+  var tbody = document.getElementById("snarkTbody");
+  var tfoot = document.getElementById("snarkFoot");
+  var toggle = document.getElementById("linkswitch");
+  var badge = document.getElementById("filtercount");
+  var badges = document.querySelectorAll("#filtercount.badge");
+  var torrentform = document.getElementById("torrentlist");
+  var rules = ".rowOdd,.rowEven,.peerinfo,.debuginfo{visibility:collapse}";
+
+  var filterbar = document.getElementById("torrentDisplay");
+  var filtered = document.querySelectorAll(".filtered");
+  var pagenav = document.getElementById("pagenavtop");
+  var query = window.location.search;
+  var path = window.location.pathname;
+  var storageFilter = "filter";
+  if (!path.endsWith("i2psnark/")) {
+    storageFilter = "filter_" + path.replace("/", "");
+  }
+  var storage = window.localStorage.getItem(storageFilter);
+
   checkIfActive();
-  checkFilterBar();
+
+  function checkIfActive() {
+    if (!storage && filterbar !== null) {
+      btnAll.checked = true;
+    }
+  }
 
   function clean() {
-    stylesheet.textContent = "";
-    document.querySelectorAll(".filtered").forEach(element => element.classList.remove("filtered"));
-    let pagenav = document.getElementById("pagenavtop");
-    if (window.localStorage.getItem(snarkFilter) === null && pagenav) {
-      pagenav.style.display = "";
+    var cssfilter = document.getElementById("cssfilter");
+    checkIfActive();
+    if (cssfilter.innerText !== null) {cssfilter.innerText = "";}
+    if (badge !== null) {badge.innerHTML = "";}
+    allOdd.forEach((element) => {element.classList.remove("filtered");});
+    allEven.forEach((element) => {element.classList.remove("filtered");});
+    if (pagenav) {
+      if (storage !== null) {pagenav.style.display = "none";}
+      else {pagenav.style.display = "";}
     }
-    badges.forEach(badge => badge.remove());
+    if (badge) {badges.forEach((element) => {element.remove();});}
   }
 
-  function showFiltered(filterClass, filterButton) {
-    clean();
-    const state = `.${filterClass}{visibility:visible}`;
-    stylesheet.textContent = cssFilter + state;
-    filterButton.checked = true;
-    window.localStorage.setItem(snarkFilter, filterButton.id);
-    document.querySelectorAll(`.${filterClass}`).forEach(element => element.classList.add("filtered"));
-    showBadge();
-    checkPagenav();
-  }
+  async function showBadge() {
+    var filtered = document.querySelectorAll(".filtered");
+    var activeFilter = document.querySelector("#torrentDisplay input:checked + .filterbutton");
+    if (!activeFilter.classList.contains("enabled")) {
+      activeFilter.classList.add("enabled");
+    }
+    if (!activeFilter.querySelector("#filtercount")) {
+      activeFilter.innerHTML += "<span id=filtercount class=badge></span>";
+    }
+    try {
+      const count = await getCount(filtered);
 
-  function showAll() {
-    clean();
-    checkPagenav();
-    window.localStorage.removeItem(snarkFilter);
-    buttons[0].checked = true;
-    buttons[0].classList.add("noPointer");
-  }
-
-  function showBadge() {
-    const filtered = document.querySelectorAll(".filtered");
-    const activeFilter = filterbar.querySelector("input:checked + .filterbutton");
-    const count = filtered.length;
-    activeFilter.classList.add("enabled");
-    if (count > 0) {
-      let badge = document.createElement("span");
-      badge.classList.add("badge");
-      badge.setAttribute("id", "filtercount");
-      activeFilter.appendChild(badge);
-      getCount(filtered, count).then(result => {
-        badge.textContent = result;
-      });
+      if (count > 0) {
+        var badge = document.getElementById("filtercount");
+        badge.innerText = count;
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 
-  function getCount(filtered, count) {
+  function getCount(filtered) {
     return new Promise(resolve => {
-      const interval = setInterval(() => {
-        if (filtered.length === count) {
-          clearInterval(interval);
-          resolve(count);
+      const observer = new MutationObserver((mutations) => {
+        for (let mutation of mutations) {
+          if (mutation.type === "attributes" && mutation.attributeName === "class") {
+            const filteredArray = Array.from(filtered);
+            if (filteredArray.every(elem => elem.classList.contains("filtered"))) {
+              observer.disconnect();
+              resolve(filtered.length);
+            }
+          }
         }
-      }, 50);
+      });
+      filtered.forEach(elem => observer.observe(elem, {attributes: true}));
     });
   }
 
-  function addFilterEventListeners() {
-    buttons.forEach((button, index) => {
-      button.addEventListener("click", () => {
-        switch (index) {
-          case 0: showAll(); break;
-          case 1: showFiltered("active", button); break;
-          case 2: showFiltered("inactive", button); break;
-          case 3: showFiltered("downloading", button); break;
-          case 4: showFiltered("seeding", button); break;
-          case 5: showFiltered("complete", button); break;
-          case 6: showFiltered("incomplete", button); break;
-          case 7: showFiltered("stopped", button); break;
-        }
-      });
-    });
+  function injectCSS() {
+    var stylesheet = document.getElementById("cssfilter");
+    stylesheet.innerText = rules;
   }
 
   function disableBar() {
@@ -97,61 +121,186 @@ function initFilterBar() {
   function enableBar() {
     filterbar.classList.remove("noPointer");
   }
-  addFilterEventListeners();
-}
 
-function checkIfActive() {
-  let snarkFilter = "snarkfilter";
-  let filterbar = document.getElementById("torrentDisplay");
-  const buttons = filterbar.querySelectorAll("input[type='radio']");
-  let isActive = Boolean(false);
-  if (!window.localStorage.getItem(snarkFilter) && filterbar) {
-    buttons[0].checked = true;
-    isActive = true;
+  function showAll() {
+    clean();
+    checkPagenav();
+    if (pagenav !== null) {
+      pagenav.removeAttribute("hidden");
+      pagenav.style.display = "";
+    }
+    var query = window.location.search;
+    window.localStorage.removeItem(storageFilter);
+    btnAll.checked = true;
+    btnAll.classList.add("noPointer");
   }
-  return isActive;
-}
 
-function selectFilter() {
-  const filterbar = document.getElementById("torrentDisplay");
-  const buttons = filterbar.querySelectorAll("input[type='radio']");
-  const storage = window.localStorage.getItem("snarkfilter");
-  const selectedBtn = buttons[storage && parseInt(storage.replace("btn", "")) || 0];
-  selectedBtn.checked = true;
-  selectedBtn.click();
-}
+  function showActive() {
+    clean();
+    var state = ".active{visibility:visible}";
+    rules += state;
+    injectCSS();
+    btnActive.checked = true;
+    window.localStorage.setItem(storageFilter, btnActive.id);
+    active.forEach((element) => {element.classList.add("filtered");});
+    showBadge();
+  }
 
-function refreshFilters() {
-  const storage = window.localStorage.getItem("snarkfilter");
-  const filterbar = document.getElementById("torrentDisplay");
-  const pagenav = document.getElementById("pagenavtop");
-  checkPagenav();
-  selectFilter();
+  function showInactive() {
+    clean();
+    var state = ".inactive{visibility:visible}";
+    rules += state;
+    injectCSS();
+    btnInactive.checked = true;
+    window.localStorage.setItem(storageFilter, btnInactive.id);
+    inactive.forEach((element) => {element.classList.add("filtered");});
+    showBadge();
+  }
+
+  function showDownloading() {
+    clean();
+    var state = ".downloading{visibility:visible}";
+    rules += state;
+    injectCSS();
+    btnDownloading.checked = true;
+    window.localStorage.setItem(storageFilter, btnDownloading.id);
+    downloading.forEach((element) => {element.classList.add("filtered");});
+    showBadge();
+  }
+
+  function showSeeding() {
+    clean();
+    var state = ".seeding{visibility:visible}";
+    rules += state;
+    injectCSS();
+    btnSeeding.checked = true;
+    window.localStorage.setItem(storageFilter, btnSeeding.id);
+    seeding.forEach((element) => {element.classList.add("filtered");});
+    showBadge();
+  }
+
+  function showComplete() {
+    clean();
+    var state = ".complete{visibility:visible}";
+    rules += state;
+    injectCSS();
+    btnComplete.checked = true;
+    window.localStorage.setItem(storageFilter, btnComplete.id);
+    complete.forEach((element) => {element.classList.add("filtered");});
+    showBadge();
+  }
+
+  function showIncomplete() {
+    clean();
+    var state = ".incomplete{visibility:visible}";
+    rules += state;
+    injectCSS();
+    btnIncomplete.checked = true;
+    window.localStorage.setItem(storageFilter, btnIncomplete.id);
+    incomplete.forEach((element) => {element.classList.add("filtered");});
+    showBadge();
+  }
+
+  function showStopped() {
+    clean();
+    var state = ".stopped{visibility:visible}";
+    rules += state;
+    injectCSS();
+    btnStopped.checked = true;
+    window.localStorage.setItem(storageFilter, btnStopped.id);
+    stopped.forEach((element) => {element.classList.add("filtered");});
+    var count = filtered.length;
+    showBadge();
+  }
+
+  function onClick() {
+    refreshFilters();
+  }
+
+  if (filterbar) {
+    btnAll.addEventListener("click", () => {disableBar();onClick();showAll();enableBar();});
+    btnActive.addEventListener("click", () => {disableBar();onClick();showActive();enableBar();});
+    btnInactive.addEventListener("click", () => {disableBar();onClick();showInactive();enableBar();});
+    btnDownloading.addEventListener("click", () => {disableBar();onClick();showDownloading();enableBar();});
+    btnSeeding.addEventListener("click", () => {disableBar();onClick();showSeeding();enableBar();});
+    btnComplete.addEventListener("click", () => {disableBar();onClick();showComplete();enableBar();});
+    btnIncomplete.addEventListener("click", () => {disableBar();onClick();showIncomplete();enableBar();});
+    btnStopped.addEventListener("click", () => {disableBar();onClick();showStopped();enableBar();});
+    switch (window.localStorage.getItem(storageFilter)) {
+      case "all":
+        btnAll.checked = true;
+        showAll();
+        break;
+      case "active":
+        btnActive.checked = true;
+        showActive();
+        break;
+      case "inactive":
+        btnInactive.checked = true;
+        showInactive();
+        break;
+      case "downloading":
+        btnDownloading.checked = true;
+        showDownloading();
+        break;
+      case "seeding":
+        btnSeeding.checked = true;
+        showSeeding();
+        break;
+      case "complete":
+        btnComplete.checked = true;
+        showComplete();
+        break;
+      case "incomplete":
+        btnIncomplete.checked = true;
+        showIncomplete();
+        break;
+      case "stopped":
+        btnStopped.checked = true;
+        showStopped();
+        break;
+      default:
+        btnAll.checked = true;
+        showAll();
+    }
+  }
 }
 
 function checkFilterBar() {
-  const storage = window.localStorage.getItem("snarkfilter");
-  const down = document.getElementById("down");
-  const filterbar = document.getElementById("torrentDisplay");
-  const noload = document.getElementById("noload");
-  const query = window.location.search;
-  const sortIcon = document.querySelectorAll(".sortIcon");
-  if (filterbar) {
-    document.querySelectorAll(".sortIcon").forEach(sort => {
-      sort.addEventListener("click", refreshFilters);
-    });
-  }
-}
+  var down = document.getElementById("down");
+  var filterbar = document.getElementById("torrentDisplay");
+  var noload = document.getElementById("noload");
+  var query = window.location.search;
+  var sortIcon = document.querySelectorAll(".sortIcon");
 
-function refreshAll() {
-  initLinkToggler();
-  checkFilterBar();
+  if (filterbar) {
+    initFilterBar();
+    checkPagenav();
+    refreshFilters();
+  }
+
+  if (noload || down) {
+    refreshAll();
+  }
+
+  sortIcon.forEach(function (item) {
+    item.addEventListener("click", () => {
+      setQuery();
+    });
+  });
+
+  function setQuery() {
+    if (query) {
+      window.localStorage.setItem("queryString", window.location.search);
+      window.location.search = query;
+    }
+  }
 }
 
 function checkPagenav() {
   var pagenav = document.getElementById("pagenavtop");
   var path = window.location.pathname;
-  var storageFilter = "snarkfilter";
+  var storageFilter = "filter";
   if (!path.endsWith("i2psnark/")) {
     storageFilter = "filter_" + path.replace("/", "");
   }
@@ -168,9 +317,32 @@ function checkPagenav() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  initFilterBar();
-  checkFilterBar();
-}, true);
+function refreshFilters() {
+  var filterbar = document.getElementById("torrentDisplay");
+  var pagenav = document.getElementById("pagenavtop");
+  var query = window.location.search;
 
-export {initFilterBar, checkFilterBar, refreshFilters, selectFilter, checkPagenav};
+  if (query == null) {
+  } else {
+    if (pagenav && filterbar) {
+      checkPagenav();
+      refreshTorrents(initFilterBar);
+    }
+  }
+}
+
+function checkIfVisible() {
+  var torrentform = document.getElementById("torrentlist");
+  onVisible(torrentform, () => {checkFilterBar();});
+}
+
+function refreshAll() {
+  var filterbar = document.getElementById("torrentDisplay");
+  if (filterbar) {
+    refreshFilters();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", checkIfVisible, true);
+
+export {initFilterBar, checkFilterBar, refreshFilters};

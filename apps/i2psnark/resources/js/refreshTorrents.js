@@ -3,7 +3,7 @@
 /* License: AGPL3 or later */
 
 import {onVisible} from "./onVisible.js";
-import {initFilterBar, checkFilterBar, refreshFilters, selectFilter, checkPagenav} from './torrentDisplay.js';
+import {initFilterBar} from './torrentDisplay.js';
 import {initLinkToggler} from "./toggleLinks.js";
 import {initToggleLog} from "./toggleLog.js";
 
@@ -47,21 +47,32 @@ function refreshTorrents(callback) {
   const query = window.location.search;
   const url = filterEnabled ? baseUrl + query + (query ? "&" : "?") + "ps=9999" : baseUrl;
 
+
   if (requestInProgress) {
     return;
   }
+
+  if (document.getElementById("ourDest") === null) {
+    const childElems = document.querySelectorAll("#snarkHead th>*");
+    document.getElementById("snarkHead").classList.add("initializing");
+    childElems.forEach(elem => {elem.style.opacity = "0";});
+  }
+
   requestInProgress = true;
 
   xhrsnark.open("GET", url, true);
   xhrsnark.responseType = "document";
   xhrsnark.onload = function () {
     switch (xhrsnark.status) {
+      case !200 || !404 || !500:
+        requestInProgress = true;
       case 200:
         break;
       case 404 || 500 || !200:
         noAjax(5000);
         break;
       default:
+        requestInProgress = false;
     }
 
     if (xhrsnark.readyState !== 4) {
@@ -80,8 +91,6 @@ function refreshTorrents(callback) {
     }
 
     if (torrents?.responseXML) {
-      if (filterbar) {
-        initFilterBar();
         filterbar.removeEventListener("mouseover", setLinks);
         const torrentsContainer = document.getElementById("torrents");
         if (torrentsContainer?.responseXML) {
@@ -89,10 +98,7 @@ function refreshTorrents(callback) {
           if (newTorrents && torrentsContainer.innerHTML !== newTorrents.innerHTML) {
             torrentsContainer.innerHTML = newTorrents.innerHTML;
           }
-          checkFilterBar();
-          setLinks(query);
         }
-      }
     } else if (dirlist?.responseXML) {
       if (info) {
         const infoResponse = xhrsnark.responseXML.getElementById("torrentInfoStats");
@@ -144,7 +150,9 @@ function refreshTorrents(callback) {
         if (mainsectionResponse && mainsection.innerHTML !== mainsectionResponse.innerHTML) {
           mainsection.innerHTML = mainsectionResponse.innerHTML;
         }
-        checkFilterBar();
+        if (filterbar) {
+          initFilterBar();
+        }
       } else if (files) {
         const dirlistResponse = xhrsnark.responseXML?.getElementById("dirlist");
         if (dirlistResponse && !Object.is(dirlist.innerHTML, dirlistResponse.innerHTML) && notfound === null) {
@@ -165,7 +173,8 @@ function refreshTorrents(callback) {
             updated = true;
           }
         });
-        if (updated) {
+        if (updated && filterbar) {
+          initFilterBar();
         }
       } else {
         refreshAll();
@@ -188,7 +197,6 @@ function refreshTorrents(callback) {
       });
     }
 
-
     if (typeof callback === "function") {
       callback(xhrsnark.responseXML, url);
     }
@@ -196,8 +204,6 @@ function refreshTorrents(callback) {
     requestInProgress = false;
     updateIfVisible(snarkTable);
     initLinkToggler();
-    initFilterBar();
-    checkFilterBar();
 
     function getRefreshInterval() {
       const interval = parseInt(xhrsnark.getResponseHeader("X-Snark-Refresh-Interval")) || 5;
@@ -235,11 +241,20 @@ function noAjax(delay) {
   }, delay);
 }
 
-const debouncedRefreshTorrents = debounce(refreshTorrents, 5*1000);
+const debouncedRefreshTorrents = debounce(refreshTorrents, 500);
 
 window.addEventListener("load", () => {
   debouncedRefreshTorrents();
 });
+
+function setupPage() {
+  if (mainsection) {
+    initToggleLog();
+  }
+  if (filterbar) {
+    initFilterBar();
+  }
+}
 
 function initSnarkRefresh() {
   const interval = (parseInt(storageRefresh) || 5) * 1000;
@@ -247,23 +262,14 @@ function initSnarkRefresh() {
     clearInterval(refreshIntervalId);
   }
   refreshIntervalId = setInterval(() => {
-    refreshTorrents();
-    if (filterbar) {
-      initFilterBar();
-      checkFilterBar();
-    }
-    initToggleLog();
+    refreshTorrents(setupPage);
   }, interval);
 }
 
 document.addEventListener("DOMContentLoaded", function() {
   initSnarkRefresh();
   initLinkToggler();
-  initToggleLog();
-  if (filterbar) {
-    initFilterBar();
-    checkFilterBar();
-  }
+  setupPage();
 });
 
-export {initSnarkRefresh, refreshTorrents,  debouncedRefreshTorrents};
+export {initSnarkRefresh, refreshTorrents, debouncedRefreshTorrents};
