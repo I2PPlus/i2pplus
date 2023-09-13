@@ -90,7 +90,6 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     private boolean debug = false;
-    private String resourcePath = debug && _context.isRouterContext() ? "/themes/" : _contextPath + WARBASE;
 
     String cspNonce = Integer.toHexString(_context.random().nextInt());
     public I2PSnarkServlet() {
@@ -347,6 +346,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // we want it to go to the base URI so we don't refresh with some funky action= value
         int delay = 0;
         String jsPfx = _context.isRouterContext() ? "" : ".resources";
+        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         if (!isConfigure) {
             out.write("<script nonce=" + cspNonce + " type=module ");
             out.write("src=\"" + resourcePath + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
@@ -547,6 +547,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
+        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         List<UIMessages.Message> msgs = _manager.getMessages();
         if (!msgs.isEmpty()) {
             out.write("<div id=screenlog");
@@ -2994,6 +2995,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers) throws IOException {
+        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         out.write("<div class=sectionPanel id=createSection>\n<div>\n");
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
         out.write("<form id=createForm action=\"_post\" method=POST target=processForm>\n");
@@ -3775,6 +3777,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.7.14
      */
     private String getListHTML(File xxxr, String base, boolean parent, Map<String, String[]> postParams, String sortParam) throws IOException {
+        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         String decodedBase = decodePath(base);
         String title = decodedBase;
         String cpath = _contextPath + '/';
