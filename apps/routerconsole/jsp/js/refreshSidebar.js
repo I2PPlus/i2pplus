@@ -342,6 +342,12 @@ function refreshSidebar() {
             if (localtunnelSummary) {
               localtunnelSummary.innerHTML = "<tr id=routerdown><td colspan=3 height=10></td></tr>";
             }
+            if (netStatus) {
+              netstatus.classList.add("statusDown");
+            }
+            if (netStatus) {
+              netstatus.classList.add("statusDown");
+            }
           }
 
           function modElements() {
@@ -349,15 +355,13 @@ function refreshSidebar() {
             const digits = document.querySelectorAll(".digits");
             const badges = document.querySelectorAll(".badge, #tunnelCount, #newsCount");
             const downStatus = '<span id="down">Router is down</span>';
-            const netStatus = document.getElementById("netStatus");
+            const statusPanel = document.querySelectorAll(".sb_status, .sb_tunnelstatus, #sb_routerControl");
+            statusPanel.forEach(statusPanel => (statusPanel.classList.add("statusDown")));
             digits.forEach(digit => (digit.innerHTML = "---&nbsp;"));
             if (clock !== null) {
               clock.innerHTML = "--:--:--";
             }
             badges.forEach(badge => (badge.innerHTML = ""));
-            if (netStatus) {
-              netStatus.innerHTML = downStatus;
-            }
           }
 
           hideSections();
@@ -376,7 +380,7 @@ function refreshSidebar() {
   if (visible === "visible") {
     xhr.send();
     stickySidebar();
-  } else if (xhr.status !== null) {
+  } else if (xhr.status !== null && xhr.status !== 404) {
     xhr.abort();
   }
 }
