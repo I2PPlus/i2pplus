@@ -284,8 +284,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         } else {
             // If well connected or ff, don't pick from high cap
             // even during congestion, because congestion starts from the top
-//            if (active > 500 || ctx.netDbSegmentor().floodfillEnabled())
-            if (active > 500 || ctx.mainNetDb().floodfillEnabled())
+            if (active > 500 || ctx.netDbSegmentor().floodfillEnabled())
                 return false;
 
             failPct = getExploratoryFailPercentage();

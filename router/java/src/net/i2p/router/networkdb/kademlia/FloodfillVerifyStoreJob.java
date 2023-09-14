@@ -410,6 +410,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     _log.warn("Verify via Floodfill failed (older) for [" + _key.toBase64().substring(0,6) + "]");
                 if (_log.shouldInfo())
                     _log.info("[Job " + getJobId() + "] Received older data \n* " + dsm.getEntry());
+                }
             } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
                 DatabaseSearchReplyMessage dsrm = (DatabaseSearchReplyMessage) _message;
                 // assume 0 old, all new, 0 invalid, 0 dup
@@ -445,8 +446,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 pm.dbLookupFailed(_target);
             ctx.statManager().addRateData("netDb.floodfillVerifyFail", delay);
             resend();
-            }
         }
+
         public void setMessage(I2NPMessage message) { _message = message; }
     }
 
@@ -464,7 +465,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
         DatabaseEntry ds = getContext().netDbSegmentor().lookupLocally(_key, _facade._dbid);
         if ((ds == null) && _facade.isClientDb() && _isRouterInfo)
             // It's safe to check the floodfill netDb for RI
-            ds = getContext().netDbSegmentor().lookupLocally(_key, "main");
+            ds = getContext().netDbSegmentor().lookupLocally(_key, FloodfillNetworkDatabaseSegmentor.MAIN_DBID);
         if (ds != null) {
             // By the time we get here, a minute or more after the store started,
             // we may have already started a new store

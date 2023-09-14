@@ -2570,11 +2570,11 @@ class PeerTestManager {
                 Hash h = ri.getHash();
                 if (h.equals(_context.routerHash()))
                     return;
-                _context.mainNetDb().store(h, ri);
+                _context.netDbSegmentor().store(h, ri);
                 // ignore flood request
             } catch (IllegalArgumentException iae) {
                 if (_log.shouldInfo())
-                    _log.info("RouterInfo store fail: " + ri, iae);
+                    _log.info("RouterInfo store fail ("+ iae.getMessage() + "): " + ri);
             }
         }
 

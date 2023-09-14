@@ -211,7 +211,7 @@ class ClientConnectionRunner {
             _manager.unregisterEncryptedDestination(this, _encryptedLSHash);
         _manager.unregisterConnection(this);
         // netdb may be null in unit tests
-        if (_context.netDb() != null) {
+        if (_context.netDbSegmentor() != null) {
             // Note that if the client sent us a destroy message,
             // removeSession() was called just before this, and
             // _sessions will be empty.

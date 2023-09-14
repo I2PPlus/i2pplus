@@ -26,7 +26,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-
 import com.maxmind.db.CHMCache;
 import com.maxmind.geoip.InvalidDatabaseException;
 import com.maxmind.geoip.LookupService;
@@ -774,7 +773,7 @@ public class GeoIP {
      *  @since 0.9.48
      */
     private static void banCountry(RouterContext ctx, String country) {
-        for (Hash h : ctx.mainNetDb().getAllRouters()) {
+        for (Hash h : ctx.netDbSegmentor().getAllRouters()) {
             String hisCountry = ctx.commSystem().getCountry(h);
             if (country.equals(hisCountry)) {
                 ctx.banlist().banlistRouterHard(h, " <b>➜</b> In our country (we are in Hidden mode)");

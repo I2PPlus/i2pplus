@@ -553,8 +553,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
  ***  unfortunately the "U" is rarely seen.
             if (!getContext().commSystem().wasUnreachable(l.getGateway())) {
 ***/
-//            RouterInfo ri = getContext().netDbSegmentor().lookupRouterInfoLocally(l.getGateway(), null);
-            RouterInfo ri = getContext().mainNetDb().lookupRouterInfoLocally(l.getGateway());
+            RouterInfo ri = getContext().netDbSegmentor().lookupRouterInfoLocally(l.getGateway(), null);
             if (ri == null || ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) < 0) {
                 _lease = l;
                 break;

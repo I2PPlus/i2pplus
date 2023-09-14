@@ -150,8 +150,7 @@ class SearchJob extends JobImpl {
         // have been commented out.
         // Returning false essentially enables kademlia as a backup to floodfill for search responses.
 
-//        if (ctx.netDbSegmentor().floodfillEnabled() || forceExplore == "true")
-        if (ctx.mainNetDb().floodfillEnabled() || forceExplore == "true")
+        if (ctx.netDbSegmentor().floodfillEnabled() || forceExplore == "true")
             return false;
         return ctx.getProperty("netDb.floodfillOnly", DEFAULT_FLOODFILL_ONLY);
     }
@@ -467,7 +466,7 @@ class SearchJob extends JobImpl {
         // this will fail if we've banlisted our inbound gateway, but the gw may not necessarily
         // be banlisted by whomever needs to contact them, so we don't need to check this
 
-        //RouterInfo inGateway = getContext().mainNetDb().lookupRouterInfoLocally(inTunnel.getPeer(0));
+        //RouterInfo inGateway = getContext().netDbSegmentor().lookupRouterInfoLocally(inTunnel.getPeer(0));
         //if (inGateway == null) {
         //    _log.error("We can't find the gateway to our inbound tunnel?!");
         //    getContext().jobQueue().addJob(new FailedJob(getContext(), router));

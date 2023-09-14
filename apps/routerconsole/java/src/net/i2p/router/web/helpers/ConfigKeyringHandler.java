@@ -73,6 +73,7 @@ public class ConfigKeyringHandler extends FormHandler {
                 try {
                     bdin = Blinding.decode(_context, _peer);
                 } catch (IllegalArgumentException iae) {}
+
                 // we need the dest or the spk, not just the desthash
                 SigningPublicKey spk = null;
                 Destination d = null;
