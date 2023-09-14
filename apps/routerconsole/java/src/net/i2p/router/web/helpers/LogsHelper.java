@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Comparator;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -147,6 +149,7 @@ public class LogsHelper extends HelperBase {
      *  @param obuf out parameter
      *  @return Long timestamp, Long last line number, String filename (escaped)
      */
+
     public Object[] getServiceLogs(StringBuilder obuf) {
         File f = ConfigServiceHandler.wrapperLogFile(_context);
         String str;
@@ -197,6 +200,37 @@ public class LogsHelper extends HelperBase {
                                     .replace("| INFO   | \tat", "| ERROR  | \tat")
                                     .replace("| ERROR  | [Reseed     ] ....reseed.Reseeder:", "| WARN   |")
                                     .replace(" |[", " | [");
+                // remove lines containing unwanted strings
+                StringBuilder filtered = new StringBuilder();
+                String[] logLines = str.split("\n");
+                for (String line : logLines) {
+                    if (!line.contains("Copyright") &&
+                        !line.contains("tanukisoftware") &&
+                        !line.contains("  \n")) {
+                        filtered.append(line).append("\n");
+                    }
+                }
+
+                // sort lines first by timestamp and then by content
+                String[] lines = filtered.toString().split("\n");
+                Arrays.sort(lines, (a, b) -> {
+                    String[] aParts = a.split(" ");
+                    String[] bParts = b.split(" ");
+
+                    int result = aParts[0].compareTo(bParts[0]); // sort by timestamp
+                    if (result == 0) {
+                        result = a.compareTo(b); // if timestamps are equal, sort by content
+                    }
+                    return result;
+                });
+
+                filtered = new StringBuilder(); // reset filtered StringBuilder
+                // append filtered lines to StringBuilder in reverse order
+                for (int i = lines.length - 1; i >= 0; i--) {
+                    filtered.append(lines[i]).append("\n");
+                }
+
+                str = filtered.toString();
             }
             toSkip = ntoSkip;
         }
