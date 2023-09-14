@@ -9,6 +9,7 @@ import {initToggleLog} from "./toggleLog.js";
 
 const filterbar = document.getElementById("torrentDisplay");
 const home = document.querySelector(".nav_main");
+const mainsection = document.getElementById("mainsection");
 const storageRefresh = window.localStorage.getItem("snarkRefresh");
 const xhrsnark = new XMLHttpRequest();
 let refreshIntervalId;
@@ -35,18 +36,14 @@ function refreshTorrents(callback) {
   const down = document.getElementById("down");
   const files = document.getElementById("dirInfo");
   const info = document.getElementById("torrentInfoStats");
-  const mainsection = document.getElementById("mainsection");
   const noload = document.getElementById("noload");
   const notfound = document.getElementById("NotFound");
-  const thead = document.getElementById("snarkHead");
+  const snarkHead = document.getElementById("snarkHead");
   const torrents = document.getElementById("torrents");
-  const storage = window.localStorage.getItem("snarkfilter");
-  const filterEnabled = localStorage.hasOwnProperty("snarkfilter");
+  const storage = window.localStorage.getItem("snarkFilter");
+  const filterEnabled = localStorage.hasOwnProperty("snarkFilter") !== null;
   const snarkTable = torrents || files;
-  const baseUrl = "/i2psnark/.ajax/xhr1.html";
   const query = window.location.search;
-  const url = filterEnabled ? baseUrl + query + (query ? "&" : "?") + "ps=9999" : baseUrl;
-
 
   if (requestInProgress) {
     return;
@@ -54,13 +51,22 @@ function refreshTorrents(callback) {
 
   if (document.getElementById("ourDest") === null) {
     const childElems = document.querySelectorAll("#snarkHead th:not(.torrentAction)>*");
-    document.getElementById("snarkHead").classList.add("initializing");
-    childElems.forEach(elem => {elem.style.opacity = "0";});
+    if (snarkHead !== null) {
+      document.getElementById("snarkHead").classList.add("initializing");
+      childElems.forEach(elem => {elem.style.opacity = "0";});
+    }
   }
 
   requestInProgress = true;
 
-  xhrsnark.open("GET", url, true);
+  function getURL() {
+    const filterEnabled = localStorage.getItem("snarkFilter") !== null;
+    const baseUrl = "/i2psnark/.ajax/xhr1.html";
+    const url = filterEnabled ? baseUrl + query + (query ? "&" : "?") + "ps=9999" : baseUrl + query;
+    return url;
+  }
+
+  xhrsnark.open("GET", getURL(), true);
   xhrsnark.responseType = "document";
   xhrsnark.onload = function () {
     switch (xhrsnark.status) {
@@ -130,12 +136,12 @@ function refreshTorrents(callback) {
     }
 
     function refreshHeaderAndFooter() {
-      const thead = document.getElementById("snarkHead");
-      if (thead?.responseXML) {
-        const theadParent = thead.parentNode;
-        const theadResponse = thead.responseXML?.getElementById("snarkHead");
-        if (thead && theadResponse && !Object.is(thead.innerHTML, theadResponse.innerHTML)) {
-          thead.innerHTML = theadResponse.innerHTML;
+      const snarkHead = document.getElementById("snarkHead");
+      if (snarkHead?.responseXML) {
+        const snarkHeadParent = snarkHead.parentNode;
+        const snarkHeadResponse = snarkHead.responseXML?.getElementById("snarkHead");
+        if (snarkHead && snarkHeadResponse && !Object.is(snarkHead.innerHTML, snarkHeadResponse.innerHTML)) {
+          snarkHead.innerHTML = snarkHeadResponse.innerHTML;
         }
       }
     }
@@ -181,28 +187,19 @@ function refreshTorrents(callback) {
       }
     }
 
-    function updateIfVisible(snarkTable) {
+    function updateIfVisible() {
       const delay = getRefreshInterval();
       let snarkUpdateId;
-      if (snarkUpdateId) {
-        clearTimeout(snarkUpdateId);
-      }
-      const onUpdate = () => {
-        snarkUpdateId = setTimeout(onUpdate, delay);
-      };
-      onVisible(snarkTable, onUpdate, {
-        hidden: () => {
-          clearTimeout(snarkUpdateId);
-        },
-      });
+      if (snarkUpdateId) {clearTimeout(snarkUpdateId);}
+      const onUpdate = () => {snarkUpdateId = setTimeout(onUpdate, delay);};
     }
 
     if (typeof callback === "function") {
-      callback(xhrsnark.responseXML, url);
+      callback(xhrsnark.responseXML, getURL());
     }
 
     requestInProgress = false;
-    updateIfVisible(snarkTable);
+    updateIfVisible();
     initLinkToggler();
 
     function getRefreshInterval() {
@@ -217,6 +214,7 @@ function refreshTorrents(callback) {
 
 xhrsnark.onerror = function (error) {
   //console.error("XHR request failed:", error);
+  noAjax(5000);
   requestInProgress = false;
 };
 

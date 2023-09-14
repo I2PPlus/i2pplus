@@ -43,11 +43,8 @@ function initFilterBar() {
   var pagenav = document.getElementById("pagenavtop");
   var query = window.location.search;
   var path = window.location.pathname;
-  var storageFilter = "filter";
-  if (!path.endsWith("i2psnark/")) {
-    storageFilter = "filter_" + path.replace("/", "");
-  }
-  var storage = window.localStorage.getItem(storageFilter);
+  var snarkFilter = "snarkFilter";
+  var storage = window.localStorage.getItem(snarkFilter);
 
   checkIfActive();
 
@@ -65,7 +62,8 @@ function initFilterBar() {
     allOdd.forEach((element) => {element.classList.remove("filtered");});
     allEven.forEach((element) => {element.classList.remove("filtered");});
     if (pagenav) {
-      if (storage !== null) {pagenav.style.display = "none";}
+      var filterActive = storage !== null;
+      if (filterActive) {pagenav.style.display = "none";}
       else {pagenav.style.display = "";}
     }
     if (badge) {badges.forEach((element) => {element.remove();});}
@@ -129,8 +127,7 @@ function initFilterBar() {
       pagenav.removeAttribute("hidden");
       pagenav.style.display = "";
     }
-    var query = window.location.search;
-    window.localStorage.removeItem(storageFilter);
+    window.localStorage.removeItem(snarkFilter);
     btnAll.checked = true;
     btnAll.classList.add("noPointer");
   }
@@ -141,7 +138,7 @@ function initFilterBar() {
     rules += state;
     injectCSS();
     btnActive.checked = true;
-    window.localStorage.setItem(storageFilter, btnActive.id);
+    window.localStorage.setItem(snarkFilter, btnActive.id);
     active.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
@@ -152,7 +149,7 @@ function initFilterBar() {
     rules += state;
     injectCSS();
     btnInactive.checked = true;
-    window.localStorage.setItem(storageFilter, btnInactive.id);
+    window.localStorage.setItem(snarkFilter, btnInactive.id);
     inactive.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
@@ -163,7 +160,7 @@ function initFilterBar() {
     rules += state;
     injectCSS();
     btnDownloading.checked = true;
-    window.localStorage.setItem(storageFilter, btnDownloading.id);
+    window.localStorage.setItem(snarkFilter, btnDownloading.id);
     downloading.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
@@ -174,7 +171,7 @@ function initFilterBar() {
     rules += state;
     injectCSS();
     btnSeeding.checked = true;
-    window.localStorage.setItem(storageFilter, btnSeeding.id);
+    window.localStorage.setItem(snarkFilter, btnSeeding.id);
     seeding.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
@@ -185,7 +182,7 @@ function initFilterBar() {
     rules += state;
     injectCSS();
     btnComplete.checked = true;
-    window.localStorage.setItem(storageFilter, btnComplete.id);
+    window.localStorage.setItem(snarkFilter, btnComplete.id);
     complete.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
@@ -196,7 +193,7 @@ function initFilterBar() {
     rules += state;
     injectCSS();
     btnIncomplete.checked = true;
-    window.localStorage.setItem(storageFilter, btnIncomplete.id);
+    window.localStorage.setItem(snarkFilter, btnIncomplete.id);
     incomplete.forEach((element) => {element.classList.add("filtered");});
     showBadge();
   }
@@ -207,7 +204,7 @@ function initFilterBar() {
     rules += state;
     injectCSS();
     btnStopped.checked = true;
-    window.localStorage.setItem(storageFilter, btnStopped.id);
+    window.localStorage.setItem(snarkFilter, btnStopped.id);
     stopped.forEach((element) => {element.classList.add("filtered");});
     var count = filtered.length;
     showBadge();
@@ -226,7 +223,7 @@ function initFilterBar() {
     btnComplete.addEventListener("click", () => {disableBar();onClick();showComplete();enableBar();});
     btnIncomplete.addEventListener("click", () => {disableBar();onClick();showIncomplete();enableBar();});
     btnStopped.addEventListener("click", () => {disableBar();onClick();showStopped();enableBar();});
-    switch (window.localStorage.getItem(storageFilter)) {
+    switch (window.localStorage.getItem(snarkFilter)) {
       case "all":
         btnAll.checked = true;
         showAll();
@@ -300,11 +297,11 @@ function checkFilterBar() {
 function checkPagenav() {
   var pagenav = document.getElementById("pagenavtop");
   var path = window.location.pathname;
-  var storageFilter = "filter";
+  var snarkFilter = "snarkFilter";
   if (!path.endsWith("i2psnark/")) {
-    storageFilter = "filter_" + path.replace("/", "");
+    snarkFilter = "filter_" + path.replace("/", "");
   }
-  var storage = window.localStorage.getItem(storageFilter);
+  var storage = window.localStorage.getItem(snarkFilter);
   if (pagenav !== null) {
     if (storage !== null) {
       pagenav.style.display = "none";
@@ -333,7 +330,9 @@ function refreshFilters() {
 
 function checkIfVisible() {
   var torrentform = document.getElementById("torrentlist");
-  onVisible(torrentform, () => {checkFilterBar();});
+  if (torrentform !== null) {
+    onVisible(torrentform, () => {checkFilterBar();});
+  }
 }
 
 function refreshAll() {

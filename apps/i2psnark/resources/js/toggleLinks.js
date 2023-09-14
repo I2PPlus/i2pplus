@@ -46,6 +46,7 @@ function linkToggle() {
   if (toggle !== null) {
     if (config === "links" || config === "") {
       const expectedHtml = showMagnets;
+      toggle.click();
       if (toggleCss.innerHTML !== expectedHtml) {
         toggleCss.innerHTML = expectedHtml;
       }
