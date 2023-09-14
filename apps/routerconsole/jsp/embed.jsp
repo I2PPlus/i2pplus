@@ -127,7 +127,6 @@ var iframes = iFrameResize({interval: 0, heightCalculationMethod: isOldIE ? 'max
       var cssLink = document.createElement("link");
       cssLink.href = "/themes/console/embed.css";
       cssLink.rel = "stylesheet";
-      cssLink.type = "text/css";
       frames["<%=appname%>_frame"].document.body.appendChild(cssLink);
       var resizer = document.createElement("script");
       resizer.setAttribute("src", "/js/iframeResizer/iframeResizer.contentWindow.js");
