@@ -23,17 +23,3 @@ function endOfPage() {
   frames[a + "_frame"].document.body.appendChild(end);
 }
 
-// refresh embedded logs every 30 seconds
-
-function doRefresh() {
-  if (u.indexOf(".log") >= 0 && r != null) {
-    w = document.getElementById(a + '_frame').contentWindow;
-    var end = document.createElement("span");
-    end.setAttribute("id", "endOfPage");
-    end.setAttribute("data-iframe-height", "");
-    frames[a + "_frame"].document.body.appendChild(end);
-    if (u.indexOf(".log") >=0) {
-      setTimeout("document.getElementById('endOfPage').scrollIntoView({behavior: 'smooth', block: 'end', inline: 'end'});", 3000); // 3 sec delay to ensure dom loaded
-    }
-  }
-}
