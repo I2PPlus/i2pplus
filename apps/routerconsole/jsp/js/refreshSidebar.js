@@ -8,12 +8,6 @@ import {stickySidebar} from "/js/stickySidebar.js";
 
 let isDown = false;
 let isDownTimer = null;
-/**
-let routerIsDown = document.getElementById("routerIsDown");
-const routerIsDownStyle = document.createElement("style");
-routerIsDownStyle.id = "routerIsDown";
-routerIsDownStyle.textContent = "body{margin:0;padding:0;overflow:hidden;contain:paint;height:100vh}body::before,body::after{display:block!important}";
-**/
 
 const advancedGeneral = document.getElementById("sb_advancedgeneral");
 const badges = document.querySelectorAll(".badge, #tunnelCount, #newsCount");
@@ -53,11 +47,23 @@ const updateSectionHR = document.querySelector("#sb_updatesection + hr");
 const updateStatus = document.getElementById("sb_updatestatus");
 const visible = document.visibilityState;
 
+sb.addEventListener("loaded", () => {
+  sectionToggler();
+  countTunnels();
+  countNewsItems();
+});
+
 function tangoDown() {
   isDown = true;
+  statusPanel.forEach(statusPanel => (statusPanel.classList.add("statusDown")));
+  digits.forEach(digit => (digit.innerHTML = "---&nbsp;"));
+  if (clock !== null) {clock.textContent = "--:--:--";}
+  if (graphStats !== null) {graphStats.textContent = " --- / ---";}
+  badges.forEach(badge => (badge.textContent = ""));
+  localtunnelSummary.classList.add = "statusDown";
   document.querySelector("body").classList.add("isDown");
   if (shutdownStatus !== null) {
-    shutdownStatus.setAttribute("hidden", "");
+    shutdownStatus.setAttribute("hidden", "hidden");
   }
   if (localTunnels) {
     localTunnels.innerHTML = "<tr id=routerdown><td colspan=3 height=10></td></tr>";
@@ -68,12 +74,6 @@ function tangoDown() {
   if (localtunnelSummary) {
     localtunnelSummary.innerHTML = "<tr id=routerdown><td colspan=3 height=10></td></tr>";
   }
-  statusPanel.forEach(statusPanel => (statusPanel.classList.add("statusDown")));
-  digits.forEach(digit => (digit.innerHTML = "---&nbsp;"));
-  if (clock !== null) {clock.textContent = "--:--:--";}
-  if (graphStats !== null) {graphStats.textContent = " --- / ---";}
-  badges.forEach(badge => (badge.textContent = ""));
-  localtunnelSummary.classList.add = "statusDown";
 }
 
 function refreshSidebar() {
@@ -402,17 +402,9 @@ function refreshSidebar() {
     checkSections();
   };
 
-  xhr.addEventListener("loaded", () => {
-    sectionToggler();
-    countTunnels();
-    countNewsItems();
-  });
-
   if (visible === "visible") {
     xhr.send();
     stickySidebar();
-  } else if (xhr.status !== null) {
-    xhr.abort();
   }
 
   xhr.onerror = function (error) {
