@@ -1078,6 +1078,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #netdboverview td,.sybil_addresses td{line-height:1.6}
 #netdboverview th[colspan="3"]{padding:12px;position:static;text-transform:uppercase;letter-spacing:.08em;font-size:12pt;background:var(--h1);background-size:2px,100% 4px,100%,175px}
 #netdboverview th[role="columnheader"]:not([data-sort-method="none"])::after{top:38%}
+#netdboverview table{margin-bottom:-1px}
 #netdboverview table th:first-child::before,#netdboverview table td:first-child::before{min-height:26px;display:inline-block;vertical-align:middle;content:""}
 #netdboverview table th{font-size:95%}
 #netdboverview table th:last-child,#netdboverview table td:last-child{text-align:right}
@@ -2313,7 +2314,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #routerlogs td p,#wrapperlogs td p{margin:0}
 #routerlogs ul,#criticallogs ul{margin:-4px 0;border:0}
 #servicelogs{color:var(--ink)}
-#service_logs{margin:0;padding:4px 6px;width:calc(100% - 12px);max-height:600px;white-space:pre-wrap;resize:none;font-weight:500;color:#8f935c;background:url(images/tank.webp) no-repeat right 18px bottom 10px/14% auto}
+#service_logs{margin:0;padding:4px 6px;width:calc(100% - 12px);max-height:600px;white-space:pre-wrap;resize:none;font-weight:500;color:#8f935c;background:url(images/tank.webp) no-repeat right 12px bottom 12px/14% auto}
 #wrapperlogs{margin-bottom:10px;width:100%;table-layout:fixed}
 #wrapperlogs tr:nth-child(2){background:rgba(0,16,0,.3)}
 #wrapperlogs tr:last-child td{padding:0}
@@ -2942,5 +2943,10 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #jobs label{float:right}
 
 /* router down */
-#sidebar #sb_status.statusDown,#sidebar #sb_tunnelstatus.statusDown,#sidebar #sb_routerControl.statusDown {padding:18px;border:0;box-shadow:none;background:var(--isdown);opacity:.3}
-#sidebar #sb_status.statusDown>*,#sidebar #sb_tunnelstatus.statusDown>*,#sidebar #sb_routerControl.statusDown>*,#sidebar #sb_status.statusDown::before,#sidebar #sb_tunnelstatus.statusDown::before,#sidebar #sb_routerControl.statusDown::before,#sidebar #sb_status.statusDown::after,#sidebar #sb_tunnelstatus.statusDown::after,#sidebar #sb_routerControl.statusDown::before {display:none}
+#sidebar #sb_status.statusDown,#sidebar #sb_tunnelstatus.statusDown,#sidebar #sb_routerControl.statusDown{padding:18px;border:0;box-shadow:none;background:var(--isdown);opacity:.3;pointer-events:none}
+#sidebar #sb_status.statusDown>*,#sidebar #sb_tunnelstatus.statusDown>*,#sidebar #sb_routerControl.statusDown>*,#sidebar #sb_status.statusDown::before,#sidebar #sb_tunnelstatus.statusDown::before,#sidebar #sb_routerControl.statusDown::before,#sidebar #sb_status.statusDown::after,#sidebar #sb_tunnelstatus.statusDown::after,#sidebar #sb_routerControl.statusDown::before{display:none}
+
+body.isDown::after,body.isDown::before{height:100vh;width:100%;display:block;position:absolute;top:0;left:0;bottom:0;right:0;overflow:hidden;content:"";contain:paint}
+body.isDown::before{background:linear-gradient(90deg,rgba(0,0,0,.8),#000,rgba(0,0,0,.8));backdrop-filter:saturate(.3) blur(5px);z-index:9998}
+body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 40px);background:var(--update) var(--center)/80px;content:"";transform:rotate(0);animation:linear spin 3s forwards infinite;z-index:9999}
+
