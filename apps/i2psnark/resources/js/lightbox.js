@@ -21,8 +21,6 @@ function Lightbox() {
    * Private vars
    */
   var CTX = this,
-    isIE8 = false,
-    isIE9 = false,
     body = document.getElementsByTagName('body')[0],
     template = '<div class="' + _const_name + '-contentwrapper" id="' + _const_name + '-contentwrapper" ></div>',
     imgRatio = false, // ratio of current image
@@ -67,7 +65,6 @@ function Lightbox() {
    */
 
   /**
-   * Get correct height in IE8
    * @return {number}
    */
   function getHeight() {
@@ -75,7 +72,6 @@ function Lightbox() {
   }
 
   /**
-   * Get correct width in IE8
    * @return {number}
    */
   function getWidth() {
@@ -306,14 +302,11 @@ function Lightbox() {
    * Starts the loading animation
    */
   function startAnimation() {
-    if (isIE8) {
-      return;
-    }
     // stop any already running animations
     stopAnimation();
     var fnc = function () {
       addClass(CTX.box, _const_class_prefix + '-loading');
-      if (!isIE9 && typeof CTX.opt.loadingAnimation === 'number') {
+      if (typeof CTX.opt.loadingAnimation === 'number') {
         var index = 0;
         animationInt = setInterval(function () {
           addClass(animationChildren[index], _const_class_prefix + '-active');
@@ -332,15 +325,11 @@ function Lightbox() {
    * Stops the animation
    */
   function stopAnimation() {
-    if (isIE8) {
-      return;
-    }
     // hide animation-element
     removeClass(CTX.box, _const_class_prefix + '-loading');
     // stop animation
-    if (!isIE9 && typeof CTX.opt.loadingAnimation !== 'string' && CTX.opt.loadingAnimation) {
+    if (typeof CTX.opt.loadingAnimation !== 'string' && CTX.opt.loadingAnimation) {
       clearInterval(animationInt);
-      // do not use animationChildren.length here due to IE8/9 bugs
       for (var i = 0; i < animationChildren.length; i++) {
         removeClass(animationChildren[i], _const_class_prefix + '-active');
       }
@@ -477,9 +466,6 @@ function Lightbox() {
         body.appendChild(CTX.box);
       }
     CTX.box.innerHTML = template;
-    if (isIE8) {
-      addClass(CTX.box, _const_class_prefix + '-ie8');
-    }
     CTX.wrapper = document.getElementById(_const_id_prefix + '-contentwrapper');
 
     // init regular closebutton
@@ -496,7 +482,7 @@ function Lightbox() {
     }
 
     // close lightbox on background-click by default / if true
-    if (!isIE8 && CTX.opt.closeOnClick) {
+    if (CTX.opt.closeOnClick) {
       addEvent(CTX.box, 'click', function (e) {
         stopPropagation(e);
         CTX.close();
@@ -647,10 +633,6 @@ function Lightbox() {
 
     addClass(CTX.box, _const_class_prefix + '-active');
 
-    // show wrapper early to avoid bug where dimensions are not correct in IE8
-    if (isIE8) {
-      addClass(CTX.wrapper, _const_class_prefix + '-active');
-    }
     if (CTX.opt.controls && currImages.length > 1) {
       initControls();
       repositionControls();
@@ -673,13 +655,6 @@ function Lightbox() {
       // store original width here
       currImage.originalWidth = this.naturalWidth || this.width;
       currImage.originalHeight = this.naturalHeight || this.height;
-      // use dummyimage for correct dimension calculating in older IE
-      if (isIE8 || isIE9) {
-        var dummyImg = new Image();
-        dummyImg.setAttribute('src', src);
-        currImage.originalWidth = dummyImg.width;
-        currImage.originalHeight = dummyImg.height;
-      }
       // interval to check if image is ready to show
       var checkClassInt = setInterval(function () {
         if (hasClass(CTX.box, _const_class_prefix + '-active')) {
@@ -743,15 +718,6 @@ function Lightbox() {
    * @param  {Object} opt Custom options
    */
   CTX.load = function (opt) {
-    // check for IE8
-    if (navigator.appVersion.indexOf('MSIE 8') > 0) {
-      isIE8 = true;
-    }
-
-    // check for IE9
-    if (navigator.appVersion.indexOf('MSIE 9') > 0) {
-      isIE9 = true;
-    }
 
     // set options
     setOpt(opt);
@@ -920,11 +886,6 @@ function Lightbox() {
 
     // stop animtation
     stopAnimation();
-
-    // Hide Lightbox if iE8
-    if (isIE8) {
-      CTX.box.setAttribute('style', 'display: none');
-    }
 
     // show overflow by default / if set
     if (!CTX.opt || !isset(CTX.opt.hideOverflow) || CTX.opt.hideOverflow) {
