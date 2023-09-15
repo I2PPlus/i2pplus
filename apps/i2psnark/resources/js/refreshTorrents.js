@@ -25,7 +25,12 @@ function debounce(func, wait) {
     };
 
     clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
+
+    if (arguments[2] && arguments[2] === "now") {
+      func(...args);
+    } else {
+      timeout = setTimeout(later, wait);
+    }
   };
 }
 
@@ -45,7 +50,7 @@ function refreshTorrents(callback) {
   const snarkTable = torrents || files;
   const query = window.location.search;
 
-  if (requestInProgress) {
+  if (requestInProgress && (callback !== initFilterBar || callback !== updateLog)) {
     return;
   }
 
@@ -239,7 +244,7 @@ function noAjax(delay) {
   }, delay);
 }
 
-const debouncedRefreshTorrents = debounce(refreshTorrents, 500);
+const debouncedRefreshTorrents = debounce(refreshTorrents, 10);
 
 window.addEventListener("load", () => {
   debouncedRefreshTorrents();
@@ -253,7 +258,7 @@ function setupPage() {
     initFilterBar();
   }
 }
-
+/**
 function initSnarkRefresh() {
   const interval = (parseInt(storageRefresh) || 5) * 1000;
   if (refreshIntervalId) {
@@ -263,6 +268,25 @@ function initSnarkRefresh() {
     refreshTorrents(setupPage);
   }, interval);
 }
+**/
+
+function initSnarkRefresh() {
+  const interval = (parseInt(storageRefresh) || 5) * 1000;
+  let lastDebouncedCall = Date.now(); // track the timestamp of the last debounced call
+  if (refreshIntervalId) {
+    clearInterval(refreshIntervalId);
+  }
+  const debouncedRefreshTorrents = debounce(() => {
+    if (Date.now() - lastDebouncedCall >= interval) {
+      refreshTorrents(setupPage);
+      lastDebouncedCall = Date.now();
+    }
+  }, interval - 50);
+
+  refreshIntervalId = setInterval(() => {
+    debouncedRefreshTorrents();
+  }, interval);
+}
 
 document.addEventListener("DOMContentLoaded", function() {
   initSnarkRefresh();
@@ -270,4 +294,4 @@ document.addEventListener("DOMContentLoaded", function() {
   setupPage();
 });
 
-export {initSnarkRefresh, refreshTorrents, debouncedRefreshTorrents, xhrsnark};
+export {initSnarkRefresh, refreshTorrents, debouncedRefreshTorrents, debounce, xhrsnark};

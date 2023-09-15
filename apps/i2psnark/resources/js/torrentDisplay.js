@@ -108,8 +108,10 @@ function initFilterBar() {
   }
 
   function injectCSS() {
+    clean();
     var stylesheet = document.getElementById("cssfilter");
     stylesheet.innerText = rules;
+    showBadge();
   }
 
   function disableBar() {
@@ -133,73 +135,73 @@ function initFilterBar() {
   }
 
   function showActive() {
-    clean();
+//    clean();
     var state = ".active{visibility:visible}";
     rules += state;
     injectCSS();
     btnActive.checked = true;
     window.localStorage.setItem(snarkFilter, btnActive.id);
     active.forEach((element) => {element.classList.add("filtered");});
-    showBadge();
+//    showBadge();
   }
 
   function showInactive() {
-    clean();
+//    clean();
     var state = ".inactive{visibility:visible}";
     rules += state;
     injectCSS();
     btnInactive.checked = true;
     window.localStorage.setItem(snarkFilter, btnInactive.id);
     inactive.forEach((element) => {element.classList.add("filtered");});
-    showBadge();
+//    showBadge();
   }
 
   function showDownloading() {
-    clean();
+//    clean();
     var state = ".downloading{visibility:visible}";
     rules += state;
     injectCSS();
     btnDownloading.checked = true;
     window.localStorage.setItem(snarkFilter, btnDownloading.id);
     downloading.forEach((element) => {element.classList.add("filtered");});
-    showBadge();
+//    showBadge();
   }
 
   function showSeeding() {
-    clean();
+//    clean();
     var state = ".seeding{visibility:visible}";
     rules += state;
     injectCSS();
     btnSeeding.checked = true;
     window.localStorage.setItem(snarkFilter, btnSeeding.id);
     seeding.forEach((element) => {element.classList.add("filtered");});
-    showBadge();
+//    showBadge();
   }
 
   function showComplete() {
-    clean();
+//    clean();
     var state = ".complete{visibility:visible}";
     rules += state;
     injectCSS();
     btnComplete.checked = true;
     window.localStorage.setItem(snarkFilter, btnComplete.id);
     complete.forEach((element) => {element.classList.add("filtered");});
-    showBadge();
+//    showBadge();
   }
 
   function showIncomplete() {
-    clean();
+//    clean();
     var state = ".incomplete{visibility:visible}";
     rules += state;
     injectCSS();
     btnIncomplete.checked = true;
     window.localStorage.setItem(snarkFilter, btnIncomplete.id);
     incomplete.forEach((element) => {element.classList.add("filtered");});
-    showBadge();
+//    showBadge();
   }
 
   function showStopped() {
-    clean();
+//    clean();
     var state = ".stopped{visibility:visible}";
     rules += state;
     injectCSS();
@@ -207,7 +209,7 @@ function initFilterBar() {
     window.localStorage.setItem(snarkFilter, btnStopped.id);
     stopped.forEach((element) => {element.classList.add("filtered");});
     var count = filtered.length;
-    showBadge();
+//    showBadge();
   }
 
   function onClick() {
