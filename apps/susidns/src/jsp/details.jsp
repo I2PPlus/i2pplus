@@ -44,8 +44,8 @@
     }
 %>
 <link rel=stylesheet href="<%=book.getTheme()%>override.css">
-<script charset=utf-8 src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset=utf-8 src="/js/textareaResize.js"></script>
+<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/textareaResize.js"></script>
 <%
     String query = request.getQueryString();
 %>

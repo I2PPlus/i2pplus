@@ -68,10 +68,10 @@
     }
 %>
 <link rel=stylesheet href="<%=book.getTheme()%>override.css">
-<script charset=utf-8 src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset=utf-8 src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset=utf-8 src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <%
     String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
     String query = request.getQueryString();
@@ -515,8 +515,8 @@
 <style>body{display:block;pointer-events:auto}</style>
 </div>
 <!--
-<script charset=utf-8 src="/themes/search.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/themes/search.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 -->
-<script charset=utf-8 src=/js/lazyload.js></script>
+<script src=/js/lazyload.js></script>
 </body>
 </html>

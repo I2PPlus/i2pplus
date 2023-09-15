@@ -81,8 +81,8 @@
                 appname = "imagegen";
 %>
 <div class=main id="<%=appname%>">
-<script charset=utf-8 src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset=utf-8 src="/js/iframedClassInjectTheme.js"></script>
+<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframedClassInjectTheme.js"></script>
 <script nonce=<%=cspNonce%>>
 function setupFrame() {
       f = document.getElementById("<%=appname%>_frame");
@@ -113,8 +113,8 @@ var iframes = iFrameResize({interval: 0, heightCalculationMethod: isOldIE ? 'max
             else appname = "iframedapp";
 %>
 <div class="main embedded" id="<%=appname%>">
-<script charset=utf-8 src="/js/iframedClassInjectTheme.js"></script>
-<script charset=utf-8 src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframedClassInjectTheme.js"></script>
+<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce=<%=cspNonce%>>
   function setupFrame() {
       f = document.getElementById("<%=appname%>_frame");

@@ -14,7 +14,7 @@
 <%=intl.title("config plugins")%>
 <style>input.default{width: 1px; height: 1px; visibility: hidden;}</style>
 <script nonce=<%=cspNonce%>>var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";</script>
-<script charset=utf-8 src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>

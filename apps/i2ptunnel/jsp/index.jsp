@@ -601,8 +601,8 @@ ElGamal-2048
 <%
   }  // !isInitialized()
 %>
-<script charset=utf-8 src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset=utf-8 src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
+<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
 </div>
 <span data-iframe-height></span>
 <noscript><style>.script{display:none!important}.tunnelInfo{display:table-row!important}#screenlog_buttons{display:table-row!important}</style></noscript>

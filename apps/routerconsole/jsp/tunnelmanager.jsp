@@ -31,6 +31,8 @@
 <head>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
+<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <%=intl.title("Tunnel Manager")%>
 </head>
 <body>
@@ -47,8 +49,8 @@
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/i2ptunnel/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
-<script charset=utf-8 src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset=utf-8 src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce=<%=cspNonce%>>
   function setupFrame() {
     f = document.getElementById("i2ptunnelframe");

@@ -45,7 +45,7 @@
     }
 %>
 <link rel=stylesheet href="<%=base.getTheme()%>override.css">
-<script charset=utf-8 src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style>body{display:none;pointer-events:none}</style>
 </head>
 <body id=ovrvw>

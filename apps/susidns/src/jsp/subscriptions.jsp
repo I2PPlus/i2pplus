@@ -46,7 +46,7 @@
     }
 %>
 <link rel=stylesheet href="<%=subs.getTheme()%>override.css">
-<script charset=utf-8 src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style>body{display:none;pointer-events:none}</style>
 </head>
 <body id=sbs>
@@ -65,7 +65,7 @@
 <h3><%=intl._t("Subscriptions")%>&nbsp;&nbsp;<span><a href="log.jsp">View Log</a></span></h3>
 <h4><%=intl._t("File location")%>: <span class=storage>${subs.fileName}</span></h4>
 </div>
-<script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <div id=messages>${subs.messages}</div>
 <form method=POST action="subscriptions#navi">
 <div id=content>

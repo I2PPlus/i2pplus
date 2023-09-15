@@ -33,6 +33,8 @@
 <head>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
+<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <%=intl.title("torrents")%>
 </head>
 <body>
@@ -50,8 +52,6 @@
 &nbsp;<a href="/i2psnark/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
 </div>
-<script charset=utf-8 src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script charset=utf-8 src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce=<%=cspNonce%>>
   function setupFrame() {
     f = document.getElementById("i2psnarkframe");

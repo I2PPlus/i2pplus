@@ -46,7 +46,7 @@
     }
 %>
 <link rel=stylesheet href="<%=base.getTheme()%>override.css">
-<script charset=utf-8 src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style>body{display:none;pointer-events:none}</style>
 </head>
 <body id=cfg>
@@ -65,7 +65,7 @@
 <h3><%=intl._t("Configuration")%></h3>
 <h4><%=intl._t("File location")%>: <span class=storage>${cfg.fileName}</span></h4>
 </div>
-<script charset=utf-8 src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <div id=messages>${cfg.messages}</div>
 <form method=POST action="config#navi">
 <div id=config>

@@ -16,7 +16,7 @@
 <script nonce=<%=cspNonce%>>
   var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";
 </script>
-<script charset=utf-8 src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body>
 
