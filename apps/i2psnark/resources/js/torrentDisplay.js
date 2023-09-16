@@ -61,65 +61,34 @@ function initFilterBar() {
     if (badge !== null) {badge.innerHTML = "";}
     allOdd.forEach((element) => {element.classList.remove("filtered");});
     allEven.forEach((element) => {element.classList.remove("filtered");});
+
     if (pagenav) {
       var filterActive = storage !== null;
       if (filterActive) {pagenav.style.display = "none";}
       else {pagenav.style.display = "";}
     }
+
     if (badge) {badges.forEach((element) => {element.remove();});}
   }
 
-  async function showBadge() {
-    var filtered = document.querySelectorAll(".filtered");
+  var filteredCount = 0;
+
+  function showBadge() {
+    var filtered = document.querySelectorAll("#snarkTbody tr.filtered");
     var activeFilter = document.querySelector("#torrentDisplay input:checked + .filterbutton");
-    if (!activeFilter.classList.contains("enabled")) {
+
+    if (activeFilter && !activeFilter.classList.contains("enabled")) {
       activeFilter.classList.add("enabled");
     }
     if (!activeFilter.querySelector("#filtercount")) {
-      activeFilter.innerHTML += "<span id=filtercount class=badge></span>";
+      activeFilter.innerHTML += "<span id='filtercount' class='badge'></span>";
     }
-    try {
-      const count = await getCount(filtered);
-
-      if (count > 0) {
-        var badge = document.getElementById("filtercount");
-        badge.innerText = count;
-      }
-    } catch (error) {
-      console.error(error);
+    const badge = document.getElementById("filtercount");
+    const count = filtered.length;
+    if (count !== filteredCount) {
+      filteredCount = count;
+      badge.innerText = filteredCount;
     }
-  }
-
-  function getCount(filtered) {
-    return new Promise(resolve => {
-      const observer = new MutationObserver((mutations) => {
-        for (let mutation of mutations) {
-          if (mutation.type === "attributes" && mutation.attributeName === "class") {
-            const filteredArray = Array.from(filtered);
-            if (filteredArray.every(elem => elem.classList.contains("filtered"))) {
-              observer.disconnect();
-              resolve(filtered.length);
-            }
-          }
-        }
-      });
-      filtered.forEach(elem => observer.observe(elem, {attributes: true}));
-    });
-  }
-
-  function injectCSS() {
-    clean();
-    var stylesheet = document.getElementById("cssfilter");
-    stylesheet.innerText = rules;
-    showBadge();
-  }
-
-  function disableBar() {
-    filterbar.classList.add("noPointer");
-  }
-
-  function enableBar() {
-    filterbar.classList.remove("noPointer");
   }
 
   function showAll() {
@@ -135,134 +104,85 @@ function initFilterBar() {
   }
 
   function showActive() {
-//    clean();
-    var state = ".active{visibility:visible}";
-    rules += state;
-    injectCSS();
     btnActive.checked = true;
     window.localStorage.setItem(snarkFilter, btnActive.id);
-    active.forEach((element) => {element.classList.add("filtered");});
-//    showBadge();
   }
 
   function showInactive() {
-//    clean();
-    var state = ".inactive{visibility:visible}";
-    rules += state;
-    injectCSS();
     btnInactive.checked = true;
     window.localStorage.setItem(snarkFilter, btnInactive.id);
-    inactive.forEach((element) => {element.classList.add("filtered");});
-//    showBadge();
   }
 
   function showDownloading() {
-//    clean();
-    var state = ".downloading{visibility:visible}";
-    rules += state;
-    injectCSS();
     btnDownloading.checked = true;
     window.localStorage.setItem(snarkFilter, btnDownloading.id);
-    downloading.forEach((element) => {element.classList.add("filtered");});
-//    showBadge();
   }
 
   function showSeeding() {
-//    clean();
-    var state = ".seeding{visibility:visible}";
-    rules += state;
-    injectCSS();
     btnSeeding.checked = true;
     window.localStorage.setItem(snarkFilter, btnSeeding.id);
-    seeding.forEach((element) => {element.classList.add("filtered");});
-//    showBadge();
   }
 
   function showComplete() {
-//    clean();
-    var state = ".complete{visibility:visible}";
-    rules += state;
-    injectCSS();
     btnComplete.checked = true;
     window.localStorage.setItem(snarkFilter, btnComplete.id);
-    complete.forEach((element) => {element.classList.add("filtered");});
-//    showBadge();
   }
 
   function showIncomplete() {
-//    clean();
-    var state = ".incomplete{visibility:visible}";
-    rules += state;
-    injectCSS();
     btnIncomplete.checked = true;
     window.localStorage.setItem(snarkFilter, btnIncomplete.id);
-    incomplete.forEach((element) => {element.classList.add("filtered");});
-//    showBadge();
   }
 
   function showStopped() {
-//    clean();
-    var state = ".stopped{visibility:visible}";
-    rules += state;
-    injectCSS();
     btnStopped.checked = true;
     window.localStorage.setItem(snarkFilter, btnStopped.id);
-    stopped.forEach((element) => {element.classList.add("filtered");});
-    var count = filtered.length;
-//    showBadge();
-  }
-
-  function onClick() {
-    refreshFilters();
   }
 
   if (filterbar) {
-    btnAll.addEventListener("click", () => {disableBar();onClick();showAll();enableBar();});
-    btnActive.addEventListener("click", () => {disableBar();onClick();showActive();enableBar();});
-    btnInactive.addEventListener("click", () => {disableBar();onClick();showInactive();enableBar();});
-    btnDownloading.addEventListener("click", () => {disableBar();onClick();showDownloading();enableBar();});
-    btnSeeding.addEventListener("click", () => {disableBar();onClick();showSeeding();enableBar();});
-    btnComplete.addEventListener("click", () => {disableBar();onClick();showComplete();enableBar();});
-    btnIncomplete.addEventListener("click", () => {disableBar();onClick();showIncomplete();enableBar();});
-    btnStopped.addEventListener("click", () => {disableBar();onClick();showStopped();enableBar();});
-    switch (window.localStorage.getItem(snarkFilter)) {
-      case "all":
-        btnAll.checked = true;
-        showAll();
-        break;
-      case "active":
-        btnActive.checked = true;
-        showActive();
-        break;
-      case "inactive":
-        btnInactive.checked = true;
-        showInactive();
-        break;
-      case "downloading":
-        btnDownloading.checked = true;
-        showDownloading();
-        break;
-      case "seeding":
-        btnSeeding.checked = true;
-        showSeeding();
-        break;
-      case "complete":
-        btnComplete.checked = true;
-        showComplete();
-        break;
-      case "incomplete":
-        btnIncomplete.checked = true;
-        showIncomplete();
-        break;
-      case "stopped":
-        btnStopped.checked = true;
-        showStopped();
-        break;
-      default:
-        btnAll.checked = true;
-        showAll();
+    const filters = [
+      { button: btnAll, filterFunction: showAll, localStorageKey: "all" },
+      { button: btnActive, filterFunction: showActive, localStorageKey: "active" },
+      { button: btnInactive, filterFunction: showInactive, localStorageKey: "inactive" },
+      { button: btnDownloading, filterFunction: showDownloading, localStorageKey: "downloading" },
+      { button: btnSeeding, filterFunction: showSeeding, localStorageKey: "seeding" },
+      { button: btnComplete, filterFunction: showComplete, localStorageKey: "complete" },
+      { button: btnIncomplete, filterFunction: showIncomplete, localStorageKey: "incomplete" },
+      { button: btnStopped, filterFunction: showStopped, localStorageKey: "stopped" }
+    ];
+
+    filters.forEach(filter => {
+      filter.button.addEventListener("click", () => {
+        filter.filterFunction();
+        window.localStorage.setItem(snarkFilter, filter.localStorageKey);
+        clean();
+        injectCSS();
+        showBadge();
+        refreshFilters();
+      });
+
+      if (window.localStorage.getItem(snarkFilter) === filter.localStorageKey) {
+        filter.button.checked = true;
+        filter.button.click();
+        filter.filterFunction();
+      }
+    });
+  }
+
+  function injectCSS() {
+    let state;
+    const stylesheet = document.getElementById("cssfilter");
+    const activeFilterId = document.querySelector("#torrentDisplay input:checked").id;
+    console.log("activeFilterId is: " + activeFilterId);
+    if (activeFilterId !== "all") {
+      const filteredRows = document.querySelectorAll(`${"#snarkTbody tr." + activeFilterId}`);
+      filteredRows.forEach((element) => {element.classList.add("filtered");});
+      const state = "." + activeFilterId + "{visibility:visible}";
+      stylesheet.innerText = rules + state;
+    } else {
+       stylesheet.textContent = "";
     }
   }
+
 }
 
 function checkFilterBar() {
@@ -297,22 +217,15 @@ function checkFilterBar() {
 }
 
 function checkPagenav() {
-  var pagenav = document.getElementById("pagenavtop");
-  var path = window.location.pathname;
-  var snarkFilter = "snarkFilter";
-  if (!path.endsWith("i2psnark/")) {
-    snarkFilter = "filter_" + path.replace("/", "");
-  }
-  var storage = window.localStorage.getItem(snarkFilter);
-  if (pagenav !== null) {
-    if (storage !== null) {
-      pagenav.style.display = "none";
-      pagenav.hidden = true;
-    } else {
-      pagenav.style.display = "block";
-      pagenav.hidden = false;
-      pagenav.removeAttribute("hidden");
-    }
+  const pagenav = document.getElementById("pagenavtop");
+  const path = window.location.pathname;
+  const snarkFilter = !path.endsWith("i2psnark/") ? "filter_" + path.replace("/", "") : "snarkFilter";
+  const storage = window.localStorage.getItem(snarkFilter);
+
+  if (pagenav) {
+    pagenav.style.display = storage ? "none" : "block";
+    pagenav.hidden = !!storage;
+    pagenav.removeAttribute("hidden");
   }
 }
 
@@ -320,13 +233,9 @@ function refreshFilters() {
   var filterbar = document.getElementById("torrentDisplay");
   var pagenav = document.getElementById("pagenavtop");
   var query = window.location.search;
-
-  if (query == null) {
-  } else {
-    if (pagenav && filterbar) {
-      checkPagenav();
-      refreshTorrents(initFilterBar);
-    }
+  if (query.includes("ps=9999") && pagenav && filterbar) {
+    checkPagenav();
+    debouncedRefreshTorrents(initFilterBar);
   }
 }
 
@@ -339,9 +248,7 @@ function checkIfVisible() {
 
 function refreshAll() {
   var filterbar = document.getElementById("torrentDisplay");
-  if (filterbar) {
-    refreshFilters();
-  }
+  if (filterbar) {refreshFilters();}
 }
 
 document.addEventListener("DOMContentLoaded", checkIfVisible, true);

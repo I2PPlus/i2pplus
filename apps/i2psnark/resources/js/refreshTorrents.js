@@ -13,6 +13,7 @@ const mainsection = document.getElementById("mainsection");
 const storageRefresh = window.localStorage.getItem("snarkRefresh");
 const xhrsnark = new XMLHttpRequest();
 let refreshIntervalId;
+let refreshTimeoutId;
 let requestInProgress = false;
 
 function debounce(func, wait) {
@@ -50,7 +51,11 @@ function refreshTorrents(callback) {
   const snarkTable = torrents || files;
   const query = window.location.search;
 
-  if (requestInProgress && (callback !== initFilterBar || callback !== updateLog)) {
+  if (requestInProgress) {
+    if (refreshTimeoutId) {
+      clearTimeout(refreshTimeoutId);
+    }
+    refreshTimeoutId = setTimeout(() => refreshTorrents(callback), 1000);
     return;
   }
 
@@ -74,21 +79,6 @@ function refreshTorrents(callback) {
   xhrsnark.open("GET", getURL(), true);
   xhrsnark.responseType = "document";
   xhrsnark.onload = function () {
-    switch (xhrsnark.status) {
-      case !200 || !404 || !500:
-        requestInProgress = true;
-      case 200:
-        break;
-      case 404 || 500 || !200:
-        noAjax(5000);
-        break;
-      default:
-        requestInProgress = false;
-    }
-
-    if (xhrsnark.readyState !== 4) {
-      return;
-    }
 
     if (storageRefresh === null) {
       getRefreshInterval();
@@ -194,18 +184,19 @@ function refreshTorrents(callback) {
 
     function updateIfVisible() {
       const delay = getRefreshInterval();
-      let snarkUpdateId;
-      if (snarkUpdateId) {clearTimeout(snarkUpdateId);}
-      const onUpdate = () => {snarkUpdateId = setTimeout(onUpdate, delay);};
+      let snarkUpdateId = null;
+      const onUpdate = () => {
+        clearTimeout(snarkUpdateId);
+        snarkUpdateId = setTimeout(onUpdate, delay);
+      };
+      onUpdate();
     }
 
     if (typeof callback === "function") {
       callback(xhrsnark.responseXML, getURL());
     }
 
-    requestInProgress = false;
-    updateIfVisible();
-    initLinkToggler();
+    //updateIfVisible();
 
     function getRefreshInterval() {
       const interval = parseInt(xhrsnark.getResponseHeader("X-Snark-Refresh-Interval")) || 5;
@@ -214,14 +205,18 @@ function refreshTorrents(callback) {
     }
     requestInProgress = false;
   };
+
+  xhrsnark.onerror = function (error) {
+    console.error("XHR request failed:", error);
+    noAjax(5000);
+    if (refreshTimeoutId) {
+      clearTimeout(refreshTimeoutId);
+    }
+    refreshTimeoutId = setTimeout(() => refreshTorrents(callback), 1000);
+    requestInProgress = false;
+  };
   xhrsnark.send();
 }
-
-xhrsnark.onerror = function (error) {
-  //console.error("XHR request failed:", error);
-  noAjax(5000);
-  requestInProgress = false;
-};
 
 function setLinks(query) {
   const home = document.querySelector('.nav_main');
@@ -244,11 +239,21 @@ function noAjax(delay) {
   }, delay);
 }
 
-const debouncedRefreshTorrents = debounce(refreshTorrents, 10);
+function debouncedRefreshTorrents(callback) {
+  const delay = 100;
+  let debounceTimeoutId;
 
-window.addEventListener("load", () => {
-  debouncedRefreshTorrents();
-});
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(debounceTimeoutId);
+      callback(refreshTorrents(...args));
+    };
+
+    clearTimeout(debounceTimeoutId);
+
+    debounceTimeoutId = setTimeout(later, delay);
+  };
+}
 
 function setupPage() {
   if (mainsection) {
@@ -258,40 +263,17 @@ function setupPage() {
     initFilterBar();
   }
 }
-/**
-function initSnarkRefresh() {
-  const interval = (parseInt(storageRefresh) || 5) * 1000;
-  if (refreshIntervalId) {
-    clearInterval(refreshIntervalId);
-  }
-  refreshIntervalId = setInterval(() => {
-    refreshTorrents(setupPage);
-  }, interval);
-}
-**/
 
 function initSnarkRefresh() {
   const interval = (parseInt(storageRefresh) || 5) * 1000;
-  let lastDebouncedCall = Date.now(); // track the timestamp of the last debounced call
-  if (refreshIntervalId) {
-    clearInterval(refreshIntervalId);
-  }
-  const debouncedRefreshTorrents = debounce(() => {
-    if (Date.now() - lastDebouncedCall >= interval) {
-      refreshTorrents(setupPage);
-      lastDebouncedCall = Date.now();
-    }
-  }, interval - 50);
-
+  clearInterval(refreshIntervalId);
   refreshIntervalId = setInterval(() => {
-    debouncedRefreshTorrents();
+    debouncedRefreshTorrents(setupPage)(refreshTorrents);
   }, interval);
 }
 
 document.addEventListener("DOMContentLoaded", function() {
   initSnarkRefresh();
-  initLinkToggler();
-  setupPage();
 });
 
 export {initSnarkRefresh, refreshTorrents, debouncedRefreshTorrents, debounce, xhrsnark};
