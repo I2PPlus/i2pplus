@@ -26,45 +26,46 @@ function initLinkToggler() {
   var mlinks = document.querySelectorAll("#snarkTbody .magnet");
   var tlinks = document.querySelectorAll("#snarkTbody .trackerLink");
   var toggle = document.getElementById("linkswitch");
-
-  if (!toggle) {return;}
   toggle.removeAttribute("hidden");
-  if (config === "links" || config === "") {
+  toggle.removeAttribute("checked");
+  if (!toggle) {return;}
+  if (config === "links" || !config) {
     localStorage.setItem("linkToggle", "links");
+    toggle.false = true;
+  } else if (config === "magnets") {
     toggle.checked = true;
-    toggle.setAttribute("checked", "checked");
-  } else {
-    localStorage.setItem("linkToggle", "magnets");
-    toggle.checked = false;
-    toggle.setAttribute("checked", "");
-    magnetToClipboard();
   }
   toggle.addEventListener("click", linkToggle, true);
   magnetToClipboard();
 }
 
 function linkToggle() {
-  var config = window.localStorage.getItem("linkToggle").toString();
+  var config = window.localStorage.getItem("linkToggle");
+  if (config && (config === "links" || config === "magnets")) {
+    config = config.toString();
+  } else {
+    config = "";
+  }
   var mlinks = document.querySelectorAll("#snarkTbody .magnet");
   var tlinks = document.querySelectorAll("#snarkTbody .trackerLink");
   var toggle = document.getElementById("linkswitch");
   var toggleCss = document.getElementById("toggleLinks");
 
   if (!toggle) {return;}
-  if (config === "links" || config === "") {
+  if (config === "links" || !config) {
     const expectedHtml = showMagnets + magnetBtn;
     if (toggleCss.innerHTML !== expectedHtml) {
       toggleCss.innerHTML = expectedHtml;
     }
-    localStorage.setItem("linkToggle", "magnets");
     toggle.click();
+    localStorage.setItem("linkToggle", "magnets");
   } else {
     const expectedHtml = showLinks + magnetBtn;
     if (toggleCss.innerHTML !== expectedHtml) {
       toggleCss.innerHTML = expectedHtml;
     }
-    localStorage.setItem("linkToggle", "links");
     toggle.click();
+    localStorage.setItem("linkToggle", "links");
   }
 }
 
