@@ -188,7 +188,7 @@ public class RouterContext extends I2PAppContext {
      */
     @Deprecated
     public void setProperty(String propName, String value) {
-    		_overrideProps.setProperty(propName, value);
+        _overrideProps.setProperty(propName, value);
     }
 
     /**
@@ -204,7 +204,7 @@ public class RouterContext extends I2PAppContext {
 
 
     public void addPropertyCallback(I2PPropertyCallback callback) {
-    	_overrideProps.addCallBack(callback);
+        _overrideProps.addCallBack(callback);
     }
 
 

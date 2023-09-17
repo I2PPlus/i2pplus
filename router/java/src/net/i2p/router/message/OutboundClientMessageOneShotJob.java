@@ -553,7 +553,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
  ***  unfortunately the "U" is rarely seen.
             if (!getContext().commSystem().wasUnreachable(l.getGateway())) {
 ***/
-            RouterInfo ri = getContext().netDbSegmentor().lookupRouterInfoLocally(l.getGateway(), null);
+//            RouterInfo ri = getContext().netDbSegmentor().lookupRouterInfoLocally(l.getGateway(), null);
+            RouterInfo ri = getContext().mainNetDb().lookupRouterInfoLocally(l.getGateway());
             if (ri == null || ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) < 0) {
                 _lease = l;
                 break;
@@ -591,11 +592,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             int cause;
             if (getContext().netDbSegmentor().isNegativeCachedForever(_to.calculateHash(), _from.calculateHash().toBase32())) {
                 if (_log.shouldWarn())
-                    _log.warn("Signature type unsupported; cannot send to " + _toString);
+                    _log.warn("Cannot send to " + _toString + " -> Unsupported Signature type");
                 cause = MessageStatusMessage.STATUS_SEND_FAILURE_UNSUPPORTED_ENCRYPTION;
             } else {
                 if (_log.shouldInfo())
-                    _log.info("LeaseSet not found; cannot send to " + _toString);
+                    _log.info("Cannot send to " + _toString + " -> LeaseSet not found");
                 cause = MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
             }
 

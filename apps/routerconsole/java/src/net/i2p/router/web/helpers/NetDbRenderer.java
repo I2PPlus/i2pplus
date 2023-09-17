@@ -80,7 +80,8 @@ class NetDbRenderer {
     public static final int LOOKUP_WAIT = 8 * 1000;
 
     public boolean isFloodfill() {
-        return _context.netDbSegmentor().floodfillEnabled();
+//        return _context.netDbSegmentor().floodfillEnabled();
+        return _context.mainNetDb().floodfillEnabled();
     }
 
     /**

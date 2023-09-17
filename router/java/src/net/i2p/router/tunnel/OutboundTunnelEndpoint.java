@@ -65,7 +65,7 @@ class OutboundTunnelEndpoint {
                 // We don't have any use for it yet.
                 // Don't send to OutboundMessageDistributor.distribute() which will NPE or fail
                 if (_log.shouldWarn())
-                    _log.warn("Dropping messsage at Outbound Endpoint - unsupported delivery instruction type (LOCAL)");
+                    _log.warn("Dropping messsage at Outbound Endpoint -> Unsupported delivery instruction type (LOCAL)");
                 return;
             }
             if (_log.shouldDebug())
@@ -79,32 +79,34 @@ class OutboundTunnelEndpoint {
                     if (dsm.getEntry().isRouterInfo()) {
                         _ridsm++;
                         _context.statManager().addRateData("tunnel.outboundTunnelEndpointFwdRIDSM", 1);
-                        if (_log.shouldLog(Log.WARN))
-                            _log.warn("OBEP directly forwarding RI DSM (count: "
-                                      + _ridsm + "/" + _totalmsg + ") from tunnel id "
-                                      + _config.getReceiveTunnelId()
-                                      + " to router "
-                                      + toRouter.toBase64().substring(0,4)
-                                      + " with message: " + dsm);
+                        if (_log.shouldLog(Log.INFO))
+                            _log.warn("OutboundEndpoint RouterInfo DatabaseStoreMessage (count: " +
+                                      _ridsm + "/" + _totalmsg + ") from [TunnelId " + _config.getReceiveTunnelId() + "] " +
+                                      "to Router [" + toRouter.toBase64().substring(0,6) + "] with message: " + dsm);
+                        else if (_log.shouldLog(Log.WARN))
+                            _log.warn("OutboundEndpoint RouterInfo DatabaseStoreMessage (count: " +
+                                      _ridsm + "/" + _totalmsg + ") from [TunnelId " + _config.getReceiveTunnelId() + "] " +
+                                      "to Router [" + toRouter.toBase64().substring(0,6) + "]");
                     } else {
                         _lsdsm++;
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("OBEP directly forwarding LS DSM (count: "
-                                      + _lsdsm + "/" + _totalmsg + ") from tunnel id "
-                                      + _config.getReceiveTunnelId()
-                                      + " to router "
-                                      + toRouter.toBase64().substring(0,4)
-                                      + " with message: " + dsm);
+                            _log.warn("OutboundEndpoint LeaseSet DatabaseStoreMessage (count: " + _lsdsm + "/" + _totalmsg + ") " +
+                                      "from [TunnelId " + _config.getReceiveTunnelId() + "] to Router " +
+                                      toRouter.toBase64().substring(0,6) + "] with message: " + dsm);
+                        else if (_log.shouldLog(Log.WARN))
+                            _log.warn("OutboundEndpoint LeaseSet DatabaseStoreMessage (count: " + _lsdsm + "/" + _totalmsg + ") " +
+                                      "from [TunnelId " + _config.getReceiveTunnelId() + "] to Router " +
+                                      toRouter.toBase64().substring(0,6) + "]");
                     }
                 } else {
                     _i2npmsg++;
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("OBEP directly forwarding I2NP Message (count: "
-                                  + _i2npmsg + "/" + _totalmsg + ") from tunnel id "
-                                  + _config.getReceiveTunnelId()
-                                  + " to router "
-                                  + toRouter.toBase64().substring(0,4)
-                                  + " with message: " + msg);
+                        _log.warn("OutboundEndpoint I2NP Message (count: " + _i2npmsg + "/" + _totalmsg + ") from [TunnelId " +
+                                  _config.getReceiveTunnelId() + " to Router [" + toRouter.toBase64().substring(0,6) + "] " +
+                                  "with message: " + msg);
+                    else if (_log.shouldLog(Log.WARN))
+                        _log.warn("OutboundEndpoint I2NP Message (count: " + _i2npmsg + "/" + _totalmsg + ") from [TunnelId " +
+                                  _config.getReceiveTunnelId() + " to Router [" + toRouter.toBase64().substring(0,6) + "]");
                 }
             }
             int size = msg.getMessageSize();
@@ -124,6 +126,6 @@ class OutboundTunnelEndpoint {
     /** @since 0.9.8 */
     @Override
     public String toString() {
-        return "OBEP " + _config.getReceiveTunnelId();
+        return "OutboundEndpoint [TunnelId " + _config.getReceiveTunnelId() + "]";
     }
 }

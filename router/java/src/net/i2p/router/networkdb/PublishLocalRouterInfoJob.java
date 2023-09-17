@@ -76,7 +76,8 @@ public class PublishLocalRouterInfoJob extends JobImpl {
             requeue(100);
             return;
         }
-        long last = getContext().netDbSegmentor().getLastRouterInfoPublishTime();
+//        long last = getContext().netDbSegmentor().getLastRouterInfoPublishTime();
+        long last = getContext().mainNetDb().getLastRouterInfoPublishTime();
         long now = getContext().clock().now();
         if (last + MIN_PUBLISH_DELAY > now) {
             long delay = getDelay();
@@ -141,7 +142,8 @@ public class PublishLocalRouterInfoJob extends JobImpl {
                           "\n* Published: " + new Date(ri.getPublished()));
             try {
                 // This won't really publish until the netdb is initialized.
-                getContext().netDbSegmentor().publish(ri);
+//                getContext().netDbSegmentor().publish(ri);
+                getContext().mainNetDb().publish(ri);
             } catch (IllegalArgumentException iae) {
                 _log.log(Log.CRIT, "Error publishing our identity - corrupt? Restart required", iae);
                 getContext().router().rebuildNewIdentity();

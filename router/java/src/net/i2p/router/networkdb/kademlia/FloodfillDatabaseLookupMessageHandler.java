@@ -54,7 +54,8 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                            _context.banlist().isBanlisted(dlm.getFrom()) ||
                            _context.banlist().isBanlistedHostile(dlm.getFrom()));
         boolean ourRI = dlm.getSearchKey() != null && dlm.getSearchKey().equals(_context.routerHash());
-        boolean ffMode = _context.netDbSegmentor().floodfillEnabled() || _context.getBooleanProperty("router.floodfillParticipant");
+//        boolean ffMode = _context.netDbSegmentor().floodfillEnabled() || _context.getBooleanProperty("router.floodfillParticipant");
+        boolean ffMode = _context.mainNetDb().floodfillEnabled() || _context.getBooleanProperty("router.floodfillParticipant");
         String searchType = dlm.getSearchType() != null ? dlm.getSearchType().toString().replace("EXPL", "XP") : "";
         if (isBanned) {
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
@@ -68,7 +69,8 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             }
             Job j = new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
             return j;
-        } else if (!_context.netDbSegmentor().floodfillEnabled() && !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
+//        } else if (!_context.netDbSegmentor().floodfillEnabled() && !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
+        } else if (!_context.mainNetDb().floodfillEnabled() && !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
             if (_log.shouldInfo()) {
                 _log.warn("Dropping " + searchType + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
                           "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] -> " +

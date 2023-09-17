@@ -181,7 +181,8 @@ public class SSUDemo {
     }
 
     private void peerRead(RouterInfo ri) {
-        RouterInfo old = _us.netDbSegmentor().store(ri.getIdentity().calculateHash(), ri);
+//        RouterInfo old = _us.netDbSegmentor().store(ri.getIdentity().calculateHash(), ri);
+        RouterInfo old = _us.mainNetDb().store(ri.getIdentity().calculateHash(), ri);
         if (old == null)
             newPeerRead(ri);
     }
@@ -314,7 +315,8 @@ public class SSUDemo {
             DatabaseStoreMessage m = (DatabaseStoreMessage)_msg;
             System.out.println("RECV: " + m);
             try {
-                _us.netDbSegmentor().store(m.getKey(), (RouterInfo) m.getEntry());
+//                _us.netDbSegmentor().store(m.getKey(), (RouterInfo) m.getEntry());
+                _us.mainNetDb().store(m.getKey(), (RouterInfo) m.getEntry());
             } catch (IllegalArgumentException iae) {
                 iae.printStackTrace();
             }

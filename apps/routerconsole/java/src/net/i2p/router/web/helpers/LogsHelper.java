@@ -199,13 +199,16 @@ public class LogsHelper extends HelperBase {
                                     .replace("| INFO   | java.lang", "| ERROR  | java.lang")
                                     .replace("| INFO   | \tat", "| ERROR  | \tat")
                                     .replace("| ERROR  | [Reseed     ] ....reseed.Reseeder:", "| WARN   |")
-                                    .replace(" |[", " | [");
+                                    .replace(" |[", " | [")
+                                    .replace("INFO   | WARN:", "WARN   |")
+                                    .replace("   |", " |");
                 // remove lines containing unwanted strings
                 StringBuilder filtered = new StringBuilder();
                 String[] logLines = str.split("\n");
                 for (String line : logLines) {
                     if (!line.contains("Copyright") &&
                         !line.contains("tanukisoftware") &&
+                        !line.contains("STATUS") &&
                         !line.contains("  \n")) {
                         filtered.append(line).append("\n");
                     }

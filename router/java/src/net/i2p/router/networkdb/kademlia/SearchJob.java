@@ -149,7 +149,9 @@ class SearchJob extends JobImpl {
         // The other two places this was called (one below and one in FNDF)
         // have been commented out.
         // Returning false essentially enables kademlia as a backup to floodfill for search responses.
-        if (ctx.netDbSegmentor().floodfillEnabled() || forceExplore == "true")
+
+//        if (ctx.netDbSegmentor().floodfillEnabled() || forceExplore == "true")
+        if (ctx.mainNetDb().floodfillEnabled() || forceExplore == "true")
             return false;
         return ctx.getProperty("netDb.floodfillOnly", DEFAULT_FLOODFILL_ONLY);
     }
@@ -700,7 +702,8 @@ class SearchJob extends JobImpl {
         DatabaseEntry ds = _facade.lookupLeaseSetLocally(_state.getTarget());
         if (ds == null) {
             if (SHOULD_RESEND_ROUTERINFO) {
-                ds = _facade.lookupRouterInfoLocally(_state.getTarget());
+//                ds = _facade.lookupRouterInfoLocally(_state.getTarget());
+                ds = getContext().mainNetDb().lookupRouterInfoLocally(_state.getTarget());
                 if (ds != null)
                     _facade.sendStore(_state.getTarget(), ds, null, null, RESEND_TIMEOUT, _state.getSuccessful());
             }
@@ -709,7 +712,8 @@ class SearchJob extends JobImpl {
             sendTo.addAll(_state.getPending());
             int numSent = 0;
             for (Hash peer : sendTo) {
-                RouterInfo peerInfo = _facade.lookupRouterInfoLocally(peer);
+//                RouterInfo peerInfo = _facade.lookupRouterInfoLocally(peer);
+                RouterInfo peerInfo = getContext().mainNetDb().lookupRouterInfoLocally(peer);
                 if (peerInfo == null) continue;
                 if (resend(peerInfo, (LeaseSet)ds))
                     numSent++;

@@ -23,7 +23,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 
 import com.maxmind.db.CHMCache;
 import com.maxmind.geoip.InvalidDatabaseException;
@@ -73,9 +75,15 @@ public class GeoIP {
     // In the following structures, an IPv4 IP is stored as a non-negative long, 0 to 2**32 - 1,
     // and the first 8 bytes of an IPv6 IP are stored as a signed long.
     private final Map<Long, String> _IPToCountry;
-    private final Set<Long> _pendingSearch;
-    private final Set<Long> _pendingIPv6Search;
-    private final Set<Long> _notFound;
+
+//    private final Set<Long> _pendingSearch;
+//    private final Set<Long> _pendingIPv6Search;
+//    private final Set<Long> _notFound;
+
+    private final CopyOnWriteArraySet<Long> _pendingSearch;
+    private final CopyOnWriteArraySet<Long> _pendingIPv6Search;
+    private final CopyOnWriteArraySet<Long> _notFound;
+
     private final AtomicBoolean _lock;
     private int _lookupRunCount;
     private static final Map<String, List<String>> _associatedCountries;
@@ -119,9 +127,14 @@ public class GeoIP {
         _codeToName = new ConcurrentHashMap<String, String>(512);
         _codeCache = new ConcurrentHashMap<String, String>(512);
         _IPToCountry = new ConcurrentHashMap<Long, String>();
-        _pendingSearch = new ConcurrentHashSet<Long>();
-        _pendingIPv6Search = new ConcurrentHashSet<Long>();
-        _notFound = new ConcurrentHashSet<Long>();
+//        _pendingSearch = new ConcurrentHashSet<Long>();
+//        _pendingIPv6Search = new ConcurrentHashSet<Long>();
+//        _notFound = new ConcurrentHashSet<Long>();
+
+        _pendingSearch = new CopyOnWriteArraySet<Long>();
+        _pendingIPv6Search = new CopyOnWriteArraySet<Long>();
+        _notFound = new CopyOnWriteArraySet<Long>();
+
         _lock = new AtomicBoolean();
         readCountryFile();
     }
