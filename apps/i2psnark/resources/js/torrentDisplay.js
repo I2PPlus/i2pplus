@@ -1,4 +1,4 @@
-/* torrentDisplay.js by dr|3d */
+/* torrentDisplay.js by dr|z3d */
 /* Setup torrent display buttons so we can show/hide snarks based on status */
 /* License: AGPL3 or later */
 
@@ -172,7 +172,6 @@ function initFilterBar() {
     let state;
     const stylesheet = document.getElementById("cssfilter");
     const activeFilterId = document.querySelector("#torrentDisplay input:checked").id;
-    console.log("activeFilterId is: " + activeFilterId);
     if (activeFilterId !== "all") {
       const filteredRows = document.querySelectorAll(`${"#snarkTbody tr." + activeFilterId}`);
       filteredRows.forEach((element) => {element.classList.add("filtered");});

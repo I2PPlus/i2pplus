@@ -1,12 +1,14 @@
-/* I2PSnark refreshTorrents.js by dr|3d */
+/* I2PSnark refreshTorrents.js by dr|z3d */
 /* Selective refresh torrents and other volatile elements in the I2PSnark UI */
 /* License: AGPL3 or later */
 
 import {onVisible} from "./onVisible.js";
 import {initFilterBar} from './torrentDisplay.js';
-import {initLinkToggler} from "./toggleLinks.js";
+import {initLinkToggler, magnetToClipboard, attachMagnetListeners} from "./toggleLinks.js";
 import {initToggleLog} from "./toggleLog.js";
+import {Lightbox} from "./lightbox.js";
 
+const files = document.getElementById("dirInfo");
 const filterbar = document.getElementById("torrentDisplay");
 const home = document.querySelector(".nav_main");
 const mainsection = document.getElementById("mainsection");
@@ -40,7 +42,6 @@ function refreshTorrents(callback) {
   const control = document.getElementById("torrentInfoControl");
   const dirlist = document.getElementById("dirlist");
   const down = document.getElementById("down");
-  const files = document.getElementById("dirInfo");
   const info = document.getElementById("torrentInfoStats");
   const noload = document.getElementById("noload");
   const notfound = document.getElementById("NotFound");
@@ -240,7 +241,7 @@ function noAjax(delay) {
 }
 
 function debouncedRefreshTorrents(callback) {
-  const delay = 100;
+  const delay = 50;
   let debounceTimeoutId;
 
   return function executedFunction(...args) {
@@ -258,6 +259,7 @@ function debouncedRefreshTorrents(callback) {
 function setupPage() {
   if (mainsection) {
     initToggleLog();
+    initLinkToggler();
   }
   if (filterbar) {
     initFilterBar();
@@ -265,15 +267,15 @@ function setupPage() {
 }
 
 function initSnarkRefresh() {
+  attachMagnetListeners();
   const interval = (parseInt(storageRefresh) || 5) * 1000;
   clearInterval(refreshIntervalId);
   refreshIntervalId = setInterval(() => {
-    debouncedRefreshTorrents(setupPage)(refreshTorrents);
+    debouncedRefreshTorrents(refreshTorrents)(setupPage);
   }, interval);
+  if (files && lightboxIsActive()) {
+    var lightbox = new Lightbox();lightbox.load();
+  }
 }
-
-document.addEventListener("DOMContentLoaded", function() {
-  initSnarkRefresh();
-});
 
 export {initSnarkRefresh, refreshTorrents, debouncedRefreshTorrents, debounce, xhrsnark};

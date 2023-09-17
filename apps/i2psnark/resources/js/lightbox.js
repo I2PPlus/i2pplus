@@ -899,4 +899,8 @@ function Lightbox() {
   };
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+   var lightbox = new Lightbox();lightbox.load();
+});
+
 export {Lightbox};
