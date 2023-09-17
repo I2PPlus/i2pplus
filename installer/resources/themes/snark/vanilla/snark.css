@@ -97,7 +97,6 @@ th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visi
 .nav_forum:active{background:var(--b_forum_active) no-repeat 12px center/17px,var(--nav_active)}
 .nav_tracker:active{background:var(--b_tracker_active) no-repeat 12px center/17px,var(--nav_active)}
 .nav_search:active{background:var(--b_search_active) no-repeat 12px center/17px,var(--nav_active)}
-
 .snarkNav:last-child{border-radius:0 2px 2px 0}
 .snarkNav:first-child,.snarkNav:hover:first-child{padding-left:27px;border-radius:2px 0 0 2px;background-position:9px center;background-size:16px,100%,16px}
 .snarkNav:last-child[href="/i2psnark/"]{margin:-2px 0 -4px;border-radius:2px}
@@ -105,6 +104,10 @@ th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visi
 .snarkNav:active,.snarkNav:visited:active{color:#eee}
 .snarkNav,.snarkNav:visited{margin-left:0;margin-right:0;border-right:0}
 .snarkNav:last-of-type,.snarkNav:last-of-type:visited{border-right:var(--border);border-radius:2px}
+
+/* toast notifications */
+#toast{box-shadow:var(--bevel_notify);background:var(--notify)}
+#toast b{color:#925}
 
 /* search */
 #snarkSearch{margin-left:8px;display:block;position:absolute;right:10px;top:7px}

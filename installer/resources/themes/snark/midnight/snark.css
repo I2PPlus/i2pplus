@@ -105,6 +105,10 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"]{opacity:.6}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover{opacity:.8}
 
+/* toast notifications */
+#toast{box-shadow:var(--bevel_notify);background:var(--notify)}
+#toast b{color:#dd0}
+
 /* screenlog */
 #screenlog{margin:0;padding:2px 5px;width:auto;height:56px;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#778;border-spacing:0;border-bottom:var(--border);background:repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px,rgba(0,0,48,.5) 4px) center center/4px,url(images/chimp.webp) no-repeat right -6px bottom -16px/96px auto,var(--snarkGraph) no-repeat left bottom,linear-gradient(180deg,#001,#000008);scrollbar-color:#225 #001;scrollbar-width:thin;contain:paint}
 .iframed #screenlog{margin-top:-5px}

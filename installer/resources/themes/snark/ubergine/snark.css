@@ -100,6 +100,10 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .iframed .page{margin-bottom:-6px;padding:0;border:0;border-radius:0;box-shadow:none;background:none}
 .iframed .mainsection table,.iframed .mainsection#commentSection table,.iframed .mainsection#media table,.iframed .mainsection#snarkFiles table,.iframed .mainsection#snarkInfo table,.iframed .resourceError,.iframed .resourceError#NotFound,.iframed #torrentEdit{padding:1px;box-shadow:0 0 0 1px rgba(180,152,180,.7),0 0 0 2px rgba(16,8,16,.9);filter:none}
 
+/* toast notifications */
+#toast{font-weight:600;border-radius:0 0 5px 5px;box-shadow:inset 0 0 0 1px #515,inset 0 0 0 2px #101,0 4px 4px rgba(0,0,0,.7);background:var(--th)}
+#toast b{color:#ff0}
+
 /* topnav */
 .snarkNav{margin:-1px -4px 0 0;padding:5px 12px 3px 29px;border:1px solid #730;background:var(--tracker) no-repeat 11px center/16px,var(--nav),var(--tracker_hover) no-repeat 11px center/16px,var(--tracker_active) no-repeat 11px center/16px}
 .snarkNav:hover,.snarkNav:focus{background:var(--tracker_hover) no-repeat 11px center/16px,var(--nav_hover);transition:ease border .3s .1s,ease-in-out box-shadow .01s}

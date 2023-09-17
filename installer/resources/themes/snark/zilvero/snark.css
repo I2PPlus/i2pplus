@@ -164,6 +164,10 @@ input[type=submit]:active,a.control:active,.snarkNav:active,#torrentDisplay labe
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"]{background-blend-mode:luminosity}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover{background-blend-mode:normal}
 
+/* toast notifications */
+#toast{box-shadow:var(--softborder);background:#fff}
+#toast b{color:#511}
+
 /* screenlog */
 #closelog,#expand,#shrink{margin-right:5px;position:sticky;top:0;float:right;mix-blend-mode:luminosity;cursor:pointer}
 #shrink{display:none}
