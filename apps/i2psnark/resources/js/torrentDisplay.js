@@ -74,7 +74,7 @@ function initFilterBar() {
   var filteredCount = 0;
 
   function showBadge() {
-    var filtered = document.querySelectorAll("#snarkTbody tr.filtered");
+    var filtered = document.querySelectorAll("#snarkTbody tr.filtered:not(.peerinfo)");
     var activeFilter = document.querySelector("#torrentDisplay input:checked + .filterbutton");
 
     if (activeFilter && !activeFilter.classList.contains("enabled")) {
