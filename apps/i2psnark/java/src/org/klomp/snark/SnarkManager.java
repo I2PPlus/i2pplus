@@ -191,7 +191,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String CONFIG_DIR_SUFFIX = ".d";
     private static final String SUBDIR_PREFIX = "s";
     private static final String B64 = Base64.ALPHABET_I2P;
-    private static final int MAX_MESSAGES = 100;
+    private static final int MAX_MESSAGES = 50;
 
     /**
      *  "name", "announceURL=websiteURL" pairs
