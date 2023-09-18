@@ -1,7 +1,7 @@
 /* I2P+ RefreshSidebar by dr|z3d */
 /* License: AGPLv3 or later */
 
-import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
+import {sectionToggler, countTunnels, countNewsItems} from "/themes/js/sectionToggle.js";
 import {stickySidebar} from "/js/stickySidebar.js";
 
 "use strict";
@@ -57,17 +57,17 @@ function tangoDown() {
   isDown = true;
   statusPanel.forEach(statusPanel => (statusPanel.classList.add("statusDown")));
   digits.forEach(digit => (digit.innerHTML = "---&nbsp;"));
-  if (clock !== null) {clock.textContent = "--:--:--";}
-  if (graphStats !== null) {graphStats.textContent = " --- / ---";}
+  if (clock) {clock.textContent = "--:--:--";}
+  if (graphStats) {graphStats.textContent = " --- / ---";}
   badges.forEach(badge => (badge.textContent = ""));
   localtunnelSummary.classList.add = "statusDown";
   document.querySelector("body").classList.add("isDown");
-  if (shutdownStatus !== null) {
+  if (shutdownStatus) {
     shutdownStatus.setAttribute("hidden", "hidden");
   }
   if (localTunnels) {
     localTunnels.innerHTML = "<tr id=routerdown><td colspan=3 height=10></td></tr>";
-    if (tunnelCount !== null) {
+    if (tunnelCount) {
       tunnelCount.innerHTML = "";
     }
   }
@@ -86,20 +86,12 @@ function refreshSidebar() {
   xhr.setRequestHeader("Accept", "text/html");
 
   xhr.onload = function () {
-    switch (xhr.status) {
-      case !200 || !404 || !500:
-        break;
-      case 200:
-        document.querySelector("body").classList.remove("isDown");
-        break;
-      case 404 || 500 || !200:
-        tangoDown();
-        break;
-      default:
-    }
-
-    if (xhr.readyState !== 4) {
-      return;
+    if (xhr.status === 200) {
+      document.querySelector("body").classList.remove("isDown");
+    } else if (xhr.status === 404 || xhr.status === 500) {
+      tangoDown();
+    } else {
+      console.log("Unexpected status code: " + xhr.status);
     }
 
     const advancedGeneralResponse = xhr.responseXML.getElementById("sb_advancedgeneral");
@@ -133,7 +125,7 @@ function refreshSidebar() {
 
     isDown = false;
 
-    if (isDownTimer !== null) {
+    if (isDownTimer) {
       clearTimeout(isDownTimer);
       isDownTimer = null;
       refreshAll();
@@ -156,64 +148,53 @@ function refreshSidebar() {
     }
 
     function updateVolatile() {
-      if (xhr.responseXML !== null) {
+      if (xhr.responseXML) {
         uncollapse();
         compareBadges();
 
-        if (clock === null || clockResponse === null) {
-          return;
-        }
-        if (!Object.is(clock.innerHTML, clockResponse.innerHTML)) {
-          clock.innerHTML = clockResponse.innerHTML;
-        }
-        if (netStatus === null || netStatusResponse === null) {
-          return;
-        }
-        if (!Object.is(netStatus.innerHTML, netStatusResponse.innerHTML)) {
-          netStatus.outerHTML = netStatusResponse.outerHTML;
-        } else {
-          if (!netStatus.classList.contains("statusDown") &&
-              xhr.responseXML !== null && netStatusResponse !== null && Object.is(netStatus.outerHTML, netStatusResponse.outerHTML)) {
-            return;
-          }
-          if (netStatusResponse !== null) {
-            netStatus.innerHTML = netStatusResponse.innerHTML;
+        if (clock && clockResponse) {
+          if (!Object.is(clock.textContent, clockResponse.textContent)) {
+            clock.textContent = clockResponse.textContent;
           }
         }
-        if (bandwidth !== null && bandwidthResponse !== null && !Object.is(bandwidth.innerHTML, bandwidthResponse.innerHTML)) {
+        if (netStatus && netStatusResponse) {
+          if (!Object.is(netStatus.innerHTML, netStatusResponse.innerHTML)) {
+            netStatus.outerHTML = netStatusResponse.outerHTML;
+          }
+        }
+        if (bandwidth && !bandwidth.hasAttribute("hidden") &&
+            bandwidthResponse && !Object.is(bandwidth.innerHTML, bandwidthResponse.innerHTML)) {
           bandwidth.innerHTML = bandwidthResponse.innerHTML;
         }
-        if (graphStats !== null) {
-          if (bandwidth !== null && bandwidth.hidden !== true) {
-            graphStats.style.opacity = null;
-          } else {
+        if (graphStats && graphStatsResponse) {
+          graphStats.textContent = graphStatsResponse.textContent;
+          if (bandwidth && bandwidth.hasAttribute("hidden")) {
             graphStats.style.opacity = "1";
+          } else {
+            graphStats.style.opacity = null;
           }
         }
-        if (graphStats !== null && graphStatsResponse !== null) {
-            graphStats.innerHTML = graphStatsResponse.innerHTML;
+        if (advancedGeneral && !advancedGeneral.hasAttribute("hidden") && advancedGeneralResponse) {
+          if (!Object.is(advancedGeneral.innerHTML, advancedGeneralResponse.innerHTML)) {
+            advancedGeneral.innerHTML = advancedGeneralResponse.innerHTML;
+          }
         }
-        if (advancedGeneral === null || advancedGeneralResponse === null) {
-          return;
-        }
-        if (!Object.is(advancedGeneral.innerHTML, advancedGeneralResponse.innerHTML)) {
-          advancedGeneral.innerHTML = advancedGeneralResponse.innerHTML;
-        }
-        if (shortGeneral !== null && shortGeneralResponse !== null && !Object.is(shortGeneral.innerHTML, shortGeneralResponse.innerHTML)) {
+        if (shortGeneral && !shortGeneral.hasAttribute("hidden") &&
+            shortGeneralResponse && !Object.is(shortGeneral.innerHTML, shortGeneralResponse.innerHTML)) {
           shortGeneral.innerHTML = shortGeneralResponse.innerHTML;
         }
-        if (general !== null && generalResponse !== null && !Object.is(general.innerHTML, generalResponse.innerHTML)) {
+        if (general && generalResponse && !Object.is(general.innerHTML, generalResponse.innerHTML)) {
           general.innerHTML = generalResponse.innerHTML;
         }
-        if (tunnels !== null && tunnelsResponse !== null && !Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML)) {
+        if (tunnels && !tunnels.hasAttribute("hidden") && tunnelsResponse && !Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML)) {
           tunnels.innerHTML = tunnelsResponse.innerHTML;
         }
-        if (localTunnels !== null && localTunnelsResponse !== null) {
+        if (localTunnels && !localTunnels.hasAttribute("hidden") && localTunnelsResponse) {
           if (!Object.is(localTunnels.innerHTML, localTunnelsResponse.innerHTML)) {
             localTunnels.innerHTML = localTunnelsResponse.innerHTML;
           }
         }
-        if (localtunnelSummary !== null) {
+        if (localtunnelSummary) {
           const clients = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/client.svg"]').length;
           const clientSpan = '<span id="clientCount" class="count_' + clients + '">' + clients + ' x <img src="/themes/console/images/client.svg"></span>';
           const pings = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/ping.svg"]').length;
@@ -226,8 +207,10 @@ function refreshSidebar() {
           const summaryTable = '<tr id="localtunnelsActive"><td>' + summary + '</td></tr>';
           const sb_localTunnelsHeading = document.getElementById("sb_localTunnelsHeading");
           const sb_localTunnelsHeadingResponse = xhr.responseXML.getElementById("sb_localTunnelsHeading");
-          sb_localTunnelsHeading.innerHTML = sb_localTunnelsHeadingResponse.innerHTML;
-          localtunnelSummary.innerHTML = summaryTable;
+          if (!Object.is(localTunnels.innerHTML, localTunnelsResponse.innerHTML)) {
+            sb_localTunnelsHeading.innerHTML = sb_localTunnelsHeadingResponse.innerHTML;
+            localtunnelSummary.innerHTML = summaryTable;
+          }
         }
         if (tunnelCount) {
           const doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
@@ -235,25 +218,26 @@ function refreshSidebar() {
             doubleCount.remove();
           }
         }
-        if (peers !== null && peersResponse !== null && !Object.is(peers.innerHTML, peersResponse.innerHTML)) {
+        if (peers && peersResponse && !peers.hasAttribute("hidden") &&
+            !Object.is(peers.innerHTML, peersResponse.innerHTML)) {
           peers.innerHTML = peersResponse.innerHTML;
         }
-        if (queue !== null) {
-          if (queueResponse !== null && !Object.is(queue.innerHTML, queueResponse.innerHTML)) {
+        if (queue && !queue.hasAttribute("hidden")) {
+          if (queueResponse && !Object.is(queue.innerHTML, queueResponse.innerHTML)) {
             queue.innerHTML = queueResponse.innerHTML;
           }
         }
-        if (memBar !== null && memBarResponse !== null && !Object.is(memBar.innerHTML, memBarResponse.innerHTML)) {
+        if (memBar && memBarResponse && !Object.is(memBar.innerHTML, memBarResponse.innerHTML)) {
           memBar.innerHTML = memBarResponse.innerHTML;
         }
-        if (cpuBar !== null && cpuBarResponse !== null && !Object.is(cpuBar.innerHTML, cpuBarResponse.innerHTML)) {
+        if (cpuBar && cpuBarResponse && !Object.is(cpuBar.innerHTML, cpuBarResponse.innerHTML)) {
           cpuBar.innerHTML = cpuBarResponse.innerHTML;
         }
-        if (updateBar !== null) {
-          if (updateBarResponse !== null) {
+        if (updateBar) {
+          if (updateBarResponse) {
             if (!Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
               updateBar.innerHTML = updateBarResponse.innerHTML;
-              if (updateH3 !== null) {
+              if (updateH3) {
                 var updateH3 = document.querySelector("#sb_updatesection > h3 a");
                 updateH3.classList.add("updating");
                 var spinner = "<span id=\"updateSpinner\"></span>";
@@ -266,60 +250,52 @@ function refreshSidebar() {
             refreshAll();
           }
         }
-        if (updateSection !== null && updateSection.classList.contains("collapsed") !== true && updateStatus !== null) {
-          if (updateStatusResponse !== null && !updateBar === null) {
-            if (!Object.is(updateStatus.innerHTML, updateStatusResponse.innerHTML)) {
-              updateStatus.innerHTML = updateStatusResponse.innerHTML;
-            }
+
+        if (updateSection && !updateSection.classList.contains("collapsed")) {
+          if (updateStatus && updateStatusResponse && !Object.is(updateStatus.innerHTML, updateStatusResponse.innerHTML)) {
+            updateStatus.innerHTML = updateStatusResponse.innerHTML;
           }
-        }
-        if (updateSection !== null &&  updateSection.classList.contains("collapsed") !== true && updateForm !== null) {
-          if (updateFormResponse !== null) {
-            if (!Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
-              updateForm.innerHTML = updateFormResponse.innerHTML;
-              if (updateSectionHR.hidden === true) {
+          if (updateForm && updateFormResponse && !Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
+            updateForm.innerHTML = updateFormResponse.innerHTML;
+            if (updateSectionHR.hidden === true) {
               updateSectionHR.hidden = null;
-              }
             }
           }
-        }
-        if (updateSection !== null && updateSection.classList.contains("collapsed") !== true && updateProgress !== null) {
-          if (updateProgressResponse !== null) {
-            if (!Object.is(updateProgress.innerHTML, updateProgressResponse.innerHTML)) {
-              updateProgress.innerHTML = updateProgressResponse.innerHTML;
-            }
+          if (updateProgress && updateProgressResponse && !Object.is(updateProgress.innerHTML, updateProgressResponse.innerHTML)) {
+            updateProgress.innerHTML = updateProgressResponse.innerHTML;
           }
-        }
-        if (updateSection !== null) {
-          if (!Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
+          if (!updateSection.hasAttribute("hidden") && updateSectionResponse && !Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
             updateSection.hidden = null;
             updateSection.outerHTML = updateSectionResponse.outerHTML;
           }
         }
-        if (tunnelBuildStatus !== null && tunnelBuildStatus.classList.contains("statusDown") ||
-            tunnelBuildStatusResponse !== null && !Object.is(tunnelBuildStatus.outerHTML, tunnelBuildStatusResponse.outerHTML)) {
+
+        if (tunnelBuildStatus && tunnelBuildStatus.classList.contains("statusDown") ||
+            tunnelBuildStatusResponse && !Object.is(tunnelBuildStatus.outerHTML, tunnelBuildStatusResponse.outerHTML)) {
           tunnelBuildStatus.innerHTML = tunnelBuildStatusResponse.innerHTML;
         }
-        if (notice !== null && noticeResponse !== null && !Object.is(notice.innerHTML, noticeResponse.innerHTML)) {
+        if (notice && noticeResponse && !Object.is(notice.innerHTML, noticeResponse.innerHTML)) {
           notice.innerHTML = noticeResponse.innerHTML;
         } else if (noticeResponse && noticeResponse === null) {
           notice.remove();
         }
-        if (shutdownStatus !== null && shutdownStatusResponse !== null && !Object.is(shutdownStatus.innerHTML, shutdownStatusResponse.innerHTML)) {
+        if (shutdownStatus && shutdownStatusResponse && !Object.is(shutdownStatus.innerHTML, shutdownStatusResponse.innerHTML)) {
           shutdownStatus.innerHTML = shutdownStatusResponse.innerHTML;
         } else if (shutdownStatus && shutdownStatusResponse === null) {
           shutdownStatus.remove();
         }
-        if (routerControl !== null && routerControl.classList.contains("statusDown") ||
-            routerControlResponse !== null && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
+        if (routerControl && routerControl.classList.contains("statusDown") ||
+            routerControlResponse && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
           routerControl.outerHTML = routerControlResponse.outerHTML;
         }
-        if (internals !== null && internalsResponse !== null && !Object.is(internals.innerHTML, internalsResponse.innerHTML)) {
+        if (internals && internalsResponse && !Object.is(internals.innerHTML, internalsResponse.innerHTML)) {
           internals.outerHTML = internalsResponse.outerHTML;
         }
-        if (services !== null && servicesResponse !== null && !Object.is(services.innerHTML, servicesResponse.innerHTML)) {
+        if (services && servicesResponse && !Object.is(services.innerHTML, servicesResponse.innerHTML)) {
           services.outerHTML = servicesResponse.outerHTML;
         }
+      } else {
+        tangoDown();
       }
     }
 
@@ -328,14 +304,14 @@ function refreshSidebar() {
       var updatingResponse = xhr.responseXML.querySelectorAll(".volatile");
       var i, len = updating.length;
       for (i = 0; i < len; i++) {
-        if (updating[i] !== null) {
-          if (updatingResponse[i] !== null) {
+        if (updating[i]) {
+          if (updatingResponse[i]) {
             updateVolatile();
             sectionToggler();
             countTunnels();
             countNewsItems();
           }
-          if (localTunnels !== null && localTunnels.hidden !== true) {
+          if (localTunnels && localTunnels.hidden !== true) {
             var updatingLen = updating.length;  // Cache the length of updating array
             var updatingResponseLen = updatingResponse.length;  // Cache the length of updatingResponse array
             if (localTunnels.hidden !== true && updatingLen !== updatingResponseLen) {
@@ -347,9 +323,9 @@ function refreshSidebar() {
     }
 
     function refreshAll() {
-      if (sb !== null) {
+      if (sb) {
         var sbResponse = xhr.responseXML.getElementById("sb");
-        if (sbResponse !== null && !Object.is(sb.innerHTML, sbResponse.innerHTML)) {
+        if (sbResponse && !Object.is(sb.innerHTML, sbResponse.innerHTML)) {
           xhrContainer.innerHTML = sbResponse.innerHTML;
           sectionToggler();
           countTunnels();
