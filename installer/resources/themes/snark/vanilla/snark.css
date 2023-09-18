@@ -723,8 +723,8 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 /* comment indicator */
 .filetype{position:relative;vertical-align:middle}
 .details img:not([src$="rateme.svg"]),.fileIcon img{min-width:20px;min-height:20px}
-.snarkCommented{display:inline-block;position:absolute;top:1px;right:3px;z-index:20;line-height:0;font-size:0}
-.snarkCommented img{padding:0;height:9px;width:auto;border:0;box-shadow:none}
+.commented{display:inline-block;position:absolute;top:1px;right:3px;z-index:20;line-height:0;font-size:0}
+.commented img{padding:0;height:9px;width:auto;border:0;box-shadow:none}
 
 #torrentOrderControl .optbox[type=checkbox],#torrentOrderControl .optbox[type=checkbox]:checked,#torrentOrderControl .optbox[type=checkbox][disabled],#torrentOrderControl .optbox[type=checkbox][disabled]:checked{border:1px solid #bbb}
 .optbox{margin:4px;width:19px;height:19px;position:relative;box-sizing:border-box;border:var(--btn_border);box-shadow:inset 2px 2px 2px #b2a499;background:#faf1eb;appearance:none}
@@ -846,7 +846,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 /* responsive layout */
 @media (max-width:1500px){
 .tName a{margin:-3px 0 -2px;padding:4px 0 6px}
-.snarkCommented{top:-3px}
+.commented{top:-3px}
 .tAction input[type=submit]{padding:11px;background-size:13px,100%,13px}
 .tAction input[type=submit]:active{background-size:11px,100%}
 #actionStopAll,#actionStartAll{padding:11px 18px}

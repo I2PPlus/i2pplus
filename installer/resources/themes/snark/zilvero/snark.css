@@ -255,8 +255,8 @@ tr:hover .magnetLabel{opacity:1}
 .rateDown,.rateUp,.txd{text-align:center}
 .rateDown .right,.rateUp .right,.txd .right{min-width:40px;text-align:right}
 .routerdown{padding:15px 10px;font-size:120%;text-shadow:0 1px 1px #fff;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #ddd;background:repeating-linear-gradient(135deg,#eee,#eee 20px,#fff 20px,#fff 40px)}
-.snarkCommented{display:inline-block;vertical-align:top;margin:-2px -3px 0 0}
-.snarkCommented img{width:10px;height:10px;display:inline-block;vertical-align:top;position:relative;z-index:10}
+.commented{display:inline-block;vertical-align:top;margin:-2px -3px 0 0}
+.commented img{width:10px;height:10px;display:inline-block;vertical-align:top;position:relative;z-index:10}
 .details{padding-right:0}
 .rxd{width:1%}
 .tName a,.dirInfo .snarkFileName a{padding:4px 0;font-weight:700;font-style:normal}
@@ -476,8 +476,8 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 .commentWrapper{margin:6px;padding:9px 10px 10px;height:28px;max-height:300px;overflow:auto;resize:vertical;box-shadow:0 0 0 1px #ccc,inset 0 0 0 1px #f2f2f2;background:#ddd}
 .commentText .commentWrapper{height:auto;resize:none}
 .newTab{margin:1px 4px -2px;float:right}
-.snarkCommented{display:inline-block;position:absolute;top:-3px;right:0;z-index:20;line-height:0;font-size:0}
-.snarkCommented img{padding:0;height:9px;width:auto}
+.commented{display:inline-block;position:absolute;top:-3px;right:0;z-index:20;line-height:0;font-size:0}
+.commented img{padding:0;height:9px;width:auto}
 #commentDeleteAction td{padding:8px 3px;border-top:var(--border)}
 #commentInfo th,#mediaContainer th{padding-left:5px;text-align:left}
 #commentInfo th{padding:2px 0 2px 5px;border-top:0}
@@ -603,7 +603,7 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 @media (max-width:1499px){
 th img{max-height:20px}
 td.status{background-size:24px auto}
-.snarkCommented{top:-1px;right:1px}
+.commented{top:-1px;right:1px}
 .peerclient{width:90px}
 .peerCount .left,.peerCount .right{padding:4px 3px 3px;}
 #torrents .infohash{width:60px}
@@ -650,7 +650,7 @@ tr:hover td.trackerLink,tr:hover td.details,tr:hover td.tName,tr:hover td.rxd,tr
 body,td,th:not(.suboption),span,table a,input[type=submit],input[type=text],textarea{font-size:9.5pt}
 td.status img{width:26px;height:26px}
 td.details img:not([src$="rateme.svg"]),.dirInfo td:first-child img:not(.thumb){width:23px;height:23px}
-.snarkCommented img{width:11px;height:11px}
+.commented img{width:11px;height:11px}
 .tAction input{padding:11px}
 .rxd,.txd,.rateDown,.rateUp{min-width:76px}
 .ETA:not(:empty),.rateUp:not(:empty),.rateDown:not(:empty),.txd:not(:empty){min-width:50px}

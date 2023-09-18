@@ -368,7 +368,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .details a:active img[src$="rateme.svg"]{filter:none;transform:scale(0.9)}
 .details a:hover img:not([src$="rateme.svg"]),.fileIcon a:hover img{border:var(--border_hard);box-shadow:inset 0 0 0 1px rgba(255,96,0,.5)}
 .details a:hover img:not([src$="rateme.svg"]),.details a:focus img:not([src$="rateme.svg"]),.dirInfo td:not(.parentdir):first-child a:hover img,.dirInfo td:not(.parentdir):first-child a:focus img{border:1px solid var(--hover);background:linear-gradient(180deg,#717 50%,#414 50%);filter:none}
-.details a:hover .snarkCommented,.details a:hover .snarkCommented a img,.details a:hover .snarkCommented img{background:none}
+.details a:hover .commented,.details a:hover .commented a img,.details a:hover .commented img{background:none}
 .details img{border-radius:2px}
 .details img,.dirInfo td:first-child img:not(.thumb){margin:-2px 1px;padding:4px;width:20px;height:20px;border:1px solid transparent}
 .details{padding-left:0;padding-right:0;width:1%;white-space:nowrap;text-align:center;font-weight:700}
@@ -401,8 +401,8 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #torrentOrderControl{float:right;line-height:1}
 #torrents tbody tr:hover,.dirInfo tbody tr:hover{background:linear-gradient(180deg,#58165e,#4a0d56)}
 #torrents tbody tr:last-child td{border-bottom:var(--border_hard)}
-#torrents .snarkCommented{width:9px;height:9px;display:inline-block;position:absolute;top:-7px;right:2px;z-index:20}
-#torrents .snarkCommented img{padding:0;margin:0;width:9px;height:9px;border:0;filter:drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3))}
+#torrents .commented{width:9px;height:9px;display:inline-block;position:absolute;top:-7px;right:2px;z-index:20}
+#torrents .commented img{padding:0;margin:0;width:9px;height:9px;border:0;filter:drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3))}
 #videoTitle::before{top:auto;bottom:-3px}
 .iframed #torrentInfoControl td,#setPriority th{box-shadow:inset 0 0 0 1px #313}
 
@@ -1300,8 +1300,8 @@ th,td,.choked,.unchoked{letter-spacing:0}
 #torrentInfo .infohash{padding:4px 4px 4px 20px;background:var(--hash) no-repeat 4px center/14px,linear-gradient(180deg,#dd0 50%,#cc0 50%)}
 #torrentInfoStats .nowrap{margin-right:6px}
 #torrentlist{margin-top:-2px}
-#torrents .snarkCommented{width:12px;height:12px;right:2px}
-#torrents .snarkCommented img{margin-top:-2px;width:12px;height:12px}
+#torrents .commented{width:12px;height:12px;right:2px}
+#torrents .commented img{margin-top:-2px;width:12px;height:12px}
 #torrents .infohash{padding-left:16px;max-width:100px;vertical-align:text-top;background-size:13px,100%}
 #torrents code{margin:1px 2px 1px 4px;padding:2px 3px 2px 5px;opacity:.9}
 }

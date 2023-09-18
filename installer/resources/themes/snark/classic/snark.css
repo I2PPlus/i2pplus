@@ -707,8 +707,8 @@ th #nameRequired,th .commentAuthorName{margin-top:8px;vertical-align:middle}
 
 /* comment indicator */
 .filetype{position:relative;vertical-align:middle}
-.snarkCommented{display:inline-block;position:absolute;top:-3px;right:1px;z-index:20;line-height:0;font-size:0}
-.snarkCommented img{padding:0;height:9px;width:auto;border:0}
+.commented{display:inline-block;position:absolute;top:-3px;right:1px;z-index:20;line-height:0;font-size:0}
+.commented img{padding:0;height:9px;width:auto;border:0}
 
 .mainsection{background:var(--bg3);border-bottom:var(--border)}
 .iframed #commentSection,.iframed #snarkFiles{ border:0;border-top:var(--border);border-bottom:var(--border)}
@@ -816,7 +816,7 @@ b.alwaysShow{display:none}
 #torrents .debuginfo td,#torrents .peerinfo td{font-weight:400}
 #torrents tfoot tr:first-child th:not(:empty){padding:0 2px}
 td#bwHelp{background:url(images/details.svg) no-repeat left 10px center/14px}
-.snarkCommented img{position:absolute;top:-8px;right:0}
+.commented img{position:absolute;top:-8px;right:0}
 }
 
 @media (max-width:900px){

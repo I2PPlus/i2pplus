@@ -680,8 +680,8 @@ tfoot .rateDown::after,tfoot .rateUp::after{width:6px;display:inline-block;verti
 
 /* comment indicator */
 .filetype{position:relative;vertical-align:middle}
-.snarkCommented{display:inline-block;position:absolute;top:-3px;right:2px;z-index:20;line-height:0;font-size:0}
-.snarkCommented img{padding:0;height:9px;width:9px;border:0;filter:drop-shadow(0 0 1px #555) drop-shadow(0 0 2px rgba(128,128,0,.3));image-rendering:-webkit-optimize-contrast}
+.commented{display:inline-block;position:absolute;top:-3px;right:2px;z-index:20;line-height:0;font-size:0}
+.commented img{padding:0;height:9px;width:9px;border:0;filter:drop-shadow(0 0 1px #555) drop-shadow(0 0 2px rgba(128,128,0,.3));image-rendering:-webkit-optimize-contrast}
 
 .snarkFilename:hover .targetfile{display:inline-block}
 .snarkFilename .targetfile,.snarkFilename:hover .tags,.snarkFileName a:empty{display:none}

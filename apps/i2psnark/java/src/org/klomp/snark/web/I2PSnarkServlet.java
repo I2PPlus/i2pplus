@@ -2329,7 +2329,13 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         // File type icon column
-        out.write("</td><td class=details>");
+        out.write("</td><td class=\"details");
+        if (!isValid && !isMultiFile) {
+            out.write(" fetching");
+        } else {
+            out.write(" data");
+        }
+        out.write("\">");
         if (isValid) {
             StringBuilder buf = new StringBuilder(128);
             CommentSet comments = snark.getComments();
@@ -2338,7 +2344,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<span class=filetype><a href=\"").append(encodedBaseName)
                .append("/\" title=\"").append(_t("Torrent details")).append("\">");
             if (comments != null && !comments.isEmpty()) {
-                buf.append("<span class=snarkCommented title=\"").append(_t("Torrent has comments")).append("\">");
+                buf.append("<span class=commented title=\"").append(_t("Torrent has comments")).append("\">");
                 toSVG(buf, "rateme", "", "");
                 buf.append("</span>");
             }

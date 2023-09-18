@@ -756,8 +756,8 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 
 /* comment indicator */
 .filetype{position:relative;vertical-align:middle}
-.snarkCommented{position:absolute;display:inline-block;z-index:20;top:-3px;right:1px;line-height:0;font-size:0}
-.snarkCommented img{padding:0;height:9px;width:auto;filter:drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3))}
+.commented{position:absolute;display:inline-block;z-index:20;top:-3px;right:1px;line-height:0;font-size:0}
+.commented img{padding:0;height:9px;width:auto;filter:drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3))}
 
 #snarkInfo~.mainsection{margin-top:-2px;border:var(--border);background:#001}
 .iframed #snarkInfo~.mainsection,.iframed #torrentInfo td:last-child{border-left:0;border-right:0}

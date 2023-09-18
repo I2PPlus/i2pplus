@@ -236,8 +236,8 @@ th.peerCount a img{margin-left:-5px}
 .rowOdd td,.rowEven td{color:#bb7;border-bottom:1px solid #000}
 .seeding.active:hover td#torrents .tAction{background:linear-gradient(to left,#f64384,#f64384 2px,#030 2px)}
 .seeding.active td#torrents .tAction{background:linear-gradient(to left,#f64384,#f64384 2px,transparent 2px)}
-.snarkCommented img{padding:0;width:auto;height:11px;position:absolute;top:-2px;right:-2px;filter:drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3))}
-.snarkCommented{position:absolute;display:inline-block;z-index:20;top:-2px;right:3px;line-height:0;font-size:0}
+.commented img{padding:0;width:auto;height:11px;position:absolute;top:-2px;right:-2px;filter:drop-shadow(0 0 1px #101) drop-shadow(0 0 2px rgba(128,128,0,.3))}
+.commented{position:absolute;display:inline-block;z-index:20;top:-2px;right:3px;line-height:0;font-size:0}
 .snarkFileName{padding:4px 5px;word-break:break-all;text-align:left}
 .filetype{position:relative;vertical-align:middle}
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-top:-3px;margin-right:-1px;display:inline-block;vertical-align:middle;line-height:0;font-size:90%;font-style:normal;text-shadow:0 0 1px #010}
