@@ -4,7 +4,10 @@
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
   import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
-<%
+<%/*
+  import {refreshSidebar} from "/themes/js/refreshSidebar.js"; // debug
+  import {sectionToggler, countTunnels, countNewsItems} from "/themes/js/sectionToggle.js"; // debug
+*/%>
   import {stickySidebar} from "/js/stickySidebar.js";
   import {onVisible} from "/js/onVisible.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
