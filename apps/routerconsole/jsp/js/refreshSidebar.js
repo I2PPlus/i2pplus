@@ -1,7 +1,7 @@
 /* I2P+ RefreshSidebar by dr|z3d */
 /* License: AGPLv3 or later */
 
-import {sectionToggler, countTunnels, countNewsItems} from "/themes/js/sectionToggle.js";
+import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
 import {stickySidebar} from "/js/stickySidebar.js";
 
 "use strict";
