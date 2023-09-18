@@ -197,8 +197,7 @@ public class InfoHelper extends HelperBase {
             buf.append(" &ensp;<b>" + _t("UDP Port") + ":</b> " + getUdpPort() + " &ensp;<b>" + _t("Status") +
                        ":</b> " + _t(_context.commSystem().getStatus().toStatusString()));
             buf.append(" &ensp;<b>" + _t("Floodfill Role") + ":</b> ");
-//            if (_context.netDbSegmentor().floodfillEnabled())
-            if (_context.mainNetDb().floodfillEnabled())
+            if (_context.netDbSegmentor().floodfillEnabled())
                 buf.append(_t("Active"));
             else
                 buf.append(_t("Inactive"));

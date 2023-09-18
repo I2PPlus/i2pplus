@@ -17,12 +17,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import net.i2p.crypto.SigAlgo;
 import net.i2p.crypto.SigType;
@@ -162,7 +159,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     static final String PROP_VALIDATE_ROUTERS_AFTER = "router.validateRoutersAfter";
 
 //    private final static long EXPLORE_JOB_DELAY = 10*60*1000l;
-    private final static long EXPLORE_JOB_DELAY = 15*60*1000l;
+    private final static long EXPLORE_JOB_DELAY = 8*60*1000l;
 
 
     /**
@@ -343,7 +340,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return _dbid.startsWith("clients_");
     }
 
-/**
     public synchronized void startup() {
         _log.info("Starting up the Kademlia Network Database...");
         RouterInfo ri = _context.router().getRouterInfo();
@@ -405,18 +401,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             // and anyway, we want to search for a completely random key,
             // not a random key for a particular kbucket.
             // _context.jobQueue().addJob(new ExploreKeySelectorJob(_context, this));
-            if (_exploreJob == null && _dbid.equals(FloodfillNetworkDatabaseSegmentor.MAIN_DBID)) {
+            if (_exploreJob == null)
                 _exploreJob = new StartExplorersJob(_context, this);
-                // fire off a group of searches from the explore pool
-                // Don't start it right away, so we don't send searches for random keys
-                // out our 0-hop exploratory tunnels (generating direct connections to
-                // one or more floodfill peers within seconds of startup).
-                // We're trying to minimize the ff connections to lessen the load on the
-                // floodfills, and in any case let's try to build some real expl. tunnels first.
-                // No rush, it only runs every 30m.
-                _exploreJob.getTiming().setStartAfter(now + EXPLORE_JOB_DELAY);
-                _context.jobQueue().addJob(_exploreJob);
-            }
+            // fire off a group of searches from the explore pool
+            // Don't start it right away, so we don't send searches for random keys
+            // out our 0-hop exploratory tunnels (generating direct connections to
+            // one or more floodfill peers within seconds of startup).
+            // We're trying to minimize the ff connections to lessen the load on the
+            // floodfills, and in any case let's try to build some real expl. tunnels first.
+            // No rush, it only runs every 30m.
+            _exploreJob.getTiming().setStartAfter(now + EXPLORE_JOB_DELAY);
+            _context.jobQueue().addJob(_exploreJob);
         } else {
             _log.warn("Operating in QUIET MODE - not exploring or pushing data proactively, simply reactively " +
                       "\n* This should NOT be used in production!");
@@ -439,80 +434,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             //}
         }
     }
-**/
-
-    public synchronized void startup() {
-        _log.info("Starting up the Kademlia Network Database...");
-
-        RouterInfo ri = _context.router().getRouterInfo();
-        _dbDir = getDbDir();
-
-        // Use nested ternary operators to condense the if-else block
-        String exploreBucketSize = _context.getProperty("router.exploreBucketSize");
-        String exploreKadB = _context.getProperty("router.exploreKadB");
-        _kb = new KBucketSet<Hash>(
-            _context,
-            ri.getIdentity().getHash(),
-            exploreBucketSize != null ? Integer.valueOf(exploreBucketSize) : BUCKET_SIZE,
-            exploreKadB != null ? Integer.valueOf(exploreKadB) : KAD_B,
-            new RejectTrimmer<Hash>()
-        );
-        _log.info("BucketSize: " + BUCKET_SIZE + "; B Value: " + exploreKadB);
-
-        try {
-            _ds = new PersistentDataStore(_context, _dbDir, this);
-        } catch (IOException ioe) {
-            throw new RuntimeException("Unable to initialize NetDb storage", ioe);
-        }
-
-        _negativeCache = new NegativeLookupCache(_context);
-        _blindCache.startup();
-
-        // Perform long-running tasks in a separate thread
-        createHandlers();
-
-        _initialized = true;
-        _started = System.currentTimeMillis();
-
-        // expire old leases
-        Job elj = new ExpireLeasesJob(_context, this);
-        long now = _context.clock().now();
-        elj.getTiming().setStartAfter(now + 11 * 60 * 1000);
-        _context.jobQueue().addJob(elj);
-
-        // Only perform these tasks if the commSystem is not a dummy (i.e., if we are not running in test mode)
-        if (!_context.commSystem().isDummy()) {
-            // expire some routers
-            Job erj = new ExpireRoutersJob(_context, this);
-            boolean isFF = _context.getBooleanProperty(FloodfillMonitorJob.PROP_FLOODFILL_PARTICIPANT);
-            long down = _context.router().getEstimatedDowntime();
-            long delay = (down == 0 || (!isFF && down > 30 * 60 * 1000) || (isFF && down > 24 * 60 * 60 * 1000)) ?
-                ROUTER_INFO_EXPIRATION_FLOODFILL + 10 * 60 * 1000 :
-                10 * 60 * 1000;
-            erj.getTiming().setStartAfter(now + delay);
-            _context.jobQueue().addJob(erj);
-        }
-
-        if (!QUIET) {
-            if (_exploreJob == null && _dbid.equals(FloodfillNetworkDatabaseSegmentor.MAIN_DBID)) {
-                _exploreJob = new StartExplorersJob(_context, this);
-                _exploreJob.getTiming().setStartAfter(now + EXPLORE_JOB_DELAY);
-                _context.jobQueue().addJob(_exploreJob);
-            }
-        } else {
-            _log.warn("Operating in QUIET MODE - not exploring or pushing data proactively, simply reactively " +
-                "\n* This should NOT be used in production!");
-        }
-
-        if (_dbid == null || _dbid.equals(FloodfillNetworkDatabaseSegmentor.MAIN_DBID) || _dbid.isEmpty()) {
-            // periodically update and resign the router's 'published date', which basically serves as a version
-            Job plrij = new PublishLocalRouterInfoJob(_context);
-            // do not delay this, as this creates the RI too, and we need a good local routerinfo right away
-            //plrij.getTiming().setStartAfter(_context.clock().now() + PUBLISH_JOB_DELAY);
-            _context.jobQueue().addJob(plrij);
-        }
-    }
-
 
     /** unused, see override */
     protected void createHandlers() {}
@@ -551,7 +472,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 *****/
 
     /** get the hashes for all known routers */
-/**
     public Set<Hash> getAllRouters() {
         if (!_initialized) return Collections.emptySet();
         Set<Map.Entry<Hash, DatabaseEntry>> entries = _ds.getMapEntries();
@@ -562,19 +482,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
         }
         return rv;
-    }
-**/
-
-    /** get the hashes for all known routers */
-    public Set<Hash> getAllRouters() {
-    if (!_initialized) {
-        return Collections.emptySet();
-    }
-    Collection<DatabaseEntry> entries = _ds.getEntries();
-    return entries.stream()
-                  .filter(e -> e.isRouterInfo())
-                  .map(e -> e.getHash())
-                  .collect(Collectors.toSet());
     }
 
     /**

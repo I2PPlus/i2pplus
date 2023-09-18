@@ -222,10 +222,8 @@ public class IterativeSearchJob extends FloodSearchJob {
 
         String MIN_VERSION = "0.9.58";
         boolean isHidden = getContext().router().isHidden();
-//        RouterInfo ri = _facade.lookupRouterInfoLocally(_key);
-//        RouterInfo isUs = _facade.lookupRouterInfoLocally(getContext().routerHash());
-        RouterInfo ri = getContext().mainNetDb().lookupRouterInfoLocally(_key);
-        RouterInfo isUs = getContext().mainNetDb().lookupRouterInfoLocally(getContext().routerHash());
+        RouterInfo ri = _facade.lookupRouterInfoLocally(_key);
+        RouterInfo isUs = _facade.lookupRouterInfoLocally(getContext().routerHash());
         long uptime = getContext().router().getUptime();
         if (ri != null && ri != isUs) {
             String v = ri.getVersion();

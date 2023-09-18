@@ -121,8 +121,7 @@ class RefreshRoutersJob extends JobImpl {
                     continue;
                 if (_log.shouldDebug())
                     _log.debug("Checking RouterInfo [" + h.toBase64().substring(0,6) + "]");
-//                RouterInfo ri = _facade.lookupRouterInfoLocally(h);
-                RouterInfo ri = getContext().mainNetDb().lookupRouterInfoLocally(h);
+                RouterInfo ri = _facade.lookupRouterInfoLocally(h);
                 if (ri == null)
                     continue;
 //                if (ri.getPublished() < expire) {

@@ -83,11 +83,15 @@ class StartExplorersJob extends JobImpl {
         boolean forceExplore = getContext().getBooleanProperty(PROP_FORCE_EXPLORE);
         boolean isFF = _facade.floodfillEnabled();
         boolean isCpuHighLoad = SystemVersion.getCPULoad() > 90 && SystemVersion.getCPULoadAvg() > 90;
-        if (!isFF || forceExplore) {
+        if (!isFF || forceExplore || _facade.isClientDb()) {
             if (!(getContext().jobQueue().getMaxLag() > MAX_LAG ||
                   getContext().throttle().getMessageDelay() > MAX_MSG_DELAY ||
+                  // getContext().router().gracefulShutdownInProgress()
                   getContext().commSystem().getStatus() == Status.DISCONNECTED)) {
                 int num = MAX_PER_RUN;
+//                int count = _facade.getDataStore().size();
+//                count = getContext().netDbSegmentor().getKnownRouters();
+                count = getContext().mainNetDb().getKnownRouters();
                 String exploreBuckets = getContext().getProperty(PROP_EXPLORE_BUCKETS);
                 if (exploreBuckets == null) {
                     if (count < MIN_ROUTERS)

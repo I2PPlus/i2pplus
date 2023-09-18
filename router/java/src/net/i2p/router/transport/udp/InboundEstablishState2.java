@@ -190,8 +190,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             if (_log.shouldDebug())
                 _log.debug("[SSU2] Processed " + blocks + " blocks on " + this);
         } catch (RIException rie) {
-            if (_log.shouldInfo())
-                _log.info("RouterInfo error: " + rie.getMessage());
+            if (_log.shouldWarn())
+                _log.warn("RouterInfo error: " + rie.getMessage());
             int reason = rie.getReason();
             PeerStateDestroyed psd = createPeerStateDestroyed(reason);
             _transport.addRecentlyClosed(psd);
