@@ -66,6 +66,7 @@ public class ConfigAdvancedHelper extends HelperBase {
 
     /** @since 0.9.21 */
     public boolean isFloodfill() {
-        return _context.netDbSegmentor().floodfillEnabled();
+//        return _context.netDbSegmentor().floodfillEnabled();
+        return _context.mainNetDb().floodfillEnabled();
     }
 }

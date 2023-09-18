@@ -32,14 +32,14 @@ import net.i2p.router.Router;
  * (where "rN" is an instance number, such as r0 or r9).
  *
  * Optionally, i2p.vmCommSystem=true can be enabled.
- * 
+ *
  * i2p.vmCommSystem=true tells the router to use an in-VM comm system for sending
  * messages back and forth between routers (see net.i2p.transport.VMCommSystem).
  *
  * However, the default comm system implementation is usually preferred since
  * enabling the VMCommSystem will bypass UDP and TCP, and therefore will not
  * provide a test bed for many important I2P systems.
- * 
+ *
  * To make the router console work, either run from a directory containing
  * lib/, webapps/, docs/, etc., or point i2p.dir.base to a directory containing the
  * above.
@@ -49,12 +49,12 @@ import net.i2p.router.Router;
  */
 public class MultiRouter {
 
-	private static final int BASE_PORT = 5000;
+    private static final int BASE_PORT = 5000;
 
-	private static int nbrRouters;
+    private static int nbrRouters;
 
-	private static PrintStream _out;
-	private static ArrayList<Router> _routers = new ArrayList<Router>(8);
+    private static PrintStream _out;
+    private static ArrayList<Router> _routers = new ArrayList<Router>(8);
     private static I2PAppContext _defaultContext;
 
     public static void main(String args[]) {
@@ -89,10 +89,10 @@ public class MultiRouter {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-            	_out.println("Shutting down in a few moments..");
-            	for(Router r : _routers) {
-            		r.shutdown(0);
-            	}
+                _out.println("Shutting down in a few moments..");
+                for(Router r : _routers) {
+                    r.shutdown(0);
+                }
                 try { Thread.sleep(1500); } catch (InterruptedException ie) {}
                 Runtime.getRuntime().halt(0);
             }
@@ -107,7 +107,7 @@ public class MultiRouter {
         }
 
         for (int i = 0; i < nbrRouters; i++) {
-        	final Router r = _routers.get(i);
+            final Router r = _routers.get(i);
             long offset = r.getContext().random().nextLong(Router.CLOCK_FUDGE_FACTOR/2);
             if (r.getContext().random().nextBoolean())
                 offset = 0 - offset;
@@ -115,9 +115,9 @@ public class MultiRouter {
 
             /* Start the routers in separate threads since it takes some time. */
             (new Thread() {
-            	  public void run() {
-            		  r.runRouter();
-            	  }
+                  public void run() {
+                      r.runRouter();
+                  }
             }).start();
             try { Thread.sleep(100); } catch (InterruptedException ie) {}
 
@@ -138,28 +138,28 @@ public class MultiRouter {
 
     private static void internalReseed() {
 
-    	HashSet<RouterInfo> riSet = new HashSet<RouterInfo>();
-    	for(Router r : _routers) {
-    		riSet.addAll(r.getContext().netDbSegmentor().getRouters());
-    	}
-		for(Router r : _routers) {
-    		for(RouterInfo ri : riSet){
-    			r.getContext().netDbSegmentor().publish(ri);
-    		}
-    	}
-		_out.println(riSet.size() + " RouterInfos were reseeded");
+        HashSet<RouterInfo> riSet = new HashSet<RouterInfo>();
+        for(Router r : _routers) {
+            riSet.addAll(r.getContext().netDbSegmentor().getRouters());
+        }
+        for(Router r : _routers) {
+            for(RouterInfo ri : riSet){
+                r.getContext().netDbSegmentor().publish(ri);
+            }
+        }
+        _out.println(riSet.size() + " RouterInfos were reseeded");
     }
 
     private static Properties buildRouterProps(int id) {
         Properties props = getRouterProps(id);
         File f = new File(props.getProperty("router.configLocation"));
         if (!f.exists()) {
-        	f.getParentFile().mkdirs();
+            f.getParentFile().mkdirs();
             try {
-				DataHelper.storeProps(props, f);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+                DataHelper.storeProps(props, f);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return props;
     }
@@ -201,24 +201,24 @@ public class MultiRouter {
     }
 
     private static Properties buildClientProps(int id) {
-    	Properties rProps = getRouterProps(id);
+        Properties rProps = getRouterProps(id);
         Properties props = getClientProps();
         File f = new File(rProps.getProperty("router.clientConfigFile"));
         if (!f.exists()) {
-        	f.getParentFile().mkdirs();
+            f.getParentFile().mkdirs();
             try {
-				DataHelper.storeProps(props, f);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+                DataHelper.storeProps(props, f);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return props;
     }
 
     private static Properties getClientProps() {
-    	Properties props = new Properties();
+        Properties props = new Properties();
 
-    	props.setProperty("clientApp.0.args", (BASE_PORT-1) + " 127.0.0.1 ./webapps");
+        props.setProperty("clientApp.0.args", (BASE_PORT-1) + " 127.0.0.1 ./webapps");
         props.setProperty("clientApp.0.main", "net.i2p.router.web.RouterConsoleRunner");
         props.setProperty("clientApp.0.name", "webconsole");
         props.setProperty("clientApp.0.onBoot", "true");
@@ -231,8 +231,8 @@ public class MultiRouter {
     }
 
     private static String getBaseDir(int id) {
-    	File f = new File(".");
-    	return f.getAbsoluteFile().getParentFile().toString() + "/multirouter/"+ Integer.toString(id);
+        File f = new File(".");
+        return f.getAbsoluteFile().getParentFile().toString() + "/multirouter/"+ Integer.toString(id);
     }
 
     private static void waitForCompletion() {
@@ -241,7 +241,7 @@ public class MultiRouter {
             for (int i = 0; i < _routers.size(); i++) {
                 Router r = _routers.get(i);
                 if (!r.isAlive()) {
-                	_out.println("Router " + i + " is dead");
+                    _out.println("Router " + i + " is dead");
                 } else {
                     alive++;
                 }
