@@ -7,8 +7,8 @@ input,button,textarea,select,a{font-weight:400;font-family:Noto Sans,Open Sans,S
 .snarkAddInfo,.snarkAddInfo code{font-size:10pt}
 #pagenav{font-size:9.5pt}
 input[type],select,#configs select,select option,#configs select option,td,td a,#screenlog li,#screenlog li a,textarea,input.r,input[name="nofilter_dataDir"],.configPanel,.configPanel td,#configs td,.trackerconfig td{font-size:10.5pt}
-th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp,td.torrentDownloaded,td.torrentUploaded,td.RateDown,td.RateUp,.torrentName a:link{font-size:10pt}
-th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp{font-weight:700}
+th.rxd,th.txd,th.rateDown,th.rateUp,td.rxd,td.txd,td.rateDown,td.rateUp,.tName a:link{font-size:10pt}
+th.rxd,th.txd,th.rateDown,th.rateUp{font-weight:700}
 .snarkNewTorrent #trackerselect tr:first-child td,.snarkNewTorrent td{font-size:10pt}
 #trackerselect td:first-child,#trackerselect td:last-child{width:20%}
 #trackerselect td:nth-child(2),#trackerselect td:nth-child(3){width:15%}
@@ -20,7 +20,7 @@ select,a.control,input[type=submit],input.accept,th,#trackerselect tr:first-chil
 .configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active{padding-top:8px;font-size:14pt;text-transform:uppercase;font-variant:normal}
 .configPanel .configTitle img{margin-top:-2px;display:inline-block;height:24px;width:24px;mix-blend-mode:hard-light}
 #torrentInfo th,.dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}
-.torrentName a,.dirInfo .snarkFileName a{font-weight:400;padding-top:2px;padding-bottom:2px}
+.tName a,.dirInfo .snarkFileName a{font-weight:400;padding-top:2px;padding-bottom:2px}
 .percentbartext{font-size:8.5pt}
 .dirInfo .percentbartext{line-height:12px}
 #torrents code{font-size:9.5pt}
@@ -35,5 +35,5 @@ select,a.control,input[type=submit],input.accept,th,#trackerselect tr:first-chil
 }
 
 @media (max-width:1400px){
-.iframed #torrents td.torrentName a{max-width:400px;display:inline-block;;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iframed #torrents td.tName a{max-width:400px;display:inline-block;;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }

@@ -12,8 +12,8 @@ select{padding-top:1px;padding-bottom:1px}
 .optionlist{columns:500px auto;column-gap:5px}
 .snarkAddInfo{font-size:10pt}
 .snarkNav{font-weight:700}
-th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp,td.torrentDownloaded,td.torrentUploaded,td.RateDown,td.RateUp,.torrentName a:link,th#pagenav{font-size:10pt}
-.torrentDownloaded,th.torrentUploaded,.RateDown,th.RateUp,.percentBarComplete{font-weight:700}
+th.rxd,th.txd,th.rateDown,th.rateUp,td.rxd,td.txd,td.rateDown,td.rateUp,.tName a:link,th#pagenav{font-size:10pt}
+.rxd,th.txd,.rateDown,th.rateUp,.barComplete{font-weight:700}
 #torrentInfo th,.dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}
 #configs input[name="nofilter_dataDir"],input[name="i2cpOpts"],input[name="nofilter_commentsName"]{width:calc(100% - 200px)}
 #configs td b{letter-spacing:.08em;min-width:180px}
@@ -23,5 +23,5 @@ th.torrentDownloaded,th.torrentUploaded,th.RateDown,th.RateUp,td.torrentDownload
 #torrents code,.snarkAddInfo code{font-size:9.5pt}
 }
 @media (max-width:1400px){
-.iframed #torrents td.torrentName a{max-width:400px;display:inline-block;;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iframed #torrents td.tName a{max-width:400px;display:inline-block;;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }
