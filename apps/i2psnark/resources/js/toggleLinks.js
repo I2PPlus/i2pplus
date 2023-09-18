@@ -18,25 +18,32 @@ const showMagnets = "#torrents #linkswitch::before{background:url(/i2psnark/.res
                     "border:0}";
 
 const magnets = document.querySelectorAll("#snarkTbody td.magnet .magnetlink");
+const mlinks = document.querySelectorAll("#snarkTbody .magnet");
+const tlinks = document.querySelectorAll("#snarkTbody .trackerLink");
 const toast = document.querySelector("#toast");
+const toggleCss = document.getElementById("toggleLinks");
+const toggle = document.getElementById("linkswitch");
 
 function initLinkToggler() {
   var config = localStorage.getItem("linkToggle");
   if (config !== null) {config = config.toString();}
-  var mlinks = document.querySelectorAll("#snarkTbody .magnet");
-  var tlinks = document.querySelectorAll("#snarkTbody .trackerLink");
-  var toggle = document.getElementById("linkswitch");
-  toggle.removeAttribute("hidden");
-  toggle.removeAttribute("checked");
-  if (!toggle) {return;}
+  console.log("Toggle localStorage config set to: " + config);
+  //if (!toggle) {return;}
   if (config === "links" || !config) {
     localStorage.setItem("linkToggle", "links");
     toggle.false = true;
+    showLinks();
+    removeMagnetListeners();
+    removeMagnetToClipboardListeners();
   } else if (config === "magnets") {
     toggle.checked = true;
+    showMagnets();
+    magnetToClipboard();
+    attachMagnetListeners();
   }
   toggle.addEventListener("click", linkToggle, true);
-  magnetToClipboard();
+  toggle.removeAttribute("hidden");
+  toggle.removeAttribute("checked");
 }
 
 function linkToggle() {
@@ -46,27 +53,32 @@ function linkToggle() {
   } else {
     config = "";
   }
-  var mlinks = document.querySelectorAll("#snarkTbody .magnet");
-  var tlinks = document.querySelectorAll("#snarkTbody .trackerLink");
-  var toggle = document.getElementById("linkswitch");
-  var toggleCss = document.getElementById("toggleLinks");
 
-  if (!toggle) {return;}
-  if (config === "links" || !config) {
-    const expectedHtml = showMagnets + magnetBtn;
-    if (toggleCss.innerHTML !== expectedHtml) {
-      toggleCss.innerHTML = expectedHtml;
-    }
-    toggle.click();
-    localStorage.setItem("linkToggle", "magnets");
+  //if (!toggle) {return;}
+  if (config === "links" || !config || config === "") {
+    showMagnets();
   } else {
-    const expectedHtml = showLinks + magnetBtn;
-    if (toggleCss.innerHTML !== expectedHtml) {
-      toggleCss.innerHTML = expectedHtml;
-    }
-    toggle.click();
-    localStorage.setItem("linkToggle", "links");
+    showLinks();
+}
+
+function showLinks() {
+  const expectedHtml = showMagnets + magnetBtn;
+  if (toggleCss.innerHTML !== expectedHtml) {
+    toggleCss.innerHTML = expectedHtml;
   }
+  localStorage.setItem("linkToggle", "links");
+  removeMagnetListeners();
+  removeMagnetToClipboardListeners();
+}
+
+function showMagnets() {
+  const expectedHtml = showLinks + magnetBtn;
+  if (toggleCss.innerHTML !== expectedHtml) {
+    toggleCss.innerHTML = expectedHtml;
+  }
+  localStorage.setItem("linkToggle", "magnets");
+  attachMagnetListeners();
+  magnetToClipboard();
 }
 
 function magnetToClipboard() {
@@ -82,6 +94,7 @@ function magnetToClipboard() {
     }
   }
 
+  removeMagnetToClipboardListeners();
   window.addEventListener("scroll", fixToast);
   window.addEventListener("resize", fixToast);
   if (window.frameElement) {
@@ -89,18 +102,24 @@ function magnetToClipboard() {
     window.parent.addEventListener("resize", fixToast);
   }
 
-  window.addEventListener("load", function() {
-    for (var i = 0; i < magnets.length; i++) {
-      var anchor = magnets[i];
-      var span = anchor.parentElement.querySelector(".copyMagnet");
-      span.style.display = "inline";
-    }
-  });
-  attachMagnetListeners();
+}
+
+function removeMagnetToClipboardListeners() {
+  function noop() {}
+
+  window.removeEventListener("scroll", fixToast);
+  window.removeEventListener("resize", fixToast);
+  if (window.frameElement) {
+    window.parent.removeEventListener("scroll", fixToast);
+    window.parent.removeEventListener("resize", fixToast);
+  }
+
+  function fixToast() {}
 }
 
 function attachMagnetListeners() {
   let toastTimeoutId;
+  removeMagnetListeners();
   for (let i = 0; i < magnets.length; i++) {
     let anchor = magnets[i];
     let copyBtn = anchor.parentElement.querySelector(".copyMagnet");
@@ -142,6 +161,14 @@ function attachMagnetListeners() {
         toast.textContent = "";
       }, 3500);
     });
+  }
+}
+
+function removeMagnetListeners() {
+  for (let i = 0; i < magnets.length; i++) {
+    let copyBtn = magnets[i].parentElement.querySelector(".copyMagnet");
+    let newCopyBtn = copyBtn.cloneNode(true);
+    copyBtn.parentNode.replaceChild(newCopyBtn, copyBtn);
   }
 }
 

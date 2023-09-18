@@ -167,11 +167,13 @@ function refreshTorrents(callback) {
       const dirlist = document.getElementById("dirlist");
       const updating = document.getElementsByClassName("volatile");
       const updatingResponse = xhrsnark.responseXML?.getElementsByClassName("volatile");
+      const updatingTds = document.querySelectorAll(".volatile td:not(.details.data):not(.magnet):not(.trackerLink)");
+      const updatingTdsResponse = xhrsnark.responseXML?.querySelectorAll(".volatile td:not(.details.data):not(.magnet):not(.trackerLink)");
       if (updatingResponse?.length && updating.length === updatingResponse.length) {
         let updated = false;
-        Array.from(updating).forEach((elem, index) => {
-          if (elem.innerHTML !== updatingResponse[index].innerHTML) {
-            elem.outerHTML = updatingResponse[index].outerHTML;
+        Array.from(updatingTds).forEach((elem, index) => {
+          if (elem.innerHTML !== updatingTdsResponse[index].innerHTML) {
+            elem.innerHTML = updatingTdsResponse[index].innerHTML;
             updated = true;
           }
         });
@@ -238,10 +240,11 @@ function noAjax(delay) {
       targetElement.innerHTML = failMessage;
     }
   }, delay);
+  refreshAll();
 }
 
 function debouncedRefreshTorrents(callback) {
-  const delay = 50;
+  const delay = 100;
   let debounceTimeoutId;
 
   return function executedFunction(...args) {
@@ -267,7 +270,6 @@ function setupPage() {
 }
 
 function initSnarkRefresh() {
-  attachMagnetListeners();
   const interval = (parseInt(storageRefresh) || 5) * 1000;
   clearInterval(refreshIntervalId);
   refreshIntervalId = setInterval(() => {
@@ -278,4 +280,4 @@ function initSnarkRefresh() {
   }
 }
 
-export {initSnarkRefresh, refreshTorrents, debouncedRefreshTorrents, debounce, xhrsnark};
+export {initSnarkRefresh, refreshTorrents, debouncedRefreshTorrents, debounce, xhrsnark, refreshIntervalId};
