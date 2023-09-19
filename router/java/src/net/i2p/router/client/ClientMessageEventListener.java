@@ -712,13 +712,13 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             }
             if (_log.shouldDebug())
                 _log.debug("Publishing: " + ls);
-            _context.netDbSegmentor().publish(ls, _runner.getDestHash().toBase32());
+            _context.clientNetDb(_runner.getDestHash()).publish(ls);
             if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                 // store the decrypted ls also
                 EncryptedLeaseSet encls = (EncryptedLeaseSet) ls;
                 if (_log.shouldDebug())
                     _log.debug("Storing decrypted: " + encls.getDecryptedLeaseSet());
-                _context.netDbSegmentor().store(dest.getHash(), encls.getDecryptedLeaseSet());
+                _context.clientNetDb(dest.getHash()).store(dest.getHash(), encls.getDecryptedLeaseSet());
             }
         } catch (IllegalArgumentException iae) {
             if (_log.shouldError())
@@ -862,9 +862,9 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 _log.warn("Unsupported BlindingInfo type: " + message);
             return;
         }
-        BlindData obd = _context.netDbSegmentor().getBlindData(spk);
+        BlindData obd = _context.clientNetDb(_runner.getDestHash()).getBlindData(spk);
         if (obd == null) {
-            _context.netDbSegmentor().setBlindData(bd, _runner.getDestHash().toBase32());
+            _context.clientNetDb(_runner.getDestHash()).setBlindData(bd);
             if (_log.shouldWarn())
                 _log.warn("New: " + bd);
         } else {
@@ -885,7 +885,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                         return;
                     }
                 }
-                _context.netDbSegmentor().setBlindData(bd, _runner.getDestHash().toBase32());
+                _context.clientNetDb(_runner.getDestHash()).setBlindData(bd);
                 if (_log.shouldWarn())
                     _log.warn("Updated: " + bd);
             } else {
@@ -894,7 +894,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 if (nexp > oexp) {
                     obd.setExpiration(nexp);
                     // to force save at shutdown
-                    _context.netDbSegmentor().setBlindData(obd, _runner.getDestHash().toBase32());
+                    _context.clientNetDb(_runner.getDestHash()).setBlindData(obd);
                     if (_log.shouldWarn())
                         _log.warn("Updated expiration: " + obd);
                 } else {

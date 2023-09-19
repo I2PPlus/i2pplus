@@ -140,9 +140,9 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                             return;
                         RouterInfo oldri = null;
                         if (_client != null)
-                            oldri = _context.netDbSegmentor().lookupRouterInfoLocally(key, _client.toBase32());
+                            oldri = _context.clientNetDb(_client).lookupRouterInfoLocally(key);
                         else
-                            oldri = _context.netDbSegmentor().lookupRouterInfoLocally(key, FloodfillNetworkDatabaseSegmentor.MAIN_DBID);
+                            oldri = _context.mainNetDb().lookupRouterInfoLocally(key);
                         // only update if RI is newer and non-ff
                         if (oldri != null && oldri.getPublished() < ri.getPublished() &&
                             !FloodfillNetworkDatabaseFacade.isFloodfill(ri)) {
@@ -272,7 +272,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         if (dsm.getEntry().isLeaseSet()) {
                             if (_log.shouldLog(Log.INFO))
                                 _log.info("[client: " + _clientNickname + "] Saving LS DSM from client tunnel.");
-                            FloodfillDatabaseStoreMessageHandler _FDSMH = new FloodfillDatabaseStoreMessageHandler(_context, _context.netDbSegmentor().getSubNetDB(dbid));
+                            FloodfillDatabaseStoreMessageHandler _FDSMH = new FloodfillDatabaseStoreMessageHandler(_context, _context.clientNetDb(_client));
                             Job j = _FDSMH.createJob(msg, null, null);
                             j.runJob();
                             if (sz > 0) {
@@ -359,110 +359,107 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                 if (type == GarlicMessage.MESSAGE_TYPE) {
                     _receiver.receive((GarlicMessage)data);
                 } else if (type == DatabaseStoreMessage.MESSAGE_TYPE) {
-                        // Treat db store explicitly here (not in HandleFloodfillDatabaseStoreMessageJob),
-                        // since we don't want to republish (or flood)
-                        // unnecessarily. Reply tokens ignored.
-                        DatabaseStoreMessage dsm = (DatabaseStoreMessage)data;
-                        // Ensure the reply info is cleared, just in case
-                        dsm.setReplyToken(0);
-                        dsm.setReplyTunnel(null);
-                        dsm.setReplyGateway(null);
-                        String truncDest = _client != null ? _client.toString().substring(0,12) + "..." : "";
+                    // Treat db store explicitly here (not in HandleFloodfillDatabaseStoreMessageJob),
+                    // since we don't want to republish (or flood)
+                    // unnecessarily. Reply tokens ignored.
+                    DatabaseStoreMessage dsm = (DatabaseStoreMessage)data;
+                    // Ensure the reply info is cleared, just in case
+                    dsm.setReplyToken(0);
+                    dsm.setReplyTunnel(null);
+                    dsm.setReplyGateway(null);
+                    String truncDest = _client != null ? _client.toString().substring(0,12) + "..." : "";
 
-                            if (dsm.getEntry().isLeaseSet()) {
-                                    // Case 1:
-                                    // store of our own LS.
-                                    // This is almost certainly a response to a FloodfillVerifyStoreJob search.
-                                    // We must send to the InNetMessagePool so the message can be matched
-                                    // and the verify marked as successful.
+                    if (dsm.getEntry().isLeaseSet()) {
+                        // Case 1:
+                        // store of our own LS.
+                        // This is almost certainly a response to a FloodfillVerifyStoreJob search.
+                        // We must send to the InNetMessagePool so the message can be matched
+                        // and the verify marked as successful.
 
-                                    // Case 2:
-                                    // Store of somebody else's LS.
-                                    // This could be an encrypted response to an IterativeSearchJob search.
-                                    // We must send to the InNetMessagePool so the message can be matched
-                                    // and the search marked as successful.
-                                    // Or, it's a normal LS bundled with data and a MessageStatusMessage.
+                        // Case 2:
+                        // Store of somebody else's LS.
+                        // This could be an encrypted response to an IterativeSearchJob search.
+                        // We must send to the InNetMessagePool so the message can be matched
+                        // and the search marked as successful.
+                        // Or, it's a normal LS bundled with data and a MessageStatusMessage.
 
-                                    // ... and inject it.
-                                    ((LeaseSet)dsm.getEntry()).setReceivedBy(_client);
-                                    if (_log.shouldInfo())
-                                        _log.info("Storing garlic LeaseSet down tunnel for [" + dsm.getKey().toBase64().substring(0,6) +
-                                                  "] sent to " + (_client != null ? _clientNickname + " [" + truncDest : "[router") + "]");
+                        // ... and inject it.
+                        ((LeaseSet)dsm.getEntry()).setReceivedBy(_client);
+                        if (_log.shouldInfo())
+                            _log.info("Storing garlic LeaseSet down tunnel for [" + dsm.getKey().toBase64().substring(0,6) +
+                                      "] sent to " + (_client != null ? _clientNickname + " [" + truncDest : "[router") + "]");
 
-                                    String dbid = null;
-                                    if (_client != null)
-                                        dbid = _context.netDbSegmentor().getDbidByHash(_client);
-                                    if (dbid != null) {
-                                        // We need to replicate some of the handling that was previously
-                                        // performed when these types of messages were passed back to
-                                        // the inNetMessagePool.
-                                        // There's important inline handling made when fetching the original messages.
-                                        List<OutNetMessage> origMessages = _context.messageRegistry().getOriginalMessages(data);
-                                        int sz = origMessages.size();
-                                        if (sz > 0)
-                                            dsm.setReceivedAsReply();
-                                        // ToDo: This should actually have a try and catch.
-                                    if (_log.shouldLog(Log.INFO))
-                                        _log.info("Store the LS in the correct dbid subDb: " + dbid);
-                                        FloodfillDatabaseStoreMessageHandler _FDSMH = new FloodfillDatabaseStoreMessageHandler(_context, _context.netDbSegmentor().getSubNetDB(dbid));
-                                        Job j = _FDSMH.createJob(data, null, null);
-                                        j.runJob();
-                                        if (sz > 0) {
-                                            for (int i = 0; i < sz; i++) {
-                                                OutNetMessage omsg = origMessages.get(i);
-                                                ReplyJob job = omsg.getOnReplyJob();
-                                                if (job != null) {
-                                                    if (_log.shouldLog(Log.DEBUG))
-                                                        _log.debug("Setting ReplyJob ("
-                                                                   + job + ") for original message:"
-                                                                   + omsg + "; with reply message [id: "
-                                                                   + data.getUniqueId()
-                                                                   + " Class: "
-                                                                   + data.getClass().getSimpleName()
-                                                                   + "] full message: " + data);
-                                                    else if  (_log.shouldLog(Log.INFO))
-                                                        _log.info("Setting a ReplyJob ("
-                                                                  + job + ") for original message class "
-                                                                  + omsg.getClass().getSimpleName()
-                                                                  + " with reply message class "
-                                                                  + data.getClass().getSimpleName());
-                                                    job.setMessage(data);
-                                                    _context.jobQueue().addJob(job);
-                                                }
-                                            }
+                        if (_client.toBase32() != null) {
+                            // We need to replicate some of the handling that was previously
+                            // performed when these types of messages were passed back to
+                            // the inNetMessagePool.
+                            // There's important inline handling made when fetching the original messages.
+                            List<OutNetMessage> origMessages = _context.messageRegistry().getOriginalMessages(data);
+                            int sz = origMessages.size();
+                            if (sz > 0)
+                                dsm.setReceivedAsReply();
+                                // ToDo: This should actually have a try and catch.
+                                if (_log.shouldLog(Log.INFO))
+                                    _log.info("Store the LeaseSet in the correct DbId subDb: " + _client.toBase32());
+                                FloodfillDatabaseStoreMessageHandler _FDSMH = new FloodfillDatabaseStoreMessageHandler(_context, _context.clientNetDb(_client));
+                                Job j = _FDSMH.createJob(data, null, null);
+                                j.runJob();
+                                if (sz > 0) {
+                                    for (int i = 0; i < sz; i++) {
+                                        OutNetMessage omsg = origMessages.get(i);
+                                        ReplyJob job = omsg.getOnReplyJob();
+                                        if (job != null) {
+                                            if (_log.shouldLog(Log.DEBUG))
+                                                _log.debug("Setting ReplyJob ("
+                                                           + job + ") for original message:"
+                                                           + omsg + "; with reply message [id: "
+                                                           + data.getUniqueId()
+                                                           + " Class: "
+                                                           + data.getClass().getSimpleName()
+                                                           + "] full message: " + data);
+                                            else if (_log.shouldLog(Log.INFO))
+                                                    _log.info("Setting a ReplyJob ("
+                                                              + job + ") for original message class "
+                                                              + omsg.getClass().getSimpleName()
+                                                              + " with reply message class "
+                                                              + data.getClass().getSimpleName());
+                                            job.setMessage(data);
+                                            _context.jobQueue().addJob(job);
                                         }
-                                    } else if (_client == null) {
-                                        if (_log.shouldLog(Log.DEBUG))
-                                            _log.info("Routing Exploratory Tunnel message back to the inNetMessagePool.");
-                                        _context.inNetMessagePool().add(dsm, null, null, _msgIDBloomXor);
-                                    } else {
-                                        if (_log.shouldLog(Log.ERROR))
-                                            _log.error("No handling provisions for message: " + data);
                                     }
-                            } else {
-                                if (_client != null) {
-                                    // drop it, since the data we receive shouldn't include router
-                                    // references, as that might get us to talk to them (and therefore
-                                    // open an attack vector)
-                                    _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1,
-                                                                       DatabaseStoreMessage.MESSAGE_TYPE);
-                                    _log.error("Dropping DANGEROUS message (" + dsm + ") sent down a tunnel for " + _clientNickname + " [" + truncDest + "]",
-                                               new Exception("cause"));
-                                    return;
                                 }
-                                // Case 3:
-                                // Store of an RI (ours or somebody else's)
-                                // This is almost certainly a response to an IterativeSearchJob search.
-                                // We must send to the InNetMessagePool so the message can be matched
-                                // and the search marked as successful.
-                                // note that encrypted replies to RI lookups is currently disabled in ISJ, we won't get here.
-
-                                // ... and inject it.
-                                _context.statManager().addRateData("tunnel.inboundI2NPGarlicRIDSM", 1);
-                                if (_log.shouldInfo())
-                                    _log.info("Received DBStoreMessage from exploratory tunnel for RouterInfo [" + dsm.getKey() + "]");
-                                _context.inNetMessagePool().add(dsm, null, null, _msgIDBloomXor);
-                            }
+                        } else if (_client == null) {
+                            if (_log.shouldLog(Log.DEBUG))
+                                _log.info("Routing Exploratory Tunnel message back to the inNetMessagePool.");
+                            _context.inNetMessagePool().add(dsm, null, null, _msgIDBloomXor);
+                        } else {
+                            if (_log.shouldLog(Log.ERROR))
+                                _log.error("No handling provisions for message: " + data);
+                        }
+                    } else {
+                        if (_client != null) {
+                            // drop it, since the data we receive shouldn't include router
+                            // references, as that might get us to talk to them (and therefore
+                            // open an attack vector)
+                            _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1,
+                                                               DatabaseStoreMessage.MESSAGE_TYPE);
+                            _log.error("Dropping DANGEROUS message (" + dsm + ") sent down a tunnel for " + _clientNickname + " [" + truncDest + "]",
+                                       new Exception("cause"));
+                             return;
+                        }
+                        // Case 3:
+                        // Store of an RI (ours or somebody else's)
+                        // This is almost certainly a response to an IterativeSearchJob search.
+                        // We must send to the InNetMessagePool so the message can be matched
+                        // and the search marked as successful.
+                        // note that encrypted replies to RI lookups is currently disabled in ISJ, we won't get here.
+ 
+                        // ... and inject it.
+                        _context.statManager().addRateData("tunnel.inboundI2NPGarlicRIDSM", 1);
+                        if (_log.shouldInfo())
+                            _log.info("Received DBStoreMessage from exploratory tunnel for RouterInfo [" + dsm.getKey() + "]");
+                        _context.inNetMessagePool().add(dsm, null, null, _msgIDBloomXor);
+                    }
                 } else if (_client != null && type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
                     // DSRMs show up here now that replies are encrypted
                     // TODO: Strip in IterativeLookupJob etc. instead, depending on
@@ -489,18 +486,18 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                                    + "; msg: " + orig);
                     _context.inNetMessagePool().add(orig, null, null, _msgIDBloomXor);
                 } else if (type == DataMessage.MESSAGE_TYPE) {
-                        // a data message targeting the local router is how we send load tests
-                        // (real data messages target destinations)
-                        _context.statManager().addRateData("tunnel.handleLoadClove", 1);
-                        data = null;
-                        //_context.inNetMessagePool().add(data, null, null);
+                    // a data message targeting the local router is how we send load tests
+                    // (real data messages target destinations)
+                    _context.statManager().addRateData("tunnel.handleLoadClove", 1);
+                    data = null;
+                    //_context.inNetMessagePool().add(data, null, null);
                 } else if (_client != null && type != DeliveryStatusMessage.MESSAGE_TYPE &&
                            type != OutboundTunnelBuildReplyMessage.MESSAGE_TYPE) {
-                            // drop it, since the data we receive shouldn't include other stuff,
-                            // as that might open an attack vector
-                            _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1, data.getType());
-                            _log.error("Dropping DANGEROUS message (" + data + ") down a tunnel for client [" + _client.toString().substring(0,12) +
-                                       "...]", new Exception("cause"));
+                    // drop it, since the data we receive shouldn't include other stuff,
+                    // as that might open an attack vector
+                    _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1, data.getType());
+                    _log.error("Dropping DANGEROUS message (" + data + ") down a tunnel for client [" + _client.toString().substring(0,12) +
+                               "...]", new Exception("cause"));
                 } else {
                     if ((type == OutboundTunnelBuildReplyMessage.MESSAGE_TYPE) ||
                         (type == TunnelBuildReplyMessage.MESSAGE_TYPE) ||
