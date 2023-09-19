@@ -2787,3 +2787,11 @@ th code{font-size:9pt}
 #searchbar input,#searchbar select{height:30px}
 #searchbar button{height:29px;border-bottom:var(--border_input)}
 }
+
+/* router down */
+#sidebar #sb_status.statusDown,#sidebar #sb_tunnelstatus.statusDown,#sidebar #sb_routerControl.statusDown{padding:18px;border:0;box-shadow:none;background:var(--isdown);opacity:.3;pointer-events:none}
+#sidebar #sb_status.statusDown>*,#sidebar #sb_tunnelstatus.statusDown>*,#sidebar #sb_routerControl.statusDown>*,#sidebar #sb_status.statusDown::before,#sidebar #sb_tunnelstatus.statusDown::before,#sidebar #sb_routerControl.statusDown::before,#sidebar #sb_status.statusDown::after,#sidebar #sb_tunnelstatus.statusDown::after,#sidebar #sb_routerControl.statusDown::before{display:none}
+body.isDown{margin:0;height:100vh;overflow:hidden;contain:paint}
+body.isDown::after,body.isDown::before{height:100vh;width:100%;display:block;position:absolute;top:0;left:0;bottom:0;right:0;overflow:hidden;content:"";contain:paint}
+body.isDown::before{background:linear-gradient(90deg,rgba(220,220,255,.8),#eef,rgba(220,220,255,.8));backdrop-filter:saturate(.3) blur(5px);z-index:9998}
+body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 40px);background:var(--update) center center/80px;content:"";transform:rotate(0);animation:linear spin 3s forwards infinite;z-index:9999}
