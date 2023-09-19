@@ -22,6 +22,8 @@ switch (uri.substring(uri.lastIndexOf(".") + 1)) {
     break;
   case "jpg":
     contentType = "image/jpeg";
+  case "webp":
+    contentType = "image/webp";
     break;
   case "ico":
     contentType = "image/x-icon";
@@ -101,8 +103,8 @@ if (lastmod > 0) {
 }
 
 if (uri.contains("override.css")) {
-    response.setHeader("Cache-Control", "no-store");
-} else if (uri.contains(".css") || uri.contains(".js") || uri.contains(".png") || uri.contains(".jpg")
+    response.setHeader("Cache-Control", "private, no-cache, max-age=2628000");
+} else if (uri.contains(".css") || uri.contains(".js") || uri.contains(".png") || uri.contains(".jpg") || uri.contains(".webp")
            || uri.contains(".svg") || uri.contains(".ico") || uri.contains(".ttf") || uri.contains(".woff2")) {
     response.setHeader("Cache-Control", "private, max-age=2628000, immutable");
 } else {
@@ -121,7 +123,7 @@ try {
         response.sendError(HttpServletResponse.SC_FORBIDDEN, ioe.getMessage());
     }  else {
         // not an error, happens when the browser closes the stream
-        net.i2p.I2PAppContext.getGlobalContext().logManager().getLog(getClass()).warn("Error serving " + uri, ioe);
+        net.i2p.I2PAppContext.getGlobalContext().logManager().getLog(getClass()).warn("Error serving " + uri + " (" + ioe.getMessage() + ")");
         // Jetty doesn't log this
         throw ioe;
     }
