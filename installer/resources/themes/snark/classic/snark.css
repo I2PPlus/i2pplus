@@ -2,7 +2,7 @@
 /* Author: dr|z3d */
 
 @import url(/themes/console/classic/global.css);
-@import url(/i2psnark/.resources/linkToggle.css);
+@import url(/i2psnark/.res/linkToggle.css);
 
 :root{
 --bevel_notify:0 0 0 1px #bfc3d9,var(--highlight);
@@ -327,7 +327,7 @@ td.status{padding-left:5px}
 #setPriority th{padding:5px 10px;text-align:right}
 #setPriority input.accept{margin-left:5px}
 #setPriority input[disabled],#setPriority input[disabled]:hover{display:none;cursor:not-allowed;border:1px solid #999;background:var(--th)}
-#filecheck{margin:5px 0;padding-left:22px;display:inline-block;background:url(/i2psnark/.resources/icons/progressbar.gif) no-repeat left center}
+#filecheck{margin:5px 0;padding-left:22px;display:inline-block;background:url(/i2psnark/.res/icons/progressbar.gif) no-repeat left center}
 #filecheck a{margin:8px}
 .dirInfo td:first-child .thumb:hover,.dirInfo td:first-child .thumb:focus{border:1px solid var(--hover);box-shadow:none;background:var(--bg);transition:ease all .2s .1s}
 audio,video{margin:0 4px;padding:2px;width:240px;border:var(--border);box-shadow:inset 0 0 0 2px var(--bg);background:#000}
@@ -339,8 +339,8 @@ audio::-webkit-media-controls-enclosure{border-radius:0;filter:invert(1)}
 video::-webkit-media-controls-panel{display:none}
 video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-panel{display:flex}
 .newTab{margin:3px 4px -2px;float:right}
-#mediaContainer th{background:url(/i2psnark/.resources/icons/film.png) no-repeat 8px center,var(--th)}
-#mediaContainer th.audio{background:url(/i2psnark/.resources/icons/music.png) no-repeat 8px center,var(--th)}
+#mediaContainer th{background:url(/i2psnark/.res/icons/film.png) no-repeat 8px center,var(--th)}
+#mediaContainer th.audio{background:url(/i2psnark/.res/icons/music.png) no-repeat 8px center,var(--th)}
 #mediaContainer td{padding:15px;text-align:center}
 #mediaContainer video{width:auto;max-width:calc(100% - 20px)}
 .info_tracker{margin:0 2px;padding:1px 6px 1px 18px;display:inline-block;white-space:nowrap;max-width:155px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;color:#bbf;border-radius:1px;box-shadow:0 0 0 1px #ccf;background:var(--bg2) var(--tracker) no-repeat left 3px center/14px}
@@ -447,9 +447,9 @@ input#toggle_addtorrent:checked + label + hr + table,input#toggle_createtorrent:
 #totals{margin:2px 0 2px 5px;display:inline-block}
 
 /* torrent priorities */
-.priorityHigh{background:url(/i2psnark/.resources/icons/clock_red.png) no-repeat left 26px center}
-.priorityNormal{background:url(/i2psnark/.resources/icons/clock.png) no-repeat left 26px center}
-.prioritySkip{background:url(/i2psnark/.resources/icons/block.png) no-repeat left 26px center}
+.priorityHigh{background:url(/i2psnark/.res/icons/clock_red.png) no-repeat left 26px center}
+.priorityNormal{background:url(/i2psnark/.res/icons/clock.png) no-repeat left 26px center}
+.prioritySkip{background:url(/i2psnark/.res/icons/block.png) no-repeat left 26px center}
 .priorityHigh,.priorityNormal,.prioritySkip,.priorityHigh:hover,.priorityNormal:hover,.prioritySkip:hover{width:52px;display:inline-block;color:transparent;background-size:18px}
 
 /* configure */
@@ -564,7 +564,7 @@ td.commentAuthor{padding-left:5px}
 #configs select{margin-right:1px}
 
 /* tooltip */
-#bwHelp{margin-left:-184px;padding:15px 15px 15px 55px;width:320px;display:block;position:absolute;bottom:125%;left:0;z-index:999;visibility:hidden;white-space:normal;text-align:center;font-size:10pt;font-weight:700;border-radius:3px;background:var(--bg5) url(/i2psnark/.resources/icons/favicon.svg) no-repeat 10px center/28px;opacity:0;filter:drop-shadow(0 0 1px #333);will-change:transform}
+#bwHelp{margin-left:-184px;padding:15px 15px 15px 55px;width:320px;display:block;position:absolute;bottom:125%;left:0;z-index:999;visibility:hidden;white-space:normal;text-align:center;font-size:10pt;font-weight:700;border-radius:3px;background:var(--bg5) url(/i2psnark/.res/icons/favicon.svg) no-repeat 10px center/28px;opacity:0;filter:drop-shadow(0 0 1px #333);will-change:transform}
 #bwhelp::after{margin-left:-10px;position:absolute;top:100%;left:50%;border-width:10px;border-style:solid;border-color:var(--bg5) transparent transparent transparent;content:""}
 #bwHoverHelp:hover #bwHelp{visibility:visible;text-align:center;color:var(--bg);text-shadow:0 1px 1px #337;opacity:1;transition:ease opacity .3s}
 #bwHoverHelp{position:relative;display:inline-block}

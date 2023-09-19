@@ -2,7 +2,7 @@
 /* Author: dr|z3d */
 
 @import url(/themes/console/dark/global.css);
-@import url(/i2psnark/.resources/linkToggle.css);
+@import url(/i2psnark/.res/linkToggle.css);
 
 :root{
 --bevel_notify:var(--bevel),inset 0 0 3px 3px #131,inset 0 0 1px 5px rgba(16,48,16,.1);
@@ -259,7 +259,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 .txd{padding-right:6px}
 .txd .left{min-width:12px}
 .details a:active img:not([src$="rateme.svg"]),.dirInfo td:first-child a:active img{box-shadow:var(--highlight),inset 0 0 1px 1px #f60,inset 3px 3px 3px 3px rgba(0,0,0,.8);transform:scale(.9)}
-.details a:hover img[src^="/i2psnark/.resources/icons/"]:not([src$="rateme.svg"]),.details a:focus img[src^="/i2psnark/.resources/icons/"]:not([src$="rateme.svg"]),.commentDetails a:hover img,.commentDetails a:focus img{border-radius:1px;box-shadow:var(--outline),inset 0 0 1px 1px #930;background:linear-gradient(180deg,#030 50%,#010 50%);filter:none}
+.details a:hover img[src^="/i2psnark/.res/icons/"]:not([src$="rateme.svg"]),.details a:focus img[src^="/i2psnark/.res/icons/"]:not([src$="rateme.svg"]),.commentDetails a:hover img,.commentDetails a:focus img{border-radius:1px;box-shadow:var(--outline),inset 0 0 1px 1px #930;background:linear-gradient(180deg,#030 50%,#010 50%);filter:none}
 .details img,.dirInfo td:first-child img{margin:0;padding:1px}
 .details{padding-left:0;padding-right:0;width:1%;white-space:nowrap;text-align:center;font-weight:700}
 .zero .peerCount b{display:none}
@@ -392,9 +392,9 @@ hr.debug{display:none}
 .priority{width:1%;max-width:160px;vertical-align:middle;font-size:8pt}
 .priority::after{content:"";display:inline-block;min-height:30px;vertical-align:middle}
 .priority input[type=radio]{margin:3px}
-.priorityHigh{background:url(/i2psnark/.resources/icons/clock_red.png) no-repeat left 26px center/18px}
-.priorityNormal{background:url(/i2psnark/.resources/icons/clock.png) no-repeat left 26px center/18px}
-.prioritySkip{background:url(/i2psnark/.resources/icons/block.png) no-repeat left 26px center/18px}
+.priorityHigh{background:url(/i2psnark/.res/icons/clock_red.png) no-repeat left 26px center/18px}
+.priorityNormal{background:url(/i2psnark/.res/icons/clock.png) no-repeat left 26px center/18px}
+.prioritySkip{background:url(/i2psnark/.res/icons/block.png) no-repeat left 26px center/18px}
 .priorityHigh,.priorityNormal,.prioritySkip{display:inline-block;width:52px;color:transparent;font-size:0;overflow:hidden;text-align:left;vertical-align:middle}
 
 /* comments */
@@ -467,8 +467,8 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .thumb{max-height:32px;box-shadow:0 0 0 1px #030;background:#000}
 .thumb:hover,tr:hover .thumb{box-shadow:0 0 0 1px #930;filter:none}
 #mediaContainer{margin-top:-1px}
-#mediaContainer th{padding:10px 5px 10px 30px;background:url(/i2psnark/.resources/icons/film.png) no-repeat 8px center,linear-gradient(180deg,#000a00 50%,#000 50%)}
-#mediaContainer th.audio{background:url(/i2psnark/.resources/icons/music.png) no-repeat 8px center,linear-gradient(180deg,#000a00 50%,#000 50%)}
+#mediaContainer th{padding:10px 5px 10px 30px;background:url(/i2psnark/.res/icons/film.png) no-repeat 8px center,linear-gradient(180deg,#000a00 50%,#000 50%)}
+#mediaContainer th.audio{background:url(/i2psnark/.res/icons/music.png) no-repeat 8px center,linear-gradient(180deg,#000a00 50%,#000 50%)}
 #mediaContainer td{padding:20px 15px;text-align:center}
 #mediaContainer audio,#mediaContainer video{width:auto;max-width:100%}
 #snarkFiles table{margin-bottom:-1px}
@@ -607,7 +607,7 @@ input.trackerhome,input.trackerannounce{width:210px}
 #configs .spacer,.trackerconfig .spacer{display:none}
 #configs tr:nth-last-child(2){box-shadow:var(--row_highlight)}
 #configs th{padding:8px;font-size:10pt;text-align:left;background:linear-gradient(180deg,#020,#000)}
-#configs th.suboption::before{margin:-2px 3px 0 2px;width:20px;height:20px;display:inline-block;vertical-align:middle;background:url(/i2psnark/.resources/icons/stalled.svg) no-repeat center center/20px;content:"";filter:saturate(.3) brightness(1.2)}
+#configs th.suboption::before{margin:-2px 3px 0 2px;width:20px;height:20px;display:inline-block;vertical-align:middle;background:url(/i2psnark/.res/icons/stalled.svg) no-repeat center center/20px;content:"";filter:saturate(.3) brightness(1.2)}
 #configs td{min-width:0;vertical-align:middle;text-align:left;font-weight:400}
 #configs td,#configs td:first-child{padding:0}
 #configs td:first-child::after{content:"";display:inline-block;vertical-align:middle}
@@ -644,7 +644,7 @@ input.trackerhome,input.trackerannounce{width:210px}
 .trackerconfig .delete,.trackerconfig .reload{float:left}
 
 /* tooltip */
-#bwHelp{margin-left:-184px;padding:15px 15px 15px 55px;width:320px;display:block;position:absolute;bottom:125%;left:0;z-index:999;visibility:hidden;white-space:normal;text-align:center;font-size:10pt;font-weight:700;border-radius:3px;background:#030 url(/i2psnark/.resources/icons/favicon.svg) no-repeat 10px center/28px;opacity:0;filter:drop-shadow(0 0 1px #000);will-change:transform}
+#bwHelp{margin-left:-184px;padding:15px 15px 15px 55px;width:320px;display:block;position:absolute;bottom:125%;left:0;z-index:999;visibility:hidden;white-space:normal;text-align:center;font-size:10pt;font-weight:700;border-radius:3px;background:#030 url(/i2psnark/.res/icons/favicon.svg) no-repeat 10px center/28px;opacity:0;filter:drop-shadow(0 0 1px #000);will-change:transform}
 #bwHoverHelp:hover #bwHelp{visibility:visible;text-align:center;color:#fff;opacity:1;transition:ease opacity .3s}
 #bwHelp a{white-space:nowrap}
 #bwHoverHelp{position:relative;display:inline-block}

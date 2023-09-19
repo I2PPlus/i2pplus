@@ -123,16 +123,16 @@
     <target name="war" depends="jar, bundle, warUpToDate, listChangedFiles" unless="war.uptodate" >
         <!-- set if unset -->
         <property name="workspace.changes.tr" value="" />
-        <copy todir="build/resources/.resources" >
-            <fileset dir="../resources/" />
+        <copy todir="build/res/.res" >
+            <fileset dir="../res/" />
         </copy>
-        <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/resources/.resources/js" />
+        <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/res/.res/js" />
         <!-- mime.properties must be in with the classes -->
         <copy file="../mime.properties" todir="build/obj/org/klomp/snark/web" />
         <war destfile="../i2psnark.war" webxml="../web.xml" >
           <!-- include only the web stuff, as of 0.7.12 the router will add i2psnark.jar to the classpath for the war -->
           <classes dir="./build/obj" includes="**/web/*" />
-            <fileset dir="build/resources/" />
+            <fileset dir="build/res/" />
             <manifest>
                 <attribute name="Implementation-Version" value="${full.version}" />
                 <attribute name="Built-By" value="${build.built-by}" />
@@ -147,7 +147,7 @@
 
     <target name="warUpToDate">
         <uptodate property="war.uptodate" targetfile="../i2psnark.war" >
-            <srcfiles dir= "." includes="build/obj/org/klomp/snark/web/*.class ../resources/**/* ../web.xml" />
+            <srcfiles dir= "." includes="build/obj/org/klomp/snark/web/*.class ../res/**/* ../web.xml" />
         </uptodate>
     </target>
 
@@ -259,122 +259,122 @@
 
     <!-- add css, image, and js files for standalone snark to the war -->
     <target name="standalone_war" depends="war">
-        <mkdir dir="build/standalone-resources/.resources/themes/snark" />
-        <copy todir="build/standalone-resources/.resources/themes/snark" >
-            <fileset dir="../../../installer/resources/themes/snark/" />
+        <mkdir dir="build/standalone-res/.res/themes/snark" />
+        <copy todir="build/standalone-res/.res/themes/snark" >
+            <fileset dir="../../../installer/res/themes/snark/" />
         </copy>
-        <mkdir dir="build/standalone-resources/.resources/themes/snark/fonts" />
-        <copy todir="build/standalone-resources/.resources/themes/snark/fonts" >
-            <fileset dir="../../../installer/resources/themes/fonts/" />
+        <mkdir dir="build/standalone-res/.res/themes/snark/fonts" />
+        <copy todir="build/standalone-res/.res/themes/snark/fonts" >
+            <fileset dir="../../../installer/res/themes/fonts/" />
         </copy>
-        <replace dir="build/standalone-resources/.resources/themes/snark"
+        <replace dir="build/standalone-res/.res/themes/snark"
             summary="true"
             token="url(/themes/console/classic/images/"
-            value="url(/i2psnark/.resources/themes/snark/classic/images/" >
+            value="url(/i2psnark/.res/themes/snark/classic/images/" >
             <include name="**/*.css" />
         </replace>
-        <replace dir="build/standalone-resources/.resources/themes/snark"
+        <replace dir="build/standalone-res/.res/themes/snark"
             summary="true"
             token="url(/themes/console/dark/images/"
-            value="url(/i2psnark/.resources/themes/snark/dark/images/" >
+            value="url(/i2psnark/.res/themes/snark/dark/images/" >
             <include name="**/*.css" />
         </replace>
-        <replace dir="build/standalone-resources/.resources/themes/snark"
+        <replace dir="build/standalone-res/.res/themes/snark"
             summary="true"
             token="url(../../console/light/images/"
-            value="url(/i2psnark/.resources/themes/snark/light/images/" >
+            value="url(/i2psnark/.res/themes/snark/light/images/" >
             <include name="**/*.css" />
         </replace>
-        <replace dir="build/standalone-resources/.resources/themes/snark"
+        <replace dir="build/standalone-res/.res/themes/snark"
             summary="true"
             token="url(/themes/console/light/"
-            value="url(/i2psnark/.resources/themes/snark/light/" >
+            value="url(/i2psnark/.res/themes/snark/light/" >
             <include name="**/*.css" />
         </replace>
-        <replace dir="build/standalone-resources/.resources/themes/snark"
+        <replace dir="build/standalone-res/.res/themes/snark"
             summary="true"
             token="url(/themes/console/light/images/"
-            value="url(/i2psnark/.resources/themes/snark/light/images/" >
+            value="url(/i2psnark/.res/themes/snark/light/images/" >
             <include name="**/*.css" />
         </replace>
-        <replace dir="build/standalone-resources/.resources/themes/snark"
+        <replace dir="build/standalone-res/.res/themes/snark"
             summary="true"
             token="url(/themes/console/images/info/"
-            value="url(/i2psnark/.resources/themes/snark/ubergine/images/" >
+            value="url(/i2psnark/.res/themes/snark/ubergine/images/" >
             <include name="**/*.css" />
         </replace>
-        <replace dir="build/standalone-resources/.resources/themes/snark"
+        <replace dir="build/standalone-res/.res/themes/snark"
             summary="true"
             token="url(/themes/console/classic/"
-            value="url(/i2psnark/.resources/themes/snark/classic/" >
+            value="url(/i2psnark/.res/themes/snark/classic/" >
             <include name="**/*.css" />
         </replace>
-        <replace dir="build/standalone-resources/.resources/themes/snark"
+        <replace dir="build/standalone-res/.res/themes/snark"
             summary="true"
             token="url(/themes/console/dark/"
-            value="url(/i2psnark/.resources/themes/snark/dark/" >
+            value="url(/i2psnark/.res/themes/snark/dark/" >
             <include name="**/*.css" />
         </replace>
-        <replace dir="build/standalone-resources/.resources/themes/snark"
+        <replace dir="build/standalone-res/.res/themes/snark"
             summary="true"
             token="url(/themes/console/light/"
-            value="url(/i2psnark/.resources/themes/snark/light/" >
+            value="url(/i2psnark/.res/themes/snark/light/" >
             <include name="**/*.css" />
         </replace>
-        <replace dir="build/standalone-resources/.resources/themes/snark"
+        <replace dir="build/standalone-res/.res/themes/snark"
             summary="true"
             token="url(/themes/console/midnight/"
-            value="url(/i2psnark/.resources/themes/snark/midnight/" >
+            value="url(/i2psnark/.res/themes/snark/midnight/" >
             <include name="**/*.css" />
         </replace>
 
         <!-- Rather than pulling in all the console theme images, let's just specify the ones we need -->
-        <copy file="../../../installer/resources/themes/console/dark/images/camotile2.png"
-              todir="build/standalone-resources/.resources/themes/snark/dark/images" />
-        <copy file="../../../installer/resources/themes/console/classic/images/bg0.png"
-              todir="build/standalone-resources/.resources/themes/snark/classic/images" />
-        <copy file="../../../installer/resources/themes/console/light/global.css"
-              todir="build/standalone-resources/.resources/themes/snark/light" />
-        <copy file="../../../installer/resources/themes/console/classic/global.css"
-              todir="build/standalone-resources/.resources/themes/snark/classic" />
-        <copy file="../../../installer/resources/themes/console/dark/global.css"
-              todir="build/standalone-resources/.resources/themes/snark/dark" />
-        <copy file="../../../installer/resources/themes/console/dark/chromescroll.css"
-              todir="build/standalone-resources/.resources/themes/snark/dark" />
-        <copy file="../../../installer/resources/themes/console/midnight/global.css"
-              todir="build/standalone-resources/.resources/themes/snark/midnight" />
-        <copy file="../../../installer/resources/themes/console/midnight/images/tile.css"
-              todir="build/standalone-resources/.resources/themes/snark/midnight/images" />
-        <copy file="../../../installer/resources/themes/console/midnight/chromescroll.css"
-              todir="build/standalone-resources/.resources/themes/snark/midnight" />
-        <replace dir="build/standalone-resources/.resources/themes/snark"
+        <copy file="../../../installer/res/themes/console/dark/images/camotile2.png"
+              todir="build/standalone-res/.res/themes/snark/dark/images" />
+        <copy file="../../../installer/res/themes/console/classic/images/bg0.png"
+              todir="build/standalone-res/.res/themes/snark/classic/images" />
+        <copy file="../../../installer/res/themes/console/light/global.css"
+              todir="build/standalone-res/.res/themes/snark/light" />
+        <copy file="../../../installer/res/themes/console/classic/global.css"
+              todir="build/standalone-res/.res/themes/snark/classic" />
+        <copy file="../../../installer/res/themes/console/dark/global.css"
+              todir="build/standalone-res/.res/themes/snark/dark" />
+        <copy file="../../../installer/res/themes/console/dark/chromescroll.css"
+              todir="build/standalone-res/.res/themes/snark/dark" />
+        <copy file="../../../installer/res/themes/console/midnight/global.css"
+              todir="build/standalone-res/.res/themes/snark/midnight" />
+        <copy file="../../../installer/res/themes/console/midnight/images/tile.css"
+              todir="build/standalone-res/.res/themes/snark/midnight/images" />
+        <copy file="../../../installer/res/themes/console/midnight/chromescroll.css"
+              todir="build/standalone-res/.res/themes/snark/midnight" />
+        <replace dir="build/standalone-res/.res/themes/snark"
             summary="true"
             token="url(/themes/fonts/"
-            value="url(/i2psnark/.resources/themes/snark/fonts/" >
+            value="url(/i2psnark/.res/themes/snark/fonts/" >
             <include name="**/*.css" />
         </replace>
-        <replace dir="build/standalone-resources/.resources/themes/snark"
+        <replace dir="build/standalone-res/.res/themes/snark"
             summary="true"
             token="@import url(../images/images.css);"
             value="" >
             <include name="**/*.css" />
         </replace>
-        <replace dir="build/standalone-resources/.resources/themes/snark"
+        <replace dir="build/standalone-res/.res/themes/snark"
             summary="true"
             token="@import url(../images/itooplus.css);"
             value="" >
             <include name="**/*.css" />
         </replace>
 
-        <mkdir dir="build/standalone-resources/.resources/js" />
-        <!--<copy file="../../routerconsole/jsp/js/ajax.js" todir="build/standalone-resources/.resources/js" />-->
-        <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/standalone-resources/.resources/js" />
+        <mkdir dir="build/standalone-res/.res/js" />
+        <!--<copy file="../../routerconsole/jsp/js/ajax.js" todir="build/standalone-res/.res/js" />-->
+        <copy file="../../routerconsole/jsp/js/onVisible.js" todir="build/standalone-res/.res/js" />
 <!--
-        <copy file="../resources/js/previewTheme.js" todir="build/standalone-resources/.resources/js" />
-        <replace dir="build/standalone-resources/.resources/js"
+        <copy file="../res/js/previewTheme.js" todir="build/standalone-res/.res/js" />
+        <replace dir="build/standalone-res/.res/js"
             summary="true"
             token="/themes/"
-            value="/i2psnark/.resources/themes/" >
+            value="/i2psnark/.res/themes/" >
             <include name="previewTheme.js" />
         </replace>
 -->
@@ -400,7 +400,7 @@
         <copy file="./build/i2psnark-standalone.jar" tofile="./i2psnark/i2psnark.jar" />
         <copy file="../readme-standalone.txt" tofile="./i2psnark/readme.txt" />
         <!-- temp so announces work -->
-        <copy file="../../../installer/resources/hosts.txt" tofile="./i2psnark/hosts.txt" />
+        <copy file="../../../installer/res/hosts.txt" tofile="./i2psnark/hosts.txt" />
         <copy todir="./i2psnark/licenses" >
             <fileset dir="../../../licenses" includes="LICENSE-GPLv2.txt, ABOUT-Jetty.html" />
         </copy>

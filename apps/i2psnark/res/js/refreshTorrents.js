@@ -210,7 +210,7 @@ function refreshTorrents(callback) {
   };
 
   xhrsnark.onerror = function (error) {
-    console.error("XHR request failed:", error);
+    //console.error("XHR request failed:", error);
     noAjax(5000);
     if (refreshTimeoutId) {
       clearTimeout(refreshTimeoutId);
@@ -240,7 +240,6 @@ function noAjax(delay) {
       targetElement.innerHTML = failMessage;
     }
   }, delay);
-  refreshAll();
 }
 
 function debouncedRefreshTorrents(callback) {
@@ -260,13 +259,15 @@ function debouncedRefreshTorrents(callback) {
 }
 
 function setupPage() {
-  if (mainsection) {
-    initToggleLog();
-    initLinkToggler();
-  }
-  if (filterbar) {
-    initFilterBar();
-  }
+  document.addEventListener('DOMContentLoaded', () => {
+    if (mainsection) {
+      initToggleLog();
+      initLinkToggler();
+    }
+    if (filterbar) {
+      initFilterBar();
+    }
+  });
 }
 
 function initSnarkRefresh() {
@@ -275,7 +276,7 @@ function initSnarkRefresh() {
   refreshIntervalId = setInterval(() => {
     debouncedRefreshTorrents(refreshTorrents)(setupPage);
   }, interval);
-  if (files && lightboxIsActive()) {
+  if (files) {
     var lightbox = new Lightbox();lightbox.load();
   }
 }

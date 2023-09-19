@@ -44,7 +44,7 @@ function createTorrentNotify() {
 
 function injectCss() {
   if (!alertCss) {
-    document.head.innerHTML += "<link id=snarkAlert rel=stylesheet href=/i2psnark/.resources/snarkAlert.css type=text/css>";
+    document.head.innerHTML += "<link id=snarkAlert rel=stylesheet href=/i2psnark/.res/snarkAlert.css type=text/css>";
   }
 }
 

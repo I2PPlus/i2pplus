@@ -2,20 +2,20 @@
 /* Provide a toggle switch for magnets or links in the main torrent table */
 /* License: AGPL3 or later */
 
-const showLinks =   "#torrents #linkswitch::before{background:url(/i2psnark/.resources/icons/link.svg) no-repeat center center/20px!important}" +
+const linkCss =    "#torrents #linkswitch::before{background:url(/i2psnark/.res/icons/link.svg) no-repeat center center/20px!important}" +
                     "#snarkTbody .magnet,#snarkTbody .magnet:empty{padding:0;width:0;font-size:0}#snarkTbody .magnet>*{display:none}" +
                     "#snarkTbody .trackerLink{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .trackerLink>*{display:inline-block}" +
                     "#torrents td.trackerLink img{margin:0;width:18px!important;height:18px!important}" +
                     "@media(min-width:1500px){#torrents td.trackerLink img{margin:0;width:20px!important;height:20px!important}";
 
-const showMagnets = "#torrents #linkswitch::before{background:url(/i2psnark/.resources/icons/magnet.svg) no-repeat center center/20px!important}" +
+const magnetCss = "#torrents #linkswitch::before{background:url(/i2psnark/.res/icons/magnet.svg) no-repeat center center/20px!important}" +
                     "#snarkTbody .trackerLink,#snarkTbody .trackerLink:empty{padding:0;width:0;font-size:0}#snarkTbody .trackerLink>*{display:none}" +
                     "#snarkTbody .magnet{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .magnet>*{display:inline-block}" +
                     "#torrents td.trackerLink img{margin:0;width:18px!important;height:18px!important}" +
                     "@media(min-width:1500px){#torrents td.magnet img{margin:0;width:20px!important;height:20px!important}}";
 
  const magnetBtn  = "#snarkTbody .magnetlink{position:relative}#snarkTbody .copyMagnet{width:100%;height:100%;position:absolute;top:0;right:0;bottom:0;left:0;" +
-                    "border:0}";
+                    "border:0;}";
 
 const magnets = document.querySelectorAll("#snarkTbody td.magnet .magnetlink");
 const mlinks = document.querySelectorAll("#snarkTbody .magnet");
@@ -28,15 +28,20 @@ function initLinkToggler() {
   var config = localStorage.getItem("linkToggle");
   if (config !== null) {config = config.toString();}
   console.log("Toggle localStorage config set to: " + config);
-  //if (!toggle) {return;}
+
+  if (!toggle) {return;}
+
+  toggle.removeAttribute("checked");
+
   if (config === "links" || !config) {
     localStorage.setItem("linkToggle", "links");
-    toggle.false = true;
+    toggle.checked = false;
+    toggle.click();
     showLinks();
     removeMagnetListeners();
-    removeMagnetToClipboardListeners();
   } else if (config === "magnets") {
     toggle.checked = true;
+    toggle.click();
     showMagnets();
     magnetToClipboard();
     attachMagnetListeners();
@@ -48,31 +53,32 @@ function initLinkToggler() {
 
 function linkToggle() {
   var config = window.localStorage.getItem("linkToggle");
+
   if (config && (config === "links" || config === "magnets")) {
     config = config.toString();
   } else {
     config = "";
   }
 
-  //if (!toggle) {return;}
   if (config === "links" || !config || config === "") {
     showMagnets();
   } else {
     showLinks();
+  }
+  toggle.click();
 }
 
 function showLinks() {
-  const expectedHtml = showMagnets + magnetBtn;
+  const expectedHtml = linkCss;
   if (toggleCss.innerHTML !== expectedHtml) {
     toggleCss.innerHTML = expectedHtml;
   }
   localStorage.setItem("linkToggle", "links");
   removeMagnetListeners();
-  removeMagnetToClipboardListeners();
 }
 
 function showMagnets() {
-  const expectedHtml = showLinks + magnetBtn;
+  const expectedHtml = magnetCss + magnetBtn;
   if (toggleCss.innerHTML !== expectedHtml) {
     toggleCss.innerHTML = expectedHtml;
   }
@@ -94,7 +100,7 @@ function magnetToClipboard() {
     }
   }
 
-  removeMagnetToClipboardListeners();
+  removeMagnetListeners();
   window.addEventListener("scroll", fixToast);
   window.addEventListener("resize", fixToast);
   if (window.frameElement) {
@@ -104,17 +110,25 @@ function magnetToClipboard() {
 
 }
 
-function removeMagnetToClipboardListeners() {
+function removeMagnetListeners() {
+
   function noop() {}
 
   window.removeEventListener("scroll", fixToast);
   window.removeEventListener("resize", fixToast);
+
   if (window.frameElement) {
     window.parent.removeEventListener("scroll", fixToast);
     window.parent.removeEventListener("resize", fixToast);
   }
 
   function fixToast() {}
+
+  for (let i = 0; i < magnets.length; i++) {
+    let copyBtn = magnets[i].parentElement.querySelector(".copyMagnet");
+    let newCopyBtn = copyBtn.cloneNode(true);
+    copyBtn.parentNode.replaceChild(newCopyBtn, copyBtn);
+  }
 }
 
 function attachMagnetListeners() {
@@ -126,10 +140,9 @@ function attachMagnetListeners() {
     copyBtn.addEventListener("click", function(event) {
       event.preventDefault();
       toast.removeAttribute("hidden");
-      toast.hidden=false;
       toast.style.display = "block";
       let link = anchor.href;
-      let hashRegex = link.match(/btih:([^&]+)/);
+      let hashRegex = link.match(/btih:([^&]*)/);
       let magnetHash = "";
       if (hashRegex) {magnetHash = hashRegex[1];}
       let magnetName = link.substring(link.lastIndexOf("=") + 1);
@@ -145,30 +158,10 @@ function attachMagnetListeners() {
       console.log("Link copied to clipboard: " + link);
       clearTimeout(toastTimeoutId);
       toastTimeoutId = setTimeout(function() {
-        toast.removeAttribute("hidden");
-        toast.hidden=true;
         toast.style.display = "none";
         toast.textContent = "";
       }, 3500);
     });
-    copyBtn.addEventListener("click", function(event) {
-      event.preventDefault();
-      clearTimeout(toastTimeoutId);
-      toastTimeoutId = setTimeout(function() {
-        toast.removeAttribute("hidden");
-        toast.hidden=true;
-        toast.style.display = "none";
-        toast.textContent = "";
-      }, 3500);
-    });
-  }
-}
-
-function removeMagnetListeners() {
-  for (let i = 0; i < magnets.length; i++) {
-    let copyBtn = magnets[i].parentElement.querySelector(".copyMagnet");
-    let newCopyBtn = copyBtn.cloneNode(true);
-    copyBtn.parentNode.replaceChild(newCopyBtn, copyBtn);
   }
 }
 

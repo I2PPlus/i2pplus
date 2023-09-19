@@ -3,7 +3,7 @@
 /* Author: dr|z3d */
 @import url(/themes/fonts/DroidSans.css);
 @import url(chromescroll.css);
-@import url(/i2psnark/.resources/linkToggle.css);
+@import url(/i2psnark/.res/linkToggle.css);
 
 :root{
 --badge:linear-gradient(180deg,#414,#313);
@@ -374,8 +374,8 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .details{padding-left:0;padding-right:0;width:1%;white-space:nowrap;text-align:center;font-weight:700}
 .torrentLink{padding:0;text-align:right}
 #enableInOrder{margin-left:4px;margin-right:8px}
-#mediaContainer th{padding:8px 5px 8px 30px;background:url(/i2psnark/.resources/icons/video.png) no-repeat 8px center/16px,var(--th)}
-#mediaContainer th.audio{padding:8px 5px 8px 30px;background:url(/i2psnark/.resources/icons/music.png) no-repeat 8px center/16px,var(--th)}
+#mediaContainer th{padding:8px 5px 8px 30px;background:url(/i2psnark/.res/icons/video.png) no-repeat 8px center/16px,var(--th)}
+#mediaContainer th.audio{padding:8px 5px 8px 30px;background:url(/i2psnark/.res/icons/music.png) no-repeat 8px center/16px,var(--th)}
 #mediaContainer td{padding:15px;text-align:center;background:linear-gradient(135deg,rgba(0,0,0,.1),rgba(16,0,16,.5),rgba(16,0,16,.8),#101),linear-gradient(135deg,rgba(0,0,0,0),rgba(16,0,16,.5))}
 #mediaContainer audio,#mediaContainer video{width:auto;max-width:100%}
 #setPriority>*{vertical-align:middle}
@@ -434,9 +434,9 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .priority input[type=radio]{text-align:left;margin:3px}
 .priority input[type=radio]:not(:checked):not(:hover){opacity:.7}
 .priorityHigh,.priorityNormal,.prioritySkip{padding:0;display:inline-block;width:50px;font-size:0;text-align:left;vertical-align:middle;color:transparent;overflow:hidden}
-.priorityHigh{background:url(/i2psnark/.resources/icons/clock_red.png) no-repeat left 26px center/18px}
-.priorityNormal{background:url(/i2psnark/.resources/icons/clock.png) no-repeat left 26px center/18px}
-.prioritySkip{background:url(/i2psnark/.resources/icons/block.png) no-repeat left 25px center/18px}
+.priorityHigh{background:url(/i2psnark/.res/icons/clock_red.png) no-repeat left 26px center/18px}
+.priorityNormal{background:url(/i2psnark/.res/icons/clock.png) no-repeat left 26px center/18px}
+.prioritySkip{background:url(/i2psnark/.res/icons/block.png) no-repeat left 25px center/18px}
 .dirInfo img[src$="priority.png"]{margin:0}
 #setPriority{border-top:1px solid #000}
 #setPriority th{text-align:right}
@@ -656,7 +656,7 @@ input.trackername{width:100px}
 #configs input,#configs select{margin-top:0;margin-bottom:0;vertical-align:middle;will-change:transform}
 #configs input[type=submit],.trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}
 #configs th,.optionlist,#configs td b,#torrentOrderControl b{filter:drop-shadow(0 0 2px rgba(16,0,16,.5))}
-#configs th{padding:7px 5px 8px 30px;font-size:9.5pt;color:rgba(255,240,255,.85);text-transform:capitalize;text-shadow:var(--txt_shadow);border:1px solid #212;border-radius:5px 5px 0 0;box-shadow:inset 0 0 0 1px #434;background:url(/i2psnark/.resources/icons/favicon.svg) no-repeat 7px center/20px,linear-gradient(135deg,rgba(16,0,16,.6),rgba(16,0,16,.3)),linear-gradient(180deg,rgba(68,51,68,.8) 50%,rgba(28,0,28,.8) 50%);background-blend-mode:luminosity,normal,normal}
+#configs th{padding:7px 5px 8px 30px;font-size:9.5pt;color:rgba(255,240,255,.85);text-transform:capitalize;text-shadow:var(--txt_shadow);border:1px solid #212;border-radius:5px 5px 0 0;box-shadow:inset 0 0 0 1px #434;background:url(/i2psnark/.res/icons/favicon.svg) no-repeat 7px center/20px,linear-gradient(135deg,rgba(16,0,16,.6),rgba(16,0,16,.3)),linear-gradient(180deg,rgba(68,51,68,.8) 50%,rgba(28,0,28,.8) 50%);background-blend-mode:luminosity,normal,normal}
 #configs td{text-align:left;font-weight:400;vertical-align:middle;padding:4px 0;min-width:0;width:50%}
 #configs tr:nth-last-child(2) td{padding:10px 0 2px;text-align:right}
 #configs td b,#torrentOrderControl b{margin-right:5px;padding:5px 10px 6px;display:inline-block;min-width:150px;color:rgba(255,240,255,.8);text-align:right;border-radius:15px 5px 5px 15px;box-shadow:0 0 0 1px rgba(17,0,17,.7);background:linear-gradient(180deg,rgba(32,16,32,.2),rgba(16,0,16,.7));opacity:.9;transition:ease width .2s}
@@ -665,7 +665,7 @@ input.trackername{width:100px}
 #configs td:first-child{min-width:220px;width:25%;font-weight:700}
 #configs td[colspan="3"]{padding-right:0}
 #configs .spacer td{padding:0}
-#filecheck{margin:5px 0;padding-left:22px;display:inline-block;background:url(/i2psnark/.resources/icons/progressbar.gif) no-repeat left center}
+#filecheck{margin:5px 0;padding-left:22px;display:inline-block;background:url(/i2psnark/.res/icons/progressbar.gif) no-repeat left center}
 #filecheck a{margin:8px}
 #snarkLang{margin-right:5px;padding:4px 8px;display:inline-block;line-height:1.6;vertical-align:middle;color:#ff7;font-weight:700;text-align:center;border-radius:4px;background:#212}
 #torrentOrderControl b{background:linear-gradient(180deg,#303,#101)}
@@ -825,7 +825,7 @@ th .commentAuthorName{margin-right:-10px;padding-right:6px;font-size:90%}
 .tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 6px);left:30px;border-width:6px;border-style:solid;border-color:transparent #000 transparent transparent;content:"";animation:fade-in .1s ease 3s reverse both}
 .tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:-3px;left:32px;border:1px solid #000;border-radius:3px;box-shadow:var(--highlight);background:#000;content:attr(data-tooltip);animation:fade-in .1s ease 3s reverse both}
 .tooltipped:hover::before,.tooltipped:active::before,.tooltipped:hover::after,.tooltipped:active::after{position:absolute;display:inline-block}
-#bwHelp{margin-left:-170px;padding:15px 15px 15px 55px;width:320px;display:block;visibility:hidden;white-space:normal;text-align:center;position:absolute;left:0;bottom:125%;z-index:2000;border-radius:3px;font-size:10pt;background:#101 url(/i2psnark/.resources/icons/favicon.svg) no-repeat 10px center/28px;filter:drop-shadow(0 0 1px #fff);opacity:0}
+#bwHelp{margin-left:-170px;padding:15px 15px 15px 55px;width:320px;display:block;visibility:hidden;white-space:normal;text-align:center;position:absolute;left:0;bottom:125%;z-index:2000;border-radius:3px;font-size:10pt;background:#101 url(/i2psnark/.res/icons/favicon.svg) no-repeat 10px center/28px;filter:drop-shadow(0 0 1px #fff);opacity:0}
 #bwhelp::after{margin-left:-10px;position:absolute;top:100%;left:calc(50% + 9px);border-width:10px;border-style:solid;border-color:#101 transparent transparent transparent;content:""}
 #bwHoverHelp img{margin-right:5px}
 #bwHoverHelp:hover #bwHelp,#bwHoverHelp:active #bwHelp{visibility:visible;color:#fff;text-align:center;opacity:1;transition:ease opacity .3s}

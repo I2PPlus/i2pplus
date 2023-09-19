@@ -85,7 +85,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     private static final String DEFAULT_NAME = "i2psnark";
     public static final String PROP_CONFIG_FILE = "i2psnark.configFile";
-    private static final String WARBASE = "/.resources/";
+    private static final String WARBASE = "/.res/";
     private static final char HELLIP = '\u2026';
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
@@ -358,7 +358,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // we want it to go to the base URI so we don't refresh with some funky action= value
         int delay = 0;
-        String jsPfx = _context.isRouterContext() ? "" : ".resources";
+        String jsPfx = _context.isRouterContext() ? "" : ".res";
         String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         if (!isConfigure) {
             out.write("<script nonce=" + cspNonce + " type=module ");
@@ -616,7 +616,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<li class=msg>" + msg + "</li>\n");
             }
             out.write("</ul>\n</div>\n");
-            out.write("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=module defer></script>\n");
+            //out.write("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=module defer></script>\n");
             int delay = 0;
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0 && _context.isRouterContext()) {
@@ -2509,19 +2509,20 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if (isRunning) {
             // Stop Button
             out.write("<input type=submit class=actionStop name=\"action_Stop_" + b64 + "\" value=\"" +
-                      _t("Stop") + "\" title=\"" + _t("Stop the torrent") + "\">");
+                      _t("Stop") + "\" title=\"" + _t("Stop the torrent").replace(" the", "") + "\">");
 
         } else if (!snark.isStarting()) {
             if (!_manager.isStopping()) {
                 // Start Button
                 out.write("<input type=submit class=actionStart name=\"action_Start_" + b64 + "\" value=\"" +
-                          _t("Start") + "\" title=\"" + _t("Start the torrent") + "\">");
+                          _t("Start") + "\" title=\"" + _t("Start the torrent").replace(" the", "") + "\">");
 
             }
             if (isValid && canWrite) {
                 // Remove Button
                 out.write("<input type=submit class=actionRemove name=\"action_Remove_" + b64 + "\" value=\"" +
-                          _t("Remove") + "\" title=\"" + _t("Remove the torrent from the active list, deleting the .torrent file") +
+                          _t("Remove") + "\" title=\"" + _t("Remove the torrent from the active list, deleting the .torrent file")
+                          .replace("Remove the torrent from the active list, deleting the .torrent file", "Remove and delete torrent, retaining downloaded files") +
                           "\" client=\"" + escapeJSString(snark.getName()) + "\">");
             }
 
@@ -2529,7 +2530,8 @@ public class I2PSnarkServlet extends BasicServlet {
             if (!isValid || canWrite) {
                 // Delete Button
                 out.write("<input type=submit class=actionDelete name=\"action_Delete_" + b64 + "\" value=\"" +
-                          _t("Delete") + "\" title=\"" + _t("Delete the .torrent file and the associated data files") +
+                          _t("Delete") + "\" title=\"" + _t("Delete the .torrent file and the associated data files")
+                          .replace("the .torrent file", "torrent file").replace("and the associated", "and associated") +
                           "\" client=\"" + escapeJSString(snark.getName()) + "\">");
             }
         }

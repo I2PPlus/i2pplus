@@ -4,7 +4,7 @@
 /* Thanks to http://www.luxphile.com/2011/01/creative-commons-cat.html for the kitty image */
 
 @import url(/themes/console/light/global.css);
-@import url(/i2psnark/.resources/linkToggle.css);
+@import url(/i2psnark/.res/linkToggle.css);
 
 :root{
 --bevel_notify:inset 0 0 0 3px #fff,inset 0 0 0 5px #99f;
@@ -188,7 +188,7 @@ tfoot .rateUp,tfoot .rateDown,td.rateUp,td.rateDown,tfoot .txd,td.txd{text-align
 .txd:empty{text-align:center}
 .txd,.rateUp{font-style:italic}
 .trackerLink,.magnet{padding:0 4px;width:1%;text-align:center;}
-.trackerLink a:hover img,.trackerLink a:focus img,.details a:hover img[src^="/i2psnark/.resources/icons/"]:not([src$="rateme.svg"]),.details a:focus img[src^="/i2psnark/.resources/icons/"]:not([src$="rateme.svg"]),.dirInfo tr:first-child td:first-child a:hover img,.dirInfo tr:first-child td:first-child a:focus img{border:1px solid var(--hover);border-radius:2px;background:var(--btnAction);filter:none;mix-blend-mode:normal}
+.trackerLink a:hover img,.trackerLink a:focus img,.details a:hover img[src^="/i2psnark/.res/icons/"]:not([src$="rateme.svg"]),.details a:focus img[src^="/i2psnark/.res/icons/"]:not([src$="rateme.svg"]),.dirInfo tr:first-child td:first-child a:hover img,.dirInfo tr:first-child td:first-child a:focus img{border:1px solid var(--hover);border-radius:2px;background:var(--btnAction);filter:none;mix-blend-mode:normal}
 .trackerLink a:active img,.details a:active img,.dirInfo td:first-child a:active img{box-shadow:inset 2px 2px 2px #adadeb;transform:scale(.9)}
 .trackerLink img,.details img,.commentDetails img{margin:0;padding:3px;height:19px;width:auto;border:1px solid transparent;filter:none}
 .peerinfo:nth-child(even),.peerinfo:nth-child(odd),#torrentEdit tr:nth-child(even){border-top:var(--border_softer);background:repeating-linear-gradient(90deg,rgba(255,255,255,.5) 2px,rgba(192,192,255,.5) 4px),#fff;background-size:4px}
@@ -301,8 +301,8 @@ body:not(.framed) #torrentInfo{margin-top:8px}
 #enableInOrder{margin-left:0;margin-right:12px}
 #setPriority th{border-bottom:0}
 #mediaContainer{background:#f0f0ff}
-#mediaContainer th{padding:8px 5px 8px 30px;background:url(/i2psnark/.resources/icons/film.png) no-repeat 8px center,linear-gradient(180deg,#fff 50%,rgb(240,240,255))}
-#mediaContainer th.audio{background:url(/i2psnark/.resources/icons/music.png) no-repeat 8px center,linear-gradient(180deg,#fff 50%,rgb(240,240,255))}
+#mediaContainer th{padding:8px 5px 8px 30px;background:url(/i2psnark/.res/icons/film.png) no-repeat 8px center,linear-gradient(180deg,#fff 50%,rgb(240,240,255))}
+#mediaContainer th.audio{background:url(/i2psnark/.res/icons/music.png) no-repeat 8px center,linear-gradient(180deg,#fff 50%,rgb(240,240,255))}
 #mediaContainer td{padding:20px 15px;text-align:center}
 #mediaContainer video{width:auto;max-width:calc(100% - 10px)}
 
@@ -456,9 +456,9 @@ hr.debug{display:none}
 .priority{width:1%;white-space:nowrap;text-align:center}
 .priority::after{min-height:28px;display:inline-block;vertical-align:middle;content:""}
 .priorityHigh,.priorityNormal,.prioritySkip{margin:3px;width:44px;display:inline-block;overflow:hidden;vertical-align:middle;text-align:left;font-size:0;color:transparent;background-size:18px}
-.priorityHigh{background:url(/i2psnark/.resources/icons/clock_red.png) no-repeat left 24px center/18px}
-.priorityNormal{background:url(/i2psnark/.resources/icons/clock.png) no-repeat left 24px center/18px}
-.prioritySkip{background:url(/i2psnark/.resources/icons/block.png) no-repeat left 24px center/18px}
+.priorityHigh{background:url(/i2psnark/.res/icons/clock_red.png) no-repeat left 24px center/18px}
+.priorityNormal{background:url(/i2psnark/.res/icons/clock.png) no-repeat left 24px center/18px}
+.prioritySkip{background:url(/i2psnark/.res/icons/block.png) no-repeat left 24px center/18px}
 
 /* configs */
 #configs td:nth-child(2){white-space:nowrap}
@@ -532,7 +532,7 @@ td.commentAuthor .commentAuthorName{margin-left:2px;padding:0 5px 0 22px;width:1
 #torrentOrderControl b{line-height:1}
 
 /* tooltip */
-#bwHelp{margin-left:-170px;padding:15px 15px 15px 55px;width:320px;display:block;visibility:hidden;border-radius:3px;position:absolute;left:0;bottom:125%;z-index:999;text-align:center;white-space:normal;font-size:10pt;font-weight:700;background:#aaf url(/i2psnark/.resources/icons/favicon.svg) no-repeat 10px center/28px;opacity:0;filter:drop-shadow(0 0 1px #11f);will-change:transform}
+#bwHelp{margin-left:-170px;padding:15px 15px 15px 55px;width:320px;display:block;visibility:hidden;border-radius:3px;position:absolute;left:0;bottom:125%;z-index:999;text-align:center;white-space:normal;font-size:10pt;font-weight:700;background:#aaf url(/i2psnark/.res/icons/favicon.svg) no-repeat 10px center/28px;opacity:0;filter:drop-shadow(0 0 1px #11f);will-change:transform}
 #bwhelp::after{margin-left:-10px;position:absolute;top:100%;left:calc(50% - 14px);border-width:10px;border-style:solid;border-color:#aaf transparent transparent transparent;content:""}
 #bwHoverHelp:hover #bwHelp,#bwHoverHelp:active #bwHelp{visibility:visible;color:#fff;text-align:center;opacity:1;transition:ease opacity .05s}
 #bwHoverHelp{position:relative;display:inline-block}

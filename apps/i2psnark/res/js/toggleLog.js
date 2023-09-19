@@ -4,7 +4,7 @@
 
 function initToggleLog() {
 
-  const baseUrl = "/i2psnark/.resources/";
+  const baseUrl = "/i2psnark/.res/";
   const mainsection = document.getElementById("mainsection");
   const screenlog = document.getElementById("screenlog");
   const toggleLogCss = document.getElementById("toggleLogCss");

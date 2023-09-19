@@ -3,7 +3,7 @@
 /* Copyright 2018 and beyond */
 
 @import url(/themes/fonts/DroidSans.css);
-@import url(/i2psnark/.resources/linkToggle.css);
+@import url(/i2psnark/.res/linkToggle.css);
 
 :root{
 --a:#d23;
@@ -287,7 +287,7 @@ tr:hover .magnetLabel{opacity:1}
 /* action buttons */
 .tAction{padding-right:5px;white-space:nowrap}
 .active .tAction,.active:hover .tAction{background:linear-gradient(270deg,#cb4dcb 3px,rgba(0,0,0,0) 3px);animation:ease-in-out active .5s 3s forwards}
-#torrents .tAction{padding-right:4px}
+#torrents .tAction{padding-right:4px;text-align:center}
 #torrents .tAction input{margin:0 2px;padding:11px;display:inline-block;min-width:0;float:none;font-size:0;border-radius:2px;box-shadow:var(--highlight);background-blend-mode:luminosity}
 #torrents #actionStopAll,#torrents #actionStartAll{padding:10px 16px}
 #torrents .actionStart{background:var(--start) no-repeat center center/14px,var(--btn)}
@@ -350,9 +350,9 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .priority input[type=radio]{text-align:left;margin:3px}
 .priority input[type=radio]:not(:checked):not(:hover){opacity:.7}
 .priorityHigh,.priorityNormal,.prioritySkip{padding:0;width:52px;display:inline-block;vertical-align:middle;overflow:hidden;text-align:left;font-size:0;color:transparent}
-.priorityHigh{background:url(/i2psnark/.resources/icons/clock_red.png) no-repeat left 26px center/18px}
-.priorityNormal{background:url(/i2psnark/.resources/icons/clock.png) no-repeat left 26px center/18px}
-.prioritySkip{background:url(/i2psnark/.resources/icons/block.png) no-repeat left 26px center/18px}
+.priorityHigh{background:url(/i2psnark/.res/icons/clock_red.png) no-repeat left 26px center/18px}
+.priorityNormal{background:url(/i2psnark/.res/icons/clock.png) no-repeat left 26px center/18px}
+.prioritySkip{background:url(/i2psnark/.res/icons/block.png) no-repeat left 26px center/18px}
 .priority{padding:5px;width:1%;text-align:center;white-space:nowrap}
 .snarkFileName{width:90%}
 .filetype{position:relative;vertical-align:middle}
@@ -430,7 +430,7 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 #createSection td:first-child{padding-right:10px;text-align:right;font-weight:700}
 #createSection td:nth-child(2) td:first-child{text-align:left}
 #createSection #trackerselect{margin:5px 0 8px 2px;width:100%;border:var(--border);border-collapse:separate;border-spacing:0;border-radius:4px}
-#createSection #trackerselect td{padding:8px;border-top:var(--border);border-right:var(--border)}
+#createSection #trackerselect td{padding:8px;text-align:center;border-top:var(--border);border-right:var(--border)}
 #createSection #trackerselect td:first-child{font-weight:400}
 #createSection #trackerselect td:last-child{text-align:center;border-right:0}
 #createSection #trackerselect tr:first-child td{font-weight:700;border:0;background:#fff}
@@ -500,7 +500,7 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 .tooltipped:hover::before,.tooltipped:active::before,.tooltipped:hover::after,.tooltipped:active::after{position:absolute;display:inline-block}
 .tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:0;left:32px;font-weight:600;border:1px solid #cca;border-radius:2px;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff,#ffd);content:attr(data-tooltip);animation:fade-in .1s ease 3s reverse both}
 .tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 4px);left:30px;border-width:6px;border-style:solid;border-color:transparent #cca transparent transparent;content:"";animation:fade-in .1s ease 3s reverse both}
-#bwHelp{visibility:hidden;background:#fff url(/i2psnark/.resources/icons/favicon.svg) no-repeat 10px center/28px;text-align:center;padding:15px 15px 15px 55px;border-radius:3px;width:320px;position:absolute;z-index:2000;bottom:125%;left:0;margin-left:-183px;display:block;white-space:normal;font-size:10pt;filter:drop-shadow(0 0 1px #999);opacity:0}
+#bwHelp{visibility:hidden;background:#fff url(/i2psnark/.res/icons/favicon.svg) no-repeat 10px center/28px;text-align:center;padding:15px 15px 15px 55px;border-radius:3px;width:320px;position:absolute;z-index:2000;bottom:125%;left:0;margin-left:-183px;display:block;white-space:normal;font-size:10pt;filter:drop-shadow(0 0 1px #999);opacity:0}
 #bwhelp::after{content:"";position:absolute;top:100%;left:50%;margin-left:-10px;border-width:10px;border-style:solid;border-color:#fff transparent transparent transparent}
 #bwHoverHelp img{margin-right:5px;width:16px;height:16px;filter:saturate(0) opacity(.5)}
 #bwHoverHelp:hover img{filter:none}
@@ -548,20 +548,20 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 .snarkConfig .configTitle,.toggleview{background:radial-gradient(circle at top,#fff 70%,#ddd)}
 .tab_label,.configTitle,.configTitle a{font-size:11pt}
 .tab_label{display:inline-block;transform:translateY(1px)}
-.trackerConfig{margin-top:11px}
-.trackerConfig a{max-width:220px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trackerconfig{margin-top:11px}
+.trackerconfig a{max-width:220px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .trackerconfig input[type=submit]{margin-top:7px;margin-bottom:6px}
-.trackerConfig .add{margin-right:0}
+.trackerconfig .add{margin-right:0}
 .trackerconfig .add{margin-right:-3px}
 .trackerconfig .default{display:none}
 .trackerconfig .delete,.trackerconfig .reload{margin:7px 12px 6px -3px;float:left}
-.trackerConfig .delete{margin-left:0}
+.trackerconfig .delete{margin-left:0}
 .trackerconfig th{border-bottom:0}
 .trackerconfig th:first-child{background:var(--nuke) no-repeat center center/14px,var(--th)}
 .trackerconfig th:first-child,.knownTracker td:first-child,#addtracker td:first-child{border-left:var(--border)}
-.trackerConfig th{font-size:9pt;border-bottom:0}
+.trackerconfig th{font-size:9pt;border-bottom:0}
 .trackerconfig th:last-child,.knownTracker td:last-child,#addtracker td:last-child{border-right:var(--border)}
-.trackerConfig th:nth-child(2),.trackerConfig th:nth-child(3){text-align:left}
+.trackerconfig th:nth-child(2),.trackerconfig th:nth-child(3){text-align:left}
 .trackerconfig th:last-child{text-align:left}
 .trackerconfig td:first-child{text-align:right}
 .trackerconfig td:nth-child(4),.trackerconfig td:nth-child(5),.trackerconfig td:nth-child(6),.knownTracker td:first-child{text-align:center}
@@ -577,7 +577,7 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #configs .optionList{margin:4px 8px}
 #configs .spacer{display:none}
 #configs .suboption{padding:5px 6px;text-align:left;letter-spacing:0.1em;text-transform:uppercase;font-size:110%;border:var(--border);background:var(--th)}
-#configs .suboption::before{width:22px;height:16px;display:inline-block;vertical-align:middle;background:url(/i2psnark/.resources/icons/nopeers.svg) no-repeat left center/auto 16px;opacity:.8;content:""}
+#configs .suboption::before{width:22px;height:16px;display:inline-block;vertical-align:middle;background:url(/i2psnark/.res/icons/nopeers.svg) no-repeat left center/auto 16px;opacity:.8;content:""}
 #configs .suboption a{margin-top:2px;font-size:80%;vertical-align:middle;letter-spacing:0;text-transform:none}
 #configs td:first-child{padding-right:10px;text-align:left}
 #configs tr:nth-last-child(2) td{padding:8px 0 11px;border-top:var(--border)}
@@ -620,7 +620,7 @@ td.status{background-size:24px auto}
 
 @media (max-width:1100px){
 .knownTracker td{min-width:60px}
-.trackerAnnounce,.trackerConfig a,.trackerHome,.trackername{max-width:120px}
+.trackerAnnounce,.trackerconfig a,.trackerHome,.trackername{max-width:120px}
 }
 
 @media (max-width:1000px){

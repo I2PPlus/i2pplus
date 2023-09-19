@@ -1,5 +1,7 @@
 'use strict';
 
+var snarkFiles = document.getElementById('snarkFiles');
+
 /**
  * jsOnlyLightbox 0.5.6
  * Copyright © 2014 Felix Hagspiel - http://jslightbox.felixhagspiel.de
@@ -9,6 +11,7 @@
  */
 /* exported Lightbox */
 function Lightbox() {
+  if (!snarkFiles) {return;}
 
   /**
    * Constants
@@ -454,7 +457,7 @@ function Lightbox() {
     }
     // create box element if no ID is given and element is not there
     else
-      if (!CTX.box) {
+      if (!CTX.box && snarkFiles) {
         // check if there already exists a jslghtbx-div
         var newEl = document.getElementById(_const_id_prefix);
         if (!newEl) {
@@ -900,7 +903,8 @@ function Lightbox() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-   var lightbox = new Lightbox();lightbox.load();
+  if (!snarkFiles) {return;}
+  var lightbox = new Lightbox();lightbox.load();
 });
 
 export {Lightbox};
