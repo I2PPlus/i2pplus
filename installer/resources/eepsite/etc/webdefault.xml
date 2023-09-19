@@ -334,6 +334,11 @@
   <!-- ==================================================================== -->
   <session-config>
     <session-timeout>30</session-timeout>
+    <cookie-config>
+      <http-only>true</http-only>
+      <!-- cookie expires after 0 seconds so doesn't exist! -->
+      <max-age>0</max-age>
+    </cookie-config>
   </session-config>
 
   <!-- ==================================================================== -->
