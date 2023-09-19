@@ -464,7 +464,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .audioPreview{padding:0 4px;white-space:nowrap;border-radius:3px;background:#001800}
 .snarkFilename .targetfile,.snarkFilename:hover .tags,.snarkFileName a:empty{display:none}
 .snarkFilename:hover .targetfile{display:inline-block}
-.thumb{max-height:32px;box-shadow:0 0 0 1px #030;background:#000}
+.thumb{width:48px;height:48px;object-fit:cover;box-shadow:0 0 0 1px #030;background:#000}
 .thumb:hover,tr:hover .thumb{box-shadow:0 0 0 1px #930;filter:none}
 #mediaContainer{margin-top:-1px}
 #mediaContainer th{padding:10px 5px 10px 30px;background:url(/i2psnark/.res/icons/film.png) no-repeat 8px center,linear-gradient(180deg,#000a00 50%,#000 50%)}
@@ -494,9 +494,9 @@ td.subHeaderPriority{padding:0 1px;font-size:7.5pt;font-weight:700;background-im
 .dirInfo th img{margin:0;max-height:20px;padding-top:3px;padding-bottom:3px}
 .dirInfo th:nth-child(2){text-align:center;width:32px}
 .dirInfo td{min-width:0}
-.dirInfo td:first-child{padding-left:4px;text-align:left}
+.dirInfo td:first-child{padding:4px 6px 4px 4px;text-align:left}
 .dirInfo td:first-child a:hover img:not(.thumb),.dirInfo td:first-child a:focus img:not(.thumb){box-shadow:var(--outline),inset 0 0 0 1px #930;filter:none}
-.dirInfo td:first-child img{margin:0 2px;padding-right:6px}
+.dirInfo td:first-child img{margin:0 2px}
 .fileIcon{padding:0;width:16px}
 .fileStatusIcon{padding:0 4px 0 0;width:24px;text-align:center}
 .fileStatus img[src*="clock"]{mix-blend-mode:normal}
@@ -547,7 +547,7 @@ th.torrentlink{text-align:left}
 #torrentInfoStats span:not(#metainfo){margin-right:6px;display:inline-block;white-space:nowrap}
 #torrentOrderControl{float:right}
 #torrentInfoControl td,#setPriority th{padding:8px;text-align:right;box-shadow:var(--row_highlight);background:none}
-#torrentInfoControl td{text-align:left}
+#torrentInfoControl td{text-align:left;border-bottom:var(--border);background:var(--th)}
 #setPriority,#torrentInfoControl,.commentAction[colspan="5"]{border-top:var(--border);border-bottom:var(--border);background:var(--th)}
 #setPriority th{padding:8px}
 #snarkInfo~.mainsection input:not(:checked)+.toggleview{margin-bottom:5px}
@@ -692,7 +692,8 @@ input.trackerhome,input.trackerannounce{width:210px}
 
 /* sections */
 .page #snarkInfo~.mainsection{margin:10px 0;border-bottom:var(--border)}
-.page #snarkInfo~.mainsection:last-child{margin-bottom:-7px}
+.page #snarkInfo~.mainsection:not(#commentSection):last-child{margin-bottom:-7px}
+.page #snarkInfo~#commentSection{margin-bottom:0}
 .iframed .page #snarkInfo~#snarkFiles,.iframed .page #snarkInfo~#commentSection{margin:-11px 0 10px;border-bottom:var(--border)}
 .iframed #configSection,.iframed #trackers,.iframed .mainsection#snarkInfo{margin-bottom:-9px}
 .iframed .page #snarkInfo~#commentSection{margin-bottom:-10px}
