@@ -361,8 +361,8 @@ public class I2PSnarkServlet extends BasicServlet {
         String jsPfx = _context.isRouterContext() ? "" : ".res";
         String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         if (!isConfigure) {
-            out.write("<script nonce=" + cspNonce + " type=module ");
-            out.write("src=\"" + resourcePath + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
+            //out.write("<script nonce=" + cspNonce + " type=module ");
+            //out.write("src=\"" + resourcePath + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
@@ -512,6 +512,10 @@ public class I2PSnarkServlet extends BasicServlet {
                 writeConfigLink(out);
             }
             out.write("</div>\n");
+        }
+        if (!isConfigure) {
+            out.write("<script nonce=" + cspNonce + " type=module ");
+            out.write("src=\"" + resourcePath + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
         }
         if (!isStandalone())
             out.write(FOOTER);

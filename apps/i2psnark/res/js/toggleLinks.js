@@ -3,19 +3,19 @@
 /* License: AGPL3 or later */
 
 const linkCss =    "#torrents #linkswitch::before{background:url(/i2psnark/.res/icons/link.svg) no-repeat center center/20px!important}" +
-                    "#snarkTbody .magnet,#snarkTbody .magnet:empty{padding:0;width:0;font-size:0}#snarkTbody .magnet>*{display:none}" +
-                    "#snarkTbody .trackerLink{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .trackerLink>*{display:inline-block}" +
-                    "#torrents td.trackerLink img{margin:0;width:18px!important;height:18px!important}" +
-                    "@media(min-width:1500px){#torrents td.trackerLink img{margin:0;width:20px!important;height:20px!important}";
+                   "#snarkTbody .magnet,#snarkTbody .magnet:empty{padding:0;width:0;font-size:0}#snarkTbody .magnet>*{display:none}" +
+                   "#snarkTbody .trackerLink{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .trackerLink>*{display:inline-block}" +
+                   "#torrents td.trackerLink img{margin:0;width:18px!important;height:18px!important}" +
+                   "@media(min-width:1500px){#torrents td.trackerLink img{margin:0;width:20px!important;height:20px!important}";
 
-const magnetCss = "#torrents #linkswitch::before{background:url(/i2psnark/.res/icons/magnet.svg) no-repeat center center/20px!important}" +
-                    "#snarkTbody .trackerLink,#snarkTbody .trackerLink:empty{padding:0;width:0;font-size:0}#snarkTbody .trackerLink>*{display:none}" +
-                    "#snarkTbody .magnet{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .magnet>*{display:inline-block}" +
-                    "#torrents td.trackerLink img{margin:0;width:18px!important;height:18px!important}" +
-                    "@media(min-width:1500px){#torrents td.magnet img{margin:0;width:20px!important;height:20px!important}}";
+const magnetCss =  "#torrents #linkswitch::before{background:url(/i2psnark/.res/icons/magnet.svg) no-repeat center center/20px!important}" +
+                   "#snarkTbody .trackerLink,#snarkTbody .trackerLink:empty{padding:0;width:0;font-size:0}#snarkTbody .trackerLink>*{display:none}" +
+                   "#snarkTbody .magnet{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .magnet>*{display:inline-block}" +
+                   "#torrents td.trackerLink img{margin:0;width:18px!important;height:18px!important}" +
+                   "@media(min-width:1500px){#torrents td.magnet img{margin:0;width:20px!important;height:20px!important}}";
 
- const magnetBtn  = "#snarkTbody .magnetlink{position:relative}#snarkTbody .copyMagnet{width:100%;height:100%;position:absolute;top:0;right:0;bottom:0;left:0;" +
-                    "border:0;}";
+ const magnetBtn = "#snarkTbody .magnetlink{position:relative}#snarkTbody .copyMagnet{width:100%;height:100%;position:absolute;top:0;right:0;bottom:0;left:0;" +
+                   "border:0}";
 
 const magnets = document.querySelectorAll("#snarkTbody td.magnet .magnetlink");
 const mlinks = document.querySelectorAll("#snarkTbody .magnet");
@@ -25,66 +25,63 @@ const toggleCss = document.getElementById("toggleLinks");
 const toggle = document.getElementById("linkswitch");
 
 function initLinkToggler() {
-  var config = localStorage.getItem("linkToggle");
-  if (config !== null) {config = config.toString();}
-  console.log("Toggle localStorage config set to: " + config);
 
   if (!toggle) {return;}
+  toggle.removeAttribute("hidden");
 
-  toggle.removeAttribute("checked");
+  var config = localStorage.getItem("linkToggle");
 
-  if (config === "links" || !config) {
+  if (config === "links") {
     localStorage.setItem("linkToggle", "links");
-    toggle.checked = false;
-    toggle.click();
+    toggle.false = true;
     showLinks();
     removeMagnetListeners();
-  } else if (config === "magnets") {
+    toggle.checked = false;
+    toggleCss.textContent = linkCss + magnetBtn;
+  } else if (config === "magnets" || !config) {
     toggle.checked = true;
-    toggle.click();
     showMagnets();
     magnetToClipboard();
     attachMagnetListeners();
+    toggle.checked = true;
+    toggleCss.textContent = magnetCss + magnetBtn;
   }
   toggle.addEventListener("click", linkToggle, true);
-  toggle.removeAttribute("hidden");
-  toggle.removeAttribute("checked");
 }
 
 function linkToggle() {
-  var config = window.localStorage.getItem("linkToggle");
+  const config = window.localStorage.getItem("linkToggle");
 
-  if (config && (config === "links" || config === "magnets")) {
-    config = config.toString();
-  } else {
-    config = "";
-  }
-
-  if (config === "links" || !config || config === "") {
+  if (config === "links" || !config) {
     showMagnets();
   } else {
     showLinks();
   }
-  toggle.click();
 }
 
 function showLinks() {
-  const expectedHtml = linkCss;
-  if (toggleCss.innerHTML !== expectedHtml) {
-    toggleCss.innerHTML = expectedHtml;
+  var expectedHtml = linkCss;
+  if (toggleCss.textContent !== expectedHtml) {
+    toggleCss.textContent = expectedHtml;
   }
+  console.log(toggleCss.textContent);
   localStorage.setItem("linkToggle", "links");
   removeMagnetListeners();
+  toggle.click();
+  toggle.addEventListener("click", linkToggle, true);
 }
 
 function showMagnets() {
-  const expectedHtml = magnetCss + magnetBtn;
+  var expectedHtml = magnetCss + magnetBtn;
   if (toggleCss.innerHTML !== expectedHtml) {
     toggleCss.innerHTML = expectedHtml;
   }
+  console.log(toggleCss.textContent);
   localStorage.setItem("linkToggle", "magnets");
   attachMagnetListeners();
   magnetToClipboard();
+  toggle.click();
+  toggle.addEventListener("click", linkToggle, true);
 }
 
 function magnetToClipboard() {
@@ -163,6 +160,9 @@ function attachMagnetListeners() {
       }, 3500);
     });
   }
+  toggle.addEventListener("click", linkToggle, true);
 }
+
+document.addEventListener('DOMContentLoaded', () => {initLinkToggler();});
 
 export {initLinkToggler, linkToggle, magnetToClipboard, attachMagnetListeners};
