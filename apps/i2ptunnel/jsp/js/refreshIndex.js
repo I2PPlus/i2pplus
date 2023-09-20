@@ -17,7 +17,7 @@ function refreshTunnelStatus() {
   xhrtunnman.onreadystatechange = function() {
     if (xhrtunnman.readyState == 4) {
       if (xhrtunnman.status == 200) {
-        if (isDown && xhrtunnman.responseXML.getElementById("globalTunnelControl") !== null) {
+        if (isDown && xhrtunnman.responseXML.getElementById("globalTunnelControl")) {
           reloadPage();
         } else if (notReady) {
           var notReadyResponse = xhrtunnman.responseXML.getElementById("notReady");
@@ -31,7 +31,7 @@ function refreshTunnelStatus() {
         function noRouter() {
           var down = "<div id=down class=notReady><b><span>Router is down</span></b></div>";
           index.innerHTML = down;
-          if (isDown && xhrtunnman.responseXML.getElementById("globalTunnelControl") !== null) {
+          if (isDown && xhrtunnman.responseXML.getElementById("globalTunnelControl")) {
             reloadPage();
           }
         }
@@ -43,66 +43,66 @@ function refreshTunnelStatus() {
 }
 
 function countServices() {
-  var runningClientCount = document.querySelector("#countClient .running");
-  var runningClient = document.getElementsByClassName("cli statusRunning");
-  var runningServerCount = document.querySelector("#countServer .running");
-  var runningServer = document.getElementsByClassName("svr statusRunning");
-  var standbyClientCount = document.querySelector("#countClient .standby");
-  var standbyClient = document.getElementsByClassName("cli statusStandby");
-  var standbyServerCount = document.querySelector("#countServer .standby");
-  var standbyServer = document.getElementsByClassName("svr statusStandby");
-  var startingClientCount = document.querySelector("#countClient .starting");
-  var startingClient = document.getElementsByClassName("cli statusStarting");
-  var startingServerCount = document.querySelector("#countServer .starting");
-  var startingServer = document.getElementsByClassName("svr statusStarting");
-  var stoppedClientCount = document.querySelector("#countClient .stopped");
-  var stoppedClient = document.getElementsByClassName("cli statusNotRunning");
-  var stoppedServerCount = document.querySelector("#countServer .stopped");
-  var stoppedServer = document.getElementsByClassName("svr statusNotRunning");
-  if (control !== null) {
-    if (runningClient !== null && runningClient.length > 0) {
-      runningClientCount.innerHTML = " x " + runningClient.length;
-    } else if (runningClient !== null && runningClientCount !== null) {
-      runningClientCount.innerHTML == "";
+  const runningClientCount = document.querySelector("#countClient .running");
+  const runningClient = document.querySelectorAll(".cli.statusRunning");
+  const runningServerCount = document.querySelector("#countServer .running");
+  const runningServer = document.querySelectorAll(".svr.statusRunning");
+  const standbyClientCount = document.querySelector("#countClient .standby");
+  const standbyClient = document.querySelectorAll(".cli.statusStandby");
+  const standbyServerCount = document.querySelector("#countServer .standby");
+  const standbyServer = document.querySelectorAll(".svr.statusStandby");
+  const startingClientCount = document.querySelector("#countClient .starting");
+  const startingClient = document.querySelectorAll(".cli.statusStarting");
+  const startingServerCount = document.querySelector("#countServer .starting");
+  const startingServer = document.querySelectorAll(".svr.statusStarting");
+  const stoppedClientCount = document.querySelector("#countClient .stopped");
+  const stoppedClient = document.querySelectorAll(".cli.statusNotRunning");
+  const stoppedServerCount = document.querySelector("#countServer .stopped");
+  const stoppedServer = document.querySelectorAll(".svr.statusNotRunning");
+  if (control) {
+    if (runningClient && runningClient.length > 0) {
+      runningClientCount.textContent = " x " + runningClient.length;
+    } else if (runningClient && runningClientCount) {
+      runningClientCount.textContent == "";
     }
-    if (runningServer !== null && runningServer.length > 0) {
-      runningServerCount.innerHTML = " x " + runningServer.length;
-    } else if (runningServer !== null && runningServerCount !== null) {
-      runningServerCount.innerHTML = "";
+    if (runningServer && runningServer.length > 0) {
+      runningServerCount.textContent = " x " + runningServer.length;
+    } else if (runningServer && runningServerCount) {
+      runningServerCount.textContent = "";
     }
-    if (standbyClient !== null && standbyClient.length > 0) {
-      standbyClientCount.innerHTML = " x " + standbyClient.length;
-    } else if (standbyClient !== null && standbyClientCount !== null) {
-      standbyClientCount.innerHTML = "";
+    if (standbyClient && standbyClient.length > 0) {
+      standbyClientCount.textContent = " x " + standbyClient.length;
+    } else if (standbyClient && standbyClientCount) {
+      standbyClientCount.textContent = "";
     }
-    if (startingClient !== null && startingClient.length > 0) {
-      startingClientCount.innerHTML = " x " + startingClient.length;
-    } else if (startingClient !== null && startingClientCount !== null) {
-      startingClientCount.innerHTML = "";
+    if (startingClient && startingClient.length > 0) {
+      startingClientCount.textContent = " x " + startingClient.length;
+    } else if (startingClient && startingClientCount) {
+      startingClientCount.textContent = "";
     }
-    if (startingServer !== null && startingServer.length > 0) {
-      startingServerCount.innerHTML = " x " + startingServer.length;
-    } else if (startingServer !== null && startingServerCount !== null) {
-      startingServerCount.innerHTML = "";
+    if (startingServer && startingServer.length > 0) {
+      startingServerCount.textContent = " x " + startingServer.length;
+    } else if (startingServer && startingServerCount) {
+      startingServerCount.textContent = "";
     }
-    if (stoppedClient !== null && stoppedClient.length > 0) {
-      stoppedClientCount.innerHTML = " x " + stoppedClient.length;
-    } else if (stoppedClient !== null && stoppedClientCount !== null) {
-      stoppedClientCount.innerHTML = "";
+    if (stoppedClient && stoppedClient.length > 0) {
+      stoppedClientCount.textContent = " x " + stoppedClient.length;
+    } else if (stoppedClient && stoppedClientCount) {
+      stoppedClientCount.textContent = "";
     }
-    if (stoppedServer !== null && stoppedServer.length > 0) {
-      stoppedServerCount.innerHTML = " x " + stoppedServer.length;
-    } else if (stoppedServer !== null && stoppedServerCount !== null) {
-      stoppedServerCount.innerHTML = "";
+    if (stoppedServer && stoppedServer.length > 0) {
+      stoppedServerCount.textContent = " x " + stoppedServer.length;
+    } else if (stoppedServer && stoppedServerCount) {
+      stoppedServerCount.textContent = "";
     }
   }
 }
 
 function updateVolatile() {
-  var updating = document.getElementsByClassName("volatile");
-  var updatingResponse = xhrtunnman.responseXML.getElementsByClassName("volatile");
-  if (messages !== null) {
-    var messagesResponse = xhrtunnman.responseXML.getElementById("tunnelMessages");
+  var updating = document.querySelectorAll(".tunnelProperties .volatile");
+  var updatingResponse = xhrtunnman?.responseXML.querySelectorAll(".tunnelProperties .volatile");
+  var messagesResponse = xhrtunnman?.responseXML.getElementById("tunnelMessages");
+  if (messages && messagesResponse) {
     if (!Object.is(messages.innerHTML, messages.innerHTML)) {
       messages.innerHTML = messagesResponse.innerHTML;
     }
@@ -122,7 +122,7 @@ function refreshPanels() {
   var serversResponse = xhrtunnman.responseXML.getElementById("serverTunnels");
   var clients = document.getElementById("clientTunnels");
   var clientsResponse = xhrtunnman.responseXML.getElementById("clientTunnels");
-  if (messages !== null) {
+  if (messages) {
     var messagesResponse = xhrtunnman.responseXML.getElementById("tunnelMessages");
     if (!Object.is(messages.innerHTML, messagesResponse.innerHTML)) {
       messages.innerHTML = messagesResponse.innerHTML;
