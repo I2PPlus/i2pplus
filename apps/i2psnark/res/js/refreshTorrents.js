@@ -133,11 +133,18 @@ function refreshTorrents(callback) {
 
     function refreshHeaderAndFooter() {
       const snarkHead = document.getElementById("snarkHead");
+      const snarkHeadThs = document.querySelectorAll("#snarkHead th:not(.torrentLink)");
       if (snarkHead?.responseXML) {
-        const snarkHeadParent = snarkHead.parentNode;
         const snarkHeadResponse = snarkHead.responseXML?.getElementById("snarkHead");
+        const snarkHeadThsResponse = xhrsnark.responseXML?.querySelectorAll("#snarkHead th:not(.torrentLink)");
         if (snarkHead && snarkHeadResponse && !Object.is(snarkHead.innerHTML, snarkHeadResponse.innerHTML)) {
-          snarkHead.innerHTML = snarkHeadResponse.innerHTML;
+          let updated = false;
+          Array.from(snarkHeadThs).forEach((elem, index) => {
+            if (elem.innerHTML !== snarkHeadThsResponse[index].innerHTML) {
+              elem.innerHTML = snarkHeadThsResponse[index].innerHTML;
+              updated = true;
+            }
+          });
         }
       }
     }
