@@ -808,7 +808,7 @@ class SummaryBarRenderer {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(512);
         SummaryHelper.NetworkStateMessage reachability = _helper.getReachability();
-        buf.append("<h4 id=sb_status><span class=\"sb_netstatus volatile ");
+        buf.append("<h4 id=sb_status><span id=sb_netstatus class=\"sb_netstatus volatile ");
         switch (reachability.getState()) {
             case VMCOMM:
                 buf.append("vmcomm");
