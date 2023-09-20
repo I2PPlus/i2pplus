@@ -88,7 +88,7 @@ public class CSSHelper extends HelperBase {
      */
     public void setSoraDisplayFont() {
         // Protected with nonce in css.jsi
-        if (PROP_ENABLE_SORA_FONT != null && PROP_ENABLE_SORA_FONT == "true")
+        if (PROP_ENABLE_SORA_FONT != null && PROP_ENABLE_SORA_FONT.toLowerCase().equals("true"))
             _context.router().saveConfig(PROP_ENABLE_SORA_FONT, "true");
     }
 
@@ -229,13 +229,15 @@ public class CSSHelper extends HelperBase {
     public static class StringFormatter {
         public static String capitalizeWord(String str) {
             String words[] = str.split("\\s");
-            String capitalizeWord = "";
+            StringBuilder capitalizeWord = new StringBuilder("");
             for (String w:words) {
                 String first = w.substring(0,1);
                 String afterfirst = w.substring(1);
-                capitalizeWord += first.toUpperCase() + afterfirst + " ";
+                capitalizeWord.append(first.toUpperCase());
+                capitalizeWord.append(afterfirst);
+                capitalizeWord.append(" ");
             }
-        return capitalizeWord.trim();
+        return capitalizeWord.toString().trim();
         }
     }
 
