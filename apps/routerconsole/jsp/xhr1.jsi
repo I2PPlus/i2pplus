@@ -12,10 +12,11 @@
 <jsp:setProperty name="helper" property="updateNonce" value="<%=request.getParameter(\"updateNonce\")%>" />
 <jsp:setProperty name="helper" property="consoleNonce" value="<%=request.getParameter(\"consoleNonce\")%>" />
 <%
-    String reqURI = request.getRequestURI();
-    if (reqURI.contains("/xhr1"))
-        reqURI = request.getParameter("requestURI");
-    helper.setRequestURI(reqURI);
+String reqURI = request.getRequestURI();
+if (reqURI.contains("/xhr1")) {
+    reqURI = request.getParameter("requestURI");
+}
+helper.setRequestURI(reqURI);
 %>
 <% helper.storeWriter(out); %>
 <% helper.storeNewsHelper(newshelper); %>
@@ -37,6 +38,6 @@
 <jsp:setProperty name="update" property="*" />
 <jsp:setProperty name="update" property="contextId" value="<%=i2pcontextId%>" />
 <%
-    // moved to java for ease of translation
-    helper.renderSummaryBar();
+// moved to java for ease of translation
+helper.renderSummaryBar();
 %>

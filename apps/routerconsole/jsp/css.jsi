@@ -77,13 +77,7 @@
 <script nonce="<%=cspNonce%>">if (top.location != location) {top.location.href = location.href;}</script>
 <%
     response.setHeader("Accept-Ranges", "bytes");
-    // clickjacking
-    if (intl.shouldSendXFrame()) {
-        response.setHeader("X-Frame-Options", "SAMEORIGIN");
-    }
-    // unsafe-inline is a fallback for browsers not supporting nonce
-    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src
-    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; font-src 'self'; object-src 'none'; media-src 'none'; base-uri 'self'");
+    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; font-src 'self'; object-src 'none'; media-src 'none'; base-uri 'self'");
     response.setHeader("X-XSS-Protection", "1; mode=block");
     response.setHeader("X-Content-Type-Options", "nosniff");
     response.setHeader("Permissions-Policy", "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), display-capture(), fullscreen=(self), geolocation=(), gyroscope=(), interest-cohort=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), vibrate=(), vr=()");
@@ -92,7 +86,7 @@
     response.setHeader("Referrer-Policy", "same-origin");
     if (uri.contains("override.css"))
         response.setHeader("Cache-Control", "private, no-cache, max-age=84600");
-    else if (uri.contains(".png") || uri.contains(".svg") || uri.contains(".jpg") || uri.contains(".ttf") ||
+    else if (uri.contains(".png") || uri.contains(".svg") || uri.contains(".jpg") || uri.contains(".webp") || uri.contains(".ttf") ||
              uri.contains(".woff2") || uri.contains(".woff2") || uri.contains("flags.jsp") || uri.contains(".js") || uri.contains(".css"))
         response.setHeader("Cache-Control", "private, max-age=2628000, immutable");
     else if (uri.endsWith("xhr1.jsp"))
