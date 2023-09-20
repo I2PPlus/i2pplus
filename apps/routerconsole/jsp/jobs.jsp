@@ -56,7 +56,6 @@
         const updatingTds = document.querySelectorAll("#statCount td");
         const updatingTdsResponse = xhr.responseXML?.querySelectorAll("#statCount td");
         let updated = false;
-        console.log("HTML Rows: " + rows.length + " / XHR Rows: " + rowsResponse.length);
         if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML)) {
           if (rows.length !== rowsResponse.length) {
             tbody.innerHTML = tbodyResponse.innerHTML;
