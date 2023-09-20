@@ -83,7 +83,7 @@ if (themePath != null)
     base = themePath;
 else
     base = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
-              java.io.File.separatorChar + "docs";
+           java.io.File.separatorChar + "docs";
 
 java.io.File file = new java.io.File(base, uri);
 if (!file.exists()) {
@@ -112,15 +112,17 @@ if (uri.contains("override.css")) {
 }
 
 long length = file.length();
-if (length > 0)
+if (length > 0) {
     response.setHeader("Content-Length", Long.toString(length));
+}
 
 try {
     net.i2p.util.FileUtil.readFile(uri, base, response.getOutputStream());
+    response.getOutputStream().close();
 } catch (java.io.IOException ioe) {
     // prevent 'Committed' IllegalStateException from Jetty
     if (!response.isCommitted()) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN, ioe.getMessage());
+      response.sendError(403, ioe.toString());
     }  else {
         // not an error, happens when the browser closes the stream
         net.i2p.I2PAppContext.getGlobalContext().logManager().getLog(getClass()).warn("Error serving " + uri + " (" + ioe.getMessage() + ")");
