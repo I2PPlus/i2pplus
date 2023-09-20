@@ -142,7 +142,7 @@ public class RouterConsoleRunner implements RouterApp {
     private static final int MIN_THREADS = 1;
     /** this is for the handlers only. We will adjust for the connectors and acceptors below. */
 //    private static final int MAX_THREADS = 24;
-    private static final int MAX_THREADS = 8;
+    private static final int MAX_THREADS = 16;
     private static final int MAX_IDLE_TIME = 90*1000;
     private static final String THREAD_NAME = "RouterConsole Jetty";
     public static final String PROP_DTG_ENABLED = "desktopgui.enabled";
@@ -721,8 +721,7 @@ public class RouterConsoleRunner implements RouterApp {
             // Each address spawns a Connector and an Acceptor thread
             // If the min is less than this, we have no thread for the handlers or the expiration thread.
             qtp.setMinThreads(MIN_THREADS + (2 * boundAddresses));
-//            qtp.setMaxThreads(MAX_THREADS + (2 * boundAddresses));
-            qtp.setMaxThreads(MAX_THREADS);
+            qtp.setMaxThreads(MAX_THREADS + (2 * boundAddresses));
 
             File tmpdir = new SecureDirectory(workDir, ROUTERCONSOLE + "-" +
                                                        (_listenPort != null ? _listenPort : _sslListenPort));
