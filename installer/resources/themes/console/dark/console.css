@@ -603,6 +603,7 @@ h3[id*="jobs"]{clear:both;margin-top:25px}
 #jobstats tbody td:nth-last-child(n+2){border-right:var(--border_softer)}
 #jobstats tbody tr{border-top:var(--border_softer)}
 #jobstats td{padding-top:6px;padding-bottom:6px;border-bottom:0}
+#jobstats td.updated:nth-child(n+2){padding-top:6px;padding-bottom:6px;border-bottom:0;animation:updatingTd .1s ease both}
 #jobstats thead th{font-size:85%}
 #jobstats thead th,#jobstats tfoot td{font-weight:700;background:var(--th)}
 #jobstats tfoot td{border-top:var(--border)}
@@ -2529,6 +2530,8 @@ iframe.iframed{margin:15px 0 0}
 @keyframes slide{from{transform:translateY(-20px)}to{transform:translateY(0)}}
 @keyframes spin{from{transform:rotate(-360deg)}}
 @keyframes textglow{from{text-shadow:0 0 1px #995}}
+@keyframes updatingTd{from{color:#dd0;box-shadow:0 0 0 1px #330 inset;background:rgba(255,255,0,.05)}to{color:var(--ink_bright)}}
+@keyframes updatingIcon{from{background-image:var(--clock)}}
 @keyframes zoom{from{transform:scale(0);opacity:0}to{scale:scale(1);opacity:1}}
 
 /* chrome overrides */
@@ -2759,6 +2762,7 @@ th{font-size:8pt}
 .ls_crypto{display:inline-block;columns:340px 4}
 .tab2{margin-bottom:-1px;padding:5px 12px 6px}
 #jobstats tbody td:first-child{padding-left:28px;background:var(--yes) no-repeat 8px center;background-size:12px}
+#jobstats tbody td.updated:first-child{animation:updatingIcon .5s ease both}
 #terms{padding:5px 0 15px;columns:2 auto;column-gap:35px;column-rule:1px solid #020}
 #terms p{break-inside:avoid;page-break-inside:avoid;-webkit-column-break-inside:avoid}
 #terms p:first-child{margin-top:0}
