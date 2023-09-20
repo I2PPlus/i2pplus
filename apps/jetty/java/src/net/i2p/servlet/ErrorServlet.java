@@ -141,7 +141,7 @@ public class ErrorServlet extends HttpServlet {
         if (_icoPath != null)
             out.print("<link rel=icon href=\"" + _icoPath + "\">\n");
         out.print("<script>if (window.location !== window.top.location) {window.top.location = window.location;}</script>\n"); // breakout of iframe
-        out.print("<script charset=utf-8 src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>\n"); // or ensure embedded correctly elsewise
+        out.print("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>\n"); // or ensure embedded correctly elsewise
         out.print("</head>\n<body id=servletError>\n");
         out.print("<div class=logo>");
         out.print("<a href=\"/\" title=\"" + _t("Router Console") + "\"><img src=\"" + themePath +
