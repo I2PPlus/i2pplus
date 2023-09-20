@@ -544,7 +544,7 @@ public class I2PSnarkServlet extends BasicServlet {
             resp.setHeader("Cache-Control", "private, no-cache, max-age=2628000");
         }
         resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; " +
-                "script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; " +
+                "script-src 'self' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; " +
                 "object-src 'none'; base-uri 'self'; media-src '" + (allowMedia ? "self" : "none") + "'");
         resp.setHeader("Permissions-Policy", "fullscreen=(self)");
         resp.setHeader("Referrer-Policy", "same-origin");
