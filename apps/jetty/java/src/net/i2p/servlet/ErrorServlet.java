@@ -87,8 +87,8 @@ public class ErrorServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setHeader("Accept-Ranges", "none");
-        resp.setDateHeader("Expires", 0);
-        resp.setHeader("Cache-Control", "no-store, max-age=0, no-cache, must-revalidate");
+        //resp.setDateHeader("Expires", 0);
+        resp.setHeader("Cache-Control", "private, no-cache, max-age=3600");
         resp.setHeader("Pragma", "no-cache");
 //        resp.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'none'");
         // add unsafe-inline script-src to allow iframe escape to function
