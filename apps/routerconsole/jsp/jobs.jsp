@@ -32,36 +32,60 @@
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.dotsep.js></script>
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.number.js></script>
 <script nonce=<%=cspNonce%>>
-  var stats = document.getElementById("jobstats");
-  var tbody = document.getElementById("statCount");
-  var tfoot = document.getElementById("statTotals");
-  var sorter = new Tablesort((stats), {descending: true});
-  var xhr = new XMLHttpRequest();
+  const jobs = document.getElementById("jobstats");
+  const sorter = new Tablesort((jobs), {descending: true});
+  const xhr = new XMLHttpRequest();
   progressx.hide();
-  var visibility = document.visibilityState;
+  const visibility = document.visibilityState;
   if (visibility === "visible") {
     setInterval(function() {
-      xhr.open('GET', '/jobs?t=' + new Date().getTime(), true);
+      xhr.open('GET', '/jobs', true);
       xhr.responseType = "document";
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          var tbodyResponse = xhr.responseXML.getElementById("statCount");
-          var tfootResponse = xhr.responseXML.getElementById("statTotals");
-          if (tbody.innerHTML !== tbodyResponse.innerHTML) {
+      xhr.onload = function () {
+        if (!xhr.responseXML) {
+          alert("Your browser doesn't support ajax. Please upgrade to a newer browser or enable support for XHR requests.");
+          return;
+        }
+        const jobsResponse = xhr.responseXML.getElementById("jobstats");
+        const rows = document.querySelectorAll("#statCount tr");
+        const rowsResponse = xhr.responseXML?.querySelectorAll("#statCount tr");
+        const tbody = document.getElementById("statCount");
+        const tbodyResponse = xhr.responseXML.getElementById("statCount");
+        const tfoot = document.getElementById("statTotals");
+        const tfootResponse = xhr.responseXML.getElementById("statTotals");
+        const updatingTds = document.querySelectorAll("#statCount td");
+        const updatingTdsResponse = xhr.responseXML?.querySelectorAll("#statCount td");
+        let updated = false;
+        console.log("HTML Rows: " + rows.length + " / XHR Rows: " + rowsResponse.length);
+        if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML)) {
+          if (rows.length !== rowsResponse.length) {
             tbody.innerHTML = tbodyResponse.innerHTML;
             tfoot.innerHTML = tfootResponse.innerHTML;
-            sorter.refresh();
+            updated = true;
+          } else {
+            Array.from(updatingTds).forEach((elem, index) => {
+              elem.classList.remove("updated");
+              if (elem.innerHTML !== "<span hidden>[0.]</span>0" && elem.innerHTML !== updatingTdsResponse[index].innerHTML) {
+                elem.innerHTML = updatingTdsResponse[index].innerHTML;
+                elem.classList.add("updated");
+                updated = true;
+              }
+            });
+            if (tfoot.innerHTML !== tfootResponse.innerHTML) {
+              tfoot.innerHTML = tfootResponse.innerHTML;
+            }
           }
+          sorter.refresh();
         }
       }
       progressx.hide();
-      sorter.refresh();
+//      sorter.refresh();
       xhr.send();
     }, 10000);
   }
   window.addEventListener("DOMContentLoaded", progressx.hide(), true);
-  stats.addEventListener("beforeSort", function() {progressx.show();progressx.progress(0.5);}, true);
-  stats.addEventListener("afterSort", function() {progressx.hide();}, true);
+  jobs.addEventListener("beforeSort", function() {progressx.show();progressx.progress(0.5);}, true);
+  jobs.addEventListener("afterSort", function() {progressx.hide();}, true);
 </script>
 </body>
 </html>
