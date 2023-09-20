@@ -165,51 +165,48 @@
     var refreshId = setInterval(refreshLogs, 30000);
   }
   function refreshLogs() {
-    xhr.open('GET', '/logs?t=' + new Date().getTime(), true);
+    xhr.open('GET', '/logs', true);
     xhr.responseType = "document";
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4 && xhr.status === 200 && visible === "visible") {
-        var mainLogsResponse = xhr.responseXML.getElementById("logs");
-        progressx.show();
-        progressx.progress(0.5);
+    xhr.onload = function () {
+      var mainLogsResponse = xhr.responseXML.getElementById("logs");
+      progressx.show();
+      progressx.progress(0.5);
 
-        if (criticallogs) {
-          var criticallogsResponse = xhr.responseXML.getElementById("criticallogs");
-          if (criticallogsResponse !== null && !criticallogs) {
-            mainLogs.innerHTML = mainLogsResponse.innerHTML;
-          } else if (criticallogsResponse !== null && criticallogs !== criticallogsResponse && !noCritLogs) {
-            criticallogs.innerHTML = criticallogsResponse.innerHTML;
-          } else if (noCritLogs) {
-            critLogsHead.remove();
-            criticallogs.remove();
-          }
+      if (criticallogs) {
+        var criticallogsResponse = xhr.responseXML.getElementById("criticallogs");
+        if (criticallogsResponse !== null && !criticallogs) {
+          mainLogs.innerHTML = mainLogsResponse.innerHTML;
+        } else if (criticallogsResponse !== null && criticallogs !== criticallogsResponse && !noCritLogs) {
+          criticallogs.innerHTML = criticallogsResponse.innerHTML;
+        } else if (noCritLogs) {
+          critLogsHead.remove();
+          criticallogs.remove();
         }
-        if (routerlogs) {
-          var routerlogsResponse = xhr.responseXML.getElementById("routerlogs");
-          if (!routerlogs && routerlogsResponse) {
-            mainLogs.innerHTML = mainLogsResponse.innerHTML;
-          } else if (routerlogs !== routerlogsResponse) {
-            routerlogs.innerHTML = routerlogsResponse.innerHTML;
-          }
-        }
-        if (servicelogs) {
-          var servicelogsResponse = xhr.responseXML.getElementById("wrapperlogs");
-          if (servicelogsResponse) {
-            if (servicelogs !== servicelogsResponse) {
-              servicelogs.innerHTML = servicelogsResponse.innerHTML;
-            }
-          } else {
-            mainLogs.innerHTML = mainLogsResponse.innerHTML;
-          }
-        }
-        progressx.hide();
       }
+      if (routerlogs) {
+        var routerlogsResponse = xhr.responseXML.getElementById("routerlogs");
+        if (!routerlogs && routerlogsResponse) {
+          mainLogs.innerHTML = mainLogsResponse.innerHTML;
+        } else if (routerlogs !== routerlogsResponse) {
+          routerlogs.innerHTML = routerlogsResponse.innerHTML;
+        }
+      }
+      if (servicelogs) {
+        var servicelogsResponse = xhr.responseXML.getElementById("wrapperlogs");
+        if (servicelogsResponse) {
+          if (servicelogs !== servicelogsResponse) {
+            servicelogs.innerHTML = servicelogsResponse.innerHTML;
+          }
+        } else {
+          mainLogs.innerHTML = mainLogsResponse.innerHTML;
+        }
+      }
+      progressx.hide();
     }
     xhr.send();
   }
   window.addEventListener("DOMContentLoaded", progressx.hide(), true);
   document.addEventListener("DOMContentLoaded", initRefresh(), true);
-  onVisible(mainLogs, () => {refreshLogs();});
 </script>
 </body>
 </html>

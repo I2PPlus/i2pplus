@@ -80,7 +80,7 @@ if (__invalid) {
 <script nonce="<%=cspNonce%>">
   setInterval(function() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/i2ptunnel/?' + new Date().getTime(), true);
+    xhr.open('GET', '/i2ptunnel/', true);
     xhr.responseType = "text";
     xhr.onreadystatechange = function () {
       if (xhr.readyState==4 && xhr.status==200) {

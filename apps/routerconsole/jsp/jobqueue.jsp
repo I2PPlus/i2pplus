@@ -34,15 +34,14 @@
       progressx.show();
       progressx.progress(0.5);
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/jobqueue?t=' + new Date().getTime(), true);
+      xhr.open('GET', '/jobqueue', true);
       xhr.responseType = "document";
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState==4 && xhr.status==200) {
-          var jobs = document.getElementById("jobs");
-          var jobsResponse = xhr.responseXML.getElementById("jobs");
-          var jobsParent = jobs.parentNode;
-            if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML))
-              jobsParent.replaceChild(jobsResponse, jobs);
+      xhr.onload = function () {
+        var jobs = document.getElementById("jobs");
+        var jobsResponse = xhr.responseXML.getElementById("jobs");
+        var jobsParent = jobs.parentNode;
+        if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML)) {
+          jobsParent.replaceChild(jobsResponse, jobs);
         }
       }
       window.addEventListener("DOMContentLoaded", progressx.hide());

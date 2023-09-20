@@ -33,7 +33,7 @@
     progressx.show();
     progressx.progress(0.5);
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/stats?' + new Date().getTime(), true);
+    xhr.open('GET', '/stats', true);
     xhr.responseType = "document";
     xhr.onreadystatechange = function () {
       if (xhr.readyState==4 && xhr.status==200) {

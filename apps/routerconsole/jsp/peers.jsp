@@ -133,7 +133,7 @@
   }
 
   function refreshPeers() {
-    var now = new Date().getTime();
+    var now = Date.now();
     if (queryParams.has("transport")) {
       xhrPeers.open("GET", path + query + "&t=" + now, true);
     } else {

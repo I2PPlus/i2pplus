@@ -109,56 +109,54 @@
   var countries = document.getElementById("netdbcountrylist");
   var ccsorter = countries !== null ? new Tablesort(countries, {descending: true}) : null;
   function initRefresh() {
-    var url = window.location.href;
+    const url = window.location.href;
     if (!url.includes("?c") && !url.includes("?f") && !url.includes("?l") && !url.includes("?ls") && !url.includes("?n") && !url.includes("?r")) {
       setInterval(updateNetDb, 30000);
     }
   }
   function updateNetDb() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/netdb?' + new Date().getTime(), true);
+    xhr.open('GET', '/netdb', true);
     xhr.responseType = "document";
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200) {
-        var congestion = document.getElementById("netdbcongestion");
-        var congestionResponse = xhr.responseXML.getElementById("netdbcongestion");
-        var cclist = document.getElementById("cclist");
-        var cclistResponse = xhr.responseXML.getElementById("cclist");
-        var overview = document.getElementById("netdboverview");
-        var overviewResponse = xhr.responseXML.getElementById("netdboverview");
-        var tiers = document.getElementById("netdbtiers");
-        var tiersResponse = xhr.responseXML.getElementById("netdbtiers");
-        var transports = document.getElementById("netdbtransports");
-        var transportsResponse = xhr.responseXML.getElementById("netdbtransports");
-        var versions = document.getElementById("netdbversions");
-        var versionsResponse = xhr.responseXML.getElementById("netdbversions");
-        if (congestion !== null && congestion.innerHTML !== congestionResponse.innerHTML) {
-          congestion.innerHTML = congestionResponse.innerHTML;
+    xhr.onload = function () {
+      const congestion = document.getElementById("netdbcongestion");
+      const congestionResponse = xhr.responseXML.getElementById("netdbcongestion");
+      const cclist = document.getElementById("cclist");
+      const cclistResponse = xhr.responseXML.getElementById("cclist");
+      const overview = document.getElementById("netdboverview");
+      const overviewResponse = xhr.responseXML.getElementById("netdboverview");
+      const tiers = document.getElementById("netdbtiers");
+      const tiersResponse = xhr.responseXML.getElementById("netdbtiers");
+      const transports = document.getElementById("netdbtransports");
+      const transportsResponse = xhr.responseXML.getElementById("netdbtransports");
+      const versions = document.getElementById("netdbversions");
+      const versionsResponse = xhr.responseXML.getElementById("netdbversions");
+      if (congestion !== null && congestion.innerHTML !== congestionResponse.innerHTML) {
+        congestion.innerHTML = congestionResponse.innerHTML;
+      }
+      if (countries) {
+        if (typeof ccsorter === "undefined" || ccsorter === null) {
+          const ccsorter = new Tablesort(countries, {descending: true});
         }
-        if (countries) {
-          if (typeof ccsorter === "undefined" || ccsorter === null) {
-            var ccsorter = new Tablesort(countries, {descending: true});
-          }
-          if (cclist.innerHTML !== cclistResponse.innerHTML) {
-            cclist.innerHTML = cclistResponse.innerHTML;
-            ccsorter.refresh();
-          }
-        } else if (versions) {
-            overview.innerHTML = overviewResponse.innerHTML;
+        if (cclist.innerHTML !== cclistResponse.innerHTML) {
+          cclist.innerHTML = cclistResponse.innerHTML;
+          ccsorter.refresh();
         }
-        if (tiers !== null && tiers.innerHTML !== tiersResponse.innerHTML) {
-          tiers.innerHTML = tiersResponse.innerHTML;
-        }
-        if (transports !== null && transports.innerHTML !== transportsResponse.innerHTML) {
-          transports.innerHTML = transportsResponse.innerHTML;
-        }
-        if (versions !== null && versions.innerHTML !== versionsResponse.innerHTML) {
-          versions.innerHTML = versionsResponse.innerHTML;
-        }
+      } else if (versions) {
+          overview.innerHTML = overviewResponse.innerHTML;
+      }
+      if (tiers !== null && tiers.innerHTML !== tiersResponse.innerHTML) {
+        tiers.innerHTML = tiersResponse.innerHTML;
+      }
+      if (transports !== null && transports.innerHTML !== transportsResponse.innerHTML) {
+        transports.innerHTML = transportsResponse.innerHTML;
+      }
+      if (versions !== null && versions.innerHTML !== versionsResponse.innerHTML) {
+        versions.innerHTML = versionsResponse.innerHTML;
       }
     }
     if (typeof ccsorter === "undefined" || ccsorter === null) {
-      var ccsorter = new Tablesort(countries, {descending: true});
+      const ccsorter = new Tablesort(countries, {descending: true});
     }
     if (countries) {ccsorter.refresh();}
     xhr.send();

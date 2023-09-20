@@ -36,7 +36,7 @@
   if (visibility == "visible") {
     setInterval(function() {
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/tunnels?' + new Date().getTime(), true);
+      xhr.open('GET', '/tunnels', true);
       xhr.responseType = "document";
       xhr.onreadystatechange = function () {
         if (xhr.readyState==4 && xhr.status==200) {

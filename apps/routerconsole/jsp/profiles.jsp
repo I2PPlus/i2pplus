@@ -95,9 +95,9 @@
   }
   function refreshProfiles() {
     if (uri.includes("?") && !uri.includes("f=3")) {
-      xhrprofiles.open('GET', uri + '&t=' + new Date().getTime(), true);
+      xhrprofiles.open('GET', uri + '&t=' + Date.now(), true);
     } else if (!uri.includes("f=3")) {
-      xhrprofiles.open('GET', uri + '?t=' + new Date().getTime(), true);
+      xhrprofiles.open('GET', uri + '', true);
     }
     xhrprofiles.responseType = "document";
     xhrprofiles.onreadystatechange = function () {

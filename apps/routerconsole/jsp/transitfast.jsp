@@ -78,7 +78,7 @@
     }
   }
   function updateTunnels() {
-    xhrtunnels.open('GET', '/tunnelsparticipatingfastest?t=' + new Date().getTime(), true);
+    xhrtunnels.open('GET', '/tunnelsparticipatingfastest', true);
     xhrtunnels.responseType = "document";
     xhrtunnels.onreadystatechange = function () {
       if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {

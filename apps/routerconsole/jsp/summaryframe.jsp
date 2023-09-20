@@ -72,32 +72,6 @@
 <jsp:setProperty name="newshelper" property="page" value="<%=newspath.getAbsolutePath()%>" />
 <jsp:setProperty name="newshelper" property="maxLines" value="300" />
 <%@include file="summarynoframe.jsi" %>
-<%
-    // d and shutdownSoon defined above
-/**
-    if (!shutdownSoon) {
-        out.print("<hr>\n<div class=\"refresh\">\n<form action=\"summaryframe.jsp\" method=\"POST\">\n");
-        if (intl.getDisableRefresh()) {
-            out.print("<b>");
-            out.print(intl._t("Refresh (s)"));
-            out.print(":</b> <input size=\"3\" type=\"text\" name=\"refresh\" value=\"60\" >\n");
-            out.print("<button type=\"submit\" value=\"Enable\" >");
-            out.print(intl._t("Enable"));
-        } else {
-            // this will load in the iframe but subsequent pages will not have the iframe
-            out.print("<input type=\"hidden\" name=\"refresh\" value=\"0\" >\n");
-            out.print("<button type=\"submit\" value=\"Disable\" >");
-            long refreshMS = 60*1000;
-            try {
-                refreshMS = 1000 * Long.parseLong(d);
-            } catch (NumberFormatException nfe) {}
-            String refreshTime = net.i2p.data.DataHelper.formatDuration2(refreshMS);
-            out.print(intl._t("Disable {0} Refresh", refreshTime));
-        }
-        out.print("</button>\n</form>\n</div>\n");
-    }
-**/
-%>
 </div>
 </body>
 </html>

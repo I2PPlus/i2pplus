@@ -78,7 +78,7 @@
     var graphs = document.getElementById("allgraphs");
     var nographs = document.getElementById("nographs");
     var xhrgraphs = new XMLHttpRequest();
-    xhrgraphs.open('GET', '/graphs?t=' + new Date().getTime(), true);
+    xhrgraphs.open('GET', '/graphs', true);
     xhrgraphs.responseType = "document";
     xhrgraphs.onreadystatechange = function () {
       if (xhrgraphs.readyState==4) {

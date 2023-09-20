@@ -57,7 +57,7 @@
 <script nonce=<%=cspNonce%>>
   function refreshInfo() {
     var xhrInfo = new XMLHttpRequest();
-    xhrInfo.open('GET', '/info?t=' + new Date().getTime(), true);
+    xhrInfo.open('GET', '/info', true);
     xhrInfo.responseType = "document";
     xhrInfo.onreadystatechange = function () {
       if (xhrInfo.readyState === 4 && xhrInfo.status === 200) {

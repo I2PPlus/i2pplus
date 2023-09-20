@@ -108,7 +108,7 @@ var visibility = document.visibilityState;
 if (graph && visibility == "visible") {
   setInterval(function() {
     progressx.show();
-    var graphURL = window.location.href + "&t=" + new Date().getTime();
+    var graphURL = window.location.href + "&t=" + Date.now();
     var xhrgraph = new XMLHttpRequest();
     xhrgraph.open('GET', graphURL, true);
     xhrgraph.responseType = "document";

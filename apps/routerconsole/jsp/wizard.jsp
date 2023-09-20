@@ -388,7 +388,7 @@ A negative rate sets the default.</i><br>
 <script nonce=<%=cspNonce%>>
   setInterval(function() {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/wizard?page=4&' + new Date().getTime(), true);
+    xhr.open('GET', '/wizard?page=4&' + Date.now(), true);
     xhr.responseType = "text";
     xhr.onreadystatechange = function () {
       if (xhr.readyState==4 && xhr.status==200) {
