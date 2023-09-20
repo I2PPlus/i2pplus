@@ -198,7 +198,7 @@ public abstract class FormHandler {
             buf.append("</div>");
         }
         buf.append("</div>");
-        buf.append("<script nonce=<%=cspNonce%> src=\"/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>\"></script>");
+        buf.append("<script nonce=" + _nonce + " src=\"/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>\"></script>");
         return buf.toString();
     }
 
