@@ -162,9 +162,10 @@ function refreshSidebar() {
             netStatus.outerHTML = netStatusResponse.outerHTML;
           }
         }
-        if (bandwidth && !bandwidth.hasAttribute("hidden") &&
-            bandwidthResponse && !Object.is(bandwidth.innerHTML, bandwidthResponse.innerHTML)) {
-          bandwidth.innerHTML = bandwidthResponse.innerHTML;
+        if (bandwidth && !bandwidth.hasAttribute("hidden")) {
+          if (bandwidthResponse && !Object.is(bandwidth.innerHTML, bandwidthResponse.innerHTML)) {
+            bandwidth.innerHTML = bandwidthResponse.innerHTML;
+          }
         }
         if (graphStats && graphStatsResponse) {
           graphStats.textContent = graphStatsResponse.textContent;
@@ -174,24 +175,29 @@ function refreshSidebar() {
             graphStats.style.opacity = null;
           }
         }
-        if (advancedGeneral && !advancedGeneral.hasAttribute("hidden") && advancedGeneralResponse) {
-          if (!Object.is(advancedGeneral.innerHTML, advancedGeneralResponse.innerHTML)) {
-            advancedGeneral.innerHTML = advancedGeneralResponse.innerHTML;
+        if (advancedGeneral && !advancedGeneral.hasAttribute("hidden")) {
+          if (advancedGeneralResponse && !Object.is(advancedGeneral.innerHTML, advancedGeneralResponse.innerHTML)) {
+              advancedGeneral.innerHTML = advancedGeneralResponse.innerHTML;
           }
         }
-        if (shortGeneral && !shortGeneral.hasAttribute("hidden") &&
-            shortGeneralResponse && !Object.is(shortGeneral.innerHTML, shortGeneralResponse.innerHTML)) {
-          shortGeneral.innerHTML = shortGeneralResponse.innerHTML;
+        if (shortGeneral && !shortGeneral.hasAttribute("hidden")) {
+          if (shortGeneralResponse && !Object.is(shortGeneral.innerHTML, shortGeneralResponse.innerHTML)) {
+            shortGeneral.innerHTML = shortGeneralResponse.innerHTML;
+          }
         }
-        if (general && generalResponse && !Object.is(general.innerHTML, generalResponse.innerHTML)) {
-          general.innerHTML = generalResponse.innerHTML;
+        if (general && !general.hasAttribute("hidden")) {
+          if (generalResponse && !Object.is(general.innerHTML, generalResponse.innerHTML)) {
+            general.innerHTML = generalResponse.innerHTML;
+          }
         }
-        if (tunnels && !tunnels.hasAttribute("hidden") && tunnelsResponse && !Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML)) {
-          tunnels.innerHTML = tunnelsResponse.innerHTML;
+        if (tunnels && !tunnels.hasAttribute("hidden")) {
+          if (tunnelsResponse && !Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML)) {
+            tunnels.innerHTML = tunnelsResponse.innerHTML;
+          }
         }
-        if (localTunnels && !localTunnels.hasAttribute("hidden") && localTunnelsResponse) {
-          if (!Object.is(localTunnels.innerHTML, localTunnelsResponse.innerHTML)) {
-            localTunnels.innerHTML = localTunnelsResponse.innerHTML;
+        if (localTunnels && !localTunnels.hasAttribute("hidden")) {
+          if (localTunnelsResponse && !Object.is(localTunnels.innerHTML, localTunnelsResponse.innerHTML)) {
+              localTunnels.innerHTML = localTunnelsResponse.innerHTML;
           }
         }
         if (localtunnelSummary) {
@@ -218,9 +224,10 @@ function refreshSidebar() {
             doubleCount.remove();
           }
         }
-        if (peers && peersResponse && !peers.hasAttribute("hidden") &&
-            !Object.is(peers.innerHTML, peersResponse.innerHTML)) {
-          peers.innerHTML = peersResponse.innerHTML;
+        if (peers && !peers.hasAttribute("hidden")) {
+          if (peersResponse && !Object.is(peers.innerHTML, peersResponse.innerHTML)) {
+            peers.innerHTML = peersResponse.innerHTML;
+          }
         }
         if (queue && !queue.hasAttribute("hidden")) {
           if (queueResponse && !Object.is(queue.innerHTML, queueResponse.innerHTML)) {
@@ -233,75 +240,70 @@ function refreshSidebar() {
         if (cpuBar && cpuBarResponse && !Object.is(cpuBar.innerHTML, cpuBarResponse.innerHTML)) {
           cpuBar.innerHTML = cpuBarResponse.innerHTML;
         }
-        if (updateBar) {
-          if (updateBarResponse) {
-            if (!Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
-              updateBar.innerHTML = updateBarResponse.innerHTML;
-              if (updateH3) {
-                var updateH3 = document.querySelector("#sb_updatesection > h3 a");
-                updateH3.classList.add("updating");
-                var spinner = "<span id=\"updateSpinner\"></span>";
-                if (updateH3.innerHTML.indexOf(spinner) === -1) {
-                  updateH3.innerHTML += spinner;
-                }
+        if (updateBar && updateBarResponse) {
+          if (!Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
+            updateBar.innerHTML = updateBarResponse.innerHTML;
+            if (updateH3) {
+              var updateH3 = document.querySelector("#sb_updatesection > h3 a");
+              updateH3.classList.add("updating");
+              var spinner = "<span id=\"updateSpinner\"></span>";
+              if (updateH3.innerHTML.indexOf(spinner) === -1) {
+                updateH3.innerHTML += spinner;
               }
             }
-          } else {
-            refreshAll();
           }
-        }
-
-        if (updateSection && !updateSection.classList.contains("collapsed")) {
-          if (updateStatus && updateStatusResponse && !Object.is(updateStatus.innerHTML, updateStatusResponse.innerHTML)) {
-            updateStatus.innerHTML = updateStatusResponse.innerHTML;
-          }
-          if (updateForm && updateFormResponse && !Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
-            updateForm.innerHTML = updateFormResponse.innerHTML;
-            if (updateSectionHR.hidden === true) {
-              updateSectionHR.hidden = null;
-            }
-          }
-          if (updateProgress && updateProgressResponse && !Object.is(updateProgress.innerHTML, updateProgressResponse.innerHTML)) {
-            updateProgress.innerHTML = updateProgressResponse.innerHTML;
-          }
-          if (!updateSection.hasAttribute("hidden") && updateSectionResponse && !Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
-            updateSection.hidden = null;
-            updateSection.outerHTML = updateSectionResponse.outerHTML;
-          }
-        }
-
-        if (tunnelBuildStatus && tunnelBuildStatus.classList.contains("statusDown") ||
-            tunnelBuildStatusResponse && !Object.is(tunnelBuildStatus.outerHTML, tunnelBuildStatusResponse.outerHTML)) {
-          tunnelBuildStatus.innerHTML = tunnelBuildStatusResponse.innerHTML;
-        }
-        if (notice && noticeResponse && !Object.is(notice.innerHTML, noticeResponse.innerHTML)) {
-          notice.innerHTML = noticeResponse.innerHTML;
-        } else if (noticeResponse && noticeResponse === null) {
-          notice.remove();
-        }
-        if (shutdownStatus && shutdownStatusResponse && !Object.is(shutdownStatus.innerHTML, shutdownStatusResponse.innerHTML)) {
-          shutdownStatus.innerHTML = shutdownStatusResponse.innerHTML;
-        } else if (shutdownStatus && shutdownStatusResponse === null) {
-          shutdownStatus.remove();
-        }
-        if (routerControl && routerControl.classList.contains("statusDown") ||
-            routerControlResponse && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
-          routerControl.outerHTML = routerControlResponse.outerHTML;
-        }
-        if (internals && internalsResponse && !Object.is(internals.innerHTML, internalsResponse.innerHTML)) {
-          internals.outerHTML = internalsResponse.outerHTML;
-        }
-        if (services && servicesResponse && !Object.is(services.innerHTML, servicesResponse.innerHTML)) {
-          services.outerHTML = servicesResponse.outerHTML;
         }
       } else {
-        tangoDown();
+        refreshAll();
+      }
+
+      if (updateSection && !updateSection.classList.contains("collapsed")) {
+        if (updateStatus && updateStatusResponse && !Object.is(updateStatus.innerHTML, updateStatusResponse.innerHTML)) {
+          updateStatus.innerHTML = updateStatusResponse.innerHTML;
+        }
+        if (updateForm && updateFormResponse && !Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
+          updateForm.innerHTML = updateFormResponse.innerHTML;
+          if (updateSectionHR.hidden === true) {
+            updateSectionHR.hidden = null;
+          }
+        }
+        if (updateProgress && updateProgressResponse && !Object.is(updateProgress.innerHTML, updateProgressResponse.innerHTML)) {
+          updateProgress.innerHTML = updateProgressResponse.innerHTML;
+        }
+        if (!updateSection.hasAttribute("hidden") && updateSectionResponse && !Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
+          updateSection.hidden = null;
+          updateSection.outerHTML = updateSectionResponse.outerHTML;
+        }
+      }
+      if (tunnelBuildStatus && tunnelBuildStatus.classList.contains("statusDown") ||
+          tunnelBuildStatusResponse && !Object.is(tunnelBuildStatus.outerHTML, tunnelBuildStatusResponse.outerHTML)) {
+        tunnelBuildStatus.innerHTML = tunnelBuildStatusResponse.innerHTML;
+      }
+      if (notice && noticeResponse && !Object.is(notice.innerHTML, noticeResponse.innerHTML)) {
+        notice.innerHTML = noticeResponse.innerHTML;
+      } else if (noticeResponse && noticeResponse === null) {
+        notice.remove();
+      }
+      if (shutdownStatus && shutdownStatusResponse && !Object.is(shutdownStatus.innerHTML, shutdownStatusResponse.innerHTML)) {
+        shutdownStatus.innerHTML = shutdownStatusResponse.innerHTML;
+      } else if (shutdownStatus && shutdownStatusResponse === null) {
+        shutdownStatus.remove();
+      }
+      if (routerControl && routerControl.classList.contains("statusDown") ||
+          routerControlResponse && !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
+        routerControl.outerHTML = routerControlResponse.outerHTML;
+      }
+      if (internals && internalsResponse && !Object.is(internals.innerHTML, internalsResponse.innerHTML)) {
+        internals.outerHTML = internalsResponse.outerHTML;
+      }
+      if (services && servicesResponse && !Object.is(services.innerHTML, servicesResponse.innerHTML)) {
+        services.outerHTML = servicesResponse.outerHTML;
       }
     }
 
     function checkSections() {
-      var updating = document.querySelectorAll(".volatile");
-      var updatingResponse = xhr.responseXML.querySelectorAll(".volatile");
+      var updating = document.querySelectorAll("#sidebar .volatile");
+      var updatingResponse = xhr.responseXML.querySelectorAll("#sidebar .volatile");
       var i, len = updating.length;
       for (i = 0; i < len; i++) {
         if (updating[i]) {
