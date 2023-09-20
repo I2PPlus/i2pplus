@@ -65,7 +65,6 @@
 <h3><%=intl._t("Subscriptions")%>&nbsp;&nbsp;<span><a href="log.jsp">View Log</a></span></h3>
 <h4><%=intl._t("File location")%>: <span class=storage>${subs.fileName}</span></h4>
 </div>
-<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <div id=messages>${subs.messages}</div>
 <form method=POST action="subscriptions#navi">
 <div id=content>
@@ -88,5 +87,6 @@
 </div>
 <span data-iframe-height></span>
 <style>body{display:block;pointer-events:auto}</style>
+<script nonce="<%=cspNonce%>" src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </body>
 </html>
