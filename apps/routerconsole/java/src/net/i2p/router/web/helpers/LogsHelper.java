@@ -201,7 +201,9 @@ public class LogsHelper extends HelperBase {
                                     .replace("| ERROR  | [Reseed     ] ....reseed.Reseeder:", "| WARN   |")
                                     .replace(" |[", " | [")
                                     .replace("INFO   | WARN:", "WARN   |")
-                                    .replace("   |", " |");
+                                    .replace("   |", " |")
+                                    .replace("| ERROR  |", "| ERR  |")
+                                    .replace("| INFO | # V  [", "| INFO | # Source: [");
                 // remove lines containing unwanted strings
                 StringBuilder filtered = new StringBuilder();
                 String[] logLines = str.split("\n");
@@ -209,6 +211,10 @@ public class LogsHelper extends HelperBase {
                     if (!line.contains("Copyright") &&
                         !line.contains("tanukisoftware") &&
                         !line.contains("STATUS") &&
+                        !line.contains("If you would like to submit a bug report") &&
+                        !line.contains("Problematic frame:") &&
+                        !line.contains("INFO | #   Unknown") &&
+                        !line.contains("INFO | #\n") &&
                         !line.contains("  \n")) {
                         filtered.append(line).append("\n");
                     }
