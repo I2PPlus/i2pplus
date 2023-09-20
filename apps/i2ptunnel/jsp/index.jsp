@@ -1,3 +1,6 @@
+<%@ page import="java.net.URL" %>
+<%@ page import="java.net.URLConnection" %>
+<%@ page import="java.io.IOException" %>
 <%@include file="headers.jsi"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page trimDirectiveWhitespaces="true"%>
@@ -23,8 +26,22 @@
 <link href="<%=indexBean.getTheme()%>../../fonts/Sora.css" rel=stylesheet>
 <%
   }
+  String overrideURL = indexBean.getTheme() + "override.css";
+  boolean overrideEnabled = false;
+  try {
+    URL url = new URL(overrideURL);
+    URLConnection connection = url.openConnection();
+    connection.connect();
+    overrideEnabled = true;
+  } catch (IOException e) {
+    overrideEnabled = false;
+  }
+  if (overrideEnabled) {
 %>
-<link href="<%=indexBean.getTheme()%>override.css" rel=stylesheet> 
+<link href="<%=indexBean.getTheme()%>override.css" rel=stylesheet>
+<%
+  }
+%>
 <link rel=icon href="<%=indexBean.getTheme()%>images/favicon.svg">
 <style>body{display:none;pointer-events:none}</style>
 </head>
