@@ -184,6 +184,12 @@ function refreshTorrents(callback) {
             updated = true;
           }
         });
+        Array.from(updating).forEach((elem, index) => {
+          if (elem.innerHTML !== updatingResponse[index].innerHTML) {
+            elem.innerHTML = updatingResponse[index].innerHTML;
+            updated = true;
+          }
+        })
         if (updated && filterbar) {
           initFilterBar();
         }
