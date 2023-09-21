@@ -7,6 +7,7 @@ a,a.control,a:link,a:visited,a#settings,b,button,h3,h4,h5,input[type="reset"],in
 h1{font-weight:800}
 h2,.headline h3,.tab2,#sidebar h3,#sidebar h3 a,.main h3,.main h4{font-weight:700}
 input[type=password],input[type=text],label,.infohash,.infohelp,.infowarn,.listDate,#navi a,#torrents .infohash,.names a[href$=".i2p/"],#host_list td.b32link a,#host_list td.helper a{font-weight:500}
+.lightbox-caption #caption{font-weight:500!important}
 .tab a{padding:4px 12px}
 .tunnel_id{min-width:102px;font-size:90%}
 .ui_lang{font-size:88%}
