@@ -378,11 +378,9 @@ public class I2PSnarkServlet extends BasicServlet {
                       "(downloaded data will not be deleted) ?") + "\";\n" +
                       "  const deleteMessage2 = \"" + _t("Are you sure you want to delete the torrent \\''{0}\\'' " +
                       "and all downloaded data?") + "\";\n</script>\n");
-            if (!isConfigure) {
-                out.write("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/delete.js?" + CoreVersion.VERSION + "\"></script>\n");
-            }
+            out.write("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/delete.js?" + CoreVersion.VERSION + "\"></script>\n");
+            out.write("<link rel=stylesheet href=" + resourcePath + "toast.css>\n");
         }
-        out.write("<link rel=stylesheet href=" + resourcePath + "toast.css>\n");
 
         // custom dialog boxes for javascript alerts
         //out.write("<script src=\"" + jsPfx + "/js/custom-alert.js\"></script>\n");
@@ -545,7 +543,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; " +
                 "script-src 'self' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; " +
-                "object-src 'none'; base-uri 'self'; media-src '" + (allowMedia ? "self" : "none") + "'");
+                "object-src 'none'; base-uri 'self'; report-uri ''; media-src '" + (allowMedia ? "self" : "none") + "'");
         resp.setHeader("Permissions-Policy", "fullscreen=(self)");
         resp.setHeader("Referrer-Policy", "same-origin");
         resp.setHeader("X-Content-Type-Options", "nosniff");
@@ -560,7 +558,7 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setContentType("text/html; charset=utf-8");
         resp.setHeader("Accept-Ranges", "bytes");
         resp.setHeader("Cache-Control", "private, max-age=5, immutable");
-        resp.setHeader("Content-Security-Policy", "default-src 'none'; base-uri 'self'");
+        resp.setHeader("Content-Security-Policy", "default-src 'none'; base-uri 'self'; report-uri ''");
         resp.setHeader("Referrer-Policy", "same-origin");
         resp.setHeader("X-Content-Type-Options", "nosniff");
         //resp.setHeader("X-Frame-Options", "SAMEORIGIN");
