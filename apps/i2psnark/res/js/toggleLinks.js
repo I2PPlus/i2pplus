@@ -17,6 +17,7 @@ const magnetCss =  "#torrents #linkswitch::before{background:url(/i2psnark/.res/
  const magnetBtn = "#snarkTbody .magnetlink{position:relative}#snarkTbody .copyMagnet{width:100%;height:100%;position:absolute;top:0;right:0;bottom:0;left:0;" +
                    "border:0}";
 
+var config = localStorage.getItem("linkToggle");
 const magnets = document.querySelectorAll("#snarkTbody td.magnet .magnetlink");
 const mlinks = document.querySelectorAll("#snarkTbody .magnet");
 const tlinks = document.querySelectorAll("#snarkTbody .trackerLink");
@@ -28,34 +29,39 @@ function initLinkToggler() {
 
   if (!toggle) {return;}
   toggle.removeAttribute("hidden");
+  toggle.removeAttribute("checked");
 
-  var config = localStorage.getItem("linkToggle");
 
   if (config === "links") {
-    localStorage.setItem("linkToggle", "links");
-    toggle.false = true;
     showLinks();
     removeMagnetListeners();
+    toggle.click();
     toggle.checked = false;
     toggleCss.textContent = linkCss + magnetBtn;
   } else if (config === "magnets" || !config) {
+    toggle.click();
     toggle.checked = true;
     showMagnets();
     magnetToClipboard();
     attachMagnetListeners();
-    toggle.checked = true;
     toggleCss.textContent = magnetCss + magnetBtn;
   }
+  toggle.removeEventListener("click", linkToggle, true);
   toggle.addEventListener("click", linkToggle, true);
 }
 
 function linkToggle() {
-  const config = window.localStorage.getItem("linkToggle");
 
   if (config === "links" || !config) {
+    toggle.click();
     showMagnets();
+    toggle.checked = true;
+    localStorage.setItem("linkToggle", "links");
   } else {
+    toggle.click();
     showLinks();
+    toggle.checked = false;
+    localStorage.setItem("linkToggle", "magnets");
   }
 }
 
@@ -64,7 +70,6 @@ function showLinks() {
   if (toggleCss.textContent !== expectedHtml) {
     toggleCss.textContent = expectedHtml;
   }
-  console.log(toggleCss.textContent);
   localStorage.setItem("linkToggle", "links");
   removeMagnetListeners();
   toggle.click();
@@ -76,7 +81,6 @@ function showMagnets() {
   if (toggleCss.innerHTML !== expectedHtml) {
     toggleCss.innerHTML = expectedHtml;
   }
-  console.log(toggleCss.textContent);
   localStorage.setItem("linkToggle", "magnets");
   attachMagnetListeners();
   magnetToClipboard();
@@ -152,7 +156,7 @@ function attachMagnetListeners() {
       document.body.removeChild(tempInput);
       toast.innerHTML = "Magnet link copied to clipboard: <b>" + magnetName + "</b>" +
                         (magnetHash != "" ? "<br>Hash: <b>" + magnetHash + "</b>": "");
-      console.log("Link copied to clipboard: " + link);
+      console.log("Magnet link copied to clipboard: " + link);
       clearTimeout(toastTimeoutId);
       toastTimeoutId = setTimeout(function() {
         toast.style.display = "none";

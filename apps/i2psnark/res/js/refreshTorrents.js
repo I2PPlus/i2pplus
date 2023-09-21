@@ -4,7 +4,7 @@
 
 import {onVisible} from "./onVisible.js";
 import {initFilterBar} from './torrentDisplay.js';
-import {initLinkToggler, magnetToClipboard, attachMagnetListeners} from "./toggleLinks.js";
+import {initLinkToggler, magnetToClipboard, attachMagnetListeners, linkToggle} from "./toggleLinks.js";
 import {initToggleLog} from "./toggleLog.js";
 import {Lightbox} from "./lightbox.js";
 
@@ -272,15 +272,17 @@ function debouncedRefreshTorrents(callback) {
 }
 
 function setupPage() {
-  document.addEventListener('DOMContentLoaded', () => {
-    if (mainsection) {
-      initToggleLog();
-      initLinkToggler();
-    }
-    if (filterbar) {
-      initFilterBar();
-    }
-  });
+  if (mainsection) {
+    initToggleLog();
+  }
+  if (filterbar) {
+    initFilterBar();
+  }
+  if (snarkHead) {
+    const toggle = document.getElementById("linkswitch");
+    toggle.removeEventListener("click", linkToggle, true);
+    toggle.addEventListener("click", linkToggle, true);
+  }
 }
 
 function initSnarkRefresh() {
@@ -291,6 +293,9 @@ function initSnarkRefresh() {
   }, interval);
   if (files) {
     var lightbox = new Lightbox();lightbox.load();
+  }
+  if (snarkHead) {
+    initLinkToggler();
   }
 }
 
