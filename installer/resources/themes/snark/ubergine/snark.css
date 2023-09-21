@@ -334,7 +334,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .dirInfo .rowEven{background:#270027}
 .dirInfo .rowOdd{background:#351933}
 .dirInfo .thumb,audio,video{padding:1px;border:var(--border_hard);box-shadow:inset 0 0 0 1px #414;background:#000;box-sizing:border-box}
-.dirInfo .thumb{padding:2px;max-height:40px;display:inline-block;box-shadow:inset 0 0 0 1px #414;image-rendering:auto}
+.dirInfo .thumb{padding:2px;height:64px;width:64px;object-fit:cover;display:inline-block;box-shadow:inset 0 0 0 1px #414;image-rendering:auto}
 .dirInfo .thumb:hover,.dirInfo .thumb:focus,.dirInfo a:hover .thumb,.dirInfo a:focus .thumb,audio:hover,video:hover,audio:focus,video:focus{box-shadow:inset 0 0 0 1px var(--hover)}
 .fileIcon{padding:4px;width:16px;text-align:center}
 .fileIcon img{margin:1px;padding:0}
