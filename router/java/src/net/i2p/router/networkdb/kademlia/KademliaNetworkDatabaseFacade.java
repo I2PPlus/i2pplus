@@ -203,14 +203,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     public KademliaNetworkDatabaseFacade(RouterContext context, String dbid) {
         _context = context;
+        _dbid = dbid;
         _log = _context.logManager().getLog(getClass());
         _networkID = context.router().getNetworkID();
         _peerSelector = createPeerSelector();
         _publishingLeaseSets = new HashMap<Hash, RepublishLeaseSetJob>(8);
         _activeRequests = new HashMap<Hash, SearchJob>(8);
+        if (isClientDb())
+            _reseedChecker = null;
+        else
         _reseedChecker = new ReseedChecker(context);
         _blindCache = new BlindCache(context);
-        _dbid = dbid;
+        
         _localKey = null;
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Created KademliaNetworkDatabaseFacade for id: " + _dbid);
@@ -243,6 +247,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /** @since 0.9 */
     @Override
     public ReseedChecker reseedChecker() {
+        if (isClientDb())
+            return null;
         return _reseedChecker;
     }
 
@@ -341,30 +347,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return _dbid.startsWith("clients_");
     }
 
-/**
+    public boolean isMultihomeDb() {
+        return _dbid.equals(FloodfillNetworkDatabaseSegmentor.MULTIHOME_DBID);
+    }
+
     public synchronized void startup() {
         _log.info("Starting up the Kademlia Network Database...");
         RouterInfo ri = _context.router().getRouterInfo();
-        _dbDir = getDbDir();
-        String exploreBucketSize = _context.getProperty("router.exploreBucketSize");
-        String exploreKadB = _context.getProperty("router.exploreKadB");
-        if (exploreBucketSize != null && exploreKadB != null) {
-            _kb = new KBucketSet<Hash>(_context, ri.getIdentity().getHash(),
-                                       Integer.valueOf(exploreBucketSize), Integer.valueOf(exploreKadB), new RejectTrimmer<Hash>());
-            _log.info("BucketSize: " + exploreBucketSize + "; B Value: " + exploreKadB);
-        } else if (exploreBucketSize != null) {
-            _kb = new KBucketSet<Hash>(_context, ri.getIdentity().getHash(),
-                                       Integer.valueOf(exploreBucketSize), KAD_B, new RejectTrimmer<Hash>());
-            _log.info("BucketSize: " + exploreBucketSize + "; B Value: " + KAD_B);
-        } else if (exploreKadB != null) {
-            _kb = new KBucketSet<Hash>(_context, ri.getIdentity().getHash(),
-                                       BUCKET_SIZE, Integer.valueOf(exploreKadB), new RejectTrimmer<Hash>());
-            _log.info("BucketSize: " + BUCKET_SIZE + "; B Value: " + exploreKadB);
-        } else {
         _kb = new KBucketSet<Hash>(_context, ri.getIdentity().getHash(),
                                    BUCKET_SIZE, KAD_B, new RejectTrimmer<Hash>());
             _log.info("BucketSize: " + BUCKET_SIZE + "; B Value: " + KAD_B);
-        }
+        _dbDir = getDbDir();
         try {
             if (!isClientDb()) {
                 _ds = new PersistentDataStore(_context, _dbDir, this);
@@ -407,7 +400,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             // and anyway, we want to search for a completely random key,
             // not a random key for a particular kbucket.
             // _context.jobQueue().addJob(new ExploreKeySelectorJob(_context, this));
-            if (_exploreJob == null && _dbid.equals(FloodfillNetworkDatabaseSegmentor.MAIN_DBID)) {
+            if (_exploreJob == null)
                 _exploreJob = new StartExplorersJob(_context, this);
                 // fire off a group of searches from the explore pool
                 // Don't start it right away, so we don't send searches for random keys
@@ -418,7 +411,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 // No rush, it only runs every 30m.
                 _exploreJob.getTiming().setStartAfter(now + EXPLORE_JOB_DELAY);
                 _context.jobQueue().addJob(_exploreJob);
-            }
         } else {
             _log.warn("Operating in QUIET MODE - not exploring or pushing data proactively, simply reactively " +
                       "\n* This should NOT be used in production!");
@@ -441,80 +433,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             //}
         }
     }
-**/
-
-    public synchronized void startup() {
-        _log.info("Starting up the Kademlia Network Database...");
-
-        RouterInfo ri = _context.router().getRouterInfo();
-        _dbDir = getDbDir();
-
-        // Use nested ternary operators to condense the if-else block
-        String exploreBucketSize = _context.getProperty("router.exploreBucketSize");
-        String exploreKadB = _context.getProperty("router.exploreKadB");
-        _kb = new KBucketSet<Hash>(
-            _context,
-            ri.getIdentity().getHash(),
-            exploreBucketSize != null ? Integer.valueOf(exploreBucketSize) : BUCKET_SIZE,
-            exploreKadB != null ? Integer.valueOf(exploreKadB) : KAD_B,
-            new RejectTrimmer<Hash>()
-        );
-        _log.info("BucketSize: " + BUCKET_SIZE + "; B Value: " + exploreKadB);
-
-        try {
-            _ds = new PersistentDataStore(_context, _dbDir, this);
-        } catch (IOException ioe) {
-            throw new RuntimeException("Unable to initialize NetDb storage", ioe);
-        }
-
-        _negativeCache = new NegativeLookupCache(_context);
-        _blindCache.startup();
-
-        // Perform long-running tasks in a separate thread
-        createHandlers();
-
-        _initialized = true;
-        _started = System.currentTimeMillis();
-
-        // expire old leases
-        Job elj = new ExpireLeasesJob(_context, this);
-        long now = _context.clock().now();
-        elj.getTiming().setStartAfter(now + 11 * 60 * 1000);
-        _context.jobQueue().addJob(elj);
-
-        // Only perform these tasks if the commSystem is not a dummy (i.e., if we are not running in test mode)
-        if (!_context.commSystem().isDummy()) {
-            // expire some routers
-            Job erj = new ExpireRoutersJob(_context, this);
-            boolean isFF = _context.getBooleanProperty(FloodfillMonitorJob.PROP_FLOODFILL_PARTICIPANT);
-            long down = _context.router().getEstimatedDowntime();
-            long delay = (down == 0 || (!isFF && down > 30 * 60 * 1000) || (isFF && down > 24 * 60 * 60 * 1000)) ?
-                ROUTER_INFO_EXPIRATION_FLOODFILL + 10 * 60 * 1000 :
-                10 * 60 * 1000;
-            erj.getTiming().setStartAfter(now + delay);
-            _context.jobQueue().addJob(erj);
-        }
-
-        if (!QUIET) {
-            if (_exploreJob == null && _dbid.equals(FloodfillNetworkDatabaseSegmentor.MAIN_DBID)) {
-                _exploreJob = new StartExplorersJob(_context, this);
-                _exploreJob.getTiming().setStartAfter(now + EXPLORE_JOB_DELAY);
-                _context.jobQueue().addJob(_exploreJob);
-            }
-        } else {
-            _log.warn("Operating in QUIET MODE - not exploring or pushing data proactively, simply reactively " +
-                "\n* This should NOT be used in production!");
-        }
-
-        if (_dbid == null || _dbid.equals(FloodfillNetworkDatabaseSegmentor.MAIN_DBID) || _dbid.isEmpty()) {
-            // periodically update and resign the router's 'published date', which basically serves as a version
-            Job plrij = new PublishLocalRouterInfoJob(_context);
-            // do not delay this, as this creates the RI too, and we need a good local routerinfo right away
-            //plrij.getTiming().setStartAfter(_context.clock().now() + PUBLISH_JOB_DELAY);
-            _context.jobQueue().addJob(plrij);
-        }
-    }
-
 
     /** unused, see override */
     protected void createHandlers() {}

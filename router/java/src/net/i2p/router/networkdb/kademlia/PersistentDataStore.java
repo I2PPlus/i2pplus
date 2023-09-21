@@ -614,6 +614,10 @@ public class PersistentDataStore extends TransientDataStore {
                     _lastReseed = _context.clock().now();
                     _setNetDbReady = true;
                     setNetDbReady();
+                } else if (_facade.isMultihomeDb()) {
+                    _lastReseed = _context.clock().now();
+                    _setNetDbReady = true;
+                    setNetDbReady();
                 } else if (_facade.reseedChecker().checkReseed(routerCount)) {
                     _lastReseed = _context.clock().now();
                     // checkReseed will call wakeup() when done and we will run again
@@ -626,6 +630,8 @@ public class PersistentDataStore extends TransientDataStore {
 //                int known = _context.netDbSegmentor().getKnownRouters();
                 int known = _context.mainNetDb().getKnownRouters();
                 if (_facade.isClientDb()) {
+                    _lastReseed = _context.clock().now();
+                } else if (_facade.isMultihomeDb()) {
                     _lastReseed = _context.clock().now();
                 } else if (known < MIN_ROUTERS) {
                     if (_facade.reseedChecker().checkReseed(count))
