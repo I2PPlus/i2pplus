@@ -1707,8 +1707,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // it has expired *or* its tunnels are failing and we want to see if there
         // are any updates
         if (_log.shouldInfo())
-            _log.info("Dropping LeaseSet [" + dbEntry.toBase64().substring(0,6) + "] -> Lookup / tunnel failure");
-        _ds.remove(dbEntry, false);
+            _log.info("Dropping Lease [" + dbEntry.toBase64().substring(0,6) + "] -> Lookup / tunnel failure");
+        try {
+            _ds.remove(dbEntry, false);
+        } catch (UnsupportedOperationException uoe) {
+            // if this happens it's because we're a TransientDataStore instead,
+            // so just call remove without the persist option.
+            _ds.remove(dbEntry);
+        }
     }
 
     /** don't use directly - see F.N.D.F. override */
