@@ -611,10 +611,10 @@ function Lightbox() {
 
     // hide overflow by default / if set
     if (!CTX.opt || !isset(CTX.opt.hideOverflow) || CTX.opt.hideOverflow) {
-      body.setAttribute('style', 'overflow: hidden');
+      body.setAttribute('style', 'overflow:hidden');
     }
 
-    CTX.box.setAttribute('style', 'padding-top: 0');
+    CTX.box.setAttribute('style', 'padding-top:0');
     CTX.wrapper.innerHTML = '';
     CTX.wrapper.appendChild(currImage.img);
     // set animation class
@@ -623,14 +623,23 @@ function Lightbox() {
     }
     // set caption
     var captionText = getAttr(el, _const_dataattr + '-caption');
-    var dimensions = (getWidth(el) + ' x ' + getHeight(el));
     if (captionText && CTX.opt.captions) {
       var caption = document.createElement('p');
       caption.setAttribute('class', _const_class_prefix + '-caption');
       // add dimensions to caption
-      // FIXME: ensure the dimensions refresh when we load a new image
-      //caption.innerHTML = ('<span>' + captionText + '</span><span>' + dimensions + '</span>');
-      caption.innerHTML = ('<span>' + captionText + '</span');
+      var dimensions;
+      var currIndex = currImages.indexOf(el);
+      if (currImage.img.naturalWidth) {
+        dimensions = currImage.img.naturalWidth + ' x ' + currImage.img.naturalHeight;
+      } else {
+        if (currIndex === 0) {
+          dimensions = (getWidth(currImage.img) + ' x ' + getHeight(currImage.img));
+        } else {
+          dimensions = currImage.originalWidth + ' x ' + currImage.originalHeight;
+        }
+      }
+      caption.innerHTML = ('<span id=caption>' + captionText + ' &nbsp;<span id=dimensions>' +
+                           (!dimensions.includes("undefined") ? dimensions : "") + '</span></span>');
       CTX.wrapper.appendChild(caption);
     }
 
