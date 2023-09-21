@@ -43,7 +43,7 @@
       xhr.responseType = "document";
       xhr.onload = function () {
         if (!xhr.responseXML) {
-          alert("Your browser doesn't support ajax. Please upgrade to a newer browser or enable support for XHR requests.");
+          //alert("Your browser doesn't support ajax. Please upgrade to a newer browser or enable support for XHR requests.");
           return;
         }
         const jobsResponse = xhr.responseXML.getElementById("jobstats");
