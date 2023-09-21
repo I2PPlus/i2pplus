@@ -16,8 +16,7 @@ const magnetCss =  "#torrents #linkswitch::before{background:url(/i2psnark/.res/
 
  const magnetBtn = "#snarkTbody .magnetlink{position:relative}#snarkTbody .copyMagnet{width:100%;height:100%;position:absolute;top:0;right:0;bottom:0;left:0;" +
                    "border:0}";
-
-var config = localStorage.getItem("linkToggle");
+let config;
 const magnets = document.querySelectorAll("#snarkTbody td.magnet .magnetlink");
 const mlinks = document.querySelectorAll("#snarkTbody .magnet");
 const tlinks = document.querySelectorAll("#snarkTbody .trackerLink");
@@ -26,66 +25,53 @@ const toggleCss = document.getElementById("toggleLinks");
 const toggle = document.getElementById("linkswitch");
 
 function initLinkToggler() {
+  config = localStorage.getItem("linkToggle");
 
-  if (!toggle) {return;}
+  if (!toggle) {
+    return;
+  }
+
   toggle.removeAttribute("hidden");
   toggle.removeAttribute("checked");
-
+  toggle.addEventListener("click", linkToggle);
 
   if (config === "links") {
     showLinks();
-    removeMagnetListeners();
-    toggle.click();
-    toggle.checked = false;
-    toggleCss.textContent = linkCss + magnetBtn;
   } else if (config === "magnets" || !config) {
-    toggle.click();
-    toggle.checked = true;
     showMagnets();
-    magnetToClipboard();
-    attachMagnetListeners();
-    toggleCss.textContent = magnetCss + magnetBtn;
   }
-  toggle.removeEventListener("click", linkToggle, true);
-  toggle.addEventListener("click", linkToggle, true);
 }
 
 function linkToggle() {
-
-  if (config === "links" || !config) {
-    toggle.click();
-    showMagnets();
-    toggle.checked = true;
-    localStorage.setItem("linkToggle", "links");
+  const currentConfig = localStorage.getItem("linkToggle");
+  if (currentConfig === "links") {
+    if (config !== "magnets") {
+      showMagnets();
+    }
   } else {
-    toggle.click();
-    showLinks();
-    toggle.checked = false;
-    localStorage.setItem("linkToggle", "magnets");
+    if (config !== "links") {
+      showLinks();
+    }
   }
 }
 
 function showLinks() {
-  var expectedHtml = linkCss;
-  if (toggleCss.textContent !== expectedHtml) {
-    toggleCss.textContent = expectedHtml;
-  }
-  localStorage.setItem("linkToggle", "links");
   removeMagnetListeners();
-  toggle.click();
-  toggle.addEventListener("click", linkToggle, true);
+  toggle.checked = true;
+  toggleCss.textContent = linkCss;
+  localStorage.setItem("linkToggle", "links");
+  config = "links";
+  //console.log("showLinks() -> Localstorage set to: " + config);
 }
 
 function showMagnets() {
-  var expectedHtml = magnetCss + magnetBtn;
-  if (toggleCss.innerHTML !== expectedHtml) {
-    toggleCss.innerHTML = expectedHtml;
-  }
-  localStorage.setItem("linkToggle", "magnets");
   attachMagnetListeners();
   magnetToClipboard();
-  toggle.click();
-  toggle.addEventListener("click", linkToggle, true);
+  toggle.checked = false;
+  toggleCss.textContent = magnetCss + magnetBtn;
+  localStorage.setItem("linkToggle", "magnets");
+  config = "magnets";
+  //console.log("showMagnets() -> Localstorage set to: " + config);
 }
 
 function magnetToClipboard() {
@@ -164,9 +150,13 @@ function attachMagnetListeners() {
       }, 3500);
     });
   }
-  toggle.addEventListener("click", linkToggle, true);
+  toggle.addEventListener("click", linkToggle);
 }
 
-document.addEventListener('DOMContentLoaded', () => {initLinkToggler();});
+document.addEventListener('DOMContentLoaded', () => {
+  initLinkToggler();
+  magnetToClipboard();
+  attachMagnetListeners();
+});
 
 export {initLinkToggler, linkToggle, magnetToClipboard, attachMagnetListeners};

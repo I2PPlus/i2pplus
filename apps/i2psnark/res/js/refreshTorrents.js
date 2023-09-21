@@ -12,6 +12,7 @@ const files = document.getElementById("dirInfo");
 const filterbar = document.getElementById("torrentDisplay");
 const home = document.querySelector(".nav_main");
 const mainsection = document.getElementById("mainsection");
+const snarkHead = document.getElementById("snarkHead");
 const storageRefresh = window.localStorage.getItem("snarkRefresh");
 const xhrsnark = new XMLHttpRequest();
 let refreshIntervalId;
@@ -272,16 +273,12 @@ function debouncedRefreshTorrents(callback) {
 }
 
 function setupPage() {
-  if (mainsection) {
-    initToggleLog();
-  }
   if (filterbar) {
     initFilterBar();
   }
-  if (snarkHead) {
-    const toggle = document.getElementById("linkswitch");
-    toggle.removeEventListener("click", linkToggle, true);
-    toggle.addEventListener("click", linkToggle, true);
+  if (document.getElementById("linkswitch")) {
+    magnetToClipboard();
+    attachMagnetListeners();
   }
 }
 
@@ -293,9 +290,6 @@ function initSnarkRefresh() {
   }, interval);
   if (files) {
     var lightbox = new Lightbox();lightbox.load();
-  }
-  if (snarkHead) {
-    initLinkToggler();
   }
 }
 
