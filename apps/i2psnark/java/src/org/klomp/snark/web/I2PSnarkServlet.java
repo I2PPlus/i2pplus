@@ -421,12 +421,14 @@ public class I2PSnarkServlet extends BasicServlet {
         // add placeholders filterbar, toggleLog, toggleLinks css
         out.write("<style id=cssfilter></style>\n" +
                   "<style id=toggleLogCss></style>\n" +
-                  "<style id=toggleLinks></style>\n" +
-                  "<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp" +
+                  "<style id=toggleLinks></style>\n");
+        if (!isStandalone() && delay <= 0) {
+            out.write("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp" +
                   "?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160" +
-                  "&hideLegend=true&hideTitle=true&hideGrid=true&t=" + now + "\')}\"</style>" +
-                  "</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"" +
-                  _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>\n");
+                  "&hideLegend=true&hideTitle=true&hideGrid=true&t=" + now + "\')}\"</style>");
+        }
+        out.write("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"" + _manager.getTheme() +
+                  " lang_" + lang + "\">\n" + "<center>\n");
         out.write(IFRAME_FORM);
         List<Tracker> sortedTrackers = null;
         out.write("<span id=toast hidden=hidden></span>");
@@ -770,7 +772,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("</a>\n");
             }
         }
-        out.write("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden=hidden></th>");
+        out.write("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden=hidden checked=checked></th>");
         out.write("<th id=torrentSort>");
         // cycle through sort by name or type
         boolean isTypeSort = false;
