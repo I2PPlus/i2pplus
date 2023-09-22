@@ -44,10 +44,10 @@ Graal21:
     - ant tarball
     - ant updaterCompact
     # identify the main class from the JAR file
-    - JAR_FILE=$(ls target/*.jar)
+    - JAR_FILE=$(ls /builds/i2pplus/I2P.Plus/pkg-temp/lib/*.jar)
     - MAIN_CLASS=$(jar tf $JAR_FILE | grep -e "^.*Main.class$" | sed 's/\.class//;s#/#.#g')
     # generate the native executable with a prefix
-    - PREFIXED_NATIVE_EXE=target/graal-i2p
+    - PREFIXED_NATIVE_EXE=/builds/i2pplus/I2P.Plus/graal-i2p
     - native-image --no-server -cp $JAR_FILE $MAIN_CLASS -H:Name=$PREFIXED_NATIVE_EXE
     # identify the main class from the ZIP file
     - ZIP_FILE=$(ls /builds/i2pplus/I2P.Plus/*.zip)
