@@ -29,6 +29,7 @@ import net.i2p.I2PException;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
+import net.i2p.client.streaming.RouterRestartException;
 import net.i2p.crypto.SigType;
 import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
@@ -705,7 +706,8 @@ class SAMv3Handler extends SAMv1Handler
             return false ;
         }
 
-        streamSession = rec.getHandler().streamSession;
+        SAMv3Handler ctl = rec.getHandler();
+        streamSession = ctl.streamSession;
         if (streamSession==null) {
             if (_log.shouldDebug())
                 _log.debug("specified ID is not a stream session");
@@ -714,11 +716,31 @@ class SAMv3Handler extends SAMv1Handler
             } catch (IOException e) {}
             return false ;
         }
+        if (streamSession.isDestroyed()) {
+            if (_log.shouldDebug())
+                _log.debug("Session manager is destroyed");
+            try {
+                notifyStreamResult(true, "I2P_ERROR",  "Session is closed");
+            } catch (IOException e) {}
+            ctl.writeString(SESSION_ERROR, "Session is closed");
+            ctl.stopHandling();
+            return false;
+        }
 
         if ( opcode.equals ( "CONNECT" ) ) {
             return execStreamConnect ( props );
         } else if ( opcode.equals ( "ACCEPT" ) ) {
-            return execStreamAccept ( props );
+            try {
+                return execStreamAccept(props);
+            } catch (I2PSessionException ise) {
+                ctl.writeString(SESSION_ERROR, ise.getMessage());
+                ctl.stopHandling();
+                return false;
+            } catch (RouterRestartException rre) {
+                ctl.writeString(SESSION_ERROR, "Router restart");
+                ctl.stopHandling();
+                return false;
+            }
         } else if ( opcode.equals ( "FORWARD") ) {
             return execStreamForwardIncoming( props );
         } else {
@@ -799,12 +821,17 @@ class SAMv3Handler extends SAMv1Handler
         return false ;
     }
 
-    private boolean execStreamAccept( Properties props ) {
+    /**
+     * @return success
+     * @throws I2PSessionException if socket manager is destroyed while waiting
+     */
+    private boolean execStreamAccept(Properties props) throws I2PSessionException, RouterRestartException {
         // Messages are NOT sent if SILENT=true,
         // The specs said that they were.
         boolean verbose = !Boolean.parseBoolean(props.getProperty("SILENT"));
         try {
             try {
+                // execStreamSession() above checks if session is destroyed first
                 notifyStreamResult(verbose, "OK", null);
                 ((SAMv3StreamSession)streamSession).accept(this, verbose);
                 return true ;
@@ -812,6 +839,21 @@ class SAMv3Handler extends SAMv1Handler
                 if (_log.shouldDebug())
                     _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
                     notifyStreamResult( verbose, "TIMEOUT", e.getMessage() );
+            } catch (I2PSessionException e) {
+                // As of 0.9.60, this is thrown for a destroyed session.
+                // Kill the SAM session.
+                if (_log.shouldDebug())
+                    _log.debug("STREAM ACCEPT failed", e);
+                notifyStreamResult (verbose, "I2P_ERROR", e.getMessage());
+                // throw so caller can close control socket
+                throw e;
+            } catch (RouterRestartException e) {
+                // Kill the SAM session.
+                if (_log.shouldDebug())
+                    _log.debug("STREAM ACCEPT failed", e);
+                notifyStreamResult (verbose, "I2P_ERROR", "Router restart");
+                // throw so caller can close control socket
+                throw e;
             } catch (I2PException e) {
                 if (_log.shouldDebug())
                     _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());

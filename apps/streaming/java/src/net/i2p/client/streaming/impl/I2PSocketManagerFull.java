@@ -526,6 +526,11 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         return _realServerSocket;
     }
 
+
+
+    /**
+     * @throws I2PException if session is closed; as of 0.9.60, this is an I2PSessionException which extends I2PException
+     */
     private void verifySession() throws I2PException {
         verifySession(_connectionManager.getSession());
     }
@@ -533,7 +538,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /** @since 0.9.21 */
     private void verifySession(I2PSession session) throws I2PException {
         if (_isDestroyed.get())
-            throw new I2PException("Session was closed");
+            throw new I2PSessionException("Session was closed");
         if (!session.isClosed())
             return;
         session.connect();
