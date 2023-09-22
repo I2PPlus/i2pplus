@@ -1401,7 +1401,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean isOld = routerInfo != null && !isUs && VersionComparator.comp(v, MIN_VERSION) < 0;
         boolean isOlderThanCurrent = routerInfo != null && !isUs && VersionComparator.comp(v, CURRENT_VERSION) < 0;
         if (routerInfo != null) {
-            //routerId = routerInfo.getIdentity().getHash().toBase64().substring(0,6);
             routerId = routerInfo.getIdentity().getHash().toBase64().substring(0,6);
             caps = routerInfo.getCapabilities().toUpperCase();
             h = routerInfo.getIdentity().getHash();
