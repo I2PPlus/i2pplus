@@ -50,16 +50,16 @@ Graal21:
     - PREFIXED_NATIVE_EXE=target/graal-i2p
     - native-image --no-server -cp $JAR_FILE $MAIN_CLASS -H:Name=$PREFIXED_NATIVE_EXE
     # identify the main class from the ZIP file
-    - ZIP_FILE=$(ls target/*.zip)
+    - ZIP_FILE=$(ls /builds/i2pplus/I2P.Plus/*.zip)
     - MAIN_CLASS=$(unzip -p $ZIP_FILE META-INF/MANIFEST.MF | grep "Main-Class:" | awk '{ print $2 }')
     # generate the native executable with a prefix
-    - PREFIXED_NATIVE_EXE=target/graal-i2p
+    - PREFIXED_NATIVE_EXE=/builds/i2pplus/I2P.Plus/graal-i2p
     - native-image --no-server -jar $ZIP_FILE $MAIN_CLASS -H:Name=$PREFIXED_NATIVE_EXE
     # rename the package files with a prefix
-    - mv target/i2p* $PREFIXED_NATIVE_EXE.jar
-    - mv target/updaterCompact* $PREFIXED_NATIVE_EXE-updaterCompact.jar
-    - mv target/updater200Compact* $PREFIXED_NATIVE_EXE-updater200Compact.jar
-    - mv target/i2psnark* $PREFIXED_NATIVE_EXE-i2psnark.jar
+    - mv /builds/i2pplus/I2P.Plus/i2p* $PREFIXED_NATIVE_EXE.jar
+    - mv /builds/i2pplus/I2P.Plus/updaterCompact* $PREFIXED_NATIVE_EXE-updaterCompact.jar
+    - mv /builds/i2pplus/I2P.Plus/updater200Compact* $PREFIXED_NATIVE_EXE-updater200Compact.jar
+    - mv /builds/i2pplus/I2P.Plus/i2psnark* $PREFIXED_NATIVE_EXE-i2psnark.jar
 
 #testing:
 #  stage: test
