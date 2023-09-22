@@ -22,25 +22,40 @@ before_script:
   - apt-get install -yqq libc6-i386 ant gettext zip git
   - java -version
 
-Java8:
+Graal21:
   stage: build
   only:
-    - master
-  image: openjdk:8
-  # allow failure so commits work when CI minutes exhausted
+    - graal
+  image: oracle/graalvm-ce:java8-21.0.0
   allow_failure: true
+  before_script:
+    # install dependencies to build EXEs and packages
+    - apt-get update -yqq
+    - apt-get install -yqq libc6-i386 ant gettext zip git
+    - java -version
+    - gu install native-image
   script:
+    # build the required packages
     - ant pkg
     - ant tarball
     - ant updaterCompact
-    - ant updater200Compact
-    - ant i2psnark
-    - ant javadoc-zip
-    - git archive --format=tar.gz -o i2pplus_latest_source.tar.gz HEAD
-#    - ./installer/resources/makegeoip.sh
-#    - ant updater200WithJettyAndGeoIP
-#    - ant updaterWithJetty
-#    - ant updaterCompact
+    # identify the main class from the JAR file
+    - JAR_FILE=$(ls target/*.jar)
+    - MAIN_CLASS=$(jar tf $JAR_FILE | grep -e "^.*Main.class$" | sed 's/\.class//;s#/#.#g')
+    # generate the native executable with a prefix
+    - PREFIXED_NATIVE_EXE=target/graal-i2p
+    - native-image --no-server -cp $JAR_FILE $MAIN_CLASS -H:Name=$PREFIXED_NATIVE_EXE
+    # identify the main class from the ZIP file
+    - ZIP_FILE=$(ls target/*.zip)
+    - MAIN_CLASS=$(unzip -p $ZIP_FILE META-INF/MANIFEST.MF | grep "Main-Class:" | awk '{ print $2 }')
+    # generate the native executable with a prefix
+    - PREFIXED_NATIVE_EXE=target/graal-i2p
+    - native-image --no-server -jar $ZIP_FILE $MAIN_CLASS -H:Name=$PREFIXED_NATIVE_EXE
+    # rename the package files with a prefix
+    - mv target/i2p* $PREFIXED_NATIVE_EXE.jar
+    - mv target/updaterCompact* $PREFIXED_NATIVE_EXE-updaterCompact.jar
+    - mv target/updater200Compact* $PREFIXED_NATIVE_EXE-updater200Compact.jar
+    - mv target/i2psnark* $PREFIXED_NATIVE_EXE-i2psnark.jar
 
 #testing:
 #  stage: test
