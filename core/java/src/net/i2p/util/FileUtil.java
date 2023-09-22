@@ -206,8 +206,8 @@ public class FileUtil {
             if (zip != null) {
                 try { zip.close(); } catch (IOException ioe) {}
             }
-            if (files > 0 && logLevel <= Log.WARN)
-                System.err.println("INFO: " + files + " files extracted to " + targetDir);
+            //if (files > 0 && logLevel <= Log.WARN)
+            //    System.err.println("INFO: " + files + " files extracted to " + targetDir);
         }
     }
 
