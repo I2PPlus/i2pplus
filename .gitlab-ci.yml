@@ -36,7 +36,7 @@ Graal21:
     - export PATH=$GRAALVM_HOME/bin:$PATH
     - gu install native-image
     - apt-get update -yqq
-    - apt-get install -yqq ant gettext zip git
+    - apt-get install -yqq ant gettext zip git wget
     - java -version
   script:
     # build the required packages
