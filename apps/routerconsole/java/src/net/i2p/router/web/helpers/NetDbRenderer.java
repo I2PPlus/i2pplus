@@ -1418,7 +1418,7 @@ class NetDbRenderer {
             long uptime = _context.router().getUptime();
             if (enableReverseLookups() && uptime > 30*1000 && !isUnreachable && address != null) {
                 String rdns = _context.commSystem().getCanonicalHostName(address);
-                if (!rdns.equals(address) && !rdns.equals("unknown")) {
+                if (rdns != null && !rdns.equals(address) && !rdns.equals("unknown")) {
                     buf.append("<span class=netdb_info><b>").append(_t("Hostname")).append(":</b> <span class=rdns>")
                        .append(rdns).append("</span></span>&nbsp;&nbsp;");
                 }
