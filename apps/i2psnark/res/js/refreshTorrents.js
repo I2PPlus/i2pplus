@@ -87,10 +87,10 @@ function refreshTorrents(callback) {
     }
 
     if (down || noload) {
-      refreshAll();
+      window.requestAnimationFrame(refreshAll);
     } else if (files || torrents) {
-      refreshHeaderAndFooter();
-      updateVolatile();
+      window.requestAnimationFrame(refreshHeaderAndFooter);
+      window.requestAnimationFrame(updateVolatile);
     }
 
     if (torrents?.responseXML) {
@@ -195,7 +195,7 @@ function refreshTorrents(callback) {
           initFilterBar();
         }
       } else {
-        refreshAll();
+        window.requestAnimationFrame(refreshAll);
       }
     }
 
