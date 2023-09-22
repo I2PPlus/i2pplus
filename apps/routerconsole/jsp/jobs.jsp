@@ -78,7 +78,6 @@
         }
       }
       progressx.hide();
-//      sorter.refresh();
       xhr.send();
     }, 10000);
   }

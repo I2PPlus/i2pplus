@@ -16,4 +16,4 @@ function lazyload() {
   });
 }
 
-lazyload();
+window.requestAnimationFrame(lazyload);

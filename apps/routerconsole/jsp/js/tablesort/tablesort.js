@@ -146,120 +146,123 @@
 
       that.table.dispatchEvent(createEvent('beforeSort'));
 
+      window.requestAnimationFrame(function() {
+
       // If updating an existing sort, direction should remain unchanged.
-      if (!update) {
-        if (sortOrder === 'ascending') {
-          sortOrder = 'descending';
-        } else if (sortOrder === 'descending') {
-          sortOrder = 'ascending';
-        } else {
-          sortOrder = that.options.descending ? 'descending' : 'ascending';
-        }
-
-        header.setAttribute('aria-sort', sortOrder);
-      }
-
-      if (that.table.rows.length < 2) return;
-
-      // If we force a sort method, it is not necessary to check rows
-      if (!sortMethod) {
-        var cell;
-        while (items.length < 3 && i < that.table.tBodies[0].rows.length) {
-          if(columnKey) {
-            cell = getCellByKey(that.table.tBodies[0].rows[i].cells, columnKey);
+        if (!update) {
+          if (sortOrder === 'ascending') {
+            sortOrder = 'descending';
+          } else if (sortOrder === 'descending') {
+            sortOrder = 'ascending';
           } else {
-            cell = that.table.tBodies[0].rows[i].cells[column];
+            sortOrder = that.options.descending ? 'descending' : 'ascending';
           }
 
-          // Treat missing cells as empty cells
-          item = cell ? getInnerText(cell) : "";
-
-          item = item.trim();
-
-          if (item.length > 0) {
-            items.push(item);
-          }
-
-          i++;
+          header.setAttribute('aria-sort', sortOrder);
         }
 
-        if (!items) return;
-      }
+        if (that.table.rows.length < 2) return;
 
-      for (i = 0; i < sortOptions.length; i++) {
-        item = sortOptions[i];
+        // If we force a sort method, it is not necessary to check rows
+        if (!sortMethod) {
+          var cell;
+          while (items.length < 3 && i < that.table.tBodies[0].rows.length) {
+            if(columnKey) {
+              cell = getCellByKey(that.table.tBodies[0].rows[i].cells, columnKey);
+            } else {
+              cell = that.table.tBodies[0].rows[i].cells[column];
+            }
 
-        if (sortMethod) {
-          if (item.name === sortMethod) {
+            // Treat missing cells as empty cells
+            item = cell ? getInnerText(cell) : "";
+
+            item = item.trim();
+
+            if (item.length > 0) {
+              items.push(item);
+            }
+
+            i++;
+          }
+
+          if (!items) return;
+        }
+
+        for (i = 0; i < sortOptions.length; i++) {
+          item = sortOptions[i];
+
+          if (sortMethod) {
+            if (item.name === sortMethod) {
+              sortFunction = item.sort;
+              break;
+            }
+          } else if (items.every(item.pattern)) {
             sortFunction = item.sort;
             break;
           }
-        } else if (items.every(item.pattern)) {
-          sortFunction = item.sort;
-          break;
         }
-      }
 
-      that.col = column;
+        that.col = column;
 
-      for (i = 0; i < that.table.tBodies.length; i++) {
-        var newRows = [],
-            noSorts = {},
-            j,
-            totalRows = 0,
-            noSortsSoFar = 0;
+        for (i = 0; i < that.table.tBodies.length; i++) {
+          var newRows = [],
+              noSorts = {},
+              j,
+              totalRows = 0,
+              noSortsSoFar = 0;
 
-        if (that.table.tBodies[i].rows.length < 2) continue;
+          if (that.table.tBodies[i].rows.length < 2) continue;
 
-        for (j = 0; j < that.table.tBodies[i].rows.length; j++) {
-          var cell;
+          for (j = 0; j < that.table.tBodies[i].rows.length; j++) {
+            var cell;
 
-          item = that.table.tBodies[i].rows[j];
-          if (item.getAttribute('data-sort-method') === 'none') {
-            // keep no-sorts in separate list to be able to insert
-            // them back at their original position later
-            noSorts[totalRows] = item;
-          } else {
-            if (columnKey) {
-              cell = getCellByKey(item.cells, columnKey);
+            item = that.table.tBodies[i].rows[j];
+            if (item.getAttribute('data-sort-method') === 'none') {
+              // keep no-sorts in separate list to be able to insert
+              // them back at their original position later
+              noSorts[totalRows] = item;
             } else {
-              cell = item.cells[that.col];
+              if (columnKey) {
+                cell = getCellByKey(item.cells, columnKey);
+              } else {
+                cell = item.cells[that.col];
+              }
+              // Save the index for stable sorting
+              newRows.push({
+                tr: item,
+                td: cell ? getInnerText(cell) : '',
+                index: totalRows
+              });
             }
-            // Save the index for stable sorting
-            newRows.push({
-              tr: item,
-              td: cell ? getInnerText(cell) : '',
-              index: totalRows
-            });
+            totalRows++;
           }
-          totalRows++;
-        }
-        // Before we append should we reverse the new array or not?
-        // If we reverse, the sort needs to be `anti-stable` so that
-        // the double negatives cancel out
-        if (sortOrder === 'descending') {
-          newRows.sort(stabilize(sortFunction, true));
-        } else {
-          newRows.sort(stabilize(sortFunction, false));
-          newRows.reverse();
-        }
-
-        // append rows that already exist rather than creating new ones
-        for (j = 0; j < totalRows; j++) {
-          if (noSorts[j]) {
-            // We have a no-sort row for this position, insert it here.
-            item = noSorts[j];
-            noSortsSoFar++;
+          // Before we append should we reverse the new array or not?
+          // If we reverse, the sort needs to be `anti-stable` so that
+          // the double negatives cancel out
+          if (sortOrder === 'descending') {
+            newRows.sort(stabilize(sortFunction, true));
           } else {
-            item = newRows[j - noSortsSoFar].tr;
+            newRows.sort(stabilize(sortFunction, false));
+            newRows.reverse();
           }
 
-          // appendChild(x) moves x if already present somewhere else in the DOM
-          that.table.tBodies[i].appendChild(item);
-        }
-      }
+          // append rows that already exist rather than creating new ones
+          for (j = 0; j < totalRows; j++) {
+            if (noSorts[j]) {
+              // We have a no-sort row for this position, insert it here.
+              item = noSorts[j];
+              noSortsSoFar++;
+            } else {
+              item = newRows[j - noSortsSoFar].tr;
+            }
 
-      that.table.dispatchEvent(createEvent('afterSort'));
+            // appendChild(x) moves x if already present somewhere else in the DOM
+            that.table.tBodies[i].appendChild(item);
+          }
+        }
+
+        that.table.dispatchEvent(createEvent('afterSort'));
+      });
     },
 
     refresh: function() {
