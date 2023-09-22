@@ -22,19 +22,13 @@
  *
  * $Revision: 1.3 $
  */
-
-    // http://www.crazysquirrel.com/computing/general/form-encoding.jspx
-    if (request.getCharacterEncoding() == null)
-        request.setCharacterEncoding("UTF-8");
-    response.setHeader("X-Frame-Options", "SAMEORIGIN");
-    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'; base-uri 'self'");
-    response.setHeader("X-XSS-Protection", "1; mode=block");
-    response.setHeader("X-Content-Type-Options", "nosniff");
-    response.setHeader("Referrer-Policy", "no-referrer");
-    response.setHeader("Accept-Ranges", "none");
 %>
-<%@ page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true" import="net.i2p.servlet.RequestWrapper"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page trimDirectiveWhitespaces="true"%>
+<%@page pageEncoding="UTF-8"%>
+<%@page contentType="text/html"%>
+<%@page import="net.i2p.servlet.RequestWrapper"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@include file="headers.jsi"%>
 <jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
 <jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
@@ -73,7 +67,7 @@
 <script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <%
-    String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
+    //String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
     String query = request.getQueryString();
     RequestWrapper bookRequest = new RequestWrapper(request);
     String here = bookRequest.getParameter("book");
@@ -82,9 +76,8 @@
     // Messages will be displayed below.
     String formMessages = book.getMessages();
 %>
-<style>body{display:none;pointer-events:none}</style>
 </head>
-<body id=bk>
+<body id=bk style=display:none;pointer-events:none>
 <div<% if (book.getBook().equals("published")) { %> id=published<% } %> class=page>
 <div id=navi class="${book.getBook()}">
 <a class="abook router<%=(here.contains("router") ? " selected" : "")%>" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
@@ -512,7 +505,7 @@
 %>
 <c:if test="${book.isEmpty}"></div></c:if>
 <span data-iframe-height></span>
-<style>body{display:block;pointer-events:auto}</style>
+<style>body{display:block!important;pointer-events:auto!important}</style>
 </div>
 <!--
 <script src="/themes/search.js?<%=net.i2p.CoreVersion.VERSION%>"></script>

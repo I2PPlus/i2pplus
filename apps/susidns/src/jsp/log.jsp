@@ -23,11 +23,11 @@
  * $Revision: 1.1 $
  */
 %>
-<%@include file="headers.jsi"%>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
 <%@ page contentType="text/html" %>
-<%@page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@include file="headers.jsi"%>
 <jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
 <jsp:useBean id="log" class="i2p.susi.dns.LogBean" scope="session" />

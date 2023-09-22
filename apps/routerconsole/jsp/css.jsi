@@ -77,7 +77,7 @@
 <script nonce="<%=cspNonce%>">if (top.location != location) {top.location.href = location.href;}</script>
 <%
     response.setHeader("Accept-Ranges", "bytes");
-    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; font-src 'self'; object-src 'none'; media-src 'none'; base-uri 'self'");
+    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'nonce-" + cspNonce + "'; font-src 'self'; object-src 'none'; media-src 'none';");
     response.setHeader("X-XSS-Protection", "1; mode=block");
     response.setHeader("X-Content-Type-Options", "nosniff");
     response.setHeader("Permissions-Policy", "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), display-capture(), fullscreen=(self), geolocation=(), gyroscope=(), interest-cohort=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), vibrate=(), vr=()");

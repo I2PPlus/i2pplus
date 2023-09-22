@@ -1991,16 +1991,7 @@ public class WebMail extends HttpServlet
             // Apply any override
             theme = Config.getProperty(CONFIG_THEME, theme);
         }
-/**
-        // remap deprecated themes
-        if (theme.equals("midnight")) {
-            if (ctx.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD))
-                theme = "dark";
-        } else if (theme.equals("classic")) {
-            if (ctx.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD))
-                theme = "light";
-        }
-**/
+
         boolean forceMobileConsole = ctx.getBooleanProperty(RC_PROP_FORCE_MOBILE_CONSOLE);
         boolean enableSoraFont = ctx.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT);
         boolean isMobile = (forceMobileConsole || isMobile(httpRequest.getHeader("User-Agent")));
@@ -2008,7 +1999,7 @@ public class WebMail extends HttpServlet
         httpRequest.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setHeader("X-Frame-Options", "SAMEORIGIN");
-                response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'; base-uri 'self'");
+        response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; media-src 'none'");
         response.setHeader("X-XSS-Protection", "1; mode=block");
         response.setHeader("X-Content-Type-Options", "nosniff");
         response.setHeader("Referrer-Policy", "no-referrer");

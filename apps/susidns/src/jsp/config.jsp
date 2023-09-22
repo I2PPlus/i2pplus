@@ -23,10 +23,10 @@
  * $Revision: 1.1 $
  */
 %>
-<%@include file="headers.jsi"%>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page contentType="text/html" %>
-<%@page trimDirectiveWhitespaces="true"%>
+<%@include file="headers.jsi"%>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
 <jsp:useBean id="cfg" class="i2p.susi.dns.ConfigBean" scope="session"/>
 <jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
@@ -47,9 +47,8 @@
 %>
 <link rel=stylesheet href="<%=base.getTheme()%>override.css">
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<style>body{display:none;pointer-events:none}</style>
 </head>
-<body id=cfg>
+<body id=cfg style=display:none;pointer-events:none>
 <div class=page>
 <div id=navi>
 <a class="abook router" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
@@ -103,6 +102,6 @@
 </div>
 </div>
 <span data-iframe-height></span>
-<style>body{display:block;pointer-events:auto}</style>
+<style>body{display:block!important;pointer-events:auto!important}</style>
 </body>
 </html>

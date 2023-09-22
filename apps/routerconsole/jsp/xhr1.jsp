@@ -14,7 +14,7 @@
     }
   } catch (IllegalStateException ise) {}
   response.setHeader("Cache-Control", "private, no-cache, max-age=3600");
-  response.setHeader("Content-Security-Policy", "default-src 'none'; base-uri 'self'");
+  response.setHeader("Content-Security-Policy", "default-src 'none'");
   response.setHeader("X-XSS-Protection", "1; mode=block");
   response.setHeader("X-Content-Type-Options", "nosniff");
 %>

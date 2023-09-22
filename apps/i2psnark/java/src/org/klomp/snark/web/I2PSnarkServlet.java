@@ -544,8 +544,8 @@ public class I2PSnarkServlet extends BasicServlet {
             resp.setHeader("Cache-Control", "private, no-cache, max-age=2628000");
         }
         resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; " +
-                "script-src 'self' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; " +
-                "object-src 'none'; base-uri 'self'; report-uri ''; media-src '" + (allowMedia ? "self" : "none") + "'");
+                "script-src 'self' 'nonce-" + cspNonce + "'; " +
+                "object-src 'none'; media-src '" + (allowMedia ? "self" : "none") + "'");
         resp.setHeader("Permissions-Policy", "fullscreen=(self)");
         resp.setHeader("Referrer-Policy", "same-origin");
         resp.setHeader("X-Content-Type-Options", "nosniff");
@@ -560,10 +560,9 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setContentType("text/html; charset=utf-8");
         resp.setHeader("Accept-Ranges", "bytes");
         resp.setHeader("Cache-Control", "private, max-age=5, immutable");
-        resp.setHeader("Content-Security-Policy", "default-src 'none'; base-uri 'self'; report-uri ''");
+        resp.setHeader("Content-Security-Policy", "default-src 'none'");
         resp.setHeader("Referrer-Policy", "same-origin");
         resp.setHeader("X-Content-Type-Options", "nosniff");
-        //resp.setHeader("X-Frame-Options", "SAMEORIGIN");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
         resp.setHeader("X-Snark-Pagesize", pageSize);
         resp.setHeader("X-Snark-Refresh-Interval", refresh);

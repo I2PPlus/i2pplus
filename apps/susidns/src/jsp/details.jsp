@@ -20,10 +20,10 @@
  *
  */
 %>
-<%@include file="headers.jsi"%>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page contentType="text/html"%>
-<%@page trimDirectiveWhitespaces="true"%>
+<%@include file="headers.jsi"%>
 <jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
 <jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
@@ -49,9 +49,8 @@
 <%
     String query = request.getQueryString();
 %>
-<style>body{display:none;pointer-events:none}</style>
 </head>
-<body id=dtls>
+<body id=dtls style=display:none;pointer-events:none>
 <div class=page>
 <div id=navi>
 <a class="abook router<%=(query.contains("book=router") ? " details selected" : "")%>" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
@@ -209,6 +208,6 @@
 </div><%-- book --%>
 </div><%-- page --%>
 <span data-iframe-height></span>
-<style>body{display:block;pointer-events:auto}</style>
+<style>body{display:block!important;pointer-events:auto!important}</style>
 </body>
 </html>
