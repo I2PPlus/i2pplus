@@ -158,7 +158,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         //RouterInfo ri = _facade.lookupRouterInfoLocally(getContext().routerHash());
         //String MIN_VERSION = "0.9.57";
 //        int known = ctx.netDbSegmentor().getKnownRouters();
-        int known = ctx.mainNetDb().getKnownRouters();
+        int known = ctx.netDb().getKnownRouters();
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
         boolean isHidden = ctx.router().isHidden();
@@ -224,8 +224,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         boolean isHidden = getContext().router().isHidden();
 //        RouterInfo ri = _facade.lookupRouterInfoLocally(_key);
 //        RouterInfo isUs = _facade.lookupRouterInfoLocally(getContext().routerHash());
-        RouterInfo ri = getContext().mainNetDb().lookupRouterInfoLocally(_key);
-        RouterInfo isUs = getContext().mainNetDb().lookupRouterInfoLocally(getContext().routerHash());
+        RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(_key);
+        RouterInfo isUs = getContext().netDb().lookupRouterInfoLocally(getContext().routerHash());
         long uptime = getContext().router().getUptime();
         if (ri != null && ri != isUs) {
             String v = ri.getVersion();
@@ -237,7 +237,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                                      //caps.indexOf(Router.CAPABILITY_BW64) >= 0 ||
                                      (v.equals("") || VersionComparator.comp(v, MIN_VERSION) < 0)) &&
 //                                     !isHidden && getContext().netDbSegmentor().getKnownRouters() > 1000;
-                                     !isHidden && getContext().mainNetDb().getKnownRouters() > 1000;
+                                     !isHidden && getContext().netDb().getKnownRouters() > 1000;
             if (uninteresting) {
                 if (_log.shouldInfo())
                     _log.info("[Job " + getJobId() + "] Skipping search for uninteresting Router [" + _key.toBase64().substring(0,6) + "]");
@@ -401,7 +401,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     private void sendQuery(Hash peer, int previouslyTried) {
             final RouterContext ctx = getContext();
             TunnelManagerFacade tm = ctx.tunnelManager();
-            RouterInfo ri = ctx.mainNetDb().lookupRouterInfoLocally(peer);
+            RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
             if (ri != null && ctx.commSystem().getStatus() != Status.DISCONNECTED) {
                 // Now that most of the netdb is Ed RIs and EC LSs, don't even bother
                 // querying old floodfills that don't know about those sig types.
@@ -693,7 +693,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 _log.info("[Job " + getJobId() + "] Banlisted peer from DbSearchReplyMsg [" + peer.toBase64().substring(0,6) + "]");
             return;
         }
-        RouterInfo ri = getContext().mainNetDb().lookupRouterInfoLocally(peer);
+        RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(peer);
         if (ri != null && !FloodfillNetworkDatabaseFacade.isFloodfill(ri)) {
             if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Non-Floodfill peer from DbSearchReplyMsg [" + peer.toBase64().substring(0,6) + "]");
@@ -811,7 +811,7 @@ public class IterativeSearchJob extends FloodSearchJob {
 
         // Confirm success by checking for the Lease Set in local storage
         if (_isLease) {
-            dest = getContext().mainNetDb().lookupDestinationLocally(_key);
+            dest = getContext().netDb().lookupDestinationLocally(_key);
             if ((dest == null) && (_log.shouldLog(Log.WARN)))
                 _log.warn("Warning! LeaseSet not found in persistent data store for key [" + _key + "]");
         }

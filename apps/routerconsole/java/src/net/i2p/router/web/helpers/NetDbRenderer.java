@@ -81,7 +81,7 @@ class NetDbRenderer {
 
     public boolean isFloodfill() {
 //        return _context.netDbSegmentor().floodfillEnabled();
-        return _context.mainNetDb().floodfillEnabled();
+        return _context.netDb().floodfillEnabled();
     }
 
     /**
@@ -147,7 +147,7 @@ class NetDbRenderer {
                                      String tr, int cost, int icount, String client, boolean allClients) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
         List<Hash> sybils = sybil != null ? new ArrayList<Hash>(128) : null;
-        FloodfillNetworkDatabaseFacade netdb = _context.mainNetDb();
+        FloodfillNetworkDatabaseFacade netdb = _context.netDb();
         if (client != null) {
             netdb = _context.clientNetDb(client);
         }
@@ -243,7 +243,7 @@ class NetDbRenderer {
                     routers.addAll(_context.netDbSegmentor().getRoutersKnownToClients());
             } else {
                 if (client == null)
-                    routers.addAll(_context.mainNetDb().getRouters());
+                    routers.addAll(_context.netDb().getRouters());
                 else
                     routers.addAll(_context.clientNetDb(client).getRouters());
 
@@ -608,12 +608,12 @@ class NetDbRenderer {
         DecimalFormat fmt;
         FloodfillNetworkDatabaseFacade netdb = null;
         if (clientsOnly) {
-            netdb = _context.mainNetDb();
+            netdb = _context.netDb();
         } else {
             if (client != null)
                 netdb = _context.clientNetDb(client);
             else
-                netdb = _context.mainNetDb();
+                netdb = _context.netDb();
         }
         if (debug) {
             ourRKey = _context.routerHash();
@@ -737,17 +737,17 @@ class NetDbRenderer {
             buf.append(hostname);
             buf.append("</div>");
         } else {
-            LeaseSet ls = _context.mainNetDb().lookupLeaseSetLocally(hash);
+            LeaseSet ls = _context.netDb().lookupLeaseSetLocally(hash);
             if (ls == null) {
                 // remote lookup
                 LookupWaiter lw = new LookupWaiter();
                 // use-case for the exploratory netDb here?
-                _context.mainNetDb().lookupLeaseSetRemotely(hash, lw, lw, 8*1000, null);
+                _context.netDb().lookupLeaseSetRemotely(hash, lw, lw, 8*1000, null);
                 // just wait right here in the middle of the rendering, sure
                 synchronized(lw) {
                     try { lw.wait(9*1000); } catch (InterruptedException ie) {}
                 }
-                ls = _context.mainNetDb().lookupLeaseSetLocally(hash);
+                ls = _context.netDb().lookupLeaseSetLocally(hash);
             }
             if (ls != null) {
                 BigInteger dist = HashDistance.getDistance(_context.routerHash(), ls.getRoutingKey());
@@ -967,7 +967,7 @@ class NetDbRenderer {
      *         mode 3: Same as 0 but sort countries by count
      */
     public void renderStatusHTML(Writer out, int pageSize, int page, int mode, String client, boolean clientsOnly) throws IOException {
-        if (!_context.mainNetDb().isInitialized()) {
+        if (!_context.netDb().isInitialized()) {
             out.write("<div id=notinitialized>");
             out.write(_t("Not initialized"));
             out.write("</div>");
@@ -988,7 +988,7 @@ class NetDbRenderer {
         } else if (clientsOnly) {
             routers.addAll(_context.netDbSegmentor().getRoutersKnownToClients());
         } else {
-            routers.addAll(_context.mainNetDb().getRouters());
+            routers.addAll(_context.netDb().getRouters());
         }
         int toSkip = pageSize * page;
         boolean nextpg = routers.size() > toSkip + pageSize;

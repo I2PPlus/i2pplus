@@ -55,7 +55,7 @@ class RequestThrottler {
 
     /** increments before checking */
     boolean shouldThrottle(Hash h) {
-        RouterInfo ri = context.mainNetDb().lookupRouterInfoLocally(h);
+        RouterInfo ri = context.netDb().lookupRouterInfoLocally(h);
         boolean isUnreachable = ri != null && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         boolean isLowShare = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                              ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||

@@ -198,7 +198,7 @@ public class InfoHelper extends HelperBase {
                        ":</b> " + _t(_context.commSystem().getStatus().toStatusString()));
             buf.append(" &ensp;<b>" + _t("Floodfill Role") + ":</b> ");
 //            if (_context.netDbSegmentor().floodfillEnabled())
-            if (_context.mainNetDb().floodfillEnabled())
+            if (_context.netDb().floodfillEnabled())
                 buf.append(_t("Active"));
             else
                 buf.append(_t("Inactive"));

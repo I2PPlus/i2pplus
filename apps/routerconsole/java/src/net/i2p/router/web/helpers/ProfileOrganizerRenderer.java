@@ -52,7 +52,7 @@ class ProfileOrganizerRenderer {
     public void renderStatusHTML(Writer out, int mode) throws IOException {
         boolean full = mode == 0;
         Hash us = _context.routerHash();
-        RouterInfo local = _context.mainNetDb().lookupRouterInfoLocally(us);
+        RouterInfo local = _context.netDb().lookupRouterInfoLocally(us);
         boolean ffmode = local != null && local.getCapabilities().indexOf('f') >= 0;
         Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
@@ -65,7 +65,7 @@ class ProfileOrganizerRenderer {
         for (Hash peer : peers) {
             if (_organizer.getUs().equals(peer)) continue;
             PeerProfile prof = _organizer.getProfileNonblocking(peer);
-            RouterInfo info = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(peer);
+            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
             if (prof == null)
                 continue;
@@ -158,7 +158,7 @@ class ProfileOrganizerRenderer {
                 // debug
                 //if(prof.getIsExpandedDB())
                 //   buf.append(" ** ");
-                RouterInfo info = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(peer);
+                RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
                 buf.append("<td>");
                 if (info != null) {
                     buf.append(_context.commSystem().renderPeerCaps(peer, false));
@@ -408,7 +408,7 @@ class ProfileOrganizerRenderer {
             for (PeerProfile prof : order) {
                 Hash peer = prof.getPeer();
                 DBHistory dbh = prof.getDBHistory();
-                RouterInfo info = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(peer);
+                RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
                 boolean isBanned = _context.banlist().isBanlisted(peer);
                 boolean isUnreachable = info != null && info.getCapabilities().indexOf('U') >= 0;
                 boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;

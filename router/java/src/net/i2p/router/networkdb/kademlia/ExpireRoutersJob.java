@@ -69,7 +69,7 @@ class ExpireRoutersJob extends JobImpl {
                     _log.debug("No expired RouterInfo files found - next check in " + (RERUN_DELAY_MS / 1000 / 60) + "m");
         }
 //        if (getContext().netDbSegmentor().getKnownRouters() > 2000)
-        if (getContext().mainNetDb().getKnownRouters() > 2000)
+        if (getContext().netDb().getKnownRouters() > 2000)
             requeue(RERUN_DELAY_MS / 5);
         else
             requeue(RERUN_DELAY_MS);

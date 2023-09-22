@@ -122,7 +122,7 @@ class ProfilePersistenceHelper {
         }
 
         StringBuilder buf = new StringBuilder(512);
-        RouterInfo info = _context.mainNetDb().lookupRouterInfoLocally(profile.getPeer());
+        RouterInfo info = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
         // round up/down speed, integ, capacity
         int speed = Math.round(profile.getSpeedValue());
         int integration = Math.round(profile.getIntegrationValue());
@@ -341,7 +341,7 @@ class ProfilePersistenceHelper {
             loadProps(props, file);
 
             long lastSentToSuccessfully = getLong(props, "lastSentToSuccessfully");
-            RouterInfo info = _context.mainNetDb().lookupRouterInfoLocally(profile.getPeer());
+            RouterInfo info = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
             String caps = "";
             if (info != null)
                 caps = DataHelper.stripHTML(info.getCapabilities());

@@ -269,13 +269,13 @@ public class SummaryHelper extends HelperBase {
     /** allowReseed */
     public boolean allowReseed() {
         long uptime = _context.router().getUptime();
-        return _context.mainNetDb().isInitialized() &&
-               (_context.mainNetDb().getKnownRouters() < ReseedChecker.MINIMUM && uptime > 60*1000) ||
+        return _context.netDb().isInitialized() &&
+               (_context.netDb().getKnownRouters() < ReseedChecker.MINIMUM && uptime > 60*1000) ||
                 _context.getBooleanProperty("i2p.alwaysAllowReseed");
     }
 
     /** subtract one for ourselves, so if we know no other peers it displays zero */
-    public int getAllPeers() { return Math.max(_context.mainNetDb().getKnownRouters() - 1, 0); }
+    public int getAllPeers() { return Math.max(_context.netDb().getKnownRouters() - 1, 0); }
 
     public enum NetworkState {
         HIDDEN,
@@ -397,7 +397,7 @@ public class SummaryHelper extends HelperBase {
                 // fall through...
             case IPV4_FIREWALLED_IPV6_OK:
             case IPV4_FIREWALLED_IPV6_UNKNOWN:
-                if ((_context.mainNetDb()).floodfillEnabled())
+                if ((_context.netDb()).floodfillEnabled())
                     return new NetworkStateMessage(NetworkState.WARN, _t("Firewalled &amp; Floodfill"));
                 //if (_context.router().getRouterInfo().getCapabilities().indexOf('O') >= 0)
                 //    return new NetworkStateMessage(NetworkState.WARN, _t("WARN-Firewalled and Fast"));
@@ -582,12 +582,12 @@ public class SummaryHelper extends HelperBase {
      */
     public boolean showFirewallWarning() {
         return _context != null &&
-               _context.mainNetDb().isInitialized() &&
+               _context.netDb().isInitialized() &&
                _context.router().getUptime() > 2*60*1000 &&
                (!_context.commSystem().isDummy()) &&
                _context.commSystem().countActivePeers() <= 0 &&
-               _context.mainNetDb().getKnownRouters() > 5 ||
-               _context.mainNetDb().isInitialized() &&
+               _context.netDb().getKnownRouters() > 5 ||
+               _context.netDb().isInitialized() &&
                _context.router().getUptime() > 2*60*1000 &&
                (!_context.commSystem().isDummy()) &&
                _context.commSystem().countActivePeers() <= 0;
@@ -1349,7 +1349,7 @@ public class SummaryHelper extends HelperBase {
                .append("</b></div>");
         }
 
-        ReseedChecker checker = _context.mainNetDb().reseedChecker();
+        ReseedChecker checker = _context.netDb().reseedChecker();
         String status = checker.getStatus();
         if (status.length() > 0) {
             // Show status message even if not running, timer in ReseedChecker should remove after 20 minutes

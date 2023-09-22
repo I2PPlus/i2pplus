@@ -75,7 +75,7 @@ class RefreshRoutersJob extends JobImpl {
         Random rand = new Random();
         long lag = getContext().jobQueue().getMaxLag();
 //        int netDbCount = getContext().netDbSegmentor().getKnownRouters();
-        int netDbCount = getContext().mainNetDb().getKnownRouters();
+        int netDbCount = getContext().netDb().getKnownRouters();
         long uptime = getContext().router().getUptime();
         boolean isCpuHighLoad = SystemVersion.getCPULoad() > 80;
         boolean shouldDisconnect = getContext().getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
@@ -122,7 +122,7 @@ class RefreshRoutersJob extends JobImpl {
                 if (_log.shouldDebug())
                     _log.debug("Checking RouterInfo [" + h.toBase64().substring(0,6) + "]");
 //                RouterInfo ri = _facade.lookupRouterInfoLocally(h);
-                RouterInfo ri = getContext().mainNetDb().lookupRouterInfoLocally(h);
+                RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(h);
                 if (ri == null)
                     continue;
 //                if (ri.getPublished() < expire) {
@@ -141,7 +141,7 @@ class RefreshRoutersJob extends JobImpl {
                                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                          VersionComparator.comp(v, MIN_VERSION) < 0) &&
 //                                         getContext().netDbSegmentor().getKnownRouters() > 3000 &&
-                                         getContext().mainNetDb().getKnownRouters() > 3000 &&
+                                         getContext().netDb().getKnownRouters() > 3000 &&
                                          uptime > 15*60*1000 && !isHidden && !isUs;
                 boolean refreshUninteresting = getContext().getBooleanProperty(PROP_ROUTER_REFRESH_UNINTERESTING);
                 String caps = "unknown";

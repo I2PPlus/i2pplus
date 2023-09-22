@@ -464,7 +464,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     @Override
     public boolean floodfillEnabled() { 
         if (isMultihomeDb())
-            return _context.mainNetDb().floodfillEnabled();
+            return _context.netDb().floodfillEnabled();
         return _floodfillEnabled;
     }
 
@@ -728,7 +728,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                        info.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
         boolean uninteresting = info != null && !isHidden && (VersionComparator.comp(v, MIN_VERSION) < 0 && !fast) &&
 //                                _context.netDbSegmentor().getKnownRouters() > 2000 && !isUs;
-                                _context.mainNetDb().getKnownRouters() > 2000 && !isUs;
+                                _context.netDb().getKnownRouters() > 2000 && !isUs;
         boolean isFF = false;
         boolean noSSU = true;
         String caps = "unknown";

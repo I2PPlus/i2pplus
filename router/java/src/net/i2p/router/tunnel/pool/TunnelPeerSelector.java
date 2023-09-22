@@ -234,7 +234,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         if (ctx.commSystem().wasUnreachable(h))
             return true;
 
-        RouterInfo info = (RouterInfo) ctx.mainNetDb().lookupLocallyWithoutValidation(h);
+        RouterInfo info = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
         if (info == null)
             return true;
 
@@ -274,7 +274,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @since 0.9.34, protected since 0.9.58 for ClientPeerSelector
      */
     protected boolean allowAsOBEP(Hash h) {
-        RouterInfo ri = (RouterInfo) ctx.mainNetDb().lookupLocallyWithoutValidation(h);
+        RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
         if (ri == null)
             return true;
         return canConnect(ri, ANY_V4);
@@ -291,7 +291,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @since 0.9.34, protected since 0.9.58 for ClientPeerSelector
      */
     protected boolean allowAsIBGW(Hash h) {
-        RouterInfo ri = (RouterInfo) ctx.mainNetDb().lookupLocallyWithoutValidation(h);
+        RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
         if (ri == null)
             return true;
         if (ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0)
@@ -686,7 +686,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (ctx.commSystem().isEstablished(h))
                 return false;
             boolean canConnect;
-            RouterInfo peer = (RouterInfo) ctx.mainNetDb().lookupLocallyWithoutValidation(h);
+            RouterInfo peer = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
             if (peer == null) {
                 canConnect = false;
             } else if (isIn) {

@@ -67,7 +67,7 @@ class OutboundMessageDistributor {
                             + target.toBase64().substring(0,6) + "]");
             return;
         }
-        RouterInfo info = _context.mainNetDb().lookupRouterInfoLocally(target);
+        RouterInfo info = _context.netDb().lookupRouterInfoLocally(target);
         if (info == null) {
             if (_log.shouldInfo())
                 _log.info("Outbound distributor to [" + target.toBase64().substring(0,6)
@@ -75,7 +75,7 @@ class OutboundMessageDistributor {
                            + " -> No local info, searching...");
             // TODO - should we set the search timeout based on the message timeout,
             // or is that a bad idea due to clock skews?
-            _context.mainNetDb().lookupRouterInfo(target, new DistributeJob(_context, msg, target, tunnel), null, MAX_DISTRIBUTE_TIME);
+            _context.netDb().lookupRouterInfo(target, new DistributeJob(_context, msg, target, tunnel), null, MAX_DISTRIBUTE_TIME);
             return;
         } else {
             distribute(msg, info, tunnel);
@@ -147,7 +147,7 @@ class OutboundMessageDistributor {
         public String getName() { return "Distribute OBEP after Lookup"; }
 
         public void runJob() {
-            RouterInfo info = getContext().mainNetDb().lookupRouterInfoLocally(_target);
+            RouterInfo info = getContext().netDb().lookupRouterInfoLocally(_target);
             int stat;
             if (info != null) {
                 if (_log.shouldDebug())

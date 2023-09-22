@@ -349,7 +349,7 @@ class TunnelRenderer {
                 //char cap = getCapacity(h);
                 HopConfig cfg = participating.get(count);
                 int lifetime = count > 0 ? (int) ((_context.clock().now() - cfg.getCreation()) / 1000) : 1;
-                RouterInfo info = _context.mainNetDb().lookupRouterInfoLocally(h);
+                RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
                 //String rl = _context.namingService().reverseLookup(h);
                 String truncHash = h.toBase64().substring(0,4);
                 String ip = (info != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
@@ -497,7 +497,7 @@ class TunnelRenderer {
             out.write("</tr>\n</thead>\n<tbody id=allPeers>\n");
             for (Hash h : peerList) {
                 //char cap = getCapacity(h);
-                RouterInfo info = _context.mainNetDb().lookupRouterInfoLocally(h);
+                RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
                 String ip = (info != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
                 String v = info != null ? info.getOption("router.version") : null;
                 String truncHash = h.toBase64().substring(0,4);
@@ -944,7 +944,7 @@ class TunnelRenderer {
 
     /** @return cap char or '?' */
     private char getCapacity(Hash peer) {
-        RouterInfo info = (RouterInfo) _context.mainNetDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         if (info != null) {
             String caps = info.getCapabilities();
             for (int i = 0; i < RouterInfo.BW_CAPABILITY_CHARS.length(); i++) {

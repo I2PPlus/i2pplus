@@ -214,7 +214,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         else
         _reseedChecker = new ReseedChecker(context);
         _blindCache = new BlindCache(context);
-        
+
         _localKey = null;
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Created KademliaNetworkDatabaseFacade for id: " + _dbid);
@@ -822,7 +822,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                      ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) &&
                                      isOld && (uptime > 15*60*1000 ||
 //                                     _context.netDbSegmentor().getKnownRouters() > 1500) && !isUs;
-                                     _context.mainNetDb().getKnownRouters() > 1500) && !isUs;
+                                     _context.netDb().getKnownRouters() > 1500) && !isUs;
             boolean isLTier =  ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
             boolean isUnreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
@@ -894,7 +894,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!_initialized) return null;
         // Client netDb shouldn't have RI, search for RI in the floodfill netDb.
         if (isClientDb())
-            return _context.mainNetDb().lookupRouterInfoLocally(key);
+            return _context.netDb().lookupRouterInfoLocally(key);
         DatabaseEntry ds = _ds.get(key);
         if (ds != null) {
             if (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {

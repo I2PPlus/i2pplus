@@ -191,7 +191,7 @@ class StartExplorersJob extends JobImpl {
 
 //        int netDbSize = _facade.getDataStore().size();
 //        int netDbSize = getContext().netDbSegmentor().getKnownRouters();
-        int netDbSize = getContext().mainNetDb().getKnownRouters();
+        int netDbSize = getContext().netDb().getKnownRouters();
         long uptime = getContext().router().getUptime();
         long delay = getContext().clock().now() - _facade.getLastExploreNewDate();
         if (exploreDelay == null) {

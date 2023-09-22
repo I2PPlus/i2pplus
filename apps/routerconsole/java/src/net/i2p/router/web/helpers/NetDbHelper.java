@@ -42,7 +42,7 @@ public class NetDbHelper extends FormHandler {
     private static final int DEFAULT_PAGE = 0;
 
     public boolean isFloodfill() {
-        return _context.mainNetDb().floodfillEnabled();
+        return _context.netDb().floodfillEnabled();
     }
 
     private static final String titles[] =

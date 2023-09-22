@@ -85,7 +85,7 @@ public class ConfigKeyringHelper extends HelperBase {
                 continue;
             buf.append("\n<tr><td>");
 
-            Destination dest = _context.mainNetDb().lookupDestinationLocally(h);
+            Destination dest = _context.netDb().lookupDestinationLocally(h);
             if (dest != null && local) {
                 TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(h);
                 if (in != null && in.getDestinationNickname() != null)

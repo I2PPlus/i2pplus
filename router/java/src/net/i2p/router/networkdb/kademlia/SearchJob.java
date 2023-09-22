@@ -150,7 +150,7 @@ class SearchJob extends JobImpl {
         // have been commented out.
         // Returning false essentially enables kademlia as a backup to floodfill for search responses.
 
-        if (ctx.mainNetDb().floodfillEnabled() || forceExplore == "true") {
+        if (ctx.netDb().floodfillEnabled() || forceExplore == "true") {
             return false;
         }
         return ctx.getProperty("netDb.floodfillOnly", DEFAULT_FLOODFILL_ONLY);
@@ -335,7 +335,7 @@ class SearchJob extends JobImpl {
                         if (_log.shouldInfo())
                             _log.info("[DbId: " + _facade._dbid + "] Next closest peer [" + peer.toBase64().substring(0,6) +
                                       "] was only recently referred to us, sending a search for them");
-                        getContext().mainNetDb().lookupRouterInfo(peer, null, null, _timeoutMs);
+                        getContext().netDb().lookupRouterInfo(peer, null, null, _timeoutMs);
                     } else if (!(ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {
                         if (_log.shouldWarn())
                             _log.warn("[DbId: " + _facade._dbid + "] Error selecting closest hash that wasn't a router! "
@@ -411,7 +411,7 @@ class SearchJob extends JobImpl {
             _log.debug("[Job " + getJobId() + "] Checked current routing key [" + rkey.toBase64().substring(0,6) +
                        "] for [" + key.toBase64().substring(0,6) + "]");
         if (_facade.isClientDb())
-            return getContext().mainNetDb().getPeerSelector().selectNearestExplicit(rkey, numClosest, alreadyChecked, _facade.getKBuckets());
+            return getContext().netDb().getPeerSelector().selectNearestExplicit(rkey, numClosest, alreadyChecked, _facade.getKBuckets());
         else
             return _peerSelector.selectNearestExplicit(rkey, numClosest, alreadyChecked, _facade.getKBuckets());
     }
@@ -703,7 +703,7 @@ class SearchJob extends JobImpl {
         if (ds == null) {
             if (SHOULD_RESEND_ROUTERINFO) {
 //                ds = _facade.lookupRouterInfoLocally(_state.getTarget());
-                ds = getContext().mainNetDb().lookupRouterInfoLocally(_state.getTarget());
+                ds = getContext().netDb().lookupRouterInfoLocally(_state.getTarget());
                 if (ds != null)
                     _facade.sendStore(_state.getTarget(), ds, null, null, RESEND_TIMEOUT, _state.getSuccessful());
             }
@@ -713,7 +713,7 @@ class SearchJob extends JobImpl {
             int numSent = 0;
             for (Hash peer : sendTo) {
 //                RouterInfo peerInfo = _facade.lookupRouterInfoLocally(peer);
-                RouterInfo peerInfo = getContext().mainNetDb().lookupRouterInfoLocally(peer);
+                RouterInfo peerInfo = getContext().netDb().lookupRouterInfoLocally(peer);
                 if (peerInfo == null) continue;
                 if (resend(peerInfo, (LeaseSet)ds))
                     numSent++;
