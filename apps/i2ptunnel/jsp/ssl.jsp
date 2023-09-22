@@ -1,9 +1,7 @@
-<%@include file="headers.jsi"%>
-<%@include file="headers-unsafe.jsi"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page contentType="text/html" import="java.io.File,java.io.IOException,net.i2p.crypto.KeyStoreUtil,net.i2p.data.DataHelper,net.i2p.jetty.JettyXmlConfigurationParser"%>
 <%@page trimDirectiveWhitespaces="true"%>
-<%@page%>
+<%@include file="headers.jsi"%>
 <!DOCTYPE html>
 <%
   /* right now using EditBean instead of IndexBean for getSpoofedHost() */

@@ -1,16 +1,16 @@
 <%@ page import="java.net.URL" %>
 <%@ page import="java.net.URLConnection" %>
 <%@ page import="java.io.IOException" %>
-<%@include file="headers.jsi"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page trimDirectiveWhitespaces="true"%>
+<%@include file="headers.jsi"%>
 <%@page contentType="text/html" import="net.i2p.i2ptunnel.web.IndexBean"%>
-<!DOCTYPE html>
 <jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request" />
 <jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request" />
 <jsp:setProperty name="indexBean" property="tunnel" /><%-- must be set before key1-4 --%>
 <jsp:setProperty name="indexBean" property="*" />
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
+<!DOCTYPE html>
 <html id=tman>
 <head>
 <meta charset=utf-8>

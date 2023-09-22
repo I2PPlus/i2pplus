@@ -1,7 +1,7 @@
-<%@include file="headers.jsi"%>
-<%@include file="headers-unsafe.jsi"%>
 <%@page pageEncoding="UTF-8"%>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@page contentType="text/html" import="net.i2p.i2ptunnel.web.EditBean"%>
+<%@include file="headers.jsi"%>
 <!DOCTYPE html>
 <jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request" />
 <jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request" />

@@ -1,8 +1,7 @@
-<%@include file="headers.jsi"%>
-<%@include file="headers-unsafe.jsi"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page contentType="text/html" import="net.i2p.i2ptunnel.web.EditBean"%>
+<%@include file="headers.jsi"%>
 <%
 boolean __isClient = false;
 boolean __invalid = false;
