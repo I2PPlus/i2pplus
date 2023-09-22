@@ -29,14 +29,14 @@ Graal21:
   image: adoptopenjdk:8-jdk-hotspot
   allow_failure: true
   before_script:
+    - apt-get update -yqq
+    - apt-get install -yqq ant gettext zip git wget
     # install GraalVM and dependencies
     - wget https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-21.0.0.2/graalvm-ce-java8-linux-amd64-21.0.0.2.tar.gz
     - tar -xzf graalvm-ce-java8-linux-amd64-21.0.0.2.tar.gz
     - export GRAALVM_HOME=$PWD/graalvm-ce-java8-21.0.0.2
     - export PATH=$GRAALVM_HOME/bin:$PATH
     - gu install native-image
-    - apt-get update -yqq
-    - apt-get install -yqq ant gettext zip git wget
     - java -version
   script:
     # build the required packages
