@@ -384,6 +384,14 @@ function refreshSidebar() {
   if (visible === "visible") {
     xhr.send();
     stickySidebar();
+  } else {
+    document.addEventListener("visibilitychange", function ready() {
+      if (document.visibilityState === "visible") {
+        xhr.send();
+        stickySidebar();
+        document.removeEventListener("visibilitychange", ready);
+      }
+    });
   }
 
   xhr.onerror = function (error) {
