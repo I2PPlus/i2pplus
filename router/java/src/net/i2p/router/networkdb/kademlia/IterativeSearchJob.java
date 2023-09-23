@@ -313,11 +313,12 @@ public class IterativeSearchJob extends FloodSearchJob {
         Job onTimeout = new FloodOnlyLookupTimeoutJob(getContext(), this);
         _out = getContext().messageRegistry().registerPending(replySelector, onReply, onTimeout);
         if (_log.shouldInfo())
-            _log.info("[Job " + getJobId() + "] [DbId: " + _facade._dbid + "] New IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
+            _log.info("[Job " + getJobId() + "] New IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
                       " [" + _key.toBase64().substring(0,6) + "]" +
                       "\n* Querying: "  + DataHelper.toString(_toTry).substring(0,6) + "]" +
                       "; Routing key: [" + _rkey.toBase64().substring(0,6) + "]" +
-                      "; Timeout: " + DataHelper.formatDuration(_timeoutMs));
+                      "; Timeout: " + DataHelper.formatDuration(_timeoutMs) +
+                      "\n* DbId: " + _facade._dbid);
         retry();
     }
 
@@ -475,8 +476,8 @@ public class IterativeSearchJob extends FloodSearchJob {
                 isClientReplyTunnel = false;
                 isDirect = true;
                 if (_facade.isClientDb() && _log.shouldLog(Log.WARN))
-                    _log.warn("[JobId: " + getJobId() + "] [DbId: " + _facade._dbid + "]" +
-                              " Warning! Direct search selected in a client NetDb context!");
+                    _log.warn("[JobId: " + getJobId() + "] Warning! Direct search selected in a client NetDb context!" +
+                              "\n* DbId: " + _facade._dbid);
                 ctx.statManager().addRateData("netDb.RILookupDirect", 1);
             } else {
                 if (previouslyTried <= 0) {
@@ -617,9 +618,8 @@ public class IterativeSearchJob extends FloodSearchJob {
                 outMsg = dlm;
             if (isDirect) {
                 if (_facade.isClientDb() && _log.shouldLog(Log.WARN))
-                    _log.warn("[JobId: " + getJobId() + ";[DbId: " + _facade._dbid + "]"
-                              + " Warning! Sending direct search message in a client netDb context! "
-                              + outMsg);
+                    _log.warn("[JobId: " + getJobId() + "Warning! Sending direct search message in a client netDb context! " +
+                              "\n* DbId: " + _facade._dbid + outMsg);
                 OutNetMessage m = new OutNetMessage(ctx, outMsg, outMsg.getMessageExpiration(),
                                                     OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, ri);
                 // Should always succeed, we are connected already
