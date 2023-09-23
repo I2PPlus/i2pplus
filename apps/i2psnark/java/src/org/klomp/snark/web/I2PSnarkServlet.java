@@ -1918,6 +1918,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     // TODO thread it
                     int count = 0;
                     for (Snark snark : matches) {
+                        if (!snark.isStopped())
+                            continue;
                         _manager.startTorrent(snark);
                         if ((count++ & 0x0f) == 15) {
                             // try to prevent OOMs
@@ -2286,7 +2288,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         String rowStatus = (rowClass + ' ' + snarkStatus);
-        out.write("<tr class=\"" + rowStatus + " volatile\">\n" +
+        out.write("<tr class=\"" + rowStatus + " volatile\">" +
                   "<td class=status>");
         out.write(statusString);
 
@@ -2394,9 +2396,6 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         if (remaining == 0 || isMultiFile)
             out.write("</a>");
-
-//        if (basename.contains("Magnet"))
-//            out.write("</span>");
         out.write("</td><td class=ETA>");
         if (isRunning && remainingSeconds > 0 && !snark.isChecking())
             out.write(DataHelper.formatDuration2(Math.max(remainingSeconds, 10) * 1000)); // (eta 6h)
