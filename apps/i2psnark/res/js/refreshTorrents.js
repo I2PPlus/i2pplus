@@ -187,24 +187,32 @@ function refreshTorrents(callback) {
           if (responseElem) {
             const classes = Array.from(elem.classList);
             const responseClasses = Array.from(responseElem.classList);
-            if (classes.join(' ') !== responseClasses.join(' ')) {
-              elem.replaceWith(responseElem);
-              updated = true;
-            }
+            responseClasses.forEach((cls) => {
+              if (!classes.includes(cls)) {
+                elem.classList.remove(cls);
+              }
+            });
+            classes.forEach((cls) => {
+              if (!responseClasses.includes(cls)) {
+                elem.classList.add(cls);
+              }
+            });
+            updated = true;
           }
         });
         Array.from(updatingTds).forEach((elem, index) => {
-          if (elem.innerHTML !== updatingTdsResponse[index].innerHTML && updated !== true) {
+          if (updatingResponse[index] && elem.innerHTML !== updatingTdsResponse[index].innerHTML) {
             elem.innerHTML = updatingTdsResponse[index].innerHTML;
             updated = true;
           }
         });
         Array.from(updating).forEach((elem, index) => {
-          if (elem.innerHTML !== updatingResponse[index].innerHTML) {
-            elem.innerHTML = updatingResponse[index].innerHTML;
+          if (updatingResponse[index] && elem.innerHTML !== updatingResponse[index].innerHTML) {
+            const responseElem = updatingResponse[index];
+            elem.replaceWith(responseElem);
             updated = true;
           }
-        })
+        });
         if (updated && filterbar) {
           initFilterBar();
         }
