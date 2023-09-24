@@ -173,14 +173,28 @@ function refreshTorrents(callback) {
 
     function updateVolatile() {
       const dirlist = document.getElementById("dirlist");
+      const snarkTr = document.querySelectorAll("#snarkTbody tr.volatile");
+      const snarkTrResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile");
       const updating = document.getElementsByClassName("volatile");
       const updatingResponse = xhrsnark.responseXML?.getElementsByClassName("volatile");
       const updatingTds = document.querySelectorAll(".volatile td:not(.details.data):not(.magnet):not(.trackerLink)");
       const updatingTdsResponse = xhrsnark.responseXML?.querySelectorAll(".volatile td:not(.details.data):not(.magnet):not(.trackerLink)");
+      let updated = false;
+
       if (updatingResponse?.length && updating.length === updatingResponse.length) {
-        let updated = false;
+        Array.from(snarkTr).forEach((elem, index) => {
+          const responseElem = snarkTrResponse[index];
+          if (responseElem) {
+            const classes = Array.from(elem.classList);
+            const responseClasses = Array.from(responseElem.classList);
+            if (!arrayEquals(classes, responseClasses)) {
+              elem.replaceWith(responseElem);
+              updated = true;
+            }
+          }
+        });
         Array.from(updatingTds).forEach((elem, index) => {
-          if (elem.innerHTML !== updatingTdsResponse[index].innerHTML) {
+          if (elem.innerHTML !== updatingTdsResponse[index].innerHTML && updated !== true) {
             elem.innerHTML = updatingTdsResponse[index].innerHTML;
             updated = true;
           }
