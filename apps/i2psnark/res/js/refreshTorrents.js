@@ -135,6 +135,8 @@ function refreshTorrents(callback) {
     function refreshHeaderAndFooter() {
       const snarkHead = document.getElementById("snarkHead");
       const snarkHeadThs = document.querySelectorAll("#snarkHead th:not(.torrentLink)");
+      const snarkFoot = document.getElementById("snarkFoot");
+      const snarkFootThs = document.querySelectorAll("#snarkFoot th");
       if (snarkHead?.responseXML) {
         const snarkHeadResponse = snarkHead.responseXML?.getElementById("snarkHead");
         const snarkHeadThsResponse = xhrsnark.responseXML?.querySelectorAll("#snarkHead th:not(.torrentLink)");
@@ -143,6 +145,19 @@ function refreshTorrents(callback) {
           Array.from(snarkHeadThs).forEach((elem, index) => {
             if (elem.innerHTML !== snarkHeadThsResponse[index].innerHTML) {
               elem.innerHTML = snarkHeadThsResponse[index].innerHTML;
+              updated = true;
+            }
+          });
+        }
+      }
+      if (snarkFoot?.responseXML) {
+        const snarkFootResponse = snarkFoot.responseXML?.getElementById("snarkFoot");
+        const snarkFootThsResponse = xhrsnark.responseXML?.querySelectorAll("#snarkFoot th");
+        if (snarkFoot && snarkFootResponse && !Object.is(snarkFoot.innerHTML, snarkFootResponse.innerHTML)) {
+          let updated = false;
+          Array.from(snarkFootThs).forEach((elem, index) => {
+            if (elem.innerHTML !== snarkFootThsResponse[index].innerHTML) {
+              elem.innerHTML = snarkFootThsResponse[index].innerHTML;
               updated = true;
             }
           });
@@ -175,31 +190,13 @@ function refreshTorrents(callback) {
       const dirlist = document.getElementById("dirlist");
       const snarkTr = document.querySelectorAll("#snarkTbody tr.volatile");
       const snarkTrResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile");
-      const updating = document.getElementsByClassName("volatile");
-      const updatingResponse = xhrsnark.responseXML?.getElementsByClassName("volatile");
-      const updatingTds = document.querySelectorAll(".volatile td:not(.details.data):not(.magnet):not(.trackerLink)");
-      const updatingTdsResponse = xhrsnark.responseXML?.querySelectorAll(".volatile td:not(.details.data):not(.magnet):not(.trackerLink)");
+      const updating = document.querySelectorAll("#snarkTbody .volatile, #messages");
+      const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody .volatile, #messages");
+      const updatingTds = document.querySelectorAll("#snarkTbody .volatile td:not(.details.data):not(.magnet):not(.trackerLink)");
+      const updatingTdsResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody .volatile td:not(.details.data):not(.magnet):not(.trackerLink)");
       let updated = false;
 
       if (updatingResponse?.length && updating.length === updatingResponse.length) {
-        Array.from(snarkTr).forEach((elem, index) => {
-          const responseElem = snarkTrResponse[index];
-          if (responseElem) {
-            const classes = Array.from(elem.classList);
-            const responseClasses = Array.from(responseElem.classList);
-            responseClasses.forEach((cls) => {
-              if (!classes.includes(cls)) {
-                elem.classList.remove(cls);
-              }
-            });
-            classes.forEach((cls) => {
-              if (!responseClasses.includes(cls)) {
-                elem.classList.add(cls);
-              }
-            });
-            updated = true;
-          }
-        });
         Array.from(updatingTds).forEach((elem, index) => {
           if (updatingResponse[index] && elem.innerHTML !== updatingTdsResponse[index].innerHTML) {
             elem.innerHTML = updatingTdsResponse[index].innerHTML;
@@ -209,13 +206,12 @@ function refreshTorrents(callback) {
         Array.from(updating).forEach((elem, index) => {
           if (updatingResponse[index] && elem.innerHTML !== updatingResponse[index].innerHTML) {
             const responseElem = updatingResponse[index];
-            elem.replaceWith(responseElem);
+            //elem.replaceWith(responseElem);
+            elem.outerHTML = updatingResponse[index].outerHTML;
             updated = true;
           }
         });
-        if (updated && filterbar) {
-          initFilterBar();
-        }
+        window.requestAnimationFrame(refreshHeaderAndFooter);
       } else {
         window.requestAnimationFrame(refreshAll);
       }
@@ -287,9 +283,7 @@ function debouncedRefreshTorrents(callback) {
       clearTimeout(debounceTimeoutId);
       callback(refreshTorrents(...args));
     };
-
     clearTimeout(debounceTimeoutId);
-
     debounceTimeoutId = setTimeout(later, delay);
   };
 }
