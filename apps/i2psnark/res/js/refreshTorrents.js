@@ -187,7 +187,7 @@ function refreshTorrents(callback) {
           if (responseElem) {
             const classes = Array.from(elem.classList);
             const responseClasses = Array.from(responseElem.classList);
-            if (!arrayEquals(classes, responseClasses)) {
+            if (classes.join(' ') !== responseClasses.join(' ')) {
               elem.replaceWith(responseElem);
               updated = true;
             }
