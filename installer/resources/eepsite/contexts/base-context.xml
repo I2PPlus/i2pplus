@@ -11,10 +11,6 @@ to serve static html files and images.
 <Configure class="org.eclipse.jetty.servlet.ServletContextHandler">
   <Set name="contextPath">/</Set>
   <Set name="resourceBase">./eepsite/docroot/</Set>
-  <Call name="setInitParameter">
-    <Arg>org.eclipse.jetty.servlet.Default.cacheControl</Arg>
-    <Arg>no-cache, private, max-age=2628000</Arg>
-  </Call>
   <!-- change to false to disallow directory listings -->
   <Call name="setInitParameter">
     <Arg>org.eclipse.jetty.servlet.Default.dirAllowed</Arg>
@@ -45,6 +41,11 @@ to serve static html files and images.
   <Call name="addServlet">
     <Arg>net.i2p.servlet.I2PDefaultServlet</Arg>
     <Arg>/</Arg>
+    <!-- set to false to disable the last-modified (utc) header -->
+    <Call name="setInitParameter">
+      <Arg>setLastModifiedHeader</Arg>
+      <Arg>true</Arg>
+    </Call>
   </Call>
 </Configure>
 

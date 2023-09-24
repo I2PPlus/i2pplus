@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,6 +69,8 @@ public class I2PDefaultServlet extends DefaultServlet
 
 //    private static final String FORMAT = "yyyy-MM-dd HH:mm";
     private static final String FORMAT = "dd MMM yyyy HH:mm";
+    private static final String LAST_MODIFIED_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
+    private boolean setLastModifiedHeader = true;
 
     /**
      * Overridden to save local copies of dirAllowed, locale, resourceBase, and stylesheet.
@@ -104,6 +107,12 @@ public class I2PDefaultServlet extends DefaultServlet
             }
         }
         catch(Exception e) {}
+
+        // Read the configuration parameter from webdefault.xml and set the flag
+        String setLastModifiedHeaderParam = getInitParameter("setLastModifiedHeader");
+        if (setLastModifiedHeaderParam != null && setLastModifiedHeaderParam.equalsIgnoreCase("false")) {
+            setLastModifiedHeader = false;
+        }
     }
 
     /**
@@ -381,4 +390,68 @@ public class I2PDefaultServlet extends DefaultServlet
     private static String deTag(String raw) {
         return StringUtil.sanitizeXmlString(raw);
     }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Get the resource path from the request URI
+        String resourcePath = request.getRequestURI().substring(request.getContextPath().length());
+
+        // Call the super implementation to handle the request and obtain the resource
+        Resource resource = getResource(resourcePath);
+        if(resource == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        // Set the Last-Modified header to the last modified date of the resource
+        long lastModified = resource.lastModified();
+        if(lastModified > 0) {
+            SimpleDateFormat sdf = new SimpleDateFormat(LAST_MODIFIED_FORMAT, Locale.US);
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+            response.setHeader("Last-Modified", sdf.format(new Date(lastModified)));
+        }
+
+        // Let the super implementation handle the response
+        super.doGet(request, response);
+    }
+
+    @Override
+    public Resource getResource(String path) {
+        // First, try to get the resource with the requested path
+        Resource resource = super.getResource(path);
+
+        if (resource != null || !"true".equals(getInitParameter("aliases"))) {
+            // If a resource is found or aliases are not enabled, return it
+            return resource;
+        }
+
+        // Aliases are enabled, so try to find a resource with a different extension
+        int dotIndex = path.lastIndexOf(".");
+        if (dotIndex != -1) {
+            String pathWithoutExtension = path.substring(0, dotIndex);
+            String[] aliases = {
+                pathWithoutExtension + ".gif",
+                pathWithoutExtension + ".htm",
+                pathWithoutExtension + ".jpeg",
+                pathWithoutExtension + ".jpg",
+                pathWithoutExtension + ".php",
+                pathWithoutExtension + ".png",
+                pathWithoutExtension + ".shtml",
+                pathWithoutExtension + ".webp",
+                pathWithoutExtension + ".xhtml"
+            };
+
+            for (String alias : aliases) {
+                resource = super.getResource(alias);
+                if (resource != null) {
+                    // If a resource is found with a different extension, return it
+                    return resource;
+                }
+            }
+        }
+
+        // If no resource is found, return null
+        return null;
+    }
+
 }
