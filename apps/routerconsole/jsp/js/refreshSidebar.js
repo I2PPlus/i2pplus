@@ -381,15 +381,25 @@ function refreshSidebar() {
   checkSections();
   };
 
+  let isReady = false;
+
+  function ready() {
+    if (document.visibilityState === "visible") {
+      xhr.send();
+      stickySidebar();
+      isReady = false;
+      document.removeEventListener("visibilitychange", ready);
+    }
+  }
+
   if (visible === "visible") {
     xhr.send();
     stickySidebar();
   } else {
-    document.addEventListener("visibilitychange", function ready() {
-      if (document.visibilityState === "visible") {
-        xhr.send();
-        stickySidebar();
-        document.removeEventListener("visibilitychange", ready);
+    document.addEventListener("visibilitychange", function() {
+      if (!isReady) {
+        isReady = true;
+        ready();
       }
     });
   }
