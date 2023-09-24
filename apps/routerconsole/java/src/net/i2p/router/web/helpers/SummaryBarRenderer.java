@@ -998,6 +998,11 @@ class SummaryBarRenderer {
            .append("</b></td><td class=digits><span>")
            .append(_helper.getFiveMinuteKBps())
            .append("Bps</span></td></tr>\n");
+        } else {
+            buf.append("<tr hidden><td><b>")
+           .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))   // 5 min
+           .append("</b></td><td class=digits><span>---")
+           .append("Bps</span></td></tr>\n");
         }
 
         if (_context.router().getUptime() > 2*60*1000) {
@@ -1005,6 +1010,11 @@ class SummaryBarRenderer {
            .append(_t("Total").replace("Total", _t("Lifetime")))
            .append("</b></td><td class=digits><span>")
            .append(_helper.getLifetimeKBps())
+           .append("Bps</span></td></tr>\n");
+        } else {
+            buf.append("<tr hidden><td><b>")
+           .append(_t("Total").replace("Total", _t("Lifetime")))
+           .append("</b></td><td class=digits><span>---")
            .append("Bps</span></td></tr>\n");
         }
 
@@ -1177,6 +1187,11 @@ class SummaryBarRenderer {
               .append(_t("Message delay")).append("\">")
               .append(_helper.getJobLag()).append(" / ").append(_helper.getMessageDelay())
               .append("</span>");
+        } else {
+           buf.append(" <span class=badge hidden title=\"").append(_t("Job lag")).append(" / ")
+              .append(_t("Message delay")).append("\">")
+              .append("--- / ---")
+              .append("</span>");
         }
         buf.append("</a><input type=checkbox id=toggle_sb_queue class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n" +
                    "<table id=sb_queue>\n" +
@@ -1233,6 +1248,15 @@ class SummaryBarRenderer {
                .append(_t("Tunnel lag"))
                .append("</b></td><td class=digits><span>")
                .append(_helper.getTunnelLag())
+               .append("</span></td></tr>\n");
+        } else {
+            buf.append("<tr title=\"")
+               .append(_t("Round trip time for a tunnel test"))
+               .append("\" hidden>" +
+                       "<td><b>")
+               .append(_t("Tunnel lag"))
+               .append("</b></td><td class=digits><span>")
+               .append("---")
                .append("</span></td></tr>\n");
         }
 
