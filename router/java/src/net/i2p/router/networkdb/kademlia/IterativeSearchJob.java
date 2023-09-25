@@ -809,11 +809,11 @@ public class IterativeSearchJob extends FloodSearchJob {
             }
         }
 
-        // Confirm success by checking for the Lease Set in local storage
+        // Confirm success by checking for the LeaseSet in local storage
         if (_isLease) {
             dest = getContext().netDb().lookupDestinationLocally(_key);
             if ((dest == null) && (_log.shouldLog(Log.WARN)))
-                _log.warn("Warning! LeaseSet not found in persistent data store for key [" + _key + "]");
+                _log.warn("Warning! LeaseSet not found in persistent data store for key [" + _key.toBase64().substring(0,6) + "]");
         }
 
 
