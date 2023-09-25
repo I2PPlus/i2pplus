@@ -487,7 +487,7 @@ public class WebMail extends HttpServlet
             out.println("Debug: Showing Mail Part at level " + level + " with ID " + mailPart.getID());
             out.println("Debug: Mail Part headers follow");
             out.println("-->");
-            out.println("<tr class=\"debugHeader\" style=\"display: none;\"><td><pre class=left>");
+            out.println("<tr class=debugHeader style=display:none><td><pre class=left>");
             for (int i = 0; i < mailPart.headerLines.length; i++) {
                 // fix Content-Type: multipart/alternative; boundary="----------8CDE39ECAF2633"
                 out.println(mailPart.headerLines[i].replace("--", "&#45;&#45;").replace("<", "&lt;").replace(">", "&gt;"));
