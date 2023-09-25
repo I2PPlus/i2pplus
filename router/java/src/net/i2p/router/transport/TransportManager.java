@@ -269,7 +269,6 @@ public class TransportManager implements TransportEventListener {
     private void configTransports() {
         Transport udp = null;
         if (_enableUDP) {
-//            boolean enableSSU1 = _context.getBooleanPropertyDefaultTrue(PROP_ENABLE_SSU1);
             boolean enableSSU1 = _context.getProperty(PROP_ENABLE_SSU1, DEFAULT_ENABLE_SSU1);
             boolean enableSSU2 = _context.getBooleanPropertyDefaultTrue(PROP_ENABLE_SSU2);
             DHSessionKeyBuilder.PrecalcRunner dh = enableSSU1 ? _dhThread : null;
