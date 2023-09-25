@@ -2031,7 +2031,9 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #bandwidthconfig .optionsingle{margin-left:2px;padding:0 15px 0 40px;background:#002500}
 #bandwidthconfig .optionsingle:hover,#reseedproxytype label:hover,#graphs .nowrap:hover{background-color:#030}
 #bandwidthconfig .optionsingle::after{min-height:54px}
-#bandwidthconfig .optionsingle input,#bandwidthconfig select{margin-top:16px}
+#bandwidthconfig .optionsingle input,#bandwidthconfig select{margin-top:16px;min-width:100px;text-align:right}
+#bandwidthconfig select{text-align:center}
+#bandwidthconfig select option{text-align:right}
 #bandwidthconfig td:first-child:not(.infohelp):not(.optionsave){padding:0 50px 0 5px;background:#000800 url(/themes/console/images/arrow_right.svg) no-repeat right 12px center/24px;background-blend-mode:luminosity}
 #bandwidthconfig td:not(.infohelp){background:#000}
 #bandwidthconfig td:not(.infohelp):first-child{width:25%;min-width:200px;white-space:nowrap}
