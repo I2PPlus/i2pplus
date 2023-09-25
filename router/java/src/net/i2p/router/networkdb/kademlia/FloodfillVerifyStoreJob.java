@@ -341,12 +341,12 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 boolean rv = _key.equals(dsrm.getSearchKey());
                 if (rv) {
                     if (_log.shouldInfo())
-                        _log.info("[JobId: " + getJobId() + "] DSRM key match successful" +
+                        _log.info("[JobId: " + getJobId() + "] DbSearchReplyMessage key match successful" +
                                   "\n* DbId: " + _facade._dbid);
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("[JobId: " + getJobId() + "] DSRM key mismatch for key " + _key +
-                                  " with DSRM " + message + "\n* DbId: " + _facade._dbid);
+                        _log.warn("[JobId: " + getJobId() + "] DbSearchReplyMessage key mismatch for key [" + _key.toBase64().substring(0,6) +
+                                  "] with DSRM " + message + "\n* DbId: " + _facade._dbid);
                 }
                 return rv;
             }
