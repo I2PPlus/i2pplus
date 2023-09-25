@@ -958,7 +958,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("[EncryptedLeaseSet: ");
+        buf.append("\n* EncryptedLeaseSet: ");
         if (_signingKey != null) {
             buf.append("\n* Blinded Key: ").append(_signingKey);
             Hash h = getHash();
@@ -992,7 +992,6 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         } else {
             buf.append("\n* Not decrypted");
         }
-        buf.append("]");
         return buf.toString();
     }
 
