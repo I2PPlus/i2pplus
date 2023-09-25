@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project basedir="." default="all" name="i2p" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
+  <!-- Define the ant-contrib tasks -->
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+    <classpath>
+      <pathelement location="/usr/share/java/ant-contrib.jar"/>
+    </classpath>
+  </taskdef>
+
     <!-- for javac "release" parameter -->
     <property name="ant.minimumVersion" value="1.9.8" />
 
@@ -3286,4 +3293,28 @@
         <checksum file="portable-win32.zip" forceOverwrite="yes" />
         <move file="portable" tofile="pkg-temp" />
     </target>
+
+    <target name="removeComments">
+      <property name="newline" value="${line.separator}" />
+      <foreach target="cleanup-jsps" param="currentFile" parallel="false">
+        <path>
+          <fileset dir="./">
+            <include name="**/*_jsp.java"/>
+          </fileset>
+        </path>
+      </foreach>
+    </target>
+
+    <target name="cleanup-jsps">
+      <property name="currentFile" value="${toString:param}" />
+      <basename property="filename" file="${currentFile}" />
+      <echo message="Processing file ${filename}" />
+      <loadfile property="filecontent" srcFile="${currentFile}" />
+      <!-- Remove double newlines -->
+      <replace file="${currentFile}" token="${newline}${newline}" value="${newline}" />
+      <!-- Remove comments -->
+      <replaceregexp file="${currentFile}" match="\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/" replace="">
+      </replaceregexp>
+    </target>
+
 </project>
