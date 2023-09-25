@@ -772,6 +772,17 @@ class SummaryBarRenderer {
                buf.append("\"><span>")
                   .append(DataHelper.formatDuration2(_context.clock().getOffset()))
                   .append("</span></td></tr>\n");
+           } else {
+               buf.append("<tr title=\"")
+                  .append(_t("Difference between network-synced time and local time"))
+                  .append("\" hidden>" +
+                           "<td><b>")
+                  .append(_t("Clock Skew"))
+                  .append("</b></td>" +
+                           "<td class=\"digits")
+                   .append("\"><span>")
+                  .append("---")
+                  .append("</span></td></tr>\n");
            }
 
            String requestURI = _helper.getRequestURI();
