@@ -3,6 +3,7 @@
 
 import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
 import {stickySidebar} from "/js/stickySidebar.js";
+import {onVisible} from "/js/onVisible.js";
 
 "use strict";
 
@@ -382,28 +383,26 @@ function refreshSidebar() {
   };
 
   function ready() {
-    if (document.visibilityState === "visible") {
-      xhr.send();
-      stickySidebar();
-      document.removeEventListener("visibilitychange", ready);
-    } else {
+    xhr.send();
+    stickySidebar();
+
+    if (document.visibilityState !== "visible") {
       xhr.abort();
     }
   }
 
   function handleVisibilityChange() {
     if (document.visibilityState === "visible") {
-      ready();
+      xhr.send();
     } else {
       xhr.abort();
     }
   }
 
   if (visible === "visible") {
-    xhr.send();
-    stickySidebar();
+    ready();
   } else {
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+    onVisible(document, ready);
   }
 
   xhr.onerror = function (error) {
