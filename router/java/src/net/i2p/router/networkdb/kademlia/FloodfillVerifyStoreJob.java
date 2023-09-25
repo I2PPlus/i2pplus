@@ -423,13 +423,14 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 // and what is failing. This message will be displayed unconditionally
                 // every time a DSRM is handled here.
                 if (_log.shouldWarn())
-                    _log.warn("Verify via Floodfill (DbId: " + _facade._dbid + ") failed (DbSearchReplyMsg) for [" + _key.toBase64().substring(0,6) + "]");
+                    _log.warn("Verify via Floodfill failed (DbSearchReplyMsg) for [" + _key.toBase64().substring(0,6) + "]" +
+                              "\n* DbId: " + _facade._dbid);
                 // only for RI... LS too dangerous?
                 if (_isRouterInfo) {
                     if (_facade.isClientDb())
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("[Jobid: " + getJobId() + "; dbid: " + _facade._dbid
-                                      + "Warning! Client is starting a SingleLookupJob (DIRECT?) for RouterInfo");
+                            _log.warn("[Jobid: " + getJobId() + "] Warning! Client is starting a SingleLookupJob (DIRECT?) for RouterInfo" +
+                                      "\n* DbId: " + _facade._dbid);
                     ctx.jobQueue().addJob(new SingleLookupJob(ctx, dsrm));
                 }
             }
