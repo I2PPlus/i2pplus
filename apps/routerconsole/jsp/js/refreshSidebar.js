@@ -386,12 +386,16 @@ function refreshSidebar() {
       xhr.send();
       stickySidebar();
       document.removeEventListener("visibilitychange", ready);
+    } else {
+      xhr.abort();
     }
   }
 
   function handleVisibilityChange() {
     if (document.visibilityState === "visible") {
       ready();
+    } else {
+      xhr.abort();
     }
   }
 
