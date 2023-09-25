@@ -82,6 +82,7 @@ ul{margin:20px 0;padding:0}
 #routerinformation .h3navlinks a,#config_logging .h3navlinks a{margin-top:-7px}
 
 /* sidebar */
+#sidebar :-moz-broken{opacity:0}
 h4.sb_info+hr+form{margin-bottom:-1px;padding-top:5px}
 h4.sb_info{margin-top:-11px}
 .sb_info a{vertical-align:baseline}

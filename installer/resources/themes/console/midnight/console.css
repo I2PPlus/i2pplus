@@ -197,6 +197,7 @@ button.download.control:hover,button.download.control:focus{background:var(--dow
 button.download.control:active{background:var(--download) no-repeat center center/14px,var(--btn_active)}
 
 /* sidebar */
+#sidebar :-moz-broken{opacity:0}
 
 /* buttons */
 #sidebar button{margin:2px;min-width:87px;background-blend-mode:normal}

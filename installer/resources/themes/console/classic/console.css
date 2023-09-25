@@ -54,6 +54,7 @@ a.script{word-spacing:normal;letter-spacing:normal}
 .main a:visited[target="_blank"]{color:var(--visited)}
 
 /* sidebar */
+#sidebar :-moz-broken{opacity:0}
 .sb_notice{margin:-5px 1px -6px;padding:7px 5px;line-height:1.1;font-size:8.5pt;font-weight:700;border:var(--border);border-radius:2px;box-shadow:0 0 1px #bbb,inset 0 0 0 1px #fbb;background:var(--label_focus)}
 .sb_notice:empty{display:none}
 .sb_notice+.sb_notice{margin-top:8px}
