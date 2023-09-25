@@ -196,7 +196,9 @@ public class GeoIP {
         private static final int CLEAR = 8;
 
         public void run() {
-            runit();
+            synchronized(this) {
+                runit();
+            }
         }
 
         /**
