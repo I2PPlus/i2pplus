@@ -2034,7 +2034,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #bandwidthconfig .optionsingle input,#bandwidthconfig select{margin-top:16px}
 #bandwidthconfig td:first-child:not(.infohelp):not(.optionsave){padding:0 50px 0 5px;background:#000800 url(/themes/console/images/arrow_right.svg) no-repeat right 12px center/24px;background-blend-mode:luminosity}
 #bandwidthconfig td:not(.infohelp){background:#000}
-#bandwidthconfig td:not(.infohelp):first-child{width:200px;white-space:nowrap}
+#bandwidthconfig td:not(.infohelp):first-child{width:25%;min-width:200px;white-space:nowrap}
 #bandwidthconfig tr:nth-child(2) .net_bwrate::before{background:url(/themes/console/images/inbound.svg) var(--center)}
 #bandwidthconfig tr:nth-child(3) .net_bwrate::before,#bandwidthconfig tr:nth-child(4) .net_bwrate::before{background:url(/themes/console/images/outbound.svg) var(--center)}
 #bandwidthconfig tr:nth-last-child(n+3) td{background-color:#000800}
