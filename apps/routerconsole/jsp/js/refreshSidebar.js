@@ -44,7 +44,7 @@ const updateForm = document.getElementById("sb_updateform");
 const updateProgress = document.getElementById("sb_updateprogress");
 const updateSection = document.getElementById("sb_updatesection");
 const updateSectionHR = document.querySelector("#sb_updatesection + hr");
-const updateStatus = document.getElementById("sb_updatestatus");
+const updateStatus = document.getElementById("sb_updateprogess");
 const visible = document.visibilityState;
 
 sb.addEventListener("loaded", () => {
@@ -120,7 +120,7 @@ function refreshSidebar() {
     const updateFormResponse = xhr.responseXML.getElementById("sb_updateform");
     const updateProgressResponse = xhr.responseXML.getElementById("sb_updateprogress");
     const updateSectionResponse = xhr.responseXML.getElementById("sb_updatesection");
-    const updateStatusResponse = xhr.responseXML.getElementById("sb_updatestatus");
+    const updateStatusResponse = xhr.responseXML.getElementById("sb_updateprogess");
     const routerdown = document.getElementById("routerdown");
 
     statusPanel.forEach(statusPanel => (statusPanel.classList.remove("statusDown")));
@@ -381,14 +381,17 @@ function refreshSidebar() {
   checkSections();
   };
 
-  let isReady = false;
-
   function ready() {
     if (document.visibilityState === "visible") {
       xhr.send();
       stickySidebar();
-      isReady = false;
       document.removeEventListener("visibilitychange", ready);
+    }
+  }
+
+  function handleVisibilityChange() {
+    if (document.visibilityState === "visible") {
+      ready();
     }
   }
 
@@ -396,12 +399,7 @@ function refreshSidebar() {
     xhr.send();
     stickySidebar();
   } else {
-    document.addEventListener("visibilitychange", function() {
-      if (!isReady) {
-        isReady = true;
-        ready();
-      }
-    });
+    document.addEventListener("visibilitychange", handleVisibilityChange);
   }
 
   xhr.onerror = function (error) {
