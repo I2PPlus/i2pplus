@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import net.i2p.app.ClientAppManager;
@@ -41,9 +40,6 @@ import net.i2p.util.SystemVersion;
 import net.i2p.router.web.ConfigUpdateHandler;
 
 import java.lang.management.ManagementFactory;
-//import java.lang.management.OperatingSystemMXBean;
-//import java.lang.management.ThreadMXBean;
-
 import com.sun.management.OperatingSystemMXBean;
 
 /**
@@ -251,21 +247,6 @@ public class SummaryHelper extends HelperBase {
             return DataHelper.formatDuration2(router.getUptime());
     }
 
-/**
-    this displayed offset, not skew - now handled in reachability()
-
-    private String timeSkew() {
-        if (_context == null) return "";
-        //if (!_context.clock().getUpdatedSuccessfully())
-        //    return " (Unknown skew)";
-        long ms = _context.clock().getOffset();
-        long diff = Math.abs(ms);
-        if (diff < 3000)
-            return "";
-        return " (" + DataHelper.formatDuration2(diff) + " " + _t("skew") + ")";
-    }
-**/
-
     /** allowReseed */
     public boolean allowReseed() {
         long uptime = _context.router().getUptime();
@@ -352,9 +333,9 @@ public class SummaryHelper extends HelperBase {
         if (routerInfo == null)
             return new NetworkStateMessage(NetworkState.TESTING, _t("Testing"));
 
-// TODO: Migrate/decouple + enhance .sb_netstatus linked advice to Network Reachability section,
-// add tooltips to .sb_netstatus to explain status/nature of error (user may have Reachability section hidden),
-// color .sb_netstatus text according to status,
+        // TODO: Migrate/decouple + enhance .sb_netstatus linked advice to Network Reachability section,
+        // add tooltips to .sb_netstatus to explain status/nature of error (user may have Reachability section hidden),
+        // color .sb_netstatus text according to status
         Status status = _context.commSystem().getStatus();
         String txstatus = _context.commSystem().getLocalizedStatusString();
         NetworkState state = NetworkState.RUNNING;
@@ -523,17 +504,6 @@ public class SummaryHelper extends HelperBase {
      * @since 0.9.58+
      */
     public String getCPUBar() {
-/*
-        Rate stat = _context.statManager().getRate("router.cpuLoad").getRate(60*1000);
-        long loadAvg;
-        long count = (1 + (3 * stat.getCurrentEventCount() + stat.getLastEventCount()));
-        if (count > 1) {
-            loadAvg = (long) (getCPULoad() + ((3 * stat.getCurrentTotalValue()) + stat.getLastTotalValue()) / count);
-        } else {
-            loadAvg = getCPULoad();
-        }
-        int load = Math.toIntExact(loadAvg);
-*/
         return "<div class=\"percentBarOuter volatile\" id=sb_CPUBar><div class=percentBarText>CPU: " +
                getCPULoadAvg() + "%" + (getSystemLoad() > 0 ? " | Sys Load Avg: " + getSystemLoad() + "%" : "") +
                "</div><div class=percentBarInner style=\"width:" + getCPULoadAvg() +
@@ -826,7 +796,7 @@ public class SummaryHelper extends HelperBase {
                     buf.append("class=tunnelServer ");
                 else if (isPing)
                     buf.append("class=ping ");
-                buf.append("align=right><img src=/themes/console/images/");
+                buf.append("><img src=/themes/console/images/");
                 if (isSnark) {
                     buf.append("snark.svg alt=I2PSnark title=\"").append(_t("Torrents"));
                 } else if (server) {
@@ -879,12 +849,12 @@ public class SummaryHelper extends HelperBase {
             buf.append("<table id=sb_localtunnels class=volatile>\n<tr><td colspan=3><center><i>")
                .append(_t("none")).append("</i></center></td></tr>\n</table>\n");
         }
-        buf.append("<table id=localtunnelSummary hidden>\n<tr id=localtunnelsActive>\n<td>")
+        buf.append("<table id=localtunnelSummary hidden>\n<tr id=localtunnelsActive><td>")
            .append("<span id=snarkCount class=\"count_0\">0 x <img src=/themes/console/images/snark.svg></span>")
            .append("<span id=serverCount class=\"count_0\">0 x <img src=/themes/console/images/server.svg></span>")
            .append("<span id=clientCount class=\"count_0\">0 x <img src=/themes/console/images/client.svg></span>")
            .append("<span id=pingCount class=\"count_0\">0 x <img src=/themes/console/images/ping.svg></span>")
-           .append("</td>\n</tr>\n</table>\n");
+           .append("</td></tr>\n</table>\n");
         return buf.toString();
     }
 

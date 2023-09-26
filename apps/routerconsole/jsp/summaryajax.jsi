@@ -14,25 +14,29 @@
   const refreshInterval = refresh * 1000;
   let timerId = null;
   const sb = document.getElementById("sidebar");
-  const visible = document.visibilityState;
-  function initSidebarRefresh() {timerId = setInterval(() => requestAnimationFrame(refreshSidebar), refreshInterval);}
-  function stopSidebarRefresh() {clearInterval(timerId);}
+  const initSidebarRefresh = () => {
+    timerId = setInterval(() => {
+      requestAnimationFrame(refreshSidebar);
+    }, refreshInterval);
+  };
+  const stopSidebarRefresh = () => {
+    clearInterval(timerId);
+  };
   onVisible(sb, () => {
-    if (timerId === null) {
+    if (!timerId) {
       initSidebarRefresh();
     }
+  }, () => {
+    if (timerId) {
+      stopSidebarRefresh();
+    }
   });
-  function onDomContentLoaded() {
+  const onDomContentLoaded = () => {
     sectionToggler();
     stickySidebar();
-  }
-  function onWindowResize() {
-    stickySidebar();
-  }
-  document.addEventListener("DOMContentLoaded", onDomContentLoaded);
+  };
   window.addEventListener("DOMContentLoaded", onDomContentLoaded);
-  window.addEventListener("resize", onWindowResize);
-  if (visible === "hidden") {stopSidebarRefresh();}
+  window.addEventListener("resize", () => stickySidebar());
 </script>
 <%
     } else {

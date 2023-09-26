@@ -385,25 +385,9 @@ function refreshSidebar() {
   function ready() {
     xhr.send();
     stickySidebar();
-
-    if (document.visibilityState !== "visible") {
-      xhr.abort();
-    }
   }
 
-  function handleVisibilityChange() {
-    if (document.visibilityState === "visible") {
-      xhr.send();
-    } else {
-      xhr.abort();
-    }
-  }
-
-  if (visible === "visible") {
-    ready();
-  } else {
-    onVisible(document, ready);
-  }
+  onVisible(sb, ready);
 
   xhr.onerror = function (error) {
     isDownTimer = setTimeout(tangoDown, 5000);
