@@ -188,12 +188,12 @@ function refreshTorrents(callback) {
 
     function updateVolatile() {
       const dirlist = document.getElementById("dirlist");
-      const snarkTr = document.querySelectorAll("#snarkTbody tr.volatile");
-      const snarkTrResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile");
-      const updating = document.querySelectorAll("#snarkTbody .volatile, #messages");
-      const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody .volatile, #messages");
-      const updatingTds = document.querySelectorAll("#snarkTbody .volatile td:not(.details.data):not(.magnet):not(.trackerLink)");
-      const updatingTdsResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody .volatile td:not(.details.data):not(.magnet):not(.trackerLink)");
+      const snarkTr = document.querySelectorAll("tr.volatile");
+      const snarkTrResponse = xhrsnark.responseXML?.querySelectorAll("tr.volatile");
+      const updating = document.querySelectorAll("tr.volatile, #messages");
+      const updatingResponse = xhrsnark.responseXML?.querySelectorAll("tr.volatile, #messages");
+      const updatingTds = document.querySelectorAll(".volatile td:not(.details.data):not(.magnet):not(.trackerLink)");
+      const updatingTdsResponse = xhrsnark.responseXML?.querySelectorAll(".volatile td:not(.details.data):not(.magnet):not(.trackerLink)");
       let updated = false;
 
       if (updatingResponse?.length && updating.length === updatingResponse.length) {
