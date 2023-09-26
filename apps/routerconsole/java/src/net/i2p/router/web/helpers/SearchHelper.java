@@ -94,7 +94,7 @@ public class SearchHelper extends HelperBase {
         buildEngineMap();
         if (_engines.isEmpty())
             return "<b>No search engines specified</b>";
-        String dflt = _context.getProperty(PROP_DEFAULT);
+        String dflt = _context.getProperty(PROP_DEFAULT, DEFAULT);
         if (dflt == null || !_engines.containsKey(dflt)) {
             // pick a random one as default and save it
             int idx = _context.random().nextInt(_engines.size());
