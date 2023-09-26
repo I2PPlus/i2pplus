@@ -17,6 +17,6 @@ input[type=password],input[type=text],label,.infohash,.infohelp,.infowarn,.listD
 #torrents tfoot .RateDown:not(:empty)::before,tfoot .torrentDownloaded:not(:empty)::before,tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{margin-right:2px}
 #torrents tfoot tr:first-child th{min-width:80px}
 #totals .canhide{display:none}
-@font-face{font-display:swap;font-family:FiraCode;font-style:normal;font-weight:300,400,500,600,700;src:url(/themes/fonts/FiraCode.woff2);format("woff2")}
-@font-face{font-display:swap;font-family:Sora;font-style:italic;font-weight:100,200,300,400,500,600,700,800;src:url(/themes/fonts/Sora/Sora-Italic.woff2);format("woff2")}
 @font-face{font-display:swap;font-family:Sora;font-style:normal;font-weight:100,200,300,400,500,600,700,800;src:url(/themes/fonts/Sora/Sora.woff2);format("woff2")}
+@font-face{font-display:swap;font-family:Sora;font-style:italic;font-weight:100,200,300,400,500,600,700,800;src:url(/themes/fonts/Sora/Sora-Italic.woff2);format("woff2")}
+@font-face{font-display:swap;font-family:FiraCode;font-style:normal;font-weight:300,400,500,600,700;src:url(/themes/fonts/FiraCode.woff2);format("woff2")}

@@ -1,5 +1,10 @@
 @charset "utf-8";
 
+:root{
+--bodyfont:Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Bitstream Vera Sans,DejaVu Sans,Verdana,Lucida Grande,Helvetica,sans-serif;
+--monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
+}
+
 @font-face{
   font-family:"Droid Sans";
   font-weight:400;
