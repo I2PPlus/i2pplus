@@ -1043,7 +1043,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         buf.append(status).append("</div>");
         double pct = ((double)downloaded) / ((double)totalSize);
         synchronized (_pct) {
-            buf.append("<div class=\"percentBarOuter volatile\"><div class=percentBarText>");
+            buf.append("<div id=sb_updatebar class=\"percentBarOuter volatile\"><div class=percentBarText>");
             buf.append(DataHelper.formatSize2(downloaded));
             buf.append("B / ");
             buf.append(DataHelper.formatSize2(totalSize));
