@@ -21,18 +21,13 @@ public class BaseBean
     protected final I2PAppContext _context;
     protected final Properties properties;
     protected String action, lastSerial, serial;
-
     private long configLastLoaded;
     private static final String PRIVATE_BOOK = "private_addressbook";
     private static final String DEFAULT_PRIVATE_BOOK = "../privatehosts.txt";
-
     private static final String RC_PROP_THEME_NAME = "routerconsole.theme";
     private static final String PROP_THEME_NAME = "theme";
     private static final String DEFAULT_THEME = "dark";
     private static final String BASE_THEME_PATH = "/themes/susidns/";
-    /** From CSSHelper */
-    private static final String PROP_DISABLE_OLD = "routerconsole.disableOldThemes";
-    private static final boolean DEFAULT_DISABLE_OLD = false;
     public static final String PROP_PW_ENABLE = "routerconsole.auth.enable";
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     private static final String ADDRESSBOOK_DIR = "addressbook";
@@ -105,14 +100,6 @@ public class BaseBean
         String theme = _context.getProperty(RC_PROP_THEME_NAME, DEFAULT_THEME);
         // Apply any override
         theme = properties.getProperty(PROP_THEME_NAME, theme);
-        // remap deprecated themes
-        if (theme.equals("midnight")) {
-            if (_context.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD))
-                theme = "dark";
-        } else if (theme.equals("classic")) {
-            if (_context.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD))
-                theme = "light";
-        }
         // Ensure that theme exists
         String[] themes = getThemes();
         boolean themeExists = false;

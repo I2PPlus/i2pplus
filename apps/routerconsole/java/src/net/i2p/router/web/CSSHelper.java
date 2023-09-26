@@ -34,9 +34,6 @@ public class CSSHelper extends HelperBase {
     public static final String PROP_FORCE_MOBILE_CONSOLE = "routerconsole.forceMobileConsole";
     /** @since 0.9.32 */
     public static final String PROP_EMBED_APPS = "routerconsole.embedApps";
-    /** @since 0.9.36 */
-    public static final String PROP_DISABLE_OLD = "routerconsole.disableOldThemes";
-    public static final boolean DEFAULT_DISABLE_OLD = false;
     /** @since 0.9.59+ */
     public static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     public static final boolean DEFAULT_ENABLE_SORA_FONT = false;

@@ -149,9 +149,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String RC_PROP_UNIVERSAL_THEMING = "routerconsole.universal.theme";
     public static final String PROP_THEME = "i2psnark.theme";
     public static final String DEFAULT_THEME = "ubergine";
-    /** From CSSHelper */
-    private static final String PROP_DISABLE_OLD = "routerconsole.disableOldThemes";
-    private static final boolean DEFAULT_DISABLE_OLD = false;
     /** @since 0.9.32 */
     public static final String PROP_COLLAPSE_PANELS = "i2psnark.collapsePanels";
     /** @since 0.9.34 */
@@ -994,14 +991,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         } else {
             theme = _config.getProperty(PROP_THEME, DEFAULT_THEME);
         }
-        // remap deprecated themes
-        if (theme.equals("midnight")) {
-            if (_context.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD))
-                theme = "dark";
-        } else if (theme.equals("classic")) {
-            if (_context.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD))
-                theme = "light";
-        }
         return theme;
     }
 
@@ -1017,11 +1006,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             File[] dirnames = dir.listFiles(fileFilter);
             if (dirnames != null) {
                 List<String> th = new ArrayList<String>(dirnames.length);
-                boolean skipOld = _context.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD);
                 for (int i = 0; i < dirnames.length; i++) {
                     String name = dirnames[i].getName();
-                    if (skipOld && (name.equals("midnight") || name.equals("classic")))
-                        continue;
                     if (name.equals("images"))
                         continue;
                     th.add(name);

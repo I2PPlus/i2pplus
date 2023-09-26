@@ -89,8 +89,6 @@ public class IndexBean {
     private static final String PROP_THEME_NAME = "routerconsole.theme";
     private static final String DEFAULT_THEME = "dark";
     /** From CSSHelper */
-    private static final String PROP_DISABLE_OLD = "routerconsole.disableOldThemes";
-    private static final boolean DEFAULT_DISABLE_OLD = false;
     private static final String PROP_PW_ENABLE = "routerconsole.auth.enable";
     private static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
 
@@ -350,16 +348,6 @@ public class IndexBean {
 
     public String getTheme() {
         String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
-/**
-        // remap deprecated themes
-        if (theme.equals("midnight")) {
-            if (_context.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD))
-                theme = "dark";
-        } else if (theme.equals("classic")) {
-            if (_context.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD))
-                theme = "light";
-        }
-**/
         return "/themes/console/" + theme + "/";
     }
 

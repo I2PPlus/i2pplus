@@ -256,10 +256,6 @@ public class WebMail extends HttpServlet
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     private static final String CONFIG_THEME = "theme";
     private static final String DEFAULT_THEME = "dark";
-    /** From CSSHelper */
-    private static final String PROP_DISABLE_OLD = "routerconsole.disableOldThemes";
-    private static final boolean DEFAULT_DISABLE_OLD = false;
-
     private static final String spacer = ""; /* this is best done with css */
     private static final String thSpacer = "<th>&nbsp;</th>\n";
     private static final String CONSOLE_BUNDLE_NAME = "net.i2p.router.web.messages";
@@ -3713,11 +3709,8 @@ public class WebMail extends HttpServlet
             File[] dirnames = dir.listFiles(fileFilter);
             if (dirnames != null) {
                 List<String> th = new ArrayList<String>(dirnames.length);
-                boolean skipOld = ctx.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD);
                 for (int i = 0; i < dirnames.length; i++) {
                     String name = dirnames[i].getName();
-                    if (skipOld && (name.equals("midnight") || name.equals("classic")))
-                        continue;
                     th.add(name);
                 }
                 themes = th.toArray(new String[th.size()]);
