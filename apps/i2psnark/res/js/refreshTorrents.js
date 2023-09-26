@@ -97,7 +97,7 @@ function refreshTorrents(callback) {
         filterbar.removeEventListener("mouseover", setLinks);
         const torrentsContainer = document.getElementById("torrents");
         if (torrentsContainer?.responseXML) {
-          const newTorrents = torrents.responseXML.getElementById("torrents");
+          const newTorrents = xhrsnark.responseXML.getElementById("torrents");
           if (newTorrents && torrentsContainer.innerHTML !== newTorrents.innerHTML) {
             torrentsContainer.innerHTML = newTorrents.innerHTML;
           }
@@ -138,8 +138,8 @@ function refreshTorrents(callback) {
       const snarkFoot = document.getElementById("snarkFoot");
       const snarkFootThs = document.querySelectorAll("#snarkFoot th");
       if (snarkHead?.responseXML) {
-        const snarkHeadResponse = snarkHead.responseXML?.getElementById("snarkHead");
-        const snarkHeadThsResponse = xhrsnark.responseXML?.querySelectorAll("#snarkHead th:not(.torrentLink)");
+        const snarkHeadResponse = xhrsnark.responseXML.getElementById("snarkHead");
+        const snarkHeadThsResponse = xhrsnark.responseXML.querySelectorAll("#snarkHead th:not(.torrentLink)");
         if (snarkHead && snarkHeadResponse && !Object.is(snarkHead.innerHTML, snarkHeadResponse.innerHTML)) {
           let updated = false;
           Array.from(snarkHeadThs).forEach((elem, index) => {
@@ -151,8 +151,8 @@ function refreshTorrents(callback) {
         }
       }
       if (snarkFoot?.responseXML) {
-        const snarkFootResponse = snarkFoot.responseXML?.getElementById("snarkFoot");
-        const snarkFootThsResponse = xhrsnark.responseXML?.querySelectorAll("#snarkFoot th");
+        const snarkFootResponse = xhrsnark.responseXML.getElementById("snarkFoot");
+        const snarkFootThsResponse = xhrsnark.responseXML.querySelectorAll("#snarkFoot th");
         if (snarkFoot && snarkFootResponse && !Object.is(snarkFoot.innerHTML, snarkFootResponse.innerHTML)) {
           let updated = false;
           Array.from(snarkFootThs).forEach((elem, index) => {
@@ -206,7 +206,6 @@ function refreshTorrents(callback) {
         Array.from(updating).forEach((elem, index) => {
           if (updatingResponse[index] && elem.innerHTML !== updatingResponse[index].innerHTML) {
             const responseElem = updatingResponse[index];
-            //elem.replaceWith(responseElem);
             elem.outerHTML = updatingResponse[index].outerHTML;
             updated = true;
           }
