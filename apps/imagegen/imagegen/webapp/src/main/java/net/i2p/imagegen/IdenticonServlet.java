@@ -80,7 +80,7 @@ public class IdenticonServlet extends HttpServlet {
 
 		// Since identicons cache expiration is very long, version is
 		// used in ETag to force identicons to be updated as needed.
-		// Change veresion whenever rendering codes changes result in
+		// Change version whenever rendering codes changes result in
 		// visual changes.
 		if (cfg.getInitParameter(INIT_PARAM_VERSION) != null)
 			this.version = Integer.parseInt(cfg
