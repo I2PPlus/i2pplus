@@ -40,7 +40,7 @@ const statusPanel = document.querySelectorAll("#sb_status,.sb_tunnelstatus,#sb_r
 const tunnelBuildStatus = document.getElementById("sb_tunnelstatus");
 const tunnelCount = document.getElementById("tunnelCount");
 const tunnels = document.getElementById("sb_tunnels");
-const updateBar = document.querySelector(".sb_updatestatus + .percentBarOuter");
+const updateBar = document.getElementById("sb_updatebar");
 const updateForm = document.getElementById("sb_updateform");
 const updateProgress = document.getElementById("sb_updateprogress");
 const updateSection = document.getElementById("sb_updatesection");
@@ -117,7 +117,7 @@ function refreshSidebar() {
     const shutdownStatusResponse = xhr.responseXML.getElementById("sb_shutdownStatus");
     const tunnelBuildStatusResponse = xhr.responseXML.getElementById("sb_tunnelstatus");
     const tunnelsResponse = xhr.responseXML.getElementById("sb_tunnels");
-    const updateBarResponse = xhr.responseXML.querySelector(".sb_updatestatus + .percentBarOuter");
+    const updateBarResponse = xhr.responseXML.getElementById("sb_updatebar");
     const updateFormResponse = xhr.responseXML.getElementById("sb_updateform");
     const updateProgressResponse = xhr.responseXML.getElementById("sb_updateprogress");
     const updateSectionResponse = xhr.responseXML.getElementById("sb_updatesection");
@@ -241,8 +241,8 @@ function refreshSidebar() {
       if (cpuBar && cpuBarResponse && !Object.is(cpuBar.innerHTML, cpuBarResponse.innerHTML)) {
         cpuBar.innerHTML = cpuBarResponse.innerHTML;
       }
-      if (updateBar && updaterBarResponse && !Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
-        updateBar.innerHTML = updateBarResponse.innerHTML;
+      if (updateBar && updaterBarResponse && !Object.is(updateBar.textContent, updateBarResponse.textContent)) {
+        updateBar.outerHTML = updateBarResponse.outerHTML;
         const updateH3 = document.querySelector("#sb_updatesection > h3 a");
         if (updateH3) {
           const spinner = "<span id=updateSpinner></span>";
