@@ -195,7 +195,7 @@ function refreshSidebar() {
           tunnels.innerHTML = tunnelsResponse.innerHTML;
         }
       }
-      if (localtunnels && !localtunnels?.hasAttribute("hidden")) {
+      if (localtunnels) {
         if (localtunnelsResponse && !Object.is(localtunnels.innerHTML, localtunnelsResponse.innerHTML)) {
           localtunnels.innerHTML = localtunnelsResponse.innerHTML;
         }
