@@ -2122,9 +2122,9 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #debug h2+hr,.buckets hr{display:none}
 #debug h2{margin-top:15px;padding:10px 10px 8px;font-size:11.5pt;background:var(--bug) no-repeat right 10px center,var(--h3),#010;background-size:18px,2px}
 #debug h3{border-width:1px;padding:5px 10px;font-size:10pt}
-#debug h3.debug_inboundsessions{background:var(--in) no-repeat 8px center,linear-gradient(180deg,rgba(0,0,0,0) 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 1px,rgba(0,16,0,.5) 2px,rgba(0,16,0,.4) 3px),var(--h3_fade)}
-#debug h3.debug_outboundsessions,#debug h3.debug_inboundsessions{padding:6px 10px 8px 28px;background-size:14px}
-#debug h3.debug_outboundsessions{margin-top:-2px;background:var(--out) no-repeat 8px center,linear-gradient(180deg,rgba(0,0,0,0) 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 1px,rgba(0,16,0,.5) 2px,rgba(0,16,0,.4) 3px),var(--h3_fade)}
+#debug h3.debug_inboundsessions{background:var(--in) no-repeat 8px center/14px,var(--th)}
+#debug h3.debug_outboundsessions,#debug h3.debug_inboundsessions{padding:6px 10px 5px 28px}
+#debug h3.debug_outboundsessions{margin-top:-2px;background:var(--out) no-repeat 8px center/14px,var(--th)}
 #debug li{display:inline-block;padding:2px 0;min-width:400px}
 #debug li:last-child{padding-bottom:2px}
 #debug{line-height:1.4;padding-bottom:11px}
@@ -2142,6 +2142,15 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #portmapper td:first-child,#sockets td:first-child{font-weight:700}
 
 /* jardump */
+.revision,.sha256,.unsignedmod{display:inline-block;user-select:all}
+.revision code::selection,.sha256 code::selection,#help code::selection,#configinfo th::selection,#console code::selection{background:#bb0;color:#000}
+.revision br::selection,.sha256 br::selection{background:transparent}
+.sha256 code{letter-spacing:-.03em;font-size:90%}
+.subheading.routerfiles{background:url(images/favicon.svg) no-repeat right 5px center/16px,linear-gradient(90deg,#000,#001000 40%);background-blend-mode:luminosity,normal}
+.subheading.pluginfiles{background:var(--plugin) no-repeat right 5px center/16px,linear-gradient(90deg,#000,#001000 40%);background-blend-mode:luminosity,normal}
+.unsignedmod{margin:0;padding:2px 4px 2px 4px}
+.unsignedmod{display:inline-block;word-break:break-all}
+.unsignedmod::selection{background:#b00;color:#fff}
 #jardump{overflow:auto;padding:0;min-width:650px}
 #jardump table{margin:-1px 0 0;border:0;border-collapse:collapse;font-size:8pt;color:#bb7}
 #jardump th{padding:9px 5px}
@@ -2164,17 +2173,8 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #jardump tr:hover tt{color:#dd0}
 #jardump a[href^="https://gitlab.com/i2pplus"]{margin-left:-4px;padding-left:14px;background:var(--gitlab) no-repeat left center;background-size:11px}
 #jardump font[color="red"]{color:#d00}
-.revision,.sha256,.unsignedmod{display:inline-block;user-select:all}
-.sha256 code{letter-spacing:-.03em;font-size:90%}
-.unsignedmod::selection{background:#b00;color:#fff}
-.revision code::selection,.sha256 code::selection,#help code::selection,#configinfo th::selection,#console code::selection{background:#bb0;color:#000}
-.revision br::selection,.sha256 br::selection{background:transparent}
-.unsignedmod{margin:0;padding:2px 4px 2px 4px}
 #jardump hr{margin:1px 0;width:100%;height:1px;background:#131;display:block}
 #jardump .subheading{padding-top:6px;padding-bottom:6px}
-.subheading.routerfiles{background:url(images/favicon.svg) no-repeat right 5px center/16px,linear-gradient(90deg,#000,#001000 40%);background-blend-mode:luminosity,normal}
-.subheading.pluginfiles{background:var(--plugin) no-repeat right 5px center/16px,linear-gradient(90deg,#000,#001000 40%);background-blend-mode:luminosity,normal}
-.unsignedmod{display:inline-block;word-break:break-all}
 
 /* reseed help ordered list */
 #reseedhelp ol{display:block;margin-right:30px}
