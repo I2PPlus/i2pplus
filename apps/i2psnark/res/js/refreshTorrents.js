@@ -4,7 +4,7 @@
 
 import {onVisible} from "./onVisible.js";
 import {initFilterBar} from './torrentDisplay.js';
-import {initLinkToggler, magnetToClipboard, attachMagnetListeners, linkToggle} from "./toggleLinks.js";
+import {initLinkToggler, magnetToast, attachMagnetListeners, linkToggle} from "./toggleLinks.js";
 import {initToggleLog} from "./toggleLog.js";
 import {Lightbox} from "./lightbox.js";
 
@@ -178,6 +178,7 @@ function refreshTorrents(callback) {
         if (filterbar) {
           initFilterBar();
         }
+        attachMagnetListeners();
       } else if (files) {
         const dirlistResponse = xhrsnark.responseXML?.getElementById("dirlist");
         if (dirlistResponse && !Object.is(dirlist.innerHTML, dirlistResponse.innerHTML) && notfound === null) {
@@ -211,26 +212,15 @@ function refreshTorrents(callback) {
           }
         });
         window.requestAnimationFrame(refreshHeaderAndFooter);
+        attachMagnetListeners();
       } else {
         window.requestAnimationFrame(refreshAll);
       }
     }
 
-    function updateIfVisible() {
-      const delay = getRefreshInterval();
-      let snarkUpdateId = null;
-      const onUpdate = () => {
-        clearTimeout(snarkUpdateId);
-        snarkUpdateId = setTimeout(onUpdate, delay);
-      };
-      onUpdate();
-    }
-
     if (typeof callback === "function") {
       callback(xhrsnark.responseXML, getURL());
     }
-
-    //updateIfVisible();
 
     function getRefreshInterval() {
       const interval = parseInt(xhrsnark.getResponseHeader("X-Snark-Refresh-Interval")) || 5;
@@ -291,21 +281,28 @@ function setupPage() {
   if (filterbar) {
     initFilterBar();
   }
-  if (document.getElementById("linkswitch")) {
-    magnetToClipboard();
-    attachMagnetListeners();
-  }
+  magnetToast();
+  attachMagnetListeners();
 }
 
 function initSnarkRefresh() {
   const interval = (parseInt(storageRefresh) || 5) * 1000;
   clearInterval(refreshIntervalId);
+
   refreshIntervalId = setInterval(() => {
     debouncedRefreshTorrents(refreshTorrents)(setupPage);
   }, interval);
+
   if (files) {
-    var lightbox = new Lightbox();lightbox.load();
+    const lightbox = new Lightbox();
+    lightbox.load();
   }
 }
+
+const ready = (element) => {
+  initSnarkRefresh();
+};
+
+onVisible(mainsection, ready);
 
 export {initSnarkRefresh, refreshTorrents, debouncedRefreshTorrents, debounce, xhrsnark, refreshIntervalId};

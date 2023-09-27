@@ -66,7 +66,7 @@ function showLinks() {
 
 function showMagnets() {
   attachMagnetListeners();
-  magnetToClipboard();
+  magnetToast();
   toggle.checked = false;
   toggleCss.textContent = magnetCss + magnetBtn;
   localStorage.setItem("linkToggle", "magnets");
@@ -74,7 +74,7 @@ function showMagnets() {
   //console.log("showMagnets() -> Localstorage set to: " + config);
 }
 
-function magnetToClipboard() {
+function magnetToast() {
   var toastPosition = toast.getBoundingClientRect().top;
 
   function fixToast() {
@@ -87,7 +87,6 @@ function magnetToClipboard() {
     }
   }
 
-  removeMagnetListeners();
   window.addEventListener("scroll", fixToast);
   window.addEventListener("resize", fixToast);
   if (window.frameElement) {
@@ -97,30 +96,9 @@ function magnetToClipboard() {
 
 }
 
-function removeMagnetListeners() {
-
-  function noop() {}
-
-  window.removeEventListener("scroll", fixToast);
-  window.removeEventListener("resize", fixToast);
-
-  if (window.frameElement) {
-    window.parent.removeEventListener("scroll", fixToast);
-    window.parent.removeEventListener("resize", fixToast);
-  }
-
-  function fixToast() {}
-
-  for (let i = 0; i < magnets.length; i++) {
-    let copyBtn = magnets[i].parentElement.querySelector(".copyMagnet");
-    let newCopyBtn = copyBtn.cloneNode(true);
-    copyBtn.parentNode.replaceChild(newCopyBtn, copyBtn);
-  }
-}
-
 function attachMagnetListeners() {
+  if (!toggle) {return;}
   let toastTimeoutId;
-  removeMagnetListeners();
   for (let i = 0; i < magnets.length; i++) {
     let anchor = magnets[i];
     let copyBtn = anchor.parentElement.querySelector(".copyMagnet");
@@ -150,13 +128,12 @@ function attachMagnetListeners() {
       }, 3500);
     });
   }
-  toggle.addEventListener("click", linkToggle);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   initLinkToggler();
-  magnetToClipboard();
   attachMagnetListeners();
+  magnetToast();
 });
 
-export {initLinkToggler, linkToggle, magnetToClipboard, attachMagnetListeners};
+export {initLinkToggler, linkToggle, magnetToast, attachMagnetListeners};

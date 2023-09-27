@@ -4,7 +4,7 @@
 
 import {refreshTorrents} from "./refreshTorrents.js";
 import {onVisible} from "./onVisible.js";
-import {initLinkToggler, linkToggle} from "./toggleLinks.js";
+import {initLinkToggler, linkToggle, attachMagnetListeners} from "./toggleLinks.js";
 
 function initFilterBar() {
 
@@ -213,6 +213,7 @@ function checkFilterBar() {
       window.location.search = query;
     }
   }
+  attachMagnetListeners();
 }
 
 function checkPagenav() {
@@ -235,6 +236,7 @@ function refreshFilters() {
   if (query.includes("ps=9999") && pagenav && filterbar) {
     checkPagenav();
     debouncedRefreshTorrents(initFilterBar);
+    attachMagnetListeners();
   }
 }
 
@@ -248,6 +250,7 @@ function checkIfVisible() {
 function refreshAll() {
   var filterbar = document.getElementById("torrentDisplay");
   if (filterbar) {refreshFilters();}
+  attachMagnetListeners();
 }
 
 document.addEventListener("DOMContentLoaded", checkIfVisible, true);
