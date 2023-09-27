@@ -42,10 +42,9 @@ const tunnelCount = document.getElementById("tunnelCount");
 const tunnels = document.getElementById("sb_tunnels");
 const updateBar = document.getElementById("sb_updatebar");
 const updateForm = document.getElementById("sb_updateform");
-const updateProgress = document.getElementById("sb_updateprogress");
+const updateStatus = document.getElementById("sb_updateprogress");
 const updateSection = document.getElementById("sb_updatesection");
 const updateSectionHR = document.querySelector("#sb_updatesection + hr");
-const updateStatus = document.getElementById("sb_updateprogess");
 const visible = document.visibilityState;
 
 sb.addEventListener("loaded", () => {
@@ -119,7 +118,6 @@ function refreshSidebar() {
     const tunnelsResponse = xhr.responseXML.getElementById("sb_tunnels");
     const updateBarResponse = xhr.responseXML.getElementById("sb_updatebar");
     const updateFormResponse = xhr.responseXML.getElementById("sb_updateform");
-    const updateProgressResponse = xhr.responseXML.getElementById("sb_updateprogress");
     const updateSectionResponse = xhr.responseXML.getElementById("sb_updatesection");
     const updateStatusResponse = xhr.responseXML.getElementById("sb_updateprogess");
     const routerdown = document.getElementById("routerdown");
@@ -241,7 +239,7 @@ function refreshSidebar() {
       if (cpuBar && cpuBarResponse && !Object.is(cpuBar.innerHTML, cpuBarResponse.innerHTML)) {
         cpuBar.innerHTML = cpuBarResponse.innerHTML;
       }
-      if (updateBar && updaterBarResponse && !Object.is(updateBar.innerHTML, updateBarResponse.innerHTML)) {
+      if (updateBar && updaterBarResponse && updateBar.innerHTML !== updaterBarResponse.innerHTML) {
         updateBar.outerHTML = updateBarResponse.outerHTML;
         const updateH3 = document.querySelector("#sb_updatesection > h3 a");
         if (updateH3) {
@@ -263,8 +261,8 @@ function refreshSidebar() {
             updateSectionHR.hidden = null;
         }
       }
-      if (updateProgress && updateProgressResponse && !Object.is(updateProgress.innerHTML, updateProgressResponse.innerHTML)) {
-        updateProgress.innerHTML = updateProgressResponse.innerHTML;
+      if (updateStatus && updateStatusResponse && !Object.is(updateStatus.innerHTML, updateStatusResponse.innerHTML)) {
+        updateStatus.innerHTML = updateStatusResponse.innerHTML;
       }
       if (updateSection && !updateSection?.hasAttribute("hidden")) {
         if (updateSectionResponse && !Object.is(updateSection.innerHTML, updateSectionResponse.innerHTML)) {
