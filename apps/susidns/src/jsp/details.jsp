@@ -44,8 +44,14 @@
     }
 %>
 <link rel=stylesheet href="<%=book.getTheme()%>override.css">
-<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/textareaResize.js"></script>
+<script nonce="<%=cspNonce%>" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script nonce="<%=cspNonce%>" src="/js/textareaResize.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const myTextarea = document.getElementById("addNotes");
+  addResizeListener(addNotes);
+});
+</script>
 <%
     String query = request.getQueryString();
 %>
@@ -154,7 +160,7 @@
 %>
 <tr class="list${book.trClass}" id=hostNotes>
 <td><%=intl._t("Notes")%></td>
-<td><textarea name="nofilter_notes" rows=3 style=height:6em cols=70 placeholder="<%=intl._t("Add notes about domain")%>"><%=addr.getNotes()%></textarea>
+<td><textarea id=addNotes name="nofilter_notes" rows=3 style=height:6em cols=70 placeholder="<%=intl._t("Add notes about domain")%>"><%=addr.getNotes()%></textarea>
 <input class=accept type=submit name=action value="<%=intl._t("Save Notes")%>"></td>
 </tr>
 <%
