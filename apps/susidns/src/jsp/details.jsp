@@ -36,25 +36,25 @@
 <meta charset=utf-8>
 <title>${book.book} <%=intl._t("addressbook")%> - susidns</title>
 <link rel=stylesheet href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
-<%
-    if (base.useSoraFont()) {
-%>
-<link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet>
-<%
-    }
-%>
+<%  if (base.useSoraFont()) { %>
+<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>
+<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>
+<link rel=stylesheet href=/themes/fonts/Sora.css>
+<%  } else { %>
+<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>
+<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>
+<link rel=stylesheet href=/themes/fonts/DroidSans.css>
+<%  } %>
 <link rel=stylesheet href="<%=book.getTheme()%>override.css">
 <script nonce="<%=cspNonce%>" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>" src="/js/textareaResize.js"></script>
-<script>
+<script nonce="<%=cspNonce%>">
 document.addEventListener("DOMContentLoaded", function() {
   const myTextarea = document.getElementById("addNotes");
   addResizeListener(addNotes);
 });
 </script>
-<%
-    String query = request.getQueryString();
-%>
+<%  String query = request.getQueryString(); %>
 </head>
 <body id=dtls style=display:none;pointer-events:none>
 <div class=page>
@@ -68,43 +68,35 @@ document.addEventListener("DOMContentLoaded", function() {
 <a id=overview href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>
-<%
-    String detail = request.getParameter("h");
-    if (detail == null) {
-%>
+<%  String detail = request.getParameter("h");
+    if (detail == null) { %>
 <p>No host specified</p>
-<%
-    } else {
+<%  } else {
         // process save notes form
         book.saveNotes();
         detail = net.i2p.data.DataHelper.stripHTML(detail);
         java.util.List<i2p.susi.dns.AddressBean> addrs = book.getLookupAll();
-        if (addrs == null) {
-            %><p>Not found: <%=detail%></p><%
-        } else {
+        if (addrs == null) {%>
+<p>Not found: <%=detail%></p>
+<%      } else {
             boolean haveImagegen = book.haveImagegen();
             // use one nonce for all
             String nonce = book.getSerial();
             boolean showNotes = !book.getBook().equals("published");
             for (i2p.susi.dns.AddressBean addr : addrs) {
-                String b32 = addr.getB32();
-%>
+                String b32 = addr.getB32(); %>
 <jsp:setProperty name="book" property="trClass"	value="0" />
 <div class=headline>
 <h3><%=intl._t("Details")%>: <%=addr.getName()%></h3>
 </div>
 <div id=book>
-<%
-                if (showNotes) {
-%>
+<%              if (showNotes) { %>
 <form method=POST action="details">
 <input type=hidden name="book" value="${book.book}">
 <input type=hidden name="serial" value="<%=nonce%>">
 <input type=hidden name="h" value="<%=detail%>">
 <input type=hidden name="destination" value="<%=addr.getDestination()%>">
-<%
-                }  // showNotes
-%>
+<%              }  // showNotes %>
 <table class=book id=host_details>
 <tr>
 <td><%=intl._t("Hostname")%></td>
@@ -112,16 +104,12 @@ document.addEventListener("DOMContentLoaded", function() {
 &nbsp;<b><%=intl._t("Book")%></b>&nbsp;<%=intl._t(book.getBook())%>&nbsp;<b><%=intl._t("Address Helper")%></b>&nbsp;<a href="http://<%=addr.getName()%>/?i2paddresshelper=<%=addr.getDestination()%>" target=_blank rel=noreferrer><%=intl._t("link")%></a></td>
 </tr>
 <tr>
-<%
-                if (addr.isIDN()) {
-%>
+<%              if (addr.isIDN()) { %>
 <td><%=intl._t("Encoded Name")%></td>
 <td><a href="http://<%=addr.getName()%>/" target=_blank rel=noreferrer><%=addr.getName()%></a></td>
 </tr>
 <tr>
-<%
-                }
-%>
+<%              } %>
 <td><%=intl._t("Base 32 Address")%></td>
 <td><a href="http://<%=b32%>/" target=_blank rel=noreferrer><%=b32%></a></td>
 </tr>
@@ -141,39 +129,27 @@ document.addEventListener("DOMContentLoaded", function() {
 <tr>
 <td><%=intl._t("Added Date")%></td>
 <td><%=addr.getAdded()%>&nbsp;
-<%
-                String lastmod = addr.getModded();
-                if (lastmod.length() > 0) {
-%>
+<%              String lastmod = addr.getModded();
+                if (lastmod.length() > 0) { %>
 <%=addr.getAdded()%>&nbsp;<b><%=intl._t("Last Modified")%></b>&nbsp;<span id=lastMod><%=lastmod%></span>
-<%
-                }
-%>
+<%              } %>
 </td>
 </tr>
 <tr>
 <td><%=intl._t("Destination")%></td>
 <td class=destinations><div class=destaddress tabindex=0><%=addr.getDestination()%></div></td>
 </tr>
-<%
-                if (showNotes) {
-%>
+<%              if (showNotes) { %>
 <tr class="list${book.trClass}" id=hostNotes>
 <td><%=intl._t("Notes")%></td>
 <td><textarea id=addNotes name="nofilter_notes" rows=3 style=height:6em cols=70 placeholder="<%=intl._t("Add notes about domain")%>"><%=addr.getNotes()%></textarea>
 <input class=accept type=submit name=action value="<%=intl._t("Save Notes")%>"></td>
 </tr>
-<%
-                }  // showNotes
-%>
+<%              }  // showNotes %>
 </table>
-<%
-                if (showNotes) {
-%>
+<%              if (showNotes) { %>
 </form>
-<%
-                }  // showNotes
-%>
+<%              }  // showNotes %>
 <div id=buttons>
 <form method=POST action="addressbook">
 <p class=buttons>
@@ -187,9 +163,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </p>
 </form>
 </div><%-- buttons --%>
-<%
-                if (haveImagegen) {
-%>
+<%              if (haveImagegen) { %>
 <div id=visualid>
 <h3><%=intl._t("Visual Identification for")%>&nbsp;<span id=idAddress><%=addr.getName()%></span></h3>
 <table>
@@ -202,15 +176,11 @@ document.addEventListener("DOMContentLoaded", function() {
 </tr>
 </table>
 </div><%-- visualid --%>
-<%
-                }  // haveImagegen
-%>
+<%              }  // haveImagegen %>
 <hr>
-<%
-            }  // foreach addr
+<%          }  // foreach addr
         }  // addrs == null
-    }  // detail == null
-%>
+    }  // detail == null %>
 </div><%-- book --%>
 </div><%-- page --%>
 <span data-iframe-height></span>
