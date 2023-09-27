@@ -326,8 +326,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
              IOException ioe = new IOException("Peer is dead: " + _remotePeer.toBase64());
              if (_log.shouldDebug())
                  _log.debug("Dead: " + this, ioe);
-             else if (_log.shouldWarn())
-                 _log.warn("Router [" + _remotePeer.toBase64().substring(0,6) + "] is dead: " + this);
+             else if (_log.shouldInfo())
+                 _log.info("Router [" + _remotePeer.toBase64().substring(0,6) + "] is dead: " + this);
              throw ioe;
          }
          return _packetNumber.getAndIncrement();
