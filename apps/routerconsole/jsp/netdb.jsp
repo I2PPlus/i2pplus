@@ -122,7 +122,6 @@
       const congestion = document.getElementById("netdbcongestion");
       const congestionResponse = xhr.responseXML.getElementById("netdbcongestion");
       const cclist = document.getElementById("cclist");
-      const cclistResponse = xhr.responseXML.getElementById("cclist");
       const overview = document.getElementById("netdboverview");
       const overviewResponse = xhr.responseXML.getElementById("netdboverview");
       const tiers = document.getElementById("netdbtiers");
@@ -134,10 +133,11 @@
       if (congestion !== null && congestion.innerHTML !== congestionResponse.innerHTML) {
         congestion.innerHTML = congestionResponse.innerHTML;
       }
-      if (countries) {
+      if (countries && cclist) {
         if (typeof ccsorter === "undefined" || ccsorter === null) {
           const ccsorter = new Tablesort(countries, {descending: true});
         }
+        const cclistResponse = xhr.responseXML.getElementById("cclist");
         if (cclist.innerHTML !== cclistResponse.innerHTML) {
           cclist.innerHTML = cclistResponse.innerHTML;
           ccsorter.refresh();
