@@ -92,7 +92,7 @@
             sorter.refresh();
             removeHref();
           }
-        } else if (!tunnels || !peersReponse) {
+        } else if (!tunnels || !peersResponse) {
           main.innerHTML = mainResponse.innerHTML;
         }
       }

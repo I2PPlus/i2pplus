@@ -77,7 +77,7 @@
             peers.innerHTML = peersResponse.innerHTML;
             sorter.refresh();
           }
-        } else if (!summary || !peersReponse) {
+        } else if (!summary || !peersResponse) {
           main.innerHTML = mainResponse.innerHTML;
         }
       }
