@@ -2,90 +2,47 @@
 <%@include file="headers.jsi"%>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width">
-<%
-if (theme.contains("dark") || theme.contains("night")) {
-%>
+<% if (theme.contains("dark") || theme.contains("night")) { %>
 <style>html{background:#000}</style>
-<%
-}
-%>
-<%
-if (useSoraFont) {
-%>
-<link rel=preload href="/themes/fonts/Sora.css" as=style>
-<%
-} else {
-%>
-<link rel=preload href="/themes/fonts/DroidSans.css" as=style>
-<%
-}
-%>
-<%
-if (uri.contains("config")) {
-%>
-<link rel=preload href="/themes/console/confignav.css" as=style>
-<%
-}
-%>
-<link rel=preload href="<%=themePath%>global.css" as=style>
+<link rel=preload href="<%=themePath%>global.css?<%=net.i2p.CoreVersion.VERSION%>" as=style>
+<link rel=preload href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" as=style>
+<% } %>
+<% if (useSoraFont) { %>
+<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>
+<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>
+<link rel=stylesheet href=/themes/fonts/Sora.css>
+<% } else { %>
+<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>
+<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>
+<link rel=stylesheet href=/themes/fonts/DroidSans.css>
+<% } %>
 <link rel=preload href="<%=themePath%>images/i2plogo.png" as=image>
 <link rel=preload href="/themes/console/images/images.css" as=style>
 <link rel=preload href="<%=themePath%>images/images.css" as=style>
-<script nonce="<%=cspNonce%>" src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<%
-if (hasOverride) {
-%>
+<% if (uri.contains("config")) { %>
+<link rel=preload href=/themes/console/confignav.css as=style>
+<% } %>
+<% if (hasOverride) { %>
 <link rel=preload href="<%=themePath%>override.css" as=style>
-<link rel=preload href="<%=themePath%>override.css" as=style>
-<%
-}
-%>
+<% } %>
 <noscript><style>.script{display:none!important}</style></noscript>
 <link rel=icon href="<%=themePath%>images/favicon.svg">
 <script nonce="<%=cspNonce%>">if (top.location != location) {top.location.href = location.href;}</script>
 <link href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet title="<%=theme%>">
 <link href="/themes/console/images/images.css" rel=stylesheet>
 <link href="<%=themePath%>images/images.css" rel=stylesheet>
-<%
-if (useSoraFont) {
-%>
-<link href="/themes/fonts/Sora.css" rel=stylesheet>
-<%
-} else {
-%>
-<link href="/themes/fonts/DroidSans.css" rel=stylesheet>
-<%
-}
-%>
-<%
-if (intl.getLang().equals("zh")) {
-   // make the fonts bigger for chinese
-%>
+<% if (intl.getLang().equals("zh")) { %>
 <link href="<%=themePath%>console_big.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
-<%
-} else if (intl.getLang().equals("ar")) {
-  // Use RTL theme for Arabic
-%>
+<% } else if (intl.getLang().equals("ar")) { %>
 <link href="<%=themePath%>console_ar.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
-<%
-}
-if (!intl.allowIFrame(UA)) {
-%>
+<% }
+   if (!intl.allowIFrame(UA)) { %>
 <link href="<%=themePath%>mobile.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
-<%
-}
-%>
-<%
-if (hasOverride) {
-%>
+<% }
+   if (hasOverride) { %>
 <link href="<%=themePath%>override.css" rel=stylesheet>
-<%
-}
-%>
-<%
-if (uri.endsWith("wizard") || uri.endsWith("wizard.jsp")) {
-%>
-<link href="<%=themePath%>wizard.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
-<%
-}
-%>
+<% }
+   if (uri.endsWith("wizard") || uri.endsWith("wizard.jsp")) { %>
+<link href="<%=themePath%>wizard.css" rel=stylesheet>
+<% } %>
+<script nonce="<%=cspNonce%>" src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
