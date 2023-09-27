@@ -1618,7 +1618,7 @@ h3 .b32{font-size:inherit}
 .tunnel_cap{padding:2px 3px;color:var(--ink)}
 .tunnel_cap:empty{border:0}
 .tunnel_cap:empty::after{content:"?"}
-.tunnel_id:not(:empty){margin-left:2px;padding:2px 8px 2px 18px;min-width:84px;display:inline-block;line-height:1.35;vertical-align:middle;text-align:right;border:var(--border_badge);box-shadow:var(--highlight);background:var(--hardhat) no-repeat 6px center/12px, var(--element)}
+.tunnel_id:not(:empty){margin-left:2px;padding:2px 8px 2px 18px;min-width:84px;display:inline-block;line-height:1.35;vertical-align:middle;text-align:right;border:var(--border_badge);box-shadow:var(--highlight);background:var(--hardhat) no-repeat 6px center/12px,var(--element)}
 .tunnel_local,span.b32{margin:0 3px;padding:2px;min-width:64px;display:inline-block;vertical-align:middle;border:var(--border_badge);border-radius:1px;box-shadow:var(--highlight);background:var(--element)}
 span.b32{margin:-2px 6px -2px 0;padding:3px 8px;min-width:auto;line-height:1}
 .tunnel_local{margin:0;padding:1px 2px;width:103px;box-sizing:border-box;line-height:1.7;font-size:80%;text-transform:lowercase}
@@ -2523,7 +2523,7 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:14px}
 #sb_internals.collapsed td,#sb_advanced.collapsed td{width:calc(100% + 30px)}
 #sb_internals .sb_icon[href="/jobs"]{display:none!important}
-#sb_services.collapsed td{width:calc(100% + 59px)}
+#sb_services.collapsed td{width:calc(100% + 88px)}
 #sb_tunnelstatus .tunnelBuildStatus::before{margin:-2px 0;background-size:12px}
 #sb_wrap{position:fixed!important}
 #searchbar button{height:28px}
@@ -2531,6 +2531,7 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #sidebarconf button img{width:10px;height:10px}
 #sidebar h3::before{height:14px}
 #sidebar h3{margin-bottom:-9px;padding:5px 0}
+#sidebar #sb_services.collapsed td .sb_icon{margin-bottom:1px}
 #sitelinks+.linkgroup .applink:last-child{margin-bottom:8px}
 #sitemap .applink img{padding-left:62px;padding-right:62px}
 #tunnels h3 a[href^="/configtunnels#"]::after,#tunnels h3 a[href$="i2ptunnelmgr"]::after,#logs a.configure::after,#logs a.delete::after{width:14px;height:14px;background-size:12px}
@@ -2728,6 +2729,9 @@ h4#updateplugins{margin-top:-15px}
 #sidebar h4{margin:-9px -11px -10px}
 #sidebar hr{margin-top:9px}
 #sidebar{width:220px}
+#sidebar #sb_advanced.collapsed td,#sidebar #sb_internals.collapsed td,#sidebar #sb_services.collapsed td{width:237px}
+#sb_tunnels_condensed td,#sb_peers_condensed td{width:257px}
+#sidebar #sb_internals.collapsed .sb_icon{margin-bottom:-3px}
 #sitemap h3{font-size:11pt}
 #newtab{margin-top:5px}
 #sybilTask th{font-size:12pt}
@@ -2735,8 +2739,6 @@ table[id^="sb_"],#sidebar #sb_localtunnels{width:236px}
 #tunnels .tab,#tunnels .tab2{line-height:1.3}
 #webappconfig td:first-child::after{min-height:30px}
 }
-
-@supports not (-moz-appearance:none){#searchbar span{margin:-1px -1px -5px}}
 
 @media (min-width:1634px){
 th code{font-size:9pt}
@@ -2815,6 +2817,8 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #searchbar input,#searchbar select{height:30px}
 #searchbar button{height:29px;border-bottom:var(--border)}
 }
+
+@supports not (-moz-appearance:none){#searchbar span{margin:-1px -1px -5px}}
 
 .rid,.rid td{margin:0;padding:2px 1px!important;line-height:0;vertical-align:middle;text-align:center;border:var(--border_badge)!important;box-shadow:var(--bevel)!important;background:var(--badge)}
 .rid{width:unset}
