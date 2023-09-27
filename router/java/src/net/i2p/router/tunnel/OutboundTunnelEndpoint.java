@@ -105,8 +105,8 @@ class OutboundTunnelEndpoint {
                                   _config.getReceiveTunnelId() + "] to Router [" + toRouter.toBase64().substring(0,6) + "] " +
                                   "with message: " + msg);
                     else if (_log.shouldLog(Log.WARN))
-                        _log.warn("OutboundEndpoint I2NP Message (count: " + _i2npmsg + "/" + _totalmsg + ") from [TunnelId " +
-                                  _config.getReceiveTunnelId() + "] to Router [" + toRouter.toBase64().substring(0,6) + "]");
+                        _log.warn("OutboundEndpoint I2NP Message from [TunnelId " + _config.getReceiveTunnelId() + "] " +
+                                  "to Router [" + toRouter.toBase64().substring(0,6) + "] -> Count: " + _i2npmsg + " / " + _totalmsg);
                 }
             }
             int size = msg.getMessageSize();
