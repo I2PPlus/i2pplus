@@ -163,8 +163,10 @@
   }
   document.addEventListener("DOMContentLoaded", initRefresh(), true);
   window.addEventListener("DOMContentLoaded", progressx.hide());
-  countries.addEventListener("beforeSort", function() {progressx.show();progressx.progress(0.5);}, true);
-  countries.addEventListener("afterSort", function() {progressx.hide();}, true);
+  if (countries) {
+    countries.addEventListener("beforeSort", function() {progressx.show();progressx.progress(0.5);}, true);
+    countries.addEventListener("afterSort", function() {progressx.hide();}, true);
+  }
 </script>
 </body>
 </html>
