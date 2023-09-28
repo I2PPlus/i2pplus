@@ -1,12 +1,11 @@
 <%@page contentType="text/html"%>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext context = net.i2p.I2PAppContext.getGlobalContext();
+<%  net.i2p.I2PAppContext context = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
     if (context.getProperty("routerconsole.lang") != null)
-        lang = context.getProperty("routerconsole.lang");
-%>
+        lang = context.getProperty("routerconsole.lang"); %>
 <html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
@@ -19,7 +18,6 @@
 <script src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body>
-
 <script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request" />
@@ -38,41 +36,27 @@
 </span>
 </h3>
 <p class=infohelp id=clientconf>
-<%
-       net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-       if (net.i2p.router.startup.ClientAppConfig.isSplitConfig(ctx)) {
-%>
+<%     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+       if (net.i2p.router.startup.ClientAppConfig.isSplitConfig(ctx)) { %>
 <%=intl._t("To change client options, edit the files in: {0}", "<code>" + net.i2p.router.startup.ClientAppConfig.configDir(ctx).getAbsolutePath() + "</code>")%>
-<%
-       } else {
-%>
+<%     } else { %>
 <%=intl._t("To change client options, edit the file: {0}", "<code>" + net.i2p.router.startup.ClientAppConfig.configFile(ctx).getAbsolutePath() + "</code>")%>
-<%
-       }
-%>
+<%     } %>
 </p>
-<%
-      if (!clientshelper.isAdvanced()) {
-%>
+<%    if (!clientshelper.isAdvanced()) { %>
 <p class=infowarn id=clientconf>
 <b><%=intl._t("Be careful changing any settings here. The 'router console' and 'application tunnels' are required for most uses of I2P. Only advanced users should change these.")%></b>
 </p>
-<%
-      }
-%>
+<%    } %>
 <div class=wideload>
 <form action="" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="clientshelper" property="form1" />
 <div class=formaction id=clientsconfig>
 <input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>" />
-<%
-      if (clientshelper.isClientChangeEnabled() && request.getParameter("edit") == null) {
-%>
+<%    if (clientshelper.isClientChangeEnabled() && request.getParameter("edit") == null) { %>
 <input type=submit name=edit class=add value="<%=intl._t("Add Client")%>" />
-<%
-      }
-%>
+<%   } %>
 <input type=submit class=accept name=action value="<%=intl._t("Save Client Configuration")%>" />
 </div>
 </form>
