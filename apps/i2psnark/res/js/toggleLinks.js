@@ -60,7 +60,6 @@ function showLinks() {
   toggleCss.textContent = linkCss;
   localStorage.setItem("linkToggle", "links");
   config = "links";
-  //console.log("showLinks() -> Localstorage set to: " + config);
 }
 
 function showMagnets() {
@@ -70,7 +69,6 @@ function showMagnets() {
   toggleCss.textContent = magnetCss + magnetBtn;
   localStorage.setItem("linkToggle", "magnets");
   config = "magnets";
-  //console.log("showMagnets() -> Localstorage set to: " + config);
 }
 
 function magnetToast() {
