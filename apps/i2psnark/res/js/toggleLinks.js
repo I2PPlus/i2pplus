@@ -56,7 +56,6 @@ function linkToggle() {
 }
 
 function showLinks() {
-  removeMagnetListeners();
   toggle.checked = true;
   toggleCss.textContent = linkCss;
   localStorage.setItem("linkToggle", "links");
