@@ -297,7 +297,12 @@ public class Blocklist {
             super(_context);
         }
         public String getName(){
-            return "Expire blocklist at user-defined interval of " + expireInterval();
+            if (expireInterval() > 0) {
+                String expiry = expireInterval() >= 600000 ? (expireInterval() / 60 / 1000) + "m" : (expireInterval() / 1000 + "s");
+                return "Expire blocklist at user-defined interval of " + expiry;
+            } else {
+                return "Expire blocklist";
+            }
         }
         public void runJob() {
             int jobInterval;
