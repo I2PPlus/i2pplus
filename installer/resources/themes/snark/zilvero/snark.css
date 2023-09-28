@@ -216,6 +216,7 @@ tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before{content:"\27A4";transform:rotate(90deg) scaleX(0.6)}
 tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4";transform:rotate(-90deg) scaleX(0.6)}
 tr:hover .magnetLabel{opacity:1}
+.torrentLink{text-align:center}
 .active.downloading .barInner{background:repeating-linear-gradient(135deg,#70a97e,#70a97e 10px,#47d16a 10px,#47d16a 20px)}
 .active.downloading .tAction,.active.downloading:hover .tAction,.active.RX .tAction,.active.RX:hover .tAction{background:var(--td_dl);animation:ease-in-out downloading .5s 3s forwards}
 .active.seeding .barComplete{background:linear-gradient(90deg,rgba(0,0,0,0) 49%,#b39,rgba(0,0,0,0) 51%) #7e70a9;background-size:200%,100%}
@@ -265,6 +266,7 @@ tr:hover .magnetLabel{opacity:1}
 .tName a:active,.snarkFileName a:active{box-shadow:inset 2px 2px 2px 1px rgba(32,32,0,.3);border:0}
 .txd .left{min-width:12px}
 .trackerLink img{width:16px;height:16px;opacity:0}
+#linkswitch::before,#linkswitch:not(:checked)::before{margin-left:-1px}
 #ourDest,.peerclient{padding:1px 4px;display:inline-block;border-radius:1px;box-shadow:inset 0 0 0 1px #bbb;background:#fff}
 #ourDest{margin-left:3px;line-height:1.3}
 #torrents td,#torrents th{padding:5px}
@@ -342,7 +344,9 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .fileStatus img[src$="tick.svg"]{padding:4px;width:10px;height:10px;border-radius:50%;background:#171}
 .fileStatus .barOuter,.fileStatus .barInner,.fileStatus .barText{width:80px}
 .fileStatus .barOuter{margin:0 auto}
+.filetype{position:relative;vertical-align:middle}
 .knownTracker input[type=radio]:disabled{opacity:.3}
+.magnetlink img,.torrentlink img{padding:1.5px 4px;vertical-align:middle;box-shadow:var(--highlight),var(--softborder);filter:none}
 .ParentDir{border-bottom:var(--border);background:#fafafa}
 .ParentDir img{display:none}
 .priority{padding-right:5px;white-space:nowrap;text-align:right}
@@ -355,7 +359,6 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .prioritySkip{background:url(/i2psnark/.res/icons/block.png) no-repeat left 26px center/18px}
 .priority{padding:5px;width:1%;text-align:center;white-space:nowrap}
 .snarkFileName{width:90%}
-.filetype{position:relative;vertical-align:middle}
 .thumb{max-width:80px}
 .thumb:hover,.thumb:focus,audio:hover,audio:focus,video:hover,video:focus{border:1px solid var(--a)}
 .tName{font-style:italic}
@@ -363,7 +366,6 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #torrentInfo th:last-child{text-align:right;padding-right:6px}
 #torrentInfo th:first-child img,#torrentInfoStats img,#trackers img{margin:0 6px}
 #torrentInfo img{max-height:16px;vertical-align:text-top;filter:saturate(0)}
-.magnetlink img,.torrentlink img{padding:1.5px 4px;vertical-align:middle;box-shadow:var(--highlight),var(--softborder);filter:none}
 #torrentInfo .nowrap{display:inline-block;white-space:nowrap;line-height:1.6}
 #setPriority th{padding:6px 3px 10px;text-align:right;border-top:0}
 #metacomment{padding:2px}
