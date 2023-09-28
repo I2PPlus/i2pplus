@@ -239,7 +239,7 @@ function refreshSidebar() {
       if (cpuBar && cpuBarResponse && !Object.is(cpuBar.innerHTML, cpuBarResponse.innerHTML)) {
         cpuBar.innerHTML = cpuBarResponse.innerHTML;
       }
-      if (updateBar && updaterBarResponse && updateBar.innerHTML !== updaterBarResponse.innerHTML) {
+      if (updateBar && updateBarResponse && updateBar.innerHTML !== updateBarResponse.innerHTML) {
         updateBar.outerHTML = updateBarResponse.outerHTML;
         const updateH3 = document.querySelector("#sb_updatesection > h3 a");
         if (updateH3) {
