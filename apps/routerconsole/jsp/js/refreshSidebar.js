@@ -119,7 +119,7 @@ function refreshSidebar() {
     const updateBarResponse = xhr.responseXML.getElementById("sb_updatebar");
     const updateFormResponse = xhr.responseXML.getElementById("sb_updateform");
     const updateSectionResponse = xhr.responseXML.getElementById("sb_updatesection");
-    const updateStatusResponse = xhr.responseXML.getElementById("sb_updateprogess");
+    const updateStatusResponse = xhr.responseXML.getElementById("sb_updateprogress");
     const routerdown = document.getElementById("routerdown");
 
     statusPanel.forEach(statusPanel => (statusPanel.classList.remove("statusDown")));
