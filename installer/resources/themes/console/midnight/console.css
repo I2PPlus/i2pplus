@@ -2136,8 +2136,10 @@ h3[id*="jobs"]{margin-top:25px;clear:both}
 #jobstats{margin-bottom:10px}
 #jobstats th,#jobstats td{padding:3px 8px;text-align:right}
 #jobstats th{padding:5px 8px;font-size:90%}
+#jobstats th[aria-sort],#jobstats th:hover{padding:5px 12px 5px 4px}
 #schedjobs th:first-child,#schedjobs td:first-child,#jobstats th:first-child,#jobstats td:first-child{margin-bottom:15px;padding-left:8px;text-align:left;font-weight:700}
 #schedjobs td:first-child{padding:5px 8px 3px}
+#jobstats td.updated:nth-child(n+2){animation:updatingTd .1s ease both}
 #jobstats tfoot td{font-size:105%;font-weight:700;border-top:3px solid #1e1c4a!important;background:#002}
 #schedjobs tr,#schedjobs tr:hover,#schedjobs tr,#schedjobs tr:hover td{background:#010008}
 #jobstats+hr{display:none}
@@ -2465,6 +2467,8 @@ iframe.iframed{margin:15px 0 0}
 @keyframes routerdown{from{background-position:left center}}
 @keyframes slide{from{transform:translateY(-20px)}to{transform:translateY(0)}}
 @keyframes spin{from{transform:rotate(-360deg)}}
+@keyframes updatingTd{from{color:#dd0;box-shadow:0 0 0 1px #330 inset;background:rgba(255,255,0,.05)}to{font-weight:600;color:#990}}
+@keyframes updatingIcon{from{background-image:var(--clock)}}
 
 /* browser specific */
 @supports (-moz-appearance:none){html{background-attachment:fixed}}
@@ -2637,6 +2641,7 @@ h3.tabletitle a,#version.tabletitle a{padding-left:18px}
 #terms p:first-child{margin-top:0}
 #thresholds th,#thresholds td{width:33%}
 #jobstats tbody td:first-child,#jobstats tbody tr:hover td:first-child{padding:6px 0 6px 26px;background-image:var(--yes);background-position:7px center;background-repeat:no-repeat;background-size:12px}
+#jobstats tbody td.updated:first-child{animation:updatingIcon .5s ease both}
 #jobstats tfoot tr td:first-child{padding-left:8px;background-image:none}
 }
 

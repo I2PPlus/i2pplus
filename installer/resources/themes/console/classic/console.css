@@ -1007,6 +1007,7 @@ h2#jobrunners{display:none}
 #jobstats tbody td:last-child{border-right:var(--border)}
 #jobstats tbody tr:last-child td{border-bottom:var(---border)}
 #jobstats td:nth-child(n+2){text-align:right}
+#jobstats td.updated:nth-child(n+2){animation:updatingTd .1s ease both}
 #jobstats tfoot td{border-left:0;border-right:0}
 #schedjobs{margin:-11px 0 5px;width:100%}
 #schedjobs th,#schedjobs td{padding:3px 10px}
@@ -2139,6 +2140,7 @@ iframe{height:0}
 @keyframes logupdate{from{background-color:rgba(80,255,80,.3)}}
 @keyframes reloader{0%,100%{width:0}80%,99%{width:120%}}
 @keyframes spin{from{transform:rotate(-360deg)}}
+@keyframes updatingTd{from{color:#373;box-shadow:0 0 0 1px #373 inset;background:rgba(255,255,0,.05)}to{font-weight:500;color:#373}}
 @keyframes update{from{filter:opacity(.6);color:#900}}
 @keyframes zoom{from{transform:scale(.8)}to{transform:scale(1)}}
 

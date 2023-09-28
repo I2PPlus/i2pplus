@@ -976,6 +976,9 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #refreshPage{cursor:pointer}
 #tunnel_defs{margin-top:-1px;margin-bottom:10px}
 #tunnel_defs td:first-child,#tunnel_defs td:nth-child(even){width:1%;white-space:nowrap}
+#tunnel_defs td:first-child{display:none}
+#tunnel_defs td:nth-child(2){border-left:0}
+#tunnel_defs td:nth-child(odd){text-align:left}
 #tunnelPeerCount .configpeer img{padding:3px}
 #tunnels #exploratory a,#tunnels h3.server a,#tunnels h3.client a{margin:-8px 0 -8px 0;padding:7px 4px 14px 10px}
 #tunnels #exploratory{padding-left:35px;background:var(--globe) no-repeat 9px center/18px,var(--title)}

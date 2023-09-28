@@ -1036,6 +1036,7 @@ h3#scheduledjobs+ol li::before{background:var(--timer) no-repeat 6px center/12px
 #jobs #jobstats th{position:relative}
 #jobs #jobstats th::after{right:0}
 #jobs #jobstats th:nth-child(n+2),#jobs #jobstats td:nth-child(n+2){text-align:right;padding-right:.5%}
+#jobstats td.updated:nth-child(n+2){animation:updatingTd .1s ease both}
 
 /* jobs */
 #schedjobs th:last-child{text-align:center}
@@ -2395,6 +2396,8 @@ iframe.iframed{margin:10px 0 0}
 @keyframes routerdown{from{background:repeating-linear-gradient(135deg,#fffff2,#fffff2 10px,#ddddd2 10px,#ddddd2 20px)}to{background:repeating-linear-gradient(135deg,#ddddd2,#ddddd2 10px,#fffff2 10px,#fffff2 20px)}}
 @keyframes slide{from{transform:translateY(-60px)}to{transform:translateY(0)}}
 @keyframes spin{from{transform:rotate(-360deg)}}
+@keyframes updatingTd{from{color:#373;box-shadow:0 0 0 1px #373 inset;background:rgba(255,255,0,.05)}to{font-weight:500;color:#373}}
+@keyframes updatingIcon{from{background-image:var(--clock)}}
 @keyframes zoom{from{transform:scale(0)}to{scale:scale(1)}}
 
 /* browser specific */
@@ -2635,6 +2638,7 @@ th.queue{white-space:nowrap}
 #jardump{overflow:hidden}
 #jobstats td:first-child,#jobstats tr:hover td:first-child{padding:6px 0 6px 24px;background-image:var(--timer);background-repeat:no-repeat;background-position:5px center;background-size:14px}
 #jobstats tr:last-child td:first-child,#jobstats tr:last-child:hover td:first-child{padding:7px 8px;background-image:none}
+#jobstats tbody td.updated:first-child{animation:updatingIcon .5s ease both}
 #ntcpconnections .spacer{display:none}
 #terms p{-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}
 #terms p:first-child{margin-top:0}
