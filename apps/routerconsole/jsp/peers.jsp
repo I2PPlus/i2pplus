@@ -200,11 +200,11 @@
   }
 
   progressx.hide();
-  xhrPeers.addEventListener("load", countTiers(), true);
+  xhrPeers.addEventListener("load", countTiers, true);
   document.addEventListener("DOMContentLoaded", () => {
     initRefresh();
-    if (peersNTCP !== null) {ntcpConn.addEventListener("mouseover", lazyload());}
-    if (peersSSU !== null) {ssuConn.addEventListener("mouseover", lazyload());}
+    if (peersNTCP !== null) {ntcpConn.addEventListener("mouseover", lazyload);}
+    if (peersSSU !== null) {ssuConn.addEventListener("mouseover", lazyload);}
   });
 </script>
 </body>

@@ -396,9 +396,9 @@ A negative rate sets the default.</i><br>
       }
     }
     xhr.send();
-    window.addEventListener("DOMContentLoaded", progressx.hide());
+    window.addEventListener("DOMContentLoaded", progressx.hide);
   }, 75000);
-  window.addEventListener("DOMContentLoaded", progressx.hide());
+  window.addEventListener("DOMContentLoaded", progressx.hide);
 </script>
 <%
     }

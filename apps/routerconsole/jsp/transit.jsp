@@ -106,8 +106,8 @@
   }
   onVisible(main, () => {updateTunnels();});
   if (visible === "hidden") {clearInterval(refreshId);}
-  window.addEventListener("DOMContentLoaded", progressx.hide(), true);
-  document.addEventListener("DOMContentLoaded", initRefresh(), true);
+  window.addEventListener("DOMContentLoaded", progressx.hide, true);
+  document.addEventListener("DOMContentLoaded", initRefresh, true);
 </script>
 </div>
 <script nonce=<%=cspNonce%> src=/js/lazyload.js></script>

@@ -29,6 +29,6 @@
 <% tunnelHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelHelper" property="tunnelSummary" />
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
 </body>
 </html>

@@ -64,6 +64,6 @@
 </div>
 </form>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
 </body>
 </html>

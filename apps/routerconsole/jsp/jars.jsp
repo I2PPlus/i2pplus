@@ -22,6 +22,6 @@
 <jsp:setProperty name="dumpHelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:getProperty name="dumpHelper" property="fileSummary" />
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
 </body>
 </html>

@@ -84,7 +84,7 @@
 <p><%=intl._t("You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink> on I2P's IRC network</a>.")%></p>
 </div>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
 <%@include file="../summaryajax.jsi" %>
 </body>
 </html>

@@ -99,7 +99,7 @@
         }
       }
     }
-    window.addEventListener("DOMContentLoaded", progressx.hide());
+    window.addEventListener("DOMContentLoaded", progressx.hide);
     graph.addEventListener("load", initCss());
     if (visibility === "visible") {
       xhrgraphs.send();
@@ -135,7 +135,7 @@
   }
   toggleView();
   toggle.addEventListener("click", toggleView);
-  window.addEventListener("DOMContentLoaded", progressx.hide());
+  window.addEventListener("DOMContentLoaded", progressx.hide);
 </script>
 <noscript><style>#gform{display:block!important}#graphdisplay{margin-bottom:15px!important;color:var(--ink)!important;cursor:default!important}</style></noscript>
 </body>

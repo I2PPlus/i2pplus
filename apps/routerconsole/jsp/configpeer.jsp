@@ -89,6 +89,6 @@
 <h3 class=tabletitle><%=intl._t("Banned IPs")%></h3>
 <jsp:getProperty name="peerhelper" property="blocklistSummary" />
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
 </body>
 </html>

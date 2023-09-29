@@ -119,12 +119,12 @@ if (graph && visibility == "visible") {
         graphImage.addEventListener("load", initCss());
       }
     }
-    window.addEventListener("DOMContentLoaded", progressx.hide());
+    window.addEventListener("DOMContentLoaded", progressx.hide);
     xhrgraph.send();
   }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
 }
 <%  } %>
 </script>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
 </body>
 </html>

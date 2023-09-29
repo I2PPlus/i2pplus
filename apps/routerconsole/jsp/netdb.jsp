@@ -161,8 +161,8 @@
     if (countries) {ccsorter.refresh();}
     xhr.send();
   }
-  document.addEventListener("DOMContentLoaded", initRefresh(), true);
-  window.addEventListener("DOMContentLoaded", progressx.hide());
+  document.addEventListener("DOMContentLoaded", initRefresh, true);
+  window.addEventListener("DOMContentLoaded", progressx.hide);
   if (countries) {
     countries.addEventListener("beforeSort", function() {progressx.show();progressx.progress(0.5);}, true);
     countries.addEventListener("afterSort", function() {progressx.hide();}, true);

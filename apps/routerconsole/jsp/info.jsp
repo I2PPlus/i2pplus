@@ -79,7 +79,7 @@
     xhrInfo.send();
   }
   setInterval(refreshInfo, 30000);
-  window.addEventListener("DOMContentLoaded", progressx.hide());
+  window.addEventListener("DOMContentLoaded", progressx.hide);
 </script>
 </body>
 </html>

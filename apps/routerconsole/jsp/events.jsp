@@ -42,6 +42,6 @@
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.date.js></script>
 <script nonce=<%=cspNonce%>>new Tablesort(document.getElementById("eventlog"));</script>
 <script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
 </body>
 </html>

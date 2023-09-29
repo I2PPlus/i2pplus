@@ -55,6 +55,6 @@
 <hr>
 <%=intl._t("Error 404")%>: <%=ERROR_URI%>&nbsp;<%=intl._t("not found")%>.
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
 </body>
 </html>

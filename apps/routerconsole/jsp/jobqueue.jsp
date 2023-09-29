@@ -44,11 +44,11 @@
           jobsParent.replaceChild(jobsResponse, jobs);
         }
       }
-      window.addEventListener("DOMContentLoaded", progressx.hide());
+      window.addEventListener("DOMContentLoaded", progressx.hide);
       xhr.send();
     }, 15000);
   }
-  window.addEventListener("DOMContentLoaded", progressx.hide());
+  window.addEventListener("DOMContentLoaded", progressx.hide);
 </script>
 </body>
 </html>

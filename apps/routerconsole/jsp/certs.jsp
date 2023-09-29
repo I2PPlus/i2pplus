@@ -24,6 +24,6 @@
 <jsp:getProperty name="certhelper" property="summary" />
 <span id=end></span>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide());</script>
+<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
 </body>
 </html>
