@@ -263,6 +263,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 .details img,.dirInfo td:first-child img{margin:0;padding:1px}
 .details{padding-left:0;padding-right:0;width:1%;white-space:nowrap;text-align:center;font-weight:700}
 .zero .peerCount b{display:none}
+#linkswitch{margin-right:-1px}
 #linkswitch:not(:checked)::before{opacity:1}
 #pagenav,th.ETA,th.rxd,th.txd,th.rateDown,th.rateUp,th.SnarkTorrentAction{text-align:center}
 #snarkhead th{background:none}
