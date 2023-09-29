@@ -80,23 +80,21 @@ class OutboundTunnelEndpoint {
                         _ridsm++;
                         _context.statManager().addRateData("tunnel.outboundTunnelEndpointFwdRIDSM", 1);
                         if (_log.shouldLog(Log.INFO))
-                            _log.warn("OutboundEndpoint RouterInfo DatabaseStoreMessage (count: " +
+                            _log.warn("OutboundEndpoint RouterInfo NetDbStoreMsg (count: " +
                                       _ridsm + "/" + _totalmsg + ") from [TunnelId " + _config.getReceiveTunnelId() + "] " +
                                       "to Router [" + toRouter.toBase64().substring(0,6) + "] with message: " + dsm);
                         else if (_log.shouldLog(Log.WARN))
-                            _log.warn("OutboundEndpoint RouterInfo DatabaseStoreMessage (count: " +
-                                      _ridsm + "/" + _totalmsg + ") from [TunnelId " + _config.getReceiveTunnelId() + "] " +
-                                      "to Router [" + toRouter.toBase64().substring(0,6) + "]");
+                            _log.warn("OutboundEndpoint RouterInfo NetDbStoreMsg from [TunnelId " + _config.getReceiveTunnelId() + "] " +
+                                      "to Router [" + toRouter.toBase64().substring(0,6) + "] -> Count: " + _ridsm + " / " + _totalmsg);
                     } else {
                         _lsdsm++;
                         if (_log.shouldLog(Log.INFO))
-                            _log.warn("OutboundEndpoint LeaseSet DatabaseStoreMessage (count: " + _lsdsm + "/" + _totalmsg + ") " +
+                            _log.warn("OutboundEndpoint LeaseSet NetDbStoreMsg (count: " + _lsdsm + "/" + _totalmsg + ") " +
                                       "from [TunnelId " + _config.getReceiveTunnelId() + "] to Router " +
                                       toRouter.toBase64().substring(0,6) + "] with message: " + dsm);
                         else if (_log.shouldLog(Log.WARN))
-                            _log.warn("OutboundEndpoint LeaseSet DatabaseStoreMessage (count: " + _lsdsm + "/" + _totalmsg + ") " +
-                                      "from [TunnelId " + _config.getReceiveTunnelId() + "] to Router " +
-                                      toRouter.toBase64().substring(0,6) + "]");
+                            _log.warn("OutboundEndpoint LeaseSet NetDbStoreMsg from [TunnelId " + _config.getReceiveTunnelId() + "] " +
+                                      "to Router " + toRouter.toBase64().substring(0,6) + "] -> Count: " + _lsdsm + " / " + _totalmsg);
                     }
                 } else {
                     _i2npmsg++;
