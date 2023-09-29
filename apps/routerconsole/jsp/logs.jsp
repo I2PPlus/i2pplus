@@ -159,10 +159,11 @@
   const servicelogs = document.getElementById("wrapperlogs");
   const visible = document.visibilityState;
   const xhrlogs = new XMLHttpRequest();
+  let refreshId;
   progressx.hide();
   function initRefresh() {
     if (refreshId) {clearInterval(refreshId);}
-    const refreshId = setInterval(refreshLogs, 30000);
+    refreshId = setInterval(refreshLogs, 30000);
   }
   function refreshLogs() {
     xhrlogs.open('GET', '/logs', true);
