@@ -214,6 +214,7 @@ function checkFilterBar() {
     }
   }
   attachMagnetListeners();
+  initLinkToggler();
 }
 
 function checkPagenav() {
@@ -237,6 +238,7 @@ function refreshFilters() {
     checkPagenav();
     debouncedRefreshTorrents(initFilterBar);
     attachMagnetListeners();
+    initLinkToggler();
   }
 }
 
@@ -251,6 +253,7 @@ function refreshAll() {
   var filterbar = document.getElementById("torrentDisplay");
   if (filterbar) {refreshFilters();}
   attachMagnetListeners();
+  initLinkToggler();
 }
 
 document.addEventListener("DOMContentLoaded", checkIfVisible, true);
