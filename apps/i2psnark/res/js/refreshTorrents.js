@@ -148,6 +148,9 @@ function refreshTorrents(callback) {
               updated = true;
             }
           });
+          magnetToast();
+          initLinkToggler();
+          attachMagnetListeners();
         }
       }
       if (snarkFoot?.responseXML) {
@@ -178,6 +181,8 @@ function refreshTorrents(callback) {
         if (filterbar) {
           initFilterBar();
         }
+        magnetToast();
+        initLinkToggler();
         attachMagnetListeners();
       } else if (files) {
         const dirlistResponse = xhrsnark.responseXML?.getElementById("dirlist");
@@ -208,6 +213,9 @@ function refreshTorrents(callback) {
           if (updatingResponse[index] && elem.innerHTML !== updatingResponse[index].innerHTML) {
             const responseElem = updatingResponse[index];
             elem.outerHTML = updatingResponse[index].outerHTML;
+            magnetToast();
+            initLinkToggler();
+            attachMagnetListeners();
             updated = true;
           }
         });
@@ -282,8 +290,8 @@ function setupPage() {
     initFilterBar();
   }
   magnetToast();
-  attachMagnetListeners();
   initLinkToggler();
+  attachMagnetListeners();
 }
 
 function initSnarkRefresh() {
@@ -298,6 +306,9 @@ function initSnarkRefresh() {
     const lightbox = new Lightbox();
     lightbox.load();
   }
+  magnetToast();
+  initLinkToggler();
+  attachMagnetListeners();
 }
 
 const ready = (element) => {

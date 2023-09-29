@@ -4,7 +4,7 @@
 
 import {refreshTorrents} from "./refreshTorrents.js";
 import {onVisible} from "./onVisible.js";
-import {initLinkToggler, linkToggle, attachMagnetListeners} from "./toggleLinks.js";
+import {initLinkToggler, linkToggle, attachMagnetListeners, magnetToast} from "./toggleLinks.js";
 
 function initFilterBar() {
 
@@ -213,8 +213,9 @@ function checkFilterBar() {
       window.location.search = query;
     }
   }
-  attachMagnetListeners();
+  magnetToast();
   initLinkToggler();
+  attachMagnetListeners();
 }
 
 function checkPagenav() {
@@ -237,8 +238,9 @@ function refreshFilters() {
   if (query.includes("ps=9999") && pagenav && filterbar) {
     checkPagenav();
     debouncedRefreshTorrents(initFilterBar);
-    attachMagnetListeners();
+    magnetToast();
     initLinkToggler();
+    attachMagnetListeners();
   }
 }
 
@@ -246,14 +248,18 @@ function checkIfVisible() {
   var torrentform = document.getElementById("torrentlist");
   if (torrentform !== null) {
     onVisible(torrentform, () => {checkFilterBar();});
+    magnetToast();
+    initLinkToggler();
+    attachMagnetListeners();
   }
 }
 
 function refreshAll() {
   var filterbar = document.getElementById("torrentDisplay");
   if (filterbar) {refreshFilters();}
-  attachMagnetListeners();
+  magnetToast();
   initLinkToggler();
+  attachMagnetListeners();
 }
 
 document.addEventListener("DOMContentLoaded", checkIfVisible, true);

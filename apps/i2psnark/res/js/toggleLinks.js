@@ -118,7 +118,7 @@ function attachMagnetListeners() {
         toast.style.display = "none";
         toast.textContent = "";
       }, 3500);
-    });
+    }, {once: true});
   }
 }
 
