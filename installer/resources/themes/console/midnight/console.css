@@ -805,7 +805,7 @@ p#ipconfig,p#ipv4config,p#udpconfig,p#externaltcp{padding:10px;border:var(--bord
 #confignotes{margin-bottom:-21px;padding:15px 25px 15px 55px;background:var(--infohelp) no-repeat 15px center/28px}
 #bandwidthconfig{margin-bottom:1px;padding:5px 10px}
 #bandwidthconfig td:not(.infohelp):first-child{width:200px;white-space:nowrap}
-#bandwidthconfig input,#bandwidthconfig select{margin-right:3px;min-width:90px;width:90px;text-align:right}
+#bandwidthconfig input[type=text],#bandwidthconfig select{margin-right:3px;min-width:90px;width:90px;text-align:right}
 #bandwidthconfig select{text-align:center}
 #netconfig{will-change:transform}
 #netconfig .optbox{margin:10px 6px 2px;display:inline-block}
