@@ -283,6 +283,7 @@ function setupPage() {
   }
   magnetToast();
   attachMagnetListeners();
+  initLinkToggler();
 }
 
 function initSnarkRefresh() {

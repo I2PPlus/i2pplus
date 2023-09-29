@@ -43,15 +43,10 @@ function initLinkToggler() {
 }
 
 function linkToggle() {
-  const currentConfig = localStorage.getItem("linkToggle");
-  if (currentConfig === "links") {
-    if (config !== "magnets") {
-      showMagnets();
-    }
-  } else {
-    if (config !== "links") {
-      showLinks();
-    }
+  if (config === "links") {
+    showMagnets();
+  } else if (config === "magnets") {
+    showLinks();
   }
 }
 
@@ -64,9 +59,9 @@ function showLinks() {
 
 function showMagnets() {
   attachMagnetListeners();
-  magnetToast();
   toggle.checked = false;
   toggleCss.textContent = magnetCss + magnetBtn;
+  magnetToast();
   localStorage.setItem("linkToggle", "magnets");
   config = "magnets";
 }
@@ -95,12 +90,13 @@ function magnetToast() {
 
 function attachMagnetListeners() {
   if (!toggle) {return;}
-  let toastTimeoutId;
+  let toastTimeoutId = null;
   for (let i = 0; i < magnets.length; i++) {
     let anchor = magnets[i];
     let copyBtn = anchor.parentElement.querySelector(".copyMagnet");
     copyBtn.addEventListener("click", function(event) {
       event.preventDefault();
+      clearTimeout(toastTimeoutId);
       toast.removeAttribute("hidden");
       toast.style.display = "block";
       let link = anchor.href;
@@ -118,7 +114,6 @@ function attachMagnetListeners() {
       toast.innerHTML = "Magnet link copied to clipboard: <b>" + magnetName + "</b>" +
                         (magnetHash != "" ? "<br>Hash: <b>" + magnetHash + "</b>": "");
       console.log("Magnet link copied to clipboard: " + link);
-      clearTimeout(toastTimeoutId);
       toastTimeoutId = setTimeout(function() {
         toast.style.display = "none";
         toast.textContent = "";
