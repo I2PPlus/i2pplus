@@ -546,31 +546,29 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 #graphopts a{margin:3px -2px;padding:1px 10px;display:inline-block;line-height:1.4}
 #graphopts a:empty{display:none}
 #graphopts{margin:30px -14px -9px;padding:10px 0 9px;text-align:center;text-transform:capitalize;border-top:1px solid #77789f;box-shadow:var(--highlight);background:repeating-linear-gradient(135deg,rgba(248,248,255,.6) 2px,rgba(220,220,255,.3) 3px,#f8f8ff 5px),#f8f8ff;filter:drop-shadow(0 0 1px #ccc)}
-#graphs form{border:var(--border_inner);padding:10px;margin:-16px 0 5px}
+#gform{margin:-16px 0 5px;padding:0;border:var(--border_inner)}
+#gform hr{margin:0 -1px 8px}
+#gform table{border:0;margin:0}
 #graph_single h3{margin:15px 0 0}
 #graph_single .graphspanel{margin:9px -9px -20px}
-#graphs input[type=text]{min-width:70px}
 #graphs hr{display:none}
+#gform input,#gform select{margin:3px 5px 3px 0;vertical-align:middle}
+#gform input[type=text]{width:70px;min-width:70px;text-align:right}
 #graphs .optionlist{border:0;column-gap:2px;columns:500px auto;background:#fff}
 #graphs .optionlist:hover{box-shadow:none}
 #graphs .nowrap{width:calc(100% - 10px);display:inline-block;margin:1px 0;padding:2px 5px;background:#eaeaff;line-height:1}
 #graphs .nowrap:hover{background:#ffd;transition:ease background .2s .01s}
 #graphs .nowrap::before{content:"";display:inline-block;min-height:42px;vertical-align:middle}
-#graphs form{padding:0}
-#graphs form hr{margin:0 -1px 8px}
-#graphs form table{border:0;margin:0}
 #graphs tr:first-child td{border-top:0}
 #graphs td{padding:1px;box-shadow:var(--highlight);transition:ease box-shadow .5s}
 #graphs td:hover{box-shadow:inset 0 0 0 1px #a79;transition:ease box-shadow .5s}
 #graphs td b{min-width:150px;text-align:right;display:inline-block;margin-right:5px}
-#graphs form input,#graphs form select{margin:3px 5px 3px 0;vertical-align:middle}
-#graphs input[type=text]{min-width:60px}
 #graphing{margin:-1px 0;padding:5px 3px;border-left:0;border-right:0}
 #graphs .statimage,#graphs .statimage:hover,#graphs a:hover .statimage,#graph_single .statimage,#graph_single .statimage:hover{margin:0;padding:0;max-width:calc(100% + 2px);border:0;box-shadow:none;background:none}
 #graph_single .graphContainer{padding:6px 6px 6px 0;max-width:calc(100% - 32px);box-sizing:content-box;background:#fff;animation:ease grid-fade 2s forwards}
-#updategraphs .messages{margin-bottom:4px}
 #graphdisplay:not(.visible){margin-bottom:5px}
 #graphdisplay:hover,#graphdisplay:focus{color:var(--hover)}
+#updategraphs .messages{margin-bottom:4px}
 
 /* notifications */
 .error{color:#900}
@@ -1980,6 +1978,7 @@ select[name="newlogclass"]{margin-left:3px}
 .net_bwrate{padding:0 2px 12px;width:100%;font-weight:700;font-size:125%;color:var(--ink_light)}
 .net_datausage{margin:-4px -7px;padding:12px 5px 0;width:100%;min-width:320px;font-style:italic;border-top:1px dotted #ddf}
 .net_datausage{padding:4px 0;min-width:260px;white-space:normal}
+#bandwidthconfig input[type=text],#bandwidthconfig select{width:90px;min-width:90px;text-align:right}
 #bandwidthconfig .bw_in{background:#eaeaff url(/themes/console/images/inbound.svg) 18px calc(50% + 12px) no-repeat}
 #bandwidthconfig .bw_out{background:#eaeaff url(/themes/console/images/outbound.svg) 18px calc(50% + 12px) no-repeat}
 #bandwidthconfig .bw_share{background:#eaeaff var(--share) 18px calc(50% + 12px) no-repeat}

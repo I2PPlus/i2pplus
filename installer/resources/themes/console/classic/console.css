@@ -637,7 +637,6 @@ pre#activetransports{margin:-11px 0 0;padding:15px 15px 0;width:calc(100% - 32px
 #advconf .infohelp{padding:20px 15px 20px 36px;background-size:22px;background-position:8px center}
 #addkeyring{margin-bottom:-5px}
 #addkeyring td:first-child:not(.infohelp){line-height:1.15}
-#bandwidthconfig td:first-child{width:1%;white-space:nowrap}
 #configinfo th{text-align:left;font-family:var(--monospaced);font-weight:600;padding:7px 10px;color:#050}
 #configinfo td{text-align:justify;padding:5px 15px;background:rgba(230,230,255,.5)}
 #config_clients label[for="0"]{cursor:default;color:var(--ink)}
@@ -1075,10 +1074,6 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 .graphspanel form:last-child{text-align:left;margin:0 20px}
 #graphdisplay{margin:12px -16px 10px;padding:8px 10px;line-height:1}
 #graphs .graphspanel{margin:-16px}
-#graphs form[action="graphs"]{border:var(--border);padding:5px 10px;margin:-11px 0 5px;background:var(--bg3)}
-#graphs form[action="graphs"],#graphs form[action="/updategraphs"]{margin:-10px -14px}
-#graphs form[action="graphs"] hr{margin:5px -11px 3px;height:1px}
-#graphs form[action="graphs"] input[type=text]{min-width:80px}
 #graph_single .graphContainer{padding-top:4px}
 #graphs .statimage,#graphs .statimage:hover,#graphs a:hover .statimage,#graph_single .statimage,#graph_single .statimage:hover{border:0;box-shadow:none}
 #graphs .statimage{min-width:180px;min-height:40px}
@@ -1088,15 +1083,15 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 #graphdisplay a{margin-top:2px}
 
 /* graph options */
-#graphs form{padding:0}
-#graphs form hr{margin:0 -1px 8px}
-#graphs form table{border:0;margin:0}
+#gform{margin:-11px -16px;padding:0;border:var(--border);background:var(--bg3)}
+#gform hr{margin:0 -1px 8px}
+#gform input,#gform select{margin:3px 5px 3px 0;vertical-align:middle}
+#gform input[type=text]{width:70px;min-width:70px;text-align:right}
+#gform table{border:0;margin:0}
 #graphs tr:first-child td{border-top:0}
 #graphs td{padding:8px 0 0;min-width:100px;text-align:left;white-space:nowrap;font-weight:400}
 #graphs td.infohelp{padding:5px 5px 5px 40px;text-align:left;border:0;background:var(--bg2) var(--infohelp) no-repeat 15px center/20px}
 #graphs td b{min-width:150px;text-align:right;display:inline-block;margin-right:5px}
-#graphs form input,#graphs form select{margin:3px 5px 3px 0;vertical-align:middle}
-#graphs input[type=text]{min-width:60px}
 #graphs .nowrap{line-height:3;display:inline-block}
 #graphdisplay:not(.visible){margin-bottom:-11px}
 #graphdisplay:hover,#graphdisplay:focus{color:var(--hover)}
@@ -1608,8 +1603,10 @@ b.suboption{margin:0;padding:5px 10px;position:relative;z-index:10;display:inlin
 #externali2cp input[name="port"]{margin-left:6px}
 
 /* bandwidth config */
-#bandwidthconfig td:first-child:not(.infohelp):not(.optionsave){padding:0 50px 0 5px;background:url(/themes/console/images/arrow_right.svg) no-repeat right 9px center/24px}
-#bandwidthconfig .optionsingle{margin:8px 0 8px 3px;padding:0 15px 0 40px;background:var(--bg2)}
+#bandwidthconfig input[type=text],#bandwidthconfig select{width:90px;min-width:90px;text-align:right}
+#bandwidthconfig select{text-align:center}
+#bandwidthconfig td:first-child:not(.infohelp):not(.optionsave){padding:0 50px 0 5px;width:20%;white-space:nowrap;background:url(/themes/console/images/arrow_right.svg) no-repeat right 9px center/24px}
+#bandwidthconfig .optionsingle{margin:8px 0 8px 3px;padding:0 20px 0 40px;background:var(--bg2)}
 #bandwidthconfig .bw_out{background:var(--bg2) url(/themes/console/images/outbound.svg) no-repeat 10px calc(50% + 14px)/24px}
 #bandwidthconfig .bw_in{background:var(--bg2) url(/themes/console/images/inbound.svg) no-repeat 10px calc(50% + 14px)/24px}
 #bandwidthconfig .bw_share{background:var(--bg2) var(--share) no-repeat 10px calc(50% + 14px)/24px}
@@ -2274,7 +2271,7 @@ input[name="capacity"],input[name="speed"]{min-width:80px;width:80px}
 .tab a{padding:2px 10px}
 .welcome h2{font-size:11pt}
 #bandwidthconfig td:not(.infohelp):first-child{padding-right:0;background:none}
-#bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{padding-left:5px;padding-right:8px;background:var(--bg2)}
+#bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{padding-left:5px;padding-right:15px;background:var(--bg2)}
 #bandwidthconfig .infohelp{padding-right:10px}
 #config_update .messages{padding-left:40px;background-size:22px;background-position:8px center}
 #events{min-width:510px}
