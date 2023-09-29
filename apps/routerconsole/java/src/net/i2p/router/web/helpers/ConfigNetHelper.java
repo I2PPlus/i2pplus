@@ -381,7 +381,7 @@ public class ConfigNetHelper extends HelperBase {
                 else
                     val = pct;
             }
-            buf.append("<option style=text-align:right value=\"").append(val).append("\" ");
+            buf.append("<option value=\"").append(val).append("\" ");
             if (pct == val) {
                 buf.append(SELECTED);
                 found = true;

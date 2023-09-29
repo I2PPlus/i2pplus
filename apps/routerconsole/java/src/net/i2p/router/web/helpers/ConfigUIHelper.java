@@ -33,7 +33,7 @@ public class ConfigUIHelper extends HelperBase {
             buf.append("value=\"").append(theme).append("\" id=\"").append(theme).append("\">" +
                        "<img height=48 width=48 alt=\"\" src=\"/themes/console/").append(theme).append("/images/thumbnail.png\">" +
                        "<br>" +
-                       "<div class=themelabel style=text-align:center>" + _t(theme) + "</div>" +
+                       "<div class=themelabel>" + _t(theme) + "</div>" +
                        "</div></label>\n");
         }
         buf.append("</div><div id=themeoptions>" +
