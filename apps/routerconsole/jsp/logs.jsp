@@ -151,32 +151,34 @@
 </div>
 <script nonce=<%=cspNonce%> type=module>
   import {onVisible} from "/js/onVisible.js";
-  var mainLogs = document.getElementById("logs");
-  var criticallogs = document.getElementById("criticallogs");
-  var critLogsHead = document.getElementById("critLogsHead");
-  var noCritLogs = document.querySelector("#criticallogs .nologs");
-  var routerlogs = document.getElementById("routerlogs");
-  var servicelogs = document.getElementById("wrapperlogs");
-  var visible = document.visibilityState;
-  var xhr = new XMLHttpRequest();
+  const mainLogs = document.getElementById("logs");
+  const criticallogs = document.getElementById("criticallogs");
+  const critLogsHead = document.getElementById("critLogsHead");
+  const noCritLogs = document.querySelector("#criticallogs .nologs");
+  const routerlogs = document.getElementById("routerlogs");
+  const servicelogs = document.getElementById("wrapperlogs");
+  const visible = document.visibilityState;
+  const xhrlogs = new XMLHttpRequest();
   progressx.hide();
   function initRefresh() {
     if (refreshId) {clearInterval(refreshId);}
-    var refreshId = setInterval(refreshLogs, 30000);
+    const refreshId = setInterval(refreshLogs, 30000);
   }
   function refreshLogs() {
-    xhr.open('GET', '/logs', true);
-    xhr.responseType = "document";
-    xhr.onload = function () {
-      var mainLogsResponse = xhr.responseXML.getElementById("logs");
+    xhrlogs.open('GET', '/logs', true);
+    xhrlogs.responseType = "document";
+    xhrlogs.onload = function () {
+      const mainLogsResponse = xhrlogs.responseXML.getElementById("logs");
       progressx.show();
       progressx.progress(0.5);
 
+      if (!xhrlogs.responseXML) {return;}
+
       if (criticallogs) {
-        var criticallogsResponse = xhr.responseXML.getElementById("criticallogs");
-        if (criticallogsResponse !== null && !criticallogs) {
+        const criticallogsResponse = xhrlogs.responseXML.getElementById("criticallogs");
+        if (criticallogsResponse && !criticallogs) {
           mainLogs.innerHTML = mainLogsResponse.innerHTML;
-        } else if (criticallogsResponse !== null && criticallogs !== criticallogsResponse && !noCritLogs) {
+        } else if (criticallogsResponse && criticallogs !== criticallogsResponse && !noCritLogs) {
           criticallogs.innerHTML = criticallogsResponse.innerHTML;
         } else if (noCritLogs) {
           critLogsHead.remove();
@@ -184,15 +186,17 @@
         }
       }
       if (routerlogs) {
-        var routerlogsResponse = xhr.responseXML.getElementById("routerlogs");
-        if (!routerlogs && routerlogsResponse) {
-          mainLogs.innerHTML = mainLogsResponse.innerHTML;
-        } else if (routerlogs !== routerlogsResponse) {
-          routerlogs.innerHTML = routerlogsResponse.innerHTML;
+        const routerlogsResponse = xhrlogs.responseXML.getElementById("routerlogs");
+        if (routerlogsResponse) {
+          if (!routerlogs) {
+            mainLogs.innerHTML = mainLogsResponse.innerHTML;
+          } else if (routerlogs !== routerlogsResponse) {
+            routerlogs.innerHTML = routerlogsResponse.innerHTML;
+          }
         }
       }
       if (servicelogs) {
-        var servicelogsResponse = xhr.responseXML.getElementById("wrapperlogs");
+        const servicelogsResponse = xhrlogs.responseXML.getElementById("wrapperlogs");
         if (servicelogsResponse) {
           if (servicelogs !== servicelogsResponse) {
             servicelogs.innerHTML = servicelogsResponse.innerHTML;
@@ -203,10 +207,10 @@
       }
       progressx.hide();
     }
-    xhr.send();
+    xhrlogs.send();
   }
-  window.addEventListener("DOMContentLoaded", progressx.hide(), true);
-  document.addEventListener("DOMContentLoaded", initRefresh(), true);
+  window.addEventListener("DOMContentLoaded", progressx.hide, true);
+  document.addEventListener("DOMContentLoaded", initRefresh, true);
 </script>
 </body>
 </html>
