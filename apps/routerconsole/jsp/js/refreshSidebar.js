@@ -116,7 +116,6 @@ function refreshSidebar() {
     const shutdownStatusResponse = xhr.responseXML.getElementById("sb_shutdownStatus");
     const tunnelBuildStatusResponse = xhr.responseXML.getElementById("sb_tunnelstatus");
     const tunnelsResponse = xhr.responseXML.getElementById("sb_tunnels");
-    const updateBarResponse = xhr.responseXML.getElementById("sb_updatebar");
     const updateFormResponse = xhr.responseXML.getElementById("sb_updateform");
     const updateSectionResponse = xhr.responseXML.getElementById("sb_updatesection");
     const updateStatusResponse = xhr.responseXML.getElementById("sb_updateprogress");
@@ -239,14 +238,17 @@ function refreshSidebar() {
       if (cpuBar && cpuBarResponse && !Object.is(cpuBar.innerHTML, cpuBarResponse.innerHTML)) {
         cpuBar.innerHTML = cpuBarResponse.innerHTML;
       }
-      if (updateBar && updateBarResponse && updateBar.innerHTML !== updateBarResponse.innerHTML) {
-        updateBar.outerHTML = updateBarResponse.outerHTML;
-        const updateH3 = document.querySelector("#sb_updatesection > h3 a");
-        if (updateH3) {
-          const spinner = "<span id=updateSpinner></span>";
-          updateH3.classList.add("updating");
-          if (updateH3.innerHTML.indexOf(spinner) === -1) {
+      if (updateBar) {
+        const updateBarResponse = xhr.responseXML.getElementById("sb_updatebar");
+        if (updaterBar && updateBarResponse && updateBar.innerHTML !== updateBarResponse.innerHTML) {
+          updateBar.innerHTML = updateBarResponse.innerHTML;
+          const updateH3 = document.querySelector("#sb_updatesection > h3 a");
+          if (updateH3) {
+            const spinner = "<span id=updateSpinner></span>";
+            updateH3.classList.add("updating");
+            if (updateH3.innerHTML.indexOf(spinner) === -1) {
               updateH3.innerHTML += spinner;
+            }
           }
         }
       }
