@@ -5,4 +5,4 @@ function closeMessage() {
 
 document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("messages").addEventListener("click", closeMessage);
-}, true);
+});

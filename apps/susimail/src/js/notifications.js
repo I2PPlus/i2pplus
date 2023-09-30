@@ -13,9 +13,7 @@ function removeNotify() {
     });
   }
 
-  document.addEventListener("DOMContentLoaded", function() {
-    initNotifications();
-  }, true);
+  document.addEventListener("DOMContentLoaded", initNotifications);
 }
 
 export {removeNotify};

@@ -60,8 +60,8 @@
   }
   function addSortListeners() {
     if (summary) {
-      summary.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
-      summary.addEventListener('afterSort', function() {progressx.hide();}, true);
+      summary.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);});
+      summary.addEventListener('afterSort', function() {progressx.hide();});
     }
   }
   function updateTunnels() {
@@ -87,8 +87,8 @@
   }
   onVisible(main, () => {updateTunnels();});
   if (visible === "hidden") {clearInterval(refreshId);}
-  window.addEventListener("DOMContentLoaded", progressx.hide, true);
-  document.addEventListener("DOMContentLoaded", initRefresh, true);
+  window.addEventListener("DOMContentLoaded", progressx.hide);
+  document.addEventListener("DOMContentLoaded", initRefresh);
 </script>
 </body>
 </html>

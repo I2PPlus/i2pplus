@@ -210,8 +210,8 @@
     }
     xhrlogs.send();
   }
-  window.addEventListener("DOMContentLoaded", progressx.hide, true);
-  document.addEventListener("DOMContentLoaded", initRefresh, true);
+  window.addEventListener("DOMContentLoaded", progressx.hide);
+  document.addEventListener("DOMContentLoaded", initRefresh);
 </script>
 </body>
 </html>

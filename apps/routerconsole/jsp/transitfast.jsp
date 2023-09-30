@@ -61,8 +61,8 @@
   }
   function addSortListeners() {
     if (tunnels) {
-      tunnels.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
-      tunnels.addEventListener('afterSort', function() {progressx.hide();}, true);
+      tunnels.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);});
+      tunnels.addEventListener('afterSort', function() {progressx.hide();});
     }
   }
   function updateNotes() {
@@ -106,8 +106,8 @@
   }
   onVisible(main, () => {updateTunnels();});
   if (visible === "hidden") {clearInterval(refreshId);}
-  window.addEventListener("DOMContentLoaded", progressx.hide, true);
-  document.addEventListener("DOMContentLoaded", initRefresh, true);
+  window.addEventListener("DOMContentLoaded", progressx.hide);
+  document.addEventListener("DOMContentLoaded", initRefresh);
 </script>
 </div>
 <script nonce=<%=cspNonce%> src=/js/lazyload.js></script>

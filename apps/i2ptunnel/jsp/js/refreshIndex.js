@@ -160,4 +160,4 @@ function refreshIndex() {
 
 bindToggle();
 setInterval(refreshIndex, 5000);
-document.addEventListener("DOMContentLoaded", countServices(), true);
+document.addEventListener("DOMContentLoaded", countServices);

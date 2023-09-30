@@ -262,6 +262,6 @@ function refreshAll() {
   attachMagnetListeners();
 }
 
-document.addEventListener("DOMContentLoaded", checkIfVisible, true);
+document.addEventListener("DOMContentLoaded", checkIfVisible);
 
 export {initFilterBar, checkFilterBar, refreshFilters};

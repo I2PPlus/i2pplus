@@ -16,6 +16,4 @@ function selectAll(element) {
   element.select();
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-  initSelectAll();
-}, true);
+document.addEventListener("DOMContentLoaded", initSelectAll);

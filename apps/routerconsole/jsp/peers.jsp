@@ -88,12 +88,12 @@
 
   function addSortListeners() {
     if (ntcpConn) {
-      ntcpConn.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
-      ntcpConn.addEventListener('afterSort', function() {progressx.hide();}, true);
+      ntcpConn.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);});
+      ntcpConn.addEventListener('afterSort', function() {progressx.hide();});
     }
     if (ssuConn) {
-      ssuConn.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
-      ssuConn.addEventListener('afterSort', function() {progressx.hide();}, true);
+      ssuConn.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);});
+      ssuConn.addEventListener('afterSort', function() {progressx.hide();});
     }
   }
 

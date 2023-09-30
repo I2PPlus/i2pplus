@@ -81,16 +81,16 @@
   function addSortListeners() {
     if (ff && sorterFF === null) {
       sorterFF = new Tablesort((ff), {descending: true});
-      ff.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
-      ff.addEventListener('afterSort', function() {progressx.hide();}, true);
+      ff.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);});
+      ff.addEventListener('afterSort', function() {progressx.hide();});
     } else if (plist && sorterP === null) {
       sorterP = new Tablesort((plist), {descending: true});
-      plist.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
-      plist.addEventListener('afterSort', function() {progressx.hide();}, true);
+      plist.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);});
+      plist.addEventListener('afterSort', function() {progressx.hide();});
     } else if (sessionBans && sorterBans === null) {
       sorterBans = new Tablesort((sessionBans), {descending: false});
-      sessionBans.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);}, true);
-      sessionBans.addEventListener('afterSort', function() {progressx.hide();}, true);
+      sessionBans.addEventListener('beforeSort', function() {progressx.show();progressx.progress(0.5);});
+      sessionBans.addEventListener('afterSort', function() {progressx.hide();});
     }
   }
   function refreshProfiles() {

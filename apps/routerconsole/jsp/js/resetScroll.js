@@ -1,31 +1,17 @@
 // resets scroll position of element
 // use with onblur to clear scroll position when element loses focus
 
-function initResetScroll() {
-	var buttons = document.getElementsByClassName("resetScrollLeft");
-	for(index = 0; index < buttons.length; index++) {
-		var button = buttons[index];
-		addBlurHandler(button);
-	}
-}
-
-function addBlurHandler(elem) {
-	elem.addEventListener("blur", function() {
-		resetScrollLeft(elem);
-	});
-}
-
-// reset scroll to left position
 function resetScrollLeft(element) {
-	element.scrollLeft = 0;
+  element.scrollLeft = 0;
 }
 
-// reset scroll to top position
-// unused
-function resetScrollTop(element) {
-	element.scrollTop = 0;
+function initResetScroll() {
+  var buttons = document.getElementsByClassName("resetScrollLeft");
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener("blur", function() {
+      resetScrollLeft(this);
+    });
+  }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-	initResetScroll();
-}, true);
+document.addEventListener("DOMContentLoaded", initResetScroll);

@@ -15,4 +15,4 @@ function addClickHandler(elem) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", function() {init();}, true);
+document.addEventListener("DOMContentLoaded", init);

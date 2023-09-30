@@ -81,9 +81,9 @@
       xhr.send();
     }, 10000);
   }
-  window.addEventListener("DOMContentLoaded", progressx.hide, true);
-  jobs.addEventListener("beforeSort", function() {progressx.show();progressx.progress(0.5);}, true);
-  jobs.addEventListener("afterSort", function() {progressx.hide();}, true);
+  window.addEventListener("DOMContentLoaded", progressx.hide);
+  jobs.addEventListener("beforeSort", function() {progressx.show();progressx.progress(0.5);});
+  jobs.addEventListener("afterSort", function() {progressx.hide();});
 </script>
 </body>
 </html>
