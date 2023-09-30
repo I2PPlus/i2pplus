@@ -240,7 +240,7 @@ function refreshSidebar() {
       }
       if (updateBar) {
         const updateBarResponse = xhr.responseXML.getElementById("sb_updatebar");
-        if (updaterBar && updateBarResponse && updateBar.innerHTML !== updateBarResponse.innerHTML) {
+        if (updateBar && updateBarResponse && updateBar.innerHTML !== updateBarResponse.innerHTML) {
           updateBar.innerHTML = updateBarResponse.innerHTML;
           const updateH3 = document.querySelector("#sb_updatesection > h3 a");
           if (updateH3) {
