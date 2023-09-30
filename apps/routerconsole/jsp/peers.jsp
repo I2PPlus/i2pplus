@@ -56,28 +56,28 @@
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js></script>
 <script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
 <script nonce=<%=cspNonce%>>
-  var autorefresh = document.getElementById("autorefresh");
-  var ntcpConn = document.getElementById("ntcpconnections");
-  var ntcpH3 = document.getElementById("ntcpcon");
-  var ntcpTfoot = document.querySelector("#ntcpconnections tfoot");
-  var peersNTCP = document.getElementById("peersNTCP");
-  var peersSSU = document.getElementById("peersSSU");
-  var refreshPeersId = setInterval(refreshPeers, 60000);
-  var ssuConn = document.getElementById("udpconnections");
-  var ssuH3 = document.getElementById("udpcon");
-  var ssuTfoot = document.querySelector("#udpconnections tfoot");
-  var summary = document.getElementById("transportSummary");
-  var url = document.location;
-  var path = location.pathname;
-  var query = location.search;
-  var queryParams = new URL(url.href).searchParams;
-  var xhrPeers = new XMLHttpRequest();
+  const autorefresh = document.getElementById("autorefresh");
+  const ntcpConn = document.getElementById("ntcpconnections");
+  const ntcpH3 = document.getElementById("ntcpcon");
+  const ntcpTfoot = document.querySelector("#ntcpconnections tfoot");
+  const peersNTCP = document.getElementById("peersNTCP");
+  const peersSSU = document.getElementById("peersSSU");
+  const refreshPeersId = setInterval(refreshPeers, 60000);
+  const ssuConn = document.getElementById("udpconnections");
+  const ssuH3 = document.getElementById("udpcon");
+  const ssuTfoot = document.querySelector("#udpconnections tfoot");
+  const summary = document.getElementById("transportSummary");
+  const url = document.location;
+  const path = location.pathname;
+  const query = location.search;
+  const queryParams = new URL(url.href).searchParams;
+  const xhrPeers = new XMLHttpRequest();
 
   if (peersNTCP && typeof sorterNTCP === "undefined") {
-    var sorterNTCP = new Tablesort((ntcpConn), {descending: true});
+    const sorterNTCP = new Tablesort((ntcpConn), {descending: true});
   }
   if (peersSSU && typeof sorterSSU === "undefined") {
-    var sorterSSU = new Tablesort((ssuConn), {descending: true});
+    const sorterSSU = new Tablesort((ssuConn), {descending: true});
   }
 
   function initRefresh() {
@@ -99,26 +99,26 @@
 
   function countTiers() {
     if (ssuTfoot || ntcpTfoot) {
-      var tierL = document.querySelectorAll(".rbw.L");
-      var tierM = document.querySelectorAll(".rbw.M");
-      var tierN = document.querySelectorAll(".rbw.N");
-      var tierO = document.querySelectorAll(".rbw.O");
-      var tierP = document.querySelectorAll(".rbw.P");
-      var tierX = document.querySelectorAll(".rbw.X");
-      var isFF = document.querySelectorAll(".isff");
-      var isU = document.querySelectorAll(".isU");
-      var countL = tierL !== null ? tierL.length : "0";
-      var countM = tierM !== null ? tierM.length : "0";
-      var countN = tierN !== null ? tierN.length : "0";
-      var countO = tierO !== null ? tierO.length : "0";
-      var countP = tierP !== null ? tierP.length : "0";
-      var countX = tierX !== null ? tierX.length : "0";
-      var countFF = isFF !== null ? isFF.length : "0";
-      var countU = isU !== null ? isU.length : "0";
-      var peerFoot = document.querySelector("tfoot .peer");
-      var pCount = document.getElementById("peerCounter");
-      var topCount = document.getElementById("topCount");
-      var counter = "<table><tr>" +
+      const tierL = document.querySelectorAll(".rbw.L");
+      const tierM = document.querySelectorAll(".rbw.M");
+      const tierN = document.querySelectorAll(".rbw.N");
+      const tierO = document.querySelectorAll(".rbw.O");
+      const tierP = document.querySelectorAll(".rbw.P");
+      const tierX = document.querySelectorAll(".rbw.X");
+      const isFF = document.querySelectorAll(".isff");
+      const isU = document.querySelectorAll(".isU");
+      const countL = tierL !== null ? tierL.length : "0";
+      const countM = tierM !== null ? tierM.length : "0";
+      const countN = tierN !== null ? tierN.length : "0";
+      const countO = tierO !== null ? tierO.length : "0";
+      const countP = tierP !== null ? tierP.length : "0";
+      const countX = tierX !== null ? tierX.length : "0";
+      const countFF = isFF !== null ? isFF.length : "0";
+      const countU = isU !== null ? isU.length : "0";
+      const peerFoot = document.querySelector("tfoot .peer");
+      const pCount = document.getElementById("peerCounter");
+      const topCount = document.getElementById("topCount");
+      const counter = "<table><tr>" +
                     (countL > 0 ? "<td class=rbw>L<span> " + countL + "</span></td>" : "") +
                     (countM > 0 ? "<td class=rbw>M<span> " + countM + "</span></td>" : "") +
                     (countN > 0 ? "<td class=rbw>N<span> " + countN + "</span></td>" : "") +
@@ -133,20 +133,19 @@
   }
 
   function refreshPeers() {
-    var now = Date.now();
     if (queryParams.has("transport")) {
-      xhrPeers.open("GET", path + query + "&t=" + now, true);
+      xhrPeers.open("GET", path + query, true);
     } else {
-      xhrPeers.open("GET", "/peers?t=" + now, true);
+      xhrPeers.open("GET", "/peers", true);
     }
     xhrPeers.responseType = "document";
     xhrPeers.onreadystatechange = function () {
       if (xhrPeers.readyState === 4 && xhrPeers.status === 200 && autorefresh.checked) {
         if (ssuConn) {
           if (peersSSU) {
-            var peersSSUResponse = xhrPeers.responseXML.getElementById("peersSSU");
-            var ssuH3Response = xhrPeers.responseXML.getElementById("udpcon");
-            var ssuTfootResponse = xhrPeers.responseXML.querySelector("#udpconnections tfoot");
+            const peersSSUResponse = xhrPeers.responseXML.getElementById("peersSSU");
+            const ssuH3Response = xhrPeers.responseXML.getElementById("udpcon");
+            const ssuTfootResponse = xhrPeers.responseXML.querySelector("#udpconnections tfoot");
             if (peersSSUResponse !== null && peersSSU.innerHTML !== peersSSUResponse.innerHTML) {
               ssuH3.innerHTML = ssuH3Response.innerHTML;
               peersSSU.innerHTML = peersSSUResponse.innerHTML;
@@ -157,16 +156,16 @@
               sorterSSU.refresh();
             }
           } else {
-            var udpResponse = xhrPeers.responseXML.getElementById("udp");
+            const udpResponse = xhrPeers.responseXML.getElementById("udp");
             if (!Object.is(udp.innerHTML, udpResponse.innerHTML)) {
               udp.innerHTML = udpResponse.innerHTML;
             }
           }
         } else if (ntcpConn) {
           if (peersNTCP) {
-            var peersNTCPResponse = xhrPeers.responseXML.getElementById("peersNTCP");
-            var ntcpH3Response = xhrPeers.responseXML.getElementById("ntcpcon");
-            var ntcpTfootResponse = xhrPeers.responseXML.querySelector("#ntcpconnections tfoot");
+            const peersNTCPResponse = xhrPeers.responseXML.getElementById("peersNTCP");
+            const ntcpH3Response = xhrPeers.responseXML.getElementById("ntcpcon");
+            const ntcpTfootResponse = xhrPeers.responseXML.querySelector("#ntcpconnections tfoot");
             if (peersNTCPResponse !== null && peersNTCP.innerHTML !== peersNTCPResponse.innerHTML) {
               ntcpH3.innerHTML = ntcpH3Response.innerHTML;
               peersNTCP.innerHTML = peersNTCPResponse.innerHTML;
@@ -177,13 +176,13 @@
               sorterNTCP.refresh();
             }
           } else {
-            var ntcpResponse = xhrPeers.responseXML.getElementById("ntcp");
+            const ntcpResponse = xhrPeers.responseXML.getElementById("ntcp");
             if (!Object.is(ntcp.innerHTML, ntcpResponse.innerHTML)) {
               ntcp.innerHTML = ntcpResponse.innerHTML;
             }
           }
         } else if (summary) {
-          var summaryResponse = xhrPeers.responseXML.getElementById("transportSummary");
+          const summaryResponse = xhrPeers.responseXML.getElementById("transportSummary");
           if (!Object.is(summary.innerHTML, summaryResponse.innerHTML)) {
             summary.innerHTML = summaryResponse.innerHTML;
           }
@@ -203,8 +202,8 @@
   xhrPeers.addEventListener("load", countTiers, true);
   document.addEventListener("DOMContentLoaded", () => {
     initRefresh();
-    if (peersNTCP !== null) {ntcpConn.addEventListener("mouseover", lazyload);}
-    if (peersSSU !== null) {ssuConn.addEventListener("mouseover", lazyload);}
+    if (peersNTCP !== null) {ntcpConn.addEventListener("mouseenter", lazyload);}
+    if (peersSSU !== null) {ssuConn.addEventListener("mouseenter", lazyload);}
   });
 </script>
 </body>

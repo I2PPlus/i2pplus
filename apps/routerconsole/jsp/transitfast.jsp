@@ -102,7 +102,7 @@
   }
   if (refresh) {
     refresh.addEventListener("click", function() {progressx.show();progressx.progress(0.5);updateTunnels();progressx.hide();});
-    refresh.addEventListener("mouseover", removeHref);
+    refresh.addEventListener("mouseenter", removeHref);
   }
   onVisible(main, () => {updateTunnels();});
   if (visible === "hidden") {clearInterval(refreshId);}
