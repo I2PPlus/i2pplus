@@ -32,23 +32,21 @@
 <jsp:getProperty name="tunnelHelper" property="tunnelSummary" />
 </div>
 <script nonce=<%=cspNonce%>>
-  var visibility = document.visibilityState;
+  const visibility = document.visibilityState;
   if (visibility == "visible") {
     setInterval(function() {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/tunnels', true);
-      xhr.responseType = "document";
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState==4 && xhr.status==200) {
-          var tunnels = document.getElementById("tunnels");
-          var tunnelsResponse = xhr.responseXML.getElementById("tunnels");
-          var tunnelsParent = tunnels.parentNode;
-          if (!Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML)) {
-            tunnelsParent.replaceChild(tunnelsResponse, tunnels);
-          }
+      const xhrtunn = new XMLHttpRequest();
+      xhrtunn.open('GET', '/tunnels', true);
+      xhrtunn.responseType = "document";
+      xhrtunn.onload = function () {
+        const tunnels = document.getElementById("tunnels");
+        const tunnelsResponse = xhrtunn.responseXML.getElementById("tunnels");
+        const tunnelsParent = tunnels.parentNode;
+        if (!Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML)) {
+          tunnelsParent.replaceChild(tunnelsResponse, tunnels);
         }
       }
-      xhr.send();
+      xhrtunn.send();
     }, 15000);
   }
 </script>

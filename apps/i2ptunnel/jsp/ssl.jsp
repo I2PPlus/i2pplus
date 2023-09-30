@@ -856,15 +856,15 @@
 <div id=notReady><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
 <script nonce="<%=cspNonce%>">
   setInterval(function() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/i2ptunnel/', true);
-    xhr.responseType = "text";
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200) {
-        document.getElementById("page").innerHTML=xhr.responseText;
+    const xhrtunnman = new XMLHttpRequest();
+    xhrtunnman.open('GET', '/i2ptunnel/', true);
+    xhrtunnman.responseType = "text";
+    xhrtunnman.onreadystatechange = function () {
+      if (xhrtunnman.readyState==4 && xhrtunnman.status==200) {
+        document.getElementById("page").innerHTML=xhrtunnman.responseText;
       }
     }
-    xhr.send();
+    xhrtunnman.send();
   }, 5000);
 </script>
 <%

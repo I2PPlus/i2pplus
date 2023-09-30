@@ -82,18 +82,17 @@
 <div class=illustrate id=svg>
 <% /* load svg via ajax (with noscript fallback) so we can style per theme */ %>
 <script nonce="<%=cspNonce%>">
-var now = Date.now();
-xhr = new XMLHttpRequest();
-xhr.open("GET","/susidns/images/how.svg?time=" + now, false);
-xhr.send("");
-document.getElementById("svg").appendChild(xhr.responseXML.documentElement);
+  const xhrdns = new XMLHttpRequest();
+  xhrdns.open("GET","/susidns/images/how.svg", false);
+  xhrdns.send();
+  document.getElementById("svg").appendChild(xhrdns.responseXML.documentElement);
 </script>
 <noscript>
 <%  String theme = base.getTheme();
     if (theme.contains("midnight")) { %>
-<style>.illustrate {border: 1px solid #010011 !important; background: #fff !important; filter: sepia(100%) invert(100%);}</style>
+<style>.illustrate{border:1px solid #010011!important;background:#fff!important;filter:sepia(100%) invert(100%)}</style>
 <%  } else if (theme.contains("dark")) { %>
-<style>.illustrate {border: 1px solid #111 !important; box-shadow: none !important; background: #fff !important; background: rgba(255,255,255,0.3) !important; filter: invert(1) sepia(100%) hue-rotate(30deg);}</style>
+<style>.illustrate{border:1px solid #111!important;box-shadow:none!important;background:#fff!important;background:rgba(255,255,255,0.3)!important;filter:invert(1) sepia(100%) hue-rotate(30deg)}</style>
 <%  } %>
 <object type="image/svg+xml" data="images/how.svg?<%=net.i2p.CoreVersion.VERSION%>">
 <img src="/themes/susidns/images/how.png" border="0" alt="How the address book works" title="How the address book works" />

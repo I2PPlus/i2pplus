@@ -32,20 +32,20 @@
   function updateStats() {
     progressx.show();
     progressx.progress(0.5);
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/stats', true);
-    xhr.responseType = "document";
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200) {
+    var xhrstats = new XMLHttpRequest();
+    xhrstats.open('GET', '/stats', true);
+    xhrstats.responseType = "document";
+    xhrstats.onreadystatechange = function () {
+      if (xhrstats.readyState==4 && xhrstats.status==200) {
         var statlist = document.getElementById("statlist");
-        var statlistResponse = xhr.responseXML.getElementById("statlist");
+        var statlistResponse = xhrstats.responseXML.getElementById("statlist");
         var statlistParent = statlist.parentNode;
         if (!Object.is(statlist.innerHTML, statlistResponse.innerHTML)) {
           statlistParent.replaceChild(statlistResponse, statlist);
         }
       }
     }
-    xhr.send();
+    xhrstats.send();
     progressx.hide();
   }
   var infohelp = document.querySelector("#gatherstats");

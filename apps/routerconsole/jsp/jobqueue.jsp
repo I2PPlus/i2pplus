@@ -28,24 +28,24 @@
 <jsp:getProperty name="jobQueueHelper" property="jobQueueSummary" />
 </div>
 <script nonce=<%=cspNonce%>>
-  var visibility = document.visibilityState;
+  const visibility = document.visibilityState;
   if (visibility == "visible") {
     setInterval(function() {
       progressx.show();
       progressx.progress(0.5);
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/jobqueue', true);
-      xhr.responseType = "document";
-      xhr.onload = function () {
-        var jobs = document.getElementById("jobs");
-        var jobsResponse = xhr.responseXML.getElementById("jobs");
-        var jobsParent = jobs.parentNode;
+      const xhrqueue = new XMLHttpRequest();
+      xhrqueue.open('GET', '/jobqueue', true);
+      xhrqueue.responseType = "document";
+      xhrqueue.onload = function () {
+        const jobs = document.getElementById("jobs");
+        const jobsResponse = xhrqueue.responseXML.getElementById("jobs");
+        const jobsParent = jobs.parentNode;
         if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML)) {
           jobsParent.replaceChild(jobsResponse, jobs);
         }
       }
       window.addEventListener("DOMContentLoaded", progressx.hide);
-      xhr.send();
+      xhrqueue.send();
     }, 15000);
   }
   window.addEventListener("DOMContentLoaded", progressx.hide);

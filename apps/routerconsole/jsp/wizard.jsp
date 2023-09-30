@@ -168,13 +168,13 @@
 <p class=infohelp id=bandwidth><%=intl._t("The bandwidth test is now running and will take around 60 seconds to complete, after which you should be forwarded to the results page.")%></p>
 <div id=bandwidthTestRunning><%=intl._t("Bandwidth Test in progress")%>...</div>
 <noscript>
-<div id=xhr>
+<div id=xhrwizard>
 <p class=infohelp id=bandwidth>
 <%=intl._t("Javascript is disabled - wait 60 seconds for the bandwidth test to complete and then click Next")%>
 </p>
 </div>
 </noscript>
-<div id=xhr2>
+<div id=xhrwizard2>
 </div>
 <%
     } else if (ipg == 4) {
@@ -386,16 +386,17 @@ A negative rate sets the default.</i><br>
     if (ipg == 3) {
 %>
 <script nonce=<%=cspNonce%>>
-  setInterval(function() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/wizard?page=4&' + Date.now(), true);
-    xhr.responseType = "text";
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200) {
-        document.getElementById("wizardpage").innerHTML = xhr.responseText;
+  let bwRefresh = setInterval(function() {
+    var xhrwizard = new XMLHttpRequest();
+    xhrwizard.open("GET", "/wizard?page=4", true);
+    xhrwizard.responseType = "text";
+    xhrwizard.onload = function () {
+      if (xhrwizard.status === 200) {
+        document.getElementById("wizardpage").innerHTML = xhrwizard.responseText;
+        clearInterval(bwRefresh);
       }
     }
-    xhr.send();
+    xhrwizard.send();
     window.addEventListener("DOMContentLoaded", progressx.hide);
   }, 75000);
   window.addEventListener("DOMContentLoaded", progressx.hide);

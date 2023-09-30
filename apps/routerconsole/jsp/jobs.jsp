@@ -34,27 +34,27 @@
 <script nonce=<%=cspNonce%>>
   const jobs = document.getElementById("jobstats");
   const sorter = new Tablesort((jobs), {descending: true});
-  const xhr = new XMLHttpRequest();
+  const xhrjobs = new XMLHttpRequest();
   progressx.hide();
   const visibility = document.visibilityState;
   if (visibility === "visible") {
     setInterval(function() {
-      xhr.open('GET', '/jobs', true);
-      xhr.responseType = "document";
-      xhr.onload = function () {
-        if (!xhr.responseXML) {
-          //alert("Your browser doesn't support ajax. Please upgrade to a newer browser or enable support for XHR requests.");
+      xhrjobs.open('GET', '/jobs', true);
+      xhrjobs.responseType = "document";
+      xhrjobs.onload = function () {
+        if (!xhrjobs.responseXML) {
+          //alert("Your browser doesn't support ajax. Please upgrade to a newer browser or enable support for xhrjobs requests.");
           return;
         }
-        const jobsResponse = xhr.responseXML.getElementById("jobstats");
+        const jobsResponse = xhrjobs.responseXML.getElementById("jobstats");
         const rows = document.querySelectorAll("#statCount tr");
-        const rowsResponse = xhr.responseXML?.querySelectorAll("#statCount tr");
+        const rowsResponse = xhrjobs.responseXML?.querySelectorAll("#statCount tr");
         const tbody = document.getElementById("statCount");
-        const tbodyResponse = xhr.responseXML.getElementById("statCount");
+        const tbodyResponse = xhrjobs.responseXML.getElementById("statCount");
         const tfoot = document.getElementById("statTotals");
-        const tfootResponse = xhr.responseXML.getElementById("statTotals");
+        const tfootResponse = xhrjobs.responseXML.getElementById("statTotals");
         const updatingTds = document.querySelectorAll("#statCount td");
-        const updatingTdsResponse = xhr.responseXML?.querySelectorAll("#statCount td");
+        const updatingTdsResponse = xhrjobs.responseXML?.querySelectorAll("#statCount td");
         let updated = false;
         if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML)) {
           if (rows.length !== rowsResponse.length) {
@@ -78,7 +78,7 @@
         }
       }
       progressx.hide();
-      xhr.send();
+      xhrjobs.send();
     }, 10000);
   }
   window.addEventListener("DOMContentLoaded", progressx.hide);
