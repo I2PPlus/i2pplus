@@ -1,18 +1,42 @@
 const lazyload = () => {
   const lazyelements = document.querySelectorAll(".lazy");
-  let observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.intersectionRatio > 0) {
-        entry.target.classList.add("lazyshow");
-        entry.target.classList.remove("lazyhide");
-      } else {
-        entry.target.classList.remove("lazyshow");
-        entry.target.classList.add("lazyhide");
+  const parentSelectors = [
+    "#host_list",
+    "#profilelist",
+    "#ffProfiles",
+    ".tunneldisplay",
+    ".main"
+  ];
+  let parentElement;
+
+  lazyelements.forEach(lazyElement => {
+    for (let i = 0; i < parentSelectors.length; i++) {
+      parentElement = lazyElement.closest(parentSelectors[i]);
+
+      if (parentElement) {
+        break;
       }
+    }
+
+    if (!parentElement || parentElement.nodeType !== Node.ELEMENT_NODE) {
+      parentElement = document.documentElement;
+    }
+
+    let observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.intersectionRatio > 0) {
+          entry.target.classList.add("lazyshow");
+          entry.target.classList.remove("lazyhide");
+        } else {
+          entry.target.classList.remove("lazyshow");
+          entry.target.classList.add("lazyhide");
+        }
+      });
     });
-  });
-  lazyelements.forEach(entry => {
-    observer.observe(entry);
+
+    observer.observe(lazyElement, {
+      root: parentElement
+    });
   });
 };
 
