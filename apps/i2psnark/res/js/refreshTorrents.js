@@ -148,9 +148,6 @@ function refreshTorrents(callback) {
               updated = true;
             }
           });
-          magnetToast();
-          initLinkToggler();
-          attachMagnetListeners();
         }
       }
       if (snarkFoot?.responseXML) {
@@ -181,9 +178,6 @@ function refreshTorrents(callback) {
         if (filterbar) {
           initFilterBar();
         }
-        magnetToast();
-        initLinkToggler();
-        attachMagnetListeners();
       } else if (files) {
         const dirlistResponse = xhrsnark.responseXML?.getElementById("dirlist");
         if (dirlistResponse && !Object.is(dirlist.innerHTML, dirlistResponse.innerHTML) && notfound === null) {
@@ -213,9 +207,6 @@ function refreshTorrents(callback) {
           if (updatingResponse[index] && elem.innerHTML !== updatingResponse[index].innerHTML) {
             const responseElem = updatingResponse[index];
             elem.outerHTML = updatingResponse[index].outerHTML;
-            magnetToast();
-            initLinkToggler();
-            attachMagnetListeners();
             updated = true;
           }
         });
@@ -247,6 +238,13 @@ function refreshTorrents(callback) {
     refreshTimeoutId = setTimeout(() => refreshTorrents(callback), 1000);
     requestInProgress = false;
   };
+
+  if (filterbar) {
+    initFilterBar();
+  }
+  magnetToast();
+  initLinkToggler();
+  attachMagnetListeners();
   xhrsnark.send();
 }
 
@@ -285,30 +283,18 @@ function debouncedRefreshTorrents(callback) {
   };
 }
 
-function setupPage() {
-  if (filterbar) {
-    initFilterBar();
-  }
-  magnetToast();
-  initLinkToggler();
-  attachMagnetListeners();
-}
-
 function initSnarkRefresh() {
   const interval = (parseInt(storageRefresh) || 5) * 1000;
   clearInterval(refreshIntervalId);
 
   refreshIntervalId = setInterval(() => {
-    debouncedRefreshTorrents(refreshTorrents)(setupPage);
+    debouncedRefreshTorrents(refreshTorrents);
   }, interval);
 
   if (files) {
     const lightbox = new Lightbox();
     lightbox.load();
   }
-  magnetToast();
-  initLinkToggler();
-  attachMagnetListeners();
 }
 
 const ready = (element) => {
