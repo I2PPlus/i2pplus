@@ -165,10 +165,10 @@ function refreshSidebar() {
           if (graphStatsResponse && !Object.is(graphStats.textContent, graphStatsResponse.textContent)) {
             graphStats.innerHTML = graphStatsResponse.innerHTML;
           }
-          if (!bandwidth?.hasAttribute("hidden")) {
-            graphStats.style.opacity = null;
+          if (bandwidth?.hasAttribute("hidden")) {
+            graphStats.classList.add("show");
           } else {
-            graphStats.style.opacity = "1";
+            graphStats.classList.remove("show");
           }
         }
       }
@@ -240,7 +240,7 @@ function refreshSidebar() {
       }
       if (updateBar) {
         const updateBarResponse = xhr.responseXML.getElementById("sb_updatebar");
-        if (updateBar && updateBarResponse && updateBar.innerHTML !== updateBarResponse.innerHTML) {
+        if (updateBarResponse && updateBar.innerHTML !== updateBarResponse.innerHTML) {
           updateBar.innerHTML = updateBarResponse.innerHTML;
           const updateH3 = document.querySelector("#sb_updatesection > h3 a");
           if (updateH3) {
