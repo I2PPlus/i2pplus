@@ -211,7 +211,6 @@ function refreshTorrents(callback) {
           }
         });
         window.requestAnimationFrame(refreshHeaderAndFooter);
-        attachMagnetListeners();
       } else {
         window.requestAnimationFrame(refreshAll);
       }
@@ -230,7 +229,6 @@ function refreshTorrents(callback) {
   };
 
   xhrsnark.onerror = function (error) {
-    //console.error("XHR request failed:", error);
     noAjax(5000);
     if (refreshTimeoutId) {
       clearTimeout(refreshTimeoutId);
@@ -242,8 +240,8 @@ function refreshTorrents(callback) {
   if (filterbar) {
     initFilterBar();
   }
-  magnetToast();
   initLinkToggler();
+  magnetToast();
   attachMagnetListeners();
   xhrsnark.send();
 }
