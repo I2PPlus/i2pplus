@@ -1049,7 +1049,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             buf.append(DataHelper.formatSize2(totalSize));
             buf.append("B</div><div class=percentBarInner style=\"width: ");
             buf.append(_pct.format(pct));
-            buf.append("\">");
+            buf.append("\"></div></div>");
         }
         updateStatus(buf.toString());
     }
