@@ -21,7 +21,6 @@ function updateLog() {
   const logEntryEl = xhrsnark.responseXML.querySelectorAll("#screenlog li.msg")[0];
   if (messages && logEntryEl) {
     const newLogEntry = logEntryEl.innerHTML.substring(21);
-    //console.log(newLogEntry);
     const newTable = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
     if (!addNotify.hidden) addNotify.innerHTML = newTable;
     if (!createNotify.hidden) createNotify.innerHTML = newTable;
@@ -52,6 +51,11 @@ function hideAlert() {
   setTimeout(() => (addNotify && createNotify && (addNotify.setAttribute("hidden", ""), createNotify.setAttribute("hidden", ""))), 7000);
 }
 
-addTorrent.addEventListener("submit", addTorrentNotify);
-createTorrent.addEventListener("submit", createTorrentNotify);
-injectCss();
+function initSnarkAlert() {
+  if (!addNotify) {return;}
+  addTorrent.addEventListener("submit", addTorrentNotify);
+  createTorrent.addEventListener("submit", createTorrentNotify);
+  injectCss();
+}
+
+export {initSnarkAlert};

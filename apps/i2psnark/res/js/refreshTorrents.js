@@ -7,6 +7,7 @@ import {initFilterBar} from "./torrentDisplay.js";
 import {initLinkToggler, magnetToast, attachMagnetListeners, linkToggle} from "./toggleLinks.js";
 import {initToggleLog} from "./toggleLog.js";
 import {Lightbox} from "./lightbox.js";
+import {initSnarkAlert} from "./snarkAlert.js";
 
 const files = document.getElementById("dirInfo");
 const filterbar = document.getElementById("torrentDisplay");
@@ -256,6 +257,7 @@ async function initSnarkRefresh() {
     initLinkToggler();
     magnetToast();
     attachMagnetListeners();
+    initSnarkAlert();
     const screenlog = document.getElementById("screenlog");
     if (screenlog) {initToggleLog();}
   }, interval);
