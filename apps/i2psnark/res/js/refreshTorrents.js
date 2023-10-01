@@ -3,7 +3,7 @@
 /* License: AGPL3 or later */
 
 import {onVisible} from "./onVisible.js";
-import {initFilterBar} from './torrentDisplay.js';
+import {initFilterBar} from "./torrentDisplay.js";
 import {initLinkToggler, magnetToast, attachMagnetListeners, linkToggle} from "./toggleLinks.js";
 import {initToggleLog} from "./toggleLog.js";
 import {Lightbox} from "./lightbox.js";
@@ -12,6 +12,7 @@ const files = document.getElementById("dirInfo");
 const filterbar = document.getElementById("torrentDisplay");
 const home = document.querySelector(".nav_main");
 const mainsection = document.getElementById("mainsection");
+const query = window.location.search;
 const snarkHead = document.getElementById("snarkHead");
 const storageRefresh = window.localStorage.getItem("snarkRefresh");
 const xhrsnark = new XMLHttpRequest();
@@ -19,70 +20,38 @@ let refreshIntervalId;
 let refreshTimeoutId;
 let requestInProgress = false;
 
-function debounce(func, wait) {
-  let timeout;
-
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-
-    clearTimeout(timeout);
-
-    if (arguments[2] && arguments[2] === "now") {
-      func(...args);
-    } else {
-      timeout = setTimeout(later, wait);
-    }
-  };
-}
-
 function refreshTorrents(callback) {
   const complete = document.getElementsByClassName("completed");
   const control = document.getElementById("torrentInfoControl");
   const dirlist = document.getElementById("dirlist");
   const down = document.getElementById("down");
+  const filterEnabled = localStorage.hasOwnProperty("snarkFilter") !== null;
   const info = document.getElementById("torrentInfoStats");
   const noload = document.getElementById("noload");
   const notfound = document.getElementById("NotFound");
-  const snarkHead = document.getElementById("snarkHead");
-  const torrents = document.getElementById("torrents");
   const storage = window.localStorage.getItem("snarkFilter");
-  const filterEnabled = localStorage.hasOwnProperty("snarkFilter") !== null;
-  const snarkTable = torrents || files;
-  const query = window.location.search;
+  const torrents = document.getElementById("torrents");
 
-  if (requestInProgress) {
-    if (refreshTimeoutId) {
-      clearTimeout(refreshTimeoutId);
-    }
-    refreshTimeoutId = setTimeout(() => refreshTorrents(callback), 1000);
-    return;
+  if (xhrsnark.readyState !== XMLHttpRequest.UNSENT) {
+    xhrsnark.abort();
+  }
+
+  if (typeof callback === "function") {
+    callback(xhrsnark.responseXML, getURL());
   }
 
   if (document.getElementById("ourDest") === null) {
     const childElems = document.querySelectorAll("#snarkHead th:not(.torrentAction)>*");
     if (snarkHead !== null) {
       document.getElementById("snarkHead").classList.add("initializing");
-      childElems.forEach(elem => {elem.style.opacity = "0";});
+      childElems.forEach((elem) => {elem.style.opacity = "0";});
     }
   }
 
   requestInProgress = true;
-
-  function getURL() {
-    const filterEnabled = localStorage.getItem("snarkFilter") !== null;
-    const baseUrl = "/i2psnark/.ajax/xhr1.html";
-    const url = filterEnabled ? baseUrl + query + (query ? "&" : "?") + "ps=9999" : baseUrl + query;
-    return url;
-  }
-
-  xhrsnark.open("GET", getURL(), true);
-  xhrsnark.responseType = "document";
   xhrsnark.onload = function () {
 
-    if (storageRefresh === null) {
+    if (!storageRefresh) {
       getRefreshInterval();
     }
 
@@ -228,26 +197,37 @@ function refreshTorrents(callback) {
     requestInProgress = false;
   };
 
+  if (filterbar) {
+    initFilterBar();
+  }
+
   xhrsnark.onerror = function (error) {
     noAjax(5000);
     if (refreshTimeoutId) {
       clearTimeout(refreshTimeoutId);
     }
-    refreshTimeoutId = setTimeout(() => refreshTorrents(callback), 1000);
+    refreshTimeoutId = setTimeout(() => refreshTorrents(initFunctions), 1000);
     requestInProgress = false;
   };
 
-  if (filterbar) {
-    initFilterBar();
-  }
+}
+
+function getURL() {
+  const filterEnabled = localStorage.getItem("snarkFilter") !== null;
+  const baseUrl = "/i2psnark/.ajax/xhr1.html";
+  const url = filterEnabled ? baseUrl + query + (query ? "&" : "?") + "ps=9999" : baseUrl + query;
+  return url;
+}
+
+function initFunctions() {
+  setLinks();
   initLinkToggler();
   magnetToast();
   attachMagnetListeners();
-  xhrsnark.send();
 }
 
 function setLinks(query) {
-  const home = document.querySelector('.nav_main');
+  const home = document.querySelector(".nav_main");
   if (home) {
     if (query !== undefined && query !== null) {
       home.href = `/i2psnark/${query}`;
@@ -267,38 +247,50 @@ function noAjax(delay) {
   }, delay);
 }
 
-function debouncedRefreshTorrents(callback) {
-  const delay = 100;
-  let debounceTimeoutId;
-
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(debounceTimeoutId);
-      callback(refreshTorrents(...args));
-    };
-    clearTimeout(debounceTimeoutId);
-    debounceTimeoutId = setTimeout(later, delay);
-  };
-}
-
-function initSnarkRefresh() {
+async function initSnarkRefresh() {
   const interval = (parseInt(storageRefresh) || 5) * 1000;
   clearInterval(refreshIntervalId);
-
-  refreshIntervalId = setInterval(() => {
-    debouncedRefreshTorrents(refreshTorrents);
+  refreshIntervalId = setInterval(async () => {
+    await doRefresh();
+    setLinks();
+    initLinkToggler();
+    magnetToast();
+    attachMagnetListeners();
+    const screenlog = document.getElementById("screenlog");
+    if (screenlog) {initToggleLog();}
   }, interval);
-
-  if (files) {
+  if (files && document.getElementById("lightbox")) {
     const lightbox = new Lightbox();
     lightbox.load();
   }
 }
 
-const ready = (element) => {
-  initSnarkRefresh();
-};
+async function doRefresh() {
+  const xhr = new XMLHttpRequest();
+  xhrsnark.responseType = "document";
+  xhrsnark.open("GET", getURL(), true);
+  xhrsnark.send();
+  await new Promise((resolve, reject) => {
+    xhrsnark.onload = () => {
+      refreshTorrents(xhrsnark);
+      resolve();
+    };
+    xhrsnark.onerror = () => {
+      reject(xhrsnark.status);
+    };
+  });
+}
 
-onVisible(mainsection, ready);
+document.addEventListener("DOMContentLoaded", () => {
+  if (mainsection) {
+    onVisible(mainsection, () => {
+      doRefresh();
+    });
+  } else if (files) {
+    onVisible(files, () => {
+      doRefresh();
+    });
+  }
+});
 
-export {initSnarkRefresh, refreshTorrents, debouncedRefreshTorrents, debounce, xhrsnark, refreshIntervalId};
+export {initSnarkRefresh, refreshTorrents, xhrsnark, refreshIntervalId};

@@ -2,7 +2,7 @@
 /* Author: dr|z3d */
 /* License: AGPL3 or later */
 
-import {initSnarkRefresh, refreshTorrents, debouncedRefreshTorrents, xhrsnark} from "./refreshTorrents.js";
+import {initSnarkRefresh, refreshTorrents, xhrsnark} from "./refreshTorrents.js";
 
 "use strict";
 

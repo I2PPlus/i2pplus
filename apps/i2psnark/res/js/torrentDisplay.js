@@ -236,8 +236,8 @@ function refreshFilters() {
   var pagenav = document.getElementById("pagenavtop");
   var query = window.location.search;
   if (query.includes("ps=9999") && pagenav && filterbar) {
+    refreshTorrents(initFilterBar);
     checkPagenav();
-    debouncedRefreshTorrents(initFilterBar);
     magnetToast();
     initLinkToggler();
     attachMagnetListeners();
