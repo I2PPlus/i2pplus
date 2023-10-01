@@ -238,18 +238,11 @@ function refreshSidebar() {
       if (cpuBar && cpuBarResponse && !Object.is(cpuBar.innerHTML, cpuBarResponse.innerHTML)) {
         cpuBar.innerHTML = cpuBarResponse.innerHTML;
       }
-      if (updateBar) {
-        const updateBarResponse = xhr.responseXML.getElementById("sb_updatebar");
-        if (updateBarResponse && updateBar.innerHTML !== updateBarResponse.innerHTML) {
-          updateBar.innerHTML = updateBarResponse.innerHTML;
-          const updateH3 = document.querySelector("#sb_updatesection > h3 a");
-          if (updateH3) {
-            const spinner = "<span id=updateSpinner></span>";
-            updateH3.classList.add("updating");
-            if (updateH3.innerHTML.indexOf(spinner) === -1) {
-              updateH3.innerHTML += spinner;
-            }
-          }
+      const updateInProgress = document.querySelector(".sb_update.inProgress");
+      if (updateInProgress) {
+        const updateInProgressResponse = xhr.responseXML.querySelector(".sb_update.inProgress");
+        if (updateInProgressResponse && updateInProgress.innerHTML !== updateInProgressResponse.innerHTML) {
+          updateInProgress.innerHTML = updateInProgressResponse.innerHTML;
         }
       }
       if (updateSection && !updateSection?.classList.contains("collapsed")) {
