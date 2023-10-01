@@ -262,7 +262,6 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 .details a:hover img[src^="/i2psnark/.res/icons/"]:not([src$="rateme.svg"]),.details a:focus img[src^="/i2psnark/.res/icons/"]:not([src$="rateme.svg"]),.commentDetails a:hover img,.commentDetails a:focus img{border-radius:1px;box-shadow:var(--outline),inset 0 0 1px 1px #930;background:linear-gradient(180deg,#030 50%,#010 50%);filter:none}
 .details img,.dirInfo td:first-child img{margin:0;padding:1px}
 .details{padding-left:0;padding-right:0;width:1%;white-space:nowrap;text-align:center;font-weight:700}
-.zero .peerCount b{display:none}
 #linkswitch{margin-right:-1px}
 #linkswitch:not(:checked)::before{opacity:1}
 #pagenav,th.ETA,th.rxd,th.txd,th.rateDown,th.rateUp,th.SnarkTorrentAction{text-align:center}
