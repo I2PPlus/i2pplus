@@ -667,7 +667,7 @@ class SummaryBarRenderer {
            .append(_t("Never disclose this to anyone, as it can reveal your real world IP."))
            .append("\">")
            .append(_t("Router Info"))
-           .append(" <span class=badge hidden title=\"").append(_t("How long we've been running for this session"))
+           .append(" <span class=\"badge volatile\" hidden title=\"").append(_t("How long we've been running for this session"))
            .append("\">").append(_t("Up")).append(" ").append(_helper.getUptime()).append("</span>")
            .append("</a><input type=checkbox id=toggle_sb_general class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n")
            .append("<table id=sb_general class=volatile>")
@@ -726,7 +726,7 @@ class SummaryBarRenderer {
            .append(_t("Never disclose this to anyone, as it can reveal your real world IP."))
            .append("\">")
            .append(_t("Router Info"))
-           .append(" <span class=badge hidden title=\"").append(_t("How long we've been running for this session"))
+           .append(" <span class=\"badge volatile\" hidden title=\"").append(_t("How long we've been running for this session"))
            .append("\">").append(_t("Up")).append(" ").append(_helper.getUptime()).append("</span>")
            .append("</a><input type=checkbox id=toggle_sb_advancedgeneral class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n")
            .append("<table id=sb_advancedgeneral class=volatile>\n")
@@ -886,7 +886,7 @@ class SummaryBarRenderer {
            .append(_t("Show all current peer connections"))
            .append("\">")
            .append(_t("Peers"))
-           .append(" <span class=badge hidden title=\"").append(_t("Peers active in the last minute")).append(" / ")
+           .append(" <span class=\"badge volatile\" hidden title=\"").append(_t("Peers active in the last minute")).append(" / ")
            .append(_t("Total peers in NetDb")).append("\">").append(active).append (" / ").append(_helper.getAllPeers()).append("</span>")
            .append("</a><input type=checkbox id=toggle_sb_peers class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n")
            .append("<table id=sb_peers>\n")
@@ -961,13 +961,13 @@ class SummaryBarRenderer {
         buf.append("<table id=sb_peers_condensed hidden>\n")
            .append("<tr><td>")
            .append("<a class=sb_icon id=floodfill href=\"/profiles?f=2\" title=\"").append(_t("Floodfill"))
-           .append("\"><span><span class=badge>").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
+           .append("\"><span><span class=\"badge volatile\">").append(_helper.getWellIntegratedPeers()).append("</span></span></a>\n")
            .append("<a class=sb_icon id=fast href=\"/profiles?f=1#profilelist\" title=\"").append(_t("Fast"))
-           .append("\"><span><span class=badge>").append(_helper.getFastPeers()).append("</span></span></a>\n")
+           .append("\"><span><span class=\"badge volatile\">").append(_helper.getFastPeers()).append("</span></span></a>\n")
            .append("<a class=sb_icon id=firewalled href=\"/netdb?caps=U\" title=\"").append(_t("Unreachable"))
-           .append("\"><span><span class=badge>").append(_helper.getUnreachablePeers()).append("</span></span></a>\n")
+           .append("\"><span><span class=\"badge volatile\">").append(_helper.getUnreachablePeers()).append("</span></span></a>\n")
            .append("<a class=sb_icon id=banned href=\"/profiles?f=3\" title=\"").append(_t("Banned"))
-           .append("\"><span><span class=badge>").append(_helper.getBanlistedPeers()).append("</span></span></a>\n")
+           .append("\"><span><span class=\"badge volatile\">").append(_helper.getBanlistedPeers()).append("</span></span></a>\n")
            .append("</td></tr>\n</table>\n");
 
         return buf.toString();
@@ -1075,7 +1075,7 @@ class SummaryBarRenderer {
            .append(_t("View existing tunnels and tunnel build status"))
            .append("\">")
            .append(_t("Tunnels"))
-           .append(" <span class=badge hidden title=\"").append(_t("Total number of tunnels in use"));
+           .append(" <span class=\"badge volatile\" hidden title=\"").append(_t("Total number of tunnels in use"));
        if (_helper.getTunnelBuildSuccess() > 0) {
            buf.append(" / ").append(_t("Average tunnel build success for last 10m interval"));
        }
@@ -1161,15 +1161,15 @@ class SummaryBarRenderer {
             buf.append("<table id=sb_tunnels_condensed hidden>\n")
                .append("<tr><td>")
                .append("<a class=sb_icon id=service href=\"/tunnels#client_tunnels\" title=\"").append(_t("Service")).append(' ').append(_t("tunnels"))
-               .append("\"><span><span class=badge>").append(_helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels())
+               .append("\"><span><span class=\"badge volatile\">").append(_helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels())
                .append("</span></span></a>\n")
                .append("<a class=sb_icon id=transit href=\"/transit\" title=\"").append(_t("Transit")).append(' ').append(_t("tunnels"))
-               .append("\"><span><span class=badge>").append(partTunnels).append("</span></span></a>\n")
+               .append("\"><span><span class=\"badge volatile\">").append(partTunnels).append("</span></span></a>\n")
                .append("<a class=sb_icon id=utility href=\"/tunnels#exploratory\" title=\"").append(_t("Utility")).append(' ').append(_t("tunnels"))
-               .append("\"><span><span class=badge>").append(_helper.getInboundTunnels() + _helper.getOutboundTunnels())
+               .append("\"><span><span class=\"badge volatile\">").append(_helper.getInboundTunnels() + _helper.getOutboundTunnels())
                .append("</span></span></a>\n")
                .append("<a class=sb_icon id=tcount href=\"/tunnelpeercount\" title=\"").append(_t("Tunnel Count by Peer"))
-               .append("\"><span><span class=badge>").append(totalTunnels).append("</span></span></a>\n")
+               .append("\"><span><span class=\"badge volatile\">").append(totalTunnels).append("</span></span></a>\n")
                .append("</td></tr>\n</table>\n");
 
         return buf.toString();
@@ -1184,12 +1184,12 @@ class SummaryBarRenderer {
            .append("\">")
            .append(_t("Congestion"));
         if (_context.router().getUptime() > 2*60*1000) {
-           buf.append(" <span class=badge hidden title=\"").append(_t("Job lag")).append(" / ")
+           buf.append(" <span class=\"badge volatile\" hidden title=\"").append(_t("Job lag")).append(" / ")
               .append(_t("Message delay")).append("\">")
               .append(_helper.getJobLag()).append(" / ").append(_helper.getMessageDelay())
               .append("</span>");
         } else {
-           buf.append(" <span class=badge hidden title=\"").append(_t("Job lag")).append(" / ")
+           buf.append(" <span class=\"badge volatile\" hidden title=\"").append(_t("Job lag")).append(" / ")
               .append(_t("Message delay")).append("\">")
               .append("--- / ---")
               .append("</span>");
@@ -1346,7 +1346,7 @@ class SummaryBarRenderer {
                         // Set up title and pre-headings stuff.
                         buf.append("<h3 id=sb_newsH3><a href=\"/news\">")
                            .append(_t("News &amp; Updates"))
-                           .append(" <span id=newsCount class=badge hidden></span>")
+                           .append(" <span id=newsCount class=\"badge volatile\" hidden></span>")
                            .append("</a><input type=checkbox id=toggle_sb_newsheadings class=\"toggleSection script\" checked hidden></h3><hr class=b>")
                            .append("<div id=sb_newsheadings>\n<table>\n");
                     }
