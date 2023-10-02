@@ -1252,7 +1252,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 buf.append("<img class=unknownflag width=24 height=18 alt=\"??\"")
                    .append(" src=\"/flags.jsp?c=a0\">");
             }
-            buf.append("</span>");
         } else {
             buf.append(_t("unknown")).append("\"><img class=unknownflag width=24 height=18 alt=\"??\"" +
                        " src=\"/flags.jsp?c=a0\" loading=lazy>");
