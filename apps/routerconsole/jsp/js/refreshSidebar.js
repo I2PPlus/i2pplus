@@ -54,7 +54,6 @@ sb.addEventListener("loaded", () => {
 });
 
 function tangoDown() {
-  isDown = true;
   statusPanel.forEach(statusPanel => (statusPanel.classList.add("statusDown")));
   digits.forEach(digit => (digit.innerHTML = "---&nbsp;"));
   if (clock) {clock.textContent = "--:--:--";}
@@ -74,84 +73,59 @@ function tangoDown() {
   if (localtunnelSummary) {
     localtunnelSummary.innerHTML = "<tr id=routerdown><td colspan=3 height=10></td></tr>";
   }
+  isDown = true;
 }
 
 function refreshSidebar() {
-  const xhr = new XMLHttpRequest();
+  const xhrsb = new XMLHttpRequest();
   const uri = location.pathname;
   const xhrContainer = document.getElementById("xhr");
-  xhr.open("GET", "/xhr1.jsp?requestURI=" + uri, true);
-  xhr.responseType = "document";
-  xhr.overrideMimeType("text/html");
-  xhr.setRequestHeader("Accept", "text/html");
+  xhrsb.open("GET", "/xhr1.jsp?requestURI=" + uri, true);
+  xhrsb.responseType = "document";
+  xhrsb.overrideMimeType("text/html");
+  xhrsb.setRequestHeader("Accept", "text/html");
 
-  xhr.onload = function () {
-    if (xhr.status === 200) {
+  xhrsb.onload = function () {
+    if (xhrsb.status === 200) {
+      isDown = false;
       document.querySelector("body").classList.remove("isDown");
-      if (isDown = true) {
-        refreshAll();
-        isDown = false;
-      }
-    } else if (xhr.status === 404 || xhr.status === 500) {
+    } else if (xhrsb.status === 404 || xhrsb.status === 500) {
       window.requestAnimationFrame(tangoDown);
     } else {
-      console.log("Unexpected status code: " + xhr.status);
+      console.log("Unexpected status code: " + xhrsb.status);
     }
 
-    if (!xhr.responseXML) {refreshAll();}
+    const badgesResponse = xhrsb.responseXML.querySelectorAll(".badge");
+    if (!xhrsb.responseXML || badgesResponse.length !== badges.length) {window.requestAnimationFrame(refreshAll);}
 
-    const advancedGeneralResponse = xhr.responseXML.getElementById("sb_advancedgeneral");
-    const badgesResponse = xhr.responseXML.querySelectorAll(".badge");
-    const bandwidthResponse = xhr.responseXML.getElementById("sb_bandwidth");
-    const clockResponse = xhr.responseXML.getElementById("clock");
-    const cpuBarResponse = xhr.responseXML.getElementById("sb_CPUBar");
-    const generalResponse = xhr.responseXML.getElementById("sb_general");
-    const graphStatsResponse = xhr.responseXML.getElementById("sb_graphstats");
-    const internalsResponse = xhr.responseXML.getElementById("sb_internals");
-    const localtunnelsResponse = xhr.responseXML.getElementById("sb_localtunnels");
-    const memBarResponse = xhr.responseXML.getElementById("sb_memoryBar");
-    const netStatusResponse = xhr.responseXML.getElementById("sb_netstatus");
-    const noticeResponse = xhr.responseXML.getElementById("sb_notice");
-    const peersResponse = xhr.responseXML.getElementById("sb_peers");
-    const queueResponse = xhr.responseXML.getElementById("sb_queue");
-    const routerControlResponse = xhr.responseXML.getElementById("sb_routerControl");
-    const servicesResponse = xhr.responseXML.getElementById("sb_services");
-    const shortGeneralResponse = xhr.responseXML.getElementById("sb_shortgeneral");
-    const shutdownStatusResponse = xhr.responseXML.getElementById("sb_shutdownStatus");
-    const tunnelBuildStatusResponse = xhr.responseXML.getElementById("sb_tunnelstatus");
-    const tunnelsResponse = xhr.responseXML.getElementById("sb_tunnels");
-    const updateFormResponse = xhr.responseXML.getElementById("sb_updateform");
-    const updateSectionResponse = xhr.responseXML.getElementById("sb_updatesection");
-    const updateStatusResponse = xhr.responseXML.getElementById("sb_updateprogress");
+    const advancedGeneralResponse = xhrsb.responseXML.getElementById("sb_advancedgeneral");
+    const bandwidthResponse = xhrsb.responseXML.getElementById("sb_bandwidth");
+    const clockResponse = xhrsb.responseXML.getElementById("clock");
+    const cpuBarResponse = xhrsb.responseXML.getElementById("sb_CPUBar");
+    const generalResponse = xhrsb.responseXML.getElementById("sb_general");
+    const graphStatsResponse = xhrsb.responseXML.getElementById("sb_graphstats");
+    const internalsResponse = xhrsb.responseXML.getElementById("sb_internals");
+    const localtunnelsResponse = xhrsb.responseXML.getElementById("sb_localtunnels");
+    const memBarResponse = xhrsb.responseXML.getElementById("sb_memoryBar");
+    const netStatusResponse = xhrsb.responseXML.getElementById("sb_netstatus");
+    const noticeResponse = xhrsb.responseXML.getElementById("sb_notice");
+    const peersResponse = xhrsb.responseXML.getElementById("sb_peers");
+    const queueResponse = xhrsb.responseXML.getElementById("sb_queue");
+    const routerControlResponse = xhrsb.responseXML.getElementById("sb_routerControl");
+    const servicesResponse = xhrsb.responseXML.getElementById("sb_services");
+    const shortGeneralResponse = xhrsb.responseXML.getElementById("sb_shortgeneral");
+    const shutdownStatusResponse = xhrsb.responseXML.getElementById("sb_shutdownStatus");
+    const tunnelBuildStatusResponse = xhrsb.responseXML.getElementById("sb_tunnelstatus");
+    const tunnelsResponse = xhrsb.responseXML.getElementById("sb_tunnels");
+    const updateFormResponse = xhrsb.responseXML.getElementById("sb_updateform");
+    const updateSectionResponse = xhrsb.responseXML.getElementById("sb_updatesection");
+    const updateStatusResponse = xhrsb.responseXML.getElementById("sb_updateprogress");
     const routerdown = document.getElementById("routerdown");
 
     statusPanel.forEach(statusPanel => (statusPanel.classList.remove("statusDown")));
 
-    if (isDownTimer) {
-      clearTimeout(isDownTimer);
-      isDownTimer = null;
-      window.requestAnimationFrame(refreshAll);
-      uncollapse();
-    }
-
-    function compareBadges() {
-      const length = Math.min(badges.length, badgesResponse.length);
-      if (badgesResponse === null) {
-        return;
-      }
-      for (let i = 0; i < length; i++) {
-        if (badges[i].textContent !== badgesResponse[i].textContent) {
-          badges[i].textContent = badgesResponse[i].textContent;
-        }
-      }
-      if (badges.length !== badgesResponse.length) {
-        window.requestAnimationFrame(refreshAll);
-      }
-    }
-
     function updateVolatile() {
-      uncollapse();
-      compareBadges();
+      window.requestAnimationFrame(uncollapse);
 
       if (clock && clockResponse && !Object.is(clock?.textContent, clockResponse?.textContent)) {
         clock.textContent = clockResponse.textContent;
@@ -211,7 +185,7 @@ function refreshSidebar() {
         const summary = snarkSpan + " " + serverSpan + " " + clientSpan + " " + pingSpan;
         const summaryTable = '<tr id="localtunnelsActive"><td>' + summary + '</td></tr>';
         const localtunnelsHeading = document.getElementById("sb_localTunnelsHeading");
-        const localtunnelsHeadingResponse = xhr.responseXML.getElementById("sb_localTunnelsHeading");
+        const localtunnelsHeadingResponse = xhrsb.responseXML.getElementById("sb_localTunnelsHeading");
 
         if (localtunnels && localtunnelsResponse && !Object.is(localtunnels.innerHTML, localtunnelsResponse.innerHTML)) {
           localtunnelsHeading.innerHTML = localtunnelsHeadingResponse.innerHTML;
@@ -242,7 +216,7 @@ function refreshSidebar() {
       }
       const updateInProgress = document.querySelector(".sb_update.inProgress");
       if (updateInProgress) {
-        const updateInProgressResponse = xhr.responseXML.querySelector(".sb_update.inProgress");
+        const updateInProgressResponse = xhrsb.responseXML.querySelector(".sb_update.inProgress");
         if (updateInProgressResponse && updateInProgress.innerHTML !== updateInProgressResponse.innerHTML) {
           updateInProgress.innerHTML = updateInProgressResponse.innerHTML;
         }
@@ -297,8 +271,8 @@ function refreshSidebar() {
     function checkSections() {
       const updating = document.querySelectorAll("#xhr .volatile");
       var updatingResponse = [];
-      if (xhr.responseXML) {
-        updatingResponse = xhr.responseXML.querySelectorAll("#sb .volatile");
+      if (xhrsb.responseXML) {
+        updatingResponse = xhrsb.responseXML.querySelectorAll("#sb .volatile");
       }
       var updatingLen = updating.length;  // Cache the length of updating array
       var updatingResponseLen = updatingResponse.length;  // Cache the length of updatingResponse array
@@ -320,8 +294,8 @@ function refreshSidebar() {
     }
 
     function refreshAll() {
-      if (sb && xhr.responseXML) {
-        const sbResponse = xhr.responseXML.getElementById("sb");
+      if (sb && xhrsb.responseXML) {
+        const sbResponse = xhrsb.responseXML.getElementById("sb");
         if (sbResponse && !Object.is(sb.innerHTML, sbResponse.innerHTML)) {
           xhrContainer.innerHTML = sbResponse.innerHTML;
           window.requestAnimationFrame(sectionToggler);
@@ -378,13 +352,13 @@ function refreshSidebar() {
   };
 
   function ready() {
-    xhr.send();
+    xhrsb.send();
     stickySidebar();
   }
 
   onVisible(sb, ready);
 
-  xhr.onerror = function (error) {
+  xhrsb.onerror = function (error) {
     isDownTimer = setTimeout(tangoDown, 5000);
   };
 }
