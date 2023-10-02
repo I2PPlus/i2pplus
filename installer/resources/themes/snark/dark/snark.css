@@ -117,7 +117,7 @@ select{margin:2px 4px 2px 0;padding:7px 24px 7px 7px;min-width:120px;font-size:8
 #searchwrap a[href="/i2psnark"]{height:12px;width:12px;display:inline-block;position:absolute;top:calc(50% - 14px);right:4px;font-size:0;background:url(images/delete.svg) no-repeat center center/12px;border:0;box-shadow:none;opacity:0;filter:none}
 
 /* toast notifications */
-#toast{box-shadow:var(--bevel_notify);background:var(--notify)}
+#toast{left:0;right:0;box-shadow:var(--bevel_notify);background:var(--notify)}
 #toast b{color:#dd0}
 
 /* screenlog */
@@ -240,7 +240,7 @@ th.peerCount a img{margin-left:-5px}
 .commented{position:absolute;display:inline-block;z-index:20;top:-2px;right:3px;line-height:0;font-size:0}
 .snarkFileName{padding:4px 5px;word-break:break-all;text-align:left}
 .filetype{position:relative;vertical-align:middle}
-tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-top:-3px;margin-right:-1px;display:inline-block;vertical-align:middle;line-height:0;font-size:90%;font-style:normal;text-shadow:0 0 1px #010}
+tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-top:-8px;margin-right:4px;display:inline-block;vertical-align:middle;line-height:0;font-size:90%;font-style:normal;text-shadow:0 0 1px #010}
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before{content:"\27A4";transform:rotate(90deg) scaleX(0.6)}
 tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4";transform:rotate(-90deg) scaleX(0.6)}
 .tooltipped{display:inline-block;position:relative;z-index:99;white-space:nowrap;content:""}
