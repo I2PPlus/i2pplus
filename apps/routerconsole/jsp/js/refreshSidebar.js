@@ -88,6 +88,10 @@ function refreshSidebar() {
   xhr.onload = function () {
     if (xhr.status === 200) {
       document.querySelector("body").classList.remove("isDown");
+      if (isDown = true) {
+        refreshAll();
+        isDown = false;
+      }
     } else if (xhr.status === 404 || xhr.status === 500) {
       window.requestAnimationFrame(tangoDown);
     } else {
@@ -122,8 +126,6 @@ function refreshSidebar() {
     const routerdown = document.getElementById("routerdown");
 
     statusPanel.forEach(statusPanel => (statusPanel.classList.remove("statusDown")));
-
-    isDown = false;
 
     if (isDownTimer) {
       clearTimeout(isDownTimer);
