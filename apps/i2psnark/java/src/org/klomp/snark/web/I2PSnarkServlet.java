@@ -337,6 +337,13 @@ public class I2PSnarkServlet extends BasicServlet {
                   "<link rel=preload href=\"" + _themePath + "snark.css?" + CoreVersion.VERSION + "\" as=style>\n" +
                   "<link rel=preload href=\"" + _themePath + "images/images.css?" + CoreVersion.VERSION + "\" as=style>\n" +
                   "<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
+        if (!isStandalone() && useSoraFont()) {
+            out.write("<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n" +
+                      "<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n");
+        } else {
+            out.write("<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>\n" +
+                      "<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n");
+        }
         if (!isStandalone())
             out.write("<link rel=preload href=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" as=script>\n");
         out.write("<title>");
