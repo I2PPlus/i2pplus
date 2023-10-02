@@ -175,7 +175,7 @@ function refreshTorrents(callback) {
     const snarkHeadThs = document.querySelectorAll("#snarkHead th:not(.torrentLink)");
     const snarkFoot = document.getElementById("snarkFoot");
     const snarkFootThs = document.querySelectorAll("#snarkFoot th");
-    if (snarkHead) {
+    if (snarkHead && xhrsnark.responseXML) {
       const snarkHeadResponse = xhrsnark.responseXML.getElementById("snarkHead");
       const snarkHeadThsResponse = xhrsnark.responseXML.querySelectorAll("#snarkHead th:not(.torrentLink)");
       if (snarkHead && snarkHeadResponse && !Object.is(snarkHead.innerHTML, snarkHeadResponse.innerHTML)) {
@@ -186,7 +186,7 @@ function refreshTorrents(callback) {
         });
       }
     }
-    if (snarkFoot) {
+    if (snarkFoot && xhrsnark.responseXML) {
       const snarkFootResponse = xhrsnark.responseXML.getElementById("snarkFoot");
       const snarkFootThsResponse = xhrsnark.responseXML.querySelectorAll("#snarkFoot th");
       if (snarkFoot && snarkFootResponse && !Object.is(snarkFoot.innerHTML, snarkFootResponse.innerHTML)) {
@@ -288,15 +288,20 @@ function noAjax(delay) {
 }
 
 async function initSnarkRefresh() {
+  if (refreshIntervalId) {
+    clearInterval(refreshIntervalId);
+  }
   const interval = (parseInt(storageRefresh) || 5) * 1000;
-  clearInterval(refreshIntervalId);
-  refreshIntervalId = setInterval(async () => {
-    await doRefresh();
-    initHandlers();
-  }, interval);
-  if (files && document.getElementById("lightbox")) {
-    const lightbox = new Lightbox();
-    lightbox.load();
+  try {
+    refreshIntervalId = setInterval(async () => {
+      await doRefresh();
+    }, interval);
+    if (files && document.getElementById("lightbox")) {
+      const lightbox = new Lightbox();
+      lightbox.load();
+    }
+  } catch (error) {
+    console.error(error);
   }
 }
 
