@@ -14,22 +14,40 @@ const createTorrent = document.getElementById("createForm");
 const inputAddFile = document.querySelector("input[name='nofilter_newURL']");
 const inputNewFile = document.querySelector("input[name='nofilter_baseFile']");
 const messages = document.getElementById("screenlog");
-const processForm = document.querySelector("iframe");
+const processForm = document.getElementById("processForm");
 let url = ".ajax/xhr1.html";
 
 function updateLog() {
-  const logEntryEl = xhrsnark.responseXML.querySelectorAll("#screenlog li.msg")[0];
-  if (messages && logEntryEl) {
-    const newLogEntry = logEntryEl.innerHTML.substring(21);
-    const newTable = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
-    if (!addNotify.hidden) addNotify.innerHTML = newTable;
-    if (!createNotify.hidden) createNotify.innerHTML = newTable;
+  const messages = xhrsnark.responseXML.querySelector("messages");
+  if (messages) {
+    const logEntryEl = xhrsnark.responseXML.querySelector("#screenlog li.msg");
+    if (logEntryEl) {
+      console.log(logEntryEl.innerHTML);
+      const newLogEntry = logEntryEl.innerHTML.substring(21);
+      console.log("Alert notification should read: " + newLogEntry);
+      const newTable = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
+      if (!addNotify.hidden) addNotify.innerHTML = newTable;
+      if (!createNotify.hidden) createNotify.innerHTML = newTable;
+    }
   }
 }
 
 function addTorrentNotify() {
   addNotify.removeAttribute("hidden");
-  processForm.onload = function () {refreshTorrents(updateLog);};
+  processForm.onload = function() {
+    if (xhrsnark.responseXML) {
+      const messages = xhrsnark.responseXML.getElementById("screenlog");
+      if (messages) {
+        const logEntryEl = xhrsnark.responseXML.querySelector("#screenlog li.msg");
+        if (logEntryEl) {
+          const newLogEntry = logEntryEl.innerHTML.substring(21);
+          const newTable = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
+          if (!addNotify.hidden) addNotify.innerHTML = newTable;
+          if (!createNotify.hidden) createNotify.innerHTML = newTable;
+        }
+      }
+    }
+  };
   hideAlert();
   setTimeout(() => (inputAddFile.value = "", inputAddFile.focus()), 3000);
 }

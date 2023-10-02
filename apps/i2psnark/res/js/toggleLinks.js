@@ -89,36 +89,48 @@ function magnetToast() {
 }
 
 function attachMagnetListeners() {
-  if (!toggle) {return;}
+  if (!toggle) {
+    return;
+  }
   let toastTimeoutId = null;
+  const copiedToClipboard = function(anchor, copyBtn, event) {
+    event.preventDefault();
+    if (toastTimeoutId) {
+      clearTimeout(toastTimeoutId);
+    }
+    toast.removeAttribute("hidden");
+    toast.style.display = "block";
+    let link = anchor.href;
+    if (!link || !link.startsWith("magnet:?xt=urn:btih:")) {
+      return;
+    }
+    let magnetHash = link.substring(link.indexOf(":") + 1, link.indexOf("&"));
+    let magnetName = link.substring(link.lastIndexOf("=") + 1);
+    magnetName = decodeURIComponent(magnetName);
+    let tempInput = document.createElement("input");
+    tempInput.value = link;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+    toast.innerHTML = "Magnet link copied to clipboard: <b>" + magnetName + "</b>" +
+                      "<br>Hash: <b>" + magnetHash + "</b>";
+    console.log("Magnet link copied to clipboard: " + link);
+    copyBtn.removeEventListener("click", copiedToClipboard);
+    toastTimeoutId = setTimeout(function() {
+      toast.style.display = "none";
+      toast.textContent = "";
+    }, 3500);
+  };
+  let magnets = document.querySelectorAll(".magnetlink");
   for (let i = 0; i < magnets.length; i++) {
     let anchor = magnets[i];
-    let copyBtn = anchor.parentElement.querySelector(".copyMagnet");
-    copyBtn.addEventListener("click", function(event) {
-      event.preventDefault();
-      clearTimeout(toastTimeoutId);
-      toast.removeAttribute("hidden");
-      toast.style.display = "block";
-      let link = anchor.href;
-      let hashRegex = link.match(/btih:([^&]*)/);
-      let magnetHash = "";
-      if (hashRegex) {magnetHash = hashRegex[1];}
-      let magnetName = link.substring(link.lastIndexOf("=") + 1);
-      magnetName = decodeURIComponent(magnetName);
-      let tempInput = document.createElement("input");
-      tempInput.value = link;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand("copy");
-      document.body.removeChild(tempInput);
-      toast.innerHTML = "Magnet link copied to clipboard: <b>" + magnetName + "</b>" +
-                        (magnetHash != "" ? "<br>Hash: <b>" + magnetHash + "</b>": "");
-      console.log("Magnet link copied to clipboard: " + link);
-      toastTimeoutId = setTimeout(function() {
-        toast.style.display = "none";
-        toast.textContent = "";
-      }, 3500);
-    }, {once: true});
+    if (!anchor.href || !anchor.href.startsWith("magnet:?xt=urn:btih:")) {
+      continue;
+    }
+    let copyBtn = anchor.querySelector(".copyMagnet");
+    copyBtn.removeEventListener("click", copiedToClipboard);
+    copyBtn.addEventListener("click", copiedToClipboard.bind(null, anchor, copyBtn), {once: true});
   }
 }
 
