@@ -365,7 +365,7 @@ class TunnelRenderer {
                 out.write("</td><td>");
                 out.write("<span class=routerHash><a href=\"netdb?r=" + h.toBase64().substring(0,6) + "\">");
                 out.write(truncHash);
-                out.write("</a></td><td>");
+                out.write("</a></span></td><td>");
 /*
                 out.write("<tr class=lazy><td>");
                 out.write(netDbLink(h));
@@ -458,18 +458,18 @@ class TunnelRenderer {
     }
 
     public void renderPeers(Writer out) throws IOException {
+        long uptime = _context.router().getUptime();
         // count up the peers in the local pools
-        ObjectCounter<Hash> lc = new ObjectCounter();
-        int tunnelCount = countTunnelsPerPeer(lc);
+        ObjectCounter<Hash> localCount = new ObjectCounter<>();
+        int tunnelCount = countTunnelsPerPeer(localCount);
 
         // count up the peers in the participating tunnels
-        ObjectCounter<Hash> pc = new ObjectCounter();
-        int partCount = countParticipatingPerPeer(pc);
-        long uptime = _context.router().getUptime();
+        ObjectCounter<Hash> transitCount = new ObjectCounter<>();
+        int partCount = countParticipatingPerPeer(transitCount);
 
-        Set<Hash> peers = new HashSet(lc.objects());
-        peers.addAll(pc.objects());
-        List<Hash> peerList = new ArrayList(peers);
+        Set<Hash> peers = new HashSet<>(localCount.objects());
+        peers.addAll(transitCount.objects());
+        List<Hash> peerList = new ArrayList<>(peers);
         int peerCount = peerList.size();
         Collections.sort(peerList, new CountryComparator(this._context.commSystem()));
 
@@ -488,114 +488,83 @@ class TunnelRenderer {
             if (enableReverseLookups()) {
                 out.write("<th id=domain data-sortable>" + _t("Domain") + "</th>");
             }
-            out.write("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" data-sortable data-sort-method=number data-sort-column-key=localCount>" +
-                      _t("Local") + "</th>");
+            out.write("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" data-sortable data-sort-method=number data-sort-column-key=localCount>" + _t("Local") + "</th>");
             if (!participating.isEmpty()) {
                 out.write("<th class=tcount colspan=2 data-sortable data-sort-method=number data-sort-column-key=transitCount>" + _t("Transit") + "</th>");
             }
             out.write("<th id=edit data-sort-method=none>" + _t("Edit") + "</th>");
             out.write("</tr>\n</thead>\n<tbody id=allPeers>\n");
+            final StringBuilder sb = new StringBuilder();
             for (Hash h : peerList) {
-                //char cap = getCapacity(h);
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
-                String ip = (info != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
-                String v = info != null ? info.getOption("router.version") : null;
-                String truncHash = h.toBase64().substring(0,4);
-                String rl = (ip != null && enableReverseLookups() && uptime > 30*1000) ? _context.commSystem().getCanonicalHostName(ip) : null;
-                out.write("<tr class=lazy><td>");
-                out.write(peerFlag(h));
-                out.write("</td><td>");
-                out.write("<span class=routerHash><a href=\"netdb?r=" + h.toBase64().substring(0,6) + "\">");
-                out.write(truncHash);
-                out.write("</a></td><td>");
-                //out.write(netDbLink(h));
-                if (v != null)
-                    out.write("<span class=version title=\"" + _t("Show all routers with this version in the NetDb") +
-                              "\"><a href=\"/netdb?v=" + DataHelper.stripHTML(v) + "\">" + DataHelper.stripHTML(v) +
-                              "</a></span>");
-                out.write("</td><td>");
-                if (info != null) {
-                    out.write(_context.commSystem().renderPeerCaps(h, false));
-                } else {
-                    out.write("<table class=\"rid ric\"><tr><td class=rbw>?</td></tr></table>");
+                if (info == null) {
+                    continue;
                 }
-                out.write("</td><td><span class=ipaddress>");
-                if (info != null && ip != null) {
-                    if (!ip.toString().equals("null")) {
-                        if (ip.toString().contains(":"))
-                            out.write("<span hidden>[IPv6]</span>" + ip.toString());
-                        else
-                            out.write(ip.toString());
-/*
-                        out.write("<a class=script href=\"https://gwhois.org/" + ip.toString() +
-                                  "+dns\" target=_blank title=\"" + _t("Lookup address on gwhois.org") +
-                                  "\">" + ip.toString() + "</a><noscript>" + ip.toString() + "</noscript>");
-*/
-                    } else {
-                        out.write("&ndash;");
+                int localTunnelCount = localCount.count(h);
+                String ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
+                String v = info.getOption("router.version");
+                String truncHash = h.toBase64().substring(0, 4);
+                String rl = "";
+                if (ip != null && enableReverseLookups() && uptime > 30 * 1000) {
+                    rl = _context.commSystem().getCanonicalHostName(ip);
+                }
+                sb.setLength(0);
+                sb.append("<tr class=lazy><td>")
+                  .append(peerFlag(h))
+                  .append("</td><td><span class=routerHash><a href=\"netdb?r=")
+                  .append(h.toBase64().substring(0, 6))
+                  .append("\">")
+                  .append(truncHash)
+                  .append("</a></span></td><td>");
+                if (v != null) {
+                    sb.append("<span class=version title=\"Show all routers with this version in the NetDb\">")
+                      .append("<a href=\"/netdb?v=" + DataHelper.stripHTML(v) + "\">" + DataHelper.stripHTML(v) + "</a></span>");
+                }
+                sb.append("</td><td>")
+                  .append(_context.commSystem().renderPeerCaps(h, false))
+                  .append("</td><td><span class=ipaddress>");
+                if (ip != null && !ip.isEmpty()) {
+                    if (ip.contains(":")) {
+                        sb.append("<span hidden>[IPv6]</span>");
                     }
+                    sb.append(ip);
                 } else {
-                    out.write("&ndash;");
+                    sb.append("&ndash;");
                 }
-                out.write("</span>");
-                if (enableReverseLookups()) {
-                    out.write("</td><td>");
-                    if (rl != null && rl.length() != 0 && !ip.toString().equals(rl)) {
-                        out.write("<span class=rlookup title=\"");
-                        out.write(rl);
-                        out.write("\">");
-                        if (!ip.toString().equals(rl)) {
-                            out.write(CommSystemFacadeImpl.getDomain(rl));
-                        }
-                    } else {
-                        out.write("<span hidden>");
-                        out.write("&ndash;");
-                    }
-                    out.write("</span>");
+                sb.append("</span>");
+                if (enableReverseLookups() && rl != null && !rl.isEmpty() && !ip.equals(rl)) {
+                    sb.append(String.format("</td><td><span class=rlookup title=\"%s\">", rl))
+                      .append(CommSystemFacadeImpl.getDomain(rl))
+                      .append("</span>");
+                } else if (enableReverseLookups()) {
+                    sb.append("<td></td>");
                 }
-                out.write("</td><td class=tcount>");
-                if (lc.count(h) > 0) {
-                    out.write("<span>" + lc.count(h) + "</span>");
+                sb.append(String.format("<td class=tcount>%d</td><td class=bar data-sort-column-key=localCount>", localTunnelCount));
+                if (localTunnelCount > 0) {
+                    sb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\">" +
+                                            "<span class=percentBarText>%d%%</span></span></span>",
+                                            fmt.format(localTunnelCount * 100 / tunnelCount).replace(".00", ""),
+                                            localTunnelCount * 100 / tunnelCount));
                 } else {
-                    out.write("<span hidden>0</span>");
-                }
-                out.write("</td><td class=bar data-sort-column-key=localCount>");
-                if (lc.count(h) > 0) {
-                    out.write("<span class=percentBarOuter><span class=percentBarInner style=\"width:");
-                    out.write(fmt.format((lc.count(h) * 100) / tunnelCount).replace(".00", ""));
-                    out.write("%\"><span class=percentBarText>");
-                    out.write(fmt.format((lc.count(h) * 100) / tunnelCount).replace(".00", ""));
-                    out.write("%</span></span></span>");
-                } else {
-                    out.write("<span hidden>&ndash;</span>");
+                    sb.append("<span hidden>&ndash;</span>");
                 }
                 if (!participating.isEmpty()) {
-                    out.write("</td><td class=tcount data-sort-column-key=transitCount>");
-                    if (pc.count(h) > 0) {
-                        out.write("<span>" + pc.count(h) + "</span>");
+                    int transitTunnelCount = transitCount.count(h);
+                    if (transitTunnelCount > 0) {
+                        sb.append(String.format("</td><td class=tcount>%d</td><td class=bar>", transitTunnelCount));
+                        sb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\">" +
+                                                "<span class=percentBarText>%d%%</span></span></span>",
+                                                fmt.format(transitTunnelCount * 100 / partCount).replace(".00", ""),
+                                                transitTunnelCount * 100 / partCount));
+                        sb.append("</td>");
                     } else {
-                        out.write("<span hidden>0</span>");
+                        sb.append("<td></td><td></td>");
                     }
-                    out.write("</td><td class=bar>");
-                    if (pc.count(h) > 0) {
-                        out.write("<span class=percentBarOuter><span class=percentBarInner style=\"width:");
-                        out.write(fmt.format((pc.count(h) * 100) / partCount).replace(".00", ""));
-                        out.write("%\"><span class=percentBarText>");
-                        out.write(fmt.format((pc.count(h) * 100) / partCount).replace(".00", ""));
-                        out.write("%</span></span></span>");
-                    } else {
-                       out.write("<span hidden>&ndash;</span>");
-                    }
-                    out.write("</td>");
                 } else {
-                    out.write("</td>");
+                    sb.append("<td></td>");
                 }
-                out.write("<td>");
-                if (info != null && info.getHash() != null) {
-                    out.write("<a class=configpeer href=\"/configpeer?peer=" + info.getHash() + "\" title=\"Configure peer\">" +
-                              _t("Edit") + "</a>");
-                }
-                out.write("</td></tr>\n");
+                sb.append(String.format("<td><a class=configpeer href=\"/configpeer?peer=%s\" title=\"Configure peer\">%s</a></td></tr>\n", info.getHash(), _t("Edit")));
+                out.write(sb.toString());
             }
             out.write("</tbody>\n<tfoot><tr class=tablefooter data-sort-method=none>" +
                       "<td colspan=4><b>" + peerCount + ' ' + _t("unique peers") + "</b></td>" +
@@ -607,9 +576,9 @@ class TunnelRenderer {
             if (!participating.isEmpty()) {
                 out.write("<td colspan=2><b>" + partCount + ' ' + _t("transit") + "</b></td>");
             }
-            out.write("<td></td></tr></tfoot>\n</table>\n");
+            out.write("<td></td></tr>\n</tfoot>\n</table>\n");
         } else {
-            out.write("<p class=infohelp>" + _t("No local or transit tunnels currently active."));
+            out.write("<p class=infohelp>" + _t("No local or transit tunnels currently active.") + "</p>\n");
         }
     }
 

@@ -37,20 +37,22 @@
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js></script>
 <script nonce=<%=cspNonce%> type=module>
   import {onVisible} from "/js/onVisible.js";
-  var main = document.getElementById("tunnels");
-  var peers = document.getElementById("allPeers");
-  var tunnels = document.getElementById("tunnelPeerCount");
-  var refresh = document.getElementById("refreshPage");
-  var xhrtunnels = new XMLHttpRequest();
-  var visible = document.visibilityState;
+  const footer = document.querySelector(".tablefooter");
+  const main = document.getElementById("tunnels");
+  const peers = document.getElementById("allPeers");
+  const refresh = document.getElementById("refreshPage");
+  const tunnels = document.getElementById("tunnelPeerCount");
+  const xhrtunnels = new XMLHttpRequest();
+  const visible = document.visibilityState;
   if (tunnels) {var sorter = new Tablesort((tunnels), {descending: true});}
   function initRefresh() {
+    let refreshId = null;
     if (refreshId) {
       clearInterval(refreshId);
     }
-    var refreshId = setInterval(updateTunnels, 60000);
+    refreshId = setInterval(updateTunnels, 60000);
     if (tunnels && sorter === null) {
-      var sorter = new Tablesort((tunnels), {descending: true});
+      const sorter = new Tablesort((tunnels), {descending: true});
       removeHref();
     }
     addSortListeners();
@@ -68,20 +70,22 @@
   function updateTunnels() {
     xhrtunnels.open('GET', '/tunnelpeercount', true);
     xhrtunnels.responseType = "document";
-    xhrtunnels.onreadystatechange = function () {
-      if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {
-        var mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
-        var peersResponse = xhrtunnels.responseXML.getElementById("allPeers");
-        if (peersResponse) {
-          addSortListeners();
-          if (peers && peers !== peersResponse) {
-            peers.innerHTML = peersResponse.innerHTML;
-            sorter.refresh();
-            removeHref();
-          }
-        } else if (!tunnels || !peersResponse) {
-          main.innerHTML = mainResponse.innerHTML;
+    xhrtunnels.onload = function () {
+      const mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
+      const peersResponse = xhrtunnels.responseXML.getElementById("allPeers");
+      const footerResponse = xhrtunnels.responseXML.querySelector(".tablefooter");
+      if (peersResponse) {
+        addSortListeners();
+        if (peers && peers !== peersResponse) {
+          peers.innerHTML = peersResponse.innerHTML;
+          sorter.refresh();
+          removeHref();
         }
+        if (footer && footerResponse && footer !== footerResponse) {
+          footer.innerHTML = footerResponse.innerHTML;
+        }
+      } else if ((!tunnels || !peersResponse) && mainResponse) {
+        main.innerHTML = mainResponse.innerHTML;
       }
     }
     if (sorter) {sorter.refresh();}
