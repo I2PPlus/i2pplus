@@ -1,7 +1,6 @@
 /* I2PSnark theme "Ubergine" */
 /* Guantanamo Commemorative Edition */
 /* Author: dr|z3d */
-@import url(/themes/fonts/DroidSans.css);
 @import url(chromescroll.css);
 @import url(/i2psnark/.res/linkToggle.css);
 
@@ -9,7 +8,6 @@
 --badge:linear-gradient(180deg,#414,#313);
 --bevel:inset 0 0 2px 1px rgba(16,0,16,.5),0 0 0 1px #202;
 --bevel_notify:inset 0 0 0 1px #101,inset 0 0 2px 0 #414,inset 0 0 4px 0 #905;
---bodyfont:Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Lucida Grande,DejaVu Sans,Verdana,sans-serif;
 --border_hard:1px solid #101;
 --border_inner:1px solid #313;
 --border_filtered:var(--border_hard);
@@ -24,7 +22,6 @@
 --ink_btn:#2f1d30;
 --isDown:repeating-linear-gradient(90deg,#101,rgba(0,0,0,0),#101),linear-gradient(90deg,#303,#101,#303) center center,#101;
 --link:linear-gradient(180deg,#313 50%,#101 50%);
---monospaced:FiraCode,Noto Mono,Lucida Console,DejaVu Sans Mono,monospace;
 --nav_active:radial-gradient(at center bottom,rgba(255,200,0,.5) 0,rgba(0,0,0,0) 70%),linear-gradient(180deg,#f50,#f70);
 --nav_hover:radial-gradient(at center bottom,rgba(200,96,200,.6) 0,rgba(0,0,0,0) 90%),linear-gradient(180deg,#a15b73,#7e4062 50%,#591c3e 51%,#46133e);
 --nav:radial-gradient(at center bottom,rgba(148,48,0,.25),rgba(80,16,0,.15) 80%,rgba(0,0,0,0)),linear-gradient(180deg,#a68058 1%,#7a6045 27%,#5e4730 50%,#2e1700 51%,#1f0f00);
@@ -845,6 +842,7 @@ th .commentAuthorName{margin-right:-10px;padding-right:6px;font-size:90%}
 #torrentDisplay label:last-child{border-right:var(--border_inner)}
 #torrentDisplay label:hover{color:var(--hover);box-shadow:var(--highlight),inset 0 0 0 2px rgba(255,128,0,.3);background:var(--btnAction_hover)}
 #torrentDisplay label:active{text-shadow:none;-webkit-text-stroke:0}
+#torrentDisplay .badge{animation:fade-in .05s ease-in .3s both}
 #torrentlist #torrentDisplay~#torrents,.iframed #torrentlist #torrentDisplay~#torrents{border-radius:0 0 4px 4px;border-top:0;box-shadow:none}
 .iframed #torrentlist #torrentDisplay~#torrents{border-radius:0}
 .iframed #torrentDisplay{margin:1px 1px -1px;position:relative;z-index:999;border-radius:0}

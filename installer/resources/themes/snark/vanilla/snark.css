@@ -1,12 +1,10 @@
 /* I2PSnark theme "Vanilla" by dr|z3d */
 /* Now with 100% more chocolate */
 
-@import url(/themes/fonts/DroidSans.css);
 @import url(/i2psnark/.res/linkToggle.css);
 
 :root{
 --bevel_notify:0 0 0 1px #6f533e,var(--highlight),inset 0 0 2px 1px #e9e5e2,inset 0 0 4px 0 #df0067;
---bodyfont:Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Lucida Grande,Bitstream Vera Sans,Verdana,sans-serif;
 --border:1px solid #463e39;
 --border_filtered:var(--border_hard);
 --border_hard:1px solid #6f533e;
@@ -17,7 +15,6 @@
 --btn_border_hover:1px solid #4f3927;
 --highlight:0 0 0 1px #ffefe6 inset;
 --ink:#331700;
---monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
 --navbar:linear-gradient(180deg,#efefef,#cfc7c2,#bcb0a9);
 --nav_active:linear-gradient(180deg,#af9178,#dfb899);
 --nav_hover:linear-gradient(180deg,#ffeadf,#cfb6a8);

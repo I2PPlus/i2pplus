@@ -2,7 +2,6 @@
 /* Author: dr|z3d */
 /* Copyright 2018 and beyond */
 
-@import url(/themes/fonts/DroidSans.css);
 @import url(/i2psnark/.res/linkToggle.css);
 
 :root{
@@ -11,7 +10,6 @@
 --bar:repeating-linear-gradient(90deg,#d1cbc7,#d1cbc7 10%,#b9b1ac 10%,#b9b1ac 20%);
 --bevel_notify:0 0 0 1px #777,var(--highlight),inset 0 0 3px 0 var(--a);
 --bg:url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
---bodyfont:Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Lucida Grande,Bitstream Vera Sans,Verdana,sans-serif;
 --border:1px solid #bbb;
 --border_filtered:none;
 --border_hard:1px solid #777;
@@ -22,7 +20,6 @@
 --bullet:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='31' fill='%23384'/%3E%3Cg stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' transform='matrix(.90207 0 0 .90192 3.3 3.4)'%3E%3Cpath id='a' fill='%23fff' stroke='%23fff' stroke-dasharray='none' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.1' d='M31.7 2.2c-2.8 7-7.9 13.3-8 20.5.2 4.1 2.6 7.1 5.7 8.9-15 0-14.6 12.8-22.4 16.8 12.2 0 20.8 1.8 24.7-6v.1V2.3s0 0 0 0zM7 48.4h-.1 0z'/%3E%3Cuse href='%23a' width='100%25' height='100%25' transform='matrix(-1 0 0 1 63.6 0)'/%3E%3C/g%3E%3C/svg%3E");
 --highlight:inset 0 0 0 1px #fff;
 --ink:#555;
---monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
 --notify:var(--th);
 --row_filtered:#fafafa;
 --shadow_inline:2px 2px 2px #ccc inset;
