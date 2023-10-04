@@ -4,7 +4,7 @@
 
 import {onVisible} from "./onVisible.js";
 import {initFilterBar} from "./torrentDisplay.js";
-import {initLinkToggler, magnetToast, attachMagnetListeners, linkToggle} from "./toggleLinks.js";
+import {initLinkToggler, attachMagnetListeners, linkToggle} from "./toggleLinks.js";
 import {initToggleLog} from "./toggleLog.js";
 import {Lightbox} from "./lightbox.js";
 import {initSnarkAlert} from "./snarkAlert.js";
@@ -19,7 +19,9 @@ const screenlog = document.getElementById("screenlog");
 const snarkHead = document.getElementById("snarkHead");
 const storageRefresh = window.localStorage.getItem("snarkRefresh");
 const xhrsnark = new XMLHttpRequest();
+const xhrsnarklog = new XMLHttpRequest();
 let refreshIntervalId;
+let screenLogIntervalId;
 let refreshTimeoutId;
 let requestInProgress = false;
 
@@ -131,8 +133,8 @@ function refreshTorrents(callback) {
   function updateVolatile() {
     const dirlist = document.getElementById("dirlist");
     const snarkTr = document.querySelectorAll("#snarkTbody tr.volatile");
-    const updating = document.querySelectorAll("#snarkTbody tr.volatile, #messages");
-    const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile, #messages");
+    const updating = document.querySelectorAll("#snarkTbody tr.volatile");
+    const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile");
 
     let updated = false;
 
@@ -227,6 +229,25 @@ function refreshTorrents(callback) {
 
 }
 
+function refreshScreenLog() {
+  xhrsnarklog.onload = function () {
+    if (xhrsnarklog.readyState === 4 && xhrsnarklog.status === 200) {
+      const msgs = document.querySelectorAll("#screenlog li");
+      const responseXML = xhrsnarklog.responseXML;
+      const screenlogXML = responseXML?.querySelectorAll("#screenlog li");
+      for (let i = 0; i < screenlogXML?.length; i++) {
+        const screenlogHTML = msgs[i].innerHTML.trim();
+        const screenlogXMLText = screenlogXML[i].textContent.trim();
+        if (screenlogHTML !== screenlogXMLText) {
+          msgs[i].innerHTML = screenlogXMLText;
+        }
+      }
+    }
+  };
+  xhrsnarklog.open("GET", "/i2psnark/.ajax/xhrscreenlog.html");
+  xhrsnarklog.send();
+}
+
 function getURL() {
   const filterEnabled = localStorage.getItem("snarkFilter") !== null;
   const baseUrl = "/i2psnark/.ajax/xhr1.html";
@@ -236,7 +257,6 @@ function getURL() {
 
 let linkTogglerReady = false;
 let magnetListenersReady = false;
-let magnetToastReady = false;
 let setLinksReady = false;
 let toggleLogReady = false;
 
@@ -249,17 +269,9 @@ function initHandlers() {
     initLinkToggler();
     linkTogglerReady = true;
   }
-  if (!magnetToastReady) {
-    magnetToast();
-    magnetToastReady = true;
-  }
-  if (!magnetListenersReady && debugMode) {
+  if (!magnetListenersReady) {
     attachMagnetListeners();
     magnetListenersReady = true;
-  }
-  if (screenlog && !toggleLogReady) {
-    initToggleLog();
-    toggleLogReady = true;
   }
   if (screenlog) {
     initSnarkAlert();
@@ -291,11 +303,16 @@ async function initSnarkRefresh() {
   if (refreshIntervalId) {
     clearInterval(refreshIntervalId);
   }
-  const interval = (parseInt(storageRefresh) || 5) * 1000;
+  const refreshInterval = (parseInt(storageRefresh) || 5) * 1000;
+  const screenLogInterval = 30000;
   try {
     refreshIntervalId = setInterval(async () => {
       await doRefresh();
-    }, interval);
+    }, refreshInterval);
+    screenLogIntervalId = setInterval(() => {
+      refreshScreenLog();
+      initToggleLog();
+    }, screenLogInterval);
     if (files && document.getElementById("lightbox")) {
       const lightbox = new Lightbox();
       lightbox.load();
@@ -305,19 +322,18 @@ async function initSnarkRefresh() {
   }
 }
 
-async function doRefresh() {
-  xhrsnark.open("GET", getURL(), true);
-  xhrsnark.responseType = "document";
-  xhrsnark.send();
-  await new Promise((resolve, reject) => {
+function doRefresh() {
+  return new Promise((resolve, reject) => {
+    xhrsnark.open("GET", getURL(), true);
+    xhrsnark.responseType = "document";
     xhrsnark.onload = () => {
+      refreshTorrents(initFilterBar, initHandlers);
       resolve();
-      refreshTorrents();
-      initHandlers();
     };
     xhrsnark.onerror = () => {
       reject(xhrsnark.status);
     };
+    xhrsnark.send();
   });
 }
 
@@ -331,6 +347,10 @@ document.addEventListener("DOMContentLoaded", () => {
       doRefresh();
     });
   }
+  if (screenlog) {initToggleLog();}
+  const iframed = document.querySelector("body.iframed");
+  const iframeResizer = document.getElementById("iframeResizer");
+  if (!iframed) {iframeResizer?.remove();}
 });
 
-export {initSnarkRefresh, refreshTorrents, xhrsnark, refreshIntervalId};
+export {initSnarkRefresh, refreshTorrents, xhrsnark, xhrsnarklog refreshIntervalId};

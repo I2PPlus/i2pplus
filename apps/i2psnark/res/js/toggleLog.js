@@ -25,8 +25,8 @@ function initToggleLog() {
   function clean() {
     var expandLog = document.getElementById("expandLog");
     var shrinkLog = document.getElementById("shrinkLog");
-    if (screenlog.classList.contains("xpanded")) {screenlog.classList.remove("xpanded");}
-    if (screenlog.classList.contains("collapsed")) {screenlog.classList.remove("collapsed");}
+    if (screenlog?.classList.contains("xpanded")) {screenlog.classList.remove("xpanded");}
+    if (screenlog?.classList.contains("collapsed")) {screenlog.classList.remove("collapsed");}
     if (expandLog) {expandLog.remove();}
     if (shrinkLog) {shrinkLog.remove();}
   }
@@ -36,8 +36,9 @@ function initToggleLog() {
     if (toggleLogCss) {
       toggleLogCss.innerHTML = expandCss;
     }
-    screenlog.classList.add("xpanded");
+    screenlog?.classList.add("xpanded");
     localStorage.setItem("screenlog", "expanded");
+    handleShrinkClick();
   }
 
   function shrink() {
@@ -45,33 +46,27 @@ function initToggleLog() {
     if (toggleLogCss) {
       toggleLogCss.innerHTML = collapseCss;
     }
-    screenlog.classList.add("collapsed");
+    screenlog?.classList.add("collapsed");
     localStorage.setItem("screenlog", "collapsed");
+    handleExpandClick();
   }
 
   function handleShrinkClick() {
     if (localStorage.getItem("screenlog") === "expanded") {
       shrink();
-      ex.removeEventListener("click", handleExpandClick);
-      ex.addEventListener("click", handleExpandClick, false);
+      ex.addEventListener("click", handleExpandClick);
     }
   }
 
   function handleExpandClick() {
     if (localStorage.getItem("screenlog") !== "expanded") {
       expand();
-      sh.removeEventListener("click", handleShrinkClick);
-      sh.addEventListener("click", handleShrinkClick, false);
+      sh.addEventListener("click", handleShrinkClick);
     }
   }
 
   if (!localStorage.getItem("screenlog")) {
     localStorage.setItem("screenlog", "collapsed");
-  }
-
-  if (sh != null && ex !== null) {
-    sh.addEventListener("click", handleShrinkClick, false);
-    ex.addEventListener("click", handleExpandClick, false);
   }
 
   if (mainsection) {
@@ -81,6 +76,12 @@ function initToggleLog() {
       shrink();
     }
   }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    if (sh) {sh.addEventListener("click", handleShrinkClick);}
+    if (ex) {ex.addEventListener("click", handleExpandClick);}
+  });
+
 }
 
 export {initToggleLog};

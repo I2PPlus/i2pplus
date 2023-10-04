@@ -2,7 +2,7 @@
 /* Author: dr|z3d */
 /* License: AGPL3 or later */
 
-import {initSnarkRefresh, refreshTorrents, xhrsnark} from "./refreshTorrents.js";
+import {initSnarkRefresh, refreshTorrents, xhrsnarklog} from "./refreshTorrents.js";
 
 "use strict";
 
@@ -18,13 +18,13 @@ const processForm = document.getElementById("processForm");
 let url = ".ajax/xhr1.html";
 
 function updateLog() {
-  const messages = xhrsnark.responseXML.querySelector("messages");
+  const messages = xhrsnarklog.responseXML.querySelector("messages");
   if (messages) {
-    const logEntryEl = xhrsnark.responseXML.querySelector("#screenlog li.msg");
+    const logEntryEl = xhrsnarklog.responseXML.querySelector("#screenlog li.msg");
     if (logEntryEl) {
       console.log(logEntryEl.innerHTML);
       const newLogEntry = logEntryEl.innerHTML.substring(21);
-      console.log("Alert notification should read: " + newLogEntry);
+      //console.log("Alert notification should read: " + newLogEntry);
       const newTable = "<table><tr><td>" + newLogEntry + "</td></tr></table>";
       if (!addNotify.hidden) addNotify.innerHTML = newTable;
       if (!createNotify.hidden) createNotify.innerHTML = newTable;
@@ -35,10 +35,10 @@ function updateLog() {
 function addTorrentNotify() {
   addNotify.removeAttribute("hidden");
   processForm.onload = function() {
-    if (xhrsnark.responseXML) {
-      const messages = xhrsnark.responseXML.getElementById("screenlog");
+    if (xhrsnarklog.responseXML) {
+      const messages = xhrsnarklog.responseXML.getElementById("screenlog");
       if (messages) {
-        const logEntryEl = xhrsnark.responseXML.querySelector("#screenlog li.msg");
+        const logEntryEl = xhrsnarklog.responseXML.querySelector("#screenlog li.msg");
         if (logEntryEl) {
           const newLogEntry = logEntryEl.innerHTML.substring(21);
           const newTable = "<table><tr><td>" + newLogEntry + "</td></tr></table>";

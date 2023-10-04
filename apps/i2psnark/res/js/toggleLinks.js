@@ -61,31 +61,8 @@ function showMagnets() {
   attachMagnetListeners();
   toggle.checked = false;
   toggleCss.textContent = magnetCss + magnetBtn;
-  magnetToast();
   localStorage.setItem("linkToggle", "magnets");
   config = "magnets";
-}
-
-function magnetToast() {
-  var toastPosition = toast.getBoundingClientRect().top;
-
-  function fixToast() {
-    var toastRect = toast.getBoundingClientRect();
-    var parentRect = window.parent.document.documentElement.getBoundingClientRect();
-    if (toastRect.bottom > parentRect.bottom || toastRect.top < parentRect.top) {
-      var toastTop = Math.max(toastRect.top, parentRect.top);
-      toast.style.position = "fixed";
-      toast.style.top = toastTop - parentRect.top + "px";
-    }
-  }
-
-  window.addEventListener("scroll", fixToast);
-  window.addEventListener("resize", fixToast);
-  if (window.frameElement) {
-    window.parent.addEventListener("scroll", fixToast);
-    window.parent.addEventListener("resize", fixToast);
-  }
-
 }
 
 function attachMagnetListeners() {
@@ -137,7 +114,6 @@ function attachMagnetListeners() {
 document.addEventListener('DOMContentLoaded', () => {
   initLinkToggler();
   attachMagnetListeners();
-  magnetToast();
 });
 
-export {initLinkToggler, linkToggle, magnetToast, attachMagnetListeners};
+export {initLinkToggler, linkToggle, attachMagnetListeners};
