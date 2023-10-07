@@ -596,12 +596,12 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
         String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         List<UIMessages.Message> msgs = _manager.getMessages();
+        out.write("<div id=screenlog");
+        if (isConfigure) {
+            out.write(" class=configpage");
+        }
+        out.write(" tabindex=0>");
         if (!msgs.isEmpty()) {
-            out.write("<div id=screenlog");
-            if (isConfigure) {
-                out.write(" class=configpage");
-            }
-            out.write(" tabindex=0>\n");
             out.write("<a id=closelog href=\"" + _contextPath + '/');
             if (isConfigure) {
                 out.write("configure");
@@ -643,13 +643,14 @@ public class I2PSnarkServlet extends BasicServlet {
                     msg = msg.replace("</span>", "");
                 out.write("<li class=msg>" + msg + "</li>\n");
             }
-            out.write("</ul>\n</div>\n");
-            out.write("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=module defer></script>\n");
-            int delay = 0;
-            delay = _manager.getRefreshDelaySeconds();
-            if (delay > 0 && _context.isRouterContext()) {
-                out.write("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/graphRefresh.js?" + CoreVersion.VERSION + "\" defer></script>\n");
-            }
+            out.write("</ul>");
+        }
+        out.write("</div>\n");
+        out.write("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=module defer></script>\n");
+        int delay = 0;
+        delay = _manager.getRefreshDelaySeconds();
+        if (delay > 0 && _context.isRouterContext()) {
+            out.write("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/graphRefresh.js?" + CoreVersion.VERSION + "\" defer></script>\n");
         }
     }
 

@@ -11,8 +11,9 @@
   let timerId = null;
   const sb = document.getElementById("sidebar");
   const initSidebarRefresh = () => {
+    clearInterval(timerId);
     timerId = setInterval(() => {
-      requestAnimationFrame(refreshSidebar);
+      window.requestAnimationFrame(refreshSidebar);
     }, refreshInterval);
   };
   const stopSidebarRefresh = () => {
