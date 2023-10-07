@@ -156,6 +156,7 @@ public class GraphHelper extends FormHandler {
         if (ss == null)
             return "";
         try {
+            StringBuilder buf = new StringBuilder(384);
             List<SummaryListener> listeners = ss.getListeners();
             TreeSet<SummaryListener> ordered = new TreeSet<SummaryListener>(new AlphaComparator());
             ordered.addAll(listeners);
@@ -180,10 +181,10 @@ public class GraphHelper extends FormHandler {
                         iter.remove();
                 }
                 if (hiDPI)
-                    _out.write("<span class=graphContainer id=hidpi>");
+                    buf.append("<span class=graphContainer id=hidpi>");
                 else
-                    _out.write("<span class=graphContainer>");
-                _out.write("<a href=\"graph?stat=bw.combined"
+                    buf.append("<span class=graphContainer>");
+                buf.append("<a href=\"graph?stat=bw.combined"
                            + "&amp;c=" + (3 * _periodCount )
                            + "&amp;w=1000&amp;h=280"
                            //+ "&amp;w=" + (3 * _width)
@@ -191,12 +192,12 @@ public class GraphHelper extends FormHandler {
                            + "\">");
                 String title = _t("Combined bandwidth graph");
                 if (hiDPI) {
-                    _out.write("<img loading=lazy class=statimage"
+                    buf.append("<img loading=lazy class=statimage"
                                + " src=\"viewstat.jsp?stat=bw.combined"
                                + "&amp;periodCount=" + _periodCount
                                + "&amp;width=" + (_width * 2));
                 } else {
-                    _out.write("<img loading=lazy class=statimage"
+                    buf.append("<img loading=lazy class=statimage"
                                + " src=\"viewstat.jsp?stat=bw.combined"
                                + "&amp;periodCount=" + _periodCount
                                + "&amp;width=" + _width);
@@ -205,17 +206,17 @@ public class GraphHelper extends FormHandler {
                     if (hiDPI)
                         // bw.combined graph has two entries in its legend
                         // -26 pixels equalizes its height with the other images (standard dpi)
-                        _out.write("&amp;height=" + ((_height * 2) - 52));
+                        buf.append("&amp;height=" + ((_height * 2) - 52));
                     else
-                        _out.write("&amp;height=" + (_height - 26));
+                        buf.append("&amp;height=" + (_height - 26));
                 } else {
                     if (hiDPI)
                         // no legend, no height difference needed
-                        _out.write("&amp;height=" + (_height * 2));
+                        buf.append("&amp;height=" + (_height * 2));
                     else
-                        _out.write("&amp;height=" + (_height));
+                        buf.append("&amp;height=" + (_height));
                 }
-                _out.write("&amp;hideLegend=" + hideLegend + "&amp;time=" + System.currentTimeMillis()
+                buf.append("&amp;hideLegend=" + hideLegend + "&amp;time=" + System.currentTimeMillis()
                            + "\" alt=\"" + title + "\" title=\"" + title + "\"></a></span>\n");
             }
 
@@ -224,40 +225,43 @@ public class GraphHelper extends FormHandler {
                 // e.g. "statname for 60m"
                 String title = _t("{0} for {1}", r.getRateStat().getName(), DataHelper.formatDuration2(_periodCount * r.getPeriod()));
                 if (hiDPI)
-                    _out.write("<span class=graphContainer id=hidpi>");
+                    buf.append("<span class=graphContainer id=hidpi>");
                 else
-                    _out.write("<span class=graphContainer>");
-                _out.write("<a href=\"graph?stat="
+                    buf.append("<span class=graphContainer>");
+                buf.append("<a href=\"graph?stat="
                            + r.getRateStat().getName().replace(" ", "%20")
                            + '.' + r.getPeriod()
                            + "&amp;c=" + (3 * _periodCount ));
                            // let's set width & height predictably and reduce chance of downscaling
                 if (hiDPI)
-                    _out.write("&amp;w=2000&amp;h=560");
+                    buf.append("&amp;w=2000&amp;h=560");
                 else
-                    _out.write("&amp;w=1000&amp;h=280");
+                    buf.append("&amp;w=1000&amp;h=280");
                            //+ "&amp;w=" + (3 * _width)
                            //+ "&amp;h=" + (3 * _height)
-                _out.write((_showEvents ? "&amp;showEvents=1" : "")
+                buf.append((_showEvents ? "&amp;showEvents=1" : "")
                            + "\">");
-                _out.write("<img loading=lazy class=statimage border=0"
+                buf.append("<img loading=lazy class=statimage border=0"
                            + " src=\"viewstat.jsp?stat="
                            + r.getRateStat().getName().replace(" ", "%20")
                            + "&amp;showEvents=" + _showEvents
                            + "&amp;period=" + r.getPeriod()
                            + "&amp;periodCount=" + _periodCount);
                 if (hiDPI) {
-                    _out.write("&amp;width=" + (_width * 2)
+                    buf.append("&amp;width=" + (_width * 2)
                            + "&amp;height=" + (_height * 2));
                 } else {
-                    _out.write("&amp;width=" + _width
+                    buf.append("&amp;width=" + _width
                            + "&amp;height=" + _height);
                 }
-                _out.write("&amp;hideLegend=" + hideLegend
+                buf.append("&amp;hideLegend=" + hideLegend
                            + "&amp;time=" + System.currentTimeMillis()
                            + "\" alt=\"" + title
                            + "\" title=\"" + title + "\"></a></span>\n");
             }
+            _out.write(buf.toString());
+            _out.flush();
+            buf.setLength(0);
 
             // FIXME jrobin doesn't support setting the timezone, will have to mod TimeAxis.java
             // 0.9.1 - all graphs currently state UTC on them, so this text blurb is unnecessary,
@@ -275,6 +279,7 @@ public class GraphHelper extends FormHandler {
      *  @since 0.9
      */
     public String getSingleStat() {
+        StringBuilder buf = new StringBuilder(384);
         StatSummarizer ss = StatSummarizer.instance(_context);
         if (ss == null)
             return "";

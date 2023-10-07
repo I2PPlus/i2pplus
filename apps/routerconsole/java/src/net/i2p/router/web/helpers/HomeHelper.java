@@ -347,8 +347,9 @@ public class HomeHelper extends HelperBase {
 
     public String getProxyStatus() {
         int port = _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY);
-        if (port <= 0)
+        if (port <= 0) {
             return _t("The HTTP proxy is not up");
+        }
         return "<img src=\"http://console.i2p/onepixel.png?" + _context.random().nextInt() + "\"" +
                 " alt=\"" + _t("Your browser is not properly configured to use the HTTP proxy at {0}",
                 _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST, ConfigUpdateHandler.DEFAULT_PROXY_HOST) + ':' + port) +
@@ -358,18 +359,20 @@ public class HomeHelper extends HelperBase {
     private String homeTable(String prop, String dflt, Collection<App> toAdd) {
         String config = _context.getProperty(prop, dflt);
         Collection<App> apps = buildApps(_context, config);
-        if (toAdd != null)
+        if (toAdd != null) {
             apps.addAll(toAdd);
+        }
         return renderApps(apps);
     }
 
     private String configTable(String prop, String dflt) {
         String config = _context.getProperty(prop, dflt);
         Collection<App> apps;
-        if (prop.equals(SearchHelper.PROP_ENGINES))
+        if (prop.equals(SearchHelper.PROP_ENGINES)) {
             apps = buildSearchApps(config);
-        else
+        } else {
             apps = buildApps(_context, config);
+        }
         return renderConfig(apps);
     }
 
@@ -414,7 +417,7 @@ public class HomeHelper extends HelperBase {
 
     private String renderApps(Collection<App> apps) {
         String website = _t("Web Server");
-        StringBuilder buf = new StringBuilder(1024);
+        StringBuilder buf = new StringBuilder(6*1024);
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
         buf.append("<div class=\"linkgroup\">");
         PortMapper pm = _context.portMapper();
@@ -487,7 +490,7 @@ public class HomeHelper extends HelperBase {
         }
 
     private String renderConfig(Collection<App> apps) {
-        StringBuilder buf = new StringBuilder(1024);
+        StringBuilder buf = new StringBuilder(64*1024);
         buf.append("<table class=homelinkedit><tr><th class=center title=\"")
            .append(_t("Mark for deletion"))
            .append("\">")
