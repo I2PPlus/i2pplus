@@ -178,7 +178,7 @@ public class EventLogHelper extends FormHandler {
             return ("<table id=eventlog>\n<tr><td class=infohelp>") +
                     _t("No \"{0}\" events found in previous {1}", xev, DataHelper.formatDuration2(_age)) + ("</td></tr></table>\n");
         }
-        StringBuilder buf = new StringBuilder(2048);
+        StringBuilder buf = new StringBuilder(16*1024);
         buf.append("<table id=eventlog><thead><tr><th>");
         buf.append(_t("Time"));
         buf.append("</th><th>");

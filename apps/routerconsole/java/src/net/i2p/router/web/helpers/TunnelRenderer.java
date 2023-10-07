@@ -189,6 +189,7 @@ class TunnelRenderer {
                     processed = (long)rs.getRate(10*60*1000).getLifetimeTotalValue();
                 int inactive = 0;
                 int displayed = 0;
+                StringBuilder sb = new StringBuilder(1024);
                 for (int i = 0; i < participating.size(); i++) {
                     HopConfig cfg = participating.get(i);
                     int count = cfg.getProcessedMessagesCount();
@@ -207,21 +208,21 @@ class TunnelRenderer {
                     processed += cfg.getRecentMessagesCount();
                     if (++displayed > DISPLAY_LIMIT)
                         continue;
-                    out.write("<tr class=lazy>");
+                    sb.append("<tr class=lazy>");
                     if (to == null)
-                        out.write("<td class=\"cells obep\" title=\"" + _t("Outbound Endpoint") + "\">" + _t("Outbound Endpoint") + "</td>");
+                        sb.append("<td class=\"cells obep\" title=\"" + _t("Outbound Endpoint") + "\">" + _t("Outbound Endpoint") + "</td>");
                     else if (from == null)
-                        out.write("<td class=\"cells ibgw\" title=\"" + _t("Inbound Gateway") + "\">" + _t("Inbound Gateway") + "</td>");
+                        sb.append("<td class=\"cells ibgw\" title=\"" + _t("Inbound Gateway") + "\">" + _t("Inbound Gateway") + "</td>");
                     else
-                        out.write("<td class=\"cells ptcp\" title=\"" + _t("Participant") + "\">" + _t("Participant") + "</td>");
+                        sb.append("<td class=\"cells ptcp\" title=\"" + _t("Participant") + "\">" + _t("Participant") + "</td>");
                     long timeLeft = cfg.getExpiration()-_context.clock().now();
                     if (timeLeft > 0)
-//                        out.write("<td class=\"cells expiry\">" + DataHelper.formatDuration2(timeLeft) + "</td>");
-                        out.write("<td class=\"cells expiry\"><span class=right>" + timeLeft / 1000 +
+//                        sb.append("<td class=\"cells expiry\">" + DataHelper.formatDuration2(timeLeft) + "</td>");
+                        sb.append("<td class=\"cells expiry\"><span class=right>" + timeLeft / 1000 +
                                   "</span><span class=left>&#8239;" + _t("sec") + "</span></td>");
                     else
-                        out.write("<td><i>" + _t("grace period") + "</i></td>");
-                    out.write("<td class=\"cells datatransfer\"><span class=right>" + (count * 1024 / 1000) +
+                        sb.append("<td><i>" + _t("grace period") + "</i></td>");
+                    sb.append("<td class=\"cells datatransfer\"><span class=right>" + (count * 1024 / 1000) +
                               "</span><span class=left>&#8239;KB</span></td>");
                     int lifetime = (int) ((_context.clock().now() - cfg.getCreation()) / 1000);
                     if (lifetime <= 0)
@@ -231,45 +232,48 @@ class TunnelRenderer {
 //                    long bps = 1024L * count / lifetime;
                     float bps = 1024 * count / lifetime;
                     float kbps = bps / 1024;
-                    out.write("<td class=\"cells bps\"><span class=right>" + fmt.format(kbps) +
+                    sb.append("<td class=\"cells bps\"><span class=right>" + fmt.format(kbps) +
                               "&#8239;</span><span class=left>KB/s</span></td>");
 /*
-                    out.write("<td class=\"cells bps\"><span class=right>" + DataHelper.formatSize2(bps, true).replace("i", "")
+                    sb.append("<td class=\"cells bps\"><span class=right>" + DataHelper.formatSize2(bps, true).replace("i", "")
                         .replace("K", "&#8239;</span><span class=left>K").replace("M", "&#8239;</span><span class=left>M"));
                     if (bps > 1023)
-                        out.write(_t("/s"));
+                        sb.append(_t("/s"));
                     else
-                        out.write("</span><span class=left>" + _t("B/s"));
-                    out.write("</span></td>");
+                        sb.append("</span><span class=left>" + _t("B/s"));
+                    sb.append("</span></td>");
 */
                     long recv = cfg.getReceiveTunnelId();
                     if (debug) {
                         if (recv != 0)
-                            out.write("<td title=\"" + _t("Tunnel identity") + "\"><span class=tunnel_id>" +
+                            sb.append("<td title=\"" + _t("Tunnel identity") + "\"><span class=tunnel_id>" +
                                       recv + "</span></td>");
                         else
-                            out.write("<td><span hidden>&ndash;</span></td>");
+                            sb.append("<td><span hidden>&ndash;</span></td>");
                     }
                     if (from != null)
-                        out.write("<td><span class=tunnel_peer>" + netDbLink(from) +
+                        sb.append("<td><span class=tunnel_peer>" + netDbLink(from) +
                                   "</span>");//&nbsp;<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(from) + "</b></td>");
                     else
-                        out.write("<td><span hidden>&ndash;</span></td>");
+                        sb.append("<td><span hidden>&ndash;</span></td>");
                     long send = cfg.getSendTunnelId();
                     if (debug) {
                         if (send != 0)
-                            out.write("<td title=\"" + _t("Tunnel identity") + "\"><span class=tunnel_id>" +
+                            sb.append("<td title=\"" + _t("Tunnel identity") + "\"><span class=tunnel_id>" +
                                       send + "</span></td>");
                         else
-                            out.write("<td><span hidden>&ndash;</span></td>");
+                            sb.append("<td><span hidden>&ndash;</span></td>");
                     }
                     if (to != null)
-                        out.write("<td><span class=tunnel_peer>" + netDbLink(to) +
+                        sb.append("<td><span class=tunnel_peer>" + netDbLink(to) +
                                   "</span>");//&nbsp;<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(to) + "</b></td>");
                     else
-                        out.write("<td><span hidden>&ndash;</span></td>");
-                    out.write("</tr>\n");
+                        sb.append("<td><span hidden>&ndash;</span></td>");
+                    sb.append("</tr>\n");
                 }
+                out.write(sb.toString());
+                out.flush();
+                sb.setLength(0);
                 out.write("</tbody>\n</table>\n");
                 if (displayed > DISPLAY_LIMIT) {
                     if (bySpeed)
@@ -343,6 +347,7 @@ class TunnelRenderer {
             displayed = 0;
             List<Hash> sort = counts.sortedObjects();
             long uptime = _context.router().getUptime();
+            StringBuilder sb = new StringBuilder(1024);
             for (Hash h : sort) {
                 DISPLAY_LIMIT = 50;
                 int count = counts.count(h);
@@ -360,72 +365,72 @@ class TunnelRenderer {
                     break;
                 if (++displayed > DISPLAY_LIMIT)
                     break;
-                out.write("<tr class=lazy><td>");
-                out.write(peerFlag(h));
-                out.write("</td><td>");
-                out.write("<span class=routerHash><a href=\"netdb?r=" + h.toBase64().substring(0,6) + "\">");
-                out.write(truncHash);
-                out.write("</a></span></td><td>");
+                sb.append("<tr class=lazy><td>");
+                sb.append(peerFlag(h));
+                sb.append("</td><td>");
+                sb.append("<span class=routerHash><a href=\"netdb?r=" + h.toBase64().substring(0,6) + "\">");
+                sb.append(truncHash);
+                sb.append("</a></span></td><td>");
 /*
-                out.write("<tr class=lazy><td>");
-                out.write(netDbLink(h));
-                out.write("</td><td>");
+                sb.append("<tr class=lazy><td>");
+                sb.append(netDbLink(h));
+                sb.append("</td><td>");
 */
                 if (v != null) {
-                    out.write("<span class=version title=\"" + _t("Show all routers with this version in the NetDb") +
+                    sb.append("<span class=version title=\"" + _t("Show all routers with this version in the NetDb") +
                               "\"><a href=\"/netdb?v=" + DataHelper.stripHTML(v) + "\">" + DataHelper.stripHTML(v) +
                               "</a></span>");
                 } else {
-                    out.write("<span class=version\">???</span>");
+                    sb.append("<span class=version\">???</span>");
                 }
-                out.write("</td><td>");
+                sb.append("</td><td>");
                 if (info != null) {
-                    out.write(_context.commSystem().renderPeerCaps(h, false));
+                    sb.append(_context.commSystem().renderPeerCaps(h, false));
                 } else {
-                    out.write("<table class=\"rid ric\"><tr><td class=rbw>?</td></tr></table>");
+                    sb.append("<table class=\"rid ric\"><tr><td class=rbw>?</td></tr></table>");
                 }
-                out.write("</td><td><span class=ipaddress>");
+                sb.append("</td><td><span class=ipaddress>");
                 if (info != null && ip != null) {
                     if (!ip.toString().equals("null")) {
                         if (ip.toString().contains(":"))
-                            out.write("<span hidden>[IPv6]</span>" + ip.toString());
+                            sb.append("<span hidden>[IPv6]</span>" + ip.toString());
                         else
-                            out.write(ip.toString());
+                            sb.append(ip.toString());
 /*
-                        out.write("<a class=script href=\"https://gwhois.org/" + ip.toString() + "+dns\" target=_blank title=\"" +
+                        sb.append("<a class=script href=\"https://gwhois.org/" + ip.toString() + "+dns\" target=_blank title=\"" +
                                   _t("Lookup address on gwhois.org") + "\">" + ip.toString() + "</a>" +
                                   "<noscript>" + ip.toString() + "</noscript>");
 */
 
                     } else {
-                        out.write("&ndash;");
+                        sb.append("&ndash;");
                     }
                 } else {
-                    out.write("&ndash;");
+                    sb.append("&ndash;");
                 }
-                out.write("</span></td>");
+                sb.append("</span></td>");
                 if (enableReverseLookups()) {
-                    out.write("<td>");
+                    sb.append("<td>");
                     if (rl != null && rl.length() != 0 && !ip.toString().equals(rl)) {
-                        out.write("<span class=rlookup title=\"");
-                        out.write(rl);
-                        out.write("\">");
+                        sb.append("<span class=rlookup title=\"");
+                        sb.append(rl);
+                        sb.append("\">");
                         if (!ip.toString().equals(rl)) {
-                            out.write(CommSystemFacadeImpl.getDomain(rl));
+                            sb.append(CommSystemFacadeImpl.getDomain(rl));
                         }
                     } else {
-                        out.write("<span hidden>");
-                        out.write("&ndash;");
+                        sb.append("<span hidden>");
+                        sb.append("&ndash;");
                     }
-                    out.write("</span></td>");
+                    sb.append("</span></td>");
                 }
-                out.write("<td class=tcount>" + count + "</td>");
-                //out.write("<td>" + (bws.count(h) > 0 ? DataHelper.formatSize2(bws.count(h) * 1024) + "B": "") + "</td>\n");
-                out.write("<td>");
+                sb.append("<td class=tcount>" + count + "</td>");
+                //sb.append("<td>" + (bws.count(h) > 0 ? DataHelper.formatSize2(bws.count(h) * 1024) + "B": "") + "</td>\n");
+                sb.append("<td>");
                 if (bws.count(h) > 0) {
-                    out.write("<span class=data>" + fmt.format(bws.count(h)).replace(".00", "") + "KB</span>");
+                    sb.append("<span class=data>" + fmt.format(bws.count(h)).replace(".00", "") + "KB</span>");
                 } else {
-                    out.write("<span class=data hidden>0KB</span>");
+                    sb.append("<span class=data hidden>0KB</span>");
                 }
 /*
                 if (lifetime <= 0)
@@ -434,21 +439,24 @@ class TunnelRenderer {
                     lifetime = 10*60;
                 float bps = 1024 * count / lifetime;
                 float kbps = bps / 1024;
-                out.write("</td><td class=\"cells bps\">");
+                sb.append("</td><td class=\"cells bps\">");
                 if (kbps >= 1) {
-                    out.write("<span class=right>" + fmt.format(kbps) + "&#8239;</span><span class=left>KB/s</span>");
+                    sb.append("<span class=right>" + fmt.format(kbps) + "&#8239;</span><span class=left>KB/s</span>");
                 } else if (kbps >= 0) {
-                    out.write("<span class=right><&#8239;1</span><span class=left>KB/s</span>");
+                    sb.append("<span class=right><&#8239;1</span><span class=left>KB/s</span>");
                 } else {
-                    out.write("<span class=right hidden>0&#8239;</span><span class=left hidden>KB/s</span>");
+                    sb.append("<span class=right hidden>0&#8239;</span><span class=left hidden>KB/s</span>");
                 }
 */
-                out.write("</td><td>");
+                sb.append("</td><td>");
                 if (info != null && info.getHash() != null)
-                    out.write("<a class=configpeer href=\"/configpeer?peer=" + info.getHash() + "\" title=\"Configure peer\">" +
+                    sb.append("<a class=configpeer href=\"/configpeer?peer=" + info.getHash() + "\" title=\"Configure peer\">" +
                               _t("Edit") + "</a>");
-                out.write("</td></tr>\n");
+                sb.append("</td></tr>\n");
             }
+            out.write(sb.toString());
+            out.flush();
+            sb.setLength(0);
             out.write("</tbody>\n</table>\n");
         } else if (_context.router().isHidden()) {
                 out.write("<p class=infohelp>" + _t("Router is currently operating in Hidden Mode which prevents transit tunnels from being built."));
@@ -494,7 +502,7 @@ class TunnelRenderer {
             }
             out.write("<th id=edit data-sort-method=none>" + _t("Edit") + "</th>");
             out.write("</tr>\n</thead>\n<tbody id=allPeers>\n");
-            final StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(640);
             for (Hash h : peerList) {
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
                 if (info == null) {
@@ -565,6 +573,8 @@ class TunnelRenderer {
                 }
                 sb.append(String.format("<td><a class=configpeer href=\"/configpeer?peer=%s\" title=\"Configure peer\">%s</a></td></tr>\n", info.getHash(), _t("Edit")));
                 out.write(sb.toString());
+                out.flush();
+                sb.setLength(0);
             }
             out.write("</tbody>\n<tfoot><tr class=tablefooter data-sort-method=none>" +
                       "<td colspan=4><b>" + peerCount + ' ' + _t("unique peers") + "</b></td>" +

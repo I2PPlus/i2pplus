@@ -535,6 +535,7 @@ class ProfileOrganizerRenderer {
         }  // mode < 2
         out.write(buf.toString());
         out.flush();
+        buf.setLength(0);
     }
 
     private class ProfileComparator extends HashComparator {
