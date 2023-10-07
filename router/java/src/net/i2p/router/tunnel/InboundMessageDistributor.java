@@ -243,13 +243,13 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                 // Handling of client tunnel messages need explicit handling
                 // in the context of the client subDb.
                 if (_client != null) {
-                    String dbid = _context.netDbSegmentor().getDbidByHash(_client);
-                    if (dbid == null) {
+                    //Hash dbid = _context.netDbSegmentor().getDbidByHash(_client);
+                    /*if (dbid == null) {
                         // This error shouldn't occur.  All clients should have their own netDb.
                         if (_log.shouldLog(Log.ERROR))
                             _log.error("Error, client (" + _clientNickname + ") dbid not found while processing messages in the IBMD.");
                             return;
-                    }
+                    }*/
                     // For now, the only client message we know how to handle here is a DSM.
                     // There aren't normally DSM messages here, but it should be safe to store
                     // them in the client netDb.
@@ -389,7 +389,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                             _log.info("Storing garlic LeaseSet down tunnel for [" + dsm.getKey().toBase64().substring(0,6) +
                                       "] sent to " + (_client != null ? _clientNickname + " [" + truncDest : "[router") + "]");
 
-                        if (_client.toBase32() != null) {
+                                    if (_client != null) {
                             // We need to replicate some of the handling that was previously
                             // performed when these types of messages were passed back to
                             // the inNetMessagePool.
