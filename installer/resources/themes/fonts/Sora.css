@@ -15,6 +15,7 @@ input[type="submit"],input[type="reset"],button,.control,.fakebutton,.fakebutton
 #dologin td{font-weight:500}
 #torrents tfoot .RateDown:not(:empty)::before,tfoot .torrentDownloaded:not(:empty)::before,tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{margin-right:2px}
 #torrents tfoot tr:first-child th{min-width:80px}
+#torrents .clientid{font-size:75%;font-weight:600}
 #totals .canhide{display:none}
 @font-face{font-display:swap;font-family:Sora;font-style:normal;font-weight:100,200,300,400,500,600,700,800;src:url(/themes/fonts/Sora/Sora.woff2);format("woff2")}
 @font-face{font-display:swap;font-family:Sora;font-style:italic;font-weight:100,200,300,400,500,600,700,800;src:url(/themes/fonts/Sora/Sora-Italic.woff2);format("woff2")}
