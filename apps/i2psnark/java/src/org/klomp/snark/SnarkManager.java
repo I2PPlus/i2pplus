@@ -176,9 +176,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /** @since 0.9.58 */
     public static final String PROP_MAX_FILES_PER_TORRENT = "i2psnark.maxFilesPerTorrent";
 
-//    public static final int MIN_UP_BW = 10;
+    /** @since 0.9.60+ */
+    public static final String PROP_MAX_MESSAGES = "i2psnark.maxLogMessages";
+
     public static final int MIN_UP_BW = 30;
-//    public static final int DEFAULT_MAX_UP_BW = 25;
     public static final int DEFAULT_MAX_UP_BW = 1024;
     public static final int DEFAULT_STARTUP_DELAY = 3;
     public static final int DEFAULT_REFRESH_DELAY_SECS = 5;
@@ -188,7 +189,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String CONFIG_DIR_SUFFIX = ".d";
     private static final String SUBDIR_PREFIX = "s";
     private static final String B64 = Base64.ALPHABET_I2P;
-    private static final int MAX_MESSAGES = 50;
+    private static final int DEFAULT_MAX_MESSAGES = 50;
 
     /**
      *  "name", "announceURL=websiteURL" pairs
@@ -303,7 +304,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _contextPath = ctxPath;
         _contextName = ctxName;
         _log = _context.logManager().getLog(SnarkManager.class);
-        _messages = new UIMessages(MAX_MESSAGES);
+        _messages = new UIMessages(DEFAULT_MAX_MESSAGES);
         _util = new I2PSnarkUtil(_context, ctxName, this);
         _peerCoordinatorSet = new PeerCoordinatorSet();
         _connectionAcceptor = new ConnectionAcceptor(_util, _peerCoordinatorSet);
@@ -616,6 +617,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             return Integer.parseInt(_config.getProperty(PROP_MAX_FILES_PER_TORRENT));
         } catch (NumberFormatException nfe) {
             return DEFAULT_MAX_FILES_PER_TORRENT;
+        }
+    }
+
+    /**
+     *  @since 0.9.60+ (I2P+)
+     */
+    public int getMaxLogMessages() {
+        try {
+            return Integer.parseInt(_config.getProperty(PROP_MAX_MESSAGES));
+        } catch (NumberFormatException nfe) {
+            return DEFAULT_MAX_MESSAGES;
         }
     }
 
