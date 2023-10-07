@@ -307,9 +307,12 @@ function doRefresh() {
 }
 
 function isXHRSynced() {
+  if (!debugging) {return;}
   const updating = document.querySelectorAll("#snarkTbody tr, #torrents #snarkFoot th");
   const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr, #torrents #snarkFoot th");
-  console.log("html elements: " + updating.length + " / xhr elements: " + updatingResponse.length);
+  if (updatingResponse) {
+    console.log("html elements: " + updating.length + " / xhr elements: " + updatingResponse.length);
+  }
   if (updating.length != updatingResponse.length) {
     for (let i = 0; i < updatingResponse.length; i++) {
     if (updating[i] && updating[i].outerHTML != updatingResponse[i].outerHTML) {
