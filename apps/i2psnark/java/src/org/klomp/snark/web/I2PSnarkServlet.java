@@ -332,6 +332,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean collapsePanels = _manager.util().collapsePanels();
         setHTMLHeaders(resp, cspNonce, false);
         PrintWriter out = resp.getWriter();
+        StringBuilder sbuf = new StringBuilder(4*1024);
         String theme = _manager.getTheme();
         String pageBackground = "#fff";
         if (theme.equals("dark")) {
@@ -345,73 +346,75 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if (theme.equals("vanilla")) {
           pageBackground = "repeating-linear-gradient(180deg,#6f5b4c 1px,#a9927e 1px,#bfa388 4px),#cab39b";
         }
-        out.write(DOCTYPE + "<html style=background:" + pageBackground + ">\n" +
+        sbuf.append(DOCTYPE + "<html style=background:" + pageBackground + ">\n" +
                   "<head>\n" +
                   "<meta charset=utf-8>\n" +
                   "<meta name=viewport content=\"width=device-width\">\n");
         if (!isStandalone() && useSoraFont()) {
-            out.write("<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n" +
-                      "<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n" +
-                      "<link rel=stylesheet href=/themes/fonts/Sora.css>\n");
+            sbuf.append("<link rel=preload href=/themes/fonts/Sora.css as=style>\n" +
+                       "<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n" +
+                       "<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n" +
+                       "<link rel=stylesheet href=/themes/fonts/Sora.css>\n");
         } else {
-            out.write("<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>\n" +
-                      "<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n" +
-                      "<link rel=stylsheet href=/themes/fonts/DroidSans.css>\n");
+            sbuf.append("<link rel=preload href=/themes/fonts/DroidSans.css as=style>\n" +
+                       "<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>\n" +
+                       "<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n" +
+                       "<link rel=stylsheet href=/themes/fonts/DroidSans.css>\n");
         }
-        out.write("<link rel=preload href=\"" + _themePath + "snark.css?" + CoreVersion.VERSION + "\" as=style>\n" +
-                  "<link rel=preload href=\"" + _themePath + "images/images.css?" + CoreVersion.VERSION + "\" as=style>\n" +
-                  "<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
+        sbuf.append("<link rel=preload href=\"" + _themePath + "snark.css?" + CoreVersion.VERSION + "\" as=style>\n" +
+                   "<link rel=preload href=\"" + _themePath + "images/images.css?" + CoreVersion.VERSION + "\" as=style>\n" +
+                   "<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
         if (!isStandalone())
-            out.write("<link rel=preload href=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" as=script>\n");
-        out.write("<title>");
+            sbuf.append("<link rel=preload href=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" as=script>\n");
+        sbuf.append("<title>");
         if (_contextName.equals(DEFAULT_NAME))
-            out.write(_t("I2PSnark"));
+            sbuf.append(_t("I2PSnark"));
         else
-            out.write(_contextName);
-        out.write(" - ");
+            sbuf.append(_contextName);
+        sbuf.append(" - ");
         if (isConfigure) {
-            out.write(_t("Configuration"));
+            sbuf.append(_t("Configuration"));
         } else {
             String peerParam = req.getParameter("p");
             if ("2".equals(peerParam))
-                out.write(_t("Debug Mode"));
+                sbuf.append(_t("Debug Mode"));
             else
-                out.write(_t("Anonymous BitTorrent Client"));
+                sbuf.append(_t("Anonymous BitTorrent Client"));
         }
-        out.write("</title>\n");
+        sbuf.append("</title>\n");
 
         // we want it to go to the base URI so we don't refresh with some funky action= value
         int delay = 0;
         String jsPfx = _context.isRouterContext() ? "" : ".res";
         String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         if (!isConfigure) {
-            //out.write("<script nonce=" + cspNonce + " type=module ");
-            //out.write("src=\"" + resourcePath + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
+            //sbuf.append("<script nonce=" + cspNonce + " type=module ");
+            //sbuf.append("src=\"" + resourcePath + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
                 // fallback to metarefresh when javascript is disabled
-                out.write("<noscript><meta http-equiv=refresh content=\"" + delay + ";" + _contextPath + "/" + peerString + "\"></noscript>\n");
-                out.write("<script nonce=" + cspNonce + " type=module>\n" +
+                sbuf.append("<noscript><meta http-equiv=refresh content=\"" + delay + ";" + _contextPath + "/" + peerString + "\"></noscript>\n");
+                sbuf.append("<script nonce=" + cspNonce + " type=module>\n" +
                           "  import {initSnarkRefresh} from \"" + resourcePath + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
                           "  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
             }
-            out.write("<script nonce=" + cspNonce + ">\n" +
+            sbuf.append("<script nonce=" + cspNonce + ">\n" +
                       "  const deleteMessage1 = \"" + _t("Are you sure you want to delete the file \\''{0}\\'' " +
                       "(downloaded data will not be deleted) ?") + "\";\n" +
                       "  const deleteMessage2 = \"" + _t("Are you sure you want to delete the torrent \\''{0}\\'' " +
                       "and all downloaded data?") + "\";\n</script>\n");
-            out.write("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/delete.js?" + CoreVersion.VERSION + "\"></script>\n");
-            out.write("<link rel=stylesheet href=" + resourcePath + "toast.css>\n");
+            sbuf.append("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/delete.js?" + CoreVersion.VERSION + "\"></script>\n");
+            sbuf.append("<link rel=stylesheet href=" + resourcePath + "toast.css>\n");
         }
 
         // custom dialog boxes for javascript alerts
-        //out.write("<script src=\"" + jsPfx + "/js/custom-alert.js\"></script>\n");
-        //out.write("<link rel=stylesheet href=\"" + _contextPath + WARBASE + "custom-alert.css\">\n");
+        //sbuf.append("<script src=\"" + jsPfx + "/js/custom-alert.js\"></script>\n");
+        //sbuf.append("<link rel=stylesheet href=\"" + _contextPath + WARBASE + "custom-alert.css\">\n");
 
         // selected theme inserted here
-        out.write(HEADER_A + _themePath + HEADER_B + "\n");
-        out.write(HEADER_A + _themePath + HEADER_I + "\n"); // load css image assets
+        sbuf.append(HEADER_A + _themePath + HEADER_B + "\n");
+        sbuf.append(HEADER_A + _themePath + HEADER_I + "\n"); // load css image assets
         String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
                            java.io.File.separatorChar + "docs" + java.io.File.separatorChar + "themes" +
                            java.io.File.separatorChar + "snark" + java.io.File.separatorChar + _manager.getTheme() +
@@ -419,85 +422,88 @@ public class I2PSnarkServlet extends BasicServlet {
         File override = new File(themeBase + "override.css");
         int rnd = _context.random().nextInt(3);
         if (!isStandalone() && rnd == 0 && _manager.getTheme().equals("light")) {
-            out.write("<style>#screenlog{background:url(/themes/snark/light/images/k2.webp) no-repeat right bottom," +
+            sbuf.append("<style>#screenlog{background:url(/themes/snark/light/images/k2.webp) no-repeat right bottom," +
                       "repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),var(--snarkGraph) no-repeat," +
                       "var(--th);background-size:72px auto,100%,calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom," +
                       "center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n");
         }
         if (!isStandalone() && override.exists()) {
-            out.write(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
+            sbuf.append(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
         }
 
         // larger fonts for cjk translations
         String lang = (Translate.getLanguage(_manager.util().getContext()));
         long now = _context.clock().now();
         if (lang.equals("zh") || lang.equals("ja") || lang.equals("ko"))
-            out.write(HEADER_A + _themePath + HEADER_D + "\n");
+            sbuf.append(HEADER_A + _themePath + HEADER_D + "\n");
 
         //  ...and inject CSS to display panels uncollapsed
         if (noCollapse || !collapsePanels) {
-            out.write(HEADER_A + _themePath + HEADER_C + "\n");
+            sbuf.append(HEADER_A + _themePath + HEADER_C + "\n");
         }
         // add placeholders filterbar, toggleLog, toggleLinks css
-        out.write("<style id=cssfilter></style>\n" +
+        sbuf.append("<style id=cssfilter></style>\n" +
                   "<style id=toggleLogCss></style>\n" +
                   "<style id=toggleLinks></style>\n");
         if (!isStandalone() && delay <= 0) {
-            out.write("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp" +
+            sbuf.append("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp" +
                   "?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160" +
                   "&hideLegend=true&hideTitle=true&hideGrid=true&t=" + now + "\')}\"</style>");
         }
-        out.write("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"" + _manager.getTheme() +
+        sbuf.append("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"" + _manager.getTheme() +
                   " lang_" + lang + "\">\n" + "<center>\n");
-        out.write(IFRAME_FORM);
+        sbuf.append(IFRAME_FORM);
         List<Tracker> sortedTrackers = null;
-        out.write("<span id=toast hidden=hidden></span>");
+        sbuf.append("<span id=toast hidden=hidden></span>");
         if (isConfigure) {
-            out.write("<div id=navbar>\n<a href=\"" + _contextPath + "/\" title=\"" + _t("Torrents") +
+            sbuf.append("<div id=navbar>\n<a href=\"" + _contextPath + "/\" title=\"" + _t("Torrents") +
                       "\" class=\"snarkNav nav_main\">");
             if (_contextName.equals(DEFAULT_NAME))
-                out.write(_t("I2PSnark"));
+                sbuf.append(_t("I2PSnark"));
             else
-                out.write(_contextName);
-            out.write("</a>\n");
+                sbuf.append(_contextName);
+            sbuf.append("</a>\n");
         } else {
-            out.write("<div id=navbar>\n<a href=\"" + _contextPath + '/' + peerString + "\" title=\"" + _t("Refresh page") +
+            sbuf.append("<div id=navbar>\n<a href=\"" + _contextPath + '/' + peerString + "\" title=\"" + _t("Refresh page") +
                       "\" class=\"snarkNav nav_main\">");
             if (_contextName.equals(DEFAULT_NAME))
-                out.write(_t("I2PSnark"));
+                sbuf.append(_t("I2PSnark"));
             else
-                out.write(_contextName);
-            out.write("</a>\n");
+                sbuf.append(_contextName);
+            sbuf.append("</a>\n");
             sortedTrackers = _manager.getSortedTrackers();
-            out.write("<a href=\"http://discuss.i2p/\" class=\"snarkNav nav_forum\" target=_blank title=\"" +
+            sbuf.append("<a href=\"http://discuss.i2p/\" class=\"snarkNav nav_forum\" target=_blank title=\"" +
                       _t("Torrent &amp; filesharing forum") + "\">" + _t("Forum") + "</a>\n");
             for (Tracker t : sortedTrackers) {
                 if (t.baseURL == null || !t.baseURL.startsWith("http"))
                     continue;
                 if (_manager.util().isKnownOpenTracker(t.announceURL))
                     continue;
-                out.write("\n<a href=\"" + t.baseURL + "\" class=\"snarkNav nav_tracker\" target=_blank>" + t.name + "</a>");
+                sbuf.append("\n<a href=\"" + t.baseURL + "\" class=\"snarkNav nav_tracker\" target=_blank>" + t.name + "</a>");
             }
-            out.write("\n<a href=\"http://btdigg.i2p/\" class=\"snarkNav nav_search\" target=_blank title=\"" +
+            sbuf.append("\n<a href=\"http://btdigg.i2p/\" class=\"snarkNav nav_search\" target=_blank title=\"" +
                       _t("I2P-based search engine for clearnet-hosted torrents") + "\">" + _t("BTDigg") + "</a>");
         }
         if (_manager.getTorrents().size() > 1) {
-            out.write("<form id=snarkSearch action=\"" + _contextPath + "\" method=GET hidden>\n" +
+            sbuf.append("<form id=snarkSearch action=\"" + _contextPath + "\" method=GET hidden>\n" +
                       "<span id=searchwrap><input id=searchInput type=search required name=s size=20 placeholder=\"");
-            out.write(_t("Search torrents"));
-            out.write("\"");
+            sbuf.append(_t("Search torrents"));
+            sbuf.append("\"");
             String s = req.getParameter("s");
             if (s != null)
-                out.write(" value=\"" + DataHelper.escapeHTML(s) + '"');
-            out.write("><a href=" + _contextPath + " title=\"" + _t("Clear search") +
+                sbuf.append(" value=\"" + DataHelper.escapeHTML(s) + '"');
+            sbuf.append("><a href=" + _contextPath + " title=\"" + _t("Clear search") +
                       "\" hidden>x</a></span><input type=submit value=\"Search\">\n</form>\n");
-            //out.write("<script src=\"" + resourcePath + "js/search.js?" + CoreVersion.VERSION + "\"></script>");
+            //sbuf.append("<script src=\"" + resourcePath + "js/search.js?" + CoreVersion.VERSION + "\"></script>");
         }
-        out.write("\n</div>\n");
+        sbuf.append("\n</div>\n");
         String newURL = req.getParameter("newURL");
         if (newURL != null && newURL.trim().length() > 0 && req.getMethod().equals("GET"))
             _manager.addMessage(_t("Click \"Add torrent\" button to fetch torrent"));
-        out.write("<div class=page>\n<div id=mainsection class=mainsection>\n");
+        sbuf.append("<div class=page>\n<div id=mainsection class=mainsection>\n");
+        out.write(sbuf.toString());
+        out.flush();
+        sbuf.setLength(0);
 
         writeMessages(out, isConfigure, peerString);
 
@@ -535,10 +541,11 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<script nonce=" + cspNonce + " type=module ");
             out.write("src=\"" + resourcePath + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
         }
-        if (!isStandalone())
+        if (!isStandalone()) {
             out.write(FOOTER);
-        else
+        } else {
             out.write(FTR_STD);
+        }
     }
 
     /**
@@ -1290,6 +1297,7 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder buf = new StringBuilder(256);
         writeHiddenInputs(buf, req, action);
         out.write(buf.toString());
+
     }
 
     /**
