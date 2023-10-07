@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -240,13 +241,27 @@ public class I2PSnarkServlet extends BasicServlet {
             setXHRHeaders(resp, cspNonce, false);
             PrintWriter out = resp.getWriter();
             out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhr>\n<div id=mainsection>\n");
-            writeMessages(out, false, peerString);
+            //writeMessages(out, false, peerString);
             boolean canWrite;
             synchronized(this) {
                 canWrite = _resourceBase.canWrite();
             }
             writeTorrents(out, req, canWrite);
             out.write("\n</div>\n</body>\n</html>\n");
+            return;
+        }
+
+        // AJAX for screenlog
+        if ("/.ajax/xhrscreenlog.html".equals(path)) {
+            setXHRHeaders(resp, cspNonce, false);
+            PrintWriter out = resp.getWriter();
+            out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhrlogs>\n");
+            writeMessages(out, false, peerString);
+            boolean canWrite;
+            synchronized(this) {
+                canWrite = _resourceBase.canWrite();
+            }
+            out.write("\n</body>\n</html>\n");
             return;
         }
 
@@ -379,7 +394,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<noscript><meta http-equiv=refresh content=\"" + delay + ";" + _contextPath + "/" + peerString + "\"></noscript>\n");
                 out.write("<script nonce=" + cspNonce + " type=module>\n" +
                           "  import {initSnarkRefresh} from \"" + resourcePath + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
-                          "  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh, true);\n</script>\n");
+                          "  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
             }
             out.write("<script nonce=" + cspNonce + ">\n" +
                       "  const deleteMessage1 = \"" + _t("Are you sure you want to delete the file \\''{0}\\'' " +
@@ -498,8 +513,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 canWrite = _resourceBase.canWrite();
             }
             boolean pageOne = writeTorrents(out, req, canWrite);
+            boolean enableAddCreate = _manager.util().enableAddCreate();
             // end of mainsection div
-            if (pageOne) {
+            if (pageOne || enableAddCreate) {
                 out.write("</div>\n<div id=lowersection>\n");
                 if (canWrite) {
                     writeAddForm(out, req);
@@ -508,13 +524,10 @@ public class I2PSnarkServlet extends BasicServlet {
                 writeConfigLink(out);
                 // end of lowersection div
             } else {
+                // end of mainsection div
                 out.write("</div>\n<div id=lowersection>\n");
-                boolean enableAddCreate = _manager.util().enableAddCreate();
-                if (canWrite && enableAddCreate) {
-                    writeAddForm(out, req);
-                    writeSeedForm(out, req, sortedTrackers);
-                }
                 writeConfigLink(out);
+                // end of lowersection div
             }
             out.write("</div>\n");
         }
@@ -549,8 +562,8 @@ public class I2PSnarkServlet extends BasicServlet {
             resp.setHeader("Cache-Control", "private, no-cache, max-age=2628000");
         }
         resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; " +
-                "script-src 'self' 'nonce-" + cspNonce + "'; " +
-                "object-src 'none'; media-src '" + (allowMedia ? "self" : "none") + "'");
+                       "script-src 'self' 'nonce-" + cspNonce + "'; " +
+                       "object-src 'none'; media-src '" + (allowMedia ? "self" : "none") + "'");
         resp.setHeader("Permissions-Policy", "fullscreen=(self)");
         resp.setHeader("Referrer-Policy", "same-origin");
         resp.setHeader("X-Content-Type-Options", "nosniff");
@@ -624,7 +637,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<li class=msg>" + msg + "</li>\n");
             }
             out.write("</ul>\n</div>\n");
-            //out.write("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=module defer></script>\n");
+            out.write("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=module defer></script>\n");
             int delay = 0;
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0 && _context.isRouterContext()) {
@@ -646,6 +659,11 @@ public class I2PSnarkServlet extends BasicServlet {
         List<Snark> snarks = getSortedSnarks(req);
         boolean isForm = _manager.util().connected() || !snarks.isEmpty();
         boolean showStatusFilter = _manager.util().showStatusFilter();
+        String srt = req.getParameter("sort");
+        String psize = req.getParameter("ps");
+        String srch = req.getParameter("s");
+        filterParam = req.getParameter("filter");
+        filterEnabled = filterParam != null || filterParam != "all";
         if (isForm) {
             if (showStatusFilter && !snarks.isEmpty() && _manager.util().connected())
               out.write("<form id=torrentlist class=filterbarActive action=\"_post\" method=POST target=processForm>\n");
@@ -656,7 +674,38 @@ public class I2PSnarkServlet extends BasicServlet {
                 // selective display of torrents based on status
                 // this should probably be done via a query string, but for now prototyping in js
                 if (!snarks.isEmpty() && _manager.util().connected()) {
-                    // ensure we hide torrent filter bar (if enabled) and js is disabled
+                    StringBuilder activeQuery = new StringBuilder("/i2psnark/?");
+                    if (peerParam != null) {
+                        activeQuery.append("p=" + peerParam + "&");
+                    }
+                    if (srt != null) {
+                        activeQuery.append("sort=" + srt + "&");
+                    }
+                    if (srch != null) {
+                        activeQuery.append("s=" + srch + "&");
+                    }
+                    if (psize != null) {
+                        activeQuery.append("ps=" + psize + "&");
+                    }
+                    activeQuery.setLength(activeQuery.length() - 1);
+                    String buttonUrl = activeQuery.toString();
+                    if (filterEnabled) {
+                        buttonUrl += (buttonUrl.contains("?") ? "&" : "?") + "filter=";
+                    }
+                    out.write("<noscript><style>.script{display:none}</style></noscript>\n");
+                    out.write("<div id=torrentDisplay class=script>" +
+                              "<a class=filter id=all href=\"" + buttonUrl + "all\"><span>" + _t("Show All") + "<span class=badge></span></span></a>" +
+                              "<a class=filter id=active href=\"" + buttonUrl + "active\"><span>" + _t("Active") + "<span class=badge></span></span></a>" +
+                              "<a class=filter id=inactive href=\"" + buttonUrl + "inactive\"><span>" + _t("Inactive") + "<span class=badge></span></span></a>" +
+                              "<a class=filter id=connected href=\"" + buttonUrl + "connected\"><span>" + _t("Connected") + "<span class=badge></span></span></a>" +
+                              "<a class=filter id=downloading href=\"" + buttonUrl + "downloading\"><span>" + _t("Downloading") + "<span class=badge></span></span></a>" +
+                              "<a class=filter id=seeding href=\"" + buttonUrl + "seeding\"><span>" + _t("Seeding") + "<span class=badge></span></span></a>" +
+                              "<a class=filter id=complete href=\"" + buttonUrl + "complete\"><span>" + _t("Complete") + "<span class=badge></span></span></a>" +
+                              "<a class=filter id=incomplete href=\"" + buttonUrl + "incomplete\"><span>" + _t("Incomplete") + "<span class=badge></span></span></a>" +
+                              "<a class=filter id=stopped href=\"" + buttonUrl + "stopped\"><span>" + _t("Stopped") + "<span class=badge></span></span></a>" +
+                              "</div>\n");
+
+/**
                     String filterRadio = "<input type=radio name=torrentDisplay id=";
                     out.write("<noscript><style>.script{display:none}</style></noscript>\n");
                     out.write("<div id=torrentDisplay class=script>\n" +
@@ -669,7 +718,9 @@ public class I2PSnarkServlet extends BasicServlet {
                               filterRadio + "incomplete hidden><label for=incomplete class=filterbutton>Incomplete</label>" +
                               filterRadio + "stopped hidden><label for=stopped class=filterbutton>Stopped</label>\n" +
                               "</div>\n");
+**/
                 }
+            // ensure we hide torrent filter bar (if enabled) and js is disabled
             } else if (showStatusFilter) {
                 out.write("<div id=torrentDisplay hidden></div>\n");
             }
@@ -701,7 +752,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam)));
             } catch (NumberFormatException nfe) {}
         }
-        int pageSize = _manager.getPageSize();
+        ///int pageSize = _manager.getPageSize();
+        int pageSize = filterEnabled ? 9999 : _manager.getPageSize();
         String ps = req.getParameter("ps");
         if (ps == "null") {
             ps = String.valueOf(pageSize);
@@ -753,7 +805,7 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean hasPeers = false;
             int end = Math.min(start + pageSize, snarks.size());
             for (int i = start; i < end; i++) {
-                if (snarks.get(i).getPeerCount() > 0) {
+                if (snarks.get(i).getPeerList().size() >= 1) {
                     hasPeers = true;
                     break;
                 }
@@ -776,7 +828,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("</a>\n");
             }
         }
-        out.write("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden=hidden checked=checked></th>");
+        out.write("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden=hidden></th>");
         out.write("<th id=torrentSort>");
         // cycle through sort by name or type
         boolean isTypeSort = false;
@@ -813,7 +865,7 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean isDownloading = false;
             int end = Math.min(start + pageSize, snarks.size());
             for (int i = start; i < end; i++) {
-                if ((snarks.get(i).getPeerCount() > 0) && (snarks.get(i).getDownloadRate() > 0)) {
+                if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getDownloadRate() > 0)) {
                     isDownloading = true;
                     break;
                 }
@@ -881,7 +933,7 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean isDownloading = false;
             int end = Math.min(start + pageSize, snarks.size());
             for (int i = start; i < end; i++) {
-                if ((snarks.get(i).getPeerCount() > 0) && (snarks.get(i).getDownloadRate() > 0)) {
+                if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getDownloadRate() > 0)) {
                     isDownloading = true;
                     break;
                 }
@@ -949,7 +1001,7 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean isUploading = false;
             int end = Math.min(start + pageSize, snarks.size());
             for (int i = start; i < end; i++) {
-                if ((snarks.get(i).getPeerCount() > 0) && (snarks.get(i).getUploadRate() > 0)) {
+                if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getUploadRate() > 0)) {
                     isUploading = true;
                     break;
                 }
@@ -998,7 +1050,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } else {
             out.write("");
         }
-        out.write("</th></tr>\n</thead>\n<tbody id=snarkTbody>\n");
+        out.write("</th></tr>\n</thead>\n<tbody id=snarkTbody>");
         String uri = _contextPath + '/';
         boolean showDebug = "2".equals(peerParam);
 
@@ -1010,7 +1062,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         if (total == 0) {
-            out.write("<tr id=noload class=noneLoaded><td colspan=11><i>");
+            out.write("<tr id=noload class=noneLoaded><td colspan=12><i>");
             synchronized(this) {
                 File dd = _resourceBase;
                 if (!dd.exists() && !dd.mkdirs()) {
@@ -1027,7 +1079,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write(_t("No torrents loaded."));
                 }
             }
-            out.write("</i></td></tr>\n</tbody>\n");
+            out.write("</i></td></tr></tbody>\n");
             out.write("<tfoot id=\"snarkFoot");
             if (_manager.util().isConnecting() || !_manager.util().connected())
                 out.write("\" class=\"initializing");
@@ -1038,7 +1090,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // TODO: disable on pages where torrents is < 50 e.g. last page
             if (total > 0 && (start > 0 || total > pageSize) && pageSize >= 50 && total - start >= 20) {
                 out.write("<tr id=pagenavbottom><td colspan=12><div class=pagenavcontrols>");
-                writePageNav(out, req, start, pageSize, total, noThinsp);
+                writePageNav(out, req, start, (pageSize), total, noThinsp);
                 out.write("</div></td></tr>\n</tbody>\n");
             }
             out.write("<tfoot id=snarkFoot>\n<tr class=volatile><th id=torrentTotals align=left colspan=6>");
@@ -1144,7 +1196,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 boolean isUploading = false;
                 int end = Math.min(start + pageSize, snarks.size());
                 for (int i = start; i < end; i++) {
-                    if ((snarks.get(i).getPeerCount() > 0) && (snarks.get(i).getUploadRate() > 0)) {
+                    if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getUploadRate() > 0)) {
                         isUploading = true;
                         break;
                     }
@@ -2094,6 +2146,32 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final int MAX_DISPLAYED_FILENAME_LENGTH = 255;
     private static final int MAX_DISPLAYED_ERROR_LENGTH = 43;
 
+    private boolean snarkMatchesFilter(Snark s, String filter) {
+        String snarkStatus = this.snarkStatus;
+        switch (filter) {
+            case "active":
+                return snarkStatus.contains("active") && !snarkStatus.contains("inactive");
+            case "inactive":
+                return snarkStatus.contains("zero") || snarkStatus.contains("inactive");
+            case "downloading":
+                return snarkStatus.contains("downloading");
+            case "connected":
+                return snarkStatus.contains("connected");
+            case "seeding":
+                return snarkStatus.contains("seeding");
+            case "complete":
+                return snarkStatus.contains("complete") && !snarkStatus.contains("incomplete");
+            case "incomplete":
+                return snarkStatus.contains("incomplete");
+            case "stopped":
+                return snarkStatus.contains("stopped");
+            case "all":
+                return true;
+            default:
+                return true;
+        }
+    }
+
     /**
      *  Display one snark (one line in table, unless showPeers is true)
      *
@@ -2101,6 +2179,9 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @param statsOnly if true, output nothing, update stats only
      *  @param canWrite is the i2psnark data directory writable?
      */
+    private String snarkStatus;
+    private String filterParam;
+    private boolean filterEnabled;
     private void displaySnark(PrintWriter out, HttpServletRequest req,
                               Snark snark, String uri, int row, long stats[], boolean showPeers,
                               boolean isDegraded, boolean noThinsp, boolean showDebug, boolean statsOnly,
@@ -2116,7 +2197,7 @@ public class I2PSnarkServlet extends BasicServlet {
             stats[2] += downBps;
             stats[3] += upBps;
         }
-        int curPeers = snark.getPeerCount();
+        int curPeers = snark.getPeerList().size();
         stats[4] += curPeers;
         long total = snark.getTotalLength();
         if (total > 0)
@@ -2159,7 +2240,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         String statusString;
         // add status to table rows so we can selectively show/hide snarks and style based on status
-        String snarkStatus;
+        //String snarkStatus;
         String rowClass = (row % 2 == 0 ? "rowEven" : "rowOdd");
         if (snark.isChecking()) {
             (new DecimalFormat("0.00%")).format(snark.getCheckingProgress());
@@ -2189,8 +2270,10 @@ public class I2PSnarkServlet extends BasicServlet {
                     img = "seeding";
                     txt = _t("Seeding");
                     tooltip = ngettext("Seeding to {0} peer", "Seeding to {0} peers", curPeers);
-                    snarkStatus = "active seeding complete";
-                    if (curPeers > 0)
+                    if (curPeers > 0 && upBps <= 0)
+                        snarkStatus = "inactive seeding complete connected";
+                    else if (curPeers > 0)
+                        snarkStatus = "active seeding complete connected";
                         img = "seeding_active";
                 } else {
                     // partial
@@ -2201,9 +2284,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     if (curPeers > 0) {
                         tooltip = txt + " (" + _t("Seeding to {0} of {1} peers in swarm", curPeers, knownPeers) + ")";
                         if (upBps > 0) {
-                            snarkStatus = "active seeding complete";
+                            snarkStatus = "active seeding complete connected";
                         } else {
-                            snarkStatus = "inactive seeding complete";
+                            snarkStatus = "inactive seeding complete connected";
                         }
                     }
                 }
@@ -2214,9 +2297,9 @@ public class I2PSnarkServlet extends BasicServlet {
                                          uri + getQueryString(req, b64, null, null) + "\"><span class=right>" +
                                          curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
                     if (upBps > 0) {
-                        snarkStatus = "active seeding complete";
+                        snarkStatus = "active seeding complete connected";
                     } else {
-                        snarkStatus = "inactive seeding complete";
+                        snarkStatus = "inactive seeding complete connected";
                     }
                 } else if (curPeers > 0) {
                     statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>" +
@@ -2224,16 +2307,18 @@ public class I2PSnarkServlet extends BasicServlet {
                                          _t("Hide Peers") + "\">" + "<span class=right>" + curPeers + "</span>" + thinsp(noThinsp) +
                                          "<span class=left>" + knownPeers + "</span></a>";
                     if (upBps > 0) {
-                        snarkStatus = "active seeding complete";
+                        snarkStatus = "active seeding complete connected";
                     } else {
-                        snarkStatus = "inactive seeding complete";
+                        snarkStatus = "inactive seeding complete connected";
                     }
                 } else {
                     statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>" +
                                "<td class=peerCount><b><span class=right>" + curPeers +
                                "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
-                    if (upBps > 0 || curPeers > 0) {
-                        snarkStatus = "active seeding complete";
+                    if (upBps > 0 && curPeers > 0) {
+                        snarkStatus = "active seeding complete connected";
+                    } else if (upBps <= 0 && curPeers > 0) {
+                        snarkStatus = "inactive seeding complete connected";
                     } else {
                         snarkStatus = "inactive seeding complete";
                     }
@@ -2250,25 +2335,25 @@ public class I2PSnarkServlet extends BasicServlet {
                                      "<td class=peerCount><b><a href=\"" +
                                      uri + getQueryString(req, b64, null, null) + "\"><span class=right>" +
                                      curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
-                snarkStatus = "active downloading incomplete";
+                snarkStatus = "active downloading incomplete connected";
             } else if (isRunning && curPeers > 0 && downBps > 0) {
                 statusString = toSVGWithDataTooltip("downloading", "", _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) + "</td>" +
                                      "<td class=peerCount><b><a href=\"" +
                                      uri + "\" title=\"" + _t("Hide Peers") + "\"><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) +
                                      "<span class=left>" + knownPeers + "</span></a>";
-                snarkStatus = "active downloading incomplete";
+                snarkStatus = "active downloading incomplete connected";
             } else if (isRunning && curPeers > 0 && !showPeers) {
                 statusString = toSVGWithDataTooltip("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers) + ")") + "</td>" +
                                      "<td class=peerCount><b><a href=\"" +
                                      uri + getQueryString(req, b64, null, null) + "\"><span class=right>" +
                                      curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
-                snarkStatus = "inactive downloading incomplete";
+                snarkStatus = "inactive downloading incomplete connected";
             } else if (isRunning && curPeers > 0) {
                 statusString = toSVGWithDataTooltip("stalled", "", _t("Stalled") +
                                      " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>" +
                                      "<td class=peerCount><b><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") +
                                      "\"><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
-                snarkStatus = "inactive downloading incomplete";
+                snarkStatus = "inactive downloading incomplete connected";
             } else if (isRunning && knownPeers > 0) {
                 statusString = toSVGWithDataTooltip("nopeers", "", _t("No Peers") +
                                      " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>" +
@@ -2287,157 +2372,159 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         String rowStatus = (rowClass + ' ' + snarkStatus);
-        StringBuilder buf = new StringBuilder(1024*1024);
-        buf.append("<tr class=\"" + rowStatus + " volatile\">" +
-                  "<td class=status>");
-        buf.append(statusString);
+        StringBuilder buf = new StringBuilder(2*1024);
+        filterParam = req.getParameter("filter");
+        filterEnabled = filterParam != null || filterParam != "all";
+        if (filterParam == null || snarkMatchesFilter(snark, filterParam)) {
+            buf.append("<tr class=\"" + rowStatus + " volatile\">").append("<td class=status>")
+               .append(statusString);
 
-        // link column
-        buf.append("</b></td><td class=trackerLink>");
-        if (isValid) {
-            String announce = meta.getAnnounce();
-            if (announce == null)
-                announce = snark.getTrackerURL();
-            if (announce != null) {
-                // Link to tracker details page
-                String trackerLink = getTrackerLink(announce, snark.getInfoHash());
-                if (trackerLink != null)
-                    buf.append(trackerLink);
+            // link column
+            buf.append("</b></td><td class=trackerLink>");
+            if (isValid) {
+                String announce = meta.getAnnounce();
+                if (announce == null)
+                    announce = snark.getTrackerURL();
+                if (announce != null) {
+                    // Link to tracker details page
+                    String trackerLink = getTrackerLink(announce, snark.getInfoHash());
+                    if (trackerLink != null)
+                        buf.append(trackerLink);
+                }
             }
-        }
 
-        String encodedBaseName = encodePath(fullBasename);
-        String hex = I2PSnarkUtil.toHex(snark.getInfoHash());
-        // magnet column
-        buf.append("</td><td class=magnet>");
-        if (isValid && meta != null) {
-            String announce = meta.getAnnounce();
-            buf.append("<a class=magnetlink href=\"" + MagnetURI.MAGNET_FULL + hex);
-            if (announce != null) {
-                buf.append("&amp;tr=" + announce);
+            String encodedBaseName = encodePath(fullBasename);
+            String hex = I2PSnarkUtil.toHex(snark.getInfoHash());
+            // magnet column
+            buf.append("</td><td class=magnet>");
+            if (isValid && meta != null) {
+                String announce = meta.getAnnounce();
+                buf.append("<a class=magnetlink href=\"" + MagnetURI.MAGNET_FULL + hex);
+                if (announce != null) {
+                    buf.append("&amp;tr=" + announce);
+                }
+                if (encodedBaseName != null) {
+                    buf.append("&amp;dn=" + encodedBaseName.replace(".torrent", "")
+                       .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
+                }
+                buf.append("\">" + toSVG("magnet", "") + "<span class=copyMagnet></span></a>");
             }
-            if (encodedBaseName != null) {
-                buf.append("&amp;dn=" + encodedBaseName.replace(".torrent", "")
-                   .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
-            }
-            buf.append("\">" + toSVG("magnet", "") + "<span class=copyMagnet></span></a>");
-        }
 
-        // File type icon column
-        buf.append("</td><td class=\"details");
-        if (!isValid && !isMultiFile) {
-            buf.append(" fetching");
-        } else {
-            buf.append(" data");
-        }
-        buf.append("\">");
-        if (isValid) {
-            CommentSet comments = snark.getComments();
-            // Link to local details page - note that trailing slash on a single-file torrent
-            // gets us to the details page instead of the file.
-            buf.append("<span class=filetype><a href=\"").append(encodedBaseName)
-               .append("/\" title=\"").append(_t("Torrent details")).append("\">");
-            if (comments != null && !comments.isEmpty()) {
-                buf.append("<span class=commented title=\"").append(_t("Torrent has comments")).append("\">");
-                toSVG(buf, "rateme", "", "");
-                buf.append("</span>");
+            // File type icon column
+            buf.append("</td><td class=\"details");
+            if (!isValid && !isMultiFile) {
+                buf.append(" fetching");
+            } else {
+                buf.append(" data");
             }
-        }
-        String icon;
-        if (isMultiFile)
-            icon = "folder";
-        else if (isValid)
-            icon = toIcon(meta.getName());
-        else if (snark instanceof FetchAndAdd)
-            icon = "download";
-        else
-            icon = "magnet";
-        if (isValid) {
-            buf.append(toSVG(icon));
-            buf.append("</a></span>");
-        } else {
-            buf.append(toSVG(icon));
-        }
-
-        // Torrent name column
-        buf.append("</td><td class=tName>");
-        if (remaining == 0 || isMultiFile) {
-            buf.append("<a href=\"").append(encodedBaseName);
+            buf.append("\">");
+            if (isValid) {
+                CommentSet comments = snark.getComments();
+                // Link to local details page - note that trailing slash on a single-file torrent
+                // gets us to the details page instead of the file.
+                buf.append("<span class=filetype><a href=\"").append(encodedBaseName)
+                   .append("/\" title=\"").append(_t("Torrent details")).append("\">");
+                if (comments != null && !comments.isEmpty()) {
+                    buf.append("<span class=commented title=\"").append(_t("Torrent has comments")).append("\">");
+                    toSVG(buf, "rateme", "", "");
+                    buf.append("</span>");
+                }
+            }
+            String icon;
             if (isMultiFile)
-                buf.append('/');
-            buf.append("\" title=\"");
-            if (isMultiFile)
-                buf.append(_t("View files"));
+                icon = "folder";
+            else if (isValid)
+                icon = toIcon(meta.getName());
+            else if (snark instanceof FetchAndAdd)
+                icon = "download";
             else
-                buf.append(_t("Open file"));
-            buf.append("\">");
-        }
-        if (basename.contains("Magnet")) {
-            buf.append(DataHelper.escapeHTML(basename)
-               .replace("Magnet ", "<span class=infohash>")
-               .replaceFirst("\\(", "</span> <span class=magnetLabel>").replaceAll("\\)$", ""));
-            buf.append("</span>");
-        } else {
-            buf.append(DataHelper.escapeHTML(basename));
-        }
-        if (remaining == 0 || isMultiFile)
-            buf.append("</a>");
-        buf.append("</td><td class=ETA>");
-        if (isRunning && remainingSeconds > 0 && !snark.isChecking())
-            buf.append(DataHelper.formatDuration2(Math.max(remainingSeconds, 10) * 1000)); // (eta 6h)
-        buf.append("</td>");
-        buf.append("<td class=rxd>");
-        if (remaining > 0) {
-            long percent = 100 * (total - remaining) / total;
-            buf.append("<div class=barOuter>");
-            buf.append("<div class=barInner style=\"width: " + percent + "%;\">");
-            buf.append("<div class=barText tabindex=0 title=\"");
-            buf.append(percent + "% " + _t("complete") + "; " + formatSize(remaining) + ' ' + _t("remaining"));
-            buf.append("\">");
-            buf.append(formatSize(total-remaining).replaceAll("iB","") + thinsp(noThinsp) + formatSize(total).replaceAll("iB",""));
-            buf.append("</div></div></div>");
-        } else if (remaining == 0) {
-            // needs locale configured for automatic translation
-            SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy");
-            fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
-            long[] dates = _manager.getSavedAddedAndCompleted(snark);
-            String date = fmt.format(new Date(dates[1]));
-            buf.append("<div class=barComplete title=\"");
-            buf.append(_t("Completed") + ": " + date + "\">");
-            buf.append(formatSize(total).replaceAll("iB","")); // 3GB
-            buf.append("</div>");
+                icon = "magnet";
+            if (isValid) {
+                buf.append(toSVG(icon));
+                buf.append("</a></span>");
+            } else {
+                buf.append(toSVG(icon));
             }
-        buf.append("</td>");
-        buf.append("<td class=\"rateDown");
-        if (downBps >= 100000)
-            buf.append(" hundred");
-        else if (downBps >= 10000)
-            buf.append(" ten");
-        buf.append("\">");
-        // we may only be uploading to peers, so hide when downrate <= 0
-        if (isRunning && needed > 0 && downBps > 0 && curPeers > 0) {
-            buf.append("<span class=right>");
-            buf.append(formatSize(downBps).replaceAll("iB", "")
-                                         .replace("B", "</span><span class=left>B")
-                                         .replace("K", "</span><span class=left>K")
-                                         .replace("M", "</span><span class=left>M")
-                                         .replace("G", "</span><span class=left>G")
-                                         + "/s</span>");
-        }
-        buf.append("</td>");
-        buf.append("<td class=txd>");
-        if (isValid) {
-            double ratio = uploaded / ((double) total);
-            if (total <= 0)
-                ratio = 0;
-            String txPercent = (new DecimalFormat("0")).format(ratio * 100);
-            String txPercentBar = txPercent + "%";
-            if (ratio > 1)
-                txPercentBar = "100%";
-            if (ratio <= 0.01 && ratio > 0)
-                txPercent = (new DecimalFormat("0.00")).format(ratio * 100);
-            if (showRatios) {
-                if (total > 0) {
+
+            // Torrent name column
+            buf.append("</td><td class=tName>");
+            if (remaining == 0 || isMultiFile) {
+                buf.append("<a href=\"").append(encodedBaseName);
+                if (isMultiFile)
+                    buf.append('/');
+                buf.append("\" title=\"");
+                if (isMultiFile)
+                    buf.append(_t("View files"));
+                else
+                    buf.append(_t("Open file"));
+                buf.append("\">");
+            }
+            if (basename.contains("Magnet")) {
+                buf.append(DataHelper.escapeHTML(basename)
+                   .replace("Magnet ", "<span class=infohash>")
+                   .replaceFirst("\\(", "</span> <span class=magnetLabel>").replaceAll("\\)$", ""));
+                buf.append("</span>");
+            } else {
+                buf.append(DataHelper.escapeHTML(basename));
+            }
+            if (remaining == 0 || isMultiFile)
+                buf.append("</a>");
+            buf.append("</td><td class=ETA>");
+            if (isRunning && remainingSeconds > 0 && !snark.isChecking())
+                buf.append(DataHelper.formatDuration2(Math.max(remainingSeconds, 10) * 1000)); // (eta 6h)
+            buf.append("</td>");
+            buf.append("<td class=rxd>");
+            if (remaining > 0) {
+                long percent = 100 * (total - remaining) / total;
+                buf.append("<div class=barOuter>");
+                buf.append("<div class=barInner style=\"width: " + percent + "%;\">");
+                buf.append("<div class=barText tabindex=0 title=\"");
+                buf.append(percent + "% " + _t("complete") + "; " + formatSize(remaining) + ' ' + _t("remaining"));
+                buf.append("\">");
+                buf.append(formatSize(total-remaining).replaceAll("iB","") + thinsp(noThinsp) + formatSize(total).replaceAll("iB",""));
+                buf.append("</div></div></div>");
+            } else if (remaining == 0) {
+                // needs locale configured for automatic translation
+                SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy");
+                fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
+                long[] dates = _manager.getSavedAddedAndCompleted(snark);
+                String date = fmt.format(new Date(dates[1]));
+                buf.append("<div class=barComplete title=\"");
+                buf.append(_t("Completed") + ": " + date + "\">");
+                buf.append(formatSize(total).replaceAll("iB","")); // 3GB
+                buf.append("</div>");
+                }
+            buf.append("</td>");
+            buf.append("<td class=\"rateDown");
+            if (downBps >= 100000)
+                buf.append(" hundred");
+            else if (downBps >= 10000)
+                buf.append(" ten");
+            buf.append("\">");
+            // we may only be uploading to peers, so hide when downrate <= 0
+            if (isRunning && needed > 0 && downBps > 0 && curPeers > 0) {
+                buf.append("<span class=right>");
+                buf.append(formatSize(downBps).replaceAll("iB", "")
+                                             .replace("B", "</span><span class=left>B")
+                                             .replace("K", "</span><span class=left>K")
+                                             .replace("M", "</span><span class=left>M")
+                                             .replace("G", "</span><span class=left>G")
+                                             + "/s</span>");
+            }
+            buf.append("</td>");
+            buf.append("<td class=txd>");
+            if (isValid) {
+                double ratio = uploaded / ((double) total);
+                if (total <= 0)
+                    ratio = 0;
+                String txPercent = (new DecimalFormat("0")).format(ratio * 100);
+                String txPercentBar = txPercent + "%";
+                if (ratio > 1)
+                    txPercentBar = "100%";
+                if (ratio <= 0.01 && ratio > 0)
+                    txPercent = (new DecimalFormat("0.00")).format(ratio * 100);
+                if (showRatios) {
+                    if (total > 0) {
                     buf.append("<span class=tx><span class=txBarText>");
                     buf.append(txPercent);
                     buf.append("&#8239;%");
@@ -2525,10 +2612,11 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         buf.append("</td></tr>\n");
 
-        if(showPeers && isRunning && curPeers > 0) {
+        if (showPeers && isRunning && curPeers > 0) {
             List<Peer> peers = snark.getPeerList();
-            if (!showDebug)
+            if (!showDebug) {
                 Collections.sort(peers, new PeerComparator());
+            }
             for (Peer peer : peers) {
                 long t = peer.getInactiveTime();
                 if ((peer.getUploadRate() > 0 || peer.getDownloadRate() > 0) && t < 60 * 1000) {
@@ -2540,8 +2628,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 } else {
                     snarkStatus = "inactive";
                 }
-                if (!peer.isConnected())
+                if (!peer.isConnected()) {
                     continue;
+                }
                 buf.append("<tr class=\"peerinfo " + snarkStatus + " volatile\">\n<td class=status title=\"");
                 buf.append(_t("Peer attached to swarm"));
                 buf.append("\"></td><td class=peerdata colspan=5>");
@@ -2620,7 +2709,6 @@ public class I2PSnarkServlet extends BasicServlet {
                         if (id != null && id[0] == '-')
                             client += getAzVersion(id);
                     }
-
                     buf.append(client + "</span></span>");
                 }
                 if (t >= 5000) {
@@ -2656,10 +2744,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 buf.append("</td>");
                 buf.append("<td class=\"rateDown");
-                if (peer.getDownloadRate() >= 100000)
+                if (peer.getDownloadRate() >= 100000) {
                     buf.append(" hundred");
-                else if (peer.getDownloadRate() >= 10000)
+                } else if (peer.getDownloadRate() >= 10000) {
                     buf.append(" ten");
+                }
                 buf.append("\">");
                 if (needed > 0) {
                     if (peer.isInteresting() && !peer.isChoked() && peer.getDownloadRate() > 0) {
@@ -2740,15 +2829,19 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("</td>");
                 buf.append("<td class=tAction>");
                 buf.append("</td></tr>\n");
-                if (showDebug)
+                if (showDebug) {
                     buf.append("<tr class=\"debuginfo volatile " + rowClass + "\">\n<td class=status></td>" +
-                              "<td colspan=12>" + peer.getSocket()
-                              .replaceAll("Connection", "<b>Connection</b>").replaceAll(";", " &bullet;").replaceAll("\\* ", "")
-                              .replaceAll("from", "<span class=from>⇦</span>").replaceAll("to", "<span class=to>⇨</span>") +
-                              "</td></tr>");
+                               "<td colspan=12>" + peer.getSocket()
+                               .replaceAll("Connection", "<b>Connection</b>").replaceAll(";", " &bullet;").replaceAll("\\* ", "")
+                               .replaceAll("from", "<span class=from>⇦</span>").replaceAll("to", "<span class=to>⇨</span>") +
+                               "</td></tr>");
+                }
             }
         }
         out.write(buf.toString());
+        out.flush();
+        buf.setLength(0);
+        }
     }
 
     /**
@@ -3503,7 +3596,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /** @since 0.9 */
     private void writeTrackerForm(PrintWriter out, HttpServletRequest req) throws IOException {
-        StringBuilder buf = new StringBuilder(1024);
+        StringBuilder buf = new StringBuilder(5*1024);
         buf.append("<form action=\"" + _contextPath + "/configure#navbar\" method=POST>\n" +
                    "<div class=configPanel id=trackers><div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save2");
@@ -5887,5 +5980,6 @@ public class I2PSnarkServlet extends BasicServlet {
         else
             return true;
     }
+
 }
 
