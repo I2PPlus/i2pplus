@@ -3,8 +3,8 @@
 /* License: AGPL3 or later */
 
 import {onVisible} from "./onVisible.js";
-import {initFilterBar} from "./torrentDisplay.js";
-import {initLinkToggler, attachMagnetListeners, linkToggle} from "./toggleLinks.js";
+import {initFilterBar, showBadge} from "./torrentDisplay.js";
+import {initLinkToggler} from "./toggleLinks.js";
 import {initToggleLog} from "./toggleLog.js";
 import {Lightbox} from "./lightbox.js";
 import {initSnarkAlert} from "./snarkAlert.js";
@@ -18,12 +18,13 @@ const query = window.location.search;
 const screenlog = document.getElementById("screenlog");
 const snarkHead = document.getElementById("snarkHead");
 const storageRefresh = window.localStorage.getItem("snarkRefresh");
+const torrents = document.getElementById("torrents");
 const xhrsnark = new XMLHttpRequest();
 const xhrsnarklog = new XMLHttpRequest();
 let refreshIntervalId;
 let screenLogIntervalId;
 let refreshTimeoutId;
-let requestInProgress = false;
+let debugging = true;
 
 function refreshTorrents(callback) {
   const complete = document.getElementsByClassName("completed");
@@ -35,19 +36,6 @@ function refreshTorrents(callback) {
   const noload = document.getElementById("noload");
   const notfound = document.getElementById("NotFound");
   const storage = window.localStorage.getItem("snarkFilter");
-  const torrents = document.getElementById("torrents");
-
-  if (xhrsnark.readyState === XMLHttpRequest.UNSENT) {
-    requestInProgress = true;
-
-    xhrsnark.onload = function() {
-      if (typeof callback === "function") {
-        callback(xhrsnark.responseXML, getURL());
-      }
-      requestInProgress = false;
-    };
-    doRefresh();
-  }
 
   if (document.getElementById("ourDest") === null) {
     const childElems = document.querySelectorAll("#snarkHead th:not(.torrentAction)>*");
@@ -57,152 +45,139 @@ function refreshTorrents(callback) {
     }
   }
 
-  requestInProgress = true;
-
   if (!storageRefresh) {
     getRefreshInterval();
+    if (debugging) {
+      console.log("getRefreshInterval()");
+    }
   }
 
-  if (down || noload) {
-    window.requestAnimationFrame(refreshAll);
-  } else if (files || torrents) {
-    window.requestAnimationFrame(refreshHeaderAndFooter);
+  setLinks(query);
+
+  if (files || torrents) {
     window.requestAnimationFrame(updateVolatile);
+  } else if (down || noload) {
+    window.requestAnimationFrame(refreshAll);
   }
 
-  if (torrents?.responseXML) {
-      //filterbar.removeEventListener("mouseover", setLinks);
-      const torrentsContainer = document.getElementById("torrents");
-      if (torrentsContainer?.responseXML) {
-        const newTorrents = xhrsnark.responseXML.getElementById("torrents");
-        if (newTorrents && torrentsContainer.innerHTML !== newTorrents.innerHTML) {
-          torrentsContainer.innerHTML = newTorrents.innerHTML;
+  function refreshAll(delay) {
+    return new Promise((resolve, reject) => {
+      try {
+        const files = document.getElementById("dirInfo");
+        const mainsection = document.getElementById("mainsection");
+        const notfound = document.getElementById("NotFound");
+        const dirlist = document.getElementById("dirlist");
+        if (mainsection) {
+          const mainsectionResponse = xhrsnark.responseXML?.getElementById("mainsection");
+          if (mainsectionResponse && mainsection.innerHTML !== mainsectionResponse.innerHTML) {
+            new Promise(resolve => {
+              if (torrents) {
+                const torrentsResponse = xhrsnark.responseXML.getElementById("torrents");
+                torrents.innerHTML = torrentsResponse.innerHTML;
+                resolve();
+              } else {
+                mainsection.innerHTML = mainsectionResponse.innerHTML;
+              }
+            }).then(() => {
+              resolve();
+            });
+            return;
+          }
+        } else if (files) {
+          const dirlistResponse = xhrsnark.responseXML?.getElementById("dirlist");
+          if (dirlistResponse && !Object.is(dirlist.innerHTML, dirlistResponse.innerHTML) && notfound === null) {
+            dirlist.innerHTML = dirlistResponse.innerHTML;
+          }
         }
-      }
-  } else if (dirlist?.responseXML) {
-    if (info) {
-      const infoResponse = xhrsnark.responseXML.getElementById("torrentInfoStats");
-      if (infoResponse) {
-        const infoParent = info.parentNode;
-        if (!Object.is(info.innerHTML, infoResponse.innerHTML)) {
-          infoParent.replaceChild(infoResponse, info);
+        if (debugging) {
+          console.log("refreshAll()");
         }
+      } catch (error) {
+        reject(error);
       }
-    }
-    if (control) {
-      const controlResponse = xhrsnark.responseXML.getElementById("torrentInfoControl");
-      if (controlResponse) {
-        const controlParent = control.parentNode;
-        if (!Object.is(control.innerHTML, controlResponse.innerHTML)) {
-          controlParent.replaceChild(controlResponse, control);
-        }
-      }
-    }
-    if (complete?.length && dirlist?.responseXML) {
-      const completeResponse = xhrsnark.responseXML.getElementsByClassName("completed");
-      for (let i = 0; i < complete.length && completeResponse?.length; i++) {
-        if (!Object.is(complete[i].innerHTML, completeResponse[i]?.innerHTML)) {
-          complete[i].innerHTML = completeResponse[i].innerHTML;
-        }
-      }
-    }
-    setLinks(query);
+    });
   }
 
-  function refreshAll() {
-    const files = document.getElementById("dirInfo");
-    const mainsection = document.getElementById("mainsection");
-    const notfound = document.getElementById("NotFound");
-    const dirlist = document.getElementById("dirlist");
-    if (mainsection) {
-      const mainsectionResponse = xhrsnark.responseXML?.getElementById("mainsection");
-      if (mainsectionResponse && mainsection.innerHTML !== mainsectionResponse.innerHTML) {
-        mainsection.innerHTML = mainsectionResponse.innerHTML;
-      }
-      if (filterbar) {
-        initFilterBar();
-      }
-    } else if (files) {
-      const dirlistResponse = xhrsnark.responseXML?.getElementById("dirlist");
-      if (dirlistResponse && !Object.is(dirlist.innerHTML, dirlistResponse.innerHTML) && notfound === null) {
-        dirlist.innerHTML = dirlistResponse.innerHTML;
-      }
-    }
-  }
+  let updated = false;
+  let requireFullRefresh = true;
+  let requireHeadFootRefresh = true;
 
   function updateVolatile() {
-    const dirlist = document.getElementById("dirlist");
-    const snarkTr = document.querySelectorAll("#snarkTbody tr.volatile");
-    const updating = document.querySelectorAll("#snarkTbody tr.volatile");
-    const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile");
+    const updating = document.querySelectorAll("#snarkTbody tr");
+    const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr");
+    const updatingCells = document.querySelectorAll("#snarkTbody tr.volatile td:not(.magnet):not(.trackerLink):not(.details.data)");
+    const updatingCellsResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile td:not(.magnet):not(.trackerLink):not(.details.data)");
 
-    let updated = false;
-
-    if (updatingResponse && updatingResponse.length && Array.from(updating).every(function (elem) {
-      return Array.from(updatingResponse).includes(elem);
-    })) {
-      updated = false;
-    }
-
-    for (let i = 0; i < updating.length; i++) {
+    if (torrents) {
       if (updatingResponse && updating.length === updatingResponse.length) {
-        const updatingTds = updating[i].querySelectorAll("td:not(.details.data):not(.magnet):not(.trackerLink)");
-        const updatingTdsResponse = updatingResponse[i]?.querySelectorAll("td:not(.details.data):not(.magnet):not(.trackerLink)");
-        if (updatingResponse && updating[i].innerHTML !== updatingResponse[i]?.innerHTML) {
-          if (updating[i].classList.contains("even")) {
-            updating[i].outerHTML = updatingResponse[i].outerHTML;
-          } else {
-            updating[i].outerHTML = updatingResponse[i].outerHTML.replace(/(<tr class="[^"]*)even([^"]*">)/, "$1$2");
-          }
-          updated = true;
-        } else if (updatingResponse) {
-          for (let j = 0; j < updatingTds.length; j++) {
-            updatingTds[j].innerHTML = updatingTdsResponse[j].innerHTML;
-            updated = true;
+        for (let i = 0; i < updating.length; i++) {
+          if (updating[i].innerHTML !== updatingResponse[i].innerHTML) {
+            if (updating[i].outerHTML !== updatingResponse[i].outerHTML) {
+              updating[i].outerHTML = updatingResponse[i].outerHTML;
+              window.requestAnimationFrame(refreshHeaderAndFooter);
+              updated = true;
+              requireFullRefresh = false;
+            }
           }
         }
-      } else {
+      } else if (requireFullRefresh && updatingResponse) {
+        console.log("html: " + updating.length + " / xhr: " + updatingResponse.length);
         window.requestAnimationFrame(refreshAll);
+        updated = true;
+        requireHeadFootRefresh = false;
+        requireFullRefresh = false;
+      }
+    } else if (dirlist?.responseXML) {
+      if (info) {
+        const infoResponse = xhrsnark.responseXML.getElementById("torrentInfoStats");
+        if (infoResponse) {
+          const infoParent = info.parentNode;
+          if (!Object.is(info.innerHTML, infoResponse.innerHTML)) {
+            infoParent.replaceChild(infoResponse, info);
+          }
+        }
+      }
+      if (control) {
+        const controlResponse = xhrsnark.responseXML.getElementById("torrentInfoControl");
+        if (controlResponse) {
+          const controlParent = control.parentNode;
+          if (!Object.is(control.innerHTML, controlResponse.innerHTML)) {
+            controlParent.replaceChild(controlResponse, control);
+          }
+        }
+      }
+      if (complete?.length && dirlist?.responseXML) {
+        const completeResponse = xhrsnark.responseXML.getElementsByClassName("completed");
+        if (completeResponse) {
+          for (let i = 0; i < complete.length && completeResponse?.length; i++) {
+            if (!Object.is(complete[i].innerHTML, completeResponse[i]?.innerHTML)) {
+              complete[i].innerHTML = completeResponse[i].innerHTML;
+            }
+          }
+        }
       }
     }
-    if (updated) {
-      window.requestAnimationFrame(refreshHeaderAndFooter);
-    } else {
-      window.requestAnimationFrame(refreshAll);
-    }
+    console.log("updateVolatile()");
   }
 
   function refreshHeaderAndFooter() {
-    const snarkHead = document.getElementById("snarkHead");
-    const snarkHeadThs = document.querySelectorAll("#snarkHead th:not(.torrentLink)");
     const snarkFoot = document.getElementById("snarkFoot");
-    const snarkFootThs = document.querySelectorAll("#snarkFoot th");
-    if (snarkHead && xhrsnark.responseXML) {
-      const snarkHeadResponse = xhrsnark.responseXML.getElementById("snarkHead");
-      const snarkHeadThsResponse = xhrsnark.responseXML.querySelectorAll("#snarkHead th:not(.torrentLink)");
-      if (snarkHead && snarkHeadResponse && !Object.is(snarkHead.innerHTML, snarkHeadResponse.innerHTML)) {
-        Array.from(snarkHeadThs).forEach((elem, index) => {
-          if (elem.innerHTML !== snarkHeadThsResponse[index].innerHTML) {
-            elem.innerHTML = snarkHeadThsResponse[index].innerHTML;
-          }
-        });
+    const snarkFootResponse = xhrsnark.responseXML.getElementById("snarkFoot");
+    const snarkHead = document.getElementById("snarkHead");
+    const snarkHeadResponse = xhrsnark.responseXML?.getElementById("snarkHead");
+    const snarkHeadCells = torrents.querySelectorAll("#snarkHead th:not(.torrentLink)");
+    const snarkHeadCellsResponse = xhrsnark.responseXML.querySelectorAll("#snarkhead th:not(.torrentLink)");
+
+    if (snarkHead && snarkHeadResponse && snarkHead !== snarkHeadResponse) {
+      for (let i = 0; i < snarkHeadCells.length && snarkHeadCellsResponse?.length; i++) {
+        if (!Object.is(snarkHeadCells[i].innerHTML, snarkHeadCellsResponse[i]?.innerHTML)) {
+          snarkHeadCells[i].innerHTML = snarkHeadCellsResponse[i].innerHTML;
+        }
       }
     }
-    if (snarkFoot && xhrsnark.responseXML) {
-      const snarkFootResponse = xhrsnark.responseXML.getElementById("snarkFoot");
-      const snarkFootThsResponse = xhrsnark.responseXML.querySelectorAll("#snarkFoot th");
-      if (snarkFoot && snarkFootResponse && !Object.is(snarkFoot.innerHTML, snarkFootResponse.innerHTML)) {
-        Array.from(snarkFootThs).forEach((elem, index) => {
-          if (elem.innerHTML !== snarkFootThsResponse[index].innerHTML) {
-            elem.innerHTML = snarkFootThsResponse[index].innerHTML;
-          }
-        });
-      }
-    }
-    if (debugMode) {
-      debugMode.load = function() {
-        initHandlers();
-      };
+
+    if (snarkFoot && snarkFootResponse && snarkFoot !== snarkFootResponse) {
+      snarkFoot.innerHTML = snarkFootResponse.innerHTML;
     }
   }
 
@@ -212,19 +187,12 @@ function refreshTorrents(callback) {
     return interval * 1000;
   }
 
-  requestInProgress = false;
-
-  if (filterbar) {
-    initFilterBar();
-  }
-
   xhrsnark.onerror = function (error) {
     noAjax(5000);
     if (refreshTimeoutId) {
       clearTimeout(refreshTimeoutId);
     }
     refreshTimeoutId = setTimeout(() => refreshTorrents(initHandlers), 1000);
-    requestInProgress = false;
   };
 
 }
@@ -249,33 +217,25 @@ function refreshScreenLog() {
 }
 
 function getURL() {
-  const filterEnabled = localStorage.getItem("snarkFilter") !== null;
   const baseUrl = "/i2psnark/.ajax/xhr1.html";
-  const url = filterEnabled ? baseUrl + query + (query ? "&" : "?") + "ps=9999" : baseUrl + query;
+  var url = baseUrl + query;
   return url;
 }
 
-let linkTogglerReady = false;
-let magnetListenersReady = false;
-let setLinksReady = false;
-let toggleLogReady = false;
-
 function initHandlers() {
-  if (!setLinksReady) {
+  window.requestAnimationFrame(() => {
     setLinks();
-    setLinksReady = true;
-  }
-  if (!linkTogglerReady) {
     initLinkToggler();
-    linkTogglerReady = true;
-  }
-  if (!magnetListenersReady) {
-    attachMagnetListeners();
-    magnetListenersReady = true;
-  }
-  if (screenlog) {
-    initSnarkAlert();
-  }
+    if (screenlog) {
+      initSnarkAlert();
+    }
+    if (filterbar) {
+      showBadge();
+    }
+    if (debugging) {
+      console.log("initHandlers()");
+    }
+  });
 }
 
 function setLinks(query) {
@@ -299,58 +259,73 @@ function noAjax(delay) {
   }, delay);
 }
 
+
 async function initSnarkRefresh() {
   if (refreshIntervalId) {
     clearInterval(refreshIntervalId);
   }
-  const refreshInterval = (parseInt(storageRefresh) || 5) * 1000;
-  const screenLogInterval = 30000;
-  try {
-    refreshIntervalId = setInterval(async () => {
-      await doRefresh();
-    }, refreshInterval);
-    screenLogIntervalId = setInterval(() => {
-      refreshScreenLog();
-      initToggleLog();
-    }, screenLogInterval);
-    if (files && document.getElementById("lightbox")) {
-      const lightbox = new Lightbox();
-      lightbox.load();
+  onVisible(mainsection, () => {
+      const refreshInterval = (parseInt(storageRefresh) || 5) * 1000;
+      const screenLogInterval = 30000;
+    try {
+      refreshIntervalId = setInterval(async () => {
+        await doRefresh();
+      }, refreshInterval);
+      screenLogIntervalId = setInterval(() => {
+        refreshScreenLog();
+        initToggleLog();
+      }, screenLogInterval);
+      const lighboxEnabled = document.getElementById("lightbox");
+      if (files && lightboxEnabled) {
+        const lightbox = new Lightbox();
+        lightbox.load();
+      }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-  }
+  });
 }
 
+const REQUEST_TIMEOUT = 5000;
 function doRefresh() {
   return new Promise((resolve, reject) => {
+    xhrsnark.timeout = REQUEST_TIMEOUT;
     xhrsnark.open("GET", getURL(), true);
     xhrsnark.responseType = "document";
     xhrsnark.onload = () => {
-      refreshTorrents(initFilterBar, initHandlers);
+      isXHRSynced();
+      refreshTorrents();
+      initHandlers();
       resolve();
     };
     xhrsnark.onerror = () => {
       reject(xhrsnark.status);
     };
     xhrsnark.send();
+  }).finally(() => {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  if (mainsection) {
-    onVisible(mainsection, () => {
-      doRefresh();
-    });
-  } else if (files) {
-    onVisible(files, () => {
-      doRefresh();
-    });
+function isXHRSynced() {
+  const updating = document.querySelectorAll("#snarkTbody tr, #torrents #snarkFoot th");
+  const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr, #torrents #snarkFoot th");
+  console.log("html elements: " + updating.length + " / xhr elements: " + updatingResponse.length);
+  if (updating.length != updatingResponse.length) {
+    for (let i = 0; i < updatingResponse.length; i++) {
+    if (updating[i] && updating[i].outerHTML != updatingResponse[i].outerHTML) {
+      continue;
+    }
+    console.log("Missing element: Class: " + updating[i]?.className + ", ID: " + updating[i]?.id);
+    return false;
+    }
+  } else {
+    return true;
   }
-  if (screenlog) {initToggleLog();}
-  const iframed = document.querySelector("body.iframed");
-  const iframeResizer = document.getElementById("iframeResizer");
-  if (!iframed) {iframeResizer?.remove();}
-});
+}
 
-export {initSnarkRefresh, refreshTorrents, xhrsnark, xhrsnarklog refreshIntervalId};
+function countSnarks() {
+  const rowCount = document.querySelectorAll("tr.volatile").length;
+  return rowCount;
+}
+
+export {initSnarkRefresh, refreshTorrents, xhrsnark, xhrsnarklog, refreshIntervalId, getURL, countSnarks};
