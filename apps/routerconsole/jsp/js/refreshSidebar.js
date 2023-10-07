@@ -131,6 +131,15 @@ function refreshSidebar() {
       if (clock && clockResponse && !Object.is(clock?.textContent, clockResponse?.textContent)) {
         clock.textContent = clockResponse.textContent;
       }
+      if (badges && badgesResponse) {
+        const badgesLen = badges.length;
+        const badgesResponseLen = badgesResponse.length;
+        for (let i = 0; i < badgesLen && i < badgesResponseLen; i++) {
+          if (badges[i].textContent !== badgesResponse[i].textContent) {
+            badges[i].textContent = badgesResponse[i].textContent;
+          }
+        }
+      }
       if (netStatus && netStatusResponse && !Object.is(netStatus.innerHTML, netStatusResponse.innerHTML)) {
         netStatus?.replaceWith(netStatusResponse);
       }
@@ -243,8 +252,8 @@ function refreshSidebar() {
         }
       }
       if (tunnelBuildStatus && tunnelBuildStatusResponse)
-          if (tunnelBuildStatus?.classList.contains("statusDown") ||
-              !Object.is(tunnelBuildStatus?.outerHTML, tunnelBuildStatusResponse?.outerHTML)) {
+        if (tunnelBuildStatus?.classList.contains("statusDown") ||
+            !Object.is(tunnelBuildStatus?.outerHTML, tunnelBuildStatusResponse?.outerHTML)) {
         tunnelBuildStatus.innerHTML = tunnelBuildStatusResponse.innerHTML;
       }
       if (notice && noticeResponse && !Object.is(notice.innerHTML, noticeResponse.innerHTML)) {
@@ -270,29 +279,21 @@ function refreshSidebar() {
     }
 
     function checkSections() {
+      if (!xhrsb.responseXML) {return;}
       const updating = document.querySelectorAll("#xhr .volatile");
-      var updatingResponse = [];
-      if (xhrsb.responseXML) {
-        updatingResponse = xhrsb.responseXML.querySelectorAll("#sb .volatile");
-      }
-      var updatingLen = updating.length;  // Cache the length of updating array
-      var updatingResponseLen = updatingResponse.length;  // Cache the length of updatingResponse array
-      var i;
-
-      //console.log("Updating length is: " + updatingLen + "; Response Length is: " + updatingResponseLen);
-      for (i = 0; i < updatingLen && i < updatingResponseLen; i++) {
-        if (updating[i] && updatingResponse[i]) {
-          window.requestAnimationFrame(updateVolatile);
-          window.requestAnimationFrame(sectionToggler);
-          window.requestAnimationFrame(countTunnels);
-          window.requestAnimationFrame(countNewsItems);
-        }
-      }
-
+      const updatingLen = updating.length;
+      const updatingResponse = xhrsb.responseXML.querySelectorAll("#sb .volatile");
+      const updatingResponseLen = updatingResponse?.length;
       if (updatingLen !== updatingResponseLen) {
         window.requestAnimationFrame(refreshAll);
+      } else {
+        window.requestAnimationFrame(updateVolatile);
+        window.requestAnimationFrame(sectionToggler);
+        window.requestAnimationFrame(countTunnels);
+        window.requestAnimationFrame(countNewsItems);
       }
     }
+    checkSections();
 
     function refreshAll() {
       if (sb && xhrsb.responseXML) {
@@ -308,48 +309,46 @@ function refreshSidebar() {
       }
     }
 
-  const graphCanvas = document.getElementById("minigraph");
-  const ctx = graphCanvas ? graphCanvas.getContext("2d") : null;
-  const minigraph_width = 245;
-  const minigraph_height = 50;
-  const image = new Image(minigraph_width, minigraph_height);
-
-  function refreshGraph() {
-    const graphContainer = document.getElementById("sb_graphcontainer");
-    const graphContainerHR = document.querySelector("#sb_graphcontainer + hr");
-    const minigraph = document.getElementById("minigraph");
-    if (minigraph) {
-      if (graphContainer.hidden === true) {
-        graphContainer.hidden = null;
-        graphContainerHR.hidden = null;
-      }
-      image.onload = renderGraph;
-      image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + Date.now();
-      if (ctx) {
-        ctx.imageSmoothingEnabled = false;
-        ctx.imageSmoothingQuality = "low";
-        ctx.globalCompositeOperation = "copy";
-        ctx.globalAlpha = 1;
-        //minigraph.style.background = image.src;
-      }
-
-      function renderGraph() {
-        minigraph.width = minigraph_width;
-        minigraph.height = minigraph_height;
+    function refreshGraph() {
+      const graphCanvas = document.getElementById("minigraph");
+      const ctx = graphCanvas ? graphCanvas.getContext("2d") : null;
+      const graphContainer = document.getElementById("sb_graphcontainer");
+      const graphContainerHR = document.querySelector("#sb_graphcontainer + hr");
+      const minigraph = document.getElementById("minigraph");
+      const minigraph_height = 50;
+      const minigraph_width = 245;
+      const image = new Image(minigraph_width, minigraph_height);
+      if (minigraph) {
+        if (graphContainer.hidden === true) {
+          graphContainer.hidden = null;
+          graphContainerHR.hidden = null;
+        }
+        image.onload = renderGraph;
+        image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + Date.now();
         if (ctx) {
-          ctx.drawImage(image, 0, 0, minigraph_width, minigraph_height);
+          ctx.imageSmoothingEnabled = false;
+          ctx.imageSmoothingQuality = "low";
+          ctx.globalCompositeOperation = "copy";
+          ctx.globalAlpha = 1;
+          //minigraph.style.background = image.src;
+        }
+
+        function renderGraph() {
+          minigraph.width = minigraph_width;
+          minigraph.height = minigraph_height;
+          if (ctx) {
+            ctx.drawImage(image, 0, 0, minigraph_width, minigraph_height);
+          }
         }
       }
     }
-  }
-  window.requestAnimationFrame(refreshGraph);
+    window.requestAnimationFrame(refreshGraph);
 
-  function uncollapse() {
-    window.requestAnimationFrame(sectionToggler);
-    window.requestAnimationFrame(countTunnels);
-    window.requestAnimationFrame(countNewsItems);
-  }
-  checkSections();
+    function uncollapse() {
+      window.requestAnimationFrame(sectionToggler);
+      window.requestAnimationFrame(countTunnels);
+      window.requestAnimationFrame(countNewsItems);
+    }
   };
 
   function ready() {
