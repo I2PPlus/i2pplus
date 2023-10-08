@@ -90,7 +90,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final char HELLIP = '\u2026';
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
-    private boolean debug = false;
+    private boolean debug = true;
 
     String cspNonce = Integer.toHexString(_context.random().nextInt());
     public I2PSnarkServlet() {
@@ -352,18 +352,18 @@ public class I2PSnarkServlet extends BasicServlet {
                   "<meta name=viewport content=\"width=device-width\">\n");
         if (!isStandalone() && useSoraFont()) {
             sbuf.append("<link rel=preload href=/themes/fonts/Sora.css as=style>\n" +
-                       "<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n" +
-                       "<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n" +
-                       "<link rel=stylesheet href=/themes/fonts/Sora.css>\n");
+                        "<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n" +
+                        "<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n" +
+                        "<link rel=stylesheet href=/themes/fonts/Sora.css>\n");
         } else {
             sbuf.append("<link rel=preload href=/themes/fonts/DroidSans.css as=style>\n" +
-                       "<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>\n" +
-                       "<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n" +
-                       "<link rel=stylsheet href=/themes/fonts/DroidSans.css>\n");
+                        "<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>\n" +
+                        "<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n" +
+                        "<link rel=stylsheet href=/themes/fonts/DroidSans.css>\n");
         }
         sbuf.append("<link rel=preload href=\"" + _themePath + "snark.css?" + CoreVersion.VERSION + "\" as=style>\n" +
-                   "<link rel=preload href=\"" + _themePath + "images/images.css?" + CoreVersion.VERSION + "\" as=style>\n" +
-                   "<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
+                    "<link rel=preload href=\"" + _themePath + "images/images.css?" + CoreVersion.VERSION + "\" as=style>\n" +
+                    "<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
         if (!isStandalone())
             sbuf.append("<link rel=preload href=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" as=script>\n");
         sbuf.append("<title>");
@@ -558,7 +558,6 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=utf-8");
         resp.setHeader("Accept-Ranges", "bytes");
-
         // Set cache policy based on MIME type
         String mimeType = resp.getContentType();
         if (mimeType != null && (mimeType.equals("image/png") || mimeType.equals("image/jpeg") ||
@@ -596,62 +595,75 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
         String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         List<UIMessages.Message> msgs = _manager.getMessages();
-        out.write("<div id=screenlog");
+        int entries = msgs.size();
+
+        StringBuilder buf = new StringBuilder(entries*256);
+        buf.append("<div id=screenlog");
         if (isConfigure) {
-            out.write(" class=configpage");
+            buf.append(" class=configpage");
         }
-        out.write(" tabindex=0>");
+        buf.append(" tabindex=0>");
         if (!msgs.isEmpty()) {
-            out.write("<a id=closelog href=\"" + _contextPath + '/');
+            buf.append("<a id=closelog href=\"").append(_contextPath).append('/');
             if (isConfigure) {
-                out.write("configure");
+                buf.append("configure");
             }
             if (peerString.length() > 0) {
-                out.write(peerString + "&amp;");
+                buf.append(peerString).append("&amp;");
             } else {
-                out.write("?");
+                buf.append("?");
             }
             int lastID = msgs.get(msgs.size() - 1).id;
-            out.write("action=Clear&amp;id=" + lastID + "&amp;nonce=" + _nonce + "\">");
+            buf.append("action=Clear&amp;id=").append(lastID)
+              .append("&amp;nonce=").append(_nonce).append("\">");
             String tx = _t("clear messages");
-            out.write(toThemeSVG("delete", tx, tx));
-            out.write("</a>\n");
-            out.write("<a class=script id=expand>");
+            buf.append(toThemeSVG("delete", tx, tx));
+            buf.append("</a>\n");
+            buf.append("<a class=script id=expand>");
             String x = _t("Expand");
-            out.write(toThemeSVG("expand", x, x));
-            out.write("</a>\n");
-            out.write("<a class=script id=shrink>");
+            buf.append(toThemeSVG("expand", x, x));
+            buf.append("</a>\n");
+            buf.append("<a class=script id=shrink>");
             String s = _t("Shrink");
-            out.write(toThemeSVG("shrink", s, s));
-            out.write("</a>\n");
-            out.write("<ul id=messages class=volatile>\n");
+            buf.append(toThemeSVG("shrink", s, s));
+            buf.append("</a>\n");
+            buf.append("<ul id=messages class=volatile>\n");
             // FIXME only show once
             if (!_manager.util().connected()) {
-                out.write("<noscript>\n<li class=noscriptWarning>" +
-                          _t("Warning! Javascript is disabled in your browser. " +
+                buf.append("<noscript>\n<li class=noscriptWarning>");
+                buf.append(_t("Warning! Javascript is disabled in your browser. " +
                           "If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs.",
                           "<a href=\"configure\">" + _t("page refresh") + "</a>"));
-                out.write("</li>\n</noscript>\n");
+                buf.append("</li>\n</noscript>\n");
             }
 
             for (int i = msgs.size()-1; i >= 0; i--) {
                 String msg = msgs.get(i).message
-                             .replace("Adding Magnet ", "Magnet added: " + "<span class=infohash>")
-                             .replace("Starting torrent: Magnet", "Starting torrent: <span class=infohash>")
-                             .replaceFirst(" \\(", "</span> (");
+                        .replace("Adding Magnet ", "Magnet added: " + "<span class=infohash>")
+                        .replace("Starting torrent: Magnet", "Starting torrent: <span class=infohash>")
+                        .replaceFirst(" \\(", "</span> (");
                 if (msg.contains(_t("Warning - No I2P")))
                     msg = msg.replace("</span>", "");
-                out.write("<li class=msg>" + msg + "</li>\n");
+                buf.append("<li class=msg>").append(msg).append("</li>\n");
             }
-            out.write("</ul>");
+            buf.append("</ul>");
         }
-        out.write("</div>\n");
-        out.write("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=module defer></script>\n");
+        buf.append("</div>\n");
+        buf.append("<script nonce=").append(cspNonce)
+          .append(" src=\"").append(resourcePath)
+          .append("js/toggleLog.js?").append(CoreVersion.VERSION)
+          .append("\" type=module defer></script>\n");
         int delay = 0;
         delay = _manager.getRefreshDelaySeconds();
         if (delay > 0 && _context.isRouterContext()) {
-            out.write("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/graphRefresh.js?" + CoreVersion.VERSION + "\" defer></script>\n");
+            buf.append("<script nonce=").append(cspNonce)
+              .append(" src=\"").append(resourcePath)
+              .append("js/graphRefresh.js?").append(CoreVersion.VERSION)
+              .append("\" defer></script>\n");
         }
+        out.write(buf.toString());
+        out.flush();
+        buf.setLength(0);
     }
 
     /**
@@ -667,10 +679,11 @@ public class I2PSnarkServlet extends BasicServlet {
         List<Snark> snarks = getSortedSnarks(req);
         boolean isForm = _manager.util().connected() || !snarks.isEmpty();
         boolean showStatusFilter = _manager.util().showStatusFilter();
+        String filter = req.getParameter("filter");
         String srt = req.getParameter("sort");
         String psize = req.getParameter("ps");
         String srch = req.getParameter("s");
-        filterParam = req.getParameter("filter");
+        filterParam = filter;
         filterEnabled = filterParam != null || filterParam != "all";
         if (isForm) {
             if (showStatusFilter && !snarks.isEmpty() && _manager.util().connected())
@@ -774,17 +787,18 @@ public class I2PSnarkServlet extends BasicServlet {
         // move pagenav here so we can align it nicely without resorting to hacks
         if (isForm && total > 0 && (start > 0 || total > pageSize)) {
             out.write("<div class=pagenavcontrols id=pagenavtop>");
-            writePageNav(out, req, start, pageSize, total, noThinsp);
+            writePageNav(out, req, start, pageSize, total, filter, noThinsp);
             out.write("</div>");
         } else if (isForm && showStatusFilter && total > pageSize) {
             out.write("<div class=pagenavcontrols id=pagenavtop hidden>");
-            writePageNav(out, req, start, pageSize, total, noThinsp);
+            writePageNav(out, req, start, pageSize, total, filter, noThinsp);
             out.write("</div>");
         }
 
         out.write(TABLE_HEADER);
 
         String currentSort = req.getParameter("sort");
+        filterParam = req.getParameter("filter");
         boolean showSort = total > 1;
         out.write("<tr><th class=status>");
         // show incomplete torrents at top on first click
@@ -801,7 +815,7 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 sort = "2";
             }
-            out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+            out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort, filter));
             out.write("\">");
         }
         String tx = _t("Status");
@@ -822,13 +836,13 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write(" <a href=\"" + _contextPath + '/');
                 if (peerParam != null) {
                     // disable peer view
-                    out.write(getQueryString(req, "", null, null));
+                    out.write(getQueryString(req, "", null, null, sort, filter));
                     out.write("\">");
                     tx = _t("Hide Peers");
                     out.write(toThemeImg("hidepeers", tx, tx));
                 } else {
                     // enable peer view
-                    out.write(getQueryString(req, "1", null, null));
+                    out.write(getQueryString(req, "1", null, null, sort, filter));
                     out.write("\">");
                     tx = _t("Show Peers");
                     out.write(toThemeImg("showpeers", tx, tx));
@@ -857,7 +871,7 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 sort = "";
             }
-            out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+            out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort, filter));
             out.write("\">");
         }
         tx = _t("Torrent");
@@ -880,8 +894,6 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             if (isDownloading) {
                 if (showSort) {
-                    // show lower ETA values at top
-//                    sort = ("4".equals(currentSort)) ? "-4" : "4";
                     out.write("<span class=sortIcon>");
                     if (currentSort == null || "-4".equals(currentSort)) {
                         sort = "4";
@@ -891,7 +903,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         sort = "-4";
                         out.write("<span class=ascending></span>");
                     }
-                    out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+                    out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort, filter));
                     out.write("\">");
                 }
             // Translators: Please keep short or translate as " "
@@ -925,7 +937,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 } else {
                     sort = "-5";
                 }
-                out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+                out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort, filter));
                 out.write("\">");
             }
             // Translators: Please keep short or translate as " "
@@ -959,7 +971,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     } else {
                         sort = "-8";
                     }
-                out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+                out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort, filter));
                 out.write("\">");
                 }
                 // Translators: Please keep short or translate as " "
@@ -994,7 +1006,7 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 sort = "-7";
             }
-            out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+            out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort, filter));
             out.write("\">");
         }
         // Translators: Please keep short or translate as " "
@@ -1027,7 +1039,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     } else {
                         sort = "-9";
                     }
-                    out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+                    out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort, filter));
                     out.write("\">");
                 }
                 // Translators: Please keep short or translate as " "
@@ -1098,7 +1110,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // TODO: disable on pages where torrents is < 50 e.g. last page
             if (total > 0 && (start > 0 || total > pageSize) && pageSize >= 50 && total - start >= 20) {
                 out.write("<tr id=pagenavbottom><td colspan=12><div class=pagenavcontrols>");
-                writePageNav(out, req, start, (pageSize), total, noThinsp);
+                writePageNav(out, req, start, (pageSize), total, filter, noThinsp);
                 out.write("</div></td></tr>\n</tbody>\n");
             }
             out.write("<tfoot id=snarkFoot>\n<tr class=volatile><th id=torrentTotals align=left colspan=6>");
@@ -1349,63 +1361,85 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @return non-null, possibly empty
      *  @since 0.9.16
      */
-    private static String getQueryString(HttpServletRequest req, String p, String st, String so) {
-        return getQueryString(req, p, st, so, null);
+    private static String getQueryString(HttpServletRequest req, String p, String st, String so, String filter) {
+        return getQueryString(req, p, st, so, filter, null);
     }
 
     /**
      *  @param s search param override or "" for default or null to keep the same as in req
      *  @since 0.9.58
      */
-    private static String getQueryString(HttpServletRequest req, String p, String st, String so, String s) {
+    private static String getQueryString(HttpServletRequest req, String p, String st, String so, String filter, String s) {
         String url = req.getRequestURL().toString();
         StringBuilder buf = new StringBuilder(64);
         if (p == null) {
             p = req.getParameter("p");
-            if (p != null)
+            if (p != null) {
                 p = DataHelper.stripHTML(p);
-        }
-        if (p != null && !p.equals("")) {
-            buf.append("?p=").append(p);
-            if (so != null && !so.equals("")) {
-                buf.append("&amp;sort=");
-                buf.append(so);
             }
         }
-        if (so == null) {
-            so = req.getParameter("sort");
-            if (so != null)
-                so = DataHelper.stripHTML(so);
-        }
-        if (so != null && !so.equals("")) {
-            if (buf.length() <= 0)
-                buf.append("?sort=");
-            else
-                buf.append("&amp;sort=");
-            buf.append(so);
+        if (p != null && !p.equals("")) {
+            if (buf.length() <= 0) {
+                buf.append("?p=");
+            } else {
+                buf.append("&amp;p=");
+            }
+            buf.append(p);
         }
         if (st == null) {
             st = req.getParameter("st");
-            if (st != null)
+            if (st != null) {
                 st = DataHelper.stripHTML(st);
+            }
         }
         if (st != null && !st.equals("")) {
-            if (buf.length() <= 0)
+            if (buf.length() <= 0) {
                 buf.append("?st=");
-            else
+            } else {
                 buf.append("&amp;st=");
+            }
             buf.append(st);
+        }
+        if (so == null) {
+            so = req.getParameter("sort");
+            if (so != null) {
+                so = DataHelper.stripHTML(so);
+            }
+        }
+        if (so != null && !so.equals("")) {
+            if (buf.length() <= 0) {
+                buf.append("?sort=");
+            } else {
+                buf.append("&amp;sort=");
+            }
+            buf.append(so);
+        }
+        if (filter == null) {
+            filter = req.getParameter("filter");
+            if (filter != null) {
+                filter = DataHelper.escapeHTML(filter);
+            }
+        }
+        if (filter != null && (!filter.equals("") || !filter.equals("all"))) {
+            if (buf.length() <= 0) {
+                buf.append("?filter=");
+            } else {
+                buf.append("&amp;filter=");
+            }
+            buf.append(filter);
         }
         if (s == null) {
             s = req.getParameter("s");
-            if (s != null)
+            if (s != null) {
                 s = DataHelper.escapeHTML(s);
+            }
         }
         if (s != null && !s.equals("")) {
-            if (buf.length() <= 0)
+            if (buf.length() <= 0) {
                 buf.append("?s=");
-        else
+            } else {
                 buf.append("&amp;s=");
+            }
             buf.append(s);
         }
         return buf.toString();
@@ -1414,13 +1448,13 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      *  @since 0.9.6
      */
-    private void writePageNav(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total,
+    private void writePageNav(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total, String filter,
                               boolean noThinsp) {
             // Page nav
             if (start > 0) {
                 // First
                 out.write("<a href=\"" + _contextPath);
-                out.write(getQueryString(req, null, "", null));
+                out.write(getQueryString(req, null, "", null, filter));
                 out.write("\"><span id=first>");
                 out.write(toThemeSVG("first", _t("First"), _t("First page")));
                 out.write("</span></a>");
@@ -1430,7 +1464,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     // Back
                     out.write("<a href=\"" + _contextPath);
                     String sprev = (prev > 0) ? Integer.toString(prev) : "";
-                    out.write(getQueryString(req, null, sprev, null));
+                    out.write(getQueryString(req, null, sprev, null, filter));
                     out.write("\"><span id=previous>");
                     out.write(toThemeSVG("previous", _t("Prev"), _t("Previous page")));
                     out.write("</span></a>");
@@ -1460,7 +1494,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (true) {
                     // Next
                     out.write("<a href=\"" + _contextPath);
-                    out.write(getQueryString(req, null, Integer.toString(next), null));
+                    out.write(getQueryString(req, null, Integer.toString(next), null, filter));
                     out.write("\"><span id=next>");
                     out.write(toThemeSVG("next", _t("Next"), _t("Next page")));
                     out.write("</span></a>");
@@ -1468,7 +1502,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 // Last
                 int last = ((total - 1) / pageSize) * pageSize;
                 out.write("<a href=\"" + _contextPath);
-                out.write(getQueryString(req, null, Integer.toString(last), null));
+                out.write(getQueryString(req, null, Integer.toString(last), null, filter));
                 out.write("\"><span id=last>");
                 out.write(toThemeSVG("last", _t("Last"), _t("Last page")));
                 out.write("</span></a>");
@@ -2246,6 +2280,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         String err = snark.getTrackerProblems();
         int knownPeers = Math.max(curPeers, snark.getTrackerSeenPeers());
+        filterParam = req.getParameter("filter");
 
         String statusString;
         // add status to table rows so we can selectively show/hide snarks and style based on status
@@ -2303,7 +2338,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>" +
                                          "<td class=peerCount><b>" +
                                          "<a href=\"" +
-                                         uri + getQueryString(req, b64, null, null) + "\"><span class=right>" +
+                                         uri + getQueryString(req, b64, null, null, filterParam) + "\"><span class=right>" +
                                          curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
                     if (upBps > 0) {
                         snarkStatus = "active seeding complete connected";
@@ -2342,7 +2377,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 statusString = toSVGWithDataTooltip("downloading", "", _t("OK") +
                                      " (" + _t("Downloading from {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>" +
                                      "<td class=peerCount><b><a href=\"" +
-                                     uri + getQueryString(req, b64, null, null) + "\"><span class=right>" +
+                                     uri + getQueryString(req, b64, null, null, filterParam) + "\"><span class=right>" +
                                      curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
                 snarkStatus = "active downloading incomplete connected";
             } else if (isRunning && curPeers > 0 && downBps > 0) {
@@ -2354,7 +2389,7 @@ public class I2PSnarkServlet extends BasicServlet {
             } else if (isRunning && curPeers > 0 && !showPeers) {
                 statusString = toSVGWithDataTooltip("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers) + ")") + "</td>" +
                                      "<td class=peerCount><b><a href=\"" +
-                                     uri + getQueryString(req, b64, null, null) + "\"><span class=right>" +
+                                     uri + getQueryString(req, b64, null, null, filterParam) + "\"><span class=right>" +
                                      curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
                 snarkStatus = "inactive downloading incomplete connected";
             } else if (isRunning && curPeers > 0) {
@@ -2382,7 +2417,6 @@ public class I2PSnarkServlet extends BasicServlet {
 
         String rowStatus = (rowClass + ' ' + snarkStatus);
         StringBuilder buf = new StringBuilder(2*1024);
-        filterParam = req.getParameter("filter");
         filterEnabled = filterParam != null || filterParam != "all";
         if (filterParam == null || snarkMatchesFilter(snark, filterParam)) {
             buf.append("<tr class=\"" + rowStatus + " volatile\">").append("<td class=status>")
@@ -5296,6 +5330,17 @@ public class I2PSnarkServlet extends BasicServlet {
     private static String getQueryString(String so) {
         if (so != null && !so.equals(""))
             return "?sort=" + DataHelper.stripHTML(so);
+        return "";
+    }
+
+    /**
+     *  @param filter null ok
+     *  @return query string or ""
+     *  @since 0.9.60+
+     */
+    private static String getQueryFilterString(String filter) {
+        if (filter != null && !filter.equals("") && !filter.equals("all"))
+            return "?filter=" + DataHelper.stripHTML(filter);
         return "";
     }
 
