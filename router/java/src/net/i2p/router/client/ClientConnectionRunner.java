@@ -1174,29 +1174,35 @@ class ClientConnectionRunner {
      * Get the FloodfillNetworkDatabaseFacade for this runner. This is the client
      * netDb if the router is configured to use subDbs, or the main netDb if the
      * router is configured to use a monolithic netDb.
-     * 
+     *
      * If neither a client netDb or the main netDb is available, it will return null.
      * This should be impossible.
      * If you get the  `getFloodfillNetworkDatabaseFacade is null for runner` warning,
      * the main netDb will be returned instead. If the main netDb is null, then null
      * will be returned.
-     * 
+     *
      * @return _floodfillNetworkDatabaseFacade
      * @since 0.9.60
      */
     public FloodfillNetworkDatabaseFacade getFloodfillNetworkDatabaseFacade() {
+        long uptime = _context.router().getUptime();
         if (!_context.netDbSegmentor().useSubDbs())
             return _context.netDb();
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("getFloodfillNetworkDatabaseFacade is getting the subDb for dbid: " + this.getDestHash());
+            _log.debug("getFloodfillNetworkDatabaseFacade is getting the subDb for DbId: " + this.getDestHash());
         if (_floodfillNetworkDatabaseFacade == null) {
-            if (_log.shouldLog(Log.ERROR))
-                _log.error("getFloodfillNetworkDatabaseFacade is null for runner", new Exception());
+            if (_log.shouldLog(Log.ERROR) && uptime > 3*60*1000) {
+                _log.error("getFloodfillNetworkDatabaseFacade is null for runner, using mainNetDb instead", new Exception());
+            } else {
+                if (_log.shouldLog(Log.WARN)) {
+                    _log.warn("getFloodfillNetworkDatabaseFacade is null for runner, using mainNetDb instead");
+                }
+            }
             return _context.netDb();
         }
         return this._floodfillNetworkDatabaseFacade;
     }
-    
+
     private class MessageDeliveryStatusUpdate extends JobImpl {
         private final SessionId _sessId;
         private final MessageId _messageId;
