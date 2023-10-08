@@ -210,7 +210,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _peerSelector = createPeerSelector();
         _publishingLeaseSets = new HashMap<Hash, RepublishLeaseSetJob>(8);
         _activeRequests = new HashMap<Hash, SearchJob>(8);
-        if (isClientDb())
+        if (!isMainDb())
             _reseedChecker = null;
         else
         _reseedChecker = new ReseedChecker(context);
@@ -248,7 +248,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /** @since 0.9 */
     @Override
     public ReseedChecker reseedChecker() {
-        if (isClientDb())
+        if (!isMainDb())
             return null;
         return _reseedChecker;
     }
@@ -360,6 +360,21 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return true;
     }
 
+    /**
+     * Check if the database is the main netDb. This is the one we're normally using
+     * if you're acting as a floodfill.
+     * 
+     * @return true if _dbid == FNDS.MAIN_DBID
+     * @since 0.9.60
+     */
+    protected boolean isMainDb() {
+        // This is a null check in disguise, don't use equals() here.
+        // FNDS.MAIN_DBID is always null.
+        if (_dbid == FloodfillNetworkDatabaseSegmentor.MAIN_DBID)
+            return true;
+        return false;
+    }
+
 
     /**
      * Checks if the current database is a multihome database.
@@ -385,7 +400,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _log.info("BucketSize: " + BUCKET_SIZE + "; B Value: " + KAD_B);
         _dbDir = getDbDir();
         try {
-            if (!isClientDb()) {
+            if (isMainDb()) {
                 _ds = new PersistentDataStore(_context, _dbDir, this);
             } else {
                 _ds = new TransientDataStore(_context);
@@ -420,7 +435,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         if (!QUIET) {
-            if (!isClientDb() && !isMultihomeDb()) {
+            if (isMainDb()) {
             // fill the search queue with random keys in buckets that are too small
             // Disabled since KBucketImpl.generateRandomKey() is b0rked,
             // and anyway, we want to search for a completely random key,
@@ -444,7 +459,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _log.warn("Operating in QUIET MODE - not exploring or pushing data proactively, simply reactively " +
                       "\n* This should NOT be used in production!");
         }
-        if (!isClientDb() && !isMultihomeDb()) {
+        if (isMainDb()) {
             // periodically update and resign the router's 'published date', which basically
             // serves as a version
             Job plrij = new PublishLocalRouterInfoJob(_context);
