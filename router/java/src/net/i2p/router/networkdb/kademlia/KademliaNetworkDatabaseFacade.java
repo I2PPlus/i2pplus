@@ -360,7 +360,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return true;
     }
 
-    
+
     /**
      * Checks if the current database is a multihome database.
      *
@@ -1034,25 +1034,26 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _log.error("Locally published LeaseSet is not valid", iae);
             throw iae;
         }
-        if (!_context.netDbSegmentor().useSubDbs()){
-            String dbid = "main netDb";
+        if (!_context.netDbSegmentor().useSubDbs()) {
+            String dbid = "Main netDb";
             if (isClientDb()) {
-                dbid = "client netDb: " + _dbid;
+                dbid = "Client netDb: " + _dbid;
+            }
         }
         if (_localKey != null) {
             if (!_localKey.equals(localLeaseSet.getHash()))
                 if (_log.shouldLog(Log.ERROR))
                     _log.error("Error, local LeaseSet hash ["
                                + _localKey.toBase64().substring(0,6) + "] does not match the published hash ("
-                               + localLeaseSet.getHash() + ")! This shouldn't happen!" + 
-                               "\n* DbId: " + dbid,
+                               + localLeaseSet.getHash() + ")! This shouldn't happen!" +
+                               "\n* DbId: " + _dbid,
                                new Exception());
         } else {
             // This will only happen once when the local LS is first published
             _localKey = localLeaseSet.getHash();
             if (_log.shouldLog(Log.INFO))
-                _log.info("Local client LeaseSet key initialized to: " + _localKey) +
-                "\n* DbId: " + dbid;
+                _log.info("Local client LeaseSet key initialized to: " + _localKey +
+                "\n* DbId: " + _dbid);
         }
         if (!_context.clientManager().shouldPublishLeaseSet(h))
             return;
