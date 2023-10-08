@@ -354,12 +354,14 @@ function refreshSidebar() {
   function ready() {
     xhrsb.send();
     stickySidebar();
+    isDown = false;
   }
 
   onVisible(sb, ready);
 
   xhrsb.onerror = function (error) {
     isDownTimer = setTimeout(tangoDown, 5000);
+    isDown = true;
   };
 }
 

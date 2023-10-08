@@ -1,6 +1,4 @@
-<%
-    if (!intl.getDisableRefresh()) {
-%>
+<% if (!intl.getDisableRefresh()) { %>
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
   import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
@@ -8,36 +6,35 @@
   import {onVisible} from "/js/onVisible.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
   const refreshInterval = refresh * 1000;
-  let timerId = null;
+  let sbRefreshTimerId = null;
   const sb = document.getElementById("sidebar");
   const initSidebarRefresh = () => {
-    clearInterval(timerId);
-    timerId = setInterval(() => {
+    clearInterval(sbRefreshTimerId);
+    sbRefreshTimerId = setInterval(() => {
       window.requestAnimationFrame(refreshSidebar);
     }, refreshInterval);
   };
   const stopSidebarRefresh = () => {
-    clearInterval(timerId);
+    clearInterval(sbRefreshTimerId);
   };
   onVisible(sb, () => {
-    if (!timerId) {
+    if (!sbRefreshTimerId) {
       initSidebarRefresh();
     }
   }, () => {
-    if (timerId) {
+    if (sbRefreshTimerId) {
       stopSidebarRefresh();
     }
   });
   const onDomContentLoaded = () => {
     sectionToggler();
     stickySidebar();
+    initSidebarRefresh();
   };
   window.addEventListener("DOMContentLoaded", onDomContentLoaded);
   window.addEventListener("resize", () => stickySidebar());
 </script>
-<%
-    } else {
-%>
+<% } else { %>
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
   import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
@@ -54,6 +51,4 @@
   window.addEventListener("DOMContentLoaded", onDomContentLoaded);
   window.addEventListener("resize", onWindowResize);
 </script>
-<%
-    }
-%>
+<% } %>
