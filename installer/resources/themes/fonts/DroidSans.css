@@ -1,5 +1,3 @@
-@charset "utf-8";
-
 :root{
 --bodyfont:Droid Sans,Open Sans,Noto Sans,Ubuntu,Segoe UI,Bitstream Vera Sans,DejaVu Sans,Verdana,Lucida Grande,Helvetica,sans-serif;
 --monospaced:FiraCode,Noto Mono,DejaVu Sans Mono,Lucida Console,monospace;
@@ -10,7 +8,7 @@
   font-weight:400;
   font-style:normal;
   font-display:swap;
-  src:local("Droid Sans Regular"),local("DroidSans"),url(/themes/fonts/DroidSans/DroidSans.woff2) format("woff2");
+  src:url(/themes/fonts/DroidSans/DroidSans.woff2) format("woff2");
 }
 
 @font-face{
@@ -18,7 +16,7 @@
   font-weight:700;
   font-style:normal;
   font-display:swap;
-  src:url(/themes/fonts/DroidSans/DroidSans-Bold.woff2) format("woff2"),local("Droid Sans Bold"),local("DroidSans-Bold");
+  src:url(/themes/fonts/DroidSans/DroidSans-Bold.woff2) format("woff2");
 }
 
 @font-face{
