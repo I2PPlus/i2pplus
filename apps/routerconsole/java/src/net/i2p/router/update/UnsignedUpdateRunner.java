@@ -47,7 +47,7 @@ class UnsignedUpdateRunner extends UpdateRunner {
             }
             String zipURL = _currentURI.toString();
             if (_log.shouldDebug())
-                _log.debug("Starting unsigned update URL: " + zipURL);
+                _log.debug("Attemping unsigned update from URL: " + zipURL);
             try {
                 // 40 retries!!
                 _get = new EepGet(_context, proxyHost, proxyPort, 40, _updateFile, zipURL, false);
@@ -55,6 +55,7 @@ class UnsignedUpdateRunner extends UpdateRunner {
                 _get.fetch(CONNECT_TIMEOUT, -1, INACTIVITY_TIMEOUT);
             } catch (Throwable t) {
                 _log.error("Error updating", t);
+                updateStatus("<b>" + _t("Update failed") + ": " + t.getMessage() + "</b>");
             }
             if (!this.done)
                 _mgr.notifyTaskFailed(this, "", null);

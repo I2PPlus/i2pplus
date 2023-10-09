@@ -113,15 +113,6 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         _downloaded = new ConcurrentHashMap<UpdateItem, Version>();
         _installed = new ConcurrentHashMap<UpdateItem, Version>();
         _status = "";
-        // DEBUG slow start for snark updates
-        // For 0.9.4 update, only for dev builds
-        // For 0.9.5 update, only for dev builds and 1% more
-        // For 0.9.6 update, only for dev builds and 3% more
-        // For 0.9.8 update, only for dev builds and 30% more
-        // For 0.9.10 update, only for dev builds and 60% more
-        // Remove this for 100%
-        //_allowTorrent = RouterVersion.BUILD != 0 || _context.random().nextInt(100) < 60;
-        // Finally, for 0.9.12, 18 months later...
         _allowTorrent = true;
         _state = INITIALIZED;
     }
@@ -874,7 +865,12 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                             if (!oldSources.contains(uri)) {
                                 if (_log.shouldWarn())
                                     _log.warn(ui.toString() + ' ' + oldVA + " adding " + uri + " to method " + method);
-                                oldSources.add(uri);
+                                try {
+                                    oldSources.add(uri);
+                                } catch (UnsupportedOperationException uoe) {
+                                    // rare case, changed URL but it's a singleton list, replace old list
+                                    oldVA.sourceMap.put(method, Collections.singletonList(uri));
+                                }
                             }
                         }
                     } else {
