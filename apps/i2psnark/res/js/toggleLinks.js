@@ -21,7 +21,6 @@ const magnets = document.querySelectorAll("#snarkTbody td.magnet .magnetlink");
 const main = document.getElementById("mainsection");
 const mlinks = document.querySelectorAll("#snarkTbody .magnet");
 const tlinks = document.querySelectorAll("#snarkTbody .trackerLink");
-const toast = document.querySelector("#toast");
 const toggleAttached = main.querySelector(".toggleListenerAttached");
 const toggleCss = document.getElementById("toggleLinks");
 const toggle = document.getElementById("linkswitch");
@@ -112,6 +111,7 @@ function attachMagnetListeners() {
   }
 
   function copiedToClipboard(event, anchor) {
+    const toast = document.getElementById("toast");
     clearTimeout(toastTimeoutId);
     event.preventDefault();
     toast.removeAttribute("hidden");

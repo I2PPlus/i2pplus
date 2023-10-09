@@ -20,7 +20,6 @@ const snarkHead = document.getElementById("snarkHead");
 const storageRefresh = window.localStorage.getItem("snarkRefresh");
 const torrents = document.getElementById("torrents");
 const xhrsnark = new XMLHttpRequest();
-const xhrsnarklog = new XMLHttpRequest();
 let refreshIntervalId;
 let screenLogIntervalId;
 let refreshTimeoutId;
@@ -161,8 +160,9 @@ function refreshTorrents(callback) {
   }
 
   function refreshHeaderAndFooter() {
+    if (!xhrsnark.responseXML) {return;}
     const snarkFoot = document.getElementById("snarkFoot");
-    const snarkFootResponse = xhrsnark.responseXML.getElementById("snarkFoot");
+    const snarkFootResponse = xhrsnark.responseXML?.getElementById("snarkFoot");
     const snarkHead = document.getElementById("snarkHead");
     const snarkHeadResponse = xhrsnark.responseXML?.getElementById("snarkHead");
     const snarkHeadCells = torrents.querySelectorAll("#snarkHead th:not(.torrentLink)");
@@ -197,24 +197,63 @@ function refreshTorrents(callback) {
 
 }
 
-function refreshScreenLog() {
+function refreshScreenLog(callback) {
+  const xhrsnarklog = new XMLHttpRequest();
+  xhrsnarklog.open("GET", "/i2psnark/.ajax/xhrscreenlog.html");
+  xhrsnarklog.responseType = "document";
   xhrsnarklog.onload = function () {
     if (xhrsnarklog.readyState === 4 && xhrsnarklog.status === 200) {
-      const msgs = document.querySelectorAll("#screenlog li");
-      const responseXML = xhrsnarklog.responseXML;
-      const screenlogXML = responseXML?.querySelectorAll("#screenlog li");
-      for (let i = 0; i < screenlogXML?.length; i++) {
-        const screenlogHTML = msgs[i].innerHTML.trim();
-        const screenlogXMLText = screenlogXML[i].textContent.trim();
-        if (screenlogHTML !== screenlogXMLText) {
-          msgs[i].innerHTML = screenlogXMLText;
-        }
+      //console.log(xhrsnarklog.responseXML);
+      const screenlog = document.getElementById("screenlog");
+      const screenlogResponse = xhrsnarklog.responseXML.getElementById("screenlog");
+      const toast = document.getElementById("toast");
+      const toastResponse = xhrsnarklog.responseXML.getElementById("toast");
+
+      // Use a MutationObserver to wait for the DOM to update before modifying it
+      const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+             if (toast.innerHTML !== toastResponse.innerHTML) {
+               toast.innerHTML = toastResponse.innerHTML;
+               screenlog.outerHTML = screenlogResponse.outerHTML;
+             }
+             observer.disconnect(); // Stop observing the DOM changes
+             if (callback) {
+               callback();
+             }
+          }
+        });
+      });
+      observer.observe(document.body, {childList: true, subtree: true});
+    }
+  };
+  xhrsnarklog.send();
+}
+
+/**
+function refreshScreenLog(callback) {
+  const xhrsnarklog = new XMLHttpRequest();
+  xhrsnarklog.open("GET", "/i2psnark/.ajax/xhrscreenlog.html");
+  xhrsnarklog.responseType = "document";
+  xhrsnarklog.onload = function () {
+    if (xhrsnarklog.readyState === 4 && xhrsnarklog.status === 200) {
+      console.log(xhrsnarklog.responseXML);
+      const screenlog = document.getElementById("screenlog");
+      const screenlogResponse = xhrsnarklog.responseXML.getElementById("screenlog");
+      const toast = document.getElementById("toast");
+      const toastResponse = xhrsnarklog.responseXML.getElementById("toast");
+      if (toast.innerHTML !== toastResponse.innerHTML) {
+        toast.innerHTML = toastResponse.innerHTML;
+        screenlog.outerHTML = screenlogResponse.outerHTML;
+      }
+      if (callback) {
+        callback();
       }
     }
   };
-  xhrsnarklog.open("GET", "/i2psnark/.ajax/xhrscreenlog.html");
   xhrsnarklog.send();
 }
+**/
 
 function getURL() {
   const baseUrl = "/i2psnark/.ajax/xhr1.html";
@@ -259,14 +298,13 @@ function noAjax(delay) {
   }, delay);
 }
 
-
 async function initSnarkRefresh() {
   if (refreshIntervalId) {
     clearInterval(refreshIntervalId);
   }
   onVisible(mainsection, () => {
       const refreshInterval = (parseInt(storageRefresh) || 5) * 1000;
-      const screenLogInterval = 30000;
+      const screenLogInterval = 3000;
     try {
       refreshIntervalId = setInterval(async () => {
         await doRefresh();
@@ -279,6 +317,11 @@ async function initSnarkRefresh() {
       if (files && lightboxEnabled) {
         const lightbox = new Lightbox();
         lightbox.load();
+      }
+      const events = document._events?.click || [];
+      for (let i = 0; i < events.length; i++) {
+        document.removeEventListener("click", events[i]);
+        refreshOnSubmit();
       }
     } catch (error) {
       console.error(error);
@@ -294,7 +337,7 @@ function doRefresh() {
     xhrsnark.responseType = "document";
     xhrsnark.onload = () => {
       isXHRSynced();
-      refreshTorrents();
+      window.requestAnimationFrame(refreshTorrents);
       initHandlers();
       resolve();
     };
@@ -326,9 +369,17 @@ function isXHRSynced() {
   }
 }
 
+function refreshOnSubmit() {
+  document.addEventListener("click", function(event) {
+    if (event.target.tagName === "INPUT" && event.target.type === "submit") {
+      refreshScreenLog();
+    }
+  });
+}
+
 function countSnarks() {
   const rowCount = document.querySelectorAll("tr.volatile").length;
   return rowCount;
 }
 
-export {initSnarkRefresh, refreshTorrents, xhrsnark, xhrsnarklog, refreshIntervalId, getURL, countSnarks};
+export {initSnarkRefresh, refreshTorrents, refreshScreenLog, xhrsnark, refreshIntervalId, getURL, countSnarks};
