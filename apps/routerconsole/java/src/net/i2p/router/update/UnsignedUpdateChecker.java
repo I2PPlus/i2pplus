@@ -106,8 +106,6 @@ class UnsignedUpdateChecker extends UpdateRunner {
                     msg = status + " " + DataHelper.stripHTML(get.getStatusText());
                 updateStatus("<b>" + msg + "</b>");
             }
-
-            }
         //} catch (Throwable t) {
         //    _log.error("Error fetching the update", t);
         //}
