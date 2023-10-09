@@ -166,21 +166,21 @@ public class ConfigUpdateHandler extends FormHandler {
             boolean a2 = false;
 //            boolean a3 = false;
             boolean a3 = true;
-            if ((!a1) && _updateDevSU3 && _devSU3URL != null && _devSU3URL.length() > 0)
+            if ((!a1) && _updateDevSU3 && _devSU3URL != null && _devSU3URL.length() > 0) {
                 a2 = mgr.checkAvailable(ROUTER_DEV_SU3, 40*1000) != null;
-            if ((!a2) && _updateUnsigned && _zipURL != null && _zipURL.length() > 0)
+            }
+            if ((!a2) && _updateUnsigned && _zipURL != null && _zipURL.length() > 0) {
                 a3 = mgr.checkAvailable(ROUTER_UNSIGNED, 40*1000) != null;
+            }
             if (a1 || a2 || a3) {
-                if ( (_updatePolicy == null) || (!_updatePolicy.equals("notify")) )
+                if ( (_updatePolicy == null) || (!_updatePolicy.equals("notify")) ) {
                     addFormNotice(_t("Update available, attempting to download now") + "...");
-                else
+                } else {
                     addFormNotice(_t("Update available, click button on left to download"));
-                // So that update() will post a status to the summary bar before we reload
-//                try {
-//                    Thread.sleep(4000);
-//                } catch (InterruptedException ie) {}
-            } else
+                }
+            } else {
                 addFormNotice(_t("No update available"));
+            }
             return;
         }
 

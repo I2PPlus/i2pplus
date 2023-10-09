@@ -110,10 +110,8 @@ function showBadge() {
   const query = new URLSearchParams(window.location.search);
   const filterQuery = query.get("filter");
   const allFilters = filterbar.querySelectorAll(".filter");
-  const activeFilter = filterbar.querySelector(".filter#" + (filterQuery !== null && filterQuery !== "all" ? filterQuery : "all"));
-  if (debugging) {
-    console.log("Filter query is: " + filterQuery);
-  }
+  const activeFilter = document.querySelector(".filter[id='" + (filterQuery != null ? filterQuery : "all") + "']");
+  console.log("activeFilter identified as: " + activeFilter)
   allFilters.forEach(filter => {
     if (filter !== activeFilter) {
       filter.classList.remove("enabled");

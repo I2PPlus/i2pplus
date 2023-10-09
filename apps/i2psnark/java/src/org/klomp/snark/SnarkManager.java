@@ -1532,7 +1532,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (theme != null) {
             if(!theme.equals(_config.getProperty(PROP_THEME))) {
                 _config.setProperty(PROP_THEME, theme);
-                addMessage(_t("{0} theme loaded.", theme));
+                //addMessage(_t("{0} theme loaded.", theme));
                 changed = true;
             }
         }
@@ -1556,10 +1556,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     addMessage(_t("Torrent filter bar disabled."));
                 _util.setShowStatusFilter(showStatusFilter);
                 changed = true;
-            } else  if (showStatusFilter) {
-                addMessage(_t("Cannot enable filter bar when torrent refresh is disabled."));
-                changed = false;
-            }
+            }// else if (showStatusFilter) {
+             //   addMessage(_t("Cannot enable filter bar when torrent refresh is disabled."));
+             //   changed = false;
+            //}
         }
 
         if (_util.enableLightbox() != enableLightbox) {

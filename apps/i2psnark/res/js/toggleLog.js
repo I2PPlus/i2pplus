@@ -5,6 +5,7 @@
 function initToggleLog() {
 
   const screenlog = document.getElementById("screenlog");
+  const messages = document.getElementById("messages");
   const toggleLogCss = document.getElementById("toggleLogCss");
   const sh = document.getElementById("shrink");
   const ex = document.getElementById("expand");
@@ -12,15 +13,16 @@ function initToggleLog() {
   const shrinkLog = document.getElementById("shrinkLog");
   const isExpanded = localStorage.getItem("screenlog") === "expanded";
 
-  const expandCss = "#screenlog.xpanded{height:auto!important;max-height:300px!important;min-height:56px}" +
+  const expandCss = "#screenlog.xpanded{height:auto!important;max-height:300px!important;min-height:56px;" +
+                    "transition:max-height .1s linear,min-height .1s linear;will-change:transform}" +
                     "#screenlog:hover,#screenlog:focus{overflow-y:auto}" +
                     "#expand{display:none}" +
-                    "#shrink{display:inline-block}" +
+                    "#shrink:not([hidden]){display:inline-block}" +
                     "@media (min-width:1500px){#screenlog.xpanded{min-height:60px!important}}";
 
-  const collapseCss = "#screenlog.collapsed{height:56px!important;min-height:56px}" +
+  const collapseCss = "#screenlog.collapsed{max-height:56px!important;min-height:56px}" +
                       "#shrink{display:none}" +
-                      "#expand{display:inline-block}" +
+                      "#expand:not([hidden]){display:inline-block}" +
                       "@media (min-width:1500px){#screenlog.collapsed{height:60px!important;min-height:60px}}";
 
   function clean() {
@@ -63,14 +65,18 @@ function initToggleLog() {
   if (screenlog) {
     if (localStorage.getItem("screenlog")) {
       [shrink, expand][localStorage.getItem("screenlog") === "expanded" ? 1 : 0]();
+      if (sh) {sh.removeAttribute("hidden");}
     } else {
       shrink();
+      if (ex) {ex.removeAttribute("hidden");}
     }
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     if (sh && isExpanded) {sh.addEventListener("click", shrink);}
     else if (ex) {ex.addEventListener("click", expand);}
+    if (ex) {ex.removeAttribute("hidden");}
+    if (sh) {sh.removeAttribute("hidden");}
   });
 
 }

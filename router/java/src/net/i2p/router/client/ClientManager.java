@@ -784,39 +784,48 @@ class ClientManager {
     /**
      * get the FloodfillNetworkDatabaseFacade associated with a particular client destination.
      * This is inside the runner, so it won't be there if the runner isn't ready.
-     * 
+     *
      * @param destHash destination hash associated with the client who's subDb we're looking for
      * @return may be null if it does not exist and the main netDb is not initialized
      */
     public FloodfillNetworkDatabaseFacade getClientFloodfillNetworkDatabaseFacade(Hash destHash) {
         if (destHash != null) {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldLog(Log.DEBUG)) {
                 _log.debug("Getting subDb for desthash: " + destHash);
+            }
             ClientConnectionRunner runner = getRunner(destHash);
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldLog(Log.DEBUG)) {
                 _log.debug("ClientManager got a runner in getClientFloodfillNetworkDatabaseFacade for " + destHash);
-            return runner.getFloodfillNetworkDatabaseFacade();
+            }
+            if (runner != null) {
+                return runner.getFloodfillNetworkDatabaseFacade();
+            } else {
+                if (_log.shouldLog(Log.WARN))
+                    _log.warn("Runner in getClientFloodfillNetworkDatabaseFacade not available for " + destHash);
+            }
         }
         return null;
     }
 
     /**
      * get all of the FloodfillNetworkDatabaseFacades for all of the clients.
-     * 
+     *
      * @return non-null
      */
     public Set<FloodfillNetworkDatabaseFacade> getClientFloodfillNetworkDatabaseFacades() {
         Set<FloodfillNetworkDatabaseFacade> rv = new HashSet<FloodfillNetworkDatabaseFacade>();
         for (ClientConnectionRunner runner : _runners.values()) {
-            if (runner != null)
-                rv.add(runner.getFloodfillNetworkDatabaseFacade());
+            FloodfillNetworkDatabaseFacade fndf = runner.getFloodfillNetworkDatabaseFacade();
+            if (fndf != null) {
+                rv.add(fndf);
+            }
         }
         return rv;
     }
 
     /**
      * get all the primary hashes for all the clients and return them as a set
-     * 
+     *
      * @return
      */
     public Set<Hash> getPrimaryHashes() {
