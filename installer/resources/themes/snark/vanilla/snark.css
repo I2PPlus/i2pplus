@@ -129,6 +129,7 @@ th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visi
 #screenlog.configpage{width:calc(100% - 10px)}
 #screenlog:hover,#screenlog:focus{overflow:auto}
 #screenlog:focus{box-shadow:0 0 0 1px #ff1a85,0 0 0 3px rgba(70,62,57,.5)}
+#screenlog:empty{display:none}
 #screenlog a,#screenlog a:visited,#screenlog .infohash{vertical-align:baseline;color:#f90;text-shadow:0 0 1px #000;opacity:.9}
 #screenlog a:hover,#screenlog a:visited:hover{color:#fb0;opacity:1}
 #screenlog a:link:active,#screenlog a:visited:active{color:#f60}

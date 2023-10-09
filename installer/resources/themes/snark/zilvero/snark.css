@@ -174,6 +174,7 @@ input[type=submit]:active,a.control:active,.snarkNav:active,#torrentDisplay .fil
 #screenlog{margin-bottom:-1px;height:60px;min-height:60px;overflow:hidden;line-height:1.15;font-size:9pt;text-align:left;box-shadow:var(--highlight);background:url(images/her.webp) no-repeat right 2px bottom/96px auto,linear-gradient(180deg,#fff,#eee)!important}
 #screenlog.xpanded{height:auto}
 #screenlog:hover{overflow-y:auto}
+#screenlog:empty{display:none}
 #screenlog ul{margin:1px 20px 0 -37px;list-style:none;color:#384;font-weight:700}
 #screenlog li,#screenlog li a{line-height:1.2}
 #screenlog li::before{margin:-2px 3px 0 0;width:10px;height:10px;content:"";display:inline-block;vertical-align:middle;background:var(--bullet) no-repeat left center/10px}
@@ -278,7 +279,7 @@ tr:hover .magnetLabel{opacity:1}
 #torrents td.tName{padding-left:8px;width:99%;font-weight:700;white-space:normal}
 #torrents td img{margin:-1px 0;vertical-align:middle}
 #torrents tfoot tr:first-child th:nth-child(n+2){text-align:center;white-space:nowrap}
-#torrents tfoot th{padding:7px 5px;border-top:0;border-bottom:0;background:#fff}
+#torrents tfoot th{padding:2px 5px;border-top:0;border-bottom:0;background:#fff}
 #torrents .infohash{padding:2px 4px 2px 18px;display:inline-block;border-radius:1px;box-shadow:0 0 0 1px #7a7,var(--highlight);background:var(--hash) no-repeat 4px center/12px,linear-gradient(180deg,#efe,#e6ffe6)}
 #torrents .rateDown,#torrents .rateUp,#torrents .ETA{padding:2px 8px;min-width:80px;text-align:center;font-weight:700}
 #totals{margin-left:3px;white-space:nowrap}

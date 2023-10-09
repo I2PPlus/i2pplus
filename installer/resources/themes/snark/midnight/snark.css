@@ -114,6 +114,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 .iframed #screenlog{margin-top:-5px}
 #screenlog:hover,#screenlog:focus{overflow:auto}
 #screenlog:focus{box-shadow:inset 0 0 0 1px #930}
+#screenlog:empty{display:none}
 #screenlog a:active{color:#ff007c}
 #screenlog ul{margin:-1px 0 2px 0;padding:0 0 0 14px;list-style:none}
 #screenlog li{margin-left:-15px;line-height:1.25;color:var(--li)}
