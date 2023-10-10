@@ -593,27 +593,31 @@ class TunnelRenderer {
     }
 
     public void renderGuide(Writer out) throws IOException {
-        out.write("<h3 class=tabletitle>" + _t("Bandwidth Tiers") + "</h3>\n");
-        out.write("<table id=tunnel_defs><tbody>");
-        out.write("<tr><td>&nbsp;</td>" +
-                  "<td><span class=tunnel_cap><b>L</b></span></td>" +
-                  "<td>" +_t("{0} shared bandwidth", range(Router.MIN_BW_L, Router.MIN_BW_M)) + "</td>" +
-                  "<td><span class=tunnel_cap><b>M</b></span></td>" +
-                  "<td>" + _t("{0} shared bandwidth", range(Router.MIN_BW_M, Router.MIN_BW_N)) + "</td>" +
-                  "<td>&nbsp;</td></tr>");
-        out.write("<tr><td>&nbsp;</td>" +
-                  "<td><span class=tunnel_cap><b>N</b></span></td>" +
-                  "<td>" + _t("{0} shared bandwidth", range(Router.MIN_BW_N, Router.MIN_BW_O)) + "</td>" +
-                  "<td><span class=tunnel_cap><b>O</b></span></td>" +
-                  "<td>" + _t("{0} shared bandwidth", range(Router.MIN_BW_O, Router.MIN_BW_P)) + "</td>" +
-                  "<td>&nbsp;</td></tr>");
-        out.write("<tr><td>&nbsp;</td>" +
-                  "<td><span class=tunnel_cap><b>P</b></span></td>" +
-                  "<td>" + _t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X)) + "</td>" +
-                  "<td><span class=tunnel_cap><b>X</b></span></td>" +
-                  "<td>" + _t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f) + " KBps") + "</td>" +
-                  "<td>&nbsp;</td></tr>");
-        out.write("</tbody></table>");
+        StringBuilder buf = new StringBuilder(1024);
+        buf.append("<h3 class=tabletitle>" + _t("Bandwidth Tiers") + "</h3>\n")
+           .append("<table id=tunnel_defs><tbody>")
+           .append("<tr><td>&nbsp;</td>")
+           .append("<td><span class=tunnel_cap><b>L</b></span></td>")
+           .append("<td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_L, Router.MIN_BW_M))).append("</td>")
+           .append("<td><span class=tunnel_cap><b>M</b></span></td>")
+           .append("<td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_M, Router.MIN_BW_N))).append("</td>")
+           .append("<td>&nbsp;</td></tr>")
+           .append("<tr><td>&nbsp;</td>")
+           .append("<td><span class=tunnel_cap><b>N</b></span></td>")
+           .append("<td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_N, Router.MIN_BW_O))).append("</td>")
+           .append("<td><span class=tunnel_cap><b>O</b></span></td>")
+           .append("<td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_O, Router.MIN_BW_P))).append("</td>")
+           .append("<td>&nbsp;</td></tr>")
+           .append("<tr><td>&nbsp;</td>")
+           .append("<td><span class=tunnel_cap><b>P</b></span></td>")
+           .append("<td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X))).append("</td>")
+           .append("<td><span class=tunnel_cap><b>X</b></span></td>")
+           .append("<td>").append(_t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f))).append("KBps").append("</td>")
+           .append("<td>&nbsp;</td></tr>")
+           .append("</tbody></table>");
+        out.write(buf.toString());
+        out.flush();
+        buf.setLength(0);
     }
 
     /** @since 0.9.33 */
@@ -750,20 +754,21 @@ class TunnelRenderer {
             if (length > maxLength)
                 maxLength = length;
         }
+        StringBuilder buf = new StringBuilder(32*1024);
         if (tunnels.size() != 0) {
-            out.write("<table class=\"tunneldisplay tunnels_client\"><tr><th title=\"" + _t("Inbound or outbound?") + ("\">") + _t("In/Out") +
+            buf.append("<table class=\"tunneldisplay tunnels_client\"><tr><th title=\"" + _t("Inbound or outbound?") + ("\">") + _t("In/Out") +
                       "</th><th>" + _t("Expiry") + "</th><th title=\"" + _t("Data transferred") + "\">" + _t("Data") + "</th><th>" + _t("Gateway") + "</th>");
             if (maxLength > 3) {
-            out.write("<th colspan=\"" + (maxLength - 2));
-            out.write("\">" + _t("Participants") + "</th>");
+            buf.append("<th colspan=\"" + (maxLength - 2));
+            buf.append("\">" + _t("Participants") + "</th>");
             }
             else if (maxLength == 3) {
-                out.write("<th>" + _t("Participant") + "</th>");
+                buf.append("<th>" + _t("Participant") + "</th>");
             }
             if (maxLength > 1) {
-                out.write("<th>" + _t("Endpoint") + "</th>");
+                buf.append("<th>" + _t("Endpoint") + "</th>");
             }
-            out.write("</tr>\n");
+            buf.append("</tr>\n");
         }
         final String tib = _t("Inbound");
         final String tob = _t("Outbound");
@@ -775,17 +780,17 @@ class TunnelRenderer {
             live++;
             boolean isInbound = info.isInbound();
             if (isInbound)
-                out.write("<tr><td><span class=inbound title=\"" + tib +
+                buf.append("<tr><td><span class=inbound title=\"" + tib +
                           "\"><img src=/themes/console/images/inbound.svg alt=\"" + tib + "\"></span></td>");
             else
-                out.write("<tr><td><span class=outbound title=\"" + tob +
+                buf.append("<tr><td><span class=outbound title=\"" + tob +
                           "\"><img src=/themes/console/images/outbound.svg alt=\"" + tob + "\"></span></td>");
-            out.write("<td>" + DataHelper.formatDuration2(timeLeft) + "</td>\n");
+            buf.append("<td>" + DataHelper.formatDuration2(timeLeft) + "</td>\n");
             int count = info.getProcessedMessagesCount() * 1024 / 1000;
-            out.write("<td class=\"cells datatransfer\">");
+            buf.append("<td class=\"cells datatransfer\">");
             if (count > 0)
-                out.write("<span class=right>" + count + "</span><span class=left>&#8239;KB</span>");
-            out.write("</td>\n");
+                buf.append("<span class=right>" + count + "</span><span class=left>&#8239;KB</span>");
+            buf.append("</td>\n");
             int length = info.getLength();
             boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
             for (int j = 0; j < length; j++) {
@@ -796,52 +801,52 @@ class TunnelRenderer {
                     if (length < maxLength && length == 1 && isInbound) {
                         // pad before inbound zero hop
                         for (int k = 1; k < maxLength; k++) {
-                            out.write("<td></td>");
+                            buf.append("<td></td>");
                         }
                     }
                     // Add empty content placeholders to force alignment.
-                    out.write(" <td><span class=\"tunnel_peer tunnel_local\" title=\"" +
+                    buf.append(" <td><span class=\"tunnel_peer tunnel_local\" title=\"" +
                               _t("Locally hosted tunnel") + "\">" + _t("Local") + "</span>");//&nbsp;" +
                               //"<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
                     if (debug) {
-                        out.write("<span class=tunnel_id title=\"" + _t("Tunnel identity") + "\">" +
+                        buf.append("<span class=tunnel_id title=\"" + _t("Tunnel identity") + "\">" +
                                   (id == null ? "" : "" + id) + "</span>");
                     }
-                    out.write("</td>");
+                    buf.append("</td>");
                 } else {
-                    out.write(" <td><span class=tunnel_peer>" + netDbLink(peer) +
+                    buf.append(" <td><span class=tunnel_peer>" + netDbLink(peer) +
                               "</span>");//&nbsp;<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
                     if (debug) {
-                        out.write("<span class=tunnel_id title=\"" + _t("Tunnel identity") + "\">" +
+                        buf.append("<span class=tunnel_id title=\"" + _t("Tunnel identity") + "\">" +
                                   (id == null ? "" : " " + id) + "</span>");
                     }
-                    out.write("</td>");
+                    buf.append("</td>");
                 }
                 if (length < maxLength && ((length == 1 && !isInbound) || j == length - 2)) {
                     // pad out outbound zero hop; non-zero-hop pads in middle
                     for (int k = length; k < maxLength; k++) {
-                        out.write("<td></td>");
+                        buf.append("<td></td>");
                     }
                 }
             }
-            out.write("</tr>\n");
+            buf.append("</tr>\n");
 
             if (info.isInbound())
                 processedIn += count;
             else
                 processedOut += count;
         }
-        out.write("</table>\n");
+        buf.append("</table>\n");
         if (live > 0 && ((in != null || (outPool != null)))) {
             List<?> pendingIn = in.listPending();
             List<?> pendingOut = outPool.listPending();
             if ((!pendingIn.isEmpty()) || (!pendingOut.isEmpty())) {
-                out.write("<div class=statusnotes><center><b>" + _t("Build in progress") + ":&nbsp;");
+                buf.append("<div class=statusnotes><center><b>" + _t("Build in progress") + ":&nbsp;");
                 if (in != null) {
                     // PooledTunnelCreatorConfig
 //                    List<?> pending = in.listPending();
                     if (!pendingIn.isEmpty()) {
-                        out.write("&nbsp;<span class=pending>" + pendingIn.size() + " " + tib + "</span>&nbsp;");
+                        buf.append("&nbsp;<span class=pending>" + pendingIn.size() + " " + tib + "</span>&nbsp;");
                         live += pendingIn.size();
                     }
                 }
@@ -849,18 +854,21 @@ class TunnelRenderer {
                     // PooledTunnelCreatorConfig
 //                    List<?> pending = outPool.listPending();
                     if (!pendingOut.isEmpty()) {
-                        out.write("&nbsp;<span class=pending>" + pendingOut.size() + " " + tob + "</span>&nbsp;");
+                        buf.append("&nbsp;<span class=pending>" + pendingOut.size() + " " + tob + "</span>&nbsp;");
                         live += pendingOut.size();
                     }
                 }
-                out.write("</b></center></div>\n");
+                buf.append("</b></center></div>\n");
             }
         }
         if (live <= 0)
-            out.write("<div class=statusnotes><center><b>" + _t("none") + "</b></center></div>\n");
-        out.write("<div class=statusnotes><center><b>" + _t("Lifetime bandwidth usage") + ":&nbsp;&nbsp;" +
+            buf.append("<div class=statusnotes><center><b>" + _t("none") + "</b></center></div>\n");
+        buf.append("<div class=statusnotes><center><b>" + _t("Lifetime bandwidth usage") + ":&nbsp;&nbsp;" +
                   DataHelper.formatSize2(processedIn*1024, true).replace("i", "") + "B " + _t("in") + ", " +
                   DataHelper.formatSize2(processedOut*1024, true).replace("i", "") + "B " + _t("out") + "</b></center></div>");
+        out.write(buf.toString());
+        out.flush();
+        buf.setLength(0);
     }
 
     /* duplicate of that in tunnelPoolManager for now */
