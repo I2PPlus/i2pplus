@@ -459,7 +459,11 @@ public class PersistentDataStore extends TransientDataStore {
                 }
             }
         } catch (IOException ioe) {
-            _log.error("Error writing out the object", ioe);
+            if (_log.shouldDebug()) {
+                _log.error("Error writing to disk", ioe);
+            } else {
+            _log.error("Error writing to disk (" + ioe.getMessage() + ")");
+            }
         } finally {
             if (fos != null) try { fos.close(); } catch (IOException ioe) {}
         }
