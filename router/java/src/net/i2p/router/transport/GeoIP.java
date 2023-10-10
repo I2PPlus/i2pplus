@@ -129,7 +129,6 @@ public class GeoIP {
 //        _pendingSearch = new ConcurrentHashSet<Long>();
 //        _pendingIPv6Search = new ConcurrentHashSet<Long>();
 //        _notFound = new ConcurrentHashSet<Long>();
-
         _pendingSearch = new CopyOnWriteArraySet<Long>();
         _pendingIPv6Search = new CopyOnWriteArraySet<Long>();
         _notFound = new CopyOnWriteArraySet<Long>();
@@ -149,22 +148,6 @@ public class GeoIP {
         _pendingIPv6Search.clear();
         _notFound.clear();
     }
-
-    /**
-     * Fire off a thread to lookup all pending IPs.
-     * There is no indication of completion.
-     * Results will be added to the table and available via get() after completion.
-     */
-/******
-    public void lookup() {
-        if (! _context.getBooleanPropertyDefaultTrue(PROP_GEOIP_ENABLED)) {
-            _pendingSearch.clear();
-            return;
-        }
-        Thread t = new Thread(new LookupJob());
-        t.start();
-    }
-******/
 
     /**
      * Blocking lookup of all pending IPs.
@@ -497,8 +480,8 @@ public class GeoIP {
             geoFile = new File(_context.getBaseDir(), geoDir);
         geoFile = new File(geoFile, GEOIP2_FILE_DEFAULT);
         if (!geoFile.exists()) {
-            if (_log.shouldWarn())
-                _log.warn("GeoIP2 file not found: " + geoFile.getAbsolutePath());
+            if (_log.shouldError())
+                _log.error("GeoIP2 file not found: " + geoFile.getAbsolutePath());
             return null;
         }
         return geoFile;
@@ -543,8 +526,8 @@ public class GeoIP {
             geoFile = new File(_context.getBaseDir(), geoDir);
         geoFile = new File(geoFile, COUNTRY_FILE_DEFAULT);
         if (!geoFile.exists()) {
-            if (_log.shouldWarn())
-                _log.warn("Country file not found: " + geoFile.getAbsolutePath());
+            if (_log.shouldError())
+                _log.error("Country file not found: " + geoFile.getAbsolutePath());
             return;
         }
         BufferedReader br = null;
@@ -605,8 +588,8 @@ public class GeoIP {
             geoFile = new File(_context.getBaseDir(), geoDir);
         geoFile = new File(geoFile, GEOIP_FILE_DEFAULT);
         if (!geoFile.exists()) {
-            if (_log.shouldWarn())
-                _log.warn("GeoIP file not found: " + geoFile.getAbsolutePath());
+            if (_log.shouldError())
+                _log.error("GeoIP file not found: " + geoFile.getAbsolutePath());
             return new String[0];
         }
         String[] rv = new String[search.length];
@@ -929,27 +912,11 @@ public class GeoIP {
             System.exit(1);
         }
         GeoIP g = new GeoIP(I2PAppContext.getGlobalContext());
-/***
-        String tests[] = {"0.0.0.0", "0.0.0.1", "0.0.0.2", "0.0.0.255", "1.0.0.0",
-                                        "94.3.3.3", "77.1.2.3", "127.0.0.0", "127.127.127.127", "128.0.0.0",
-                                        "89.8.9.3", "72.5.6.8", "217.4.9.7", "175.107.027.107", "135.6.5.2",
-                                        "129.1.2.3", "255.255.255.254", "255.255.255.255",
-                          "::", "1", "2000:1:2:3::", "2001:200:1:2:3:4:5:6", "2001:208:7:8:9::",
-                          "2c0f:fff0:1234:5678:90ab:cdef:0:0", "2c0f:fff1:0::"
-                          };
-        for (int i = 0; i < tests.length; i++)
-            g.add(tests[i]);
-***/
         for (int i = 0; i < args.length; i++)
             g.add(args[i]);
         long start = System.currentTimeMillis();
         g.blockingLookup();
         System.out.println("Lookup took " + (System.currentTimeMillis() - start));
-/***
-        g.countryToIP("af");
-        for (int i = 0; i < tests.length; i++)
-            System.out.println(tests[i] + " : " + g.get(tests[i]));
-***/
         for (int i = 0; i < args.length; i++)
             System.out.println(args[i] + " : " + g.get(args[i]));
     }
