@@ -218,7 +218,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         _localKey = null;
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Created KademliaNetworkDatabaseFacade for id: " + _dbid);
+            _log.debug("Created KademliaNetworkDatabaseFacade for DbId: " + _dbid);
         context.statManager().createRateStat("netDb.lookupDeferred", "Deferred NetDb lookups", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.exploreKeySet", "NetDb keys queued for exploration", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.negativeCache", "Aborted NetDb lookups (already cached)", "NetworkDatabase", RATES);
