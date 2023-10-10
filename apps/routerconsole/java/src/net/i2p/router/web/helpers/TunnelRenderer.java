@@ -454,14 +454,16 @@ class TunnelRenderer {
                               _t("Edit") + "</a>");
                 sb.append("</td></tr>\n");
             }
+            sb.append("</tbody>\n</table>\n");
             out.write(sb.toString());
             out.flush();
             sb.setLength(0);
-            out.write("</tbody>\n</table>\n");
         } else if (_context.router().isHidden()) {
-                out.write("<p class=infohelp>" + _t("Router is currently operating in Hidden Mode which prevents transit tunnels from being built."));
+                out.write("<p class=infohelp>");
+                out.write(_t("Router is currently operating in Hidden Mode which prevents transit tunnels from being built."));
         } else {
-                out.write("<p class=infohelp>" + _t("No transit tunnels currently active."));
+                out.write("<p class=infohelp>");
+                out.write(_t("No transit tunnels currently active."));
         }
     }
 
@@ -484,25 +486,30 @@ class TunnelRenderer {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
 
         if (!participating.isEmpty() || tunnelCount > 0) {
-            out.write("<h3 class=tabletitle id=peercount>" + _t("All Tunnels by Peer") +
-                      "&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=\"/tunnelpeercount\">" + _t("Refresh") + "</a></h3>\n");
-            out.write("<table id=tunnelPeerCount data-sortable>");
-            out.write("<thead>\n<tr>" +
-                      "<th id=country data-sortable>" + _t("Country") + "</th>" +
-                      "<th id=router data-sortable data-sort-method=natural>" + _t("Router") + "</th>" +
-                      "<th id=version data-sortable data-sort-method=dotsep>" + _t("Version") + "</th>" +
-                      "<th id=tier data-sortable data-sort=LMNOPX>" + _t("Tier") + "</th>" +
-                      "<th id=address data-sortable title=\"Primary IP address\">Address</th>");
+            StringBuilder sb = new StringBuilder(peerCount*640+1024);
+            sb.append("<h3 class=tabletitle id=peercount>").append(_t("All Tunnels by Peer"))
+              .append("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=\"/tunnelpeercount\">")
+              .append(_t("Refresh")).append("</a></h3>\n")
+              .append("<table id=tunnelPeerCount data-sortable>")
+              .append("<thead>\n<tr>")
+              .append("<th id=country data-sortable>").append(_t("Country")).append("</th>")
+              .append("<th id=router data-sortable data-sort-method=natural>").append(_t("Router")).append("</th>")
+              .append("<th id=version data-sortable data-sort-method=dotsep>").append(_t("Version")).append("</th>")
+              .append("<th id=tier data-sortable data-sort=LMNOPX>").append(_t("Tier")).append("</th>")
+              .append("<th id=address data-sortable title=\"").append(_t("Primary IP address")).append("\">")
+              .append(_t("Address")).append("</th>");
             if (enableReverseLookups()) {
-                out.write("<th id=domain data-sortable>" + _t("Domain") + "</th>");
+                sb.append("<th id=domain data-sortable>").append(_t("Domain")).append("</th>");
             }
-            out.write("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" data-sortable data-sort-method=number data-sort-column-key=localCount>" + _t("Local") + "</th>");
+            sb.append("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" ")
+              .append("data-sortable data-sort-method=number data-sort-column-key=localCount>")
+              .append(_t("Local") + "</th>");
             if (!participating.isEmpty()) {
-                out.write("<th class=tcount colspan=2 data-sortable data-sort-method=number data-sort-column-key=transitCount>" + _t("Transit") + "</th>");
+                sb.append("<th class=tcount colspan=2 data-sortable data-sort-method=number data-sort-column-key=transitCount>")
+                  .append(_t("Transit")).append("</th>");
             }
-            out.write("<th id=edit data-sort-method=none>" + _t("Edit") + "</th>");
-            out.write("</tr>\n</thead>\n<tbody id=allPeers>\n");
-            StringBuilder sb = new StringBuilder(640);
+            sb.append("<th id=edit data-sort-method=none>").append(_t("Edit")).append("</th>");
+            sb.append("</tr>\n</thead>\n<tbody id=allPeers>\n");
             for (Hash h : peerList) {
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
                 if (info == null) {
@@ -516,7 +523,6 @@ class TunnelRenderer {
                 if (ip != null && enableReverseLookups() && uptime > 30 * 1000) {
                     rl = _context.commSystem().getCanonicalHostName(ip);
                 }
-                sb.setLength(0);
                 sb.append("<tr class=lazy><td>")
                   .append(peerFlag(h))
                   .append("</td><td><span class=routerHash><a href=\"netdb?r=")
@@ -526,7 +532,8 @@ class TunnelRenderer {
                   .append("</a></span></td><td>");
                 if (v != null) {
                     sb.append("<span class=version title=\"Show all routers with this version in the NetDb\">")
-                      .append("<a href=\"/netdb?v=" + DataHelper.stripHTML(v) + "\">" + DataHelper.stripHTML(v) + "</a></span>");
+                      .append("<a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">")
+                      .append(DataHelper.stripHTML(v)).append("</a></span>");
                 }
                 sb.append("</td><td>")
                   .append(_context.commSystem().renderPeerCaps(h, false))
@@ -571,24 +578,27 @@ class TunnelRenderer {
                 } else {
                     sb.append("<td></td>");
                 }
-                sb.append(String.format("<td><a class=configpeer href=\"/configpeer?peer=%s\" title=\"Configure peer\">%s</a></td></tr>\n", info.getHash(), _t("Edit")));
-                out.write(sb.toString());
-                out.flush();
-                sb.setLength(0);
+                sb.append(String.format("<td><a class=configpeer href=\"/configpeer?peer=%s\" title=\"" +
+                  _t("Configure peer") + "\">%s</a></td></tr>\n", info.getHash(), _t("Edit")));
             }
-            out.write("</tbody>\n<tfoot><tr class=tablefooter data-sort-method=none>" +
-                      "<td colspan=4><b>" + peerCount + ' ' + _t("unique peers") + "</b></td>" +
-                      "<td></td>");
+            sb.append("</tbody>\n<tfoot><tr class=tablefooter data-sort-method=none>")
+              .append("<td colspan=4><b>").append(peerCount).append(" ").append(_t("unique peers")).append("</b></td>")
+              .append("<td></td>");
             if (enableReverseLookups()) {
-                out.write("<td></td>");
+                sb.append("<td></td>");
             }
-            out.write("<td colspan=2><b>" + tunnelCount + ' ' + _t("local") + "</b></td>");
+            sb.append("<td colspan=2><b>").append(tunnelCount).append(" ").append(_t("local")).append("</b></td>");
             if (!participating.isEmpty()) {
-                out.write("<td colspan=2><b>" + partCount + ' ' + _t("transit") + "</b></td>");
+                sb.append("<td colspan=2><b>").append(partCount).append(" ").append(_t("transit")).append("</b></td>");
             }
-            out.write("<td></td></tr>\n</tfoot>\n</table>\n");
+            sb.append("<td></td></tr>\n</tfoot>\n</table>\n");
+            out.write(sb.toString());
+            out.flush();
+            sb.setLength(0);
         } else {
-            out.write("<p class=infohelp>" + _t("No local or transit tunnels currently active.") + "</p>\n");
+            out.write("<p class=infohelp>");
+            out.write(_t("No local or transit tunnels currently active."));
+            out.write("</p>\n");
         }
     }
 
