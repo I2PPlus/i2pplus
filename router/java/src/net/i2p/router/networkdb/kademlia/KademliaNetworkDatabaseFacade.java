@@ -363,7 +363,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Check if the database is the main netDb. This is the one we're normally using
      * if you're acting as a floodfill.
-     * 
+     *
      * @return true if _dbid == FNDS.MAIN_DBID
      * @since 0.9.60
      */
@@ -435,7 +435,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         if (!QUIET) {
-            if (isMainDb()) {
+            if (!isClientDb() && !isMultihomeDb()) {
             // fill the search queue with random keys in buckets that are too small
             // Disabled since KBucketImpl.generateRandomKey() is b0rked,
             // and anyway, we want to search for a completely random key,
@@ -459,7 +459,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _log.warn("Operating in QUIET MODE - not exploring or pushing data proactively, simply reactively " +
                       "\n* This should NOT be used in production!");
         }
-        if (isMainDb()) {
+        if (!isClientDb() && !isMultihomeDb()) {
             // periodically update and resign the router's 'published date', which basically
             // serves as a version
             Job plrij = new PublishLocalRouterInfoJob(_context);
@@ -1064,11 +1064,26 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                "\n* DbId: " + _dbid,
                                new Exception());
         } else {
-            // This will only happen once when the local LS is first published
-            _localKey = localLeaseSet.getHash();
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Local client LeaseSet key initialized to: " + _localKey +
-                "\n* DbId: " + _dbid);
+            if (!_context.netDbSegmentor().useSubDbs()){
+                String dbid = "MainNetDb";
+                if (isClientDb()) {
+                    dbid = "ClientNetDb: " + _dbid;
+                }
+                if (_localKey != null) {
+                    if (!_localKey.equals(localLeaseSet.getHash()))
+                        if (_log.shouldLog(Log.ERROR))
+                            _log.error("[" + dbid + "]" + "Error, the local LS hash ("
+                                    + _localKey + ") does not match the published hash ("
+                                    + localLeaseSet.getHash() + ")! This shouldn't happen!",
+                                    new Exception());
+                } else {
+                    // This will only happen once when the local LS is first published
+                    _localKey = localLeaseSet.getHash();
+                    if (_log.shouldLog(Log.INFO))
+                        _log.info("Local client LeaseSet key initialized to: " + _localKey +
+                                  "\n* DbId: " + _dbid);
+                }
+            }
         }
         if (!_context.clientManager().shouldPublishLeaseSet(h))
             return;
@@ -1464,6 +1479,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.7
      */
     String validate(RouterInfo routerInfo) throws IllegalArgumentException {
+        if (!isInitialized()) {
+            return null;
+        }
         long now = _context.clock().now();
         String validateUptime = _context.getProperty("router.validateRoutersAfter");
         Hash us = _context.routerHash();
