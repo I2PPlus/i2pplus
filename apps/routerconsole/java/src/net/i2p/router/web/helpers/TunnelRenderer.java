@@ -502,10 +502,10 @@ class TunnelRenderer {
                 sb.append("<th id=domain data-sortable>").append(_t("Domain")).append("</th>");
             }
             sb.append("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" ")
-              .append("data-sortable data-sort-method=number data-sort-column-key=localCount>")
+              .append("data-sortable data-sort-method=natural data-sort-column-key=localCount>")
               .append(_t("Local") + "</th>");
             if (!participating.isEmpty()) {
-                sb.append("<th class=tcount colspan=2 data-sortable data-sort-method=number data-sort-column-key=transitCount>")
+                sb.append("<th class=tcount colspan=2 data-sortable data-sort-method=natural data-sort-column-key=transitCount>")
                   .append(_t("Transit")).append("</th>");
             }
             sb.append("<th id=edit data-sort-method=none>").append(_t("Edit")).append("</th>");

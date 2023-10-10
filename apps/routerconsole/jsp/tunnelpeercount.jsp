@@ -68,7 +68,7 @@
     }
   }
   function updateTunnels() {
-    xhrtunnels.open('GET', '/tunnelpeercount', true);
+    xhrtunnels.open("GET", "/tunnelpeercount", true);
     xhrtunnels.responseType = "document";
     xhrtunnels.onload = function () {
       const mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
