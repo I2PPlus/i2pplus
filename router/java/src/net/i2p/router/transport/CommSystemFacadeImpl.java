@@ -189,8 +189,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         // Going to calculate, sort them
         Collections.sort(skews);
-        if (_log.shouldDebug())
-            _log.debug("Peer clock skews (ms): \n* " + skews);
+        // enable this is you REALLY need it, which you don't
+        //if (_log.shouldDebug())
+        //    _log.debug("Peer clock skews (ms): \n* " + skews);
         // Calculate frame size
         int frameSize = Math.max((skews.size() * percentToInclude / 100), 1);
         int first = (skews.size() / 2) - (frameSize / 2);
@@ -411,7 +412,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public void exemptIncoming(Hash peer) {
         if (_manager.isEstablished(peer))
             return;
-        RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+        //RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
         if (ri == null)
             return;
         Collection<RouterAddress> addrs = ri.getAddresses();
@@ -526,7 +528,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /* We hope the routerinfos are read in and things have settled down by now, but it's not required to be so */
-    private static final int START_DELAY = SystemVersion.isSlow() ? 60*1000 : 5*1000;
+    private static final int START_DELAY = SystemVersion.isSlow() ? 60*1000 : 10*1000;
     private static final int LOOKUP_TIME = 5*60*1000;
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {
@@ -554,26 +556,24 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         public void timeReached() {
             long uptime = _context.router().getUptime();
             for (Hash h : _context.netDb().getAllRouters()) {
-                RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
-//                RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
+                RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
                 if (ri == null)
                     continue;
                 byte[] ip = getIP(ri);
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
-/**
-                if (enableReverseLookups() && uptime > 3*60*1000 && uptime < 10*60*1000) {
+
+                //if (enableReverseLookups() && uptime > 3*60*1000 && uptime < 10*60*1000) {
+                try {
+                    InetAddress ipAddress = InetAddress.getByAddress(ip);
+                    String ipString = ipAddress.getHostAddress();
+                    getCanonicalHostName(ipString);
                     try {
-                        InetAddress ipAddress = InetAddress.getByAddress(ip);
-                        String ipString = ipAddress.getHostAddress();
-                        getCanonicalHostName(ipString);
-                        //try {
-                        //    Thread.sleep(1); // 1000 lookups/s max
-                        //} catch (InterruptedException e) {}
-                    } catch(UnknownHostException exception) {}
-                }
-**/
+                        Thread.sleep(10); // 100 lookups/s max
+                    } catch (InterruptedException e) {}
+                } catch(UnknownHostException exception) {}
+                //}
             }
             _context.simpleTimer2().addPeriodicEvent(new Lookup(), 5000, LOOKUP_TIME);
         }
@@ -595,24 +595,15 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             super("GeoIP Lookup");
             setDaemon(true);
         }
-    }
 
-    public void run() {
-        long start = System.currentTimeMillis();
-        long uptime = _context.router().getUptime();
-        _geoIP.blockingLookup();
-/*
-        if (enableReverseLookups() && uptime > 60*1000 && uptime < 6*60*1000) {
-            readRDNSCacheFromFile();
-            if (_log.shouldInfo())
-                _log.info("NetDb GeoIP lookup and reading reverse DNS cache took " + (System.currentTimeMillis() - start) + "ms");
-        } else {
+        public void run() {
+            long start = System.currentTimeMillis();
+            long uptime = _context.router().getUptime();
+            _geoIP.blockingLookup();
+
             if (_log.shouldInfo())
                 _log.info("GeoIP lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
         }
-*/
-        if (_log.shouldInfo())
-            _log.info("GeoIP lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
     }
 
     /**
@@ -756,40 +747,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
           }
        }
     }
-
-/**
-    private static void writeRDNSCacheToFile() {
-       try {
-          File cacheFile = new File(RDNS_CACHE_FILE);
-          if (!cacheFile.exists()) {
-             cacheFile.createNewFile();
-             System.err.println("Cache file created");
-          }
-
-          // create a buffered writer with UTF-8 encoding and "\n" as the newline character
-          BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-                  new FileOutputStream(cacheFile), ENCODING));
-          Map<String, CacheEntry> cacheEntries = rdnsCache;
-
-          for (Map.Entry<String, CacheEntry> entry : cacheEntries.entrySet()) {
-             String ipAddress = entry.getKey();
-             CacheEntry cacheEntry = entry.getValue();
-
-             if (!isDuplicateEntry(cacheFile, ipAddress, cacheEntry.getHostname())) {
-                String line = ipAddress + "," + cacheEntry.getHostname() + NEWLINE;
-                writer.write(line);
-                // flush the writer to ensure that all data is written to the file
-                writer.flush();
-             }
-          }
-          // close the writer
-          writer.close();
-          //System.err.println("Reverse DNS cache written to file (" + countRdnsCacheEntries() + ")");
-       } catch (IOException ex) {
-          System.err.println("Error updating reverse DNS cache file: " + ex.getMessage());
-       }
-    }
-**/
 
     private static void writeRDNSCacheToFile() {
        try {
@@ -973,43 +930,34 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @return two-letter lower-case country code or null
      */
 
-/**
-    @Override
-    public String getCountry(Hash peer) {
-        byte[] ip = TransportImpl.getIP(peer);
-        //if (ip != null && ip.length == 4)
-        if (ip != null)
-            return _geoIP.get(ip);
-        RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-        if (ri == null)
-            return null;
-        ip = getValidIP(ri);
-        if (ip != null)
-            return _geoIP.get(ip);
-        return null;
-    }
-**/
-
     @Override
     public String getCountry(Hash peer) {
         byte[] ip = TransportImpl.getIP(peer);
         if (ip != null) {
             String country = _geoIP.get(ip);
             return country;
+        } else {
+            if (_log.shouldDebug()) {
+                _log.debug("Cannot identify country for [" + peer.toBase64().substring(0,6) + "] -> IP address not found");
+            }
         }
         RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+        //RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer); // this causes a catastrophic fail
         if (ri == null) {
+            if (_log.shouldDebug()) {
+                _log.debug("No RouterInfo for [" + peer.toBase64().substring(0,6) + "]");
+            }
             return null;
         }
         ip = getValidIP(ri);
         if (ip != null) {
-            String country = _geoIP.get(ip);
             try {
+                String country = _geoIP.get(ip);
                 if (_log.shouldDebug() && country == null) {
                     _log.debug("Country not found for IP address: " + InetAddress.getByAddress(ip).getHostAddress());
                 }
+                return country;
             } catch (UnknownHostException e) {}
-            return country;
         }
         return null;
     }
@@ -1221,7 +1169,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public String renderPeerFlag(Hash peer) {
         StringBuilder buf = new StringBuilder(128);
-        RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+        //RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
         String c = getCountry(peer);
         String countryName = getCountryName(c);
         String h = peer.toBase64();
