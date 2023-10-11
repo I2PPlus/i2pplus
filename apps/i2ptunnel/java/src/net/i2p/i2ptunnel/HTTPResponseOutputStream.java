@@ -45,7 +45,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     protected String _contentEncoding;
 
 //    private static final int CACHE_SIZE = 8*1024;
-    private static final int CACHE_SIZE = 16*1024;
+    private static final int CACHE_SIZE = 32*1024;
     private static final ByteCache _cache = ByteCache.getInstance(8, CACHE_SIZE);
     // OOM DOS prevention
     private static final int MAX_HEADER_SIZE = 64*1024;
