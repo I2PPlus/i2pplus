@@ -221,10 +221,11 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // in-war icons etc.
         if (path != null && path.startsWith(WARBASE)) {
-            if (method.equals("GET") || method.equals("HEAD"))
+            if (method.equals("GET") || method.equals("HEAD")) {
                 super.doGet(req, resp);
-            else  // no POST either
+            } else {  // no POST either
                 resp.sendError(405);
+            }
             return;
         }
 
@@ -340,13 +341,13 @@ public class I2PSnarkServlet extends BasicServlet {
         if (theme.equals("dark")) {
           pageBackground = "#000";
         } else if (theme.equals("midnight")) {
-          pageBackground = "repeating-linear-gradient(180deg,rgba(0,0,24,.75) 2px,rgba(0,0,0,.7) 4px)/100% 4px," +
+            pageBackground = "repeating-linear-gradient(180deg,rgba(0,0,24,.75) 2px,rgba(0,0,0,.7) 4px)/100% 4px," +
                            "var(--tile)/171px 148px,var(--offline)/0,#000010";
         } else if (theme.equals("ubergine")) {
-          pageBackground = "repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(48,0,48,.5) 4px)," +
+            pageBackground = "repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(48,0,48,.5) 4px)," +
                            "repeating-linear-gradient(180deg,#080008 2px,#212 4px),var(--offline) no-repeat,#130313";
         } else if (theme.equals("vanilla")) {
-          pageBackground = "repeating-linear-gradient(180deg,#6f5b4c 1px,#a9927e 1px,#bfa388 4px),#cab39b";
+            pageBackground = "repeating-linear-gradient(180deg,#6f5b4c 1px,#a9927e 1px,#bfa388 4px),#cab39b";
         }
         sbuf.append(DOCTYPE).append("<html style=background:").append(pageBackground).append(">\n")
             .append("<head>\n").append("<meta charset=utf-8>\n").append("<meta name=viewport content=\"width=device-width\">\n");
@@ -451,16 +452,17 @@ public class I2PSnarkServlet extends BasicServlet {
                 .append("&hideLegend=true&hideTitle=true&hideGrid=true&t=").append(now).append("\')}\"</style>");
         }
         sbuf.append("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"").append(_manager.getTheme())
-            .append(" lang_").append(lang).append("\">\n<center>\n");
-        sbuf.append(IFRAME_FORM);
+            .append(" lang_").append(lang).append("\">\n<center>\n")
+            .append(IFRAME_FORM);
         List<Tracker> sortedTrackers = null;
         if (isConfigure) {
             sbuf.append("<div id=navbar>\n<a href=\"").append(_contextPath).append("/\" title=\"").append(_t("Torrents"))
                 .append("\" class=\"snarkNav nav_main\">");
-            if (_contextName.equals(DEFAULT_NAME))
+            if (_contextName.equals(DEFAULT_NAME)) {
                 sbuf.append(_t("I2PSnark"));
-            else
+            } else {
                 sbuf.append(_contextName);
+            }
             sbuf.append("</a>\n");
         } else {
             sbuf.append("<div id=navbar>\n<a href=\"").append(_contextPath).append('/').append(peerString)
@@ -485,12 +487,13 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         if (_manager.getTorrents().size() > 1) {
             sbuf.append("<form id=snarkSearch action=\"").append(_contextPath).append("\" method=GET hidden>\n")
-                .append("<span id=searchwrap><input id=searchInput type=search required name=s size=20 placeholder=\"");
-            sbuf.append(_t("Search torrents"));
-            sbuf.append("\"");
+                .append("<span id=searchwrap><input id=searchInput type=search required name=s size=20 placeholder=\"")
+                .append(_t("Search torrents"))
+                .append("\"");
             String s = req.getParameter("s");
-            if (s != null)
+            if (s != null) {
                 sbuf.append(" value=\"").append(DataHelper.escapeHTML(s)).append('"');
+            }
             sbuf.append("><a href=").append(_contextPath).append(" title=\"").append(_t("Clear search"))
                 .append("\" hidden>x</a></span><input type=submit value=\"Search\">\n</form>\n");
             //sbuf.append("<script src=\"" + resourcePath + "js/search.js?" + CoreVersion.VERSION + "\"></script>");
@@ -579,6 +582,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String[] headerParts = line.split(": ");
             resp.setHeader(headerParts[0], headerParts[1]);
         }
+        headers.setLength(0);
     }
 
     private void setXHRHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
@@ -600,6 +604,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String[] headerParts = line.split(": ");
             resp.setHeader(headerParts[0], headerParts[1]);
         }
+        headers.setLength(0);
     }
 
     private UIMessages.Message lastMessage;
@@ -706,23 +711,24 @@ public class I2PSnarkServlet extends BasicServlet {
     private boolean writeTorrents(PrintWriter out, HttpServletRequest req, boolean canWrite) throws IOException {
         /** dl, ul, down rate, up rate, peers, size */
         final long stats[] = new long[6];
+        String filter = req.getParameter("filter") != null ? req.getParameter("filter") : "";
         String peerParam = req.getParameter("p");
+        String psize = req.getParameter("ps");
+        String srch = req.getParameter("s");
+        String srt = req.getParameter("sort");
         String stParam = req.getParameter("st");
         int refresh = _manager.getRefreshDelaySeconds();
         List<Snark> snarks = getSortedSnarks(req);
         boolean isForm = _manager.util().connected() || !snarks.isEmpty();
         boolean showStatusFilter = _manager.util().showStatusFilter();
-        String filter = req.getParameter("filter");
-        String srt = req.getParameter("sort");
-        String psize = req.getParameter("ps");
-        String srch = req.getParameter("s");
         filterParam = filter;
         filterEnabled = filterParam != null && !filterParam.equals("all") && !filterParam.equals("");
         if (isForm) {
+            StringBuilder fbuf = new StringBuilder(1280);
             if (showStatusFilter && !snarks.isEmpty() && _manager.util().connected()) {
-              out.write("<form id=torrentlist class=filterbarActive action=\"_post\" method=POST target=processForm>\n");
+              fbuf.append("<form id=torrentlist class=filterbarActive action=\"_post\" method=POST target=processForm>\n");
             } else {
-              out.write("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");
+              fbuf.append("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");
             }
             if (showStatusFilter) {
                 // selective display of torrents based on status
@@ -740,28 +746,44 @@ public class I2PSnarkServlet extends BasicServlet {
                     if (psize != null) {
                         activeQuery.append("ps=" + psize + "&");
                     }
+                    if (filterEnabled) {
+                        // remove existing filter parameter
+                        String existingFilter = "filter=" + filterParam;
+                        int filterIndex = activeQuery.indexOf(existingFilter);
+                        if (filterIndex >= 0) {
+                            activeQuery.delete(filterIndex, filterIndex + existingFilter.length());
+                        }
+                    }
                     activeQuery.setLength(activeQuery.length() - 1);
                     String buttonUrl = activeQuery.toString();
-                    buttonUrl += (buttonUrl.contains("?") ? "&" : "?") + "filter=";
-                    //if (filterEnabled) {
-                    //} else {
-                    //    buttonUrl += (buttonUrl.contains("?") ? "&" : "?") + "filter=all";
-                    //}
-                    out.write("<noscript><style>.script{display:none}</style></noscript>\n");
-                    out.write("<div id=torrentDisplay class=script>" +
-                              "<a class=filter id=all href=\"" + buttonUrl + "all\"><span>" + _t("Show All") + "<span class=badge></span></span></a>" +
-                              "<a class=filter id=active href=\"" + buttonUrl + "active\"><span>" + _t("Active") + "<span class=badge></span></span></a>" +
-                              "<a class=filter id=inactive href=\"" + buttonUrl + "inactive\"><span>" + _t("Inactive") + "<span class=badge></span></span></a>" +
-                              "<a class=filter id=connected href=\"" + buttonUrl + "connected\"><span>" + _t("Connected") + "<span class=badge></span></span></a>" +
-                              "<a class=filter id=downloading href=\"" + buttonUrl + "downloading\"><span>" + _t("Downloading") + "<span class=badge></span></span></a>" +
-                              "<a class=filter id=seeding href=\"" + buttonUrl + "seeding\"><span>" + _t("Seeding") + "<span class=badge></span></span></a>" +
-                              "<a class=filter id=complete href=\"" + buttonUrl + "complete\"><span>" + _t("Complete") + "<span class=badge></span></span></a>" +
-                              "<a class=filter id=incomplete href=\"" + buttonUrl + "incomplete\"><span>" + _t("Incomplete") + "<span class=badge></span></span></a>" +
-                              "<a class=filter id=stopped href=\"" + buttonUrl + "stopped\"><span>" + _t("Stopped") + "<span class=badge></span></span></a>" +
-                              "</div>\n");
+                    buttonUrl += (buttonUrl.contains("=") ? "&amp;filter=" : "?filter=");
+                    fbuf.append("<noscript><style>.script{display:none}</style></noscript>\n")
+                        .append("<div id=torrentDisplay class=script>")
+                        .append("<a class=filter id=all href=\"").append(buttonUrl).append("all\"><span>")
+                        .append(_t("Show All")).append("<span class=badge></span></span></a>")
+                        .append("<a class=filter id=active href=\"").append(buttonUrl).append("active\"><span>")
+                        .append(_t("Active")).append("<span class=badge></span></span></a>")
+                        .append("<a class=filter id=inactive href=\"").append(buttonUrl).append("inactive\"><span>")
+                        .append(_t("Inactive")).append("<span class=badge></span></span></a>")
+                        .append("<a class=filter id=connected href=\"").append(buttonUrl).append("connected\"><span>")
+                        .append(_t("Connected")).append("<span class=badge></span></span></a>")
+                        .append("<a class=filter id=downloading href=\"").append(buttonUrl).append("downloading\"><span>")
+                        .append(_t("Downloading")).append("<span class=badge></span></span></a>")
+                        .append("<a class=filter id=seeding href=\"").append(buttonUrl).append("seeding\"><span>")
+                        .append(_t("Seeding")).append("<span class=badge></span></span></a>")
+                        .append("<a class=filter id=complete href=\"").append(buttonUrl).append("complete\"><span>")
+                        .append(_t("Complete")).append("<span class=badge></span></span></a>")
+                        .append("<a class=filter id=incomplete href=\"").append(buttonUrl).append("incomplete\"><span>")
+                        .append(_t("Incomplete")).append("<span class=badge></span></span></a>")
+                        .append("<a class=filter id=stopped href=\"").append(buttonUrl).append("stopped\"><span>")
+                        .append(_t("Stopped")).append("<span class=badge></span></span></a>")
+                        .append("</div>\n");
                 }
             }
+            out.write(fbuf.toString());
+            fbuf.setLength(0);
             writeHiddenInputs(out, req, null);
+            out.flush();
         }
 
         // Opera and text-mode browsers: no &thinsp; and no input type=image values submitted
@@ -814,31 +836,36 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(TABLE_HEADER);
 
         String currentSort = req.getParameter("sort");
-        filterParam = req.getParameter("filter");
+        String url = req.getRequestURL().toString();
+        filterParam = req.getParameter("filter") != null ? req.getParameter("filter") : "";
+        String filterQuery = (url.contains("?") ? "&amp;" : "?") + "filter=" +
+                             (filterParam.isEmpty() ? "all" : filterParam);
         boolean showSort = total > 1;
-        out.write("<tr><th class=status>");
+        StringBuilder hbuf = new StringBuilder(2*1024);
+        hbuf.append("<tr><th class=status>");
         // show incomplete torrents at top on first click
         String sort = "-2";
         if (showSort) {
-            out.write("<span class=sortIcon>");
+            hbuf.append("<span class=sortIcon>");
             if (currentSort == null || "-2".equals(currentSort)) {
                 sort = "2";
                 if ( "-2".equals(currentSort))
-                    out.write("<span class=ascending></span>");
+                    hbuf.append("<span class=ascending></span>");
             } else if ("2".equals(currentSort)) {
                 sort = "-2";
-                out.write("<span class=descending></span>");
+                hbuf.append("<span class=descending></span>");
             } else {
                 sort = "2";
             }
-            out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, sort, filter, null));
-            out.write("\">");
+            hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+            hbuf.append(filterQuery);
+            hbuf.append("\">");
         }
         String tx = _t("Status");
-        out.write(toThemeImg("status", tx, showSort ? _t("Sort by {0}", tx) : tx));
+        hbuf.append(toThemeImg("status", tx, showSort ? _t("Sort by {0}", tx) : tx));
         if (showSort)
-            out.write("</a></span>");
-        out.write("</th><th class=peerCount>");
+            hbuf.append("</a></span>");
+        hbuf.append("</th><th class=peerCount>");
         if (_manager.util().connected() && !snarks.isEmpty()) {
             boolean hasPeers = false;
             int end = Math.min(start + pageSize, snarks.size());
@@ -849,56 +876,58 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
             if (hasPeers) {
-                out.write(" <a href=\"" + _contextPath + '/');
+                hbuf.append(" <a href=\"" + _contextPath + '/');
                 if (peerParam != null) {
                     // disable peer view
-                    out.write(getQueryString(req, "0", null, sort, filter, null));
-                    out.write("\">");
+                    hbuf.append(getQueryString(req, "", null, null));
+                    hbuf.append(filterQuery);
+                    hbuf.append("\">");
                     tx = _t("Hide Peers");
-                    out.write(toThemeImg("hidepeers", tx, tx));
+                    hbuf.append(toThemeImg("hidepeers", tx, tx));
                 } else {
                     // enable peer view
-                    out.write(getQueryString(req, "1", null, sort, filter, null));
-                    out.write("\">");
+                    hbuf.append(getQueryString(req, "1", null, null));
+                    hbuf.append(filterQuery);
+                    hbuf.append("\">");
                     tx = _t("Show Peers");
-                    out.write(toThemeImg("showpeers", tx, tx));
+                    hbuf.append(toThemeImg("showpeers", tx, tx));
                 }
-                out.write("</a>\n");
+                hbuf.append("</a>\n");
             }
         }
-
-        out.write("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden=hidden></th>");
-        out.write("<th id=torrentSort>");
+        hbuf.append("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden=hidden></th>");
+        hbuf.append("<th id=torrentSort>");
         // cycle through sort by name or type
         boolean isTypeSort = false;
         if (showSort) {
-            out.write("<span class=sortIcon>");
+            hbuf.append("<span class=sortIcon>");
             if (currentSort == null || "0".equals(currentSort) || "1".equals(currentSort)) {
                 sort = "-1";
                 if ("1".equals(currentSort) || currentSort == null)
-                    out.write("<span class=ascending></span>");
+                    hbuf.append("<span class=ascending></span>");
             } else if ("-1".equals(currentSort)) {
                 sort = "12";
                 isTypeSort = true;
-                out.write("<span class=descending></span>");
+                hbuf.append("<span class=descending></span>");
             } else if ("12".equals(currentSort)) {
                 sort = "-12";
                 isTypeSort = true;
-                out.write("<span class=ascending></span>");
+                hbuf.append("<span class=ascending></span>");
             } else {
                 sort = "";
             }
-            out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, sort, filter, null));
-            out.write("\">");
+            hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+            hbuf.append(filterQuery);
+            hbuf.append("\">");
         }
         tx = _t("Torrent");
         if (!snarks.isEmpty()) {
-            out.write(toThemeImg("torrent", tx, showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Torrent name"))) : tx));
+            hbuf.append(toThemeImg("torrent", tx, showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Torrent name"))) : tx));
             if (showSort) {
-                out.write("</a></span>");
+                hbuf.append("</a></span>");
             }
         }
-        out.write("</th><th class=tName></th><th class=ETA>");
+        hbuf.append("</th><th class=tName></th><th class=ETA>");
         // FIXME: only show icon when actively downloading, not uploading
         if (_manager.util().connected() && !snarks.isEmpty()) {
             boolean isDownloading = false;
@@ -911,60 +940,62 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             if (isDownloading) {
                 if (showSort) {
-                    out.write("<span class=sortIcon>");
+                    hbuf.append("<span class=sortIcon>");
                     if (currentSort == null || "-4".equals(currentSort)) {
                         sort = "4";
                         if ("-4".equals(currentSort))
-                            out.write("<span class=descending></span>");
+                            hbuf.append("<span class=descending></span>");
                     } else if ("4".equals(currentSort)) {
                         sort = "-4";
-                        out.write("<span class=ascending></span>");
+                        hbuf.append("<span class=ascending></span>");
                     }
-                    out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, sort, filter, null));
-                    out.write("\">");
+                    hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+                    hbuf.append(filterQuery);
+                    hbuf.append("\">");
                 }
             // Translators: Please keep short or translate as " "
             tx = _t("ETA");
-            out.write(toThemeImg("eta", tx, showSort ? _t("Sort by {0}", _t("Estimated time remaining")) : _t("Estimated time remaining")));
+            hbuf.append(toThemeImg("eta", tx, showSort ? _t("Sort by {0}", _t("Estimated time remaining")) : _t("Estimated time remaining")));
                 if (showSort)
-                    out.write("</a></span>");
+                    hbuf.append("</a></span>");
             }
          }
-        out.write("</th><th class=rxd>");
+        hbuf.append("</th><th class=rxd>");
         // cycle through sort by size or downloaded
         boolean isDlSort = false;
         if (!snarks.isEmpty()) {
             if (showSort) {
-                out.write("<span class=sortIcon>");
+                hbuf.append("<span class=sortIcon>");
                 if ("-5".equals(currentSort)) {
                     sort = "5";
-                    out.write("<span class=descending></span>");
+                    hbuf.append("<span class=descending></span>");
                 } else if ("5".equals(currentSort)) {
                     sort = "-6";
                     isDlSort = true;
-                    out.write("<span class=ascending></span>");
+                    hbuf.append("<span class=ascending></span>");
                 } else if ("-6".equals(currentSort)) {
                     sort = "6";
                     isDlSort = true;
-                    out.write("<span class=descending></span>");
+                    hbuf.append("<span class=descending></span>");
                 } else if ("6".equals(currentSort)) {
                     sort = "-5";
                     isDlSort = true;
-                    out.write("<span class=ascending></span>");
+                    hbuf.append("<span class=ascending></span>");
                 } else {
                     sort = "-5";
                 }
-                out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, sort, filter, null));
-                out.write("\">");
+                hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+                hbuf.append(filterQuery);
+                hbuf.append("\">");
             }
             // Translators: Please keep short or translate as " "
             tx = _t("RX");
-            out.write(toThemeImg("head_rx", tx, showSort ? _t("Sort by {0}", (isDlSort ? _t("Downloaded") : _t("Size"))) : _t("Downloaded")));
+            hbuf.append(toThemeImg("head_rx", tx, showSort ? _t("Sort by {0}", (isDlSort ? _t("Downloaded") : _t("Size"))) : _t("Downloaded")));
             if (showSort)
-                out.write("</a></span>");
+                hbuf.append("</a></span>");
         }
-        out.write("</th>");
-        out.write("<th class=rateDown>");
+        hbuf.append("</th>");
+        hbuf.append("<th class=rateDown>");
         // FIXME only show icon when total down rate > 0
         if (_manager.util().connected() && !snarks.isEmpty()) {
             boolean isDownloading = false;
@@ -977,62 +1008,69 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             if (isDownloading) {
                 if (showSort) {
-                    out.write("<span class=sortIcon>");
+                    hbuf.append("<span class=sortIcon>");
                     if (currentSort == null || "8".equals(currentSort)) {
                         sort = "-8";
                         if ("8".equals(currentSort))
-                            out.write("<span class=descending></span>");
+                            hbuf.append("<span class=descending></span>");
                     } else if ("-8".equals(currentSort)) {
                         sort = "8";
-                        out.write("<span class=ascending></span>");
+                        hbuf.append("<span class=ascending></span>");
                     } else {
                         sort = "-8";
                     }
-                out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, sort, filter, null));
-                out.write("\">");
+                    if (peerParam != null) {
+                        hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, "1", sort, filter, null));
+                    } else {
+                        hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, "0", sort, filter, null));
+                    }
+                    hbuf.append(filterQuery);
+                    hbuf.append("\">");
+                    // Translators: Please keep short or translate as " "
+                    tx = _t("RX Rate");
+                    hbuf.append(toThemeImg("head_rxspeed", tx, showSort ? _t("Sort by {0}", _t("Down Rate")) : _t("Down Rate")));
+                    if (showSort) {
+                        hbuf.append("</a></span>");
+                    }
                 }
-                // Translators: Please keep short or translate as " "
-                tx = _t("RX Rate");
-                out.write(toThemeImg("head_rxspeed", tx, showSort ? _t("Sort by {0}", _t("Down Rate")) : _t("Down Rate")));
-                if (showSort)
-                    out.write("</a></span>");
             }
         }
-        out.write("<th class=txd>");
+        hbuf.append("<th class=txd>");
         boolean isRatSort = false;
         // cycle through sort by uploaded or ratio
         boolean nextRatSort = false;
         if (showSort) {
-            out.write("<span class=sortIcon>");
+            hbuf.append("<span class=sortIcon>");
             if ("-7".equals(currentSort)) {
                 sort = "7";
-                out.write("<span class=descending></span>");
+                hbuf.append("<span class=descending></span>");
             } else if ("7".equals(currentSort)) {
                 sort = "-11";
                 nextRatSort = true;
-                out.write("<span class=ascending></span>");
+                hbuf.append("<span class=ascending></span>");
             } else if ("-11".equals(currentSort)) {
                 sort = "11";
                 nextRatSort = true;
                 isRatSort = true;
-                out.write("<span class=descending></span>");
+                hbuf.append("<span class=descending></span>");
             } else if ("11".equals(currentSort)) {
                 sort = "-7";
                 isRatSort = true;
-                out.write("<span class=ascending></span>");
+                hbuf.append("<span class=ascending></span>");
             } else {
                 sort = "-7";
             }
-            out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, sort, filter, null));
-            out.write("\">");
+            hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+            hbuf.append(filterQuery);
+            hbuf.append("\">");
         }
         // Translators: Please keep short or translate as " "
         tx = _t("TX");
-        out.write(toThemeImg("head_tx", tx, showSort ? _t("Sort by {0}", (nextRatSort ? _t("Upload ratio") : _t("Uploaded"))) : _t("Uploaded")));
+        hbuf.append(toThemeImg("head_tx", tx, showSort ? _t("Sort by {0}", (nextRatSort ? _t("Upload ratio") : _t("Uploaded"))) : _t("Uploaded")));
         if (showSort)
-            out.write("</a></span>");
-        out.write("</th>");
-        out.write("<th class=rateUp>");
+            hbuf.append("</a></span>");
+        hbuf.append("</th>");
+        hbuf.append("<th class=rateUp>");
         // FIXME only show icon when total up rate > 0 and no choked peers
         if (_manager.util().connected() && !snarks.isEmpty()) {
             boolean isUploading = false;
@@ -1045,49 +1083,53 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             if (isUploading) {
                 if (showSort) {
-                    out.write("<span class=sortIcon>");
+                    hbuf.append("<span class=sortIcon>");
                     if (currentSort == null || "9".equals(currentSort)) {
                         sort = "-9";
                         if ("9".equals(currentSort))
-                            out.write("<span class=ascending></span>");
+                            hbuf.append("<span class=ascending></span>");
                     } else if ("-9".equals(currentSort)) {
                         sort = "9";
-                        out.write("<span class=descending></span>");
+                        hbuf.append("<span class=descending></span>");
                     } else {
                         sort = "-9";
                     }
-                    out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, sort, filter, null));
-                    out.write("\">");
+                    hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+                    hbuf.append(filterQuery);
+                    hbuf.append("\">");
                 }
                 // Translators: Please keep short or translate as " "
                 tx = _t("TX Rate");
-                out.write(toThemeImg("head_txspeed", tx, showSort ? _t("Sort by {0}", _t("Up Rate")) : _t("Up Rate")));
+                hbuf.append(toThemeImg("head_txspeed", tx, showSort ? _t("Sort by {0}", _t("Up Rate")) : _t("Up Rate")));
                 if (showSort)
-                    out.write("</a></span>");
+                    hbuf.append("</a></span>");
             }
         }
-        out.write("</th>");
-        out.write("<th class=tAction>");
+        hbuf.append("</th>");
+        hbuf.append("<th class=tAction>");
         if (_manager.isStopping()) {
-            out.write("");
+            hbuf.append("");
         } else if (_manager.util().connected()) {
-            out.write("<input type=submit id=actionStopAll name=action_StopAll value=\"" +
+            hbuf.append("<input type=submit id=actionStopAll name=action_StopAll value=\"" +
                       _t("Stop All") + "\" title=\"" + _t("Stop all torrents and the I2P tunnel") + "\">");
             for (Snark s : snarks) {
                 if (s.isStopped()) {
                     // show startall too
-                    out.write("<input type=submit id=actionStartAll name=action_StartAll value=\"" +
+                    hbuf.append("<input type=submit id=actionStartAll name=action_StartAll value=\"" +
                              _t("Start All") + "\" title=\"" + _t("Start all stopped torrents") + "\">");
                     break;
                 }
             }
         } else if ((!_manager.util().isConnecting()) && !snarks.isEmpty()) {
-            out.write("<input type=submit id=actionStartAll name=action_StartAll value=\"" +
+            hbuf.append("<input type=submit id=actionStartAll name=action_StartAll value=\"" +
                       _t("Start All") + "\" title=\"" + _t("Start all torrents and the I2P tunnel") + "\">");
         } else {
-            out.write("");
+            hbuf.append("");
         }
-        out.write("</th></tr>\n</thead>\n<tbody id=snarkTbody>");
+        hbuf.append("</th></tr>\n</thead>\n<tbody id=snarkTbody>");
+        out.write(hbuf.toString());
+        out.flush();
+        hbuf.setLength(0);
         String uri = _contextPath + '/';
         boolean showDebug = "2".equals(peerParam);
 
@@ -1120,7 +1162,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<tfoot id=\"snarkFoot");
             if (_manager.util().isConnecting() || !_manager.util().connected())
                 out.write("\" class=\"initializing");
-            out.write("\">\n<tr><th id=torrentTotals align=left colspan=12></th></tr>\n</tfoot>\n");
+            out.write("\"><tr><th id=torrentTotals align=left colspan=12></th></tr></tfoot>\n");
         } else /** if (snarks.size() > 1) */ {
 
             // Add a pagenav to bottom of table if we have 50+ torrents per page
@@ -1130,7 +1172,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 writePageNav(out, req, start, (pageSize), total, filter, noThinsp);
                 out.write("</div></td></tr>\n</tbody>\n");
             }
-            out.write("<tfoot id=snarkFoot>\n<tr class=volatile><th id=torrentTotals align=left colspan=6>");
+            out.write("<tfoot id=snarkFoot><tr class=volatile><th id=torrentTotals align=left colspan=6>");
             out.write("<span id=totals><span class=canhide>");
             out.write(_t("Totals"));
             out.write(":&nbsp;</span>");
@@ -1268,7 +1310,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         out.write(_t("No DHT Peers"));
                         out.write("</b>");
                     }
-                    out.write("</span></th></tr>\n");
+                    out.write("</span></th></tr>");
                 }
                 out.write("</tfoot>\n");
             }
@@ -1376,8 +1418,8 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!str.matches(regex)) {
             return false;
         }
-        double num = Double.parseDouble(str);
-        return num > 0;
+        int num = Integer.valueOf(str);
+        return true;
     }
 
     /**
@@ -1390,16 +1432,17 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @return non-null, possibly empty
      *  @since 0.9.16
      */
-    private static String getQueryString(HttpServletRequest req, String p, String so, String filter, String st) {
-        return getQueryString(req, p, st, so, filter, null);
+    private static String getQueryString(HttpServletRequest req, String p, String st, String so) {
+        return getQueryString(req, p, st, so, null);
     }
 
     /**
      *  @param s search param override or "" for default or null to keep the same as in req
      *  @since 0.9.58
      */
-    private static String getQueryString(HttpServletRequest req, String p, String so, String filter, String st, String s) {
+    private static String getQueryString(HttpServletRequest req, String p, String st, String so, String s) {
         String url = req.getRequestURL().toString();
+        String filter = req.getParameter("filter");
         StringBuilder buf = new StringBuilder(64);
         if (p == null) {
             p = req.getParameter("p");
@@ -1407,7 +1450,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 p = DataHelper.stripHTML(p);
             }
         }
-        if (isValidNumeric(p) && p != null && !p.equals("")) {
+        if (isValidNumeric(p) && p != null && !p.isEmpty()) {
             if (buf.length() <= 0) {
                 buf.append("?p=");
             } else {
@@ -1421,7 +1464,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 so = DataHelper.stripHTML(so);
             }
         }
-        if (isValidNumeric(so) && so != null && !so.equals("")) {
+        if (isValidNumeric(so) && so != null && !so.isEmpty()) {
             if (buf.length() <= 0) {
                 buf.append("?sort=");
             } else {
@@ -1435,7 +1478,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 st = DataHelper.stripHTML(st);
             }
         }
-        if (isValidNumeric(st) && st != null && !st.equals("")) {
+        if (isValidNumeric(st) && st != null && !st.isEmpty()) {
             if (buf.length() <= 0) {
                 buf.append("?st=");
             } else {
@@ -1443,13 +1486,14 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             buf.append(st);
         }
+/*
         if (filter == null) {
             filter = req.getParameter("filter");
-            if (st != null) {
-                st = DataHelper.stripHTML(filter);
+            if (filter != null) {
+                filter = DataHelper.stripHTML(filter);
             }
         }
-        if (filter != null && !filter.isEmpty() && !filter.equals("all")) {
+        if (filter != null && !filter.isEmpty()) {
             if (filter.equals("stopped") || filter.equals("seeding") ||
                 filter.equals("active") || filter.equals("inactive") ||
                 filter.equals("connected") || filter.equals("downloading") ||
@@ -1462,13 +1506,14 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append(filter);
             }
         }
+*/
         if (s == null) {
             s = req.getParameter("s");
             if (s != null) {
                 s = DataHelper.escapeHTML(s);
             }
         }
-        if (s != null && !s.equals("")) {
+        if (s != null && !s.isEmpty()) {
             if (buf.length() <= 0) {
                 buf.append("?s=");
             } else {
@@ -3214,7 +3259,7 @@ public class I2PSnarkServlet extends BasicServlet {
         //tbuf.append(_t("Add an optional comment or description to be embedded in the torrent file"));
         //tbuf.append("\" >");
         //tbuf.append("</td></tr>\n");
-        tbuf.append("<tr><td>\n");
+        tbuf.append("<tr><td>");
         tbuf.append(_t("Trackers"));
         tbuf.append(":<td>\n<table id=trackerselect>\n<tr>\n<td>Name</td><td>");
         tbuf.append(_t("Primary"));
@@ -3233,7 +3278,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String name = t.name;
             String announceURL = t.announceURL.replace("&#61;", "=");
             String homeURL = t.baseURL;
-            tbuf.append("<tr>\n<td><span class=trackerName>");
+            tbuf.append("<tr><td><span class=trackerName>");
             tbuf.append("<a href=\"" + homeURL + "\" target=_blank>" + name + "</a>");
             tbuf.append("</span></td><td><input type=radio class=optbox name=announceURL value=\"");
             tbuf.append(announceURL);
@@ -3253,7 +3298,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             tbuf.append("</td></tr>\n");
         }
-        tbuf.append("<tr>\n<td><i>");
+        tbuf.append("<tr><td><i>");
         tbuf.append(_t("none"));
         tbuf.append("</i></td><td><input type=radio class=optbox name=announceURL value=\"none\"");
         if (_lastAnnounceURL == null)
