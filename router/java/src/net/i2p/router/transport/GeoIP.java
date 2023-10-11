@@ -75,9 +75,11 @@ public class GeoIP {
     // and the first 8 bytes of an IPv6 IP are stored as a signed long.
     private final Map<Long, String> _IPToCountry;
 
-//    private final Set<Long> _pendingSearch;
-//    private final Set<Long> _pendingIPv6Search;
-//    private final Set<Long> _notFound;
+/**
+    private final Set<Long> _pendingSearch;
+    private final Set<Long> _pendingIPv6Search;
+    private final Set<Long> _notFound;
+**/
 
     private final CopyOnWriteArraySet<Long> _pendingSearch;
     private final CopyOnWriteArraySet<Long> _pendingIPv6Search;
@@ -126,9 +128,12 @@ public class GeoIP {
         _codeToName = new ConcurrentHashMap<String, String>(512);
         _codeCache = new ConcurrentHashMap<String, String>(512);
         _IPToCountry = new ConcurrentHashMap<Long, String>();
-//        _pendingSearch = new ConcurrentHashSet<Long>();
-//        _pendingIPv6Search = new ConcurrentHashSet<Long>();
-//        _notFound = new ConcurrentHashSet<Long>();
+/**
+        _pendingSearch = new ConcurrentHashSet<Long>();
+        _pendingIPv6Search = new ConcurrentHashSet<Long>();
+        _notFound = new ConcurrentHashSet<Long>();
+**/
+
         _pendingSearch = new CopyOnWriteArraySet<Long>();
         _pendingIPv6Search = new CopyOnWriteArraySet<Long>();
         _notFound = new CopyOnWriteArraySet<Long>();
