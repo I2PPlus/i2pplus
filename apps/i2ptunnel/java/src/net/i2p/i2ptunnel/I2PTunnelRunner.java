@@ -43,7 +43,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      * api's job...
      */
 //    static int MAX_PACKET_SIZE = 1024 * 4;
-    static int MAX_PACKET_SIZE = 8*1024;
+    static int MAX_PACKET_SIZE = 16*1024;
 
     static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE*2;
 
