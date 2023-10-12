@@ -560,7 +560,7 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder headers = new StringBuilder(1024);
         headers.append("Accept-Ranges: bytes\r\n");
         String mimeType = resp.getContentType();
-        if (mimeType != null && (mimeType.equals("image/png") || mimeType.equals("image/jpeg") ||
+        if (mimeType != null && (mimeType.equals("image/png") || mimeType.equals("image/jpeg") || mimeType.equals("font/woff2") ||
             mimeType.equals("image/gif") ||  mimeType.equals("image/webp") || mimeType.equals("image/svg+xml") ||
             mimeType.equals("text/css"))) {
             headers.append("Cache-Control: private, max-age=2628000, immutable\r\n");
@@ -590,7 +590,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String refresh = String.valueOf(_manager.getRefreshDelaySeconds());
         StringBuilder headers = new StringBuilder(1024);
         headers.append("Accept-Ranges: bytes\r\n");
-        headers.append("Cache-Control: private, max-age=5, immutable\r\n");
+        headers.append("Cache-Control: private, no-cache, max-age=60\r\n");
         headers.append("Content-Security-Policy: default-src 'none'\r\n");
         headers.append("Referrer-Policy: same-origin\r\n");
         headers.append("X-Content-Type-Options: nosniff\r\n");
