@@ -1191,12 +1191,8 @@ class ClientConnectionRunner {
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("getFloodfillNetworkDatabaseFacade is getting the subDb for DbId: " + this.getDestHash());
         if (_floodfillNetworkDatabaseFacade == null) {
-            if (_log.shouldLog(Log.ERROR) && uptime > 3*60*1000) {
-                _log.error("getFloodfillNetworkDatabaseFacade is null for runner, using mainNetDb instead", new Exception());
-            } else {
-                if (_log.shouldLog(Log.WARN)) {
-                    _log.warn("getFloodfillNetworkDatabaseFacade is null for runner, using mainNetDb instead");
-                }
+            if (_log.shouldLog(Log.WARN)) {
+                _log.warn("getFloodfillNetworkDatabaseFacade is null for runner, using mainNetDb instead");
             }
             return _context.netDb();
         }
