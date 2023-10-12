@@ -96,14 +96,24 @@ class UnsignedUpdateChecker extends UpdateRunner {
             } else {
                 int status = get.getStatusCode();
                 String msg;
-                if (status == 504 || status <= 0)
-                    msg = "Unable to connect to development update server " + _currentURI.getHost();
-                else if (status == 500)
-                    msg = "Development update server " + _currentURI.getHost() + " not found in address book";
-                else if (status == 404)
-                    msg = "Update file not found on development update server at " + url;
-                else
+                if (status == 504 || status <= 0) {
+                    msg = _mgr._t("Unable to connect to update server ") + _currentURI.getHost();
+                    if (url.contains("skank.i2p")) {
+                        msg = msg.replace("update", "I2P+ update");
+                    }
+                } else if (status == 500) {
+                    msg = _mgr._t("Update server {0} not found in address book", _currentURI.getHost());
+                    if (url.contains("skank.i2p")) {
+                        msg = msg.replace("Update", "I2P+ update");
+                    }
+                } else if (status == 404) {
+                    msg = _mgr._t("Update file not found at {0}", url);
+                    if (url.contains("skank.i2p")) {
+                        msg = msg.replace("Update", "I2P+ update");
+                    }
+                } else {
                     msg = status + " " + DataHelper.stripHTML(get.getStatusText());
+                }
                 updateStatus("<b>" + msg + "</b>");
             }
         //} catch (Throwable t) {
