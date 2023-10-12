@@ -111,9 +111,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private long _startedOn = 0L;
     private ConnThrottler _postThrottler;
 
-    private final static String ERR_STYLE = "<body style=\"margin: 3% 4%; padding: 0 0 15px; font-family: sans-serif; color: #dda; " +
-                                            "text-shadow: 0 1px 1px #000; border-bottom: 1px solid #aa8;background: #311;\">\n";
-
     private final static String ERR_UNAVAILABLE =
          "HTTP/1.1 503 Service Unavailable\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n" +
@@ -232,8 +229,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         super(host, port, privData, l, notifyThis, tunnel);
         setupI2PTunnelHTTPServer(spoofHost);
 
-        // get the properties of this server-tunnel
-        Properties opts = tunnel.getClientOptions();
     }
 
     public I2PTunnelHTTPServer(InetAddress host, int port, File privkey, String privkeyname, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
@@ -350,10 +345,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
             long afterAccept = getTunnel().getContext().clock().now();
 
-
-            StringBuilder command = new StringBuilder(128);
             // The headers _should_ be in the first packet, but
             // may not be, depending on the client-side options
+
+            StringBuilder command = new StringBuilder(128);
             Map<String, List<String>> headers;
             try {
                 // catch specific exceptions thrown, to return a good
@@ -664,12 +659,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final boolean _shouldCompress;
         //private final boolean _addHeaders;
 //        private static final int BUF_SIZE = 8*1024;
-        private static final int BUF_SIZE = 32*1024;
+        private static final int BUF_SIZE = 8*1024;
 
         /**
          *  @param shouldCompress if false, don't compress, just filter server headers
          */
-
         public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
                                    I2PAppContext ctx, Log log, boolean shouldCompress) {
             _webserver = webserver;
@@ -698,6 +692,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // Don't spin off a thread for this except for POSTs and PUTs
                 // TODO Upgrade:
                 // beware interference with Shoutcast, etc.?
+
+                // Parse request headers here to extract URL
+                String[] requestLines = _headers.split("\r\n");
+                String requestLine = requestLines[0];
+                String[] requestParts = requestLine.split(" ");
+                String url = requestParts[1];
+
                 if ((!(_headers.startsWith("GET ") || _headers.startsWith("HEAD "))) ||
                     browserin.available() > 0) {  // just in case
                     I2PAppThread sender = new I2PAppThread(new Sender(serverout, browserin, "Client -> Server", _log),
@@ -724,8 +725,29 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                                             "image/webp", "text/css", "video/mp4", "video/ogg", "video/webm"};
 
                 // Check MIME type of response
-                String mimeType = headers.get("Content-Type").get(0);
-
+                List<String> contentTypeList = headers.get("Content-Type");
+                // Set a generic default MIME type
+                String mimeType = "application/octet-stream";
+                if (contentTypeList != null && !contentTypeList.isEmpty()) {
+                    mimeType = headers.get("Content-Type").get(0);
+                // Set default MIME type based on the resource being requested
+                } else if (url.endsWith(".html")) {
+                    mimeType = "text/html";
+                } else if (url.endsWith(".css")) {
+                    mimeType = "text/css";
+                } else if (url.endsWith(".js")) {
+                    mimeType = "text/javascript";
+                } else if (url.endsWith(".jpg") || url.endsWith(".jpeg")) {
+                    mimeType = "image/jpg";
+                } else if (url.endsWith(".webp")) {
+                    mimeType = "image/webp";
+                } else if (url.endsWith(".png")) {
+                    mimeType = "image/png";
+                } else if (url.endsWith(".gif")) {
+                    mimeType = "image/gif";
+                } else if (url.endsWith(".json")) {
+                    mimeType = "application/json";
+                }
                 // Add allow and referrer-policy headers if required
                 boolean allowReferrerHeader = Arrays.asList(referrerPolicyWhitelist).contains(mimeType);
                 if (_headers != null && allowReferrerHeader) {
@@ -824,6 +846,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             }
         }
     }
+
     private static class Sender implements Runnable {
         private final OutputStream _out;
         private final InputStream _in;
