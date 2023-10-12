@@ -27,9 +27,9 @@ function addTorrentNotify() {
 function showAlert() {
   addNotify.removeAttribute("hidden");
   if (!addNotify.hidden) {
-    addNotify.innerHTML = notify.innerHTML;
+    addNotify.innerHTML = xhrsnarklog.responseXML.getElementById("notify").innerHTML;
     setTimeout(() => {
-      //hideAlert();
+      hideAlert();
       setTimeout(() => {
         inputAddFile.value = "";
         inputAddFile.focus();

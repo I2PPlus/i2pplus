@@ -168,15 +168,11 @@ function refreshTorrents(callback) {
     const snarkHeadCells = torrents.querySelectorAll("#snarkHead th:not(.torrentLink)");
     const snarkHeadCellsResponse = xhrsnark.responseXML.querySelectorAll("#snarkhead th:not(.torrentLink)");
 
-    if (snarkHead && snarkHeadResponse && snarkHead !== snarkHeadResponse) {
-      for (let i = 0; i < snarkHeadCells.length && snarkHeadCellsResponse?.length; i++) {
-        if (!Object.is(snarkHeadCells[i].innerHTML, snarkHeadCellsResponse[i]?.innerHTML)) {
-          snarkHeadCells[i].innerHTML = snarkHeadCellsResponse[i].innerHTML;
-        }
-      }
+    if (snarkHead && snarkHeadResponse && snarkHead.innerHTML !== snarkHeadResponse.innerHTML) {
+      snarkHead.innerHTML = snarkHeadResponse.innerHTML
     }
 
-    if (snarkFoot && snarkFootResponse && snarkFoot !== snarkFootResponse) {
+    if (snarkFoot && snarkFootResponse && snarkFoot.innerHTML !== snarkFootResponse.innerHTML) {
       snarkFoot.innerHTML = snarkFootResponse.innerHTML;
     }
   }
@@ -203,57 +199,19 @@ function refreshScreenLog(callback) {
   xhrsnarklog.responseType = "document";
   xhrsnarklog.onload = function () {
     if (xhrsnarklog.readyState === 4 && xhrsnarklog.status === 200) {
-      //console.log(xhrsnarklog.responseXML);
-      const screenlog = document.getElementById("screenlog");
-      const screenlogResponse = xhrsnarklog.responseXML.getElementById("screenlog");
+      const screenlog = document.getElementById("messages");
+      const screenlogResponse = xhrsnarklog.responseXML.getElementById("messages");
       const toast = document.getElementById("toast");
       const toastResponse = xhrsnarklog.responseXML.getElementById("toast");
-
-      // Use a MutationObserver to wait for the DOM to update before modifying it
-      const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-          if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
-             if (toast.innerHTML !== toastResponse.innerHTML) {
-               toast.innerHTML = toastResponse.innerHTML;
-               screenlog.outerHTML = screenlogResponse.outerHTML;
-             }
-             observer.disconnect(); // Stop observing the DOM changes
-             if (callback) {
-               callback();
-             }
-          }
-        });
-      });
-      observer.observe(document.body, {childList: true, subtree: true});
+      const addNotify = document.getElementById("addNotify");
+      const notifyResponse = xhrsnarklog.responseXML.getElementById("notify");
+      addNotify.innerHTML = notifyResponse.innerHTML;
+      toast.innerHTML = toastResponse.innerHTML;
+      if (callback) {callback();}
     }
   };
   xhrsnarklog.send();
 }
-
-/**
-function refreshScreenLog(callback) {
-  const xhrsnarklog = new XMLHttpRequest();
-  xhrsnarklog.open("GET", "/i2psnark/.ajax/xhrscreenlog.html");
-  xhrsnarklog.responseType = "document";
-  xhrsnarklog.onload = function () {
-    if (xhrsnarklog.readyState === 4 && xhrsnarklog.status === 200) {
-      console.log(xhrsnarklog.responseXML);
-      const screenlog = document.getElementById("screenlog");
-      const screenlogResponse = xhrsnarklog.responseXML.getElementById("screenlog");
-      const toast = document.getElementById("toast");
-      const toastResponse = xhrsnarklog.responseXML.getElementById("toast");
-      if (toast.innerHTML !== toastResponse.innerHTML) {
-        toast.innerHTML = toastResponse.innerHTML;
-        screenlog.outerHTML = screenlogResponse.outerHTML;
-      }
-      if (callback) {
-        callback();
-      }
-    }
-  };
-  xhrsnarklog.send();
-}
-**/
 
 function getURL() {
   const baseUrl = "/i2psnark/.ajax/xhr1.html";
