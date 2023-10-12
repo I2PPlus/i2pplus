@@ -838,8 +838,9 @@ public class I2PSnarkServlet extends BasicServlet {
         String currentSort = req.getParameter("sort");
         String url = req.getRequestURL().toString();
         filterParam = req.getParameter("filter") != null ? req.getParameter("filter") : "";
-        String filterQuery = (url.contains("?") ? "&amp;" : "?") + "filter=" +
-                             (filterParam.isEmpty() ? "all" : filterParam);
+        String filterQuery = "";
+        String separator = "&";
+        filterQuery = separator + "filter=" + (filterParam.isEmpty() ? "all" : filterParam);
         boolean showSort = total > 1;
         StringBuilder hbuf = new StringBuilder(2*1024);
         hbuf.append("<tr><th class=status>");
@@ -875,25 +876,14 @@ public class I2PSnarkServlet extends BasicServlet {
                     break;
                 }
             }
-            if (hasPeers) {
-                hbuf.append(" <a href=\"" + _contextPath + '/');
-                if (peerParam != null) {
-                    // disable peer view
-                    hbuf.append(getQueryString(req, "", null, null));
-                    hbuf.append(filterQuery);
-                    hbuf.append("\">");
-                    tx = _t("Hide Peers");
-                    hbuf.append(toThemeImg("hidepeers", tx, tx));
-                } else {
-                    // enable peer view
-                    hbuf.append(getQueryString(req, "1", null, null));
-                    hbuf.append(filterQuery);
-                    hbuf.append("\">");
-                    tx = _t("Show Peers");
-                    hbuf.append(toThemeImg("showpeers", tx, tx));
-                }
-                hbuf.append("</a>\n");
-            }
+
+            //if (hasPeers) {
+                String queryString = peerParam != null ? getQueryString(req, "", null, null) : getQueryString(req, "1", null, null);
+                String link = _contextPath + '/' + queryString + filterQuery;
+                tx = peerParam != null ? _t("Hide Peers") : _t("Show Peers");
+                String img = peerParam != null ? "hidepeers" : "showpeers";
+                hbuf.append(" <a href=\"" + link + "\">").append(toThemeImg(img, tx, tx)).append("</a>\n");
+            //}
         }
         hbuf.append("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden=hidden></th>");
         hbuf.append("<th id=torrentSort>");
