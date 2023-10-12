@@ -16,9 +16,6 @@ import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -361,8 +358,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             try {
                 // catch specific exceptions thrown, to return a good
                 // error to the client
-                headers = readHeaders(socket, null, command,
-                                      CLIENT_SKIPHEADERS, getTunnel().getContext());
+                headers = readHeaders(socket, null, command, CLIENT_SKIPHEADERS, getTunnel().getContext());
             } catch (SocketTimeoutException ste) {
                 try {
                     socket.getOutputStream().write(ERR_REQUEST_TIMEOUT.getBytes("UTF-8"));
@@ -667,18 +663,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final Log _log;
         private final boolean _shouldCompress;
         //private final boolean _addHeaders;
-        private static ExecutorService executor = Executors.newCachedThreadPool();
 //        private static final int BUF_SIZE = 8*1024;
         private static final int BUF_SIZE = 32*1024;
 
         /**
          *  @param shouldCompress if false, don't compress, just filter server headers
          */
-
-/**
-        public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
-                                   I2PAppContext ctx, Log log, boolean shouldCompress, boolean addHeaders) {
-**/
 
         public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
                                    I2PAppContext ctx, Log log, boolean shouldCompress) {
@@ -691,104 +681,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             //_addHeaders = addHeaders;
         }
 
-        public void run() {
-            ExecutorService executor = Executors.newCachedThreadPool();
-            try {
-
-                try (OutputStream serverOut = _webserver.getOutputStream();
-                     InputStream browserIn = _browser.getInputStream();
-                     BufferedInputStream serverIn = new BufferedInputStream(_webserver.getInputStream(), BUF_SIZE);
-                     OutputStream browserOut = _browser.getOutputStream()) {
-
-                    // Write headers to server
-                    if (_log.shouldInfo()) {
-                        _log.info("[HTTPServer] Received Request headers \n Request: " + _headers);
-                    }
-                    byte[] headersBytes = _headers.getBytes(StandardCharsets.UTF_8);
-                    serverOut.write(headersBytes);
-
-                    Sender sender;
-                    if (_headers != null && !(_headers.startsWith("GET ") || _headers.startsWith("HEAD ")) || browserIn.available() > 0) {
-                        // Use a pooled executor for the Sender threads
-                        executor.execute(new Sender(serverOut, browserIn, "Client -> Server", _log));
-                    } else {
-                        // todo - half close? reduce MessageInputStream buffer size?
-                    }
-
-                    StringBuilder command = new StringBuilder(512);
-
-                    // Change headers to protect server identity
-                    Map<String, List<String>> headers = readHeaders(null, serverIn, command, SERVER_SKIPHEADERS, _ctx);
-
-                    // TODO: read option, add UI config option
-                    //if (AddHeaders.shouldAddResponseHeaders()) {
-
-                        // Define a whitelist of MIME types that require Allow and Referrer-Policy headers
-                        String[] referrerPolicyWhitelist = {"text/html", "application/xhtml+xml", "application/xml", "text/plain", "application/json"};
-                        String[] immutableCacheWhitelist = {"font/woff", "font/woff2", "audio/midi", "audio/mpeg", "audio/ogg", "audio/wav", "audio/webm",
-                                                            "image/apng", "image/bmp", "image/gif", "image/jpeg", "image/png", "image/svg+xml", "image/tiff",
-                                                            "image/webp", "text/css", "video/mp4", "video/ogg", "video/webm"};
-
-
-                        // Check MIME type of response
-                        String mimeType = headers.get("Content-Type").get(0);
-
-                        // Add allow and referrer-policy headers if required
-                        boolean allowReferrerHeader = Arrays.asList(referrerPolicyWhitelist).contains(mimeType);
-                        if (_headers != null && allowReferrerHeader) {
-                            boolean allow = headers.containsKey("Allow".toLowerCase());
-                            if (!allow) {
-                                setEntry(headers, "Allow", "GET, POST, HEAD");
-                            }
-                            boolean rp = headers.containsKey("Referrer-Policy".toLowerCase());
-                            if (!rp) {
-                                setEntry(headers, "Referrer-Policy", "same-origin");
-                            }
-                        }
-
-                        // Set cache-control to immutable if required
-                        boolean immutableCache = Arrays.stream(immutableCacheWhitelist).anyMatch(mimeType::matches);
-                        boolean cc = headers.containsKey("Cache-Control".toLowerCase());
-                        if (_headers != null && !cc) {
-                            if (immutableCache) {
-                                setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");
-                            } else {
-                                setEntry(headers, "Cache-Control", "private, no-cache, max-age=604800");
-                            }
-                        }
-
-                        // Add x-xss-protection header if not present
-                        boolean xss = headers.containsKey("X-XSS-Protection".toLowerCase());
-                        if (_headers != null && !xss) {
-                            setEntry(headers, "X-XSS-Protection", "1; mode=block");
-                        }
-                    //}
-
-                    String modifiedHeaders = formatHeaders(headers, command);
-
-                    if (_shouldCompress) {
-                        CompressedResponseOutputStream compressedOut = new CompressedResponseOutputStream(browserOut);
-                        compressedOut.write(modifiedHeaders.getBytes(StandardCharsets.UTF_8));
-                        sender = new Sender(compressedOut, serverIn, "Server -> Client compressor", _log);
-                    } else {
-                        browserOut.write(modifiedHeaders.getBytes(StandardCharsets.UTF_8));
-                        sender = new Sender(browserOut, serverIn, "Server -> Client uncompressed", _log);
-                    }
-
-                    // Run Sender thread in the same thread
-                    sender.run();
-
-                } catch (IOException e) {
-                    _log.warn("[HTTPServer] Error compressing: " + e.getMessage());
-                } finally {
-                    executor.shutdown();
-                }
-            } catch (Exception ex) {
-                _log.error("[HTTPServer] Error: " + ex.getMessage());
-            }
-        }
-
-/**
         public void run() {
             OutputStream serverout = null;
             OutputStream browserout = null;
@@ -826,37 +718,43 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 //Change headers to protect server identity
                 StringBuilder command = new StringBuilder(128);
                 Map<String, List<String>> headers = readHeaders(null, serverin, command, SERVER_SKIPHEADERS, _ctx);
+                    String[] referrerPolicyWhitelist = {"text/html", "application/xhtml+xml", "application/xml", "text/plain", "application/json"};
+                    String[] immutableCacheWhitelist = {"font/woff", "font/woff2", "audio/midi", "audio/mpeg", "audio/ogg", "audio/wav", "audio/webm",
+                                                            "image/apng", "image/bmp", "image/gif", "image/jpeg", "image/png", "image/svg+xml", "image/tiff",
+                                                            "image/webp", "text/css", "video/mp4", "video/ogg", "video/webm"};
 
-                // Make adding headers an (opt-in?) tunnel option
-                // TODO Exclude local proxy error pages; different caching policies for different resource types?
-                //if (shouldAddResponseHeaders()) {
+                // Check MIME type of response
+                String mimeType = headers.get("Content-Type").get(0);
 
-                // add cache-control header if not present
-                //String cc = getEntryOrNull(headers, "Cache-Control");
-                //if (cc == null || !cc.toLowerCase(Locale.US).equals("cache-control"))
-                boolean cc = headers.containsKey("Cache-Control");
-                if (!cc)
-                    setEntry(headers, "Cache-Control", "private, no-cache, max-age=604800");
-                // add allow header if not present
-                boolean allow = headers.containsKey("Allow");
-                if (!allow)
-                    setEntry(headers, "Allow", "GET, POST, HEAD");
+                // Add allow and referrer-policy headers if required
+                boolean allowReferrerHeader = Arrays.asList(referrerPolicyWhitelist).contains(mimeType);
+                if (_headers != null && allowReferrerHeader) {
+                    boolean allow = headers.containsKey("Allow".toLowerCase());
+                    if (!allow) {
+                        setEntry(headers, "Allow", "GET, POST, HEAD");
+                    }
+                    boolean rp = headers.containsKey("Referrer-Policy".toLowerCase());
+                    if (!rp) {
+                        setEntry(headers, "Referrer-Policy", "same-origin");
+                    }
+                }
 
-                // add content-security-policy header if not present
-                //boolean csp = headers.containsKey("Content-Security-Policy");
-                //if (!csp)
-                //    addEntry(headers, "Content-Security-Policy", "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'");
+                // Set cache-control to immutable if required
+                boolean immutableCache = Arrays.stream(immutableCacheWhitelist).anyMatch(mimeType::matches);
+                boolean cc = headers.containsKey("Cache-Control".toLowerCase());
+                if (_headers != null && !cc) {
+                    if (immutableCache) {
+                        setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");
+                    } else {
+                        setEntry(headers, "Cache-Control", "private, no-cache, max-age=604800");
+                    }
+                }
 
-                // add referrer-policy header if not present
-                boolean rp = headers.containsKey("Referrer-Policy");
-                if (!rp)
-                    setEntry(headers, "Referrer-Policy", "same-origin");
-
-                // add x-xss-protection header if not present
-                boolean xss = headers.containsKey("X-XSS-Protection");
-                if (!xss)
+                // Add x-xss-protection header if not present
+                boolean xss = headers.containsKey("X-XSS-Protection".toLowerCase());
+                if (_headers != null && !xss) {
                     setEntry(headers, "X-XSS-Protection", "1; mode=block");
-             //}
+                }
 
                 String modifiedHeaders = formatHeaders(headers, command);
 
@@ -925,9 +823,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (serverin != null) try { serverin.close(); } catch (IOException ioe) {}
             }
         }
-**/
     }
-
     private static class Sender implements Runnable {
         private final OutputStream _out;
         private final InputStream _in;
