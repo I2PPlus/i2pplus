@@ -6,19 +6,27 @@ package net.i2p.i2ptunnel;
 import java.io.BufferedInputStream;
 import java.io.EOFException;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.function.Predicate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.GZIPOutputStream;
 
 import javax.net.ssl.SSLException;
@@ -381,7 +389,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                      try { socket.close(); } catch (IOException ioe) {}
                 }
                 if (_log.shouldWarn())
-//                    _log.warn("[HTTPServer] Error in the HTTP request (timeout) \n* From: " + peerB32, ste);
                     _log.warn("[HTTPServer] Error in the HTTP request (timeout) \n* Client: " + peerB32);
                 return;
             } catch (EOFException eofe) {
@@ -392,7 +399,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                      try { socket.close(); } catch (IOException ioe) {}
                 }
                 if (_log.shouldWarn())
-//                    _log.warn("[HTTPServer] Error in the HTTP request (bad request) \n* From: " + peerB32, eofe);
                     _log.warn("[HTTPServer] Error in the HTTP request (EOF exception) \n* Client: " + peerB32);
                 return;
             } catch (LineTooLongException ltle) {
@@ -403,7 +409,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                      try { socket.close(); } catch (IOException ioe) {}
                 }
                 if (_log.shouldWarn())
-//                    _log.warn("[HTTPServer] Error in the HTTP request (headers too large) \n* From: " + peerB32, ltle);
                     _log.warn("[HTTPServer] Error in the HTTP request (headers too large) \n* Client: " + peerB32);
                 return;
             } catch (RequestTooLongException rtle) {
@@ -414,7 +419,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                      try { socket.close(); } catch (IOException ioe) {}
                 }
                 if (_log.shouldWarn())
-//                    _log.warn("[HTTPServer] Error in the HTTP request (URI too long) \n* From: " + peerB32, rtle);
                     _log.warn("[HTTPServer] Error in the HTTP request (URI too long) \n* Client: " + peerB32);
                 return;
             } catch (BadRequestException bre) {
@@ -651,14 +655,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             // Don't complain too early, Jetty may not be ready.
             int level = getTunnel().getContext().clock().now() - _startedOn > START_INTERVAL ? Log.ERROR : Log.WARN;
             if (_log.shouldLog(level))
-//                _log.log(level, "[HTTPServer] Error connecting to " + remoteHost + ':' + remotePort, ex);
                 _log.log(level, "[HTTPServer] Error connecting to " + remoteHost + ':' + remotePort + "\n* " + ex.getMessage());
         } catch (IOException ex) {
             try {
                 socket.close();
             } catch (IOException ioe) {}
             if (_log.shouldWarn())
-//                _log.warn("[HTTPServer] Error in the HTTP request \n* From: " + peerB32, ex);
                 _log.warn("[HTTPServer] Error in the HTTP request \n* Client: " + peerB32 + "\n* " + ex.getMessage());
         } catch (OutOfMemoryError oom) {
             // Often actually a file handle limit problem so we can safely send a response
@@ -685,7 +687,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final Log _log;
         private final boolean _shouldCompress;
         //private final boolean _addHeaders;
-
+        private static ExecutorService executor = Executors.newCachedThreadPool();
 //        private static final int BUF_SIZE = 8*1024;
         private static final int BUF_SIZE = 32*1024;
 
@@ -707,6 +709,98 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             //_addHeaders = addHeaders;
         }
 
+        public void run() {
+            ExecutorService executor = Executors.newCachedThreadPool();
+            try {
+
+                try (OutputStream serverOut = _webserver.getOutputStream();
+                     InputStream browserIn = _browser.getInputStream();
+                     BufferedInputStream serverIn = new BufferedInputStream(_webserver.getInputStream(), BUF_SIZE);
+                     OutputStream browserOut = _browser.getOutputStream()) {
+
+                    // Write headers to server
+                    if (_log.shouldInfo()) {
+                        _log.info("[HTTPServer] Received Request headers \n Request: " + _headers);
+                    }
+                    byte[] headersBytes = _headers.getBytes(StandardCharsets.UTF_8);
+                    serverOut.write(headersBytes);
+
+                    Sender sender;
+                    if (!(_headers.startsWith("GET ") || _headers.startsWith("HEAD ")) || browserIn.available() > 0) {
+                        // Use a pooled executor for the Sender threads
+                        executor.execute(new Sender(serverOut, browserIn, "Client -> Server", _log));
+                    } else {
+                        // todo - half close? reduce MessageInputStream buffer size?
+                    }
+
+                    // Define a whitelist of MIME types that require Allow and Referrer-Policy headers
+                    String[] referrerPolicyWhitelist = {"text/html", "application/xhtml+xml", "application/xml", "text/plain", "application/json"};
+                    String[] immutableCacheWhitelist = {"font/woff", "font/woff2", "audio/midi", "audio/mpeg", "audio/ogg", "audio/wav", "audio/webm",
+                                                        "image/apng", "image/bmp", "image/gif", "image/jpeg", "image/png", "image/svg+xml", "image/tiff",
+                                                        "image/webp", "text/css", "video/mp4", "video/ogg", "video/webm"};
+
+                    StringBuilder command = new StringBuilder(128);
+                    // Change headers to protect server identity
+                    Map<String, List<String>> headers = readHeaders(null, serverIn, command, SERVER_SKIPHEADERS, _ctx);
+
+                    // Check MIME type of response
+                    String mimeType = headers.get("Content-Type").get(0);
+
+                    // Add allow and referrer-policy headers if required
+                    boolean allowReferrerHeader = Arrays.asList(referrerPolicyWhitelist).contains(mimeType);
+                    if (allowReferrerHeader) {
+                        boolean allow = headers.containsKey("Allow".toLowerCase());
+                        if (!allow) {
+                            setEntry(headers, "Allow", "GET, POST, HEAD");
+                        }
+                        boolean rp = headers.containsKey("Referrer-Policy".toLowerCase());
+                        if (!rp) {
+                            setEntry(headers, "Referrer-Policy", "same-origin");
+                        }
+                    }
+
+                    // Set cache-control to immutable if required
+                    boolean immutableCache = Arrays.stream(immutableCacheWhitelist).anyMatch(mimeType::matches);
+                    boolean cc = headers.containsKey("Cache-Control".toLowerCase());
+                    if (!cc) {
+                        if (immutableCache) {
+                            setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");
+                        } else {
+                            setEntry(headers, "Cache-Control", "private, no-cache, max-age=604800");
+                        }
+                    }
+
+                    // Add x-xss-protection header if not present
+                    boolean xss = headers.containsKey("X-XSS-Protection".toLowerCase());
+                    if (!xss) {
+                        setEntry(headers, "X-XSS-Protection", "1; mode=block");
+                    }
+
+                    String modifiedHeaders = formatHeaders(headers, command);
+
+                    if (_shouldCompress) {
+                        CompressedResponseOutputStream compressedOut = new CompressedResponseOutputStream(browserOut);
+                        compressedOut.write(modifiedHeaders.getBytes(StandardCharsets.UTF_8));
+                        sender = new Sender(compressedOut, serverIn, "Server -> Client compressor", _log);
+                    } else {
+                        browserOut.write(modifiedHeaders.getBytes(StandardCharsets.UTF_8));
+                        sender = new Sender(browserOut, serverIn, "Server -> Client uncompressed", _log);
+                    }
+
+                    // Run Sender thread in the same thread
+                    sender.run();
+
+                } catch (IOException e) {
+                    _log.warn("[HTTPServer] Error compressing: " + e.getMessage());
+                } finally {
+                    executor.shutdown();
+                }
+            } catch (Exception ex) {
+                _log.error("[HTTPServer] Error: " + ex.getMessage());
+            }
+        }
+
+/**
         public void run() {
             OutputStream serverout = null;
             OutputStream browserout = null;
@@ -734,19 +828,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // todo - half close? reduce MessageInputStream buffer size?
                 }
                 browserout = _browser.getOutputStream();
-                // NPE seen here in 0.7-7, caused by addition of socket.close() in the
-                // catch (IOException ioe) block above in blockingHandle() ???
-                // CRIT  [ad-130280.hc] net.i2p.util.I2PThread        : Killing thread Thread-130280.hc
-                // java.lang.NullPointerException
-                //     at java.io.FileInputStream.<init>(FileInputStream.java:131)
-                //     at java.net.SocketInputStream.<init>(SocketInputStream.java:44)
-                //     at java.net.PlainSocketImpl.getInputStream(PlainSocketImpl.java:401)
-                //     at java.net.Socket$2.run(Socket.java:779)
-                //     at java.security.AccessController.doPrivileged(Native Method)
-                //     at java.net.Socket.getInputStream(Socket.java:776)
-                //     at net.i2p.i2ptunnel.I2PTunnelHTTPServer$CompressedRequestor.run(I2PTunnelHTTPServer.java:174)
-                //     at java.lang.Thread.run(Thread.java:619)
-                //     at net.i2p.util.I2PThread.run(I2PThread.java:71)
+
                 try {
                     serverin = new BufferedInputStream(_webserver.getInputStream(), BUF_SIZE);
                 } catch (NullPointerException npe) {
@@ -757,45 +839,37 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 StringBuilder command = new StringBuilder(128);
                 Map<String, List<String>> headers = readHeaders(null, serverin, command, SERVER_SKIPHEADERS, _ctx);
 
-/**
                 // Make adding headers an (opt-in?) tunnel option
                 // TODO Exclude local proxy error pages; different caching policies for different resource types?
                 //if (shouldAddResponseHeaders()) {
 
-                    // add cache-control header if not present
-                    //String cc = getEntryOrNull(headers, "Cache-Control");
-                    //if (cc == null || !cc.toLowerCase(Locale.US).equals("cache-control"))
-                    boolean cc = headers.containsKey("Cache-Control");
-                    if (!cc)
-                        setEntry(headers, "Cache-Control", "private, no-cache, max-age=604800");
+                // add cache-control header if not present
+                //String cc = getEntryOrNull(headers, "Cache-Control");
+                //if (cc == null || !cc.toLowerCase(Locale.US).equals("cache-control"))
+                boolean cc = headers.containsKey("Cache-Control");
+                if (!cc)
+                    setEntry(headers, "Cache-Control", "private, no-cache, max-age=604800");
+                // add allow header if not present
+                boolean allow = headers.containsKey("Allow");
+                if (!allow)
+                    setEntry(headers, "Allow", "GET, POST, HEAD");
 
-                    // add allow header if not present
-                    boolean allow = headers.containsKey("Allow");
-                    if (!allow)
-                        setEntry(headers, "Allow", "GET, POST, HEAD");
+                // add content-security-policy header if not present
+                //boolean csp = headers.containsKey("Content-Security-Policy");
+                //if (!csp)
+                //    addEntry(headers, "Content-Security-Policy", "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'");
 
-                    // add x-frame-options header if not present
-                    boolean xf = headers.containsKey("X-Frame-Options");
-                    if (!xf)
-                        setEntry(headers, "X-Frame-Options", "SAMEORIGIN");
+                // add referrer-policy header if not present
+                boolean rp = headers.containsKey("Referrer-Policy");
+                if (!rp)
+                    setEntry(headers, "Referrer-Policy", "same-origin");
 
-                    // add content-security-policy header if not present
-                    //boolean csp = headers.containsKey("Content-Security-Policy");
-                    //if (!csp)
-                    //    addEntry(headers, "Content-Security-Policy", "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'");
+                // add x-xss-protection header if not present
+                boolean xss = headers.containsKey("X-XSS-Protection");
+                if (!xss)
+                    setEntry(headers, "X-XSS-Protection", "1; mode=block");
+             //}
 
-                    // add referrer-policy header if not present
-                    boolean rp = headers.containsKey("Referrer-Policy");
-                    if (!rp)
-                        setEntry(headers, "Referrer-Policy", "same-origin");
-
-                    // add x-xss-protection header if not present
-                    boolean xss = headers.containsKey("X-XSS-Protection");
-                    if (!xss)
-                        setEntry(headers, "X-XSS-Protection", "1; mode=block");
-
-                //}
-**/
                 String modifiedHeaders = formatHeaders(headers, command);
 
                 if (_shouldCompress) {
@@ -816,7 +890,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 } catch (IOException ioe) {}
             } catch (IOException ioe) {
                 if (_log.shouldWarn())
-//                    _log.warn("[HTTPServer] Error compressing", ioe);
                     _log.warn("[HTTPServer] Error compressing: " + ioe.getMessage());
                  ioex = ioe;
             } finally {
@@ -831,7 +904,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         i2pReset = status == I2PSocketException.STATUS_CONNECTION_RESET;
                         if (i2pReset) {
                             if (_log.shouldWarn())
-//                                _log.warn("[HTTPServer] Received I2P reset, resetting socket", ioex);
                                 _log.warn("[HTTPServer] Received I2P reset, resetting socket...");
                             try {
                                 _webserver.setSoLinger(true, 0);
@@ -865,7 +937,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (serverin != null) try { serverin.close(); } catch (IOException ioe) {}
             }
         }
+**/
     }
+
 
     private static class Sender implements Runnable {
         private final OutputStream _out;
