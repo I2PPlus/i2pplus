@@ -37,7 +37,7 @@ public class GracefulShutdown implements Runnable {
                     // Allow time for a UI reponse
                     try {
                         synchronized (Thread.currentThread()) {
-                            Thread.currentThread().wait(2*1000);
+                            Thread.currentThread().wait(10*1000);
                         }
                     } catch (InterruptedException ie) {}
                     _context.router().shutdown(gracefulExitCode);
