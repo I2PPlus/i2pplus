@@ -89,7 +89,14 @@ public class ConfigKeyringHandler extends FormHandler {
                     addFormError(_t("Requires hostname, destination, or blinded Base32"));
                     return;
                 }
-                    BlindData bdold = _context.netDb().getBlindData(spk);
+
+                // from BlindCache
+                    List<Hash> clientBase32s = _context.netDbSegmentor().lookupClientBySigningPublicKey(spk);
+                // TODO: This updates all of the blind data for all clients, turning the blind cache into a shared context for the owner of an encrypted leaseSet.
+                // This is probably not ideal, with some social-engineering a service operator who owns an encrypted destination could associate 2 tunnels.
+                // How realistic is it? Maybe not very, but I don't like it. Still, this is better than nothing.
+                    for (Hash clientBase32 : clientBase32s) {
+                        BlindData bdold = _context.clientNetDb(clientBase32).getBlindData(spk);
                     if (bdold != null && d == null)
                         d = bdold.getDestination();
                     if (d != null && _context.clientManager().isLocal(d)) {
@@ -124,12 +131,12 @@ public class ConfigKeyringHandler extends FormHandler {
                         atype = BlindData.AUTH_NONE;
                         pk = null;
                     }
-                    BlindData bdold = _context.netDb().getBlindData(spk);
-                        if (bdold != null && d == null)
-                            d = bdold.getDestination();
-                        if (d != null && _context.clientManager().isLocal(d)) {
-                            // don't bother translating
-                            addFormError("Cannot add key for local destination. Enable encryption in the Hidden Services Manager.");
+                    if (_mode == 2 || _mode == 4 || _mode == 6)
+                        _secret = null;
+                    if (bdin != null) {
+                        // more checks based on supplied b33
+                        if (bdin.getSecretRequired() && _secret == null) {
+                            addFormError(_t("Destination requires lookup password"));
                             return;
                         }
                         if (!bdin.getSecretRequired() && _secret != null) {
@@ -158,7 +165,7 @@ public class ConfigKeyringHandler extends FormHandler {
                             _log.debug("Already cached: " + bdold);
                     }
                     try {
-                        _context.netDb().setBlindData(bdout);
+                        _context.clientNetDb(clientBase32).setBlindData(bdout);
                         addFormNotice(_t("Key for {0} added to keyring", bdout.toBase32()));
                         if (_mode == 6 || _mode == 7) {
                             addFormNotice(_t("Send key to server operator.") + ' ' + pk.toPublic().toBase64());
@@ -167,6 +174,7 @@ public class ConfigKeyringHandler extends FormHandler {
                         addFormError(_t("Invalid destination") + ": " + iae.getLocalizedMessage());
                     }
                 }
+            }
         } else if (_action.equals(_t("Delete key")) && _revokes != null) {
             // these should all be b32s or b33s
             for (String p : _revokes) {
