@@ -42,7 +42,8 @@ class BanlistRenderer {
     }
 
     public void renderStatusHTML(Writer out) throws IOException {
-        StringBuilder buf = new StringBuilder(1024);
+        int bannedCount = _context.banlist().getRouterCount();
+        StringBuilder buf = new StringBuilder(bannedCount * 512 + 8192);
         // move to the jsp
         //buf.append("<h2>Banned Peers</h2>");
         Map<Hash, Banlist.Entry> entries = new TreeMap<Hash, Banlist.Entry>(new HashComparator());
@@ -62,7 +63,7 @@ class BanlistRenderer {
             long expires = entry.expireOn-_context.clock().now();
             if (expires <= 0)
                 continue;
-            buf.append("<li>").append(_context.commSystem().renderPeerHTML(key, false));
+            buf.append("<li class=lazy>").append(_context.commSystem().renderPeerHTML(key, false));
             buf.append(' ').append("<span class=banperiod>");
             String expireString = DataHelper.formatDuration2(expires);
             if (key.equals(Hash.FAKE_HASH))
@@ -126,11 +127,11 @@ class BanlistRenderer {
                 entry.cause.toLowerCase().contains("blocklist"))) {
                 continue;
             } else {
-                buf.append("<tr");
+                buf.append("<tr class=\"lazy");
                 if (entry.cause.toLowerCase().contains("floodfill")) {
-                    buf.append(" class=banFF");
+                    buf.append(" banFF");
                 }
-                buf.append(">")
+                buf.append("\">")
                    .append("<td>").append(_t(entry.cause,entry.causeCode).replace("<b>➜</b> ","")).append("</td>")
                    .append("<td>:</td>")
                    .append("<td><span class=b64>").append(key.toBase64()).append("</span></td>")

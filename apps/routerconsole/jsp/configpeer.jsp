@@ -12,6 +12,7 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("config peers")%>
+<script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
@@ -89,6 +90,11 @@
 <h3 class=tabletitle><%=intl._t("Banned IPs")%></h3>
 <jsp:getProperty name="peerhelper" property="blocklistSummary" />
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+<script nonce=<%=cspNonce%>>
+window.addEventListener("DOMContentLoaded", progressx.hide);
+document.addEventListener("DOMContentLoaded", () => {
+  lazyload();
+});
+</script>
 </body>
 </html>

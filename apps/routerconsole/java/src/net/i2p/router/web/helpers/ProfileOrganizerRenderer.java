@@ -91,7 +91,6 @@ class ProfileOrganizerRenderer {
         int reliable = 0;
         int integrated = 0;
         boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
-//        StringBuilder buf = new StringBuilder(16*1024);
         StringBuilder buf = new StringBuilder(32*1024);
 
         if (mode < 2) {

@@ -59,6 +59,7 @@
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.natural.js></script>
 <script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
 <script nonce=<%=cspNonce%>>
+  var banlist = document.getElementById("banlist");
   var bbody = document.getElementById("sessionBanlist");
   var bfoot = document.getElementById("sessionBanlistFooter");
   var ff = document.getElementById("floodfills");
