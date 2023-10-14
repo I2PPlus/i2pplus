@@ -748,20 +748,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 } else if (url.endsWith(".json")) {
                     mimeType = "application/json";
                 }
-                // Add allow and referrer-policy headers if required
+                // Add referrer-policy headers if not set
                 boolean allowReferrerHeader = Arrays.asList(referrerPolicyWhitelist).contains(mimeType);
                 if (_headers != null && allowReferrerHeader) {
-                    boolean allow = headers.containsKey("Allow".toLowerCase());
-                    if (!allow) {
-                        setEntry(headers, "Allow", "GET, POST, HEAD");
-                    }
                     boolean rp = headers.containsKey("Referrer-Policy".toLowerCase());
                     if (!rp) {
                         setEntry(headers, "Referrer-Policy", "same-origin");
                     }
                 }
 
-                // Set cache-control to immutable if required
+                // Set cache-control to immutable if not set
                 boolean immutableCache = Arrays.stream(immutableCacheWhitelist).anyMatch(mimeType::matches);
                 boolean cc = headers.containsKey("Cache-Control".toLowerCase());
                 if (_headers != null && !cc) {
@@ -772,10 +768,22 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     }
                 }
 
+
+                // Set restrictive allow headers if not set
+                boolean allow = headers.containsKey("Allow".toLowerCase());
+                if (!allow) {
+                    setEntry(headers, "Allow", "GET, POST, HEAD");
+                }
+
                 // Add x-xss-protection header if not present
                 boolean xss = headers.containsKey("X-XSS-Protection".toLowerCase());
                 if (_headers != null && !xss) {
                     setEntry(headers, "X-XSS-Protection", "1; mode=block");
+                }
+
+                boolean nosniff = headers.containsKey("X-Content-Type-Options");
+                if (_headers != null && !nosniff) {
+                    setEntry(headers, "X-Content-Type-Options", "nosniff");
                 }
 
                 String modifiedHeaders = formatHeaders(headers, command);
