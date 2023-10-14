@@ -1419,17 +1419,17 @@
 
     <target name="preppkg-windows" depends="preppkg-base, preplicenses-windows, buildUtilityJar, buildexe">
         <copy file="build/i2p.exe" todir="pkg-temp/" failonerror="false" />
-        <copy file="installer/resources/eepget.bat" todir="pkg-temp/" />
-        <copy file="installer/resources/eephead.bat" todir="pkg-temp/" />
-        <copy file="installer/resources/i2prouter.bat" todir="pkg-temp/" />
-        <copy file="installer/resources/fixperms.bat" todir="pkg-temp/" />
-        <copy file="installer/resources/install_i2p_service_winnt.bat" todir="pkg-temp/" />
-        <copy file="installer/resources/set_config_dir_for_nt_service.bat" todir="pkg-temp/" />
-        <copy file="installer/resources/uninstall_i2p_service_winnt.bat" todir="pkg-temp/" />
-        <copy file="installer/resources/StartI2P+Service.bat" todir="pkg-temp/" />
-        <copy file="installer/resources/StopI2P+Service.bat" todir="pkg-temp/" />
-        <copy file="installer/resources/EnableI2P+Service.bat" todir="pkg-temp/" />
-        <copy file="installer/resources/DisableI2P+Service.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/windows/eepget.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/windows/eephead.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/windows/i2prouter.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/windows/fixperms.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/windows/install_i2p_service_winnt.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/windows/set_config_dir_for_nt_service.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/windows/uninstall_i2p_service_winnt.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/windows/StartI2P+Service.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/windows/StopI2P+Service.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/windows/EnableI2P+Service.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/windows/DisableI2P+Service.bat" todir="pkg-temp/" />
         <copy file="build/utility.jar" todir="pkg-temp" />
         <copy todir="pkg-temp/lib/wrapper/win32/">
             <fileset dir="installer/lib/wrapper/win32/" excludes="*.txt" />
@@ -1493,10 +1493,10 @@
         <mkdir dir="pkg-temp/scripts" />
         <copy file="apps/proxyscript/i2pProxy.pac" todir="pkg-temp/scripts/" />
         <copy file="installer/resources/startconsole.html" todir="pkg-temp/docs/" />
-        <copy file="installer/resources/start.ico" todir="pkg-temp/docs/" />
-        <copy file="installer/resources/stop.ico" todir="pkg-temp/docs/" />
-        <copy file="installer/resources/console.ico" todir="pkg-temp/docs/" />
-        <copy file="installer/resources/uninstall.ico" todir="pkg-temp/docs/" />
+        <copy file="installer/resources/windows/start.ico" todir="pkg-temp/docs/" />
+        <copy file="installer/resources/windows/stop.ico" todir="pkg-temp/docs/" />
+        <copy file="installer/resources/windows/console.ico" todir="pkg-temp/docs/" />
+        <copy file="installer/resources/windows/uninstall.ico" todir="pkg-temp/docs/" />
         <!-- Eepsite stuff here -->
         <mkdir dir="pkg-temp/eepsite" />
         <copy todir="pkg-temp/eepsite/">
@@ -1878,7 +1878,7 @@
         <copy file="installer/resources/eephead" todir="pkg-temp/" />
         <copy file="installer/resources/graceful_update" todir="pkg-temp/" />
         <!-- will overwrite existing instances, resetting i2p path
-        <copy file="installer/resources/eephead.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/windows/eephead.bat" todir="pkg-temp/" />
         -->
         <!-- are these ever used in java installs ?? -->
         <!--
@@ -1886,7 +1886,7 @@
             <fileset dir="installer/resources/man/" />
         </copy>
         -->
-        <copy file="installer/resources/fixperms2.bat" todir="pkg-temp/scripts/" />
+        <copy file="installer/resources/windows/fixperms2.bat" todir="pkg-temp/scripts/" />
     </target>
 
     <target name="truncatehistory">
@@ -1958,7 +1958,7 @@
         <copy file="installer/resources/eepget" todir="pkg-temp/" />
         <copy file="installer/resources/eephead" todir="pkg-temp/" />
         <!--<copy file="installer/resources/graceful_update" todir="pkg-temp/" />-->
-        <!--<copy file="installer/resources/fixperms2.bat" todir="pkg-temp/scripts/" />-->
+        <!--<copy file="installer/resources/windows/fixperms2.bat" todir="pkg-temp/scripts/" />-->
     </target>
 
 
