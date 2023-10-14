@@ -728,25 +728,155 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 List<String> contentTypeList = headers.get("Content-Type");
                 // Set a generic default MIME type
                 String mimeType = "application/octet-stream";
+                int index = url.indexOf("?");
+                if (index != -1) {
+                    url = url.substring(0, index);
+                }
+                url = url.toLowerCase();
                 if (contentTypeList != null && !contentTypeList.isEmpty()) {
                     mimeType = headers.get("Content-Type").get(0);
-                // Set default MIME type based on the resource being requested
-                } else if (url.endsWith(".html")) {
-                    mimeType = "text/html";
+                // Set default MIME type based on the resource being requested if no mimetype header found
+                // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+                } else if (url.endsWith(".3g2")) {
+                    mimeType = "video/3gpp2";
+                } else if (url.endsWith(".3gp")) {
+                    mimeType = "video/3gpp";
+                } else if (url.endsWith(".aac")) {
+                    mimeType = "audio/aac";
+                } else if (url.endsWith(".abw")) {
+                    mimeType = "application/x-abiword";
+                } else if (url.endsWith(".arc")) {
+                    mimeType = "application/x-freearc";
+                } else if (url.endsWith(".avif")) {
+                    mimeType = "image/avif";
+                } else if (url.endsWith(".avi")) {
+                    mimeType = "video/x-msvideo";
+                } else if (url.endsWith(".azw")) {
+                    mimeType = "application/vnd.amazon.ebook";
+                } else if (url.endsWith(".bin")) {
+                    mimeType = "application/octet-stream";
+                } else if (url.endsWith(".bmp")) {
+                    mimeType = "image/bmp";
+                } else if (url.endsWith(".bz")) {
+                    mimeType = "application/x-bzip";
+                } else if (url.endsWith(".bz2")) {
+                    mimeType = "application/x-bzip2";
+                } else if (url.endsWith(".cda")) {
+                    mimeType = "application/x-cdf";
                 } else if (url.endsWith(".css")) {
                     mimeType = "text/css";
-                } else if (url.endsWith(".js")) {
-                    mimeType = "text/javascript";
-                } else if (url.endsWith(".jpg") || url.endsWith(".jpeg")) {
-                    mimeType = "image/jpg";
-                } else if (url.endsWith(".webp")) {
-                    mimeType = "image/webp";
-                } else if (url.endsWith(".png")) {
-                    mimeType = "image/png";
+                } else if (url.endsWith(".csv")) {
+                    mimeType = "text/csv";
+                } else if (url.endsWith(".doc")) {
+                    mimeType = "application/msword";
+                } else if (url.endsWith(".docx")) {
+                    mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                } else if (url.endsWith(".eot")) {
+                    mimeType = "application/vnd.ms-fontobject";
+                } else if (url.endsWith(".epub")) {
+                    mimeType = "application/epub+zip";
                 } else if (url.endsWith(".gif")) {
                     mimeType = "image/gif";
+                } else if (url.endsWith(".gz")) {
+                    mimeType = "application/gzip";
+                } else if (url.endsWith(".htm") || url.endsWith(".html")) {
+                    mimeType = "text/html";
+                } else if (url.endsWith(".ico")) {
+                    mimeType = "image/vnd.microsoft.icon";
+                } else if (url.endsWith(".ics")) {
+                    mimeType = "text/calendar";
+                } else if (url.endsWith(".jar")) {
+                    mimeType = "application/java-archive";
+                } else if (url.endsWith(".jpeg") || url.endsWith(".jpg")) {
+                    mimeType = "image/jpeg";
                 } else if (url.endsWith(".json")) {
                     mimeType = "application/json";
+                } else if (url.endsWith(".jsonld")) {
+                    mimeType = "application/ld+json";
+                } else if (url.endsWith(".js")) {
+                    mimeType = "text/javascript";
+                } else if (url.endsWith(".mid") || url.endsWith(".midi")) {
+                    mimeType = "audio/midi";
+                } else if (url.endsWith(".mjs")) {
+                    mimeType = "text/javascript";
+                } else if (url.endsWith(".mp3")) {
+                    mimeType = "audio/mpeg";
+                } else if (url.endsWith(".mp4")) {
+                    mimeType = "video/mp4";
+                } else if (url.endsWith(".mpeg")) {
+                    mimeType = "video/mpeg";
+                } else if (url.endsWith(".mpkg")) {
+                    mimeType = "application/vnd.apple.installer+xml";
+                } else if (url.endsWith(".ods")) {
+                    mimeType = "application/vnd.oasis.opendocument.spreadsheet";
+                } else if (url.endsWith(".odt")) {
+                    mimeType = "application/vnd.oasis.opendocument.text";
+                } else if (url.endsWith(".odp")) {
+                    mimeType = "application/vnd.oasis.opendocument.presentation";
+                } else if (url.endsWith(".oga")) {
+                    mimeType = "audio/ogg";
+                } else if (url.endsWith(".ogv")) {
+                    mimeType = "video/ogg";
+                } else if (url.endsWith(".ogx")) {
+                    mimeType = "application/ogg";
+                } else if (url.endsWith(".opus")) {
+                    mimeType = "audio/opus";
+                } else if (url.endsWith(".otf")) {
+                    mimeType = "font/otf";
+                } else if (url.endsWith(".pdf")) {
+                    mimeType = "application/pdf";
+                } else if (url.endsWith(".php")) {
+                    mimeType = "application/x-httpd-php";
+                } else if (url.endsWith(".png")) {
+                    mimeType = "image/png";
+                } else if (url.endsWith(".ppt")) {
+                    mimeType = "application/vnd.ms-powerpoint";
+                } else if (url.endsWith(".pptx")) {
+                    mimeType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+                } else if (url.endsWith(".rar")) {
+                    mimeType = "application/x-rar-compressed";
+                } else if (url.endsWith(".rtf")) {
+                    mimeType = "application/rtf";
+                } else if (url.endsWith(".sh")) {
+                    mimeType = "application/x-sh";
+                } else if (url.endsWith(".svg")) {
+                    mimeType = "image/svg+xml";
+                } else if (url.endsWith(".tar")) {
+                    mimeType = "application/x-tar";
+                } else if (url.endsWith(".tif") || url.endsWith(".tiff")) {
+                    mimeType = "image/tiff";
+                } else if (url.endsWith(".ts")) {
+                    mimeType = "video/mp2t";
+                } else if (url.endsWith(".txt")) {
+                    mimeType = "text/plain";
+                } else if (url.endsWith(".tif") || url.endsWith(".tiff")) {
+                    mimeType = "image/tiff";
+                } else if (url.endsWith(".ttf")) {
+                    mimeType = "font/ttf";
+                } else if (url.endsWith(".vsd")) {
+                    mimeType = "application/vnd.visio";
+                } else if (url.endsWith(".wav")) {
+                    mimeType = "audio/wav";
+                } else if (url.endsWith(".weba")) {
+                    mimeType = "audio/webm";
+                } else if (url.endsWith(".webm")) {
+                    mimeType = "video/webm";
+                } else if (url.endsWith(".woff")) {
+                    mimeType = "font/woff";
+                } else if (url.endsWith(".woff2")) {
+                    mimeType = "font/woff2";
+                } else if (url.endsWith(".xhtml")) {
+                    mimeType = "application/xhtml+xml";
+                } else if (url.endsWith(".xls")) {
+                    mimeType = "application/vnd.ms-excel";
+                } else if (url.endsWith(".xlsx")) {
+                    mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                } else if (url.endsWith(".xml")) {
+                    mimeType = "application/xml";
+                } else if (url.endsWith(".xul")) {
+                    mimeType = "application/vnd.mozilla.xul+xml";
+                } else if (url.endsWith(".zip")) {
+                    mimeType = "application/zip";
                 }
                 // Add referrer-policy headers if not set
                 boolean allowReferrerHeader = Arrays.asList(referrerPolicyWhitelist).contains(mimeType);
