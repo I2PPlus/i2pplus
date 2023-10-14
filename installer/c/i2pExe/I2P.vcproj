@@ -317,7 +317,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\resources\start.ico"
+				RelativePath="..\..\resources\windows\start.ico"
 				>
 			</File>
 		</Filter>

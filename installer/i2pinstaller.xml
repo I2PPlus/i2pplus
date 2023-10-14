@@ -5,7 +5,7 @@
   <errTitle>I2P+ Installer</errTitle>
   <chdir>.</chdir>
   <customProcName>false</customProcName>
-  <icon>resources/console.ico</icon>
+  <icon>resources/windows/console.ico</icon>
   <jre>
     <minVersion>1.8.0</minVersion>
   </jre>

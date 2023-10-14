@@ -13,7 +13,7 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>../../resources/console.ico</icon>
+  <icon>../../resources/windows/console.ico</icon>
   <singleInstance>
     <mutexName>I2P+</mutexName>
     <windowTitle></windowTitle>

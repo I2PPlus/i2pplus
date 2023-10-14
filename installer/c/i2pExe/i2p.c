@@ -1,4 +1,4 @@
-/** 
+/**
  * Customized I2P launcher.
  * Launches the JRE within the process, to allow Task Manager to show
  * "I2P.exe" as the process, and firewalls to control access of
@@ -7,8 +7,8 @@
 
 #include "errors.h"
 
-#include <windows.h> 
-#include <stdio.h>   
+#include <windows.h>
+#include <stdio.h>
 #include <malloc.h>
 #include <sys/stat.h>
 
@@ -69,20 +69,20 @@ main(int argc, char** argv) {
 	case ERROR_COULDNT_FIND_JVM:
 	case ERROR_COULDNT_INITIALIZE_JVM:
 	case ERROR_COULDNT_LOAD_JVM:
-		if (MessageBox(NULL, "I2P needs the Java Runtime Environment 5.0 or above. Click OK to go to www.java.com, where you can install Java.", 
+		if (MessageBox(NULL, "I2P+ needs the Java Runtime Environment 1.8 or above. Click OK to go to www.java.com, where you can install Java.",
 		       "I2P Launcher Error",
 		       MB_ICONWARNING | MB_OKCANCEL) == IDOK)
 			ShellExecute(NULL, NULL, "http://www.java.com/", "", "", SW_SHOWNORMAL);
 		break;
 	case ERROR_COULDNT_PARSE_ARGUMENTS:
-		MessageBox(NULL, "I2P failed to parse the commandline arguments to Java.\n"
+		MessageBox(NULL, "I2P+ failed to parse the commandline arguments to Java.\n"
 			"Please download and install I2P again.",
 			"I2P Launcher Error", MB_OK);
 		break;
 	case ERROR_STARTING_PROGRAM:
-		MessageBox(NULL, "I2P was unable to load.\n"
-				"Please download and install I2P again.",
-				"I2P Launcher Error", MB_OK);
+		MessageBox(NULL, "I2P+ was unable to load.\n"
+				"Please download and install I2P+ again.",
+				"I2P+ Launcher Error", MB_OK);
 		break;
 	}
 	return ret;
@@ -101,13 +101,13 @@ void readOptions(char*** options, int* size) {
 	char* buffer;
 	int i;
 	size_t currentlen;
-	char* command;	
+	char* command;
 
 	file = fopen("launch.properties", "r");
 	if(file == NULL) {
 		// default to certain values.
 		*size = 9;
-		
+
 		*options = (char**)MemAlloc(sizeof(char*) * (*size));
 		i = 0;
 		(*options)[i++] = "-Xms64m";
@@ -212,7 +212,7 @@ WinMain(HINSTANCE inst, HINSTANCE previnst, LPSTR cmdline, int cmdshow)
 {
     int   ret;
 
-    /* It turns out, that Windows can set thread locale to default user locale 
+    /* It turns out, that Windows can set thread locale to default user locale
      * instead of default system locale. We correct this by explicitely setting
      * thread locale to system default.
      */
@@ -221,5 +221,5 @@ WinMain(HINSTANCE inst, HINSTANCE previnst, LPSTR cmdline, int cmdshow)
     __initenv = _environ;
     ret = main(__argc, __argv);
 
-    return ret; 
+    return ret;
 }

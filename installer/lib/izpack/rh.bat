@@ -1,7 +1,7 @@
 :: Files required:
 :: ResourceHacker.exe from http://www.angusj.com/resourcehacker/
 :: VersionInfo_template.rc copied from installer/lib/izpack
-:: console.ico copied from installer/resources
+:: console.ico copied from installer/windows/resources
 :: the unsigned i2pinstall_0.9.xx_windows.exe
 ::
 :: the original file will be renamed to i2pinstall_0.9.xx_windows_unsigned.exe

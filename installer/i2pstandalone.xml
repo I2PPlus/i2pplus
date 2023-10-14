@@ -2,10 +2,10 @@
   <headerType>0</headerType>
   <jar>../build/launchi2p.jar</jar>
   <outfile>../build/i2p.exe</outfile>
-  <errTitle>I2P</errTitle>
+  <errTitle>I2P+</errTitle>
   <chdir>.</chdir>
   <customProcName>false</customProcName>
-  <icon>resources/start.ico</icon>
+  <icon>resources/windows/start.ico</icon>
   <jre>
     <minVersion>1.8.0</minVersion>
 <!--    <minHeapSize>128</minHeapSize> -->
