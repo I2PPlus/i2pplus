@@ -37,7 +37,8 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     private boolean _headerWritten;
     private final byte _buf1[];
     protected boolean _gzip;
-    protected long _dataExpected;
+    protected long _dataExpected = -1;
+    protected boolean _keepAlive;
     /** lower-case, trimmed */
     protected String _contentType;
     /** lower-case, trimmed */
@@ -59,6 +60,44 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         _log = context.logManager().getLog(getClass());
         _headerBuffer = _cache.acquire();
         _buf1 = new byte[1];
+    }
+
+    /**
+     * Optionally keep browser socket alive and call callback when we're done.
+     * BROWSER-SIDE ONLY for now.
+     *
+     * @param allowKeepAlive we may, but are not required to, keep the browser-side socket alive
+     * @param isHead is this a response to a HEAD, and thus no data is expected (RFC 2616 sec. 4.4)
+     * @since 0.9.61
+     */
+    public HTTPResponseOutputStream(OutputStream raw, boolean allowKeepAlive, boolean isHead) {
+        this(raw);
+        _keepAlive = allowKeepAlive;
+        if (isHead)
+            _dataExpected = 0;
+        if (_log.shouldInfo())
+            _log.info("Before headers: keepalive? " + _keepAlive);
+    }
+
+    /**
+     * Should we keep the input stream alive when done?
+     *
+     * @return false always, not yet supported
+     * @since 0.9.61
+     */
+    public boolean getKeepAliveIn() {
+        return false;
+    }
+
+    /**
+     * Should we keep the output stream alive when done?
+     * Only supported for the browser socket side.
+     * I2P socket on server side not supported yet.
+     *
+     * @since 0.9.61
+     */
+    public boolean getKeepAliveOut() {
+        return _keepAlive;
     }
 
     @Override
@@ -142,10 +181,10 @@ class HTTPResponseOutputStream extends FilterOutputStream {
 
     /** ok, received, now munge & write it */
     private void writeHeader() throws IOException {
-        String responseLine = null;
 
         boolean connectionSent = false;
         boolean proxyConnectionSent = false;
+        boolean chunked = false;
 
         int lastEnd = -1;
         byte[] data = _headerBuffer.getData();
@@ -153,11 +192,26 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         for (int i = 0; i < valid; i++) {
             if (data[i] == NL) {
                 if (lastEnd == -1) {
-                    responseLine = DataHelper.getUTF8(data, 0, i+1); // includes NL
+                    String responseLine = DataHelper.getUTF8(data, 0, i+1);
                     responseLine = filterResponseLine(responseLine);
                     responseLine = (responseLine.trim() + "\r\n");
                     if (_log.shouldInfo())
                         _log.info("Response: " + responseLine.trim());
+                    // Persistent conn requires HTTP/1.1
+                    if (_keepAlive && !responseLine.startsWith("HTTP/1.1 "))
+                        _keepAlive = false;
+                    // force zero datalen for 1xx, 204, 304 (RFC 2616 sec. 4.4)
+                    // so that these don't prevent keepalive
+                    int sp = responseLine.indexOf(" ");
+                    if (sp > 0) {
+                        String s = responseLine.substring(sp + 1);
+                        if (s.startsWith("1") || s.startsWith("204") || s.startsWith("304"))
+                            _dataExpected = 0;
+                    } else {
+                        // no status?
+                        _keepAlive = false;
+                    }
+
                     out.write(DataHelper.getUTF8(responseLine));
                 } else {
                     for (int j = lastEnd+1; j < i; j++) {
@@ -182,12 +236,18 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                                     // pass through for websocket
                                     out.write(DataHelper.getASCII("Connection: " + val + "\r\n"));
                                     proxyConnectionSent = true;
+                                    // Disable persistence
+                                    _keepAlive = false;
                                 } else {
-                                    out.write(CONNECTION_CLOSE);
+                                    // Strip to allow persistence, replace to disallow
+                                    if (!_keepAlive)
+                                        out.write(CONNECTION_CLOSE);
                                 }
                                 connectionSent = true;
                             } else if ("proxy-connection".equals(lcKey)) {
-                                out.write(PROXY_CONNECTION_CLOSE);
+                                // Strip to allow persistence, replace to disallow
+                                if (!_keepAlive)
+                                    out.write(PROXY_CONNECTION_CLOSE);
                                 proxyConnectionSent = true;
                             } else if ("content-encoding".equals(lcKey) && "x-i2p-gzip".equals(val.toLowerCase(Locale.US))) {
                                 _gzip = true;
@@ -206,6 +266,9 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                                 } else if ("content-encoding".equals(lcKey)) {
                                     // save for compress decision on server side
                                     _contentEncoding = val.toLowerCase(Locale.US);
+                                } else if ("transfer-encoding".equals(lcKey) && val.toLowerCase(Locale.US).contains("chunked")) {
+                                    // save for keepalive decision on client side
+                                    chunked = true;
                                 } else if ("set-cookie".equals(lcKey)) {
                                     String lcVal = val.toLowerCase(Locale.US);
                                     if (lcVal.contains("domain=b32.i2p") ||
@@ -229,20 +292,47 @@ class HTTPResponseOutputStream extends FilterOutputStream {
             }
         }
 
-        if (!connectionSent)
+        // Now make the final keepalive decision
+        if (_keepAlive) {
+            // we need one but not both
+            if ((chunked && _dataExpected >= 0) ||
+                (!chunked && _dataExpected < 0))
+                _keepAlive = false;
+        }
+
+        if (!connectionSent && !_keepAlive)
             out.write(CONNECTION_CLOSE);
-        if (!proxyConnectionSent)
+        if (!proxyConnectionSent && !_keepAlive)
             out.write(PROXY_CONNECTION_CLOSE);
 
         finishHeaders();
 
         boolean shouldCompress = shouldCompress();
         if (_log.shouldInfo())
-            _log.info("After headers: gzip? " + _gzip + " compress? " + shouldCompress);
+            _log.info("After headers: gzip? " + _gzip + " compress? " + shouldCompress + " keepalive? " + _keepAlive);
 
         if (data.length == CACHE_SIZE)
             _cache.release(_headerBuffer);
             _headerBuffer = null;
+
+     /*****
+        // TODO
+        // Setup the keepalive streams
+        // Until we have keepalive for the i2p socket, the client side
+        // does not need to do this, we just wait for the socket to close.
+        // Until we have keepalive for the server socket, the server side
+        // does not need to do this, we just wait for the socket to close.
+        if (_keepAlive) {
+            if (_dataExpected > 0) {
+                // content-length
+                // filter output stream to count the data
+            } else {
+                // chunked
+                // filter output stream to look for the end
+            }
+        }
+      ****/
+
         if (shouldCompress) {
             beginProcessing();
         }
@@ -257,7 +347,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     @Override
     public void close() throws IOException {
         if (_log.shouldInfo())
-            _log.info("Closing " + out + " compressed? " + shouldCompress());
+            _log.info("Closing " + out + " compressed? " + shouldCompress() + " keepalive? " + _keepAlive);
         synchronized(this) {
             // synch with changing out field below
             super.close();
