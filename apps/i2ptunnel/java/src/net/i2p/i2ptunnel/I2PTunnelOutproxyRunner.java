@@ -41,9 +41,9 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
      * Sun's impl of BufferedOutputStream), but that is the streaming
      * api's job...
      */
-    private static final int MAX_PACKET_SIZE = 1024 * 4;
+    private static final int MAX_PACKET_SIZE = 16 * 1024;
 
-    private static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE;
+    private static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE * 2;
 
     private final Socket s;
     private final Socket i2ps;
