@@ -3,7 +3,6 @@ Content-Type: text/html; charset=UTF-8
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.5
 Proxy-Authenticate: Basic realm="I2P HTTP Proxy"
 Connection: close
-Proxy-Connection: close
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
 X-Frame-Options: DENY

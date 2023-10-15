@@ -1,7 +1,6 @@
 HTTP/1.1 403 Access Denied
 Content-Type: text/html; charset=UTF-8
 Connection: close
-Proxy-Connection: close
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
 X-Frame-Options: DENY
