@@ -422,7 +422,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // Do not set keepalive for internal sockets.
             boolean keepalive = !(s instanceof InternalSocket);
 // indent -------------------------------------------------------------
-          while (keepalive) {
+          do {
 // indent -------------------------------------------------------------
             if (requestCount > 0) {
                 if (_log.shouldInfo())
@@ -1493,7 +1493,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // go around again
             requestCount++;
 // indent -------------------------------------------------------------
-          } // while (keepalive)
+          } while (keepalive);
 // indent -------------------------------------------------------------
         } catch(IOException ex) {
             // This is normal for keepalive when the browser closed the socket,

@@ -77,23 +77,39 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final String[] CLIENT_SKIPHEADERS = {HASH_HEADER.toLowerCase(Locale.US),
                                                         DEST64_HEADER.toLowerCase(Locale.US),
                                                         DEST32_HEADER.toLowerCase(Locale.US)};
+    private static final String AGE_HEADER = "age"; // possible anonymity implications, informational
+    private static final String ALT_SVC_HEADER = "alt-svc"; // superfluous
     private static final String DATE_HEADER = "date";
-    private static final String SERVER_HEADER = "server";
-    private static final String X_POWERED_BY_HEADER = "x-powered-by";
-    private static final String X_RUNTIME_HEADER = "x-runtime"; // Rails
-    private static final String X_HACKER_HEADER = "x-hacker"; // Wordpress
     private static final String EXPIRES_HEADER = "expires"; // not needed with cache-control max-age, and php inserts erroneous header
     private static final String PRAGMA_HEADER = "pragma"; // obsolete
+    private static final String REFERER_HEADER = "referer"; // shouldn't be in response headers
+    private static final String SERVER_HEADER = "server";
+    private static final String STRICT_TRANSPORT_SECURITY_HEADER = "strict-transport-security"; // superfluous
+    private static final String VIA_HEADER = "via"; // possible anonymity implications, informational
+    private static final String X_CACHE_HEADER = "x-cache"; // possible anonymity implications, informational
+    private static final String X_CACHE_HITS_HEADER = "x-cache-hits"; // possible anonymity implications, informational
+    private static final String X_CLOUD_TRACE_CONTEXT_HEADER = "x-cloud-trace-context"; // superfluous
+    private static final String X_GOOG_GENERATION_HEADER = "x-goog-generation"; // superfluous
+    private static final String X_GOOG_HASH_HEADER = "x-goog-hash"; // superfluous
+    private static final String X_GUPLOADER_UPLOADID_HEADER = "x-guploader-uploadid"; // superfluous
+    private static final String X_HACKER_HEADER = "x-hacker"; // Wordpress
+    private static final String X_PANTHEON_STYX_HOSTNAME_HEADER = "x-pantheon-styx-hostname"; // possible anonymity implications, informational
+    private static final String X_POWERED_BY_HEADER = "x-powered-by";
+    private static final String X_RUNTIME_HEADER = "x-runtime"; // Rails
+    private static final String X_SERVED_BY_HEADER = "x-served-by"; // possible anonymity implications, informational
+    private static final String X_STYX_REQ_ID_HEADER = "x-styx-req-id"; // possible anonymity implications, informational
+    private static final String X_TIMER_HEADER = "x-timer"; // possible anonymity implications, informational
+
     // https://httpoxy.org
     private static final String PROXY_HEADER = "proxy";
     /** MUST ALL BE LOWER CASE */
-    private static final String[] SERVER_SKIPHEADERS = {DATE_HEADER, SERVER_HEADER, X_HACKER_HEADER, X_POWERED_BY_HEADER, X_RUNTIME_HEADER,
-                                                        PROXY_HEADER, EXPIRES_HEADER, PRAGMA_HEADER};
+    private static final String[] SERVER_SKIPHEADERS = {AGE_HEADER, ALT_SVC_HEADER, DATE_HEADER, EXPIRES_HEADER, PRAGMA_HEADER, PROXY_HEADER, REFERER_HEADER, SERVER_HEADER,
+                                                        STRICT_TRANSPORT_SECURITY_HEADER, VIA_HEADER, X_CACHE_HEADER, X_CACHE_HITS_HEADER, X_CLOUD_TRACE_CONTEXT_HEADER,
+                                                        X_GOOG_GENERATION_HEADER, X_GOOG_HASH_HEADER, X_GUPLOADER_UPLOADID_HEADER, X_HACKER_HEADER, X_PANTHEON_STYX_HOSTNAME_HEADER,
+                                                        X_POWERED_BY_HEADER, X_RUNTIME_HEADER, X_SERVED_BY_HEADER, X_STYX_REQ_ID_HEADER};
     /** timeout for first request line */
-//    private static final long HEADER_TIMEOUT = 15*1000;
     private static final long HEADER_TIMEOUT = 30*1000;
     /** total timeout for the request and all the headers */
-//    private static final long TOTAL_HEADER_TIMEOUT = 2 * HEADER_TIMEOUT;
     private static final long TOTAL_HEADER_TIMEOUT = 3 * HEADER_TIMEOUT;
     private static final long START_INTERVAL = (60 * 1000) * 3;
     private static final int MAX_LINE_LENGTH = 8*1024;
@@ -725,15 +741,40 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 // Remove cache-control header if it contains the word "none" so we can set a sane value later
                 List<String> cacheControlList = headers.get("Cache-Control");
-                if (cacheControlList != null && cacheControlList.contains("none")) {
+                if (cacheControlList != null && (cacheControlList.contains("none") || cacheControlList.contains("post-check=0, pre-check=0"))) {
                     headers.remove("Cache-Control");
+                }
+
+                // Check Set-Cookie header for specific strings
+                String[] cookieStrings = {"STYXKEY", "visited=yes"};
+                List<String> setCookieList = headers.get("Set-Cookie");
+                if (setCookieList != null) {
+                    List<String> newSetCookieList = new ArrayList<>();
+                    for (String setCookie : setCookieList) {
+                        boolean containsString = false;
+                        for (String cookieString : cookieStrings) {
+                            if (setCookie.contains(cookieString)) {
+                                containsString = true;
+                                break;
+                            }
+                        }
+                        if (!containsString) {
+                            newSetCookieList.add(setCookie);
+                        }
+                    }
+                    if (newSetCookieList.isEmpty()) {
+                        headers.remove("Set-Cookie");
+                    } else {
+                        headers.put("Set-Cookie", newSetCookieList);
+                    }
                 }
 
                 // Define mimetypes for referrer policy and cache-control treatment
                 String[] referrerPolicyWhitelist = {"text/html", "application/xhtml+xml", "application/xml", "text/plain", "application/json"};
-                String[] immutableCacheWhitelist = {"font/woff", "font/woff2", "audio/midi", "audio/mpeg", "audio/ogg", "audio/wav", "audio/webm",
-                                                    "image/apng", "image/bmp", "image/gif", "image/jpeg", "image/png", "image/svg+xml", "image/tiff",
-                                                    "image/webp", "image/x-icon", "text/css", "video/mp4", "video/ogg", "video/webm"};
+                String[] immutableCacheWhitelist = {"application/pdf", "audio", "audio/midi", "audio/mpeg", "audio/ogg", "audio/wav", "audio/webm",
+                                                    "font", "font/woff", "font/woff2", "image", "image/apng", "image/bmp", "image/gif", "image/jpeg",
+                                                    "image/png", "image/svg+xml", "image/tiff", "image/webp", "image/x-icon", "text/css", "video",
+                                                    "video/mp4", "video/ogg", "video/webm"};
 
                 // Check MIME type of response
                 List<String> contentTypeList = headers.get("Content-Type");
@@ -910,7 +951,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     }
                 }
 
-
                 // Set restrictive allow headers if not set
                 boolean allow = headers.containsKey("Allow".toLowerCase());
                 if (!allow) {
@@ -923,7 +963,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     setEntry(headers, "X-XSS-Protection", "1; mode=block");
                 }
 
-                boolean nosniff = headers.containsKey("X-Content-Type-Options");
+                boolean nosniff = headers.containsKey("X-Content-Type-Options".toLowerCase());
                 if (_headers != null && !nosniff) {
                     setEntry(headers, "X-Content-Type-Options", "nosniff");
                 }
