@@ -82,10 +82,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final String X_POWERED_BY_HEADER = "x-powered-by";
     private static final String X_RUNTIME_HEADER = "x-runtime"; // Rails
     private static final String X_HACKER_HEADER = "x-hacker"; // Wordpress
+    private static final String EXPIRES_HEADER = "expires"; // not needed with cache-control max-age, and php inserts erroneous header
+    private static final String PRAGMA_HEADER = "pragma"; // obsolete
     // https://httpoxy.org
     private static final String PROXY_HEADER = "proxy";
     /** MUST ALL BE LOWER CASE */
-    private static final String[] SERVER_SKIPHEADERS = {DATE_HEADER, SERVER_HEADER, X_HACKER_HEADER, X_POWERED_BY_HEADER, X_RUNTIME_HEADER, PROXY_HEADER};
+    private static final String[] SERVER_SKIPHEADERS = {DATE_HEADER, SERVER_HEADER, X_HACKER_HEADER, X_POWERED_BY_HEADER, X_RUNTIME_HEADER,
+                                                        PROXY_HEADER, EXPIRES_HEADER, PRAGMA_HEADER};
     /** timeout for first request line */
 //    private static final long HEADER_TIMEOUT = 15*1000;
     private static final long HEADER_TIMEOUT = 30*1000;
@@ -716,13 +719,21 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     throw new IOException("getInputStream NPE");
                 }
 
-                //Change headers to protect server identity
-                StringBuilder command = new StringBuilder(128);
+                StringBuilder command = new StringBuilder(512);
+                // Change headers to protect server identity
                 Map<String, List<String>> headers = readHeaders(null, serverin, command, SERVER_SKIPHEADERS, _ctx);
-                    String[] referrerPolicyWhitelist = {"text/html", "application/xhtml+xml", "application/xml", "text/plain", "application/json"};
-                    String[] immutableCacheWhitelist = {"font/woff", "font/woff2", "audio/midi", "audio/mpeg", "audio/ogg", "audio/wav", "audio/webm",
-                                                            "image/apng", "image/bmp", "image/gif", "image/jpeg", "image/png", "image/svg+xml", "image/tiff",
-                                                            "image/webp", "text/css", "video/mp4", "video/ogg", "video/webm"};
+
+                // Remove cache-control header if it contains the word "none" so we can set a sane value later
+                List<String> cacheControlList = headers.get("Cache-Control");
+                if (cacheControlList != null && cacheControlList.contains("none")) {
+                    headers.remove("Cache-Control");
+                }
+
+                // Define mimetypes for referrer policy and cache-control treatment
+                String[] referrerPolicyWhitelist = {"text/html", "application/xhtml+xml", "application/xml", "text/plain", "application/json"};
+                String[] immutableCacheWhitelist = {"font/woff", "font/woff2", "audio/midi", "audio/mpeg", "audio/ogg", "audio/wav", "audio/webm",
+                                                    "image/apng", "image/bmp", "image/gif", "image/jpeg", "image/png", "image/svg+xml", "image/tiff",
+                                                    "image/webp", "image/x-icon", "text/css", "video/mp4", "video/ogg", "video/webm"};
 
                 // Check MIME type of response
                 List<String> contentTypeList = headers.get("Content-Type");
@@ -878,6 +889,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 } else if (url.endsWith(".zip")) {
                     mimeType = "application/zip";
                 }
+
                 // Add referrer-policy headers if not set
                 boolean allowReferrerHeader = Arrays.asList(referrerPolicyWhitelist).contains(mimeType);
                 if (_headers != null && allowReferrerHeader) {
@@ -1226,7 +1238,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 readLine(socket, command, HEADER_TIMEOUT);
             } catch (LineTooLongException ltle) {
                 // convert for first line
-                throw new RequestTooLongException("Request too long (max: " + MAX_LINE_LENGTH + ")");
+                throw new RequestTooLongException("Request too long (Max allowed: " + MAX_LINE_LENGTH + ")");
             }
         } else {
              boolean ok = DataHelper.readLine(in, command);
@@ -1241,7 +1253,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         int i = 0;
         while (true) {
             if (++i > MAX_HEADERS) {
-                throw new LineTooLongException("Too many header lines (max: " + MAX_HEADERS + ")");
+                throw new LineTooLongException("Too many header lines (Max allowed: " + MAX_HEADERS + ")");
             }
             buf.setLength(0);
             if (socket != null) {
@@ -1307,15 +1319,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
 
                 addEntry(headers, name, value);
-                //if (_log.shouldDebug())
-                //    _log.debug("Client [" + peerB32.substring(0,6) + "] Reading header: " + name + " -> " + new Date(ctx.clock().now()));
-                //    _log.debug("Read the header [" + name + "] = [" + value + "]");
+                //if (_log.shouldDebug()) {
+                //    _log.debug("Reading headers sent by client [" + peerB32.substring(0,6) + "]" +
+                //    "\n* " + name + ": " + value);
+                //}
             }
         }
     }
 
     /**
-     *  Read a line teriminated by newline, with a total read timeout.
+     *  Read a line terminated by newline, with a total read timeout.
      *
      *  Warning - strips \n but not \r
      *  Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
