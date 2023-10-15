@@ -17,7 +17,7 @@ public class TunnelPeerCountHelper extends HelperBase {
                 renderer.renderPeers(_out);
                 return "";
             } else {
-                StringWriter sw = new StringWriter(32*1024);
+                StringWriter sw = new StringWriter(1024*1024);
                 renderer.renderPeers(sw);
                 return sw.toString();
             }

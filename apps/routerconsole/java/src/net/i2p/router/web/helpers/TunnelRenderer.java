@@ -881,6 +881,55 @@ class TunnelRenderer {
         buf.setLength(0);
     }
 
+    public void renderLifetimeBandwidth(Writer out, TunnelPool in, TunnelPool outPool) throws IOException {
+        Comparator<TunnelInfo> comp = new TunnelInfoComparator();
+        List<TunnelInfo> tunnels;
+        if (in == null) {
+            tunnels = new ArrayList<TunnelInfo>();
+        } else {
+            tunnels = in.listTunnels();
+            Collections.sort(tunnels, comp);
+        }
+        if (outPool != null) {
+            List<TunnelInfo> otunnels = outPool.listTunnels();
+            Collections.sort(otunnels, comp);
+            tunnels.addAll(otunnels);
+        }
+        int maxLength = 1;
+        for (int i = 0; i < tunnels.size(); i++) {
+            TunnelInfo info = tunnels.get(i);
+            int length = info.getLength();
+            if (length > maxLength)
+                maxLength = length;
+        }
+        StringBuilder buf = new StringBuilder(32*1024);
+        if (tunnels.size() != 0) {
+            buf.append("<table id=tunnelbandwidth><tr><th>")
+               .append(_t("Tunnel Name")).append("</th><th>").append(_t("Data In"))
+               .append("</th><th>").append(_t("Data Out")).append("</th></tr>\n");
+        }
+        long lifetimeIn = 0;
+        long lifetimeOut = 0;
+        for (int i = 0; i < tunnels.size(); i++) {
+            TunnelInfo info = tunnels.get(i);
+            int count = info.getProcessedMessagesCount() * 1024;
+            if (info.isInbound()) {
+                lifetimeIn += count;
+            } else {
+                lifetimeOut += count;
+            }
+            String nickname = getTunnelName(in);
+            String tunnelName = nickname != null ? nickname : "Unknown";
+            buf.append("<tr><td>").append(tunnelName).append("</td><td>")
+               .append(DataHelper.formatSize2(lifetimeIn, true)).append("</td><td>")
+               .append(DataHelper.formatSize2(lifetimeOut, true)).append("</td></tr>\n");
+        }
+        buf.append("</table>\n");
+        out.write(buf.toString());
+        out.flush();
+        buf.setLength(0);
+    }
+
     /* duplicate of that in tunnelPoolManager for now */
     /** @return total number of non-fallback expl. + client tunnels */
 

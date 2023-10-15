@@ -15,13 +15,11 @@ public class TunnelHelper extends HelperBase {
         try {
             if (_out != null) {
                 renderer.renderStatusHTML(_out);
-//                renderer.renderParticipating(_out);
                 renderer.renderGuide(_out);
                 return "";
             } else {
                 StringWriter sw = new StringWriter(32*1024);
                 renderer.renderStatusHTML(sw);
-//                renderer.renderParticipating(sw);
                 renderer.renderGuide(sw);
                 return sw.toString();
             }
