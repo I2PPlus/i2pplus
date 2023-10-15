@@ -52,7 +52,6 @@ public abstract class LocalHTTPServer {
          "HTTP/1.1 404 Not Found\r\n"+
          "Content-Type: text/plain\r\n"+
          "Connection: close\r\n"+
-         "Proxy-Connection: close\r\n"+
          "\r\n"+
          "HTTP Proxy local file not found";
 
@@ -60,7 +59,6 @@ public abstract class LocalHTTPServer {
          "HTTP/1.1 409 Bad\r\n"+
          "Content-Type: text/plain\r\n"+
          "Connection: close\r\n"+
-         "Proxy-Connection: close\r\n"+
          "\r\n"+
          "Add to addressbook failed - bad parameters";
 
@@ -68,7 +66,6 @@ public abstract class LocalHTTPServer {
          "HTTP/1.1 400 Bad\r\n"+
          "Content-Type: text/plain\r\n"+
          "Connection: close\r\n"+
-         "Proxy-Connection: close\r\n"+
          "\r\n"+
          "B32 update failed - bad parameters";
 
@@ -77,7 +74,6 @@ public abstract class LocalHTTPServer {
          "Content-Type: text/plain\r\n" +
          "Cache-Control: no-cache, private, max-age=86400\r\n" +
          "Connection: close\r\n"+
-         "Proxy-Connection: close\r\n"+
          "\r\n"+
          "I2P HTTP proxy OK";
 
@@ -87,7 +83,6 @@ public abstract class LocalHTTPServer {
          "Referrer-Policy: no-referrer\r\n"+
          "Cache-Control: no-cache, private\r\n" +
          "Connection: close\r\n"+
-         "Proxy-Connection: close\r\n"+
          "\r\n";
 
     private final static String headerLinks =
@@ -174,14 +169,16 @@ public abstract class LocalHTTPServer {
                 else if (filename.endsWith(".xhtml"))
                     type = "application/xhtml+xml";
                 else type = "text/html; charset=UTF-8";
-                out.write("HTTP/1.1 200 OK\r\nContent-Type: ".getBytes("UTF-8"));
-                out.write(type.getBytes("UTF-8"));
-                out.write("\r\nAccess-Control-Allow-Origin: *".getBytes("UTF-8"));
-                if (filename.contains(".css") || filename.contains(".js") || filename.endsWith(".jpg") || filename.endsWith(".png")
-                    || filename.endsWith(".ttf") || filename.endsWith(".woff2") || filename.endsWith(".svg"))
-                    out.write("\r\nCache-Control: max-age=2628000, immutable\r\nConnection: close\r\nProxy-Connection: close\r\n\r\n".getBytes("UTF-8"));
-                else
-                    out.write("\r\nCache-Control: no-cache, private\r\nConnection: close\r\nProxy-Connection: close\r\n\r\n".getBytes("UTF-8"));
+                StringBuilder buf = new StringBuilder(256);
+                buf.append("HTTP/1.1 200 OK\r\nContent-Type: ").append(type).append("\r\n")
+                   .append("Access-Control-Allow-Origin: *");
+                if (filename.contains(".css") || filename.contains(".js") || filename.endsWith(".jpg") || filename.endsWith(".png") ||
+                    filename.endsWith(".webp") || filename.endsWith(".ttf") || filename.endsWith(".woff2") || filename.endsWith(".svg")) {
+                    buf.append("\r\nCache-Control: max-age=2628000, immutable\r\nConnection: close\r\n\r\n");
+                } else {
+                    buf.append("\r\nCache-Control: private, no-cache, max-age=2628000\r\nConnection: close\r\n\r\n");
+                }
+                out.write(buf.toString().getBytes("UTF-8"));
                 FileUtil.readFile(filename, themesDir.getAbsolutePath(), out);
                 return;
             }
@@ -317,29 +314,21 @@ public abstract class LocalHTTPServer {
                             PortMapper pm = context.portMapper();
                             String conURL = pm.getConsoleURL();
                             buf.append(NEWKEY)
-                               .append("<!DOCTYPE html>\n<html>\n<head>\n" +
-                                       "<title>" + _t("Your new encryption key") + "</title>\n" + headerLinks +
-                                       "</head>\n<body>\n<div class=logo>\n<a href=\"" + conURL + "\" title=\""+
-                                       _t("Router Console") + "\">" + logo + "</a><hr>\n");
+                               .append("<!DOCTYPE html>\n<html>\n<head>\n")
+                               .append("<title>").append(_t("Your new encryption key")).append("</title>\n").append(headerLinks)
+                               .append("</head>\n<body>\n<div class=logo>\n<a href=\"").append(conURL).append("\" title=\"")
+                               .append(_t("Router Console")).append("\">").append(logo).append("</a><hr>\n");
                             if (pm.isRegistered(PortMapper.SVC_SUSIDNS))
-                                out.write(("<a href=\"" + conURL + "susidns/index\">" + _t("Addressbook") + "</a> ").getBytes("UTF-8"));
-                            out.write(("<a href=\"" + conURL + "config\">" + _t("Configuration") + "</a> " +
-                                       "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes("UTF-8"));
-                            buf.append("</div>" +
-                                       "<div class=warning id=warning>\n" +
-                                       "<h3>")
-                               .append(_t("Your new encryption key"))
-                               .append("</h3>\n<p id=key>")
-                               .append(key)
-                               .append("</p>\n<p>")
-                               .append(_t("Copy the key and send it to the server operator."))
-                               .append(' ')
+                                buf.append("<a href=\"").append(conURL).append("susidns/index\">").append(_t("Addressbook")).append("</a> ");
+                            buf.append("<a href=\"").append(conURL).append("config\">").append(_t("Configuration")).append("</a> ")
+                               .append("<a href=\"").append(conURL).append("help/\">").append(_t("Help")).append("</a>\n")
+                               .append("</div>\n<div class=warning id=warning>\n")
+                               .append("<h3>").append(_t("Your new encryption key")).append("</h3>\n")
+                               .append("<p id=key>").append(key).append("</p>\n")
+                               .append("<p>").append(_t("Copy the key and send it to the server operator.")).append(' ')
                                .append(_t("After you are granted permission, you may proceed to the website."))
-                               .append("</p>\n<p><a href=\"")
-                               .append(url)
-                               .append("\">")
-                               .append(url)
-                               .append("</a></div>");
+                               .append("</p>\n")
+                               .append("<p><a href=\"").append(url).append("\">").append(url).append("</a></p></div>");
                             out.write(buf.toString().getBytes("UTF-8"));
                             I2PTunnelHTTPClientBase.writeFooter(out);
                         } else {
@@ -381,8 +370,7 @@ public abstract class LocalHTTPServer {
                   "Content-Type: text/html; charset=UTF-8\r\n" +
                   "Referrer-Policy: no-referrer\r\n" +
                   "Access-Control-Allow-Origin: *\r\n" +
-                  "Connection: close\r\n" +
-                  "Proxy-Connection: close\r\n\r\n" +
+                  "Connection: close\r\n\r\n" +
                   "<!DOCTYPE html>\n<html>\n<head>\n<title>" + _t("Redirecting to {0}", idn) + "</title>\n" + headerLinks +
                   "<meta http-equiv=\"Refresh\" content=\"1; url=" + url + "\">\n</head>\n<body>\n" +
                   "<div class=logo>\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" + logo +
@@ -411,8 +399,7 @@ public abstract class LocalHTTPServer {
                   "Content-Type: text/html; charset=UTF-8\r\n" +
                   "Referrer-Policy: no-referrer\r\n" +
                   "Access-Control-Allow-Origin: *\r\n" +
-                  "Connection: close\r\n" +
-                  "Proxy-Connection: close\r\n\r\n" +
+                  "Connection: close\r\n\r\n" +
                   "<!DOCTYPE html>\n<html>\n<head>\n<title>" + _t("Redirecting to {0}", idn) + "</title>\n" + headerLinks +
                   "<meta http-equiv=\"Refresh\" content=\"1; url=" + url + "\">\n</head>\n<body>\n" +
                   "<div class=logo>\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" + logo +

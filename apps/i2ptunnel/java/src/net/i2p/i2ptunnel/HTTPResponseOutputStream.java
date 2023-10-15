@@ -51,7 +51,6 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     /** we ignore any potential \r, since we trim it on write anyway */
     private static final byte NL = '\n';
     private static final byte[] CONNECTION_CLOSE = DataHelper.getASCII("Connection: close\r\n");
-    private static final byte[] PROXY_CONNECTION_CLOSE = DataHelper.getASCII("Proxy-Connection: close\r\n");
     private static final byte[] CRLF = DataHelper.getASCII("\r\n");
 
     public HTTPResponseOutputStream(OutputStream raw) {
@@ -181,10 +180,9 @@ class HTTPResponseOutputStream extends FilterOutputStream {
 
     /** ok, received, now munge & write it */
     private void writeHeader() throws IOException {
+        String responseLine = null;
 
         boolean connectionSent = false;
-        boolean proxyConnectionSent = false;
-        boolean chunked = false;
 
         int lastEnd = -1;
         byte[] data = _headerBuffer.getData();
@@ -192,26 +190,11 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         for (int i = 0; i < valid; i++) {
             if (data[i] == NL) {
                 if (lastEnd == -1) {
-                    String responseLine = DataHelper.getUTF8(data, 0, i+1);
+                    responseLine = DataHelper.getUTF8(data, 0, i+1); // includes NL
                     responseLine = filterResponseLine(responseLine);
                     responseLine = (responseLine.trim() + "\r\n");
                     if (_log.shouldInfo())
                         _log.info("Response: " + responseLine.trim());
-                    // Persistent conn requires HTTP/1.1
-                    if (_keepAlive && !responseLine.startsWith("HTTP/1.1 "))
-                        _keepAlive = false;
-                    // force zero datalen for 1xx, 204, 304 (RFC 2616 sec. 4.4)
-                    // so that these don't prevent keepalive
-                    int sp = responseLine.indexOf(" ");
-                    if (sp > 0) {
-                        String s = responseLine.substring(sp + 1);
-                        if (s.startsWith("1") || s.startsWith("204") || s.startsWith("304"))
-                            _dataExpected = 0;
-                    } else {
-                        // no status?
-                        _keepAlive = false;
-                    }
-
                     out.write(DataHelper.getUTF8(responseLine));
                 } else {
                     for (int j = lastEnd+1; j < i; j++) {
@@ -228,27 +211,19 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                                 val = DataHelper.getUTF8(data, j+2, valLen).trim();
 
                             if (_log.shouldInfo())
-                                _log.info("Response header sent\n* " + key + ": " + val);
+                                _log.info("Response header [" + key + "] = [" + val + "]");
 
                             String lcKey = key.toLowerCase(Locale.US);
                             if ("connection".equals(lcKey)) {
                                 if (val.toLowerCase(Locale.US).contains("upgrade")) {
                                     // pass through for websocket
                                     out.write(DataHelper.getASCII("Connection: " + val + "\r\n"));
-                                    proxyConnectionSent = true;
-                                    // Disable persistence
-                                    _keepAlive = false;
                                 } else {
-                                    // Strip to allow persistence, replace to disallow
-                                    if (!_keepAlive)
-                                        out.write(CONNECTION_CLOSE);
+                                    out.write(CONNECTION_CLOSE);
                                 }
                                 connectionSent = true;
                             } else if ("proxy-connection".equals(lcKey)) {
-                                // Strip to allow persistence, replace to disallow
-                                if (!_keepAlive)
-                                    out.write(PROXY_CONNECTION_CLOSE);
-                                proxyConnectionSent = true;
+                                // Nonstandard, strip
                             } else if ("content-encoding".equals(lcKey) && "x-i2p-gzip".equals(val.toLowerCase(Locale.US))) {
                                 _gzip = true;
                             } else if ("proxy-authenticate".equals(lcKey)) {
@@ -266,9 +241,6 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                                 } else if ("content-encoding".equals(lcKey)) {
                                     // save for compress decision on server side
                                     _contentEncoding = val.toLowerCase(Locale.US);
-                                } else if ("transfer-encoding".equals(lcKey) && val.toLowerCase(Locale.US).contains("chunked")) {
-                                    // save for keepalive decision on client side
-                                    chunked = true;
                                 } else if ("set-cookie".equals(lcKey)) {
                                     String lcVal = val.toLowerCase(Locale.US);
                                     if (lcVal.contains("domain=b32.i2p") ||
@@ -292,47 +264,18 @@ class HTTPResponseOutputStream extends FilterOutputStream {
             }
         }
 
-        // Now make the final keepalive decision
-        if (_keepAlive) {
-            // we need one but not both
-            if ((chunked && _dataExpected >= 0) ||
-                (!chunked && _dataExpected < 0))
-                _keepAlive = false;
-        }
-
-        if (!connectionSent && !_keepAlive)
+        if (!connectionSent)
             out.write(CONNECTION_CLOSE);
-        if (!proxyConnectionSent && !_keepAlive)
-            out.write(PROXY_CONNECTION_CLOSE);
 
         finishHeaders();
 
         boolean shouldCompress = shouldCompress();
         if (_log.shouldInfo())
-            _log.info("After headers: gzip? " + _gzip + " compress? " + shouldCompress + " keepalive? " + _keepAlive);
+            _log.info("After headers: gzip? " + _gzip + " compress? " + shouldCompress);
 
         if (data.length == CACHE_SIZE)
             _cache.release(_headerBuffer);
-            _headerBuffer = null;
-
-     /*****
-        // TODO
-        // Setup the keepalive streams
-        // Until we have keepalive for the i2p socket, the client side
-        // does not need to do this, we just wait for the socket to close.
-        // Until we have keepalive for the server socket, the server side
-        // does not need to do this, we just wait for the socket to close.
-        if (_keepAlive) {
-            if (_dataExpected > 0) {
-                // content-length
-                // filter output stream to count the data
-            } else {
-                // chunked
-                // filter output stream to look for the end
-            }
-        }
-      ****/
-
+        _headerBuffer = null;
         if (shouldCompress) {
             beginProcessing();
         }

@@ -111,7 +111,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "Content-Type: text/html; charset=iso-8859-1\r\n" +
             "Cache-Control: no-cache\r\n" +
             "Connection: close\r\n"+
-            "Proxy-Connection: close\r\n"+
             "\r\n" +
             "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>" +
             "The requested address appears to be invalid.<BR>";
@@ -135,7 +134,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "Content-Type: text/html; charset=iso-8859-1\r\n" +
             "Cache-Control: no-cache\r\n" +
             "Connection: close\r\n"+
-            "Proxy-Connection: close\r\n"+
             "\r\n" +
             "<html><body><H1>I2P ERROR: No outproxy found</H1>" +
             "Your request was for a site outside of I2P, but you have no " +
@@ -146,7 +144,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "Content-Type: text/html; charset=iso-8859-1\r\n" +
             "Cache-Control: no-cache\r\n" +
             "Connection: close\r\n"+
-            "Proxy-Connection: close\r\n"+
             "\r\n" +
             "<html><body><H1>I2P ERROR: Destination key conflict</H1>" +
             "The addresshelper link you followed specifies a different destination key " +
@@ -163,7 +160,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "Content-Type: text/html; charset=iso-8859-1\r\n" +
             "Cache-Control: no-cache\r\n" +
             "Connection: close\r\n"+
-            "Proxy-Connection: close\r\n"+
             "\r\n" +
             "<html><body><H1>I2P ERROR: Helper key not resolvable.</H1>" +
             "The helper key you put for i2paddresshelper= is not resolvable. " +
@@ -175,7 +171,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "Content-Type: text/html; charset=iso-8859-1\r\n" +
             "Cache-Control: no-cache\r\n" +
             "Connection: close\r\n"+
-            "Proxy-Connection: close\r\n"+
             "\r\n" +
             "<html><body><H1>New Host Name with Address Helper</H1>" +
             "The address helper link you followed is for a new host name that is not in your addressbook. " +
@@ -188,7 +183,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "Content-Type: text/html; charset=iso-8859-1\r\n" +
             "Cache-Control: no-cache\r\n" +
             "Connection: close\r\n"+
-            "Proxy-Connection: close\r\n"+
             "\r\n" +
             "<html><body><H1>I2P ERROR: NON-HTTP PROTOCOL</H1>" +
             "The request uses a bad protocol. " +
@@ -199,7 +193,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "Content-Type: text/html; charset=iso-8859-1\r\n" +
             "Cache-Control: no-cache\r\n" +
             "Connection: close\r\n"+
-            "Proxy-Connection: close\r\n"+
             "\r\n" +
             "<html><body><H1>I2P ERROR: INVALID REQUEST URI</H1>" +
             "The request URI is invalid, and probably contains illegal characters. " +
@@ -210,7 +203,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "Content-Type: text/html; charset=iso-8859-1\r\n" +
             "Cache-Control: no-cache\r\n" +
             "Connection: close\r\n"+
-            "Proxy-Connection: close\r\n"+
             "\r\n" +
             "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>" +
             "Your browser is misconfigured. Do not use the proxy to access the router console or other localhost destinations.<BR>";
@@ -220,7 +212,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "Content-Type: text/html; charset=iso-8859-1\r\n" +
             "Cache-Control: no-cache\r\n" +
             "Connection: close\r\n"+
-            "Proxy-Connection: close\r\n"+
             "\r\n" +
             "<html><body><H1>I2P ERROR: SSL to I2P address rejected</H1>" +
             "SSL to .i2p addresses denied by configuration." +
@@ -416,7 +407,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             InputReader reader = new InputReader(s.getInputStream());
             int requestCount = 0;
             // Will be set to false for non-GET/HEAD, non-HTTP/1.1,
-            // Connection: close, Proxy-Connection: close,
+            // Connection: close
             // or after analysis of the response headers in HTTPResponseOutputStream,
             // or on errors in I2PTunnelRunner.
             // Do not set keepalive for internal sockets.
@@ -1439,7 +1430,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     out.write(("HTTP/1.1 301 Address Helper Accepted\r\n" +
                         "Location: " + uri + "\r\n" +
                         "Connection: close\r\n"+
-                        "Proxy-Connection: close\r\n"+
                         "\r\n").getBytes("UTF-8"));
                 } catch (IOException ioe) {
                     // ignore
@@ -1742,7 +1732,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "HTTP/1.1 403 Disabled\r\n" +
             "Content-Type: text/plain\r\n" +
             "Connection: close\r\n"+
-            "Proxy-Connection: close\r\n"+
             "\r\n" +
             "Address helpers disabled";
 
