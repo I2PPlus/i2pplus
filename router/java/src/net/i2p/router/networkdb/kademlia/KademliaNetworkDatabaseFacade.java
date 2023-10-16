@@ -163,7 +163,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     static final String PROP_VALIDATE_ROUTERS_AFTER = "router.validateRoutersAfter";
 
 //    private final static long EXPLORE_JOB_DELAY = 10*60*1000l;
-    private final static long EXPLORE_JOB_DELAY = 15*60*1000l;
+    private final static long EXPLORE_JOB_DELAY = 5*60*1000l;
 
 
     /**
@@ -280,13 +280,20 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /** @return unmodifiable set */
     public Set<Hash> getExploreKeys() {
-        if (!_initialized)
+        if (!_initialized) {
+            if (_log.shouldInfo())
+                _log.info("Datastore not initialized, cannot find keys to explore");
             return Collections.emptySet();
+        }
         return Collections.unmodifiableSet(_exploreKeys);
     }
 
     public void removeFromExploreKeys(Collection<Hash> toRemove) {
-        if (!_initialized) return;
+        if (!_initialized) {
+            if (_log.shouldInfo())
+                _log.info("Datastore not initialized, not removing expired keys...");
+            return;
+        }
         _exploreKeys.removeAll(toRemove);
         _context.statManager().addRateData("netDb.exploreKeySet", _exploreKeys.size());
     }
@@ -294,7 +301,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public void queueForExploration(Collection<Hash> keys) {
         String exploreQueue = _context.getProperty("router.exploreQueue");
         boolean upLongEnough = _context.router().getUptime() > 15*60*1000;
-        if (!_initialized) return;
+        if (!_initialized) {
+            if (_log.shouldInfo())
+                _log.info("Datastore not initialized, cannot queue keys for exploration");
+            return;
+        }
         if (exploreQueue != null) {
             for (Iterator<Hash> iter = keys.iterator(); iter.hasNext() && _exploreKeys.size() < Integer.valueOf(exploreQueue);) {
             _exploreKeys.add(iter.next());
@@ -444,7 +455,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             Job erj = new ExpireRoutersJob(_context, this);
             boolean isFF = _context.getBooleanProperty(FloodfillMonitorJob.PROP_FLOODFILL_PARTICIPANT);
             long down = _context.router().getEstimatedDowntime();
-            long delay = (down == 0 || (!isFF && down > ROUTER_INFO_EXPIRATION_FLOODFILL/2) || (isFF && down > ROUTER_INFO_EXPIRATION_FLOODFILL*24)) ?
+            long delay = (down == 0 || (!isFF && down > ROUTER_INFO_EXPIRATION_FLOODFILL/2) || (isFF && down > ROUTER_INFO_EXPIRATION_FLOODFILL*8)) ?
                          ROUTER_INFO_EXPIRATION_FLOODFILL + ROUTER_INFO_EXPIRATION_FLOODFILL/6 :
                          ROUTER_INFO_EXPIRATION_FLOODFILL/6;
             erj.getTiming().setStartAfter(now + delay);
@@ -1456,7 +1467,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 // old i2pd bug, possibly at startup, don't ban forever
                 _context.banlist().banlistRouter(key, " <b>➜</b> No Network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
             } else {
-                _context.banlist().banlistRouterHard(key, " <b>➜</b> " + "Not in our Network: " + id);
+                _context.banlist().banlistRouterForever(key, " <b>➜</b> " + "Not in our Network: " + id);
             }
             if (_log.shouldWarn())
                 _log.warn("BAD Network detected for [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]");
@@ -1635,12 +1646,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
         if (minVersionAllowed != null) {
             if (VersionComparator.comp(v, minVersionAllowed) < 0) {
-                _context.banlist().banlistRouterHard(h, " <b>➜</b> Router too old (" + v + ")");
+                _context.banlist().banlistRouterForever(h, " <b>➜</b> Router too old (" + v + ")");
                 return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
             }
         } else {
             if (VersionComparator.comp(v, minRouterVersion) < 0) {
-                _context.banlist().banlistRouterHard(h, " <b>➜</b> Router too old (" + v + ")");
+                _context.banlist().banlistRouterForever(h, " <b>➜</b> Router too old (" + v + ")");
                 return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
             }
         }
@@ -1805,7 +1816,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                         SigType type = kc.getSigType();
                         if (type == null || !type.isAvailable()) {
                             String stype = (type != null) ? type.toString() : Integer.toString(kc.getSigTypeCode());
-                            _context.banlist().banlistRouterHard(h, " <b>➜</b> " + "Unsupported Signature type " + stype);
+                            _context.banlist().banlistRouterForever(h, " <b>➜</b> " + "Unsupported Signature type " + stype);
                             if (_log.shouldWarn())
                                 _log.warn("Unsupported Signature type (" + stype + ") for ["
                                           + h.toBase64().substring(0,6) + "] - banned until restart");
