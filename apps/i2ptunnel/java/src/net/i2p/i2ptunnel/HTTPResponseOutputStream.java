@@ -137,7 +137,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     private void ensureCapacity() throws IOException {
         int valid = _headerBuffer.getValid();
         if (valid >= MAX_HEADER_SIZE)
-            throw new IOException("Max header size exceeded: " + MAX_HEADER_SIZE);
+            throw new IOException("Max header size (" + MAX_HEADER_SIZE + "B) exceeded -> " + valid + "B size header detected");
         byte[] data = _headerBuffer.getData();
         int len = data.length;
         if (valid + 1 >= len) {
@@ -210,8 +210,9 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                             else
                                 val = DataHelper.getUTF8(data, j+2, valLen).trim();
 
-                            if (_log.shouldInfo())
-                                _log.info("Response header [" + key + "] = [" + val + "]");
+                            if (_log.shouldInfo()) {
+                                _log.info("Response header: [" + key + ": " + val + "]");
+                            }
 
                             String lcKey = key.toLowerCase(Locale.US);
                             if ("connection".equals(lcKey)) {
