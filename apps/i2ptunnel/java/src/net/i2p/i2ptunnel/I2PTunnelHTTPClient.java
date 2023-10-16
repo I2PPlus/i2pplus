@@ -411,7 +411,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // or after analysis of the response headers in HTTPResponseOutputStream,
             // or on errors in I2PTunnelRunner.
             // Do not set keepalive for internal sockets.
-            boolean keepalive = !(s instanceof InternalSocket);
+            //boolean keepalive = !(s instanceof InternalSocket);
+            boolean keepalive = false;
 // indent -------------------------------------------------------------
           do {
 // indent -------------------------------------------------------------
@@ -644,7 +645,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 break;
                             }
                         } else {
-                            _log.warn("[HTTPClient] Bad i2p/b64dest " + request);
+                            _log.warn("[HTTPClient] Bad I2P / B64 destination: " + request);
                             host = null;
                             break;
                         }
@@ -755,7 +756,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                                 ahelperConflict = true;
                                                 if (_log.shouldWarn()) {
                                                     _log.warn(getPrefix(requestId) + "Addresshelper key conflict for site [" + destination +
-                                                            "], trusted key [" + destB64 + "], specified key [" + ahelperKey + "].");
+                                                            "] -> Trusted key [" + destB64 + "] - Specified key [" + ahelperKey + "]");
                                                 }
 
                                             }
@@ -862,9 +863,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             out.write(getErrorPage("localhost", ERR_LOCALHOST).getBytes("UTF-8"));
                             writeFooter(out);
                             reader.drain();
-                        } catch (IOException ioe) {
-                            // ignore
-                        }
+                        } catch (IOException ioe) {} // ignore
                         return;
                     } else if (host.contains(".") || host.startsWith("[")) {
                         if (Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USE_OUTPROXY_PLUGIN, "true"))) {
@@ -919,9 +918,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                     out.write(getErrorPage("noproxy", ERR_NO_OUTPROXY).getBytes("UTF-8"));
                                     writeFooter(out);
                                     reader.drain();
-                                } catch (IOException ioe) {
-                                    // ignore
-                                }
+                                } catch (IOException ioe) {} // ignore
                                 return;
                             }
                             destination = currentProxy;
@@ -946,9 +943,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             out.write(getErrorPage("denied", ERR_REQUEST_DENIED).getBytes("UTF-8"));
                             writeFooter(out);
                             reader.drain();
-                        } catch (IOException ioe) {
-                            // ignore
-                        }
+                        } catch (IOException ioe) {} // ignore
                         return;
                     }   // end host name processing
 
@@ -1188,9 +1183,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         out.write(getErrorPage("protocol", ERR_BAD_PROTOCOL).getBytes("UTF-8"));
                     }
                     writeFooter(out);
-                } catch (IOException ioe) {
-                    // ignore
-                }
+                } catch (IOException ioe) {} // ignore
                 return;
             }
 
@@ -1212,9 +1205,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 try {
                     out.write(getAuthError(result == AuthResult.AUTH_STALE).getBytes("UTF-8"));
                     writeFooter(out);
-                } catch (IOException ioe) {
-                    // ignore
-                }
+                } catch (IOException ioe) {} // ignore
                 return;
             }
 
@@ -1229,9 +1220,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     } else {
                         LocalHTTPServer.serveLocalFile(_context, sockMgr, out, method, internalPath, internalRawQuery, _proxyNonce, allowGzip);
                     }
-                } catch (IOException ioe) {
-                    // ignore
-                }
+                } catch (IOException ioe) {} // ignore
                 return;
             }
 
@@ -1273,9 +1262,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     String header = getErrorPage("ahelper-notfound", ERR_AHELPER_NOTFOUND);
                     try {
                         writeErrorMessage(header, out, targetRequest, false, destination);
-                    } catch (IOException ioe) {
-                        // ignore
-                    }
+                    } catch (IOException ioe) {} // ignore
                     return;
                 }
             } else if ("i2p".equals(host)) {
@@ -1287,7 +1274,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     String header = getErrorPage("b32", ERR_DESTINATION_UNKNOWN);
                     try {
                         writeErrorMessage(header, _t("Corrupt Base32 address"), out, targetRequest, false, destination);
-                    } catch (IOException ioe) {}
+                    } catch (IOException ioe) {} // ignore
                     return;
                 }
                 if (len >= 64) {
@@ -1305,7 +1292,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         String header = getErrorPage("b32", ERR_DESTINATION_UNKNOWN);
                         try {
                             writeErrorMessage(header, iae.getMessage(), out, targetRequest, false, destination);
-                        } catch (IOException ioe) {}
+                        } catch (IOException ioe) {}  // ignore
                         return;
                     }
                 }
@@ -1383,9 +1370,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 }
                 try {
                     writeErrorMessage(header, extraMessage, out, targetRequest, usingWWWProxy, destination, jumpServers);
-                } catch (IOException ioe) {
-                    // ignore
-                }
+                } catch (IOException ioe) {} // ignore
                 return;
             }
 
@@ -1395,9 +1380,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_INTERNAL_SSL, "true"))) {
                 try {
                     writeErrorMessage(ERR_INTERNAL_SSL, out, targetRequest, false, destination);
-                } catch (IOException ioe) {
-                    // ignore
-                }
+                } catch (IOException ioe) {} // ignore
                 if (_log.shouldWarn())
                     _log.warn("[HTTPClient] SSL to i2p destinations denied by configuration \n* Request: " + targetRequest);
                 return;
@@ -1411,9 +1394,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_DISABLE_HELPER))) {
                 try {
                     writeHelperSaveForm(out, destination, ahelperKey, targetRequest, referer);
-                } catch (IOException ioe) {
-                    // ignore
-                }
+                } catch (IOException ioe) {} // ignore
                 return;
             }
 
@@ -1431,9 +1412,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         "Location: " + uri + "\r\n" +
                         "Connection: close\r\n"+
                         "\r\n").getBytes("UTF-8"));
-                } catch (IOException ioe) {
-                    // ignore
-                }
+                } catch (IOException ioe) {} // ignore
                 return;
             }
 
