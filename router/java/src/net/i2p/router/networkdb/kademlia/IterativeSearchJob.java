@@ -809,13 +809,14 @@ public class IterativeSearchJob extends FloodSearchJob {
             }
         }
 
+/**
         // Confirm success by checking for the LeaseSet in local storage
         if (_isLease) {
             dest = getContext().netDb().lookupDestinationLocally(_key);
             if ((dest == null) && (_log.shouldLog(Log.WARN)))
                 _log.warn("Warning! LeaseSet not found in persistent data store for key [" + _key.toBase64().substring(0,6) + "]");
         }
-
+**/
 
         _facade.complete(_key);
         if (peer != null) {
@@ -825,7 +826,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         }
         long time = System.currentTimeMillis() - _created;
         if (_log.shouldInfo())
-            _log.info("[Job " + getJobId() + "] IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") + " [" + _key.toBase64().substring(0,6) + "] succeeded" +
+            _log.info("[Job " + getJobId() + "] IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") +
+                      " [" + _key.toBase64().substring(0,6) + "] succeeded" +
                       "\n* Peers queried: " + tries + "; Time taken: " + time + "ms");
         getContext().statManager().addRateData("netDb.successTime", time);
         getContext().statManager().addRateData("netDb.successRetries", tries - 1);
