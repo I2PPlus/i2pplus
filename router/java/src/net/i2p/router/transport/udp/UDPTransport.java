@@ -2087,7 +2087,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                         if (id == -1)
                             _context.banlist().banlistRouter(peerHash, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
                         else
-                            _context.banlist().banlistRouterHard(peerHash, " <b>➜</b> Not in our network: " + id);
+                            _context.banlist().banlistRouterForever(peerHash, " <b>➜</b> Not in our network: " + id);
                         if (peer != null)
                             sendDestroy(peer, SSU2Util.REASON_NETID);
                         dropPeer(peerHash, false, "Not in our network");
@@ -2475,7 +2475,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 if (nid == -1)
                     _context.banlist().banlistRouter(to, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
                 else
-                    _context.banlist().banlistRouterHard(to, " <b>➜</b> Not in our network: " + nid);
+                    _context.banlist().banlistRouterForever(to, " <b>➜</b> Not in our network: " + nid);
                 markUnreachable(to);
                 return null;
             }

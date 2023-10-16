@@ -349,7 +349,7 @@ class EstablishmentManager {
             if (id == -1)
                 _context.banlist().banlistRouter(toHash, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
             else
-                _context.banlist().banlistRouterHard(toHash, " <b>➜</b> Not in our network: " + id);
+                _context.banlist().banlistRouterForever(toHash, " <b>➜</b> Not in our network: " + id);
             if (_log.shouldWarn())
                 _log.warn("Not in our network: " + toRouterInfo, new Exception());
             _transport.markUnreachable(toHash);

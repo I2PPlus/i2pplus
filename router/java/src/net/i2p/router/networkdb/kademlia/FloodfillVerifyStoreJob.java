@@ -379,7 +379,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     if (_log.shouldWarn())
                         _log.warn(getJobId() + ": Sent bad data for verify: " + _target);
                     pm.dbLookupFailed(_target);
-                    ctx.banlist().banlistRouterHard(_target, "Sent bad NetDb data");
+                    ctx.banlist().banlistRouterForever(_target, "Sent bad NetDb data");
                     ctx.statManager().addRateData("netDb.floodfillVerifyFail", delay);
                     resend();
                     return;

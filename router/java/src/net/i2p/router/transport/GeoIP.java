@@ -766,7 +766,7 @@ public class GeoIP {
         for (Hash h : ctx.netDb().getAllRouters()) {
             String hisCountry = ctx.commSystem().getCountry(h);
             if (country.equals(hisCountry)) {
-                ctx.banlist().banlistRouterHard(h, " <b>➜</b> In our country (we are in Hidden mode)");
+                ctx.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");
             }
         }
     }

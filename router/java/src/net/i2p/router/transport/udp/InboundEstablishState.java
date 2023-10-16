@@ -394,7 +394,7 @@ class InboundEstablishState {
                     if (_log.shouldWarn())
                         _log.warn("Unsupported Signature type from: " + toString());
                     // _x() in UDPTransport
-                    _context.banlist().banlistRouterHard(_receivedUnconfirmedIdentity.calculateHash(),
+                    _context.banlist().banlistRouterForever(_receivedUnconfirmedIdentity.calculateHash(),
                                                             " <b>➜</b> " + "Unsupported Signature type");
                     fail();
                 }
