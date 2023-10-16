@@ -48,25 +48,25 @@ import net.i2p.util.Log;
 public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /** all of these in SECONDS */
-    public static final String OPT_POST_WINDOW = "postCheckTime";
+    public static final int DEFAULT_POST_BAN_TIME = 15*60;
+    public static final int DEFAULT_POST_MAX = 16;
+    public static final int DEFAULT_POST_TOTAL_BAN_TIME = 10*60;
+    public static final int DEFAULT_POST_TOTAL_MAX = 30;
+    public static final int DEFAULT_POST_WINDOW = 3*60;
     public static final String OPT_POST_BAN_TIME = "postBanTime";
-    public static final String OPT_POST_TOTAL_BAN_TIME = "postTotalBanTime";
     public static final String OPT_POST_MAX = "maxPosts";
+    public static final String OPT_POST_TOTAL_BAN_TIME = "postTotalBanTime";
     public static final String OPT_POST_TOTAL_MAX = "maxTotalPosts";
+    public static final String OPT_POST_WINDOW = "postCheckTime";
+
     public static final String OPT_REJECT_INPROXY = "rejectInproxy";
     public static final String OPT_REJECT_REFERER = "rejectReferer";
     public static final String OPT_REJECT_USER_AGENTS = "rejectUserAgents";
     public static final String OPT_USER_AGENTS = "userAgentRejectList";
-    public static final String OPT_ADD_RESPONSE_HEADERS = "addResponseHeaders";
-//    public static final int DEFAULT_POST_WINDOW = 5*60;
-    public static final int DEFAULT_POST_WINDOW = 3*60;
-//    public static final int DEFAULT_POST_BAN_TIME = 20*60;
-    public static final int DEFAULT_POST_BAN_TIME = 3*60;
-//    public static final int DEFAULT_POST_TOTAL_BAN_TIME = 10*60;
-    public static final int DEFAULT_POST_TOTAL_BAN_TIME = 3*60;
-    public static final int DEFAULT_POST_MAX = 16;
-//    public static final int DEFAULT_POST_TOTAL_MAX = 20;
-    public static final int DEFAULT_POST_TOTAL_MAX = 30;
+    public static final String OPT_ADD_RESPONSE_HEADER_ALLOW = "addResponseHeaderAllow";
+    public static final String OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL = "addResponseHeaderCacheControl";
+    public static final String OPT_ADD_RESPONSE_HEADER_NOSNIFF = "addResponseHeaderNoSniff";
+    public static final String OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY = "addResponseHeaderReferrerPolicy";
 
     /** what Host: should we seem to be to the webserver? */
     private String _spoofHost;
@@ -91,6 +91,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final String X_CACHE_HEADER = "x-cache"; // possible anonymity implications, informational
     private static final String X_CACHE_HITS_HEADER = "x-cache-hits"; // possible anonymity implications, informational
     private static final String X_CLOUD_TRACE_CONTEXT_HEADER = "x-cloud-trace-context"; // superfluous
+    private static final String X_CONTEXTID_HEADER = "x-contextid";
     private static final String X_GOOG_GENERATION_HEADER = "x-goog-generation"; // superfluous
     private static final String X_GOOG_HASH_HEADER = "x-goog-hash"; // superfluous
     private static final String X_GUPLOADER_UPLOADID_HEADER = "x-guploader-uploadid"; // superfluous
@@ -101,14 +102,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final String X_SERVED_BY_HEADER = "x-served-by"; // possible anonymity implications, informational
     private static final String X_STYX_REQ_ID_HEADER = "x-styx-req-id"; // possible anonymity implications, informational
     private static final String X_TIMER_HEADER = "x-timer"; // possible anonymity implications, informational
+    private static final String X_NANANANA_HEADER = "x-nananana"; // wordpress batcache, informational
 
     // https://httpoxy.org
     private static final String PROXY_HEADER = "proxy";
     /** MUST ALL BE LOWER CASE */
-    private static final String[] SERVER_SKIPHEADERS = {AGE_HEADER, ALT_SVC_HEADER, DATE_HEADER, EXPIRES_HEADER, PRAGMA_HEADER, PROXY_HEADER, PROXY_CONN_HEADER, REFERER_HEADER, SERVER_HEADER,
-                                                        STRICT_TRANSPORT_SECURITY_HEADER, VIA_HEADER, X_CACHE_HEADER, X_CACHE_HITS_HEADER, X_CLOUD_TRACE_CONTEXT_HEADER,
-                                                        X_GOOG_GENERATION_HEADER, X_GOOG_HASH_HEADER, X_GUPLOADER_UPLOADID_HEADER, X_HACKER_HEADER, X_PANTHEON_STYX_HOSTNAME_HEADER,
-                                                        X_POWERED_BY_HEADER, X_RUNTIME_HEADER, X_SERVED_BY_HEADER, X_STYX_REQ_ID_HEADER};
+    private static final String[] SERVER_SKIPHEADERS = {AGE_HEADER, ALT_SVC_HEADER, DATE_HEADER, EXPIRES_HEADER, PRAGMA_HEADER, PROXY_HEADER,
+                                                        PROXY_CONN_HEADER, REFERER_HEADER, SERVER_HEADER, STRICT_TRANSPORT_SECURITY_HEADER, VIA_HEADER,
+                                                        X_CACHE_HEADER, X_CACHE_HITS_HEADER, X_CLOUD_TRACE_CONTEXT_HEADER, X_CONTEXTID_HEADER,
+                                                        X_GOOG_GENERATION_HEADER, X_GOOG_HASH_HEADER, X_GUPLOADER_UPLOADID_HEADER, X_HACKER_HEADER,
+                                                        X_NANANANA_HEADER, X_PANTHEON_STYX_HOSTNAME_HEADER, X_POWERED_BY_HEADER, X_RUNTIME_HEADER,
+                                                        X_SERVED_BY_HEADER, X_STYX_REQ_ID_HEADER};
     /** timeout for first request line */
     private static final long HEADER_TIMEOUT = 30*1000;
     /** total timeout for the request and all the headers */
@@ -241,7 +245,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     public I2PTunnelHTTPServer(InetAddress host, int port, String privData, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
         super(host, port, privData, l, notifyThis, tunnel);
         setupI2PTunnelHTTPServer(spoofHost);
-
     }
 
     public I2PTunnelHTTPServer(InetAddress host, int port, File privkey, String privkeyname, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
@@ -300,6 +303,61 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         return dflt;
     }
 
+    /** @since 0.9.60+ */
+    private final boolean shouldAddResponseHeaderAllow() {
+        Properties opts = getTunnel().getClientOptions();
+            boolean addAllowHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_ALLOW));
+        if (!addAllowHeader) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /** @since 0.9.60+ */
+    private final boolean shouldAddResponseHeadercacheControl() {
+        Properties opts = getTunnel().getClientOptions();
+            boolean addCacheControlHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL));
+        if (!addCacheControlHeader) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /** @since 0.9.60+ */
+    private final boolean shouldAddResponseHeaderCacheControl() {
+        Properties opts = getTunnel().getClientOptions();
+            boolean addCacheControlHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL));
+        if (!addCacheControlHeader) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /** @since 0.9.60+ */
+    private final boolean shouldAddResponseHeaderReferrerPolicy() {
+        Properties opts = getTunnel().getClientOptions();
+            boolean addReferrerPolicyHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY));
+        if (!addReferrerPolicyHeader) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /** @since 0.9.60+ */
+    private final boolean shouldAddResponseHeaderNoSniff() {
+        Properties opts = getTunnel().getClientOptions();
+            boolean addNoSniffPolicyHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_NOSNIFF));
+        if (!addNoSniffPolicyHeader) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     /** @since 0.9.9 */
     @Override
     public boolean close(boolean forced) {
@@ -322,7 +380,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         _spoofHost = (spoofHost != null && spoofHost.trim().length() > 0) ? spoofHost.trim() : null;
         super.optionsUpdated(tunnel);
     }
-
 
     /**
      * Called by the thread pool of I2PSocket handlers
@@ -671,7 +728,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final Log _log;
         private final boolean _shouldCompress;
         //private final boolean _addHeaders;
-//        private static final int BUF_SIZE = 8*1024;
         private static final int BUF_SIZE = 8*1024;
 
         /**
@@ -735,7 +791,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 // Remove cache-control header if it contains the word "none" so we can set a sane value later
                 List<String> cacheControlList = headers.get("Cache-Control");
-                if (cacheControlList != null && (cacheControlList.contains("none") || cacheControlList.contains("post-check=0, pre-check=0"))) {
+                if (cacheControlList != null && (cacheControlList.contains("none") ||
+                    cacheControlList.contains("post-check"))) {
                     headers.remove("Cache-Control");
                 }
 
@@ -764,7 +821,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
 
                 // Define mimetypes for referrer policy and cache-control treatment
-                String[] referrerPolicyWhitelist = {"text/html", "application/xhtml+xml", "application/xml", "text/plain", "application/json"};
+                String[] customWhitelist = {"text/html", "application/xhtml+xml", "application/xml", "text/plain", "application/json"};
                 String[] immutableCacheWhitelist = {"application/pdf", "audio", "audio/midi", "audio/mpeg", "audio/ogg", "audio/wav", "audio/webm",
                                                     "font", "font/woff", "font/woff2", "image", "image/apng", "image/bmp", "image/gif", "image/jpeg",
                                                     "image/png", "image/svg+xml", "image/tiff", "image/webp", "image/x-icon", "text/css", "video",
@@ -926,15 +983,20 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
 
                 // Add referrer-policy headers if not set
-                boolean allowReferrerHeader = Arrays.asList(referrerPolicyWhitelist).contains(mimeType);
-                if (_headers != null && allowReferrerHeader) {
+                boolean securityHeaders = Arrays.asList(customWhitelist).contains(mimeType);
+                if (_headers != null && securityHeaders) {
                     boolean rp = headers.containsKey("Referrer-Policy".toLowerCase());
                     if (!rp) {
                         setEntry(headers, "Referrer-Policy", "same-origin");
                     }
+                    // Set restrictive allow headers if not set
+                    boolean allow = headers.containsKey("Allow".toLowerCase());
+                    if (!allow) {
+                        setEntry(headers, "Allow", "GET, POST, HEAD");
+                    }
                 }
 
-                // Set cache-control to immutable if not set
+                // Set cache-control to immutable if not set for custom mimetypes, no-cache for everything else
                 boolean immutableCache = Arrays.stream(immutableCacheWhitelist).anyMatch(mimeType::matches);
                 boolean cc = headers.containsKey("Cache-Control".toLowerCase());
                 if (_headers != null && !cc) {
@@ -943,12 +1005,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     } else {
                         setEntry(headers, "Cache-Control", "private, no-cache, max-age=604800");
                     }
-                }
-
-                // Set restrictive allow headers if not set
-                boolean allow = headers.containsKey("Allow".toLowerCase());
-                if (!allow) {
-                    setEntry(headers, "Allow", "GET, POST, HEAD");
                 }
 
                 // Add x-xss-protection header if not present
@@ -1432,17 +1488,4 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             super(s);
         }
     }
-
-/**
-    private boolean shouldAddResponseHeaders() {
-        Properties opts = getTunnel().getClientOptions();
-            boolean addHeaders = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADERS));
-        if (!addHeaders) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-**/
-
 }
