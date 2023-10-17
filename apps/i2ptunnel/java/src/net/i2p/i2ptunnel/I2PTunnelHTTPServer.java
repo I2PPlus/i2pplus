@@ -1007,6 +1007,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     }
                 }
 
+                // Override cache-control for static content with no-cache policy
+                boolean hasNoCache = cc && headers.get("Cache-Control").contains("no-cache".toLowerCase());
+                if (_headers != null && hasNoCache && immutableCache) {
+                    headers.remove("Cache-Control");
+                    setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");
+                }
+
                 // Add x-xss-protection header if not present
                 boolean xss = headers.containsKey("X-XSS-Protection".toLowerCase());
                 if (_headers != null && !xss) {
