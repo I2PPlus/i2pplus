@@ -672,7 +672,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                     keepAliveTo = _keepAliveSocket;
                 }
                 if (_log.shouldLog(Log.INFO)) {
-                    _log.info(direction + " done forwarding from "
+                    _log.info(direction + " Done forwarding from "
                               + from + " to " + to
                               + " keepalive from? " + keepAliveFrom
                               + " keepalive to? " + keepAliveTo
@@ -700,7 +700,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                         else
                             out.close();
                     } else if (_log.shouldInfo()) {
-                        _log.info(direction + " not closing so we can write the error message...");
+                        _log.info(direction + " Not closing stream so we can write the error message...");
                         if (keepAliveTo)
                             out.flush();
                     }
