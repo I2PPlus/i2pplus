@@ -1163,7 +1163,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 }
             } // end header processing
 
-            if (_log.shouldDebug()) {
+            if (_log.shouldDebug() && !newRequest.toString().isEmpty()) {
                 _log.debug(getPrefix(requestId) + "NewRequest header\n\t" + newRequest.toString());
             }
 
