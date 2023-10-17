@@ -39,8 +39,8 @@ public class ConfigTunnelsHelper extends HelperBase {
         if (sorted.size() > 1)
             DataHelper.sort(sorted, new TPComparator());
         for (TunnelPoolSettings in : sorted) {
-            buf.append("<input type=hidden name=\"pool.").append(cur).append("\" value=\"");
-            buf.append(in.getDestination().toBase64()).append("\" >\n");
+            buf.append("<input type=hidden name=\"pool.").append(cur).append("\" value=\"")
+               .append(in.getDestination().toBase64()).append("\" >\n");
             cur++;
         }
 
@@ -122,48 +122,46 @@ public class ConfigTunnelsHelper extends HelperBase {
             in.getLength() + in.getLengthVariance() <= 0 ||
             out.getLength() <= 0 ||
             out.getLength() + out.getLengthVariance() <= 0) {
-            buf.append("<tr><th colspan=4><font color=\"#900\">" +
-                       _t("ANONYMITY WARNING - Settings include 0-hop tunnels.") +
-                       "</font></th></tr>\n");
+            buf.append("<tr><th colspan=4><font color=#900>")
+               .append(_t("ANONYMITY WARNING - Settings include 0-hop tunnels."))
+               .append("</font></th></tr>\n");
             if (TransportUtil.getIPv6Config(_context, "SSU") == TransportUtil.IPv6Config.IPV6_ONLY) {
                 // rare, don't bother translating
-                buf.append("<tr><th colspan=4><font color=\"#900\">" +
-                           _t("WARNING - 0-hop tunnels not recommended for IPv6-only routers.") +
-                           "</font></th></tr>\n");
+                buf.append("<tr><th colspan=4><font color=#900>")
+                   .append(_t("WARNING - 0-hop tunnels not recommended for IPv6-only routers."))
+                   .append("</font></th></tr>\n");
             }
             if ((in.getLength() <= 0 || in.getLength() + in.getLengthVariance() <= 0) &&
                 _context.router().isHidden()) {
-                // rare, don't bother translating
-                buf.append("<tr><th colspan=4><font color=\"#900\">" +
-                           _t("WARNING - Inbound 0-hop tunnels not recommended for hidden routers.") +
-                           "</font></th></tr>\n");
+                buf.append("<tr><th colspan=4><font color=#900>")
+                   .append(_t("WARNING - Inbound 0-hop tunnels not recommended for hidden routers."))
+                   .append("</font></th></tr>\n");
             }
         } else if (in.getLength() <= 1 ||
             in.getLength() + in.getLengthVariance() <= 1 ||
             out.getLength() <= 1 ||
             out.getLength() + out.getLengthVariance() <= 1) {
-            buf.append("<tr><th colspan=4><font color=\"#900\">" +
-                       _t("ANONYMITY WARNING - Settings include 1-hop tunnels.") +
-                       "</font></th></tr>\n");
+            buf.append("<tr><th colspan=4><font color=#900>")
+               .append(_t("ANONYMITY WARNING - Settings include 1-hop tunnels."))
+               .append("</font></th></tr>\n");
         }
         if (in.getLength() + Math.abs(in.getLengthVariance()) >= WARN_LENGTH ||
             out.getLength() + Math.abs(out.getLengthVariance()) >= WARN_LENGTH)
-            buf.append("<tr><th colspan=4><font color=\"#900\">" +
-                       _t("PERFORMANCE WARNING - Settings include very long tunnels.") +
-                       "</font></th></tr>\n");
-        if (in.getTotalQuantity() >= WARN_QUANTITY ||
-            out.getTotalQuantity() >= WARN_QUANTITY)
-            buf.append("<tr><th colspan=4><font color=\"#900\">" +
-                       _t("PERFORMANCE WARNING - Settings include high tunnel quantities.") +
-                       "</font></th></tr>\n");
+            buf.append("<tr><th colspan=4><font color=#900>")
+               .append(_t("PERFORMANCE WARNING - Settings include very long tunnels."))
+               .append("</font></th></tr>\n");
+        if (in.getTotalQuantity() >= WARN_QUANTITY || out.getTotalQuantity() >= WARN_QUANTITY)
+            buf.append("<tr><th colspan=4><font color=#900>")
+               .append(_t("PERFORMANCE WARNING - Settings include high tunnel quantities."))
+               .append("</font></th></tr>\n");
 
-        buf.append("<tr><th></th><th class=inbound>" + _t("Inbound") + "</th><th class=outbound>" +
-                   _t("Outbound") + "</th><th class=spacer></th>\n</tr>\n");
+        buf.append("<tr><th></th><th class=inbound>").append(_t("Inbound")).append("</th><th class=outbound>")
+           .append(_t("Outbound")).append("</th><th class=spacer></th>\n</tr>\n");
 
         // tunnel depth
         int maxLength = advanced ? MAX_ADVANCED_LENGTH : MAX_LENGTH;
-        buf.append("<tr><td><b>" + _t("Length") + ":</b></td>\n");
-        buf.append("<td><select name=\"").append(index).append(".depthInbound\"");
+        buf.append("<tr><td><b>").append(_t("Length")).append(":</b></td>\n")
+           .append("<td><select name=\"").append(index).append(".depthInbound\"");
         if (!advanced && prefix != "exploratory")
             buf.append(" disabled");
         buf.append(">\n");
@@ -171,9 +169,8 @@ public class ConfigTunnelsHelper extends HelperBase {
         renderOptions(buf, 0, maxLength, now, "", HOP);
         if (now > maxLength)
             renderOptions(buf, now, now, now, "", HOP);
-        buf.append("</select></td>\n");
-
-        buf.append("<td><select name=\"").append(index).append(".depthOutbound\"");
+        buf.append("</select></td>\n")
+           .append("<td><select name=\"").append(index).append(".depthOutbound\"");
         if (!advanced && prefix != "exploratory")
             buf.append(" disabled");
         buf.append(">\n");
@@ -181,13 +178,13 @@ public class ConfigTunnelsHelper extends HelperBase {
         renderOptions(buf, 0, maxLength, now, "", HOP);
         if (now > maxLength)
             renderOptions(buf, now, now, now, "", HOP);
-        buf.append("</select></td>\n");
-        buf.append("<td class=spacer></td>\n</tr>\n");
+        buf.append("</select></td>\n")
+           .append("<td class=spacer></td>\n</tr>\n");
 
         // tunnel depth variance
         if (advanced) {
-            buf.append("<tr><td><b>" + _t("Randomization") + ":</b></td>\n");
-            buf.append("<td><select name=\"").append(index).append(".varianceInbound\">\n");
+            buf.append("<tr><td><b>").append(_t("Randomization")).append(":</b></td>\n")
+               .append("<td><select name=\"").append(index).append(".varianceInbound\">\n");
             now = in.getLengthVariance();
             renderOptions(buf, 0, 0, now, "", HOP);
             renderOptions(buf, 1, MAX_VARIANCE, now, "+ 0-", HOP);
@@ -196,9 +193,8 @@ public class ConfigTunnelsHelper extends HelperBase {
                 renderOptions(buf, now, now, now, "+ 0-", HOP);
             else if (now < MIN_NEG_VARIANCE)
                 renderOptions(buf, now, now, now, "+/- 0", HOP);
-            buf.append("</select></td>\n");
-
-            buf.append("<td><select name=\"").append(index).append(".varianceOutbound\">\n");
+            buf.append("</select></td>\n")
+               .append("<td><select name=\"").append(index).append(".varianceOutbound\">\n");
             now = out.getLengthVariance();
             renderOptions(buf, 0, 0, now, "", HOP);
             renderOptions(buf, 1, MAX_VARIANCE, now, "+ 0-", HOP);
@@ -207,16 +203,16 @@ public class ConfigTunnelsHelper extends HelperBase {
                 renderOptions(buf, now, now, now, "+ 0-", HOP);
             else if (now < MIN_NEG_VARIANCE)
                 renderOptions(buf, now, now, now, "+/- 0", HOP);
-            buf.append("</select></td>\n");
-            buf.append("<td class=spacer></td>\n</tr>\n");
+            buf.append("</select></td>\n")
+               .append("<td class=spacer></td>\n</tr>\n");
         }
         // tunnel quantity
         int maxQuantity = advanced ? MAX_ADVANCED_QUANTITY : MAX_QUANTITY;
         buf.append("<tr");
         if (!advanced)
             buf.append(" class=\"lastrow\"");
-        buf.append("><td><b>" + _t("Quantity") + ":</b></td>\n");
-        buf.append("<td><select name=\"").append(index).append(".quantityInbound\"");
+        buf.append("><td><b>").append(_t("Quantity")).append(":</b></td>\n")
+           .append("<td><select name=\"").append(index).append(".quantityInbound\"");
         if (!advanced && prefix != "exploratory")
             buf.append(" disabled");
         buf.append(">\n");
@@ -234,27 +230,26 @@ public class ConfigTunnelsHelper extends HelperBase {
         renderOptions(buf, 1, maxQuantity, now, "", TUNNEL);
         if (now > maxQuantity)
             renderOptions(buf, now, now, now, "", TUNNEL);
-        buf.append("</select></td>\n");
-        buf.append("<td class=spacer></td>\n</tr>\n");
+        buf.append("</select></td>\n")
+           .append("<td class=spacer></td>\n</tr>\n");
 
         // tunnel backup quantity
         if (advanced) {
             int maxBQuantity = advanced ? MAX_ADVANCED_BACKUP_QUANTITY : MAX_BACKUP_QUANTITY;
-            buf.append("<tr class=\"lastrow\"><td><b>" + _t("Backup quantity") + ":</b></td>\n");
-            buf.append("<td><select name=\"").append(index).append(".backupInbound\">\n");
+            buf.append("<tr class=\"lastrow\"><td><b>").append(_t("Backup quantity")).append(":</b></td>\n")
+               .append("<td><select name=\"").append(index).append(".backupInbound\">\n");
             now = in.getBackupQuantity();
             renderOptions(buf, 0, maxBQuantity, now, "", TUNNEL);
             if (now > maxBQuantity)
                 renderOptions(buf, now, now, now, "", TUNNEL);
-            buf.append("</select></td>\n");
-
-            buf.append("<td><select name=\"").append(index).append(".backupOutbound\">\n");
+            buf.append("</select></td>\n")
+               .append("<td><select name=\"").append(index).append(".backupOutbound\">\n");
             now = out.getBackupQuantity();
             renderOptions(buf, 0, maxBQuantity, now, "", TUNNEL);
             if (now > maxBQuantity)
                 renderOptions(buf, now, now, now, "", TUNNEL);
-            buf.append("</select></td>\n");
-            buf.append("<td class=spacer></td>\n</tr>\n");
+            buf.append("</select></td>\n")
+               .append("<td class=spacer></td>\n</tr>\n");
         }
 
         // custom options
@@ -263,10 +258,10 @@ public class ConfigTunnelsHelper extends HelperBase {
         // And let's not display them at all unless they have contents, which should be rare.
         Properties props = in.getUnknownOptions();
         if (!props.isEmpty()) {
-            buf.append("<tr><td><b>" + _t("Inbound options") + ":</b></td>\n" +
-                       "<td colspan=2><input name=\"").append(index);
-            buf.append(".inboundOptions\" type=text size=32 disabled=disabled " +
-                       "value=\"");
+            buf.append("<tr><td><b>").append(_t("Inbound options")).append(":</b></td>\n")
+               .append("<td colspan=2><input name=\"").append(index)
+               .append(".inboundOptions\" type=text size=32 disabled=disabled ")
+               .append("value=\"");
             for (String prop : props.stringPropertyNames()) {
                 String val = props.getProperty(prop);
                 buf.append(prop).append('=').append(val).append(' ');
@@ -275,10 +270,10 @@ public class ConfigTunnelsHelper extends HelperBase {
         }
         props = out.getUnknownOptions();
         if (!props.isEmpty()) {
-            buf.append("<tr><td><b>" + _t("Outbound options") + ":</b></td>\n" +
-                       "<td colspan=2><input name=\"").append(index);
-            buf.append(".outboundOptions\" type=text size=32 disabled=disabled " +
-                       "value=\"");
+            buf.append("<tr><td><b>").append(_t("Outbound options")).append(":</b></td>\n")
+               .append("<td colspan=2><input name=\"").append(index)
+               .append(".outboundOptions\" type=text size=32 disabled=disabled ")
+               .append("value=\"");
             for (String prop : props.stringPropertyNames()) {
                 String val = props.getProperty(prop);
                 buf.append(prop).append('=').append(val).append(' ');
@@ -295,8 +290,8 @@ public class ConfigTunnelsHelper extends HelperBase {
             buf.append("<option value=\"").append(i).append("\" ");
             if (i == now)
                 buf.append(SELECTED);
-            buf.append(">").append(ngettext(DUMMY2 + name, DUMMY2 + name + 's', i));
-            buf.append("</option>\n");
+            buf.append(">").append(ngettext(DUMMY2 + name, DUMMY2 + name + 's', i))
+               .append("</option>\n");
         }
     }
 

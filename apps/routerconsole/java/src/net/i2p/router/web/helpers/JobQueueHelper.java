@@ -113,9 +113,9 @@ public class JobQueueHelper extends HelperBase {
                     MAX_JOBS = 32;
                 if (i >= MAX_JOBS)
                     continue;
-                buf.append("<li><b title=\"").append(j.toString()).append("\">").append(j.getName()).append("</b> &#10140; ");
-                buf.append(_t("waiting")).append(' ').append(DataHelper.formatDuration2(now-j.getTiming().getStartAfter()));
-                buf.append("</li>\n");
+                buf.append("<li><b title=\"").append(j.toString()).append("\">").append(j.getName()).append("</b> &#10140; ")
+                   .append(_t("waiting")).append(' ').append(DataHelper.formatDuration2(now-j.getTiming().getStartAfter()))
+                   .append("</li>\n");
             }
             buf.append("</ol>\n");
             getJobCounts(buf, counter);
@@ -143,11 +143,10 @@ public class JobQueueHelper extends HelperBase {
             // translators: {0} is a job name, {1} is a time, e.g. 6 min
             buf.append("<li>").append(_t("{0} starts in {1}", "<b title=\"" + j.toString() + "\">" +
                        j.getName() + "</b> &#10140; ", "<i>" + DataHelper.formatDuration2(time) + "</i>"));
-            // debug, don't bother translating
             if (time < 0)
-                buf.append(" <span class=delayed>[DELAYED]</span>");
+                buf.append(" <span class=delayed>[").append(_t("DELAYED")).append("]</span>");
             if (time < prev)
-                buf.append(" <span class=outOfOrder>[OUT OF ORDER]</span>");
+                buf.append(" <span class=outOfOrder>[").append(_t("OUT OF ORDER")).append("]</span>");
             prev = time;
             buf.append("</li>\n");
         }
@@ -177,9 +176,9 @@ public class JobQueueHelper extends HelperBase {
             buf.append("<tr><td>\n<ul>\n");
             for (String name : names) {
                      buf.append("<li><span class=jobcount><b>").append(name).append(":</b> ")
-                         .append(counter.count(name)).append("</span></li>\n");
+                        .append(counter.count(name)).append("</span></li>\n");
                  }
-            // TODO: Add aggregate total for single jobs and total for all jobs and only display jobnames with > 1 job
+            // TODO: Add aggregate total for single jobs and total for all jobs
             // buf.append("<span class=\"jobcount\"><b>").append(_t("Otherjobs")).append(":</b> ")
             // .append(otherjobs).append("</span>").append(_t("Total jobs scheduled")).append(": ").append(totaljobs);
             buf.append("</ul></td></tr></table>\n");
@@ -193,28 +192,26 @@ public class JobQueueHelper extends HelperBase {
     private void getJobStats(StringBuilder buf) {
         buf.append("<div class=widescroll>")
            .append("<h3 id=totaljobstats>").append(_t("Job Statistics (excluding single-shot jobs)"))
-//           .append("<label class=script hidden><input name=toggle id=toggle type=checkbox class=\"optbox slider\" checked=\"\">")
-//           .append(_t("Extended view")).append("</label>")
-           .append("</h3>\n");
-        buf.append("<table id=jobstats data-sortable>\n" +
-                   "<colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup/>");
+           .append("</h3>\n")
+           .append("<table id=jobstats data-sortable>\n")
+           .append("<colgroup/><colgroup/><colgroup/><colgroup/><colgroup/><colgroup/>");
         if (isAdvanced()) {
             buf.append("<colgroup/><colgroup/><colgroup/><colgroup/>\n");
         }
-        buf.append("<thead><tr data-sort-method=thead>" +
-                   "<th>").append(_t("Job")).append("</th>" +
-                   "<th data-sort-method=number>").append(_t("Runs")).append("</th>" +
-                   "<th data-sort-method=number>").append(_t("Dropped")).append("</th>" +
-                   "<th data-sort-method=number>").append(_t("Time")).append("</th>" +
-                   "<th data-sort-method=number>").append(_t("Avg")).append("</th>" +
-                   "<th data-sort-method=number>").append(_t("Max")).append("</th>" +
-                   "<th data-sort-method=number>").append(_t("Min")).append("</th>");
-            if (isAdvanced()) {
-                buf.append("<th data-sort-method=number>").append(_t("Pending")).append("</th>" +
-                           "<th data-sort-method=number>").append(_t("Avg")).append("</th>" +
-                           "<th data-sort-method=number>").append(_t("Max")).append("</th>" +
-                           "<th data-sort-method=number>").append(_t("Min")).append("</th>");
-            }
+        buf.append("<thead><tr data-sort-method=thead>")
+           .append("<th>").append(_t("Job")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Runs")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Dropped")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Time")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Avg")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Max")).append("</th>")
+           .append("<th data-sort-method=number>").append(_t("Min")).append("</th>");
+        if (isAdvanced()) {
+            buf.append("<th data-sort-method=number>").append(_t("Pending")).append("</th>")
+               .append("<th data-sort-method=number>").append(_t("Avg")).append("</th>")
+               .append("<th data-sort-method=number>").append(_t("Max")).append("</th>")
+               .append("<th data-sort-method=number>").append(_t("Min")).append("</th>");
+        }
         buf.append("</tr></thead>\n<tbody id=statCount>\n");
 
         long totRuns = 0;
@@ -250,18 +247,26 @@ public class JobQueueHelper extends HelperBase {
             buf.append("<tr>");
             // TODO: Add tooltip with simpleName to job name
             //buf.append("<td><b title=\"").append(getClass().getSimpleName()).append("\">").append(stats.getName()).append("</b></td>");
-            buf.append("<td><b>").append(stats.getName()).append("</b></td>");
-            buf.append("<td>").append(stats.getRuns()).append("</td>");
-            buf.append("<td>").append(stats.getDropped()).append("</td>");
-            buf.append("<td><span hidden>[").append(stats.getTotalTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getTotalTime())).append("</td>");
-            buf.append("<td><span hidden>[").append(stats.getAvgTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getAvgTime())).append("</td>");
-            buf.append("<td><span hidden>[").append(stats.getMaxTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getMaxTime())).append("</td>");
-            buf.append("<td><span hidden>[").append(stats.getMinTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getMinTime())).append("</td>");
+            buf.append("<td><b>").append(stats.getName()).append("</b></td>")
+               .append("<td>").append(stats.getRuns()).append("</td>")
+               .append("<td>").append(stats.getDropped()).append("</td>")
+               .append("<td><span hidden>[").append(stats.getTotalTime()).append(".]</span>")
+               .append(DataHelper.formatDuration2(stats.getTotalTime())).append("</td>")
+               .append("<td><span hidden>[").append(stats.getAvgTime()).append(".]</span>")
+               .append(DataHelper.formatDuration2(stats.getAvgTime())).append("</td>")
+               .append("<td><span hidden>[").append(stats.getMaxTime()).append(".]</span>")
+               .append(DataHelper.formatDuration2(stats.getMaxTime())).append("</td>")
+               .append("<td><span hidden>[").append(stats.getMinTime()).append(".]</span>")
+               .append(DataHelper.formatDuration2(stats.getMinTime())).append("</td>");
             if (isAdvanced()) {
-                buf.append("<td><span hidden>[").append(stats.getTotalPendingTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getTotalPendingTime())).append("</td>");
-                buf.append("<td><span hidden>[").append(stats.getAvgPendingTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getAvgPendingTime())).append("</td>");
-                buf.append("<td><span hidden>[").append(stats.getMaxPendingTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getMaxPendingTime())).append("</td>");
-                buf.append("<td><span hidden>[").append(stats.getMinPendingTime()).append(".]</span>").append(DataHelper.formatDuration2(stats.getMinPendingTime())).append("</td>");
+                buf.append("<td><span hidden>[").append(stats.getTotalPendingTime()).append(".]</span>")
+                   .append(DataHelper.formatDuration2(stats.getTotalPendingTime())).append("</td>")
+                   .append("<td><span hidden>[").append(stats.getAvgPendingTime()).append(".]</span>")
+                   .append(DataHelper.formatDuration2(stats.getAvgPendingTime())).append("</td>")
+                   .append("<td><span hidden>[").append(stats.getMaxPendingTime()).append(".]</span>")
+                   .append(DataHelper.formatDuration2(stats.getMaxPendingTime())).append("</td>")
+                   .append("<td><span hidden>[").append(stats.getMinPendingTime()).append(".]</span>")
+                   .append(DataHelper.formatDuration2(stats.getMinPendingTime())).append("</td>");
             }
             buf.append("</tr>\n");
             if (stats.getMaxTime() > maxExecTime)
@@ -281,22 +286,22 @@ public class JobQueueHelper extends HelperBase {
                 avgPendingTime = totPendingTime / totRuns;
         }
 
-        buf.append("</tbody>\n<tfoot id=statTotals><tr class=tablefooter>");
-        buf.append("<td><b>").append(_t("Summary")).append("</b></td>");
-        buf.append("<td>").append(totRuns).append("</td>");
-        buf.append("<td>").append(totDropped).append("</td>");
-        buf.append("<td>").append(DataHelper.formatDuration2(totExecTime)).append("</td>");
-        buf.append("<td>").append(DataHelper.formatDuration2(avgExecTime)).append("</td>");
-        buf.append("<td>").append(DataHelper.formatDuration2(maxExecTime)).append("</td>");
-        buf.append("<td>").append(DataHelper.formatDuration2(minExecTime)).append("</td>");
+        buf.append("</tbody>\n<tfoot id=statTotals><tr class=tablefooter>")
+           .append("<td><b>").append(_t("Summary")).append("</b></td>")
+           .append("<td>").append(totRuns).append("</td>")
+           .append("<td>").append(totDropped).append("</td>")
+           .append("<td>").append(DataHelper.formatDuration2(totExecTime)).append("</td>")
+           .append("<td>").append(DataHelper.formatDuration2(avgExecTime)).append("</td>")
+           .append("<td>").append(DataHelper.formatDuration2(maxExecTime)).append("</td>")
+           .append("<td>").append(DataHelper.formatDuration2(minExecTime)).append("</td>");
         if (isAdvanced()) {
-            buf.append("<td>").append(DataHelper.formatDuration2(totPendingTime)).append("</td>");
-            buf.append("<td>").append(DataHelper.formatDuration2(avgPendingTime)).append("</td>");
-            buf.append("<td>").append(DataHelper.formatDuration2(maxPendingTime)).append("</td>");
-            buf.append("<td>").append(DataHelper.formatDuration2(minPendingTime)).append("</td>");
+            buf.append("<td>").append(DataHelper.formatDuration2(totPendingTime)).append("</td>")
+               .append("<td>").append(DataHelper.formatDuration2(avgPendingTime)).append("</td>")
+               .append("<td>").append(DataHelper.formatDuration2(maxPendingTime)).append("</td>")
+               .append("<td>").append(DataHelper.formatDuration2(minPendingTime)).append("</td>");
         }
-        buf.append("</tr></tfoot>\n</table>\n");
-        buf.append("</div>\n");
+        buf.append("</tr></tfoot>\n</table>\n")
+           .append("</div>\n");
     }
 
     /** @since 0.8.9 */

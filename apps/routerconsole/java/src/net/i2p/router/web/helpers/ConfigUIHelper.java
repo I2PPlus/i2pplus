@@ -227,25 +227,29 @@ public class ConfigUIHelper extends HelperBase {
             buf.append("<style>#consolepass .delete{display:none!important)</style>\n");
         buf.append("<table id=consolepass>\n");
         if (userpw.isEmpty()) {
-            buf.append("<tr><td class=infohelp colspan=3>" +
-                       _t("Add a user and password to enable.") + "&nbsp;" +
-                       _t("Note: If you forget your password, removing the configuration entry in your router.config file will clear it (restart required).") +
-                       "</td></tr>\n");
+            buf.append("<tr><td class=infohelp colspan=3>")
+               .append(_t("Add a user and password to enable.")).append("&nbsp;")
+               .append(_t("Note: If you forget your password, removing the configuration entry in your router.config file will clear it (restart required)."))
+               .append("</td></tr>\n");
         } else {
-            buf.append("<tr><td class=infohelp colspan=3>" +
-                       _t("Router console password is enabled.") +
-                       "</td></tr>\n");
-            buf.append("<tr><th title=\"" + _t("Mark for deletion") + "\">" + _t("Remove") + "</th><th>" + _t("Username") + "</th><th>&nbsp;</th></tr>\n");
+            buf.append("<tr><td class=infohelp colspan=3>")
+               .append(_t("Router console password is enabled."))
+               .append("</td></tr>\n")
+               .append("<tr><th title=\"").append(_t("Mark for deletion")).append("\">")
+               .append(_t("Remove")).append("</th><th>").append(_t("Username"))
+               .append("</th><th>&nbsp;</th></tr>\n");
             for (String name : userpw.keySet()) {
-                buf.append("<tr><td><input type=checkbox class=optbox id=\"" + name + "\" name=\"delete_" + name + "\"></td>" +
-                           "<td colspan=2><label for=\"" + name + "\">" + name + "</label></td></tr>\n");
+                buf.append("<tr><td><input type=checkbox class=optbox id=\"").append(name)
+                   .append("\" name=\"delete_").append(name).append("\"></td>")
+                   .append("<td colspan=2><label for=\"").append(name).append("\">")
+                   .append(name).append("</label></td></tr>\n");
             }
         }
-        buf.append("<tr><td id=pw_adduser colspan=3>" +
-                   "<b>" + _t("Username") + ":</b> " + "<input type=text name=name title=\"" +
-                   _t("Please supply a username") + "\"><b>" + _t("Password") + ":</b> " +
-                   "<input type=password size=40 name=nofilter_pw title=\"" +
-                   _t("Please supply a password") + "\">" + "</td></tr>\n</table>\n");
+        buf.append("<tr><td id=pw_adduser colspan=3>")
+           .append("<b>").append(_t("Username")).append(":</b> ").append("<input type=text name=name title=\"")
+           .append(_t("Please supply a username")).append("\"><b>").append(_t("Password")).append(":</b> ")
+           .append("<input type=password size=40 name=nofilter_pw title=\"")
+           .append(_t("Please supply a password")).append("\">").append("</td></tr>\n</table>\n");
         return buf.toString();
     }
 }

@@ -474,11 +474,11 @@ public class HomeHelper extends HelperBase {
                 url.contains("tinypng") || url.contains("vuldb") || url.contains("meduza") || url.contains("mdn") ||
                 url.contains("w3schools"))
                 buf.append(" js");
-            buf.append("\" style=display:inline-block;text-align:center>" +
-                       "<div class=appicon>" +
+            buf.append("\" style=display:inline-block;text-align:center>")
+               .append("<div class=appicon>")
                        // usability: add tabindex -1 so we avoid 2 tabs per app
-                       "<a href=\"").append(url).append("\" tabindex=\"-1\">" +
-                       "<img alt=\"\" title=\"").append(app.desc).append("\" src=\"").append(app.icon)
+               .append("<a href=\"").append(url).append("\" tabindex=\"-1\">")
+               .append("<img alt=\"\" title=\"").append(app.desc).append("\" src=\"").append(app.icon)
                // don't version the icons to avoid double-caching where they're used in css
                //.append(app.icon.contains("?") ? "&amp;" : "?").append(CoreVersion.VERSION)
                .append("\" width=32 height=32></a></div><table><tr><td><div class=applabel><a href=\"")
@@ -520,8 +520,8 @@ public class HomeHelper extends HelperBase {
             buf.append(app.name.replace(" ", "_").replace("\'", ""))
                .append("\">")
                .append(DataHelper.escapeHTML(app.name))
-               .append("</label></td><td><a href=\"");
-            buf.append(url)
+               .append("</label></td><td><a href=\"")
+               .append(url)
                .append("\">");
             // truncate before escaping
             String urltext = DataHelper.escapeHTML(app.url).replace("&amp;ref=console", "");
@@ -532,10 +532,10 @@ public class HomeHelper extends HelperBase {
             buf.append("</a></td></tr>\n");
         }
         buf.append("<tr class=addnew><td colspan=2><b>")
-           .append(_t("Add")).append(":</b>" +
-                   "</td><td><input type=text name=\"nofilter_name\"></td>" +
-                   "<td><input type=text size=40 name=\"nofilter_url\"></td></tr>");
-        buf.append("</table>\n");
+           .append(_t("Add")).append(":</b>")
+           .append("</td><td><input type=text name=\"nofilter_name\"></td>")
+           .append("<td><input type=text size=40 name=\"nofilter_url\"></td></tr>")
+           .append("</table>\n");
         return buf.toString();
     }
 
