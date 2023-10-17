@@ -618,7 +618,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 outMsg = dlm;
             if (isDirect) {
                 if (_facade.isClientDb() && _log.shouldLog(Log.WARN))
-                    _log.warn("[JobId: " + getJobId() + "Warning! Sending direct search message in a client netDb context! " +
+                    _log.warn("[JobId: " + getJobId() + "] Warning! Sending direct search message in a client netDb context! " +
                               "\n* DbId: " + _facade._dbid + outMsg);
                 OutNetMessage m = new OutNetMessage(ctx, outMsg, outMsg.getMessageExpiration(),
                                                     OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, ri);
