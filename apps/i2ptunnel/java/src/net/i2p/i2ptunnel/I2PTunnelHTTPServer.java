@@ -728,7 +728,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final Log _log;
         private final boolean _shouldCompress;
         //private final boolean _addHeaders;
-        private static final int BUF_SIZE = 8*1024;
+        private static final int BUF_SIZE = 16*1024;
 
         /**
          *  @param shouldCompress if false, don't compress, just filter server headers
@@ -789,10 +789,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // Change headers to protect server identity
                 Map<String, List<String>> headers = readHeaders(null, serverin, command, SERVER_SKIPHEADERS, _ctx);
 
-                // Remove cache-control header if it contains the word "none" so we can set a sane value later
+                // Check cache-control header for "none" and "post-check" values and remove if present
                 List<String> cacheControlList = headers.get("Cache-Control");
-                if (cacheControlList != null && (cacheControlList.contains("none") ||
-                    cacheControlList.contains("post-check"))) {
+                if (cacheControlList != null && (cacheControlList.contains("none".toLowerCase()) ||
+                    cacheControlList.contains("post-check".toLowerCase()))) {
                     headers.remove("Cache-Control");
                 }
 

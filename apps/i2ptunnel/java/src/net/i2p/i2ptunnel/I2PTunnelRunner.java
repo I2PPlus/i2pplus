@@ -591,7 +591,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             String to = i2ps.getPeerDestination().calculateHash().toBase64().substring(0,6);
 
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug(direction + " Forwarding between " + from + " and " + to);
+                _log.debug(direction + " Forwarding between [" + from + "] and [" + to + "]");
             }
 
             ByteArray ba = _cache.acquire();

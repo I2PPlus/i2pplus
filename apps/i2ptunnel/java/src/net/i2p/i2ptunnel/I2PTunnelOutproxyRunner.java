@@ -177,12 +177,12 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
             close(out, in, i2pout, i2pin, s, i2ps, t1, t2);
         } catch (InterruptedException ex) {
             if (_log.shouldError())
-                _log.error("Interrupted", ex);
+                _log.error("Interrupted (" + ex.getMessage() + ")");
         } catch (SSLException she) {
             _log.error("SSL error", she);
         } catch (IOException ex) {
             if (_log.shouldDebug())
-                _log.debug("Error forwarding", ex);
+                _log.debug("Error forwarding (" + ex.getMessage() + ")");
         } catch (IllegalStateException ise) {
             if (_log.shouldWarn())
                 _log.warn("gnu?", ise);
@@ -195,14 +195,14 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                     s.close();
             } catch (IOException ex) {
                 if (_log.shouldWarn())
-                    _log.warn("Could not close java socket", ex);
+                    _log.warn("Could not close java socket (" + ex.getMessage() + ")");
             }
             if (i2ps != null) {
                 try {
                     i2ps.close();
                 } catch (IOException ex) {
                     if (_log.shouldWarn())
-                        _log.warn("Could not close Socket", ex);
+                        _log.warn("Could not close Socket (" + ex.getMessage() + ")");
                 }
             }
         }
@@ -271,7 +271,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
             this.in = in;
             this.out = out;
             _toI2P = toI2P;
-            direction = (toI2P ? "toOutproxy" : "fromOutproxy");
+            direction = (toI2P ? "[To outproxy]" : "[From outproxy]");
             _cache = ByteCache.getInstance(32, NETWORK_BUFFER_SIZE);
             setName("OutproxyForwarder " + _runnerId + '.' + __forwarderId.incrementAndGet());
         }
@@ -282,8 +282,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
             String to = "todo";
 
             if (_log.shouldDebug()) {
-                _log.debug(direction + ": Forwarding between "
-                           + from + " and " + to);
+                _log.debug(direction + " Forwarding between [" + from + "] and [" + to + "]");
             }
 
             ByteArray ba = _cache.acquire();
@@ -302,7 +301,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
 
                     if (in.available() == 0) {
                         if (_log.shouldDebug())
-                            _log.debug(direction + ": " + len + " bytes flushed through " + (_toI2P ? "to " : "from ")
+                            _log.debug(direction + " " + len + " bytes flushed through " + (_toI2P ? "to " : "from ")
                                        + "outproxy");
                         if (_toI2P) {
                             try {
@@ -324,39 +323,37 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                 synchronized (finishLock) {
                     if (!finished) {
                         if (_log.shouldDebug())
-                            _log.debug(direction + ": Socket closed - error reading and writing",
-                                       ex);
+                            _log.debug(direction + " Socket closed - error reading and writing (" + ex.getMessage() + ")");
                     }
                 }
             } catch (InterruptedIOException ex) {
                 if (_log.shouldWarn())
-                    _log.warn(direction + ": Closing connection due to timeout (error: \""
-                              + ex.getMessage() + "\")");
+                    _log.warn(direction + " Closing connection due to timeout (" + ex.getMessage() + ")");
             } catch (IOException ex) {
                 if (!finished) {
                     if (_log.shouldWarn())
-                        _log.warn(direction + ": Error forwarding", ex);
+                        _log.warn(direction + " Error forwarding (" + ex.getMessage() + ")");
                 }
             } finally {
                 _cache.release(ba);
                 if (_log.shouldInfo()) {
-                    _log.info(direction + ": Done forwarding between ["
+                    _log.info(direction + " Done forwarding between ["
                               + from + "] and [" + to + "]");
                 }
                 try {
                     in.close();
                 } catch (IOException ex) {
                     if (_log.shouldWarn())
-                        _log.warn(direction + ": Error closing input stream", ex);
+                        _log.warn(direction + " Error closing input stream (" + ex.getMessage() + ")");
                 }
                 try {
                     if (!(onTimeout != null && (!_toI2P) && totalReceived <= 0))
                         out.close();
                     else if (_log.shouldInfo())
-                        _log.info(direction + ": Not closing so we can write the error message");
+                        _log.info(direction + " Not closing stream so we can write the error message...");
                 } catch (IOException ioe) {
                     if (_log.shouldWarn())
-                        _log.warn(direction + ": Error flushing to close", ioe);
+                        _log.warn(direction + " Error flushing to close (" + ioe.getMessage() + ")");
                 }
                 synchronized (finishLock) {
                     finished = true;

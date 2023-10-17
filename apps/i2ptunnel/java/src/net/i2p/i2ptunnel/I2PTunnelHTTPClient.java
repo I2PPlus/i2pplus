@@ -89,13 +89,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     private final String _proxyNonce;
 
     public static final String AUTH_REALM = "I2P HTTP Proxy";
-    private static final String UA_I2P = "User-Agent: " +
-                                         "MYOB/6.66 (AN/ON)" +
-                                         "\r\n";
+    private static final String UA_I2P = "User-Agent: " + "MYOB/6.66 (AN/ON)" + "\r\n";
     // ESR version of Firefox, same as Tor Browser
-    private static final String UA_CLEARNET = "User-Agent: " +
-                                              DNSOverHTTPS.UA_CLEARNET +
-                                              "\r\n";
+    private static final String UA_CLEARNET = "User-Agent: " + DNSOverHTTPS.UA_CLEARNET + "\r\n";
     // overrides
     private static final String PROP_UA_I2P = "httpclient.userAgent.i2p";
     private static final String PROP_UA_CLEARNET = "httpclient.userAgent.outproxy";
@@ -437,13 +433,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             while((line = reader.readLine(method)) != null) {
                 line = line.trim();
                 if (_log.shouldDebug()) {
-                    if (line != null)
+                    if (line != null) {
                         _log.debug(getPrefix(requestId) + "Request header: " + line);
+                    }
                 }
 
                 String lowercaseLine = line.toLowerCase(Locale.US);
 
-                if(method == null) {
+                if (method == null) {
                     // first line GET/POST/etc.
                     if (_log.shouldDebug()) {
                         _log.debug(getPrefix(requestId) + "First line [" + line + "] -> Request count: " +  requestCount);
@@ -1044,9 +1041,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             try {
                                 // Either strip or rewrite the referer line
                                 URI refererURI = new URI(referer);
+                                String origHost = origRequestURI.getHost();
                                 String refererHost = refererURI.getHost();
                                 if (refererHost != null) {
-                                    String origHost = origRequestURI.getHost();
                                     if (!refererHost.equals(origHost) ||
                                         refererURI.getPort() != origRequestURI.getPort() ||
                                         !DataHelper.eq(refererURI.getScheme(), origRequestURI.getScheme())) {
