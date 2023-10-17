@@ -154,7 +154,8 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
     @Override
     public String toString() {
-        return "GOS read: " + getTotalRead() + " expanded: " + getTotalExpanded() + " remaining: " + getRemaining() + " finished: " + getFinished();
+        return "Gunzip output stream -> Read: " + getTotalRead() + "B,  expanded: " + getTotalExpanded() +
+               "B, remaining: " + getRemaining() + "B, finished: " + getFinished() + "B";
     }
 
     /**
@@ -175,12 +176,12 @@ public class GunzipOutputStream extends InflaterOutputStream {
         long actualSize = inf.getTotalOut();
         long expectedSize = DataHelper.fromLongLE(footer, 4, 4);
         if (expectedSize != actualSize)
-            throw new IOException("gunzip expected " + expectedSize + " bytes, got " + actualSize);
+            throw new IOException("Gunzip expected " + expectedSize + " bytes, got " + actualSize);
 
         long actualCRC = _crc32.getValue();
         long expectedCRC = DataHelper.fromLongLE(footer, 0, 4);
         if (expectedCRC != actualCRC)
-            throw new IOException("gunzip CRC fail expected 0x" + Long.toHexString(expectedCRC) +
+            throw new IOException("Gunzip CRC fail expected 0x" + Long.toHexString(expectedCRC) +
                                   " bytes, got 0x" + Long.toHexString(actualCRC));
     }
 
@@ -234,7 +235,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
             case EF:
                 if ( (c != 0x00) && (c != 0x02) && (c != 0x04) )
-	            throw new IOException("Invalid extended flags [" + c + "]");
+                throw new IOException("Invalid extended flags [" + c + "]");
                 _state = HeaderState.OS;
                 break;
 

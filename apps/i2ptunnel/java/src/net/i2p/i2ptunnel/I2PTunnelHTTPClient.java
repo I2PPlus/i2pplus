@@ -928,7 +928,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             if (destination != null && destination.length() > 20)
                                 outproxyName = destination.substring(0,12) + "...";
                             if (_log.shouldDebug()) {
-                                _log.debug(getPrefix(requestId) + " for [" + host + "] forwarded \n* Outproxy: " + outproxyName);
+                                _log.debug(getPrefix(requestId) + " for [" + host + "] forwarded via outproxy: " + outproxyName);
                             }
                         }
                     } else {
@@ -972,12 +972,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     if (destination != null && destination.length() > 20)
                         outproxyName = destination.substring(0,12) + "...";
                     if (_log.shouldDebug()) {
-                        _log.debug(getPrefix(requestId) + "REQ   : \"" + request + "\"");
-                        _log.debug(getPrefix(requestId) + "REQURI: \"" + requestURI + "\"");
-                        _log.debug(getPrefix(requestId) + "NEWREQ: \"" + line + "\"");
-                        _log.debug(getPrefix(requestId) + "HOST  : \"" + host + "\"");
-                        _log.debug(getPrefix(requestId) + "RPORT : \"" + remotePort + "\"");
-                        _log.debug(getPrefix(requestId) + "DEST  : \"" + destination + "\"");
+                        _log.debug(getPrefix(requestId) + "Request: " + request );
+                        _log.debug(getPrefix(requestId) + "Request URI: " + requestURI );
+                        _log.debug(getPrefix(requestId) + "New request: " + line );
+                        _log.debug(getPrefix(requestId) + "Host: " + host );
+                        _log.debug(getPrefix(requestId) + "Remote port: " + remotePort );
+                        _log.debug(getPrefix(requestId) + "Destination: " + destination );
                     }
 
                 // end first line processing
