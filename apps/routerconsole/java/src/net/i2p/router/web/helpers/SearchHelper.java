@@ -40,13 +40,13 @@ public class SearchHelper extends HelperBase {
         "psychonaut.i2p"           + S +     "http://psychonaut.i2p/w/index.php?search=%s&fulltext=Search" + S +
         "ramble.i2p"               + S +     "http://ramble.i2p/search?q=%s" + S +
         "slashdot.i2p"             + S +     "http://slashdot.i2p/index2.pl?fhfilter=%s" + S +
-        "stackoverflow.i2p"        + S +     "http://duckduckgo.i2p/?q=site%3Astackoverflow.com+%s" + S +
         "teddit.i2p/r/i2p"         + S +     "http://teddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
         "tracker2.postman.i2p"     + S +     "http://tracker2.postman.i2p/?search=%s" + S +
         "wiki.i2p-projekt.i2p"     + S +     "http://wiki.i2p-projekt.i2p/wiki/index.php?search=%s" + S +
         "wikiless.i2p"             + S +     "http://wikiless.i2p/w/index.php?search=%s&fulltext=Search" + S +
         "wired.i2p"                + S +     "http://wired.i2p/search/?q=%s" + S +
         "wordnik.i2p"              + S +     "http://wordnik.i2p/words?myWord=%s" +
+        //"stackoverflow.i2p"        + S +     "http://duckduckgo.i2p/?q=site%3Astackoverflow.com+%s" + S +
         //"zzz.i2p"                  + S +     "http://zzz.i2p/search?type=posts&query=%s" + //S +
         //"ebooks.i2p"               + S +     "http://ebooks.i2p/index.php?page=9&query=%s" + S +
         //"eepsites.i2p"             + S +     "http://eepsites.i2p/Content/Search/SearchResults.aspx?inpQuery=%s" + S +
