@@ -1164,7 +1164,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             } // end header processing
 
             if (_log.shouldDebug() && !newRequest.toString().isEmpty()) {
-                _log.debug(getPrefix(requestId) + "NewRequest header\n\t" + newRequest.toString());
+                _log.debug(getPrefix(requestId) + "New request header\n\t" + newRequest.toString());
             }
 
             if (method == null || (destination == null && !usingInternalOutproxy)) {
