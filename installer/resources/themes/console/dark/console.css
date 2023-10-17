@@ -1891,7 +1891,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #loggingoptions td:nth-child(2){width:170px}
 #loggingoptions tr:nth-last-child(2){white-space:nowrap}
 #loggingoptions input[type=text],#loggingoptions select,#loggingoptions textarea{margin:3px;min-width:170px}
-#loggingoptions textarea{margin-bottom:8px;width:calc(100% - 6px);height:120px;resize:none}
+#loggingoptions textarea{margin-bottom:8px;width:calc(100% - 6px);height:120px;min-height:120px;resize:vertical}
 #loggingoptions textarea:empty{height:80px;min-height:80px}
 #loggingoptions select[name="newlogclass"]{width:calc(100% - 254px)}
 #config_logging h3{margin-bottom:-1px;position:relative}

@@ -1026,7 +1026,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #loggingoptions tr:nth-last-child(n+3) td:last-child,#loggingoptions p{line-height:1.4;font-size:100%}
 #loggingoptions p{margin:6px 6px 5px}
 #loggingoptions input[type=text],#loggingoptions select,#loggingoptions textarea{min-width:170px;margin:3px}
-#loggingoptions textarea{width:calc(100% - 8px);resize:none}
+#loggingoptions textarea{height:120px;min-height:120px;width:calc(100% - 8px);resize:vertical}
 #loggingoptions select[name="newlogclass"]{width:calc(100% - 185px)}
 
 /* sidebar */

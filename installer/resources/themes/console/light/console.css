@@ -1904,6 +1904,7 @@ table#addkeyring tr:last-child td{padding:5px;border-top:var(--border_inner)}
 select[name="newlogclass"]{margin-left:3px}
 #config_logging{padding-bottom:18px}
 #loggingoptions input[type=text],#loggingoptions select:not([name="newlogclass"]):not([name="newloglevel"]){margin:5px 3px;width:calc(100% - 6px)}
+#loggingoptions textarea{height:120px;min-height:120px;resize:vertical}
 #loggingoptions td:last-child:not(.optionsave){text-align:left}
 #loggingoptions p{text-align:left;margin:0 5px 2px;line-height:1.5}
 

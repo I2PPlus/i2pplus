@@ -676,7 +676,15 @@ pre#activetransports{margin:-11px 0 0;padding:15px 15px 0;width:calc(100% - 32px
 #i2pupdates .infohelp code{user-select:all}
 #leavefamily{margin-top:19px;margin-bottom:7px}
 #leavefamily tr:last-child td:first-child{padding:var(--pad_info);background:var(--bg) var(--leavefamily) var(--bgpos_info)}
+
+/* logging */
+#loggingoptions select[name="newloglevel"]{margin-right:0;width:166px}
+#loggingoptions textarea{height:120px;min-height:120px;resize:vertical}
+#loggingoptions td:not(.optionsave):first-child{padding-right:0;min-width:120px;line-height:1.2}
 #loggingoptions td:nth-child(2){width:170px}
+#loggingoptions tr:nth-last-child(3) td:first-child{padding-top:45px;vertical-align:top}
+#loggingoptions tr:nth-last-child(n+3) input[type=text],#loggingoptions tr:nth-last-child(n+3) select{width:180px}
+
 #newfamily{margin-top:4px;margin-bottom:-6px}
 #manualreseed{margin-bottom:10px}
 #manualreseed tr:nth-child(odd){background:var(--bg)}
@@ -1027,10 +1035,7 @@ h2#jobrunners{display:none}
 .homelinkedit tr:last-child{border-top:var(--border)}
 .addnew td:first-child{text-align:right}
 .addnew:hover{color:var(--ink)}
-#loggingoptions tr:nth-last-child(n+3) input[type=text],#loggingoptions tr:nth-last-child(n+3) select{width:180px}
-#loggingoptions select[name="newloglevel"]{margin-right:0;width:166px}
-#loggingoptions td:not(.optionsave):first-child{padding-right:0;min-width:120px;line-height:1.2}
-#loggingoptions tr:nth-last-child(3) td:first-child{padding-top:45px;vertical-align:top}
+
 
 .infohelp,.infowarn,#upnpstatus,#gatherstats,#debugmode,p.sybilinfo,#pluginconfigtext{padding:20px 15px 20px 55px;white-space:normal;text-align:justify;line-height:1.25;border:var(--border);background:var(--bg) var(--infohelp) var(--bgpos_info)}
 td.infowarn,p.infowarn{background:var(--bg) var(--infowarn) var(--bgpos_info)}
