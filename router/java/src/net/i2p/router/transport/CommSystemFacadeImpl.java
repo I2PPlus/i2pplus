@@ -563,17 +563,18 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
-
-                //if (enableReverseLookups() && uptime > 3*60*1000 && uptime < 10*60*1000) {
-                try {
-                    InetAddress ipAddress = InetAddress.getByAddress(ip);
-                    String ipString = ipAddress.getHostAddress();
-                    getCanonicalHostName(ipString);
+/**
+                if (enableReverseLookups() && uptime > 3*60*1000 && uptime < 10*60*1000) {
                     try {
-                        Thread.sleep(10); // 100 lookups/s max
-                    } catch (InterruptedException e) {}
-                } catch(UnknownHostException exception) {}
-                //}
+                        InetAddress ipAddress = InetAddress.getByAddress(ip);
+                        String ipString = ipAddress.getHostAddress();
+                        getCanonicalHostName(ipString);
+                        try {
+                            Thread.sleep(10); // 100 lookups/s max
+                        } catch (InterruptedException e) {}
+                    } catch(UnknownHostException exception) {}
+                }
+**/
             }
             _context.simpleTimer2().addPeriodicEvent(new Lookup(), 5000, LOOKUP_TIME);
         }
