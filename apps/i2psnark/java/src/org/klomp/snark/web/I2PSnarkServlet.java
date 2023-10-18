@@ -3259,7 +3259,7 @@ public class I2PSnarkServlet extends BasicServlet {
         //tbuf.append("</td></tr>\n");
         tbuf.append("<tr><td>");
         tbuf.append(_t("Trackers"));
-        tbuf.append(":<td>\n<table id=trackerselect>\n<tr>\n<td>Name</td><td>");
+        tbuf.append(":<td>\n<table id=trackerselect>\n<tr><td>Name</td><td>");
         tbuf.append(_t("Primary"));
         tbuf.append("</td><td>");
         tbuf.append(_t("Alternates"));
