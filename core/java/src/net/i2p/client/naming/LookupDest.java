@@ -144,7 +144,7 @@ public class LookupDest {
      *  TODO: does not support I2CP options.
      */
     public static void main(String args[]) {
-        if (args.length != 1) {
+        if (args.length < 1) {
             System.err.println("Usage: LookupDest hostname|b32");
             System.exit(1);
         }
@@ -160,7 +160,7 @@ public class LookupDest {
             }
         }
         if (args[0].length() == 2) {
-            if (args[0] == "-d") { 
+            if (args[0] == "-d") {
                 deleteHostname(I2PAppContext.getGlobalContext(), args[1]);
             }
         }
