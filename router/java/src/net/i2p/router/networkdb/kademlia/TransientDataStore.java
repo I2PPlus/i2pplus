@@ -185,12 +185,12 @@ class TransientDataStore implements DataStore {
                 }
 
                 if (newDate < oldDate) {
-//                    if (_log.shouldInfo())
-//                        _log.info("Almost clobbered a LeaseSet! [" + key.toBase64().substring(0,6) + "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
-//                                  "\n* New: " + new Date(ls.getEarliestLeaseDate()));
+                    if (_log.shouldDebug())
+                        _log.debug("Almost clobbered a LeaseSet! [" + key.toBase64().substring(0,6) + "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
+                                  "\n* New: " + new Date(ls.getEarliestLeaseDate()));
                 } else if (newDate == oldDate) {
-//                    if (_log.shouldInfo())
-//                        _log.info("Duplicate RouterInfo [" + key.toBase64().substring(0,6) + "] - not updating");
+                    if (_log.shouldDebug())
+                        _log.debug("Duplicate RouterInfo [" + key.toBase64().substring(0,6) + "] - not updating");
                 } else {
                     if (_log.shouldDebug()) {
                         _log.debug("Updated LeaseSet [" + key.toBase64().substring(0,6) + "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
