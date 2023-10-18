@@ -1405,7 +1405,7 @@ public class TunnelController implements Logging {
      */
     @Override
     public String toString() {
-        return "[Tunnel Controller: " + getType() + "] " + getName() + "for " + _tunnel + ' ' + _state;
+        return "[Tunnel Controller: " + getType() + "] " + getName() + " for " + _tunnel + ' ' + _state;
     }
 
     /**
