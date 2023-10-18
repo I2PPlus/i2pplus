@@ -17,7 +17,8 @@ input[type="submit"],input[type="reset"],button,.control,.fakebutton,.fakebutton
 #torrents tfoot tr:first-child th{min-width:80px}
 #torrents .clientid{font-size:75%;font-weight:600}
 #totals .canhide{display:none}
-#torrents #totals{font-weight:600}
+#torrents .tName{font-weight:500!important}
+#torrents .barComplete,#torrents #totals{font-weight:600}
 @font-face{font-display:swap;font-family:Sora;font-style:normal;font-weight:100,200,300,400,500,600,700,800;src:url(/themes/fonts/Sora/Sora.woff2);format("woff2")}
 @font-face{font-display:swap;font-family:Sora;font-style:italic;font-weight:100,200,300,400,500,600,700,800;src:url(/themes/fonts/Sora/Sora-Italic.woff2);format("woff2")}
 @font-face{font-display:swap;font-family:FiraCode;font-style:normal;font-weight:300,400,500,600,700;src:url(/themes/fonts/FiraCode.woff2);format("woff2")}
