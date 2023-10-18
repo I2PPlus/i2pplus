@@ -159,7 +159,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     if (getContext().netDbSegmentor().useSubDbs())
                         getContext().multihomeNetDb().store(key, ls);
                     else
-                        throw new IllegalArgumentException("Peer attempted to store LOCAL LeaseSet [" + key.toBase32().substring(0,6) + "]" +
+                        throw new IllegalArgumentException("Peer attempted to store LOCAL LeaseSet [" +
+                                                           key.toBase32().substring(0,6) + "]" +
                                                            "\n* DbId: " + _facade._dbid);
                 }
                 //boolean oldrar = ls.getReceivedAsReply();
@@ -301,20 +302,13 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             _log.warn("Dropping unsolicited NetDbStore of banned " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "]" + ((isFF && noSSU) ? " -> SSU transport disabled" : ""));
                         }
-
-/** TODO: re-enable when GEOIP lookups fixed
-
-                    } else if (noCountry && uptime > 45*1000) {
+                    } else if (noCountry && uptime > 10*60*1000) {
                         shouldStore = false;
                         wasNew = false;
                         if (_log.shouldWarn()) {
                             _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "] -> Address not resolvable via GeoIP");
                         }
-**/
-
-
-/**
                         if (isFF)
                             getContext().banlist().banlistRouter(key, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, now + 4*60*60*1000);
                         else
@@ -323,9 +317,6 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "] and banning for 4h -> Address not resolvable via GeoIP");
                         }
-**/
-
-
                     } else if ((isFF && noSSU) || (isFF && isUnreachable)) {
                         shouldStore = false;
                         wasNew = false;
@@ -333,24 +324,20 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             if (_log.shouldWarn())
                                 _log.warn("Dropping unsolicited NetDbStore of " + cap + " Floodfill [" + key.toBase64().substring(0,6) +
                                           "] -> SSU transport disabled");
-/**
                             getContext().banlist().banlistRouter(key, " <b>➜</b> Floodfill with SSU disabled", null, null, now + 4*60*60*1000);
                             if (_log.shouldWarn())
                                 _log.warn("Dropping unsolicited NetDbStore of " + cap + " Floodfill [" + key.toBase64().substring(0,6) +
                                           "] and banning for 4h -> SSU transport disabled");
-**/
                         } else {
                           shouldStore = false;
                           wasNew = false;
                             if (_log.shouldWarn())
                                 _log.warn("Dropping unsolicited NetDbStore of " + cap + " Floodfill [" + key.toBase64().substring(0,6) +
                                           "] -> Unreachable");
-/**
                             getContext().banlist().banlistRouter(key, " <b>➜</b> Floodfill is unreachable/firewalled", null, null, now + 4*60*60*1000);
                             if (_log.shouldWarn())
                                 _log.warn("Dropping unsolicited NetDbStore of " + cap + " Floodfill [" + key.toBase64().substring(0,6) +
                                           "] and banning for 4h -> Unreachable");
-**/
                         }
                     } else if (prevNetDb == null) { // actually new
                         if (isUnreachable && isOld) {
