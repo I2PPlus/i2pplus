@@ -14,29 +14,24 @@ const inputAddFile = document.querySelector("input[name='nofilter_newURL']");
 const inputNewFile = document.querySelector("input[name='nofilter_baseFile']");
 const notify = document.getElementById("notify");
 const processForm = document.getElementById("processForm");
+const xhrsnarklog = new XMLHttpRequest();
 
 function addTorrentNotify() {
   if (notify) {
-    refreshScreenLog(showAlert);
-    console.log("refreshScreenLog(notify)");
-  } else {
-    console.log("Can't find #notify in DOM");
+    setTimeout(function() {
+      refreshScreenLog(showAlert);
+    }, 1000);
   }
 }
 
 function showAlert() {
   addNotify.removeAttribute("hidden");
   if (!addNotify.hidden) {
-    addNotify.innerHTML = xhrsnarklog.responseXML.getElementById("notify").innerHTML;
     setTimeout(() => {
       hideAlert();
-      setTimeout(() => {
-        inputAddFile.value = "";
-        inputAddFile.focus();
-      }, 3000);
-    }, 2000);
-  } else {
-    console.log("DOM has not been refreshed");
+      inputAddFile.value = "";
+      inputAddFile.focus();
+    }, 5000);
   }
 }
 

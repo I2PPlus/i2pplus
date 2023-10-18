@@ -195,22 +195,30 @@ function refreshTorrents(callback) {
 
 function refreshScreenLog(callback) {
   const xhrsnarklog = new XMLHttpRequest();
+  const addNotify = document.getElementById("addNotify");
+  const screenlog = document.getElementById("messages");
+  const toast = document.getElementById("toast");
   xhrsnarklog.open("GET", "/i2psnark/.ajax/xhrscreenlog.html");
   xhrsnarklog.responseType = "document";
   xhrsnarklog.onload = function () {
+    const notifyResponse = xhrsnarklog.responseXML.getElementById("notify");
+    const screenlogResponse = xhrsnarklog.responseXML.getElementById("messages");
+    const toastResponse = xhrsnarklog.responseXML.getElementById("toast");
+    if (screenlog.innerHTML !== screenlogResponse.innerHTML) {
+      screenlog.innerHTML = screenlogResponse.innerHTML;
+    }
     if (xhrsnarklog.readyState === 4 && xhrsnarklog.status === 200) {
-      const screenlog = document.getElementById("messages");
-      const screenlogResponse = xhrsnarklog.responseXML.getElementById("messages");
-      const toast = document.getElementById("toast");
-      const toastResponse = xhrsnarklog.responseXML.getElementById("toast");
-      const addNotify = document.getElementById("addNotify");
-      const notifyResponse = xhrsnarklog.responseXML.getElementById("notify");
-      addNotify.innerHTML = notifyResponse.innerHTML;
+      setTimeout(function() {
+        if (addNotify.innerHTML !== notifyResponse.innerHTML) {
+          addNotify.innerHTML = notifyResponse.innerHTML;
+        }
+      }, 500);
       toast.innerHTML = toastResponse.innerHTML;
       if (callback) {callback();}
     }
   };
   xhrsnarklog.send();
+  console.log("Updated screenlog");
 }
 
 function getURL() {
@@ -266,11 +274,9 @@ async function initSnarkRefresh() {
     try {
       refreshIntervalId = setInterval(async () => {
         await doRefresh();
+        await refreshScreenLog();
+        await initToggleLog();
       }, refreshInterval);
-      screenLogIntervalId = setInterval(() => {
-        refreshScreenLog();
-        initToggleLog();
-      }, screenLogInterval);
       const lighboxEnabled = document.getElementById("lightbox");
       if (files && lightboxEnabled) {
         const lightbox = new Lightbox();
