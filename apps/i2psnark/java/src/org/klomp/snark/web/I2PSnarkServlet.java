@@ -1731,7 +1731,8 @@ public class I2PSnarkServlet extends BasicServlet {
                             try { in.close(); } catch (IOException ioe) {}
                             Snark snark = _manager.getTorrentByInfoHash(fileInfoHash);
                             if (snark != null) {
-                                _manager.addMessage(_t("Torrent with this info hash is already running: {0}", snark.getBaseName()).replace("Magnet ", ""));
+                                _manager.addMessage(_t("Torrent with this info hash is already running: {0}",
+                                                    snark.getBaseName()).replace("Magnet ", "").replace("</span>", ""));
                                 return;
                             }
 
