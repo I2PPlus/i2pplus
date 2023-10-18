@@ -719,6 +719,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String stParam = req.getParameter("st");
         int refresh = _manager.getRefreshDelaySeconds();
         List<Snark> snarks = getSortedSnarks(req);
+        int total = snarks.size();
         boolean isForm = _manager.util().connected() || !snarks.isEmpty();
         boolean showStatusFilter = _manager.util().showStatusFilter();
         filterParam = filter;
@@ -756,11 +757,18 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                     activeQuery.setLength(activeQuery.length() - 1);
                     String buttonUrl = activeQuery.toString();
+                    int pageSizeConf = _manager.getPageSize();
                     buttonUrl += (buttonUrl.contains("=") ? "&amp;filter=" : "?filter=");
                     fbuf.append("<noscript><style>.script{display:none}</style></noscript>\n")
                         .append("<div id=torrentDisplay class=script>")
                         .append("<a class=filter id=all href=\"").append(buttonUrl).append("all\"><span>")
-                        .append(_t("Show All")).append("<span class=badge></span></span></a>")
+                        .append(_t("Show All")).append("<span class=badge hidden>");
+                    if (pageSizeConf < total) {
+                        fbuf.append(pageSizeConf).append(" / ").append(total);
+                    } else {
+                        fbuf.append(total);
+                    }
+                    fbuf.append("</span></span></a>")
                         .append("<a class=filter id=active href=\"").append(buttonUrl).append("active\"><span>")
                         .append(_t("Active")).append("<span class=badge></span></span></a>")
                         .append("<a class=filter id=inactive href=\"").append(buttonUrl).append("inactive\"><span>")
@@ -805,7 +813,6 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // pages
         int start = 0;
-        int total = snarks.size();
         if (stParam != null) {
             try {
                 start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam)));
