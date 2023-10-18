@@ -99,6 +99,7 @@ p:empty+.sb_notice{margin-top:9px}
 #sb_general td:first-child,#sb_shortgeneral td:first-child,#sb_advancedgeneral td:first-child,#sb_peersadvanced td:first-child{max-width:130px}
 #sb_general td,#sb_shortgeneral td,#sb_advancedgeneral td,#sb_peersadvanced td{white-space:nowrap}
 #sb_general td::before,#sb_shortgeneral td::before,#sb_advancedgeneral td::before,#sb_bandwidth td::before,#sb_peers td::before,#sb_peersadvanced td::before,#sb_tunnels td::before,#sb_queue td::before,#sb_localtunnels td::before{min-height:22px;display:inline-block;vertical-align:middle;content:""}
+#sb_help{margin-bottom:-9px}
 #sb_shortgeneral{margin:-7px auto -9px -1px}
 #sb_internals a,#sb_services a,#sb_advanced a,#sb_help a{padding:1px 3px;display:inline-block;vertical-align:middle}
 #sb_localtunnels a:active{box-shadow:inset 2px 2px 2px #000;background:linear-gradient(90deg,rgba(0,0,0,0),#020)}
