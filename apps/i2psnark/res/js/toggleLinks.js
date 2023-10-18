@@ -2,15 +2,17 @@
 /* Provide a toggle switch for magnets or links in the main torrent table */
 /* License: AGPL3 or later */
 
+"use strict";
+
 const linkCss =    "#torrents #linkswitch::before{background:url(/i2psnark/.res/icons/link.svg) no-repeat center center/20px!important}" +
-                   "#snarkTbody .magnet,#snarkTbody .magnet:empty{padding:0;width:0;font-size:0}#snarkTbody .magnet>*{display:none}" +
-                   "#snarkTbody .trackerLink{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .trackerLink>*{display:inline-block}" +
+                   "#snarkTbody .magnet{padding:0;width:0;font-size:0}#snarkTbody .magnet>*{display:none!important}" +
+                   "#snarkTbody .trackerLink{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .trackerLink>*{display:inline-block!important}" +
                    "#torrents td.trackerLink img{margin:0;width:18px!important;height:18px!important}" +
                    "@media(min-width:1500px){#torrents td.trackerLink img{margin:0;width:20px!important;height:20px!important}";
 
 const magnetCss =  "#torrents #linkswitch::before{background:url(/i2psnark/.res/icons/magnet.svg) no-repeat center center/20px!important}" +
-                   "#snarkTbody .trackerLink,#snarkTbody .trackerLink:empty{padding:0;width:0;font-size:0}#snarkTbody .trackerLink>*{display:none}" +
-                   "#snarkTbody .magnet{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .magnet>*{display:inline-block}" +
+                   "#snarkTbody .trackerLink,#snarkTbody .trackerLink:empty{padding:0;width:0;font-size:0}#snarkTbody .trackerLink>*{display:none!important}" +
+                   "#snarkTbody .magnet{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .magnet>*{display:inline-block!important}" +
                    "#torrents td.trackerLink img{margin:0;width:18px!important;height:18px!important}" +
                    "@media(min-width:1500px){#torrents td.magnet img{margin:0;width:20px!important;height:20px!important}}";
 
@@ -22,37 +24,37 @@ const main = document.getElementById("mainsection");
 const mlinks = document.querySelectorAll("#snarkTbody .magnet");
 const tlinks = document.querySelectorAll("#snarkTbody .trackerLink");
 const toggleAttached = main.querySelector(".toggleListenerAttached");
-const toggleCss = document.getElementById("toggleLinks");
 const toggle = document.getElementById("linkswitch");
 const torrents = document.getElementById("torrents");
 const torrentlist = document.getElementById("torrentlist");
 
 let config;
-let debugging = true;
+let debugging = false;
 let toastTimeoutId = null;
+let toggleCss;
 
 function initLinkToggler() {
-  config = localStorage.getItem("linkToggle");
   if (!toggle) {
     console.log("Couldn't find #linkswitch in DOM");
     return;
   }
 
-  removeToggleListener();
-
   if (!main.classList.contains("toggleListenerAttached")) {
     attachToggleListener();
     main.classList.add("toggleListenerAttached");
-    console.log("toggleListenerAttached class not present -> toggle listener attached");
+    if (debugging) {
+      console.log("toggleListenerAttached class not present -> toggle listener attached");
+    }
   }
-
-/**
-  if (config === "links") {
-    showLinks();
-  } else if (config === "magnets" || !config) {
-    showMagnets();
+  config = localStorage.getItem("linkToggle");
+  toggleCss = document.querySelector("#toggleLinks");
+  if (config === "magnets" || !config) {
+    toggleCss.textContent = magnetCss + magnetBtn;
+    toggle.checked = true;
+  } else {
+    toggleCss.textContent = linkCss;
+    toggle.checked = false;
   }
-**/
 }
 
 function attachToggleListener() {
@@ -62,51 +64,31 @@ function attachToggleListener() {
   }
 }
 
-function removeToggleListener() {
-  if (toggleAttached) {
-    const events = main._events?.click || [];
-    // Start loop from index 1 to leave the first event listener intact
-    for (let i = 1; i < events.length; i++) {
-      torrentlist.removeEventListener("click", events[i]);
-    }
-  }
-}
-
 function toggleHandler(event) {
-  if (!event.target.matches("#linkswitch")) {
-    console.log("Couldn't find #linkswitch in DOM");
-    return;
-  } else if (event.target.matches("#linkswitch")) {
-    linkToggle();
+  if (!event.target.matches("#linkswitch")) {return;}
+  else {doToggle();}
+  if (debugging) {console.log("Detected click on #linkswitch");}
+}
+
+function doToggle() {
+  config = localStorage.getItem("linkToggle");
+  toggleCss = document.querySelector("#toggleLinks");
+  toggleCss.textContent = "";
+  if (config === "magnets" || !config) {
+    toggleCss.textContent = linkCss;
+    toggle.checked = false;
+    localStorage["linkToggle"] = "links";
+  } else {
+    toggleCss.textContent = magnetCss + magnetBtn;
+    toggle.checked = true;
+    localStorage["linkToggle"] = "magnets";
   }
-  console.log("Detected click on link toggler");
-}
-
-function linkToggle() {
-  if (config === "links") {
-    showMagnets();
-  } else if (config === "magnets" || !config) {
-    showLinks();
-  }
-}
-
-function showLinks() {
-  toggle.checked = false;
-  toggleCss.textContent = linkCss;
-  localStorage.setItem("linkToggle", "links");
-  config = "links";
-}
-
-function showMagnets() {
-  toggle.checked = true;
-  toggleCss.textContent = magnetCss + magnetBtn;
-  config = "magnets";
-  localStorage.setItem("linkToggle", "magnets");
+  if (debugging) {console.log("#toggleLinks = " + toggleCss.innerHTML);}
 }
 
 function attachMagnetListeners() {
   if (!toggle) {
-    console.log("Couldn't find #linkswitch in DOM, not attaching magnet listeners");
+    if (debugging) {console.log("Couldn't find #linkswitch in DOM, not attaching magnet listeners");}
     return;
   }
 
@@ -118,10 +100,10 @@ function attachMagnetListeners() {
     toast.style.display = "block";
     let link = anchor;
     if (!link || !link.startsWith("magnet:?xt=urn:btih:")) {
-      console.log("Magnet link not valid");
+      if (debugging) {console.log("Magnet link not valid");}
       return;
     } else {
-      console.log("Magnet link: " + link + " copied to clipboard");
+      if (debugging) {console.log("Magnet link: " + link + " copied to clipboard");}
     }
     let magnetHash = link.substring(link.indexOf(":") + 1, link.indexOf("&"));
     let magnetName = link.substring(link.lastIndexOf("=") + 1);
@@ -134,7 +116,7 @@ function attachMagnetListeners() {
     document.body.removeChild(tempInput);
     toast.innerHTML = "Magnet link copied to clipboard" + (magnetName !== null ? ": <b> " +
                        magnetName + "</b>" : "") + "<br>Hash: <b>" + magnetHash + "</b>";
-    console.log("Magnet link copied to clipboard: " + link);
+    if (debugging) {console.log("Magnet link copied to clipboard: " + link);}
     toastTimeoutId = setTimeout(function() {
       toast.style.display = "none";
       toast.textContent = "";
@@ -146,7 +128,7 @@ function attachMagnetListeners() {
       if (!event.target.hasAttribute("data-click")) {
          event.target.setAttribute("data-click", true);
         const anchor = event.target.parentNode.href;
-        console.log("anchor reported as: " + anchor);
+        if (debugging) {console.log("anchor reported as: " + anchor);}
         if (toastTimeoutId) {
           clearTimeout(toastTimeoutId);
         }
@@ -157,16 +139,9 @@ function attachMagnetListeners() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  config = localStorage.getItem("linkToggle");
   initLinkToggler();
-  if (config === "links") {
-    //toggle.checked = false;
-  } else if (config === "magnets" || !config) {
-    //toggle.click();
-    toggle.click();
-    showMagnets();
-    //toggle.checked = true;
-  }
   attachMagnetListeners();
 });
 
-export {initLinkToggler, linkToggle};
+export {initLinkToggler};
