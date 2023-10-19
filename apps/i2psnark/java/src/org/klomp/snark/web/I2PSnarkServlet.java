@@ -847,12 +847,12 @@ public class I2PSnarkServlet extends BasicServlet {
         filterParam = req.getParameter("filter") != null ? req.getParameter("filter") : "";
         String filterQuery = "";
         String separator = "&";
-        filterQuery = separator + "filter=" + (filterParam.isEmpty() ? "all" : filterParam);
+        filterQuery = "filter=" + (filterParam.isEmpty() ? "all" : filterParam);
         boolean showSort = total > 1;
         StringBuilder hbuf = new StringBuilder(2*1024);
         hbuf.append("<tr><th class=status>");
         // show incomplete torrents at top on first click
-        String sort = "-2";
+        String sort = ("-2".equals(currentSort)) ? "2" : "-2";
         if (showSort) {
             hbuf.append("<span class=sortIcon>");
             if (currentSort == null || "-2".equals(currentSort)) {
@@ -866,7 +866,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 sort = "2";
             }
             hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
-            hbuf.append(filterQuery);
+            hbuf.append(separator).append(filterQuery);
             hbuf.append("\">");
         }
         String tx = _t("Status");
@@ -883,14 +883,16 @@ public class I2PSnarkServlet extends BasicServlet {
                     break;
                 }
             }
-
-            //if (hasPeers) {
-                String queryString = peerParam != null ? getQueryString(req, "", null, null) : getQueryString(req, "1", null, null);
-                String link = _contextPath + '/' + queryString + filterQuery;
-                tx = peerParam != null ? _t("Hide Peers") : _t("Show Peers");
-                String img = peerParam != null ? "hidepeers" : "showpeers";
-                hbuf.append(" <a href=\"" + link + "\">").append(toThemeImg(img, tx, tx)).append("</a>\n");
-            //}
+            String queryString = peerParam != null ? getQueryString(req, "", null, null) : getQueryString(req, "1", null, null);
+            String link = _contextPath + '/' + queryString + filterQuery;
+            tx = peerParam != null ? _t("Hide Peers") : _t("Show Peers");
+            String img = peerParam != null ? "hidepeers" : "showpeers";
+            if (peerParam == null) {
+                hbuf.append(" <a href=\"" + link.replace("filter", "&filter") + "\">");
+            } else {
+                hbuf.append(" <a href=\"" + link.replace("filter", "?filter") + "\">");
+            }
+            hbuf.append(toThemeImg(img, tx, tx)).append("</a>\n");
         }
         hbuf.append("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden=hidden></th>");
         hbuf.append("<th id=torrentSort>");
@@ -914,7 +916,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 sort = "";
             }
             hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
-            hbuf.append(filterQuery);
+            hbuf.append(separator).append(filterQuery);
             hbuf.append("\">");
         }
         tx = _t("Torrent");
@@ -947,14 +949,15 @@ public class I2PSnarkServlet extends BasicServlet {
                         hbuf.append("<span class=ascending></span>");
                     }
                     hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
-                    hbuf.append(filterQuery);
+                    hbuf.append(separator).append(filterQuery);
                     hbuf.append("\">");
                 }
             // Translators: Please keep short or translate as " "
             tx = _t("ETA");
             hbuf.append(toThemeImg("eta", tx, showSort ? _t("Sort by {0}", _t("Estimated time remaining")) : _t("Estimated time remaining")));
-                if (showSort)
+                if (showSort) {
                     hbuf.append("</a></span>");
+                }
             }
          }
         hbuf.append("</th><th class=rxd>");
@@ -982,7 +985,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     sort = "-5";
                 }
                 hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
-                hbuf.append(filterQuery);
+                hbuf.append(separator).append(filterQuery);
                 hbuf.append("\">");
             }
             // Translators: Please keep short or translate as " "
@@ -1021,7 +1024,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     } else {
                         hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, "0", sort, filter, null));
                     }
-                    hbuf.append(filterQuery);
+                    hbuf.append(separator).append(filterQuery);
                     hbuf.append("\">");
                     // Translators: Please keep short or translate as " "
                     tx = _t("RX Rate");
@@ -1058,7 +1061,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 sort = "-7";
             }
             hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
-            hbuf.append(filterQuery);
+            hbuf.append(separator).append(filterQuery);
             hbuf.append("\">");
         }
         // Translators: Please keep short or translate as " "
@@ -1092,7 +1095,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         sort = "-9";
                     }
                     hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
-                    hbuf.append(filterQuery);
+                    hbuf.append(separator).append(filterQuery);
                     hbuf.append("\">");
                 }
                 // Translators: Please keep short or translate as " "
@@ -4094,7 +4097,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showPriority = storage != null && !storage.complete() && r.isDirectory();
 
         StringBuilder buf=new StringBuilder(4096);
-        buf.append(DOCTYPE).append("<html>\n<head>\n<title>");
+        buf.append(DOCTYPE).append("<html>\n<head>\n<meta charset=utf-8>\n<title>");
         if (title.endsWith("/"))
             title = title.substring(0, title.length() - 1);
         final String directory = title;
