@@ -92,8 +92,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final char HELLIP = '\u2026';
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
-    private boolean debug = false
-;
+    private boolean debug = false;
 
     String cspNonce = Integer.toHexString(_context.random().nextInt());
     public I2PSnarkServlet() {
@@ -541,7 +540,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         if (!isConfigure) {
             out.write("<script nonce=" + cspNonce + " type=module ");
-            out.write("src=\"" + resourcePath + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
+            out.write("src=" + resourcePath + "js/toggleLinks.js></script>\n");
         }
         if (!isStandalone()) {
             out.write(FOOTER);
@@ -1127,8 +1126,6 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if ((!_manager.util().isConnecting()) && !snarks.isEmpty()) {
             hbuf.append("<input type=submit id=actionStartAll name=action_StartAll value=\"" +
                       _t("Start All") + "\" title=\"" + _t("Start all torrents and the I2P tunnel") + "\">");
-        } else {
-            hbuf.append("");
         }
         hbuf.append("</th></tr>\n</thead>\n<tbody id=snarkTbody>");
         out.write(hbuf.toString());
@@ -1341,13 +1338,15 @@ public class I2PSnarkServlet extends BasicServlet {
         for (int i = 0; i < terms.length; i++) {
             String term = terms[i];
             if (term.length() > 0) {
-                if (searchList == null)
+                if (searchList == null) {
                     searchList = new ArrayList<String>(4);
+                }
                 searchList.add(term.toLowerCase(Locale.US));
             }
         }
-        if (searchList == null)
+        if (searchList == null) {
             return null;
+        }
         List<Snark> matches = new ArrayList<Snark>(32);
         for (Snark snark : snarks) {
             String lcname = snark.getBaseName().toLowerCase(Locale.US);
@@ -3308,7 +3307,7 @@ public class I2PSnarkServlet extends BasicServlet {
             tbuf.append(" checked");
         tbuf.append("></td><td></td><td></td></tr>\n</table>\n");
         tbuf.append("</td></tr>\n</table>\n</form>\n</div>\n<span id=createNotify class=notify hidden></span>\n</div>\n");
-        tbuf.append("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/snarkAlert.js?" + CoreVersion.VERSION + "\" type=module></script>\n");
+        tbuf.append("<script nonce=" + cspNonce + " src=" + resourcePath + "js/snarkAlert.js type=module></script>\n");
         out.write(tbuf.toString());
         out.flush();
         tbuf.setLength(0);
@@ -4085,29 +4084,31 @@ public class I2PSnarkServlet extends BasicServlet {
                            java.io.File.separatorChar;
         File override = new File(themeBase + "override.css");
         if (!isStandalone() && useSoraFont()) {
-            buf.append("<link rel=preload href=/themes/fonts/Sora.css as=style>\n" +
-                        "<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n" +
-                        "<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n" +
-                        "<link rel=stylesheet href=/themes/fonts/Sora.css>\n");
+            buf.append("<link rel=preload href=/themes/fonts/Sora.css as=style>\n")
+               .append("<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=stylesheet href=/themes/fonts/Sora.css>\n");
         } else {
-            buf.append("<link rel=preload href=/themes/fonts/DroidSans.css as=style>\n" +
-                        "<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>\n" +
-                        "<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n" +
-                        "<link rel=stylesheet href=/themes/fonts/DroidSans.css>\n");
+            buf.append("<link rel=preload href=/themes/fonts/DroidSans.css as=style>\n")
+               .append("<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=stylesheet href=/themes/fonts/DroidSans.css>\n");
         }
         if (!isStandalone() && override.exists()) {
-            buf.append(HEADER_A + _themePath + HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
+            buf.append(HEADER_A).append(_themePath).append(HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
         }
         // hide javascript-dependent buttons when js is unavailable
         buf.append("<noscript><style>.script{display:none}</style></noscript>\n")
-           .append("<link rel=\"shortcut icon\" href=\"" + _contextPath + WARBASE + "icons/favicon.svg\">\n");
-/** TODO fixup with ajax refresh
+           .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n");
+
+/** TODO event delegation so it works with ajax refresh
         if (showPriority)
             buf.append("<script nonce=" + cspNonce + " src=\"").append(_contextPath + WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\" async></script>\n");
             buf.append("<script nonce=" + cspNonce + " src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
 **/
-        buf.append("</head>\n<body display:none;pointer-events:none class=lang_" + lang + ">\n" +
-                   "<center>\n<div id=navbar><a href=\"").append(_contextPath).append("/\" title=Torrents class=\"snarkNav nav_main\">");
+
+        buf.append("</head>\n<body display:none;pointer-events:none class=lang_").append(lang).append(">\n")
+           .append("<center>\n<div id=navbar><a href=\"").append(_contextPath).append("/\" title=Torrents class=\"snarkNav nav_main\">");
         if (_contextName.equals(DEFAULT_NAME))
             buf.append(_t("I2PSnark"));
         else
@@ -4785,26 +4786,29 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<tr class=\"").append(rowClass).append(' ').append(completed).append("\">");
 
             String path = addPaths(decodedBase, item.getName());
-            if (fai.isDirectory && !path.endsWith("/"))
+            if (fai.isDirectory && !path.endsWith("/")) {
                 path=addPaths(path,"/");
+            }
             path = encodePath(path);
             String icon = toIcon(item);
             String mime = getMimeType(path);
-            if (mime == null)
+            if (mime == null) {
                 mime = "";
+            }
 
             boolean isAudio = isAudio(mime);
             boolean isVideo = !isAudio && isVideo(mime);
             int videoCount = 0;
             buf.append("<td class=\"fileIcon");
-            if (!complete)
+            if (!complete) {
                 buf.append(" volatile");
+            }
             buf.append("\">");
             String preview = null;
-            if (isVideo && complete)
+            if (isVideo && complete) {
               videoCount++;
-            if (complete ||
-                (isAudio && fai.preview > 100*1024) ||
+            }
+            if (complete || (isAudio && fai.preview > 100*1024) ||
                 (isVideo && fai.preview > 5*1024*1024 && fai.preview / (double) fai.length >= 0.01d)) {
                 String ppath = complete ? path : path + "?limit=" + fai.preview;
                 if (!complete) {
@@ -4815,14 +4819,16 @@ public class I2PSnarkServlet extends BasicServlet {
                     // scale up image thumbnails if directory also contains audio/video
                     buf.append("\n<style>.thumb{max-height:inherit!important;max-width:240px!important}</style>\n");
                     // HTML5
-                    if (isAudio)
+                    if (isAudio) {
                         buf.append("<audio");
-                    else
+                    } else {
                         buf.append("<video");
+                    }
                     buf.append(" controls><source src=\"").append(ppath);
-                    if (isVideo)
+                    if (isVideo) {
                         // display video 20 seconds in for a better chance of a thumbnail
                         buf.append("#t=20");
+                    }
                     buf.append("\" type=\"").append(mime).append("\">");
                 }
                 buf.append("<a href=\"").append(ppath).append("\">");
@@ -4834,10 +4840,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 } else {
                     buf.append(toSVG(icon, _t("Open"))).append("</a>");
                 }
-                if (isAudio)
+                if (isAudio) {
                     buf.append("</audio>");
-                else if (isVideo)
+                } else if (isVideo) {
                     buf.append("</video>");
+                }
                 if (videoCount == 1) {
                     buf.append("<script src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");
                 }
@@ -4845,17 +4852,20 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append(toSVG(icon));
             }
             buf.append("</td><td class=\"snarkFileName");
-            if (!complete)
+            if (!complete) {
                 buf.append(" volatile");
+            }
             buf.append("\">");
             if (complete) {
                 buf.append("<a href=\"").append(path);
                 buf.append("\"");
                 // send browser-viewable files to new tab to avoid potential display in iframe
-                if (isAudio || isVideo || mime.startsWith("text/") || mime.startsWith("image/") || mime.equals("application/pdf"))
+                if (isAudio || isVideo || mime.startsWith("text/") || mime.startsWith("image/") || mime.equals("application/pdf")) {
                     buf.append(" target=_blank");
-                if (mime.equals("audio/mpeg"))
+                }
+                if (mime.equals("audio/mpeg")) {
                     buf.append(" class=targetfile");
+                }
                 buf.append(">");
             }
             buf.append(DataHelper.escapeHTML(item.getName()));
@@ -4865,18 +4875,20 @@ public class I2PSnarkServlet extends BasicServlet {
                     String tags = Mp3Tags.getTags(item);
                     buf.append("<a class=tags href=\"").append(path);
                     buf.append("\" target=_blank hidden>");
-                    if (tags != null)
+                    if (tags != null) {
                         buf.append(tags);
-                    else
+                    } else {
                         buf.append(DataHelper.escapeHTML(item.getName()));
+                    }
                     buf.append("</a>");
                 }
             } else if (preview != null) {
                 buf.append(preview);
             }
             buf.append("</td><td class=snarkFileSize>");
-            if (!fai.isDirectory)
+            if (!fai.isDirectory) {
                 buf.append(formatSize(length));
+            }
             buf.append("</td><td class=\"fileStatus volatile\">");
             //buf.append(dfmt.format(new Date(item.lastModified())));
             buf.append(status);
@@ -4885,27 +4897,29 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<td class=\"priority volatile\">");
                 if ((!complete) && (!fai.isDirectory)) {
                     if (!inOrder) {
-                    buf.append("<label class=priorityHigh title=\"").append(_t("Download file at high priority")).append("\">" +
-                               "\n<input type=radio class=\"prihigh optbox\" value=5 name=\"pri.").append(fileIndex).append("\" ");
-                    if (priority > 0)
-                        buf.append("checked=checked");
-                    buf.append('>')
-                       .append(_t("High")).append("</label>");
+                    buf.append("<label class=priorityHigh title=\"")
+                       .append(_t("Download file at high priority")).append("\">")
+                       .append("\n<input type=radio class=\"prihigh optbox\" value=5 name=\"pri.")
+                       .append(fileIndex).append("\" ");
+                        if (priority > 0) {
+                            buf.append("checked=checked");
+                        }
+                        buf.append('>').append(_t("High")).append("</label>");
                     }
 
-                    buf.append("<label class=priorityNormal title=\"").append(_t("Download file at normal priority")).append("\">" +
-                               "\n<input type=radio class=\"prinorm optbox\" value=\"0\" name=\"pri.").append(fileIndex).append("\" ");
-                    if (priority == 0 || (inOrder && priority >= 0))
+                    buf.append("<label class=priorityNormal title=\"").append(_t("Download file at normal priority")).append("\">")
+                       .append("\n<input type=radio class=\"prinorm optbox\" value=\"0\" name=\"pri.").append(fileIndex).append("\" ");
+                    if (priority == 0 || (inOrder && priority >= 0)) {
                         buf.append("checked=checked");
-                    buf.append('>')
-                       .append(_t("Normal")).append("</label>");
+                    }
+                    buf.append('>').append(_t("Normal")).append("</label>");
 
-                    buf.append("<label class=prioritySkip title=\"").append(_t("Do not download this file")).append("\">" +
-                               "\n<input type=radio class=\"priskip optbox\" value=\"-9\" name=\"pri.").append(fileIndex).append("\" ");
-                    if (priority < 0)
+                    buf.append("<label class=prioritySkip title=\"").append(_t("Do not download this file")).append("\">")
+                       .append("\n<input type=radio class=\"priskip optbox\" value=\"-9\" name=\"pri.").append(fileIndex).append("\" ");
+                    if (priority < 0) {
                         buf.append("checked=checked");
-                    buf.append('>')
-                       .append(_t("Skip")).append("</label>");
+                    }
+                    buf.append('>').append(_t("Skip")).append("</label>");
                     showSaveButton = true;
                 }
                 buf.append("</td>");
@@ -4928,8 +4942,7 @@ public class I2PSnarkServlet extends BasicServlet {
 */
 
            buf.append("<input type=submit class=accept value=\"").append(_t("Save priorities"))
-               .append("\" name=savepri>\n" +
-                       "</th></tr></thead>\n");
+              .append("\" name=savpri>\n").append("</th></tr></thead>\n");
         }
         buf.append("</table>\n</div>\n");
 
@@ -4999,9 +5012,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // don't include playlist files as the browser doesn't support them
         // in the HTML5 player,
         // and if it did and prefetched, that could be a security issue
-        return (mime.startsWith("audio/") &&
-                !mime.equals("audio/mpegurl") &&
-                !mime.equals("audio/x-scpls")) ||
+        return (mime.startsWith("audio/") && !mime.equals("audio/mpegurl") && !mime.equals("audio/x-scpls")) ||
                 mime.equals("application/ogg");
     }
 
@@ -5010,11 +5021,8 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.44
      */
     private static boolean isVideo(String mime) {
-        return mime.startsWith("video/") &&
-               !mime.equals("video/x-msvideo") &&
-               !mime.equals("video/x-matroska") &&
-               !mime.equals("video/quicktime") &&
-               !mime.equals("video/x-flv");
+        return mime.startsWith("video/") && !mime.equals("video/x-msvideo") && !mime.equals("video/x-matroska") &&
+               !mime.equals("video/quicktime") && !mime.equals("video/x-flv");
     }
 
     /**
@@ -5023,8 +5031,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @since 0.9.44
      */
-    private boolean hasCompleteAudio(List<Sorters.FileAndIndex> fileList,
-                                     Storage storage, long[] remainingArray) {
+    private boolean hasCompleteAudio(List<Sorters.FileAndIndex> fileList, Storage storage, long[] remainingArray) {
         for (Sorters.FileAndIndex fai : fileList) {
             if (fai.isDirectory) {
                 // recurse
@@ -5039,12 +5046,14 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 continue;
             }
-            if (fai.remaining != 0)
+            if (fai.remaining != 0) {
                 continue;
+            }
             String name = fai.file.getName();
             String mime = getMimeType(name);
-            if (mime != null && isAudio(mime))
+            if (mime != null && isAudio(mime)) {
                 return true;
+            }
         }
         return false;
     }
@@ -5062,8 +5071,9 @@ public class I2PSnarkServlet extends BasicServlet {
         String decodedBase = decodePath(base);
         String title = decodedBase;
         String cpath = _contextPath + '/';
-        if (title.startsWith(cpath))
+        if (title.startsWith(cpath)) {
             title = title.substring(cpath.length());
+        }
 
         // Get the snark associated with this directory
         String tName;
@@ -5077,22 +5087,27 @@ public class I2PSnarkServlet extends BasicServlet {
             pathInTorrent = "/";
         }
         Snark snark = _manager.getTorrentByBaseName(tName);
-        if (snark == null)
+        if (snark == null) {
             return null;
+        }
         Storage storage = snark.getStorage();
-        if (storage == null)
+        if (storage == null) {
             return null;
+        }
         File sbase = storage.getBase();
         File r;
-        if (pathInTorrent.equals("/"))
+        if (pathInTorrent.equals("/")) {
             r = sbase;
-        else
+        } else {
             r = new File(sbase, pathInTorrent);
-        if (!r.isDirectory())
+        }
+        if (!r.isDirectory()) {
             return null;
+        }
         File[] ls = r.listFiles();
-        if (ls == null)
+        if (ls == null) {
             return null;
+        }
         List<Sorters.FileAndIndex> fileList = new ArrayList<Sorters.FileAndIndex>(ls.length);
         // precompute remaining for all files for efficiency
         long[] remainingArray = (storage != null) ? storage.remaining() : null;
@@ -5113,8 +5128,9 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder buf = new StringBuilder(512);
         getPlaylist(buf, fileList, reqURL, sort, storage, remainingArray);
         String rv = buf.toString();
-        if (rv.length() <= 0)
+        if (rv.length() <= 0) {
             return null;
+        }
         return rv;
     }
 
@@ -5146,8 +5162,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 continue;
             }
-            if (fai.remaining != 0)
+            if (fai.remaining != 0) {
                 continue;
+            }
             String name = fai.file.getName();
             String mime = getMimeType(name);
             if (mime != null && isAudio(mime)) {
@@ -5173,31 +5190,31 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(_t("Ratings and Comments").replace("and", "&amp;"))
                .append("&nbsp;&nbsp;&nbsp;");
             if (esc && !canRate) {
-                buf.append("<span id=nameRequired>");
-                buf.append(_t("Author name required to rate or comment"));
-                buf.append("&nbsp;&nbsp;<a href=\"").append(_contextPath).append("/configure#configureAuthor\">[");
-                buf.append(_t("Configure"));
-                buf.append("]</a></span>");
+                buf.append("<span id=nameRequired>")
+                   .append(_t("Author name required to rate or comment"))
+                   .append("&nbsp;&nbsp;<a href=\"").append(_contextPath).append("/configure#configureAuthor\">[")
+                   .append(_t("Configure"))
+                   .append("]</a></span>");
             } else if (esc) {
                 buf.append("<span id=nameRequired><span class=commentAuthorName title=\"")
                    .append(_t("Your author name for published comments and ratings"))
-                   .append("\">");
-                buf.append(DataHelper.escapeHTML(_manager.util().getCommentsName()));
-                buf.append("</span></span>");
+                   .append("\">")
+                   .append(DataHelper.escapeHTML(_manager.util().getCommentsName()))
+                   .append("</span></span>");
             }
 
-            buf.append("<span id=commentstoggle><label><input type=checkbox class=optbox name=enableComments id=enableComments title=\"");
-            buf.append(_t("Enable viewing and posting comments for this torrent")).append("\" ");
-            if (esc)
+            buf.append("<span id=commentstoggle><label><input type=checkbox class=optbox name=enableComments id=enableComments title=\"")
+               .append(_t("Enable viewing and posting comments for this torrent")).append("\" ");
+            if (esc) {
                 buf.append("checked=checked");
-            else if (!ec)
+            } else if (!ec) {
                 buf.append("disabled=disabled");
-            buf.append(">&nbsp;");
-            buf.append("</label> &nbsp;");
+            }
+            buf.append(">&nbsp;").append("</label> &nbsp;");
             if (ec) {
-                buf.append("<input type=submit name=setCommentsEnabled value=\"");
-                buf.append(_t("Save Preference"));
-                buf.append("\" class=accept>");
+                buf.append("<input type=submit name=setCommentsEnabled value=\"")
+                   .append(_t("Save Preference"))
+                   .append("\" class=accept>");
             }
             buf.append("</span></th></tr>\n");
 
@@ -5208,8 +5225,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("<td>\n<select name=myRating>\n");
                     for (int i = 5; i >= 0; i--) {
                         buf.append("<option value=\"").append(i).append("\" ");
-                        if (i == myRating)
+                        if (i == myRating) {
                             buf.append("selected=selected");
+                        }
                         buf.append('>');
                         if (i != 0) {
                             for (int j = 0; j < i; j++) {
@@ -5231,12 +5249,13 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("<td></td>");
                 }
                 buf.append("<td class=commentAction><input type=submit name=addComment value=\"");
-                if (er && esc)
+                if (er && esc) {
                     buf.append(_t("Rate and Comment"));
-                else if (er)
+                } else if (er) {
                     buf.append(_t("Rate Torrent"));
-                else
+                } else {
                     buf.append(_t("Add Comment"));
+                }
                 buf.append("\" class=accept></td>");
                 buf.append("</tr>\n");
             }
@@ -5310,9 +5329,10 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("</td><td class=commentText>");
                     if (esc) {
                         if (c.getText() != null) {
-                            buf.append("<div class=commentWrapper title=\"").append(_t("Submitted")).append(": ").append(fmt.format(new Date(c.getTime()))).append("\">");
-                            buf.append(DataHelper.escapeHTML(c.getText()));
-                            buf.append("</div></td><td class=commentDelete><input type=checkbox class=optbox name=\"cdelete.")
+                            buf.append("<div class=commentWrapper title=\"").append(_t("Submitted")).append(": ")
+                               .append(fmt.format(new Date(c.getTime()))).append("\">")
+                               .append(DataHelper.escapeHTML(c.getText()))
+                               .append("</div></td><td class=commentDelete><input type=checkbox class=optbox name=\"cdelete.")
                                .append(c.getID()).append("\" title=\"").append(_t("Mark for deletion")).append("\">");
                             ccount++;
                         } else {
@@ -5342,8 +5362,9 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.16
      */
     private static String getQueryString(String so) {
-        if (so != null && !so.equals(""))
+        if (so != null && !so.equals("")) {
             return "?sort=" + DataHelper.stripHTML(so);
+        }
         return "";
     }
 
@@ -5354,8 +5375,9 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.7.14
      */
     private String toIcon(File item) {
-        if (item.isDirectory())
+        if (item.isDirectory()) {
             return "folder";
+        }
         return toIcon(item.toString());
     }
 
@@ -5371,51 +5393,54 @@ public class I2PSnarkServlet extends BasicServlet {
         // Note that for this to work well, our custom mime.properties file must be loaded.
         String plc = path.toLowerCase(Locale.US);
         String mime = getMimeType(path);
-        if (mime == null)
+        if (mime == null) {
             mime = "";
-        if (mime.equals("text/html") || plc.endsWith(".jsp"))
+        }
+        if (mime.equals("text/html") || plc.endsWith(".jsp")) {
             icon = "html";
-        else if (plc.endsWith(".srt"))
+        } else if (plc.endsWith(".srt")) {
             icon = "srt";
-        else if (mime.equals("text/plain") || mime.equals("text/x-sfv") ||
-                 mime.equals("application/rtf") || plc.endsWith(".md") ||
-                 plc.endsWith(".ini") || plc.endsWith(".nfo"))
+        } else if (mime.equals("text/plain") || mime.equals("text/x-sfv") ||
+                   mime.equals("application/rtf") || plc.endsWith(".md") ||
+                   plc.endsWith(".ini") || plc.endsWith(".nfo")) {
             icon = "text";
-        else if  (mime.equals("application/epub+zip") ||
-                  mime.equals("application/x-mobipocket-ebook") ||
-                  plc.endsWith(".fb2") || plc.endsWith(".azw3") ||
-                  plc.endsWith(".azw4") || plc.endsWith(".prc"))
+        } else if (mime.equals("application/epub+zip") ||
+                   mime.equals("application/x-mobipocket-ebook") ||
+                   plc.endsWith(".fb2") || plc.endsWith(".azw3") ||
+                   plc.endsWith(".azw4") || plc.endsWith(".prc")) {
             icon = "ebook";
-        else if (mime.equals("application/x-jar") || mime.equals("application/x-java-archive") ||
-                 mime.equals("application/java-archive") || plc.endsWith(".jar") || plc.endsWith(".exe")) {
-            if (plc.contains("i2pinstall") && plc.contains("+"))
+        } else if (mime.equals("application/x-jar") || mime.equals("application/x-java-archive") ||
+                   mime.equals("application/java-archive") || plc.endsWith(".jar") || plc.endsWith(".exe")) {
+            if (plc.contains("i2pinstall") && plc.contains("+")) {
                 icon = "plus";
-            else if (plc.contains("i2pinstall"))
+            } else if (plc.contains("i2pinstall")) {
                 icon = "i2p";
-            else if (plc.endsWith(".exe"))
+            } else if (plc.endsWith(".exe")) {
                 icon = "windows";
-            else
+            } else {
                 icon = "package";
+            }
         } else if (mime.equals("application/java-archive") || plc.endsWith(".deb") || plc.endsWith(".rpm") ||
-                   plc.endsWith(".flatpak") || plc.endsWith(".snap") || plc.endsWith(".appimage"))
+                   plc.endsWith(".flatpak") || plc.endsWith(".snap") || plc.endsWith(".appimage")) {
             icon = "package";
-        else if (plc.endsWith(".xpi2p"))
+        } else if (plc.endsWith(".xpi2p")) {
             icon = "plugin";
-        else if (mime.equals("application/pdf"))
+        } else if (mime.equals("application/pdf")) {
             icon = "pdf";
-        else if (mime.startsWith("image/"))
+        } else if (mime.startsWith("image/")) {
             icon = "image";
-        else if (mime.startsWith("audio/") || mime.equals("application/ogg"))
+        } else if (mime.startsWith("audio/") || mime.equals("application/ogg")) {
             icon = "audio";
-        else if (mime.startsWith("video/"))
+        } else if (mime.startsWith("video/")) {
             icon = "video";
-        else if (mime.startsWith("font/") || plc.endsWith(".ttf") || plc.endsWith(".woff") || plc.endsWith(".woff2"))
+        } else if (mime.startsWith("font/") || plc.endsWith(".ttf") || plc.endsWith(".woff") || plc.endsWith(".woff2")) {
             icon = "font";
-        else if (mime.equals("application/zip")) {
-            if (plc.endsWith(".su3") || plc.endsWith(".su2"))
+        } else if (mime.equals("application/zip")) {
+            if (plc.endsWith(".su3") || plc.endsWith(".su2")) {
                 icon = "i2p";
-            else
+            } else {
                 icon = "compress";
+            }
         } else if (mime.equals("application/x-rar-compressed")) {
             icon = "rar";
         } else if (mime.equals("application/x-gtar") || mime.equals("application/x-tar") || plc.endsWith(".txz")) {
@@ -5424,27 +5449,28 @@ public class I2PSnarkServlet extends BasicServlet {
                    mime.equals("application/gzip") || mime.equals("application/x-7z-compressed") ||
                    mime.equals("application/x-bzip2")) {
             icon = "compress";
-        } else if (plc.endsWith(".bin"))
+        } else if (plc.endsWith(".bin")) {
             icon = "app";
-        else if (plc.endsWith(".bat") || plc.endsWith(".dll"))
+        } else if (plc.endsWith(".bat") || plc.endsWith(".dll")) {
             icon = "windows";
-        else if (plc.endsWith(".dmg"))
+        } else if (plc.endsWith(".dmg")) {
             icon = "apple";
-        else if (plc.endsWith(".iso") || plc.endsWith(".nrg"))
+        } else if (plc.endsWith(".iso") || plc.endsWith(".nrg")) {
             icon = "cd";
-        else if (plc.endsWith(".sh"))
+        } else if (plc.endsWith(".sh")) {
             icon = "shell";
-        else if (plc.contains(".css.") || plc.endsWith(".css") || plc.endsWith(".js") ||
+        } else if (plc.contains(".css.") || plc.endsWith(".css") || plc.endsWith(".js") ||
                  plc.endsWith(".cgi") || plc.endsWith(".pl") || plc.endsWith(".py") ||
                  plc.endsWith(".php") || plc.endsWith(".h") || plc.endsWith(".cpp") ||
-                 plc.endsWith(".json"))
+                 plc.endsWith(".json")) {
             icon = "code";
-        else if (plc.endsWith(".md5") || plc.contains("shasum"))
+        } else if (plc.endsWith(".md5") || plc.contains("shasum")) {
             icon = "hash";
-        else if (mime.equals("application/x-bittorrent"))
+        } else if (mime.equals("application/x-bittorrent")) {
             icon = "magnet";
-        else
+        } else {
             icon = "generic";
+        }
         return icon;
     }
 
