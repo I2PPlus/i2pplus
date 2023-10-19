@@ -23,7 +23,7 @@ const xhrsnark = new XMLHttpRequest();
 let refreshIntervalId;
 let screenLogIntervalId;
 let refreshTimeoutId;
-let debugging = true;
+let debugging = false;
 
 function refreshTorrents(callback) {
   const complete = document.getElementsByClassName("completed");
@@ -46,9 +46,7 @@ function refreshTorrents(callback) {
 
   if (!storageRefresh) {
     getRefreshInterval();
-    if (debugging) {
-      console.log("getRefreshInterval()");
-    }
+    if (debugging) {console.log("getRefreshInterval()");}
   }
 
   setLinks(query);
@@ -120,7 +118,7 @@ function refreshTorrents(callback) {
           }
         }
       } else if (requireFullRefresh && updatingResponse) {
-        console.log("html: " + updating.length + " / xhr: " + updatingResponse.length);
+        if (debugging) {console.log("html: " + updating.length + " / xhr: " + updatingResponse.length);}
         window.requestAnimationFrame(refreshAll);
         updated = true;
         requireHeadFootRefresh = false;
@@ -156,7 +154,9 @@ function refreshTorrents(callback) {
         }
       }
     }
-    console.log("updateVolatile()");
+    if (debugging) {
+      console.log("updateVolatile()");
+    }
   }
 
   function refreshHeaderAndFooter() {
@@ -195,7 +195,9 @@ function refreshTorrents(callback) {
 
 function refreshScreenLog(callback) {
   const xhrsnarklog = new XMLHttpRequest();
-  const addNotify = document.getElementById("addNotify");
+  const lowerSection = document.getElementById("lowersection");
+  const addNotify = lowerSection.querySelector("#addNotify");
+  const createNotify = lowerSection.querySelector("#createNotify");
   const screenlog = document.getElementById("messages");
   const toast = document.getElementById("toast");
   xhrsnarklog.open("GET", "/i2psnark/.ajax/xhrscreenlog.html");
@@ -212,13 +214,16 @@ function refreshScreenLog(callback) {
         if (addNotify.innerHTML !== notifyResponse.innerHTML) {
           addNotify.innerHTML = notifyResponse.innerHTML;
         }
+        if (createNotify.innerHTML !== notifyResponse.innerHTML) {
+          createNotify.innerHTML = notifyResponse.innerHTML;
+        }
       }, 500);
       toast.innerHTML = toastResponse.innerHTML;
       if (callback) {callback();}
     }
   };
   xhrsnarklog.send();
-  console.log("Updated screenlog");
+  if (debugging) {console.log("Updated screenlog");}
 }
 
 function getURL() {
@@ -237,20 +242,15 @@ function initHandlers() {
     if (filterbar) {
       showBadge();
     }
-    if (debugging) {
-      console.log("initHandlers()");
-    }
+    if (debugging) {console.log("initHandlers()");}
   });
 }
 
 function setLinks(query) {
   const home = document.querySelector(".nav_main");
   if (home) {
-    if (query !== undefined && query !== null) {
-      home.href = `/i2psnark/${query}`;
-    } else {
-      home.href = "/i2psnark/";
-    }
+    if (query !== undefined && query !== null) {home.href = `/i2psnark/${query}`;}
+    else {home.href = "/i2psnark/";}
   }
 }
 
@@ -314,19 +314,17 @@ function doRefresh() {
 }
 
 function isXHRSynced() {
-  if (!debugging) {return;}
+  if (debugging === false) {return;}
   const updating = document.querySelectorAll("#snarkTbody tr, #torrents #snarkFoot th");
   const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr, #torrents #snarkFoot th");
-  if (updatingResponse) {
-    console.log("html elements: " + updating.length + " / xhr elements: " + updatingResponse.length);
-  }
+  if (updatingResponse && debugging) {console.log("html elements: " + updating.length + " / xhr elements: " + updatingResponse.length);}
   if (updating.length != updatingResponse.length) {
     for (let i = 0; i < updatingResponse.length; i++) {
-    if (updating[i] && updating[i].outerHTML != updatingResponse[i].outerHTML) {
-      continue;
-    }
-    console.log("Missing element: Class: " + updating[i]?.className + ", ID: " + updating[i]?.id);
-    return false;
+      if (updating[i] && updating[i].outerHTML != updatingResponse[i].outerHTML) {
+        continue;
+      }
+      if (debugging) {console.log("Missing element: Class: " + updating[i]?.className + ", ID: " + updating[i]?.id);}
+      return false;
     }
   } else {
     return true;

@@ -19,27 +19,35 @@ const xhrsnarklog = new XMLHttpRequest();
 function addTorrentNotify() {
   if (notify) {
     setTimeout(function() {
-      refreshScreenLog(showAlert);
+      refreshScreenLog(showAddAlert);
     }, 1000);
   }
 }
 
-function showAlert() {
-  addNotify.removeAttribute("hidden");
-  if (!addNotify.hidden) {
-    setTimeout(() => {
-      hideAlert();
-      inputAddFile.value = "";
-      inputAddFile.focus();
-    }, 5000);
+function createTorrentNotify() {
+  if (notify) {
+    setTimeout(function() {
+      refreshScreenLog(showCreateAlert);
+    }, 1000);
   }
 }
 
-function createTorrentNotify() {
+function showAddAlert() {
+  addNotify.removeAttribute("hidden");
+  setTimeout(() => {
+    hideAlert();
+    inputAddFile.value = "";
+    inputAddFile.focus();
+  }, 5000);
+}
+
+function showCreateAlert() {
   createNotify.removeAttribute("hidden");
-  processForm.onload = refreshScreenLog();
-  hideAlert();
-  setTimeout(() => (inputNewFile.value = "", inputNewFile.focus()), 3000);
+  setTimeout(() => {
+    hideAlert();
+    inputNewFile.value = "";
+    inputNewFile.focus();
+  }, 5000);
 }
 
 function injectCss() {
@@ -53,7 +61,6 @@ function hideAlert() {
   setTimeout(() => {
     if (addNotify && createNotify) {
       addNotify.setAttribute("hidden", "");
-      //notifyTable.setAttribute("hidden", "");
       createNotify.setAttribute("hidden", "");
       notify.setAttribute("hidden", "");
     }

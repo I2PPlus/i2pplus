@@ -398,8 +398,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 sbuf.append("<noscript><meta http-equiv=refresh content=\"").append(delay).append(";")
                     .append(_contextPath).append("/").append(peerString).append("\"></noscript>\n")
                     .append("<script nonce=").append(cspNonce).append(" type=module>\n")
-                    .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js?")
-                    .append(CoreVersion.VERSION).append("\";\n")
+                    .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
                     .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
             }
             sbuf.append("<script nonce=").append(cspNonce).append(">\n").append("  const deleteMessage1 = \"")
@@ -689,15 +688,20 @@ public class I2PSnarkServlet extends BasicServlet {
             mbuf.append("<div id=screenlog hidden><ul id=messages></ul>");
         }
         mbuf.append("</div>\n");
-        mbuf.append("<script nonce=").append(cspNonce)
-            .append(" src=\"").append(resourcePath)
-            .append("js/toggleLog.js?").append(CoreVersion.VERSION)
-            .append("\" type=module defer></script>\n");
+        if (isConfigure) {
+            mbuf.append("<script nonce=").append(cspNonce).append(" type=module defer>\n")
+                .append("  import {initToggleLog} from \"").append(resourcePath).append("js/toggleLog.js").append("\";\n")
+                .append("  initToggleLog();\n")
+                .append("</script>\n");
+        } else {
+            mbuf.append("<script nonce=").append(cspNonce).append(" src=").append(resourcePath)
+                .append("js/toggleLog.js type=module defer></script>\n");
+        }
         int delay = 0;
         delay = _manager.getRefreshDelaySeconds();
         if (delay > 0 && _context.isRouterContext()) {
             mbuf.append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath)
-              .append("js/graphRefresh.js?").append(CoreVersion.VERSION).append("\" defer></script>\n");
+                .append("js/graphRefresh.js?").append(CoreVersion.VERSION).append("\" defer></script>\n");
         }
         out.write(mbuf.toString());
         out.flush();
@@ -5023,12 +5027,12 @@ public class I2PSnarkServlet extends BasicServlet {
         CommentSet comments = snark.getComments();
         if (er || ec) {
             buf.append("<div class=mainsection id=commentSection>\n");
-                buf.append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
-                if (comments != null && !comments.isEmpty())
-                    buf.append(" checked");
-                buf.append(">\n<label id=tab_comments class=toggleview for=\"toggle_comments\"><span class=tab_label>");
-                buf.append(_t("Comments"));
-            buf.append("</span></label><hr>\n");
+            buf.append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
+            if (comments != null && !comments.isEmpty()) {
+                buf.append(" checked");
+            }
+            buf.append(">\n<label id=tab_comments class=toggleview for=\"toggle_comments\">")
+               .append("<span class=tab_label>").append(_t("Comments")).append("</span></label><hr>\n");
             displayComments(snark, er, ec, esc, buf);
             // for stop/start/check
             buf.append("</div>\n");
@@ -5038,15 +5042,16 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         boolean enableLightbox = _manager.util().enableLightbox();
         if (enableLightbox) {
-            buf.append("<link rel=stylesheet href=" + resourcePath + "lightbox.css>\n");
-            buf.append("<script nonce=" + cspNonce + " src=" + resourcePath + "js/lightbox.js type=module>\n" +
-                       "  import {Lightbox} from \"" + resourcePath + "js/lightbox.js\";\n" +
-                       "  var lightbox = new Lightbox();lightbox.load();\n" +
-                       "</script>\n");
+            buf.append("<link rel=stylesheet href=").append(resourcePath).append("lightbox.css>\n");
+            buf.append("<script nonce=").append(cspNonce).append(" src=").append(resourcePath).append("js/lightbox.js type=module>\n")
+               .append("  import {Lightbox} from \"").append(resourcePath).append("js/lightbox.js\";\n")
+               .append("  var lightbox = new Lightbox();lightbox.load();\n")
+               .append("</script>\n");
         }
-        buf.append("<script nonce=" + cspNonce + " type=module>\n" +
-                          "  import {initSnarkRefresh} from \"" + resourcePath + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
-                          "  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh, true);\n</script>\n");
+        buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
+           .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js\";\n")
+           .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh, true);\n")
+           .append("</script>\n");
         int delay = _manager.getRefreshDelaySeconds();
         if (!isStandalone())
             buf.append(FOOTER);
@@ -5086,7 +5091,7 @@ public class I2PSnarkServlet extends BasicServlet {
         return (mime.startsWith("audio/") &&
                 !mime.equals("audio/mpegurl") &&
                 !mime.equals("audio/x-scpls")) ||
-               mime.equals("application/ogg");
+                mime.equals("application/ogg");
     }
 
     /**
