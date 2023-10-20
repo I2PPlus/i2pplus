@@ -430,7 +430,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _kb = new KBucketSet<Hash>(_context, ri.getIdentity().getHash(),
                                    BUCKET_SIZE, KAD_B, new RejectTrimmer<Hash>());
         _log.info("BucketSize: " + BUCKET_SIZE + "; B Value: " + KAD_B);
-        _dbDir = getDbDir();
         try {
             if (isMainDb()) {
                 _ds = new PersistentDataStore(_context, dbDir, this);
@@ -442,7 +441,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
         _dbDir = dbDir;
         _negativeCache = new NegativeLookupCache(_context);
-        _blindCache.startup();
+        if (isMainDb()) {
+            _blindCache.startup();
+        }
 
         createHandlers();
 
