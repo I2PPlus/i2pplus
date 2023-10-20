@@ -803,8 +803,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
        }
        return false;
     }
-
-    private static void cleanupRDNSCache() {
+    private static synchronized void cleanupRDNSCache() {
         List<String> keysToRemove = new ArrayList<>();
         Iterator<Map.Entry<String, CacheEntry>> it = rdnsCache.entrySet().iterator();
         while (it.hasNext()) {
@@ -814,6 +813,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 it.remove();
             }
         }
+        rdnsCache.keySet().removeAll(keysToRemove);
     }
 
     /**
