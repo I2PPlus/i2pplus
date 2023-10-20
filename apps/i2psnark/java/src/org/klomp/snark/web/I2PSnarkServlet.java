@@ -476,7 +476,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</a>\n");
             sortedTrackers = _manager.getSortedTrackers();
             buf.append("<a href=\"http://discuss.i2p/\" class=\"snarkNav nav_forum\" target=_blank title=\"")
-               .append(_t("Torrent &amp; filesharing forum")).append("\">").append(_t("Forum")).append("</a>\n");
+               .append(_t("Torrent &amp; filesharing forum")).append("\">").append(_t("Forum")).append("</a>");
             for (Tracker t : sortedTrackers) {
                 if (t.baseURL == null || !t.baseURL.startsWith("http")) {
                     continue;
@@ -509,7 +509,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<div class=page>\n<div id=mainsection class=mainsection>\n");
         out.write(buf.toString());
         buf.setLength(0);
-        //out.flush();
+        out.flush();
 
         writeMessages(out, isConfigure, peerString);
 
@@ -550,7 +550,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!isStandalone()) {
             out.write(FOOTER);
         } else {
-            out.write(FTR_STD);
+            out.write(FOOTER_STANDALONE);
         }
         out.flush();
     }
@@ -801,7 +801,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(buf.toString());
             buf.setLength(0);
             writeHiddenInputs(out, req, null);
-            //out.flush();
+            out.flush();
         }
 
         // Opera and text-mode browsers: no &thinsp; and no input type=image values submitted
@@ -813,6 +813,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // search
         boolean isSearch = false;
         String search = req.getParameter("search");
+        boolean searchActive = search != null && search.length() > 0;
         if (search != null && search.length() > 0) {
             List<Snark> matches = search(search, snarks);
             if (matches != null) {
@@ -838,9 +839,11 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         // move pagenav here so we can align it nicely without resorting to hacks
         if (isForm && total > 0 && (start > 0 || total > pageSize)) {
-            out.write("<div class=pagenavcontrols id=pagenavtop>");
-            writePageNav(out, req, start, pageSize, total, filter, noThinsp);
-            out.write("</div>");
+            if (!searchActive || searchActive && search.length() > pageSize) {
+                out.write("<div class=pagenavcontrols id=pagenavtop>");
+                writePageNav(out, req, start, pageSize, total, filter, noThinsp);
+                out.write("</div>");
+            }
         } else if (isForm && showStatusFilter && total > pageSize) {
             out.write("<div class=pagenavcontrols id=pagenavtop hidden>");
             writePageNav(out, req, start, pageSize, total, filter, noThinsp);
@@ -1114,13 +1117,13 @@ public class I2PSnarkServlet extends BasicServlet {
         if (_manager.isStopping()) {
             hbuf.append("");
         } else if (_manager.util().connected()) {
-            hbuf.append("<input type=submit id=actionStopAll name=action_StopAll value=\"" +
-                      _t("Stop All") + "\" title=\"" + _t("Stop all torrents and the I2P tunnel") + "\">");
+            hbuf.append("<input type=submit id=actionStopAll name=action_StopAll value=\"")
+                .append(_t("Stop All") + "\" title=\"" + _t("Stop all torrents and the I2P tunnel") + "\">");
             for (Snark s : snarks) {
                 if (s.isStopped()) {
                     // show startall too
-                    hbuf.append("<input type=submit id=actionStartAll name=action_StartAll value=\"" +
-                             _t("Start All") + "\" title=\"" + _t("Start all stopped torrents") + "\">");
+                    hbuf.append("<input type=submit id=actionStartAll name=action_StartAll value=\"")
+                        .append(_t("Start All") + "\" title=\"" + _t("Start all stopped torrents") + "\">");
                     break;
                 }
             }
@@ -1130,12 +1133,13 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         hbuf.append("</th></tr></thead>\n<tbody id=snarkTbody>");
         out.write(hbuf.toString());
+        hbuf.setLength(0);
         out.flush();
-        //hbuf.setLength(0);
         String uri = _contextPath + '/';
         boolean showDebug = "2".equals(peerParam);
+        int totalSnarks = snarks.size();
 
-        for (int i = 0; i < total; i++) {
+        for (int i = 0; i < totalSnarks; i++) {
             Snark snark = snarks.get(i);
             boolean showPeers = showDebug || "1".equals(peerParam) || Base64.encode(snark.getInfoHash()).equals(peerParam);
             boolean hide = i < start || i >= start + pageSize;
@@ -1167,7 +1171,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 footer.append("\" class=\"initializing");
             }
             footer.append("\"><tr><th id=torrentTotals align=left colspan=12></th></tr></tfoot>\n");
-        } else /** if (snarks.size() > 1) */ {
+        } else if (snarks.size() > 1) {
 
             // Add a pagenav to bottom of table if we have 50+ torrents per page
             // TODO: disable on pages where torrents is < 50 e.g. last page
@@ -1366,8 +1370,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
         }
-        String msg = "I2PSnark search for: \"" + search + "\" returned " + matches.size() + (matches.size() == 1 ? " match" : " matches");
-        System.out.println(msg);
+        //String msg = "I2PSnark search for: \"" + search + "\" returned " + matches.size() + (matches.size() == 1 ? " match" : " matches");
+        //System.out.println(msg);
         return matches;
     }
 
@@ -3456,7 +3460,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append((showStatusFilter ? "checked " : ""))
            .append("title=\"")
            .append(_t("Show filter bar above torrents for selective display based on status"))
-           .append(" (" + _t("requires javascript") + ")")
+           .append(" (").append(_t("requires javascript")).append(")")
            .append("\"></span><br>\n")
            .append("<span class=configOption><label for=\"enableLightbox\"><b>")
            .append(_t("Enable lightbox"))
@@ -3465,7 +3469,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append((enableLightbox ? "checked " : ""))
            .append("title=\"")
            .append(_t("Use a lightbox to display images when thumbnails are clicked"))
-           .append(" (" + _t("requires javascript") + ")")
+           .append(" (").append(_t("requires javascript")).append(")")
            .append("\"></span><br>\n")
            .append("<span class=configOption><label for=\"enableAddCreate\"><b>")
            .append(_t("Persist Add/Create"))
@@ -3479,167 +3483,153 @@ public class I2PSnarkServlet extends BasicServlet {
 
 // comments/ratings
 
-        buf.append("<tr><th class=suboption>");
-        buf.append(_t("Comments &amp; Ratings"));
-        buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
-
-        buf.append("<span class=configOption><label for=\"ratings\"><b>");
-        buf.append(_t("Enable Ratings"));
-        buf.append("</b></label> <input type=checkbox class=\"optbox slider\" name=ratings id=ratings value=true "
-                  + (useRatings ? "checked " : "")
-                  + "title=\"");
-        buf.append(_t("Show ratings on torrent pages"));
-        buf.append("\" ></span><br>\n");
-
-        buf.append("<span class=configOption><label for=\"comments\"><b>");
-        buf.append(_t("Enable Comments"));
-        buf.append("</b></label> <input type=checkbox class=\"optbox slider\" name=comments id=comments value=true "
-                  + (useComments ? "checked " : "")
-                  + "title=\"");
-        buf.append(_t("Show comments on torrent pages"));
-        buf.append("\" ></span><br>\n");
-
-        buf.append("<span class=configOption id=configureAuthor><label><b>");
-        buf.append(_t("Comment Author"));
-        buf.append("</b> <input type=text name=nofilter_commentsName spellcheck=false value=\""
-                  + DataHelper.escapeHTML(_manager.util().getCommentsName()) + "\" size=15 maxlength=16 title=\"");
-        buf.append(_t("Set the author name for your comments and ratings"));
-        buf.append("\" ></label></span>\n");
-
-        buf.append("</div>\n</td></tr>\n");
+        buf.append("<tr><th class=suboption>")
+           .append(_t("Comments &amp; Ratings"))
+           .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
+           .append("<span class=configOption><label for=\"ratings\"><b>")
+           .append(_t("Enable Ratings"))
+           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=ratings id=ratings value=true ")
+           .append(useRatings ? "checked " : "")
+           .append("title=\"")
+           .append(_t("Show ratings on torrent pages"))
+           .append("\" ></span><br>\n")
+           .append("<span class=configOption><label for=\"comments\"><b>")
+           .append(_t("Enable Comments"))
+           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=comments id=comments value=true ")
+           .append(useComments ? "checked " : "")
+           .append("title=\"")
+           .append(_t("Show comments on torrent pages"))
+           .append("\" ></span><br>\n")
+           .append("<span class=configOption id=configureAuthor><label><b>")
+           .append(_t("Comment Author"))
+           .append("</b> <input type=text name=nofilter_commentsName spellcheck=false value=\"")
+           .append(DataHelper.escapeHTML(_manager.util().getCommentsName())).append("\" size=15 maxlength=16 title=\"")
+           .append(_t("Set the author name for your comments and ratings"))
+           .append("\" ></label></span>\n")
+           .append("</div>\n</td></tr>\n");
 
 // torrent options
 
-        buf.append("<tr><th class=suboption>");
-        buf.append(_t("Torrent Options"));
-        buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
-
-        buf.append("<span class=configOption><label><b>");
-        buf.append(_t("Up bandwidth limit"));
-        buf.append("</b> <input type=text name=upBW class=\"r numeric\" value=\""
-                  + _manager.util().getMaxUpBW() + "\" size=5 maxlength=5 pattern=\"[0-9]{1,5}\""
-                  + " title=\"");
-        buf.append(_t("Maximum bandwidth allocated for uploading"));
-        buf.append("\"> KBps</label> <span id=bwHoverHelp>");
-        buf.append(toThemeSVG("details", "", ""));
-        buf.append("<span id=bwHelp><i>");
-        buf.append(_t("Half available bandwidth recommended."));
-        buf.append("</i></span></span>");
+        buf.append("<tr><th class=suboption>")
+           .append(_t("Torrent Options"))
+           .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
+           .append("<span class=configOption><label><b>")
+           .append(_t("Up bandwidth limit"))
+           .append("</b> <input type=text name=upBW class=\"r numeric\" value=\"")
+           .append(_manager.util().getMaxUpBW()).append("\" size=5 maxlength=5 pattern=\"[0-9]{1,5}\"")
+           .append(" title=\"")
+           .append(_t("Maximum bandwidth allocated for uploading"))
+           .append("\"> KBps</label> <span id=bwHoverHelp>")
+           .append(toThemeSVG("details", "", ""))
+           .append("<span id=bwHelp><i>")
+           .append(_t("Half available bandwidth recommended."))
+           .append("</i></span></span>");
         if (_context.isRouterContext()) {
-            buf.append(" <a href=\"/config.jsp\" target=_blank title=\"");
-            buf.append(_t("View or change router bandwidth"));
-            buf.append("\">[");
-            buf.append(_t("Configure"));
-            buf.append("]</a>");
+            buf.append(" <a href=\"/config.jsp\" target=_blank title=\"")
+               .append(_t("View or change router bandwidth"))
+               .append("\">[")
+               .append(_t("Configure"))
+               .append("]</a>");
         }
         buf.append("</span><br>\n");
-
-        buf.append("<span class=configOption><label><b>");
-        buf.append(_t("Total uploader limit"));
-        buf.append("</b> <input type=text name=upLimit class=\"r numeric\" value=\""
-                  + _manager.util().getMaxUploaders() + "\" size=5 maxlength=3 pattern=\"[0-9]{1,3}\""
-                  + " title=\"");
-        buf.append(_t("Maximum number of peers to upload to"));
-        buf.append("\"> ");
-        buf.append(_t("peers"));
-        buf.append("</label></span><br>\n");
-
-        buf.append("<span class=configOption><label for=\"useOpenTrackers\"><b>");
-        buf.append(_t("Use open trackers also").replace(" also", ""));
-        buf.append("</b></label> <input type=checkbox class=\"optbox slider\" name=useOpenTrackers id=useOpenTrackers value=true "
-                  + (useOpenTrackers ? "checked " : "")
-                  + "title=\"");
-        buf.append(_t("Announce torrents to open trackers as well as trackers listed in the torrent file"));
-        buf.append("\"></span><br>\n");
-
-        buf.append("<span class=configOption><label for=\"useDHT\"><b>");
-        buf.append(_t("Enable DHT"));
-        buf.append("</b></label> <input type=checkbox class=\"optbox slider\" name=useDHT id=useDHT value=true "
-                  + (useDHT ? "checked " : "")
-                  + "title=\"");
-        buf.append(_t("Use DHT to find additional peers"));
-        buf.append("\"></span><br>\n");
-
-        buf.append("<span class=configOption><label for=\"autoStart\"><b>");
-        buf.append(_t("Auto start torrents"));
-        buf.append("</b> </label><input type=checkbox class=\"optbox slider\" name=autoStart id=autoStart value=true "
-                  + (autoStart ? "checked " : "")
-                  + "title=\"");
-        buf.append(_t("Automatically start torrents when added and restart torrents when I2PSnark starts"));
-        buf.append("\"></span>");
+        buf.append("<span class=configOption><label><b>")
+           .append(_t("Total uploader limit"))
+           .append("</b> <input type=text name=upLimit class=\"r numeric\" value=\"")
+           .append(_manager.util().getMaxUploaders()).append("\" size=5 maxlength=3 pattern=\"[0-9]{1,3}\"")
+           .append(" title=\"")
+           .append(_t("Maximum number of peers to upload to"))
+           .append("\"> ")
+           .append(_t("peers"))
+           .append("</label></span><br>\n")
+           .append("<span class=configOption><label for=\"useOpenTrackers\"><b>")
+           .append(_t("Use open trackers also").replace(" also", ""))
+           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=useOpenTrackers id=useOpenTrackers value=true ")
+           .append(useOpenTrackers ? "checked " : "")
+           .append("title=\"")
+           .append(_t("Announce torrents to open trackers as well as trackers listed in the torrent file"))
+           .append("\"></span><br>\n")
+           .append("<span class=configOption><label for=\"useDHT\"><b>")
+           .append(_t("Enable DHT"))
+           .append("</b></label> <input type=checkbox class=\"optbox slider\" name=useDHT id=useDHT value=true ")
+           .append(useDHT ? "checked " : "")
+           .append("title=\"")
+           .append(_t("Use DHT to find additional peers"))
+           .append("\"></span><br>\n")
+           .append("<span class=configOption><label for=\"autoStart\"><b>")
+           .append(_t("Auto start torrents"))
+           .append("</b> </label><input type=checkbox class=\"optbox slider\" name=autoStart id=autoStart value=true ")
+           .append(autoStart ? "checked " : "")
+           .append("title=\"")
+           .append(_t("Automatically start torrents when added and restart torrents when I2PSnark starts"))
+           .append("\"></span>");
 
         if (_context.isRouterContext()) {
-            buf.append("<br>\n<span class=configOption><label><b>");
-            buf.append(_t("Startup delay"));
-            buf.append("</b> <input type=text name=startupDelay size=5 maxlength=4 pattern=\"[0-9]{1,4}\" class=\"r numeric\""
-                      + " title=\"");
-            buf.append(_t("How long before auto-started torrents are loaded when I2PSnark starts"));
-            buf.append("\" value=\"" + _manager.util().getStartupDelay() + "\"> ");
-            buf.append(_t("minutes"));
-            buf.append("</label></span>");
+            buf.append("<br>\n<span class=configOption><label><b>")
+               .append(_t("Startup delay"))
+               .append("</b> <input type=text name=startupDelay size=5 maxlength=4 pattern=\"[0-9]{1,4}\" class=\"r numeric\"")
+               .append(" title=\"")
+               .append(_t("How long before auto-started torrents are loaded when I2PSnark starts"))
+               .append("\" value=\"").append(_manager.util().getStartupDelay()).append("\"> ")
+               .append(_t("minutes"))
+               .append("</label></span>");
         }
         buf.append("\n</div>\n</td></tr>\n");
 
 // data storage
 
-        buf.append("<tr><th class=suboption>");
-        buf.append(_t("Data Storage"));
-        buf.append("</th></tr><tr><td>\n<div class=optionlist>\n");
-
-        buf.append("<span class=configOption><label><b>");
-        buf.append(_t("Data directory"));
-        buf.append("</b> <input type=text name=nofilter_dataDir size=60" + " title=\"");
-        buf.append(_t("Directory where torrents and downloaded/shared files are stored"));
-        buf.append("\" value=\"" + DataHelper.escapeHTML(dataDir) + "\" spellcheck=false></label></span><br>\n");
-
-        buf.append("<span class=configOption><label for=\"filesPublic\"><b>");
-        buf.append(_t("Files readable by all"));
-        buf.append("</b> </label><input type=checkbox class=\"optbox slider\" name=filesPublic id=filesPublic value=true " +
-                  (filesPublic ? "checked " : "") + "title=\"");
-        buf.append(_t("Set file permissions to allow other local users to access the downloaded files"));
-        buf.append("\" ></span>\n");
-
-        buf.append("<span class=configOption><label for=\"maxFiles\"><b>");
-        buf.append(_t("Max files per torrent"));
-        buf.append("</b> <input type=text name=maxFiles size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"" + " title=\"");
-        buf.append(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"));
-        buf.append("\" value=\"" + _manager.getMaxFilesPerTorrent() + "\" spellcheck=false disabled></label></span><br>\n");
-        buf.append("</div></td></tr>\n");
+        buf.append("<tr><th class=suboption>")
+           .append(_t("Data Storage"))
+           .append("</th></tr><tr><td>\n<div class=optionlist>\n")
+           .append("<span class=configOption><label><b>")
+           .append(_t("Data directory"))
+           .append("</b> <input type=text name=nofilter_dataDir size=60").append(" title=\"")
+           .append(_t("Directory where torrents and downloaded/shared files are stored"))
+           .append("\" value=\"").append(DataHelper.escapeHTML(dataDir)).append("\" spellcheck=false></label></span><br>\n")
+           .append("<span class=configOption><label for=\"filesPublic\"><b>")
+           .append(_t("Files readable by all"))
+           .append("</b> </label><input type=checkbox class=\"optbox slider\" name=filesPublic id=filesPublic value=true ")
+           .append(filesPublic ? "checked " : "").append("title=\"")
+           .append(_t("Set file permissions to allow other local users to access the downloaded files"))
+           .append("\" ></span>\n")
+           .append("<span class=configOption><label for=\"maxFiles\"><b>")
+           .append(_t("Max files per torrent"))
+           .append("</b> <input type=text name=maxFiles size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"").append(" title=\"")
+           .append(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"))
+           .append("\" value=\"" + _manager.getMaxFilesPerTorrent() + "\" spellcheck=false disabled></label></span><br>\n")
+           .append("</div></td></tr>\n");
 
 // i2cp/tunnel configuration
 
-        buf.append("<tr><th class=suboption>");
-        buf.append(_t("Tunnel Configuration"));
-        buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
+        buf.append("<tr><th class=suboption>")
+           .append(_t("Tunnel Configuration"))
+           .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
 
         Map<String, String> options = new TreeMap<String, String>(_manager.util().getI2CPOptions());
 
-        buf.append("<span class=configOption><b>");
-        buf.append(_t("Inbound Settings"));
-        buf.append("</b> \n");
-        buf.append(renderOptions(1, 16, SnarkManager.DEFAULT_TUNNEL_QUANTITY, options.remove("inbound.quantity"), "inbound.quantity", TUNNEL));
-        buf.append("&nbsp;");
-        buf.append(renderOptions(0, 6, 3, options.remove("inbound.length"), "inbound.length", HOP));
-        buf.append("</span><br>\n");
-
-        buf.append("<span class=configOption><b>");
-        buf.append(_t("Outbound Settings"));
-        buf.append("</b> \n");
-        buf.append(renderOptions(1, 16, SnarkManager.DEFAULT_TUNNEL_QUANTITY, options.remove("outbound.quantity"), "outbound.quantity", TUNNEL));
-        buf.append("&nbsp;");
-        buf.append(renderOptions(0, 6, 3, options.remove("outbound.length"), "outbound.length", HOP));
-        buf.append("</span><br>\n");
+        buf.append("<span class=configOption><b>")
+           .append(_t("Inbound Settings"))
+           .append("</b> \n")
+           .append(renderOptions(1, 16, SnarkManager.DEFAULT_TUNNEL_QUANTITY, options.remove("inbound.quantity"), "inbound.quantity", TUNNEL))
+           .append("&nbsp;")
+           .append(renderOptions(0, 6, 3, options.remove("inbound.length"), "inbound.length", HOP))
+           .append("</span><br>\n")
+           .append("<span class=configOption><b>")
+           .append(_t("Outbound Settings"))
+           .append("</b> \n")
+           .append(renderOptions(1, 16, SnarkManager.DEFAULT_TUNNEL_QUANTITY, options.remove("outbound.quantity"), "outbound.quantity", TUNNEL))
+           .append("&nbsp;")
+           .append(renderOptions(0, 6, 3, options.remove("outbound.length"), "outbound.length", HOP))
+           .append("</span><br>\n");
 
         if (!_context.isRouterContext()) {
-            buf.append("<span class=configOption><label><b>");
-            buf.append(_t("I2CP host"));
-            buf.append("</b> <input type=text name=i2cpHost value=\""
-                      + _manager.util().getI2CPHost() + "\" size=5></label></span><br>\n");
-
-            buf.append("<span class=configOption><label><b>");
-            buf.append(_t("I2CP port"));
-            buf.append("</b> <input type=text name=i2cpPort value=\"" +
-                      + _manager.util().getI2CPPort() + "\" class=numeric size=5 maxlength=5 pattern=\"[0-9]{1,5}\" ></label></span><br>\n");
+            buf.append("<span class=configOption><label><b>")
+               .append(_t("I2CP host"))
+               .append("</b> <input type=text name=i2cpHost value=\"")
+               .append(_manager.util().getI2CPHost()).append("\" size=5></label></span><br>\n")
+               .append("<span class=configOption><label><b>")
+               .append(_t("I2CP port"))
+               .append("</b> <input type=text name=i2cpPort value=\"")
+               .append(_manager.util().getI2CPPort()).append("\" class=numeric size=5 maxlength=5 pattern=\"[0-9]{1,5}\" ></label></span><br>\n");
         }
 
         options.remove(I2PSnarkUtil.PROP_MAX_BW);
@@ -3771,10 +3761,14 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     private void writeConfigLink(PrintWriter out) throws IOException {
-        out.write("<div id=configSection>\n<span class=snarkConfig>");
-        out.write("<span id=tab_config class=configTitle><a href=\"configure\"><span class=tab_label>");
-        out.write(_t("Configuration"));
-        out.write("</span></a></span></span>\n</div>\n");
+        StringBuilder buf = new StringBuilder(192);
+        buf.append("<div id=configSection>\n<span class=snarkConfig>")
+           .append("<span id=tab_config class=configTitle><a href=\"configure\"><span class=tab_label>")
+           .append(_t("Configuration"))
+           .append("</span></a></span></span>\n</div>\n");
+        out.write(buf.toString());
+        out.flush();
+        buf.setLength(0);
     }
 
     /**
@@ -3934,7 +3928,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String FOOTER = "</div>\n</center>\n<span id=endOfPage data-iframe-height></span>\n" +
                                          "<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
                                          CoreVersion.VERSION + "\" id=iframeResizer></script>\n" + SHOWPAGE_CSS + "</body>\n</html>";
-    private static final String FTR_STD = "</div>\n</center>" + SHOWPAGE_CSS + "</body>\n</html>";
+    private static final String FOOTER_STANDALONE = "</div>\n</center>" + SHOWPAGE_CSS + "</body>\n</html>";
     private static final String IFRAME_FORM = "<iframe name=processForm id=processForm hidden></iframe>\n";
 
     /**
@@ -4589,7 +4583,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (!isStandalone()) {
                 buf.append(FOOTER);
             } else {
-                buf.append(FTR_STD);
+                buf.append(FOOTER_STANDALONE);
             }
             return buf.toString();
         }
@@ -4972,7 +4966,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!isStandalone()) {
             buf.append(FOOTER);
         } else {
-            buf.append(FTR_STD);
+            buf.append(FOOTER_STANDALONE);
         }
         return buf.toString();
     }
