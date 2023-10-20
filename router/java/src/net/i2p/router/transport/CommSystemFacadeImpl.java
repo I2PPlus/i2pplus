@@ -806,13 +806,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     private static void cleanupRDNSCache() {
         List<String> keysToRemove = new ArrayList<>();
-        for (Map.Entry<String, CacheEntry> entry : rdnsCache.entrySet()) {
+        Iterator<Map.Entry<String, CacheEntry>> it = rdnsCache.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, CacheEntry> entry = it.next();
             if (rdnsCache.size() > MAX_RDNS_CACHE_SIZE) {
                 keysToRemove.add(entry.getKey());
+                it.remove();
             }
-        }
-        for (String key : keysToRemove) {
-            rdnsCache.remove(key);
         }
     }
 
