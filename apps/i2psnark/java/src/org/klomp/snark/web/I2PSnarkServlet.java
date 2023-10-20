@@ -92,6 +92,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final char HELLIP = '\u2026';
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
+    private int searchResults;
     private boolean debug = false;
 
     String cspNonce = Integer.toHexString(_context.random().nextInt());
@@ -773,8 +774,12 @@ public class I2PSnarkServlet extends BasicServlet {
                        .append("<div id=torrentDisplay class=script>")
                        .append("<a class=filter id=all href=\"").append(buttonUrl).append("all\"><span>")
                        .append(_t("Show All")).append("<span class=badge hidden>");
-                    if (pageSizeConf < total) {
-                        buf.append(pageSizeConf).append(" / ").append(total);
+                    if (srch == null && Math.max(pageSizeConf, 10) < total) {
+                        buf.append(Math.max(pageSizeConf, 10)).append(" / ").append(total);
+                    } else if (searchResults > Math.max(pageSizeConf, 10)) {
+                        buf.append(Math.max(pageSizeConf, 10)).append(" / ").append(searchResults);
+                    } else if (srch != null && searchResults < Math.max(pageSizeConf, 10)) {
+                        buf.append(searchResults);
                     } else {
                         buf.append(total);
                     }
@@ -819,6 +824,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (matches != null) {
                 snarks = matches;
                 isSearch = true;
+                searchResults = matches.size();
             }
         }
 
@@ -3397,7 +3403,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</select>\n</span><br>\n")
            .append("<span class=configOption><label><b>")
            .append(_t("Page size"))
-           .append("</b> <input type=text name=pageSize size=5 maxlength=4 pattern=\"[0-9]{0,4}\" ")
+           .append("</b> <input type=text name=pageSize size=5 maxlength=4 min=10 pattern=\"[0-9]{0,4}\" ")
            .append("class=\"r numeric\" title=\"")
            .append(_t("Maximum number of torrents to display per page"))
            .append("\" value=\"").append(_manager.getPageSize()).append("\"> ")

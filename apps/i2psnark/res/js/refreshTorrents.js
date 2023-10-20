@@ -104,8 +104,15 @@ function refreshTorrents(callback) {
     const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr");
     const updatingCells = document.querySelectorAll("#snarkTbody tr.volatile td:not(.magnet):not(.trackerLink):not(.details.data)");
     const updatingCellsResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile td:not(.magnet):not(.trackerLink):not(.details.data)");
+    const activeBadge = filterbar.querySelector(".filter.enabled #filtercount");
 
     if (torrents) {
+      if (activeBadge) {
+        const activeBadgeResponse = xhrsnark.responseXML.querySelector(".filter.enabled #filtercount");
+        if (activeBadgeResponse && activeBadge.textContent !== activeBadgeResponse.textContent) {
+          activeBadge.textContent = activeBadgeResponse.textContent;
+        }
+      }
       if (updatingResponse && updating.length === updatingResponse.length) {
         for (let i = 0; i < updating.length; i++) {
           if (updating[i].innerHTML !== updatingResponse[i].innerHTML) {
@@ -165,8 +172,6 @@ function refreshTorrents(callback) {
     const snarkFootResponse = xhrsnark.responseXML?.getElementById("snarkFoot");
     const snarkHead = document.getElementById("snarkHead");
     const snarkHeadResponse = xhrsnark.responseXML?.getElementById("snarkHead");
-    const snarkHeadCells = torrents.querySelectorAll("#snarkHead th:not(.torrentLink)");
-    const snarkHeadCellsResponse = xhrsnark.responseXML.querySelectorAll("#snarkhead th:not(.torrentLink)");
 
     if (snarkHead && snarkHeadResponse && snarkHead.innerHTML !== snarkHeadResponse.innerHTML) {
       snarkHead.innerHTML = snarkHeadResponse.innerHTML
