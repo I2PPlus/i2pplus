@@ -71,7 +71,7 @@ class ConnectionAcceptor implements Runnable
   public synchronized void startAccepting() {
       stop = false;
       if (_log.shouldWarn())
-          _log.warn("ConnectionAcceptor: start accepting new thread? " + (thread == null));
+          _log.warn("ConnectionAcceptor: Start accepting new thread? " + (thread == null));
       if (thread == null) {
           thread = new I2PAppThread(this, "I2PSnark acceptor");
           thread.setDaemon(true);

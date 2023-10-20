@@ -244,13 +244,13 @@ public class I2PSnarkServlet extends BasicServlet {
             setXHRHeaders(resp, cspNonce, false);
             PrintWriter out = resp.getWriter();
             out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhr>\n<div id=mainsection>\n");
-            //writeMessages(out, false, peerString);
             boolean canWrite;
             synchronized(this) {
                 canWrite = _resourceBase.canWrite();
             }
             writeTorrents(out, req, canWrite);
             out.write("\n</div>\n</body>\n</html>\n");
+            out.flush();
             return;
         }
 
@@ -265,6 +265,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 canWrite = _resourceBase.canWrite();
             }
             out.write("</body>\n</html>\n");
+            out.flush();
             return;
         }
 
@@ -335,88 +336,89 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean collapsePanels = _manager.util().collapsePanels();
         setHTMLHeaders(resp, cspNonce, false);
         PrintWriter out = resp.getWriter();
-        StringBuilder sbuf = new StringBuilder(4*1024);
+        StringBuilder buf = new StringBuilder(4*1024);
         String theme = _manager.getTheme();
         String pageBackground = "#fff";
         if (theme.equals("dark")) {
           pageBackground = "#000";
         } else if (theme.equals("midnight")) {
             pageBackground = "repeating-linear-gradient(180deg,rgba(0,0,24,.75) 2px,rgba(0,0,0,.7) 4px)/100% 4px," +
-                           "var(--tile)/171px 148px,var(--offline)/0,#000010";
+                             "var(--tile)/171px 148px,var(--offline)/0,#000010";
         } else if (theme.equals("ubergine")) {
             pageBackground = "repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(48,0,48,.5) 4px)," +
-                           "repeating-linear-gradient(180deg,#080008 2px,#212 4px),var(--offline) no-repeat,#130313";
+                             "repeating-linear-gradient(180deg,#080008 2px,#212 4px),var(--offline) no-repeat,#130313";
         } else if (theme.equals("vanilla")) {
             pageBackground = "repeating-linear-gradient(180deg,#6f5b4c 1px,#a9927e 1px,#bfa388 4px),#cab39b";
         }
-        sbuf.append(DOCTYPE).append("<html style=background:").append(pageBackground).append(">\n")
-            .append("<head>\n").append("<meta charset=utf-8>\n").append("<meta name=viewport content=\"width=device-width\">\n");
+        buf.append(DOCTYPE).append("<html style=background:").append(pageBackground).append(">\n")
+           .append("<head>\n").append("<meta charset=utf-8>\n")
+           .append("<meta name=viewport content=\"width=device-width\">\n");
         if (!isStandalone() && useSoraFont()) {
-            sbuf.append("<link rel=preload href=/themes/fonts/Sora.css as=style>\n")
-                .append("<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
-                .append("<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n")
-                .append("<link rel=stylesheet href=/themes/fonts/Sora.css>\n");
+            buf.append("<link rel=preload href=/themes/fonts/Sora.css as=style>\n")
+               .append("<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=stylesheet href=/themes/fonts/Sora.css>\n");
         } else {
-            sbuf.append("<link rel=preload href=/themes/fonts/DroidSans.css as=style>\n")
-                .append("<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>\n")
-                .append("<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n")
-                .append("<link rel=stylesheet href=/themes/fonts/DroidSans.css>\n");
+            buf.append("<link rel=preload href=/themes/fonts/DroidSans.css as=style>\n")
+               .append("<link rel=preload href=/themes/fonts/DroidSans/DroidSans.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=preload href=/themes/fonts/DroidSans/DroidSans-Bold.woff2 as=font type=font/woff2 crossorigin>\n")
+               .append("<link rel=stylesheet href=/themes/fonts/DroidSans.css>\n");
         }
-        sbuf.append("<link rel=preload href=\"").append(_themePath).append("snark.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
-            .append("<link rel=preload href=\"").append(_themePath).append("images/images.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
-            .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n");
+        buf.append("<link rel=preload href=\"").append(_themePath).append("snark.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
+           .append("<link rel=preload href=\"").append(_themePath).append("images/images.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
+           .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n");
         if (!isStandalone())
-            sbuf.append("<link rel=preload href=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" as=script>\n");
-        sbuf.append("<title>");
+            buf.append("<link rel=preload href=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" as=script>\n");
+        buf.append("<title>");
         if (_contextName.equals(DEFAULT_NAME))
-            sbuf.append(_t("I2PSnark"));
+            buf.append(_t("I2PSnark"));
         else
-            sbuf.append(_contextName);
-        sbuf.append(" - ");
+            buf.append(_contextName);
+        buf.append(" - ");
         if (isConfigure) {
-            sbuf.append(_t("Configuration"));
+            buf.append(_t("Configuration"));
         } else {
             String peerParam = req.getParameter("p");
             if ("2".equals(peerParam))
-                sbuf.append(_t("Debug Mode"));
+                buf.append(_t("Debug Mode"));
             else
-                sbuf.append(_t("Anonymous BitTorrent Client"));
+                buf.append(_t("Anonymous BitTorrent Client"));
         }
-        sbuf.append("</title>\n");
+        buf.append("</title>\n");
 
         // we want it to go to the base URI so we don't refresh with some funky action= value
         int delay = 0;
         String jsPfx = _context.isRouterContext() ? "" : ".res";
         String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         if (!isConfigure) {
-            //sbuf.append("<script nonce=" + cspNonce + " type=module ");
-            //sbuf.append("src=\"" + resourcePath + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
+            //buf.append("<script nonce=" + cspNonce + " type=module ");
+            //buf.append("src=\"" + resourcePath + "js/toggleLinks.js?" + CoreVersion.VERSION + "\"></script>\n");
             delay = _manager.getRefreshDelaySeconds();
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
                 // fallback to metarefresh when javascript is disabled
-                sbuf.append("<noscript><meta http-equiv=refresh content=\"").append(delay).append(";")
-                    .append(_contextPath).append("/").append(peerString).append("\"></noscript>\n")
-                    .append("<script nonce=").append(cspNonce).append(" type=module>\n")
-                    .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
-                    .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
+                buf.append("<noscript><meta http-equiv=refresh content=\"").append(delay).append(";")
+                   .append(_contextPath).append("/").append(peerString).append("\"></noscript>\n")
+                   .append("<script nonce=").append(cspNonce).append(" type=module>\n")
+                   .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
+                   .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
             }
-            sbuf.append("<script nonce=").append(cspNonce).append(">\n").append("  const deleteMessage1 = \"")
-                .append(_t("Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?")).append("\";\n")
-                .append("  const deleteMessage2 = \"")
-                .append(_t("Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?")).append("\";\n</script>\n")
-                .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/delete.js?")
-                .append(CoreVersion.VERSION).append("\"></script>\n")
-                .append("<link rel=stylesheet href=").append(resourcePath).append("toast.css>\n");
+            buf.append("<script nonce=").append(cspNonce).append(">\n").append("  const deleteMessage1 = \"")
+               .append(_t("Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?")).append("\";\n")
+               .append("  const deleteMessage2 = \"")
+               .append(_t("Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?")).append("\";\n</script>\n")
+               .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/delete.js?")
+               .append(CoreVersion.VERSION).append("\"></script>\n")
+               .append("<link rel=stylesheet href=").append(resourcePath).append("toast.css>\n");
         }
 
         // custom dialog boxes for javascript alerts
-        //sbuf.append("<script src=\"" + jsPfx + "/js/custom-alert.js\"></script>\n");
-        //sbuf.append("<link rel=stylesheet href=\"" + _contextPath + WARBASE + "custom-alert.css\">\n");
+        //buf.append("<script src=\"" + jsPfx + "/js/custom-alert.js\"></script>\n");
+        //buf.append("<link rel=stylesheet href=\"" + _contextPath + WARBASE + "custom-alert.css\">\n");
 
         // selected theme inserted here
-        sbuf.append(HEADER_A + _themePath + HEADER_B + "\n");
-        sbuf.append(HEADER_A + _themePath + HEADER_I + "\n"); // load css image assets
+        buf.append(HEADER_A + _themePath + HEADER_B + "\n");
+        buf.append(HEADER_A + _themePath + HEADER_I + "\n"); // load css image assets
         String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
                            java.io.File.separatorChar + "docs" + java.io.File.separatorChar + "themes" +
                            java.io.File.separatorChar + "snark" + java.io.File.separatorChar + _manager.getTheme() +
@@ -424,87 +426,90 @@ public class I2PSnarkServlet extends BasicServlet {
         File override = new File(themeBase + "override.css");
         int rnd = _context.random().nextInt(3);
         if (!isStandalone() && rnd == 0 && _manager.getTheme().equals("light")) {
-            sbuf.append("<style>#screenlog{background:url(/themes/snark/light/images/k2.webp) no-repeat right bottom,")
-                .append("repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),var(--snarkGraph) no-repeat,")
-                .append("var(--th);background-size:72px auto,100%,calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom,")
-                .append("center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n");
+            buf.append("<style>#screenlog{background:url(/themes/snark/light/images/k2.webp) no-repeat right bottom,")
+               .append("repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),var(--snarkGraph) no-repeat,")
+               .append("var(--th);background-size:72px auto,100%,calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom,")
+               .append("center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n");
         }
         if (!isStandalone() && override.exists()) {
-            sbuf.append(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
+            buf.append(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
         }
 
         // larger fonts for cjk translations
         String lang = (Translate.getLanguage(_manager.util().getContext()));
         long now = _context.clock().now();
         if (lang.equals("zh") || lang.equals("ja") || lang.equals("ko"))
-            sbuf.append(HEADER_A + _themePath + HEADER_D + "\n");
+            buf.append(HEADER_A + _themePath + HEADER_D + "\n");
 
         //  ...and inject CSS to display panels uncollapsed
         if (noCollapse || !collapsePanels) {
-            sbuf.append(HEADER_A + _themePath + HEADER_C + "\n");
+            buf.append(HEADER_A + _themePath + HEADER_C + "\n");
         }
         // add placeholders filterbar, toggleLog, toggleLinks css
-        sbuf.append("<style id=cssfilter></style>\n").append("<style id=toggleLogCss></style>\n").append("<style id=toggleLinks></style>\n");
+        buf.append("<style id=cssfilter></style>\n").append("<style id=toggleLogCss></style>\n").append("<style id=toggleLinks></style>\n");
         if (!isStandalone() && delay <= 0) {
-            sbuf.append("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp")
-                .append("?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160")
-                .append("&hideLegend=true&hideTitle=true&hideGrid=true&t=").append(now).append("\')}\"</style>");
+            buf.append("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp")
+               .append("?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160")
+               .append("&hideLegend=true&hideTitle=true&hideGrid=true&t=").append(now).append("\')}\"</style>");
         }
-        sbuf.append("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"").append(_manager.getTheme())
-            .append(" lang_").append(lang).append("\">\n<center>\n")
-            .append(IFRAME_FORM);
+        buf.append("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"").append(_manager.getTheme())
+           .append(" lang_").append(lang).append("\">\n<center>\n")
+           .append(IFRAME_FORM);
         List<Tracker> sortedTrackers = null;
         if (isConfigure) {
-            sbuf.append("<div id=navbar>\n<a href=\"").append(_contextPath).append("/\" title=\"").append(_t("Torrents"))
-                .append("\" class=\"snarkNav nav_main\">");
+            buf.append("<div id=navbar>\n<a href=\"").append(_contextPath).append("/\" title=\"").append(_t("Torrents"))
+               .append("\" class=\"snarkNav nav_main\">");
             if (_contextName.equals(DEFAULT_NAME)) {
-                sbuf.append(_t("I2PSnark"));
+                buf.append(_t("I2PSnark"));
             } else {
-                sbuf.append(_contextName);
+                buf.append(_contextName);
             }
-            sbuf.append("</a>\n");
+            buf.append("</a>\n");
         } else {
-            sbuf.append("<div id=navbar>\n<a href=\"").append(_contextPath).append('/').append(peerString)
-                .append("\" title=\"").append(_t("Refresh page")).append("\" class=\"snarkNav nav_main\">");
-            if (_contextName.equals(DEFAULT_NAME))
-                sbuf.append(_t("I2PSnark"));
-            else
-                sbuf.append(_contextName);
-            sbuf.append("</a>\n");
-            sortedTrackers = _manager.getSortedTrackers();
-            sbuf.append("<a href=\"http://discuss.i2p/\" class=\"snarkNav nav_forum\" target=_blank title=\"")
-                .append(_t("Torrent &amp; filesharing forum")).append("\">").append(_t("Forum")).append("</a>\n");
-            for (Tracker t : sortedTrackers) {
-                if (t.baseURL == null || !t.baseURL.startsWith("http"))
-                    continue;
-                if (_manager.util().isKnownOpenTracker(t.announceURL))
-                    continue;
-                sbuf.append("\n<a href=\"").append(t.baseURL).append("\" class=\"snarkNav nav_tracker\" target=_blank>").append(t.name).append("</a>");
+            buf.append("<div id=navbar>\n<a href=\"").append(_contextPath).append('/').append(peerString)
+               .append("\" title=\"").append(_t("Refresh page")).append("\" class=\"snarkNav nav_main\">");
+            if (_contextName.equals(DEFAULT_NAME)) {
+                buf.append(_t("I2PSnark"));
+            } else {
+                buf.append(_contextName);
             }
-            sbuf.append("\n<a href=\"http://btdigg.i2p/\" class=\"snarkNav nav_search\" target=_blank title=\"")
-                .append(_t("I2P-based search engine for clearnet-hosted torrents")).append("\">").append(_t("BTDigg")).append("</a>");
+            buf.append("</a>\n");
+            sortedTrackers = _manager.getSortedTrackers();
+            buf.append("<a href=\"http://discuss.i2p/\" class=\"snarkNav nav_forum\" target=_blank title=\"")
+               .append(_t("Torrent &amp; filesharing forum")).append("\">").append(_t("Forum")).append("</a>\n");
+            for (Tracker t : sortedTrackers) {
+                if (t.baseURL == null || !t.baseURL.startsWith("http")) {
+                    continue;
+                }
+                if (_manager.util().isKnownOpenTracker(t.announceURL)) {
+                    continue;
+                }
+                buf.append("\n<a href=\"").append(t.baseURL).append("\" class=\"snarkNav nav_tracker\" target=_blank>").append(t.name).append("</a>");
+            }
+            buf.append("\n<a href=\"http://btdigg.i2p/\" class=\"snarkNav nav_search\" target=_blank title=\"")
+               .append(_t("I2P-based search engine for clearnet-hosted torrents")).append("\">").append(_t("BTDigg")).append("</a>");
         }
         if (_manager.getTorrents().size() > 1) {
-            String s = req.getParameter("s");
-            sbuf.append("<form id=snarkSearch action=\"").append(_contextPath).append("\" method=GET hidden>\n")
-                .append("<span id=searchwrap><input id=searchInput type=search required name=s size=20 placeholder=\"")
-                .append(_t("Search torrents"))
-                .append("\"");
+            String s = req.getParameter("search");
+            buf.append("<form id=snarkSearch action=\"").append(_contextPath).append("\" method=GET hidden>\n")
+               .append("<span id=searchwrap><input id=searchInput type=search required name=search size=20 placeholder=\"")
+               .append(_t("Search torrents"))
+               .append("\"");
             if (s != null) {
-                sbuf.append(" value=\"").append(DataHelper.escapeHTML(s)).append('"');
+                buf.append(" value=\"").append(DataHelper.escapeHTML(s)).append('"');
             }
-            sbuf.append("><a href=").append(_contextPath).append(" title=\"").append(_t("Clear search"))
-                .append("\" hidden>x</a></span><input type=submit value=\"Search\">\n").append("</form>\n");
-            //sbuf.append("<script src=\"" + resourcePath + "js/search.js?" + CoreVersion.VERSION + "\"></script>");
+            buf.append("><a href=").append(_contextPath).append(" title=\"").append(_t("Clear search"))
+               .append("\" hidden>x</a></span><input type=submit value=\"Search\">\n").append("</form>\n");
+            //buf.append("<script src=\"" + resourcePath + "js/search.js?" + CoreVersion.VERSION + "\"></script>");
         }
-        sbuf.append("</div>\n");
+        buf.append("</div>\n");
         String newURL = req.getParameter("newURL");
         if (newURL != null && newURL.trim().length() > 0 && req.getMethod().equals("GET"))
             _manager.addMessage(_t("Click \"Add torrent\" button to fetch torrent"));
-        sbuf.append("<div class=page>\n<div id=mainsection class=mainsection>\n");
-        out.write(sbuf.toString());
-        out.flush();
-        sbuf.setLength(0);
+        buf.append("<div class=page>\n<div id=mainsection class=mainsection>\n");
+        out.write(buf.toString());
+        buf.setLength(0);
+        //out.flush();
 
         writeMessages(out, isConfigure, peerString);
 
@@ -547,6 +552,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } else {
             out.write(FTR_STD);
         }
+        out.flush();
     }
 
     /**
@@ -718,7 +724,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String filter = req.getParameter("filter") != null ? req.getParameter("filter") : "";
         String peerParam = req.getParameter("p");
         String psize = req.getParameter("ps");
-        String srch = req.getParameter("s");
+        String srch = req.getParameter("search");
         String srt = req.getParameter("sort");
         String stParam = req.getParameter("st");
         int refresh = _manager.getRefreshDelaySeconds();
@@ -746,7 +752,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         activeQuery.append("sort=" + srt + "&");
                     }
                     if (srch != null) {
-                        activeQuery.append("s=" + srch + "&");
+                        activeQuery.append("search=" + srch + "&");
                     }
                     if (psize != null) {
                         activeQuery.append("ps=" + psize + "&");
@@ -764,9 +770,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     int pageSizeConf = _manager.getPageSize();
                     buttonUrl += (buttonUrl.contains("=") ? "&amp;filter=" : "?filter=");
                     buf.append("<noscript><style>.script{display:none}</style></noscript>\n")
-                        .append("<div id=torrentDisplay class=script>")
-                        .append("<a class=filter id=all href=\"").append(buttonUrl).append("all\"><span>")
-                        .append(_t("Show All")).append("<span class=badge hidden>");
+                       .append("<div id=torrentDisplay class=script>")
+                       .append("<a class=filter id=all href=\"").append(buttonUrl).append("all\"><span>")
+                       .append(_t("Show All")).append("<span class=badge hidden>");
                     if (pageSizeConf < total) {
                         buf.append(pageSizeConf).append(" / ").append(total);
                     } else {
@@ -792,10 +798,10 @@ public class I2PSnarkServlet extends BasicServlet {
                         .append("</div>\n");
                 }
             }
-            writeHiddenInputs(buf, req, null);
             out.write(buf.toString());
-            out.flush();
             buf.setLength(0);
+            writeHiddenInputs(out, req, null);
+            //out.flush();
         }
 
         // Opera and text-mode browsers: no &thinsp; and no input type=image values submitted
@@ -806,7 +812,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // search
         boolean isSearch = false;
-        String search = req.getParameter("s");
+        String search = req.getParameter("search");
         if (search != null && search.length() > 0) {
             List<Snark> matches = search(search, snarks);
             if (matches != null) {
@@ -1122,7 +1128,7 @@ public class I2PSnarkServlet extends BasicServlet {
             hbuf.append("<input type=submit id=actionStartAll name=action_StartAll value=\"" +
                       _t("Start All") + "\" title=\"" + _t("Start all torrents and the I2P tunnel") + "\">");
         }
-        hbuf.append("</th></tr>\n</thead>\n<tbody id=snarkTbody>");
+        hbuf.append("</th></tr></thead>\n<tbody id=snarkTbody>");
         out.write(hbuf.toString());
         out.flush();
         //hbuf.setLength(0);
@@ -1315,7 +1321,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
             footer.append("</table>\n");
             if (isForm) {
-                footer.append("</form>\n");
+                footer.append("</form>");
             }
 
             out.write(footer.toString());
@@ -1345,8 +1351,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 searchList.add(term.toLowerCase(Locale.US));
             }
         }
-        if (searchList == null) {
-            return null;
+        if (searchList == null || searchList.isEmpty()) {
+            return new ArrayList<Snark>(0); // empty list
         }
         List<Snark> matches = new ArrayList<Snark>(32);
         for (Snark snark : snarks) {
@@ -1360,6 +1366,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
         }
+        String msg = "I2PSnark search for: \"" + search + "\" returned " + matches.size() + (matches.size() == 1 ? " match" : " matches");
+        System.out.println(msg);
         return matches;
     }
 
@@ -1406,9 +1414,9 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(action).append("\" >\n");
         } else {
             // for buttons, keep the search term
-            String sParam = req.getParameter("s");
+            String sParam = req.getParameter("search");
             if (sParam != null) {
-                buf.append("<input type=hidden name=s value=\"")
+                buf.append("<input type=hidden name=search value=\"")
                    .append(DataHelper.escapeHTML(sParam)).append("\" >\n");
             }
         }
@@ -1444,7 +1452,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @param s search param override or "" for default or null to keep the same as in req
      *  @since 0.9.58
      */
-    private static String getQueryString(HttpServletRequest req, String p, String st, String so, String s) {
+    private static String getQueryString(HttpServletRequest req, String p, String st, String so, String search) {
         String url = req.getRequestURL().toString();
         String filter = req.getParameter("filter");
         StringBuilder buf = new StringBuilder(64);
@@ -1490,40 +1498,19 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             buf.append(st);
         }
-/*
-        if (filter == null) {
-            filter = req.getParameter("filter");
-            if (filter != null) {
-                filter = DataHelper.stripHTML(filter);
+        if (search == null) {
+            search = req.getParameter("search");
+            if (search != null) {
+                search = DataHelper.escapeHTML(search);
             }
         }
-        if (filter != null && !filter.isEmpty()) {
-            if (filter.equals("stopped") || filter.equals("seeding") ||
-                filter.equals("active") || filter.equals("inactive") ||
-                filter.equals("connected") || filter.equals("downloading") ||
-                filter.equals("complete") || filter.equals("incomplete")) {
-                if (buf.length() <= 0) {
-                    buf.append("?filter=");
-                } else {
-                    buf.append("&amp;filter=");
-                }
-                buf.append(filter);
-            }
-        }
-*/
-        if (s == null) {
-            s = req.getParameter("s");
-            if (s != null) {
-                s = DataHelper.escapeHTML(s);
-            }
-        }
-        if (s != null && !s.isEmpty()) {
+        if (search != null && !search.isEmpty()) {
             if (buf.length() <= 0) {
-                buf.append("?s=");
+                buf.append("?search=");
             } else {
-                buf.append("&amp;s=");
+                buf.append("&amp;search=");
             }
-            buf.append(s);
+            buf.append(search);
         }
         return buf.toString();
     }
@@ -2083,7 +2070,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 _manager.addMessage(_t("Error creating torrent - you must enter a file or directory"));
             }
         } else if ("StopAll".equals(action)) {
-            String search = req.getParameter("s");
+            String search = req.getParameter("search");
             if (search != null && search.length() > 0) {
                 List<Snark> matches = search(search, _manager.getTorrents());
                 if (matches != null) {
@@ -2095,7 +2082,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             _manager.stopAllTorrents(false);
         } else if ("StartAll".equals(action)) {
-            String search = req.getParameter("s");
+            String search = req.getParameter("search");
             if (search != null && search.length() > 0) {
                 List<Snark> matches = search(search, _manager.getTorrents());
                 if (matches != null) {
@@ -3188,7 +3175,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (newURL == null || newURL.trim().length() <= 0 || req.getMethod().equals("POST"))
             newURL = "";
         else
-            newURL = DataHelper.stripHTML(newURL);    // XSS
+            newURL = DataHelper.stripHTML(newURL); // XSS
         //String newFile = req.getParameter("newFile");
         //if ( (newFile == null) || (newFile.trim().length() <= 0) ) newFile = "";
 
@@ -3199,7 +3186,7 @@ public class I2PSnarkServlet extends BasicServlet {
         writeHiddenInputs(fbuf, req, "Add");
         fbuf.append("<input hidden class=toggle_input id=toggle_addtorrent type=checkbox");
         if (newURL.length() > 0) {
-            fbuf.append(" checked=checked>");  // force toggle open
+            fbuf.append(" checked=checked>"); // force toggle open
         } else {
             fbuf.append('>');
         }
@@ -3281,7 +3268,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (announceURL.equals(_lastAnnounceURL)) {
                 buf.append(" checked");
             }
-            buf.append("></td><td><input type=checkbox class=optbox name=\"backup_")
+            buf.append("></td><td><input type=checkbox class=\"optbox slider\" name=\"backup_")
                .append(announceURL)
                .append("\" value=\"foo\"></td><td>");
 
@@ -3717,9 +3704,9 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean isKnownOpen = _manager.util().isKnownOpenTracker(t.announceURL);
             boolean isOpen = isKnownOpen || openTrackers.contains(t.announceURL);
             buf.append("<tr class=knownTracker><td><input type=checkbox class=optbox id=\"")
-                .append(name).append("\" name=\"delete_")
-                .append(name).append("\" title=\"").append(_t("Mark tracker for deletion")).append("\">")
-                .append("</td><td><label for=\"").append(name).append("\">").append(name).append("</label></td><td>");
+               .append(name).append("\" name=\"delete_")
+               .append(name).append("\" title=\"").append(_t("Mark tracker for deletion")).append("\">")
+               .append("</td><td><label for=\"").append(name).append("\">").append(name).append("</label></td><td>");
             if (homeURL.endsWith(".i2p/")) {
                 homeURL = homeURL.substring(0, homeURL.length() - 1);
             }
@@ -3779,6 +3766,8 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
            .append("</table>\n</div>\n</div></form>\n");
         out.write(buf.toString());
+        out.flush();
+        buf.setLength(0);
     }
 
     private void writeConfigLink(PrintWriter out) throws IOException {
@@ -3940,7 +3929,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=stylesheet>";
     private static final String HEADER_I = "images/images.css?" + CoreVersion.VERSION + "\" rel=stylesheet>";
     private static final String HEADER_Z = "override.css\" rel=stylesheet>";
-    private static final String TABLE_HEADER = "<table id=torrents width=100% border=0>\n" + "<thead id=snarkHead>\n";
+    private static final String TABLE_HEADER = "<table id=torrents width=100% border=0>\n" + "<thead id=snarkHead>";
     private static final String SHOWPAGE_CSS = "<style>body{display:block!important;pointer-events:auto!important}:-moz-broken{opacity:0}</style>\n";
     private static final String FOOTER = "</div>\n</center>\n<span id=endOfPage data-iframe-height></span>\n" +
                                          "<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
@@ -4108,22 +4097,24 @@ public class I2PSnarkServlet extends BasicServlet {
 
         buf.append("</head>\n<body display:none;pointer-events:none class=lang_").append(lang).append(">\n")
            .append("<center>\n<div id=navbar><a href=\"").append(_contextPath).append("/\" title=Torrents class=\"snarkNav nav_main\">");
-        if (_contextName.equals(DEFAULT_NAME))
+        if (_contextName.equals(DEFAULT_NAME)) {
             buf.append(_t("I2PSnark"));
-        else
+        } else {
             buf.append(_contextName);
+        }
         buf.append("</a>\n</div>\n");
 
-        if (parent)  // always true
+        if (parent) { // always true
             buf.append("<div class=page id=dirlist>\n");
+        }
         // for stop/start/check
         final boolean er = snark != null && _manager.util().ratingsEnabled();
         final boolean ec = snark != null && _manager.util().commentsEnabled(); // global setting
         final boolean esc = ec && _manager.getSavedCommentsEnabled(snark); // per-torrent setting
         final boolean includeForm = showStopStart || showPriority || er || ec;
         if (includeForm) {
-            buf.append("<form action=\"").append(base).append("\" method=POST>\n");
-            buf.append("<input type=hidden name=nonce value=\"").append(_nonce).append("\" >\n");
+            buf.append("<form action=\"").append(base).append("\" method=POST>\n")
+               .append("<input type=hidden name=nonce value=\"").append(_nonce).append("\" >\n");
             if (sortParam != null) {
                 buf.append("<input type=hidden name=sort value=\"")
                    .append(DataHelper.stripHTML(sortParam)).append("\" >\n");
@@ -4136,9 +4127,9 @@ public class I2PSnarkServlet extends BasicServlet {
             String fullPath = snark.getName();
             String baseName = encodePath((new File(fullPath)).getName());
             MetaInfo meta = snark.getMetaInfo();
-            buf.append("<div class=mainsection id=snarkInfo>");
-            buf.append("<table id=torrentInfo>\n");
-            buf.append("<tr><th colspan=2>");
+            buf.append("<div class=mainsection id=snarkInfo>")
+               .append("<table id=torrentInfo>\n")
+               .append("<tr><th colspan=2>");
             toThemeImg(buf, "torrent");
             buf.append("<b>")
                .append(_t("Torrent"))
@@ -4227,8 +4218,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMMM yyyy");
                 fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
                 long[] dates = _manager.getSavedAddedAndCompleted(snark);
-                buf.append("<tr id=torrentInfoStats>");
-                buf.append("<td colspan=3><span class=nowrap");
+                buf.append("<tr id=torrentInfoStats>")
+                   .append("<td colspan=3><span class=nowrap");
                 if (dat > 0) {
                     String date = fmt.format(new Date(dat));
                     buf.append(" title=\"").append(_t("Created")).append(": ").append(date).append("\"");
@@ -4273,10 +4264,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 long uploaded = snark.getUploaded();
                 if (uploaded > 0) {
                     double ratio = uploaded / ((double) snark.getTotalLength());
-                    if (ratio < 0.1)
+                    if (ratio < 0.1) {
                         buf.append((new DecimalFormat("0.000")).format(ratio));
-                    else
+                    } else {
                         buf.append((new DecimalFormat("0.00")).format(ratio));
+                    }
                     buf.append("&#8239;x");
                 } else {
                     buf.append('0');
@@ -4290,11 +4282,12 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append(">");
                 toThemeImg(buf, "head_rx");
                 buf.append("<b>");
-                if (completion < 1.0)
+                if (completion < 1.0) {
                     buf.append(_t("Completion")).append(":</b> ").append((new DecimalFormat("0.0%"))
                        .format(completion).replace("0.0%","0%"));
-                else
+                } else {
                     buf.append(_t("Complete")).append("</b>");
+                }
                 buf.append("</span>");
 
                 if (meta != null) {
@@ -4366,10 +4359,11 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("<span class=info_tracker>");
                         boolean more = false;
                         for (String s : alist2) {
-                            if (more)
+                            if (more) {
                                 buf.append("<span class=info_tracker>");
-                            else
+                            } else {
                                 more = true;
+                            }
                             buf.append(getShortTrackerLink(DataHelper.stripHTML(s)
                                .replaceAll(cryptb32, "tracker.crypthost.i2p")
                                .replaceAll(freedomb32, "torrfreedom.i2p")
@@ -4384,8 +4378,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 } else {
                     if (meta != null) {
                     announce = meta.getAnnounce();
-                    if (announce == null)
-                       announce = snark.getTrackerURL();
+                    if (announce == null) {
+                        announce = snark.getTrackerURL();
+                    }
                     if (announce != null) {
                         announce = DataHelper.stripHTML(announce)
                            .replace(postmanb64, "tracker2.postman")
@@ -4402,11 +4397,11 @@ public class I2PSnarkServlet extends BasicServlet {
                            .append("\"><td colspan=3>");
                         toThemeImg(buf, "torrent");
                         buf.append("<b>")
-                           .append(_t("Tracker")).append(":</b> ");
-                        buf.append("<span class=\"info_tracker primary\">");
-                        buf.append(getShortTrackerLink(announce, snark.getInfoHash()));
-                        buf.append("</span> ");
-                        buf.append("</td></tr>\n");
+                           .append(_t("Tracker")).append(":</b> ")
+                           .append("<span class=\"info_tracker primary\">")
+                           .append(getShortTrackerLink(announce, snark.getInfoHash()))
+                           .append("</span> ")
+                           .append("</td></tr>\n");
                         }
                     }
                 }
@@ -4422,17 +4417,17 @@ public class I2PSnarkServlet extends BasicServlet {
                     if (!wlist.isEmpty()) {
                         buf.append("<tr id=webseeds><td colspan=3>");
                         toThemeImg(buf, "torrent");
-                        buf.append("<b>")
-                           .append(_t("Web Seeds")).append("</b>: ");
+                        buf.append("<b>").append(_t("Web Seeds")).append("</b>: ");
                         boolean more = false;
                         for (String s : wlist) {
                             buf.append("<span class=info_tracker>");
-                            if (more)
+                            if (more) {
                                 buf.append(' ');
-                            else
+                            } else {
                                 more = true;
-                            buf.append(getShortTrackerLink(DataHelper.stripHTML(s), snark.getInfoHash()));
-                            buf.append("</span> ");
+                            }
+                            buf.append(getShortTrackerLink(DataHelper.stripHTML(s), snark.getInfoHash()))
+                               .append("</span> ");
                         }
                         buf.append("</td></tr>\n");
                     }
@@ -4442,10 +4437,11 @@ public class I2PSnarkServlet extends BasicServlet {
             if (meta != null) {
                 String com = meta.getComment();
                 if (com != null && com.length() > 0) {
-                    if (com.length() > 5000)
+                    if (com.length() > 5000) {
                         com = com.substring(0, 5000) + "&hellip;";
-                    buf.append("<tr><td id=metacomment colspan=3>");
-                    buf.append("<div class=commentWrapper>")
+                    }
+                    buf.append("<tr><td id=metacomment colspan=3>")
+                       .append("<div class=commentWrapper>")
                        .append(DataHelper.stripHTML(com).replace("\r\n", "<br>").replace("\n", "<br>").replace("&apos;", "&#39;"))
                        .append("</div></td></tr>\n");
                 }
@@ -4466,19 +4462,21 @@ public class I2PSnarkServlet extends BasicServlet {
                 } else {
                     boolean isRunning = !snark.isStopped();
                     buf.append("<input type=submit value=\"");
-                    if (isRunning)
+                    if (isRunning) {
                         buf.append(_t("Stop")).append("\" name=stop class=stoptorrent>");
-                    else
+                    } else {
                         buf.append(_t("Start")).append("\" name=start class=starttorrent>");
+                    }
                     buf.append("<input type=submit name=recheck value=\"").append(_t("Force Recheck"));
-                    if (isRunning)
+                    if (isRunning) {
                         buf.append("\" class=disabled disabled=disabled title=\"")
                            .append(_t("Stop the torrent in order to check file integrity"))
                            .append("\">");
-                    else
+                    } else {
                         buf.append("\" class=reload title=\"")
                            .append(_t("Check integrity of the downloaded files"))
                            .append("\">");
+                    }
                 }
 /**
 // TODO: fix feature so checkbox status is saved
@@ -4509,8 +4507,8 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("</td></tr><tr><td><b>").append(_t("Base")).append(":</b></td><td>").append(base)
                .append("</td></tr>\n");
         }
-        buf.append("</table>\n");
-        buf.append("</div>\n");
+        buf.append("</table>\n")
+           .append("</div>\n");
 
         displayTorrentEdit(snark, base, buf);
 
@@ -4544,14 +4542,18 @@ public class I2PSnarkServlet extends BasicServlet {
                        .append("<table id=mediaContainer>\n<tr>");
                     // HTML5
                     if (isAudio) {
-                        buf.append("<th class=audio>").append(_t("Audio file: ")).append(DataHelper.escapeHTML(tName))
-                           .append("<a href=\"").append(path).append("\" title=\"Open in new tab\" target=_blank>")
+                        buf.append("<th class=audio>").append(_t("Audio file: "))
+                           .append(DataHelper.escapeHTML(tName))
+                           .append("<a href=\"").append(path)
+                           .append("\" title=\"Open in new tab\" target=_blank>")
                            .append(newTab)
                            .append("</a>").append("</th></tr>\n<tr><td>")
                            .append("<audio controls>");
                     } else {
-                        buf.append("<th id=videoTitle class=video>").append(_t("Video file: ")).append(DataHelper.escapeHTML(tName))
-                           .append("<a href=\"").append(path).append("\" title=\"Open in new tab\" target=_blank>")
+                        buf.append("<th id=videoTitle class=video>").append(_t("Video file: "))
+                           .append(DataHelper.escapeHTML(tName))
+                           .append("<a href=\"").append(path)
+                           .append("\" title=\"Open in new tab\" target=_blank>")
                            .append(newTab)
                            .append("</a>").append("</th></tr>\n<tr><td>")
                            .append("<video id=embedVideo controls>");
@@ -4562,8 +4564,8 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("</audio>");
                     } else {
                         buf.append("</video>")
-                           .append("<script nonce=" + cspNonce + " src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION +
-                                   "\"></script>\n");
+                           .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath)
+                           .append("js/getMetadata.js?").append(CoreVersion.VERSION).append("\"></script>\n");
                     }
                     buf.append("</td></tr>\n</table>\n</div>\n");
                 }
@@ -4572,20 +4574,23 @@ public class I2PSnarkServlet extends BasicServlet {
                 CommentSet comments = snark.getComments();
                 buf.append("<div class=mainsection id=commentSection>")
                    .append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
-                if (comments != null && !comments.isEmpty())
+                if (comments != null && !comments.isEmpty()) {
                     buf.append(" checked");
+                }
                 buf.append(">\n<label id=tab_comments class=toggleview for=\"toggle_comments\"><span class=tab_label>")
                    .append(_t("Comments &amp; Ratings"))
                    .append("</span></label><hr>\n");
                 displayComments(snark, er, ec, esc, buf);
                 buf.append("</div>\n");
             }
-            if (includeForm)
+            if (includeForm) {
                 buf.append("</form>\n");
-            if (!isStandalone())
+            }
+            if (!isStandalone()) {
                 buf.append(FOOTER);
-            else
+            } else {
                 buf.append(FTR_STD);
+            }
             return buf.toString();
         }
 
@@ -4601,8 +4606,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 // Storage now will not create padding files, but
                 // may have been created by an old version or other client.
                 String n = f.getName();
-                if ((n.equals(".pad") || n.equals("_pad")) && f.isDirectory())
+                if ((n.equals(".pad") || n.equals("_pad")) && f.isDirectory()) {
                     continue;
+                }
             }
             fileList.add(new Sorters.FileAndIndex(f, storage, remainingArray, previewArray));
         }
@@ -4620,19 +4626,18 @@ public class I2PSnarkServlet extends BasicServlet {
 
 // Directory info section
 
-        buf.append("<div class=mainsection id=snarkFiles>");
-        buf.append("<input hidden class=toggle_input id=toggle_files type=checkbox");
+        buf.append("<div class=mainsection id=snarkFiles>")
+           .append("<input hidden class=toggle_input id=toggle_files type=checkbox");
         // don't collapse file view if not in torrent root
         String up = "";
-        if (!isTopLevel || fileList.size() <= 10 || sortParam != null || getQueryString(up) != null)
+        if (!isTopLevel || fileList.size() <= 10 || sortParam != null || getQueryString(up) != null) {
             buf.append(" checked");
-        buf.append(">");
-        buf.append("<label id=tab_files class=toggleview for=\"toggle_files\"><span class=tab_label>");
-        buf.append(_t("Files"));
-        buf.append("</span></label><hr>\n");
-        buf.append("<table class=dirInfo>\n<thead>\n" +
-                   "<tr>\n" +
-                   "<th colspan=2>");
+        }
+        buf.append(">")
+           .append("<label id=tab_files class=toggleview for=\"toggle_files\"><span class=tab_label>")
+           .append(_t("Files"))
+           .append("</span></label><hr>\n")
+           .append("<table class=dirInfo>\n<thead>\n<tr>\n<th colspan=2>");
         String tx = _t("Directory");
         // cycle through sort by name or type
         // TODO: add "(ascending") or "(descending") suffix to tooltip to indicate direction of sort
@@ -4650,29 +4655,25 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 sort = "";
             }
-            buf.append("<a href=\"").append(base)
-               .append(getQueryString(sort)).append("\">");
+            buf.append("<a href=\"").append(base).append(getQueryString(sort)).append("\">");
         }
-        toThemeImg(buf, "file", tx,
-                   showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Name")))
-                            : tx + ": " + directory);
-        if (showSort)
+        toThemeImg(buf, "file", tx, showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Name"))) : tx + ": " + directory);
+        if (showSort) {
             buf.append("</a>");
+        }
         if (!isTopLevel) {
-            buf.append("&nbsp;");
-            buf.append(DataHelper.escapeHTML(directory.substring(dirSlash + 1)));
+            buf.append("&nbsp;").append(DataHelper.escapeHTML(directory.substring(dirSlash + 1)));
         }
         buf.append("</th><th class=snarkFileSize>");
         if (showSort) {
             sort = ("-5".equals(sortParam)) ? "5" : "-5";
-            buf.append("<a href=\"").append(base)
-               .append(getQueryString(sort)).append("\">");
+            buf.append("<a href=\"").append(base).append(getQueryString(sort)).append("\">");
         }
         tx = _t("Size");
-        toThemeImg(buf, "size", tx,
-                   showSort ? _t("Sort by {0}", tx) : tx);
-        if (showSort)
+        toThemeImg(buf, "size", tx, showSort ? _t("Sort by {0}", tx) : tx);
+        if (showSort) {
             buf.append("</a>");
+        }
         buf.append("</th><th class=fileStatus>");
         boolean showRemainingSort = showSort && showPriority;
         if (showRemainingSort) {
@@ -4689,26 +4690,24 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</th><th class=\"priority volatile\">");
             if (showSort) {
                 sort = ("13".equals(sortParam)) ? "-13" : "13";
-                buf.append("<a href=\"").append(base)
-                   .append(getQueryString(sort)).append("\">");
+                buf.append("<a href=\"").append(base).append(getQueryString(sort)).append("\">");
             }
             tx = _t("Download Priority");
-            toThemeImg(buf, "priority", tx,
-                       showSort ? _t("Sort by {0}", tx) : tx);
+            toThemeImg(buf, "priority", tx, showSort ? _t("Sort by {0}", tx) : tx);
             if (showSort)
                 buf.append("</a>");
         }
-        buf.append("</th></tr>\n</thead>\n<tbody id=dirInfo>");
+        buf.append("</th></tr></thead>\n<tbody id=dirInfo>");
         if (!isTopLevel || hasCompleteAudio(fileList, storage, remainingArray)) { // don't show row if top level or no playlist
             buf.append("<tr><td colspan=\"" + (showPriority ? '3' : '2') + "\" class=ParentDir>");
             if (!isTopLevel) { // don't show parent dir link if top level
                 up = "up";
                 buf.append("<a href=\"");
                 URIUtil.encodePath(buf, addPaths(decodedBase,"../"));
-                buf.append("/").append(getQueryString(up));
-                buf.append("\">");
-                buf.append(toThemeSVG(up, "", ""));
-                buf.append(' ')
+                buf.append("/").append(getQueryString(up))
+                   .append("\">")
+                   .append(toThemeSVG(up, "", ""))
+                   .append(' ')
                    .append(_t("Up to higher level directory").replace("Up to higher level", "Parent"))
                    .append("</a>");
             }
@@ -4717,11 +4716,11 @@ public class I2PSnarkServlet extends BasicServlet {
             // playlist button
             if (hasCompleteAudio(fileList, storage, remainingArray)) {
                 buf.append("<a href=\"").append(base).append("?playlist");
-                if (sortParam != null && !"0".equals(sortParam) && !"1".equals(sortParam))
+                if (sortParam != null && !"0".equals(sortParam) && !"1".equals(sortParam)) {
                     buf.append("&amp;sort=").append(sortParam);
-                buf.append("\">");
-                buf.append(toSVG("playlist"));
-                buf.append(' ').append(_t("Audio Playlist")).append("</a>");
+                }
+                buf.append("\">").append(toSVG("playlist"))
+                   .append(' ').append(_t("Audio Playlist")).append("</a>");
             }
             buf.append("</td></tr>\n");
         }
@@ -4752,196 +4751,190 @@ public class I2PSnarkServlet extends BasicServlet {
                     complete = true;
                     status = toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
                 } else {
-
-                            long remaining = fai.remaining;
-                            if (remaining < 0 || (remaining < 0 && fai.isDirectory)) {
-                                complete = true;
-                                status = toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
-                            } else if (remaining == 0 || length <= 0) {
-                                complete = true;
-                                status = toSVG("tick", "iconStatus", _t("Complete"), _t("Complete"));
-                            } else {
-                                priority = fai.priority;
-                                if (priority < 0)
-                                    status = "<div class=priorityIndicator>" + toImg("block") + "</div>";
-                                else if (priority == 0)
-                                    status = "<div class=priorityIndicator>" + toImg("clock") + "</div>";
-                                else
-                                    status = "<div class=priorityIndicator>" + toImg("clock_red") + "</div>";
-                                long percent = 100 * (length - remaining) / length;
-                                status += " <div class=barOuter>" +
-                                         "<div class=barInner style=\"width: " +
+                    long remaining = fai.remaining;
+                    if (remaining < 0 || (remaining < 0 && fai.isDirectory)) {
+                        complete = true;
+                        status = toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
+                    } else if (remaining == 0 || length <= 0) {
+                        complete = true;
+                        status = toSVG("tick", "iconStatus", _t("Complete"), _t("Complete"));
+                    } else {
+                        priority = fai.priority;
+                        if (priority < 0) {
+                            status = "<div class=priorityIndicator>" + toImg("block") + "</div>";
+                        } else if (priority == 0) {
+                            status = "<div class=priorityIndicator>" + toImg("clock") + "</div>";
+                        } else {
+                            status = "<div class=priorityIndicator>" + toImg("clock_red") + "</div>";
+                            long percent = 100 * (length - remaining) / length;
+                            status += " <div class=barOuter>" + "<div class=barInner style=\"width: " +
                                          percent + "%;\"><div class=barText tabindex=0 title=\"" +
                                          formatSize(remaining) + ' ' + _t("remaining") +
                                          "\">" + percent + "%</div></div></div>";
-                            }
+                        }
 
+                    }
                 }
-            }
 
-            String rowClass = (rowEven ? "rowEven" : "rowOdd");
-            String completed = (complete ? "completed" : "incomplete");
-            rowEven = !rowEven;
-            buf.append("<tr class=\"").append(rowClass).append(' ').append(completed).append("\">");
+                String rowClass = (rowEven ? "rowEven" : "rowOdd");
+                String completed = (complete ? "completed" : "incomplete");
+                rowEven = !rowEven;
+                buf.append("<tr class=\"").append(rowClass).append(' ').append(completed).append("\">");
+                String path = addPaths(decodedBase, item.getName());
+                if (fai.isDirectory && !path.endsWith("/")) {
+                    path=addPaths(path,"/");
+                }
+                path = encodePath(path);
+                String icon = toIcon(item);
+                String mime = getMimeType(path);
+                if (mime == null) {
+                    mime = "";
+                }
 
-            String path = addPaths(decodedBase, item.getName());
-            if (fai.isDirectory && !path.endsWith("/")) {
-                path=addPaths(path,"/");
-            }
-            path = encodePath(path);
-            String icon = toIcon(item);
-            String mime = getMimeType(path);
-            if (mime == null) {
-                mime = "";
-            }
-
-            boolean isAudio = isAudio(mime);
-            boolean isVideo = !isAudio && isVideo(mime);
-            int videoCount = 0;
-            buf.append("<td class=\"fileIcon");
-            if (!complete) {
-                buf.append(" volatile");
-            }
-            buf.append("\">");
-            String preview = null;
-            if (isVideo && complete) {
-              videoCount++;
-            }
-            if (complete || (isAudio && fai.preview > 100*1024) ||
-                (isVideo && fai.preview > 5*1024*1024 && fai.preview / (double) fai.length >= 0.01d)) {
-                String ppath = complete ? path : path + "?limit=" + fai.preview;
+                boolean isAudio = isAudio(mime);
+                boolean isVideo = !isAudio && isVideo(mime);
+                int videoCount = 0;
+                buf.append("<td class=\"fileIcon");
                 if (!complete) {
-                    double pct = fai.preview / (double) fai.length;
-                    preview = " &nbsp;<span class=audioPreview>" + _t("Preview") + ": " + (new DecimalFormat("0.00%")).format(pct) + "</span>";
+                    buf.append(" volatile");
                 }
-                if (isAudio || isVideo) {
-                    // scale up image thumbnails if directory also contains audio/video
-                    buf.append("\n<style>.thumb{max-height:inherit!important;max-width:240px!important}</style>\n");
-                    // HTML5
+                buf.append("\">");
+                String preview = null;
+                if (isVideo && complete) {
+                    videoCount++;
+                }
+                if (complete || (isAudio && fai.preview > 100*1024) ||
+                    (isVideo && fai.preview > 5*1024*1024 && fai.preview / (double) fai.length >= 0.01d)) {
+                    String ppath = complete ? path : path + "?limit=" + fai.preview;
+                    if (!complete) {
+                        double pct = fai.preview / (double) fai.length;
+                        preview = " &nbsp;<span class=audioPreview>" + _t("Preview") + ": " +
+                                  (new DecimalFormat("0.00%")).format(pct) + "</span>";
+                    }
+                    if (isAudio || isVideo) {
+                        // scale up image thumbnails if directory also contains audio/video
+                        buf.append("\n<style>.thumb{max-height:inherit!important;max-width:240px!important}</style>\n");
+                        // HTML5
+                        if (isAudio) {
+                            buf.append("<audio");
+                        } else {
+                            buf.append("<video");
+                        }
+                        buf.append(" controls><source src=\"").append(ppath);
+                        if (isVideo) {
+                            // display video 20 seconds in for a better chance of a thumbnail
+                            buf.append("#t=20");
+                        }
+                        buf.append("\" type=\"").append(mime).append("\">");
+                    }
+                    buf.append("<a href=\"").append(ppath).append("\">");
+                    if (mime.startsWith("image/")) {
+                        // thumbnail
+                        buf.append("<img alt=\"\" border=0 class=thumb src=\"")
+                           .append(ppath).append("\" data-lightbox data-lightbox-caption=\"")
+                           .append(item.getName()).append("\" data-lightbox-group=\"allInDir\"></a>");
+                    } else {
+                        buf.append(toSVG(icon, _t("Open"))).append("</a>");
+                    }
                     if (isAudio) {
-                        buf.append("<audio");
-                    } else {
-                        buf.append("<video");
+                        buf.append("</audio>");
+                    } else if (isVideo) {
+                        buf.append("</video>");
                     }
-                    buf.append(" controls><source src=\"").append(ppath);
-                    if (isVideo) {
-                        // display video 20 seconds in for a better chance of a thumbnail
-                        buf.append("#t=20");
+                    if (videoCount == 1) {
+                        buf.append("<script src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");
                     }
-                    buf.append("\" type=\"").append(mime).append("\">");
-                }
-                buf.append("<a href=\"").append(ppath).append("\">");
-                if (mime.startsWith("image/")) {
-                    // thumbnail
-                    buf.append("<img alt=\"\" border=0 class=thumb src=\"")
-                       .append(ppath).append("\" data-lightbox data-lightbox-caption=\"")
-                       .append(item.getName()).append("\" data-lightbox-group=\"allInDir\"></a>");
                 } else {
-                    buf.append(toSVG(icon, _t("Open"))).append("</a>");
+                    buf.append(toSVG(icon));
                 }
-                if (isAudio) {
-                    buf.append("</audio>");
-                } else if (isVideo) {
-                    buf.append("</video>");
+                buf.append("</td><td class=\"snarkFileName");
+                if (!complete) {
+                    buf.append(" volatile");
                 }
-                if (videoCount == 1) {
-                    buf.append("<script src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");
-                }
-            } else {
-                buf.append(toSVG(icon));
-            }
-            buf.append("</td><td class=\"snarkFileName");
-            if (!complete) {
-                buf.append(" volatile");
-            }
-            buf.append("\">");
-            if (complete) {
-                buf.append("<a href=\"").append(path);
-                buf.append("\"");
-                // send browser-viewable files to new tab to avoid potential display in iframe
-                if (isAudio || isVideo || mime.startsWith("text/") || mime.startsWith("image/") || mime.equals("application/pdf")) {
-                    buf.append(" target=_blank");
-                }
-                if (mime.equals("audio/mpeg")) {
-                    buf.append(" class=targetfile");
-                }
-                buf.append(">");
-            }
-            buf.append(DataHelper.escapeHTML(item.getName()));
-            if (complete) {
-                buf.append("</a>");
-                if (mime.equals("audio/mpeg")) {
-                    String tags = Mp3Tags.getTags(item);
-                    buf.append("<a class=tags href=\"").append(path);
-                    buf.append("\" target=_blank hidden>");
-                    if (tags != null) {
-                        buf.append(tags);
-                    } else {
-                        buf.append(DataHelper.escapeHTML(item.getName()));
+                buf.append("\">");
+                if (complete) {
+                    buf.append("<a href=\"").append(path).append("\"");
+                    // send browser-viewable files to new tab to avoid potential display in iframe
+                    if (isAudio || isVideo || mime.startsWith("text/") || mime.startsWith("image/") || mime.equals("application/pdf")) {
+                        buf.append(" target=_blank");
                     }
-                    buf.append("</a>");
+                    if (mime.equals("audio/mpeg")) {
+                        buf.append(" class=targetfile");
+                    }
+                    buf.append(">");
                 }
-            } else if (preview != null) {
-                buf.append(preview);
-            }
-            buf.append("</td><td class=snarkFileSize>");
-            if (!fai.isDirectory) {
-                buf.append(formatSize(length));
-            }
-            buf.append("</td><td class=\"fileStatus volatile\">");
-            //buf.append(dfmt.format(new Date(item.lastModified())));
-            buf.append(status);
-            buf.append("</td>");
-            if (showPriority) {
-                buf.append("<td class=\"priority volatile\">");
-                if ((!complete) && (!fai.isDirectory)) {
-                    if (!inOrder) {
-                    buf.append("<label class=priorityHigh title=\"")
-                       .append(_t("Download file at high priority")).append("\">")
-                       .append("\n<input type=radio class=\"prihigh optbox\" value=5 name=\"pri.")
-                       .append(fileIndex).append("\" ");
-                        if (priority > 0) {
+                buf.append(DataHelper.escapeHTML(item.getName()));
+                if (complete) {
+                    buf.append("</a>");
+                    if (mime.equals("audio/mpeg")) {
+                        String tags = Mp3Tags.getTags(item);
+                        buf.append("<a class=tags href=\"").append(path);
+                        buf.append("\" target=_blank hidden>");
+                        if (tags != null) {
+                            buf.append(tags);
+                        } else {
+                            buf.append(DataHelper.escapeHTML(item.getName()));
+                        }
+                        buf.append("</a>");
+                    }
+                } else if (preview != null) {
+                    buf.append(preview);
+                }
+                buf.append("</td><td class=snarkFileSize>");
+                if (!fai.isDirectory) {
+                    buf.append(formatSize(length));
+                }
+                buf.append("</td><td class=\"fileStatus volatile\">")
+                   //.append(dfmt.format(new Date(item.lastModified())));
+                   .append(status)
+                   .append("</td>");
+                if (showPriority) {
+                    buf.append("<td class=\"priority volatile\">");
+                    if ((!complete) && (!fai.isDirectory)) {
+                        if (!inOrder) {
+                            buf.append("<label class=priorityHigh title=\"")
+                               .append(_t("Download file at high priority")).append("\">")
+                               .append("\n<input type=radio class=\"prihigh optbox\" value=5 name=\"pri.")
+                               .append(fileIndex).append("\" ");
+                            if (priority > 0) {
+                                buf.append("checked=checked");
+                            }
+                            buf.append('>').append(_t("High")).append("</label>");
+                        }
+                        buf.append("<label class=priorityNormal title=\"").append(_t("Download file at normal priority")).append("\">")
+                           .append("\n<input type=radio class=\"prinorm optbox\" value=\"0\" name=\"pri.").append(fileIndex).append("\" ");
+                        if (priority == 0 || (inOrder && priority >= 0)) {
                             buf.append("checked=checked");
                         }
-                        buf.append('>').append(_t("High")).append("</label>");
+                        buf.append('>').append(_t("Normal")).append("</label>")
+                           .append("<label class=prioritySkip title=\"").append(_t("Do not download this file")).append("\">")
+                           .append("\n<input type=radio class=\"priskip optbox\" value=\"-9\" name=\"pri.").append(fileIndex).append("\" ");
+                        if (priority < 0) {
+                            buf.append("checked=checked");
+                        }
+                        buf.append('>').append(_t("Skip")).append("</label>");
+                        showSaveButton = true;
                     }
-
-                    buf.append("<label class=priorityNormal title=\"").append(_t("Download file at normal priority")).append("\">")
-                       .append("\n<input type=radio class=\"prinorm optbox\" value=\"0\" name=\"pri.").append(fileIndex).append("\" ");
-                    if (priority == 0 || (inOrder && priority >= 0)) {
-                        buf.append("checked=checked");
-                    }
-                    buf.append('>').append(_t("Normal")).append("</label>");
-
-                    buf.append("<label class=prioritySkip title=\"").append(_t("Do not download this file")).append("\">")
-                       .append("\n<input type=radio class=\"priskip optbox\" value=\"-9\" name=\"pri.").append(fileIndex).append("\" ");
-                    if (priority < 0) {
-                        buf.append("checked=checked");
-                    }
-                    buf.append('>').append(_t("Skip")).append("</label>");
-                    showSaveButton = true;
+                    buf.append("</td>");
                 }
-                buf.append("</td>");
+                buf.append("</tr>\n");
             }
-            buf.append("</tr>\n");
         }
         if (showSaveButton) {
-            buf.append("</tbody>\n<thead><tr id=setPriority><th colspan=5>");
-
-/* TODO: fixup so works with ajax refresh
-                       "<span class=script>");
+            buf.append("</tbody>\n<thead><tr id=setPriority><th colspan=5>")
+            /* TODO: fixup so works with ajax refresh
+                   "<span class=script>");
             if (!inOrder) {
                 buf.append("<a class=control id=setallhigh href=#>")
                    .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");
             }
             buf.append("<a class=control id=setallnorm href=#>")
-               .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n" +
-                       "<a class=control id=setallskip href=#>")
+               .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n")
+               .append("<a class=control id=setallskip href=#>")
                .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
-*/
-
-           buf.append("<input type=submit class=accept value=\"").append(_t("Save priorities"))
-              .append("\" name=savpri>\n").append("</th></tr></thead>\n");
+           */
+               .append("<input type=submit class=accept value=\"").append(_t("Save priorities"))
+               .append("\" name=savpri>\n").append("</th></tr></thead>\n");
         }
         buf.append("</table>\n</div>\n");
 
@@ -4949,17 +4942,17 @@ public class I2PSnarkServlet extends BasicServlet {
 
         CommentSet comments = snark.getComments();
         if (er || ec) {
-            buf.append("<div class=mainsection id=commentSection>\n");
-            buf.append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
+            buf.append("<div class=mainsection id=commentSection>\n")
+               .append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
             if (comments != null && !comments.isEmpty()) {
                 buf.append(" checked");
             }
-            buf.append(">\n<label id=tab_comments class=toggleview for=\"toggle_comments\">")
-               .append("<span class=tab_label>").append(_t("Comments")).append("</span></label><hr>\n");
-            displayComments(snark, er, ec, esc, buf);
-            // for stop/start/check
-            buf.append("</div>\n");
         }
+        buf.append(">\n<label id=tab_comments class=toggleview for=\"toggle_comments\">")
+           .append("<span class=tab_label>").append(_t("Comments")).append("</span></label><hr>\n");
+        displayComments(snark, er, ec, esc, buf);
+        // for stop/start/check
+        buf.append("</div>\n");
         if (includeForm) {
             buf.append("</form>\n");
         }
@@ -4976,10 +4969,11 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh, true);\n")
            .append("</script>\n");
         int delay = _manager.getRefreshDelaySeconds();
-        if (!isStandalone())
+        if (!isStandalone()) {
             buf.append(FOOTER);
-        else
+        } else {
             buf.append(FTR_STD);
+        }
         return buf.toString();
     }
 
