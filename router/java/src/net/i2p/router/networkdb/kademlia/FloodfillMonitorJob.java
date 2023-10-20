@@ -126,10 +126,6 @@ class FloodfillMonitorJob extends JobImpl {
             return false;
         }
 
-        // Client subDb should not be a floodfill
-        if (_facade.isClientDb())
-            return false;
-
         String enabled = getContext().getProperty(PROP_FLOODFILL_PARTICIPANT, "auto");
         if ("true".equals(enabled))
             return true;

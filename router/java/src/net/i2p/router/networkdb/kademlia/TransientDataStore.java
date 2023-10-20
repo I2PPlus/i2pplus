@@ -51,10 +51,6 @@ class TransientDataStore implements DataStore {
         _data.clear();
     }
 
-    public void restart() {
-        stop();
-    }
-
     public void rescan() {}
 
     /**
