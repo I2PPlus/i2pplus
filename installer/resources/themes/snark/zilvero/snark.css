@@ -149,7 +149,7 @@ input[type=submit]:active,a.control:active,.snarkNav:active,#torrentDisplay .fil
 #snarkSearch{margin-left:8px;display:block;position:absolute;right:12px;top:10px}
 .iframed #snarkSearch{top:5px;right:8px}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:12px 8px 4px;height:28px;border:0;box-shadow:none;background:transparent}
-#snarkSearch input[type=search]:hover,#snarkSearch input[type=search]:focus{padding-right:22px;border-bottom:1px solid #ccc;opacity:1;appearance:none}
+#snarkSearch input[type=search]:hover,#snarkSearch input[type=search]:focus,#snarkSearch input[type=search][value]{padding-right:22px;border-bottom:1px solid #ccc;opacity:1;appearance:none}
 #snarkSearch input[type=search]::placeholder{font-weight:600;font-style:italic;opacity:.4}
 #snarkSearch:not(:hover) input[type=search]::placeholder,#snarkSearch input[type=search]:focus::placeholder{opacity:0}
 #snarkSearch input[type="submit"]{width:28px;min-width:unset;font-size:0;color:transparent;background:var(--b_search) no-repeat bottom right/24px;opacity:.5}
@@ -157,9 +157,11 @@ input[type=submit]:active,a.control:active,.snarkNav:active,#torrentDisplay .fil
 #snarkSearch input[type="submit"]:active{background-size:22px;filter:none}
 #snarkSearch:hover input[type="submit"],#snarkSearch:focus-within input[type="submit"]{opacity:1}
 #searchwrap{position:relative}
-#searchwrap a[href="/i2psnark"]{padding:3px;height:14px;width:14px;display:inline-block;position:absolute;top:calc(50% - 12px);right:0;font-size:0;background:#f2f2f2 url(images/delete.svg) no-repeat center center/10px;border:1px solid #ccc;box-shadow:none;opacity:0;filter:none}
-#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"]{background-blend-mode:luminosity}
+#searchwrap a[href="/i2psnark"]{margin:1px 0 -1px;padding:3px;height:10px;width:10px;display:inline-block;position:absolute;top:calc(50% - 9px);right:0;font-size:0;background:#f2f2f2 url(images/delete.svg) no-repeat center center/10px;border:1px solid #ccc;box-shadow:none;opacity:0;filter:none}
+#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch input[type=search][value]+a[href="/i2psnark"]{background-blend-mode:luminosity}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover{background-blend-mode:normal}
+#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover,#snarkSearch input[type=search][value]+a[href="/i2psnark"]{opacity:1}
+#snarkSearch input[type=search]:not(:focus){color:#888}
 
 /* toast notifications */
 #toast{box-shadow:var(--softborder);background:#fff}

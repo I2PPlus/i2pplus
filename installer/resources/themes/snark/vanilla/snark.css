@@ -111,7 +111,7 @@ th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visi
 .iframed #snarkSearch{top:9px}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:12px 8px 4px;height:28px;border:0;box-shadow:none;background:transparent;transform:translateY(-4px)}
 #snarkSearch input[type=search]:not(:focus){opacity:0}
-#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{padding-right:22px;font-weight:600;border-bottom:1px solid #a69a93;border-radius:0;opacity:1;-webkit-appearance:none}
+#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus,#snarkSearch input[type=search][value]{padding-right:22px;font-weight:600;border-bottom:1px solid #a69a93;border-radius:0;opacity:1;-webkit-appearance:none}
 #snarkSearch input[type=search]::placeholder{font-weight:500;font-style:italic;opacity:.6}
 #snarkSearch input[type=search]:focus::placeholder{opacity:0}
 #snarkSearch input[type="submit"]{width:28px;font-size:0;color:transparent;text-shadow:none;background:var(--b_search) no-repeat center right/24px;opacity:.6}
@@ -120,7 +120,7 @@ th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visi
 #snarkSearch:hover input[type="submit"],#snarkSearch:focus-within input[type="submit"]{font-size:0;opacity:.8}
 #searchwrap{position:relative}
 #searchwrap a[href="/i2psnark"]{height:12px;width:12px;position:absolute;top:calc(50% - 10px);right:4px;display:inline-block;font-size:0;background:url(images/delete.svg) no-repeat center center/12px;border:0;box-shadow:none;opacity:0;filter:none}
-#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"]{opacity:.6}
+#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch input[type=search][value]+a[href="/i2psnark"]{opacity:.6}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover{opacity:.8}
 
 /* screenlog */

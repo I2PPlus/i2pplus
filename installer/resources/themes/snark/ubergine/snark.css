@@ -132,8 +132,8 @@ body:not(.iframed) #navbar {transition:width .5s ease-in-out .5s;will-change:tra
 /* search */
 #snarkSearch{margin-left:8px;display:block;position:absolute;right:10px;top:7px}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:12px 8px 4px;height:28px;border:0;box-shadow:none;background:transparent}
-#snarkSearch input[type=search]:not(:focus){opacity:0}
-#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{padding-right:22px;border-bottom:1px solid #303;opacity:1;transform:translateY(-4px);-webkit-appearance:none}
+#snarkSearch input[type=search]:not([value]):not(:focus){opacity:0}
+#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus,#snarkSearch input[type=search][value]{padding-right:22px;border-bottom:1px solid #303;opacity:1;transform:translateY(-4px);-webkit-appearance:none}
 #snarkSearch input[type=search]::placeholder{font-weight:600;font-style:italic;opacity:.4}
 #snarkSearch input[type=search]:focus::placeholder{opacity:0}
 #snarkSearch input[type="submit"]{width:28px;color:transparent;background:var(--search) no-repeat bottom right/24px;opacity:.5}
@@ -143,7 +143,7 @@ body:not(.iframed) #navbar {transition:width .5s ease-in-out .5s;will-change:tra
 #searchwrap{position:relative}
 #searchwrap a[href="/i2psnark"]{padding:3px;height:14px;width:14px;position:absolute;top:calc(50% - 16px);right:4px;font-size:0;background:#000 var(--close) no-repeat center center/10px;border:1px solid #303;box-shadow:none;opacity:0;filter:none}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"]{opacity:.5}
-#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover{opacity:1}
+#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover, #snarkSearch input[type=search][value]+a[href="/i2psnark"]{opacity:1}
 .iframed #snarkSearch{top:9px}
 
 /* screenlog */

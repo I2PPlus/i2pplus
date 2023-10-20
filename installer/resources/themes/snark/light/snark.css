@@ -101,7 +101,7 @@ td{padding:3px 4px;color:var(--ink_light);opacity:1;font-size:9pt}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:8px;border:0;box-shadow:none;background:transparent}
 #snarkSearch input[type=search]{padding:4px 6px;font-weight:600;border-bottom:1px solid #ddf;transform:translateY(-2px);-webkit-appearance:none}
 #snarkSearch input[type=search]:not(:focus){opacity:0}
-#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{opacity:1}
+#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus,#snarkSearch input[type=search][value]{opacity:1}
 #snarkSearch input[type=search]::placeholder{font-weight:500;font-style:italic;opacity:.5;color:var(--ink)}
 #snarkSearch input[type=search]:focus::placeholder{opacity:0}
 #snarkSearch input[type=submit]{padding:8px 0;width:28px;min-width:0;color:transparent;text-shadow:none;background:var(--search) no-repeat center right/24px;opacity:.5}
@@ -111,8 +111,8 @@ td{padding:3px 4px;color:var(--ink_light);opacity:1;font-size:9pt}
 #snarkSearch:focus-within input[type=submit]{opacity:1}
 #searchwrap{position:relative}
 #searchwrap a[href="/i2psnark"]{height:12px;width:12px;position:absolute;top:calc(50% - 8px);right:4px;display:inline-block;font-size:0;background:url(images/delete.svg) no-repeat center center/12px;border:0;box-shadow:none;opacity:0;filter:none}
-#snarkSearch input[type=search]:focus:not(:placeholder-shown) + a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown) + a[href="/i2psnark"]{opacity:.6}
-#snarkSearch input[type=search]:focus:not(:placeholder-shown) + a[href="/i2psnark"]:hover{opacity:.8}
+#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch input[type=search][value]+a[href="/i2psnark"]{opacity:.6}
+#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover{opacity:.8}
 
 /* toast notifications */
 #toast{box-shadow:0 0 0 1px #ddd;background:var(--section)}

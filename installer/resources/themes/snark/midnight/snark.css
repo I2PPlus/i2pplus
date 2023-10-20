@@ -92,7 +92,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:8px;border:0;box-shadow:none;background:transparent}
 #snarkSearch input[type=search]{padding:4px 6px;font-weight:600;color:var(--ink);-webkit-text-stroke:0;border-bottom:1px solid #26235c;cursor:text;transform:translateY(-2px);-webkit-appearance:none}
 #snarkSearch input[type=search]:not(:focus){opacity:0}
-#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus{opacity:1}
+#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus,#snarkSearch input[type=search][value]{opacity:1}
 #snarkSearch input[type=search]::placeholder{font-weight:500;font-style:italic;opacity:.5;color:var(--ink)}
 #snarkSearch input[type=search]:focus::placeholder{opacity:0}
 #snarkSearch input[type=submit]{padding:8px 0;width:28px;min-width:0;color:transparent;text-shadow:none;background:var(--search) no-repeat center right/24px;opacity:.5}
@@ -102,7 +102,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #snarkSearch:focus-within input[type=submit]{opacity:1}
 #searchwrap{position:relative}
 #searchwrap a[href="/i2psnark"]{height:12px;width:12px;position:absolute;top:calc(50% - 8px);right:4px;display:inline-block;font-size:0;background:url(images/delete.svg) no-repeat center center/12px;border:0;box-shadow:none;opacity:0;filter:none}
-#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"]{opacity:.6}
+#snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch input[type=search][value]+a[href="/i2psnark"]{opacity:.6}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover{opacity:.8}
 
 /* toast notifications */
@@ -194,6 +194,8 @@ td.details img:not([src$="rateme.svg"]),.dirInfo td:first-child img:not(.thumb){
 #torrents th{text-align:center}
 #torrents .tAction{padding:1px 2px 1px 1px;width:1%;white-space:nowrap;text-align:center}
 #torrents .details{padding-left:0;padding-right:2px}
+#torrents .tName{width:90%}
+/*#torrents .ETA,#torrents .rateDown,#torrents .rateUp,#torrents .rxd,#torrents .txd{width:1%;min-width:48px}*/
 #torrents .trackerLink{padding-left:4px;padding-right:0}
 #torrents .trackerLink,#torrents .details{width:1%;text-align:center;font-weight:700}
 #torrents tr:hover,.knownTracker:hover,#trackerselect tr:nth-child(n+2):hover,#dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover td{background:#1e0b28}
