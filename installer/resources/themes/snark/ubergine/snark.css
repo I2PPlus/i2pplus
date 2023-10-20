@@ -121,7 +121,8 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .nav_search:active{background:var(--search_active) no-repeat 11px center/16px,var(--nav_active)}
 .snarkNav:last-child{border-radius:0 2px 2px 0}
 .snarkNav:first-child{border-radius:2px 0 0 2px}
-#navbar{margin:-11px 0 10px 0;padding:7px 10px 5px;min-width:600px;width:80%;position:sticky;top:-3px;z-index:99999;text-align:center;border:var(--border_hard);border-radius:0 0 4px 4px;box-shadow:inset 0 0 0 1px rgba(169,61,169,.2),inset 0 0 0 2px #101,inset 0 0 3px 1px #212,0 0 0 1px rgba(0,0,0,.7);background:linear-gradient(180deg,#535,#202 55%,#101,#080008);filter:drop-shadow(0 2px 4px #101);transition:width .5s ease-in-out .5s;will-change:transform}
+#navbar{margin:-11px 0 10px 0;padding:7px 10px 5px;min-width:600px;width:80%;position:sticky;top:-3px;z-index:99999;text-align:center;border:var(--border_hard);border-radius:0 0 4px 4px;box-shadow:inset 0 0 0 1px rgba(169,61,169,.2),inset 0 0 0 2px #101,inset 0 0 3px 1px #212,0 0 0 1px rgba(0,0,0,.7);background:linear-gradient(180deg,#535,#202 55%,#101,#080008);filter:drop-shadow(0 2px 4px #101)}
+body:not(.iframed) #navbar {transition:width .5s ease-in-out .5s;will-change:transform}
 #navbar a{display:inline-block;font:700 10.5pt/1.3 var(--bodyfont);letter-spacing:.11em;text-decoration:none;text-transform:uppercase;color:#f70;text-shadow:1px 0 1px rgba(0,0,0,.6),-1px 0 1px rgba(255,240,255,.2);-webkit-text-stroke:.5px rgba(0,0,0,.3);outline:none;border-radius:0;box-shadow:0 0 1px #000,inset 0 0 0 1px rgba(16,0,16,.7),inset 0 0 2px 0 rgba(255,128,0,.5)}
 #navbar a:hover,#navbar a:focus{color:#d2baff;border:1px solid #820b64;box-shadow:0 0 1px #000,inset 0 0 0 1px rgba(16,0,16,.9),inset 0 0 2px 0 #515;transition:ease-in-out box-shadow .01s;will-change:transform}
 #navbar a:active{color:#fff;text-shadow:none;border:1px solid #730;box-shadow:0 0 1px 0 #000,var(--highlight),inset 3px 3px 3px 2px #3f1900;transition:box-shadow ease .01s}
@@ -591,6 +592,7 @@ td.tAction input[type=submit]{margin-top:1px}
 .snarkNewTorrent td:first-child,.snarkNewTorrent tr:first-child,#createSection td:first-child{font-weight:700}
 #trackerselect{width:100%}
 #trackerselect td:first-child{font-weight:400}
+#trackerselect td:nth-child(n+2){text-align:center}
 #trackerselect td:nth-child(2),#trackerselect td:nth-child(3){max-width:60px;overflow:hidden;text-overflow:ellipsis}
 .configPanel{padding:0 10px}
 .configPanel input[type=checkbox],.configPanel input[type=text],.configPanel select,.configPanel input.r,.configPanel input[name="nofilter_dataDir"]{margin-left:0}
