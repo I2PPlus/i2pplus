@@ -272,7 +272,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
 
         boolean shouldCompress = shouldCompress();
         if (_log.shouldInfo())
-            _log.info("After headers: gzip? " + _gzip + " compress? " + shouldCompress);
+            _log.info("After headers: GZIP? " + _gzip + " Compressed? " + shouldCompress);
 
         if (data.length == CACHE_SIZE)
             _cache.release(_headerBuffer);
@@ -291,7 +291,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     @Override
     public void close() throws IOException {
         if (_log.shouldInfo())
-            _log.info("Closing " + out + " compressed? " + shouldCompress() + " keepalive? " + _keepAlive);
+            _log.info("Closing " + out + " -> Compressed? " + shouldCompress() + " KeepAlive? " + _keepAlive);
         synchronized(this) {
             // synch with changing out field below
             super.close();

@@ -729,11 +729,11 @@ public class I2PSnarkServlet extends BasicServlet {
         filterParam = filter;
         filterEnabled = filterParam != null && !filterParam.equals("all") && !filterParam.equals("");
         if (isForm) {
-            StringBuilder fbuf = new StringBuilder(1280);
+            StringBuilder buf = new StringBuilder(1280);
             if (showStatusFilter && !snarks.isEmpty() && _manager.util().connected()) {
-                fbuf.append("<form id=torrentlist class=filterbarActive action=\"_post\" method=POST target=processForm>\n");
+                buf.append("<form id=torrentlist class=filterbarActive action=\"_post\" method=POST target=processForm>\n");
             } else {
-                fbuf.append("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");
+                buf.append("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");
             }
             if (showStatusFilter) {
                 // selective display of torrents based on status
@@ -763,16 +763,16 @@ public class I2PSnarkServlet extends BasicServlet {
                     String buttonUrl = activeQuery.toString();
                     int pageSizeConf = _manager.getPageSize();
                     buttonUrl += (buttonUrl.contains("=") ? "&amp;filter=" : "?filter=");
-                    fbuf.append("<noscript><style>.script{display:none}</style></noscript>\n")
+                    buf.append("<noscript><style>.script{display:none}</style></noscript>\n")
                         .append("<div id=torrentDisplay class=script>")
                         .append("<a class=filter id=all href=\"").append(buttonUrl).append("all\"><span>")
                         .append(_t("Show All")).append("<span class=badge hidden>");
                     if (pageSizeConf < total) {
-                        fbuf.append(pageSizeConf).append(" / ").append(total);
+                        buf.append(pageSizeConf).append(" / ").append(total);
                     } else {
-                        fbuf.append(total);
+                        buf.append(total);
                     }
-                    fbuf.append("</span></span></a>")
+                    buf.append("</span></span></a>")
                         .append("<a class=filter id=active href=\"").append(buttonUrl).append("active\"><span>")
                         .append(_t("Active")).append("<span class=badge></span></span></a>")
                         .append("<a class=filter id=inactive href=\"").append(buttonUrl).append("inactive\"><span>")
@@ -792,11 +792,11 @@ public class I2PSnarkServlet extends BasicServlet {
                         .append("</div>\n");
                 }
             }
-            out.write(fbuf.toString());
-            fbuf.setLength(0);
+            writeHiddenInputs(buf, req, null);
+            out.write(buf.toString());
+            out.flush();
+            buf.setLength(0);
         }
-        writeHiddenInputs(out, req, null);
-        //out.flush();
 
         // Opera and text-mode browsers: no &thinsp; and no input type=image values submitted
         // Using a unique name fixes Opera, except for the buttons with js confirms, see below
@@ -954,7 +954,6 @@ public class I2PSnarkServlet extends BasicServlet {
                     hbuf.append(separator).append(filterQuery);
                     hbuf.append("\">");
                 }
-            // Translators: Please keep short or translate as " "
             tx = _t("ETA");
             hbuf.append(toThemeImg("eta", tx, showSort ? _t("Sort by {0}", _t("Estimated time remaining")) : _t("Estimated time remaining")));
                 if (showSort) {
@@ -990,7 +989,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 hbuf.append(separator).append(filterQuery);
                 hbuf.append("\">");
             }
-            // Translators: Please keep short or translate as " "
             tx = _t("RX");
             hbuf.append(toThemeImg("head_rx", tx, showSort ? _t("Sort by {0}", (isDlSort ? _t("Downloaded") : _t("Size"))) : _t("Downloaded")));
             if (showSort) {
@@ -1029,7 +1027,6 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                     hbuf.append(separator).append(filterQuery);
                     hbuf.append("\">");
-                    // Translators: Please keep short or translate as " "
                     tx = _t("RX Rate");
                     hbuf.append(toThemeImg("head_rxspeed", tx, showSort ? _t("Sort by {0}", _t("Down Rate")) : _t("Down Rate")));
                     if (showSort) {
@@ -1067,7 +1064,6 @@ public class I2PSnarkServlet extends BasicServlet {
             hbuf.append(separator).append(filterQuery);
             hbuf.append("\">");
         }
-        // Translators: Please keep short or translate as " "
         tx = _t("TX");
         hbuf.append(toThemeImg("head_tx", tx, showSort ? _t("Sort by {0}", (nextRatSort ? _t("Upload ratio") : _t("Uploaded"))) : _t("Uploaded")));
         if (showSort)
@@ -1101,7 +1097,6 @@ public class I2PSnarkServlet extends BasicServlet {
                     hbuf.append(separator).append(filterQuery);
                     hbuf.append("\">");
                 }
-                // Translators: Please keep short or translate as " "
                 tx = _t("TX Rate");
                 hbuf.append(toThemeImg("head_txspeed", tx, showSort ? _t("Sort by {0}", _t("Up Rate")) : _t("Up Rate")));
                 if (showSort)
@@ -1130,7 +1125,7 @@ public class I2PSnarkServlet extends BasicServlet {
         hbuf.append("</th></tr>\n</thead>\n<tbody id=snarkTbody>");
         out.write(hbuf.toString());
         out.flush();
-        hbuf.setLength(0);
+        //hbuf.setLength(0);
         String uri = _contextPath + '/';
         boolean showDebug = "2".equals(peerParam);
 
@@ -1141,49 +1136,50 @@ public class I2PSnarkServlet extends BasicServlet {
             displaySnark(out, req, snark, uri, i, stats, showPeers, isDegraded, noThinsp, showDebug, hide, isRatSort, canWrite);
         }
 
+        StringBuilder footer = new StringBuilder(2*1024);
         if (total == 0) {
-            out.write("<tr id=noload class=noneLoaded><td colspan=12><i>");
+            footer.append("<tr id=noload class=noneLoaded><td colspan=12><i>");
             synchronized(this) {
                 File dd = _resourceBase;
                 if (!dd.exists() && !dd.mkdirs()) {
-                    out.write(_t("Data directory cannot be created") + ": " + DataHelper.escapeHTML(dd.toString()));
+                    footer.append(_t("Data directory cannot be created") + ": " + DataHelper.escapeHTML(dd.toString()));
                 } else if (!dd.isDirectory()) {
-                    out.write(_t("Not a directory") + ": " + DataHelper.escapeHTML(dd.toString()));
+                    footer.append(_t("Not a directory") + ": " + DataHelper.escapeHTML(dd.toString()));
                 } else if (!dd.canRead()) {
-                    out.write(_t("Unreadable") + ": " + DataHelper.escapeHTML(dd.toString()));
+                    footer.append(_t("Unreadable") + ": " + DataHelper.escapeHTML(dd.toString()));
                 } else if (!canWrite) {
-                    out.write(_t("No write permissions for data directory") + ": " + DataHelper.escapeHTML(dd.toString()));
+                    footer.append(_t("No write permissions for data directory") + ": " + DataHelper.escapeHTML(dd.toString()));
                 } else if (isSearch) {
-                    out.write(_t("No torrents found."));
+                    footer.append(_t("No torrents found."));
                 } else {
-                    out.write(_t("No torrents loaded."));
+                    footer.append(_t("No torrents loaded."));
                 }
             }
-            out.write("</i></td></tr></tbody>\n");
-            out.write("<tfoot id=\"snarkFoot");
+            footer.append("</i></td></tr></tbody>\n");
+            footer.append("<tfoot id=\"snarkFoot");
             if (_manager.util().isConnecting()) {
-                out.write("\" class=\"initializing");
+                footer.append("\" class=\"initializing");
             }
-            out.write("\"><tr><th id=torrentTotals align=left colspan=12></th></tr></tfoot>\n");
+            footer.append("\"><tr><th id=torrentTotals align=left colspan=12></th></tr></tfoot>\n");
         } else /** if (snarks.size() > 1) */ {
 
             // Add a pagenav to bottom of table if we have 50+ torrents per page
             // TODO: disable on pages where torrents is < 50 e.g. last page
             if (total > 0 && (start > 0 || total > pageSize) && pageSize >= 50 && total - start >= 20) {
-                out.write("<tr id=pagenavbottom><td colspan=12><div class=pagenavcontrols>");
+                footer.append("<tr id=pagenavbottom><td colspan=12><div class=pagenavcontrols>");
                 writePageNav(out, req, start, (pageSize), total, filter, noThinsp);
-                out.write("</div></td></tr>\n</tbody>\n");
+                footer.append("</div></td></tr>\n</tbody>\n");
             }
-            out.write("<tfoot id=snarkFoot><tr class=volatile><th id=torrentTotals align=left colspan=6>");
-            out.write("<span id=totals><span class=canhide>");
-            out.write(_t("Totals"));
-            out.write(":&nbsp;</span>");
-            out.write(ngettext("1 torrent", "{0} torrents", total));
-            out.write(" &bullet; ");
-            out.write(DataHelper.formatSize2(stats[5]) + "B");
+            footer.append("<tfoot id=snarkFoot><tr class=volatile><th id=torrentTotals align=left colspan=6>");
+            footer.append("<span id=totals><span class=canhide>");
+            footer.append(_t("Totals"));
+            footer.append(":&nbsp;</span>");
+            footer.append(ngettext("1 torrent", "{0} torrents", total));
+            footer.append(" &bullet; ");
+            footer.append(DataHelper.formatSize2(stats[5]) + "B");
             if (_manager.util().connected() && total > 0 && stats[4] > 0) {
-                out.write(" &bullet; ");
-                out.write(ngettext("1 connected peer", "{0} connected peers", (int) stats[4])
+                footer.append(" &bullet; ");
+                footer.append(ngettext("1 connected peer", "{0} connected peers", (int) stats[4])
                    .replace("connected peers", "peer connections"));
             }
 
@@ -1191,40 +1187,40 @@ public class I2PSnarkServlet extends BasicServlet {
             if (dht != null) {
                 int dhts = dht.size();
                 if (dhts > 0) {
-                    out.write(" &bullet; <span>");
-                    out.write(ngettext("1 DHT peer", "{0} DHT peers", dhts));
-                    out.write("</span>");
+                    footer.append(" &bullet; <span>");
+                    footer.append(ngettext("1 DHT peer", "{0} DHT peers", dhts));
+                    footer.append("</span>");
                 }
             }
 
             String ibtunnels = _manager.util().getI2CPOptions().get("inbound.quantity");
             String obtunnels = _manager.util().getI2CPOptions().get("outbound.quantity");
             if (_manager.util().connected()) {
-                out.write(" <span class=canhide title=\"" + _t("Configured maximum (actual usage may be less)") +
+                footer.append(" <span class=canhide title=\"" + _t("Configured maximum (actual usage may be less)") +
                           "\"> &bullet; " + _t("Tunnels") + ": ");
-                out.write(ibtunnels);
-                out.write(' ');
-                out.write(_t("in"));
-                out.write(" / ");
-                out.write(obtunnels);
-                out.write(' ');
-                out.write(_t("out"));
-                out.write("</span>");
+                footer.append(ibtunnels);
+                footer.append(' ');
+                footer.append(_t("in"));
+                footer.append(" / ");
+                footer.append(obtunnels);
+                footer.append(' ');
+                footer.append(_t("out"));
+                footer.append("</span>");
             }
 
             String IPString = _manager.util().getOurIPString();
             if (!IPString.equals("unknown")) {
                 // Only truncate if it's an actual dest
-                out.write("&nbsp;<span id=ourDest title=\"" + _t("Our destination (identity) for this session") + "\">" +
+                footer.append("&nbsp;<span id=ourDest title=\"" + _t("Our destination (identity) for this session") + "\">" +
                           _t("Dest.") + "<code>" + IPString.substring(0, 4) + "</code></span>");
             }
-            out.write("</span>");
-            out.write("</th>");
+            footer.append("</span>");
+            footer.append("</th>");
             if (_manager.util().connected() && total > 0) {
-                out.write("<th class=ETA>");
+                footer.append("<th class=ETA>");
                 // FIXME: add total ETA for all torrents here
-                // out.write("<th class=ETA title=\"");
-                // out.write(_t("Estimated download time for all torrents") + "\">");
+                // footer.append("<th class=ETA title=\"");
+                // footer.append(_t("Estimated download time for all torrents") + "\">");
 
                 if (_manager.util().connected() && !snarks.isEmpty()) {
                     boolean hasPeers = false;
@@ -1244,36 +1240,36 @@ public class I2PSnarkServlet extends BasicServlet {
                         hasPeers = true;
                         if (hasPeers) {
                             if (totalETA > 0) {
-                                out.write("<span title=\"");
-                                out.write(_t("Estimated download time for all torrents") + "\">");
-                                out.write(DataHelper.formatDuration2(Math.max(totalETA, 10) * 1000));
-                                out.write("</span>");
+                                footer.append("<span title=\"");
+                                footer.append(_t("Estimated download time for all torrents") + "\">");
+                                footer.append(DataHelper.formatDuration2(Math.max(totalETA, 10) * 1000));
+                                footer.append("</span>");
                             }
                         }
                         break;
                     }
                 }
-                out.write("</th>");
-                out.write("<th class=rxd title=\"");
-                out.write(_t("Data downloaded this session") + "\">");
+                footer.append("</th>");
+                footer.append("<th class=rxd title=\"");
+                footer.append(_t("Data downloaded this session") + "\">");
                 if (stats[0] > 0) {
-                    out.write(formatSize(stats[0]).replaceAll("iB", ""));
+                    footer.append(formatSize(stats[0]).replaceAll("iB", ""));
                 }
-                out.write("</th>");
-                out.write("<th class=rateDown title=\"");
-                out.write(_t("Total download speed") + "\">");
+                footer.append("</th>");
+                footer.append("<th class=rateDown title=\"");
+                footer.append(_t("Total download speed") + "\">");
                 if (stats[2] > 0) {
-                    out.write(formatSize(stats[2]).replaceAll("iB", "") + "/s");
+                    footer.append(formatSize(stats[2]).replaceAll("iB", "") + "/s");
                 }
-                out.write("</th>");
-                out.write("<th class=txd  title=\"");
-                out.write(_t("Total data uploaded (for listed torrents)") + "\">");
+                footer.append("</th>");
+                footer.append("<th class=txd  title=\"");
+                footer.append(_t("Total data uploaded (for listed torrents)") + "\">");
                 if (stats[1] > 0) {
-                    out.write(formatSize(stats[1]).replaceAll("iB", ""));
+                    footer.append(formatSize(stats[1]).replaceAll("iB", ""));
                 }
-                out.write("</th>");
-                out.write("<th class=rateUp title=\"");
-                out.write(_t("Total upload speed") + "\">");
+                footer.append("</th>");
+                footer.append("<th class=rateUp title=\"");
+                footer.append(_t("Total upload speed") + "\">");
                 boolean isUploading = false;
                 int end = Math.min(start + pageSize, snarks.size());
                 for (int i = start; i < end; i++) {
@@ -1283,43 +1279,48 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                 }
                 if (stats[3] > 0 && isUploading) {
-                    out.write(formatSize(stats[3]).replaceAll("iB", "") + "/s");
+                    footer.append(formatSize(stats[3]).replaceAll("iB", "") + "/s");
                 }
-                out.write("</th>");
-                out.write("<th class=tAction>");
+                footer.append("</th>");
+                footer.append("<th class=tAction>");
                 if (dht != null && (!"2".equals(peerParam))) {
-                    out.write("<a id=debugMode href=\"?p=2\" title=\"");
-                    out.write(_t("Enable Debug Mode") + "\">");
-                    out.write(_t("Debug Mode") + "</a>");
+                    footer.append("<a id=debugMode href=\"?p=2\" title=\"");
+                    footer.append(_t("Enable Debug Mode") + "\">");
+                    footer.append(_t("Debug Mode") + "</a>");
                 } else if (dht != null) {
-                    out.write("<a id=debugMode href=\"?p\" title=\"");
-                    out.write(_t("Disable Debug Mode") + "\">");
-                    out.write(_t("Normal Mode") + "</a>");
+                    footer.append("<a id=debugMode href=\"?p\" title=\"");
+                    footer.append(_t("Disable Debug Mode") + "\">");
+                    footer.append(_t("Normal Mode") + "</a>");
                 }
-                out.write("</th>");
+                footer.append("</th>");
                 } else {
-                    out.write("<th colspan=6></th>");
+                    footer.append("<th colspan=6></th>");
                 }
-                out.write("</tr>\n");
+                footer.append("</tr>\n");
 
                 if (showDebug) {
-                    out.write("<tr id=dhtDebug>");
-                    out.write("<th colspan=12><span class=volatile>");
+                    footer.append("<tr id=dhtDebug>");
+                    footer.append("<th colspan=12><span class=volatile>");
                     if (dht != null) {
-                        out.write(dht.renderStatusHTML());
+                        footer.append(dht.renderStatusHTML());
                     } else {
-                        out.write("<b>");
-                        out.write(_t("No DHT Peers"));
-                        out.write("</b>");
+                        footer.append("<b>");
+                        footer.append(_t("No DHT Peers"));
+                        footer.append("</b>");
                     }
-                    out.write("</span></th></tr>");
+                    footer.append("</span></th></tr>");
                 }
-                out.write("</tfoot>\n");
+                footer.append("</tfoot>\n");
             }
 
-            out.write("</table>\n");
-            if (isForm)
-                out.write("</form>\n");
+            footer.append("</table>\n");
+            if (isForm) {
+                footer.append("</form>\n");
+            }
+
+            out.write(footer.toString());
+            footer.setLength(0);
+            out.flush();
 
             return start == 0;
     }
@@ -3191,16 +3192,17 @@ public class I2PSnarkServlet extends BasicServlet {
         //String newFile = req.getParameter("newFile");
         //if ( (newFile == null) || (newFile.trim().length() <= 0) ) newFile = "";
 
-        out.write("<div id=add class=snarkNewTorrent>\n");
+        fbuf.append("<div id=add class=snarkNewTorrent>\n");
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
-        out.write("<form id=addForm action=\"_post\" method=POST target=processForm>\n");
-        out.write("<div class=sectionPanel id=addSection>\n");
-        writeHiddenInputs(out, req, "Add");
+        fbuf.append("<form id=addForm action=\"_post\" method=POST target=processForm>\n");
+        fbuf.append("<div class=sectionPanel id=addSection>\n");
+        writeHiddenInputs(fbuf, req, "Add");
         fbuf.append("<input hidden class=toggle_input id=toggle_addtorrent type=checkbox");
-        if (newURL.length() > 0)
+        if (newURL.length() > 0) {
             fbuf.append(" checked=checked>");  // force toggle open
-        else
+        } else {
             fbuf.append('>');
+        }
         fbuf.append("<label id=tab_addtorrent class=toggleview for=\"toggle_addtorrent\"><span class=tab_label>");
         fbuf.append(_t("Add Torrent"));
         fbuf.append("</span></label>");
@@ -3231,45 +3233,36 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers) throws IOException {
-        StringBuilder tbuf = new StringBuilder(3*1024);
+        StringBuilder buf = new StringBuilder(3*1024);
         String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
-        out.write("<div class=sectionPanel id=createSection>\n<div>\n");
+        buf.append("<div class=sectionPanel id=createSection>\n<div>\n");
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
-        out.write("<form id=createForm action=\"_post\" method=POST target=processForm>\n");
-        writeHiddenInputs(out, req, "Create");
-        tbuf.append("<input hidden class=toggle_input id=toggle_createtorrent type=checkbox>" +
-                  "<label id=tab_newtorrent class=toggleview for=\"toggle_createtorrent\"><span class=tab_label>");
-        tbuf.append(_t("Create Torrent"));
-        tbuf.append("</span></label><hr>\n<table border=0><tr><td>");
-        //tbuf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
-        tbuf.append(_t("Data to seed"));
-        tbuf.append(":</td><td>"
-                  + "<input type=text name=nofilter_baseFile size=85 value=\""
-                  + "\" spellcheck=false title=\"");
-        tbuf.append(_t("File or directory to seed (full path or within the directory {0} )",
-                    _manager.getDataDir().getAbsolutePath() + File.separatorChar));
-        tbuf.append("\" required> <input type=submit class=create value=\"");
-        tbuf.append(_t("Create torrent"));
-        tbuf.append("\" name=foo>");
-        tbuf.append("</td></tr>\n");
-        // TODO: Add support for adding comment to .torrent
-        //tbuf.append("<tr><td>\n");
-        //tbuf.append(_t("Comment"));
-        //tbuf.append(":</td><td>"
-        //          + "<input type=text name=comment size=85 maxlength=\"256\" value=\""
-        //          + "\" title=\"");
-        //tbuf.append(_t("Add an optional comment or description to be embedded in the torrent file"));
-        //tbuf.append("\" >");
-        //tbuf.append("</td></tr>\n");
-        tbuf.append("<tr><td>");
-        tbuf.append(_t("Trackers"));
-        tbuf.append(":<td>\n<table id=trackerselect>\n<tr><td>Name</td><td>");
-        tbuf.append(_t("Primary"));
-        tbuf.append("</td><td>");
-        tbuf.append(_t("Alternates"));
-        tbuf.append("</td><td>");
-        tbuf.append(_t("Tracker Type"));
-        tbuf.append("</td></tr>\n");
+        buf.append("<form id=createForm action=\"_post\" method=POST target=processForm>\n");
+        writeHiddenInputs(buf, req, "Create");
+        buf.append("<input hidden class=toggle_input id=toggle_createtorrent type=checkbox>")
+           .append("<label id=tab_newtorrent class=toggleview for=\"toggle_createtorrent\"><span class=tab_label>")
+           .append(_t("Create Torrent"))
+           .append("</span></label><hr>\n<table border=0><tr><td>")
+        //buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
+           .append(_t("Data to seed"))
+           .append(":</td><td>")
+           .append("<input type=text name=nofilter_baseFile size=85 value=\"")
+           .append("\" spellcheck=false title=\"")
+           .append(_t("File or directory to seed (full path or within the directory {0} )",
+                   _manager.getDataDir().getAbsolutePath() + File.separatorChar))
+           .append("\" required> <input type=submit class=create value=\"")
+           .append(_t("Create torrent"))
+           .append("\" name=foo>")
+           .append("</td></tr>\n")
+           .append("<tr><td>")
+           .append(_t("Trackers"))
+           .append(":<td>\n<table id=trackerselect>\n<tr><td>Name</td><td>")
+           .append(_t("Primary"))
+           .append("</td><td>")
+           .append(_t("Alternates"))
+           .append("</td><td>")
+           .append(_t("Tracker Type"))
+           .append("</td></tr>\n");
 
         for (Tracker t : sortedTrackers) {
             List<String> openTrackers = _manager.util().getOpenTrackers();
@@ -3280,37 +3273,40 @@ public class I2PSnarkServlet extends BasicServlet {
             String name = t.name;
             String announceURL = t.announceURL.replace("&#61;", "=");
             String homeURL = t.baseURL;
-            tbuf.append("<tr><td><span class=trackerName>");
-            tbuf.append("<a href=\"" + homeURL + "\" target=_blank>" + name + "</a>");
-            tbuf.append("</span></td><td><input type=radio class=optbox name=announceURL value=\"");
-            tbuf.append(announceURL);
-            tbuf.append("\"");
-            if (announceURL.equals(_lastAnnounceURL))
-                tbuf.append(" checked");
-            tbuf.append("></td><td><input type=checkbox class=optbox name=\"backup_");
-            tbuf.append(announceURL);
-            tbuf.append("\" value=\"foo\"></td><td>");
-
-            if (!(isOpen || isPrivate))
-                tbuf.append(_t("Standard"));
-            if (isOpen)
-                tbuf.append(_t("Open"));
-            if (isPrivate) {
-                tbuf.append(_t("Private"));
+            buf.append("<tr><td><span class=trackerName>")
+               .append("<a href=\"").append(homeURL).append("\" target=_blank>").append(name).append("</a>")
+               .append("</span></td><td><input type=radio class=optbox name=announceURL value=\"")
+               .append(announceURL)
+               .append("\"");
+            if (announceURL.equals(_lastAnnounceURL)) {
+                buf.append(" checked");
             }
-            tbuf.append("</td></tr>\n");
+            buf.append("></td><td><input type=checkbox class=optbox name=\"backup_")
+               .append(announceURL)
+               .append("\" value=\"foo\"></td><td>");
+
+            if (!(isOpen || isPrivate)) {
+                buf.append(_t("Standard"));
+            }
+            if (isOpen) {
+                buf.append(_t("Open"));
+            }
+            if (isPrivate) {
+                buf.append(_t("Private"));
+            }
+            buf.append("</td></tr>\n");
         }
-        tbuf.append("<tr><td><i>");
-        tbuf.append(_t("none"));
-        tbuf.append("</i></td><td><input type=radio class=optbox name=announceURL value=\"none\"");
-        if (_lastAnnounceURL == null)
-            tbuf.append(" checked");
-        tbuf.append("></td><td></td><td></td></tr>\n</table>\n");
-        tbuf.append("</td></tr>\n</table>\n</form>\n</div>\n<span id=createNotify class=notify hidden></span>\n</div>\n");
-        tbuf.append("<script nonce=" + cspNonce + " src=" + resourcePath + "js/snarkAlert.js type=module></script>\n");
-        out.write(tbuf.toString());
+        buf.append("<tr><td><i>").append(_t("none"))
+           .append("</i></td><td><input type=radio class=optbox name=announceURL value=\"none\"");
+        if (_lastAnnounceURL == null) {
+            buf.append(" checked");
+        }
+        buf.append("></td><td></td><td></td></tr>\n</table>\n")
+           .append("</td></tr>\n</table>\n</form>\n</div>\n<span id=createNotify class=notify hidden></span>\n</div>\n")
+           .append("<script nonce=" + cspNonce + " src=" + resourcePath + "js/snarkAlert.js type=module></script>\n");
+        out.write(buf.toString());
         out.flush();
-        tbuf.setLength(0);
+        buf.setLength(0);
     }
 
     private static final int[] times = { 5, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
@@ -3335,88 +3331,87 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean noCollapse = noCollapsePanels(req);
 
 // configuration
-        StringBuilder cbuf = new StringBuilder(16*1024);
-        out.write("<form action=\"" + _contextPath + "/configure\" method=POST>");
-        out.write("<div class=\"configPanel lang_" + lang + "\"><div class=snarkConfig>\n");
-        writeHiddenInputs(out, req, "Save");
-        cbuf.append("<span class=configTitle>");
-        cbuf.append(_t("Configuration"));
-        cbuf.append("</span><hr>\n");
-        cbuf.append("<table border=0 id=configs>\n");
+        StringBuilder buf = new StringBuilder(16*1024);
+        buf.append("<form action=\"").append(_contextPath).append("/configure\" method=POST>")
+           .append("<div class=\"configPanel lang_").append(lang).append("\"><div class=snarkConfig>\n");
+        writeHiddenInputs(buf, req, "Save");
+        buf.append("<span class=configTitle>")
+           .append(_t("Configuration"))
+           .append("</span><hr>\n")
+           .append("<table border=0 id=configs>\n");
 
 // user interface
 
-        cbuf.append("<tr><th class=suboption>");
-        cbuf.append(_t("User Interface"));
+        buf.append("<tr><th class=suboption>")
+           .append(_t("User Interface"));
         if (_context.isRouterContext()) {
-            cbuf.append("&nbsp;&nbsp;<a href=/torrentmgr target=_top class=script id=embed>");
-            cbuf.append(_t("Switch to Embedded Mode"));
-            cbuf.append("</a>");
-            cbuf.append("<a href=\"" + _contextPath + "/configure\" target=_top class=script id=fullscreen>");
-            cbuf.append(_t("Switch to Fullscreen Mode"));
-            cbuf.append("</a>");
+            buf.append("&nbsp;&nbsp;<a href=/torrentmgr target=_top class=script id=embed>")
+               .append(_t("Switch to Embedded Mode"))
+               .append("</a>")
+               .append("<a href=\"").append(_contextPath).append("/configure\" target=_top class=script id=fullscreen>")
+               .append(_t("Switch to Fullscreen Mode"))
+               .append("</a>");
         }
-        cbuf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
-
-        cbuf.append("<span class=configOption><b>");
-        cbuf.append(_t("Theme"));
-        cbuf.append("</b> \n");
+        buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
+           .append("<span class=configOption><b>")
+           .append(_t("Theme"))
+           .append("</b> \n");
         if (_manager.getUniversalTheming()) {
-            cbuf.append("<select id=themeSelect name=theme disabled=disabled title=\"");
-            cbuf.append(_t("To change themes manually, disable universal theming"));
-            cbuf.append("\"><option>");
-            cbuf.append(_manager.getTheme());
-            cbuf.append("</option></select> <span id=bwHoverHelp>");
-            cbuf.append(toThemeSVG("details", "", ""));
-            cbuf.append("<span id=bwHelp>");
-            cbuf.append(_t("Universal theming is enabled."));
-            cbuf.append("</span></span>");
-            cbuf.append(" <a href=\"/configui\" target=_blank>[");
-            cbuf.append(_t("Configure"));
-            cbuf.append("]</a></span><br>");
+            buf.append("<select id=themeSelect name=theme disabled=disabled title=\"")
+               .append(_t("To change themes manually, disable universal theming"))
+               .append("\"><option>")
+               .append(_manager.getTheme())
+               .append("</option></select> <span id=bwHoverHelp>")
+               .append(toThemeSVG("details", "", ""))
+               .append("<span id=bwHelp>")
+               .append(_t("Universal theming is enabled."))
+               .append("</span></span>")
+               .append(" <a href=\"/configui\" target=_blank>[")
+               .append(_t("Configure"))
+               .append("]</a></span><br>");
         } else {
-            cbuf.append("<select id=themeSelect name=theme>");
+            buf.append("<select id=themeSelect name=theme>");
             String theme = _manager.getTheme();
             String[] themes = _manager.getThemes();
             Arrays.sort(themes);
             for (int i = 0; i < themes.length; i++) {
                 if(themes[i].equals(theme))
-                    cbuf.append("\n<OPTION value=\"" + themes[i] + "\" SELECTED>" + themes[i]);
+                    buf.append("\n<OPTION value=\"").append(themes[i]).append("\" SELECTED>").append(themes[i]);
                 else
-                    cbuf.append("\n<OPTION value=\"" + themes[i] + "\">" + themes[i]);
+                    buf.append("\n<OPTION value=\"").append(themes[i]).append("\">").append(themes[i]);
             }
-            cbuf.append("</select>\n</span><br>\n");
+            buf.append("</select>\n</span><br>\n");
         }
 
-        cbuf.append("<span class=configOption><b>");
-        cbuf.append(_t("Refresh time"));
-        cbuf.append("</b> \n<select name=refreshDelay title=\"");
-        cbuf.append(_t("How frequently torrent status is updated on the main page"));
-        cbuf.append("\">");
+        buf.append("<span class=configOption><b>")
+           .append(_t("Refresh time"))
+           .append("</b> \n<select name=refreshDelay title=\"")
+           .append(_t("How frequently torrent status is updated on the main page"))
+           .append("\">");
         int delay = _manager.getRefreshDelaySeconds();
         for (int i = 0; i < times.length; i++) {
-            cbuf.append("<option value=\"");
-            cbuf.append(Integer.toString(times[i]));
-            cbuf.append("\"");
-            if (times[i] == delay)
-                cbuf.append(" selected=selected");
-            cbuf.append(">");
+            buf.append("<option value=\"")
+               .append(Integer.toString(times[i]))
+               .append("\"");
+            if (times[i] == delay) {
+                buf.append(" selected=selected");
+            }
+            buf.append(">");
             if (times[i] > 0)
-                cbuf.append(DataHelper.formatDuration2(times[i] * 1000));
+                buf.append(DataHelper.formatDuration2(times[i] * 1000));
             else
-                cbuf.append(_t("Never"));
-            cbuf.append("</option>\n");
+                buf.append(_t("Never"));
+            buf.append("</option>\n");
         }
-        cbuf.append("</select>\n</span><br>\n");
-
-        cbuf.append("<span class=configOption><label><b>");
-        cbuf.append(_t("Page size"));
-        cbuf.append("</b> <input type=text name=pageSize size=5 maxlength=4 pattern=\"[0-9]{0,4}\" class=\"r numeric\""
-                  + " title=\"");
-        cbuf.append(_t("Maximum number of torrents to display per page"));
-        cbuf.append("\" value=\"" + _manager.getPageSize() + "\" > ");
-        cbuf.append(_t("torrents"));
-        cbuf.append("</label></span><br>\n");
+        buf.append("</select>\n</span><br>\n")
+           .append("<span class=configOption><label><b>")
+           .append(_t("Page size"))
+           .append("</b> <input type=text name=pageSize size=5 maxlength=4 pattern=\"[0-9]{0,4}\" ")
+           .append("class=\"r numeric\" title=\"")
+           .append(_t("Maximum number of torrents to display per page"))
+           .append("\" value=\"").append(_manager.getPageSize()).append("\"> ")
+           .append(_t("torrents"))
+           .append("</label></span><br>\n");
 
         if (!_context.isRouterContext()) {
             try {
@@ -3425,240 +3420,238 @@ public class I2PSnarkServlet extends BasicServlet {
                 Method getLangSettings = helper.getMethod("getLangSettings", I2PAppContext.class);
                 String langSettings = (String) getLangSettings.invoke(null, _context);
                 // If we get to here, we have the language settings
-                cbuf.append("<span class=configOption><b>");
-                cbuf.append(_t("Language"));
-                cbuf.append("</b> ");
-                cbuf.append(langSettings);
-                cbuf.append("</span><br>\n");
+                buf.append("<span class=configOption><b>").append(_t("Language")).append("</b> ")
+                   .append(langSettings)
+                   .append("</span><br>\n");
             } catch (ClassNotFoundException e) {
             } catch (NoSuchMethodException e) {
             } catch (IllegalAccessException e) {
             } catch (InvocationTargetException e) {
             }
         } else {
-            cbuf.append("<span class=configOption><b>");
-            cbuf.append(_t("Language"));
-            cbuf.append("</b> <span id=snarkLang>");
-            cbuf.append(lang);
-            cbuf.append("</span> <a href=\"/configui#langheading\" target=_blank>");
-            cbuf.append("[");
-            cbuf.append(_t("Configure"));
-            cbuf.append("]</a></span><br>\n");
+            buf.append("<span class=configOption><b>")
+               .append(_t("Language"))
+               .append("</b> <span id=snarkLang>")
+               .append(lang)
+               .append("</span> <a href=\"/configui#langheading\" target=_blank>")
+               .append("[")
+               .append(_t("Configure"))
+               .append("]</a></span><br>\n");
         }
 
-        cbuf.append("<span class=configOption><label for=\"smartSort\"><b>");
-        cbuf.append(_t("Smart torrent sorting"));
-        cbuf.append("</b> </label><input type=checkbox class=\"optbox slider\" name=smartSort id=smartSort value=true "
-                  + (smartSort ? "checked " : "")
-                  + "title=\"");
-        cbuf.append(_t("Ignore words such as 'a' and 'the' when sorting"));
-        cbuf.append("\" ></span><br>\n");
-
-        cbuf.append("<span class=configOption><label for=\"collapsePanels\"><b>");
-        cbuf.append(_t("Collapsible panels"));
-        cbuf.append("</b> </label><input type=checkbox class=\"optbox slider\" name=collapsePanels id=collapsePanels value=true "
-                  + (collapsePanels ? "checked " : "")
-                  + "title=\"");
+        buf.append("<span class=configOption><label for=\"smartSort\"><b>")
+           .append(_t("Smart torrent sorting"))
+           .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
+           .append("name=smartSort id=smartSort value=true ")
+           .append((smartSort ? "checked " : ""))
+           .append("title=\"")
+           .append(_t("Ignore words such as 'a' and 'the' when sorting"))
+           .append("\" ></span><br>\n")
+           .append("<span class=configOption><label for=\"collapsePanels\"><b>")
+           .append(_t("Collapsible panels"))
+           .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
+           .append("name=collapsePanels id=collapsePanels value=true ")
+           .append((collapsePanels ? "checked " : ""))
+           .append("title=\"");
         if (noCollapse) {
         String ua = req.getHeader("user-agent");
-            cbuf.append(_t("Your browser does not support this feature."));
-            cbuf.append("[" + ua + "]");
-            cbuf.append("\" disabled=\"disabled");
+            buf.append(_t("Your browser does not support this feature."))
+               .append("[" + ua + "]")
+               .append("\" disabled=\"disabled");
         } else {
-            cbuf.append(_t("Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"));
+            buf.append(_t("Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"));
         }
-        cbuf.append("\"></span><br>\n");
-
-        cbuf.append("<span class=configOption><label for=\"showStatusFilter\"><b>");
-        cbuf.append(_t("Torrent filter bar"));
-        cbuf.append("</b> </label><input type=checkbox class=\"optbox slider\" name=showStatusFilter id=showStatusFilter value=true "
-                  + (showStatusFilter ? "checked " : "")
-                  + "title=\"");
-        cbuf.append(_t("Show filter bar above torrents for selective display based on status"));
-        cbuf.append(" (" + _t("requires javascript") + ")");
-        cbuf.append("\"></span><br>\n");
-
-        cbuf.append("<span class=configOption><label for=\"enableLightbox\"><b>");
-        cbuf.append(_t("Enable lightbox"));
-        cbuf.append("</b> </label><input type=checkbox class=\"optbox slider\" name=enableLightbox id=enableLightbox value=true "
-                  + (enableLightbox ? "checked " : "")
-                  + "title=\"");
-        cbuf.append(_t("Use a lightbox to display images when thumbnails are clicked"));
-        cbuf.append(" (" + _t("requires javascript") + ")");
-        cbuf.append("\"></span><br>\n");
-
-        cbuf.append("<span class=configOption><label for=\"enableAddCreate\"><b>");
-        cbuf.append(_t("Persist Add/Create"));
-        cbuf.append("</b> </label><input type=checkbox class=\"optbox slider\" name=enableAddCreate id=enableAddCreate value=true "
-                  + (enableAddCreate ? "checked " : "")
-                  + "title=\"");
-        cbuf.append(_t("Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"));
-        cbuf.append("\"></span><br>\n");
-
-        cbuf.append("</div>\n</td></tr>\n");
+        buf.append("\"></span><br>\n")
+           .append("<span class=configOption><label for=\"showStatusFilter\"><b>")
+           .append(_t("Torrent filter bar"))
+           .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
+           .append("name=showStatusFilter id=showStatusFilter value=true ")
+           .append((showStatusFilter ? "checked " : ""))
+           .append("title=\"")
+           .append(_t("Show filter bar above torrents for selective display based on status"))
+           .append(" (" + _t("requires javascript") + ")")
+           .append("\"></span><br>\n")
+           .append("<span class=configOption><label for=\"enableLightbox\"><b>")
+           .append(_t("Enable lightbox"))
+           .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
+           .append("name=enableLightbox id=enableLightbox value=true ")
+           .append((enableLightbox ? "checked " : ""))
+           .append("title=\"")
+           .append(_t("Use a lightbox to display images when thumbnails are clicked"))
+           .append(" (" + _t("requires javascript") + ")")
+           .append("\"></span><br>\n")
+           .append("<span class=configOption><label for=\"enableAddCreate\"><b>")
+           .append(_t("Persist Add/Create"))
+           .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
+           .append("name=enableAddCreate id=enableAddCreate value=true ")
+           .append((enableAddCreate ? "checked " : ""))
+           .append("title=\"")
+           .append(_t("Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"))
+           .append("\"></span><br>\n")
+           .append("</div>\n</td></tr>\n");
 
 // comments/ratings
 
-        cbuf.append("<tr><th class=suboption>");
-        cbuf.append(_t("Comments &amp; Ratings"));
-        cbuf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
+        buf.append("<tr><th class=suboption>");
+        buf.append(_t("Comments &amp; Ratings"));
+        buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
 
-        cbuf.append("<span class=configOption><label for=\"ratings\"><b>");
-        cbuf.append(_t("Enable Ratings"));
-        cbuf.append("</b></label> <input type=checkbox class=\"optbox slider\" name=ratings id=ratings value=true "
+        buf.append("<span class=configOption><label for=\"ratings\"><b>");
+        buf.append(_t("Enable Ratings"));
+        buf.append("</b></label> <input type=checkbox class=\"optbox slider\" name=ratings id=ratings value=true "
                   + (useRatings ? "checked " : "")
                   + "title=\"");
-        cbuf.append(_t("Show ratings on torrent pages"));
-        cbuf.append("\" ></span><br>\n");
+        buf.append(_t("Show ratings on torrent pages"));
+        buf.append("\" ></span><br>\n");
 
-        cbuf.append("<span class=configOption><label for=\"comments\"><b>");
-        cbuf.append(_t("Enable Comments"));
-        cbuf.append("</b></label> <input type=checkbox class=\"optbox slider\" name=comments id=comments value=true "
+        buf.append("<span class=configOption><label for=\"comments\"><b>");
+        buf.append(_t("Enable Comments"));
+        buf.append("</b></label> <input type=checkbox class=\"optbox slider\" name=comments id=comments value=true "
                   + (useComments ? "checked " : "")
                   + "title=\"");
-        cbuf.append(_t("Show comments on torrent pages"));
-        cbuf.append("\" ></span><br>\n");
+        buf.append(_t("Show comments on torrent pages"));
+        buf.append("\" ></span><br>\n");
 
-        cbuf.append("<span class=configOption id=configureAuthor><label><b>");
-        cbuf.append(_t("Comment Author"));
-        cbuf.append("</b> <input type=text name=nofilter_commentsName spellcheck=false value=\""
+        buf.append("<span class=configOption id=configureAuthor><label><b>");
+        buf.append(_t("Comment Author"));
+        buf.append("</b> <input type=text name=nofilter_commentsName spellcheck=false value=\""
                   + DataHelper.escapeHTML(_manager.util().getCommentsName()) + "\" size=15 maxlength=16 title=\"");
-        cbuf.append(_t("Set the author name for your comments and ratings"));
-        cbuf.append("\" ></label></span>\n");
+        buf.append(_t("Set the author name for your comments and ratings"));
+        buf.append("\" ></label></span>\n");
 
-        cbuf.append("</div>\n</td></tr>\n");
+        buf.append("</div>\n</td></tr>\n");
 
 // torrent options
 
-        cbuf.append("<tr><th class=suboption>");
-        cbuf.append(_t("Torrent Options"));
-        cbuf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
+        buf.append("<tr><th class=suboption>");
+        buf.append(_t("Torrent Options"));
+        buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
 
-        cbuf.append("<span class=configOption><label><b>");
-        cbuf.append(_t("Up bandwidth limit"));
-        cbuf.append("</b> <input type=text name=upBW class=\"r numeric\" value=\""
+        buf.append("<span class=configOption><label><b>");
+        buf.append(_t("Up bandwidth limit"));
+        buf.append("</b> <input type=text name=upBW class=\"r numeric\" value=\""
                   + _manager.util().getMaxUpBW() + "\" size=5 maxlength=5 pattern=\"[0-9]{1,5}\""
                   + " title=\"");
-        cbuf.append(_t("Maximum bandwidth allocated for uploading"));
-        cbuf.append("\"> KBps</label> <span id=bwHoverHelp>");
-        cbuf.append(toThemeSVG("details", "", ""));
-        cbuf.append("<span id=bwHelp><i>");
-        cbuf.append(_t("Half available bandwidth recommended."));
-        cbuf.append("</i></span></span>");
+        buf.append(_t("Maximum bandwidth allocated for uploading"));
+        buf.append("\"> KBps</label> <span id=bwHoverHelp>");
+        buf.append(toThemeSVG("details", "", ""));
+        buf.append("<span id=bwHelp><i>");
+        buf.append(_t("Half available bandwidth recommended."));
+        buf.append("</i></span></span>");
         if (_context.isRouterContext()) {
-            cbuf.append(" <a href=\"/config.jsp\" target=_blank title=\"");
-            cbuf.append(_t("View or change router bandwidth"));
-            cbuf.append("\">[");
-            cbuf.append(_t("Configure"));
-            cbuf.append("]</a>");
+            buf.append(" <a href=\"/config.jsp\" target=_blank title=\"");
+            buf.append(_t("View or change router bandwidth"));
+            buf.append("\">[");
+            buf.append(_t("Configure"));
+            buf.append("]</a>");
         }
-        cbuf.append("</span><br>\n");
+        buf.append("</span><br>\n");
 
-        cbuf.append("<span class=configOption><label><b>");
-        cbuf.append(_t("Total uploader limit"));
-        cbuf.append("</b> <input type=text name=upLimit class=\"r numeric\" value=\""
+        buf.append("<span class=configOption><label><b>");
+        buf.append(_t("Total uploader limit"));
+        buf.append("</b> <input type=text name=upLimit class=\"r numeric\" value=\""
                   + _manager.util().getMaxUploaders() + "\" size=5 maxlength=3 pattern=\"[0-9]{1,3}\""
                   + " title=\"");
-        cbuf.append(_t("Maximum number of peers to upload to"));
-        cbuf.append("\"> ");
-        cbuf.append(_t("peers"));
-        cbuf.append("</label></span><br>\n");
+        buf.append(_t("Maximum number of peers to upload to"));
+        buf.append("\"> ");
+        buf.append(_t("peers"));
+        buf.append("</label></span><br>\n");
 
-        cbuf.append("<span class=configOption><label for=\"useOpenTrackers\"><b>");
-        cbuf.append(_t("Use open trackers also").replace(" also", ""));
-        cbuf.append("</b></label> <input type=checkbox class=\"optbox slider\" name=useOpenTrackers id=useOpenTrackers value=true "
+        buf.append("<span class=configOption><label for=\"useOpenTrackers\"><b>");
+        buf.append(_t("Use open trackers also").replace(" also", ""));
+        buf.append("</b></label> <input type=checkbox class=\"optbox slider\" name=useOpenTrackers id=useOpenTrackers value=true "
                   + (useOpenTrackers ? "checked " : "")
                   + "title=\"");
-        cbuf.append(_t("Announce torrents to open trackers as well as trackers listed in the torrent file"));
-        cbuf.append("\"></span><br>\n");
+        buf.append(_t("Announce torrents to open trackers as well as trackers listed in the torrent file"));
+        buf.append("\"></span><br>\n");
 
-        cbuf.append("<span class=configOption><label for=\"useDHT\"><b>");
-        cbuf.append(_t("Enable DHT"));
-        cbuf.append("</b></label> <input type=checkbox class=\"optbox slider\" name=useDHT id=useDHT value=true "
+        buf.append("<span class=configOption><label for=\"useDHT\"><b>");
+        buf.append(_t("Enable DHT"));
+        buf.append("</b></label> <input type=checkbox class=\"optbox slider\" name=useDHT id=useDHT value=true "
                   + (useDHT ? "checked " : "")
                   + "title=\"");
-        cbuf.append(_t("Use DHT to find additional peers"));
-        cbuf.append("\"></span><br>\n");
+        buf.append(_t("Use DHT to find additional peers"));
+        buf.append("\"></span><br>\n");
 
-        cbuf.append("<span class=configOption><label for=\"autoStart\"><b>");
-        cbuf.append(_t("Auto start torrents"));
-        cbuf.append("</b> </label><input type=checkbox class=\"optbox slider\" name=autoStart id=autoStart value=true "
+        buf.append("<span class=configOption><label for=\"autoStart\"><b>");
+        buf.append(_t("Auto start torrents"));
+        buf.append("</b> </label><input type=checkbox class=\"optbox slider\" name=autoStart id=autoStart value=true "
                   + (autoStart ? "checked " : "")
                   + "title=\"");
-        cbuf.append(_t("Automatically start torrents when added and restart torrents when I2PSnark starts"));
-        cbuf.append("\"></span>");
+        buf.append(_t("Automatically start torrents when added and restart torrents when I2PSnark starts"));
+        buf.append("\"></span>");
 
         if (_context.isRouterContext()) {
-            cbuf.append("<br>\n<span class=configOption><label><b>");
-            cbuf.append(_t("Startup delay"));
-            cbuf.append("</b> <input type=text name=startupDelay size=5 maxlength=4 pattern=\"[0-9]{1,4}\" class=\"r numeric\""
+            buf.append("<br>\n<span class=configOption><label><b>");
+            buf.append(_t("Startup delay"));
+            buf.append("</b> <input type=text name=startupDelay size=5 maxlength=4 pattern=\"[0-9]{1,4}\" class=\"r numeric\""
                       + " title=\"");
-            cbuf.append(_t("How long before auto-started torrents are loaded when I2PSnark starts"));
-            cbuf.append("\" value=\"" + _manager.util().getStartupDelay() + "\"> ");
-            cbuf.append(_t("minutes"));
-            cbuf.append("</label></span>");
+            buf.append(_t("How long before auto-started torrents are loaded when I2PSnark starts"));
+            buf.append("\" value=\"" + _manager.util().getStartupDelay() + "\"> ");
+            buf.append(_t("minutes"));
+            buf.append("</label></span>");
         }
-        cbuf.append("\n</div>\n</td></tr>\n");
+        buf.append("\n</div>\n</td></tr>\n");
 
 // data storage
 
-        cbuf.append("<tr><th class=suboption>");
-        cbuf.append(_t("Data Storage"));
-        cbuf.append("</th></tr><tr><td>\n<div class=optionlist>\n");
+        buf.append("<tr><th class=suboption>");
+        buf.append(_t("Data Storage"));
+        buf.append("</th></tr><tr><td>\n<div class=optionlist>\n");
 
-        cbuf.append("<span class=configOption><label><b>");
-        cbuf.append(_t("Data directory"));
-        cbuf.append("</b> <input type=text name=nofilter_dataDir size=60" + " title=\"");
-        cbuf.append(_t("Directory where torrents and downloaded/shared files are stored"));
-        cbuf.append("\" value=\"" + DataHelper.escapeHTML(dataDir) + "\" spellcheck=false></label></span><br>\n");
+        buf.append("<span class=configOption><label><b>");
+        buf.append(_t("Data directory"));
+        buf.append("</b> <input type=text name=nofilter_dataDir size=60" + " title=\"");
+        buf.append(_t("Directory where torrents and downloaded/shared files are stored"));
+        buf.append("\" value=\"" + DataHelper.escapeHTML(dataDir) + "\" spellcheck=false></label></span><br>\n");
 
-        cbuf.append("<span class=configOption><label for=\"filesPublic\"><b>");
-        cbuf.append(_t("Files readable by all"));
-        cbuf.append("</b> </label><input type=checkbox class=\"optbox slider\" name=filesPublic id=filesPublic value=true " +
+        buf.append("<span class=configOption><label for=\"filesPublic\"><b>");
+        buf.append(_t("Files readable by all"));
+        buf.append("</b> </label><input type=checkbox class=\"optbox slider\" name=filesPublic id=filesPublic value=true " +
                   (filesPublic ? "checked " : "") + "title=\"");
-        cbuf.append(_t("Set file permissions to allow other local users to access the downloaded files"));
-        cbuf.append("\" ></span>\n");
+        buf.append(_t("Set file permissions to allow other local users to access the downloaded files"));
+        buf.append("\" ></span>\n");
 
-        cbuf.append("<span class=configOption><label for=\"maxFiles\"><b>");
-        cbuf.append(_t("Max files per torrent"));
-        cbuf.append("</b> <input type=text name=maxFiles size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"" + " title=\"");
-        cbuf.append(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"));
-        cbuf.append("\" value=\"" + _manager.getMaxFilesPerTorrent() + "\" spellcheck=false disabled></label></span><br>\n");
-        cbuf.append("</div></td></tr>\n");
+        buf.append("<span class=configOption><label for=\"maxFiles\"><b>");
+        buf.append(_t("Max files per torrent"));
+        buf.append("</b> <input type=text name=maxFiles size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"" + " title=\"");
+        buf.append(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"));
+        buf.append("\" value=\"" + _manager.getMaxFilesPerTorrent() + "\" spellcheck=false disabled></label></span><br>\n");
+        buf.append("</div></td></tr>\n");
 
 // i2cp/tunnel configuration
 
-        cbuf.append("<tr><th class=suboption>");
-        cbuf.append(_t("Tunnel Configuration"));
-        cbuf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
+        buf.append("<tr><th class=suboption>");
+        buf.append(_t("Tunnel Configuration"));
+        buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n");
 
         Map<String, String> options = new TreeMap<String, String>(_manager.util().getI2CPOptions());
 
-        cbuf.append("<span class=configOption><b>");
-        cbuf.append(_t("Inbound Settings"));
-        cbuf.append("</b> \n");
-        cbuf.append(renderOptions(1, 16, SnarkManager.DEFAULT_TUNNEL_QUANTITY, options.remove("inbound.quantity"), "inbound.quantity", TUNNEL));
-        cbuf.append("&nbsp;");
-        cbuf.append(renderOptions(0, 6, 3, options.remove("inbound.length"), "inbound.length", HOP));
-        cbuf.append("</span><br>\n");
+        buf.append("<span class=configOption><b>");
+        buf.append(_t("Inbound Settings"));
+        buf.append("</b> \n");
+        buf.append(renderOptions(1, 16, SnarkManager.DEFAULT_TUNNEL_QUANTITY, options.remove("inbound.quantity"), "inbound.quantity", TUNNEL));
+        buf.append("&nbsp;");
+        buf.append(renderOptions(0, 6, 3, options.remove("inbound.length"), "inbound.length", HOP));
+        buf.append("</span><br>\n");
 
-        cbuf.append("<span class=configOption><b>");
-        cbuf.append(_t("Outbound Settings"));
-        cbuf.append("</b> \n");
-        cbuf.append(renderOptions(1, 16, SnarkManager.DEFAULT_TUNNEL_QUANTITY, options.remove("outbound.quantity"), "outbound.quantity", TUNNEL));
-        cbuf.append("&nbsp;");
-        cbuf.append(renderOptions(0, 6, 3, options.remove("outbound.length"), "outbound.length", HOP));
-        cbuf.append("</span><br>\n");
+        buf.append("<span class=configOption><b>");
+        buf.append(_t("Outbound Settings"));
+        buf.append("</b> \n");
+        buf.append(renderOptions(1, 16, SnarkManager.DEFAULT_TUNNEL_QUANTITY, options.remove("outbound.quantity"), "outbound.quantity", TUNNEL));
+        buf.append("&nbsp;");
+        buf.append(renderOptions(0, 6, 3, options.remove("outbound.length"), "outbound.length", HOP));
+        buf.append("</span><br>\n");
 
         if (!_context.isRouterContext()) {
-            cbuf.append("<span class=configOption><label><b>");
-            cbuf.append(_t("I2CP host"));
-            cbuf.append("</b> <input type=text name=i2cpHost value=\""
+            buf.append("<span class=configOption><label><b>");
+            buf.append(_t("I2CP host"));
+            buf.append("</b> <input type=text name=i2cpHost value=\""
                       + _manager.util().getI2CPHost() + "\" size=5></label></span><br>\n");
 
-            cbuf.append("<span class=configOption><label><b>");
-            cbuf.append(_t("I2CP port"));
-            cbuf.append("</b> <input type=text name=i2cpPort value=\"" +
+            buf.append("<span class=configOption><label><b>");
+            buf.append(_t("I2CP port"));
+            buf.append("</b> <input type=text name=i2cpPort value=\"" +
                       + _manager.util().getI2CPPort() + "\" class=numeric size=5 maxlength=5 pattern=\"[0-9]{1,5}\" ></label></span><br>\n");
         }
 
@@ -3671,41 +3664,36 @@ public class I2PSnarkServlet extends BasicServlet {
             String val = e.getValue();
             opts.append(key).append('=').append(val).append(' ');
         }
-        cbuf.append("<span class=configOption><label><b>");
-        cbuf.append(_t("I2CP options"));
-        cbuf.append("</b> <input type=text name=i2cpOpts value=\""
-                  + opts.toString() + "\" size=60></label></span>\n");
-
-        cbuf.append("</div>\n</td></tr>\n");
-
-        cbuf.append("<tr class=spacer><td></td></tr>\n");  // spacer
+        buf.append("<span class=configOption><label><b>")
+           .append(_t("I2CP options"))
+           .append("</b> <input type=text name=i2cpOpts value=\"")
+           .append(opts.toString()).append("\" size=60></label></span>\n")
+           .append("</div>\n</td></tr>\n")
+           .append("<tr class=spacer><td></td></tr>\n");  // spacer
 
 // save config
 
-        cbuf.append("<tr><td><input type=submit class=accept value=\"");
-        cbuf.append(_t("Save configuration"));
-        cbuf.append("\" name=foo></td></tr>\n" +
-                  "<tr class=spacer><td>&nbsp;</td></tr>\n" +  // spacer
-                  "</table></div></div></form>");
-        out.write(cbuf.toString());
+        buf.append("<tr><td><input type=submit class=accept value=\"")
+           .append(_t("Save configuration"))
+           .append("\" name=foo></td></tr>\n")
+           .append("<tr class=spacer><td>&nbsp;</td></tr>\n")  // spacer
+           .append("</table></div></div></form>");
+        out.write(buf.toString());
         out.flush();
-        cbuf.setLength(0);
+        buf.setLength(0);
     }
 
     /** @since 0.9 */
     private void writeTrackerForm(PrintWriter out, HttpServletRequest req) throws IOException {
         StringBuilder buf = new StringBuilder(5*1024);
-        buf.append("<form action=\"" + _contextPath + "/configure#navbar\" method=POST>\n" +
-                   "<div class=configPanel id=trackers><div class=snarkConfig>\n");
+        buf.append("<form action=\"").append(_contextPath).append("/configure#navbar\" method=POST>\n")
+           .append("<div class=configPanel id=trackers><div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save2");
-        buf.append("<span class=configTitle>");
-//        toThemeImg(buf, "config");
-//        buf.append(' ');
-        buf.append(_t("Trackers"));
-        buf.append("</span><hr>\n"   +
-                   "<table class=trackerconfig><tr><th title=\"")
-            .append(_t("Select trackers for removal from I2PSnark's known list"))
-           //.append(_t("Remove"))
+        buf.append("<span class=configTitle>")
+           .append(_t("Trackers"))
+           .append("</span><hr>\n")
+           .append("<table class=trackerconfig><tr><th title=\"")
+           .append(_t("Select trackers for removal from I2PSnark's known list"))
            .append("\"></th><th>")
            .append(_t("Name"))
            .append("</th><th>")
@@ -3728,28 +3716,31 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean isPrivate = privateTrackers.contains(t.announceURL);
             boolean isKnownOpen = _manager.util().isKnownOpenTracker(t.announceURL);
             boolean isOpen = isKnownOpen || openTrackers.contains(t.announceURL);
-            buf.append("<tr class=knownTracker><td><input type=checkbox class=optbox id=\"").append(name).append("\" name=\"delete_")
-               .append(name).append("\" title=\"").append(_t("Mark tracker for deletion")).append("\">" +
-                       "</td><td><label for=\"").append(name).append("\">").append(name).append("</label></td><td>");
-               if (homeURL.endsWith(".i2p/"))
-                   homeURL = homeURL.substring(0, homeURL.length() - 1);
-            buf.append(urlify(homeURL, 64)).append("</td><td><input type=radio class=optbox value=\"0\" tabindex=-1 name=\"ttype_")
+            buf.append("<tr class=knownTracker><td><input type=checkbox class=optbox id=\"")
+                .append(name).append("\" name=\"delete_")
+                .append(name).append("\" title=\"").append(_t("Mark tracker for deletion")).append("\">")
+                .append("</td><td><label for=\"").append(name).append("\">").append(name).append("</label></td><td>");
+            if (homeURL.endsWith(".i2p/")) {
+                homeURL = homeURL.substring(0, homeURL.length() - 1);
+            }
+            buf.append(urlify(homeURL, 64))
+               .append("</td><td><input type=radio class=optbox value=\"0\" tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
-            if (!(isOpen || isPrivate))
+            if (!(isOpen || isPrivate)) {
                 buf.append(" checked=checked");
-            else if (isKnownOpen)
+            } else if (isKnownOpen) {
                 buf.append(" disabled=disabled");
-            buf.append(">" +
-                       "</td><td><input type=radio class=optbox value=1 tabindex=-1 name=\"ttype_")
+            }
+            buf.append("></td><td><input type=radio class=optbox value=1 tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
-            if (isOpen)
+            if (isOpen) {
                 buf.append(" checked=checked");
-            else if (t.announceURL.equals("http://diftracker.i2p/announce.php") ||
-                     t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
-                     t.announceURL.equals("http://torrfreedom.i2p/announce.php"))
+            } else if (t.announceURL.equals("http://diftracker.i2p/announce.php") ||
+                       t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
+                       t.announceURL.equals("http://torrfreedom.i2p/announce.php")) {
                 buf.append(" disabled=disabled");
-            buf.append(">" +
-                       "</td><td><input type=radio class=optbox value=2 tabindex=-1 name=\"ttype_")
+            }
+            buf.append("></td><td><input type=radio class=optbox value=2 tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
             if (isPrivate) {
                 buf.append(" checked=checked");
@@ -3759,36 +3750,40 @@ public class I2PSnarkServlet extends BasicServlet {
                        t.announceURL.equals("http://torrfreedom.i2p/announce.php")) {
                 buf.append(" disabled=disabled");
             }
-            buf.append(">" +
-                       "</td><td>").append(urlify(announceURL, 64))
+            buf.append("></td><td>").append(urlify(announceURL, 64))
                .append("</td></tr>\n");
         }
         buf.append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n")  // spacer
            .append("<tr id=addtracker><td><b>")
-           .append(_t("Add")).append(":</b></td>" +
-                   "<td><input type=text class=trackername name=tname spellcheck=false></td>" +
-                   "<td><input type=text class=trackerhome name=thurl spellcheck=false></td>" +
-                   "<td><input type=radio class=optbox value=\"0\" name=add_tracker_type checked=checked></td>" +
-                   "<td><input type=radio class=optbox value=1 name=add_tracker_type></td>" +
-                   "<td><input type=radio class=optbox value=2 name=add_tracker_type></td>" +
-                   "<td><input type=text class=trackerannounce name=taurl spellcheck=false></td></tr>\n" +
-                   "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n" +  // spacer
-                   "<tr><td colspan=7>\n" +
-                   "<input type=submit name=taction class=default value=\"").append(_t("Add tracker")).append("\">\n" +
-                   "<input type=submit name=taction class=delete value=\"").append(_t("Delete selected")).append("\">\n" +
-                   "<input type=submit name=taction class=\"add\" value=\"").append(_t("Add tracker")).append("\">\n" +
-                   "<input type=submit name=taction class=accept value=\"").append(_t("Save tracker configuration")).append("\">\n" +
-                   // "<input type=reset class=cancel value=\"").append(_t("Cancel")).append("\">\n" +
-                   "<input type=submit name=taction class=reload value=\"").append(_t("Restore defaults")).append("\">\n" +
-                   "</td></tr>" +
-                   "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n" +  // spacer
-                   "</table>\n</div>\n</div></form>\n");
+           .append(_t("Add")).append(":</b></td>")
+           .append("<td><input type=text class=trackername name=tname spellcheck=false></td>")
+           .append("<td><input type=text class=trackerhome name=thurl spellcheck=false></td>")
+           .append("<td><input type=radio class=optbox value=\"0\" name=add_tracker_type checked=checked></td>")
+           .append("<td><input type=radio class=optbox value=1 name=add_tracker_type></td>")
+           .append("<td><input type=radio class=optbox value=2 name=add_tracker_type></td>")
+           .append("<td><input type=text class=trackerannounce name=taurl spellcheck=false></td></tr>\n")
+           .append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
+           .append("<tr><td colspan=7>\n")
+           .append("<input type=submit name=taction class=default value=\"")
+           .append(_t("Add tracker")).append("\">\n")
+           .append("<input type=submit name=taction class=delete value=\"")
+           .append(_t("Delete selected")).append("\">\n")
+           .append("<input type=submit name=taction class=\"add\" value=\"")
+           .append(_t("Add tracker")).append("\">\n")
+           .append("<input type=submit name=taction class=accept value=\"")
+           .append(_t("Save tracker configuration")).append("\">\n")
+           // "<input type=reset class=cancel value=\"").append(_t("Cancel")).append("\">\n" +
+           .append("<input type=submit name=taction class=reload value=\"")
+           .append(_t("Restore defaults")).append("\">\n")
+           .append("</td></tr>")
+           .append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
+           .append("</table>\n</div>\n</div></form>\n");
         out.write(buf.toString());
     }
 
     private void writeConfigLink(PrintWriter out) throws IOException {
-        out.write("<div id=configSection>\n<span class=snarkConfig>" +
-                  "<span id=tab_config class=configTitle><a href=\"configure\"><span class=tab_label>");
+        out.write("<div id=configSection>\n<span class=snarkConfig>");
+        out.write("<span id=tab_config class=configTitle><a href=\"configure\"><span class=tab_label>");
         out.write(_t("Configuration"));
         out.write("</span></a></span></span>\n</div>\n");
     }
@@ -3832,18 +3827,22 @@ public class I2PSnarkServlet extends BasicServlet {
         } catch (Throwable t) {}
         StringBuilder buf = new StringBuilder(128);
         buf.append("<select name=\"").append(selName);
-        if (selName.contains("quantity"))
-            buf.append("\" title=\"").append(_t("This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"));
-        if (selName.contains("length"))
-            buf.append("\" title=\"").append(_t("Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"));
+        if (selName.contains("quantity")) {
+            buf.append("\" title=\"")
+               .append(_t("This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"));
+        }
+        if (selName.contains("length")) {
+            buf.append("\" title=\"")
+               .append(_t("Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"));
+        }
         buf.append("\">\n");
         for (int i = min; i <= max; i++) {
             buf.append("<option value=\"").append(i).append("\" ");
             if (i == now)
                 buf.append("selected=selected ");
             // constants to prevent tagging
-            buf.append(">").append(ngettext(DUMMY1 + name, DUMMY0 + name + 's', i));
-            buf.append("</option>\n");
+            buf.append(">").append(ngettext(DUMMY1 + name, DUMMY0 + name + 's', i))
+               .append("</option>\n");
         }
         buf.append("</select>\n");
         return buf.toString();
