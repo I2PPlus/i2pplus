@@ -430,13 +430,6 @@ public class HomeHelper extends HelperBase {
                     continue;
                 else
                     url = app.url + "\" target=_blank class=\"extlink";
-            // embed plugins in the console
-            } else if ((app.url.contains("bote") && !app.url.contains(".i2p") && (embedApps))) {
-                url = "/embed?url=/i2pbote&amp;name=BoteMail";
-            } else if ((app.url.contains("BwSchedule") && (embedApps))) {
-                url = "/embed?url=/BwSchedule/home&amp;name=Bandwidth+Scheduler";
-            } else if ((app.url.contains("outproxy") && !app.url.contains(".i2p") && (embedApps))) {
-                url = "/embed?url=/outproxy/&amp;name=SOCKS+Outproxy+Plugin";
             // if external links set to open in new tab, add class so we can indicate external links with overlay
             // plugins need to be manually added
             } else if ((!embedApps && (app.url.contains("webmail") || app.url.contains("torrents") || app.url.contains("outproxy")

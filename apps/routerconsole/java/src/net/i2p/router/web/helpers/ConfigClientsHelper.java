@@ -381,15 +381,10 @@ public class ConfigClientsHelper extends HelperBase {
         buf.append("<tr><td class=right>");
         if (urlify) {
             String link = "/";
-            if (! RouterConsoleRunner.ROUTERCONSOLE.equals(name))
+            if (! RouterConsoleRunner.ROUTERCONSOLE.equals(name)) {
                 link += escapedName + "/\" target=\"_blank";
-                boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
-                if (name.contains(_t("imagegen")) && (embedApps)) {
-                    buf.append("<a href=\"/embed?url=/imagegen&name=").append(_t("Identification Image Generator")
-                       .replace(" ", "%20")).append("\">").append(_t(escapedName)).append("</a>");
-                } else {
-                    buf.append("<a href=\"").append(link).append("\">").append(_t(escapedName)).append("</a>");
-             }
+            }
+            buf.append("<a href=\"").append(link).append("\">").append(_t(escapedName)).append("</a>");
         } else if (edit && !ro) {
             buf.append("<input type=text name=\"nofilter_name").append(index).append("\" value=\"");
             if (name.length() > 0)

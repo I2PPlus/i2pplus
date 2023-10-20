@@ -89,23 +89,11 @@ public class NavHelper implements NavService, ClientApp {
             buf.setLength(0);
             getClientAppImg(buf, appName, app.icon);
             I2PAppContext ctx = I2PAppContext.getGlobalContext();
-            boolean embedApps = ctx.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
-            if ((path.contains("bote") && (embedApps))) {
-                buf.append(" <a href=\"/embed?url=").append(path).append("&amp;name=BoteMail\"");
-                if (tip != null)
-                        buf.append(" title=\"").append(tip).append("\"");
-                    buf.append('>').append(name.replace(" ", "&nbsp;")).append("</a>\n");
-            } else if ((path.contains("BwSchedule") && (embedApps))) {
-                buf.append(" <a href=\"/embed?url=").append(path).append("&amp;name=Bandwidth+Scheduler\"");
-                if (tip != null)
-                        buf.append(" title=\"").append(tip).append("\"");
-                    buf.append('>').append(name.replace(" ", "&nbsp;")).append("</a>\n");
-            } else {
-                buf.append(" <a target=_blank href=\"").append(path.replace(" ", "%20")).append("\"");
-                if (tip != null)
-                    buf.append(" title=\"").append(tip).append("\"");
-                buf.append('>').append(name.replace(" ", "&nbsp;")).append("</a>\n");
+            buf.append(" <a target=_blank href=\"").append(path.replace(" ", "%20")).append("\"");
+            if (tip != null) {
+                buf.append(" title=\"").append(tip).append("\"");
             }
+            buf.append('>').append(name.replace(" ", "&nbsp;")).append("</a>\n");
             rv.put(name, buf.toString());
         }
         return rv;
