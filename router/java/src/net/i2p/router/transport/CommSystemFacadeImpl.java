@@ -805,10 +805,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     private static void cleanupRDNSCache() {
-        Iterator<Map.Entry<String, CacheEntry>> it = rdnsCache.entrySet().iterator();
-        while (it.hasNext() && rdnsCache.size() > MAX_RDNS_CACHE_SIZE) {
-            it.next();
-            it.remove();
+        List<String> keysToRemove = new ArrayList<>();
+        for (Map.Entry<String, CacheEntry> entry : rdnsCache.entrySet()) {
+            if (rdnsCache.size() > MAX_RDNS_CACHE_SIZE) {
+                keysToRemove.add(entry.getKey());
+            }
+        }
+        for (String key : keysToRemove) {
+            rdnsCache.remove(key);
         }
     }
 
