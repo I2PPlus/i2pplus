@@ -104,12 +104,12 @@ function refreshTorrents(callback) {
     const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr");
     const updatingCells = document.querySelectorAll("#snarkTbody tr.volatile td:not(.magnet):not(.trackerLink):not(.details.data)");
     const updatingCellsResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile td:not(.magnet):not(.trackerLink):not(.details.data)");
-    const activeBadge = filterbar.querySelector(".filter.enabled #filtercount");
 
     if (torrents) {
-      if (activeBadge) {
+      if (filterbar) {
+        const activeBadge = filterbar.querySelector(".filter.enabled #filtercount");
         const activeBadgeResponse = xhrsnark.responseXML.querySelector(".filter.enabled #filtercount");
-        if (activeBadgeResponse && activeBadge.textContent !== activeBadgeResponse.textContent) {
+        if (activeBadge && activeBadgeResponse && activeBadge.textContent !== activeBadgeResponse.textContent) {
           activeBadge.textContent = activeBadgeResponse.textContent;
         }
       }
