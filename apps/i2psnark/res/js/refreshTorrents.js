@@ -260,7 +260,7 @@ function setLinks(query) {
 }
 
 function noAjax(delay) {
-  var failMessage = "<div class='routerdown' id='down'><span>Router is down</span></div>";
+  var failMessage = "<div class=routerdown id=down><span>Router is down</span></div>";
   var targetElement = mainsection || snarkInfo;
   setTimeout(function() {
     if (targetElement) {
