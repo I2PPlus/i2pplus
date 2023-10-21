@@ -563,18 +563,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (ip == null)
                     continue;
                 _geoIP.add(ip);
-/**
-                if (enableReverseLookups() && uptime > 3*60*1000 && uptime < 10*60*1000) {
-                    try {
-                        InetAddress ipAddress = InetAddress.getByAddress(ip);
-                        String ipString = ipAddress.getHostAddress();
-                        getCanonicalHostName(ipString);
-                        try {
-                            Thread.sleep(10); // 100 lookups/s max
-                        } catch (InterruptedException e) {}
-                    } catch(UnknownHostException exception) {}
-                }
-**/
             }
             _context.simpleTimer2().addPeriodicEvent(new Lookup(), 5000, LOOKUP_TIME);
         }
@@ -627,6 +615,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final long EXPIRE_TIME = 24*60*60*1000;
     private static final long EXPIRE_TIME_SHORT = 60*60*1000;
     private static final int MAX_RDNS_CACHE_SIZE = SystemVersion.getMaxMemory() < 512*1024*1024 ? 16384 : 32768;
+    private static Object rdnslock = new Object();
 
     public static class CacheEntry {
         private String ipAddress;
@@ -658,43 +647,47 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     public static String rdnsCacheSize() {
-        File cache = new File(RDNS_CACHE_FILE);
-        long fileSize = cache != null ? cache.length() / 1024 : 0;
-        return cache != null ? String.valueOf(fileSize) + "KB" : "Cache file not found";
+        synchronized (rdnslock) {
+            File cache = new File(RDNS_CACHE_FILE);
+            long fileSize = cache != null ? cache.length() / 1024 : 0;
+            return cache != null ? String.valueOf(fileSize) + "KB" : "Cache file not found";
+        }
     }
 
     private static void readRDNSCacheFromFile() {
-        File fCache = new File(RDNS_CACHE_FILE);
-        try (BufferedReader reader = new BufferedReader(new FileReader(fCache))) {
-           String line;
-           while ((line = reader.readLine()) != null) {
-              if (!line.matches("^([0-9a-fA-F]).*")) {
-                 System.out.println("Line doesn't start with a digit or a-f (skipping line): " + line);
-                 line = line.replaceFirst("^[^0-9a-fA-F]*", "");
-              }
-              CacheEntry cacheEntry = rdnsEntryFromString(line);
-              if (cacheEntry != null) {
-                 rdnsCache.put(cacheEntry.getIpAddress(), cacheEntry);
-              }
-           }
-           // Log the number of entries imported from file cache
-           //System.out.println("Imported " + rdnsCache.size() + " entries from cache file");
-        } catch (IOException ex) {
-           System.err.println("Error reading RDNS cache file. Creating new file...");
-           createRdnsCacheFile();
-           ex.printStackTrace();
-        }
-        // Print the contents of the rdnsCache map to the console
-        //System.out.println("RDNS cache: " + rdnsCache);
-        //for (Map.Entry<String, CacheEntry> entry : rdnsCache.entrySet()) {
-        //   System.out.println(entry.getKey() + "=" + entry.getValue().getHostname());
-        //}
+        synchronized (rdnslock) {
+            File fCache = new File(RDNS_CACHE_FILE);
+            try (BufferedReader reader = new BufferedReader(new FileReader(fCache))) {
+               String line;
+               while ((line = reader.readLine()) != null) {
+                  if (!line.matches("^([0-9a-fA-F]).*")) {
+                     System.out.println("Line doesn't start with a digit or a-f (skipping line): " + line);
+                     line = line.replaceFirst("^[^0-9a-fA-F]*", "");
+                  }
+                  CacheEntry cacheEntry = rdnsEntryFromString(line);
+                  if (cacheEntry != null) {
+                     rdnsCache.put(cacheEntry.getIpAddress(), cacheEntry);
+                  }
+               }
+               // Log the number of entries imported from file cache
+               //System.out.println("Imported " + rdnsCache.size() + " entries from cache file");
+            } catch (IOException ex) {
+               System.err.println("Error reading RDNS cache file. Creating new file...");
+               createRdnsCacheFile();
+               ex.printStackTrace();
+            }
+            // Print the contents of the rdnsCache map to the console
+            //System.out.println("RDNS cache: " + rdnsCache);
+            //for (Map.Entry<String, CacheEntry> entry : rdnsCache.entrySet()) {
+            //   System.out.println(entry.getKey() + "=" + entry.getValue().getHostname());
+            //}
 
-        // Schedule the cache writer to run every 5 minutes
-        // TODO: Convert to a standard job
-        Timer timer = new Timer();
-        long delay = 5 * 60 * 1000 + 30;
-        timer.schedule(new RDNSCacheFileWriter(new HashMap<>(rdnsCache)), delay, delay);
+            // Schedule the cache writer to run every 5 minutes
+            // TODO: Convert to a standard job
+            Timer timer = new Timer();
+            long delay = 5 * 60 * 1000 + 30;
+            timer.schedule(new RDNSCacheFileWriter(new HashMap<>(rdnsCache)), delay, delay);
+        }
     }
 
     // method to convert a CacheEntry to a string representation (for file storage)
@@ -713,16 +706,18 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return null;
     }
 
-    private static void createRdnsCacheFile() {
-        File cacheFile = new File(RDNS_CACHE_FILE);
-        if (!cacheFile.exists()) {
-            try {
-                cacheFile.createNewFile();
-            } catch (IOException ex) {
-                System.err.println("Error creating cache file: " + ex.getMessage());
+    private static synchronized void createRdnsCacheFile() {
+        synchronized (rdnslock) {
+            File cacheFile = new File(RDNS_CACHE_FILE);
+            if (!cacheFile.exists()) {
+                try {
+                    cacheFile.createNewFile();
+                } catch (IOException ex) {
+                    System.err.println("Error creating cache file: " + ex.getMessage());
+                }
+            } else {
+                readRDNSCacheFromFile();
             }
-        } else {
-            readRDNSCacheFromFile();
         }
     }
 
@@ -750,108 +745,118 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     private static void writeRDNSCacheToFile() {
-       try {
-          File cacheFile = new File(RDNS_CACHE_FILE);
-          if (!cacheFile.exists()) {
-             cacheFile.createNewFile();
-             System.err.println("Cache file created");
-          }
-          // create a temporary file
-          File tmpFile = new File(RDNS_CACHE_FILE + ".tmp");
-          // create a buffered writer with UTF-8 encoding and "\n" as the newline character
-          BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-                  new FileOutputStream(tmpFile), ENCODING));
-          Map<String, CacheEntry> cacheEntries = rdnsCache;
+        synchronized (rdnslock) {
+            try {
+                File cacheFile = new File(RDNS_CACHE_FILE);
+                if (!cacheFile.exists()) {
+                  cacheFile.createNewFile();
+                  System.err.println("Cache file created");
+                }
+                // create a temporary file
+                File tmpFile = new File(RDNS_CACHE_FILE + ".tmp");
+                // create a buffered writer with UTF-8 encoding and "\n" as the newline character
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpFile), ENCODING));
+                Map<String, CacheEntry> cacheEntries = rdnsCache;
 
-          for (Map.Entry<String, CacheEntry> entry : cacheEntries.entrySet()) {
-             String ipAddress = entry.getKey();
-             CacheEntry cacheEntry = entry.getValue();
+                for (Map.Entry<String, CacheEntry> entry : cacheEntries.entrySet()) {
+                    String ipAddress = entry.getKey();
+                    CacheEntry cacheEntry = entry.getValue();
 
-             if (!isDuplicateEntry(cacheFile, ipAddress, cacheEntry.getHostname())) {
-                String line = ipAddress + "," + cacheEntry.getHostname() + NEWLINE;
-                writer.write(line);
-                // flush the writer to ensure that all data is written to the file
-                writer.flush();
-             }
-          }
-          // close the writer
-          writer.close();
-          // copy the tmp file to the actual cache file location
-          Files.copy(tmpFile.toPath(), cacheFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-          // delete the tmp file
-          tmpFile.delete();
-          //System.err.println("Reverse DNS cache written to file (" + countRdnsCacheEntries() + ")");
-       } catch (IOException ex) {
-          System.err.println("Error updating reverse DNS cache file: " + ex.getMessage());
-       }
-    }
-
-    private static boolean isDuplicateEntry(File file, String ip, String domain) {
-       String entryStr = ip + "," + domain;
-       try (BufferedReader reader = new BufferedReader(new InputStreamReader(
-               new FileInputStream(file), ENCODING))) {
-          String line;
-          while ((line = reader.readLine()) != null) {
-             String[] parts = line.split(",");
-             if (parts.length == 2 && parts[0].equals(ip) && parts[1].equals(domain)) {
-                System.out.println("Found duplicate entry: " + line);
-                return true;
-             }
-          }
-       } catch (IOException ex) {
-          System.err.println("Error checking for duplicate entry in file: " + ex.getMessage());
-       }
-       return false;
-    }
-    private static synchronized void cleanupRDNSCache() {
-        List<String> keysToRemove = new ArrayList<>();
-        Iterator<Map.Entry<String, CacheEntry>> it = rdnsCache.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, CacheEntry> entry = it.next();
-            if (rdnsCache.size() > MAX_RDNS_CACHE_SIZE) {
-                keysToRemove.add(entry.getKey());
-                it.remove();
+                    if (!isDuplicateEntry(cacheFile, ipAddress, cacheEntry.getHostname())) {
+                        String line = ipAddress + "," + cacheEntry.getHostname() + NEWLINE;
+                        writer.write(line);
+                        // flush the writer to ensure that all data is written to the file
+                        writer.flush();
+                    }
+                }
+                // close the writer
+                writer.close();
+                // copy the tmp file to the actual cache file location
+                Files.copy(tmpFile.toPath(), cacheFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                // delete the tmp file
+                tmpFile.delete();
+                //System.err.println("Reverse DNS cache written to file (" + countRdnsCacheEntries() + ")");
+            } catch (IOException ex) {
+                System.err.println("Error updating reverse DNS cache file: " + ex.getMessage());
             }
         }
-        rdnsCache.keySet().removeAll(keysToRemove);
+    }
+
+    private static synchronized boolean isDuplicateEntry(File file, String ip, String domain) {
+        synchronized (rdnslock) {
+            String entryStr = ip + "," + domain;
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), ENCODING))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    if (parts.length == 2 && parts[0].equals(ip) && parts[1].equals(domain)) {
+                        System.out.println("Found duplicate entry: " + line);
+                        return true;
+                    }
+                }
+            } catch (IOException ex) {
+                System.err.println("Error checking for duplicate entry in file: " + ex.getMessage());
+            }
+            return false;
+        }
+    }
+
+    private static synchronized void cleanupRDNSCache() {
+        synchronized (rdnslock) {
+            List<String> keysToRemove = new ArrayList<>();
+            Iterator<Map.Entry<String, CacheEntry>> it = rdnsCache.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, CacheEntry> entry = it.next();
+                if (rdnsCache.size() > MAX_RDNS_CACHE_SIZE) {
+                    //keysToRemove.add(entry.getKey());
+                    it.remove();
+                }
+            }
+            rdnsCache.keySet().removeAll(keysToRemove);
+        }
     }
 
     /**
      * @return reverse dns hostname or ip address if unresolvable
      * @since 0.9.58+
      */
+
     @Override
     public String getCanonicalHostName(String ipAddress) {
-        cleanupRDNSCache();
-        if (ipAddress == null || ipAddress.equals("null")) {
-            return null;
-        }
-        CacheEntry cacheEntry = rdnsCache.get(ipAddress);
-        if (cacheEntry != null) {
-            if (_log.shouldInfo()) {
-                _log.info("Reverse DNS for [" + ipAddress + "] is " + cacheEntry.getHostname() + " (cached)");
+        synchronized (rdnslock) {
+            cleanupRDNSCache();
+            if (ipAddress == null || ipAddress.equals("null")) {
+                return null;
             }
-            return cacheEntry.getHostname();
-        }
-        try {
-            String hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
-            if (hostName.equals(ipAddress)) {
-                hostName = "unknown";
+            CacheEntry cacheEntry = rdnsCache.get(ipAddress);
+            if (cacheEntry != null) {
+                //if (_log.shouldInfo()) {
+                //    _log.info("Reverse DNS for [" + ipAddress + "] is " + cacheEntry.getHostname() + " (cached)");
+                //}
+                return cacheEntry.getHostname();
             }
-            rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName));
-            if (_log.shouldInfo()) {
-                _log.info("Reverse DNS for [" + ipAddress + "] is " + hostName);
+            try {
+                String hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
+                if (hostName.equals(ipAddress)) {
+                    hostName = "unknown";
+                }
+                rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName));
+                //if (_log.shouldInfo()) {
+                //    _log.info("Reverse DNS for [" + ipAddress + "] is " + hostName);
+                //}
+                return hostName;
+            } catch (UnknownHostException exception) {
+                rdnsCache.put(ipAddress, new CacheEntry(ipAddress, "unknown"));
+                return ipAddress;
             }
-            return hostName;
-        } catch (UnknownHostException exception) {
-            rdnsCache.put(ipAddress, new CacheEntry(ipAddress, "unknown"));
-            return ipAddress;
         }
     }
 
     /* @since 0.9.60+ */
     public static int countRdnsCacheEntries() {
-        return rdnsCache.size();
+        synchronized (rdnslock) {
+            return rdnsCache.size();
+        }
     }
 
     /**

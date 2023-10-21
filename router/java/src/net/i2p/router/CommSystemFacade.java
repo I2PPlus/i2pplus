@@ -164,7 +164,7 @@ public abstract class CommSystemFacade implements Service {
         return peer.toBase64().substring(0, 4);
     }
 
-    public String getCanonicalHostName(String ipAddress) {
+    public synchronized String getCanonicalHostName(String ipAddress) {
         return ipAddress;
     }
 
