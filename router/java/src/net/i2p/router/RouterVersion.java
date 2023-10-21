@@ -20,7 +20,7 @@ public class RouterVersion {
     public final static String VERSION = CoreVersion.VERSION;
     /** for example: "beta", "alpha", "rc" */
     public final static String STATUS = "";
-    public final static long BUILD = 65;
+    public final static long BUILD = 66;
 
     /** for example "-test" */
     public final static String EXTRA = "+";
