@@ -772,8 +772,13 @@ public class I2PSnarkServlet extends BasicServlet {
                     buttonUrl += (buttonUrl.contains("=") ? "&amp;filter=" : "?filter=");
                     buf.append("<noscript><style>.script{display:none}</style></noscript>\n")
                        .append("<div id=torrentDisplay class=script>")
-                       .append("<a class=filter id=all href=\"").append(buttonUrl).append("all\"><span>")
-                       .append(_t("Show All")).append("<span class=badge hidden>");
+                       .append("<a class=filter id=all href=\"").append(buttonUrl).append("all\"><span>");
+                    if (srch != null) {
+                        buf.append(_t("Search"));
+                    } else {
+                       buf.append(_t("Show All"));
+                    }
+                    buf.append("<span class=badge hidden>");
                     if (srch == null && Math.max(pageSizeConf, 10) < total) {
                         buf.append(Math.max(pageSizeConf, 10)).append(" / ").append(total);
                     } else if (searchResults > Math.max(pageSizeConf, 10)) {

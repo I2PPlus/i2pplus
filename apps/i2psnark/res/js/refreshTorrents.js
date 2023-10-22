@@ -107,8 +107,8 @@ function refreshTorrents(callback) {
 
     if (torrents) {
       if (filterbar) {
-        const activeBadge = filterbar.querySelector(".filter.enabled #filtercount");
-        const activeBadgeResponse = xhrsnark.responseXML.querySelector(".filter.enabled #filtercount");
+        const activeBadge = filterbar.querySelector("#torrentDisplay .filter .badge:not(:empty)");
+        const activeBadgeResponse = xhrsnark.responseXML.querySelector("#torrentDisplay .filter .badge:not(:empty)");
         if (activeBadge && activeBadgeResponse && activeBadge.textContent !== activeBadgeResponse.textContent) {
           activeBadge.textContent = activeBadgeResponse.textContent;
         }
