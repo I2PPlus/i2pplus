@@ -2529,7 +2529,7 @@ iframe.iframed{margin:15px 0 0}
 @keyframes fade{from{filter:opacity(1)}to{filter:opacity(0)}}
 @keyframes grid-fade{from{background:repeating-linear-gradient(90deg,rgba(0,0,0,0),#020 1px,rgba(0,0,0,0) 1px,rgba(0,0,0,0) 10px),repeating-linear-gradient(180deg,#000,#020 1px,#000 1px,#000 10px)}to{background:#000}}
 @keyframes hide-up{0%{margin-top:0;filter:opacity(1)}30%{filter:opacity(0)}100%{margin-top:-300px}}
-@keyframes indentity{from{text-indent:8%;color:rgba(0,0,0,0)}to{text-indent:0;color:var(--ink)}}
+@keyframes indentity{from{text-indent:8%}to{text-indent:0}}
 @keyframes ping{from{filter:saturate(2)}}
 @keyframes progress{from{background-position:200%}to{background-position:0}}
 @keyframes reloader{0%,100%{width:0}80%,99%{width:120%}}
