@@ -93,9 +93,10 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #snarkSearch input[type=search]{padding:4px 6px;font-weight:600;color:var(--ink);-webkit-text-stroke:0;border-bottom:1px solid #26235c;cursor:text;transform:translateY(-2px);-webkit-appearance:none}
 #snarkSearch input[type=search]:not(:focus){opacity:0}
 #snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus,#snarkSearch input[type=search][value]{opacity:1}
+#snarkSearch input[type=search][value]:not(:focus){color:#c9ceffbb}
 #snarkSearch input[type=search]::placeholder{font-weight:500;font-style:italic;opacity:.5;color:var(--ink)}
 #snarkSearch input[type=search]:focus::placeholder{opacity:0}
-#snarkSearch input[type=submit]{padding:8px 0;width:28px;min-width:0;color:transparent;text-shadow:none;background:var(--search) no-repeat center right/24px;opacity:.5}
+#snarkSearch input[type=submit]{padding:8px 0;width:28px;min-width:0;color:transparent;text-shadow:none;background:var(--search) no-repeat center right/24px;opacity:.5;transform: translateY(-2px)}
 #snarkSearch input[type=submit]:hover{background-size:26px}
 #snarkSearch input[type=submit]:active{background-size:22px;filter:none}
 #snarkSearch:hover input[type=submit]{opacity:.8}
