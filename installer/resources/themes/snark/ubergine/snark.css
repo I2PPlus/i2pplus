@@ -800,16 +800,16 @@ th .commentAuthorName{margin-right:-10px;padding-right:6px;font-size:90%}
 .lang_it #configs td b,.lang_sk #configs td b{min-width:180px}
 .lang_nl #configs td b,.lang_sv #configs td b,.lang_in #configs td b{min-width:210px}
 .lang_hu #configs td b,.lang_pl #configs td b,.lang_tr #configs td b{min-width:220px}
-.lang_de #configs td b,.lang_fr #configs td b,.lang_pt #configs td b,.lang_ro #configs td b{min-width:250px}
+.lang_de #configs td b,.lang_pt #configs td b,.lang_ro #configs td b{min-width:250px}
 .lang_uk #configs td b{min-width:260px}
-.lang_es #configs td b{min-width:280px}
+.lang_fr #configs td b{min-width:280px}
 .lang_ru #configs td b,.lang_es #configs td b{min-width:300px}
 .lang_it #configs input[name="nofilter_dataDir"],.lang_it input[name="i2cpOpts"],.lang_it input[name="nofilter_commentsName"],.lang_sk #configs input[name="nofilter_dataDir"],.lang_sk input[name="i2cpOpts"],.lang_sk input[name="nofilter_commentsName"]{width:calc(100% - 200px)}
 .lang_in #configs input[name="nofilter_dataDir"],.lang_in input[name="i2cpOpts"],.lang_in input[name="nofilter_commentsName"],.lang_nl #configs input[name="nofilter_dataDir"],.lang_nl input[name="i2cpOpts"],.lang_nl input[name="nofilter_commentsName"],.lang_sv #configs input[name="nofilter_dataDir"],.lang_sv input[name="i2cpOpts"],.lang_sv input[name="nofilter_commentsName"]{width:calc(100% - 230px)}
 .lang_hu #configs input[name="nofilter_dataDir"],.lang_hu input[name="i2cpOpts"],.lang_hu input[name="nofilter_commentsName"],.lang_pl #configs input[name="nofilter_dataDir"],.lang_pl input[name="i2cpOpts"],.lang_pl input[name="nofilter_commentsName"],.lang_tr #configs input[name="nofilter_dataDir"],.lang_tr input[name="i2cpOpts"],.lang_tr input[name="nofilter_commentsName"]{width:calc(100% - 240px)}
-.lang_de #configs input[name="nofilter_dataDir"],.lang_de input[name="i2cpOpts"],.lang_de input[name="nofilter_commentsName"],.lang_fr #configs input[name="nofilter_dataDir"],.lang_fr input[name="i2cpOpts"],.lang_fr input[name="nofilter_commentsName"],.lang_pt #configs input[name="nofilter_dataDir"],.lang_pt input[name="i2cpOpts"],.lang_pt input[name="nofilter_commentsName"],.lang_ro #configs input[name="nofilter_dataDir"],.lang_ro input[name="i2cpOpts"],.lang_ro input[name="nofilter_commentsName"]{width:calc(100% - 270px)}
+.lang_de #configs input[name="nofilter_dataDir"],.lang_de input[name="i2cpOpts"],.lang_de input[name="nofilter_commentsName"],.lang_pt #configs input[name="nofilter_dataDir"],.lang_pt input[name="i2cpOpts"],.lang_pt input[name="nofilter_commentsName"],.lang_ro #configs input[name="nofilter_dataDir"],.lang_ro input[name="i2cpOpts"],.lang_ro input[name="nofilter_commentsName"]{width:calc(100% - 270px)}
 .lang_uk #configs input[name="nofilter_dataDir"],.lang_uk input[name="i2cpOpts"],.lang_uk input[name="nofilter_commentsName"]{width:calc(100% - 280px)}
-.lang_es #configs input[name="nofilter_dataDir"],.lang_es input[name="i2cpOpts"],.lang_es input[name="nofilter_commentsName"]{width:calc(100% - 300px)}
+.lang_es #configs input[name="nofilter_dataDir"],.lang_es input[name="i2cpOpts"],.lang_es input[name="nofilter_commentsName"],.lang_fr #configs input[name="nofilter_dataDir"],.lang_fr input[name="i2cpOpts"],.lang_fr input[name="nofilter_commentsName"]{width:calc(100% - 300px)}
 .lang_ru #configs input[name="nofilter_dataDir"],.lang_ru input[name="i2cpOpts"],.lang_ru input[name="nofilter_commentsName"]{width:calc(100% - 320px)}
 
 /* embed mode */
