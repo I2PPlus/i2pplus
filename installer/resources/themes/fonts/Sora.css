@@ -14,6 +14,7 @@ input[type=password],input[type=search],input[type=text]{font-family:var(--bodyf
 .uploaded{min-width:74px}
 #configstats label b{font-size:90%;overflow:hidden;text-overflow:ellipsis}
 #dologin td{font-weight:500}
+#torrents td{font-weight:500}
 #torrents tfoot .RateDown:not(:empty)::before,tfoot .torrentDownloaded:not(:empty)::before,tfoot .RateUp:not(:empty)::before,tfoot .torrentUploaded:not(:empty)::before{margin-right:2px}
 #torrents tfoot tr:first-child th{min-width:80px}
 #torrents .clientid{font-size:75%;font-weight:600}
