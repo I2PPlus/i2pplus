@@ -2365,7 +2365,7 @@ h1.perf{background:var(--h1_perf) no-repeat 10px center,var(--h1)}
 h1.sched{background:var(--h1_tasks) no-repeat 10px center,var(--h1)}
 h1.snark{background:var(--h1_snark) no-repeat 10px center,var(--h1)}
 h1.webapp{background:var(--h1_webapp) no-repeat 10px center,var(--h1)}
-h1[class],h1{margin:0 5px 0 226px;position:relative;z-index:999;white-space:normal;line-height:1.2;letter-spacing:.15em;text-transform:uppercase;text-align:left;font-weight:700;font-style:normal;text-shadow:0 0 1px #000,0 0 2px #040,0 0 3px #000;border-radius:3px 3px 0 0;box-shadow:var(--bevel);background-blend-mode:normal,normal,normal,exclusion}
+h1[class],h1{margin:0 5px 0 226px;position:relative;z-index:999;white-space:normal;line-height:1.2;letter-spacing:.15em;text-transform:uppercase;text-align:left;font-weight:700;font-style:normal;text-shadow:0 0 1px #000,0 0 2px #040,0 0 3px #000;border-radius:3px 3px 0 0;box-shadow:var(--bevel);background-blend-mode:normal,normal,normal,exclusion;animation:indentity .2s ease-out .65s both}
 
 /* help */
 div[lang="es"] li,div[lang="pt"] li,div[lang="sv"] li{list-style:none}
@@ -2527,18 +2527,19 @@ iframe.iframed{margin:15px 0 0}
 @keyframes bar{from{transform:scaleX(101%)}}
 @keyframes downloadbar{from{background:var(--download_bar)}to{background:repeating-linear-gradient(135deg,#010 1px,#010 6px,#000 7px,#000 11px)}}
 @keyframes fade{from{filter:opacity(1)}to{filter:opacity(0)}}
-@keyframes hide-up{0%{margin-top:0;filter:opacity(1)}30%{filter:opacity(0)}100%{margin-top:-300px}}
 @keyframes grid-fade{from{background:repeating-linear-gradient(90deg,rgba(0,0,0,0),#020 1px,rgba(0,0,0,0) 1px,rgba(0,0,0,0) 10px),repeating-linear-gradient(180deg,#000,#020 1px,#000 1px,#000 10px)}to{background:#000}}
+@keyframes hide-up{0%{margin-top:0;filter:opacity(1)}30%{filter:opacity(0)}100%{margin-top:-300px}}
+@keyframes indentity{from{text-indent:8%;color:rgba(0,0,0,0)}to{text-indent:0;color:var(--ink)}}
 @keyframes ping{from{filter:saturate(2)}}
 @keyframes progress{from{background-position:200%}to{background-position:0}}
-@keyframes routerdown{from{background-position:-10px center}}
 @keyframes reloader{0%,100%{width:0}80%,99%{width:120%}}
+@keyframes routerdown{from{background-position:-10px center}}
 @keyframes scaleY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 @keyframes slide{from{transform:translateY(-20px)}to{transform:translateY(0)}}
 @keyframes spin{from{transform:rotate(-360deg)}}
 @keyframes textglow{from{text-shadow:0 0 1px #995}}
-@keyframes updatingTd{from{color:#dd0;box-shadow:0 0 0 1px #330 inset;background:rgba(255,255,0,.05)}to{font-weight:500;color:var(--ink_bright)}}
 @keyframes updatingIcon{from{background-image:var(--clock)}}
+@keyframes updatingTd{from{color:#dd0;box-shadow:0 0 0 1px #330 inset;background:rgba(255,255,0,.05)}to{font-weight:500;color:var(--ink_bright)}}
 @keyframes zoom{from{transform:scale(0);opacity:0}to{scale:scale(1);opacity:1}}
 
 /* chrome overrides */
