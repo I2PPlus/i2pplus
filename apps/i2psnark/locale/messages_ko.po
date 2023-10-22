@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2020-02-12 17:20+0000\n"
+"PO-Revision-Date: 2023-10-22 12:00+0000\n"
 "Last-Translator: SEPT____ <xpressengine3@mail.beo.kr>\n"
 "Language-Team: Korean (http://www.transifex.com/otf/I2P/language/ko/)\n"
 "Language: ko\n"
@@ -18,36 +18,31 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4\n"
 
 #: ../java/src/org/klomp/snark/IdleChecker.java:76
 msgid "No more torrents running."
 msgstr "작동중인 토렌트가 없습니다."
 
-#: ../java/src/org/klomp/snark/IdleChecker.java:77
-#: ../java/src/org/klomp/snark/SnarkManager.java:3453
+#: ../java/src/org/klomp/snark/IdleChecker.java:77 ../java/src/org/klomp/snark/SnarkManager.java:3453
 #: ../java/src/org/klomp/snark/SnarkManager.java:3464
 msgid "I2P tunnel closed."
 msgstr "I2P 터널이 닫혔습니다."
 
-#: ../java/src/org/klomp/snark/MagnetURI.java:50
-#: ../java/src/org/klomp/snark/MagnetURI.java:60
+#: ../java/src/org/klomp/snark/MagnetURI.java:50 ../java/src/org/klomp/snark/MagnetURI.java:60
 #: ../java/src/org/klomp/snark/SnarkManager.java:3059
 msgid "Magnet"
 msgstr "마그넷"
 
-#: ../java/src/org/klomp/snark/Snark.java:595
-#: ../java/src/org/klomp/snark/SnarkManager.java:401
-#: ../java/src/org/klomp/snark/SnarkManager.java:1947
-#: ../java/src/org/klomp/snark/SnarkManager.java:2813
+#: ../java/src/org/klomp/snark/Snark.java:595 ../java/src/org/klomp/snark/SnarkManager.java:401
+#: ../java/src/org/klomp/snark/SnarkManager.java:1947 ../java/src/org/klomp/snark/SnarkManager.java:2813
 #: ../java/src/org/klomp/snark/SnarkManager.java:2890
 #, fuzzy
 msgid "Unable to connect to I2P"
 msgstr "전 세팅값으로 연결할 수 없습니다!"
 
-#: ../java/src/org/klomp/snark/Snark.java:597
-#: ../java/src/org/klomp/snark/SnarkManager.java:1949
-#: ../java/src/org/klomp/snark/SnarkManager.java:2815
-#: ../java/src/org/klomp/snark/SnarkManager.java:2892
+#: ../java/src/org/klomp/snark/Snark.java:597 ../java/src/org/klomp/snark/SnarkManager.java:1949
+#: ../java/src/org/klomp/snark/SnarkManager.java:2815 ../java/src/org/klomp/snark/SnarkManager.java:2892
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "에러: I2P에 연결할 수 없습니다. I2CP 설정을 확인하세요."
 
@@ -55,8 +50,7 @@ msgstr "에러: I2P에 연결할 수 없습니다. I2CP 설정을 확인하세�
 msgid "Configuring I2PSnark with I2CP options"
 msgstr "I2CP 옵션으로 I2PSnark 구성"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:1105
-#: ../java/src/org/klomp/snark/SnarkManager.java:1314
+#: ../java/src/org/klomp/snark/SnarkManager.java:1105 ../java/src/org/klomp/snark/SnarkManager.java:1314
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1167
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1691
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1829
@@ -65,8 +59,7 @@ msgstr "I2CP 옵션으로 I2PSnark 구성"
 msgid "No write permissions for data directory"
 msgstr "데이터 디렉토리에 대한 쓰기 권한이 없습니다."
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:1112
-#: ../java/src/org/klomp/snark/SnarkManager.java:1298
+#: ../java/src/org/klomp/snark/SnarkManager.java:1112 ../java/src/org/klomp/snark/SnarkManager.java:1298
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1161
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1672
 msgid "Data directory cannot be created"
@@ -162,8 +155,7 @@ msgid "I2CP settings changed to {0}"
 msgstr "I2P 세팅이 {0}으로 변경되었습니다."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1429
-msgid ""
-"Unable to connect with the new settings, reverting to the old I2CP settings"
+msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
 msgstr "새 세팅값으로는 연결할 수 없습니다. 전 I2CP 세팅으로 되돌립니다."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1436
@@ -267,9 +259,7 @@ msgid "Add and Create sections enabled on all torrent listing pages."
 msgstr "모든 토렌트 목록 페이지에서 섹션 추가 및 생성이 활성화됩니다."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1580
-msgid ""
-"Add and Create sections to display only on first page of multipage torrent "
-"listing pages."
+msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "여러 페이지로 구성된 토렌트 목록 페이지의 첫 번째 페이지에만 표시할 섹션을 추가하고 생성하세요."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1591
@@ -282,8 +272,9 @@ msgstr "오픈 트래커 리스트가 변경되었습니다 - 토렌트를 재�
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1633
 msgid "Private tracker list changed - affects newly created torrents only."
-msgstr "개인 추적기 목록이 변경됨 - 새로 생성된 토렌트에만 영향을 미칩니다."
-"사설 트래커 리스트가 변경디었습니다 - 새로 만들어진 토렌트에게만 적용됩니다."
+msgstr ""
+"개인 추적기 목록이 변경됨 - 새로 생성된 토렌트에만 영향을 미칩니다.사설 트래커 리스트가 변경디었습니다 - 새"
+"로 만들어진 토렌트에게만 적용됩니다."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1679
 #, java-format
@@ -302,18 +293,14 @@ msgstr "토렌트 파일이 삭제되었습니다: {0}"
 msgid "Torrent file moved from {0} to {1}"
 msgstr "토렌트 파일이 {0}에서 {1}로 이동되었습니다."
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:1820
-#: ../java/src/org/klomp/snark/SnarkManager.java:3116
-#: ../java/src/org/klomp/snark/SnarkManager.java:3122
-#: ../java/src/org/klomp/snark/SnarkManager.java:3126
+#: ../java/src/org/klomp/snark/SnarkManager.java:1820 ../java/src/org/klomp/snark/SnarkManager.java:3116
+#: ../java/src/org/klomp/snark/SnarkManager.java:3122 ../java/src/org/klomp/snark/SnarkManager.java:3126
 #, fuzzy, java-format
 msgid "Error: Could not add torrent: {0}"
 msgstr "에러: {0} 토렌트를 추가할 수 없습니다."
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:1835
-#: ../java/src/org/klomp/snark/SnarkManager.java:1922
-#: ../java/src/org/klomp/snark/SnarkManager.java:3296
-#: ../java/src/org/klomp/snark/web/FetchAndAdd.java:179
+#: ../java/src/org/klomp/snark/SnarkManager.java:1835 ../java/src/org/klomp/snark/SnarkManager.java:1922
+#: ../java/src/org/klomp/snark/SnarkManager.java:3296 ../java/src/org/klomp/snark/web/FetchAndAdd.java:179
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1750
 #, java-format
 msgid "Torrent already running: {0}"
@@ -326,17 +313,14 @@ msgid "Cannot open \"{0}\""
 msgstr "\"{0}\" - 열 수 없습니다."
 
 #. TODO - if the existing one is a magnet, delete it and add the metainfo instead?
-#: ../java/src/org/klomp/snark/SnarkManager.java:1864
-#: ../java/src/org/klomp/snark/SnarkManager.java:2030
-#: ../java/src/org/klomp/snark/SnarkManager.java:2119
-#: ../java/src/org/klomp/snark/web/FetchAndAdd.java:167
+#: ../java/src/org/klomp/snark/SnarkManager.java:1864 ../java/src/org/klomp/snark/SnarkManager.java:2030
+#: ../java/src/org/klomp/snark/SnarkManager.java:2119 ../java/src/org/klomp/snark/web/FetchAndAdd.java:167
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1738
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr "해당 정보해시를 가진 토렌트가 이미 작동중입니다: {0}"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:1870
-#: ../java/src/org/klomp/snark/SnarkManager.java:2125
+#: ../java/src/org/klomp/snark/SnarkManager.java:1870 ../java/src/org/klomp/snark/SnarkManager.java:2125
 #, java-format
 msgid "Torrent with the same data location is already running: {0}"
 msgstr "동일한 데이터 위치의 Torrent가 이미 실행 중입니다: {0}"
@@ -348,38 +332,34 @@ msgstr "오류 - Private 토렌트 \"{0}\"에 I2P 트래커가 없습니다"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1878
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and "
-"DHT only."
-msgstr "경고 - \"{0}\"에 I2P 추적기가 없습니다. I2P 공개 추적기와 DHT에만 알립니다."
-"경고- \"{0}\"에 I2P 트래커가 없습니다. I2P 오픈 트래커와 DHT에게만 전달할 것"
-"입니다."
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr ""
+"경고 - \"{0}\"에 I2P 추적기가 없습니다. I2P 공개 추적기와 DHT에만 알립니다.경고- \"{0}\"에 I2P 트래커가 없"
+"습니다. I2P 오픈 트래커와 DHT에게만 전달할 것입니다."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1880
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will "
-"announce to DHT only."
-msgstr "경고 - \"{0}\"에 I2P 추적기가 없으며 공개 추적기가 비활성화되어 DHT에만 알립니다."
-"경고- \"{0}\"에 I2P 트래커가 없습니다, 오픈트래커 역시 비활성화 되었으며, DHT"
-"에게만 전달합니다."
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr ""
+"경고 - \"{0}\"에 I2P 추적기가 없으며 공개 추적기가 비활성화되어 DHT에만 알립니다.경고- \"{0}\"에 I2P 트래커"
+"가 없습니다, 오픈트래커 역시 비활성화 되었으며, DHT에게만 전달합니다."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1882
 #, java-format
 msgid ""
-"Warning - No I2P trackers in \"{0}\", and DHT and open trackers are "
-"disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "경고 - \"{0}\"에 I2P 추적기가 없으며 DHT 및 공개 추적기가 비활성화되어 있습니다. 토렌트를 시작하기 전에 공개 추적기 또는 DHT를 활성화해야 합니다."
-"경고- \"{0}\"에 I2P 트래커가 없습니다, 오픈트래커와 DHT도 비활성화 되었으며, "
-"토렌트를 시작하려면 이를 활성화해야 합니다."
+"Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open "
+"trackers or DHT before starting the torrent."
+msgstr ""
+"경고 - \"{0}\"에 I2P 추적기가 없으며 DHT 및 공개 추적기가 비활성화되어 있습니다. 토렌트를 시작하기 전에 공"
+"개 추적기 또는 DHT를 활성화해야 합니다.경고- \"{0}\"에 I2P 트래커가 없습니다, 오픈트래커와 DHT도 비활성화 "
+"되었으며, 토렌트를 시작하려면 이를 활성화해야 합니다."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1908
 #, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "토렌트 \"{0}\"가 올바르지 않습니다"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:1914
-#: ../java/src/org/klomp/snark/web/FetchAndAdd.java:196
+#: ../java/src/org/klomp/snark/SnarkManager.java:1914 ../java/src/org/klomp/snark/web/FetchAndAdd.java:196
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1768
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
@@ -389,14 +369,12 @@ msgstr "에러 - 메모리 부족. {0}에서 토렌트를 만들 수 없습니�
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "I2PSnark 초기화 및 터널 열기"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:1958
-#: ../java/src/org/klomp/snark/SnarkManager.java:1960
+#: ../java/src/org/klomp/snark/SnarkManager.java:1958 ../java/src/org/klomp/snark/SnarkManager.java:1960
 #, java-format
 msgid "Torrent added and started: {0}"
 msgstr "토렌트를 추가 및 시작합니다: {0}"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:1962
-#: ../java/src/org/klomp/snark/SnarkManager.java:1964
+#: ../java/src/org/klomp/snark/SnarkManager.java:1962 ../java/src/org/klomp/snark/SnarkManager.java:1964
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "토렌트 추가됨: {0}"
@@ -409,12 +387,11 @@ msgstr "정보를 가져오는 중 {0}"
 #: ../java/src/org/klomp/snark/SnarkManager.java:2048
 #, java-format
 msgid ""
-"Open trackers are disabled and we have no DHT peers. Fetch of {0} may not "
-"succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr "오픈 트래커가 비활성화되어 있으며 DHT 피어가 없습니다. "
-"오픈 트래커가 비활성 되었습니다. 또한 DHT 피어도 없습니다. 다른 토렌트를 시작"
-"하거나, 해당 설정들을 활성화하지 않으면 {0}의 정보를 가져오지 못할 수 있습니"
-"다."
+"Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another "
+"torrent, enable open trackers, or enable DHT."
+msgstr ""
+"오픈 트래커가 비활성화되어 있으며 DHT 피어가 없습니다. 오픈 트래커가 비활성 되었습니다. 또한 DHT 피어도 없"
+"습니다. 다른 토렌트를 시작하거나, 해당 설정들을 활성화하지 않으면 {0}의 정보를 가져오지 못할 수 있습니다."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2052
 #, java-format
@@ -426,16 +403,13 @@ msgstr "{0} 추가중"
 msgid "Download already running: {0}"
 msgstr "이미 다운로드 중입니다: {0}"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:2135
-#: ../java/src/org/klomp/snark/SnarkManager.java:2145
-#: ../java/src/org/klomp/snark/SnarkManager.java:2171
-#: ../java/src/org/klomp/snark/SnarkManager.java:2985
+#: ../java/src/org/klomp/snark/SnarkManager.java:2135 ../java/src/org/klomp/snark/SnarkManager.java:2145
+#: ../java/src/org/klomp/snark/SnarkManager.java:2171 ../java/src/org/klomp/snark/SnarkManager.java:2985
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "{0}에 토렌트 파일 복사 실패."
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:2650
-#: ../java/src/org/klomp/snark/Storage.java:278
+#: ../java/src/org/klomp/snark/SnarkManager.java:2650 ../java/src/org/klomp/snark/Storage.java:278
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
 msgstr "너무 많은 파일: \"{0}\" ({1})!"
@@ -487,8 +461,7 @@ msgstr "{0}B 보다 큰 토렌트는 아직 지원되지 않습니다. \"{1}\"!"
 msgid "Error: Could not remove the torrent {0}"
 msgstr "오류: 토렌트 {0}을 삭제할 수 없습니다"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:2713
-#: ../java/src/org/klomp/snark/SnarkManager.java:2732
+#: ../java/src/org/klomp/snark/SnarkManager.java:2713 ../java/src/org/klomp/snark/SnarkManager.java:2732
 #, java-format
 msgid "Torrent stopped: {0}"
 msgstr "토렌트 정지: {0}"
@@ -503,15 +476,14 @@ msgstr "토렌트 제거됨: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "{0}에 토렌트 추가중"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:2794
-#: ../java/src/org/klomp/snark/SnarkManager.java:2805
+#: ../java/src/org/klomp/snark/SnarkManager.java:2794 ../java/src/org/klomp/snark/SnarkManager.java:2805
 msgid "Connecting to I2P"
 msgstr "I2P에 연결중"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2829
-#, fuzzy, java-format
+#, java-format
 msgid "Starting up torrent {0}"
-msgstr "토렌트 {0} 시작중"
+msgstr "토렌트 시작: {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2841
 #, fuzzy, java-format
@@ -525,12 +497,10 @@ msgstr "I2P I2PSnark 독립형 버전 {0}이(가) 시작되었습니다."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2880
 #, fuzzy, java-format
-msgid ""
-"Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "최대 속도제한은 {0}Kbps입니다"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:2915
-#: ../java/src/org/klomp/snark/SnarkManager.java:2921
+#: ../java/src/org/klomp/snark/SnarkManager.java:2915 ../java/src/org/klomp/snark/SnarkManager.java:2921
 #, java-format
 msgid "Download finished: {0}"
 msgstr "다운로드 완료: {0}"
@@ -547,19 +517,16 @@ msgstr "I2PSnark"
 
 #. addMessage(_t("Metainfo received for {0}", snark.getName()));
 #. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
-#: ../java/src/org/klomp/snark/SnarkManager.java:2982
-#: ../java/src/org/klomp/snark/SnarkManager.java:3302
-#, fuzzy, java-format
+#: ../java/src/org/klomp/snark/SnarkManager.java:2982 ../java/src/org/klomp/snark/SnarkManager.java:3302
+#, java-format
 msgid "Starting torrent: {0}"
-msgstr "토렌트 {0} 시작중"
+msgstr "토렌트 시작: {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:3286
-#, fuzzy
 msgid "Torrent not found"
-msgstr "토렌트 발견안됨"
+msgstr "토렌트를 찾을 수 없음"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:3301
-#: ../java/src/org/klomp/snark/web/FetchAndAdd.java:131
+#: ../java/src/org/klomp/snark/SnarkManager.java:3301 ../java/src/org/klomp/snark/web/FetchAndAdd.java:131
 msgid "Opening the I2P tunnel"
 msgstr "I2P 터널 여는중"
 
@@ -567,8 +534,7 @@ msgstr "I2P 터널 여는중"
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "I2P 터널을 열고 모든 토렌트를 시작하는 중"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:3395
-#: ../java/src/org/klomp/snark/SnarkManager.java:3411
+#: ../java/src/org/klomp/snark/SnarkManager.java:3395 ../java/src/org/klomp/snark/SnarkManager.java:3411
 msgid "Stopping all torrents and closing the I2P tunnel."
 msgstr "모든 토렌트를 종료하고 I2P 터널을 닫는 중입니다."
 
@@ -596,8 +562,7 @@ msgstr "토렌트 {0}를 확인하는데 오류가 있습니다"
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
 msgstr "{0}에 올바른 트래커가 없습니다 - 오픈트래커나 DHT를 활성화 하였습니까?"
 
-#: ../java/src/org/klomp/snark/UpdateHandler.java:49
-#: ../java/src/org/klomp/snark/UpdateRunner.java:233
+#: ../java/src/org/klomp/snark/UpdateHandler.java:49 ../java/src/org/klomp/snark/UpdateRunner.java:233
 msgid "Updating"
 msgstr "업데이트 중"
 
@@ -612,9 +577,9 @@ msgid "Downloading {0}"
 msgstr "다운로드 완료: {0}"
 
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:94
-#, fuzzy, java-format
+#, java-format
 msgid "Requesting torrent file: {0}"
-msgstr "토렌트 {0} 시작중"
+msgstr "토렌트 파일을 요청 중입니다: {0}"
 
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:104
 #, fuzzy, java-format
@@ -664,18 +629,14 @@ msgstr "라우터가 꺼져있습니다."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:408
 #, java-format
-msgid ""
-"Are you sure you want to delete the file \\''{0}\\'' (downloaded data will "
-"not be deleted) ?"
-msgstr "\\''{0}\\'' 파일을 삭제하시겠습니까(다운로드한 데이터는 삭제되지 않습니다)?"
-"정말 \\''{0}\\'' 파일을 지우겠습니까? (다운로드된 데이터는 지워지지 않습니"
-"다) ?"
+msgid "Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?"
+msgstr ""
+"\\''{0}\\'' 파일을 삭제하시겠습니까(다운로드한 데이터는 삭제되지 않습니다)?정말 \\''{0}\\'' 파일을 지우겠습"
+"니까? (다운로드된 데이터는 지워지지 않습니다) ?"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:410
 #, java-format
-msgid ""
-"Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded "
-"data?"
+msgid "Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?"
 msgstr "정말 \\''{0}\\'' 토렌트와 다운로드된 파일도 지우겠습니까?"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:461
@@ -691,9 +652,8 @@ msgid "Forum"
 msgstr "포럼"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:480
-#, fuzzy
 msgid "Torrent &amp; filesharing forum"
-msgstr "토렌트 파일"
+msgstr "토렌트 및 파일 공유 포럼"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:491
 msgid "BTDigg"
@@ -704,9 +664,8 @@ msgid "I2P-based search engine for clearnet-hosted torrents"
 msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:497
-#, fuzzy
 msgid "Search torrents"
-msgstr "토렌트 시작"
+msgstr "토렌트 검색"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:502
 msgid "Clear search"
@@ -731,8 +690,8 @@ msgstr "축소"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:678
 #, java-format
 msgid ""
-"Warning! Javascript is disabled in your browser. If {0} is enabled, you will "
-"lose any input in the add/create torrent sections when a refresh occurs."
+"Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/"
+"create torrent sections when a refresh occurs."
 msgstr "경고! "
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:680
@@ -745,9 +704,8 @@ msgid "Warning - No I2P"
 msgstr "I2P에 연결중"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:776
-#, fuzzy
 msgid "Show All"
-msgstr "모두 멈춤"
+msgstr "모두 보기"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:788
 msgid "Active"
@@ -764,9 +722,8 @@ msgid "Connected"
 msgstr "연결된 피어: {0} "
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:794
-#, fuzzy
 msgid "Downloading"
-msgstr "다운로드 완료: {0}"
+msgstr "다운로드"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:796
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2396
@@ -835,9 +792,8 @@ msgid "File type"
 msgstr "파일 타입"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:941
-#, fuzzy
 msgid "Torrent name"
-msgstr "토렌트 파일"
+msgstr "토렌트 이름"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:972
 msgid "ETA"
@@ -1133,11 +1089,11 @@ msgstr "\"{0}\" 토렌트 생성됨"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2071
 #, java-format
 msgid ""
-"Many I2P trackers require you to register new torrents before seeding - "
-"please do so before starting \"{0}\""
-msgstr "많은 I2P 추적기에서는 시드하기 전에 새 토렌트를 등록해야 합니다. \"{0}\"을(를) 시작하기 전에 등록하십시오."
-"많은 I2P 트래커들은 토렌트를 시딩하기 전 가입을 요구합니다 - {0}을 시작하기 "
-"전 가입해주세요"
+"Many I2P trackers require you to register new torrents before seeding - please do so before starting "
+"\"{0}\""
+msgstr ""
+"많은 I2P 추적기에서는 시드하기 전에 새 토렌트를 등록해야 합니다. \"{0}\"을(를) 시작하기 전에 등록하십시오."
+"많은 I2P 트래커들은 토렌트를 시딩하기 전 가입을 요구합니다 - {0}을 시작하기 전 가입해주세요"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2073
 #, java-format
@@ -1257,9 +1213,8 @@ msgid "Torrent details"
 msgstr "토렌트 세부정보"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2552
-#, fuzzy
 msgid "Torrent has comments"
-msgstr "토렌트 세부정보"
+msgstr "토렌트에 댓글이 있습니다"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2581
 msgid "View files"
@@ -1386,11 +1341,10 @@ msgstr "URL에서"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3211
 #, fuzzy
-msgid ""
-"Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr "토렌트 파일 다운로드 URL(I2P 전용), 마그넷 링크, 정보 해시를 입력하세요."
-"토렌트 파일 다운로드 URL (I2P only) 혹은 마그넷, Maggot, 정보 해쉬를 입력하세"
-"요."
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr ""
+"토렌트 파일 다운로드 URL(I2P 전용), 마그넷 링크, 정보 해시를 입력하세요.토렌트 파일 다운로드 URL (I2P "
+"only) 혹은 마그넷, Maggot, 정보 해쉬를 입력하세요."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3216
 msgid "Add torrent"
@@ -1542,14 +1496,13 @@ msgstr "귀하의 브라우저는 이 기능을 지원하지 않습니다."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3459
 msgid ""
-"Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and "
-"collapse by default in non-embedded mode"
+"Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-"
+"embedded mode"
 msgstr "'토렌트 추가' 및 '토렌트 생성' 패널을 접을 수 있도록 허용하고 비포함 모드에서는 기본적으로 접습니다."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3463
-#, fuzzy
 msgid "Torrent filter bar"
-msgstr "토렌트 파일"
+msgstr "토렌트 필터 바"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3468
 msgid "Show filter bar above torrents for selective display based on status"
@@ -1573,9 +1526,7 @@ msgid "Persist Add/Create"
 msgstr "지속 추가/생성"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3486
-msgid ""
-"Display the 'Add' and 'Create' sections on all torrent listing pages when in "
-"multipage mode"
+msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
 msgstr "다중 페이지 모드에 있을 때 모든 토렌트 목록 페이지에 '추가' 및 '만들기' 섹션을 표시합니다."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3493
@@ -1608,9 +1559,8 @@ msgid "Set the author name for your comments and ratings"
 msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3520
-#, fuzzy
 msgid "Torrent Options"
-msgstr "토렌트 세부정보"
+msgstr "토렌트 옵션"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3523
 msgid "Up bandwidth limit"
@@ -1645,9 +1595,7 @@ msgid "Use open trackers also"
 msgstr "오픈 트래커도 사용"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3555
-msgid ""
-"Announce torrents to open trackers as well as trackers listed in the torrent "
-"file"
+msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
 msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3558
@@ -1663,9 +1611,7 @@ msgid "Auto start torrents"
 msgstr "토렌트 다종시작"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3569
-msgid ""
-"Automatically start torrents when added and restart torrents when I2PSnark "
-"starts"
+msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
 msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3574
@@ -1698,9 +1644,7 @@ msgid "Files readable by all"
 msgstr "모든 사람에게 파일읽기 허락"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3598
-msgid ""
-"Set file permissions to allow other local users to access the downloaded "
-"files"
+msgid "Set file permissions to allow other local users to access the downloaded files"
 msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3601
@@ -1709,10 +1653,12 @@ msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3603
 msgid ""
-"Maximum number of files permitted per torrent - note that trackers may set "
-"their own limits, and your OS may limit the number of open files, preventing "
-"torrents with many files (and subsequent torrents) from loading"
-msgstr "토렌트당 허용되는 최대 파일 수 - 추적기는 자체 제한을 설정할 수 있으며 OS는 열린 파일 수를 제한하여 파일이 많은 토렌트(및 후속 토렌트)가 로드되지 않도록 할 수 있습니다."
+"Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS "
+"may limit the number of open files, preventing torrents with many files (and subsequent torrents) from "
+"loading"
+msgstr ""
+"토렌트당 허용되는 최대 파일 수 - 추적기는 자체 제한을 설정할 수 있으며 OS는 열린 파일 수를 제한하여 파일이 "
+"많은 토렌트(및 후속 토렌트)가 로드되지 않도록 할 수 있습니다."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3610
 #, fuzzy
@@ -1790,14 +1736,14 @@ msgstr[0] "{0} 터널"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3821
 msgid ""
-"This configures the maximum number of tunnels to open, determined by the "
-"number of connected peers (actual usage may be less)"
+"This configures the maximum number of tunnels to open, determined by the number of connected peers (actual "
+"usage may be less)"
 msgstr "연결된 피어 수에 따라 결정되는 열려는 최대 터널 수를 구성합니다(실제 사용량은 더 적을 수 있음)."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3825
 msgid ""
-"Changing this setting to less than 3 hops may improve speed at the expense "
-"of anonymity and is not recommended"
+"Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not "
+"recommended"
 msgstr "이 설정을 3홉 미만으로 변경하면 익명성이 희생되어 속도가 향상될 수 있으므로 권장되지 않습니다."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4144
@@ -1836,9 +1782,7 @@ msgstr "스킵된"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4334
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4396
-msgid ""
-"Only I2P trackers will be used; non-I2P trackers are displayed for "
-"informational purposes only"
+msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
 msgstr "I2P 추적기만 사용됩니다. "
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4400
@@ -2045,9 +1989,8 @@ msgid "Delete Selected"
 msgstr "선택된 것 삭제"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5744
-#, fuzzy
 msgid "Edit Torrent"
-msgstr "토렌트 추가"
+msgstr "토렌트 편집"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5774
 #, fuzzy
@@ -2060,9 +2003,8 @@ msgid "Add Tracker"
 msgstr "트래커 추가"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5837
-#, fuzzy
 msgid "Torrent Comment"
-msgstr "토렌트 세부정보"
+msgstr "토렌트 댓글"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5844
 msgid "Torrent must be stopped in order to edit"
@@ -2139,4 +2081,3 @@ msgstr "토렌트 정지: {0}"
 
 #~ msgid "Skip all"
 #~ msgstr "모두 스킵"
-

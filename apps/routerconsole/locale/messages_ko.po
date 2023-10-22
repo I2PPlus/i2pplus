@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2020-05-13 22:50+0000\n"
+"PO-Revision-Date: 2023-10-22 12:03+0000\n"
 "Last-Translator: SEPT____ <xpressengine3@mail.beo.kr>\n"
 "Language-Team: Korean (http://www.transifex.com/otf/I2P/language/ko/)\n"
 "Language: ko\n"
@@ -18,6 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4\n"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:387
 msgid "Hash"
@@ -3450,7 +3451,7 @@ msgstr "모든 알려진 I2P 라우터 리스트 보이기"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:445
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:560
 msgid "Router Info"
-msgstr ""
+msgstr "라우터 정보"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:52
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:72
@@ -6728,7 +6729,7 @@ msgstr "참가 터널 비활성화"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1296
 #, java-format
 msgid "Accepting participating tunnel requests; participating in {0} tunnels"
-msgstr ""
+msgstr "참여 터널 요청을 수락하고 {0} 터널에 참여 중입니다."
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1298
 msgid "No participating tunnels are built when Hidden mode is active"
