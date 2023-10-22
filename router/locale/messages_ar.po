@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-05 03:49+0000\n"
+"POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2019-11-24 13:40+0000\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Arabic (http://www.transifex.com/otf/I2P/language/ar/)\n"
@@ -25,73 +25,75 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #. * IPv4 OK, IPv6 OK or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:392
+#: ../java/src/net/i2p/router/CommSystemFacade.java:426
 msgid "OK"
 msgstr "موافق"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:393
+#: ../java/src/net/i2p/router/CommSystemFacade.java:427
 msgid "IPv4: OK; IPv6: Testing"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:394
+#: ../java/src/net/i2p/router/CommSystemFacade.java:428
 msgid "IPv4: OK; IPv6: Firewalled"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:395
+#: ../java/src/net/i2p/router/CommSystemFacade.java:429
 msgid "IPv4: Testing; IPv6: OK"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:396
+#: ../java/src/net/i2p/router/CommSystemFacade.java:430
 msgid "IPv4: Firewalled; IPv6: OK"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:397
+#: ../java/src/net/i2p/router/CommSystemFacade.java:431
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:398
+#. * IPv4 symmetric NAT (not source NAT)
+#: ../java/src/net/i2p/router/CommSystemFacade.java:433
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr ""
 
 #. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:400
+#: ../java/src/net/i2p/router/CommSystemFacade.java:435
 msgid "Symmetric NAT"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:401
+#. * IPv4 symmetric NAT (not source NAT)
+#: ../java/src/net/i2p/router/CommSystemFacade.java:437
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:402
+#: ../java/src/net/i2p/router/CommSystemFacade.java:438
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr ""
 
 #. * IPv4 firewalled, IPv6 firewalled or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:404
+#: ../java/src/net/i2p/router/CommSystemFacade.java:440
 msgid "Firewalled"
 msgstr "ممنوع من الجدار الناري"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:405
+#: ../java/src/net/i2p/router/CommSystemFacade.java:441
 msgid "IPv4: Testing; IPv6: Firewalled"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:406
+#: ../java/src/net/i2p/router/CommSystemFacade.java:442
 msgid "IPv4: Disabled; IPv6: Testing"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:407
+#: ../java/src/net/i2p/router/CommSystemFacade.java:443
 msgid "IPv4: Disabled; IPv6: Firewalled"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:408
+#: ../java/src/net/i2p/router/CommSystemFacade.java:444
 msgid "Disconnected"
 msgstr "فصل الاتصال"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:409
+#: ../java/src/net/i2p/router/CommSystemFacade.java:445
 msgid "Port Conflict"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:410
+#: ../java/src/net/i2p/router/CommSystemFacade.java:446
 msgid "Testing"
 msgstr "جاري التجريب"
 
@@ -103,7 +105,7 @@ msgstr "جاري التجريب"
 #. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:92
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:152
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:596
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:575
 msgid "Starting up"
 msgstr ""
 
@@ -113,15 +115,15 @@ msgid "Declining all tunnel requests:<br>"
 msgstr "تجاوز النفق: ازدحام"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:845
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 msgid "Hidden Mode"
 msgstr ""
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:883
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:914
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
 #, fuzzy
 msgid "Declining tunnel requests:<br>"
 msgstr "تجاوز النفق: ازدحام"
@@ -144,27 +146,37 @@ msgstr ""
 msgid "Participation disabled"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:258
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
+#, fuzzy
+msgid "High system load"
+msgstr "توقيف الأنفاق"
+
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
+#, fuzzy
+msgid "Rejecting all tunnel requests:<br>"
+msgstr "توقيف غالبية الأنفاق : "
+
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
 #, fuzzy
 msgid "High number of requests"
 msgstr "توقيف غالبية الأنفاق : "
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:258
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
 #, fuzzy
 msgid "Rejecting most tunnel requests:<br>"
 msgstr "توقيف غالبية الأنفاق : "
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:468
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:262
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:469
 #, fuzzy
 msgid "Accepting most tunnel requests"
 msgstr "قبول غالبية الأنفاق"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:262
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:470
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:612
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:264
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:471
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:591
 #, fuzzy
 msgid "Accepting tunnel requests"
 msgstr "قبول الأنفاق"
@@ -176,61 +188,66 @@ msgstr "قبول الأنفاق"
 #. hard to do {0} from here
 #. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
 #. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:368
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:464
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:369
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:465
 #, fuzzy
 msgid "Declining requests: Bandwidth limit"
 msgstr "رفض الانفاق: وصل حد سرعة الاتصال"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:601
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 #, fuzzy
 msgid "Declining requests"
 msgstr "تجاوز النفق: بطيئ جدا"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:601
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 msgid "Shutting down"
 msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:614
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
 #, fuzzy
 msgid "Declining tunnel requests"
 msgstr "تجاوز النفق: بطيئ جدا"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:292
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:302
 msgid "Dropping tunnel requests: Too slow"
 msgstr "تجاوز النفق: بطيئ جدا"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:301
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:311
 #, fuzzy
 msgid "Dropping tunnel requests: High job lag"
 msgstr "تجاوز النفق: ازدحام كبير"
 
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:320
+#, fuzzy
+msgid "Dropping tunnel requests:<br>High CPU load"
+msgstr "تجاوز النفق: ازدحام كبير"
+
 #. don't even bother, since we are so overloaded locally
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:508
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:587
 msgid "Dropping tunnel requests: Overloaded"
 msgstr "تجاوز النفق: ازدحام"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:845
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 #, fuzzy
 msgid "Declining requests:"
 msgstr "تجاوز النفق: بطيئ جدا"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:883
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
 #, fuzzy
 msgid "Request overload"
 msgstr "تجاوز النفق: ازدحام"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:914
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
 #, fuzzy
 msgid "Connection limit reached"
 msgstr "رفض الانفاق: وصل الى الحد"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1182
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1217
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1267
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1302
 msgid "Dropping tunnel requests: High load"
 msgstr "تجاوز النفق: ازدحام كبير"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1300
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1385
 msgid "Dropping tunnel requests: Queue time"
 msgstr "تجاوز النفق: وقت الانتظار"
 

@@ -22,7 +22,7 @@
       initSidebarRefresh();
     }
   }, () => {
-    if (sbRefreshTimerId) {
+    if (sbRefreshTimerId !== null) {
       stopSidebarRefresh();
     }
   });
