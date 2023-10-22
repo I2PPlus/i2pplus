@@ -554,7 +554,7 @@ class TunnelRenderer {
                 } else if (enableReverseLookups()) {
                     sb.append("<td></td>");
                 }
-                sb.append(String.format("<td class=tcount>%d</td><td class=bar data-sort-column-key=localCount>", localTunnelCount));
+                sb.append(String.format("<td class=tcount data-sort-column-key=localCount>%d</td><td class=bar data-sort-column-key=localCount>", localTunnelCount));
                 if (localTunnelCount > 0) {
                     sb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\">" +
                                             "<span class=percentBarText>%d%%</span></span></span>",
@@ -566,7 +566,7 @@ class TunnelRenderer {
                 if (!participating.isEmpty()) {
                     int transitTunnelCount = transitCount.count(h);
                     if (transitTunnelCount > 0) {
-                        sb.append(String.format("</td><td class=tcount>%d</td><td class=bar>", transitTunnelCount));
+                        sb.append(String.format("</td><td class=tcount data-sort-column-key=transitCount>%d</td><td class=bar data-sort-column-key=transitCount>", transitTunnelCount));
                         sb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\">" +
                                                 "<span class=percentBarText>%d%%</span></span></span>",
                                                 fmt.format(transitTunnelCount * 100 / partCount).replace(".00", ""),
