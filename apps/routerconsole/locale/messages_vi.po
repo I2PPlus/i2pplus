@@ -2226,7 +2226,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:572
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:646
 msgid "Tunnels"
-msgstr ""
+msgstr "Đường hầm"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:31
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:85
@@ -3421,7 +3421,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:445
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:560
 msgid "Router Info"
-msgstr ""
+msgstr "Thông tin bộ định tuyến"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:52
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:72
@@ -6037,38 +6037,37 @@ msgstr "Đồ thị Băng thông "
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1185
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:513
 msgid "Congestion"
-msgstr ""
+msgstr "Sự tắc nghẽn"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:68
 msgid "Tunnel Status"
-msgstr ""
+msgstr "Tình trạng đường hầm"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:69
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:776
-#, fuzzy
 msgid "Service Tunnels"
-msgstr "Dịch vụ"
+msgstr "Đường hầm dịch vụ"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:70
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1348
 msgid "News &amp; Updates"
-msgstr ""
+msgstr "Tin tức và cập nhật"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:71
 msgid "Advanced Links"
-msgstr ""
+msgstr "Liên kết nâng cao"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:72
 msgid "UTC Clock"
-msgstr ""
+msgstr "Đồng hồ UTC"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:73
 msgid "CPU Load"
-msgstr ""
+msgstr "Tải CPU"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:162
 msgid "I2P Router Help &amp; FAQ"
-msgstr ""
+msgstr "Trợ giúp và Câu hỏi thường gặp"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:172
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:409
@@ -6181,7 +6180,6 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:374
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:443
-#, fuzzy
 msgid "Services"
 msgstr "Dịch vụ"
 
@@ -6192,7 +6190,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:435
 #, fuzzy
 msgid "Internals"
-msgstr "nội bộ"
+msgstr "Nội bộ"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:443
 msgid "Certs"
@@ -6416,7 +6414,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:987
 msgid "Bandwidth in/out"
-msgstr ""
+msgstr "Băng thông vào/ra"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:991
 msgid "Current"
@@ -6518,7 +6516,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1166
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1168
 msgid "tunnels"
-msgstr ""
+msgstr "đường hầm"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1166
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:509
@@ -6638,16 +6636,16 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:329
 #, java-format
 msgid "Clock Skew of {0}"
-msgstr ""
+msgstr "Đồng hồ sai lệch của {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:334
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:567
 msgid "Testing"
-msgstr ""
+msgstr "Kiểm tra"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:367
 msgid "Private TCP Address"
-msgstr ""
+msgstr "Địa chỉ TCP riêng"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:371
 msgid "SymmetricNAT"
@@ -6663,7 +6661,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:388
 msgid "Disconnected"
-msgstr ""
+msgstr "Mất kết nối"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:391
 msgid "UDP Port In Use"
@@ -7625,9 +7623,8 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/applytheme_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/applytheme_jsp.java:447
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:427
-#, fuzzy
 msgid "User Interface Configuration"
-msgstr "Cấu hình giao diện chung cho WAN"
+msgstr "Cấu hình giao diện người dùng"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/certs_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/certs_jsp.java:417
@@ -7637,7 +7634,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:282
 msgid "configure bandwidth"
-msgstr ""
+msgstr "cấu hình băng thông"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:427
 #, fuzzy
@@ -7646,12 +7643,12 @@ msgstr "Đồ thị Băng thông "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:528
 msgid "Bandwidth Limiter"
-msgstr ""
+msgstr "Giới hạn băng thông"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:530
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:532
 msgid "Advanced Network Configuration"
-msgstr ""
+msgstr "Cấu hình mạng nâng cao"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:534
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:614
@@ -7677,7 +7674,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:543
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:621
 msgid "Download Speed"
-msgstr ""
+msgstr "Tốc độ tải về"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:549
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:627
@@ -7687,7 +7684,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:555
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:633
 msgid "Upload Speed"
-msgstr ""
+msgstr "Tốc độ tải lên"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:561
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:639
@@ -7709,7 +7706,7 @@ msgstr "Chia sẻ"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:592
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:654
 msgid "NOTE"
-msgstr ""
+msgstr "GHI CHÚ"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:580
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:656
@@ -11985,7 +11982,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:485
 #, fuzzy
 msgid "Bandwidth In/Out"
-msgstr "Đồ thị Băng thông "
+msgstr "Băng thông vào/ra"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:487
 msgid ""
