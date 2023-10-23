@@ -6588,7 +6588,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1249
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1258
 msgid "Tunnel lag"
-msgstr ""
+msgstr "Đường hầm trễ"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1266
 msgid "Queued requests from other routers to participate in tunnels"
@@ -6627,7 +6627,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1296
 #, java-format
 msgid "Accepting participating tunnel requests; participating in {0} tunnels"
-msgstr ""
+msgstr "Chấp nhận các yêu cầu đường hầm tham gia; tham gia vào các đường hầm {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1298
 msgid "No participating tunnels are built when Hidden mode is active"
@@ -6749,11 +6749,11 @@ msgstr "Add Client"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1167
 msgid "Click Restart to install"
-msgstr ""
+msgstr "Nhấp vào Khởi động lại để cài đặt"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1169
 msgid "Click Shutdown and restart to install"
-msgstr ""
+msgstr "Nhấp vào Shutdown và khởi động lại để cài đặt"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1174
 #, java-format
@@ -6762,7 +6762,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1182
 msgid "Updating after restart"
-msgstr ""
+msgstr "Cập nhật sau khi khởi động lại"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1254
 msgid "Signed development update available"
@@ -6776,12 +6776,12 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1278
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1280
 msgid "Download I2P Update"
-msgstr ""
+msgstr "Tải xuống bản cập nhật I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1268
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1270
 msgid "Unsigned update available"
-msgstr ""
+msgstr "Cập nhật không dấu có sẵn"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1304
 msgid "Help with firewall configuration"
@@ -7605,15 +7605,15 @@ msgstr ""
 #. may or may not be worth translating
 #: ../java/strings/Strings.java:76
 msgid "host"
-msgstr ""
+msgstr "chủ nhà"
 
 #: ../java/strings/Strings.java:77
 msgid "key"
-msgstr ""
+msgstr "chìa khóa"
 
 #: ../java/strings/Strings.java:78
 msgid "port"
-msgstr ""
+msgstr "hải cảng"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/applytheme_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:282
@@ -7630,16 +7630,15 @@ msgstr "Cấu hình giao diện người dùng"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/certs_jsp.java:417
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:500
 msgid "Certificates"
-msgstr ""
+msgstr "Giấy chứng nhận"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:282
 msgid "configure bandwidth"
 msgstr "cấu hình băng thông"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:427
-#, fuzzy
 msgid "Bandwidth Allocation"
-msgstr "Đồ thị Băng thông "
+msgstr "Phân bổ băng thông"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:528
 msgid "Bandwidth Limiter"
@@ -7746,7 +7745,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:282
 msgid "config advanced"
-msgstr ""
+msgstr "Cấu hình nâng cao"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:526
 msgid "Floodfill Configuration"
@@ -7768,15 +7767,15 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:551
 msgid "Enrollment"
-msgstr ""
+msgstr "Ghi danh"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:557
 msgid "Automatic"
-msgstr ""
+msgstr "Tự động"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:563
 msgid "Force On"
-msgstr ""
+msgstr "Buộc vào"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:569
 msgid "Disable"
