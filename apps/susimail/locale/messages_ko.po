@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2019-04-24 14:21+0000\n"
+"PO-Revision-Date: 2023-10-23 08:10+0000\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Korean (http://www.transifex.com/otf/I2P/language/ko/)\n"
 "Language: ko\n"
@@ -19,6 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4\n"
 
 #: src/src/i2p/susi/webmail/MailCache.java:529
 #: src/src/i2p/susi/webmail/WebMail.java:2410
@@ -67,7 +68,7 @@ msgstr "Trash"
 #. MailDir-like
 #: src/src/i2p/susi/webmail/WebMail.java:217
 msgid "Bulk Mail"
-msgstr ""
+msgstr "대량 메일"
 
 #. untranslated, translate on use
 #: src/src/i2p/susi/webmail/WebMail.java:221
@@ -90,11 +91,11 @@ msgstr "({0}) 부분 보여질 수 없음. {1}가 문제일 수 있습니다"
 
 #: src/src/i2p/susi/webmail/WebMail.java:592
 msgid "Reloading the page may fix the error."
-msgstr ""
+msgstr "페이지를 다시 로드하면 오류가 수정될 수 있습니다."
 
 #: src/src/i2p/susi/webmail/WebMail.java:622
 msgid "File"
-msgstr ""
+msgstr "파일"
 
 #: src/src/i2p/susi/webmail/WebMail.java:645
 #: src/src/i2p/susi/webmail/WebMail.java:650
@@ -167,14 +168,14 @@ msgstr "서버 연결 오류"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1039
 msgid "Draft saved."
-msgstr ""
+msgstr "초안이 저장되었습니다."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1049
 #: src/src/i2p/susi/webmail/WebMail.java:1290
 #: src/src/i2p/susi/webmail/WebMail.java:2740
 #: src/src/i2p/susi/webmail/WebMail.java:2923
 msgid "Unable to save mail."
-msgstr ""
+msgstr "메일을 저장할 수 없습니다."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1179
 #, java-format
@@ -241,7 +242,8 @@ msgstr "삭제하려는 메세지 없음."
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
 msgstr ""
-"호스트를 바꾸지 않았습니다. 설정 파일 {0}을 편집해 호스트를 변경하세요."
+"호스트가 변경되지 않았습니다. 호스트를 바꾸지 않았습니다. 설정 파일 {0}"
+"을 편집해 호스트를 변경하세요."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1820
 msgid "Configuration saved"
@@ -260,7 +262,7 @@ msgstr "로그인"
 #: src/src/i2p/susi/webmail/WebMail.java:2426
 #: src/src/i2p/susi/webmail/WebMail.java:3179
 msgid "Loading messages, please wait..."
-msgstr ""
+msgstr "메시지를 로드하는 중입니다. 잠시 기다려 주세요..."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2292
 #, fuzzy, java-format
@@ -287,29 +289,29 @@ msgstr "설정"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2320
 msgid "I2PMail"
-msgstr ""
+msgstr "I2P메일"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2413
 msgid "No new messages"
-msgstr ""
+msgstr "새 메시지가 없습니다."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2428
 msgid "Checking for new messages on server"
-msgstr ""
+msgstr "서버에서 새 메시지를 확인하는 중"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2430
 msgid "Refresh the page for updates"
-msgstr ""
+msgstr "업데이트를 위해 페이지를 새로 고치세요."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2465
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
-msgstr ""
+msgstr "{0}은 {1}에서 제공하는 I2P 전용 서비스입니다."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2467
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr ""
+msgstr "{0} 웹메일 클라이언트"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2648
 #: src/src/i2p/susi/webmail/WebMail.java:3296
@@ -339,7 +341,7 @@ msgstr ""
 #: src/src/i2p/susi/webmail/WebMail.java:2855
 #: src/src/i2p/susi/webmail/WebMail.java:2936
 msgid "Sending mail."
-msgstr ""
+msgstr "메일을 보내는 중입니다."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2860
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:254
@@ -358,7 +360,7 @@ msgstr "보내기"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2984
 msgid "Save as Draft"
-msgstr ""
+msgstr "임시 보관함에 저장"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2985
 #: src/src/i2p/susi/webmail/WebMail.java:3405
@@ -414,16 +416,15 @@ msgstr "선택한 첨부파일 삭제"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3125
 msgid "I2PMail Login"
-msgstr ""
+msgstr "I2PMail 로그인"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3129
 msgid "User"
 msgstr "유저"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3130
-#, fuzzy
 msgid "Username"
-msgstr "유저"
+msgstr "사용자 이름"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3134
 #: src/src/i2p/susi/webmail/WebMail.java:3135
@@ -432,7 +433,7 @@ msgstr "패스워드"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3137
 msgid "Toggle password visibility"
-msgstr ""
+msgstr "비밀번호 공개 전환"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3143
 msgid "Host"
@@ -456,9 +457,8 @@ msgid "Settings"
 msgstr "설정"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3168
-#, fuzzy
 msgid "Learn about I2PMail"
-msgstr "I2P 메일이란?"
+msgstr "I2PMail에 대해 알아보기"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3169
 msgid "Create Account"
@@ -475,7 +475,7 @@ msgstr "메일 확인"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3215
 msgid "Refresh Page"
-msgstr ""
+msgstr "페이지 새로 고침"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3228
 #, java-format
@@ -515,9 +515,8 @@ msgid "Message is spam"
 msgstr "스팸 메세지"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3370
-#, fuzzy
 msgid "Message body not downloaded"
-msgstr "잘못된 메세지 ID."
+msgstr "메시지 본문이 다운로드되지 않았습니다."
 
 #. TODO ngettext
 #: src/src/i2p/susi/webmail/WebMail.java:3403
@@ -542,7 +541,7 @@ msgstr "모두 소거"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3425
 msgid "Change to Folder"
-msgstr ""
+msgstr "폴더로 변경"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3433
 msgid "First"
@@ -597,7 +596,7 @@ msgstr "폴더로 돌아가기"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3576
 msgid "Move to Folder"
-msgstr ""
+msgstr "폴더로 이동"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3656
 msgid "Folder Page Size"

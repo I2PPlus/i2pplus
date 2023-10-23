@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2019-10-02 08:58+0000\n"
+"PO-Revision-Date: 2023-10-23 09:07+0000\n"
 "Last-Translator: Nathan Tran\n"
 "Language-Team: Vietnamese (http://www.transifex.com/otf/I2P/language/vi/)\n"
 "Language: vi\n"
@@ -18,13 +18,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4\n"
 
 #: src/src/i2p/susi/webmail/MailCache.java:529
 #: src/src/i2p/susi/webmail/WebMail.java:2410
 #, java-format
 msgid "{0} new message"
 msgid_plural "{0} new messages"
-msgstr[0] ""
+msgstr[0] "{0} tin nhắn mới"
 
 #: src/src/i2p/susi/webmail/MailCache.java:532
 msgid "Email"
@@ -46,7 +47,7 @@ msgstr "Re:"
 #: src/src/i2p/susi/webmail/WebMail.java:1255
 #: src/src/i2p/susi/webmail/WebMail.java:1256
 msgid "Fwd:"
-msgstr ""
+msgstr "Chuyển hướng:"
 
 #. MailDir-like
 #: src/src/i2p/susi/webmail/WebMail.java:214
@@ -66,7 +67,7 @@ msgstr "Thùng rác"
 #. MailDir-like
 #: src/src/i2p/susi/webmail/WebMail.java:217
 msgid "Bulk Mail"
-msgstr ""
+msgstr "Thư hàng loạt"
 
 #. untranslated, translate on use
 #: src/src/i2p/susi/webmail/WebMail.java:221
@@ -89,17 +90,17 @@ msgstr "Phần ({0}) không hiển thị, vì {1}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:592
 msgid "Reloading the page may fix the error."
-msgstr ""
+msgstr "Tải lại trang có thể khắc phục được lỗi."
 
 #: src/src/i2p/susi/webmail/WebMail.java:622
 msgid "File"
-msgstr ""
+msgstr "Tập tin"
 
 #: src/src/i2p/susi/webmail/WebMail.java:645
 #: src/src/i2p/susi/webmail/WebMail.java:650
 #, java-format
 msgid "Download attachment {0}"
-msgstr ""
+msgstr "Tải xuống tệp đính kèm {0}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:651
 msgid "File is packed into a zipfile for security reasons."
@@ -157,7 +158,7 @@ msgstr "Số cổng SMTP không đúng."
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:243
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:258
 msgid "Cannot connect"
-msgstr ""
+msgstr "Không thể kết nối"
 
 #: src/src/i2p/susi/webmail/WebMail.java:932
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:744
@@ -166,14 +167,14 @@ msgstr "Có lỗi kết nối vào máy chủ"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1039
 msgid "Draft saved."
-msgstr ""
+msgstr "Đã lưu bản nháp."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1049
 #: src/src/i2p/susi/webmail/WebMail.java:1290
 #: src/src/i2p/susi/webmail/WebMail.java:2740
 #: src/src/i2p/susi/webmail/WebMail.java:2923
 msgid "Unable to save mail."
-msgstr ""
+msgstr "Không thể lưu thư."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1179
 #, java-format
@@ -215,7 +216,7 @@ msgstr "Không tìm thấy bộ mã cho {0}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1592
 msgid "Attachment not found."
-msgstr ""
+msgstr "Không tìm thấy tệp đính kèm."
 
 #. error if we get here
 #: src/src/i2p/susi/webmail/WebMail.java:1620
@@ -223,7 +224,7 @@ msgstr ""
 #: src/src/i2p/susi/webmail/WebMail.java:2304
 #: src/src/i2p/susi/webmail/WebMail.java:3617
 msgid "Message not found."
-msgstr ""
+msgstr "Không tìm thấy tin nhắn."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1725
 #, java-format
@@ -239,11 +240,11 @@ msgstr "Không có thư nào chờ xóa."
 #: src/src/i2p/susi/webmail/WebMail.java:1800
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
+msgstr "Máy chủ không thay đổi. "
 
 #: src/src/i2p/susi/webmail/WebMail.java:1820
 msgid "Configuration saved"
-msgstr ""
+msgstr "Đã lưu cấu hình"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1842
 msgid "Invalid pagesize number, resetting to default value."
@@ -258,7 +259,7 @@ msgstr "Đăng nhập"
 #: src/src/i2p/susi/webmail/WebMail.java:2426
 #: src/src/i2p/susi/webmail/WebMail.java:3179
 msgid "Loading messages, please wait..."
-msgstr ""
+msgstr "Đang tải tin nhắn, vui lòng đợi..."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2292
 #, fuzzy, java-format
@@ -269,7 +270,7 @@ msgstr[0] "{0} Thư"
 #: src/src/i2p/susi/webmail/WebMail.java:2294
 #: src/src/i2p/susi/webmail/WebMail.java:3380
 msgid "No messages"
-msgstr ""
+msgstr "Không có tin nhắn"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2302
 msgid "Show Message"
@@ -277,7 +278,7 @@ msgstr "Hiển Thị Thư"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2307
 msgid "New Message"
-msgstr ""
+msgstr "Tin nhắn mới"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2309
 msgid "Configuration"
@@ -285,29 +286,29 @@ msgstr "Cấu hình"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2320
 msgid "I2PMail"
-msgstr ""
+msgstr "I2PMail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2413
 msgid "No new messages"
-msgstr ""
+msgstr "Không có tin nhắn mới"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2428
 msgid "Checking for new messages on server"
-msgstr ""
+msgstr "Kiểm tra tin nhắn mới trên máy chủ"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2430
 msgid "Refresh the page for updates"
-msgstr ""
+msgstr "Làm mới trang để cập nhật"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2465
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
-msgstr ""
+msgstr "{0} là dịch vụ độc quyền I2P do {1} cung cấp."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2467
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr ""
+msgstr "{0} ứng dụng email trực tuyến"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2648
 #: src/src/i2p/susi/webmail/WebMail.java:3296
@@ -332,19 +333,19 @@ msgstr "Không thấy người nhận."
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:302
 #, java-format
 msgid "Email is too large, max is {0}"
-msgstr ""
+msgstr "Email quá lớn, tối đa là {0}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2855
 #: src/src/i2p/susi/webmail/WebMail.java:2936
 msgid "Sending mail."
-msgstr ""
+msgstr "Đang gửi mail."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2860
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:254
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:346
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:351
 msgid "Error sending mail"
-msgstr ""
+msgstr "Lỗi gửi thư"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2894
 msgid "Mail sent."
@@ -356,7 +357,7 @@ msgstr "Gửi."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2984
 msgid "Save as Draft"
-msgstr ""
+msgstr "Lưu dưới dạng bản nháp"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2985
 #: src/src/i2p/susi/webmail/WebMail.java:3405
@@ -398,9 +399,8 @@ msgstr "Thêm Đính Kèm"
 
 #. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 #: src/src/i2p/susi/webmail/WebMail.java:3091
-#, fuzzy
 msgid "Add attachment"
-msgstr "Thêm Đính Kèm"
+msgstr "Thêm bản đính kèm"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3098
 msgid "Attachments"
@@ -408,20 +408,19 @@ msgstr "Các tập tin đính kèm"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3109
 msgid "Delete selected attachments"
-msgstr ""
+msgstr "Xóa tệp đính kèm đã chọn"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3125
 msgid "I2PMail Login"
-msgstr ""
+msgstr "Đăng nhập I2PMail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3129
 msgid "User"
 msgstr "Người dùng"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3130
-#, fuzzy
 msgid "Username"
-msgstr "Người dùng"
+msgstr "tên tài khoản"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3134
 #: src/src/i2p/susi/webmail/WebMail.java:3135
@@ -430,7 +429,7 @@ msgstr "Mật khẩu"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3137
 msgid "Toggle password visibility"
-msgstr ""
+msgstr "Chuyển đổi khả năng hiển thị mật khẩu"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3143
 msgid "Host"
@@ -438,15 +437,15 @@ msgstr "Máy chủ"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3148
 msgid "POP3 Port"
-msgstr ""
+msgstr "Cổng POP3"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3153
 msgid "SMTP Port"
-msgstr ""
+msgstr "Cổng SMTP"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3162
 msgid "Read Mail Offline"
-msgstr ""
+msgstr "Đọc thư ngoại tuyến"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3163
 #: src/src/i2p/susi/webmail/WebMail.java:3409
@@ -455,7 +454,7 @@ msgstr "Thiết lập"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3168
 msgid "Learn about I2PMail"
-msgstr ""
+msgstr "Tìm hiểu về I2PMail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3169
 msgid "Create Account"
@@ -472,7 +471,7 @@ msgstr "Lấy thư"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3215
 msgid "Refresh Page"
-msgstr ""
+msgstr "Làm mới trang"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3228
 #, java-format
@@ -497,24 +496,23 @@ msgstr "Kích thước"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3252
 msgid "Mark for deletion"
-msgstr ""
+msgstr "Đánh dấu để xóa"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3349
 msgid "Message has an attachment"
-msgstr ""
+msgstr "Tin nhắn có tệp đính kèm"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3359
 msgid "Message is new"
-msgstr ""
+msgstr "Tin nhắn mới"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3361
 msgid "Message is spam"
-msgstr ""
+msgstr "Tin nhắn là thư rác"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3370
-#, fuzzy
 msgid "Message body not downloaded"
-msgstr "ID của thư không đúng"
+msgstr "Nội dung thư chưa được tải xuống"
 
 #. TODO ngettext
 #: src/src/i2p/susi/webmail/WebMail.java:3403
@@ -535,11 +533,11 @@ msgstr "Đánh dấu tất cả"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3412
 msgid "Clear All"
-msgstr ""
+msgstr "Làm sạch tất cả"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3425
 msgid "Change to Folder"
-msgstr ""
+msgstr "Thay đổi thư mục"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3433
 msgid "First"
@@ -581,7 +579,7 @@ msgstr "Chuyển tiếp"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3525
 msgid "Save As"
-msgstr ""
+msgstr "Lưu thành"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3527
 #: src/src/i2p/susi/webmail/WebMail.java:3529
@@ -594,11 +592,11 @@ msgstr "Trở lại thư mục"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3576
 msgid "Move to Folder"
-msgstr ""
+msgstr "Di chuyển đến thư mục"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3656
 msgid "Folder Page Size"
-msgstr ""
+msgstr "Kích thước trang thư mục"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3657
 msgid "Set"
@@ -610,7 +608,7 @@ msgstr "Thiết lập nâng cao"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3670
 msgid "Save Configuration"
-msgstr ""
+msgstr "Lưu cấu hình"
 
 #. this appears in the UI so translate
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:108
@@ -620,31 +618,31 @@ msgstr ""
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:978
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1199
 msgid "No response from server"
-msgstr ""
+msgstr "Không có phản hồi từ máy chủ"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
+msgstr "Đăng nhập máy chủ thư không thành công, sai tên người dùng hoặc mật khẩu."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
+msgstr "Đăng xuất và sau đó đăng nhập lại với tên người dùng và mật khẩu chính xác."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:314
 msgid "Login failed"
-msgstr ""
+msgstr "Đăng nhập thất bại"
 
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:256
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:285
 msgid "Server refused connection"
-msgstr ""
+msgstr "Máy chủ từ chối kết nối"
 
 #. TODO which recipient?
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:327
 msgid "Mail rejected"
-msgstr ""
+msgstr "Thư bị từ chối"
 
 #~ msgid "User logged out."
 #~ msgstr "Người dùng đã đăng xuất."

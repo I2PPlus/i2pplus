@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2019-04-24 14:21+0000\n"
+"PO-Revision-Date: 2023-10-23 09:44+0000\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Japanese (http://www.transifex.com/otf/I2P/language/ja/)\n"
 "Language: ja\n"
@@ -20,6 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4\n"
 
 #: src/src/i2p/susi/webmail/MailCache.java:529
 #: src/src/i2p/susi/webmail/WebMail.java:2410
@@ -68,7 +69,7 @@ msgstr "ごみ箱"
 #. MailDir-like
 #: src/src/i2p/susi/webmail/WebMail.java:217
 msgid "Bulk Mail"
-msgstr ""
+msgstr "バルクメール"
 
 #. untranslated, translate on use
 #: src/src/i2p/susi/webmail/WebMail.java:221
@@ -91,11 +92,11 @@ msgstr "パート ({0}) が表示されませ、 {1} のためです。"
 
 #: src/src/i2p/susi/webmail/WebMail.java:592
 msgid "Reloading the page may fix the error."
-msgstr ""
+msgstr "ページをリロードするとエラーが解決する場合があります。"
 
 #: src/src/i2p/susi/webmail/WebMail.java:622
 msgid "File"
-msgstr ""
+msgstr "ファイル"
 
 #: src/src/i2p/susi/webmail/WebMail.java:645
 #: src/src/i2p/susi/webmail/WebMail.java:650
@@ -168,14 +169,14 @@ msgstr "サーバーに接続することができませんでした"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1039
 msgid "Draft saved."
-msgstr ""
+msgstr "下書きが保存されました。"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1049
 #: src/src/i2p/susi/webmail/WebMail.java:1290
 #: src/src/i2p/susi/webmail/WebMail.java:2740
 #: src/src/i2p/susi/webmail/WebMail.java:2923
 msgid "Unable to save mail."
-msgstr ""
+msgstr "メールを保存できません。"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1179
 #, java-format
@@ -225,7 +226,7 @@ msgstr "添付ファイルが見つかりません。"
 #: src/src/i2p/susi/webmail/WebMail.java:2304
 #: src/src/i2p/susi/webmail/WebMail.java:3617
 msgid "Message not found."
-msgstr ""
+msgstr "メッセージが見つかりません。"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1725
 #, java-format
@@ -241,7 +242,7 @@ msgstr "削除にマークされているメッセージなし。"
 #: src/src/i2p/susi/webmail/WebMail.java:1800
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
+msgstr "ホストは変更されません。"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1820
 msgid "Configuration saved"
@@ -260,7 +261,7 @@ msgstr "ログイン"
 #: src/src/i2p/susi/webmail/WebMail.java:2426
 #: src/src/i2p/susi/webmail/WebMail.java:3179
 msgid "Loading messages, please wait..."
-msgstr ""
+msgstr "メッセージを読み込んでいます。お待ちください..."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2292
 #, fuzzy, java-format
@@ -287,29 +288,29 @@ msgstr "設定"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2320
 msgid "I2PMail"
-msgstr ""
+msgstr "I2Pメール"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2413
 msgid "No new messages"
-msgstr ""
+msgstr "新しいメッセージはありません"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2428
 msgid "Checking for new messages on server"
-msgstr ""
+msgstr "サーバー上の新しいメッセージをチェックしています"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2430
 msgid "Refresh the page for updates"
-msgstr ""
+msgstr "更新情報についてはページを更新してください"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2465
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
-msgstr ""
+msgstr "{0} は、{1} によって提供される I2P 専用サービスです。"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2467
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr ""
+msgstr "{0} ウェブメール クライアント"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2648
 #: src/src/i2p/susi/webmail/WebMail.java:3296
@@ -334,12 +335,12 @@ msgstr "受信者が見つかりませんでした。"
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:302
 #, java-format
 msgid "Email is too large, max is {0}"
-msgstr ""
+msgstr "メールが大きすぎます。最大値は {0} です"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2855
 #: src/src/i2p/susi/webmail/WebMail.java:2936
 msgid "Sending mail."
-msgstr ""
+msgstr "メールを送信中。"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2860
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:254
@@ -358,7 +359,7 @@ msgstr "送信"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2984
 msgid "Save as Draft"
-msgstr ""
+msgstr "下書きとして保存"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2985
 #: src/src/i2p/susi/webmail/WebMail.java:3405
@@ -400,9 +401,8 @@ msgstr "ファイルを添付する"
 
 #. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 #: src/src/i2p/susi/webmail/WebMail.java:3091
-#, fuzzy
 msgid "Add attachment"
-msgstr "ファイルを添付する"
+msgstr "添付ファイルを追加する"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3098
 msgid "Attachments"
@@ -414,16 +414,15 @@ msgstr "指定された添付ファイルを削除する"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3125
 msgid "I2PMail Login"
-msgstr ""
+msgstr "I2Pメールログイン"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3129
 msgid "User"
 msgstr "ユーザー"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3130
-#, fuzzy
 msgid "Username"
-msgstr "ユーザー"
+msgstr "ユーザー名"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3134
 #: src/src/i2p/susi/webmail/WebMail.java:3135
@@ -432,7 +431,7 @@ msgstr "パスワード"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3137
 msgid "Toggle password visibility"
-msgstr ""
+msgstr "パスワードの表示を切り替えます"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3143
 msgid "Host"
@@ -456,9 +455,8 @@ msgid "Settings"
 msgstr "設定"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3168
-#, fuzzy
 msgid "Learn about I2PMail"
-msgstr "I2P メールについて知る"
+msgstr "I2Pmail について学ぶ"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3169
 msgid "Create Account"
@@ -475,7 +473,7 @@ msgstr "メールをチェック"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3215
 msgid "Refresh Page"
-msgstr ""
+msgstr "ページの更新"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3228
 #, java-format
@@ -515,9 +513,8 @@ msgid "Message is spam"
 msgstr "迷惑メールです"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3370
-#, fuzzy
 msgid "Message body not downloaded"
-msgstr "メッセージIDが有効でありません。"
+msgstr "メッセージ本文がダウンロードされていません"
 
 #. TODO ngettext
 #: src/src/i2p/susi/webmail/WebMail.java:3403
@@ -542,7 +539,7 @@ msgstr "全てクリア"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3425
 msgid "Change to Folder"
-msgstr ""
+msgstr "フォルダーに変更"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3433
 msgid "First"
@@ -597,7 +594,7 @@ msgstr "フォルダーに戻る"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3576
 msgid "Move to Folder"
-msgstr ""
+msgstr "フォルダへ移動"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3656
 msgid "Folder Page Size"
@@ -627,11 +624,11 @@ msgstr "サーバーからの応答がありません"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
+msgstr "メールサーバーへのログインに失敗しました。ユーザー名またはパスワードが間違っています。"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
+msgstr "ログアウトし、正しいユーザー名とパスワードを使用して再度ログインします。"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240
