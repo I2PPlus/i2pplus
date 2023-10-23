@@ -31,7 +31,7 @@ const notice = document.getElementById("sb_notice");
 const peers = document.getElementById("sb_peers");
 const queue = document.getElementById("sb_queue");
 const routerControl = document.getElementById("sb_routerControl");
-const sb = document.getElementById("sidebar");
+const sb = document.querySelector("#sidebar");
 const sectionTitle = document.querySelectorAll("#sidebar h3, #sidebar a");
 const services = document.getElementById("sb_services");
 const shortGeneral = document.getElementById("sb_shortgeneral");
@@ -74,7 +74,9 @@ function tangoDown() {
     localtunnelSummary.innerHTML = "<tr id=routerdown><td colspan=3 height=10></td></tr>";
   }
   isDown = true;
-  setTimeout(refreshSidebar, 3000);
+  onVisible(sb, () => {
+    setTimeout(refreshSidebar, 5000);
+  });
 }
 
 function refreshSidebar() {
@@ -89,6 +91,7 @@ function refreshSidebar() {
   xhrsb.onload = function () {
     if (xhrsb.status === 200) {
       isDown = false;
+      if (isDownTimer !== null) {clearTimeout(isDownTimer);}
       document.querySelector("body").classList.remove("isDown");
     } else if (xhrsb.status === 404 || xhrsb.status === 500) {
       window.requestAnimationFrame(tangoDown);
@@ -363,6 +366,7 @@ function refreshSidebar() {
     isDownTimer = setTimeout(tangoDown, 5000);
     isDown = true;
   };
+
 }
 
 export {refreshSidebar};

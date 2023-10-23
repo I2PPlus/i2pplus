@@ -100,6 +100,7 @@ function refreshTorrents(callback) {
   let requireHeadFootRefresh = true;
 
   function updateVolatile() {
+    if (!xhrsnark.responseXML) {return;}
     const updating = document.querySelectorAll("#snarkTbody tr");
     const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr");
     const updatingCells = document.querySelectorAll("#snarkTbody tr.volatile td:not(.magnet):not(.trackerLink):not(.details.data)");
@@ -108,7 +109,7 @@ function refreshTorrents(callback) {
     if (torrents) {
       if (filterbar) {
         const activeBadge = filterbar.querySelector("#torrentDisplay .filter .badge:not(:empty)");
-        const activeBadgeResponse = xhrsnark.responseXML.querySelector("#torrentDisplay .filter .badge:not(:empty)");
+        const activeBadgeResponse = xhrsnark.responseXML?.querySelector("#torrentDisplay .filter .badge:not(:empty)");
         if (activeBadge && activeBadgeResponse && activeBadge.textContent !== activeBadgeResponse.textContent) {
           activeBadge.textContent = activeBadgeResponse.textContent;
         }
@@ -133,7 +134,7 @@ function refreshTorrents(callback) {
       }
     } else if (dirlist?.responseXML) {
       if (info) {
-        const infoResponse = xhrsnark.responseXML.getElementById("torrentInfoStats");
+        const infoResponse = xhrsnark.responseXML?.getElementById("torrentInfoStats");
         if (infoResponse) {
           const infoParent = info.parentNode;
           if (!Object.is(info.innerHTML, infoResponse.innerHTML)) {
@@ -142,7 +143,7 @@ function refreshTorrents(callback) {
         }
       }
       if (control) {
-        const controlResponse = xhrsnark.responseXML.getElementById("torrentInfoControl");
+        const controlResponse = xhrsnark.responseXML?.getElementById("torrentInfoControl");
         if (controlResponse) {
           const controlParent = control.parentNode;
           if (!Object.is(control.innerHTML, controlResponse.innerHTML)) {
@@ -278,9 +279,11 @@ async function initSnarkRefresh() {
       const screenLogInterval = 3000;
     try {
       refreshIntervalId = setInterval(async () => {
-        await doRefresh();
-        await refreshScreenLog();
-        await initToggleLog();
+        try {
+          await doRefresh();
+          await refreshScreenLog();
+          await initToggleLog();
+        } catch {};
       }, refreshInterval);
       const lighboxEnabled = document.getElementById("lightbox");
       if (files && lightboxEnabled) {
@@ -292,9 +295,7 @@ async function initSnarkRefresh() {
         document.removeEventListener("click", events[i]);
         refreshOnSubmit();
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch {}
   });
 }
 
