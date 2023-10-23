@@ -23,7 +23,7 @@
 <span class=tab><a href="/help/advancedsettings"><%=intl._t("Advanced Settings")%></a></span>
 <span class=tab><a href="/help/ui"><%=intl._t("User Interface")%></a></span>
 <span class=tab2><%=intl._t("Reseeding")%></span>
-<span class=tab><a href="/help/tunnelfilter">T<%=intl._t("unnel Filtering")%></a></span>
+<span class=tab><a href="/help/tunnelfilter"><%=intl._t("Tunnel Filtering")%></a></span>
 <span class=tab><a href="/help/faq"><%=intl._t("FAQ")%></a></span>
 <span class=tab><a href="/help/newusers"><%=intl._t("New User Guide")%></a></span>
 <span class=tab><a href="/help/webhosting"><%=intl._t("Web Hosting")%></a></span>
