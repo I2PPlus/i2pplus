@@ -7755,15 +7755,6 @@ msgstr "Thiết lập nâng cao"
 msgid "User Interface"
 msgstr "Giao diện người dùng"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:415 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:415
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:415 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:415
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:415 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:443 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:415
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:415 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:415 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:270
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:405 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:415 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:415
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:406
-msgid "Tunnel Filtering"
-msgstr ""
-
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:417 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:421 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:421 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:421 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:421

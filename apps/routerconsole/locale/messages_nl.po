@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"POT-Creation-Date: 2023-10-22 01:44+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-23 21:17+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -9375,11 +9376,13 @@ msgstr "I2CP Interface"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:415
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:443
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:415
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:270
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:405
@@ -10308,12 +10311,6 @@ msgid ""
 "Note: Most of the options in the Tunnel Manager have tooltips; be sure to "
 "check those before you change settings you don't fully understand!"
 msgstr ""
-
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:415
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:415
-#, fuzzy
-msgid "unnel Filtering"
-msgstr "Tunnel vertraging"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:433
 #, fuzzy
@@ -13886,6 +13883,10 @@ msgstr "Volgende"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:742
 msgid "Finished"
 msgstr "Klaar"
+
+#, fuzzy
+#~ msgid "unnel Filtering"
+#~ msgstr "Tunnel vertraging"
 
 #, fuzzy
 #~ msgid "I2P Plugins"

@@ -6,7 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"POT-Creation-Date: 2023-10-22 01:44+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-23 21:17+0000\n"
 "PO-Revision-Date: 2021-10-16 14:53+0000\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -9511,11 +9512,13 @@ msgstr "Interfaccia utente"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:415
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:443
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:415
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:270
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:405
@@ -10480,12 +10483,6 @@ msgstr ""
 "controlla queste prima di cambiare delle impostazioni che non comprendi! Per "
 "esempio, <i>non</i> è raccomandato abilitare DCC per il tuo tunnel client "
 "IRC perché questo potrebbe compromettere gravemente la tua anonimità."
-
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:415
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:415
-#, fuzzy
-msgid "unnel Filtering"
-msgstr "Filtri del tunnel"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:433
 #, fuzzy
@@ -14185,6 +14182,10 @@ msgstr "Successivo"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:742
 msgid "Finished"
 msgstr "Finito"
+
+#, fuzzy
+#~ msgid "unnel Filtering"
+#~ msgstr "Filtri del tunnel"
 
 #~ msgid "Send key to server opererator."
 #~ msgstr "Invia chiave all'admin del server"
