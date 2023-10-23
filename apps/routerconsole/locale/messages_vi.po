@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2023-10-23 20:49+0000\n"
+"PO-Revision-Date: 2023-10-23 21:14+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -2368,8 +2368,9 @@ msgid "Router console password is enabled."
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:238 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:488
+#, fuzzy
 msgid "Mark for deletion"
-msgstr ""
+msgstr "Đánh dấu để xóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:239 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:490 ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1454
 msgid "Remove"
@@ -2711,8 +2712,9 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:47 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:68 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:88
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:279 ../java/strings/Strings.java:16
+#, fuzzy
 msgid "I2PMail"
-msgstr ""
+msgstr "I2PMail"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:48 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:478
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:310
@@ -7536,7 +7538,7 @@ msgstr "Áp dụng"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:545
 msgid "Theme selection disabled for Internet Explorer, sorry."
-msgstr ""
+msgstr "Rất tiếc, lựa chọn chủ đề đã bị tắt đối với Internet Explorer."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:546
 msgid "(A very old version has been detected. It's not recommended to use I2P with unmaintained browsers."
@@ -7548,11 +7550,11 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:552
 msgid "Router Console Password"
-msgstr ""
+msgstr "Mật khẩu bảng điều khiển bộ định tuyến"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:575
 msgid "Router Console Language"
-msgstr ""
+msgstr "Ngôn ngữ bảng điều khiển bộ định tuyến"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:583
 msgid "Please contribute to the router console translation project! Contact the developers in #i2p-dev on IRC to help."
@@ -7568,15 +7570,15 @@ msgstr "Cập nhật bộ định tuyến"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:536
 msgid "I2P &amp; News Updates"
-msgstr ""
+msgstr "I2P và cập nhật tin tức"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:542 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:544
 msgid "News Updates"
-msgstr ""
+msgstr "Tin tức cập nhật"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:554
 msgid "I2P update policy"
-msgstr ""
+msgstr "Chính sách cập nhật I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:562
 #, fuzzy
@@ -9030,82 +9032,81 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:443 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:453 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:463 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:473 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:487
-#, fuzzy
 msgid "Reseed Configuration page"
-msgstr "trang cấu hình giữ chỗ tải trở lại"
+msgstr "Trang cấu hình Reseed"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:443
 #, java-format
 msgid "To use a proxy to reseed, configure the proxy type, hostname, and port on the {0}."
-msgstr ""
+msgstr "Để sử dụng proxy để khởi tạo lại, hãy định cấu hình loại proxy, tên máy chủ và cổng trên {0}."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:445
 msgid "If you are running the Tor Browser, you may use its Tor instance by configuring I2P to use: <i>Proxy type:</i> <code>SOCKS 5</code> <i>Host:</i> <code>127.0.0.1</code> <i>Port:</i> <code>9150</code>."
-msgstr ""
+msgstr "Nếu bạn đang chạy Trình duyệt Tor, bạn có thể sử dụng phiên bản Tor của nó bằng cách định cấu hình I2P để sử dụng: <i>Loại proxy:</i> <code>SOCKS 5</code> <i>Máy chủ:</i> "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:447
 msgid "If you are running a standalone Tor instance locally, you may use it by configuring I2P to use: <i>Proxy type:</i> <code>SOCKS 5</code> <i>Host:</i> <code>127.0.0.1</code> <i>Port:</i> <code>9050</code>."
-msgstr ""
+msgstr "Nếu bạn đang chạy cục bộ một phiên bản Tor độc lập, bạn có thể sử dụng nó bằng cách định cấu hình I2P để sử dụng: <i>Loại proxy:</i> <code>SOCKS 5</code> <i>Máy chủ:</i> "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:449
 msgid "If you have some peers but need more, you may try the I2P Outproxy option. This will not work for the initial reseed when you have 0 known peers. Selecting this option will use the I2P HTTP outproxy (by default on <code>127.0.0.1:4444</code>) or, if configured, the Orchid Tor plugin."
-msgstr ""
+msgstr "Nếu bạn có một số thiết bị ngang hàng nhưng cần nhiều hơn, bạn có thể thử tùy chọn I2P Outproxy. "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:451
 msgid "Then click the <i>Save changes</i> button to confirm the proxy configuration and then the <i>Reseed now</i> button to initiate the reseed process."
-msgstr ""
+msgstr "Sau đó nhấp vào nút <i>Lưu thay đổi</i> để xác nhận cấu hình proxy và sau đó nhấp vào nút <i>Reseed now</i> để bắt đầu quá trình gieo hạt lại."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:453
 #, java-format
 msgid "If you know and trust somebody that runs I2P, ask them to send you a reseed file generated using this page in their router console. Then, select the <i>Reseed from file</i> option on the {0} using the file you received."
-msgstr ""
+msgstr "Nếu bạn biết và tin tưởng ai đó chạy I2P, hãy yêu cầu họ gửi cho bạn tệp reseed được tạo bằng trang này trong bảng điều khiển bộ định tuyến của họ. "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:455
 #, java-format
 msgid "If you know and trust somebody that publishes reseed files, ask them for the URL. Then, click the <i>Reseed from URL</i> button on the {0} to reseed using the URL you received."
-msgstr ""
+msgstr "Nếu bạn biết và tin tưởng ai đó xuất bản các tập tin reseed, hãy hỏi họ URL. "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:457
 msgid "How do I reseed manually?"
-msgstr ""
+msgstr "Làm cách nào để gieo hạt theo cách thủ công?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:459
 msgid "An I2P router usually only needs to be seeded once, to join the network for the first time. However, if the router is running for an extended period without network connectivity it may also need to be reseeded. Reseeding involves fetching multiple \"RouterInfo\" files (bundled into a signed zip-file) from at least two predefined server URLs picked from a volunteer-run group of clearnet HTTPS servers."
-msgstr ""
+msgstr "Bộ định tuyến I2P thường chỉ cần được gieo hạt một lần để tham gia mạng lần đầu tiên. "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:461
 msgid "If the number of known peers drops below 50, I2P will attempt to reseed automatically. If the reseed attempt fails, a notification will appear in the sidebar with an option to manually reseed. A failed reseed attempt can occur if your local firewall limits outbound traffic, you are experiencing network connectivity issues, or if the reseed request is blocked entirely."
-msgstr ""
+msgstr "Nếu số lượng đồng nghiệp đã biết giảm xuống dưới 50, I2P sẽ cố gắng tự động khởi động lại. "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:463
 #, java-format
 msgid "In the event that you suspect the request is being blocked, you can configure I2P to use a proxy to reseed. Go to the {0} and configure the proxy type, hostname, and port."
-msgstr ""
+msgstr "Trong trường hợp bạn nghi ngờ yêu cầu đang bị chặn, bạn có thể định cấu hình I2P để sử dụng proxy để khởi động lại. "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:465
 msgid "If you are stuck behind an ISP firewall or filter, you can use the following manual method (non-automated technical solution) to join the I2P network."
-msgstr ""
+msgstr "Nếu bạn bị kẹt sau tường lửa hoặc bộ lọc của ISP, bạn có thể sử dụng phương pháp thủ công sau (giải pháp kỹ thuật không tự động) để tham gia mạng I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:467
 msgid "Joining the I2P Network using a reseed file"
-msgstr ""
+msgstr "Tham gia Mạng I2P bằng tệp reseed"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:469
 msgid "Please contact a known trustworthy friend who has a running I2P router, and ask them for help with reseeding your I2P router. Request that they send you a reseed file exported from their running I2P router. It is vital that the file is exchanged over a secure channel, e.g. encrypted to avoid external tampering (PGP Sign, Encrypt and Verified with a trusted public key). The file itself is unsigned, so please accept files only from known trusted friends. Never import a reseed file if you cannot verify its source."
-msgstr ""
+msgstr "Vui lòng liên hệ với một người bạn đáng tin cậy đã biết có bộ định tuyến I2P đang chạy và nhờ họ trợ giúp cài đặt lại bộ định tuyến I2P của bạn. "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:471
 msgid "To import the received i2preseed.zip file into your local I2P router:"
-msgstr ""
+msgstr "Để nhập tệp i2preseed.zip đã nhận vào bộ định tuyến I2P cục bộ của bạn:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:473 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:487
 #, java-format
 msgid "Go to the {0}"
-msgstr ""
+msgstr "Đi tới {0}"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:475
 msgid "Under <i>Select zip or su3 file</i> click <i>Browse&hellip;</i>"
-msgstr ""
+msgstr "Trong <i>Chọn tệp zip hoặc su3</i> nhấp vào <i>Duyệt"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:477
 msgid "Select the i2preseed.zip file"
@@ -9182,15 +9183,15 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:445
 msgid "Firewalls, Modems &amp; Routers"
-msgstr ""
+msgstr "Tường lửa, Modem và Bộ định tuyến"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:447
 msgid "Where possible, please ensure I2P+/Java is allowed bi-directional port access from the internet by configuring your modem/router/pc firewall accordingly. If you're behind a prohibitive firewall but have unrestricted outbound access, I2P+ can still function; you can turn off inbound access and rely on <a href=http://i2p-projekt.i2p/udp.html target=_blank rel=noreferrer class=sitelink>SSU IP Address Detection</a> (<a href=https://wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer class='sitelink external'>firewall hole punching</a>) to connect you to the network, and your network status in the side panel will indicate \"Status: Firewalled\". For optimal performance, please ensure I2P's <a href=/confignet#udpconfig>external port</a> is visible from the internet (see below for more information)."
 msgstr "Nếu có thể, vui lòng đảm bảo I2P /Java được phép truy cập cổng hai chiều từ internet bằng cách định cấu hình tường lửa modem/bộ định tuyến/máy tính của bạn cho phù hợp."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:449
-msgid "Check Your Proxy Setttings"
-msgstr ""
+msgid "Check Your Proxy Settings"
+msgstr "Kiểm tra cài đặt proxy của bạn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:451
 msgid "If you cannot see any websites at all (not even <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>i2p-projekt.i2p</a>), make sure your browser's proxy is set to access http traffic (<i>not</i> https, <i>not</i> socks) via <code>127.0.0.1 port 4444</code>. If you need some help, there's <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>a guide</a> to configuring your browser for I2P use."
@@ -9198,7 +9199,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:453
 msgid "Check Your Logs"
-msgstr ""
+msgstr "Kiểm tra nhật ký của bạn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:455
 msgid "<a href=/logs>Logs</a> may help resolve a problem. You may wish to paste excerpts in a <a href=http://i2pforum.i2p/ target=_blank rel=noreferrer>forum</a> for help, or perhaps <a href=http://cake.i2p/pastebin/ target=_blank rel=noreferrer class='sitelink external'>paste</a> it instead and reference the link on IRC for help."
