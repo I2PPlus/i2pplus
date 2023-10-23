@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"POT-Creation-Date: 2023-10-22 01:44+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2023-10-22 21:16+0000\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
@@ -19,12 +20,15 @@ msgstr ""
 msgid "Host name \"{0}\" contains illegal character {1}"
 msgstr "Tên máy chủ \"{0}\" chứa ký tự không hợp lệ {1}"
 
-#: ../src/java/src/i2p/susi/dns/AddressBean.java:145 ../src/java/src/i2p/susi/dns/AddressBean.java:147 ../src/java/src/i2p/susi/dns/AddressBean.java:154
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:145
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:147
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:154
 #, java-format
 msgid "Host name cannot start with \"{0}\""
 msgstr "Tên máy chủ không thể bắt đầu bằng \"{0}\""
 
-#: ../src/java/src/i2p/susi/dns/AddressBean.java:149 ../src/java/src/i2p/susi/dns/AddressBean.java:151
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:149
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:151
 #, java-format
 msgid "Host name cannot end with \"{0}\""
 msgstr "Tên máy chủ không được kết thúc bằng \"{0}\""
@@ -36,8 +40,12 @@ msgstr "Tên máy chủ không được chứa \"{0}\""
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:159
 #, java-format
-msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
-msgstr "Tên máy chủ \"{0}\" yêu cầu chuyển đổi sang ASCII nhưng thư viện chuyển đổi không có sẵn trong JVM này"
+msgid ""
+"Host name \"{0}\" requires conversion to ASCII but the conversion library is "
+"unavailable in this JVM"
+msgstr ""
+"Tên máy chủ \"{0}\" yêu cầu chuyển đổi sang ASCII nhưng thư viện chuyển đổi "
+"không có sẵn trong JVM này"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:224
 msgid "None"
@@ -59,12 +67,15 @@ msgstr "Đã ký"
 msgid "Key"
 msgstr "Khóa dữ liệu"
 
-#: ../src/java/src/i2p/susi/dns/AddressBean.java:240 ../src/java/src/i2p/susi/dns/AddressBean.java:265
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:240
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:265
 #, java-format
 msgid "Type {0}"
 msgstr "Nhập {0}"
 
-#: ../src/java/src/i2p/susi/dns/AddressBean.java:252 ../src/java/src/i2p/susi/dns/AddressBean.java:259 ../src/java/src/i2p/susi/dns/AddressBean.java:262
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:252
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:259
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:262
 msgid "DSA 1024 bit"
 msgstr "DSA 1024bit"
 
@@ -91,101 +102,133 @@ msgid "1 entry"
 msgid_plural "{0} entries"
 msgstr[0] ""
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:254
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:254
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1025
 msgid "Add"
 msgstr "Thêm"
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251 ../src/java/src/i2p/susi/dns/AddressbookBean.java:261 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:261
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:995
 msgid "Replace"
 msgstr "Thay thế"
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:260 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:251
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:260
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:251
 #, java-format
 msgid "Host name {0} is already in address book, unchanged."
 msgstr "Tên máy chủ {0} đã có trong sổ địa chỉ, không thay đổi."
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:262 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:255
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:262
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:255
 #, java-format
-msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgid ""
+"Host name {0} is already in address book with a different destination. Click "
+"\"Replace\" to overwrite."
 msgstr "Tên máy chủ {0} đã có trong sổ địa chỉ với đích khác. "
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:282 ../src/java/src/i2p/susi/dns/AddressbookBean.java:289 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:274
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:282
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:289
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:274
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:281
 msgid "Unable to resolve Base 32 address"
 msgstr "Không thể giải quyết địa chỉ Cơ sở 32"
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:307 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:313
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:307
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:313
 #, java-format
 msgid "Destination added for {0}."
 msgstr "Thêm địa chỉ đến cho {0}"
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:309 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:315
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:309
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:315
 #, java-format
 msgid "Destination changed for {0}."
 msgstr "Đổi địa chỉ đến cho {0}"
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:311 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:317
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:311
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:317
 msgid "Warning - host name does not end with \".i2p\""
 msgstr "Cảnh báo - tên máy chủ không kết thúc bằng \".i2p\""
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:318 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:329
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:318
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:329
 msgid "Invalid Base 32 host name."
 msgstr "Tên máy chủ Base 32 không hợp lệ."
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:320 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:331
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:320
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:331
 msgid "Invalid Base 64 destination."
 msgstr "Dạng Base 64 của địa chỉ không đúng"
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:327 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:337
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:327
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:337
 #, java-format
 msgid "Invalid host name \"{0}\"."
 msgstr "Tên máy chủ không hợp lệ \"{0}\"."
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:330 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:340
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:330
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:340
 msgid "Please enter a host name and destination"
 msgstr "Xin điền vào tên máy chủ và địa chỉ đến"
 
 #. clear search when deleting
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334 ../src/java/src/i2p/susi/dns/AddressbookBean.java:355 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
-#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:348 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:382 ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:384
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:355
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:348
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:382
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:384
 msgid "Delete Entry"
 msgstr "Xóa mục nhập"
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344 ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:743
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:743
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:921
 msgid "Delete Selected"
 msgstr "Xóa lựa chọn"
 
 #. parameter is a host name
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:348 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:374
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:348
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:374
 #, java-format
 msgid "Destination {0} deleted."
 msgstr "Địa chỉ {0} được xóa."
 
 #. parameter will always be >= 2
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:351 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:377
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:351
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:377
 #, java-format
 msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
 msgstr[0] ""
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:353 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:379
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:353
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:379
 msgid "No entries selected to delete."
 msgstr "Không có mục nào được chọn để xóa."
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:357 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:252
-#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:291 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:298 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:312
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:357
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:252
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:291
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:298
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:312
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1003
 msgid "Add Alternate"
 msgstr "Thêm thay thế"
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:364 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:386
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:364
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:386
 msgid "Address book saved."
 msgstr "Đã lưu sổ địa chỉ."
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:364 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:386
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:364
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:386
 msgid "Browse away from this addressbook and return to see update."
 msgstr "Duyệt khỏi sổ địa chỉ này và quay lại để xem cập nhật."
 
@@ -193,19 +236,33 @@ msgstr "Duyệt khỏi sổ địa chỉ này và quay lại để xem cập nh�
 msgid "ERROR: Could not write addressbook file."
 msgstr "LỖI: không thể lưu trữ sổ địa chỉ."
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:372 ../src/java/src/i2p/susi/dns/ConfigBean.java:108 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:372
+#: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
-msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgid ""
+"Invalid form submission, probably because you used the \"back\" or "
+"\"reload\" button on your browser. Please resubmit."
 msgstr ""
-"Gửi biểu mẫu không hợp lệ, có thể do bạn đã sử dụng nút \"quay lại\" hoặc \"tải lại\" trên trình duyệt của mình. Mẫu nạp không giá trị, có lẻ vì bạn dùng nút \"lùi\" (back) hoặc \"nạp "
-"lại\" (reload) trong trình duyệt. Xin vui lòng làm lại."
+"Gửi biểu mẫu không hợp lệ, có thể do bạn đã sử dụng nút \"quay lại\" hoặc "
+"\"tải lại\" trên trình duyệt của mình. Mẫu nạp không giá trị, có lẻ vì bạn "
+"dùng nút \"lùi\" (back) hoặc \"nạp lại\" (reload) trong trình duyệt. Xin vui "
+"lòng làm lại."
 
-#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373 ../src/java/src/i2p/susi/dns/ConfigBean.java:110 ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
+#: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Nếu sự cố vẫn tiếp diễn, hãy xác minh rằng bạn đã bật cookie trong trình duyệt của mình."
+msgid ""
+"If the problem persists, verify that you have cookies enabled in your "
+"browser."
+msgstr ""
+"Nếu sự cố vẫn tiếp diễn, hãy xác minh rằng bạn đã bật cookie trong trình "
+"duyệt của mình."
 
-#: ../src/java/src/i2p/susi/dns/ConfigBean.java:99 ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:137 ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:246
+#: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:137
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:246
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:244
 msgid "Save"
 msgstr "Lưu trữ"
@@ -214,7 +271,9 @@ msgstr "Lưu trữ"
 msgid "Configuration saved."
 msgstr "Cấu hình được lưu trữ."
 
-#: ../src/java/src/i2p/susi/dns/ConfigBean.java:102 ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:159 ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:244
+#: ../src/java/src/i2p/susi/dns/ConfigBean.java:102
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:159
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:244
 msgid "Reload"
 msgstr "Nạp lại"
 
@@ -251,7 +310,8 @@ msgstr "Không thể thêm Đích cho {0} vào dịch vụ đặt tên {1}"
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Không thể xóa Đích cho {0} khỏi dịch vụ đặt tên {1}"
 
-#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:407 ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:368
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:407
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:368
 msgid "Save Notes"
 msgstr "Lưu ghi chú"
 
@@ -301,7 +361,8 @@ msgstr "Đã lưu đăng ký."
 #. // with the correct parameters will kick off a
 #. // config reload and fetch.
 #. ******
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:150 ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:242
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:150
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:242
 msgid "Update"
 msgstr "Cập nhật"
 
@@ -318,7 +379,8 @@ msgstr "Không thể cập nhật đăng ký: Proxy HTTP không chạy!"
 msgid "Subscriptions reloaded."
 msgstr "Đăng ký được tải lại."
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:208 ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1043
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:208
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1043
 msgid "Import"
 msgstr "Nhập"
 
@@ -326,44 +388,73 @@ msgstr "Nhập"
 msgid "address book"
 msgstr "sổ địa chỉ"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:275 ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:216 ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:221
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:207 ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:218 ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:216
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:275
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:216
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:221
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:207
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:218
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:216
 msgid "Router"
 msgstr "Bộ định tuyến"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:279 ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:218 ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:225
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:209 ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:220 ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:218
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:279
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:218
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:225
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:209
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:220
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:218
 msgid "Master"
 msgstr "Thầy"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:283 ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:220 ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:229
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:211 ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:222 ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:220
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:283
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:220
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:229
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:211
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:222
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:220
 msgid "Private"
 msgstr "Riêng tư"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:287 ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:222 ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:233
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:213 ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:224 ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:222
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:287
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:222
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:233
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:213
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:224
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:222
 msgid "Published"
 msgstr "Đã xuất bản"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:289 ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:224 ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:235
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:215 ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:226 ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:224
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:289
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:224
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:235
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:215
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:226
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:224
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:230 build/HowSVG.java:15
 msgid "Subscriptions"
 msgstr "Đăng ký"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:291 ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:226 ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:230
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:237 ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:217 ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:228
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:291
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:226
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:230
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:237
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:217
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:228
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:226
 msgid "Configuration"
 msgstr "Cấu hình"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:293 ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:228 ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:239
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:219 ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:230 ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:228
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:293
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:228
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:239
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:219
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:230
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:228
 msgid "Help"
 msgstr "Trợ giúp"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:295 ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:287
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:295
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:287
 msgid "Book"
 msgstr "Sách"
 
@@ -371,7 +462,8 @@ msgstr "Sách"
 msgid "No entries"
 msgstr "Không có mục nào"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:356 ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:366
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:356
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:366
 msgid "Export in hosts.txt format"
 msgstr "Xuất ở định dạng Host.txt"
 
@@ -399,7 +491,9 @@ msgstr "bộ lọc rõ ràng"
 msgid "Info"
 msgstr "Thông tin"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:751 ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:967 ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:281
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:751
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:967
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:281
 msgid "Hostname"
 msgstr "Tên máy chủ"
 
@@ -407,7 +501,8 @@ msgstr "Tên máy chủ"
 msgid "Link (b32)"
 msgstr "Liên kết (b32)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:755 ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:353
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:755
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:353
 msgid "Destination"
 msgstr "Đích đến"
 
@@ -415,7 +510,8 @@ msgstr "Đích đến"
 msgid "Select hosts for deletion from addressbook"
 msgstr "Chọn máy chủ để xóa khỏi sổ địa chỉ"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:814 ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:826
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:814
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:826
 msgid "More information on this entry"
 msgstr "Thông tin thêm về mục này"
 
@@ -425,13 +521,16 @@ msgstr "Địa chỉ cơ sở 32"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:844
 msgid "Helper link to share host address with option to add to addressbook"
-msgstr "Liên kết trợ giúp để chia sẻ địa chỉ máy chủ với tùy chọn thêm vào sổ địa chỉ"
+msgstr ""
+"Liên kết trợ giúp để chia sẻ địa chỉ máy chủ với tùy chọn thêm vào sổ địa chỉ"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:864
 msgid "Mark for deletion"
 msgstr "Đánh dấu xóa"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:919 ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:979 ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1041
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:919
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:979
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1041
 msgid "Cancel"
 msgstr "Hủy"
 
@@ -463,7 +562,9 @@ msgstr "Chọn tập tin"
 msgid "configuration"
 msgstr "cấu hình"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:232 ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:236 ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:232
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:232
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:236
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:232
 msgid "File location"
 msgstr "Vị trí tệp"
 
@@ -472,24 +573,45 @@ msgid "Hints"
 msgstr "Gợi ý"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:250
-msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
-msgstr "Đường dẫn tệp và thư mục ở đây có liên quan đến thư mục làm việc của sổ địa chỉ, thường là ~/.i2p/addressbook/ (Linux) hoặc %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgid ""
+"File and directory paths here are relative to the addressbook's working "
+"directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%"
+"\\I2P\\addressbook\\ (Windows)."
+msgstr ""
+"Đường dẫn tệp và thư mục ở đây có liên quan đến thư mục làm việc của sổ địa "
+"chỉ, thường là ~/.i2p/addressbook/ (Linux) hoặc %LOCALAPPDATA%"
+"\\I2P\\addressbook\\ (Windows)."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:252
-msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
-msgstr "Nếu bạn muốn thêm dòng vào sổ địa chỉ theo cách thủ công, hãy thêm chúng vào sổ địa chỉ riêng hoặc chính."
+msgid ""
+"If you want to manually add lines to an addressbook, add them to the private "
+"or master addressbooks."
+msgstr ""
+"Nếu bạn muốn thêm dòng vào sổ địa chỉ theo cách thủ công, hãy thêm chúng vào "
+"sổ địa chỉ riêng hoặc chính."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:254
-msgid "The router addressbook and the published addressbook are updated by the addressbook application."
-msgstr "Sổ địa chỉ bộ định tuyến và sổ địa chỉ đã xuất bản được cập nhật bởi ứng dụng sổ địa chỉ."
+msgid ""
+"The router addressbook and the published addressbook are updated by the "
+"addressbook application."
+msgstr ""
+"Sổ địa chỉ bộ định tuyến và sổ địa chỉ đã xuất bản được cập nhật bởi ứng "
+"dụng sổ địa chỉ."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:256
-msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
-msgstr "Khi bạn xuất bản sổ địa chỉ của mình, TẤT CẢ các đích đến từ sổ địa chỉ chính và bộ định tuyến sẽ xuất hiện ở đó."
+msgid ""
+"When you publish your addressbook, ALL destinations from the master and "
+"router addressbooks appear there."
+msgstr ""
+"Khi bạn xuất bản sổ địa chỉ của mình, TẤT CẢ các đích đến từ sổ địa chỉ "
+"chính và bộ định tuyến sẽ xuất hiện ở đó."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:258
-msgid "Use the private addressbook for private destinations, these are not published."
-msgstr "Sử dụng sổ địa chỉ riêng cho các điểm đích riêng, chúng không được công bố."
+msgid ""
+"Use the private addressbook for private destinations, these are not "
+"published."
+msgstr ""
+"Sử dụng sổ địa chỉ riêng cho các điểm đích riêng, chúng không được công bố."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:260
 msgid "Options"
@@ -504,8 +626,12 @@ msgid "Update interval in hours"
 msgstr "Khoảng thời gian cập nhật tính bằng giờ"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:266
-msgid "Your public hosts.txt file (choose a path within your webserver document root)"
-msgstr "Tệp Host.txt công khai của bạn (chọn đường dẫn trong thư mục gốc tài liệu máy chủ web của bạn)"
+msgid ""
+"Your public hosts.txt file (choose a path within your webserver document "
+"root)"
+msgstr ""
+"Tệp Host.txt công khai của bạn (chọn đường dẫn trong thư mục gốc tài liệu "
+"máy chủ web của bạn)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:268
 msgid "Your hosts.txt (don't change)"
@@ -532,12 +658,19 @@ msgid "Whether to update the published addressbook"
 msgstr "Có nên cập nhật sổ địa chỉ đã xuất bản hay không"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:280
-msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
-msgstr "Tệp chứa tiêu đề etags từ các URL đăng ký được tìm nạp (không cần thay đổi)"
+msgid ""
+"File containing the etags header from the fetched subscription URLs (no need "
+"to change)"
+msgstr ""
+"Tệp chứa tiêu đề etags từ các URL đăng ký được tìm nạp (không cần thay đổi)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:282
-msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
-msgstr "Tệp chứa dấu thời gian sửa đổi cho từng URL đăng ký được tìm nạp (không cần thay đổi)"
+msgid ""
+"File containing the modification timestamp for each fetched subscription URL "
+"(no need to change)"
+msgstr ""
+"Tệp chứa dấu thời gian sửa đổi cho từng URL đăng ký được tìm nạp (không cần "
+"thay đổi)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:284
 msgid "File to log activity to (change to /dev/null if you like)"
@@ -545,7 +678,8 @@ msgstr "Tệp để ghi nhật ký hoạt động (đổi thành /dev/null nếu
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:286
 msgid "Name of override theme to use (defaults to console-selected theme)"
-msgstr "Tên của chủ đề ghi đè sẽ sử dụng (mặc định là chủ đề do bảng điều khiển chọn)"
+msgstr ""
+"Tên của chủ đề ghi đè sẽ sử dụng (mặc định là chủ đề do bảng điều khiển chọn)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:193
 msgid "addressbook"
@@ -648,44 +782,81 @@ msgid "The addressbook application is part of your I2P installation."
 msgstr "Ứng dụng sổ địa chỉ là một phần trong quá trình cài đặt I2P của bạn."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:225
-msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
-msgstr "Nó thường xuyên cập nhật tệp Hosts.txt của bạn từ các nguồn được phân phối hoặc \"đăng ký\"."
+msgid ""
+"It regularly updates your hosts.txt file from distributed sources or "
+"\"subscriptions\"."
+msgstr ""
+"Nó thường xuyên cập nhật tệp Hosts.txt của bạn từ các nguồn được phân phối "
+"hoặc \"đăng ký\"."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:227
-msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
-msgstr "Việc đăng ký các trang web bổ sung thật dễ dàng, chỉ cần thêm chúng vào tệp <a href=\"subscriptions\">đăng ký</a> của bạn."
+msgid ""
+"Subscribing to additional sites is easy, just add them to your <a "
+"href=\"subscriptions\">subscriptions</a> file."
+msgstr ""
+"Việc đăng ký các trang web bổ sung thật dễ dàng, chỉ cần thêm chúng vào tệp "
+"<a href=\"subscriptions\">đăng ký</a> của bạn."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:229
-msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
-msgstr "Để biết thêm thông tin về cách đặt tên trong I2P, hãy xem <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>tổng quan</a>."
+msgid ""
+"For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/"
+"naming.html\" target=_blank>the overview</a>."
+msgstr ""
+"Để biết thêm thông tin về cách đặt tên trong I2P, hãy xem <a href=\"http://"
+"i2p-projekt.i2p/naming.html\" target=_blank>tổng quan</a>."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:231
 msgid "How does the addressbook application work?"
 msgstr "Ứng dụng sổ địa chỉ hoạt động như thế nào?"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:233
-msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
-msgstr "Ứng dụng sổ địa chỉ thường xuyên thăm dò các đăng ký của bạn và hợp nhất nội dung của chúng vào sổ địa chỉ \"bộ định tuyến\" của bạn."
+msgid ""
+"The addressbook application regularly polls your subscriptions and merges "
+"their content into your \"router\" address book."
+msgstr ""
+"Ứng dụng sổ địa chỉ thường xuyên thăm dò các đăng ký của bạn và hợp nhất nội "
+"dung của chúng vào sổ địa chỉ \"bộ định tuyến\" của bạn."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:235
-msgid "Then it merges your \"master\" address book into the router address book as well."
-msgstr "Sau đó, nó cũng hợp nhất sổ địa chỉ \"master\" của bạn vào sổ địa chỉ bộ định tuyến."
+msgid ""
+"Then it merges your \"master\" address book into the router address book as "
+"well."
+msgstr ""
+"Sau đó, nó cũng hợp nhất sổ địa chỉ \"master\" của bạn vào sổ địa chỉ bộ "
+"định tuyến."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:237
-msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
-msgstr "Nếu được định cấu hình, sổ địa chỉ bộ định tuyến hiện được ghi vào sổ địa chỉ \"đã xuất bản\", sổ này sẽ hiển thị công khai nếu bạn đang chạy một trang web điện tử."
+msgid ""
+"If configured, the router address book is now written to the \"published\" "
+"address book, which will be publicly available if you are running an eepsite."
+msgstr ""
+"Nếu được định cấu hình, sổ địa chỉ bộ định tuyến hiện được ghi vào sổ địa "
+"chỉ \"đã xuất bản\", sổ này sẽ hiển thị công khai nếu bạn đang chạy một "
+"trang web điện tử."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:239
-msgid "The router also uses a private address book, which is not merged or published."
-msgstr "Bộ định tuyến cũng sử dụng sổ địa chỉ riêng, không được hợp nhất hoặc xuất bản."
+msgid ""
+"The router also uses a private address book, which is not merged or "
+"published."
+msgstr ""
+"Bộ định tuyến cũng sử dụng sổ địa chỉ riêng, không được hợp nhất hoặc xuất "
+"bản."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:241
-msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
-msgstr "Bạn có thể truy cập các máy chủ trong sổ địa chỉ riêng nhưng địa chỉ của chúng không bao giờ được phân phối cho người khác."
+msgid ""
+"Hosts in the private address book can be accessed by you but their addresses "
+"are never distributed to others."
+msgstr ""
+"Bạn có thể truy cập các máy chủ trong sổ địa chỉ riêng nhưng địa chỉ của "
+"chúng không bao giờ được phân phối cho người khác."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:243
-msgid "The private address book can also be used for aliases of hosts in your other address books."
-msgstr "Sổ địa chỉ riêng cũng có thể được sử dụng làm bí danh của máy chủ trong sổ địa chỉ khác của bạn."
+msgid ""
+"The private address book can also be used for aliases of hosts in your other "
+"address books."
+msgstr ""
+"Sổ địa chỉ riêng cũng có thể được sử dụng làm bí danh của máy chủ trong sổ "
+"địa chỉ khác của bạn."
 
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:196
 #, fuzzy
@@ -710,8 +881,11 @@ msgid "The subscription file contains a list of i2p URLs."
 msgstr "Tệp đăng ký chứa danh sách URL i2p."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:248
-msgid "The addressbook application regularly checks this list for new eepsites."
-msgstr "Ứng dụng sổ địa chỉ thường xuyên kiểm tra danh sách này để tìm các trang điện tử mới."
+msgid ""
+"The addressbook application regularly checks this list for new eepsites."
+msgstr ""
+"Ứng dụng sổ địa chỉ thường xuyên kiểm tra danh sách này để tìm các trang "
+"điện tử mới."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:250
 msgid "Those URLs refer to published hosts.txt files."
@@ -722,28 +896,47 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Xem Câu hỏi thường gặp để biết danh sách URL đăng ký."
 
 #: build/HowSVG.java:5
-msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Nếu SusiDNS được định cấu hình để xuất bản sổ địa chỉ Bộ định tuyến của bạn, các mục nhập sẽ xuất hiện trong sổ địa chỉ Đã xuất bản của bạn và được lưu vào tệp Hosts.txt để chia sẻ."
+msgid ""
+"If SusiDNS is configured to publish your Router address book, the entries "
+"will appear in your Published address book and saved to a hosts.txt file for "
+"sharing."
+msgstr ""
+"Nếu SusiDNS được định cấu hình để xuất bản sổ địa chỉ Bộ định tuyến của bạn, "
+"các mục nhập sẽ xuất hiện trong sổ địa chỉ Đã xuất bản của bạn và được lưu "
+"vào tệp Hosts.txt để chia sẻ."
 
 #: build/HowSVG.java:6
 msgid "Published Addressbook"
 msgstr "Xuất bản sổ địa chỉ"
 
 #: build/HowSVG.java:7
-msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Để định cấu hình SusiDNS nhằm đẩy sổ địa chỉ Bộ định tuyến của bạn vào sổ địa chỉ Đã xuất bản, hãy đặt ' Should_publish=true' trên trang cấu hình."
+msgid ""
+"To configure SusiDNS to push your Router address book to your Published "
+"address book, set 'should_publish=true' on the configuration page."
+msgstr ""
+"Để định cấu hình SusiDNS nhằm đẩy sổ địa chỉ Bộ định tuyến của bạn vào sổ "
+"địa chỉ Đã xuất bản, hãy đặt ' Should_publish=true' trên trang cấu hình."
 
 #: build/HowSVG.java:8
-msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
-msgstr "Tất cả các máy chủ có nguồn gốc từ đăng ký sẽ xuất hiện trong sổ địa chỉ này, ngoài bất kỳ máy chủ nào bạn thêm thủ công vào đây hoặc vào sổ địa chỉ Chính của bạn."
+msgid ""
+"All hosts derived from subscriptions will appear in this address book, in "
+"addition to any you manually add here or to your Master address book."
+msgstr ""
+"Tất cả các máy chủ có nguồn gốc từ đăng ký sẽ xuất hiện trong sổ địa chỉ "
+"này, ngoài bất kỳ máy chủ nào bạn thêm thủ công vào đây hoặc vào sổ địa chỉ "
+"Chính của bạn."
 
 #: build/HowSVG.java:9
 msgid "Router Addressbook"
 msgstr "Sổ địa chỉ bộ định tuyến"
 
 #: build/HowSVG.java:10
-msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
-msgstr "Các máy chủ bạn thêm vào đây theo cách thủ công sẽ không bao giờ được xuất bản. "
+msgid ""
+"Hosts you manually add here will never be published. You can also add "
+"aliases to hosts in other address books here."
+msgstr ""
+"Các máy chủ bạn thêm vào đây theo cách thủ công sẽ không bao giờ được xuất "
+"bản. "
 
 #: build/HowSVG.java:11
 msgid "Private Addressbook"
@@ -754,24 +947,40 @@ msgid "Local Records"
 msgstr "Hồ sơ địa phương"
 
 #: build/HowSVG.java:13
-msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
-msgstr "Các ứng dụng I2P (bao gồm proxy HTTP) sử dụng máy chủ trong sổ địa chỉ cục bộ của bạn để phân giải tên máy chủ .i2p."
+msgid ""
+"I2P applications (including the HTTP proxy) use the hosts in your local "
+"address books to resolve .i2p hostnames."
+msgstr ""
+"Các ứng dụng I2P (bao gồm proxy HTTP) sử dụng máy chủ trong sổ địa chỉ cục "
+"bộ của bạn để phân giải tên máy chủ .i2p."
 
 #: build/HowSVG.java:14
-msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
-msgstr "Bạn có thể tìm thấy các đăng ký bổ sung trong phần Câu hỏi thường gặp trên trang trợ giúp Bộ định tuyến."
+msgid ""
+"Additional subscriptions can be found in the FAQ section of the Router help "
+"page."
+msgstr ""
+"Bạn có thể tìm thấy các đăng ký bổ sung trong phần Câu hỏi thường gặp trên "
+"trang trợ giúp Bộ định tuyến."
 
 #: build/HowSVG.java:16
-msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
-msgstr "Các máy chủ có nguồn gốc từ đăng ký của bạn sẽ được thêm vào sổ địa chỉ Bộ định tuyến của bạn và được tự động đồng bộ hóa (theo mặc định cứ sau 12 giờ)."
+msgid ""
+"Hosts sourced from your subscriptions are added to your Router address book, "
+"and are automatically synced (by default every 12 hours)."
+msgstr ""
+"Các máy chủ có nguồn gốc từ đăng ký của bạn sẽ được thêm vào sổ địa chỉ Bộ "
+"định tuyến của bạn và được tự động đồng bộ hóa (theo mặc định cứ sau 12 giờ)."
 
 #: build/HowSVG.java:17
 msgid "Configure Subscriptions"
 msgstr "Cấu hình đăng ký"
 
 #: build/HowSVG.java:18
-msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
-msgstr "Nếu bạn thêm máy chủ ở đây theo cách thủ công, chúng sẽ được đưa vào sổ địa chỉ Đã xuất bản của bạn (nếu được định cấu hình)."
+msgid ""
+"If you manually add hosts here, they will be included your Published address "
+"book (if configured)."
+msgstr ""
+"Nếu bạn thêm máy chủ ở đây theo cách thủ công, chúng sẽ được đưa vào sổ địa "
+"chỉ Đã xuất bản của bạn (nếu được định cấu hình)."
 
 #: build/HowSVG.java:19
 msgid "Master Addressbook"
@@ -786,8 +995,12 @@ msgid "I2P applications"
 msgstr "Ứng dụng I2P"
 
 #: build/HowSVG.java:22
-msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
-msgstr "Sổ địa chỉ Chính, Bộ định tuyến và Riêng tư đóng vai trò chung là cơ quan quản lý DNS cho các ứng dụng I2P."
+msgid ""
+"The Master, Router and Private address books collectively serve as the DNS "
+"authority for I2P applications."
+msgstr ""
+"Sổ địa chỉ Chính, Bộ định tuyến và Riêng tư đóng vai trò chung là cơ quan "
+"quản lý DNS cho các ứng dụng I2P."
 
 #: build/HowSVG.java:23
 msgid "Optional,"
@@ -798,16 +1011,30 @@ msgid "for websites"
 msgstr "dành cho các trang web"
 
 #: build/HowSVG.java:25
-msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Nếu bạn định cấu hình SusiDNS để xuất bản sổ địa chỉ Bộ định tuyến của mình, nó sẽ xuất tệp Host.txt chứa tất cả các máy chủ (theo mặc định là thư mục gốc của eepsite của bạn)."
+msgid ""
+"If you configure SusiDNS to publish your Router address book, it will export "
+"a hosts.txt file containing all the hosts (by default to the root of your "
+"eepsite)."
+msgstr ""
+"Nếu bạn định cấu hình SusiDNS để xuất bản sổ địa chỉ Bộ định tuyến của mình, "
+"nó sẽ xuất tệp Host.txt chứa tất cả các máy chủ (theo mặc định là thư mục "
+"gốc của eepsite của bạn)."
 
 #: build/HowSVG.java:26
-msgid "Addresses manually added to your Master address book will merge with your Router address book."
-msgstr "Các địa chỉ được thêm thủ công vào sổ địa chỉ Chính của bạn sẽ hợp nhất với sổ địa chỉ Bộ định tuyến của bạn."
+msgid ""
+"Addresses manually added to your Master address book will merge with your "
+"Router address book."
+msgstr ""
+"Các địa chỉ được thêm thủ công vào sổ địa chỉ Chính của bạn sẽ hợp nhất với "
+"sổ địa chỉ Bộ định tuyến của bạn."
 
 #: build/HowSVG.java:27
-msgid "Hosts you receive from your subscriptions will merge with your Router address book."
-msgstr "Máy chủ bạn nhận được từ đăng ký của mình sẽ hợp nhất với sổ địa chỉ Bộ định tuyến của bạn."
+msgid ""
+"Hosts you receive from your subscriptions will merge with your Router "
+"address book."
+msgstr ""
+"Máy chủ bạn nhận được từ đăng ký của mình sẽ hợp nhất với sổ địa chỉ Bộ định "
+"tuyến của bạn."
 
 #, java-format
 #~ msgid "Showing {0} of {1}"
