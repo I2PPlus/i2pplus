@@ -74,7 +74,7 @@ function tangoDown() {
     localtunnelSummary.innerHTML = "<tr id=routerdown><td colspan=3 height=10></td></tr>";
   }
   isDown = true;
-  refreshAll();
+  setTimeout(refreshSidebar, 3000);
 }
 
 function refreshSidebar() {
