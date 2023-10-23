@@ -11946,7 +11946,7 @@ msgstr ""
 "文）。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:449
-msgid "Check Your Proxy Setttings"
+msgid "Check Your Proxy Settings"
 msgstr "检查你的代理设置"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:451
