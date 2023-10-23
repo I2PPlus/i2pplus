@@ -1,24 +1,12 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the i2ptunnel package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# asteryx <asteryx82@gmail.com>, 2015
-# Denis Lysenko <gribua@gmail.com>, 2011
-# Denis Lysenko <gribua@gmail.com>, 2012
-# samalero <ivan.barabash96@mail.ru>, 2017
-# LinuxChata, 2014
-# madjong <madjong@i2pmail.org>, 2014-2015
-# brianhopes <voganc-12@live.ru>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
 "PO-Revision-Date: 2019-11-24 13:40+0000\n"
-"Last-Translator: zzzi2p\n"
-"Language-Team: Ukrainian (Ukraine) (http://www.transifex.com/otf/I2P/"
 "language/uk_UA/)\n"
 "Language: uk_UA\n"
 "MIME-Version: 1.0\n"

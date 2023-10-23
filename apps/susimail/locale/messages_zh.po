@@ -1,23 +1,12 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the susimail package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# K <daleks@foxmail.com>, 2017
-# xkimo_daeee <michael_ies@yahoo.com>, 2014
-# walking <waling@mail.i2p>, 2013
-# walking <walking@i2pmail.org>, 2011
-# YFdyh000 <yfdyh000@gmail.com>, 2015
-# fzh2003 <fzh2003@i2pmail.org>,2020
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2022-09-16 11:45+0000\n"
-"Last-Translator: zzzi2p\n"
-"Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
 "zh_CN/)\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"

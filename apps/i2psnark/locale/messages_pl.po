@@ -1,27 +1,12 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the i2psnark package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# PolishAnon <b790979@klzlk.com>, 2011
-# Warton <businesshehe@yahoo.com>, 2012
-# foo <foo@bar>, 2009
-# polacco <polacco@i2pmail.org>, 2014-2015
-# polacco <polacco@i2pmail.org>, 2012
-# sebx, 2014
-# Smert i2p <Smert@safe-mail.net>, 2013
-# Taporpo Ne <taporpone@gmail.com>, 2015
-# Verdulo :-), 2016-2017
-# Verdulo :-), 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2023-10-22 10:50+0000\n"
-"Last-Translator: Andrzej Dopytalski <adudu.andi@gmail.com>\n"
-"Language-Team: Polish (http://www.transifex.com/otf/I2P/language/pl/)\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

@@ -1,39 +1,12 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the i2psnark package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# Aleksey Orekhov <opexob@yandex.ru>, 2013
-# Aleksey Vyskubov <viskubov@gmail.com>, 2016
-# Alexander Georgievskiy <galeksandrp@gmail.com>, 2017
-# mama__1 <inactive+mama__1@transifex.com>, 2013
-# Dmitriy Mamonov <sassy.but.classic@gmail.com>, 2014
-# ducki2p <ducki2p@gmail.com>, 2011
-# Eugene, 2013
-# Filipp Chertiev <f@fzfx.ru>, 2017
-# foo <foo@bar>, 2009
-# Alexander Georgievskiy <galeksandrp@gmail.com>, 2016
-# mama__1 <inactive+mama__1@transifex.com>, 2013
-# R4SAS, 2017
-# Foster Snowhill, 2013
-# sr4d <sr4d@bitmessage.ch>, 2014
-# t bo <tarantulko.bo@googlemail.com>, 2017
-# ValdikSS <iam@valdikss.org.ru>, 2017-2019
-# vertnis, 2015
-# Foster Snowhill, 2013
-# yume, 2014-2015
-# yume, 2018
-# zzzi2p, 2017-2018
-# Василий Суматохин <basilbasilbasil@gmail.com>, 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2022-03-24 14:43+0000\n"
-"Last-Translator: acetone\n"
-"Language-Team: Russian (Russia) (http://www.transifex.com/otf/I2P/language/"
 "ru_RU/)\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"

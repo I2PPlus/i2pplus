@@ -1,30 +1,12 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the i2ptunnel package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# Aleksey Orekhov <opexob@yandex.ru>, 2013
-# Andrey Lukyanenko <operru32@yandex.ru>, 2013
-# ducki2p <ducki2p@gmail.com>, 2011
-# Evgeny Lavrov <EvgenyLavrov@gmail.com>, 2019
-# foo <foo@bar>, 2009
-# Alexander Georgievskiy <galeksandrp@gmail.com>, 2016
-# gmind, 2012-2013
-# Nikolay Parukhin <parukhin@gmail.com>, 2014
-# sfix <anon-9b36b2e@lycos.com>, 2013
-# ValdikSS <iam@valdikss.org.ru>, 2017,2019
-# brianhopes <voganc-12@live.ru>, 2015
-# yume, 2014-2015
-# Василий Суматохин <basilbasilbasil@gmail.com>, 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2022-09-16 09:01+0000\n"
-"Last-Translator: ValdikSS <iam@valdikss.org.ru>\n"
-"Language-Team: Russian (Russia) (http://www.transifex.com/otf/I2P/language/"
 "ru_RU/)\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"

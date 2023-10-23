@@ -1,35 +1,12 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the i2ptunnel package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# ducki2p <ducki2p@gmail.com>, 2011
-# gzs, 2019
-# nobody <oiiu19@yahoo.com>, 2013
-# xkimo_daeee <michael_ies@yahoo.com>, 2014
-# nobody <oiiu19@yahoo.com>, 2017
-# 黃彥儒 <r1235613@gmail.com>, 2014
-# SF W, 2019
-# uzmintid Xun <1109673069@qq.com>, 2017
-# walking <walking@i2pmail.org>, 2011
-# walking <waling@mail.i2p>, 2013
-# walking <walking@i2pmail.org>, 2011
-# wwj402 <wwj402@gmail.com>, 2013
-# YFdyh000 <yfdyh000@gmail.com>, 2019
-# YFdyh000 <yfdyh000@gmail.com>, 2016
-# YFdyh000 <yfdyh000@gmail.com>, 2014-2017
-# yue gao <gaoyue@iie.ac.cn>, 2017
-# fzh2003 <fzh2003@i2pmail.org>, 2020
-# NarratorZ <TpNYxtt11ox5TgZ@i2pmail.org>, 2022
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
 "PO-Revision-Date: 2022-10-20 19:12-0400\n"
-"Last-Translator: zzzi2p\n"
-"Language-Team: Chinese (China) (http://www.transifex.com/otf/I2P/language/"
 "zh_CN/)\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"

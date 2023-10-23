@@ -2,18 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the i2p package.
 #
-# Translators:
-# D.A. Loader <>, 2012
-# Ettore Atalan <atalanttore@googlemail.com>, 2015,2017
-# mixxy <m1xxy@mail.i2p>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: i2p@packages.debian.org\n"
 "POT-Creation-Date: 2017-11-12 14:01+0000\n"
 "PO-Revision-Date: 2017-12-18 18:20+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
-"Language-Team: German (http://www.transifex.com/otf/I2P/language/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

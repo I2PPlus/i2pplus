@@ -1,23 +1,13 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the routerconsole package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 # foo <foo@bar>, 2009.
-#
-# Translators:
-# YFdyh000 <yfdyh000@gmail.com>, 2019
-# erinm, 2019
-# zzzi2p, 2019
-# Beta Ba <linsui555@gmail.com>, 2019
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P routerconsole\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2019-12-19 14:09+0000\n"
-"Last-Translator: Beta Ba <linsui555@gmail.com>, 2019\n"
-"Language-Team: Chinese (China) (https://www.transifex.com/otf/teams/12694/"
 "zh_CN/)\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"

@@ -2,21 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the i2p package.
 #
-# Translators:
-# Blacksun <eclipsimamans@protonmail.com>, 2017
-# Leelium <bovas85@gmail.com>, 2012
-# Sparta83 <dlditalydownload@gmail.com>, 2012
-# Leelium <bovas85@gmail.com>, 2012
-# Sebastiano Pistore <SebastianoPistore.info@protonmail.ch>, 2016
-# Sparta83 <dlditalydownload@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: i2p@packages.debian.org\n"
 "POT-Creation-Date: 2017-11-12 14:01+0000\n"
 "PO-Revision-Date: 2017-12-28 12:17+0000\n"
-"Last-Translator: Blacksun <eclipsimamans@protonmail.com>\n"
-"Language-Team: Italian (http://www.transifex.com/otf/I2P/language/it/)\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

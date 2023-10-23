@@ -1,19 +1,12 @@
 # I2P
 # Copyright (C) 2014 The I2P Project
 # This file is distributed under the same license as the streaming package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# polearnik <polearnik@mail.ru>, 2019
-# polearnik <polearnik@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-16 12:59+0000\n"
 "PO-Revision-Date: 2019-09-01 14:07+0000\n"
-"Last-Translator: polearnik <polearnik@mail.ru>\n"
-"Language-Team: Romanian (http://www.transifex.com/otf/I2P/language/ro/)\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

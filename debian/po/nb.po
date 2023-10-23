@@ -2,16 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the i2p package.
 #
-# Translators:
-# Allan Nordhøy <epost@anotheragency.no>, 2017-2018
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: i2p@packages.debian.org\n"
 "POT-Creation-Date: 2017-11-12 14:01+0000\n"
 "PO-Revision-Date: 2018-01-24 00:16+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
-"Language-Team: Norwegian Bokmål (http://www.transifex.com/otf/I2P/language/"
 "nb/)\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"

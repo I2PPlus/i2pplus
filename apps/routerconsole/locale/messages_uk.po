@@ -1,36 +1,12 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the routerconsole package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# naeto <a89393@rmqkr.net>, 2012
-# Anton Zub <azb.0x7dc@gmail.com>, 2014
-# Denis Lysenko <gribua@gmail.com>, 2011,2015
-# Denis Lysenko <gribua@gmail.com>, 2011
-# Denis Lysenko <gribua@gmail.com>, 2011,2015
-# Denis Lysenko <gribua@gmail.com>, 2011
-# jonny_nut, 2014
-# jonny_nut, 2014
-# LinuxChata, 2014
-# LinuxChata, 2014
-# madjong <madjong@i2pmail.org>, 2015
-# madjong <madjong@i2pmail.org>, 2015
-# Maus <ru-ko@ukr.net>, 2015
-# Maxym Mykhalchuk, 2015
-# Maxym Mykhalchuk, 2015
-# naeto <a89393@rmqkr.net>, 2012
-# puxud <puxud@alivance.com>, 2014
-# puxud <puxud@alivance.com>, 2014
-# Maus <ru-ko@ukr.net>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
-"Last-Translator: madjong <madjong@i2pmail.org>\n"
-"Language-Team: Ukrainian (Ukraine) (http://www.transifex.com/otf/I2P/"
 "language/uk_UA/)\n"
 "Language: uk_UA\n"
 "MIME-Version: 1.0\n"

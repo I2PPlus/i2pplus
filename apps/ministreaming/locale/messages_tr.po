@@ -1,18 +1,12 @@
 # I2P
 # Copyright (C) 2014 The I2P Project
 # This file is distributed under the same license as the streaming package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# Kaya Zeren <kayazeren@gmail.com>, 2015,2019
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-05 19:41+0000\n"
 "PO-Revision-Date: 2019-12-20 07:46+0000\n"
-"Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
-"Language-Team: Turkish (Turkey) (http://www.transifex.com/otf/I2P/language/"
 "tr_TR/)\n"
 "Language: tr_TR\n"
 "MIME-Version: 1.0\n"

@@ -1,18 +1,12 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the susidns package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# 男孩不壞, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2019-10-02 08:58+0000\n"
-"Last-Translator: Chi-Hsun Tsai\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/otf/I2P/language/"
 "zh_TW/)\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"

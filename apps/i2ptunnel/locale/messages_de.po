@@ -1,36 +1,12 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the i2ptunnel package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# a b <ahx7@posteo.net>, 2019
-# Bandura Yeo Borissowitsch <m.k@mk16.de>, 2020
-# blabla, 2011
-# blabla <blabla@trash-mail.com>, 2014
-# blabla <blabla@trash-mail.com>, 2011-2012
-# D.A. Loader, 2012
-# driz <driz@i2pmail.org>, 2012
-# ducki2p <ducki2p@gmail.com>, 2011
-# Ettore Atalan <atalanttore@googlemail.com>, 2014-2015,2017
-# Florian Maier <contact@marsmenschen.com>, 2017
-# foo <foo@bar>, 2009
-# Lars Schimmer <echelon@i2pmail.org>, 2014-2016,2018-2020
-# mixxy, 2011
-# nextloop <ga25day@mytum.de>, 2013
-# pirr <pirr@tormail.org>, 2012
-# Robin Braun <robinflohr@gmail.com>, 2020
-# Robin Braun <robinflohr@gmail.com>, 2015
-# Forecast <taisto@web.de>, 2019
-# zeroflag <zeroflag@i2pmail.org>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
 "PO-Revision-Date: 2020-05-19 14:31+0000\n"
-"Last-Translator: Lars Schimmer <echelon@i2pmail.org>\n"
-"Language-Team: German (http://www.transifex.com/otf/I2P/language/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

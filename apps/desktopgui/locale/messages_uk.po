@@ -1,22 +1,12 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the desktopgui package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# w008 <alex.on.www@gmail.com>, 2016
-# Denis Lysenko <gribua@gmail.com>, 2011
-# LinuxChata, 2014
-# madjong <madjong@i2pmail.org>, 2014
-# Maxym Mykhalchuk, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-13 16:15+0000\n"
 "PO-Revision-Date: 2017-06-30 21:32+0000\n"
-"Last-Translator: Maxym Mykhalchuk\n"
-"Language-Team: Ukrainian (Ukraine) (http://www.transifex.com/otf/I2P/"
 "language/uk_UA/)\n"
 "Language: uk_UA\n"
 "MIME-Version: 1.0\n"

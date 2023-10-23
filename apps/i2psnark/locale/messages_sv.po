@@ -1,32 +1,12 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the i2psnark package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# 123hund123 <M8R-ra4r1r@mailinator.com>, 2011
-# Anders Nilsson <anders@devode.se>, 2016
-# Anders Nilsson <anders@devode.se>, 2015-2016
-# Calle Rundgren <samaire@samaire.net>, 2013
-# ducki2p <ducki2p@gmail.com>, 2011
-# cacapo <handelsehorisont@gmail.com>, 2015
-# hottuna <i2p@robertfoss.se>, 2011
-# hottuna <i2p@robertfoss.se>, 2013
-# hottuna <i2p@robertfoss.se>, 2011-2012
-# Jonatan Nyberg <jonatan.nyberg.karl@gmail.com>, 2017
-# Jonatan Nyberg <jonatan.nyberg.karl@gmail.com>, 2018-2020
-# Jonatan Nyberg <jonatan.nyberg.karl@gmail.com>, 2017-2018
-# Martin Svensson <digitalmannen@gmail.com>, 2011-2012
-# mon <mattias.ohlsson@inprose.com>, 2012
-# WinterFairy <winterfairy@riseup.net>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2020-05-13 22:51+0000\n"
-"Last-Translator: zzzi2p\n"
-"Language-Team: Swedish (Sweden) (http://www.transifex.com/otf/I2P/language/"
 "sv_SE/)\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"

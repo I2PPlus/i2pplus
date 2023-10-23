@@ -1,25 +1,18 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the i2ptunnel package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# A5h8d0wf0x <littleslyfoxie28@gmail.com>, 2014
-# Waseihou Watashi <waseihou@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
-"PO-Revision-Date: 2019-11-24 13:40+0000\n"
-"Last-Translator: zzzi2p\n"
-"Language-Team: Czech (http://www.transifex.com/otf/I2P/language/cs/)\n"
+"PO-Revision-Date: 2023-10-22 22:02+0000\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
-"<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
+"X-Generator: Poedit 3.4\n"
 
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:490
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:500
@@ -33,7 +26,6 @@ msgid_plural "{0} inbound tunnels"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:541
 #, java-format
@@ -42,7 +34,6 @@ msgid_plural "{0} outbound tunnels"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:543
 #, java-format
@@ -51,7 +42,6 @@ msgid_plural "{0} inbound, {0} outbound tunnels"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:547
 msgid "lower bandwidth and reliability"
@@ -667,7 +657,6 @@ msgid_plural "{0} hop tunnel"
 msgstr[0] "Zastavuji tunel"
 msgstr[1] "Zastavuji tunel"
 msgstr[2] "Zastavuji tunel"
-msgstr[3] "Zastavuji tunel"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:860
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1876
@@ -775,7 +764,6 @@ msgid_plural "{0} backup tunnels"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:928
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2007

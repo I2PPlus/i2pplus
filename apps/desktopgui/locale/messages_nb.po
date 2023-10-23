@@ -1,19 +1,12 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the desktopgui package.
-# To contribute translations, see http://www.i2p2.de/newdevelopers
 #
-# Translators:
-# Allan Nordhøy <epost@anotheragency.no>, 2014
-# Allan Nordhøy <epost@anotheragency.no>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-13 16:15+0000\n"
 "PO-Revision-Date: 2017-09-19 14:52+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
-"Language-Team: Norwegian Bokmål (http://www.transifex.com/otf/I2P/language/"
 "nb/)\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
