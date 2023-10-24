@@ -5,7 +5,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "POT-Creation-Date: 2022-11-07 11:52+0000\n"
-"PO-Revision-Date: 2023-10-22 01:39+0000\n"
+"PO-Revision-Date: 2023-10-24 01:49+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -591,7 +593,7 @@ msgstr "Configuration"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:332 ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1077
 msgid "Debug Mode"
-msgstr "mode débogage"
+msgstr "Mode débogage"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:334
 msgid "Anonymous BitTorrent Client"
@@ -1662,7 +1664,7 @@ msgstr "Ignoré"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3947 ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4007
 msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
-msgstr "Seuls les trackers I2P seront utilisés ; "
+msgstr "Seuls les trackers I2P seront utilisés - les trackers non I2P sont affichés à des fins d'information uniquement"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4011
 msgid "Tracker"
