@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2023-10-24 01:15+0000\n"
+"PO-Revision-Date: 2023-10-24 01:23+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: id\n"
@@ -1326,7 +1326,7 @@ msgstr "Seberapa sering status torrent diperbarui pada halaman utama"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3400
 msgid "Never"
-msgstr "Tidak akan."
+msgstr "Tidak akan"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3405
 msgid "Page size"

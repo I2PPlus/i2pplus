@@ -6,16 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2022-03-24 14:43+0000\n"
-"ru_RU/)\n"
+"PO-Revision-Date: 2023-10-24 01:31+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
-"(n%100>=11 && n%100<=14)? 2 : 3);\n"
-"X-Generator: Poedit 3.0.1\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Generator: Poedit 3.4\n"
 
 #: ../java/src/org/klomp/snark/IdleChecker.java:76
 msgid "No more torrents running."
@@ -50,7 +50,7 @@ msgstr "Ошибка соединения с I2P, проверьте настр�
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1071
 msgid "Configuring I2PSnark with I2CP options"
-msgstr ""
+msgstr "Настройка i2psnark с параметрами I2CP"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1105
 #: ../java/src/org/klomp/snark/SnarkManager.java:1314
@@ -698,26 +698,25 @@ msgid "Forum"
 msgstr "Форум"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:480
-#, fuzzy
 msgid "Torrent &amp; filesharing forum"
-msgstr "Фильтрующий бар"
+msgstr "Торрент и филиализация"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:491
 msgid "BTDigg"
-msgstr ""
+msgstr "BTDigg"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:491
 msgid "I2P-based search engine for clearnet-hosted torrents"
 msgstr ""
+"Поисковая система на основе I2P для торрентов с пропорциональными торрентами"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:497
-#, fuzzy
 msgid "Search torrents"
-msgstr "Запустить торрент"
+msgstr "Поиск потоков"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:502
 msgid "Clear search"
-msgstr ""
+msgstr "Чистый поиск"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:509
 msgid "Click \"Add torrent\" button to fetch torrent"
@@ -753,14 +752,12 @@ msgid "Warning - No I2P"
 msgstr "Внимани: нет I2P"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:776
-#, fuzzy
 msgid "Show All"
-msgstr "Остановить все"
+msgstr "Показать все"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:788
-#, fuzzy
 msgid "Active"
-msgstr "неактивный"
+msgstr "Активный"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:790
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2843
@@ -768,14 +765,12 @@ msgid "Inactive"
 msgstr "Неактивный"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:792
-#, fuzzy
 msgid "Connected"
-msgstr "{0} подсоединенный пир"
+msgstr "Связанный"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:794
-#, fuzzy
 msgid "Downloading"
-msgstr "Загрузка {0}"
+msgstr "Загрузка"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:796
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2396
@@ -791,9 +786,8 @@ msgid "Complete"
 msgstr "Завершен"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:800
-#, fuzzy
 msgid "Incomplete"
-msgstr "скачано"
+msgstr "Неполный"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:802
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2493
@@ -921,9 +915,8 @@ msgid "Start all torrents and the I2P tunnel"
 msgstr "Запустить все торренты и открыть соединение с I2P"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1169
-#, fuzzy
 msgid "No torrents found."
-msgstr "Нет загруженных торрентов."
+msgstr "Торренты не найдены."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1171
 msgid "No torrents loaded."
@@ -940,7 +933,6 @@ msgid_plural "{0} torrents"
 msgstr[0] "{0} торрент"
 msgstr[1] "{0} торрента"
 msgstr[2] "{0} торрентов"
-msgstr[3] "{0} торрентов"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1198
 #, java-format
@@ -949,7 +941,6 @@ msgid_plural "{0} connected peers"
 msgstr[0] "{0} подсоединенный пир"
 msgstr[1] "{0} подсоединенных пиров"
 msgstr[2] "{0} подсоединенных пиров"
-msgstr[3] "{0} подсоединенных пиров"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1207
 #, java-format
@@ -958,7 +949,6 @@ msgid_plural "{0} DHT peers"
 msgstr[0] "{0} DHT пир"
 msgstr[1] "{0} DHT пира"
 msgstr[2] "{0} DHT пиров"
-msgstr[3] "{0} DHT пиров"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1215
 msgid "Configured maximum (actual usage may be less)"
@@ -970,11 +960,11 @@ msgstr "{0} туннель"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1219
 msgid "in"
-msgstr ""
+msgstr "в"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1223
 msgid "out"
-msgstr ""
+msgstr "вне"
 
 #. Only truncate if it's an actual dest
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1230
@@ -1223,7 +1213,6 @@ msgid_plural "Seeding to {0} peers"
 msgstr[0] "Раздаем {0} пиру"
 msgstr[1] "Раздаем {0} пирам"
 msgstr[2] "Раздаем {0} пирам"
-msgstr[3] "Раздаем {0} пирам"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2410
 #, java-format
@@ -1247,7 +1236,6 @@ msgid_plural "Downloading from {0} peers"
 msgstr[0] "Скачиваем с {0} пира"
 msgstr[1] "Скачиваем с {0} пиров"
 msgstr[2] "Скачиваем с {0} пиров"
-msgstr[3] "Скачиваем с {0} пиров"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2471
 #, java-format
@@ -1256,7 +1244,6 @@ msgid_plural "Connected to {0} peers"
 msgstr[0] "Соединены с {0} пиром"
 msgstr[1] "Соединены с {0} пирами"
 msgstr[2] "Соединены с {0} пирами"
-msgstr[3] "Соединены с {0} пирами"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2471
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2477
@@ -1816,7 +1803,6 @@ msgid_plural "{0} hops"
 msgstr[0] "{0} хоп"
 msgstr[1] "{0} хопа"
 msgstr[2] "{0} хопов"
-msgstr[3] "{0} хопов"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3806
 #, java-format
@@ -1825,7 +1811,6 @@ msgid_plural "{0} tunnels"
 msgstr[0] "{0} туннель"
 msgstr[1] "{0} туннеля"
 msgstr[2] "{0} туннелей"
-msgstr[3] "{0} туннелей"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3821
 msgid ""
@@ -2045,7 +2030,6 @@ msgid_plural "{0} stars"
 msgstr[0] "{0} звезда"
 msgstr[1] "{0} звезды"
 msgstr[2] "{0} звезд"
-msgstr[3] "{0} звезд"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5231
 msgid "No rating"
