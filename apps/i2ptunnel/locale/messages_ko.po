@@ -6,15 +6,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
-"PO-Revision-Date: 2019-11-24 13:40+0000\n"
+"PO-Revision-Date: 2023-10-24 18:25+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4\n"
 
-#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:490
-#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:500
+#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:490 ../java/src/net/i2p/i2ptunnel/web/EditBean.java:500
 msgid "internal"
 msgstr "내부"
 
@@ -22,13 +24,13 @@ msgstr "내부"
 #, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
-msgstr[0] ""
+msgstr[0] "{0} 인바운드 터널"
 
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:541
 #, java-format
 msgid "{0} outbound tunnel"
 msgid_plural "{0} outbound tunnels"
-msgstr[0] ""
+msgstr[0] "{0} 아웃바운드 터널"
 
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:543
 #, java-format
@@ -51,17 +53,15 @@ msgstr "높은 대역폭과 신뢰도"
 #: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:189
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:319
 msgid ""
-"Invalid form submission, probably because you used the 'back' or 'reload' "
-"button on your browser. Please resubmit."
+"Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please "
+"resubmit."
 msgstr ""
-"잘못된 폼 서브미션. 뒤로가기나 새로고침을 누르셨을 수 있습니다. 재시도해주세"
-"요."
+"잘못된 양식 제출. 브라우저에서 '뒤로' 또는 '새로고침' 버튼을 사용했기 때문일 수 있습니다. 잘못된 폼 서브미션. "
+"뒤로가기나 새로고침을 누르셨을 수 있습니다. 재시도해주세요."
 
 #: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:191
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:321
-msgid ""
-"If the problem persists, verify that you have cookies enabled in your "
-"browser."
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "문제가 지속되면 브라우저의 쿠키가 활성화되어 있는지 확인해주세요."
 
 #: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:248
@@ -84,24 +84,22 @@ msgstr "터널 중지중"
 msgid "New Tunnel"
 msgstr "새 터널"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:417
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:447
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:417 ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:447
 #: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:533
 msgid "Port not set"
 msgstr "포트 설정 안됨"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:420
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:535
+#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:420 ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:535
 msgid "Invalid port"
 msgstr "올바르지 않은 터널"
 
 #: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:423
 msgid "Warning - ports less than 1024 are not recommended"
-msgstr "경고 - 1024 이상으로 포트값을 설정하십시오."
+msgstr "경고 - 1024 이상으로 포트값을 설정하십시오"
 
 #: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:440
 msgid "Warning - duplicate port"
-msgstr "경고 - 포트값이 중복됬습니다."
+msgstr "경고 - 포트값이 중복됬습니다"
 
 #: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:459
 msgid "Standard client"
@@ -164,45 +162,40 @@ msgstr "올바르지 않은 주소"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:155
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:188
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:175
-#, fuzzy
 msgid "Tunnel Manager"
-msgstr "터널 마법사"
+msgstr "터널관리자"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:182
 msgid "Edit Client Tunnel"
 msgstr "클라이언트 터널 편집"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:182
-#, fuzzy
 msgid "Edit Server Tunnel"
-msgstr "서버 터널"
+msgstr "서버 터널 편집"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:214
 msgid "Are you sure you want to delete?"
-msgstr ""
+msgstr "정말 삭제하시겠습니까?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:233
-msgid ""
-"Tunnel and all other shared client tunnels must be stopped to change this "
-"configuration"
-msgstr ""
+msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
+msgstr "이 구성을 변경하려면 터널 및 기타 모든 공유 클라이언트 터널을 중지해야 합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:234
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1215
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1772
-#, fuzzy
 msgid "Tunnel must be stopped to change this configuration"
-msgstr "해당 터널은 새 목적지를 가지고 설정되어야 합니다."
+msgstr "이 구성을 변경하려면 터널을 중지해야 합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:250
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1186
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:815
 msgid "Configuration"
-msgstr ""
+msgstr "구성"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:260
 msgid "New Client Configuration"
-msgstr ""
+msgstr "새 클라이언트 구성"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:312
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1266
@@ -220,18 +213,16 @@ msgstr "터널 자동 시작"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:316
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1274
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:471
-msgid ""
-"Name of tunnel to be displayed on Tunnel Manager home page and the router "
-"console sidebar"
+msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
 msgstr "터널 매니저 홈페이지와 라우터 콘솔 사이드바에 표시 될 터널의 이름"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:320
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1278
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:674
-msgid ""
-"Enable this option to ensure this service is available when the router starts"
+msgid "Enable this option to ensure this service is available when the router starts"
 msgstr ""
-"라우터가 시작할 때 이 서비스가 확실히 실행되길 원하는 경우 이 옵션을 활성화"
+"라우터가 시작될 때 이 서비스를 사용할 수 있도록 하려면 이 옵션을 활성화하세요.라우터가 시작할 때 이 서비스가 확"
+"실히 실행되길 원하는 경우 이 옵션을 활성화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:324
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1282
@@ -257,14 +248,15 @@ msgstr "터널 매니저 홈페이지에 표시 될 터널의 설명"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:344
 msgid ""
-"Traffic from all clients with this feature enabled will be routed over the "
-"same set of tunnels. This will make profiling the tunnels by an adversary "
-"more difficult, but will link the clients together."
+"Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make "
+"profiling the tunnels by an adversary more difficult, but will link the clients together."
 msgstr ""
+"이 기능이 활성화된 모든 클라이언트의 트래픽은 동일한 터널 집합을 통해 라우팅됩니다. 이렇게 하면 적의 터널 프로"
+"파일링이 더 어려워지지만 클라이언트를 서로 연결하게 됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:360
 msgid "Share tunnels with other configured clients"
-msgstr ""
+msgstr "구성된 다른 클라이언트와 터널 공유"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:376
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1321
@@ -342,23 +334,25 @@ msgstr "클라이언트 터널이 접근 가능한 로컬 인터페이스 (IP �
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:462
 msgid ""
-"If an outproxy plugin is installed (e.g. Orchid), use this instead of any "
-"configured outproxies to access websites outside of I2P"
+"If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access "
+"websites outside of I2P"
 msgstr ""
+"아웃 프록시 플러그인이 설치된 경우(예: Orchid), 구성된 아웃 프록시 대신 이를 사용하여 I2P 외부 웹사이트에 액세"
+"스합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:466
 msgid "Use plugin instead of proxies listed below if available"
-msgstr ""
+msgstr "가능한 경우 아래 나열된 프록시 대신 플러그인을 사용하세요"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:472
 msgid ""
-"Enables direct chat and file transfers, bypassing I2P. Note that this will "
-"compromise your anonymity and is not recommended."
-msgstr ""
+"Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is "
+"not recommended."
+msgstr "I2P를 우회하여 직접 채팅 및 파일 전송을 활성화합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:476
 msgid "Enable Direct Client-to-Client protocol"
-msgstr ""
+msgstr "직접 클라이언트-클라이언트 프로토콜 활성화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:487
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:503
@@ -371,17 +365,14 @@ msgstr "SSL 아웃프록시"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:497
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:507
-msgid ""
-"Specify the .i2p address or destination (b32 or b64) of the outproxy here."
-msgstr ""
+msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgstr "여기에서 아웃프록시의 .i2p 주소 또는 대상(b32 또는 b64)을 지정합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:499
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:509
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:541
-msgid ""
-"For a random selection from a pool, separate with commas e.g. server1.i2p,"
-"server2.i2p"
-msgstr ""
+msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
+msgstr "풀에서 무작위로 선택하려면 쉼표로 구분하세요. server1.i2p,server2.i2p"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:521
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:525
@@ -390,14 +381,12 @@ msgstr "터널 목적지"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:526
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1323
-#, fuzzy
 msgid "Use SSL"
-msgstr "SSL을 사용합니까?"
+msgstr "SSL 사용"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:539
-msgid ""
-"Specify the .i2p address or destination (b32 or b64) of the tunnel here."
-msgstr ""
+msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgstr "여기에서 터널의 .i2p 주소 또는 대상(b32 또는 b64)을 지정합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:545
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:531
@@ -406,18 +395,17 @@ msgstr "이름, name:port, 또는 목적지"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:551
 msgid ""
-"If you are accessing a service on a remote I2P router, you may wish to "
-"connect with SSL to avoid traffic interception. The client application "
-"should be also be configured to use SSL."
-msgstr ""
+"If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic "
+"interception. The client application should be also be configured to use SSL."
+msgstr "원격 I2P 라우터의 서비스에 액세스하는 경우 SSL로 연결하여 트래픽 가로채기를 피할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:555
 msgid "Clients use SSL to connect to tunnel"
-msgstr ""
+msgstr "클라이언트는 SSL을 사용하여 터널에 연결합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:561
 msgid "Please specify the full b64 destination."
-msgstr ""
+msgstr "전체 b64 대상을 지정하십시오."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:576
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1433
@@ -426,12 +414,12 @@ msgstr "로컬 목적지"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:578
 msgid "Local Base32"
-msgstr ""
+msgstr "로컬 베이스32"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:580
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1437
 msgid "Read Only: Local Destination (if known)"
-msgstr ""
+msgstr "읽기 전용: 로컬 대상(알려진 경우)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:601
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1143
@@ -495,9 +483,11 @@ msgstr "고급 네트워크 옵션"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:638
 msgid ""
-"Note: When this client is configured to share tunnels, these options apply "
-"to all clients configured to share tunnels."
+"Note: When this client is configured to share tunnels, these options apply to all clients configured to share "
+"tunnels."
 msgstr ""
+"참고: 이 클라이언트가 터널을 공유하도록 구성된 경우 이러한 옵션은 터널을 공유하도록 구성된 모든 클라이언트에 적"
+"용됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:645
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1659
@@ -511,7 +501,7 @@ msgstr "연결 지연"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:649
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1673
 msgid "Connection Profile"
-msgstr ""
+msgstr "연결 프로필"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:655
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1679
@@ -648,16 +638,16 @@ msgstr "3 단계 터널 (높은 익명성)"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1906
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1910
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1914
-#, fuzzy, java-format
+#, java-format
 msgid "{0} hop tunnel"
 msgid_plural "{0} hop tunnel"
-msgstr[0] "터널 중지중"
+msgstr[0] "{0} 홉 터널"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:860
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1876
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1916
 msgid "Number of Tunnels in Group"
-msgstr ""
+msgstr "그룹 내 터널 수"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:868
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1926
@@ -673,72 +663,62 @@ msgstr "백업 수"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:872
 msgid "Level of Randomization for Tunnel Length"
-msgstr ""
+msgstr "터널 길이에 대한 무작위화 수준"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:880
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1948
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2051
-#, fuzzy
 msgid "0 hop variance"
-msgstr "단계 분산"
+msgstr "0 홉 변화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:881
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1944
-#, fuzzy
 msgid "no randomization, consistent performance"
-msgstr "0 단계 분산 (분산 없음, 일관성있는 성능)"
+msgstr "무작위화 없음, 일관된 성능"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:885
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1954
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2055
-#, fuzzy
 msgid "+ 0-1 hop variance"
-msgstr "단계 분산"
+msgstr "0-1 홉 변화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:886
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1950
-#, fuzzy
 msgid "medium randomization, lower performance"
-msgstr "0 단계 분산 (분산 없음, 일관성있는 성능)"
+msgstr "중간 무작위화, 낮은 성능"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:890
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1960
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2059
-#, fuzzy
 msgid "+ 0-2 hop variance"
-msgstr "단계 분산"
+msgstr "0-2 홉 변화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:891
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1956
-#, fuzzy
 msgid "high randomization, very low performance"
-msgstr "0 단계 분산 (분산 없음, 일관성있는 성능)"
+msgstr "높은 무작위화, 매우 낮은 성능"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:895
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1972
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2067
-#, fuzzy
 msgid "+/- 0-1 hop variance"
-msgstr "단계 분산"
+msgstr "/- 0-1 홉 변화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:896
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1968
-#, fuzzy
 msgid "standard randomization, standard performance"
-msgstr "+/- 0-1 단계 분산 (표준 분산, 표준 성능)"
+msgstr "표준 무작위화, 표준 성능"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:900
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1978
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2071
-#, fuzzy
 msgid "+/- 0-2 hop variance"
-msgstr "단계 분산"
+msgstr "/- 0-2 홉 변화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:901
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1974
-#, fuzzy
 msgid "not recommended"
-msgstr "b32는 권장되지 않습니다."
+msgstr "권장하지 않음"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:913
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1996
@@ -762,45 +742,39 @@ msgstr "예비 터널 수"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2023
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2029
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2037
-#, fuzzy, java-format
+#, java-format
 msgid "{0} backup tunnel"
 msgid_plural "{0} backup tunnels"
-msgstr[0] "백업 터널"
+msgstr[0] "{0} 백업 터널"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:928
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2007
-#, fuzzy
 msgid "no redundancy, no added resource usage"
-msgstr "0 백업 터널 (0 중복, 추가적인 자원 사용 없음)"
+msgstr "중복성 없음, 추가 리소스 사용량 없음"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:933
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2013
-#, fuzzy
 msgid "low redundancy, low resource usage"
-msgstr "각 디렉션마다 1 백업 터널 (낮은 중복, 낮은 자원 사용)"
+msgstr "낮은 중복성, 낮은 리소스 사용량"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:938
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2019
-#, fuzzy
 msgid "medium redundancy, medium resource usage"
-msgstr "각 디렉션마다 2 백업 터널 (중간 중복, 중간 자원 사용)"
+msgstr "중간 중복성, 중간 자원 사용량"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:943
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2025
-#, fuzzy
 msgid "high redundancy, high resource usage"
-msgstr "각 디렉션마다 3 백업 터널 (높은 중복, 높은 자원 사용)"
+msgstr "높은 중복성, 높은 리소스 사용량"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:961
-#, fuzzy
 msgid "Reduce tunnel quantity"
-msgstr "대기시 터널 양 축소"
+msgstr "터널 수량 감소"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:963
 msgid ""
-"Reduce tunnel count when idle to conserve resources but keep tunnel open (to "
-"ensure immediate availability)"
-msgstr ""
+"Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
+msgstr "자원을 절약하기 위해 유휴 상태일 때 터널 수를 줄이고 터널을 열어 두십시오(즉시 가용성 보장)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:967
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2162
@@ -811,17 +785,16 @@ msgstr "대기시 터널 양 축소"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:989
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2168
 msgid "Idle period"
-msgstr ""
+msgstr "유휴 기간"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:971
 msgid "Reduced Tunnel Idle Time"
-msgstr ""
+msgstr "터널 유휴 시간 감소"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:975
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2176
-#, fuzzy
 msgid "Reduced count"
-msgstr "축소된 터널 양"
+msgstr "감소된 카운트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:977
 msgid "Reduced tunnel count"
@@ -833,7 +806,7 @@ msgstr "대기시 터널 닫기"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:983
 msgid "To conserve resources, close tunnels when not in use"
-msgstr "자원을 절약하려면 사용하지 않을 때는 터널을 닫습니다."
+msgstr "자원을 절약하려면 사용하지 않을 때는 터널을 닫습니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:987
 msgid "Close client tunnels after specified idle period"
@@ -877,14 +850,13 @@ msgstr "Private 키 파일"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1017
 msgid ""
-"Enabling this feature will ensure your tunnel identity (destination) remains "
-"static, for services offering features based on destination e.g. IRC user "
-"authentication"
-msgstr ""
+"Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering "
+"features based on destination e.g. IRC user authentication"
+msgstr "이 기능을 활성화하면 대상을 기반으로 기능을 제공하는 서비스에 대해 터널 ID(대상)가 정적으로 유지됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1021
 msgid "Generate key to enable persistent client tunnel identity"
-msgstr ""
+msgstr "영구 클라이언트 터널 ID를 활성화하기 위한 키 생성"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1023
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1450
@@ -897,9 +869,10 @@ msgstr "HTTP 필터링"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1034
 msgid ""
-"When enabled, the user agent of your web browser or http client will not be "
-"spoofed, potentially reducing your anonymity"
+"When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your "
+"anonymity"
 msgstr ""
+"활성화되면 웹 브라우저 또는 http 클라이언트의 사용자 에이전트가 스푸핑되지 않아 잠재적으로 익명성이 감소합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1038
 msgid "Do not spoof User-Agent header"
@@ -907,9 +880,9 @@ msgstr "사용자 에이전트 헤더를 스푸핑하지 마십시오"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1040
 msgid ""
-"When enabled, the referer (originating page) of your web requests will not "
-"be filtered, potentially reducing your anonymity"
-msgstr ""
+"When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing "
+"your anonymity"
+msgstr "활성화되면 웹 요청의 리퍼러(원본 페이지)가 필터링되지 않아 잠재적으로 익명성이 감소합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1044
 msgid "Do not block Referer header"
@@ -917,9 +890,11 @@ msgstr "참조 헤더를 차단하지 마십시오"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1046
 msgid ""
-"When enabled, the accept headers (mime types support) broadcast by your web "
-"browser will not be filtered, potentially reducing your anonymity"
+"When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, "
+"potentially reducing your anonymity"
 msgstr ""
+"활성화되면 웹 브라우저에서 브로드캐스트하는 승인 헤더(MIME 유형 지원)가 필터링되지 않아 잠재적으로 익명성이 감"
+"소합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1050
 msgid "Do not block Accept headers"
@@ -938,15 +913,13 @@ msgid "Local Authorization"
 msgstr "로컬 인증"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1065
-#, fuzzy
 msgid "Local Credentials"
-msgstr "로컬 목적지"
+msgstr "로컬 자격 증명"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1067
-msgid ""
-"Enable to require a username and password to access this local service (for "
-"example if hosting on a LAN)"
+msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
 msgstr ""
+"이 로컬 서비스에 액세스하려면 사용자 이름과 비밀번호를 요구하도록 활성화합니다(예: LAN에서 호스팅하는 경우)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1071
 msgid "Require local authorization for this service"
@@ -986,29 +959,27 @@ msgstr "원격 서버 자격 증명"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1089
 msgid "Enable if the outproxy a username and password to access"
-msgstr ""
+msgstr "아웃프록시에 액세스할 사용자 이름과 비밀번호가 있는 경우 활성화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1093
 msgid "Outproxy requires authorization"
-msgstr ""
+msgstr "Outproxy에는 인증이 필요합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1097
 msgid "Enter username required by outproxy"
-msgstr ""
+msgstr "아웃프록시에 필요한 사용자 이름을 입력하세요"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1105
 msgid "Enter password required by outproxy"
-msgstr ""
+msgstr "아웃프록시에 필요한 비밀번호를 입력하세요"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1116
 msgid "Jump URL List"
 msgstr "URL 점프 리스트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1118
-msgid ""
-"List of helper URLs providing jump links when a host is not found in your "
-"addressbook"
-msgstr ""
+msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
+msgstr "주소록에 호스트가 없을 때 점프 링크를 제공하는 도우미 URL 목록"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1126
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2670
@@ -1032,7 +1003,7 @@ msgstr "호스트 이름"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1289
 msgid "Website Hostname"
-msgstr ""
+msgstr "웹사이트 호스트 이름"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1291
 msgid "(leave blank for outproxies)"
@@ -1040,38 +1011,35 @@ msgstr "(아웃프록시로 하려면 공란으로 두십시오)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1305
 msgid "Website Hostname e.g. mysite.i2p"
-msgstr ""
+msgstr "웹사이트 호스트 이름 예: mysite.i2p"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1358
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:580
 msgid "Specify the port the server is running on"
-msgstr ""
+msgstr "서버가 실행 중인 포트를 지정하세요"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1372
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:633
 msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
-msgstr ""
+msgstr "클라이언트 액세스를 위한 수신 인터페이스(IP 주소)(일반적으로 127.0.0.1)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1396
 msgid ""
-"To avoid traffic sniffing if connecting to a remote server, you can enable "
-"an SSL connection. Note that the target server must be configured to accept "
-"SSL connections."
-msgstr ""
+"To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the "
+"target server must be configured to accept SSL connections."
+msgstr "원격 서버에 연결할 때 트래픽 스니핑을 방지하려면 SSL 연결을 활성화할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1400
 msgid "Use SSL to connect to target"
 msgstr "목표에 연결시 SSL 사용"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1423
-msgid ""
-"Port required to access service (this can be a different port to the port "
-"the service is hosted on)"
-msgstr ""
+msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
+msgstr "서비스에 액세스하는 데 필요한 포트(서비스가 호스팅되는 포트와 다른 포트일 수 있음)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1477
 msgid "Generate a QR Code for this domain"
-msgstr ""
+msgstr "이 도메인에 대한 QR 코드 생성"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1485
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1614
@@ -1082,7 +1050,7 @@ msgstr "QR code 생성"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1492
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1629
 msgid "Add to Private addressbook"
-msgstr ""
+msgstr "개인 주소록에 추가"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1498
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1635
@@ -1091,7 +1059,7 @@ msgstr "주소록에 저장"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1504
 msgid "Register, unregister or change details for hostname"
-msgstr ""
+msgstr "호스트 이름에 대한 세부 정보 등록, 등록 취소 또는 변경"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1509
 msgid "Registration Authentication"
@@ -1099,24 +1067,25 @@ msgstr "가입 인증"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1515
 msgid "HTTPS configuration"
-msgstr ""
+msgstr "HTTPS 구성"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1520
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:652
 msgid "SSL Wizard"
-msgstr ""
+msgstr "SSL 마법사"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1530
 msgid ""
-"Note: In order to enable QR code generation or registration authentication, "
-"configure the Website Hostname field (for websites) or the Name field "
-"(everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+"Note: In order to enable QR code generation or registration authentication, configure the Website Hostname "
+"field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver."
+"i2p"
 msgstr ""
+"참고: QR 코드 생성 또는 등록 인증을 활성화하려면 위의 웹사이트 호스트 이름 필드(웹사이트의 경우) 또는 이름 필드"
+"(기타 모든 항목)를 .i2p 접미사 호스트 이름으로 구성하십시오. mynewserver.i2p"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1543
-msgid ""
-"Absolute path to Private Key File (will be created if it does not exist)"
-msgstr ""
+msgid "Absolute path to Private Key File (will be created if it does not exist)"
+msgstr "개인 키 파일의 절대 경로(존재하지 않는 경우 생성됨)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1549
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1557
@@ -1129,33 +1098,33 @@ msgstr "대체 로컬 목적지"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1571
 msgid "Absolute path for new key (will be created)"
-msgstr ""
+msgstr "새 키의 절대 경로(생성됨)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1582
 msgid "Read Only: Alternate Local Destination"
-msgstr ""
+msgstr "읽기 전용: 대체 로컬 대상"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1593
 msgid "Specify filename or full path for new key"
-msgstr ""
+msgstr "새 키의 파일 이름 또는 전체 경로를 지정하세요"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1662
 msgid "Configuration cannot be changed after destination is created"
-msgstr ""
+msgstr "대상이 생성된 후에는 구성을 변경할 수 없습니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1689
 msgid ""
-"Configuration of signature type is only possible when the tunnel is first "
-"created. To change, you must create a new tunnel."
-msgstr ""
+"Configuration of signature type is only possible when the tunnel is first created. To change, you must create "
+"a new tunnel."
+msgstr "서명 유형의 구성은 터널이 처음 생성될 때만 가능합니다. 변경하려면 새 터널을 만들어야 합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1709
 msgid "Legacy option, with alternate key configured"
-msgstr ""
+msgstr "대체 키가 구성된 레거시 옵션"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1755
 msgid "Recommended for blinded and encrypted destinations"
-msgstr ""
+msgstr "맹검 및 암호화된 대상에 권장"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1792
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1800
@@ -1174,51 +1143,43 @@ msgid "Outbound"
 msgstr "송신"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1820
-#, fuzzy
 msgid "no anonymity"
-msgstr "0 단계 터널 (익명성 없음)"
+msgstr "익명성 없음"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1826
-#, fuzzy
 msgid "low anonymity"
-msgstr "1 단계 터널 (낮은 익명성)"
+msgstr "낮은 익명성"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1832
-#, fuzzy
 msgid "medium anonymity"
-msgstr "2 단계 터널 (중간 익명성)"
+msgstr "중간 익명성"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1838
-#, fuzzy
 msgid "high anonymity"
-msgstr "3 단계 터널 (높은 익명성)"
+msgstr "높은 익명성"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1940
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2043
 msgid "Level of Randomization for Tunnel Depth"
-msgstr ""
+msgstr "터널 깊이에 대한 무작위화 수준"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1962
-#, fuzzy
 msgid "very high randomization, very low performance"
-msgstr "0 단계 분산 (분산 없음, 일관성있는 성능)"
+msgstr "무작위성이 매우 높고 성능이 매우 낮음"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1966
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2063
-#, fuzzy
 msgid "+ 0-3 hop variance"
-msgstr "단계 분산"
+msgstr "0-3 홉 변화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1980
-#, fuzzy
 msgid "definitely not recommended"
-msgstr "b32는 권장되지 않습니다."
+msgstr "절대 권장하지 않습니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1984
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2075
-#, fuzzy
 msgid "+/- 0-3 hop variance"
-msgstr "단계 분산"
+msgstr "/- 0-3 홉 변화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2103
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2109
@@ -1229,13 +1190,12 @@ msgid "backup tunnels"
 msgstr "백업 터널"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2166
-#, fuzzy
 msgid "Reduce tunnels to conserve resources"
-msgstr "축소된 터널 양"
+msgstr "자원을 절약하기 위해 터널을 줄입니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2170
 msgid "Period of inactivity before tunnel number is reduced"
-msgstr ""
+msgstr "터널 번호가 줄어들기 전의 비활성 기간"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2174
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2646
@@ -1245,15 +1205,15 @@ msgstr "분"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2178
 msgid "Number of tunnels to keep open to maintain availability of service"
-msgstr ""
+msgstr "서비스 가용성을 유지하기 위해 열어 두어야 할 터널 수"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2182
 msgid "Server Access Options"
-msgstr ""
+msgstr "서버 액세스 옵션"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2188
 msgid "Prevent clients from accessing this service via an inproxy"
-msgstr ""
+msgstr "클라이언트가 inproxy를 통해 이 서비스에 액세스하는 것을 방지합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2192
 msgid "Block Access via Inproxies"
@@ -1264,10 +1224,8 @@ msgid "Block Accesses containing Referers"
 msgstr "포함된 Referer로 접근 막기"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2202
-msgid ""
-"Use unique IP addresses for each connecting client (local non-SSL servers "
-"only)"
-msgstr ""
+msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
+msgstr "연결하는 각 클라이언트에 고유한 IP 주소를 사용합니다(로컬 비SSL 서버에만 해당)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2206
 msgid "Unique Local Address per Client"
@@ -1275,7 +1233,7 @@ msgstr "클라이언트 당 유니크 로컬 주소"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2208
 msgid "Only enable if you are hosting this service on multiple routers"
-msgstr ""
+msgstr "여러 라우터에서 이 서비스를 호스팅하는 경우에만 활성화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2214
 msgid "Optimize for Multihoming"
@@ -1283,7 +1241,7 @@ msgstr "멀티호밍으로 최적화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2220
 msgid "Deny User-Agents matching these strings (probably from inproxies)"
-msgstr ""
+msgstr "이 문자열과 일치하는 사용자 에이전트 거부(아마도 프록시에서)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2224
 msgid "Block these User-Agents"
@@ -1291,7 +1249,7 @@ msgstr "해당 유저-에이전트 막기"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2226
 msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
-msgstr ""
+msgstr "쉼표로 구분됨(예: Mozilla,Opera (대소문자 구분)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2237
 msgid "Encrypt Leaseset"
@@ -1299,7 +1257,7 @@ msgstr "리즈셋 암호화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2250
 msgid "Optional Lookup Password"
-msgstr ""
+msgstr "선택적 조회 비밀번호"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2255
 msgid "Keyring Manager"
@@ -1309,12 +1267,12 @@ msgstr "키링 관리자"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2274
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2526
 msgid "Allow all clients to connect to this service"
-msgstr ""
+msgstr "모든 클라이언트가 이 서비스에 연결하도록 허용"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2285
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2313
 msgid "Send key to all users."
-msgstr ""
+msgstr "모든 사용자에게 키를 보냅니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2290
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2318
@@ -1324,66 +1282,65 @@ msgstr "암호화 됨"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2295
 msgid "Prevents server discovery by floodfills"
-msgstr ""
+msgstr "플러드필에 의한 서버 검색을 방지합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2300
 msgid "Blinded"
-msgstr ""
+msgstr "블라인드"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2306
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2335
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2350
 msgid "Send password to all users."
-msgstr ""
+msgstr "모든 사용자에게 비밀번호를 보냅니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2311
 msgid "Blinded with lookup password"
-msgstr ""
+msgstr "조회 비밀번호로 인해 블라인드됨"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2320
 msgid "Send key and password to all users."
-msgstr ""
+msgstr "모든 사용자에게 키와 비밀번호를 보냅니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2325
 msgid "Encrypted with lookup password"
-msgstr ""
+msgstr "조회 비밀번호로 암호화됨"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2327
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2334
 msgid "Send individual key to each user."
-msgstr ""
+msgstr "각 사용자에게 개별 키를 보냅니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2332
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2347
 msgid "Encrypted with per-user key"
-msgstr ""
+msgstr "사용자별 키로 암호화됨"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2340
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2355
 msgid "Encrypted with lookup password and per-user key"
-msgstr ""
+msgstr "조회 비밀번호 및 사용자별 키로 암호화됨"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2342
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2349
 msgid "Enter key from each user."
-msgstr ""
+msgstr "각 사용자의 키를 입력하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2391
 msgid "Encryption Key"
 msgstr "암호화 키"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2393
-#, fuzzy
 msgid "Generate New Key"
-msgstr "QR code 생성"
+msgstr "새 키 생성"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2409
 msgid "Encryption key required to access this service"
-msgstr ""
+msgstr "이 서비스에 액세스하려면 암호화 키가 필요합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2413
 msgid "Generate new encryption key"
-msgstr ""
+msgstr "새 암호화 키 생성"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2416
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:598
@@ -1395,9 +1352,8 @@ msgid "Tunnel must be stopped first"
 msgstr "터널을 먼저 중지해야합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2428
-#, fuzzy
 msgid "Client Manager"
-msgstr "클라이언트 터널"
+msgstr "클라이언트 관리자"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2436
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2474
@@ -1433,20 +1389,19 @@ msgstr "제한된 접근 리스트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2514
 msgid "Activate to enable editing"
-msgstr ""
+msgstr "편집을 활성화하려면 활성화하세요"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2520
-#, fuzzy
 msgid "Tunnel Filter"
-msgstr "터널 타입"
+msgstr "터널 필터"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2522
 msgid "Help with defining tunnel filters"
-msgstr ""
+msgstr "터널 필터 정의에 대한 도움말"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2532
 msgid "Prevent listed clients from connecting to this service"
-msgstr ""
+msgstr "나열된 클라이언트가 이 서비스에 연결하는 것을 방지합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2536
 msgid "Blacklist"
@@ -1454,7 +1409,7 @@ msgstr "블랙리스트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2538
 msgid "Only allow listed clients to connect to this service"
-msgstr ""
+msgstr "목록에 있는 클라이언트만 이 서비스에 연결하도록 허용합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2542
 msgid "Whitelist"
@@ -1470,18 +1425,16 @@ msgstr "필터 정의로가는 절대 경로"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2554
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2556
-#, fuzzy
 msgid "Specify client destinations, 1 per line"
-msgstr "이전 이름과 목적지 기입"
+msgstr "클라이언트 대상을 한 줄에 하나씩 지정하세요"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2564
 msgid "Server Throttling"
 msgstr "서버 스로틀링"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2566
-#, fuzzy
 msgid "Inbound connection limits"
-msgstr "수신 연결 제한 (0 = 무제한)"
+msgstr "인바운드 연결 제한"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2568
 msgid "Per Minute"
@@ -1505,10 +1458,8 @@ msgid "Per Client"
 msgstr "클라이언트 당"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2578
-msgid ""
-"Maximum number of web page requests per minute for a unique client before "
-"access to the server is blocked"
-msgstr ""
+msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
+msgstr "서버에 대한 액세스가 차단되기 전 고유 클라이언트에 대한 분당 최대 웹 페이지 요청 수"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2580
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2586
@@ -1519,21 +1470,16 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2618
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2638
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2656
-#, fuzzy
 msgid "(0 = unlimited)"
-msgstr "POST 제한 (0 = 무제한)"
+msgstr "(0 = 무제한)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2584
-msgid ""
-"Maximum number of web page requests per hour for a unique client before "
-"access to the server is blocked"
-msgstr ""
+msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
+msgstr "서버에 대한 액세스가 차단되기 전 고유 클라이언트에 대한 시간당 최대 웹 페이지 요청 수"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2590
-msgid ""
-"Maximum number of web page requests per day for a unique client before "
-"access to the server is blocked"
-msgstr ""
+msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
+msgstr "서버에 대한 액세스가 차단되기 전 고유 클라이언트에 대한 일일 최대 웹 페이지 요청 수"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2596
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2652
@@ -1541,31 +1487,24 @@ msgid "Total"
 msgstr "총"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2598
-msgid ""
-"Total number of web page requests per minute before access to the server is "
-"blocked"
-msgstr ""
+msgid "Total number of web page requests per minute before access to the server is blocked"
+msgstr "서버 접근이 차단되기 전의 분당 웹페이지 요청 총 횟수"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2604
-msgid ""
-"Total number of web page requests per hour before access to the server is "
-"blocked"
-msgstr ""
+msgid "Total number of web page requests per hour before access to the server is blocked"
+msgstr "서버 접속이 차단되기 전 시간당 웹페이지 요청 총 횟수"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2610
-msgid ""
-"Total number of web page requests per day before access to the server is "
-"blocked"
-msgstr ""
+msgid "Total number of web page requests per day before access to the server is blocked"
+msgstr "서버 접속이 차단되기 전의 일일 총 웹페이지 요청 횟수"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2616
 msgid "Maximum number of simultaneous client connections"
-msgstr ""
+msgstr "최대 동시 클라이언트 연결 수"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2626
-#, fuzzy
 msgid "POST limits"
-msgstr "POST 제한 (0 = 무제한)"
+msgstr "POST 제한"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2628
 msgid "Per Period"
@@ -1580,32 +1519,28 @@ msgid "POST limit period"
 msgstr "후 제한 기간"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2636
-msgid ""
-"Maximum number of post requests permitted for a unique client for the "
-"configured timespan"
-msgstr ""
+msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
+msgstr "구성된 기간 동안 고유 클라이언트에 허용되는 최대 게시 요청 수"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2642
 msgid ""
-"If a client exceeds the maximum number of post requests per allocated "
-"period, enforce a ban for this number of minutes"
-msgstr ""
+"If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of "
+"minutes"
+msgstr "클라이언트가 할당된 기간당 최대 게시 요청 수를 초과하는 경우 이 시간(분) 동안 금지를 시행합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2648
-msgid ""
-"Timespan for the maximum number of post requests to be reached before a ban "
-"is triggered"
-msgstr ""
+msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
+msgstr "차단이 실행되기 전에 도달해야 하는 최대 게시물 요청 수에 대한 시간 범위"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2654
 msgid "Total number of post requests permitted for the configured timespan"
-msgstr ""
+msgstr "구성된 기간 동안 허용된 총 게시물 요청 수"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2660
 msgid ""
-"If the maximum number of post requests per allocated period is exceeded, "
-"enforce a global access ban for this number of minutes"
-msgstr ""
+"If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this "
+"number of minutes"
+msgstr "할당된 기간당 최대 게시물 요청 수가 초과되면 이 시간(분) 동안 전역 액세스 금지를 시행합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2693
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:851
@@ -1637,7 +1572,7 @@ msgstr "지우기"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:217
 msgid "Global Tunnel Control"
-msgstr ""
+msgstr "글로벌 터널 제어"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:219
 msgid "Tunnel Wizard"
@@ -1656,9 +1591,8 @@ msgid "Restart All"
 msgstr "모두 재시작"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:234
-#, fuzzy
 msgid "I2P Server Tunnels"
-msgstr "서버 터널"
+msgstr "I2P 서버 터널"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:238
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:559
@@ -1668,7 +1602,7 @@ msgstr "종류"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:240
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:722
 msgid "Points at"
-msgstr "목적지:"
+msgstr "목적지"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:242
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:324
@@ -1690,20 +1624,20 @@ msgstr "컨트롤"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:272
 msgid "Edit Server Tunnel Settings for"
-msgstr ""
+msgstr "에 대한 서버 터널 설정 편집"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:291
 msgid "Test HTTPS server, bypassing I2P"
-msgstr ""
+msgstr "I2P를 우회하여 HTTPS 서버 테스트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:299
 msgid "Test HTTP server, bypassing I2P"
-msgstr ""
+msgstr "I2P를 우회하여 HTTP 서버 테스트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:320
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:732
 msgid "Test HTTP server through I2P"
-msgstr ""
+msgstr "I2P를 통해 HTTP 서버 테스트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:330
 msgid "Base32 Address"
@@ -1736,18 +1670,17 @@ msgstr "가동중"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:370
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:676
 msgid "Hops"
-msgstr ""
+msgstr "홉"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:375
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:389
 msgid "in"
-msgstr ""
+msgstr "~에"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:380
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:394
-#, fuzzy
 msgid "out"
-msgstr "횟수"
+msgstr "아웃"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:414
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:417
@@ -1764,29 +1697,25 @@ msgstr "목적지"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:775
-#, fuzzy
 msgid "Signature"
-msgstr "서명 종류"
+msgstr "시그니처"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:483
 msgid "Alternate"
 msgstr "번갈아 하는"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:513
-#, fuzzy
 msgid "Alt Destination"
-msgstr "목적지"
+msgstr "대체 대상"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:525
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:815
-#, fuzzy
 msgid "Encryption"
-msgstr "암호화 키"
+msgstr "암호화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:549
-#, fuzzy
 msgid "New server tunnel"
-msgstr "서버 터널"
+msgstr "새 서버 터널"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:551
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:840
@@ -1813,7 +1742,7 @@ msgstr "인터페이스"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:593
 msgid "Edit Tunnel Settings for"
-msgstr ""
+msgstr "에 대한 터널 설정 편집"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:656
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:659
@@ -1843,18 +1772,17 @@ msgstr "가입 도우미"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:261
 msgid ""
-"This service uses encrypted leasesets. Registration is not recommended. "
-"Registration authentication is disabled."
-msgstr ""
+"This service uses encrypted leasesets. Registration is not recommended. Registration authentication is "
+"disabled."
+msgstr "이 서비스는 암호화된 임대 세트를 사용합니다. 등록은 권장되지 않습니다. 등록 인증이 비활성화되었습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:267
 msgid ""
-"Please be sure to select, copy, and paste the entire contents of the "
-"appropriate authentication data into the form of your favorite registration "
-"site"
+"Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the "
+"form of your favorite registration site"
 msgstr ""
-"원하는 가입 사이트의 폼의 적절한 인증 데이터를 선택, 복사, 붙여넣기 했는지 확"
-"인하세요."
+"해당 인증데이터의 전체 내용을 반드시 선택, 복사하여 즐겨찾는 등록사이트 형태로 붙여넣어주세요.원하는 가입 사이"
+"트의 폼의 적절한 인증 데이터를 선택, 복사, 붙여넣기 했는지 확인하세요"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:269
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:752
@@ -1867,7 +1795,7 @@ msgstr "웹사이트 이름"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:285
 msgid "Local Destination"
-msgstr ""
+msgstr "로컬 목적지"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:293
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:678
@@ -1877,34 +1805,32 @@ msgstr "로컬 목적지가 사용 가능하지 않습니다. 터널을 재시�
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:300
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:685
 msgid ""
-"To enable registration verification, edit tunnel and set name (or website "
-"name) to a valid host name ending in '.i2p'"
+"To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in "
+"'.i2p'"
 msgstr ""
-"가입 인증을 활성화하려면 터널을 편집하고 이름을 세팅하세요 (또는 웹사이트 이"
-"름) '.i2p'로 끝나야 합니다."
+"등록 확인을 활성화하려면 터널을 편집하고 이름(또는 웹 사이트 이름)을 '.i2p'로 끝나는 유효한 호스트 이름으로 설"
+"정하세요.가입 인증을 활성화하려면 터널을 편집하고 이름을 세팅하세요 (또는 웹사이트 이름) '.i2p'로 끝나야 합니"
+"다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:306
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:691
-msgid ""
-"To enable registration verification, edit tunnel and set name to a valid "
-"host name ending in '.i2p'"
+msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
 msgstr ""
-"가입 인증을 활성화하려면 터널을 편집하고 호스트네임을 설정하세요. '.i2p'로 끝"
-"나야 합니다."
+"등록 확인을 활성화하려면 터널을 편집하고 이름을 '.i2p'로 끝나는 유효한 호스트 이름으로 설정하세요.가입 인증을 "
+"활성화하려면 터널을 편집하고 호스트네임을 설정하세요. '.i2p'로 끝나야 합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:315
 msgid "Destination signing key is not available. Start the tunnel."
 msgstr "목적지 서명키가 사용가능하지 않습니다. 터널을 시작하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:321
-msgid ""
-"Destination signing key is offline. Use CLI tools on the offline machine."
-msgstr ""
+msgid "Destination signing key is offline. Use CLI tools on the offline machine."
+msgstr "대상 서명 키가 오프라인입니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:331
 #, java-format
 msgid "Authentication for adding host {0}"
-msgstr ""
+msgstr "호스트 {0} 추가를 위한 인증"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:333
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:348
@@ -1915,7 +1841,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:511
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:544
 msgid "Copy and paste this to the registration site"
-msgstr ""
+msgstr "이것을 복사해서 등록사이트에 붙여넣으세요"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:338
 msgid "Advanced authentication strings"
@@ -1924,7 +1850,7 @@ msgstr "고급 인증 문자열"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:346
 #, java-format
 msgid "Authentication for removing host {0}"
-msgstr ""
+msgstr "호스트 {0} 제거를 위한 인증"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:377
 msgid "Authentication for changing name"
@@ -1943,7 +1869,7 @@ msgstr "해당 터널은 반드시 새 호스트 이름과 함께 설정되어�
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:399
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:428
 msgid "Enter old hostname below."
-msgstr ""
+msgstr "아래에 이전 호스트 이름을 입력하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:406
 msgid "Authentication for adding alias"
@@ -2002,7 +1928,7 @@ msgstr "하이-레벨 도메인과 목적지를 아래에 입력하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:569
 msgid "Return to Tunnel Configuration"
-msgstr ""
+msgstr "터널 구성으로 복귀"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:576
 msgid "Specify old name and destination"
@@ -2018,20 +1944,19 @@ msgstr "아래의 필수 아이템을 보세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:587
 msgid "Old / parent hostname "
-msgstr ""
+msgstr "이전 / 부모 호스트 이름 "
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:591
-#, fuzzy
 msgid "Private key file for old destination / sub-domain parent"
-msgstr "이전 목적지의 사설 키 파일"
+msgstr "이전 대상/하위 도메인 상위에 대한 개인 키 파일"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:595
 msgid "Generate Authentication"
-msgstr ""
+msgstr "인증 생성"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:179
 msgid "SSL Helper"
-msgstr ""
+msgstr "SSL 도우미"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:663
 msgid "Experts only!"
@@ -2039,28 +1964,27 @@ msgstr "전문가만 사용하세요!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:699
 msgid "Base32"
-msgstr ""
+msgstr "베이스32"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:707
 msgid "Alt Base32"
-msgstr ""
+msgstr "Alt Base32"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:716
 msgid "Incoming I2P Port Routing"
-msgstr ""
+msgstr "들어오는 I2P 포트 라우팅"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:718
 msgid "Virtual Host"
-msgstr ""
+msgstr "가상호스트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:720
-#, fuzzy
 msgid "Via SSL?"
-msgstr "SSL을 사용합니까?"
+msgstr "SSL을 통해?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:795
 msgid "Test HTTPS server through I2P"
-msgstr ""
+msgstr "I2P를 통해 HTTPS 서버 테스트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:813
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:245
@@ -2071,9 +1995,8 @@ msgid "Server"
 msgstr "서버"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:817
-#, fuzzy
 msgid "SSL Activation"
-msgstr "로컬 인증"
+msgstr "SSL 활성화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:870
 msgid "I2P webserver (eepsite)"
@@ -2081,46 +2004,44 @@ msgstr "i2P 웹서버 (eepSite)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1052
 msgid "Disable SSL"
-msgstr ""
+msgstr "SSL 비활성화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1058
 msgid "Enable SSL"
-msgstr ""
+msgstr "SSL 활성화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1064
 msgid "New Certificate Password"
-msgstr ""
+msgstr "새 인증서 비밀번호"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1066
 msgid "Password (required to encrypt the certificate)"
-msgstr ""
+msgstr "비밀번호(인증서 암호화에 필요)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1074
 msgid "Generate new SSL certificate"
-msgstr ""
+msgstr "새 SSL 인증서 생성"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1080
 msgid "Generate SSL certificate and enable"
-msgstr ""
+msgstr "SSL 인증서 생성 및 활성화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1094
 #, java-format
-msgid ""
-"Cannot configure, no Jetty server found in {0}client configurations{1} that "
-"matches this tunnel"
-msgstr ""
+msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
+msgstr "구성할 수 없습니다. 이 터널과 일치하는 {0}클라이언트 구성{1}에 Jetty 서버가 없습니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1096
 msgid "Support for non-Jetty servers will be added in a future release"
-msgstr ""
+msgstr "Jetty가 아닌 서버에 대한 지원은 향후 릴리스에 추가될 예정입니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1103
 msgid "Return to Tunnel Manager Index"
-msgstr ""
+msgstr "터널 관리자 색인으로 돌아가기"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1114
 msgid "Return to Tunnel Editor"
-msgstr ""
+msgstr "터널 편집기로 돌아가기"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:193
 msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
@@ -2159,34 +2080,32 @@ msgid "Wizard completed"
 msgstr "마법사 완료됨"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:344
-msgid ""
-"This wizard will take you through the various options available for creating "
-"tunnels in I2P."
+msgid "This wizard will take you through the various options available for creating tunnels in I2P."
 msgstr ""
-"해당 마법사는 I2P에 터널을 생성하는데 이용가능한 다양한 옵션으로 안내할 것입"
-"니다."
+"이 마법사는 I2P에서 터널을 생성하는 데 사용할 수 있는 다양한 옵션을 안내합니다.해당 마법사는 I2P에 터널을 생성"
+"하는데 이용가능한 다양한 옵션으로 안내할 것입니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:346
-msgid ""
-"The first thing to decide is whether you want to create a server or a client "
-"tunnel."
+msgid "The first thing to decide is whether you want to create a server or a client tunnel."
 msgstr ""
-"먼저 서버 터널을 생성할 것인지 클라이언트 터널을 설정할 것인지 결정해 주세요."
+"가장 먼저 결정해야 할 것은 서버 또는 클라이언트 터널을 생성할지 여부입니다.먼저 서버 터널을 생성할 것인지 클라"
+"이언트 터널을 설정할 것인지 결정해 주세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:348
 msgid ""
-"If you need to connect to a remote service, such as an IRC server inside I2P "
-"or a code repository, then you will require a CLIENT tunnel."
+"If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you "
+"will require a CLIENT tunnel."
 msgstr ""
-"I2P 내부의 IRC나 코드 저장소 같은 원격 서비스에 연결하려면 클라이언트 터널이 "
-"필요합니다."
+"I2P 내부의 IRC 서버나 코드 저장소와 같은 원격 서비스에 연결해야 하는 경우 CLIENT 터널이 필요합니다.I2P 내부의 "
+"IRC나 코드 저장소 같은 원격 서비스에 연결하려면 클라이언트 터널이 필요합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:350
 msgid ""
-"On the other hand, if you wish to host a service for others to connect to "
-"you'll need to create a SERVER tunnel."
+"On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER "
+"tunnel."
 msgstr ""
-"반면, 다른 사람들을 위해 서비스를 호스트 하고 싶다면 서버 터널을 생성하세요."
+"반면에 다른 사람이 연결할 수 있는 서비스를 호스팅하려면 SERVER 터널을 만들어야 합니다.반면, 다른 사람들을 위해 "
+"서비스를 호스트 하고 싶다면 서버 터널을 생성하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:352
 msgid "Server Tunnel"
@@ -2207,92 +2126,82 @@ msgstr "I2P 단일 서비스에 연결할 기본 터널."
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:383
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:417
 msgid ""
-"Try this if none of the tunnel types below fit your requirements, or you "
-"don't know what type of tunnel you need."
+"Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you "
+"need."
 msgstr "아래의 어떤 것도 목적에 맞지 않거나 확실하지 않다면 선택하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:385
 msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
-msgstr "I2P 내부의 eepsite에 접근할 때 HTTP 프록시로 행동하는 터널"
+msgstr "I2P 내부의 eepsite에 접근할 때 HTTP 프록시로 행동하는 터널."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:387
 msgid ""
-"Set your browser to use this tunnel as an http proxy, or set your "
-"\"http_proxy\" environment variable for command-line applications in GNU/"
-"Linux."
+"Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for "
+"command-line applications in GNU/Linux."
 msgstr ""
-"해당 터널을 HTTP 프록시로 사용하도록 브라우저를 설정하세요, 또는 GNU/Linux의 "
-"커맨드라인 프로그램을 위해 \"http_proxy\" 환경 변수를 설정하세요."
+"이 터널을 http 프록시로 사용하도록 브라우저를 설정하거나 GNU/Linux의 명령줄 응용 프로그램에 대해 "
+"\"http_proxy\" 환경 변수를 설정하세요.해당 터널을 HTTP 프록시로 사용하도록 브라우저를 설정하세요, 또는 GNU/"
+"Linux의 커맨드라인 프로그램을 위해 \"http_proxy\" 환경 변수를 설정하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:389
-msgid ""
-"Websites outside I2P can also be reached if an HTTP proxy within I2P is "
-"known."
+msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
 msgstr ""
-"I2P 내의 HTTP 프록시가 알려져 있다면 I2P 밖의 웹사이트에도 접근 가능합니다."
+"I2P 내의 HTTP 프록시가 알려진 경우 I2P 외부 웹사이트에도 접근할 수 있습니다.I2P 내의 HTTP 프록시가 알려져 있다"
+"면 I2P 밖의 웹사이트에도 접근 가능합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:391
 msgid "Customised client tunnel specific for IRC connections."
-msgstr "IRC 연결을 위한 사용자 설정 클라이언트 터널 사양"
+msgstr "IRC 연결을 위한 사용자 설정 클라이언트 터널 사양."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:393
-msgid ""
-"With this tunnel type, your IRC client will be able to connect to an IRC "
-"network inside I2P."
+msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
 msgstr ""
-"이 터널 타입을 이용해 IRC 클라이언트를 I2P IRC 네트워크에 연결할 수 있습니다."
+"이 터널 유형을 사용하면 IRC 클라이언트가 I2P 내부의 IRC 네트워크에 연결할 수 있습니다.이 터널 타입을 이용해 "
+"IRC 클라이언트를 I2P IRC 네트워크에 연결할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:395
-msgid ""
-"Each IRC network in I2P that you wish to connect to will require its own "
-"tunnel. (See Also, SOCKS IRC)"
+msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
 msgstr ""
-"연결할 각 I2P IRC 네트워크는 각자의 고유 터널을 필요로 합니다. (SOCKS IRC를 "
-"참조)"
+"연결하려는 I2P의 각 IRC 네트워크에는 자체 터널이 필요합니다. 연결할 각 I2P IRC 네트워크는 각자의 고유 터널을 필"
+"요로 합니다. (SOCKS IRC를 참조)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:397
 msgid "A tunnel that implements the SOCKS protocol."
-msgstr "SOCKS 프로토콜을 사용하는 터널"
+msgstr "SOCKS 프로토콜을 사용하는 터널."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:399
-msgid ""
-"This enables both TCP and UDP connections to be made through a SOCKS "
-"outproxy within I2P."
+msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
 msgstr "TCP와 UDP 모두를 I2P SOCKS 아웃프록시로 가도록 활성화합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:401
-msgid ""
-"A client tunnel implementing the SOCKS protocol, which is customised for "
-"connecting to IRC networks."
+msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
 msgstr ""
-"클라이언트 터널이 IRC 네트워크 연결을 위해 커스텀된 SOCKS 프로토콜을 사용중입"
-"니다."
+"IRC 네트워크에 연결하기 위해 사용자 정의된 SOCKS 프로토콜을 구현하는 클라이언트 터널입니다.클라이언트 터널이 "
+"IRC 네트워크 연결을 위해 커스텀된 SOCKS 프로토콜을 사용중입니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:403
 msgid ""
-"With this tunnel type, IRC networks in I2P can be reached by typing the I2P "
-"address into your IRC client, and configuring the IRC client to use this "
-"SOCKS tunnel."
+"With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and "
+"configuring the IRC client to use this SOCKS tunnel."
 msgstr ""
-"해당 터널 타입을 이용해, IRC 클라이언트에 I2P 주소를 I2P IRC 서버에 접속할 "
-"수 있습니다. IRC 클라이언트를 SOCKS 터널으로 설정하는 것을 잊지마세요."
+"이 터널 유형을 사용하면 I2P 주소를 IRC 클라이언트에 입력하고 이 SOCKS 터널을 사용하도록 IRC 클라이언트를 구성하"
+"여 I2P의 IRC 네트워크에 연결할 수 있습니다.해당 터널 타입을 이용해, IRC 클라이언트에 I2P 주소를 I2P IRC 서버에 "
+"접속할 수 있습니다. IRC 클라이언트를 SOCKS 터널으로 설정하는 것을 잊지마세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:405
-msgid ""
-"This means that only one I2P tunnel is required rather than a separate "
-"tunnel per IRC network."
+msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
 msgstr ""
-"이 말은 IRC 네트워크마다 분리된 터널이 필요한게 아니라는 겁니다. 오직 하나의 "
-"I2P 터널만 요구됩니다."
+"IRC 네트워크당 별도의 터널이 아닌 하나의 I2P 터널만 필요하다는 의미입니다.이 말은 IRC 네트워크마다 분리된 터널"
+"이 필요한게 아니라는 겁니다. 오직 하나의 I2P 터널만 요구됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:407
 msgid ""
-"IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P "
-"is known, though it depends on whether or not the outproxy has been blocked "
-"by the IRC network."
+"IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on "
+"whether or not the outproxy has been blocked by the IRC network."
 msgstr ""
-"I2P 네트워크가 아닌 IRC 또한 아웃프록시가 정상적으로 구동한다면 접근이 가능합"
-"니다만, IRC 서버 측에서 I2P IP를 차단하지 않은 경우에만 가능합니다."
+"I2P 내의 SOCKS 외부 프록시가 알려진 경우 I2P 외부 IRC 네트워크에도 연결할 수 있습니다. 단, 이는 외부 프록시가 "
+"IRC 네트워크에 의해 차단되었는지 여부에 따라 다릅니다.I2P 네트워크가 아닌 IRC 또한 아웃프록시가 정상적으로 구동"
+"한다면 접근이 가능합니다만, IRC 서버 측에서 I2P IP를 차단하지 않은 경우에만 가능합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:415
 msgid "A basic server tunnel for hosting a generic service inside I2P."
@@ -2300,81 +2209,68 @@ msgstr "I2P 내부의 일반적인 서비스 호스팅을 위한 기본 서버 �
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:419
 msgid "A server tunnel that is customised for HTTP connections."
-msgstr "HTTP 연결에 정의 된 서버 터널"
+msgstr "HTTP 연결에 정의 된 서버 터널."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:421
 msgid "Use this tunnel type if you want to host an eepsite."
-msgstr "eepsite를 호스트 하고 싶다면 이 터널 타입을 선택하십시오"
+msgstr "Eepsite를 호스트 하고 싶다면 이 터널 타입을 선택하십시오"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:423
 msgid "A customised server tunnel for hosting IRC networks inside I2P."
-msgstr "I2P내의 IRC네트워크의 호스팅으로 커스터마이즈 된 서버 터널"
+msgstr "I2P내의 IRC네트워크의 호스팅으로 커스터마이즈 된 서버 터널."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:425
-msgid ""
-"Usually, a separate tunnel needs to be created for each IRC server that is "
-"to be accessible inside I2P."
+msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
 msgstr ""
-"보통, 분리된 터널들은 I2P 내부에서 접근가능한 각 IRC 서버들을 위해 생성되어"
-"야 합니다."
+"일반적으로 I2P 내부에서 액세스할 수 있는 각 IRC 서버마다 별도의 터널을 만들어야 합니다.보통, 분리된 터널들은 "
+"I2P 내부에서 접근가능한 각 IRC 서버들을 위해 생성되어야 합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:431
 msgid "Select tunnel type"
-msgstr ""
+msgstr "터널 유형 선택"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:465
 msgid "Choose a name and description for your tunnel."
 msgstr "터널에 이름과 세부사항를 기입해주세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:467
-msgid ""
-"These can be anything you want - they are just for ease of identifying the "
-"tunnel in the routerconsole."
+msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
 msgstr ""
-"아무거나 상관없습니다 - 라우터 콘솔 내부에서 터널들을 파악하는것을 용이하게 "
-"하기위함 입니다."
+"원하는 것은 무엇이든 될 수 있습니다. 단지 라우터 콘솔에서 터널을 쉽게 식별하기 위한 것입니다.아무거나 상관없습"
+"니다 - 라우터 콘솔 내부에서 터널들을 파악하는것을 용이하게 하기위함 입니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:499
-msgid ""
-"If you know of any outproxies for this type of tunnel (either HTTP or "
-"SOCKS), fill them in below."
+msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
 msgstr ""
-"해당 타입의 터널의 아웃프록시들을 안다면 (HTTP 또는 SOCKS), 아래에 기입하세"
-"요."
+"이러한 유형의 터널(HTTP 또는 SOCKS)에 대한 아웃프록시를 알고 있는 경우 아래에 입력하세요.해당 타입의 터널의 아"
+"웃프록시들을 안다면 (HTTP 또는 SOCKS), 아래에 기입하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:501
 msgid "Separate multiple proxies with commas."
-msgstr "쉼표로 여러 프록시를 구분합니다"
+msgstr "쉼표로 여러 프록시를 구분합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:505
-msgid ""
-"List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,"
-"proxy2.i2p)"
-msgstr ""
+msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
+msgstr "쉼표로 구분된 I2P 아웃프록시 대상 목록(예: Proxy1.i2p,proxy2.i2p)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:521
-msgid ""
-"Type in the I2P destination of the service that this client tunnel should "
-"connect to."
+msgid "Type in the I2P destination of the service that this client tunnel should connect to."
 msgstr "해당 클라이언트 터널이 연결해야 할 서비스의 I2P 목적지를 기입하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:523
-msgid ""
-"This could be the full Base64 destination key, or an I2P URL from your "
-"address book."
-msgstr ""
+msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
+msgstr "이는 전체 Base64 대상 키이거나 주소록의 I2P URL일 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:527
 msgid "Enter a b64 or .i2p address here"
-msgstr ""
+msgstr "여기에 b64 또는 .i2p 주소를 입력하세요"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:551
 msgid ""
-"This is the IP that your service is running on, this is usually on the same "
-"machine so 127.0.0.1 is autofilled."
+"This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
 msgstr ""
-"서비스를 가동하는 IP주소입니다. 대부분의 경우 같은 PC에서 동작하므로 "
-"127.0.0.1이 처음부터 입력되어 있습니다."
+"서비스가 실행 중인 IP입니다. 일반적으로 동일한 시스템에 있으므로 127.0.0.1이 자동으로 채워집니다.서비스를 가동"
+"하는 IP주소입니다. 대부분의 경우 같은 PC에서 동작하므로 127.0.0.1이 처음부터 입력되어 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:576
 msgid "This is the port that the service is accepting connections on."
@@ -2386,31 +2282,28 @@ msgstr "터널이 로컬에서 접근할 수 있는 포트 번호입니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:622
 msgid ""
-"How do you want this tunnel to be accessed? By just this machine, your "
-"entire subnet, or external internet?"
+"How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
 msgstr ""
-"어떤 방식으로 해당 터널에 접근하겠습니까? 이 장치에서만, 혹은 모든  서브넷에"
-"서, 혹은 외부 인터넷에서?"
+"이 터널에 어떻게 접근하길 원하시나요? 어떤 방식으로 해당 터널에 접근하겠습니까? 이 장치에서만, 혹은 모든  서브"
+"넷에서, 혹은 외부 인터넷에서?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:624
 msgid "You will most likely want to just allow 127.0.0.1"
 msgstr "대개의 경우 127.0.0.1만 허가합니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:670
-msgid ""
-"The I2P router can automatically start this tunnel for you when the router "
-"is started."
-msgstr "I2P라우터가 실행되면 자동적으로 이 터널을 시작할 수 있습니다"
+msgid "The I2P router can automatically start this tunnel for you when the router is started."
+msgstr "I2P라우터가 실행되면 자동적으로 이 터널을 시작할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:672
 msgid ""
-"This can be useful for frequently-used tunnels (especially server tunnels), "
-"but for tunnels that are only used occassionally it would mean that the I2P "
-"router is creating and maintaining unnecessary tunnels."
+"This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used "
+"occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
 msgstr ""
-"자주 사용되는 터널에도 유용할 수 있습니다 (특히 서버 터널), 하지만 가끔 사용"
-"되는 터널에 대해서는 자원의 낭비가 있을 수 있습니다. I2P 라우터가 쓸모없는 터"
-"널을 생성하고 관리하는 격이니까요."
+"자주 사용되는 터널(특히 서버 터널)에는 유용할 수 있지만 가끔 사용되는 터널의 경우 I2P 라우터가 불필요한 터널을 "
+"생성하고 유지 관리한다는 의미입니다.자주 사용되는 터널에도 유용할 수 있습니다 (특히 서버 터널), 하지만 가끔 사"
+"용되는 터널에 대해서는 자원의 낭비가 있을 수 있습니다. I2P 라우터가 쓸모없는 터널을 생성하고 관리하는 격이니까"
+"요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:699
 msgid "The wizard has now collected enough information to create your tunnel."
@@ -2418,34 +2311,30 @@ msgstr "마법사가 지금 터널 생성을 위한 필요한 정보를 받고 �
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:701
 msgid ""
-"Upon clicking the Save button below, the wizard will set up the tunnel, and "
-"take you back to the main I2PTunnel page."
+"Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main "
+"I2PTunnel page."
 msgstr ""
-"아래의 저장 버튼을 누르면, 마법사가 터널을 세팅하고 당신을 메인 I2P터널 페이"
-"지로 이동시킵니다."
+"아래 저장 버튼을 클릭하면 마법사가 터널을 설정하고 기본 I2PTunnel 페이지로 돌아갑니다.아래의 저장 버튼을 누르"
+"면, 마법사가 터널을 세팅하고 당신을 메인 I2P터널 페이지로 이동시킵니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:707
 msgid ""
-"Because you chose to automatically start the tunnel when the router starts, "
-"you don't have to do anything further."
+"Because you chose to automatically start the tunnel when the router starts, you don't have to do anything "
+"further."
 msgstr ""
-"라우터를 시작할 때 터널을 자동으로 시작하도록 선택 있기 때문에 다른 조치를 "
-"할 필요가 없습니다."
+"라우터가 시작될 때 자동으로 터널을 시작하도록 선택했기 때문에 추가로 수행할 작업이 없습니다.라우터를 시작할 때 "
+"터널을 자동으로 시작하도록 선택 있기 때문에 다른 조치를 할 필요가 없습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:709
 msgid "The router will start the tunnel once it has been set up."
 msgstr "셋업된 직후 터널을 시작합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:715
-msgid ""
-"Because you chose not to automatically start the tunnel, you will have to "
-"manually start it."
-msgstr "터널 자동시작이 설정되어 있지 않으므로 수동으로 시작해야 합니다"
+msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
+msgstr "터널 자동시작이 설정되어 있지 않으므로 수동으로 시작해야 합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:717
-msgid ""
-"You can do this by clicking the Start button on the main page which "
-"corresponds to the new tunnel."
+msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
 msgstr "새 터널에 부합하는 메인 페이지의 시작 버튼을 눌러 시행합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:723
@@ -2458,37 +2347,34 @@ msgstr "터널 설명"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:784
 msgid "Binding address"
-msgstr ""
+msgstr "바인딩 주소"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:792
 msgid "Tunnel port"
-msgstr ""
+msgstr "터널 포트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:830
-msgid ""
-"Alongside these basic settings, there are a number of advanced options for "
-"tunnel configuration."
+msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
 msgstr ""
-"이 기본적인 설정들과 더불어, 터널 설정을 위한 많은 수의 고급 옵션들이 존재합"
-"니다."
+"이러한 기본 설정 외에도 터널 구성을 위한 다양한 고급 옵션이 있습니다.이 기본적인 설정들과 더불어, 터널 설정을 "
+"위한 많은 수의 고급 옵션들이 존재합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:832
 msgid ""
-"The wizard will set reasonably sensible default values for these, but you "
-"can view and/or edit these by clicking on the tunnel's name in the main "
-"I2PTunnel page."
+"The wizard will set reasonably sensible default values for these, but you can view and/or edit these by "
+"clicking on the tunnel's name in the main I2PTunnel page."
 msgstr ""
-"마법사는 기본값으로 '민감한' 세팅들을 할겁니다. 이 세팅은 합리적인 이유에서 "
-"이루어집니다. 그러나, 만약 원하신다면 메인 I2P터널 페이지의 터널 이름들을 클"
-"릭하여 해당 사항들을 보거나 편집할 수 있습니다."
+"마법사는 이에 대해 합리적인 기본값을 설정하지만 기본 I2PTunnel 페이지에서 터널 이름을 클릭하여 이를 보거나 편집"
+"할 수 있습니다.마법사는 기본값으로 '민감한' 세팅들을 할겁니다. 이 세팅은 합리적인 이유에서 이루어집니다. 그러"
+"나, 만약 원하신다면 메인 I2P터널 페이지의 터널 이름들을 클릭하여 해당 사항들을 보거나 편집할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:850
 msgid "Cancel the wizard and return to Tunnel Manager home page"
-msgstr ""
+msgstr "마법사를 취소하고 터널 관리자 홈 페이지로 돌아갑니다"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:858
 msgid "Return to previous page"
-msgstr ""
+msgstr "이전 페이지로 돌아가기"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:861
 msgid "Previous"
@@ -2496,7 +2382,7 @@ msgstr "전"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:871
 msgid "Save tunnel configuration"
-msgstr ""
+msgstr "터널 구성 저장"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:874
 msgid "Save Tunnel"
@@ -2504,7 +2390,7 @@ msgstr "터널 저장"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:880
 msgid "Finish Wizard and review tunnel settings"
-msgstr ""
+msgstr "마법사 완료 및 터널 설정 검토"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:883
 msgid "Finish"
@@ -2512,62 +2398,8 @@ msgstr "종료"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:889
 msgid "Advance to next page"
-msgstr ""
+msgstr "다음 페이지로 이동"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:892
 msgid "Next"
 msgstr "다음"
-
-#~ msgid "Tunnels are not initialized yet, please reload in two minutes."
-#~ msgstr "터널이 아직 시작되지 않았습니다. 2분 후에 다시 로드하세요."
-
-#~ msgid "Hidden Services Manager"
-#~ msgstr "히든 서비스 매니저"
-
-#~ msgid "Edit Hidden Service"
-#~ msgstr "히든 서비스 편집"
-
-#~ msgid "Edit proxy settings"
-#~ msgstr "프록시 설정 변경"
-
-#~ msgid "New proxy settings"
-#~ msgstr "새 프록시 설정"
-
-#~ msgid "hop tunnel (very poor performance)"
-#~ msgstr "단계 터널 (매우 낮은 익명성)"
-
-#~ msgid ""
-#~ "+ 0-1 hop variance (medium additive randomization, subtractive "
-#~ "performance)"
-#~ msgstr "+ 0-1 단계 분산 (중간 분산, 성능 영향 있음)"
-
-#~ msgid ""
-#~ "+ 0-2 hop variance (high additive randomization, subtractive performance)"
-#~ msgstr "+ 0-2 단계 분산 (높은 분산, 성능 영향 있음)"
-
-#~ msgid "+/- 0-2 hop variance (not recommended)"
-#~ msgstr "+/- 0-2 단계 분산 (추천되지 않음)"
-
-#~ msgid "File"
-#~ msgstr "파일"
-
-#~ msgid "Both"
-#~ msgstr "둘 다"
-
-#~ msgid "Max concurrent connections (0=unlimited)"
-#~ msgstr "최대 동시 연결 (0 = 무제한)"
-
-#~ msgid "I2P Hidden Services"
-#~ msgstr "I2P 히든 서비스"
-
-#~ msgid "New hidden service"
-#~ msgstr "새 히든 서비스"
-
-#~ msgid "Go back and edit the tunnel"
-#~ msgstr "뒤로가서 터널 편집"
-
-#~ msgid "Default"
-#~ msgstr "기본값"
-
-#~ msgid "Enabled"
-#~ msgstr "사용"
