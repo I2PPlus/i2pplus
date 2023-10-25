@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2023-10-24 01:31+0000\n"
+"PO-Revision-Date: 2023-10-25 06:32+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru_RU\n"
@@ -2101,75 +2101,3 @@ msgstr "Сохранить изменения"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5862
 msgid "Torrent must be stopped"
 msgstr "Торрент остановлен {0}"
-
-#, java-format
-#~ msgid "{0} theme loaded."
-#~ msgstr "загружена тема {0}."
-
-#~ msgid "Created by"
-#~ msgstr "Создан"
-
-#~ msgid "Error on torrent {0}"
-#~ msgstr "Ошибка в торренте {0}"
-
-#~ msgid "Torrent was not retrieved from {0}"
-#~ msgstr "Не удалось получить торрент из: {0}"
-
-#, fuzzy
-#~ msgid "Net Error"
-#~ msgstr "Ошибка Трекера"
-
-#~ msgid "Download torrent file from {0}"
-#~ msgstr "Загрузка торрент файла из: {0}"
-
-#~ msgid "Dht Debug"
-#~ msgstr "Отладка DHT"
-
-#~ msgid "1 peer"
-#~ msgid_plural "{0} peers"
-#~ msgstr[0] "{0} пир"
-#~ msgstr[1] "{0} пира"
-#~ msgstr[2] "{0} пиров"
-#~ msgstr[3] "{0} пиров"
-
-#~ msgid "You can also copy .torrent files to: {0}."
-#~ msgstr "Либо вы можете просто скопировать .torrent-файлы в директорию {0}."
-
-#~ msgid "Removing a .torrent will cause it to stop."
-#~ msgstr "Удаление .torrent-файла приведёт к остановке торрента."
-
-#~ msgid "Data location"
-#~ msgstr "Расположение данных"
-
-#~ msgid "Primary Tracker"
-#~ msgstr "Первичный трекер"
-
-#~ msgid "Tracker List"
-#~ msgstr "Список трекеров"
-
-#~ msgid "Comment"
-#~ msgstr "Комментарий"
-
-#~ msgid "Magnet link"
-#~ msgstr "Magnet-ссылка"
-
-#~ msgid "Private torrent"
-#~ msgstr "Частный Torrent"
-
-#~ msgid "Piece size"
-#~ msgstr "Размер части"
-
-#~ msgid "Download files in order"
-#~ msgstr "Скачать файлы по порядку"
-
-#~ msgid "Download pieces in order"
-#~ msgstr "Скачать части по порядку"
-
-#~ msgid "Set all high"
-#~ msgstr "Всем высокий приоритет"
-
-#~ msgid "Set all normal"
-#~ msgstr "Всем нормальный приоритет"
-
-#~ msgid "Skip all"
-#~ msgstr "Пропустить все"

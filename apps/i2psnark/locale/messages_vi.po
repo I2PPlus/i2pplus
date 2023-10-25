@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2023-10-24 03:44+0000\n"
+"PO-Revision-Date: 2023-10-25 06:30+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -1985,10 +1985,3 @@ msgstr "Lưu thay đổi"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5862
 msgid "Torrent must be stopped"
 msgstr "Torrent phải dừng lại"
-
-#, fuzzy
-#~ msgid "Created by"
-#~ msgstr "Đã tạo"
-
-#~ msgid "Piece size"
-#~ msgstr "Kích thước mảnh"

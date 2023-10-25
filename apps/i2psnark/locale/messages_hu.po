@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2023-10-23 23:37+0000\n"
+"PO-Revision-Date: 2023-10-25 06:50+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: hu\n"
@@ -601,7 +601,7 @@ msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:491
 msgid "BTDigg"
-msgstr ""
+msgstr "BTDigg"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:491
 msgid "I2P-based search engine for clearnet-hosted torrents"
@@ -629,7 +629,7 @@ msgstr "Bontsa ki"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:671
 msgid "Shrink"
-msgstr "zsugorodik"
+msgstr "Zsugorodik"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:678
 #, java-format
@@ -1355,7 +1355,7 @@ msgstr "Intelligens torrent rendezés"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3445
 msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr "A rendezés során hagyja figyelmen kívül az olyan szavakat, mint az „a” és a „the”."
+msgstr "A rendezés során hagyja figyelmen kívül az olyan szavakat, mint az „a” és a „the”"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3448
 msgid "Collapsible panels"
