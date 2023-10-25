@@ -15,16 +15,16 @@ import net.i2p.util.Log;
 
 /**
  * FloodfillNetworkDatabaseSegmentor
- * 
+ *
  * Default implementation of the SegmentedNetworkDatabaseFacade.
- * 
+ *
  * This is a datastructure which manages (3+Clients) "sub-netDbs" on behalf of an
  * I2P router, each representing it's own view of the network. Normally, these sub-netDb's
  * are identified by the hash of the primary session belonging to the client who "owns"
  * a particular sub-netDb.
- * 
+ *
  * There are 3 "Special" netDbs which have non-hash names:
- * 
+ *
  *  - Main NetDB: This is the netDb we use if or when we become a floodfill, and for
  *  direct interaction with other routers on the network, such as when we are communicating
  *  with a floodfill.
@@ -34,18 +34,18 @@ import net.i2p.util.Log;
  *  - Exploratory NetDB: This is used when we want to stash a DatabaseEntry for a key
  *  during exploration but don't want it to go into the Main NetDB until we do something
  *  else with it.
- * 
+ *
  * And there are an unlimited number of "Client" netDbs. These sub-netDbs are
  * intended to contain only the information required to operate them, and as such
  * most of them are very small, containing only a few LeaseSets belonging to clients.
  * Each one corresponds to a Destination which can recieve information from the
  * netDb, and can be indexed either by it's hash or by it's base32 address. This index
  * is known as the 'dbid' or database id.
- * 
+ *
  * Users of this class should strive to always access their sub-netDbs via the
  * explicit DBID of the destination recipient, or using the DBID of the special
  * netDb when it's appropriate to route the netDb entry to one of the special tables.
- * 
+ *
  * @author idk
  * @since 0.9.60
  */
@@ -62,7 +62,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      * Construct a new FloodfillNetworkDatabaseSegmentor with the given
      * RouterContext, containing a default, main netDb and a multihome netDb
      * and which is prepared to add client netDbs.
-     * 
+     *
      * @since 0.9.60
      */
     public FloodfillNetworkDatabaseSegmentor(RouterContext context) {
@@ -111,7 +111,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      * Start up the floodfill for the _mainDbid and the _multihomeDbid
      *
      * @since 0.9.60
-     * 
+     *
      */
     public synchronized void startup() {
             if (_log.shouldLog(Log.DEBUG))
@@ -141,7 +141,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      * list of the Hashes of currently known floodfill peers;
      * Returned list will not include our own hash.
      * List is not sorted and not shuffled.
-     * 
+     *
      * @since 0.9.60
      * @return non-null
      */
@@ -172,7 +172,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      * Lookup using the client's tunnels when the client LS key is known.
      * if a DBID is not provided, the clients will all be checked, and the
      * first value will be used.
-     * 
+     *
      * @return may be null
      * @since 0.9.60
      */
@@ -215,7 +215,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
 
     /**
      * list of the RouterInfo objects for all known peers known to clients(in subDbs) only
-     * 
+     *
      * @since 0.9.60
      * @return non-null
      */
@@ -231,7 +231,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
 
     /**
      * list of the LeaseSet objects for all known peers known to clients(in subDbs) only
-     * 
+     *
      * @since 0.9.60
      * @return non-null
      */
@@ -258,7 +258,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
 
     /**
      * get the multiHome netDb, which is especially for handling multihomes
-     * 
+     *
      * @since 0.9.60
      * @return may be null
      */
@@ -268,12 +268,13 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     }
 
     /**
-     * get the client netDb for the given id
-     * Will return the "exploratory(default client)" netDb if
-     * the dbid is null.
+     * Get the client netDb for the given id.
+     * Will return the main netDb if
+     * the dbid is null or the client db is not found.
      *
+     * @param id may be null
+     * @return non-null
      * @since 0.9.60
-     * @return may be null if the client netDb does not exist
      */
     @Override
     public FloodfillNetworkDatabaseFacade clientNetDB(Hash id) {
@@ -281,12 +282,12 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
             _log.debug("looked up clientNetDB: " + id);
         if (!useSubDbs())
             return _mainDbid;
-        if (id != null){
+        if (id != null) {
             FloodfillNetworkDatabaseFacade fndf = getSubNetDB(id);
             if (fndf != null)
                 return fndf;
-    }
-        return mainNetDB();
+        }
+        return _mainDbid;
     }
 
     /**
@@ -342,7 +343,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      * get all the subDbs and return them in a Set. This only includes subDbs associated
      * with specific clients, unless subDbs are disabled in which case it only contains the
      * main netDB
-     * 
+     *
      * @since 0.9.60
      * @return non-null
      */
@@ -360,7 +361,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
 
     /**
      * list of the BlindData objects for all known clients
-     * 
+     *
      * @since 0.9.60
      * @return non-null
      */

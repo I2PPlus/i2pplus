@@ -329,6 +329,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  Cannot be restarted.
      */
     public synchronized void shutdown() {
+        if (_log.shouldWarn())
+            _log.warn("NetDb shutdown: " + this);
         _initialized = false;
         if (!_context.commSystem().isDummy() && isMainDb() &&
             _context.router().getUptime() > ROUTER_INFO_EXPIRATION_FLOODFILL + 10*60*1000 + 60*1000) {
@@ -424,7 +426,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     public void startup() {
-        _log.info("Starting up the Kademlia Network Database...");
+        if (_log.shouldInfo()) {
+            _log.info("Starting up the Kademlia Network Database...");
+        }
         RouterInfo ri = _context.router().getRouterInfo();
         String dbDir = _context.getProperty(PROP_DB_DIR, DEFAULT_DB_DIR);
         _kb = new KBucketSet<Hash>(_context, ri.getIdentity().getHash(),
@@ -2068,4 +2072,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public void renderStatusHTML(Writer out) throws IOException {
         out.write(_kb.toString().replace("\n", "<br>\n"));
     }
+
+    /**
+     * @since 0.9.60
+     */
+    @Override
+    public String toString() {
+        if (isMainDb())
+            return "Main NetDB";
+        if (isMultihomeDb())
+            return "Multihome NetDB";
+        return "Client NetDB " + _dbid.toBase64();
+    }
+
 }

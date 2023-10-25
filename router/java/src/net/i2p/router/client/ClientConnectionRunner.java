@@ -49,9 +49,8 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.router.crypto.TransientSessionKeyManager;
 import net.i2p.router.crypto.ratchet.RatchetSKM;
-import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
-import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseSegmentor;
 import net.i2p.router.crypto.ratchet.MuxedSKM;
+import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
@@ -160,8 +159,6 @@ class ClientConnectionRunner {
         _alreadyProcessed = new ArrayList<MessageId>();
         _acceptedPending = new ConcurrentHashSet<MessageId>();
         _messageId = new AtomicInteger(_context.random().nextInt());
-        // Set up the per-destination FloodfillNetworkDatabaseFacade to prevent clients from being able to
-        // update leaseSet entries in the floodfill netDb
     }
 
     private static final AtomicInteger __id = new AtomicInteger();
@@ -213,9 +210,6 @@ class ClientConnectionRunner {
         _acceptedPending.clear();
         if (_sessionKeyManager != null)
             _sessionKeyManager.shutdown();
-        if (_floodfillNetworkDatabaseFacade != null)
-            if (_floodfillNetworkDatabaseFacade.isClientDb())
-                _floodfillNetworkDatabaseFacade.shutdown();
         if (_encryptedLSHash != null)
             _manager.unregisterEncryptedDestination(this, _encryptedLSHash);
         _manager.unregisterConnection(this);
@@ -226,12 +220,12 @@ class ClientConnectionRunner {
             // _sessions will be empty.
             for (SessionParams sp : _sessions.values()) {
                 LeaseSet ls = sp.currentLeaseSet;
-                if (ls != null && getFloodfillNetworkDatabaseFacade() != null)
-                    getFloodfillNetworkDatabaseFacade().unpublish(ls);
+                if (ls != null)
+                    _context.netDb().unpublish(ls);
                 // unpublish encrypted LS also
                 ls = sp.currentEncryptedLeaseSet;
-                if (ls != null && getFloodfillNetworkDatabaseFacade() != null)
-                    getFloodfillNetworkDatabaseFacade().unpublish(ls);
+                if (ls != null)
+                    _context.netDb().unpublish(ls);
                 if (!sp.isPrimary)
                     _context.tunnelManager().removeAlias(sp.dest);
             }
@@ -242,6 +236,8 @@ class ClientConnectionRunner {
                     sp.rerequestTimer.cancel();
             }
         }
+        if (_floodfillNetworkDatabaseFacade != null)
+            _floodfillNetworkDatabaseFacade.shutdown();
         synchronized (_alreadyProcessed) {
             _alreadyProcessed.clear();
         }
@@ -467,8 +463,8 @@ class ClientConnectionRunner {
                 // Tell client manger
                 _manager.unregisterSession(id, sp.dest);
                 LeaseSet ls = sp.currentLeaseSet;
-                if (ls != null && getFloodfillNetworkDatabaseFacade() != null)
-                    getFloodfillNetworkDatabaseFacade().unpublish(ls);
+                if (ls != null && _floodfillNetworkDatabaseFacade != null)
+                    _floodfillNetworkDatabaseFacade.unpublish(ls);
                 // unpublish encrypted LS also
                 ls = sp.currentEncryptedLeaseSet;
                 if (ls != null && getFloodfillNetworkDatabaseFacade() != null)
@@ -492,12 +488,12 @@ class ClientConnectionRunner {
                     _log.info("Destroying remaining client subsession " + sp.sessionId);
                 _manager.unregisterSession(sp.sessionId, sp.dest);
                 LeaseSet ls = sp.currentLeaseSet;
-                if (ls != null && getFloodfillNetworkDatabaseFacade() != null)
-                    getFloodfillNetworkDatabaseFacade().unpublish(ls);
+                if (ls != null && _floodfillNetworkDatabaseFacade != null)
+                    _floodfillNetworkDatabaseFacade.unpublish(ls);
                 // unpublish encrypted LS also
                 ls = sp.currentEncryptedLeaseSet;
-                if (ls != null && getFloodfillNetworkDatabaseFacade() != null)
-                    getFloodfillNetworkDatabaseFacade().unpublish(ls);
+                if (ls != null && _floodfillNetworkDatabaseFacade != null)
+                    _floodfillNetworkDatabaseFacade.unpublish(ls);
                 _context.tunnelManager().removeAlias(sp.dest);
                 synchronized(this) {
                     if (sp.rerequestTimer != null)
@@ -572,18 +568,6 @@ class ClientConnectionRunner {
     public int sessionEstablished(SessionConfig config) {
         Destination dest = config.getDestination();
         Hash destHash = dest.calculateHash();
-        if (destHash != null){
-            if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug("Initializing subDb for client" + destHash);
-            }
-            _floodfillNetworkDatabaseFacade = new FloodfillNetworkDatabaseFacade(_context, destHash);
-            _floodfillNetworkDatabaseFacade.startup();
-        } else {
-            if (_log.shouldLog(Log.ERROR)) {
-                _log.error("Initializing subDb for unknown client" + dest, new Exception());
-            }
-            _floodfillNetworkDatabaseFacade = null;
-        }
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("SessionEstablished called for destination " + destHash);
         if (_sessions.size() > MAX_SESSIONS)
@@ -611,9 +595,8 @@ class ClientConnectionRunner {
             _dontSendMSMOnReceive = Boolean.parseBoolean(opts.getProperty(I2PClient.PROP_FAST_RECEIVE));
         }
 
-        // Set up the
-        // per-destination session key manager to prevent rather easy correlation
-        // based on the specified encryption types in the config
+        // Set up the per-destination session key manager to prevent
+        // rather easy correlation based on the specified encryption types in the config
         if (isPrimary && _sessionKeyManager == null) {
             int tags = TransientSessionKeyManager.DEFAULT_TAGS;
             int thresh = TransientSessionKeyManager.LOW_THRESHOLD;
@@ -661,6 +644,13 @@ class ClientConnectionRunner {
                     return SessionStatusMessage.STATUS_INVALID;
                 }
             }
+        }
+
+        if (isPrimary && _floodfillNetworkDatabaseFacade == null && _context.netDbSegmentor().useSubDbs()) {
+            if (_log.shouldDebug())
+                _log.debug("Initializing subDb for client" + destHash);
+            _floodfillNetworkDatabaseFacade = new FloodfillNetworkDatabaseFacade(_context, destHash);
+            _floodfillNetworkDatabaseFacade.startup();
         }
         return _manager.destinationEstablished(this, dest);
     }
@@ -1171,32 +1161,15 @@ class ClientConnectionRunner {
     private static final int MAX_REQUEUE = 60;  // 30 sec.
 
     /**
-     * Get the FloodfillNetworkDatabaseFacade for this runner. This is the client
-     * netDb if the router is configured to use subDbs, or the main netDb if the
-     * router is configured to use a monolithic netDb.
+     * Get the FloodfillNetworkDatabaseFacade for this runner. This is the client netDb.
      *
-     * If neither a client netDb or the main netDb is available, it will return null.
-     * This should be impossible.
-     * If you get the  `getFloodfillNetworkDatabaseFacade is null for runner` warning,
-     * the main netDb will be returned instead. If the main netDb is null, then null
-     * will be returned.
+     * If a session has not been created yet, it will return null.
      *
-     * @return _floodfillNetworkDatabaseFacade
+     * @return the client netdb or null if no session was created yet
      * @since 0.9.60
      */
     public FloodfillNetworkDatabaseFacade getFloodfillNetworkDatabaseFacade() {
-        long uptime = _context.router().getUptime();
-        if (!_context.netDbSegmentor().useSubDbs())
-            return _context.netDb();
-        if (_log.shouldLog(Log.DEBUG))
-            _log.debug("getFloodfillNetworkDatabaseFacade is getting the subDb for DbId: " + this.getDestHash());
-        if (_floodfillNetworkDatabaseFacade == null) {
-            if (_log.shouldLog(Log.WARN)) {
-                _log.warn("getFloodfillNetworkDatabaseFacade is null for runner, using mainNetDb instead");
-            }
-            return _context.netDb();
-        }
-        return this._floodfillNetworkDatabaseFacade;
+        return _floodfillNetworkDatabaseFacade;
     }
 
     private class MessageDeliveryStatusUpdate extends JobImpl {

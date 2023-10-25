@@ -202,11 +202,9 @@ public class RouterContext extends I2PAppContext {
         _overrideProps.remove(propName);
     }
 
-
     public void addPropertyCallback(I2PPropertyCallback callback) {
         _overrideProps.addCallBack(callback);
     }
-
 
     /**
      *  The following properties may be used to replace various parts
@@ -375,65 +373,88 @@ public class RouterContext extends I2PAppContext {
     public SegmentedNetworkDatabaseFacade netDbSegmentor() { return _netDb; }
     public FloodfillNetworkDatabaseFacade netDb() { return _netDb.mainNetDB(); }
     public FloodfillNetworkDatabaseFacade multihomeNetDb() { return _netDb.multiHomeNetDB(); }
+
+    /**
+     * Get the client netDb for the given id.
+     * Will return the main netDb if
+     * the dbid is null or the client db is not found.
+     *
+     * @param id may be null
+     * @return non-null
+     * @since 0.9.60
+     */
     public FloodfillNetworkDatabaseFacade clientNetDb(Hash id) { return _netDb.clientNetDB(id); }
+
     /**
      * The actual driver of the router, where all jobs are enqueued and processed.
      */
     public JobQueue jobQueue() { return _jobQueue; }
+
     /**
      * Coordinates the router's ElGamal and DSA keys, as well as any keys given
      * to it by clients as part of a LeaseSet.
      */
     public KeyManager keyManager() { return _keyManager; }
+
     /**
      * How do we pass messages from our outNetMessagePool to another router
      */
     public CommSystemFacade commSystem() { return _commSystem; }
+
     /**
      * Organize the peers we know about into various tiers, profiling their
      * performance and sorting them accordingly.
      */
     public ProfileOrganizer profileOrganizer() { return _profileOrganizer; }
+
     /**
      * Minimal interface for selecting peers for various tasks based on given
      * criteria.  This is kept seperate from the profile organizer since this
      * logic is independent of how the peers are organized (or profiled even).
      */
     public PeerManagerFacade peerManager() { return _peerManagerFacade; }
+
     /**
      * Expose a simple API for various router components to take note of
      * particular events that a peer enacts (sends us a message, agrees to
      * participate in a tunnel, etc).
      */
     public ProfileManager profileManager() { return _profileManager; }
+
     /**
      * Coordinate this router's bandwidth limits
      */
     public FIFOBandwidthLimiter bandwidthLimiter() { return _bandwidthLimiter; }
+
     /**
      * Coordinate this router's tunnels (its pools, participation, backup, etc).
      * Any configuration for the tunnels is rooted from the context's properties
      */
     public TunnelManagerFacade tunnelManager() { return _tunnelManager; }
+
     /**
      * Handle tunnel messages, as well as coordinate the gateways
      */
     public TunnelDispatcher tunnelDispatcher() { return _tunnelDispatcher; }
+
     /**
      * If the router is configured to, gather up some particularly tasty morsels
      * regarding the stats managed and offer to publish them into the routerInfo.
      */
     public StatisticsManager statPublisher() { return _statPublisher; }
+
     /**
      * who does this peer hate?
      */
     public Banlist banlist() { return _banlist; }
     public Blocklist blocklist() { return _blocklist; }
+
     /**
      * The router keeps track of messages it receives to prevent duplicates, as
      * well as other criteria for "validity".
      */
     public MessageValidator messageValidator() { return _messageValidator; }
+
     /**
      * Component to coordinate our accepting/rejecting of requests under load
      *
