@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2023-10-24 00:05+0000\n"
+"PO-Revision-Date: 2023-10-25 09:45+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -319,7 +319,8 @@ msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disab
 msgstr ""
 "Advarsel - Ingen I2P-sporere i \"{0}\", og DHT og åpne sporere er deaktivert, bør du aktivere åpne sporere eller DHT før du starter torrenten.Advarsel - Ingen I2P-sporere i \"{0}\", og DHT og åpne sporere er deaktivert, bør du "
 "aktivere åpne sporere eller DHT før du starter torrenten.Advarsel - Ingen I2P-sporere i \"{0}\", og DHT og åpne sporere er deaktivert, bør du aktivere åpne sporere eller DHT før du starter torrenten.Advarsel - Ingen I2P-sporere i "
-"\"{0}\", og DHT og åpne sporere er avskrudd, du burde skru på åpne sporere eller DHT før du starter torrenten."
+"\"{0}\", og DHT og åpne sporere er deaktivert, bør du aktivere åpne sporere eller DHT før du starter torrenten.Advarsel - Ingen I2P-sporere i \"{0}\", og DHT og åpne sporere er avskrudd, du burde skru på åpne sporere eller DHT før "
+"du starter torrenten."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1908
 #, java-format
@@ -597,7 +598,7 @@ msgstr "Oppdater side"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:480
 msgid "Forum"
-msgstr ""
+msgstr "Forum"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:480
 msgid "Torrent &amp; filesharing forum"
@@ -605,7 +606,7 @@ msgstr "Torrent"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:491
 msgid "BTDigg"
-msgstr ""
+msgstr "BTDigg"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:491
 msgid "I2P-based search engine for clearnet-hosted torrents"
@@ -613,7 +614,7 @@ msgstr "I2P-basert søkemotor for clearnet-vertsbaserte torrenter"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:497
 msgid "Search torrents"
-msgstr ""
+msgstr "Søk i torrenter"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:502
 msgid "Clear search"
@@ -646,11 +647,11 @@ msgstr "sideoppdatering"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:689
 msgid "Warning - No I2P"
-msgstr ""
+msgstr "Advarsel - Ingen I2P"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:776
 msgid "Show All"
-msgstr ""
+msgstr "Vis alle"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:788
 msgid "Active"
@@ -662,11 +663,11 @@ msgstr "Inaktiv"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:792
 msgid "Connected"
-msgstr ""
+msgstr "Tilkoblet"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:794
 msgid "Downloading"
-msgstr ""
+msgstr "Nedlasting"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:796 ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2396
 msgid "Seeding"
@@ -679,7 +680,7 @@ msgstr "Ferdig"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:800
 msgid "Incomplete"
-msgstr ""
+msgstr "Ufullstendig"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:802 ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2493
 msgid "Stopped"
@@ -715,7 +716,7 @@ msgstr "Filtype"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:941
 msgid "Torrent name"
-msgstr ""
+msgstr "Torrent navn"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:972
 msgid "ETA"
@@ -787,7 +788,7 @@ msgstr "Start alle torrenter og I2P-tunnelen"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1169
 msgid "No torrents found."
-msgstr ""
+msgstr "Ingen torrenter funnet."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1171
 msgid "No torrents loaded."
@@ -824,11 +825,11 @@ msgstr "Konfigurert maksimum (faktisk bruk kan være mindre)"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1216
 msgid "Tunnels"
-msgstr ""
+msgstr "Tunneler"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1219
 msgid "in"
-msgstr ""
+msgstr "i"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1223
 msgid "out"
@@ -841,7 +842,7 @@ msgstr "Vår destinasjon (identitet) for denne økten"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1231
 msgid "Dest."
-msgstr ""
+msgstr "Dest."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1260
 msgid "Estimated download time for all torrents"
@@ -853,7 +854,7 @@ msgstr "Data lastet ned denne økten"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1276
 msgid "Total download speed"
-msgstr ""
+msgstr "Total nedlastingshastighet"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1282
 msgid "Total data uploaded (for listed torrents)"
@@ -861,7 +862,7 @@ msgstr "Totalt lastet opp data (for oppførte torrenter)"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1288
 msgid "Total upload speed"
-msgstr ""
+msgstr "Total opplastingshastighet"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1304
 msgid "Enable Debug Mode"
@@ -873,11 +874,11 @@ msgstr "Deaktiver feilsøkingsmodus"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1309
 msgid "Normal Mode"
-msgstr ""
+msgstr "Normal modus"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1324
 msgid "No DHT Peers"
-msgstr ""
+msgstr "Ingen DHT Peers"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1539
 msgid "First"
@@ -925,7 +926,7 @@ msgstr "Nedlasting fra ikke-I2P-sted {0} støttes ikke"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1774
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
-msgstr ""
+msgstr "Ugyldig URL: Må starte med \"{0}\" eller \"{1}\""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1817 ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1853
 #, java-format
@@ -1058,8 +1059,8 @@ msgstr "Starter"
 #, java-format
 msgid "Seeding to {0} peer"
 msgid_plural "Seeding to {0} peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Såing til {0} peer"
+msgstr[1] "Såing til {0} jevnaldrende"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2410
 #, java-format
@@ -1079,15 +1080,15 @@ msgstr "Nedlasting fra {0} av {1} jevnaldrende i sverm"
 #, java-format
 msgid "Downloading from {0} peer"
 msgid_plural "Downloading from {0} peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Last ned fra {0} peer"
+msgstr[1] "Last ned fra {0} jevnaldrende"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2471
 #, java-format
 msgid "Connected to {0} peer"
 msgid_plural "Connected to {0} peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Koblet til {0} peer"
+msgstr[1] "Koblet til {0} jevnaldrende"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2471 ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2477
 msgid "Stalled"
@@ -1108,7 +1109,7 @@ msgstr "Torrentdetaljer"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2552
 msgid "Torrent has comments"
-msgstr ""
+msgstr "Torrent har kommentarer"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2581
 msgid "View files"
@@ -1237,7 +1238,7 @@ msgstr "Legg til torrent"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3220
 msgid "Data dir"
-msgstr ""
+msgstr "Datamappen"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3223
 #, java-format
@@ -1373,7 +1374,7 @@ msgstr "Tillat at 'Legg til Torrent' og 'Opprett torrent' - panelene skjules og 
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3463
 msgid "Torrent filter bar"
-msgstr ""
+msgstr "Torrent filterlinje"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3468
 msgid "Show filter bar above torrents for selective display based on status"
@@ -1405,31 +1406,31 @@ msgstr "Kommentarer"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3496
 msgid "Enable Ratings"
-msgstr ""
+msgstr "Aktiver vurderinger"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3500
 msgid "Show ratings on torrent pages"
-msgstr ""
+msgstr "Vis rangeringer på torrent-sider"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3503
 msgid "Enable Comments"
-msgstr ""
+msgstr "Aktiver kommentarer"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3507
 msgid "Show comments on torrent pages"
-msgstr ""
+msgstr "Vis kommentarer på torrent-sider"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3510
 msgid "Comment Author"
-msgstr ""
+msgstr "Kommentarforfatter"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3513
 msgid "Set the author name for your comments and ratings"
-msgstr ""
+msgstr "Angi forfatternavnet for kommentarer og vurderinger"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3520
 msgid "Torrent Options"
-msgstr ""
+msgstr "Torrent-alternativer"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3523
 msgid "Up bandwidth limit"
@@ -1437,7 +1438,7 @@ msgstr "Oppbåndbreddegrense"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3527
 msgid "Maximum bandwidth allocated for uploading"
-msgstr ""
+msgstr "Maksimal båndbredde tildelt for opplasting"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3531
 msgid "Half available bandwidth recommended."
@@ -1453,7 +1454,7 @@ msgstr "Total opplastergrense"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3546
 msgid "Maximum number of peers to upload to"
-msgstr ""
+msgstr "Maksimalt antall jevnaldrende å laste opp til"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3548
 msgid "peers"
@@ -1465,7 +1466,7 @@ msgstr "Bruk åpne sporere også"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3555
 msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
-msgstr ""
+msgstr "Kunngjør torrenter for å åpne sporere så vel som sporere oppført i torrentfilen"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3558
 msgid "Enable DHT"
@@ -1473,15 +1474,15 @@ msgstr "Skru på DHT"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3562
 msgid "Use DHT to find additional peers"
-msgstr ""
+msgstr "Bruk DHT for å finne flere jevnaldrende"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3565
 msgid "Auto start torrents"
-msgstr ""
+msgstr "Autostart torrents"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3569
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr ""
+msgstr "Start torrenter automatisk når de legges til, og start torrenter på nytt når I2PSnark starter"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3574
 msgid "Startup delay"
@@ -1669,7 +1670,7 @@ msgstr "Ressurs ikke funnet"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4507 ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4520
 msgid "Base"
-msgstr ""
+msgstr "Utgangspunkt"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4518
 msgid "Resource Does Not Exist"
@@ -1794,8 +1795,8 @@ msgstr "Lagre preferanse"
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 stjerne"
+msgstr[1] "{0} stjerner"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5231
 msgid "No rating"
@@ -1865,52 +1866,3 @@ msgstr "Lagre endringer"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5862
 msgid "Torrent must be stopped"
 msgstr "Torrent må stoppes"
-
-#, java-format
-#~ msgid "{0} theme loaded."
-#~ msgstr "{0} drakt lastet."
-
-#, fuzzy
-#~ msgid "Created by"
-#~ msgstr "Opprettet"
-
-#, java-format
-#~ msgid "Error on torrent {0}"
-#~ msgstr "Feil i torrent {0}"
-
-#, java-format
-#~ msgid "Torrent was not retrieved from {0}"
-#~ msgstr "Torrent ble ikke mottatt fra {0}"
-
-#, fuzzy
-#~ msgid "Net Error"
-#~ msgstr "Sporerfeil"
-
-#, java-format
-#~ msgid "Download torrent file from {0}"
-#~ msgstr "Last ned torrentfil fra {0}"
-
-#, java-format
-#~ msgid "1 peer"
-#~ msgid_plural "{0} peers"
-#~ msgstr[0] "1 deler"
-#~ msgstr[1] "{0} delere"
-
-#, java-format
-#~ msgid "You can also copy .torrent files to: {0}."
-#~ msgstr "Du kan også kopiere .torrentfiler til: {0}"
-
-#~ msgid "Removing a .torrent will cause it to stop."
-#~ msgstr "Fjerning av .torrent vil få den til å stoppe."
-
-#~ msgid "Comment"
-#~ msgstr "Kommentar"
-
-#~ msgid "Magnet link"
-#~ msgstr "Magnetlenke"
-
-#~ msgid "Private torrent"
-#~ msgstr "Privat torrent"
-
-#~ msgid "Piece size"
-#~ msgstr "Bit-størrelse"

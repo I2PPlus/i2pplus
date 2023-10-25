@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2023-10-23 22:45+0000\n"
+"PO-Revision-Date: 2023-10-25 10:02+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sq\n"
@@ -37,9 +37,8 @@ msgstr "Magnet"
 #: ../java/src/org/klomp/snark/SnarkManager.java:1947
 #: ../java/src/org/klomp/snark/SnarkManager.java:2813
 #: ../java/src/org/klomp/snark/SnarkManager.java:2890
-#, fuzzy
 msgid "Unable to connect to I2P"
-msgstr "Jo në gjendje të rilidhem me cilësimet e vjetra!"
+msgstr "Nuk mund të lidhet me I2P"
 
 #: ../java/src/org/klomp/snark/Snark.java:597
 #: ../java/src/org/klomp/snark/SnarkManager.java:1949
@@ -110,11 +109,11 @@ msgstr "Madhësia e faqes ndryshuar me {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1269
 msgid "New files will be publicly readable"
-msgstr "Filet e reja do të jenë të lexueshme publikisht. "
+msgstr "Filet e reja do të jenë të lexueshme publikisht"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1274
 msgid "New files will not be publicly readable"
-msgstr "Filet e reja nuk do të jenë të lexueshme publikisht. "
+msgstr "Filet e reja nuk do të jenë të lexueshme publikisht"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1286
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1668
@@ -138,7 +137,7 @@ msgstr "Paqartë"
 #: ../java/src/org/klomp/snark/SnarkManager.java:1322
 #, java-format
 msgid "Data directory changed to {0}"
-msgstr "Udhëzuesi i shënimeve ndryshuar te {0} "
+msgstr "Udhëzuesi i shënimeve ndryshuar te {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1403
 msgid "I2CP and tunnel changes will take effect after stopping all torrents"
@@ -147,16 +146,16 @@ msgstr "I2CP dhe ndryshimet e tunelit do të hyjnë në fuqi pas ndalimit të t�
 #: ../java/src/org/klomp/snark/SnarkManager.java:1410
 #, java-format
 msgid "I2CP options changed to {0}"
-msgstr "I2CP ndryshuar te {0} "
+msgstr "I2CP ndryshuar te {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1419
 msgid "Disconnecting old I2CP destination"
-msgstr "Duke shkëputur lidhjen me destinacionin e vjetër të I2CP'së."
+msgstr "Duke shkëputur lidhjen me destinacionin e vjetër të I2CP'së"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1421
 #, java-format
 msgid "I2CP settings changed to {0}"
-msgstr "Cilësimet e I2CP''së ndryshuar te {0} "
+msgstr "Cilësimet e I2CP''së ndryshuar te {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1429
 msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
@@ -388,7 +387,7 @@ msgstr "Po merr {0}"
 #: ../java/src/org/klomp/snark/SnarkManager.java:2048
 #, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr "Gjurmuesit e hapur janë të çaktivizuar dhe nuk kemi bashkëmoshatarë DHT."
+msgstr "Gjurmuesit e hapur janë çaktivizuar dhe nuk kemi bashkëmoshatarë DHT. Marrja e {0} mund të mos ketë sukses derisa të nisni një torrent tjetër, të aktivizoni gjurmuesit e hapur ose të aktivizoni DHT."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2052
 #, java-format
@@ -488,9 +487,9 @@ msgid "Starting up torrent {0}"
 msgstr "Nisja e torrentit {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2841
-#, fuzzy, java-format
+#, java-format
 msgid "Up bandwidth limit is {0} KBps"
-msgstr "Limiti minimal i bandwith''it është {0}KBps"
+msgstr "Limiti i gjerësisë së brezit është {0} KBps"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2874
 #, java-format
@@ -516,7 +515,7 @@ msgstr "Shkarkimi përfundoi: {0}"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4055
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4101
 msgid "I2PSnark"
-msgstr ""
+msgstr "I2PSnark"
 
 #. addMessage(_t("Metainfo received for {0}", snark.getName()));
 #. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
@@ -650,11 +649,11 @@ msgstr "Përrua"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:471
 msgid "Refresh page"
-msgstr "faqe refresh"
+msgstr "Faqe refresh"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:480
 msgid "Forum"
-msgstr ""
+msgstr "Forum"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:480
 msgid "Torrent &amp; filesharing forum"
@@ -662,7 +661,7 @@ msgstr "Përrua"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:491
 msgid "BTDigg"
-msgstr ""
+msgstr "BTDigg"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:491
 msgid "I2P-based search engine for clearnet-hosted torrents"
@@ -695,7 +694,7 @@ msgstr "Tkurr"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:678
 #, java-format
 msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
-msgstr "Kujdes! "
+msgstr "Paralajmërim! Javascript është i çaktivizuar në shfletuesin tuaj. Nëse aktivizohet {0}, do të humbisni çdo hyrje në seksionet e shtimit/krijimit të torrentit kur të ndodhë një rifreskim."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:680
 msgid "page refresh"
@@ -740,9 +739,8 @@ msgid "Complete"
 msgstr "E plotësuar"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:800
-#, fuzzy
 msgid "Incomplete"
-msgstr "E plotësuar"
+msgstr "E paplotë"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:802
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2493
@@ -798,7 +796,7 @@ msgstr "Emri torrent"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:972
 msgid "ETA"
-msgstr ""
+msgstr "ETA"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:973
 msgid "Estimated time remaining"
@@ -806,7 +804,7 @@ msgstr "Koha e parashikuar e mbetur"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1007
 msgid "RX"
-msgstr ""
+msgstr "Marrë"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1008
 msgid "Downloaded"
@@ -828,7 +826,7 @@ msgstr "Norma e uljes"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1082
 msgid "TX"
-msgstr ""
+msgstr "Dërguar"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1083
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2662
@@ -850,7 +848,7 @@ msgstr "Norma lart"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1127
 msgid "Stop All"
-msgstr ""
+msgstr "Ndalo të gjitha"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1127
 msgid "Stop all torrents and the I2P tunnel"
@@ -885,22 +883,22 @@ msgstr "Gjithsej"
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 torrent"
+msgstr[1] "{0} torrents"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1198
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} connected peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 bashkëmoshatar i lidhur"
+msgstr[1] "{0} kolegë të lidhur"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1207
 #, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 bashkëmoshatar DHT"
+msgstr[1] "{0} kolegë DHT"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1215
 msgid "Configured maximum (actual usage may be less)"
@@ -912,7 +910,7 @@ msgstr "Tunele"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1219
 msgid "in"
-msgstr ""
+msgstr "në"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1223
 msgid "out"
@@ -1156,8 +1154,8 @@ msgstr "Po niset"
 #, java-format
 msgid "Seeding to {0} peer"
 msgid_plural "Seeding to {0} peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Mbjellja tek {0} kolegët"
+msgstr[1] "Mbjellja për {0} bashkëmoshatarë"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2410
 #, java-format
@@ -1178,15 +1176,15 @@ msgstr "Shkarkim nga {0} prej {1} kolegëve në tufë"
 #, java-format
 msgid "Downloading from {0} peer"
 msgid_plural "Downloading from {0} peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Po shkarkohet nga {0} peer"
+msgstr[1] "Po shkarkohet nga {0} kolegë"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2471
 #, java-format
 msgid "Connected to {0} peer"
 msgid_plural "Connected to {0} peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Lidhur me {0} peer"
+msgstr[1] "Lidhur me {0} kolegë"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2471
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2477
@@ -1345,7 +1343,7 @@ msgstr "Shto torrent"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3220
 msgid "Data dir"
-msgstr ""
+msgstr "Dosja e të dhënave"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3223
 #, java-format
@@ -1393,7 +1391,7 @@ msgstr "Lloji i gjurmuesit"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3286
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3685
 msgid "Standard"
-msgstr ""
+msgstr "Standard"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3289
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3687
@@ -1643,12 +1641,11 @@ msgstr "Maksimumi i skedarëve për torrent"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3603
 msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
-msgstr "Numri maksimal i skedarëve të lejuar për torrent - vini re se gjurmuesit mund të vendosin kufijtë e tyre dhe OS juaj mund të kufizojë numrin e skedarëve të hapur, duke parandaluar ngarkimin e torrenteve me shumë skedarë (dhe torrentët pasues)."
+msgstr "Numri maksimal i skedarëve të lejuar për torrent - vini re se gjurmuesit mund të vendosin kufijtë e tyre dhe OS juaj mund të kufizojë numrin e skedarëve të hapur, duke parandaluar ngarkimin e torrenteve me shumë skedarë (dhe torrentët pasues)"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3610
-#, fuzzy
 msgid "Tunnel Configuration"
-msgstr "Formësim"
+msgstr "Konfigurimi i tunelit"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3616
 msgid "Inbound Settings"
@@ -1711,15 +1708,15 @@ msgstr "URL e pavlefshme magneti {0}"
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 hop"
+msgstr[1] "{0} hop"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3806
 #, java-format
 msgid "1 tunnel"
 msgid_plural "{0} tunnels"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 tunel"
+msgstr[1] "{0} tunele"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3821
 msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
@@ -1766,7 +1763,7 @@ msgstr "E anashkaluar"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4334
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4396
 msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
-msgstr "Do të përdoren vetëm gjurmuesit I2P; "
+msgstr "Do të përdoren vetëm gjurmuesit I2P; Gjurmuesit jo-I2P shfaqen vetëm për qëllime informative"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4400
 msgid "Tracker"
@@ -1811,11 +1808,11 @@ msgstr "Burimi"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4545
 msgid "Audio file: "
-msgstr "Skedar audio:"
+msgstr "Skedar audio: "
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4553
 msgid "Video file: "
-msgstr "Skedar video:"
+msgstr "Skedar video: "
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4641
 msgid "Directory"
@@ -1918,14 +1915,14 @@ msgstr "Aktivizo shikimin dhe postimin e komenteve për këtë përrua"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5209
 msgid "Save Preference"
-msgstr ""
+msgstr "Ruaj Preferencën"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5229
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 yll"
+msgstr[1] "{0} yje"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5231
 msgid "No rating"
@@ -1982,9 +1979,8 @@ msgid "Add Tracker"
 msgstr "Shto gjurmues"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5837
-#, fuzzy
 msgid "Torrent Comment"
-msgstr "Koment"
+msgstr "Komenti i Torrentit"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5844
 msgid "Torrent must be stopped in order to edit"
@@ -1998,7 +1994,3 @@ msgstr "Ruaj ndryshimet"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5862
 msgid "Torrent must be stopped"
 msgstr "Përrua duhet të ndalet"
-
-#, fuzzy
-#~ msgid "Created by"
-#~ msgstr "U krijua"
