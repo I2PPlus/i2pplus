@@ -7,17 +7,19 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
-"PO-Revision-Date: 2022-10-18 05:08+0000\n"
+"PO-Revision-Date: 2023-10-25 19:35+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.4\n"
 
 #: ../java/build/Proxy.java:5 ../java/build/Proxy.java:11
 msgid "Warning: Invalid Request URI"
-msgstr "警告：请求的 URI 无效。"
+msgstr "警告：请求的 URI 无效"
 
 #: ../java/build/Proxy.java:6 ../java/build/Proxy.java:15
 #: ../java/build/Proxy.java:27 ../java/build/Proxy.java:37
@@ -135,7 +137,7 @@ msgstr "您可能希望{0}重试{1}。"
 msgid ""
 "If you leave this page open, it will automatically retry connecting to the "
 "website every {0} seconds after a failed connection attempt."
-msgstr "如果你打开这个页面，它将在连接失败后每隔 {0} 秒自动重新尝试连接到网站"
+msgstr "如果你打开这个页面，它将在连接失败后每隔 {0} 秒自动重新尝试连接到网站."
 
 #: ../java/build/Proxy.java:25 ../java/build/Proxy.java:62
 #: ../java/build/Proxy.java:74 ../java/build/Proxy.java:87
@@ -181,7 +183,7 @@ msgstr "错误：请求被拒绝"
 
 #: ../java/build/Proxy.java:46
 msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr ""
+msgstr "错误：无法通过I2P代理访问路由器控制台"
 
 #: ../java/build/Proxy.java:47
 msgid "Your browser is misconfigured."
@@ -199,6 +201,8 @@ msgid ""
 "console on) from being routed via I2P's http proxy, usually by excluding the "
 "address in your browser's proxy configuration section."
 msgstr ""
+"您需要防止127.0.0.1（或您要访问I2P控制台的地址）通过I2P的HTTP代理路由，通常是"
+"通过在浏览器的代理配置部分中排除地址。"
 
 #: ../java/build/Proxy.java:50
 msgid "Website Unknown"
@@ -639,7 +643,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1588
 msgid "Ask the server operator for help."
-msgstr "向服务器操作者寻求帮助"
+msgstr "向服务器操作者寻求帮助."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1589
 msgid "Enter PSK encryption key"
@@ -685,11 +689,11 @@ msgstr "您的新加密密钥"
 
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:328
 msgid "Copy the key and send it to the server operator."
-msgstr "复制密钥，并发送给服务器操作者"
+msgstr "复制密钥，并发送给服务器操作者."
 
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:329
 msgid "After you are granted permission, you may proceed to the website."
-msgstr "被授予权限后，您才可以访问这个网站"
+msgstr "被授予权限后，您才可以访问这个网站."
 
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:347
 msgid "Go back and fix the error"
@@ -736,17 +740,3 @@ msgstr "如果未能自动转到，请点击这里。"
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "已保存 {0} 的凭据，正在重定向。"
-
-#~ msgid "You may want to retry."
-#~ msgstr "您可能希望重试。"
-
-#, java-format
-#~ msgid ""
-#~ "You may want to retry as this will randomly reselect an outproxy from the "
-#~ "pool you have defined {0}here{1} (if you have more than one configured)."
-#~ msgstr ""
-#~ "您可能想要重试因为这将从您在{0}此处{1}定义的出口代理列表中随机选择一个进行"
-#~ "连接（如果您设置了多个出口代理）。"
-
-#~ msgid "Error: Local Access"
-#~ msgstr "错误：本地访问"

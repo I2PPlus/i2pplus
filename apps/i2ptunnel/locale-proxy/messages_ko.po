@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
-"PO-Revision-Date: 2023-10-24 20:50+0000\n"
+"PO-Revision-Date: 2023-10-25 19:44+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ko\n"
@@ -184,7 +184,7 @@ msgstr ""
 
 #: ../java/build/Proxy.java:50
 msgid "Website Unknown"
-msgstr "Website Unknown"
+msgstr "웹 사이트 알 수 없습니다"
 
 #: ../java/build/Proxy.java:56
 msgid "Website Not Found in Addressbook"
@@ -557,7 +557,7 @@ msgstr "저장"
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1535
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
-msgstr "주소록을 마스터하고 웹 사이트를 계속하기 위해 {0}을 저장하십시오."
+msgstr "주소록을 마스터하고 웹 사이트를 계속하기 위해 {0}을 저장하십시오"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1536
 msgid ""
