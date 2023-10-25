@@ -6,14 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2022-09-18 15:00+0000\n"
-"zh_CN/)\n"
+"PO-Revision-Date: 2023-10-25 06:25+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.4\n"
 
 #: ../java/src/org/klomp/snark/IdleChecker.java:76
 msgid "No more torrents running."
@@ -691,9 +692,8 @@ msgid "I2P-based search engine for clearnet-hosted torrents"
 msgstr "基于I2P的搜索引擎，用于查找网上的种子资源"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:497
-#, fuzzy
 msgid "Search torrents"
-msgstr "启动种子"
+msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:502
 msgid "Clear search"
@@ -733,14 +733,12 @@ msgid "Warning - No I2P"
 msgstr "正在连接到I2P"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:776
-#, fuzzy
 msgid "Show All"
-msgstr "停止全部"
+msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:788
-#, fuzzy
 msgid "Active"
-msgstr "不活跃"
+msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:790
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2843
@@ -748,14 +746,12 @@ msgid "Inactive"
 msgstr "不活跃"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:792
-#, fuzzy
 msgid "Connected"
-msgstr "{0}个已连接用户"
+msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:794
-#, fuzzy
 msgid "Downloading"
-msgstr "下载中{0}"
+msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:796
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2396
@@ -771,9 +767,8 @@ msgid "Complete"
 msgstr "完成"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:800
-#, fuzzy
 msgid "Incomplete"
-msgstr "完成"
+msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:802
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2493
@@ -901,9 +896,8 @@ msgid "Start all torrents and the I2P tunnel"
 msgstr "启动全部种子及I2P隧道"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1169
-#, fuzzy
 msgid "No torrents found."
-msgstr "未载入任何种子"
+msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1171
 msgid "No torrents loaded."
@@ -2043,82 +2037,3 @@ msgstr "为了编辑，Torrent必须停止。"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5850
 msgid "Save Changes"
 msgstr "保存更改"
-
-#. shouldn't happen
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5862
-msgid "Torrent must be stopped"
-msgstr "种子必须停止"
-
-#, java-format
-#~ msgid "{0} theme loaded."
-#~ msgstr "{0} 主题已加载"
-
-#~ msgid "Created by"
-#~ msgstr "创建者"
-
-#, java-format
-#~ msgid "Error on torrent {0}"
-#~ msgstr "种子 {0} 发生错误"
-
-#, java-format
-#~ msgid "Torrent was not retrieved from {0}"
-#~ msgstr "从{0}获得种子失败"
-
-#, fuzzy
-#~ msgid "Net Error"
-#~ msgstr "Tracker错误"
-
-#, java-format
-#~ msgid "Download torrent file from {0}"
-#~ msgstr "正在从 {0} 处下载种子文件"
-
-#~ msgid "Dht Debug"
-#~ msgstr "DHT调试"
-
-#, java-format
-#~ msgid "1 peer"
-#~ msgid_plural "{0} peers"
-#~ msgstr[0] "{0}个用户"
-
-#, java-format
-#~ msgid "You can also copy .torrent files to: {0}."
-#~ msgstr "您也可以将.torrent文件复制到: {0}."
-
-#~ msgid "Removing a .torrent will cause it to stop."
-#~ msgstr "移除一个种子文件 (.torrent) 将导致它中止。"
-
-#~ msgid "Data location"
-#~ msgstr "数据位置"
-
-#~ msgid "Primary Tracker"
-#~ msgstr "主 Tracker"
-
-#~ msgid "Tracker List"
-#~ msgstr "Tracker 列表"
-
-#~ msgid "Comment"
-#~ msgstr "评论"
-
-#~ msgid "Magnet link"
-#~ msgstr "Magnet磁性链接"
-
-#~ msgid "Private torrent"
-#~ msgstr "私有种子"
-
-#~ msgid "Piece size"
-#~ msgstr "分块大小"
-
-#~ msgid "Download files in order"
-#~ msgstr "按顺序下载文件"
-
-#~ msgid "Download pieces in order"
-#~ msgstr "按顺序下载片段"
-
-#~ msgid "Set all high"
-#~ msgstr "设置所有为高"
-
-#~ msgid "Set all normal"
-#~ msgstr "设置所有为正常"
-
-#~ msgid "Skip all"
-#~ msgstr "忽略所有"
