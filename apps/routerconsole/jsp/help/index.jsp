@@ -22,7 +22,7 @@
 <li id=help_changelog><a href="changelog"><b><%=intl._t("Change Log")%></b></a><br><%=intl._t("Recent code changes to I2P+")%></li>
 <li id=help_configuration><a href="configuration"><b><%=intl._t("Configuration")%></b></a><br><%=intl._t("Configuring I2P+: Network, Firefox, Tunnel Manager")%></li>
 <li id=help_faq><a href="faq"><b><%=intl._t("F.A.Q.")%></b></a><br><%=intl._t("Frequently Asked Questions")%></b></li>
-<li id=help_glossary><a href="glossary"><b><%=intl._t("Glossary")%></b></a><br>I<%=intl._t("2P-specific terminology")%></li>
+<li id=help_glossary><a href="glossary"><b><%=intl._t("Glossary")%></b></a><br><%=intl._t("I2P-specific terminology")%></li>
 <li id=help_legal><a href="legal"><b><%=intl._t("Legal")%></b></a><br><%=intl._t("Licensing and copyright notices")%></li>
 <li id=help_newusers><a href="newusers"><b><%=intl._t("New User Guide")%></b></a><br><%=intl._t("A gentle introduction to I2P")%></li>
 <li id=help_reseed><a href="reseed"><b><%=intl._t("Reseeding")%></b></a><br><%=intl._t("A guide to reseeding your I2P+ router")%></li>

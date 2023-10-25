@@ -11353,7 +11353,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:425
 #, fuzzy
-msgid "2P-specific terminology"
+msgid "I2P-specific terminology"
 msgstr "I2P-vevpost"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:429
