@@ -862,9 +862,9 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 _log.warn("Unsupported BlindingInfo type: " + message);
             return;
         }
-        BlindData obd = _runner.getFloodfillNetworkDatabaseFacade().getBlindData(spk);
+        BlindData obd = _context.netDb().getBlindData(spk);
         if (obd == null) {
-            _runner.getFloodfillNetworkDatabaseFacade().setBlindData(bd);
+            _context.netDb().setBlindData(bd);
             if (_log.shouldWarn())
                 _log.warn("New: " + bd);
         } else {
@@ -885,7 +885,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                         return;
                     }
                 }
-                _runner.getFloodfillNetworkDatabaseFacade().setBlindData(bd);
+                _context.netDb().setBlindData(obd);
                 if (_log.shouldWarn())
                     _log.warn("Updated: " + bd);
             } else {
@@ -894,7 +894,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 if (nexp > oexp) {
                     obd.setExpiration(nexp);
                     // to force save at shutdown
-                    _runner.getFloodfillNetworkDatabaseFacade().setBlindData(obd);
+                    _context.netDb().setBlindData(bd);
                     if (_log.shouldWarn())
                         _log.warn("Updated expiration: " + obd);
                 } else {
