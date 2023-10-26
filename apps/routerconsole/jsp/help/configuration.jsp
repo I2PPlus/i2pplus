@@ -26,7 +26,7 @@
 <span class=tab><a href="/help/faq"><%=intl._t("FAQ")%></a></span>
 <span class=tab><a href="/help/newusers"><%=intl._t("New User Guide")%></a></span>
 <span class=tab><a href="/help/webhosting"><%=intl._t("Web Hosting")%></a></span>
-<span class=tab><a href="/help/hostnameregistration">H<%=intl._t("ostname Registration")%></a></span>
+<span class=tab><a href="/help/hostnameregistration"><%=intl._t("Hostname Registration")%></a></span>
 <span class=tab><a href="/help/troubleshoot"><%=intl._t("Troubleshoot")%></a></span>
 <span class=tab><a href="/help/glossary"><%=intl._t("Glossary")%></a></span>
 <span class=tab><a href="/help/legal"><%=intl._t("Legal")%></a></span>
