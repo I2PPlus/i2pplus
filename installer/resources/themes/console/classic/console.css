@@ -688,7 +688,7 @@ pre#activetransports{margin:-11px 0 0;padding:15px 15px 0;width:calc(100% - 32px
 #newfamily{margin-top:4px;margin-bottom:-6px}
 #manualreseed{margin-bottom:10px}
 #manualreseed tr:nth-child(odd){background:var(--bg)}
-#manualreseed td:first-child{white-space:nowrap;border-right:0}
+#manualreseed td:first-child{border-right:0}
 #pluginconfig{margin:-14px 0 0}
 #pluginconfig table{margin:3px;width:calc(100% - 5px)}
 #pluginconfig tr td{background:var(--bg)}
