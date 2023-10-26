@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"POT-Creation-Date: 2023-10-22 01:44+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-26 21:55+0000\n"
 "PO-Revision-Date: 2019-09-07 15:46+0000\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -657,4 +658,3 @@ msgstr "Server refuzat conexiune"
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:327
 msgid "Mail rejected"
 msgstr "Corespondență respinsă"
-

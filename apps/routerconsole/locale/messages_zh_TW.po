@@ -5,13 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"POT-Creation-Date: 2023-10-22 01:44+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-26 21:55+0000\n"
 "PO-Revision-Date: 2020-02-12 17:20+0000\n"
-"zh_TW/)\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"zh_TW/)\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:387
@@ -9264,11 +9265,13 @@ msgstr "I2CP 介面"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:415
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:443
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:415
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:270
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:405
@@ -9321,6 +9324,7 @@ msgstr "新建參數"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:425
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:423
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:405
@@ -9956,11 +9960,6 @@ msgstr "儲存修改"
 msgid "View the full change log"
 msgstr "查看全部的更新日誌"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:423
-#, fuzzy
-msgid "ostname Registration"
-msgstr "I2P 主頁設定"
-
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:541
 msgid ""
@@ -10195,12 +10194,6 @@ msgid ""
 "Note: Most of the options in the Tunnel Manager have tooltips; be sure to "
 "check those before you change settings you don't fully understand!"
 msgstr ""
-
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:415
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:415
-#, fuzzy
-msgid "unnel Filtering"
-msgstr "隧道延遲"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:433
 #, fuzzy
@@ -13745,4 +13738,6 @@ msgstr "下一個"
 msgid "Finished"
 msgstr "完成"
 
-
+#, fuzzy
+#~ msgid "unnel Filtering"
+#~ msgstr "隧道延遲"

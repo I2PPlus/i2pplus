@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"POT-Creation-Date: 2023-10-22 01:44+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-26 21:55+0000\n"
 "PO-Revision-Date: 2023-10-25 08:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -13,7 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Poedit 3.4\n"
 
 #: ../java/src/org/klomp/snark/IdleChecker.java:76
@@ -53,18 +55,18 @@ msgstr "تكوين I2PSnark مع خيارات I2CP"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1105
 #: ../java/src/org/klomp/snark/SnarkManager.java:1314
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1167
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1691
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1829
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1865
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1977
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1172
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1696
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1834
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1870
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1982
 msgid "No write permissions for data directory"
 msgstr "لا توجد أذونات الكتابة لدليل البيانات"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1112
 #: ../java/src/org/klomp/snark/SnarkManager.java:1298
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1161
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1672
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1166
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1677
 msgid "Data directory cannot be created"
 msgstr "لا يمكن إنشاء دليل البيانات"
 
@@ -116,7 +118,7 @@ msgid "New files will not be publicly readable"
 msgstr "لن تكون الملفات الجديدة قابلة للقراءة بشكل عام"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1286
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1668
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1673
 msgid "Data directory must be an absolute path"
 msgstr "يجب أن يكون دليل البيانات مسارًا مطلقًا"
 
@@ -125,12 +127,12 @@ msgid "Data directory does not exist"
 msgstr "دليل البيانات غير موجود"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1303
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1163
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1168
 msgid "Not a directory"
 msgstr "ليس دليلا"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1308
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1165
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1170
 msgid "Unreadable"
 msgstr "غير قابل للقراءة"
 
@@ -158,7 +160,8 @@ msgid "I2CP settings changed to {0}"
 msgstr "تغيرت الاعدادات الى {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1429
-msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
+msgid ""
+"Unable to connect with the new settings, reverting to the old I2CP settings"
 msgstr "فشل في الاتصال بالاعدادات الجديدة، سيتم الرجوع الى الاعدادات القديمة"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1436
@@ -260,8 +263,12 @@ msgid "Add and Create sections enabled on all torrent listing pages."
 msgstr "تم تمكين إضافة وإنشاء أقسام في جميع صفحات قوائم التورنت."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1580
-msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
-msgstr "إضافة وإنشاء أقسام لعرضها فقط على الصفحة الأولى من صفحات قائمة التورنت متعددة الصفحات."
+msgid ""
+"Add and Create sections to display only on first page of multipage torrent "
+"listing pages."
+msgstr ""
+"إضافة وإنشاء أقسام لعرضها فقط على الصفحة الأولى من صفحات قائمة التورنت "
+"متعددة الصفحات."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1591
 msgid "Configuration unchanged."
@@ -281,8 +288,8 @@ msgid "Unable to save the config to {0}"
 msgstr "فشل في حفظ الاعدادات {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1783
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1826
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1862
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1831
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1867
 #, java-format
 msgid "Torrent file deleted: {0}"
 msgstr "تم خذف ملف التورنت: {0}"
@@ -304,7 +311,7 @@ msgstr "خطأ: تعذر إضافة التورنت: {0}"
 #: ../java/src/org/klomp/snark/SnarkManager.java:1922
 #: ../java/src/org/klomp/snark/SnarkManager.java:3296
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:179
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1750
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1755
 #, java-format
 msgid "Torrent already running: {0}"
 msgstr "تورنت مفعل: {0}"
@@ -320,7 +327,7 @@ msgstr "فشل في فتح \"{0}\""
 #: ../java/src/org/klomp/snark/SnarkManager.java:2030
 #: ../java/src/org/klomp/snark/SnarkManager.java:2119
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:167
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1738
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1743
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr "تورنت بهذه المعلومات مشغل: {0}"
@@ -338,18 +345,30 @@ msgstr "خطأ - لا يوجد متتبعات I2P في التورنت الخاص
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1878
 #, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "تحذير - لن يتم الإعلان عن أي متتبعات I2P في \"{0}\"، لمتتبعات I2P المفتوحة وDHT فقط."
+msgid ""
+"Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and "
+"DHT only."
+msgstr ""
+"تحذير - لن يتم الإعلان عن أي متتبعات I2P في \"{0}\"، لمتتبعات I2P المفتوحة "
+"وDHT فقط."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1880
 #, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "تحذير - لا توجد متتبعات I2P في \"{0}\"، وتم تعطيل المتتبعات المفتوحة، سيتم الإعلان عن ذلك إلى DHT فقط."
+msgid ""
+"Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will "
+"announce to DHT only."
+msgstr ""
+"تحذير - لا توجد متتبعات I2P في \"{0}\"، وتم تعطيل المتتبعات المفتوحة، سيتم "
+"الإعلان عن ذلك إلى DHT فقط."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1882
 #, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "تحذير - لا توجد أدوات تعقب I2P في \"{0}\"، وتم تعطيل أدوات التتبع المفتوحة وDHT، يجب عليك تمكين أدوات التتبع المفتوحة أو DHT قبل بدء تشغيل التورنت."
+msgid ""
+"Warning - No I2P trackers in \"{0}\", and DHT and open trackers are "
+"disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr ""
+"تحذير - لا توجد أدوات تعقب I2P في \"{0}\"، وتم تعطيل أدوات التتبع المفتوحة "
+"وDHT، يجب عليك تمكين أدوات التتبع المفتوحة أو DHT قبل بدء تشغيل التورنت."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1908
 #, java-format
@@ -358,7 +377,7 @@ msgstr "تورنت في \"{0}\"غير صحيح"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1914
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:196
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1768
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1773
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "خطأ - لا توجد ذاكرة كافية، لا يمكن انشاء تورنت {0}"
@@ -386,8 +405,12 @@ msgstr "يحمل {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2048
 #, java-format
-msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr "يتم تعطيل أجهزة التتبع المفتوحة وليس لدينا أقران DHT. قد لا ينجح جلب {0} حتى تبدأ سيلًا آخر ، أو تمكين المتتبعات المفتوحة ، أو تمكين DHT."
+msgid ""
+"Open trackers are disabled and we have no DHT peers. Fetch of {0} may not "
+"succeed until you start another torrent, enable open trackers, or enable DHT."
+msgstr ""
+"يتم تعطيل أجهزة التتبع المفتوحة وليس لدينا أقران DHT. قد لا ينجح جلب {0} حتى "
+"تبدأ سيلًا آخر ، أو تمكين المتتبعات المفتوحة ، أو تمكين DHT."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2052
 #, java-format
@@ -498,8 +521,11 @@ msgstr "بدأ الإصدار المستقل I2P I2PSnark {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2880
 #, java-format
-msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
-msgstr "حد النطاق الترددي للتحميل هو {0} كيلو بايت في الثانية بحد أقصى {1} من النظراء المتزامنين."
+msgid ""
+"Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgstr ""
+"حد النطاق الترددي للتحميل هو {0} كيلو بايت في الثانية بحد أقصى {1} من "
+"النظراء المتزامنين."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2915
 #: ../java/src/org/klomp/snark/SnarkManager.java:2921
@@ -511,9 +537,9 @@ msgstr "انتهى التحميل: {0}"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:375
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:464
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:473
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2781
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4055
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4101
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2786
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4060
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4106
 msgid "I2PSnark"
 msgstr "I2PSnark برنامج تورنت"
 
@@ -598,26 +624,26 @@ msgid "Torrent downloaded from {0}"
 msgstr "تم تنزيل تورنت من {0}"
 
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:181
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1752
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1757
 #, java-format
 msgid "Torrent already in the queue: {0}"
 msgstr "تورنت في قائمة الانتظار: {0}"
 
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:194
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1725
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1765
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1730
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1770
 #, java-format
 msgid "Torrent at {0} was not valid"
 msgstr "تورنت غير صحيح {0}"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:380
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3336
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3773
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3341
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3778
 msgid "Configuration"
 msgstr "اعدادات"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:384
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1305
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1310
 msgid "Debug Mode"
 msgstr "وضع التصحيح"
 
@@ -635,12 +661,18 @@ msgstr "جهاز التوجيه معطل"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:408
 #, java-format
-msgid "Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?"
-msgstr "هل أنت متأكد أنك تريد حذف الملف \\''{0}\\'' (لن يتم حذف البيانات التي تم تنزيلها)؟"
+msgid ""
+"Are you sure you want to delete the file \\''{0}\\'' (downloaded data will "
+"not be deleted) ?"
+msgstr ""
+"هل أنت متأكد أنك تريد حذف الملف \\''{0}\\'' (لن يتم حذف البيانات التي تم "
+"تنزيلها)؟"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:410
 #, java-format
-msgid "Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?"
+msgid ""
+"Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded "
+"data?"
 msgstr "هل أنت متأكد من حذف التورنت \\''{0}\\'' وجمبع البيانات المحملة؟"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:461
@@ -693,8 +725,12 @@ msgstr "يتقلص"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:678
 #, java-format
-msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
-msgstr "تحذير! تم تعطيل جافا سكريبت في المتصفح الخاص بك. إذا تم تمكين {0} ، فسوف تفقد أي مدخلات في أقسام إضافة/إنشاء تورنت عند حدوث تحديث."
+msgid ""
+"Warning! Javascript is disabled in your browser. If {0} is enabled, you will "
+"lose any input in the add/create torrent sections when a refresh occurs."
+msgstr ""
+"تحذير! تم تعطيل جافا سكريبت في المتصفح الخاص بك. إذا تم تمكين {0} ، فسوف "
+"تفقد أي مدخلات في أقسام إضافة/إنشاء تورنت عند حدوث تحديث."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:680
 msgid "page refresh"
@@ -704,182 +740,186 @@ msgstr "تحديث الصفحة"
 msgid "Warning - No I2P"
 msgstr "تحذير - لا I2P"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:776
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:777
+msgid "Search"
+msgstr ""
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:779
 msgid "Show All"
 msgstr "عرض الكل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:788
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:793
 msgid "Active"
 msgstr "نشط"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:790
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2843
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:795
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2848
 msgid "Inactive"
 msgstr "غير نشط"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:792
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:797
 msgid "Connected"
 msgstr "متصل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:794
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:799
 msgid "Downloading"
 msgstr "جارى التحميل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:796
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2396
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:801
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2401
 msgid "Seeding"
 msgstr "بشارك"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:798
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2406
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2452
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4289
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4760
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:803
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2411
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2457
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4294
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4765
 msgid "Complete"
 msgstr "اكتمل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:800
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:805
 msgid "Incomplete"
 msgstr "غير مكتمل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:802
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2493
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:807
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2498
 msgid "Stopped"
 msgstr "متوقف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:888
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:893
 msgid "Status"
 msgstr "الحالة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:889
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:941
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:973
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1008
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1046
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1083
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1116
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4660
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4673
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4686
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4696
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:894
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:946
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:978
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1013
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1051
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1088
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1121
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4665
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4678
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4691
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4701
 #, java-format
 msgid "Sort by {0}"
 msgstr "فرز حسب {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:905
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2432
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2467
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2479
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:910
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2437
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2472
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2484
 msgid "Hide Peers"
 msgstr "اخفاء النظائر"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:905
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:910
 msgid "Show Peers"
 msgstr "أظهر النظائر"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:939
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4055
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4135
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4506
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4521
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:944
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4060
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4140
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4511
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4526
 msgid "Torrent"
 msgstr "تورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:941
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4660
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:946
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4665
 msgid "File type"
 msgstr "نوع الملف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:941
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:946
 msgid "Torrent name"
 msgstr "اسم التورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:972
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:977
 msgid "ETA"
 msgstr "إيتا"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:973
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:978
 msgid "Estimated time remaining"
 msgstr "تقدير للوقت الباقي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1007
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1012
 msgid "RX"
 msgstr "آر إكس"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1008
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1013
 msgid "Downloaded"
 msgstr "محمل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1008
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4230
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4672
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1013
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4235
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4677
 msgid "Size"
 msgstr "الحجم"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1045
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1050
 msgid "RX Rate"
 msgstr "معدل الاستقبال"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1046
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1051
 msgid "Down Rate"
 msgstr "معدل التحميل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1082
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1087
 msgid "TX"
 msgstr "تكس"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1083
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2662
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4262
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1088
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2667
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4267
 msgid "Upload ratio"
 msgstr "نسبة التحميل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1083
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1088
 msgid "Uploaded"
 msgstr "رفع"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1115
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1120
 msgid "TX Rate"
 msgstr "معدل تكساس"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1116
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1121
 msgid "Up Rate"
 msgstr "معدل أعلى"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1127
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1132
 msgid "Stop All"
 msgstr "توقيف الجمبع"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1127
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1132
 msgid "Stop all torrents and the I2P tunnel"
 msgstr "توقيف جمبع التورنت و النفق I2P"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1132
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1138
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1137
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1143
 msgid "Start All"
 msgstr "شغل الجمبع"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1132
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1137
 msgid "Start all stopped torrents"
 msgstr "بدء جميع السيول المتوقفة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1138
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1143
 msgid "Start all torrents and the I2P tunnel"
 msgstr "شغل جمبع التورنت و النفق I2P"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1169
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1174
 msgid "No torrents found."
 msgstr "لم يتم العثور على السيول."
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1171
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1176
 msgid "No torrents loaded."
 msgstr "لم يحمل تورنت."
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1191
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1196
 msgid "Totals"
 msgstr "مجموع"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1193
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1198
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
@@ -890,7 +930,7 @@ msgstr[3] "{0} السيول"
 msgstr[4] "{0} السيول"
 msgstr[5] "{0} السيول"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1198
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1203
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} connected peers"
@@ -901,7 +941,7 @@ msgstr[3] "{0} أقران متصلون"
 msgstr[4] "{0} أقران متصلون"
 msgstr[5] "{0} أقران متصلون"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1207
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1212
 #, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
@@ -912,257 +952,262 @@ msgstr[3] "{0} أقران DHT"
 msgstr[4] "{0} أقران DHT"
 msgstr[5] "{0} أقران DHT"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1215
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1220
 msgid "Configured maximum (actual usage may be less)"
 msgstr "الحد الأقصى الذي تم تكوينه (قد يكون الاستخدام الفعلي أقل)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1216
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1221
 msgid "Tunnels"
 msgstr "الأنفاق"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1219
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1224
 msgid "in"
 msgstr "في"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1223
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1228
 msgid "out"
 msgstr "خارج"
 
 #. Only truncate if it's an actual dest
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1230
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1235
 msgid "Our destination (identity) for this session"
 msgstr "وجهتنا ( هويتنا ) لهذه الجلسة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1231
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1236
 msgid "Dest."
 msgstr "الوجهة."
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1260
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1265
 msgid "Estimated download time for all torrents"
 msgstr "وقت التنزيل المقدر لجميع السيول"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1270
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1275
 msgid "Data downloaded this session"
 msgstr "البيانات التي تم تنزيلها في هذه الجلسة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1276
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1281
 msgid "Total download speed"
 msgstr "سرعة التنزيل الكلية"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1282
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1287
 msgid "Total data uploaded (for listed torrents)"
 msgstr "إجمالي البيانات التي تم تحميلها (للسيول المدرجة)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1288
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1293
 msgid "Total upload speed"
 msgstr "سرعة التحميل الكلية"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1304
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1309
 msgid "Enable Debug Mode"
 msgstr "تمكين وضع التصحيح"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1308
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1313
 msgid "Disable Debug Mode"
 msgstr "تعطيل وضع التصحيح"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1309
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1314
 msgid "Normal Mode"
 msgstr "الوضع العادي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1324
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1329
 msgid "No DHT Peers"
 msgstr "لا يوجد أقران DHT"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1539
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1544
 msgid "First"
 msgstr "اﻷول"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1539
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1544
 msgid "First page"
 msgstr "الصفحة الأولى"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1549
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1554
 msgid "Prev"
 msgstr "السابق"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1549
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1554
 msgid "Previous page"
 msgstr "الصفحة السابقة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1579
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1584
 msgid "Next"
 msgstr "التالي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1579
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1584
 msgid "Next page"
 msgstr "الصفحة التالية"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1587
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1592
 msgid "Last"
 msgstr "اﻷخير"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1587
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1592
 msgid "Last page"
 msgstr "الصفحة الأخيرة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1682
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2003
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1687
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2008
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "لا يمكن إضافة سيل {0} داخل سيل آخر: {1}"
 
 #. TODO
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1700
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1705
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "التنزيل من موقع غير I2P {0} غير مدعوم"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1774
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1779
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "عنوان URL غير صالح: يجب أن يبدأ بـ \"{0}\" أو \"{1}\""
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1817
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1853
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1822
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1858
 #, java-format
 msgid "Magnet deleted: {0}"
 msgstr "تم حذف ملف مغناطيس: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1830
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1866
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1835
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1871
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "تعذر حذف ملف تورنت: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1851
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1856
 #, java-format
 msgid "Download deleted: {0}"
 msgstr "تم حذف التنزيل: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1877
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1882
 #, java-format
 msgid "Data file deleted: {0}"
 msgstr "خذف ملف البيانات: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1879
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1889
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1884
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1894
 #, java-format
 msgid "Data file could not be deleted: {0}"
 msgstr "فشل في حذف الملف: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1906
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1911
 #, java-format
 msgid "Directory could not be deleted: {0}"
 msgstr "لا يمكن حذف الدليل: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1914
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1919
 #, java-format
 msgid "Directory deleted: {0}"
 msgstr "تم حذف الدليل: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1982
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1987
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
 msgstr "لا يمكن إضافة ملف تورنت ينتهي بـ \".torrent\": {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1987
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1992
 #, java-format
 msgid "Torrent with this name is already running: {0}"
 msgstr "السيل بهذا الاسم قيد التشغيل بالفعل: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1993
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1998
 #, java-format
 msgid "Cannot add a torrent including an I2P directory: {0}"
 msgstr "لا يمكن إضافة ملف تورنت يتضمن دليل I2P: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2008
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2013
 #, java-format
 msgid "Cannot add torrent {0} including another torrent: {1}"
 msgstr "لا يمكن إضافة تورنت {0} بما في ذلك تورنت آخر: {1}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2034
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2039
 msgid "Error - Cannot include alternate trackers without a primary tracker"
 msgstr "خطأ - لا يمكن تضمين أدوات التتبع البديلة بدون أداة التتبع الأساسية"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2047
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2052
 msgid "Error - Cannot mix private and public trackers in a torrent"
 msgstr "خطأ - لا يمكن خلط أدوات التتبع الخاصة والعامة في ملف تورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2069
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2074
 #, java-format
 msgid "Torrent created for \"{0}\""
 msgstr "تم انشاء تورنت لـ \"{0}\""
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2071
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2076
 #, java-format
-msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "يطلب منك العديد من متتبعي I2P تسجيل ملفات تورنت جديدة قبل الزرع - يرجى القيام بذلك قبل البدء \"{0}\"العديد من trackers يطلبون تسجيل التورنت قبل مشاركتها، قم بذلك قبل البداية {0}"
+msgid ""
+"Many I2P trackers require you to register new torrents before seeding - "
+"please do so before starting \"{0}\""
+msgstr ""
+"يطلب منك العديد من متتبعي I2P تسجيل ملفات تورنت جديدة قبل الزرع - يرجى "
+"القيام بذلك قبل البدء \"{0}\"العديد من trackers يطلبون تسجيل التورنت قبل "
+"مشاركتها، قم بذلك قبل البداية {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2073
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2078
 #, java-format
 msgid "Error creating a torrent for \"{0}\""
 msgstr "فشل في انشاء تورنت لـ \"{0}\""
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2077
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2082
 #, java-format
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "لا يمكن انشاء تورنت لبيانات غير موجودة: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2080
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2085
 msgid "Error creating torrent - you must enter a file or directory"
 msgstr "فشل في انشاء تورنت - عليك اختيار ملف أو مجلد"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2146
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3753
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2151
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3758
 msgid "Delete selected"
 msgstr "حذف المحدد"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2146
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3757
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2151
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3762
 msgid "Save tracker configuration"
 msgstr "حفظ تكوين التعقب"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2163
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2168
 msgid "Removed"
 msgstr "تمت الإزالة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2195
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3751
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3755
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5823
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2200
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3756
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3760
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5828
 msgid "Add tracker"
 msgstr "إضافة تعقب"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2218
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2221
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2223
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2226
 msgid "Enter valid tracker name and URLs"
 msgstr "أدخل اسم المتتبع وعناوين URL الصالحة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2223
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3760
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2228
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3765
 msgid "Restore defaults"
 msgstr "استعادة الإعدادات الافتراضية"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2226
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2231
 msgid "Restored default trackers"
 msgstr "استعادة أجهزة التتبع الافتراضية"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2372
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4454
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2377
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4459
 msgid "Checking"
 msgstr "الفحص"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2377
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4461
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2382
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4466
 msgid "Allocating"
 msgstr "التخصيص"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2385
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4459
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2390
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4464
 msgid "Starting"
 msgstr "جاري البدأ"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2397
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2402
 #, java-format
 msgid "Seeding to {0} peer"
 msgid_plural "Seeding to {0} peers"
@@ -1173,22 +1218,22 @@ msgstr[3] "البذر إلى {0} نظير"
 msgstr[4] "البذر إلى {0} نظير"
 msgstr[5] "البذر إلى {0} نظير"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2410
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2415
 #, java-format
 msgid "Seeding to {0} of {1} peers in swarm"
 msgstr "البذر إلى {0} من {1} أقران في السرب"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2458
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2465
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2463
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2470
 msgid "OK"
 msgstr "موافق"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2459
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2464
 #, java-format
 msgid "Downloading from {0} of {1} peers in swarm"
 msgstr "التنزيل من {0} من {1} أقران في السرب"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2465
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2470
 #, java-format
 msgid "Downloading from {0} peer"
 msgid_plural "Downloading from {0} peers"
@@ -1199,7 +1244,7 @@ msgstr[3] "التنزيل من نظير {0}"
 msgstr[4] "التنزيل من نظير {0}"
 msgstr[5] "التنزيل من نظير {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2471
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2476
 #, java-format
 msgid "Connected to {0} peer"
 msgid_plural "Connected to {0} peers"
@@ -1210,525 +1255,555 @@ msgstr[3] "متصل بـ {0} نظير"
 msgstr[4] "متصل بـ {0} نظير"
 msgstr[5] "متصل بـ {0} نظير"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2471
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2477
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2476
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2482
 msgid "Stalled"
 msgstr "متوقف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2478
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2484
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2483
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2489
 #, java-format
 msgid "Connected to {0} of {1} peers in swarm"
 msgstr "متصل بـ {0} من {1} أقران في السرب"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2483
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2489
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2488
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2494
 msgid "No Peers"
 msgstr "لا بوجد نظائر"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2550
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2555
 msgid "Torrent details"
 msgstr "تفاصيل التورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2552
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2557
 msgid "Torrent has comments"
 msgstr "السيل لديه تعليقات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2581
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2586
 msgid "View files"
 msgstr "أظهر الملفات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2583
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2588
 msgid "Open file"
 msgstr "فتح ملف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2606
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2611
 msgid "complete"
 msgstr "اكتمل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2606
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4772
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2611
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4777
 msgid "remaining"
 msgstr "باقي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2617
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4280
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2622
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4285
 msgid "Completed"
 msgstr "اكتمل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2673
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4325
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2678
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4330
 msgid "Last activity"
 msgstr "آخر نشاط"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2711
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4466
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2716
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4471
 msgid "Stop"
 msgstr "قف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2711
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2716
 msgid "Stop the torrent"
 msgstr "قف التورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2717
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4468
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2722
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4473
 msgid "Start"
 msgstr "ابدأ"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2717
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2722
 msgid "Start the torrent"
 msgstr "ابدأ التورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2723
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2728
 msgid "Remove"
 msgstr "حذف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2723
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2728
 msgid "Remove the torrent from the active list, deleting the .torrent file"
 msgstr "حذف التورنت من القائمة، حذف ملف .torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2732
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5775
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2737
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5780
 msgid "Delete"
 msgstr "حذف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2732
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2737
 msgid "Delete the .torrent file and the associated data files"
 msgstr "احذف ملف .torrent وملفات البيانات المرتبطة به"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2759
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2764
 msgid "Peer attached to swarm"
 msgstr "نظير مرتبط بالسرب"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2777
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2782
 msgid "Destination (identity) of peer"
 msgstr "الوجهة (الهوية) للنظير"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2828
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2833
 msgid "Unknown"
 msgstr "غير معروف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2840
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2845
 msgid "inactive"
 msgstr "غير نشط"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2844
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2849
 msgid "seconds"
 msgstr "ثواني"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2855
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2860
 msgid "Seed"
 msgstr "شارك"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2891
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2896
 msgid "Uninteresting (The peer has no pieces we need)"
 msgstr "غير مهم (النظير لا يحتوي على اجزاء نحتاجها)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2893
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2898
 msgid "Choked (The peer is not allowing us to request pieces)"
 msgstr "مختنق (النظير لا يسمح لنا بطلب القطع)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2935
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2940
 msgid "Peer is interested but currently idle"
 msgstr "النظير مهتم ولكنه خامل حاليًا"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2940
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2945
 msgid "Uninterested (We have no pieces the peer needs)"
 msgstr "غير مهتم (ليس لدينا قطع يحتاجها النظير)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2942
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2947
 msgid "Choking (We are not allowing the peer to request pieces)"
 msgstr "مشكلة (لا يمكن الحصول على اجزاء الملف من النظائر)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3076
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3081
 #, java-format
 msgid "Details at {0} tracker"
 msgstr "تفاصيل حول {0} tracker"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3093
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3098
 msgid "Info"
 msgstr "معلومات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3204
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3209
 msgid "Add Torrent"
 msgstr "أضف تورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3208
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3213
 msgid "From URL"
 msgstr "من عنوان"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3211
-msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr "أدخل عنوان URL لتنزيل ملف التورنت (I2P فقط)، أو رابط المغناطيس، أو تجزئة المعلومات"
-
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3216
+msgid ""
+"Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr ""
+"أدخل عنوان URL لتنزيل ملف التورنت (I2P فقط)، أو رابط المغناطيس، أو تجزئة "
+"المعلومات"
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3221
 msgid "Add torrent"
 msgstr "أضف تورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3220
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3225
 msgid "Data dir"
 msgstr "دير البيانات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3223
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3228
 #, java-format
 msgid "Enter the directory to save the data in (default {0})"
 msgstr "أدخل الدليل لحفظ البيانات فيه (الافتراضي {0})"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3241
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3246
 msgid "Create Torrent"
 msgstr "أنشئ تورنت"
 
 #. buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3244
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3249
 msgid "Data to seed"
 msgstr "البيانات المشاركة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3248
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3253
 #, java-format
 msgid "File or directory to seed (full path or within the directory {0} )"
 msgstr "ملف أو دليل للبذور (المسار الكامل أو داخل الدليل {0})"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3251
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3256
 msgid "Create torrent"
 msgstr "أنشئ تورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3255
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3676
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4338
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3260
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3681
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4343
 msgid "Trackers"
 msgstr "أجهزة التتبع"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3257
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5775
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5807
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3262
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5780
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5812
 msgid "Primary"
 msgstr "الأولي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3259
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3264
 msgid "Alternates"
 msgstr "البدائل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3261
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3266
 msgid "Tracker Type"
 msgstr "نوع المقتفي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3286
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3685
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3291
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3690
 msgid "Standard"
 msgstr "عادي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3289
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3687
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4837
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3294
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3692
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4842
 msgid "Open"
 msgstr "فتح"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3292
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3689
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3297
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3694
 msgid "Private"
 msgstr "خاص"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3296
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3301
 msgid "none"
 msgstr "ﻻشيئ"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3343
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3348
 msgid "User Interface"
 msgstr "واجهة المستخدم"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3346
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3351
 msgid "Switch to Embedded Mode"
 msgstr "التبديل إلى الوضع المضمن"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3349
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3354
 msgid "Switch to Fullscreen Mode"
 msgstr "التبديل إلى وضع ملء الشاشة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3354
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3359
 msgid "Theme"
 msgstr "تيمة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3358
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3363
 msgid "To change themes manually, disable universal theming"
 msgstr "لتغيير السمات يدويًا، قم بتعطيل السمات العامة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3364
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3369
 msgid "Universal theming is enabled."
 msgstr "تم تمكين السمات العالمية."
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3367
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3435
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3537
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5189
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3372
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3440
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3542
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5194
 msgid "Configure"
 msgstr "الضبط"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3384
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3389
 msgid "Refresh time"
 msgstr "وقت التحديث"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3386
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3391
 msgid "How frequently torrent status is updated on the main page"
 msgstr "مدى تكرار تحديث حالة التورنت على الصفحة الرئيسية"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3400
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3405
 msgid "Never"
 msgstr "أبد"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3405
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3410
 msgid "Page size"
 msgstr "حجم الصفحة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3408
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3413
 msgid "Maximum number of torrents to display per page"
 msgstr "الحد الأقصى لعدد السيول لعرضها في كل صفحة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3410
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3415
 msgid "torrents"
 msgstr "السيول"
 
 #. If we get to here, we have the language settings
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3420
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3430
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3425
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3435
 msgid "Language"
 msgstr "اللغة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3440
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3445
 msgid "Smart torrent sorting"
 msgstr "الفرز الذكي للسيل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3445
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3450
 msgid "Ignore words such as 'a' and 'the' when sorting"
 msgstr "تجاهل الكلمات مثل \"a\" و\"the\" عند الفرز"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3448
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3453
 msgid "Collapsible panels"
 msgstr "ألواح قابلة للطي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3455
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3460
 msgid "Your browser does not support this feature."
 msgstr "متصفحك لا يدعم هذه الميزة."
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3459
-msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
-msgstr "السماح بطي لوحات \"إضافة تورنت\" و\"إنشاء تورنت\"، وطيها بشكل افتراضي في الوضع غير المضمن"
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3464
+msgid ""
+"Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and "
+"collapse by default in non-embedded mode"
+msgstr ""
+"السماح بطي لوحات \"إضافة تورنت\" و\"إنشاء تورنت\"، وطيها بشكل افتراضي في "
+"الوضع غير المضمن"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3463
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3468
 msgid "Torrent filter bar"
 msgstr "شريط تصفية تورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3468
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3473
 msgid "Show filter bar above torrents for selective display based on status"
 msgstr "إظهار شريط التصفية أعلى السيول للعرض الانتقائي بناءً على الحالة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3469
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3478
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3474
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3483
 msgid "requires javascript"
 msgstr "يتطلب جافا سكريبت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3472
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3477
 msgid "Enable lightbox"
 msgstr "تمكين العرض المبسط"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3477
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3482
 msgid "Use a lightbox to display images when thumbnails are clicked"
 msgstr "استخدم العرض المبسط لعرض الصور عند النقر على الصور المصغرة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3481
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3486
 msgid "Persist Add/Create"
 msgstr "استمر في الإضافة/الإنشاء"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3486
-msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
-msgstr "عرض قسمي \"إضافة\" و\"إنشاء\" على جميع صفحات قائمة التورنت عندما تكون في وضع الصفحات المتعددة"
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3491
+msgid ""
+"Display the 'Add' and 'Create' sections on all torrent listing pages when in "
+"multipage mode"
+msgstr ""
+"عرض قسمي \"إضافة\" و\"إنشاء\" على جميع صفحات قائمة التورنت عندما تكون في وضع "
+"الصفحات المتعددة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3493
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4581
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3498
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4586
 msgid "Comments &amp; Ratings"
 msgstr "تعليقات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3496
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3501
 msgid "Enable Ratings"
 msgstr "تمكين التقييمات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3500
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3505
 msgid "Show ratings on torrent pages"
 msgstr "إظهار التقييمات على صفحات التورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3503
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3508
 msgid "Enable Comments"
 msgstr "تمكين التعليقات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3507
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3512
 msgid "Show comments on torrent pages"
 msgstr "إظهار التعليقات على صفحات التورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3510
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3515
 msgid "Comment Author"
 msgstr "تعليق المؤلف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3513
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3518
 msgid "Set the author name for your comments and ratings"
 msgstr "قم بتعيين اسم المؤلف لتعليقاتك وتقييماتك"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3520
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3525
 msgid "Torrent Options"
 msgstr "خيارات التورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3523
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3528
 msgid "Up bandwidth limit"
 msgstr "اقصى حد لسرعة الاتصال"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3527
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3532
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "الحد الأقصى لعرض النطاق الترددي المخصص للتحميل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3531
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3536
 msgid "Half available bandwidth recommended."
 msgstr "ينصح باستعمال نصف سرعة الشبكة."
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3535
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3540
 msgid "View or change router bandwidth"
 msgstr "أظهر أو غير سرعة الموجه"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3542
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3547
 msgid "Total uploader limit"
 msgstr "اقصى حد للرفع"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3546
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3551
 msgid "Maximum number of peers to upload to"
 msgstr "الحد الأقصى لعدد النظراء للتحميل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3548
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3553
 msgid "peers"
 msgstr "النظائر"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3551
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3556
 msgid "Use open trackers also"
 msgstr "استعمال open trackers ايضا"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3555
-msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
-msgstr "الإعلان عن السيول لفتح المتتبعات وكذلك المتتبعات المدرجة في ملف التورنت"
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3560
+msgid ""
+"Announce torrents to open trackers as well as trackers listed in the torrent "
+"file"
+msgstr ""
+"الإعلان عن السيول لفتح المتتبعات وكذلك المتتبعات المدرجة في ملف التورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3558
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3563
 msgid "Enable DHT"
 msgstr "تمكين DHT"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3562
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3567
 msgid "Use DHT to find additional peers"
 msgstr "استخدم DHT للبحث عن أقران إضافيين"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3565
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3570
 msgid "Auto start torrents"
 msgstr "بدء تشغيل السيول تلقائيًا"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3569
-msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
-msgstr "بدء تشغيل ملفات التورنت تلقائيًا عند إضافتها وإعادة تشغيل ملفات التورنت عند بدء تشغيل I2PSnark"
-
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3574
+msgid ""
+"Automatically start torrents when added and restart torrents when I2PSnark "
+"starts"
+msgstr ""
+"بدء تشغيل ملفات التورنت تلقائيًا عند إضافتها وإعادة تشغيل ملفات التورنت عند "
+"بدء تشغيل I2PSnark"
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3579
 msgid "Startup delay"
 msgstr "تأخر البداية"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3577
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3582
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr "كم من الوقت قبل أن يتم تحميل السيول التي يتم تشغيلها تلقائيًا عند بدء تشغيل I2PSnark"
+msgstr ""
+"كم من الوقت قبل أن يتم تحميل السيول التي يتم تشغيلها تلقائيًا عند بدء تشغيل "
+"I2PSnark"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3579
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3584
 msgid "minutes"
 msgstr "دقائق"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3587
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3592
 msgid "Data Storage"
 msgstr "تخزين البيانات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3590
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3595
 msgid "Data directory"
 msgstr "مجلد البيانات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3592
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3597
 msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "الدليل حيث يتم تخزين السيول والملفات التي تم تنزيلها/المشتركة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3595
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3600
 msgid "Files readable by all"
 msgstr "ملفات قابلة للقراءة من قبل الجميع"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3598
-msgid "Set file permissions to allow other local users to access the downloaded files"
-msgstr "قم بتعيين أذونات الملف للسماح للمستخدمين المحليين الآخرين بالوصول إلى الملفات التي تم تنزيلها"
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3603
+msgid ""
+"Set file permissions to allow other local users to access the downloaded "
+"files"
+msgstr ""
+"قم بتعيين أذونات الملف للسماح للمستخدمين المحليين الآخرين بالوصول إلى "
+"الملفات التي تم تنزيلها"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3601
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3606
 msgid "Max files per torrent"
 msgstr "الحد الأقصى للملفات لكل تورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3603
-msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
-msgstr "الحد الأقصى لعدد الملفات المسموح بها لكل تورنت - لاحظ أن المتتبعين قد يضعون حدودًا خاصة بهم، وقد يحدد نظام التشغيل لديك عدد الملفات المفتوحة، مما يمنع السيول التي تحتوي على العديد من الملفات (والسيول اللاحقة) من التحميل"
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3608
+msgid ""
+"Maximum number of files permitted per torrent - note that trackers may set "
+"their own limits, and your OS may limit the number of open files, preventing "
+"torrents with many files (and subsequent torrents) from loading"
+msgstr ""
+"الحد الأقصى لعدد الملفات المسموح بها لكل تورنت - لاحظ أن المتتبعين قد يضعون "
+"حدودًا خاصة بهم، وقد يحدد نظام التشغيل لديك عدد الملفات المفتوحة، مما يمنع "
+"السيول التي تحتوي على العديد من الملفات (والسيول اللاحقة) من التحميل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3610
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3615
 msgid "Tunnel Configuration"
 msgstr "تكوين النفق"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3616
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3621
 msgid "Inbound Settings"
 msgstr "اعدادت الاتصال الداخلي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3623
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3628
 msgid "Outbound Settings"
 msgstr "اعدادت الاتصال الخارجي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3632
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3637
 msgid "I2CP host"
 msgstr "المضيف I2CP"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3636
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3641
 msgid "I2CP port"
 msgstr "منفذ I2CP"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3651
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3656
 msgid "I2CP options"
 msgstr "خيارات I2CP"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3660
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3665
 msgid "Save configuration"
 msgstr "حفظ الاعدادات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3679
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3684
 msgid "Select trackers for removal from I2PSnark's known list"
 msgstr "حدد أدوات التتبع لإزالتها من قائمة I2PSnark المعروفة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3681
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4660
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3686
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4665
 msgid "Name"
 msgstr "الاسم"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3683
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3688
 msgid "Website URL"
 msgstr "عنوان URL لموقع الويب"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3691
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5774
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5807
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3696
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5779
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5812
 msgid "Announce URL"
 msgstr "الإعلان عن عنوان URL"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3704
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3709
 msgid "Mark tracker for deletion"
 msgstr "وضع علامة على المتعقب للحذف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3741
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3746
 msgid "Add"
 msgstr "إضافة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3797
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3802
 #, java-format
 msgid "Invalid magnet URL {0}"
 msgstr "غنوان مغناطيس غير صحيح {0}"
 
 #. * dummies for translation
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3805
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3810
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
@@ -1739,7 +1814,7 @@ msgstr[3] "{0} القفزات"
 msgstr[4] "{0} القفزات"
 msgstr[5] "{0} القفزات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3806
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3811
 #, java-format
 msgid "1 tunnel"
 msgid_plural "{0} tunnels"
@@ -1750,163 +1825,175 @@ msgstr[3] "{0} الأنفاق"
 msgstr[4] "{0} الأنفاق"
 msgstr[5] "{0} الأنفاق"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3821
-msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
-msgstr "يقوم هذا بتكوين الحد الأقصى لعدد الأنفاق التي سيتم فتحها، والتي يحددها عدد النظراء المتصلين (قد يكون الاستخدام الفعلي أقل)"
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3826
+msgid ""
+"This configures the maximum number of tunnels to open, determined by the "
+"number of connected peers (actual usage may be less)"
+msgstr ""
+"يقوم هذا بتكوين الحد الأقصى لعدد الأنفاق التي سيتم فتحها، والتي يحددها عدد "
+"النظراء المتصلين (قد يكون الاستخدام الفعلي أقل)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3825
-msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
-msgstr "تغيير هذا الإعداد إلى أقل من 3 قفزات قد يؤدي إلى تحسين السرعة على حساب عدم الكشف عن هويته ولا ينصح به"
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3830
+msgid ""
+"Changing this setting to less than 3 hops may improve speed at the expense "
+"of anonymity and is not recommended"
+msgstr ""
+"تغيير هذا الإعداد إلى أقل من 3 قفزات قد يؤدي إلى تحسين السرعة على حساب عدم "
+"الكشف عن هويته ولا ينصح به"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4144
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4149
 msgid "Info hash"
 msgstr "تجزئة المعلومات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4225
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4230
 msgid "Created"
 msgstr "أُنشيء"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4238
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4638
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4243
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4643
 msgid "Files"
 msgstr "الملفات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4247
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4252
 msgid "Added"
 msgstr "أضيفت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4252
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4257
 msgid "Pieces"
 msgstr "القطع"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4286
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4291
 msgid "Completion"
 msgstr "انتهاء"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4305
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4686
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4310
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4691
 msgid "Remaining"
 msgstr "متبقي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4314
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4319
 msgid "Skipped"
 msgstr "تخطي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4334
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4396
-msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
-msgstr "سيتم استخدام متتبعات I2P فقط ؛ يتم عرض أجهزة التتبع غير I2P لأغراض إعلامية فقط"
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4339
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4401
+msgid ""
+"Only I2P trackers will be used; non-I2P trackers are displayed for "
+"informational purposes only"
+msgstr ""
+"سيتم استخدام متتبعات I2P فقط ؛ يتم عرض أجهزة التتبع غير I2P لأغراض إعلامية "
+"فقط"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4400
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4405
 msgid "Tracker"
 msgstr "المقتفي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4420
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4425
 msgid "Web Seeds"
 msgstr "بذور الويب"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4457
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4462
 msgid "Refresh page for results"
 msgstr "تحديث الصفحة للحصول على النتائج"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4470
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4475
 msgid "Force Recheck"
 msgstr "إعادة فحص القوة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4473
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4478
 msgid "Stop the torrent in order to check file integrity"
 msgstr "أوقف السيل للتحقق من سلامة الملف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4477
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4482
 msgid "Check integrity of the downloaded files"
 msgstr "التحقق من سلامة الملفات التي تم تنزيلها"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4505
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4510
 msgid "Resource Not found"
 msgstr "لم يتم العثور على المورد"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4507
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4520
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4512
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4525
 msgid "Base"
 msgstr "القاعدة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4518
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4523
 msgid "Resource Does Not Exist"
 msgstr "المورد غير موجود"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4519
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4524
 msgid "Resource"
 msgstr "موارد"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4545
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4550
 msgid "Audio file: "
 msgstr "ملف صوتي: "
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4553
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4558
 msgid "Video file: "
 msgstr "ملف فيديو: "
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4641
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4646
 msgid "Directory"
 msgstr "المجلد"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4684
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4689
 msgid "Download Status"
 msgstr "حالة التنزيل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4695
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4700
 msgid "Download Priority"
 msgstr "أولوية التنزيل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4711
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4716
 msgid "Up to higher level directory"
 msgstr "ما يصل إلى دليل المستوى الأعلى"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4723
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4728
 msgid "Audio Playlist"
 msgstr "قائمة تشغيل الصوت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4752
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4757
 msgid "Not found"
 msgstr "غير موجود"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4752
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4757
 msgid "Torrent not found?"
 msgstr "تورنت غير موجود؟"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4757
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4762
 msgid "File not found in torrent?"
 msgstr "الملف غير موجود في التورنت؟"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4757
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4762
 msgid "Unrecognized"
 msgstr "غير معترف به"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4811
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4816
 msgid "Preview"
 msgstr "معاينة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4896
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4901
 msgid "Download file at high priority"
 msgstr "تنزيل الملف بأولوية عالية"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4902
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4907
 msgid "High"
 msgstr "عالي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4904
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4909
 msgid "Download file at normal priority"
 msgstr "تنزيل الملف بالأولوية العادية"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4909
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4914
 msgid "Normal"
 msgstr "عادي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4910
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4915
 msgid "Do not download this file"
 msgstr "لا تقم بتنزيل هذا الملف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4915
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4920
 msgid "Skip"
 msgstr "تجاوز"
 
@@ -1921,35 +2008,35 @@ msgstr "تجاوز"
 #. .append("<a class=control id=setallskip href=#>")
 #. .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
 #.
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4936
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4941
 msgid "Save priorities"
 msgstr "حفظ الأولويات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4952
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4957
 msgid "Comments"
 msgstr "تعليقات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5183
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5188
 msgid "Ratings and Comments"
 msgstr "التقييمات والتعليقات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5187
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5192
 msgid "Author name required to rate or comment"
 msgstr "اسم المؤلف مطلوب للتقييم أو التعليق"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5193
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5198
 msgid "Your author name for published comments and ratings"
 msgstr "اسم المؤلف الخاص بك للتعليقات والتقييمات المنشورة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5200
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5205
 msgid "Enable viewing and posting comments for this torrent"
 msgstr "تمكين عرض ونشر التعليقات لهذا السيل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5209
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5214
 msgid "Save Preference"
 msgstr "حفظ التفضيلات"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5229
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5234
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
@@ -1960,73 +2047,73 @@ msgstr[3] "{0} نجوم"
 msgstr[4] "{0} نجوم"
 msgstr[5] "{0} نجوم"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5231
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5236
 msgid "No rating"
 msgstr "لا يوجد تصنيف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5246
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5251
 msgid "Rate and Comment"
 msgstr "التقييم والتعليق"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5248
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5253
 msgid "Rate Torrent"
 msgstr "معدل السيل"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5250
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5255
 msgid "Add Comment"
 msgstr "أضف تعليقاً"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5263
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5268
 msgid "My Rating"
 msgstr "تقييمي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5276
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5278
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5281
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5283
 msgid "Average Rating"
 msgstr "متوسط ​​التقييم"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5279
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5284
 msgid "No community ratings currently available"
 msgstr "لا توجد تقييمات مجتمعية متاحة حاليًا"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5325
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5330
 msgid "Submitted"
 msgstr "مقدم"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5329
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5790
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5334
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5795
 msgid "Mark for deletion"
 msgstr "اختر للحذف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5343
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5348
 msgid "Delete Selected"
 msgstr "حذف"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5744
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5749
 msgid "Edit Torrent"
 msgstr "تحرير تورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5774
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5779
 msgid "Active Trackers"
 msgstr "أجهزة التتبع النشطة"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5805
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5810
 msgid "Add Tracker"
 msgstr "إضافة المقتفي"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5837
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5842
 msgid "Torrent Comment"
 msgstr "تعليق تورنت"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5844
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5849
 msgid "Torrent must be stopped in order to edit"
 msgstr "يجب إيقاف التورنت حتى تتمكن من التحرير"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5850
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5855
 msgid "Save Changes"
 msgstr "حفظ التغييرات"
 
 #. shouldn't happen
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5862
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5867
 msgid "Torrent must be stopped"
 msgstr "يجب إيقاف السيل"

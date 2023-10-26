@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"POT-Creation-Date: 2023-10-22 01:44+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-26 21:55+0000\n"
 "PO-Revision-Date: 2019-05-21 05:22+0000\n"
 "Language: tr_TR\n"
 "MIME-Version: 1.0\n"
@@ -649,4 +650,3 @@ msgstr "Sunucu bağlantıyı reddetti"
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:327
 msgid "Mail rejected"
 msgstr "Posta reddedildi"
-

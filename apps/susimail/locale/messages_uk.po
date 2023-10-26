@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"POT-Creation-Date: 2023-10-22 01:44+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-26 21:55+0000\n"
 "PO-Revision-Date: 2023-10-23 08:16+0000\n"
 "Language: uk_UA\n"
 "MIME-Version: 1.0\n"
@@ -626,14 +627,12 @@ msgstr "Немає відповіді від сервера"
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
 msgstr ""
-"Помилка входу на поштовий сервер, неправильне ім’я користувача або "
-"пароль."
+"Помилка входу на поштовий сервер, неправильне ім’я користувача або пароль."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
 msgstr ""
-"Вийдіть, а потім увійдіть знову з правильним іменем користувача та "
-"паролем."
+"Вийдіть, а потім увійдіть знову з правильним іменем користувача та паролем."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"POT-Creation-Date: 2023-10-22 01:44+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-26 21:55+0000\n"
 "PO-Revision-Date: 2023-10-23 08:10+0000\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -235,8 +236,8 @@ msgstr "삭제하려는 메세지 없음."
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
 msgstr ""
-"호스트가 변경되지 않았습니다. 호스트를 바꾸지 않았습니다. 설정 파일 {0}"
-"을 편집해 호스트를 변경하세요."
+"호스트가 변경되지 않았습니다. 호스트를 바꾸지 않았습니다. 설정 파일 {0}을 편"
+"집해 호스트를 변경하세요."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1820
 msgid "Configuration saved"

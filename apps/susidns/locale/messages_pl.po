@@ -1076,5 +1076,3 @@ msgstr ""
 "Adresy pobrane z subskrypcji zostaną scalone do Twojej książki adresowej "
 "węzła."
 
-
-

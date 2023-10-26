@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 21:17+0000\n"
+"POT-Creation-Date: 2023-10-26 21:54+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
@@ -9433,6 +9433,7 @@ msgstr "Override baru"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:425
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:423
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:405
@@ -10067,11 +10068,6 @@ msgstr "Simpan perubahan"
 #, fuzzy
 msgid "View the full change log"
 msgstr "Lihat changelog lengkap"
-
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:423
-#, fuzzy
-msgid "ostname Registration"
-msgstr "Konfigurasi Home Page i2p"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:541
@@ -13924,4 +13920,3 @@ msgstr "Selanjutnya"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:742
 msgid "Finished"
 msgstr "Selesai"
-#, java-format#~ "I2P''s main configuration interface is this web console, so for your "

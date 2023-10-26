@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 21:17+0000\n"
+"POT-Creation-Date: 2023-10-26 21:54+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -9407,6 +9407,7 @@ msgstr "Novo nível"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:425
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:423
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:405
@@ -10040,11 +10041,6 @@ msgstr "Salvar alterações"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:448
 msgid "View the full change log"
 msgstr ""
-
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:423
-#, fuzzy
-msgid "ostname Registration"
-msgstr "Configuração da página inicial do I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:541
@@ -13851,4 +13847,4 @@ msgstr "Seguinte"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:742
 msgid "Finished"
-msgstr "Terminada"#, java-format#~ msgstr "Veja {0} para instruções sobre ressemeamento manual."
+msgstr "Terminada"

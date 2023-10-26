@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 21:17+0000\n"
+"POT-Creation-Date: 2023-10-26 21:54+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -9515,6 +9515,7 @@ msgstr "Corecție noua"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:425
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:423
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:405
@@ -10149,11 +10150,6 @@ msgstr "Salvați modificările"
 #, fuzzy
 msgid "View the full change log"
 msgstr "Vizualizați lista completă de modificări"
-
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:423
-#, fuzzy
-msgid "ostname Registration"
-msgstr "Configurarea Paginii de pornire I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:541
@@ -14052,4 +14048,4 @@ msgstr "Următorul"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:742
 msgid "Finished"
-msgstr "Finalizat"#, java-format#~ msgstr "{0} urmărește eepsitele active."
+msgstr "Finalizat"

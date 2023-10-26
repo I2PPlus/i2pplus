@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"POT-Creation-Date: 2023-10-22 01:44+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-26 21:55+0000\n"
 "PO-Revision-Date: 2023-10-23 08:05+0000\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -244,7 +245,8 @@ msgstr "Configuració desada"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1842
 msgid "Invalid pagesize number, resetting to default value."
-msgstr "Número de mida de pàgina no vàlid, s'està restablint al valor predeterminat."
+msgstr ""
+"Número de mida de pàgina no vàlid, s'està restablint al valor predeterminat."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2282
 #: src/src/i2p/susi/webmail/WebMail.java:3162
@@ -622,11 +624,15 @@ msgstr "Cap resposta del servidor"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr "Error d'inici de sessió al servidor de correu, nom d'usuari o contrasenya incorrectes."
+msgstr ""
+"Error d'inici de sessió al servidor de correu, nom d'usuari o contrasenya "
+"incorrectes."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr "Tanqueu la sessió i torneu a iniciar sessió amb el nom d'usuari i la contrasenya correctes."
+msgstr ""
+"Tanqueu la sessió i torneu a iniciar sessió amb el nom d'usuari i la "
+"contrasenya correctes."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

@@ -19,11 +19,11 @@ msgstr ""
 
 #, fuzzy
 msgid "Welcome to I2P+!"
-msgstr "Vitajte v I2P!"
+msgstr "Vitajte v I2P+!"
 
 #, fuzzy, java-format
 msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
-msgstr "Prosím {0}buďte trpezlivý{1}, kým sa I2P nabootuje a nájde peerov."
+msgstr "Prosím {0}buďte trpezlivý{1}, kým sa I2P+ nabootuje a nájde peerov."
 
 #, java-format
 msgid ""

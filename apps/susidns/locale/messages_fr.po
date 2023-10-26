@@ -1129,6 +1129,4 @@ msgstr ""
 "carnet d'adresses de votre routeur.Les hôtes que vous recevez de vos "
 "abonnements seront fusionnés avec votre Carnet d'adresses du routeur"
 
-
-
 #, java-format#~ "The default subscription is the hosts.txt from {0}, which is updated "
