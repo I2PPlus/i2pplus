@@ -64,7 +64,7 @@ function hideAlert() {
       createNotify.setAttribute("hidden", "");
       notify.setAttribute("hidden", "");
     }
-  }, 7000);
+  }, 500);
 }
 
 function initSnarkAlert() {
