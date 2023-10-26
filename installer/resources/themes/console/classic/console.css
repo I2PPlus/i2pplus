@@ -971,6 +971,7 @@ h4#updateplugins{margin-top:-13px}
 .sitemapLink{margin:1px -8px 8px 14px}
 html[lang="es"] .sitemapLink,html[lang="es"] .sitemapLabel{width:160px}
 .sitemapLabel{margin:0 0 -4px;padding:4px 0;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9pt;border:0;border-top:var(--border);contain:layout paint}
+.sitemapLabel::before,.sitemapLabel::after{width:6px;display:inline-block;vertical-align:middle;content:""}
 .sitemapLink:hover .sitemapLabel{color:var(--hover)}
 .sitemapLink:hover,.sitemapLink:hover .sitemapLabel{border-color:var(--hover)}
 .sitemapLink:active .sitemapLabel{color:var(--bg);box-shadow:var(--btn_shadow_active);background:var(--hover)}
