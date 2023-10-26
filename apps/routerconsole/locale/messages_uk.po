@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 21:17+0000\n"
-"PO-Revision-Date: 2023-10-26 02:43+0000\n"
+"PO-Revision-Date: 2023-10-26 11:27+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk_UA\n"
@@ -344,7 +344,7 @@ msgstr "Вимкнені UPnP пристрої"
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1220
 msgid "UPnP has not found any UPnP-aware, compatible device on your LAN."
-msgstr "В вашій локальній мережі не знайдено жодного пристрою сумісного з UPnP"
+msgstr "UPNP не знайшла жодного пристрою, що знаходяться у UPNP, сумісному пристрою на локальній мережі."
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1231
 #, java-format
@@ -2072,12 +2072,12 @@ msgstr "Налаштування логу збережено"
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:62
 #, java-format
 msgid "Add additional logging statements above (e.g. {0})."
-msgstr ""
+msgstr "Додайте додаткові оператори журналювання вище (наприклад, {0})."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:64
 #, java-format
 msgid "Valid log levels are {0}."
-msgstr ""
+msgstr "Дійсні рівні журналу: {0}."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:141
 msgid "Select a class to add"
@@ -2086,7 +2086,7 @@ msgstr "Оберіть клас для додавання"
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:153
 #, java-format
 msgid "All classes in {0}"
-msgstr ""
+msgstr "Усі класи в {0}"
 
 #. stat groups for stats.jsp
 #. See StatsGenerator for groups mapped to a display name
@@ -2177,7 +2177,7 @@ msgstr "Мережа"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:410
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:441
 msgid "Sidebar"
-msgstr ""
+msgstr "Бічна панель"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:29
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:234
@@ -2242,7 +2242,7 @@ msgstr "Модулі"
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:32
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configwebapps_jsp.java:429
 msgid "Web Apps"
-msgstr ""
+msgstr "Веб-програми"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:33
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:579
@@ -2279,7 +2279,7 @@ msgstr "Початкове завантаження"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:427
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:622
 msgid "Router Family"
-msgstr ""
+msgstr "Сімейство маршрутизаторів"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:62
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:103
@@ -3458,64 +3458,64 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:344
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:494
 msgid "Web Server"
-msgstr ""
+msgstr "Веб-сервер"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:63
 msgid "Configure Bandwidth"
-msgstr ""
+msgstr "Налаштуйте пропускну здатність"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:63
 msgid "I2P Bandwidth Configuration"
-msgstr ""
+msgstr "Конфігурація пропускної здатності I2P"
 
 #. FIXME wasn't escaped
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:65
 msgid "Configure UI"
-msgstr ""
+msgstr "Налаштування інтерфейсу користувача"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:65
 msgid "Select console theme & language & set optional console password"
-msgstr ""
+msgstr "Виберіть тему консолі"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:66
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:560
 msgid "Customize Sidebar"
-msgstr ""
+msgstr "Налаштуйте бічну панель"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:66
 msgid "Customize the sidebar by adding or removing or repositioning elements"
-msgstr ""
+msgstr "Налаштуйте бічну панель, додаючи, видаляючи або змінюючи положення елементів"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:79
 msgid "Configuration and bandwidth tester"
-msgstr ""
+msgstr "Тестер конфігурації та пропускної здатності"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:79
 msgid "Wizard"
-msgstr ""
+msgstr "Майстер"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
 msgid "Advanced Config"
-msgstr ""
+msgstr "Розширена конфігурація"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
 msgid "Advanced router configuration"
-msgstr ""
+msgstr "Розширена конфігурація маршрутизатора"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:85
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:584
 msgid "Start or stop Router clients"
-msgstr ""
+msgstr "Запуск або зупинка клієнтів маршрутизатора"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:180
 msgid "Changelog"
-msgstr ""
+msgstr "Журнал змін"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86
 msgid "Recent changes"
-msgstr ""
+msgstr "Останні зміни"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:105
 msgid "Bug tracker"
@@ -3536,11 +3536,11 @@ msgstr "Засто задавані питання"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:106
 msgid "I2P FAQ"
-msgstr ""
+msgstr "Поширені запитання щодо I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:107
 msgid "Historical infrastructure data from the I2P network"
-msgstr ""
+msgstr "Історичні дані інфраструктури з мережі I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:108
 msgid "I2P home page"
@@ -3563,28 +3563,28 @@ msgstr ""
 #. software repositories + filesharing
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:114
 msgid "Transient server-encrypted filesharing and pastebin"
-msgstr ""
+msgstr "Тимчасовий обмін файлами з серверним шифруванням і вставка"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:115
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:118
 msgid "Secure filesharing service"
-msgstr ""
+msgstr "Служба безпечного обміну файлами"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:116
 msgid "Community Git hosting"
-msgstr ""
+msgstr "Хостинг спільноти Git"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:117
 msgid "Official I2P Git repository"
-msgstr ""
+msgstr "Офіційне сховище I2P Git"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:119
 msgid "Home of I2P+"
-msgstr ""
+msgstr "Дім I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "Bittorrent tracker"
-msgstr ""
+msgstr "Торрент-трекер"
 
 #. torrent trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
@@ -3691,7 +3691,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:155
 msgid "Provider of privacy respecting web hosting and VPN services"
-msgstr ""
+msgstr "Постачальник конфіденційності щодо послуг веб-хостингу та VPN"
 
 #. "tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "eepsites/tv.svg" + S +
 #. "tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
@@ -3724,11 +3724,11 @@ msgstr ""
 #. wikis & reference
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:172
 msgid "Enabling the free transmission of data in the public interest"
-msgstr ""
+msgstr "Забезпечення вільної передачі даних в суспільних інтересах"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:173
 msgid "Selected Papers in Anonymity"
-msgstr ""
+msgstr "Вибрані статті в анонімності"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:174
 msgid "Tor .onion site links"
@@ -5913,22 +5913,22 @@ msgstr "Брандмауер"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:65
 msgid "Bandwidth Graph"
-msgstr ""
+msgstr "Графік пропускної здатності"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:67
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1185
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:513
 msgid "Congestion"
-msgstr ""
+msgstr "Затори"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:68
 msgid "Tunnel Status"
-msgstr ""
+msgstr "Статус тунелю"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:69
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:776
 msgid "Service Tunnels"
-msgstr ""
+msgstr "Службові тунелі"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:70
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1348
@@ -6015,7 +6015,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:425
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:416
 msgid "Troubleshoot"
-msgstr ""
+msgstr "Усунення несправностей"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:228
 msgid "Troubleshooting &amp; Further Assistance"
@@ -6024,16 +6024,16 @@ msgstr "Усунення несправностей"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:237
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:698
 msgid "Information about the sidebar and network status messages"
-msgstr ""
+msgstr "Інформація про бічні панелі та повідомлення про стан мережі"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:243
 msgid "Webhosting"
-msgstr ""
+msgstr "Веб-хостинг"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:246
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:453
 msgid "An introduction to hosting websites on the I2P network"
-msgstr ""
+msgstr "Знайомство з розміщенням веб-сайтів у мережі I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:298
 msgid "I2PControl"
@@ -6041,70 +6041,70 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:301
 msgid "RPC Service"
-msgstr ""
+msgstr "Служба RPC"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:333
 msgid "Manage I2P client and server tunnels to access or provide network services"
-msgstr ""
+msgstr "Керуйте тунелями клієнта та сервера I2P для доступу або надання мережевих послуг"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:345
 msgid "Local Web Server"
-msgstr ""
+msgstr "Локальний веб-сервер"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:372
 msgid "Configure startup of clients and webapps (services); manually start dormant services"
-msgstr ""
+msgstr "Налаштувати запуск клієнтів і веб-додатків (служб); "
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:374
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:443
 msgid "Services"
-msgstr ""
+msgstr "Послуги"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:433
 msgid "I2P Router Sitemap"
-msgstr ""
+msgstr "Карта сайту маршрутизатора I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:435
 msgid "Internals"
-msgstr ""
+msgstr "Внутрішні органи"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:443
 msgid "Certs"
-msgstr ""
+msgstr "Сертифікати"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:445
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:498
 msgid "Review active encryption certificates used in console"
-msgstr ""
+msgstr "Перегляньте активні сертифікати шифрування, які використовуються в консолі"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:457
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:510
 msgid "View historical log of router events"
-msgstr ""
+msgstr "Перегляд історичного журналу подій маршрутизатора"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:469
 msgid "Graph router performance"
-msgstr ""
+msgstr "Граф продуктивності маршрутизатора"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:481
 msgid "Router Help and FAQ"
-msgstr ""
+msgstr "Довідка та поширені запитання щодо маршрутизатора"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:489
 msgid "Info"
-msgstr ""
+msgstr "Інформація"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:492
 msgid "Router information including transport addresses and UPnP scan"
-msgstr ""
+msgstr "Інформація про маршрутизатор, включаючи транспортні адреси та сканування UPnP"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:500
 msgid "Jobs"
-msgstr ""
+msgstr "Робота"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:503
 msgid "Show the router's workload, and how it's performing"
-msgstr ""
+msgstr "Показати робоче навантаження маршрутизатора та його продуктивність"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:511
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:417
@@ -6114,17 +6114,17 @@ msgstr "Журнали"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:522
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:544
 msgid "NetDb"
-msgstr ""
+msgstr "Мережа БД"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:536
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:886
 msgid "Show all current peer connections"
-msgstr ""
+msgstr "Показати всі поточні однорангові підключення"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:544
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:556
 msgid "Profiles"
-msgstr ""
+msgstr "Профілі"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:547
 msgid "Show recent peer performance profiles"
@@ -6189,7 +6189,7 @@ msgstr "Перегляньте можливі сивіли в базі дани�
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:725
 #, java-format
 msgid "Your Local Identity [{0}] is your unique I2P router identity, similar to an IP address but tailored to I2P. "
-msgstr "Ваш локальний ідентифікатор [{0}] — це ваш унікальний ідентифікатор I2P-маршрутизатора, подібний до IP-адреси, але налаштований на I2P."
+msgstr "Ваш локальний ідентифікатор [{0}] — це ваш унікальний ідентифікатор I2P-маршрутизатора, подібний до IP-адреси, але налаштований на I2P. "
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:667
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:726
@@ -6758,7 +6758,7 @@ msgstr "Близько до наших пунктів призначення"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:258
 msgid "This is an experimental network database tool for debugging and analysis. Do not panic even if you see warnings indicated. Possible \"threats\" are summarized, however these are unlikely to be real threats. If you see anything you would like to discuss with the devs, contact us on IRC #i2p-dev."
-msgstr "Це експериментальний інструмент мережевої бази даних для налагодження та аналізу. "
+msgstr "Це експериментальний інструмент бази даних мережі для налагодження та аналізу. Не панікуйте, навіть якщо ви бачите зазначені попередження. Можливі \"загрози\" узагальнені, однак вони навряд чи стануть реальними загрозами. Якщо ви бачите щось, що ви хотіли б обговорити з розробниками, зв’яжіться з нами на IRC #i2p-dev або #saltR."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:266
 msgid "No stored analysis"
@@ -6778,7 +6778,7 @@ msgstr "Запустіть аналіз на всіх маршрутизатор
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:324
 msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, with the option to block peers meeting the configured threshold. Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
-msgstr "Процедуру виявлення sybil можна налаштувати на регулярне сканування мережевої бази даних із можливістю блокування однорангових вузлів, які досягають налаштованого порогового значення. "
+msgstr "Програма виявлення SYBIL може бути налаштована для сканування мережевої бази даних на регулярному проміжку, з можливістю блокування однолітків, що відповідають налаштованому порогу. Блокування однолітків заважає вашому маршрутизатору будувати з ними тунелі протягом налаштованої тривалості або до перезапуску маршрутизатора."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:327
 msgid "Configure Background Analysis"
@@ -7751,7 +7751,7 @@ msgstr "Об 'єкти інтересів"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configi2cp_jsp.java:282
 msgid "config i2cp"
-msgstr ""
+msgstr "Налаштування I2CP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configi2cp_jsp.java:429
 msgid "External Client Access"
@@ -7897,7 +7897,7 @@ msgstr "Відредагуйте {0}, щоб змінити"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configlogging_jsp.java:541
 msgid "(the symbol '@' will be replaced during log rotation)"
-msgstr ""
+msgstr "(Символ '@' буде замінений під час обертання журналу)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configlogging_jsp.java:543
 msgid "Log record format"
@@ -7969,12 +7969,12 @@ msgstr "Зміна цих налаштувань призведе до пере�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:538
 msgid "IP Configuration"
-msgstr "IP-конфігурація 573:"
+msgstr "IP-конфігурація"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:540
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:651
 msgid "Externally reachable hostname or IP address"
-msgstr ""
+msgstr "Зовні доступне ім'я хоста або IP -адреса"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:546
 msgid "Use all auto-detect methods"
@@ -8015,7 +8015,7 @@ msgstr "Увімкніть UPnP, щоб відкрити порти брандм
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:595
 msgid "This mode enhances anonymity by preventing correlation between public IP address changes and your router identity. Both your router identity and UDP port will be changed."
-msgstr "Цей режим підвищує анонімність, запобігаючи кореляції між змінами загальнодоступної IP-адреси та ідентифікацією вашого маршрутизатора. "
+msgstr "Цей режим підвищує анонімність, запобігаючи кореляції між загальнодоступними змінами IP -адреси та вашою ідентичністю маршрутизатора. І ваша ідентичність маршрутизатора, і порт UDP будуть змінені."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:601
 msgid "Laptop mode"
@@ -8153,7 +8153,7 @@ msgstr "Налаштуйте бонуси профілю"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:578
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
-msgstr "Бонуси можуть бути позитивними чи негативними та впливати на включення однорангового партнера до рівнів швидкої та високої потужності. "
+msgstr "Бонуси можуть бути позитивними чи негативними та впливати на включення однолітків у швидкі та високі рівні потужності. Швидкі однолітки використовуються для клієнтських тунелів, а однолітки високої ємності використовуються для деяких дослідницьких тунелів."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:596
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:447
@@ -8261,7 +8261,7 @@ msgstr "Використовуйте проксі для повторного з
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:594
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:600
 msgid "SOCKS 4/4a"
@@ -8273,11 +8273,11 @@ msgstr "ШКАПЕТКИ 5"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:608
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
-msgstr "Ця опція використовуватиме HTTP-проксі I2P для повторного заповнення або плагін Orchid, якщо його налаштовано. "
+msgstr "У цій опції буде використати HTTP OutProxy I2P для Reseed, або плагін орхідеї, якщо налаштовано. Примітка. Цей варіант не буде працювати, коли у вас є 0 відомих однолітків."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:614
 msgid "I2P Outproxy"
-msgstr ""
+msgstr "I2P веб -проксі"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:638
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:661
@@ -8490,7 +8490,7 @@ msgstr "Параметри за замовчуванням оптимізова�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:551
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr "Щоб змінити параметри клієнтського тунелю, використовуйте <a href=\"/i2ptunnelmgr\">Менеджер тунелів</a> або <a href=\"/i2psnark/configure\">сторінку конфігурації</a> для "
+msgstr "Щоб змінити параметри клієнтського тунелю, використовуйте <a href=\"/i2ptunnelmgr\">Менеджер тунелів</a> або <a href=\"/i2psnark/configure\">сторінку конфігурації</a> для."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:553
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
@@ -8515,7 +8515,7 @@ msgstr "(Виявлено дуже стару версію. Не рекомен�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:548
 msgid "If you're not using IE, it's likely that your browser is pretending to be IE; please configure your browser (or proxy) to use a different User Agent string if you'd like to access the console themes."
-msgstr "Якщо ви не використовуєте IE, ймовірно, ваш браузер видає себе за IE; "
+msgstr "Якщо ви не використовуєте IE, цілком ймовірно, що ваш браузер прикидається IE; Будь ласка, налаштуйте свій браузер (або проксі), щоб використовувати інший рядок агента користувача, якщо ви хочете отримати доступ до тематики консолі."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:552
 msgid "Router Console Password"
@@ -8527,7 +8527,7 @@ msgstr "Мова консолі маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:583
 msgid "Please contribute to the router console translation project! Contact the developers in #i2p-dev on IRC to help."
-msgstr "Будь ласка, долучіться до проекту перекладу консолі маршрутизатора! "
+msgstr "Будь ласка, внесіть внесок у проект перекладу консолі маршрутизаторів! Зверніться до розробників у #saltR на IRC, щоб допомогти."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:282
 msgid "config update"
@@ -8561,7 +8561,7 @@ msgstr "Виконується оновлення"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:588
 msgid "In order to maintain anonymity, it is recommended to update using the I2P http proxy. If the news or I2P update is hosted on I2P, using the proxy will be necessary."
-msgstr "Щоб зберегти анонімність, рекомендується оновлювати за допомогою I2P http-проксі. "
+msgstr "Для того, щоб підтримувати анонімність, рекомендується оновити за допомогою проксі -сервера I2P HTTP. Якщо оновлення новин або i2p буде розміщено на i2p, буде необхідним використання проксі."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:594
 msgid "Fetch news using I2P http proxy"
@@ -8610,7 +8610,7 @@ msgstr "Оновити URL"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:640
 msgid "To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>"
-msgstr "Щоб оновити непідписані збірки випуску I2P: <code>http://skank.i2p/i2pupdate.zip</code> або для останніх непідписаних збірок розробки: <code>http://skank.i2p/dev/i2pupdate "
+msgstr "Щоб оновити непідписані збірки випуску I2P+: <code>http://skank.i2p/i2pupdate.zip</code> або для останніх непідписаних збірок розробки: <code>http://skank.i2p/dev/i2pupdate</code>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:644
 msgid "Update with unsigned development builds"
@@ -8626,7 +8626,7 @@ msgstr "конфігурація веб-додатків"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configwebapps_jsp.java:540
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
-msgstr "Веб-програми Java, наведені нижче, запускаються клієнтом webConsole і працюють у тій самій JVM, що й маршрутизатор. "
+msgstr "Веб -додатки Java, перелічені нижче, запущені клієнтом WebConsole і запускаються в тому ж JVM, що і маршрутизатор. Зазвичай вони є веб -додатками, доступними через консоль маршрутизатора. Вони можуть бути повними програмами (наприклад, i2psnark), передніми до іншого клієнта або програми, які повинні бути ввімкнено (наприклад, SusiDNS, I2PTunnel) або взагалі не мати веб-інтерфейсу (наприклад, адреса)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/dns_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/dns_jsp.java:453
@@ -8678,20 +8678,20 @@ msgstr "Помилка {0}"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/info_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:437
 msgid "I2P Version and Running Environment"
-msgstr ""
+msgstr "I2P+ версія та запущеного середовища"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:388
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:434
 msgid "Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report."
-msgstr ""
+msgstr "Зауважте, що інформація про систему, часові позначки журналу та повідомлення журналу можуть надати підказки вашому місцезнаходження; Будь ласка, перегляньте все, що ви включаєте у звіт про помилку."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error_jsp.java:313
 msgid "Page Not Found"
-msgstr ""
+msgstr "Сторінку не знайдено"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error_jsp.java:456
 msgid "Sorry! You appear to be requesting a non-existent Router Console page or resource."
-msgstr ""
+msgstr "Вибачте! Ви, здається, запитуєте неіснуючу сторінку або ресурс консолі маршрутизаторів."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error_jsp.java:458
 msgid "Error 404"
@@ -8699,39 +8699,39 @@ msgstr "Помилка 404"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error_jsp.java:463
 msgid "not found"
-msgstr ""
+msgstr "не знайдено"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/events_jsp.java:280
 msgid "events"
-msgstr ""
+msgstr "події"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/events_jsp.java:431
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:512
 msgid "Event Log"
-msgstr ""
+msgstr "Журнал подій"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:285
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graphs_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/updategraphs_jsp.java:280
 msgid "graphs"
-msgstr ""
+msgstr "графіки"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:454
 msgid "Performance Graph"
-msgstr ""
+msgstr "Графік продуктивності"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graphs_jsp.java:436
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/updategraphs_jsp.java:429
 msgid "Performance Graphs"
-msgstr ""
+msgstr "Графіки продуктивності"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:270
 msgid "Advanced Configuration Help - I2P+"
-msgstr ""
+msgstr "Розширена довідка з конфігурації - I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:405
 msgid "Advanced Configuration Help"
-msgstr ""
+msgstr "Розширена довідка з налаштування"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:411
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:411
@@ -8750,7 +8750,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:650
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:700
 msgid "User Interface"
-msgstr ""
+msgstr "Інтерфейс користувача"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:415
@@ -8769,7 +8769,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:406
 msgid "Tunnel Filtering"
-msgstr ""
+msgstr "Тунельна фільтрація"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:417
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:423
@@ -8788,7 +8788,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:412
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:704
 msgid "Web Hosting"
-msgstr ""
+msgstr "Веб хостинг"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:419
@@ -8807,7 +8807,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:410
 msgid "New User Guide"
-msgstr ""
+msgstr "Новий посібник користувача"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:425
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:423
@@ -8823,7 +8823,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:414
 msgid "Hostname Registration"
-msgstr ""
+msgstr "Реєстрація імені хоста"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:429
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:427
@@ -8843,7 +8843,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:418
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:676
 msgid "Glossary"
-msgstr ""
+msgstr "Глосарій"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:431
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:429
@@ -8861,7 +8861,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:420
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:680
 msgid "Legal"
-msgstr ""
+msgstr "Юридичний"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:433
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:270
@@ -8886,7 +8886,7 @@ msgstr "Список змін"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:576
 msgid "Advanced Router Configuration"
-msgstr ""
+msgstr "Розширена конфігурація маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:437
 msgid "The router configuration options listed below are not available in the user interface, usually because they are rarely used or provide access to advanced settings that most users will not need. This is not a comprehensive list. Some settings will require a restart of the router to take effect. Note that all settings are case sensitive. You will need to edit your <code>router.config</code> file to add options, or, once you have added <code>routerconsole.advanced=true</code> to the router.config file, you may edit settings within the console on the <a href=/configadvanced>Advanced Configuration page</a>."
@@ -8978,31 +8978,31 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:481
 msgid "When set to true, your router will not be classified as slow, regardless of the specifications of your host system. Ordinarily, routers running on hosts with the following characteristics will be classified as slow, and various performance-related router options will be modified accordingly:"
-msgstr ""
+msgstr "Якщо встановлено значення true, ваш маршрутизатор не буде класифікуватися як повільний, незалежно від характеристик вашої хост-системи. Зазвичай маршрутизатори, що працюють на хостах із такими характеристиками, класифікуються як повільні, а різні параметри маршрутизатора, пов’язані з продуктивністю, змінюються відповідно:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:483
 msgid "Host OS running Android"
-msgstr ""
+msgstr "Хост-ОС під управлінням Android"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:485
 msgid "Host OS running on ARM (MacOS excepted)"
-msgstr ""
+msgstr "Хост-ОС працює на ARM (за винятком MacOS)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:487
 msgid "32bit host OS running with less than 4 detected cores"
-msgstr ""
+msgstr "32-розрядна хост-ОС працює з менш ніж 4 виявленими ядрами"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:489
 msgid "64bit host OS running with 1 detected core and less than 384MB allocated to the JVM"
-msgstr ""
+msgstr "64-розрядна хост-ОС працює з 1 виявленим ядром і менше 384 МБ, виділених для JVM"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:491
 msgid "Less than 256MB allocated to the JVM"
-msgstr ""
+msgstr "Для JVM виділено менше 256 МБ"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:493
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
-msgstr ""
+msgstr "Маршрутизатор працює під керуванням нерідної версії бібліотеки Java BigInteger, емульованої програмним забезпеченням"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:495
 msgid "This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
@@ -11222,27 +11222,27 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:506
 msgid "View debugging information"
-msgstr ""
+msgstr "Перегляньте інформацію про налагодження"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:514
 msgid "View router performance graphs"
-msgstr ""
+msgstr "Перегляньте графіки продуктивності маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:518
 msgid "Router help section"
-msgstr ""
+msgstr "Розділ довідки маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:522
 msgid "Router homepage"
-msgstr ""
+msgstr "Домашня сторінка маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:524
 msgid "Home"
-msgstr ""
+msgstr "Додому"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:526
 msgid "View news relating to I2P"
-msgstr ""
+msgstr "Переглядайте новини, що стосуються I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:528
 msgid "I2P News"
@@ -11250,144 +11250,144 @@ msgstr "Новини I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:534
 msgid "View router workload and stats"
-msgstr ""
+msgstr "Перегляньте робоче навантаження та статистику маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:536
 msgid "Router Jobs"
-msgstr ""
+msgstr "Роботи маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:538
 msgid "View router logs"
-msgstr ""
+msgstr "Перегляд журналів маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:542
 msgid "View information and stats regarding all known peers"
-msgstr ""
+msgstr "Переглядайте інформацію та статистичні дані щодо всіх відомих партнерів"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:550
 msgid "View active peers"
-msgstr ""
+msgstr "Перегляньте активних колег"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:554
 msgid "View peer performance profiles"
-msgstr ""
+msgstr "Переглядайте профілі ефективності однолітків"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:558
 msgid "View information about router and running environment"
-msgstr ""
+msgstr "Перегляд інформації про маршрутизатор і робоче середовище"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:564
 msgid "Statistics"
-msgstr ""
+msgstr "Статистика"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:570
 msgid "View active tunnels"
-msgstr ""
+msgstr "Перегляд активних тунелів"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:588
 msgid "Customize homepage"
-msgstr ""
+msgstr "Налаштувати домашню сторінку"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:590
 msgid "Homepage"
-msgstr ""
+msgstr "Домашня сторінка"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:592
 msgid "Configure I2P Client Control Interface"
-msgstr ""
+msgstr "Налаштувати інтерфейс керування клієнтом I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:596
 msgid "View or edit router keyring for encrypted destinations"
-msgstr ""
+msgstr "Перегляньте або відредагуйте брелок маршрутизатора для зашифрованих місць призначення"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:604
 msgid "Configure router networking options"
-msgstr ""
+msgstr "Налаштуйте параметри мережі маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:608
 msgid "Manually edit peers and view banned peers and blocklist"
-msgstr ""
+msgstr "Редагувати вручну однорангових вузлів і переглядати заборонені однорангові вузли та список блокувань"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:612
 msgid "Install and manage router plugins"
-msgstr ""
+msgstr "Встановлення плагінів маршрутизатора та керування ними"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:616
 msgid "Router reseeding and configuration"
-msgstr ""
+msgstr "Повторне завантаження та налаштування маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:620
 msgid "Configure and manage Router family"
-msgstr ""
+msgstr "Налаштуйте та керуйте сімейством маршрутизаторів"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:624
 msgid "Manage Router service"
-msgstr ""
+msgstr "Керувати службою маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:628
 msgid "Configure stat collection for graphing"
-msgstr ""
+msgstr "Налаштувати збір статистики для побудови графіків"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:630
 msgid "Router Stats"
-msgstr ""
+msgstr "Статистика маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:632
 msgid "Configure router updates"
-msgstr ""
+msgstr "Налаштуйте оновлення маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:636
 msgid "Configuration wizard for new users"
-msgstr ""
+msgstr "Майстер конфігурації для нових користувачів"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:638
 msgid "Setup Wizard"
-msgstr ""
+msgstr "Майстер налаштування"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:640
 msgid "Customize sidebar"
-msgstr ""
+msgstr "Налаштуйте бічну панель"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:644
 msgid "Configure tunnel options"
-msgstr ""
+msgstr "Налаштувати параметри тунелю"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:648
 msgid "Configure router user interface and optional console password"
-msgstr ""
+msgstr "Налаштуйте інтерфейс користувача маршрутизатора та додатковий пароль консолі"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:666
 msgid "Configuring I2P for optimal performance"
-msgstr ""
+msgstr "Налаштування I2P для оптимальної продуктивності"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:682
 msgid "Information for new users"
-msgstr ""
+msgstr "Інформація для нових користувачів"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:686
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:702
 msgid "A guide to reseeding your I2P router"
-msgstr ""
+msgstr "Посібник із повторного завантаження маршрутизатора I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:690
 msgid "What to do in the event I2P isn't working"
-msgstr ""
+msgstr "Що робити, якщо I2P не працює"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:694
 msgid "Introduction to tunnel filters"
-msgstr ""
+msgstr "Вступ до тунельних фільтрів"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:696
 msgid "Tunnel Filters"
-msgstr ""
+msgstr "Тунельні фільтри"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/stats_jsp.java:280
 msgid "statistics"
-msgstr ""
+msgstr "статистика"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/stats_jsp.java:428
 msgid "Router Statistics"
-msgstr ""
+msgstr "Статистика маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrentmgr_jsp.java:283
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrents_jsp.java:312
@@ -11399,19 +11399,19 @@ msgstr "торрентів"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrents_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrents_jsp.java:457
 msgid "Torrent Manager"
-msgstr ""
+msgstr "Торрент-менеджер"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:417
 msgid "Most Recent Transit Tunnels"
-msgstr ""
+msgstr "Найновіші транзитні тунелі"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:419
 msgid "Locally hosted tunnels (exploratory and client)"
-msgstr ""
+msgstr "Локальні тунелі (дослідницькі та клієнтські)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:424
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:424
@@ -11419,7 +11419,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:424
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:422
 msgid "Most Recent"
-msgstr ""
+msgstr "Останній"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:430
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:430
@@ -11427,7 +11427,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:430
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:428
 msgid "Fastest"
-msgstr ""
+msgstr "Найшвидший"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:432
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:432
@@ -11435,7 +11435,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:432
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:430
 msgid "Top 50 peers by transit tunnel requests"
-msgstr ""
+msgstr "Топ-50 партнерів за запитами на транзитні тунелі"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:434
@@ -11443,46 +11443,46 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:432
 msgid "Transit by Peer"
-msgstr ""
+msgstr "Транзит через Peer"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:417
 msgid "Fastest Transit Tunnels"
-msgstr ""
+msgstr "Найшвидші транзитні тунелі"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:417
 msgid "Transit Tunnels by Peer"
-msgstr ""
+msgstr "Транзитні тунелі за Peer"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:280
 msgid "tunnel peer count"
-msgstr ""
+msgstr "кількість однорангових тунелів"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_005fnorefresh_jsp.java:280
 msgid "tunnel summary"
-msgstr ""
+msgstr "резюме тунелю"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_005fnorefresh_jsp.java:417
 msgid "Tunnel Summary"
-msgstr ""
+msgstr "Підсумок тунелю"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:280
 msgid "local tunnels"
-msgstr ""
+msgstr "місцеві тунелі"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:417
 msgid "Local Tunnels"
-msgstr ""
+msgstr "Місцеві тунелі"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:417
 msgid "Peer Profile"
-msgstr ""
+msgstr "Профіль однолітка"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:438
 msgid "Profile for peer"
-msgstr ""
+msgstr "Профіль однолітка"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:442
 msgid "NetDb entry"
@@ -11490,28 +11490,28 @@ msgstr "показати опис в NetDB"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:455
 msgid "View profile in text format"
-msgstr ""
+msgstr "Перегляд профілю в текстовому форматі"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:457
 msgid "View Raw Profile"
-msgstr ""
+msgstr "Перегляд необробленого профілю"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:476
 msgid "Return to Top"
-msgstr ""
+msgstr "Повернутися до початку"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:311
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:456
 msgid "webmail"
-msgstr ""
+msgstr "веб-пошта"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:333
 msgid "New Install Wizard"
-msgstr ""
+msgstr "Майстер нової інсталяції"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:356
 msgid "Skip Setup"
-msgstr ""
+msgstr "Пропустити налаштування"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:481
 msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
@@ -11531,92 +11531,92 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:496
 msgid "Bandwidth Test"
-msgstr ""
+msgstr "Перевірка пропускної здатності"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:498
 msgid "I2P will now test your internet connection to identify the optimal speed settings."
-msgstr ""
+msgstr "I2P тепер перевірить ваше інтернет-з’єднання, щоб визначити оптимальні налаштування швидкості."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:500
 msgid "This is done using the third-party M-Lab service."
-msgstr ""
+msgstr "Це робиться за допомогою стороннього сервісу M-Lab."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:502
 msgid "Please review the M-Lab privacy policies linked below."
-msgstr ""
+msgstr "Ознайомтеся з політикою конфіденційності M-Lab, посилання на яку наведено нижче."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:504
 msgid "If you do not wish to run the M-Lab bandwidth test, you may skip it by clicking the button below."
-msgstr ""
+msgstr "Якщо ви не бажаєте запускати тест пропускної здатності M-Lab, ви можете пропустити його, натиснувши кнопку нижче."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:506
 msgid "M-Lab Privacy Policy"
-msgstr ""
+msgstr "Політика конфіденційності M-Lab"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:508
 msgid "M-Lab Name Server Privacy Policy"
-msgstr ""
+msgstr "Політика конфіденційності сервера імен M-Lab"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:515
 msgid "The bandwidth test is now running and will take around 60 seconds to complete, after which you should be forwarded to the results page."
-msgstr ""
+msgstr "Зараз виконується перевірка пропускної здатності, яка триватиме близько 60 секунд, після чого вас буде перенаправлено на сторінку результатів."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:517
 msgid "Bandwidth Test in progress"
-msgstr ""
+msgstr "Виконується перевірка пропускної здатності"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:519
 msgid "Javascript is disabled - wait 60 seconds for the bandwidth test to complete and then click Next"
-msgstr ""
+msgstr "Javascript вимкнено - зачекайте 60 секунд, поки завершиться перевірка пропускної здатності, а потім натисніть «Далі»"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:539
 msgid "Bandwidth Test Results"
-msgstr ""
+msgstr "Результати тестування пропускної здатності"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:545
 msgid "Test running?"
-msgstr ""
+msgstr "Тестовий запуск?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:562
 msgid "Test complete?"
-msgstr ""
+msgstr "Тест завершено?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:575
 msgid "Test server location"
-msgstr ""
+msgstr "Розташування тестового сервера"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:579
 msgid "Completion status"
-msgstr ""
+msgstr "Статус завершення"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:592
 msgid "Downstream Bandwidth"
-msgstr ""
+msgstr "Пропускна здатність низхідного потоку"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:596
 msgid "Upstream Bandwidth"
-msgstr ""
+msgstr "Пропускна здатність висхідного каналу"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:600
 msgid "Share of Bandwidth for I2P"
-msgstr ""
+msgstr "Частка пропускної здатності для I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:612
 msgid "Bandwidth Configuration"
-msgstr ""
+msgstr "Конфігурація пропускної здатності"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:662
 #, java-format
 msgid "You have configured I2P to share {0} KBps."
-msgstr ""
+msgstr "Ви налаштували I2P для спільного використання {0} Кбіт/с."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:673
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
-msgstr ""
+msgstr "I2P вимагає веб-браузер, налаштований на використання резидентного HTTP-проксі, щоб переглядати веб-сайти в мережі I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:675
 msgid "Browser Setup"
-msgstr ""
+msgstr "Налаштування браузера"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:677
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
@@ -11624,15 +11624,15 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:684
 msgid "Welcome to I2P!"
-msgstr "Ласкаво просимо в I2P!"
+msgstr "Ласкаво просимо в I2P+!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:686
 msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
-msgstr "Коли ви запускаєте I2P, може знадобитися кілька хвилин для завантаження (інтеграції) вашого маршрутизатора в мережу та пошуку додаткових однорангових пристроїв, тому запасіться терпінням."
+msgstr "Коли ви запускаєте I2P+, може знадобитися кілька хвилин для завантаження (інтеграції) вашого маршрутизатора в мережу та пошуку додаткових однорангових пристроїв, тому запасіться терпінням."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:688
 msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
-msgstr "Коли поруч із вашими локальними тунелями відображаються зелені зірочки, з I2P ви можете робити багато речей."
+msgstr "Коли поруч із вашими локальними тунелями відображаються зелені зірочки, з I2P+ ви можете робити багато речей."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:696
 msgid "Unknown Wizard page"
