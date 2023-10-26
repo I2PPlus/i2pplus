@@ -6,12 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2019-11-24 13:40+0000\n"
+"PO-Revision-Date: 2023-10-26 00:56+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.4\n"
 
 #. * IPv4 OK, IPv6 OK or disabled or no address
 #: ../java/src/net/i2p/router/CommSystemFacade.java:426
@@ -20,28 +23,28 @@ msgstr "تایید"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:427
 msgid "IPv4: OK; IPv6: Testing"
-msgstr ""
+msgstr "IPv4: خوب ؛ IPv6: آزمایش"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:428
 msgid "IPv4: OK; IPv6: Firewalled"
-msgstr ""
+msgstr "IPv4: خوب ؛ IPv6: فایروالد"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:429
 msgid "IPv4: Testing; IPv6: OK"
-msgstr ""
+msgstr "IPv4: آزمایش ؛ IPv6: خوب"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:430
 msgid "IPv4: Firewalled; IPv6: OK"
-msgstr ""
+msgstr "IPv4: Firewalled ؛ IPv6: خوب"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:431
 msgid "IPv4: Disabled; IPv6: OK"
-msgstr ""
+msgstr "IPv4: غیرفعال ؛ IPv6: خوب"
 
 #. * IPv4 symmetric NAT (not source NAT)
 #: ../java/src/net/i2p/router/CommSystemFacade.java:433
 msgid "IPv4: Symmetric NAT; IPv6: OK"
-msgstr ""
+msgstr "IPv4: متقارن NAT ؛ IPv6: خوب"
 
 #. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
 #: ../java/src/net/i2p/router/CommSystemFacade.java:435
@@ -51,28 +54,28 @@ msgstr "NAT همگام"
 #. * IPv4 symmetric NAT (not source NAT)
 #: ../java/src/net/i2p/router/CommSystemFacade.java:437
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
-msgstr ""
+msgstr "IPv4: متقارن NAT ؛ IPv6: آزمایش"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:438
 msgid "IPv4: Firewalled; IPv6: Testing"
-msgstr ""
+msgstr "IPv4: Firewalled ؛ IPv6: آزمایش"
 
 #. * IPv4 firewalled, IPv6 firewalled or disabled or no address
 #: ../java/src/net/i2p/router/CommSystemFacade.java:440
 msgid "Firewalled"
-msgstr ""
+msgstr "دیوار آتش"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:441
 msgid "IPv4: Testing; IPv6: Firewalled"
-msgstr ""
+msgstr "IPv4: آزمایش ؛ IPv6: فایروالد"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:442
 msgid "IPv4: Disabled; IPv6: Testing"
-msgstr ""
+msgstr "IPv4: غیرفعال ؛ IPv6: آزمایش"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:443
 msgid "IPv4: Disabled; IPv6: Firewalled"
-msgstr ""
+msgstr "IPv4: غیرفعال ؛ IPv6: فایروالد"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:444
 msgid "Disconnected"
@@ -80,11 +83,11 @@ msgstr "قطع است"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:445
 msgid "Port Conflict"
-msgstr ""
+msgstr "درگیری بندر"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:446
 msgid "Testing"
-msgstr ""
+msgstr "آزمایش"
 
 #. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
 #. NPE, too early
@@ -96,16 +99,16 @@ msgstr ""
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:152
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:575
 msgid "Starting up"
-msgstr ""
+msgstr "راه اندازی"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
 msgid "Declining all tunnel requests:<br>"
-msgstr ""
+msgstr "رد کردن همه درخواست‌های تونل:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 msgid "Hidden Mode"
-msgstr ""
+msgstr "حالت پنهان"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
@@ -113,57 +116,53 @@ msgstr ""
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
 msgid "Declining tunnel requests:<br>"
-msgstr ""
+msgstr "رد درخواست تونل:<br>"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
 msgid "High message delay"
-msgstr ""
+msgstr "تاخیر پیام زیاد"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Declining requests: "
-msgstr ""
+msgstr "رد درخواست ها: "
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Limit reached"
-msgstr ""
+msgstr "به حد مجاز رسیده است"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 msgid "Participation disabled"
-msgstr ""
+msgstr "مشارکت غیرفعال است"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
 msgid "High system load"
-msgstr ""
+msgstr "بار بالای سیستم"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "Rejecting all tunnel requests:<br>"
-msgstr "تونل های کاربر"
+msgstr "رد کردن تمام درخواست های تونل:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
 msgid "High number of requests"
-msgstr ""
+msgstr "تعداد درخواست زیاد"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "Rejecting most tunnel requests:<br>"
-msgstr "تونل های کاربر"
+msgstr "رد کردن اکثر درخواست های تونل:<br>"
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:262
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:469
-#, fuzzy
 msgid "Accepting most tunnel requests"
-msgstr "تونل های کاربر"
+msgstr "پذیرش اکثر درخواست های تونل"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:264
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:471
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:591
-#, fuzzy
 msgid "Accepting tunnel requests"
-msgstr "تونل های کاربر"
+msgstr "پذیرش درخواست های تونل"
 
 #. .067KBps
 #. * also limited to 90% - see below
@@ -175,58 +174,54 @@ msgstr "تونل های کاربر"
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:369
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:465
 msgid "Declining requests: Bandwidth limit"
-msgstr ""
+msgstr "رد درخواست ها: محدودیت پهنای باند"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
-#, fuzzy
 msgid "Declining requests"
-msgstr "تونل های کاربر"
+msgstr "رد درخواست ها"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 msgid "Shutting down"
-msgstr ""
+msgstr "خاموش شدن"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
-#, fuzzy
 msgid "Declining tunnel requests"
-msgstr "تونل های کاربر"
+msgstr "رد درخواست های تونل"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:302
 msgid "Dropping tunnel requests: Too slow"
-msgstr ""
+msgstr "درخواست های تونل انداختن: خیلی کند است"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:311
 msgid "Dropping tunnel requests: High job lag"
-msgstr ""
+msgstr "درخواست های حذف تونل: تاخیر شغلی زیاد"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:320
-#, fuzzy
 msgid "Dropping tunnel requests:<br>High CPU load"
-msgstr "تونل های کاربر"
+msgstr "حذف درخواست های تونل:<br>بار بالای CPU"
 
 #. don't even bother, since we are so overloaded locally
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:587
 msgid "Dropping tunnel requests: Overloaded"
-msgstr ""
+msgstr "درخواست های تونل انداختن: بیش از حد بارگذاری شده است"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
-#, fuzzy
 msgid "Declining requests:"
-msgstr "تونل های کاربر"
+msgstr "رد درخواست ها:"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
 msgid "Request overload"
-msgstr ""
+msgstr "درخواست اضافه بار"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
 msgid "Connection limit reached"
-msgstr ""
+msgstr "محدودیت اتصال رسیده است"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1267
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1302
 msgid "Dropping tunnel requests: High load"
-msgstr ""
+msgstr "درخواست های تونل انداختن: بار زیاد"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1385
 msgid "Dropping tunnel requests: Queue time"
-msgstr ""
+msgstr "درخواست های تونل انداختن: زمان صف"
