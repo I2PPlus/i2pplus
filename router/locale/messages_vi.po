@@ -6,12 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2019-11-24 13:40+0000\n"
+"PO-Revision-Date: 2023-10-26 01:41+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4\n"
 
 #. * IPv4 OK, IPv6 OK or disabled or no address
 #: ../java/src/net/i2p/router/CommSystemFacade.java:426
@@ -20,59 +23,59 @@ msgstr "OK"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:427
 msgid "IPv4: OK; IPv6: Testing"
-msgstr ""
+msgstr "IPv4: OK; IPv6: Kiểm tra"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:428
 msgid "IPv4: OK; IPv6: Firewalled"
-msgstr ""
+msgstr "IPv4: OK; IPv6: Firewalled"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:429
 msgid "IPv4: Testing; IPv6: OK"
-msgstr ""
+msgstr "IPv4: Kiểm tra; IPv6: OK"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:430
 msgid "IPv4: Firewalled; IPv6: OK"
-msgstr ""
+msgstr "IPv4: Firewalled; IPv6: OK"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:431
 msgid "IPv4: Disabled; IPv6: OK"
-msgstr ""
+msgstr "IPv4: bị vô hiệu hóa; IPv6: OK"
 
 #. * IPv4 symmetric NAT (not source NAT)
 #: ../java/src/net/i2p/router/CommSystemFacade.java:433
 msgid "IPv4: Symmetric NAT; IPv6: OK"
-msgstr ""
+msgstr "IPv4: NAT đối xứng; IPv6: OK"
 
 #. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
 #: ../java/src/net/i2p/router/CommSystemFacade.java:435
 msgid "Symmetric NAT"
-msgstr ""
+msgstr "NAT đối xứng"
 
 #. * IPv4 symmetric NAT (not source NAT)
 #: ../java/src/net/i2p/router/CommSystemFacade.java:437
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
-msgstr ""
+msgstr "IPv4: NAT đối xứng; IPv6: Kiểm tra"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:438
 msgid "IPv4: Firewalled; IPv6: Testing"
-msgstr ""
+msgstr "IPv4: Firewalled; IPv6: Kiểm tra"
 
 #. * IPv4 firewalled, IPv6 firewalled or disabled or no address
 #: ../java/src/net/i2p/router/CommSystemFacade.java:440
 msgid "Firewalled"
-msgstr ""
+msgstr "Tường lửa"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:441
 msgid "IPv4: Testing; IPv6: Firewalled"
-msgstr ""
+msgstr "IPv4: Kiểm tra; IPv6: Firewalled"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:442
 msgid "IPv4: Disabled; IPv6: Testing"
-msgstr ""
+msgstr "IPv4: bị vô hiệu hóa; IPv6: Kiểm tra"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:443
 msgid "IPv4: Disabled; IPv6: Firewalled"
-msgstr ""
+msgstr "IPv4: bị vô hiệu hóa; IPv6: Firewalled"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:444
 msgid "Disconnected"
@@ -80,11 +83,11 @@ msgstr "Đã dừng kết nối"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:445
 msgid "Port Conflict"
-msgstr ""
+msgstr "Xung đột cổng"
 
 #: ../java/src/net/i2p/router/CommSystemFacade.java:446
 msgid "Testing"
-msgstr ""
+msgstr "Kiểm tra"
 
 #. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
 #. NPE, too early
@@ -96,79 +99,70 @@ msgstr ""
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:152
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:575
 msgid "Starting up"
-msgstr ""
+msgstr "Khởi động"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
-#, fuzzy
 msgid "Declining all tunnel requests:<br>"
-msgstr "Bỏ yêu cầu đường ống riêng: Quá tải"
+msgstr "Từ chối tất cả các yêu cầu đường hầm:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 msgid "Hidden Mode"
-msgstr ""
+msgstr "Chế độ ẩn"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
-#, fuzzy
 msgid "Declining tunnel requests:<br>"
-msgstr "Bỏ yêu cầu đường ống riêng: Quá tải"
+msgstr "Yêu cầu đường hầm giảm:<br>"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
-#, fuzzy
 msgid "High message delay"
-msgstr "Từ chối đường ống riêng: Độ trễ tin nhắn cao"
+msgstr "Độ trễ tin nhắn cao"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Declining requests: "
-msgstr ""
+msgstr "Yêu cầu giảm: "
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Limit reached"
-msgstr ""
+msgstr "Đã đạt đến giới hạn"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 msgid "Participation disabled"
-msgstr ""
+msgstr "Tham gia bị vô hiệu hóa"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "High system load"
-msgstr "Từ chối đường ống riêng: Độ trễ tin nhắn cao"
+msgstr "Tải hệ thống cao"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "Rejecting all tunnel requests:<br>"
-msgstr "Từ chối hầu hết đường ống riêng: Số lượng yêu cầu cao"
+msgstr "Từ chối tất cả các yêu cầu đường hầm:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "High number of requests"
-msgstr "Từ chối hầu hết đường ống riêng: Số lượng yêu cầu cao"
+msgstr "Số lượng yêu cầu cao"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "Rejecting most tunnel requests:<br>"
-msgstr "Từ chối hầu hết đường ống riêng: Số lượng yêu cầu cao"
+msgstr "Từ chối hầu hết các yêu cầu đường hầm:<br>"
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:262
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:469
-#, fuzzy
 msgid "Accepting most tunnel requests"
-msgstr "Chấp nhận hầu hết đường ống riêng"
+msgstr "Chấp nhận hầu hết các yêu cầu đường hầm"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:264
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:471
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:591
-#, fuzzy
 msgid "Accepting tunnel requests"
-msgstr "Chấp nhận đường ống riêng"
+msgstr "Chấp nhận yêu cầu đường hầm"
 
 #. .067KBps
 #. * also limited to 90% - see below
@@ -179,37 +173,32 @@ msgstr "Chấp nhận đường ống riêng"
 #. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:369
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:465
-#, fuzzy
 msgid "Declining requests: Bandwidth limit"
-msgstr "Từ chối đường ống riêng: Giới hạn băng thông"
+msgstr "Từ chối yêu cầu: Giới hạn băng thông"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
-#, fuzzy
 msgid "Declining requests"
-msgstr "Bỏ yêu cầu đường ống riêng: Quá chậm"
+msgstr "Yêu cầu từ chối"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 msgid "Shutting down"
-msgstr ""
+msgstr "Tắt máy"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
-#, fuzzy
 msgid "Declining tunnel requests"
-msgstr "Bỏ yêu cầu đường ống riêng: Quá chậm"
+msgstr "Yêu cầu đường hầm giảm"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:302
 msgid "Dropping tunnel requests: Too slow"
 msgstr "Bỏ yêu cầu đường ống riêng: Quá chậm"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:311
-#, fuzzy
 msgid "Dropping tunnel requests: High job lag"
-msgstr "Bỏ yêu cầu đường ống riêng: Độ tải quá cao"
+msgstr "Bỏ yêu cầu đường hầm: Độ trễ công việc cao"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:320
-#, fuzzy
 msgid "Dropping tunnel requests:<br>High CPU load"
-msgstr "Bỏ yêu cầu đường ống riêng: Độ tải quá cao"
+msgstr "Loại bỏ yêu cầu đường hầm:<br>Tải CPU cao"
 
 #. don't even bother, since we are so overloaded locally
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:587
@@ -217,19 +206,16 @@ msgid "Dropping tunnel requests: Overloaded"
 msgstr "Bỏ yêu cầu đường ống riêng: Quá tải"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
-#, fuzzy
 msgid "Declining requests:"
-msgstr "Bỏ yêu cầu đường ống riêng: Quá chậm"
+msgstr "Từ chối yêu cầu:"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
-#, fuzzy
 msgid "Request overload"
-msgstr "Từ chối đường ống riêng: Quá tải yêu cầu kết nối"
+msgstr "Yêu cầu quá tải"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
-#, fuzzy
 msgid "Connection limit reached"
-msgstr "Từ chối đường ống riêng: Đạt tới hạn"
+msgstr "Đã đạt đến giới hạn kết nối"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1267
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1302
@@ -239,22 +225,3 @@ msgstr "Bỏ yêu cầu đường ống riêng: Độ tải quá cao"
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1385
 msgid "Dropping tunnel requests: Queue time"
 msgstr "Bỏ yêu cầu đường ống riêng: Hàng đợi thời gian"
-
-#~ msgid "Rejecting tunnels: Starting up"
-#~ msgstr "Từ chối đường ống riêng: Đang khởi động"
-
-#~ msgid "Rejecting most tunnels: Bandwidth limit"
-#~ msgstr "Từ chối hầu hết đường ống riêng: Giới hạn băng thông"
-
-#~ msgid "Rejecting tunnels: Shutting down"
-#~ msgstr "Từ chối đường ống riêng: Đang tắt"
-
-#~ msgid "Rejecting tunnels"
-#~ msgstr "Chấp nhận đường ống riêng"
-
-#, fuzzy
-#~ msgid "Rejecting tunnels: Hidden mode"
-#~ msgstr "Từ chối đường ống riêng: Độ trễ tin nhắn cao"
-
-#~ msgid "Rejecting tunnels: Connection limit"
-#~ msgstr "Từ chối đường ống riêng: vượt giới hạn kết nối"
