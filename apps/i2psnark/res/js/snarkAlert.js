@@ -15,8 +15,10 @@ const inputNewFile = document.querySelector("input[name='nofilter_baseFile']");
 const notify = document.getElementById("notify");
 const processForm = document.getElementById("processForm");
 const xhrsnarklog = new XMLHttpRequest();
+let hideAlertTimeoutId;
 
 function addTorrentNotify() {
+  if (hideAlertTimeoutId) {clearTimeout(hideAlertTimeoutId);}
   if (notify) {
     setTimeout(function() {
       refreshScreenLog(showAddAlert);
@@ -25,6 +27,7 @@ function addTorrentNotify() {
 }
 
 function createTorrentNotify() {
+  if (hideAlertTimeoutId) {clearTimeout(hideAlertTimeoutId);}
   if (notify) {
     setTimeout(function() {
       refreshScreenLog(showCreateAlert);
@@ -58,7 +61,17 @@ function injectCss() {
 }
 
 function hideAlert() {
-  setTimeout(() => {
+  hideAlertTimeoutId = setTimeout(() => {
+    if (addNotify && createNotify) {
+      addNotify.setAttribute("hidden", "");
+      createNotify.setAttribute("hidden", "");
+      notify.setAttribute("hidden", "");
+    }
+  }, 500);
+}
+
+function hideAlert() {
+  timeoutId = setTimeout(() => {
     if (addNotify && createNotify) {
       addNotify.setAttribute("hidden", "");
       createNotify.setAttribute("hidden", "");
