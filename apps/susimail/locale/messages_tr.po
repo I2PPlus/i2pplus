@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2019-05-21 05:22+0000\n"
 "Language: tr_TR\n"
@@ -650,12 +650,3 @@ msgstr "Sunucu bağlantıyı reddetti"
 msgid "Mail rejected"
 msgstr "Posta reddedildi"
 
-#~ msgid "User logged out."
-#~ msgstr "Kullanıcı oturumunu kapattı."
-
-#~ msgid "Folder"
-#~ msgstr "Klasör"
-
-#, java-format
-#~ msgid "Page {0} of {1}"
-#~ msgstr "Sayfa {0} / {1}"

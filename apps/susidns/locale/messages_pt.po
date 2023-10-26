@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2019-04-24 14:22+0000\n"
@@ -1011,57 +1011,4 @@ msgstr ""
 msgid ""
 "Hosts you receive from your subscriptions will merge with your Router "
 "address book."
-msgstr ""
-
-#, java-format
-#~ msgid "One result for search within filtered list."
-#~ msgid_plural "{0} results for search within filtered list."
-#~ msgstr[0] "Um resultado obtido na pesquisa com lista filtrada"
-#~ msgstr[1] "{0} resultados obtidos na pesquisa com lista filtrada"
-
-#, java-format
-#~ msgid "Address book contains 1 entry."
-#~ msgid_plural "Address book contains {0} entries."
-#~ msgstr[0] "O livro de endereços contém 1 entrada."
-#~ msgstr[1] "O livro de endereços contém {0} entradas."
-
-#, java-format
-#~ msgid "Showing {0} of {1}"
-#~ msgstr "Mostrando {0} de {1}"
-
-#~ msgid "Overview"
-#~ msgstr "Resumo"
-
-#~ msgid "Address book"
-#~ msgstr "Livro de endereço"
-
-#~ msgid "Storage"
-#~ msgstr "Armazenamento"
-
-#~ msgid "Current filter"
-#~ msgstr "Filtro atual"
-
-#~ msgid "Filter"
-#~ msgstr "Filtro"
-
-#~ msgid "all"
-#~ msgstr "tudo"
-
-#~ msgid "This address book is empty."
-#~ msgstr "Este livro de endereços está vazio."
-
-#~ msgid "File"
-#~ msgstr "Ficheiro"
-
-#, java-format
-#~ msgid ""
-#~ "In the default configuration, the address book is only subscribed to {0}."
-#~ msgstr ""
-#~ "Na configuração padrão, o livro de endereços está inscrito apenas no  {0}."
-
-#~ msgid ""
-#~ "So it is a good idea to add additional subscriptions to sites that have "
-#~ "the latest addresses."
-#~ msgstr ""
-#~ "Então é uma boa ideia adicionar inscrições adicionais para os sites que "
-#~ "mantém as últimas atualizações."
+msgstr ""#, java-format#~ "In the default configuration, the address book is only subscribed to {0}."

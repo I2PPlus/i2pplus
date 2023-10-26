@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2023-10-24 00:47+0000\n"
 "Last-Translator: \n"
@@ -1861,65 +1861,5 @@ msgstr "Wijzigingen opslaan"
 msgid "Torrent must be stopped"
 msgstr "Torrent moet worden gestopt"
 
-#, fuzzy
-#~ msgid "Created by"
-#~ msgstr "Aangemaakt door"
 
-#, java-format
-#~ msgid "Error on torrent {0}"
-#~ msgstr "Fout bij torrent {0}"
-
-#, java-format
-#~ msgid "Torrent was not retrieved from {0}"
-#~ msgstr "Torrent was niet ontvangen van {0}"
-
-#, fuzzy
-#~ msgid "Net Error"
-#~ msgstr "Trackerfout"
-
-#, java-format
-#~ msgid "Download torrent file from {0}"
-#~ msgstr "Torrent-bestand downloaden van {0}"
-
-#, java-format
-#~ msgid "1 peer"
-#~ msgid_plural "{0} peers"
-#~ msgstr[0] "1 peer"
-#~ msgstr[1] "{0} peers"
-
-#, java-format
-#~ msgid "You can also copy .torrent files to: {0}."
-#~ msgstr "Je kan ook .torrent bestanden kopieren naar: {0}."
-
-#~ msgid "Removing a .torrent will cause it to stop."
-#~ msgstr "Verwijderen van een .torrent zorgt dat deze stopt."
-
-#~ msgid "Data location"
-#~ msgstr "Datalocatie"
-
-#~ msgid "Primary Tracker"
-#~ msgstr "Primaire tracker"
-
-#~ msgid "Tracker List"
-#~ msgstr "Trackerlijst"
-
-#~ msgid "Comment"
-#~ msgstr "Opmerking"
-
-#~ msgid "Magnet link"
-#~ msgstr "Magnet link"
-
-#~ msgid "Private torrent"
-#~ msgstr "Privé-torrent"
-
-#~ msgid "Piece size"
-#~ msgstr "Stukgrootte"
-
-#~ msgid "Set all high"
-#~ msgstr "Stel alle in als hoog"
-
-#~ msgid "Set all normal"
-#~ msgstr "Stel alle in als normaal"
-
-#~ msgid "Skip all"
-#~ msgstr "Alle overslaan"
+#, java-format#~ msgstr "Je kan ook .torrent bestanden kopieren naar: {0}."

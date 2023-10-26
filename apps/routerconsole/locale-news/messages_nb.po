@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2017-09-19 18:30+0000\n"
@@ -69,14 +69,3 @@ msgid ""
 msgstr ""
 "Rett din IRC-klient inn mot {0}localhost:6668{1} og si hei til oss på {2}"
 "#i2p{3}."
-
-#, fuzzy, java-format
-#~ msgid ""
-#~ "Once you have a \"Shared Clients\" destination indicated on the sidebar, "
-#~ "please {0}check out{1} our {2}FAQ{3}."
-#~ msgstr ""
-#~ "Når du har \"delte klienter\" mål opplistet til venstre, {0}sjekk{1} vår "
-#~ "{2}O-S-S{3}."
-
-#~ msgid "Congratulations on getting I2P installed!"
-#~ msgstr "Til lykke med installasjonen av I2P!"

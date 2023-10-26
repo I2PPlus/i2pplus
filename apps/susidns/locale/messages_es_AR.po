@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2011-02-13 12:00+0000\n"
@@ -1064,59 +1064,4 @@ msgstr ""
 "Los equipos que recibe desde sus suscripciones se combinarán con su libreta "
 "de direcciones Router."
 
-#, java-format
-#~ msgid "Showing {0} of {1}"
-#~ msgstr "Mostrando {0} de {1}"
-
-#~ msgid "Overview"
-#~ msgstr "Información general"
-
-#~ msgid "Local"
-#~ msgstr "Local"
-
-#~ msgid "Address book"
-#~ msgstr "Libreta de direcciones"
-
-#~ msgid "Storage"
-#~ msgstr "Almacenamiento"
-
-#~ msgid "Current filter"
-#~ msgstr "Filtro actual"
-
-#~ msgid "Filter"
-#~ msgstr "Filtrar"
-
-#~ msgid "all"
-#~ msgstr "todos"
-
-#~ msgid "View larger version of identicon for this hostname"
-#~ msgstr ""
-#~ "Ver una versión más grande del identicon para este nombre de servidor"
-
-#~ msgid "This address book is empty."
-#~ msgstr "Esta libreta de direcciones está vacía."
-
-#~ msgid "File"
-#~ msgstr "Archivo"
-
-#, java-format
-#~ msgid ""
-#~ "In the default configuration, the address book is only subscribed to {0}."
-#~ msgstr ""
-#~ "En la configuración predeterminada, la libreta de direcciones sólo está "
-#~ "suscrita a {0}."
-
-#, java-format
-#~ msgid ""
-#~ "The default subscription is the hosts.txt from {0}, which is updated "
-#~ "infrequently."
-#~ msgstr ""
-#~ "La suscripción predeterminada es el hosts.txt de {0}, que se actualiza "
-#~ "con poca frecuencia."
-
-#~ msgid ""
-#~ "So it is a good idea to add additional subscriptions to sites that have "
-#~ "the latest addresses."
-#~ msgstr ""
-#~ "Por lo tanto, es una buena idea agregar suscripciones adicionales a "
-#~ "sitios que tengan las direcciones más recientes."
+#, java-format#~ "The default subscription is the hosts.txt from {0}, which is updated "

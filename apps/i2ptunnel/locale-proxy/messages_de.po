@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2022-09-16 09:02+0000\n"
@@ -828,18 +828,3 @@ msgstr "Klick hier, wenn du nicht automatisch weitergeleitet wirst!"
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Authentifizierung für {0} gespeichert, leite jetzt um."
-
-#~ msgid "You may want to retry."
-#~ msgstr "Vielleicht möchten Sie es erneut versuchen."
-
-#, java-format
-#~ msgid ""
-#~ "You may want to retry as this will randomly reselect an outproxy from the "
-#~ "pool you have defined {0}here{1} (if you have more than one configured)."
-#~ msgstr ""
-#~ "Sie sollten es öfters versuchen, da so ein Outproxy zufällig ausgewählt "
-#~ "wird aus dem Pool, den Sie {0}hier{1} definiert haben (falls Sie mehr als "
-#~ "einen konfiguriert haben)."
-
-#~ msgid "Error: Local Access"
-#~ msgstr "Fehler: Lokaler Zugriff"

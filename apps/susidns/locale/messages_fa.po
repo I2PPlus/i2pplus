@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
@@ -972,21 +972,3 @@ msgid ""
 "Hosts you receive from your subscriptions will merge with your Router "
 "address book."
 msgstr ""
-
-#~ msgid "Overview"
-#~ msgstr "بررسی اجمالی"
-
-#~ msgid "Address book"
-#~ msgstr "دفترچه آدرس"
-
-#~ msgid "Current filter"
-#~ msgstr "فیلتر فعلی"
-
-#~ msgid "Filter"
-#~ msgstr "فیلتر"
-
-#~ msgid "all"
-#~ msgstr "همه"
-
-#~ msgid "File"
-#~ msgstr "فايل"

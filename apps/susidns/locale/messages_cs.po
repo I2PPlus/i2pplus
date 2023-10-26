@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2023-10-22 21:12+0000\n"
@@ -1044,21 +1044,4 @@ msgstr ""
 "Hostitelé, které obdržíte z vašich předplatných, se sloučí s vaším adresářem "
 "routeru."
 
-#, java-format
-#~ msgid "Showing {0} of {1}"
-#~ msgstr "Zobrazuji {0} z {1}"
-
-#~ msgid "Overview"
-#~ msgstr "Přehled"
-
-#~ msgid "Storage"
-#~ msgstr "Úložiště"
-
-#~ msgid "Current filter"
-#~ msgstr "Současný filtr"
-
-#~ msgid "all"
-#~ msgstr "vše"
-
-#~ msgid "File"
-#~ msgstr "Soubor"
+#, java-format#~ msgstr "Zobrazuji {0} z {1}"

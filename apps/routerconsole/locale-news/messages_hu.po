@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2019-12-15 19:30+0000\n"
@@ -68,14 +68,3 @@ msgid ""
 msgstr ""
 "Irányítsa az IRC kliensét a {0}localhost:6668{1} címre és üdvözöljön minket "
 "az {2}#i2p{3} csatornán."
-
-#, fuzzy, java-format
-#~ msgid ""
-#~ "Once you have a \"Shared Clients\" destination indicated on the sidebar, "
-#~ "please {0}check out{1} our {2}FAQ{3}."
-#~ msgstr ""
-#~ "Kérjük, hogy miután már szerepelnek \"megosztott kliens\" célok a bal "
-#~ "oldalon, {0}tekintse meg{1} a {2}GYIK-et{3} is."
-
-#~ msgid "Congratulations on getting I2P installed!"
-#~ msgstr "Gratulálunk az I2P telepítéséhez!"

@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
@@ -67,14 +67,3 @@ msgid ""
 msgstr ""
 "Усмерите ИРЦ клијент на {0}localhost:6668{1} и реците нам здраво на {2}"
 "#i2p{3}."
-
-#, fuzzy, java-format
-#~ msgid ""
-#~ "Once you have a \"Shared Clients\" destination indicated on the sidebar, "
-#~ "please {0}check out{1} our {2}FAQ{3}."
-#~ msgstr ""
-#~ "Када на левој страни будете имали одредишта „дељених клијената“, {0}"
-#~ "погледајте{1} наша {2}ЧПП{3}."
-
-#~ msgid "Congratulations on getting I2P installed!"
-#~ msgstr "Честитамо на инсталацији И2П!"

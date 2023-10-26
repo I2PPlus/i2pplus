@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2019-11-24 13:40+0000\n"
 "Language: ro\n"
@@ -239,21 +239,3 @@ msgstr "Arunc cererile de tunel: Încărcătura mare"
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1385
 msgid "Dropping tunnel requests: Queue time"
 msgstr "Arunc cererile de tunel: Timp așteptare"
-
-#~ msgid "Rejecting tunnels: Starting up"
-#~ msgstr "Respingere tuneluri: Pornește"
-
-#~ msgid "Rejecting most tunnels: Bandwidth limit"
-#~ msgstr "Respingere a majoritatea tunelurilor: Limită lățime de bandă"
-
-#~ msgid "Rejecting tunnels: Shutting down"
-#~ msgstr "Respingere tuneluri: Oprire"
-
-#~ msgid "Rejecting tunnels"
-#~ msgstr "Refuza tuneluri"
-
-#~ msgid "Rejecting tunnels: Hidden mode"
-#~ msgstr "Respingere tuneluri: Mod ascuns"
-
-#~ msgid "Rejecting tunnels: Connection limit"
-#~ msgstr "Respinge Tuneluri: Limită de conexiune"

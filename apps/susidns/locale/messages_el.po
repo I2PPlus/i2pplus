@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2020-02-16 18:40+0000\n"
@@ -978,27 +978,4 @@ msgid ""
 "address book."
 msgstr ""
 
-#, java-format
-#~ msgid "Showing {0} of {1}"
-#~ msgstr "Εμφάνιση {0} από {1}"
-
-#~ msgid "Overview"
-#~ msgstr "Επισκόπηση"
-
-#~ msgid "Address book"
-#~ msgstr "Βιβλίο Διευθύνσεων"
-
-#~ msgid "Current filter"
-#~ msgstr "Παρόν φίλτρο"
-
-#~ msgid "Filter"
-#~ msgstr "Φίλτρο"
-
-#~ msgid "all"
-#~ msgstr "όλα"
-
-#~ msgid "This address book is empty."
-#~ msgstr "Το βιβλίο διευθύνσεων είναι κενό."
-
-#~ msgid "File"
-#~ msgstr "Αρχείο"
+#, java-format#~ msgstr "Εμφάνιση {0} από {1}"

@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2021-11-10 12:27+0000\n"
@@ -64,9 +64,3 @@ msgid ""
 msgstr ""
 "Usmerite vašega IRC odjemalca na {0}localhost:6668{1} in odpišite \"hi to "
 "use\" na {2}#i2p{3}."
-
-#~ msgid "Congratulations on getting I2P installed!"
-#~ msgstr "Čestitke za uspešno nameščen I2P!"
-
-#~ msgid "I2P Development Team"
-#~ msgstr "I2P razvojna ekipa"

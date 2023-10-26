@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2023-10-22 21:02+0000\n"
@@ -1086,66 +1086,4 @@ msgid ""
 "address book."
 msgstr ""
 "Хости, отримані від ваших підписок, будуть об’єднані з адресною книгою "
-"вашого маршрутизатора."
-
-#, java-format
-#~ msgid "One result for search within filtered list."
-#~ msgid_plural "{0} results for search within filtered list."
-#~ msgstr[0] "{0} результат для пошуку у відфільтрованому списку."
-#~ msgstr[1] "{0} результати для пошуку у відфільтрованому списку."
-#~ msgstr[2] "{0} результатів для пошуку у відфільтрованому списку."
-#~ msgstr[3] "{0} результатів для пошуку у відфільтрованому списку."
-
-#, java-format
-#~ msgid "Address book contains 1 entry."
-#~ msgid_plural "Address book contains {0} entries."
-#~ msgstr[0] "Адресна книга містить {0} запис"
-#~ msgstr[1] "Адресна книга містить {0} запису"
-#~ msgstr[2] "Адресна книга містить {0} записів."
-#~ msgstr[3] "Адресна книга містить {0} записів."
-
-#, java-format
-#~ msgid "Showing {0} of {1}"
-#~ msgstr "Показано {0} з {1}"
-
-#~ msgid "Overview"
-#~ msgstr "Перегляд"
-
-#~ msgid "Address book"
-#~ msgstr "Адресна книга"
-
-#~ msgid "Storage"
-#~ msgstr "Зберігання"
-
-#~ msgid "Current filter"
-#~ msgstr "Теперішній фільтр"
-
-#~ msgid "Filter"
-#~ msgstr "Фільтр"
-
-#~ msgid "all"
-#~ msgstr "всі (без фільтра)"
-
-#~ msgid "This address book is empty."
-#~ msgstr "Ця адресна книга пуста."
-
-#~ msgid "File"
-#~ msgstr "Файл"
-
-#, java-format
-#~ msgid ""
-#~ "In the default configuration, the address book is only subscribed to {0}."
-#~ msgstr "За замовчуванням адресна книга налаштована тільки на {0}."
-
-#, java-format
-#~ msgid ""
-#~ "The default subscription is the hosts.txt from {0}, which is updated "
-#~ "infrequently."
-#~ msgstr "Підписка за умовчанням - hosts.txt від {0}, який оновлюється рідко."
-
-#~ msgid ""
-#~ "So it is a good idea to add additional subscriptions to sites that have "
-#~ "the latest addresses."
-#~ msgstr ""
-#~ "Тому не завадить додатково підписатися на hosts.txt із сайтів, що частіше "
-#~ "оновлюються."
+"вашого маршрутизатора."#, java-format#~ "The default subscription is the hosts.txt from {0}, which is updated "

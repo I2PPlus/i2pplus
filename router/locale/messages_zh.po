@@ -239,21 +239,3 @@ msgstr "忽略共享隧道请求：高负载"
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1385
 msgid "Dropping tunnel requests: Queue time"
 msgstr "忽略共享隧道请求：队列积压"
-
-#~ msgid "Rejecting tunnels: Starting up"
-#~ msgstr "拒绝共享隧道：正在启动"
-
-#~ msgid "Rejecting most tunnels: Bandwidth limit"
-#~ msgstr "收紧最大共享隧道：带宽限额"
-
-#~ msgid "Rejecting tunnels: Shutting down"
-#~ msgstr "拒绝共享隧道：正在关闭"
-
-#~ msgid "Rejecting tunnels"
-#~ msgstr "拒绝共享隧道"
-
-#~ msgid "Rejecting tunnels: Hidden mode"
-#~ msgstr "拒绝共享隧道：隐身模式"
-
-#~ msgid "Rejecting tunnels: Connection limit"
-#~ msgstr "拒绝共享隧道：连接受限"

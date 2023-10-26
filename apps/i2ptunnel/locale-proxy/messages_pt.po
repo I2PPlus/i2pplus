@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2023-10-25 04:44+0000\n"
@@ -594,6 +594,3 @@ msgstr "Clique aqui se você não for redirecionado automaticamente."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Salva a autenticação para {0}, redirecionando agora."
-
-#~ msgid "Error: Local Access"
-#~ msgstr "Erro: Acesso Local"

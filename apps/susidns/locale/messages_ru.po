@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2019-04-24 18:14+0000\n"
@@ -1072,68 +1072,5 @@ msgid ""
 "address book."
 msgstr "Узлы из подписок будут объединены с адресной книгой маршрутизатора."
 
-#, java-format
-#~ msgid "One result for search within filtered list."
-#~ msgid_plural "{0} results for search within filtered list."
-#~ msgstr[0] "{0} результат для поиска внутри отфильтрованного списка."
-#~ msgstr[1] "{0} результата для поиска внутри отфильтрованного списка."
-#~ msgstr[2] "{0} результатов для поиска внутри отфильтрованного списка."
-#~ msgstr[3] "{0} результатов для поиска внутри отфильтрованного списка."
 
-#, java-format
-#~ msgid "Address book contains 1 entry."
-#~ msgid_plural "Address book contains {0} entries."
-#~ msgstr[0] "Адресная книга содержит {0} запись."
-#~ msgstr[1] "Адресная книга содержит {0} записи."
-#~ msgstr[2] "Адресная книга содержит {0} записей."
-#~ msgstr[3] "Адресная книга содержит {0} записей."
 
-#, java-format
-#~ msgid "Showing {0} of {1}"
-#~ msgstr "Показаны {0} из {1}"
-
-#~ msgid "Overview"
-#~ msgstr "Введение"
-
-#~ msgid "Address book"
-#~ msgstr "Адресная книга"
-
-#~ msgid "Storage"
-#~ msgstr "Хранилище"
-
-#~ msgid "Current filter"
-#~ msgstr "Текущий фильтр"
-
-#~ msgid "Filter"
-#~ msgstr "Фильтр"
-
-#~ msgid "all"
-#~ msgstr "[без фильтра]"
-
-#~ msgid "View larger version of identicon for this hostname"
-#~ msgstr "Увеличенное изображение identicon для этого узла"
-
-#~ msgid "This address book is empty."
-#~ msgstr "Эта адресная книга пуста."
-
-#~ msgid "File"
-#~ msgstr "Файл"
-
-#, java-format
-#~ msgid ""
-#~ "In the default configuration, the address book is only subscribed to {0}."
-#~ msgstr "По умолчанию в адресной книге подписка настроена только на {0}."
-
-#, java-format
-#~ msgid ""
-#~ "The default subscription is the hosts.txt from {0}, which is updated "
-#~ "infrequently."
-#~ msgstr ""
-#~ "Подписка по умолчанию — hosts.txt с {0}, который обновляется очень редко."
-
-#~ msgid ""
-#~ "So it is a good idea to add additional subscriptions to sites that have "
-#~ "the latest addresses."
-#~ msgstr ""
-#~ "Поэтому не помешает дополнительно подписаться на hosts.txt с более часто "
-#~ "обновляемых сайтов."

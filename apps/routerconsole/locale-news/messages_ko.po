@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
@@ -67,14 +67,3 @@ msgid ""
 msgstr ""
 "IRC 클라이언트를 {0}localhost:6668{1}로 포인트 하고 {2}#i2p{3}에 접속해서 우"
 "리들에게 인사를 건네주세요."
-
-#, fuzzy, java-format
-#~ msgid ""
-#~ "Once you have a \"Shared Clients\" destination indicated on the sidebar, "
-#~ "please {0}check out{1} our {2}FAQ{3}."
-#~ msgstr ""
-#~ "\"공유된 클라이언트\"의 행선지가 왼쪽에 있습니다. {2}FAQ{3}를 {0}참조해 주"
-#~ "세요{1}."
-
-#~ msgid "Congratulations on getting I2P installed!"
-#~ msgstr "I2P 설치를 축하드립니다!"

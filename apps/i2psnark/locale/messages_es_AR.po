@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2011-02-13 12:00+0000\n"
 "language/es_AR/)\n"
@@ -2124,76 +2124,3 @@ msgstr "Guardar cambios"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5862
 msgid "Torrent must be stopped"
 msgstr ""
-
-#, java-format
-#~ msgid "{0} theme loaded."
-#~ msgstr "Tema cargado: {0}."
-
-#, fuzzy
-#~ msgid "Created by"
-#~ msgstr "Creado por"
-
-#~ msgid "dark"
-#~ msgstr "oscuro"
-
-#~ msgid "light"
-#~ msgstr "claro"
-
-#~ msgid "vanilla"
-#~ msgstr "por defecto"
-
-#, java-format
-#~ msgid "Error on torrent {0}"
-#~ msgstr "Error en el torrent {0}"
-
-#, java-format
-#~ msgid "Download torrent file from {0}"
-#~ msgstr "Descargar archivo torrent desde {0}"
-
-#, java-format
-#~ msgid "Torrent was not retrieved from {0}"
-#~ msgstr "El torrent no se pudo obtener desde {0}"
-
-#~ msgid "Dht Debug"
-#~ msgstr "Depuración de la DHT"
-
-#~ msgid "Tracker Error"
-#~ msgstr "Error del tracker (rastreador)"
-
-#, java-format
-#~ msgid "You can also copy .torrent files to: {0}."
-#~ msgstr "También puede copiar ficheros .torrent a: {0}."
-
-#~ msgid "Removing a .torrent will cause it to stop."
-#~ msgstr ""
-#~ "Eliminar un fichero .torrent provocará que se detengan sus transferencias."
-
-#~ msgid "Data location"
-#~ msgstr "Ubicación de los datos"
-
-#~ msgid "Primary Tracker"
-#~ msgstr "Tracker principal"
-
-#~ msgid "Tracker List"
-#~ msgstr "Lista de trackers"
-
-#~ msgid "Comment"
-#~ msgstr "Comentario"
-
-#~ msgid "Magnet link"
-#~ msgstr "Enlace de magnet"
-
-#~ msgid "Private torrent"
-#~ msgstr "Torrent privado"
-
-#~ msgid "Piece size"
-#~ msgstr "Tamaño de las partes"
-
-#~ msgid "Set all high"
-#~ msgstr "Configurar todos a alto "
-
-#~ msgid "Set all normal"
-#~ msgstr "Configurar todos a normal"
-
-#~ msgid "Skip all"
-#~ msgstr "Omitir todos"

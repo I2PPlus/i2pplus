@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2023-10-23 08:05+0000\n"
 "Language: ca\n"
@@ -643,6 +643,3 @@ msgstr "El servidor ha rebutjat la connexió"
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:327
 msgid "Mail rejected"
 msgstr "Correu rebutjat"
-
-#~ msgid "Folder"
-#~ msgstr "Carpeta"

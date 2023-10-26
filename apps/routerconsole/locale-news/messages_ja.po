@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2018-08-17 19:05+0000\n"
@@ -65,14 +65,3 @@ msgid ""
 msgstr ""
 "IRC クライアントを {0}localhost:6668{1} にあわせて、  {2}#i2p{3} で私たちに挨"
 "拶してみてください。"
-
-#, fuzzy, java-format
-#~ msgid ""
-#~ "Once you have a \"Shared Clients\" destination indicated on the sidebar, "
-#~ "please {0}check out{1} our {2}FAQ{3}."
-#~ msgstr ""
-#~ "左にリストされている「共有クライアント」の宛先があれば、{2}FAQ{3}を{0}確認"
-#~ "{1}してください。"
-
-#~ msgid "Congratulations on getting I2P installed!"
-#~ msgstr "I2P のインストールおめでとうございます！"

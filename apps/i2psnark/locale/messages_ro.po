@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2023-10-24 03:37+0000\n"
 "Last-Translator: \n"
@@ -1878,79 +1878,4 @@ msgstr "Salvați modificările"
 msgid "Torrent must be stopped"
 msgstr "Torentul trebuie oprit"
 
-#, java-format
-#~ msgid "{0} theme loaded."
-#~ msgstr "{0} tema încărcată."
-
-#, fuzzy
-#~ msgid "Created by"
-#~ msgstr "Creat de"
-
-#, java-format
-#~ msgid "Error on torrent {0}"
-#~ msgstr "Eroare de torrent {0}"
-
-#, java-format
-#~ msgid "Torrent was not retrieved from {0}"
-#~ msgstr "Torrentul nu a fost preluat de la {0}"
-
-#, fuzzy
-#~ msgid "Net Error"
-#~ msgstr "Eroare tracker"
-
-#, java-format
-#~ msgid "Download torrent file from {0}"
-#~ msgstr "Descărca fișierul torrent de la {0}"
-
-#~ msgid "Dht Debug"
-#~ msgstr "Dht Debug"
-
-#, java-format
-#~ msgid "1 peer"
-#~ msgid_plural "{0} peers"
-#~ msgstr[0] "1 partener"
-#~ msgstr[1] "{0} parteneri"
-#~ msgstr[2] "{0} parteneri"
-
-#, java-format
-#~ msgid "You can also copy .torrent files to: {0}."
-#~ msgstr "De asemenea, puteți copia fișierul .torrent la: {0}."
-
-#~ msgid "Removing a .torrent will cause it to stop."
-#~ msgstr "Stergînd .torrent va face ca acesta să se oprească."
-
-#~ msgid "Data location"
-#~ msgstr "Locaţie date"
-
-#~ msgid "Primary Tracker"
-#~ msgstr "Tracker primar"
-
-#~ msgid "Tracker List"
-#~ msgstr "Lista Trackere"
-
-#~ msgid "Comment"
-#~ msgstr "Comentariu"
-
-#~ msgid "Magnet link"
-#~ msgstr "Legătură Magnet"
-
-#~ msgid "Private torrent"
-#~ msgstr "Torrent privat"
-
-#~ msgid "Piece size"
-#~ msgstr "Dimensiune bucăți"
-
-#~ msgid "Download files in order"
-#~ msgstr "Descărcați fișierele în ordine"
-
-#~ msgid "Download pieces in order"
-#~ msgstr "Descărcați piese în ordine"
-
-#~ msgid "Set all high"
-#~ msgstr "Configurează toate ca înalte"
-
-#~ msgid "Set all normal"
-#~ msgstr "Configurează toate ca normal"
-
-#~ msgid "Skip all"
-#~ msgstr "Omite tot"
+#, java-format#~ msgstr "De asemenea, puteți copia fișierul .torrent la: {0}."

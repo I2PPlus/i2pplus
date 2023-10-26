@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2023-10-23 09:44+0000\n"
 "Language: ja\n"
@@ -638,12 +638,3 @@ msgstr "サーバーに接続が拒否されました。"
 msgid "Mail rejected"
 msgstr "メールが拒否されました"
 
-#~ msgid "User logged out."
-#~ msgstr "ユーザーはログアウトしました"
-
-#~ msgid "Folder"
-#~ msgstr "フォルダー"
-
-#, java-format
-#~ msgid "Page {0} of {1}"
-#~ msgstr "ページ {0} / {1}"

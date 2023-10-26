@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2023-10-22 21:04+0000\n"
@@ -1022,58 +1022,3 @@ msgid ""
 "Hosts you receive from your subscriptions will merge with your Router "
 "address book."
 msgstr "구독을 통해 받은 호스트는 라우터 주소록과 병합됩니다."
-
-#, java-format
-#~ msgid "One result for search within filtered list."
-#~ msgid_plural "{0} results for search within filtered list."
-#~ msgstr[0] "{0} 상세검색 결과"
-
-#, java-format
-#~ msgid "Address book contains 1 entry."
-#~ msgid_plural "Address book contains {0} entries."
-#~ msgstr[0] "{0} 항목을 포함하는 주소록"
-
-#, java-format
-#~ msgid "Showing {0} of {1}"
-#~ msgstr "{1}에서 {0} 보여짐"
-
-#~ msgid "Overview"
-#~ msgstr "미리보기"
-
-#~ msgid "Address book"
-#~ msgstr "주소록"
-
-#~ msgid "Storage"
-#~ msgstr "스토리지"
-
-#~ msgid "Current filter"
-#~ msgstr "현재 필터"
-
-#~ msgid "Filter"
-#~ msgstr "핉"
-
-#~ msgid "all"
-#~ msgstr "모두"
-
-#~ msgid "This address book is empty."
-#~ msgstr "주소록 빔."
-
-#~ msgid "File"
-#~ msgstr "파일"
-
-#, java-format
-#~ msgid ""
-#~ "In the default configuration, the address book is only subscribed to {0}."
-#~ msgstr "기본 설정에서는, 주소록은 {0}만 구독합니다."
-
-#, java-format
-#~ msgid ""
-#~ "The default subscription is the hosts.txt from {0}, which is updated "
-#~ "infrequently."
-#~ msgstr "기본 구독은 {0}의 hosts.txt 입니다. 드물게 업데이트 될 것입니다."
-
-#~ msgid ""
-#~ "So it is a good idea to add additional subscriptions to sites that have "
-#~ "the latest addresses."
-#~ msgstr ""
-#~ "그러므로 최신 주소들을 받고 싶으시다면, 추가 구독을 하는 것이 좋습니다."

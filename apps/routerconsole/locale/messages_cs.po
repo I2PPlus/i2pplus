@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 21:16+0000\n"
 "PO-Revision-Date: 2023-10-24 13:52+0000\n"
@@ -13249,112 +13249,4 @@ msgstr "Další"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:742
 msgid "Finished"
 msgstr "Hotové"
-
-#, fuzzy
-#~ msgid "unnel Filtering"
-#~ msgstr "Tunely"
-
-#, fuzzy
-#~ msgid "I2P Plugins"
-#~ msgstr "Pluginy"
-
-#, fuzzy
-#~ msgid "Newsweek"
-#~ msgstr "Novinky"
-
-#, fuzzy
-#~ msgid "NewsNow"
-#~ msgstr "Novinky"
-
-#, fuzzy
-#~ msgid "SaveTibet"
-#~ msgstr "Uložit"
-
-#, fuzzy
-#~ msgid "on"
-#~ msgstr "žádný"
-
-#, fuzzy
-#~ msgid "Embed Page"
-#~ msgstr "Domovská stránka"
-
-#~ msgid "Usage"
-#~ msgstr "Použití"
-
-#~ msgid "Enable"
-#~ msgstr "Zapnout"
-
-#, fuzzy
-#~ msgid "Network Summary"
-#~ msgstr "Síť"
-
-#, java-format
-#~ msgid "Banned by router hash: {0}"
-#~ msgstr "Zakázáno hashem routeru: {0}"
-
-#, fuzzy
-#~ msgid "IP banned by blocklist.txt"
-#~ msgstr "IP adresa zakázána v souboru blocklist.txt, záznam {0}"
-
-#~ msgid "Date"
-#~ msgstr "Datum"
-
-#~ msgid "Backlogged?"
-#~ msgstr "Backlogováno?"
-
-#, java-format
-#~ msgid "Reseed fetched only 1 router."
-#~ msgid_plural "Reseed fetched only {0} routers."
-#~ msgstr[0] "Reseed získán pouze pro 1 router."
-#~ msgstr[1] "Reseed získán pouze pro {0} routerů."
-#~ msgstr[2] "Reseed získán pouze pro {0} routerů."
-#~ msgstr[3] "Reseed získán pouze pro {0} routerů."
-
-#, java-format
-#~ msgid "See {0} for help."
-#~ msgstr "Další informace viz. {0}."
-
-#~ msgid "Reseeding: fetching seed URL."
-#~ msgstr "Reseedovaní: načítání seedované URL."
-
-#~ msgid "How many peers we are actively talking with"
-#~ msgstr "S kolika peery aktivně komunikujeme"
-
-#~ msgid ""
-#~ "UPnP has been disabled; Do you have more than one UPnP Internet Gateway "
-#~ "Device on your LAN ?"
-#~ msgstr ""
-#~ "UPnP bylo odpojeno. Máte více než jedno UPnP Internet Gateway Device na "
-#~ "vaší LAN?"
-
-#~ msgid "Queued"
-#~ msgstr "Ve frontě"
-
-#~ msgid ""
-#~ "To override these limits, add the settings i2np.ntcp.maxConnections=nnn "
-#~ "and i2np.udp.maxConnections=nnn on the advanced configuration page."
-#~ msgstr ""
-#~ "Pro nastavení těchto limitů přidejte nastavení i2np.ntcp."
-#~ "maxConnections=nnn a i2np.udp.maxConnections=nnn na stránce pokročilá "
-#~ "nastavení."
-
-#~ msgid "The round trip time in milliseconds"
-#~ msgstr "Round trip time v milisekundách"
-
-#~ msgid "The retransmit timeout in milliseconds"
-#~ msgstr "Časový limit opakovaného přenosu v milisekundách"
-
-#~ msgid "Limit"
-#~ msgstr "Limit"
-
-#~ msgid "Expiration"
-#~ msgstr "Expirace"
-
-#~ msgid "Authorization"
-#~ msgstr "Autorizace"
-
-#~ msgid "or"
-#~ msgstr "nebo"
-
-#~ msgid "Log"
-#~ msgstr "Log"
+#, java-format#~ msgstr "Další informace viz. {0}."

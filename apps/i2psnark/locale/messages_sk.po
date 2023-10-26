@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2023-10-24 00:37+0000\n"
 "Last-Translator: \n"
@@ -1887,55 +1887,5 @@ msgstr "Uložiť zmeny"
 msgid "Torrent must be stopped"
 msgstr "Torrent musí byť zastavený"
 
-#, fuzzy
-#~ msgid "Created by"
-#~ msgstr "Vytvorené užívateľom"
 
-#, java-format
-#~ msgid "Error on torrent {0}"
-#~ msgstr "Chyba na torrente {0}"
-
-#, java-format
-#~ msgid "Torrent was not retrieved from {0}"
-#~ msgstr "Torrent nebol získaný z {0}"
-
-#, fuzzy
-#~ msgid "Net Error"
-#~ msgstr "Chyba stopovača"
-
-#, java-format
-#~ msgid "Download torrent file from {0}"
-#~ msgstr "Stiahnuť súbor torrentu z {0}"
-
-#, java-format
-#~ msgid "1 peer"
-#~ msgid_plural "{0} peers"
-#~ msgstr[0] "1 peer"
-#~ msgstr[1] "{0} peerovia"
-#~ msgstr[2] "{0} peerov"
-#~ msgstr[3] "{0} peerov"
-
-#, java-format
-#~ msgid "You can also copy .torrent files to: {0}."
-#~ msgstr "Môžete tiež skopírovať .torrent súbory do: {0}."
-
-#~ msgid "Removing a .torrent will cause it to stop."
-#~ msgstr "Odstránenie .torrent spôsobí jeho zastavenie."
-
-#~ msgid "Primary Tracker"
-#~ msgstr "Primárny stopovač"
-
-#~ msgid "Tracker List"
-#~ msgstr "Zoznam stopovačov"
-
-#~ msgid "Comment"
-#~ msgstr "Komentár"
-
-#~ msgid "Magnet link"
-#~ msgstr "Magnetový link"
-
-#~ msgid "Private torrent"
-#~ msgstr "Súkromný torrent"
-
-#~ msgid "Piece size"
-#~ msgstr "Veľkosť kúsku"
+#, java-format#~ msgstr "Môžete tiež skopírovať .torrent súbory do: {0}."

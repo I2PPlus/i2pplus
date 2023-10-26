@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2019-11-24 13:40+0000\n"
 "Language: ja\n"
@@ -238,21 +238,3 @@ msgstr "トンネル要求をドロップ: 高い負荷"
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1385
 msgid "Dropping tunnel requests: Queue time"
 msgstr "トンネル要求をドロップ: キュー時間"
-
-#~ msgid "Rejecting tunnels: Starting up"
-#~ msgstr "トンネルを拒否中: 起動中"
-
-#~ msgid "Rejecting most tunnels: Bandwidth limit"
-#~ msgstr "ほとんどのトンネルを拒否中: 帯域幅制限"
-
-#~ msgid "Rejecting tunnels: Shutting down"
-#~ msgstr "トンネルを拒否中: シャットダウン中"
-
-#~ msgid "Rejecting tunnels"
-#~ msgstr "トンネルを拒否中"
-
-#~ msgid "Rejecting tunnels: Hidden mode"
-#~ msgstr "トンネルを拒否: Hidden モード"
-
-#~ msgid "Rejecting tunnels: Connection limit"
-#~ msgstr "トンネルを拒否中: 接続制限"

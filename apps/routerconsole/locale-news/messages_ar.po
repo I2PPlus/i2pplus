@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2018-09-19 22:20+0000\n"
@@ -70,14 +70,3 @@ msgid ""
 msgstr ""
 "أشر بعميل IRC - تطبيق للمحادثة عبر الانترنت - الخاص بك إلى {0}المضيف "
 "المحليّ:6668{1}، وألقي السّلام علينا في {2}I2P{3}."
-
-#, fuzzy, java-format
-#~ msgid ""
-#~ "Once you have a \"Shared Clients\" destination indicated on the sidebar, "
-#~ "please {0}check out{1} our {2}FAQ{3}."
-#~ msgstr ""
-#~ "عندما عندما تظهر عبارة \"shared clients\" على اليسار يمكنك حينها {0}"
-#~ "زيارة{1} {2}الأسئلة الشائعة{3}."
-
-#~ msgid "Congratulations on getting I2P installed!"
-#~ msgstr "تهانينا على تثبيتِ I2P!"

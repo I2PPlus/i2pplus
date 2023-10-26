@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2020-02-12 17:20+0000\n"
 "language/pt_BR/)\n"
@@ -2073,27 +2073,3 @@ msgstr ""
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5862
 msgid "Torrent must be stopped"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Created by"
-#~ msgstr "Criada"
-
-#, fuzzy
-#~ msgid "Net Error"
-#~ msgstr "Erro de tracker"
-
-#, java-format
-#~ msgid "1 peer"
-#~ msgid_plural "{0} peers"
-#~ msgstr[0] "1 peer"
-#~ msgstr[1] "{0} pares"
-
-#, java-format
-#~ msgid "You can also copy .torrent files to: {0}."
-#~ msgstr "Você pode também copiar arquivos .torrent para: {0}."
-
-#~ msgid "Removing a .torrent will cause it to stop."
-#~ msgstr "A remoção de um .torrent parará a mesma"
-
-#~ msgid "Comment"
-#~ msgstr "Comentário"

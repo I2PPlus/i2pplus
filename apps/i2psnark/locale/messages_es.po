@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2023-10-24 01:04+0000\n"
 "Last-Translator: \n"
@@ -1906,72 +1906,5 @@ msgstr "Guardar cambios"
 msgid "Torrent must be stopped"
 msgstr "Se debe detener el torrent"
 
-#, java-format
-#~ msgid "{0} theme loaded."
-#~ msgstr "Tema cargado: {0}."
 
-#, fuzzy
-#~ msgid "Created by"
-#~ msgstr "Creado por"
-
-#, java-format
-#~ msgid "Error on torrent {0}"
-#~ msgstr "Error en el torrent {0}"
-
-#, java-format
-#~ msgid "Torrent was not retrieved from {0}"
-#~ msgstr "El torrent no se pudo obtener desde {0}"
-
-#, fuzzy
-#~ msgid "Net Error"
-#~ msgstr "Error del tracker (rastreador)"
-
-#, java-format
-#~ msgid "Download torrent file from {0}"
-#~ msgstr "Descargar archivo torrent desde {0}"
-
-#~ msgid "Dht Debug"
-#~ msgstr "Depuración de la DHT"
-
-#, java-format
-#~ msgid "1 peer"
-#~ msgid_plural "{0} peers"
-#~ msgstr[0] "1 par"
-#~ msgstr[1] "{0} pares"
-
-#, java-format
-#~ msgid "You can also copy .torrent files to: {0}."
-#~ msgstr "También puede copiar ficheros .torrent a: {0}."
-
-#~ msgid "Removing a .torrent will cause it to stop."
-#~ msgstr "Eliminar un .torrent hará que se detenga."
-
-#~ msgid "Data location"
-#~ msgstr "Ubicación de los datos"
-
-#~ msgid "Primary Tracker"
-#~ msgstr "Tracker principal"
-
-#~ msgid "Tracker List"
-#~ msgstr "Lista de trackers"
-
-#~ msgid "Comment"
-#~ msgstr "Comentario"
-
-#~ msgid "Magnet link"
-#~ msgstr "Enlace de magnet"
-
-#~ msgid "Private torrent"
-#~ msgstr "Torrent privado"
-
-#~ msgid "Piece size"
-#~ msgstr "Tamaño de las partes"
-
-#~ msgid "Set all high"
-#~ msgstr "Configurar todos a alto "
-
-#~ msgid "Set all normal"
-#~ msgstr "Configurar todos a normal"
-
-#~ msgid "Skip all"
-#~ msgstr "Omitir todos"
+#, java-format#~ msgstr "También puede copiar ficheros .torrent a: {0}."

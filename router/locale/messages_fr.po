@@ -239,21 +239,3 @@ msgstr "Abandon des requêtes des tunnels : charge élevée"
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1385
 msgid "Dropping tunnel requests: Queue time"
 msgstr "Abandon des requêtes des tunnels : temps d’attente"
-
-#~ msgid "Rejecting tunnels: Starting up"
-#~ msgstr "Refus de tunnels : démarrage"
-
-#~ msgid "Rejecting most tunnels: Bandwidth limit"
-#~ msgstr "Refus de la plupart des tunnels : limite de bande passante"
-
-#~ msgid "Rejecting tunnels: Shutting down"
-#~ msgstr "Refus de tunnels : fermeture"
-
-#~ msgid "Rejecting tunnels"
-#~ msgstr "Refus de tunnels"
-
-#~ msgid "Rejecting tunnels: Hidden mode"
-#~ msgstr "Refus de tunnels : mode caché"
-
-#~ msgid "Rejecting tunnels: Connection limit"
-#~ msgstr "Refus de tunnels : limite de connexions"

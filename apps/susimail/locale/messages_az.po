@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2019-04-24 14:21+0000\n"
 "Language: az\n"
@@ -651,12 +651,3 @@ msgstr "Server qoşulmaqdan imtina etdi "
 msgid "Mail rejected"
 msgstr "Email qəbul edilmədi"
 
-#~ msgid "User logged out."
-#~ msgstr "İstifadəçi sistemdən çıxıb."
-
-#~ msgid "Folder"
-#~ msgstr "Qovluq"
-
-#, java-format
-#~ msgid "Page {0} of {1}"
-#~ msgstr "{0} səhifədən {1}"

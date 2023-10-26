@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2019-09-07 15:46+0000\n"
 "Language: ro\n"
@@ -658,12 +658,3 @@ msgstr "Server refuzat conexiune"
 msgid "Mail rejected"
 msgstr "Corespondență respinsă"
 
-#~ msgid "User logged out."
-#~ msgstr "Utilizatorul sa deconectat."
-
-#~ msgid "Folder"
-#~ msgstr "Dosar"
-
-#, java-format
-#~ msgid "Page {0} of {1}"
-#~ msgstr "Pagina {0} din {1}"

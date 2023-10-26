@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
 "Language: id\n"
@@ -2635,85 +2635,3 @@ msgstr "Lanjut ke halaman berikutnya"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:892
 msgid "Next"
 msgstr "Berikutnya"
-
-#~ msgid "Tunnels are not initialized yet, please reload in two minutes."
-#~ msgstr ""
-#~ "Tunnel saat ini belum diinisialisasi, silahkan reload dalam dua menit."
-
-#~ msgid "Hidden Services Manager"
-#~ msgstr "Hidden Services Manager "
-
-#~ msgid "Edit Hidden Service"
-#~ msgstr "Edit Hidden Service "
-
-#~ msgid "Edit proxy settings"
-#~ msgstr "Edit setting proxy"
-
-#~ msgid "New proxy settings"
-#~ msgstr "Setting baru proxy"
-
-#~ msgid "Enables direct chat and file transfers, bypassing I2P"
-#~ msgstr ""
-#~ "Memungkinkan chatting dan file transfer secara langsung, melompati I2P"
-
-#~ msgid "hop tunnel (very poor performance)"
-#~ msgstr "hop tunnel (kinerja sangat rendah)"
-
-#~ msgid ""
-#~ "+ 0-1 hop variance (medium additive randomization, subtractive "
-#~ "performance)"
-#~ msgstr ""
-#~ "+ 0-1 hop variance (tambahan randomisasi medium, kinerja subtractive)"
-
-#~ msgid ""
-#~ "+ 0-2 hop variance (high additive randomization, subtractive performance)"
-#~ msgstr ""
-#~ "+ 0-2 hop variance (tambahan randomisasi tinggi, kinerja subtractive)"
-
-#~ msgid "+/- 0-2 hop variance (not recommended)"
-#~ msgstr "+/-0-2 hop variance (tidak disarankan)"
-
-#~ msgid "File"
-#~ msgstr "File "
-
-#~ msgid "Edit Server Settings"
-#~ msgstr "Edit Pengaturan Server"
-
-#~ msgid "New Server Settings"
-#~ msgstr "Pengaturan Baru Server"
-
-#~ msgid "Control access to this service"
-#~ msgstr "Kontrol akses ke service ini"
-
-#~ msgid "Max concurrent connections (0=unlimited)"
-#~ msgstr "Jumlah maksimum koneksi yang terjadi bersamaan (0 = tidak terbatas)"
-
-#~ msgid "I2P Hidden Services"
-#~ msgstr "I2P Hidden Services "
-
-#~ msgid "New hidden service"
-#~ msgstr "Hidden service baru"
-
-#~ msgid "Go back and edit the tunnel"
-#~ msgstr "Kembali dan edit tunnel"
-
-#~ msgid "I2P Port"
-#~ msgstr "Port I2P"
-
-#~ msgid "SSL"
-#~ msgstr "SSL "
-
-#~ msgid "Default"
-#~ msgstr "Default "
-
-#~ msgid "Jetty Server"
-#~ msgstr "Server Jetty"
-
-#~ msgid "Enabled"
-#~ msgstr "Bisa dijalankan"
-
-#~ msgid "SSL is enabled"
-#~ msgstr "SSL diaktifkan"
-
-#~ msgid "SSL is disabled"
-#~ msgstr "SSL dimatikan"

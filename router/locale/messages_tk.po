@@ -239,21 +239,3 @@ msgstr "Tunel haýyşlaryny taşlamak: loadokary ýük"
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1385
 msgid "Dropping tunnel requests: Queue time"
 msgstr "Tunel haýyşlaryny taşlamak: nobatyň wagty"
-
-#~ msgid "Rejecting tunnels: Starting up"
-#~ msgstr "Tunelleri ret etmek: Başlamak"
-
-#~ msgid "Rejecting most tunnels: Bandwidth limit"
-#~ msgstr "Tunelleriň köpüsini ret etmek: Zolak giňligi"
-
-#~ msgid "Rejecting tunnels: Shutting down"
-#~ msgstr "Tunelleri ret etmek: Öçürmek"
-
-#~ msgid "Rejecting tunnels"
-#~ msgstr "Tunelleri retmak: Öçenbe"
-
-#~ msgid "Rejecting tunnels: Hidden mode"
-#~ msgstr "Tunelleri ret etmek: Gizlin re .im"
-
-#~ msgid "Rejecting tunnels: Connection limit"
-#~ msgstr "Tunelleri ret etmek: Baglanyş çägi"

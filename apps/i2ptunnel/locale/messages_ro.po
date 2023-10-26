@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
 "Language: ro\n"
@@ -2688,110 +2688,3 @@ msgstr "Advance la pagina următoare"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:892
 msgid "Next"
 msgstr "Următorul"
-
-#~ msgid "Tunnels are not initialized yet, please reload in two minutes."
-#~ msgstr ""
-#~ "Tuneluri încă nu sunt inițializate , vă rugăm să reîncărcați în două "
-#~ "minute."
-
-#~ msgid "Hidden Services Manager"
-#~ msgstr "Administrator servicii ascunse"
-
-#~ msgid "Edit Hidden Service"
-#~ msgstr "Editare serviciu ascuns"
-
-#~ msgid "Edit proxy settings"
-#~ msgstr "Editați setările proxy"
-
-#~ msgid "New proxy settings"
-#~ msgstr "Opțiuni proxy noi"
-
-#~ msgid "Enables direct chat and file transfers, bypassing I2P"
-#~ msgstr ""
-#~ "Activează chaturile directe și transferurile de fișiere, ocolind I2P"
-
-#~ msgid "hop tunnel (very poor performance)"
-#~ msgstr "tunel hop (performanță foarte slabă)"
-
-#~ msgid ""
-#~ "+ 0-1 hop variance (medium additive randomization, subtractive "
-#~ "performance)"
-#~ msgstr ""
-#~ "+ 0-1 varianță de hamei (randomizare aditivă medie, performanță scăzută)"
-
-#~ msgid ""
-#~ "+ 0-2 hop variance (high additive randomization, subtractive performance)"
-#~ msgstr ""
-#~ "+ 0-2 hop variance (randomizare aditivă ridicată, performanță scăzută)"
-
-#~ msgid "+/- 0-2 hop variance (not recommended)"
-#~ msgstr "+ / - 0-2 hop variație (nu se recomandă)"
-
-#~ msgid "File"
-#~ msgstr "Fișier"
-
-#~ msgid "Edit Server Settings"
-#~ msgstr "Editați Setările serverului"
-
-#~ msgid "New Server Settings"
-#~ msgstr "Setări server noi"
-
-#~ msgid "Access List Description"
-#~ msgstr "Descrierea listei de acces"
-
-#~ msgid "Control access to this service"
-#~ msgstr "Controlați accesul la acest serviciu"
-
-#~ msgid "Filter Definition File"
-#~ msgstr "Fișier definiție filtru"
-
-#~ msgid "You can define an advanced filter for this tunnel."
-#~ msgstr "Puteți defini un filtru avansat pentru acest tunel."
-
-#~ msgid "Format Specification"
-#~ msgstr "Specificația formatului"
-
-#~ msgid "Max concurrent connections (0=unlimited)"
-#~ msgstr "Conexiuni concurente max (0 = nelimitat)"
-
-#~ msgid "These are the local services provided by your router."
-#~ msgstr "Acestea sunt serviciile locale furnizate de routerul dvs."
-
-#~ msgid ""
-#~ "By default, most of your client services (email, HTTP proxy, IRC) will "
-#~ "share the same set of tunnels and be listed as \"Shared Clients\" and "
-#~ "\"Shared Clients(DSA)\"."
-#~ msgstr ""
-#~ "În mod implicit, majoritatea serviciilor dvs. pentru clienți (email, "
-#~ "proxy HTTP, IRC) vor împărtăși același set de tuneluri și vor fi listate "
-#~ "ca „Clienți partajați” și „Clienți partajați (DSA)”."
-
-#~ msgid "I2P Hidden Services"
-#~ msgstr "Servicii ascunse I2P"
-
-#~ msgid "New hidden service"
-#~ msgstr "Serviciu ascuns nou"
-
-#~ msgid "Go back and edit the tunnel"
-#~ msgstr "Întoarceți-vă și editați tunelul"
-
-#~ msgid "I2P Port"
-#~ msgstr "I2P Port"
-
-#~ msgid "SSL"
-#~ msgstr "SSL"
-
-#~ msgid "Default"
-#~ msgstr "Implicit"
-
-#~ msgid "Jetty Server"
-#~ msgstr "Jetty Server"
-
-#~ msgid "Enabled"
-#~ msgstr "Activat"
-
-#~ msgid "SSL is enabled"
-#~ msgstr "SSL este activat"
-
-#~ msgid "SSL is disabled"
-#~ msgstr "SSL este dezactivat"

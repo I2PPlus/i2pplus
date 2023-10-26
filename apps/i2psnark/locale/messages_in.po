@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2023-10-24 01:23+0000\n"
 "Last-Translator: \n"
@@ -1857,77 +1857,4 @@ msgstr "Simpan Perubahan"
 msgid "Torrent must be stopped"
 msgstr "Torrent harus dihentikan"
 
-#, java-format
-#~ msgid "{0} theme loaded."
-#~ msgstr "theme {0} dimuat."
-
-#, fuzzy
-#~ msgid "Created by"
-#~ msgstr "Dibuat oleh"
-
-#, java-format
-#~ msgid "Error on torrent {0}"
-#~ msgstr "Kesalahan pada torrent {0}"
-
-#, java-format
-#~ msgid "Torrent was not retrieved from {0}"
-#~ msgstr "Torrent tidak diambil dari {0}"
-
-#, fuzzy
-#~ msgid "Net Error"
-#~ msgstr "Tracker Error "
-
-#, java-format
-#~ msgid "Download torrent file from {0}"
-#~ msgstr "Men-download file torrent dari {0}"
-
-#~ msgid "Dht Debug"
-#~ msgstr "Dht Debug "
-
-#, java-format
-#~ msgid "1 peer"
-#~ msgid_plural "{0} peers"
-#~ msgstr[0] "{0} peer"
-
-#, java-format
-#~ msgid "You can also copy .torrent files to: {0}."
-#~ msgstr "Anda juga dapat mengkopi file .torrent: {0}."
-
-#~ msgid "Removing a .torrent will cause it to stop."
-#~ msgstr "Menghapus .torrent akan menghentikannya."
-
-#~ msgid "Data location"
-#~ msgstr "Lokasi data"
-
-#~ msgid "Primary Tracker"
-#~ msgstr "Primary Tracker "
-
-#~ msgid "Tracker List"
-#~ msgstr "Daftar Tracker"
-
-#~ msgid "Comment"
-#~ msgstr "Komentar"
-
-#~ msgid "Magnet link"
-#~ msgstr "Link magnet"
-
-#~ msgid "Private torrent"
-#~ msgstr "Private torrent "
-
-#~ msgid "Piece size"
-#~ msgstr "Ukuran potongan"
-
-#~ msgid "Download files in order"
-#~ msgstr "Download file secara berurutan"
-
-#~ msgid "Download pieces in order"
-#~ msgstr "Download potongan secara berurutan"
-
-#~ msgid "Set all high"
-#~ msgstr "Atur semua menjadi tinggi"
-
-#~ msgid "Set all normal"
-#~ msgstr "Atur semua menjadi normal"
-
-#~ msgid "Skip all"
-#~ msgstr "Lewati semua"
+#, java-format#~ msgstr "Anda juga dapat mengkopi file .torrent: {0}."

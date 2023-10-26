@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2019-11-28 13:22+0000\n"
 "Language: cs\n"
@@ -239,22 +239,4 @@ msgstr ""
 msgid "Dropping tunnel requests: Queue time"
 msgstr ""
 
-#~ msgid "Rejecting tunnels: Starting up"
-#~ msgstr "Odmítnutí tunelů: Uvádění do provozu"
 
-#~ msgid "Rejecting most tunnels: Bandwidth limit"
-#~ msgstr "Odmítnutí většiny tunelů: limit rychlost"
-
-#~ msgid "Rejecting tunnels: Shutting down"
-#~ msgstr "Odmítám tunely: vypínání"
-
-#~ msgid "Rejecting tunnels"
-#~ msgstr "Odmítnutí tunelů"
-
-#, fuzzy
-#~ msgid "Rejecting tunnels: Hidden mode"
-#~ msgstr "Odmítám tunely: velké spoždění zprávy"
-
-#, fuzzy
-#~ msgid "Rejecting tunnels: Connection limit"
-#~ msgstr "Odmítnutí tunelů: limit rychlosti"

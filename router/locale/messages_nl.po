@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2019-11-24 13:40+0000\n"
 "Language: nl\n"
@@ -238,21 +238,3 @@ msgstr "Negeer tunnel aanvragen: Hoge load"
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1385
 msgid "Dropping tunnel requests: Queue time"
 msgstr "Negeer tunnel aanvragen: Wachttijd"
-
-#~ msgid "Rejecting tunnels: Starting up"
-#~ msgstr "Tunnels worden afgewezen: Bezig met opstarten"
-
-#~ msgid "Rejecting most tunnels: Bandwidth limit"
-#~ msgstr "Meeste tunnels geweigerd: Bandbreedte limiet"
-
-#~ msgid "Rejecting tunnels: Shutting down"
-#~ msgstr "Tunnels geweigerd: Aan het afsluiten"
-
-#~ msgid "Rejecting tunnels"
-#~ msgstr "Tunnels geweigerd"
-
-#~ msgid "Rejecting tunnels: Hidden mode"
-#~ msgstr "Tunnels worden afgewezen: Verborgen modus"
-
-#~ msgid "Rejecting tunnels: Connection limit"
-#~ msgstr "Weiger tunnels: Connectie limiet"

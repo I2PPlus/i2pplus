@@ -238,21 +238,3 @@ msgstr "Spuščanje prošenj predorov: Visoko breme"
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1385
 msgid "Dropping tunnel requests: Queue time"
 msgstr "Spuščanje prošenj predorov: Čas čakalnega reda"
-
-#~ msgid "Rejecting tunnels: Starting up"
-#~ msgstr "Zavrnitev predorov: Zagon"
-
-#~ msgid "Rejecting most tunnels: Bandwidth limit"
-#~ msgstr "Zavrnitev večine predorov: Omejitev pretočnosti"
-
-#~ msgid "Rejecting tunnels: Shutting down"
-#~ msgstr "Zavrnitev predorov: Zaustavitev"
-
-#~ msgid "Rejecting tunnels"
-#~ msgstr "Zavrnitev predorov"
-
-#~ msgid "Rejecting tunnels: Hidden mode"
-#~ msgstr "Zavrnitev predorov: Skriti način"
-
-#~ msgid "Rejecting tunnels: Connection limit"
-#~ msgstr "Zavrnitev predorov: Omejitev povezave"

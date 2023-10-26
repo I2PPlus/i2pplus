@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2023-10-22 21:18+0000\n"
@@ -1058,12 +1058,3 @@ msgid ""
 msgstr ""
 "Os hosts que recibas das túas subscricións fusionaranse coa túa axenda de "
 "enderezos do enrutador."
-
-#~ msgid "Overview"
-#~ msgstr "Vista Xeral"
-
-#~ msgid "This address book is empty."
-#~ msgstr "Ista axenda de enderezos está baleira."
-
-#~ msgid "File"
-#~ msgstr "Ficheiro"

@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2023-10-24 03:55+0000\n"
 "Last-Translator: \n"
@@ -1994,13 +1994,3 @@ msgstr "Gem ændringer"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5862
 msgid "Torrent must be stopped"
 msgstr "Torrent skal stoppes"
-
-#, fuzzy
-#~ msgid "Created by"
-#~ msgstr "Oprettet"
-
-#~ msgid "dark"
-#~ msgstr "mørk"
-
-#~ msgid "light"
-#~ msgstr "lyst"

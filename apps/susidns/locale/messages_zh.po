@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2022-09-16 11:51+0000\n"
@@ -1002,59 +1002,4 @@ msgid ""
 "address book."
 msgstr "您从订阅中取得的主机将与路由器地址簿合并。"
 
-#, java-format
-#~ msgid "One result for search within filtered list."
-#~ msgid_plural "{0} results for search within filtered list."
-#~ msgstr[0] "列表中有{0}个与筛选条件匹配的结果。"
-
-#, java-format
-#~ msgid "Address book contains 1 entry."
-#~ msgid_plural "Address book contains {0} entries."
-#~ msgstr[0] "地址簿中有{0}条记录。"
-
-#, java-format
-#~ msgid "Showing {0} of {1}"
-#~ msgstr "显示 {0} 个项目共 {1}"
-
-#~ msgid "Overview"
-#~ msgstr "概述"
-
-#~ msgid "Address book"
-#~ msgstr "地址簿"
-
-#~ msgid "Storage"
-#~ msgstr "存储"
-
-#~ msgid "Current filter"
-#~ msgstr "当前过滤器"
-
-#~ msgid "Filter"
-#~ msgstr "过滤器"
-
-#~ msgid "all"
-#~ msgstr "全部"
-
-#~ msgid "View larger version of identicon for this hostname"
-#~ msgstr "查看这个主机名更大版本的身份验证"
-
-#~ msgid "This address book is empty."
-#~ msgstr "此地址簿为空。"
-
-#~ msgid "File"
-#~ msgstr "文件"
-
-#, java-format
-#~ msgid ""
-#~ "In the default configuration, the address book is only subscribed to {0}."
-#~ msgstr "在默认配置中，地址簿只订阅 {0}。"
-
-#, java-format
-#~ msgid ""
-#~ "The default subscription is the hosts.txt from {0}, which is updated "
-#~ "infrequently."
-#~ msgstr "默认订阅是来自 {0} 的 hosts.txt，它很少更新。"
-
-#~ msgid ""
-#~ "So it is a good idea to add additional subscriptions to sites that have "
-#~ "the latest addresses."
-#~ msgstr "所以订阅一些网站的最新地址簿是个不错的主意。"
+#, java-format#~ "The default subscription is the hosts.txt from {0}, which is updated "

@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
 "ru_RU/)\n"
@@ -2669,109 +2669,3 @@ msgstr "На следующую страницу"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:892
 msgid "Next"
 msgstr "Следующее"
-
-#~ msgid "Tunnels are not initialized yet, please reload in two minutes."
-#~ msgstr ""
-#~ "Туннели ещё не инициализированы, перезагрузите страницу через 2 минуты."
-
-#~ msgid "Hidden Services Manager"
-#~ msgstr "Управление скрытыми сервисами"
-
-#~ msgid "Edit Hidden Service"
-#~ msgstr "Настроить скрытые сервисы"
-
-#~ msgid "Edit proxy settings"
-#~ msgstr "Редактирование настроек клиентского туннеля"
-
-#~ msgid "New proxy settings"
-#~ msgstr "Настройки нового клиентского туннеля"
-
-#~ msgid "Enables direct chat and file transfers, bypassing I2P"
-#~ msgstr "Использовать чат и передавать файлы напрямую, не используя I2P"
-
-#~ msgid "hop tunnel (very poor performance)"
-#~ msgstr "хопов (очень низкая производительность)"
-
-#~ msgid ""
-#~ "+ 0-1 hop variance (medium additive randomization, subtractive "
-#~ "performance)"
-#~ msgstr ""
-#~ "+ 0-1 разброс (умеренно повышенная рандомизация, пониженная "
-#~ "производительность)"
-
-#~ msgid ""
-#~ "+ 0-2 hop variance (high additive randomization, subtractive performance)"
-#~ msgstr ""
-#~ "+ 0-2 разброс (повышенная рандомизация, пониженная производительность)"
-
-#~ msgid "+/- 0-2 hop variance (not recommended)"
-#~ msgstr "+/- 0-2 разброс (не рекомендуется)"
-
-#~ msgid "File"
-#~ msgstr "Файл"
-
-#~ msgid "Edit Server Settings"
-#~ msgstr "Изменение настроек сервера"
-
-#~ msgid "New Server Settings"
-#~ msgstr "Настройки нового сервера"
-
-#~ msgid "Access List Description"
-#~ msgstr "Описание листа доступа"
-
-#~ msgid "Control access to this service"
-#~ msgstr "Управление доступом к сервису"
-
-#~ msgid "Filter Definition File"
-#~ msgstr "Файл определения фильтра"
-
-#~ msgid "You can define an advanced filter for this tunnel."
-#~ msgstr "Вы можете указать расширенный фильтр для этого туннеля."
-
-#~ msgid "Format Specification"
-#~ msgstr "Спецификация формата"
-
-#~ msgid "Max concurrent connections (0=unlimited)"
-#~ msgstr "Максимум одновременных соединений (0=неограниченно)"
-
-#~ msgid "These are the local services provided by your router."
-#~ msgstr "Это локальные сервисы, предоставляемые вашим роутером."
-
-#~ msgid ""
-#~ "By default, most of your client services (email, HTTP proxy, IRC) will "
-#~ "share the same set of tunnels and be listed as \"Shared Clients\" and "
-#~ "\"Shared Clients(DSA)\"."
-#~ msgstr ""
-#~ "По умолчанию большинство ваших клиентских служб (электронная почта, HTTP-"
-#~ "прокси, IRC) будут использовать один и тот же набор туннелей и будут "
-#~ "отображаться как «Общие клиенты» и «Общие клиенты (DSA)»."
-
-#~ msgid "I2P Hidden Services"
-#~ msgstr "Скрытые сервисы I2P"
-
-#~ msgid "New hidden service"
-#~ msgstr "Новый скрытый сервис"
-
-#~ msgid "Go back and edit the tunnel"
-#~ msgstr "Вернитесь и отредактируйте туннель"
-
-#~ msgid "I2P Port"
-#~ msgstr "Порт I2P"
-
-#~ msgid "SSL"
-#~ msgstr "SSL"
-
-#~ msgid "Default"
-#~ msgstr "По умолчанию"
-
-#~ msgid "Jetty Server"
-#~ msgstr "Сервер Jetty"
-
-#~ msgid "Enabled"
-#~ msgstr "Включить"
-
-#~ msgid "SSL is enabled"
-#~ msgstr "SSL включён"
-
-#~ msgid "SSL is disabled"
-#~ msgstr "SSL отключён"

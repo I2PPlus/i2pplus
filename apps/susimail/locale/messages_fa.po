@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2020-04-23 14:55+0000\n"
 "Language: fa\n"
@@ -648,12 +648,3 @@ msgstr ""
 msgid "Mail rejected"
 msgstr ""
 
-#~ msgid "User logged out."
-#~ msgstr "کاربر خارج شد."
-
-#~ msgid "Folder"
-#~ msgstr "پوشه"
-
-#, java-format
-#~ msgid "Page {0} of {1}"
-#~ msgstr "صفحه {0} از {1}"

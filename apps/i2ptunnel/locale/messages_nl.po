@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
 "PO-Revision-Date: 2020-05-13 22:50+0000\n"
 "Language: nl\n"
@@ -2551,49 +2551,3 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:892
 msgid "Next"
 msgstr "Volgende"
-
-#~ msgid "Tunnels are not initialized yet, please reload in two minutes."
-#~ msgstr "Tunnels zijn nog niet klaar, ververs over twee minuten."
-
-#~ msgid "Hidden Services Manager"
-#~ msgstr "Verborgen diensten-beheerder"
-
-#~ msgid "Edit Hidden Service"
-#~ msgstr "Verborgen dienst bewerken"
-
-#~ msgid "Edit proxy settings"
-#~ msgstr "Bewerk proxy instellingen"
-
-#~ msgid "New proxy settings"
-#~ msgstr "Nieuwe proxy instellingen"
-
-#~ msgid "Enables direct chat and file transfers, bypassing I2P"
-#~ msgstr ""
-#~ "Activeert directe chat en bestandsuitwisseling, zonder I2P te gebruiken"
-
-#~ msgid "+/- 0-2 hop variance (not recommended)"
-#~ msgstr "+/- 0-2 hop variantie (niet aanbevolen)"
-
-#~ msgid "File"
-#~ msgstr "Bestand"
-
-#~ msgid "Edit Server Settings"
-#~ msgstr "Server instellingen bewerken"
-
-#~ msgid "Max concurrent connections (0=unlimited)"
-#~ msgstr "Maximum gelijktijdige connecties (0=onbeperkt)"
-
-#~ msgid "I2P Hidden Services"
-#~ msgstr "I2P verborgen diensten"
-
-#~ msgid "New hidden service"
-#~ msgstr "Nieuwe verborgen dienst"
-
-#~ msgid "Go back and edit the tunnel"
-#~ msgstr "Ga terug en bewerk de tunnel"
-
-#~ msgid "Default"
-#~ msgstr "Standaard"
-
-#~ msgid "Enabled"
-#~ msgstr "Geactiveerd"

@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
 "PO-Revision-Date: 2023-10-24 05:33+0000\n"
 "Last-Translator: \n"
@@ -2060,93 +2060,3 @@ msgstr "Następny"
 
 msgid "Tunnels are not initialized yet, please reload in two minutes."
 msgstr "Tunele nie zostały jeszcze zainicjowane. Załaduj je ponownie za dwie minuty."
-
-#~ msgid "Hidden Services Manager"
-#~ msgstr "Zarządzanie ukrytymi usługami"
-
-#~ msgid "Edit Hidden Service"
-#~ msgstr "Edytuj ukrytą usługę"
-
-#~ msgid "Edit proxy settings"
-#~ msgstr "Edytuj ustawienia proxy"
-
-#~ msgid "New proxy settings"
-#~ msgstr "Nowe ustawienia proxy"
-
-#~ msgid "Enables direct chat and file transfers, bypassing I2P"
-#~ msgstr "Włącz bezpośredni kontakt i transfery plików, pomijając I2P"
-
-#~ msgid "hop tunnel (very poor performance)"
-#~ msgstr "tunel skoku (bardzo mała wydajność)"
-
-#~ msgid "+ 0-1 hop variance (medium additive randomization, subtractive performance)"
-#~ msgstr "+ 0-1 zmienność przeskoków (średni dodatek losowości, zmniejszenie wydajności)"
-
-#~ msgid "+ 0-2 hop variance (high additive randomization, subtractive performance)"
-#~ msgstr "+ 0-2 zmienność przeskoków (duża dodatkowa losowość, zmniejszenie wydajności)"
-
-#~ msgid "+/- 0-2 hop variance (not recommended)"
-#~ msgstr "zmienność plus/minus 0-2 skoki (nie zalecane)"
-
-#~ msgid "File"
-#~ msgstr "Plik"
-
-#~ msgid "Edit Server Settings"
-#~ msgstr "Edytuj ustawienia serwera"
-
-#~ msgid "New Server Settings"
-#~ msgstr "Ustawienia nowego serwera"
-
-#~ msgid "Access List Description"
-#~ msgstr "Opis listy dostępu"
-
-#~ msgid "Control access to this service"
-#~ msgstr "Kontrola dostępu do usługi"
-
-#~ msgid "Filter Definition File"
-#~ msgstr "Plik definicji filtru"
-
-#~ msgid "You can define an advanced filter for this tunnel."
-#~ msgstr "Możesz zdefiniować zaawansowany filtr dla tego tunelu."
-
-#~ msgid "Format Specification"
-#~ msgstr "Specyfikacja formatu"
-
-#~ msgid "Max concurrent connections (0=unlimited)"
-#~ msgstr "Maksymalna ilość równoczesnych połączeń (0=brak limitu)"
-
-#~ msgid "These are the local services provided by your router."
-#~ msgstr "To są lokalne usługi dostarczane przez Twój węzeł."
-
-#~ msgid "By default, most of your client services (email, HTTP proxy, IRC) will share the same set of tunnels and be listed as \"Shared Clients\" and \"Shared Clients(DSA)\"."
-#~ msgstr "Domyślnie większość usług klienckich (el‑poczta, proxy HTTP, IRC) dzieli wspólny zestaw tuneli wyświetlany jako „współdzielone klienty” lub „współdzielone klienty (DSA)”."
-
-#~ msgid "I2P Hidden Services"
-#~ msgstr "Ukryte usługi I2P"
-
-#~ msgid "New hidden service"
-#~ msgstr "Nowa ukryta usługa"
-
-#~ msgid "Go back and edit the tunnel"
-#~ msgstr "Wróć do edycji tunelu"
-
-#~ msgid "I2P Port"
-#~ msgstr "Port I2P"
-
-#~ msgid "SSL"
-#~ msgstr "SSL"
-
-#~ msgid "Default"
-#~ msgstr "Domyślny"
-
-#~ msgid "Jetty Server"
-#~ msgstr "Serwer Jetty"
-
-#~ msgid "Enabled"
-#~ msgstr "Aktywny"
-
-#~ msgid "SSL is enabled"
-#~ msgstr "SSL jest włączony"
-
-#~ msgid "SSL is disabled"
-#~ msgstr "SSL jest wyłączony"

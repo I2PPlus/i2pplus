@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2022-08-22 22:57+0000\n"
 "PO-Revision-Date: 2019-11-24 13:40+0000\n"
 "zh_TW/)\n"
@@ -2431,21 +2431,3 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:892
 msgid "Next"
 msgstr "下一個"
-
-#~ msgid "Tunnels are not initialized yet, please reload in two minutes."
-#~ msgstr "隧道尚未初始化，請在兩分鐘內重整。"
-
-#~ msgid "Hidden Services Manager"
-#~ msgstr "隱身服務管理器"
-
-#~ msgid "File"
-#~ msgstr "檔案"
-
-#~ msgid "Both"
-#~ msgstr "兩者都選"
-
-#~ msgid "Default"
-#~ msgstr "預設"
-
-#~ msgid "Enabled"
-#~ msgstr "啟用"

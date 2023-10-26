@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2019-11-24 15:59+0000\n"
 "Language: pl\n"
@@ -240,21 +240,3 @@ msgstr "Odrzucanie żądań o tunele: Wysokie obciążenie"
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1385
 msgid "Dropping tunnel requests: Queue time"
 msgstr "Odrzucanie żądań o tunele: Czas kolejki"
-
-#~ msgid "Rejecting tunnels: Starting up"
-#~ msgstr "Odrzucanie tuneli: Uruchamianie"
-
-#~ msgid "Rejecting most tunnels: Bandwidth limit"
-#~ msgstr "Odrzucanie większości tuneli: Limit przepustowości"
-
-#~ msgid "Rejecting tunnels: Shutting down"
-#~ msgstr "Odrzucanie tuneli: Zamykanie"
-
-#~ msgid "Rejecting tunnels"
-#~ msgstr "Odrzucanie tuneli"
-
-#~ msgid "Rejecting tunnels: Hidden mode"
-#~ msgstr "Odrzucanie tuneli: Tryb Ukryty"
-
-#~ msgid "Rejecting tunnels: Connection limit"
-#~ msgstr "Odrzucanie tuneli: Limit połączenia"

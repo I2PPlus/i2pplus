@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2019-10-02 08:58+0000\n"
@@ -964,25 +964,4 @@ msgid ""
 "address book."
 msgstr ""
 
-#, java-format
-#~ msgid "One result for search within filtered list."
-#~ msgid_plural "{0} results for search within filtered list."
-#~ msgstr[0] "{0} 在過濾列表中的搜尋結果。"
-
-#, java-format
-#~ msgid "Address book contains 1 entry."
-#~ msgid_plural "Address book contains {0} entries."
-#~ msgstr[0] "地址簿包含{0}條目。"
-
-#, java-format
-#~ msgid "Showing {0} of {1}"
-#~ msgstr "顯示 {1}的 {0} "
-
-#~ msgid "Overview"
-#~ msgstr "總覽"
-
-#~ msgid "Filter"
-#~ msgstr "過濾器"
-
-#~ msgid "File"
-#~ msgstr "檔案"
+#, java-format#~ msgstr "顯示 {1}的 {0} "

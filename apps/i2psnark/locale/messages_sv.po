@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2023-10-24 01:42+0000\n"
 "Last-Translator: \n"
@@ -1883,72 +1883,5 @@ msgstr "Spara ändringar"
 msgid "Torrent must be stopped"
 msgstr "Torrent måste stoppas"
 
-#, java-format
-#~ msgid "{0} theme loaded."
-#~ msgstr "{0} temat laddat."
 
-#, fuzzy
-#~ msgid "Created by"
-#~ msgstr "Skapad av"
-
-#, java-format
-#~ msgid "Error on torrent {0}"
-#~ msgstr "Fel på torrent {0}"
-
-#, java-format
-#~ msgid "Torrent was not retrieved from {0}"
-#~ msgstr "Torrent kunde inte hämtas från {0}"
-
-#, fuzzy
-#~ msgid "Net Error"
-#~ msgstr "Bevakarfel"
-
-#, java-format
-#~ msgid "Download torrent file from {0}"
-#~ msgstr "Hämtar torrentfil från {0}"
-
-#~ msgid "Dht Debug"
-#~ msgstr "Dht-felsökning"
-
-#, java-format
-#~ msgid "1 peer"
-#~ msgid_plural "{0} peers"
-#~ msgstr[0] "1 klient"
-#~ msgstr[1] "{0} jämlikar"
-
-#, java-format
-#~ msgid "You can also copy .torrent files to: {0}."
-#~ msgstr "Du kan även kopiera .torrent-filer till: {0}"
-
-#~ msgid "Removing a .torrent will cause it to stop."
-#~ msgstr "Borttagning av .torrent fil kommer stanna den."
-
-#~ msgid "Data location"
-#~ msgstr "Plats för data"
-
-#~ msgid "Primary Tracker"
-#~ msgstr "Primär bevakare"
-
-#~ msgid "Tracker List"
-#~ msgstr "Bevakarlista"
-
-#~ msgid "Comment"
-#~ msgstr "Kommentar"
-
-#~ msgid "Magnet link"
-#~ msgstr "Magnet länk"
-
-#~ msgid "Private torrent"
-#~ msgstr "Privat torrent"
-
-#~ msgid "Piece size"
-#~ msgstr "Delstorlek"
-
-#~ msgid "Set all high"
-#~ msgstr "Sätt alla höga"
-
-#~ msgid "Set all normal"
-#~ msgstr "Sätt alla normala"
-
-#~ msgid "Skip all"
-#~ msgstr "Hoppa över alla"
+#, java-format#~ msgstr "Du kan även kopiera .torrent-filer till: {0}"

@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
@@ -61,6 +61,3 @@ msgid ""
 "Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}"
 "#saltR{3}."
 msgstr ""
-
-#~ msgid "Congratulations on getting I2P installed!"
-#~ msgstr "Gratulujeme k nainstalování I2P!"

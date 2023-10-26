@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2023-10-23 23:54+0000\n"
 "Last-Translator: \n"
@@ -1864,53 +1864,5 @@ msgstr "Salvar alterações"
 msgid "Torrent must be stopped"
 msgstr "Torrent deve ser interrompido"
 
-#, fuzzy
-#~ msgid "Created by"
-#~ msgstr "Criado por"
 
-#, java-format
-#~ msgid "Error on torrent {0}"
-#~ msgstr "Erro no torrente {0}"
-
-#, java-format
-#~ msgid "Torrent was not retrieved from {0}"
-#~ msgstr "Não se pode obter torrente de {0}"
-
-#, fuzzy
-#~ msgid "Net Error"
-#~ msgstr "Erro do rastreador"
-
-#, java-format
-#~ msgid "Download torrent file from {0}"
-#~ msgstr "Descarregando arquivo torrente de {0}"
-
-#, java-format
-#~ msgid "1 peer"
-#~ msgid_plural "{0} peers"
-#~ msgstr[0] "1 parceiro"
-#~ msgstr[1] "{0} parceiros"
-
-#, java-format
-#~ msgid "You can also copy .torrent files to: {0}."
-#~ msgstr "Também pode copiar arquivos torrentes a {0}."
-
-#~ msgid "Removing a .torrent will cause it to stop."
-#~ msgstr "A remoção de um arquivo .torrent fará com que ele pare."
-
-#~ msgid "Primary Tracker"
-#~ msgstr "Rastreador Primário"
-
-#~ msgid "Tracker List"
-#~ msgstr "Lista de Rastreadores"
-
-#~ msgid "Comment"
-#~ msgstr "Commentar"
-
-#~ msgid "Magnet link"
-#~ msgstr "URL magnet"
-
-#~ msgid "Private torrent"
-#~ msgstr "Torrente privado"
-
-#~ msgid "Piece size"
-#~ msgstr "Tamanho das peças"
+#, java-format#~ msgstr "Também pode copiar arquivos torrentes a {0}."

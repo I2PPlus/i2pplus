@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2019-04-24 14:21+0000\n"
 "Language: sq\n"
@@ -653,10 +653,3 @@ msgstr "Shërbyesi e hodhi poshtë  lidhjen"
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:327
 msgid "Mail rejected"
 msgstr "Postë e hedhur poshtë"
-
-#~ msgid "User logged out."
-#~ msgstr "Përdoruesi doli."
-
-#, java-format
-#~ msgid "Page {0} of {1}"
-#~ msgstr "Faqja {0} nga {1} "

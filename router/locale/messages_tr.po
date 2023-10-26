@@ -239,21 +239,3 @@ msgstr "Tünel istekleri geri çevriliyor: Yüksek yüklenme"
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1385
 msgid "Dropping tunnel requests: Queue time"
 msgstr "Tünel istekleri geri çevriliyor: Kuyruk süresi"
-
-#~ msgid "Rejecting tunnels: Starting up"
-#~ msgstr "Tünelleme red ediliyor: Başlatılıyor"
-
-#~ msgid "Rejecting most tunnels: Bandwidth limit"
-#~ msgstr "Çoğu tünelleme red ediliyor: Bant genişliği sınırı"
-
-#~ msgid "Rejecting tunnels: Shutting down"
-#~ msgstr "Tünelleme red ediliyor: Kapatılıyor"
-
-#~ msgid "Rejecting tunnels"
-#~ msgstr "Tünelleme red ediliyor"
-
-#~ msgid "Rejecting tunnels: Hidden mode"
-#~ msgstr "Tüneller red ediliyor: Gizli kip"
-
-#~ msgid "Rejecting tunnels: Connection limit"
-#~ msgstr "Tüneller reddediliyor: Bağlantı sınırı"

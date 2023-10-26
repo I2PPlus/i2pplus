@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2019-04-24 14:21+0000\n"
 "Language: pl\n"
@@ -661,12 +661,3 @@ msgstr "Serwer odmówił połączenia"
 msgid "Mail rejected"
 msgstr "List odrzucony"
 
-#~ msgid "User logged out."
-#~ msgstr "Użytkownik wylogowany."
-
-#~ msgid "Folder"
-#~ msgstr "Katalog"
-
-#, java-format
-#~ msgid "Page {0} of {1}"
-#~ msgstr "Strona {0} z {1}"

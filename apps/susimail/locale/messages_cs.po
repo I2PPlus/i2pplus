@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: I2P\n"
+"Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
 "PO-Revision-Date: 2019-04-24 14:21+0000\n"
 "Language: cs\n"
@@ -654,12 +654,3 @@ msgstr "Server odmítá připojení"
 msgid "Mail rejected"
 msgstr "Email byl odmítnut"
 
-#~ msgid "User logged out."
-#~ msgstr "Uživatel se odhlásil."
-
-#~ msgid "Folder"
-#~ msgstr "Složka"
-
-#, java-format
-#~ msgid "Page {0} of {1}"
-#~ msgstr "Stránka {0}/{1}"
