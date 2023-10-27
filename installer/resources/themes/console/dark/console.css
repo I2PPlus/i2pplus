@@ -1784,8 +1784,10 @@ tr.addnew,tr.addnew:hover{border-top:var(--border);background:#000800}
 #consolepass .delete{float:left}
 
 /* family */
+
 #netconfig th,#config_family th{padding:10px}
-#config_family th{word-spacing:.1em;letter-spacing:.1em;text-transform:uppercase;background:var(--h1);background-size:2px,100%,100%}
+#config_family tr:first-child{background:var(--h1)}
+#config_family th{word-spacing:.1em;letter-spacing:.1em;text-transform:uppercase;background:none}
 #newfamily{margin-bottom:10px}
 #leavefamily{margin:12px 0 -2px}
 #exportfamily tr:nth-child(2) td:first-child{padding:20px 24px 20px 58px;background:#000 var(--joinfamily) no-repeat 15px center/28px}
@@ -2840,7 +2842,7 @@ span#newtab{margin-top:4px}
 .tunneldisplay .tunnel_peer{margin:0;min-width:80px}
 .tunneldisplay .tunnel_peer.tunnel_local{min-width:100px}
 .warning h3{font-size:11.5pt}#webappconfiguration .h3navlinks a{padding-top:9px}
-#advancedconfig a{padding:10px 4px 8px 13px}
+#advancedconfig a{padding:6px 0 8px 13px}
 #advancedconfig a::after{margin:-2px -6px -2px -5px}
 #applinks a::after,#sitelinks a::after{margin-left:11px}
 #applinks,#sitelinks{padding:9px 10px 8px 35px}
