@@ -6,12 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2019-11-24 13:40+0000\n"
+"PO-Revision-Date: 2023-10-27 10:23+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4\n"
 
 #. * IPv4 OK, IPv6 OK or disabled or no address
 #: ../java/src/net/i2p/router/CommSystemFacade.java:426
@@ -96,79 +99,70 @@ msgstr "Probando"
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:152
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:575
 msgid "Starting up"
-msgstr ""
+msgstr "Puesta en marcha"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
-#, fuzzy
 msgid "Declining all tunnel requests:<br>"
-msgstr "Desechando solicitudes de túnel: Sobrecargado"
+msgstr "Rechazando todas las solicitudes de túnel:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 msgid "Hidden Mode"
-msgstr ""
+msgstr "Modo oculto"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
-#, fuzzy
 msgid "Declining tunnel requests:<br>"
-msgstr "Desechando solicitudes de túnel: Sobrecargado"
+msgstr "Solicitudes de túnel rechazadas:<br>"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
-#, fuzzy
 msgid "High message delay"
-msgstr "Rechazando túneles: Elevado retardo del mensaje"
+msgstr "Retraso alto en el mensaje"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Declining requests: "
-msgstr ""
+msgstr "Solicitudes rechazadas: "
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Limit reached"
-msgstr ""
+msgstr "Límite alcanzado"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 msgid "Participation disabled"
-msgstr ""
+msgstr "Participación deshabilitada"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "High system load"
-msgstr "Rechazando túneles: Elevado retardo del mensaje"
+msgstr "Carga alta del sistema"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "Rejecting all tunnel requests:<br>"
-msgstr "Rechazando la mayoría de los túneles: Elevado número de peticiones"
+msgstr "Rechazando todas las solicitudes de túnel:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "High number of requests"
-msgstr "Rechazando la mayoría de los túneles: Elevado número de peticiones"
+msgstr "Número elevado de solicitudes"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "Rejecting most tunnel requests:<br>"
-msgstr "Rechazando la mayoría de los túneles: Elevado número de peticiones"
+msgstr "Rechazando la mayoría de las solicitudes de túnel:<br>"
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:262
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:469
-#, fuzzy
 msgid "Accepting most tunnel requests"
-msgstr "Aceptando la mayoría de los túneles"
+msgstr "Aceptando la mayoría de las solicitudes de túnel"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:264
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:471
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:591
-#, fuzzy
 msgid "Accepting tunnel requests"
-msgstr "Aceptando túneles"
+msgstr "Aceptar solicitudes de túnel"
 
 #. .067KBps
 #. * also limited to 90% - see below
@@ -179,23 +173,20 @@ msgstr "Aceptando túneles"
 #. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:369
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:465
-#, fuzzy
 msgid "Declining requests: Bandwidth limit"
-msgstr "Rechazando túneles: Límite de ancho de banda"
+msgstr "Solicitudes rechazadas: límite de ancho de banda"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
-#, fuzzy
 msgid "Declining requests"
-msgstr "Desechando  solicitudes de túnel: Demasiado lento"
+msgstr "Solicitudes rechazadas"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 msgid "Shutting down"
-msgstr ""
+msgstr "Apagar"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
-#, fuzzy
 msgid "Declining tunnel requests"
-msgstr "Desechando  solicitudes de túnel: Demasiado lento"
+msgstr "Solicitudes de túnel rechazadas"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:302
 msgid "Dropping tunnel requests: Too slow"
@@ -206,9 +197,8 @@ msgid "Dropping tunnel requests: High job lag"
 msgstr "Desechando solicitudes de túnel: Alto retraso de trabajo"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:320
-#, fuzzy
 msgid "Dropping tunnel requests:<br>High CPU load"
-msgstr "Desechando solicitudes de túnel: Carga elevada"
+msgstr "Eliminación de solicitudes de túnel:<br>Alta carga de CPU"
 
 #. don't even bother, since we are so overloaded locally
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:587
@@ -216,19 +206,16 @@ msgid "Dropping tunnel requests: Overloaded"
 msgstr "Desechando solicitudes de túnel: Sobrecargado"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
-#, fuzzy
 msgid "Declining requests:"
-msgstr "Desechando  solicitudes de túnel: Demasiado lento"
+msgstr "Solicitudes rechazadas:"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
-#, fuzzy
 msgid "Request overload"
-msgstr "Rechazando túneles: Sobrecarga de solicitudes"
+msgstr "Sobrecarga de solicitudes"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
-#, fuzzy
 msgid "Connection limit reached"
-msgstr "Rechazando túneles: Se ha alcanzado el límite"
+msgstr "Límite de conexión alcanzado"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1267
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1302

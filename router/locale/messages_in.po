@@ -6,12 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2019-11-24 13:40+0000\n"
+"PO-Revision-Date: 2023-10-27 10:13+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4\n"
 
 #. * IPv4 OK, IPv6 OK or disabled or no address
 #: ../java/src/net/i2p/router/CommSystemFacade.java:426
@@ -96,79 +99,70 @@ msgstr "Menguji"
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:152
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:575
 msgid "Starting up"
-msgstr ""
+msgstr "Memulai"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
-#, fuzzy
 msgid "Declining all tunnel requests:<br>"
-msgstr "Menolak permintaan terowongan: overload"
+msgstr "Menolak semua permintaan terowongan:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 msgid "Hidden Mode"
-msgstr ""
+msgstr "Modus Tersembunyi"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
-#, fuzzy
 msgid "Declining tunnel requests:<br>"
-msgstr "Menolak permintaan terowongan: overload"
+msgstr "Menolak permintaan terowongan:<br>"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
-#, fuzzy
 msgid "High message delay"
-msgstr "Menolak tunnel: High message delay"
+msgstr "Penundaan pesan tinggi"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Declining requests: "
-msgstr ""
+msgstr "Permintaan yang ditolak: "
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Limit reached"
-msgstr ""
+msgstr "Batas tercapai"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 msgid "Participation disabled"
-msgstr ""
+msgstr "Partisipasi dinonaktifkan"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "High system load"
-msgstr "Menolak tunnel: High message delay"
+msgstr "Beban sistem tinggi"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "Rejecting all tunnel requests:<br>"
-msgstr "Menolak sebagian besar tunnel: jumlah permintaan tinggi"
+msgstr "Menolak semua permintaan terowongan:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "High number of requests"
-msgstr "Menolak sebagian besar tunnel: jumlah permintaan tinggi"
+msgstr "Jumlah permintaan yang tinggi"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "Rejecting most tunnel requests:<br>"
-msgstr "Menolak sebagian besar tunnel: jumlah permintaan tinggi"
+msgstr "Menolak sebagian besar permintaan terowongan:<br>"
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:262
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:469
-#, fuzzy
 msgid "Accepting most tunnel requests"
-msgstr "Menerima sebagian besar tunnel"
+msgstr "Menerima sebagian besar permintaan terowongan"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:264
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:471
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:591
-#, fuzzy
 msgid "Accepting tunnel requests"
-msgstr "Menerima tunnel"
+msgstr "Menerima permintaan terowongan"
 
 #. .067KBps
 #. * also limited to 90% - see below
@@ -179,23 +173,20 @@ msgstr "Menerima tunnel"
 #. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:369
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:465
-#, fuzzy
 msgid "Declining requests: Bandwidth limit"
-msgstr "Menolak tunnel: batas Bandwidth"
+msgstr "Permintaan yang ditolak: Batas bandwidth"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
-#, fuzzy
 msgid "Declining requests"
-msgstr "Menolak permintaan tunnel: terlalu lambat"
+msgstr "Menolak permintaan"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 msgid "Shutting down"
-msgstr ""
+msgstr "Mematikan"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
-#, fuzzy
 msgid "Declining tunnel requests"
-msgstr "Menolak permintaan tunnel: terlalu lambat"
+msgstr "Menolak permintaan terowongan"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:302
 msgid "Dropping tunnel requests: Too slow"
@@ -206,9 +197,8 @@ msgid "Dropping tunnel requests: High job lag"
 msgstr "Menolak permintaan tunnel: job lag tinggi"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:320
-#, fuzzy
 msgid "Dropping tunnel requests:<br>High CPU load"
-msgstr "Menolak permintaan tunnel: beban tinggi"
+msgstr "Menghilangkan permintaan terowongan:<br>Beban CPU tinggi"
 
 #. don't even bother, since we are so overloaded locally
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:587
@@ -216,19 +206,16 @@ msgid "Dropping tunnel requests: Overloaded"
 msgstr "Menolak permintaan terowongan: overload"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
-#, fuzzy
 msgid "Declining requests:"
-msgstr "Menolak permintaan tunnel: terlalu lambat"
+msgstr "Permintaan yang ditolak:"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
-#, fuzzy
 msgid "Request overload"
-msgstr "Menolak tunnel: permintaan berlebihan"
+msgstr "Permintaan berlebihan"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
-#, fuzzy
 msgid "Connection limit reached"
-msgstr "Menolak tunnel: batas tercapai"
+msgstr "Batas koneksi tercapai"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1267
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1302

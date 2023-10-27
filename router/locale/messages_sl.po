@@ -7,13 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P routerconsole\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2019-12-19 14:09+0000\n"
+"PO-Revision-Date: 2023-10-27 10:09+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
 "n%100==4 ? 2 : 3);\n"
+"X-Generator: Poedit 3.4\n"
 
 #. * IPv4 OK, IPv6 OK or disabled or no address
 #: ../java/src/net/i2p/router/CommSystemFacade.java:426
@@ -98,79 +101,70 @@ msgstr "Preizkušanje"
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:152
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:575
 msgid "Starting up"
-msgstr ""
+msgstr "Zagon"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
-#, fuzzy
 msgid "Declining all tunnel requests:<br>"
-msgstr "Spuščanje prošenj predorov: Preobremenjeno"
+msgstr "Zavračanje vseh zahtev za tunel:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 msgid "Hidden Mode"
-msgstr ""
+msgstr "Skriti način"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
-#, fuzzy
 msgid "Declining tunnel requests:<br>"
-msgstr "Spuščanje prošenj predorov: Preobremenjeno"
+msgstr "Zavračanje zahtevkov za tunel:<br>"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
-#, fuzzy
 msgid "High message delay"
-msgstr "Zavrnitev predorov: Visoka zamuda sporočil"
+msgstr "Velika zakasnitev sporočila"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Declining requests: "
-msgstr ""
+msgstr "Zavračanje zahtev: "
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Limit reached"
-msgstr ""
+msgstr "Meja dosežena"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 msgid "Participation disabled"
-msgstr ""
+msgstr "Sodelovanje onemogočeno"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "High system load"
-msgstr "Zavrnitev predorov: Visoka zamuda sporočil"
+msgstr "Velika obremenitev sistema"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "Rejecting all tunnel requests:<br>"
-msgstr "Zavrnitev večine predorov: Visoko število prošenj"
+msgstr "Zavračanje vseh zahtev za tunel:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "High number of requests"
-msgstr "Zavrnitev večine predorov: Visoko število prošenj"
+msgstr "Veliko število zahtev"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "Rejecting most tunnel requests:<br>"
-msgstr "Zavrnitev večine predorov: Visoko število prošenj"
+msgstr "Zavračanje večine zahtev za tunel:<br>"
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:262
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:469
-#, fuzzy
 msgid "Accepting most tunnel requests"
-msgstr "Sprejemanje večine predorov"
+msgstr "Sprejemanje večine zahtev za tunel"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:264
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:471
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:591
-#, fuzzy
 msgid "Accepting tunnel requests"
-msgstr "Sprejemanje predorov"
+msgstr "Sprejemanje zahtev za tunel"
 
 #. .067KBps
 #. * also limited to 90% - see below
@@ -181,22 +175,20 @@ msgstr "Sprejemanje predorov"
 #. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:369
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:465
-#, fuzzy
 msgid "Declining requests: Bandwidth limit"
-msgstr "Zavrnitev predorov: Omejitev pretočnosti"
+msgstr "Zavračanje zahtev: Omejitev pasovne širine"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 msgid "Declining requests"
-msgstr ""
+msgstr "Zavračanje zahtev"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 msgid "Shutting down"
-msgstr ""
+msgstr "Zapiranje"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
-#, fuzzy
 msgid "Declining tunnel requests"
-msgstr "Spuščanje prošenj predorov: Preveč počasno"
+msgstr "Zavračanje zahtevkov za tunel"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:302
 msgid "Dropping tunnel requests: Too slow"
@@ -207,9 +199,8 @@ msgid "Dropping tunnel requests: High job lag"
 msgstr "Spuščanje prošenj predorov: Visoki odzivni čas dela"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:320
-#, fuzzy
 msgid "Dropping tunnel requests:<br>High CPU load"
-msgstr "Spuščanje prošenj predorov: Visoko breme"
+msgstr "Opuščanje zahtev tunela:<br>Visoka obremenitev procesorja"
 
 #. don't even bother, since we are so overloaded locally
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:587
@@ -218,17 +209,15 @@ msgstr "Spuščanje prošenj predorov: Preobremenjeno"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 msgid "Declining requests:"
-msgstr ""
+msgstr "Zavračanje zahtev:"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
-#, fuzzy
 msgid "Request overload"
-msgstr "Zavrnitev predorov: Preobremenitev prošenj"
+msgstr "Preobremenitev zahteve"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
-#, fuzzy
 msgid "Connection limit reached"
-msgstr "Zavrnitev predorov: Omejitev dosežena"
+msgstr "Omejitev povezave je dosežena"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1267
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1302

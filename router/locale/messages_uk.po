@@ -6,7 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2019-11-24 13:40+0000\n"
+"PO-Revision-Date: 2023-10-27 09:52+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: uk_UA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15,6 +17,7 @@ msgstr ""
 "11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
 "100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"X-Generator: Poedit 3.4\n"
 
 #. * IPv4 OK, IPv6 OK or disabled or no address
 #: ../java/src/net/i2p/router/CommSystemFacade.java:426
@@ -99,79 +102,70 @@ msgstr "Тестування"
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:152
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:575
 msgid "Starting up"
-msgstr ""
+msgstr "Запуск"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
-#, fuzzy
 msgid "Declining all tunnel requests:<br>"
-msgstr "Відхиляю запити на тунелі: перевантажено"
+msgstr "Відхилення всіх запитів на тунель:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 msgid "Hidden Mode"
-msgstr ""
+msgstr "Прихований режим"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
-#, fuzzy
 msgid "Declining tunnel requests:<br>"
-msgstr "Відхиляю запити на тунелі: перевантажено"
+msgstr "Відхилення запитів на тунель:<br>"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
-#, fuzzy
 msgid "High message delay"
-msgstr "Не приймаємо тунелі: Велика затримка повідомлень"
+msgstr "Велика затримка повідомлення"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Declining requests: "
-msgstr ""
+msgstr "Відхилення запитів: "
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Limit reached"
-msgstr ""
+msgstr "Ліміт досягнуто"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 msgid "Participation disabled"
-msgstr ""
+msgstr "Участь вимкнено"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "High system load"
-msgstr "Не приймаємо тунелі: Велика затримка повідомлень"
+msgstr "Високе навантаження на систему"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "Rejecting all tunnel requests:<br>"
-msgstr "Не приймаємо більшу частину тунелів: Велика кількість запитів"
+msgstr "Відхилення всіх запитів на тунель:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "High number of requests"
-msgstr "Не приймаємо більшу частину тунелів: Велика кількість запитів"
+msgstr "Велика кількість запитів"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "Rejecting most tunnel requests:<br>"
-msgstr "Не приймаємо більшу частину тунелів: Велика кількість запитів"
+msgstr "Відхилення більшості запитів на тунель:<br>"
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:262
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:469
-#, fuzzy
 msgid "Accepting most tunnel requests"
-msgstr "Приймаємо більшість тунелів"
+msgstr "Прийняття більшості запитів на тунель"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:264
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:471
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:591
-#, fuzzy
 msgid "Accepting tunnel requests"
-msgstr "Приймаємо тунелі"
+msgstr "Прийняття запитів на тунель"
 
 #. .067KBps
 #. * also limited to 90% - see below
@@ -182,23 +176,20 @@ msgstr "Приймаємо тунелі"
 #. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:369
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:465
-#, fuzzy
 msgid "Declining requests: Bandwidth limit"
-msgstr "Не приймаємо тунелі: Досягнутий ліміт пропускної спроможності"
+msgstr "Відхилення запитів: обмеження пропускної здатності"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
-#, fuzzy
 msgid "Declining requests"
-msgstr "Відхиляю запити на тунелі: занадто повільна обробка запитів"
+msgstr "Відхилення запитів"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 msgid "Shutting down"
-msgstr ""
+msgstr "Вимкнення"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
-#, fuzzy
 msgid "Declining tunnel requests"
-msgstr "Відхиляю запити на тунелі: занадто повільна обробка запитів"
+msgstr "Відхилення запитів на тунель"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:302
 msgid "Dropping tunnel requests: Too slow"
@@ -209,9 +200,8 @@ msgid "Dropping tunnel requests: High job lag"
 msgstr "Відхиляю запити на тунелі: велике відставання обробки запитів"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:320
-#, fuzzy
 msgid "Dropping tunnel requests:<br>High CPU load"
-msgstr "Відхиляю запити на тунелі: високе навантаження"
+msgstr "Відкидання запитів на тунель:<br>Високе навантаження на ЦП"
 
 #. don't even bother, since we are so overloaded locally
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:587
@@ -219,19 +209,16 @@ msgid "Dropping tunnel requests: Overloaded"
 msgstr "Відхиляю запити на тунелі: перевантажено"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
-#, fuzzy
 msgid "Declining requests:"
-msgstr "Відхиляю запити на тунелі: занадто повільна обробка запитів"
+msgstr "Відхилення запитів:"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
-#, fuzzy
 msgid "Request overload"
-msgstr "Не приймаємо тунелі: забагато запитів"
+msgstr "Перевантаження запиту"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
-#, fuzzy
 msgid "Connection limit reached"
-msgstr "Не приймаємо тунелі: Досягнутий ліміт кількості тунелів"
+msgstr "Досягнуто ліміту підключення"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1267
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1302

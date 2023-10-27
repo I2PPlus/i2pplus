@@ -6,13 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2019-11-24 13:40+0000\n"
+"PO-Revision-Date: 2023-10-27 10:27+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?"
 "2:1));\n"
+"X-Generator: Poedit 3.4\n"
 
 #. * IPv4 OK, IPv6 OK or disabled or no address
 #: ../java/src/net/i2p/router/CommSystemFacade.java:426
@@ -97,79 +100,70 @@ msgstr "Testare"
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:152
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:575
 msgid "Starting up"
-msgstr ""
+msgstr "Pornirea"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
-#, fuzzy
 msgid "Declining all tunnel requests:<br>"
-msgstr "Arunc cererile tunelului: Supraîncărcat"
+msgstr "Refuzarea tuturor cererilor de tunel:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 msgid "Hidden Mode"
-msgstr ""
+msgstr "Mod ascuns"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
-#, fuzzy
 msgid "Declining tunnel requests:<br>"
-msgstr "Arunc cererile tunelului: Supraîncărcat"
+msgstr "Declinarea cererilor de tunel:<br>"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
-#, fuzzy
 msgid "High message delay"
-msgstr "Respingere tuneluri: Mesajul are întârziere mare"
+msgstr "Întârziere mare a mesajului"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Declining requests: "
-msgstr ""
+msgstr "Refuzarea cererilor: "
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Limit reached"
-msgstr ""
+msgstr "Limita atinsă"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 msgid "Participation disabled"
-msgstr ""
+msgstr "Participarea dezactivată"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "High system load"
-msgstr "Respingere tuneluri: Mesajul are întârziere mare"
+msgstr "Încărcare mare a sistemului"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "Rejecting all tunnel requests:<br>"
-msgstr "Respingere a majoritatea tunelurilor: Număr mare de cereri"
+msgstr "Respingerea tuturor cererilor de tunel:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "High number of requests"
-msgstr "Respingere a majoritatea tunelurilor: Număr mare de cereri"
+msgstr "Număr mare de solicitări"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "Rejecting most tunnel requests:<br>"
-msgstr "Respingere a majoritatea tunelurilor: Număr mare de cereri"
+msgstr "Respingerea majorității cererilor de tunel:<br>"
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:262
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:469
-#, fuzzy
 msgid "Accepting most tunnel requests"
-msgstr "Accepta majoritatea tunelurilor"
+msgstr "Se acceptă majoritatea solicitărilor de tunel"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:264
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:471
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:591
-#, fuzzy
 msgid "Accepting tunnel requests"
-msgstr "Accepta tuneluri"
+msgstr "Acceptarea cererilor de tunel"
 
 #. .067KBps
 #. * also limited to 90% - see below
@@ -180,23 +174,20 @@ msgstr "Accepta tuneluri"
 #. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:369
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:465
-#, fuzzy
 msgid "Declining requests: Bandwidth limit"
-msgstr "Respingere tuneluri: Limita de lățime de bandă"
+msgstr "Solicitari în declin: limită de lățime de bandă"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
-#, fuzzy
 msgid "Declining requests"
-msgstr "Arunc cererile tunelului: Prea lent"
+msgstr "Refuzarea cererilor"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 msgid "Shutting down"
-msgstr ""
+msgstr "Închidere"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
-#, fuzzy
 msgid "Declining tunnel requests"
-msgstr "Arunc cererile tunelului: Prea lent"
+msgstr "Declinul cererilor de tunel"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:302
 msgid "Dropping tunnel requests: Too slow"
@@ -207,9 +198,8 @@ msgid "Dropping tunnel requests: High job lag"
 msgstr "Arunc cererile de tunel: Decalaj job-uri ridicat"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:320
-#, fuzzy
 msgid "Dropping tunnel requests:<br>High CPU load"
-msgstr "Arunc cererile de tunel: Încărcătura mare"
+msgstr "Renunțarea solicitărilor de tunel:<br>Încărcare mare a procesorului"
 
 #. don't even bother, since we are so overloaded locally
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:587
@@ -217,19 +207,16 @@ msgid "Dropping tunnel requests: Overloaded"
 msgstr "Arunc cererile tunelului: Supraîncărcat"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
-#, fuzzy
 msgid "Declining requests:"
-msgstr "Arunc cererile tunelului: Prea lent"
+msgstr "Refuzarea cererilor:"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
-#, fuzzy
 msgid "Request overload"
-msgstr "Resping Tuneluri: Cerere supraîncărcată"
+msgstr "Solicitare supraîncărcare"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
-#, fuzzy
 msgid "Connection limit reached"
-msgstr "Respingere tuneluri: Limită atinsă"
+msgstr "Limita de conectare a fost atinsă"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1267
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1302

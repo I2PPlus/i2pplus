@@ -7,12 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P routerconsole\n"
 "POT-Creation-Date: 2023-10-22 01:44+0000\n"
-"PO-Revision-Date: 2019-12-19 14:09+0000\n"
+"PO-Revision-Date: 2023-10-27 10:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: tr_TR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.4\n"
 
 #. * IPv4 OK, IPv6 OK or disabled or no address
 #: ../java/src/net/i2p/router/CommSystemFacade.java:426
@@ -97,79 +100,70 @@ msgstr "Sınanıyor"
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:152
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:575
 msgid "Starting up"
-msgstr ""
+msgstr "Başlatılıyor"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
-#, fuzzy
 msgid "Declining all tunnel requests:<br>"
-msgstr "Tünel istekleri geri çevriliyor: Aşırı yüklenme"
+msgstr "Tüm tünel isteklerinin reddedilmesi:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 msgid "Hidden Mode"
-msgstr ""
+msgstr "Gizli Mod"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
-#, fuzzy
 msgid "Declining tunnel requests:<br>"
-msgstr "Tünel istekleri geri çevriliyor: Aşırı yüklenme"
+msgstr "Tünel isteklerinin reddedilmesi:<br>"
 
 #. }
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
-#, fuzzy
 msgid "High message delay"
-msgstr "Tünelleme red ediliyor: Yüksek ileti gecikmesi"
+msgstr "Yüksek mesaj gecikmesi"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Declining requests: "
-msgstr ""
+msgstr "Reddedilen istekler: "
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Limit reached"
-msgstr ""
+msgstr "Sınıra ulaşıldı"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 msgid "Participation disabled"
-msgstr ""
+msgstr "Katılım devre dışı"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "High system load"
-msgstr "Tünelleme red ediliyor: Yüksek ileti gecikmesi"
+msgstr "Yüksek sistem yükü"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
-#, fuzzy
 msgid "Rejecting all tunnel requests:<br>"
-msgstr "Çoğu tünelleme red ediliyor: Çok sayıda istek"
+msgstr "Tüm tünel istekleri reddediliyor:<br>"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "High number of requests"
-msgstr "Çoğu tünelleme red ediliyor: Çok sayıda istek"
+msgstr "Çok sayıda istek"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
-#, fuzzy
 msgid "Rejecting most tunnel requests:<br>"
-msgstr "Çoğu tünelleme red ediliyor: Çok sayıda istek"
+msgstr "Tünel isteklerinin çoğu reddediliyor:<br>"
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:262
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:469
-#, fuzzy
 msgid "Accepting most tunnel requests"
-msgstr "Çoğu tünel kabul ediliyor"
+msgstr "Tünel isteklerinin çoğu kabul ediliyor"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:264
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:471
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:591
-#, fuzzy
 msgid "Accepting tunnel requests"
-msgstr "Tüneller kabul ediliyor"
+msgstr "Tünel isteklerini kabul etme"
 
 #. .067KBps
 #. * also limited to 90% - see below
@@ -180,23 +174,20 @@ msgstr "Tüneller kabul ediliyor"
 #. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:369
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:465
-#, fuzzy
 msgid "Declining requests: Bandwidth limit"
-msgstr "Tünelleme red ediliyor: Bant genişliği sınırı"
+msgstr "Azalan istekler: Bant genişliği sınırı"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
-#, fuzzy
 msgid "Declining requests"
-msgstr "Tünel istekleri geri çevriliyor: Çok yavaş"
+msgstr "Reddedilen istekler"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 msgid "Shutting down"
-msgstr ""
+msgstr "Kapatılıyor"
 
 #: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
-#, fuzzy
 msgid "Declining tunnel requests"
-msgstr "Tünel istekleri geri çevriliyor: Çok yavaş"
+msgstr "Tünel isteklerinin reddedilmesi"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:302
 msgid "Dropping tunnel requests: Too slow"
@@ -207,9 +198,8 @@ msgid "Dropping tunnel requests: High job lag"
 msgstr "Tünel istekleri geri çevriliyor: Yüksek görev gecikmesi"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:320
-#, fuzzy
 msgid "Dropping tunnel requests:<br>High CPU load"
-msgstr "Tünel istekleri geri çevriliyor: Yüksek yüklenme"
+msgstr "Tünel istekleri bırakılıyor:<br>Yüksek CPU yükü"
 
 #. don't even bother, since we are so overloaded locally
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:587
@@ -217,19 +207,16 @@ msgid "Dropping tunnel requests: Overloaded"
 msgstr "Tünel istekleri geri çevriliyor: Aşırı yüklenme"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
-#, fuzzy
 msgid "Declining requests:"
-msgstr "Tünel istekleri geri çevriliyor: Çok yavaş"
+msgstr "Reddedilen istekler:"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
-#, fuzzy
 msgid "Request overload"
-msgstr "Tüneller reddediliyor: İstek aşırı yüklenmiş"
+msgstr "Aşırı yükleme isteği"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
-#, fuzzy
 msgid "Connection limit reached"
-msgstr "Tünelleme red ediliyor: Sınıra ulaşıldı"
+msgstr "Bağlantı limitine ulaşıldı"
 
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1267
 #: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1302
