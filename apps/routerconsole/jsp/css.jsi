@@ -33,7 +33,7 @@
 <link href="<%=themePath%>images/images.css" rel=stylesheet>
 <% if (intl.getLang().equals("zh")) { %>
 <link href="<%=themePath%>console_big.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
-<% } else if (intl.getLang().equals("ar")) { %>
+<% } else if (intl.getLang().equals("ar") || intl.getLang().equals("fa")) { %>
 <link href="<%=themePath%>console_ar.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <% }
    if (!intl.allowIFrame(UA)) { %>
