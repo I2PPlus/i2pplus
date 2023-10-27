@@ -372,7 +372,6 @@ public class RouterContext extends I2PAppContext {
      */
     public SegmentedNetworkDatabaseFacade netDbSegmentor() { return _netDb; }
     public FloodfillNetworkDatabaseFacade netDb() { return _netDb.mainNetDB(); }
-    public FloodfillNetworkDatabaseFacade multihomeNetDb() { return _netDb.multiHomeNetDB(); }
 
     /**
      * Get the client netDb for the given id.

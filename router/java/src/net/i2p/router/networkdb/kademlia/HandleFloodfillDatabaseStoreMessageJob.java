@@ -154,14 +154,12 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     blockStore = false;
                 if (blockStore) {
                     getContext().statManager().addRateData("netDb.storeLocalLeaseSetAttempt", 1, 0);
-                    // throw rather than return, so that we send the ack below (prevent easy attack)
+                    // If we're using subdbs, store the leaseSet in the multihome DB.
+                    // otherwise, throw rather than return, so that we send the ack below (prevent easy attack)
                     dontBlamePeer = true;
-                    if (getContext().netDbSegmentor().useSubDbs())
-                        getContext().multihomeNetDb().store(key, ls);
-                    else
-                        throw new IllegalArgumentException("Peer attempted to store LOCAL LeaseSet [" +
-                                                           key.toBase32().substring(0,6) + "]" +
-                                                           "\n* DbId: " + _facade._dbid);
+                    throw new IllegalArgumentException("Peer attempted to store LOCAL LeaseSet [" +
+                                                       key.toBase32().substring(0,6) + "]" +
+                                                       "\n* DbId: " + _facade._dbid);
                 }
                 //boolean oldrar = ls.getReceivedAsReply();
                 //boolean oldrap = ls.getReceivedAsPublished();
