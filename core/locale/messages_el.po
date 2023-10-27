@@ -30,8 +30,8 @@ msgstr ""
 #, java-format
 msgid "{0,number,####} ms"
 msgid_plural "{0,number,####} ms"
-msgstr[0] "{0,number,####} μιλιδευτερόλεπτο"
-msgstr[1] "{0,number,####} μιλιδευτερόλεπτα"
+msgstr[0] "{0,number,####} ms"
+msgstr[1] "{0,number,####} ms"
 
 #. seconds
 #. alternates: secs, sec. 'seconds' is probably too long.
