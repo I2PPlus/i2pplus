@@ -1008,7 +1008,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
 
                 // Override cache-control for static content with no-cache policy
-                boolean hasNoCache = cc && headers.get("Cache-Control").contains("no-cache".toLowerCase());
+                boolean hasNoCache = (headers == null ? false : cc && headers.get("Cache-Control").contains("no-cache".toLowerCase()));
                 if (_headers != null && hasNoCache && immutableCache) {
                     headers.remove("Cache-Control");
                     setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");
