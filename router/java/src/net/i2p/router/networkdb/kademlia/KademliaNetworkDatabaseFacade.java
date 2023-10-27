@@ -453,7 +453,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         if (!QUIET) {
-            if (!isClientDb() && !isMultihomeDb()) {
+            if (!isClientDb()) {
             // fill the search queue with random keys in buckets that are too small
             // Disabled since KBucketImpl.generateRandomKey() is b0rked,
             // and anyway, we want to search for a completely random key,
@@ -477,7 +477,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _log.warn("Operating in QUIET MODE - not exploring or pushing data proactively, simply reactively " +
                       "\n* This should NOT be used in production!");
         }
-        if (!isClientDb() && !isMultihomeDb()) {
+        if (!isClientDb()) {
             // periodically update and resign the router's 'published date', which basically
             // serves as a version
             Job plrij = new PublishLocalRouterInfoJob(_context);
@@ -2061,8 +2061,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public String toString() {
         if (isMainDb())
             return "Main NetDB";
-        if (isMultihomeDb())
-            return "Multihome NetDB";
         return "Client NetDB " + _dbid.toBase64();
     }
 

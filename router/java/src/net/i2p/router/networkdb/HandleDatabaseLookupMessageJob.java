@@ -145,7 +145,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                 // Only send it out if it is in our estimated keyspace.
                 // For this, we do NOT use their dontInclude list as it can't be trusted
                 // (i.e. it could mess up the closeness calculation)
-                Set<Hash> closestHashes = getContext().netDb().findNearestRouters(searchKey, 
+                Set<Hash> closestHashes = getContext().netDb().findNearestRouters(searchKey,
                                                                             CLOSENESS_THRESHOLD, null);
                 if (weAreClosest(closestHashes)) {
                     // It's in our keyspace, so give it to them
@@ -173,7 +173,6 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                     getContext().statManager().addRateData("netDb.lookupsMatchedRemoteNotClosest", 1);
                     Set<Hash> routerHashSet = getNearestRouters(lookupType);
                     sendClosest(searchKey, routerHashSet, fromKey, toTunnel);
-                }
             }
         } else if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO && lookupType != DatabaseLookupMessage.Type.LS) {
             RouterInfo info = (RouterInfo) dbe;
@@ -262,7 +261,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         // Honor flag to exclude all floodfills
         //if (dontInclude.contains(Hash.FAKE_HASH)) {
         // This is handled in FloodfillPeerSelector
-        return getContext().netDb().findNearestRouters(_message.getSearchKey(), 
+        return getContext().netDb().findNearestRouters(_message.getSearchKey(),
                                                        MAX_ROUTERS_RETURNED,
                                                        dontInclude);
     }

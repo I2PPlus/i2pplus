@@ -564,7 +564,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 if (invalidMessage.contains("published over")) {
                     dontBlamePeer = true;
                     if (_log.shouldWarn())
-                        _log.warn("[DbId: " + _facade._dbid + "] Received stale RouterInfo from [" + _fromHash.toBase64().substring(0,6) + "] \n* " + invalidMessage);
+                        _log.warn("Received stale RouterInfo from [" + _fromHash.toBase64().substring(0,6) + "] \n* " + invalidMessage);
                 // Should we record in the profile?
                 } else if (_log.shouldDebug()) {
                     _log.warn("[DbId: " + _facade._dbid + "] Received INVALID data packet from [" + _fromHash.toBase64().substring(0,6) + "] \n* " + invalidMessage + _from);
@@ -575,7 +575,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         } else if (invalidMessage != null && !dontBlamePeer) {
             if (_log.shouldWarn()) {
                 if (invalidMessage.contains("published over"))
-                    _log.warn("[DbId: " + _facade._dbid + "] Received stale RouterInfo from [unknown] \n* " + invalidMessage);
+                    _log.warn("Received stale RouterInfo from [unknown] \n* " + invalidMessage);
                 else
                     _log.warn("[DbId: " + _facade._dbid + "] Received INVALID data packet from [unknown] \n* " + invalidMessage);
                 }
