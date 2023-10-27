@@ -62,16 +62,6 @@ public abstract class SegmentedNetworkDatabaseFacade {
     }
 
     /**
-     * Determine whether to use subDb defenses at all or to use the extant FNDF/RAP/RAR defenses
-     *
-     * @return true if using subDbs, false if not
-     * @since 0.9.60
-     */
-    public boolean useSubDbs() {
-        return false;
-    }
-
-    /**
      * Get a sub-netDb using a Hash identifier
      * 
      * @return client subDb for hash, or null if it does not exist

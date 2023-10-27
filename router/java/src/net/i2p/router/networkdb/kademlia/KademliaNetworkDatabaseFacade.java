@@ -1049,7 +1049,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
     }
 
-    private static final long PUBLISH_DELAY = 20*1000;
+    private static final long PUBLISH_DELAY = 5*1000;
 
     /**
      * @throws IllegalArgumentException if the leaseSet is not valid
@@ -1057,7 +1057,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public void publish(LeaseSet localLeaseSet) throws IllegalArgumentException {
         if (!_initialized) {
             if (_log.shouldWarn())
-//                _log.warn("publish() before initialized: " + localLeaseSet, new Exception("I did it"));
                 _log.warn("Attempted to publish local LeaseSet before router fully initialized: " + localLeaseSet);
             return;
         }
@@ -1068,41 +1067,23 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _log.error("Locally published LeaseSet is not valid", iae);
             throw iae;
         }
-        if (!_context.netDbSegmentor().useSubDbs()) {
-            String dbid = "Main netDb";
-            if (isClientDb()) {
-                dbid = "Client netDb: " + _dbid;
-            }
+        String dbid = "MainNetDb";
+        if (isClientDb()) {
+            dbid = "ClientNetDb: " + _dbid;
         }
         if (_localKey != null) {
             if (!_localKey.equals(localLeaseSet.getHash()))
                 if (_log.shouldLog(Log.ERROR))
-                    _log.error("Error, local LeaseSet hash ["
-                               + _localKey.toBase64().substring(0,6) + "] does not match the published hash ("
-                               + localLeaseSet.getHash() + ")! This shouldn't happen!" +
-                               "\n* DbId: " + _dbid,
-                               new Exception());
+                    _log.error("[" + dbid + "]" + "Error, the local LS hash ("
+                            + _localKey + ") does not match the published hash ("
+                            + localLeaseSet.getHash() + ")! This shouldn't happen!",
+                            new Exception());
         } else {
-            if (!_context.netDbSegmentor().useSubDbs()){
-                String dbid = "MainNetDb";
-                if (isClientDb()) {
-                    dbid = "ClientNetDb: " + _dbid;
-                }
-                if (_localKey != null) {
-                    if (!_localKey.equals(localLeaseSet.getHash()))
-                        if (_log.shouldLog(Log.ERROR))
-                            _log.error("[" + dbid + "]" + "Error, the local LS hash ("
-                                    + _localKey + ") does not match the published hash ("
-                                    + localLeaseSet.getHash() + ")! This shouldn't happen!",
-                                    new Exception());
-                } else {
-                    // This will only happen once when the local LS is first published
-                    _localKey = localLeaseSet.getHash();
-                    if (_log.shouldLog(Log.INFO))
-                        _log.info("Local client LeaseSet key initialized to: " + _localKey +
-                                  "\n* DbId: " + _dbid);
-                }
-            }
+            // This will only happen once when the local LS is first published
+            _localKey = localLeaseSet.getHash();
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Local client LeaseSet key initialized to: " + _localKey +
+                          "\n* DbId: " + _dbid);
         }
         if (!_context.clientManager().shouldPublishLeaseSet(h))
             return;
