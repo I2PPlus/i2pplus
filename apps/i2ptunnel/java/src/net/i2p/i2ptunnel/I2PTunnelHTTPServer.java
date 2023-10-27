@@ -998,20 +998,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 // Set cache-control to immutable if not set for custom mimetypes, no-cache for everything else
                 boolean immutableCache = Arrays.stream(immutableCacheWhitelist).anyMatch(mimeType::matches);
-                boolean cc = headers.containsKey("Cache-Control".toLowerCase());
-                if (_headers != null && !cc) {
-                    if (immutableCache) {
+                if (_headers != null) {
+                    boolean cc = headers.containsKey("Cache-Control".toLowerCase());
+                    boolean hasNoCache = cc && headers.get("Cache-Control").contains("no-cache".toLowerCase());
+                    // Override cache-control for static content with no-cache policy
+                    if (_headers != null && hasNoCache && immutableCache) {
+                        headers.remove("Cache-Control");
                         setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");
-                    } else {
+                    } else if (immutableCache && !cc) {
+                        setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");
+                    } else if (!cc) {
                         setEntry(headers, "Cache-Control", "private, no-cache, max-age=604800");
                     }
-                }
-
-                // Override cache-control for static content with no-cache policy
-                boolean hasNoCache = (headers == null ? false : cc && headers.get("Cache-Control").contains("no-cache".toLowerCase()));
-                if (_headers != null && hasNoCache && immutableCache) {
-                    headers.remove("Cache-Control");
-                    setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");
                 }
 
                 // Add x-xss-protection header if not present
