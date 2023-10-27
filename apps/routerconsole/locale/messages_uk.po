@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-10-26 22:49+0000\n"
+"PO-Revision-Date: 2023-10-27 07:48+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk_UA\n"
@@ -635,7 +635,7 @@ msgstr "Неможливо завантажити плагін із {0}"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:100
 msgid "Unable to connect to update server "
-msgstr "Не вдається підключитися до сервера оновлення"
+msgstr "Не вдається підключитися до сервера оновлення "
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:105
 #, java-format
@@ -710,7 +710,7 @@ msgstr "М’який перезапуск"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:253
 msgid "Graceful restart requested"
-msgstr "Запитаний м'який перезапуск "
+msgstr "Запитаний м'який перезапуск"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:254 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:551
 msgid "Hard restart"
@@ -1181,7 +1181,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigAdvancedHandler.java:73
 msgid "Error updating the configuration - please see the error logs"
-msgstr "Помилка при оновленні конфігурації. Будь ласка, подивіться журнали помилок."
+msgstr "Помилка оновлення конфігурації - перегляньте журнали помилок"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:60 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:563
 msgid "Save Client Configuration"
@@ -2353,7 +2353,7 @@ msgstr "Клієнтські тунелі для {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:126
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
-msgstr "ПОПЕРЕДЖЕННЯ АНОНІМНОСТІ: Налаштування включають тунелі без хопів"
+msgstr "ПОПЕРЕДЖЕННЯ АНОНІМНОСТІ: Налаштування включають тунелі без хопів."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:131
 msgid "WARNING - 0-hop tunnels not recommended for IPv6-only routers."
@@ -2365,15 +2365,15 @@ msgstr "ПОПЕРЕДЖЕННЯ. Вхідні тунелі з нульовим 
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:145
 msgid "ANONYMITY WARNING - Settings include 1-hop tunnels."
-msgstr "ПОПЕРЕДЖЕННЯ АНОНІМНОСТІ: Налаштування включають тунелі з одним хопом"
+msgstr "ПОПЕРЕДЖЕННЯ АНОНІМНОСТІ: Налаштування включають тунелі з одним хопом."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:151
 msgid "PERFORMANCE WARNING - Settings include very long tunnels."
-msgstr "ПОПЕРЕДЖЕННЯ ПРОДУКТИВНОСТІ: Налаштування включають дуже довгі тунелі"
+msgstr "ПОПЕРЕДЖЕННЯ ПРОДУКТИВНОСТІ: Налаштування включають дуже довгі тунелі."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:155
 msgid "PERFORMANCE WARNING - Settings include high tunnel quantities."
-msgstr "ПОПЕРЕДЖЕННЯ ПРОДУКТИВНОСТІ: Налаштування включають велику кількість тунелів"
+msgstr "ПОПЕРЕДЖЕННЯ ПРОДУКТИВНОСТІ: Налаштування включають велику кількість тунелів."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:158 ../java/src/net/i2p/router/web/helpers/InfoHelper.java:211
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:196 ../java/src/net/i2p/router/web/helpers/PeerHelper.java:200 ../java/src/net/i2p/router/web/helpers/PeerHelper.java:388
@@ -3270,7 +3270,7 @@ msgstr "Атлас світу з географічними фактами"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:187
 msgid "WorldAtlas"
-msgstr "WorldAtlas"
+msgstr "Атлас світу"
 
 #. "cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
 #. "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "eepsites/books.svg" + S +
@@ -3307,7 +3307,7 @@ msgstr "Журнал, пов'язаний з канабісом"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:202
 msgid "CultureMagazine"
-msgstr ""
+msgstr "CultureMagazine"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "A magazine of Politics &amp; Culture"
@@ -3355,7 +3355,7 @@ msgstr "Він глобальний журнал новин та ідей"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "FrontLineDefenders"
-msgstr ""
+msgstr "FrontLineDefenders"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "Human rights activism"
@@ -3379,119 +3379,119 @@ msgstr "Агрегація новин, пов'язаних з комп'ютер�
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:214
 msgid "HackerNews"
-msgstr ""
+msgstr "HackerNews"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
 msgid "HongKongFreePress"
-msgstr ""
+msgstr "HongKongFreePress"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
 msgid "Independent &amp; impartial news for Hong Kong"
-msgstr ""
+msgstr "Незалежні та неупереджені новини для Гонконгу"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
 msgid "HongKongWatch"
-msgstr ""
+msgstr "HongKongWatch"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
 msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr ""
+msgstr "Відстежує загрози свободам і правам у Гонконзі"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
 msgid "Business &amp; Financial News"
-msgstr ""
+msgstr "Ділові та фінансові новини"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Politics &amp; Current Affairs Journal"
-msgstr ""
+msgstr "Журнал «Політика та поточні справи»"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "English language Japanese News"
-msgstr ""
+msgstr "English language Japanese News"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "JapanToday"
-msgstr ""
+msgstr "Японія сьогодні"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "JStorDaily"
-msgstr ""
+msgstr "JStorDaily"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "Where news meets its scholarly match"
-msgstr ""
+msgstr "Де новини зустрічаються з академічним середовищем"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Jurist"
-msgstr ""
+msgstr "Jurist"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Legal News &amp; Commentary"
-msgstr ""
+msgstr "Юридичні новини та коментарі"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "In-depth security news &amp; investigation"
-msgstr ""
+msgstr "Докладні новини безпеки та розслідування"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "KrebsOnSecurity"
-msgstr ""
+msgstr "KrebsOnSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "Linux Kernel Mailing List"
-msgstr ""
+msgstr "Список розсилки ядра Linux"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "MetaCritic"
-msgstr ""
+msgstr "MetaCritic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "Movie + TV + Music + Game reviews"
-msgstr ""
+msgstr "Огляди фільмів + телебачення + музики + ігор"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "NakedSecurity"
-msgstr ""
+msgstr "NakedSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "Security news and research blog"
-msgstr ""
+msgstr "Блог про новини безпеки та дослідження"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "Smart &amp; fearless journalism"
-msgstr ""
+msgstr "Розумна та безстрашна журналістика"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "NewStatesman"
-msgstr ""
+msgstr "NewStatesman"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "Politics &amp; Current Affairs magazine"
-msgstr ""
+msgstr "Журнал «Політика та сучасність»."
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "Independent International Media Platform"
-msgstr ""
+msgstr "Незалежна міжнародна медіа платформа"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "OpenDemocracy"
-msgstr ""
+msgstr "Відкрита демократія"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "News and blog feeds on I2P"
-msgstr ""
+msgstr "Стрічки новин і блогів на I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "Planeta"
-msgstr ""
+msgstr "Planeta"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
 msgid "News &amp; Views on Tibet"
-msgstr ""
+msgstr "Новини та погляди на Тибет"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "RadioFreeAsia"
-msgstr ""
+msgstr "RadioFreeAsia"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "Reliable journalism for countries under censorship"
@@ -3507,7 +3507,7 @@ msgstr "Всесвітньо відомий технолог безпеки"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "SchneierOnSecurity"
-msgstr ""
+msgstr "SchneierOnSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "Latest scientific research news"
@@ -3515,7 +3515,7 @@ msgstr "Останні новини наукових досліджень"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "ScienceDaily"
-msgstr ""
+msgstr "ScienceDaily"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
 msgid "Community-driven tech news"
@@ -3531,71 +3531,71 @@ msgstr "Новини технологій"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Reporting on China without fear or favor"
-msgstr ""
+msgstr "Звітувати про Китай без страху чи ласки"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "News from the Taiwan Capital"
-msgstr ""
+msgstr "Новини зі столиці Тайваню"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "TaipeiTimes"
-msgstr ""
+msgstr "TaipeiTimes"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "TechXplore"
-msgstr ""
+msgstr "TechXplore"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "Technology and engineering news"
-msgstr ""
+msgstr "Новини техніки та техніки"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "TechMeme"
-msgstr ""
+msgstr "TechMeme"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "Technology news aggregator"
-msgstr ""
+msgstr "Агрегатор новин про технології"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "News &amp; Reviews"
-msgstr ""
+msgstr "Новини та огляди"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "TheAtlantic"
-msgstr ""
+msgstr "TheAtlantic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "Academic commentary and essays"
-msgstr ""
+msgstr "Наукові коментарі та реферати"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "TheConversation"
-msgstr ""
+msgstr "TheConversation"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Global News"
-msgstr ""
+msgstr "Світові новини"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "TheGuardian"
-msgstr ""
+msgstr "TheGuardian"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "TheHill"
-msgstr ""
+msgstr "TheHill"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "US Political News"
-msgstr ""
+msgstr "Політичні новини США"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "TheMarkup"
-msgstr ""
+msgstr "TheMarkup"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "Watching Big Tech..."
-msgstr ""
+msgstr "Перегляд Big Tech..."
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "Independent Journalism from Russia"
@@ -3603,11 +3603,11 @@ msgstr "Незалежна журналістика з Росії"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "TheMoscowTimes"
-msgstr ""
+msgstr "TheMoscowTimes"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "TheNewRepublic"
-msgstr ""
+msgstr "TheNewRepublic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "International News from Tibet"
@@ -5035,7 +5035,8 @@ msgstr "затримка"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:520
 msgid "Is the peer responding to tests in a timely fashion? To configure the timeout value: <code>router.peerTestTimeout={n}</code> (value is milliseconds, default 1000ms)"
-msgstr "Чи своєчасно одноліток відповідає на тести? "
+msgstr ""
+"Чи своєчасно одноліток відповідає на тести? Щоб налаштувати значення часу очікування: <code>router.peerTestTimeout={n}</code> (значення мілісекунди, за замовчуванням 1000 мс)"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:524
 msgid "capacity"
@@ -5497,7 +5498,7 @@ msgstr "Див. більше інформації на вікі"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:852
 msgid "Warning: ECDSA is not available. Update your Java or OS"
-msgstr "Попередження: ECDSA недоступний. "
+msgstr "Попередження: ECDSA недоступний. Оновіть Java або ОС"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:866
 msgid "Configure I2P Updates"
@@ -7311,7 +7312,9 @@ msgstr "Повністю вимкнути підключення UDP"
 msgid ""
 "The router's external port allows communication with other routers. It is recommended to configure your firewall to allow inbound and outbound traffic on this port to optimize "
 "your router's performance on the network."
-msgstr "Зовнішній порт маршрутизатора дозволяє з’єднуватися з іншими маршрутизаторами. "
+msgstr ""
+"Зовнішній порт маршрутизатора забезпечує зв'язок з іншими маршрутизаторами. Рекомендується налаштувати брандмауер на дозвіл вхідного та вихідного трафіку на цьому порту, щоб "
+"оптимізувати продуктивність маршрутизатора в мережі."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:727
 msgid "Do not reveal your port numbers to anyone, as they can be used to discover your IP address."
@@ -7585,7 +7588,7 @@ msgstr "Налаштувати системну службу I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:609
 msgid "Configure the status of the I2P service at system startup. If disabled, the service can be launched manually."
-msgstr "Налаштувати статус служби I2P під час запуску системи. "
+msgstr "Налаштуйте статус служби I2P під час запуску системи. Якщо вимкнено, службу можна запустити вручну."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:617
 msgid "Install I2P system service"
@@ -7627,7 +7630,9 @@ msgstr "Налаштування збору статистики I2P"
 msgid ""
 "A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of "
 "enabled stats, view the <a href=\"/stats\">stats page</a>."
-msgstr "За замовчуванням увімкнено обмежений вибір статистичних даних, необхідних для моніторингу продуктивності маршрутизатора. "
+msgstr ""
+"За замовчуванням увімкнено обмежений вибір статистики, який необхідний для моніторингу продуктивності маршрутизатора. Тут наведено лише статистичні дані, які мають "
+"необов’язковий графік; щоб переглянути повний список увімкненої статистики, перегляньте <a href=\"/stats\">сторінку статистики</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:537
 msgid "Enable full stats?"
@@ -9110,7 +9115,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:471
 msgid "Exploratory Tunnel"
-msgstr ""
+msgstr "Тунель комунальних послуг"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:473
 msgid ""
@@ -9128,7 +9133,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:479
 msgid "Garlic Routing"
-msgstr ""
+msgstr "Часникова маршрутизація"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:481
 msgid ""
@@ -9138,7 +9143,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:483
 msgid "Hidden Mode"
-msgstr ""
+msgstr "Прихований режим"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:485
 msgid ""
@@ -9154,7 +9159,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:491
 msgid "I2NP"
-msgstr ""
+msgstr "I2NP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:493
 msgid ""
@@ -9204,15 +9209,15 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:511
 msgid "Introducer"
-msgstr ""
+msgstr "Інтродюсер"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:513
 msgid "A router that facilitates the connection to the network of another router that is behind a firewall."
-msgstr ""
+msgstr "Маршрутизатор, який забезпечує підключення до мережі іншого маршрутизатора, який знаходиться за брандмауером."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:515
 msgid "Jump Service"
-msgstr ""
+msgstr "Стрибкова служба"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:517
 msgid ""
@@ -9223,7 +9228,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:519
 msgid "Laptop Mode"
-msgstr ""
+msgstr "Мода на ноутбук"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:521
 msgid ""
@@ -9895,7 +9900,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:441
 msgid "A filter is a text file that can contain one or more declarations. Blank lines and lines beginning with <i class=example>#</i> are ignored."
-msgstr "Фільтр — це текстовий файл, який може містити одну або більше декларацій. "
+msgstr "Фільтр — це текстовий файл, який може містити одне або більше оголошень. Порожні рядки та рядки, що починаються з <i class=example>#</i>, ігноруються."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:443
 msgid "A declaration will contain a directive (keyword) with parameters to define the scope of the declaration, and can represent one of the following:"
@@ -10040,7 +10045,9 @@ msgstr "реєструйте відвідувачів, які здійснюют
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:507
 msgid "You can use a recorder in one tunnel that writes to a file that another tunnel, or multiple tunnels, can use for throttling. These files can also be edited by hand."
-msgstr "Ви можете використовувати записувач в одному тунелі, який записує файл, який інший або кілька тунелів можуть використовувати для регулювання. "
+msgstr ""
+"Ви можете використовувати реєстратор в одному тунелі, який записує файл, який інший тунель або кілька тунелів можуть використовувати для регулювання. Ці файли також можна "
+"редагувати вручну."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:509
 msgid ""
