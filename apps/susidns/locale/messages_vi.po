@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 13:20+0000\n"
+"POT-Creation-Date: 2023-10-27 10:58+0000\n"
 "PO-Revision-Date: 2023-10-22 21:16+0000\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
@@ -105,14 +105,14 @@ msgstr[0] ""
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:254
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1025
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1023
 msgid "Add"
 msgstr "Thêm"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:261
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:995
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:993
 msgid "Replace"
 msgstr "Thay thế"
 
@@ -187,8 +187,8 @@ msgstr "Xóa mục nhập"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:743
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:921
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:741
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:919
 msgid "Delete Selected"
 msgstr "Xóa lựa chọn"
 
@@ -218,7 +218,7 @@ msgstr "Không có mục nào được chọn để xóa."
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:291
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:298
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:312
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1003
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1001
 msgid "Add Alternate"
 msgstr "Thêm thay thế"
 
@@ -379,16 +379,16 @@ msgstr "Không thể cập nhật đăng ký: Proxy HTTP không chạy!"
 msgid "Subscriptions reloaded."
 msgstr "Đăng ký được tải lại."
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:208
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1043
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:206
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1041
 msgid "Import"
 msgstr "Nhập"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:220
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:218
 msgid "address book"
 msgstr "sổ địa chỉ"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:275
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:273
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:216
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:221
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:207
@@ -397,7 +397,7 @@ msgstr "sổ địa chỉ"
 msgid "Router"
 msgstr "Bộ định tuyến"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:279
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:277
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:218
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:225
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:209
@@ -406,7 +406,7 @@ msgstr "Bộ định tuyến"
 msgid "Master"
 msgstr "Thầy"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:283
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:281
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:220
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:229
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:211
@@ -415,7 +415,7 @@ msgstr "Thầy"
 msgid "Private"
 msgstr "Riêng tư"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:287
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:285
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:222
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:233
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:213
@@ -424,7 +424,7 @@ msgstr "Riêng tư"
 msgid "Published"
 msgstr "Đã xuất bản"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:289
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:287
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:224
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:235
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:215
@@ -434,7 +434,7 @@ msgstr "Đã xuất bản"
 msgid "Subscriptions"
 msgstr "Đăng ký"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:291
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:289
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:226
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:230
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:237
@@ -444,7 +444,7 @@ msgstr "Đăng ký"
 msgid "Configuration"
 msgstr "Cấu hình"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:293
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:291
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:228
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:239
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:219
@@ -453,108 +453,108 @@ msgstr "Cấu hình"
 msgid "Help"
 msgstr "Trợ giúp"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:295
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:293
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:287
 msgid "Book"
 msgstr "Sách"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:312
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:310
 msgid "No entries"
 msgstr "Không có mục nào"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:356
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:366
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:354
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:364
 msgid "Export in hosts.txt format"
 msgstr "Xuất ở định dạng Host.txt"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:358
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:356
 msgid "Export results in hosts.txt format"
 msgstr "Xuất kết quả ở định dạng Host.txt"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:368
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:366
 msgid "Export book in hosts.txt format"
 msgstr "Xuất sách ở định dạng Host.txt"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:415
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:413
 msgid "Search"
 msgstr "Tìm"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:693
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:691
 msgid "other"
 msgstr "khác"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:705
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:703
 msgid "clear filter"
 msgstr "bộ lọc rõ ràng"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:749
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:747
 msgid "Info"
 msgstr "Thông tin"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:751
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:967
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:749
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:965
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:281
 msgid "Hostname"
 msgstr "Tên máy chủ"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:753
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:751
 msgid "Link (b32)"
 msgstr "Liên kết (b32)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:755
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:753
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:353
 msgid "Destination"
 msgstr "Đích đến"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:769
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:767
 msgid "Select hosts for deletion from addressbook"
 msgstr "Chọn máy chủ để xóa khỏi sổ địa chỉ"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:814
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:826
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:812
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:824
 msgid "More information on this entry"
 msgstr "Thông tin thêm về mục này"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:838
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:836
 msgid "Base 32 address"
 msgstr "Địa chỉ cơ sở 32"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:844
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:842
 msgid "Helper link to share host address with option to add to addressbook"
 msgstr ""
 "Liên kết trợ giúp để chia sẻ địa chỉ máy chủ với tùy chọn thêm vào sổ địa chỉ"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:864
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:862
 msgid "Mark for deletion"
 msgstr "Đánh dấu xóa"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:919
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:979
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1041
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:917
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:977
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1039
 msgid "Cancel"
 msgstr "Hủy"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:965
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:963
 msgid "Add new destination"
 msgstr "Thêm điểm đến mới"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:971
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:969
 msgid "e.g. newdomain.i2p"
 msgstr "ví dụ. "
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:973
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:971
 msgid "B64 or B32"
 msgstr "B64 hoặc B32"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:977
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:975
 msgid "Full destination or b32 address"
 msgstr "Địa chỉ đích đầy đủ hoặc địa chỉ b32"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1037
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1035
 msgid "Import from hosts.txt file"
 msgstr "Nhập từ tệp Host.txt"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1039
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1037
 msgid "Select file"
 msgstr "Chọn tập tin"
 
@@ -1035,4 +1035,3 @@ msgid ""
 msgstr ""
 "Máy chủ bạn nhận được từ đăng ký của mình sẽ hợp nhất với sổ địa chỉ Bộ định "
 "tuyến của bạn."
-
