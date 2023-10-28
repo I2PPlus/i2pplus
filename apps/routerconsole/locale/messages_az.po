@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:50+0000\n"
-"PO-Revision-Date: 2023-10-28 16:43+0000\n"
+"PO-Revision-Date: 2023-10-28 17:12+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: az\n"
@@ -5348,7 +5348,7 @@ msgstr "Yerli Veb Server"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:372
 msgid "Configure startup of clients and webapps (services); manually start dormant services"
-msgstr "Müştərilərin və veb proqramların (xidmətlərin) işə salınmasını konfiqurasiya edin; "
+msgstr "Müştərilərin və WebApps (Xidmətlərin) başlanğıcını konfiqurasiya edin; Xüsusiyyətləri əl ilə başlayın"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:374 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:443
 msgid "Services"
@@ -5469,7 +5469,7 @@ msgstr "Şəbəkə verilənlər bazasında mümkün sibilləri nəzərdən keçi
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:666 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:725
 #, java-format
 msgid "Your Local Identity [{0}] is your unique I2P router identity, similar to an IP address but tailored to I2P. "
-msgstr "Yerli Kimliyiniz [{0}] IP ünvanına bənzər, lakin I2P-ə uyğunlaşdırılmış unikal I2P marşrutlaşdırıcınızdır."
+msgstr "Yerli Kimliyiniz [{0}] IP ünvanına bənzər, lakin I2P-ə uyğunlaşdırılmış unikal I2P marşrutlaşdırıcınızdır. "
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:667 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:726
 msgid "Never disclose this to anyone, as it can reveal your real world IP."
@@ -5752,19 +5752,19 @@ msgstr "Test etmək"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:367
 msgid "Private TCP Address"
-msgstr ""
+msgstr "Şəxsi TCP Ünvanı"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:371
 msgid "SymmetricNAT"
-msgstr ""
+msgstr "Simmetrik NAT"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:377
 msgid "Firewalled with Inbound TCP Enabled"
-msgstr ""
+msgstr "Gələn TCP Aktivləşdirilmiş Firewalled"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:382
 msgid "Firewalled &amp; Floodfill"
-msgstr ""
+msgstr "Firewalled və Daşqınlıq"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:388
 msgid "Disconnected"
@@ -5772,7 +5772,7 @@ msgstr "Bağlantısı"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:391
 msgid "UDP Port In Use"
-msgstr ""
+msgstr "İstifadədə UDP portu"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:402
 msgid "No Active Peers"
@@ -5784,15 +5784,15 @@ msgstr "UDP Əlildir"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:407
 msgid "Firewalled with UDP Disabled"
-msgstr ""
+msgstr "UDP əlilləri ilə firewalled"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:774
 msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr ""
+msgstr "Müştəri və server tunellərinizi əlavə et / silmək / redaktə etmək və idarə etmək"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:777
 msgid "How many local service tunnels we're running"
-msgstr ""
+msgstr "Neçə yerli xidmət tunelini çalışırıq"
 
 #. older names for pre-0.7.4 installs
 #. hardcoded in i2psnark
@@ -5804,11 +5804,11 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:803
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:805
 msgid "service may be available to peers"
-msgstr ""
+msgstr "xidmət həmyaşıdları üçün mövcud ola bilər"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:813
 msgid "service is only available locally"
@@ -5816,11 +5816,11 @@ msgstr "xidmət yalnız yerli səviyyədə mövcuddur"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:818
 msgid "Show tunnels"
-msgstr ""
+msgstr "Tunelləri göstər"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:832
 msgid "Leases expired"
-msgstr ""
+msgstr "İcarələr müddəti bitdi"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:832 ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:834
 msgid "Rebuilding"
@@ -5914,7 +5914,7 @@ msgstr "Yuxarı get"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1505
 msgid "Down"
-msgstr ""
+msgstr "Aşağı"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1510
 msgid "Move down"
@@ -5922,7 +5922,7 @@ msgstr "Aşağı get"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1515
 msgid "Bottom"
-msgstr ""
+msgstr "Dibli"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1520
 msgid "Move to bottom"
@@ -6071,11 +6071,11 @@ msgstr "Bloku tətbiq edin"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:380
 msgid "days"
-msgstr ""
+msgstr "günlük"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:390
 msgid "Known Floodfills"
-msgstr ""
+msgstr "Tanınmış daşqınlar"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:392
 msgid "Average closest floodfill distance"
@@ -6090,7 +6090,7 @@ msgstr "Məlumatların"
 #. "<b>").append(_t("Next Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getNextModData()))
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:397
 msgid "Rotates in"
-msgstr ""
+msgstr "İçəri dönür"
 
 #. Distance to our router analysis
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:478
@@ -6265,7 +6265,7 @@ msgstr "Son mağaza uğursuz oldu"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1192
 msgid "Distance to "
-msgstr "Məsafə"
+msgstr "Məsafə "
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1197
 msgid "Distance for"
@@ -6442,7 +6442,7 @@ msgstr "Tikinti davam edir"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:877
 msgid "in"
-msgstr ""
+msgstr "ilə"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:878
 msgid "out"
@@ -6450,7 +6450,7 @@ msgstr "çıxdı"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:908
 msgid "Data In"
-msgstr ""
+msgstr "Alınan məlumatlar"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:908
 msgid "Tunnel Name"
@@ -6458,7 +6458,7 @@ msgstr "Tunel adı"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:909
 msgid "Data Out"
-msgstr ""
+msgstr "Məlumat göndərildi"
 
 #. Saved in CSSHelper, assume success
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:46
@@ -6715,7 +6715,7 @@ msgstr "Yükləmə sürəti"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:549 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:627
 msgid "KBps In"
-msgstr ""
+msgstr "KB/s in"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:555 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:633
 msgid "Upload Speed"
@@ -6723,7 +6723,7 @@ msgstr "Yükləmə sürəti"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:561 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:639
 msgid "KBps Out"
-msgstr "KBps Çıxış"
+msgstr "KB/s Çıxış"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:566 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:644
 msgid "Network Share"
@@ -6770,23 +6770,23 @@ msgstr "inkişaf etmiş konfiqurasiya"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:526
 msgid "Floodfill Configuration"
-msgstr ""
+msgstr "Daşqın Konfiqurasiyası"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:528
 msgid "Floodfill participation helps the network, but may use more of your computer's resources."
-msgstr ""
+msgstr "Floodfill iştirakı şəbəkəyə kömək edir, lakin kompüterinizin resurslarından daha çox istifadə edə bilər."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:534
 msgid "This router is currently a floodfill participant."
-msgstr ""
+msgstr "Bu marşrutlaşdırıcı hazırda daşqın iştirakçısıdır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:542
 msgid "This router is not currently a floodfill participant."
-msgstr ""
+msgstr "Bu marşrutlaşdırıcı hazırda daşqın iştirakçısı deyil."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:551
 msgid "Enrollment"
-msgstr ""
+msgstr "Qeydiyyat"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:557
 msgid "Automatic"
