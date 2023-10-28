@@ -1000,15 +1000,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 boolean immutableCache = Arrays.stream(immutableCacheWhitelist).anyMatch(mimeType::matches);
                 if (_headers != null) {
                     boolean cc = headers.containsKey("Cache-Control".toLowerCase());
-                    boolean hasNoCache = cc && headers.get("Cache-Control").contains("no-cache".toLowerCase());
-                    // Override cache-control for static content with no-cache policy
-                    if (_headers != null && hasNoCache && immutableCache) {
-                        headers.remove("Cache-Control");
-                        setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");
-                    } else if (immutableCache && !cc) {
-                        setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");
-                    } else if (!cc) {
-                        setEntry(headers, "Cache-Control", "private, no-cache, max-age=604800");
+                    if (cacheControlList != null) {
+                        boolean hasNoCache = cc && headers.get("Cache-Control").contains("no-cache".toLowerCase());
+                        // Override cache-control for static content with no-cache policy
+                        if (hasNoCache && immutableCache) {
+                            headers.remove("Cache-Control");
+                            setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");
+                        } else if (immutableCache && !cc) {
+                            setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");
+                        } else if (!cc) {
+                            setEntry(headers, "Cache-Control", "private, no-cache, max-age=604800");
+                        }
                     }
                 }
 
