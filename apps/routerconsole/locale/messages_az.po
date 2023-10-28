@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:50+0000\n"
-"PO-Revision-Date: 2023-10-28 15:09+0000\n"
+"PO-Revision-Date: 2023-10-28 16:43+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: az\n"
@@ -1634,58 +1634,58 @@ msgstr "Yanlış hədəf"
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:65 ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:164
 #, java-format
 msgid "Key for {0} added to keyring"
-msgstr ""
+msgstr "{0} üçün açar açarlığa əlavə edildi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:69
 msgid "Lookup password required"
-msgstr ""
+msgstr "Axtarış parolu tələb olunur"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:90
 msgid "Requires hostname, destination, or blinded Base32"
-msgstr ""
+msgstr "Host adı, təyinat yeri və ya korlanmış Base32 tələb olunur"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:134
 msgid "Destination requires lookup password"
-msgstr ""
+msgstr "Təyinat üçün axtarış parolu tələb olunur"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:138
 msgid "Destination does not require lookup password"
-msgstr ""
+msgstr "Təyinat üçün axtarış parolu tələb olunmur"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:142
 msgid "Destination requires encryption key"
-msgstr ""
+msgstr "Təyinat şifrələmə açarı tələb edir"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:146
 msgid "Destination does not require encryption key"
-msgstr ""
+msgstr "Təyinat üçün şifrələmə açarı tələb olunmur"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:166 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:573
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:579
 msgid "Send key to server operator."
-msgstr ""
+msgstr "Açarı server operatoruna göndərin."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:172 ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:46
 msgid "Delete key"
-msgstr ""
+msgstr "Düyməni sil"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:201
 #, java-format
 msgid "Key for {0} removed from keyring"
-msgstr ""
+msgstr "{0} üçün açar açarlıqdan çıxarıldı"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:203
 #, java-format
 msgid "Key for {0} not found in keyring"
-msgstr ""
+msgstr "{0} açarı açarlıqda tapılmadı"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:39
 msgid "Local encrypted destinations"
-msgstr ""
+msgstr "Yerli şifrəli təyinatlar"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:41
 msgid "Remote encrypted destinations"
-msgstr ""
+msgstr "Uzaqdan şifrələnmiş təyinat yerləri"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:45 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:594
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:616 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:555
@@ -2405,11 +2405,11 @@ msgstr "Yedək miqdarı"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:261
 msgid "Inbound options"
-msgstr ""
+msgstr "Gələn seçimlər"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:273
 msgid "Outbound options"
-msgstr ""
+msgstr "Gidən seçimləri"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:30 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:558
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:573
@@ -2418,69 +2418,69 @@ msgstr "İstifadəçi əlavə et"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:84
 msgid "Theme change saved."
-msgstr ""
+msgstr "Mövzu dəyişikliyi saxlanıldı."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:86 ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:91
 msgid "Refresh the page to view."
-msgstr ""
+msgstr "Baxmaq üçün səhifəni yeniləyin."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:89
 msgid "Mobile console option saved."
-msgstr ""
+msgstr "Mobil konsol seçimi yadda saxlanıldı."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:101
 msgid "No user name entered"
-msgstr ""
+msgstr "İstifadəçi adı daxil edilməyib"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:113
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
-msgstr ""
+msgstr "Xəbərdarlıq: ISO-8859-1 simvol dəstindən kənar istifadəçi adları tövsiyə edilmir. "
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:116
 msgid "No password entered"
-msgstr ""
+msgstr "Heç bir parol daxil edilmədi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:125
 #, java-format
 msgid "To recover from a forgotten or non-working password, stop I2P, edit the file {0}, delete the line {1}, and restart I2P."
-msgstr ""
+msgstr "Unudulmuş və ya işləməyən paroldan bərpa etmək üçün I2P-ni dayandırın, faylı {0} redaktə edin, {1} sətrini silin və I2P-ni yenidən başladın."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:144
 #, java-format
 msgid "Removed user {0}"
-msgstr ""
+msgstr "Silinmiş istifadəçi {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:44
 msgid "Set theme universally across all apps"
-msgstr ""
+msgstr "Mövzunu bütün proqramlarda universal olaraq təyin edin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:50
 msgid "Use alternative display font in console and webapps"
-msgstr ""
+msgstr "Konsolda və veb proqramlarda alternativ ekran şriftindən istifadə edin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:63
 msgid "Force the mobile console to be used"
-msgstr ""
+msgstr "Mobil konsolu istifadə etməyə məcbur edin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:66
 msgid "Enabling the Universal Theming option is recommended when embedding these applications"
-msgstr ""
+msgstr "Bu proqramları daxil edərkən Universal Mövzu seçimini aktivləşdirmək tövsiyə olunur"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:71
 msgid "Embed I2PSnark and I2PMail in the console"
-msgstr ""
+msgstr "I2PSnark və I2PMail-i konsola yerləşdirin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:231
 msgid "Add a user and password to enable."
-msgstr ""
+msgstr "Aktivləşdirmək üçün istifadəçi və parol əlavə edin."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:232
 msgid "Note: If you forget your password, removing the configuration entry in your router.config file will clear it (restart required)."
-msgstr ""
+msgstr "Qeyd: Əgər parolunuzu unutsanız, router.config faylınızdakı konfiqurasiya qeydinin silinməsi onu təmizləyəcək (yenidən başladın tələb olunur)."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:236
 msgid "Router console password is enabled."
-msgstr ""
+msgstr "Router konsolunun parolu aktivləşdirilib."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:238 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:488
 msgid "Mark for deletion"
@@ -2504,130 +2504,130 @@ msgstr "Şifrə"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:250
 msgid "Please supply a username"
-msgstr ""
+msgstr "Zəhmət olmasa istifadəçi adı verin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:252
 msgid "Please supply a password"
-msgstr ""
+msgstr "Zəhmət olmasa parol daxil edin"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:32
 msgid "Aborted startup"
-msgstr ""
+msgstr "Başlanğıc dayandırıldı"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:33
 msgid "Enabled floodfill"
-msgstr ""
+msgstr "Daşqını aktivləşdirdi"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:34
 msgid "Changed IP"
-msgstr ""
+msgstr "IP dəyişdirildi"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:35
 msgid "Changed port"
-msgstr ""
+msgstr "Port dəyişdirildi"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:36
 msgid "Clock shifted"
-msgstr ""
+msgstr "Saat dəyişdi"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:37
 msgid "Crashed"
-msgstr ""
+msgstr "Qəzaya uğradı"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:38
 msgid "Critical error"
-msgstr ""
+msgstr "Kritik səhv"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:40
 msgid "Installed new version"
-msgstr ""
+msgstr "Yeni versiya quraşdırılıb"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:41
 msgid "Install failed"
-msgstr ""
+msgstr "Quraşdırma uğursuz oldu"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:42
 msgid "Network error"
-msgstr ""
+msgstr "Şəbəkə xətası"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:43 ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:47
 msgid "New router identity"
-msgstr ""
+msgstr "Yeni marşrutlaşdırıcının şəxsiyyəti"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:44
 msgid "Disabled floodfill"
-msgstr ""
+msgstr "daşqın doldurma fəaliyyətini dayandırdı"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:45
 msgid "Out of memory error"
-msgstr ""
+msgstr "Yaddaş çatışmazlığı xətası"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:46
 msgid "Reachability change"
-msgstr ""
+msgstr "Əlçatanlıq dəyişikliyi"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:48
 msgid "Reseeded router"
-msgstr ""
+msgstr "Yenidən əkilmiş marşrutlaşdırıcı"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:49
 msgid "Soft restart"
-msgstr ""
+msgstr "Yumşaq yenidən başladın"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:50
 msgid "Started router"
-msgstr ""
+msgstr "Router işə salındı"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:51
 msgid "Stopped router"
-msgstr ""
+msgstr "Router dayandırıldı"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:52
 msgid "Updated router"
-msgstr ""
+msgstr "Yenilənmiş marşrutlaşdırıcı"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:53
 msgid "Watchdog warning"
-msgstr ""
+msgstr "Gözətçi xəbərdarlığı"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:102
 msgid "Display Events"
-msgstr ""
+msgstr "Hadisələri göstərin"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:106
 msgid "Events since"
-msgstr ""
+msgstr "O vaxtdan bəri hadisələr"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:111
 msgid "Event type"
-msgstr ""
+msgstr "Hadisə növü"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:117 ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:151
 msgid "All events"
-msgstr ""
+msgstr "Bütün hadisələr"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:122
 msgid "Filter events"
-msgstr ""
+msgstr "Hadisələri süzün"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:173
 msgid "No events found"
-msgstr ""
+msgstr "Tədbir tapılmadı"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:174
 #, java-format
 msgid "No events found in previous {0}"
-msgstr ""
+msgstr "Əvvəlki {0} tarixində heç bir tədbir tapılmadı"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:177
 #, java-format
 msgid "No \"{0}\" events found"
-msgstr ""
+msgstr "\"{0}\" tədbiri tapılmadı"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:179
 #, java-format
 msgid "No \"{0}\" events found in previous {1}"
-msgstr ""
+msgstr "Əvvəlki {1}-də \"{0}\" tədbiri tapılmadı"
 
 #: ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:183 ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:205
 msgid "Time"
@@ -2816,12 +2816,12 @@ msgstr "FAQ"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:45 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:62
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:83 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:269
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
-msgstr ""
+msgstr "I2P host faylınızı burada idarə edin (I2P domen adının həlli)"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:46 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:67
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:87
 msgid "Graph Router Performance"
-msgstr ""
+msgstr "Qrafik Router Performansı"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:46 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:67
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:87 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:466
@@ -2846,27 +2846,27 @@ msgstr "Kömək"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:48 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69
 msgid "I2P Router Help"
-msgstr ""
+msgstr "I2P Router Yardımı"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:49 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:70
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:89
 msgid "Install and configure I2P plugins"
-msgstr ""
+msgstr "I2P plaginlərini quraşdırın və konfiqurasiya edin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:49 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:70
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:89
 msgid "Manage Plugins"
-msgstr ""
+msgstr "Pluginləri idarə edin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:50 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:90
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:548
 msgid "NetDb Search"
-msgstr ""
+msgstr "NetDb Axtarış"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:50 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:90
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:625 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:546
 msgid "Network database search tool"
-msgstr ""
+msgstr "Şəbəkə verilənlər bazası axtarış aləti"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:51 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:71
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:91 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:539
@@ -2876,12 +2876,12 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:525 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:533
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:541 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:549
 msgid "Network Database"
-msgstr ""
+msgstr "Şəbəkə verilənlər bazası"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:51 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:71
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:91 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:525
 msgid "Show list of all known I2P routers"
-msgstr ""
+msgstr "Bütün məlum I2P marşrutlaşdırıcılarının siyahısını göstərin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:52 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:72
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:92 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:669
@@ -5320,83 +5320,83 @@ msgstr "Problemlərin aradan qaldırılması"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:237 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:698
 msgid "Information about the sidebar and network status messages"
-msgstr ""
+msgstr "Yan panel və şəbəkə statusu mesajları haqqında məlumat"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:243
 msgid "Webhosting"
-msgstr ""
+msgstr "Veb hostinq"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:246 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:453
 msgid "An introduction to hosting websites on the I2P network"
-msgstr ""
+msgstr "I2P şəbəkəsində veb saytların yerləşdirilməsinə giriş"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:298
 msgid "I2PControl"
-msgstr ""
+msgstr "I2Pnəzarət"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:301
 msgid "RPC Service"
-msgstr ""
+msgstr "RPC xidməti"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:333
 msgid "Manage I2P client and server tunnels to access or provide network services"
-msgstr ""
+msgstr "Şəbəkə xidmətlərinə daxil olmaq və ya təmin etmək üçün I2P müştəri və server tunellərini idarə edin"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:345
 msgid "Local Web Server"
-msgstr ""
+msgstr "Yerli Veb Server"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:372
 msgid "Configure startup of clients and webapps (services); manually start dormant services"
-msgstr ""
+msgstr "Müştərilərin və veb proqramların (xidmətlərin) işə salınmasını konfiqurasiya edin; "
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:374 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:443
 msgid "Services"
-msgstr ""
+msgstr "Xidmətlər"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:433
 msgid "I2P Router Sitemap"
-msgstr ""
+msgstr "I2P Router Sayt Xəritəsi"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:435
 msgid "Internals"
-msgstr ""
+msgstr "Daxili"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:443
 msgid "Certs"
-msgstr ""
+msgstr "Sertifikatlar"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:445 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:498
 msgid "Review active encryption certificates used in console"
-msgstr ""
+msgstr "Konsolda istifadə olunan aktiv şifrələmə sertifikatlarını nəzərdən keçirin"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:457 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:510
 msgid "View historical log of router events"
-msgstr ""
+msgstr "Router hadisələrinin tarixi qeydinə baxın"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:469
 msgid "Graph router performance"
-msgstr ""
+msgstr "Qrafik marşrutlaşdırıcının performansı"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:481
 msgid "Router Help and FAQ"
-msgstr ""
+msgstr "Router yardımı və tez-tez verilən suallar"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:489
 msgid "Info"
-msgstr ""
+msgstr "Məlumat"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:492
 msgid "Router information including transport addresses and UPnP scan"
-msgstr ""
+msgstr "Nəqliyyat ünvanları və UPnP skanı daxil olmaqla marşrutlaşdırıcı məlumat"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:500
 msgid "Jobs"
-msgstr ""
+msgstr "İş"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:503
 msgid "Show the router's workload, and how it's performing"
-msgstr ""
+msgstr "Routerin iş yükünü və onun necə işlədiyini göstərin"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:511 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:417
 msgid "Logs"
@@ -5408,19 +5408,19 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:536 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:886
 msgid "Show all current peer connections"
-msgstr ""
+msgstr "Bütün cari həmyaşıd əlaqələrini göstərin"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:544 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:556
 msgid "Profiles"
-msgstr ""
+msgstr "Profillər"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:547
 msgid "Show recent peer performance profiles"
-msgstr ""
+msgstr "Son həmyaşıd performans profillərini göstərin"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:558 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1075
 msgid "View existing tunnels and tunnel build status"
-msgstr ""
+msgstr "Mövcud tunellərə və tunel qurma statusuna baxın"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:577 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:427
 msgid "Advanced Configuration"
@@ -5432,7 +5432,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:591
 msgid "Documentation for the I2P API"
-msgstr ""
+msgstr "I2P API üçün sənədlər"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:600 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/debug_jsp.java:285
 msgid "Debug"
@@ -5440,31 +5440,31 @@ msgstr "Sazlama"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:603
 msgid "View router debug information"
-msgstr ""
+msgstr "Routerin debug məlumatlarına baxın"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:611 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:532
 msgid "Jars"
-msgstr ""
+msgstr "Bankalar"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:614 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:530
 msgid "Review extended info about installed .jar and .war files"
-msgstr ""
+msgstr "Quraşdırılmış .jar və .war faylları haqqında geniş məlumatı nəzərdən keçirin"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:622
 msgid "Lookup"
-msgstr ""
+msgstr "Axtarış"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:636 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:562
 msgid "Textual router performance statistics"
-msgstr ""
+msgstr "Mətn yönləndirici performans statistikası"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:644
 msgid "Sybils"
-msgstr ""
+msgstr "Sibillər"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:647 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:566
 msgid "Review possible sybils in network database"
-msgstr ""
+msgstr "Şəbəkə verilənlər bazasında mümkün sibilləri nəzərdən keçirin"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:666 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:725
 #, java-format
