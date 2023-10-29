@@ -61,13 +61,14 @@ function injectCss() {
 }
 
 function hideAlert() {
+  if (hideAlertTimeoutId !== null) {clearTimeout(hideAlertTimeoutId);}
   hideAlertTimeoutId = setTimeout(() => {
     if (addNotify && createNotify) {
       addNotify.setAttribute("hidden", "");
       createNotify.setAttribute("hidden", "");
       notify.setAttribute("hidden", "");
     }
-  }, 7000);
+  }, 10000);
 }
 
 function initSnarkAlert() {
