@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 13:20+0000\n"
+"POT-Creation-Date: 2023-10-29 03:22+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -39,6 +39,12 @@ msgid ""
 "documentation including an FAQ is available in the {2}help section{1}."
 msgstr ""
 
+#, java-format
+msgid ""
+"You may also wish to enable I2P+ updates on {0}the update configuration "
+"page{1}."
+msgstr ""
+
 msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
 msgstr "您也可以將瀏覽器設定成使用 I2P 代理伺服器來連上 eepsite 網站。"
 
@@ -64,4 +70,3 @@ msgid ""
 msgstr ""
 "將您的 IRC 客戶端連線指向 {0}localhost:6668{1} 並且在 {2}#i2p{3} 上面跟我們打"
 "聲招呼。"
-
