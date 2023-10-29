@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 03:21+0000\n"
-"PO-Revision-Date: 2023-10-29 12:22+0000\n"
+"PO-Revision-Date: 2023-10-29 15:52+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -1972,11 +1972,11 @@ msgstr "ネットワーク"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:410
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:441
 msgid "Sidebar"
-msgstr ""
+msgstr "サイドバー"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:29 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:234
 msgid "UI"
-msgstr "UI"
+msgstr "インターフェース"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:30 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:66
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:555
@@ -2175,7 +2175,7 @@ msgstr "SSU イントロデューサーを要求中"
 #. Wow this dumps all conns immediately and really isn't nice
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:437
 msgid "Performing a soft restart"
-msgstr ""
+msgstr "ソフトリスタートの実行"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:470
 msgid "Invalid address"
@@ -2201,7 +2201,7 @@ msgstr "帯域幅制限を更新しました"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:266
 msgid "Delete this value to disable"
-msgstr ""
+msgstr "無効にするにはこの値を削除します"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:307
 msgid "bps"
@@ -2209,7 +2209,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:309
 #, java-format
-msgid "{0}B maximum data transfer per month"
+msgid "{0}B 1 か月あたりの最大データ転送量"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:21
@@ -2318,15 +2318,15 @@ msgstr "URLから再シード"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:43
 msgid "No URL specified. Please supply a valid reseed URL."
-msgstr ""
+msgstr "URLが指定されていません。 有効な再シードURLを入力してください。"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:68
 msgid "Reseed in progress, check summary bar for status"
-msgstr ""
+msgstr "再配信中です。サマリーバーでステータスを確認してください"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:70
 msgid "Reseed complete, check summary bar for status"
-msgstr ""
+msgstr "再シードが完了しました。サイドバーでステータスを確認してください"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:77
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:729
@@ -2335,7 +2335,7 @@ msgstr "ファイルから再シード"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:83
 msgid "No file specified. Please select a valid .zip or .su3 file to reseed from."
-msgstr ""
+msgstr "ファイルが指定されていません。 再シード元の有効な .zip または .su3 ファイルを選択してください。"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:88 ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:96
 msgid "Reseed from file failed"
@@ -2345,7 +2345,7 @@ msgstr "ファイルからの再シード失敗"
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] ""
+msgstr[0] "再シードが成功し、ファイルから {0} ルーター情報がロードされました。"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:105
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:681
@@ -2391,7 +2391,7 @@ msgstr "{0} でシャットダウン"
 #, java-format
 msgid "{0} transit tunnel still active"
 msgid_plural "{0} transit tunnels still active"
-msgstr[0] ""
+msgstr[0] "{0} 交通トンネルはまだアクティブです"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:88 ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:103
 #, java-format
@@ -2444,13 +2444,13 @@ msgstr "完全なデフォルトに戻す"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:61
 msgid "Full summary bar default restored."
-msgstr ""
+msgstr "Full sidebar default restored."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:62
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:66
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:159
 msgid "Summary bar will refresh shortly."
-msgstr ""
+msgstr "サイドバーはすぐに更新されます。"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:63
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:568
@@ -2459,7 +2459,7 @@ msgstr "最小のデフォルトに戻す"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:65
 msgid "Minimal summary bar default restored."
-msgstr ""
+msgstr "最小限のサイドバーのデフォルトが復元されました。"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:82
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:104
@@ -2503,13 +2503,13 @@ msgstr "設定の保存中にエラー (適用されたが保存されず) - エ
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
-msgstr[0] ""
+msgstr[0] "{0}ホップ"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:23
 #, java-format
 msgid "{0} tunnel"
 msgid_plural "{0} tunnels"
-msgstr[0] ""
+msgstr[0] "{0} 個のトンネル"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:51
 msgid "Exploratory tunnels"
@@ -2526,11 +2526,11 @@ msgstr "匿名性警告 - 設定に0ホップのトンネルが含まれてい�
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:131
 msgid "WARNING - 0-hop tunnels not recommended for IPv6-only routers."
-msgstr ""
+msgstr "警告- IPv 6のみのルーターには0ホップトンネルは推奨されません。"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:137
 msgid "WARNING - Inbound 0-hop tunnels not recommended for hidden routers."
-msgstr ""
+msgstr "警告 - 受信 0 ホップ トンネルは、隠しルーターには推奨されません。"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:145
 msgid "ANONYMITY WARNING - Settings include 1-hop tunnels."
