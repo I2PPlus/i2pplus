@@ -184,12 +184,14 @@ class LookupDestJob extends JobImpl {
             DoneJob done = new DoneJob(getContext());
             // shorten timeout so we can respond before the client side times out
             long timeout = _timeout;
-            if (timeout > 1500)
+            if (timeout > 1500) {
                 timeout -= 500;
+            }
             // TODO tell router this is an encrypted lookup, skip 38 or earlier ffs?
             NetworkDatabaseFacade db = _runner.getFloodfillNetworkDatabaseFacade();
-            if (db == null)
+            if (db == null) {
                 db = getContext().netDb();
+            }
             db.lookupDestination(_hash, done, timeout, _fromLocalDest);
         } else {
             // blinding decode fail

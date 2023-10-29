@@ -1067,32 +1067,16 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _log.error("Locally published LeaseSet is not valid", iae);
             throw iae;
         }
-        String dbid = "MainNetDb";
-        if (isClientDb()) {
-            dbid = "ClientNetDb: " + _dbid;
-        }
-        if (_localKey != null) {
-            if (!_localKey.equals(localLeaseSet.getHash()))
-                if (_log.shouldLog(Log.ERROR))
-                    _log.error("[" + dbid + "]" + "Error, the local LS hash ("
-                            + _localKey + ") does not match the published hash ("
-                            + localLeaseSet.getHash() + ")! This shouldn't happen!",
-                            new Exception());
-        } else {
-            // This will only happen once when the local LS is first published
-            _localKey = localLeaseSet.getHash();
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Local client LeaseSet key initialized to: " + _localKey +
-                          "\n* DbId: " + _dbid);
-        }
-        if (!_context.clientManager().shouldPublishLeaseSet(h))
+        if (!_context.clientManager().shouldPublishLeaseSet(h)) {
             return;
+        }
         // If we're exiting, don't publish.
         // If we're restarting, keep publishing to minimize the downtime.
         if (_context.router().gracefulShutdownInProgress()) {
             int code = _context.router().scheduledGracefulExitCode();
-            if (code == Router.EXIT_GRACEFUL || code == Router.EXIT_HARD)
+            if (code == Router.EXIT_GRACEFUL || code == Router.EXIT_HARD) {
                 return;
+            }
         }
 
         RepublishLeaseSetJob j;

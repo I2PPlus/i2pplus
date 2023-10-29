@@ -791,19 +791,17 @@ class ClientManager {
      */
     public FloodfillNetworkDatabaseFacade getClientFloodfillNetworkDatabaseFacade(Hash destHash) {
         if (destHash != null) {
-            if (_log.shouldLog(Log.DEBUG)) {
+            if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Getting subDb for desthash: " + destHash);
-            }
             ClientConnectionRunner runner = getRunner(destHash);
-            if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug("ClientManager got a runner in getClientFloodfillNetworkDatabaseFacade for " + destHash);
-            }
-            if (runner != null) {
-                return runner.getFloodfillNetworkDatabaseFacade();
-            } else {
+            if (runner == null){
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Runner in getClientFloodfillNetworkDatabaseFacade not available for " + destHash);
+                _log.warn("ClientManager got a null runner in getClientFloodfillNetworkDatabaseFacade for " + destHash);
+                return null;
             }
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("ClientManager got a runner in getClientFloodfillNetworkDatabaseFacade for " + destHash);
+            return runner.getFloodfillNetworkDatabaseFacade();
         }
         return null;
     }
@@ -817,9 +815,10 @@ class ClientManager {
     public Set<FloodfillNetworkDatabaseFacade> getClientFloodfillNetworkDatabaseFacades() {
         Set<FloodfillNetworkDatabaseFacade> rv = new HashSet<FloodfillNetworkDatabaseFacade>();
         for (ClientConnectionRunner runner : _runners.values()) {
-             FloodfillNetworkDatabaseFacade fndf = runner.getFloodfillNetworkDatabaseFacade();
-            if (fndf != null)
+            FloodfillNetworkDatabaseFacade fndf = runner.getFloodfillNetworkDatabaseFacade();
+            if (fndf != null) {
                 rv.add(fndf);
+            }
         }
         return rv;
     }
