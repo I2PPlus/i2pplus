@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-10-27 13:34+0000\n"
+"PO-Revision-Date: 2023-10-30 16:56+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -63,13 +63,13 @@ msgstr "Bắt đầu gieo lại"
 #, java-format
 msgid "Acquired {0} router info from reseed hosts"
 msgid_plural "Acquired {0} router infos from reseed hosts"
-msgstr[0] ""
+msgstr[0] "Thu được {0} bộ định tuyến từ máy chủ Reseed"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:382
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] ""
+msgstr[0] "Chỉ có được {0} bộ định tuyến từ máy chủ Reseed"
 
 #. remove dupe error msgs
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:407
@@ -199,7 +199,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:484 ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:488
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:490 ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:976
 msgid "Show all routers with this capability in the NetDb"
-msgstr ""
+msgstr "Hiển thị tất cả các bộ định tuyến với khả năng này trong NetDb"
 
 #. This used to be "no common transports" but it is almost always no transports at all
 #: ../../../router/java/src/net/i2p/router/transport/GetBidsJob.java:79
@@ -208,11 +208,11 @@ msgstr "Không có truyền tải (bị ẩn hoặc đang khởi động?)"
 
 #: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:932
 msgid "Unsupported signature type"
-msgstr ""
+msgstr "Loại chữ ký không được hỗ trợ"
 
 #: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:950
 msgid "No support for our signature type"
-msgstr ""
+msgstr "Không hỗ trợ loại chữ ký của chúng tôi"
 
 #: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:954
 msgid "Unreachable on any transport"
@@ -342,18 +342,18 @@ msgstr "{0} cổng {1,number,#####} chưa được chuyển tiếp bằng UPnP."
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:968 ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:335
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:496 ../java/strings/Strings.java:69 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:563
 msgid "Router"
-msgstr ""
+msgstr "Bộ định tuyến"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:905 ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1211
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1221
 msgid "Update available"
-msgstr ""
+msgstr "Có bản cập nhật"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:905 ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1212
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1222
 #, java-format
 msgid "Version {0}"
-msgstr ""
+msgstr "Phiên bản {0}"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:936
 #, java-format
@@ -373,7 +373,7 @@ msgstr "Không có phiên bản mới dành cho tiện ích {0}"
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1110
 #, java-format
 msgid "Install failed from {0}"
-msgstr ""
+msgstr "Cài đặt không thành công từ {0}"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1112
 #, java-format
@@ -382,7 +382,7 @@ msgstr "Truyền thất bại từ phía {0}"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1115
 msgid "Error"
-msgstr ""
+msgstr "Lỗi"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1368 ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1453
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1455 ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1173
@@ -418,12 +418,12 @@ msgstr "Xảy ra lỗi khi sao chép sang {0}"
 #: ../java/src/net/i2p/router/update/UnsignedUpdateRunner.java:41 ../java/src/net/i2p/router/update/UpdateRunner.java:155 ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:161
 #: ../java/src/net/i2p/router/web/PluginStarter.java:207 ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:619
 msgid "HTTP client proxy tunnel must be running"
-msgstr ""
+msgstr "Đường hầm proxy máy khách HTTP phải đang chạy"
 
 #: ../java/src/net/i2p/router/update/DevSU3UpdateChecker.java:83 ../java/src/net/i2p/router/update/NewsFetcher.java:286 ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:89
 #, java-format
 msgid "Requires Java version {0} but installed Java version is {1}"
-msgstr ""
+msgstr "Yêu cầu phiên bản Java {0} nhưng phiên bản Java đã cài đặt là {1}"
 
 #. set status before thread to ensure UI feedback
 #: ../java/src/net/i2p/router/update/DevSU3UpdateHandler.java:91
@@ -432,20 +432,20 @@ msgstr "Đang cập nhật"
 
 #: ../java/src/net/i2p/router/update/NewsFetcher.java:248
 msgid "In-network updates disabled. Check package manager."
-msgstr ""
+msgstr "Cập nhật trong mạng bị vô hiệu hóa. "
 
 #: ../java/src/net/i2p/router/update/NewsFetcher.java:254
 msgid "No write permission for I2P install directory."
-msgstr ""
+msgstr "Không có quyền ghi vào thư mục cài đặt I2P."
 
 #: ../java/src/net/i2p/router/update/NewsFetcher.java:268
 msgid "No update certificates installed."
-msgstr ""
+msgstr "Chưa cài đặt chứng chỉ cập nhật nào."
 
 #: ../java/src/net/i2p/router/update/NewsFetcher.java:276
 #, java-format
 msgid "You must first update to version {0}"
-msgstr ""
+msgstr "Trước tiên bạn phải cập nhật lên phiên bản {0}"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateChecker.java:62
 #, java-format
@@ -455,14 +455,14 @@ msgstr "Kiểm tra cập nhật dành cho tiện ích {0}"
 #. set status before thread to ensure UI feedback
 #: ../java/src/net/i2p/router/update/PluginUpdateHandler.java:90
 msgid "Contacting plugin update server"
-msgstr ""
+msgstr "Liên hệ với máy chủ cập nhật plugin"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:113 ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:561
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:566 ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:50
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:75
 #, java-format
 msgid "Bad URL {0}"
-msgstr ""
+msgstr "URL xấu {0}"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:118
 #, java-format
@@ -559,109 +559,109 @@ msgstr "Phiên bản của tiện ích tải về là {0} không mới hơn ti�
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:483
 #, java-format
 msgid "Plugin update requires installed plugin version {0} or higher"
-msgstr ""
+msgstr "Cập nhật plugin yêu cầu cài đặt phiên bản plugin {0} trở lên"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:490
 #, java-format
 msgid "Plugin update requires installed plugin version {0} or lower"
-msgstr ""
+msgstr "Cập nhật plugin yêu cầu cài đặt phiên bản plugin {0} hoặc thấp hơn"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:498 ../java/src/net/i2p/router/web/PluginStarter.java:379
 #, java-format
 msgid "Plugin requires Jetty version {0} or higher"
-msgstr ""
+msgstr "Plugin yêu cầu phiên bản Jetty {0} trở lên"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:505 ../java/src/net/i2p/router/update/PluginUpdateRunner.java:521 ../java/src/net/i2p/router/web/PluginStarter.java:390
 #: ../java/src/net/i2p/router/web/PluginStarter.java:412
 #, java-format
 msgid "Plugin requires Jetty version {0} or lower"
-msgstr ""
+msgstr "Plugin yêu cầu phiên bản Jetty {0} hoặc thấp hơn"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:513 ../java/src/net/i2p/router/web/PluginStarter.java:401
 #, java-format
 msgid "Plugin requires Java version {0} or lower"
-msgstr ""
+msgstr "Plugin yêu cầu phiên bản Java {0} trở xuống"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:530
 #, java-format
 msgid "Cannot copy plugin to directory {0}"
-msgstr ""
+msgstr "Không thể sao chép plugin vào thư mục {0}"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:540
 msgid "Plugin will be installed on next restart."
-msgstr ""
+msgstr "Plugin sẽ được cài đặt vào lần khởi động lại tiếp theo."
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:558
 msgid "Plugin is for upgrades only, but the plugin is not installed"
-msgstr ""
+msgstr "Plugin chỉ dành cho nâng cấp, nhưng plugin chưa được cài đặt"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:571
 #, java-format
 msgid "Failed to install plugin in {0}"
-msgstr ""
+msgstr "Không cài đặt được plugin trong {0}"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:578 ../java/src/net/i2p/router/update/PluginUpdateRunner.java:606
 #, java-format
 msgid "Plugin {0} installed"
-msgstr ""
+msgstr "Đã cài đặt plugin {0}"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:597
 #, java-format
 msgid "Plugin {0} installed and started"
-msgstr ""
+msgstr "Plugin {0} đã được cài đặt và khởi động"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:600
 #, java-format
 msgid "Plugin {0} installed but failed to start, check logs"
-msgstr ""
+msgstr "Đã cài đặt plugin {0} nhưng không khởi động được, hãy kiểm tra nhật ký"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:602
 #, java-format
 msgid "Plugin {0} installed but failed to start"
-msgstr ""
+msgstr "Đã cài đặt plugin {0} nhưng không khởi động được"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:614
 #, java-format
 msgid "Failed to download plugin from {0}"
-msgstr ""
+msgstr "Không thể tải xuống plugin từ {0}"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:100
 msgid "Unable to connect to update server "
-msgstr ""
+msgstr "Không thể kết nối với máy chủ cập nhật"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:105
 #, java-format
 msgid "Update server {0} not found in address book"
-msgstr ""
+msgstr "Không tìm thấy máy chủ cập nhật {0} trong sổ địa chỉ"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:110
 #, java-format
 msgid "Update file not found at {0}"
-msgstr ""
+msgstr "Không tìm thấy tệp cập nhật tại {0}"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateHandler.java:93 ../java/src/net/i2p/router/update/UnsignedUpdateHandler.java:96 ../java/src/net/i2p/router/update/UpdateHandler.java:53
 #: ../java/src/net/i2p/router/update/UpdateHandler.java:55 ../java/src/net/i2p/router/update/UpdateRunner.java:262 ../java/src/net/i2p/router/update/UpdateRunner.java:264
 msgid "Updating I2P"
-msgstr ""
+msgstr "Cập nhật I2P"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateRunner.java:58
 msgid "Update failed"
-msgstr ""
+msgstr "Cập nhật không thành công"
 
 #: ../java/src/net/i2p/router/update/UpdateRunner.java:202
 #, java-format
 msgid "Updating from {0}"
-msgstr ""
+msgstr "Đang cập nhật từ {0}"
 
 #: ../java/src/net/i2p/router/update/UpdateRunner.java:279
 #, java-format
 msgid "No new version found at {0}"
-msgstr ""
+msgstr "Không tìm thấy phiên bản mới tại {0}"
 
 #: ../java/src/net/i2p/router/update/UpdateRunner.java:302
 #, java-format
 msgid "Transfer of {0} failed"
-msgstr ""
+msgstr "Chuyển {0} không thành công"
 
 #: ../java/src/net/i2p/router/web/CSSHelper.java:191 ../java/src/net/i2p/router/web/helpers/InfoHelper.java:208 ../java/src/net/i2p/router/web/helpers/InfoHelper.java:214
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:245 ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:62 ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:297
@@ -671,156 +671,156 @@ msgstr "Cấu hình"
 
 #: ../java/src/net/i2p/router/web/CSSHelper.java:191
 msgid "config"
-msgstr ""
+msgstr "cấu hình"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:235 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:533
 msgid "Shutdown gracefully"
-msgstr ""
+msgstr "Tắt máy một cách duyên dáng"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:239
 msgid "Graceful shutdown initiated"
-msgstr ""
+msgstr "Bắt đầu tắt máy một cách duyên dáng"
 
 #. Normal browsers send value, IE sends button label
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:240 ../java/src/net/i2p/router/web/ConfigServiceHandler.java:244 ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:44
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:535
 msgid "Shutdown immediately"
-msgstr ""
+msgstr "Tắt máy ngay lập tức"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:245 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:539
 msgid "Cancel graceful shutdown"
-msgstr ""
+msgstr "Hủy tắt máy một cách duyên dáng"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:247
 msgid "Graceful shutdown cancelled"
-msgstr ""
+msgstr "Đã hủy tắt máy duyên dáng"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:248 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:549
 msgid "Graceful restart"
-msgstr ""
+msgstr "Khởi động lại một cách duyên dáng"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:253
 msgid "Graceful restart requested"
-msgstr ""
+msgstr "Yêu cầu khởi động lại nhẹ nhàng"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:254 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:551
 msgid "Hard restart"
-msgstr ""
+msgstr "Khởi động lại khó khăn"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:259
 msgid "Hard restart requested"
-msgstr ""
+msgstr "Yêu cầu khởi động lại cứng"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:260
 msgid "Rekey and Restart"
-msgstr ""
+msgstr "Rekey và khởi động lại"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:261
 msgid "Rekeying after graceful restart"
-msgstr ""
+msgstr "Khóa lại sau khi khởi động lại nhẹ nhàng"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:264
 msgid "Rekey and Shutdown"
-msgstr ""
+msgstr "Rekey và tắt máy"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:265
 msgid "Rekeying after graceful shutdown"
-msgstr ""
+msgstr "Khóa lại sau khi tắt máy nhẹ nhàng"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:268 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:621
 msgid "Install I2P service"
-msgstr ""
+msgstr "Cài đặt dịch vụ I2P"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:270 ../java/src/net/i2p/router/web/ConfigServiceHandler.java:273
 msgid "I2P+ Service now enabled on system start"
-msgstr ""
+msgstr "Dịch vụ I2P hiện được bật khi khởi động hệ thống"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:271 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:613
 msgid "Enable I2P service"
-msgstr ""
+msgstr "Bật dịch vụ I2P"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:274 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:611
 msgid "Disable I2P service"
-msgstr ""
+msgstr "Vô hiệu hóa dịch vụ I2P"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:276
 msgid "I2P+ Service now disabled on system start"
-msgstr ""
+msgstr "Dịch vụ I2P hiện bị tắt khi khởi động hệ thống"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:277 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:582
 msgid "Dump threads"
-msgstr ""
+msgstr "Kết xuất chủ đề"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:284
 #, java-format
 msgid "Threads dumped to {0}"
-msgstr ""
+msgstr "Chủ đề được đổ vào {0}"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:288 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:566
 msgid "Open console on startup"
-msgstr ""
+msgstr "Mở bảng điều khiển khi khởi động"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:290
 msgid "Console is to be shown on startup"
-msgstr ""
+msgstr "Bảng điều khiển sẽ được hiển thị khi khởi động"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:291 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:564
 msgid "No console on startup"
-msgstr ""
+msgstr "Không có bảng điều khiển khi khởi động"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:293
 msgid "Console is not to be shown on startup"
-msgstr ""
+msgstr "Bảng điều khiển không hiển thị khi khởi động"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:294 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:578
 msgid "Force garbage collection"
-msgstr ""
+msgstr "Buộc thu gom rác"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:296
 msgid "Full garbage collection requested"
-msgstr ""
+msgstr "Yêu cầu thu gom rác đầy đủ"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:297 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:595
 msgid "Show systray icon"
-msgstr ""
+msgstr "Hiển thị biểu tượng hệ thống"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:299 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:599
 msgid "Hide systray icon"
-msgstr ""
+msgstr "Ẩn biểu tượng hệ thống"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:340
 msgid "Installed I2P+ system service"
-msgstr ""
+msgstr "Dịch vụ hệ thống I2P đã cài đặt"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:342
 msgid "Warning: unable to install the service"
-msgstr ""
+msgstr "Cảnh báo: không thể cài đặt dịch vụ"
 
 #. addFormNotice(_t("Service installed"));
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:351
 msgid "Enabled I2P+ service autostart at system startup"
-msgstr ""
+msgstr "Đã bật tự động khởi động dịch vụ I2P khi khởi động hệ thống"
 
 #. addFormError(_t("Warning: unable to install the service") + " - " + ioe.getLocalizedMessage());
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:354
 msgid "Warning: could not set the I2P+ service to autostart"
-msgstr ""
+msgstr "Cảnh báo: không thể đặt dịch vụ I2P ở chế độ tự khởi động"
 
 #. addFormNotice(_t("Service removed"));
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:363
 msgid "Disabled I2P+ Service autostart at system startup"
-msgstr ""
+msgstr "Tự động khởi động dịch vụ I2P bị vô hiệu hóa khi khởi động hệ thống"
 
 #. addFormError(_t("Warning: unable to remove the service") + " - " + ioe.getLocalizedMessage());
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:366
 msgid "Warning: could not set the I2P+ service to manual start"
-msgstr ""
+msgstr "Cảnh báo: không thể đặt dịch vụ I2P ở chế độ khởi động thủ công"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:395 ../java/src/net/i2p/router/web/ConfigServiceHandler.java:444
 #: ../java/src/net/i2p/router/web/helpers/ConfigAdvancedHandler.java:93 ../java/src/net/i2p/router/web/helpers/ConfigAdvancedHandler.java:115
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:421 ../java/src/net/i2p/router/web/helpers/WizardHandler.java:71
 msgid "Configuration saved successfully"
-msgstr ""
+msgstr "Đã lưu cấu hình thành công"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:397 ../java/src/net/i2p/router/web/ConfigServiceHandler.java:446
 #: ../java/src/net/i2p/router/web/helpers/ConfigAdvancedHandler.java:95 ../java/src/net/i2p/router/web/helpers/ConfigAdvancedHandler.java:117
@@ -830,15 +830,15 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:423 ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:133
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:187 ../java/src/net/i2p/router/web/helpers/WizardHandler.java:73
 msgid "Error saving the configuration (applied but not saved) - please see the error logs"
-msgstr ""
+msgstr "Lỗi lưu cấu hình (đã áp dụng nhưng chưa lưu) - vui lòng xem nhật ký lỗi"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:416 ../java/src/net/i2p/router/web/ConfigServiceHandler.java:431
 msgid "Enabled system tray"
-msgstr ""
+msgstr "Khay hệ thống đã bật"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:421
 msgid "Disabled system tray"
-msgstr ""
+msgstr "Khay hệ thống bị vô hiệu hóa"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:427 ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:677
 #: ../java/src/net/i2p/router/web/helpers/ConfigFamilyHandler.java:56 ../java/src/net/i2p/router/web/helpers/ConfigFamilyHandler.java:112
@@ -846,40 +846,40 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/ConfigStatsHandler.java:125 ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:127
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:151 ../java/src/net/i2p/router/web/helpers/GraphHelper.java:560
 msgid "Restart required to take effect"
-msgstr ""
+msgstr "Cần khởi động lại để có hiệu lực"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:436
 msgid "Failed to start systray"
-msgstr ""
+msgstr "Không khởi động được hệ thống"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:438
 msgid "Failed to stop systray"
-msgstr ""
+msgstr "Không dừng được hệ thống"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:144 ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:420
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:422 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:577
 msgid "Check for updates"
-msgstr ""
+msgstr "Kiểm tra cập nhật"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:147
 msgid "Update manager not registered, cannot check for updates"
-msgstr ""
+msgstr "Trình quản lý cập nhật chưa được đăng ký, không thể kiểm tra cập nhật"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:151
 msgid "Update or check already in progress"
-msgstr ""
+msgstr "Đang cập nhật hoặc kiểm tra"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:177
 msgid "Update available, attempting to download now"
-msgstr ""
+msgstr "Đã có bản cập nhật, đang cố tải xuống ngay bây giờ"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:179
 msgid "Update available, click button on left to download"
-msgstr ""
+msgstr "Đã có bản cập nhật, bấm vào nút bên trái để tải xuống"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:182
 msgid "No update available"
-msgstr ""
+msgstr "Không có bản cập nhật nào"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:187 ../java/src/net/i2p/router/web/helpers/ConfigHomeHandler.java:25
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:32 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:558
@@ -890,7 +890,7 @@ msgstr "Giữ"
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:201
 #, java-format
 msgid "Updating news URL to {0}"
-msgstr ""
+msgstr "Cập nhật URL tin tức lên {0}"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:208 ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:216 ../java/src/net/i2p/router/web/ConfigUpdateHelper.java:54
 #: ../java/src/net/i2p/router/web/ConfigUpdateHelper.java:60
@@ -900,17 +900,17 @@ msgstr "nội bộ"
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:212
 #, java-format
 msgid "Updating proxy host to {0}"
-msgstr ""
+msgstr "Đang cập nhật máy chủ proxy lên {0}"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:220
 #, java-format
 msgid "Updating proxy port to {0}"
-msgstr ""
+msgstr "Đang cập nhật cổng proxy lên {0}"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:241
 #, java-format
 msgid "Updating refresh frequency to {0}"
-msgstr ""
+msgstr "Đang cập nhật tần suất làm mới lên {0}"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:242 ../java/src/net/i2p/router/web/ConfigUpdateHelper.java:126 ../java/src/net/i2p/router/web/helpers/GraphHelper.java:469
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:341 ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:363
@@ -920,53 +920,53 @@ msgstr "Không bao giờ"
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:249
 #, java-format
 msgid "Updating update policy to {0}"
-msgstr ""
+msgstr "Cập nhật chính sách cập nhật lên {0}"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:258
 msgid "Updating update URLs."
-msgstr ""
+msgstr "Cập nhật URL cập nhật."
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:270
 msgid "Updating trusted keys."
-msgstr ""
+msgstr "Cập nhật các khóa đáng tin cậy."
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:281
 #, java-format
 msgid "Updating unsigned update URL to {0}"
-msgstr ""
+msgstr "Đang cập nhật URL cập nhật chưa được ký thành {0}"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:289
 #, java-format
 msgid "Updating signed development build URL to {0}"
-msgstr ""
+msgstr "Đang cập nhật URL bản dựng phát triển đã ký thành {0}"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHelper.java:128
 msgid "Every"
-msgstr ""
+msgstr "Mỗi"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHelper.java:147
 msgid "Notify only"
-msgstr ""
+msgstr "Chỉ thông báo"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHelper.java:154
 msgid "Download and verify only"
-msgstr ""
+msgstr "Chỉ tải xuống và xác minh"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHelper.java:162
 msgid "Download, verify, and restart"
-msgstr ""
+msgstr "Tải xuống, xác minh và khởi động lại"
 
 #: ../java/src/net/i2p/router/web/DeadlockDetector.java:85 ../java/src/net/i2p/router/web/helpers/EventLogHelper.java:39 ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1315
 msgid "Deadlock detected"
-msgstr ""
+msgstr "Phát hiện bế tắc"
 
 #: ../java/src/net/i2p/router/web/DeadlockDetector.java:85 ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1317
 msgid "Please report"
-msgstr ""
+msgstr "Vui lòng báo cáo"
 
 #: ../java/src/net/i2p/router/web/DeadlockDetector.java:100 ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1318
 msgid "After reporting, please restart your router"
-msgstr ""
+msgstr "Sau khi báo cáo, vui lòng khởi động lại bộ định tuyến của bạn"
 
 #: ../java/src/net/i2p/router/web/FormHandler.java:265
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
@@ -974,79 +974,79 @@ msgstr "Mẫu đơn đệ nạp không đúng, có lẻ vì bạn dùng nút 'ba
 
 #: ../java/src/net/i2p/router/web/FormHandler.java:267
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr ""
+msgstr "Nếu sự cố vẫn tiếp diễn, hãy xác minh rằng bạn đã bật cookie trong trình duyệt của mình."
 
 #: ../java/src/net/i2p/router/web/NewsHelper.java:310
 #, java-format
 msgid "News last updated {0} ago."
-msgstr ""
+msgstr "Tin tức được cập nhật lần cuối {0} trước."
 
 #: ../java/src/net/i2p/router/web/NewsHelper.java:316
 #, java-format
 msgid "News last checked {0} ago."
-msgstr ""
+msgstr "Tin tức được kiểm tra lần cuối {0} trước."
 
 #: ../java/src/net/i2p/router/web/NewsHelper.java:326
 msgid "Hide news"
-msgstr ""
+msgstr "Ẩn tin tức"
 
 #: ../java/src/net/i2p/router/web/NewsHelper.java:329 ../java/src/net/i2p/router/web/NewsHelper.java:332
 msgid "Show news"
-msgstr ""
+msgstr "Hiển thị tin tức"
 
 #: ../java/src/net/i2p/router/web/NewsHelper.java:336
 msgid "Show all news"
-msgstr ""
+msgstr "Hiển thị tất cả tin tức"
 
 #: ../java/src/net/i2p/router/web/PluginStarter.java:190
 msgid "Checking for plugin updates"
-msgstr ""
+msgstr "Kiểm tra cập nhật plugin"
 
 #: ../java/src/net/i2p/router/web/PluginStarter.java:205 ../java/src/net/i2p/router/web/PluginStarter.java:211
 msgid "Plugin update check failed"
-msgstr ""
+msgstr "Kiểm tra cập nhật plugin không thành công"
 
 #: ../java/src/net/i2p/router/web/PluginStarter.java:250
 #, java-format
 msgid "{0} plugin updated"
 msgid_plural "{0} plugins updated"
-msgstr[0] ""
+msgstr[0] "Đã cập nhật {0} plugin"
 
 #: ../java/src/net/i2p/router/web/PluginStarter.java:252
 msgid "Plugin check complete"
-msgstr ""
+msgstr "Kiểm tra plugin hoàn tất"
 
 #: ../java/src/net/i2p/router/web/StatSummarizer.java:449 ../java/src/net/i2p/router/web/helpers/GraphHelper.java:296
 msgid "Bandwidth usage"
-msgstr ""
+msgstr "Sử dụng băng thông"
 
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:419
 #, java-format
 msgid "events in {0}"
-msgstr ""
+msgstr "sự kiện ở {0}"
 
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:434
 msgid "Events per period"
-msgstr ""
+msgstr "Sự kiện mỗi kỳ"
 
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:474 ../java/src/net/i2p/router/web/SummaryRenderer.java:518 ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:208
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:213
 msgid "Min"
-msgstr ""
+msgstr "Tối thiểu"
 
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:477 ../java/src/net/i2p/router/web/SummaryRenderer.java:515 ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:207
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:212
 msgid "Max"
-msgstr ""
+msgstr "Tối đa"
 
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:480 ../java/src/net/i2p/router/web/SummaryRenderer.java:521 ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:206
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:211
 msgid "Avg"
-msgstr ""
+msgstr "Trung bình"
 
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:483 ../java/src/net/i2p/router/web/SummaryRenderer.java:524
 msgid "Now"
-msgstr ""
+msgstr "Bây giờ"
 
 #. ctx.router().shutdown(Router.EXIT_HARD_RESTART); // never returns
 #. give the UI time to respond
@@ -1063,42 +1063,42 @@ msgstr "không có"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:70
 msgid "Permanently banned"
-msgstr ""
+msgstr "Cấm vĩnh viễn"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:72
 #, java-format
 msgid "Temporary ban expiring in {0}"
-msgstr ""
+msgstr "Lệnh cấm tạm thời hết hạn sau {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:74
 #, java-format
 msgid "Banned for {0} / until restart"
-msgstr ""
+msgstr "Bị cấm trong {0} / cho đến khi khởi động lại"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:90
 msgid "unban now"
-msgstr ""
+msgstr "bỏ cấm ngay bây giờ"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:106
 msgid "No bans currently active"
-msgstr ""
+msgstr "Hiện tại không có lệnh cấm nào"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:113
 msgid "Reason"
-msgstr ""
+msgstr "Lý do"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:115 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:551
 msgid "Router Hash"
-msgstr ""
+msgstr "Băm bộ định tuyến"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:116 ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:171
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:770
 msgid "Expiry"
-msgstr ""
+msgstr "Hết hạn"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:145
 msgid "Total session-only bans"
-msgstr ""
+msgstr "Tổng số lượt cấm chỉ trong phiên"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:33
 msgid ""
@@ -1108,18 +1108,18 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:36
 msgid "Local SSL Certificates"
-msgstr ""
+msgstr "Chứng chỉ SSL cục bộ"
 
 #. console
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:39 ../java/src/net/i2p/router/web/helpers/CertHelper.java:141 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:302
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:386
 msgid "Router Console"
-msgstr ""
+msgstr "Bảng điều khiển bộ định tuyến"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:40 ../java/src/net/i2p/router/web/helpers/CertHelper.java:54 ../java/src/net/i2p/router/web/helpers/CertHelper.java:69
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:85 ../java/src/net/i2p/router/web/helpers/CertHelper.java:101 ../java/src/net/i2p/router/web/helpers/InfoHelper.java:238
 msgid "Location"
-msgstr ""
+msgstr "Vị trí"
 
 #. I2CP
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:42 ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:32
@@ -1129,7 +1129,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:53
 msgid "I2PTunnel"
-msgstr ""
+msgstr "I2PTđường hầm"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:68 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:571
 msgid "SAM"
@@ -1141,7 +1141,7 @@ msgstr "Trang web"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:96
 msgid "Local Router Family Certificate"
-msgstr ""
+msgstr "Chứng chỉ dòng bộ định tuyến cục bộ"
 
 #. hide family name in css as it's already displayed above
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:100 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:524 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1400
@@ -1149,7 +1149,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1667 ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1030
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1066
 msgid "Family"
-msgstr ""
+msgstr "Gia đình"
 
 #. } else {
 #. _out.write("<p>");
@@ -1157,7 +1157,7 @@ msgstr ""
 #. _out.write("</p>\n");
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:138
 msgid "Console"
-msgstr ""
+msgstr "Bảng điều khiển"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:144
 msgid ""
@@ -1167,62 +1167,62 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigAdvancedHandler.java:73
 msgid "Error updating the configuration - please see the error logs"
-msgstr ""
+msgstr "Lỗi cập nhật cấu hình - vui lòng xem nhật ký lỗi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:60 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:563
 msgid "Save Client Configuration"
-msgstr ""
+msgstr "Lưu cấu hình máy khách"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:64 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configi2cp_jsp.java:602
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configi2cp_jsp.java:606
 msgid "Save Interface Configuration"
-msgstr ""
+msgstr "Lưu cấu hình giao diện"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:68 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configwebapps_jsp.java:548
 msgid "Save WebApp Configuration"
-msgstr ""
+msgstr "Lưu cấu hình ứng dụng web"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:73 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:610
 msgid "Save Plugin Configuration"
-msgstr ""
+msgstr "Lưu cấu hình plugin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:80 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:560
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:564
 msgid "Install Plugin"
-msgstr ""
+msgstr "Cài đặt plugin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:89 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:589
 msgid "Install Plugin from File"
-msgstr ""
+msgstr "Cài đặt Plugin từ tệp"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:98 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:602
 msgid "Update All Installed Plugins"
-msgstr ""
+msgstr "Cập nhật tất cả các plugin đã cài đặt"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:150 ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:187
 #, java-format
 msgid "Error stopping plugin {0}"
-msgstr ""
+msgstr "Lỗi dừng plugin {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:155
 #, java-format
 msgid "Deleted plugin {0}"
-msgstr ""
+msgstr "Đã xóa plugin {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:157
 #, java-format
 msgid "Error deleting plugin {0}"
-msgstr ""
+msgstr "Lỗi xóa plugin {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:182
 #, java-format
 msgid "Stopped plugin {0}"
-msgstr ""
+msgstr "Đã dừng plugin {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:192
 #, java-format
 msgid "Stopped webapp {0}"
-msgstr ""
+msgstr "Ứng dụng web đã dừng {0}"
 
 #. label (IE)
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:221 ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:407
@@ -1232,109 +1232,109 @@ msgstr "Bắt đầu"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:254
 msgid "Client configuration saved successfully"
-msgstr ""
+msgstr "Cấu hình máy khách đã được lưu thành công"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:317
 msgid "New client added"
-msgstr ""
+msgstr "Đã thêm khách hàng mới"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:338 ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:364
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:379
 msgid "Bad client index."
-msgstr ""
+msgstr "Chỉ số khách hàng xấu."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:347
 #, java-format
 msgid "Client {0} stopped"
-msgstr ""
+msgstr "Máy khách {0} đã dừng"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:369
 #, java-format
 msgid "Client {0} started"
-msgstr ""
+msgstr "Khách hàng {0} đã bắt đầu"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:385
 #, java-format
 msgid "Client {0} deleted"
-msgstr ""
+msgstr "Đã xóa ứng dụng khách {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:404
 msgid "WebApp configuration saved."
-msgstr ""
+msgstr "Đã lưu cấu hình WebApp."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:418
 msgid "Plugin configuration saved."
-msgstr ""
+msgstr "Đã lưu cấu hình plugin."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:433 ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:229
 msgid "WebApp"
-msgstr ""
+msgstr "Ứng dụng web"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:433
 msgid "started"
-msgstr ""
+msgstr "bắt đầu"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:435
 msgid "Failed to start"
-msgstr ""
+msgstr "Không khởi động được"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:440
 msgid "Failed to find server."
-msgstr ""
+msgstr "Không tìm thấy máy chủ."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:446
 msgid "No plugin URL specified."
-msgstr ""
+msgstr "Không có URL plugin nào được chỉ định."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:467 ../java/src/net/i2p/router/web/helpers/ConfigFamilyHandler.java:67
 msgid "You must enter a file"
-msgstr ""
+msgstr "Bạn phải nhập một tập tin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:506
 msgid "Install from file failed"
-msgstr ""
+msgstr "Cài đặt từ tệp không thành công"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:521
 #, java-format
 msgid "No update URL specified for {0}"
-msgstr ""
+msgstr "Không có URL cập nhật nào được chỉ định cho {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:530 ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:554
 msgid "Plugin or update download already in progress."
-msgstr ""
+msgstr "Đang tải xuống plugin hoặc bản cập nhật."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:535
 msgid "Updating all plugins"
-msgstr ""
+msgstr "Cập nhật tất cả các plugin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:574
 #, java-format
 msgid "Installing plugin from {0}"
-msgstr ""
+msgstr "Cài đặt plugin từ {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:595
 #, java-format
 msgid "Checking plugin {0} for updates"
-msgstr ""
+msgstr "Đang kiểm tra bản cập nhật của plugin {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:634 ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:636
 #, java-format
 msgid "Started plugin {0}"
-msgstr ""
+msgstr "Đã bắt đầu plugin {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:639
 #, java-format
 msgid "Error starting plugin {0}"
-msgstr ""
+msgstr "Lỗi khởi động plugin {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:661 ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:124
 #, java-format
 msgid "Added user {0}"
-msgstr ""
+msgstr "Người dùng đã thêm {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:676
 msgid "Interface configuration saved"
-msgstr ""
+msgstr "Đã lưu cấu hình giao diện"
 
 #. "<th data-sortable data-sort-method=number>" + _t("Speed") + "</th>" +
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:116 ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:416
@@ -1349,27 +1349,27 @@ msgstr "Chỉnh sửa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:125 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:559
 msgid "Add Client"
-msgstr "Add Client"
+msgstr "Thêm khách hàng"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:134 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1093
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:809 ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:811
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:501
 msgid "Client"
-msgstr ""
+msgstr "Khách hàng"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:135 ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:230
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:277
 msgid "Run at Startup?"
-msgstr ""
+msgstr "Chạy khi khởi động?"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:136 ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:231
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:278
 msgid "Control"
-msgstr "Control"
+msgstr "Kiểm soát"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:137
 msgid "Class and arguments"
-msgstr ""
+msgstr "Lớp và đối số"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:232 ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:279
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:312
@@ -1446,13 +1446,13 @@ msgstr "Mô tả"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:370 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:372
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:352 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:354
 msgid "I2P Router Console"
-msgstr ""
+msgstr "Bảng điều khiển bộ định tuyến I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:245 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:55 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:75
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:95 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:311 ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:801
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:470
 msgid "Torrents"
-msgstr ""
+msgstr "Torrent"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:247 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:56 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:76
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:96 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:330
@@ -1460,11 +1460,11 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:474 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelmanager_jsp.java:310
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelmanager_jsp.java:447 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelmanager_jsp.java:455
 msgid "Tunnel Manager"
-msgstr ""
+msgstr "Quản lý đường hầm"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:249 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:449
 msgid "Identification Image Generator"
-msgstr ""
+msgstr "Trình tạo hình ảnh nhận dạng"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:251 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:45 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:62
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:83 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:267
@@ -1479,7 +1479,7 @@ msgstr "Thư điện tử"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:276
 msgid "Plugin"
-msgstr ""
+msgstr "Plugin"
 
 #. hide caps as already in the header
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:294 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:520
@@ -1498,11 +1498,11 @@ msgstr "Tác giả"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:328
 msgid "Signed by"
-msgstr ""
+msgstr "Người ký tên"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:342
 msgid "Update link"
-msgstr ""
+msgstr "Cập nhật liên kết"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:354
 msgid "License"
@@ -1524,35 +1524,35 @@ msgstr "Xóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigFamilyHandler.java:29 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:560
 msgid "Create Family"
-msgstr ""
+msgstr "Tạo gia đình"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigFamilyHandler.java:33
 msgid "You must enter a family name"
-msgstr ""
+msgstr "Bạn phải nhập họ"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigFamilyHandler.java:55 ../java/src/net/i2p/router/web/helpers/ConfigFamilyHandler.java:130
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:185 ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:319
 msgid "Configuration saved successfully."
-msgstr ""
+msgstr "Đã lưu cấu hình thành công."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigFamilyHandler.java:62 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:548
 msgid "Join Family"
-msgstr ""
+msgstr "Gia nhập gia đình"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigFamilyHandler.java:117 ../java/src/net/i2p/router/web/helpers/ConfigFamilyHandler.java:119
 msgid "Load from file failed"
-msgstr ""
+msgstr "Tải từ tệp không thành công"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigFamilyHandler.java:124 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:595
 msgid "Leave Family"
-msgstr ""
+msgstr "Rời bỏ gia đình"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigHomeHandler.java:22 ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:28
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:28 ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1527
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:534 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:550
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:566 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:565
 msgid "Delete selected"
-msgstr ""
+msgstr "Xóa đã chọn"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigHomeHandler.java:23 ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:29
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1547 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:532
@@ -1560,91 +1560,91 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:556 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:564
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:572
 msgid "Add item"
-msgstr ""
+msgstr "Thêm mục"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigHomeHandler.java:24 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:538
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:554 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:570
 msgid "Restore defaults"
-msgstr ""
+msgstr "Khôi phục mặc định"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigHomeHandler.java:30
 msgid "Home page changed"
-msgstr ""
+msgstr "Trang chủ đã thay đổi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigHomeHandler.java:61
 msgid "Restored default settings"
-msgstr ""
+msgstr "Đã khôi phục cài đặt mặc định"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigHomeHandler.java:73
 msgid "No name entered"
-msgstr ""
+msgstr "Chưa nhập tên"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigHomeHandler.java:78
 msgid "No URL entered"
-msgstr ""
+msgstr "Chưa nhập URL"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigHomeHandler.java:102 ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:102
 msgid "Added"
-msgstr ""
+msgstr "Đã thêm"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigHomeHandler.java:119 ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:129
 msgid "Removed"
-msgstr ""
+msgstr "Đã xóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:32 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:593
 msgid "Add key"
-msgstr ""
+msgstr "Thêm khóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:34
 msgid "You must enter a destination"
-msgstr ""
+msgstr "Bạn phải nhập điểm đến"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:46
 msgid "You must enter a key"
-msgstr ""
+msgstr "Bạn phải nhập khóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:51
 msgid "Invalid key"
-msgstr ""
+msgstr "Khóa không hợp lệ"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:58 ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:169
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:198
 msgid "Invalid destination"
-msgstr ""
+msgstr "Đích đến không hợp lệ"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:65 ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:164
 #, java-format
 msgid "Key for {0} added to keyring"
-msgstr ""
+msgstr "Khóa cho {0} được thêm vào chuỗi khóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:69
 msgid "Lookup password required"
-msgstr ""
+msgstr "Yêu cầu tra cứu mật khẩu"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:90
 msgid "Requires hostname, destination, or blinded Base32"
-msgstr ""
+msgstr "Yêu cầu tên máy chủ, đích đến hoặc Base32 bị ẩn"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:134
 msgid "Destination requires lookup password"
-msgstr ""
+msgstr "Đích yêu cầu tra cứu mật khẩu"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:138
 msgid "Destination does not require lookup password"
-msgstr ""
+msgstr "Điểm đến không yêu cầu tra cứu mật khẩu"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:142
 msgid "Destination requires encryption key"
-msgstr ""
+msgstr "Đích yêu cầu khóa mã hóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:146
 msgid "Destination does not require encryption key"
-msgstr ""
+msgstr "Đích đến không yêu cầu khóa mã hóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:166 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:573
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:579
 msgid "Send key to server operator."
-msgstr ""
+msgstr "Gửi key cho nhà điều hành máy chủ."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:172 ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:46
 msgid "Delete key"
@@ -1653,20 +1653,20 @@ msgstr "Xóa khóa"
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:201
 #, java-format
 msgid "Key for {0} removed from keyring"
-msgstr ""
+msgstr "Đã xóa khóa cho {0} khỏi chuỗi khóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:203
 #, java-format
 msgid "Key for {0} not found in keyring"
-msgstr ""
+msgstr "Không tìm thấy khóa cho {0} trong chuỗi khóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:39
 msgid "Local encrypted destinations"
-msgstr ""
+msgstr "Điểm đến được mã hóa cục bộ"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:41
 msgid "Remote encrypted destinations"
-msgstr ""
+msgstr "Điểm đến được mã hóa từ xa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:45 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:594
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:616 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:555
@@ -1708,61 +1708,61 @@ msgstr "Đã tạo"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:75
 msgid "Expires"
-msgstr ""
+msgstr "Hết hạn"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:103 ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:138
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:143 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:799
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:554 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:566
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:575
 msgid "Encrypted"
-msgstr ""
+msgstr "Đã mã hóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:136 ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:141
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:570 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:581
 msgid "Encrypted with lookup password"
-msgstr ""
+msgstr "Mã hóa bằng mật khẩu tra cứu"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:146 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:562
 msgid "Blinded with lookup password"
-msgstr ""
+msgstr "Bị mù tra cứu mật khẩu"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:148 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:558
 msgid "Blinded"
-msgstr ""
+msgstr "Bị mù"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHandler.java:94
 msgid "Log overrides updated"
-msgstr ""
+msgstr "Đã cập nhật ghi đè nhật ký"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHandler.java:183
 msgid "Log configuration saved"
-msgstr ""
+msgstr "Đã lưu cấu hình nhật ký"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:62
 #, java-format
 msgid "Add additional logging statements above (e.g. {0})."
-msgstr ""
+msgstr "Thêm câu lệnh ghi nhật ký bổ sung ở trên (ví dụ: {0})."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:64
 #, java-format
 msgid "Valid log levels are {0}."
-msgstr ""
+msgstr "Mức nhật ký hợp lệ là {0}."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:141
 msgid "Select a class to add"
-msgstr ""
+msgstr "Chọn lớp cần thêm"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:153
 #, java-format
 msgid "All classes in {0}"
-msgstr ""
+msgstr "Tất cả các lớp trong {0}"
 
 #. stat groups for stats.jsp
 #. See StatsGenerator for groups mapped to a display name
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:29 ../java/src/net/i2p/router/web/helpers/InfoHelper.java:211
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:64 ../java/strings/Strings.java:66 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:582
 msgid "Bandwidth"
-msgstr ""
+msgstr "Băng thông"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:29
 msgid "Home Page"
@@ -1808,11 +1808,11 @@ msgstr "Mạng lưới"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/updategraphs_jsp.java:422 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:410
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:441
 msgid "Sidebar"
-msgstr ""
+msgstr "Thanh bên"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:29 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:234
 msgid "UI"
-msgstr ""
+msgstr "Giao diện người dùng"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:30 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:66
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:555 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1077
@@ -1824,16 +1824,16 @@ msgstr "Đường hầm"
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:31 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:85
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configwebapps_jsp.java:533 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:586
 msgid "Clients"
-msgstr ""
+msgstr "Khách hàng"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:31 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:598
 msgid "Keyring"
-msgstr ""
+msgstr "Móc khóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:31 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configlogging_jsp.java:428
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:602
 msgid "Logging"
-msgstr ""
+msgstr "Ghi nhật ký"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:31 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:62
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:533 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:888 ../java/strings/Strings.java:68
@@ -1854,7 +1854,7 @@ msgstr "Plugins"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:32 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configwebapps_jsp.java:429
 msgid "Web Apps"
-msgstr ""
+msgstr "Ứng dụng web"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:33 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:579
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/peers_jsp.java:454 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:578
@@ -1878,7 +1878,7 @@ msgstr "Giữ chỗ tải trở lại"
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:33 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:427
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:622
 msgid "Router Family"
-msgstr ""
+msgstr "Gia đình bộ định tuyến"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:62 ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:103
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHandler.java:32 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:596
@@ -2088,11 +2088,11 @@ msgstr "IP bị cấm cho đến khi khởi động lại"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHelper.java:31
 msgid "IPv4 Addresses"
-msgstr ""
+msgstr "Địa chỉ IPv4"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHelper.java:61
 msgid "IPv6 Addresses"
-msgstr ""
+msgstr "Địa chỉ IPv6"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHelper.java:78
 msgid "IPs Permanently Banned"
@@ -2108,48 +2108,48 @@ msgstr "Đến"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:28 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:687
 msgid "Reseed now"
-msgstr ""
+msgstr "Gieo lại ngay bây giờ"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:31 ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:55
 msgid "Reseeding is already in progress"
-msgstr ""
+msgstr "Đang tiến hành gieo hạt lại"
 
 #. skip the nonce checking in ReseedHandler
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:35
 msgid "Starting reseed process"
-msgstr ""
+msgstr "Bắt đầu quá trình gieo hạt"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:35
 msgid "check sidebar for status."
-msgstr ""
+msgstr "kiểm tra trạng thái ở thanh bên."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:37 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:706
 msgid "Reseed from URL"
-msgstr ""
+msgstr "Ghép lại từ URL"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:43
 msgid "No URL specified. Please supply a valid reseed URL."
-msgstr ""
+msgstr "Không có URL nào được chỉ định. "
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:68
 msgid "Reseed in progress, check summary bar for status"
-msgstr ""
+msgstr "Đang tiến hành gieo lại, kiểm tra thanh tóm tắt để biết trạng thái"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:70
 msgid "Reseed complete, check summary bar for status"
-msgstr ""
+msgstr "Hoàn tất gieo lại, kiểm tra thanh tóm tắt để biết trạng thái"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:77 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:729
 msgid "Reseed from file"
-msgstr ""
+msgstr "Ghép lại từ tập tin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:83
 msgid "No file specified. Please select a valid .zip or .su3 file to reseed from."
-msgstr ""
+msgstr "Không có tập tin nào được chỉ định. "
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:88 ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:96
 msgid "Reseed from file failed"
-msgstr ""
+msgstr "Không thể gieo hạt lại từ tệp"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:91
 #, java-format
@@ -2159,25 +2159,25 @@ msgstr[0] ""
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:105 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:681
 msgid "Reset URL list"
-msgstr ""
+msgstr "Đặt lại danh sách URL"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:131
 msgid "URL list reset successfully"
-msgstr ""
+msgstr "Đặt lại danh sách URL thành công"
 
 #. ctx.router().shutdown(Router.EXIT_HARD); // never returns
 #. give the UI time to respond
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:49
 msgid "Cancel shutdown"
-msgstr ""
+msgstr "Hủy tắt máy"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:50
 msgid "Cancel restart"
-msgstr ""
+msgstr "Hủy khởi động lại"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:52
 msgid "Restart immediately"
-msgstr ""
+msgstr "Khởi động lại ngay lập tức"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:61
 msgid "Shutdown"
@@ -2185,136 +2185,136 @@ msgstr "Tắt trình duyệt"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:75
 msgid "Restart imminent"
-msgstr ""
+msgstr "Sắp khởi động lại"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:77
 msgid "Shutdown imminent"
-msgstr ""
+msgstr "Sắp tắt máy"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:81
 #, java-format
 msgid "Shutdown in {0}"
-msgstr ""
+msgstr "Tắt máy sau {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:85 ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:100
 #, java-format
 msgid "{0} transit tunnel still active"
 msgid_plural "{0} transit tunnels still active"
-msgstr[0] ""
+msgstr[0] "{0} đường hầm chuyển tuyến vẫn hoạt động"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:88 ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:103
 #, java-format
 msgid "Please wait for routing commitment to expire for {0} tunnel"
 msgid_plural "Please wait for routing commitments to expire for {0} tunnels"
-msgstr[0] ""
+msgstr[0] "Vui lòng đợi các cam kết định tuyến hết hạn cho các đường hầm {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:96
 #, java-format
 msgid "Restart in {0}"
-msgstr ""
+msgstr "Khởi động lại sau {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigStatsHandler.java:119
 msgid "Stat filter and location updated successfully to"
-msgstr ""
+msgstr "Bộ lọc thống kê và vị trí được cập nhật thành công vào"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigStatsHandler.java:122
 msgid "Full statistics enabled"
-msgstr ""
+msgstr "Đã bật thống kê đầy đủ"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigStatsHandler.java:124
 msgid "Full statistics disabled"
-msgstr ""
+msgstr "Thống kê đầy đủ bị vô hiệu hóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigStatsHandler.java:128
 #, java-format
 msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr ""
+msgstr "Danh sách biểu đồ được cập nhật, có thể mất tới 60 giây để hiển thị trên {0}Trang biểu đồ{1}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:30
 msgid "Save order"
-msgstr ""
+msgstr "Lưu đơn hàng"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:44
 msgid "Refresh disabled"
-msgstr ""
+msgstr "Làm mới bị vô hiệu hóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:49
 msgid "Refresh interval changed"
-msgstr ""
+msgstr "Khoảng thời gian làm mới đã thay đổi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:52
 msgid "Refresh interval must be a number"
-msgstr ""
+msgstr "Khoảng thời gian làm mới phải là một số"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:55 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:566
 msgid "Restore full default"
-msgstr ""
+msgstr "Khôi phục mặc định đầy đủ"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:61
 msgid "Full summary bar default restored."
-msgstr ""
+msgstr "Khôi phục mặc định thanh tóm tắt đầy đủ."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:62 ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:66
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:159
 msgid "Summary bar will refresh shortly."
-msgstr ""
+msgstr "Thanh tóm tắt sẽ sớm được làm mới."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:63 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:568
 msgid "Restore minimal default"
-msgstr ""
+msgstr "Khôi phục mặc định tối thiểu"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:65
 msgid "Minimal summary bar default restored."
-msgstr ""
+msgstr "Khôi phục mặc định thanh tóm tắt tối thiểu."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:82 ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:104
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:153
 msgid "Order must be an integer"
-msgstr ""
+msgstr "Thứ tự phải là số nguyên"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:89
 msgid "No section selected"
-msgstr ""
+msgstr "Không có phần nào được chọn"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:94
 msgid "No order entered"
-msgstr ""
+msgstr "Chưa nhập lệnh"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:151
 msgid "Moved"
-msgstr ""
+msgstr "Đã di chuyển"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:158
 msgid "Saved order of sections."
-msgstr ""
+msgstr "Đã lưu thứ tự các phần."
 
 #. the count isn't really correct anyway, since we don't check for actual changes
 #. addFormNotice("Updated settings for " + updated + " pools.");
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHandler.java:131
 msgid "Updated settings for all pools."
-msgstr ""
+msgstr "Cập nhật cài đặt cho tất cả các nhóm."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHandler.java:136
 msgid "Exploratory tunnel configuration saved successfully."
-msgstr ""
+msgstr "Cấu hình đường hầm thăm dò đã được lưu thành công."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHandler.java:138 ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:94
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:129 ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:147
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
-msgstr ""
+msgstr "Lỗi khi lưu cấu hình (đã áp dụng nhưng chưa được lưu) - vui lòng xem nhật ký lỗi."
 
 #. * dummies for translation
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:22
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
-msgstr[0] ""
+msgstr[0] "{0} bước nhảy"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:23
 #, java-format
 msgid "{0} tunnel"
 msgid_plural "{0} tunnels"
-msgstr[0] ""
+msgstr[0] "{0} đường hầm"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:51
 msgid "Exploratory tunnels"
@@ -2663,15 +2663,15 @@ msgstr "Khoảng thời gian lớn hơn 52: Khoảng"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:385
 msgid "Smaller interval"
-msgstr ""
+msgstr "Khoảng cách nhỏ hơn"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:391
 msgid "Previous interval"
-msgstr "Khoảng thời gian trước 60: Khoảng"
+msgstr "Khoảng trước"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:402
 msgid "Next interval"
-msgstr ""
+msgstr "Khoảng thời gian tiếp theo"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:409
 msgid "Plot averages"
@@ -2789,26 +2789,26 @@ msgstr "Câu Hỏi Thường Gặp"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:45 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:62 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:83
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:269
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
-msgstr ""
+msgstr "Quản lý tệp máy chủ I2P của bạn tại đây (độ phân giải tên miền I2P)"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:46 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:67 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:87
 msgid "Graph Router Performance"
-msgstr ""
+msgstr "Hiệu suất của bộ định tuyến đồ thị"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:46 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:67 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:87
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:466 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:516
 msgid "Graphs"
-msgstr ""
+msgstr "Đồ thị"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:47 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:68 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:88
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:288
 msgid "Anonymous webmail client"
-msgstr ""
+msgstr "Ứng dụng email trực tuyến ẩn danh"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:47 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:68 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:88
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:279 ../java/strings/Strings.java:16
 msgid "I2PMail"
-msgstr ""
+msgstr "Thư I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:48 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:478
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:310
@@ -2817,15 +2817,15 @@ msgstr "Giúp đỡ"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:48 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69
 msgid "I2P Router Help"
-msgstr ""
+msgstr "Trợ giúp về bộ định tuyến I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:49 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:70 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:89
 msgid "Install and configure I2P plugins"
-msgstr ""
+msgstr "Cài đặt và cấu hình plugin I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:49 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:70 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:89
 msgid "Manage Plugins"
-msgstr ""
+msgstr "Quản lý plugin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:50 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:90 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:548
 msgid "NetDb Search"
@@ -2834,7 +2834,7 @@ msgstr "Tìm kiếm NetDb"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:50 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:90 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:625
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:546
 msgid "Network database search tool"
-msgstr ""
+msgstr "Công cụ tìm kiếm cơ sở dữ liệu mạng"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:51 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:71 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:91
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:539 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:476
@@ -2844,12 +2844,12 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:533 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:541
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:549
 msgid "Network Database"
-msgstr ""
+msgstr "Cơ sở dữ liệu mạng"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:51 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:71 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:91
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:525
 msgid "Show list of all known I2P routers"
-msgstr ""
+msgstr "Hiển thị danh sách tất cả các bộ định tuyến I2P đã biết"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:52 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:72 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:92
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:669 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:728
@@ -2859,101 +2859,101 @@ msgstr "Thông tin bộ định tuyến"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:52 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:72 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:92
 msgid "Summary of router properties"
-msgstr ""
+msgstr "Tóm tắt các thuộc tính của bộ định tuyến"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:53 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:73 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:93
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:514
 msgid "Health Report"
-msgstr ""
+msgstr "Báo cáo sức khỏe"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:53 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:73 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:93
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:553 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:540
 msgid "Router Logs"
-msgstr ""
+msgstr "Nhật ký bộ định tuyến"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:54 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:74 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:94
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:421
 msgid "Router Sitemap"
-msgstr ""
+msgstr "Sơ đồ trang web của bộ định tuyến"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:54 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:74 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:94
 msgid "Sitemap"
-msgstr ""
+msgstr "Sơ đồ trang web"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:55 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:75 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:95
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:320
 msgid "Built-in anonymous BitTorrent Client"
-msgstr ""
+msgstr "Máy khách BitTorrent ẩn danh tích hợp"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:56 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:76 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:96
 msgid "Manage server and client tunnels"
-msgstr ""
+msgstr "Quản lý đường hầm máy chủ và máy khách"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:57 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:77 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:97
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:652
 msgid "Manage Router webapps"
-msgstr ""
+msgstr "Quản lý ứng dụng web của Bộ định tuyến"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:57 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:77 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:97
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:654
 msgid "Webapps"
-msgstr ""
+msgstr "Ứng dụng web"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:58 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:78 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:98
 msgid "Local web server for hosting your own content on I2P"
-msgstr ""
+msgstr "Máy chủ web cục bộ để lưu trữ nội dung của riêng bạn trên I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:58 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:78 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:98
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:419 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:344
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:494
 msgid "Web Server"
-msgstr ""
+msgstr "Máy chủ Web"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:63
 msgid "Configure Bandwidth"
-msgstr ""
+msgstr "Cấu hình băng thông"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:63
 msgid "I2P Bandwidth Configuration"
-msgstr ""
+msgstr "Cấu hình băng thông I2P"
 
 #. FIXME wasn't escaped
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:65
 msgid "Configure UI"
-msgstr ""
+msgstr "Cấu hình giao diện người dùng"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:65
 msgid "Select console theme & language & set optional console password"
-msgstr ""
+msgstr "Chọn Chủ đề và ngôn ngữ bảng điều khiển và đặt mật khẩu bảng điều khiển tùy chọn"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:66 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:560
 msgid "Customize Sidebar"
-msgstr ""
+msgstr "Tùy chỉnh thanh bên"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:66
 msgid "Customize the sidebar by adding or removing or repositioning elements"
-msgstr ""
+msgstr "Tùy chỉnh thanh bên bằng cách thêm hoặc xóa hoặc định vị lại các thành phần"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:79
 msgid "Configuration and bandwidth tester"
-msgstr ""
+msgstr "Kiểm tra cấu hình và băng thông"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:79
 msgid "Wizard"
-msgstr ""
+msgstr "Pháp sư"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
 msgid "Advanced Config"
-msgstr ""
+msgstr "Cấu hình nâng cao"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
 msgid "Advanced router configuration"
-msgstr ""
+msgstr "Cấu hình bộ định tuyến nâng cao"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:85 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:584
 msgid "Start or stop Router clients"
-msgstr ""
+msgstr "Bắt đầu hoặc dừng ứng dụng khách Bộ định tuyến"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:180
 msgid "Changelog"
@@ -3094,7 +3094,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "An image cache and resize service"
-msgstr ""
+msgstr "Dịch vụ lưu trữ hình ảnh và thay đổi kích thước"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "imageproxy.i2p"
@@ -3102,19 +3102,19 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:150
 msgid "IRC Logs for multiple networks"
-msgstr ""
+msgstr "Nhật ký IRC cho nhiều mạng"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:151
 msgid "Encrypted I2P Pastebin"
-msgstr ""
+msgstr "Pastebin I2P được mã hóa"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:151
 msgid "Pastebin"
-msgstr ""
+msgstr "Thùng dán"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "Streaming radio service"
-msgstr ""
+msgstr "Dịch vụ phát thanh trực tuyến"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "radio.r4sas.i2p"
@@ -3122,19 +3122,19 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:153
 msgid "Privacy-focused not-for-profit organization"
-msgstr ""
+msgstr "Tổ chức phi lợi nhuận tập trung vào quyền riêng tư"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:154
 msgid "Outproxy bandwidth test"
-msgstr ""
+msgstr "Kiểm tra băng thông bên ngoài"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:154
 msgid "speedtest"
-msgstr ""
+msgstr "kiểm tra tốc độ"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:155
 msgid "Provider of privacy respecting web hosting and VPN services"
-msgstr ""
+msgstr "Nhà cung cấp dịch vụ lưu trữ web và dịch vụ VPN tôn trọng quyền riêng tư"
 
 #. "tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "eepsites/tv.svg" + S +
 #. "tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
@@ -3143,38 +3143,38 @@ msgstr ""
 #. "raklet.i2p" + S +_x("Tor-focused Search Engine") + S + "http://raklet.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:161 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:167
 msgid "Tor-focused Search Engine"
-msgstr ""
+msgstr "Công cụ tìm kiếm tập trung vào Tor"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:162
 msgid "DuckDuckGo Search Engine (no javascript)"
-msgstr ""
+msgstr "Công cụ tìm kiếm DuckDuckGo (không có javascript)"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:163
 msgid "Clearnet BitTorrent DHT search engine"
-msgstr ""
+msgstr "Công cụ tìm kiếm Clearnet BitTorrent DHT"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:164
 msgid "I2P Web Search Engine"
-msgstr ""
+msgstr "Công cụ tìm kiếm web I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:165
 msgid "Privacy-focused Clearnet Search Engine"
-msgstr ""
+msgstr "Công cụ tìm kiếm Clearnet tập trung vào quyền riêng tư"
 
 #. "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
 #. "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
 #. wikis & reference
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:172
 msgid "Enabling the free transmission of data in the public interest"
-msgstr ""
+msgstr "Cho phép truyền dữ liệu miễn phí vì lợi ích công cộng"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:173
 msgid "Selected Papers in Anonymity"
-msgstr ""
+msgstr "Các bài viết được chọn ẩn danh"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:174
 msgid "Tor .onion site links"
-msgstr ""
+msgstr "Liên kết trang web Tor .onion"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
 msgid "HTML Color Reference"
@@ -3263,11 +3263,11 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "Clear and accurate news for the Far East"
-msgstr ""
+msgstr "Tin tức rõ ràng và chính xác về Viễn Đông"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:200
 msgid "Independent investigative journalism"
-msgstr ""
+msgstr "Báo chí điều tra độc lập"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:201
 msgid "Information Security Research &amp; Education"
@@ -3283,7 +3283,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "A magazine of Politics &amp; Culture"
-msgstr ""
+msgstr "Một tạp chí về chính trị và văn hóa"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "CurrentAffairs"
@@ -3503,11 +3503,11 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Reporting on China without fear or favor"
-msgstr ""
+msgstr "Đưa tin về Trung Quốc mà không hề sợ hãi hay ưu ái"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "News from the Taiwan Capital"
-msgstr ""
+msgstr "Tin tức từ thủ đô Đài Loan"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "TaipeiTimes"
@@ -3539,7 +3539,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "Academic commentary and essays"
-msgstr ""
+msgstr "Bình luận và tiểu luận học thuật"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "TheConversation"
@@ -3603,7 +3603,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "A magazine about human rights and social justice"
-msgstr ""
+msgstr "Một tạp chí về nhân quyền và công bằng xã hội"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "UpstreamJournal"
@@ -3673,47 +3673,47 @@ msgstr "Đã chia sẻ"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:216
 msgid "Available CPU Cores"
-msgstr ""
+msgstr "Lõi CPU có sẵn"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:216
 msgid "Performance"
-msgstr ""
+msgstr "Hiệu suất"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:217
 msgid "Classified as slow"
-msgstr ""
+msgstr "Được phân loại là chậm"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:219
 msgid "Yes"
-msgstr ""
+msgstr "Có"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:221
 msgid "No"
-msgstr ""
+msgstr "Không"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:225
 msgid "Target"
-msgstr ""
+msgstr "Mục tiêu"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:226
 msgid "Interval"
-msgstr ""
+msgstr "Khoảng thời gian"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:232
 msgid "initializing"
-msgstr ""
+msgstr "đang khởi tạo"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:234
 msgid "Cache file"
-msgstr ""
+msgstr "Tệp đệm"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:234
 msgid "entries"
-msgstr ""
+msgstr "mục nhập"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:237
 msgid "Installed"
-msgstr ""
+msgstr "Đã cài đặt"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:239
 msgid "Config Dir"
@@ -3721,7 +3721,7 @@ msgstr "Thư mục cấu hình"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:240 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1420 ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1121
 msgid "Updated"
-msgstr ""
+msgstr "Đã cập nhật"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:242
 msgid "Update Policy"
@@ -3729,7 +3729,7 @@ msgstr "Chính sách cập nhật"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:244
 msgid "Development updates enabled"
-msgstr ""
+msgstr "Đã bật cập nhật phát triển"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:247
 msgid "Started"
@@ -3752,33 +3752,33 @@ msgstr "{0} đã được dùng cho các kết nối với bên ngoài"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:73
 msgid "Job runners"
-msgstr ""
+msgstr "Người chạy việc"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:81
 msgid "Active jobs"
-msgstr ""
+msgstr "Công việc tích cực"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:86
 #, java-format
 msgid "started {0} ago"
-msgstr ""
+msgstr "đã bắt đầu {0} trước"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:93
 msgid "Just finished jobs"
-msgstr ""
+msgstr "Vừa hoàn thành công việc"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:98
 #, java-format
 msgid "finished {0} ago"
-msgstr ""
+msgstr "đã hoàn thành {0} trước"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:106
 msgid "Ready/waiting jobs"
-msgstr ""
+msgstr "Công việc đã sẵn sàng/đang chờ"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:117
 msgid "waiting"
-msgstr ""
+msgstr "chờ đợi"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:127
 msgid "Scheduled jobs"
@@ -3788,39 +3788,39 @@ msgstr "Những công việc đã được lên lịch"
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:144
 #, java-format
 msgid "{0} starts in {1}"
-msgstr ""
+msgstr "{0} bắt đầu sau {1}"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:147
 msgid "DELAYED"
-msgstr ""
+msgstr "BỊ TRÌ HOÃN"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:149
 msgid "OUT OF ORDER"
-msgstr ""
+msgstr "KHÔNG ĐẶT HÀNG"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:174
 msgid "Queue Totals"
-msgstr ""
+msgstr "Tổng số hàng đợi"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:194
 msgid "Job Statistics (excluding single-shot jobs)"
-msgstr ""
+msgstr "Thống kê công việc (không bao gồm các công việc một lần)"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:202
 msgid "Job"
-msgstr ""
+msgstr "Công việc"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:203
 msgid "Runs"
-msgstr ""
+msgstr "Chạy"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:204
 msgid "Dropped"
-msgstr ""
+msgstr "Bỏ"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:210
 msgid "Pending"
-msgstr ""
+msgstr "Đang chờ xử lý"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:290 ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:52 ../java/src/net/i2p/router/web/helpers/PeerHelper.java:45
 msgid "Summary"
@@ -3828,31 +3828,31 @@ msgstr "Tóm tắt"
 
 #: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:87 ../java/src/net/i2p/router/web/helpers/LogsHelper.java:251
 msgid "File location"
-msgstr ""
+msgstr "Vị trí tệp"
 
 #: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:248
 msgid "File not found"
-msgstr ""
+msgstr "Không tìm thấy tập tin"
 
 #: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:257 ../java/src/net/i2p/router/web/helpers/LogsHelper.java:309
 msgid "No log messages"
-msgstr ""
+msgstr "Không có thông điệp tường trình"
 
 #. 0  -
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:53 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:511
 msgid "Local Router"
-msgstr ""
+msgstr "Bộ định tuyến cục bộ"
 
 #. 1  - r=.
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:54 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:519
 msgid "Router Lookup"
-msgstr ""
+msgstr "Tra cứu bộ định tuyến"
 
 #. 2  -
 #. 3  - f=2
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:55 ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:56 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:485
 msgid "All Routers"
-msgstr ""
+msgstr "Tất cả các bộ định tuyến"
 
 #. 4  - f=1 (debug)
 #. 5  - l=1
@@ -3862,55 +3862,55 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1586 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1660
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1062 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:535
 msgid "LeaseSets"
-msgstr ""
+msgstr "Bộ hợp đồng thuê"
 
 #. 7  - l=3
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:60 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:501
 msgid "Advanced Lookup"
-msgstr ""
+msgstr "Tra cứu nâng cao"
 
 #. 8  - f=4
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:61 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:527
 msgid "LeaseSet Lookup"
-msgstr ""
+msgstr "Tra cứu bộ hợp đồng thuê"
 
 #. 9  -
 #. 10 - f=5
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:62 ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:63
 msgid "All Routers (Client NetDb)"
-msgstr ""
+msgstr "Tất cả các bộ định tuyến (Client NetDb)"
 
 #. 11 - f=6 (debug)
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:64 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:493
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:568
 msgid "Sybil Analysis"
-msgstr ""
+msgstr "Phân tích âm tiết"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:166
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr ""
+msgstr "Không bao giờ tiết lộ danh tính bộ định tuyến của bạn cho bất kỳ ai vì nó được liên kết duy nhất với địa chỉ IP của bạn trong cơ sở dữ liệu mạng."
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:196
 msgid "is banned"
-msgstr ""
+msgstr "bị cấm"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:196 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:549 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:777
 msgid "not found in network database"
-msgstr ""
+msgstr "không tìm thấy trong cơ sở dữ liệu mạng"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:198
 msgid "No results"
-msgstr ""
+msgstr "Không có kết quả"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:244 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:556 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1019
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1075
 msgid "Previous Page"
-msgstr ""
+msgstr "Trang trước"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:246 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:559 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1022
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1078
 msgid "Page"
-msgstr ""
+msgstr "Trang"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:522 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1210
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:334 ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:495
@@ -3930,11 +3930,11 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:563 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1026
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1081
 msgid "Next Page"
-msgstr ""
+msgstr "Trang tiếp theo"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:693
 msgid "No Leasesets currently active."
-msgstr ""
+msgstr "Không có Hợp đồng thuê nào hiện đang hoạt động."
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:719
 msgid "Network data"
@@ -3942,36 +3942,36 @@ msgstr "Dữ liệu mạng"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:724
 msgid "Median distance (bits)"
-msgstr ""
+msgstr "Khoảng cách trung bình (bit)"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:728
 msgid "Estimated total floodfills"
-msgstr ""
+msgstr "Tổng lượng lũ ước tính"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:729
 msgid "Estimated total leasesets"
-msgstr ""
+msgstr "Tổng số tiền thuê ước tính"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:775 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:795
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:527
 msgid "LeaseSet"
-msgstr ""
+msgstr "Bộ hợp đồng thuê"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:796
 msgid "LeaseSet Key"
-msgstr ""
+msgstr "Khóa thuê"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:809
 msgid "View local tunnels for destination"
-msgstr ""
+msgstr "Xem các đường hầm địa phương để biết điểm đến"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:811
 msgid "published"
-msgstr ""
+msgstr "đã xuất bản"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:836 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:859
 msgid "Add to addressbook"
-msgstr ""
+msgstr "Thêm vào sổ địa chỉ"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:838 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:861
 msgid "Add to local addressbook"
@@ -3980,63 +3980,63 @@ msgstr "Thêm vô sổ địa chỉ địa phương"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:873
 #, java-format
 msgid "Published{0} ago"
-msgstr ""
+msgstr "Đã xuất bản{0} trước"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:878 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:891
 #, java-format
 msgid "Expires{0}"
-msgstr ""
+msgstr "Hết hạn{0}"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:880 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:893
 #, java-format
 msgid "Expired{0} ago"
-msgstr ""
+msgstr "Đã hết hạn{0} trước"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:882
 msgid "Received as published?"
-msgstr ""
+msgstr "Nhận được như đã xuất bản?"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:883
 msgid "Received as reply?"
-msgstr ""
+msgstr "Đã nhận được thư trả lời?"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:884
 msgid "Distance"
-msgstr ""
+msgstr "Khoảng cách"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:888
 msgid "Offline signed"
-msgstr ""
+msgstr "Đã ký ngoại tuyến"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:898 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:926
 msgid "Signature type"
-msgstr ""
+msgstr "Loại chữ ký"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:917 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:944
 msgid "Unsupported type"
-msgstr ""
+msgstr "Loại không được hỗ trợ"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:921
 msgid "Routing Key"
-msgstr ""
+msgstr "Khóa định tuyến"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:956 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:523
 msgid "Lease"
-msgstr ""
+msgstr "Thuê"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:969
 #, java-format
 msgid "Expires in {0}"
-msgstr ""
+msgstr "Hết hạn sau {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:971
 #, java-format
 msgid "Expired {0} ago"
-msgstr ""
+msgstr "Đã hết hạn {0} trước"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:986
 msgid "Not initialized"
-msgstr ""
+msgstr "Chưa được khởi tạo"
 
 #.
 #. if (client != null) {
@@ -4049,7 +4049,7 @@ msgstr ""
 #.
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1106
 msgid "Network Database Router Statistics"
-msgstr ""
+msgstr "Thống kê bộ định tuyến cơ sở dữ liệu mạng"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1113 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1134
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1166 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1195
@@ -4059,23 +4059,23 @@ msgstr "Số lượng"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1134
 msgid "Bandwidth Tier"
-msgstr ""
+msgstr "Cấp băng thông"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1166
 msgid "Congestion Cap"
-msgstr ""
+msgstr "Mũ tắc nghẽn"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1169
 msgid "Medium congestion / low performance"
-msgstr ""
+msgstr "Tắc nghẽn trung bình/hiệu suất thấp"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1174
 msgid "High congestion"
-msgstr ""
+msgstr "Tắc nghẽn cao"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1179
 msgid "Rejecting all tunnel requests"
-msgstr ""
+msgstr "Từ chối tất cả các yêu cầu về đường hầm"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1195
 msgid "Transports"
@@ -4083,11 +4083,11 @@ msgstr "Giao thông"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1224
 msgid "Initializing"
-msgstr ""
+msgstr "Đang khởi tạo"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1325 ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:965
 msgid "Our info"
-msgstr ""
+msgstr "Thông tin của chúng tôi"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1332 ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:974
 msgid "Router is banlisted"
@@ -4095,27 +4095,27 @@ msgstr "Bộ định tuyến bị cấm"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1337
 msgid "RouterInfo is compressible"
-msgstr ""
+msgstr "RouterInfo có thể nén được"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1389 ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:168
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1023 ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:380
 msgid "Show all routers with this version in the NetDb"
-msgstr ""
+msgstr "Hiển thị tất cả các bộ định tuyến có phiên bản này trong NetDb"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1399
 #, java-format
 msgid "Show all members of the {0} family in NetDb"
-msgstr ""
+msgstr "Hiển thị tất cả các thành viên của họ {0} trong NetDb"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1405 ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:334
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:335 ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1032
 msgid "View profile"
-msgstr ""
+msgstr "Xem hồ sơ"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1406 ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:335
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1033
 msgid "Profile"
-msgstr ""
+msgstr "Hồ sơ"
 
 #.
 #. PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(h);
@@ -4137,11 +4137,11 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1034 ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:582
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:449
 msgid "Configure peer"
-msgstr ""
+msgstr "Cấu hình ngang hàng"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1415
 msgid "Memory usage"
-msgstr ""
+msgstr "Sử dụng bộ nhớ"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1420 ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:331
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1121 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:571
@@ -4152,11 +4152,11 @@ msgstr "Dấu"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1425 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1455
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1358 ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1124
 msgid "Published"
-msgstr ""
+msgstr "Đã xuất bản"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1436
 msgid "Hostname"
-msgstr ""
+msgstr "Tên máy chủ"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1465
 msgid "Verified family (signing certificate is installed and valid)"
@@ -4205,7 +4205,7 @@ msgstr "Khả năng"
 #. hide version as already in the header
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1583 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1657
 msgid "Core version"
-msgstr ""
+msgstr "Phiên bản cốt lõi"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1585 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1659
 msgid "Network ID"
@@ -4258,11 +4258,11 @@ msgstr "Tham gia đường hầm (60s)"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1604 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1678
 msgid "Bandwidth send rate (1h)"
-msgstr ""
+msgstr "Tốc độ gửi băng thông (1h)"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1605 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1679
 msgid "Bandwidth receive rate (1h)"
-msgstr ""
+msgstr "Tốc độ nhận băng thông (1h)"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1623 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1626
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1075 ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1077
@@ -4600,7 +4600,7 @@ msgstr "Họ cung cấp phần giới thiệu với chúng ta"
 #, java-format
 msgid "{0} fail"
 msgid_plural "{0} fails"
-msgstr[0] ""
+msgstr[0] "{0} không thành công"
 
 #. 2
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:704 ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:199
@@ -4851,27 +4851,27 @@ msgstr ""
 #, java-format
 msgid "{0} fast peer"
 msgid_plural "{0} fast peers"
-msgstr[0] ""
+msgstr[0] "{0} ngang hàng nhanh"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:377
 #, java-format
 msgid "{0} high capacity peer"
 msgid_plural "{0} high capacity peers"
-msgstr[0] ""
+msgstr[0] "{0} ngang hàng có dung lượng cao"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:379
 #, java-format
 msgid "{0} integrated peer"
 msgid_plural "{0} integrated peers"
-msgstr[0] ""
+msgstr[0] "{0} ngang hàng tích hợp"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:393
 msgid "1h Fail Rate"
-msgstr ""
+msgstr "Tỷ lệ thất bại 1h"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:394
 msgid "1h Resp. Time"
-msgstr ""
+msgstr "1h đáp ứng Thời gian"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:396
 msgid "Last Heard From"
@@ -5062,7 +5062,7 @@ msgstr ""
 #, java-format
 msgid "{0} event"
 msgid_plural "{0} events"
-msgstr[0] ""
+msgstr[0] "{0} sự kiện"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:170
 msgid "rate"
@@ -5122,7 +5122,7 @@ msgstr ""
 #, java-format
 msgid "1 event"
 msgid_plural "{0} events"
-msgstr[0] ""
+msgstr[0] "{0} sự kiện"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:52 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:164
 msgid "Help &amp; FAQ"
@@ -5504,7 +5504,7 @@ msgstr "Hiện tại"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:998 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1004
 msgid "5 Min Average"
-msgstr ""
+msgstr "Trung bình 5 phút"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1011 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1017
 msgid "Lifetime"
@@ -5797,7 +5797,7 @@ msgstr "Nhấp vào Shutdown và khởi động lại để cài đặt"
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1174
 #, java-format
 msgid "{0}"
-msgstr ""
+msgstr "{0}"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1182
 msgid "Updating after restart"
@@ -7547,7 +7547,7 @@ msgstr "giây"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:551
 msgid "0 to disable"
-msgstr ""
+msgstr "0 để vô hiệu hóa"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:282
 msgid "config stats"
@@ -7566,6 +7566,8 @@ msgid ""
 "A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, "
 "view the <a href=\"/stats\">stats page</a>."
 msgstr ""
+"Một lựa chọn hạn chế các số liệu thống kê được bật theo mặc định, cần thiết để theo dõi hiệu suất bộ định tuyến. Chỉ các số liệu thống kê có biểu đồ tùy chọn được liệt kê ở đây; Để biết "
+"danh sách đầy đủ các số liệu thống kê đã kích hoạt, hãy xem <a href=\"/stats\"> trang thống kê </a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:537
 msgid "Enable full stats?"
@@ -8082,11 +8084,11 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:487
 msgid "32bit host OS running with less than 4 detected cores"
-msgstr ""
+msgstr "Hệ điều hành máy chủ 32 bit chạy với ít hơn 4 lõi được phát hiện"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:489
 msgid "64bit host OS running with 1 detected core and less than 384MB allocated to the JVM"
-msgstr ""
+msgstr "Hệ điều hành máy chủ 64 bit chạy với 1 lõi được phát hiện và phân bổ dưới 384 MB cho JVM"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:491
 msgid "Less than 256MB allocated to the JVM"
@@ -8493,7 +8495,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:433
 msgid "Abridged I2P FAQ"
-msgstr ""
+msgstr "Câu hỏi thường gặp I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:435
 msgid ""
@@ -8724,6 +8726,8 @@ msgid ""
 "A higher level socket API for clients. Can be enabled/disabled on the <a href=/configclients>Client Configuration page</a>. Can be changed in the <code>bob.config</code> file. [Disabled "
 "by default]"
 msgstr ""
+"Một API ổ cắm cấp cao hơn cho khách hàng. Có thể được bật/tắt trên trang cấu hình máy khách <a href=/configclents> </a>. Có thể được thay đổi trong tệp <code> Bob.config </code>. [Bị vô "
+"hiệu hóa theo mặc định]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:529
 msgid "HTTP proxy"
@@ -8778,6 +8782,8 @@ msgid ""
 "A higher level socket API for clients. Only opened when a SAM V3 client requests a UDP session. Can be enabled/disabled on the <a href=/configclients> Client Configuration page</a>. Can "
 "be changed in the <code>clients.config</code> file with the SAM command line option <code>sam.udp.port=nnnn</code>."
 msgstr ""
+"Một API ổ cắm cấp cao hơn cho khách hàng. Chỉ mở khi máy khách SAM V3 yêu cầu phiên UDP. Có thể được bật/tắt trên trang cấu hình máy khách <a href=/configclents> </a>. Có thể được thay "
+"đổi trong tệp <code> client.config </code> với tùy chọn dòng lệnh sam <code> sam.udp.port = nnnn </code>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:557
 msgid "SAM bridge"
@@ -8788,6 +8794,8 @@ msgid ""
 "A higher level socket API for clients. Can be enabled/disabled on the <a href=/configclients>Client Configuration page</a>. Can be changed in the <code>clients.config</code> file. "
 "[Disabled by default]"
 msgstr ""
+"Một API ổ cắm cấp cao hơn cho khách hàng. Có thể được bật/tắt trên trang cấu hình máy khách <a href=/configclents> </a>. Có thể được thay đổi trong tệp <code> client.config </code>. [Bị "
+"vô hiệu hóa theo mặc định]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:561
 msgid "I2P Router Console (Web interface)"
@@ -8895,6 +8903,9 @@ msgid ""
 "wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> destination. For services on the network, the Base64 hash is often mapped to an .i2p domain in "
 "the addressbook."
 msgstr ""
+"Liên kết <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> (luôn kết thúc bằng .b32.i2p) là một hàm băm của đích <a "
+"href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a>. Đối với các dịch vụ trên mạng, hàm băm Base64 thường được ánh xạ tới miền ."
+"i2p trong sổ địa chỉ."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:443
 msgid "B33"
@@ -8943,6 +8954,9 @@ msgid ""
 "rel=noreferrer>wget</a> or <a href=https://curl.haxx.se/ class='sitelink external' target=_blank rel=noreferrer>curl</a>. Eepget is also used internally by the router, for example to "
 "reseed from remote hosts. By default, eepget uses the HTTP proxy on <code>127.0.0.1:4444</code>."
 msgstr ""
+"Một ứng dụng dòng lệnh được cung cấp cùng với I2P được sử dụng để yêu cầu tài nguyên URL, tương tự như <a href=https://www.gnu.org/software/wget/ class='sitelink external' target=_blank "
+"rel=noreferrer>wget </a> hoặc <a href=https://curl.haxx.se/ class='sitelink external' target=_blank rel=noreferrer>curl</a>. Eepget cũng được bộ định tuyến sử dụng nội bộ, chẳng hạn như "
+"để khởi tạo lại từ các máy chủ từ xa. Theo mặc định, eepget sử dụng proxy HTTP trên <code>127.0.0.1:4444</code>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:463
 msgid "Eephead"
@@ -8953,6 +8967,8 @@ msgid ""
 "A command-line application supplied with I2P+ (Linux/MacOS) that is used to perform a <code>head</code> request on a specified http resource on the network, returning various response "
 "headers from the remote server. By default, eephead uses the HTTP proxy on <code>127.0.0.1:4444</code>."
 msgstr ""
+"Một ứng dụng dòng lệnh được cung cấp cùng với I2P+ (Linux/MacOS) được sử dụng để thực hiện yêu cầu <code>head</code> trên một tài nguyên http được chỉ định trên mạng, trả về nhiều tiêu "
+"đề phản hồi khác nhau từ máy chủ từ xa. Theo mặc định, eephead sử dụng proxy HTTP trên <code>127.0.0.1:4444</code>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:467
 msgid "Eepsite"
@@ -9055,6 +9071,9 @@ msgid ""
 "supplied as part of the default suite of applications with Java I2P, and also available as a <a href=http://skank.i2p/#download class=sitelink target=_blank rel=noreferrer>standalone "
 "Java application</a>."
 msgstr ""
+"Một nhánh của <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>ứng dụng khách Snark BitTorrent</a> được tái cấu trúc để sử dụng trên mạng I2P. "
+"Thường được cung cấp như một phần của bộ ứng dụng mặc định có Java I2P và cũng có sẵn dưới dạng <a href=http://skank.i2p/#download class=sitelink target=_blank rel=noreferrer>ứng dụng "
+"Java độc lập</a> ."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:511
 msgid "Introducer"
@@ -9062,7 +9081,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:513
 msgid "A router that facilitates the connection to the network of another router that is behind a firewall."
-msgstr ""
+msgstr "Một bộ định tuyến tạo điều kiện cho kết nối với mạng của một bộ định tuyến khác đứng sau tường lửa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:515
 msgid "Jump Service"
@@ -9092,7 +9111,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:529
 msgid "A group of tunnel entry points (leases) for a <i>destination</i>. Note: A 0-hop server tunnel will only have one lease, regardless of the number of tunnels configured."
-msgstr ""
+msgstr "Một nhóm các điểm vào đường hầm (cho thuê) cho một <i>đích</i>. Lưu ý: Đường hầm máy chủ 0 hop sẽ chỉ có một hợp đồng thuê, bất kể số lượng đường hầm được định cấu hình."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:531
 msgid "Monotone / mtn"
@@ -9120,6 +9139,10 @@ msgid ""
 "when new RouterInfos are acquired. Also referred to as the <i>NetDb</i>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database class='sitelink external' "
 "target=_blank rel=noreferrer>online documentation</a>."
 msgstr ""
+"Cơ sở dữ liệu phân tán chứa thông tin liên hệ của bộ định tuyến (RouterInfos) và thông tin liên hệ đích (LeaseSets). Một bộ định tuyến duy nhất duy trì cơ sở dữ liệu (một phần) của riêng "
+"nó để liên lạc với các bộ định tuyến khác trên mạng; không có bộ định tuyến nào duy trì danh sách tất cả các bộ định tuyến. RouterInfos được lưu trữ trên đĩa và đọc vào bộ nhớ khi bộ "
+"định tuyến khởi động hoặc khi có được RouterInfos mới. Còn được gọi là <i>NetDb</i>. Để biết thêm thông tin, hãy xem <a href=https://geti2p.net/en/docs/how/network-database "
+"class='sitelink external' target=_blank rel=noreferrer>tài liệu trực tuyến</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:543
 msgid "NTCP / NTCP2"
@@ -9142,6 +9165,9 @@ msgid ""
 "Manager</i>. Available from <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins."
 "orchid class='sitelink external' target=_blank rel=noreferrer>github</a>."
 msgstr ""
+"Việc triển khai Java của máy khách TOR, có sẵn dưới dạng plugin i2p. Có thể được sử dụng làm mặc định <i> outproxy </i> nếu được định cấu hình trong các khóa có liên quan hoặc đường hầm "
+"máy khách HTTP trong trình quản lý đường hầm <i> </i>. Có sẵn từ <a href=http://stats.i2p/i2p/plugins Class=Sitelink> http: //stats.i2p/i2p/plugins </a>. Mã nguồn có sẵn trên <a "
+"href=https://github.com/i2p/i2p.plugins.orchid class='Sitelink bên ngoài' Target=_Blank rel=noreferrer> GitHub </a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:551
 msgid "Outproxy"
@@ -9229,6 +9255,8 @@ msgid ""
 "A <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink external' target=_blank rel=noreferrer>unidirectional</a> encrypted communication pathway between a client or "
 "server on the I2P network. Similar to a circuit in Tor, except that Tor circuits are bidirectional."
 msgstr ""
+"Đường dẫn liên lạc được mã hóa <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink external' target=_blank rel=noreferrer>một chiều</a> được mã hóa giữa máy khách "
+"hoặc máy chủ trên mạng I2P . Tương tự như mạch trong Tor, ngoại trừ mạch Tor là hai chiều."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:591
 msgid "Tunnel Endpoint"
@@ -9260,7 +9288,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:605
 msgid "A router in a tunnel not designated as a gateway or endpoint."
-msgstr ""
+msgstr "Một bộ định tuyến trong một đường hầm không được chỉ định là cổng hoặc điểm cuối."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:607
 msgid "ZzzOT (plugin)"
@@ -9272,6 +9300,9 @@ msgid ""
 "<a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins.zzzot class='sitelink "
 "external' target=_blank rel=noreferrer>github</a>."
 msgstr ""
+"Việc triển khai plugin Java I2P của Bittorrent <a href=https://en.wikipedia.org/wiki/opentracker Class='Sitelink bên ngoài' Target=_Blank rel=noreFerrer> Trình theo dõi mở </a>. Có sẵn "
+"từ <a href=http://stats.i2p/i2p/plugins Class=Sitelink> http: //stats.i2p/i2p/plugins </a>. Mã nguồn có sẵn trên <a href=https://github.com/i2p/i2p.plugins.zzzot class='Sitelink bên "
+"ngoài' Target=_Blank rel=noreferrer> GitHub </a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:270
 msgid "Web Hosting - I2P+"
@@ -9361,7 +9392,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:437
 msgid "A guide to reseeding your I2P+ router"
-msgstr ""
+msgstr "Hướng dẫn cài đặt lại bộ định tuyến I2P+ của bạn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:439 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:270
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:405 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:433
@@ -9772,11 +9803,11 @@ msgstr "Bộ lọc là một tệp văn bản có thể chứa một hoặc nhi�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:443
 msgid "A declaration will contain a directive (keyword) with parameters to define the scope of the declaration, and can represent one of the following:"
-msgstr ""
+msgstr "Một khai báo sẽ chứa một lệnh (từ khóa) với các tham số để xác định phạm vi của khai báo và có thể biểu thị một trong các mục sau:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:445
 msgid "A default threshold to apply to all remote destinations not listed in the containing file or any of the referenced files"
-msgstr ""
+msgstr "Ngưỡng mặc định để áp dụng cho tất cả các đích từ xa không được liệt kê trong tệp chứa hoặc bất kỳ tệp được tham chiếu nào"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:447
 msgid "A threshold to apply to a specific remote destination"
@@ -10116,7 +10147,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:529
 msgid "Accepting/Rejecting"
-msgstr ""
+msgstr "Chấp nhận/từ chối"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:531
 msgid ""
@@ -10132,7 +10163,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:535
 msgid "<b>Note"
-msgstr ""
+msgstr "<b>Lưu ý"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:537
 msgid ""
@@ -10667,7 +10698,7 @@ msgstr "Thống kê công việc"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:423 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:424
 msgid "Active and scheduled jobs"
-msgstr ""
+msgstr "Các công việc tích cực và theo lịch trình"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:280
 msgid "job queue statistics"
