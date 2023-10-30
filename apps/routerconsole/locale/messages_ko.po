@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-10-30 02:37+0000\n"
+"PO-Revision-Date: 2023-10-30 04:01+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ko\n"
@@ -1549,35 +1549,35 @@ msgstr "잘못된 목적지"
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:65 ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:164
 #, java-format
 msgid "Key for {0} added to keyring"
-msgstr ""
+msgstr "{0}의 키가 키링에 추가되었습니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:69
 msgid "Lookup password required"
-msgstr ""
+msgstr "조회 비밀번호 필요"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:90
 msgid "Requires hostname, destination, or blinded Base32"
-msgstr ""
+msgstr "호스트 이름, 대상 또는 블라인드 Base32가 필요합니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:134
 msgid "Destination requires lookup password"
-msgstr ""
+msgstr "대상에는 조회 비밀번호가 필요합니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:138
 msgid "Destination does not require lookup password"
-msgstr ""
+msgstr "대상에는 조회 비밀번호가 필요하지 않습니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:142
 msgid "Destination requires encryption key"
-msgstr ""
+msgstr "대상에는 암호화 키가 필요합니다"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:146
 msgid "Destination does not require encryption key"
-msgstr ""
+msgstr "대상에는 암호화 키가 필요하지 않습니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:166 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:573 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:579
 msgid "Send key to server operator."
-msgstr ""
+msgstr "서버 운영자에게 키를 보냅니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:172 ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:46
 msgid "Delete key"
@@ -1586,20 +1586,20 @@ msgstr "키 삭제"
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:201
 #, java-format
 msgid "Key for {0} removed from keyring"
-msgstr ""
+msgstr "{0}의 키가 키링에서 제거되었습니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:203
 #, java-format
 msgid "Key for {0} not found in keyring"
-msgstr ""
+msgstr "{0}에 대한 키를 키링에서 찾을 수 없습니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:39
 msgid "Local encrypted destinations"
-msgstr ""
+msgstr "로컬 암호화 대상"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:41
 msgid "Remote encrypted destinations"
-msgstr ""
+msgstr "원격 암호화 대상"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:45 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:594 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:616
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:555 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:536 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:552
@@ -1626,7 +1626,7 @@ msgstr "암호화 키"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:69
 msgid "Lookup Password"
-msgstr ""
+msgstr "비밀번호 조회"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:72
 msgid "Created"
@@ -1634,7 +1634,7 @@ msgstr "생성됨"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:75
 msgid "Expires"
-msgstr ""
+msgstr "만료"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:103 ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:138 ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:143
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:799 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:554 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:566
@@ -1645,15 +1645,15 @@ msgstr "암호화 됨"
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:136 ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:141 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:570
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:581
 msgid "Encrypted with lookup password"
-msgstr ""
+msgstr "조회 비밀번호로 암호화됨"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:146 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:562
 msgid "Blinded with lookup password"
-msgstr ""
+msgstr "조회 비밀번호로 블라인드 처리됨"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:148 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:558
 msgid "Blinded"
-msgstr ""
+msgstr "맹인"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHandler.java:94
 msgid "Log overrides updated"
@@ -1666,12 +1666,12 @@ msgstr "로그 설정 저장됨"
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:62
 #, java-format
 msgid "Add additional logging statements above (e.g. {0})."
-msgstr ""
+msgstr "위에 추가 로깅 문을 추가합니다(예: {0})."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:64
 #, java-format
 msgid "Valid log levels are {0}."
-msgstr ""
+msgstr "유효한 로그 수준은 {0}입니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:141
 msgid "Select a class to add"
@@ -2207,13 +2207,13 @@ msgstr "설정 저장 오류 (적용됬으나 저장되지 않음) - 오류 로�
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
-msgstr[0] ""
+msgstr[0] "{0} 홉"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:23
 #, java-format
 msgid "{0} tunnel"
 msgid_plural "{0} tunnels"
-msgstr[0] ""
+msgstr[0] "{0} 터널"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:51
 msgid "Exploratory tunnels"
@@ -2230,11 +2230,11 @@ msgstr "익명 경고 - 설정이 0단계 터널을 포함합니다"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:131
 msgid "WARNING - 0-hop tunnels not recommended for IPv6-only routers."
-msgstr ""
+msgstr "경고 - IPv6 전용 라우터에는 0홉 터널이 권장되지 않습니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:137
 msgid "WARNING - Inbound 0-hop tunnels not recommended for hidden routers."
-msgstr ""
+msgstr "경고 - 숨겨진 라우터에는 인바운드 0-홉 터널이 권장되지 않습니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:145
 msgid "ANONYMITY WARNING - Settings include 1-hop tunnels."
@@ -3149,7 +3149,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "Clear and accurate news for the Far East"
-msgstr ""
+msgstr "극동지역에 대한 명확하고 정확한 소식"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:200
 msgid "Independent investigative journalism"
@@ -3185,7 +3185,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
 msgid "Global news &amp; media platform"
-msgstr ""
+msgstr "글로벌 뉴스 및 미디어 플랫폼"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
 msgid "DigitalTrends"
@@ -3277,7 +3277,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "Where news meets its scholarly match"
-msgstr ""
+msgstr "뉴스가 학술적 일치를 만나는 곳"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Jurist"
@@ -3313,7 +3313,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "Security news and research blog"
-msgstr ""
+msgstr "보안 뉴스 및 연구 블로그"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "Smart &amp; fearless journalism"
@@ -3337,7 +3337,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "News and blog feeds on I2P"
-msgstr ""
+msgstr "뉴스 및 블로그는 I2P에 제공됩니다"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "Planeta"
@@ -3353,7 +3353,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "Reliable journalism for countries under censorship"
-msgstr ""
+msgstr "검열중인 국가를위한 신뢰할 수있는 저널리즘"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
 msgid "Lifestyle magazine"
@@ -6780,7 +6780,7 @@ msgstr "키링 관리자"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:526
 msgid "The router keyring is used to decrypt encrypted LeaseSets."
-msgstr ""
+msgstr "라우터 키링은 암호화된 LeaseSet의 암호를 해독하는 데 사용됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:528
 msgid "The keyring may contain keys for local or remote encrypted destinations."
@@ -7476,7 +7476,7 @@ msgstr "라우터 콘솔 언어"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:583
 msgid "Please contribute to the router console translation project! Contact the developers in #i2p-dev on IRC to help."
-msgstr "라우터 콘솔 번역에 참여해주십시오! IRC 채팅의 #i2p-dev 로 오셔서 도움을 주세요."
+msgstr "라우터 콘솔 번역에 참여해주십시오! IRC 채팅의 #saltR 로 오셔서 도움을 주세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:282
 msgid "config update"
@@ -7484,11 +7484,11 @@ msgstr "업데이트 설정"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:419 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:634
 msgid "Router Updates"
-msgstr ""
+msgstr "라우터 업데이트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:536
 msgid "I2P &amp; News Updates"
-msgstr ""
+msgstr "I2P 및 뉴스 업데이트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:542 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:544
 msgid "News Updates"
@@ -9058,76 +9058,76 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:270 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:520
 msgid "Help Section"
-msgstr ""
+msgstr "도움말 섹션"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:405 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:660
 msgid "Help &amp; Support"
-msgstr ""
+msgstr "도움과 지원"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:409 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:662
 msgid "Advanced configuration settings"
-msgstr ""
+msgstr "고급 구성 설정"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:413
 msgid "Recent code changes to I2P+"
-msgstr ""
+msgstr "I2P에 대한 최근 코드 변경"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:417
 msgid "Configuring I2P+: Network, Firefox, Tunnel Manager"
-msgstr ""
+msgstr "I2P 구성: 네트워크, Firefox, 터널 관리자"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:419
 msgid "F.A.Q."
-msgstr ""
+msgstr "FAQ"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:425
 msgid "I2P-specific terminology"
-msgstr ""
+msgstr "I2P 관련 용어"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:429 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:678
 msgid "Licensing and copyright notices"
-msgstr ""
+msgstr "라이센스 및 저작권 고지"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:437
 msgid "A guide to reseeding your I2P+ router"
-msgstr ""
+msgstr "I2P+ 라우터 재시드 가이드"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:439 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:270 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:405
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:433 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:692
 msgid "Troubleshooting"
-msgstr ""
+msgstr "문제 해결"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:441
 msgid "What to do in the event I2P+ isn't working"
-msgstr ""
+msgstr "I2P가 작동하지 않는 경우 어떻게 해야 할까요?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:445
 msgid "An introduction to tunnel access lists"
-msgstr ""
+msgstr "터널 액세스 목록 소개"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:449
 msgid "Information about the sidebar, network status messages, and theme overrides"
-msgstr ""
+msgstr "사이드바, 네트워크 상태 메시지 및 테마 재정의에 대한 정보"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:451
 msgid "Webhosting on I2P"
-msgstr ""
+msgstr "I2P에서의 웹호스팅"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:270
 msgid "Licensing Information"
-msgstr ""
+msgstr "라이센스 정보"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:405
 msgid "Legal &amp; Licensing"
-msgstr ""
+msgstr "법률 및 라이센스"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:433
 msgid "Introduction to I2P"
-msgstr ""
+msgstr "I2P 소개"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:433
 msgid "Reseeding Your Router"
-msgstr ""
+msgstr "라우터 다시 시드하기"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:435
 msgid ""
@@ -9141,29 +9141,29 @@ msgstr "리시딩이 실패했을 경우 네트워크 연결을 확인하세요.
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:439
 msgid "If a firewall is blocking your connections to reseed hosts, you may have access to a proxy."
-msgstr ""
+msgstr "방화벽이 호스트를 다시 시드하는 연결을 차단하는 경우 프록시에 액세스할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:441
 msgid "The proxy may be remotely hosted or a service running on your computer (localhost/127.0.0.1)."
-msgstr ""
+msgstr "프록시는 원격으로 호스팅되거나 컴퓨터에서 실행되는 서비스일 수 있습니다(localhost/127.0.0.1)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:443 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:453 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:463 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:473 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:487
 msgid "Reseed Configuration page"
-msgstr ""
+msgstr "리시드 구성 페이지"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:443
 #, java-format
 msgid "To use a proxy to reseed, configure the proxy type, hostname, and port on the {0}."
-msgstr ""
+msgstr "프록시를 사용하여 다시 시드하려면 {0}에서 프록시 유형, 호스트 이름, 포트를 구성하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:445
 msgid "If you are running the Tor Browser, you may use its Tor instance by configuring I2P to use: <i>Proxy type:</i> <code>SOCKS 5</code> <i>Host:</i> <code>127.0.0.1</code> <i>Port:</i> <code>9150</code>."
-msgstr ""
+msgstr "Tor 브라우저를 실행하는 경우 i2p를 사용하여 다음을 구성하여 Tor 인스턴스를 사용할 수 있습니다. <i> 프록시 유형 : </i> <code> 양말 5 </code> <i> 호스트 : </i> <code > 127.0.0.1 </code> <i> 포트 : </i> <code> 9150 </code>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:447
 msgid "If you are running a standalone Tor instance locally, you may use it by configuring I2P to use: <i>Proxy type:</i> <code>SOCKS 5</code> <i>Host:</i> <code>127.0.0.1</code> <i>Port:</i> <code>9050</code>."
-msgstr ""
+msgstr "독립형 TOR 인스턴스를 로컬로 실행하는 경우 i2p를 사용하도록 구성하여 사용할 수 있습니다. <i> 프록시 유형 : </i> <code> 양말 5 </code> <i> 호스트 : </i> <code > 127.0.0.1 </code> <i> 포트 : </i> <code> 9050 </code>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:449
 msgid ""
