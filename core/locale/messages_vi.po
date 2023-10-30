@@ -26,7 +26,7 @@ msgstr ""
 #, java-format
 msgid "{0,number,####} ms"
 msgid_plural "{0,number,####} ms"
-msgstr[0] "{0,number,####} phần nghìn giây"
+msgstr[0] "{0,number,####} mili giây"
 
 #. seconds
 #. alternates: secs, sec. 'seconds' is probably too long.
@@ -99,7 +99,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "ERROR"
-msgstr ""
+msgstr "LỖI"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "INFO"
@@ -113,4 +113,4 @@ msgstr ""
 #, java-format
 msgid "{0} similar message omitted"
 msgid_plural "{0} similar messages omitted"
-msgstr[0] ""
+msgstr[0] "{0} Các tin nhắn tương tự bị bỏ qua"
