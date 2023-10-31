@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-10-30 21:17+0000\n"
+"PO-Revision-Date: 2023-10-31 10:02+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -41,7 +41,7 @@ msgstr "{0} trước"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:211
 msgid "Reseeding from file"
-msgstr ""
+msgstr "Reseed từ tập tin"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:244
 #, java-format
@@ -495,7 +495,7 @@ msgstr "Chữ ký xác nhạn của tiện ích từ {0} gặp lỗi"
 #. don't display signer, we're really checking the key not the signer name
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:317
 msgid "Plugin not installed - signer is untrusted"
-msgstr ""
+msgstr "Plugin chưa được cài đặt - Trình ký không được tin tưởng"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:382
 #, java-format
@@ -2071,7 +2071,7 @@ msgstr "Không thể gieo hạt lại từ tệp"
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] ""
+msgstr[0] "Reseed thành công, được tải {0} bộ định tuyến từ tệp."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:105 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:681
 msgid "Reset URL list"
@@ -3093,7 +3093,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:177
 msgid "Wolfram's Online Math Reference"
-msgstr ""
+msgstr "Tham khảo toán học trực tuyến của Wolfram"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:178
 msgid "Mozilla Developer Network"
@@ -3145,7 +3145,7 @@ msgstr "Bản đồ thế giới bao gồm thông tin địa lý"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:187
 msgid "WorldAtlas"
-msgstr ""
+msgstr "Atlas thế giới"
 
 #. "cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
 #. "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "eepsites/books.svg" + S +
@@ -3278,7 +3278,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Politics &amp; Current Affairs Journal"
-msgstr ""
+msgstr "Tạp chí chính trị và các vấn đề hiện tại"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "English language Japanese News"
@@ -3294,7 +3294,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "Where news meets its scholarly match"
-msgstr ""
+msgstr "Nơi tin tức đáp ứng trận đấu học thuật của nó"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Jurist"
@@ -3342,7 +3342,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228 ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "Politics &amp; Current Affairs magazine"
-msgstr ""
+msgstr "Tạp chí chính trị và các vấn đề hiện tại"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "Independent International Media Platform"
@@ -3370,7 +3370,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "Reliable journalism for countries under censorship"
-msgstr ""
+msgstr "Báo chí đáng tin cậy cho các quốc gia dưới sự kiểm duyệt"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
 msgid "Lifestyle magazine"
@@ -3522,12 +3522,12 @@ msgstr "Viện Washington"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:351
 msgid "The HTTP proxy is not up"
-msgstr ""
+msgstr "Proxy HTTP không tăng"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:354
 #, java-format
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
-msgstr ""
+msgstr "Trình duyệt của bạn không được cấu hình đúng cách để sử dụng proxy HTTP tại {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:494
 msgid "URL"
@@ -3568,7 +3568,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:207
 msgid "unpublished"
-msgstr ""
+msgstr "chưa được công bố"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:213
 msgid "Shared"
@@ -4249,7 +4249,7 @@ msgstr "vào tệp router.config của bạn."
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:189
 msgid "Peer Connections"
-msgstr ""
+msgstr "Kết nối ngang hàng"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:191 ../java/src/net/i2p/router/web/helpers/PeerHelper.java:343 ../java/src/net/i2p/router/web/helpers/PeerHelper.java:555
 msgid "Auto-refresh"
@@ -4901,7 +4901,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/ProfilesHelper.java:77
 msgid "Total number of banned peers"
-msgstr ""
+msgstr "Tổng số đồng nghiệp bị cấm"
 
 #: ../java/src/net/i2p/router/web/helpers/SearchHelper.java:111
 msgid "Select search engine"
@@ -4917,7 +4917,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:61
 msgid "These statistics are primarily used for development and debugging."
-msgstr ""
+msgstr "Những thống kê này chủ yếu được sử dụng để phát triển và gỡ lỗi."
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:105 ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:158
 msgid "No lifetime events"
@@ -5024,15 +5024,15 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:55 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/info_jsp.java:503
 msgid "Router Information"
-msgstr ""
+msgstr "Thông tin bộ định tuyến"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:56
 msgid "Router Information (brief)"
-msgstr ""
+msgstr "Thông tin bộ định tuyến (Tóm tắt)"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:57
 msgid "Router Information (advanced)"
-msgstr ""
+msgstr "Thông tin bộ định tuyến (Nâng cao)"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:58
 msgid "Memory Usage Bar"
@@ -5044,11 +5044,11 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:60 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:868
 msgid "Update Status"
-msgstr ""
+msgstr "Cập nhật trạng thái"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:61
 msgid "Restart Status"
-msgstr ""
+msgstr "Khởi động lại trạng thái"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:63
 msgid "Firewall &amp; Reseed Status"
@@ -5192,7 +5192,7 @@ msgstr "Chứng chỉ"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:445 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:498
 msgid "Review active encryption certificates used in console"
-msgstr ""
+msgstr "Xem xét các chứng chỉ mã hóa đang hoạt động được sử dụng trong bảng điều khiển"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:457 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:510
 msgid "View historical log of router events"
@@ -5841,6 +5841,8 @@ msgid ""
 "The sybil detection routine can be configured to scan the Network Database on a regular interval, with the option to block peers meeting the configured threshold. Blocking peers prevents your router from building "
 "tunnels with them for the duration configured, or until the router is restarted."
 msgstr ""
+"Thói quen phát hiện SYBIL có thể được cấu hình để quét cơ sở dữ liệu mạng theo một khoảng thời gian đều đặn, với tùy chọn chặn các đồng nghiệp đáp ứng ngưỡng được cấu hình. Chặn các đồng nghiệp ngăn bộ định tuyến "
+"của bạn xây dựng các đường hầm với chúng trong thời gian được cấu hình hoặc cho đến khi bộ định tuyến được khởi động lại."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:327
 msgid "Configure Background Analysis"
@@ -6403,7 +6405,7 @@ msgstr "Mạng IRC I2P"
 
 #: ../java/strings/Strings.java:45
 msgid "Proxy to connect to I2P's anonymized IRC chat network"
-msgstr ""
+msgstr "Proxy để kết nối với mạng trò chuyện IRC ẩn danh của I2P"
 
 #: ../java/strings/Strings.java:46
 msgid "I2P webserver"
@@ -6419,7 +6421,7 @@ msgstr "Máy chủ web I2P"
 
 #: ../java/strings/Strings.java:49
 msgid "Personal I2P Webserver (eepsite)"
-msgstr ""
+msgstr "Máy chủ web I2P cá nhân (eepsite)"
 
 #: ../java/strings/Strings.java:50
 msgid "HTTP Proxy"
@@ -6511,7 +6513,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:540 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:618
 msgid "The maximum data transfer values indicate the theoretical maximum, and in practice will normally be much lower."
-msgstr ""
+msgstr "Các giá trị truyền dữ liệu tối đa cho thấy mức tối đa lý thuyết và trong thực tế thường sẽ thấp hơn nhiều."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:543 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:621
 msgid "Download Speed"
@@ -6544,7 +6546,7 @@ msgstr "GHI CHÚ"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:580 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:656
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "Bạn đã cấu hình I2P để chia sẻ chỉ {0} KB/s."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:583 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:658
 msgid "I2P requires at least 12KBps to enable sharing. "
@@ -6552,7 +6554,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:584 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:659
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
-msgstr ""
+msgstr "Vui lòng cho phép chia sẻ (tham gia vào các đường hầm) bằng cách định cấu hình nhiều băng thông hơn."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:585 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:660
 msgid "It improves your anonymity by creating cover traffic, and helps the network. "
@@ -6561,11 +6563,11 @@ msgstr "Nó cải thiện tính ẩn danh của bạn bằng cách tạo lưu l�
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:587
 #, java-format
 msgid "You have configured I2P to share {0} KBps {1}."
-msgstr ""
+msgstr "Bạn đã cấu hình I2P để chia sẻ {0} KB/s {1}."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:590 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:664
 msgid "The higher the share bandwidth the more you improve your anonymity and help the network."
-msgstr ""
+msgstr "Băng thông chia sẻ càng cao, bạn càng cải thiện tính ẩn danh của mình và giúp mạng."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:282
 msgid "config advanced"
@@ -6581,11 +6583,11 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:534
 msgid "This router is currently a floodfill participant."
-msgstr ""
+msgstr "Bộ định tuyến này hiện là người tham gia lũ lụt."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:542
 msgid "This router is not currently a floodfill participant."
-msgstr ""
+msgstr "Bộ định tuyến này hiện không phải là người tham gia lũ lụt."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:551
 msgid "Enrollment"
@@ -7188,7 +7190,7 @@ msgstr "Vui lòng cung cấp tệp plugin hợp lệ"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:596
 msgid "Plugin Manager"
-msgstr ""
+msgstr "Plugin Manager"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:598
 msgid "The plugins listed below are started by the webConsole client."
@@ -7216,7 +7218,7 @@ msgstr "Trợ giúp gieo hạt"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:539 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:270 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:405
 msgid "Reseeding Help"
-msgstr ""
+msgstr "Reseeding giúp đỡ"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:543
 msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
@@ -7445,7 +7447,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:427
 msgid "Tunnel Options"
-msgstr ""
+msgstr "Tùy chọn đường hầm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:527
 msgid "The default settings work for most people."
@@ -7453,11 +7455,11 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:529
 msgid "There is a fundamental tradeoff between anonymity and performance."
-msgstr ""
+msgstr "Có một sự đánh đổi cơ bản giữa ẩn danh và hiệu suất."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:531
 msgid "Tunnels longer than 3 hops (for example 2 hops + 0-2 hops, 3 hops + 0-1 hops, 3 hops + 0-2 hops), or a high quantity + backup quantity, may severely reduce performance or reliability."
-msgstr ""
+msgstr "Đường hầm dài hơn 3 bước (ví dụ 2 bước nhảy + 0-2, 3 bước nhảy + 0-1, 3 bước nhảy + 0-2 hop) hoặc số lượng cao + số lượng dự phòng, có thể giảm nghiêm trọng hiệu suất hoặc độ tin cậy."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:533
 msgid "High CPU and/or high outbound bandwidth usage may result."
@@ -7490,7 +7492,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:526
 msgid "Router Console Theme"
-msgstr ""
+msgstr "Chủ đề Bảng điều khiển bộ định tuyến"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:541 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:587
 msgid "Apply"
@@ -7518,7 +7520,7 @@ msgstr "Ngôn ngữ bảng điều khiển bộ định tuyến"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:583
 msgid "Please contribute to the router console translation project! Contact the developers in #i2p-dev on IRC to help."
-msgstr ""
+msgstr "Vui lòng đóng góp cho dự án dịch bảng điều khiển bộ định tuyến! Liên hệ với các nhà phát triển trong #saltR trên IRC để trợ giúp."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:282
 msgid "config update"
@@ -7812,6 +7814,8 @@ msgid ""
 "Plugins signed with the cryptographic key of the developer are the recommended format, but if you wish to install unsigned plugins (.zip) you can set this to true. Note that you may still encounter issues "
 "attempting to install an unsigned plugin if the developer has included additional checks in the plugin build process."
 msgstr ""
+"Các plugin được ký với khóa mật mã của nhà phát triển là định dạng được đề xuất, nhưng nếu bạn muốn cài đặt các plugin không dấu (.zip), bạn có thể đặt điều này thành TRUE. Lưu ý rằng bạn vẫn có thể gặp sự cố đang "
+"cố gắng cài đặt một plugin không dấu nếu nhà phát triển đã bao gồm các kiểm tra bổ sung trong quy trình xây dựng plugin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:443
 msgid ""
@@ -7821,7 +7825,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:445
 msgid "When set to true, this enables gzip compression for the router console and default web applications. [Enabled by default]"
-msgstr ""
+msgstr "Khi được đặt thành TRUE, điều này cho phép nén GZIP cho bảng điều khiển bộ định tuyến và các ứng dụng web mặc định. [Được bật theo mặc định]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:447
 msgid "When set to true, this enables plugin installation on the <a href=/configplugins>Plugin Configuration page</a>. [Enabled by default]"
@@ -7833,6 +7837,9 @@ msgid ""
 "RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in "
 "your operating system. [Disabled by default, restart required]"
 msgstr ""
+"Khi được đặt thành TRUE, cài đặt này cho phép tra cứu DNS ngược cho các đồng nghiệp, được kích hoạt khi hiển thị cờ quốc gia của một người ngang hàng hoặc khi tên máy chủ hoặc tên miền được hiển thị rõ ràng trong "
+"bảng điều khiển hoặc khi RouterInfo của ngang hàng được ghi vào đĩa. Để tránh tra cứu lặp lại, bạn nên định cấu hình chính sách bộ đệm hào phóng cho tra cứu DNS từ 10 phút trở lên và để định cấu hình quyền riêng tư "
+"tôn trọng máy chủ DNS trong hệ điều hành của bạn. [Bị vô hiệu hóa theo mặc định, bắt đầu khởi động lại]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:451
 msgid ""
@@ -7855,10 +7862,14 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:457
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
 msgstr ""
+"Cài đặt này, khi được định cấu hình với đường dẫn trỏ vào tệp danh sách chặn hợp lệ, cho phép danh sách chặn khối được cấu hình bổ sung, được định cấu hình người dùng được tải khi khởi động bộ định tuyến. [Bị vô "
+"hiệu hóa theo mặc định, bắt đầu khởi động lại]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:459
 msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
 msgstr ""
+"Cài đặt này cho phép thời gian hết hạn được cấu hình (tính bằng giây) cho các lệnh cấm được thực thi thông qua danh sách khối. Theo mặc định các lệnh cấm vẫn tồn tại trong suốt thời gian của phiên định tuyến. [Khởi "
+"động lại yêu cầu]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:461
 msgid ""
@@ -7878,7 +7889,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:467
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
-msgstr ""
+msgstr "Khi được đặt thành True, bộ định tuyến sẽ thay đổi danh tính và cổng UDP mỗi khi bộ định tuyến khởi động lại. [Mặc định là sai]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:469
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
@@ -7904,13 +7915,15 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:479
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
-msgstr ""
+msgstr "Khi được đặt thành TRUE, các tệp thông tin bộ định tuyến được lưu trữ trong thư mục NETDB của hồ sơ của bạn sẽ không được chia thành 64 hướng phụ. [Mặc định là sai]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:481
 msgid ""
 "When set to true, your router will not be classified as slow, regardless of the specifications of your host system. Ordinarily, routers running on hosts with the following characteristics will be classified as "
 "slow, and various performance-related router options will be modified accordingly:"
 msgstr ""
+"Khi được đặt thành True, bộ định tuyến của bạn sẽ không được phân loại là chậm, bất kể thông số kỹ thuật của hệ thống máy chủ của bạn. Thông thường, các bộ định tuyến chạy trên máy chủ với các đặc điểm sau sẽ được "
+"phân loại là chậm và các tùy chọn bộ định tuyến liên quan đến hiệu suất khác nhau sẽ được sửa đổi tương ứng:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:483
 msgid "Host OS running Android"
@@ -7940,17 +7953,19 @@ msgstr ""
 msgid ""
 "This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is "
 "running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr ""
+msgstr "Cài đặt này cho phép bạn định cấu hình số lượng đường hầm tham gia được lưu trữ tối thiểu trước khi bộ định tuyến bắt đầu từ chối các yêu cầu đường hầm dựa trên các yêu cầu băng thông dự kiến. ."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:497
 msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr ""
+msgstr "Khi được đặt thành True, bộ định tuyến sẽ thay đổi danh tính và cổng UDP khi bộ định tuyến khởi động lại và sau đó xóa khóa khỏi Router.config để ngăn chặn các thay đổi tiếp theo. [Mặc định là sai]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:499
 msgid ""
 "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the "
 "optimum build rate. [Restart required]"
 msgstr ""
+"Khi được cấu hình, điều này đặt ra một giới hạn cứng cho số lượng đường hầm, bộ định tuyến được phép xây dựng đồng thời. Theo mặc định, bộ định tuyến sử dụng thời gian xây dựng trung bình và băng thông ra ngoài "
+"hiện tại để xác định tốc độ xây dựng tối ưu. [Khởi động lại yêu cầu]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:501
 msgid ""
@@ -7975,6 +7990,8 @@ msgid ""
 "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP "
 "connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
 msgstr ""
+"Cài đặt này xác định vận chuyển nào được ưu tiên khi giao tiếp với các đồng nghiệp. Theo mặc định, NTCP được ưa chuộng hơn UDP (SSU). Bằng cách đặt giá trị thành TRUE, UDP sẽ được ưa chuộng trừ khi kết nối NTCP có "
+"sẵn; Khi được đặt thành luôn luôn, UDP sẽ luôn được sử dụng bất kể kết nối NTCP trước đó. [Mặc định là sai]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:509
 msgid ""
@@ -7984,11 +8001,11 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:511
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr ""
+msgstr "Khi được đặt thành True, I2P chạy mà không có kết nối mạng, điều này rất hữu ích nếu bạn liên tục khởi động lại bộ định tuyến để kiểm tra cập nhật mã vì điều này ngăn chặn sự gián đoạn mạng."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:513
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr ""
+msgstr "Cài đặt này, khi được bật, giới thiệu độ trễ pong ngẫu nhiên lên tới 50ms cho tất cả các máy chủ hỗ trợ ping được lưu trữ bởi bộ định tuyến. Mặc định bị vô hiệu hóa. [Khởi động lại yêu cầu]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:515
 msgid ""
@@ -7998,25 +8015,27 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:517
 msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr ""
+msgstr "Cài đặt này (tính bằng mili giây) xác định thời gian một gói có thể ở trong hàng đợi codel trước khi nó bị loại bỏ. Mặc định là 1000ms. [Khởi động lại yêu cầu]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:519
 msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr ""
+msgstr "Cài đặt này xác định số lượng tin nhắn tối đa trong hàng đợi bên ngoài trước khi nó được đánh dấu là đầy đủ. [Mặc định là 768]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:521
 msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr ""
+msgstr "Cài đặt này xác định số lượng tin nhắn tối đa trên giá trị hàng đợi tối đa trước khi bỏ các tin nhắn tiếp theo. [Mặc định là 128]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:523
 msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr ""
+msgstr "Cài đặt này (tính bằng mili giây) cho phép bạn định cấu hình thủ công giá trị mục tiêu của hàng đợi cho hệ thống quản lý hàng đợi codel. Mặc định là 50ms. [Khởi động lại yêu cầu]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:525
 msgid ""
 "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which "
 "case the default is 8 hours]"
 msgstr ""
+"Cài đặt này (tính bằng giờ) xác định một bộ định tuyến trong NETDB bao nhiêu tuổi (ngày xuất bản cuối cùng của nó) trước khi nó được phân loại là cũ và bị xóa. [Mặc định là 28 giờ trừ khi bộ định tuyến là lũ lụt, "
+"trong trường hợp đó mặc định là 8 giờ]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:527
 msgid ""
@@ -8029,6 +8048,8 @@ msgid ""
 "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for "
 "over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
 msgstr ""
+"Cài đặt này xác định số lượng thùng NETDB DHT Công việc khám phá ngang hàng sẽ tham chiếu khi chạy. Theo mặc định, số lượng thùng để khám phá sẽ thay đổi tùy thuộc vào việc bộ định tuyến đã chạy trong hơn một giờ, "
+"nếu bộ định tuyến bị ẩn hay trong tầng băng thông 'K' và số lượng bộ định tuyến đã biết."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:531
 msgid ""
@@ -8036,10 +8057,13 @@ msgid ""
 "router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated "
 "(over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
 msgstr ""
+"Cài đặt này (tính bằng giây) cho phép bạn ghi đè sự chậm trễ giữa các lần chạy của công việc khám phá ngang hàng, cố gắng xác định vị trí các đồng nghiệp mới để thêm vào NETDB. Công việc sẽ chạy cứ sau 80 giây theo "
+"mặc định hoặc nếu bộ định tuyến đang trải qua độ trễ công việc hoặc tin nhắn, cứ sau 3 phút. Nếu kích thước của NETDB đạt 4000 đồng nghiệp, tạm dừng sẽ tăng lên 15 phút. Bạn có thể muốn tăng độ trễ nếu NETDB của "
+"bạn được đông dân cư (hơn 2000 đồng nghiệp) hoặc nếu bạn muốn giảm sử dụng băng thông tổng thể. Lưu ý: Đối với các bộ định tuyến lũ lụt, công việc này không chạy."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:533
 msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr ""
+msgstr "Cài đặt này xác định số lượng băm ngang hàng tối đa để xếp hàng để khám phá. Trong i2p tối đa là 128 và trong i2p+ giá trị mặc định là 512."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:535
 msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
@@ -8054,40 +8078,45 @@ msgid ""
 "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, "
 "routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
 msgstr ""
+"Cài đặt này cho phép bạn loại trừ các bộ định tuyến cũ hơn khỏi NETDB của bạn. Bộ định tuyến cũ hơn mặc định hoặc giá trị bạn đặt sẽ bị xóa khỏi NETDB và bị cấm trong suốt thời gian của phiên định tuyến. Theo mặc "
+"định, các bộ định tuyến cũ hơn 0.9.20 được loại trừ. Lưu ý: Bắt đầu với i2p+ phiên bản 0.9.46+, chỉ các bộ định tuyến chạy các phiên bản rất gần đây được sử dụng để xây dựng các đường hầm cục bộ. [Khởi động lại yêu "
+"cầu]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:541
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
-msgstr ""
+msgstr "Cài đặt này xác định số lượng kiểm tra ngang hàng để chạy đồng thời, được sử dụng để xác định độ trễ ngang hàng. [Mặc định là 4]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:543
 msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 5000]"
-msgstr ""
+msgstr "Cài đặt này xác định độ trễ giữa các công việc kiểm tra ngang hàng, được cấu hình bằng mili giây. [Mặc định là 5000]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:545
 msgid ""
 "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the "
 "average successful test, the average successful test value will be used. [Default is 1000]"
 msgstr ""
+"Để xác định độ trễ ngang hàng, cài đặt này phân bổ thời gian tối đa mà một bài kiểm tra ngang hàng nên thực hiện trước khi được coi là lỗi, được cấu hình bằng mili giây. Trong trường hợp thời gian chờ được cấu hình "
+"thấp hơn thử nghiệm thành công trung bình, giá trị thử nghiệm thành công trung bình sẽ được sử dụng. [Mặc định là 1000]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:547
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
-msgstr ""
+msgstr "Cài đặt này xác định xem các số liệu thống kê về bộ định tuyến của chúng tôi có được công bố lẻ tẻ lên NETDB hay không. [Mặc định là sai]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:549
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
-msgstr ""
+msgstr "Cài đặt này cấu hình kích thước ban đầu của hàng đợi tin nhắn bên ngoài. [Mặc định là 64]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:551
 msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr ""
+msgstr "Cài đặt này cấu hình kích thước tối đa của hàng đợi tin nhắn gửi đến. [Mặc định là 1024]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:553
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
-msgstr ""
+msgstr "Cài đặt này cấu hình số lượng tin nhắn gửi đến tối đa được xếp hàng trên mỗi chu kỳ (bơm). [Mặc định là 24]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:555
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
-msgstr ""
+msgstr "Cài đặt này cấu hình số lượng tin nhắn bên ngoài được xếp hàng mỗi chu kỳ (bơm) tối đa. [Mặc định là 64]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:557
 msgid ""
@@ -8101,14 +8130,18 @@ msgid ""
 "This setting (in hours) allows you to manually configure how old a RouterInfo is in order for it to be checked by the Refresh Routers Job. By default, the age of a RouterInfo before a refresh is intitiated scales "
 "according to the size of the NetDb, increasing as the NetDb grows in size. A value of 0 will force the Router Refresh Job to check every router in the NetDb, regardless of age."
 msgstr ""
+"Cài đặt này (tính bằng giờ) cho phép bạn định cấu hình thủ công một bộ định tuyến giới hạn theo thứ tự để nó được kiểm tra bởi công việc bộ định tuyến làm mới. Theo mặc định, tuổi của RouterInfo trước khi làm mới "
+"quy mô theo kích thước của NetDb, tăng khi NetDb tăng kích thước. Giá trị 0 sẽ buộc công việc làm mới bộ định tuyến phải kiểm tra mọi bộ định tuyến trong NetDb, bất kể tuổi tác."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:561
 msgid "This setting (in seconds) allows you to manually configure the amount of time to wait before an attempt to refresh a router is determined to have failed. [The default is 20 seconds]"
-msgstr ""
+msgstr "Cài đặt này (tính bằng giây) cho phép bạn định cấu hình thủ công lượng thời gian chờ đợi trước khi cố gắng làm mới bộ định tuyến được xác định là không thành công. [Mặc định là 20 giây]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:563
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr ""
+"Cài đặt này xác định xem các bộ định tuyến được phân loại là không thú vị (K hoặc L, không thể truy cập hoặc cũ hơn 0.9,50) được kiểm tra trong quá trình bộ định tuyến làm mới sau 1 giờ thời gian hoạt động. [Mặc "
+"định là sai]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:565
 msgid ""
@@ -8116,6 +8149,8 @@ msgid ""
 "inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers "
 "(older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
 msgstr ""
+"Cài đặt này (tính bằng vài phút) cho phép bạn định cấu hình thủ công thời gian chờ đợi sau khi khởi động trước khi RouterInfos trong NETDB được kiểm tra tính hợp lệ, sau đó chỉ có các bộ định tuyến hợp lệ sẽ được "
+"chấp nhận để đưa vào. Khi xác nhận xảy ra, RouterInfos đã hết hạn và các đồng nghiệp không phản hồi chỉ có thể truy cập thông qua SSU sẽ bị xóa khỏi NETDB. ."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:567
 msgid ""
@@ -8135,7 +8170,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:573
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr ""
+msgstr "Cài đặt này cho phép cấu hình của các máy chủ NTP thay thế cần thiết để đảm bảo rằng bộ định tuyến của bạn duy trì thời gian đồng hồ chính xác. [Mặc định là 0.pool.ntp.org, 1.pool.ntp.org, 2.pool.ntp.org]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:575
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
@@ -8154,11 +8189,11 @@ msgstr "Những thay đổi gần đây của I2P+"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:448
 msgid "View the full change log"
-msgstr ""
+msgstr "Xem nhật ký thay đổi đầy đủ"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:435 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:541
 msgid "While I2P will work fine behind most firewalls, your speeds and network integration will generally improve if the I2P port is forwarded for both UDP and TCP."
-msgstr ""
+msgstr "Mặc dù I2P sẽ hoạt động tốt sau hầu hết các tường lửa, tốc độ tích hợp và tích hợp mạng của bạn thường sẽ được cải thiện nếu cổng I2P được chuyển tiếp cho cả UDP và TCP."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:439
 msgid "If you can, please poke a hole in your firewall to allow unsolicited UDP and TCP packets to reach you."
@@ -8178,11 +8213,11 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:447
 msgid "UPnP is used to communicate with Internet Gateway Devices (IGDs) to detect the external IP address and forward ports."
-msgstr ""
+msgstr "UPnP được sử dụng để liên lạc với các thiết bị cổng Internet (IGD) để phát hiện địa chỉ IP bên ngoài và các cổng chuyển tiếp."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:449
 msgid "UPnP support is beta, and may not work for any number of reasons"
-msgstr ""
+msgstr "Hỗ trợ UPnP là Beta và có thể không hoạt động vì bất kỳ lý do nào"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:451
 msgid "No UPnP-compatible device present"
@@ -8190,7 +8225,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:453
 msgid "UPnP disabled on the device"
-msgstr ""
+msgstr "UPnP bị vô hiệu hóa trên thiết bị"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:455
 msgid "Software firewall interference with UPnP"
@@ -8210,11 +8245,11 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:463
 msgid "UPnP may be enabled or disabled on the Network Configuration page, but a change requires a router restart to take effect."
-msgstr ""
+msgstr "UPnP có thể được bật hoặc vô hiệu hóa trên trang cấu hình mạng, nhưng thay đổi yêu cầu khởi động lại bộ định tuyến để có hiệu lực."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:465
 msgid "Review the UPnP status here."
-msgstr ""
+msgstr "Xem lại trạng thái UPnP ở đây."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:467
 msgid "Also, <b>do not enter a private IP address</b> like 127.0.0.1 or 192.168.1.1."
@@ -8226,7 +8261,7 @@ msgstr "Nếu bạn chỉ định địa chỉ IP sai hoặc không định cấ
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:471
 msgid "When in doubt, leave the settings at the defaults."
-msgstr ""
+msgstr "Khi nghi ngờ, hãy để các cài đặt tại mặc định."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:473
 msgid "Web Browser Configuration"
@@ -8286,17 +8321,19 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497
 msgid "The Tunnel Manager"
-msgstr ""
+msgstr "Người quản lý đường hầm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:499
 msgid "The Tunnel Manager enables configuration of local services provided by your router."
-msgstr ""
+msgstr "Trình quản lý đường hầm cho phép cấu hình các dịch vụ cục bộ được cung cấp bởi bộ định tuyến của bạn."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:501
 msgid ""
 "You can determine which services automatically start when the router starts, manage tunnel allocation to optimize for high usage services or to minimize the the cpu and memory overhead, add server and client "
 "tunnels to host or access services on the network, set rate limiting or tunnel filtering for your server tunnels and more."
 msgstr ""
+"Bạn có thể xác định dịch vụ nào tự động bắt đầu khi bộ định tuyến khởi động, quản lý phân bổ đường hầm để tối ưu hóa các dịch vụ sử dụng cao hoặc để giảm thiểu CPU và chi phí bộ nhớ, thêm các đường hầm máy chủ và "
+"máy khách vào các dịch vụ lưu trữ hoặc truy cập trên mạng, đặt giới hạn tốc độ hoặc đường hầm Lọc cho các đường hầm máy chủ của bạn và nhiều hơn nữa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:503
 msgid ""
@@ -8438,7 +8475,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:477
 msgid "Where are my I2P configuration files stored?"
-msgstr ""
+msgstr "Các tệp cấu hình i2p của tôi được lưu trữ ở đâu?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:479
 msgid "Configuration files for the router, installed plugins, and router logs are stored in the following location:"
@@ -8517,7 +8554,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:513
 msgid "These are the local I2P port mappings, listening only to local connections by default, except where noted. Unless you require access from other machines, they should only be accessible from localhost."
-msgstr ""
+msgstr "Đây là các ánh xạ cổng i2P cục bộ, chỉ nghe các kết nối cục bộ theo mặc định, ngoại trừ nơi được ghi nhận. Trừ khi bạn yêu cầu truy cập từ các máy khác, chúng chỉ có thể truy cập được từ Localhost."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:517
 msgid "Function"
@@ -8930,6 +8967,8 @@ msgid ""
 "Services may be hosted on multiple routers simultaneously, by sharing the same private key for the destination. Multihoming can further enhance the security and stability of a server by providing redundancy; if a "
 "server is multihomed, when a server in the pool goes offline, the provided service will remain available, making it more difficult to correlate server downtime with a router going offline."
 msgstr ""
+"Các dịch vụ có thể được lưu trữ trên nhiều bộ định tuyến, bằng cách chia sẻ cùng một khóa riêng cho đích. Multihoming có thể tăng cường hơn nữa bảo mật và tính ổn định của máy chủ bằng cách cung cấp dự phòng; Nếu "
+"một máy chủ được đa dạng, khi một máy chủ trong nhóm đi ngoại tuyến, dịch vụ được cung cấp sẽ vẫn có sẵn, khiến việc tương quan thời gian ngừng hoạt động của máy chủ với bộ định tuyến sẽ trở nên khó khăn hơn."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:541
 msgid ""
@@ -8976,7 +9015,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:555
 msgid "Participation"
-msgstr ""
+msgstr "Sự tham gia"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:557
 msgid ""
@@ -8998,7 +9037,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:567
 msgid "Router Identity"
-msgstr ""
+msgstr "Nhận dạng bộ định tuyến"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:569
 msgid ""
@@ -9043,7 +9082,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:587
 msgid "Tunnel"
-msgstr ""
+msgstr "Đường hầm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:589
 msgid ""
@@ -9055,7 +9094,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:591
 msgid "Tunnel Endpoint"
-msgstr ""
+msgstr "Điểm cuối đường hầm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:593
 msgid ""
@@ -9065,7 +9104,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:595
 msgid "Tunnel Gateway"
-msgstr ""
+msgstr "Cổng đường hầm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:597
 msgid "The first router in a tunnel. For inbound tunnels, this is the one mentioned in the <i>LeaseSet</i> published in the <i>Network Database</i>. For outbound tunnels, the gateway is the originating router."
@@ -9077,7 +9116,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:603
 msgid "Tunnel Participant"
-msgstr ""
+msgstr "Người tham gia đường hầm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:605
 msgid "A router in a tunnel not designated as a gateway or endpoint."
@@ -9101,7 +9140,7 @@ msgstr "Web Hosting - I2P+"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:433
 msgid "Registering an I2P Domain"
-msgstr ""
+msgstr "Đăng ký miền i2p"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:435
 msgid ""
@@ -9146,6 +9185,8 @@ msgid ""
 "To migrate the key to a new router, or to setup multihoming (running the same service on multiple routers for redundancy and load-balancing), copy the backed up key to your .i2p directory and specify it in the new "
 "server tunnel, or replace the default key in the plugin folder (e.g. the zzzot plugin)."
 msgstr ""
+"Để di chuyển khóa sang bộ định tuyến mới hoặc thiết lập đa điểm (chạy cùng một dịch vụ trên nhiều bộ định tuyến để dự phòng và cân bằng tải), hãy sao chép khóa được sao lưu vào thư mục .I2P của bạn và chỉ định nó "
+"trong đường hầm máy chủ mới hoặc thay thế phím mặc định trong thư mục plugin (ví dụ: plugin ZZZOT)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:270 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:520
 msgid "Help Section"
@@ -9187,11 +9228,11 @@ msgstr "Hướng dẫn cài đặt lại bộ định tuyến I2P+ của bạn"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:405 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:433
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:692
 msgid "Troubleshooting"
-msgstr ""
+msgstr "Xử lý sự cố"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:441
 msgid "What to do in the event I2P+ isn't working"
-msgstr ""
+msgstr "Phải làm gì trong trường hợp I2P+ không hoạt động"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:445
 msgid "An introduction to tunnel access lists"
@@ -9219,13 +9260,15 @@ msgstr "Giới thiệu về I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:433
 msgid "Reseeding Your Router"
-msgstr ""
+msgstr "Đặt lại bộ định tuyến của bạn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:435
 msgid ""
 "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining. The default settings will work for most people. Change "
 "these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
 msgstr ""
+"Reseeding là quy trình bootstrapping được sử dụng để tìm các bộ định tuyến khác khi bạn cài đặt I2P lần đầu tiên hoặc khi bộ định tuyến của bạn có quá ít tài liệu tham khảo bộ định tuyến còn lại. Các cài đặt mặc "
+"định sẽ hoạt động cho hầu hết mọi người. Chỉ thay đổi những điều này nếu HTTPS bị chặn bởi tường lửa hạn chế và Reseed đã thất bại."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:437
 msgid "If reseeding has failed, you should first check your network connection."
@@ -9237,7 +9280,7 @@ msgstr "Nếu tường lửa đang chặn các kết nối của bạn với má
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:441
 msgid "The proxy may be remotely hosted or a service running on your computer (localhost/127.0.0.1)."
-msgstr ""
+msgstr "Proxy có thể được lưu trữ từ xa hoặc dịch vụ chạy trên máy tính của bạn (localhost / 127.0.0.1)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:443 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:453 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:455
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:463 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:473 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:487
@@ -9491,7 +9534,7 @@ msgstr "Modem hoặc bộ định tuyến của bạn có thể hỗ trợ <a hr
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:469
 msgid "Port Forwarding"
-msgstr ""
+msgstr "Cổng chuyển tiếp"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:471
 msgid ""
@@ -9639,7 +9682,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:475
 msgid "To allow all unspecified client destinations:"
-msgstr ""
+msgstr "Để cho phép tất cả các điểm đến khách hàng không xác định:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:477
 msgid "Or to deny all unspecified destinations:"
@@ -9675,13 +9718,15 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:491
 msgid "Recorders keep track of connection attempts made by a remote destination, and if that breaches the defined threshold, the destination gets logged in the specified file. Multiple recorders can be specified:"
-msgstr ""
+msgstr "Máy ghi theo dõi các lần thử kết nối được thực hiện bởi một đích từ xa và nếu điều đó vi phạm ngưỡng được xác định, điểm đến sẽ được ghi vào tệp được chỉ định. Có thể chỉ định nhiều máy ghi âm:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:493
 msgid ""
 "You can use a recorder to log the destinations of aggressive clients to a specified file, and then use that same file to throttle them. The following snippet defines a filter that initially allows all connection "
 "requests, but if any single destination exceeds 180 requests in 60 seconds, it gets throttled down to 30 requests every 60 seconds:"
 msgstr ""
+"Bạn có thể sử dụng một máy ghi âm để ghi lại các điểm đến của các máy khách tích cực vào một tệp được chỉ định, sau đó sử dụng cùng một tệp để điều tiết chúng. Snippet sau đây xác định một bộ lọc ban đầu cho phép "
+"tất cả các yêu cầu kết nối, nhưng nếu bất kỳ điểm đến nào vượt quá 180 yêu cầu trong 60 giây, nó sẽ được điều chỉnh xuống còn 30 yêu cầu cứ sau 60 giây:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:495
 msgid "by default there are no limits"
@@ -9697,7 +9742,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:501
 msgid "To log all unique remote destinations connecting to a server, and also log aggressive connection attempts:"
-msgstr ""
+msgstr "Để đăng nhập tất cả các điểm đến từ xa duy nhất kết nối với máy chủ và cũng đăng nhập các nỗ lực kết nối tích cực:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:503
 msgid "log all unique destinations"
@@ -9709,7 +9754,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:507
 msgid "You can use a recorder in one tunnel that writes to a file that another tunnel, or multiple tunnels, can use for throttling. These files can also be edited by hand."
-msgstr ""
+msgstr "Bạn có thể sử dụng một máy ghi âm trong một đường hầm ghi vào một tệp mà một đường hầm khác hoặc nhiều đường hầm, có thể sử dụng để điều chỉnh. Những tập tin này cũng có thể được chỉnh sửa bằng tay."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:509
 msgid ""
@@ -9726,7 +9771,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:270 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:405
 msgid "User Interface Help"
-msgstr ""
+msgstr "Giao diện người dùng trợ giúp"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:433
 msgid "Note: Many of the labels and options in the console have tooltips that indicate purpose or explain the meaning. Hover over the label or option to activate the tooltip."
@@ -9746,7 +9791,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:439
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr ""
+msgstr "Thư mục chủ đề nằm trong thư mục ứng dụng I2P trong <code>docs/themes</code>. Có ví dụ ghi đè các tệp trong bảng điều khiển và các hướng phụ chủ đề i2psnark."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:441
 msgid "Sidebar Information"
@@ -9773,6 +9818,8 @@ msgid ""
 "The version of the I2P software you are running. If a new version is available, you will be notified in the Sidebar. It is recommended to keep your router up to date to ensure optimal performance and security. "
 "Router updates are usually made available on average every 2-3 months."
 msgstr ""
+"Phiên bản của phần mềm i2p bạn đang chạy. Nếu một phiên bản mới có sẵn, bạn sẽ được thông báo trong thanh bên. Bạn nên cập nhật bộ định tuyến của bạn để đảm bảo hiệu suất và bảo mật tối ưu. Cập nhật bộ định tuyến "
+"thường được cung cấp trung bình cứ sau 2-3 tháng."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:457
 msgid ""
@@ -9849,11 +9896,11 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:499
 msgid "Tunnels built by your router and used for communication with the floodfill peers, building new tunnels, and testing existing tunnels."
-msgstr ""
+msgstr "Các đường hầm được xây dựng bởi bộ định tuyến của bạn và được sử dụng để liên lạc với các đồng nghiệp lũ lụt, xây dựng các đường hầm mới và thử nghiệm các đường hầm hiện có."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:503
 msgid "Tunnels built by your router for each client's use."
-msgstr ""
+msgstr "Các đường hầm được xây dựng bởi bộ định tuyến của bạn cho mỗi khách hàng sử dụng."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:507
 msgid ""
@@ -9871,10 +9918,12 @@ msgid ""
 "The number of participating tunnels you route for others, divided by the total number of hops in all your exploratory and client tunnels. A number greater than 1.00 means you are contributing more tunnels to the "
 "network than you are using."
 msgstr ""
+"Số lượng các đường hầm tham gia bạn định tuyến cho người khác, chia cho tổng số bước nhảy trong tất cả các đường hầm khám phá và khách hàng của bạn. Một số lớn hơn 1,00 có nghĩa là bạn đang đóng góp nhiều đường hầm "
+"cho mạng hơn bạn đang sử dụng."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:515
 msgid "Some basic indications of router overload:"
-msgstr ""
+msgstr "Một số chỉ dẫn cơ bản của quá tải bộ định tuyến:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:517
 msgid "Job Lag"
@@ -10521,12 +10570,12 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:280
 msgid "peer profiles"
-msgstr ""
+msgstr "Hồ sơ ngang hàng"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:431 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:437 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:445
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:453 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:461
 msgid "Peer Profiles"
-msgstr ""
+msgstr "Hồ sơ ngang hàng"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:439
 msgid "Session Banned Peers"
@@ -10622,7 +10671,7 @@ msgstr "Xem thông tin và số liệu thống kê về tất cả các đồng 
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:550
 msgid "View active peers"
-msgstr ""
+msgstr "Xem các đồng nghiệp đang hoạt động"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:554
 msgid "View peer performance profiles"
@@ -10780,7 +10829,7 @@ msgstr "Top 50 đồng nghiệp theo yêu cầu đường hầm chuyển tuyến
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:434 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:434 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:434 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:432
 msgid "Transit by Peer"
-msgstr ""
+msgstr "Quá cảnh bởi ngang hàng"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:280 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:417
 msgid "Fastest Transit Tunnels"
@@ -10800,7 +10849,7 @@ msgstr "tóm tắt đường hầm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_005fnorefresh_jsp.java:417
 msgid "Tunnel Summary"
-msgstr ""
+msgstr "Tóm tắt đường hầm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:280
 msgid "local tunnels"
@@ -10981,7 +11030,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:686
 msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
-msgstr ""
+msgstr "Khi bạn bắt đầu I2P, có thể mất vài phút để bootstrap (tích hợp) bộ định tuyến của bạn vào mạng và tìm thêm các đồng nghiệp, vì vậy hãy kiên nhẫn."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:688
 msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
