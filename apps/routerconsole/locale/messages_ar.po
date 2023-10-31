@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:50+0000\n"
-"PO-Revision-Date: 2023-10-31 17:02+0000\n"
+"PO-Revision-Date: 2023-10-31 17:49+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ar\n"
@@ -59,23 +59,23 @@ msgstr "بدء إعادة البذور"
 #, java-format
 msgid "Acquired {0} router info from reseed hosts"
 msgid_plural "Acquired {0} router infos from reseed hosts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "تم الحصول على معلومات جهاز التوجيه {0} من المضيفين المعادين"
+msgstr[1] "تم الحصول على معلومات جهاز التوجيه {0} من المضيفين المعادين"
+msgstr[2] "تم الحصول على معلومات جهاز التوجيه {0} من المضيفين المعادين"
+msgstr[3] "تم الحصول على معلومات جهاز التوجيه {0} من المضيفين المعادين"
+msgstr[4] "تم الحصول على معلومات جهاز التوجيه {0} من المضيفين المعادين"
+msgstr[5] "تم الحصول على معلومات جهاز التوجيه {0} من المضيفين المعادين"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:382
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "تم الحصول على معلومات جهاز التوجيه {0} فقط من المضيفين المعادين"
+msgstr[1] "تم الحصول على معلومات جهاز التوجيه {0} فقط من المضيفين المعادين"
+msgstr[2] "تم الحصول على معلومات جهاز التوجيه {0} فقط من المضيفين المعادين"
+msgstr[3] "تم الحصول على معلومات جهاز التوجيه {0} فقط من المضيفين المعادين"
+msgstr[4] "تم الحصول على معلومات جهاز التوجيه {0} فقط من المضيفين المعادين"
+msgstr[5] "تم الحصول على معلومات جهاز التوجيه {0} فقط من المضيفين المعادين"
 
 #. remove dupe error msgs
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:407
@@ -661,7 +661,7 @@ msgstr "الضبط"
 
 #: ../java/src/net/i2p/router/web/CSSHelper.java:191
 msgid "config"
-msgstr ""
+msgstr "التكوين"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:235 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:533
 msgid "Shutdown gracefully"
@@ -994,12 +994,12 @@ msgstr "فشل التحقق من تحديث البرنامج المساعد"
 #, java-format
 msgid "{0} plugin updated"
 msgid_plural "{0} plugins updated"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "تم تحديث {0} مكون إضافي"
+msgstr[1] "تم تحديث {0} مكون إضافي"
+msgstr[2] "تم تحديث {0} مكون إضافي"
+msgstr[3] "تم تحديث {0} مكون إضافي"
+msgstr[4] "تم تحديث {0} مكون إضافي"
+msgstr[5] "تم تحديث {0} مكون إضافي"
 
 #: ../java/src/net/i2p/router/web/PluginStarter.java:252
 msgid "Plugin check complete"
@@ -1206,7 +1206,7 @@ msgstr "إبدأ"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:254
 msgid "Client configuration saved successfully"
-msgstr ""
+msgstr "تم حفظ تكوين العميل بنجاح"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:317
 msgid "New client added"
@@ -2021,7 +2021,7 @@ msgstr "بدء عملية إعادة البذر"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:35
 msgid "check sidebar for status."
-msgstr ""
+msgstr "تحقق من الشريط الجانبي للحالة."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:37 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:706
 msgid "Reseed from URL"
@@ -2105,12 +2105,12 @@ msgstr "توقف في مدة {0}"
 #, java-format
 msgid "{0} transit tunnel still active"
 msgid_plural "{0} transit tunnels still active"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} أنفاق النقل لا تزال نشطة"
+msgstr[1] "{0} أنفاق النقل لا تزال نشطة"
+msgstr[2] "{0} أنفاق النقل لا تزال نشطة"
+msgstr[3] "{0} أنفاق النقل لا تزال نشطة"
+msgstr[4] "{0} أنفاق النقل لا تزال نشطة"
+msgstr[5] "{0} أنفاق النقل لا تزال نشطة"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:88 ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:103
 #, java-format
@@ -2221,23 +2221,23 @@ msgstr "خطأ في حفظ الاعدادات (مطبقة لكنها غير مح
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} قفزات"
+msgstr[1] "{0} قفزات"
+msgstr[2] "{0} قفزات"
+msgstr[3] "{0} قفزات"
+msgstr[4] "{0} قفزات"
+msgstr[5] "{0} قفزات"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:23
 #, java-format
 msgid "{0} tunnel"
 msgid_plural "{0} tunnels"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} أنفاق"
+msgstr[1] "{0} أنفاق"
+msgstr[2] "{0} أنفاق"
+msgstr[3] "{0} أنفاق"
+msgstr[4] "{0} أنفاق"
+msgstr[5] "{0} أنفاق"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:51
 msgid "Exploratory tunnels"
@@ -3388,7 +3388,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
 msgid "Community-driven tech news"
-msgstr ""
+msgstr "أخبار التكنولوجيا التي يحركها المجتمع"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
 msgid "News for nerds"
@@ -3500,7 +3500,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "A magazine about human rights and social justice"
-msgstr ""
+msgstr "مجلة تهتم بحقوق الإنسان والعدالة الاجتماعية"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "UpstreamJournal"
@@ -3508,7 +3508,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
-msgstr ""
+msgstr "تعزيز الفهم المتوازن والواقعي للمصالح الأمريكية في الشرق الأوسط"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "WashingtonInstitute"
@@ -3570,7 +3570,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:216
 msgid "Available CPU Cores"
-msgstr ""
+msgstr "نوى وحدة المعالجة المركزية المتاحة"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:216
 msgid "Performance"
@@ -3578,7 +3578,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:217
 msgid "Classified as slow"
-msgstr ""
+msgstr "تصنف على أنها بطيئة"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:219
 msgid "Yes"
@@ -3602,7 +3602,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:234
 msgid "Cache file"
-msgstr ""
+msgstr "ملف ذاكرة التخزين المؤقت"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:234
 msgid "entries"
@@ -3614,7 +3614,7 @@ msgstr "المثبتة"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:239
 msgid "Config Dir"
-msgstr ""
+msgstr "مجلد التكوين"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:240 ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1420 ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1121
 msgid "Updated"
@@ -3652,7 +3652,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:81
 msgid "Active jobs"
-msgstr ""
+msgstr "وظائف نشطة"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:86
 #, java-format
@@ -4352,12 +4352,12 @@ msgstr "الاتصال متراكم"
 #, java-format
 msgid "{0} peer"
 msgid_plural "{0} peers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} أقران"
+msgstr[1] "{0} أقران"
+msgstr[2] "{0} أقران"
+msgstr[3] "{0} أقران"
+msgstr[4] "{0} أقران"
+msgstr[5] "{0} أقران"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:546
 msgid "UDP connections"
@@ -4478,12 +4478,12 @@ msgstr "عرصو علينا تقديمهم"
 #, java-format
 msgid "{0} fail"
 msgid_plural "{0} fails"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} فشل"
+msgstr[1] "{0} فشل"
+msgstr[2] "{0} فشل"
+msgstr[3] "{0} فشل"
+msgstr[4] "{0} فشل"
+msgstr[5] "{0} فشل"
 
 #. 2
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:704 ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:199 ../java/src/net/i2p/router/web/helpers/ProfilesHelper.java:16
@@ -4493,7 +4493,7 @@ msgstr "ممنوع"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:783
 msgid "backlogged"
-msgstr ""
+msgstr "متراكمة"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:892 ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:469
 msgid "Definitions"
@@ -4743,38 +4743,38 @@ msgstr "أقرانهم"
 #, java-format
 msgid "{0} fast peer"
 msgid_plural "{0} fast peers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} أقران سريعون"
+msgstr[1] "{0} أقران سريعون"
+msgstr[2] "{0} أقران سريعون"
+msgstr[3] "{0} أقران سريعون"
+msgstr[4] "{0} أقران سريعون"
+msgstr[5] "{0} أقران سريعون"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:377
 #, java-format
 msgid "{0} high capacity peer"
 msgid_plural "{0} high capacity peers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} أقران ذوي قدرة عالية"
+msgstr[1] "{0} أقران ذوي قدرة عالية"
+msgstr[2] "{0} أقران ذوي قدرة عالية"
+msgstr[3] "{0} أقران ذوي قدرة عالية"
+msgstr[4] "{0} أقران ذوي قدرة عالية"
+msgstr[5] "{0} أقران ذوي قدرة عالية"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:379
 #, java-format
 msgid "{0} integrated peer"
 msgid_plural "{0} integrated peers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} أقران متكاملون"
+msgstr[1] "{0} أقران متكاملون"
+msgstr[2] "{0} أقران متكاملون"
+msgstr[3] "{0} أقران متكاملون"
+msgstr[4] "{0} أقران متكاملون"
+msgstr[5] "{0} أقران متكاملون"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:393
 msgid "1h Fail Rate"
-msgstr ""
+msgstr "معدل الفشل 1 ساعة"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:394
 msgid "1h Resp. Time"
@@ -4968,12 +4968,12 @@ msgstr "متوسط مدى الحياة"
 #, java-format
 msgid "{0} event"
 msgid_plural "{0} events"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} أحداث"
+msgstr[1] "{0} أحداث"
+msgstr[2] "{0} أحداث"
+msgstr[3] "{0} أحداث"
+msgstr[4] "{0} أحداث"
+msgstr[5] "{0} أحداث"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:170
 msgid "rate"
@@ -5033,12 +5033,12 @@ msgstr "متوسط الحياة"
 #, java-format
 msgid "1 event"
 msgid_plural "{0} events"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} أحداث"
+msgstr[1] "{0} أحداث"
+msgstr[2] "{0} أحداث"
+msgstr[3] "{0} أحداث"
+msgstr[4] "{0} أحداث"
+msgstr[5] "{0} أحداث"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:52 ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:164
 msgid "Help &amp; FAQ"
@@ -6328,7 +6328,7 @@ msgstr "بايت في الثانية"
 #: ../java/src/net/i2p/router/web/helpers/WizardHelper.java:220
 #, java-format
 msgid "{0}Bytes per month maximum"
-msgstr ""
+msgstr "{0}البايت في الشهر كحد أقصى"
 
 #. wars for ConfigClientsHelper
 #: ../java/strings/Strings.java:12 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/dns_jsp.java:310 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/dns_jsp.java:455
@@ -7911,11 +7911,11 @@ msgstr "نظام تشغيل مضيف يعمل على ARM (باستثناء نظ�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:487
 msgid "32bit host OS running with less than 4 detected cores"
-msgstr ""
+msgstr "نظام تشغيل مضيف 32 بت يعمل مع أقل من 4 مراكز مكتشفة"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:489
 msgid "64bit host OS running with 1 detected core and less than 384MB allocated to the JVM"
-msgstr ""
+msgstr "نظام تشغيل مضيف 64 بت يعمل بنواة واحدة تم اكتشافها وأقل من 384 ميجابايت مخصصة لـ JVM"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:491
 msgid "Less than 256MB allocated to the JVM"
@@ -8156,7 +8156,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:445
 msgid "Certain firewalls such as symmetric NATs may not work well with I2P."
-msgstr ""
+msgstr "قد لا تعمل بعض جدران الحماية مثل NATs المتماثلة بشكل جيد مع I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:447
 msgid "UPnP is used to communicate with Internet Gateway Devices (IGDs) to detect the external IP address and forward ports."
@@ -8301,7 +8301,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:433
 msgid "Abridged I2P FAQ"
-msgstr ""
+msgstr "الأسئلة الشائعة المختصرة عن I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:435
 msgid ""
@@ -8362,7 +8362,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:457
 msgid "Can I download torrents from non-I2P trackers?"
-msgstr ""
+msgstr "هل يمكنني تنزيل ملفات تورنت من أجهزة تتبع غير تابعة لـ I2P؟"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:459
 msgid ""
@@ -8840,7 +8840,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:513
 msgid "A router that facilitates the connection to the network of another router that is behind a firewall."
-msgstr ""
+msgstr "جهاز توجيه يسهل الاتصال بشبكة جهاز توجيه آخر موجود خلف جدار الحماية."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:515
 msgid "Jump Service"
@@ -9027,7 +9027,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:605
 msgid "A router in a tunnel not designated as a gateway or endpoint."
-msgstr ""
+msgstr "جهاز توجيه في نفق غير مخصص كبوابة أو نقطة نهاية."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:607
 msgid "ZzzOT (plugin)"
@@ -9074,7 +9074,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:443
 msgid "Backup your private key!"
-msgstr ""
+msgstr "قم بعمل نسخة احتياطية لمفتاحك الخاص!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:445
 msgid ""
@@ -9099,7 +9099,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:409 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:662
 msgid "Advanced configuration settings"
-msgstr ""
+msgstr "إعدادات التكوين المتقدمة"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:413
 msgid "Recent code changes to I2P+"
@@ -9123,7 +9123,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:437
 msgid "A guide to reseeding your I2P+ router"
-msgstr ""
+msgstr "دليل لإعادة زرع جهاز التوجيه I2P+ الخاص بك"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:439 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:270 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:405
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:433 ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:692
@@ -9136,7 +9136,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:445
 msgid "An introduction to tunnel access lists"
-msgstr ""
+msgstr "مقدمة لقوائم الوصول إلى الأنفاق"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:449
 msgid "Information about the sidebar, network status messages, and theme overrides"
@@ -9227,6 +9227,8 @@ msgid ""
 "An I2P router usually only needs to be seeded once, to join the network for the first time. However, if the router is running for an extended period without network connectivity it may also need to be reseeded. Reseeding involves fetching multiple "
 "\"RouterInfo\" files (bundled into a signed zip-file) from at least two predefined server URLs picked from a volunteer-run group of clearnet HTTPS servers."
 msgstr ""
+"عادةً ما يحتاج جهاز توجيه I2P إلى زرعه مرة واحدة فقط، للانضمام إلى الشبكة للمرة الأولى. ومع ذلك، إذا كان جهاز التوجيه يعمل لفترة طويلة دون الاتصال بالشبكة، فقد يحتاج أيضًا إلى إعادة زرعه. تتضمن إعادة الزرع جلب عدة ملفات \"RouterInfo\" (مجمعة في ملف "
+"مضغوط موقّع) من عنواني URL محددين مسبقًا للخادم على الأقل تم اختيارهما من مجموعة يديرها متطوعون من خوادم Clearnet HTTPS."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:461
 msgid ""
@@ -9338,7 +9340,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:441
 msgid "Check your Configuration &amp; Bandwidth Allocation"
-msgstr ""
+msgstr "تحقق من التكوين وتخصيص النطاق الترددي"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:443
 msgid ""
@@ -9360,7 +9362,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:449
 msgid "Check Your Proxy Settings"
-msgstr ""
+msgstr "تحقق من إعدادات الوكيل الخاص بك"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:451
 msgid ""
@@ -9370,7 +9372,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:453
 msgid "Check Your Logs"
-msgstr ""
+msgstr "تحقق من سجلاتك"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:455
 msgid ""
@@ -9479,6 +9481,9 @@ msgid ""
 "a hosted service to determine if the server is under attack, or simply to log all visitors by I2P destination. Additionally, a filter can function simultaneously as a whitelist and blacklist making it more flexible than the Tunnel Manager's access "
 "list controls. Note that multiple server tunnels can share a single filter file if you wish to implement a global filter."
 msgstr ""
+"يمكن أن يوفر مرشح النفق الحماية ضد هجمات رفض الخدمة، دون مقاطعة الخدمة للمستخدمين الحقيقيين، إما بالاشتراك مع خنق النفق أو كاستراتيجية بديلة. ويمكن استخدامه أيضًا لتسجيل الوصول إلى خدمة مستضافة لتحديد ما إذا كان الخادم يتعرض للهجوم، أو ببساطة لتسجيل "
+"جميع الزوار حسب وجهة I2P. بالإضافة إلى ذلك، يمكن أن يعمل المرشح في وقت واحد كقائمة بيضاء وقائمة سوداء مما يجعله أكثر مرونة من عناصر التحكم في قائمة الوصول الخاصة بـ Tunnel Manager. لاحظ أن أنفاق الخادم المتعددة يمكنها مشاركة ملف مرشح واحد إذا كنت ترغب "
+"في تنفيذ مرشح عام."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:441
 msgid "A filter is a text file that can contain one or more declarations. Blank lines and lines beginning with <i class=example>#</i> are ignored."
@@ -9597,7 +9602,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:495
 msgid "by default there are no limits"
-msgstr ""
+msgstr "افتراضيا لا توجد حدود"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:497
 msgid "but log overly aggressive destinations"
@@ -9811,7 +9816,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:529
 msgid "Accepting/Rejecting"
-msgstr ""
+msgstr "قبول/رفض"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:531
 msgid ""
@@ -9857,7 +9862,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:555
 msgid "As the firewall detection methods are not 100% reliable, this may occasionally be displayed in error."
-msgstr ""
+msgstr "نظرًا لأن طرق الكشف عن جدار الحماية ليست موثوقة بنسبة 100%، فقد يتم عرض ذلك عن طريق الخطأ أحيانًا."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:557
 msgid "However, if it appears consistently, you should check whether both your external and internal firewalls are open for your port."
@@ -9877,7 +9882,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:565
 msgid "Also, some routers cannot correctly forward both TCP and UDP on a single port, or may have other limitations or bugs that prevent them from passing traffic through to I2P."
-msgstr ""
+msgstr "بالإضافة إلى ذلك، لا تستطيع بعض أجهزة التوجيه إعادة توجيه كل من TCP وUDP بشكل صحيح على منفذ واحد، أو قد تحتوي على قيود أو أخطاء أخرى تمنعها من تمرير حركة المرور عبر I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:569
 msgid "The router is currently testing whether your UDP port is firewalled."
@@ -10209,6 +10214,8 @@ msgid ""
 "Be aware that a poorly configured webserver or web appplication can leak information such as your real IP address or server details that may reduce your anonymity or assist a hacker. If using an alternative platform, be sure to secure it before "
 "putting it online. If in doubt, consult online guides about web server and web application hardening, for example:"
 msgstr ""
+"كن على علم بأن خادم الويب أو تطبيق الويب الذي تم تكوينه بشكل سيئ يمكن أن يسرب معلومات مثل عنوان IP الحقيقي الخاص بك أو تفاصيل الخادم التي قد تقلل من عدم الكشف عن هويتك أو تساعد المتسلل. إذا كنت تستخدم منصة بديلة، فتأكد من تأمينها قبل وضعها على "
+"الإنترنت. إذا كنت في شك، فارجع إلى الأدلة عبر الإنترنت حول تقوية خادم الويب وتطبيقات الويب، على سبيل المثال:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:484
 msgid "Apache Web Server Security Guide"
