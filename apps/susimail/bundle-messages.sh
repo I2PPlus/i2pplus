@@ -69,7 +69,7 @@ do
 		# To start a new translation, copy the header from an old translation to the new .po file,
 		# then ant distclean poupdate.
 		find $JPATHS -name *.java > $TMPFILE
-		xgettext -f $TMPFILE -F -L java --from-code=UTF-8 --add-comments\
+		xgettext -f $TMPFILE -F -L java --from-code=UTF-8 --no-wrap --add-comments\
 	                 --keyword=_t --keyword=_x \
 		         -o ${i}t
 		if [ $? -ne 0 ]
