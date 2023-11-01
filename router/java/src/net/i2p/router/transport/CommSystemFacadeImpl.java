@@ -761,13 +761,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 for (Map.Entry<String, CacheEntry> entry : cacheEntries.entrySet()) {
                     String ipAddress = entry.getKey();
                     CacheEntry cacheEntry = entry.getValue();
-
-                    if (!isDuplicateEntry(cacheFile, ipAddress, cacheEntry.getHostname())) {
-                        String line = ipAddress + "," + cacheEntry.getHostname() + NEWLINE;
-                        writer.write(line);
-                        // flush the writer to ensure that all data is written to the file
-                        writer.flush();
-                    }
+                    String line = ipAddress + "," + cacheEntry.getHostname() + NEWLINE;
+                    writer.write(line);
+                    // flush the writer to ensure that all data is written to the file
+                    writer.flush();
                 }
                 // close the writer
                 writer.close();
@@ -779,25 +776,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             } catch (IOException ex) {
                 System.err.println("Error updating reverse DNS cache file: " + ex.getMessage());
             }
-        }
-    }
-
-    private static synchronized boolean isDuplicateEntry(File file, String ip, String domain) {
-        synchronized (rdnslock) {
-            String entryStr = ip + "," + domain;
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), ENCODING))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split(",");
-                    if (parts.length == 2 && parts[0].equals(ip) && parts[1].equals(domain)) {
-                        System.out.println("Found duplicate entry: " + line);
-                        return true;
-                    }
-                }
-            } catch (IOException ex) {
-                System.err.println("Error checking for duplicate entry in file: " + ex.getMessage());
-            }
-            return false;
         }
     }
 
