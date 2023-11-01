@@ -71,7 +71,7 @@ do
 		# To start a new translation, copy the header from an old translation to the new .po file,
 		# then ant distclean updater.
 		find $JPATHS -name *.java > $TMPFILE
-		xgettext -f $TMPFILE -F -L java --from-code=UTF-8 --add-comments\
+		xgettext -f $TMPFILE -F -L java --from-code=UTF-8 --no-wrap --add-comments\
 	                 --keyword=_t \
 		         -o ${i}t
 		if [ $? -ne 0 ]
@@ -104,7 +104,7 @@ do
         then
             # slow way
             # convert to class files in build/obj
-            msgfmt --java2 --no-wrap --no-fuzzy-matching --statistics -r $CLASS -l $LG -d build/obj $i
+            msgfmt --java2 --statistics -r $CLASS -l $LG -d build/obj $i
             if [ $? -ne 0 ]
             then
                 echo "ERROR - msgfmt failed on ${i}, not updating translations"
