@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-01 15:12+0000\n"
-"PO-Revision-Date: 2023-11-01 15:17+0000\n"
+"PO-Revision-Date: 2023-11-01 15:43+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt\n"
@@ -7335,10 +7335,6 @@ msgstr "Abrir Painel do Roteador na janela do navegador ao iniciar"
 msgid "shared clients"
 msgstr "clientes compartilhados"
 
-
-
-
-
 #: ../java/strings/Strings.java:40
 msgid "I2PMail SMTP Server"
 msgstr "Servidor SMTP I2PMail"
@@ -7392,11 +7388,6 @@ msgstr "iMule"
 #: ../java/strings/Strings.java:56
 msgid "Official I2P Source Repository"
 msgstr "Repositório Oficial de Origem I2P"
-
-
-
-
-
 
 #. standard themes for ConfigUIHelper
 #: ../java/strings/Strings.java:59
