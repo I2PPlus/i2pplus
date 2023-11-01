@@ -445,8 +445,9 @@ public class NetDbHelper extends FormHandler {
             if (i == 10 || i == 11)
                 continue;
             if (i == 10 || i == 11) {
-                if (_context.netDbSegmentor().getRoutersKnownToClients().size() == 0)
+                if (_context.netDb().getRouters().size() == 0) {
                     continue;
+                }
             }
             if (i == tab) {
                 // we are there

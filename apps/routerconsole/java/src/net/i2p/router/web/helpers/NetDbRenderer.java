@@ -249,7 +249,7 @@ class NetDbRenderer {
             boolean notFound = true;
             Set<RouterInfo> routers = new HashSet<RouterInfo>();
             if (allClients){
-                    routers.addAll(_context.netDbSegmentor().getRoutersKnownToClients());
+                    routers.addAll(_context.netDb().getRouters());
             } else {
                 if (client == null)
                     routers.addAll(_context.netDb().getRouters());
@@ -638,7 +638,7 @@ class NetDbRenderer {
             fmt = null;
         }
         if (clientsOnly)
-            leases.addAll(_context.netDbSegmentor().getLeasesKnownToClients());
+            leases.addAll(netdb.getLeases());
         else {
             leases.addAll(netdb.getLeases());
         }
@@ -1000,7 +1000,7 @@ class NetDbRenderer {
         if (client != null) {
             routers.addAll(_context.clientNetDb(client).getRouters());
         } else if (clientsOnly) {
-            routers.addAll(_context.netDbSegmentor().getRoutersKnownToClients());
+            routers.addAll(_context.netDb().getRouters());
         } else {
             routers.addAll(_context.netDb().getRouters());
         }
