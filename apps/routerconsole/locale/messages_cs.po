@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:50+0000\n"
-"PO-Revision-Date: 2023-11-01 01:39+0000\n"
+"PO-Revision-Date: 2023-11-01 01:45+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -11002,12 +11002,12 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:278
 msgid "home"
-msgstr ""
+msgstr "domů"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:439
 msgid "Please enter a search query"
-msgstr ""
+msgstr "Zadejte vyhledávací dotaz"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:441
@@ -11019,78 +11019,78 @@ msgstr "Hledat"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:456
 msgid "Customize links"
-msgstr ""
+msgstr "Přizpůsobte odkazy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:434
 msgid "Configure display language, theme and optional console password"
-msgstr ""
+msgstr "Nakonfigurujte jazyk zobrazení, téma a volitelné heslo konzoly"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:443
 msgid "Configure router bandwidth"
-msgstr ""
+msgstr "Nakonfigurujte šířku pásma routeru"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/info_jsp.java:280
 msgid "router information"
-msgstr ""
+msgstr "informace o routeru"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/info_jsp.java:417
 msgid "Router Summary"
-msgstr ""
+msgstr "Souhrn směrovače"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jars_jsp.java:280
 msgid "Jar File Dump"
-msgstr ""
+msgstr "Dump Files"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:280
 msgid "job queue stats"
-msgstr ""
+msgstr "Statistiky fronty úloh"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:417
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:426
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:426
 msgid "Job Queue"
-msgstr ""
+msgstr "Fronta úloh"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:419
 msgid "Job statistics for this session"
-msgstr ""
+msgstr "Statistika práce pro tuto relaci"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:422
 msgid "Job Stats"
-msgstr ""
+msgstr "Statistiky práce"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:424
 msgid "Active and scheduled jobs"
-msgstr ""
+msgstr "Aktivní a naplánované úlohy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:280
 msgid "job queue statistics"
-msgstr ""
+msgstr "Statistika fronty úloh"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:417
 msgid "Job Queue Stats"
-msgstr ""
+msgstr "Statistika fronty úloh"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:280
 msgid "logs"
-msgstr ""
+msgstr "logy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:431
 msgid "Please include your I2P version and running environment information in bug reports"
-msgstr ""
+msgstr "Uveďte prosím svou I2P verzi a informace o provozním prostředí v hlášeních o chybách"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:435
 #, java-format
 msgid "Please report bugs on {0} or {1}."
-msgstr ""
+msgstr "Nahlaste prosím chyby na {0} nebo {1}."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:439
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:581
 msgid "View event log"
-msgstr ""
+msgstr "Zobrazení protokolu událostí"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:522
 msgid "Critical / Error Level Logs"
@@ -11103,20 +11103,20 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:602
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:614
 msgid "Clear logs"
-msgstr ""
+msgstr "Vymažte protokoly"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:573
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:600
 msgid "Configure router logging options"
-msgstr ""
+msgstr "Konfigurace možností protokolování routeru"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:591
 msgid "Service (Wrapper) Logs"
-msgstr ""
+msgstr "Protokoly služby (Wrapper)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:281
 msgid "network database"
-msgstr ""
+msgstr "síťová databáze"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/news_jsp.java:280
 msgid "News"
@@ -11124,39 +11124,39 @@ msgstr "Novinky"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/news_jsp.java:417
 msgid "Latest News"
-msgstr ""
+msgstr "Nejnovější zprávy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/nowebapp_jsp.java:283
 msgid "WebApp Not Found"
-msgstr ""
+msgstr "WebApp nenalezen"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/nowebapp_jsp.java:420
 msgid "Web Application Not Running"
-msgstr ""
+msgstr "Webová aplikace neběží"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/nowebapp_jsp.java:422
 msgid "The requested web application is not running."
-msgstr ""
+msgstr "Požadovaná webová aplikace neběží."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/nowebapp_jsp.java:423
 #, java-format
 msgid "Please visit the {0}config clients page{1} to start it."
-msgstr ""
+msgstr "Navštivte prosím {0}stránku konfiguračních klientů{1} a spusťte jej."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/peers_jsp.java:280
 msgid "peer connections"
-msgstr ""
+msgstr "peer připojení"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/peers_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/peers_jsp.java:440
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/peers_jsp.java:446
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/peers_jsp.java:452
 msgid "Network Peers"
-msgstr ""
+msgstr "Síťoví kolegové"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:280
 msgid "peer profiles"
-msgstr ""
+msgstr "profily vrstevníků"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:431
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:437
@@ -11164,7 +11164,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:461
 msgid "Peer Profiles"
-msgstr ""
+msgstr "Profily vrstevníků"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:439
 msgid "Session Banned Peers"
@@ -11172,15 +11172,15 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:455
 msgid "Floodfills"
-msgstr ""
+msgstr "Záplavy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:463
 msgid "Fast / High Capacity"
-msgstr ""
+msgstr "Rychlý / Vysoká kapacita"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:445
 msgid "Manage I2P addresses"
-msgstr ""
+msgstr "Správa I2P adres"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:451
 msgid "Imagegen"
@@ -11189,29 +11189,29 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:458
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:464
 msgid "Create and download torrents"
-msgstr ""
+msgstr "Vytváření a stahování torrentů"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:472
 msgid "Manage client and server tunnels"
-msgstr ""
+msgstr "Správa klientských a serverových tunelů"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:478
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:484
 msgid "Webmail client"
-msgstr ""
+msgstr "Webový poštovní klient"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:490
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:448
 msgid "Webmail"
-msgstr ""
+msgstr "Webová pošta"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:492
 msgid "Local webserver for hosting content on the I2P network"
-msgstr ""
+msgstr "Místní webový server pro hostování obsahu v síti I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:496
 msgid "Information &amp; Diagnostics"
-msgstr ""
+msgstr "Informace"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:502
 msgid "Review recent updates to I2P"
@@ -11259,63 +11259,63 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:542
 msgid "View information and stats regarding all known peers"
-msgstr ""
+msgstr "Zobrazte informace a statistiky týkající se všech známých kolegů"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:550
 msgid "View active peers"
-msgstr ""
+msgstr "Zobrazit aktivní partnery"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:554
 msgid "View peer performance profiles"
-msgstr ""
+msgstr "Zobrazení profilů výkonu vrstevníků"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:558
 msgid "View information about router and running environment"
-msgstr ""
+msgstr "Zobrazení informací o routeru a běžícím prostředí"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:564
 msgid "Statistics"
-msgstr ""
+msgstr "Statistika"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:570
 msgid "View active tunnels"
-msgstr ""
+msgstr "Zobrazení aktivních tunelů"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:588
 msgid "Customize homepage"
-msgstr ""
+msgstr "Přizpůsobte domovskou stránku"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:590
 msgid "Homepage"
-msgstr ""
+msgstr "Domovská stránka"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:592
 msgid "Configure I2P Client Control Interface"
-msgstr ""
+msgstr "Konfigurace rozhraní I2P Client Control Interface"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:596
 msgid "View or edit router keyring for encrypted destinations"
-msgstr ""
+msgstr "Zobrazte nebo upravte svazek klíčů směrovače pro šifrované cíle"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:604
 msgid "Configure router networking options"
-msgstr ""
+msgstr "Konfigurace možností sítě routeru"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:608
 msgid "Manually edit peers and view banned peers and blocklist"
-msgstr ""
+msgstr "Ručně upravte partnery a prohlédněte si zakázané partnery a seznam blokovaných uživatelů"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:612
 msgid "Install and manage router plugins"
-msgstr ""
+msgstr "Instalujte a spravujte zásuvné moduly routeru"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:616
 msgid "Router reseeding and configuration"
-msgstr ""
+msgstr "Přenastavení a konfigurace směrovače"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:620
 msgid "Configure and manage Router family"
-msgstr ""
+msgstr "Konfigurujte a spravujte rodinu směrovačů"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:624
 msgid "Manage Router service"
@@ -11323,7 +11323,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:628
 msgid "Configure stat collection for graphing"
-msgstr ""
+msgstr "Nakonfigurujte shromažďování statistik pro grafy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:630
 msgid "Router Stats"
@@ -11331,56 +11331,56 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:632
 msgid "Configure router updates"
-msgstr ""
+msgstr "Nakonfigurujte aktualizace routeru"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:636
 msgid "Configuration wizard for new users"
-msgstr ""
+msgstr "Průvodce konfigurací pro nové uživatele"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:638
 msgid "Setup Wizard"
-msgstr ""
+msgstr "Průvodce nastavením"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:640
 msgid "Customize sidebar"
-msgstr ""
+msgstr "Přizpůsobte postranní panel"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:644
 msgid "Configure tunnel options"
-msgstr ""
+msgstr "Konfigurace možností tunelu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:648
 msgid "Configure router user interface and optional console password"
-msgstr ""
+msgstr "Konfigurace uživatelského rozhraní routeru a volitelného hesla konzoly"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:666
 msgid "Configuring I2P for optimal performance"
-msgstr ""
+msgstr "Konfigurace I2P pro optimální výkon"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:682
 msgid "Information for new users"
-msgstr ""
+msgstr "Informace pro nové uživatele"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:686
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:702
 msgid "A guide to reseeding your I2P router"
-msgstr ""
+msgstr "Průvodce přenastavením vašeho I2P routeru"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:690
 msgid "What to do in the event I2P isn't working"
-msgstr ""
+msgstr "Co dělat v případě, že I2P nefunguje"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:694
 msgid "Introduction to tunnel filters"
-msgstr ""
+msgstr "Úvod do tunelových filtrů"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:696
 msgid "Tunnel Filters"
-msgstr ""
+msgstr "Tunelové filtry"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/stats_jsp.java:280
 msgid "statistics"
-msgstr ""
+msgstr "statistika"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/stats_jsp.java:428
 msgid "Router Statistics"
@@ -11396,19 +11396,19 @@ msgstr "torrenty"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrents_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrents_jsp.java:457
 msgid "Torrent Manager"
-msgstr ""
+msgstr "Správce torrentů"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:417
 msgid "Most Recent Transit Tunnels"
-msgstr ""
+msgstr "Nejnovější tranzitní tunely"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:419
 msgid "Locally hosted tunnels (exploratory and client)"
-msgstr ""
+msgstr "Lokálně hostované tunely (průzkumné a klientské)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:424
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:424
@@ -11416,7 +11416,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:424
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:422
 msgid "Most Recent"
-msgstr ""
+msgstr "Nejnovější"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:430
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:430
@@ -11424,7 +11424,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:430
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:428
 msgid "Fastest"
-msgstr ""
+msgstr "Nejrychlejší"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:432
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:432
@@ -11432,7 +11432,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:432
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:430
 msgid "Top 50 peers by transit tunnel requests"
-msgstr ""
+msgstr "Top 50 peerů podle požadavků tranzitního tunelu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:434
@@ -11445,16 +11445,16 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:417
 msgid "Fastest Transit Tunnels"
-msgstr ""
+msgstr "Nejrychlejší tranzitní tunely"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:417
 msgid "Transit Tunnels by Peer"
-msgstr ""
+msgstr "Tranzitní tunely od Peer"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:280
 msgid "tunnel peer count"
-msgstr ""
+msgstr "počet vrstevníků v tunelu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_005fnorefresh_jsp.java:280
 msgid "tunnel summary"
@@ -11462,15 +11462,15 @@ msgstr "shrnutí tunelu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_005fnorefresh_jsp.java:417
 msgid "Tunnel Summary"
-msgstr ""
+msgstr "Shrnutí tunelu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:280
 msgid "local tunnels"
-msgstr ""
+msgstr "místní tunely"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:417
 msgid "Local Tunnels"
-msgstr ""
+msgstr "Místní tunely"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:417
@@ -11479,7 +11479,7 @@ msgstr "Profil peeru"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:438
 msgid "Profile for peer"
-msgstr ""
+msgstr "Profil pro peer"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:442
 msgid "NetDb entry"
@@ -11487,15 +11487,15 @@ msgstr "Záznam NetDB"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:455
 msgid "View profile in text format"
-msgstr ""
+msgstr "Zobrazení profilu v textovém formátu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:457
 msgid "View Raw Profile"
-msgstr ""
+msgstr "Zobrazit nezpracovaný profil"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:476
 msgid "Return to Top"
-msgstr ""
+msgstr "Návrat nahoru"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:311
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:456
@@ -11504,7 +11504,7 @@ msgstr "webmail"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:333
 msgid "New Install Wizard"
-msgstr ""
+msgstr "Průvodce novou instalací"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:356
 msgid "Skip Setup"
