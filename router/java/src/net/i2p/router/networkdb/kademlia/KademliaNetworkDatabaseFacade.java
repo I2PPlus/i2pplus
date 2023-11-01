@@ -88,7 +88,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     protected final int _networkID;
     private final BlindCache _blindCache;
     protected final Hash _dbid;
-    private Hash _localKey;
     private final Job _elj, _erj;
     static final String PROP_MIN_ROUTER_VERSION = "router.minVersionAllowed";
 
@@ -1136,13 +1135,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     @Override
     public long getLastRouterInfoPublishTime() {
         return _lastRIPublishTime;
-    }
-
-    public boolean matchClientKey(Hash key) {
-        if ((_localKey != null) && (_localKey.equals(key)))
-            return true;
-        else
-            return false;
     }
 
     /**

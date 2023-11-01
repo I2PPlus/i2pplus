@@ -41,7 +41,7 @@ class LookupDestJob extends JobImpl {
     private final BlindData _blindData;
 
 //    private static final long DEFAULT_TIMEOUT = 15*1000;
-    private static final long DEFAULT_TIMEOUT = 5*1000;
+    private static final long DEFAULT_TIMEOUT = 10*1000;
 
     public LookupDestJob(RouterContext context, ClientConnectionRunner runner, Hash h, Hash fromLocalDest) {
         this(context, runner, -1, DEFAULT_TIMEOUT, null, h, null, fromLocalDest);
@@ -197,12 +197,6 @@ class LookupDestJob extends JobImpl {
             // blinding decode fail
             returnFail(HostReplyMessage.RESULT_DECRYPTION_FAILURE);
         }
-    }
-
-    private String toBase32() {
-        if (_fromLocalDest != null)
-            return _fromLocalDest.toBase32();
-        return null;
     }
 
     private class DoneJob extends JobImpl {
