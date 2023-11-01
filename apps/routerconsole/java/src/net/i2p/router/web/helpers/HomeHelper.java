@@ -222,7 +222,6 @@ public class HomeHelper extends HelperBase {
         _x("Jurist") + S + _x("Legal News &amp; Commentary") + S + "http://jurist.i2p/" + S + I + "eepsites/jurist.svg" + S +
         _x("KrebsOnSecurity") + S + _x("In-depth security news &amp; investigation") + S + "http://krebsonsecurity.i2p/" + S + I + "eepsites/krebs.png" + S +
         "LKML" + S + _x("Linux Kernel Mailing List") + S + "http://lkml.i2p/" + S + I + "news.svg" + S +
-        _x("MetaCritic") + S + _x("Movie + TV + Music + Game reviews") + S + "http://metacritic.i2p/" + S + I + "eepsites/metacritic.svg" + S +
         _x("NakedSecurity") + S + _x("Security news and research blog") + S + "http://nakedsecurity.i2p/" + S + I + "news.svg" + S +
         "MotherJones" + S + _x("Smart &amp; fearless journalism") + S + "http://motherjones.i2p/" + S + I + "news.svg" + S +
         _x("NewStatesman") + S + _x("Politics &amp; Current Affairs magazine") + S + "http://newstatesman.i2p/" + S + I + "eepsites/newstatesman.svg" + S +
@@ -252,6 +251,7 @@ public class HomeHelper extends HelperBase {
         "TorrentFreak" + S + _x("Filesharing &amp; copyright news") + S + "http://torrentfreak.i2p/" + S + I + "eepsites/torrentfreak.svg" + S +
         _x("UpstreamJournal") + S + _x("A magazine about human rights and social justice") + S + "http://upstreamjournal.i2p/" + S + I + "news.svg" + S +
         _x("WashingtonInstitute") + S + _x("Advancing a balanced &amp; realistic understanding of American interests in the Middle East") + S + "http://washingtoninstitute.i2p/" + S + I + "eepsites/washingtoninstitute.svg" + S +
+        //_x("MetaCritic") + S + _x("Movie + TV + Music + Game reviews") + S + "http://metacritic.i2p/" + S + I + "eepsites/metacritic.svg" + S +
         //"hrichina.i2p" + S + _x("Human Rights in China") + S + "http://hrichina.i2p/" + S + I + "news.svg" + S +
         //"Granta" + S + _x("The home of new writing") + S + "http://granta.i2p/" + S + I + "eepsites/granta.svg" + S +
         //"iranfreedom.i2p" + S + _x("Democracy &amp; human rights in Iran") + S + "http://iranfreedom.i2p/" + S + I + "news.svg" + S +
