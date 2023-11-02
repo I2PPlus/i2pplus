@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-11-02 01:11+0000\n"
+"PO-Revision-Date: 2023-11-02 22:13+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -3464,11 +3464,11 @@ msgstr "I2P-Bandbreitenkonfiguration"
 #. FIXME wasn't escaped
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:65
 msgid "Configure UI"
-msgstr ""
+msgstr "Benutzeroberfläche konfigurieren"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:65
 msgid "Select console theme & language & set optional console password"
-msgstr ""
+msgstr "Konsolenthema auswählen"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:66
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:419
@@ -3482,24 +3482,24 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:79
 msgid "Configuration and bandwidth tester"
-msgstr ""
+msgstr "Konfigurations- und Bandbreitentester"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:79
 msgid "Wizard"
-msgstr ""
+msgstr "Zauberer"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
 msgid "Advanced Config"
-msgstr ""
+msgstr "Erweiterte Konfiguration"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
 msgid "Advanced router configuration"
-msgstr ""
+msgstr "Erweiterte Router-Konfiguration"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:85
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:584
 msgid "Start or stop Router clients"
-msgstr ""
+msgstr "Router-Clients starten oder stoppen"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:180
@@ -3508,7 +3508,7 @@ msgstr "Versionsgeschichte"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86
 msgid "Recent changes"
-msgstr ""
+msgstr "Letzte Änderungen"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:105
 msgid "Bug tracker"
@@ -3533,7 +3533,7 @@ msgstr "I2P FAQ"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:107
 msgid "Historical infrastructure data from the I2P network"
-msgstr ""
+msgstr "Historische Infrastrukturdaten aus dem I2P-Netzwerk"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:108
 msgid "I2P home page"
@@ -3545,7 +3545,7 @@ msgstr "Projektwebsite"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:109
 msgid "I2P+ API documentation"
-msgstr ""
+msgstr "I2P-API-Dokumentation"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:109
 msgid "Javadocs"
@@ -3556,43 +3556,43 @@ msgstr ""
 #. software repositories + filesharing
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:114
 msgid "Transient server-encrypted filesharing and pastebin"
-msgstr ""
+msgstr "Transiente, serververschlüsselte Dateifreigabe und Pastebin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:115
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:118
 msgid "Secure filesharing service"
-msgstr ""
+msgstr "Sicherer Filesharing-Dienst"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:116
 msgid "Community Git hosting"
-msgstr ""
+msgstr "Git-Hosting der Community"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:117
 msgid "Official I2P Git repository"
-msgstr ""
+msgstr "Offizielles I2P-Git-Repository"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:119
 msgid "Home of I2P+"
-msgstr ""
+msgstr "Heimat von I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "Bittorrent tracker"
-msgstr ""
+msgstr "Bittorrent-Tracker"
 
 #. torrent trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "Postman's Tracker"
-msgstr ""
+msgstr "Tracker des Postboten"
 
 #. _x("Chudo") + S + _x("No login Bittorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
 #. domain name registration + uptime trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:126
 msgid "List of active eepsites and uptime monitor"
-msgstr ""
+msgstr "Liste der aktiven Eepsites und Verfügbarkeitsüberwachung"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:127
 msgid "I2P Domain Name Registration"
-msgstr ""
+msgstr "I2P-Domänennamenregistrierung"
 
 #. "Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "servermonitor.svg" + S +
 #. "scanner.linuxfarm" + S + _x("List of active eepsites and uptime monitor") + S + "http://scanner.linuxfarm.i2p/" + S + I + "eepsites/servermonitor.svg" + S +
@@ -3604,23 +3604,23 @@ msgstr "I2P Forum"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:133
 msgid "I2P-related community forums"
-msgstr ""
+msgstr "I2P-bezogene Community-Foren"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:134
 msgid "File-sharing forum"
-msgstr ""
+msgstr "Filesharing-Forum"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:135
 msgid "Alternative front-end for Twitter"
-msgstr ""
+msgstr "Alternatives Frontend für Twitter"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:136
 msgid "Rocksolid forums for the darknets"
-msgstr ""
+msgstr "Rocksolid-Foren für die Darknets"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:137
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
-msgstr ""
+msgstr "Netzwerkübergreifendes Mikroblogging"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:138
 msgid "Alternative privacy-focused front-end for Reddit"
@@ -3644,7 +3644,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "An image cache and resize service"
-msgstr ""
+msgstr "Ein Bildcache- und Größenänderungsdienst"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "imageproxy.i2p"
@@ -3652,11 +3652,11 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:150
 msgid "IRC Logs for multiple networks"
-msgstr ""
+msgstr "IRC-Protokolle für mehrere Netzwerke"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:151
 msgid "Encrypted I2P Pastebin"
-msgstr ""
+msgstr "Verschlüsselter I2P-Pastebin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:151
 msgid "Pastebin"
@@ -3664,7 +3664,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "Streaming radio service"
-msgstr ""
+msgstr "Radio-Streaming-Dienst"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "radio.r4sas.i2p"
@@ -3672,19 +3672,19 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:153
 msgid "Privacy-focused not-for-profit organization"
-msgstr ""
+msgstr "Datenschutzorientierte gemeinnützige Organisation"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:154
 msgid "Outproxy bandwidth test"
-msgstr ""
+msgstr "Outproxy-Bandbreitentest"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:154
 msgid "speedtest"
-msgstr ""
+msgstr "Geschwindigkeitstest"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:155
 msgid "Provider of privacy respecting web hosting and VPN services"
-msgstr ""
+msgstr "Anbieter von Datenschutz in Bezug auf Webhosting- und VPN-Dienste"
 
 #. "tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "eepsites/tv.svg" + S +
 #. "tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
@@ -3694,42 +3694,42 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:161
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:167
 msgid "Tor-focused Search Engine"
-msgstr ""
+msgstr "Tor-fokussierte Suchmaschine"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:162
 msgid "DuckDuckGo Search Engine (no javascript)"
-msgstr ""
+msgstr "DuckDuckGo-Suchmaschine (kein Javascript)"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:163
 msgid "Clearnet BitTorrent DHT search engine"
-msgstr ""
+msgstr "Clearnet BitTorrent DHT-Suchmaschine"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:164
 msgid "I2P Web Search Engine"
-msgstr ""
+msgstr "I2P-Websuchmaschine"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:165
 msgid "Privacy-focused Clearnet Search Engine"
-msgstr ""
+msgstr "Datenschutzorientierte Clearnet-Suchmaschine"
 
 #. "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
 #. "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
 #. wikis & reference
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:172
 msgid "Enabling the free transmission of data in the public interest"
-msgstr ""
+msgstr "Ermöglichung der kostenlosen Übermittlung von Daten im öffentlichen Interesse"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:173
 msgid "Selected Papers in Anonymity"
-msgstr ""
+msgstr "Ausgewählte Artikel in Anonymität"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:174
 msgid "Tor .onion site links"
-msgstr ""
+msgstr "Tor .onion-Site-Links"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
 msgid "HTML Color Reference"
-msgstr ""
+msgstr "HTML-Farbreferenz"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
 msgid "HTMLColors"
@@ -3737,23 +3737,22 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
 msgid "I2P-related Wiki"
-msgstr ""
+msgstr "I2P-bezogenes Wiki"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:177
 msgid "Wolfram's Online Math Reference"
-msgstr ""
+msgstr "Wolframs Online-Mathe-Referenz"
 
-#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:178
 msgid "Mozilla Developer Network"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:179
 msgid "Internet Encylopedia of Philosophy"
-msgstr ""
+msgstr "Internet-Enzyklopädie der Philosophie"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:180
 msgid "Standford Encylopedia of Philosophy"
-msgstr ""
+msgstr "Standford Enzyklopädie der Philosophie"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:181
 msgid "Psychonaut"
@@ -3761,39 +3760,39 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:181
 msgid "Wiki relating to altered states of consciousness"
-msgstr ""
+msgstr "Wiki zu veränderten Bewusstseinszuständen"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:182
 msgid "Computing-related tutorials"
-msgstr ""
+msgstr "Tutorials zum Thema Computer"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:182
 msgid "SimplifiedGuide"
-msgstr ""
+msgstr "Vereinfachter Leitfaden"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:183
 msgid "Vulnerability Database"
-msgstr ""
+msgstr "Schwachstellendatenbank"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:184
 msgid "Web technology reference and learning site"
-msgstr ""
+msgstr "Referenz- und Lernseite für Webtechnologie"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:185
 msgid "Alternative Wikipedia front-end focused on privacy"
-msgstr ""
+msgstr "Alternatives Wikipedia-Frontend mit Fokus auf Datenschutz"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:186
 msgid "The biggest online English dictionary"
-msgstr ""
+msgstr "Das größte Online-Wörterbuch für Englisch"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:187
 msgid "World atlas including geography facts &amp; flags"
-msgstr ""
+msgstr "Weltatlas mit geografischen Fakten"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:187
 msgid "WorldAtlas"
-msgstr ""
+msgstr "Weltatlas"
 
 #. "cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
 #. "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "eepsites/books.svg" + S +
@@ -3814,11 +3813,11 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "Clear and accurate news for the Far East"
-msgstr ""
+msgstr "Klare und genaue Nachrichten für Fernost"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:200
 msgid "Independent investigative journalism"
-msgstr ""
+msgstr "Unabhängiger investigativer Journalismus"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:201
 msgid "Information Security Research &amp; Education"
@@ -3864,19 +3863,19 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:208
 msgid "Defending your rights in the digital world"
-msgstr ""
+msgstr "Verteidigen Sie Ihre Rechte in der digitalen Welt"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:209
 msgid "The Elliptic Curve Cryptography Blog"
-msgstr ""
+msgstr "Der Blog zur Kryptographie mit elliptischen Kurven"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
 msgid "ForeignPolicy"
-msgstr ""
+msgstr "Außenpolitik"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
 msgid "The Global Magazine of News &amp; Ideas"
-msgstr ""
+msgstr "Das globale Nachrichtenmagazin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "FrontLineDefenders"
@@ -4021,15 +4020,15 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "Reliable journalism for countries under censorship"
-msgstr ""
+msgstr "Zuverlässiger Journalismus für Länder unter Zensur"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
 msgid "Lifestyle magazine"
-msgstr ""
+msgstr "Lifestyle-Magazin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "Internationally renowned security technologist"
-msgstr ""
+msgstr "International renommierter Sicherheitstechnologe"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "SchneierOnSecurity"
@@ -4037,7 +4036,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "Latest scientific research news"
-msgstr ""
+msgstr "Neueste wissenschaftliche Forschungsnachrichten"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "ScienceDaily"
@@ -4045,11 +4044,11 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
 msgid "Community-driven tech news"
-msgstr ""
+msgstr "Community-gesteuerte Tech-News"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
 msgid "News for nerds"
-msgstr ""
+msgstr "Neuigkeiten für Nerds"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
 msgid "Technology news &amp; reviews"
@@ -4057,11 +4056,11 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Reporting on China without fear or favor"
-msgstr ""
+msgstr "Ohne Angst oder Gunst über China berichten"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "News from the Taiwan Capital"
-msgstr ""
+msgstr "Nachrichten aus der Hauptstadt Taiwan"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "TaipeiTimes"
@@ -4073,7 +4072,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "Technology and engineering news"
-msgstr ""
+msgstr "Technologie- und Ingenieursnachrichten"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "TechMeme"
@@ -4081,7 +4080,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "Technology news aggregator"
-msgstr ""
+msgstr "Technologie-News-Aggregator"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "News &amp; Reviews"
@@ -4093,15 +4092,15 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "Academic commentary and essays"
-msgstr ""
+msgstr "Wissenschaftliche Kommentare und Aufsätze"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "TheConversation"
-msgstr ""
+msgstr "Das Gespräch"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Global News"
-msgstr ""
+msgstr "Globale Nachrichten"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "TheGuardian"
@@ -4113,7 +4112,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "US Political News"
-msgstr ""
+msgstr "Politische Nachrichten aus den USA"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "TheMarkup"
@@ -4121,11 +4120,11 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "Watching Big Tech..."
-msgstr ""
+msgstr "Big Tech gucken..."
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "Independent Journalism from Russia"
-msgstr ""
+msgstr "Unabhängiger Journalismus aus Russland"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "TheMoscowTimes"
@@ -4133,11 +4132,11 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "TheNewRepublic"
-msgstr ""
+msgstr "Die Neue Republik"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "International News from Tibet"
-msgstr ""
+msgstr "Internationale Nachrichten aus Tibet"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "TheTibetPost"
@@ -4145,7 +4144,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "All you need to know about everything that matters"
-msgstr ""
+msgstr "Alles, was Sie über alles Wichtige wissen müssen"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "TheWeek"
@@ -7085,7 +7084,7 @@ msgstr "Teilnehmer"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:222
 msgid "sec"
-msgstr ""
+msgstr "Sek"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:224
 msgid "grace period"
@@ -7101,12 +7100,12 @@ msgstr "Tunnelidentität"
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:280
 #, java-format
 msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr ""
+msgstr "Eingeschränkte Anzeige auf die {0} Tunnel mit der höchsten Nutzung"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:282
 #, java-format
 msgid "Limited display to the {0} most recent tunnels"
-msgstr ""
+msgstr "Eingeschränkte Anzeige auf die {0} neuesten Tunnel"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:293
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:876
@@ -7116,37 +7115,37 @@ msgstr "Genutzte Bandbreite über die Lebensdauer"
 #. bwShare < 12K/s
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:296
 msgid "Not enough shared bandwidth to build transit tunnels."
-msgstr ""
+msgstr "Nicht genügend gemeinsame Bandbreite zum Bau von Transittunneln."
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:300
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:463
 msgid "Router is currently operating in Hidden Mode which prevents transit tunnels from being built."
-msgstr ""
+msgstr "Der Router arbeitet derzeit im versteckten Modus, der den Bau von Transittunneln verhindert."
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:302
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:466
 msgid "No transit tunnels currently active."
-msgstr ""
+msgstr "Derzeit sind keine Transittunnel aktiv."
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:337
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:498
 msgid "Tier"
-msgstr ""
+msgstr "Stufe"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:338
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:500
 msgid "Address"
-msgstr ""
+msgstr "Adresse"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:490
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:436
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:437
 msgid "All Tunnels by Peer"
-msgstr ""
+msgstr "Alle Tunnel von Peer"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:499
 msgid "Primary IP address"
-msgstr ""
+msgstr "Primäre IP-Adresse"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:506
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:819
@@ -7155,19 +7154,19 @@ msgstr "lokal"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:585
 msgid "unique peers"
-msgstr ""
+msgstr "einzigartige Kollegen"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:590
 msgid "local"
-msgstr ""
+msgstr "lokal"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:592
 msgid "transit"
-msgstr ""
+msgstr "Transit"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:600
 msgid "No local or transit tunnels currently active."
-msgstr ""
+msgstr "Derzeit sind keine lokalen oder Transittunnel aktiv."
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:607
 msgid "Bandwidth Tiers"
@@ -7207,15 +7206,15 @@ msgstr "ausgehend"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:908
 msgid "Data In"
-msgstr ""
+msgstr "Dateneingang"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:908
 msgid "Tunnel Name"
-msgstr ""
+msgstr "Tunnelname"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:909
 msgid "Data Out"
-msgstr ""
+msgstr "Datenausgang"
 
 #. Saved in CSSHelper, assume success
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:46
@@ -7321,7 +7320,7 @@ msgstr "Starte den Browser beim Starten"
 
 #: ../java/strings/Strings.java:31
 msgid "I2P+ Router Console"
-msgstr ""
+msgstr "I2P+ Router-Konsole"
 
 #: ../java/strings/Strings.java:32
 msgid "Open Router Console in web browser at startup"
@@ -7337,27 +7336,27 @@ msgstr "mehrere Clients"
 
 #: ../java/strings/Strings.java:40
 msgid "I2PMail SMTP Server"
-msgstr ""
+msgstr "I2PMail SMTP-Server"
 
 #: ../java/strings/Strings.java:41
 msgid "I2PMail POP3 Server"
-msgstr ""
+msgstr "I2PMail POP3-Server"
 
 #: ../java/strings/Strings.java:42
 msgid "Postman's SMTP Mail Server (smtp.postman.i2p)"
-msgstr ""
+msgstr "SMTP-Mailserver von Postman (smtp.postman.i2p)"
 
 #: ../java/strings/Strings.java:43
 msgid "Postman's POP3 Mail Server (pop3.postman.i2p)"
-msgstr ""
+msgstr "POP3-Mailserver von Postman (pop3.postman.i2p)"
 
 #: ../java/strings/Strings.java:44
 msgid "I2P IRC Network"
-msgstr ""
+msgstr "I2P IRC-Netzwerk"
 
 #: ../java/strings/Strings.java:45
 msgid "Proxy to connect to I2P's anonymized IRC chat network"
-msgstr ""
+msgstr "Proxy zur Verbindung mit dem anonymisierten IRC-Chat-Netzwerk von I2P"
 
 #: ../java/strings/Strings.java:46
 msgid "I2P webserver"
@@ -7365,16 +7364,16 @@ msgstr "I2P-Webserver"
 
 #: ../java/strings/Strings.java:47
 msgid "I2P Webserver"
-msgstr ""
+msgstr "I2P-Webserver"
 
 #: ../java/strings/Strings.java:48
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:565
 msgid "I2P Web Server"
-msgstr ""
+msgstr "I2P-Webserver"
 
 #: ../java/strings/Strings.java:49
 msgid "Personal I2P Webserver (eepsite)"
-msgstr ""
+msgstr "Persönlicher I2P-Webserver (eepsite)"
 
 #: ../java/strings/Strings.java:50
 msgid "HTTP Proxy"
@@ -7387,7 +7386,7 @@ msgstr ""
 
 #: ../java/strings/Strings.java:56
 msgid "Official I2P Source Repository"
-msgstr ""
+msgstr "Offizielles I2P-Quellen-Repository"
 
 #. standard themes for ConfigUIHelper
 #: ../java/strings/Strings.java:59
@@ -7400,11 +7399,11 @@ msgstr "hell"
 
 #: ../java/strings/Strings.java:61
 msgid "midnight"
-msgstr ""
+msgstr "Mitternacht"
 
 #: ../java/strings/Strings.java:62
 msgid "vanilla"
-msgstr ""
+msgstr "Vanille"
 
 #: ../java/strings/Strings.java:67
 msgid "Encryption"
