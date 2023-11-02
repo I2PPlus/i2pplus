@@ -409,7 +409,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 // The peer we asked did not have the key, so _sentTo failed to flood it
                 if (_log.shouldWarn())
                     _log.warn("Verify via Floodfill failed (DbSearchReplyMsg) for [" + _key.toBase64().substring(0,6) + "]" +
-                              "\n* DbId: " + _facade;
+                              "\n* DbId: " + _facade);
                 // only for RI... LS too dangerous?
                 if (_isRouterInfo) {
                     if (_facade.isClientDb())
