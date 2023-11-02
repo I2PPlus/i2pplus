@@ -410,10 +410,7 @@ class SearchJob extends JobImpl {
         if (_log.shouldDebug())
             _log.debug("[Job " + getJobId() + "] Checked current routing key [" + rkey.toBase64().substring(0,6) +
                        "] for [" + key.toBase64().substring(0,6) + "]");
-        if (_facade.isClientDb())
-            return getContext().netDb().getPeerSelector().selectNearestExplicit(rkey, numClosest, alreadyChecked, _facade.getKBuckets());
-        else
-            return _peerSelector.selectNearestExplicit(rkey, numClosest, alreadyChecked, _facade.getKBuckets());
+        return _peerSelector.selectNearestExplicit(rkey, numClosest, alreadyChecked, _facade.getKBuckets());
     }
 
     /**
