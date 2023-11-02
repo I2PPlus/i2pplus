@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-10-25 06:30+0000\n"
+"PO-Revision-Date: 2023-11-02 02:45+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -142,9 +142,7 @@ msgstr "Thư mục dữ liệu được thay đổi thành {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1403
 msgid "I2CP and tunnel changes will take effect after stopping all torrents"
-msgstr ""
-"I2CP và các thay đổi về đường hầm sẽ có hiệu lực sau khi dừng tất cả các "
-"torrent"
+msgstr "I2CP và các thay đổi về đường hầm sẽ có hiệu lực sau khi dừng tất cả các torrent"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1410
 #, java-format
@@ -161,8 +159,7 @@ msgid "I2CP settings changed to {0}"
 msgstr "Cài đặt I2CP đã thay đổi thành {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1429
-msgid ""
-"Unable to connect with the new settings, reverting to the old I2CP settings"
+msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
 msgstr "Không thể kết nối với cài đặt mới, quay lại cài đặt I2CP cũ"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1436
@@ -196,13 +193,11 @@ msgstr "Sắp xếp thông minh bị vô hiệu hóa"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1480
 msgid "Enabled open trackers - torrent restart required to take effect."
-msgstr ""
-"Đã bật trình theo dõi mở - cần phải khởi động lại torrent để có hiệu lực."
+msgstr "Đã bật trình theo dõi mở - cần phải khởi động lại torrent để có hiệu lực."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1482
 msgid "Disabled open trackers - torrent restart required to take effect."
-msgstr ""
-"Đã tắt trình theo dõi mở - cần phải khởi động lại torrent để có hiệu lực."
+msgstr "Đã tắt trình theo dõi mở - cần phải khởi động lại torrent để có hiệu lực."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1490
 msgid "Enabled DHT."
@@ -266,12 +261,8 @@ msgid "Add and Create sections enabled on all torrent listing pages."
 msgstr "Thêm và Tạo các phần được bật trên tất cả các trang danh sách torrent."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1580
-msgid ""
-"Add and Create sections to display only on first page of multipage torrent "
-"listing pages."
-msgstr ""
-"Thêm và Tạo các phần để chỉ hiển thị trên trang đầu tiên của các trang liệt "
-"kê torrent nhiều trang."
+msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
+msgstr "Thêm và Tạo các phần để chỉ hiển thị trên trang đầu tiên của các trang liệt kê torrent nhiều trang."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1591
 msgid "Configuration unchanged."
@@ -279,15 +270,11 @@ msgstr "Cấu hình không thay đổi."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1623
 msgid "Open Tracker list changed - torrent restart required to take effect."
-msgstr ""
-"Danh sách Trình theo dõi mở đã thay đổi - cần phải khởi động lại torrent để "
-"có hiệu lực."
+msgstr "Danh sách Trình theo dõi mở đã thay đổi - cần phải khởi động lại torrent để có hiệu lực."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1633
 msgid "Private tracker list changed - affects newly created torrents only."
-msgstr ""
-"Danh sách theo dõi riêng tư đã thay đổi - chỉ ảnh hưởng đến các torrent mới "
-"được tạo."
+msgstr "Danh sách theo dõi riêng tư đã thay đổi - chỉ ảnh hưởng đến các torrent mới được tạo."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1679
 #, java-format
@@ -352,31 +339,18 @@ msgstr "LỖI - Không có trình theo dõi I2P trong torrent riêng tư \"{0}\"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1878
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and "
-"DHT only."
-msgstr ""
-"Cảnh báo - Không có trình theo dõi I2P nào trong \"{0}\", sẽ chỉ thông báo "
-"cho các trình theo dõi mở I2P và DHT."
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Cảnh báo - Không có trình theo dõi I2P nào trong \"{0}\", sẽ chỉ thông báo cho các trình theo dõi mở I2P và DHT."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1880
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will "
-"announce to DHT only."
-msgstr ""
-"Cảnh báo - Không có trình theo dõi I2P nào trong \"{0}\" và trình theo dõi "
-"mở bị tắt, sẽ chỉ thông báo cho DHT."
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Cảnh báo - Không có trình theo dõi I2P nào trong \"{0}\" và trình theo dõi mở bị tắt, sẽ chỉ thông báo cho DHT."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1882
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", and DHT and open trackers are "
-"disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr ""
-"Cảnh báo - Không có trình theo dõi I2P nào trong \"{0}\", đồng thời DHT và "
-"trình theo dõi mở bị tắt, bạn nên bật trình theo dõi mở hoặc DHT trước khi "
-"bắt đầu torrent."
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Cảnh báo - Không có trình theo dõi I2P nào trong \"{0}\", đồng thời DHT và trình theo dõi mở bị tắt, bạn nên bật trình theo dõi mở hoặc DHT trước khi bắt đầu torrent."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1908
 #, java-format
@@ -413,13 +387,8 @@ msgstr "Đang tìm nạp {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2048
 #, java-format
-msgid ""
-"Open trackers are disabled and we have no DHT peers. Fetch of {0} may not "
-"succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr ""
-"Trình theo dõi mở bị vô hiệu hóa và chúng tôi không có đồng nghiệp DHT. Lấy "
-"{0} có thể không thành công cho đến khi bạn bắt đầu một torrent khác, bật "
-"Trình theo dõi mở hoặc bật DHT."
+msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
+msgstr "Trình theo dõi mở bị vô hiệu hóa và chúng tôi không có đồng nghiệp DHT. Lấy {0} có thể không thành công cho đến khi bạn bắt đầu một torrent khác, bật Trình theo dõi mở hoặc bật DHT."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2052
 #, java-format
@@ -530,11 +499,8 @@ msgstr "I2P I2PSnark phiên bản độc lập {0} đã bắt đầu"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2880
 #, java-format
-msgid ""
-"Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
-msgstr ""
-"Giới hạn băng thông tải lên là {0} KBps cho tối đa {1} thiết bị ngang hàng "
-"đồng thời."
+msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgstr "Giới hạn băng thông tải lên là {0} KBps cho tối đa {1} thiết bị ngang hàng đồng thời."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2915
 #: ../java/src/org/klomp/snark/SnarkManager.java:2921
@@ -600,8 +566,7 @@ msgstr "Lỗi kiểm tra torrent {0}"
 #: ../java/src/org/klomp/snark/TrackerClient.java:252
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr ""
-"Không có trình theo dõi hợp lệ nào cho {0} - bật trình theo dõi mở hoặc DHT?"
+msgstr "Không có trình theo dõi hợp lệ nào cho {0} - bật trình theo dõi mở hoặc DHT?"
 
 #: ../java/src/org/klomp/snark/UpdateHandler.java:49
 #: ../java/src/org/klomp/snark/UpdateRunner.java:233
@@ -671,21 +636,13 @@ msgstr "Bộ định tuyến bị hỏng"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:408
 #, java-format
-msgid ""
-"Are you sure you want to delete the file \\''{0}\\'' (downloaded data will "
-"not be deleted) ?"
-msgstr ""
-"Bạn có chắc chắn muốn xóa tệp \\''{0}\\'' (dữ liệu đã tải xuống sẽ không bị "
-"xóa) ?"
+msgid "Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?"
+msgstr "Bạn có chắc chắn muốn xóa tệp \\''{0}\\'' (dữ liệu đã tải xuống sẽ không bị xóa) ?"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:410
 #, java-format
-msgid ""
-"Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded "
-"data?"
-msgstr ""
-"Bạn có chắc chắn muốn xóa torrent \\''{0}\\'' và tất cả dữ liệu đã tải xuống "
-"không?"
+msgid "Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?"
+msgstr "Bạn có chắc chắn muốn xóa torrent \\''{0}\\'' và tất cả dữ liệu đã tải xuống không?"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:461
 msgid "Torrents"
@@ -737,13 +694,8 @@ msgstr "Thu nhỏ"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:678
 #, java-format
-msgid ""
-"Warning! Javascript is disabled in your browser. If {0} is enabled, you will "
-"lose any input in the add/create torrent sections when a refresh occurs."
-msgstr ""
-"Cảnh báo! JavaScript bị vô hiệu hóa trong trình duyệt của bạn. Nếu {0} được "
-"bật, bạn sẽ mất bất kỳ đầu vào nào trong phần Thêm/Tạo các phần torrent khi "
-"xảy ra làm mới."
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "Cảnh báo! JavaScript bị vô hiệu hóa trong trình duyệt của bạn. Nếu {0} được bật, bạn sẽ mất bất kỳ đầu vào nào trong phần Thêm/Tạo các phần torrent khi xảy ra làm mới."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:680
 msgid "page refresh"
@@ -755,7 +707,7 @@ msgstr "Cảnh báo - Không có I2P"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:777
 msgid "Search"
-msgstr ""
+msgstr "Tìm kiếm"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:779
 msgid "Show All"
@@ -1120,14 +1072,11 @@ msgstr "Không thể thêm torrent {0} kể cả torrent khác: {1}"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2039
 msgid "Error - Cannot include alternate trackers without a primary tracker"
-msgstr ""
-"Lỗi - Không thể bao gồm trình theo dõi thay thế mà không có trình theo dõi "
-"chính"
+msgstr "Lỗi - Không thể bao gồm trình theo dõi thay thế mà không có trình theo dõi chính"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2052
 msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr ""
-"Lỗi - Không thể kết hợp trình theo dõi riêng tư và công khai trong torrent"
+msgstr "Lỗi - Không thể kết hợp trình theo dõi riêng tư và công khai trong torrent"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2074
 #, java-format
@@ -1136,12 +1085,8 @@ msgstr "Torrent được tạo cho \"{0}\""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2076
 #, java-format
-msgid ""
-"Many I2P trackers require you to register new torrents before seeding - "
-"please do so before starting \"{0}\""
-msgstr ""
-"Nhiều trình theo dõi I2P yêu cầu bạn đăng ký torrent mới trước khi gieo hạt "
-"- vui lòng làm như vậy trước khi bắt đầu \"{0}\""
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "Nhiều trình theo dõi I2P yêu cầu bạn đăng ký torrent mới trước khi gieo hạt - vui lòng làm như vậy trước khi bắt đầu \"{0}\""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2078
 #, java-format
@@ -1356,8 +1301,7 @@ msgstr "Không thú vị (Người ngang hàng không có mảnh ghép nào chú
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2898
 msgid "Choked (The peer is not allowing us to request pieces)"
-msgstr ""
-"Nghẹn ngào (Người ngang hàng không cho phép chúng tôi yêu cầu các mảnh)"
+msgstr "Nghẹn ngào (Người ngang hàng không cho phép chúng tôi yêu cầu các mảnh)"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2940
 msgid "Peer is interested but currently idle"
@@ -1389,11 +1333,8 @@ msgid "From URL"
 msgstr "Từ URL"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3216
-msgid ""
-"Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr ""
-"Nhập URL tải xuống tệp torrent (chỉ I2P), liên kết nam châm hoặc hàm băm "
-"thông tin"
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "Nhập URL tải xuống tệp torrent (chỉ I2P), liên kết nam châm hoặc hàm băm thông tin"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3221
 msgid "Add torrent"
@@ -1420,8 +1361,7 @@ msgstr "Dữ liệu vào hạt giống"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3253
 #, java-format
 msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr ""
-"Tệp hoặc thư mục cần tạo hạt giống (đường dẫn đầy đủ hoặc trong thư mục {0} )"
+msgstr "Tệp hoặc thư mục cần tạo hạt giống (đường dẫn đầy đủ hoặc trong thư mục {0} )"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3256
 msgid "Create torrent"
@@ -1545,12 +1485,8 @@ msgid "Your browser does not support this feature."
 msgstr "Trình duyệt của bạn không hỗ trợ tính năng này."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3464
-msgid ""
-"Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and "
-"collapse by default in non-embedded mode"
-msgstr ""
-"Cho phép thu gọn bảng 'Thêm Torrent' và 'Tạo Torrent' và thu gọn theo mặc "
-"định ở chế độ không nhúng"
+msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
+msgstr "Cho phép thu gọn bảng 'Thêm Torrent' và 'Tạo Torrent' và thu gọn theo mặc định ở chế độ không nhúng"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3468
 msgid "Torrent filter bar"
@@ -1558,9 +1494,7 @@ msgstr "Thanh lọc torrent"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3473
 msgid "Show filter bar above torrents for selective display based on status"
-msgstr ""
-"Hiển thị thanh bộ lọc phía trên torrent để hiển thị có chọn lọc dựa trên "
-"trạng thái"
+msgstr "Hiển thị thanh bộ lọc phía trên torrent để hiển thị có chọn lọc dựa trên trạng thái"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3474
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3483
@@ -1580,12 +1514,8 @@ msgid "Persist Add/Create"
 msgstr "Kiên trì Thêm/Tạo"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3491
-msgid ""
-"Display the 'Add' and 'Create' sections on all torrent listing pages when in "
-"multipage mode"
-msgstr ""
-"Hiển thị phần 'Thêm' và 'Tạo' trên tất cả các trang danh sách torrent khi ở "
-"chế độ nhiều trang"
+msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
+msgstr "Hiển thị phần 'Thêm' và 'Tạo' trên tất cả các trang danh sách torrent khi ở chế độ nhiều trang"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3498
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4586
@@ -1653,12 +1583,8 @@ msgid "Use open trackers also"
 msgstr "Cũng sử dụng trình theo dõi mở"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3560
-msgid ""
-"Announce torrents to open trackers as well as trackers listed in the torrent "
-"file"
-msgstr ""
-"Thông báo torrent để mở trình theo dõi cũng như trình theo dõi được liệt kê "
-"trong tệp torrent"
+msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
+msgstr "Thông báo torrent để mở trình theo dõi cũng như trình theo dõi được liệt kê trong tệp torrent"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3563
 msgid "Enable DHT"
@@ -1673,12 +1599,8 @@ msgid "Auto start torrents"
 msgstr "Tự động bắt đầu torrent"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3574
-msgid ""
-"Automatically start torrents when added and restart torrents when I2PSnark "
-"starts"
-msgstr ""
-"Tự động khởi động torrent khi được thêm vào và khởi động lại torrent khi "
-"I2PSnark khởi động"
+msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
+msgstr "Tự động khởi động torrent khi được thêm vào và khởi động lại torrent khi I2PSnark khởi động"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3579
 msgid "Startup delay"
@@ -1686,8 +1608,7 @@ msgstr "Trì hoãn khởi động"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3582
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr ""
-"Mất bao lâu trước khi tải torrent tự động khởi động khi I2PSnark khởi động"
+msgstr "Mất bao lâu trước khi tải torrent tự động khởi động khi I2PSnark khởi động"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3584
 msgid "minutes"
@@ -1710,27 +1631,16 @@ msgid "Files readable by all"
 msgstr "Tất cả mọi người đều có thể đọc được các tập tin"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3603
-msgid ""
-"Set file permissions to allow other local users to access the downloaded "
-"files"
-msgstr ""
-"Đặt quyền truy cập tệp để cho phép người dùng cục bộ khác truy cập các tệp "
-"đã tải xuống"
+msgid "Set file permissions to allow other local users to access the downloaded files"
+msgstr "Đặt quyền truy cập tệp để cho phép người dùng cục bộ khác truy cập các tệp đã tải xuống"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3606
 msgid "Max files per torrent"
 msgstr "Số tệp tối đa cho mỗi torrent"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3608
-msgid ""
-"Maximum number of files permitted per torrent - note that trackers may set "
-"their own limits, and your OS may limit the number of open files, preventing "
-"torrents with many files (and subsequent torrents) from loading"
-msgstr ""
-"Số lượng tệp tối đa được phép trên mỗi torrent - lưu ý rằng trình theo dõi "
-"có thể đặt giới hạn riêng và hệ điều hành của bạn có thể giới hạn số lượng "
-"tệp đang mở, ngăn không cho tải torrent có nhiều tệp (và các torrent tiếp "
-"theo)"
+msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
+msgstr "Số lượng tệp tối đa được phép trên mỗi torrent - lưu ý rằng trình theo dõi có thể đặt giới hạn riêng và hệ điều hành của bạn có thể giới hạn số lượng tệp đang mở, ngăn không cho tải torrent có nhiều tệp (và các torrent tiếp theo)"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3615
 msgid "Tunnel Configuration"
@@ -1806,20 +1716,12 @@ msgid_plural "{0} tunnels"
 msgstr[0] "{0} Đường hầm"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3826
-msgid ""
-"This configures the maximum number of tunnels to open, determined by the "
-"number of connected peers (actual usage may be less)"
-msgstr ""
-"Điều này định cấu hình số lượng đường hầm tối đa sẽ mở, được xác định bởi số "
-"lượng thiết bị ngang hàng được kết nối (mức sử dụng thực tế có thể ít hơn)"
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "Điều này định cấu hình số lượng đường hầm tối đa sẽ mở, được xác định bởi số lượng thiết bị ngang hàng được kết nối (mức sử dụng thực tế có thể ít hơn)"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3830
-msgid ""
-"Changing this setting to less than 3 hops may improve speed at the expense "
-"of anonymity and is not recommended"
-msgstr ""
-"Thay đổi cài đặt này thành ít hơn 3 bước nhảy có thể cải thiện tốc độ nhưng "
-"phải trả giá bằng tính ẩn danh và không được khuyến nghị"
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "Thay đổi cài đặt này thành ít hơn 3 bước nhảy có thể cải thiện tốc độ nhưng phải trả giá bằng tính ẩn danh và không được khuyến nghị"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4149
 msgid "Info hash"
@@ -1857,12 +1759,8 @@ msgstr "Bỏ qua"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4339
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4401
-msgid ""
-"Only I2P trackers will be used; non-I2P trackers are displayed for "
-"informational purposes only"
-msgstr ""
-"Chỉ có trình theo dõi I2P sẽ được sử dụng; Trình theo dõi không phải I2P chỉ "
-"được hiển thị cho mục đích thông tin"
+msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
+msgstr "Chỉ có trình theo dõi I2P sẽ được sử dụng; Trình theo dõi không phải I2P chỉ được hiển thị cho mục đích thông tin"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4405
 msgid "Tracker"

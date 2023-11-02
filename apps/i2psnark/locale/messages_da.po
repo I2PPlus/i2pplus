@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-10-24 03:55+0000\n"
+"PO-Revision-Date: 2023-11-02 02:51+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: da\n"
@@ -142,8 +142,7 @@ msgstr "Databibliotek ændret til {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1403
 msgid "I2CP and tunnel changes will take effect after stopping all torrents"
-msgstr ""
-"I2CP og tunnelændringer træder i kraft efter at alle torrents er stoppet"
+msgstr "I2CP og tunnelændringer træder i kraft efter at alle torrents er stoppet"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1410
 #, java-format
@@ -160,11 +159,8 @@ msgid "I2CP settings changed to {0}"
 msgstr "I2CP-indstillinger ændret til {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1429
-msgid ""
-"Unable to connect with the new settings, reverting to the old I2CP settings"
-msgstr ""
-"Kan ikke oprette forbindelse til de nye indstillinger, vender tilbage til de "
-"gamle I2CP-indstillinger"
+msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
+msgstr "Kan ikke oprette forbindelse til de nye indstillinger, vender tilbage til de gamle I2CP-indstillinger"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1436
 msgid "Unable to reconnect with the old settings!"
@@ -197,13 +193,11 @@ msgstr "Deaktiveret smart sortering"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1480
 msgid "Enabled open trackers - torrent restart required to take effect."
-msgstr ""
-"Aktiveret åbne trackere - torrent-genstart påkrævet for at træde i kraft."
+msgstr "Aktiveret åbne trackere - torrent-genstart påkrævet for at træde i kraft."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1482
 msgid "Disabled open trackers - torrent restart required to take effect."
-msgstr ""
-"Deaktiveret åbne trackere - torrent-genstart påkrævet for at træde i kraft."
+msgstr "Deaktiveret åbne trackere - torrent-genstart påkrævet for at træde i kraft."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1490
 msgid "Enabled DHT."
@@ -267,12 +261,8 @@ msgid "Add and Create sections enabled on all torrent listing pages."
 msgstr "Tilføj og opret sektioner aktiveret på alle torrentlistesider."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1580
-msgid ""
-"Add and Create sections to display only on first page of multipage torrent "
-"listing pages."
-msgstr ""
-"Tilføj og opret sektioner for kun at blive vist på den første side af "
-"flersidede torrent-listesider."
+msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
+msgstr "Tilføj og opret sektioner for kun at blive vist på den første side af flersidede torrent-listesider."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1591
 msgid "Configuration unchanged."
@@ -280,8 +270,7 @@ msgstr "Konfiguration uændret."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1623
 msgid "Open Tracker list changed - torrent restart required to take effect."
-msgstr ""
-"Open Tracker-liste ændret - torrent-genstart kræves for at træde i kraft."
+msgstr "Open Tracker-liste ændret - torrent-genstart kræves for at træde i kraft."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1633
 msgid "Private tracker list changed - affects newly created torrents only."
@@ -350,31 +339,18 @@ msgstr "FEJL - Ingen I2P-trackere i privat torrent \"{0}\""
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1878
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and "
-"DHT only."
-msgstr ""
-"Advarsel - Ingen I2P-trackere i \"{0}\", vil kun annoncere til I2P åbne "
-"trackere og DHT."
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Advarsel - Ingen I2P-trackere i \"{0}\", vil kun annoncere til I2P åbne trackere og DHT."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1880
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will "
-"announce to DHT only."
-msgstr ""
-"Advarsel - Ingen I2P-trackere i \"{0}\", og åbne trackere er deaktiveret, "
-"vil kun annoncere til DHT."
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Advarsel - Ingen I2P-trackere i \"{0}\", og åbne trackere er deaktiveret, vil kun annoncere til DHT."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1882
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", and DHT and open trackers are "
-"disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr ""
-"Advarsel - Ingen I2P-trackere i \"{0}\", og DHT og åbne trackere er "
-"deaktiveret, bør du aktivere åbne trackere eller DHT, før du starter "
-"torrenten."
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Advarsel - Ingen I2P-trackere i \"{0}\", og DHT og åbne trackere er deaktiveret, bør du aktivere åbne trackere eller DHT, før du starter torrenten."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1908
 #, java-format
@@ -411,13 +387,8 @@ msgstr "Henter {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2048
 #, java-format
-msgid ""
-"Open trackers are disabled and we have no DHT peers. Fetch of {0} may not "
-"succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr ""
-"Åbne trackere er deaktiveret, og vi har ingen DHT -peers. Hentning af {0} "
-"lykkes muligvis ikke, før du starter en anden torrent, aktiverer åbne "
-"trackers eller aktiverer DHT."
+msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
+msgstr "Åbne trackere er deaktiveret, og vi har ingen DHT -peers. Hentning af {0} lykkes muligvis ikke, før du starter en anden torrent, aktiverer åbne trackers eller aktiverer DHT."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2052
 #, java-format
@@ -528,10 +499,8 @@ msgstr "I2P I2PSnark selvstændig version {0} startede"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2880
 #, java-format
-msgid ""
-"Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
-msgstr ""
-"Uploadbåndbreddegrænsen er {0} KBps til et maksimum på {1} samtidige peers."
+msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgstr "Uploadbåndbreddegrænsen er {0} KBps til et maksimum på {1} samtidige peers."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2915
 #: ../java/src/org/klomp/snark/SnarkManager.java:2921
@@ -667,21 +636,13 @@ msgstr "Routeren kører ikke"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:408
 #, java-format
-msgid ""
-"Are you sure you want to delete the file \\''{0}\\'' (downloaded data will "
-"not be deleted) ?"
-msgstr ""
-"Er du sikker på, at du vil slette filen \\''{0}\\'' (downloadede data vil "
-"ikke blive slettet) ?"
+msgid "Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?"
+msgstr "Er du sikker på, at du vil slette filen \\''{0}\\'' (downloadede data vil ikke blive slettet) ?"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:410
 #, java-format
-msgid ""
-"Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded "
-"data?"
-msgstr ""
-"Er du sikker på, at du vil slette torrent \\''{0}\\'' og alle downloadede "
-"data?"
+msgid "Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?"
+msgstr "Er du sikker på, at du vil slette torrent \\''{0}\\'' og alle downloadede data?"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:461
 msgid "Torrents"
@@ -733,13 +694,8 @@ msgstr "Krympe"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:678
 #, java-format
-msgid ""
-"Warning! Javascript is disabled in your browser. If {0} is enabled, you will "
-"lose any input in the add/create torrent sections when a refresh occurs."
-msgstr ""
-"Advarsel! JavaScript er deaktiveret i din browser. Hvis {0} er aktiveret, "
-"mister du ethvert input i tilføj/opret torrent -sektioner, når der opstår en "
-"opdatering."
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "Advarsel! JavaScript er deaktiveret i din browser. Hvis {0} er aktiveret, mister du ethvert input i tilføj/opret torrent -sektioner, når der opstår en opdatering."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:680
 msgid "page refresh"
@@ -751,7 +707,7 @@ msgstr "Advarsel - Ingen I2P"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:777
 msgid "Search"
-msgstr ""
+msgstr "Søg"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:779
 msgid "Show All"
@@ -1132,12 +1088,8 @@ msgstr "Torrent oprettet til \"{0}\""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2076
 #, java-format
-msgid ""
-"Many I2P trackers require you to register new torrents before seeding - "
-"please do so before starting \"{0}\""
-msgstr ""
-"Mange I2P-trackere kræver, at du registrerer nye torrents før såning - gør "
-"det venligst, før du starter \"{0}\""
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "Mange I2P-trackere kræver, at du registrerer nye torrents før såning - gør det venligst, før du starter \"{0}\""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2078
 #, java-format
@@ -1387,11 +1339,8 @@ msgid "From URL"
 msgstr "Fra URL"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3216
-msgid ""
-"Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr ""
-"Indtast URL-adressen til download af torrentfilen (kun I2P), magnetlink "
-"eller info-hash"
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "Indtast URL-adressen til download af torrentfilen (kun I2P), magnetlink eller info-hash"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3221
 msgid "Add torrent"
@@ -1542,12 +1491,8 @@ msgid "Your browser does not support this feature."
 msgstr "Din browser understøtter ikke denne funktion."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3464
-msgid ""
-"Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and "
-"collapse by default in non-embedded mode"
-msgstr ""
-"Tillad at 'Tilføj torrent'- og 'Opret Torrent'-panelerne skal skjules og "
-"skjules som standard i ikke-indlejret tilstand"
+msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
+msgstr "Tillad at 'Tilføj torrent'- og 'Opret Torrent'-panelerne skal skjules og skjules som standard i ikke-indlejret tilstand"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3468
 msgid "Torrent filter bar"
@@ -1568,20 +1513,15 @@ msgstr "Aktiver lysboks"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3482
 msgid "Use a lightbox to display images when thumbnails are clicked"
-msgstr ""
-"Brug en lysboks til at vise billeder, når der klikkes på miniaturebilleder"
+msgstr "Brug en lysboks til at vise billeder, når der klikkes på miniaturebilleder"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3486
 msgid "Persist Add/Create"
 msgstr "Fortsæt Tilføj/Opret"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3491
-msgid ""
-"Display the 'Add' and 'Create' sections on all torrent listing pages when in "
-"multipage mode"
-msgstr ""
-"Vis sektionerne 'Tilføj' og 'Opret' på alle sider med torrentliste, når du "
-"er i flersidet tilstand"
+msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
+msgstr "Vis sektionerne 'Tilføj' og 'Opret' på alle sider med torrentliste, når du er i flersidet tilstand"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3498
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4586
@@ -1649,12 +1589,8 @@ msgid "Use open trackers also"
 msgstr "Brug også åbne trackere"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3560
-msgid ""
-"Announce torrents to open trackers as well as trackers listed in the torrent "
-"file"
-msgstr ""
-"Annoncer torrents for at åbne trackere såvel som trackere, der er angivet i "
-"torrent-filen"
+msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
+msgstr "Annoncer torrents for at åbne trackere såvel som trackere, der er angivet i torrent-filen"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3563
 msgid "Enable DHT"
@@ -1669,12 +1605,8 @@ msgid "Auto start torrents"
 msgstr "Autostart torrents"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3574
-msgid ""
-"Automatically start torrents when added and restart torrents when I2PSnark "
-"starts"
-msgstr ""
-"Start automatisk torrents, når de tilføjes, og genstart torrents, når "
-"I2PSnark starter"
+msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
+msgstr "Start automatisk torrents, når de tilføjes, og genstart torrents, når I2PSnark starter"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3579
 msgid "Startup delay"
@@ -1705,26 +1637,16 @@ msgid "Files readable by all"
 msgstr "Filer kan læses af alle"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3603
-msgid ""
-"Set file permissions to allow other local users to access the downloaded "
-"files"
-msgstr ""
-"Indstil filtilladelser for at give andre lokale brugere adgang til de "
-"downloadede filer"
+msgid "Set file permissions to allow other local users to access the downloaded files"
+msgstr "Indstil filtilladelser for at give andre lokale brugere adgang til de downloadede filer"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3606
 msgid "Max files per torrent"
 msgstr "Max filer pr. torrent"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3608
-msgid ""
-"Maximum number of files permitted per torrent - note that trackers may set "
-"their own limits, and your OS may limit the number of open files, preventing "
-"torrents with many files (and subsequent torrents) from loading"
-msgstr ""
-"Maksimalt antal tilladte filer pr. torrent - bemærk, at trackere kan sætte "
-"deres egne grænser, og dit OS kan begrænse antallet af åbne filer, hvilket "
-"forhindrer torrents med mange filer (og efterfølgende torrents) i at indlæse"
+msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
+msgstr "Maksimalt antal tilladte filer pr. torrent - bemærk, at trackere kan sætte deres egne grænser, og dit OS kan begrænse antallet af åbne filer, hvilket forhindrer torrents med mange filer (og efterfølgende torrents) i at indlæse"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3615
 msgid "Tunnel Configuration"
@@ -1802,20 +1724,12 @@ msgstr[0] "1 tunnel"
 msgstr[1] "{0} tunnels"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3826
-msgid ""
-"This configures the maximum number of tunnels to open, determined by the "
-"number of connected peers (actual usage may be less)"
-msgstr ""
-"Dette konfigurerer det maksimale antal tunneler, der skal åbnes, bestemt af "
-"antallet af tilsluttede peers (faktisk brug kan være mindre)"
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "Dette konfigurerer det maksimale antal tunneler, der skal åbnes, bestemt af antallet af tilsluttede peers (faktisk brug kan være mindre)"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3830
-msgid ""
-"Changing this setting to less than 3 hops may improve speed at the expense "
-"of anonymity and is not recommended"
-msgstr ""
-"Ændring af denne indstilling til mindre end 3 hop kan forbedre hastigheden "
-"på bekostning af anonymitet og anbefales ikke"
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "Ændring af denne indstilling til mindre end 3 hop kan forbedre hastigheden på bekostning af anonymitet og anbefales ikke"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4149
 msgid "Info hash"
@@ -1853,12 +1767,8 @@ msgstr "Skippet"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4339
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4401
-msgid ""
-"Only I2P trackers will be used; non-I2P trackers are displayed for "
-"informational purposes only"
-msgstr ""
-"Kun I2P -trackere vil blive brugt; Ikke-I2P-trackere vises kun til "
-"informationsformål"
+msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
+msgstr "Kun I2P -trackere vil blive brugt; Ikke-I2P-trackere vises kun til informationsformål"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4405
 msgid "Tracker"
