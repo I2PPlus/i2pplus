@@ -321,7 +321,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _log.info("Datastore not initialized, cannot queue keys for exploration");
             return;
         }
-        for (Iterator<Hash> iter = keys.iterator(); iter.hasNext() && _exploreKeys.size() < Integer.valueOf(exploreQueue);) {
+        // TODO: make sure exploreQueue isn't null before assigning
+        //for (Iterator<Hash> iter = keys.iterator(); iter.hasNext() && _exploreKeys.size() < Integer.valueOf(exploreQueue);) {
+        for (Iterator<Hash> iter = keys.iterator(); iter.hasNext() && _exploreKeys.size() < MAX_EXPLORE_QUEUE;) {
             _exploreKeys.add(iter.next());
          }
         _context.statManager().addRateData("netDb.exploreKeySet", _exploreKeys.size());
@@ -2053,8 +2055,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     @Override
     public String toString() {
         if (!isClientDb())
-            return "Main NetDB";
-        return "Client NetDB " + _dbid.toBase64();
+            return "MainNetDb";
+        return "ClientNetDb [" + _dbid.toBase64().substring(0,8) + "]";
     }
 
 }
