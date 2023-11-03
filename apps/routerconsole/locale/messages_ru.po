@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-11-03 22:37+0000\n"
+"PO-Revision-Date: 2023-11-03 22:59+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru_RU\n"
@@ -5439,7 +5439,6 @@ msgstr[2] "Скрытие стандартных профилей {0}."
 msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
 msgstr "Обратите внимание, что профилировщик полагается на постоянное использование клиентского туннеля для точного профилирования одноранговых узлов."
 
-
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:115
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:340
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:502
@@ -6859,7 +6858,6 @@ msgstr "Ближайшие Floodfills к хешу нашего маршрути�
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:513
 msgid "Floodfills Close to Our Destinations"
 msgstr "Наводнения рядом с нашими пунктами назначения"
-
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:525
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:698
@@ -8904,7 +8902,7 @@ msgstr "Плагины, подписанные с криптографическ
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:443
 msgid "This setting allows the manual selection of the browser which I2P will launch on startup (if the console is <a href=/configservice#browseronstart>configured</a> to launch a browser on startup), overriding the OS default browser. For more information, see the <a href=#alternative_browser>FAQ entry</a> above."
-msgstr ""
+msgstr "Этот параметр позволяет вручную выбрать браузер, который I2P будет запускать при запуске (если консоль <a href=/configservice#browseronstart>настроена</a> для запуска браузера при запуске), переопределяя браузер по умолчанию в ОС. Дополнительную информацию см. в <a href=#alternative_browser>часто задаваемых вопросах</a> выше."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:445
 msgid "When set to true, this enables gzip compression for the router console and default web applications. [Enabled by default]"
@@ -8916,11 +8914,11 @@ msgstr "Если установлено значение true, это позво
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:449
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
-msgstr ""
+msgstr "Если установлено значение true, этот параметр включает обратный поиск DNS для одноранговых узлов, который запускается при отображении флага страны однорангового узла, имени хоста или домена явно отображается в консоли или при записи информации RouterInfo однорангового узла на диск. Чтобы избежать повторных поисков, рекомендуется настроить щедрую политику кэширования для DNS-запросов продолжительностью 10 и более минут, а также настроить DNS-сервер с соблюдением конфиденциальности в вашей операционной системе. [По умолчанию отключено, требуется перезагрузка]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:451
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
-msgstr ""
+msgstr "Если установлено значение true, доступ к консоли маршрутизатора через http://, когда https:// включен, будет автоматически перенаправляться на https. Чтобы настроить доступ к консоли маршрутизатора, отредактируйте настройки в файле <code>clients.config</code> в каталоге вашего профиля (<i>а не</i> в каталоге установки приложения). [Включено по умолчанию]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:453
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
@@ -8964,7 +8962,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:473
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
-msgstr ""
+msgstr "Определяет максимальное количество параллельных <a href=/jobs>заданий</a>, которые можно запустить. Значение по умолчанию определяется объемом памяти, выделенной JVM через <code>wrapper.config</code>, и устанавливается равным 3 для менее 64 МБ, 4 для менее 256 МБ или 5 для более 256 МБ. Примечание. Изменение этого параметра требует перезагрузки маршрутизатора."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:475
 msgid "Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Default is 8000, or 2000 if running on Arm or Android]"
@@ -8976,11 +8974,11 @@ msgstr "Определяет максимальный процент актив�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:479
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
-msgstr ""
+msgstr "Если установлено значение true, файлы информации о маршрутизаторе, хранящиеся в каталоге netDB вашего профиля, не будут разделены на 64 подкаталога. [По умолчанию неверно]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:481
 msgid "When set to true, your router will not be classified as slow, regardless of the specifications of your host system. Ordinarily, routers running on hosts with the following characteristics will be classified as slow, and various performance-related router options will be modified accordingly:"
-msgstr ""
+msgstr "Если установлено значение true, ваш маршрутизатор не будет классифицироваться как медленный, независимо от характеристик вашей хост-системы. Обычно маршрутизаторы, работающие на хостах со следующими характеристиками, классифицируются как медленные, и различные параметры маршрутизатора, связанные с производительностью, изменяются соответствующим образом:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:483
 msgid "Host OS running Android"
@@ -9008,19 +9006,19 @@ msgstr "Маршрутизатор, управляющий неродной пр
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:495
 msgid "This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr ""
+msgstr "Эти настройки позволяют настроить минимальное количество размещенных участвующих туннелей, прежде чем маршрутизатор начнет отклонять запросы туннелей на основе ожидаемых требований к пропускной способности. [По умолчанию — 100, если система работает под управлением Android, 800, если система работает на ARM и доступно менее 4 ядер, 1200, если система работает на ARM и доступно 4 или более ядер, в противном случае 2500]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:497
 msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr ""
+msgstr "Если установлено значение true, маршрутизатор изменит свой идентификатор и порт UDP при перезагрузке маршрутизатора, а затем удалит ключ из router.config, чтобы предотвратить дальнейшие изменения. [По умолчанию неверно]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:499
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr ""
+msgstr "При настройке это устанавливает жесткое ограничение на количество туннелей, которые маршрутизатору разрешено строить одновременно. По умолчанию маршрутизатор использует среднее время построения и текущую исходящую пропускную способность для определения оптимальной скорости построения. [Требуется перезагрузка]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:501
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr ""
+msgstr "Если вы хотите установить неподписанные (.zip) обновления I2P, их следует добавить в файл <code>router.config</code>, если вы еще не настроили <code>routerconsole.advanced=true</code>, в котором если эта опция уже предусмотрена. Примечание. Начиная с I2P+ 0.9.48+ установка <a href=/configupdate#i2pupdates>неподписанных обновлений</a> включена по умолчанию."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:503
 msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
@@ -9028,19 +9026,19 @@ msgstr "Этот параметр позволяет настроить URL-ад
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:505
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr ""
+msgstr "Этот параметр позволяет отключить тесты SSU, чтобы определить, защищен ли ваш маршрутизатор брандмауэром, и может быть включен для маршрутизаторов, которые определенно не имеют брандмауэра, но испытывают периодические проблемы с брандмауэром. Если тестирование отключено, SSU и NTCP должны сообщить ваш текущий общедоступный IP-адрес на <a href=/info>странице информации о маршрутизаторе</a>. [Требуется перезагрузка]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:507
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr ""
+msgstr "Этот параметр определяет, какой транспорт имеет приоритет при общении с одноранговыми узлами. По умолчанию NTCP предпочтительнее UDP (SSU). Если установить значение true, предпочтение будет отдано UDP, если ранее не существовало соединение NTCP; если установлено значение Always, UDP будет использоваться всегда, независимо от любого ранее существовавшего соединения NTCP. [По умолчанию неверно]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:509
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr ""
+msgstr "Этот параметр, специфичный для туннеля, позволяет включать или отключать ответы на пинг-запросы, отправляемые на серверы, размещенные на маршрутизаторе. Чтобы отключить пинги, необходимо добавить строку <code>i2p.streaming.answerPings=false</code> в раздел <i>Пользовательские параметры</i> конфигурации сервера в диспетчере туннелей."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:511
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr ""
+msgstr "Если установлено значение true, I2P работает без подключения к сети, что полезно, если вы постоянно перезагружаете маршрутизатор для проверки обновлений кода, поскольку это предотвращает сбои в работе сети."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:513
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
@@ -9048,7 +9046,7 @@ msgstr "Если этот параметр включен, он вводит с�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:515
 msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr ""
+msgstr "его настройка, если она включена, изменяет максимальную дополнительную случайную задержку в понге, введенную для серверов с поддержкой ping, если <code>i2p.streaming.enablePongDelay</code> также включен. Если не указано явно, будет использоваться значение по умолчанию 50 мс."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:517
 msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
@@ -9072,15 +9070,15 @@ msgstr "Этот параметр (в часах) определяет возр�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:527
 msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr ""
+msgstr "Этот параметр определяет количество одноранговых узлов, которые будут исследоваться параллельно при выполнении задания исследования одноранговых узлов [по умолчанию — 1 одноранговый узел за раз, если известно более 3000 одноранговых узлов]. Обратите внимание, что увеличение этого значения увеличит требования к пропускной способности для исследования, а установка слишком высокого значения может привести к чрезмерной задержке сообщения и помехам в работе других служб, поэтому используйте его с осторожностью!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:529
 msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr ""
+msgstr "Этот параметр определяет количество сегментов NetDb DHT, на которые будет ссылаться задание исследования однорангового узла при запуске. По умолчанию количество исследуемых сегментов будет варьироваться в зависимости от того, работает ли маршрутизатор более часа, является ли маршрутизатор скрытым или находится на уровне пропускной способности «K», а также от количества известных маршрутизаторов."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:531
 msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr ""
+msgstr "Этот параметр (в секундах) позволяет вам переопределить задержку между запусками задания исследования одноранговых узлов, которое пытается найти новые одноранговые узлы для добавления в NetDb. По умолчанию задание будет выполняться каждые 80 секунд, а если на маршрутизаторе наблюдается задержка задания или сообщения, — каждые 3 минуты. Если размер NetDb достигнет 4000 пиров, пауза увеличится до 15 минут. Возможно, вы захотите увеличить задержку, если ваша NetDb густо заполнена (более 2000 узлов) или если вы хотите уменьшить общее использование полосы пропускания. Примечание. Для маршрутизаторов Floodfill это задание не выполняется."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:533
 msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
@@ -9096,7 +9094,7 @@ msgstr "Если для этого параметра установлено з�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:539
 msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr ""
+msgstr "Этот параметр позволяет исключить старые маршрутизаторы из вашей NetDb. Маршрутизаторы старше значения по умолчанию или установленного вами значения будут удалены из NetDb и заблокированы на время сеанса маршрутизатора. По умолчанию исключаются маршрутизаторы старше 0.9.20. Примечание. Начиная с версии I2P+ 0.9.46+, для построения локальных туннелей используются только маршрутизаторы с самыми последними версиями. [Требуется перезагрузка]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:541
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
@@ -9108,7 +9106,7 @@ msgstr "Этот параметр определяет задержку межд
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:545
 msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 1000]"
-msgstr ""
+msgstr "Чтобы определить задержку однорангового узла, этот параметр определяет максимальное время, которое должно занять одноранговое тестирование, прежде чем оно будет считаться сбоем, настроенное в миллисекундах. В случае, если тайм-аут настроен ниже среднего успешного теста, будет использоваться среднее значение успешного теста. [по умолчанию 1000]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:547
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
