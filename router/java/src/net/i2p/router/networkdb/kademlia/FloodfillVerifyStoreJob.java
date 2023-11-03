@@ -178,7 +178,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     // We don't have a compatible way to get a reply,
                     // skip it for now.
                      if (_log.shouldWarn())
-                         _log.warn("Skipping NetDbStore verify for incompatible router " + peer);
+                         _log.warn("Skipping NetDbStore verify for incompatible Router " + peer);
                     _facade.verifyFinished(_key);
                     return;
                 }
@@ -205,18 +205,21 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     // We don't have a compatible way to get a reply,
                     // skip it for now.
                      if (_log.shouldWarn())
-                         _log.warn("Skipping NetDbStore verify to [" + _target.toBase64().substring(0,6) + "] for ECIES or ElG-only client [" + _client.toBase32().substring(0,6) + "]");
+                         _log.warn("Skipping NetDbStore verify to [" + _target.toBase64().substring(0,6) +
+                                   "] for ECIES or ElG-only client [" + _client.toBase32().substring(0,6) + "]");
                     _facade.verifyFinished(_key);
                     return;
                 }
             }
             if (sess.tag != null) {
                 if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Requesting AES reply from [" + _target.toBase64().substring(0,6) + "]\n* Session key: " + sess.key + "\n* Tag: " + sess.tag);
+                _log.info("[Job " + getJobId() + "] Requesting AES reply from [" + _target.toBase64().substring(0,6) +
+                          "]\n* Session key: " + sess.key + "\n* Tag: " + sess.tag);
                 lookup.setReplySession(sess.key, sess.tag);
             } else {
                 if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Requesting AEAD reply from [" + _target.toBase64().substring(0,6) + "]\n* Session key: " + sess.key + "\n* Tag: " + sess.rtag);
+                _log.info("[Job " + getJobId() + "] Requesting AEAD reply from [" + _target.toBase64().substring(0,6) +
+                          "]\n* Session key: " + sess.key + "\n* Tag: " + sess.rtag);
                 lookup.setReplySession(sess.key, sess.rtag);
             }
         }
@@ -248,8 +251,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
         }
 
         if (_log.shouldInfo())
-            _log.info("[" + getJobId() + "] DbId: " + _facade + " Starting verify" +
-                      "\n* Stored: Key [" + _key.toBase64().substring(0,6) + "]" + " to [" + _sentTo.toBase64().substring(0,6) + "]" +
+            _log.info("[" + getJobId() + "] Starting verify -> " + _facade +
+                      "\n* Stored: Key [" + _key.toBase64().substring(0,6) + "]" +
+                      " to [" + _sentTo.toBase64().substring(0,6) + "]" +
                       "\n* Querying: [" + _target.toBase64().substring(0,6) + "]");
         _sendTime = ctx.clock().now();
         _expiration = _sendTime + VERIFY_TIMEOUT;
@@ -292,11 +296,13 @@ class FloodfillVerifyStoreJob extends JobImpl {
                         return peer;
                     } else {
                         if (_log.shouldInfo())
-                            _log.info("[Job " + getJobId() + "] Skipping floodfill verify with Router [" + peer.toBase64().substring(0,6) + "] - too close to the store");
+                            _log.info("[Job " + getJobId() + "] Skipping floodfill verify with Router [" +
+                                      peer.toBase64().substring(0,6) + "] - too close to the store");
                     }
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("[Job " + getJobId() + "] Skipping floodfill verify with Router [" + peer.toBase64().substring(0,6) + "] - too old");
+                        _log.info("[Job " + getJobId() + "] Skipping floodfill verify with Router [" +
+                                  peer.toBase64().substring(0,6) + "] - too old");
                 }
                 _ignore.add(peer);
             }
