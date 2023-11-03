@@ -248,7 +248,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
         }
 
         if (_log.shouldInfo())
-            _log.info("[" + getJobId() + "] DbID: " + _facade + " Starting verify" +
+            _log.info("[" + getJobId() + "] DbId: " + _facade + " Starting verify" +
                       "\n* Stored: Key [" + _key.toBase64().substring(0,6) + "]" + " to [" + _sentTo.toBase64().substring(0,6) + "]" +
                       "\n* Querying: [" + _target.toBase64().substring(0,6) + "]");
         _sendTime = ctx.clock().now();
