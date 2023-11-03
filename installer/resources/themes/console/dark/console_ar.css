@@ -136,6 +136,7 @@ td{text-align:right}
 #sidebar td:last-child{text-align:left;margin-left:3px}
 #sidebar td{text-align:right}
 #sybilnav ul li a{padding-right:0}
+#themeoptions input, #enablefull input{margin:1px 2px 1px 10px}
 #tunnelconfig th{text-align:right}
 #tunnels.main h3 a{float:left}
 #updateHelper b,#updateProxyHostPort b,#i2pupdates b{text-align:left}
