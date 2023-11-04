@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-11-04 00:59+0000\n"
+"PO-Revision-Date: 2023-11-04 01:03+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: it\n"
@@ -3623,11 +3623,11 @@ msgstr "Multi-rete micro-blogging &amp; forums &amp; wiki"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:138
 msgid "Alternative privacy-focused front-end for Reddit"
-msgstr ""
+msgstr "Front-end alternativo incentrato sulla privacy per Reddit"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "Base64 Image Encoder"
-msgstr ""
+msgstr "Codificatore di immagini Base64"
 
 #. "StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
 #. "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
@@ -3639,19 +3639,19 @@ msgstr ""
 #. hosting + other services
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "base64-image.i2p"
-msgstr ""
+msgstr "base64-immagine.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "An image cache and resize service"
-msgstr ""
+msgstr "Un servizio di cache e ridimensionamento delle immagini"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "imageproxy.i2p"
-msgstr ""
+msgstr "proxyimmagine.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:150
 msgid "IRC Logs for multiple networks"
-msgstr ""
+msgstr "Log IRC per più reti"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:151
 msgid "Encrypted I2P Pastebin"
@@ -3671,15 +3671,15 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:153
 msgid "Privacy-focused not-for-profit organization"
-msgstr ""
+msgstr "Organizzazione no-profit focalizzata sulla privacy"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:154
 msgid "Outproxy bandwidth test"
-msgstr ""
+msgstr "Test della larghezza di banda outproxy"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:154
 msgid "speedtest"
-msgstr ""
+msgstr "test di velocità"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:155
 msgid "Provider of privacy respecting web hosting and VPN services"
@@ -3693,66 +3693,66 @@ msgstr "Fornitore di servizi web e VPN pro privacy"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:161
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:167
 msgid "Tor-focused Search Engine"
-msgstr ""
+msgstr "Motore di ricerca incentrato su Tor"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:162
 msgid "DuckDuckGo Search Engine (no javascript)"
-msgstr ""
+msgstr "Motore di ricerca DuckDuckGo (no javascript)"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:163
 msgid "Clearnet BitTorrent DHT search engine"
-msgstr ""
+msgstr "Motore di ricerca Clearnet BitTorrent DHT"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:164
 msgid "I2P Web Search Engine"
-msgstr ""
+msgstr "Motore di ricerca Web I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:165
 msgid "Privacy-focused Clearnet Search Engine"
-msgstr ""
+msgstr "Motore di ricerca Clearnet incentrato sulla privacy"
 
 #. "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
 #. "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
 #. wikis & reference
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:172
 msgid "Enabling the free transmission of data in the public interest"
-msgstr ""
+msgstr "Consentire la libera trasmissione dei dati nell'interesse pubblico"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:173
 msgid "Selected Papers in Anonymity"
-msgstr ""
+msgstr "Documenti selezionati in anonimato"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:174
 msgid "Tor .onion site links"
-msgstr ""
+msgstr "Link al sito Tor .onion"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
 msgid "HTML Color Reference"
-msgstr ""
+msgstr "Riferimento colore HTML"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
 msgid "HTMLColors"
-msgstr ""
+msgstr "Colori HTML"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
 msgid "I2P-related Wiki"
-msgstr ""
+msgstr "Wiki relativo a I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:177
 msgid "Wolfram's Online Math Reference"
-msgstr ""
+msgstr "Riferimenti matematici online di Wolfram"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:178
 msgid "Mozilla Developer Network"
-msgstr ""
+msgstr "Rete di sviluppatori Mozilla"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:179
 msgid "Internet Encylopedia of Philosophy"
-msgstr ""
+msgstr "Enciclopedia di filosofia su Internet"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:180
 msgid "Standford Encylopedia of Philosophy"
-msgstr ""
+msgstr "Enciclopedia della filosofia di Standford"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:181
 msgid "Psychonaut"
@@ -3764,27 +3764,27 @@ msgstr "Wiki che riguarda gli stati alterati della mente"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:182
 msgid "Computing-related tutorials"
-msgstr ""
+msgstr "Tutorial relativi all'informatica"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:182
 msgid "SimplifiedGuide"
-msgstr ""
+msgstr "Guida semplificata"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:183
 msgid "Vulnerability Database"
-msgstr ""
+msgstr "Database delle vulnerabilità"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:184
 msgid "Web technology reference and learning site"
-msgstr ""
+msgstr "Sito di riferimento e di apprendimento sulla tecnologia web"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:185
 msgid "Alternative Wikipedia front-end focused on privacy"
-msgstr ""
+msgstr "Front-end alternativo di Wikipedia incentrato sulla privacy"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:186
 msgid "The biggest online English dictionary"
-msgstr ""
+msgstr "Il più grande dizionario inglese online"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:187
 msgid "World atlas including geography facts &amp; flags"
