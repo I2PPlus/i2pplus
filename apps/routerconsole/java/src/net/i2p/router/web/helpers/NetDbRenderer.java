@@ -147,18 +147,18 @@ class NetDbRenderer {
                                      String tr, int cost, int icount, Hash client, boolean allClients) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
         List<Hash> sybils = sybil != null ? new ArrayList<Hash>(128) : null;
-        FloodfillNetworkDatabaseFacade netdb = _context.netDb();
+        FloodfillNetworkDatabaseFacade netdb = (FloodfillNetworkDatabaseFacade) _context.netDb();
         if (allClients) {
-            netdb = _context.netDb();
+            netdb = (FloodfillNetworkDatabaseFacade) _context.netDb();
         } else {
         if (client != null) {
                 Log _log = _context.logManager().getLog(NetDbRenderer.class);
                 if (_log.shouldLog(Log.DEBUG))
                     _log.debug("Client subdb for: " + client);
-            netdb = _context.clientNetDb(client);
+            netdb = (FloodfillNetworkDatabaseFacade) _context.clientNetDb(client);
             }
             else
-                netdb = _context.netDb();
+                netdb = (FloodfillNetworkDatabaseFacade) _context.netDb();
         }
 
         if (".".equals(routerPrefix)) {
@@ -617,16 +617,16 @@ class NetDbRenderer {
         DecimalFormat fmt;
         FloodfillNetworkDatabaseFacade netdb = null;
         if (clientsOnly) {
-            netdb = _context.netDb();
+            netdb = (FloodfillNetworkDatabaseFacade) _context.netDb();
         } else {
             if (client != null) {
                 Log _log = _context.logManager().getLog(NetDbRenderer.class);
                 if (_log.shouldLog(Log.DEBUG))
                     _log.debug("Client subdb for: " + client);
-                netdb = _context.clientNetDb(client);
+                netdb = (FloodfillNetworkDatabaseFacade) _context.clientNetDb(client);
             }
             else
-                netdb = _context.netDb();
+                netdb = (FloodfillNetworkDatabaseFacade) _context.netDb();
         }
         if (debug) {
             ourRKey = _context.routerHash();

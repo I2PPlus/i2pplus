@@ -118,7 +118,7 @@ public class AliasedTunnelPool extends TunnelPool {
     @Override
     protected LeaseSet locked_buildNewLeaseSet() {
         Hash primary = _aliasOf.getSettings().getDestination();
-        FloodfillNetworkDatabaseFacade db =  _context.clientNetDb(primary);
+        FloodfillNetworkDatabaseFacade db =  (FloodfillNetworkDatabaseFacade) _context.clientNetDb(primary);
         LeaseSet ls =  db.lookupLeaseSetLocally(primary);
         if (ls == null) {
             if (_log.shouldWarn())
