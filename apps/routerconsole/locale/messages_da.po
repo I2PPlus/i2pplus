@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-11-04 23:19+0000\n"
+"PO-Revision-Date: 2023-11-04 23:38+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: da\n"
@@ -4441,35 +4441,35 @@ msgstr "LeaseSets"
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:60
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:501
 msgid "Advanced Lookup"
-msgstr ""
+msgstr "Avanceret opslag"
 
 #. 8  - f=4
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:61
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:527
 msgid "LeaseSet Lookup"
-msgstr ""
+msgstr "LeaseSet Opslag"
 
 #. 9  -
 #. 10 - f=5
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:62
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:63
 msgid "All Routers (Client NetDb)"
-msgstr ""
+msgstr "Alle routere (Client NetDb)"
 
 #. 11 - f=6 (debug)
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:64
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:493
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:568
 msgid "Sybil Analysis"
-msgstr ""
+msgstr "Sybilanalyse"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:166
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr ""
+msgstr "Afslør aldrig din router-identitet til nogen, da den er unikt knyttet til din IP-adresse i netværksdatabasen."
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:196
 msgid "is banned"
-msgstr ""
+msgstr "er forbudt"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:196
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:549
@@ -4479,21 +4479,21 @@ msgstr "ikke fundet i netværksdatabasen"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:198
 msgid "No results"
-msgstr ""
+msgstr "Ingen resultater"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:244
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:556
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1019
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1075
 msgid "Previous Page"
-msgstr ""
+msgstr "Forrige side"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:246
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:559
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1022
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1078
 msgid "Page"
-msgstr ""
+msgstr "Side"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:522
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1210
@@ -4512,33 +4512,33 @@ msgstr "Port"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:536
 msgid "MTU"
-msgstr ""
+msgstr "MTU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:563
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1026
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1081
 msgid "Next Page"
-msgstr ""
+msgstr "Næste side"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:693
 msgid "No Leasesets currently active."
-msgstr ""
+msgstr "Ingen lejesæt er i øjeblikket aktive."
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:719
 msgid "Network data"
-msgstr ""
+msgstr "Netværksdata"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:724
 msgid "Median distance (bits)"
-msgstr ""
+msgstr "Medianafstand (bits)"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:728
 msgid "Estimated total floodfills"
-msgstr ""
+msgstr "Estimeret samlede oversvømmelser"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:729
 msgid "Estimated total leasesets"
-msgstr ""
+msgstr "Estimeret samlede lejemål"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:775
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:795
@@ -4548,20 +4548,20 @@ msgstr "LeaseSet"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:796
 msgid "LeaseSet Key"
-msgstr ""
+msgstr "LeaseSet Nøgle"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:809
 msgid "View local tunnels for destination"
-msgstr ""
+msgstr "Se lokale tunneler til destination"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:811
 msgid "published"
-msgstr ""
+msgstr "udgivet"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:836
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:859
 msgid "Add to addressbook"
-msgstr ""
+msgstr "Føj til adressebog"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:838
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:861
@@ -4571,49 +4571,49 @@ msgstr "Føje til den lokale adressebog"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:873
 #, java-format
 msgid "Published{0} ago"
-msgstr ""
+msgstr "Udgivet for{0} siden"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:878
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:891
 #, java-format
 msgid "Expires{0}"
-msgstr ""
+msgstr "Udløber{0}"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:880
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:893
 #, java-format
 msgid "Expired{0} ago"
-msgstr ""
+msgstr "Udløb for{0} siden"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:882
 msgid "Received as published?"
-msgstr ""
+msgstr "Modtaget som offentliggjort?"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:883
 msgid "Received as reply?"
-msgstr ""
+msgstr "Modtaget som svar?"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:884
 msgid "Distance"
-msgstr ""
+msgstr "Afstand"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:888
 msgid "Offline signed"
-msgstr ""
+msgstr "Offline underskrevet"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:898
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:926
 msgid "Signature type"
-msgstr ""
+msgstr "Signaturtype"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:917
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:944
 msgid "Unsupported type"
-msgstr ""
+msgstr "Ikke-understøttet type"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:921
 msgid "Routing Key"
-msgstr ""
+msgstr "Rutenøgle"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:956
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:523
@@ -7386,7 +7386,7 @@ msgstr "iMule"
 
 #: ../java/strings/Strings.java:56
 msgid "Official I2P Source Repository"
-msgstr ""
+msgstr "Officielt I2P-kildelager"
 
 #. standard themes for ConfigUIHelper
 #: ../java/strings/Strings.java:59
@@ -8965,27 +8965,27 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:483
 msgid "Host OS running Android"
-msgstr ""
+msgstr "Host OS, der kører Android"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:485
 msgid "Host OS running on ARM (MacOS excepted)"
-msgstr ""
+msgstr "Host OS kører på ARM (MacOS undtaget)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:487
 msgid "32bit host OS running with less than 4 detected cores"
-msgstr ""
+msgstr "32bit værts-OS, der kører med mindre end 4 detekterede kerner"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:489
 msgid "64bit host OS running with 1 detected core and less than 384MB allocated to the JVM"
-msgstr ""
+msgstr "64-bit værts-OS kører med 1 detekteret kerne og mindre end 384 MB allokeret til JVM"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:491
 msgid "Less than 256MB allocated to the JVM"
-msgstr ""
+msgstr "Mindre end 256 MB allokeret til JVM"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:493
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
-msgstr ""
+msgstr "Router, der kører en ikke-native, softwareemuleret version af Java BigInteger-biblioteket"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:495
 msgid "This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
