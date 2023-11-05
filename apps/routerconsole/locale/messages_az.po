@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 03:21+0000\n"
-"PO-Revision-Date: 2023-10-31 20:57+0000\n"
+"PO-Revision-Date: 2023-11-05 22:27+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: az\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:387
 msgid "Hash"
-msgstr ""
+msgstr "Hash"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:389
 msgid "Banned by Router Hash"
@@ -48,7 +48,7 @@ msgstr "Blok"
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1124
 #, java-format
 msgid "{0} ago"
-msgstr ""
+msgstr "{0} əvvəl"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:211
 msgid "Reseeding from file"
@@ -183,7 +183,7 @@ msgstr "Java Virtual Maşın üçün CPU istifadəsi orta"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:60
 msgid "Average tunnel build success %"
-msgstr ""
+msgstr "Orta tunel qurma uğuru %"
 
 #: ../../../router/java/src/net/i2p/router/transport/CommSystemFacadeImpl.java:1064
 #: ../../../router/java/src/net/i2p/router/transport/CommSystemFacadeImpl.java:1204
@@ -203,7 +203,7 @@ msgstr "tanınmayan"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:963
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:475
 msgid "Floodfill"
-msgstr ""
+msgstr "Floodfill"
 
 #.
 #. if (log.shouldWarn()) {
@@ -232,11 +232,11 @@ msgstr "Nəqliyyat yoxdur (gizli və ya başlamaq?)"
 
 #: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:932
 msgid "Unsupported signature type"
-msgstr ""
+msgstr "Dəstəklənməyən imza növü"
 
 #: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:950
 msgid "No support for our signature type"
-msgstr ""
+msgstr "İmza tipimiz üçün dəstək yoxdur"
 
 #: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:954
 msgid "Unreachable on any transport"
@@ -245,7 +245,7 @@ msgstr "Hər hansı bir nəqliyyatda əlçatmazdır"
 #: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:1059
 #: ../../../router/java/src/net/i2p/router/transport/UPnPManager.java:395
 msgid "UPnP is not enabled"
-msgstr ""
+msgstr "UPnP aktiv deyil"
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1066
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:30
@@ -329,11 +329,11 @@ msgstr "Tapılan cihaz"
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1151
 msgid "Subdevice"
-msgstr ""
+msgstr "Alt cihaz"
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1178
 msgid "UPnP Status"
-msgstr ""
+msgstr "UPnP Vəziyyəti"
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1186
 msgid "Disabled UPnP Devices"
@@ -403,27 +403,27 @@ msgstr "Mövcud yeniləmə"
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1222
 #, java-format
 msgid "Version {0}"
-msgstr ""
+msgstr "Versiya {0}"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:936
 #, java-format
 msgid "New plugin version {0} is available"
-msgstr ""
+msgstr "Yeni plagin versiyası {0} əlçatandır"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1016
 #, java-format
 msgid "Update check failed for plugin {0}"
-msgstr ""
+msgstr "Plugin {0} üçün yeniləmə yoxlaması alınmadı"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1020
 #, java-format
 msgid "No new version is available for plugin {0}"
-msgstr ""
+msgstr "Plugin {0} üçün yeni versiya mövcud deyil"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1110
 #, java-format
 msgid "Install failed from {0}"
-msgstr ""
+msgstr "{0}-dan quraşdırma uğursuz oldu"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1112
 #, java-format
@@ -447,7 +447,7 @@ msgstr "Yenidən"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1428
 msgid "Update verified"
-msgstr ""
+msgstr "Yeniləmə təsdiqləndi"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1437
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:226
@@ -460,7 +460,7 @@ msgstr "{0} 99-dan başlayaraq: {0} -dən"
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1461
 #, java-format
 msgid "Unsigned update file from {0} is corrupt"
-msgstr ""
+msgstr "{0} tərəfindən imzalanmamış yeniləmə faylı zədələnib"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1497
 #, java-format
@@ -727,7 +727,7 @@ msgstr "I2P yeniləmək"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateRunner.java:58
 msgid "Update failed"
-msgstr ""
+msgstr "Yeniləmə uğursuz oldu"
 
 #: ../java/src/net/i2p/router/update/UpdateRunner.java:202
 #, java-format
@@ -756,7 +756,7 @@ msgstr "Quraşdır"
 
 #: ../java/src/net/i2p/router/web/CSSHelper.java:191
 msgid "config"
-msgstr ""
+msgstr "Quraşdır"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:235
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:533
@@ -778,7 +778,7 @@ msgstr "Dərhal"
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:245
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:539
 msgid "Cancel graceful shutdown"
-msgstr ""
+msgstr "Zərif bağlanmanı ləğv edin"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:247
 msgid "Graceful shutdown cancelled"
@@ -796,7 +796,7 @@ msgstr "Zərif yenidən başlat tələb olunur"
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:254
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:551
 msgid "Hard restart"
-msgstr ""
+msgstr "Çətin yenidən başladın"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:259
 msgid "Hard restart requested"
@@ -1091,7 +1091,7 @@ msgstr "Ölü kilid 130 aşkar"
 #: ../java/src/net/i2p/router/web/DeadlockDetector.java:85
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1317
 msgid "Please report"
-msgstr ""
+msgstr "Zəhmət olmasa xəbər verin"
 
 #: ../java/src/net/i2p/router/web/DeadlockDetector.java:100
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1318
@@ -1123,7 +1123,7 @@ msgstr "Xəbərləri gizlət"
 #: ../java/src/net/i2p/router/web/NewsHelper.java:329
 #: ../java/src/net/i2p/router/web/NewsHelper.java:332
 msgid "Show news"
-msgstr ""
+msgstr "Xəbərləri göstərin"
 
 #: ../java/src/net/i2p/router/web/NewsHelper.java:336
 msgid "Show all news"
@@ -1168,7 +1168,7 @@ msgstr "Hər dövr üzrə tədbirlər"
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:208
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:213
 msgid "Min"
-msgstr ""
+msgstr "Min"
 
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:477
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:515
@@ -1211,12 +1211,12 @@ msgstr "heç biri"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:70
 msgid "Permanently banned"
-msgstr ""
+msgstr "Daimi qadağa"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:72
 #, java-format
 msgid "Temporary ban expiring in {0}"
-msgstr ""
+msgstr "Müvəqqəti qadağanın müddəti {0} tarixində başa çatır"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:74
 #, java-format
@@ -1225,15 +1225,15 @@ msgstr "{0} /yenidən başlayana qədər qadağan edildi"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:90
 msgid "unban now"
-msgstr ""
+msgstr "indi qadağanı ləğv edin"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:106
 msgid "No bans currently active"
-msgstr ""
+msgstr "Hazırda aktiv qadağa yoxdur"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:113
 msgid "Reason"
-msgstr ""
+msgstr "Səbəb"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:115
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:551
@@ -1244,7 +1244,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:171
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:770
 msgid "Expiry"
-msgstr ""
+msgstr "İstifadə müddəti"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:145
 msgid "Total session-only bans"
@@ -1281,7 +1281,7 @@ msgstr "Mövqe"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:487
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:594
 msgid "I2CP"
-msgstr ""
+msgstr "I2CP"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:53
 msgid "I2PTunnel"
@@ -1290,7 +1290,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:68
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:571
 msgid "SAM"
-msgstr ""
+msgstr "SAM"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:84
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:348
@@ -1299,7 +1299,7 @@ msgstr "Veb səhifə"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:96
 msgid "Local Router Family Certificate"
-msgstr ""
+msgstr "Yerli Router Ailə Sertifikatı"
 
 #. hide family name in css as it's already displayed above
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:100
@@ -2016,11 +2016,11 @@ msgstr "Təyinat yeri"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:939
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:583
 msgid "Encryption Key"
-msgstr ""
+msgstr "Şifrələmə Açarı"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:69
 msgid "Lookup Password"
-msgstr ""
+msgstr "Şifrəni axtarın"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:72
 msgid "Created"
@@ -2038,51 +2038,51 @@ msgstr "Vaxtı bitir"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:566
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:575
 msgid "Encrypted"
-msgstr ""
+msgstr "Şifrələnmiş"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:136
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:141
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:570
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:581
 msgid "Encrypted with lookup password"
-msgstr ""
+msgstr "Axtarış parolu ilə şifrələnmişdir"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:146
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:562
 msgid "Blinded with lookup password"
-msgstr ""
+msgstr "Axtarış parolu ilə korlanmışdır"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:148
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:558
 msgid "Blinded"
-msgstr ""
+msgstr "Kor"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHandler.java:94
 msgid "Log overrides updated"
-msgstr ""
+msgstr "Gündəlik qeydlər yeniləndi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHandler.java:183
 msgid "Log configuration saved"
-msgstr ""
+msgstr "Giriş konfiqurasiyası saxlanıldı"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:62
 #, java-format
 msgid "Add additional logging statements above (e.g. {0})."
-msgstr ""
+msgstr "Yuxarıda əlavə giriş bəyanatları əlavə edin (məsələn, {0})."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:64
 #, java-format
 msgid "Valid log levels are {0}."
-msgstr ""
+msgstr "Etibarlı jurnal səviyyələri {0}-dir."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:141
 msgid "Select a class to add"
-msgstr ""
+msgstr "Əlavə etmək üçün sinif seçin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:153
 #, java-format
 msgid "All classes in {0}"
-msgstr ""
+msgstr "{0} üzrə bütün siniflər"
 
 #. stat groups for stats.jsp
 #. See StatsGenerator for groups mapped to a display name
