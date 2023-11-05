@@ -1350,7 +1350,7 @@ class SummaryBarRenderer {
                            .append("</a><input type=checkbox id=toggle_sb_newsheadings class=\"toggleSection script\" checked hidden></h3><hr class=b>")
                            .append("<div id=sb_newsheadings>\n<table>\n");
                     }
-                    buf.append("<tr><td><a href=\"/?news=1&amp;consoleNonce=")
+                    buf.append("<tr><td><a href=\"/home?news=1&amp;consoleNonce=")
                        .append(consoleNonce)
                        .append("\"");
                     if (entry.updated > 0) {

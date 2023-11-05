@@ -322,13 +322,13 @@ public class NewsHelper extends ContentHelper {
          boolean oldHome = ctx.getBooleanProperty("routerconsole.oldHomePage");
          if (lastUpdated > 0 && consoleNonce != null) {
              if (shouldShowNews(ctx)) {
-                 buf.append(" <a href=\"/?news=0&amp;consoleNonce=").append(consoleNonce).append("\">")
+                 buf.append(" <a href=\"/home?news=0&amp;consoleNonce=").append(consoleNonce).append("\">")
                     .append(Messages.getString("Hide news", ctx));
              } else if (oldHome) {
                  buf.append(" <a href=\"/sitemap?news=1&amp;consoleNonce=").append(consoleNonce).append("\">")
                     .append(Messages.getString("Show news", ctx));
              } else {
-                 buf.append(" <a href=\"/?news=1&amp;consoleNonce=").append(consoleNonce).append("\">")
+                 buf.append(" <a href=\"/home?news=1&amp;consoleNonce=").append(consoleNonce).append("\">")
                     .append(Messages.getString("Show news", ctx));
              }
              buf.append("</a>" +
