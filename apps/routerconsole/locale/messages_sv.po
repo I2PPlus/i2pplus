@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-11-01 22:19+0000\n"
+"PO-Revision-Date: 2023-11-05 17:28+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sv_SE\n"
@@ -203,7 +203,7 @@ msgstr "okänd"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:963
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:475
 msgid "Floodfill"
-msgstr ""
+msgstr "Floodfill"
 
 #.
 #. if (log.shouldWarn()) {
@@ -704,7 +704,7 @@ msgstr "Misslyckades med att hämta insticksmodul från {0}"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:100
 msgid "Unable to connect to update server "
-msgstr ""
+msgstr "Det går inte att ansluta till uppdateringsservern"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:105
 #, java-format
@@ -1221,7 +1221,7 @@ msgstr "Tillfälligt förbud utgår om {0}"
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:74
 #, java-format
 msgid "Banned for {0} / until restart"
-msgstr ""
+msgstr "Förbjuden i {0} / tills omstart"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:90
 msgid "unban now"
@@ -1323,7 +1323,7 @@ msgstr "Konsol"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:144
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
-msgstr ""
+msgstr "För att aktivera SSL -åtkomst för routerkonsolen, se den kommenterade <code>clients.config</code> -filen som finns i din i2p -applikationskatalog för mer information. Du måste redigera routerconsolerunner -konfigurationsfilen i katalogen: "
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigAdvancedHandler.java:73
 msgid "Error updating the configuration - please see the error logs"
@@ -1922,7 +1922,7 @@ msgstr "Nyckel för {0} tillagd i nyckelring"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:69
 msgid "Lookup password required"
-msgstr ""
+msgstr "Lösenord krävs"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:90
 msgid "Requires hostname, destination, or blinded Base32"
@@ -1948,7 +1948,7 @@ msgstr "Destination kräver inte krypteringsnyckel"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:573
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:579
 msgid "Send key to server operator."
-msgstr ""
+msgstr "Skicka nyckel till serveroperatör."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:172
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:46
@@ -2397,7 +2397,7 @@ msgstr "Kräver SSU introducerare"
 #. Wow this dumps all conns immediately and really isn't nice
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:437
 msgid "Performing a soft restart"
-msgstr ""
+msgstr "Utför en mjuk omstart"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:470
 msgid "Invalid address"
@@ -3302,7 +3302,7 @@ msgstr "Anonym webbmejlklient"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:279
 #: ../java/strings/Strings.java:16
 msgid "I2PMail"
-msgstr ""
+msgstr "I2PMail"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:48
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69
@@ -3547,7 +3547,7 @@ msgstr "I2P API dokumentation"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:109
 msgid "Javadocs"
-msgstr ""
+msgstr "Javadocs"
 
 #. _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "plugin.svg" + S +
 #. "stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "stats.svg" + S +
@@ -3575,12 +3575,12 @@ msgstr "Hem i I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "Bittorrent tracker"
-msgstr ""
+msgstr "BitTorrent tracker"
 
 #. torrent trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "Postman's Tracker"
-msgstr ""
+msgstr "Postman's Tracker"
 
 #. _x("Chudo") + S + _x("No login Bittorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
 #. domain name registration + uptime trackers
@@ -3622,11 +3622,11 @@ msgstr "Mikrobloggning över nätverk"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:138
 msgid "Alternative privacy-focused front-end for Reddit"
-msgstr ""
+msgstr "Alternativ integritetsfokuserad front-end för Reddit"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "Base64 Image Encoder"
-msgstr ""
+msgstr "Base64 Bildkodare"
 
 #. "StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
 #. "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
@@ -3638,15 +3638,15 @@ msgstr ""
 #. hosting + other services
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "base64-image.i2p"
-msgstr ""
+msgstr "base64-image.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "An image cache and resize service"
-msgstr ""
+msgstr "En tjänst för bildcache och storleksändring"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "imageproxy.i2p"
-msgstr ""
+msgstr "imageproxy.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:150
 msgid "IRC Logs for multiple networks"
@@ -3658,7 +3658,7 @@ msgstr "Krypterad I2P Pastebin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:151
 msgid "Pastebin"
-msgstr ""
+msgstr "Pastebin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "Streaming radio service"
@@ -3666,7 +3666,7 @@ msgstr "Strömmande radiotjänst"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "radio.r4sas.i2p"
-msgstr ""
+msgstr "radio.r4sas.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:153
 msgid "Privacy-focused not-for-profit organization"
@@ -3747,11 +3747,11 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:179
 msgid "Internet Encylopedia of Philosophy"
-msgstr ""
+msgstr "Internet encyklopedi av filosofi"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:180
 msgid "Standford Encylopedia of Philosophy"
-msgstr ""
+msgstr "Stanford Encyclopedia i filosofi"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:181
 msgid "Psychonaut"
@@ -4184,7 +4184,7 @@ msgstr "URL"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:528
 msgid "Add"
-msgstr "Lägg till "
+msgstr "Lägg till"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:191
 msgid "Identity"
@@ -5797,7 +5797,7 @@ msgstr "Högsta genomsnitt"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:183
 msgid "Highest total in a period"
-msgstr ""
+msgstr "Högsta totalsumman på en period"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:207
 msgid "Average event count"
@@ -5809,12 +5809,12 @@ msgstr "Händelser under högtrafik"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:218
 msgid "Events in this period"
-msgstr ""
+msgstr "Händelser under denna period"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:218
 #, java-format
 msgid "ended {0} ago"
-msgstr ""
+msgstr "slutade för {0} sedan"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:222
 msgid "No events"
@@ -5831,7 +5831,7 @@ msgstr "Diagram över antal händelser"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:236
 msgid "Export Data as XML"
-msgstr ""
+msgstr "Exportera data som XML"
 
 #. Display the strict average
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:242
@@ -6000,7 +6000,7 @@ msgstr "Felsök"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:228
 msgid "Troubleshooting &amp; Further Assistance"
-msgstr ""
+msgstr "Felsökning och Ytterligare Hjälp"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:237
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:698
@@ -6095,7 +6095,7 @@ msgstr "Loggar"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:522
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:544
 msgid "NetDb"
-msgstr ""
+msgstr "NetDb"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:536
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:886
@@ -6128,7 +6128,6 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:591
 msgid "Documentation for the I2P API"
 msgstr "Dokumentation för I2P API"
-
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:600
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/debug_jsp.java:285
@@ -6289,7 +6288,7 @@ msgstr "Används"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1049
 msgid "Our inbound &amp; outbound traffic for the last 20 minutes"
-msgstr ""
+msgstr "Vår inkommande och utgående trafik under de senaste 20 minuterna"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1078
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1121
@@ -6375,7 +6374,7 @@ msgstr "tunnlar"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:424
 msgid "Transit"
-msgstr ""
+msgstr "Transitera"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1168
 msgid "Utility"
@@ -6466,7 +6465,7 @@ msgstr "Router är redo att bygga deltagande tunnlar"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1296
 #, java-format
 msgid "Accepting participating tunnel requests; participating in {0} tunnels"
-msgstr ""
+msgstr "Acceptera deltagande tunnelförfrågningar; Deltar i {0} tunnlar"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1298
 msgid "No participating tunnels are built when Hidden mode is active"
@@ -6496,7 +6495,7 @@ msgstr "Brandvägg med inkommande TCP aktiverat"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:382
 msgid "Firewalled &amp; Floodfill"
-msgstr ""
+msgstr "Firewalled och Floodfill"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:388
 msgid "Disconnected"
@@ -6512,7 +6511,7 @@ msgstr "Inga aktiva kamrater"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:405
 msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr ""
+msgstr "UDP funktionshindrad och inkommande TCP -värd/port inte inställd"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:407
 msgid "Firewalled with UDP Disabled"
@@ -6540,7 +6539,7 @@ msgstr "I2PSnark"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:803
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:805
 msgid "service may be available to peers"
@@ -6582,7 +6581,7 @@ msgstr "Bygger tunnlar"
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:866
 #: ../java/strings/Strings.java:39
 msgid "Shared Clients"
-msgstr ""
+msgstr "Delade Kunder"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1167
 msgid "Click Restart to install"
@@ -6740,7 +6739,7 @@ msgstr "Nära våra destinationer"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:258
 msgid "This is an experimental network database tool for debugging and analysis. Do not panic even if you see warnings indicated. Possible \"threats\" are summarized, however these are unlikely to be real threats. If you see anything you would like to discuss with the devs, contact us on IRC #i2p-dev."
-msgstr ""
+msgstr "Detta är ett experimentellt nätverksdatabasverktyg för felsökning och analys. Få inte panik även om du ser varningar som anges. Möjliga \\\"hot\\\" sammanfattas, men det är osannolikt att det är verkliga hot. Om du ser något du vill diskutera med Devs, kontakta oss på IRC #i2p-dev."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:266
 msgid "No stored analysis"
@@ -6760,7 +6759,7 @@ msgstr "Kör analys på alla routrar i NetDb"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:324
 msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, with the option to block peers meeting the configured threshold. Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
-msgstr ""
+msgstr "Sybil -detekteringsrutinen kan konfigureras för att skanna nätverksdatabasen på ett regelbundet intervall, med möjlighet att blockera kamrater som uppfyller den konfigurerade tröskeln. Blockering av kamrater förhindrar din router från att bygga tunnlar med dem under den konfigurerade varaktigheten, eller tills routern startas om."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:327
 msgid "Configure Background Analysis"
@@ -6800,7 +6799,7 @@ msgstr "hotpoäng"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:379
 msgid "Enforce block for"
-msgstr ""
+msgstr "Verkställa blocket för"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:380
 msgid "days"
@@ -6894,7 +6893,7 @@ msgstr "Closest Floodfill Pairs av Hash"
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:618
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1054
 msgid "Hash Distance"
-msgstr ""
+msgstr "Hashavstånd"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:660
 msgid "Routers close to Our IP"
@@ -6968,19 +6967,19 @@ msgstr "översvämningar"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:928
 msgid "MIN"
-msgstr ""
+msgstr "MIN"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:929
 msgid "AVG"
-msgstr ""
+msgstr "AVG"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:930
 msgid "MEDIAN"
-msgstr ""
+msgstr "MEDIAN"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:931
 msgid "MAX"
-msgstr ""
+msgstr "MAX"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1029
 msgid "Show all routers for this family in NetDb"
@@ -8288,7 +8287,7 @@ msgstr "Ange en URL för zip eller su3"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:704
 msgid "Please supply a valid reseed URL"
-msgstr ""
+msgstr "Vänligen ange en giltig återställningsadress"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:708
 msgid "Select zip or su3 file"
@@ -8317,7 +8316,7 @@ msgstr "konfigurera tjänst"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:428
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:626
 msgid "Router Service"
-msgstr ""
+msgstr "Routertjänst"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:529
 msgid "Shutdown the router"
@@ -8325,27 +8324,27 @@ msgstr "Stäng av routern"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:531
 msgid "Graceful mode allows your router to honor its participating tunnel commitments before shutting down or restarting."
-msgstr ""
+msgstr "Graciöst läge gör att din router kan uppfylla sina deltagande tunnelåtaganden innan den stängs av eller startas om."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:545
 msgid "Restart the router"
-msgstr ""
+msgstr "Starta om routern"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:547
 msgid "A restart may be required to update the router, implement a configuration change, or complete installation of a plugin."
-msgstr ""
+msgstr "En omstart kan krävas för att uppdatera routern, genomföra en konfigurationsändring eller slutföra installationen av ett plugin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:556
 msgid "Launch console at startup"
-msgstr ""
+msgstr "Starta konsolen vid start"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:558
 msgid "Help with configuring I2P to use a non-system default browser"
-msgstr ""
+msgstr "Hjälp med att konfigurera I2P för att använda en icke-systemstandardwebbläsare"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:562
 msgid "Launch I2P Router Console in web browser when I2P starts."
-msgstr ""
+msgstr "Starta I2P Router Console i webbläsaren när I2P startar."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:570
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:508
@@ -8355,35 +8354,35 @@ msgstr "Felsöka"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:573
 #, java-format
 msgid "To assist in debugging I2P, it may be helpful to generate a thread dump which will be written to the {0}wrapper log{1}."
-msgstr ""
+msgstr "För att hjälpa till med felsökning av I2P kan det vara till hjälp att generera en tråddump som kommer att skrivas till {0} omslagsloggen{1}."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:575
 msgid "If I2P appears to be using too much ram, you can force the router to run the garbage collection routine to free up memory."
-msgstr ""
+msgstr "Om I2P verkar använda för mycket RAM-minne kan du tvinga routern att köra sopinsamlingsrutinen för att frigöra minne."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:589
 msgid "System Tray Integration"
-msgstr ""
+msgstr "Integrering av systemfack"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:591
 msgid "Enable or disable the I2P system tray applet to enable basic service control."
-msgstr ""
+msgstr "Aktivera eller inaktivera appleten för I2P-facket för att aktivera grundläggande servicekontroll."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:607
 msgid "Configure I2P system service"
-msgstr ""
+msgstr "Konfigurera I2P-systemtjänst"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:609
 msgid "Configure the status of the I2P service at system startup. If disabled, the service can be launched manually."
-msgstr ""
+msgstr "Konfigurera statusen för i2p -tjänsten vid systemstart. Om inaktiverad kan tjänsten lanseras manuellt."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:617
 msgid "Install I2P system service"
-msgstr ""
+msgstr "Installera I2P systemtjänst"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:619
 msgid "Install the I2P system service. This is the recommended way to run I2P."
-msgstr ""
+msgstr "Installera I2P -systemtjänsten. Detta är det rekommenderade sättet att köra I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:282
 msgid "config sidebar"
@@ -8399,7 +8398,7 @@ msgstr "sekunder"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:551
 msgid "0 to disable"
-msgstr ""
+msgstr "0 för att inaktivera"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:282
 msgid "config stats"
