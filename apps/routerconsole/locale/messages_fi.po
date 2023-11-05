@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-11-01 04:25+0000\n"
+"PO-Revision-Date: 2023-11-05 12:09+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fi\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:387
 msgid "Hash"
-msgstr ""
+msgstr "Hash"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:389
 msgid "Banned by Router Hash"
@@ -95,7 +95,7 @@ msgstr "Apua varten katso {0}"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:409
 msgid "reseed help"
-msgstr ""
+msgstr "reseed apua"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:668
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:805
@@ -203,7 +203,7 @@ msgstr "tuntematon"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:963
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:475
 msgid "Floodfill"
-msgstr ""
+msgstr "Floodfill"
 
 #.
 #. if (log.shouldWarn()) {
@@ -255,7 +255,7 @@ msgstr "Palvelu"
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1071
 msgid "WAN Common Interface Configuration"
-msgstr ""
+msgstr "WAN-yhteisen rajapinnan määritys"
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1072
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1093
@@ -321,7 +321,7 @@ msgstr "WAN IP-yhteys"
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1129
 msgid "WAN Ethernet Link Configuration"
-msgstr ""
+msgstr "WAN Ethernet -linkin määritys"
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1149
 msgid "Found Device"
@@ -408,31 +408,31 @@ msgstr "Versio {0}"
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:936
 #, java-format
 msgid "New plugin version {0} is available"
-msgstr ""
+msgstr "Uusi laajennuksen versio {0} on saatavilla"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1016
 #, java-format
 msgid "Update check failed for plugin {0}"
-msgstr ""
+msgstr "Päivitystarkistus epäonnistui laajennukselle {0}"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1020
 #, java-format
 msgid "No new version is available for plugin {0}"
-msgstr ""
+msgstr "Laajennukselle {0} ei ole saatavilla uutta versiota"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1110
 #, java-format
 msgid "Install failed from {0}"
-msgstr ""
+msgstr "Asennus epäonnistui osoitteesta {0}"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1112
 #, java-format
 msgid "Transfer failed from {0}"
-msgstr ""
+msgstr "Siirto epäonnistui kohteesta {0}"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1115
 msgid "Error"
-msgstr ""
+msgstr "Virhe"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1368
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1453
@@ -447,25 +447,25 @@ msgstr "Uudelleenkäynnistetään"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1428
 msgid "Update verified"
-msgstr ""
+msgstr "Päivitys vahvistettu"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1437
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:226
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:343
 #, java-format
 msgid "from {0}"
-msgstr ""
+msgstr "alkaen {0}"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1459
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1461
 #, java-format
 msgid "Unsigned update file from {0} is corrupt"
-msgstr ""
+msgstr "Allekirjoittamaton päivitystiedosto osoitteesta {0} on vioittunut"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1497
 #, java-format
 msgid "Failed copy to {0}"
-msgstr ""
+msgstr "Kopiointi kohteeseen {0} epäonnistui"
 
 #: ../java/src/net/i2p/router/update/DevSU3UpdateChecker.java:49
 #: ../java/src/net/i2p/router/update/DevSU3UpdateRunner.java:40
@@ -478,14 +478,14 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/PluginStarter.java:207
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:619
 msgid "HTTP client proxy tunnel must be running"
-msgstr ""
+msgstr "HTTP-asiakkaan välityspalvelintunnelin on oltava käynnissä"
 
 #: ../java/src/net/i2p/router/update/DevSU3UpdateChecker.java:83
 #: ../java/src/net/i2p/router/update/NewsFetcher.java:286
 #: ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:89
 #, java-format
 msgid "Requires Java version {0} but installed Java version is {1}"
-msgstr ""
+msgstr "Edellyttää Java-versiota {0}, mutta asennettu Java-versio on {1}"
 
 #. set status before thread to ensure UI feedback
 #: ../java/src/net/i2p/router/update/DevSU3UpdateHandler.java:91
@@ -494,30 +494,30 @@ msgstr "Päivitetään"
 
 #: ../java/src/net/i2p/router/update/NewsFetcher.java:248
 msgid "In-network updates disabled. Check package manager."
-msgstr ""
+msgstr "Verkon sisäiset päivitykset pois käytöstä. "
 
 #: ../java/src/net/i2p/router/update/NewsFetcher.java:254
 msgid "No write permission for I2P install directory."
-msgstr ""
+msgstr "Ei kirjoitusoikeutta I2P-asennushakemistoon."
 
 #: ../java/src/net/i2p/router/update/NewsFetcher.java:268
 msgid "No update certificates installed."
-msgstr ""
+msgstr "Päivitysvarmenteita ei ole asennettu."
 
 #: ../java/src/net/i2p/router/update/NewsFetcher.java:276
 #, java-format
 msgid "You must first update to version {0}"
-msgstr ""
+msgstr "Sinun on ensin päivitettävä versioon {0}"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateChecker.java:62
 #, java-format
 msgid "Checking for update of plugin {0}"
-msgstr ""
+msgstr "Tarkistetaan laajennuksen {0} päivitystä"
 
 #. set status before thread to ensure UI feedback
 #: ../java/src/net/i2p/router/update/PluginUpdateHandler.java:90
 msgid "Contacting plugin update server"
-msgstr ""
+msgstr "Ota yhteyttä laajennuksen päivityspalvelimeen"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:113
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:561
@@ -542,7 +542,7 @@ msgstr "Asentaminen tiedostosta {0} epäonnistui, kopionti epäonnistui."
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:576
 #, java-format
 msgid "Downloading plugin from {0}"
-msgstr ""
+msgstr "Ladataan laajennus osoitteesta {0}"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:169
 msgid "Downloading plugin"
@@ -556,7 +556,7 @@ msgstr "Plugin ladattavissa"
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:563
 #, java-format
 msgid "Cannot create plugin directory {0}"
-msgstr ""
+msgstr "Ei voi luoda laajennushakemistoa {0}"
 
 #. updateStatus("<b>" + "Plugin contains an invalid key" + ' ' + pubkey + ' ' + signer + "</b>");
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:242
@@ -564,7 +564,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:355
 #, java-format
 msgid "Plugin from {0} contains an invalid key"
-msgstr ""
+msgstr "Plugin osoitteesta {0} sisältää virheellisen avaimen"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:284
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:294
@@ -572,12 +572,12 @@ msgstr ""
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:366
 #, java-format
 msgid "Plugin signature verification of {0} failed"
-msgstr ""
+msgstr "Liitännäisen {0} allekirjoituksen vahvistus epäonnistui"
 
 #. don't display signer, we're really checking the key not the signer name
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:317
 msgid "Plugin not installed - signer is untrusted"
-msgstr ""
+msgstr "Plugin ei asennettu - allekirjoittaja on epäluotettava"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:382
 #, java-format
@@ -1290,7 +1290,7 @@ msgstr "I2PKäytävä"
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:68
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:571
 msgid "SAM"
-msgstr ""
+msgstr "SAM"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:84
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:348
@@ -1323,7 +1323,7 @@ msgstr "Konsoli"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:144
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
-msgstr ""
+msgstr "Jos haluat ottaa SSL-käytön reititinkonsoliin käyttöön, katso lisätietoa kommentoidusta <code>clients.config</code>-tiedostosta, joka sijaitsee I2P-sovellushakemistossasi. Sinun on muokattava RouterConsoleRunner-asetustiedostoa, joka sijaitsee hakemistossa: "
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigAdvancedHandler.java:73
 msgid "Error updating the configuration - please see the error logs"
@@ -1411,7 +1411,7 @@ msgstr "Lisätty uusi asiakas"
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:364
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:379
 msgid "Bad client index."
-msgstr ""
+msgstr "Huono asiakashakemisto."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:347
 #, java-format
@@ -1430,7 +1430,7 @@ msgstr "Asiakas {0} poistettu"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:404
 msgid "WebApp configuration saved."
-msgstr ""
+msgstr "WebApp-määritykset tallennettu."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:418
 msgid "Plugin configuration saved."
@@ -1474,7 +1474,7 @@ msgstr "Kohteelle {0} ei ole määritelty päivitysverkko-osoitetta"
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:530
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:554
 msgid "Plugin or update download already in progress."
-msgstr ""
+msgstr "Laajennuksen tai päivityksen lataus on jo käynnissä."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:535
 msgid "Updating all plugins"
@@ -1732,7 +1732,7 @@ msgstr "Tunnelin hallinta"
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:249
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:449
 msgid "Identification Image Generator"
-msgstr ""
+msgstr "Tunnistuskuvageneraattori"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:251
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:45
@@ -1871,7 +1871,7 @@ msgstr "Kotisivu vaihtunut"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigHomeHandler.java:61
 msgid "Restored default settings"
-msgstr ""
+msgstr "Palautettu oletusasetukset"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigHomeHandler.java:73
 msgid "No name entered"
@@ -2238,7 +2238,7 @@ msgstr "Lisäosat"
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:32
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configwebapps_jsp.java:429
 msgid "Web Apps"
-msgstr ""
+msgstr "Verkkosovellukset"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:33
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:579
@@ -2431,7 +2431,7 @@ msgstr "Poista tämä arvo käytöstä poistamiseksi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:307
 msgid "bps"
-msgstr ""
+msgstr "b/s"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:309
 #, java-format
@@ -2762,7 +2762,7 @@ msgstr "Tutkivia käytäviä"
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:65
 #, java-format
 msgid "Client tunnels for {0}"
-msgstr ""
+msgstr "Asiakastunnelit kohteelle {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:126
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
@@ -3279,7 +3279,7 @@ msgstr "Hallinnoi I2P-isäntätiedostoasi täällä (I2P-verkkotunnuksen resoluu
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:67
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:87
 msgid "Graph Router Performance"
-msgstr ""
+msgstr "Graafireitittimen suorituskyky"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:46
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:67
@@ -3302,7 +3302,7 @@ msgstr "Anonyymi webbipostiasiakas"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:279
 #: ../java/strings/Strings.java:16
 msgid "I2PMail"
-msgstr ""
+msgstr "I2PMail"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:48
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69
@@ -3434,7 +3434,7 @@ msgstr "Hallitse reitittimen verkkosovelluksia"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:97
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:654
 msgid "Webapps"
-msgstr ""
+msgstr "WebApps"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:58
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:78
@@ -3488,7 +3488,7 @@ msgstr "Velho"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
 msgid "Advanced Config"
-msgstr ""
+msgstr "Lisäasetukset"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
 msgid "Advanced router configuration"
@@ -3506,7 +3506,7 @@ msgstr "Muutosloki"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86
 msgid "Recent changes"
-msgstr ""
+msgstr "Viimeaikaiset muutokset"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:105
 msgid "Bug tracker"
@@ -3515,7 +3515,7 @@ msgstr "Vikaseuraaja"
 #. I2P specific
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:105
 msgid "I2P Bug Reports"
-msgstr ""
+msgstr "I2P-virheraportit"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:106
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:270
@@ -3547,7 +3547,7 @@ msgstr "I2P API -dokumentaatio"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:109
 msgid "Javadocs"
-msgstr ""
+msgstr "Javadocs"
 
 #. _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "plugin.svg" + S +
 #. "stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "stats.svg" + S +
@@ -3580,7 +3580,7 @@ msgstr "Bittorrent-seuranta"
 #. torrent trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "Postman's Tracker"
-msgstr ""
+msgstr "Postimiehen Jäljittäjä"
 
 #. _x("Chudo") + S + _x("No login Bittorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
 #. domain name registration + uptime trackers
@@ -3622,11 +3622,11 @@ msgstr "Verkkojen välinen mikrobloggaaminen"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:138
 msgid "Alternative privacy-focused front-end for Reddit"
-msgstr ""
+msgstr "Vaihtoehtoinen yksityisyyteen keskittyvä käyttöliittymä Redditille"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "Base64 Image Encoder"
-msgstr ""
+msgstr "Base64 Image Encoder"
 
 #. "StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
 #. "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
@@ -3638,23 +3638,23 @@ msgstr ""
 #. hosting + other services
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "base64-image.i2p"
-msgstr ""
+msgstr "base64-image.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "An image cache and resize service"
-msgstr ""
+msgstr "Kuvavälimuisti ja koonmuutospalvelu"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "imageproxy.i2p"
-msgstr ""
+msgstr "imageproxy.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:150
 msgid "IRC Logs for multiple networks"
-msgstr ""
+msgstr "IRC-lokit useille verkoille"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:151
 msgid "Encrypted I2P Pastebin"
-msgstr ""
+msgstr "Salattu I2P Pastebin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:151
 msgid "Pastebin"
@@ -3662,27 +3662,27 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "Streaming radio service"
-msgstr ""
+msgstr "Suoratoistoradiopalvelu"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "radio.r4sas.i2p"
-msgstr ""
+msgstr "radio.r4sas.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:153
 msgid "Privacy-focused not-for-profit organization"
-msgstr ""
+msgstr "Yksityisyyteen keskittyvä voittoa tavoittelematon organisaatio"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:154
 msgid "Outproxy bandwidth test"
-msgstr ""
+msgstr "Välityspalvelimen kaistanleveyden testi"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:154
 msgid "speedtest"
-msgstr ""
+msgstr "nopeustesti"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:155
 msgid "Provider of privacy respecting web hosting and VPN services"
-msgstr ""
+msgstr "Yksityisyyden tarjoaja, joka kunnioittaa web-isännöinti- ja VPN-palveluita"
 
 #. "tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "eepsites/tv.svg" + S +
 #. "tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
@@ -3692,38 +3692,38 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:161
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:167
 msgid "Tor-focused Search Engine"
-msgstr ""
+msgstr "Toriin keskittyvä hakukone"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:162
 msgid "DuckDuckGo Search Engine (no javascript)"
-msgstr ""
+msgstr "DuckDuckGo-hakukone (ei javascriptiä)"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:163
 msgid "Clearnet BitTorrent DHT search engine"
-msgstr ""
+msgstr "Clearnet BitTorrent DHT -hakukone"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:164
 msgid "I2P Web Search Engine"
-msgstr ""
+msgstr "I2P-verkkohakukone"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:165
 msgid "Privacy-focused Clearnet Search Engine"
-msgstr ""
+msgstr "Yksityisyyteen keskittyvä Clearnet-hakukone"
 
 #. "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
 #. "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
 #. wikis & reference
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:172
 msgid "Enabling the free transmission of data in the public interest"
-msgstr ""
+msgstr "Tietojen ilmaisen siirron mahdollistaminen yleisen edun vuoksi"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:173
 msgid "Selected Papers in Anonymity"
-msgstr ""
+msgstr "Valitut paperit nimettömänä"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:174
 msgid "Tor .onion site links"
-msgstr ""
+msgstr "Tor .onion -sivustolinkit"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
 msgid "HTML Color Reference"
@@ -3735,11 +3735,11 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
 msgid "I2P-related Wiki"
-msgstr ""
+msgstr "I2P:hen liittyvä Wiki"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:177
 msgid "Wolfram's Online Math Reference"
-msgstr ""
+msgstr "Wolframin online-matematiikan viite"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:178
 msgid "Mozilla Developer Network"
@@ -3747,7 +3747,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:179
 msgid "Internet Encylopedia of Philosophy"
-msgstr ""
+msgstr "Internetin Filosofian Tietosanakirja"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:180
 msgid "Standford Encylopedia of Philosophy"
@@ -3791,7 +3791,7 @@ msgstr "Maailman atlas, mukaan lukien maantieteelliset tiedot"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:187
 msgid "WorldAtlas"
-msgstr ""
+msgstr "Maailman Atlas"
 
 #. "cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
 #. "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "eepsites/books.svg" + S +
@@ -3930,23 +3930,23 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "English language Japanese News"
-msgstr ""
+msgstr "Englanninkieliset japanilaiset uutiset"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "JapanToday"
-msgstr ""
+msgstr "Japani Tänään"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "JStorDaily"
-msgstr ""
+msgstr "JStorDaily"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "Where news meets its scholarly match"
-msgstr ""
+msgstr "Missä uutiset kohtaavat tieteellisen ottelunsa"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Jurist"
-msgstr ""
+msgstr "Juristi"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Legal News &amp; Commentary"
@@ -3958,27 +3958,27 @@ msgstr "perusteellisia turvallisuusuutisia"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "KrebsOnSecurity"
-msgstr ""
+msgstr "KrebsOnSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "Linux Kernel Mailing List"
-msgstr ""
+msgstr "Linux-ytimen postituslista"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "MetaCritic"
-msgstr ""
+msgstr "MetaCritic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "Movie + TV + Music + Game reviews"
-msgstr ""
+msgstr "Elokuva-TV-musiikkipeliarvostelut"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "NakedSecurity"
-msgstr ""
+msgstr "NakedSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "Security news and research blog"
-msgstr ""
+msgstr "Turvallisuusuutiset ja tutkimusblogi"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "Smart &amp; fearless journalism"
@@ -4543,11 +4543,11 @@ msgstr "Arvioitu vuokrasopimusten kokonaismäärä"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:795
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:527
 msgid "LeaseSet"
-msgstr ""
+msgstr "LeaseSet"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:796
 msgid "LeaseSet Key"
-msgstr ""
+msgstr "LeaseSet Key"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:809
 msgid "View local tunnels for destination"
@@ -5019,7 +5019,7 @@ msgstr "Aktiivinen viime hetkellä"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:196
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:197
 msgid "IPv4"
-msgstr ""
+msgstr "IPv4"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:200
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:201
@@ -5049,7 +5049,7 @@ msgstr "NTCP-yhteydet"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:568
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:112
 msgid "Caps"
-msgstr ""
+msgstr "Caps"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:347
 msgid "Peer capabilities"
@@ -5430,7 +5430,7 @@ msgstr "Huomaa, että profiloija luottaa jatkuvaan asiakastunnelin käyttöön p
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:340
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:502
 msgid "Domain"
-msgstr ""
+msgstr "Verkkotunnus"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:115
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:117
@@ -5551,7 +5551,7 @@ msgstr "vertais"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:372
 msgid "peers"
-msgstr ""
+msgstr "vertaisia"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:375
 #, java-format
@@ -5580,7 +5580,7 @@ msgstr "1h epäonnistumisprosentti"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:394
 msgid "1h Resp. Time"
-msgstr "1h Resp. "
+msgstr "1h Resp."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:396
 msgid "Last Heard From"
@@ -5626,7 +5626,7 @@ msgstr "NetDb:n ominaisuudet, joita ei käytetä profiilien määrittämiseen"
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:472
 #: ../java/strings/Strings.java:80
 msgid "caps"
-msgstr ""
+msgstr "caps"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:479
 msgid "Reachable"
@@ -5789,7 +5789,7 @@ msgstr "taajuus"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:173
 msgid "Average"
-msgstr "keskiarvo"
+msgstr "Keskiarvo"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:176
 msgid "Highest average"
@@ -6073,7 +6073,7 @@ msgstr "Reitittimen ohje ja usein kysytyt kysymykset"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:489
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:492
 msgid "Router information including transport addresses and UPnP scan"
@@ -6095,7 +6095,7 @@ msgstr "Lokit"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:522
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:544
 msgid "NetDb"
-msgstr ""
+msgstr "NetDb"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:536
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:886
@@ -6123,7 +6123,7 @@ msgstr "Lisäasetukset"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:589
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:591
 msgid "Documentation for the I2P API"
@@ -6159,7 +6159,7 @@ msgstr "Tekstilliset reitittimen suorituskykytilastot"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:644
 msgid "Sybils"
-msgstr ""
+msgstr "Sybils"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:647
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:566
@@ -6384,7 +6384,7 @@ msgstr "Hyödyllisyys"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:417
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:436
 msgid "Tunnel Count by Peer"
-msgstr ""
+msgstr "Peerin Tunnelilaskenta"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1183
 msgid "What's in the router's job queue?"
@@ -6439,7 +6439,7 @@ msgstr "Muiden reitittimien jonossa olevat pyynnöt osallistua tunneleihin"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1269
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:525
 msgid "Backlog"
-msgstr ""
+msgstr "Työn viive"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1283
 msgid "No participating tunnels requests are accepted for the first 10 minutes while router stabilizes"
@@ -6465,7 +6465,7 @@ msgstr "Reititin on valmis rakentamaan osallistuvia tunneleita"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1296
 #, java-format
 msgid "Accepting participating tunnel requests; participating in {0} tunnels"
-msgstr ""
+msgstr "Osallistuvien tunnelipyyntöjen hyväksyminen; osallistuu {0} tunneliin"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1298
 msgid "No participating tunnels are built when Hidden mode is active"
@@ -6511,7 +6511,7 @@ msgstr "Ei aktiivisia vertaisryhmiä"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:405
 msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr ""
+msgstr "UDP pois käytöstä ja saapuvan TCP-isäntä/portti ei asetettu"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:407
 msgid "Firewalled with UDP Disabled"
@@ -6519,7 +6519,7 @@ msgstr "Palomuuri ja UDP pois käytöstä"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:774
 msgid "Add/remove/edit &amp; control your client and server tunnels"
-msgstr ""
+msgstr "Lisää/poista/muokkaa ja hallitse asiakas- ja palvelintunneleita"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:777
 msgid "How many local service tunnels we're running"
@@ -6633,7 +6633,7 @@ msgstr "Yritä ladata reitittimen viitetiedostoja (jos automaattinen uudelleensy
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1348
 msgid "Reseed"
-msgstr ""
+msgstr "Reseed"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1458
 msgid "Order"
@@ -6739,7 +6739,7 @@ msgstr "Lähellä kohteitamme"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:258
 msgid "This is an experimental network database tool for debugging and analysis. Do not panic even if you see warnings indicated. Possible \"threats\" are summarized, however these are unlikely to be real threats. If you see anything you would like to discuss with the devs, contact us on IRC #i2p-dev."
-msgstr ""
+msgstr "Tämä on kokeellinen verkkotietokantatyökalu virheenkorjaukseen ja analysointiin. Älä panikoi, vaikka näet varoituksia. Mahdolliset \"uhat\" on yhteenveto, mutta ne eivät todennäköisesti ole todellisia uhkia. Jos näet jotain, josta haluaisit keskustella kehittäjien kanssa, ota meihin yhteyttä IRC:ssä #i2p-dev."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:266
 msgid "No stored analysis"
@@ -6759,7 +6759,7 @@ msgstr "Suorita analyysi kaikilla NetDb:n reitittimillä"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:324
 msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, with the option to block peers meeting the configured threshold. Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
-msgstr ""
+msgstr "Sybil-tunnistusrutiini voidaan määrittää skannaamaan verkkotietokantaa säännöllisin väliajoin, ja siinä on mahdollisuus estää vertaiskäyttäjät, jotka täyttävät määritetyn kynnyksen. Vertaiskäyttäjien estäminen estää reititintäsi rakentamasta tunneleita niiden kanssa määritetyn ajan tai kunnes reititin käynnistetään uudelleen."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:327
 msgid "Configure Background Analysis"
@@ -6967,11 +6967,11 @@ msgstr "tulvat"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:928
 msgid "MIN"
-msgstr ""
+msgstr "MIN"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:929
 msgid "AVG"
-msgstr ""
+msgstr "AVG"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:930
 msgid "MEDIAN"
@@ -6979,7 +6979,7 @@ msgstr "MEDIAANI"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:931
 msgid "MAX"
-msgstr ""
+msgstr "MAX"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1029
 msgid "Show all routers for this family in NetDb"
@@ -7053,7 +7053,7 @@ msgstr "Rooli"
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:343
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:770
 msgid "Data"
-msgstr ""
+msgstr "Data"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:172
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:770
@@ -7074,7 +7074,7 @@ msgstr "Lähtevä päätepiste"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:215
 msgid "Inbound Gateway"
-msgstr ""
+msgstr "Sisääntuleva yhdyskäytävä"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:217
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:776
@@ -7161,7 +7161,7 @@ msgstr "paikallinen"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:592
 msgid "transit"
-msgstr ""
+msgstr "transit"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:600
 msgid "No local or transit tunnels currently active."
@@ -7205,7 +7205,7 @@ msgstr "ulos"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:908
 msgid "Data In"
-msgstr ""
+msgstr "Data sisään"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:908
 msgid "Tunnel Name"
@@ -7213,7 +7213,7 @@ msgstr "Tunnelin nimi"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:909
 msgid "Data Out"
-msgstr ""
+msgstr "Data ulos"
 
 #. Saved in CSSHelper, assume success
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:46
@@ -7257,7 +7257,7 @@ msgstr "bittiä sekunnissa"
 #: ../java/src/net/i2p/router/web/helpers/WizardHelper.java:220
 #, java-format
 msgid "{0}Bytes per month maximum"
-msgstr ""
+msgstr "{0}Tavua kuukaudessa enintään"
 
 #. wars for ConfigClientsHelper
 #: ../java/strings/Strings.java:12
@@ -7381,7 +7381,7 @@ msgstr "HTTP Proxy"
 #. hardcoded in iMule?
 #: ../java/strings/Strings.java:55
 msgid "iMule"
-msgstr ""
+msgstr "iMule"
 
 #: ../java/strings/Strings.java:56
 msgid "Official I2P Source Repository"
@@ -7410,7 +7410,7 @@ msgstr "Salaus"
 
 #: ../java/strings/Strings.java:70
 msgid "Stream"
-msgstr ""
+msgstr "Striimaa"
 
 #. parameters in transport addresses (netdb.jsp)
 #. may or may not be worth translating
@@ -7458,7 +7458,7 @@ msgstr "Kaistanleveyden rajoitin"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:530
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:532
 msgid "Advanced Network Configuration"
-msgstr ""
+msgstr "Verkon Lisäasetukset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:534
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:614
@@ -7483,7 +7483,7 @@ msgstr "Latausnopeus"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:549
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:627
 msgid "KBps In"
-msgstr ""
+msgstr "KB/s sisään"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:555
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:633
@@ -7493,7 +7493,7 @@ msgstr "Latausnopeus"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:561
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:639
 msgid "KBps Out"
-msgstr ""
+msgstr "KB/s ulos"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:566
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:644
@@ -7572,7 +7572,7 @@ msgstr "Automaattinen"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:563
 msgid "Force On"
-msgstr ""
+msgstr "Pakota päälle"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:569
 msgid "Disable"
@@ -7580,7 +7580,7 @@ msgstr "Poista käytöstä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:573
 msgid "Advanced I2P Configuration"
-msgstr ""
+msgstr "Edistynyt I2P-määritys"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:594
 msgid "Some changes may require a restart to take effect."
@@ -7603,7 +7603,7 @@ msgstr "Oletko varma, että haluat poistaa {0}?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:433
 msgid "Router Clients"
-msgstr ""
+msgstr "Reititin Asiakkaat"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:532
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:539
@@ -7614,7 +7614,7 @@ msgstr "Asiakasasetukset"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:534
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configwebapps_jsp.java:535
 msgid "Plugin Configuration"
-msgstr ""
+msgstr "Plugin Asetukset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:536
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:541
@@ -7634,7 +7634,7 @@ msgstr "Voit muuttaa asiakasasetuksia muokkaamalla tiedostoa: {0}"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:547
 msgid "Be careful changing any settings here. The 'router console' and 'application tunnels' are required for most uses of I2P. Only advanced users should change these."
-msgstr "Ole varovainen muuttaessasi asetuksia täällä. "
+msgstr "Ole varovainen muuttaessasi asetuksia täällä."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:282
 msgid "config router family"
@@ -8134,7 +8134,7 @@ msgstr "Säädä profiilibonuksia"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:578
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
-msgstr ""
+msgstr "Bonukset voivat olla positiivisia tai negatiivisia, ja ne voivat vaikuttaa kumppanin sisällyttämiseen Fast- ja High Capacity -tasoihin. Asiakastunneleissa käytetään nopeita vertaisversioita, ja joissakin tutkimustunneleissa käytetään korkean kapasiteetin vertaisia."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:596
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:447
@@ -8176,7 +8176,7 @@ msgstr "Ole hyvä ja toimita kelvollinen laajennustiedosto"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:596
 msgid "Plugin Manager"
-msgstr ""
+msgstr "Plugin Manager"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:598
 msgid "The plugins listed below are started by the webConsole client."
