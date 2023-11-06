@@ -34,8 +34,7 @@ import net.i2p.data.Hash;
  */
 public class LookupDest {
 
-//    private static final long DEFAULT_TIMEOUT = 15*1000;
-    private static final long DEFAULT_TIMEOUT = 20*1000;
+    private static final long DEFAULT_TIMEOUT = 15*1000;
 
     protected LookupDest(I2PAppContext context) {}
 
@@ -97,23 +96,6 @@ public class LookupDest {
         return rv;
     }
 
-    private static boolean deleteHostname(I2PAppContext ctx, String hostname) {
-        try {
-            Destination dest = lookupHostname(I2PAppContext.getGlobalContext(), hostname);
-            if (dest == null)
-                System.err.println("Destination not found!");
-            else {
-                NamingService ns = I2PAppContext.getGlobalContext().namingService();
-                if (ns != null)
-                    return ns.remove(hostname, dest);
-                System.err.print("ns is null");
-            }
-        } catch (I2PSessionException ise) {
-            ise.printStackTrace();
-        }
-        return false;
-    }
-
     /**
      * @since 0.9.40 split out from above
      */
@@ -144,26 +126,18 @@ public class LookupDest {
      *  TODO: does not support I2CP options.
      */
     public static void main(String args[]) {
-        if (args.length < 1) {
+        if (args.length != 1) {
             System.err.println("Usage: LookupDest hostname|b32");
             System.exit(1);
         }
-        if (args[0].length() == 1) {
-            try {
-                Destination dest = lookupHostname(I2PAppContext.getGlobalContext(), args[0]);
-                if (dest == null)
-                    System.err.println("Destination not found!");
-                else
-                    System.out.println(dest.toBase64());
-            } catch (I2PSessionException ise) {
-                ise.printStackTrace();
-            }
+        try {
+            Destination dest = lookupHostname(I2PAppContext.getGlobalContext(), args[0]);
+            if (dest == null)
+                System.err.println("Destination not found!");
+            else
+                System.out.println(dest.toBase64());
+        } catch (I2PSessionException ise) {
+            ise.printStackTrace();
         }
-        if (args[0].length() == 2) {
-            if (args[0] == "-d") {
-                deleteHostname(I2PAppContext.getGlobalContext(), args[1]);
-            }
-        }
-
     }
 }
