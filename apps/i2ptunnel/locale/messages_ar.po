@@ -7,15 +7,14 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-10-24 13:05+0000\n"
+"PO-Revision-Date: 2023-11-06 15:34+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Poedit 3.4\n"
 
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:498
@@ -27,34 +26,34 @@ msgstr "داخلي"
 #, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} الأنفاق الواردة"
+msgstr[1] "{0} الأنفاق الواردة"
+msgstr[2] "{0} الأنفاق الواردة"
+msgstr[3] "{0} الأنفاق الواردة"
+msgstr[4] "{0} الأنفاق الواردة"
+msgstr[5] "{0} الأنفاق الواردة"
 
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:549
 #, java-format
 msgid "{0} outbound tunnel"
 msgid_plural "{0} outbound tunnels"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} الأنفاق الخارجية"
+msgstr[1] "{0} الأنفاق الخارجية"
+msgstr[2] "{0} الأنفاق الخارجية"
+msgstr[3] "{0} الأنفاق الخارجية"
+msgstr[4] "{0} الأنفاق الخارجية"
+msgstr[5] "{0} الأنفاق الخارجية"
 
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:551
 #, java-format
 msgid "{0} inbound, {0} outbound tunnel"
 msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} Inbound ، {0} الأنفاق الخارجية"
+msgstr[1] "{0} Inbound ، {0} الأنفاق الخارجية"
+msgstr[2] "{0} Inbound ، {0} الأنفاق الخارجية"
+msgstr[3] "{0} Inbound ، {0} الأنفاق الخارجية"
+msgstr[4] "{0} Inbound ، {0} الأنفاق الخارجية"
+msgstr[5] "{0} Inbound ، {0} الأنفاق الخارجية"
 
 #: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:555
 msgid "lower bandwidth and reliability"
@@ -70,19 +69,12 @@ msgstr "عرض النطاق الترددي العالي والموثوقية"
 
 #: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:191
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:333
-msgid ""
-"Invalid form submission, probably because you used the 'back' or 'reload' "
-"button on your browser. Please resubmit."
-msgstr ""
-"إرسال النموذج غير صالح، ربما لأنك استخدمت زر 'الرجوع' أو 'إعادة التحميل' في "
-"متصفحك. خطأ في الارسال، ربما لاستعمالك زر 'الرجوع' او 'انعش' في المتصفح. "
-"حاول اعادة الارسال."
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "إرسال النموذج غير صالح، ربما لأنك استخدمت زر 'الرجوع' أو 'إعادة التحميل' في متصفحك. خطأ في الارسال، ربما لاستعمالك زر 'الرجوع' او 'انعش' في المتصفح. حاول اعادة الارسال."
 
 #: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:193
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:335
-msgid ""
-"If the problem persists, verify that you have cookies enabled in your "
-"browser."
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "إذا استمرت المشكلة، فتأكد من تمكين ملفات تعريف الارتباط في متصفحك."
 
 #: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:250
@@ -201,9 +193,7 @@ msgid "Are you sure you want to delete?"
 msgstr "هل تريد الحذف فعلا ؟"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:241
-msgid ""
-"Tunnel and all other shared client tunnels must be stopped to change this "
-"configuration"
+msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "يجب إيقاف النفق وكافة أنفاق العميل المشتركة الأخرى لتغيير هذا التكوين"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:242
@@ -238,20 +228,14 @@ msgstr "نفق البدء التلقائي"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:324
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1296
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:445
-msgid ""
-"Name of tunnel to be displayed on Tunnel Manager home page and the router "
-"console sidebar"
-msgstr ""
-"اسم النفق الذي سيتم عرضه على الصفحة الرئيسية لـ Tunnel Manager والشريط "
-"الجانبي لوحدة تحكم جهاز التوجيه"
+msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
+msgstr "اسم النفق الذي سيتم عرضه على الصفحة الرئيسية لـ Tunnel Manager والشريط الجانبي لوحدة تحكم جهاز التوجيه"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:328
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1300
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:634
-msgid ""
-"Enable this option to ensure this service is available when the router starts"
-msgstr ""
-"قم بتمكين هذا الخيار للتأكد من توفر هذه الخدمة عند بدء تشغيل جهاز التوجيه"
+msgid "Enable this option to ensure this service is available when the router starts"
+msgstr "قم بتمكين هذا الخيار للتأكد من توفر هذه الخدمة عند بدء تشغيل جهاز التوجيه"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:332
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1304
@@ -276,13 +260,8 @@ msgid "Description of tunnel to be displayed on Tunnel Manager home page"
 msgstr "وصف النفق الذي سيتم عرضه على الصفحة الرئيسية لـ Tunnel Manager"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:352
-msgid ""
-"Traffic from all clients with this feature enabled will be routed over the "
-"same set of tunnels. This will make profiling the tunnels by an adversary "
-"more difficult, but will link the clients together."
-msgstr ""
-"سيتم توجيه حركة المرور من جميع العملاء الذين تم تمكين هذه الميزة عبر نفس "
-"مجموعة الأنفاق."
+msgid "Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together."
+msgstr "سيتم توجيه حركة المرور من جميع العملاء الذين تم تمكين هذه الميزة عبر نفس مجموعة الأنفاق."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:368
 msgid "Share tunnels with other configured clients"
@@ -363,22 +342,15 @@ msgid "Local interface (ip address) the client tunnel will be reachable from"
 msgstr "الواجهة المحلية (عنوان IP) التي يمكن الوصول إلى نفق العميل منها"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:470
-msgid ""
-"If an outproxy plugin is installed (e.g. Orchid), use this instead of any "
-"configured outproxies to access websites outside of I2P"
-msgstr ""
-"إذا تم تثبيت مكون إضافي للوكيل الخارجي (على سبيل المثال، Orchid)، استخدم هذا "
-"بدلاً من أي وكلاء خارجيين تم تكوينهم للوصول إلى مواقع الويب خارج I2P"
+msgid "If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P"
+msgstr "إذا تم تثبيت مكون إضافي للوكيل الخارجي (على سبيل المثال، Orchid)، استخدم هذا بدلاً من أي وكلاء خارجيين تم تكوينهم للوصول إلى مواقع الويب خارج I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:474
 msgid "Use plugin instead of proxies listed below if available"
-msgstr ""
-"استخدم البرنامج المساعد بدلا من الوكلاء المذكورين أدناه إذا كان ذلك متاحا"
+msgstr "استخدم البرنامج المساعد بدلا من الوكلاء المذكورين أدناه إذا كان ذلك متاحا"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:480
-msgid ""
-"Enables direct chat and file transfers, bypassing I2P. Note that this will "
-"compromise your anonymity and is not recommended."
+msgid "Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended."
 msgstr "تمكين الدردشة المباشرة ونقل الملفات، وتجاوز I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:484
@@ -396,22 +368,18 @@ msgstr "وكلاء SSL"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:505
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:515
-msgid ""
-"Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
 msgstr "حدد عنوان .i2p أو الوجهة (b32 أو b64) للوكيل الخارجي هنا."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:507
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:517
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:563
-msgid ""
-"For a random selection from a pool, separate with commas e.g. server1.i2p,"
-"server2.i2p"
-msgstr "للاختيار العشوائي من مجموعة، افصل بفواصل على سبيل المثال."
+msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
+msgstr "للاختيار العشوائي من مجموعة، افصل بفواصل على سبيل المثال. server1.i2p,server2.i2p"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:530
-#, fuzzy
 msgid "Outproxy Type"
-msgstr "بروكسي خارجي"
+msgstr "نوع الوكيل"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:543
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:496
@@ -424,8 +392,7 @@ msgid "Use SSL"
 msgstr "استخدم SSL"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:561
-msgid ""
-"Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
 msgstr "حدد عنوان .i2p أو الوجهة (b32 أو b64) للنفق هنا."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:567
@@ -434,13 +401,8 @@ msgid "name, name:port, or destination"
 msgstr "الاسم، الاسم: المنفذ، أو الوجهة"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:573
-msgid ""
-"If you are accessing a service on a remote I2P router, you may wish to "
-"connect with SSL to avoid traffic interception. The client application "
-"should be also be configured to use SSL."
-msgstr ""
-"إذا كنت تصل إلى خدمة على جهاز توجيه I2P بعيد، فقد ترغب في الاتصال بـ SSL "
-"لتجنب اعتراض حركة المرور."
+msgid "If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL."
+msgstr "إذا كنت تصل إلى خدمة على جهاز توجيه I2P بعيد، فقد ترغب في الاتصال بـ SSL لتجنب اعتراض حركة المرور."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:577
 msgid "Clients use SSL to connect to tunnel"
@@ -525,12 +487,8 @@ msgid "Advanced networking options"
 msgstr "اعدادات متقدمة للشبكة"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:660
-msgid ""
-"Note: When this client is configured to share tunnels, these options apply "
-"to all clients configured to share tunnels."
-msgstr ""
-"ملاحظة: عندما يتم تكوين هذا العميل لمشاركة الأنفاق، تنطبق هذه الخيارات على "
-"جميع العملاء الذين تم تكوينهم لمشاركة الأنفاق."
+msgid "Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels."
+msgstr "ملاحظة: عندما يتم تكوين هذا العميل لمشاركة الأنفاق، تنطبق هذه الخيارات على جميع العملاء الذين تم تكوينهم لمشاركة الأنفاق."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:667
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1681
@@ -621,7 +579,7 @@ msgstr "كلا النوعين من التشفير"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1816
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1820
 msgid "Tunnel Options"
-msgstr ""
+msgstr "خيارات النفق"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:824
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1824
@@ -649,7 +607,7 @@ msgstr "0 نفق القفز (بدون إخفاء الهوية)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:840
 msgid "1 hop tunnel (low anonymity)"
-msgstr ""
+msgstr "1 قفزة نفق (عدم الكشف عن هويته)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:844
 msgid "2 hop tunnel (medium anonymity)"
@@ -657,9 +615,7 @@ msgstr "2 نفق القفز (مجهول الهوية بدرجة متوسطة)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:848
 msgid "3 hop tunnel (high anonymity)"
-msgstr ""
-"ملاحظة: عندما يتم تكوين هذا العميل لمشاركة الأنفاق، تنطبق هذه الخيارات على "
-"كافة العملاء الذين تم تكوينهم لمشاركة الأنفاق."
+msgstr "ملاحظة: عندما يتم تكوين هذا العميل لمشاركة الأنفاق، تنطبق هذه الخيارات على كافة العملاء الذين تم تكوينهم لمشاركة الأنفاق."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:856
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:860
@@ -686,12 +642,12 @@ msgstr ""
 #, java-format
 msgid "{0} hop tunnel"
 msgid_plural "{0} hop tunnel"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} نفق القفزة"
+msgstr[1] "{0} نفق القفزة"
+msgstr[2] "{0} نفق القفزة"
+msgstr[3] "{0} نفق القفزة"
+msgstr[4] "{0} نفق القفزة"
+msgstr[5] "{0} نفق القفزة"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:882
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1898
@@ -721,7 +677,7 @@ msgstr "مستوى التوزيع العشوائي لطول النفق"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1970
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2073
 msgid "0 hop variance"
-msgstr ""
+msgstr "0 تباين قفزة"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:903
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1966
@@ -770,7 +726,7 @@ msgstr "/- 0-2 تباين القفزة"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:923
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1996
 msgid "not recommended"
-msgstr ""
+msgstr "غير مستحسن"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:935
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2018
@@ -797,12 +753,12 @@ msgstr "عدد الأنفاق الاحتياطية"
 #, java-format
 msgid "{0} backup tunnel"
 msgid_plural "{0} backup tunnels"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} الأنفاق الاحتياطية"
+msgstr[1] "{0} الأنفاق الاحتياطية"
+msgstr[2] "{0} الأنفاق الاحتياطية"
+msgstr[3] "{0} الأنفاق الاحتياطية"
+msgstr[4] "{0} الأنفاق الاحتياطية"
+msgstr[5] "{0} الأنفاق الاحتياطية"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:950
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2029
@@ -826,15 +782,11 @@ msgstr "تكرار عالي، استخدام عالي للموارد"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:983
 msgid "Reduce tunnel quantity"
-msgstr ""
+msgstr "تقليل كمية النفق"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:985
-msgid ""
-"Reduce tunnel count when idle to conserve resources but keep tunnel open (to "
-"ensure immediate availability)"
-msgstr ""
-"تقليل عدد الأنفاق عندما تكون في وضع الخمول للحفاظ على الموارد مع إبقاء النفق "
-"مفتوحًا (لضمان التوفر الفوري)"
+msgid "Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
+msgstr "تقليل عدد الأنفاق عندما تكون في وضع الخمول للحفاظ على الموارد مع إبقاء النفق مفتوحًا (لضمان التوفر الفوري)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:989
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2184
@@ -854,7 +806,7 @@ msgstr "تقليل وقت الخمول في النفق"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:997
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2198
 msgid "Reduced count"
-msgstr ""
+msgstr "انخفاض العدد"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:999
 msgid "Reduced tunnel count"
@@ -909,13 +861,8 @@ msgid "Private key file"
 msgstr "ملف مفتاح الخاص"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1039
-msgid ""
-"Enabling this feature will ensure your tunnel identity (destination) remains "
-"static, for services offering features based on destination e.g. IRC user "
-"authentication"
-msgstr ""
-"سيؤدي تمكين هذه الميزة إلى ضمان بقاء هوية النفق (الوجهة) ثابتة، بالنسبة "
-"للخدمات التي تقدم ميزات بناءً على الوجهة، على سبيل المثال."
+msgid "Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering features based on destination e.g. IRC user authentication"
+msgstr "سيؤدي تمكين هذه الميزة إلى ضمان بقاء هوية النفق (الوجهة) ثابتة، بالنسبة للخدمات التي تقدم ميزات بناءً على الوجهة، على سبيل المثال"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1043
 msgid "Generate key to enable persistent client tunnel identity"
@@ -931,36 +878,24 @@ msgid "HTTP Filtering"
 msgstr "العشوائية المتوسطة، وانخفاض الأداء"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1056
-msgid ""
-"When enabled, the user agent of your web browser or http client will not be "
-"spoofed, potentially reducing your anonymity"
-msgstr ""
-"عند التمكين، لن يتم انتحال وكيل المستخدم لمتصفح الويب الخاص بك أو عميل http، "
-"مما قد يقلل من عدم الكشف عن هويتك"
+msgid "When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity"
+msgstr "عند التمكين، لن يتم انتحال وكيل المستخدم لمتصفح الويب الخاص بك أو عميل http، مما قد يقلل من عدم الكشف عن هويتك"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1060
 msgid "Do not spoof User-Agent header"
 msgstr "لا تقم بانتحال رأس وكيل المستخدم"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1062
-msgid ""
-"When enabled, the referer (originating page) of your web requests will not "
-"be filtered, potentially reducing your anonymity"
-msgstr ""
-"عند التمكين، لن تتم تصفية المرجع (الصفحة الأصلية) لطلبات الويب الخاصة بك، "
-"مما قد يقلل من عدم الكشف عن هويتك"
+msgid "When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity"
+msgstr "عند التمكين، لن تتم تصفية المرجع (الصفحة الأصلية) لطلبات الويب الخاصة بك، مما قد يقلل من عدم الكشف عن هويتك"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1066
 msgid "Do not block Referer header"
 msgstr "لا تقم بحظر رأس المُحيل"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1068
-msgid ""
-"When enabled, the accept headers (mime types support) broadcast by your web "
-"browser will not be filtered, potentially reducing your anonymity"
-msgstr ""
-"عند التمكين، لن تتم تصفية رؤوس القبول (دعم أنواع mime) التي يبثها متصفح "
-"الويب الخاص بك، مما قد يقلل من عدم الكشف عن هويتك"
+msgid "When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity"
+msgstr "عند التمكين، لن تتم تصفية رؤوس القبول (دعم أنواع mime) التي يبثها متصفح الويب الخاص بك، مما قد يقلل من عدم الكشف عن هويتك"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1072
 msgid "Do not block Accept headers"
@@ -980,15 +915,11 @@ msgstr "التفويض المحلي"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1087
 msgid "Local Credentials"
-msgstr ""
+msgstr "أوراق الاعتماد المحلية"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1089
-msgid ""
-"Enable to require a username and password to access this local service (for "
-"example if hosting on a LAN)"
-msgstr ""
-"تمكين طلب اسم مستخدم وكلمة مرور للوصول إلى هذه الخدمة المحلية (على سبيل "
-"المثال في حالة الاستضافة على شبكة LAN)"
+msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
+msgstr "تمكين طلب اسم مستخدم وكلمة مرور للوصول إلى هذه الخدمة المحلية (على سبيل المثال في حالة الاستضافة على شبكة LAN)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1093
 msgid "Require local authorization for this service"
@@ -1047,12 +978,8 @@ msgid "Jump URL List"
 msgstr "الانتقال إلى قائمة عناوين URL"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1140
-msgid ""
-"List of helper URLs providing jump links when a host is not found in your "
-"addressbook"
-msgstr ""
-"قائمة عناوين URL المساعدة التي توفر روابط الانتقال عند عدم العثور على مضيف "
-"في دفتر العناوين الخاص بك"
+msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
+msgstr "قائمة عناوين URL المساعدة التي توفر روابط الانتقال عند عدم العثور على مضيف في دفتر العناوين الخاص بك"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1148
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2720
@@ -1084,7 +1011,7 @@ msgstr "(دعه فارغا من أجل البروكسي الخارجي)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1327
 msgid "Website Hostname e.g. mysite.i2p"
-msgstr "اسم مضيف موقع الويب، على سبيل المثال."
+msgstr "اسم مضيف الموقع على سبيل المثال mysite.i2p"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1380
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:547
@@ -1097,24 +1024,16 @@ msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
 msgstr "واجهة الاستماع (عنوان IP) للوصول إلى العميل (عادة 127.0.0.1)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1418
-msgid ""
-"To avoid traffic sniffing if connecting to a remote server, you can enable "
-"an SSL connection. Note that the target server must be configured to accept "
-"SSL connections."
-msgstr ""
-"لتجنب استنشاق حركة المرور في حالة الاتصال بخادم بعيد، يمكنك تمكين اتصال SSL."
+msgid "To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections."
+msgstr "لتجنب استنشاق حركة المرور في حالة الاتصال بخادم بعيد، يمكنك تمكين اتصال SSL."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1422
 msgid "Use SSL to connect to target"
 msgstr "استخدم SSL للاتصال بالهدف"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1445
-msgid ""
-"Port required to access service (this can be a different port to the port "
-"the service is hosted on)"
-msgstr ""
-"المنفذ المطلوب للوصول إلى الخدمة (يمكن أن يكون هذا منفذًا مختلفًا عن المنفذ "
-"الذي تتم استضافة الخدمة عليه)"
+msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
+msgstr "المنفذ المطلوب للوصول إلى الخدمة (يمكن أن يكون هذا منفذًا مختلفًا عن المنفذ الذي تتم استضافة الخدمة عليه)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1499
 msgid "Generate a QR Code for this domain"
@@ -1154,15 +1073,11 @@ msgid "SSL Wizard"
 msgstr "معالج SSL"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1552
-msgid ""
-"Note: In order to enable QR code generation or registration authentication, "
-"configure the Website Hostname field (for websites) or the Name field "
-"(everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
 msgstr "المسار إلى ملف المفتاح الخاص"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1565
-msgid ""
-"Absolute path to Private Key File (will be created if it does not exist)"
+msgid "Absolute path to Private Key File (will be created if it does not exist)"
 msgstr "تصفية HTTP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1571
@@ -1180,9 +1095,7 @@ msgstr "المسار المطلق للمفتاح الجديد (سيتم إنشا
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1604
 msgid "Read Only: Alternate Local Destination"
-msgstr ""
-"عند التمكين، لن تتم تصفية المرجع (الصفحة الأصلية) لطلبات الويب الخاصة بك، "
-"مما قد يقلل من عدم الكشف عن هويتك"
+msgstr "عند التمكين، لن تتم تصفية المرجع (الصفحة الأصلية) لطلبات الويب الخاصة بك، مما قد يقلل من عدم الكشف عن هويتك"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1615
 msgid "Specify filename or full path for new key"
@@ -1193,9 +1106,7 @@ msgid "Configuration cannot be changed after destination is created"
 msgstr "لا يمكن تغيير التكوين بعد إنشاء الوجهة"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1711
-msgid ""
-"Configuration of signature type is only possible when the tunnel is first "
-"created. To change, you must create a new tunnel."
+msgid "Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel."
 msgstr "لا يمكن تكوين نوع التوقيع إلا عند إنشاء النفق لأول مرة."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1731
@@ -1254,7 +1165,7 @@ msgstr "0-3 قفزة التباين"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2002
 msgid "definitely not recommended"
-msgstr ""
+msgstr "بالتأكيد غير موصى بها"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2006
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2097
@@ -1271,7 +1182,7 @@ msgstr "الأنفاق الاحتياطية"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2188
 msgid "Reduce tunnels to conserve resources"
-msgstr ""
+msgstr "تقليل الأنفاق للحفاظ على الموارد"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2192
 msgid "Period of inactivity before tunnel number is reduced"
@@ -1304,9 +1215,7 @@ msgid "Block Accesses containing Referers"
 msgstr "حظر الوصول الذي يحتوي على المراجعين"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2224
-msgid ""
-"Use unique IP addresses for each connecting client (local non-SSL servers "
-"only)"
+msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
 msgstr "استخدام عناوين IP فريدة لكل عميل متصل (خوادم محلية غير SSL فقط)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2228
@@ -1414,7 +1323,7 @@ msgstr "مفتاح التشفير"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2415
 msgid "Generate New Key"
-msgstr ""
+msgstr "إنشاء مفتاح جديد"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2431
 msgid "Encryption key required to access this service"
@@ -1435,7 +1344,7 @@ msgstr "يجب إيقاف النفق أولاً"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2450
 msgid "Client Manager"
-msgstr ""
+msgstr "مدير العملاء"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2458
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2496
@@ -1516,7 +1425,7 @@ msgstr "اختناق الخادم"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2588
 msgid "Inbound connection limits"
-msgstr ""
+msgstr "حدود الاتصال الوارد"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2590
 msgid "Per Minute"
@@ -1540,12 +1449,8 @@ msgid "Per Client"
 msgstr "لكل عميل"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2600
-msgid ""
-"Maximum number of web page requests per minute for a unique client before "
-"access to the server is blocked"
-msgstr ""
-"الحد الأقصى لعدد طلبات صفحة الويب في الدقيقة للعميل الفريد قبل حظر الوصول "
-"إلى الخادم"
+msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
+msgstr "الحد الأقصى لعدد طلبات صفحة الويب في الدقيقة للعميل الفريد قبل حظر الوصول إلى الخادم"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2602
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2608
@@ -1560,20 +1465,12 @@ msgid "(0 = unlimited)"
 msgstr "(0 = غير محدود)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2606
-msgid ""
-"Maximum number of web page requests per hour for a unique client before "
-"access to the server is blocked"
-msgstr ""
-"الحد الأقصى لعدد طلبات صفحة الويب في الساعة للعميل الفريد قبل حظر الوصول إلى "
-"الخادم"
+msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
+msgstr "الحد الأقصى لعدد طلبات صفحة الويب في الساعة للعميل الفريد قبل حظر الوصول إلى الخادم"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2612
-msgid ""
-"Maximum number of web page requests per day for a unique client before "
-"access to the server is blocked"
-msgstr ""
-"الحد الأقصى لعدد طلبات صفحات الويب يوميًا للعميل الفريد قبل حظر الوصول إلى "
-"الخادم"
+msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
+msgstr "الحد الأقصى لعدد طلبات صفحات الويب يوميًا للعميل الفريد قبل حظر الوصول إلى الخادم"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2618
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2674
@@ -1581,21 +1478,15 @@ msgid "Total"
 msgstr "المجموع"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2620
-msgid ""
-"Total number of web page requests per minute before access to the server is "
-"blocked"
+msgid "Total number of web page requests per minute before access to the server is blocked"
 msgstr "إجمالي عدد طلبات صفحة الويب في الدقيقة قبل حظر الوصول إلى الخادم"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2626
-msgid ""
-"Total number of web page requests per hour before access to the server is "
-"blocked"
+msgid "Total number of web page requests per hour before access to the server is blocked"
 msgstr "إجمالي عدد طلبات صفحات الويب في الساعة قبل حظر الوصول إلى الخادم"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2632
-msgid ""
-"Total number of web page requests per day before access to the server is "
-"blocked"
+msgid "Total number of web page requests per day before access to the server is blocked"
 msgstr "إجمالي عدد طلبات صفحات الويب يوميًا قبل حظر الوصول إلى الخادم"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2638
@@ -1619,88 +1510,64 @@ msgid "POST limit period"
 msgstr "فترة الحد الأقصى"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2658
-msgid ""
-"Maximum number of post requests permitted for a unique client for the "
-"configured timespan"
-msgstr ""
-"الحد الأقصى لعدد طلبات النشر المسموح بها لعميل فريد خلال الفترة الزمنية التي "
-"تم تكوينها"
+msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
+msgstr "الحد الأقصى لعدد طلبات النشر المسموح بها لعميل فريد خلال الفترة الزمنية التي تم تكوينها"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2664
-msgid ""
-"If a client exceeds the maximum number of post requests per allocated "
-"period, enforce a ban for this number of minutes"
-msgstr ""
-"إذا تجاوز العميل الحد الأقصى لعدد طلبات النشر لكل فترة مخصصة، فقم بفرض حظر "
-"على هذا العدد من الدقائق"
+msgid "If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes"
+msgstr "إذا تجاوز العميل الحد الأقصى لعدد طلبات النشر لكل فترة مخصصة، فقم بفرض حظر على هذا العدد من الدقائق"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2670
-msgid ""
-"Timespan for the maximum number of post requests to be reached before a ban "
-"is triggered"
-msgstr ""
-"الفترة الزمنية للحد الأقصى لعدد طلبات النشر التي يجب الوصول إليها قبل بدء "
-"الحظر"
+msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
+msgstr "الفترة الزمنية للحد الأقصى لعدد طلبات النشر التي يجب الوصول إليها قبل بدء الحظر"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2676
 msgid "Total number of post requests permitted for the configured timespan"
 msgstr "إجمالي عدد طلبات النشر المسموح بها للمدة الزمنية التي تم تكوينها"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2682
-msgid ""
-"If the maximum number of post requests per allocated period is exceeded, "
-"enforce a global access ban for this number of minutes"
-msgstr ""
-"إذا تم تجاوز الحد الأقصى لعدد طلبات النشر لكل فترة مخصصة، فقم بفرض حظر وصول "
-"عالمي لهذا العدد من الدقائق"
+msgid "If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes"
+msgstr "إذا تم تجاوز الحد الأقصى لعدد طلبات النشر لكل فترة مخصصة، فقم بفرض حظر وصول عالمي لهذا العدد من الدقائق"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2696
 msgid "Custom HTTP Headers"
-msgstr ""
+msgstr "رؤوس HTTP مخصصة"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2698
-msgid ""
-"Note: These custom headers will only be enabled for served files that don't "
-"have the relevant header already set."
-msgstr ""
+msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
+msgstr "ملاحظة: سيتم تمكين هذه الرؤوس المخصصة فقط للملفات المقدمة التي لم يتم تعيين الرأس ذي الصلة بها بالفعل."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2700
-msgid ""
-"Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
-msgstr ""
+msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
+msgstr "قم بتعيين رأس السماح بـ \"الحصول على ملفات HTML و XML و JSON"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2702
 msgid "Allow"
-msgstr ""
+msgstr "يسمح"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2704
-msgid ""
-"Enable Cache-Control headers (no-cache for html, xml, json and text, "
-"immutable for everything else)"
-msgstr ""
+msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
+msgstr "تمكين رؤوس التحكم في ذاكرة التخزين المؤقت (بدون ذاكرة تخزين مؤقت لـ html وxml وjson والنص، وغير قابلة للتغيير لكل شيء آخر)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2706
-#, fuzzy
 msgid "Cache-Control"
-msgstr "تحكم"
+msgstr "التحكم في ذاكرة التخزين المؤقت"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2708
-msgid ""
-"Set the Referrer-Policy header to 'same-origin' for html, xml, json and text "
-"files"
-msgstr ""
+msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
+msgstr "قم بتعيين رأس سياسة المُحيل على \"نفس الأصل\" لملفات html وxml وjson والملفات النصية"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2710
 msgid "Referrer-Policy"
-msgstr ""
+msgstr "سياسة الإحالة"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2712
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
-msgstr ""
+msgstr "قم بتعيين رأس X-Content-Type-Options على \"nosniff\""
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2714
 msgid "X-Content-Type-Options"
-msgstr ""
+msgstr "خيارات نوع المحتوى X"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2743
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:924
@@ -1715,7 +1582,7 @@ msgstr "تهيئة مدير الأنفاق{0}"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:618
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1140
 msgid "Tunnels not initialized yet; please retry in a few moments."
-msgstr "لم تتم تهيئة الأنفاق بعد؛"
+msgstr "أنفاق لم تتم تهيئتها بعد ؛ يرجى إعادة المحاولة في لحظات قليلة."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:224
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:658
@@ -1753,7 +1620,7 @@ msgstr "أعد تشغيل الجمبع"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:281
 msgid "I2P Server Tunnels"
-msgstr ""
+msgstr "أنفاق خادم I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:285
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:636
@@ -1843,7 +1710,7 @@ msgstr "في"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:462
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:473
 msgid "out"
-msgstr ""
+msgstr "خارج"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:491
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:493
@@ -1869,16 +1736,16 @@ msgstr "البديل"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:590
 msgid "Alt Destination"
-msgstr ""
+msgstr "وجهة البديل"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:602
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:888
 msgid "Encryption"
-msgstr ""
+msgstr "التشفير"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:626
 msgid "New server tunnel"
-msgstr ""
+msgstr "نفق الخادم الجديد"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:628
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:913
@@ -1934,19 +1801,12 @@ msgid "Registration Helper"
 msgstr "مساعد التسجيل"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:269
-msgid ""
-"This service uses encrypted leasesets. Registration is not recommended. "
-"Registration authentication is disabled."
+msgid "This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled."
 msgstr "تستخدم هذه الخدمة مجموعات الإيجار المشفرة."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:275
-msgid ""
-"Please be sure to select, copy, and paste the entire contents of the "
-"appropriate authentication data into the form of your favorite registration "
-"site"
-msgstr ""
-"يرجى التأكد من تحديد ونسخ ولصق كامل محتويات بيانات المصادقة المناسبة في "
-"نموذج موقع التسجيل المفضل لديك"
+msgid "Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site"
+msgstr "يرجى التأكد من تحديد ونسخ ولصق كامل محتويات بيانات المصادقة المناسبة في نموذج موقع التسجيل المفضل لديك"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:277
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:700
@@ -1968,29 +1828,20 @@ msgstr "الوجهة المحلية غير متوفرة."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:308
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:699
-msgid ""
-"To enable registration verification, edit tunnel and set name (or website "
-"name) to a valid host name ending in '.i2p'"
-msgstr ""
-"لتمكين التحقق من التسجيل، قم بتحرير النفق وتعيين الاسم (أو اسم موقع الويب) "
-"إلى اسم مضيف صالح ينتهي بـ '.i2p'."
+msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
+msgstr "لتمكين التحقق من التسجيل، قم بتحرير النفق وتعيين الاسم (أو اسم موقع الويب) إلى اسم مضيف صالح ينتهي بـ '.i2p'."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:314
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:705
-msgid ""
-"To enable registration verification, edit tunnel and set name to a valid "
-"host name ending in '.i2p'"
-msgstr ""
-"لتمكين التحقق من التسجيل، قم بتحرير النفق وتعيين الاسم لاسم مضيف صالح ينتهي "
-"بـ '.i2p'."
+msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
+msgstr "لتمكين التحقق من التسجيل، قم بتحرير النفق وتعيين الاسم لاسم مضيف صالح ينتهي بـ '.i2p'."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:323
 msgid "Destination signing key is not available. Start the tunnel."
 msgstr "مفتاح توقيع الوجهة غير متوفر."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:329
-msgid ""
-"Destination signing key is offline. Use CLI tools on the offline machine."
+msgid "Destination signing key is offline. Use CLI tools on the offline machine."
 msgstr "مفتاح توقيع الوجهة غير متصل."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:339
@@ -2130,7 +1981,7 @@ msgstr "الخبراء فقط!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:713
 msgid "Base32"
-msgstr ""
+msgstr "BASE32"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:721
 msgid "Alt Base32"
@@ -2194,12 +2045,8 @@ msgstr "إنشاء شهادة SSL وتمكينها"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1108
 #, java-format
-msgid ""
-"Cannot configure, no Jetty server found in {0}client configurations{1} that "
-"matches this tunnel"
-msgstr ""
-"لا يمكن التهيئة، لم يتم العثور على خادم Jetty في {0}تكوينات العميل{1} التي "
-"تطابق هذا النفق"
+msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
+msgstr "لا يمكن التهيئة، لم يتم العثور على خادم Jetty في {0}تكوينات العميل{1} التي تطابق هذا النفق"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1110
 msgid "Support for non-Jetty servers will be added in a future release"
@@ -2250,33 +2097,20 @@ msgid "Wizard completed"
 msgstr "اكتمل المعالج"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:337
-msgid ""
-"This wizard will take you through the various options available for creating "
-"tunnels in I2P."
-msgstr ""
-"سيأخذك هذا المعالج عبر الخيارات المتنوعة المتاحة لإنشاء الأنفاق في I2P."
+msgid "This wizard will take you through the various options available for creating tunnels in I2P."
+msgstr "سيأخذك هذا المعالج عبر الخيارات المتنوعة المتاحة لإنشاء الأنفاق في I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:339
-msgid ""
-"The first thing to decide is whether you want to create a server or a client "
-"tunnel."
+msgid "The first thing to decide is whether you want to create a server or a client tunnel."
 msgstr "أول شيء عليك أن تقرره هو ما إذا كنت تريد إنشاء خادم أو نفق عميل."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:340
-msgid ""
-"If you need to connect to a remote service, such as an IRC server inside I2P "
-"or a code repository, then you will require a CLIENT tunnel."
-msgstr ""
-"إذا كنت بحاجة إلى الاتصال بخدمة بعيدة، مثل خادم IRC داخل I2P أو مستودع "
-"التعليمات البرمجية، فسوف تحتاج إلى نفق العميل."
+msgid "If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel."
+msgstr "إذا كنت بحاجة إلى الاتصال بخدمة بعيدة، مثل خادم IRC داخل I2P أو مستودع التعليمات البرمجية، فسوف تحتاج إلى نفق العميل."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:341
-msgid ""
-"On the other hand, if you wish to host a service for others to connect to "
-"you'll need to create a SERVER tunnel."
-msgstr ""
-"من ناحية أخرى، إذا كنت ترغب في استضافة خدمة ليتصل بها الآخرون، فستحتاج إلى "
-"إنشاء نفق خادم."
+msgid "On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel."
+msgstr "من ناحية أخرى، إذا كنت ترغب في استضافة خدمة ليتصل بها الآخرون، فستحتاج إلى إنشاء نفق خادم."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:343
 msgid "Server Tunnel"
@@ -2296,49 +2130,31 @@ msgstr "النفق الأساسي للاتصال بخدمة واحدة داخل 
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:371
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:396
-msgid ""
-"Try this if none of the tunnel types below fit your requirements, or you "
-"don't know what type of tunnel you need."
-msgstr ""
-"جرب هذا إذا لم يكن أي من أنواع الأنفاق أدناه يناسب متطلباتك، أو إذا كنت لا "
-"تعرف نوع النفق الذي تحتاجه."
+msgid "Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need."
+msgstr "جرب هذا إذا لم يكن أي من أنواع الأنفاق أدناه يناسب متطلباتك، أو إذا كنت لا تعرف نوع النفق الذي تحتاجه."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:373
 msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
 msgstr "النفق الذي يعمل بمثابة وكيل HTTP للوصول إلى مواقع eepsites داخل I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:374
-msgid ""
-"Set your browser to use this tunnel as an http proxy, or set your "
-"\"http_proxy\" environment variable for command-line applications in GNU/"
-"Linux."
-msgstr ""
-"قم بتعيين متصفحك لاستخدام هذا النفق كوكيل http، أو قم بتعيين متغير البيئة "
-"\"http_proxy\" الخاص بك لتطبيقات سطر الأوامر في GNU/Linux."
+msgid "Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux."
+msgstr "قم بتعيين متصفحك لاستخدام هذا النفق كوكيل http، أو قم بتعيين متغير البيئة \"http_proxy\" الخاص بك لتطبيقات سطر الأوامر في GNU/Linux."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:375
-msgid ""
-"Websites outside I2P can also be reached if an HTTP proxy within I2P is "
-"known."
-msgstr ""
-"يمكن أيضًا الوصول إلى مواقع الويب خارج I2P إذا كان وكيل HTTP داخل I2P معروفًا."
+msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
+msgstr "يمكن أيضًا الوصول إلى مواقع الويب خارج I2P إذا كان وكيل HTTP داخل I2P معروفًا."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:377
 msgid "Customised client tunnel specific for IRC connections."
 msgstr "نفق عميل مخصص خاص باتصالات IRC."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:378
-msgid ""
-"With this tunnel type, your IRC client will be able to connect to an IRC "
-"network inside I2P."
-msgstr ""
-"مع هذا النوع من النفق، سيتمكن عميل IRC الخاص بك من الاتصال بشبكة IRC داخل "
-"I2P."
+msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
+msgstr "مع هذا النوع من النفق، سيتمكن عميل IRC الخاص بك من الاتصال بشبكة IRC داخل I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:379
-msgid ""
-"Each IRC network in I2P that you wish to connect to will require its own "
-"tunnel. (See Also, SOCKS IRC)"
+msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
 msgstr "كل شبكة IRC في I2P ترغب في الاتصال بها ستتطلب نفقًا خاصًا بها."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:381
@@ -2346,44 +2162,24 @@ msgid "A tunnel that implements the SOCKS protocol."
 msgstr "نفق يقوم بتنفيذ بروتوكول SOCKS."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:382
-msgid ""
-"This enables both TCP and UDP connections to be made through a SOCKS "
-"outproxy within I2P."
-msgstr ""
-"يتيح هذا إمكانية إجراء اتصالات TCP وUDP من خلال وكيل خارجي SOCKS داخل I2P."
+msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
+msgstr "يتيح هذا إمكانية إجراء اتصالات TCP وUDP من خلال وكيل خارجي SOCKS داخل I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:384
-msgid ""
-"A client tunnel implementing the SOCKS protocol, which is customised for "
-"connecting to IRC networks."
-msgstr ""
-"نفق العميل الذي ينفذ بروتوكول SOCKS، والذي تم تخصيصه للاتصال بشبكات IRC."
+msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
+msgstr "نفق العميل الذي ينفذ بروتوكول SOCKS، والذي تم تخصيصه للاتصال بشبكات IRC."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:385
-msgid ""
-"With this tunnel type, IRC networks in I2P can be reached by typing the I2P "
-"address into your IRC client, and configuring the IRC client to use this "
-"SOCKS tunnel."
-msgstr ""
-"مع هذا النوع من النفق، يمكن الوصول إلى شبكات IRC في I2P عن طريق كتابة عنوان "
-"I2P في عميل IRC الخاص بك، وتكوين عميل IRC لاستخدام نفق SOCKS هذا."
+msgid "With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel."
+msgstr "مع هذا النوع من النفق، يمكن الوصول إلى شبكات IRC في I2P عن طريق كتابة عنوان I2P في عميل IRC الخاص بك، وتكوين عميل IRC لاستخدام نفق SOCKS هذا."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:386
-msgid ""
-"This means that only one I2P tunnel is required rather than a separate "
-"tunnel per IRC network."
-msgstr ""
-"هذا يعني أن هناك حاجة إلى نفق I2P واحد فقط بدلاً من نفق منفصل لكل شبكة IRC."
+msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
+msgstr "هذا يعني أن هناك حاجة إلى نفق I2P واحد فقط بدلاً من نفق منفصل لكل شبكة IRC."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:387
-msgid ""
-"IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P "
-"is known, though it depends on whether or not the outproxy has been blocked "
-"by the IRC network."
-msgstr ""
-"يمكن أيضًا الوصول إلى شبكات IRC خارج I2P إذا كان وكيل SOCKS الخارجي داخل I2P "
-"معروفًا، على الرغم من أن ذلك يعتمد على ما إذا كان الوكيل الخارجي قد تم حظره "
-"بواسطة شبكة IRC أم لا."
+msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
+msgstr "يمكن أيضًا الوصول إلى شبكات IRC خارج I2P إذا كان وكيل SOCKS الخارجي داخل I2P معروفًا، على الرغم من أن ذلك يعتمد على ما إذا كان الوكيل الخارجي قد تم حظره بواسطة شبكة IRC أم لا."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:395
 msgid "A basic server tunnel for hosting a generic service inside I2P."
@@ -2402,9 +2198,7 @@ msgid "A customised server tunnel for hosting IRC networks inside I2P."
 msgstr "نفق خادم مخصص لاستضافة شبكات IRC داخل I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:402
-msgid ""
-"Usually, a separate tunnel needs to be created for each IRC server that is "
-"to be accessible inside I2P."
+msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
 msgstr "عادة، يجب إنشاء نفق منفصل لكل خادم IRC يمكن الوصول إليه داخل I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:408
@@ -2416,58 +2210,36 @@ msgid "Choose a name and description for your tunnel."
 msgstr "اختر اسمًا ووصفًا للنفق الخاص بك."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:441
-msgid ""
-"These can be anything you want - they are just for ease of identifying the "
-"tunnel in the routerconsole."
-msgstr ""
-"يمكن أن تكون هذه أي شيء تريده - فهي فقط لتسهيل التعرف على النفق في وحدة تحكم "
-"جهاز التوجيه."
+msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
+msgstr "يمكن أن تكون هذه أي شيء تريده - فهي فقط لتسهيل التعرف على النفق في وحدة تحكم جهاز التوجيه."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:472
-msgid ""
-"If you know of any outproxies for this type of tunnel (either HTTP or "
-"SOCKS), fill them in below."
-msgstr ""
-"إذا كنت تعرف أي وكلاء خارجيين لهذا النوع من الأنفاق (إما HTTP أو SOCKS)، "
-"فاملأهم أدناه."
+msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
+msgstr "إذا كنت تعرف أي وكلاء خارجيين لهذا النوع من الأنفاق (إما HTTP أو SOCKS)، فاملأهم أدناه."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:473
 msgid "Separate multiple proxies with commas."
 msgstr "فصل بين الوكلاء المتعددين بفواصل."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:477
-msgid ""
-"List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,"
-"proxy2.i2p)"
-msgstr ""
-"قائمة وجهات الوكيل الخارجي لـ I2P، مفصولة بفواصل (على سبيل المثال proxy1.i2p,"
-"proxy2.i2p)"
+msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
+msgstr "قائمة وجهات الوكيل الخارجي لـ I2P، مفصولة بفواصل (على سبيل المثال proxy1.i2p,proxy2.i2p)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:493
-msgid ""
-"Type in the I2P destination of the service that this client tunnel should "
-"connect to."
+msgid "Type in the I2P destination of the service that this client tunnel should connect to."
 msgstr "اكتب وجهة I2P للخدمة التي يجب أن يتصل بها نفق العميل هذا."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:494
-msgid ""
-"This could be the full Base64 destination key, or an I2P URL from your "
-"address book."
-msgstr ""
-"قد يكون هذا هو مفتاح الوجهة Base64 الكامل، أو عنوان URL لـ I2P من دفتر "
-"العناوين الخاص بك."
+msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
+msgstr "قد يكون هذا هو مفتاح الوجهة Base64 الكامل، أو عنوان URL لـ I2P من دفتر العناوين الخاص بك."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:498
 msgid "Enter a b64 or .i2p address here"
 msgstr "أدخل عنوان b64 أو .i2p هنا"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:520
-msgid ""
-"This is the IP that your service is running on, this is usually on the same "
-"machine so 127.0.0.1 is autofilled."
-msgstr ""
-"هذا هو عنوان IP الذي تعمل عليه خدمتك، وعادةً ما يكون هذا على نفس الجهاز، لذا "
-"يتم ملء 127.0.0.1 تلقائيًا."
+msgid "This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
+msgstr "هذا هو عنوان IP الذي تعمل عليه خدمتك، وعادةً ما يكون هذا على نفس الجهاز، لذا يتم ملء 127.0.0.1 تلقائيًا."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:543
 msgid "This is the port that the service is accepting connections on."
@@ -2478,9 +2250,7 @@ msgid "This is the port that the client tunnel will be accessed from locally."
 msgstr "هذا هو المنفذ الذي سيتم الوصول إلى نفق العميل منه محليًا."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:587
-msgid ""
-"How do you want this tunnel to be accessed? By just this machine, your "
-"entire subnet, or external internet?"
+msgid "How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
 msgstr "كيف تريد الوصول إلى هذا النفق؟"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:588
@@ -2488,59 +2258,36 @@ msgid "You will most likely want to just allow 127.0.0.1"
 msgstr "سوف ترغب على الأرجح في السماح بـ 127.0.0.1 فقط"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:631
-msgid ""
-"The I2P router can automatically start this tunnel for you when the router "
-"is started."
-msgstr ""
-"يمكن لجهاز توجيه I2P أن يبدأ هذا النفق تلقائيًا عند بدء تشغيل جهاز التوجيه."
+msgid "The I2P router can automatically start this tunnel for you when the router is started."
+msgstr "يمكن لجهاز توجيه I2P أن يبدأ هذا النفق تلقائيًا عند بدء تشغيل جهاز التوجيه."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:632
-msgid ""
-"This can be useful for frequently-used tunnels (especially server tunnels), "
-"but for tunnels that are only used occassionally it would mean that the I2P "
-"router is creating and maintaining unnecessary tunnels."
-msgstr ""
-"يمكن أن يكون هذا مفيدًا للأنفاق المستخدمة بشكل متكرر (خاصة أنفاق الخادم)، "
-"ولكن بالنسبة للأنفاق التي يتم استخدامها من حين لآخر فقط، فهذا يعني أن جهاز "
-"توجيه I2P يقوم بإنشاء أنفاق غير ضرورية وصيانتها."
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgstr "يمكن أن يكون هذا مفيدًا للأنفاق المستخدمة بشكل متكرر (خاصة أنفاق الخادم)، ولكن بالنسبة للأنفاق التي يتم استخدامها من حين لآخر فقط، فهذا يعني أن جهاز توجيه I2P يقوم بإنشاء أنفاق غير ضرورية وصيانتها."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:657
 msgid "The wizard has now collected enough information to create your tunnel."
 msgstr "لقد قام المعالج الآن بتجميع معلومات كافية لإنشاء النفق الخاص بك."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:658
-msgid ""
-"Upon clicking the Save button below, the wizard will set up the tunnel, and "
-"take you back to the main I2PTunnel page."
-msgstr ""
-"عند النقر فوق الزر 'حفظ' أدناه، سيقوم المعالج بإعداد النفق، ويعيدك إلى صفحة "
-"I2PTunnel الرئيسية."
+msgid "Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page."
+msgstr "عند النقر فوق الزر 'حفظ' أدناه، سيقوم المعالج بإعداد النفق، ويعيدك إلى صفحة I2PTunnel الرئيسية."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:662
-msgid ""
-"Because you chose to automatically start the tunnel when the router starts, "
-"you don't have to do anything further."
-msgstr ""
-"نظرًا لأنك اخترت بدء تشغيل النفق تلقائيًا عند بدء تشغيل جهاز التوجيه، فلن "
-"يتعين عليك القيام بأي شيء آخر."
+msgid "Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further."
+msgstr "نظرًا لأنك اخترت بدء تشغيل النفق تلقائيًا عند بدء تشغيل جهاز التوجيه، فلن يتعين عليك القيام بأي شيء آخر."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:663
 msgid "The router will start the tunnel once it has been set up."
 msgstr "سيبدأ جهاز التوجيه النفق بمجرد إعداده."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:667
-msgid ""
-"Because you chose not to automatically start the tunnel, you will have to "
-"manually start it."
+msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
 msgstr "نظرًا لأنك اخترت عدم بدء تشغيل النفق تلقائيًا، سيتعين عليك تشغيله يدويًا."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:668
-msgid ""
-"You can do this by clicking the Start button on the main page which "
-"corresponds to the new tunnel."
-msgstr ""
-"يمكنك القيام بذلك عن طريق النقر فوق الزر 'ابدأ' الموجود بالصفحة الرئيسية "
-"والذي يتوافق مع النفق الجديد."
+msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
+msgstr "يمكنك القيام بذلك عن طريق النقر فوق الزر 'ابدأ' الموجود بالصفحة الرئيسية والذي يتوافق مع النفق الجديد."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:673
 msgid "Below is a summary of the options you chose:"
@@ -2559,17 +2306,11 @@ msgid "Tunnel port"
 msgstr "ميناء النفق"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:774
-msgid ""
-"Alongside these basic settings, there are a number of advanced options for "
-"tunnel configuration."
-msgstr ""
-"إلى جانب هذه الإعدادات الأساسية، يوجد عدد من الخيارات المتقدمة لتكوين النفق."
+msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
+msgstr "إلى جانب هذه الإعدادات الأساسية، يوجد عدد من الخيارات المتقدمة لتكوين النفق."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:775
-msgid ""
-"The wizard will set reasonably sensible default values for these, but you "
-"can view and/or edit these by clicking on the tunnel's name in the main "
-"I2PTunnel page."
+msgid "The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page."
 msgstr "انظر أعلاه لمعرفة العناصر المطلوبة."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:793
