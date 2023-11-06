@@ -452,19 +452,20 @@ input[type=file]{background:none}
 
 /* Show text on context specific buttons (eg deferred shutdown) */
 #sidebar .reload[value="restartImmediate"],#sidebar .stop[value="shutdownImmediate"],#sb_manualReseed,#sb_manualReseed:hover,#sb_manualReseed:focus{padding-left:24px;text-indent:0;text-align:left;text-transform:capitalize;background-size:14px,100%}
-#sidebar .reload[value="restartImmediate"]{padding-left:24px;background:var(--restart) no-repeat 8px center/12px,var(--btn)}
-#sidebar .reload[value="restartImmediate"]:hover,#sidebar .reload[value="restartImmediate"]:focus{background:var(--restart_hover) no-repeat 8px center/12px,var(--btn_hover_radial);color:#f00}
+#sidebar .reload[value="restartImmediate"]{padding-left:24px;color:transparent!important;text-shadow:none!important;background:var(--warning) no-repeat calc(50% - 9px) center/16px,var(--restart) no-repeat calc(50% + 9px) center/12px,var(--btn)}
+#sidebar .reload[value="restartImmediate"]:hover,#sidebar .reload[value="restartImmediate"]:focus{background:var(--warning) no-repeat calc(50% - 9px) center/16px,var(--restart_hover) no-repeat calc(50% + 9px) center/12px,var(--btn_hover_radial);color:#f00}
 #sidebar .cancel{text-transform:capitalize}
 #sidebar .stop[value="shutdownImmediate"]{width:auto;background:var(--shutdown) no-repeat 8px center/12px,var(--btn)}
 #sidebar .stop[value="shutdownImmediate"]:hover,#sidebar .stop[value="shutdownImmediate"]:focus{background:var(--shutdown_hover) no-repeat 8px center/12px,var(--btn_hover_radial)}
 #sidebar .stop[value="shutdownImmediate"]:active{background:#f60 var(--shutdown_active) no-repeat 8px center/12px}
-#sidebar .reload[value="restartImmediate"]:active{color:#ee9;background:#f60 var(--restart_active) no-repeat 8px center/12px}
+#sidebar .reload[value="restartImmediate"]:active{color:#ee9;background:var(--warning) no-repeat calc(50% - 9px) center/16px,var(--restart_active) no-repeat calc(50% + 9px) center/12px,#f60}
 
+#sidebar button.cancel{min-width:151px}
 #sidebar button.reload,#sidebar button.stop,#sidebar button.cancel{margin:3px 2px;min-width:97px;text-transform:capitalize}
+#sidebar button.reload[value$="Immediate"],#sidebar button.cancel[value^="cancel"]{min-width:160px}
 #sidebar button.download{margin:5px 0 4px;padding:6px 12px;width:calc(100% - 20px);border-radius:20px;border:1px solid #151;box-shadow:inset 0 0 3px 0 rgba(16,56,16,.2),inset 0 -2px 4px 0 rgba(0,0,0,.4),inset 0 0 3px 1px rgba(32,80,32,.2),inset 0 2px 8px 2px rgba(0,48,0,.7),0 -2px 2px 1px #000;background:var(--glow_bottom),linear-gradient(180deg,#000a00,#000400)}
 #sidebar button.download:hover,#sidebar button.download:focus{border:1px solid #f60;box-shadow:inset 0 0 2px 0 rgba(96,32,0,.3),inset 0 0 3px 1px rgba(179,71,0,.4),inset 0 1px 9px 1px rgba(230,92,0,.3),inset 0 -3px 4px 0 rgba(0,0,0,.7),0 0 2px 1px #000;background:linear-gradient(180deg,rgba(255,96,0,.01),rgba(230,88,0,.01),rgba(77,29,0,.01)),var(--glow_bottom_hover),linear-gradient(180deg,#520,#000)}
 #sidebar button.download:active{padding:7px 11px 5px 13px;color:rgba(255,96,0,.5);text-shadow:0 -1px 1px rgba(0,0,0,.7);box-shadow:var(--btn_shadow_active),0 0 2px 1px #000;background:linear-gradient(180deg,#310,#520)}
-#sidebar button.cancel{min-width:151px}
 #sidebar #sb_manualReseed{width:auto;min-width:unset;font-size:110%;text-indent:0;background:var(--download) no-repeat center left 6px/14px,var(--btn)}
 #sidebar #sb_manualReseed:hover,#sidebar #sb_manualReseed:focus,#sidebar #sb_manualReseed:active{background:var(--download_hover) no-repeat center left 6px/14px,var(--btn_hover_radial)}
 #updateAvailable{margin:0;padding:4px 0 0;width:calc(100% - 20px);display:inline-block;line-height:1.2;color:#dd3;font-size:9pt;text-shadow:var(--textshadow);opacity:.9}
@@ -2633,8 +2634,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #searchbar span{margin:3px 3px 0}
 #sidebar button.cancel{margin-top:10px}
 #sidebar .reload:hover,#sidebar .reload:focus{background-size:12px,12px,100%}
-#sidebar .reload,#sidebar .stop,#sidebar .stop:hover,#sidebar .stop:focus,#sidebar .reload[value="restartImmediate"]{background-size:12px,100%}
-#sidebar .reload[value="restartImmediate"],#sidebar .reload[value="restartImmediate"]:hover,#sidebar .reload[value="restartImmediate"]:focus{margin-bottom:-6px;background-size:10px,100%;background-position:9px center}
+#sidebar .reload[value="restartImmediate"],#sidebar .reload[value="restartImmediate"]:hover,#sidebar .reload[value="restartImmediate"]:focus{margin-bottom:-6px}
 #sidebar #sb_services td,#sidebar #sb_internals td,#sidebar #sb_advanced td{padding:4px}
 #sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table):not(#sb_services):not(#sb_internals):not(#sb_advanced) td:first-child{padding:1px 3px 1px 6px}
 #sidebar table:not(#sb_localtunnels):not(#sb_newsheadings table):not(#sb_services):not(#sb_internals):not(#sb_advanced) td:last-child{padding:1px 6px 1px 3px}
@@ -2891,8 +2891,8 @@ span#newtab{margin-top:4px}
 #schedjobs ul{columns:270px auto}
 #searchbar input[type=text]:focus{padding-top:7px;padding-bottom:7px}
 #sidebar{width:240px}
-#sidebar .reload[value="restartImmediate"]{width:auto;min-width:157px}
-#sidebar button.cancel{min-width:157px}
+#sidebar .reload[value="restartImmediate"]{width:auto;min-width:164px}
+#sidebar button.cancel{min-width:164px}
 #sidebar button.download{margin-bottom:5px;line-height:1.4}
 #sidebar button.reload,#sidebar button.stop{margin:4px 2px 3px;width:calc(50% - 8px)}
 #sidebar button.reload,#sidebar button.stop,#sidebar button.cancel{padding-top:10px;padding-bottom:10px}
