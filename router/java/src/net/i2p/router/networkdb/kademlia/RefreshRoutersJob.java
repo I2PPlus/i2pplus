@@ -57,7 +57,7 @@ class RefreshRoutersJob extends JobImpl {
     static final String PROP_ROUTER_REFRESH_TIMEOUT = "router.refreshTimeout";
     static final String PROP_ROUTER_REFRESH_UNINTERESTING = "router.refreshUninteresting";
 //    private final static long EXPIRE = 2*60*60*1000;
-    private final static long EXPIRE = 31*24*60*60*1000;
+    private final static long EXPIRE = 7*24*60*60*1000;
     private final static long OLDER = 2*60*60*1000;
     private static long RESTART_DELAY_MS = 5*60*1000;
     private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
@@ -140,7 +140,6 @@ class RefreshRoutersJob extends JobImpl {
                                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                          VersionComparator.comp(v, MIN_VERSION) < 0) &&
-//                                         getContext().netDbSegmentor().getKnownRouters() > 3000 &&
                                          getContext().netDb().getKnownRouters() > 3000 &&
                                          uptime > 15*60*1000 && !isHidden && !isUs;
                 boolean refreshUninteresting = getContext().getBooleanProperty(PROP_ROUTER_REFRESH_UNINTERESTING);

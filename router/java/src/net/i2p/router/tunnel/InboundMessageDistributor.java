@@ -239,13 +239,6 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                 // Handling of client tunnel messages need explicit handling
                 // in the context of the client subDb.
                 if (_client != null) {
-                    //Hash dbid = _context.netDbSegmentor().getDbidByHash(_client);
-                    /*if (dbid == null) {
-                        // This error shouldn't occur.  All clients should have their own netDb.
-                        if (_log.shouldLog(Log.ERROR))
-                            _log.error("Error, client (" + _clientNickname + ") dbid not found while processing messages in the IBMD.");
-                            return;
-                    }*/
                     // For now, the only client message we know how to handle here is a DSM.
                     // There aren't normally DSM messages here, but it should be safe to store
                     // them in the client netDb.
@@ -449,7 +442,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         // We must send to the InNetMessagePool so the message can be matched
                         // and the search marked as successful.
                         // note that encrypted replies to RI lookups is currently disabled in ISJ, we won't get here.
- 
+
                         // ... and inject it.
                         _context.statManager().addRateData("tunnel.inboundI2NPGarlicRIDSM", 1);
                         if (_log.shouldInfo())

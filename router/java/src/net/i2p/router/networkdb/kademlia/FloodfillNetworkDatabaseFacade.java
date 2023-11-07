@@ -519,11 +519,15 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     // tunnels.  The return messages will not have sufficient information
     // to be directed back to the clientmaking the query.
     SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease, Hash fromLocalDest) {
-        //if (true) return super.search(key, onFindJob, onFailedLookupJob, timeoutMs, isLease);
-//        if (key == null) throw new IllegalArgumentException("Searchin' for nothing, eh?");
         if (key == null) {
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("Not searching for a NULL key!");
+            }
+            return null;
+        } else if (fromLocalDest == null && isClientDb()) {
+            if (_log.shouldWarn()) {
+                _log.warn("Client subDbs cannot use exploratory tunnels!");
+            }
             return null;
         } else {
             boolean isNew = false;
