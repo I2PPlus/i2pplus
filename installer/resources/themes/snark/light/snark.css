@@ -130,7 +130,7 @@ td{padding:3px 4px;color:var(--ink_light);opacity:1;font-size:9pt}
 #screenlog li{margin-left:-18px;margin-right:-5px;padding:0 20px 2px 5px;display:block;word-break:break-all;font-weight:700;mix-blend-mode:multiply;background:rgba(255,255,255,.25);letter-spacing:0;word-spacing:0}
 #screenlog li,#screenlog li a{line-height:1.1;font-size:8.5pt}
 #screenlog li::before{margin:-1px 0 1px;display:inline-block;width:14px;height:10px;vertical-align:middle;background:var(--bullet) no-repeat left bottom/9px;content:""}
-#closelog,#expand,#shrink{margin:0;padding:0;position:sticky;top:0;z-index:999;float:right;cursor:pointer}
+#closelog,#expand,#shrink{margin:0;padding:0;display:block;position:sticky;top:0;z-index:999;float:right;cursor:pointer}
 #closelog{margin-right:-2px}
 #shrink{display:none}
 #closelog img,#expand img,#shrink img{margin:0;padding:3px;width:12px;opacity:.8;border:1px solid #77b;background:linear-gradient(180deg,rgba(255,255,255,.8) 50%,rgba(220,220,255,.8) 50%)}
@@ -681,7 +681,7 @@ tfoot .rateDown::after,tfoot .rateUp::after{width:6px;display:inline-block;verti
 
 /* comment indicator */
 .filetype{position:relative;vertical-align:middle}
-.commented{display:inline-block;position:absolute;top:-3px;right:2px;z-index:20;line-height:0;font-size:0}
+.commented{display:inline-block;position:absolute;top:-14px;right:3px;z-index:20;line-height:0;font-size:0}
 .commented img{padding:0;height:9px;width:9px;border:0;filter:drop-shadow(0 0 1px #555) drop-shadow(0 0 2px rgba(128,128,0,.3));image-rendering:-webkit-optimize-contrast}
 
 .snarkFilename:hover .targetfile{display:inline-block}
