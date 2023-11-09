@@ -669,7 +669,7 @@ class NetDbRenderer {
         if (debug) {
             RouterKeyGenerator gen = _context.routerKeyGenerator();
             if (leases.size() > 0) {
-                buf.append("<tr><td><b>Published (RAP) Leasesets:</b></td><td colspan=3>").append(leases).append("</td></tr>\n");
+                buf.append("<tr><td><b>Published (RAP) Leasesets:</b></td><td colspan=3>").append(netdb.getKnownLeaseSets()).append("</td></tr>\n");
             }
             buf.append("<tr><td><b>Mod Data:</b></td><td>").append(DataHelper.getUTF8(gen.getModData())).append("</td>")
                .append("<td><b>Last Changed:</b></td><td>").append(DataHelper.formatTime(gen.getLastChanged())).append("</td></tr>\n")
