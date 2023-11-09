@@ -361,7 +361,7 @@ public class PersistentDataStore extends TransientDataStore {
         boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") ||
                          bw.equals("M") || bw.equals("N");
         boolean isLTier = bw.equals("L");
-        boolean isBanned = ri != null && (_context.banlist().isBanlistedHard(key) ||
+        boolean isBanned = ri != null && (_context.banlist().isBanlistedForever(key) ||
                            _context.banlist().isBanlisted(key) ||
                            _context.banlist().isBanlistedHostile(key));
 

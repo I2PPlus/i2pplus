@@ -155,32 +155,33 @@ public class Blocklist {
         _singleIPv6Blocklist = _haveIPv6 ? new LHMCache<BigInteger, Object>(MAX_IPV6_SINGLES) : null;
     }
 
-
-    private int expireInterval(){
+    private int expireInterval() {
         String expireIntervalValue = _context.getProperty(PROP_BLOCKLIST_EXPIRE_INTERVAL, "0");
-        try{
+        try {
             Integer expireIntervalInt = 0;
             if (expireIntervalValue.endsWith("s")) {
                 expireIntervalValue = expireIntervalValue.substring(0, expireIntervalValue.length() - 1);
                 expireIntervalInt = Integer.parseInt(expireIntervalValue) * 1000;
-            }else if(expireIntervalValue.endsWith("m")){
+            } else if (expireIntervalValue.endsWith("m")) {
                 expireIntervalValue = expireIntervalValue.substring(0, expireIntervalValue.length() - 1);
                 expireIntervalInt = Integer.parseInt(expireIntervalValue) * 60000;
-            }else if(expireIntervalValue.endsWith("h")){
+            } else if (expireIntervalValue.endsWith("h")) {
                 expireIntervalValue = expireIntervalValue.substring(0, expireIntervalValue.length() - 1);
                 expireIntervalInt = Integer.parseInt(expireIntervalValue) * 3600000;
-            }else if (expireIntervalValue.endsWith("d")) {
+            } else if (expireIntervalValue.endsWith("d")) {
                 expireIntervalValue = expireIntervalValue.substring(0, expireIntervalValue.length() - 1);
                 expireIntervalInt = Integer.parseInt(expireIntervalValue) * 86400000;
-            }else{
+            } else {
                 expireIntervalInt = Integer.parseInt(expireIntervalValue);
             }
-            if (expireIntervalInt < 0)
+            if (expireIntervalInt < 0) {
                 expireIntervalInt = 0;
+            }
             return expireIntervalInt;
-        }catch(NumberFormatException nfe){
-            if (_log.shouldLog(_log.ERROR))
-                _log.error("format error in "+PROP_BLOCKLIST_EXPIRE_INTERVAL, nfe);
+        } catch(NumberFormatException nfe) {
+            if (_log.shouldLog(_log.ERROR)) {
+                _log.error("format error in " + PROP_BLOCKLIST_EXPIRE_INTERVAL, nfe);
+            }
         }
         // if we don't have a valid value in this field, return 0 which is the same as disabling it.
         return 0;
@@ -249,9 +250,11 @@ public class Blocklist {
         // but it's important to have this initialized before we read in the netdb.
         //job.getTiming().setStartAfter(_context.clock().now() + 30*1000);
         _context.jobQueue().addJob(job);
-        Job cleanupJob = new CleanupJob();
-        cleanupJob.getTiming().setStartAfter(_context.clock().now() + expireInterval());
-        _context.jobQueue().addJob(cleanupJob);
+        if (expireInterval() > 0) {
+            Job cleanupJob = new CleanupJob();
+            cleanupJob.getTiming().setStartAfter(_context.clock().now() + expireInterval());
+            _context.jobQueue().addJob(cleanupJob);
+        }
     }
 
     /**
@@ -296,7 +299,7 @@ public class Blocklist {
         public CleanupJob() {
             super(_context);
         }
-        public String getName(){
+        public String getName() {
             if (expireInterval() > 0) {
                 String expiry = expireInterval() >= 600000 ? (expireInterval() / 60 / 1000) + "m" : (expireInterval() / 1000 + "s");
                 return "Expire blocklist at user-defined interval of " + expiry;
@@ -305,25 +308,17 @@ public class Blocklist {
             }
         }
         public void runJob() {
-            int jobInterval;
-
-            if (expireInterval() > 0) {
-                clear();
-                _lastExpired = System.currentTimeMillis();
-                jobInterval = expireInterval();
-                if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Expiring blocklist entrys at" + _lastExpired);
-            } else {
-                // Set the next job interval to 15 minutes when expireInterval disabled
-                jobInterval = 15 * 60 * 1000;
+            clear();
+            _lastExpired = System.currentTimeMillis();
+            if (_log.shouldDebug()) {
+                _log.debug("Expiring blocklist entrys at" + _lastExpired);
             }
-
             // schedule the next one
-            super.requeue(jobInterval);
+            super.requeue(expireInterval());
         }
     }
 
-    private void clear(){
+    private void clear() {
         synchronized(_singleIPBlocklist) {
             _singleIPBlocklist.clear();
         }
@@ -383,10 +378,11 @@ public class Blocklist {
                 String reason;
                 String comment = _peerBlocklist.get(peer);
                 String peerhash = peer.toBase64().substring(0,6);
-                if (comment != null)
+                if (comment != null) {
                     reason = " <b>➜</b> " + _x("Hash") + ": " + peerhash;
-                else
+                } else {
                     reason = " <b>➜</b> " + _x("Banned by Router Hash");
+                }
                 banlistRouter(peer, reason, comment);
             }
             _peerBlocklist.clear();
@@ -396,9 +392,7 @@ public class Blocklist {
 
     private void banlistRouter(Hash peer, String reason, String comment) {
         if (expireInterval() > 0)
-            _context.banlist().banlistRouter(peer, reason, comment,
-                                             _context.banlist().BANLIST_CODE_HARD, null,
-                                             _context.clock().now() + expireInterval());
+            _context.banlist().banlistRouter(peer, reason, comment, null, expireInterval());
         else
             _context.banlist().banlistRouterForever(peer, reason, comment);
     }
@@ -1307,14 +1301,13 @@ public class Blocklist {
      * So we also stagger these jobs.
      *
      */
-    private void banlistRouter( Hash peer, String reason, String reasonComment, long duration) {
+    private void banlistRouter( Hash peer, String reason, String reasonCode, long duration) {
         if (duration > 0)
-            _context.banlist().banlistRouter(peer, reason, reasonComment,
-                                             _context.banlist().BANLIST_CODE_HARD, null,
-                                             System.currentTimeMillis()+expireInterval());
+            _context.banlist().banlistRouter(peer, reason, reasonCode, null, System.currentTimeMillis() + expireInterval());
         else
-            _context.banlist().banlistRouterForever(peer, reason, reasonComment);
+            _context.banlist().banlistRouterForever(peer, reason, reasonCode);
     }
+
     private synchronized void banlistRouter(Hash peer, List<byte[]> ips, long duration) {
         // This only checks one file for now, pick the best one
         // user specified

@@ -186,9 +186,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     private boolean verifyInbound(Hash aliceHash) {
         // get inet-addr
         byte[] ip = _con.getRemoteIP();
-        if (_context.banlist().isBanlistedHard(aliceHash)) {
+        if (_context.banlist().isBanlistedForever(aliceHash)) {
             if (_log.shouldWarn())
-                _log.warn("Dropping Inbound connection from " + (_context.banlist().isBanlistedHard(aliceHash) ?
+                _log.warn("Dropping Inbound connection from " + (_context.banlist().isBanlistedForever(aliceHash) ?
                           "permanently" : "") + " banlisted peer at " + Addresses.toString(ip) +
                           " [" + aliceHash.toBase64().substring(0,6) + "]");
             // So next time we will not accept the con from this IP,
@@ -198,7 +198,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             if (getVersion() < 2)
                 fail("Banlisting incompatible Router [" + aliceHash.toBase64().substring(0,6) + "] -> No NTCP2 support");
             else if (_log.shouldWarn())
-                _log.warn("Router is banlisted " + (_context.banlist().isBanlistedHard(aliceHash) ? "forever" : "") +
+                _log.warn("Router is banlisted " + (_context.banlist().isBanlistedForever(aliceHash) ? "forever" : "") +
                           " [" + aliceHash.toBase64().substring(0,6) + "]");
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             return false;
@@ -707,7 +707,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         // s is verified, we may now ban the hash
         if (mismatchMessage != null) {
             _context.banlist().banlistRouter(h, " <b>➜</b> Wrong IP address in RouterInfo (NTCP)",
-                                             null, _context.banlist().BANLIST_CODE_HARD, null, _context.clock().now() + 4*60*60*1000);
+                                             null, null, _context.clock().now() + 4*60*60*1000);
             _context.commSystem().forceDisconnect(h);
             if (_log.shouldWarn())
                 _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +

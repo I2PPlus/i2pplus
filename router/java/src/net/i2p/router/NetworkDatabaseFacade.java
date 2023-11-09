@@ -122,11 +122,11 @@ public abstract class NetworkDatabaseFacade implements Service {
      *  @since 0.9.16
      */
     public DatabaseEntry store(Hash key, DatabaseEntry entry) throws IllegalArgumentException {
-        if (entry.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
+        if (!entry.isLeaseSet()) {
             return store(key, (RouterInfo) entry);
-        if (entry.getType() == DatabaseEntry.KEY_TYPE_LEASESET)
+        } else {
             return store(key, (LeaseSet) entry);
-        throw new IllegalArgumentException("Unknown type");
+        }
     }
 
     /**

@@ -84,7 +84,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         DatabaseEntry entry = _message.getEntry();
         int type = entry.getType();
         long now = getContext().clock().now();
-        boolean isBanned = getContext().banlist().isBanlistedHard(key) ||
+        boolean isBanned = getContext().banlist().isBanlistedForever(key) ||
                            getContext().banlist().isBanlisted(key) ||
                            getContext().banlist().isBanlistedHostile(key);
         if (DatabaseEntry.isLeaseSet(type)) {
@@ -502,7 +502,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 // Check new routerinfo address against blocklist
                 if (wasNew) {
                     // TODO should we not flood temporarily banned routers either?
-                    boolean forever = getContext().banlist().isBanlistedHard(key);
+                    boolean forever = getContext().banlist().isBanlistedForever(key);
                     if (forever || isBanned) {
                         wasNew = false; // don't flood
                         shouldStore = false; // don't call heardAbout()

@@ -698,7 +698,7 @@ public class NTCPTransport extends TransportImpl {
     public void forceDisconnect(Hash peer) {
         NTCPConnection con = _conByIdent.remove(peer);
         boolean isBanned = _context.banlist().isBanlisted(peer);
-        boolean isBannedHard = _context.banlist().isBanlistedHard(peer);
+        boolean isBannedHard = _context.banlist().isBanlistedForever(peer);
         boolean isBlocklisted = _context.blocklist().isBlocklisted(peer);
         if (con != null) {
             if (_log.shouldWarn()) {

@@ -3687,7 +3687,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     public void forceDisconnect(Hash peer) {
         PeerState ps =  _peersByIdent.get(peer);
         boolean isBanned = _context.banlist().isBanlisted(peer);
-        boolean isBannedHard = _context.banlist().isBanlistedHard(peer);
+        boolean isBannedHard = _context.banlist().isBanlistedForever(peer);
         boolean isBlocklisted = _context.blocklist().isBlocklisted(peer);
         if (ps != null) {
             if (_log.shouldWarn()) {

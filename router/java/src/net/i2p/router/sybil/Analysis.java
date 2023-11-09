@@ -180,7 +180,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                         Hash h = Hash.create(b);
                         long until = e.getValue().longValue();
                         String reason = " <b>➜</b> Sybil Analysis";
-                        ban.banlistRouter(h, reason, null, ban.BANLIST_CODE_HARD, null, until);
+                        ban.banlistRouter(h, reason, null, null, until);
                     }
                 }
             }
@@ -505,7 +505,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                     else
                         _log.warn("Banning " + h.toBase64() + ' ' + reason.replace("<b>➜</b>", "->"));
                 }
-                _context.banlist().banlistRouter(h, reason, null, Banlist.BANLIST_CODE_HARD, null, blockUntil);
+                _context.banlist().banlistRouter(h, reason, null, null, blockUntil);
             }
         }
         if (!blocks.isEmpty())
@@ -517,8 +517,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      *  @return average distance
      *  @since 0.9.38 split out from renderPairDistance()
      */
-    public double calculatePairDistance(List<RouterInfo> ris, Map<Hash, Points> points,
-                                        List<Pair> pairs) {
+    public double calculatePairDistance(List<RouterInfo> ris, Map<Hash, Points> points, List<Pair> pairs) {
         int sz = ris.size();
         double total = 0;
         for (int i = 0; i < sz; i++) {
@@ -1069,8 +1068,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 if (entry != null) {
                     if (entry.cause != null) {
 //                        buf.append(": ");
-                        if (entry.causeComment != null)
-                            buf.append(_t(entry.cause, entry.causeComment));
+                        if (entry.causeCode != null)
+                            buf.append(_t(entry.cause, entry.causeCode));
                         else
                             buf.append(_t(entry.cause));
                     }
