@@ -1216,6 +1216,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .tabletitle{margin-bottom:-2px}
 #netdblookup{margin-bottom:9px}
 #netdblookup th{padding:10px;text-align:left;letter-spacing:.08em;text-transform:uppercase;font-size:11pt;background:var(--title)}
+#netdblookup td{padding:3px 6px}
 #netdblookup td:nth-child(odd){padding-left:10px;padding-right:0;text-align:right;white-space:nowrap;font-weight:700}
 #netdblookup td:nth-child(even){padding-left:0;width:50%}
 #netdblookup td:nth-child(2){border-right:1px inset #131}
@@ -1225,8 +1226,8 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdblookup td.optionsave{padding:10px}
 #netdblookup td b{font-size:90%}
 #netdblookup .optbox{margin:10px }
-#netdblookup input[type=text]{width:calc(100% - 11px)}
-#netdblookup select{width:calc(100% - 10px)}
+#netdblookup input[type=text]{width:calc(100% - 12px)}
+#netdblookup select{width:calc(100% - 11px)}
 
 /* leasesets */
 .addtobook{text-align:right}
@@ -1430,7 +1431,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #banneduntilrestart{border-left:1px solid var(--border)}
 #banneduntilrestart td{border-right:var(--border);text-align:center}
 #ipv4,#ipv6,#permabanned tr:nth-child(2){border-top:var(--border);border-bottom:var(--border);background:var(--th)}
-#sessionBanned {margin:11px auto 9px}
+#sessionBanned{margin:11px auto 9px}
 #sessionBanned th,#sessionBanned td{padding:6px 12px}
 #sessionBanned thead th{font-size:85%;text-align:left}
 #profiles #sessionBanned tfoot th{padding:8px 12px;text-align:center}
