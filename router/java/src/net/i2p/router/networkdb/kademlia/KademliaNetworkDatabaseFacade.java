@@ -1478,9 +1478,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.7
      */
     String validate(RouterInfo routerInfo) throws IllegalArgumentException {
-        if (!isInitialized()) {
-            return null;
-        }
+        if (!isInitialized()) { return null; }
         long now = _context.clock().now();
         String validateUptime = _context.getProperty("router.validateRoutersAfter");
         Hash us = _context.routerHash();
