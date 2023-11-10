@@ -216,6 +216,7 @@ public class LogsHelper extends HelperBase {
                         !line.contains("Problematic frame:") &&
                         !line.contains("INFO | #   Unknown") &&
                         !line.contains("INFO | #\n") &&
+                        !line.endsWith("| INFO | #\n") &&
                         !line.contains("  \n")) {
                         filtered.append(line).append("\n");
                     }
