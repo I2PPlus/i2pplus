@@ -648,6 +648,7 @@ th img{filter:none;opacity:.85}
 .peerclient,.peerinfo code,.clientid{display:inline-block;vertical-align:middle;line-height:1;text-shadow:none}
 .peerclient{padding:1px;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:var(--badge)}
 .peerdata{padding-left:0}
+.peerdata[colspan="5"]{text-align:left}
 .peerinfo td>*{vertical-align:middle}
 .peerinfo code{margin:0;padding:0 5px;color:#282;text-shadow:var(--txt_shadow);border-radius:2px 0 0 2px;background:none}
 #ourDest,#ourDest code{display:inline-block;vertical-align:middle;line-height:16px}
@@ -820,7 +821,6 @@ td.status img{width:auto;height:21px}
 #torrentDisplay{margin-bottom:0;display:flex;top:39px}
 #torrents .infohash{max-width:60px}
 #torrents tfoot tr:first-child th{padding:3px 0 3px 2px}
-
 }
 
 @media (max-width:800px){
