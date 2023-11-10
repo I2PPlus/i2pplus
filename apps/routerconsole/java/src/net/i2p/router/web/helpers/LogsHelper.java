@@ -201,6 +201,7 @@ public class LogsHelper extends HelperBase {
                                     .replace("| ERROR  | [Reseed     ] ....reseed.Reseeder:", "| WARN   |")
                                     .replace(" |[", " | [")
                                     .replace("INFO   | WARN:", "WARN   |")
+                                    .replace("INFO   | WARNING:", "WARN   |")
                                     .replace("   |", " |")
                                     .replace("| ERROR  |", "| ERR  |")
                                     .replace("| INFO | # V  [", "| INFO | # Source: [");
