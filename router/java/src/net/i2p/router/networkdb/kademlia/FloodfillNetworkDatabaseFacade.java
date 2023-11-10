@@ -65,18 +65,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  Was 7 through release 0.9; 5 for 0.9.1.
      *  4 as of 0.9.2; 3 as of 0.9.9
      */
-//    public static final int MAX_TO_FLOOD = 3;
-    public static final int MAX_TO_FLOOD = SystemVersion.isSlow() ? 3 : 5;
+    public static final int MAX_TO_FLOOD = SystemVersion.isSlow() ? 4 : 8;
 
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
-//    private static final int FLOOD_TIMEOUT = 30*1000;
-    private static final int FLOOD_TIMEOUT = 90*1000;
+    private static final int FLOOD_TIMEOUT = 60*1000;
     static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
-//    private static final int NEXT_FLOOD_QTY = 2;
     private static final int NEXT_FLOOD_QTY = SystemVersion.isSlow() ? 2 : 3;
     private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 600 : 300;
-
 
     /**
      *  Main DB
@@ -129,7 +125,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             isFF = false;
         } else {
             isFF = _context.getBooleanProperty(FloodfillMonitorJob.PROP_FLOODFILL_PARTICIPANT);
-            _lookupThrottler = new LookupThrottler();
+            _lookupThrottler = new LookupThrottler(this);
             _lookupBanner = new LookupBanHammer();
         }
 

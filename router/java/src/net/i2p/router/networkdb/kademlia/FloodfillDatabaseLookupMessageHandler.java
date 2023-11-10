@@ -50,18 +50,13 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         _context.statManager().addRateData("netDb.lookupsReceived", 1);
 
         DatabaseLookupMessage dlm = (DatabaseLookupMessage)receivedMessage;
-        boolean isBanned = dlm.getFrom() != null && (_context.banlist().isBanlistedForever(dlm.getFrom()) ||
-                           _context.banlist().isBanlisted(dlm.getFrom()) ||
-                           _context.banlist().isBanlistedHostile(dlm.getFrom()));
         boolean ourRI = dlm.getSearchKey() != null && dlm.getSearchKey().equals(_context.routerHash());
         boolean ffMode = _context.netDb().floodfillEnabled() || _context.getBooleanProperty("router.floodfillParticipant");
         String searchType = dlm.getSearchType() != null ? dlm.getSearchType().toString().replace("EXPL", "XP") : "";
-        if (isBanned) {
-            _context.statManager().addRateData("netDb.lookupsDropped", 1);
-            return null;
-        } else if ((!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
-             !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel()) && (ffMode || ourRI)) ||
-             _context.routerHash().equals(dlm.getFrom())) {
+        if ((!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
+             !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
+             (ffMode || ourRI || dlm.getSearchType() != DatabaseLookupMessage.Type.EXPL)) ||
+             _context.routerHash().equals(dlm.getSearchKey())) {
             if (_log.shouldInfo()) {
                 _log.info("Replying to " + searchType + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
                           "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] via [TunnelId " + dlm.getReplyTunnel() + "]");

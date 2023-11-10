@@ -20,11 +20,29 @@ class LookupThrottler {
     /** the id of this is -1 */
     private static final TunnelId DUMMY_ID = new TunnelId();
     /** this seems like plenty */
-//    private static final int MAX_LOOKUPS = 30;
-    private static final int MAX_LOOKUPS = 20;
-    private static final long CLEAN_TIME = 3*60*1000;
+    private static final int DEFAULT_MAX_LOOKUPS = 14;
+    private static final int DEFAULT_MAX_NON_FF_LOOKUPS = 3;
+    private static final long DEFAULT_CLEAN_TIME = 2*60*1000;
+    private final int MAX_LOOKUPS;
+    private final int MAX_NON_FF_LOOKUPS;
+    private final long CLEAN_TIME;
+    private final FloodfillNetworkDatabaseFacade _facade;
+    private int _max;
 
-    LookupThrottler() {
+    LookupThrottler(FloodfillNetworkDatabaseFacade facade) {
+        this(facade, DEFAULT_MAX_LOOKUPS, DEFAULT_MAX_NON_FF_LOOKUPS, DEFAULT_CLEAN_TIME);
+    }
+
+    /**
+     *  @param maxlookups when floodfill
+     *  @param maxnonfflookups when not floodfill
+     *  @since 0.9.60
+     */
+    LookupThrottler(FloodfillNetworkDatabaseFacade facade, int maxlookups, int maxnonfflookups, long cleanTime) {
+        _facade = facade;
+        MAX_LOOKUPS = maxlookups;
+        MAX_NON_FF_LOOKUPS = maxnonfflookups;
+        CLEAN_TIME = cleanTime;
         this.counter = new ObjectCounter<ReplyTunnel>();
         SimpleTimer2.getInstance().addPeriodicEvent(new Cleaner(), CLEAN_TIME);
     }
@@ -35,12 +53,13 @@ class LookupThrottler {
      * @param id null if for direct lookups
      */
     boolean shouldThrottle(Hash key, TunnelId id) {
-        return this.counter.increment(new ReplyTunnel(key, id)) > MAX_LOOKUPS;
+        return this.counter.increment(new ReplyTunnel(key, id)) > _max;
     }
 
     private class Cleaner implements SimpleTimer.TimedEvent {
         public void timeReached() {
             LookupThrottler.this.counter.clear();
+            _max = _facade.floodfillEnabled() ? MAX_LOOKUPS : MAX_NON_FF_LOOKUPS;
         }
     }
 
