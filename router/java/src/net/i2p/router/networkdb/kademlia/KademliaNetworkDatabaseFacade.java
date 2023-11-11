@@ -569,10 +569,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     public Set<Hash> findNearestRouters(Hash key, int maxNumRouters, Set<Hash> peersToIgnore) {
         if (isClientDb()) {
-            _log.warn("Subdb", new Exception("I did it"));
+//            _log.warn("Subdb", new Exception("I did it"));
             return Collections.emptySet();
         }
-        if (!_initialized) return Collections.emptySet();
+        if (!_initialized) {return Collections.emptySet();}
         return new HashSet<Hash>(_peerSelector.selectNearest(key, maxNumRouters, peersToIgnore, _kb));
     }
 
@@ -622,7 +622,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /** get the hashes for all known routers */
     public Set<Hash> getAllRouters() {
         if (isClientDb()) {
-            _log.warn("Subdb", new Exception("I did it"));
+//            _log.warn("Subdb", new Exception("I did it"));
             return Collections.emptySet();
         }
         if (!_initialized) {return Collections.emptySet();}
@@ -650,7 +650,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return count.size();
 ****/
         if (isClientDb()) {
-            _log.warn("Subdb", new Exception("I did it"));
+//            _log.warn("Subdb", new Exception("I did it"));
             return 0;
         }
         if (_ds == null) return 0;
@@ -1377,26 +1377,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     blindCache().setBlinded(dest, null, null);
             }
         }
-
-        // Iterate through the old failure / success count, copying over the old
-        // values (if any tunnels overlap between leaseSets).  no need to be
-        // ueberthreadsafe fascists here, since these values are just heuristics
-      /****** unused
-        if (rv != null) {
-            for (int i = 0; i < rv.getLeaseCount(); i++) {
-                Lease old = rv.getLease(i);
-                for (int j = 0; j < leaseSet.getLeaseCount(); j++) {
-                    Lease cur = leaseSet.getLease(j);
-                    if (cur.getTunnelId().getTunnelId() == old.getTunnelId().getTunnelId()) {
-                        cur.setNumFailure(old.getNumFailure());
-                        cur.setNumSuccess(old.getNumSuccess());
-                        break;
-                    }
-                }
-            }
-        }
-       *******/
-
         return rv;
     }
 
@@ -1537,33 +1517,29 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 noCountry = false;
             }
         }
-        if (expireRI != null)
+        if (expireRI != null) {
             adjustedExpiration = Integer.valueOf(expireRI)*60*60*1000;
-        else if (floodfillEnabled())
+        } else if (floodfillEnabled()) {
             adjustedExpiration = ROUTER_INFO_EXPIRATION_FLOODFILL;
-        else
-/*
-            adjustedExpiration = Math.min(ROUTER_INFO_EXPIRATION,
-                                          ROUTER_INFO_EXPIRATION_MIN +
-                                          ((ROUTER_INFO_EXPIRATION - ROUTER_INFO_EXPIRATION_MIN) * MIN_ROUTERS / (_kb.size() + 1)));
-*/
+        } else {
             adjustedExpiration = existing > 4000 ? ROUTER_INFO_EXPIRATION / 3 :
                                  existing > 3000 ? ROUTER_INFO_EXPIRATION / 2 :
                                  existing > 2000 ? ROUTER_INFO_EXPIRATION / 3 * 2 :
                                  ROUTER_INFO_EXPIRATION;
-
+        }
         if (upLongEnough && !isUs && !routerInfo.isCurrent(adjustedExpiration)) {
             long age = now - routerInfo.getPublished();
             if (existing >= MIN_REMAINING_ROUTERS) {
-                if (_log.shouldInfo())
-//                    _log.info("Expired RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]", new Exception());
+                if (_log.shouldInfo()) {
                     _log.info("Dropping RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] -> " +
                               "Published " + DataHelper.formatDuration(age) + " ago");
+                }
                 return "Published " + DataHelper.formatDuration(age) + " ago";
             } else {
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("Even though peer [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] is stale, we have only " + existing
                               + " peers left - not dropping...");
+                }
             }
         }
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR && !isUs) {
@@ -1577,7 +1553,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                              new Date(routerInfo.getPublished()) + ")", null, null, 4*60*60*1000);
             return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " in the future";
         }
-/**
         if (noSSU && isFF && !isUs) {
             if (_log.shouldWarn()) {
                 //_log.warn("Dropping RouterInfo [" + riHash + "] -> Floodfill with SSU disabled");
@@ -1594,6 +1569,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _context.banlist().banlistRouter(h, " <b>➜</b> Router with SSU disabled",
                                              null, null, 4*60*60*1000);
             return caps + " Router [" + routerId + "] -> Router with SSU disabled";
+       }
+/**
         } else if (uptime > 45*1000 && noCountry && !isUs) {
             if (_log.shouldInfo())
                 _log.info("Dropping RouterInfo [" + routerId + "] -> Address not resolvable via GeoIP");
