@@ -924,6 +924,7 @@ a,th,thead th,tfoot th,td,select,select option,.snarkAddInfo,.snarkFileName,code
 @media (min-width:1500px){
 a,th,thead th,tfoot th,td,select,select option,.snarkAddInfo,.snarkFileName,textarea,button,input[name="nofilter_dataDir"],input[type=submit],input[type=text]{font-size:10pt}
 code{font-size:10pt}
+label b,.configOption b,.trackerconfig th{font-size:9pt}
 td.status img{margin-left:1px;height:24px}
 thead img,thead img:hover{max-height:22px}
 .configPanel .configTitle{font-size:12.5pt}

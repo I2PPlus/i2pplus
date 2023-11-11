@@ -75,7 +75,7 @@ input{font:bold 9pt var(--bodyfont);margin:2px 4px 2px 0;cursor:pointer;text-ali
 input[disabled]{opacity:.5}
 input[disabled][type=submit]:hover,input[disabled][type=submit]:focus{border:1px solid #999;background:var(--th);box-shadow:var(--highlight);color:#555;pointer-events:none}
 #configs input[type=submit],.trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}
-input[type=submit],input[type="reset"],a.control{padding:5px 8px;min-width:90px;font-size:9pt;font-weight:400;color:var(--ink_light);text-align:center;border:var(--border);border-radius:3px;box-shadow:var(--btn_shadow);background:var(--btn);outline:none;cursor:pointer}
+input[type=submit],input[type="reset"],a.control{padding:6px 12px;min-width:90px;font-size:9pt;font-weight:400;color:var(--ink_light);text-align:center;border:var(--border);border-radius:3px;box-shadow:var(--btn_shadow);background:var(--btn);outline:none;cursor:pointer}
 input[type=submit]:hover,input[type="reset"]:hover,input[type=submit]:focus,input[type="reset"]:focus,a.control:hover,a.control:focus{color:var(--ink);border:var(--border);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover)}
 input[type=submit]:active,input[type="reset"]:active,a.control:active{border:1px solid #999;box-shadow:var(--btn_shadow_active),var(--btn_shadow_hover);background:#ddd}
 input[name="savepri"]{margin-right:-2px}
@@ -878,7 +878,7 @@ body,th,td,table a,input,input[type=text],input.r,input[name="nofilter_dataDir"]
 .snarkNav{font-size:11pt}
 .snarkNav{padding-left:25px}
 .percentDownloaded{pointer-events:none;/* hide tooltip */}
-.configTitle,.toggleview,.configPanel .configTitle,.configPanel .configTitle:hover{min-width:300px}
+.configTitle,.toggleview,.configPanel .configTitle,.configPanel .configTitle:hover{min-width:400px}
 }
 
 @media (min-width:1200px){
@@ -894,6 +894,7 @@ body,th,td,table a,input,input[type=text],input.r,input[name="nofilter_dataDir"]
 
 @media (min-width:1500px){
 body,th,td,table a,input,input[type=text],input.r,input[name="nofilter_dataDir"],select,textarea,.snarkAddInfo,#commentInfo textarea{font-size:10pt}
+label b,.configOption b,.trackerconfig th{font-size:9pt}
 .dirInfo td:first-child img:not(.thumb){margin:-2px 2px;width:22px;height:22px;max-width:22px;max-height:22px}
 .iframed #snarkFiles{margin-top:5px}
 .barComplete{padding-top:3px}

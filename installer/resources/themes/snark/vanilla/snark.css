@@ -1005,6 +1005,7 @@ thead a img,thead img{max-height:21px}
 body:not(.iframed) .txd{margin:-1px 0 2px}
 body,#torrents td,.snarkAddInfo,th,td,.snarkFileName,a.control,input[type=submit],input[type="reset"],select,button,code,#pagenavbottom{font-size:10pt}
 img[src$="details.png"]{max-height:18px}
+label b,.configOption b,.trackerconfig th{font-size:9pt}
 select{padding-left:8px}
 textarea,#torrents code,#screenlog{font-size:9pt}
 thead a img,thead img{max-height:22px}

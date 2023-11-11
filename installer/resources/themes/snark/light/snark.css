@@ -919,6 +919,7 @@ td.peerCount{padding-left:0;padding-right:3px;width:1%;white-space:nowrap;font-w
 body,input[type=text],input[type=submit],.control,.snarkAddInfo,#commentInfo textarea{font-size:10pt}
 code,#torrentEdit textarea{font-size:9pt}
 input[type=submit]{min-width:100px}
+label b,.configOption b,.trackerconfig th{font-size:9pt}
 .debuginfo td{padding-top:4px;padding-bottom:4px;word-spacing:0;font-size:10pt}
 .knownTracker a,.trackerannounce,.trackerhome{width:400px;max-width:400px}
 .magnetLabel{margin:0;padding:2px 6px;line-height:1;border-radius:1px;box-shadow:0 0 0 1px #bbc,inset 0 0 0 1px #fff;background:linear-gradient(180deg,#f2f2ff,#eef)}

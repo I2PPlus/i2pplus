@@ -650,6 +650,7 @@ tr:hover td.trackerLink,tr:hover td.details,tr:hover td.tName,tr:hover td.rxd,tr
 
 @media (min-width:1500px){
 body,td,th:not(.suboption),span,table a,input[type=submit],input[type=text],textarea{font-size:9.5pt}
+label b,.configOption b,.trackerconfig th{font-size:9pt}
 td.status img{width:26px;height:26px}
 td.details img:not([src$="rateme.svg"]),.dirInfo td:first-child img:not(.thumb){width:23px;height:23px}
 .commented img{width:11px;height:11px}
