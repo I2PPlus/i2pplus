@@ -25,11 +25,13 @@ import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import gnu.getopt.Getopt;
-
 import freenet.support.CPUInformation.CPUID;
 import freenet.support.CPUInformation.UnknownCPUException;
+
+import gnu.getopt.Getopt;
+
 import net.i2p.client.impl.I2PSessionImpl;
+import net.i2p.CoreVersion;
 import net.i2p.crypto.SigUtil;
 import net.i2p.data.Base64;
 import net.i2p.data.Certificate;
@@ -37,12 +39,12 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
-import net.i2p.data.PublicKey;
-import net.i2p.data.SigningPrivateKey;
-import net.i2p.data.SigningPublicKey;
 import net.i2p.data.i2np.GarlicMessage;
+import net.i2p.data.PublicKey;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.data.SigningPrivateKey;
+import net.i2p.data.SigningPublicKey;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.message.GarlicMessageHandler;
@@ -54,9 +56,9 @@ import net.i2p.router.startup.WorkingDir;
 import net.i2p.router.sybil.Analysis;
 import net.i2p.router.tasks.*;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
-import net.i2p.router.transport.UPnPScannerCallback;
 import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.udp.UDPTransport;
+import net.i2p.router.transport.UPnPScannerCallback;
 import net.i2p.router.util.EventLog;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
@@ -76,6 +78,8 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SimpleByteCache;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
+import net.i2p.util.VersionComparator;
+
 
 /**
  * Main driver for the router.
@@ -145,7 +149,7 @@ public class Router implements RouterClock.ClockShiftListener {
     private static final String PROP_JBIGI_PROCESSOR = "jbigi.lastProcessor";
     public static final String UPDATE_FILE = "i2pupdate.zip";
     //// remove after release ////
-    private static final boolean CONGESTION_CAPS = net.i2p.CoreVersion.PUBLISHED_VERSION.equals("0.9.58");
+    private static final boolean CONGESTION_CAPS = VersionComparator.comp(CoreVersion.PUBLISHED_VERSION, "0.9.60") >= 0;
 
     private static final int SHUTDOWN_WAIT_SECS = 60;
 
