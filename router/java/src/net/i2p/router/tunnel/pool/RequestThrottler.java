@@ -159,8 +159,9 @@ class RequestThrottler {
             }
 **/
         if (isLTier && isUnreachable && isOld) {
-            if (_log.shouldWarn())
+            if (_log.shouldWarn() && !context.banlist().isBanlisted(h)) {
                 _log.warn("Temp banning for 8h and immediately disconnecting from [" + h.toBase64().substring(0,6) + "] -> LU / " + v);
+            }
             context.banlist().banlistRouter(h, " <b>➜</b> LU and older than current version", null, null, context.clock().now() + 8*60*60*1000);
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
         } else if (isOld && (isUnreachable || isLowShare)) {

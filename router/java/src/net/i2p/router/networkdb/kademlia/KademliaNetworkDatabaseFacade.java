@@ -991,14 +991,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
 
             if (!isUs && isLTier && isUnreachable && isOlderThanCurrent) {
-                if (_log.shouldInfo())
-                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> LU and older than 0.9.59");
-                if (_log.shouldWarn())
-                    _log.warn("Temp banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                              " [" + key.toBase64().substring(0,6) + "] for 4h -> LU and older than 0.9.59");
+                if (!_context.banlist().isBanlisted(key)) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> LU and older than 0.9.59");
+                    }
+                    if (_log.shouldWarn() && !_context.banlist().isBanlisted(key)) {
+                        _log.warn("Temp banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                                  " [" + key.toBase64().substring(0,6) + "] for 4h -> LU and older than 0.9.59");
+                    }
                     _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.59", null, null, _context.clock().now() + 4*60*60*1000);
-                _ds.remove(key);
-                _kb.remove(key);
+                    _ds.remove(key);
+                    _kb.remove(key);
+                }
             } else if (!isUs && uninteresting && !isHidden) {
                 if (_log.shouldInfo())
                     _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Uninteresting");
@@ -1583,12 +1587,16 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     _context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address", null, null, _context.clock().now() + 4*60*60*1000);
 **/
         if (isLTier && isUnreachable && isOlderThanCurrent) {
-            if (_log.shouldInfo())
-                _log.info("Dropping RouterInfo [" + routerId + "] -> LU and older than 0.9.59");
-            if (_log.shouldWarn())
-                _log.warn("Temp banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                          " [" + routerId + "] for 4h -> LU and older than 0.9.59");
-                _context.banlist().banlistRouter(h, " <b>➜</b> LU and older than 0.9.59", null, null, _context.clock().now() + 4*60*60*1000);
+            if (!_context.banlist().isBanlisted(h)) {
+                if (_log.shouldInfo()) {
+                    _log.info("Dropping RouterInfo [" + routerId + "] -> LU and older than 0.9.59");
+                }
+                if (_log.shouldWarn() && !_context.banlist().isBanlisted(h)) {
+                    _log.warn("Temp banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                              " [" + routerId + "] for 4h -> LU and older than 0.9.59");
+                }
+            }
+            _context.banlist().banlistRouter(h, " <b>➜</b> LU and older than 0.9.59", null, null, _context.clock().now() + 4*60*60*1000);
         }
         if (minVersionAllowed != null) {
             if (VersionComparator.comp(v, minVersionAllowed) < 0) {
