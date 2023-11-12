@@ -71,7 +71,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static final int FLOOD_TIMEOUT = 60*1000;
     static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
-    private static final int NEXT_FLOOD_QTY = SystemVersion.isSlow() ? 2 : 3;
+    private static final int NEXT_FLOOD_QTY = SystemVersion.isSlow() ? 2 : 4;
     private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 600 : 300;
 
     /**
@@ -201,8 +201,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // wait until we've read in the RI's so we can find the closest floodfill
         if (!isInitialized()) {
             if (_log.shouldWarn())
-//                _log.warn("Attempted to publish our RouterInfo before NetDb initialized: " + localRouterInfo, new Exception("I did it"));
-                _log.warn("Attempted to publish our RouterInfo before NetDb initialized, will retry shortly..."); //+ localRouterInfo);
+                _log.warn("Attempted to publish our RouterInfo before NetDb initialized, will retry shortly...");
             return;
         }
         // no use sending if we have no addresses
