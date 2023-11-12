@@ -18,8 +18,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.time.BuildTime;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
 
@@ -192,6 +194,13 @@ public class Banlist {
      */
     public boolean banlistRouter(Hash peer, String reason, String reasonCode, String transport, long expireOn) {
         long banDuration =  ((expireOn - _context.clock().now()) / 1000) / 60;
+        if (expireOn < _context.clock().now()) {
+            if (expireOn < BuildTime.getEarliestTime()) {
+                // catch errors where we were passed a duration
+                throw new IllegalArgumentException("Bad expiration: " + DataHelper.formatTime(expireOn));
+            }
+            return false;
+        }
         if (peer == null) {
             if (_log.shouldWarn()) {
                 _log.warn("Cannot apply Router ban, peer is null");
