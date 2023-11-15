@@ -133,7 +133,7 @@ textarea[name="nofilter_newComment"]:focus{min-height:64px;box-shadow:inset 0 0 
 .nav_tracker:hover,.nav_tracker:focus{background:var(--b_tracker_hover) no-repeat 10px center/16px,var(--btn_hover)}
 .nav_tracker:active{background:var(--b_tracker_active) no-repeat 10px center/16px,var(--btn_active)}
 .snarkNav,.snarkNav:visited{margin:2px -3px;display:inline-block;font-weight:700;border:var(--border);background:#fff}
-.snarkNav,.snarkNav:hover,.snarkNav:focus,.snarkNav:active{padding:5px 11px 5px 28px;background-size:16px,100%,100%;background-position:10px center;background-repeat:no-repeat,repeat}
+.snarkNav,.snarkNav:hover,.snarkNav:focus,.snarkNav:active{padding:5px 11px 5px 28px;line-height:1.3;background-size:16px,100%,100%;background-position:10px center;background-repeat:no-repeat,repeat}
 .snarkNav:hover{border:1px solid var(--a);position:relative;z-index:2;box-shadow:var(--highlight)}
 .snarkNav:active{border:var(--border)}
 .snarkNav.nav_main:last-child{border-radius:1px}
