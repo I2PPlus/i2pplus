@@ -60,6 +60,7 @@ class Dummy {
         _t("light");
         _t("midnight");
         _t("vanilla");
+        _t("classic");
 
         // stat groups for stats.jsp
         // See StatsGenerator for groups mapped to a display name
