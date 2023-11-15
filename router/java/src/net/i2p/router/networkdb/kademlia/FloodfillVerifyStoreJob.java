@@ -89,7 +89,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             _ipSet = new MaskedIPSet(ctx, sentTo, IP_CLOSE_BYTES);
             _ignore.add(_sentTo);
         } else {
-            _ipSet = new MaskedIPSet(4);
+            _ipSet = new MaskedIPSet(16);
         }
         // wait some time before trying to verify the store
         getTiming().setStartAfter(ctx.clock().now() + START_DELAY + ctx.random().nextInt(START_DELAY_RAND));
@@ -154,9 +154,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
         RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(_target);
         if (peer == null) {
              if (_log.shouldLog(Log.WARN))
-                 _log.warn("(JobId: " + getJobId()
-                           + "; DbId: " + _facade
-                           + ") Fail looking up RI locally for target " + _target);
+                 _log.warn("[JobId: " + getJobId() + "] Local lookup of RouterInfo for target " + _target + " failed " +
+                 "[DbId: " + _facade + "]");
             _facade.verifyFinished(_key);
             return;
         }
@@ -168,10 +167,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
             MessageWrapper.OneTimeSession sess;
             if (isInboundExploratory) {
                 EncType ourType = ctx.keyManager().getPublicKey().getType();
-                supportsRatchet = ourType == EncType.ECIES_X25519 &&
-                                  type == EncType.ECIES_X25519;
-                supportsElGamal = ourType == EncType.ELGAMAL_2048 &&
-                                  type == EncType.ELGAMAL_2048;
+                supportsElGamal = ourType == EncType.ELGAMAL_2048 && type == EncType.ELGAMAL_2048;
+                supportsRatchet = ourType == EncType.ECIES_X25519 && type == EncType.ECIES_X25519;
                 if (supportsElGamal || supportsRatchet) {
                     sess = MessageWrapper.generateSession(ctx, ctx.sessionKeyManager(), VERIFY_TIMEOUT, !supportsRatchet);
                 } else {
@@ -185,13 +182,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
             } else {
                 LeaseSetKeys lsk = ctx.keyManager().getKeys(_client);
                 // an ElG router supports ratchet replies
-                supportsRatchet = lsk != null &&
-                                  lsk.isSupported(EncType.ECIES_X25519) &&
-                                  DatabaseLookupMessage.supportsRatchetReplies(peer);
+                supportsRatchet = lsk != null && lsk.isSupported(EncType.ECIES_X25519) && DatabaseLookupMessage.supportsRatchetReplies(peer);
                 // but an ECIES router does not supports ElGamal requests
-                supportsElGamal = lsk != null &&
-                                  lsk.isSupported(EncType.ELGAMAL_2048) &&
-                                  type == EncType.ELGAMAL_2048;
+                supportsElGamal = lsk != null && lsk.isSupported(EncType.ELGAMAL_2048) && type == EncType.ELGAMAL_2048;
                 if (supportsElGamal || supportsRatchet) {
                     // garlic encrypt
                     sess = MessageWrapper.generateSession(ctx, _client, VERIFY_TIMEOUT, !supportsRatchet);
@@ -373,7 +366,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 DatabaseEntry entry = dsm.getEntry();
                 if (!entry.verifySignature()) {
                     if (_log.shouldWarn())
-                        _log.warn(getJobId() + ": Sent bad data for verify: " + _target);
+                        _log.warn("[JobId " + getJobId() + "] Sent bad data for verify: " + _target);
                     pm.dbLookupFailed(_target);
                     ctx.banlist().banlistRouterForever(_target, "Sent bad NetDb data");
                     ctx.statManager().addRateData("netDb.floodfillVerifyFail", delay);
@@ -468,7 +461,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
             }
             if (newDate > _published) {
                 if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] Verify failed, but new NetDbStore already happened for [" + _key.toString().substring(0,6) + "]");
+                    _log.info("[Job " + getJobId() + "] Verify failed, but new NetDbStore already happened for [" +
+                              _key.toString().substring(0,6) + "]");
                 return;
             }
             Set<Hash> toSkip = new HashSet<Hash>(8);
