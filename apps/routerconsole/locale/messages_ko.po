@@ -201,7 +201,7 @@ msgstr "알수없는"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:963
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:475
 msgid "Floodfill"
-msgstr ""
+msgstr "홍수 노드"
 
 #.
 #. if (log.shouldWarn()) {
