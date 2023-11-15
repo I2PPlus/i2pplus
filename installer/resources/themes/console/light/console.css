@@ -1867,7 +1867,7 @@ th.options{padding:8px 5px 8px 10px;font-size:9pt}
 .th_title a,.th_title a:hover{color:var(--ink_light)}
 p#clientconf.infohelp+.wideload{margin-top:12px}
 pre#activetransports b{padding-bottom:2px}
-pre#activetransports{margin:-16px 0 0;padding:10px 0 0 10px;display:inline-block;width:calc(100% - 12px);font-size:9pt;border:var(--border_inner);box-shadow:var(--highlight),inset 0 0 2px 1px #ddf;background:#fafaff}
+pre#activetransports{margin:-16px 0 0;padding:10px 0 0 10px;display:inline-block;width:calc(100% - 12px);font-size:9pt;border:var(--border_inner);box-shadow:var(--highlight),inset 0 0 2px 1px #ddf;background:#fafaff url(images/french.webp) no-repeat right 8px bottom/120px}
 p#tunnelconfig{margin-bottom:-13px}
 table#addkeyring tr:last-child td{padding:5px;border-top:var(--border_inner)}
 #advancedconfig a,#iptransport a,#reseedsetup a{padding:6px 8px}
