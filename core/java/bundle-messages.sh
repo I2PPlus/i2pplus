@@ -106,7 +106,7 @@ do
         then
             # slow way
             # convert to class files in build/obj
-            msgfmt --java2 --statistics -r $CLASS -l $LG -d build/obj $i
+            msgfmt --java2 --statistics -r $CLASS -l $LG -d build/obj $i --no-wrap
             if [ $? -ne 0 ]
             then
                 echo "ERROR - msgfmt failed on ${i}, not updating translations"
