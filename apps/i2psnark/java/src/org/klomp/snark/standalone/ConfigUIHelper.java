@@ -37,7 +37,7 @@ public class ConfigUIHelper {
         //{ "et", "ee", "Eesti", null },
         { "en", "us", "English", null },
         { "es", "es", "Español", null },
-        { "es_AR", "ar", "Español" ,"Argentina" },
+        //{ "es_AR", "ar", "Español" ,"Argentina" },
         { "fa", "ir", "Persian فارسی", null },
         { "fr", "fr", "Français", null },
         //{ "gl", "lang_gl", "Galego", null },
@@ -52,7 +52,7 @@ public class ConfigUIHelper {
         { "nb", "no", "Norsk (bokmål)", null },
         { "pl", "pl", "Polski", null },
         { "pt", "pt", "Português", null },
-        { "pt_BR", "br", "Português", "Brazil" },
+        //{ "pt_BR", "br", "Português", "Brazil" },
         { "ro", "ro", "Română", null },
         { "ru", "ru", "Russian Русский", null },
         { "sk", "sk", "Slovenčina", null },
@@ -112,9 +112,7 @@ public class ConfigUIHelper {
             buf.append(langs[i][2]);
             String name = langs[i][3];
             if (name != null) {
-                buf.append(" (")
-                   .append(name)
-                   .append(')');
+                buf.append(" (").append(name).append(')');
             }
             buf.append("</option>\n");
         }
