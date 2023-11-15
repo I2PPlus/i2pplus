@@ -60,7 +60,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 
 /* topnav */
 #navbar{margin:0 0 -6px;padding:10px 0;position:sticky;top:-1px;z-index:999;word-spacing:1px;letter-spacing:.15em;text-align:center;border:var(--border);border-radius:2px 2px 0 0;background:var(--panel);background-size:4px 100%,100%;will-change:transform}
-#navbar a,#navbar a:visited{color:#89f}
+#navbar a,#navbar a:visited{line-height:1.6;color:#89f}
 #navbar a:hover,#navbar a:visited:hover,#navbar a:focus,#navbar a:visited:focus{z-index:999;text-decoration:none;color:#fff;text-shadow:none;border-color:#652787}
 #navbar a:active,#navbar a:visited:active{color:#8634b2;text-shadow:none;-webkit-text-stroke:0;box-shadow:var(--btn_shadow_active);transition:ease box-shadow .1s}
 .iframed #navbar{margin:-1px 0 5px;position:static;border:0;border-bottom:var(--border);border-radius:0}
@@ -624,7 +624,7 @@ td .commentAuthorName{padding-right:8px;width:120px;white-space:nowrap;overflow:
 .configOption::after{content:"";display:inline-block;height:38px;vertical-align:middle}
 .numeric{min-width:0;width:70px}
 .numeric:focus{text-align:center}
-input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 183px)}
+input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 193px)}
 input[name="nofilter_commentsName"]{max-width:248px}
 #configs th{padding:6px 8px;font-size:10pt;background:var(--title);background-size:4px 100%,100%}
 #configs td,#configs td:first-child{padding:0}
@@ -632,7 +632,7 @@ input[name="nofilter_commentsName"]{max-width:248px}
 #configs td:first-child{min-width:220px}
 #configs td:nth-child(2){white-space:nowrap}
 #configs tr:nth-last-child(2) td{padding:11px 8px 0;text-align:right}
-#configs td b,#torrentOrderControl b{margin-right:8px;padding:6px 10px 7px;min-width:160px;display:inline-block;vertical-align:middle;line-height:1.1;color:#b5bddf;text-align:right;border-radius:15px 5px 5px 15px;box-shadow:0 0 0 1px #000;background:linear-gradient(180deg,#113,#060619)}
+#configs td b,#torrentOrderControl b{margin-right:8px;padding:6px 10px;min-width:160px;display:inline-block;vertical-align:middle;line-height:1.7;color:#b5bddf;text-align:right;border-radius:15px 5px 5px 15px;box-shadow:0 0 0 1px #000;background:linear-gradient(180deg,#113,#060619)}
 #configs td label:hover b,#torrentOrderControl b:hover{color:#dfe5ff}
 #configs input,#configs select{margin-top:0;margin-bottom:0;vertical-align:middle}
 #configs input,#configs select{margin-top:0;margin-bottom:0;vertical-align:middle;will-change:transform}
