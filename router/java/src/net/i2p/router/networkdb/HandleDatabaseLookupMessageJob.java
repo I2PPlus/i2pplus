@@ -110,8 +110,8 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         // only lookup once, then cast to correct type
         DatabaseEntry dbe = getContext().netDb().lookupLocally(searchKey);
         int type = dbe != null ? dbe.getType() : -1;
-        if (DatabaseEntry.isLeaseSet(type) &&
-            (lookupType == DatabaseLookupMessage.Type.ANY || lookupType == DatabaseLookupMessage.Type.LS)) {
+        if (DatabaseEntry.isLeaseSet(type) && (lookupType == DatabaseLookupMessage.Type.ANY ||
+                                               lookupType == DatabaseLookupMessage.Type.LS)) {
             LeaseSet ls = (LeaseSet) dbe;
             // Answer any request for a LeaseSet if it has been published to us.
 
@@ -132,19 +132,6 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                 getContext().statManager().addRateData("netDb.lookupsMatchedReceivedPublished", 1);
                 sendData(searchKey, ls, fromKey, toTunnel);
                 }
-            } else {
-                    // It was not published to us (we looked it up, for example)
-                    // or it's local and we aren't floodfill,
-                    // or it's local and we don't publish it.
-                    // Lie, pretend we don't have it
-                    if (_log.shouldLog(Log.INFO))
-                        _log.info("We have LS " + searchKey +
-                                ", NOT answering query - local? " + isLocal + " shouldPublish? " + shouldPublishLocal +
-                                " RAP? " + ls.getReceivedAsPublished() + " RAR? " + ls.getReceivedAsReply());
-                    getContext().statManager().addRateData("netDb.lookupsMatchedRemoteNotClosest", 1);
-                    Set<Hash> routerHashSet = getNearestRouters(lookupType);
-                    sendClosest(searchKey, routerHashSet, fromKey, toTunnel);
-            }
         } else if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO && lookupType != DatabaseLookupMessage.Type.LS) {
             RouterInfo info = (RouterInfo) dbe;
             String cap = info.getCapabilities();
@@ -192,9 +179,10 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                 //     }
                 // }
 
-                if (_log.shouldDebug())
-                    _log.debug("Expired [" + searchKey.toBase64().substring(0,6) +
-                               "] locally; sending back " + routerHashSet.size() + " peers to [" + fromKey.toBase64().substring(0,6) + "]");
+                if (_log.shouldDebug()) {
+                    _log.debug("Expired [" + searchKey.toBase64().substring(0,6) + "] locally; sending back " +
+                               routerHashSet.size() + " peers to [" + fromKey.toBase64().substring(0,6) + "]");
+                }
                 sendClosest(searchKey, routerHashSet, fromKey, toTunnel);
             }
         } else {

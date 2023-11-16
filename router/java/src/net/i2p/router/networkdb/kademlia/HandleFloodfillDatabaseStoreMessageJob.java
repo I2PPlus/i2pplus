@@ -142,6 +142,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     throw new IllegalArgumentException("Peer attempted to store LOCAL LeaseSet [" +
                                                        key.toBase32().substring(0,6) + "]" +
                                                        "\n* DbId: " + _facade._dbid);
+                    }
                 }
                 //boolean oldrar = ls.getReceivedAsReply();
                 //boolean oldrap = ls.getReceivedAsPublished();
@@ -191,9 +192,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             }
         } else if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
             RouterInfo ri = (RouterInfo) entry;
-            if (_log.shouldDebug())
-                _log.debug("[DbId: " + _facade._dbid
-                           + "] Starting handling of dbStore of RouterInfo " + _message);
+            if (_log.shouldDebug()) {
+                _log.debug("[DbId: " + _facade._dbid + "] Starting handling of dbStore of RouterInfo " + _message);
+            }
             String cap = ri.getCapabilities();
             boolean isFF = cap.contains("f");
             getContext().statManager().addRateData("netDb.storeRouterInfoHandled", 1);
