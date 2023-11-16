@@ -88,7 +88,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 @supports (justify-content:center){#navbar{display:flex;justify-content:center}.snarkNav{margin-left:-1px;margin-right:-1px}}
 
 /* search */
-#snarkSearch{display:block;position:absolute;right:8px;top:5px}
+#snarkSearch{display:block;position:absolute;right:8px;top:10px}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:8px;border:0;box-shadow:none;background:transparent}
 #snarkSearch input[type=search]{padding:4px 6px;font-weight:600;color:var(--ink);-webkit-text-stroke:0;border-bottom:1px solid #26235c;cursor:text;transform:translateY(-2px);-webkit-appearance:none}
 #snarkSearch input[type=search]:not(:focus){opacity:0}
@@ -833,6 +833,7 @@ hr.debug{margin:3px 0 -5px;width:100%;display:none;background:#120f35}
 #configSection{margin-bottom:-13px}
 #mediaContainer{margin-bottom:-13px}
 #pagenavtop.pagenavcontrols{margin-bottom:0;border:0;border-bottom:var(--border)}
+#searchInput{width:150px}
 #torrents #actionStopAll,#torrents #actionStartAll{padding:11px 18px}
 #torrents,#addSection{margin-top:0}
 #torrents .tAction input{padding:11px;background-size:13px}
@@ -856,6 +857,7 @@ hr.debug{margin:3px 0 -5px;width:100%;display:none;background:#120f35}
 .tName a,.magnetLabel{max-width:340px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #ourDest code{line-height:1.25}
 #pagenavcontrols{transform:translateX(40px)}
+#searchInput{width:120px}
 #torrents .tAction input,#torrents .tAction input:hover,#torrents .tAction input,#torrents .tAction input:focus{padding:10px;background-size:12px,100%}
 #torrents th.tAction input,#torrents th.tAction input:hover,#torrents th.tAction input,#torrents th.tAction input:focus{padding:10px;background-size:auto 12px,100%,100%}
 #torrents .details img{margin-left:0}
