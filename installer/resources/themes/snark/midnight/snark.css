@@ -513,7 +513,8 @@ textarea:focus{color:#7166ff}
 #configs td:nth-child(2){white-space:nowrap}
 #configs tr:last-child{display:none}
 #bwHelp{width:100%;padding-left:5px}
-#configs a{display:inline-block;white-space:nowrap;margin-left:4px;font-weight:700}
+#configs .configOption a{display:inline-block;white-space:nowrap;vertical-align:middle;font-weight:700;color:transparent;background:var(--settings) no-repeat left center/18px}
+#configs .configOption a:hover,#configs .configOption a:focus{background-image:var(--settings_hover)}
 .snarkConfig tr:nth-last-child(2){background:none}
 .snarkConfig tr:nth-last-child(2) td,.configPanel td[colspan="5"]{padding:11px 15px 0;text-align:right;border-top:var(--border)}
 .snarkConfig tr{border:0}
@@ -654,8 +655,8 @@ td#bwHelp a{display:inline-block;white-space:nowrap;margin-left:4px}
 .lang_it #configs input[name="nofilter_dataDir"],.lang_it input[name="i2cpOpts"],.lang_it input[name="nofilter_commentsName"],.lang_sk #configs input[name="nofilter_dataDir"],.lang_sk input[name="i2cpOpts"],.lang_sk input[name="nofilter_commentsName"]{width:calc(100% - 200px)}
 .lang_in #configs input[name="nofilter_dataDir"],.lang_in input[name="i2cpOpts"],.lang_in input[name="nofilter_commentsName"],.lang_nl #configs input[name="nofilter_dataDir"],.lang_nl input[name="i2cpOpts"],.lang_nl input[name="nofilter_commentsName"],.lang_sv #configs input[name="nofilter_dataDir"],.lang_sv input[name="i2cpOpts"],.lang_sv input[name="nofilter_commentsName"]{width:calc(100% - 230px)}
 .lang_hu #configs input[name="nofilter_dataDir"],.lang_hu input[name="i2cpOpts"],.lang_hu input[name="nofilter_commentsName"],.lang_pl #configs input[name="nofilter_dataDir"],.lang_pl input[name="i2cpOpts"],.lang_pl input[name="nofilter_commentsName"],.lang_tr #configs input[name="nofilter_dataDir"],.lang_tr input[name="i2cpOpts"],.lang_tr input[name="nofilter_commentsName"]{width:calc(100% - 240px)}
-.lang_de #configs input[name="nofilter_dataDir"],.lang_de input[name="i2cpOpts"],.lang_de input[name="nofilter_commentsName"],.lang_fr #configs input[name="nofilter_dataDir"],.lang_fr input[name="i2cpOpts"],.lang_fr input[name="nofilter_commentsName"],.lang_pt #configs input[name="nofilter_dataDir"],.lang_pt input[name="i2cpOpts"],.lang_pt input[name="nofilter_commentsName"],.lang_ro #configs input[name="nofilter_dataDir"],.lang_ro input[name="i2cpOpts"],.lang_ro input[name="nofilter_commentsName"]{width:calc(100% - 270px)}
-.lang_uk #configs input[name="nofilter_dataDir"],.lang_uk input[name="i2cpOpts"],.lang_uk input[name="nofilter_commentsName"]{width:calc(100% - 280px)}
+.lang_fr #configs input[name="nofilter_dataDir"],.lang_fr input[name="i2cpOpts"],.lang_fr input[name="nofilter_commentsName"],.lang_pt #configs input[name="nofilter_dataDir"],.lang_pt input[name="i2cpOpts"],.lang_pt input[name="nofilter_commentsName"],.lang_ro #configs input[name="nofilter_dataDir"],.lang_ro input[name="i2cpOpts"],.lang_ro input[name="nofilter_commentsName"]{width:calc(100% - 270px)}
+.lang_de #configs input[name="nofilter_dataDir"],.lang_de input[name="i2cpOpts"],.lang_de input[name="nofilter_commentsName"],.lang_uk #configs input[name="nofilter_dataDir"],.lang_uk input[name="i2cpOpts"],.lang_uk input[name="nofilter_commentsName"]{width:calc(100% - 284px)}
 .lang_es #configs input[name="nofilter_dataDir"],.lang_es input[name="i2cpOpts"],.lang_es input[name="nofilter_commentsName"]{width:calc(100% - 300px)}
 .lang_ru #configs input[name="nofilter_dataDir"],.lang_ru input[name="i2cpOpts"],.lang_ru input[name="nofilter_commentsName"]{width:calc(100% - 320px)}
 
