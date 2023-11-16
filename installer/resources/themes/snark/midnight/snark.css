@@ -303,7 +303,7 @@ tr:hover .barComplete{text-shadow:0 1px 1px #000,0 0 2px #337;box-shadow:var(--h
 #torrentInfo th:first-child,#torrentInfo td{padding:6px 8px 6px 4px;line-height:1.8;text-align:left;font-weight:inherit}
 #torrentInfo tr:last-child td{padding:6px 8px}
 #torrentInfo th{border-top:0}
-#torrentInfo th:last-child{text-align:right}
+#torrentInfo th:last-child{padding-right:8px;text-align:right}
 #torrentInfo input[type=submit]{min-width:60px;text-align:center}
 #torrentInfo{margin-bottom:1px;border-bottom:var(--border)}
 #torrentInfo tr:nth-child(even){color:#7670c2;background:#001}
@@ -352,8 +352,8 @@ tr.priority:last-child{border-bottom:0}
 .dirInfo tr:hover .fileStatus img{mix-blend-mode:normal}
 #torrentOrderControl{float:right}
 #enableInOrder{margin-left:8px;margin-right:20px}
-#torrentInfoControl td,#setPriority th{box-shadow:var(--highlight),inset 0 0 2px 1px #191939,inset 0 0 5px 3px #002;background:linear-gradient(180deg,#000016,#000008)}
-#torrentInfoControl td{padding:8px 5px 8px 10px;border-top:var(--border);text-align:left}
+#torrentInfo #torrentInfoControl td,#setPriority th{box-shadow:var(--highlight),inset 0 0 2px 1px #191939,inset 0 0 5px 3px #002;background:linear-gradient(180deg,#000016,#000008)}
+#torrentInfo #torrentInfoControl td{padding:8px 6px 12px;border-top:var(--border);text-align:right}
 .knownTracker input[type=radio],.knownTracker input[type=radio]:hover{opacity:.3;cursor:default}
 .knownTracker input[type=radio]:checked,.knownTracker input[type=radio]:checked:hover{opacity:.5}
 #filecheck{margin:5px 0;padding-left:22px;display:inline-block;background:url(/i2psnark/.res/icons/progressbar.gif) no-repeat left center}
@@ -776,15 +776,17 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 #editSection{margin-bottom:1px}
 #editSection hr{margin-top:5px}
 #torrentEdit{margin:10px 0 0}
+#torrentEdit textarea{margin:4px auto;width:calc(100% - 8px);height:80px;min-height:80px;resize:vertical}
 #torrentEdit th,#torrentEdit td{padding:8px 20px;width:25%;text-align:center;border-bottom:var(--border_soft)}
 #torrentEdit th,#torrentEdit #addCommentText{border-bottom:var(--border);border-top:var(--border)}
+#torrentEdit th{font-size:90%}
 #torrentEdit th:first-child:not([colspan]),#torrentEdit td:first-child:not([colspan]){width:20%;text-align:right}
 #torrentEdit th:first-child[colspan]{text-align:left}
 #torrentEdit th:nth-child(2),#torrentEdit td:nth-child(2){width:30%;text-align:left}
-#addCommentText{padding:18px 15px;text-align:center}
-#torrentEdit textarea{width:100%;height:80px;min-height:80px;resize:vertical}
+#torrentEdit #addCommentText{padding:8px 8px 6px;text-align:center}
 #torrentEdit tr:last-child input{margin-right:0}
 #torrentEdit .info_tracker{min-width:80px;max-width:none;text-align:left;pointer-events:none}
+#torrentEdit tfoot td{text-align:right;padding:10px 10px 8px}
 
 /* debug */
 .debugConnection{line-height:1.3;font-family:var(--monospaced);color:#090;padding:0 5px}
