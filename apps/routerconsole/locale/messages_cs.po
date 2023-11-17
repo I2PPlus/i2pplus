@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:50+0000\n"
-"PO-Revision-Date: 2023-11-01 01:45+0000\n"
+"PO-Revision-Date: 2023-11-17 07:25+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -19,11 +19,11 @@ msgstr ""
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:387
 msgid "Hash"
-msgstr ""
+msgstr "Hash"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:389
 msgid "Banned by Router Hash"
-msgstr ""
+msgstr "Zakázáno Routerem Hash"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:1258
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:1360
@@ -48,7 +48,7 @@ msgstr "Seznam blokovaných"
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1124
 #, java-format
 msgid "{0} ago"
-msgstr ""
+msgstr "{0} před"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:211
 msgid "Reseeding from file"
@@ -706,7 +706,7 @@ msgstr "Stažení pluginu z {0} se nezdařilo"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:100
 msgid "Unable to connect to update server "
-msgstr "Nelze se připojit k aktualizačnímu serveru"
+msgstr "Nelze se připojit k aktualizačnímu serveru "
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:105
 #, java-format
@@ -758,7 +758,7 @@ msgstr "Konfigurovat"
 
 #: ../java/src/net/i2p/router/web/CSSHelper.java:191
 msgid "config"
-msgstr ""
+msgstr "Konfigurovat"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:235
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:533
@@ -814,7 +814,7 @@ msgstr "Opětovné klíčování po elegantním restartu"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:264
 msgid "Rekey and Shutdown"
-msgstr ""
+msgstr "Reykey a Vypnutí"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:265
 msgid "Rekeying after graceful shutdown"
@@ -889,7 +889,7 @@ msgstr "Zobrazit ikonu systray"
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:299
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:599
 msgid "Hide systray icon"
-msgstr ""
+msgstr "Skrýt ikonu systray"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:340
 msgid "Installed I2P+ system service"
@@ -1144,9 +1144,9 @@ msgstr "Selhala kontrola aktualizace pluginu"
 #, java-format
 msgid "{0} plugin updated"
 msgid_plural "{0} plugins updated"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} plugin aktualizován"
+msgstr[1] "{0} pluginy aktualizován"
+msgstr[2] "{0} pluginy aktualizován"
 
 #: ../java/src/net/i2p/router/web/PluginStarter.java:252
 msgid "Plugin check complete"
@@ -1171,14 +1171,14 @@ msgstr "Události za období"
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:208
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:213
 msgid "Min"
-msgstr "min"
+msgstr "Min"
 
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:477
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:515
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:207
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:212
 msgid "Max"
-msgstr ""
+msgstr "Max"
 
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:480
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:521
@@ -1241,7 +1241,7 @@ msgstr "Důvod"
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:115
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:551
 msgid "Router Hash"
-msgstr ""
+msgstr "Hash Router"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:116
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:171
@@ -1284,7 +1284,7 @@ msgstr "Umístění"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:487
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:594
 msgid "I2CP"
-msgstr ""
+msgstr "I2CP"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:53
 msgid "I2PTunnel"
@@ -1293,7 +1293,7 @@ msgstr "I2PTunel"
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:68
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:571
 msgid "SAM"
-msgstr ""
+msgstr "SAM"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:84
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:348
@@ -1442,7 +1442,7 @@ msgstr "Konfigurace pluginu uložena."
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:433
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:229
 msgid "WebApp"
-msgstr ""
+msgstr "Webová Aplikace"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:433
 msgid "started"
@@ -1754,7 +1754,7 @@ msgstr "Email"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:276
 msgid "Plugin"
-msgstr ""
+msgstr "Plugin"
 
 #. hide caps as already in the header
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:294
@@ -2181,7 +2181,7 @@ msgstr "Postranní panel"
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:29
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:234
 msgid "UI"
-msgstr ""
+msgstr "Uživatelské Rozhraní"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:30
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:66
@@ -2434,7 +2434,7 @@ msgstr "Odstraněním této hodnoty ji deaktivujete"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:307
 msgid "bps"
-msgstr ""
+msgstr "b/s"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:309
 #, java-format
@@ -2551,7 +2551,7 @@ msgstr "zkontrolujte stav postranního panelu."
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:37
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:706
 msgid "Reseed from URL"
-msgstr ""
+msgstr "Reseed z URL"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:43
 msgid "No URL specified. Please supply a valid reseed URL."
@@ -2632,9 +2632,9 @@ msgstr "Vypnutí za {0}"
 #, java-format
 msgid "{0} transit tunnel still active"
 msgid_plural "{0} transit tunnels still active"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} transit tunel stále aktivní"
+msgstr[1] "{0} transit tunely stále aktivní"
+msgstr[2] "{0} transit tunely stále aktivní"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:88
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:103
@@ -2751,17 +2751,17 @@ msgstr "Chyba při ukládání konfigurace (použito, ale neuloženo) – podív
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} hop"
+msgstr[1] "{0} hops"
+msgstr[2] "{0} hops"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:23
 #, java-format
 msgid "{0} tunnel"
 msgid_plural "{0} tunnels"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} tunel"
+msgstr[1] "{0} tunely"
+msgstr[2] "{0} tunely"
 
 #: ../java/src/net/i2p/#:
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:51
@@ -3475,7 +3475,7 @@ msgstr "Konfigurace uživatelského rozhraní"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:65
 msgid "Select console theme & language & set optional console password"
-msgstr ""
+msgstr "Vyberte téma konzoly a jazyk a nastavte volitelné heslo konzoly"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:66
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:419
@@ -3497,7 +3497,7 @@ msgstr "Čaroděj"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
 msgid "Advanced Config"
-msgstr ""
+msgstr "Pokročilá Konfigurace"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
 msgid "Advanced router configuration"
@@ -3536,7 +3536,7 @@ msgstr "Často kladené otázky"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:106
 msgid "I2P FAQ"
-msgstr ""
+msgstr "I2P FAQ"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:107
 msgid "Historical infrastructure data from the I2P network"
@@ -3552,11 +3552,11 @@ msgstr "Webová stránka projektu"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:109
 msgid "I2P+ API documentation"
-msgstr ""
+msgstr "Dokumentace I2P+ API"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:109
 msgid "Javadocs"
-msgstr ""
+msgstr "Javadocs"
 
 #. _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "plugin.svg" + S +
 #. "stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "stats.svg" + S +
@@ -3584,12 +3584,12 @@ msgstr "Domov I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "Bittorrent tracker"
-msgstr ""
+msgstr "BitTorrent tracker"
 
 #. torrent trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "Postman's Tracker"
-msgstr "Stopman's Tracker"
+msgstr "Postmanův sledovač"
 
 #. _x("Chudo") + S + _x("No login Bittorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
 #. domain name registration + uptime trackers
@@ -3647,7 +3647,7 @@ msgstr ""
 #. hosting + other services
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "base64-image.i2p"
-msgstr ""
+msgstr "base64-image.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "An image cache and resize service"
@@ -3655,7 +3655,7 @@ msgstr "Služba mezipaměti obrázků a změny velikosti"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "imageproxy.i2p"
-msgstr ""
+msgstr "imageproxy.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:150
 msgid "IRC Logs for multiple networks"
@@ -3667,7 +3667,7 @@ msgstr "Šifrovaný I2P Pastebin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:151
 msgid "Pastebin"
-msgstr ""
+msgstr "Pastebin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "Streaming radio service"
@@ -3675,7 +3675,7 @@ msgstr "Streamování rádiové služby"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "radio.r4sas.i2p"
-msgstr ""
+msgstr "radio.r4sas.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:153
 msgid "Privacy-focused not-for-profit organization"
@@ -3752,7 +3752,7 @@ msgstr "Wolframova online matematická příručka"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:178
 msgid "Mozilla Developer Network"
-msgstr ""
+msgstr "Mozilla Developer Network"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:179
 msgid "Internet Encylopedia of Philosophy"
@@ -5164,9 +5164,9 @@ msgstr "Spojení je zablokováno"
 #, java-format
 msgid "{0} peer"
 msgid_plural "{0} peers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} druh"
+msgstr[1] "{0} vrstevníci"
+msgstr[2] "{0} vrstevníci"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:546
 msgid "UDP connections"
@@ -5294,9 +5294,9 @@ msgstr "Nabídli nám že nás představí"
 #, java-format
 msgid "{0} fail"
 msgid_plural "{0} fails"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} selhat"
+msgstr[1] "{0} selže"
+msgstr[2] "{0} selže"
 
 #. 2
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:704
@@ -5571,33 +5571,33 @@ msgstr "vrstevníci"
 #, java-format
 msgid "{0} fast peer"
 msgid_plural "{0} fast peers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} rychlý peer"
+msgstr[1] "{0} rychlí vrstevníci"
+msgstr[2] "{0} rychlí vrstevníci"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:377
 #, java-format
 msgid "{0} high capacity peer"
 msgid_plural "{0} high capacity peers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} vysoká kapacita peer"
+msgstr[1] "{0} vysokokapacitní vrstevníci"
+msgstr[2] "{0} vysokokapacitní vrstevníci"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:379
 #, java-format
 msgid "{0} integrated peer"
 msgid_plural "{0} integrated peers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} integrovaný peer"
+msgstr[1] "{0} integrovaní vrstevníci"
+msgstr[2] "{0} integrovaní vrstevníci"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:393
 msgid "1h Fail Rate"
-msgstr ""
+msgstr "1H Míra selhání"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:394
 msgid "1h Resp. Time"
-msgstr ""
+msgstr "1H doba odezvy"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:396
 msgid "Last Heard From"
@@ -5797,9 +5797,9 @@ msgstr "Celoživotní průměrná frekvence"
 #, java-format
 msgid "{0} event"
 msgid_plural "{0} events"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} událost"
+msgstr[1] "{0} události"
+msgstr[2] "{0} události"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:170
 msgid "rate"
@@ -5860,9 +5860,9 @@ msgstr "Doživotní průměrná hodnota"
 #, java-format
 msgid "1 event"
 msgid_plural "{0} events"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 událost"
+msgstr[1] "{0} události"
+msgstr[2] "{0} události"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:52
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:164
@@ -6053,7 +6053,7 @@ msgstr "Místní webový server"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:372
 msgid "Configure startup of clients and webapps (services); manually start dormant services"
-msgstr "Konfigurace spouštění klientů a webových aplikací (služeb); "
+msgstr "Konfigurace spuštění klientů a webApps (Services); Ručně spusťte spící služby"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:374
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:443
@@ -6189,7 +6189,7 @@ msgstr "Prohlédněte si možné sybily v síťové databázi"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:725
 #, java-format
 msgid "Your Local Identity [{0}] is your unique I2P router identity, similar to an IP address but tailored to I2P. "
-msgstr "Your Local Identity [{0}] je vaše jedinečná identita směrovače I2P, podobná adrese IP, ale přizpůsobená I2P."
+msgstr "Your Local Identity [{0}] je vaše jedinečná identita směrovače I2P, podobná adrese IP, ale přizpůsobená I2P. "
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:667
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:726
@@ -6294,7 +6294,7 @@ msgstr "Aktuální"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:998
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1004
 msgid "5 Min Average"
-msgstr ""
+msgstr "5 minut průměr"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1011
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1017
@@ -6778,7 +6778,7 @@ msgstr "Spusťte analýzu na všech směrovačích v NetDb"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:324
 msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, with the option to block peers meeting the configured threshold. Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
-msgstr "Rutina detekce sybil může být nakonfigurována tak, aby v pravidelných intervalech prohledávala síťovou databázi, s možností blokovat partnery splňující nakonfigurovanou prahovou hodnotu. "
+msgstr "Rutinu detekce SYBIL lze nakonfigurovat tak, aby skenoval síťovou databázi v pravidelném intervalu, s možností blokování vrstevníků splňujících konfigurovaný prahová hodnota. Blokování vrstevníků zabraňuje vašemu routeru v budování tunelů s nimi po celou dobu nakonfigurované, nebo dokud se router restartuje."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:327
 msgid "Configure Background Analysis"
@@ -7693,7 +7693,7 @@ msgstr "Zde můžete vytvořit novou rodinu routerů. "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:556
 msgid "Note: To avoid deanonymization, do not name your family with personally-attributable information e.g. your IRC nickname; your family name is associated with your router's IP address."
-msgstr "Poznámka: Abyste se vyhnuli deanonymizaci, neuvádějte svou rodinu osobními údaji, např. "
+msgstr "Poznámka: Abyste se vyhnuli deanonymizaci, nepojmenujte svou rodinu s osobně přispívajícími informacemi, např. Vaše přezdívka IRC; Vaše příjmení je spojeno s IP adresou vašeho routeru."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:558
 msgid "Enter new family name"
@@ -8273,7 +8273,7 @@ msgstr "SOCKS 5"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:608
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
-msgstr "Tato volba použije k opětovnému seedu HTTP outproxy I2P nebo plugin Orchid, pokud je nakonfigurován. "
+msgstr "Tato možnost použije I2P HTTP OutProxy k reseed nebo plugin orchideje, pokud je nakonfigurován. Poznámka: Tato možnost nebude fungovat, když máte 0 známých vrstevníků."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:614
 msgid "I2P Outproxy"
@@ -8298,7 +8298,7 @@ msgstr "Preferován je formát su3, protože bude ověřen jako podepsaný dův�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:693
 msgid "The zip format is unsigned; use a zip file only from a source that you trust."
-msgstr "Formát zip je nepodepsaný; "
+msgstr "Formát zipu je nepodepsán; Použijte soubor ZIP pouze ze zdroje, kterému důvěřujete."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:695
 msgid "Enter zip or su3 URL"
@@ -8393,7 +8393,7 @@ msgstr "Konfigurace I2P systémové služby"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:609
 msgid "Configure the status of the I2P service at system startup. If disabled, the service can be launched manually."
-msgstr "Nakonfigurujte stav služby I2P při startu systému. "
+msgstr "Nakonfigurujte stav služby I2P při spuštění systému. Pokud je deaktivována, může být služba spuštěna ručně."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:617
 msgid "Install I2P system service"
@@ -8433,7 +8433,7 @@ msgstr "Nakonfigurujte I2P Stat Collection"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:530
 msgid "A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>."
-msgstr "Ve výchozím nastavení je povolen omezený výběr statistik, které jsou vyžadovány pro sledování výkonu routeru. "
+msgstr "Ve výchozím nastavení je povolen omezený výběr statistik, který je nutný pro monitorování výkonu routeru. Zde jsou uvedeny pouze statistiky, které mají volitelný graf; Úplný seznam povolených statistik naleznete na stránce <a href=/stats>statistiky</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:537
 msgid "Enable full stats?"
@@ -8490,7 +8490,7 @@ msgstr "Výchozí nastavení jsou optimalizována pro obecné použití a za nor
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:551
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr "Chcete-li upravit nastavení klientského tunelu, použijte <a href=\"/i2ptunnelmgr\">Správce tunelů</a> nebo <a href=\"/i2psnark/configure\">stránku konfigurace</a> pro "
+msgstr "Chcete-li upravit nastavení klientského tunelu, použijte <a href=\"/i2ptunnelmgr\">Správce tunelů</a> nebo <a href=\"/i2psnark/configure\">stránku konfigurace</a> pro I2PSnark."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:553
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
@@ -8610,7 +8610,7 @@ msgstr "Aktualizujte URL"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:640
 msgid "To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>"
-msgstr "Pro aktualizaci pomocí nepodepsaných sestavení I2P vydání: <code>http://skank.i2p/i2pupdate.zip</code> nebo pro nejnovější nepodepsané vývojové sestavení: <code>http://skank.i2p/dev/i2pupdate "
+msgstr "Pro aktualizaci pomocí nepodepsaných sestavení I2P vydání: <code>http://skank.i2p/i2pupdate.zip</code> nebo pro nejnovější nepodepsané vývojové sestavení: <code>http://skank.i2p/dev/i2pupdate</code>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:644
 msgid "Update with unsigned development builds"
