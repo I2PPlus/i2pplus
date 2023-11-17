@@ -120,7 +120,7 @@ function attachMagnetListeners() {
     toastTimeoutId = setTimeout(function() {
       toast.style.display = "none";
       toast.textContent = "";
-    }, 3500);
+    }, 8000);
   }
 
   main.addEventListener("click", function copyMagnetHandler(event) {
