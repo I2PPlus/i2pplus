@@ -548,6 +548,7 @@ td.commentAuthor .commentAuthorName{margin-left:2px;padding:0 5px 0 22px;width:1
 .configOption{padding:0 4px;display:inline-block;vertical-align:middle;white-space:nowrap;width:calc(100% - 20px)}
 .configOption::after{height:40px;display:inline-block;vertical-align:middle;content:""}
 input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 180px)}
+#configs input[name="i2cpOpts"],#configs input[name="nofilter_dataDir"]{font-size:90%}
 #embed,#fullscreen{margin-top:2px;float:right;font-size:85%}
 #fullscreen{display:none}
 .iframed #embed{display:none}
@@ -592,6 +593,9 @@ input.trackerhome{width:200px}
 .trackerconfig tr:nth-last-child(3) td,.trackerconfig tr:nth-last-child(5) td{font-size:0;padding:0}
 .trackerhome,.trackerannounce{width:260px}
 #addtracker td{padding-top:6px;padding-bottom:6px}
+#addtracker td:first-child b{width:22px;height:22px;display:inline-block;vertical-align:middle;font-size:0;background:var(--add) no-repeat center center/22px;mix-blend-mode:luminosity}
+#addtracker td input{margin-left:0}
+#addtracker:hover td:first-child b,#addtracker:focus-within td:first-child b{mix-blend-mode:normal}
 
 /* iconized panel tabs */
 input:checked + .toggleview:active .tab_label::after{transform:rotate(-90deg) scale(.9);transition:linear transform .15s}
