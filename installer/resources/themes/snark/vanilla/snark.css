@@ -103,8 +103,8 @@ th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visi
 .snarkNav:last-of-type,.snarkNav:last-of-type:visited{border-right:var(--border);border-radius:2px}
 
 /* toast notifications */
-#toast{box-shadow:var(--bevel_notify);background:var(--notify)}
-#toast b{color:#925}
+#toast{color:var(--ink);box-shadow:var(--bevel_notify);background:var(--notify)}
+#toast b{color:#662e00}
 
 /* search */
 #snarkSearch{margin-left:8px;display:block;position:absolute;right:10px;top:7px}
