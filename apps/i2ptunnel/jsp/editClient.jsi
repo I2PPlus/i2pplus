@@ -140,7 +140,7 @@
           out.write(")</font></span>");
       }
 %>
-<input type=text size="6" maxlength="5" name="port" title="<%=intl._t("Specify the local port this service should be accessible from")%>" value="<%=editBean.getClientPort(curTunnel)%>" class="freetext port" placeholder="required" />
+<input type=text size="6" maxlength="5" name="port" title="<%=intl._t("Specify the local port this service should be accessible from")%>" value="<%=editBean.getClientPort(curTunnel)%>" class="freetext port"  placeholder="<%=intl._t("required")%>" />
 <%
       if ("streamrclient".equals(tunnelType)) {
 %>
@@ -153,7 +153,7 @@
           out.write(")</font></span>");
       }
 %>
-<input type=text size="20" id="targetHost" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=targetHost%>" class="freetext host" placeholder="required" />
+<input type=text size="20" id="targetHost" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=targetHost%>" class="freetext host"  placeholder="<%=intl._t("required")%>" />
 <%
       } else {
 %>
