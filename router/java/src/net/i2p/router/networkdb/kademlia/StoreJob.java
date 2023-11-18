@@ -104,7 +104,7 @@ abstract class StoreJob extends JobImpl {
                 _connectMask = ConnectChecker.ANY_V4;
         }
         if (_log.shouldDebug())
-            _log.debug("[Job " + getJobId() + "] [DbId: " + _facade._dbid + "] New store job for \n" + data, new Exception("I did it"));
+            _log.debug("[Job " + getJobId() + "] [DbId: " + _facade + "] New store job for \n" + data, new Exception("I did it"));
     }
 
     public String getName() { return "Process Kademlia NetDb Store";}
@@ -187,11 +187,11 @@ abstract class StoreJob extends JobImpl {
         if ( (closestHashes == null) || (closestHashes.isEmpty()) ) {
             if (_state.getPendingCount() <= 0) {
                 if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] [DbId: " + _facade._dbid + "] No more peers left and none pending");
+                    _log.info("[Job " + getJobId() + "] [DbId: " + _facade + "] No more peers left and none pending");
                 fail();
             } else {
                 if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] [DbId: " + _facade._dbid + "] No more peers left but some are pending, waiting...");
+                    _log.info("[Job " + getJobId() + "] [DbId: " + _facade + "] No more peers left but some are pending, waiting...");
                 return;
             }
         } else {
@@ -211,7 +211,7 @@ abstract class StoreJob extends JobImpl {
                     ds = _facade.getDataStore().get(peer);
                 if ( (ds == null) || !(ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) ) {
                     if (_log.shouldInfo())
-                        _log.info("[Job " + getJobId() + "] [DbId: " + _facade._dbid + "] Error selecting closest hash that wasn't a Router! [" + peer.toBase64().substring(0,6) + "]: " + ds);
+                        _log.info("[Job " + getJobId() + "] [DbId: " + _facade + "] Error selecting closest hash that wasn't a Router! [" + peer.toBase64().substring(0,6) + "]: " + ds);
                     _state.addSkipped(peer);
                     skipped++;
                 } else if (!shouldStoreTo((RouterInfo)ds)) {
@@ -265,7 +265,7 @@ abstract class StoreJob extends JobImpl {
                     // // Do not store to hidden nodes
                     // if (!((RouterInfo)ds).isHidden()) {
                        if (_log.shouldInfo())
-                           _log.info("[Job " + getJobId() + "] [DbId: " + _facade._dbid + "] Sending key [" + _state.getTarget().toBase64().substring(0,6) +
+                           _log.info("[Job " + getJobId() + "] [DbId: " + _facade + "] Sending key [" + _state.getTarget().toBase64().substring(0,6) +
                                      "] (attempt " + (_state.getAttemptedCount() + 1) + ")\n* To: " + closestHashes);
                         _state.addPending(peer);
                         sendStore((RouterInfo)ds, peerTimeout);
@@ -275,7 +275,7 @@ abstract class StoreJob extends JobImpl {
             }
             if (queued == 0 && _state.getPendingCount() <= 0) {
                 if (_log.shouldInfo())
-                    _log.info("[Job " + getJobId() + "] [DbId: " + _facade._dbid + "] No more peers left after skipping " + skipped + " and none pending");
+                    _log.info("[Job " + getJobId() + "] [DbId: " + _facade + "] No more peers left after skipping " + skipped + " and none pending");
                 // queue a job to go around again rather than recursing
                 getContext().jobQueue().addJob(new WaitJob(getContext()));
             }
@@ -390,7 +390,7 @@ abstract class StoreJob extends JobImpl {
                 // and issue a warning.
                 sendStoreThroughExploratory(msg, peer, expiration);
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("[JobId: " + getJobId() + " [DbId: " + _facade._dbid + "]"
+                    _log.warn("[JobId: " + getJobId() + " [DbId: " + _facade + "]"
                               + " Sending RI store (though exploratory tunnels) in a client context to "
                               + peer.getIdentity().getHash() + " with message " + msg);
             }
@@ -583,7 +583,7 @@ abstract class StoreJob extends JobImpl {
             StoreMessageSelector selector = new StoreMessageSelector(ctx, getJobId(), peer, msg.getReplyToken(), expiration);
 
             if (_log.shouldDebug()) {
-                    _log.debug("[Job " + getJobId() + "] [DbId: " + _facade._dbid + "] Sending encrypted store to [" + to.toBase64().substring(0,6) +
+                    _log.debug("[Job " + getJobId() + "] [DbId: " + _facade + "] Sending encrypted store to [" + to.toBase64().substring(0,6) +
                                "] through " + outTunnel + ": " + sent + " with reply to " + replyGW + ' ' + replyTunnelId);
 
             }

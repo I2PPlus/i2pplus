@@ -56,7 +56,7 @@ class ExpireLeasesJob extends JobImpl {
                 //_facade.lookupLeaseSet(key, null, null, RERUN_DELAY_MS);
             }
             if (_log.shouldLog(Log.INFO)) {
-                _log.info("[DbId: " + _facade._dbid + "] Known LeaseSets: " + _facade.getKnownLeaseSets() + "; Leases to expire: " + toExpire);
+                _log.info("[DbId: " + _facade + "] Known LeaseSets: " + _facade.getKnownLeaseSets() + "; Leases to expire: " + toExpire);
             }
         }
         //_facade.queueForExploration(toExpire); // don't do explicit searches, just explore passively
