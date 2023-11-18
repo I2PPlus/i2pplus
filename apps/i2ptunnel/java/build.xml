@@ -11,7 +11,7 @@
     <target name="depend" if="depend.available">
         <depend
             cache="../../../build"
-            srcdir="./src" 
+            srcdir="./src"
             destdir="./build/obj" >
             <!-- Depend on classes instead of jars where available -->
             <classpath>
@@ -37,12 +37,12 @@
     <target name="compile" depends="depend">
         <mkdir dir="./build" />
         <mkdir dir="./build/obj" />
-        <javac 
-            srcdir="./src" 
+        <javac
+            srcdir="./src"
             excludes="net/i2p/i2ptunnel/web/**/*"
-            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
+            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
             release="${javac.release}"
-            destdir="./build/obj" 
+            destdir="./build/obj"
             includeAntRuntime="false"
             encoding="UTF-8"
             classpath="../../../core/java/build/i2p.jar:../../../core/java/build/gnu-getopt.jar:../../ministreaming/java/build/mstreaming.jar" >
@@ -54,12 +54,12 @@
     <target name="compileWeb" depends="jar">
         <mkdir dir="./build" />
         <mkdir dir="./build/obj" />
-        <javac 
-            srcdir="./src" 
+        <javac
+            srcdir="./src"
             includes="net/i2p/i2ptunnel/web/**/*"
-            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
+            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
             release="${javac.release}"
-            destdir="./build/obj" 
+            destdir="./build/obj"
             includeAntRuntime="false"
             encoding="UTF-8"
             classpath="../../../core/java/build/i2p.jar:build/i2ptunnel.jar:../../jetty/jettylib/jetty-i2p.jar:../../jetty/jettylib/jetty-util.jar:../../jetty/jettylib/jetty-xml.jar" >
@@ -169,7 +169,7 @@
         <exec executable="sh" osfamily="windows" failifexecutionfails="false" >
             <arg value="./bundle-messages.sh" />
         </exec>
-        <javac source="${javac.version}" target="${javac.version}" 
+        <javac source="${javac.version}" target="${javac.version}"
                release="${javac.release}"
                includeAntRuntime="false"
                encoding="UTF-8"
@@ -215,7 +215,7 @@
         <exec executable="sh" osfamily="windows" failifexecutionfails="false" >
             <arg value="./bundle-messages-proxy.sh" />
         </exec>
-        <javac source="${javac.version}" target="${javac.version}" 
+        <javac source="${javac.version}" target="${javac.version}"
                release="${javac.release}"
                includeAntRuntime="false"
                encoding="UTF-8"
@@ -271,7 +271,7 @@
     </target>
 
     <!-- The web classes are now in the war not the jar - they are not part of the API -->
-    <target name="war" depends="compileWeb, precompilejsp, bundle, warUpToDate, listChangedFiles2" unless="war.uptodate" > 
+    <target name="war" depends="compileWeb, precompilejsp, bundle, warUpToDate, listChangedFiles2" unless="war.uptodate" >
         <!-- set if unset -->
         <property name="workspace.changes.w.tr" value="" />
     	<copy todir="../jsp/WEB-INF/classes/net/i2p/i2ptunnel/ui">
@@ -353,8 +353,9 @@
             <arg value="../jsp/web-fragment.xml" />
             <arg value="-webapp" />
             <arg value="../jsp/" />
+            <arg value="-die" />
         </java>
-        <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
+        <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
                release="${javac.release}"
                includeAntRuntime="false"
                encoding="UTF-8"
@@ -408,11 +409,11 @@
     <target name="javadoc">
         <mkdir dir="./build" />
         <mkdir dir="./build/javadoc" />
-        <javadoc 
-            sourcepath="./src:../../../core/java/src:../../ministreaming/java/src" destdir="./build/javadoc" 
-            packagenames="*" 
-            use="true" 
-            splitindex="true" 
+        <javadoc
+            sourcepath="./src:../../../core/java/src:../../ministreaming/java/src" destdir="./build/javadoc"
+            packagenames="*"
+            use="true"
+            splitindex="true"
             windowtitle="I2PTunnel" />
     </target>
 
