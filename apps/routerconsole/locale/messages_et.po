@@ -3751,7 +3751,7 @@ msgid "Internet Encyclopedia of Philosophy"
 msgstr "Interneti -entsüklopeedia filosoofiast"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:180
-msgid "Standford Encylopedia of Philosophy"
+msgid "Standford Encyclopedia of Philosophy"
 msgstr "Stanfordi filosoofia entsüklopeedia"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:181

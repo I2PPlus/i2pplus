@@ -176,8 +176,8 @@ public class HomeHelper extends HelperBase {
         "I2P Wiki" + S + _x("I2P-related Wiki") + S + "http://wiki.i2p-projekt.i2p/" + S + I + "wiki.svg" + S +
         "mathworld.i2p" + S + _x("Wolfram's Online Math Reference") + S + "http://mathworld.i2p/" + S + I + "eepsites/books.svg" + S +
         "mdn.i2p" + S + _x("Mozilla Developer Network") + S + "http://mdn.i2p/" + S + I + "eepsites/mdn.svg" + S +
-        "Philosopedia" + S + _x("Internet Encylopedia of Philosophy") + S + "http://philosopedia.i2p/" + S + I + "eepsites/books.svg" + S +
-        "plato.i2p" + S + _x("Standford Encylopedia of Philosophy") + S + "http://plato.i2p/" + S + I + "eepsites/plato.png" + S +
+        "Philosopedia" + S + _x("Internet Encyclopedia of Philosophy") + S + "http://philosopedia.i2p/" + S + I + "eepsites/books.svg" + S +
+        "plato.i2p" + S + _x("Standford Encyclopedia of Philosophy") + S + "http://plato.i2p/" + S + I + "eepsites/plato.png" + S +
         _x("Psychonaut") + S + _x("Wiki relating to altered states of consciousness") + S + "http://psychonaut.i2p/" + S + I + "eepsites/psy.svg" + S +
         _x("SimplifiedGuide") + S + _x("Computing-related tutorials") + S + "http://simplified.i2p/" + S + I + "help.svg" + S +
         "vuldb.i2p" + S + _x("Vulnerability Database") + S + "http://vuldb.i2p/" + S + I + "eepsites/vuldb.svg" + S +

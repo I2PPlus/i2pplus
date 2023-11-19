@@ -3742,7 +3742,7 @@ msgid "Internet Encyclopedia of Philosophy"
 msgstr "Bách khoa toàn thư Internet về triết học"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:180
-msgid "Standford Encylopedia of Philosophy"
+msgid "Standford Encyclopedia of Philosophy"
 msgstr "Bách khoa toàn thư Stanford về triết học"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:181

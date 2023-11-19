@@ -3742,7 +3742,7 @@ msgid "Internet Encyclopedia of Philosophy"
 msgstr "철학의 인터넷 백과 사전"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:180
-msgid "Standford Encylopedia of Philosophy"
+msgid "Standford Encyclopedia of Philosophy"
 msgstr "스탠포드 철학 백과 사전"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:181

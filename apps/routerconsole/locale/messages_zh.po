@@ -3742,7 +3742,7 @@ msgid "Internet Encyclopedia of Philosophy"
 msgstr "互联网哲学百科全书"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:180
-msgid "Standford Encylopedia of Philosophy"
+msgid "Standford Encyclopedia of Philosophy"
 msgstr "斯坦福大学哲学百科全书"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:181
