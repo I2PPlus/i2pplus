@@ -530,7 +530,7 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 #torrentSort .ascending,th#torrentSort .descending{right:-14px}
 
 /* configure */
-input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 220px)}
+input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 220px);font-size:90%!important}
 input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-bottom:6px}
 .configOption{margin-top:3px;margin-bottom:3px;display:inline-block}
 .configOption::after{min-height:34px;display:inline-block;vertical-align:middle;content:""}
@@ -561,15 +561,19 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 .trackerconfig th{border-bottom:0}
 .trackerconfig th:first-child{background:var(--nuke) no-repeat center center/14px,var(--th)}
 .trackerconfig th:first-child,.knownTracker td:first-child,#addtracker td:first-child{border-left:var(--border)}
+.trackerconfig th:first-child,.trackerconfig td:first-child{width:32px}
 .trackerconfig th{font-size:9pt;border-bottom:0}
 .trackerconfig th:last-child,.knownTracker td:last-child,#addtracker td:last-child{border-right:var(--border)}
 .trackerconfig th:nth-child(2),.trackerconfig th:nth-child(3){text-align:left}
 .trackerconfig th:last-child{text-align:left}
-.trackerconfig td:first-child{text-align:right}
+.trackerconfig td:first-child{text-align:center}
 .trackerconfig td:nth-child(4),.trackerconfig td:nth-child(5),.trackerconfig td:nth-child(6),.knownTracker td:first-child{text-align:center}
 .trackerAnnounce,.trackerHome{width:220px}
 .trackerName{width:140px}
 #addtracker td{padding-top:10px;padding-bottom:8px;border-top:var(--border);background:#fff}
+#addtracker td:first-child b{width:22px;height:22px;display:inline-block;vertical-align:middle;font-size:0;background:var(--add) no-repeat center center/22px;mix-blend-mode:luminosity}
+#addtracker td input{margin-left:0}
+#addtracker:hover td:first-child b,#addtracker:focus-within td:first-child b{mix-blend-mode:normal}
 #bwHoverHelp img{height:16px;width:16px;margin:0 4px;vertical-align:text-top}
 #configs,.trackerconfig{margin:10px 10px 0;width:80%;width:calc(100% - 20px)}
 #configs .accept{margin-right:0}
@@ -588,7 +592,6 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #trackers td{padding:6px 4px 4px;border-top:var(--border);border-bottom:var(--border)}
 #trackers .info_tracker{vertical-align:text-bottom}
 #trackers .knownTracker td,#trackers #addtracker td,#trackers .trackerconfig td[colspan="7"]{border-bottom:0}
-#trackers .knownTracker td{min-width:100px}
 #trackers #addtracker td{padding-top:10px;padding-bottom:10px}
 
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
