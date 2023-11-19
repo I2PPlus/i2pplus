@@ -200,10 +200,10 @@ td.destinations textarea{height:28px;box-shadow:none}
 #hostNotes:hover td:first-child,#hostNotes:hover textarea{background:#ffe}
 #hostNotes td:last-child input[type=submit]{margin:10px;float:right;display:none}
 #hostNotes td:last-child textarea:focus+input[type=submit]{display:inline-block}
-#hostNotes textarea{margin:0;padding:5px 8px;border:1px solid transparent;border-left:0;border-right:0;border-radius:0;background:#fafaff}
-#hostNotes textarea:hover,#hostNotes textarea:focus{border:1px solid var(--hover);border-right:0;border-left:0;;background:#fff}
-#hostNotes textarea::placeholder{font-style:italic}
-#hostNotes textarea:focus::placeholder{color:transparent}
+#addNotes{margin:0;padding:5px 8px;border:1px solid transparent;border-left:0;border-right:0;border-radius:0;background:#fafaff}
+#addNotes:hover,#addNotes:focus{border:1px solid var(--hover);border-right:0;border-left:0;;background:#fff}
+#addNotes::placeholder{font-style:italic}
+#addNotes:focus::placeholder{color:transparent}
 #lastMod:empty::after{content:"n/a"}
 
 /* identicon + qr image */

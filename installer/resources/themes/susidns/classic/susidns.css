@@ -128,10 +128,10 @@ td.destinations{padding:0;max-width:50px}
 #host_details td.destinations{background:none}
 #host_details .destaddress{font-family:var(--monospaced);word-break:break-all;white-space:normal}
 #hostNotes td:first-child{padding-top:8px;vertical-align:top}
-#hostNotes textarea{margin:4px 0}
+#addNotes{margin:4px 0}
 #hostNotes .accept{margin-top:4px;float:right}
-#hostNotes textarea+.accept{display:none}
-#hostNotes textarea:focus+.accept{display:inline-block}
+#addNotes+.accept{display:none}
+#addNotes:focus+.accept{display:inline-block}
 
 /* import/export/add */
 #add{margin-top:-12px;background:var(--bg)}

@@ -231,9 +231,9 @@ p.book{padding-left:35px}
 #dtls #book form+#buttons{padding-bottom:14px}
 #hostNotes td:last-child{padding:0}
 #hostNotes input[type=submit]{margin:14px 20px 12px;display:none;float:right}
-#hostNotes textarea:focus+input[type=submit]{display:inline-block}
-#hostNotes textarea{margin:0;padding:4px 10px;font-family:var(--bodyfont);font-size:inherit;font-weight:400;color:var(--ink);border:0;box-shadow:none;opacity:1;background:transparent;border-bottom:1px solid transparent;-moz-user-select:auto;-webkit-user-select:auto;user-select:auto}
-#hostNotes textarea:focus{border-bottom:var(--border_soft);background:#000}
+#addNotes:focus+input[type=submit]{display:inline-block}
+#addNotes{margin:0;padding:4px 10px;font-family:var(--bodyfont);font-size:inherit;font-weight:400;color:var(--ink);border:0;box-shadow:none;opacity:1;background:transparent;border-bottom:1px solid transparent;-moz-user-select:auto;-webkit-user-select:auto;user-select:auto}
+#addNotes:focus{border-bottom:var(--border_soft);background:#000}
 
 /* hostname list */
 #host_list{margin-top:28px}
