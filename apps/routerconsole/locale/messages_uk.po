@@ -3754,7 +3754,7 @@ msgid "Mozilla Developer Network"
 msgstr "Мережа розробників Mozilla"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:179
-msgid "Internet Encylopedia of Philosophy"
+msgid "Internet Encyclopedia of Philosophy"
 msgstr "Інтернет-енциклопедія філософії"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:180
