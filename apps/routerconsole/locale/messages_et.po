@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-10-31 23:17+0000\n"
+"PO-Revision-Date: 2023-11-19 22:59+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: et_EE\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:387
 msgid "Hash"
-msgstr "räsi"
+msgstr "Räsi"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:389
 msgid "Banned by Router Hash"
@@ -29,7 +29,7 @@ msgstr "Keelatud ruuteri räsi poolt"
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:1258
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:1360
 msgid "Blocklist"
-msgstr "blokeerimisloend"
+msgstr "Blokeerimisloend"
 
 #: ../../../router/java/src/net/i2p/router/Router.java:2049
 #: ../../../router/java/src/net/i2p/router/sybil/Analysis.java:1092
@@ -111,12 +111,12 @@ msgstr "Kontaktide hange: toon ruuteri info URL-i ({0} edukalt, {1} viga)."
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:848
 #, java-format
 msgid "Acquired {0} router infos from reseed hosts"
-msgstr "hangiti {0} ruuteriteavet uuesti esitatavatelt hostidelt"
+msgstr "Hangiti {0} ruuteriteavet uuesti esitatavatelt hostidelt"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:852
 #, java-format
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
-msgstr "hangitud {0} ruuteriteavet uuesti esitatavatelt hostidelt ({1} viga)"
+msgstr "Hangitud {0} ruuteriteavet uuesti esitatavatelt hostidelt ({1} viga)"
 
 #. NOTE TO TRANSLATORS - each of these phrases is a description for a statistic
 #. to be displayed on /stats.jsp and in the graphs on /graphs.jsp.
@@ -204,7 +204,7 @@ msgstr "tundmatu"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:963
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:475
 msgid "Floodfill"
-msgstr ""
+msgstr "Üleujutus"
 
 #.
 #. if (log.shouldWarn()) {
@@ -237,7 +237,7 @@ msgstr "Toetuseta allkirja tüüp"
 
 #: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:950
 msgid "No support for our signature type"
-msgstr ""
+msgstr "Meie allkirja tüübile pole tuge"
 
 #: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:954
 msgid "Unreachable on any transport"
@@ -532,7 +532,7 @@ msgstr "halb URL {0}"
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:118
 #, java-format
 msgid "Attempting to install from file {0}"
-msgstr "proovitakse installida failist {0}"
+msgstr "Proovitakse installida failist {0}"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:121
 #, java-format
@@ -666,7 +666,7 @@ msgstr "Ei saa kopeerida pluginat kataloogi {0}"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:540
 msgid "Plugin will be installed on next restart."
-msgstr ""
+msgstr "Pistikprogramm installitakse järgmisele taaskäivitamisele."
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:558
 msgid "Plugin is for upgrades only, but the plugin is not installed"
@@ -1065,7 +1065,7 @@ msgstr "Uuendan allkirjastamata uuenduse URL-iks {0}"
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:289
 #, java-format
 msgid "Updating signed development build URL to {0}"
-msgstr ""
+msgstr "Allkirjastatud arendusehituse URL värskendamine {0}"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHelper.java:128
 msgid "Every"
@@ -1169,14 +1169,14 @@ msgstr "Sündmusi perioodi kohta"
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:208
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:213
 msgid "Min"
-msgstr "min"
+msgstr "Min"
 
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:477
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:515
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:207
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:212
 msgid "Max"
-msgstr ""
+msgstr "Maks"
 
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:480
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:521
@@ -1188,7 +1188,7 @@ msgstr "Kesk"
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:483
 #: ../java/src/net/i2p/router/web/SummaryRenderer.java:524
 msgid "Now"
-msgstr "nüüd"
+msgstr "Nüüd"
 
 #. ctx.router().shutdown(Router.EXIT_HARD_RESTART); // never returns
 #. give the UI time to respond
@@ -1282,7 +1282,7 @@ msgstr "Asukoht"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:487
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:594
 msgid "I2CP"
-msgstr ""
+msgstr "I2CP"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:53
 msgid "I2PTunnel"
@@ -1291,7 +1291,7 @@ msgstr "I2PTunnel"
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:68
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:571
 msgid "SAM"
-msgstr ""
+msgstr "SAM"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:84
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:348
@@ -1324,7 +1324,7 @@ msgstr "konsool"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:144
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
-msgstr ""
+msgstr "Ruuteri konsooli SSL -i juurdepääsu lubamiseks vaadake lisateabe saamiseks faili <code> clients.config </code> fail, mis asub teie I2P rakenduste kataloogis. Peate redigeerima kaustas asuvat RouterConsolerunneri konfiguratsioonifaili: "
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigAdvancedHandler.java:73
 msgid "Error updating the configuration - please see the error logs"
@@ -1402,7 +1402,7 @@ msgstr "Käivita"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:254
 msgid "Client configuration saved successfully"
-msgstr ""
+msgstr "Kliendi konfiguratsioon salvestati edukalt"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:317
 msgid "New client added"
@@ -1728,12 +1728,12 @@ msgstr "Torrentid"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelmanager_jsp.java:447
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelmanager_jsp.java:455
 msgid "Tunnel Manager"
-msgstr ""
+msgstr "Tunneli Juhtimine"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:249
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:449
 msgid "Identification Image Generator"
-msgstr ""
+msgstr "Identifitseerimise Pildigeneraator"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:251
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:45
@@ -2083,7 +2083,7 @@ msgstr "Vali lisamiseks klass"
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:153
 #, java-format
 msgid "All classes in {0}"
-msgstr "kõik klassid: {0}"
+msgstr "Kõik klassid: {0}"
 
 #. stat groups for stats.jsp
 #. See StatsGenerator for groups mapped to a display name
@@ -2432,7 +2432,7 @@ msgstr "keelamiseks kustutage see väärtus"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:307
 msgid "bps"
-msgstr ""
+msgstr "b/s"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:309
 #, java-format
@@ -2837,7 +2837,7 @@ msgstr "Valikud (väljuv)"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:558
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:573
 msgid "Add user"
-msgstr "lisage kasutaja"
+msgstr "Lisage kasutaja"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:84
 msgid "Theme change saved."
@@ -2858,7 +2858,7 @@ msgstr "kasutajanime pole sisestatud"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:113
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
-msgstr ""
+msgstr "HOIATUS: Kasutajanimesid väljaspool ISO-8859-1 tähemärgikomplekti pole soovitatav. Tugi ei ole standardiseeritud ja see varieerub brauseri järgi."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:116
 msgid "No password entered"
@@ -2896,7 +2896,7 @@ msgstr "Manustage konsooli I2PSnark ja I2PMail"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:231
 msgid "Add a user and password to enable."
-msgstr "lubamiseks lisage kasutaja ja parool."
+msgstr "Lubamiseks lisage kasutaja ja parool."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:232
 msgid "Note: If you forget your password, removing the configuration entry in your router.config file will clear it (restart required)."
@@ -3267,7 +3267,7 @@ msgstr "Häälestus"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:408
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:672
 msgid "FAQ"
-msgstr ""
+msgstr "KKK"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:45
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:62
@@ -3303,7 +3303,7 @@ msgstr "Anonüümne veebimeili klient"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:279
 #: ../java/strings/Strings.java:16
 msgid "I2PMail"
-msgstr ""
+msgstr "I2PMail"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:48
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69
@@ -3493,7 +3493,7 @@ msgstr "täpsem konfiguratsioon"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:84
 msgid "Advanced router configuration"
-msgstr "ruuteri täpsem konfiguratsioon"
+msgstr "Ruuteri täpsem konfiguratsioon"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:85
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:584
@@ -3503,7 +3503,7 @@ msgstr "Käivitage või peatage ruuteri kliendid"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:180
 msgid "Changelog"
-msgstr ""
+msgstr "Viimased värskendused"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86
 msgid "Recent changes"
@@ -3548,7 +3548,7 @@ msgstr "I2P API dokumentatsioon"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:109
 msgid "Javadocs"
-msgstr ""
+msgstr "Javadocs"
 
 #. _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "plugin.svg" + S +
 #. "stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "stats.svg" + S +
@@ -3619,7 +3619,7 @@ msgstr "Rocksolidi foorumid pimedate võrkude jaoks"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:137
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
-msgstr ""
+msgstr "Võrkudevaheline mikroblogimine"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:138
 msgid "Alternative privacy-focused front-end for Reddit"
@@ -3639,15 +3639,15 @@ msgstr "Base64 pildi kodeerija"
 #. hosting + other services
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "base64-image.i2p"
-msgstr ""
+msgstr "base64-image.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "An image cache and resize service"
-msgstr "piltide vahemälu ja suuruse muutmise teenus"
+msgstr "Piltide vahemälu ja suuruse muutmise teenus"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "imageproxy.i2p"
-msgstr ""
+msgstr "imageproxy.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:150
 msgid "IRC Logs for multiple networks"
@@ -3659,7 +3659,7 @@ msgstr "Krüpteeritud I2P Pastebin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:151
 msgid "Pastebin"
-msgstr ""
+msgstr "Pastebin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "Streaming radio service"
@@ -3667,7 +3667,7 @@ msgstr "voogesituse raadioteenus"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "radio.r4sas.i2p"
-msgstr ""
+msgstr "radio.r4sas.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:153
 msgid "Privacy-focused not-for-profit organization"
@@ -3732,7 +3732,7 @@ msgstr "HTML-i värviviide"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
 msgid "HTMLColors"
-msgstr ""
+msgstr "HTML Värvid"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
 msgid "I2P-related Wiki"
@@ -3747,12 +3747,12 @@ msgid "Mozilla Developer Network"
 msgstr "Mozilla arendajavõrk"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:179
-msgid "Internet Encylopedia of Philosophy"
-msgstr ""
+msgid "Internet Encyclopedia of Philosophy"
+msgstr "Interneti -entsüklopeedia filosoofiast"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:180
 msgid "Standford Encylopedia of Philosophy"
-msgstr ""
+msgstr "Stanfordi filosoofia entsüklopeedia"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:181
 msgid "Psychonaut"
@@ -3780,7 +3780,7 @@ msgstr "Veebitehnoloogia viide- ja õppesait"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:185
 msgid "Alternative Wikipedia front-end focused on privacy"
-msgstr "privaatsusele keskendunud alternatiivne Wikipedia kasutajaliides"
+msgstr "Privaatsusele keskendunud alternatiivne Wikipedia kasutajaliides"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:186
 msgid "The biggest online English dictionary"
@@ -3788,7 +3788,7 @@ msgstr "suurim inglise keele veebisõnastik"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:187
 msgid "World atlas including geography facts &amp; flags"
-msgstr ""
+msgstr "Maailma atlas, sealhulgas geograafia faktid ja lipud"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:187
 msgid "WorldAtlas"
@@ -3805,11 +3805,11 @@ msgstr "Maailma Atlas"
 #. news + blogs
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:198
 msgid "Technology News &amp; more..."
-msgstr ""
+msgstr "Tehnoloogiauudised ja palju muud..."
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "BenarNews"
-msgstr ""
+msgstr "BenarNews"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "Clear and accurate news for the Far East"
@@ -3821,202 +3821,202 @@ msgstr "Sõltumatu uuriv ajakirjandus"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:201
 msgid "Information Security Research &amp; Education"
-msgstr ""
+msgstr "Infoturbe uurimine ja haridus"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:202
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:215
 msgid "Cannabis-related magazine"
-msgstr ""
+msgstr "Kanepiga seotud ajakiri"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:202
 msgid "CultureMagazine"
-msgstr ""
+msgstr "Kultuuriajakiri"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "A magazine of Politics &amp; Culture"
-msgstr ""
+msgstr "Poliitika ja kultuuri ajakiri"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "CurrentAffairs"
-msgstr ""
+msgstr "Aktuaalne"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:204
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:205
 msgid "Darknet related news site"
-msgstr ""
+msgstr "Darknetiga seotud uudiste sait"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
 msgid "DigitalJournal"
-msgstr ""
+msgstr "Digital Journal"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
 msgid "Global news &amp; media platform"
-msgstr ""
+msgstr "Globaalsed uudised ja meediaplatvorm"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
 msgid "DigitalTrends"
-msgstr ""
+msgstr "Digital Trends"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
 msgid "Tech News &amp; Reviews"
-msgstr ""
+msgstr "Tehnikauudised ja ülevaated"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:208
 msgid "Defending your rights in the digital world"
-msgstr ""
+msgstr "oma õiguste kaitsmine digitaalses maailmas"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:209
 msgid "The Elliptic Curve Cryptography Blog"
-msgstr ""
+msgstr "Elliptilise kõvera krüptograafia ajaveeb"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
 msgid "ForeignPolicy"
-msgstr ""
+msgstr "Välispoliitika"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
 msgid "The Global Magazine of News &amp; Ideas"
-msgstr ""
+msgstr "Ülemaailmne ajakiri uudiste ja ideede ajakiri"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "FrontLineDefenders"
-msgstr ""
+msgstr "FrontLineDefenders"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "Human rights activism"
-msgstr ""
+msgstr "Inimõiguste aktivism"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:212
 msgid "Defending Human Rights Worldwide"
-msgstr ""
+msgstr "Inimõiguste kaitsmine kogu maailmas"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:212
 msgid "HumanRightsWatch"
-msgstr ""
+msgstr "Human RightsWatch"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:213
 msgid "Fresh hacks every day"
-msgstr ""
+msgstr "Värskeid häkke iga päev"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:214
 msgid "Computer related news aggregation"
-msgstr ""
+msgstr "arvutiga seotud uudiste koondamine"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:214
 msgid "HackerNews"
-msgstr ""
+msgstr "HackerNews"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
 msgid "HongKongFreePress"
-msgstr ""
+msgstr "HongKongFreePress"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
 msgid "Independent &amp; impartial news for Hong Kong"
-msgstr ""
+msgstr "Iseseisvad ja erapooletu uudised Hongkongile"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
 msgid "HongKongWatch"
-msgstr ""
+msgstr "HongKongWatch"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
 msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr ""
+msgstr "Jälgib vabadusi ja õigusi ähvardavaid ohte Hongkongis"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
 msgid "Business &amp; Financial News"
-msgstr ""
+msgstr "Äri- ja finantsuudised"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Politics &amp; Current Affairs Journal"
-msgstr ""
+msgstr "Poliitika- ja ajakirjade ajakiri"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "English language Japanese News"
-msgstr ""
+msgstr "ingliskeelsed jaapani uudised"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "JapanToday"
-msgstr ""
+msgstr "Jaapan täna"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "JStorDaily"
-msgstr ""
+msgstr "JStorDaily"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "Where news meets its scholarly match"
-msgstr ""
+msgstr "kus uudised kohtuvad oma teadusliku mänguga"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Jurist"
-msgstr ""
+msgstr "Jurist"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Legal News &amp; Commentary"
-msgstr ""
+msgstr "Juriidilised uudised ja kommentaarid"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "In-depth security news &amp; investigation"
-msgstr ""
+msgstr "Põhjalikud turvauudised ja uurimine"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "KrebsOnSecurity"
-msgstr ""
+msgstr "KrebsOnSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "Linux Kernel Mailing List"
-msgstr ""
+msgstr "Linuxi tuuma meililist"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "MetaCritic"
-msgstr ""
+msgstr "MetaCritic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "Movie + TV + Music + Game reviews"
-msgstr ""
+msgstr "Filmi-TV muusikamängude ülevaated"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "NakedSecurity"
-msgstr ""
+msgstr "Alasti Turvalisus"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "Security news and research blog"
-msgstr ""
+msgstr "Turvauudiste ja -uuringute ajaveeb"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "Smart &amp; fearless journalism"
-msgstr ""
+msgstr "Nutikas ja kartmatu ajakirjandus"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "NewStatesman"
-msgstr ""
+msgstr "NewStatesman"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "Politics &amp; Current Affairs magazine"
-msgstr ""
+msgstr "Poliitika ja ajakiri ajakiri"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "Independent International Media Platform"
-msgstr ""
+msgstr "Sõltumatu rahvusvaheline meediaplatvorm"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "OpenDemocracy"
-msgstr ""
+msgstr "AvatudDemokraatia"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "News and blog feeds on I2P"
-msgstr ""
+msgstr "I2P uudiste ja ajaveebi kanalid"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "Planeta"
-msgstr ""
+msgstr "Planeta"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
 msgid "News &amp; Views on Tibet"
-msgstr ""
+msgstr "Uudised ja vaated Tiibeti kohta"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "RadioFreeAsia"
-msgstr ""
+msgstr "RadioFreeAsia"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "Reliable journalism for countries under censorship"
@@ -4032,7 +4032,7 @@ msgstr "rahvusvaheliselt tuntud turvatehnoloog"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "SchneierOnSecurity"
-msgstr ""
+msgstr "SchneierOnSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "Latest scientific research news"
@@ -4040,7 +4040,7 @@ msgstr "uusimad teadusuuringute uudised"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "ScienceDaily"
-msgstr ""
+msgstr "ScienceDaily"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
 msgid "Community-driven tech news"
@@ -4056,35 +4056,35 @@ msgstr "Tehnoloogiauudised"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Reporting on China without fear or favor"
-msgstr ""
+msgstr "Aruandlus Hiinast ilma hirmu ja poolehoiuta"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "News from the Taiwan Capital"
-msgstr ""
+msgstr "Uudised Taiwani pealinnast"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "TaipeiTimes"
-msgstr ""
+msgstr "TaipeiTimes"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "TechXplore"
-msgstr ""
+msgstr "TechXplore"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "Technology and engineering news"
-msgstr ""
+msgstr "Tehnoloogia- ja inseneriuudised"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "TechMeme"
-msgstr ""
+msgstr "TechMeme"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "Technology news aggregator"
-msgstr ""
+msgstr "Tehnoloogiauudiste koondaja"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "News &amp; Reviews"
-msgstr ""
+msgstr "Uudised ja ülevaated"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "TheAtlantic"
@@ -4096,7 +4096,7 @@ msgstr "Akadeemilised kommentaarid ja esseed"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "TheConversation"
-msgstr "The Conversation"
+msgstr "TheConversation"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Global News"
@@ -4104,11 +4104,11 @@ msgstr "ülemaailmsed uudised"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "TheGuardian"
-msgstr ""
+msgstr "TheGuardian"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "TheHill"
-msgstr "The Hill"
+msgstr "TheHill"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "US Political News"
@@ -4116,7 +4116,7 @@ msgstr "USA poliitilised uudised"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "TheMarkup"
-msgstr ""
+msgstr "TheMarkup"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "Watching Big Tech..."
@@ -4128,7 +4128,7 @@ msgstr "Sõltumatu ajakirjandus Venemaalt"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "TheMoscowTimes"
-msgstr ""
+msgstr "TheMoscowTimes"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "TheNewRepublic"
@@ -4140,7 +4140,7 @@ msgstr "Rahvusvahelised uudised Tiibetist"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "TheTibetPost"
-msgstr ""
+msgstr "Tetibetpost"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "All you need to know about everything that matters"
@@ -4152,7 +4152,7 @@ msgstr "Nädal"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "Filesharing &amp; copyright news"
-msgstr ""
+msgstr "Filesharimise ja autoriõiguse uudised"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "A magazine about human rights and social justice"
@@ -4164,11 +4164,11 @@ msgstr "UpstreamJournal"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
-msgstr ""
+msgstr "Lähis -Idas Ameerika huvide tasakaalustatud ja realistliku mõistmise edendamine"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "WashingtonInstitute"
-msgstr ""
+msgstr "WashingtoniInstituut"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:351
 msgid "The HTTP proxy is not up"
@@ -4185,7 +4185,7 @@ msgstr "URL"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:528
 msgid "Add"
-msgstr "lisage"
+msgstr "Lisage"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:191
 msgid "Identity"
@@ -4230,7 +4230,7 @@ msgstr "jagatud"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:216
 msgid "Available CPU Cores"
-msgstr "saadaolevad protsessori tuumad"
+msgstr "Saadaolevad protsessori tuumad"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:216
 msgid "Performance"
@@ -4274,7 +4274,7 @@ msgstr "Installitud"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:239
 msgid "Config Dir"
-msgstr ""
+msgstr "Konfiguratsioonikataloog"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:240
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1420
@@ -4292,7 +4292,7 @@ msgstr "arendusvärskendused on lubatud"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:247
 msgid "Started"
-msgstr "algas"
+msgstr "Algas"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:249
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:757
@@ -4317,7 +4317,7 @@ msgstr "tööjooksjad"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:81
 msgid "Active jobs"
-msgstr "aktiivsed tööd"
+msgstr "Aktiivsed tööd"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:86
 #, java-format
@@ -4421,7 +4421,7 @@ msgstr "ruuteri otsing"
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:56
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:485
 msgid "All Routers"
-msgstr "kõik ruuterid"
+msgstr "Kõik ruuterid"
 
 #. 4  - f=1 (debug)
 #. 5  - l=1
@@ -4447,21 +4447,21 @@ msgstr "Täpsem otsing"
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:61
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:527
 msgid "LeaseSet Lookup"
-msgstr ""
+msgstr "Leaseset -otsimine"
 
 #. 9  -
 #. 10 - f=5
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:62
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:63
 msgid "All Routers (Client NetDb)"
-msgstr "kõik ruuterid (Client NetDb)"
+msgstr "Kõik ruuterid (Client NetDb)"
 
 #. 11 - f=6 (debug)
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:64
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:493
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:568
 msgid "Sybil Analysis"
-msgstr ""
+msgstr "Sybil -analüüs"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:166
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
@@ -4508,11 +4508,11 @@ msgstr "Maa"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:667
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:515
 msgid "Port"
-msgstr ""
+msgstr "Sadam"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:536
 msgid "MTU"
-msgstr ""
+msgstr "MTU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:563
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1026
@@ -4530,7 +4530,7 @@ msgstr "Võrguandmed"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:724
 msgid "Median distance (bits)"
-msgstr "keskmine kaugus (bitti)"
+msgstr "Keskmine kaugus (bitti)"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:728
 msgid "Estimated total floodfills"
@@ -4548,7 +4548,7 @@ msgstr "Lüüsikirjegrupp"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:796
 msgid "LeaseSet Key"
-msgstr ""
+msgstr "Rendilepingu Võti"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:809
 msgid "View local tunnels for destination"
@@ -4566,7 +4566,7 @@ msgstr "Lisa aadressiraamatusse"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:838
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:861
 msgid "Add to local addressbook"
-msgstr "lisage kohalikku aadressiraamatusse"
+msgstr "Lisage kohalikku aadressiraamatusse"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:873
 #, java-format
@@ -4658,7 +4658,7 @@ msgstr "Arv"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1134
 msgid "Bandwidth Tier"
-msgstr "ribalaiuse tase"
+msgstr "Ribalaiuse tase"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1166
 msgid "Congestion Cap"
@@ -4666,7 +4666,7 @@ msgstr "ummikupiirang"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1169
 msgid "Medium congestion / low performance"
-msgstr "keskmine ülekoormus / madal jõudlus"
+msgstr "Keskmine ülekoormus / madal jõudlus"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1174
 msgid "High congestion"
@@ -4895,12 +4895,12 @@ msgstr "Osalevad tunnelid (60s)"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1604
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1678
 msgid "Bandwidth send rate (1h)"
-msgstr "ribalaiuse saatmiskiirus (1 h)"
+msgstr "Ribalaiuse saatmiskiirus (1 h)"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1605
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1679
 msgid "Bandwidth receive rate (1h)"
-msgstr "ribalaiuse vastuvõtukiirus (1 h)"
+msgstr "Ribalaiuse vastuvõtukiirus (1 h)"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1623
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1626
@@ -4954,7 +4954,7 @@ msgstr "Ainult IPv6 SSU, tutvustajad"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1704
 msgid "IPv6 SSU"
-msgstr ""
+msgstr "IPv6 SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1704
 msgid "IPv6 SSU, introducers"
@@ -4962,11 +4962,11 @@ msgstr "IPv6 SSU, tutvustajad"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1705
 msgid "IPv6 NTCP"
-msgstr ""
+msgstr "IPv6 NTCP"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1705
 msgid "IPv6 NTCP, SSU"
-msgstr ""
+msgstr "IPv6 NTCP, SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1705
 msgid "IPv6 NTCP, SSU, introducers"
@@ -5000,7 +5000,7 @@ msgstr "faili ruuter.config."
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:189
 msgid "Peer Connections"
-msgstr ""
+msgstr "Vastastikused ühendused"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:191
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:343
@@ -5011,7 +5011,7 @@ msgstr "Automaatne värskendamine"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:193
 #: ../java/strings/Strings.java:71
 msgid "Transport"
-msgstr ""
+msgstr "Transpord"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:194
 msgid "Active in the last minute"
@@ -5020,7 +5020,7 @@ msgstr "Aktiivne viimasel minutil"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:196
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:197
 msgid "IPv4"
-msgstr ""
+msgstr "IPv4"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:200
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:201
@@ -5083,7 +5083,7 @@ msgstr "kaaslaste passiivsus"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:352
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:583
 msgid "Average inbound/outbound rate (KBps)"
-msgstr "keskmine sissetulemise/väljamineku kiirus (KB/s)"
+msgstr "Keskmine sissetulemise/väljamineku kiirus (KB/s)"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:352
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:583
@@ -5548,7 +5548,7 @@ msgstr "tunnelit tunnis"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:370
 msgid "peer"
-msgstr ""
+msgstr "eakaaslane"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:372
 msgid "peers"
@@ -5724,7 +5724,7 @@ msgstr "mitmest uuest ruuterist nad meile hiljuti rääkinud on?"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfilesHelper.java:13
 msgid "All"
-msgstr "kõik"
+msgstr "Kõik"
 
 #. 3
 #: ../java/src/net/i2p/router/web/helpers/ProfilesHelper.java:17
@@ -5895,7 +5895,7 @@ msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:65
 msgid "Bandwidth Graph"
-msgstr "ribalaiuse graafik"
+msgstr "Ribalaiuse graafik"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:67
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1185
@@ -6120,7 +6120,7 @@ msgstr "Vaata tunnelite ja nende ehitamise staatust"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:577
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:427
 msgid "Advanced Configuration"
-msgstr "täpsem konfiguratsioon"
+msgstr "Täpsem konfiguratsioon"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:589
 msgid "API"
@@ -6409,7 +6409,7 @@ msgstr "töö keskmine viivitus / maksimaalne viivitus"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1203
 msgid "Average delay before scheduled jobs are run"
-msgstr "keskmine viivitus enne plaanitud tööde käivitamist"
+msgstr "Keskmine viivitus enne plaanitud tööde käivitamist"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1218
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
@@ -6417,7 +6417,7 @@ msgstr "näitab, kui kiiresti teistele I2P-ruuteritele väljaminevaid sõnumeid 
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1232
 msgid "Average time to test a peer (successful / total)"
-msgstr "keskmine aeg kaaslase testimiseks (edukas / kokku)"
+msgstr "Keskmine aeg kaaslase testimiseks (edukas / kokku)"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1235
 msgid "Peer test average"
@@ -6630,7 +6630,7 @@ msgstr "Kontrollige võrguühendust ja NAT-i/tulemüüri!"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1347
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
-msgstr "proovige alla laadida ruuteri viitefaile (kui automaatne uuesti esitamine ebaõnnestus)"
+msgstr "Proovige alla laadida ruuteri viitefaile (kui automaatne uuesti esitamine ebaõnnestus)"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1348
 msgid "Reseed"
@@ -6776,11 +6776,11 @@ msgstr "Kustutage skaneeringud, mis on vanemad kui"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:367
 msgid "Automatic blocking"
-msgstr "automaatne blokeerimine"
+msgstr "Automaatne blokeerimine"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:370
 msgid "Add detected sybils to banlist"
-msgstr "lisage tuvastatud sildid banlisti"
+msgstr "Lisage tuvastatud sildid banlisti"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:372
 msgid "Block all detected sybils"
@@ -6812,7 +6812,7 @@ msgstr "Tuntud üleujutused"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:392
 msgid "Average closest floodfill distance"
-msgstr "keskmine lähim üleujutuse täituvus"
+msgstr "Keskmine lähim üleujutuse täituvus"
 
 #. "<b>").append(_t("Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getModData()))
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:394
@@ -7170,7 +7170,7 @@ msgstr "Hetkel ei ole aktiivseid kohalikke ega ühistransporditunneleid."
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:607
 msgid "Bandwidth Tiers"
-msgstr "ribalaiuse tasemed"
+msgstr "Ribalaiuse tasemed"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:769
 msgid "Inbound or outbound?"
@@ -7223,33 +7223,33 @@ msgstr "konsooli keel on salvestatud."
 
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:53
 msgid "Bandwidth test completed successfully"
-msgstr "ribalaiuse test on edukalt lõpule viidud"
+msgstr "Ribalaiuse test on edukalt lõpule viidud"
 
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:55
 msgid "Bandwidth test failed"
-msgstr "ribalaiuse test ebaõnnestus"
+msgstr "Ribalaiuse test ebaõnnestus"
 
 #. didn't run at all?
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:57
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:60
 msgid "Bandwidth test did not complete"
-msgstr "ribalaiuse testi ei lõpetatud"
+msgstr "Ribalaiuse testi ei lõpetatud"
 
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:142
 msgid "Bandwidth test started"
-msgstr "ribalaiuse test algas"
+msgstr "Ribalaiuse test algas"
 
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:144
 msgid "Bandwidth test is already running"
-msgstr "ribalaiuse test juba töötab"
+msgstr "Ribalaiuse test juba töötab"
 
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:153
 msgid "Bandwidth test cancelled"
-msgstr "ribalaiuse test tühistati"
+msgstr "Ribalaiuse test tühistati"
 
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:155
 msgid "Bandwidth test was not running"
-msgstr "ribalaiuse test ei töötanud"
+msgstr "Ribalaiuse test ei töötanud"
 
 #: ../java/src/net/i2p/router/web/helpers/WizardHelper.java:218
 msgid "bits per second"
@@ -7446,15 +7446,15 @@ msgstr "Sertifikaadid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:282
 msgid "configure bandwidth"
-msgstr "ribalaiuse häälestus"
+msgstr "Ribalaiuse häälestus"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:427
 msgid "Bandwidth Allocation"
-msgstr "ribalaiuse eraldamine"
+msgstr "Ribalaiuse eraldamine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:528
 msgid "Bandwidth Limiter"
-msgstr "ribalaiuse piiraja"
+msgstr "Ribalaiuse piiraja"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:530
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:532
@@ -7697,7 +7697,7 @@ msgstr "Perekonna {0} aktiveerimiseks on vaja taaskäivitada."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:583
 msgid "After restarting, you may export the family key."
-msgstr "pärast taaskäivitamist saate perevõtme eksportida."
+msgstr "Pärast taaskäivitamist saate perevõtme eksportida."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:591
 msgid "Leave Router Family"
@@ -7755,7 +7755,7 @@ msgstr "Paljud kliendid ei toeta SSL-i ega autoriseerimist."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configi2cp_jsp.java:534
 msgid "All changes require restart to take effect."
-msgstr "Kõik muutused vajavad jõustumiseks uuesti käivitamist"
+msgstr "Kõik muutused vajavad jõustumiseks uuesti käivitamist."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configi2cp_jsp.java:538
 msgid "External I2P Client Protocol (I2CP) Interface Access"
@@ -8055,7 +8055,7 @@ msgstr "kui me pole tulemüüri taga"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:667
 msgid "Always use auto-detected IP address (not firewalled)"
-msgstr "kasutage alati automaatselt tuvastatud IP-aadressi (mitte tulemüüriga)"
+msgstr "Kasutage alati automaatselt tuvastatud IP-aadressi (mitte tulemüüriga)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:681
 msgid "Disable inbound TCP connections (firewalled)"
@@ -8869,7 +8869,7 @@ msgstr "Muudatuste logi"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:576
 msgid "Advanced Router Configuration"
-msgstr "ruuteri täpsem konfiguratsioon"
+msgstr "Ruuteri täpsem konfiguratsioon"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:437
 msgid "The router configuration options listed below are not available in the user interface, usually because they are rarely used or provide access to advanced settings that most users will not need. This is not a comprehensive list. Some settings will require a restart of the router to take effect. Note that all settings are case sensitive. You will need to edit your <code>router.config</code> file to add options, or, once you have added <code>routerconsole.advanced=true</code> to the router.config file, you may edit settings within the console on the <a href=/configadvanced>Advanced Configuration page</a>."
@@ -11510,7 +11510,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:496
 msgid "Bandwidth Test"
-msgstr "ribalaiuse test"
+msgstr "Ribalaiuse test"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:498
 msgid "I2P will now test your internet connection to identify the optimal speed settings."
@@ -11542,7 +11542,7 @@ msgstr "Ribalaiuse test töötab nüüd ja selle lõpuleviimiseks kulub umbes 60
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:517
 msgid "Bandwidth Test in progress"
-msgstr "ribalaiuse test on pooleli"
+msgstr "Ribalaiuse test on pooleli"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:519
 msgid "Javascript is disabled - wait 60 seconds for the bandwidth test to complete and then click Next"
@@ -11550,7 +11550,7 @@ msgstr "Javascript on keelatud – oodake 60 sekundit, kuni ribalaiuse test on l
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:539
 msgid "Bandwidth Test Results"
-msgstr "ribalaiuse testi tulemused"
+msgstr "Ribalaiuse testi tulemused"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:545
 msgid "Test running?"
@@ -11582,7 +11582,7 @@ msgstr "I2P ribalaiuse osakaal"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:612
 msgid "Bandwidth Configuration"
-msgstr "ribalaiuse konfiguratsioon"
+msgstr "Ribalaiuse konfiguratsioon"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:662
 #, java-format
