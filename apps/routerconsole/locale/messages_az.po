@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 03:21+0000\n"
-"PO-Revision-Date: 2023-11-05 22:27+0000\n"
+"PO-Revision-Date: 2023-11-20 17:58+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: az\n"
@@ -28,7 +28,7 @@ msgstr "Router Hash tərəfindən qadağan"
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:1258
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:1360
 msgid "Blocklist"
-msgstr "Blok"
+msgstr "Blok siyahıu"
 
 #: ../../../router/java/src/net/i2p/router/Router.java:2049
 #: ../../../router/java/src/net/i2p/router/sybil/Analysis.java:1092
@@ -368,12 +368,12 @@ msgstr "UPnP maksimum yuxarı axın bit dərəcəsinin {0}bit/san olduğunu bild
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1255
 #, java-format
 msgid "{0} port {1,number,#####} was successfully forwarded by UPnP."
-msgstr ""
+msgstr "{0} port {1,number,#####} UPNP tərəfindən uğurla göndərildi."
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1257
 #, java-format
 msgid "{0} port {1,number,#####} was not forwarded by UPnP."
-msgstr ""
+msgstr "{0} port {1,number,#####} UPNP tərəfindən göndərilmədi."
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:904
 #: ../java/src/net/i2p/router/web/DeadlockDetector.java:110
@@ -1142,8 +1142,8 @@ msgstr "Qoşmanın yeniləmə yoxlaması uğursuz oldu"
 #, java-format
 msgid "{0} plugin updated"
 msgid_plural "{0} plugins updated"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} plugin yeniləndi"
+msgstr[1] "{0} pluginlər yeniləndi"
 
 #: ../java/src/net/i2p/router/web/PluginStarter.java:252
 msgid "Plugin check complete"
@@ -1238,7 +1238,7 @@ msgstr "Səbəb"
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:115
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:551
 msgid "Router Hash"
-msgstr ""
+msgstr "Router Hash"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:116
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:171
@@ -1285,7 +1285,7 @@ msgstr "I2CP"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:53
 msgid "I2PTunnel"
-msgstr ""
+msgstr "I2PTuneli"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:68
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:571
@@ -2173,12 +2173,12 @@ msgstr "Şəbəkə"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:410
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:441
 msgid "Sidebar"
-msgstr ""
+msgstr "Yan panel"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:29
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:234
 msgid "UI"
-msgstr ""
+msgstr "UI"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:30
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:66
@@ -2197,12 +2197,12 @@ msgstr "Tunellər"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configwebapps_jsp.java:533
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:586
 msgid "Clients"
-msgstr ""
+msgstr "Müştərilərə"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:31
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:598
 msgid "Keyring"
-msgstr ""
+msgstr "Açar halqası"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:31
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configlogging_jsp.java:428
@@ -2238,7 +2238,7 @@ msgstr "Qoşmalar"
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:32
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configwebapps_jsp.java:429
 msgid "Web Apps"
-msgstr ""
+msgstr "Veb Tətbiqləri"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:33
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:579
@@ -2269,13 +2269,13 @@ msgstr "Yüksək"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:618
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:688
 msgid "Reseeding"
-msgstr ""
+msgstr "Yenidən əkmək"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:33
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:427
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:622
 msgid "Router Family"
-msgstr ""
+msgstr "Router Ailəsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:62
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:103
@@ -2290,163 +2290,163 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:595
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:563
 msgid "Save changes"
-msgstr ""
+msgstr "Dəyişiklikləri yadda saxlayın"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:229
 msgid "Updating IP address"
-msgstr ""
+msgstr "IP ünvanı yenilənir"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:251
 msgid "Updating IPv6 setting"
-msgstr ""
+msgstr "IPv6 parametrinin yenilənməsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:269
 msgid "Disabling TCP completely"
-msgstr ""
+msgstr "TCP-nin tamamilə söndürülməsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:274
 #, java-format
 msgid "Updating TCP address to {0}"
-msgstr ""
+msgstr "TCP ünvanı {0} olaraq yenilənir"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:281
 msgid "Disabling inbound TCP"
-msgstr ""
+msgstr "Gələn TCP-nin deaktiv edilməsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:283
 msgid "Updating inbound TCP address to auto"
-msgstr ""
+msgstr "Daxil olan TCP ünvanı avtomatik olaraq yenilənir"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:299
 #, java-format
 msgid "Updating TCP port to {0}"
-msgstr ""
+msgstr "TCP portu {0}-a yenilənir"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:301
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:326
 msgid "Warning - ports less than 1024 are not recommended"
-msgstr ""
+msgstr "Xəbərdarlıq - 1024-dən kiçik portlar tövsiyə edilmir"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:305
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:332
 msgid "Invalid port"
-msgstr ""
+msgstr "Yanlış port"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:310
 msgid "Updating inbound TCP port to auto"
-msgstr ""
+msgstr "Gələn TCP portu avtomatik olaraq yenilənir"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:324
 #, java-format
 msgid "Updating UDP port to {0}"
-msgstr ""
+msgstr "UDP portu {0}-a yenilənir"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:349
 msgid "Gracefully restarting into Hidden Router Mode"
-msgstr ""
+msgstr "Gizli Router rejiminə zərif şəkildə yenidən başladın"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:351
 msgid "Gracefully restarting to exit Hidden Router Mode"
-msgstr ""
+msgstr "Gizli Router rejimindən çıxmaq üçün zərif şəkildə yenidən başladın"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:361
 msgid "Enabling UPnP"
-msgstr ""
+msgstr "UPnP-nin aktivləşdirilməsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:363
 msgid "Disabling UPnP"
-msgstr ""
+msgstr "UPnP-nin söndürülməsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:372
 msgid "Enabling laptop mode"
-msgstr ""
+msgstr "Laptop rejiminin aktivləşdirilməsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:374
 msgid "Disabling laptop mode"
-msgstr ""
+msgstr "Laptop rejiminin söndürülməsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:381
 msgid "Disabling inbound IPv4"
-msgstr ""
+msgstr "Daxil olan IPv4-ün deaktiv edilməsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:383
 msgid "Enabling inbound IPv4"
-msgstr ""
+msgstr "Daxil olan IPv4-ün aktivləşdirilməsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:391
 msgid "Disabling inbound IPv6"
-msgstr ""
+msgstr "Daxil olan IPv6-nın deaktiv edilməsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:393
 msgid "Enabling inbound IPv6"
-msgstr ""
+msgstr "Daxil olan IPv6-nın aktivləşdirilməsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:401
 msgid "Disabling UDP"
-msgstr ""
+msgstr "UDP-nin söndürülməsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:403
 msgid "Enabling UDP"
-msgstr ""
+msgstr "UDP-nin aktivləşdirilməsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:410
 msgid "Requiring SSU introducers"
-msgstr ""
+msgstr "SSU introduktorları tələb olunur"
 
 #. if (_context.hasWrapper()) {
 #. Wow this dumps all conns immediately and really isn't nice
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:437
 msgid "Performing a soft restart"
-msgstr ""
+msgstr "Yumşaq yenidən başladın həyata keçirilir"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:470
 msgid "Invalid address"
-msgstr ""
+msgstr "Yanlış ünvan"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:476
 #, java-format
 msgid "The hostname or IP {0} is not publicly routable"
-msgstr ""
+msgstr "Host adı və ya IP {0} ictimai yönləndirilə bilməz"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:501
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:96
 msgid "Updating bandwidth share percentage"
-msgstr ""
+msgstr "Bölmə genişliyi payı faizi yenilənir"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:521
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:536
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:112
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:127
 msgid "Invalid bandwidth"
-msgstr ""
+msgstr "Yanlış bant genişliyi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:541
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:131
 msgid "Updated bandwidth limits"
-msgstr ""
+msgstr "Yenilənmiş bant genişliyi məhdudiyyətləri"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:266
 msgid "Delete this value to disable"
-msgstr ""
+msgstr "Deaktiv etmək üçün bu dəyəri silin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:307
 msgid "bps"
-msgstr ""
+msgstr "b/s"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:309
 #, java-format
 msgid "{0}B maximum data transfer per month"
-msgstr ""
+msgstr "{0}B ayda maksimum məlumat ötürülməsi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:21
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:563
 msgid "Ban peer until restart"
-msgstr ""
+msgstr "Yenidən başlayana qədər peer-i qadağan edin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:24
 #, java-format
 msgid "Manually banned via {0}"
-msgstr ""
+msgstr "{0} vasitəsilə əl ilə qadağan edildi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:26
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:35
@@ -2461,60 +2461,60 @@ msgstr "Bənzər"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:26
 msgid "banned until restart"
-msgstr ""
+msgstr "yenidən başlayana qədər qadağandır"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:29
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:40
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:61
 msgid "Invalid peer"
-msgstr ""
+msgstr "Etibarsız həmyaşıd"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:30
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:570
 msgid "Unban peer"
-msgstr ""
+msgstr "Həmyaşıdları ləğv edin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:35
 msgid "unbanned"
-msgstr ""
+msgstr "qadağasız"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:37
 msgid "is not currently banned"
-msgstr ""
+msgstr "hazırda qadağan deyil"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:41
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:594
 msgid "Adjust peer bonuses"
-msgstr ""
+msgstr "Həmyaşıd bonuslarını tənzimləyin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:49
 msgid "Bad speed value"
-msgstr ""
+msgstr "Pis sürət dəyəri"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:54
 msgid "Bad capacity value"
-msgstr ""
+msgstr "Pis tutum dəyəri"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:63
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:77
 msgid "Unsupported"
-msgstr ""
+msgstr "Dəstəklənmir"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHelper.java:23
 msgid "IPs Banned Until Restart"
-msgstr ""
+msgstr "IP-lər Yenidən Başlayana qədər Qadağan Edildi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHelper.java:31
 msgid "IPv4 Addresses"
-msgstr ""
+msgstr "IPv4 Ünvanları"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHelper.java:61
 msgid "IPv6 Addresses"
-msgstr ""
+msgstr "IPv6 Ünvanları"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHelper.java:78
 msgid "IPs Permanently Banned"
-msgstr ""
+msgstr "İP-lər Daimi Qadağan Edildi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHelper.java:83
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:181
@@ -2529,52 +2529,52 @@ msgstr "Qədər"
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:28
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:687
 msgid "Reseed now"
-msgstr ""
+msgstr "İndi yenidən oxuyun"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:31
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:55
 msgid "Reseeding is already in progress"
-msgstr ""
+msgstr "Yenidən əkmə artıq davam edir"
 
 #. skip the nonce checking in ReseedHandler
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:35
 msgid "Starting reseed process"
-msgstr ""
+msgstr "Yenidən əkmə prosesi başlayır"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:35
 msgid "check sidebar for status."
-msgstr ""
+msgstr "status üçün yan panelə baxın."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:37
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:706
 msgid "Reseed from URL"
-msgstr ""
+msgstr "URL-dən yenidən baxıldı"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:43
 msgid "No URL specified. Please supply a valid reseed URL."
-msgstr ""
+msgstr "URL göstərilməyib. "
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:68
 msgid "Reseed in progress, check summary bar for status"
-msgstr ""
+msgstr "Yenidən yoxlanılır, status üçün xülasə panelini yoxlayın"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:70
 msgid "Reseed complete, check summary bar for status"
-msgstr ""
+msgstr "Yenidən baxma tamamlandı, status üçün xülasə çubuğunu yoxlayın"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:77
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:729
 msgid "Reseed from file"
-msgstr ""
+msgstr "Fayldan yenidən oxuyun"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:83
 msgid "No file specified. Please select a valid .zip or .su3 file to reseed from."
-msgstr ""
+msgstr "Heç bir fayl göstərilməyib. "
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:88
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:96
 msgid "Reseed from file failed"
-msgstr ""
+msgstr "Fayldan yenidən oxumaq alınmadı"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:91
 #, java-format
@@ -2586,25 +2586,25 @@ msgstr[1] ""
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:105
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:681
 msgid "Reset URL list"
-msgstr ""
+msgstr "URL siyahısını sıfırlayın"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:131
 msgid "URL list reset successfully"
-msgstr ""
+msgstr "URL siyahısı uğurla sıfırlandı"
 
 #. ctx.router().shutdown(Router.EXIT_HARD); // never returns
 #. give the UI time to respond
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:49
 msgid "Cancel shutdown"
-msgstr ""
+msgstr "Bağlanmağı ləğv edin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:50
 msgid "Cancel restart"
-msgstr ""
+msgstr "Yenidən başlamanı ləğv edin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:52
 msgid "Restart immediately"
-msgstr ""
+msgstr "Dərhal yenidən başladın"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:61
 msgid "Shutdown"
@@ -2612,7 +2612,7 @@ msgstr "Söndür"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:75
 msgid "Restart imminent"
-msgstr ""
+msgstr "Qaçılmaz yenidən başladın"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:77
 msgid "Shutdown imminent"
@@ -2628,8 +2628,8 @@ msgstr "{0}-da sönmə"
 #, java-format
 msgid "{0} transit tunnel still active"
 msgid_plural "{0} transit tunnels still active"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} tranzit tunel hələ də aktivdir"
+msgstr[1] "{0} tranzit tunelləri hələ də aktivdir"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:88
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:103
@@ -2642,151 +2642,151 @@ msgstr[1] ""
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:96
 #, java-format
 msgid "Restart in {0}"
-msgstr ""
+msgstr "{0} sonra yenidən başladın"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigStatsHandler.java:119
 msgid "Stat filter and location updated successfully to"
-msgstr ""
+msgstr "Stat filtri və yeri uğurla yeniləndi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigStatsHandler.java:122
 msgid "Full statistics enabled"
-msgstr ""
+msgstr "Tam statistika aktivləşdirildi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigStatsHandler.java:124
 msgid "Full statistics disabled"
-msgstr ""
+msgstr "Tam statistika deaktiv edilib"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigStatsHandler.java:128
 #, java-format
 msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr ""
+msgstr "Qrafik siyahısı yeniləndi, {0}Qrafiklər Səhifəsində{1} əks olunması 60 saniyəyə qədər çəkə bilər"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:30
 msgid "Save order"
-msgstr ""
+msgstr "Sifarişi yadda saxla"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:44
 msgid "Refresh disabled"
-msgstr ""
+msgstr "Yeniləmə qeyri-aktivdir"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:49
 msgid "Refresh interval changed"
-msgstr ""
+msgstr "Yeniləmə intervalı dəyişdirildi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:52
 msgid "Refresh interval must be a number"
-msgstr ""
+msgstr "Təzələmə intervalı rəqəm olmalıdır"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:55
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:566
 msgid "Restore full default"
-msgstr ""
+msgstr "Tam standartı bərpa edin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:61
 msgid "Full summary bar default restored."
-msgstr ""
+msgstr "Tam xülasə paneli default bərpa edildi."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:62
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:66
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:159
 msgid "Summary bar will refresh shortly."
-msgstr ""
+msgstr "Xülasə paneli tezliklə yenilənəcək."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:63
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:568
 msgid "Restore minimal default"
-msgstr ""
+msgstr "Minimal defolt bərpa edin"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:65
 msgid "Minimal summary bar default restored."
-msgstr ""
+msgstr "Minimal xülasə çubuğu defolt bərpa edildi."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:82
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:104
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:153
 msgid "Order must be an integer"
-msgstr ""
+msgstr "Sıra tam ədəd olmalıdır"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:89
 msgid "No section selected"
-msgstr ""
+msgstr "Heç bir bölmə seçilmədi"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:94
 msgid "No order entered"
-msgstr ""
+msgstr "Sifariş daxil edilməyib"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:151
 msgid "Moved"
-msgstr ""
+msgstr "köçürüldü"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:158
 msgid "Saved order of sections."
-msgstr ""
+msgstr "Bölmələrin saxlanmış sırası."
 
 #. the count isn't really correct anyway, since we don't check for actual changes
 #. addFormNotice("Updated settings for " + updated + " pools.");
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHandler.java:131
 msgid "Updated settings for all pools."
-msgstr ""
+msgstr "Bütün hovuzlar üçün yenilənmiş parametrlər."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHandler.java:136
 msgid "Exploratory tunnel configuration saved successfully."
-msgstr ""
+msgstr "Kəşfiyyat tunelinin konfiqurasiyası uğurla yadda saxlanıldı."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHandler.java:138
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:94
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:129
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:147
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
-msgstr ""
+msgstr "Konfiqurasiyanın saxlanmasında xəta (tətbiq edilib, lakin saxlanmayıb) - xəta qeydlərinə baxın."
 
 #. * dummies for translation
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:22
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} hop"
+msgstr[1] "{0} hops"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:23
 #, java-format
 msgid "{0} tunnel"
 msgid_plural "{0} tunnels"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} tunel"
+msgstr[1] "{0} tunellər"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:51
 msgid "Exploratory tunnels"
-msgstr ""
+msgstr "Kəşfiyyat tunelləri"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:65
 #, java-format
 msgid "Client tunnels for {0}"
-msgstr ""
+msgstr "{0} üçün müştəri tunelləri"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:126
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
-msgstr ""
+msgstr "ANONİMLİK XƏBƏRDARLIĞI - Parametrlərə 0-hop tunelləri daxildir."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:131
 msgid "WARNING - 0-hop tunnels not recommended for IPv6-only routers."
-msgstr ""
+msgstr "XƏBƏRDARLIQ - 0-hop tunelləri yalnız IPv6 marşrutlaşdırıcıları üçün tövsiyə edilmir."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:137
 msgid "WARNING - Inbound 0-hop tunnels not recommended for hidden routers."
-msgstr ""
+msgstr "XƏBƏRDARLIQ - Daxil olan 0-hop tunelləri gizli marşrutlaşdırıcılar üçün tövsiyə edilmir."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:145
 msgid "ANONYMITY WARNING - Settings include 1-hop tunnels."
-msgstr ""
+msgstr "ANONİMLİK XƏBƏRDARLIĞI - Parametrlərə 1-hop tunelləri daxildir."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:151
 msgid "PERFORMANCE WARNING - Settings include very long tunnels."
-msgstr ""
+msgstr "PERFORMANS XƏBƏRDARLIĞI - Parametrlərə çox uzun tunellər daxildir."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:155
 msgid "PERFORMANCE WARNING - Settings include high tunnel quantities."
-msgstr ""
+msgstr "PERFORMANS XƏBƏRDARLIĞI - Parametrlərə yüksək tunel miqdarları daxildir."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:158
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:211
@@ -2796,7 +2796,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:676
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:783
 msgid "Inbound"
-msgstr ""
+msgstr "Gələn"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:159
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:212
@@ -2806,7 +2806,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:678
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:784
 msgid "Outbound"
-msgstr ""
+msgstr "gedən"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:163
 msgid "Length"
@@ -2814,7 +2814,7 @@ msgstr "Uzunluq"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:186
 msgid "Randomization"
-msgstr ""
+msgstr "Təsadüfiləşdirmə"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:214
 msgid "Quantity"
@@ -3294,7 +3294,7 @@ msgstr "Qrafiklər"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:88
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:288
 msgid "Anonymous webmail client"
-msgstr ""
+msgstr "Anonim veb poçt müştərisi"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:47
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:68
@@ -3302,7 +3302,7 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:279
 #: ../java/strings/Strings.java:16
 msgid "I2PMail"
-msgstr ""
+msgstr "I2PMail"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:48
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69
@@ -3506,7 +3506,7 @@ msgstr "Dəyişikliklər"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:86
 msgid "Recent changes"
-msgstr ""
+msgstr "Son dəyişikliklər"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:105
 msgid "Bug tracker"
@@ -3515,7 +3515,7 @@ msgstr "Xəta indikatoru"
 #. I2P specific
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:105
 msgid "I2P Bug Reports"
-msgstr ""
+msgstr "I2P Baq Hesabatları"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:106
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:270
@@ -3547,7 +3547,7 @@ msgstr "I2P API sənədləri"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:109
 msgid "Javadocs"
-msgstr ""
+msgstr "Javadocs"
 
 #. _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "plugin.svg" + S +
 #. "stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "stats.svg" + S +
@@ -3638,7 +3638,7 @@ msgstr "Base64 Şəkil Kodlayıcısı"
 #. hosting + other services
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "base64-image.i2p"
-msgstr ""
+msgstr "base64-image.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "An image cache and resize service"
@@ -3646,7 +3646,7 @@ msgstr "Şəkil önbelleği və ölçüsünü dəyişmə xidməti"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "imageproxy.i2p"
-msgstr ""
+msgstr "imageproxy.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:150
 msgid "IRC Logs for multiple networks"
@@ -3658,7 +3658,7 @@ msgstr "Şifrələnmiş I2P Pastebin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:151
 msgid "Pastebin"
-msgstr ""
+msgstr "Pastebin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "Streaming radio service"
@@ -3666,7 +3666,7 @@ msgstr "Axın radio xidməti"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "radio.r4sas.i2p"
-msgstr ""
+msgstr "radio.r4sas.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:153
 msgid "Privacy-focused not-for-profit organization"
@@ -3743,7 +3743,7 @@ msgstr "Volframın Onlayn Riyaziyyat Referansı"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:178
 msgid "Mozilla Developer Network"
-msgstr ""
+msgstr "Mozilla Developer Şəbəkəsi"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:179
 msgid "Internet Encyclopedia of Philosophy"
@@ -3804,11 +3804,11 @@ msgstr "Dünya Atlası"
 #. news + blogs
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:198
 msgid "Technology News &amp; more..."
-msgstr ""
+msgstr "Texnologiya xəbərləri və daha çox..."
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "BenarNews"
-msgstr ""
+msgstr "BenarNews"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "Clear and accurate news for the Far East"
@@ -3837,185 +3837,185 @@ msgstr "Siyasət jurnalı"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "CurrentAffairs"
-msgstr ""
+msgstr "CurrentAffairs"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:204
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:205
 msgid "Darknet related news site"
-msgstr ""
+msgstr "DarkNet ilə əlaqəli xəbər saytında"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
 msgid "DigitalJournal"
-msgstr ""
+msgstr "DigitalJournal"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
 msgid "Global news &amp; media platform"
-msgstr ""
+msgstr "Qlobal Xəbərlər və Media Platforması"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
 msgid "DigitalTrends"
-msgstr ""
+msgstr "DigitalTrends"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
 msgid "Tech News &amp; Reviews"
-msgstr ""
+msgstr "Texniki xəbərlər və rəylər"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:208
 msgid "Defending your rights in the digital world"
-msgstr ""
+msgstr "Rəqəmsal dünyada hüquqlarınızı müdafiə etmək"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:209
 msgid "The Elliptic Curve Cryptography Blog"
-msgstr ""
+msgstr "Elliptik Əyri Kriptoqrafiya Blogu"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
 msgid "ForeignPolicy"
-msgstr ""
+msgstr "ForeignPolicy"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
 msgid "The Global Magazine of News &amp; Ideas"
-msgstr ""
+msgstr "Xəbərlər və fikirlər jurnalı"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "FrontLineDefenders"
-msgstr ""
+msgstr "FrontLineDefenders"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "Human rights activism"
-msgstr ""
+msgstr "İnsan haqları fəallığı"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:212
 msgid "Defending Human Rights Worldwide"
-msgstr ""
+msgstr "Dünyada İnsan Hüquqlarının Müdafiəsi"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:212
 msgid "HumanRightsWatch"
-msgstr ""
+msgstr "HumanRightsWatch"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:213
 msgid "Fresh hacks every day"
-msgstr ""
+msgstr "Hər gün təzə hacklər"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:214
 msgid "Computer related news aggregation"
-msgstr ""
+msgstr "Kompüterlə bağlı xəbərlərin toplanması"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:214
 msgid "HackerNews"
-msgstr ""
+msgstr "HackerNews"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
 msgid "HongKongFreePress"
-msgstr ""
+msgstr "HongKongFreePress"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
 msgid "Independent &amp; impartial news for Hong Kong"
-msgstr ""
+msgstr "Hong Kong üçün müstəqil və qərəzsiz xəbərlər"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
 msgid "HongKongWatch"
-msgstr ""
+msgstr "HongKongWatch"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
 msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr ""
+msgstr "Honq-Konqda azadlıqlara və hüquqlara olan təhdidləri izləyir"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
 msgid "Business &amp; Financial News"
-msgstr ""
+msgstr "Biznes və maliyyə xəbərləri"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Politics &amp; Current Affairs Journal"
-msgstr ""
+msgstr "Siyasət və Cari İşlər Jurnalı"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "English language Japanese News"
-msgstr ""
+msgstr "İngilis dili Yapon Xəbərləri"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "JapanToday"
-msgstr ""
+msgstr "Yaponiya bu gün"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "JStorDaily"
-msgstr ""
+msgstr "JStorDaily"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "Where news meets its scholarly match"
-msgstr ""
+msgstr "Xəbərin elmi uyğunluğu ilə qarşılaşdığı yer"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Jurist"
-msgstr ""
+msgstr "Jurist"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Legal News &amp; Commentary"
-msgstr ""
+msgstr "Hüquq Xəbərləri və şərh"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "In-depth security news &amp; investigation"
-msgstr ""
+msgstr "Dərin təhlükəsizlik xəbərləri və istintaqı"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "KrebsOnSecurity"
-msgstr ""
+msgstr "KrebsOnSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "Linux Kernel Mailing List"
-msgstr ""
+msgstr "Linux Kernel Poçt Siyahısı"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "MetaCritic"
-msgstr ""
+msgstr "MetaCritic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "Movie + TV + Music + Game reviews"
-msgstr ""
+msgstr "Movie TV Music Game icmalları"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "NakedSecurity"
-msgstr ""
+msgstr "Çılpaq Təhlükəsizlik"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "Security news and research blog"
-msgstr ""
+msgstr "Təhlükəsizlik xəbərləri və araşdırma bloqu"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "Smart &amp; fearless journalism"
-msgstr ""
+msgstr "Ağıllı və qorxmaz jurnalistika"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "NewStatesman"
-msgstr ""
+msgstr "NewStatesman"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "Politics &amp; Current Affairs magazine"
-msgstr ""
+msgstr "Siyasət və Cari İşlər Jurnalı"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "Independent International Media Platform"
-msgstr ""
+msgstr "Müstəqil Beynəlxalq Media Platforması"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "OpenDemocracy"
-msgstr ""
+msgstr "OpenDemocracy"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "News and blog feeds on I2P"
-msgstr ""
+msgstr "I2P-də xəbərlər və blog lentləri"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "Planeta"
-msgstr ""
+msgstr "Planeta"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
 msgid "News &amp; Views on Tibet"
-msgstr ""
+msgstr "Tibet haqqında xəbərlər və fikirlər"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "RadioFreeAsia"
-msgstr ""
+msgstr "RadioFreeAsia"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "Reliable journalism for countries under censorship"
@@ -4031,7 +4031,7 @@ msgstr "Beynəlxalq tanınmış təhlükəsizlik texnoloqu"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "SchneierOnSecurity"
-msgstr ""
+msgstr "SchneierOnSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "Latest scientific research news"
@@ -4039,7 +4039,7 @@ msgstr "Son elmi araşdırma xəbərləri"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "ScienceDaily"
-msgstr ""
+msgstr "ScienceDaily"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
 msgid "Community-driven tech news"
@@ -4051,7 +4051,7 @@ msgstr "Nerdlər üçün xəbərlər"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
 msgid "Technology news &amp; reviews"
-msgstr ""
+msgstr "Texnologiya xəbərləri və rəylər"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Reporting on China without fear or favor"
@@ -4063,120 +4063,120 @@ msgstr "Tayvanın paytaxtından xəbərlər"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "TaipeiTimes"
-msgstr ""
+msgstr "TaipeiTimes"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "TechXplore"
-msgstr ""
+msgstr "TechXplore"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "Technology and engineering news"
-msgstr ""
+msgstr "Texnologiya və mühəndislik xəbərləri"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "TechMeme"
-msgstr ""
+msgstr "TechMeme"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "Technology news aggregator"
-msgstr ""
+msgstr "Texnologiya xəbərləri toplayıcısı"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "News &amp; Reviews"
-msgstr ""
+msgstr "Xəbərlər və rəylər"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "TheAtlantic"
-msgstr ""
+msgstr "TheAtlantic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "Academic commentary and essays"
-msgstr ""
+msgstr "Akademik şərhlər və esselər"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "TheConversation"
-msgstr ""
+msgstr "TheConversation"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Global News"
-msgstr ""
+msgstr "Qlobal Xəbərlər"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "TheGuardian"
-msgstr ""
+msgstr "TheGuardian"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "TheHill"
-msgstr ""
+msgstr "TheHill"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "US Political News"
-msgstr ""
+msgstr "ABŞ Siyasi Xəbərləri"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "TheMarkup"
-msgstr ""
+msgstr "İşarələmə"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "Watching Big Tech..."
-msgstr ""
+msgstr "Böyük Texnologiyaya baxın..."
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "Independent Journalism from Russia"
-msgstr ""
+msgstr "Rusiyadan Müstəqil Jurnalistika"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "TheMoscowTimes"
-msgstr ""
+msgstr "TheMoscowTimes"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "TheNewRepublic"
-msgstr ""
+msgstr "TheNewRepublic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "International News from Tibet"
-msgstr ""
+msgstr "Tibetdən Beynəlxalq Xəbərlər"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "TheTibetPost"
-msgstr ""
+msgstr "TheTibetPost"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "All you need to know about everything that matters"
-msgstr ""
+msgstr "Vacib olan hər şey haqqında bilməli olduğunuz hər şey"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "TheWeek"
-msgstr ""
+msgstr "TheWeek"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "Filesharing &amp; copyright news"
-msgstr ""
+msgstr "FileSharing və müəllif hüquqları xəbərləri"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "A magazine about human rights and social justice"
-msgstr ""
+msgstr "İnsan hüquqları və sosial ədalət haqqında jurnal"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "UpstreamJournal"
-msgstr ""
+msgstr "UpstreamJournal"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
-msgstr ""
+msgstr "Yaxın Şərqdəki Amerika maraqlarını balanslı və real bir anlayışın inkişafı"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "WashingtonInstitute"
-msgstr ""
+msgstr "Vaşinqton İnstitutu"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:351
 msgid "The HTTP proxy is not up"
-msgstr ""
+msgstr "HTTP proksi işləmir"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:354
 #, java-format
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
-msgstr ""
+msgstr "Brauzeriniz {0} ünvanında HTTP proksisini istifadə etmək üçün düzgün konfiqurasiya edilməyib"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:494
 msgid "URL"
@@ -4511,7 +4511,7 @@ msgstr "Port"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:536
 msgid "MTU"
-msgstr ""
+msgstr "MTU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:563
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1026
@@ -4929,7 +4929,7 @@ msgstr "Gizli və ya işə başlamaq"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1702
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:579
 msgid "SSU"
-msgstr ""
+msgstr "SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1702
 msgid "SSU with introducers"
@@ -4937,7 +4937,7 @@ msgstr "Təqdimatçılarla SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1703
 msgid "NTCP"
-msgstr ""
+msgstr "NTCP"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1703
 msgid "NTCP and SSU"
@@ -4953,7 +4953,7 @@ msgstr "IPv6 Yalnız SSU, təqdim edənlər"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1704
 msgid "IPv6 SSU"
-msgstr ""
+msgstr "IPv6 SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1704
 msgid "IPv6 SSU, introducers"
@@ -4961,11 +4961,11 @@ msgstr "IPv6 SSU, təqdimatçılar"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1705
 msgid "IPv6 NTCP"
-msgstr ""
+msgstr "IPv6 NTCP"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1705
 msgid "IPv6 NTCP, SSU"
-msgstr ""
+msgstr "IPv6 NTCP, SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1705
 msgid "IPv6 NTCP, SSU, introducers"
@@ -5019,14 +5019,14 @@ msgstr "Son dəqiqədə aktivdir"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:196
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:197
 msgid "IPv4"
-msgstr ""
+msgstr "IPv4"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:200
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:201
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:350
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:573
 msgid "IPv6"
-msgstr ""
+msgstr "IPv6"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:248
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1011
@@ -5059,7 +5059,7 @@ msgstr "Həmyaşıdların imkanları"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:571
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:896
 msgid "Dir"
-msgstr ""
+msgstr "İstiqamət"
 
 #. "<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>" +
 #. buf.append("<th class=lookup title=\"").append(_t("Lookup address via gwhois.org")).append("\">").append(_t("Whois")).append("</th>");
@@ -5125,7 +5125,7 @@ msgstr "Mesajlar göndərildi"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:605
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:934
 msgid "TX"
-msgstr ""
+msgstr "TX"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:356
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:611
@@ -5136,7 +5136,7 @@ msgstr "Mesajlar qəbul edildi"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:612
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:936
 msgid "RX"
-msgstr ""
+msgstr "RX"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:357
 msgid "Out Queue"
@@ -5155,8 +5155,8 @@ msgstr "Bağlantı geridə qalıb"
 #, java-format
 msgid "{0} peer"
 msgid_plural "{0} peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} həmyaşıd"
+msgstr[1] "{0} həmyaşıdları"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:546
 msgid "UDP connections"
@@ -5209,7 +5209,7 @@ msgstr "Yenidən ötürülən paketlər"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:619
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:938
 msgid "Dup TX"
-msgstr ""
+msgstr "Dup TX"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:622
 msgid "Sort by packets retransmitted"
@@ -5222,7 +5222,7 @@ msgstr "Dublikat paketlər alındı"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:626
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:940
 msgid "Dup RX"
-msgstr ""
+msgstr "Dup RX"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:629
 msgid "Sort by packets received more than once"
@@ -5284,8 +5284,8 @@ msgstr "Bizi tanış etməyi təklif etdilər"
 #, java-format
 msgid "{0} fail"
 msgid_plural "{0} fails"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} uğursuz"
+msgstr[1] "{0} uğursuz olur"
 
 #. 2
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:704
@@ -5298,7 +5298,7 @@ msgstr "Qadağan olunmuş"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:783
 msgid "backlogged"
-msgstr ""
+msgstr "gecikmiş"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:892
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:469
@@ -5557,22 +5557,22 @@ msgstr "həmyaşıdları"
 #, java-format
 msgid "{0} fast peer"
 msgid_plural "{0} fast peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} sürətli həmyaşıd"
+msgstr[1] "{0} sürətli həmyaşıdları"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:377
 #, java-format
 msgid "{0} high capacity peer"
 msgid_plural "{0} high capacity peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} yüksək tutumlu həmyaşıd"
+msgstr[1] "{0} yüksək tutumlu həmyaşıdları"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:379
 #, java-format
 msgid "{0} integrated peer"
 msgid_plural "{0} integrated peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} inteqrasiya olunmuş həmyaşıd"
+msgstr[1] "{0} inteqrasiya olunmuş həmyaşıdları"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:393
 msgid "1h Fail Rate"
@@ -5652,7 +5652,7 @@ msgstr "{0}-dən çox paylaşılan bant genişliyi"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:495
 msgid "status"
-msgstr ""
+msgstr "vəziyyət"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:497
 msgid "is the peer banned, or unreachable, or failing tunnel tests?"
@@ -5780,8 +5780,8 @@ msgstr "Ömür boyu orta tezlik"
 #, java-format
 msgid "{0} event"
 msgid_plural "{0} events"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} hadisə"
+msgstr[1] "{0} hadisələr"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:170
 msgid "rate"
@@ -6095,7 +6095,7 @@ msgstr "Jurnallar"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:522
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:544
 msgid "NetDb"
-msgstr ""
+msgstr "NetDb"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:536
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:886
@@ -6123,7 +6123,7 @@ msgstr "Yüksək quraşdırma"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:589
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:591
 msgid "Documentation for the I2P API"
@@ -6535,7 +6535,7 @@ msgstr "Neçə yerli xidmət tunelini çalışırıq"
 #: ../java/strings/Strings.java:53
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:507
 msgid "I2PSnark"
-msgstr ""
+msgstr "I2PSnark"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:803
 msgid "Server"
@@ -6594,7 +6594,7 @@ msgstr "Quraşdırmaq üçün Bağlama üzərinə klikləyin və yenidən başla
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1174
 #, java-format
 msgid "{0}"
-msgstr ""
+msgstr "{0}"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1182
 msgid "Updating after restart"
@@ -6743,7 +6743,7 @@ msgstr "Bu, diskussiya və analiz üçün eksperimental şəbəkə verilənlər 
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:266
 msgid "No stored analysis"
-msgstr ""
+msgstr "Saxlanılan təhlil yoxdur"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:273
 msgid "Select stored analysis"
@@ -6779,7 +6779,7 @@ msgstr "Avtomatik"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:370
 msgid "Add detected sybils to banlist"
-msgstr ""
+msgstr "Banlistə aşkar edilmiş sybilləri əlavə edin"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:372
 msgid "Block all detected sybils"
@@ -6971,15 +6971,15 @@ msgstr "DƏQ"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:929
 msgid "AVG"
-msgstr ""
+msgstr "AVG"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:930
 msgid "MEDIAN"
-msgstr ""
+msgstr "MEDIAN"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:931
 msgid "MAX"
-msgstr ""
+msgstr "MAX"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1029
 msgid "Show all routers for this family in NetDb"
@@ -7177,7 +7177,7 @@ msgstr "Gələn və ya gedən?"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:770
 msgid "Gateway"
-msgstr ""
+msgstr "Darvaza"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:773
 msgid "Participants"
