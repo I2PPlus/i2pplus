@@ -2160,29 +2160,28 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 .unsignedmod{display:inline-block;word-break:break-all}
 .unsignedmod::selection{background:#b00;color:#fff}
 #jardump{overflow:auto;padding:0;min-width:650px}
-#jardump table{margin:-1px 0 0;border:0;border-collapse:collapse;font-size:8pt;color:#bb7}
-#jardump th{padding:9px 5px}
-#jardump th:nth-child(4),#jardump th:nth-child(5){white-space:nowrap}
-#jardump th{border-right:0;border-left:0}
-#jardump th,#jardump td{vertical-align:middle;text-align:center}
-#jardump th:first-child,#jardump td:first-child{text-align:left}
-#jardump td{border-right:var(--border_softer);padding:2px 5px 3px;color:#bb7}
-#jardump td:first-child{padding-left:22px;padding-right:0;color:#eea;background:var(--package) no-repeat 6px center,linear-gradient(180deg,#001400,#000600);background-size:14px,100%;background-blend-mode:luminosity,normal}
-#jardump tr:hover td:first-child{padding-left:18px;background:#001800 var(--package) no-repeat 6px center;background-size:14px;background-blend-mode:normal}
-#jardump td:first-child b{margin-right:4px;display:inline-block;padding:4px;border-radius:2px}
-#jardump tr:hover td:first-child b{margin:0 0 -2px -2px;width:calc(100% - 10px);border:1px solid #010;box-shadow:0 0 1px 0 #010;background:#030}
-#jardump tr:hover td:first-child{padding-left:26px;padding-right:0}
-#jardump td:nth-child(2){padding-right:8px;white-space:nowrap;text-align:right;font-weight:700;font-style:italic}
-#jardump td:last-child{padding:0;text-align:left;word-break:break-all;border-right:0}
-#jardump tr:hover td{background:#001800;color:var(--ink);border:1px solid #151;border-left:1px solid transparent;border-right:1px solid transparent}
-#jardump tr:hover .unsignedmod:not(:empty){background:#700;color:#fff}
-#jardump tr:hover hr{background:transparent}
-#jardump tt{font-size:95%;letter-spacing:-.03em}
-#jardump tr:hover tt{color:#dd0}
-#jardump a[href^="https://gitlab.com/i2pplus"]{margin-left:-4px;padding-left:14px;background:var(--gitlab) no-repeat left center;background-size:11px}
-#jardump font[color="red"]{color:#d00}
-#jardump hr{margin:1px 0;width:100%;height:1px;background:#131;display:block}
-#jardump .subheading{padding-top:6px;padding-bottom:6px}
+#jarfiles{margin:-1px 0 0;border:0;border-collapse:collapse;font-size:8pt;color:#bb7}
+#jarfiles th{padding:8px 5px 5px;font-size:90%}
+#jarfiles th:nth-child(4),#jarfiles th:nth-child(5){white-space:nowrap}
+#jarfiles th{border-right:0;border-left:0}
+#jarfiles th,#jarfiles td{vertical-align:middle;text-align:center}
+#jarfiles th:first-child,#jarfiles td:first-child{text-align:left}
+#jarfiles td{border-right:var(--border_softer);padding:2px 5px 3px;color:#bb7}
+#jarfiles td:first-child{padding-left:22px;padding-right:0;color:#eea;background:var(--package) no-repeat 6px center,linear-gradient(180deg,#001400,#000600);background-size:14px,100%;background-blend-mode:luminosity,normal}
+#jarfiles tr:hover td:first-child{padding-left:18px;background:#001800 var(--package) no-repeat 6px center;background-size:14px;background-blend-mode:normal}
+#jarfiles td:first-child b{margin-right:4px;display:inline-block;padding:4px;border-radius:2px}
+#jarfiles tr:hover td:first-child b{margin:0 0 -2px -2px;width:calc(100% - 10px);border:1px solid #010;box-shadow:0 0 1px 0 #010;background:#030}
+#jarfiles tr:hover td:first-child{padding-left:26px;padding-right:0}
+#jarfiles td:nth-child(2){padding-right:8px;white-space:nowrap;text-align:right;font-weight:700;font-style:italic}
+#jarfiles td:last-child{padding:0;text-align:left;word-break:break-all;border-right:0}
+#jarfiles tr:hover td{background:#001800;color:var(--ink);border:1px solid #151;border-left:1px solid transparent;border-right:1px solid transparent}
+#jarfiles tr:hover .unsignedmod:not(:empty){background:#700;color:#fff}
+#jarfiles tr:hover hr{background:transparent}
+#jarfiles tr:hover tt{color:#dd0}
+#jarfiles a[href^="https://gitlab.com/i2pplus"]{margin-left:-4px;padding-left:14px;background:var(--gitlab) no-repeat left center;background-size:11px}
+#jarfiles font[color="red"]{color:#d00}
+#jarfiles hr{margin:1px 0;width:100%;height:1px;background:#131;display:block}
+#jarfiles .subheading{padding-top:6px;padding-bottom:6px;border-top-width:2px;border-bottom-width:2px}
 
 /* reseed help ordered list */
 #reseedhelp ol{display:block;margin-right:30px}
