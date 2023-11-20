@@ -250,7 +250,7 @@ input.reload{padding:5px 7px 5px 22px;background:var(--refresh) no-repeat 6px ce
 input.reload:hover,input.reload:focus{background:var(--refresh_hover) no-repeat 6px center,var(--btn_hover);background-size:14px,100%}
 input.search[type=submit]{margin-left:3px;padding:6px 5px;width:44px;vertical-align:middle;color:transparent;text-shadow:none;border-radius:0 2px 2px 0;background:var(--search) no-repeat center center/14px,var(--btn);background-blend-mode:luminosity}
 input.search[type=submit]:hover,input.search[type=submit]:focus{background:var(--search) no-repeat center center/14px,var(--btn_hover);background-blend-mode:normal}
-input.search[type=text]{margin:1px -10px 0 0;padding:5px 8px;vertical-align:middle;border-radius:2px 0 0 2px;transition:none}
+input.search[type=text]{margin:1px -10px 0 0;padding:6px 8px;vertical-align:middle;border-radius:2px 0 0 2px;transition:none}
 input.search[type=text]:focus,input.search[type=text]:focus-within~input.search[type=submit]{border:1px solid var(--hover);filter:none;transition:none}
 input.search[type=text]:focus{box-shadow:var(--btn_shadow_active)}
 input.update{margin-left:5px}
@@ -281,7 +281,6 @@ svg{opacity:.9}
 /* responsive layout */
 @media (max-width:1499px){
 input.search[type=submit]{padding:6px 5px}
-input.search[type="text"]{padding:4px 8px}
 .headline h3{font-size:10.5pt;background-size:18px}
 .headline#subscriptions h3,.headline#configure h3,.headline#addressbook h3,.headline h3{margin-bottom:-4px;padding-top:10px}
 #current{font-size:10pt}
