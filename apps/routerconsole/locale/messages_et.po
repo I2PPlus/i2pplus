@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-11-19 22:59+0000\n"
+"PO-Revision-Date: 2023-11-21 06:13+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: et_EE\n"
@@ -5891,7 +5891,7 @@ msgstr "Taaskäivitamise olek"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:63
 msgid "Firewall &amp; Reseed Status"
-msgstr ""
+msgstr "Tulemüüri ja Alglaadimistaatus"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:65
 msgid "Bandwidth Graph"
@@ -5915,7 +5915,7 @@ msgstr "teenindustunnelid"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:70
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1348
 msgid "News &amp; Updates"
-msgstr ""
+msgstr "Uudised ja värskendused"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:71
 msgid "Advanced Links"
@@ -5931,7 +5931,7 @@ msgstr "CPU koormus"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:162
 msgid "I2P Router Help &amp; FAQ"
-msgstr "I2P ruuteri abi &amp; KKK"
+msgstr "I2P Ruuteri Abi &amp; KKK"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:172
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:409
@@ -6001,7 +6001,7 @@ msgstr "Veaotsing"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:228
 msgid "Troubleshooting &amp; Further Assistance"
-msgstr ""
+msgstr "Tõrkeotsing ja Edasine Abi"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:237
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:698
@@ -6096,7 +6096,7 @@ msgstr "Logid"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:522
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:544
 msgid "NetDb"
-msgstr ""
+msgstr "NetDb"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:536
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:886
@@ -6124,7 +6124,7 @@ msgstr "Täpsem konfiguratsioon"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:589
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:591
 msgid "Documentation for the I2P API"
@@ -6160,7 +6160,7 @@ msgstr "Ruuteri jõudlusinfo teksti kujul"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:644
 msgid "Sybils"
-msgstr ""
+msgstr "Sybils"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:647
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:566
@@ -6212,7 +6212,7 @@ msgstr "Vaadake lisateavet vikis"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:852
 msgid "Warning: ECDSA is not available. Update your Java or OS"
-msgstr ""
+msgstr "Hoiatus: ECDSA pole saadaval. Uuendage oma Java või OS -i"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:866
 msgid "Configure I2P Updates"
@@ -6289,7 +6289,7 @@ msgstr "Kasutatud"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1049
 msgid "Our inbound &amp; outbound traffic for the last 20 minutes"
-msgstr ""
+msgstr "Meie sissetulev ja väljaminev liiklus viimase 20 minuti jooksul"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1078
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1121
@@ -6466,7 +6466,7 @@ msgstr "ruuter on valmis ehitama osalevaid tunneleid"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1296
 #, java-format
 msgid "Accepting participating tunnel requests; participating in {0} tunnels"
-msgstr ""
+msgstr "Osalevate tunnelitaotluste aktsepteerimine; osalemine {0} tunnelites"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1298
 msgid "No participating tunnels are built when Hidden mode is active"
@@ -6496,7 +6496,7 @@ msgstr "Tulemüür, sissetulev TCP on lubatud"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:382
 msgid "Firewalled &amp; Floodfill"
-msgstr ""
+msgstr "Tulemüür ja üleujutus"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:388
 msgid "Disconnected"
@@ -6512,7 +6512,7 @@ msgstr "Aktiivseid kolleege pole"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:405
 msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr ""
+msgstr "UDP keelatud ja sissetulev TCP host/port pole seatud"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:407
 msgid "Firewalled with UDP Disabled"
@@ -6740,15 +6740,15 @@ msgstr "Meie sihtkohtade lähedal"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:258
 msgid "This is an experimental network database tool for debugging and analysis. Do not panic even if you see warnings indicated. Possible \"threats\" are summarized, however these are unlikely to be real threats. If you see anything you would like to discuss with the devs, contact us on IRC #i2p-dev."
-msgstr ""
+msgstr "See on eksperimentaalne võrgu andmebaasi tööriist silumiseks ja analüüsimiseks. Ärge paanitsege isegi siis, kui näete, et hoiatused on näidatud. Võimalikud \"ähvardused\" on kokku võetud, kuid tõenäoliselt pole need tõelised ohud. Kui näete midagi, mida soovite Devsiga arutada, võtke meiega ühendust IRC #i2p-dev-is."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:266
 msgid "No stored analysis"
-msgstr "pole salvestatud analüüsi"
+msgstr "Pole salvestatud analüüsi"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:273
 msgid "Select stored analysis"
-msgstr "valige salvestatud analüüs"
+msgstr "Valige salvestatud analüüs"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:301
 msgid "Run analysis on Floodfills only"
@@ -6760,7 +6760,7 @@ msgstr "Käivitage analüüs kõigis NetDb ruuterites"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:324
 msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, with the option to block peers meeting the configured threshold. Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
-msgstr ""
+msgstr "SYBIL -i tuvastamise rutiini saab konfigureerida võrguandmebaasi regulaarsel intervallil, võimalusega blokeerida eakaaslased konfigureeritud lävele vastavaid. Blokeerivad eakaaslased takistavad teie ruuteril tunnelite ehitamist koos nendega konfigureeritud kestuse jaoks või kuni ruuteri taaskäivitamiseni."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:327
 msgid "Configure Background Analysis"
@@ -6968,11 +6968,11 @@ msgstr "üleujutused"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:928
 msgid "MIN"
-msgstr ""
+msgstr "MIN"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:929
 msgid "AVG"
-msgstr ""
+msgstr "AVG"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:930
 msgid "MEDIAN"
@@ -6980,7 +6980,7 @@ msgstr "MEDIAAN"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:931
 msgid "MAX"
-msgstr ""
+msgstr "MAX"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1029
 msgid "Show all routers for this family in NetDb"
@@ -7430,7 +7430,7 @@ msgstr "port"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/applytheme_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:282
 msgid "config UI"
-msgstr ""
+msgstr "konfiguratsioon UI"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/applytheme_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/applytheme_jsp.java:447
@@ -7573,7 +7573,7 @@ msgstr "Automaatne"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:563
 msgid "Force On"
-msgstr ""
+msgstr "Jõustama"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:569
 msgid "Disable"
@@ -7671,11 +7671,11 @@ msgstr "Looge uus ruuteri perekond"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:554
 msgid "You may create a new router family here. Once you have created the family, you may export the family key file and share with other routers in your nominated family."
-msgstr ""
+msgstr "Võite siin luua uue ruuteri pere. Kui olete pere loonud, võite eksportida perekonna võtmefaili ja jagada oma nimetatud pere teiste ruuteriga."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:556
 msgid "Note: To avoid deanonymization, do not name your family with personally-attributable information e.g. your IRC nickname; your family name is associated with your router's IP address."
-msgstr ""
+msgstr "MÄRKUS. Denonüümitamise vältimiseks ärge nimetage oma peret isiklikult saamatu teabega, nt. Teie IRC hüüdnimi; Teie perekonnanimi on seotud ruuteri IP -aadressiga."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:558
 msgid "Enter new family name"
@@ -7710,7 +7710,7 @@ msgstr "ei ole enam pereliige {0}."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:282
 msgid "config home"
-msgstr ""
+msgstr "kodu konfigureerimine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:419
 msgid "Homepage Customization"
@@ -7733,7 +7733,7 @@ msgstr "huvipakkuvad saidid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configi2cp_jsp.java:282
 msgid "config i2cp"
-msgstr ""
+msgstr "i2cp konfigureerimine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configi2cp_jsp.java:429
 msgid "External Client Access"
@@ -7997,7 +7997,7 @@ msgstr "Luba tulemüüri porte UPnP abil avada"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:595
 msgid "This mode enhances anonymity by preventing correlation between public IP address changes and your router identity. Both your router identity and UDP port will be changed."
-msgstr ""
+msgstr "See režiim suurendab anonüümsust, takistades korrelatsiooni avaliku IP -aadressimuudatuste ja teie ruuteri identiteedi vahel. Nii ruuteri identiteeti kui ka UDP -porti muudetakse."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:601
 msgid "Laptop mode"
@@ -8071,7 +8071,7 @@ msgstr "Keelake TCP-ühendused täielikult"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:691
 msgid "TCP port"
-msgstr ""
+msgstr "Puerto TCP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:697
 msgid "Use the same port configured for UDP"
@@ -8091,7 +8091,7 @@ msgstr "UDP konfiguratsioon"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:713
 msgid "UDP port"
-msgstr ""
+msgstr "Puerto UDP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:717
 msgid "Select only if behind a firewall that blocks outbound UDP"
@@ -8115,7 +8115,7 @@ msgstr "config eakaaslased"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:421
 msgid "Peer Manager"
-msgstr ""
+msgstr "Eakaaslaste Konfiguratsioon"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:549
 msgid "Manual Peer Controls"
@@ -8135,7 +8135,7 @@ msgstr "Muuda profiili boonuseid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:578
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
-msgstr ""
+msgstr "Boonused võivad olla positiivsed või negatiivsed ning mõjutada eakaaslaste kaasamist kiirete ja suure mahutavusega. Kiireid eakaaslasi kasutatakse kliendi tunnelite jaoks ja mõne uurimusliku tunneli jaoks kasutatakse suure mahutavusega eakaaslasi."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:596
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:447
@@ -8177,7 +8177,7 @@ msgstr "Esitage kehtiv pistikprogrammi fail"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:596
 msgid "Plugin Manager"
-msgstr ""
+msgstr "Pistikprogrammihaldur"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:598
 msgid "The plugins listed below are started by the webConsole client."
@@ -8243,19 +8243,19 @@ msgstr "Kasutage uuesti külvamiseks puhverserverit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:594
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:600
 msgid "SOCKS 4/4a"
-msgstr ""
+msgstr "SOCKS 4/4a"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:606
 msgid "SOCKS 5"
-msgstr ""
+msgstr "SOCKS 5"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:608
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
-msgstr ""
+msgstr "Sellel suvandil kasutatakse I2P HTTP Outproxy reseprodutseerimiseks või konfigureerituna orhidee pistikprogrammi. Märkus. See suvand ei tööta, kui teil on 0 teadaolevat eakaaslast."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:614
 msgid "I2P Outproxy"
@@ -8407,7 +8407,7 @@ msgstr "konfiguratsioonistatistika"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:419
 msgid "Stats Collection &amp; Graphing"
-msgstr ""
+msgstr "Statistikakogumine ja Graafik"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:528
 msgid "Configure I2P Stat Collection"
@@ -8645,11 +8645,11 @@ msgstr "Sisemine viga"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:312
 msgid "ERROR"
-msgstr ""
+msgstr "VIGA"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:317
 msgid "Internal Server Error"
-msgstr ""
+msgstr "Serveri Sisemine Viga"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:319
 #, java-format
@@ -8713,7 +8713,7 @@ msgstr "Täpsem konfiguratsiooni spikker – I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:405
 msgid "Advanced Configuration Help"
-msgstr ""
+msgstr "Täpsem Konfiguratsiooniabi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:411
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:411
@@ -10140,13 +10140,13 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:471
 msgid "To import the received i2preseed.zip file into your local I2P router:"
-msgstr ""
+msgstr "Vastuvõetud faili i2preseed.zip importimiseks kohalikku I2P-ruuterisse toimige järgmiselt."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:487
 #, java-format
 msgid "Go to the {0}"
-msgstr ""
+msgstr "minge lehele {0}"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:475
 msgid "Under <i>Select zip or su3 file</i> click <i>Browse&hellip;</i>"
@@ -10154,15 +10154,15 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:477
 msgid "Select the i2preseed.zip file"
-msgstr ""
+msgstr "Valige fail i2preseed.zip"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:479
 msgid "Click the <i>Reseed from File</i> button"
-msgstr ""
+msgstr "Klõpsake nupul <i>Uuesti vaata failist</i>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:481
 msgid "Service (Wrapper) log"
-msgstr ""
+msgstr "Teenindus (ümbris) logi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:481
 #, java-format
@@ -10171,19 +10171,19 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:483
 msgid "Sharing a reseed file"
-msgstr ""
+msgstr "Uuesti külvatud faili jagamine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:485
 msgid "For trusted friends you can use your local I2P router to give them a jump start:"
-msgstr ""
+msgstr "Usaldusväärsete sõprade jaoks saate kasutada kohalikku I2P-ruuterit, et anda neile hüppeline algus."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:489
 msgid "Under <i>Create Reseed File</i> click the <i>Create reseed file</i> button"
-msgstr ""
+msgstr "Klõpsake jaotises <i>Loo uuesti lähtefail</i> nuppu <i>Loo uuesti lähtefail</i>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:491
 msgid "Securely send the i2preseed.zip file to your friend"
-msgstr ""
+msgstr "Saatke fail i2preseed.zip turvaliselt oma sõbrale"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:493
 msgid "Do not reveal this file to unknown users, as it contains sensitive data (100 RouterInfo files) from your own I2P router which potentially could be used by an adversary to decloak your identity. In order to protect your anonymity: you should wait for a few hours/days before sharing the file with your trusted friend. It is also advisable to use this procedure sparingly (no more than once a week)."
@@ -10191,27 +10191,27 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:495
 msgid "General guidelines for manual reseeding of I2P"
-msgstr ""
+msgstr "Üldjuhised I2P käsitsi uuesti külvamiseks"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:497
 msgid "Do not publicly publish the reseed file or share these files with a friend of a friend!"
-msgstr ""
+msgstr "Ärge avaldage uuesti külvatud faili avalikult ega jagage neid faile sõbra sõbraga!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:499
 msgid "This file should be used only for a very limited number of friends (less than 3)."
-msgstr ""
+msgstr "Seda faili tuleks kasutada ainult väga piiratud arvu sõprade jaoks (alla 3)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:501
 msgid "The file will only be valid for a limited time (less than 3 weeks)."
-msgstr ""
+msgstr "Fail kehtib ainult piiratud aja (vähem kui 3 nädalat)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:435
 msgid "If you're experiencing issues with running I2P+, the following information may help identify and resolve the problem:"
-msgstr ""
+msgstr "Kui teil on probleeme I2P käitamisega, võib järgmine teave aidata probleemi tuvastada ja lahendada."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:437
 msgid "Be Patient!"
-msgstr ""
+msgstr "Olge kannatlik!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:439
 msgid "I2P+ may be slow to integrate into network the first time you run it as it bootstraps into the network and learns of additional peers. The longer your I2P+ router is running, the better it will perform, so try and keep your router on as long as you can, 24/7 if possible! If, after 30 minutes, your <i>Active: [connected/recent]</i> count still has less than 10 peers, or your total number of <i>Integrated</i> peers is less than 5, there are several things you can do to check for problems:"
@@ -10936,7 +10936,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:468
 msgid "Use separate files for multi-use assets"
-msgstr ""
+msgstr "Kasutage mitmeotstarbeliste varade jaoks eraldi faile"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:470
 msgid "Wherever possible, assets that are used repeatedly on your site should be loaded from an external file and not inlined. If you're using the same CSS on several pages, create a separate css file and load that in the <code>&lt;head&gt;</code> section of your pages. This will make styling updates to your site easier to manage, and will also allow the file to be cached in the visitor's browser, resulting in less bandwidth demands on your webserver and faster page loads for your visitors."
@@ -10944,7 +10944,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:472
 msgid "Consider using a backend cache"
-msgstr ""
+msgstr "Kaaluge tausta vahemälu kasutamist"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:474
 msgid "If you're running a dynamic site handling a large number of concurrent users, content caching can often improve the time taken to deliver pages. For content that rapidly changes, a <a href=https://blog.stackpath.com/glossary-micro-caching/ target=_blank class='sitelink external'>micro-caching strategy</a> may still yield some benefits. The <a href=https://www.nginx.com/ target=_blank class='sitelink external'>Nginx webserver</a> provides a competent caching sub-system, or for a more heavy-weight solution, have a look at <a href=https://varnish-cache.org/ target=_blank class='sitelink external'>Varnish</a>."
@@ -10952,7 +10952,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:476
 msgid "Using an alternative webserver"
-msgstr ""
+msgstr "Alternatiivse veebiserveri kasutamine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:478
 msgid "To configure an alternative webserver for use on I2P, you can either use the existing webserver tunnel and <a href=/configclients>disable the default webserver</a> from running, or create a new HTTP Server tunnel in the <a href=/i2ptunnelmgr>Tunnel Manager</a>. Ensure that the webserver's <i>listening port</i> is also configured in the Tunnel Manager settings. For example, if your webserver is listening by default on address 127.0.0.1 port 80, you'd also need to ensure that the <i>Target port</i> in the Tunnel Manager settings page for the service is also configured to port 80."
@@ -10968,15 +10968,15 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:484
 msgid "Apache Web Server Security Guide"
-msgstr ""
+msgstr "Apache veebiserveri turvajuhend"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:486
 msgid "Nginx Web Server Security Guide"
-msgstr ""
+msgstr "Nginxi veebiserveri turbejuhend"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:488
 msgid "How to Harden Your WordPress Site"
-msgstr ""
+msgstr "Kuidas tugevdada oma WordPressi saiti"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:490
 msgid "<b>Note:</b> On some Apache installations, the <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> and <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> modules are enabled by default. It is important to disable these, or otherwise protect access to the urls, to avoid compromising the anonymity and security of your server."
@@ -10989,35 +10989,35 @@ msgstr "algusleht"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:439
 msgid "Please enter a search query"
-msgstr ""
+msgstr "Palun sisestage otsingupäring"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:441
 msgid "Search"
-msgstr ""
+msgstr "Otsi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:425
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:428
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:456
 msgid "Customize links"
-msgstr ""
+msgstr "Kohandage linke"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:434
 msgid "Configure display language, theme and optional console password"
-msgstr ""
+msgstr "seadistage kuvakeel, teema ja valikuline konsooli parool"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:443
 msgid "Configure router bandwidth"
-msgstr ""
+msgstr "ruuteri ribalaiuse konfigureerimine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/info_jsp.java:280
 msgid "router information"
-msgstr ""
+msgstr "ruuteri teave"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/info_jsp.java:417
 msgid "Router Summary"
-msgstr ""
+msgstr "ruuteri kokkuvõte"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jars_jsp.java:280
 msgid "Jar File Dump"
@@ -11025,36 +11025,36 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:280
 msgid "job queue stats"
-msgstr ""
+msgstr "tööjärjekorra statistika"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:417
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:426
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:426
 msgid "Job Queue"
-msgstr ""
+msgstr "Tööjärjekord"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:419
 msgid "Job statistics for this session"
-msgstr ""
+msgstr "Selle seansi tööstatistika"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:422
 msgid "Job Stats"
-msgstr ""
+msgstr "Tööstatistika"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:424
 msgid "Active and scheduled jobs"
-msgstr ""
+msgstr "aktiivsed ja plaanipärased tööd"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:280
 msgid "job queue statistics"
-msgstr ""
+msgstr "tööjärjekorra statistika"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:417
 msgid "Job Queue Stats"
-msgstr ""
+msgstr "Tööjärjekorra statistika"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:280
 msgid "logs"
@@ -11062,7 +11062,7 @@ msgstr "logid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:431
 msgid "Please include your I2P version and running environment information in bug reports"
-msgstr ""
+msgstr "Palun lisage veaaruannetesse oma I2P-versiooni ja töökeskkonna teave"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:435
 #, java-format
@@ -11072,11 +11072,11 @@ msgstr "Palun teata veast {0} või {1} kaudu."
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:439
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:581
 msgid "View event log"
-msgstr ""
+msgstr "vaata sündmuste logi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:522
 msgid "Critical / Error Level Logs"
-msgstr ""
+msgstr "Kriitilise / veataseme logid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:537
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:545
@@ -11085,12 +11085,12 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:602
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:614
 msgid "Clear logs"
-msgstr ""
+msgstr "Selge palgid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:573
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:600
 msgid "Configure router logging options"
-msgstr ""
+msgstr "konfigureerige ruuteri logimissuvandid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:591
 msgid "Service (Wrapper) Logs"
@@ -11098,15 +11098,15 @@ msgstr "Teenuse (ümbrise) logid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:281
 msgid "network database"
-msgstr ""
+msgstr "võrgu andmebaas"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/news_jsp.java:280
 msgid "News"
-msgstr ""
+msgstr "Uudised"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/news_jsp.java:417
 msgid "Latest News"
-msgstr ""
+msgstr "Viimased uudised"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/nowebapp_jsp.java:283
 msgid "WebApp Not Found"
@@ -11123,7 +11123,7 @@ msgstr "Soovitud veebirakendus ei ole käivitatud."
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/nowebapp_jsp.java:423
 #, java-format
 msgid "Please visit the {0}config clients page{1} to start it."
-msgstr ""
+msgstr "Selle käivitamiseks külastage {0}konfiguratsiooniklientide lehte{1}."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/peers_jsp.java:280
 msgid "peer connections"
@@ -11134,7 +11134,7 @@ msgstr "ühendused ruuteritega"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/peers_jsp.java:446
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/peers_jsp.java:452
 msgid "Network Peers"
-msgstr ""
+msgstr "Võrgukaaslased"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:280
 msgid "peer profiles"
@@ -11146,219 +11146,219 @@ msgstr "ruuterite profiilid"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:461
 msgid "Peer Profiles"
-msgstr ""
+msgstr "kaaslaste profiilid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:439
 msgid "Session Banned Peers"
-msgstr ""
+msgstr "Seansi ajal keelatud kaaslased"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:455
 msgid "Floodfills"
-msgstr ""
+msgstr "Üleujutused"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:463
 msgid "Fast / High Capacity"
-msgstr ""
+msgstr "Kiire / suur võimsus"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:445
 msgid "Manage I2P addresses"
-msgstr ""
+msgstr "I2P-aadresside haldamine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:451
 msgid "Imagegen"
-msgstr ""
+msgstr "Pilt"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:458
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:464
 msgid "Create and download torrents"
-msgstr ""
+msgstr "torrentide loomine ja allalaadimine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:472
 msgid "Manage client and server tunnels"
-msgstr ""
+msgstr "Hallake kliendi- ja serveritunneleid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:478
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:484
 msgid "Webmail client"
-msgstr ""
+msgstr "Veebiposti klient"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:490
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:448
 msgid "Webmail"
-msgstr ""
+msgstr "Veebipost"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:492
 msgid "Local webserver for hosting content on the I2P network"
-msgstr ""
+msgstr "Kohalik veebiserver sisu majutamiseks I2P-võrgus"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:496
 msgid "Information &amp; Diagnostics"
-msgstr ""
+msgstr "Teave"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:502
 msgid "Review recent updates to I2P"
-msgstr ""
+msgstr "vaadake üle I2P hiljutised värskendused"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:506
 msgid "View debugging information"
-msgstr ""
+msgstr "vaadake silumisinfot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:514
 msgid "View router performance graphs"
-msgstr ""
+msgstr "vaadake ruuteri jõudluse graafikuid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:518
 msgid "Router help section"
-msgstr ""
+msgstr "Ruuteri abijaotis"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:522
 msgid "Router homepage"
-msgstr ""
+msgstr "Ruuteri Koduleht"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:524
 msgid "Home"
-msgstr ""
+msgstr "Kodu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:526
 msgid "View news relating to I2P"
-msgstr ""
+msgstr "Vaadake I2P-ga seotud uudiseid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:528
 msgid "I2P News"
-msgstr ""
+msgstr "I2P uudised"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:534
 msgid "View router workload and stats"
-msgstr ""
+msgstr "vaadake ruuteri töökoormust ja statistikat"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:536
 msgid "Router Jobs"
-msgstr ""
+msgstr "ruuteri tööd"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:538
 msgid "View router logs"
-msgstr ""
+msgstr "ruuteri logide vaatamine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:542
 msgid "View information and stats regarding all known peers"
-msgstr ""
+msgstr "Vaadake teavet ja statistikat kõigi teadaolevate sarnaste rakenduste kohta"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:550
 msgid "View active peers"
-msgstr ""
+msgstr "Vaadake aktiivseid kolleege"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:554
 msgid "View peer performance profiles"
-msgstr ""
+msgstr "Vaadake kolleegide jõudlusprofiile"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:558
 msgid "View information about router and running environment"
-msgstr ""
+msgstr "vaadake teavet ruuteri ja töökeskkonna kohta"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:564
 msgid "Statistics"
-msgstr ""
+msgstr "Statistika"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:570
 msgid "View active tunnels"
-msgstr ""
+msgstr "kuvage aktiivsed tunnelid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:588
 msgid "Customize homepage"
-msgstr ""
+msgstr "kodulehe kohandamine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:590
 msgid "Homepage"
-msgstr ""
+msgstr "Koduleht"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:592
 msgid "Configure I2P Client Control Interface"
-msgstr ""
+msgstr "I2P-kliendi juhtimisliidese konfigureerimine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:596
 msgid "View or edit router keyring for encrypted destinations"
-msgstr ""
+msgstr "krüptitud sihtkohtade ruuteri võtmerõnga vaatamine või muutmine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:604
 msgid "Configure router networking options"
-msgstr ""
+msgstr "konfigureerige ruuteri võrgusuvandid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:608
 msgid "Manually edit peers and view banned peers and blocklist"
-msgstr ""
+msgstr "redigeerige eakaaslaste käsitsi ja vaadake keelatud kaaslaste ja blokeerimisloendit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:612
 msgid "Install and manage router plugins"
-msgstr ""
+msgstr "installige ja hallake ruuteri pistikprogramme"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:616
 msgid "Router reseeding and configuration"
-msgstr ""
+msgstr "ruuteri uuesti külvamine ja konfigureerimine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:620
 msgid "Configure and manage Router family"
-msgstr ""
+msgstr "Ruuteri perekonna konfigureerimine ja haldamine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:624
 msgid "Manage Router service"
-msgstr ""
+msgstr "ruuteri teenuse haldamine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:628
 msgid "Configure stat collection for graphing"
-msgstr ""
+msgstr "konfigureerige statistikakogu graafiku tegemiseks"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:630
 msgid "Router Stats"
-msgstr ""
+msgstr "ruuteri statistika"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:632
 msgid "Configure router updates"
-msgstr ""
+msgstr "ruuteri värskenduste konfigureerimine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:636
 msgid "Configuration wizard for new users"
-msgstr ""
+msgstr "konfiguratsiooniviisard uutele kasutajatele"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:638
 msgid "Setup Wizard"
-msgstr ""
+msgstr "häälestusviisard"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:640
 msgid "Customize sidebar"
-msgstr ""
+msgstr "kohandage külgriba"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:644
 msgid "Configure tunnel options"
-msgstr ""
+msgstr "Tunneli valikute konfigureerimine"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:648
 msgid "Configure router user interface and optional console password"
-msgstr ""
+msgstr "konfigureerige ruuteri kasutajaliides ja valikuline konsooli parool"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:666
 msgid "Configuring I2P for optimal performance"
-msgstr ""
+msgstr "I2P konfigureerimine optimaalseks jõudluseks"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:682
 msgid "Information for new users"
-msgstr ""
+msgstr "teave uutele kasutajatele"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:686
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:702
 msgid "A guide to reseeding your I2P router"
-msgstr ""
+msgstr "I2P-ruuteri uuesti külvamise juhend"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:690
 msgid "What to do in the event I2P isn't working"
-msgstr ""
+msgstr "Mida teha, kui I2P ei tööta"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:694
 msgid "Introduction to tunnel filters"
-msgstr ""
+msgstr "Sissejuhatus tunnelifiltritesse"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:696
 msgid "Tunnel Filters"
-msgstr ""
+msgstr "Tunnelifiltrid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/stats_jsp.java:280
 msgid "statistics"
@@ -11366,31 +11366,31 @@ msgstr "statistika"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/stats_jsp.java:428
 msgid "Router Statistics"
-msgstr ""
+msgstr "ruuteri statistika"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrentmgr_jsp.java:283
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrents_jsp.java:312
 msgid "torrents"
-msgstr ""
+msgstr "torrentid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrentmgr_jsp.java:420
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrentmgr_jsp.java:428
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrents_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrents_jsp.java:457
 msgid "Torrent Manager"
-msgstr ""
+msgstr "Torrentihaldur"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:417
 msgid "Most Recent Transit Tunnels"
-msgstr ""
+msgstr "uusimad transiiditunnelid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:419
 msgid "Locally hosted tunnels (exploratory and client)"
-msgstr ""
+msgstr "Kohalikult hostitud tunnelid (uurimis- ja klienditunnelid)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:424
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:424
@@ -11398,7 +11398,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:424
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:422
 msgid "Most Recent"
-msgstr ""
+msgstr "Uusim"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:430
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:430
@@ -11406,7 +11406,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:430
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:428
 msgid "Fastest"
-msgstr ""
+msgstr "Kiireim"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:432
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:432
@@ -11414,7 +11414,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:432
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:430
 msgid "Top 50 peers by transit tunnel requests"
-msgstr ""
+msgstr "50 parimat partnerit ühistransiiditunneli taotluste järgi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:434
@@ -11422,21 +11422,21 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:432
 msgid "Transit by Peer"
-msgstr ""
+msgstr "Peeri ühistransport"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:417
 msgid "Fastest Transit Tunnels"
-msgstr ""
+msgstr "Kiireimad transporditunnelid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:417
 msgid "Transit Tunnels by Peer"
-msgstr ""
+msgstr "Peeri ühistransporditunnelid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:280
 msgid "tunnel peer count"
-msgstr ""
+msgstr "tunneli kaaslaste arv"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_005fnorefresh_jsp.java:280
 msgid "tunnel summary"
@@ -11444,15 +11444,15 @@ msgstr "tunnelite kokkuvõte"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_005fnorefresh_jsp.java:417
 msgid "Tunnel Summary"
-msgstr ""
+msgstr "Tunneli kokkuvõte"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:280
 msgid "local tunnels"
-msgstr ""
+msgstr "kohalikud tunnelid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:417
 msgid "Local Tunnels"
-msgstr ""
+msgstr "Kohalikud tunnelid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:417
@@ -11461,7 +11461,7 @@ msgstr "Ruuteri profiil"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:438
 msgid "Profile for peer"
-msgstr ""
+msgstr "Partneri profiil"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:442
 msgid "NetDb entry"
@@ -11469,28 +11469,28 @@ msgstr "Võrguandmebaasi kirje"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:455
 msgid "View profile in text format"
-msgstr ""
+msgstr "Vaadake profiili tekstivormingus"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:457
 msgid "View Raw Profile"
-msgstr ""
+msgstr "Vaata töötlemata profiili"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:476
 msgid "Return to Top"
-msgstr ""
+msgstr "Tagasi üles"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:311
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:456
 msgid "webmail"
-msgstr ""
+msgstr "veebipost"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:333
 msgid "New Install Wizard"
-msgstr ""
+msgstr "Uus installiviisard"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:356
 msgid "Skip Setup"
-msgstr ""
+msgstr "Jäta seadistus vahele"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:481
 msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
@@ -11498,7 +11498,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:483
 msgid "Router Console &amp; WebApps Display Language"
-msgstr ""
+msgstr "Ruuteri Konsool ja WebApps Kuvamiskeel"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:492
 msgid "Your I2P+ router by default contributes to the network by routing internal, end-to-end encrypted traffic for other routers, known as <i>participation</i>. Bandwidth participation improves the anonymity level of all users on the network and maximizes your download speed."
