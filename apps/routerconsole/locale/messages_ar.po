@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:50+0000\n"
-"PO-Revision-Date: 2023-10-31 20:58+0000\n"
+"PO-Revision-Date: 2023-11-21 03:36+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ar\n"
@@ -1234,7 +1234,7 @@ msgstr "منع مؤقت {0}"
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:74
 #, java-format
 msgid "Banned for {0} / until restart"
-msgstr ""
+msgstr "محظور لمدة {0} / حتى إعادة التشغيل"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:90
 msgid "unban now"
@@ -1294,7 +1294,7 @@ msgstr "الموقع"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:487
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:594
 msgid "I2CP"
-msgstr ""
+msgstr "I2CP"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:53
 msgid "I2PTunnel"
@@ -1303,7 +1303,7 @@ msgstr "الأنفاق I2P"
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:68
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:571
 msgid "SAM"
-msgstr ""
+msgstr "SAM"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:84
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:348
@@ -1336,7 +1336,7 @@ msgstr "وحدة التحكم"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:144
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
-msgstr ""
+msgstr "لتمكين وصول SSL لوحدة التحكم في جهاز التوجيه ، راجع ملف <code>clients.config</code> المذكور في دليل تطبيق I2P لمزيد من المعلومات. ستحتاج إلى تحرير ملف تكوين RouterConsolerunner الموجود في الدليل: "
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigAdvancedHandler.java:73
 msgid "Error updating the configuration - please see the error logs"
@@ -1919,7 +1919,7 @@ msgstr "عليك ادخال مفتاح"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:51
 msgid "Invalid key"
-msgstr ""
+msgstr "مفتاح غير صالح"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:58
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHandler.java:169
@@ -2542,7 +2542,7 @@ msgstr "إلى"
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:28
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:687
 msgid "Reseed now"
-msgstr ""
+msgstr "Reseed الآن"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:31
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:55
@@ -2565,15 +2565,15 @@ msgstr "إعادة النشر من URL"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:43
 msgid "No URL specified. Please supply a valid reseed URL."
-msgstr ""
+msgstr "لم يحدد عنوان URL. يرجى تقديم عنوان URL Reseed صالح."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:68
 msgid "Reseed in progress, check summary bar for status"
-msgstr ""
+msgstr "إعادة البذر قيد التقدم، تحقق من شريط الملخص لمعرفة الحالة"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:70
 msgid "Reseed complete, check summary bar for status"
-msgstr ""
+msgstr "إعادة البذر مكتملة، تحقق من شريط الملخص لمعرفة الحالة"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:77
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:729
@@ -2582,12 +2582,12 @@ msgstr "إعادة زرع من الملف"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:83
 msgid "No file specified. Please select a valid .zip or .su3 file to reseed from."
-msgstr ""
+msgstr "لم يحدد ملف. يرجى تحديد ملف .zip أو .su3 صالح من."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:88
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:96
 msgid "Reseed from file failed"
-msgstr ""
+msgstr "فشلت Reseed من الملف"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:91
 #, java-format
@@ -2795,7 +2795,7 @@ msgstr "استكشاف الأنفاق"
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:65
 #, java-format
 msgid "Client tunnels for {0}"
-msgstr ""
+msgstr "أنفاق العميل لـ {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:126
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
@@ -3335,7 +3335,7 @@ msgstr "بريد الكتروني مجهول"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:279
 #: ../java/strings/Strings.java:16
 msgid "I2PMail"
-msgstr ""
+msgstr "I2PMail"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:48
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69
@@ -3353,7 +3353,7 @@ msgstr "مساعدة روتر I2P"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:70
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:89
 msgid "Install and configure I2P plugins"
-msgstr ""
+msgstr "تثبيت وتكوين ملحقات I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:49
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:70
@@ -3651,7 +3651,7 @@ msgstr "المنتديات الصلبة للشبكة المظلمة"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:137
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
-msgstr ""
+msgstr "عبر الشبكة المدونين الجزئي والمنتدى"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:138
 msgid "Alternative privacy-focused front-end for Reddit"
@@ -3671,7 +3671,7 @@ msgstr "برنامج تشفير الصور Base64"
 #. hosting + other services
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "base64-image.i2p"
-msgstr ""
+msgstr "base64-image.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "An image cache and resize service"
@@ -3679,7 +3679,7 @@ msgstr "خدمة تخزين الصور وتغيير حجمها"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "imageproxy.i2p"
-msgstr ""
+msgstr "imageproxy.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:150
 msgid "IRC Logs for multiple networks"
@@ -3699,7 +3699,7 @@ msgstr "خدمة البث الإذاعي"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "radio.r4sas.i2p"
-msgstr ""
+msgstr "radio.r4sas.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:153
 msgid "Privacy-focused not-for-profit organization"
@@ -3820,7 +3820,7 @@ msgstr "أكبر قاموس إنجليزي على الإنترنت"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:187
 msgid "World atlas including geography facts &amp; flags"
-msgstr ""
+msgstr "أطلس العالم بما في ذلك حقائق الجغرافيا والأعلام"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:187
 msgid "WorldAtlas"
@@ -3837,11 +3837,11 @@ msgstr "أطلس العالم"
 #. news + blogs
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:198
 msgid "Technology News &amp; more..."
-msgstr ""
+msgstr "أخبار التكنولوجيا والمزيد ..."
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "BenarNews"
-msgstr ""
+msgstr "BenarNews"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "Clear and accurate news for the Far East"
@@ -3853,65 +3853,65 @@ msgstr "الصحافة الاستقصائية المستقلة"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:201
 msgid "Information Security Research &amp; Education"
-msgstr ""
+msgstr "أبحاث وتعليم أمن المعلومات"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:202
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:215
 msgid "Cannabis-related magazine"
-msgstr ""
+msgstr "المجلة المتعلقة بالقنب"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:202
 msgid "CultureMagazine"
-msgstr ""
+msgstr "CultureMagazine"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "A magazine of Politics &amp; Culture"
-msgstr ""
+msgstr "مجلة من السياسة والثقافة"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "CurrentAffairs"
-msgstr ""
+msgstr "CurrentAffairs"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:204
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:205
 msgid "Darknet related news site"
-msgstr ""
+msgstr "موقع الأخبار المتعلق بـ Darknet"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
 msgid "DigitalJournal"
-msgstr ""
+msgstr "DigitalJournal"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
 msgid "Global news &amp; media platform"
-msgstr ""
+msgstr "منصة الأخبار والإعلام العالمية"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
 msgid "DigitalTrends"
-msgstr ""
+msgstr "DigitalTrends"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
 msgid "Tech News &amp; Reviews"
-msgstr ""
+msgstr "أخبار التكنولوجيا والمراجعات"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:208
 msgid "Defending your rights in the digital world"
-msgstr ""
+msgstr "الدفاع عن حقوقك في العالم الرقمي"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:209
 msgid "The Elliptic Curve Cryptography Blog"
-msgstr ""
+msgstr "مدونة تشفير المنحنى الإهليلجي"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
 msgid "ForeignPolicy"
-msgstr ""
+msgstr "السياسة الخارجية"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
 msgid "The Global Magazine of News &amp; Ideas"
-msgstr ""
+msgstr "المجلة العالمية للأخبار والأفكار"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "FrontLineDefenders"
-msgstr ""
+msgstr "فرونت لاين ديفندرز"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "Human rights activism"
@@ -3923,7 +3923,7 @@ msgstr "الدفاع عن حقوق الإنسان في جميع أنحاء ال�
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:212
 msgid "HumanRightsWatch"
-msgstr ""
+msgstr "هيومن رايتس ووتش"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:213
 msgid "Fresh hacks every day"
@@ -3935,120 +3935,120 @@ msgstr "تجميع الأخبار المتعلقة بالكمبيوتر"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:214
 msgid "HackerNews"
-msgstr ""
+msgstr "هاكر نيوز"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
 msgid "HongKongFreePress"
-msgstr ""
+msgstr "هونج كونج فري برس"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
 msgid "Independent &amp; impartial news for Hong Kong"
-msgstr ""
+msgstr "أخبار مستقلة ونزيهة لهونغ كونغ"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
 msgid "HongKongWatch"
-msgstr ""
+msgstr "ساعة هونج كونج"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
 msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr ""
+msgstr "يراقب تهديدات الحريات والحقوق في هونغ كونغ"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
 msgid "Business &amp; Financial News"
-msgstr ""
+msgstr "الأخبار التجارية والمالية"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Politics &amp; Current Affairs Journal"
-msgstr ""
+msgstr "مجلة السياسة والشؤون الحالية"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "English language Japanese News"
-msgstr ""
+msgstr "أخبار اللغة الإنجليزية اليابانية"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "JapanToday"
-msgstr ""
+msgstr "اليابان اليوم"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "JStorDaily"
-msgstr ""
+msgstr "جيستورديلي"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "Where news meets its scholarly match"
-msgstr ""
+msgstr "حيث يلتقي الخبر بنظيره العلمي"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Jurist"
-msgstr ""
+msgstr "الفقيه"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Legal News &amp; Commentary"
-msgstr ""
+msgstr "الأخبار القانونية والتعليقات"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "In-depth security news &amp; investigation"
-msgstr ""
+msgstr "أخبار الأمن والتحقيق المتعمقة"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "KrebsOnSecurity"
-msgstr ""
+msgstr "كريبس أون سيكيوريتي"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "Linux Kernel Mailing List"
-msgstr ""
+msgstr "القائمة البريدية لنواة لينكس"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "MetaCritic"
-msgstr ""
+msgstr "ميتاكريتيك"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "Movie + TV + Music + Game reviews"
-msgstr ""
+msgstr "مراجعات الأفلام والتلفزيون والموسيقى والألعاب"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "NakedSecurity"
-msgstr ""
+msgstr "الأمن العاري"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "Security news and research blog"
-msgstr ""
+msgstr "مدونة الأخبار والأبحاث الأمنية"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "Smart &amp; fearless journalism"
-msgstr ""
+msgstr "صحافة ذكية وخوف"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "NewStatesman"
-msgstr ""
+msgstr "نيو ستيتسمان"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "Politics &amp; Current Affairs magazine"
-msgstr ""
+msgstr "مجلة السياسة والشؤون الحالية"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "Independent International Media Platform"
-msgstr ""
+msgstr "منصة إعلامية دولية مستقلة"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "OpenDemocracy"
-msgstr ""
+msgstr "الديمقراطية المفتوحة"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "News and blog feeds on I2P"
-msgstr ""
+msgstr "موجزات الأخبار والمدونات على I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "Planeta"
-msgstr ""
+msgstr "كوكب"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
 msgid "News &amp; Views on Tibet"
-msgstr ""
+msgstr "الأخبار والآراء حول التبت"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "RadioFreeAsia"
-msgstr ""
+msgstr "راديو فري آسيا"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "Reliable journalism for countries under censorship"
@@ -4056,23 +4056,23 @@ msgstr "صحافة موثوقة للدول الخاضعة للرقابة"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
 msgid "Lifestyle magazine"
-msgstr ""
+msgstr "مجلة لايف ستايل"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "Internationally renowned security technologist"
-msgstr ""
+msgstr "تقني أمني مشهور عالميًا"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "SchneierOnSecurity"
-msgstr ""
+msgstr "شناير أون سيكيوريتي"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "Latest scientific research news"
-msgstr ""
+msgstr "آخر أخبار الأبحاث العلمية"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "ScienceDaily"
-msgstr ""
+msgstr "ساينس ديلي"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
 msgid "Community-driven tech news"
@@ -4080,11 +4080,11 @@ msgstr "أخبار التكنولوجيا التي يحركها المجتمع"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
 msgid "News for nerds"
-msgstr ""
+msgstr "أخبار للمهووسين"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
 msgid "Technology news &amp; reviews"
-msgstr ""
+msgstr "أخبار ومراجعات التكنولوجيا"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Reporting on China without fear or favor"
@@ -4116,7 +4116,7 @@ msgstr "مجمع أخبار التكنولوجيا"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "News &amp; Reviews"
-msgstr ""
+msgstr "الأخبار والمراجعات"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "TheAtlantic"
@@ -4184,7 +4184,7 @@ msgstr "الأسبوع"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "Filesharing &amp; copyright news"
-msgstr ""
+msgstr "ترشيح أخبار حقوق الطبع والنشر"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "A magazine about human rights and social justice"
@@ -4192,7 +4192,7 @@ msgstr "مجلة تهتم بحقوق الإنسان والعدالة الاجت�
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "UpstreamJournal"
-msgstr ""
+msgstr "المنبع جورنال"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
@@ -4200,16 +4200,16 @@ msgstr "تعزيز الفهم المتوازن والواقعي للمصالح �
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "WashingtonInstitute"
-msgstr ""
+msgstr "معهد واشنطن"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:351
 msgid "The HTTP proxy is not up"
-msgstr ""
+msgstr "وكيل HTTP لا يعمل"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:354
 #, java-format
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
-msgstr ""
+msgstr "لم يتم تكوين متصفحك بشكل صحيح لاستخدام وكيل HTTP في {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:494
 msgid "URL"
@@ -4250,15 +4250,15 @@ msgstr "مفعل"
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:286
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:291
 msgid "Inactive"
-msgstr ""
+msgstr "غير نشط"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:207
 msgid "unpublished"
-msgstr ""
+msgstr "غير منشورة"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:213
 msgid "Shared"
-msgstr ""
+msgstr "مشترك"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:216
 msgid "Available CPU Cores"
@@ -4266,7 +4266,7 @@ msgstr "نوى وحدة المعالجة المركزية المتاحة"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:216
 msgid "Performance"
-msgstr ""
+msgstr "الأداء"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:217
 msgid "Classified as slow"
@@ -4274,23 +4274,23 @@ msgstr "تصنف على أنها بطيئة"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:219
 msgid "Yes"
-msgstr ""
+msgstr "نعم"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:221
 msgid "No"
-msgstr ""
+msgstr "لا"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:225
 msgid "Target"
-msgstr ""
+msgstr "الهدف"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:226
 msgid "Interval"
-msgstr ""
+msgstr "الفاصل الزمني"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:232
 msgid "initializing"
-msgstr ""
+msgstr "التهيئة"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:234
 msgid "Cache file"
@@ -4298,7 +4298,7 @@ msgstr "ملف ذاكرة التخزين المؤقت"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:234
 msgid "entries"
-msgstr ""
+msgstr "المدخلات"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:237
 msgid "Installed"
@@ -4316,7 +4316,7 @@ msgstr "تحديث"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:242
 msgid "Update Policy"
-msgstr ""
+msgstr "سياسة التحديث"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:244
 msgid "Development updates enabled"
@@ -4324,7 +4324,7 @@ msgstr "تم تمكين تحديثات التطوير"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:247
 msgid "Started"
-msgstr ""
+msgstr "بدأت"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:249
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:757
@@ -4345,7 +4345,7 @@ msgstr "{0} مستعملة للاتصال الخارجي فقط"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:73
 msgid "Job runners"
-msgstr ""
+msgstr "العدائين الوظيفيين"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:81
 msgid "Active jobs"
@@ -4354,20 +4354,20 @@ msgstr "وظائف نشطة"
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:86
 #, java-format
 msgid "started {0} ago"
-msgstr ""
+msgstr "بدأت منذ {0}."
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:93
 msgid "Just finished jobs"
-msgstr ""
+msgstr "انتهيت للتو من المهام"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:98
 #, java-format
 msgid "finished {0} ago"
-msgstr ""
+msgstr "انتهى منذ {0}."
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:106
 msgid "Ready/waiting jobs"
-msgstr ""
+msgstr "وظائف جاهزة/منتظرة"
 
 #: ../java/src/net/i2p/router/web/helpers/JobQueueHelper.java:117
 msgid "waiting"
@@ -4544,7 +4544,7 @@ msgstr "منفذ"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:536
 msgid "MTU"
-msgstr ""
+msgstr "MTU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:563
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1026
@@ -4970,7 +4970,7 @@ msgstr "SSU مع المقدمين"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1703
 msgid "NTCP"
-msgstr ""
+msgstr "NTCP"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1703
 msgid "NTCP and SSU"
@@ -4986,7 +4986,7 @@ msgstr "IPv6 فقط SSU، المُقدمين"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1704
 msgid "IPv6 SSU"
-msgstr ""
+msgstr "IPv6 SSU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1704
 msgid "IPv6 SSU, introducers"
@@ -4994,7 +4994,7 @@ msgstr "IPv6 SSU، المقدمون"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1705
 msgid "IPv6 NTCP"
-msgstr ""
+msgstr "IPv6 NTCP"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1705
 msgid "IPv6 NTCP, SSU"
@@ -5052,14 +5052,14 @@ msgstr "نشط في اللحظة الأخيرة"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:196
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:197
 msgid "IPv4"
-msgstr ""
+msgstr "IPv4"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:200
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:201
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:350
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:573
 msgid "IPv6"
-msgstr ""
+msgstr "IPv6"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:248
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1011
@@ -5241,12 +5241,12 @@ msgstr "حسب الحزم المستقبلة"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:618
 msgid "Retransmitted packets"
-msgstr ""
+msgstr "الحزم المعاد إرسالها"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:619
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:938
 msgid "Dup TX"
-msgstr ""
+msgstr "دوب تكساس"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:622
 msgid "Sort by packets retransmitted"
@@ -5347,11 +5347,11 @@ msgstr "التعاريف"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:895
 msgid "Remote peer, identified by truncated router hash"
-msgstr ""
+msgstr "النظير البعيد، الذي تم تحديده بواسطة تجزئة جهاز التوجيه المقطوع"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:897
 msgid "Direction"
-msgstr ""
+msgstr "الاتجاه"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:899
 msgid "Outbound connection"
@@ -5865,7 +5865,7 @@ msgstr "أعلى متوسط"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:183
 msgid "Highest total in a period"
-msgstr ""
+msgstr "أعلى إجمالي في الفترة"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:207
 msgid "Average event count"
@@ -6090,7 +6090,7 @@ msgstr "مقدمة عن استضافة المواقع على شبكة I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:298
 msgid "I2PControl"
-msgstr ""
+msgstr "التحكم I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:301
 msgid "RPC Service"
@@ -6167,7 +6167,7 @@ msgstr "يجلات"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:522
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:544
 msgid "NetDb"
-msgstr ""
+msgstr "NetDb"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:536
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:886
@@ -6360,7 +6360,7 @@ msgstr "مستعمل"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1049
 msgid "Our inbound &amp; outbound traffic for the last 20 minutes"
-msgstr ""
+msgstr "حركة المرور الواردة والخارجية لمدة 20 دقيقة الماضية"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1078
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1121
@@ -6567,7 +6567,7 @@ msgstr "جدار حماية مع تمكين TCP الوارد"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:382
 msgid "Firewalled &amp; Floodfill"
-msgstr ""
+msgstr "جدار الحماية وموجه الفيضان"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:388
 msgid "Disconnected"
@@ -6583,7 +6583,7 @@ msgstr "لا يوجد أقران نشطون"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:405
 msgid "UDP Disabled &amp; Inbound TCP host/port not set"
-msgstr ""
+msgstr "لم يتم تعيين UDP تعطيل مضيف/منفذ TCP الواردة"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:407
 msgid "Firewalled with UDP Disabled"
@@ -6627,7 +6627,7 @@ msgstr "أظهر الانفاق"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:832
 msgid "Leases expired"
-msgstr ""
+msgstr "انتهت عقود الإيجار"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:832
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:834
@@ -6653,7 +6653,7 @@ msgstr "جاري بناء النفق"
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:866
 #: ../java/strings/Strings.java:39
 msgid "Shared Clients"
-msgstr ""
+msgstr "العملاء المشتركون"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1167
 msgid "Click Restart to install"
@@ -6831,7 +6831,7 @@ msgstr "قم بتشغيل التحليل على كافة أجهزة التوجي
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:324
 msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, with the option to block peers meeting the configured threshold. Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
-msgstr ""
+msgstr "يمكن تكوين روتين الكشف عن SYBIL لمسح قاعدة بيانات الشبكة على فاصل منتظم ، مع خيار منع أقرانهم العتبة التي تم تكوينها. يمنع أقران حظر جهاز التوجيه الخاص بك من بناء الأنفاق معهم للمدة التي تم تكوينها ، أو حتى يتم إعادة تشغيل جهاز التوجيه."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:327
 msgid "Configure Background Analysis"
@@ -7155,7 +7155,7 @@ msgstr "المشارك"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:222
 msgid "sec"
-msgstr ""
+msgstr "ثانية"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:224
 msgid "grace period"
@@ -7261,7 +7261,7 @@ msgstr "نقطة النهاية"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:819
 msgid "Locally hosted tunnel"
-msgstr ""
+msgstr "نفق مستضاف محليًا"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:854
 msgid "Build in progress"
@@ -7277,7 +7277,7 @@ msgstr "خرج"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:908
 msgid "Data In"
-msgstr ""
+msgstr "البيانات الواردة"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:908
 msgid "Tunnel Name"
@@ -7285,7 +7285,7 @@ msgstr "اسم النفق"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:909
 msgid "Data Out"
-msgstr ""
+msgstr "خروج البيانات"
 
 #. Saved in CSSHelper, assume success
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:46
@@ -7352,7 +7352,7 @@ msgstr "البريد"
 
 #: ../java/strings/Strings.java:17
 msgid "susidns"
-msgstr ""
+msgstr "susidns"
 
 #: ../java/strings/Strings.java:18
 msgid "routerconsole"
@@ -7367,7 +7367,7 @@ msgstr "شاشة التحكم"
 
 #: ../java/strings/Strings.java:24
 msgid "SAM application bridge"
-msgstr ""
+msgstr "سام جسر التطبيق"
 
 #: ../java/strings/Strings.java:25
 msgid "Application tunnels"
@@ -7383,7 +7383,7 @@ msgstr "خادم الويب I2P (eepsite)"
 
 #: ../java/strings/Strings.java:28
 msgid "I2P Web Server (eepsite)"
-msgstr ""
+msgstr "خادم الويب I2P (eepsite)"
 
 #: ../java/strings/Strings.java:29
 msgid "Browser launch at startup"
@@ -7391,7 +7391,7 @@ msgstr "اطلاق المتصفح عند البداية"
 
 #: ../java/strings/Strings.java:31
 msgid "I2P+ Router Console"
-msgstr ""
+msgstr "وحدة التوجيه I2P+"
 
 #: ../java/strings/Strings.java:32
 msgid "Open Router Console in web browser at startup"
@@ -7474,7 +7474,7 @@ msgstr "ليل"
 
 #: ../java/strings/Strings.java:62
 msgid "vanilla"
-msgstr ""
+msgstr "فانيلا"
 
 #: ../java/strings/Strings.java:67
 msgid "Encryption"
