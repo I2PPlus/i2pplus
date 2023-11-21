@@ -28,6 +28,7 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicLong;
 
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PSession;
@@ -742,6 +743,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     /** just to set the name and set Daemon */
     private static class CustomThreadFactory implements ThreadFactory {
         private final String _name;
+        private final AtomicLong _executorThreadCount = new AtomicLong();
 
         public CustomThreadFactory(String name) {
             _name = name;
@@ -749,7 +751,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName(_name);
+            rv.setName(_name + "[" + _executorThreadCount.incrementAndGet() + "]");
             rv.setPriority(Thread.MAX_PRIORITY);
             rv.setDaemon(true);
             return rv;
