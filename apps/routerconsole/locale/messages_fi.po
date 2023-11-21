@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-11-05 12:09+0000\n"
+"PO-Revision-Date: 2023-11-21 16:10+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fi\n"
@@ -3658,7 +3658,7 @@ msgstr "Salattu I2P Pastebin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:151
 msgid "Pastebin"
-msgstr ""
+msgstr "Pastebin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "Streaming radio service"
@@ -3727,11 +3727,11 @@ msgstr "Tor .onion -sivustolinkit"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
 msgid "HTML Color Reference"
-msgstr ""
+msgstr "HTML-väriviittaus"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
 msgid "HTMLColors"
-msgstr ""
+msgstr "HTML Värit"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
 msgid "I2P-related Wiki"
@@ -3743,7 +3743,7 @@ msgstr "Wolframin online-matematiikan viite"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:178
 msgid "Mozilla Developer Network"
-msgstr ""
+msgstr "Mozilla Developer Network"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:179
 msgid "Internet Encyclopedia of Philosophy"
@@ -3751,11 +3751,11 @@ msgstr "Internetin Filosofian Tietosanakirja"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:180
 msgid "Standford Encyclopedia of Philosophy"
-msgstr ""
+msgstr "Stanfordin Filosofian Tietosanakirja"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:181
 msgid "Psychonaut"
-msgstr ""
+msgstr "Psychonaut"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:181
 msgid "Wiki relating to altered states of consciousness"
@@ -3808,7 +3808,7 @@ msgstr "Teknologiauutiset"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "BenarNews"
-msgstr ""
+msgstr "BenarNews"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "Clear and accurate news for the Far East"
@@ -3833,7 +3833,7 @@ msgstr "Kulttuurilehti"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "A magazine of Politics &amp; Culture"
-msgstr ""
+msgstr "Lehti politiikasta ja kulttuurista"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "CurrentAffairs"
@@ -3846,19 +3846,19 @@ msgstr "Darknetiin liittyvä uutissivusto"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
 msgid "DigitalJournal"
-msgstr ""
+msgstr "DigitalJournal"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
 msgid "Global news &amp; media platform"
-msgstr ""
+msgstr "Globaalit uutiset ja mediaalusta"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
 msgid "DigitalTrends"
-msgstr ""
+msgstr "DigitalTrends"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
 msgid "Tech News &amp; Reviews"
-msgstr ""
+msgstr "Tekniset uutiset ja arvostelut"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:208
 msgid "Defending your rights in the digital world"
@@ -3874,11 +3874,11 @@ msgstr "Ulkopolitiikka"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
 msgid "The Global Magazine of News &amp; Ideas"
-msgstr "The Global Magazine of News"
+msgstr "Hän globaali uutislehti ja ideoita"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "FrontLineDefenders"
-msgstr ""
+msgstr "FrontLineDefenders"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "Human rights activism"
@@ -3902,31 +3902,31 @@ msgstr "Tietokoneeseen liittyvä uutiskooste"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:214
 msgid "HackerNews"
-msgstr ""
+msgstr "HackerNews"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
 msgid "HongKongFreePress"
-msgstr ""
+msgstr "HongKongFreePress"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
 msgid "Independent &amp; impartial news for Hong Kong"
-msgstr ""
+msgstr "Hongkongille riippumattomat ja puolueettomat uutiset"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
 msgid "HongKongWatch"
-msgstr ""
+msgstr "HongKongWatch"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
 msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr ""
+msgstr "Tarkkailee vapauksia ja oikeuksia koskevia uhkia Hongkongissa"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
 msgid "Business &amp; Financial News"
-msgstr ""
+msgstr "Liiketoiminta- ja taloudelliset uutiset"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Politics &amp; Current Affairs Journal"
-msgstr ""
+msgstr "Politiikka ja ajankohtaiset asiat"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "English language Japanese News"
@@ -3950,7 +3950,7 @@ msgstr "Juristi"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Legal News &amp; Commentary"
-msgstr ""
+msgstr "Oikeudelliset uutiset ja kommentit"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "In-depth security news &amp; investigation"
@@ -3982,40 +3982,40 @@ msgstr "Turvallisuusuutiset ja tutkimusblogi"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "Smart &amp; fearless journalism"
-msgstr ""
+msgstr "Älykäs ja peloton journalismi"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "NewStatesman"
-msgstr ""
+msgstr "NewStatesman"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "Politics &amp; Current Affairs magazine"
-msgstr ""
+msgstr "Politiikka ja ajankohtainen asiakirja"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "Independent International Media Platform"
-msgstr ""
+msgstr "Riippumaton kansainvälinen media-alusta"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "OpenDemocracy"
-msgstr ""
+msgstr "Avoin Demokratia"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "News and blog feeds on I2P"
-msgstr ""
+msgstr "Uutis- ja blogisyötteet I2P:stä"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "Planeta"
-msgstr ""
+msgstr "Planeta"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
 msgid "News &amp; Views on Tibet"
-msgstr ""
+msgstr "Uutiset ja näkymät Tiibetistä"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "RadioFreeAsia"
-msgstr ""
+msgstr "RadioFreeAsia"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "Reliable journalism for countries under censorship"
@@ -4031,7 +4031,7 @@ msgstr "Kansainvälisesti tunnettu turvallisuusteknologi"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "SchneierOnSecurity"
-msgstr ""
+msgstr "SchneierOnSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "Latest scientific research news"
@@ -4039,7 +4039,7 @@ msgstr "Viimeisimmät tieteelliset tutkimusuutiset"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "ScienceDaily"
-msgstr ""
+msgstr "ScienceDaily"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
 msgid "Community-driven tech news"
@@ -4063,11 +4063,11 @@ msgstr "Uutisia Taiwanin pääkaupungista"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "TaipeiTimes"
-msgstr ""
+msgstr "TaipeiTimes"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "TechXplore"
-msgstr ""
+msgstr "TechXplore"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "Technology and engineering news"
@@ -4075,7 +4075,7 @@ msgstr "Tekniikka ja tekniikan uutiset"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "TechMeme"
-msgstr ""
+msgstr "TechMeme"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "Technology news aggregator"
@@ -4087,23 +4087,23 @@ msgstr "Uutiset"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "TheAtlantic"
-msgstr ""
+msgstr "TheAtlantic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "Academic commentary and essays"
-msgstr ""
+msgstr "Akateemiset kommentit ja esseet"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "TheConversation"
-msgstr ""
+msgstr "TheConversation"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Global News"
-msgstr ""
+msgstr "Globaalit uutiset"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "TheGuardian"
-msgstr ""
+msgstr "TheGuardian"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "TheHill"
@@ -4111,11 +4111,11 @@ msgstr "The Hill"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "US Political News"
-msgstr ""
+msgstr "Yhdysvaltain poliittiset uutiset"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "TheMarkup"
-msgstr ""
+msgstr "TheMarkup"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "Watching Big Tech..."
@@ -4127,7 +4127,7 @@ msgstr "Itsenäinen journalismi Venäjältä"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "TheMoscowTimes"
-msgstr ""
+msgstr "TheMoscowTimes"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "TheNewRepublic"
@@ -4139,7 +4139,7 @@ msgstr "Kansainvälisiä uutisia Tiibetistä"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "TheTibetPost"
-msgstr ""
+msgstr "TheTibetPost"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "All you need to know about everything that matters"
@@ -4147,7 +4147,7 @@ msgstr "Kaikki mitä sinun tarvitsee tietää kaikesta, mikä on tärkeää"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "TheWeek"
-msgstr "The Week"
+msgstr "TheWeek"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "Filesharing &amp; copyright news"
@@ -4159,15 +4159,15 @@ msgstr "Aikakauslehti ihmisoikeuksista ja sosiaalisesta oikeudenmukaisuudesta"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "UpstreamJournal"
-msgstr ""
+msgstr "UpstreamJournal"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
-msgstr ""
+msgstr "Tasapainoinen andrealistinen ymmärrys Lähi -idän amerikkalaisista intresseistä"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "WashingtonInstitute"
-msgstr ""
+msgstr "WashingtonInstitute"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:351
 msgid "The HTTP proxy is not up"
@@ -4204,7 +4204,7 @@ msgstr "UDP-portti"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:199
 msgid "Floodfill Role"
-msgstr ""
+msgstr "Tulva -reitittimen rooli"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:202
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:901
@@ -4273,7 +4273,7 @@ msgstr "Asennettu"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:239
 msgid "Config Dir"
-msgstr ""
+msgstr "Konfigurointihakemisto"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:240
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1420
@@ -4434,19 +4434,19 @@ msgstr "Kaikki reitittimet"
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:1062
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:535
 msgid "LeaseSets"
-msgstr ""
+msgstr "Vuokrasopimukset"
 
 #. 7  - l=3
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:60
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:501
 msgid "Advanced Lookup"
-msgstr ""
+msgstr "Tarkennettu haku"
 
 #. 8  - f=4
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:61
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:527
 msgid "LeaseSet Lookup"
-msgstr ""
+msgstr "Leaseset -haku"
 
 #. 9  -
 #. 10 - f=5
@@ -4460,7 +4460,7 @@ msgstr "Kaikki reitittimet (Client NetDb)"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:493
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:568
 msgid "Sybil Analysis"
-msgstr ""
+msgstr "Sybil -analyysi"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:166
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
@@ -4511,7 +4511,7 @@ msgstr "Portti"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:536
 msgid "MTU"
-msgstr ""
+msgstr "MTU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:563
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1026
@@ -6487,7 +6487,7 @@ msgstr "Yksityinen TCP-osoite"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:371
 msgid "SymmetricNAT"
-msgstr ""
+msgstr "Symmetrinen NAT"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:377
 msgid "Firewalled with Inbound TCP Enabled"
@@ -6495,7 +6495,7 @@ msgstr "Palomuuri, jossa Inbound TCP käytössä"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:382
 msgid "Firewalled &amp; Floodfill"
-msgstr "Palomuuri"
+msgstr "Palomuuri ja tulva täyttö"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:388
 msgid "Disconnected"
@@ -7708,8 +7708,8 @@ msgid "No longer be a member of the family {0}."
 msgstr "Älä ole enää perheenjäsen {0}."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:282
-msgid "config home"
-msgstr ""
+msgid "configure home"
+msgstr "määritä koti"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:419
 msgid "Homepage Customization"
@@ -7732,7 +7732,7 @@ msgstr "Kiinnostavat sivustot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configi2cp_jsp.java:282
 msgid "config i2cp"
-msgstr ""
+msgstr "määritä I2CP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configi2cp_jsp.java:429
 msgid "External Client Access"
@@ -7790,7 +7790,7 @@ msgstr "avainnippuasetukset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:419
 msgid "Keyring Manager"
-msgstr ""
+msgstr "Avainpäällikkö"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:526
 msgid "The router keyring is used to decrypt encrypted LeaseSets."
@@ -8184,7 +8184,7 @@ msgstr "WebConsole-asiakasohjelma käynnistää alla luetellut laajennukset."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:282
 msgid "config reseeding"
-msgstr ""
+msgstr "määritä reseeding"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:527
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
@@ -8218,7 +8218,7 @@ msgstr "Lähetä URL-osoitteet uudelleen"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:555
 msgid "Reseed URL Selection"
-msgstr ""
+msgstr "Reseed URL -osoitteen valinta"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:561
 msgid "Try SSL first then non-SSL"
@@ -8254,11 +8254,11 @@ msgstr "SOCKS 5"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:608
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
-msgstr ""
+msgstr "Tämä vaihtoehto käyttää I2P: n HTTP -OutProxy -ohjelmaa uudelleen tai orkidea -laajennusta, jos se on määritetty. Huomaa: Tämä vaihtoehto ei toimi, kun sinulla on 0 tunnettua vertaista."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:614
 msgid "I2P Outproxy"
-msgstr ""
+msgstr "I2P Outproxy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:638
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:661
@@ -8426,7 +8426,7 @@ msgstr "Muutos tulee voimaan vasta uudelleenkäynnistyksen myötä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:543
 msgid "Select Stats for Graphing"
-msgstr ""
+msgstr "Valitse Tilastot kuvaajia varten"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:282
 msgid "config tunnels"
@@ -8434,7 +8434,7 @@ msgstr "käytäväasetukset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:427
 msgid "Tunnel Options"
-msgstr ""
+msgstr "Tunneliasetukset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:527
 msgid "The default settings work for most people."
@@ -8517,11 +8517,11 @@ msgstr "päivitysasetukset"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:634
 msgid "Router Updates"
-msgstr ""
+msgstr "Reitittimen päivitykset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:536
 msgid "I2P &amp; News Updates"
-msgstr ""
+msgstr "I2P ja uutispäivitykset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:542
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:544
@@ -8530,11 +8530,11 @@ msgstr "Uutispäivityset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:554
 msgid "I2P update policy"
-msgstr ""
+msgstr "I2P-päivityskäytäntö"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:562
 msgid "Update check"
-msgstr ""
+msgstr "Päivitystarkistus"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:571
 msgid "Update In Progress"
@@ -8542,23 +8542,23 @@ msgstr "Päivitys käynnissä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:588
 msgid "In order to maintain anonymity, it is recommended to update using the I2P http proxy. If the news or I2P update is hosted on I2P, using the proxy will be necessary."
-msgstr ""
+msgstr "Anonyymin ylläpitämiseksi on suositeltavaa päivittää käyttämällä I2P HTTP -välityspalvelinta. Jos uutiset tai I2P -päivitys isännöidään I2P: ssä, välityspalvelimen käyttäminen on tarpeen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:594
 msgid "Fetch news using I2P http proxy"
-msgstr ""
+msgstr "Hae uutisia I2P http-välityspalvelimella"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:598
 msgid "Update I2P using I2P http proxy"
-msgstr ""
+msgstr "Päivitä I2P käyttämällä I2P http-välityspalvelinta"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:600
 msgid "I2P proxy host"
-msgstr ""
+msgstr "I2P-välityspalvelin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:604
 msgid "I2P proxy port"
-msgstr ""
+msgstr "I2P-välityspalvelinportti"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:608
 msgid "News URL"
@@ -8566,7 +8566,7 @@ msgstr "Uutis-URL"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:620
 msgid "If I2P cannot update via BitTorrent, it will try these addresses in the order they are listed"
-msgstr ""
+msgstr "Jos I2P ei voi päivittää BitTorrentin kautta, se yrittää näitä osoitteita siinä järjestyksessä kuin ne on listattu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:622
 msgid "Update URLs"
@@ -8574,7 +8574,7 @@ msgstr "Päivitä URL:t"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:626
 msgid "These keys are used to validate official router updates, signed development builds and the official news feed"
-msgstr ""
+msgstr "Näitä avaimia käytetään virallisten reititinpäivitysten, allekirjoitettujen kehitysversioiden ja virallisen uutissyötteen vahvistamiseen"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:628
 msgid "Trusted keys"
@@ -8582,12 +8582,12 @@ msgstr "Luotetut avaimet"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:634
 msgid "Update with signed development builds"
-msgstr ""
+msgstr "Päivitys allekirjoitetuilla kehitysversioilla"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:636
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:646
 msgid "Update URL"
-msgstr ""
+msgstr "Päivitä URL-osoite"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:640
 msgid "To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>"
@@ -8603,7 +8603,7 @@ msgstr "Päivitykset lähetetään paketinhallinnan kautta."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configwebapps_jsp.java:282
 msgid "config webapps"
-msgstr ""
+msgstr "määritä WebApps"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configwebapps_jsp.java:540
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
@@ -8684,12 +8684,12 @@ msgstr "ei löytynyt"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/events_jsp.java:280
 msgid "events"
-msgstr ""
+msgstr "tapahtumat"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/events_jsp.java:431
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:512
 msgid "Event Log"
-msgstr ""
+msgstr "Tapahtumaloki"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:285
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graphs_jsp.java:280
@@ -8699,20 +8699,20 @@ msgstr "kuvaajat"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:454
 msgid "Performance Graph"
-msgstr ""
+msgstr "Suorituskykykaavio"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graphs_jsp.java:436
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/updategraphs_jsp.java:429
 msgid "Performance Graphs"
-msgstr ""
+msgstr "Suorituskykykaaviot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:270
 msgid "Advanced Configuration Help - I2P+"
-msgstr ""
+msgstr "Advanced -kokoonpano -ohje - I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:405
 msgid "Advanced Configuration Help"
-msgstr ""
+msgstr "Advanced -kokoonpano -ohje"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:411
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:411
@@ -8731,7 +8731,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:650
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:700
 msgid "User Interface"
-msgstr ""
+msgstr "Käyttöliittymä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:415
@@ -8750,7 +8750,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:406
 msgid "Tunnel Filtering"
-msgstr ""
+msgstr "Tunnelisuodatus"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:417
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:423
@@ -8769,7 +8769,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:412
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:704
 msgid "Web Hosting"
-msgstr ""
+msgstr "Web Hosting"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:419
@@ -8788,7 +8788,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:410
 msgid "New User Guide"
-msgstr ""
+msgstr "Uusi käyttöopas"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:425
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:423
@@ -8805,7 +8805,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:414
 msgid "Hostname Registration"
-msgstr ""
+msgstr "Isäntänimen rekisteröinti"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:429
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:427
@@ -8825,7 +8825,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:418
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:676
 msgid "Glossary"
-msgstr ""
+msgstr "Sanasto"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:431
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:429
@@ -8843,7 +8843,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:420
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:680
 msgid "Legal"
-msgstr ""
+msgstr "Laki"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:433
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:270
@@ -8868,7 +8868,7 @@ msgstr "Muutosloki"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:576
 msgid "Advanced Router Configuration"
-msgstr ""
+msgstr "Edistynyt Reitittimen Kokoonpano"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:437
 msgid "The router configuration options listed below are not available in the user interface, usually because they are rarely used or provide access to advanced settings that most users will not need. This is not a comprehensive list. Some settings will require a restart of the router to take effect. Note that all settings are case sensitive. You will need to edit your <code>router.config</code> file to add options, or, once you have added <code>routerconsole.advanced=true</code> to the router.config file, you may edit settings within the console on the <a href=/configadvanced>Advanced Configuration page</a>."
@@ -8964,27 +8964,27 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:483
 msgid "Host OS running Android"
-msgstr ""
+msgstr "Isäntäkäyttöjärjestelmä, jossa on Android"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:485
 msgid "Host OS running on ARM (MacOS excepted)"
-msgstr ""
+msgstr "Isäntäkäyttöjärjestelmä, joka toimii ARM:lla (poikkeuksena MacOS)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:487
 msgid "32bit host OS running with less than 4 detected cores"
-msgstr ""
+msgstr "32-bittinen isäntäkäyttöjärjestelmä, jossa on alle 4 havaittua ydintä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:489
 msgid "64bit host OS running with 1 detected core and less than 384MB allocated to the JVM"
-msgstr ""
+msgstr "64-bittinen isäntäkäyttöjärjestelmä, jossa on yksi havaittu ydin ja alle 384 Mt varattu JVM:lle"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:491
 msgid "Less than 256MB allocated to the JVM"
-msgstr ""
+msgstr "JVM:lle varattu alle 256 Mt"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:493
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
-msgstr ""
+msgstr "Reititin, joka käyttää Java BigInteger -kirjaston ei-alkuperäistä ohjelmistoemuloitua versiota"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:495
 msgid "This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
@@ -9156,88 +9156,88 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:433
 msgid "Recent I2P+ Changes"
-msgstr ""
+msgstr "Viimeaikaiset I2P-muutokset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:448
 msgid "View the full change log"
-msgstr ""
+msgstr "Näytä koko muutosloki"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:541
 msgid "While I2P will work fine behind most firewalls, your speeds and network integration will generally improve if the I2P port is forwarded for both UDP and TCP."
-msgstr ""
+msgstr "Vaikka I2P toimii hyvin useimpien palomuurien takana, nopeudesi ja verkkointegraatiosi paranevat yleensä, jos I2P-portti välitetään sekä UDP:lle että TCP:lle."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:439
 msgid "If you can, please poke a hole in your firewall to allow unsolicited UDP and TCP packets to reach you."
-msgstr ""
+msgstr "Jos voit, tee reikä palomuuriisi, jotta ei-toivotut UDP- ja TCP-paketit pääsevät perille."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:441
 msgid "If you can't, I2P supports UPnP (Universal Plug and Play) and UDP hole punching with \"SSU introductions\" to relay traffic."
-msgstr ""
+msgstr "Jos et voi, I2P tukee UPnP:tä (Universal Plug and Play) ja UDP-rei'itystoimintoa \"SSU-esittelyillä\" liikenteen välittämiseen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:443
 msgid "Most of the options on the Network Configuration page are for special situations, for example where UPnP does not work correctly, or a firewall not under your control is doing harm."
-msgstr ""
+msgstr "Useimmat Verkkoasetukset-sivun vaihtoehdoista ovat erikoistilanteita varten, esimerkiksi silloin, kun UPnP ei toimi oikein tai palomuuri, joka ei ole sinun hallinnassasi, aiheuttaa vahinkoa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:445
 msgid "Certain firewalls such as symmetric NATs may not work well with I2P."
-msgstr ""
+msgstr "Tietyt palomuurit, kuten symmetriset NAT:t, eivät välttämättä toimi hyvin I2P:n kanssa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:447
 msgid "UPnP is used to communicate with Internet Gateway Devices (IGDs) to detect the external IP address and forward ports."
-msgstr ""
+msgstr "UPnP:tä käytetään kommunikoimaan Internet-yhdyskäytävälaitteiden (IGD) kanssa ulkoisen IP-osoitteen ja edelleenporttien havaitsemiseksi."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:449
 msgid "UPnP support is beta, and may not work for any number of reasons"
-msgstr ""
+msgstr "UPnP-tuki on beta, eikä se välttämättä toimi useista syistä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:451
 msgid "No UPnP-compatible device present"
-msgstr ""
+msgstr "Ei UPnP-yhteensopivaa laitetta"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:453
 msgid "UPnP disabled on the device"
-msgstr ""
+msgstr "UPnP ei ole käytössä laitteessa"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:455
 msgid "Software firewall interference with UPnP"
-msgstr ""
+msgstr "Ohjelmiston palomuuri häiritsee UPnP:tä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:457
 msgid "Bugs in the device's UPnP implementation"
-msgstr ""
+msgstr "Virheet laitteen UPnP-toteutuksessa"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:459
 msgid "Multiple firewall/routers in the internet connection path"
-msgstr ""
+msgstr "Useita palomuuria/reitittimiä Internet-yhteyspolulla"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:461
 msgid "UPnP device change, reset, or address change"
-msgstr ""
+msgstr "UPnP-laitteen muutos, nollaus tai osoitteen muutos"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:463
 msgid "UPnP may be enabled or disabled on the Network Configuration page, but a change requires a router restart to take effect."
-msgstr ""
+msgstr "UPnP voidaan ottaa käyttöön tai poistaa käytöstä Verkkoasetukset-sivulla, mutta muutos edellyttää reitittimen uudelleenkäynnistämistä."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:465
 msgid "Review the UPnP status here."
-msgstr ""
+msgstr "Tarkista UPnP-tila tästä."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:467
 msgid "Also, <b>do not enter a private IP address</b> like 127.0.0.1 or 192.168.1.1."
-msgstr ""
+msgstr "Älä myöskään <b>kirjoita yksityistä IP-osoitetta</b>, kuten 127.0.0.1 tai 192.168.1.1."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:469
 msgid "If you specify the wrong IP address, or do not properly configure your NAT or firewall, your network performance will degrade substantially."
-msgstr ""
+msgstr "Jos määrität väärän IP-osoitteen tai et määritä NAT:ta tai palomuuria oikein, verkkosi suorituskyky heikkenee huomattavasti."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:471
 msgid "When in doubt, leave the settings at the defaults."
-msgstr ""
+msgstr "Jos olet epävarma, jätä asetukset oletusasetuksiin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:473
 msgid "Web Browser Configuration"
-msgstr ""
+msgstr "Verkkoselaimen asetukset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:475
 msgid "In order to access websites hosted on I2P, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P HTTP proxy, by default running on <code>127.0.0.1 port 4444</code>. Most browsers offer an option to configure your proxy; in this mini-tutorial we'll focus on Firefox."
@@ -9245,31 +9245,31 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:477
 msgid "Open the Preferences page in Firefox and scroll to the bottom of the General section."
-msgstr ""
+msgstr "Avaa Asetukset-sivu Firefoxissa ja vieritä Yleiset-osion alaosaan."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:479
 msgid "In the Network Settings sub-section, hit the <i>Settings</i> button."
-msgstr ""
+msgstr "Paina Verkkoasetukset-alaosiossa <i>Asetukset</i>-painiketta."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:481
 msgid "Under <i>Configure Proxy Access to Internet</i> select the <i>Manual proxy configuration</i> option."
-msgstr ""
+msgstr "Valitse <i>Määritä välityspalvelimen käyttö Internetiin</i> -kohdassa vaihtoehto <i>Manuaalinen välityspalvelimen määritys</i>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:483
 msgid "Enter <code>127.0.0.1</code> in the <i>HTTP Proxy</i> field, and <code>4444</code> in the <i>Port</i> field."
-msgstr ""
+msgstr "Kirjoita <code>127.0.0.1</code> <i>HTTP-välityspalvelin</i>-kenttään ja <code>4444</code> <i>Portti</i>-kenttään."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:485
 msgid "Tick the box marked <i>Use this proxy server for all protocols</i> to avoid requests escaping the proxy."
-msgstr ""
+msgstr "Valitse valintaruutu <i>Käytä tätä välityspalvelinta kaikille protokollille</i>, jotta pyynnöt eivät karkaa välityspalvelimelta."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:487
 msgid "In the box marked <i>No Proxy for</i> add the line <code>127.0.0.1,localhost</code> to ensure the I2P console and other locally hosted websites are still available."
-msgstr ""
+msgstr "Lisää <i>No Proxy for</i> -kenttään rivi <code>127.0.0.1,localhost</code> varmistaaksesi, että I2P-konsoli ja muut paikallisesti isännöidyt verkkosivustot ovat edelleen käytettävissä."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:489
 msgid "Tick the box marked <i>Proxy DNS when using SOCKS v5</i> to prevent DNS leaks."
-msgstr ""
+msgstr "Estä DNS-vuodot valitsemalla ruutu <i>Välityspalvelin DNS käytettäessä SOCKS v5:tä</i>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:491
 msgid "Hit the <i>OK</i> button and test the proxy is working by visiting <a href=http://planeta.i2p/ target=_blank rel=noreferrer class=sitelink>planeta.i2p</a> and <a href=https://www.myip.com/ target=_blank rel=noreferrer class='sitelink external'>www.myip.com</a>."
@@ -9285,11 +9285,11 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497
 msgid "The Tunnel Manager"
-msgstr ""
+msgstr "Tunnelin Johtaja"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:499
 msgid "The Tunnel Manager enables configuration of local services provided by your router."
-msgstr ""
+msgstr "Tunnelinhallinta mahdollistaa reitittimesi tarjoamien paikallisten palvelujen määrittämisen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:501
 msgid "You can determine which services automatically start when the router starts, manage tunnel allocation to optimize for high usage services or to minimize the the cpu and memory overhead, add server and client tunnels to host or access services on the network, set rate limiting or tunnel filtering for your server tunnels and more."
@@ -10647,11 +10647,11 @@ msgstr "Palomuurin takana"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:553
 msgid "Your UDP port appears to be firewalled."
-msgstr ""
+msgstr "UDP-porttisi näyttää olevan palomuuri."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:555
 msgid "As the firewall detection methods are not 100% reliable, this may occasionally be displayed in error."
-msgstr ""
+msgstr "Koska palomuurin tunnistusmenetelmät eivät ole 100 % luotettavia, tämä saattaa joskus näkyä virheellisesti."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:557
 msgid "However, if it appears consistently, you should check whether both your external and internal firewalls are open for your port."
@@ -10663,7 +10663,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:561
 msgid "However, you will get more participating traffic and help the network if you open your firewall."
-msgstr ""
+msgstr "Saat kuitenkin enemmän osallistuvaa liikennettä ja autat verkkoa, jos avaat palomuurisi."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:563
 msgid "If you think you have already done so, remember that you may have both a hardware and a software firewall, or be behind an additional, institutional firewall you cannot control."
@@ -10683,7 +10683,7 @@ msgstr "Reititintä ei ole asetettu julkaisemaan osoitettaan, eikä se siis odot
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:575
 msgid "Hidden mode is automatically enabled for added protection in certain countries."
-msgstr ""
+msgstr "Piilotettu tila otetaan automaattisesti käyttöön suojauksen lisäämiseksi tietyissä maissa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:577
 msgid "WARN - Firewalled and Fast"
@@ -10731,15 +10731,15 @@ msgstr "VAROITUS - Palomuurissa ja UDP kielletty"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:597
 msgid "You have configured inbound TCP, however you have disabled UDP."
-msgstr ""
+msgstr "Olet määrittänyt saapuvan TCP:n, mutta olet poistanut UDP:n käytöstä."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:599
 msgid "You appear to be firewalled on TCP, therefore your router cannot accept inbound connections."
-msgstr ""
+msgstr "Sinulla näyttää olevan palomuuri TCP:llä, joten reitittimesi ei voi hyväksyä saapuvia yhteyksiä."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:601
 msgid "Please open your firewall or enable UDP."
-msgstr ""
+msgstr "Avaa palomuuri tai ota UDP käyttöön."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:603
 msgid "ERR - Clock Skew"
@@ -10803,7 +10803,7 @@ msgstr "VIRHE - UDP kielletty, eikä sisääntulevaa TCP osoitetta/porttia asete
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:631
 msgid "You have not configured inbound TCP with a hostname and port on the Network Configuration page, however you have disabled UDP."
-msgstr ""
+msgstr "Et ole määrittänyt saapuvan TCP:n isäntänimeä ja porttia Verkkoasetukset-sivulla, mutta olet kuitenkin poistanut UDP:n käytöstä."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:633
 msgid "Therefore your router cannot accept inbound connections."
@@ -10811,43 +10811,43 @@ msgstr "Reitittimesi ei voi hyväksyä sisääntulevia yhteyksiä."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:635
 msgid "Please configure a TCP host and port on the Network Configuration page or enable UDP."
-msgstr ""
+msgstr "Määritä TCP-isäntä ja -portti Verkkoasetukset-sivulla tai ota UDP käyttöön."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:637
 msgid "ERR - Client Manager I2CP Error - check logs"
-msgstr ""
+msgstr "ERR - Client Manager I2CP Error - tarkista lokit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:639
 msgid "This is usually due to a port 7654 conflict. Check the logs to verify."
-msgstr ""
+msgstr "Tämä johtuu yleensä sataman 7654 konfliktista. Tarkista lokit tarkistaaksesi."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:641
 msgid "Do you have another I2P instance running? Stop the conflicting program and restart I2P."
-msgstr ""
+msgstr "Onko sinulla toinen I2P -ilmentymä? Pysäytä ristiriitainen ohjelma ja käynnistä I2P uudelleen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:645
 msgid "The skew (offset) of your computer's clock relative to the network-synced time."
-msgstr ""
+msgstr "Tietokoneesi kellon vino (poikkeama) suhteessa verkkosynkronoituun aikaan."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:647
 msgid "I2P requires your computer's time be accurate."
-msgstr ""
+msgstr "I2P edellyttää, että tietokoneesi aika on tarkka."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:649
 msgid "If the skew is more than a few seconds, please correct the problem by adjusting your computer's time."
-msgstr ""
+msgstr "Jos vino on yli muutaman sekunnin, korjaa ongelma säätämällä tietokoneesi aikaa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:651
 msgid "If I2P cannot connect to the internet, a reading of 0ms may be indicated."
-msgstr ""
+msgstr "Jos I2P ei voi muodostaa yhteyttä Internetiin, lukema voi olla 0 ms."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:396
 msgid "Web hosting on I2P"
-msgstr ""
+msgstr "Verkkopalvelu I2P:llä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:424
 msgid "Introduction to Hosting Websites on I2P"
-msgstr ""
+msgstr "Johdatus I2P-verkkosivustojen isännöintiin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:426
 msgid "By default, I2P is supplied with a webserver to host your own anonymized website (traditionally referred to as an <i>eepsite</i>). Both the site and the I2P Router Console are running on a streamlined version of <a href='https://en.wikipedia.org/wiki/Jetty_(web_server)' target=_blank rel=noreferrer class='sitelink external'>Jetty</a>, customized for I2P."
@@ -10871,15 +10871,15 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:436
 msgid "Location of the I2P webserver root directory"
-msgstr ""
+msgstr "I2P-verkkopalvelimen juurihakemiston sijainti"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:438
 msgid "Standard Java installation"
-msgstr ""
+msgstr "Vakio Java-asennus"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:440
 msgid "Package/repository installation"
-msgstr ""
+msgstr "Paketin/varaston asennus"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:442
 msgid "On the I2P network, remotely hosted services can be accessed using a <a href=https://en.wikipedia.org/wiki/Base32 target=_blank rel=noreferrer class='sitelink external'>Base32</a> address ending in \".b32.i2p\", a <i>destination</i> represented as a long <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external'>Base64</a> string, or more usually by using an .i2p domain. A destination is I2P's equivalent to an IP address, and is shown on the <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>. You can share your b32.i2p address to allow others to access to your website until you've registered your own .i2p domain."
@@ -10927,7 +10927,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:464
 msgid "Optimize your images"
-msgstr ""
+msgstr "Optimoi kuvat"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:466
 msgid "If you want your site to feel responsive, image compression is essential when hosting large images. Using a service like <a href=https://tinypng.com/ target=_blank class='sitelink external'>tinypng.com</a> to compress your png and jpeg images will often result in much smaller files with minimal loss of quality. In some situations the webp format can best jpegs, generating smaller files with approximately the same or better visual fidelity, and has wide browser support. Also consider using svgs instead of bitmaps for icons and illustrations - they're often smaller than the equivalent bitmap file (run them through a service like <a href=https://vecta.io/nano target=_blank class='sitelink external'>Nano SVG Optimizer</a> to remove unneeded cruft), scale without loss of quality, and can be gzipped by your webserver."
@@ -10935,7 +10935,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:468
 msgid "Use separate files for multi-use assets"
-msgstr ""
+msgstr "Käytä erillisiä tiedostoja monikäyttöisille resursseille"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:470
 msgid "Wherever possible, assets that are used repeatedly on your site should be loaded from an external file and not inlined. If you're using the same CSS on several pages, create a separate css file and load that in the <code>&lt;head&gt;</code> section of your pages. This will make styling updates to your site easier to manage, and will also allow the file to be cached in the visitor's browser, resulting in less bandwidth demands on your webserver and faster page loads for your visitors."
@@ -10943,7 +10943,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:472
 msgid "Consider using a backend cache"
-msgstr ""
+msgstr "Harkitse taustavälimuistin käyttöä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:474
 msgid "If you're running a dynamic site handling a large number of concurrent users, content caching can often improve the time taken to deliver pages. For content that rapidly changes, a <a href=https://blog.stackpath.com/glossary-micro-caching/ target=_blank class='sitelink external'>micro-caching strategy</a> may still yield some benefits. The <a href=https://www.nginx.com/ target=_blank class='sitelink external'>Nginx webserver</a> provides a competent caching sub-system, or for a more heavy-weight solution, have a look at <a href=https://varnish-cache.org/ target=_blank class='sitelink external'>Varnish</a>."
@@ -10951,7 +10951,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:476
 msgid "Using an alternative webserver"
-msgstr ""
+msgstr "Käytä vaihtoehtoista verkkopalvelinta"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:478
 msgid "To configure an alternative webserver for use on I2P, you can either use the existing webserver tunnel and <a href=/configclients>disable the default webserver</a> from running, or create a new HTTP Server tunnel in the <a href=/i2ptunnelmgr>Tunnel Manager</a>. Ensure that the webserver's <i>listening port</i> is also configured in the Tunnel Manager settings. For example, if your webserver is listening by default on address 127.0.0.1 port 80, you'd also need to ensure that the <i>Target port</i> in the Tunnel Manager settings page for the service is also configured to port 80."
@@ -10967,15 +10967,15 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:484
 msgid "Apache Web Server Security Guide"
-msgstr ""
+msgstr "Apache Verkkopalvelimen Suojausopas"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:486
 msgid "Nginx Web Server Security Guide"
-msgstr ""
+msgstr "Nginx Verkkopalvelimen Suojausopas"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:488
 msgid "How to Harden Your WordPress Site"
-msgstr ""
+msgstr "Kuinka vahvistaa WordPress-sivustoasi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:490
 msgid "<b>Note:</b> On some Apache installations, the <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> and <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> modules are enabled by default. It is important to disable these, or otherwise protect access to the urls, to avoid compromising the anonymity and security of your server."
@@ -10988,7 +10988,7 @@ msgstr "Aloitussivu"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:439
 msgid "Please enter a search query"
-msgstr ""
+msgstr "Syötä hakukysely"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:441
@@ -11000,60 +11000,60 @@ msgstr "Haku"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:456
 msgid "Customize links"
-msgstr ""
+msgstr "Mukauta linkkejä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:434
 msgid "Configure display language, theme and optional console password"
-msgstr ""
+msgstr "Määritä näytön kieli, teema ja valinnainen konsolin salasana"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:443
 msgid "Configure router bandwidth"
-msgstr ""
+msgstr "Määritä reitittimen kaistanleveys"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/info_jsp.java:280
 msgid "router information"
-msgstr ""
+msgstr "reitittimen tiedot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/info_jsp.java:417
 msgid "Router Summary"
-msgstr ""
+msgstr "Reitittimen yhteenveto"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jars_jsp.java:280
 msgid "Jar File Dump"
-msgstr ""
+msgstr "Jar File Dump"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:280
 msgid "job queue stats"
-msgstr ""
+msgstr "työjonotilastot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:417
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:426
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:426
 msgid "Job Queue"
-msgstr ""
+msgstr "Työjono"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:419
 msgid "Job statistics for this session"
-msgstr ""
+msgstr "Tämän istunnon työtilastot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:422
 msgid "Job Stats"
-msgstr ""
+msgstr "Työtilastot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:424
 msgid "Active and scheduled jobs"
-msgstr ""
+msgstr "Aktiiviset ja aikataulutetut työt"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:280
 msgid "job queue statistics"
-msgstr ""
+msgstr "työjonotilastot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:417
 msgid "Job Queue Stats"
-msgstr ""
+msgstr "Työjonotilastot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:280
 msgid "logs"
@@ -11061,21 +11061,21 @@ msgstr "lokit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:431
 msgid "Please include your I2P version and running environment information in bug reports"
-msgstr ""
+msgstr "Liitä I2P-versiosi ja käyttöympäristösi tiedot virheraportteihin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:435
 #, java-format
 msgid "Please report bugs on {0} or {1}."
-msgstr ""
+msgstr "Ilmoita virheistä {0} tai {1}."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:439
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:581
 msgid "View event log"
-msgstr ""
+msgstr "Näytä tapahtumaloki"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:522
 msgid "Critical / Error Level Logs"
-msgstr ""
+msgstr "Kriittisen / virhetason lokit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:537
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:545
@@ -11084,12 +11084,12 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:602
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:614
 msgid "Clear logs"
-msgstr ""
+msgstr "Tyhjennä lokit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:573
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:600
 msgid "Configure router logging options"
-msgstr ""
+msgstr "Määritä reitittimen lokiasetukset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:591
 msgid "Service (Wrapper) Logs"
@@ -11097,7 +11097,7 @@ msgstr "Palvelus (Wrapper) lokit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:281
 msgid "network database"
-msgstr ""
+msgstr "verkkotietokanta"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/news_jsp.java:280
 msgid "News"
@@ -11122,7 +11122,7 @@ msgstr "Pyydetty Web-sovellus ei ole käynnissä."
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/nowebapp_jsp.java:423
 #, java-format
 msgid "Please visit the {0}config clients page{1} to start it."
-msgstr ""
+msgstr "Käy {0}config clients -sivulla{1} aloittaaksesi sen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/peers_jsp.java:280
 msgid "peer connections"
@@ -11133,7 +11133,7 @@ msgstr "yhteydet vertaissolmuihin"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/peers_jsp.java:446
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/peers_jsp.java:452
 msgid "Network Peers"
-msgstr ""
+msgstr "Verkkoverkot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:280
 msgid "peer profiles"
@@ -11145,82 +11145,82 @@ msgstr "vertaissolmujen profiilit"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:453
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:461
 msgid "Peer Profiles"
-msgstr ""
+msgstr "Vertaisprofiilit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:439
 msgid "Session Banned Peers"
-msgstr ""
+msgstr "Istuntokielletyt vertaiset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:455
 msgid "Floodfills"
-msgstr ""
+msgstr "Tulvat"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:463
 msgid "Fast / High Capacity"
-msgstr ""
+msgstr "Nopea / suuri kapasiteetti"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:445
 msgid "Manage I2P addresses"
-msgstr ""
+msgstr "Hallitse I2P-osoitteita"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:451
 msgid "Imagegen"
-msgstr ""
+msgstr "Kuva"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:458
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:464
 msgid "Create and download torrents"
-msgstr ""
+msgstr "Luo ja lataa torrentteja"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:472
 msgid "Manage client and server tunnels"
-msgstr ""
+msgstr "Hallitse asiakas- ja palvelintunneleita"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:478
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:484
 msgid "Webmail client"
-msgstr ""
+msgstr "Webmail-asiakas"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:490
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:448
 msgid "Webmail"
-msgstr ""
+msgstr "Webmail"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:492
 msgid "Local webserver for hosting content on the I2P network"
-msgstr ""
+msgstr "Paikallinen verkkopalvelin sisällön isännöintiin I2P-verkossa"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:496
 msgid "Information &amp; Diagnostics"
-msgstr ""
+msgstr "Tiedot ja Diagnostiikka"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:502
 msgid "Review recent updates to I2P"
-msgstr ""
+msgstr "Tarkista viimeisimmät I2P-päivitykset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:506
 msgid "View debugging information"
-msgstr ""
+msgstr "Näytä virheenkorjaustiedot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:514
 msgid "View router performance graphs"
-msgstr ""
+msgstr "Näytä reitittimen suorituskykykaaviot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:518
 msgid "Router help section"
-msgstr ""
+msgstr "Reitittimen ohjeosio"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:522
 msgid "Router homepage"
-msgstr ""
+msgstr "Reitittimen kotisivu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:524
 msgid "Home"
-msgstr ""
+msgstr "Kotiin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:526
 msgid "View news relating to I2P"
-msgstr ""
+msgstr "Katso I2P-uutisia"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:528
 msgid "I2P News"
@@ -11228,136 +11228,136 @@ msgstr "I2P-uutiset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:534
 msgid "View router workload and stats"
-msgstr ""
+msgstr "Näytä reitittimen työmäärä ja tilastot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:536
 msgid "Router Jobs"
-msgstr ""
+msgstr "Reititintyöt"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:538
 msgid "View router logs"
-msgstr ""
+msgstr "Näytä reitittimen lokit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:542
 msgid "View information and stats regarding all known peers"
-msgstr ""
+msgstr "Tarkastele tietoja ja tilastoja kaikista tunnetuista vertaisversioista"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:550
 msgid "View active peers"
-msgstr ""
+msgstr "Näytä aktiiviset vertaisryhmät"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:554
 msgid "View peer performance profiles"
-msgstr ""
+msgstr "Näytä vertaissuoritusprofiilit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:558
 msgid "View information about router and running environment"
-msgstr ""
+msgstr "Näytä tiedot reitittimestä ja käyttöympäristöstä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:564
 msgid "Statistics"
-msgstr ""
+msgstr "Tilastot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:570
 msgid "View active tunnels"
-msgstr ""
+msgstr "Näytä aktiiviset tunnelit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:588
 msgid "Customize homepage"
-msgstr ""
+msgstr "Mukauta kotisivua"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:590
 msgid "Homepage"
-msgstr ""
+msgstr "Kotisivu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:592
 msgid "Configure I2P Client Control Interface"
-msgstr ""
+msgstr "Määritä I2P-asiakashallintaliittymä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:596
 msgid "View or edit router keyring for encrypted destinations"
-msgstr ""
+msgstr "Tarkastele tai muokkaa salattujen kohteiden reitittimen avaimenperää"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:604
 msgid "Configure router networking options"
-msgstr ""
+msgstr "Määritä reitittimen verkkoasetukset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:608
 msgid "Manually edit peers and view banned peers and blocklist"
-msgstr ""
+msgstr "Muokkaa vertaisversioita manuaalisesti ja tarkastele kiellettyjä vertaisohjelmia ja estolistaa"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:612
 msgid "Install and manage router plugins"
-msgstr ""
+msgstr "Asenna ja hallitse reitittimen laajennuksia"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:616
 msgid "Router reseeding and configuration"
-msgstr ""
+msgstr "Reitittimen uudelleensyöttö ja konfigurointi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:620
 msgid "Configure and manage Router family"
-msgstr ""
+msgstr "Määritä ja hallitse reititinperhettä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:624
 msgid "Manage Router service"
-msgstr ""
+msgstr "Hallitse reititinpalvelua"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:628
 msgid "Configure stat collection for graphing"
-msgstr ""
+msgstr "Määritä tilastokokoelma kuvaajaa varten"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:630
 msgid "Router Stats"
-msgstr ""
+msgstr "Reitittimen tilastot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:632
 msgid "Configure router updates"
-msgstr ""
+msgstr "Määritä reitittimen päivitykset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:636
 msgid "Configuration wizard for new users"
-msgstr ""
+msgstr "Ohjattu määritystoiminto uusille käyttäjille"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:638
 msgid "Setup Wizard"
-msgstr ""
+msgstr "Ohjattu asennustoiminto"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:640
 msgid "Customize sidebar"
-msgstr ""
+msgstr "Mukauta sivupalkkia"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:644
 msgid "Configure tunnel options"
-msgstr ""
+msgstr "Määritä tunneliasetukset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:648
 msgid "Configure router user interface and optional console password"
-msgstr ""
+msgstr "Määritä reitittimen käyttöliittymä ja valinnainen konsolin salasana"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:666
 msgid "Configuring I2P for optimal performance"
-msgstr ""
+msgstr "I2P:n määrittäminen optimaalista suorituskykyä varten"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:682
 msgid "Information for new users"
-msgstr ""
+msgstr "Tietoa uusille käyttäjille"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:686
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:702
 msgid "A guide to reseeding your I2P router"
-msgstr ""
+msgstr "Opas I2P-reitittimen uudelleenkytkemiseen"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:690
 msgid "What to do in the event I2P isn't working"
-msgstr ""
+msgstr "Mitä tehdä, jos I2P ei toimi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:694
 msgid "Introduction to tunnel filters"
-msgstr ""
+msgstr "Johdatus tunnelisuodattimiin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:696
 msgid "Tunnel Filters"
-msgstr ""
+msgstr "Tunnelisuodattimet"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/stats_jsp.java:280
 msgid "statistics"
@@ -11365,31 +11365,31 @@ msgstr "tilastot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/stats_jsp.java:428
 msgid "Router Statistics"
-msgstr ""
+msgstr "Reitittimen tilastot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrentmgr_jsp.java:283
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrents_jsp.java:312
 msgid "torrents"
-msgstr ""
+msgstr "torrentit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrentmgr_jsp.java:420
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrentmgr_jsp.java:428
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrents_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/torrents_jsp.java:457
 msgid "Torrent Manager"
-msgstr ""
+msgstr "Torrent -päällikkö"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:417
 msgid "Most Recent Transit Tunnels"
-msgstr ""
+msgstr "Viimeisimmät kauttakulkutunnelit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:419
 msgid "Locally hosted tunnels (exploratory and client)"
-msgstr ""
+msgstr "Paikallisesti isännöidyt tunnelit (tutkimus- ja asiakastunnelit)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:424
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:424
@@ -11397,7 +11397,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:424
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:422
 msgid "Most Recent"
-msgstr ""
+msgstr "Uusin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:430
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:430
@@ -11405,7 +11405,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:430
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:428
 msgid "Fastest"
-msgstr ""
+msgstr "Nopein"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:432
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:432
@@ -11413,7 +11413,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:432
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:430
 msgid "Top 50 peers by transit tunnel requests"
-msgstr ""
+msgstr "50 parasta vertaista liikennetunnelipyyntöjen mukaan"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:434
@@ -11421,21 +11421,21 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:432
 msgid "Transit by Peer"
-msgstr ""
+msgstr "Transpit by vertaisverkko"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:417
 msgid "Fastest Transit Tunnels"
-msgstr ""
+msgstr "Nopeimmat liikennetunnelit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:417
 msgid "Transit Tunnels by Peer"
-msgstr ""
+msgstr "Transit -tunnelit vertaisverkkoon"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:280
 msgid "tunnel peer count"
-msgstr ""
+msgstr "tunnelin vertaismäärä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_005fnorefresh_jsp.java:280
 msgid "tunnel summary"
@@ -11443,24 +11443,24 @@ msgstr "yhteenveto käytävistä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_005fnorefresh_jsp.java:417
 msgid "Tunnel Summary"
-msgstr ""
+msgstr "Tunnelin yhteenveto"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:280
 msgid "local tunnels"
-msgstr ""
+msgstr "paikalliset tunnelit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:417
 msgid "Local Tunnels"
-msgstr ""
+msgstr "Paikalliset tunnelit"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:417
 msgid "Peer Profile"
-msgstr ""
+msgstr "Vertaisprofiili"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:438
 msgid "Profile for peer"
-msgstr ""
+msgstr "Profiili vertaiselle"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:442
 msgid "NetDb entry"
@@ -11468,28 +11468,28 @@ msgstr "NetDb merkintä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:455
 msgid "View profile in text format"
-msgstr ""
+msgstr "Näytä profiili tekstimuodossa"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:457
 msgid "View Raw Profile"
-msgstr ""
+msgstr "Näytä raakaprofiili"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:476
 msgid "Return to Top"
-msgstr ""
+msgstr "Palaa alkuun"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:311
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/webmail_jsp.java:456
 msgid "webmail"
-msgstr ""
+msgstr "webmail"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:333
 msgid "New Install Wizard"
-msgstr ""
+msgstr "Uusi ohjattu asennustoiminto"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:356
 msgid "Skip Setup"
-msgstr ""
+msgstr "Ohita asennus"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:481
 msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
@@ -11497,7 +11497,7 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:483
 msgid "Router Console &amp; WebApps Display Language"
-msgstr ""
+msgstr "Reititinkonsoli ja WebApps -näyttökieli"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:492
 msgid "Your I2P+ router by default contributes to the network by routing internal, end-to-end encrypted traffic for other routers, known as <i>participation</i>. Bandwidth participation improves the anonymity level of all users on the network and maximizes your download speed."
@@ -11509,92 +11509,92 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:496
 msgid "Bandwidth Test"
-msgstr ""
+msgstr "Kaistanleveystesti"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:498
 msgid "I2P will now test your internet connection to identify the optimal speed settings."
-msgstr ""
+msgstr "I2P testaa nyt Internet-yhteytesi löytääkseen optimaaliset nopeusasetukset."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:500
 msgid "This is done using the third-party M-Lab service."
-msgstr ""
+msgstr "Tämä tehdään käyttämällä kolmannen osapuolen M-Lab-palvelua."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:502
 msgid "Please review the M-Lab privacy policies linked below."
-msgstr ""
+msgstr "Tutustu alla oleviin M-Labin tietosuojakäytäntöihin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:504
 msgid "If you do not wish to run the M-Lab bandwidth test, you may skip it by clicking the button below."
-msgstr ""
+msgstr "Jos et halua suorittaa M-Labin kaistanleveystestiä, voit ohittaa sen napsauttamalla alla olevaa painiketta."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:506
 msgid "M-Lab Privacy Policy"
-msgstr ""
+msgstr "M-Labin tietosuojakäytäntö"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:508
 msgid "M-Lab Name Server Privacy Policy"
-msgstr ""
+msgstr "M-Lab Name Server -tietosuojakäytäntö"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:515
 msgid "The bandwidth test is now running and will take around 60 seconds to complete, after which you should be forwarded to the results page."
-msgstr ""
+msgstr "Kaistanleveystesti on nyt käynnissä ja kestää noin 60 sekuntia, minkä jälkeen sinut pitäisi ohjata tulossivulle."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:517
 msgid "Bandwidth Test in progress"
-msgstr ""
+msgstr "Kaistanleveystesti käynnissä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:519
 msgid "Javascript is disabled - wait 60 seconds for the bandwidth test to complete and then click Next"
-msgstr ""
+msgstr "Javascript ei ole käytössä – odota 60 sekuntia, kunnes kaistanleveystesti on valmis, ja napsauta sitten Seuraava"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:539
 msgid "Bandwidth Test Results"
-msgstr ""
+msgstr "Kaistanleveystestin tulokset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:545
 msgid "Test running?"
-msgstr ""
+msgstr "Testaus käynnissä?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:562
 msgid "Test complete?"
-msgstr ""
+msgstr "Testi on valmis?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:575
 msgid "Test server location"
-msgstr ""
+msgstr "Testaa palvelimen sijaintia"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:579
 msgid "Completion status"
-msgstr ""
+msgstr "Valmiustila"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:592
 msgid "Downstream Bandwidth"
-msgstr ""
+msgstr "Alavirran kaistanleveys"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:596
 msgid "Upstream Bandwidth"
-msgstr ""
+msgstr "Ylävirran kaistanleveys"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:600
 msgid "Share of Bandwidth for I2P"
-msgstr ""
+msgstr "Osuus I2P:n kaistanleveydestä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:612
 msgid "Bandwidth Configuration"
-msgstr ""
+msgstr "Kaistanleveyden määritys"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:662
 #, java-format
 msgid "You have configured I2P to share {0} KBps."
-msgstr ""
+msgstr "Olet määrittänyt I2P:n jakamaan {0} kt/s."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:673
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
-msgstr ""
+msgstr "I2P vaatii verkkoselaimen, joka on määritetty käyttämään paikallista HTTP-välityspalvelinta, jotta se voi selata verkkosivustoja I2P-verkossa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:675
 msgid "Browser Setup"
-msgstr ""
+msgstr "Selaimen asetukset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:677
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
