@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-11-04 19:57+0000\n"
+"PO-Revision-Date: 2023-11-21 04:34+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -3791,7 +3791,7 @@ msgstr "Atlas mundial, incluidos hechos de geografía y banderas"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:187
 msgid "WorldAtlas"
-msgstr ""
+msgstr "Atlas Mundial"
 
 #. "cssportal.i2p" + S + _x("CSS design reference") + S + "http://cssportal.i2p/" + S + I + "help.svg" + S +
 #. "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "eepsites/books.svg" + S +
@@ -3804,11 +3804,11 @@ msgstr ""
 #. news + blogs
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:198
 msgid "Technology News &amp; more..."
-msgstr ""
+msgstr "Noticias tecnológicas y más..."
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "BenarNews"
-msgstr ""
+msgstr "BenarNews"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "Clear and accurate news for the Far East"
@@ -3820,45 +3820,45 @@ msgstr "Periodismo de investigación independiente"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:201
 msgid "Information Security Research &amp; Education"
-msgstr ""
+msgstr "Investigación y educación sobre seguridad de la información"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:202
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:215
 msgid "Cannabis-related magazine"
-msgstr ""
+msgstr "Revista relacionada con el cannabis"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:202
 msgid "CultureMagazine"
-msgstr ""
+msgstr "Revista Cultura"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "A magazine of Politics &amp; Culture"
-msgstr ""
+msgstr "Una revista de política y cultura"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "CurrentAffairs"
-msgstr ""
+msgstr "Asuntos actuales"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:204
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:205
 msgid "Darknet related news site"
-msgstr ""
+msgstr "Sitio de noticias relacionado con Darknet"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
 msgid "DigitalJournal"
-msgstr ""
+msgstr "Diario Digital"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
 msgid "Global news &amp; media platform"
-msgstr ""
+msgstr "Plataforma global de noticias y medios"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
 msgid "DigitalTrends"
-msgstr ""
+msgstr "Tendencias digitales"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
 msgid "Tech News &amp; Reviews"
-msgstr ""
+msgstr "Noticias y reseñas de tecnología"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:208
 msgid "Defending your rights in the digital world"
@@ -3874,7 +3874,7 @@ msgstr "PolíticaExterior"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
 msgid "The Global Magazine of News &amp; Ideas"
-msgstr ""
+msgstr "La revista global de noticias e ideas"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "FrontLineDefenders"
@@ -3910,7 +3910,7 @@ msgstr "Prensa libre de Hong Kong"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
 msgid "Independent &amp; impartial news for Hong Kong"
-msgstr ""
+msgstr "Noticias independientes e imparciales para Hong Kong"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
 msgid "HongKongWatch"
@@ -3922,80 +3922,80 @@ msgstr "Supervisa las amenazas a las libertades y los derechos en Hong Kong"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
 msgid "Business &amp; Financial News"
-msgstr ""
+msgstr "Noticias comerciales y financieras"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Politics &amp; Current Affairs Journal"
-msgstr ""
+msgstr "Política y revista de asuntos actuales"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "English language Japanese News"
-msgstr ""
+msgstr "Noticias japonesas en inglés"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "JapanToday"
-msgstr ""
+msgstr "Japón hoy"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "JStorDaily"
-msgstr ""
+msgstr "JStorDaily"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "Where news meets its scholarly match"
-msgstr ""
+msgstr "Donde las noticias se encuentran con su pareja académica"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Jurist"
-msgstr ""
+msgstr "Jurista"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Legal News &amp; Commentary"
-msgstr ""
+msgstr "Noticias y comentarios legales"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "In-depth security news &amp; investigation"
-msgstr ""
+msgstr "Noticias e investigaciones de seguridad en profundidad"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "KrebsOnSecurity"
-msgstr ""
+msgstr "Krebs sobre seguridad"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "Linux Kernel Mailing List"
-msgstr ""
+msgstr "Lista de correo del kernel de Linux"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "MetaCritic"
-msgstr ""
+msgstr "Metacrítico"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "Movie + TV + Music + Game reviews"
-msgstr ""
+msgstr "Película + TV + Música + reseñas de juegos"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "NakedSecurity"
-msgstr ""
+msgstr "Seguridad Desnuda"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "Security news and research blog"
-msgstr ""
+msgstr "Blog de investigación y noticias de seguridad"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "Smart &amp; fearless journalism"
-msgstr ""
+msgstr "Periodismo inteligente e intrépido"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "NewStatesman"
-msgstr ""
+msgstr "Nuevo estadista"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "Politics &amp; Current Affairs magazine"
-msgstr ""
+msgstr "Política y revista de asuntos actuales"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "Independent International Media Platform"
-msgstr ""
+msgstr "Plataforma de medios internacionales independientes"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "OpenDemocracy"
@@ -4011,7 +4011,7 @@ msgstr "Planeta"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
 msgid "News &amp; Views on Tibet"
-msgstr ""
+msgstr "Noticias y opiniones sobre el Tíbet"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "RadioFreeAsia"
@@ -4083,7 +4083,7 @@ msgstr "Agregador de noticias tecnológicas"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "News &amp; Reviews"
-msgstr ""
+msgstr "Noticias y reseñas"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "TheAtlantic"
@@ -4095,7 +4095,7 @@ msgstr "Comentarios y ensayos académicos."
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "TheConversation"
-msgstr "La conversación"
+msgstr "LaConversación"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Global News"
@@ -4103,11 +4103,11 @@ msgstr "Noticias globales"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "TheGuardian"
-msgstr "El Guardián"
+msgstr "ElGuardián"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "TheHill"
-msgstr "La Colina"
+msgstr "LaColina"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "US Political News"
@@ -4115,7 +4115,7 @@ msgstr "Noticias políticas de EE. UU."
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "TheMarkup"
-msgstr "El marcado"
+msgstr "ElMarcado"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "Watching Big Tech..."
@@ -4151,7 +4151,7 @@ msgstr "La Semana"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "Filesharing &amp; copyright news"
-msgstr ""
+msgstr "Noticias para el intercambio de archivos y derechos de autor"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "A magazine about human rights and social justice"
@@ -4159,15 +4159,15 @@ msgstr "Una revista sobre derechos humanos y justicia social"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "UpstreamJournal"
-msgstr ""
+msgstr "Diario ascendente"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
-msgstr ""
+msgstr "Avanzar en una comprensión equilibrada y realista de los intereses estadounidenses en el Medio Oriente"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "WashingtonInstitute"
-msgstr ""
+msgstr "Instituto de Washington"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:351
 msgid "The HTTP proxy is not up"
@@ -4511,7 +4511,7 @@ msgstr "Puerto"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:536
 msgid "MTU"
-msgstr ""
+msgstr "MTU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:563
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1026
@@ -5424,13 +5424,13 @@ msgstr[1] ""
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:104
 msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
-msgstr ""
+msgstr "Tenga en cuenta que el generador de perfiles depende del uso sostenido del túnel del cliente para perfilar con precisión a sus pares."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:115
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:340
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:502
 msgid "Domain"
-msgstr ""
+msgstr "Dominio"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:115
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:117
@@ -5453,7 +5453,7 @@ msgstr "Velocidad"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:122
 msgid "Low Latency"
-msgstr ""
+msgstr "Baja latencia"
 
 #. .append("<th title=\"").append(_t("Time taken for peer test")).append("\">")
 #. .append(_t("Test Avg (ms)")).append("</th>")
@@ -5465,19 +5465,19 @@ msgstr "Capacidad"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:126
 msgid "Tunnels peer has agreed to participate in"
-msgstr ""
+msgstr "El compañero de Tunnels ha aceptado participar en"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:127
 msgid "Accepted"
-msgstr ""
+msgstr "Aceptado"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:128
 msgid "Tunnels peer has refused to participate in"
-msgstr ""
+msgstr "Un compañero de túneles se ha negado a participar en"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:129
 msgid "Rejected"
-msgstr ""
+msgstr "Rechazado"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:130
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:368
@@ -5487,7 +5487,7 @@ msgstr "Integración"
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:131
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:395
 msgid "First Heard About"
-msgstr ""
+msgstr "Escuché por primera vez sobre"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:132
 msgid "View/Edit"
@@ -5543,15 +5543,15 @@ msgstr "Umbrales"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:367
 msgid "tunnels per hour"
-msgstr ""
+msgstr "túneles por hora"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:370
 msgid "peer"
-msgstr ""
+msgstr "compañero"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:372
 msgid "peers"
-msgstr ""
+msgstr "compañeros"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:375
 #, java-format
@@ -5588,7 +5588,7 @@ msgstr "Última constancia desde"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:397
 msgid "Good Lookups"
-msgstr ""
+msgstr "Buenas búsquedas"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:398
 msgid "Last Good Lookup"
@@ -5604,7 +5604,7 @@ msgstr "Último guardado exitoso"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:401
 msgid "Bad Lookups"
-msgstr ""
+msgstr "Búsquedas incorrectas"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:402
 msgid "Last Bad Lookup"
@@ -5699,11 +5699,11 @@ msgstr "rendimiento máximo (bytes por segundo) que el par ha sostenido en un ú
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:518
 msgid "latency"
-msgstr ""
+msgstr "latencia"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:520
 msgid "Is the peer responding to tests in a timely fashion? To configure the timeout value: <code>router.peerTestTimeout={n}</code> (value is milliseconds, default 1000ms)"
-msgstr ""
+msgstr "¿El compañero está respondiendo a las pruebas de manera oportuna? Para configurar el valor de tiempo de espera: <code>router.peerTestTimeOut={n}</code> (el valor es milisegundos, 1000ms predeterminado)"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:524
 msgid "capacity"
@@ -5728,11 +5728,11 @@ msgstr "Todos"
 #. 3
 #: ../java/src/net/i2p/router/web/helpers/ProfilesHelper.java:17
 msgid "Session Bans"
-msgstr ""
+msgstr "Prohibiciones de sesiones"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfilesHelper.java:77
 msgid "Total number of banned peers"
-msgstr ""
+msgstr "Número total de compañeros prohibidos"
 
 #: ../java/src/net/i2p/router/web/helpers/SearchHelper.java:111
 msgid "Select search engine"
@@ -5797,7 +5797,7 @@ msgstr "Promedio máximo"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:183
 msgid "Highest total in a period"
-msgstr ""
+msgstr "Total más alto en un período"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:207
 msgid "Average event count"
@@ -5809,7 +5809,7 @@ msgstr "Eventos en periodo pico"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:218
 msgid "Events in this period"
-msgstr ""
+msgstr "Eventos en este período"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:218
 #, java-format
@@ -5831,7 +5831,7 @@ msgstr "Graficar recuento de eventos"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:236
 msgid "Export Data as XML"
-msgstr ""
+msgstr "Exportar datos como XML"
 
 #. Display the strict average
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:242
@@ -5922,11 +5922,11 @@ msgstr "Enlaces avanados"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:72
 msgid "UTC Clock"
-msgstr ""
+msgstr "Reloj UTC"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:73
 msgid "CPU Load"
-msgstr ""
+msgstr "Carga de CPU"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:162
 msgid "I2P Router Help &amp; FAQ"
@@ -5970,12 +5970,12 @@ msgstr "Una versión acortada de las Preguntas frecuentes"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:207
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:684
 msgid "New Users"
-msgstr ""
+msgstr "Nuevos usuarios"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:210
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:433
 msgid "A gentle introduction to I2P"
-msgstr ""
+msgstr "Una suave introducción a I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:219
 msgid "A guide to reseeding the router"
@@ -6005,24 +6005,24 @@ msgstr "Resolución de problemas y asistencia adicional"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:237
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:698
 msgid "Information about the sidebar and network status messages"
-msgstr ""
+msgstr "Información sobre la barra lateral y mensajes de estado de la red"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:243
 msgid "Webhosting"
-msgstr ""
+msgstr "Alojamiento Web"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:246
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:453
 msgid "An introduction to hosting websites on the I2P network"
-msgstr ""
+msgstr "Introducción al alojamiento de sitios web en la red I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:298
 msgid "I2PControl"
-msgstr ""
+msgstr "Control I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:301
 msgid "RPC Service"
-msgstr ""
+msgstr "Servicio RPC"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:333
 msgid "Manage I2P client and server tunnels to access or provide network services"
@@ -6030,7 +6030,7 @@ msgstr "Administrar los túneles cliente y servidor para accede o proveer servic
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:345
 msgid "Local Web Server"
-msgstr ""
+msgstr "Servidor Web Local"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:372
 msgid "Configure startup of clients and webapps (services); manually start dormant services"
@@ -6043,7 +6043,7 @@ msgstr "Servicios"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:433
 msgid "I2P Router Sitemap"
-msgstr ""
+msgstr "Mapa del sitio del enrutador I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:435
 msgid "Internals"
@@ -6073,11 +6073,11 @@ msgstr "Ayuda del router y preguntas frecuentes"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:489
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:492
 msgid "Router information including transport addresses and UPnP scan"
-msgstr ""
+msgstr "Información del enrutador, incluidas direcciones de transporte y escaneo UPnP"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:500
 msgid "Jobs"
@@ -6123,7 +6123,7 @@ msgstr "Configuración avanzada"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:589
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:591
 msgid "Documentation for the I2P API"
@@ -6219,7 +6219,7 @@ msgstr "Configure las actualizaciones de I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:890
 msgid "Total peers in NetDb"
-msgstr ""
+msgstr "Pares totales en NetDb"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:895
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:897
@@ -6244,7 +6244,7 @@ msgstr "El número de pares disponibles para consultas a la base de datos de red
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:933
 msgid "The number of peers without a published public IP address"
-msgstr ""
+msgstr "El número de pares sin una dirección IP pública publicada"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:942
 msgid "The number of banned peers"
@@ -6270,17 +6270,17 @@ msgstr "Ancho de banda"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:991
 msgid "Current"
-msgstr ""
+msgstr "Actual"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:998
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1004
 msgid "5 Min Average"
-msgstr ""
+msgstr "Promedio de 5 minutos"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1011
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1017
 msgid "Lifetime"
-msgstr ""
+msgstr "Toda la vida"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1023
 msgid "Used"
@@ -6293,11 +6293,11 @@ msgstr "Nuestro tráfico de entrada y de salida de los últimos 20 minutos"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1078
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1121
 msgid "Total number of tunnels in use"
-msgstr ""
+msgstr "Número total de túneles en uso"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1080
 msgid "Average tunnel build success for last 10m interval"
-msgstr ""
+msgstr "Éxito promedio en la construcción de túneles durante el último intervalo de 10 m"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1090
 msgid "Tunnels we are using to provide or access services on the network"
@@ -6306,7 +6306,7 @@ msgstr "Túneles que está usando para proporcionar servicios en la red o accede
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1090
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1100
 msgid "inbound / outbound"
-msgstr ""
+msgstr "entrante / saliente"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1100
 msgid "Used for building and testing tunnels, and communicating with floodfill peers"
@@ -6324,7 +6324,7 @@ msgstr "Túneles en los que está participando, aportando ancho de banda directa
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1112
 msgid "Current / Maximum"
-msgstr ""
+msgstr "Actual / Máximo"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1115
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:505
@@ -6333,19 +6333,19 @@ msgstr "Participando en"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1129
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
-msgstr ""
+msgstr "Construcciones de túneles simultáneas (promediado durante un minuto)/tiempo de construcción de un solo túnel"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1132
 msgid "Concurrency"
-msgstr ""
+msgstr "Simultaneidad"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1138
 msgid "Combined utility and service tunnel build success (averaged over 10 minute intervals)"
-msgstr ""
+msgstr "Éxito en la construcción del túnel de servicios y servicios combinados (promediado en intervalos de 10 minutos)"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1141
 msgid "Build Success"
-msgstr ""
+msgstr "Construir el éxito"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1150
 msgid "The ratio of tunnel hops we provide to tunnel hops we use - a value greater than 1.00 indicates a positive contribution to the network"
@@ -6359,7 +6359,7 @@ msgstr "Tasa de compartición"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1166
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1168
 msgid "tunnels"
-msgstr ""
+msgstr "túneles"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1166
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:509
@@ -6374,11 +6374,11 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:424
 msgid "Transit"
-msgstr ""
+msgstr "Tránsito"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1168
 msgid "Utility"
-msgstr ""
+msgstr "Utilidad"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1171
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:417
@@ -6404,11 +6404,11 @@ msgstr "Demora de mensajes"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1201
 msgid "Average job delay / maximum delay"
-msgstr ""
+msgstr "Retraso promedio del trabajo / retraso máximo"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1203
 msgid "Average delay before scheduled jobs are run"
-msgstr ""
+msgstr "Retraso promedio antes de ejecutar los trabajos programados"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1218
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
@@ -6416,11 +6416,11 @@ msgstr "Indica cómo de rápido se envían mensajes a otros routers I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1232
 msgid "Average time to test a peer (successful / total)"
-msgstr ""
+msgstr "Tiempo promedio para probar a un compañero (exitoso/total)"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1235
 msgid "Peer test average"
-msgstr ""
+msgstr "Promedio de la prueba de pares"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1246
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1255
@@ -6456,7 +6456,7 @@ msgstr "El router o el rendimiento de la red impiden la creación de túneles pa
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1292
 msgid "Router is configured to reject all participating tunnel requests"
-msgstr ""
+msgstr "El enrutador está configurado para rechazar todas las solicitudes de túnel participantes"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1294
 msgid "Router is ready to build participating tunnels"
@@ -6523,7 +6523,7 @@ msgstr "Añadir/eliminar/editar y controlar sus túneles cliente y servidor"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:777
 msgid "How many local service tunnels we're running"
-msgstr ""
+msgstr "¿Cuántos túneles de servicio local estamos ejecutando?"
 
 #. older names for pre-0.7.4 installs
 #. hardcoded in i2psnark
@@ -6594,15 +6594,15 @@ msgstr "Pulse Apagar y reinicie para instalar"
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1174
 #, java-format
 msgid "{0}"
-msgstr ""
+msgstr "{0}"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1182
 msgid "Updating after restart"
-msgstr ""
+msgstr "Actualización después del reinicio"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1254
 msgid "Signed development update available"
-msgstr ""
+msgstr "Actualización de desarrollo firmada disponible"
 
 #. Note to translators: parameter is a router version, e.g. "0.9.19-16"
 #. <br> is optional, to help the browser make the lines even in the button
@@ -6612,12 +6612,12 @@ msgstr ""
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1278
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1280
 msgid "Download I2P Update"
-msgstr ""
+msgstr "Descargar la actualización I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1268
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1270
 msgid "Unsigned update available"
-msgstr ""
+msgstr "Actualización sin firmar disponible"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1304
 msgid "Help with firewall configuration"
@@ -6673,27 +6673,27 @@ msgstr "Seleccione una sección a añadir"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:144
 msgid "No known routers"
-msgstr ""
+msgstr "No hay enrutadores conocidos"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:151
 msgid "Review stored analysis"
-msgstr ""
+msgstr "Revisar el análisis almacenado"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:152
 msgid "Run new analysis"
-msgstr ""
+msgstr "Ejecutar nuevo análisis"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:153
 msgid "Configure periodic analysis"
-msgstr ""
+msgstr "Configurar análisis periódico"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:154
 msgid "Review current bans"
-msgstr ""
+msgstr "Revisar las prohibiciones actuales"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:155
 msgid "Floodfill Summary"
-msgstr ""
+msgstr "Resumen de relleno de inundación"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:156
 msgid "Same Family"
@@ -6710,12 +6710,12 @@ msgstr "Misma IP"
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:159
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:160
 msgid "Same IPv4"
-msgstr ""
+msgstr "Misma IPv4"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:161
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:162
 msgid "Same IPv6"
-msgstr ""
+msgstr "Misma IPv6"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:163
 msgid "Pair distance"
@@ -6739,7 +6739,7 @@ msgstr "Cerca de nuestras destinaciones"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:258
 msgid "This is an experimental network database tool for debugging and analysis. Do not panic even if you see warnings indicated. Possible \"threats\" are summarized, however these are unlikely to be real threats. If you see anything you would like to discuss with the devs, contact us on IRC #i2p-dev."
-msgstr ""
+msgstr "Esta es una herramienta de base de datos de red experimental para la depuración y el análisis. No se asuste incluso si ve advertencias indicadas. Se resumen posibles \"amenazas\", sin embargo, es poco probable que sean amenazas reales. Si ve algo que le gustaría discutir con los desarrolladores, contáctenos en IRC #i2p-dev."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:266
 msgid "No stored analysis"
@@ -6759,7 +6759,7 @@ msgstr "Ejecutar análisis en todos los enrutadores en NetDb"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:324
 msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, with the option to block peers meeting the configured threshold. Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
-msgstr ""
+msgstr "La rutina de detección SYBIL se puede configurar para escanear la base de datos de red en un intervalo regular, con la opción de bloquear los pares que cumplen con el umbral configurado. El bloqueo de los compañeros evita que su enrutador construya túneles con ellos durante la duración configurada, o hasta que se reinicie el enrutador."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:327
 msgid "Configure Background Analysis"
@@ -7311,7 +7311,7 @@ msgstr "Servidor web de I2P (eepsite)"
 
 #: ../java/strings/Strings.java:28
 msgid "I2P Web Server (eepsite)"
-msgstr ""
+msgstr "Servidor web de I2P (eepsite)"
 
 #: ../java/strings/Strings.java:29
 msgid "Browser launch at startup"
@@ -7319,7 +7319,7 @@ msgstr "Abrir navegador al iniciar"
 
 #: ../java/strings/Strings.java:31
 msgid "I2P+ Router Console"
-msgstr ""
+msgstr "Consola de Enrutador I2P+"
 
 #: ../java/strings/Strings.java:32
 msgid "Open Router Console in web browser at startup"
@@ -7343,11 +7343,11 @@ msgstr "Servidor POP3 de I2PMail"
 
 #: ../java/strings/Strings.java:42
 msgid "Postman's SMTP Mail Server (smtp.postman.i2p)"
-msgstr "Servidor SMTP  de Postman (smtp.postman.i2p)"
+msgstr "Servidor SMTP de Postman (smtp.postman.i2p)"
 
 #: ../java/strings/Strings.java:43
 msgid "Postman's POP3 Mail Server (pop3.postman.i2p)"
-msgstr "Servidor POP3  de Postman (smtp.postman.i2p)"
+msgstr "Servidor POP3 de Postman (smtp.postman.i2p)"
 
 #: ../java/strings/Strings.java:44
 msgid "I2P IRC Network"
@@ -7368,7 +7368,7 @@ msgstr "Servidor web de I2P"
 #: ../java/strings/Strings.java:48
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:565
 msgid "I2P Web Server"
-msgstr ""
+msgstr "Servidor web de I2P"
 
 #: ../java/strings/Strings.java:49
 msgid "Personal I2P Webserver (eepsite)"
@@ -7473,7 +7473,7 @@ msgstr "Nota: Tu contribución a la red (lo que compartes) está determinado por
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:540
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:618
 msgid "The maximum data transfer values indicate the theoretical maximum, and in practice will normally be much lower."
-msgstr ""
+msgstr "Los valores de transferencia de datos máximos indican el máximo teórico, y en la práctica normalmente serán mucho más bajos."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:543
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:621
@@ -7530,12 +7530,12 @@ msgstr "Por favor, habilite el compartido (participación en túneles) configura
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:585
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:660
 msgid "It improves your anonymity by creating cover traffic, and helps the network. "
-msgstr ""
+msgstr "Mejora su anonimato al crear tráfico de cobertura y ayuda a la red."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:587
 #, java-format
 msgid "You have configured I2P to share {0} KBps {1}."
-msgstr ""
+msgstr "Has configurado I2P para compartir {0} KBps {1}."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:590
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:664
@@ -7625,12 +7625,12 @@ msgstr "Configuración de las aplicaciones web"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:540
 #, java-format
 msgid "To change client options, edit the files in: {0}"
-msgstr ""
+msgstr "Para cambiar las opciones del cliente, edite los archivos en: {0}"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:542
 #, java-format
 msgid "To change client options, edit the file: {0}"
-msgstr ""
+msgstr "Para cambiar las opciones del cliente, edite el archivo: {0}"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:547
 msgid "Be careful changing any settings here. The 'router console' and 'application tunnels' are required for most uses of I2P. Only advanced users should change these."
@@ -7794,7 +7794,7 @@ msgstr "Administrador de claves"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:526
 msgid "The router keyring is used to decrypt encrypted LeaseSets."
-msgstr ""
+msgstr "El llavero del enrutador se utiliza para descifrar LeaseSets cifrados."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:528
 msgid "The keyring may contain keys for local or remote encrypted destinations."
@@ -7814,42 +7814,42 @@ msgstr "Las claves para los destinos locales para el servicio relevante deben in
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:548
 msgid "Full destination, name, Base32, or hash"
-msgstr ""
+msgstr "Destino completo, nombre, Base32 o hash"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:552
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:564
 msgid "Enter key provided by server operator."
-msgstr ""
+msgstr "Ingrese la clave proporcionada por el operador del servidor."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:556
 msgid "Prevents server discovery by floodfills"
-msgstr ""
+msgstr "Evita el descubrimiento del servidor mediante inundaciones"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:560
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:577
 msgid "Enter password provided by server operator."
-msgstr ""
+msgstr "Ingrese la contraseña proporcionada por el operador del servidor."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:568
 msgid "Enter key and password provided by server operator."
-msgstr ""
+msgstr "Ingrese la clave y la contraseña proporcionadas por el operador del servidor."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:572
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:578
 msgid "Key will be generated."
-msgstr ""
+msgstr "Se generará la clave."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:585
 msgid "Leave blank for DH, will be generated automatically"
-msgstr ""
+msgstr "Dejar en blanco para DH, se generará automáticamente"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:587
 msgid "Optional lookup password"
-msgstr ""
+msgstr "Contraseña de búsqueda opcional"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configkeyring_jsp.java:589
 msgid "Set password required to access this service"
-msgstr ""
+msgstr "Establecer la contraseña requerida para acceder a este servicio"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configlogging_jsp.java:282
 msgid "config logging"
@@ -7902,7 +7902,7 @@ msgstr "Tamaño máximo del fichero de registro"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configlogging_jsp.java:563
 msgid "GZIP Compression"
-msgstr ""
+msgstr "Compresión GZIP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configlogging_jsp.java:571
 msgid "Default log level"
@@ -8000,7 +8000,7 @@ msgstr "Este modo aumenta el anonimato previniendo la correlación ante los camb
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:601
 msgid "Laptop mode"
-msgstr ""
+msgstr "Modo portátil"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:603
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:645
@@ -8134,7 +8134,7 @@ msgstr "Ajustar bonus de perfiles"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:578
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
-msgstr ""
+msgstr "Las bonificaciones pueden ser positivas o negativas, y afectan la inclusión del par en niveles de rápida y alta capacidad. Los pares rápidos se utilizan para túneles de clientes, y se utilizan pares de alta capacidad para algunos túneles exploratorios."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:596
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:447
@@ -8156,7 +8156,7 @@ msgstr "Instalación de complemento"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:543
 #, java-format
 msgid "For available plugins, visit {0}."
-msgstr ""
+msgstr "Para complementos disponibles, visite {0}."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:545
 msgid "Enter xpi2p or su3 plugin URL"
@@ -8192,7 +8192,7 @@ msgstr "El resembrado es el proceso de inicialización utilizado para encontrar 
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:529
 msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr ""
+msgstr "Para habilitar la configuración de las URL de reseño, active el <a href=/help/advancedsettings>Modo avanzado</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:535
 msgid "Reseeding Configuration"
@@ -8254,7 +8254,7 @@ msgstr "SOCKS 5"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:608
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
-msgstr ""
+msgstr "Esta opción utilizará el HTTP OutProxy de I2P para volver a crecer, o el complemento Orchid si está configurado. Nota: Esta opción no funcionará cuando tenga 0 pares conocidos."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:614
 msgid "I2P Outproxy"
@@ -8354,11 +8354,11 @@ msgstr "Depuración"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:573
 #, java-format
 msgid "To assist in debugging I2P, it may be helpful to generate a thread dump which will be written to the {0}wrapper log{1}."
-msgstr ""
+msgstr "Para ayudar a depurar I2P, puede resultar útil generar un volcado de subprocesos que se escribirá en el {0}registro contenedor{1}."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:575
 msgid "If I2P appears to be using too much ram, you can force the router to run the garbage collection routine to free up memory."
-msgstr ""
+msgstr "Si parece que I2P está usando demasiada RAM, puede forzar al enrutador a ejecutar la rutina de recolección de basura para liberar memoria."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:589
 msgid "System Tray Integration"
@@ -8370,23 +8370,23 @@ msgstr "Activar o desactivar el apple de bandeja de sistema de I2P para activar 
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:607
 msgid "Configure I2P system service"
-msgstr ""
+msgstr "Configurar el servicio del sistema I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:609
 msgid "Configure the status of the I2P service at system startup. If disabled, the service can be launched manually."
-msgstr ""
+msgstr "Configure el estado del servicio I2P al inicio del sistema. Si está deshabilitado, el servicio se puede lanzar manualmente."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:617
 msgid "Install I2P system service"
-msgstr ""
+msgstr "Instalar el servicio del sistema I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:619
 msgid "Install the I2P system service. This is the recommended way to run I2P."
-msgstr ""
+msgstr "Instale el servicio del sistema I2P. Esta es la forma recomendada de ejecutar I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:282
 msgid "config sidebar"
-msgstr ""
+msgstr "barra lateral de configuración"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:529
 msgid "Refresh Interval"
@@ -8398,7 +8398,7 @@ msgstr "segundos"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:551
 msgid "0 to disable"
-msgstr ""
+msgstr "0 para desactivar"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:282
 msgid "config stats"
@@ -8414,7 +8414,7 @@ msgstr "Configurar recopilación de estadísticas de I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:530
 msgid "A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>."
-msgstr ""
+msgstr "Una selección limitada de STAT está habilitada de forma predeterminada, requerida para monitorear el rendimiento del enrutador. Solo se enumeran las estadísticas que tienen un gráfico opcional; Para obtener una lista completa de estadísticas habilitadas, vea la página <a href=/stats>estadísticas</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:537
 msgid "Enable full stats?"
@@ -8426,7 +8426,7 @@ msgstr "los cambios requieren reiniciar para que surtan efecto"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:543
 msgid "Select Stats for Graphing"
-msgstr ""
+msgstr "Seleccionar estadísticas para gráficos"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:282
 msgid "config tunnels"
@@ -8467,15 +8467,15 @@ msgstr "Los cambios en túneles cliente son de carácter temporal y no se guarda
 #. if (pm.isRegistered(net.i2p.util.PortMapper.SVC_I2PTUNNEL)) {
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:549
 msgid "The default settings are optimized for general usage and normally don't need to be changed."
-msgstr ""
+msgstr "La configuración predeterminada está optimizada para uso general y normalmente no es necesario cambiarla."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:551
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr ""
+msgstr "Para modificar la configuración del túnel del cliente, use el <a href=/i2ptunnelmgr>Gerente de Túnel</a>, o el <a href=/i2psnark/configure>página de configuración</a> para I2PSnark."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:553
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr ""
+msgstr "Para habilitar los cambios de solo sesión en los túneles del cliente, active el <a href=/help/advancedsettings>Modo Avanzado</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:526
 msgid "Router Console Theme"
@@ -8591,7 +8591,7 @@ msgstr "Actualizar URL"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:640
 msgid "To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>"
-msgstr ""
+msgstr "Para actualizar con compilaciones de versión I2P+ sin firmes: <code>http://skank.i2p/i2pupdate.zip</code> o para las últimas compilaciones de desarrollo sin firmar: <code>http://skank.i2p/dev/i2pupdate.zip</code>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:644
 msgid "Update with unsigned development builds"
@@ -8708,11 +8708,11 @@ msgstr "Gráficas de rendimiento"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:270
 msgid "Advanced Configuration Help - I2P+"
-msgstr ""
+msgstr "Ayuda de Configuración Avanzada - I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:405
 msgid "Advanced Configuration Help"
-msgstr ""
+msgstr "Ayuda de Configuración Avanzada"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:411
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:411
@@ -8750,7 +8750,7 @@ msgstr "Interfaz de Usuario"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:406
 msgid "Tunnel Filtering"
-msgstr ""
+msgstr "Filtrado de Túnel"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:417
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:423
@@ -8769,7 +8769,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:412
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:704
 msgid "Web Hosting"
-msgstr ""
+msgstr "Alojamiento Web"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:419
@@ -8788,7 +8788,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:410
 msgid "New User Guide"
-msgstr ""
+msgstr "Guía para Nuevos Usuarios"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:425
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:423
@@ -8805,7 +8805,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:414
 msgid "Hostname Registration"
-msgstr ""
+msgstr "Registro de Nombre de Host"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:429
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:427
@@ -8825,7 +8825,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:418
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:676
 msgid "Glossary"
-msgstr ""
+msgstr "Glosario"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:431
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:429
@@ -8863,12 +8863,12 @@ msgstr "Legal"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:422
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:504
 msgid "Change Log"
-msgstr ""
+msgstr "Registro de Cambios"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:576
 msgid "Advanced Router Configuration"
-msgstr ""
+msgstr "Configuración Avanzada del Enrutador"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:437
 msgid "The router configuration options listed below are not available in the user interface, usually because they are rarely used or provide access to advanced settings that most users will not need. This is not a comprehensive list. Some settings will require a restart of the router to take effect. Note that all settings are case sensitive. You will need to edit your <code>router.config</code> file to add options, or, once you have added <code>routerconsole.advanced=true</code> to the router.config file, you may edit settings within the console on the <a href=/configadvanced>Advanced Configuration page</a>."
