@@ -7,12 +7,15 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
-"PO-Revision-Date: 2017-06-30 21:33+0000\n"
+"PO-Revision-Date: 2023-11-22 22:05+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4\n"
 
 msgid "Anonymous Proxy"
 msgstr "Proxy ẩn danh"
@@ -48,7 +51,7 @@ msgid "Angola"
 msgstr "Angola"
 
 msgid "Asia/Pacific Region"
-msgstr ""
+msgstr "Khu vực Châu Á/Thái Bình Dương"
 
 msgid "Antarctica"
 msgstr "Nam Cực"
@@ -102,7 +105,7 @@ msgid "Benin"
 msgstr "Benin"
 
 msgid "Saint Barthélemy"
-msgstr ""
+msgstr "Thánh Barthélemy"
 
 msgid "Bermuda"
 msgstr "Bermuda"
@@ -114,7 +117,7 @@ msgid "Bolivia"
 msgstr "Bô-li-vi-a"
 
 msgid "Bonaire"
-msgstr ""
+msgstr "Bonaire"
 
 msgid "Brazil"
 msgstr "Ba Tây"
@@ -246,7 +249,7 @@ msgid "Falkland Islands (Malvinas)"
 msgstr "Quần đảo Falkland (Malvinas)"
 
 msgid "Micronesia"
-msgstr ""
+msgstr "Micronesia"
 
 msgid "Faroe Islands"
 msgstr "Quần đảo Faroe"
@@ -348,7 +351,7 @@ msgid "Iraq"
 msgstr "Iraq"
 
 msgid "Iran"
-msgstr ""
+msgstr "Iran"
 
 msgid "Iceland"
 msgstr "Iceland"
@@ -387,7 +390,7 @@ msgid "Saint Kitts and Nevis"
 msgstr "Saint Kitts và Nevis"
 
 msgid "North Korea"
-msgstr ""
+msgstr "Bắc Triều Tiên"
 
 msgid "Republic of Korea"
 msgstr "Hàn Quốc"
@@ -432,7 +435,7 @@ msgid "Latvia"
 msgstr "Latvia"
 
 msgid "Libya"
-msgstr ""
+msgstr "Lybia"
 
 msgid "Morocco"
 msgstr "Ma-rốc"
@@ -441,7 +444,7 @@ msgid "Monaco"
 msgstr "Monaco"
 
 msgid "Moldova"
-msgstr ""
+msgstr "Môn-đô-va"
 
 msgid "Montenegro"
 msgstr "Montenegro"
@@ -456,7 +459,7 @@ msgid "Marshall Islands"
 msgstr "Quần đảo Marshall"
 
 msgid "Macedonia"
-msgstr ""
+msgstr "Macedonia"
 
 msgid "Mali"
 msgstr "Mali"
@@ -468,7 +471,7 @@ msgid "Mongolia"
 msgstr "Mông Cổ"
 
 msgid "Macau"
-msgstr ""
+msgstr "Ma Cao"
 
 msgid "Northern Mariana Islands"
 msgstr "Quần đảo Bắc Mariana"
@@ -648,7 +651,7 @@ msgid "Suriname"
 msgstr "Suriname"
 
 msgid "South Sudan"
-msgstr ""
+msgstr "Nam Sudan"
 
 msgid "Sao Tome and Principe"
 msgstr "Sao Tome và Principe"
@@ -657,10 +660,10 @@ msgid "El Salvador"
 msgstr "El Salvador"
 
 msgid "Sint Maarten"
-msgstr ""
+msgstr "Sint Maarten"
 
 msgid "Syria"
-msgstr ""
+msgstr "Syria"
 
 msgid "Swaziland"
 msgstr "Swaziland"
@@ -711,7 +714,7 @@ msgid "Taiwan"
 msgstr "Đài Loan"
 
 msgid "Tanzania"
-msgstr ""
+msgstr "Tanzania"
 
 msgid "Ukraine"
 msgstr "Ukraine"
@@ -732,7 +735,7 @@ msgid "Uzbekistan"
 msgstr "Uzbekistan"
 
 msgid "Vatican"
-msgstr ""
+msgstr "Vatican"
 
 msgid "Saint Vincent and the Grenadines"
 msgstr "Saint Vincent và Grenadines"
@@ -744,7 +747,7 @@ msgid "Virgin Islands"
 msgstr "Quần đảo Virgin"
 
 msgid "Vietnam"
-msgstr ""
+msgstr "Việt Nam"
 
 msgid "Vanuatu"
 msgstr "Vanuatu"
@@ -756,7 +759,7 @@ msgid "Samoa"
 msgstr "Samoa"
 
 msgid "Kosovo"
-msgstr ""
+msgstr "Kosovo"
 
 msgid "Yemen"
 msgstr "Yemen"

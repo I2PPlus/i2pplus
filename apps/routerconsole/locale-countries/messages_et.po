@@ -7,11 +7,15 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
-"PO-Revision-Date: 2017-06-30 21:33+0000\n"
+"PO-Revision-Date: 2023-11-22 21:59+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: et_EE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n""Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Transfer-Encoding: 8bit\n"
+"\"\"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4\n"
 
 msgid "Anonymous Proxy"
 msgstr "Anonüümne proxy"
@@ -47,7 +51,7 @@ msgid "Angola"
 msgstr "Angoola"
 
 msgid "Asia/Pacific Region"
-msgstr ""
+msgstr "Aasia/Vaikse ookeani piirkond"
 
 msgid "Antarctica"
 msgstr "Antarktika"
@@ -101,7 +105,7 @@ msgid "Benin"
 msgstr "Benin"
 
 msgid "Saint Barthélemy"
-msgstr ""
+msgstr "Saint Barthélemy"
 
 msgid "Bermuda"
 msgstr "Bermuuda"
@@ -113,7 +117,7 @@ msgid "Bolivia"
 msgstr "Boliivia"
 
 msgid "Bonaire"
-msgstr ""
+msgstr "Bonaire"
 
 msgid "Brazil"
 msgstr "Brasiilia"
@@ -245,7 +249,7 @@ msgid "Falkland Islands (Malvinas)"
 msgstr "Falklandi saared (Malviinid)"
 
 msgid "Micronesia"
-msgstr ""
+msgstr "Mikroneesia"
 
 msgid "Faroe Islands"
 msgstr "Fääri saared"
@@ -347,7 +351,7 @@ msgid "Iraq"
 msgstr "Iraak"
 
 msgid "Iran"
-msgstr ""
+msgstr "Iraan"
 
 msgid "Iceland"
 msgstr "Island"
@@ -386,7 +390,7 @@ msgid "Saint Kitts and Nevis"
 msgstr "Saint Kitts ja Nevis"
 
 msgid "North Korea"
-msgstr ""
+msgstr "Põhja-Korea"
 
 msgid "Republic of Korea"
 msgstr "Korea Vabariik"
@@ -431,7 +435,7 @@ msgid "Latvia"
 msgstr "Läti"
 
 msgid "Libya"
-msgstr ""
+msgstr "Liibüa"
 
 msgid "Morocco"
 msgstr "Maroko"
@@ -440,7 +444,7 @@ msgid "Monaco"
 msgstr "Monako"
 
 msgid "Moldova"
-msgstr ""
+msgstr "Moldova"
 
 msgid "Montenegro"
 msgstr "Montenegro"
@@ -455,7 +459,7 @@ msgid "Marshall Islands"
 msgstr "Marshall'i saared"
 
 msgid "Macedonia"
-msgstr ""
+msgstr "Makedoonia"
 
 msgid "Mali"
 msgstr "Mali"
@@ -467,7 +471,7 @@ msgid "Mongolia"
 msgstr "Mongoolia"
 
 msgid "Macau"
-msgstr ""
+msgstr "Macau"
 
 msgid "Northern Mariana Islands"
 msgstr "Põhja-Mariaani saared"
@@ -647,7 +651,7 @@ msgid "Suriname"
 msgstr "Suriname"
 
 msgid "South Sudan"
-msgstr ""
+msgstr "Lõuna-Sudaan"
 
 msgid "Sao Tome and Principe"
 msgstr "Sao Tome ja Principe"
@@ -656,10 +660,10 @@ msgid "El Salvador"
 msgstr "El Salvador"
 
 msgid "Sint Maarten"
-msgstr ""
+msgstr "Sint Maarten"
 
 msgid "Syria"
-msgstr ""
+msgstr "Süüria"
 
 msgid "Swaziland"
 msgstr "Swaasimaa"
@@ -710,7 +714,7 @@ msgid "Taiwan"
 msgstr "Taiwan"
 
 msgid "Tanzania"
-msgstr ""
+msgstr "Tansaania"
 
 msgid "Ukraine"
 msgstr "Ukraina"
@@ -731,7 +735,7 @@ msgid "Uzbekistan"
 msgstr "Uzbekistan"
 
 msgid "Vatican"
-msgstr ""
+msgstr "Vatikan"
 
 msgid "Saint Vincent and the Grenadines"
 msgstr "Saint Vincent ja Grenadiinid"
@@ -743,7 +747,7 @@ msgid "Virgin Islands"
 msgstr "Neitsisaared"
 
 msgid "Vietnam"
-msgstr ""
+msgstr "Vietnam"
 
 msgid "Vanuatu"
 msgstr "Vanuatu"
@@ -755,7 +759,7 @@ msgid "Samoa"
 msgstr "Samoa"
 
 msgid "Kosovo"
-msgstr ""
+msgstr "Kosovo"
 
 msgid "Yemen"
 msgstr "Jeemen"
