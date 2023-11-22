@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-11-03 01:04+0000\n"
+"PO-Revision-Date: 2023-11-22 19:36+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk_UA\n"
@@ -370,7 +370,7 @@ msgstr "Для випадкового вибору з пулу розділяй�
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:530
 msgid "Outproxy Type"
-msgstr ""
+msgstr "Зовнішній тип проксі"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:543
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:496
@@ -1516,23 +1516,23 @@ msgstr "Якщо перевищено максимальну кількість 
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2696
 msgid "Custom HTTP Headers"
-msgstr ""
+msgstr "Спеціальні заголовки HTTP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2698
 msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
-msgstr ""
+msgstr "Примітка. Ці спеціальні заголовки будуть включені лише для поданих файлів, які не мають відповідного заголовка."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2700
 msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
-msgstr ""
+msgstr "Встановіть заголовок дозволу на \"Отримати, розміщувати, відправити\" для HTML, XML, JSON та текстових файлів"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2702
 msgid "Allow"
-msgstr ""
+msgstr "Allow"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2704
 msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
-msgstr ""
+msgstr "Увімкнути заголовки контролю кешу (без кеш для HTML, XML, JSON та тексту, незмінний для всього іншого)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2706
 msgid "Cache-Control"
@@ -1540,7 +1540,7 @@ msgstr "Cache-Control"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2708
 msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
-msgstr ""
+msgstr "Встановіть заголовок-поліцейський референт на \"одноразовий походження\" для HTML, XML, JSON та текстових файлів"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2710
 msgid "Referrer-Policy"
@@ -1548,7 +1548,7 @@ msgstr "Referrer-Policy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2712
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
-msgstr ""
+msgstr "Встановіть заголовок X-Content Type-Options на 'nosniff'"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2714
 msgid "X-Content-Type-Options"

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-10-24 19:24+0000\n"
+"PO-Revision-Date: 2023-11-22 18:09+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -54,22 +54,13 @@ msgstr "băng thông và độ tin cậy cao hơn"
 
 #: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:191
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:333
-msgid ""
-"Invalid form submission, probably because you used the 'back' or 'reload' "
-"button on your browser. Please resubmit."
-msgstr ""
-"Gửi biểu mẫu không hợp lệ, có thể do bạn đã sử dụng nút 'quay lại' hoặc 'tải "
-"lại' trên trình duyệt của mình. Mẫu đơn đệ nạp không đúng, có lẻ vì bạn dùng "
-"nút 'back' hay 'reload\" của trình duyệt. Xin vui lòng đệ nạp lại."
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Gửi biểu mẫu không hợp lệ, có thể do bạn đã sử dụng nút 'quay lại' hoặc 'tải lại' trên trình duyệt của mình. Mẫu đơn đệ nạp không đúng, có lẻ vì bạn dùng nút 'back' hay 'reload\" của trình duyệt. Xin vui lòng đệ nạp lại."
 
 #: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:193
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:335
-msgid ""
-"If the problem persists, verify that you have cookies enabled in your "
-"browser."
-msgstr ""
-"Nếu sự cố vẫn tiếp diễn, hãy xác minh rằng bạn đã bật cookie trong trình "
-"duyệt của mình."
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Nếu sự cố vẫn tiếp diễn, hãy xác minh rằng bạn đã bật cookie trong trình duyệt của mình."
 
 #: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:250
 msgid "Configuration reloaded for all tunnels"
@@ -187,12 +178,8 @@ msgid "Are you sure you want to delete?"
 msgstr "Bạn có chắc là muốn xóa không?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:241
-msgid ""
-"Tunnel and all other shared client tunnels must be stopped to change this "
-"configuration"
-msgstr ""
-"Đường hầm và tất cả các đường hầm máy khách dùng chung khác phải bị dừng để "
-"thay đổi cấu hình này"
+msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
+msgstr "Đường hầm và tất cả các đường hầm máy khách dùng chung khác phải bị dừng để thay đổi cấu hình này"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:242
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1237
@@ -226,20 +213,14 @@ msgstr "Đường hầm khởi động tự động"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:324
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1296
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:445
-msgid ""
-"Name of tunnel to be displayed on Tunnel Manager home page and the router "
-"console sidebar"
-msgstr ""
-"Tên đường hầm sẽ được hiển thị trên trang chủ Trình quản lý đường hầm và "
-"thanh bên của bảng điều khiển bộ định tuyến"
+msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
+msgstr "Tên đường hầm sẽ được hiển thị trên trang chủ Trình quản lý đường hầm và thanh bên của bảng điều khiển bộ định tuyến"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:328
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1300
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:634
-msgid ""
-"Enable this option to ensure this service is available when the router starts"
-msgstr ""
-"Bật tùy chọn này để đảm bảo dịch vụ này khả dụng khi bộ định tuyến khởi động"
+msgid "Enable this option to ensure this service is available when the router starts"
+msgstr "Bật tùy chọn này để đảm bảo dịch vụ này khả dụng khi bộ định tuyến khởi động"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:332
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1304
@@ -261,19 +242,11 @@ msgstr "Chia khách"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1319
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:451
 msgid "Description of tunnel to be displayed on Tunnel Manager home page"
-msgstr ""
-"Mô tả đường hầm sẽ được hiển thị trên trang chủ Trình quản lý đường hầm"
+msgstr "Mô tả đường hầm sẽ được hiển thị trên trang chủ Trình quản lý đường hầm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:352
-msgid ""
-"Traffic from all clients with this feature enabled will be routed over the "
-"same set of tunnels. This will make profiling the tunnels by an adversary "
-"more difficult, but will link the clients together."
-msgstr ""
-"Lưu lượng truy cập từ tất cả các máy khách có tính năng này được bật sẽ được "
-"định tuyến trên cùng một bộ đường hầm. Điều này sẽ làm cho việc định hình "
-"các đường hầm bởi một kẻ thù trở nên khó khăn hơn, nhưng sẽ liên kết các "
-"khách hàng với nhau."
+msgid "Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together."
+msgstr "Lưu lượng truy cập từ tất cả các máy khách có tính năng này được bật sẽ được định tuyến trên cùng một bộ đường hầm. Điều này sẽ làm cho việc định hình các đường hầm bởi một kẻ thù trở nên khó khăn hơn, nhưng sẽ liên kết các khách hàng với nhau."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:368
 msgid "Share tunnels with other configured clients"
@@ -351,26 +324,18 @@ msgstr "Với được qua"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:448
 msgid "Local interface (ip address) the client tunnel will be reachable from"
-msgstr ""
-"Giao diện cục bộ (địa chỉ IP), đường hầm máy khách sẽ có thể truy cập được từ"
+msgstr "Giao diện cục bộ (địa chỉ IP), đường hầm máy khách sẽ có thể truy cập được từ"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:470
-msgid ""
-"If an outproxy plugin is installed (e.g. Orchid), use this instead of any "
-"configured outproxies to access websites outside of I2P"
-msgstr ""
-"Nếu plugin outproxy được cài đặt (ví dụ: Orchid), hãy sử dụng plugin này "
-"thay vì bất kỳ proxy outproxy nào được định cấu hình để truy cập các trang "
-"web bên ngoài I2P"
+msgid "If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P"
+msgstr "Nếu plugin outproxy được cài đặt (ví dụ: Orchid), hãy sử dụng plugin này thay vì bất kỳ proxy outproxy nào được định cấu hình để truy cập các trang web bên ngoài I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:474
 msgid "Use plugin instead of proxies listed below if available"
 msgstr "Sử dụng plugin thay vì proxy được liệt kê bên dưới nếu có"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:480
-msgid ""
-"Enables direct chat and file transfers, bypassing I2P. Note that this will "
-"compromise your anonymity and is not recommended."
+msgid "Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended."
 msgstr "Cho phép trò chuyện trực tiếp và truyền tệp, bỏ qua I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:484
@@ -388,24 +353,18 @@ msgstr "Giao tiếp SSL"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:505
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:515
-msgid ""
-"Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
 msgstr "Chỉ định địa chỉ hoặc đích .i2p (b32 hoặc b64) của outproxy tại đây."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:507
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:517
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:563
-msgid ""
-"For a random selection from a pool, separate with commas e.g. server1.i2p,"
-"server2.i2p"
-msgstr ""
-"Đối với lựa chọn ngẫu nhiên từ một nhóm, hãy phân tách bằng dấu phẩy, ví dụ: "
-"server1.i2p,server2.i2p"
+msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
+msgstr "Đối với lựa chọn ngẫu nhiên từ một nhóm, hãy phân tách bằng dấu phẩy, ví dụ: server1.i2p,server2.i2p"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:530
-#, fuzzy
 msgid "Outproxy Type"
-msgstr "Outproxy"
+msgstr "Loại ủy quyền đi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:543
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:496
@@ -418,8 +377,7 @@ msgid "Use SSL"
 msgstr "Sử dụng SSL"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:561
-msgid ""
-"Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
 msgstr "Chỉ định địa chỉ hoặc đích .i2p (b32 hoặc b64) của đường hầm tại đây."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:567
@@ -428,14 +386,8 @@ msgid "name, name:port, or destination"
 msgstr "tên, tên:cổng hoặc đích"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:573
-msgid ""
-"If you are accessing a service on a remote I2P router, you may wish to "
-"connect with SSL to avoid traffic interception. The client application "
-"should be also be configured to use SSL."
-msgstr ""
-"Nếu bạn đang truy cập dịch vụ trên bộ định tuyến I2P từ xa, bạn có thể muốn "
-"kết nối với SSL để tránh đánh chặn lưu lượng truy cập. Ứng dụng máy khách "
-"cũng nên được cấu hình để sử dụng SSL."
+msgid "If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL."
+msgstr "Nếu bạn đang truy cập dịch vụ trên bộ định tuyến I2P từ xa, bạn có thể muốn kết nối với SSL để tránh đánh chặn lưu lượng truy cập. Ứng dụng máy khách cũng nên được cấu hình để sử dụng SSL."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:577
 msgid "Clients use SSL to connect to tunnel"
@@ -520,13 +472,8 @@ msgid "Advanced networking options"
 msgstr "Tùy chọn mạng cao cấp"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:660
-msgid ""
-"Note: When this client is configured to share tunnels, these options apply "
-"to all clients configured to share tunnels."
-msgstr ""
-"Lưu ý: Khi máy khách này được định cấu hình để chia sẻ đường hầm, các tùy "
-"chọn này sẽ áp dụng cho tất cả các máy khách được định cấu hình để chia sẻ "
-"đường hầm."
+msgid "Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels."
+msgstr "Lưu ý: Khi máy khách này được định cấu hình để chia sẻ đường hầm, các tùy chọn này sẽ áp dụng cho tất cả các máy khách được định cấu hình để chia sẻ đường hầm."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:667
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1681
@@ -601,8 +548,7 @@ msgstr "Đây là tùy chọn mặc định, được khuyến nghị"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:777
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1739
 msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr ""
-"Tùy chọn kế thừa (không được dùng nữa), được cung cấp để tương thích ngược"
+msgstr "Tùy chọn kế thừa (không được dùng nữa), được cung cấp để tương thích ngược"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:797
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1788
@@ -814,12 +760,8 @@ msgid "Reduce tunnel quantity"
 msgstr "Giảm số lượng đường hầm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:985
-msgid ""
-"Reduce tunnel count when idle to conserve resources but keep tunnel open (to "
-"ensure immediate availability)"
-msgstr ""
-"Giảm số lượng đường hầm khi không hoạt động để bảo tồn tài nguyên nhưng vẫn "
-"mở đường hầm (để đảm bảo tính khả dụng ngay lập tức)"
+msgid "Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
+msgstr "Giảm số lượng đường hầm khi không hoạt động để bảo tồn tài nguyên nhưng vẫn mở đường hầm (để đảm bảo tính khả dụng ngay lập tức)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:989
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2184
@@ -894,14 +836,8 @@ msgid "Private key file"
 msgstr "Tập tin khóa riêng"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1039
-msgid ""
-"Enabling this feature will ensure your tunnel identity (destination) remains "
-"static, for services offering features based on destination e.g. IRC user "
-"authentication"
-msgstr ""
-"Bật tính năng này sẽ đảm bảo danh tính đường hầm (đích) của bạn vẫn ở trạng "
-"thái tĩnh, đối với các dịch vụ cung cấp các tính năng dựa trên đích, ví dụ: "
-"xác thực người dùng IRC"
+msgid "Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering features based on destination e.g. IRC user authentication"
+msgstr "Bật tính năng này sẽ đảm bảo danh tính đường hầm (đích) của bạn vẫn ở trạng thái tĩnh, đối với các dịch vụ cung cấp các tính năng dựa trên đích, ví dụ: xác thực người dùng IRC"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1043
 msgid "Generate key to enable persistent client tunnel identity"
@@ -917,36 +853,24 @@ msgid "HTTP Filtering"
 msgstr "Lọc HTTP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1056
-msgid ""
-"When enabled, the user agent of your web browser or http client will not be "
-"spoofed, potentially reducing your anonymity"
-msgstr ""
-"Khi được bật, tác nhân người dùng của trình duyệt web hoặc ứng dụng khách "
-"http của bạn sẽ không bị giả mạo, có khả năng làm giảm tính ẩn danh của bạn"
+msgid "When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity"
+msgstr "Khi được bật, tác nhân người dùng của trình duyệt web hoặc ứng dụng khách http của bạn sẽ không bị giả mạo, có khả năng làm giảm tính ẩn danh của bạn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1060
 msgid "Do not spoof User-Agent header"
 msgstr "Không giả mạo tiêu đề Tác nhân người dùng"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1062
-msgid ""
-"When enabled, the referer (originating page) of your web requests will not "
-"be filtered, potentially reducing your anonymity"
-msgstr ""
-"Khi được bật, người giới thiệu (trang gốc) của các yêu cầu web của bạn sẽ "
-"không được lọc, có khả năng làm giảm tính ẩn danh của bạn"
+msgid "When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity"
+msgstr "Khi được bật, người giới thiệu (trang gốc) của các yêu cầu web của bạn sẽ không được lọc, có khả năng làm giảm tính ẩn danh của bạn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1066
 msgid "Do not block Referer header"
 msgstr "Không chặn tiêu đề Người giới thiệu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1068
-msgid ""
-"When enabled, the accept headers (mime types support) broadcast by your web "
-"browser will not be filtered, potentially reducing your anonymity"
-msgstr ""
-"Khi được bật, các tiêu đề chấp nhận (hỗ trợ loại mime) do trình duyệt web "
-"của bạn phát sẽ không bị lọc, có khả năng làm giảm tính ẩn danh của bạn"
+msgid "When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity"
+msgstr "Khi được bật, các tiêu đề chấp nhận (hỗ trợ loại mime) do trình duyệt web của bạn phát sẽ không bị lọc, có khả năng làm giảm tính ẩn danh của bạn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1072
 msgid "Do not block Accept headers"
@@ -969,12 +893,8 @@ msgid "Local Credentials"
 msgstr "Thông tin xác thực cục bộ"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1089
-msgid ""
-"Enable to require a username and password to access this local service (for "
-"example if hosting on a LAN)"
-msgstr ""
-"Bật yêu cầu tên người dùng và mật khẩu để truy cập dịch vụ cục bộ này (ví "
-"dụ: nếu lưu trữ trên mạng LAN)"
+msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
+msgstr "Bật yêu cầu tên người dùng và mật khẩu để truy cập dịch vụ cục bộ này (ví dụ: nếu lưu trữ trên mạng LAN)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1093
 msgid "Require local authorization for this service"
@@ -1033,12 +953,8 @@ msgid "Jump URL List"
 msgstr "Danh sách đường dẫn nhảy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1140
-msgid ""
-"List of helper URLs providing jump links when a host is not found in your "
-"addressbook"
-msgstr ""
-"Danh sách các URL trợ giúp cung cấp liên kết nhảy khi không tìm thấy máy chủ "
-"trong sổ địa chỉ của bạn"
+msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
+msgstr "Danh sách các URL trợ giúp cung cấp liên kết nhảy khi không tìm thấy máy chủ trong sổ địa chỉ của bạn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1148
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2720
@@ -1080,29 +996,19 @@ msgstr "Chỉ định cổng mà máy chủ đang chạy"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1394
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:596
 msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
-msgstr ""
-"Giao diện nghe (địa chỉ IP) để truy cập máy khách (thông thường 127.0.0.1)"
+msgstr "Giao diện nghe (địa chỉ IP) để truy cập máy khách (thông thường 127.0.0.1)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1418
-msgid ""
-"To avoid traffic sniffing if connecting to a remote server, you can enable "
-"an SSL connection. Note that the target server must be configured to accept "
-"SSL connections."
-msgstr ""
-"Để tránh đánh cắp lưu lượng truy cập nếu kết nối với máy chủ từ xa, bạn có "
-"thể bật kết nối SSL."
+msgid "To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections."
+msgstr "Để tránh đánh cắp lưu lượng truy cập nếu kết nối với máy chủ từ xa, bạn có thể bật kết nối SSL."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1422
 msgid "Use SSL to connect to target"
 msgstr "Sử dụng SSL để kết nối với mục tiêu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1445
-msgid ""
-"Port required to access service (this can be a different port to the port "
-"the service is hosted on)"
-msgstr ""
-"Cần có cổng để truy cập dịch vụ (đây có thể là một cổng khác với cổng mà "
-"dịch vụ được lưu trữ trên đó)"
+msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
+msgstr "Cần có cổng để truy cập dịch vụ (đây có thể là một cổng khác với cổng mà dịch vụ được lưu trữ trên đó)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1499
 msgid "Generate a QR Code for this domain"
@@ -1142,20 +1048,12 @@ msgid "SSL Wizard"
 msgstr "Trình hướng dẫn SSL"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1552
-msgid ""
-"Note: In order to enable QR code generation or registration authentication, "
-"configure the Website Hostname field (for websites) or the Name field "
-"(everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
-msgstr ""
-"Lưu ý: Để cho phép tạo mã hoặc xác thực đăng ký QR, định cấu hình trường "
-"HostName của trang web (cho các trang web) hoặc trường Tên (mọi thứ khác) ở "
-"trên với tên máy chủ bị hậu tố .i2p, ví dụ: mynewserver.i2p"
+msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgstr "Lưu ý: Để cho phép tạo mã hoặc xác thực đăng ký QR, định cấu hình trường HostName của trang web (cho các trang web) hoặc trường Tên (mọi thứ khác) ở trên với tên máy chủ bị hậu tố .i2p, ví dụ: mynewserver.i2p"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1565
-msgid ""
-"Absolute path to Private Key File (will be created if it does not exist)"
-msgstr ""
-"Đường dẫn tuyệt đối đến Tệp khóa riêng (sẽ được tạo nếu nó không tồn tại)"
+msgid "Absolute path to Private Key File (will be created if it does not exist)"
+msgstr "Đường dẫn tuyệt đối đến Tệp khóa riêng (sẽ được tạo nếu nó không tồn tại)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1571
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1579
@@ -1183,9 +1081,7 @@ msgid "Configuration cannot be changed after destination is created"
 msgstr "Không thể thay đổi cấu hình sau khi tạo đích"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1711
-msgid ""
-"Configuration of signature type is only possible when the tunnel is first "
-"created. To change, you must create a new tunnel."
+msgid "Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel."
 msgstr "Chỉ có thể cấu hình loại chữ ký khi đường hầm được tạo lần đầu tiên."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1731
@@ -1294,12 +1190,8 @@ msgid "Block Accesses containing Referers"
 msgstr "Chặn quyền truy cập có chứa Người giới thiệu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2224
-msgid ""
-"Use unique IP addresses for each connecting client (local non-SSL servers "
-"only)"
-msgstr ""
-"Sử dụng địa chỉ IP duy nhất cho mỗi máy khách kết nối (chỉ các máy chủ cục "
-"bộ không có SSL)"
+msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
+msgstr "Sử dụng địa chỉ IP duy nhất cho mỗi máy khách kết nối (chỉ các máy chủ cục bộ không có SSL)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2228
 msgid "Unique Local Address per Client"
@@ -1315,8 +1207,7 @@ msgstr "Tối ưu hóa cho Multihoming"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2242
 msgid "Deny User-Agents matching these strings (probably from inproxies)"
-msgstr ""
-"Từ chối Tác nhân người dùng khớp với các chuỗi này (có thể từ inproxies)"
+msgstr "Từ chối Tác nhân người dùng khớp với các chuỗi này (có thể từ inproxies)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2246
 msgid "Block these User-Agents"
@@ -1533,12 +1424,8 @@ msgid "Per Client"
 msgstr "Mỗi khách hàng"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2600
-msgid ""
-"Maximum number of web page requests per minute for a unique client before "
-"access to the server is blocked"
-msgstr ""
-"Số lượng yêu cầu trang web tối đa mỗi phút cho một khách hàng duy nhất trước "
-"khi quyền truy cập vào máy chủ bị chặn"
+msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
+msgstr "Số lượng yêu cầu trang web tối đa mỗi phút cho một khách hàng duy nhất trước khi quyền truy cập vào máy chủ bị chặn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2602
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2608
@@ -1553,20 +1440,12 @@ msgid "(0 = unlimited)"
 msgstr "(0 = không giới hạn)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2606
-msgid ""
-"Maximum number of web page requests per hour for a unique client before "
-"access to the server is blocked"
-msgstr ""
-"Số lượng yêu cầu trang web tối đa mỗi giờ cho một khách hàng duy nhất trước "
-"khi quyền truy cập vào máy chủ bị chặn"
+msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
+msgstr "Số lượng yêu cầu trang web tối đa mỗi giờ cho một khách hàng duy nhất trước khi quyền truy cập vào máy chủ bị chặn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2612
-msgid ""
-"Maximum number of web page requests per day for a unique client before "
-"access to the server is blocked"
-msgstr ""
-"Số lượng yêu cầu trang web tối đa mỗi ngày cho một khách hàng duy nhất trước "
-"khi quyền truy cập vào máy chủ bị chặn"
+msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
+msgstr "Số lượng yêu cầu trang web tối đa mỗi ngày cho một khách hàng duy nhất trước khi quyền truy cập vào máy chủ bị chặn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2618
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2674
@@ -1574,28 +1453,16 @@ msgid "Total"
 msgstr "Tổng cộng"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2620
-msgid ""
-"Total number of web page requests per minute before access to the server is "
-"blocked"
-msgstr ""
-"Tổng số yêu cầu trang web mỗi phút trước khi quyền truy cập vào máy chủ bị "
-"chặn"
+msgid "Total number of web page requests per minute before access to the server is blocked"
+msgstr "Tổng số yêu cầu trang web mỗi phút trước khi quyền truy cập vào máy chủ bị chặn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2626
-msgid ""
-"Total number of web page requests per hour before access to the server is "
-"blocked"
-msgstr ""
-"Tổng số yêu cầu trang web mỗi giờ trước khi quyền truy cập vào máy chủ bị "
-"chặn"
+msgid "Total number of web page requests per hour before access to the server is blocked"
+msgstr "Tổng số yêu cầu trang web mỗi giờ trước khi quyền truy cập vào máy chủ bị chặn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2632
-msgid ""
-"Total number of web page requests per day before access to the server is "
-"blocked"
-msgstr ""
-"Tổng số yêu cầu truy cập trang web mỗi ngày trước khi truy cập vào máy chủ "
-"bị chặn"
+msgid "Total number of web page requests per day before access to the server is blocked"
+msgstr "Tổng số yêu cầu truy cập trang web mỗi ngày trước khi truy cập vào máy chủ bị chặn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2638
 msgid "Maximum number of simultaneous client connections"
@@ -1618,89 +1485,64 @@ msgid "POST limit period"
 msgstr "Khoảng thời gian giới hạn POST"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2658
-msgid ""
-"Maximum number of post requests permitted for a unique client for the "
-"configured timespan"
-msgstr ""
-"Số lượng yêu cầu đăng bài tối đa được phép cho một khách hàng duy nhất trong "
-"khoảng thời gian được định cấu hình"
+msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
+msgstr "Số lượng yêu cầu đăng bài tối đa được phép cho một khách hàng duy nhất trong khoảng thời gian được định cấu hình"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2664
-msgid ""
-"If a client exceeds the maximum number of post requests per allocated "
-"period, enforce a ban for this number of minutes"
-msgstr ""
-"Nếu khách hàng vượt quá số lượng yêu cầu đăng bài tối đa trong khoảng thời "
-"gian được phân bổ, hãy thi hành lệnh cấm đối với số phút này"
+msgid "If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes"
+msgstr "Nếu khách hàng vượt quá số lượng yêu cầu đăng bài tối đa trong khoảng thời gian được phân bổ, hãy thi hành lệnh cấm đối với số phút này"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2670
-msgid ""
-"Timespan for the maximum number of post requests to be reached before a ban "
-"is triggered"
-msgstr ""
-"Khoảng thời gian đạt được số lượng yêu cầu đăng bài tối đa trước khi lệnh "
-"cấm được kích hoạt"
+msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
+msgstr "Khoảng thời gian đạt được số lượng yêu cầu đăng bài tối đa trước khi lệnh cấm được kích hoạt"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2676
 msgid "Total number of post requests permitted for the configured timespan"
-msgstr ""
-"Tổng số yêu cầu đăng bài được phép trong khoảng thời gian được định cấu hình"
+msgstr "Tổng số yêu cầu đăng bài được phép trong khoảng thời gian được định cấu hình"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2682
-msgid ""
-"If the maximum number of post requests per allocated period is exceeded, "
-"enforce a global access ban for this number of minutes"
-msgstr ""
-"Nếu vượt quá số lượng yêu cầu đăng bài tối đa trong khoảng thời gian được "
-"phân bổ, hãy thực thi lệnh cấm truy cập toàn cầu trong số phút này"
+msgid "If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes"
+msgstr "Nếu vượt quá số lượng yêu cầu đăng bài tối đa trong khoảng thời gian được phân bổ, hãy thực thi lệnh cấm truy cập toàn cầu trong số phút này"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2696
 msgid "Custom HTTP Headers"
-msgstr ""
+msgstr "Tiêu đề HTTP tùy chỉnh"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2698
-msgid ""
-"Note: These custom headers will only be enabled for served files that don't "
-"have the relevant header already set."
-msgstr ""
+msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
+msgstr "Lưu ý: Các tiêu đề tùy chỉnh này sẽ chỉ được bật cho các tệp được cung cấp chưa được đặt tiêu đề liên quan."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2700
-msgid ""
-"Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
-msgstr ""
+msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
+msgstr "Đặt tiêu đề Cho phép thành 'GET, POST, HEAD' cho các tệp html, xml, json và văn bản"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2702
 msgid "Allow"
-msgstr ""
+msgstr "Cho phép"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2704
-msgid ""
-"Enable Cache-Control headers (no-cache for html, xml, json and text, "
-"immutable for everything else)"
-msgstr ""
+msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
+msgstr "Bật tiêu đề Kiểm soát bộ đệm (không có bộ đệm cho html, xml, json và văn bản, không thay đổi cho mọi thứ khác)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2706
-#, fuzzy
 msgid "Cache-Control"
-msgstr "Control"
+msgstr "Cache-Control"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2708
-msgid ""
-"Set the Referrer-Policy header to 'same-origin' for html, xml, json and text "
-"files"
-msgstr ""
+msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
+msgstr "Đặt tiêu đề Chính sách giới thiệu thành 'cùng nguồn gốc' cho các tệp html, xml, json và văn bản"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2710
 msgid "Referrer-Policy"
-msgstr ""
+msgstr "Referrer-Policy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2712
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
-msgstr ""
+msgstr "Đặt tiêu đề X-Content-Type-Options thành 'nosniff'"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2714
 msgid "X-Content-Type-Options"
-msgstr ""
+msgstr "X-Content-Type-Options"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2743
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:924
@@ -1934,19 +1776,12 @@ msgid "Registration Helper"
 msgstr "Hỗ trợ đăng ký"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:269
-msgid ""
-"This service uses encrypted leasesets. Registration is not recommended. "
-"Registration authentication is disabled."
+msgid "This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled."
 msgstr "Dịch vụ này sử dụng các hợp đồng thuê được mã hóa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:275
-msgid ""
-"Please be sure to select, copy, and paste the entire contents of the "
-"appropriate authentication data into the form of your favorite registration "
-"site"
-msgstr ""
-"Hãy đảm bảo chọn, sao chép và dán toàn bộ nội dung của dữ liệu xác thực phù "
-"hợp vào biểu mẫu trang đăng ký yêu thích của bạn"
+msgid "Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site"
+msgstr "Hãy đảm bảo chọn, sao chép và dán toàn bộ nội dung của dữ liệu xác thực phù hợp vào biểu mẫu trang đăng ký yêu thích của bạn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:277
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:700
@@ -1968,31 +1803,21 @@ msgstr "Điểm đến địa phương không có sẵn. Bắt đầu đường 
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:308
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:699
-msgid ""
-"To enable registration verification, edit tunnel and set name (or website "
-"name) to a valid host name ending in '.i2p'"
-msgstr ""
-"Để bật xác minh đăng ký, hãy chỉnh sửa đường hầm và đặt tên (hoặc tên trang "
-"web) thành tên máy chủ hợp lệ kết thúc bằng '.i2p'"
+msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
+msgstr "Để bật xác minh đăng ký, hãy chỉnh sửa đường hầm và đặt tên (hoặc tên trang web) thành tên máy chủ hợp lệ kết thúc bằng '.i2p'"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:314
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:705
-msgid ""
-"To enable registration verification, edit tunnel and set name to a valid "
-"host name ending in '.i2p'"
-msgstr ""
-"Để bật xác minh đăng ký, hãy chỉnh sửa đường hầm và đặt tên thành tên máy "
-"chủ hợp lệ kết thúc bằng '.i2p'"
+msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
+msgstr "Để bật xác minh đăng ký, hãy chỉnh sửa đường hầm và đặt tên thành tên máy chủ hợp lệ kết thúc bằng '.i2p'"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:323
 msgid "Destination signing key is not available. Start the tunnel."
 msgstr "Khóa ký đích không có sẵn. Bắt đầu đường hầm."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:329
-msgid ""
-"Destination signing key is offline. Use CLI tools on the offline machine."
-msgstr ""
-"Khóa ký đích là ngoại tuyến. Sử dụng các công cụ CLI trên máy ngoại tuyến."
+msgid "Destination signing key is offline. Use CLI tools on the offline machine."
+msgstr "Khóa ký đích là ngoại tuyến. Sử dụng các công cụ CLI trên máy ngoại tuyến."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:339
 #, java-format
@@ -2195,18 +2020,12 @@ msgstr "Tạo chứng chỉ SSL và kích hoạt"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1108
 #, java-format
-msgid ""
-"Cannot configure, no Jetty server found in {0}client configurations{1} that "
-"matches this tunnel"
-msgstr ""
-"Không thể định cấu hình, không tìm thấy máy chủ Jetty trong {0}cấu hình máy "
-"khách{1} khớp với đường hầm này"
+msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
+msgstr "Không thể định cấu hình, không tìm thấy máy chủ Jetty trong {0}cấu hình máy khách{1} khớp với đường hầm này"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1110
 msgid "Support for non-Jetty servers will be added in a future release"
-msgstr ""
-"Hỗ trợ cho các máy chủ không phải Jetty sẽ được bổ sung trong bản phát hành "
-"sau này"
+msgstr "Hỗ trợ cho các máy chủ không phải Jetty sẽ được bổ sung trong bản phát hành sau này"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1117
 msgid "Return to Tunnel Manager Index"
@@ -2253,35 +2072,20 @@ msgid "Wizard completed"
 msgstr "Wizard hoàn thành"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:337
-msgid ""
-"This wizard will take you through the various options available for creating "
-"tunnels in I2P."
-msgstr ""
-"Trình hướng dẫn này sẽ đưa bạn qua các tùy chọn khác nhau có sẵn để tạo "
-"đường hầm trong I2P."
+msgid "This wizard will take you through the various options available for creating tunnels in I2P."
+msgstr "Trình hướng dẫn này sẽ đưa bạn qua các tùy chọn khác nhau có sẵn để tạo đường hầm trong I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:339
-msgid ""
-"The first thing to decide is whether you want to create a server or a client "
-"tunnel."
-msgstr ""
-"Điều đầu tiên cần quyết định là bạn muốn tạo đường hầm máy chủ hay máy khách."
+msgid "The first thing to decide is whether you want to create a server or a client tunnel."
+msgstr "Điều đầu tiên cần quyết định là bạn muốn tạo đường hầm máy chủ hay máy khách."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:340
-msgid ""
-"If you need to connect to a remote service, such as an IRC server inside I2P "
-"or a code repository, then you will require a CLIENT tunnel."
-msgstr ""
-"Nếu bạn cần kết nối với một dịch vụ từ xa, chẳng hạn như máy chủ IRC bên "
-"trong I2P hoặc kho lưu trữ mã, thì bạn sẽ cần có đường hầm CLIENT."
+msgid "If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel."
+msgstr "Nếu bạn cần kết nối với một dịch vụ từ xa, chẳng hạn như máy chủ IRC bên trong I2P hoặc kho lưu trữ mã, thì bạn sẽ cần có đường hầm CLIENT."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:341
-msgid ""
-"On the other hand, if you wish to host a service for others to connect to "
-"you'll need to create a SERVER tunnel."
-msgstr ""
-"Mặt khác, nếu bạn muốn lưu trữ một dịch vụ để người khác kết nối, bạn sẽ cần "
-"tạo một đường hầm MÁY CHỦ."
+msgid "On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel."
+msgstr "Mặt khác, nếu bạn muốn lưu trữ một dịch vụ để người khác kết nối, bạn sẽ cần tạo một đường hầm MÁY CHỦ."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:343
 msgid "Server Tunnel"
@@ -2301,103 +2105,56 @@ msgstr "Đường hầm cơ bản để kết nối với một dịch vụ duy 
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:371
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:396
-msgid ""
-"Try this if none of the tunnel types below fit your requirements, or you "
-"don't know what type of tunnel you need."
-msgstr ""
-"Hãy thử cách này nếu không có loại đường hầm nào dưới đây phù hợp với yêu "
-"cầu của bạn hoặc bạn không biết mình cần loại đường hầm nào."
+msgid "Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need."
+msgstr "Hãy thử cách này nếu không có loại đường hầm nào dưới đây phù hợp với yêu cầu của bạn hoặc bạn không biết mình cần loại đường hầm nào."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:373
 msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
-msgstr ""
-"Đường hầm hoạt động như một proxy HTTP để tiếp cận các trang web điện tử bên "
-"trong I2P."
+msgstr "Đường hầm hoạt động như một proxy HTTP để tiếp cận các trang web điện tử bên trong I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:374
-msgid ""
-"Set your browser to use this tunnel as an http proxy, or set your "
-"\"http_proxy\" environment variable for command-line applications in GNU/"
-"Linux."
-msgstr ""
-"Đặt trình duyệt của bạn để sử dụng đường hầm này làm proxy http hoặc đặt "
-"biến môi trường \"http_proxy\" cho các ứng dụng dòng lệnh trong GNU/Linux."
+msgid "Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux."
+msgstr "Đặt trình duyệt của bạn để sử dụng đường hầm này làm proxy http hoặc đặt biến môi trường \"http_proxy\" cho các ứng dụng dòng lệnh trong GNU/Linux."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:375
-msgid ""
-"Websites outside I2P can also be reached if an HTTP proxy within I2P is "
-"known."
-msgstr ""
-"Cũng có thể truy cập các trang web bên ngoài I2P nếu biết proxy HTTP trong "
-"I2P."
+msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
+msgstr "Cũng có thể truy cập các trang web bên ngoài I2P nếu biết proxy HTTP trong I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:377
 msgid "Customised client tunnel specific for IRC connections."
 msgstr "Đường hầm máy khách được tùy chỉnh dành riêng cho kết nối IRC."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:378
-msgid ""
-"With this tunnel type, your IRC client will be able to connect to an IRC "
-"network inside I2P."
-msgstr ""
-"Với loại đường hầm này, máy khách IRC của bạn sẽ có thể kết nối với mạng IRC "
-"bên trong I2P."
+msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
+msgstr "Với loại đường hầm này, máy khách IRC của bạn sẽ có thể kết nối với mạng IRC bên trong I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:379
-msgid ""
-"Each IRC network in I2P that you wish to connect to will require its own "
-"tunnel. (See Also, SOCKS IRC)"
-msgstr ""
-"Mỗi mạng IRC trong I2P mà bạn muốn kết nối sẽ yêu cầu đường hầm riêng. (Xem "
-"thêm, vớ IRC)"
+msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
+msgstr "Mỗi mạng IRC trong I2P mà bạn muốn kết nối sẽ yêu cầu đường hầm riêng. (Xem thêm, vớ IRC)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:381
 msgid "A tunnel that implements the SOCKS protocol."
 msgstr "Một đường hầm thực hiện giao thức SOCKS."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:382
-msgid ""
-"This enables both TCP and UDP connections to be made through a SOCKS "
-"outproxy within I2P."
-msgstr ""
-"Điều này cho phép cả kết nối TCP và UDP được thực hiện thông qua proxy ngoài "
-"SOCKS trong I2P."
+msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
+msgstr "Điều này cho phép cả kết nối TCP và UDP được thực hiện thông qua proxy ngoài SOCKS trong I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:384
-msgid ""
-"A client tunnel implementing the SOCKS protocol, which is customised for "
-"connecting to IRC networks."
-msgstr ""
-"Đường hầm máy khách triển khai giao thức SOCKS, được tùy chỉnh để kết nối "
-"với mạng IRC."
+msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
+msgstr "Đường hầm máy khách triển khai giao thức SOCKS, được tùy chỉnh để kết nối với mạng IRC."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:385
-msgid ""
-"With this tunnel type, IRC networks in I2P can be reached by typing the I2P "
-"address into your IRC client, and configuring the IRC client to use this "
-"SOCKS tunnel."
-msgstr ""
-"Với loại đường hầm này, có thể truy cập mạng IRC trong I2P bằng cách nhập "
-"địa chỉ I2P vào máy khách IRC của bạn và định cấu hình máy khách IRC để sử "
-"dụng đường hầm SOCKS này."
+msgid "With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel."
+msgstr "Với loại đường hầm này, có thể truy cập mạng IRC trong I2P bằng cách nhập địa chỉ I2P vào máy khách IRC của bạn và định cấu hình máy khách IRC để sử dụng đường hầm SOCKS này."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:386
-msgid ""
-"This means that only one I2P tunnel is required rather than a separate "
-"tunnel per IRC network."
-msgstr ""
-"Điều này có nghĩa là chỉ cần một đường hầm I2P thay vì một đường hầm riêng "
-"cho mỗi mạng IRC."
+msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
+msgstr "Điều này có nghĩa là chỉ cần một đường hầm I2P thay vì một đường hầm riêng cho mỗi mạng IRC."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:387
-msgid ""
-"IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P "
-"is known, though it depends on whether or not the outproxy has been blocked "
-"by the IRC network."
-msgstr ""
-"Các mạng IRC bên ngoài I2P cũng có thể đạt được nếu biết một outproxy SOCKS "
-"trong I2P, mặc dù điều đó phụ thuộc vào việc liệu outproxy đó có bị mạng IRC "
-"chặn hay không."
+msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
+msgstr "Các mạng IRC bên ngoài I2P cũng có thể đạt được nếu biết một outproxy SOCKS trong I2P, mặc dù điều đó phụ thuộc vào việc liệu outproxy đó có bị mạng IRC chặn hay không."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:395
 msgid "A basic server tunnel for hosting a generic service inside I2P."
@@ -2416,12 +2173,8 @@ msgid "A customised server tunnel for hosting IRC networks inside I2P."
 msgstr "Đường hầm máy chủ tùy chỉnh để lưu trữ mạng IRC bên trong I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:402
-msgid ""
-"Usually, a separate tunnel needs to be created for each IRC server that is "
-"to be accessible inside I2P."
-msgstr ""
-"Thông thường, cần tạo một đường hầm riêng cho mỗi máy chủ IRC để có thể truy "
-"cập được bên trong I2P."
+msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
+msgstr "Thông thường, cần tạo một đường hầm riêng cho mỗi máy chủ IRC để có thể truy cập được bên trong I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:408
 msgid "Select tunnel type"
@@ -2432,57 +2185,36 @@ msgid "Choose a name and description for your tunnel."
 msgstr "Chọn tên và mô tả cho đường hầm của bạn."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:441
-msgid ""
-"These can be anything you want - they are just for ease of identifying the "
-"tunnel in the routerconsole."
-msgstr ""
-"Đây có thể là bất cứ thứ gì bạn muốn - chúng chỉ để dễ dàng xác định đường "
-"hầm trong bảng điều khiển bộ định tuyến."
+msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
+msgstr "Đây có thể là bất cứ thứ gì bạn muốn - chúng chỉ để dễ dàng xác định đường hầm trong bảng điều khiển bộ định tuyến."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:472
-msgid ""
-"If you know of any outproxies for this type of tunnel (either HTTP or "
-"SOCKS), fill them in below."
-msgstr ""
-"Nếu bạn biết bất kỳ proxy nào cho loại đường hầm này (HTTP hoặc SOCKS), hãy "
-"điền chúng vào bên dưới."
+msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
+msgstr "Nếu bạn biết bất kỳ proxy nào cho loại đường hầm này (HTTP hoặc SOCKS), hãy điền chúng vào bên dưới."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:473
 msgid "Separate multiple proxies with commas."
 msgstr "Phân tách nhiều proxy bằng dấu phẩy."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:477
-msgid ""
-"List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,"
-"proxy2.i2p)"
-msgstr ""
-"Danh sách các đích đến của proxy bên ngoài I2P, được phân tách bằng dấu phẩy "
-"(ví dụ: proxy1.i2p, proxy2.i2p)"
+msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
+msgstr "Danh sách các đích đến của proxy bên ngoài I2P, được phân tách bằng dấu phẩy (ví dụ: proxy1.i2p, proxy2.i2p)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:493
-msgid ""
-"Type in the I2P destination of the service that this client tunnel should "
-"connect to."
+msgid "Type in the I2P destination of the service that this client tunnel should connect to."
 msgstr "Nhập đích I2P của dịch vụ mà đường hầm máy khách này sẽ kết nối tới."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:494
-msgid ""
-"This could be the full Base64 destination key, or an I2P URL from your "
-"address book."
-msgstr ""
-"Đây có thể là khóa đích Base64 đầy đủ hoặc URL I2P từ sổ địa chỉ của bạn."
+msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
+msgstr "Đây có thể là khóa đích Base64 đầy đủ hoặc URL I2P từ sổ địa chỉ của bạn."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:498
 msgid "Enter a b64 or .i2p address here"
 msgstr "Nhập địa chỉ b64 hoặc .i2p vào đây"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:520
-msgid ""
-"This is the IP that your service is running on, this is usually on the same "
-"machine so 127.0.0.1 is autofilled."
-msgstr ""
-"Đây là IP mà dịch vụ của bạn đang chạy, địa chỉ này thường nằm trên cùng một "
-"máy nên 127.0.0.1 được tự động điền."
+msgid "This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
+msgstr "Đây là IP mà dịch vụ của bạn đang chạy, địa chỉ này thường nằm trên cùng một máy nên 127.0.0.1 được tự động điền."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:543
 msgid "This is the port that the service is accepting connections on."
@@ -2493,9 +2225,7 @@ msgid "This is the port that the client tunnel will be accessed from locally."
 msgstr "Đây là cổng mà đường hầm máy khách sẽ được truy cập cục bộ."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:587
-msgid ""
-"How do you want this tunnel to be accessed? By just this machine, your "
-"entire subnet, or external internet?"
+msgid "How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
 msgstr "Bạn muốn truy cập vào đường hầm này như thế nào?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:588
@@ -2503,64 +2233,36 @@ msgid "You will most likely want to just allow 127.0.0.1"
 msgstr "Rất có thể bạn sẽ chỉ muốn cho phép 127.0.0.1"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:631
-msgid ""
-"The I2P router can automatically start this tunnel for you when the router "
-"is started."
-msgstr ""
-"Bộ định tuyến I2P có thể tự động khởi động đường hầm này cho bạn khi bộ định "
-"tuyến được khởi động."
+msgid "The I2P router can automatically start this tunnel for you when the router is started."
+msgstr "Bộ định tuyến I2P có thể tự động khởi động đường hầm này cho bạn khi bộ định tuyến được khởi động."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:632
-msgid ""
-"This can be useful for frequently-used tunnels (especially server tunnels), "
-"but for tunnels that are only used occassionally it would mean that the I2P "
-"router is creating and maintaining unnecessary tunnels."
-msgstr ""
-"Điều này có thể hữu ích cho các đường hầm được sử dụng thường xuyên (đặc "
-"biệt là các đường hầm máy chủ), nhưng đối với các đường hầm chỉ được sử dụng "
-"không thường xuyên, điều đó có nghĩa là bộ định tuyến I2P đang tạo và duy "
-"trì các đường hầm không cần thiết."
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgstr "Điều này có thể hữu ích cho các đường hầm được sử dụng thường xuyên (đặc biệt là các đường hầm máy chủ), nhưng đối với các đường hầm chỉ được sử dụng không thường xuyên, điều đó có nghĩa là bộ định tuyến I2P đang tạo và duy trì các đường hầm không cần thiết."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:657
 msgid "The wizard has now collected enough information to create your tunnel."
-msgstr ""
-"Trình hướng dẫn hiện đã thu thập đủ thông tin để tạo đường hầm của bạn."
+msgstr "Trình hướng dẫn hiện đã thu thập đủ thông tin để tạo đường hầm của bạn."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:658
-msgid ""
-"Upon clicking the Save button below, the wizard will set up the tunnel, and "
-"take you back to the main I2PTunnel page."
-msgstr ""
-"Khi nhấp vào nút Lưu bên dưới, trình hướng dẫn sẽ thiết lập đường hầm và đưa "
-"bạn quay lại trang I2PTunnel chính."
+msgid "Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page."
+msgstr "Khi nhấp vào nút Lưu bên dưới, trình hướng dẫn sẽ thiết lập đường hầm và đưa bạn quay lại trang I2PTunnel chính."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:662
-msgid ""
-"Because you chose to automatically start the tunnel when the router starts, "
-"you don't have to do anything further."
-msgstr ""
-"Vì bạn đã chọn tự động khởi động đường hầm khi bộ định tuyến khởi động nên "
-"bạn không phải làm gì thêm."
+msgid "Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further."
+msgstr "Vì bạn đã chọn tự động khởi động đường hầm khi bộ định tuyến khởi động nên bạn không phải làm gì thêm."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:663
 msgid "The router will start the tunnel once it has been set up."
 msgstr "Bộ định tuyến sẽ khởi động đường hầm sau khi được thiết lập."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:667
-msgid ""
-"Because you chose not to automatically start the tunnel, you will have to "
-"manually start it."
-msgstr ""
-"Vì bạn đã chọn không tự động khởi động đường hầm nên bạn sẽ phải khởi động "
-"nó theo cách thủ công."
+msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
+msgstr "Vì bạn đã chọn không tự động khởi động đường hầm nên bạn sẽ phải khởi động nó theo cách thủ công."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:668
-msgid ""
-"You can do this by clicking the Start button on the main page which "
-"corresponds to the new tunnel."
-msgstr ""
-"Bạn có thể thực hiện việc này bằng cách nhấp vào nút Bắt đầu trên trang "
-"chính tương ứng với đường hầm mới."
+msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
+msgstr "Bạn có thể thực hiện việc này bằng cách nhấp vào nút Bắt đầu trên trang chính tương ứng với đường hầm mới."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:673
 msgid "Below is a summary of the options you chose:"
@@ -2579,22 +2281,12 @@ msgid "Tunnel port"
 msgstr "Cổng hầm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:774
-msgid ""
-"Alongside these basic settings, there are a number of advanced options for "
-"tunnel configuration."
-msgstr ""
-"Bên cạnh các cài đặt cơ bản này, còn có một số tùy chọn nâng cao cho cấu "
-"hình đường hầm."
+msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
+msgstr "Bên cạnh các cài đặt cơ bản này, còn có một số tùy chọn nâng cao cho cấu hình đường hầm."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:775
-msgid ""
-"The wizard will set reasonably sensible default values for these, but you "
-"can view and/or edit these by clicking on the tunnel's name in the main "
-"I2PTunnel page."
-msgstr ""
-"Trình hướng dẫn sẽ đặt các giá trị mặc định hợp lý cho các giá trị này, "
-"nhưng bạn có thể xem và/hoặc chỉnh sửa các giá trị này bằng cách nhấp vào "
-"tên đường hầm trong trang I2PTunnel chính."
+msgid "The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page."
+msgstr "Trình hướng dẫn sẽ đặt các giá trị mặc định hợp lý cho các giá trị này, nhưng bạn có thể xem và/hoặc chỉnh sửa các giá trị này bằng cách nhấp vào tên đường hầm trong trang I2PTunnel chính."
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:793
 msgid "Cancel the wizard and return to Tunnel Manager home page"
