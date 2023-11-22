@@ -127,7 +127,7 @@ class ProfileOrganizerRenderer {
                .append("\">").append(_t("Accepted")).append("</th>")
                .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
                .append("\">").append(_t("Rejected")).append("</th>")
-               .append("<th>").append(_t("Integration")).append("</th>")
+               //.append("<th>").append(_t("Integration")).append("</th>")
                //.append("<th>").append(_t("First Heard About")).append("</th>")
                .append("<th>").append(_t("Last Heard From")).append("</th>")
                .append("<th>").append(_t("View/Edit")).append("</th>")
@@ -315,6 +315,7 @@ class ProfileOrganizerRenderer {
                 else
                     buf.append("<span hidden>0</span>");
                 buf.append("</td><td>");
+/**
                 String integration = num(prof.getIntegrationValue()).replace(".00", "");
                 if (prof.getIntegrationValue() > 0) {
                     buf.append("<span>").append(integration).append("</span>");
@@ -322,6 +323,7 @@ class ProfileOrganizerRenderer {
                     buf.append("<span>&ensp;</span>");
                 }
                 buf.append("</td><td>");
+**/
                 now = _context.clock().now();
 /**
                 if (prof.getFirstHeardAbout() > 0) {
@@ -388,7 +390,7 @@ class ProfileOrganizerRenderer {
 
             buf.append("<div class=widescroll id=ff>\n")
                .append("<table id=floodfills data-sortable>\n")
-               .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>" +
+               .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>" +
                        "<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>" +
                        "<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>")
                .append("<thead class=smallhead><tr>")
