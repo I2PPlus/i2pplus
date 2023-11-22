@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
-"PO-Revision-Date: 2023-10-25 19:06+0000\n"
+"PO-Revision-Date: 2023-11-22 21:54+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -21,37 +21,80 @@ msgstr ""
 msgid "Warning: Invalid Request URI"
 msgstr "Waarschuwing: ongeldige aanvraag-URI"
 
-#: ../java/build/Proxy.java:6 ../java/build/Proxy.java:15 ../java/build/Proxy.java:27 ../java/build/Proxy.java:37 ../java/build/Proxy.java:51 ../java/build/Proxy.java:64 ../java/build/Proxy.java:76
-#: ../java/build/Proxy.java:89 ../java/build/Proxy.java:98 ../java/build/Proxy.java:115 ../java/build/Proxy.java:127 ../java/build/Proxy.java:140 ../java/build/Proxy.java:153 ../java/build/Proxy.java:161
-#: ../java/build/Proxy.java:173 ../java/build/Proxy.java:183 ../java/build/Proxy.java:192 ../java/build/Proxy.java:202 ../java/build/Proxy.java:211 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:320
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:376 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:405
+#: ../java/build/Proxy.java:6 ../java/build/Proxy.java:15
+#: ../java/build/Proxy.java:27 ../java/build/Proxy.java:37
+#: ../java/build/Proxy.java:51 ../java/build/Proxy.java:64
+#: ../java/build/Proxy.java:76 ../java/build/Proxy.java:89
+#: ../java/build/Proxy.java:98 ../java/build/Proxy.java:115
+#: ../java/build/Proxy.java:127 ../java/build/Proxy.java:140
+#: ../java/build/Proxy.java:153 ../java/build/Proxy.java:161
+#: ../java/build/Proxy.java:173 ../java/build/Proxy.java:183
+#: ../java/build/Proxy.java:192 ../java/build/Proxy.java:202
+#: ../java/build/Proxy.java:211
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:320
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:376
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:405
 msgid "Router Console"
 msgstr "Routerconsole"
 
-#: ../java/build/Proxy.java:7 ../java/build/Proxy.java:16 ../java/build/Proxy.java:28 ../java/build/Proxy.java:38 ../java/build/Proxy.java:52 ../java/build/Proxy.java:65 ../java/build/Proxy.java:77
-#: ../java/build/Proxy.java:90 ../java/build/Proxy.java:99 ../java/build/Proxy.java:116 ../java/build/Proxy.java:128 ../java/build/Proxy.java:141 ../java/build/Proxy.java:154 ../java/build/Proxy.java:162
-#: ../java/build/Proxy.java:174 ../java/build/Proxy.java:184 ../java/build/Proxy.java:193 ../java/build/Proxy.java:203 ../java/build/Proxy.java:212
+#: ../java/build/Proxy.java:7 ../java/build/Proxy.java:16
+#: ../java/build/Proxy.java:28 ../java/build/Proxy.java:38
+#: ../java/build/Proxy.java:52 ../java/build/Proxy.java:65
+#: ../java/build/Proxy.java:77 ../java/build/Proxy.java:90
+#: ../java/build/Proxy.java:99 ../java/build/Proxy.java:116
+#: ../java/build/Proxy.java:128 ../java/build/Proxy.java:141
+#: ../java/build/Proxy.java:154 ../java/build/Proxy.java:162
+#: ../java/build/Proxy.java:174 ../java/build/Proxy.java:184
+#: ../java/build/Proxy.java:193 ../java/build/Proxy.java:203
+#: ../java/build/Proxy.java:212
 msgid "I2P Router Console"
 msgstr "I2P-routerconsole"
 
-#: ../java/build/Proxy.java:8 ../java/build/Proxy.java:17 ../java/build/Proxy.java:29 ../java/build/Proxy.java:39 ../java/build/Proxy.java:53 ../java/build/Proxy.java:66 ../java/build/Proxy.java:78
-#: ../java/build/Proxy.java:91 ../java/build/Proxy.java:100 ../java/build/Proxy.java:117 ../java/build/Proxy.java:129 ../java/build/Proxy.java:142 ../java/build/Proxy.java:155 ../java/build/Proxy.java:163
-#: ../java/build/Proxy.java:175 ../java/build/Proxy.java:185 ../java/build/Proxy.java:194 ../java/build/Proxy.java:204 ../java/build/Proxy.java:213 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:322
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:379 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:408
+#: ../java/build/Proxy.java:8 ../java/build/Proxy.java:17
+#: ../java/build/Proxy.java:29 ../java/build/Proxy.java:39
+#: ../java/build/Proxy.java:53 ../java/build/Proxy.java:66
+#: ../java/build/Proxy.java:78 ../java/build/Proxy.java:91
+#: ../java/build/Proxy.java:100 ../java/build/Proxy.java:117
+#: ../java/build/Proxy.java:129 ../java/build/Proxy.java:142
+#: ../java/build/Proxy.java:155 ../java/build/Proxy.java:163
+#: ../java/build/Proxy.java:175 ../java/build/Proxy.java:185
+#: ../java/build/Proxy.java:194 ../java/build/Proxy.java:204
+#: ../java/build/Proxy.java:213
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:322
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:379
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:408
 msgid "Addressbook"
 msgstr "Toevoegen aan lokaal adresboek"
 
-#: ../java/build/Proxy.java:9 ../java/build/Proxy.java:18 ../java/build/Proxy.java:30 ../java/build/Proxy.java:40 ../java/build/Proxy.java:54 ../java/build/Proxy.java:67 ../java/build/Proxy.java:79
-#: ../java/build/Proxy.java:92 ../java/build/Proxy.java:101 ../java/build/Proxy.java:118 ../java/build/Proxy.java:130 ../java/build/Proxy.java:143 ../java/build/Proxy.java:156 ../java/build/Proxy.java:164
-#: ../java/build/Proxy.java:176 ../java/build/Proxy.java:186 ../java/build/Proxy.java:195 ../java/build/Proxy.java:205 ../java/build/Proxy.java:214 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:323
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:380 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:409
+#: ../java/build/Proxy.java:9 ../java/build/Proxy.java:18
+#: ../java/build/Proxy.java:30 ../java/build/Proxy.java:40
+#: ../java/build/Proxy.java:54 ../java/build/Proxy.java:67
+#: ../java/build/Proxy.java:79 ../java/build/Proxy.java:92
+#: ../java/build/Proxy.java:101 ../java/build/Proxy.java:118
+#: ../java/build/Proxy.java:130 ../java/build/Proxy.java:143
+#: ../java/build/Proxy.java:156 ../java/build/Proxy.java:164
+#: ../java/build/Proxy.java:176 ../java/build/Proxy.java:186
+#: ../java/build/Proxy.java:195 ../java/build/Proxy.java:205
+#: ../java/build/Proxy.java:214
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:323
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:380
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:409
 msgid "Configuration"
 msgstr "Configuratie wijzigingen opgeslagen"
 
-#: ../java/build/Proxy.java:10 ../java/build/Proxy.java:19 ../java/build/Proxy.java:31 ../java/build/Proxy.java:41 ../java/build/Proxy.java:55 ../java/build/Proxy.java:68 ../java/build/Proxy.java:80
-#: ../java/build/Proxy.java:93 ../java/build/Proxy.java:102 ../java/build/Proxy.java:119 ../java/build/Proxy.java:131 ../java/build/Proxy.java:144 ../java/build/Proxy.java:157 ../java/build/Proxy.java:165
-#: ../java/build/Proxy.java:177 ../java/build/Proxy.java:187 ../java/build/Proxy.java:196 ../java/build/Proxy.java:206 ../java/build/Proxy.java:215 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:324
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:381 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:410
+#: ../java/build/Proxy.java:10 ../java/build/Proxy.java:19
+#: ../java/build/Proxy.java:31 ../java/build/Proxy.java:41
+#: ../java/build/Proxy.java:55 ../java/build/Proxy.java:68
+#: ../java/build/Proxy.java:80 ../java/build/Proxy.java:93
+#: ../java/build/Proxy.java:102 ../java/build/Proxy.java:119
+#: ../java/build/Proxy.java:131 ../java/build/Proxy.java:144
+#: ../java/build/Proxy.java:157 ../java/build/Proxy.java:165
+#: ../java/build/Proxy.java:177 ../java/build/Proxy.java:187
+#: ../java/build/Proxy.java:196 ../java/build/Proxy.java:206
+#: ../java/build/Proxy.java:215
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:324
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:381
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:410
 msgid "Help"
 msgstr "Hulp"
 
@@ -61,11 +104,10 @@ msgstr "De aanvraag-URI is ongeldig, en bevat waarschijnlijk ongeldige tekens."
 
 #: ../java/build/Proxy.java:13
 msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr ""
-"Als u op een link hebt geklikt, controleer dan aan het einde van de URI of er tekens zijn die de browser per ongeluk heeft toegevoegd.Als je op een koppeling klikte, controleer dan het einde van de URI voor tekens "
-"die de browser er per abuis aan heeft toegevoegd."
+msgstr "Als u op een link hebt geklikt, controleer dan aan het einde van de URI of er tekens zijn die de browser per ongeluk heeft toegevoegd.Als je op een koppeling klikte, controleer dan het einde van de URI voor tekens die de browser er per abuis aan heeft toegevoegd."
 
-#: ../java/build/Proxy.java:14 ../java/build/Proxy.java:20 ../java/build/Proxy.java:126 ../java/build/Proxy.java:132
+#: ../java/build/Proxy.java:14 ../java/build/Proxy.java:20
+#: ../java/build/Proxy.java:126 ../java/build/Proxy.java:132
 msgid "Connection Reset"
 msgstr "Verbinding gereset"
 
@@ -77,18 +119,25 @@ msgstr "De verbinding met de website werd gereset terwijl de pagina werd geladen
 msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
 msgstr "De website is mogelijk tijdelijk niet beschikbaar, te druk of heeft uw toegang geblokkeerd.De website is tijdelijk niet bereikbaar, te druk, of heeft je de toegang ontzegd."
 
-#: ../java/build/Proxy.java:23 ../java/build/Proxy.java:72 ../java/build/Proxy.java:124 ../java/build/Proxy.java:169
+#: ../java/build/Proxy.java:23 ../java/build/Proxy.java:72
+#: ../java/build/Proxy.java:124 ../java/build/Proxy.java:169
 #, java-format
 msgid "You may want to {0}retry{1}."
 msgstr "Je wil misschien {0}opnieuw proberen{1}."
 
-#: ../java/build/Proxy.java:24 ../java/build/Proxy.java:73 ../java/build/Proxy.java:86 ../java/build/Proxy.java:107 ../java/build/Proxy.java:137 ../java/build/Proxy.java:150 ../java/build/Proxy.java:170
+#: ../java/build/Proxy.java:24 ../java/build/Proxy.java:73
+#: ../java/build/Proxy.java:86 ../java/build/Proxy.java:107
+#: ../java/build/Proxy.java:137 ../java/build/Proxy.java:150
+#: ../java/build/Proxy.java:170
 #, java-format
 msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
 msgstr "Als u deze pagina open laat, probeert deze elke {0} seconden na een mislukte verbindingspoging automatisch opnieuw verbinding te maken met de website."
 
-#: ../java/build/Proxy.java:25 ../java/build/Proxy.java:62 ../java/build/Proxy.java:74 ../java/build/Proxy.java:87 ../java/build/Proxy.java:125 ../java/build/Proxy.java:138 ../java/build/Proxy.java:151
-#: ../java/build/Proxy.java:171 ../java/build/Proxy.java:190
+#: ../java/build/Proxy.java:25 ../java/build/Proxy.java:62
+#: ../java/build/Proxy.java:74 ../java/build/Proxy.java:87
+#: ../java/build/Proxy.java:125 ../java/build/Proxy.java:138
+#: ../java/build/Proxy.java:151 ../java/build/Proxy.java:171
+#: ../java/build/Proxy.java:190
 msgid "Could not find the following destination:"
 msgstr "Kon volgende bestemming niet vinden:"
 
@@ -170,7 +219,10 @@ msgstr "Zoek anders een Base 32- of adreshelperlink, of gebruik hieronder een ju
 msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 msgstr "Zie je deze pagina vaak? Zie je deze pagina vaak? Bekijk dan {0}de VGV{1} voor hulp met {2}abonnementen toevoegen{3} aan je adresboek."
 
-#: ../java/build/Proxy.java:63 ../java/build/Proxy.java:69 ../java/build/Proxy.java:160 ../java/build/Proxy.java:166 ../java/build/Proxy.java:182 ../java/build/Proxy.java:201 ../java/build/Proxy.java:207
+#: ../java/build/Proxy.java:63 ../java/build/Proxy.java:69
+#: ../java/build/Proxy.java:160 ../java/build/Proxy.java:166
+#: ../java/build/Proxy.java:182 ../java/build/Proxy.java:201
+#: ../java/build/Proxy.java:207
 msgid "Website Unreachable"
 msgstr "Website onbereikbaar"
 
@@ -182,7 +234,8 @@ msgstr "De website was niet bereikbaar, omdat de leaseset niet werd gevonden.De 
 msgid "The website is probably down, but there could also be network congestion."
 msgstr "De website is waarschijnlijk offline, maar er kan ook sprake zijn van netwerkoverbelasting.De website is waarschijnlijk plat, maar het netwerk kan ook overbelast zijn."
 
-#: ../java/build/Proxy.java:75 ../java/build/Proxy.java:81 ../java/build/Proxy.java:139 ../java/build/Proxy.java:145
+#: ../java/build/Proxy.java:75 ../java/build/Proxy.java:81
+#: ../java/build/Proxy.java:139 ../java/build/Proxy.java:145
 msgid "Outproxy Not Found"
 msgstr "Outproxy niet gevonden"
 
@@ -194,14 +247,14 @@ msgstr "De HTTP-outproxy is niet ingeschakeld."
 msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
 msgstr "Het is offline, er is netwerkoverbelasting of uw router is nog niet goed geïntegreerd met peers.Deze is offline, het netwerk is overbelast, of je router is nog niet goed geïntegreerd met peers."
 
-#: ../java/build/Proxy.java:84 ../java/build/Proxy.java:105 ../java/build/Proxy.java:135 ../java/build/Proxy.java:148
+#: ../java/build/Proxy.java:84 ../java/build/Proxy.java:105
+#: ../java/build/Proxy.java:135 ../java/build/Proxy.java:148
 #, java-format
 msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr ""
-"Misschien wilt u het {0}opnieuw proberen{1}, omdat hierdoor willekeurig een outproxy opnieuw wordt geselecteerd uit de groep die u {2}hier{3} heeft gedefinieerd (als u er meer dan één heeft geconfigureerd).Je wil "
-"misschien {0}opnieuw proberen{1} aangezien dit een willekeurige outproxy van de pool die je {2}hier{3} hebt gedefinieerd (als je er meer dan een hebt ingesteld) opnieuw zal selecteren."
+msgstr "Misschien wilt u het {0}opnieuw proberen{1}, omdat hierdoor willekeurig een outproxy opnieuw wordt geselecteerd uit de groep die u {2}hier{3} heeft gedefinieerd (als u er meer dan één heeft geconfigureerd).Je wil misschien {0}opnieuw proberen{1} aangezien dit een willekeurige outproxy van de pool die je {2}hier{3} hebt gedefinieerd (als je er meer dan een hebt ingesteld) opnieuw zal selecteren."
 
-#: ../java/build/Proxy.java:85 ../java/build/Proxy.java:106 ../java/build/Proxy.java:136 ../java/build/Proxy.java:149
+#: ../java/build/Proxy.java:85 ../java/build/Proxy.java:106
+#: ../java/build/Proxy.java:136 ../java/build/Proxy.java:149
 #, java-format
 msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
 msgstr "Als u problemen blijft ondervinden, kunt u uw outproxy-lijst {0}hier{1} bewerken.Als je problemen blijft ondervinden wil je misschien je outproxy-lijst {0}hier{1} wijzigen."
@@ -224,11 +277,10 @@ msgstr "Outproxy onbereikbaar"
 
 #: ../java/build/Proxy.java:104
 msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr ""
-"De HTTP-outproxy was niet bereikbaar, omdat deze coderingsopties gebruikt die niet worden ondersteund door uw I2P- of Java-versie.De HTTP-outproxy kan niet bereikt worden omdat deze versleutelingsopties gebruikt die "
-"niet worden ondersteund door je I2P- of Java-versie."
+msgstr "De HTTP-outproxy was niet bereikbaar, omdat deze coderingsopties gebruikt die niet worden ondersteund door uw I2P- of Java-versie.De HTTP-outproxy kan niet bereikt worden omdat deze versleutelingsopties gebruikt die niet worden ondersteund door je I2P- of Java-versie."
 
-#: ../java/build/Proxy.java:108 ../java/build/Proxy.java:159 ../java/build/Proxy.java:209
+#: ../java/build/Proxy.java:108 ../java/build/Proxy.java:159
+#: ../java/build/Proxy.java:209
 msgid "Could not connect to the following destination:"
 msgstr "Kon niet verbinden met de volgende bestemming:"
 
@@ -247,18 +299,15 @@ msgstr "Deze proxy is geconfigureerd om een ​​gebruikersnaam en wachtwoord t
 #: ../java/build/Proxy.java:112
 #, java-format
 msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr ""
-"Voer uw gebruikersnaam en wachtwoord in, of controleer uw {0}routerconfiguratie{1} of {2}I2PTunnel-configuratie{3}.Voer je gebruikersnaam en wachtwoord in, of controleer je {0}routerinstellingen{1} of {2}I2PTunnel-"
-"instellingen{3}."
+msgstr "Voer uw gebruikersnaam en wachtwoord in, of controleer uw {0}routerconfiguratie{1} of {2}I2PTunnel-configuratie{3}.Voer je gebruikersnaam en wachtwoord in, of controleer je {0}routerinstellingen{1} of {2}I2PTunnel-instellingen{3}."
 
 #: ../java/build/Proxy.java:113
 #, java-format
 msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr ""
-"Om autorisatie uit te schakelen, verwijdert u de configuratie {0}i2ptunnel.proxy.auth=basic{1}, stopt u vervolgens en start u de HTTP Proxy-tunnel opnieuw.Om authenticatie uit te schakelen verwijder je de "
-"configuratie {0}i2ptunnel.proxy.auth=basic{1} en stop en herstart je vervolgens de HTTP-proxytunnel."
+msgstr "Om autorisatie uit te schakelen, verwijdert u de configuratie {0}i2ptunnel.proxy.auth=basic{1}, stopt u vervolgens en start u de HTTP Proxy-tunnel opnieuw.Om authenticatie uit te schakelen verwijder je de configuratie {0}i2ptunnel.proxy.auth=basic{1} en stop en herstart je vervolgens de HTTP-proxytunnel."
 
-#: ../java/build/Proxy.java:114 ../java/build/Proxy.java:120 ../java/build/Proxy.java:188
+#: ../java/build/Proxy.java:114 ../java/build/Proxy.java:120
+#: ../java/build/Proxy.java:188
 msgid "Warning: Invalid Destination"
 msgstr "Waarschuwing: ongeldige bestemming"
 
@@ -308,21 +357,15 @@ msgstr "Waarschuwing: bestemmingssleutelconflict"
 
 #: ../java/build/Proxy.java:179
 msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
-msgstr ""
-"De adreshelperlink die u hebt gevolgd, specificeert een andere bestemmingssleutel dan de vermelding in uw adresboek.De adreshelperkoppeling die je hebt gevolgd geeft een andere bestemmingssleutel op dan het adres in "
-"je adresboek."
+msgstr "De adreshelperlink die u hebt gevolgd, specificeert een andere bestemmingssleutel dan de vermelding in uw adresboek.De adreshelperkoppeling die je hebt gevolgd geeft een andere bestemmingssleutel op dan het adres in je adresboek."
 
 #: ../java/build/Proxy.java:180
 msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
-msgstr ""
-"Het kan zijn dat iemand probeert zich voor te doen als een andere website, of dat mensen twee websites een identieke naam hebben gegeven.Iemand zou een andere website kunnen proberen imiteren, of mensen hebben twee "
-"websites identieke namen gegeven."
+msgstr "Het kan zijn dat iemand probeert zich voor te doen als een andere website, of dat mensen twee websites een identieke naam hebben gegeven.Iemand zou een andere website kunnen proberen imiteren, of mensen hebben twee websites identieke namen gegeven."
 
 #: ../java/build/Proxy.java:181
 msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
-msgstr ""
-"Los het conflict op door te beslissen welke sleutel u vertrouwt en negeer vervolgens de adreshelperlink, of verwijder de hostvermelding uit uw adresboek en klik opnieuw op de adreshelperlink.Los het conflict op door "
-"een keuze te maken welke sleutel je vertrouwt, en negeer vervolgens de adreshelperkoppeling, of verwijder de hostregel uit je adresboek en klik nogmaals op de adreshelperkoppeling."
+msgstr "Los het conflict op door te beslissen welke sleutel u vertrouwt en negeer vervolgens de adreshelperlink, of verwijder de hostvermelding uit uw adresboek en klik opnieuw op de adreshelperlink.Los het conflict op door een keuze te maken welke sleutel je vertrouwt, en negeer vervolgens de adreshelperkoppeling, of verwijder de hostregel uit je adresboek en klik nogmaals op de adreshelperkoppeling."
 
 #: ../java/build/Proxy.java:189
 msgid "The Base32 address is invalid."
@@ -343,15 +386,11 @@ msgstr "Het lijkt op rommeldata, of een verkeerd getypt Base-32-adres."
 
 #: ../java/build/Proxy.java:200
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr ""
-"Controleer uw URL om te proberen de helpersleutel te corrigeren zodat deze een geldige Base 32-hostnaam of Base 64-sleutel is.Controleer je URL om te proberen de helpersleutel te herstellen om een geldige Base-32 "
-"hostnaam of Base-64 sleutel te zijn."
+msgstr "Controleer uw URL om te proberen de helpersleutel te corrigeren zodat deze een geldige Base 32-hostnaam of Base 64-sleutel is.Controleer je URL om te proberen de helpersleutel te herstellen om een geldige Base-32 hostnaam of Base-64 sleutel te zijn."
 
 #: ../java/build/Proxy.java:208
 msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr ""
-"De website was niet bereikbaar, omdat deze coderingsopties gebruikt die niet worden ondersteund door uw I2P- of Java-versie.De website kan niet bereikt worden omdat deze versleutelingsopties gebruikt die niet worden "
-"ondersteund door je I2P- of Java-versie."
+msgstr "De website was niet bereikbaar, omdat deze coderingsopties gebruikt die niet worden ondersteund door uw I2P- of Java-versie.De website kan niet bereikt worden omdat deze versleutelingsopties gebruikt die niet worden ondersteund door je I2P- of Java-versie."
 
 #: ../java/build/Proxy.java:210
 msgid "Information: New Host Name"
@@ -415,7 +454,8 @@ msgstr "Bestemming LeaseSet niet gevonden"
 msgid "Host"
 msgstr "Host"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1503 ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1564
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1503
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1564
 msgid "Base32"
 msgstr "Basis32"
 
@@ -450,7 +490,8 @@ msgid "If you want to keep track of sites you have added manually, add to your M
 msgstr "Als u sites wilt bijhouden die u handmatig heeft toegevoegd, voeg deze dan toe aan uw hoofd- of privé-adresboek."
 
 #. FIXME wasn't escaped
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1528 ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1604
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1528
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1604
 msgid "Save & continue"
 msgstr "Opslaan & doorgaan"
 
@@ -542,7 +583,8 @@ msgstr "Ontbrekende privésleutel"
 msgid "Invalid private key"
 msgstr "Ongeldige privésleutel"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:318 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:326
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:318
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:326
 msgid "Your new encryption key"
 msgstr "Je nieuwe encryptiesleutel"
 
@@ -570,7 +612,8 @@ msgstr "meester"
 msgid "private"
 msgstr "privé"
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:374 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:403
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:374
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:403
 #, java-format
 msgid "Redirecting to {0}"
 msgstr "Doorverwijzen naar {0}"
@@ -589,7 +632,8 @@ msgstr "{0} is in het {1} adresboek opgeslagen, je wordt nu doorgestuurd."
 msgid "Failed to save {0} to the {1} addressbook, redirecting now."
 msgstr "Kan {0} niet opslaan in het adresboek van {1}. Er wordt nu omgeleid.Opslaan van {0} in het {1} adresboek mislukt, je wordt nu doorgestuurd."
 
-#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:387 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:414
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:387
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:414
 msgid "Click here if you are not redirected automatically."
 msgstr "Klik hier als je niet automatisch wordt doorgestuurd."
 
@@ -597,4 +641,3 @@ msgstr "Klik hier als je niet automatisch wordt doorgestuurd."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Authenticatie voor {0} opgeslagen, nu omleiden."
-

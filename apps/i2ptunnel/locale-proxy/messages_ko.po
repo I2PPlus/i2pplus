@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
-"PO-Revision-Date: 2023-10-25 19:44+0000\n"
+"PO-Revision-Date: 2023-11-22 21:51+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ko\n"
@@ -21,59 +21,78 @@ msgstr ""
 msgid "Warning: Invalid Request URI"
 msgstr "경고: 올바르지 않은 URL"
 
-#: ../java/build/Proxy.java:6 ../java/build/Proxy.java:15 ../java/build/Proxy.java:27
-#: ../java/build/Proxy.java:37 ../java/build/Proxy.java:51 ../java/build/Proxy.java:64
-#: ../java/build/Proxy.java:76 ../java/build/Proxy.java:89 ../java/build/Proxy.java:98
-#: ../java/build/Proxy.java:115 ../java/build/Proxy.java:127 ../java/build/Proxy.java:140
-#: ../java/build/Proxy.java:153 ../java/build/Proxy.java:161 ../java/build/Proxy.java:173
-#: ../java/build/Proxy.java:183 ../java/build/Proxy.java:192 ../java/build/Proxy.java:202
-#: ../java/build/Proxy.java:211 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:320
+#: ../java/build/Proxy.java:6 ../java/build/Proxy.java:15
+#: ../java/build/Proxy.java:27 ../java/build/Proxy.java:37
+#: ../java/build/Proxy.java:51 ../java/build/Proxy.java:64
+#: ../java/build/Proxy.java:76 ../java/build/Proxy.java:89
+#: ../java/build/Proxy.java:98 ../java/build/Proxy.java:115
+#: ../java/build/Proxy.java:127 ../java/build/Proxy.java:140
+#: ../java/build/Proxy.java:153 ../java/build/Proxy.java:161
+#: ../java/build/Proxy.java:173 ../java/build/Proxy.java:183
+#: ../java/build/Proxy.java:192 ../java/build/Proxy.java:202
+#: ../java/build/Proxy.java:211
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:320
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:376
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:405
 msgid "Router Console"
 msgstr "라우터 콘솔"
 
-#: ../java/build/Proxy.java:7 ../java/build/Proxy.java:16 ../java/build/Proxy.java:28
-#: ../java/build/Proxy.java:38 ../java/build/Proxy.java:52 ../java/build/Proxy.java:65
-#: ../java/build/Proxy.java:77 ../java/build/Proxy.java:90 ../java/build/Proxy.java:99
-#: ../java/build/Proxy.java:116 ../java/build/Proxy.java:128 ../java/build/Proxy.java:141
-#: ../java/build/Proxy.java:154 ../java/build/Proxy.java:162 ../java/build/Proxy.java:174
-#: ../java/build/Proxy.java:184 ../java/build/Proxy.java:193 ../java/build/Proxy.java:203
+#: ../java/build/Proxy.java:7 ../java/build/Proxy.java:16
+#: ../java/build/Proxy.java:28 ../java/build/Proxy.java:38
+#: ../java/build/Proxy.java:52 ../java/build/Proxy.java:65
+#: ../java/build/Proxy.java:77 ../java/build/Proxy.java:90
+#: ../java/build/Proxy.java:99 ../java/build/Proxy.java:116
+#: ../java/build/Proxy.java:128 ../java/build/Proxy.java:141
+#: ../java/build/Proxy.java:154 ../java/build/Proxy.java:162
+#: ../java/build/Proxy.java:174 ../java/build/Proxy.java:184
+#: ../java/build/Proxy.java:193 ../java/build/Proxy.java:203
 #: ../java/build/Proxy.java:212
 msgid "I2P Router Console"
 msgstr "I2P 라우터 콘솔"
 
-#: ../java/build/Proxy.java:8 ../java/build/Proxy.java:17 ../java/build/Proxy.java:29
-#: ../java/build/Proxy.java:39 ../java/build/Proxy.java:53 ../java/build/Proxy.java:66
-#: ../java/build/Proxy.java:78 ../java/build/Proxy.java:91 ../java/build/Proxy.java:100
-#: ../java/build/Proxy.java:117 ../java/build/Proxy.java:129 ../java/build/Proxy.java:142
-#: ../java/build/Proxy.java:155 ../java/build/Proxy.java:163 ../java/build/Proxy.java:175
-#: ../java/build/Proxy.java:185 ../java/build/Proxy.java:194 ../java/build/Proxy.java:204
-#: ../java/build/Proxy.java:213 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:322
+#: ../java/build/Proxy.java:8 ../java/build/Proxy.java:17
+#: ../java/build/Proxy.java:29 ../java/build/Proxy.java:39
+#: ../java/build/Proxy.java:53 ../java/build/Proxy.java:66
+#: ../java/build/Proxy.java:78 ../java/build/Proxy.java:91
+#: ../java/build/Proxy.java:100 ../java/build/Proxy.java:117
+#: ../java/build/Proxy.java:129 ../java/build/Proxy.java:142
+#: ../java/build/Proxy.java:155 ../java/build/Proxy.java:163
+#: ../java/build/Proxy.java:175 ../java/build/Proxy.java:185
+#: ../java/build/Proxy.java:194 ../java/build/Proxy.java:204
+#: ../java/build/Proxy.java:213
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:322
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:379
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:408
 msgid "Addressbook"
 msgstr "주소록"
 
-#: ../java/build/Proxy.java:9 ../java/build/Proxy.java:18 ../java/build/Proxy.java:30
-#: ../java/build/Proxy.java:40 ../java/build/Proxy.java:54 ../java/build/Proxy.java:67
-#: ../java/build/Proxy.java:79 ../java/build/Proxy.java:92 ../java/build/Proxy.java:101
-#: ../java/build/Proxy.java:118 ../java/build/Proxy.java:130 ../java/build/Proxy.java:143
-#: ../java/build/Proxy.java:156 ../java/build/Proxy.java:164 ../java/build/Proxy.java:176
-#: ../java/build/Proxy.java:186 ../java/build/Proxy.java:195 ../java/build/Proxy.java:205
-#: ../java/build/Proxy.java:214 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:323
+#: ../java/build/Proxy.java:9 ../java/build/Proxy.java:18
+#: ../java/build/Proxy.java:30 ../java/build/Proxy.java:40
+#: ../java/build/Proxy.java:54 ../java/build/Proxy.java:67
+#: ../java/build/Proxy.java:79 ../java/build/Proxy.java:92
+#: ../java/build/Proxy.java:101 ../java/build/Proxy.java:118
+#: ../java/build/Proxy.java:130 ../java/build/Proxy.java:143
+#: ../java/build/Proxy.java:156 ../java/build/Proxy.java:164
+#: ../java/build/Proxy.java:176 ../java/build/Proxy.java:186
+#: ../java/build/Proxy.java:195 ../java/build/Proxy.java:205
+#: ../java/build/Proxy.java:214
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:323
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:380
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:409
 msgid "Configuration"
 msgstr "설정"
 
-#: ../java/build/Proxy.java:10 ../java/build/Proxy.java:19 ../java/build/Proxy.java:31
-#: ../java/build/Proxy.java:41 ../java/build/Proxy.java:55 ../java/build/Proxy.java:68
-#: ../java/build/Proxy.java:80 ../java/build/Proxy.java:93 ../java/build/Proxy.java:102
-#: ../java/build/Proxy.java:119 ../java/build/Proxy.java:131 ../java/build/Proxy.java:144
-#: ../java/build/Proxy.java:157 ../java/build/Proxy.java:165 ../java/build/Proxy.java:177
-#: ../java/build/Proxy.java:187 ../java/build/Proxy.java:196 ../java/build/Proxy.java:206
-#: ../java/build/Proxy.java:215 ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:324
+#: ../java/build/Proxy.java:10 ../java/build/Proxy.java:19
+#: ../java/build/Proxy.java:31 ../java/build/Proxy.java:41
+#: ../java/build/Proxy.java:55 ../java/build/Proxy.java:68
+#: ../java/build/Proxy.java:80 ../java/build/Proxy.java:93
+#: ../java/build/Proxy.java:102 ../java/build/Proxy.java:119
+#: ../java/build/Proxy.java:131 ../java/build/Proxy.java:144
+#: ../java/build/Proxy.java:157 ../java/build/Proxy.java:165
+#: ../java/build/Proxy.java:177 ../java/build/Proxy.java:187
+#: ../java/build/Proxy.java:196 ../java/build/Proxy.java:206
+#: ../java/build/Proxy.java:215
+#: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:324
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:381
 #: ../java/src/net/i2p/i2ptunnel/localServer/LocalHTTPServer.java:410
 msgid "Help"
@@ -81,17 +100,14 @@ msgstr "도움말"
 
 #: ../java/build/Proxy.java:12
 msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr ""
-"요청 URI가 잘못되었으며 잘못된 문자가 포함되어 있을 수 있습니다.URL 주소가 올바르지 않습니다. 혹은 잘못된 특"
-"수문자가 포함되어 있을 수 있습니다."
+msgstr "요청 URI가 잘못되었으며 잘못된 문자가 포함되어 있을 수 있습니다.URL 주소가 올바르지 않습니다. 혹은 잘못된 특수문자가 포함되어 있을 수 있습니다."
 
 #: ../java/build/Proxy.java:13
-msgid ""
-"If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
 msgstr "링크를 클릭하셨다면 주소에 특수문자가 들어가있는지 확인하십시오."
 
-#: ../java/build/Proxy.java:14 ../java/build/Proxy.java:20 ../java/build/Proxy.java:126
-#: ../java/build/Proxy.java:132
+#: ../java/build/Proxy.java:14 ../java/build/Proxy.java:20
+#: ../java/build/Proxy.java:126 ../java/build/Proxy.java:132
 msgid "Connection Reset"
 msgstr "연결 리셋"
 
@@ -101,28 +117,27 @@ msgstr "페이지가 로딩되는 동안 연결이 리셋됬습니다."
 
 #: ../java/build/Proxy.java:22
 msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr ""
-"웹사이트를 일시적으로 사용할 수 없거나, 사용량이 너무 많거나, 액세스가 차단되었을 수 있습니다.웹사이트에 일"
-"시적으로 접속할 수 없습니다. 접속이 폭주하고 있거나, 사용자를 차단했을 수 있습니다."
+msgstr "웹사이트를 일시적으로 사용할 수 없거나, 사용량이 너무 많거나, 액세스가 차단되었을 수 있습니다.웹사이트에 일시적으로 접속할 수 없습니다. 접속이 폭주하고 있거나, 사용자를 차단했을 수 있습니다."
 
-#: ../java/build/Proxy.java:23 ../java/build/Proxy.java:72 ../java/build/Proxy.java:124
-#: ../java/build/Proxy.java:169
+#: ../java/build/Proxy.java:23 ../java/build/Proxy.java:72
+#: ../java/build/Proxy.java:124 ../java/build/Proxy.java:169
 #, java-format
 msgid "You may want to {0}retry{1}."
 msgstr "{0}재시도{1} 해보시겠습니까."
 
-#: ../java/build/Proxy.java:24 ../java/build/Proxy.java:73 ../java/build/Proxy.java:86
-#: ../java/build/Proxy.java:107 ../java/build/Proxy.java:137 ../java/build/Proxy.java:150
+#: ../java/build/Proxy.java:24 ../java/build/Proxy.java:73
+#: ../java/build/Proxy.java:86 ../java/build/Proxy.java:107
+#: ../java/build/Proxy.java:137 ../java/build/Proxy.java:150
 #: ../java/build/Proxy.java:170
 #, java-format
-msgid ""
-"If you leave this page open, it will automatically retry connecting to the website every {0} seconds after "
-"a failed connection attempt."
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
 msgstr "이 페이지를 열어두면 연결 시도 실패 후 {0}초마다 자동으로 웹사이트 연결을 다시 시도합니다."
 
-#: ../java/build/Proxy.java:25 ../java/build/Proxy.java:62 ../java/build/Proxy.java:74
-#: ../java/build/Proxy.java:87 ../java/build/Proxy.java:125 ../java/build/Proxy.java:138
-#: ../java/build/Proxy.java:151 ../java/build/Proxy.java:171 ../java/build/Proxy.java:190
+#: ../java/build/Proxy.java:25 ../java/build/Proxy.java:62
+#: ../java/build/Proxy.java:74 ../java/build/Proxy.java:87
+#: ../java/build/Proxy.java:125 ../java/build/Proxy.java:138
+#: ../java/build/Proxy.java:151 ../java/build/Proxy.java:171
+#: ../java/build/Proxy.java:190
 msgid "Could not find the following destination:"
 msgstr "다음의 목적지를 찾을 수 없습니다:"
 
@@ -148,9 +163,7 @@ msgstr "경고: 아웃프록시 설정안됨"
 
 #: ../java/build/Proxy.java:43
 msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr ""
-"귀하의 요청은 I2P 외부 사이트에 대한 것이지만 HTTP 아웃프록시가 구성되어 있지 않습니다.I2P 외부에 접속하려 "
-"하셨습니다. 그러나 HTTP 아웃프록시가 설정되있지 않습니다."
+msgstr "귀하의 요청은 I2P 외부 사이트에 대한 것이지만 HTTP 아웃프록시가 구성되어 있지 않습니다.I2P 외부에 접속하려 하셨습니다. 그러나 HTTP 아웃프록시가 설정되있지 않습니다."
 
 #: ../java/build/Proxy.java:44
 msgid "Please configure an outproxy in I2PTunnel."
@@ -170,17 +183,11 @@ msgstr "브라우저가 잘못 설정되었습니다."
 
 #: ../java/build/Proxy.java:48
 msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr ""
-"라우터 콘솔, 로컬 호스트 또는 로컬 LAN 대상에 액세스하기 위해 프록시를 사용하지 마십시오.라우터 콘솔, "
-"Localhost, 또는 로컬 LAN 목적지에 접속하기 위해 프록시를 사용하지 마십시오."
+msgstr "라우터 콘솔, 로컬 호스트 또는 로컬 LAN 대상에 액세스하기 위해 프록시를 사용하지 마십시오.라우터 콘솔, Localhost, 또는 로컬 LAN 목적지에 접속하기 위해 프록시를 사용하지 마십시오."
 
 #: ../java/build/Proxy.java:49
-msgid ""
-"You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via "
-"I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr ""
-"일반적으로 브라우저의 프록시 구성 섹션에서 주소를 제외하여 127.0.0.1(또는 I2P 콘솔에 액세스하는 주소)이 I2P"
-"의 http 프록시를 통해 라우팅되는 것을 방지해야 합니다."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "일반적으로 브라우저의 프록시 구성 섹션에서 주소를 제외하여 127.0.0.1(또는 I2P 콘솔에 액세스하는 주소)이 I2P의 http 프록시를 통해 라우팅되는 것을 방지해야 합니다."
 
 #: ../java/build/Proxy.java:50
 msgid "Website Unknown"
@@ -205,20 +212,16 @@ msgstr "Base 64 주소가 있으시다면, {0}주소록에 저장하세요{1}."
 
 #: ../java/build/Proxy.java:60
 msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
-msgstr ""
-"그렇지 않으면 Base 32 또는 주소 도우미 링크를 찾거나 아래 점프 서비스 링크를 사용하세요.또는 주소록 도우미로"
-"부터 Base 32 주소를 찾거나 아래의 점프 서비스 링크를 이용하세요."
+msgstr "그렇지 않으면 Base 32 또는 주소 도우미 링크를 찾거나 아래 점프 서비스 링크를 사용하세요.또는 주소록 도우미로부터 Base 32 주소를 찾거나 아래의 점프 서비스 링크를 이용하세요."
 
 #: ../java/build/Proxy.java:61
 #, java-format
-msgid ""
-"Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
-msgstr ""
-"이 페이지를 자주 보시나요? 이 페이지가 자주 보이세요? See {0}the FAQ{1} for help in {2}adding some "
-"subscriptions{3} to your addressbook."
+msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
+msgstr "이 페이지를 자주 보시나요? 이 페이지가 자주 보이세요? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
 
-#: ../java/build/Proxy.java:63 ../java/build/Proxy.java:69 ../java/build/Proxy.java:160
-#: ../java/build/Proxy.java:166 ../java/build/Proxy.java:182 ../java/build/Proxy.java:201
+#: ../java/build/Proxy.java:63 ../java/build/Proxy.java:69
+#: ../java/build/Proxy.java:160 ../java/build/Proxy.java:166
+#: ../java/build/Proxy.java:182 ../java/build/Proxy.java:201
 #: ../java/build/Proxy.java:207
 msgid "Website Unreachable"
 msgstr "접속할 수 없습니다"
@@ -229,12 +232,10 @@ msgstr "웹사이트에 접속할 수 없었습니다. 공유지를 찾을 수 �
 
 #: ../java/build/Proxy.java:71
 msgid "The website is probably down, but there could also be network congestion."
-msgstr ""
-"웹사이트가 다운되었을 수도 있지만, 네트워크 정체가 있을 수도 있습니다.해당 웹사이트가 다운된 상태인것 같습니"
-"다. 혹은 네트워크가 혼잡한 상태입니다."
+msgstr "웹사이트가 다운되었을 수도 있지만, 네트워크 정체가 있을 수도 있습니다.해당 웹사이트가 다운된 상태인것 같습니다. 혹은 네트워크가 혼잡한 상태입니다."
 
-#: ../java/build/Proxy.java:75 ../java/build/Proxy.java:81 ../java/build/Proxy.java:139
-#: ../java/build/Proxy.java:145
+#: ../java/build/Proxy.java:75 ../java/build/Proxy.java:81
+#: ../java/build/Proxy.java:139 ../java/build/Proxy.java:145
 msgid "Outproxy Not Found"
 msgstr "아웃프록시 발견안됨"
 
@@ -244,28 +245,19 @@ msgstr "HTTP 아웃프록시가 발견되지 않았습니다."
 
 #: ../java/build/Proxy.java:83
 msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr ""
-"오프라인 상태이거나, 네트워크 정체가 있거나, 라우터가 아직 피어와 제대로 통합되지 않았습니다.웹사이트가 닫혔"
-"거나, 네트워크가 혼잡할 수 있습니다. 혹은 당신의 라우터가 피어들과 충분히 연결되지 않은 상태일 수 있습니다."
+msgstr "오프라인 상태이거나, 네트워크 정체가 있거나, 라우터가 아직 피어와 제대로 통합되지 않았습니다.웹사이트가 닫혔거나, 네트워크가 혼잡할 수 있습니다. 혹은 당신의 라우터가 피어들과 충분히 연결되지 않은 상태일 수 있습니다."
 
-#: ../java/build/Proxy.java:84 ../java/build/Proxy.java:105 ../java/build/Proxy.java:135
-#: ../java/build/Proxy.java:148
+#: ../java/build/Proxy.java:84 ../java/build/Proxy.java:105
+#: ../java/build/Proxy.java:135 ../java/build/Proxy.java:148
 #, java-format
-msgid ""
-"You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}"
-"here{3} (if you have more than one configured)."
-msgstr ""
-"{2}여기{3}에 정의한 풀에서 외부 프록시를 무작위로 다시 선택하므로 {0}재시도{1}할 수 있습니다(둘 이상 구성한 "
-"경우).아웃프록시 접속은 랜덤이기에, {0}재시도{1} 하여 다른 아웃프록시에 접속할 수 있습니다. from the pool "
-"you have defined {2}here{3} (if you have more than one configured)."
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "{2}여기{3}에 정의한 풀에서 외부 프록시를 무작위로 다시 선택하므로 {0}재시도{1}할 수 있습니다(둘 이상 구성한 경우).아웃프록시 접속은 랜덤이기에, {0}재시도{1} 하여 다른 아웃프록시에 접속할 수 있습니다. from the pool you have defined {2}here{3} (if you have more than one configured)."
 
-#: ../java/build/Proxy.java:85 ../java/build/Proxy.java:106 ../java/build/Proxy.java:136
-#: ../java/build/Proxy.java:149
+#: ../java/build/Proxy.java:85 ../java/build/Proxy.java:106
+#: ../java/build/Proxy.java:136 ../java/build/Proxy.java:149
 #, java-format
 msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr ""
-"문제가 계속 발생하면 {0}여기{1}에서 외부 프록시 목록을 수정하실 수 있습니다.만약 문제가 지속된다면 {0}여기서"
-"{1} 아웃프록시 리스트를 변경할 수 있습니다."
+msgstr "문제가 계속 발생하면 {0}여기{1}에서 외부 프록시 목록을 수정하실 수 있습니다.만약 문제가 지속된다면 {0}여기서{1} 아웃프록시 리스트를 변경할 수 있습니다."
 
 #: ../java/build/Proxy.java:88 ../java/build/Proxy.java:94
 msgid "Warning: Request Denied"
@@ -284,14 +276,11 @@ msgid "Outproxy Unreachable"
 msgstr "아웃프록시에 도달할 수 없습니다"
 
 #: ../java/build/Proxy.java:104
-msgid ""
-"The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P "
-"or Java version."
-msgstr ""
-"HTTP 아웃프록시는 I2P 또는 Java 버전에서 지원하지 않는 암호화 옵션을 사용하기 때문에 연결할 수 없습니다.아"
-"웃 프록시에 접속할 수 없습니다. 암호화 설정이 사용중인 I2P, JAVA와 호환되지 않습니다."
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "HTTP 아웃프록시는 I2P 또는 Java 버전에서 지원하지 않는 암호화 옵션을 사용하기 때문에 연결할 수 없습니다.아웃 프록시에 접속할 수 없습니다. 암호화 설정이 사용중인 I2P, JAVA와 호환되지 않습니다."
 
-#: ../java/build/Proxy.java:108 ../java/build/Proxy.java:159 ../java/build/Proxy.java:209
+#: ../java/build/Proxy.java:108 ../java/build/Proxy.java:159
+#: ../java/build/Proxy.java:209
 msgid "Could not connect to the following destination:"
 msgstr "다음 목적지에 도달할 수 없습니다:"
 
@@ -309,24 +298,16 @@ msgstr "이 프록시는 유저네임 및 패스워드가 요구되도록 설정
 
 #: ../java/build/Proxy.java:112
 #, java-format
-msgid ""
-"Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel "
-"configuration{3}."
-msgstr ""
-"사용자 이름과 비밀번호를 입력하거나 {0}라우터 구성{1} 또는 {2}I2PTunnel 구성{3}을 확인하세요.유저네임과 패스"
-"워드를 입력해주세요. 또는 {0}라우터 설정{1} 이나 {2}I2P터널 설정{3}을 확인하세요."
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "사용자 이름과 비밀번호를 입력하거나 {0}라우터 구성{1} 또는 {2}I2PTunnel 구성{3}을 확인하세요.유저네임과 패스워드를 입력해주세요. 또는 {0}라우터 설정{1} 이나 {2}I2P터널 설정{3}을 확인하세요."
 
 #: ../java/build/Proxy.java:113
 #, java-format
-msgid ""
-"To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart "
-"the HTTP Proxy tunnel."
-msgstr ""
-"승인을 사용 중지하려면 {0}i2ptunnel.proxy.auth=basic{1} 구성을 삭제한 다음 HTTP 프록시 터널을 중지했다가 다"
-"시 시작하세요.인증을 비활성화 하려면 {0}i2ptunnel.proxy.auth=basic{1} 설정을 삭제하고 HTTP 프록시 터널을 종"
-"료 후 재시작하세요."
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "승인을 사용 중지하려면 {0}i2ptunnel.proxy.auth=basic{1} 구성을 삭제한 다음 HTTP 프록시 터널을 중지했다가 다시 시작하세요.인증을 비활성화 하려면 {0}i2ptunnel.proxy.auth=basic{1} 설정을 삭제하고 HTTP 프록시 터널을 종료 후 재시작하세요."
 
-#: ../java/build/Proxy.java:114 ../java/build/Proxy.java:120 ../java/build/Proxy.java:188
+#: ../java/build/Proxy.java:114 ../java/build/Proxy.java:120
+#: ../java/build/Proxy.java:188
 msgid "Warning: Invalid Destination"
 msgstr "경고: 비정상적인 목적지"
 
@@ -336,9 +317,7 @@ msgstr "연결 목적지가 올바르지 않습니다. 또는 연결이 불가�
 
 #: ../java/build/Proxy.java:122
 msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr ""
-"잘못된 Base 64 문자열을 붙여넣었거나 팔로우하는 링크가 잘못되었을 수 있습니다.올바르지 않은 Base 64 주소를 "
-"입력했거나, 타고 들어온 링크가 잘못됬을 수 있습니다."
+msgstr "잘못된 Base 64 문자열을 붙여넣었거나 팔로우하는 링크가 잘못되었을 수 있습니다.올바르지 않은 Base 64 주소를 입력했거나, 타고 들어온 링크가 잘못됬을 수 있습니다."
 
 #: ../java/build/Proxy.java:123
 msgid "The I2P host could also be offline."
@@ -350,9 +329,7 @@ msgstr "프록시 연결이 리셋되었습니다."
 
 #: ../java/build/Proxy.java:134
 msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr ""
-"프록시를 일시적으로 사용할 수 없거나 사용량이 너무 많거나 액세스가 차단되었을 수 있습니다.이 프록시는 일시적"
-"으로 사용할 수 없습니다. 접속이 폭주하고 있거나, 사용자를 차단했을 수 있습니다."
+msgstr "프록시를 일시적으로 사용할 수 없거나 사용량이 너무 많거나 액세스가 차단되었을 수 있습니다.이 프록시는 일시적으로 사용할 수 없습니다. 접속이 폭주하고 있거나, 사용자를 차단했을 수 있습니다."
 
 #: ../java/build/Proxy.java:146
 msgid "The HTTP outproxy was not reachable, because its lease set was not found."
@@ -360,9 +337,7 @@ msgstr "HTTP 아웃프록시와 연결할 수 없습니다. 공유지를 찾을 
 
 #: ../java/build/Proxy.java:147
 msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr ""
-"아웃프록시가 다운되었을 수 있지만 네트워크 정체가 있을 수도 있습니다.아웃프록시가 일시적으로 다운됬을 수 있"
-"습니다. 혹은 네트워크가 혼잡한 상태입니다."
+msgstr "아웃프록시가 다운되었을 수 있지만 네트워크 정체가 있을 수도 있습니다.아웃프록시가 일시적으로 다운됬을 수 있습니다. 혹은 네트워크가 혼잡한 상태입니다."
 
 #: ../java/build/Proxy.java:152 ../java/build/Proxy.java:158
 msgid "Warning: Authorization Required"
@@ -373,41 +348,24 @@ msgid "The website was not reachable."
 msgstr "이 웹사이트에 접속할 수 없습니다."
 
 #: ../java/build/Proxy.java:168
-msgid ""
-"The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr ""
-"웹사이트가 오프라인 상태이거나, 네트워크 정체가 있거나, 라우터가 아직 피어와 제대로 통합되지 않았습니다.웹사"
-"이트가 닫혔거나, 네트워크가 혼잡할 수 있습니다. 혹은 당신의 라우터가 피어들과 충분히 연결되지 않은 상태일 "
-"수 있습니다."
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "웹사이트가 오프라인 상태이거나, 네트워크 정체가 있거나, 라우터가 아직 피어와 제대로 통합되지 않았습니다.웹사이트가 닫혔거나, 네트워크가 혼잡할 수 있습니다. 혹은 당신의 라우터가 피어들과 충분히 연결되지 않은 상태일 수 있습니다."
 
 #: ../java/build/Proxy.java:172 ../java/build/Proxy.java:178
 msgid "Warning: Destination Key Conflict"
 msgstr "경고: 목적지 키 충돌"
 
 #: ../java/build/Proxy.java:179
-msgid ""
-"The address helper link you followed specifies a different destination key than the entry in your address "
-"book."
-msgstr ""
-"귀하가 따라온 주소 도우미 링크가 주소록 항목과 다른 대상 키를 지정합니다.주소록 도우미는 타고들어온 링크가 "
-"주소록에 있는 키와 다를 때 도음을 줍니다."
+msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
+msgstr "귀하가 따라온 주소 도우미 링크가 주소록 항목과 다른 대상 키를 지정합니다.주소록 도우미는 타고들어온 링크가 주소록에 있는 키와 다를 때 도음을 줍니다."
 
 #: ../java/build/Proxy.java:180
-msgid ""
-"Someone could be trying to impersonate another website, or people have given two websites identical names."
-msgstr ""
-"누군가가 다른 웹사이트를 가장하려고 시도하고 있거나 사람들이 두 웹사이트에 동일한 이름을 부여했을 수 있습니"
-"다.누군가 가짜 웹사이트로 접속시키려고 시도중이거나, 혹은 두개의 사이트가 똑같은 이름으로 설정됬을 수 있습니"
-"다."
+msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
+msgstr "누군가가 다른 웹사이트를 가장하려고 시도하고 있거나 사람들이 두 웹사이트에 동일한 이름을 부여했을 수 있습니다.누군가 가짜 웹사이트로 접속시키려고 시도중이거나, 혹은 두개의 사이트가 똑같은 이름으로 설정됬을 수 있습니다."
 
 #: ../java/build/Proxy.java:181
-msgid ""
-"Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or "
-"delete the host entry from your address book and click the address helper link again."
-msgstr ""
-"신뢰할 수 있는 키를 결정하여 충돌을 해결한 다음 주소 도우미 링크를 무시하거나 주소록에서 호스트 항목을 삭제"
-"하고 주소 도우미 링크를 다시 클릭하세요.두개의 키 중 한개를 선택해 해당 키를 신뢰하도록 설정할 수 있습니다. "
-"혹은 주소록의 호스트 엔트리를 삭제하고 주소록 도우미 링크를 다시 클릭하십시오."
+msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
+msgstr "신뢰할 수 있는 키를 결정하여 충돌을 해결한 다음 주소 도우미 링크를 무시하거나 주소록에서 호스트 항목을 삭제하고 주소 도우미 링크를 다시 클릭하세요.두개의 키 중 한개를 선택해 해당 키를 신뢰하도록 설정할 수 있습니다. 혹은 주소록의 호스트 엔트리를 삭제하고 주소록 도우미 링크를 다시 클릭하십시오."
 
 #: ../java/build/Proxy.java:189
 msgid "The Base32 address is invalid."
@@ -428,17 +386,11 @@ msgstr "잘못된 Base 32 주소입니다."
 
 #: ../java/build/Proxy.java:200
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr ""
-"URL을 확인하여 도우미 키가 유효한 Base 32 호스트 이름 또는 Base 64 키가 되도록 수정해 보세요.URL을 확인해 "
-"helper key를 올바른 Base 32 / Base 64 주소로 변경하십시오."
+msgstr "URL을 확인하여 도우미 키가 유효한 Base 32 호스트 이름 또는 Base 64 키가 되도록 수정해 보세요.URL을 확인해 helper key를 올바른 Base 32 / Base 64 주소로 변경하십시오."
 
 #: ../java/build/Proxy.java:208
-msgid ""
-"The website was not reachable, because it uses encryption options that are not supported by your I2P or "
-"Java version."
-msgstr ""
-"I2P 또는 Java 버전에서 지원하지 않는 암호화 옵션을 사용하기 때문에 웹 사이트에 연결할 수 없습니다.웹사이트"
-"에 접속할 수 없습니다. 해당 사이트의 암호화 설정이 사용중인 I2P, JAVA와 호환되지 않습니다."
+msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "I2P 또는 Java 버전에서 지원하지 않는 암호화 옵션을 사용하기 때문에 웹 사이트에 연결할 수 없습니다.웹사이트에 접속할 수 없습니다. 해당 사이트의 암호화 설정이 사용중인 I2P, JAVA와 호환되지 않습니다."
 
 #: ../java/build/Proxy.java:210
 msgid "Information: New Host Name"
@@ -478,12 +430,8 @@ msgstr "I2P 주소록 도우미는 해당 목적지와 호환되지 않습니다
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:789
 #, java-format
-msgid ""
-"To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting "
-"addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr ""
-"주소록에서 목적지를 방문하려면 <a href=\"{0}\"> 여기 </a>를 클릭하십시오. 충돌하는 주소 헬퍼 대상을 방문하려"
-"면 <a href=\"{1}\"> 여기 </a>를 클릭하십시오."
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "주소록에서 목적지를 방문하려면 <a href=\"{0}\"> 여기 </a>를 클릭하십시오. 충돌하는 주소 헬퍼 대상을 방문하려면 <a href=\"{1}\"> 여기 </a>를 클릭하십시오."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:799
 #, java-format
@@ -521,11 +469,8 @@ msgid "Continue to {0} without saving"
 msgstr "저장하지 않고 {0} 계속"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1513
-msgid ""
-"You can browse to the site without saving it to the addressbook. The address will be remembered until you "
-"restart your I2P router."
-msgstr ""
-"주소록에 저장하지 않고 사이트로 찾아 볼 수 있습니다. I2P 라우터를 다시 시작할 때까지 주소가 기억됩니다."
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "주소록에 저장하지 않고 사이트로 찾아 볼 수 있습니다. I2P 라우터를 다시 시작할 때까지 주소가 기억됩니다."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1514
 msgid "Continue without saving"
@@ -537,14 +482,11 @@ msgid "Save {0} to router address book and continue to website"
 msgstr "라우터 주소록에 {0} 저장하고 웹사이트로"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1522
-msgid ""
-"This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
 msgstr "이 주소는 귀하의 가입 기반 주소가 저장되어 있는 라우터 주소록에 저장됩니다."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1525
-msgid ""
-"If you want to keep track of sites you have added manually, add to your Master or Private addressbook "
-"instead."
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
 msgstr "수동으로 추가한 사이트를 추적하려면 대신 마스터 또는 개인 주소록에 추가하세요."
 
 #. FIXME wasn't escaped
@@ -560,12 +502,8 @@ msgid "Save {0} to master addressbook and continue to website"
 msgstr "주소록을 마스터하고 웹 사이트를 계속하기 위해 {0}을 저장하십시오"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1536
-msgid ""
-"This address will be saved to your Master addressbook. Select this option for addresses you wish to keep "
-"separate from the main router address book, but don't mind publishing."
-msgstr ""
-"이 주소는 마스터 주소록에 저장됩니다. 메인 라우터 주소록과 별도로 보관할 주소를 위해이 옵션을 선택하십시오. "
-"그러나 출판을 신경 쓰지 마십시오."
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "이 주소는 마스터 주소록에 저장됩니다. 메인 라우터 주소록과 별도로 보관할 주소를 위해이 옵션을 선택하십시오. 그러나 출판을 신경 쓰지 마십시오."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1541
 #, java-format
@@ -601,11 +539,8 @@ msgid "Encryption key"
 msgstr "암호화 키"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1586
-msgid ""
-"You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key "
-"and send that to the server operator."
-msgstr ""
-"서버 운영자가 제공한 PSK 암호화 키를 입력하거나, DH 암호화 키를 생성하여 서버 운영자에게 보내야 합니다."
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "서버 운영자가 제공한 PSK 암호화 키를 입력하거나, DH 암호화 키를 생성하여 서버 운영자에게 보내야 합니다."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1588
 msgid "Ask the server operator for help."
