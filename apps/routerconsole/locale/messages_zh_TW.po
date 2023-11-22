@@ -8489,7 +8489,7 @@ msgid "Router Console Language"
 msgstr "路由控制檯語言"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:583
-msgid "Please contribute to the router console translation project! Contact the developers in #i2p-dev on IRC to help."
+msgid "Please contribute to the router console translation project! Contact the developers in #saltR on IRC to help."
 msgstr "歡迎加入路由控制檯翻譯項目！提供幫助請通過IRC到 #i2p-dev 聊天室與開發人員交流。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:282

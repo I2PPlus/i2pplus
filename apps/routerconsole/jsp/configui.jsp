@@ -76,7 +76,7 @@
 <div id=langsettings>
 <jsp:getProperty name="uihelper" property="langSettings" />
 <p id=helptranslate>
-<%=uihelper._t("Please contribute to the router console translation project! Contact the developers in #i2p-dev on IRC to help.").replace("router console", "I2P+").replace("#i2p-dev", "#saltR")%>
+<%=uihelper._t("Please contribute to the router console translation project! Contact the developers in #saltR on IRC to help.").replace("router console", "I2P+").replace("#i2p-dev", "#saltR")%>
 </p><hr>
 <div class=formaction id=langui>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" >

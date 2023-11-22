@@ -8503,7 +8503,7 @@ msgid "Router Console Language"
 msgstr "Router Console Taal"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:583
-msgid "Please contribute to the router console translation project! Contact the developers in #i2p-dev on IRC to help."
+msgid "Please contribute to the router console translation project! Contact the developers in #saltR on IRC to help."
 msgstr "Draag a.u.b. bij aan het vertalen van de router console! Neem contact op met de developers in #i2p-dev om te helpen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:282

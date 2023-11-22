@@ -8509,7 +8509,7 @@ msgid "Router Console Language"
 msgstr "Idioma do painél do roteador"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:583
-msgid "Please contribute to the router console translation project! Contact the developers in #i2p-dev on IRC to help."
+msgid "Please contribute to the router console translation project! Contact the developers in #saltR on IRC to help."
 msgstr "Contribua para o projeto de tradução do painél do roteador! Entre em contato com os desenvolvedores no canal IRC #i2p-dev para ajudar."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:282

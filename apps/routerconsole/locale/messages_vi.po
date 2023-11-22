@@ -8489,7 +8489,7 @@ msgid "Router Console Language"
 msgstr "Ngôn ngữ bảng điều khiển bộ định tuyến"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:583
-msgid "Please contribute to the router console translation project! Contact the developers in #i2p-dev on IRC to help."
+msgid "Please contribute to the router console translation project! Contact the developers in #saltR on IRC to help."
 msgstr "Vui lòng đóng góp cho dự án dịch bảng điều khiển bộ định tuyến! Liên hệ với các nhà phát triển trong #saltR trên IRC để trợ giúp."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:282
