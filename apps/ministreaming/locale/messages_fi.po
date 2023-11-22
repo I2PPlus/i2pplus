@@ -6,12 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2018-06-16 12:59+0000\n"
-"PO-Revision-Date: 2017-06-30 21:32+0000\n"
+"PO-Revision-Date: 2023-11-22 04:11+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4\n"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:69
 msgid "Message timeout"
@@ -19,16 +22,16 @@ msgstr "Viestin aikaraja"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:72
 msgid "Failed delivery to local destination"
-msgstr ""
+msgstr "Toimitus paikalliseen määränpäähän epäonnistui"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:75
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:108
 msgid "Local router failure"
-msgstr ""
+msgstr "Paikallisen reitittimen vika"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:78
 msgid "Local network failure"
-msgstr ""
+msgstr "Paikallisverkkovirhe"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:81
 msgid "Session closed"
@@ -40,11 +43,11 @@ msgstr "Virheellinen viesti"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:87
 msgid "Invalid message options"
-msgstr ""
+msgstr "Virheelliset viestiasetukset"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:90
 msgid "Buffer overflow"
-msgstr ""
+msgstr "Puskurin ylivuoto"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:93
 msgid "Message expired"
@@ -52,15 +55,15 @@ msgstr "Viesti vanhentunut"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:96
 msgid "Local lease set invalid"
-msgstr ""
+msgstr "Paikallinen vuokrasopimus ei kelpaa"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:99
 msgid "No local tunnels"
-msgstr ""
+msgstr "Ei paikallisia tunneleita"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:102
 msgid "Unsupported encryption options"
-msgstr ""
+msgstr "Salausvaihtoehtoja ei tueta"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:105
 msgid "Invalid destination"
@@ -68,21 +71,21 @@ msgstr "Virheellinen kohde"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:111
 msgid "Destination lease set expired"
-msgstr ""
+msgstr "Kohteen vuokrasopimus umpeutunut"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:114
 msgid "Destination lease set not found"
-msgstr ""
+msgstr "Vuokrakohdetta ei löydy"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:117
 msgid "Local destination shutdown"
-msgstr ""
+msgstr "Paikallisen kohteen sammutus"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:120
 msgid "Connection was reset"
-msgstr ""
+msgstr "Yhteys nollattiin"
 
 #. Translate this one here, can't do it later
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:127
 msgid "Failure code"
-msgstr ""
+msgstr "Vikakoodi"
