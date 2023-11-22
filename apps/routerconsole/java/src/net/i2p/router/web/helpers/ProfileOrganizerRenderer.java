@@ -331,7 +331,7 @@ class ProfileOrganizerRenderer {
 **/
                 buf.append("<span hidden>[").append(prof.getLastHeardFrom()).append("]</span>")
                    .append(formatInterval(now, prof.getLastHeardFrom()));
-                }
+//                }
                 buf.append("</td><td nowrap class=viewedit>");
                 if (prof != null) {
                     buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("View profile"))
@@ -395,7 +395,7 @@ class ProfileOrganizerRenderer {
                .append("<th>").append(_t("Peer")).append("</th>")
                .append("<th>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>")
                .append("<th>").append(_t("1h Resp. Time")).append("</th>")
-               .append("<th>").append(_t("First Heard About")).append("</th>")
+               //.append("<th>").append(_t("First Heard About")).append("</th>")
                .append("<th>").append(_t("Last Heard From")).append("</th>")
                .append("<th>").append(_t("Good Lookups")).append("</th>")
                .append("<th>").append(_t("Last Good Lookup")).append("</th>")
@@ -442,8 +442,8 @@ class ProfileOrganizerRenderer {
                     buf.append("</td>");
                     now = _context.clock().now();
                     long heard = prof.getFirstHeardAbout();
-                    buf.append("<td><span hidden>[").append(heard).append("]</span>")
-                       .append(formatInterval(now, heard)).append("</td>");
+                    //buf.append("<td><span hidden>[").append(heard).append("]</span>")
+                    //   .append(formatInterval(now, heard)).append("</td>");
                     buf.append("<td><span hidden>[").append(prof.getLastHeardFrom()).append("]</span>")
                        .append(formatInterval(now, prof.getLastHeardFrom())).append("</td>");
                     buf.append("<td><span hidden>[").append(dbh.getSuccessfulLookups()).append("]</span>")
