@@ -128,7 +128,8 @@ class ProfileOrganizerRenderer {
                .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
                .append("\">").append(_t("Rejected")).append("</th>")
                .append("<th>").append(_t("Integration")).append("</th>")
-               .append("<th>").append(_t("First Heard About")).append("</th>")
+               //.append("<th>").append(_t("First Heard About")).append("</th>")
+               .append("<th>").append(_t("Last Heard From")).append("</th>")
                .append("<th>").append(_t("View/Edit")).append("</th>")
                .append("</tr>\n</thead>\n<tbody id=pbody>\n");
             int prevTier = 1;
@@ -322,12 +323,14 @@ class ProfileOrganizerRenderer {
                 }
                 buf.append("</td><td>");
                 now = _context.clock().now();
+/**
                 if (prof.getFirstHeardAbout() > 0) {
                     buf.append("<span hidden>[").append(prof.getFirstHeardAbout()).append("]</span>")
                        .append(formatInterval(now, prof.getFirstHeardAbout()));
                 } else {
-                    buf.append("<span hidden>[").append(prof.getLastHeardFrom()).append("]</span>")
-                       .append(formatInterval(now, prof.getLastHeardFrom()));
+**/
+                buf.append("<span hidden>[").append(prof.getLastHeardFrom()).append("]</span>")
+                   .append(formatInterval(now, prof.getLastHeardFrom()));
                 }
                 buf.append("</td><td nowrap class=viewedit>");
                 if (prof != null) {
