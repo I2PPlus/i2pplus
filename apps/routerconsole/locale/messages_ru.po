@@ -3582,7 +3582,7 @@ msgid "Home of I2P+"
 msgstr "Дом I2P+"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
-msgid "Bittorrent tracker"
+msgid "BitTorrent tracker"
 msgstr "Битторрент-трекер"
 
 #. torrent trackers
@@ -3590,7 +3590,7 @@ msgstr "Битторрент-трекер"
 msgid "Postman's Tracker"
 msgstr "Следопыт почтальона"
 
-#. _x("Chudo") + S + _x("No login Bittorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
+#. _x("Chudo") + S + _x("No login BitTorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
 #. domain name registration + uptime trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:126
 msgid "List of active eepsites and uptime monitor"

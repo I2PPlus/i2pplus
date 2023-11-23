@@ -119,8 +119,8 @@ public class HomeHelper extends HelperBase {
         "skank.i2p" + S + _x("Home of I2P+") + S + "http://skank.i2p/" + S + I + "plus.svg" + S +
 
 // torrent trackers
-        _x("Postman's Tracker") + S + _x("Bittorrent tracker") + S + "http://tracker2.postman.i2p/" + S + I + "eepsites/postman.svg" + S +
-        //_x("Chudo") + S + _x("No login Bittorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
+        _x("Postman's Tracker") + S + _x("BitTorrent tracker") + S + "http://tracker2.postman.i2p/" + S + I + "eepsites/postman.svg" + S +
+        //_x("Chudo") + S + _x("No login BitTorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
 
 // domain name registration + uptime trackers
         "notbob.i2p" + S + _x("List of active eepsites and uptime monitor") + S + "http://notbob.i2p/" + S + I + "eepsites/notbob.png" + S +
