@@ -6442,20 +6442,20 @@ msgid "Backlog"
 msgstr "عقب ماندگی"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1283
-msgid "No participating tunnels requests are accepted for the first 10 minutes while router stabilizes"
+msgid "No transit tunnel requests are accepted for the first 10 minutes while router stabilizes"
 msgstr "هیچ درخواست تونل مشارکتی در 10 دقیقه اول پذیرفته نمی شود در حالی که روتر تثبیت می شود"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1285
-msgid "Declining participating tunnel requests as we are shutting down"
+msgid "Declining transit tunnel requests as we are shutting down"
 msgstr "رد درخواست‌های تونل شرکت‌کننده چون در حال تعطیلی هستیم"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1288
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1290
-msgid "Router or network performance is impeding the building of participating tunnels"
+msgid "Router or network performance is impeding the building of transit tunnels"
 msgstr "عملکرد روتر یا شبکه مانع ساخت تونل های شرکت کننده می شود"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1292
-msgid "Router is configured to reject all participating tunnel requests"
+msgid "Router is configured to reject all transit tunnel requests"
 msgstr "روتر به گونه ای پیکربندی شده است که تمام درخواست های تونل شرکت کننده را رد کند"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1294
@@ -6464,11 +6464,11 @@ msgstr "روتر آماده ساخت تونل های مشارکت کننده ا�
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1296
 #, java-format
-msgid "Accepting participating tunnel requests; participating in {0} tunnels"
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
 msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1298
-msgid "No participating tunnels are built when Hidden mode is active"
+msgid "No transit tunnels are built when Hidden mode is active"
 msgstr "هنگامی که حالت پنهان فعال است، هیچ تونل مشارکتی ساخته نمی شود"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:329

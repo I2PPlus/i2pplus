@@ -1277,25 +1277,30 @@ class SummaryBarRenderer {
 
     public String renderTunnelStatusHTML() {
         if (_helper == null) return "";
+        int partTunnels = _helper.getParticipatingTunnels();
         StringBuilder buf = new StringBuilder(50);
         buf.append("<h4 id=sb_tunnelstatus class=\"volatile collapse\"><span class=\"tunnelBuildStatus");
         if (_t(_helper.getTunnelStatus()).contains(("Starting up")))
-            buf.append(" starting\" title=\"").append(_t("No participating tunnels requests are accepted for the first 10 minutes while router stabilizes"));
+            buf.append(" starting\" title=\"").append(_t("No transit tunnel requests are accepted for the first 10 minutes while router stabilizes"));
         if (_t(_helper.getTunnelStatus()).contains(("Shutting down")))
-            buf.append(" rejecting\" title=\"").append(_t("Declining participating tunnel requests as we are shutting down"));
+            buf.append(" rejecting\" title=\"").append(_t("Declining transit tunnel requests as we are shutting down"));
         if (_t(_helper.getTunnelStatus()).contains(("Declining")) && !(_t(_helper.getTunnelStatus()).contains(("Shutting down"))) &&
           !(_t(_helper.getTunnelStatus()).contains(("Participation disabled"))))
-            buf.append(" rejecting\" title=\"").append(_t("Router or network performance is impeding the building of participating tunnels"));
+            buf.append(" rejecting\" title=\"").append(_t("Router or network performance is impeding the building of transit tunnels"));
         if (_t(_helper.getTunnelStatus()).contains(("Dropping")) && !(_t(_helper.getTunnelStatus()).contains(("Shutting down"))))
-            buf.append(" rejecting\" title=\"").append(_t("Router or network performance is impeding the building of participating tunnels"));
+            buf.append(" rejecting\" title=\"").append(_t("Router or network performance is impeding the building of transit tunnels"));
         if (_t(_helper.getTunnelStatus()).contains(("Declining")) && (_t(_helper.getTunnelStatus()).contains(("Participation disabled"))))
-            buf.append(" rejecting disabled\" title=\"").append(_t("Router is configured to reject all participating tunnel requests"));
-        if (_t(_helper.getTunnelStatus()).contains(("Accepting")) && (_helper.getParticipatingTunnels() <= 0))
+            buf.append(" rejecting disabled\" title=\"").append(_t("Router is configured to reject all transit tunnel requests"));
+        if (_t(_helper.getTunnelStatus()).contains(("Accepting")) && (partTunnels <= 0))
             buf.append(" accepting\" title=\"").append(_t("Router is ready to build participating tunnels"));
-        if (_t(_helper.getTunnelStatus()).contains(("Accepting")) && (_helper.getParticipatingTunnels() > 0))
-            buf.append(" active\" title=\"").append(_t("Accepting participating tunnel requests; participating in {0} tunnels", _helper.getParticipatingTunnels()));
+        if (_t(_helper.getTunnelStatus()).contains(("Accepting")) && (partTunnels > 0))
+            buf.append(" active\" title=\"").append(_t("Accepting transit tunnel requests; hosting {0} tunnels", partTunnels));
         else if (_t(_helper.getTunnelStatus()).contains(("Hidden Mode")))
-            buf.append(" hidden\" title=\"").append(_t("No participating tunnels are built when Hidden mode is active"));
+            buf.append(" hidden\" title=\"").append(_t("No transit tunnels are built when Hidden mode is active"));
+        else if (partTunnels > 0)
+            buf.append(" active\" title=\"").append(_t("Accepting transit tunnel requests; hosting {0} tunnels", partTunnels));
+        else
+            buf.append(" accepting\" title=\"").append(_t("Router is ready to build participating tunnels"));
         buf.append("\">")
            .append(_helper.getTunnelStatus())
            .append("</span></h4>\n");

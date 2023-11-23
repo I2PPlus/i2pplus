@@ -6461,20 +6461,20 @@ msgid "Backlog"
 msgstr "Nevyřízené věci"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1283
-msgid "No participating tunnels requests are accepted for the first 10 minutes while router stabilizes"
+msgid "No transit tunnel requests are accepted for the first 10 minutes while router stabilizes"
 msgstr "Během prvních 10 minut, dokud se router stabilizuje, nejsou přijímány žádné zúčastněné požadavky na tunely"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1285
-msgid "Declining participating tunnel requests as we are shutting down"
+msgid "Declining transit tunnel requests as we are shutting down"
 msgstr "Odmítání zúčastněných požadavků na tunel, protože se vypínáme"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1288
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1290
-msgid "Router or network performance is impeding the building of participating tunnels"
+msgid "Router or network performance is impeding the building of transit tunnels"
 msgstr "Výkon směrovače nebo sítě brání budování zúčastněných tunelů"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1292
-msgid "Router is configured to reject all participating tunnel requests"
+msgid "Router is configured to reject all transit tunnel requests"
 msgstr "Směrovač je nakonfigurován tak, aby odmítal všechny zúčastněné požadavky na tunel"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1294
@@ -6483,11 +6483,11 @@ msgstr "Router je připraven vybudovat zúčastněné tunely"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1296
 #, java-format
-msgid "Accepting participating tunnel requests; participating in {0} tunnels"
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
 msgstr "Přijímání zúčastněných požadavků na tunel; účastnící se {0} tunelů"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1298
-msgid "No participating tunnels are built when Hidden mode is active"
+msgid "No transit tunnels are built when Hidden mode is active"
 msgstr "Když je aktivní skrytý režim, nevybudují se žádné zúčastněné tunely"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:329

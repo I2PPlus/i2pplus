@@ -6442,20 +6442,20 @@ msgid "Backlog"
 msgstr "Arxa plan"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1283
-msgid "No participating tunnels requests are accepted for the first 10 minutes while router stabilizes"
+msgid "No transit tunnel requests are accepted for the first 10 minutes while router stabilizes"
 msgstr "Router stabilləşərkən ilk 10 dəqiqə ərzində heç bir iştirakçı tunel sorğusu qəbul edilmir"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1285
-msgid "Declining participating tunnel requests as we are shutting down"
+msgid "Declining transit tunnel requests as we are shutting down"
 msgstr "İştirakçı tunel sorğularını bağladığımız üçün rədd edilir"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1288
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1290
-msgid "Router or network performance is impeding the building of participating tunnels"
+msgid "Router or network performance is impeding the building of transit tunnels"
 msgstr "Router və ya şəbəkə performansı iştirakçı tunellərin qurulmasına mane olur"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1292
-msgid "Router is configured to reject all participating tunnel requests"
+msgid "Router is configured to reject all transit tunnel requests"
 msgstr "Router bütün iştirakçı tunel sorğularını rədd etmək üçün konfiqurasiya edilib"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1294
@@ -6464,11 +6464,11 @@ msgstr "Router iştirakçı tunellər qurmağa hazırdır"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1296
 #, java-format
-msgid "Accepting participating tunnel requests; participating in {0} tunnels"
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
 msgstr "İştirakçı tunel sorğularının qəbul edilməsi; {0} tuneldə iştirak edir"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1298
-msgid "No participating tunnels are built when Hidden mode is active"
+msgid "No transit tunnels are built when Hidden mode is active"
 msgstr "Gizli rejim aktiv olduqda heç bir iştirakçı tunel tikilmir"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:329
