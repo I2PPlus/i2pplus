@@ -57,18 +57,18 @@ class ProfileOrganizerRenderer {
         Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
         long hideBefore = ffmode ? now - 15*60*1000 : !ffmode && mode == 2 ? now - 60*60*1000 : now - 15*60*1000;
-
         Set<PeerProfile> order = new TreeSet<PeerProfile>(mode == 2 ? new HashComparator() : new ProfileComparator());
         int older = 0;
         int standard = 0;
         int ff = 0;
         for (Hash peer : peers) {
-            if (_organizer.getUs().equals(peer)) continue;
             PeerProfile prof = _organizer.getProfileNonblocking(peer);
+            int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
+            int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
+            if (prof == null) continue;
+            if (_organizer.getUs().equals(peer) || prof.getLastHeardFrom() <= 0 || (agreed <= 0 && rejected <= 0)) continue;
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
-            if (prof == null)
-                continue;
             if (mode == 2) {
                 if (info != null && info.getCapabilities().indexOf('f') >= 0)
                 order.add(prof);
@@ -96,7 +96,7 @@ class ProfileOrganizerRenderer {
         if (mode < 2) {
             buf.append("<p id=profiles_overview class=infohelp>");
             buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.",
-                                order.size()).replace(".", " (active in the last 15 minutes).")).append('\n');
+                                order.size()).replace(".", " (" + _t("active in the last 15 minutes") + ").")).append('\n');
             if (older > 0)
                 buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", older)).append('\n');
             if (standard > 0)
@@ -122,7 +122,7 @@ class ProfileOrganizerRenderer {
                .append("<th class=latency>").append(_t("Low Latency")).append("</th>")
                //.append("<th title=\"").append(_t("Time taken for peer test")).append("\">")
                //.append(_t("Test Avg (ms)")).append("</th>")
-               .append("<th>").append(_t("Capacity")).append("</th>")
+               //.append("<th>").append(_t("Capacity")).append("</th>")
                .append("<th title=\"").append(_t("Tunnels peer has agreed to participate in"))
                .append("\">").append(_t("Accepted")).append("</th>")
                .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
@@ -289,7 +289,6 @@ class ProfileOrganizerRenderer {
                 else {
                     buf.append("&ensp;");
                 }
-*/
                 buf.append("</td><td><span>");
                 if (capBonus != 0 && capBonus != -30) {
                     buf.append(num(Math.round(prof.getCapacityValue())).replace(".00", ""));
@@ -302,6 +301,7 @@ class ProfileOrganizerRenderer {
                     buf.append("&ensp;");
                 }
                 buf.append("</span>");
+*/
                 buf.append("</td><td>");
                 int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
                 int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
@@ -331,7 +331,7 @@ class ProfileOrganizerRenderer {
                        .append(formatInterval(now, prof.getFirstHeardAbout()));
                 } else {
 **/
-                buf.append("<span hidden>[").append(prof.getLastHeardFrom()).append("]</span>")
+                buf.append("<span hidden>[").append(prof.getLastHeardFrom() - now).append("]</span>")
                    .append(formatInterval(now, prof.getLastHeardFrom()));
 //                }
                 buf.append("</td><td nowrap class=viewedit>");
@@ -424,7 +424,7 @@ class ProfileOrganizerRenderer {
                                  dbh.getLastLookupSuccessful() > 0);
 
                 //if (dbh != null && isFF && !isUnreachable && !isBanned && isGood) {
-                if (dbh != null && isFF && !isUnreachable && !isBanned) {
+                if (dbh != null && isFF && !isUnreachable && !isBanned && prof.getLastHeardFrom() > 0) {
                     displayed++;
                     buf.append("<tr class=lazy><td nowrap>");
                     buf.append(_context.commSystem().renderPeerHTML(peer, true));
@@ -446,7 +446,7 @@ class ProfileOrganizerRenderer {
                     long heard = prof.getFirstHeardAbout();
                     //buf.append("<td><span hidden>[").append(heard).append("]</span>")
                     //   .append(formatInterval(now, heard)).append("</td>");
-                    buf.append("<td><span hidden>[").append(prof.getLastHeardFrom()).append("]</span>")
+                    buf.append("<td><span hidden>[").append(prof.getLastHeardFrom()).append(".]</span>")
                        .append(formatInterval(now, prof.getLastHeardFrom())).append("</td>");
                     buf.append("<td><span hidden>[").append(dbh.getSuccessfulLookups()).append("]</span>")
                        .append(dbh.getSuccessfulLookups()).append("</td>");
