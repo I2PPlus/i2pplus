@@ -8491,7 +8491,7 @@ msgid "Theme selection disabled for Internet Explorer, sorry."
 msgstr "انتخاب تم برای اینترنت اکسپلورر غیرفعال است، متأسفیم."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:546
-msgid "(A very old version has been detected. It's not recommended to use I2P with unmaintained browsers."
+msgid "A very old version has been detected. It's not recommended to use I2P with unmaintained browsers."
 msgstr "(یک نسخه بسیار قدیمی شناسایی شده است. استفاده از I2P با مرورگرهای نگهداری نشده توصیه نمی شود."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:548

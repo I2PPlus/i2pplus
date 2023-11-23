@@ -8510,7 +8510,7 @@ msgid "Theme selection disabled for Internet Explorer, sorry."
 msgstr "Výběr motivu pro Internet Explorer deaktivován, omlouváme se."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:546
-msgid "(A very old version has been detected. It's not recommended to use I2P with unmaintained browsers."
+msgid "A very old version has been detected. It's not recommended to use I2P with unmaintained browsers."
 msgstr "(Byla zjištěna velmi stará verze. Nedoporučuje se používat I2P s neudržovanými prohlížeči."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:548

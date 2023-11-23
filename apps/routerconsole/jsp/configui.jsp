@@ -43,7 +43,7 @@
 </div>
 <% } else { %>
 <p class=infohelp id=oldmsie>
-<%=uihelper._t("Theme selection disabled for Internet Explorer, sorry.")%> <%=uihelper._t("(A very old version has been detected. It's not recommended to use I2P with unmaintained browsers.")%>
+<%=uihelper._t("Theme selection disabled for Internet Explorer, sorry.")%> (<%=uihelper._t("A very old version has been detected. It's not recommended to use I2P with unmaintained browsers.")%>)
 <br>
 <%=uihelper._t("If you're not using IE, it's likely that your browser is pretending to be IE; please configure your browser (or proxy) to use a different User Agent string if you'd like to access the console themes.")%>
 </p>
