@@ -6024,7 +6024,7 @@ msgid "Services"
 msgstr "서비스"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:433
-msgid "I2P Router Sitemap"
+msgid "I2P+ Router Sitemap"
 msgstr "I2P 라우터 사이트맵"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:435

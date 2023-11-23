@@ -6060,7 +6060,7 @@ msgid "Services"
 msgstr "Сервисы"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:433
-msgid "I2P Router Sitemap"
+msgid "I2P+ Router Sitemap"
 msgstr "Карта сайта I2P-маршрутизатора"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:435

@@ -430,7 +430,7 @@ class SummaryBarRenderer {
     public String renderI2PInternalsHTML() {
         StringBuilder buf = new StringBuilder(512);
         buf.append("<h3><a href=\"/sitemap\" target=_top title=\"")
-           .append(_t("I2P Router Sitemap"))
+           .append(_t("I2P+ Router Sitemap"))
            .append("\">")
            .append(_t("Internals"))
            .append("</a><input type=checkbox id=toggle_sb_internals class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n")

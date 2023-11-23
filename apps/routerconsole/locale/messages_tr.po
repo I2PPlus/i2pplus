@@ -6044,7 +6044,7 @@ msgid "Services"
 msgstr "Hizmetler"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:433
-msgid "I2P Router Sitemap"
+msgid "I2P+ Router Sitemap"
 msgstr "I2P Yönlendirici Site Haritası"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:435
