@@ -468,17 +468,17 @@ public class HomeHelper extends HelperBase {
             }
             buf.append("\n<div class=\"applink");
             // tag sites that require javascript to function
-            if (url.contains("i2pmetrics") || url.contains("paste.r4sas") || url.contains("zeronet") || url.contains("speedtest") ||
-                url.contains("tinypng") || url.contains("vuldb") || url.contains("meduza") || url.contains("mdn") ||
-                url.contains("w3schools") || url.equals("translate.idk.i2p"))
+            if (url.contains("i2pmetrics") || url.contains("paste.r4sas") || url.contains("speedtest") ||
+                url.contains("vuldb") || url.contains("meduza") || url.contains("mdn") ||
+                url.contains("w3schools") || url.contains("translate.idk")) {
                 buf.append(" js");
+            }
             buf.append("\" style=display:inline-block;text-align:center>")
                .append("<div class=appicon>")
-                       // usability: add tabindex -1 so we avoid 2 tabs per app
+               // usability: add tabindex -1 so we avoid 2 tabs per app
                .append("<a href=\"").append(url).append("\" tabindex=\"-1\">")
                .append("<img alt=\"\" title=\"").append(app.desc).append("\" src=\"").append(app.icon)
                // don't version the icons to avoid double-caching where they're used in css
-               //.append(app.icon.contains("?") ? "&amp;" : "?").append(CoreVersion.VERSION)
                .append("\" width=32 height=32></a></div><table><tr><td><div class=applabel><a href=\"")
                .append(url).append("\" title=\"").append(app.desc).append("\">").append(app.name)
                .append("</a></div></td></tr></table></div>");
