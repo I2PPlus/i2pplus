@@ -104,11 +104,11 @@ public class HomeHelper extends HelperBase {
 // I2P specific
         _x("I2P Bug Reports") + S + _x("Bug tracker") + S + "http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" + S + I + "bug.svg" + S +
         _x("I2P FAQ") + S + _x("Frequently Asked Questions") + S + "http://i2p-projekt.i2p/faq" + S + I + "faq.svg" + S +
+        _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "plugin.svg" + S +
         "i2pmetrics.i2p" + S + _x("Historical infrastructure data from the I2P network") + S + "http://i2pmetrics.i2p/" + S + I + "stats.svg" + S +
         _x("Project Website") + S + _x("I2P home page") + S + "http://i2p-projekt.i2p/" + S + I + "eepsites/i2p.svg" + S +
         _x("Javadocs") + S + _x("I2P+ API documentation") + S + "http://javadoc.skank.i2p/" + S + I + "helplink.svg" + S +
-        //_x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "plugin.svg" + S +
-        //"stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "stats.svg" + S +
+        "stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "stats.svg" + S +
 
 // software repositories + filesharing
         "cake.i2p" + S + _x("Transient server-encrypted filesharing and pastebin") + S + "http://cake.i2p/" + S + I + "eepsites/cake.svg" + S +
@@ -125,9 +125,9 @@ public class HomeHelper extends HelperBase {
 // domain name registration + uptime trackers
         "notbob.i2p" + S + _x("List of active eepsites and uptime monitor") + S + "http://notbob.i2p/" + S + I + "eepsites/notbob.png" + S +
         "reg.i2p" + S + _x("I2P Domain Name Registration") + S + "http://reg.i2p/" + S + I + "eepsites/reg.svg" + S +
+        _x("zzz Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://stats.i2p/i2p/addkey.html" + S + I + "eepsites/registrar.svg" + S +
         //"Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "servermonitor.svg" + S +
         //"scanner.linuxfarm" + S + _x("List of active eepsites and uptime monitor") + S + "http://scanner.linuxfarm.i2p/" + S + I + "eepsites/servermonitor.svg" + S +
-        //_x("zzz Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://stats.i2p/i2p/addkey.html" + S + I + "eepsites/registrar.svg" + S +
 
 // forums + social
         _x("I2P Forum") + S + _x("I2P-related community forums") + S + "http://i2pforum.i2p/" + S + I + "eepsites/forum.svg" + S +
@@ -145,13 +145,17 @@ public class HomeHelper extends HelperBase {
         //"query.i2p" + S + _x("The StackOverflow of I2P") + S + "http://query.i2p/" + S + I + "eepsites/forum.svg" + S +
 
 // hosting + other services
-        _x("base64-image.i2p") + S + _x("Base64 Image Encoder") + S + "http://base64-image.i2p/" + S + I + "eepsites/base64-image.svg" + S +
-        _x("imageproxy.i2p") + S + _x("An image cache and resize service") + S + "http://imageproxy.i2p/" + S + I + "eepsites/imageproxy.svg" + S +
+        "base64-image.i2p" + S + _x("Base64 Image Encoder") + S + "http://base64-image.i2p/" + S + I + "eepsites/base64-image.svg" + S +
+        "imageproxy.i2p" + S + _x("An image cache and resize service") + S + "http://imageproxy.i2p/" + S + I + "eepsites/imageproxy.svg" + S +
         "major.i2p" + S + _x("IRC Logs for multiple networks") + S + "http://major.i2p/" + S + I + "eepsites/major.svg" + S +
         _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "paste.svg" + S +
-        _x("radio.r4sas.i2p") + S + _x("Streaming radio service") + S + "http://radio.r4sas.i2p/" + S + I + "eepsites/radio.svg" + S +
+        "qwik.i2p" + S + _x("Landing page for various services") + S + "http://qwik.i2p/" + S + I + "eepsites/qwik.svg" + S +
+        "radio.r4sas.i2p" + S + _x("Streaming radio service") + S + "http://radio.r4sas.i2p/" + S + I + "eepsites/radio.svg" + S +
+        "rimgo" + S + _x("Alternative frontend for Imgur") + S + "http://rimgo.ls.i2p/" + S + I + "eepsites/imageproxy.svg" + S +
         "stormycloud.i2p" + S + _x("Privacy-focused not-for-profit organization") + S + "http://stormycloud.i2p/" + S + I + "eepsites/stormycloud.svg" + S +
         _x("speedtest") + S + _x("Outproxy bandwidth test") + S + "http://outproxy.purokishi.i2p/speedtest/" + S + I + "speedometer.svg" + S +
+        _x("translate") + S + _x("Text translation engine") + S + "http://translate.i2p/" + S + I + "eepsites/translate.svg" + S +
+        "translate.idk.i2p" + S + _x("Text translation engine") + S + "http://translate.idk.i2p/" + S + I + "eepsites/translate.svg" + S +
         "webhosting.i2p" + S + _x("Provider of privacy respecting web hosting and VPN services") + S + "http://webhosting.i2p/" + S + I + "eepsites/incog.svg" + S +
         //"tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "eepsites/tv.svg" + S +
         //"tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
@@ -165,6 +169,7 @@ public class HomeHelper extends HelperBase {
         "Mojeek" + S +_x("Privacy-focused Clearnet Search Engine") + S + "http://mojeek.i2p/" + S + I + "search.svg" + S +
         //"raklet.i2p" + S +_x("Tor-focused Search Engine") + S + "http://raklet.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
         "torch.i2p" + S +_x("Tor-focused Search Engine") + S + "http://torch.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
+        //"LibreY" + S +_x("Clearnet Search Engine") + S + "http://librey.i2p/" + S + I + "search.svg" + S +
         //"Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
         //"Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
 

@@ -50,7 +50,6 @@ public class SubscriptionsBean extends BaseBean
                                               "http://reg.i2p/export/hosts.txt" + "\n" +
                                               "http://skank.i2p/hosts.txt" + "\n" +
                                               "http://notbob.i2p/hosts.txt";
-                                              //"http://scanner.linuxfarm.i2p/hosts.txt";
 
     public String getFileName()
     {
