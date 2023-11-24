@@ -113,10 +113,11 @@ public class HomeHelper extends HelperBase {
 // software repositories + filesharing
         "cake.i2p" + S + _x("Transient server-encrypted filesharing and pastebin") + S + "http://cake.i2p/" + S + I + "eepsites/cake.svg" + S +
         "fs.i2p" + S + _x("Secure filesharing service") + S + "http://fs.i2p/" + S + I + "eepsites/cloud.svg" + S +
-        "git.i2p" + S + _x("Community Git hosting") + S + "http://git.i2p/explore/repos" + S + I + "eepsites/git.svg" + S +
         "git.idk.i2p" + S + _x("Official I2P Git repository") + S + "http://git.idk.i2p/explore/projects" + S + I + "gitlab.svg" + S +
+        "git.skank.i2p" + S + _x("Official I2P+ Git repository") + S + "http://git.skank.i2p/" + S + I + "eepsites/gitplus.svg" + S +
         "sharefile.i2p" + S + _x("Secure filesharing service") + S + "http://sharefile.i2p/" + S + I + "eepsites/cloud.svg" + S +
         "skank.i2p" + S + _x("Home of I2P+") + S + "http://skank.i2p/" + S + I + "plus.svg" + S +
+        //"git.i2p" + S + _x("Community Git hosting") + S + "http://git.i2p/explore/repos" + S + I + "eepsites/git.svg" + S +
 
 // torrent trackers
         _x("Postman's Tracker") + S + _x("BitTorrent tracker") + S + "http://tracker2.postman.i2p/" + S + I + "eepsites/postman.svg" + S +
