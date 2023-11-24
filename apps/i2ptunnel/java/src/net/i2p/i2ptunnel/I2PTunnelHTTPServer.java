@@ -23,6 +23,11 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.zip.GZIPOutputStream;
 
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.UnknownHostException;
+
 import javax.net.ssl.SSLException;
 
 import net.i2p.client.streaming.I2PSocket;
@@ -768,6 +773,38 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 String[] requestParts = requestLine.split(" ");
                 String url = requestParts[1];
 
+/**
+                String hostLine = requestLines[7]; // 7 ??
+                String[] hostParts = hostLine.split(" ");
+                String hostname = hostParts[1];
+                String req = hostname + (url != null ? url : "/");
+
+                // Prevent access to localhost addresses (outproxy)
+                if (!hostname.endsWith(".i2p")) {
+                    try {
+                        URL parsedURL = new URL(url);
+                        InetAddress address = InetAddress.getByName(parsedURL.getHost());
+                        if (address.equals(InetAddress.getLocalHost()) || address.getHostAddress().equals("127.0.0.1")) {
+                            if (_log.shouldWarn()) {
+                                _log.warn("[HTTPServer] Denying access to localhost address [" + req + "]");
+                            }
+                            return;
+                        }
+                    } catch (MalformedURLException e) {
+                        // Handle malformed URL
+                        if (_log.shouldWarn()) {
+                            _log.warn("[HTTPServer] Denying access to malformed address [" + req + "]");
+                        }
+                        return;
+                    } catch (UnknownHostException e) {
+                        // Handle unknown host
+                        if (_log.shouldWarn()) {
+                            _log.warn("[HTTPServer] Denying access to unresolvable address [" + req + "]");
+                        }
+                        return;
+                    }
+                }
+**/
                 if ((!(_headers.startsWith("GET ") || _headers.startsWith("HEAD "))) ||
                     browserin.available() > 0) {  // just in case
                     I2PAppThread sender = new I2PAppThread(new Sender(serverout, browserin, "Client -> Server", _log),
@@ -784,7 +821,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 } catch (NullPointerException npe) {
                     throw new IOException("getInputStream NPE");
                 }
-
                 StringBuilder command = new StringBuilder(512);
                 // Change headers to protect server identity
                 Map<String, List<String>> headers = readHeaders(null, serverin, command, SERVER_SKIPHEADERS, _ctx);
