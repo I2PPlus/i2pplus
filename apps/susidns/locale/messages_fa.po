@@ -7,42 +7,43 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 03:22+0000\n"
-"PO-Revision-Date: 2020-05-13 22:50+0000\n"
+"PO-Revision-Date: 2023-11-25 02:33+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:132
 #, java-format
 msgid "Host name \"{0}\" contains illegal character {1}"
-msgstr ""
+msgstr "نام میزبان \"{0}\" حاوی نویسه غیرقانونی است {1}"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:145
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:147
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:154
 #, java-format
 msgid "Host name cannot start with \"{0}\""
-msgstr ""
+msgstr "نام میزبان نمی تواند با \"{0}\" شروع شود"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:149
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:151
 #, java-format
 msgid "Host name cannot end with \"{0}\""
-msgstr ""
+msgstr "نام میزبان نمی تواند به \"{0}\" ختم شود"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:156
 #, java-format
 msgid "Host name cannot contain \"{0}\""
-msgstr ""
+msgstr "نام میزبان نمی تواند حاوی \"{0}\" باشد"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:159
 #, java-format
-msgid ""
-"Host name \"{0}\" requires conversion to ASCII but the conversion library is "
-"unavailable in this JVM"
-msgstr ""
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "نام میزبان \"{0}\" نیاز به تبدیل به ASCII دارد اما کتابخانه تبدیل در این JVM در دسترس نیست"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:224
 msgid "None"
@@ -50,7 +51,7 @@ msgstr "هیچ"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:232
 msgid "Hashcash"
-msgstr ""
+msgstr "Hashcash"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:234
 msgid "Hidden"
@@ -74,7 +75,7 @@ msgstr "نوع {0}"
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:259
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:262
 msgid "DSA 1024 bit"
-msgstr ""
+msgstr "DSA 1024 bit"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:184
 msgid "Search for <span class=active>"
@@ -121,49 +122,47 @@ msgstr "جایگزین"
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:251
 #, java-format
 msgid "Host name {0} is already in address book, unchanged."
-msgstr ""
+msgstr "نام میزبان {0} از قبل در دفترچه آدرس موجود است، بدون تغییر."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:262
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:255
 #, java-format
-msgid ""
-"Host name {0} is already in address book with a different destination. Click "
-"\"Replace\" to overwrite."
-msgstr ""
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "نام میزبان {0} از قبل در دفترچه آدرس با مقصد دیگری موجود است. "
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:282
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:289
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:274
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:281
 msgid "Unable to resolve Base 32 address"
-msgstr ""
+msgstr "قادر به حل کردن آدرس پایه 32 نیست"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:307
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:313
 #, java-format
 msgid "Destination added for {0}."
-msgstr ""
+msgstr "مقصد برای {0} اضافه شد."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:309
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:315
 #, java-format
 msgid "Destination changed for {0}."
-msgstr ""
+msgstr "مقصد برای {0} تغییر کرد."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:311
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:317
 msgid "Warning - host name does not end with \".i2p\""
-msgstr ""
+msgstr "هشدار - نام میزبان به \".i2p\" ختم نمی شود"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:318
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:329
 msgid "Invalid Base 32 host name."
-msgstr ""
+msgstr "نام میزبان پایه 32 نامعتبر است."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:320
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:331
 msgid "Invalid Base 64 destination."
-msgstr ""
+msgstr "مقصد مبنا 64 نامعتبر."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:327
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:337
@@ -184,7 +183,7 @@ msgstr "لطفا یک نام میزبان و مقصد وارد کنید"
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:382
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:384
 msgid "Delete Entry"
-msgstr ""
+msgstr "حذف ورودی"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
@@ -198,7 +197,7 @@ msgstr "حذف انتخاب شده"
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:374
 #, java-format
 msgid "Destination {0} deleted."
-msgstr ""
+msgstr "مقصد {0} حذف شد."
 
 #. parameter will always be >= 2
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:351
@@ -212,7 +211,7 @@ msgstr[1] ""
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:353
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:379
 msgid "No entries selected to delete."
-msgstr ""
+msgstr "هیچ ورودی برای حذف انتخاب نشده است."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:357
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
@@ -222,40 +221,35 @@ msgstr ""
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:312
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1003
 msgid "Add Alternate"
-msgstr ""
+msgstr "جایگزین اضافه کنید"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:364
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:386
 msgid "Address book saved."
-msgstr ""
+msgstr "دفترچه آدرس ذخیره شد."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:364
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:386
 msgid "Browse away from this addressbook and return to see update."
-msgstr ""
+msgstr "از این دفترچه آدرس دور شوید و برای مشاهده به‌روزرسانی برگردید."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:367
 msgid "ERROR: Could not write addressbook file."
-msgstr ""
+msgstr "خطا: فایل دفترچه آدرس را نمی توان نوشت."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:372
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
-msgid ""
-"Invalid form submission, probably because you used the \"back\" or "
-"\"reload\" button on your browser. Please resubmit."
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
 msgstr ""
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
-msgid ""
-"If the problem persists, verify that you have cookies enabled in your "
-"browser."
-msgstr ""
-"اگر همچنان مشکل پابرجاست، مطمئن شوید که در مرورگر شما Cookie ها فعال هستند."
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "اگر همچنان مشکل پابرجاست، مطمئن شوید که در مرورگر شما Cookie ها فعال هستند."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:137
@@ -279,33 +273,32 @@ msgid "Configuration reloaded."
 msgstr "پیکربندی مجددا بارگذاری شد."
 
 #: ../src/java/src/i2p/susi/dns/LogBean.java:108
-#, fuzzy
 msgid "Subscription log reloaded."
-msgstr "پیکربندی مجددا بارگذاری شد."
+msgstr "گزارش اشتراک بارگیری مجدد شد."
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:114
 #, java-format
 msgid "{0} address book in {1} database"
-msgstr ""
+msgstr "دفترچه آدرس {0} در پایگاه داده {1}"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:253
 #, java-format
 msgid "Host name {0} is not in  the address book."
-msgstr ""
+msgstr "نام میزبان {0} در دفترچه آدرس نیست."
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:296
 msgid "Manually added via SusiDNS"
-msgstr ""
+msgstr "به صورت دستی از طریق SusiDNS اضافه شده است"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:322
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
-msgstr ""
+msgstr "افزودن مقصد برای {0} به سرویس نامگذاری {1} انجام نشد"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:365
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
-msgstr ""
+msgstr "حذف مقصد برای {0} از سرویس نامگذاری {1} انجام نشد"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:407
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:368
@@ -318,16 +311,16 @@ msgstr "شما باید یک فایل وارد کنید"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:566
 msgid "No entries found in file"
-msgstr ""
+msgstr "هیچ ورودی در فایل یافت نشد"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:576
 #, java-format
 msgid "Imported from file {0}"
-msgstr ""
+msgstr "وارد شده از فایل {0}"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:578
 msgid "Imported from file"
-msgstr ""
+msgstr "از فایل وارد شده است"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:590
 #, java-format
@@ -349,7 +342,7 @@ msgstr "درون برد از فایل ناموفق بود"
 
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:139
 msgid "Subscriptions saved."
-msgstr ""
+msgstr "اشتراک ها ذخیره شدند."
 
 #. ******
 #. String nonce = System.getProperty("addressbook.nonce");
@@ -363,19 +356,19 @@ msgstr ""
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:150
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:242
 msgid "Update"
-msgstr ""
+msgstr "به روز رسانی"
 
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:153
 msgid "Attempting to update addressbook from subscription sources..."
-msgstr ""
+msgstr "تلاش برای به روز رسانی دفترچه آدرس از منابع اشتراک..."
 
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:157
 msgid "Cannot update subscriptions: HTTP proxy is not running!"
-msgstr ""
+msgstr "اشتراک ها را نمی توان به روز کرد: پروکسی HTTP اجرا نمی شود!"
 
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:161
 msgid "Subscriptions reloaded."
-msgstr ""
+msgstr "اشتراک ها بارگیری مجدد شدند."
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:208
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1043
@@ -402,7 +395,7 @@ msgstr "روتر"
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:220
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:218
 msgid "Master"
-msgstr ""
+msgstr "استاد"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:283
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:220
@@ -449,16 +442,16 @@ msgstr "پیکربندی"
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:230
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:228
 msgid "Help"
-msgstr ""
+msgstr "کمک کنید"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:295
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:287
 msgid "Book"
-msgstr ""
+msgstr "کتاب"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:312
 msgid "No entries"
-msgstr ""
+msgstr "ورودی وجود ندارد"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:356
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:366
@@ -466,14 +459,12 @@ msgid "Export in hosts.txt format"
 msgstr "برون برد در فرمت hosts.txt"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:358
-#, fuzzy
 msgid "Export results in hosts.txt format"
-msgstr "برون برد در فرمت hosts.txt"
+msgstr "نتایج را در قالب hosts.txt صادر کنید"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:368
-#, fuzzy
 msgid "Export book in hosts.txt format"
-msgstr "برون برد در فرمت hosts.txt"
+msgstr "صادرات کتاب در قالب hosts.txt"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:415
 msgid "Search"
@@ -489,7 +480,7 @@ msgstr "پاکسازی فیلتر"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:749
 msgid "Info"
-msgstr ""
+msgstr "اطلاعات"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:751
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:967
@@ -499,7 +490,7 @@ msgstr "نام سرور"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:753
 msgid "Link (b32)"
-msgstr ""
+msgstr "پیوند (b32)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:755
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:353
@@ -508,20 +499,20 @@ msgstr "مقصد"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:769
 msgid "Select hosts for deletion from addressbook"
-msgstr ""
+msgstr "میزبان ها را برای حذف از دفترچه آدرس انتخاب کنید"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:814
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:826
 msgid "More information on this entry"
-msgstr ""
+msgstr "اطلاعات بیشتر در مورد این ورودی"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:838
 msgid "Base 32 address"
-msgstr ""
+msgstr "آدرس پایگاه 32"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:844
 msgid "Helper link to share host address with option to add to addressbook"
-msgstr ""
+msgstr "پیوند کمکی برای اشتراک‌گذاری آدرس میزبان با گزینه افزودن به دفترچه آدرس"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:864
 msgid "Mark for deletion"
@@ -539,24 +530,23 @@ msgstr "افزودن مقصد جدید"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:971
 msgid "e.g. newdomain.i2p"
-msgstr ""
+msgstr "به عنوان مثال "
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:973
 msgid "B64 or B32"
-msgstr ""
+msgstr "B64 یا B32"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:977
 msgid "Full destination or b32 address"
-msgstr ""
+msgstr "آدرس کامل مقصد یا b32"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1037
 msgid "Import from hosts.txt file"
 msgstr "درون برد از فایل hosts.txt"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1039
-#, fuzzy
 msgid "Select file"
-msgstr "پاکسازی فیلتر"
+msgstr "فایل را انتخاب کنید"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:194
 msgid "configuration"
@@ -570,38 +560,27 @@ msgstr "موقعیت فایل"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:248
 msgid "Hints"
-msgstr ""
+msgstr "نکات"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:250
-msgid ""
-"File and directory paths here are relative to the addressbook's working "
-"directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%"
-"\\I2P\\addressbook\\ (Windows)."
-msgstr ""
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "مسیرهای فایل و دایرکتوری در اینجا نسبت به دایرکتوری کاری دفترچه آدرس است که معمولاً ~/.i2p/addressbook/ (Linux) یا %LOCALAPPDATA%\\I2P\\addressbook\\ (ویندوز) است."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:252
-msgid ""
-"If you want to manually add lines to an addressbook, add them to the private "
-"or master addressbooks."
-msgstr ""
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "اگر می خواهید خطوطی را به صورت دستی به دفترچه آدرس اضافه کنید، آنها را به دفترچه آدرس خصوصی یا اصلی اضافه کنید."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:254
-msgid ""
-"The router addressbook and the published addressbook are updated by the "
-"addressbook application."
-msgstr ""
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "دفترچه آدرس روتر و دفترچه آدرس منتشر شده توسط برنامه دفترچه آدرس به روز می شوند."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:256
-msgid ""
-"When you publish your addressbook, ALL destinations from the master and "
-"router addressbooks appear there."
-msgstr ""
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "هنگامی که دفترچه آدرس خود را منتشر می کنید، همه مقصدها از دفترچه آدرس اصلی و روتر در آنجا ظاهر می شوند."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:258
-msgid ""
-"Use the private addressbook for private destinations, these are not "
-"published."
-msgstr ""
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "از دفترچه آدرس خصوصی برای مقاصد خصوصی استفاده کنید، اینها منتشر نمی شوند."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:260
 msgid "Options"
@@ -609,74 +588,67 @@ msgstr "گزینه ها"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:262
 msgid "File containing the list of subscriptions URLs (no need to change)"
-msgstr ""
+msgstr "فایل حاوی لیست URL های اشتراک (بدون نیاز به تغییر)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:264
 msgid "Update interval in hours"
-msgstr ""
+msgstr "فاصله به روز رسانی در ساعت"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:266
-msgid ""
-"Your public hosts.txt file (choose a path within your webserver document "
-"root)"
-msgstr ""
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "فایل hosts.txt عمومی شما (مسیری را در ریشه سند وب سرور خود انتخاب کنید)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:268
 msgid "Your hosts.txt (don't change)"
-msgstr ""
+msgstr "hosts.txt شما (تغییر نکنید)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:270
 msgid "Your personal addressbook, these hosts will be published"
-msgstr ""
+msgstr "دفترچه آدرس شخصی شما، این میزبان ها منتشر خواهد شد"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:272
 msgid "Your private addressbook, it is never published"
-msgstr ""
+msgstr "دفترچه آدرس خصوصی شما، هرگز منتشر نمی شود"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:274
 msgid "Port for your eepProxy (no need to change)"
-msgstr ""
+msgstr "پورت برای eepProxy شما (نیازی به تغییر نیست)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:276
 msgid "Hostname for your eepProxy (no need to change)"
-msgstr ""
+msgstr "نام میزبان برای eepProxy شما (نیازی به تغییر نیست)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:278
 msgid "Whether to update the published addressbook"
-msgstr ""
+msgstr "آیا برای به روز رسانی دفترچه آدرس منتشر شده"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:280
-msgid ""
-"File containing the etags header from the fetched subscription URLs (no need "
-"to change)"
-msgstr ""
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "فایل حاوی هدر تگ ها از URL های اشتراک واکشی شده (نیازی به تغییر نیست)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:282
-msgid ""
-"File containing the modification timestamp for each fetched subscription URL "
-"(no need to change)"
-msgstr ""
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "فایل حاوی مهر زمانی اصلاح برای هر URL اشتراک واکشی شده (نیازی به تغییر نیست)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:284
 msgid "File to log activity to (change to /dev/null if you like)"
-msgstr ""
+msgstr "فایل برای ثبت فعالیت (در صورت تمایل به /dev/null تغییر دهید)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:286
 msgid "Name of override theme to use (defaults to console-selected theme)"
-msgstr ""
+msgstr "نام طرح زمینه نادیده گرفته شده برای استفاده (پیش‌فرض به طرح زمینه انتخاب‌شده توسط کنسول)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:193
 msgid "addressbook"
 msgstr "دفترچه آدرس"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:262
-#, fuzzy
 msgid "Details"
 msgstr "جزئیات"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:291
 msgid "Address Helper"
-msgstr ""
+msgstr "آدرس یاور"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:297
 msgid "link"
@@ -684,15 +656,15 @@ msgstr "لینک"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:301
 msgid "Encoded Name"
-msgstr ""
+msgstr "نام رمزگذاری شده"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:309
 msgid "Base 32 Address"
-msgstr ""
+msgstr "آدرس پایگاه 32"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:315
 msgid "Base 64 Hash"
-msgstr ""
+msgstr "پایه 64 هش"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:319
 msgid "Public Key"
@@ -700,7 +672,7 @@ msgstr "کلید عمومی"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:321
 msgid "ElGamal 2048 bit"
-msgstr ""
+msgstr "ElGamal 2048 bit"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:323
 msgid "Signing Key"
@@ -712,7 +684,7 @@ msgstr "گواهی"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:331
 msgid "Validated"
-msgstr ""
+msgstr "تایید شده"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:333
 msgid "no"
@@ -740,19 +712,19 @@ msgstr "یادداشت‌ها"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:363
 msgid "Add notes about domain"
-msgstr ""
+msgstr "یادداشت هایی در مورد دامنه اضافه کنید"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:388
 msgid "Visual Identification for"
-msgstr ""
+msgstr "شناسایی بصری برای"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:400
 msgid "Create your own identification images"
-msgstr ""
+msgstr "تصاویر شناسایی خود را ایجاد کنید"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:402
 msgid "Launch Image Generator"
-msgstr ""
+msgstr "مولد تصویر را راه اندازی کنید"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:185
 msgid "Introduction"
@@ -764,133 +736,103 @@ msgstr "دفترچه آدرس چیست؟"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:223
 msgid "The addressbook application is part of your I2P installation."
-msgstr ""
+msgstr "برنامه دفترچه آدرس بخشی از نصب I2P شما است."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:225
-msgid ""
-"It regularly updates your hosts.txt file from distributed sources or "
-"\"subscriptions\"."
-msgstr ""
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "به طور مرتب فایل hosts.txt شما را از منابع توزیع شده یا \"اشتراک ها\" به روز می کند."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:227
-msgid ""
-"Subscribing to additional sites is easy, just add them to your <a "
-"href=\"subscriptions\">subscriptions</a> file."
-msgstr ""
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "اشتراک در سایت‌های دیگر آسان است، فقط آنها را به فایل <a href=\"subscriptions\">اشتراک‌ها</a> خود اضافه کنید."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:229
-msgid ""
-"For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/"
-"naming.html\" target=_blank>the overview</a>."
-msgstr ""
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "برای اطلاعات بیشتر در مورد نامگذاری در I2P، به <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>نمای کلی</a> مراجعه کنید."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:231
 msgid "How does the addressbook application work?"
 msgstr "برنامه دفترچه آدرس چگونه کار میکند؟"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:233
-msgid ""
-"The addressbook application regularly polls your subscriptions and merges "
-"their content into your \"router\" address book."
-msgstr ""
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "برنامه دفترچه آدرس به طور منظم از اشتراک های شما نظرسنجی می کند و محتوای آنها را در دفترچه آدرس \"روتر\" شما ادغام می کند."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:235
-msgid ""
-"Then it merges your \"master\" address book into the router address book as "
-"well."
-msgstr ""
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "سپس کتاب آدرس \"master\" شما را نیز در دفترچه آدرس روتر ادغام می کند."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:237
-msgid ""
-"If configured, the router address book is now written to the \"published\" "
-"address book, which will be publicly available if you are running an eepsite."
-msgstr ""
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "در صورت پیکربندی، دفترچه آدرس روتر اکنون در دفترچه آدرس \"منتشر شده\" نوشته می شود، که در صورت اجرای eepsite به صورت عمومی در دسترس خواهد بود."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:239
-msgid ""
-"The router also uses a private address book, which is not merged or "
-"published."
-msgstr ""
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "روتر همچنین از یک دفترچه آدرس خصوصی استفاده می کند که ادغام یا منتشر نشده است."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:241
-msgid ""
-"Hosts in the private address book can be accessed by you but their addresses "
-"are never distributed to others."
-msgstr ""
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "میزبان های موجود در دفترچه آدرس خصوصی توسط شما قابل دسترسی هستند اما آدرس آنها هرگز در اختیار دیگران قرار نمی گیرد."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:243
-msgid ""
-"The private address book can also be used for aliases of hosts in your other "
-"address books."
-msgstr ""
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "دفترچه آدرس خصوصی همچنین می تواند برای نام مستعار میزبان ها در دفترچه های آدرس دیگر شما استفاده شود."
 
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:196
-#, fuzzy
 msgid "subscription log"
-msgstr "اشتراک ها"
+msgstr "ثبت اشتراک"
 
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:232
-#, fuzzy
 msgid "Subscription Log"
-msgstr "اشتراک ها"
+msgstr "ثبت اشتراک"
 
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:234
 msgid "Most recent (excluding bad domains)"
-msgstr ""
+msgstr "جدیدترین (به استثنای دامنه های بد)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:194
 msgid "subscriptions"
-msgstr ""
+msgstr "اشتراک ها"
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:246
 msgid "The subscription file contains a list of i2p URLs."
-msgstr ""
+msgstr "فایل اشتراک حاوی لیستی از URL های i2p است."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:248
-msgid ""
-"The addressbook application regularly checks this list for new eepsites."
-msgstr ""
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "برنامه دفترچه آدرس به طور مرتب این لیست را برای eepsite های جدید بررسی می کند."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:250
 msgid "Those URLs refer to published hosts.txt files."
-msgstr ""
+msgstr "این URL ها به فایل های hosts.txt منتشر شده اشاره دارند."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:252
 msgid "See the FAQ for a list of subscription URLs."
-msgstr ""
+msgstr "برای لیستی از URL های اشتراک به پرسش های متداول مراجعه کنید."
 
 #: build/HowSVG.java:5
-msgid ""
-"If SusiDNS is configured to publish your Router address book, the entries "
-"will appear in your Published address book and saved to a hosts.txt file for "
-"sharing."
-msgstr ""
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "اگر SusiDNS برای انتشار دفترچه آدرس روتر شما پیکربندی شده باشد، ورودی‌ها در دفترچه آدرس منتشر شده شما ظاهر می‌شوند و برای اشتراک‌گذاری در فایل hosts.txt ذخیره می‌شوند."
 
 #: build/HowSVG.java:6
 msgid "Published Addressbook"
-msgstr ""
+msgstr "دفترچه آدرس منتشر شده"
 
 #: build/HowSVG.java:7
-msgid ""
-"To configure SusiDNS to push your Router address book to your Published "
-"address book, set 'should_publish=true' on the configuration page."
-msgstr ""
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "برای پیکربندی SusiDNS تا دفترچه آدرس روتر شما را به دفترچه آدرس منتشر شده شما منتقل کند، 'should_publish=true' را در صفحه پیکربندی تنظیم کنید."
 
 #: build/HowSVG.java:8
-msgid ""
-"All hosts derived from subscriptions will appear in this address book, in "
-"addition to any you manually add here or to your Master address book."
-msgstr ""
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "همه هاست های مشتق شده از اشتراک ها در این دفترچه آدرس ظاهر می شوند، علاوه بر هر میزبانی که به صورت دستی در اینجا یا به دفترچه آدرس Master خود اضافه می کنید."
 
 #: build/HowSVG.java:9
 msgid "Router Addressbook"
 msgstr "دفترچه آدرس روتر"
 
 #: build/HowSVG.java:10
-msgid ""
-"Hosts you manually add here will never be published. You can also add "
-"aliases to hosts in other address books here."
-msgstr ""
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "هاست هایی که به صورت دستی در اینجا اضافه می کنید هرگز منتشر نمی شوند. "
 
 #: build/HowSVG.java:11
 msgid "Private Addressbook"
@@ -898,53 +840,43 @@ msgstr "دفترچه آدرس خصوصی"
 
 #: build/HowSVG.java:12
 msgid "Local Records"
-msgstr ""
+msgstr "سوابق محلی"
 
 #: build/HowSVG.java:13
-msgid ""
-"I2P applications (including the HTTP proxy) use the hosts in your local "
-"address books to resolve .i2p hostnames."
-msgstr ""
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "برنامه های I2P (از جمله پروکسی HTTP) از میزبان ها در دفترچه آدرس محلی شما برای حل نام هاست i2p. استفاده می کنند."
 
 #: build/HowSVG.java:14
-msgid ""
-"Additional subscriptions can be found in the FAQ section of the Router help "
-"page."
-msgstr ""
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "اشتراک‌های اضافی را می‌توانید در بخش پرسش‌های متداول در صفحه راهنمای روتر پیدا کنید."
 
 #: build/HowSVG.java:16
-msgid ""
-"Hosts sourced from your subscriptions are added to your Router address book, "
-"and are automatically synced (by default every 12 hours)."
-msgstr ""
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "هاست های منبع شده از اشتراک های شما به دفترچه آدرس روتر شما اضافه می شوند و به طور خودکار همگام سازی می شوند (به طور پیش فرض هر 12 ساعت)."
 
 #: build/HowSVG.java:17
 msgid "Configure Subscriptions"
-msgstr ""
+msgstr "اشتراک ها را پیکربندی کنید"
 
 #: build/HowSVG.java:18
-msgid ""
-"If you manually add hosts here, they will be included your Published address "
-"book (if configured)."
-msgstr ""
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "اگر به صورت دستی میزبان ها را به اینجا اضافه کنید، آنها شامل دفترچه آدرس منتشر شده شما می شوند (در صورت پیکربندی)."
 
 #: build/HowSVG.java:19
 msgid "Master Addressbook"
-msgstr ""
+msgstr "دفترچه آدرس اصلی"
 
 #: build/HowSVG.java:20
 msgid "Searchable by"
-msgstr ""
+msgstr "قابل جستجو توسط"
 
 #: build/HowSVG.java:21
 msgid "I2P applications"
 msgstr "برنامه های I2P"
 
 #: build/HowSVG.java:22
-msgid ""
-"The Master, Router and Private address books collectively serve as the DNS "
-"authority for I2P applications."
-msgstr ""
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "دفترچه آدرس Master، Router و Private در مجموع به عنوان مرجع DNS برای برنامه های I2P عمل می کنند."
 
 #: build/HowSVG.java:23
 msgid "Optional,"
@@ -955,20 +887,13 @@ msgid "for websites"
 msgstr "برای سایت ها"
 
 #: build/HowSVG.java:25
-msgid ""
-"If you configure SusiDNS to publish your Router address book, it will export "
-"a hosts.txt file containing all the hosts (by default to the root of your "
-"eepsite)."
-msgstr ""
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "اگر SusiDNS را برای انتشار دفترچه آدرس روتر خود پیکربندی کنید، یک فایل hosts.txt حاوی همه میزبان ها (به طور پیش فرض به ریشه eepsite شما) صادر می کند."
 
 #: build/HowSVG.java:26
-msgid ""
-"Addresses manually added to your Master address book will merge with your "
-"Router address book."
-msgstr ""
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "آدرس هایی که به صورت دستی به دفترچه آدرس Master شما اضافه می شوند با دفترچه آدرس روتر شما ادغام می شوند."
 
 #: build/HowSVG.java:27
-msgid ""
-"Hosts you receive from your subscriptions will merge with your Router "
-"address book."
-msgstr ""
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "میزبان هایی که از اشتراک های خود دریافت می کنید با دفترچه آدرس روتر شما ادغام می شوند."
