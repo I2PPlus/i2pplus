@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 03:22+0000\n"
-"PO-Revision-Date: 2023-11-24 20:21+0000\n"
+"PO-Revision-Date: 2023-11-25 00:42+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: tk\n"
@@ -33,7 +33,7 @@ msgstr "Garaşýan wagtyňyz, {2}konfigurasiýa sahypasynda{3} {0}geçirijilik g
 
 #, java-format
 msgid "You can also run the bandwidth test via the {0}Setup Wizard{1} to help with determining your bandwidth, and a guide for new users and additional documentation including an FAQ is available in the {2}help section{1}."
-msgstr ""
+msgstr "Bar bolan geçiriş giňligini kesgitlemek üçin {0}gurnama jadygöý{1} dolandyryp bilersiňiz. I2P + Giriş üçin giriş üçin {2}Help Bölüm{1} görüň."
 
 #, java-format
 msgid "You may also wish to enable I2P+ updates on {0}the update configuration page{1}."
