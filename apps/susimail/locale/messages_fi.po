@@ -7,12 +7,15 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2019-04-24 14:21+0000\n"
+"PO-Revision-Date: 2023-11-25 14:02+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: src/src/i2p/susi/webmail/MailCache.java:529
 #: src/src/i2p/susi/webmail/WebMail.java:2410
@@ -62,7 +65,7 @@ msgstr "Roskakori"
 #. MailDir-like
 #: src/src/i2p/susi/webmail/WebMail.java:217
 msgid "Bulk Mail"
-msgstr ""
+msgstr "Joukkoposti"
 
 #. untranslated, translate on use
 #: src/src/i2p/susi/webmail/WebMail.java:221
@@ -85,11 +88,11 @@ msgstr "Osaa ({0}) ei näytetä, syy: {1}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:592
 msgid "Reloading the page may fix the error."
-msgstr ""
+msgstr "Sivun lataaminen uudelleen voi korjata virheen."
 
 #: src/src/i2p/susi/webmail/WebMail.java:622
 msgid "File"
-msgstr ""
+msgstr "Tiedosto"
 
 #: src/src/i2p/susi/webmail/WebMail.java:645
 #: src/src/i2p/susi/webmail/WebMail.java:650
@@ -162,14 +165,14 @@ msgstr "Virhe yhdistettäessä palvelimeen"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1039
 msgid "Draft saved."
-msgstr ""
+msgstr "Luonnos tallennettu."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1049
 #: src/src/i2p/susi/webmail/WebMail.java:1290
 #: src/src/i2p/susi/webmail/WebMail.java:2740
 #: src/src/i2p/susi/webmail/WebMail.java:2923
 msgid "Unable to save mail."
-msgstr ""
+msgstr "Sähköpostia ei voi tallentaa."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1179
 #, java-format
@@ -236,7 +239,7 @@ msgstr "Yhtään viestiä ei ole merkitty poistettavaksi."
 #: src/src/i2p/susi/webmail/WebMail.java:1800
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
+msgstr "Isäntä ennallaan. Muokkaa kokoonpanotiedostoa {0} muuttaaksesi isäntä."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1820
 msgid "Configuration saved"
@@ -255,10 +258,10 @@ msgstr "Kirjaudu sisään"
 #: src/src/i2p/susi/webmail/WebMail.java:2426
 #: src/src/i2p/susi/webmail/WebMail.java:3179
 msgid "Loading messages, please wait..."
-msgstr ""
+msgstr "Ladataan viestejä, odota..."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2292
-#, fuzzy, java-format
+#, java-format
 msgid "1 message"
 msgid_plural "{0} messages"
 msgstr[0] "1 viesti"
@@ -283,29 +286,29 @@ msgstr "Asetukset"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2320
 msgid "I2PMail"
-msgstr ""
+msgstr "I2PMmail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2413
 msgid "No new messages"
-msgstr ""
+msgstr "Ei uusia viestejä"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2428
 msgid "Checking for new messages on server"
-msgstr ""
+msgstr "Tarkistaa uusia viestejä palvelimelta"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2430
 msgid "Refresh the page for updates"
-msgstr ""
+msgstr "Päivitä sivu päivityksiä varten"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2465
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
-msgstr ""
+msgstr "{0} on I2P-yksinomainen palvelu, jonka tarjoaa {1}."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2467
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr ""
+msgstr "{0} webmail client &copy Susi 2004-2005."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2648
 #: src/src/i2p/susi/webmail/WebMail.java:3296
@@ -330,12 +333,12 @@ msgstr "Ei vastaanottajia."
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:302
 #, java-format
 msgid "Email is too large, max is {0}"
-msgstr ""
+msgstr "Sähköposti on liian suuri, maksimi on {0}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2855
 #: src/src/i2p/susi/webmail/WebMail.java:2936
 msgid "Sending mail."
-msgstr ""
+msgstr "Postin lähettäminen."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2860
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:254
@@ -354,7 +357,7 @@ msgstr "Lähetä"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2984
 msgid "Save as Draft"
-msgstr ""
+msgstr "Tallenna luonnoksena"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2985
 #: src/src/i2p/susi/webmail/WebMail.java:3405
@@ -396,7 +399,6 @@ msgstr "Lisää liite"
 
 #. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 #: src/src/i2p/susi/webmail/WebMail.java:3091
-#, fuzzy
 msgid "Add attachment"
 msgstr "Lisää liite"
 
@@ -410,16 +412,15 @@ msgstr "Poista valitut liitteet"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3125
 msgid "I2PMail Login"
-msgstr ""
+msgstr "I2PMmail Kirjautuminen"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3129
 msgid "User"
 msgstr "Käyttäjä"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3130
-#, fuzzy
 msgid "Username"
-msgstr "Käyttäjä"
+msgstr "Käyttäjänimi"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3134
 #: src/src/i2p/susi/webmail/WebMail.java:3135
@@ -428,7 +429,7 @@ msgstr "Salasana"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3137
 msgid "Toggle password visibility"
-msgstr ""
+msgstr "Vaihda salasanan näkyvyys"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3143
 msgid "Host"
@@ -452,9 +453,8 @@ msgid "Settings"
 msgstr "Asetukset"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3168
-#, fuzzy
 msgid "Learn about I2PMail"
-msgstr "Lisätietoja I2P-postista"
+msgstr "Lisätietoja I2PMailista"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3169
 msgid "Create Account"
@@ -471,7 +471,7 @@ msgstr "Tarkista posti"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3215
 msgid "Refresh Page"
-msgstr ""
+msgstr "Päivitä sivu"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3228
 #, java-format
@@ -497,7 +497,7 @@ msgstr "Koko"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3252
 msgid "Mark for deletion"
-msgstr ""
+msgstr "Merkitse poistettavaksi"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3349
 msgid "Message has an attachment"
@@ -512,9 +512,8 @@ msgid "Message is spam"
 msgstr "Viesti on roskapostia"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3370
-#, fuzzy
 msgid "Message body not downloaded"
-msgstr "Viestin tunniste (id) ei kelvollinen."
+msgstr "Viestin runkoa ei ladattu"
 
 #. TODO ngettext
 #: src/src/i2p/susi/webmail/WebMail.java:3403
@@ -539,7 +538,7 @@ msgstr "Nollaa kaikki"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3425
 msgid "Change to Folder"
-msgstr ""
+msgstr "Vaihda kansioon"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3433
 msgid "First"
@@ -594,7 +593,7 @@ msgstr "Takaisin kansioon"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3576
 msgid "Move to Folder"
-msgstr ""
+msgstr "Siirrä kansioon"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3656
 msgid "Folder Page Size"
@@ -624,11 +623,11 @@ msgstr "Palvelin ei vastaa"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
+msgstr "Sähköpostipalvelimeen kirjautuminen epäonnistui, väärä käyttäjätunnus tai salasana."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
+msgstr "Kirjaudu ulos ja kirjaudu sitten uudelleen sisään oikealla käyttäjätunnuksella ja salasanalla."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240
