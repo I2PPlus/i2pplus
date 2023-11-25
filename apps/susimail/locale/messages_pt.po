@@ -7,12 +7,15 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2019-10-02 08:58+0000\n"
+"PO-Revision-Date: 2023-11-25 05:06+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: src/src/i2p/susi/webmail/MailCache.java:529
 #: src/src/i2p/susi/webmail/WebMail.java:2410
@@ -62,7 +65,7 @@ msgstr "Reciclagem"
 #. MailDir-like
 #: src/src/i2p/susi/webmail/WebMail.java:217
 msgid "Bulk Mail"
-msgstr ""
+msgstr "Correio em massa"
 
 #. untranslated, translate on use
 #: src/src/i2p/susi/webmail/WebMail.java:221
@@ -85,11 +88,11 @@ msgstr "Parte ({0}) não exibida por causa de {1}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:592
 msgid "Reloading the page may fix the error."
-msgstr ""
+msgstr "Recarregar a página pode corrigir o erro."
 
 #: src/src/i2p/susi/webmail/WebMail.java:622
 msgid "File"
-msgstr ""
+msgstr "Arquivo"
 
 #: src/src/i2p/susi/webmail/WebMail.java:645
 #: src/src/i2p/susi/webmail/WebMail.java:650
@@ -153,7 +156,7 @@ msgstr "Número da porta do SMTP é inválido."
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:243
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:258
 msgid "Cannot connect"
-msgstr ""
+msgstr "Não é possível conectar"
 
 #: src/src/i2p/susi/webmail/WebMail.java:932
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:744
@@ -162,14 +165,14 @@ msgstr "Erro ao conectar ao servidor"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1039
 msgid "Draft saved."
-msgstr ""
+msgstr "Rascunho salvo."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1049
 #: src/src/i2p/susi/webmail/WebMail.java:1290
 #: src/src/i2p/susi/webmail/WebMail.java:2740
 #: src/src/i2p/susi/webmail/WebMail.java:2923
 msgid "Unable to save mail."
-msgstr ""
+msgstr "Não foi possível salvar o e-mail."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1179
 #, java-format
@@ -211,7 +214,7 @@ msgstr "Nenhuma codificação encontrada para {0}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1592
 msgid "Attachment not found."
-msgstr ""
+msgstr "Anexo não encontrado."
 
 #. error if we get here
 #: src/src/i2p/susi/webmail/WebMail.java:1620
@@ -219,7 +222,7 @@ msgstr ""
 #: src/src/i2p/susi/webmail/WebMail.java:2304
 #: src/src/i2p/susi/webmail/WebMail.java:3617
 msgid "Message not found."
-msgstr ""
+msgstr "Mensagem não encontrada."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1725
 #, java-format
@@ -236,11 +239,11 @@ msgstr "Nenhuma mensagem marcada para eliminação."
 #: src/src/i2p/susi/webmail/WebMail.java:1800
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
+msgstr "Host inalteradoHost inalterado. Editar arquivo de configação {0} para alterar o host."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1820
 msgid "Configuration saved"
-msgstr ""
+msgstr "Configuração salva"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1842
 msgid "Invalid pagesize number, resetting to default value."
@@ -255,14 +258,14 @@ msgstr "Entrar"
 #: src/src/i2p/susi/webmail/WebMail.java:2426
 #: src/src/i2p/susi/webmail/WebMail.java:3179
 msgid "Loading messages, please wait..."
-msgstr ""
+msgstr "Carregando mensagens, aguarde..."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2292
-#, fuzzy, java-format
+#, java-format
 msgid "1 message"
 msgid_plural "{0} messages"
-msgstr[0] "Uma mensagem"
-msgstr[1] "{0} Mensagens"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:2294
 #: src/src/i2p/susi/webmail/WebMail.java:3380
@@ -275,7 +278,7 @@ msgstr "Exibir Mensagem"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2307
 msgid "New Message"
-msgstr ""
+msgstr "Nova Mensagem"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2309
 msgid "Configuration"
@@ -283,29 +286,29 @@ msgstr "Configuração"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2320
 msgid "I2PMail"
-msgstr ""
+msgstr "I2PMe-mail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2413
 msgid "No new messages"
-msgstr ""
+msgstr "Sem novas mensagens"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2428
 msgid "Checking for new messages on server"
-msgstr ""
+msgstr "Verificando novas mensagens no servidor"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2430
 msgid "Refresh the page for updates"
-msgstr ""
+msgstr "Atualize a página para atualizações"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2465
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
-msgstr ""
+msgstr "{0} é um serviço exclusivo I2P fornecido por {1}."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2467
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr ""
+msgstr "{0} webmail client &copy Susi 2004-2005."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2648
 #: src/src/i2p/susi/webmail/WebMail.java:3296
@@ -330,19 +333,19 @@ msgstr "Nenhum destinatário encontrado."
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:302
 #, java-format
 msgid "Email is too large, max is {0}"
-msgstr ""
+msgstr "O e-mail é muito grande, o máximo é {0}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2855
 #: src/src/i2p/susi/webmail/WebMail.java:2936
 msgid "Sending mail."
-msgstr ""
+msgstr "Enviando e-mail."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2860
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:254
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:346
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:351
 msgid "Error sending mail"
-msgstr ""
+msgstr "Erro ao enviar e-mail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2894
 msgid "Mail sent."
@@ -354,7 +357,7 @@ msgstr "Enviar"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2984
 msgid "Save as Draft"
-msgstr ""
+msgstr "Salvar como rascunho"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2985
 #: src/src/i2p/susi/webmail/WebMail.java:3405
@@ -378,11 +381,11 @@ msgstr "Para"
 #: src/src/i2p/susi/webmail/WebMail.java:3078
 #: src/src/i2p/susi/webmail/WebMail.java:3596
 msgid "Cc"
-msgstr ""
+msgstr "Cc"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3080
 msgid "Bcc"
-msgstr ""
+msgstr "Bcc"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3082
 #: src/src/i2p/susi/webmail/WebMail.java:3249
@@ -396,9 +399,8 @@ msgstr "Adicionar Anexo"
 
 #. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 #: src/src/i2p/susi/webmail/WebMail.java:3091
-#, fuzzy
 msgid "Add attachment"
-msgstr "Adicionar Anexo"
+msgstr "Adicionar anexo"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3098
 msgid "Attachments"
@@ -406,20 +408,19 @@ msgstr "Anexos"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3109
 msgid "Delete selected attachments"
-msgstr ""
+msgstr "Excluir anexos selecionados"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3125
 msgid "I2PMail Login"
-msgstr ""
+msgstr "Login do I2PMemail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3129
 msgid "User"
 msgstr "Usuário"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3130
-#, fuzzy
 msgid "Username"
-msgstr "Usuário"
+msgstr "Nome de usuário"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3134
 #: src/src/i2p/susi/webmail/WebMail.java:3135
@@ -428,7 +429,7 @@ msgstr "Palavra-passe"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3137
 msgid "Toggle password visibility"
-msgstr ""
+msgstr "Alternar visibilidade da senha"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3143
 msgid "Host"
@@ -436,15 +437,15 @@ msgstr "Anfitrião"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3148
 msgid "POP3 Port"
-msgstr ""
+msgstr "Porta POP3"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3153
 msgid "SMTP Port"
-msgstr ""
+msgstr "Porta SMTP"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3162
 msgid "Read Mail Offline"
-msgstr ""
+msgstr "Ler e-mail off-line"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3163
 #: src/src/i2p/susi/webmail/WebMail.java:3409
@@ -452,9 +453,8 @@ msgid "Settings"
 msgstr "Configurações"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3168
-#, fuzzy
 msgid "Learn about I2PMail"
-msgstr "Aprenda sobre o e-mail do I2P"
+msgstr "Aprenda mais sobre I2PMail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3169
 msgid "Create Account"
@@ -471,7 +471,7 @@ msgstr "Verificar Mensagens"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3215
 msgid "Refresh Page"
-msgstr ""
+msgstr "Atualizar página"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3228
 #, java-format
@@ -501,20 +501,19 @@ msgstr "Marcar para excluir"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3349
 msgid "Message has an attachment"
-msgstr ""
+msgstr "A mensagem tem um anexo"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3359
 msgid "Message is new"
-msgstr ""
+msgstr "A mensagem é nova"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3361
 msgid "Message is spam"
-msgstr ""
+msgstr "A mensagem é spam"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3370
-#, fuzzy
 msgid "Message body not downloaded"
-msgstr "ID da mensagem não é válido."
+msgstr "Corpo da mensagem não baixado"
 
 #. TODO ngettext
 #: src/src/i2p/susi/webmail/WebMail.java:3403
@@ -535,11 +534,11 @@ msgstr "Marcar todos"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3412
 msgid "Clear All"
-msgstr ""
+msgstr "Limpar tudo"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3425
 msgid "Change to Folder"
-msgstr ""
+msgstr "Mudar para pasta"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3433
 msgid "First"
@@ -594,11 +593,11 @@ msgstr "Voltar à Pasta"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3576
 msgid "Move to Folder"
-msgstr ""
+msgstr "Mover para pasta"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3656
 msgid "Folder Page Size"
-msgstr ""
+msgstr "Tamanho da página da pasta"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3657
 msgid "Set"
@@ -606,11 +605,11 @@ msgstr "Definir"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3659
 msgid "Advanced Configuration"
-msgstr ""
+msgstr "Configuração Avançada"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3670
 msgid "Save Configuration"
-msgstr ""
+msgstr "Salvar configuração"
 
 #. this appears in the UI so translate
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:108
@@ -620,28 +619,28 @@ msgstr ""
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:978
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1199
 msgid "No response from server"
-msgstr ""
+msgstr "Nenhuma resposta do servidor"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
+msgstr "Falha no login do servidor de e-mail, nome de usuário ou senha incorretos."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
+msgstr "Saia e faça login novamente com o nome de usuário e senha corretos."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:314
 msgid "Login failed"
-msgstr ""
+msgstr "Falha no login"
 
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:256
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:285
 msgid "Server refused connection"
-msgstr ""
+msgstr "Servidor recusou conexão"
 
 #. TODO which recipient?
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:327
 msgid "Mail rejected"
-msgstr ""
+msgstr "Correio rejeitado"

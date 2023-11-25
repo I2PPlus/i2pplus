@@ -7,12 +7,15 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2019-08-22 10:23+0000\n"
+"PO-Revision-Date: 2023-11-25 04:46+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: src/src/i2p/susi/webmail/MailCache.java:529
 #: src/src/i2p/susi/webmail/WebMail.java:2410
@@ -47,7 +50,7 @@ msgstr ""
 #. MailDir-like
 #: src/src/i2p/susi/webmail/WebMail.java:214
 msgid "Drafts"
-msgstr ""
+msgstr "Udkast"
 
 #. MailDir-like
 #: src/src/i2p/susi/webmail/WebMail.java:215
@@ -57,12 +60,12 @@ msgstr "Sendt"
 #. MailDir-like
 #: src/src/i2p/susi/webmail/WebMail.java:216
 msgid "Trash"
-msgstr ""
+msgstr "Affald"
 
 #. MailDir-like
 #: src/src/i2p/susi/webmail/WebMail.java:217
 msgid "Bulk Mail"
-msgstr ""
+msgstr "Massepost"
 
 #. untranslated, translate on use
 #: src/src/i2p/susi/webmail/WebMail.java:221
@@ -85,17 +88,17 @@ msgstr "Del ({0}) er ikke vist på grund af {1}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:592
 msgid "Reloading the page may fix the error."
-msgstr ""
+msgstr "Genindlæsning af siden kan løse fejlen."
 
 #: src/src/i2p/susi/webmail/WebMail.java:622
 msgid "File"
-msgstr ""
+msgstr "Fil"
 
 #: src/src/i2p/susi/webmail/WebMail.java:645
 #: src/src/i2p/susi/webmail/WebMail.java:650
 #, java-format
 msgid "Download attachment {0}"
-msgstr ""
+msgstr "Download vedhæftet fil {0}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:651
 msgid "File is packed into a zipfile for security reasons."
@@ -153,65 +156,65 @@ msgstr "SMTP  portnummer er ugyldigt."
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:243
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:258
 msgid "Cannot connect"
-msgstr ""
+msgstr "Kan ikke oprette forbindelse"
 
 #: src/src/i2p/susi/webmail/WebMail.java:932
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:744
 msgid "Error connecting to server"
-msgstr ""
+msgstr "Fejl ved forbindelse til server"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1039
 msgid "Draft saved."
-msgstr ""
+msgstr "Udkast gemt."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1049
 #: src/src/i2p/susi/webmail/WebMail.java:1290
 #: src/src/i2p/susi/webmail/WebMail.java:2740
 #: src/src/i2p/susi/webmail/WebMail.java:2923
 msgid "Unable to save mail."
-msgstr ""
+msgstr "Kan ikke gemme mail."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1179
 #, java-format
 msgid "On {0} {1} wrote:"
-msgstr ""
+msgstr "Den {0} skrev {1}:"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1242
 #: src/src/i2p/susi/webmail/WebMail.java:1467
 #, java-format
 msgid "Error reading uploaded file: {0}"
-msgstr ""
+msgstr "Fejl ved læsning af uploadet fil: {0}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1268
 msgid "begin forwarded mail"
-msgstr ""
+msgstr "begynd videresendt post"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1278
 msgid "end forwarded mail"
-msgstr ""
+msgstr "slut videresendt mail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1296
 #: src/src/i2p/susi/webmail/WebMail.java:3611
 msgid "Could not fetch mail body."
-msgstr ""
+msgstr "Kunne ikke hente brevtekst."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1328
 msgid "Message id not valid."
-msgstr ""
+msgstr "Besked-id er ikke gyldig."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1372
 msgid "Internal error, lost connection."
-msgstr ""
+msgstr "Intern fejl, mistet forbindelse."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1464
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:386
 #, java-format
 msgid "No Encoding found for {0}"
-msgstr ""
+msgstr "Ingen kodning fundet for {0}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1592
 msgid "Attachment not found."
-msgstr ""
+msgstr "Vedhæftet fil blev ikke fundet."
 
 #. error if we get here
 #: src/src/i2p/susi/webmail/WebMail.java:1620
@@ -219,7 +222,7 @@ msgstr ""
 #: src/src/i2p/susi/webmail/WebMail.java:2304
 #: src/src/i2p/susi/webmail/WebMail.java:3617
 msgid "Message not found."
-msgstr ""
+msgstr "Beskeden blev ikke fundet."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1725
 #, java-format
@@ -231,20 +234,20 @@ msgstr[1] ""
 #: src/src/i2p/susi/webmail/WebMail.java:1727
 #: src/src/i2p/susi/webmail/WebMail.java:1736
 msgid "No messages marked for deletion."
-msgstr ""
+msgstr "Ingen beskeder markeret til sletning."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1800
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
+msgstr "Vært uændret. Rediger konfigurationsfil {0} for at ændre vært."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1820
 msgid "Configuration saved"
-msgstr ""
+msgstr "Konfiguration gemt"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1842
 msgid "Invalid pagesize number, resetting to default value."
-msgstr ""
+msgstr "Ugyldigt sidestørrelsesnummer, nulstilles til standardværdi."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2282
 #: src/src/i2p/susi/webmail/WebMail.java:3162
@@ -255,7 +258,7 @@ msgstr "Log in"
 #: src/src/i2p/susi/webmail/WebMail.java:2426
 #: src/src/i2p/susi/webmail/WebMail.java:3179
 msgid "Loading messages, please wait..."
-msgstr ""
+msgstr "Indlæser beskeder, vent venligst..."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2292
 #, java-format
@@ -267,15 +270,15 @@ msgstr[1] ""
 #: src/src/i2p/susi/webmail/WebMail.java:2294
 #: src/src/i2p/susi/webmail/WebMail.java:3380
 msgid "No messages"
-msgstr ""
+msgstr "Ingen beskeder"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2302
 msgid "Show Message"
-msgstr ""
+msgstr "Vis besked"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2307
 msgid "New Message"
-msgstr ""
+msgstr "Ny besked"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2309
 msgid "Configuration"
@@ -287,66 +290,66 @@ msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:2413
 msgid "No new messages"
-msgstr ""
+msgstr "Ingen nye beskeder"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2428
 msgid "Checking for new messages on server"
-msgstr ""
+msgstr "Søger efter nye beskeder på serveren"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2430
 msgid "Refresh the page for updates"
-msgstr ""
+msgstr "Opdater siden for opdateringer"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2465
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
-msgstr ""
+msgstr "{0} er en I2P-eksklusiv tjeneste leveret af {1}."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2467
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr ""
+msgstr "{0} webmail client &copy Susi 2004-2005."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2648
 #: src/src/i2p/susi/webmail/WebMail.java:3296
 #: src/src/i2p/susi/webmail/WebMail.java:3586
 msgid "no subject"
-msgstr ""
+msgstr "intet emne"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2776
 msgid "Found no valid sender address."
-msgstr ""
+msgstr "Fandt ingen gyldig afsenderadresse."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2782
 #, java-format
 msgid "Found no valid address in \\''{0}\\''."
-msgstr ""
+msgstr "Fandt ingen gyldig adresse i \\''{0}\\''."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2796
 msgid "No recipients found."
-msgstr ""
+msgstr "Ingen modtagere fundet."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2810
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:302
 #, java-format
 msgid "Email is too large, max is {0}"
-msgstr ""
+msgstr "E-mail er for stor, maks. er {0}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2855
 #: src/src/i2p/susi/webmail/WebMail.java:2936
 msgid "Sending mail."
-msgstr ""
+msgstr "Sender mail."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2860
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:254
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:346
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:351
 msgid "Error sending mail"
-msgstr ""
+msgstr "Fejl ved afsendelse af mail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2894
 msgid "Mail sent."
-msgstr ""
+msgstr "Mail sendt."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2983
 msgid "Send"
@@ -354,7 +357,7 @@ msgstr "Send"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2984
 msgid "Save as Draft"
-msgstr ""
+msgstr "Gem som kladde"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2985
 #: src/src/i2p/susi/webmail/WebMail.java:3405
@@ -388,17 +391,16 @@ msgstr ""
 #: src/src/i2p/susi/webmail/WebMail.java:3249
 #: src/src/i2p/susi/webmail/WebMail.java:3598
 msgid "Subject"
-msgstr ""
+msgstr "Emne"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3088
 msgid "Add Attachment"
-msgstr ""
+msgstr "Tilføj vedhæftet fil"
 
 #. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 #: src/src/i2p/susi/webmail/WebMail.java:3091
-#, fuzzy
 msgid "Add attachment"
-msgstr "Vedhæftede filer"
+msgstr "Tilføj vedhæftet fil"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3098
 msgid "Attachments"
@@ -406,7 +408,7 @@ msgstr "Vedhæftede filer"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3109
 msgid "Delete selected attachments"
-msgstr ""
+msgstr "Slet valgte vedhæftede filer"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3125
 msgid "I2PMail Login"
@@ -417,9 +419,8 @@ msgid "User"
 msgstr "Bruger"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3130
-#, fuzzy
 msgid "Username"
-msgstr "Bruger"
+msgstr "Brugernavn"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3134
 #: src/src/i2p/susi/webmail/WebMail.java:3135
@@ -428,7 +429,7 @@ msgstr "Adgangskode"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3137
 msgid "Toggle password visibility"
-msgstr ""
+msgstr "Skift adgangskodesynlighed"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3143
 msgid "Host"
@@ -436,15 +437,15 @@ msgstr "Vært"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3148
 msgid "POP3 Port"
-msgstr ""
+msgstr "POP3-port"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3153
 msgid "SMTP Port"
-msgstr ""
+msgstr "SMTP-port"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3162
 msgid "Read Mail Offline"
-msgstr ""
+msgstr "Læs mail offline"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3163
 #: src/src/i2p/susi/webmail/WebMail.java:3409
@@ -453,11 +454,11 @@ msgstr "Indstillinger"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3168
 msgid "Learn about I2PMail"
-msgstr ""
+msgstr "Lær om I2PMail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3169
 msgid "Create Account"
-msgstr ""
+msgstr "Opret konto"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3194
 #: src/src/i2p/susi/webmail/WebMail.java:3519
@@ -466,11 +467,11 @@ msgstr "Ny"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3207
 msgid "Check Mail"
-msgstr ""
+msgstr "Tjek Mail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3215
 msgid "Refresh Page"
-msgstr ""
+msgstr "Opdater side"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3228
 #, java-format
@@ -500,28 +501,28 @@ msgstr "Marker for sletning"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3349
 msgid "Message has an attachment"
-msgstr ""
+msgstr "Besked har en vedhæftet fil"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3359
 msgid "Message is new"
-msgstr ""
+msgstr "Besked er ny"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3361
 msgid "Message is spam"
-msgstr ""
+msgstr "Meddelelsen er spam"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3370
 msgid "Message body not downloaded"
-msgstr ""
+msgstr "Meddelelsestekst blev ikke downloadet"
 
 #. TODO ngettext
 #: src/src/i2p/susi/webmail/WebMail.java:3403
 msgid "Really delete the marked messages?"
-msgstr ""
+msgstr "Slet virkelig de markerede beskeder?"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3404
 msgid "Yes, really delete them!"
-msgstr ""
+msgstr "Ja, slet dem virkelig!"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3410
 msgid "Delete Selected"
@@ -529,15 +530,15 @@ msgstr "Slet markedere  "
 
 #: src/src/i2p/susi/webmail/WebMail.java:3411
 msgid "Mark All"
-msgstr ""
+msgstr "Marker alle"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3412
 msgid "Clear All"
-msgstr ""
+msgstr "Slet alt"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3425
 msgid "Change to Folder"
-msgstr ""
+msgstr "Skift til mappe"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3433
 msgid "First"
@@ -559,11 +560,11 @@ msgstr "Sidste"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3493
 msgid "Really delete this message?"
-msgstr ""
+msgstr "Slet virkelig denne besked?"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3494
 msgid "Yes, really delete it!"
-msgstr ""
+msgstr "Ja, slet det virkelig!"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3522
 msgid "Reply"
@@ -571,7 +572,7 @@ msgstr "Besvar"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3523
 msgid "Reply All"
-msgstr ""
+msgstr "Svar alle"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3524
 msgid "Forward"
@@ -588,27 +589,27 @@ msgstr "Slet"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3555
 msgid "Back to Folder"
-msgstr ""
+msgstr "Tilbage til mappe"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3576
 msgid "Move to Folder"
-msgstr ""
+msgstr "Flyt til mappe"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3656
 msgid "Folder Page Size"
-msgstr ""
+msgstr "Mappe Sidestørrelse"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3657
 msgid "Set"
-msgstr ""
+msgstr "Sæt"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3659
 msgid "Advanced Configuration"
-msgstr ""
+msgstr "Avanceret konfiguration"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3670
 msgid "Save Configuration"
-msgstr ""
+msgstr "Gem konfiguration"
 
 #. this appears in the UI so translate
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:108
@@ -618,28 +619,28 @@ msgstr ""
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:978
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1199
 msgid "No response from server"
-msgstr ""
+msgstr "Intet svar fra serveren"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
+msgstr "Mail server login mislykkedes, forkert brugernavn eller adgangskode."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
+msgstr "Log ud og log derefter på igen med det korrekte brugernavn og password."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:314
 msgid "Login failed"
-msgstr ""
+msgstr "Login mislykkedes"
 
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:256
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:285
 msgid "Server refused connection"
-msgstr ""
+msgstr "Server nægtede forbindelse"
 
 #. TODO which recipient?
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:327
 msgid "Mail rejected"
-msgstr ""
+msgstr "Mail afvist"
