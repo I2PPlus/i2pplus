@@ -8779,7 +8779,7 @@ msgstr "HÃ©bergement Web"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:410
 msgid "New User Guide"
-msgstr "Nouveau guide de l'utilisateur"
+msgstr "Nouveaux utilisateurs"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:425
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:423
@@ -9260,7 +9260,7 @@ msgstr "Cochez la case <i>Proxy DNS lors de l'utilisation de SOCKS v5</i> pour Ã
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:491
 msgid "Hit the <i>OK</i> button and test the proxy is working by visiting <a href=http://planeta.i2p/ target=_blank rel=noreferrer class=sitelink>planeta.i2p</a> and <a href=https://www.myip.com/ target=_blank rel=noreferrer class='sitelink external'>www.myip.com</a>."
-msgstr "Appuyez sur le bouton <i>OK</i> et testez si le proxy fonctionne en visitant <a href=http://planeta.i2p/ target=_blank rel=noreferrer class=sitelink>planeta.i2p</a> et <a href=https://www.mon-ip.org/ target=_blank rel=noreferrer class='sitelink external'>www.mon-ip.org</a>."
+msgstr "Appuyez sur le bouton <i>OK</i> et testez si le proxy fonctionne en visitant <a href=http://planeta.i2p/ target=_blank rel=noreferrer class=sitelink>planeta.i2p</a> et <a href=https://www.myip.com/ target=_blank rel=noreferrer class='sitelink external'>www.myip.com</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:493
 msgid "Note: To enhance your security when browsing .i2p sites, you may wish to consider installing an addon to prevent Javascript from running in the browser such as <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>, though it's recommended to whitelist the address I2P+ is running on to enable various router console enhancements. In addition, an addon that prevents requests to offsite resources is also recommended, for example <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
