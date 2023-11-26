@@ -7,13 +7,15 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2019-04-24 14:21+0000\n"
+"PO-Revision-Date: 2023-11-26 04:53+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: src/src/i2p/susi/webmail/MailCache.java:529
 #: src/src/i2p/susi/webmail/WebMail.java:2410
@@ -90,11 +92,11 @@ msgstr "الجزء ({0}) لا يظهر، بسبب {1}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:592
 msgid "Reloading the page may fix the error."
-msgstr ""
+msgstr "إعادة تحميل الصفحة قد يؤدي إلى إصلاح الخطأ."
 
 #: src/src/i2p/susi/webmail/WebMail.java:622
 msgid "File"
-msgstr ""
+msgstr "ملف"
 
 #: src/src/i2p/susi/webmail/WebMail.java:645
 #: src/src/i2p/susi/webmail/WebMail.java:650
@@ -263,12 +265,11 @@ msgstr "تسجيل الدخول"
 #: src/src/i2p/susi/webmail/WebMail.java:2284
 #: src/src/i2p/susi/webmail/WebMail.java:2426
 #: src/src/i2p/susi/webmail/WebMail.java:3179
-#, fuzzy
 msgid "Loading messages, please wait..."
 msgstr "تحميل رسائل البريد الإلكتروني، يرجى الانتظار..."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2292
-#, fuzzy, java-format
+#, java-format
 msgid "1 message"
 msgid_plural "{0} messages"
 msgstr[0] "رسالة واحدة"
@@ -297,14 +298,13 @@ msgstr "التهيئة."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2320
 msgid "I2PMail"
-msgstr ""
+msgstr "I2PMail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2413
 msgid "No new messages"
 msgstr "لا توجد رسائل جديدة"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2428
-#, fuzzy
 msgid "Checking for new messages on server"
 msgstr "التحقق من رسائل البريد الإلكتروني الجديدة على الخادم"
 
@@ -315,12 +315,12 @@ msgstr "قم بتحديث الصفحة للحصول على التحديثات"
 #: src/src/i2p/susi/webmail/WebMail.java:2465
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
-msgstr ""
+msgstr "{0} هي خدمة حصرية لـ I2P مقدمة من {1}."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2467
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr ""
+msgstr "{0} webmail client &copy Susi 2004-2005."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2648
 #: src/src/i2p/susi/webmail/WebMail.java:3296
@@ -411,7 +411,6 @@ msgstr "إضافة مرفق"
 
 #. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 #: src/src/i2p/susi/webmail/WebMail.java:3091
-#, fuzzy
 msgid "Add attachment"
 msgstr "إضافة مرفق"
 
@@ -424,7 +423,6 @@ msgid "Delete selected attachments"
 msgstr "احذف المرفقات المختارة"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3125
-#, fuzzy
 msgid "I2PMail Login"
 msgstr "البريد الإلكتروني تسجيل الدخول"
 
@@ -433,9 +431,8 @@ msgid "User"
 msgstr "المستخدم"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3130
-#, fuzzy
 msgid "Username"
-msgstr "المستخدم"
+msgstr "اسم المستخدم"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3134
 #: src/src/i2p/susi/webmail/WebMail.java:3135
@@ -444,7 +441,7 @@ msgstr "كلمة السر"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3137
 msgid "Toggle password visibility"
-msgstr ""
+msgstr "تبديل رؤية كلمة المرور"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3143
 msgid "Host"
@@ -468,7 +465,6 @@ msgid "Settings"
 msgstr "الإعدادات"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3168
-#, fuzzy
 msgid "Learn about I2PMail"
 msgstr "تعرف على بريد I2P"
 
@@ -487,7 +483,7 @@ msgstr "فحص البريد"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3215
 msgid "Refresh Page"
-msgstr ""
+msgstr "تحديث الصفحة"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3228
 #, java-format
@@ -532,9 +528,8 @@ msgid "Message is spam"
 msgstr "الرسالة غير مرغوب فيها"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3370
-#, fuzzy
 msgid "Message body not downloaded"
-msgstr "معرف الرسالة غير صالح."
+msgstr "نص الرسالة لم يتم تحميله"
 
 #. TODO ngettext
 #: src/src/i2p/susi/webmail/WebMail.java:3403

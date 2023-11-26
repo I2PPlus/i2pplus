@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-11-25 04:46+0000\n"
+"PO-Revision-Date: 2023-11-26 04:59+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: da\n"
@@ -39,13 +39,13 @@ msgstr "Ingen encoder funden for kodning \\\"{0}\\\"."
 #: src/src/i2p/susi/webmail/WebMail.java:1175
 #: src/src/i2p/susi/webmail/WebMail.java:1176
 msgid "Re:"
-msgstr ""
+msgstr "Re:"
 
 #: src/src/i2p/susi/webmail/Sorters.java:125
 #: src/src/i2p/susi/webmail/WebMail.java:1255
 #: src/src/i2p/susi/webmail/WebMail.java:1256
 msgid "Fwd:"
-msgstr ""
+msgstr "Fwd:"
 
 #. MailDir-like
 #: src/src/i2p/susi/webmail/WebMail.java:214
@@ -286,7 +286,7 @@ msgstr "Konfiguration"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2320
 msgid "I2PMail"
-msgstr ""
+msgstr "I2PMail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2413
 msgid "No new messages"
@@ -381,11 +381,11 @@ msgstr "Til"
 #: src/src/i2p/susi/webmail/WebMail.java:3078
 #: src/src/i2p/susi/webmail/WebMail.java:3596
 msgid "Cc"
-msgstr ""
+msgstr "Cc"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3080
 msgid "Bcc"
-msgstr ""
+msgstr "Bcc"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3082
 #: src/src/i2p/susi/webmail/WebMail.java:3249
@@ -526,7 +526,7 @@ msgstr "Ja, slet dem virkelig!"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3410
 msgid "Delete Selected"
-msgstr "Slet markedere  "
+msgstr "Slet markedere"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3411
 msgid "Mark All"

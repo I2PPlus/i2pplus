@@ -7,13 +7,15 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-10-23 08:05+0000\n"
+"PO-Revision-Date: 2023-11-26 04:57+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: src/src/i2p/susi/webmail/MailCache.java:529
 #: src/src/i2p/susi/webmail/WebMail.java:2410
@@ -37,13 +39,13 @@ msgstr "No s'ha trobat cap codificador per codificar \\''{0}\\''."
 #: src/src/i2p/susi/webmail/WebMail.java:1175
 #: src/src/i2p/susi/webmail/WebMail.java:1176
 msgid "Re:"
-msgstr ""
+msgstr "Re:"
 
 #: src/src/i2p/susi/webmail/Sorters.java:125
 #: src/src/i2p/susi/webmail/WebMail.java:1255
 #: src/src/i2p/susi/webmail/WebMail.java:1256
 msgid "Fwd:"
-msgstr ""
+msgstr "Fwd:"
 
 #. MailDir-like
 #: src/src/i2p/susi/webmail/WebMail.java:214
@@ -245,8 +247,7 @@ msgstr "Configuració desada"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1842
 msgid "Invalid pagesize number, resetting to default value."
-msgstr ""
-"Número de mida de pàgina no vàlid, s'està restablint al valor predeterminat."
+msgstr "Número de mida de pàgina no vàlid, s'està restablint al valor predeterminat."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2282
 #: src/src/i2p/susi/webmail/WebMail.java:3162
@@ -260,11 +261,11 @@ msgid "Loading messages, please wait..."
 msgstr "S'estan carregant els missatges, espereu..."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2292
-#, fuzzy, java-format
+#, java-format
 msgid "1 message"
 msgid_plural "{0} messages"
-msgstr[0] "Sense missatges"
-msgstr[1] "Sense missatges"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:2294
 #: src/src/i2p/susi/webmail/WebMail.java:3380
@@ -285,7 +286,7 @@ msgstr "Configuració"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2320
 msgid "I2PMail"
-msgstr ""
+msgstr "I2PMail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2413
 msgid "No new messages"
@@ -307,7 +308,7 @@ msgstr "{0} és un servei exclusiu d'I2P proporcionat per {1}."
 #: src/src/i2p/susi/webmail/WebMail.java:2467
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr "{0} client de correu web"
+msgstr "{0} webmail client &copy Susi 2004-2005."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2648
 #: src/src/i2p/susi/webmail/WebMail.java:3296
@@ -322,7 +323,7 @@ msgstr "No s'ha trobat cap adreça de remitent vàlida."
 #: src/src/i2p/susi/webmail/WebMail.java:2782
 #, java-format
 msgid "Found no valid address in \\''{0}\\''."
-msgstr ""
+msgstr "No s'ha trobat cap adreça vàlida a \\''{0}\\''."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2796
 msgid "No recipients found."
@@ -332,7 +333,7 @@ msgstr "No s'han trobat destinataris."
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:302
 #, java-format
 msgid "Email is too large, max is {0}"
-msgstr ""
+msgstr "El correu electrònic és massa gran, el màxim és {0}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2855
 #: src/src/i2p/susi/webmail/WebMail.java:2936
@@ -398,9 +399,8 @@ msgstr "Afegeix un fitxer adjunt"
 
 #. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 #: src/src/i2p/susi/webmail/WebMail.java:3091
-#, fuzzy
 msgid "Add attachment"
-msgstr "Adjunts"
+msgstr "Afegeix un fitxer adjunt"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3098
 msgid "Attachments"
@@ -419,9 +419,8 @@ msgid "User"
 msgstr "Usuari"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3130
-#, fuzzy
 msgid "Username"
-msgstr "Usuari"
+msgstr "Nom d'usuari"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3134
 #: src/src/i2p/susi/webmail/WebMail.java:3135
@@ -624,15 +623,11 @@ msgstr "Cap resposta del servidor"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"Error d'inici de sessió al servidor de correu, nom d'usuari o contrasenya "
-"incorrectes."
+msgstr "Error d'inici de sessió al servidor de correu, nom d'usuari o contrasenya incorrectes."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Tanqueu la sessió i torneu a iniciar sessió amb el nom d'usuari i la "
-"contrasenya correctes."
+msgstr "Tanqueu la sessió i torneu a iniciar sessió amb el nom d'usuari i la contrasenya correctes."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240
