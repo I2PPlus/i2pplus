@@ -2831,7 +2831,7 @@ span#newtab{margin-top:4px}
 .search td{padding:6px 6px 6px 5px}
 .search td:last-child{padding-left:0;padding-right:0}
 .search td:nth-child(2){padding:5px 8px 5px 8px}
-.tab,.tab2{line-height:20px}
+.tab,.tab2{line-height:1.1}
 .tab2{padding:6px 11px 5px 13px}
 .themechoice,.langselect{width:140px}
 .tunnelBuildStatus::before{margin:0 1px 0 -8px}
@@ -2921,7 +2921,9 @@ div[id^="config_"] .confignav{margin-top:-3px}
 @media (min-width:1800px){
 .linkcontainer .applink:last-of-type{margin-bottom:9px}
 #help .confignav{margin-left:-11px;margin-right:-11px;display:flex;justify-content:center;border-left:0;border-right:0}
-#help .tab,#help .tab2{margin-left:0;margin-right:0;flex-grow:1}
+#help .confignav{margin-bottom:11px;display:flex}
+#help .confignav .tab,#help .confignav .tab2{margin-left:0;margin-right:0;padding:8px 5px;max-width:9%;min-width:unset;display:flex;;flex-grow:1;flex-shrink:1;justify-content:center;align-items:center}
+#help .confignav .tab a{padding:0;display:inline-block}
 }
 
 @media (min-width:1840px){
