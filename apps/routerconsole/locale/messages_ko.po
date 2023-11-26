@@ -11583,7 +11583,7 @@ msgid "In order to access websites hosted on the I2P network, and optionally use
 msgstr "I2P 네트워크에서 호스팅 된 웹 사이트에 액세스하고 선택적으로 Default OutProxy를 사용하여 Clearnet의 웹 사이트에 연결하려면 구성해야합니다.<code> 127.0.0.1 포트 4444 </code>에서 기본적으로 i2p+ <b> http </b> 프록시를 사용하는 브라우저. 더 많은 도움은 <a href = https : //geti2p.net/를 참조하십시오. htproxyports target = _blank rel = noreferrer> 구성 안내서 </a> 또는 <a href=/help/configuration#browserconfig> firefox의 미니-튜닝 </a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:684
-msgid "Welcome to I2P!"
+msgid "Welcome to I2P+!"
 msgstr "I2P에 환영합니다!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:686

@@ -11588,7 +11588,7 @@ msgid "In order to access websites hosted on the I2P network, and optionally use
 msgstr "Pour accéder aux sites hébergés sur le réseau I2P, et utiliser facultativement le proxy de sortie par défaut pour se connecter aux sites du clearnet, vous devrez configurer votre navigateur pour utiliser le proxy <b>HTTP</b> I2P+, exécuté par défaut sur <code>127.0.0.1 port 4444</code>. Pour plus d'aide, voir <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>le guide de configuration</a> ou <a href=/help/configuration#browserconfig>le mini-tutoriel pour Firefox</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:684
-msgid "Welcome to I2P!"
+msgid "Welcome to I2P+!"
 msgstr "Bienvenue à I2P+!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:686

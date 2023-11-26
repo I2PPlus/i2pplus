@@ -330,7 +330,7 @@ A negative rate sets the default.</i><br>
     } else if (ipg == LAST_PAGE) {
         // Done
 %>
-<h3><%=intl._t("Welcome to I2P!").replace("I2P", "I2P+")%></h3>
+<h3><%=intl._t("Welcome to I2P+!")%></h3>
 <p class=infohelp>
 <%=intl._t("When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient.").replace("I2P", "I2P+")%>
 </p>

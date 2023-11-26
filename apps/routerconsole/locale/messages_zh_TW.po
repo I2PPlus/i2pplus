@@ -11583,7 +11583,7 @@ msgid "In order to access websites hosted on the I2P network, and optionally use
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:684
-msgid "Welcome to I2P!"
+msgid "Welcome to I2P+!"
 msgstr "歡迎來到 I2P！"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:686

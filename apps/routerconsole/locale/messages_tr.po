@@ -11604,7 +11604,7 @@ msgid "In order to access websites hosted on the I2P network, and optionally use
 msgstr "I2P ağında barındırılan web sitelerine erişmek ve isteğe bağlı olarak ClearNet'teki web sitelerine bağlanmak için varsayılan outproxy kullanabilmek için, tarayıcınızı varsayılan olarak çalışarak I2P+ <b>HTTP</b> proxy'ini kullanacak şekilde yapılandırmanız gerekecektir. Kod>127.0.0.1 bağlantı noktası 4444</code>. Daha fazla yardım için bkz. <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>Yapılandırma Kılavuzu</a> veya <a href=/help/configuration#browserconfig>Firefox için Mini-Tutorical</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:684
-msgid "Welcome to I2P!"
+msgid "Welcome to I2P+!"
 msgstr "I2P+ Yazılımına Hoş Geldiniz!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:686

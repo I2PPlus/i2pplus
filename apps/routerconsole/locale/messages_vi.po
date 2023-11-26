@@ -11583,7 +11583,7 @@ msgid "In order to access websites hosted on the I2P network, and optionally use
 msgstr "Để truy cập các trang web được lưu trữ trên mạng I2P và tùy ý sử dụng proxy ngoài mặc định để kết nối với các trang web trên Clearnet, bạn sẽ cần định cấu hình trình duyệt của mình để sử dụng proxy I2P+ <b>HTTP</b>, theo mặc định chạy trên < mã>127.0.0.1 cổng 4444</code>. Để được trợ giúp thêm, hãy xem <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>hướng dẫn cấu hình</a> hoặc <a href=/help/configuration#browserconfig>hướng dẫn nhỏ dành cho Firefox</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:684
-msgid "Welcome to I2P!"
+msgid "Welcome to I2P+!"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:686
