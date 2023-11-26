@@ -39,6 +39,7 @@ public class SearchHelper extends HelperBase {
         "notbob.i2p"               + S +     "http://notbob.i2p/cgi-bin/defcon.cgi?search=%s" + S +
         "psychonaut.i2p"           + S +     "http://psychonaut.i2p/w/index.php?search=%s&fulltext=Search" + S +
         "ramble.i2p"               + S +     "http://ramble.i2p/search?q=%s" + S +
+        "shmoogle.i2p"             + S +     "http://shmoogle.i2p/yacysearch.html?query=%s" + S +
         "slashdot.i2p"             + S +     "http://slashdot.i2p/index2.pl?fhfilter=%s" + S +
         "teddit.i2p/r/i2p"         + S +     "http://teddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
         "tracker2.postman.i2p"     + S +     "http://tracker2.postman.i2p/?search=%s" + S +
