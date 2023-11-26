@@ -2909,6 +2909,11 @@ span#newtab{margin-top:4px}
 #udpconnections .cells td:first-child,#ntcpconnections .cells td:first-child{padding-right:8px;width:55px}
 }
 
+@media (min-width:1600px) {
+div[id^="config_"] .confignav{margin-top:-3px}
+#clock{padding-bottom:7px}
+}
+
 @media (min-width:1634px){
 .leasesets_container{margin-bottom:8px}th code{font-size:9pt}
 }
