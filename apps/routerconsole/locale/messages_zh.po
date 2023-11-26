@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-10-31 20:49+0000\n"
+"PO-Revision-Date: 2023-11-26 16:46+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:387
 msgid "Hash"
@@ -1774,7 +1774,7 @@ msgstr "作者"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:328
 msgid "Signed by"
-msgstr "签名者："
+msgstr "签名者"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:342
 msgid "Update link"
@@ -3800,7 +3800,7 @@ msgstr "技术新闻和 和更多..."
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "BenarNews"
-msgstr ""
+msgstr "BenarNews"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "Clear and accurate news for the Far East"
@@ -3930,7 +3930,7 @@ msgstr "今天的日本"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "JStorDaily"
-msgstr ""
+msgstr "JStorDaily"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "Where news meets its scholarly match"
@@ -3938,7 +3938,7 @@ msgstr "新闻符合学术比赛的地方"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Jurist"
-msgstr ""
+msgstr "Jurist"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Legal News &amp; Commentary"
@@ -4099,7 +4099,7 @@ msgstr "卫报"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "TheHill"
-msgstr ""
+msgstr "TheHill"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "US Political News"
@@ -4503,7 +4503,7 @@ msgstr "端口"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:536
 msgid "MTU"
-msgstr ""
+msgstr "MTU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:563
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1026
@@ -5011,7 +5011,7 @@ msgstr "在最后一刻活跃"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:196
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:197
 msgid "IPv4"
-msgstr ""
+msgstr "IPv4"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:200
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:201
@@ -5452,7 +5452,7 @@ msgstr "容量"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:126
 msgid "Tunnels peer has agreed to participate in"
-msgstr ""
+msgstr "同意参与的tunnels对等点"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:127
 msgid "Accepted"
@@ -5460,7 +5460,7 @@ msgstr "公认"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:128
 msgid "Tunnels peer has refused to participate in"
-msgstr ""
+msgstr "拒绝参与的tunnels对等点"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:129
 msgid "Rejected"
@@ -5572,7 +5572,7 @@ msgstr "上次连接"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:397
 msgid "Good Lookups"
-msgstr ""
+msgstr "成功查询"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:398
 msgid "Last Good Lookup"
@@ -5588,7 +5588,7 @@ msgstr "上次保存成功"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:401
 msgid "Bad Lookups"
-msgstr ""
+msgstr "失败查询"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:402
 msgid "Last Bad Lookup"
@@ -5712,7 +5712,7 @@ msgstr "全部"
 #. 3
 #: ../java/src/net/i2p/router/web/helpers/ProfilesHelper.java:17
 msgid "Session Bans"
-msgstr ""
+msgstr "会话禁止"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfilesHelper.java:77
 msgid "Total number of banned peers"
@@ -5780,7 +5780,7 @@ msgstr "最高均值"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:183
 msgid "Highest total in a period"
-msgstr ""
+msgstr "某个时间段内最高总数"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:207
 msgid "Average event count"
@@ -5908,7 +5908,7 @@ msgstr "协调世界时"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:73
 msgid "CPU Load"
-msgstr ""
+msgstr "CPU负载"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:162
 msgid "I2P Router Help &amp; FAQ"
@@ -6279,7 +6279,7 @@ msgstr "正在使用的隧道数量"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1080
 msgid "Average tunnel build success for last 10m interval"
-msgstr ""
+msgstr "过去10分钟内隧道建立成功率平均值"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1090
 msgid "Tunnels we are using to provide or access services on the network"
@@ -6323,7 +6323,7 @@ msgstr "并发数量"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1138
 msgid "Combined utility and service tunnel build success (averaged over 10 minute intervals)"
-msgstr ""
+msgstr "实用隧道和服务隧道建立成功率合并值(过去10分钟内平均)"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1141
 msgid "Build Success"
@@ -6692,12 +6692,12 @@ msgstr "和我们IP一样的路由器"
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:159
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:160
 msgid "Same IPv4"
-msgstr ""
+msgstr "相同的IPv4"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:161
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:162
 msgid "Same IPv6"
-msgstr ""
+msgstr "相同的IPv6"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:163
 msgid "Pair distance"
@@ -6887,37 +6887,37 @@ msgstr "和我们IP一样"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:671
 msgid "Same IPv4 /24 as us"
-msgstr ""
+msgstr "和我们相同的IPv4 /24"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:678
 msgid "Same IPv4 /16 as us"
-msgstr ""
+msgstr "和我们相同的IPv4 /16"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:685
 msgid "Same IPv6 /64 as us"
-msgstr ""
+msgstr "和我们相同的IPv6 /64"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:692
 msgid "Same IPv6 /48 as us"
-msgstr ""
+msgstr "和我们相同的IPv6 /48"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:707
 msgid "Routers with the same IPv4"
-msgstr ""
+msgstr "具有相同IPv4的路由器"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:720
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:749
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:777
 msgid "routers with IP"
-msgstr "路由器IP"
+msgstr "带有IP的路由器"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:737
 msgid "Routers in the same IPv4 /24"
-msgstr ""
+msgstr "同一个IPv4 /24中的路由器"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:766
 msgid "Routers in the same IPv4 /16 (4 minimum)"
-msgstr ""
+msgstr "同一个IPv4 /16中的路由器(最小4个)"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:855
 msgid "Routers in the same Family"
@@ -7081,7 +7081,7 @@ msgstr "隧道身份"
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:280
 #, java-format
 msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr ""
+msgstr "仅显示使用最高的{0}个隧道"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:282
 #, java-format
@@ -8858,7 +8858,7 @@ msgstr "下面列出的路由器配置选项在用户界面中不可用，通常
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:439
 msgid "When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href=/configadvanced>Advanced Configuration page</a>. Extra display options are provided in the <a href=/netdb>Network Database section</a>, including the <a href='/netdb?f=3'>Sybil Analysis tool</a>, and there are additional configuration options on the <a href=/configclients>Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar."
-msgstr ""
+msgstr "当此项设置为true时,控制台将启用额外功能,用户可以直接在<a href=/configadvanced>高级配置页面</a>编辑设置。<a href=/netdb>网络数据库部分</a>提供额外的显示选项,包括<a href='/netdb?f=3'>同花顺分析工具</a>,<a href=/configclients>客户端配置页面</a>也提供额外的配置选项。同时也将启用未签名更新的安装,手动配置新闻URL,以及侧栏额外部分。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:441
 msgid "Plugins signed with the cryptographic key of the developer are the recommended format, but if you wish to install unsigned plugins (.zip) you can set this to true. Note that you may still encounter issues attempting to install an unsigned plugin if the developer has included additional checks in the plugin build process."
@@ -8878,27 +8878,27 @@ msgstr "设置为 true 时，这将在 < a href=/configplugins>Plugin Configurat
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:449
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
-msgstr ""
+msgstr "设置为 true 时,此设置为对等点启用反向 DNS 查询,会在显示对等点的国家旗帜,或者控制台明确显示主机名或域名,或将对等点的 RouterInfo 写入磁盘时触发。为避免重复查询,建议为 DNS 查询配置较慷慨的缓存策略,如10分钟或更长,并在操作系统中配置尊重隐私的 DNS 服务器。[默认禁用,需要重启]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:451
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
-msgstr "设置为 true 时，通过 http:// 访问路由器控制台（启用 https://）将自动重定向到 https。要配置路由器控制台访问，请在配置文件目录（<i>而不是</i>应用程序安装目录）的 <code>client.config</code> 文件中编辑设置。[默认启用]"
+msgstr "设置为 true 时,在启用 https:// 时,通过 http:// 访问路由器控制台将自动重定向到 https。要配置路由器控制台访问,请在配置文件目录(<i>而不是</i>应用程序安装目录)的 <code>client.config</code> 文件中编辑设置。[默认启用]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:453
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
-msgstr ""
+msgstr "此设置决定路由器是否应使用提供的 <i>blocklist.txt</i> 文件和任何用户配置的封禁清单,以通过哈希或 IP 地址禁止路由器。对 IPv4 支持范围和网络掩码,但不支持 IPv6。有关更多信息,请参阅您的 I2P+ 应用程序目录中的 <i>blocklist.txt</i> 文件。[默认启用,需要重启]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:455
 msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr ""
+msgstr "此设置决定路由器是否应使用您的 I2P+ 应用程序目录中的提供的 <i>blocklist_tor.txt</i> 文件,以启用封禁通过 Tor 退出节点 IP 地址运行的路由器。[默认启用,需要重启]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:457
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
-msgstr ""
+msgstr "配置有指向有效封禁清单文件的路径时,此设置将启用额外的、用户配置的封禁清单在路由器启动时加载。[默认禁用,需要重启]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:459
 msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr ""
+msgstr "此设置允许为通过封禁清单强制实施的禁令配置过期时间(以秒为单位)。默认情况下,禁令将持续路由器会话期间。[需要重启]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:461
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
@@ -8906,7 +8906,7 @@ msgstr "分配用于构建隧道的处理器线程数。如果您的处理器支
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:463
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
-msgstr ""
+msgstr "此设置(以毫秒为单位)覆盖默认消息处理时间限制(伦敦区域部分中的<i>消息延迟</i>指示),在确定路由器拥塞和拒绝通行隧道请求之前。[默认值为750毫秒或1500毫秒(如果路由器被标记为较慢)]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:465
 msgid "Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]"
@@ -8934,7 +8934,7 @@ msgstr "确定路由器可以构建的参与隧道的最大数量。要完全禁
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:477
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
-msgstr ""
+msgstr "定义将对一个对等点最大使用百分比的活动本机隧道(客户端和探索隧道)。[在I2P+中默认为10%,在I2P中默认为33%。]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:479
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
@@ -8970,7 +8970,7 @@ msgstr "运行 Java BigInteger 库的非本机软件模拟版本的路由器"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:495
 msgid "This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr ""
+msgstr "该设置允许您配置主机参与隧道的最小数量,在此数量达到前,路由器会基于预期的带宽需求拒绝隧道请求。[默认值为100(如果系统运行安卓),800(如果系统运行ARM且CPU核心小于4个),1200(如果系统运行ARM且CPU核心大于或等于4个),否则为2500]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:497
 msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
@@ -9034,7 +9034,7 @@ msgstr "此设置（以小时为单位）确定 NetDb 中的 RouterInfo 在分�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:527
 msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr ""
+msgstr "该设置决定当同伴探索作业运行时要并行探索的同伴数量[默认情况下,当已知同伴超过3000个时每个同伴]。请注意,增加这个值将增加探索的带宽需求,设置这个值过高可能会导致消息延迟过度和干扰其他服务,所以请慎重使用!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:529
 msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
@@ -9379,7 +9379,7 @@ msgstr "大部分eepsites都消失了吗？"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:475
 msgid "If you consider every eepsite that has ever been created, yes, most of them are down. People and eepsites come and go. A good way to get started in I2P is check out a list of eepsites that are currently up. <a href=http://notbob.i2p/ target=_blank rel=noreferrer class=sitelink>http://notbob.i2p</a> tracks active eepsites."
-msgstr ""
+msgstr "如果考虑到曾经创建的每个私密网站,是的,大多数已经下线了。人和私密网站来来去去。在I2P开始的好方法是查看当前在线的私密网站列表。<a href=http://notbob.i2p/ target=_blank rel=noreferrer class=sitelink>http://notbob.i2p</a> 跟踪活动的私密网站。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:477
 msgid "Where are my I2P configuration files stored?"
@@ -9632,11 +9632,11 @@ msgstr "A <a href=\"https://en.wikipedia.org/wiki/Base32\" class=\"sitelink exte
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:443
 msgid "B33"
-msgstr ""
+msgstr "B33"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:445
 msgid "An address containing an encrypted LeaseSet is informally referred to as a b33 address, an extension of a base32 address with the host's public key and signature type encoded into the address instead of a lookup hash. This address type is required for blinded Leasesets. More information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 Specification</a>"
-msgstr ""
+msgstr "包含加密LeaseSet的地址,非正式地称为b33地址,是基于base32地址的扩展,将主机的公钥和签名类型编码到地址中,而不是查找哈希。此地址类型对于盲目的Leasesets是必需的。更多信息:<a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33规范</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:447
 msgid "BOB"
@@ -10505,23 +10505,23 @@ msgstr "这表示I2P正在使用的RAM 的数量以及可用的总量。 如果R
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:467
 msgid "The first number is the number of peers your router has sent or received a message from in the last few minutes. This may range from 8-10 to several hundred, depending on your total bandwidth, shared bandwidth, and locally-generated traffic. The second number is the number of peers seen in the last hour or so. Do not be concerned if these numbers vary widely. <a href='/configstats#router.activePeers'>[Enable graphing]</a>."
-msgstr ""
+msgstr "第一个数字是您的路由器在最后几分钟内与之发送或接收消息的对等点数量。这可能从8-10不等到数百个,取决于您的总带宽、共享带宽以及本地生成的流量。第二个数字是在最近一小时内看到的对等点数量。如果这些数字变化很大,请不要过于担心。<a href='/configstats#router.activePeers'>[启用图表]</a>。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:471
 msgid "This is the number of peers your router has available for building client tunnels. It is generally in the range 8-30. Your fast peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.fastPeers'>[Enable graphing]</a>"
-msgstr ""
+msgstr "这是您的路由器可用于构建客户端隧道的对等点数量。它通常在8-30的范围内。您的快速对等点显示在<a href='/profiles'>概况页面</a>上。<a href='/configstats#router.fastPeers'>[启用图表]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
 msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier.Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
-msgstr "这是你的路由器可用于建立探索隧道的对等节点数量，用于确定网络性能，它通常在8-75的范围内，且已经包含了快速节点。高容量节点数量显示在 <a href='/profiles'>概况页</a>上。<a href='/configstats#router.highCapacityPeers'>[启用图表]</a>"
+msgstr "这是你的路由器可用于建立探索隧道的对等节点数量,用于确定网络性能,它通常在8-75的范围内,且已经包含了快速节点。高容量节点数量显示在<a href='/profiles'>概况页</a>上。<a href='/configstats#router.highCapacityPeers'>[启用图表]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:479
 msgid "This is the number of peers your router will use for network database inquiries. These are usually the <i>floodfill</i> routers which are responsible for maintaining network integrity. Your well integrated peers are shown on the bottom of the <a href='/profiles'>Profiles page</a>."
-msgstr ""
+msgstr "这是您的路由器将用于网络数据库查询的对等点数量。通常是<i>floodfill</i>(洪水填充)路由器,它们负责维护网络完整性。您的整合良好的对等点显示在<a href='/profiles'>概况页</a>底部。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:483
 msgid "This is the total number of peers that are known by your router. They are listed on the <a href='/netdb'>Network Database page</a>. This may range from under 100 to 1000 or more. This number is not the total size of the network; it may vary widely depending on your total bandwidth, shared bandwidth, and locally-generated traffic. I2P does not require a router to know every other router in the network."
-msgstr ""
+msgstr "这是您路由器所知晓的对等点总数。它们列在<a href='/netdb'>网络数据库页面</a>上。这个数量可能从100以下到1000或更多不等。这个数量不是网络的总规模;根据您的总带宽、共享带宽以及本地生成的流量,它可能变化很大。I2P不要求路由器了解网络中的每个其他路由器。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:485
 msgid "Bandwidth In/Out"
@@ -10553,7 +10553,7 @@ msgstr "路由为每个客户端使用构建的隧道。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:507
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
-msgstr ""
+msgstr "其他路由器通过您的路由器建立的隧道。这可能根据网络需求、您共享的带宽和本地生成流量的数量有很大差异。限制参与隧道的建议方法是在<a href='/config'>带宽配置页面</a>修改您的共享百分比。您也可以在<a href='/configadvanced'>高级配置页面</a>设置<code>router.maxParticipatingTunnels=nnn</code>来限制总数量。<a href='/configstats#tunnel.participatingTunnels'>[启用图表]</a>。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:509
 msgid "Share Ratio"
@@ -10561,11 +10561,11 @@ msgstr "共享比率"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:511
 msgid "The number of participating tunnels you route for others, divided by the total number of hops in all your exploratory and client tunnels. A number greater than 1.00 means you are contributing more tunnels to the network than you are using."
-msgstr ""
+msgstr "您为他人路由的参与隧道数量,除以您所有的探索隧道和客户端隧道总跳数。大于1.00的数字意味着您为网络提供的隧道数量多于使用的数量。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:515
 msgid "Some basic indications of router overload:"
-msgstr "一些路由器过载的迹象："
+msgstr "路由器过载的一些基本迹象:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:517
 msgid "Job Lag"
@@ -10573,7 +10573,7 @@ msgstr "作业延迟"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:519
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
-msgstr ""
+msgstr "作业在执行前等待的时间长度。作业队列在<a href='/jobs'>作业页面</a>列出。不幸的是,路由器中可能还有几个其他作业队列堵塞,它们的状态不能在路由器控制台看到。作业延迟通常应为零。如果一直高于500毫秒,您的计算机很慢,网络出现连接问题,或者路由器有严重问题。<a href='/configstats#jobQueue.jobLag'>[启用图表]</a>。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:521
 msgid "Message Delay"
@@ -10581,11 +10581,11 @@ msgstr "消息延迟"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:523
 msgid "How long an outbound message waits in the queue. This should generally be a few hundred milliseconds or less. If it is consistently higher than 1000ms, your computer is very slow, or you should adjust your bandwidth limits, or your (BitTorrent?) clients may be sending too much data and should have their transmit bandwidth limit reduced. <a href='/configstats#transport.sendProcessingTime'>[Enable graphing]</a> (transport.sendProcessingTime)."
-msgstr ""
+msgstr "出站消息在队列中等待的时间长度。通常应为几百毫秒或更少。如果一直高于1000毫秒,您的计算机很慢,或者应调整带宽限制,或者(比特弹簧?)客户端发送的数据量过大,应减少其传输带宽限制。<a href='/configstats#transport.sendProcessingTime'>[启用图表]</a>(transport.sendProcessingTime)。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:527
 msgid "This is the number of pending requests from other routers to build a participating tunnel through your router. It should usually be close to zero. If it is consistently high, your computer is too slow, and you should reduce your share bandwidth limits."
-msgstr ""
+msgstr "这是来自其他路由器通过您的路由器建立参与隧道的待决请求数量。它通常应很接近零。如果一直很高,说明您的计算机速度太慢,应该降低共享带宽限制。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:529
 msgid "Accepting/Rejecting"
@@ -10593,11 +10593,11 @@ msgstr "接受/拒绝"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:531
 msgid "Your router's status on accepting or rejecting requests from other routers to build a participating tunnel through your router. Your router may accept all requests, accept or reject a percentage of requests, or reject all requests for a number of reasons, to control the bandwidth and CPU demands and maintain capacity for local clients. <b>Note"
-msgstr ""
+msgstr "您的路由器在接受或拒绝其他路由器通过您的路由器建立参与隧道的请求时的状态。您的路由器可能接受所有请求,接受或拒绝某些百分比的请求,或出于多种原因拒绝所有请求,以控制带宽和CPU需求并为本地客户端维持容量。<b>注意"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:533
 msgid "It will take at least 10 minutes from your router starting for it to accept building participating tunnels in order to ensure your router is stable and successfully bootstrapped to the network."
-msgstr ""
+msgstr "您的路由器启动后,至少需要10分钟它才会开始接受建立参与隧道,以确保您的路由器是稳定的,并成功引导到网络中。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:535
 msgid "<b>Note"
@@ -10605,7 +10605,7 @@ msgstr "<b>注意"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:537
 msgid "This section is not enabled by default unless <a href='/help/configuration#advancedconsole'>Advanced Console mode</a> is enabled. You may enable it on the <a href='/configsidebar'>Sidebar Configuration page</a>."
-msgstr ""
+msgstr "除非启用<a href='/help/configuration#advancedconsole'>高级控制台模式</a>,否则此部分默认未启用。您可以在<a href='/configsidebar'>侧栏配置页面</a>中启用它。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:539
 msgid "Reachability Help"
@@ -11017,7 +11017,7 @@ msgstr "工作队列"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:419
 msgid "Job statistics for this session"
-msgstr ""
+msgstr "此会话的作业统计信息"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobs_jsp.java:422
@@ -11131,11 +11131,11 @@ msgstr "对等节点摘要"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:439
 msgid "Session Banned Peers"
-msgstr ""
+msgstr "会话被禁止的对等点"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:455
 msgid "Floodfills"
-msgstr ""
+msgstr "洪水填充"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:463
 msgid "Fast / High Capacity"
@@ -11395,9 +11395,9 @@ msgstr "最快的"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:432
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:430
 msgid "Top 50 peers by transit tunnel requests"
-msgstr ""
+msgstr "按穿隧隧道请求排名前50的对等点"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transit_jsp.java:434
+#: ../jsp/WEB-INF/classs/net/i2p/router/web/jsp/transit_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitfast_jsp.java:434
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/transitsummary_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnelpeercount_jsp.java:434
@@ -11583,7 +11583,7 @@ msgid "In order to access websites hosted on the I2P network, and optionally use
 msgstr "为了访问I2P上的网站，并可使用默认的出口代理连接到Clearnet上的网站，您需要配置您的浏览器使用I2P的HTTP代理，默认运行于<code>127.0.0.1:4444</code>。大多数浏览器都提供了一个配置代理的选项；在这个迷你教程中，我们主要介绍Firefox。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:684
-msgid "Welcome to I2P!"
+msgid "Welcome to I2P+!"
 msgstr "欢迎来到 I2P！"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:686
