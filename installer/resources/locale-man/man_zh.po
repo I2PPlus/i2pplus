@@ -3,23 +3,26 @@
 # This file is distributed under the same license as the routerconsole package.
 # To contribute translations, see https://www.transifex.com/otf/I2P/dashboard/
 # zzz <zzz@mail.i2p>, 2017.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P man pages\n"
 "POT-Creation-Date: 2017-01-26 15:24+0000\n"
-"PO-Revision-Date: 2017-01-26 15:31+0000\n"
+"PO-Revision-Date: 2023-11-25 15:17+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #. type: TH
 #: man/eepget.1:1
 #, no-wrap
 msgid "EEPGET"
-msgstr ""
+msgstr "EEPGET"
 
 #. type: TH
 #: man/eepget.1:1 man/i2prouter.1:1 man/i2prouter-nowrapper.1:1
@@ -63,22 +66,13 @@ msgstr "描述"
 
 #. type: Plain text
 #: man/eepget.1:15
-msgid ""
-"Download a file non-interactively via HTTP. Transfers through both I2P and "
-"the regular Internet are supported."
+msgid "Download a file non-interactively via HTTP. Transfers through both I2P and the regular Internet are supported."
 msgstr "通过 HTTP 非交互式地下载一个文件。支持通过 I2P 和常规互联网传输。"
 
 #. type: Plain text
 #: man/eepget.1:21
-msgid ""
-"Eepget is able to cope with slow or unstable network connections; if a "
-"download is not successful because of a network problem, it will keep "
-"retrying until the whole file has been retrieved (if the -n option is set)."
-"  If supported by the remote server, eepget will instruct the server to "
-"continue the download from the point of interruption."
-msgstr ""
-"Eepget 能够处理缓慢或不稳定的网络连接；如果由于网络问题导致下载不成功，它将继续重试，直到检索到整个文件（如果已设定 -n "
-"选项）。如果远程服务器支持，eepget 将指示服务器从中断点继续。"
+msgid "Eepget is able to cope with slow or unstable network connections; if a download is not successful because of a network problem, it will keep retrying until the whole file has been retrieved (if the -n option is set).  If supported by the remote server, eepget will instruct the server to continue the download from the point of interruption."
+msgstr "Eepget 能够处理缓慢或不稳定的网络连接；如果由于网络问题导致下载不成功，它将继续重试，直到检索到整个文件（如果已设定 -n 选项）。如果远程服务器支持，eepget 将指示服务器从中断点继续。"
 
 #. type: SH
 #: man/eepget.1:22
@@ -127,23 +121,19 @@ msgstr "B<-l> 行长度"
 #. type: TP
 #: man/eepget.1:43
 #, no-wrap
-msgid ""
-"Controls the progress display. B<\\ lineLen > is the length of one progress "
-"line in characters. The default is 40."
+msgid "Controls the progress display. B<\\ lineLen > is the length of one progress line in characters. The default is 40."
 msgstr "控制进度显示。B<\\ lineLen > 控制进度行的字符长度。默认为40。"
 
 #. type: Plain text
 #: man/eepget.1:49
 msgid "B<-m> markSize"
-msgstr ""
+msgstr "B<-m> 标记大小"
 
 #. type: TP
 #: man/eepget.1:49
 #, no-wrap
-msgid ""
-"Controls the progress display. B<\\ markSize > is the number of bytes one "
-"'#' character represents. The default is 1024."
-msgstr ""
+msgid "Controls the progress display. B<\\ markSize > is the number of bytes one '#' character represents. The default is 1024."
+msgstr "控制进度显示。 "
 
 #. type: Plain text
 #: man/eepget.1:55
@@ -153,10 +143,8 @@ msgstr "B<-n> 次重试"
 #. type: TP
 #: man/eepget.1:55
 #, no-wrap
-msgid ""
-"Specify the number of times to retry downloading if the download isn't "
-"successful. If this option is not specified, eepget will not retry."
-msgstr ""
+msgid "Specify the number of times to retry downloading if the download isn't successful. If this option is not specified, eepget will not retry."
+msgstr "指定下载不成功时重试下载的次数。"
 
 #. type: Plain text
 #: man/eepget.1:61
@@ -166,24 +154,19 @@ msgstr "B<-o> 文件"
 #. type: TP
 #: man/eepget.1:61
 #, no-wrap
-msgid ""
-"Sets the output file to write to. If this option is not given, the output "
-"filename will be determined by the URL."
+msgid "Sets the output file to write to. If this option is not given, the output filename will be determined by the URL."
 msgstr "设置要写入的输出文件。 如果未指定此选项，输出文件名将由URL确定。"
 
 #. type: Plain text
 #: man/eepget.1:67
 msgid "B<-p> proxy_host[:port]"
-msgstr ""
+msgstr "B<-p> proxy_host[:端口]"
 
 #. type: TP
 #: man/eepget.1:67
 #, no-wrap
-msgid ""
-"Specify an I2P proxy server (eeproxy) to use. If the port is not specified, "
-"eepget will use 4444. If this option is not specified, eepget will use "
-"127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
-msgstr ""
+msgid "Specify an I2P proxy server (eeproxy) to use. If the port is not specified, eepget will use 4444. If this option is not specified, eepget will use 127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
+msgstr "指定要使用的I2P代理服务器（Eeproxy）。 如果未指定端口，EEPGET将使用4444。如果未指定此选项，则EEPGET将使用127.0.0.1:4444。 指定b <-c>或b <-p>：0以禁用eeproxy。"
 
 #. type: Plain text
 #: man/eepget.1:73
@@ -194,7 +177,7 @@ msgstr "B<-t> 秒"
 #: man/eepget.1:73
 #, no-wrap
 msgid "Sets the inactivity timeout. The default is 60 seconds."
-msgstr ""
+msgstr "设置不活动超时。"
 
 #. type: Plain text
 #: man/eepget.1:79
@@ -205,7 +188,7 @@ msgstr "B<-u> 用户名"
 #: man/eepget.1:79
 #, no-wrap
 msgid "Sets the username for proxy authorization, if required."
-msgstr ""
+msgstr "如果需要，设置代理授权的用户名。"
 
 #. type: Plain text
 #: man/eepget.1:85
@@ -215,10 +198,8 @@ msgstr "B<-x> 密码"
 #. type: TP
 #: man/eepget.1:85
 #, no-wrap
-msgid ""
-"Sets the password for proxy authorization, if required. If a username is "
-"specified but not a password, EepGet will prompt for the password."
-msgstr ""
+msgid "Sets the password for proxy authorization, if required. If a username is specified but not a password, EepGet will prompt for the password."
+msgstr "如果需要，设置代理授权的密码。 如果指定了用户名但未使用密码，则EEPGET将提示输入密码。"
 
 #. type: SH
 #: man/eepget.1:89
@@ -228,9 +209,7 @@ msgstr "退出状态"
 
 #. type: Plain text
 #: man/eepget.1:93
-msgid ""
-"B<eepget> exits with status zero upon successful transfer and non-zero if "
-"there were problems with the download."
+msgid "B<eepget> exits with status zero upon successful transfer and non-zero if there were problems with the download."
 msgstr "B<eepget> 退出状态为 0 表示传输成功。如果下载遇到问题，则退出状态非 0。"
 
 #. type: SH
@@ -241,10 +220,8 @@ msgstr "报告漏洞"
 
 #. type: Plain text
 #: man/eepget.1:99 man/i2prouter.1:59 man/i2prouter-nowrapper.1:29
-msgid ""
-"Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker "
-"E<.UE .>"
-msgstr ""
+msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "请在 E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> I2P Bug Tracker E<.UE .> 上输入票证"
 
 #. type: SH
 #: man/eepget.1:100 man/i2prouter.1:60 man/i2prouter-nowrapper.1:30
@@ -255,7 +232,7 @@ msgstr "另见"
 #. type: Plain text
 #: man/eepget.1:104
 msgid "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
-msgstr ""
+msgstr "B<i2prouter>(1) B<curl>(1) B<wget>(1)"
 
 #. type: TH
 #: man/i2prouter.1:1
@@ -270,12 +247,8 @@ msgstr "i2prouter - 启动和停止 I2P 路由器"
 
 #. type: Plain text
 #: man/i2prouter.1:9
-msgid ""
-"B<i2prouter> "
-"{I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
-msgstr ""
-"B<i2prouter> "
-"{I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+msgid "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+msgstr "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
 
 #. type: Plain text
 #: man/i2prouter.1:13
@@ -319,7 +292,7 @@ msgstr "停止 I2P 服务。"
 #: man/i2prouter.1:27
 #, no-wrap
 msgid "B<restart>"
-msgstr ""
+msgstr "B <重新启动>"
 
 #. type: Plain text
 #: man/i2prouter.1:29
@@ -330,7 +303,7 @@ msgstr "停止I2P服务，随后重启。"
 #: man/i2prouter.1:31
 #, no-wrap
 msgid "B<condrestart>"
-msgstr ""
+msgstr "B <condrestart>"
 
 #. type: Plain text
 #: man/i2prouter.1:33
@@ -341,7 +314,7 @@ msgstr "仅当I2P服务已在运行时重启。"
 #: man/i2prouter.1:35
 #, no-wrap
 msgid "B<graceful>"
-msgstr ""
+msgstr "B<优雅>"
 
 #. type: Plain text
 #: man/i2prouter.1:37
@@ -352,45 +325,45 @@ msgstr "自然关闭I2P（最多可能需要11分钟）"
 #: man/i2prouter.1:39
 #, no-wrap
 msgid "B<install>"
-msgstr ""
+msgstr "B<安装>"
 
 #. type: Plain text
 #: man/i2prouter.1:41
 msgid "Install initscript to start I2P automatically when the system boots."
-msgstr ""
+msgstr "安装initscript以在系统启动时自动启动I2P。"
 
 #. type: IP
 #: man/i2prouter.1:43
 #, no-wrap
 msgid "B<remove>"
-msgstr ""
+msgstr "B<删除>"
 
 #. type: Plain text
 #: man/i2prouter.1:45
 msgid "Uninstall initscript that was installed with B<install>"
-msgstr ""
+msgstr "卸载用 B<install> 安装的 initscript"
 
 #. type: IP
 #: man/i2prouter.1:47
 #, no-wrap
 msgid "B<status>"
-msgstr ""
+msgstr "B<状态>"
 
 #. type: Plain text
 #: man/i2prouter.1:49
 msgid "Prints whether the I2P service is running."
-msgstr ""
+msgstr "打印I2P服务是否正在运行。"
 
 #. type: IP
 #: man/i2prouter.1:51
 #, no-wrap
 msgid "B<dump>"
-msgstr ""
+msgstr "B<转储>"
 
 #. type: Plain text
 #: man/i2prouter.1:53
 msgid "Dumps the current threads into B<wrapper.log>."
-msgstr ""
+msgstr "将当前线程转储到 B<wrapper.log> 中。"
 
 #. type: Plain text
 #: man/i2prouter.1:61
@@ -401,12 +374,12 @@ msgstr ""
 #: man/i2prouter-nowrapper.1:1
 #, no-wrap
 msgid "I2PROUTER-NOWRAPPER"
-msgstr ""
+msgstr "I2PROUTER-Nowrapper"
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:5
 msgid "i2prouter-nowrapper - start the I2P router"
-msgstr ""
+msgstr "i2prouter-nowrapper - 启动 I2P 路由器"
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:8
@@ -415,19 +388,13 @@ msgstr ""
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:14
-msgid ""
-"Start the I2P router, without the service wrapper.  This means the router "
-"will not restart if it crashes.  Also, it will use the default memory size, "
-"which may not be enough for I2P."
-msgstr ""
+msgid "Start the I2P router, without the service wrapper.  This means the router will not restart if it crashes.  Also, it will use the default memory size, which may not be enough for I2P."
+msgstr "启动I2P路由器，不使用服务包装器。"
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:23
-msgid ""
-"You should really use the B<i2prouter>(1)  script instead.  There are no "
-"options.  To stop the router, use your browser to access E<.UR "
-"http://localhost:7657/> the router console E<.UE .>"
-msgstr ""
+msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
+msgstr "您应该真正使用b <i2prouter>（1）脚本。 没有选择。 要停止路由器，请使用浏览器访问 E<.UR http://localhost:7657/> 路由器控制台 E<.UE.>"
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:31
