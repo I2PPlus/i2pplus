@@ -55,7 +55,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                            "\n* InboundMessageDistributor with tunnel pool settings: " + clienttps);
             }
             _clientNickname =  clienttps != null ? clienttps.getDestinationNickname() : "UNKNOWN";
-            _msgIDBloomXor = clienttps != null ? clienttps.getMsgIdBloomXor() 
+            _msgIDBloomXor = clienttps != null ? clienttps.getMsgIdBloomXor()
                                                : RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
         } else {
             _clientNickname = "NULL/Expl";
@@ -75,44 +75,15 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                        ((_client != null) ? _client.toBase32().substring(0,12) + "..." : "NULL") + "] to " +
                        target + " / " + tunnel + " : " + msg);
         }
-
-        // allow messages on client tunnels even after client disconnection, as it may
-        // include e.g. test messages, etc.  DataMessages will be dropped anyway
-        /*
-        if ( (_client != null) && (!_context.clientManager().isLocal(_client)) ) {
-            if (_log.shouldInfo())
-                _log.info("Not distributing a message, as it came down a client's tunnel ("
-                          + _client.toBase64() + ") after the client disconnected: " + msg);
-            return;
-        }
-        */
-
         int type = msg.getType();
 
         // if the message came down a client tunnel:
         if (_client != null) {
             switch (type) {
-                 case DatabaseSearchReplyMessage.MESSAGE_TYPE:
+                case DatabaseSearchReplyMessage.MESSAGE_TYPE:
                      // FVSJ or client lookups could also result in a DSRM.
                      // Since there's some code that replies directly to this to gather new ff RouterInfos,
                      // sanitize it
-
-                     // TODO: Strip in IterativeLookupJob etc. instead, depending on
-                     // LS or RI and client or expl., so that we can safely follow references
-                     // in a reply to a LS lookup over client tunnels.
-                     // ILJ would also have to follow references via client tunnels
-                  /****
-                     DatabaseSearchReplyMessage orig = (DatabaseSearchReplyMessage) msg;
-                     if (orig.getNumReplies() > 0) {
-                         if (_log.shouldInfo())
-                             _log.info("Removing replies from a DSRM down a tunnel for [" + _client.toString().substring(0,12) +
-                                       "...] " + msg);
-                         DatabaseSearchReplyMessage newMsg = new DatabaseSearchReplyMessage(_context);
-                         newMsg.setFromHash(orig.getFromHash());
-                         newMsg.setSearchKey(orig.getSearchKey());
-                         msg = newMsg;
-                     }
-                   ****/
                      break;
 
                 case DatabaseStoreMessage.MESSAGE_TYPE:
@@ -204,12 +175,9 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
             } // switch
         } // client != null
 
-        if ( (target == null) && (tunnel == null) ) {
-            // Since the InboundMessageDistributor handles messages for the endpoint,
-            // most messages that arrive here have both target==null and tunnel==null.
-            // Messages with targeting instructions need careful handling, and will
-            // typically be dropped because we're the endpoint.  Especially when they
-            // specifically target this router (_context.routerHash().equals(target)).
+        if ((target == null) || ((tunnel == null) && (_context.routerHash().equals(target)))) {
+            // targetting us either implicitly (no target) or explicitly (no tunnel)
+            // make sure we don't honor any remote requests directly (garlic instructions, etc)
             if (type == GarlicMessage.MESSAGE_TYPE) {
                     // in case we're looking for replies to a garlic message (cough load tests cough)
                     _context.inNetMessagePool().handleReplies(msg);
@@ -217,36 +185,37 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                     //    _log.debug("received garlic message in the tunnel, parse it out");
                     _receiver.receive((GarlicMessage)msg);
             } else {
-                if (_log.shouldLog(Log.INFO))
-                    _log.info("Passing InboundTunnelMessage to InboundNetMessagePool for " + _clientNickname +
-                              " [" + ((_client != null) ? _client.toBase32().substring(0,12) + "..." : "null") +
-                              "]\n* Target: NULL; Tunnel: NULL \n* Message: " + msg);
-                    _context.inNetMessagePool().add(msg, null, null, _msgIDBloomXor);
+                if (_log.shouldLog(Log.INFO)) {
+                    _log.info("Distributing InboundTunnelMessage into our InboundNetMessagePool\n* Message: " + msg);
+                }
+                _context.inNetMessagePool().add(msg, null, null);
             }
-        } else if (_context.routerHash().equals(target)) {
-            if (type == GarlicMessage.MESSAGE_TYPE)
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("Dropping Inbound garlic message TARGETED AT OUR ROUTER for " + _clientNickname + " [" +
-                              ((_client != null) ? _client.toString().substring(0,12) : "NULL") + "] to " + target + " / " + tunnel);
-            else
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("Dropping inbound message TARGETED AT OUR ROUTER for " + _clientNickname + " [" +
-                              ((_client != null) ? _client.toString().substring(0,12): "NULL") + "] " +
-                              " to " + target + " / " + tunnel + " : " + msg);
-            return;
         } else {
-            if (type == GarlicMessage.MESSAGE_TYPE)
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("Dropping targeted Inbound garlic message for " + _clientNickname + " [" +
-                              ((_client != null) ? _client.toString().substring(0,12) : "NULL") +
-                              "] to " + target + " / " + tunnel);
-            else
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("Dropping targeted Inbound message for " + _clientNickname + " [" +
-                              ((_client != null) ? _client.toString().substring(0,12) : "NULL") +
-                              "] to " + target + " / " + tunnel + " : " + msg);
+            // ok, they want us to send it remotely, but that'd bust our anonymity,
+            // so we send it out a tunnel first
+            // TODO use the OCMOSJ cache to pick OB tunnel we are already using?
+            TunnelInfo out = _context.tunnelManager().selectOutboundTunnel(_client, target);
+            if (out == null) {
+                if (_log.shouldLog(Log.WARN)) {
+                    _log.warn("No outbound tunnel to send the client message for [" + _client.toBase64().substring(0,6) + "] \n* Message: " + msg);
+                }
                 return;
             }
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("distributing IB tunnel msg type " + type + " back out " + out
+                          + " targetting " + target);
+            TunnelId outId = out.getSendTunnelId(0);
+            if (outId == null) {
+                if (_log.shouldLog(Log.ERROR))
+                    _log.error("strange? outbound tunnel has no outboundId? " + out
+                               + " failing to distribute " + msg);
+                return;
+            }
+            long exp = _context.clock().now() + 20*1000;
+            if (msg.getMessageExpiration() < exp)
+                msg.setMessageExpiration(exp);
+            _context.tunnelDispatcher().dispatchOutbound(msg, outId, tunnel, target);
+        }
     }
 
     /**
