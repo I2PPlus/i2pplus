@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-02 10:47+0000\n"
-"PO-Revision-Date: 2023-11-26 16:04+0000\n"
+"PO-Revision-Date: 2023-11-27 00:28+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -122,19 +122,19 @@ msgstr "Acquisition de {0} informations sur le routeur auprès des hôtes de ré
 #. Please keep relatively short so it will fit on the graphs.
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:38
 msgid "Message receive rate (B/s)"
-msgstr "taux de réception des messages (B/s)"
+msgstr "Taux de réception des messages (B/s)"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:39
 msgid "Message send rate (B/s)"
-msgstr "taux d'envoi de messages (B/s)"
+msgstr "Taux d'envoi de messages (B/s)"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:40
 msgid "Low-level send rate (B/s)"
-msgstr "taux d'envoi de bas niveau (B/s)"
+msgstr "Taux d'envoi de bas niveau (B/s)"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:41
 msgid "Low-level receive rate (B/s)"
-msgstr "taux de réception de bas niveau (B/s)"
+msgstr "Taux de réception de bas niveau (B/s)"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:42
 msgid "Total peers in our NetDb"
@@ -159,7 +159,7 @@ msgstr "Pairs rapides connus"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:47
 msgid "Known integrated (floodfill) peers"
-msgstr "pairs intégrés (floodfill) connus"
+msgstr "Pairs intégrés (floodfill) connus"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:48
 msgid "Total peers in our banlist"
@@ -175,11 +175,11 @@ msgstr "Taille de l’arriéré de l’accepteur de tunnels"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:51
 msgid "Clock step adjustment (ms)"
-msgstr "réglage du pas d'horloge (ms)"
+msgstr "Réglage du pas d'horloge (ms)"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:59
 msgid "CPU load average of the JVM"
-msgstr "charge moyenne du processeur de la JVM"
+msgstr "Charge moyenne du processeur de la JVM"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:60
 msgid "Average tunnel build success %"
@@ -1323,7 +1323,7 @@ msgstr "Console"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:144
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
-msgstr "Console"
+msgstr "Pour activer l'accès SSL pour la console du routeur, consultez le fichier commenté <code>clients.config</code> situé dans le répertoire de votre application I2P pour plus d'informations. Vous devrez éditer le fichier de configuration RouterConsoleRunner situé dans le répertoire: "
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigAdvancedHandler.java:73
 msgid "Error updating the configuration - please see the error logs"
@@ -2245,7 +2245,7 @@ msgstr "Applis Web"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/peers_jsp.java:454
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:578
 msgid "Advanced"
-msgstr "Évolué"
+msgstr "Avancé"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:33
 #: ../java/src/net/i2p/router/web/helpers/HelpSectionHelper.java:31
@@ -2580,8 +2580,8 @@ msgstr "Échec de réensemencement à partir d’un fichier"
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Réinitialisation réussie, chargement de {0} informations de routeur à partir du fichier."
+msgstr[1] "Réinitialisation réussie, chargement de {0} informations de routeur à partir du fichier."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:105
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:681
@@ -6324,7 +6324,7 @@ msgstr "Participant"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1129
 msgid "Concurrent tunnel builds (averaged over a minute) / single tunnel build time"
-msgstr "Construction simultanée de tunnels (moyenne sur une minute) /temps de construction d'un tunnel unique"
+msgstr "Construction simultanée de tunnels (moyenne sur une minute) / temps de construction d'un tunnel unique"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1132
 msgid "Concurrency"
@@ -10017,7 +10017,7 @@ msgstr "Une introduction aux listes d’accès aux tunnels"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:449
 msgid "Information about the sidebar, network status messages, and theme overrides"
-msgstr "Informations sur la barre latérale, les messages d'état du réseau et les remplacements de thème"
+msgstr "Barre latérale, messages d'état du réseau et remplacements de thème"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:451
 msgid "Webhosting on I2P"
