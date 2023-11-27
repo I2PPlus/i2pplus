@@ -717,7 +717,7 @@ tfoot .rateDown::after,tfoot .rateUp::after{width:6px;display:inline-block;verti
 
 /* action buttons */
 td.tAction input[type=submit]{margin-top:1px}
-#torrents .tAction input[type=submit]{margin:0 2px;padding:11px;min-width:0;min-height:0;float:none;vertical-align:middle;font-size:0;border:var(--border_input);border-radius:2px;box-shadow:var(--highlight),var(--btn_shadow);background-position:center center;opacity:.9;cursor:pointer;;transition:ease 1.s all;will-change:transform}
+#torrents .tAction input[type=submit]{margin:0 2px;padding:11px;min-width:0;min-height:0;float:none;vertical-align:middle;font-size:0;border:var(--border_input);border-radius:2px;box-shadow:var(--highlight),var(--btn_shadow);background-position:center center;opacity:.9;cursor:pointer;transition:ease 1.s all;will-change:transform}
 #torrents .tAction input:hover,#torrents .tAction input:focus{border:1px solid var(--hover);opacity:1;transition:ease 1.s all}
 #torrents .actionStart:hover,.actionStart:focus{background:var(--start_hover) no-repeat center center/14px,var(--btnAction_hover)}
 #torrents .actionStop:hover,.actionStop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btnAction_hover)}

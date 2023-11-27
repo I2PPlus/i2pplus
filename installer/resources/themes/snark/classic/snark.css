@@ -517,7 +517,7 @@ td.commentAuthor{padding-left:5px}
 .commentText{white-space:normal;text-align:justify;width:90%}
 .commentText:empty + .commentDelete{background:none}
 .commentWrapper{margin:2px 0;padding:8px 10px 8px 26px;height:28px;max-height:300px;overflow:auto;resize:vertical;line-height:1.2;text-align:left;border:var(--border);border-radius:3px;box-shadow:var(--highlight);background:var(--comment) no-repeat scroll 6px center/16px,linear-gradient(180deg,var(--bg),var(--bg2));background-blend-mode:luminosity}
-.commentText .commentWrapper{height:auto;resize:none;;white-space:normal!important}
+.commentText .commentWrapper{height:auto;resize:none;white-space:normal!important}
 #commentDeleteAction{background:var(--bg)}
 #commentDeleteAction td{padding:8px 6px;border-top:var(--border);border-bottom:var(--border)}
 #commentInfo,#userComments,#mediaContainer{margin:10px 0 0;border:var(--border);border-left:0;border-right:0;background:var(--bg3)}

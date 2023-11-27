@@ -34,4 +34,4 @@ th.rxd,th.txd,th.rateDown,th.rateUp,td.rxd,td.txd,td.rateDown,td.rateUp,.tName a
 #torrents td code{padding:0 3px;min-width:38px;text-align:center;font-size:8.5pt}
 }
 @media (max-width:800px){#torrents thead img{min-height:10px}}
-@media (max-width:1400px){.iframed #torrents td.tName a{max-width:400px;display:inline-block;;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+@media (max-width:1400px){.iframed #torrents td.tName a{max-width:400px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}

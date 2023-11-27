@@ -686,7 +686,7 @@ input.trackerhome,input.trackerannounce{width:210px}
 
 /* torrent filter bar */
 #filtercount:not(:empty){margin:0 0 0 4px;padding:2px 3px 1px;min-width:18px;display:inline-block;line-height:1.1;font-size:85%;box-shadow:0 0 0 1px #010,0 0 0 1px rgba(16,92,16,.7) inset;background:var(--badge)}
-#torrentDisplay{margin:-1px 0 -1px;padding:0;display:block;position:sticky;top:44px;z-index:500;border:var(--border);border-left:0;border-right:0;box-shadow:var(--highlight);;background:linear-gradient(180deg,rgba(0,0,0,0) 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 1px,rgba(0,16,0,.5) 2px,rgba(0,16,0,.5) 3px),linear-gradient(180deg,#004000,#000 75%);background-size:100%,4px 100%,100%;contain:paint}
+#torrentDisplay{margin:-1px 0 -1px;padding:0;display:block;position:sticky;top:44px;z-index:500;border:var(--border);border-left:0;border-right:0;box-shadow:var(--highlight);background:linear-gradient(180deg,rgba(0,0,0,0) 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 1px,rgba(0,16,0,.5) 2px,rgba(0,16,0,.5) 3px),linear-gradient(180deg,#004000,#000 75%);background-size:100%,4px 100%,100%;contain:paint}
 .iframed #torrentDisplay{margin:-1px 0;position:static}
 #torrentDisplay .filter{padding:2px 10px;min-width:80px;box-sizing:border-box;display:inline-block;font-weight:700;font-size:9pt;color:#494;text-shadow:0 1px 1px #000;border-right:var(--border);box-shadow:var(--highlight);background:var(--btnAction)}
 #torrentDisplay .filter#all{border-left:var(--border)}

@@ -1496,7 +1496,7 @@ h3[id="udpcon"]{width:auto}
 #sitelinks+.linkgroup .applink:last-child{margin-bottom:9px}
 
 /* home search */
-#searchbar{margin:-23px 10px -16px;padding:8px 0 2px;width:auto;white-space:nowrap;text-align:center;;animation:fade .5s ease .7s reverse both,slide .5s ease .95s both}
+#searchbar{margin:-23px 10px -16px;padding:8px 0 2px;width:auto;white-space:nowrap;text-align:center;animation:fade .5s ease .7s reverse both,slide .5s ease .95s both}
 #searchbar span{margin:-1px 0 -5px;display:inline-block;position:relative;overflow:hidden;background:none}
 #searchbar table{margin:14px auto 12px;width:auto;border-collapse:collapse;border:var(--border);background:#000}
 #searchbar tr{box-shadow:none;border:0}
@@ -1542,7 +1542,7 @@ a:hover .sitemapLink{color:var(--hover)}
 
 /* netdb */
 .addtobook{width:1%;white-space:nowrap;text-align:center}
-.addtobook a{display:inline-block;;vertical-align:middle;font-size:0}
+.addtobook a{display:inline-block;vertical-align:middle;font-size:0}
 .addtobook a::after{margin-right:4px;width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--helper);background-size:16px;content:""}
 .addtobook a:hover::after{transform:scale(1.2)}
 .netdbentry,.leaseset{width:100%;margin-bottom:10px}

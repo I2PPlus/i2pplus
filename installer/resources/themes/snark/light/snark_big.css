@@ -27,5 +27,5 @@ a.control,input[type=submit],input.accept,th,#trackerselect tr:first-child td{fo
 }
 
 @media (max-width:1400px){
-.iframed #torrents td.tName a{max-width:400px;display:inline-block;;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iframed #torrents td.tName a{max-width:400px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }

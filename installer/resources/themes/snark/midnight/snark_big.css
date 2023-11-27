@@ -34,4 +34,4 @@ th.rxd,th.txd,th.rateDown,th.rateUp,td.rxd,td.txd,td.rateDown,td.rateUp,.tName a
 #trackerselect td:nth-child(2),#trackerselect td:nth-child(3){width:15%}
 .iframed #navbar{padding-bottom:8px}
 }
-@media (max-width:1400px){.iframed #torrents td.tName a{max-width:400px;display:inline-block;;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+@media (max-width:1400px){.iframed #torrents td.tName a{max-width:400px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
