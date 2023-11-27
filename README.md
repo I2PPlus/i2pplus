@@ -6,7 +6,7 @@
 
 # I2P+
 
-中文版文档在[这里](README-zh.md)
+中文版文档在[这里](README-zh.md) | Ридми-русский(README-ru.md)
 
 This is the source code for the soft-fork of the Java implementation of I2P.
 
