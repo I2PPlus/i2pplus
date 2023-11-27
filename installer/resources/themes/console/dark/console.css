@@ -755,7 +755,7 @@ td.ipv6{width:1%;max-width:24px}
 #peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
 #peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
 #topCount{display:inline-block;position:absolute;right:3px;top:3px}
-#topCount table{display:table;width:auto;margin:0!important;border-collapse:separate;border-spacing:2px;;border:0}
+#topCount table{display:table;width:auto;margin:0!important;border-collapse:separate;border-spacing:2px;border:0}
 #topCount table,#topCount td{line-height:1}
 #topCount td{padding:4px 2px 2px 6px;min-width:32px;position:relative;line-height:1;border:var(--border_soft);text-align:left;box-shadow:var(--highlight);background:var(--badge)}
 #topCount td span{padding:1px 3px 1px;min-width:16px;display:inline-block;position:absolute;right:1px;top:1px;text-align:center;font-size:80%;letter-spacing:-.01em;font-weight:400;border-radius:0 0 0 2px;background:rgba(0,0,0,.3)}
@@ -1597,7 +1597,7 @@ th.th_title{padding:8px 10px;position:static;text-align:left;background:var(--h1
 .configtable td.tabletextarea{padding:0;background:none}
 .configtable tr:last-child{border-top:var(--border)}
 .h3navlinks{white-space:nowrap}
-.h3navlinks a{margin:-6px 0;padding:6px 5px 6px 16px;display:inline-block;;vertical-align:middle;text-transform:capitalize;letter-spacing:normal;font-size:85%;border-left:var(--border)}
+.h3navlinks a{margin:-6px 0;padding:6px 5px 6px 16px;display:inline-block;vertical-align:middle;text-transform:capitalize;letter-spacing:normal;font-size:85%;border-left:var(--border)}
 .h3navlinks a:first-child{padding-right:9px}
 .h3navlinks a:last-child{padding-right:5px}
 .h3navlinks a:hover{color:var(--hover)}
@@ -2831,7 +2831,7 @@ span#newtab{margin-top:4px}
 .search td{padding:6px 6px 6px 5px}
 .search td:last-child{padding-left:0;padding-right:0}
 .search td:nth-child(2){padding:5px 8px 5px 8px}
-.tab,.tab2{line-height:1.1}
+.tab,.tab2{line-height:1.6}
 .tab2{padding:6px 11px 5px 13px}
 .themechoice,.langselect{width:140px}
 .tunnelBuildStatus::before{margin:0 1px 0 -8px}
@@ -2922,7 +2922,7 @@ div[id^="config_"] .confignav{margin-top:-3px}
 .linkcontainer .applink:last-of-type{margin-bottom:9px}
 #help .confignav{margin-left:-11px;margin-right:-11px;display:flex;justify-content:center;border-left:0;border-right:0}
 #help .confignav{margin-bottom:11px;display:flex}
-#help .confignav .tab,#help .confignav .tab2{margin-left:0;margin-right:0;padding:8px 5px;max-width:9%;min-width:unset;display:flex;;flex-grow:1;flex-shrink:1;justify-content:center;align-items:center}
+#help .confignav .tab,#help .confignav .tab2{margin-left:0;margin-right:0;padding:6px 5px;max-width:9%;min-width:unset;display:flex;flex-grow:1;flex-shrink:1;justify-content:center;align-items:center;line-height:1.1}
 #help .confignav .tab a{padding:0;display:inline-block}
 }
 
