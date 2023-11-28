@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-11-27 22:57+0000\n"
+"PO-Revision-Date: 2023-11-28 00:06+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -335,7 +335,7 @@ msgstr "Trạng thái UPnP"
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1186
 msgid "Disabled UPnP Devices"
-msgstr ""
+msgstr "Thiết bị UPNP bị vô hiệu hóa"
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1220
 msgid "UPnP has not found any UPnP-aware, compatible device on your LAN."
@@ -544,7 +544,7 @@ msgstr "Đang tải tiện ích về từ {0}"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:169
 msgid "Downloading plugin"
-msgstr ""
+msgstr "Tải xuống plugin"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:176
 msgid "Plugin downloaded"
@@ -1249,7 +1249,7 @@ msgstr "Tổng số lượt cấm chỉ trong phiên"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:33
 msgid "Certificates are used to authenticate encrypted services running on the network, provision optional SSL for hosted services and the router console, or provide proof of ownership of a router family."
-msgstr ""
+msgstr "Giấy chứng nhận được sử dụng để xác thực các dịch vụ được mã hóa chạy trên mạng, SSL tùy chọn cung cấp cho các dịch vụ được lưu trữ và bảng điều khiển bộ định tuyến hoặc cung cấp bằng chứng về quyền sở hữu của một gia đình bộ định tuyến."
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:36
 msgid "Local SSL Certificates"
@@ -1320,7 +1320,7 @@ msgstr "Bảng điều khiển"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:144
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
-msgstr ""
+msgstr "Để cho phép truy cập SSL cho bảng điều khiển bộ định tuyến, hãy xem tệp được nhận xét <code>client.config</code> nằm trong thư mục ứng dụng I2P của bạn để biết thêm thông tin. Bạn sẽ cần chỉnh sửa tệp cấu hình RouterConsolerunner nằm trong thư mục: "
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigAdvancedHandler.java:73
 msgid "Error updating the configuration - please see the error logs"
@@ -2017,7 +2017,7 @@ msgstr "Khóa mã hóa"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:69
 msgid "Lookup Password"
-msgstr ""
+msgstr "Mật khẩu tra cứu"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:72
 msgid "Created"
@@ -3539,7 +3539,7 @@ msgstr "Tài liệu API I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:109
 msgid "Javadocs"
-msgstr ""
+msgstr "Javadocs"
 
 #. _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "plugin.svg" + S +
 #. "stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "stats.svg" + S +
@@ -3614,11 +3614,11 @@ msgstr "Vi blog xuyên mạng"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:138
 msgid "Alternative privacy-focused front-end for Reddit"
-msgstr ""
+msgstr "Giao diện người dùng thay thế tập trung vào quyền riêng tư dành cho Reddit"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "Base64 Image Encoder"
-msgstr ""
+msgstr "Bộ mã hóa hình ảnh Base64"
 
 #. "StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
 #. "dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
@@ -3719,15 +3719,15 @@ msgstr "Liên kết trang web Tor .onion"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
 msgid "HTML Color Reference"
-msgstr ""
+msgstr "Tham chiếu màu HTML"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
 msgid "HTMLColors"
-msgstr ""
+msgstr "HTMLMàu sắc"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
 msgid "I2P-related Wiki"
-msgstr ""
+msgstr "Wiki liên quan đến I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:177
 msgid "Wolfram's Online Math Reference"
@@ -3735,7 +3735,7 @@ msgstr "Tham khảo toán học trực tuyến của Wolfram"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:178
 msgid "Mozilla Developer Network"
-msgstr ""
+msgstr "Mạng lưới nhà phát triển Mozilla"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:179
 msgid "Internet Encyclopedia of Philosophy"
@@ -3796,11 +3796,11 @@ msgstr "Atlas thế giới"
 #. news + blogs
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:198
 msgid "Technology News &amp; more..."
-msgstr ""
+msgstr "Tin tức công nghệ và nhiều hơn nữa..."
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "BenarNews"
-msgstr ""
+msgstr "Tin tức Benar"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:199
 msgid "Clear and accurate news for the Far East"
@@ -3817,11 +3817,11 @@ msgstr "Nghiên cứu và giáo dục bảo mật thông tin"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:202
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:215
 msgid "Cannabis-related magazine"
-msgstr ""
+msgstr "Tạp chí liên quan đến cần sa"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:202
 msgid "CultureMagazine"
-msgstr ""
+msgstr "Tạp chí Văn hóa"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "A magazine of Politics &amp; Culture"
@@ -3829,92 +3829,92 @@ msgstr "Một tạp chí về chính trị và văn hóa"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:203
 msgid "CurrentAffairs"
-msgstr ""
+msgstr "Chuyện hiện tại"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:204
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:205
 msgid "Darknet related news site"
-msgstr ""
+msgstr "Trang tin tức liên quan đến Darknet"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
 msgid "DigitalJournal"
-msgstr ""
+msgstr "Nhật ký kỹ thuật số"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:206
 msgid "Global news &amp; media platform"
-msgstr ""
+msgstr "Tin tức toàn cầu"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
 msgid "DigitalTrends"
-msgstr ""
+msgstr "Xu hướng kỹ thuật số"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:207
 msgid "Tech News &amp; Reviews"
-msgstr ""
+msgstr "Tin tức công nghệ"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:208
 msgid "Defending your rights in the digital world"
-msgstr ""
+msgstr "Bảo vệ quyền lợi của bạn trong thế giới kỹ thuật số"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:209
 msgid "The Elliptic Curve Cryptography Blog"
-msgstr ""
+msgstr "Blog mật mã đường cong Elliptic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
 msgid "ForeignPolicy"
-msgstr ""
+msgstr "Chính sách đối ngoại"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:210
 msgid "The Global Magazine of News &amp; Ideas"
-msgstr ""
+msgstr "Tạp chí tin tức toàn cầu"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "FrontLineDefenders"
-msgstr ""
+msgstr "Tiền tuyếnHậu vệ"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:211
 msgid "Human rights activism"
-msgstr ""
+msgstr "Hoạt động nhân quyền"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:212
 msgid "Defending Human Rights Worldwide"
-msgstr ""
+msgstr "Bảo vệ nhân quyền trên toàn thế giới"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:212
 msgid "HumanRightsWatch"
-msgstr ""
+msgstr "Theo dõi nhân quyền"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:213
 msgid "Fresh hacks every day"
-msgstr ""
+msgstr "Những mẹo mới mỗi ngày"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:214
 msgid "Computer related news aggregation"
-msgstr ""
+msgstr "Tổng hợp tin tức liên quan đến máy tính"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:214
 msgid "HackerNews"
-msgstr ""
+msgstr "Tin tức hacker"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
 msgid "HongKongFreePress"
-msgstr ""
+msgstr "HongKongFreePress"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:216
 msgid "Independent &amp; impartial news for Hong Kong"
-msgstr ""
+msgstr "Độc lập"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
 msgid "HongKongWatch"
-msgstr ""
+msgstr "Theo dõi Hồng Kông"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:217
 msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr ""
+msgstr "Giám sát các mối đe dọa đối với quyền tự do và quyền ở Hồng Kông"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:218
 msgid "Business &amp; Financial News"
-msgstr ""
+msgstr "Kinh doanh"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:219
 msgid "Politics &amp; Current Affairs Journal"
@@ -3922,7 +3922,7 @@ msgstr "Tạp chí chính trị và các vấn đề hiện tại"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "English language Japanese News"
-msgstr ""
+msgstr "Tiếng Anh Tin tức tiếng Nhật"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:220
 msgid "JapanToday"
@@ -3930,7 +3930,7 @@ msgstr "Nhật Bản hôm nay"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "JStorDaily"
-msgstr ""
+msgstr "JStorDaily"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "Where news meets its scholarly match"
@@ -3938,7 +3938,7 @@ msgstr "Nơi tin tức đáp ứng trận đấu học thuật của nó"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Jurist"
-msgstr ""
+msgstr "Luật gia"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Legal News &amp; Commentary"
@@ -3950,35 +3950,35 @@ msgstr "Tin tức và điều tra chuyên sâu"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "KrebsOnSecurity"
-msgstr ""
+msgstr "KrebsOnSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "Linux Kernel Mailing List"
-msgstr ""
+msgstr "Danh sách gửi thư hạt nhân Linux"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "MetaCritic"
-msgstr ""
+msgstr "MetaCritic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "Movie + TV + Music + Game reviews"
-msgstr ""
+msgstr "Phim truyền hình Đánh giá trò chơi âm nhạc"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "NakedSecurity"
-msgstr ""
+msgstr "Bảo mật khỏa thân"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "Security news and research blog"
-msgstr ""
+msgstr "Blog nghiên cứu và tin tức an ninh"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:227
 msgid "Smart &amp; fearless journalism"
-msgstr ""
+msgstr "Thông minh"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 msgid "NewStatesman"
-msgstr ""
+msgstr "Chính khách mới"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:228
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
@@ -3987,27 +3987,27 @@ msgstr "Tạp chí chính trị và các vấn đề hiện tại"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "Independent International Media Platform"
-msgstr ""
+msgstr "Nền tảng truyền thông quốc tế độc lập"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:229
 msgid "OpenDemocracy"
-msgstr ""
+msgstr "Dân chủ mở"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "News and blog feeds on I2P"
-msgstr ""
+msgstr "Tin tức và nguồn cấp dữ liệu blog trên I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:230
 msgid "Planeta"
-msgstr ""
+msgstr "Hành tinh"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:231
 msgid "News &amp; Views on Tibet"
-msgstr ""
+msgstr "Tin tức"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "RadioFreeAsia"
-msgstr ""
+msgstr "RadioFreeAsia"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:232
 msgid "Reliable journalism for countries under censorship"
@@ -4015,7 +4015,7 @@ msgstr "Báo chí đáng tin cậy cho các quốc gia dưới sự kiểm duy�
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:233
 msgid "Lifestyle magazine"
-msgstr ""
+msgstr "Tạp chí phong cách sống"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "Internationally renowned security technologist"
@@ -4023,7 +4023,7 @@ msgstr "Công nghệ bảo mật nổi tiếng quốc tế"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:234
 msgid "SchneierOnSecurity"
-msgstr ""
+msgstr "SchneierOnSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "Latest scientific research news"
@@ -4031,19 +4031,19 @@ msgstr "Tin tức nghiên cứu khoa học mới nhất"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:235
 msgid "ScienceDaily"
-msgstr ""
+msgstr "Khoa họcHàng ngày"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:236
 msgid "Community-driven tech news"
-msgstr ""
+msgstr "Tin tức công nghệ hướng tới cộng đồng"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:237
 msgid "News for nerds"
-msgstr ""
+msgstr "Tin tức dành cho người mọt sách"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:238
 msgid "Technology news &amp; reviews"
-msgstr ""
+msgstr "Tin tức công nghệ"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:239
 msgid "Reporting on China without fear or favor"
@@ -4055,31 +4055,31 @@ msgstr "Tin tức từ thủ đô Đài Loan"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:240
 msgid "TaipeiTimes"
-msgstr ""
+msgstr "Thời báo Đài Bắc"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "TechXplore"
-msgstr ""
+msgstr "TechXplore"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:241
 msgid "Technology and engineering news"
-msgstr ""
+msgstr "Tin công nghệ và kỹ thuật"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "TechMeme"
-msgstr ""
+msgstr "TechMeme"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:242
 msgid "Technology news aggregator"
-msgstr ""
+msgstr "Trang tổng hợp tin tức công nghệ"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "News &amp; Reviews"
-msgstr ""
+msgstr "Tin tức"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "TheAtlantic"
-msgstr ""
+msgstr "Đại Tây Dương"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "Academic commentary and essays"
@@ -4087,31 +4087,31 @@ msgstr "Bình luận và tiểu luận học thuật"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "TheConversation"
-msgstr ""
+msgstr "Cuộc trò chuyện"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "Global News"
-msgstr ""
+msgstr "Tin tức toàn cầu"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:245
 msgid "TheGuardian"
-msgstr ""
+msgstr "Người giám hộ"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "TheHill"
-msgstr ""
+msgstr "TheHill"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:246
 msgid "US Political News"
-msgstr ""
+msgstr "Tin tức chính trị Hoa Kỳ"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "TheMarkup"
-msgstr ""
+msgstr "TheMarkup"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "Watching Big Tech..."
-msgstr ""
+msgstr "Đang xem Công nghệ lớn..."
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "Independent Journalism from Russia"
@@ -4119,11 +4119,11 @@ msgstr "Báo chí độc lập từ Nga"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:248
 msgid "TheMoscowTimes"
-msgstr ""
+msgstr "TheMoscowTimes"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:249
 msgid "TheNewRepublic"
-msgstr ""
+msgstr "TheNewRepublic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "International News from Tibet"
@@ -4131,19 +4131,19 @@ msgstr "Tin tức quốc tế từ Tây Tạng"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:250
 msgid "TheTibetPost"
-msgstr ""
+msgstr "TheTibetPost"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "All you need to know about everything that matters"
-msgstr ""
+msgstr "Tất cả những gì bạn cần biết về mọi thứ quan trọng"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:251
 msgid "TheWeek"
-msgstr ""
+msgstr "Tuần"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:252
 msgid "Filesharing &amp; copyright news"
-msgstr ""
+msgstr "Chia sẻ tập tin"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "A magazine about human rights and social justice"
@@ -4151,11 +4151,11 @@ msgstr "Một tạp chí về nhân quyền và công bằng xã hội"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:253
 msgid "UpstreamJournal"
-msgstr ""
+msgstr "Nhật ký thượng nguồn"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
-msgstr ""
+msgstr "Tiến tới sự cân bằng"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "WashingtonInstitute"
@@ -4180,11 +4180,11 @@ msgstr "Thêm vào"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:191
 msgid "Identity"
-msgstr ""
+msgstr "Danh tính"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:192
 msgid "Network Database entry"
-msgstr ""
+msgstr "Bản ghi Cơ sở dữ liệu mạng"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:194
 msgid "IP Address"
@@ -4196,7 +4196,7 @@ msgstr "Cổng UDP"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:199
 msgid "Floodfill Role"
-msgstr ""
+msgstr "Vai trò lũ lụt"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:202
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:901
@@ -4209,7 +4209,7 @@ msgstr "Hoạt động"
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:286
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:291
 msgid "Inactive"
-msgstr ""
+msgstr "Bất hoạt"
 
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:207
 msgid "unpublished"
@@ -4983,7 +4983,7 @@ msgstr "Để ghi đè các giới hạn này, hãy thêm cài đặt {0} và {1
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:150
 #, java-format
 msgid "on the {0}Advanced Configuration page{1}."
-msgstr ""
+msgstr "trên {0}Trang cấu hình nâng cao{1}."
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:153
 msgid "to your router.config file."
@@ -5074,7 +5074,7 @@ msgstr "Không hoạt động ngang hàng"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:352
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:583
 msgid "Average inbound/outbound rate (KBps)"
-msgstr ""
+msgstr "Tốc độ vào/ra trung bình (KBps)"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:352
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:583
@@ -5086,7 +5086,7 @@ msgstr "Vào/Ra"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:353
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:590
 msgid "Duration of connection to peer"
-msgstr ""
+msgstr "Thời lượng kết nối với máy ngang hàng"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:353
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:591
@@ -5122,7 +5122,7 @@ msgstr "TX"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:356
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:611
 msgid "Messages received"
-msgstr ""
+msgstr "Tin nhắn nhận được"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:356
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:612
@@ -5297,7 +5297,7 @@ msgstr "Định nghĩa"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:895
 msgid "Remote peer, identified by truncated router hash"
-msgstr ""
+msgstr "Ngang hàng xa, được xác định bởi bộ định tuyến bị cắt cụt"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:897
 msgid "Direction"
@@ -5712,7 +5712,7 @@ msgstr "Tất cả"
 #. 3
 #: ../java/src/net/i2p/router/web/helpers/ProfilesHelper.java:17
 msgid "Session Bans"
-msgstr ""
+msgstr "Cấm phiên"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfilesHelper.java:77
 msgid "Total number of banned peers"
@@ -5720,15 +5720,15 @@ msgstr "Tổng số đồng nghiệp bị cấm"
 
 #: ../java/src/net/i2p/router/web/helpers/SearchHelper.java:111
 msgid "Select search engine"
-msgstr ""
+msgstr "Chọn công cụ tìm kiếm"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:57
 msgid "Statistics gathered during this router's uptime"
-msgstr ""
+msgstr "Số liệu thống kê được thu thập trong thời gian hoạt động của bộ định tuyến này"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:60
 msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr ""
+msgstr "Dữ liệu thu thập được lượng tử hóa trong khoảng thời gian 1 phút, do đó chỉ nên sử dụng làm dữ liệu ước tính."
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:61
 msgid "These statistics are primarily used for development and debugging."
@@ -5737,28 +5737,28 @@ msgstr "Những thống kê này chủ yếu được sử dụng để phát tr
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:105
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:158
 msgid "No lifetime events"
-msgstr ""
+msgstr "Không có sự kiện trọn đời"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:116
 msgid "frequency"
-msgstr ""
+msgstr "tần số"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:121
 msgid "Rolling average events per period"
-msgstr ""
+msgstr "Các sự kiện trung bình luân phiên mỗi kỳ"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:126
 msgid "Highest events per period"
-msgstr ""
+msgstr "Số sự kiện cao nhất mỗi kỳ"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:137
 msgid "Lifetime average events per period"
-msgstr ""
+msgstr "Số sự kiện trung bình trong suốt cuộc đời mỗi giai đoạn"
 
 #. Display the strict average
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:142
 msgid "Lifetime average frequency"
-msgstr ""
+msgstr "Tần số trung bình trọn đời"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:145
 #, java-format
@@ -5768,58 +5768,58 @@ msgstr[0] "{0} sự kiện"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:170
 msgid "rate"
-msgstr ""
+msgstr "tỷ lệ"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:173
 msgid "Average"
-msgstr ""
+msgstr "Trung bình"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:176
 msgid "Highest average"
-msgstr ""
+msgstr "Trung bình cao nhất"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:183
 msgid "Highest total in a period"
-msgstr ""
+msgstr "Tổng số cao nhất trong một khoảng thời gian"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:207
 msgid "Average event count"
-msgstr ""
+msgstr "Số sự kiện trung bình"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:210
 msgid "Events in peak period"
-msgstr ""
+msgstr "Sự kiện trong thời kỳ cao điểm"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:218
 msgid "Events in this period"
-msgstr ""
+msgstr "Sự kiện trong giai đoạn này"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:218
 #, java-format
 msgid "ended {0} ago"
-msgstr ""
+msgstr "đã kết thúc {0} trước"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:222
 msgid "No events"
-msgstr ""
+msgstr "Không có sự kiện"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:228
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:722
 msgid "Graph Data"
-msgstr ""
+msgstr "Dữ liệu đồ thị"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:231
 msgid "Graph Event Count"
-msgstr ""
+msgstr "Số sự kiện đồ thị"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:236
 msgid "Export Data as XML"
-msgstr ""
+msgstr "Xuất dữ liệu dưới dạng XML"
 
 #. Display the strict average
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:242
 msgid "Lifetime average value"
-msgstr ""
+msgstr "Giá trị trung bình trọn đời"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:245
 #, java-format
@@ -5830,15 +5830,15 @@ msgstr[0] "{0} sự kiện"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:52
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:164
 msgid "Help &amp; FAQ"
-msgstr ""
+msgstr "Phần trợ giúp"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:53
 msgid "I2P Services"
-msgstr ""
+msgstr "Dịch vụ I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:54
 msgid "I2P Internals"
-msgstr ""
+msgstr "Nội bộ I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:55
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/info_jsp.java:503
@@ -5855,11 +5855,11 @@ msgstr "Thông tin bộ định tuyến (Nâng cao)"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:58
 msgid "Memory Usage Bar"
-msgstr ""
+msgstr "Thanh sử dụng bộ nhớ"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:59
 msgid "Network Reachability"
-msgstr ""
+msgstr "Khả năng tiếp cận mạng"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:60
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:868
@@ -5872,7 +5872,7 @@ msgstr "Khởi động lại trạng thái"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:63
 msgid "Firewall &amp; Reseed Status"
-msgstr ""
+msgstr "Tường lửa và trạng thái Reseed"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:65
 msgid "Bandwidth Graph"
@@ -6025,7 +6025,7 @@ msgstr "Dịch vụ"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:433
 msgid "I2P+ Router Sitemap"
-msgstr ""
+msgstr "I2P+ Sitemap"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:435
 msgid "Internals"
@@ -6109,7 +6109,7 @@ msgstr "API"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:591
 msgid "Documentation for the I2P API"
-msgstr ""
+msgstr "Tài liệu cho API I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:600
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/debug_jsp.java:285
@@ -6421,7 +6421,7 @@ msgstr "Yêu cầu xếp hàng từ các bộ định tuyến khác để tham g
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1269
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:525
 msgid "Backlog"
-msgstr ""
+msgstr "Backlog"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1283
 msgid "No transit tunnel requests are accepted for the first 10 minutes while router stabilizes"
@@ -6473,7 +6473,7 @@ msgstr "NAT đối xứng"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:377
 msgid "Firewalled with Inbound TCP Enabled"
-msgstr ""
+msgstr "Tường lửa với TCP trong nước được bật"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:382
 msgid "Firewalled &amp; Floodfill"
@@ -6584,7 +6584,7 @@ msgstr "Cập nhật sau khi khởi động lại"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1254
 msgid "Signed development update available"
-msgstr ""
+msgstr "Cập nhật phát triển đã ký có sẵn"
 
 #. Note to translators: parameter is a router version, e.g. "0.9.19-16"
 #. <br> is optional, to help the browser make the lines even in the button
@@ -6615,7 +6615,7 @@ msgstr "Cố gắng tải xuống các tệp tham chiếu bộ định tuyến (
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1348
 msgid "Reseed"
-msgstr ""
+msgstr "Reseed"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1458
 msgid "Order"
@@ -6953,7 +6953,7 @@ msgstr "PHÚT"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:929
 msgid "AVG"
-msgstr ""
+msgstr "AVG"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:930
 msgid "MEDIAN"
@@ -7250,19 +7250,19 @@ msgstr "Sổ địa chỉ"
 
 #: ../java/strings/Strings.java:13
 msgid "i2psnark"
-msgstr ""
+msgstr "i2psnark"
 
 #: ../java/strings/Strings.java:14
 msgid "i2ptunnel"
-msgstr ""
+msgstr "i2ptunnel"
 
 #: ../java/strings/Strings.java:15
 msgid "susimail"
-msgstr ""
+msgstr "susimail"
 
 #: ../java/strings/Strings.java:17
 msgid "susidns"
-msgstr ""
+msgstr "susidns"
 
 #: ../java/strings/Strings.java:18
 msgid "routerconsole"
@@ -7358,7 +7358,7 @@ msgstr "Máy chủ web I2P cá nhân (eepsite)"
 
 #: ../java/strings/Strings.java:50
 msgid "HTTP Proxy"
-msgstr ""
+msgstr "Proxy HTTP"
 
 #. hardcoded in iMule?
 #: ../java/strings/Strings.java:55
@@ -7367,24 +7367,24 @@ msgstr "iMule"
 
 #: ../java/strings/Strings.java:56
 msgid "Official I2P Source Repository"
-msgstr ""
+msgstr "Kho lưu trữ nguồn I2P chính thức"
 
 #. standard themes for ConfigUIHelper
 #: ../java/strings/Strings.java:59
 msgid "dark"
-msgstr ""
+msgstr "tối"
 
 #: ../java/strings/Strings.java:60
 msgid "light"
-msgstr ""
+msgstr "ánh sáng"
 
 #: ../java/strings/Strings.java:61
 msgid "midnight"
-msgstr ""
+msgstr "nửa đêm"
 
 #: ../java/strings/Strings.java:62
 msgid "vanilla"
-msgstr ""
+msgstr "hương vani"
 
 #: ../java/strings/Strings.java:67
 msgid "Encryption"
@@ -7392,7 +7392,7 @@ msgstr "Mã hóa"
 
 #: ../java/strings/Strings.java:70
 msgid "Stream"
-msgstr ""
+msgstr "Luồng"
 
 #. parameters in transport addresses (netdb.jsp)
 #. may or may not be worth translating
@@ -7411,7 +7411,7 @@ msgstr "hải cảng"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/applytheme_jsp.java:280
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:282
 msgid "config UI"
-msgstr ""
+msgstr "Giao diện người dùng cấu hình"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/applytheme_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/applytheme_jsp.java:447
@@ -7445,12 +7445,12 @@ msgstr "Cấu hình mạng nâng cao"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:534
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:614
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P sẽ hoạt động tốt nhất nếu bạn định cấu hình tốc độ phù hợp với tốc độ kết nối internet của mình."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:537
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:616
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
-msgstr ""
+msgstr "Lưu ý: Đóng góp của bạn cho mạng (chia sẻ mạng) được xác định bằng việc phân bổ băng thông ngược dòng (tốc độ tải lên)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:540
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:618
@@ -7502,7 +7502,7 @@ msgstr "Bạn đã cấu hình I2P để chia sẻ chỉ {0} KB/s."
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:583
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:658
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P yêu cầu ít nhất 12KBps để cho phép chia sẻ."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:584
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:659
@@ -7530,11 +7530,11 @@ msgstr "Cấu hình nâng cao"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:526
 msgid "Floodfill Configuration"
-msgstr ""
+msgstr "Cấu hình lũ lụt"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:528
 msgid "Floodfill participation helps the network, but may use more of your computer's resources."
-msgstr ""
+msgstr "Sự tham gia của Floodfill giúp ích cho mạng nhưng có thể sử dụng nhiều tài nguyên máy tính của bạn hơn."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:534
 msgid "This router is currently a floodfill participant."
@@ -7704,7 +7704,7 @@ msgstr "Công cụ tìm kiếm"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:542
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:423
 msgid "Applications and Configuration"
-msgstr ""
+msgstr "Ứng dụng và cấu hình"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:558
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:451
@@ -8048,7 +8048,7 @@ msgstr "Chỉ chọn nếu đằng sau tường lửa điều tiết hoặc ch�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:689
 msgid "Completely disable TCP connections"
-msgstr ""
+msgstr "Vô hiệu hóa hoàn toàn các kết nối TCP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:691
 msgid "TCP port"
@@ -8080,7 +8080,7 @@ msgstr "Chỉ chọn nếu đằng sau tường lửa chặn UDP gửi đi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:723
 msgid "Completely disable UDP connections"
-msgstr ""
+msgstr "Vô hiệu hóa hoàn toàn các kết nối UDP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:725
 msgid "The router's external port allows communication with other routers. It is recommended to configure your firewall to allow inbound and outbound traffic on this port to optimize your router's performance on the network."
@@ -8138,7 +8138,7 @@ msgstr "Cài đặt plugin"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:543
 #, java-format
 msgid "For available plugins, visit {0}."
-msgstr ""
+msgstr "Để biết các plugin có sẵn, hãy truy cập {0}."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:545
 msgid "Enter xpi2p or su3 plugin URL"
@@ -8384,15 +8384,15 @@ msgstr "0 để vô hiệu hóa"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:282
 msgid "config stats"
-msgstr ""
+msgstr "Cấu hình thống kê"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:419
 msgid "Stats Collection &amp; Graphing"
-msgstr ""
+msgstr "Thu thập và biểu diễn dữ liệu thống kê"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:528
 msgid "Configure I2P Stat Collection"
-msgstr ""
+msgstr "Cấu hình Thu thập dữ liệu thống kê I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:530
 msgid "A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>."
@@ -8400,19 +8400,19 @@ msgstr "Một lựa chọn hạn chế các số liệu thống kê được b�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:537
 msgid "Enable full stats?"
-msgstr ""
+msgstr "Bật toàn bộ số liệu thống kê?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:539
 msgid "change requires restart to take effect"
-msgstr ""
+msgstr "sự thay đổi yêu cầu khởi động lại để áp dụng"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:543
 msgid "Select Stats for Graphing"
-msgstr ""
+msgstr "Chọn Số liệu thống kê để biểu diễn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:282
 msgid "config tunnels"
-msgstr ""
+msgstr "Cấu hình đường hầm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:427
 msgid "Tunnel Options"
@@ -8420,7 +8420,7 @@ msgstr "Tùy chọn đường hầm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:527
 msgid "The default settings work for most people."
-msgstr ""
+msgstr "Các cài đặt mặc định hoạt động tốt cho hầu hết người dùng."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:529
 msgid "There is a fundamental tradeoff between anonymity and performance."
@@ -8474,11 +8474,11 @@ msgstr "Rất tiếc, lựa chọn chủ đề đã bị tắt đối với Inte
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:546
 msgid "A very old version has been detected. It's not recommended to use I2P with unmaintained browsers."
-msgstr ""
+msgstr "Phiên bản rất cũ đã được phát hiện. Không khuyến khích sử dụng I2P với trình duyệt không được duy trì."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:548
 msgid "If you're not using IE, it's likely that your browser is pretending to be IE; please configure your browser (or proxy) to use a different User Agent string if you'd like to access the console themes."
-msgstr ""
+msgstr "Nếu bạn không sử dụng IE, có khả năng trình duyệt của bạn đang giả dạng là IE; vui lòng cấu hình trình duyệt (hoặc proxy) sử dụng chuỗi User Agent khác nếu bạn muốn truy cập giao diện bảng điều khiển."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:552
 msgid "Router Console Password"
@@ -8494,7 +8494,7 @@ msgstr "Vui lòng đóng góp cho dự án dịch bảng điều khiển bộ đ
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:282
 msgid "config update"
-msgstr ""
+msgstr "Cập nhật cấu hình"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:634
@@ -8589,7 +8589,7 @@ msgstr "cấu hình ứng dụng web"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configwebapps_jsp.java:540
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
-msgstr ""
+msgstr "Các ứng dụng web Java được liệt kê bên dưới được khởi chạy bởi khách hàng webConsole và chạy trong cùng một JVM như bộ định tuyến. Thông thường chúng là các ứng dụng web có thể truy cập qua bảng điều khiển bộ định tuyến. Chúng có thể là các ứng dụng hoàn chỉnh (v.d. i2psnark), mặt trước cho khách hàng hoặc ứng dụng khác phải được bật riêng biệt (v.d. susidns, i2ptunnel), hoặc không có giao diện web (v.d. danh bạ)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/dns_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/dns_jsp.java:453
@@ -8646,7 +8646,7 @@ msgstr "Phiên bản I2P và môi trường chạy"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:388
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:434
 msgid "Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report."
-msgstr "Lưu ý rằng thông tin hệ thống, dấu thời gian nhật ký và thông báo nhật ký có thể cung cấp manh mối về vị trí của bạn; "
+msgstr "Lưu ý rằng thông tin hệ thống, dấu thời gian nhật ký và tin nhắn nhật ký có thể cung cấp manh mối về vị trí của bạn; vui lòng xem xét kỹ mọi thông tin bạn đính kèm trong báo cáo lỗi."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error_jsp.java:313
 msgid "Page Not Found"
@@ -8654,7 +8654,7 @@ msgstr "Không tìm thấy trang"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error_jsp.java:456
 msgid "Sorry! You appear to be requesting a non-existent Router Console page or resource."
-msgstr "Xin lỗi! "
+msgstr "Xin lỗi! Có vẻ bạn đang yêu cầu 1 trang hoặc tài nguyên của Bảng điều khiển Bộ định tuyến không tồn tại."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error_jsp.java:458
 msgid "Error 404"
@@ -8946,11 +8946,11 @@ msgstr "Khi được đặt thành True, bộ định tuyến của bạn sẽ k
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:483
 msgid "Host OS running Android"
-msgstr ""
+msgstr "Hệ điều hành máy chủ chạy Android"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:485
 msgid "Host OS running on ARM (MacOS excepted)"
-msgstr ""
+msgstr "Hệ điều hành máy chủ chạy trên ARM (MacOS không kể)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:487
 msgid "32bit host OS running with less than 4 detected cores"
@@ -8966,7 +8966,7 @@ msgstr "Dưới 256MB được phân bổ cho JVM"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:493
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
-msgstr ""
+msgstr "Bộ định tuyến chạy phiên bản thư viện Java BigInteger không bản địa, được mô phỏng bởi phần mềm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:495
 msgid "This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
@@ -9010,7 +9010,7 @@ msgstr "Cài đặt này, khi được bật, giới thiệu độ trễ pong ng
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:515
 msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr ""
+msgstr "Thiết lập này, khi được bật, sẽ sửa đổi độ trễ phản hồi ngẫu nhiên tối đa được giới thiệu cho các máy chủ cho phép ping, nếu <code>i2p.streaming.enablePongDelay</code> cũng được bật. Trừ khi rõ ràng đặt, giá trị mặc định là 50ms sẽ được sử dụng."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:517
 msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
@@ -9034,7 +9034,7 @@ msgstr "Cài đặt này (tính bằng giờ) xác định một bộ định tu
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:527
 msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr ""
+msgstr "Thiết lập này xác định số lượng người cùng khám phá song song khi công việc Khám phá Đồng ngũ chạy [mặc định là 1 người một lượt khi biết hơn 3000 người]. Lưu ý là tăng giá trị này sẽ tăng yêu cầu băng thông cho quá trình khám phá, và đặt giá trị quá cao có thể gây ra độ trễ tin nhắn quá mức và can thiệp vào các dịch vụ khác, do đó hãy sử dụng cẩn thận!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:529
 msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
@@ -9094,7 +9094,7 @@ msgstr "Cài đặt này cấu hình số lượng tin nhắn bên ngoài đư�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:557
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
-msgstr ""
+msgstr "Thiết lập này (tính bằng miligiây) cho phép bạn cấu hình thủ công độ trễ giữa các bản cập nhật làm mới bộ định tuyến do công việc Làm mới Bộ định tuyến chạy. Mặc định sự ngừng lại giữa các lần làm mới được xác định bởi kích thước của NetDb, và giới thiệu một số ngẫu nhiên trong thời gian để giảm thiểu phân tích giao thông. Đối với các giá trị thấp hơn 2000 miligiây, khuyến nghị tăng giá trị của <code>router.refreshTimeout</code>. Lưu ý rằng đặt giá trị này dưới 2000 miligiây sẽ tăng lưu lượng mạng của bạn và có thể giới thiệu sự trì hoãn công việc, và không khuyến nghị sử dụng lâu dài."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:559
 msgid "This setting (in hours) allows you to manually configure how old a RouterInfo is in order for it to be checked by the Refresh Routers Job. By default, the age of a RouterInfo before a refresh is intitiated scales according to the size of the NetDb, increasing as the NetDb grows in size. A value of 0 will force the Router Refresh Job to check every router in the NetDb, regardless of age."
@@ -9279,7 +9279,7 @@ msgstr "Bạn có thể xác định dịch vụ nào tự động bắt đầu 
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:503
 msgid "By default, most of your client services (mail, http proxy, IRC) will share the same set of tunnels (for performance reasons) and be listed as <i>Shared Clients</i> and <i>Shared Clients(DSA)</i> in the sidebar under Service Tunnels and on the <a href=/tunnels>Tunnels page</a>."
-msgstr ""
+msgstr "Mặc định, hầu hết các dịch vụ khách của bạn (thư điện tử, proxy HTTP, IRC) sẽ chia sẻ cùng bộ đường hầm (vì lý do hiệu suất) và được liệt kê như <i>Khách sử dụng chung</i> và <i>Khách sử dụng chung(DSA)</i> trong thanh bên dưới Dịch vụ Đường hầm và trên trang <a href=/tunnels>Đường hầm</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:505
 msgid "However, if you experience a tunnel failure, all your services will go offline at the same time, so in some scenarios you may wish to configure client services to use their own set of tunnels."
@@ -9339,7 +9339,7 @@ msgstr "Tôi có thể truy cập IRC, BitTorrent hoặc các dịch vụ khác 
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:455
 msgid "Unless an outproxy has been set up for the service you want to connect to, this is not possible, with the exception of BitTorrent (see below). There are only three types of outproxies running right now: HTTP, HTTPS, and email. Note that there is currently no publicly listed SOCKS outproxy. If this type of service is required, try <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a>."
-msgstr ""
+msgstr "Trừ khi đã cài đặt outproxy cho dịch vụ bạn muốn kết nối, điều này sẽ không thể thực hiện, ngoại trừ BitTorrent (xem bên dưới). Hiện tại chỉ có ba loại outproxy đang chạy: HTTP, HTTPS và thư điện tử. Lưu ý rằng hiện tại không có outproxy SOCKS được công khai. Nếu loại dịch vụ này là bắt buộc, hãy thử <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:457
 msgid "Can I download torrents from non-I2P trackers?"
@@ -9347,7 +9347,7 @@ msgstr "Tôi có thể tải xuống torrent từ các tracker ngoài I2P không
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:459
 msgid "Until the advent of I2P integration in <a href=http://www.vuze.com/ target=_blank rel=noreferrer class='sitelink external'>Vuze</a>, it wasn't possible to download torrents that weren't hosted on the I2P network. However, now that Vuze (and latterly <a href=https://www.biglybt.com/ target=_blank rel=noreferrer class='sitelink external'>Bigly</a>) allow users to share non-I2P torrents on I2P, non-I2P torrents can be downloaded over I2P if Vuze/Bigly users have chosen to make content available to the I2P network. Popular torrents with a large number of peers are more likely to be accessible via I2P; to determine if the content is available, add the torrent link, magnet or infohash to your I2P-enabled BitTorrent client."
-msgstr " Cho đến khi ra mắt tích hợp I2P trong <a href=http://www.vuze.com/ target=_blank rel=noreferrer class='sitelink external'>Vuze</a>, trước đây không thể tải xuống torrent không được lưu trữ trên mạng I2P. Tuy nhiên, bây giờ Vuze (và sau này là <a href=https://www.biglybt.com/ target=_blank rel=noreferrer class='sitelink external'> Bigly</a>) cho phép người dùng chia sẻ torrent ngoài I2P trên I2P, người dùng có thể tải xuống torrent ngoài I2P qua I2P nếu người dùng Vuze/Bigly chọn để làm nội dung có sẵn cho mạng I2P. Torrent phổ biến với số lượng đồng xử lý lớn có khả năng truy cập được qua I2P nhiều hơn; để xác định nếu nội dung có sẵn, hãy thêm liên kết torrent, magnet hoặc infohash vào khách BitTorrent được kích hoạt I2P của bạn."
+msgstr "Cho đến khi ra mắt tích hợp I2P trong <a href=http://www.vuze.com/ target=_blank rel=noreferrer class='sitelink external'>Vuze</a>, trước đây không thể tải xuống torrent không được lưu trữ trên mạng I2P. Tuy nhiên, bây giờ Vuze (và sau này là <a href=https://www.biglybt.com/ target=_blank rel=noreferrer class='sitelink external'> Bigly</a>) cho phép người dùng chia sẻ torrent ngoài I2P trên I2P, người dùng có thể tải xuống torrent ngoài I2P qua I2P nếu người dùng Vuze/Bigly chọn để làm nội dung có sẵn cho mạng I2P. Torrent phổ biến với số lượng đồng xử lý lớn có khả năng truy cập được qua I2P nhiều hơn; để xác định nếu nội dung có sẵn, hãy thêm liên kết torrent, magnet hoặc infohash vào khách BitTorrent được kích hoạt I2P của bạn."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:461
 msgid "How do I configure I2P to open at startup in a specific web browser?"
@@ -9387,7 +9387,7 @@ msgstr "Các tệp cấu hình i2p của tôi được lưu trữ ở đâu?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:479
 msgid "Configuration files for the router, installed plugins, and router logs are stored in the following location:"
-msgstr ""
+msgstr "Các tệp cấu hình cho bộ định tuyến, plugin đã cài đặt và nhật ký bộ định tuyến được lưu trữ tại vị trí sau:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:481
 msgid "Windows"
@@ -9620,7 +9620,7 @@ msgstr "Thuật ngữ của I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:437
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Một ứng dụng web I2P quản lý đích dịch vụ cho mạng, ánh xạ băm B64 thành các tên dễ đọc. Đích có thể được thêm thủ công hoặc qua đăng ký tệp hosts.txt. Cũng được gọi là SusiDNS. Để biết thêm thông tin, hãy xem <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>tài liệu trực tuyến</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:439
 msgid "Base32 (B32) / Base64 (B64)"
@@ -9636,7 +9636,7 @@ msgstr "B33"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:445
 msgid "An address containing an encrypted LeaseSet is informally referred to as a b33 address, an extension of a base32 address with the host's public key and signature type encoded into the address instead of a lookup hash. This address type is required for blinded Leasesets. More information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 Specification</a>"
-msgstr ""
+msgstr "Địa chỉ chứa LeaseSet mã hóa thông thường được gọi là địa chỉ b33, một phần mở rộng của địa chỉ base32 với khóa công khai và loại chữ ký của máy chủ được mã hóa vào địa chỉ thay vì băm tìm kiếm. Loại địa chỉ này là bắt buộc cho Leasesets mờ. Thông tin chi tiết hơn: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>Tài liệu B33</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:447
 msgid "BOB"
@@ -9764,7 +9764,7 @@ msgstr "Dịch vụ nhảy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:517
 msgid "A simple CGI application that takes a hostname as a parameter and returns a 301 redirect to the proper URL with a <code>?i2paddresshelper=key</code> string appended. The HTTP proxy will interpret the appended string and use the key as the actual destination. In addition, the proxy will cache the key so the address helper is not necessary until restart, and offer the option to add the resolved address to the addressbook."
-msgstr ""
+msgstr "Một ứng dụng CGI đơn giản nhận tên miền làm tham số và trả về 301 phân luồng đến URL chính xác với xâu <code>?i2paddresshelper=key</code> đính kèm. Proxy HTTP sẽ diễn giải xâu đính kèm và sử dụng khóa làm đích thực tế. Thêm vào đó, proxy sẽ lưu trữ khóa để trợ giúp địa chỉ không cần thiết cho đến khi khởi động lại, và cung cấp tùy chọn để thêm địa chỉ giải quyết vào danh bạ."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:519
 msgid "Laptop Mode"
@@ -9808,7 +9808,7 @@ msgstr "NTCP / NTCP2"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:545
 msgid "NTCP (NIO-based TCP) and NTCP2 are TCP-based network transports which use Java's NIO (New I/O) TCP implementation to deliver I2NP messages between routers on the network. NTCP2 improves the resistance of NTCP to various attacks and automated traffic identification methods. For more information, see the <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "NTCP (dựa trên TCP NIO) và NTCP2 là giao thức mạng có cơ sở TCP sử dụng triển khai TCP NIO (NIO mới) của Java để chuyển tin nhắn I2NP giữa các bộ định tuyến trên mạng. NTCP2 cải thiện khả năng chống lại các cuộc tấn công và phương pháp xác định lưu lượng tự động của NTCP. Để biết thêm thông tin, hãy xem <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>tài liệu trực tuyến</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:547
 msgid "Orchid (plugin)"
@@ -10452,7 +10452,7 @@ msgstr "Định nghĩa bộ lọc sau áp dụng một số điều chỉnh tố
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:511
 msgid "Note that the full path to the output files must be accessible before deploying the filter. If the target directory does not exist, the destinations will not be recorded and an error will appear in the router logs. The files will be created as required. The examples provided above are not recommendations; your configuration should be tuned according to the amount of content (number and size of files) your site is serving, the speed of the server, and the frequency with which the site is updated. Configuring recorders and monitoring the resulting files will help you fine tune the settings."
-msgstr "Lưu ý rằng đường dẫn đầy đủ tới các tệp kết quả phải được truy cập trước khi triển khai bộ lọc. Nếu thư mục đích không tồn tại, các điểm đến sẽ không được ghi lại và một lỗi sẽ xuất hiện trong nhật ký của bộ định tuyến. Các tệp sẽ được tạo ra khi cần thiết. Các ví dụ được cung cấp ở trên không phải là khuyến nghị; cấu hình của bạn nên được điều chỉnh phù hợp với lượng nội dung (số lượng và kích thước các tệp) website cung cấp, tốc độ máy chủ, và tần suất website được cập nhật. Cấu hình máy ghi âm và theo dõi các tệp kết quả sẽ giúp bạn hiệu chỉnh tốt hơn các cài đặt. "
+msgstr "Lưu ý rằng đường dẫn đầy đủ đến tệp đầu ra phải có thể truy cập trước khi triển khai bộ lọc. Nếu thư mục đích không tồn tại, các đích sẽ không được ghi nhận và sẽ xuất hiện lỗi trong nhật ký bộ định tuyến. Các tệp sẽ được tạo ra khi cần thiết. Các ví dụ nêu trên không phải là khuyến nghị; cấu hình của bạn nên được điều chỉnh theo lượng nội dung (số lượng và kích thước tệp) website cung cấp, tốc độ máy chủ và tần suất cập nhật trang. Cấu hình bản ghi và theo dõi các tệp kết quả sẽ giúp bạn tối ưu hóa cài đặt."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:270
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:405
