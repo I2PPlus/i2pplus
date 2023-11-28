@@ -1,0 +1,70 @@
+<div lang="vi">
+
+<ul class="links">
+
+<li><b>Bắt đầu</b><br>
+Nếu bạn vừa bắt đầu sử dụng I2P+, số lượng <i>Đồng đội tích cực</i> hiển thị dưới mục <i>Đồng đội</i> trên thanh bên sẽ dần tăng trong vài phút tới, và bạn cũng sẽ thấy một <i>Điểm đến cục bộ</i> có tên <i>Khách hàng chung</i> được liệt kê dưới mục <i>Ống hầm dịch vụ</i>, và có thể còn các khách hàng và máy chủ khác tùy thuộc vào cấu hình của I2P. Những <i>Điểm đến cục bộ</i> này cung cấp kết nối đến các dịch vụ trên các <a href="/help/faq#portfaq" title="Danh sách cổng thông dụng" class="consolelink">cổng</a> khác nhau đến mạng lưới I2P, kích hoạt tính năng BitTorrent, thư điện tử, Proxy web và các dịch vụ khác.</li>
+
+<li><b>Tích hợp mạng</b><br>
+Lần đầu bạn bắt đầu I2P+, quá trình làm quen (tích hợp) bạn vào mạng và tìm thêm đồng đội có thể mất vài phút, vì vậy hãy kiên nhẫn. Khi có sao xanh bên cạnh các <i>Điểm đến cục bộ</i> của bạn dưới mục <i>Ống hầm dịch vụ</i> trên thanh bên, bạn có thể làm rất nhiều việc với I2P, và dưới đây chúng tôi sẽ giới thiệu một số thứ bạn có thể làm.</li>
+
+<li><b>Tình trạng mạng</b><br>
+Khi I2P+ kiểm tra kết nối mạng của bạn, chỉ số Tình trạng Mạng trên thanh bên nên hiển thị "OK". Nếu hiển thị là "Đang bị tường lửa", I2P+ vẫn hoạt động nhưng hiệu suất mạng sẽ không tối ưu, và khả năng đóng góp băng thông của bạn cũng bị hạn chế. Để hiệu suất tối ưu, hãy cố gắng mở <a href="/confignet#udpconfig" class="consolelink">cổng ngoài I2P+</a> trên tường lửa và router của nhà cung cấp. Thông tin chi tiết về các thông báo tình trạng có trên trang <a href="/help/ui#reachabilityhelp" class="consolelink">Trợ giúp giao diện</a>.</li>
+
+<li><b>Đăng ký danh bạ</b><br>
+Để I2P+ có thể tự động giải quyết tên miền .i2p, nó dựa chủ yếu vào việc đăng ký các dịch vụ cung cấp dịch chuyển DNS cho các máy chủ đã biết. Nếu bạn cài đặt I2P+ thay vì nâng cấp từ I2P, bạn đã có đủ <a href="/susidns/subscriptions" class="consolelink">đăng ký danh bạ</a> được cấu hình sau khi cài đặt, <a href="/dns" class="consolelink">danh bạ</a> của bạn sẽ tự động được điền đầy với tên miền của các dịch vụ hoạt động trên mạng mà không cần can thiệp thêm. Nếu bạn nâng cấp từ I2P, hãy xem phần <a href="/help/faq#addressbooksubs" class="consolelink">đăng ký danh bạ</a> trong <a href="/help/faq" class="consolelink">CÂU HỎI THƯỜNG GẶP</a> để biết cách thêm đăng ký.</li>
+
+<li><b>Cấu hình trình duyệt</b><br> 
+Để duyệt web trên mạng, bạn cần cấu hình trình duyệt để sử dụng Proxy HTTP mặc định được cấu hình trên cổng 4444, đồng thời cung cấp một <i>outproxy</i> cho phép duyệt web rõ ràng một cách ẩn danh. Trang <a href="/help/configuration#browserconfig" class="consolelink">hướng dẫn cấu hình Firefox</a> được cung cấp trên trang Cấu hình phần Trợ giúp, hoặc xem phần bên dưới để liên kết đến hướng dẫn cấu hình nhiều trình duyệt. Khi bạn đã cấu hình xong trình duyệt và đăng ký danh bạ, <a href="http://notbob.i2p/" target="_blank">notbob.i2p</a> là trang tuyệt vời để khám phá nội dung trên mạng.</li>
+
+</ul>
+
+<h3>Dịch vụ trên I2P</h3>
+
+<ul class="links twocol">
+
+<li><b>Internet vô hình và duyệt web công khai</b><br>
+Trên I2P bạn có thể truy cập các trang web được lưu trữ trên I2P ("eepsites") hoặc duyệt web bình thường một cách ẩn danh thông qua Proxy web tích hợp sẵn của I2P (outproxy). <a href="https://geti2p.net/en/about/browser-config" class="sitelink external" target="_blank" rel="noreferrer">Cấu hình trình duyệt</a> để sử dụng Proxy HTTP trên <code>127.0.0.1 cổng 4444</code>, sau đó truy cập vào trang web ẩn hoặc địa chỉ bình thường <code>http://</code>. Để tắt hoặc thay đổi truy cập outproxy đến internet bình thường, xóa hoặc sửa đổi mục outproxy cho <code>false.i2p</code> hoặc <code>purokishi.i2p</code> dưới mục <i>Outproxies</i> trên trang <a href="/i2ptunnel/edit?tunnel=0" target="_blank" rel="noreferrer" class="consolelink">chỉnh sửa</a> ống hầm Proxy HTTP trong <a href="/i2ptunnelmgr" class="consolelink">Quản lý ống hầm</a>.</li>
+
+<li><b>Thư điện tử ẩn danh</b><br>
+Hệ thống thư điện tử I2P của Postman có thể truy cập qua <a href="/webmail" class=onsolelink">khách thư được tích hợp sẵn của I2P</a> (Susimail) hoặc bất kỳ khách thư tiêu chuẩn nào. Một cổng thư cho phép nhận thư từ địa chỉ internet bình thường; địa chỉ <code>@mail.i2p</code> của bạn cũng có thể liên lạc qua <code>@i2pmail.org</code>. Để lấy tài khoản, truy cập <a href="http://hq.postman.i2p/" class="sitelink" target="_blank" rel="noreferrer">hq.postman.i2p</a>.</li>
+
+<li><b>Chuyển file ẩn danh</b><br>  
+<a href="/torrents" class="consolelink">I2PSnark</a> được tích hợp vào I2P, cung cấp chuyển torrent được mã hóa và ẩn danh. Thay vào đó có <a href="https://wiki.biglybt.com/w/I2P" class="sitelink external" target="_blank" rel="noreferrer">BiglyBT</a> (người kế nhiệm của Azureus/Vuze), khách torrent hỗ trợ tải torrent qua I2P, và <a hre"https://github.com/majestrate/XD" class="sitelink external" target="_blank" rel="noreferrer">XD</a>, khách torrent chỉ dành cho I2P được viết bằng Go. Các dịch vụ bổ sung bao gồm lưu trữ file dựa trình duyệt như <a href="http://cake.i2p/" class="sitelink" target="_blank" rel="noreferrer">cake.i2p</a> và <a href="http://fs.i2p/" class="sitelink" target="_blank" rel="noreferrer">fs.i2p</a>.</li>
+
+<li><b>Chat ẩn danh</b><br>  
+Khởi động khách IRC của bạn (v.d. <a href="https://hexchat.github.io/" class="sitelink external" target="_blank" rel="noreferrer">HexChat</a>) và kết nối tới <a href="irc://127.0.0.1:6668/i2p" class="chatlink">máy chủ</a> trên <code>127.0.0.1 cổng 6668</code>. Bạn không cần cấu hình proxy trong khách IRC; I2P cung cấp cho bạn ống hầm IRC cục bộ (cấu hình trong khách IRC như máy chủ IRC hoặc máy chủ xa). Khi đã vào, kênh <code>#saltr</code> và <code>#i2p-dev</code> chỉ là một vài kênh có thể tham gia. Còn có ứng dụng tin nhắn tức thời dựa trên I2P, có trên <a href="https://vituperative.github.io/i2pchat/" class="sitelink external" target="_blank" rel="noreferrer">Github</a>.</li>
+
+<li><b>Lưu trữ web được mã hóa và ẩn danh</b><br>
+I2P đi kèm máy chủ web để lưu trữ trang riêng của bạn trên mạng I2P: một thể hiện <a href="https://www.eclipse.org/jetty/" class="sitelink external" target="_blank" rel="noreferrer">Jetty</a> lắng nghe trên <a href="http://127.0.0.1:7658/" class="consolelink" target="_blank" rel="noreferrer">http://127.0.0.1:7658/</a>. Sau khi bật <a href="/i2ptunnelmgr" class="consolelink" target="_blank" rel="noreferrer">ống hầm web I2P</a> đã cấu hình trước, trang của bạn sẽ hiển thị (nhưng không tìm thấy) với người khác. Hướng dẫn cài đặt trang và đăng ký tên miền .i2p được cung cấp tại phần <a href="http://127.0.0.1:7658/help/webhosting" class="consolelink">hỗ trợ</a>.</li>
+
+<li><a name="pluins"></a><b>Plugins cho I2P</b><br>
+Truy cập <a href="http://stats.i2p/i2p/plugins/" class="sitelink" target="_blank" rel="noreferrer">trang plugins của zzz</a> để tải trực tiếp liên kết tải một số plugins. Nếu bạn là lập trình viên, một <a href="http://i2p-projekt.i2p/plugins.html" class="sitelink" target="_blank" rel="noreferrer">khuôn khổ</a> không phụ thuộc ngôn ngữ được cung cấp cho việc viết plugins riêng.</li>
+
+</ul> 
+
+<h3 id="trouble">Thông tin cho lập trình viên và người đóng góp</h3>
+
+<ul class="links">
+
+<li><b>Báo lỗi</b><br>
+Để báo lỗi, vui lòng tạo vé trên <a href"http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" class="sitelink" target="_blank" rel="noreferrer">git.idk.i2p</a>. Đối với thảo luận liên quan đến lập trình viên, vui lòng ghé thăm <a href="http://zzz.i2p/" class="sitelink" target="_blank" rel="noreferrer">diễn đàn lập trình viên của zzz</a> hoặc kênh <a href="irc://127.0.0.1:6668/i2p-dev" class="chatlink">dành cho lập trình viên</a> (#i2p-dev) trên mạng IRC của I2P.</li> 
+
+<li><b>Phát triển trên I2P</b><br>
+Nếu bạn là lập trình viên, bạn có thể cân nhắc viết các <a href="http://i2p-projekt.i2p/applications.html" class="sitelink" target="_blank" rel="noreferrer">ứng dụng I2P</a> riêng hoặc tăng cường an ninh cho ứng dụng bằng cách tận dụng mạng I2P. Cả giao thức <a href="https://wikipedia.org/wiki/User_Datagram_Protocol" class="sitelink external" target="_blank" rel="noreferrer">UDP</a> và <a href="https://wikipedia.org/wiki/Transmission_Control_Protocol" class="sitelink external" target="_blank" rel="noreferrer">TCP</a> đều được <a href="http://i2p-projekt.i2p/techintro.html#op.transport" class="sitelink" target="_blank" rel="noreferrer">hỗ trợ</a>, và truyền dữ liệu <a href="http://i2p-projekt.i2p/streaming.html" class="sitelink" target="_blank" rel="noreferrer">thời gian thực</a> cũng khả thi. Chúng tôi cũng cung cấp truy cập đầy đủ tới <a href="http://javadoc.skank.i2p/" class="sitelink" target="_blank" rel="noreferrer">Java API</a>, và thư viện cốt lõi I2P được lưu trữ trên <a href="https://mvnrepository.com/artifact/net.i2p" class="sitelink external" target="_blank" rel="noreferrer">kho Apache Maven</a>. Lập trình viên có thể duyệt mã nguồn trên <a href="https://github.com/i2p/i2p.i2p" class="sitelink external" target="_blank" rel="noreferrer">Github</a> (I2P) hoặc <a href="https://gitlab.com/i2pplus/I2P.Plus" class="sitelink external" target="_blank" rel="noreferrer">Gitlab</a> (I2P+), và theo dõi tình trạng xây dựng hiện tại qua nền tảng tích hợp liên tục <a href="https://travis-ci.org/i2p/i2p.i2p" class="sitelink external" target="_blank" rel="noreferrer">Travis</a> (I2P) hoặc <a href="https://gitlab.com/i2pplus/I2P.Plus/pipelines" class="sitelink external" target="_blank" rel="noreferrer">Gitlab</a> (I2P+). Yêu cầu <a href="https://wikipedia.org/wiki/Java_SDK" class="sitelink external" target="_blank" rel="noreferrer">Java SDK</a> và <a href="http://ant.apache.org/" class="sitelink external" target="_blank" rel="noreferrer">Apache Ant</a> để biên dịch từ mã nguồn.</li>
+
+</ul>
+
+<ul class="links twocol">
+
+<li><b>Tham gia!</b><br>
+I2P chủ yếu được phát triển và duy trì nhờ sự đóng góp tình nguyện không tài trợ của cộng đồng. Thông tin chi tiết về cách tham gia có trên <a href="http://i2p-projekt.i2p/getinvolved.html" class="sitelink" target="_blank" rel="noreferrer">trang tình nguyện viên</a> trên trang web chính thức.</li>
+
+<li><b>I2P+</b><br>
+Để biết thêm thông tin về I2P+, vui lòng truy cập <a href="http://skank.i2p/" class="sitelink" target="_blank" rel="noreferrer">skank.i2p</a> hoặc <a href="https://i2pplus.github.io/" class="sitelink external" target="_blank" rel="noreferrer">i2pplus.github.io</a>, hoặc tham gia kênh <a href="irc://127.0.0.1:6668/saltR" class="chatlink">#saltR</a> trên mạng IRC của I2P. Chúng tôi chào đón các bản sửa lỗi cho I2P+; vui lòng gửi yêu cầu kéo mã qua <a href="https://gitlab.com/i2pplus/I2P.Plus/" class="sitelink external" target="_blank" rel="noreferrer">Gitlab</a>.</li>
+
+</ul>
+
+<div class="topness"><a href="#top">[Quay lại đầu trang]</a></div>
+<div class="footnote"><hr>Tài liệu được cập nhật: Tháng 8 năm 2020</div>
+</div>
