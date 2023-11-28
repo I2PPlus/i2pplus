@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-11-28 02:08+0000\n"
+"PO-Revision-Date: 2023-11-28 02:47+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk_UA\n"
@@ -72,17 +72,17 @@ msgstr "Ініціювання повторного заповнення"
 #, java-format
 msgid "Acquired {0} router info from reseed hosts"
 msgid_plural "Acquired {0} router infos from reseed hosts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Отримав {0} routerinfo від Reseed Hosts"
+msgstr[1] "Отримав {0} routerinfos від Reseed Hosts"
+msgstr[2] "Отримав {0} routerinfos від Reseed Hosts"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:382
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Отримав лише 1 інформацію про маршрутизатор від Reseed Hosts"
+msgstr[1] "Отримав лише {0} маршрутизатор Infos від Reseed Hosts"
+msgstr[2] "Отримав лише {0} маршрутизатор Infos від Reseed Hosts"
 
 #. remove dupe error msgs
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:407
@@ -1144,9 +1144,9 @@ msgstr "Помилка перевірки оновлення плагіна"
 #, java-format
 msgid "{0} plugin updated"
 msgid_plural "{0} plugins updated"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} плагін оновлений"
+msgstr[1] "{0} плагіни оновлено"
+msgstr[2] "{0} плагіни оновлено"
 
 #: ../java/src/net/i2p/router/web/PluginStarter.java:252
 msgid "Plugin check complete"
@@ -2583,9 +2583,9 @@ msgstr "Помилка повторного завантаження з файл
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Reseed успішним, завантажений {0} routerinfo з файлу."
+msgstr[1] "Reseed успішно, завантажений {0} routerinfos з файлу."
+msgstr[2] "Reseed успішно, завантажений {0} routerinfos з файлу."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:105
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:681
@@ -2632,18 +2632,18 @@ msgstr "Зупинка в {0}"
 #, java-format
 msgid "{0} transit tunnel still active"
 msgid_plural "{0} transit tunnels still active"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} Транзитний тунель все ще активний"
+msgstr[1] "{0} Транзитні тунелі все ще активні"
+msgstr[2] "{0} Транзитні тунелі все ще активні"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:88
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:103
 #, java-format
 msgid "Please wait for routing commitment to expire for {0} tunnel"
 msgid_plural "Please wait for routing commitments to expire for {0} tunnels"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Будь ласка, зачекайте, поки термін дії маршрутизації закінчується для тунелю {0}"
+msgstr[1] "Будь ласка, зачекайте, поки термін дії маршрутизації закінчується для {0} тунелів"
+msgstr[2] "Будь ласка, зачекайте, поки термін дії маршрутизації закінчується для {0} тунелів"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:96
 #, java-format
@@ -2751,17 +2751,17 @@ msgstr "Помилка збереження конфігурації (засто
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} Хоп"
+msgstr[1] "{0} хмель"
+msgstr[2] "{0} хмель"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:23
 #, java-format
 msgid "{0} tunnel"
 msgid_plural "{0} tunnels"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} тунель"
+msgstr[1] "{0} Тунелі"
+msgstr[2] "{0} Тунелі"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:51
 msgid "Exploratory tunnels"
@@ -5293,9 +5293,9 @@ msgstr "Вони пропонують представити нас"
 #, java-format
 msgid "{0} fail"
 msgid_plural "{0} fails"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} Помилка"
+msgstr[1] "{0} не вдається"
+msgstr[2] "{0} не вдається"
 
 #. 2
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:704
@@ -5415,25 +5415,25 @@ msgstr "Дублювання пакетів, отриманих від вузл�
 #, java-format
 msgid "Showing {0} recent profile."
 msgid_plural "Showing {0} recent profiles."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Показ {0} недавній профіль."
+msgstr[1] "Показ {0} останні профілі."
+msgstr[2] "Показ {0} останні профілі."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Приховування {0} Старіший профіль."
+msgstr[1] "Приховування {0} Старіші профілі."
+msgstr[2] "Приховування {0} Старіші профілі."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:103
 #, java-format
 msgid "Hiding {0} standard profile."
 msgid_plural "Hiding {0} standard profiles."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Приховування {0} Стандартний профіль."
+msgstr[1] "Приховування {0} Стандартні профілі."
+msgstr[2] "Приховування {0} Стандартні профілі."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:104
 msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
@@ -5570,25 +5570,25 @@ msgstr "ровесники"
 #, java-format
 msgid "{0} fast peer"
 msgid_plural "{0} fast peers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} Швидкий однолітк"
+msgstr[1] "{0} швидкі однолітки"
+msgstr[2] "{0} швидкі однолітки"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:377
 #, java-format
 msgid "{0} high capacity peer"
 msgid_plural "{0} high capacity peers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} однолітки високої ємності"
+msgstr[1] "{0} однолітки високої ємності"
+msgstr[2] "{0} однолітки високої ємності"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:379
 #, java-format
 msgid "{0} integrated peer"
 msgid_plural "{0} integrated peers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} інтегровані однолітки"
+msgstr[1] "{0} інтегровані однолітки"
+msgstr[2] "{0} інтегровані однолітки"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:393
 msgid "1h Fail Rate"
@@ -5796,9 +5796,9 @@ msgstr "Середня частота за весь час"
 #, java-format
 msgid "{0} event"
 msgid_plural "{0} events"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} Подія"
+msgstr[1] "{0} Події"
+msgstr[2] "{0} Події"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:170
 msgid "rate"
@@ -5859,9 +5859,9 @@ msgstr "Середнє значення за весь період"
 #, java-format
 msgid "1 event"
 msgid_plural "{0} events"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 події"
+msgstr[1] "{0} events"
+msgstr[2] "{0} events"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:52
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:164
@@ -10827,7 +10827,7 @@ msgstr "Зазвичай це викликається конфліктом по
 msgid "Do you have another I2P instance running? Stop the conflicting program and restart I2P."
 msgstr "Чи працює інший екземпляр I2P? Зупиніть конфліктну програму та перезапустіть I2P."
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/hep/ui_jsp.java:645
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:645
 msgid "The skew (offset) of your computer's clock relative to the network-synced time."
 msgstr "Відхилення (зміщення) Вашого комп’ютерного годинника відносно часу, синхронізованого з мережею."
 
@@ -10892,8 +10892,8 @@ msgid "Setting up &amp; announcing your website"
 msgstr "Налаштування та розміщення оголошення про свій сайт"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:446
-msgid "Your webserver isunning by default at <a href=http://127.0.0.1:7658/>http://127.0.0.1:7658</a>, but is not accessible by others until you start the <i>I2P Webserver</i> tunnel. After starting the tunnel, your site will be difficult for other people to find. You could just tell people the destination or the Base32 address, but thankfully I2P has an address book to store domain names, and various services where you can <a href=/help/hostnameregistration>register a new .i2p domain</a> for free."
-msgstr "Ваш веб-сервер по замовчуванню працює за адресою <a href=http://127.0.0.1:7658/>http://127.0.0.1:7658</a>, але буде недоступний для інших допоки ви не запустите тунель <i>I2P Webserver</i>. Після запуску тунеля ваш сайт буде важко знайти для інших. Ви можете просто повідомити іншим destination або адресу Base32, але на щастя в I2P є адресна книга для зберігання доменних імен, а також різні сервіси де ви можете <a href=/help/hostnameregistration>зареєструвати новий домен .i2p</a> безкоштовно."
+msgid "Your webserver is running by default at <a href=http://127.0.0.1:7658/>http://127.0.0.1:7658</a>, but is not accessible by others until you start the <i>I2P Webserver</i> tunnel. After starting the tunnel, your site will be difficult for other people to find. You could just tell people the destination or the Base32 address, but thankfully I2P has an address book to store domain names, and various services where you can <a href=/help/hostnameregistration>register a new .i2p domain</a> for free."
+msgstr "Ваш веб-сервер працює за замовчуванням за адресою <a href=http://127.0.0.1:7658/>http://127.0.0.1:7658</a>, але недоступний для інших до початку тунелю <i>I2P Webserver</i>. Після запуску тунелю ваш сайт буде дуже важко знайти іншим. Ви можете просто повідомити людям адресу або базову 32-розрядну адресу, але на щастя в I2P є книга адрес, де можна зберігати імена доменів, і різні сервіси, де ви можете <a href=/help/hostnameregistration>зареєструвати новий домен .i2p</a> безкоштовно."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:450
 msgid "Click the <i>Start</i> button for your webserver tunnel on the <a href=/i2ptunnelmgr/>main Tunnel Manager page</a>. You should now see it listed under <i>Service Tunnels</i> on the <a href=/>Router Console</a> sidebar. A green star displayed next to the tunnel name (<i>I2P Webserver</i> by default) indicates that your website is active on the I2P network."
