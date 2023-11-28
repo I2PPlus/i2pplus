@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-11-28 00:53+0000\n"
+"PO-Revision-Date: 2023-11-28 02:08+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk_UA\n"
@@ -10056,7 +10056,7 @@ msgstr "Резервування маршрутизатора"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:435
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining. The default settings will work for most people. Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr ""
+msgstr "Перенасіння - це процес початкового завантаження для пошуку інших маршрутизаторів при першому встановленні I2P або коли у вашого маршрутизатора залишилось занадто мало посилань на інші маршрутизатори. За замовчуванням налаштування спрацюють для більшості користувачів. Змінюйте їх лише якщо HTTPS блокує жорсткий файрвол і перенасіння не вдалось."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:437
 msgid "If reseeding has failed, you should first check your network connection."
@@ -10077,262 +10077,262 @@ msgstr "Проксі може бути віддалено розміщений �
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:487
 msgid "Reseed Configuration page"
-msgstr ""
+msgstr "Сторінка налаштувань перенасіння"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:443
 #, java-format
 msgid "To use a proxy to reseed, configure the proxy type, hostname, and port on the {0}."
-msgstr ""
+msgstr "Щоб використовувати проксі для перенасіння, налаштуйте тип проксі, ім'я хоста та порт на сторінці {0}."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:445
 msgid "If you are running the Tor Browser, you may use its Tor instance by configuring I2P to use: <i>Proxy type:</i> <code>SOCKS 5</code> <i>Host:</i> <code>127.0.0.1</code> <i>Port:</i> <code>9150</code>."
-msgstr ""
+msgstr "Якщо ви використовуєте Tor Browser, ви можете використати його екземпляр Tor, налаштувавши I2P: <i>Тип проксі:</i> <code>SOCKS 5</code> <i>Хост:</i> <code>127.0.0.1</code> <i>Порт:</i> <code>9150</code>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:447
 msgid "If you are running a standalone Tor instance locally, you may use it by configuring I2P to use: <i>Proxy type:</i> <code>SOCKS 5</code> <i>Host:</i> <code>127.0.0.1</code> <i>Port:</i> <code>9050</code>."
-msgstr ""
+msgstr "Якщо ви запустили окремий екземпляр Tor локально, ви можете використати його, налаштувавши I2P: <i>Тип проксі:</i> <code>SOCKS 5</code> <i>Хост:</i> <code>127.0.0.1</code> <i>Порт:</i> <code>9050</code>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:449
 msgid "If you have some peers but need more, you may try the I2P Outproxy option. This will not work for the initial reseed when you have 0 known peers. Selecting this option will use the I2P HTTP outproxy (by default on <code>127.0.0.1:4444</code>) or, if configured, the Orchid Tor plugin."
-msgstr ""
+msgstr "Якщо ви вже маєте декількох пірів, але потрібно більше, ви можете спробувати використати опцію I2P Outproxy. Це не спрацює для початкового перенасіння, коли відомо 0 пірів. Обравши цю опцію, буде використовуватись HTTP outproxy I2P (за замовчуванням на <code>127.0.0.1:4444</code>) або, якщо налаштований, плагін Tor Orchid."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:451
 msgid "Then click the <i>Save changes</i> button to confirm the proxy configuration and then the <i>Reseed now</i> button to initiate the reseed process."
-msgstr ""
+msgstr "Потім натисніть кнопку <i>Зберегти зміни</i>, щоб підтвердити налаштування проксі, та кнопку <i>Перенасити зараз</i>, щоб ініціювати процес перенасіння."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:453
 #, java-format
 msgid "If you know and trust somebody that runs I2P, ask them to send you a reseed file generated using this page in their router console. Then, select the <i>Reseed from file</i> option on the {0} using the file you received."
-msgstr ""
+msgstr "Якщо ви знаєте і довіряєте комусь, хто користується I2P, попросіть їх надіслати вам файл перенасіння, згенерований на цій сторінці в їхній консолі маршрутизатора. Потім оберіть опцію <i>Перенасіння з файлу</i> на сторінці {0}, використовуючи отриманий файл."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:455
 #, java-format
 msgid "If you know and trust somebody that publishes reseed files, ask them for the URL. Then, click the <i>Reseed from URL</i> button on the {0} to reseed using the URL you received."
-msgstr ""
+msgstr "Якщо ви знаєте і довіряєте комусь, хто розміщує файли перенасіння, попросіть у них URL. Потім натисніть кнопку <i>Перенасіння з URL</i> на сторінці {0}, щоб перенаситися з отриманого URL."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:457
 msgid "How do I reseed manually?"
-msgstr ""
+msgstr "Як зробити перенасіння вручну?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:459
 msgid "An I2P router usually only needs to be seeded once, to join the network for the first time. However, if the router is running for an extended period without network connectivity it may also need to be reseeded. Reseeding involves fetching multiple \"RouterInfo\" files (bundled into a signed zip-file) from at least two predefined server URLs picked from a volunteer-run group of clearnet HTTPS servers."
-msgstr ""
+msgstr "Маршрутизатор I2P зазвичай потребується перенасити лише один раз, щоб вперше приєднатися до мережі. Проте, якщо маршрутизатор працюватиме довгий час без підключення до мережі, йому також може знадобитися перенасіння. Перенасіння полягає у завантаженні декількох файлів «RouterInfo» (упакованих у підписаний zip-архів) принаймні з двох заздалегідь визначених URL-адрес серверів, вибраних із групи добровільно керованих серверів HTTPS чистої мережі."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:461
 msgid "If the number of known peers drops below 50, I2P will attempt to reseed automatically. If the reseed attempt fails, a notification will appear in the sidebar with an option to manually reseed. A failed reseed attempt can occur if your local firewall limits outbound traffic, you are experiencing network connectivity issues, or if the reseed request is blocked entirely."
-msgstr ""
+msgstr "Якщо кількість відомих пірів спаде нижче 50, I2P спробує перенаситися автоматично. Якщо спроба перенасіння не вдасться, з'явиться повідомлення в боковій панелі з опцією для ручного перенасіння. Невдалу спробу перенасіння може спричинити обмеження місцевим файрволом вихідного трафіку, проблеми з мережним підключенням або повне блокування запиту на перенасіння."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:463
 #, java-format
 msgid "In the event that you suspect the request is being blocked, you can configure I2P to use a proxy to reseed. Go to the {0} and configure the proxy type, hostname, and port."
-msgstr ""
+msgstr "У випадку якщо ви підозрюєте, що запит блокується, ви можете налаштувати I2P для використання проксі для перенасіння. Перейдіть на сторінку {0} та налаштуйте тип проксі, ім'я хоста та порт."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:465
 msgid "If you are stuck behind an ISP firewall or filter, you can use the following manual method (non-automated technical solution) to join the I2P network."
-msgstr ""
+msgstr "Якщо ви знаходитесь за файрволом або фільтром Інтернет-провайдера, ви можете використовувати такий ручний метод (немає автоматизації технічного рішення), щоб приєднатися до мережі I2P:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:467
 msgid "Joining the I2P Network using a reseed file"
-msgstr ""
+msgstr "Приєднання до мережі I2P з використанням файлу перенасіння"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:469
 msgid "Please contact a known trustworthy friend who has a running I2P router, and ask them for help with reseeding your I2P router. Request that they send you a reseed file exported from their running I2P router. It is vital that the file is exchanged over a secure channel, e.g. encrypted to avoid external tampering (PGP Sign, Encrypt and Verified with a trusted public key). The file itself is unsigned, so please accept files only from known trusted friends. Never import a reseed file if you cannot verify its source."
-msgstr ""
+msgstr "Будь ласка, зв'яжіться з довіреним другом, у якого працює маршрутизатор I2P, та попросіть їх про допомогу з перенасінням вашого маршрутизатора I2P. Попросіть їх надіслати вам файл перенасіння, експортований з їхнього працюючого маршрутизатора I2P. Дуже важливо, щоб файл обмінювався по захищеному каналу, наприклад, був зашифрований для уникнення зовнішнього втручання (підпис PGP, шифрування та перевірка довіреною відкритим ключем). Сам файл не підписаний, тож беріть файли тільки від довірених друзів. Ніколи не імпортуйте файл перенасіння, якщо ви не можете перевірити його джерело."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:471
 msgid "To import the received i2preseed.zip file into your local I2P router:"
-msgstr ""
+msgstr "Щоб імпортувати отриманий файл i2preseed.zip в локальний маршрутизатор I2P:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:487
 #, java-format
 msgid "Go to the {0}"
-msgstr ""
+msgstr "Перейдіть на сторінку {0}"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:475
 msgid "Under <i>Select zip or su3 file</i> click <i>Browse&hellip;</i>"
-msgstr ""
+msgstr "У розділі <i>Оберіть zip або su3 файл</i> натисніть кнопку <i>Огляд&hellip;</i>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:477
 msgid "Select the i2preseed.zip file"
-msgstr ""
+msgstr "Оберіть файл i2preseed.zip"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:479
 msgid "Click the <i>Reseed from File</i> button"
-msgstr ""
+msgstr "Натисніть кнопку <i>Перенасіння з файлу</i>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:481
 msgid "Service (Wrapper) log"
-msgstr ""
+msgstr "Журнал сервісу (обгортка)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:481
 #, java-format
 msgid "The reseed status will be indicated on the sidebar. You can also check the {0} for the following message: <code>Reseed got 100 router infos from file with 0 errors</code>"
-msgstr ""
+msgstr "Статус перенасіння буде показаний у бічній панелі. Ви також можете перевірити {0} на наступне повідомлення: <code>Перенасіння отримало 100 інформацій про маршрутизаторів із файлу з 0 помилками</code>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:483
 msgid "Sharing a reseed file"
-msgstr ""
+msgstr "Поділитися файлом перенасіння"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:485
 msgid "For trusted friends you can use your local I2P router to give them a jump start:"
-msgstr ""
+msgstr "Для довірених друзів можна використовувати свій локальний маршрутизатор I2P, щоб допомогти їм розпочатися:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:489
 msgid "Under <i>Create Reseed File</i> click the <i>Create reseed file</i> button"
-msgstr ""
+msgstr "У розділі <i>Створити файл перенасіння</i> натисніть кнопку <i>Створити файл перенасіння</i>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:491
 msgid "Securely send the i2preseed.zip file to your friend"
-msgstr ""
+msgstr "Безпечно надішліть файл i2preseed.zip своєму другу"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:493
 msgid "Do not reveal this file to unknown users, as it contains sensitive data (100 RouterInfo files) from your own I2P router which potentially could be used by an adversary to decloak your identity. In order to protect your anonymity: you should wait for a few hours/days before sharing the file with your trusted friend. It is also advisable to use this procedure sparingly (no more than once a week)."
-msgstr ""
+msgstr "Не розголошуйте цей файл невідомим користувачам, оскільки він містить конфіденційні дані (100 файлів RouterInfo) з вашого власного маршрутизатора I2P, які потенційно можуть бути використані супротивником для розкриття вашої особистості. Щоб захистити свій анонімітет: вам варто зачекати кілька годин/днів перш ніж поділитися файлом зі своїм довіреним другом. Також рекомендується рідко (не частіше ніж 1 раз на тиждень) використовувати таку процедуру."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:495
 msgid "General guidelines for manual reseeding of I2P"
-msgstr ""
+msgstr "Загальні рекомендації для ручного перенасіння I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:497
 msgid "Do not publicly publish the reseed file or share these files with a friend of a friend!"
-msgstr ""
+msgstr "Не розміщуйте файл перенасіння публічно або не передавайте ці файли другу друга!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:499
 msgid "This file should be used only for a very limited number of friends (less than 3)."
-msgstr ""
+msgstr "Цей файл слід використовувати лише для дуже обмеженої кількості друзів (менше ніж 3)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:501
 msgid "The file will only be valid for a limited time (less than 3 weeks)."
-msgstr ""
+msgstr "Файл буде дійсним лише обмежений проміжок часу (менше ніж 3 тижні)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:435
 msgid "If you're experiencing issues with running I2P+, the following information may help identify and resolve the problem:"
-msgstr ""
+msgstr "Якщо ви стикаєтесь з проблемами при запуску I2P+, наступна інформація може допомогти визначити та вирішити проблему:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:437
 msgid "Be Patient!"
-msgstr ""
+msgstr "Будьте терплячі!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:439
 msgid "I2P+ may be slow to integrate into network the first time you run it as it bootstraps into the network and learns of additional peers. The longer your I2P+ router is running, the better it will perform, so try and keep your router on as long as you can, 24/7 if possible! If, after 30 minutes, your <i>Active: [connected/recent]</i> count still has less than 10 peers, or your total number of <i>Integrated</i> peers is less than 5, there are several things you can do to check for problems:"
-msgstr ""
+msgstr "I2P+ може початково інтегруватися в мережу повільно під час першого запуску, оскільки ініціює початкове підключення до мережі та збирає дані про додаткових пірів. Чим довше працює ваш маршрутизатор I2P+, том краще він буде працювати, тож намагайтеся тримати його увімкненим протягом усього дня, якщо це можливо! Якщо, через 30 хвилин, ваш підрахунок <i>Активний: [підключені/останні]</i> все ще менше 10 пірів або загальна кількість <i>Інтегрованих</i> пірів менше 5, існує декілька способів перевірити наявність проблем:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:441
 msgid "Check your Configuration &amp; Bandwidth Allocation"
-msgstr ""
+msgstr "Перевірте налаштування та розподіл пропускної здатності"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:443
 msgid "I2P+ functions best when you can accurately reflect the speed of your network connection in the <a href=/config>bandwidth configuration section</a>. By default I2P+ is configured with some fairly conservative values that will not suit many use cases, so please take time to review these settings and correct where necessary. The more bandwidth you allocate, <i>specifically</i> upstream bandwidth, the more you will benefit from the network."
-msgstr ""
+msgstr "I2P+ найкраще працює, коли ви зможете точно відобразити швидкість вашого мережевого з'єднання у розділі <a href=/config>налаштування пропускної здатності</a>. За замовчуванням I2P+ налаштований дещо консервативно, що не підійде для багатьох випадків використання, тож варто приділити час перегляду цих налаштувань та виправити за потреби. Чим більше пропускної здатності ви виділите, <i>саме</i> висхідну пропускну здатність, тим більше вигоди ви отримаєте від мережі."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:445
 msgid "Firewalls, Modems &amp; Routers"
-msgstr ""
+msgstr "Файрволи, модеми та маршрутизатори"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:447
 msgid "Where possible, please ensure I2P+/Java is allowed bi-directional port access from the internet by configuring your modem/router/pc firewall accordingly. If you're behind a prohibitive firewall but have unrestricted outbound access, I2P+ can still function; you can turn off inbound access and rely on <a href=http://i2p-projekt.i2p/udp.html target=_blank rel=noreferrer class=sitelink>SSU IP Address Detection</a> (<a href=https://wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer class='sitelink external'>firewall hole punching</a>) to connect you to the network, and your network status in the side panel will indicate \"Status: Firewalled\". For optimal performance, please ensure I2P's <a href=/confignet#udpconfig>external port</a> is visible from the internet (see below for more information)."
-msgstr ""
+msgstr "Якщо це можливо, перевірте, щоб I2P+/Java мав двонаправлений доступ до портів через Інтернет, належним чином налаштувавши модем, маршрутизатор або файрвол ПК. Якщо ви за захисним файрволом, але маєте необмежений вихідний доступ, I2P+ все одно зможе працювати; ви можете вимкнути вхідний доступ та використовувати <a href=http://i2p-projekt.i2p/udp.html target=_blank rel=noreferrer class=sitelink>виявлення IP-адреси SSU</a> (<a href=https://wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer class='sitelink external'>пробив файрволу</a>) для підключення до мережі, а статус мережі в бічній панелі буде показувати \"Статус: За файрволом\". Для оптимальної продуктивності перевірте, щоб зовнішній порт I2P <a href=/confignet#udpconfig>був видимий з Інтернету</a> (дивіться нижче для більшої інформації)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:449
 msgid "Check Your Proxy Settings"
-msgstr ""
+msgstr "Перевірте налаштування проксі"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:451
 msgid "If you cannot see any websites at all (not even <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>i2p-projekt.i2p</a>), make sure your browser's proxy is set to access http traffic (<i>not</i> https, <i>not</i> socks) via <code>127.0.0.1 port 4444</code>. If you need some help, there's <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>a guide</a> to configuring your browser for I2P use."
-msgstr ""
+msgstr "Якщо ви не бачите жодних вебсайтів взагалі (навіть <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>i2p-projekt.i2p</a>), перевірте, щоб проксі вашого браузера мав доступ до http-трафіку (<i>не</i> https, <i>не</i> socks) через <code>127.0.0.1 порт 4444</code>. Якщо потрібна допомога, є <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>посібник</a> з налаштування браузера для роботи з I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:453
 msgid "Check Your Logs"
-msgstr ""
+msgstr "Перевірте журнали"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:455
 msgid "<a href=/logs>Logs</a> may help resolve a problem. You may wish to paste excerpts in a <a href=http://i2pforum.i2p/ target=_blank rel=noreferrer>forum</a> for help, or perhaps <a href=http://cake.i2p/pastebin/ target=_blank rel=noreferrer class='sitelink external'>paste</a> it instead and reference the link on IRC for help."
-msgstr ""
+msgstr "<a href=/logs>Журнали</a> можуть допомогти вирішити проблему. Ви можете захотіти вставити уривки на <a href=http://i2pforum.i2p/ target=_blank rel=noreferrer>форумі</a> щоб отримати допомогу, або, можливо, <a href=http://cake.i2p/pastebin/ target=_blank rel=noreferrer class='sitelink external'>скопіювати</a> звідти та дати посилання на IRC для отримання допомоги."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:457
 msgid "Verify Java is Up to Date"
-msgstr ""
+msgstr "Перевірте, чи оновлено Java"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:459
 msgid "Ensure your Java is up to date. Version 1.8 or higher is required; version 11 or higher is recommended. Check your Java version at the top of <a href=/info>the router information page</a>."
-msgstr ""
+msgstr "Переконайтеся, що ваша Java оновлена. Вимагається версія 1.8 або вища; рекомендується 11 або вища. Перевірте версію Java на верхній частині <a href=/info>сторінки інформації про маршрутизатор</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:461
 msgid "Problems running on Legacy Hardware"
-msgstr ""
+msgstr "Проблеми при запуску на застарілому обладнанні"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:463
 msgid "[Linux/Unix/Solaris] If you can't start the router with <code>i2p/i2prouter start</code> try the <code>runplain.sh</code> script in the same directory. Root privileges are never required to run I2P+. If you need to compile the <a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>jBigi library</a> (which is necessary in rare cases), consult the documentation, visit the forums, or visit <a href=irc://127.0.0.1:6668/saltR class=chatlink>the I2P+ channel</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>IRC developer channel</a>."
-msgstr ""
+msgstr "[Linux/Unix/Solaris] Якщо ви не можете запустити маршрутизатор з <code>i2p/i2prouter start</code>, спробуйте скрипт <code>runplain.sh</code> в тій самій директорії. Права root ніколи не потрібні для роботи I2P+. Якщо вам потрібно скомпілювати <a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>бібліотеку jBigi</a> (що потрібно рідко), ознайомтесь з документацією, відвідайте форуми, або зверніться на <a href=irc://127.0.0.1:6668/saltR class=chatlink>канал I2P+</a> чи <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>IRC-канал розробників</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:465
 msgid "Enable Universal Plug and Play (UPnP)"
-msgstr ""
+msgstr "Увімкніть Universal Plug and Play (UPnP)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:467
 msgid "Your modem or router may support <a href=https://wikipedia.org/wiki/Universal_Plug_and_Play target=_blank rel=noreferrer>Universal Plug &amp; Play</a> (UPnP), which permits automatic port forwarding. Ensure UPnP support for I2P+ is enabled on the <a href=/confignet>config page</a>, then try to activate UPnP on your modem/router and possibly your computer also. Now try restarting the <a href=/>I2P+ router</a>. If successful, I2P+ should report \"Status: OK\" in the side panel once the I2P+ router completes initial connectivity tests."
-msgstr ""
+msgstr "Ваш модем або маршрутизатор може підтримувати <a href=https://wikipedia.org/wiki/Universal_Plug_and_Play target=_blank rel=noreferrer>Universal Plug &amp; Play</a> (UPnP), що дозволяє автоматичне пробивання портів. Переконайтеся, що підтримка UPnP для I2P+ увімкнена на <a href=/confignet>сторінці конфігурації</a>, потім спробуйте активувати UPnP на вашому модемі/маршрутизаторі, а також вашому комп'ютері. Тепер перезапустіть <a href=/>маршрутизатор I2P+</a>. Якщо все пройшло успішно, I2P+ повідомить \"Статус: OK\" на бічній панелі після завершення початкових перевірок підключення."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:469
 msgid "Port Forwarding"
-msgstr ""
+msgstr "Пробивання портів"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:471
 msgid "Open <a href=/confignet#udpconfig>I2P+'s port</a> on your modem, router and/or firewall(s) for better connectivity (ideally both UDP and TCP). More information on how to go about port forwarding can be found at <a href=http://portforward.com/ target=_blank rel=noreferrer class='sitelink external'>portforward.com</a>, in addition to our forums and IRC channels listed below. Note that I2P does not support connecting to the internet via an http or socks proxy [patches welcome!], though you can connect to proxies via I2P itself once connected to the network."
-msgstr ""
+msgstr "Відкрийте <a href=/confignet#udpconfig>порт I2P+</a> на вашому модемі, маршрутизаторі та/або файрволах для кращого підключення (ідеально як UDP, так і TCP). Додаткову інформацію про пробивання портів можна знайти на <a href=http://portforward.com/ target=_blank rel=noreferrer class='sitelink external'>portforward.com</a>, а також на наших форумах та IRC-каналах, зазначених нижче. Зауважте, що I2P не підтримує підключення до Інтернету через http- чи socks-проксі [внесення виправлень вітаються!], хоча після підключення до мережі ви можете підключатися до проксі через сам I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:473
 msgid "Getting Support Online"
-msgstr ""
+msgstr "Отримання підтримки онлайн"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:475
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "Ви також можете переглянути інформацію на сайті <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P</a>, опублікувати повідомлення на <a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank rel=noreferrer>форумі обговорень I2P</a> або зайти на канали <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> чи <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> внутрішньої мережі IRC I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:477
 msgid "Reporting Bugs"
-msgstr ""
+msgstr "Повідомлення про помилки"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:479
 msgid "If you'd like to report a bug, please file a ticket on <a href=http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues target=_blank rel=noreferrer class=sitelink>trac.i2p2.i2p</a>. For developer-related discussions, please visit <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>zzz's developer forums</a> or come and visit the <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>developer channel</a> on I2P's IRC network."
-msgstr ""
+msgstr "Якщо ви хочете повідомити про помилку, будь ласка, зареєструйте відповідний квиток на <a href=http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues target=_blank rel=noreferrer class=sitelink>trac.i2p2.i2p</a>. Для обговорень розробників відвідайте, будь ласка, <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>форум розробників zzz</a> або зайдіть на <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>канал розробників</a> в мережі IRC I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:481
 msgid "Further assistance is available here:"
-msgstr ""
+msgstr "Додаткову допомогу можна отримати тут:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:483
 msgid "I2P Support Forum"
-msgstr ""
+msgstr "Форум підтримки I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:485
 msgid "I2P Developers' Forum"
-msgstr ""
+msgstr "Форум розробників I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:487
 msgid "I2P Wiki"
-msgstr ""
+msgstr "Вікі I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:489
 msgid "The FAQ on <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> or <a href=https://geti2p.net/en/faq target=_blank rel=noreferrer>geti2p.net</a>"
-msgstr ""
+msgstr "Часті питання на <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> або <a href=https://geti2p.net/en/faq target=_blank rel=noreferrer>geti2p.net</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:491
 msgid "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink> on I2P's IRC network</a>."
-msgstr ""
+msgstr "Також можна спробувати <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> або <a href=irc://127.0.0.1:6668/i2p class=chatlink> на мережі IRC I2P</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:433
 msgid "Introduction to Tunnel Filtering"
-msgstr ""
+msgstr "Вступ до фільтрації тунелів"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:435
 msgid "Server tunnels, configurable in the <a href=/i2ptunnelmgr>Tunnel Manager</a>, provide a number of ways to limit access to the hosted service. Destination whitelisting, blacklisting, connection throttling, and tunnel filtering are methods provisioned to mitigate denial of service attacks, grant exclusive access to known I2P destinations, and manage traffic to the server."
-msgstr ""
+msgstr "Серверні тунелі, які налаштовуються в <a href=/i2ptunnelmgr>Менеджері тунелів</a>, надають кілька способів обмежити доступ до сервісу, що приймає. Білий та чорний список цілей, обмеження з'єднань та фільтрація тунелів - це методи, передбачені для зниження ризику загальмування послуги DDoS-атаками, надання виняткового доступу відомим цілям I2P та керування трафіком до сервера."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:437
 msgid "A tunnel filter can provide protection against denial of service attacks, without otherwise interrupting the service for genuine users, either in conjunction with the tunnel throttler or as an alternative strategy. It can also be used to log access to a hosted service to determine if the server is under attack, or simply to log all visitors by I2P destination. Additionally, a filter can function simultaneously as a whitelist and blacklist making it more flexible than the Tunnel Manager's access list controls. Note that multiple server tunnels can share a single filter file if you wish to implement a global filter."
-msgstr ""
+msgstr "Фільтр тунелів може забезпечити захист від загальмувань послуги атаками DDoS, не перериваючи при цьому роботу сервісу для справжніх користувачів, чи то разом з обмежувачем пропускної здатності тунелів, чи як альтернативну стратегію. Його також можна використовувати для реєстрації доступу до сервісу з метою визначення, чи зазнає сервер атаки, або просто для реєстрації всіх відвідувачів за цілями I2P. Крім того, фільтр може одночасно функціонувати як білий та чорний список, що робить його більш гнучким, ніж контроль списків доступу Менеджера тунелів. Зауважте, що декілька серверних тунелів можуть використовувати один файл фільтру, якщо ви бажаєте впровадити глобальний фільтр."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:441
 msgid "A filter is a text file that can contain one or more declarations. Blank lines and lines beginning with <i class=example>#</i> are ignored."
@@ -10360,83 +10360,83 @@ msgstr "Порогове значення, яке, якщо його буде п
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:453
 msgid "Note: The order of the declarations matters. The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file. Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager. Once configured, a definition file can be updated without requiring a restart of the target tunnel, although destinations that are blocked will persist until the tunnel is restarted."
-msgstr ""
+msgstr "Зауваження: важливим є порядок декларацій. Перша декларація порогу для певної цілі (явно вказана або зазначена у посиланому файлі) переважає будь-які майбутні пороги для тієї самої цілі, чи то явно вказані, чи зазначені у файлі. Зауваження: для застосування нового файлу фільтру, після вказівки його місцезнаходження в Менеджері тунелів, тунель потрібно перезапустити. Одноразово сконфігурований файл визначень можна оновлювати без перезапуску цільового тунелю, проте блокування цілей зберігатиметься до його перезапуску."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:457
-msgid "A threshold  defined by the number of connection attempts a remote destination is permitted to perform over a specified number of seconds before a \"breach\" occurs."
-msgstr ""
+msgid "A threshold defined by the number of connection attempts a remote destination is permitted to perform over a specified number of seconds before a \"breach\" occurs."
+msgstr "Поріг - це число спроб підключень, яке дозволяється віддаленій цілі здійснити протягом певної кількості секунд до того, як станеться \"порушення\". "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:459
 msgid "A threshold declaration can be expressed in one of the following ways:"
-msgstr ""
+msgstr "Декларацію порогу можна виразити одним із наступних способів: "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:461
 msgid "Numeric definition of the number of connection attempts in the period specified (in seconds) e.g. <i class=example>15/5</i>, <i class=example>60/60</i> etc."
-msgstr ""
+msgstr "Числове визначення кількості спроб підключення за вказаний період (в секундах), наприклад <i class=example>15/5</i>, <i class=example>60/60</i> тощо."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:463
 msgid "Note that if the number of connections is 1 (e.g. <i class=example>1/60</i>), the first connection attempt will result in a breach."
-msgstr ""
+msgstr "Зауважте, що якщо кількість з'єднань дорівнює 1 (наприклад <i class=example>1/60</i>), то вже перша спроба підключення призведе до порушення."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:465
 msgid "The keyword <i class=example>allow</i>. This threshold is never breached, i.e. an infinite number of connection attempts is permitted."
-msgstr ""
+msgstr "Ключове слово <i class=example>allow</i>. Цей поріг ніколи не порушується, тобто дозволяє нескінченну кількість спроб підключення."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:467
 msgid "The keyword <i class=example>deny</i>. This threshold is always breached, i.e. no connection attempts will be allowed."
-msgstr ""
+msgstr "Ключове слово <i class=example>deny</i>. Цей поріг завжди порушується, тобто жодні спроби підключення не дозволяться."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:469
 msgid "Default Threshold"
-msgstr ""
+msgstr "Типовий поріг"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:471
 msgid "The <i class=example>default</i> threshold applies to any reme destination not explicitly listed in the definition or in any of the referenced files. To set a default threshold use the keyword <i class=example>default</i>."
-msgstr ""
+msgstr "Типовий поріг <i class=example>default</i> застосовується до будь-якої віддаленої цілі, яка явно не вказана у визначенні або у будь-якому із посиланих файлів. Щоб встановити типовий поріг, використовуйте ключове слово <i class=example>default</i>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:473
 msgid "The following threshold definition <i class=example>180/60</i> specifies that the same remote destination is allowed to make 179 connection attempts during a 60 second period. If it makes one more attempt within the same period, the threshold will be breached and further connection attempts will be rejected until the end of the period:"
-msgstr ""
+msgstr "Наступне визначення порогу <i class=example>180/60</i> означає, що та сама віддалена ціль може здійснити 179 спроб підключення протягом 60-секундного періоду. Якщо протягом того самого періоду вона здійснить ще одну спробу, буде порушено поріг, і подальші спроби підключення будуть відхилятися до кінця періоду:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:475
 msgid "To allow all unspecified client destinations:"
-msgstr ""
+msgstr "Щоб дозволити усі невказані клієнтські цілі:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:477
 msgid "Or to deny all unspecified destinations:"
-msgstr ""
+msgstr "Або заборонити всі невказані цілі:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:479
 msgid "Note that there can only be a single reference to the <i class=example>default</i> keyword in a filter file. If unstated, all connections are permitted unless explicitly forbidden. Errors in the filter file will prevent a stopped tunnel from starting, so be sure to double check the syntax before deployment."
-msgstr ""
+msgstr "Зауважте, що у файлі фільтру може бути лише одне посилання на ключове слово <i class=example>default</i>. Якщо це не вказано, всі з'єднання дозволяються, крім явно заборонених. Помилки в файлі фільтру не дозволять зупиненому тунелю запуститися, тому двічі перевірте синтаксис перед впровадженням."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:481
 msgid "Explicit Thresholds"
-msgstr ""
+msgstr "Явні пороги"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:483
 msgid "Using the <i class=example>explicit</i> directive, a threshold can be applied to a remote destination listed in the definition itself, with the option to specify custom thresholds for multiple destinations. Remote destinations can also be excluded from the default threshold using the <i class=example>allow</i> keyword, or permanently blocked using the <i class=example>deny</i> keyword:"
-msgstr ""
+msgstr "Використовуючи директиву <i class=example>explicit</i>, поріг можна застосувати до віддаленої цілі, яка вказана у визначенні, з можливістю встановити власні пороги для декількох цілей. Віддалених цілей також можна виключити з типового порогу за допомогою ключового слова <i class=example>allow</i>, або блокувати назавжди за допомогою <i class=example>deny</i>:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:485
 msgid "Bulk Thresholds"
-msgstr ""
+msgstr "Пороги партіями"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:487
 msgid "For convenience you can maintain a list of destinations in a file and define a threshold for all of them in bulk:"
-msgstr ""
+msgstr "Для зручності ви можете тримати список цілей у файлі та встановити поріг для них усіх партіями:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:489
 msgid "Recorders"
-msgstr ""
+msgstr "Записувачі"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:491
 msgid "Recorders keep track of connection attempts made by a remote destination, and if that breaches the defined threshold, the destination gets logged in the specified file. Multiple recorders can be specified:"
-msgstr ""
+msgstr "Записувачі відстежують спроби підключення, зроблені віддаленою ціллю, і якщо це перевищує визначений поріг, ціль записується до вказаного файлу. Можна вказати декілька записувачів:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:493
 msgid "You can use a recorder to log the destinations of aggressive clients to a specified file, and then use that same file to throttle them. The following snippet defines a filter that initially allows all connection requests, but if any single destination exceeds 180 requests in 60 seconds, it gets throttled down to 30 requests every 60 seconds:"
-msgstr ""
+msgstr "Ви можете використовувати записувач для фіксації цілей агресивних клієнтів у певний файл, а потім використовувати цей самий файл для їх гальмування. Наступний фрагмент визначає фільтр, який спочатку дозволяє всі запити на підключення, але якщо будь-яка окрема ціль перевищує 180 запитів за 60 секунд, її гальмують до 30 запитів кожні 60 секунд:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:495
 msgid "by default there are no limits"
@@ -10468,32 +10468,32 @@ msgstr "Ви можете використовувати реєстратор в
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:509
 msgid "The following filter definition applies some throttling by default, no throttling for destinations in the file <i class=example>friends.txt</i>, forbids any connections from destinations in the file <i class=example>enemies.txt</i>, and logs any aggressive behavior in a file called <i class=example>suspicious.txt</i>:"
-msgstr ""
+msgstr "Наступне визначення фільтру ставить деяке гальмування за замовчуванням, не ставить гальмування для цілей у файлі <i class=example>friends.txt</i>, забороняє будь-які з'єднання з цілей у файлі <i class=example>enemies.txt</i>, і фіксує будь-яку агресивну поведінку у файлі під назвою <i class=example>suspicious.txt</i>:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:511
 msgid "Note that the full path to the output files must be accessible before deploying the filter. If the target directory does not exist, the destinations will not be recorded and an error will appear in the router logs. The files will be created as required. The examples provided above are not recommendations; your configuration should be tuned according to the amount of content (number and size of files) your site is serving, the speed of the server, and the frequency with which the site is updated. Configuring recorders and monitoring the resulting files will help you fine tune the settings."
-msgstr ""
+msgstr "Зауважте, що повний шлях до вихідних файлів повинен бути доступним перед розгортанням фільтру. Якщо цільова директорія не існує, цілі не будуть записані і з'явиться помилка в журналах маршрутизатора. Файли будуть створюватися за необхідністю. Приклади вище не є рекомендаціями; вашу конфігурацію потрібно налаштувати залежно від кількості контенту (кількості і розміру файлів), що обслуговує ваш сайт, швидкості сервера та частоти оновлення сайту. Налаштування записувачів і спостереження за утвореними файлами допоможуть точніше налаштувати параметри."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:270
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:405
 msgid "User Interface Help"
-msgstr "Довідка користувальницького інтерфейсу"
+msgstr "Довідка з користувальницького інтерфейсу"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:433
 msgid "Note: Many of the labels and options in the console have tooltips that indicate purpose or explain the meaning. Hover over the label or option to activate the tooltip."
-msgstr ""
+msgstr "Примітка: багато підписів і опцій у консолі мають підказки, що вказують на призначення або пояснюють значення. Наведіть вказівник на підпис або опцію для активації підказки."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:435
 msgid "Theme Overrides"
-msgstr "Тема переосмислює"
+msgstr "Перевизначення теми"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:437
 msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr ""
+msgstr "I2P+ підтримує користувацькі перевизначення тем для консолі, менеджера тунелів, I2PSnark, SusiDNS та Susimail, дозволяючи вносити зміни до тем, які зберігаються після оновлень. Щоб активувати перевизначення, створіть css-файл під назвою <code>override.css</code> з вашими змінами теми і помістіть його у відповідну директорію теми тієї теми, яку ви бажаєте змінити, або перейменуйте один із прикладових файлів, і потім перезапустіть браузер. Зауважте, що менеджер тунелів та консоль використовують той самий override.css. Щоб деактивувати перевизначення, видаліть чи перейменуйте файл <code>override.css</code> і перезапустіть браузер (зазвичай Control+Shift+R)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:439
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr ""
+msgstr "Директорія з темами розташована у каталозі застосунку I2P під <code>docs/themes</code>. Є прикладові файли перевизначень у підкаталогах тем консолі та I2PSnark."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:441
 msgid "Sidebar Information"
@@ -10501,147 +10501,147 @@ msgstr "Інформація про бічну панель"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:443
 msgid "Many of the stats on the sidebar may be <a href='/configstats'>configured</a> to be <a href='/graphs'>graphed</a> for further analysis. You may also customize the sections that appear on the Sidebar and their positioning on the <a href='/configsidebar'>Sidebar Configuration page</a>."
-msgstr ""
+msgstr "Багато статистичних даних у бічній панелі можуть бути <a href='/configstats'>налаштовані</a> для <a href='/graphs'>графічного</a> аналізу. Ви також можете налаштувати розділи, що з'являються в бічній панелі та їх розміщення на сторінці <a href='/configsidebar'>налаштування бічної панелі</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:447
 msgid "Local Identity"
-msgstr ""
+msgstr "Локальна ідентичність"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:449
 msgid "If you hover over the <i>Router Info</i> heading, your truncated router identity will be shown (the first four characters (24 bits) of your 44-character (256-bit) Base64 router hash). The full hash is shown on your <a href='netdb?r=.'>Network Database entry</a>. Never reveal this to anyone, as your router identity is uniquely linked to your IP address in the network database."
-msgstr ""
+msgstr "Якщо навести вказівник на заголовок <i>Інформація про маршрутизатор</i>, буде показано скорочену ідентичність вашого маршрутизатора (перші чотири символи (24 біта) з 44-символьного (256-бітного) хеша маршрутизатора у Base64). Повний хеш показаний на сторінці <a href='netdb?r=.'>запису в мережевій базі даних</a>. Ніколи нікому не розголошуйте це, оскільки ідентичність вашого маршрутизатора унікальним чином пов'язана з вашою IP-адресою в мережевій базі даних."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:453
 msgid "The version of the I2P software you are running. If a new version is available, you will be notified in the Sidebar. It is recommended to keep your router up to date to ensure optimal performance and security. Router updates are usually made available on average every 2-3 months."
-msgstr ""
+msgstr "Версія програмного забезпечення I2P, яке ви використовуєте. Якщо доступна нова версія, ви отримаєте повідомлення в бічній панелі. Рекомендується тримати маршрутизатор оновленим для забезпечення оптимальної продуктивності та безпеки. Оновлення маршрутизаторів, як правило, стають доступними в середньому кожні 2-3 місяці."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:457
 msgid "The skew (offset) of your computer's clock relative to the network-synced time (if known). I2P requires your computer's time be accurate. If the skew is more than a few seconds, please correct the problem by adjusting your computer's time. If I2P cannot connect to the internet, a reading of 0ms may be indicated. Note: This is only displayed in the <i>Router Information (advanced)</i> section. You may add this section to your Sidebar on the <a href='/configsidebar'>Sidebar Configuration page</a>."
-msgstr ""
+msgstr "Зсув (зміщення) годинника вашого комп’ютера відносно синхронізованого з мережею часу (якщо відомо). I2P вимагає точного часу на вашому комп'ютері. Якщо зсув перевищує кілька секунд, будь ласка, виправте цю проблему шляхом коригування часу на комп'ютері. Якщо I2P не може підключитися до Інтернету, може бути показано 0 мс. Зауваження: це відображається лише в розділі <i>Інформація про маршрутизатор (розширена)</i>. Ви можете додати цей розділ до своєї бічної панелі на сторінці <a href='/configsidebar'>налаштування бічної панелі</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:461
 msgid "This indicates the amount of RAM I2P is using, and the total amount available, allocated by Java. If the usage is consistently high relative to the available RAM, this may indicate that you need to increase the ram allocated to the JVM. You can allocate more RAM by editing your <code>wrapper.config</code> file which is normally located in the I2P application directory. You will need to edit the <code>wrapper.java.maxmemory</code> parameter, which by default is set to 256(MB) for I2P, or 384 for I2P+. Note: if the memory bar is enabled, the memory entry in the router info section will be suppressed."
-msgstr ""
+msgstr "Це вказує обсяг оперативної пам'яті, який використовує I2P, та загальний доступний обсяг, виділений Java. Якщо використання постійно високе відносно доступної RAM, це може свідчити про необхідність збільшення обсягу пам'яті, виділеної JVM. Ви можете виділити більше пам'яті, редагуючи файл <code>wrapper.config</code>, який, як правило, розташований у каталозі застосунку I2P. Вам потрібно буде відредагувати параметр <code>wrapper.java.maxmemory</code>, за замовчуванням встановлений у 256(МБ) для I2P або 384 для I2P+. Зауваження: якщо ввімкнено пам'яткову смугу, відображення запису про пам'ять у розділі інформації про маршрутизатор буде приховано."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:467
 msgid "The first number is the number of peers your router has sent or received a message from in the last few minutes. This may range from 8-10 to several hundred, depending on your total bandwidth, shared bandwidth, and locally-generated traffic. The second number is the number of peers seen in the last hour or so. Do not be concerned if these numbers vary widely. <a href='/configstats#router.activePeers'>[Enable graphing]</a>."
-msgstr ""
+msgstr "Перше число - це кількість пірів, з якими ваш маршрутизатор надіслав або отримав повідомлення за останні кілька хвилин. Це може коливатися від 8-10 до кількох сотень, в залежності від загальної пропускної здатності, спільно використовуваної пропускної здатності та локального трафіку. Друге число - це кількість пірів, помічених за останню годину або около того. Не хвилюйтеся, якщо ці числа значно коливаються. <a href='/configstats#router.activePeers'>[Увімкнути графіку]</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:471
 msgid "This is the number of peers your router has available for building client tunnels. It is generally in the range 8-30. Your fast peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.fastPeers'>[Enable graphing]</a>"
-msgstr ""
+msgstr "Це кількість пірів, які доступні вашому маршрутизатору для формування клієнтських тунелів. Зазвичай це 8-30. Ваші швидкі піри показані на сторінці <a href='/profiles'>Профілів</a>. <a href='/configstats#router.fastPeers'>[Увімкнути графіку]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
 msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier.Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
-msgstr ""
+msgstr "Це кількість пірів, доступних вашому маршрутизатору для формування розвідувальних тунелів, які використовуються для визначення продуктивності мережі. Зазвичай це 8-75. Швидкі піри входять до верхнього тиру пропускної здатності. Ваші піри верхнього тиру пропускної здатності показані на сторінці <a href='/profiles'>Профілів</a>. <a href='/configstats#router.highCapacityPeers'>[Увімкнути графіку]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:479
 msgid "This is the number of peers your router will use for network database inquiries. These are usually the <i>floodfill</i> routers which are responsible for maintaining network integrity. Your well integrated peers are shown on the bottom of the <a href='/profiles'>Profiles page</a>."
-msgstr ""
+msgstr "Це кількість пірів, які буде використовувати ваш маршрутизатор для запитів до мережевої бази даних. Це, як правило, маршрутизатори <i>розливальники</i>, відповідальні за підтримку цілісності мережі. Ваші добре інтегровані піри показані знизу на сторінці <a href='/profiles'>Профілів</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:483
 msgid "This is the total number of peers that are known by your router. They are listed on the <a href='/netdb'>Network Database page</a>. This may range from under 100 to 1000 or more. This number is not the total size of the network; it may vary widely depending on your total bandwidth, shared bandwidth, and locally-generated traffic. I2P does not require a router to know every other router in the network."
-msgstr ""
+msgstr "Це загальна кількість пірів, що відомі вашому маршрутизатору. Вони перелічені на сторінці <a href='/netdb'>Мережевої бази даних</a>. Це може коливатися від менше 100 до 1000 або більше. Це число не є загальним розміром мережі; воно може суттєво відрізнятися в залежності від загальної пропускної здатності, спільно використовуваної пропускної здатності та локального трафіку. I2P не вимагає, щоб маршрутизатор знав кожен інший маршрутизатор в мережі."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:485
 msgid "Bandwidth In/Out"
-msgstr ""
+msgstr "Пропускна здатність увійшов/вийшов"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:487
 msgid "This section indicates your average bandwidth speeds and total usage for the session. All values are in bytes per second. You may change your bandwidth limits on the <a href='/config'>Bandwidth Configuration page</a>. The more bandwidth you make available, the more you help the network and improve your own anonymity, so please take the time to review the settings. If you are unsure of your network's speed, using a service such as <a href='http://speedtest.net/'>SpeedTest</a> or similar will give you a good indication of your bandwidth capability. Your upstream share amount (KBps Out) will determine your overall contribution to the network. Bandwidth is <a href='/graphs'>graphed</a> by default."
-msgstr ""
+msgstr "Цей розділ показує середню швидкість пропускної здатності та загальний обсяг використання за сеанс. Всі значення подані в байтах за секунду. Ви можете змінити ліміти пропускної здатності на сторінці <a href='/config'>Налаштування пропускної здатності</a>. Чим більше пропускної здатності ви надаватимете, тим більше ви допомагатимете мережі й покращуватимете власну анонімність, тому будь ласка, приділіть час перегляду налаштувань. Якщо ви не впевнені в швидкості своєї мережі, скористайтеся сервісом типу <a href='http://speedtest.net/'>SpeedTest</a> або аналогічним, щоб отримати уявлення про свою пропускну здатність. Ваш обсяг поділу у висхідному напрямку (КБпс Вихід) визначатиме ваш загальний внесок до мережі. Пропускну здатність <a href='/graphs'>статистики графіків</a> за замовчуванням."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:489
 msgid "Local Destinations"
-msgstr ""
+msgstr "Локальні цілі"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:491
-msgid "These are the local services provided by your router. They may be clients started through the <a href='/i2ptunnelmgr'>Tunnel Manager</a> or external programs connecting through SAM, BOB, or directly to I2CP. By default, most of your client services (mail, http proxy, IRC) will share the same set of tunnels and be listed as <i>Shared Clients</i> and <i>Shared Clients(DSA)</i>, which enhances anonymity by blending the traffic from all shared services, and reduces the overhead required to build and maintain tunnels. However, if you experience a tunnel failure, all your services will go offline at the same time, so in some scenarios you may wish to configure client services to use their own set of tunnels. This can be done by unchecking the <i>Share tunnels with other clients&hellip;</i> option listed under <i>Shared Clients</i> on the configuration page of the relevant client service in the Tunnel Manager, after which you will need to restart the client service from the <a href='/i2ptunnelmgr'>main Tunnel Manager page</a>."
-msgstr ""
+msgid "These are the local services provided by your router. They may be clients started through the <a href='/i2ptunnelmgr'>Tunnel Manager</a> or external programs connecting through SAM, BOB, or directly to I2CP. By default, most of your client services (mail, http proxy, IRC) will share the same set of tunnels and be listed as <i>Shared Clients</i> and <i>Shared Clients(DSA)</i>, which enhances anonymity by blending the traffic from all shared services, and reduces the overhead required to build and maintain tunnels. However, if you experience a tunnel failure, all your services will go offline at the same time, so in some scenarios you may wish to configure client services to use their own set of tunnels. This can be done by unchecking the <i>Share tunnels with other clients&hellip;</i> option listed under <i>Shared Clients</i> on the configuration page of the relevant client service in the Tunnel Manager, after which you will need to restart the client service from the  <a href='/i2ptunnelmgr'>main Tunnel Manager page</a>."
+msgstr "Це локальні послуги, надані вашим маршрутизатором. Це можуть бути клієнти запущені через <a href='/i2ptunnelmgr'>Менеджер тунелів</a> або зовнішні програми, що підключаються через SAM, BOB або безпосередньо до I2CP. За замовчуванням, більшість ваших клієнтських послуг (пошта, HTTP-проксі, IRC) будуть використовувати той самий набір тунелів і відображатимуться як <i>Спільні клієнти</i> та <i>Спільні клієнти(DSA)</i>, що покращує анонімність шляхом змішування трафіку з усіх спільних послуг і знижує навантаження, необхідне для побудови та підтримки тунелів. Проте, якщо ви помітите відмову тунелю, усі ваші послуги відключаться одночасно. Тому в деяких сценаріях ви можете захотіти налаштувати клієнтські послуги так, щоб вони використовували власний набір тунелів. Це можна зробити унеможлививши опцію <i>Поділяти тунелі з іншими клієнтами&hellip;</i> на сторінці конфігурації відповідної послуги клієнта в Менеджері тунелів, після чого необхідно буде перезапустити послугу клієнта з головної сторінки <a href='/i2ptunnelmgr'>Менеджеру тунелів</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:495
 msgid "The actual tunnels are shown on the <a href='/tunnels'>Tunnels page</a>."
-msgstr ""
+msgstr "Фактичні тунелі показані на сторінці <a href='/tunnels'>Тунелів</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:499
 msgid "Tunnels built by your router and used for communication with the floodfill peers, building new tunnels, and testing existing tunnels."
-msgstr ""
+msgstr "Тунелі побудовані вашим маршрутизатором для зв'язку з пірами-розливальниками, для формування нових тунелів та перевірки існуючих."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:503
 msgid "Tunnels built by your router for each client's use."
-msgstr ""
+msgstr "Тунелі побудовані вашим маршрутизатором для кожної клієнтської послуги."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:507
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
-msgstr ""
+msgstr "Тунелі, побудовані іншими маршрутизаторами через ваш маршрутизатор. Це може значно відрізнятися залежно від попиту в мережі, вашої спільно використовуваної пропускної здатності та обсягу локально генерованого трафіку. Рекомендований метод обмеження участі в тунелях - зміна відсоткової частки на сторінці <a href='/config'>Налаштування пропускної здатності</a>. Ви також можете обмежити загальну кількість, встановивши <code>router.maxParticipatingTunnels=nnn</code> на сторінці <a href='/configadvanced'>Розширені налаштування</a>. <a href='/configstats#tunnel.participatingTunnels'>[Увімкнути графіку]</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:509
 msgid "Share Ratio"
-msgstr ""
+msgstr "Коефіцієнт участі"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:511
 msgid "The number of participating tunnels you route for others, divided by the total number of hops in all your exploratory and client tunnels. A number greater than 1.00 means you are contributing more tunnels to the network than you are using."
-msgstr ""
+msgstr "Кількість тунелів участі, які ви прокладаєте для інших, поділена на загальну кількість проміжків у всіх ваших розвідувальних і клієнтських тунелях. Число більше 1,00 означає, що ви надаєте до мережі більше тунелів, ніж використовуєте."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:515
 msgid "Some basic indications of router overload:"
-msgstr ""
+msgstr "Деякі базові ознаки перевантаження маршрутизатора:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:517
 msgid "Job Lag"
-msgstr ""
+msgstr "Затримка завдань"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:519
-msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
-msgstr ""
+msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable grphing]</a>."
+msgstr "На який час завдання чекають виконання. Черга завдань показана на сторінці <a href='/jobs'>Завдань</a>. На жаль, в маршрутизаторі є й інші черги завдань, що можуть бути завантажені, а їхній статус недоступний на консолі маршрутизатора. Зазвичай затримка завдань повинна дорівнювати нулю. Якщо вона постійно перевищує 500 мс, ваш комп'ютер дуже повільний, мережа випадково відключається або в маршрутизаторі є серйозні проблеми. <a href='/configstats#jobQueue.jobLag'>[Увімкнути графіку]</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:521
 msgid "Message Delay"
-msgstr ""
+msgstr "Затримка повідомлень"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:523
 msgid "How long an outbound message waits in the queue. This should generally be a few hundred milliseconds or less. If it is consistently higher than 1000ms, your computer is very slow, or you should adjust your bandwidth limits, or your (BitTorrent?) clients may be sending too much data and should have their transmit bandwidth limit reduced. <a href='/configstats#transport.sendProcessingTime'>[Enable graphing]</a> (transport.sendProcessingTime)."
-msgstr ""
+msgstr "Який час вихідне повідомлення чекає в черзі. Зазвичай це кілька сотень мілісекунд або менше. Якщо воно постійно перевищує 1000 мс, ваш комп'ютер занадто повільний, або слід налаштувати ліміти пропускної здатності, або біторентні клієнти можуть надсилати занадто багато даних і їхній ліміт передачі має бути знижений. <a href='/configstats#transport.sendProcessingTime'>[Увімкнути графіку]</a> (transport.sendProcessingTime)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:527
 msgid "This is the number of pending requests from other routers to build a participating tunnel through your router. It should usually be close to zero. If it is consistently high, your computer is too slow, and you should reduce your share bandwidth limits."
-msgstr ""
+msgstr "Це кількість очікуваних запитів від інших маршрутизаторів на будівництво тунелю участі через ваш маршрутизатор. Зазвичай вона повинна бути близькою до нуля. Якщо вона постійно висока, ваш комп'ютер занадто повільний, а ви повинні знизити ліміти спільної пропускної здатності."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:529
 msgid "Accepting/Rejecting"
-msgstr ""
+msgstr "Приймає/Відкидає"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:531
 msgid "Your router's status on accepting or rejecting requests from other routers to build a participating tunnel through your router. Your router may accept all requests, accept or reject a percentage of requests, or reject all requests for a number of reasons, to control the bandwidth and CPU demands and maintain capacity for local clients. <b>Note"
-msgstr ""
+msgstr "Статус вашого маршрутизатора щодо прийняття або відхилення запитів від інших маршрутизаторів на будівництво тунелю участі через ваш маршрутизатор. Ваш маршрутизатор може приймати всі запити, приймати або відхиляти певний відсоток запитів, або відхиляти всі запити з певних причин, щоб контролювати потреби пропускної смуги та процесора, і підтримувати потужність для локальних клієнтів. <b>Примітка"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:533
 msgid "It will take at least 10 minutes from your router starting for it to accept building participating tunnels in order to ensure your router is stable and successfully bootstrapped to the network."
-msgstr ""
+msgstr "Вашому маршрутизатору знадобиться принаймні 10 хвилин від моменту запуску, щоб приймати будівництво тунелів участі, аби гарантувати його стабільність і успішне підключення до мережі."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:535
 msgid "<b>Note"
-msgstr ""
+msgstr "<b>Примітка"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:537
 msgid "This section is not enabled by default unless <a href='/help/configuration#advancedconsole'>Advanced Console mode</a> is enabled. You may enable it on the <a href='/configsidebar'>Sidebar Configuration page</a>."
-msgstr ""
+msgstr "Цей розділ за замовченням не включений, якщо режим <a href='/help/configuration#advancedconsole'>Розширеної консолі</a> не активований. Ви можете активувати його на сторінці <a href='/configsidebar'>Налаштування бокової панелі</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:539
 msgid "Reachability Help"
-msgstr ""
+msgstr "Допомога з досяжністю"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:543
 msgid "If you think you have opened up your firewall and I2P still thinks you are firewalled, remember that you may have multiple firewalls, for example both software packages and external hardware routers."
-msgstr ""
+msgstr "Якщо ви думаєте, що відкрили фаєрвол і I2P все одно вважає, що ви за фаєрволом, пригадайте, що ви можете мати кілька фаєрволів, наприклад як програмні пакети, так і зовнішні апаратні маршрутизатори."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:545
 msgid "If there is an error, the <a href=\"/logs\">logs</a> may also help diagnose the problem."
-msgstr ""
+msgstr "Якщо є помилка, <a href=\"/logs\">журнали</a> також можуть допомогти діагностувати проблему."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:549
 msgid "Your UDP port does not appear to be firewalled."
-msgstr ""
+msgstr "Ваш UDP-порт, як видається, не заблокований фаєрволом."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:551
 msgid "Firewalled"
@@ -10649,99 +10649,99 @@ msgstr "За фаєрволом"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:553
 msgid "Your UDP port appears to be firewalled."
-msgstr ""
+msgstr "Ваш UDP-порт, як видається, заблокований фаєрволом."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:555
 msgid "As the firewall detection methods are not 100% reliable, this may occasionally be displayed in error."
-msgstr ""
+msgstr "Оскільки методи виявлення фаєрволів не є 100% надійними, це може прийомно відображатися помилково."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:557
 msgid "However, if it appears consistently, you should check whether both your external and internal firewalls are open for your port."
-msgstr ""
+msgstr "Проте, якщо це трапляється постійно, слід перевірити, чи відкриті для вашого порту як зовнішній, так і внутрішній фаєрволи."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:559
 msgid "I2P will work fine when firewalled, there is no reason for concern. When firewalled, the router uses \"introducers\" to relay inbound connections."
-msgstr ""
+msgstr "I2P буде працювати нормально за наявності фаєрволу, немає жодної підстави для стурбованості. За наявності фаєрволу маршрутизатор використовує «вступників» для реле вхідних з'єднань."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:561
 msgid "However, you will get more participating traffic and help the network if you open your firewall."
-msgstr ""
+msgstr "Проте, відкривши фаєрвол, ви отримаєте більше учасницького трафіку і допоможете мережі."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:563
 msgid "If you think you have already done so, remember that you may have both a hardware and a software firewall, or be behind an additional, institutional firewall you cannot control."
-msgstr ""
+msgstr "Якщо ви вважаєте, що вже це зробили, пригадайте, що ви можете мати як апаратний, так і програмний фаєрволи, або перебувати за додатковим інституційним фаєрволом, який ви не можете контролювати."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:565
 msgid "Also, some routers cannot correctly forward both TCP and UDP on a single port, or may have other limitations or bugs that prevent them from passing traffic through to I2P."
-msgstr ""
+msgstr "Крім того, деякі маршрутизатори не можуть правильно передавати TCP і UDP по одному порту або можуть мати й інші обмеження чи помилки, що перешкоджають передачі трафіку до I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:569
 msgid "The router is currently testing whether your UDP port is firewalled."
-msgstr ""
+msgstr "Маршрутизатор на даний момент перевіряє, чи заблокований фаєрволом ваш UDP-порт."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:573
 msgid "The router is not configured to publish its address, therefore it does not expect incoming connections."
-msgstr ""
+msgstr "Маршрутизатор не налаштовано на публікацію своєї адреси, тому він не очікує вхідних з'єднань."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:575
 msgid "Hidden mode is automatically enabled for added protection in certain countries."
-msgstr ""
+msgstr "Режим приховування автоматично увімкнено для додаткового захисту в певних країнах."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:577
 msgid "WARN - Firewalled and Fast"
-msgstr ""
+msgstr "ПОПЕРЕДЖЕННЯ - За фаєрволом і швидкий"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:579
 msgid "You have configured I2P to share more than 128KBps of bandwidth, but you are firewalled."
-msgstr ""
+msgstr "Ви налаштували I2P ділитися більше ніж 128 КБ/с пропускної здатності, але перебуваєте за фаєрволом."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:581
 msgid "While I2P will work fine in this configuration, if you really have over 128KBps of bandwidth to share, it will be much more helpful to the network if you open your firewall."
-msgstr ""
+msgstr "Хоча I2P працюватиме нормально в цій конфігурації, якщо ви справді маєте понад 128 КБ/с пропускної здатності для спільного використання, для мережі буде набагато корисніше, якщо ви відкриєте фаєрвол."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:583
 msgid "WARN - Firewalled and Floodfill"
-msgstr ""
+msgstr "ПОПЕРЕДЖЕННЯ - За фаєрволом і поводжа"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:585
 msgid "You have configured I2P to be a floodfill router, but you are firewalled."
-msgstr ""
+msgstr "Ви налаштували I2P як маршрутизатор поводження, але перебуваєте за фаєрволом."
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:587
+#: ../jsp/WEB-INF/clsses/net/i2p/router/web/jsp/help/ui_jsp.java:587
 msgid "For best participation as a floodfill router, you should open your firewall."
-msgstr ""
+msgstr "Для найкращої участі як маршрутизатора поводження слід відкрити фаєрвол."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:589
 msgid "WARN - Firewalled with Inbound TCP Enabled"
-msgstr ""
+msgstr "ПОПЕРЕДЖЕННЯ - За фаєрволом і з увімкненим вхідним TCP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:591
 msgid "You have configured inbound TCP, however your UDP port is firewalled, and therefore it is likely that your TCP port is firewalled as well."
-msgstr ""
+msgstr "Ви налаштували вхідний TCP, проте ваш UDP-порт заблокований фаєрволом, тому ймовірно фаєрвол також заблокує TCP-порт."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:592
 msgid "If your TCP port is firewalled with inbound TCP enabled, routers will not be able to contact you via TCP, which will hurt the network."
-msgstr ""
+msgstr "Якщо ваш TCP-порт буде заблокований фаєрволом за наявності вхідного TCP, маршрутизатори не зможуть зв'язатися з вами через TCP, що зашкодить мережі."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:593
 msgid "Please open your firewall or disable inbound TCP above."
-msgstr ""
+msgstr "Будь ласка, відкрийте фаєрвол або вимкніть вищевказаний вхідний TCP."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:595
 msgid "WARN - Firewalled with UDP Disabled"
-msgstr ""
+msgstr "ПОПЕРЕДЖЕННЯ - За фаєрволом з вимкненим UDP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:597
 msgid "You have configured inbound TCP, however you have disabled UDP."
-msgstr ""
+msgstr "Ви налаштували вхідний TCP, проте вимкнули UDP."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:599
 msgid "You appear to be firewalled on TCP, therefore your router cannot accept inbound connections."
-msgstr ""
+msgstr "Ваш маршрутизатор, схоже, заблокований фаєрволом по TCP, тому він не може приймати вхідні з'єднання."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:601
 msgid "Please open your firewall or enable UDP."
-msgstr ""
+msgstr "Будь ласка, відкрийте фаєрвол або увімкніть UDP."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:603
 msgid "ERR - Clock Skew"
@@ -10753,244 +10753,240 @@ msgstr "Ваш системний годинник занадто відхили
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:607
 msgid "Correct your clock setting if this error persists."
-msgstr ""
+msgstr "Виправте налаштування годинника, якщо ця помилка зберігається."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:609
 msgid "ERR - Private TCP Address"
-msgstr ""
+msgstr "ПОМИЛКА - Приватна TCP-адреса"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:611
 msgid "You must never advertise an unroutable IP address such as 127.0.0.1 or 192.168.1.1 as your external address."
-msgstr ""
+msgstr "Ви ніколи не повинні рекламувати нероутингову IP-адресу, таку як 127.0.0.1 або 192.168.1.1 як зовнішню адресу."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:612
 msgid "Correct the address or disable inbound TCP on the Network Configuration page."
-msgstr ""
+msgstr "Виправте адресу або вимкніть вхідний TCP на сторінці конфігурації мережі."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:614
 msgid "ERR - SymmetricNAT"
-msgstr ""
+msgstr "ПОМИЛКА - Симетричний NAT"
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:616
+#: ../jsp/WEB-INF/classes/net/2p/router/web/jsp/help/ui_jsp.java:616
 msgid "I2P detected that you are firewalled by a Symmetric NAT."
-msgstr ""
+msgstr "I2P виявив, що ви зафаєрволені симетричним NAT."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:617
 msgid "I2P does not work well behind this type of firewall. You will probably not be able to accept inbound connections, which will limit your participation in the network."
-msgstr ""
+msgstr "За цим типом фаєрволу I2P працюватиме погано. Ймовірно, ви не зможете приймати вхідні з'єднання, що обмежить вашу участь у мережі."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:619
 msgid "ERR - UDP Port In Use - Set i2np.udp.internalPort=xxxx in advanced config and restart"
-msgstr ""
+msgstr "ПОМИЛКА - Використовується UDP-порт - встановіть i2np.udp.internalPort=xxxx у розширеній конфігурації та перезапустіть"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:621
 msgid "I2P was unable to bind to the configured port noted on the advanced network configuration page ."
-msgstr ""
+msgstr "I2P не зміг прив'язатися до налаштованого порту, зазначеного на сторінці розширеної мережевої конфігурації."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:623
 msgid "Check to see if another program is using the configured port. If so, stop that program or configure I2P to use a different port."
-msgstr ""
+msgstr "Перевірте, чи не використовує порт інша програма. Якщо так, зупиніть цю програму або налаштуйте I2P на інший порт."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:625
 msgid "This may be a transient error, if the other program is no longer using the port."
-msgstr ""
+msgstr "Це може бути тимчасова помилка, якщо інша програма більше не використовує порт."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:627
 msgid "However, a restart is always required after this error."
-msgstr ""
+msgstr "Проте після цієї помилки завжди потрібно перезапустити."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:629
 msgid "ERR - UDP Disabled and Inbound TCP host/port not set"
-msgstr ""
+msgstr "ПОМИЛКА - UDP вимкнено і не встановлено вхідний TCP-хост/порт"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:631
 msgid "You have not configured inbound TCP with a hostname and port on the Network Configuration page, however you have disabled UDP."
-msgstr ""
+msgstr "Ви не налаштували вхідний TCP з вказівкою імені хоста та порту на сторінці конфігурації мережі, проте вимкнули UDP."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:633
 msgid "Therefore your router cannot accept inbound connections."
-msgstr ""
+msgstr "Отже ваш маршрутизатор не зможе приймати вхідні з'єднання."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:635
 msgid "Please configure a TCP host and port on the Network Configuration page or enable UDP."
-msgstr ""
+msgstr "Будь ласка, налаштуйте TCP-хост та порт на сторінці конфігурації мережі або увімкніть UDP."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:637
 msgid "ERR - Client Manager I2CP Error - check logs"
-msgstr ""
+msgstr "ПОМИЛКА - Помилка клієнт-менеджера I2CP - перевірте журнали"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:639
 msgid "This is usually due to a port 7654 conflict. Check the logs to verify."
-msgstr ""
+msgstr "Зазвичай це викликається конфліктом порту 7654. Перевірте журнали для підтвердження."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:641
 msgid "Do you have another I2P instance running? Stop the conflicting program and restart I2P."
-msgstr ""
+msgstr "Чи працює інший екземпляр I2P? Зупиніть конфліктну програму та перезапустіть I2P."
 
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:645
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/hep/ui_jsp.java:645
 msgid "The skew (offset) of your computer's clock relative to the network-synced time."
-msgstr ""
+msgstr "Відхилення (зміщення) Вашого комп’ютерного годинника відносно часу, синхронізованого з мережею."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:647
 msgid "I2P requires your computer's time be accurate."
-msgstr ""
+msgstr "I2P вимагає точного комп'ютерного часу."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:649
 msgid "If the skew is more than a few seconds, please correct the problem by adjusting your computer's time."
-msgstr ""
+msgstr "Якщо відхилення становить кілька секунд, будь ласка, виправте проблему налаштуванням комп'ютерного часу."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:651
 msgid "If I2P cannot connect to the internet, a reading of 0ms may be indicated."
-msgstr ""
+msgstr "Якщо I2P не може підключитися до Інтернету, може відображатися показник 0 мс."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:396
 msgid "Web hosting on I2P"
-msgstr ""
+msgstr "Хостинг веб-сайтів в I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:424
 msgid "Introduction to Hosting Websites on I2P"
-msgstr ""
+msgstr "Вступ до хостингу веб-сайтів в I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:426
-msgid "By default, I2P is supplied with a webserver to host your own anonymized website (traditionally referred to as an <i>eepsite</i>). Both the site and the I2P Router Console are running on a streamlined version of <a href='https://en.wikipedia.org/wiki/Jetty_(web_server)' target=_blank rel=noreferrer class='sitelink external'>Jetty</a>, customized for I2P."
-msgstr ""
+msgid "By default, I2P is supplied with a webserver to host your own anonymized website (traditionally referred to as an <i>eepsite</i>). Both the site and the I2P Router Console are running on a streamlined version of <a href='https://en.wikipedia.org/wiki/Jetty_(web_server)' target=_blank rel=noreferrer class='sitelink externalJetty</a>, customized for I2P."
+msgstr "За замовчуванням I2P оснащений веб-сервером для хостингу вашого власного анонімізованого сайту (традиційно званого <i>eepsite</i>). І сайт, і консоль маршрутизатора I2P працюють на спрощеній версії <a href='https://en.wikipedia.org/wiki/Jetty_(web_server)' target=_blank rel=noreferrer class='sitelink externalJetty</a>, адаптованій для I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:428
 msgid "To serve your own static content, you only need to edit or replace the files in the webserver's root directory, and the site will be available on the I2P network after you've followed the instructions below. Additionally, cgi and python scripts can be run from the <code>cgi-bin</code> directory immediately above <code>docroot</code> if you have <a href=https://www.perl.org/about.html target=_blank rel=noreferrer class='sitelink external'>perl</a> and <a href=https://www.python.org/ target=_blank rel=noreferrer class='sitelink external'>python</a> installed."
-msgstr ""
+msgstr "Для обслуговування свого статичного контенту достатньо редагувати або замінювати файли в кореневому каталозі веб-сервера, і сайт стане доступним у мережі I2P після виконання нижченаведених інструкцій. Крім того, скрипти cgi і python можна запускати з каталогу <code>cgi-bin</code> безпосередньо над <code>docroot</code> за умови наявності встановлених <a href=https://www.perl.org/about.html target=_blank rel=noreferrer class='sitelink external'>perl</a> та <a href=https://www.python.org/ target=_blank rel=noreferrer class='sitelink external'>python</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:430
 msgid "Directory listings (sometimes referred to as virtual directories) are enabled by default, so you can host files from a sub-directory of <code>docroot</code> without providing a page with links to the files. You can also serve content that exists outside of <code>docroot</code> by using a <a href=https://en.wikipedia.org/wiki/Symbolic_link target=_blank rel=noreferrer class='sitelink external'>symbolic link</a> to the desired directory."
-msgstr ""
+msgstr "Списки каталогів (іноді також званих віртуальними каталогами) увімкнені за замовчуванням, тож ви можете хостити файли з підкаталогів <code>docroot</code> без надання сторінки з посиланнями на файли. Також можна обслуговувати контент за межами <code>docroot</code>, використовуючи <a href=https://en.wikipedia.org/wiki/Symbolic_link target=_blank rel=noreferrer class='sitelink external'>символічне посилання</a> на бажаний каталог."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:432
 msgid "You can override the <a href=http://127.0.0.1:7658/help/images/>default appearance</a> of the directory listing by supplying an edited <a href=http://127.0.0.1:7658/.resources/jetty-dir.css>jetty-dir.css</a> file to set a global appearance. Note that this file will not be displayed in the webserver's directory listing. Files and directories prefixed with . and files named favicon.ico or files ending with ~ or .bak or .old will also be hidden from view (though still accessible). Note: To create hidden files with a . prefix on Windows, add a trailing . to the file or directory e.g. <code>.hidden.</code>; Windows explorer will then save the file with the correct name, removing the trailing dot in the process."
-msgstr ""
+msgstr "Можна переoverrideити <a href=http://127.0.0.1:7658/help/images/>типовий вигляд</a> списку каталогів, надавши відредагований файл <a href=http://127.0.0.1:7658/.resources/jetty-dir.css>jetty-dir.css</a> для встановлення глобального вигляду. Зауважте, що цей файл не буде відображатись у списку каталогів веб-сервера. Файли та каталоги з префіксом ., а також файли з іменами favicon.ico чи з кінцівками ~ або .bak чи .old також будуть приховані (але доступні). Зауваження: Для створення прихованих файлів з префіксом . в Windows додайте крапку в кінці імені файла чи каталогу, наприклад <code>.hidden.</code>; при цьому Windows Explorer збереже файл з правильним ім'ям, видаляючи кінцеву крапку."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:434
 msgid "To disable directory listings, find the entry for <code>org.eclipse.jetty.servlet.Default.dirAllowed</code> in the <code>base-context.xml</code> file, located in the <code>eepsite/contexts</code> folder (just above docroot folder), and change 'true' to 'false' immediately underneath. To apply the change immediately, stop and restart the <i>I2P Webserver</i> client on the <a href=/configclients>Client Configuration page</a>. You can also drop an empty <code>index.html</code> file in any exposed directory to suppress directory listings for that location."
-msgstr ""
+msgstr "Щоб відключити списки каталогів, знайдіть запис для <code>org.eclipse.jetty.servlet.Default.dirAllowed</code> у файлі <code>base-context.xml</code>, що розташований у каталозі <code>eepsite/contexts</code> (безпосередньо над каталогом docroot), і змініть 'true' на 'false' нижче. Щоб застосувати зміни негайно, зупиніть і перезапустіть клієнт <i>I2P Webserver</i> на сторінці <a href=/configclients>Налаштування клієнтів</a>. Також можна додати порожній файл <code>index.html</code> до будь-якого відкритого каталогу для приховування в ньому списку каталогів."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:436
 msgid "Location of the I2P webserver root directory"
-msgstr ""
+msgstr "Розташування кореневого каталогу веб-сервера I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:438
 msgid "Standard Java installation"
-msgstr ""
+msgstr "Типова встановлення Java"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:440
 msgid "Package/repository installation"
-msgstr ""
+msgstr "Встановлення з пакету/репозиторію"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:442
 msgid "On the I2P network, remotely hosted services can be accessed using a <a href=https://en.wikipedia.org/wiki/Base32 target=_blank rel=noreferrer class='sitelink external'>Base32</a> address ending in \".b32.i2p\", a <i>destination</i> represented as a long <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external'>Base64</a> string, or more usually by using an .i2p domain. A destination is I2P's equivalent to an IP address, and is shown on the <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>. You can share your b32.i2p address to allow others to access to your website until you've registered your own .i2p domain."
-msgstr ""
+msgstr "У мережі I2P віддалено хостовані сервіси можна отримати за допомогою адреси <a href=https://en.wikipedia.org/wiki/Base32 target=_blank rel=noreferrer class='sitelink external'>Base32</a> що закінчується на \".b32.i2p\", <i>destination</i> представленої як довгий <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external'>Base64</a> рядок, або зазвичай за допомогою домену .i2p. Destination - це аналог адреси IP в I2P, її можна побачити на сторінці <a href='/i2ptunnel/edit?tunnel=3'>Налаштування маршрутизатора</a>. Ви можете поділитися своєю адресою b32.i2p, щоб дозволити іншим доступ до вашого сайту до реєстрації власного домену .i2p."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:444
 msgid "Setting up &amp; announcing your website"
-msgstr ""
+msgstr "Налаштування та розміщення оголошення про свій сайт"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:446
-msgid "Your webserver is running by default at <a href=http://127.0.0.1:7658/>http://127.0.0.1:7658</a>, but is not accessible by others until you start the <i>I2P Webserver</i> tunnel. After starting the tunnel, your site will be difficult for other people to find. You could just tell people the destination or the Base32 address, but thankfully I2P has an address book to store domain names, and various services where you can <a href=/help/hostnameregistration>register a new .i2p domain</a> for free."
-msgstr ""
-
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:448
-msgid "Choose a name for your website (<i>hostname</i>.i2p), using lower-case. To verify that the hostname is available, check <a href=http://notbob.i2p/ target=_blank>notbob.i2p</a> or <a href=http://reg.i2p target=_blank>reg.i2p</a> before you decide. Enter the new name for your website on the <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a> where it says <i>Website name</i>, replacing the default <i>mysite.i2p</i> placeholder. If you want your website to be available when I2P starts, enable <i>Auto Start</i> and then click <i>Save</i>."
-msgstr ""
+msgid "Your webserver isunning by default at <a href=http://127.0.0.1:7658/>http://127.0.0.1:7658</a>, but is not accessible by others until you start the <i>I2P Webserver</i> tunnel. After starting the tunnel, your site will be difficult for other people to find. You could just tell people the destination or the Base32 address, but thankfully I2P has an address book to store domain names, and various services where you can <a href=/help/hostnameregistration>register a new .i2p domain</a> for free."
+msgstr "Ваш веб-сервер по замовчуванню працює за адресою <a href=http://127.0.0.1:7658/>http://127.0.0.1:7658</a>, але буде недоступний для інших допоки ви не запустите тунель <i>I2P Webserver</i>. Після запуску тунеля ваш сайт буде важко знайти для інших. Ви можете просто повідомити іншим destination або адресу Base32, але на щастя в I2P є адресна книга для зберігання доменних імен, а також різні сервіси де ви можете <a href=/help/hostnameregistration>зареєструвати новий домен .i2p</a> безкоштовно."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:450
 msgid "Click the <i>Start</i> button for your webserver tunnel on the <a href=/i2ptunnelmgr/>main Tunnel Manager page</a>. You should now see it listed under <i>Service Tunnels</i> on the <a href=/>Router Console</a> sidebar. A green star displayed next to the tunnel name (<i>I2P Webserver</i> by default) indicates that your website is active on the I2P network."
-msgstr ""
+msgstr "Натисніть кнопку <i>Запустити</i> для тунелю вашого веб-сервера на <a href=/i2ptunnelmgr/>основній сторінці менеджера тунелів</a>. Тепер ви повинні побачити його у розділі <i>Сервісні тунелі</i> в боковій панелі <a href=/>консолі маршрутизатора</a>. Зелена зірочка біля назви тунелю (<i>I2P Webserver</i> за замовчуванням) означає, що ваш сайт активний в мережі I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:452
 msgid "Highlight and copy the entire <i>Local destination</i> on the <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>."
-msgstr ""
+msgstr "Виділіть і скопіюйте повну <i>Локальну адресу</i> на сторінці <a href='/i2ptunnel/edit?tunnel=3'>Налаштування менеджера тунелів</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:454
 msgid "Enter the name and paste the destination into your <a href='/susidns/addressbook?book=router&amp;filter=none'>address book</a>. Click <i>Add</i> to save the new entry."
-msgstr ""
+msgstr "Введіть ім'я і вставте destination до своєї <a href='/susidns/addressbook?book=router&amp;filter=none'>адресної книги</a>. Натисніть <i>Додати</i> щоб зберегти новий запис."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:456
 msgid "In the web browser you have configured for I2P usage, browse to your website name (<i>chosenhostname</i>.i2p) and you should be returned to this page."
-msgstr ""
+msgstr "У веб-браузері налаштованому для роботи з I2P перейдіть за адресою вашого сайту (<i>chosenhostname</i>.i2p) і ви повинні потрапити на цю сторінку."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:458
-msgid "Before you tell the world about your new website, you should add some content. Go to the server's root directory <a href=#rootdir>listed above</a> and replace the <i>index.html</i> redirect page with your own content. If you need a template for a basic site, feel free to adapt <a href=http://127.0.0.1:7658/help/pagetemplate.html>this page</a>. If you're returned to this page after editing the content, try clearing your browser's web cache."
-msgstr ""
+msgid "Before you tell the world about your new website, you should add some content. Go to the server's root directory <a href=#rootdir>listed above</a> and replace the <i>index.html</i> redirect page with your own content. If you need a template for a basic site, feel free to adapttp://127.0.0.1:7658/help/pagetemplate.html>this page</a>. If you're returned to this page after editing the content, try clearing your browser's web cache."
+msgstr "Перш ніж розповсюджувати інформацію про ваш новий сайт, ви повинні додати якийсь контент. Перейдіть до кореневого каталогу сервера <a href=#rootdir>зазначеного вище</a> і замініть сторінку перенаправлення <i>index.html</i> на власний контент. Якщо вам потрібен шаблон для базового сайту, відкрийте сторінку <a href=http://127.0.0.1:7658/help/pagetemplate.html>цю</a>. Якщо після редагування контенту ви повертаєтесь на цю сторінку, спробуйте очистити кеш браузера."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:460
 msgid "Content Optimization"
-msgstr ""
+msgstr "Оптимізація контенту"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:462
 msgid "In order to provide the best experience for visitors to your site, there are various additional steps you may wish to consider once your site is up and running:"
-msgstr ""
+msgstr "Щоб забезпечити найкращий досвід відвідувачам вашого сайту, є кілька додаткових кроків, які варто розглянути після того як ваш сайт буде працювати:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:464
 msgid "Optimize your images"
-msgstr ""
+msgstr "Оптимізуйте зображення"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:466
 msgid "If you want your site to feel responsive, image compression is essential when hosting large images. Using a service like <a href=https://tinypng.com/ target=_blank class='sitelink external'>tinypng.com</a> to compress your png and jpeg images will often result in much smaller files with minimal loss of quality. In some situations the webp format can best jpegs, generating smaller files with approximately the same or better visual fidelity, and has wide browser support. Also consider using svgs instead of bitmaps for icons and illustrations - they're often smaller than the equivalent bitmap file (run them through a service like <a href=https://vecta.io/nano target=_blank class='sitelink external'>Nano SVG Optimizer</a> to remove unneeded cruft), scale without loss of quality, and can be gzipped by your webserver."
-msgstr ""
+msgstr "Якщо ви хочете, щоб ваш сайт працював швидко, стиснення зображень є ключовим, коли хостите великі зображення. Використання сервісу на кшталт <a href=https://tinypng.com/ target=_blank class='sitelink external'>tinypng.com</a> для стиснення ваших png та jpeg зображень часто призведе до файлів значно меншого розміру з мінімальною втратою якості. У деяких випадках формат webp краще jpeg, генеруючи файли меншого розміру приблизно з тією самою або кращою візуальною точністю, і має широку підтримку браузерів. Також розгляньте можливість використання svg замість бітмап для іконок та ілюстрацій - вони часто менші ніж еквівалентний бітмап файл (проштовхуйте їх через сервіс на кшталт <a href=https://vecta.io/nano target=_blank class='sitelink external'>Nano SVG Optimizer</a> для видалення непотрібного сміття), масштабуються без втрати якості, і можуть бути стиснуті вашим веб-сервером за допомогою gzip."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:468
 msgid "Use separate files for multi-use assets"
-msgstr ""
+msgstr "Використовуйте окремі файли для багаторазових ресурсів"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:470
 msgid "Wherever possible, assets that are used repeatedly on your site should be loaded from an external file and not inlined. If you're using the same CSS on several pages, create a separate css file and load that in the <code>&lt;head&gt;</code> section of your pages. This will make styling updates to your site easier to manage, and will also allow the file to be cached in the visitor's browser, resulting in less bandwidth demands on your webserver and faster page loads for your visitors."
-msgstr ""
+msgstr "У всіх можливих випадках, ресурси які використовуються повторно на вашому сайті повинні завантажуватись з зовнішнього файлу, а не бути вбудованими. Якщо ви використовуєте той самий CSS на декількох сторінках, створіть окремий CSS файл і завантажуйте його в розділ <code>&lt;head&gt;</code> ваших сторінок. Це полегшить керування стилістикою на вашому сайті, і також дозволить файлу бути скешованим в браузері відвідувача, що призведе до меншої навантаження на ваш веб-сервер і швидших завантажень сторінок для відвідувачів."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:472
 msgid "Consider using a backend cache"
-msgstr ""
+msgstr "Розгляньте можливість використання кешу на бекенді"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:474
 msgid "If you're running a dynamic site handling a large number of concurrent users, content caching can often improve the time taken to deliver pages. For content that rapidly changes, a <a href=https://blog.stackpath.com/glossary-micro-caching/ target=_blank class='sitelink external'>micro-caching strategy</a> may still yield some benefits. The <a href=https://www.nginx.com/ target=_blank class='sitelink external'>Nginx webserver</a> provides a competent caching sub-system, or for a more heavy-weight solution, have a look at <a href=https://varnish-cache.org/ target=_blank class='sitelink external'>Varnish</a>."
-msgstr ""
+msgstr "Якщо ви хостите динамічний сайт з великою кількістю одночасних користувачів, часто кешування контенту може поліпшити час доставки сторінок. Для швидко мінливого контенту, стратегія <a href=https://blog.stackpath.com/glossary-micro-caching/ target=_blank class='sitelink external'>мікро-кешування</a> може принести деякі переваги. Веб-сервер <a href=https://www.nginx.com/ target=_blank class='sitelink external'>Nginx</a> містить компетентну підсистему кешування, або для більш потужного рішення, подивіться <a href=https://varnish-cache.org/ target=_blank class='sitelink external'>Varnish</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:476
 msgid "Using an alternative webserver"
-msgstr ""
+msgstr "Використання альтернативного веб-сервера"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:478
 msgid "To configure an alternative webserver for use on I2P, you can either use the existing webserver tunnel and <a href=/configclients>disable the default webserver</a> from running, or create a new HTTP Server tunnel in the <a href=/i2ptunnelmgr>Tunnel Manager</a>. Ensure that the webserver's <i>listening port</i> is also configured in the Tunnel Manager settings. For example, if your webserver is listening by default on address 127.0.0.1 port 80, you'd also need to ensure that the <i>Target port</i> in the Tunnel Manager settings page for the service is also configured to port 80."
-msgstr ""
+msgstr "Щоб налаштувати альтернативний веб-сервер для використання в I2P, ви можете або використовувати існуючий тунель веб-сервера і <a href=/configclients>відключити той, що за замовчуванням</a> від працювання, або створити новий тунель сервера HTTP в <a href=/i2ptunnelmgr>Менеджері тунелів</a>. Переконайтеся, що порт \"прослуховування\" веб-сервера також налаштований в налаштуваннях Менеджера тунелів. Наприклад, якщо ваш веб-сервер прослуховує за замовчуванням адресу 127.0.0.1 порт 80, вам також потрібно буде переконатись, що цільовий порт в налаштуваннях сторінки сервісу Менеджера тунелів також налаштований на порт 80."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:480
 msgid "To preserve anonymity, make sure that the webserver is not publicly available outside of the I2P network, which is normally achieved by configuring the webserver to listen on localhost (127.0.0.1) rather than all interfaces (0.0.0.0)."
-msgstr ""
+msgstr "Щоб зберегти анонімність, переконайтеся, що веб-сервер недоступний публічно поза мережею I2P, що зазвичай досягається налаштуванням веб-сервера на прослуховування порту localhost (127.0.0.1) замість усіх інтерфейсів (0.0.0.0)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:482
 msgid "Be aware that a poorly configured webserver or web appplication can leak information such as your real IP address or server details that may reduce your anonymity or assist a hacker. If using an alternative platform, be sure to secure it before putting it online. If in doubt, consult online guides about web server and web application hardening, for example:"
-msgstr ""
+msgstr "Будьте обізнані, що погано налаштований веб-сервер або веб-застосунок можуть призвести до витоку інформації, такої як ваша реальна IP-адреса або дані сервера, що може зменшити вашу анонімність чи допомогти хакеру. Якщо використовуєте альтернативну платформу, обов'язково її захищіть перш ніж публікувати онлайн. У разі сумнівів, ознайомтесь з онлайн-посібниками з ущільнення веб-серверів та веб-застосунків, наприклад:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:484
 msgid "Apache Web Server Security Guide"
-msgstr ""
+msgstr "Посібник з безпеки веб-сервера Apache"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:486
 msgid "Nginx Web Server Security Guide"
-msgstr ""
+msgstr "Посібник з безпеки веб-сервера Nginx"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:488
 msgid "How to Harden Your WordPress Site"
-msgstr ""
+msgstr "Як ущільнити ваш сайт WordPress"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:490
 msgid "<b>Note:</b> On some Apache installations, the <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> and <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> modules are enabled by default. It is important to disable these, or otherwise protect access to the urls, to avoid compromising the anonymity and security of your server."
-msgstr ""
+msgstr "<b>Примітка:</b> На деяких установках Apache за замовчуванням увімкнені модулі <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> і <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a>. Важливо відключити їх або іншим чином захистити доступ до цих URL-адрес, щоб уникнути компрометації анонімності та безпеки свого сервера."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:278
 msgid "home"
-msgstr ""
+msgstr "головна"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:439
 msgid "Please enter a search query"
-msgstr ""
+msgstr "Будь ласка введіть запит пошуку"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:441
@@ -11167,7 +11163,7 @@ msgstr "Керування адресами I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:451
 msgid "Imagegen"
-msgstr ""
+msgstr "Генератор зображень"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:458
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:464
@@ -11198,7 +11194,7 @@ msgstr "Інформація"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:502
 msgid "Review recent updates to I2P"
-msgstr ""
+msgstr "Огляньте останні оновлення I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:506
 msgid "View debugging information"
@@ -11498,16 +11494,16 @@ msgid "Select the language to be used for the router console and web application
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:483
-msgid "Router Console &amp; WebApps Display Language"
-msgstr ""
+msgid "Router Console & WebApps Display Language"
+msgstr "Мова інтерфейсу маршрутизатора та веб-застосунків"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:492
 msgid "Your I2P+ router by default contributes to the network by routing internal, end-to-end encrypted traffic for other routers, known as <i>participation</i>. Bandwidth participation improves the anonymity level of all users on the network and maximizes your download speed."
-msgstr ""
+msgstr "Ваш маршрутизатор I2P+ за замовчуванням сприяє мережі шляхом маршрутизації внутрішнього, зшифрованого з кінця в кінець трафіку для інших маршрутизаторів, відомого як <i>участь</i>. Участь пропускної здатності підвищує рівень анонімності всіх користувачів мережі та максимізує швидкість вашого завантаження."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:494
 msgid "For the best experience, it's recommended to configure your bandwidth settings to match the values provided by your ISP. If you are unsure of your bandwidth, you can run a test to determine your download and upload speeds."
-msgstr ""
+msgstr "Для найкращого досвіду рекомендується налаштувати параметри пропускної здатності, відповідні до значень, наданих вашим Інтернет-провайдером. Якщо ви не впевнені у власній пропускній здатності, можете провести тест для визначення швидкості завантаження та відвантаження."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:496
 msgid "Bandwidth Test"
@@ -11600,7 +11596,7 @@ msgstr "Налаштування браузера"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:677
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr ""
+msgstr "Щоб мати доступ до сайтів, розміщених в мережі I2P, і опціонально використовувати тунель за замовчуванням для підключення до сайтів в відкритому інтернеті, вам необхідно налаштувати ваш браузер для використання проксі <b>HTTP</b> від I2P+, за замовчуванням він працює на адресі <code> 127.0.0.1 порт 4444</code>. Для додаткової довідки ознайомтесь з <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>посібником з налаштувань</a>, або <a href=/help/configuration#browserconfig>міні-посібником для Firefox</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:684
 msgid "Welcome to I2P+!"
