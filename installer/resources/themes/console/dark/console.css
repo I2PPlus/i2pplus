@@ -660,7 +660,7 @@ h3.stats{border:var(--border);border-radius:0}
 #stats .statsName::before{content:none}
 #stats .statsName b,.statsName i{display:inline-block}
 #stats .statsName b{width:calc(100% - 24px)}
-#stats .tab,#stats .tab2{margin:0 -1px -1px 0;padding:5px 8px;font-size:90%;flex-grow:0.5;flex-shrink:1}
+#stats .tab,#stats .tab2{margin:0 -1px -1px 0;padding:5px 8px;font-size:80%;flex-grow:0.1;flex-shrink:1}
 #stats .tab:not(.tab2){color:var(--a)}
 #stats .tab:not(.tab2):hover{color:var(--hover)}
 #stats .tab:not(.tab2):active{color:var(--ink)}
