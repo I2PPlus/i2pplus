@@ -1,0 +1,72 @@
+<div lang="da">
+
+<ul class="links">
+
+<li><b>Opstart</b><br>
+Hvis du lige er startet I2P+, vil antallet af <i>Aktive Peers</i> angivet under afsnittet <i>Peers</i> i sidepanelet begynde at vokse i løbet af de næste få minutter, og du vil også se en <i>Lokal Destination</i> ved navn <i>Delte Klienter</i> opført under afsnittet <i>Service Tunneller</i>, og muligvis også andre klienter og servere, afhængigt af hvordan I2P er konfigureret. Disse <i>Lokale Destinationer</i> giver forbindelser til tjenester på forskellige <a href="/help/faq#portfaq" title="Liste over almindeligt anvendte porte" class="consolelink">porte</a> til I2P-netværket og muliggør, at BitTorrent, e-mail, webproxy og andre tjenester kan fungere. Din <a href="/netdb" class="consolelink">Netværksdatabase</a> viser alle lokalt kendte peere på netværket. Du kan også overvåge eksisterende <a href="/peers" class="consolelink">peer-forbindelser</a>, gennemgå <a href="/profiles?f=1" class="consolelink">peer-ydelsesprofiler</a> og se aktive <a href="/tunnels" class="consolelink">tunneller</a> og deres status.</li>
+
+<li><b>Netværksintegration</b><br>
+Første gang du starter I2P+ kan det tage et par minutter at starte (integreres) dig på netværket og finde yderligere peere til at optimere din integration, så vær tålmodig. Når der er grønne stjerner ved siden af dine <i>Lokale Destinationer</i> under <i>Service Tunneller</i> i sidepanelet, kan du foretage forskellige ting med I2P, og nedenfor introducerer vi dig til nogle af dem.</li>
+
+<li><b>Netværksstatus</b><br>
+Når I2P+ har haft tid til at teste din netværksforbindelse, bør netværksstatusindikatoren i sidepanelet ideelt set vise "OK". Hvis status viser "Firewalled", vil I2P+ stadig fungere, selvom netværkets ydeevne ikke vil være optimal, og din evne til at bidrage med båndbredde til netværket vil blive begrænset. For optimal ydeevne skal du overveje at åbne din <a href="/confignet#udpconfig" class="consolelink">eksterne I2P+ port</a> på din firewall og på den router, der er leveret af din internetudbyder. Yderligere information om statusmeddelelser er tilgængelig på <a href="/help/ui#reachabilityhelp" class="consolelink">siden om brugergrænsefladen hjælp</a>.</li>
+
+<li><b>Adressbogsabonnementer</b><br>
+For at I2P+ kan opløse .i2p-hostnavne automatisk, afhænger det primært af abonnementer til tjenester, der giver DNS-oversættelse for kendte værter. Hvis du har installeret I2P+ i stedet for at opgradere fra I2P, vil du allerede have tilstrækkelige <a href="/susidns/subscriptions" class="consolelink">adressbogsabonnementer</a> konfigureret; efter installationen skal din <a href="/dns" class="consolelink">adressbog</a> automatisk fyldes med værtsnavne til aktive tjenester på netværket uden indgriben. Hvis du har opgraderet fra I2P, kan du tjekke <a href="/help/faq#addressbooksubs" class="consolelink">adressbogsabonnementsafsnittet</a> i <a href="/help/faq" class="consolelink">FAQ</a> for hjælp til at tilføje yderligere abonnementer.
+</li>
+
+<li><b>Browserkonfiguration</b><br>
+For at kunne browse hjemmesider på netværket skal du konfigurere din browser til at bruge den standard HTTP-proxy, der er konfigureret på port 4444, som også giver en <i>udgangsproxy</i>, hvilket tillader anonym browsing af clearnet sites. En <a href="/help/configuration#browserconfig" class="consolelink">mini-guide til konfigurering af Firefox</a> er tilgængelig på Konfigurationssiden i hjælpeafsnittet, eller se afsnittet nedenfor for et link til den fler-browser opsætningsguide. Når du har konfigureret din browser og adressbogsabonnementer, er <a href="http://notbob.i2p/" target="_blank">notbob.i2p</a> en fantastisk hjemmeside at opdage indhold på netværket.
+</li>
+
+</ul>
+
+<h3>Tjenester på I2P</h3>
+
+<ul class="links twocol">
+
+<li><b>Usynligt internet &amp; Offentlig webbrowsing</b><br>
+På I2P kan du få adgang til I2P-hostede hjemmesider ("eepsites") eller browse normal internettet anonymt via I2P's indbyggede webproxy (udgangsproxy). <a href="https://geti2p.net/en/about/browser-config" class="sitelink external" target="_blank" rel="noreferrer">Konfigurer din browser</a> til at bruge HTTP-proxy'en på <code>127.0.0.1 port 4444</code>, og browse derefter til en skjult service hjemmeside eller en normal, ukrypteret <code>http://</code>-adresse. Hvis du vil deaktivere eller ændre udgangsproxy-adgangen til det normale internet, skal du fjerne eller ændre udgangsproxy-indgangen for <code>false.i2p</code> eller <code>purokishi.i2p</code> under afsnittet <i>Outproxies</i> på <a href="/i2ptunnel/edit?tunnel=0" target="_blank" rel="noreferrer" class="consolelink">redigeringsiden</a> for HTTP-proxy-klienttunnellen i <a href="/i2ptunnelmgr" class="consolelink">Tunnel Manager</a>.</li>
+
+<li><b>Anonym E-mail</b><br>
+Postmans I2P-baserede mailsystem kan tilgås enten via I2P's indbyggede mailsystem (Susimail) eller enhver standard mailsystem. En mailgateway gør det muligt at modtage mails fra normale internetadresser; din @mail.i2p-adresse kan også kontaktes via @i2pmail.org. For en konto, besøg <a href="http://hq.postman.i2p/" class="sitelink" target="_blank" rel="noreferrer">hq.postman.i2p</a>.</li>
+
+<li><b>Anonym filoverførsel</b><br>
+<a href="/torrents" class="consolelink">I2PSnark</a> er integreret i I2P og giver anonyme, krypterede BitTorrent-overførsler. Alternativt er der <a href="https://wiki.biglybt.com/w/I2P" class="sitelink external" target="_blank" rel="noreferrer">BiglyBT</a> (som er efterfølgeren til Azureus/Vuze), en BitTorrent-klient der understøtter torrenting over I2P, og <a href="https://github.com/majestrate/XD" class="sitelink external" target="_blank" rel="noreferrer">XD</a>, en kun I2P-baseret BitTorrent-klient skrevet i go. Yderligere tjenester omfatter browser-baseret filhosting som f.eks. <a href="http://cake.i2p/" class="sitelink" target="_blank" rel="noreferrer">cake.i2p</a> og <a href="http://fs.i2p/" class="sitelink" target="_blank" rel="noreferrer">fs.i2p</a>.</li>
+
+<li><b>Anonym chat</b><br>
+Start din IRC-klient (f.eks. <a href="https://hexchat.github.io/" class="sitelink external" target="_blank" rel="noreferrer">HexChat</a>) og forbind til <a href="irc://127.0.0.1:6668/i2p" class="chatlink">serveren</a> på <code>127.0.0.1 port 6668</code>. Du behøver ikke at konfigurere en proxy i din IRC-klient, I2P giver dig en lokal IRC-tunnel (konfigureret i din IRC-klient som en IRC-server eller fjernvært). Når du er der, er <code>#saltr</code> og <code>#i2p-dev</code> blot et par af de tilgængelige kanaler, du måske ønsker at deltage i. Der findes også en tværplatforms I2P-baseret øjeblikkelig besked-applikation, tilgængelig på <a href="https://vituperative.github.io/i2pchat/" class="sitelink external" target="_blank" rel="noreferrer">Github</a>.</li>
+
+<li><b>Anonym krypteret webhosting</b><br>
+I2P leveres med en webserver til at hoste din egen hjemmeside på I2P-netværket: en <a href="https://www.eclipse.org/jetty/" class="sitelink external" target="_blank" rel="noreferrer">Jetty</a>-instans, der lytter på <a href="http://127.0.0.1:7658/" class="consolelink" target="_blank" rel="noreferrer">http://127.0.0.1:7658/</a>. Efter at have startet den forkonfigurerede <a href="/i2ptunnelmgr" class="consolelink" target="_blank" rel="noreferrer">I2P Webserver Tunnel</a>, vil dit websted være synligt (men ikke opdagbart) for andre. Instruktioner til opsætning af din hjemmeside og registrering af et .i2p-domæne findes i <a href="http://127.0.0.1:7658/help/webhosting" class="consolelink">hjælpeafsnittet</a>.</li>
+
+<li><a name="plugins"></a><b>Plugins til I2P</b><br>
+Besøg <a href="http://stats.i2p/i2p/plugins/" class="sitelink" target="_blank" rel="noreferrer">zzz's pluginside</a> for direkte downloadlinks til flere plugins. Hvis du er en udvikler, leveres der en programmeringssfære, der er uafhængig af sprog, til at skrive dine egne plugins.</li>
+
+</ul>
+
+<h3 id="trouble">Information til udviklere og bidragydere</h3>
+
+<ul class="links">
+
+<li><b>Rapportering af fejl</b><br>
+For at rapportere en fejl skal du oprette en sag på <a href="http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" class="sitelink" target="_blank" rel="noreferrer">git.idk.i2p</a>. For udviklerrelaterede diskussioner, besøg venligst <a href="http://zzz.i2p/" class="sitelink" target="_blank" rel="noreferrer">zzz's udviklerforum</a> eller den <a href="irc://127.0.0.1:6668/i2p-dev" class="chatlink">udviklerkanal</a> (#i2p-dev) på I2P's IRC-netværk.</li>
+
+<li><b>Udvikling på I2P</b><br>
+Hvis du er en udvikler, kan du overveje at skrive dine egne <a href="http://i2p-projekt.i2p/applications.html" class="sitelink" target="_blank" rel="noreferrer">I2P-applikationer</a> eller forbedre sikkerheden i din applikation ved at udnytte I2P-netværket. Både UDP- og TCP-protokoller er <a href="http://i2p-projekt.i2p/techintro.html#op.transport" class="sitelink" target="_blank" rel="noreferrer">tilgængelige</a>, og <a href="http://i2p-projekt.i2p/streaming.html" class="sitelink" target="_blank" rel="noreferrer">realtids-streaming</a> er også muligt. Vi tilbyder også fuld adgang til <a href="http://javadoc.skank.i2p/" class="sitelink" target="_blank" rel="noreferrer">Java API</a>, og I2P's kernebiblioteker er hostet på <a href="https://mvnrepository.com/artifact/net.i2p" class="sitelink external" target="_blank" rel="noreferrer">Apache Maven Repository</a>. Udviklere kan gennemse koden på <a href="https://github.com/i2p/i2p.i2p" class="sitelink external" target="_blank" rel="noreferrer">Github</a> (I2P) eller <a href="https://gitlab.com/i2pplus/I2P.Plus" class="sitelink external" target="_blank" rel="noreferrer">Gitlab</a> (I2P+), og overvåge den aktuelle byggestatus via det kontinuerlige integrationsplatform <a href="https://travis-ci.org/i2p/i2p.i2p" class="sitelink external" target="_blank" rel="noreferrer">Travis</a> (I2P) eller via <a href="https://gitlab.com/i2pplus/I2P.Plus/pipelines" class="sitelink external" target="_blank" rel="noreferrer">Gitlab</a> (I2P+). Et <a href="https://wikipedia.org/wiki/Java_SDK" class="sitelink external" target="_blank" rel="noreferrer">Java SDK</a> og <a href="http://ant.apache.org/" class="sitelink external" target="_blank" rel="noreferrer">Apache Ant</a> er påkrævet for at bygge fra kildekode.</li>
+
+</ul>
+
+<ul class="links twocol">
+
+<li><b>Bliv involveret!</b><br>
+I2P udvikles og vedligeholdes primært gennem ubetalt, frivillig deltagelse fra fællesskabsmedlemmer. Yderligere information om, hvordan du kan deltage, er tilgængelig på <a href="http://i2p-projekt.i2p/getinvolved.html" class="sitelink" target="_blank" rel="noreferrer">frivilligesiden</a> på den officielle hjemmeside.</li>
+
+<li><b>I2P+</b><br>
+For mere information om I2P+, besøg venligst <a href="http://skank.i2p/" class="sitelink" target="_blank" rel="noreferrer">skank.i2p</a> eller <a href="https://i2pplus.github.io/" class="sitelink external" target="_blank" rel="noreferrer">i2pplus.github.io</a>, eller deltag i kanalen <a href="irc://127.0.0.1:6668/saltR" class="chatlink">#saltR</a> på I2P IRC-netværket. Patches til I2P+ er velkomne; indsend venligst pull requests via <a href="https://gitlab.com/i2pplus/I2P.Plus/" class="sitelink external" target="_blank" rel="noreferrer">Gitlab</a>.</li>
+
+</ul>
+
+<div class="topness"><a href="#top">[Tilbage til toppen]</a></div>
+<div class="footnote"><hr>Dokument opdateret: August 2020</div>
+</div>
