@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-11-21 02:18+0000\n"
+"PO-Revision-Date: 2023-11-30 05:44+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fa\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:387
 msgid "Hash"
@@ -9758,7 +9758,7 @@ msgstr "یک پلاگین I2P نگهداری نشده که ایمیل های ر�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:503
 msgid "i2pd"
-msgstr ""
+msgstr "i2pd"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:505
 msgid "An alternative implementation of an I2P router coded in C++. For more information, see <a href=https://i2pd.website/ class='sitelink external' target=_blank rel=noreferrer>https://i2pd.website/</a> Source code is available on <a href=https://github.com/PurpleI2P/i2pd class='sitelink external' target=_blank rel=noreferrer>github</a>."
@@ -9782,111 +9782,111 @@ msgstr "سرویس پرش"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:517
 msgid "A simple CGI application that takes a hostname as a parameter and returns a 301 redirect to the proper URL with a <code>?i2paddresshelper=key</code> string appended. The HTTP proxy will interpret the appended string and use the key as the actual destination. In addition, the proxy will cache the key so the address helper is not necessary until restart, and offer the option to add the resolved address to the addressbook."
-msgstr ""
+msgstr "یک برنامه CGI ساده است که یک نام میزبان را به عنوان پارامتر می‌گیرد و به URL صحیح تبدیل 301 ردیابی می‌کند با توسل به رشته <code>?i2paddresshelper=key</code> اضافه شده‌است. پراکسی HTTP این رشته اضافه شده را تعبیر می‌کند و از کلید به عنوان واقعی مقصد استفاده خواهدکرد. علاوه بر این، پراکسی کلید را کَش می‌کند بنابراین کمک نشانی تا راه‌اندازی مجدد ضروری نخواهد بود و امکان افزودن آدرس حل‌شده به کتاب آدرس را فراهم می‌کند."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:519
 msgid "Laptop Mode"
-msgstr ""
+msgstr "حالت لپ‌تاپ"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:521
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
-msgstr ""
+msgstr "تنظیم‌گیری<a href=/confignet#ipchange>اختیاری</a> است که به‌طور خودکار شناسه <a href=/netdb?r=.>مسیریاب</a> شما و <a href=/confignet#udpconfig> درگاه خارجی</a> را وقتی که آدرس آی‌پی عمومی سیستم شما تغییر می‌کند، تغییر می‌دهد. این می‌تواند جلوی ارتباط‌یابی شناسه مسیریاب و آدرس آی‌پی شما توسط طرف مقابل را در مواردی که آدرس آی‌پی شما ممکن است به‌طور مکرر تغییر کند، بگیرد. برای مثال وقتی I2P را روی لپ‌تاپ از مکان‌های متفاوت اجرا می‌کنید."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:525
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
-msgstr ""
+msgstr "اطلاعاتی که مشخص می‌کند گذرواژه‌ای برای تونل خاصی برای دریافت پیام‌های مقصد یک <i>مقصد</i> را تعریف می‌کند."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:529
 msgid "A group of tunnel entry points (leases) for a <i>destination</i>. Note: A 0-hop server tunnel will only have one lease, regardless of the number of tunnels configured."
-msgstr ""
+msgstr "یک گروه از نقاط ورودی تونل‌ها (اجاره‌ها) برای یک <i>مقصد</i>. توجه: یک تونل سرور بدون هاپ تنها دارای یک اجاره خواهد بود، به کرات تعداد تونل‌های تنظیم‌شده."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:531
 msgid "Monotone / mtn"
-msgstr ""
+msgstr "Monotone / mtn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:533
 msgid "The distributed version control system (DVCS) previously used to maintain I2P's source code, now superseded by git."
-msgstr ""
+msgstr "سامانه کنترل نسخه توزیع‌شده (DVCS) که سابقا برای نگهداری کد منبع I2P مورد استفاده قرار می‌گرفت، اکنون با گیت جایگزین شده است."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:535
 msgid "Multihoming"
-msgstr ""
+msgstr "چندتونل‌گزینی"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:537
 msgid "Services may be hosted on multiple routers simultaneously, by sharing the same private key for the destination. Multihoming can further enhance the security and stability of a server by providing redundancy; if a server is multihomed, when a server in the pool goes offline, the provided service will remain available, making it more difficult to correlate server downtime with a router going offline."
-msgstr ""
+msgstr "سرویس‌ها ممکن است همزمان بر روی چند مسیریاب با اشتراک کلید خصوصی مشترکی برای مقصد میزبانی شوند. چندتونل‌گزینی می‌تواند به‌طور بیشتری امنیت و پایداری سرور را با فراهم‌آوردن اضافه‌کاری؛ اگر سرور چندتونل‌گزین باشد، هنگامی که سروری در مجموعه خاموش شود، سرویس ارائه‌شده باقی خواهد ماند، بنابراین ارتباط‌یابی زمان خارج‌شدن سرور با خارج‌شدن مسیریاب سخت‌تر خواهد بود."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:541
 msgid "A distributed database containing router contact information (RouterInfos) and destination contact information (LeaseSets). A single router maintains its own (partial) database for communicating with other routers on the network; no single router will maintain a list of all routers. The RouterInfos are stored on disk and read into memory when the router starts, or when new RouterInfos are acquired. Also referred to as the <i>NetDb</i>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "یک پایگاه‌داده توزیع‌شده شامل اطلاعات تماس با مسیریاب‌ها (RouterInfos) و اطلاعات تماس مقصد (LeaseSets). هر مسیریابی مدیریت پایگاه‌داده (ناقص) خود را برای ارتباط با سایر مسیریاب‌های شبکه دارد؛ هیچ مسیریابی فهرست کاملی از همه مسیریاب‌ها را نخواهد داشت. RouterInf‌ها بر روی دیسک ذخیره می‌شوند و زمانی که مسیریاب راه‌اندازی می‌شود یا RouterInf‌های جدید بدست می‌آید بارگیری می‌شوند. همچنین به عنوان <i>NetDb</i> شناخته می‌شود. برای اطلاعات بیشتر دستورالعمل آنلاین را ببینید."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:543
 msgid "NTCP / NTCP2"
-msgstr ""
+msgstr "NTCP / NTCP2"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:545
 msgid "NTCP (NIO-based TCP) and NTCP2 are TCP-based network transports which use Java's NIO (New I/O) TCP implementation to deliver I2NP messages between routers on the network. NTCP2 improves the resistance of NTCP to various attacks and automated traffic identification methods. For more information, see the <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "NTCP (NIO بر مبنای تی‌سی‌پی) و NTCP2 ترابرهای شبکه‌ای TCP مبتنی هستند که از پیاده‌سازی TCP موجود در NIO جاوا (I/O نو) برای انتقال پیام‌های I2NP بین مسیریاب‌ها در شبکه استفاده می‌کنند. NTCP2 مقاومت بهتری نسبت به حملات و روش‌های شناسایی ترافیک خودکار دارد. برای اطلاعات بیشتر مستندات آنلاین را ببینید."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:547
 msgid "Orchid (plugin)"
-msgstr ""
+msgstr "اورکید (افزونه)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:549
 msgid "A java implementation of a Tor client, available as an I2P plugin. Can be used as the default <i>outproxy</i> if configured in the relevant SOCKS or HTTP client tunnel in the <i>Tunnel Manager</i>. Available from <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgstr "پیاده‌سازی جاوایی یک مشتری تور که به عنوان یک افزونه I2P در دسترس است. می‌تواند به عنوان <i>outproxy</i> پیش‌فرض با تنظیم تونل مناسب SOCKS یا مشتری تونل HTTP در <i>مدیر تونل</i> مورد استفاده قرار گیرد. از آدرس http://stats.i2p/i2p/plugins در دسترس است. کد منبع آن در github در دسترس است."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:551
 msgid "Outproxy"
-msgstr ""
+msgstr "اوت‌پراکسی"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:553
 msgid "A service on the network that provides a proxy connection to the <i>clearnet</i>. By default, I2P has an HTTP outproxy configured for web browsing on <code>127.0.0.1:4444</code>."
-msgstr ""
+msgstr "یک سرویس در شبکه که ارتباط پراکسی به <i>اینترنت آزاد</i> را فراهم می‌آورد. به‌طور پیش‌فرض I2P یک اوت‌پراکسی HTTP برای سورف کردن وب در <code>127.0.0.1:4444</code> تنظیم شده است."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:555
 msgid "Participation"
-msgstr ""
+msgstr "مشارکت"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:557
 msgid "The act of contributing to the network by permitting other routers to build tunnels using your router in a tunnel chain. At least 12KB/s upstream bandwidth (network share) is required to be allocated in order to enable participation. Note that firewalled routers will be limited in how much they contribute to participation, and a router designated as Hidden will not participate at all."
-msgstr ""
+msgstr "فعالیت مشارکت در شبکه با اجازه دادن به سایر مسیریاب‌ها برای ساخت تونل با استفاده از مسیریاب خود در یک زنجیره تونل. حداقل 12KB/s پهنای باند بالارونده (سهم شبکه) مورد نیاز است تا اختصاص داده شود تا مشارکت فعال شود. توجه داشته باشیدکه مسیریاب‌های پشت دیوار آتش‌ایست در چقدر می‌توانند به مشارکت کمک کنند و مسیریابی که به عنوان پنهان تعیین شده است، در مشارکت شرکت نخواهد کرد."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:561
 msgid "The process of acquiring router identities, normally via <i>clearnet</i> servers, to ensure your router can communicate and build tunnels with other routers on the network. When a router has no router identities for other peers (usually immediately after installation), the process of reseeding is also referred to as <i>bootstrapping</i>."
-msgstr ""
+msgstr "فرایند کسب شناسه مسیریاب‌ها، به طور معمول از طریق سرورهای <i>اینترنت آزاد</i> برای اطمینان از اینکه مسیریاب شما می‌تواند با سایر مسیریاب‌های شبکه ارتباط برقرار کند و تونل‌ها را بسازد. وقتی مسیریاب هیچ شناسه‌ای از دیگر همتایان ندارد (معمولا همین بعد از نصب)، فرایند بازآرایی به «راه‌اندازی مجدد» مشهور است."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:565
 msgid "The core I2P software, which routes encrypted packets on the I2P network. All routers by default participate in the network except routers running in countries considered hostile (see <i>Strict Countries</i>), which both helps the network and provides cover traffic for any clients or servers connecting to the I2P network through the router."
-msgstr ""
+msgstr "نرم‌افزار اصلی I2P که بسته‌های رمزگذاری‌شده را در شبکه I2P مسیریابی می‌کند. تمام مسیریاب‌ها به طور پیش‌فرض در شبکه مشارکت دارند به جز مسیریاب‌هایی که در کشورهایی که به عنوان غیردوستانه تلقی می‌شوند اجرا می‌شوند (مشاهده کنید <i>کشور‌های سخت</i>)، که هم شبکه را کمک می‌کند و هم ترافیک پوشاننده برای هرگونه مشتری یا سروری که از طریق مسیریاب به شبکه I2P متصل می‌شوند، فراهم می‌کند."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:567
 msgid "Router Identity"
-msgstr ""
+msgstr "شناسه مسیریاب"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:569
 msgid "Information defining the unique identity of a router on the network which includes its IP address (or the IP addresses of intermediate introducers) and listening port, public signing and encryption keys. Router identities correlate to peers in the NetDB. Also referred to as a <i>RouterInfo</i>."
-msgstr ""
+msgstr "اطلاعاتی که شناسه منحصربه‌فرد یک مسیریاب را در شبکه تعریف می‌کند که شامل آدرس آی‌پی آن (یا آدرس‌های آی‌پی واسطه‌های معرف) و درگاه گوش دهنده، کلیدهای امضا و رمزنگاری عمومی است. شناسه‌های مسیریاب با همتایان در NetDB مطابقت دارند. همچنین به عنوان <i>RouterInfo</i> اشاره می‌شود."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:573
 msgid "SAM (Simple Anonymous Messaging) is a protocol which allows a client application written in any programming language to communicate over I2P, by using a socket-based interface to the I2P router. For more information, see the <a href=https://geti2p.net/en/docs/api/samv3 class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "SAM (Simple Anonymous Messaging) یک پروتکل است که اجازه می‌دهد کلاینت‌های نوشته شده با هر زبان برنامه‌نویسی بتوانند از طریق I2P ارتباط برقرار کنند با استفاده از رابطه سوکت مبتنی به مسیریاب I2P. برای اطلاعات بیشتر مستندات آنلاین را ببینید."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:575
 msgid "Shared Client"
-msgstr ""
+msgstr "کلاینت مشترک"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:577
 msgid "In order to use a single set of tunnels for multiple client services, clients can be configured from the <i>Tunnel Manager</i> to operate in <i>Shared Client</i> mode. This mode conserves resources and blends the traffic from multiple clients into a single set of tunnels, making traffic analysis harder. Clients configured as Shared Clients share the same tunnel options."
-msgstr ""
+msgstr "به منظور استفاده از یک مجموعه تونل واحد برای سرویس‌های کلاینت متعدد، کلاینت‌ها می‌توانند از <i>مدیر تونل</i> تنظیم شوند تا در حالت <i>کلاینت مشترک</i> عمل کنند. این حالت منابع را حفظ می‌کند و ترافیک از کلاینت‌های متعدد را به یک مجموعه تونل تبدیل می‌کند که تجزیه ترافیک را سخت‌تر می‌کند. کلاینت‌های تنظیم‌شده به عنوان کلاینت مشترک از گزینه‌های تونل واحدی استفاده می‌کنند."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:581
 msgid "SSU (Secure Semi-reliable UDP) is an I2P network transport providing encrypted, connection-oriented, point-to-point connections, in addition to IP address detection and NAT traversal services. For more information, see the <a href=https://geti2p.net/en/docs/transport/ssu class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "SSU (Secure Semi-reliable UDP) یک ترابر شبکه I2P است که اتصالات نقطه به نقطه رمزگذاری‌شده و محوره ارتباطات را فراهم می‌کند، به همراه خدمات تشخیص آدرس آی‌پی و عبور از NAT. برای اطلاعات بیشتر دستورالعمل آنلاین را ببینید."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:583
 msgid "Strict Countries"
-msgstr ""
+msgstr "کشورهای سخت"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:585
 msgid "A list of countries derived from the <a href=https://freedomhouse.org/report/countries-world-freedom-2019 class='sitelink external' target=_blank rel=noreferrer>World Freedom Report</a> with a poor civil liberties reputation. This list is used to place routers running in the specified countries in <i>Hidden Mode</i> to provide enhanced security for users. The following countries are designated as strict: Afghanistan, Azerbaijan, Bahrain, Belarus, Brunei, Burundi, Cameroon, Central African Republic, Chad, China, Cuba, Democratic Republic of the Congo, Egypt, Equatorial Guinea, Eritrea, Ethiopia, Iran, Kazakhstan, Laos, Libya, Myanmar, North Korea, Palestinian Territories, Rwanda, Saudi Arabia, Somalia, South Sudan, Sudan, Eswatini (Swaziland), Syria, Tajikistan, Thailand, Turkey, Turkmenistan, Venezuela, United Arab Emirates, Uzbekistan, Western Sahara, Yemen."
