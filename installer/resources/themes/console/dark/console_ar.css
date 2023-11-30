@@ -142,6 +142,8 @@ td{text-align:right}
 #updateHelper b,#updateProxyHostPort b,#i2pupdates b{text-align:left}
 #service_logs,table[id$="logs"] ul,.logtable ul li{direction:ltr;text-align:left}
 #xhr{margin:0 -9px 0 auto}
+html[lang="fa"] .links:not(.twocol) li{margin-right:42px}
+html[lang="fa"] .links:not(.twocol) li b{margin-right:-10px}
 
 @media (min-width:1500px){
 .main,.news,h1[class],.sorry{margin-right:260px;margin-left:6px}
