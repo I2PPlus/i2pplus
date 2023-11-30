@@ -1,0 +1,69 @@
+<div lang="fi">
+
+<ul class="links">
+
+<li><b>Käynnistys</b><br>
+Jos olet juuri käynnistänyt I2P+:n, osiossa <i>Peers</i> sivupalkissa olevan <i>Active Peers</i> -määrän tulisi aluksi nousta seuraavien minuuttien aikana, ja listassa <i>Service Tunnels</i> näkyy myös paikallinen kohde nimeltä <i>Shared Clients</i> sekä mahdollisesti muita palvelimia ja asiakkaita riippuen I2P:n asetuksista. Nämä <i>Local Destinations</i> tarjoavat yhteyksiä I2P-verkon eri <a href="/help/faq#portfaq" title="List of commonly used ports" class="consolelink">porteissa</a> toimiviin palveluihin, mahdollistaen BitTorrentin, sähköpostin, web-proxyn ja muiden palvelujen toimivuuden. <a href="/netdb" class="consolelink">Verkkotietokannassa</a> näkyy kaikki paikallisesti tunnetut verkon solmut. Voit myös tarkkailla <a href="/peers" class="consolelink">solmukytkentöjä</a>, tarkastella <a href="/profiles?f=1" class="consolelink">solmuprofiileja</a> ja katsoa aktiiviset <a href="/tunnels" class="consolelink">tunnelit</a> ja niiden tilan.</li>
+
+<li><b>Verkkointegraatio</b><br>
+Ensimmäisellä I2P+:n käynnistyskerralla voi kulua muutama minuutti verkkoon integroitumiseen ja lisäsolmujen löytämiseen optimoimaa integraatiota, joten ole kärsivällinen. Kun sivupalkin osiossa <i>Service Tunnels</i> paikallisten kohteiden viereen ilmestyy vihreitä tähtiä, I2P+:lla voi tehdä monenlaista, ja alla esitellään muutamia mahdollisuuksia.  </li>
+
+<li><b>Verkkotila</b><br>
+Kun I2P+ on ehtinyt testata verkkoyhteyden, sivupalkin Verkkotila-indikaattori näyttää idealla tapauksessa "OK". Jos tila on "Firewalled", I2P+ toimii kyllä, mutta suorituskyky ei ole paras mahdollinen ja kyky lisätä verkon kaistanleveyttä on rajoitetumpi. Parhaan suorituskyvyn saavuttamiseksi avaa <a href="/confignet#udpconfig" class="consolelink">ulkoinen I2P+ -portti</a> palomuurista ja ISP:n reitittimestä. Lisätietoja tilaviesteistä on käyttöliittymän ohjeissa.</li>
+
+<li><b>Osoitekirja-tilaukset</b><br>
+Jotta I2P+ pystyy automaattisesti ratkaisemaan .i2p-verkkopeitteet, se luottaa pääasiassa palveluihin, jotka tarjoavat verkko-osoitteiden kääntämistä tunnetuille isännille. Jos asensit I2P+:n eikä päivittänyt vanhasta I2P:stä, sinulla on jo riittävät <a href="/susidns/subscriptions" class="consolelink">osoitekirja-tilaukset</a> asennettuna; asennuksen jälkeen <a href="/dns" class="consolelink">osoitekirja</a> täyttyy automaattisesti verkon aktiivisten palvelujen nimistä ilman lisätoimia. Jos päivitit vanhasta I2P:stä, tarkista <a href="/help/faq#addressbooksubs" class="consolelink">faq:n osio osoitekirja-tilauksista</a> lisätiedon saamiseksi.</li>
+
+<li><b>Selaimen asetukset</b><br>
+Verkkosivujen selaamiseen tarvitset määrittää selaimesi käyttämään oletus-HTTP-proxyn portilla 4444, joka tarjoaa myös <i>outproxyn</i> anonymisoituun selaamiseen selkeäverkossa. <a href="/help/configuration#browserconfig" class="consolelink">Miniopas Firefoxin asetuksiin</a> on saatavilla asetus-osion ohjeissa, tai katso linkkiä alla monen selaimen asennusoppaaseen.</li>
+
+</ul>
+
+<h3>Palvelut I2P:ssä</h3>
+
+<ul class="links twocol">
+
+<li><b>Näkymätön internet & anonyymi verkkoselaus</b><br>
+I2P:ssä voit käyttää I2P:hen sijoitettuja sivustoja ("eeppausivuja") tai selata tavallista verkkoa anonyymisti I2P:n sisäisen web-proxyn kautta. <a href="https://geti2p.net/en/about/browser-config" class="sitelink external" target="_blank" rel="noreferrer">Määritä selain</a> käyttämään HTTP-proxyn porttia <code>127.0.0.1 portti 4444</code>, jonka jälkeen voit selata piiloverkkosivuille tai tavalliselle <code>http://</code>-osoitteelle. Voit estää tai muuttaa pääsyn tavalliselle internetille poistamalla tai muokkaamalla <i>Outproxies</i>-osion HTTP-proxyn asiakastunnelin <a href="/i2ptunnel/edit?tunnel=0" target="_blank" rel="noreferrer" class="consolelink">muokkausikkunassa</a>.</li>
+
+<li><b>Anonyymi sähköposti</b><br>
+I2P:n Postmanin sähköpostijärjestelmään pääset käsiksi joko I2P:n sisäisen <a href="/webmail" class="consolelink">sähköpostiohjelman</a> (Susimail) tai minkä tahansa standardiohjelman kautta. Sähköpostigatewayn kautta on mahdollista vastaanottaa postia tavalliselta internetiltä; osoitteesi on myös <code>@mail.i2p</code> tai <code>@i2pmail.org</code>. Tilin luonnin voit tehdä <a href="http://hq.postman.i2p/" class="sitelink" target="_blank" rel="noreferrer">Postmanin HQ:ssa</a>.</li>
+
+<li><b>Anonyymi tiedonsiirto</b><br>
+I2P:hen on integroitu <a href="/torrents" class="consolelink">I2PSnark</a>, joka mahdollistaa anonyymit ja salatut BitTorrent-siirrot. Vaihtoehtoisesti on käytettävissä <a href="https://wiki.biglybt.com/w/I2P" class="sitelink external" target="_blank" rel="noreferrer">BiglyBT</a> (entinen Azureus/Vuze), joka tukee torrentien lataamista I2P:n ylitse, tai <a href="https://github.com/majestrate/XD" class="sitelink external" target="_blank" rel="noreferrer">XD</a>, pelkästään I2P:lle kehitetty BitTorrent-asiakasohjelma.</li>
+
+<li><b>Anonyymi keskustelu</b><br>
+Käynnistä IRC-asiakasohjelmasi (esim. <a href="https://hexchat.github.io/" class="sitelink external" target="_blank" rel="noreferrer">HexChat</a>) ja yhdistä palvelimelle <a href="irc://127.0.0.1:6668/i2p" class="chatlink">osoitteeseen</a> <code>127.0.0.1 portti 6668</code>. proxyn asetusta ei tarvita, sillä I2P tarjoaa paikallisen IRC-tunnelin. Kanavilla <code>#saltr</code> ja <code>#i2p-dev</code> on keskustelua. Myös alustariippamaton I2P-pohjainen pikaviestisovellus on saatavilla <a href="https://vituperative.github.io/i2pchat/" class="sitelink external" target="_blank" rel="noreferrer">Github</a>.</li>
+
+<li><b>Anonyymi salattu webbihoito</b><br>
+I2P:ssä on mukana <a href="https://www.eclipse.org/jetty/" class="sitelink external" target="_blank" rel="noreferrer">Jetty</a>-pohjainen palvelin oman sivuston julkaisemiseen I2P-verkossa osoitteessa <a href="http://127.0.0.1:7658/" class="consolelink" target="_blank" rel="noreferrer">http://127.0.0.1:7658/</a>. Käynnistämällä <a href="/i2ptunnelmgr" class="consolelink" target="_blank" rel="noreferrer">I2P Webserver Tunnel</a> sivustosi on näkyvissä (mutta ei löydettävissä) muille. Ohjeet sivuston asetteluun ja .i2p-domainin rekisteröintiin löytyy <a href="http://127.0.0.1:7658/help/webhosting" class="consolelink">ohjeosastolta</a>.</li>
+
+<li><b>Lisäosat I2P:lle</b><br>
+ZZZ:n <a href="http://stats.i2p/i2p/plugins/" class="sitelink" target="_blank" rel="noreferrer">lisäosasivulta</a> löytyy suoria lataussivuja useille lisäosille. Jos olet kehittäjä, ohjelmointikielistä riippumaton <a href="http://i2p-projekt.i2p/plugins.html" class="sitelink" target="_blank" rel="noreferrer">kehystä</a> on saatavilla omista lisäosista koodaamiseen.</li>
+
+</ul>
+
+<h3 id="trouble">Tietoa kehittäjille ja osallistujille</h3>
+
+<ul class="links">
+
+<li><b>Ohjelmistovirheiden ilmoittaminen</b><br>
+Ohjelmistovirheen ilmoittamiseksi avaa lomake <a href="http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" class="sitelink" target="_blank" rel="noreferrer">git.idk.i2p-projektilla</a>.ehittäjiin liittyvät keskustelut käydään <a href="http://zzz.i2p/" class="sitelink" target="_blank" rel="noreferrer">zzz:n kehittäjäfoorumeilla</a> tai I2P:n IRC-verkon <a href="irc://127.0.0.1:6668/i2p-dev" class="chatlink">kehittäjäkanavalla</a> (#i2p-dev).</li>
+
+<li><b>Kehittäminen I2P:llä</b><br>
+Jos olet kehittäjä, voit harkita omien <a href="http://i2p-projekt.i2p/applications.html" class="sitelink" target="_blank" rel="noreferrer">I2P-sovellusten</a> kirjoittamista tai nykyisen sovelluksesi turvallisuuden parantamista hyödyntämällä I2P-verkkoa. Sekä <a href="https://wikipedia.org/wiki/User_Datagram_Protocol" class="sitelink external" target="_blank" rel="noreferrer">UDP</a>-että <a href="https://wikipedia.org/wiki/Transmission_Control_Protocol" class="sitelink external" target="_blank" rel="noreferrer">TCP</a>-protokollat ovat käytössä, samoin <a href="http://i2p-projekt.i2p/streaming.html" class="sitelink" target="_blank" rel="noreferrer">reaaliaikainen streaming</a>. Java-rajapinta on täysin saatavilla, ja peruskirjastot löytyvät <a href="https://mvnrepository.com/artifact/net.i2p" class="sitelink external" target="_blank" rel="noreferrer">Maven-repositoriosta</a>. Lähdekoodit ovat <a href="https://github.com/i2p/i2p.i2p" class="sitelink external" target="_blank" rel="noreferrer">Github</a> tai <a href="https://gitlab.com/i2pplus/I2P.Plus" class="sitelink external" target="_blank" rel="noreferrer">Gitlab</a>, ja rakentamiseen tarvitaan <a href="https://wikipedia.org/wiki/Java_SDK" class="sitelink external" target="_blank" rel="noreferrer">Java SDK</a> ja <a href="http://ant.apache.org/" class="sitelink external" target="_blank" rel="noreferrer">Apache Ant</a>.</li>
+
+</ul>
+
+<ul class="links twocol">
+
+<li><b>Osallistu!</b><br>
+I2P:tä kehitetään ja ylläpidetään pääasiassa vapaaehtoistyönä. Lisätietoja osallistumisesta on <a href="http://i2p-projekt.i2p/getinvolved.html" class="sitelink" target="_blank" rel="noreferrer">vapaaehtoisista</a> kertovalla sivulla.</li>
+
+<li><b>I2P+</b><br>
+Lisätietoa I2P+:sta saat sivustoilta <a href="http://skank.i2p/" class="sitelink" target="_blank" rel="noreferrer">skank.i2p</a> tai <a href="https://i2pplus.github.io/" class="sitelink external" target="_blank" rel="noreferrer">i2pplus.github.io</a>, tai I2P:n IRC-verkon <a href="irc://127.0.0.1:6668/saltR" class="chatlink">#saltR</a>-kanavalla. I2P+:aan lähetetyt korjaukset ovat tervetulleita, lähetä pull requestit <a href="https://gitlab.com/i2pplus/I2P.Plus/" class="sitelink external" target="_blank" rel="noreferrer">Gitlab</a>.</li>
+
+</ul>
+
+<div class="topness"><a href="#trouble">[Takaisin alkuun]</a></div>
+<div class="footnote"><hr>Asiakirja päivitetty: Elokuu 2020</div>

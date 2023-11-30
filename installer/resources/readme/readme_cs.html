@@ -1,0 +1,71 @@
+<div lang="cs">
+
+<ul class="links">
+
+<li><b>Zapnutí</b><br>
+Pokud jste právě spustili I2P+, počet <i>Aktivních partnerů</i> uvedený v sekci <i>Partneři</i> v postranním panelu by se měl během několika minut začít zvyšovat a rovněž by tam měla být uvedena <i>Místní destinace</i> pojmenovaná <i>Sdílené klienty</i> v sekci <i>Síťové tunely</i> a možná i další klienti a servery v závislosti na konfiguraci I2P. Tyto <i>Místní destinace</i> poskytují připojení ke službám na různých <a href="/help/faq#portfaq" title="Seznam obvykle používaných portů" class="consolelink">portech</a> do sítě I2P, což umožňuje fungování BitTorrentu, e-mailu, proxy serveru a dalších služeb. Váš <a href="/netdb" class="consolelink">Databáze sítě</a> ukazuje všechny místně známé partnery v síti. Rovněž můžete sledovat stávající <a href="/peers" class="consolelink">připojení k partnerům</a>, zkontrolovat <a href="/profiles?f=1" class="consolelink">profily výkonnosti partnerů</a> a zobrazit aktivní <a href="/tunnels" class="consolelink">tunely</a> a jejich stav.</li>
+
+<li><b>Integrace sítě</b><br>
+Při prvním spuštění I2P+ může integrace do sítě a nalezení dalších partnerů trvat několik minut, prosím buďte trpěliví. Jakmile se u vašich <i>Místních destinací</i> v sekci <i>Síťové tunely</i> na bočním panelu objeví zelené hvězdičky, můžete s I2P provádět různé věci, které vám níže představíme.</li>
+
+<li><b>Stav sítě</b><br>
+Poté, co I2P+ ověří připojení k síti, by ukazatel Stavu sítě na bočním panelu ideálně měl uvádět "OK". Pokud je stav "Za firewall", I2P+ bude stále fungovat, ale výkon sítě nebude optimální a vaše schopnost přispívat do sítě šířkou pásma bude omezená. Pro optimální výkon doporučujeme otevřít <a href="/confignet#udpconfig" class="consolelink">vnější port I2P+</a> ve svém firewallu a směrovači.</li>
+
+<li><b>Předplatné adresáře</b><br>
+Aby I2P+ dokázal automaticky rozpoznávat domény .i2p, spoléhá se především na předplatná služeb, které poskytují překlad DNS pro známé domény. Pokud jste instalovali I2P+ místo aktualizace z I2P, již máte nastavena dostatečná <a href="/susidns/subscriptions" class="consolelink">předplatná adresáře</a>; po instalaci se váš <a href="/dns" class="consolelink">adresář</a> samočinně naplní názvy aktivních služeb v síti. Pokud jste aktualizovali z I2P, podívejte se do sekce <a href="/help/faq#addressbooksubs" class="consolelink">Předplatná adresáře</a> v <a href="/help/faq" class="consolelink">Často kladené dotazy</a> na pomoc s přidáním dalších předplatných.</li>
+
+<li><b>Nastavení prohlížeče</b><br>
+Pro prohlížení webových stránek v síti je nutné nakonfigurovat váš prohlížeč, aby používal výchozí HTTP proxy nastavený na portu 4444, který rovněž poskytuje <i>outproxy</i> umožňující anonymní prohlížení stránek clearnetu. Je k dispozici <a href="/help/configuration#browserconfig" class="consolelink">mini-průvodce nastavením Firefoxu</a> na stránce Nastavení v sekci Nápověda, nebo se podívejte níže na odkaz na komplexní průvodce pro více prohlížečů. Jakmile nakonfigurujete svůj prohlížeč a předplatná adresáře, <a href="http://notbob.i2p/" target="_blank">notbob.i2p</a> je skvělé místo pro objevování obsahu v síti.</li>
+
+</ul>
+
+<h3>Služby na I2P</h3>
+
+<ul class="links twocol">
+
+<li><b>Neviditelný internet a veřejné prohlížení webu</b><br>
+Na I2P můžete přistupovat ke stránkám hostovaným v I2P ("eepsites") nebo anonymně prohlížet běžný web přes vestavěný proxy server I2P (outproxy). <a href="https://geti2p.net/en/about/browser-config" class="sitelink external" target="_blank" rel="noreferrer">Nakonfigurujte svůj prohlížeč,</a> aby používal HTTP proxy na <code>127.0.0.1 port 4444</code>, a poté prohlížejte stránky skryté služby nebo normální nešifrovanou adresu <code>http://</code>. Pro zakázání nebo změnu přístupu outproxy k běžnému internetu odstraňte nebo upravte záznam pro <code>false.i2p</code> nebo <code>purokishi.i2p</code> v sekci <i>Outproxy</i> na stránce <a href="/i2ptunnel/edit?tunnel=0" target="_blank" rel="noreferrer" class="consolelink">Upravit</a> klientského tunelu HTTP Proxy v <a href="/i2ptunnelmgr" class="consolelink">Správci tunelů</a>.</li>
+
+<li><b>Anonymní e-mail</b><br>
+E-mailový systém Postman postavený na I2P lze přístupovat buď prostřednictvím <a href="/webmail" class="consolelink">vestavěného klienta I2P</a> (Susimail), nebo jakýmkoli standardním klientem. Brána pro e-maily umožňuje příjem zpráv z adres běžného internetu; vaše adresa <code>@mail.i2p</code> je kontaktná také přes <code>@i2pmail.org</code>. Pro zřízení účtu navštivte <a href="http://hq.postman.i2p/" class="sitelink" target="_blank" rel="noreferrer">hq.postman.i2p</a>.
+</li>
+
+<li><b>Anonymní přenos souborů</b><br>
+<a href="/torrents" class="consolelink">I2PSnark</a> je integrován do I2P a poskytuje anonymní šifrované přenosy BitTorrent. Jinou možností je <a href="https://wiki.biglybt.com/w/I2P" class="sitelink external" target="_blank" rel="noreferrer">BiglyBT</a> (nástupce Azureusu/Vuze), klient BitTorrentu podporující použití I2P, nebo <a href="https://github.com/majestrate/XD" class="sitelink external" target="_blank" rel="noreferrer">XD</a>, klient BitTorrentu vyvinutý v Go výhradně pro I2P. Mezi další služby patří hosting souborů v prohlížeči jako <a href="http://cake.i2p/" class="sitelink" target="_blank" rel="noreferrer">cake.i2p</a> nebo <a href="http://fs.i2p/" class="sitelink" target="_blank" rel="noreferrer">fs.i2p</a>.</li>
+
+<li><b>Anonymní chat</b><br>
+Spusťte svůj klient IRC (např. <a href="https://hexchat.github.io/" class="sitelink external" target="_blank" rel="noreferrer">HexChat</a>) a připojte se k <a href="irc://127.0.0.1:6668/i2p" class="chatlink">serveru</a> na <code>127.0.0.1 port 6668</code>. Ve svém klientu IRC není nutné nastavovat proxy; I2P vám poskytne místní tunel IRC (nakonfigurovaný v klientu IRC jako IRC server nebo vzdálený host). Jakmile se připojíte, kanály <code>#saltr</code> a <code>#i2p-dev</code> jsou jen některé z dostupných kanálů, které byste chtěli využívat. Existuje také multiplatformní aplikace pro okamžitou zprávu založená na I2P, dostupná na <a href="https://vituperative.github.io/i2pchat/" class="sitelink external" target="_blank" rel="noreferrer">Github</a>.</li>
+
+<li><b>Anonymní šifrované webové hostingy</b><br>
+I2P přináší webový server pro hosting vlastní stránky v síti I2P: instance <a href="https://www.eclipse.org/jetty/" class="sitelink external" target="_blank" rel="noreferrer">Jetty</a> naslouchající na <a href="http://127.0.0.1:7658/" class="consolelink" tet="_blank" rel="noreferrer">http://127.0.0.1:7658/</a>. Po spuštění předkonfigurovaného <a href="/i2ptunnelmgr" class="consolelink" target="_blank" rel="noreferrer">tunelu I2P Webservera</a> bude vaše stránka viditelná (ale neobjevitelná) ostatním. Návody pro nastavení stránky a registraci domény .i2p najdete v sekci <a href="http://127.0.0.1:7658/help/webhosting" class="consolelink">nápověda</a>.</li>
+
+<li><a name="plugins"></a><b>Pluginy pro I2P</b><br>
+Na stránce <a href="http://stats.i2p/i2p/plugins/" class="sitelink" target="_blank" rel="noreferrer">zzze pluginů</a> najdete přímé odkazy ke stažení několika pluginů. Pokud jste vývojář, poskytuje se zprostředkovaný <a href="http://i2p-projekt.i2p/plugins.html" class="sitelink" target="_blank" rel="norefer">framework</a> pro psaní vlastních pluginů.</li>
+
+</ul>
+
+<h3 id="trouble">Informace pro vývojáře a přispěvatele</h3>
+
+<ul class="links">
+
+<li><b>Hlášení chyb</b><br>
+Pro nahlášení chyby otevřete prosím vývojářskou zprávu na <a href="http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" class="sitelink" target="_blank" rel="noreferrer">git.idk.i2p</a>. Diskuse pro výáře probíhají na <a href="http://zzz.i2p/" class="sitelink" target="_blank" rel="noreferrer">fóru zzz</a> nebo v kanálu <a href="irc://127.0.0.1:6668/i2p-dev" class="chatlink">#i2p-dev</a> na síti I2P IRC.</li>
+
+<li><b>Vývoj na I2P</b><br>
+Jako vývojář byste mohli zvažovat napsání vlastních <a href="http://i2p-projekt.i2p/applications.html" class="sitelink" target="_blank" rel="noreferrer">aplikací pro I2P</a> nebo zvýšit bezpečnost vaší aplikace využitím sítě I2P. Protokoly <a href="https://wikipedia.org/wiki/User_Datagram_Protocol" class="elink external" target="_blank" rel="noreferrer">UDP</a> i <a href="https://wikipedia.org/wiki/Transmission_Control_Protocol" class="sitelink external" target="_blank" rel="noreferrer">TCP</a> jsou <a href="http://i2p-projekt.i2p/techintro.html#op.transport" class="sitelink" target="_blank" rel="noreferrer">podporovány</a>, stejně tak <a href="http://i2p-projekt.i2p/streaming.html" class="sitelink" target="_blank" rel="noreferrer">streamování v reálném čase</a>. Přístup k <a href="http://javadoc.skank.i2p/" class="sitelink" target="_blank" rel="noreferrer">Java API</a> je plný, jádro knihoven I2P je k dispozici v <a href="https://mvnrepository.com/artifact/net.i2p" class="sitelink external" target="_blank" rel="noreferrer">Maven repository</a>. Zdrojové kódy I2P jsou na <a href="https://github.com/i2p/i2p.i2p" class="sitelink external" target="_blank" rel="noreferrer">Github</a> nebo <a href="https://gitlab.com/i2pplus/I2P.Plus" class="sitelink external" target="_blank" rel="noreferrer">Gitlab</a>, stav buildu sleduje <a href="https://travis-ci.org/i2p/i2p.i2p" class="sitelink external" target="_blank" rel="noreferrer">Travis CI</a> (I2P) nebo <a href="https://gitlab.com/i2pplus/I2P.Plus/pipelines" class="sitelink external" target="_blank" rel="noreferrer">Gitlab</a> (I2P+). Pro build zdrojů je zapotřebí <a href="https://wikipedia.org/wiki/Java_SDK" class="sitelink external" target="_blank" rel="noreferrer">Java SDK</a> a <a href="http://ant.apache.org/" class="sitelink external" target="_blank" rel="noreferrer">Apache Ant</a>.</li>
+</ul>
+
+<ul class="links twocol">
+
+<li><b>Zapojte se!</b><br>
+I2P je vyvíjen a udržován převážně neplacenou dobrovolnickou prací členů komunity. Více informací o tom, jak se můžete zapojit, najdete na stránce <a href="http://i2p-projekt.i2p/getinvolved.html" class="sitelink" target="_blank" rel="noreferrer">dobrovolníci</a>.</li>
+
+<li><b>I2P+</b><br>
+Více informací o I2P+ najdete na <a href="http://skank.i2p/" class="sitelink" target="_blank"l="noreferrer">skank.i2p</a>, <a href="https://i2pplus.gith./class="sitelink external" target="_blank" rel="noreferrer">i2pplus.github.io</a> nebo v kanálu <a href="irc://127.0.0.1:6668/saltR" class="chatlink">#saltR</a> na síti I2P IRC. Vítány jsou opravy pro I2P+ ve formě pull requestů na <a href="https://gitlab.com/i2pplus/I2P.Plus/" class="sitelink external" target="_blank" rel="noreferrer">Gitlab</a>.</li>
+
+</ul>
+
+<div class="topness"><a href="#top">[Návrat nahoru]</a></div>
+<div class="footnote"><hr>Dokument aktualizován: Srpen 2020</div>
+
+</div>
