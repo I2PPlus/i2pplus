@@ -1,41 +1,70 @@
 <div lang="es">
 
-<p>Si acabas de iniciar I2P, al observar el menú de la izquierda, deberías notar que los n&uacute;meros al lado de "Activos:" subirán en los próximos minutos y luego verás allí un Destino llamado "clientes diferentes" (si no, <a href="#trouble">&iexcl;mira abajo!</a>). Apenas aparezca esto, puedes:</p>
+<ul class=links>
 
-<ul>
+<li><b>Empezando</b><br>
+Si acabas de iniciar I2P+, el número de <i>Pares Activos</i> indicado en la sección <i>Pares</i> en la barra lateral debería comenzar a crecer en los próximos minutos, y también verás una <i>Destino Local</i> llamado <i>Clientes Compartidos</i> listado en la sección <i>Túneles de Servicio</i>, y posiblemente otros clientes y servidores dependiendo de cómo esté configurado I2P. Estos <i>Destinos Locales</i> brindan conexiones a servicios en diferentes <a href="/help/faq#portfaq" title="Lista de puertos comúnmente utilizados" class=consolelink>puertos</a> en la red de I2P, permitiendo que funcionen BitTorrent, correo electrónico, el proxy web y otros servicios. Tu <a href="/netdb" class=consolelink>Base de Datos de Red</a> indica todos los pares conocidos localmente en la red. También puedes monitorear conexiones de <a href="/peers" class=consolelink>pares</a> existentes, revisar <a href="/profiles?f=1" class=consolelink>perfiles de rendimiento de pares</a> y ver <a href="/tunnels" class=consolelink>túneles</a> activos y su estado.</li>
 
-<li><b>Visitar p&aacute;ginas I2P ("Eepsites")</b> - En I2P hay p&aacute;ginas web an&oacute;nimas: Configura tu navegador web para usar el proxy HTTP: <code>127.0.0.1 puerto 4444</code>, luego visita una p&aacute;gina I2P:
-<br>
+<li><b>Integración en la Red</b><br>
+La primera vez que inicies I2P+, puede tomar unos minutos para iniciar (integrarte) en la red y encontrar pares adicionales para optimizar tu integración, así que por favor ten paciencia. Una vez que aparezcan estrellas verdes junto a tus <i>Destinos Locales</i> en la sección <i>Túneles de Servicio</i> en la barra lateral, hay varias cosas que puedes hacer con I2P, y a continuación te presentamos algunas de ellas.</li>
 
-<ul class="links twocol">
-<li><a href="http://i2pforum.i2p/">i2pforum.i2p</a>: Conexi&oacute;n segura y an&oacute;nima a <a href="http://i2pforum.net/">i2pforum.net</a></li>
-<li><a href="http://i2p-projekt.i2p/es/">i2p-projekt.i2p</a>: Conexiones seguras y an&oacute;nimas a <a href="https://geti2p.net/es/">geti2p.net</a></li>
-<li><a href="http://wiki.i2p-projekt.i2p/">i2pwiki.i2p</a>: P&aacute;gina de i2pwiki; un wiki p&uacute;blico con muchos enlaces</li>
-<li><a href="http://cake.i2p/pastebin/">cake.i2p/pastebin/</a>: Pastebin an&oacute;nimo</li>
-<li><a href="http://stats.i2p/">stats.i2p</a>: Estadísticas de rendimiento y salud de I2P Network
-<li>Hay muchas p&aacute;ginas I2P m&aacute;s - simplemente &iexcl;sigue los enlaces que encuentres, pon marcadores para tus favoritos y vis&iacute;talos frecuentemente!</li>
-</ul>
+<li><b>Estado de la Red</b><br>
+Una vez que I2P+ haya tenido tiempo para probar tu conectividad de red, el indicador de Estado de la Red en la barra lateral idealmente debería indicar "OK". Si el estado indica "Firewalled", I2P+ seguirá funcionando aunque el rendimiento de la red no será óptimo, y se verá obstaculizada tu capacidad para contribuir ancho de banda a la red. Para un rendimiento óptimo, considera abrir tu <a href="/confignet#udpconfig" class=consolelink>puerto externo I2P+</a> en tu firewall y en el enrutador proporcionado por tu ISP. Se encuentra disponible más información sobre los mensajes de estado en la <a href="/help/ui#reachabilityhelp" class=consolelink>página de ayuda de la Interfaz de Usuario</a>.</li>
 
+<li><b>Suscripciones a la Libreta de Direcciones</b><br>
+Para que I2P+ pueda resolver automáticamente los nombres de host .i2p, depende principalmente de suscripciones a servicios que proporcionan traducción DNS para hosts conocidos. Si instalaste I2P+ en lugar de actualizar desde I2P, ya tendrás suficientes <a href="/susidns/subscriptions" class=consolelink>suscripciones a la libreta de direcciones</a> configuradas; después de la instalación, tu <a href="/dns" class=consolelink>libreta de direcciones</a> debería llenarse con nombres de host para servicios activos en la red sin intervención. Si actualizaste desde I2P, consulta la sección de <a href="/help/faq#addressbooksubs" class=consolelink>suscripciones a la libreta de direcciones</a> en las <a href="/help/faq" class=consolelink>Preguntas Frecuentes</a> para obtener ayuda añadiendo suscripciones adicionales.
 </li>
 
-<li><b>Navegar en internet</b> - I2P cuenta con un HTTP-"Outproxy". Para poder usarlo, puedes tambi&eacute;n utilizar el proxy HTTP en el puerto <code>4444</code> - Si configuras tu navegador web para usar este proxy, puedes visitar las p&aacute;ginas web de forma an&oacute;nima. El tr&aacute;fico ser&aacute; enrutado atrav&eacute;s de la red I2P.</li>
-<li><b>Intercambiar datos</b> - Hay una <a href="/torrents">adaptaci&oacute;n</a> para I2P de la aplicaci&oacute;n BitTorrent <a href="http://www.klomp.org/snark/">Snark</a>.</li>
-<li><b>Correo electr&oacute;nico an&oacute;nimo</b> - Postman cre&oacute; un sistema de correo electr&oacute;nico que es compatible con las aplicaciones de correo comunes (POP3/SMTP), el cual permite enviar correos electr&oacute;nicos tanto dentro de I2P como recibir y mandar correos de/a internet. Puedes registrar tu cuenta en <a href="http://hq.postman.i2p/">hq.postman.i2p</a>. Junto a esto tenemos <a href="/webmail">Susimail</a>, un cliente an&oacute;nimo de correo que se abre en el navegador web. Ya est&aacute; configurado para el servicio de Postman.<br>
-Tambi&eacute;n te recomendamos nuestro nuevo sistema de correo electr&oacute;nico sin servidor <a href="http://tjgidoycrw6s3guetge3kvrvynppqjmvqsosmtbmgqasa6vmsf6a.b32.i2p/">I2P-Bote</a>, que existe en forma de plugin. Viene con una interfaz web y cifra todos los mensajes de fin a fin.</li>
-<li><b>Chat an&oacute;nimo</b> - Lanza tu cliente IRC preferido y con&eacute;ctate con el servidor an&oacute;nimo en <code>127.0.0.1 puerto 6668</code>. Esto te llevar&aacute; a uno de dos servidores an&oacute;nimos de IRC - y ni tu ni los dem&aacute;s usuarios sabr&aacute;n quien es el otro, ni siquiera el administrador del servidor.</li>
-<li><b>Blog an&oacute;nimo</b> - &iexcl;Prueba <a href="http://syndie-project.i2p/">Syndie</a>!</li>
-<li>Y mucho m&aacute;s&hellip;</li>
+<li><b>Configuración del Navegador</b><br>
+Para navegar por sitios web en la red, deberás configurar tu navegador para usar el proxy HTTP predeterminado configurado en el puerto 4444, que también proporciona un <i>outproxy</i> que permite la navegación anónima de sitios en clearnet. Se proporciona una <a href="/help/configuration#browserconfig" class=consolelink>mini-guía para configurar Firefox</a> en la página de Configuración de la sección de ayuda, o consulta la sección a continuación para obtener un enlace a la guía de configuración multi-navegador. Una vez que hayas configurado tu navegador y suscripciones a la libreta de direcciones, <a href="http://notbob.i2p/" target=_blank>notbob.i2p</a> es un gran sitio para descubrir contenido en la red.
+</li>
 
 </ul>
 
-<h3>&iquest;Quieres tener tu propia p&aacute;gina I2P?</h3>
+<h3>Servicios en I2P</h3>
 
-<p>El paquete I2P contiene programas que te facilitan manejar tu propia p&aacute;gina I2P: Una instancia de <a href="https://www.eclipse.org/jetty/">Jetty</a> enlaza con <a href="http://127.0.0.1:7658/">http://127.0.0.1:7658/</a>. Simplemente pon tus archivos en la carpeta <code>eepsite/docroot/</code> (o los servlets/jsp <code>.war</code> en <code>eepsite/webapps</code>, scripts cgi en <code>eepsite/cgi-bin</code>) y ya est&aacute; disponible tu p&aacute;gina. Despu&eacute;s del arranque del <a href="/i2ptunnel/">t&uacute;nel de la p&aacute;gina I2P</a>, que enlaza con tu servidor, tu p&aacute;gina I2P est&aacute; disponible para otros. Instrucciones m&aacute;s detalladas sobre c&oacute;mo lanzar tu p&aacute;gina I2P puedes encontrar en <a href="http://127.0.0.1:7658/">tu p&aacute;gina I2P temporal</a>.</p>
+<ul class="links twocol">
 
-<h3 id="trouble">Problemas</h3>
+<li><b>Navegación en la internet invisible y pública</b><br>
+En I2P puedes acceder a sitios web alojados en I2P ("eepsites") o navegar por la web normal de forma anónima a través del proxy web (outproxy) incorporado en I2P. <a href="https://geti2p.net/en/about/browser-config" class="sitelink external" target=_blank rel=noreferrer>Configura tu navegador</a> para que use el proxy HTTP en <code>127.0.0.1 puerto 4444</code>, luego navega a un sitio web de servicio oculto o a una dirección normal no encriptada con <code>http://</code>. Para deshabilitar o cambiar el acceso al outproxy de internet normal, elimina o modifica la entrada del outproxy para <code>false.i2p</code> o <code>purokishi.i2p</code> en la sección <i>Outproxies</i> en la <a href="/i2ptunnel/edit?tunnel=0" target=_blank rel=noreferrer class=consolelink>página de edición</a> del túnel del cliente proxy HTTP en el <a href="/i2ptunnelmgr" class=consolelink>Túnel Manager</a>.</li>
 
-<p>&iexcl;Ten paciencia!, despu&eacute;s del primer arranque, I2P puede ser lento. Esto se debe a que tu enrutador I2P necesita tiempo para establecer conexiones con otros enrutadores I2P y para llegar a conocer la red. Si despu&eacute;s de treinta minutos el n&uacute;mero de tus conexiones activas (&iexcl;vea al lado izquierdo, debajo de "participantes"!) a&uacute;n sigue menor que diez, deber&iacute;a ver si el puerto que usa I2P est&aacute; abierto en tu cortafuegos, para que tengas una conexi&oacute;n mejor. El puerto que usa tu enrutador I2P (un puerto aleatorio escogido a la hora de la instalaci&oacute;n) puedes ver en la <a href="config">P&aacute;gina de configuraci&oacute;n</a>. Si no puedes acceder a ninguna p&aacute;gina I2P (ni siquiera a <a href="http://i2p-projekt.i2p/es/">i2p-projekt.i2p</a>), &iexcl;aseg&uacute;rate de que tu navegador est&eacute; usando el proxy <code>127.0.0.1 puerto 4444</code>!</p>
+<li><b>Correo Electrónico Anónimo</b><br>
+El sistema de correo basado en I2P de Postman se puede acceder a través del <a href="/webmail" class=consolelink>cliente de correo incorporado de I2P</a> (Susimail) o cualquier cliente de correo estándar. Una pasarela de correo permite recibir correo de direcciones de internet normales; tu dirección <code>@mail.i2p</code> también se puede contactar a través de <code>@i2pmail.org</code>. Para obtener una cuenta, visita <a href="http://hq.postman.i2p/" class=sitelink target=_blank rel=noreferrer>hq.postman.i2p</a>.</li>
 
-<p>Quiz&aacute;s quieras leer la informaci&oacute;n disponible en la <a href="http://i2p-projekt.i2p/es/">p&aacute;gina web de I2P</a>, leer noticias y escribir en el <a href="http://i2pforum.i2p/">Forum de I2P</a> o venir a saludarnos en el canal oficial de habla hispana <a href="irc://127.0.0.1:6668/i2p-es">#i2p-es</a>, el canal oficial en ingl&eacute;s <a href="irc://127.0.0.1:6668/i2p">#i2p</a> o en <a href="irc://127.0.0.1:6668/saltR">#saltR</a> , todos en los servidores <code>irc.postman.i2p</code>, <code>irc.dg.i2p</code> y <code>irc.echelon.i2p</code>. (Puedes acceder a ambos bajo <a href="irc://localhost:6668">irc://localhost:6668</a>; los dos servidores est&aacute;n conectados.)</p>
+<li><b>Transferencia de Archivos Anónima</b><br>
+<a href="/torrents" class=consolelink>I2PSnark</a> está integrado en I2P y ofrece transferencias de BitTorrent anónimas y encriptadas. Alternativamente, existe <a href="https://wiki.biglybt.com/w/I2P" class="sitelink external" target=_blank rel=noreferrer>BiglyBT</a> (el sucesor de Azureus/Vuze), un cliente de BitTorrent que admite torrentes a través de I2P, y <a href="https://github.com/majestrate/XD" class="sitelink external" target=_blank rel=noreferrer>XD</a>, un cliente de BitTorrent exclusivo de I2P escrito en Go. Los servicios adicionales incluyen hosting de archivos basado en el navegador, como <a href="http://cake.i2p/" class=sitelink target=_blank rel=noreferrer>cake.i2p</a> y <a href="http://fs.i2p/" class=sitelink target=_blank rel=noreferrer>fs.i2p</a>.</li>
+
+<li><b>Chat Anónimo</b><br>
+Inicia tu cliente de IRC (por ejemplo, <a href="https://hexchat.github.io/" class="sitelink external" target=_blank rel=noreferrer>HexChat</a>) y conéctate al <a href="irc://127.0.0.1:6668/i2p" class=chatlink>servidor</a> en <code>127.0.0.1 puerto 6668</code>. No necesitas configurar un proxy en tu cliente de IRC; I2P te proporciona un túnel de IRC local (configurado en tu cliente de IRC como un servidor IRC o host remoto). Una vez allí, <code>#saltr</code> y <code>#i2p-dev</code> son solo algunos de los canales disponibles a los que podrías unirte. También existe una aplicación de mensajería instantánea basada en I2P de plataforma cruzada, disponible en <a href="https://vituperative.github.io/i2pchat/" class="sitelink external" target=_blank rel=noreferrer>Github</a>.</li>
+
+<li><b>Hosting Web Anónimo y Encriptado</b><br>
+I2P viene con un servidor web para alojar tu propio sitio web en la red de I2P: una instancia de <a href="https://www.eclipse.org/jetty/" class="sitelink external" target=_blank rel=noreferrer>Jetty</a> escuchando en <a href="http://127.0.0.1:7658/" class=consolelink target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>. Después de iniciar el túnel del <a href="/i2ptunnelmgr" class=consolelink target=_blank rel=noreferrer>Servidor Web I2P preconfigurado</a>, tu sitio será visible (pero no descubrible) para otros. Las instrucciones para configurar tu sitio y registrar un dominio .i2p se proporcionan en la <a href="http://127.0.0.1:7658/help/webhosting" class=consolelink>sección de ayuda</a>.</li>
+
+<li><a name="plugins"></a><b>Plugins para I2P</b><br>
+Visita la página de <a href="http://stats.i2p/i2p/plugins/" class=sitelink target=_blank rel=noreferrer>plugins de zzz</a> para descargar varios plugins directamente. Si eres un desarrollador, se proporciona un <a href="http://i2p-projekt.i2p/plugins.html" class=sitelink target=_blank rel=noreferrer>framework</a> agnóstico de lenguaje para escribir tus propios plugins.</li>
+
+</ul>
+
+<h3 id="trouble">Información para desarrolladores y colaboradores</h3>
+
+<ul class=links>
+
+<li><b>Reportar errores</b><br>
+Para reportar un error, por favor presenta un ticket en <a href="http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" class=sitelink target=_blank rel=noreferrer>git.idk.i2p</a>. Para discusiones relacionadas con los desarrolladores, por favor visita <a href="http://zzz.i2p/" class=sitelink target=_blank rel=noreferrer>los foros de desarrolladores de zzz</a> o el <a href="irc://127.0.0.1:6668/i2p-dev" class=chatlink>canal de desarrolladores</a> (#i2p-dev) en la red IRC de I2P.</li>
+
+<li><b>Desarrollando en I2P</b><br>
+Si eres un desarrollador, puedes considerar escribir tus propias <a href="http://i2p-projekt.i2p/applications.html" class=sitelink target=_blank rel=noreferrer>aplicaciones de I2P</a> o mejorar la seguridad de tu aplicación aprovechando la red I2P. Tanto los protocolos <a href="https://wikipedia.org/wiki/User_Datagram_Protocol" class="sitelink external" target=_blank rel=noreferrer>UDP</a> como <a href="https://wikipedia.org/wiki/Transmission_Control_Protocol" class="sitelink external" target=_blank rel=noreferrer>TCP</a> están <a href="http://i2p-projekt.i2p/techintro.html#op.transport" class=sitelink target=_blank rel=noreferrer>provisionados</a>, y también es posible el <a href="http://i2p-projekt.i2p/streaming.html" class=sitelink target=_blank rel=noreferrer>streaming en tiempo real</a>. También proporcionamos acceso completo a la <a href="http://javadoc.skank.i2p/" class=sitelink target=_blank rel=noreferrer>API de Java</a>, y las bibliotecas principales de I2P están alojadas en el <a href="https://mvnrepository.com/artifact/net.i2p" class="sitelink external" target=_blank rel=noreferrer>repositorio Apache Maven</a>. Los desarrolladores pueden navegar el código fuente en <a href="https://github.com/i2p/i2p.i2p" class="sitelink external" target=_blank rel=noreferrer>Github</a> (I2P) o <a href="https://gitlab.com/i2pplus/I2P.Plus" class="sitelink external" target=_blank rel=noreferrer>Gitlab</a> (I2P+), y monitorear el estado actual de la compilación a través de la plataforma de integración continua <a href="https://travis-ci.org/i2p/i2p.i2p" class="sitelink external" target=_blank rel=noreferrer>Travis</a> (I2P) o a través de <a href="https://gitlab.com/i2pplus/I2P.Plus/pipelines" class="sitelink external" target=_blank rel=noreferrer>Gitlab</a> (I2P+). Se requiere un <a href="https://wikipedia.org/wiki/Java_SDK" class="sitelink external" target=_blank rel=noreferrer>Java SDK</a> y <a href="http://ant.apache.org/" class="sitelink external" target=_blank rel=noreferrer>Apache Ant</a> para compilar desde el código fuente.</li>
+
+</ul>
+
+<ul class="links twocol">
+
+<li><b>¡Participa!</b><br>
+I2P se desarrolla y mantiene principalmente a través de la participación voluntaria y sin financiamiento de los miembros de la comunidad. Más información sobre cómo puedes participar está disponible en <a href="http://i2p-projekt.i2p/getinvolved.html" class=sitelink target=_blank rel=noreferrer>la página de voluntarios</a> en el sitio web oficial.</li>
+
+<li><b>I2P+</b><br>
+Para obtener más información sobre I2P+, por favor visita <a href="http://skank.i2p/" class=sitelink target=_blank rel=noreferrer>skank.i2p</a> o <a href="https://i2pplus.github.io/" class="sitelink external" target=_blank rel=noreferrer>i2pplus.github.io</a>, o únete al canal <a href="irc://127.0.0.1:6668/saltR" class=chatlink>#saltR</a> en la red IRC de I2P. Se aceptan parches para I2P+; por favor envía las solicitudes de extracción a través de <a href="https://gitlab.com/i2pplus/I2P.Plus/" class="sitelink external" target=_blank rel=noreferrer>Gitlab</a>.</li>
+
+</ul>
 
 </div>

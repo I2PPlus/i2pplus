@@ -1,158 +1,70 @@
 <div lang="ar">
 
 <ul class=links>
-<li>
-<b> بدءً </b> <br>
-إذ كنت قد بدأت للتو في I2P، فإن عدد <i> اﻷقران النّشطين </i> المشار إليهم تحت قسم <i> اﻷقران </i> في اللوحة الجانبية على اليسار يجب أن يبدأ في النمو خلال الدقائق القليلة القادمة.
-سترى أيضًا <i> نفقا محليًا </i> بمسمى <i> العملاء المشتركين </i> مدرجًا هناك، وربما عملاء وخوادم آخرين.
-إذا لم يكن كذلك، فراجع قسم استكشاف اﻷخطاء وإصلاحها <a href="#trouble"> أدناه </a>.
-تقوم هذه <i> اﻷنفاق المحليّة </i> بتوفير الاتصالات بشبكة I2P، ممّا يتيح لك خدمات كـ bittorrent, والبريد الإلكتروني، والوكيل عبر الإنترنت وخدمات أخرى.
-تشير <a href="/netdb"> قاعدة بيانات الشبكة </a> الخاصة بك إلى كافة النظائر المعروفة على الشبكة.
-بالإضافة إلى ذلك، يمكنك مراقبة <a href="/peers"> اتصالات الند </a> الحالية وعرض <a href="/tunnels"> اﻷنفاق </a> الحالية وحالتها.
-المزيد من المعلومات متاحة على <a href="/help/"> صفحة المساعدة </a>.</li>
 
-<li>
-<b> تكامل الشّبكة </b><br>
-عند بدء تشغيل I2P ، فقد يستغرق الأمر بضع دقائق لبدء تشغيل (دمج) الموجه في الشبكة والبحث عن نظائر إضافيين ، لذا يرجى التحلي بالصبر.
-عندما يبدأ تشغيل I2P ، وأثناء التشغيل العادي ، قد يشير مؤشر جاهز لبناء نفق I2P في اللوحة الجانبية إلى أن I2P  "يرفض الأنفاق" ؛ وهذا هو السّلوك الطبيعي.
-بمجرد أن تظهر النجوم الخضراء بجوار <i>اﻷنفاق المحلية</i> الخاصة بك ، فهناك مجموعة متنوعة من الأشياء التي يمكنك القيام بها مع I2P ، وفيما يلي نقدم لك بعضًا منها.</li>
+<li><b>البدء</b><br>
+إذا كنت للتو قمت بتشغيل I2P+ ، فإن عدد <i>الأقران النشطة</i> المشار إليها في قسم <i>الأقران</i> على الشريط الجانبي يجب أن يبدأ في الزيادة خلال الدقائق القليلة المقبلة. وسوف ترى أيضًا <i>الوجهة المحلية</i> المسماة <i>Shared Clients</i> المدرجة في قسم <i>الأنفاق الخدمية</i> ، وقد يكون هناك عملاء وخوادم أخرى اعتمادًا على كيفية تهيئة I2P. تُوفر هذه <i>الوجهات المحلية</i> اتصالات بالخدمات على منافذ مختلفة <a href="/help/faq#portfaq" title="قائمة بالمنافذ المستخدمة بشكل شائع" class=consolelink>المنافذ</a> إلى شبكة I2P ، مما يمكن من تشغيل BitTorrent والبريد الإلكتروني وخادم الوكيل وغيرها من الخدمات. يُشير <a href="/netdb" class=consolelink>قاعدة بيانات الشبكة</a> إلى جميع الأقران المعروفة محلياً على الشبكة. يمكنك أيضًا مراقبة <a href="/peers" class=consolelink>اتصالات الأقران</a> الحالية ، ومراجعة <a href="/profiles?f=1" class=consolelink>ملفات أداء الأقران</a> ، وعرض <a href="/tunnels" class=consolelink>الأنفاق</a> النشطة وحالتها.</li>
+
+<li><b>تكامل الشبكة</b><br>
+في المرة الأولى التي تقوم فيها بتشغيل I2P+ ، قد يستغرق الأمر بضع دقائق لإعدادك في الشبكة والعثور على أقران إضافية لتحسين تكاملك ، لذا يرجى أن تكون صبورًا. بمجرد ظهور النجوم الخضراء بجوار <i>الوجهات المحلية</i> تحت <i>الأنفاق الخدمية</i> على الشريط الجانبي ، يمكنك القيام بالعديد من الأمور باستخدام I2P ، وفيما يلي نقدم لك بعضها.</li>
+
+<li><b>حالة الشبكة</b><br>
+بمجرد أن يتمكن I2P+ من اختبار اتصال الشبكة الخاص بك ، ينبغي أن يشير مؤشر حالة الشبكة على الشريط الجانبي إلى "مناسب". إذا كانت الحالة تشير إلى "محروقة" ، فسوف يواصل I2P+ العمل على الرغم من أن أداء الشبكة لن يكون مثاليًا ، وسيتم تعطيل قدرتك على المساهمة في عرض النطاق الترددي في الشبكة. للحصول على أداء مثالي ، يرجى النظر في فتح <a href="/confignet#udpconfig" class=consolelink>منفذ I2P+ الخارجي</a> على جدار الحماية الخاص بك وجهاز التوجيه المزود بالإنترنت. يتوفر مزيد من المعلومات حول رسائل الحالة على <a href="/help/ui#reachabilityhelp" class=consolelink>صفحة مساعدة واجهة المستخدم</a>.</li>
+
+<li><b>اشتراكات دليل العناوين</b><br>
+تعتمد إمكانية I2P+ في حل أسماء مضيفي .i2p تلقائيًا على الاشتراكات في الخدمات التي توفر ترجمة DNS للمضيفين المعروفين. إذا قمت بتثبيت I2P+ بدلاً من الترقية من I2P ، فسيكون لديك بالفعل <a href="/susidns/subscriptions" class=consolelink>اشتراكات دليل العناوين</a> المكونة. بعد التثبيت ، يجب أن يمتلئ <a href="/dns" class=consolelink>دليل العناوين</a> بأسماء المضيفين للخدمات النشطة على الشبكة تلقائيًا. إذا كنت قد قمت بالترقية من I2P ، قم بالتحقق من قسم <a href="/help/faq#addressbooksubs" class=consolelink>الاشتراك في دليل العناوين</a> في <a href="/help/faq" class=consolelink>الأسئلة المتداولة</a> للحصول على مساعدة في إضافة اشتراكات إضافية.
+</li>
+
+<li><b>تكوين المتصفح</b><br>
+لتصفح مواقع الويب على الشبكة ، ستحتاج إلى تكوين مستعرضك لاستخدام بروكسي HTTP الافتراضي المكون على المنفذ 4444 ، والذي يوفر أيضًا <i>خروجًا إلى الخارج</i> يسمح بتصفح المواقع في الويب المفتوحة. يتوفر <a href="/help/configuration#browserconfig" class=consolelink>دليل صغير لتكوين Firefox</a> على صفحة التكوين في قسم المساعدة ، أو يمكنك الرجوع إلى القسم أدناه للحصول على رابط إلى دليل إعداد متعدد المتصفحات. بمجرد تكوين المتصفح الخاص بك واشتراكات دليل العناوين الخاصة بك ، يعد <a href="http://notbob.i2p/" target=_blank>notbob.i2p</a> موقعًا رائعًا لاكتشاف المحتوى على الشبكة.
+</li>
 
 </ul>
-<h3>الخدمات في I2P</h3>
+
+<h3>الخدمات على I2P</h3>
+
+<ul class="links twocol">
+
+<li><b>التصفح على الإنترنت المخفي والعام</b><br>
+على I2P يمكنك الوصول إلى مواقع المستضيفة في I2P ("مواقع إيبسايت") أو تصفح الويب العادي بشكل مجهول عبر وكيل الويب المدمج في I2P (النقطة الخارجية). <a href="https://geti2p.net/en/about/browser-config" class="sitelink external" target=_blank rel=noreferrer>قم بتكوين المتصفح</a> لاستخدام وكيل HTTP على <code>127.0.0.1 المنفذ 4444</code>، ثم قم بالتصفح إلى موقع خدمة مخفية أو عنوان عادي غير مشفر <code>http://</code>. لتعطيل أو تغيير وصول النقطة الخارجية إلى الإنترنت العادي، قم بإزالة أو تعديل إدخال النقطة الخارجية لـ <code>false.i2p</code> أو <code>purokishi.i2p</code> تحت قسم <i>النقاط الخارجية</i> في <a href="/i2ptunnel/edit?tunnel=0" target=_blank rel=noreferrer class=consolelink>صفحة التحرير</a> لنفق العميل وكيل HTTP في <a href="/i2ptunnelmgr" class=consolelink>مدير النفق</a>،.</li>
+
+<li><b>البريد الإلكتروني المجهول</b><br>
+يمكن الوصول إلى نظام البريد القائم على I2P لـ بريدمان سواءً عن طريق <a href="/webmail" class=consolelink>عميل البريد المدمج في I2P</a> (سوسيميل) أو أي عميل بريد قياسي. يسمح بوابة البريد بتلقي البريد من عناوين الإنترنت العادية؛ يمكن الاتصال بعنوان البريد الإلكتروني <code>@mail.i2p</code> الخاص بك أيضًا عبر <code>@i2pmail.org</code>. للحصول على حساب، قم بزيارة <a href="http://hq.postman.i2p/" class=sitelink target=_blank rel=noreferrer>hq.postman.i2p</a>.</li>
+
+<li><b>نقل الملفات المجهول</b><br>
+متكامل في I2P، يوفر <a href="/torrents" class=consolelink>I2PSnark</a> نقل BitTorrent مجهول ومشفر. بدلاً من ذلك، هناك <a href="https://wiki.biglybt.com/w/I2P" class="sitelink external" target=_blank rel=noreferrer>BiglyBT</a> (خلف Azurues/Vuze) وهو عميل BitTorrent يدعم تورنت عبر I2P، و <a href="https://github.com/majestrate/XD" class="sitelink external" target=_blank rel=noreferrer>XD</a> ، وهو عميل BitTorrent مخصص لـ I2P مكتوب بلغة go. تشمل الخدمات الإضافية استضافة الملفات على الويب بناءً على المتصفح مثل <a href="http://cake.i2p/" class=sitelink target=_blank rel=noreferrer>cake.i2p</a> و <a href="http://fs.i2p/" class=sitelink target=_blank rel=noreferrer>fs.i2p</a>.</li>
+
+<li><b>الدردشة المجهولة</b><br>
+قم بتشغيل عميل IRC الخاص بك (على سبيل المثال <a href="https://hexchat.github.io/" class="sitelink external" target=_blank rel=noreferrer>HexChat</a>) وقم بالاتصال بـ <a href="irc://127.0.0.1:6668/i2p" class=chatlink>الخادم</a> في <code>127.0.0.1 المنفذ 6668</code>. لا تحتاج إلى تكوين بروكسي في عميل IRC الخاص بك؛ يوفر لك I2P نفق IRC محليًا (مكون في عميل IRC الخاص بك كخادم IRC أو مضيف عن بُعد). بمجرد التواجد هناك، <code> #saltr </code> ، و <code>#i2p-dev</code> هما قناتان من القنوات المتاحة التي قد ترغب في الانضمام إليهما. هناك أيضًا تطبيق رسول فوري قائم على I2P يعمل على جميع المنصات، متاح على <a href="https://vituperative.github.io/i2pchat/" class="sitelink external" target=_blank rel=noreferrer>Github</a>.</li>
+
+<li><b>استضافة الويب المشفرة والمجهولة</b><br>
+يأتي I2P مع خادم ويب لاستضافة موقعك الخاص على شبكة I2P: نسخة <a href="https://www.eclipse.org/jetty/" class="sitelink external" target=_blank rel=noreferrer>Jetty</a> يستمع على <a href="http://127.0.0.1:7658/" class=consolelink target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>. بعد بدء تشغيل <a href="/i2ptunnelmgr" class=consolelink target=_blank rel=noreferrer>نفق خادم الويب I2P</a> المعد مسبقًا، سيكون موقعك مرئيًا (ولكن ليس مكتشفًا) للآخرين. يتم توفير تعليمات لإعداد موقعك وتسجيل نطاق .i2p في <a href="http://127.0.0.1:7658/help/webhosting" class=consolelink>قسم المساعدة</a>.</li>
+
+<li><a name="plugins"></a><b>الوحدات الإضافية لـ I2P</b><br>
+تفضل بزيارة <a href="http://stats.i2p/i2p/plugins/" class=sitelink target=_blank rel=noreferrer>صفحة الوحدات الإضافية لـ zzz</a> للحصول على روابط تنزيل مباشرة لعدة وحدات إضافية. إذا كنت مطورًا، ستقدم إطار <a href="http://i2p-projekt.i2p/plugins.html" class=sitelink target=_blank rel=noreferrer>غير معتمد على اللغة</a> لكتابة الوحدات الإضافية الخاصة بك.</li>
+
+</ul>
+
+<h3 id="trouble">معلومات للمطورين والمشاركين</h3>
 
 <ul class=links>
-<li>
-<b>الخدمات المخفية وتصفح الويب العام</b><br>
-على I2P ، يمكنك الوصول إلى مواقع الخدمات المخفية ("eepsites") وغيرها من الخدمات ، ويمكنك استضافة خدماتك الخاصة.
-يمكنك أيضًا الوصول إلى الويب العادي بشكل مجهول عبر وكيل I2P المدمج للويب (outproxy).
-قم <a href="https://geti2p.net/en/about/browser-config" target=_blank> بتهيئة المتصفح الخاص بك </a> لاستخدام وكيل HTTP على <code> 127.0.0.1 منفذ  4444 </code> ، ثم تصفح أي موقع ويب مخفي، أو عادي، عنوان <code>  http: // </code>  غير المشفر.
-إذا كنت ترغب في تعطيل أو تغيير وصول outproxy إلى الإنترنت العادي ، قم بإزالة أو تعديل دخول outproxy لـ <code> false.i2p </code> تحت خيار <i>  Outproxies </i> في <a href="/i2ptunnel/edit?tunnel=0" target=_blank> I2P HTTP Proxy Tunnel  </a>Editor.
-في قسم "مواقع الاهتمام" <a href="#eepsites"> أدناه </a> ، نقوم بإدراج عدد قليل من المواقع الّتي تستضيفها I2P.</li>
 
-<li>
-<b> البريد الإلكتروني المجهول </b><br>
-يمكن الوصول إلى نظام ساعي البريد المستند على I2P إما عن طريق <a href="/webmail"> برنامج البريد المدمج في I2P </a> أو مع أي عميل بريد خارجي.
-يمكن للحسابات إرسال واستلام البريد من الإنترنت العادي.
-للحصول على حساب ، قم بزيارة <a href="http://hq.postman.i2p/" target=_blank> hq.postman.i2p</a>.
-بالإضافة إلى ذلك، يعتبر <a href="http://bote.i2p/" target=_blank>I2P-Bote</a> كنظامٍ I2P-داخلي، دون خادم، ونظام بريد إلكتروني آمن (بتشفير نهاية إلى نهاية) مع خدمة المجهول المدمجة/وإعادة إرسال اسم مستعار مجهول.
-  يمكن تثبيته على أنه <a href="#plugins">ملحق </a>.</li>
+<li><b>الإبلاغ عن الأخطاء</b><br>
+للإبلاغ عن أي خطأ، يُرجى إضافة تذكرة في <a href="http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" class=sitelink target=_blank rel=noreferrer>git.idk.i2p</a>. للمناقشات المتعلقة بالمطورين، يُرجى زيارة <a href="http://zzz.i2p/" class=sitelink target=_blank rel=noreferrer>منتديات المطورين لـ zzz</a> أو القناة <a href="irc://127.0.0.1:6668/i2p-dev" class=chatlink>قناة المطورين</a> (#i2p-dev) على شبكة الدردشة الخاصة بـ I2P.</li>
 
-<li>
-<b>النقل المجهول للملف </b><br><a href="/torrents">I2PSnark</a> مدموج في داخل I2P، ويقوم بتقديم عمليات تحويل BitTorrent مجهولة المصدر ومشفرة.</li>
-<li>
-<b> الدردشة المجهولة </b><br>
-ابدأ عميل IRC الخاص بك (على سبيل المثال HexChat) وقم بالاتصال <a href="irc://127.0.0.1:6668/i2p"> بالخادم </a> على <code>127.0.0.1منفذ 6668</code>.
-لا تحتاج إلى تهيئة وكيل في عميل IRC الخاص بك ؛ I2P يوفر لك نفق IRC محلي (تم تهيئته في عميل IRC الخاص بك كخادم IRC أو مضيف بعيد).
-سيقوم نفق I2P IRC المحلي على <code> المضيف المحلي: 6668 </code> بتوجيهك إلى واحد من ثلاثة خوادم IRC مستضافة على I2P بواسطة Postman و echelon و zl0 ، ولكن لا أنت أو غيرك يعرف مكان تواجد اﻵخرين ، ويتم تشفير اتصالاتك أثناء النقل بواسطة I2P لمنع الاعتراض.
-بمجرد أن تكون هناك ، فإن <code> #i2p-chat </code> و <code> #i2p-dev </code> ما هما إلا بعض القنوات المتاحة التي قد ترغب في الانضمام إليها.
-هناك أيضًا برنامج <a href="http://echelon.i2p/qti2pmessenger/"> Instant Messenger </a> القائم على I2P للدردشة الغير معروفة والغير قابلة للمراقبة ، بالإضافة إلى خوادم IRC بديلة، وخوادم Jabber، والدردشة المستندة إلى موقع الويب، والمزيد.
-بإمكانك تشغيل خوادمك الخاصة على I2P في أي نكهة تختارها ، أو إذا كنت مطورًا ، فاكتب <a href="http://i2p-projekt.i2p/applications.html" target=_blank> تطبيقات I2P </a>الخاصة بك.
-كلٌّ من برتوكولات UDP و TCP <a href="http://i2p-projekt.i2p/techintro.html#op.transport" target=_blank>مدعومة</a>.
-كما نوفر أيضًا الوصول الكامل إلى <a href="http://javadoc.skank.i2p/" target=_blank> Java API </a>.</li>
-
-<li>
-<b>المنتديات والتدوين </b><br>
- سيتم تشغيل جميع برامج التدوين، والمنتدى وبرامج CMS العادية عبر I2P، على الرغم من ذلك ننصحك باتخاذ الاحتياطات الإضافية مع الأمان عند الإعداد والاحتفاظ بجميع البرامج المرتبطة (مثل Php و MySql و Python و Apache) محدثة ومؤمنة دائمًا.
-أيضا ، هناك عدد غير قليل من المنتديات التي تديرها المجتمعات المحلية على I2P بلغات مختلفة. انظر <a href="#eepsites"> أدناه </a> للحصول على بعض الاقتراحات.</li>
-
-<li>
-<a name="plugins"></a><b>إضافات لـ I2P</b><br>
-قم بتوسيع فائدة I2P من خلال تثبيت إضافات: التدوين ، الدردشة ، مشاركة الملفات واﻹضافات الأخرى الّتي قد تمّ كتابتها أو نقلها بالفعل وفي انتظار <a href="http://i2pwiki.i2p/index.php?title=Plugins" target=_blank> تثبيتك </a> لها!
-تصفح اﻹضافات والمعلومات ذات الصلة على <a href="http://i2pwiki.i2p/index.php?title=Plugins" target=_blank> i2pwiki.i2p</a>.
-إذا كنت <a href="http://i2pwiki.i2p/index.php?title=Plugins" target=_blank> مطورًا </a>، فسيتم تزويدك بإطار عمل كامل لكتابة اﻹضافات الخاصة بك مع <a href="http://i2p-projekt.i2p/plugins.html" target=_blank> الوثائق </a>.</li>
-
-</ul>
-<h3>تشفير استضافات المواقع اﻹلكترونية المجهولة على I2P</h3>
-
-<ul class=links>
-<li>
-<b>خادم الويب المدمج</b><br>
-I2P يأتي مع خادم ويب مدمج ليستضيف موقع الويب الخفيّ الخاص بك ("eepite") على شبكة I2P: <a href="https://www.eclipse.org/jetty/" target=_blank>Jetty</a> على سبيل المثال يستمع على <a href="http://127.0.0.1:7658/" target=_blank>http://127.0.0.1:7658/</a>.
-لاستضافة المحتوى الخاص بك ، قم ببساطة بوضع ملفاتك في المجلد <code> eepsite/docroot/ </code>(أو ضع أي ملفات JPS/Servlet .war موجودة تحت <code> eepsite/webapps </code>، أو البرامج النصية القياسية لـ CGI تحت <code> </code>eepsite/cgi-bin) وسوف تظهر.
-يمكنك أيضًا تشغيل أي نظام بديل لخادم الويب عبر I2P واستبدال الخادم المدمج ، أو تشغيله على نفق آخر.</li>
-
-<li>
-<b>ابدأ نفقك</b><br>
- بعد البدء ، سيكون <a href="/i2ptunnelmgr"> نفق خادم الويب I2P </a> الذي تم تهيئة مسبقًا ، وموقع الويب الخاص بك مرئيًا (ولكن غير قابل للاكتشاف) من اﻵخرين.
-يمكن الوصول إلى الإرشادات التفصيلية لبدء موقعك الإلكتروني وتسجيل نطاق .i2p والترويج لموقعك للآخرين عبر خادم الويب I2P الخاص بك على <a href="http://127.0.0.1:7658/help/" target=_blank> http://127.0.0.1:7658/help/</a>.</li>
+<li><b>التطوير على I2P</b><br>
+إذا كنت مطورًا، يُمكنك اعتبار كتابة تطبيقات <a href="http://i2p-projekt.i2p/applications.html" class=sitelink target=_blank rel=noreferrer>I2P الخاصة بك</a> أو تعزيز أمان تطبيقك بتوظيف شبكة I2P. كل من بروتوكولات UDP و TCP <a href="http://i2p-projekt.i2p/techintro.html#op.transport" class=sitelink target=_blank rel=noreferrer>متوفرة</a>، وكذلك تيار البث المباشر <a href="http://i2p-projekt.i2p/streaming.html" class=sitelink target=_blank rel=noreferrer>ممكن أيضًا</a>. نحن نوفر الوصول الكامل إلى واجهة برمجة التطبيقات بلغة جافا <a href="http://javadoc.skank.i2p/" class=sitelink target=_blank rel=noreferrer>Java API</a>، وتتم استضافة مكتبات I2P الأساسية على مستودع التخزين <a href="https://mvnrepository.com/artifact/net.i2p" class="sitelink external" target=_blank rel=noreferrer>Apache Maven</a>. يمكن للمطورين تصفح المصدر على <a href="https://github.com/i2p/i2p.i2p" class="sitelink external" target=_blank rel=noreferrer>Github</a> (I2P) أو <a href="https://gitlab.com/i2pplus/I2P.Plus" class="sitelink external" target=_blank rel=noreferrer>Gitlab</a> (I2P+)، ومراقبة حالة البناء الحالية عبر منصة الدمج المستمر <a href="https://travis-ci.org/i2p/i2p.i2p" class="sitelink external" target=_blank rel=noreferrer>Travis</a> (I2P) أو من خلال <a href="https://gitlab.com/i2pplus/I2P.Plus/pipelines" class="sitelink external" target=_blank rel=noreferrer>Gitlab</a> (I2P+). يتطلب بناء المصدر وجود <a href="https://wikipedia.org/wiki/Java_SDK" class="sitelink external" target=_blank rel=noreferrer>مجموعة تطوير جافا</a> و <a href="http://ant.apache.org/" class="sitelink external" target=_blank rel=noreferrer>Apache Ant</a>.</li>
 
 </ul>
 
-<h2 id="trouble">استكشاف الأخطاء وإصلاحها والمساعدة الإضافية</h2>
+<ul class="links twocol">
 
-<ul class=links>
-<li>
-<b>كن صبوراً!</b><br>
-قد يكون I2P بطيئًا في الاندماج بالشبكة في المرة الأولى التي تقوم فيها بتشغيله أثناء تمهيد دخوله في الشبكة واكتشاف الأقران.
-كلما زاد تشغيل جهاز توجيه I2P ، كان الأداء أفضل ، لذا حاول أن تبقي على جهاز التوجيه لديك طوال الوقت ، إذا كان ذلك ممكنًا ، 24/7 إن أمكن!
-إذا كان عدد الأقران النشطاء [متصلين/حديثًا] بعد 30 دقيقة أقل من 10 أقران، أو كان العدد الأقران المدمج أقل من 5، فهناك عدّة أشياء يمكنك التأكد منها لمعرفة إذ كان هناك أي مشاكل:</li>
+<li><b>شارك معنا!</b><br>
+تم تطوير I2P وصيانتها بشكل أساسي من خلال مشاركة طوعية غير مدعومة من قبل أعضاء المجتمع. يتوفر مزيد من المعلومات حول كيفية المشاركة على <a href="http://i2p-projekt.i2p/getinvolved.html" class=sitelink target=_blank rel=noreferrer>صفحة المتطوعين</a> على الموقع الرسمي.</li>
 
-<li>
-<b>تحقق من التهيئة الخاصة بك وتخصيص عرض النطاق الترددي</b><br>
-تعمل وظائف I2P بشكل أفضل عندما يمكنك التعبير بدقة عن سرعة اتصال الشبكة الخاصة بك  في <a href="/config"> قسم تهيئة النطاق الترددي</a>.
-بشكل افتراضي ، يتم تهيئة I2P مع بعض القيم المحافظة التي قد لا تتناسب مع العديد من حالات الاستخدام ، لذا يرجى أخذ الوقت لمراجعة هذه الإعدادات وتصحيحها عند الضرورة.
-كلما زاد عرض النطاق الترددي الذي تخصصه ، <i> وتحديدًا </i> نطاق الرفع الترددي  ، كلما استفدت أكثر من الشبكة.</li>
-
-<li>
-<b>جدران الحماية، وأجهزة المودم وأجهزة التوجيه</b><br>
-حيثما أمكن ، يُرجى التأكد من السماح لـ I2P/Java بالدخول داخل جدار الحماية من الإنترنت عن طريق تكوين جدار حماية المودم/جهاز التوجيه/جهاز الكمبيوتر الخاص بك وفقًا لذلك.
-إذا كنت خلف جدار حماية مانع ولكنك تتمتع بإمكانية وصول غير مقيد إلى الخارج، فسيظل I2P يعمل؛ يمكنك إيقاف الوصول الوارد والاعتماد على <a href="http://i2p-projekt.i2p/udp.html" target=_blank> SSU IP Detection </a> ( <a href="https://secure.wikimedia.org/wikipedia/en/wiki/Hole_punching" target=_blank>ثقب جدار الحماية </a>) لتوصيلك بالشبكة ، وحالة الشبكة في اللوحة الجانبية ستشير إلى"Network: Firewalled".
-للحصول على أفضل أداء ، يرجى التأكد من أن <a href="/confignet"> المنفذ الخارجي </a> لـ I2P مرئي من الإنترنت.
-انظر أدناه للحصول على مزيد من المعلومات.</li>
-
-<li>
-<b>تحقق من إعدادات الوكيل الخاصة بك</b><br>
-إذا لم تتمكن من رؤية أي مواقع ويب على الإطلاق (ولا حتى <a href="http://i2p-projekt.i2p/" target=_blank> i2p-projekt.i2p </a>) ، فتأكد من تعيين وكيل المتصفح الخاص بك للوصول إلى حركة مرور http ( <i>وليس </i> https ، <i>وليس</i> الجوارب) عبر <code> 127.0.0.1منفذ  4444</code>.
-إذا كنت بحاجة إلى بعض المساعدة ، فهناك <a href="https://geti2p.net/en/about/browser-config" target=_blank>دليل </a> لتهيئة المتصفح الخاص بك لاستخدام I2P.</li>
-
-<li>
-<b>تحقق من سجلاتك</b><br>
-قد تكون <a href="/logs"> السجلات</a> مفيدة لحل مشكلة ما.
-قد ترغب في لصق بعض المقتطفات من السجلان في <a href="http://i2pforum.i2p/" target=_blank> منتدانا </a> للمساعدة ، أو ربما <a href="http://cake.i2p/pastebin" target=_blank> لصقه </a> بالكامل بدلاً من ذلك ، ثم الرجوع إلى الرابط على IRC للحصول على المساعدة.</li>
-
-<li>
-<b>Verify Java is Up to Date</b><br>
-Ensure your Java is up to date.
-Check your Java version at the top of <a href="/logs">the logs page</a>.</li>
-<li>
-<b>مشاكل تحصل في الأجهزة القديمة</b><br>
-[Linux / BSD] إذا لم تتمكن من بدء تشغيل جهاز التوجيه باستخدام <code>  i2p/i2prouter </code>، فابدأ في تشغيل البرنامج النصي <code> runplain.sh </code> في نفس المجلد.
-امتيازات المسؤول غير مطلوبة أبدًا لتشغيل I2P.
-إذا كنت بحاجة إلى تجميع مكتبة jBigi (التي تعد ضرورية في حالات نادرة) ، فراجع الوثائق المناسبة ، أو قم بزيارة المنتديات ، أو قم بزيارة إلى <a href="irc://127.0.0.1:6668/i2p-dev"> قناة مطوري IRC الخاصة بنا</a>.</li>
-
-<li>
-<b>تمكين التوصيل والتشغيل العالمي (UPnP)</b><br>
-ربما يدعم المودم أو جهاز التوجيه الخاص بك (UPnP) لإعادة توجيه المنفذ التلقائي.
-تأكد من تمكين دعم UPnP على المودم أو الموجه الخاص بك.
-حاول الآن إعادة تشغيل <a href="/"> جهاز التوجيه I2P </a>.
-إذا نجحت ، يجب على I2P تقديم تقرير عن حالة "الشبكة: OK" في اللوحة الجانبية بمجرد إكمال جهاز التوجيه I2P اختبارات الاتصال الأولية.</li>
-
-<li>
-<b>منفذ التقدم</b><br>
-افتح <a href="/confignet">منفذ I2P </a>على المودم أو الموجه و/أو جدار (جدران) الحماية للحصول على اتصال أفضل (من الناحية المثالية UDP و TCP).
-يمكن العثور على المزيد من المعلومات حول كيفية التنقل حول منفذ التقدم بسهولة من خلال بحث الويب.
-إذا واجهتك أي صعوبات ، يمكنك طلب المساعدة في منتدياتنا وقنوات IRC المدرجة أدناه.
-لاحظ أن I2P لا يدعم الاتصال بالإنترنت عبر http أو بوكيل الجوارب [التعديلات مرحب بها!] ، على الرغم من ذلك يمكنك الاتصال بالوكيل عبر I2P نفسه بمجرد توصيله بالشبكة.</li>
-
-<li>
-<b>Getting Support Online</b><br>
-You may also want to review the information on the <a href="http://i2p-projekt.i2p/" target=_blank>I2P website</a>, post messages to the <a href="http://i2pforum.i2p/" target=_blank>I2P discussion forum</a> or swing by <a href="irc://127.0.0.1:6668/i2p">#i2p</a> or <a href="irc://127.0.0.1:6668/saltR">#saltR</a> on I2P's internal IRC network - Irc2P. 
-These channels are also available outside of I2P's encrypted, anonymous network via <a href="irc://irc.freenode.net/i2p">Freenode IRC</a>.</li>
-
-<li>
-<b>الإبلاغ عن الأخطاء</b><br>
-للإبلاغ عن خطأ ، يرجى ملء تذكرة على <a href="http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" target=_blank> git.idk.i2p </a> أو ، عبر clearnet, <a href="https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues" target=_blank>i2pgit.org</a>
-للمناقشات المتعلقة بالمطور ، يرجى زيارة <a href="http://zzz.i2p/" target=_blank> منتديات المطور zzz </a> أو زيارة <a href="irc://127.0.0.1:6668/i2p-dev"> قناة المطور </a> على شبكة IRC في I2P.
-يمكن للمطورين تصفح المصدر في <a href="https://github.com/i2p/i2p.i2p" target=_blank> Github </a>.
-نحن نستخدم العمل الروتيني لإدارة شفرة المصدر - في حين أنك قد تستنسخ شفرة المصدر بشكل مجهول ، ويتم قبول مساهماتك فقط بعد قبول اتفاقية المطور.</li>
-
-<li>
-<b>شارك!</b><br>
-تم تطوير I2P والحفاظ عليها في الغالب من خلال المشاركة الطوعية غير الممولة من قبل أفراد المجتمع.
-نحن سعداء بقبول <a href="http://i2p-projekt.i2p/donate.html" target=_blank> التبرعات</a>، والتي ستذهب في دفع تكاليف الاستضافة اﻷساسية والتكاليف اﻹدارية.
-لدينا مكافآت نقدية لعدة جوانب في I2P للمطورين الذين يبحثون عن حوافز للمشاركة ، ونحن نبحث دائمًا عن المزيد من <a href="http://i2p-projekt.i2p/newdevelopers.html" target=_blank> مطويرين Java </a>،  <a href="http://i2p-projekt.i2p/newtranslators.html" target=_blank>والمترجمين</a>، والمروجين، والمستخدمين للمساعدة في زيادة نمو I2P.
-كلما كبرت شبكة I2P ، كلما استفاد الجميع من ذلك ، لذلك ببساطة إخبار جميع أصدقائك حول I2P (والمشاركة في المساعدة في التثبيت والإعداد عند الحاجة) أمر مفيد.
-للمزيد من المعلومات حول كيفية المشاركة ، تفضل بزيارة <a href="http://i2p-projekt.i2p/getinvolved.html" target=_blank> صفحة المتطوعين </a> على الموقع.</li>
+<li><b>I2P+</b><br>
+لمزيد من المعلومات حول I2P+، يُرجى زيارة <a href="http://skank.i2p/" class=sitelink target=_blank rel=noreferrer>skank.i2p</a> أو <a href="https://i2pplus.github.io/" class="sitelink external" target=_blank rel=noreferrer>i2pplus.github.io</a>، أو انضم إلى القناة <a href="irc://127.0.0.1:6668/saltR" class=chatlink>#saltR</a> على شبكة I2P IRC. نحن نرحب بالتصحيحات لـ I2P+؛ يُرجى إرسال طلبات السحب عبر <a href="https://gitlab.com/i2pplus/I2P.Plus/" class="sitelink external" target=_blank rel=noreferrer>Gitlab</a>.</li>
 
 </ul>
+
 </div>
