@@ -2371,9 +2371,6 @@ h1.webapp{background:var(--h1_webapp) no-repeat 10px center,var(--h1)}
 h1[class],h1{margin:0 5px 0 226px;position:relative;z-index:999;white-space:normal;line-height:1.2;letter-spacing:.15em;text-transform:uppercase;text-align:left;font-weight:700;font-style:normal;text-shadow:0 0 1px #000,0 0 2px #040,0 0 3px #000;border-radius:3px 3px 0 0;box-shadow:var(--bevel);background-blend-mode:normal,normal,normal,exclusion;animation:indentity .2s ease-out .65s both}
 
 /* help */
-div[lang="es"] li,div[lang="pt"] li,div[lang="sv"] li{list-style:none}
-div[lang="pt"] .twocol,div[lang="es"] .twocol,div[lang="sv"] .twocol{margin:10px -5px 5px;padding:10px;border:1px solid #000;border-radius:4px;background:rgba(0,32,0,.3)}
-div[lang="sv"] li::first-letter{text-transform:uppercase}
 p+.twocol{margin:10px 25px}
 .plus{margin-right:6px;padding:1px 2px;float:left;font-size:95%;font-weight:700;color:#000;border-radius:2px;background:#770}
 .sitelink,.chatlink,.consolelink{padding:0 3px 0 18px;white-space:nowrap;border-radius:1px;box-shadow:var(--outline)}

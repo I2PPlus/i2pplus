@@ -8,10 +8,10 @@ body{direction:rtl;margin:6px 12px 6px 0}
 button.search{margin-right:30px}
 .applink:hover .appicon .extlink::after{left:-1px;right:auto;border-radius:2px 0 2px 0}
 .cells{text-align:center}
-.configtable td.infohelp,p.infohelp,td.infohelp,p#debugmode,p#sybilinfo,p.infowarn,td.infowarn,p#keyringhelp,h3#shutdownrouter + p,h3#restartrouter + p,h3#servicedebug + p,h3#browseronstart + p,h3#runonstartup + p,h3#systray + p{padding:15px 45px 15px 15px;background:#000 var(--infohelp) no-repeat right 8px center/28px}
+.configtable td.infohelp,p.infohelp,td.infohelp,p#debugmode,p#sybilinfo,p.infowarn,td.infowarn,p#keyringhelp,h3#shutdownrouter+p,h3#restartrouter+p,h3#servicedebug+p,h3#browseronstart+p,h3#runonstartup+p,h3#systray+p{padding:15px 45px 15px 15px;background:#000 var(--infohelp) no-repeat right 8px center/28px}
 div.joblog li{text-align:left;direction:ltr}
 div[lang="ar"] ul,div[lang="ar"] p{margin:10px}
-div[lang="ar"] ul li{list-style-image:url(images/link.png);list-style-position:outside;margin:10px 15px 0 0;padding-left:0;margin-top:15px;}
+div[lang="ar"] ul li{list-style-position:outside;margin:10px 15px 0 0;padding-left:0;margin-top:15px;}
 div[lang="ar"] ul{margin-right:20px}
 div[lang="ar"] ul ul{margin-right:-10px}
 div.main li{margin:5px 20px;text-align:right;line-height:150%}
@@ -40,7 +40,7 @@ td{text-align:right}
 .main{margin:-1px 212px 5px 5px}
 .messages{background-position:right 12px center,left bottom;padding:20px 40px 20px 10px}
 .news h3,#newspage h3{direction:ltr}
-.news hr + i{float:left;direction:rtl}
+.news hr+i{float:left;direction:rtl}
 .optionsingle p{padding:15px 55px 15px 15px}
 .optionsingle table{margin-right:0}
 .percentBarOuter{margin:-3px -6px -5px 0}
@@ -58,7 +58,7 @@ td{text-align:right}
 .sybil_routerinfo th{padding:1px 3px 1px 1px}
 .tab2::before,.tab2::after{display:none}
 .themechoice{padding:0}
-.tunnel_id:empty + .tunnel_cap{display:inline-block;margin-left:0;margin-right:12px}
+.tunnel_id:empty+.tunnel_cap{display:inline-block;margin-left:0;margin-right:12px}
 .tunnel_local{margin-right:-4px;margin-left:4px;text-align:center}
 .tunnel_peer{text-align:left}
 .twocol li{list-style-position:inside;padding-right:0;margin-right:0}
@@ -70,7 +70,7 @@ td{text-align:right}
 #clientconfig td:nth-child(2){text-align:center}
 #clientconfig th:first-child,#clientconfig td:first-child,#loggingoptions td:first-child,#i2pupdates td:first-child,#tunnelconfig td:first-child,table#i2pupdates input[name*="URL"],table#i2pupdates textarea,#addkeyring td:first-child,#reseedconfig td:first-child{text-align:left}
 #config_logging p,#reseedconfig td.infohelp{text-align:right}
-#config_reseed .confignav + .infohelp + form{margin-left:-16px;margin-right:16px}
+#config_reseed .confignav+.infohelp+form{margin-left:-16px;margin-right:16px}
 #config_reseed #reseedurl,#config_reseed #reseedzip,#config_reseed #reseedcreatefile,#config_reseed #reseedurl:hover,#config_reseed #reseedzip:hover,#config_reseed #reseedcreatefile:hover{background-position:right 10px center;padding:10px 45px 10px 10px}
 #configstats td:first-child{text-align:center}
 #configstats td:nth-child(2){padding-right:15px}
@@ -80,7 +80,7 @@ td{text-align:right}
 #config_update .messages{padding:15px 55px 15px 15px;text-align:right;background:#000 var(--infohelp) no-repeat right 10px center/28px}
 #config_update .suboption label[for="newsThroughProxy"]{margin-right:5px;margin-left:15px}
 #consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#consolepass input[name="nofilter_pw"]:focus,#externali2cp input[name="nofilter_pw"]:focus,#consolepass input[name="name"],#externali2cp input[name="user"],#consolepass input[name="name"]:focus,#externali2cp input[name="user"]:focus{margin:5px 3px 5px 15px;padding:6px 26px 6px 4px;background-position:right 6px center,center center}
-#consolepass tr:first-child td,p#clientconf.infohelp,p#webappconfigtext.infohelp,#floodfillconfig .infohelp,#bandwidthconfig tr:first-child .infohelp,h3#shutdownrouter + p.infohelp,h3#restartrouter + p.infohelp,h3#systray + p.infohelp,h3#servicedebug + p.infohelp,h3#browseronstart + p.infohelp,table#addkeyring td:first-child,#config_peers tr:nth-child(3) td.infohelp,#config_reseed.main p.infohelp,#plugininstall tr:nth-child(3) td:nth-last-child(2),#manualreseed tr:nth-child(3) td:nth-last-child(2),#manualreseed tr:nth-child(5) td:nth-last-child(2),#plugininstall2 tr:nth-child(2) td:nth-last-child(2),#manualreseed tr:nth-last-child(2) td.infohelp,p#enablefullstats,p#gatherstats,p#pluginconfigtext,#plugininstall .infohelp,#config_family .infohelp,#joinfamily tr:nth-child(3) td:first-child,#newfamily tr:last-child td:first-child,#config_summarybar .configtable td:not(.optionsave),table#bugreports td.infohelp{background-position:right 12px center;padding:15px 50px 15px 15px}
+#consolepass tr:first-child td,p#clientconf.infohelp,p#webappconfigtext.infohelp,#floodfillconfig .infohelp,#bandwidthconfig tr:first-child .infohelp,h3#shutdownrouter+p.infohelp,h3#restartrouter+p.infohelp,h3#systray+p.infohelp,h3#servicedebug+p.infohelp,h3#browseronstart+p.infohelp,table#addkeyring td:first-child,#config_peers tr:nth-child(3) td.infohelp,#config_reseed.main p.infohelp,#plugininstall tr:nth-child(3) td:nth-last-child(2),#manualreseed tr:nth-child(3) td:nth-last-child(2),#manualreseed tr:nth-child(5) td:nth-last-child(2),#plugininstall2 tr:nth-child(2) td:nth-last-child(2),#manualreseed tr:nth-last-child(2) td.infohelp,p#enablefullstats,p#gatherstats,p#pluginconfigtext,#plugininstall .infohelp,#config_family .infohelp,#joinfamily tr:nth-child(3) td:first-child,#newfamily tr:last-child td:first-child,#config_summarybar .configtable td:not(.optionsave),table#bugreports td.infohelp{background-position:right 12px center;padding:15px 50px 15px 15px}
 #console .twocol{margin:15px 35px 5px 0;background:rgba(0,32,0,.5);border-radius:3px;padding-top:10px;padding-bottom:10px;line-height:120%}
 #criticallogs ul{border:0}
 #debug{direction:ltr}
@@ -99,18 +99,18 @@ td{text-align:right}
 #leasesetdebug th:first-child,#leasesetsummary th:first-child{text-align:right}
 #leasesetdebug th:last-child,#leasesetsummary th:last-child{text-align:left}
 #leasesetdebug th,#leasesetsummary th{padding:5px}
-#manualreseed .optionsingle,#newfamily .optionsingle,#joinfamily .optionsingle,#manualreseed .optionsingle:hover ,#newfamily .optionsingle:hover,#joinfamily .optionsingle:hover{padding:5px 45px 5px 5px;background-position:right 8px center}
+#manualreseed .optionsingle,#newfamily .optionsingle,#joinfamily .optionsingle,#manualreseed .optionsingle:hover,#newfamily .optionsingle:hover,#joinfamily .optionsingle:hover{padding:5px 45px 5px 5px;background-position:right 8px center}
 #netdboverview th,table.netdbentry th,#leasesetdebug td:nth-child(2n){text-align:right}
 #news h3{border-width:1px 1px 1px 5px}
 #newtab{text-align:left;font-size:8pt;float:left;letter-spacing:0}
 #helptranslate,#floodfillconfig tr:first-child .infohelp{text-align:right;padding-right:50px;background:var(--infohelp) no-repeat right 12px center/28px}
 #pluginconfig td:first-child label{margin-right:6px;padding:3px 24px 3px 5px;text-align:right;border-radius:15px 2px 2px 15px;background:var(--plugin) no-repeat right 5px center,linear-gradient(180deg,#020,#000);background-size:14px,100%}
-#pluginconfigtext + form{float:left;margin-left:8px}
+#pluginconfigtext+form{float:left;margin-left:8px}
 #reseedconfig input{margin-left:8px;margin-right:0}
 #reseedconfig{margin-right:-16px}
 #reseedsetup a{float:left}
 #reseedsetup{margin-left:16px;margin-right:-16px}
-#reseedurl input[type=text],#reseedzip input[type="file"],#reseedcreatefile p{width:calc(100% - 20px)}
+#reseedurl input[type=text],#reseedzip input[type=file],#reseedcreatefile p{width:calc(100% - 20px)}
 #sb_localtunnels a{display:inline;margin-right:2px;font-size:9pt}
 #sb_localtunnels td:last-child{text-align:left}
 #sb_localtunnels td:nth-child(2){text-align:right}
