@@ -1,0 +1,26 @@
+.confignav a[href="/help/configuration"],.tab2#cfig span{background:var(--wrench)}
+.confignav a[href="/help/advancedsettings"],.tab2#adv span{background:var(--configure)}
+.confignav a[href="/help/ui"],.tab2#usif span{background:var(--ui)}
+.confignav a[href="/help/reseed"],.tab2#rsd span{background:var(--reseed)}
+.confignav a[href="/help/tunnelfilter"],.tab2#tfilt span{background:var(--filter)}
+.confignav a[href="/help/faq"],.tab2#freq span{background:var(--faq)}
+.confignav a[href="/help/newusers"],.tab2#nuser span{background:url(images/plus.svg)}
+.confignav a[href="/help/webhosting"],.tab2#webh span{background:var(--webserver)}
+.confignav a[href="/help/hostnameregistration"],.tab2#hreg span{background:url(images/eepsites/registrar.svg)}
+.confignav a[href="/help/troubleshoot"],.tab2#tshoot span{background:url(images/troubleshoot.svg)}
+.confignav a[href="/help/glossary"],.tab2#terms span{background:url(images/info.svg)}
+.confignav a[href="/help/legal"],.tab2#leg span{background:var(--legal)}
+.confignav a[href="/help/changelog"],.tab2#hist span{background:var(--changelog)}
+.confignav a[href],.tab2 span{display:inline-block;width:26px;height:28px;vertical-align:middle;line-height:0;font-size:0;background-size:20px;background-repeat:no-repeat!important;background-position:center center}
+.confignav a[href]{filter:saturate(.6)}
+.confignav a[href]:hover,.confignav a[href]:focus{transform:scale(1.2);filter:saturate(1)}
+.confignav a[href]:active{transform:scale(.9);filter:saturate(0)}
+.confignav,.tab,.tab2{display:flex}
+.tab,.tab2{flex-grow:.1;flex-shrink:.1}
+.tab2 span{background-position:center calc(50% + 1px)!important;background-size:18px!important;filter:saturate(0) drop-shadow(2px 2px 1px rgba(0,0,0,.5))}
+#help .confignav{margin-top:-2px;padding:0}
+
+@media (min-width:1500px){
+.confignav a[href]{background-size:24px;background-repeat:no-repeat}
+.tab2 span{background-size:22px!important}
+}
