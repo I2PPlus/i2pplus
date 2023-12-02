@@ -10946,8 +10946,9 @@ msgstr "Si estás ejecutando un sitio dinámico manejando un gran número de usu
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:476
 msgid "Using an alternative webserver"
-msgstr "Usando un servidor web alternativo\"  #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:47"
+msgstr "Usando un servidor web alternativo"
 
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:47
 msgid "To configure an alternative webserver for use on I2P, you can either use the existing webserver tunnel and <a href=/configclients>disable the default webserver</a> from running, or create a new HTTP Server tunnel in the <a href=/i2ptunnelmgr>Tunnel Manager</a>. Ensure that the webserver's <i>listening port</i> is also configured in the Tunnel Manager settings. For example, if your webserver is listening by default on address 127.0.0.1 port 80, you'd also need to ensure that the <i>Target port</i> in the Tunnel Manager settings page for the service is also configured to port 80."
 msgstr "Para configurar un servidor web alternativo para su uso en I2P, puedes usar el túnel del servidor web existente y <a href=/configclients>deshabilitar el servidor web predeterminado</a> de ejecutarse, o crear un nuevo túnel de Servidor HTTP en el <a href=/i2ptunnelmgr>Administrador de Túneles</a>. Asegúrate de que el <i>puerto de escucha</i> del servidor web también esté configurado en la configuración del Administrador de Túneles. Por ejemplo, si tu servidor web escucha de forma predeterminada en la dirección 127.0.0.1 puerto 80, también deberás asegurarte de que el <i>Puerto objetivo</i> en la página de configuración del servicio del Administrador de Túneles también esté configurado en el puerto 80."
 
