@@ -34,5 +34,6 @@
 </div>
 <div id=legal><%@include file="../help-legal.jsi" %></div>
 </div>
+<%@include file="../summaryajax.jsi" %>
 </body>
 </html>
