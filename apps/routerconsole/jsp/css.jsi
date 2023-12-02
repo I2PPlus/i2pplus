@@ -19,8 +19,10 @@
 <link rel=preload href="<%=themePath%>images/i2plogo.png" as=image>
 <link rel=preload href="/themes/console/images/images.css" as=style>
 <link rel=preload href="<%=themePath%>images/images.css" as=style>
-<% if (uri.contains("config")) { %>
+<% if (uri.contains("config") && !uri.contains("/help/")) { %>
 <link rel=preload href=/themes/console/confignav.css as=style>
+<% } else if (uri.contains("/help/") && !uri.endsWith("/")) { %>
+<link rel=stylesheet href=/themes/console/helpnav.css>
 <% } %>
 <% if (hasOverride) { %>
 <link rel=preload href="<%=themePath%>override.css" as=style>
