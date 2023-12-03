@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-11-21 12:06+0000\n"
+"PO-Revision-Date: 2023-12-03 04:33+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: tr_TR\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:387
 msgid "Hash"
@@ -4709,7 +4709,7 @@ msgstr "Bu sürüme sahip tüm yönlendiricileri NetDb'de göster"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1399
 #, java-format
 msgid "Show all members of the {0} family in NetDb"
-msgstr ""
+msgstr "NetDb'de {0} ailesinin tüm üyelerini göster"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1405
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:334
@@ -7538,7 +7538,7 @@ msgstr "Kapak trafiği oluşturarak anonimliğinizi artırır ve ağa yardımcı
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:587
 #, java-format
 msgid "You have configured I2P to share {0} KBps {1}."
-msgstr ""
+msgstr "I2P'yi paylaşmak için {0} KBps {1} şeklinde yapılandırdınız."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/config_jsp.java:590
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:664
@@ -8357,7 +8357,7 @@ msgstr "Hata Ayıklama"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:573
 #, java-format
 msgid "To assist in debugging I2P, it may be helpful to generate a thread dump which will be written to the {0}wrapper log{1}."
-msgstr ""
+msgstr "I2P hata ayıklamada yardımcı olması için, {0}wrapper log{1}'a yazılan bir iş parçacığı tablosu oluşturmak faydalı olabilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:575
 msgid "If I2P appears to be using too much ram, you can force the router to run the garbage collection routine to free up memory."
@@ -8401,7 +8401,7 @@ msgstr "saniye"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:551
 msgid "0 to disable"
-msgstr ""
+msgstr "Devre dışı bırakmak için 0"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:282
 msgid "config stats"
@@ -8417,7 +8417,7 @@ msgstr "I2P İstatistik Toplama Yapılandırması"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:530
 msgid "A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>."
-msgstr ""
+msgstr "Varsayılan olarak sınırlı bir seçim istatistik etkinleştirilir. Sadece isteğe bağlı bir grafik olan istatistikler burada listelenir; etkinleştirilen istatistiklerin tam listesini görmek için, <a href=/stats>istatistikler sayfasına</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:537
 msgid "Enable full stats?"
@@ -8495,7 +8495,7 @@ msgstr "Malesef, Internet Explorer üzerinde tema seçimi yapılamaz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:546
 msgid "A very old version has been detected. It's not recommended to use I2P with unmaintained browsers."
-msgstr ""
+msgstr "Bir çok eski versiyon tespit edildi. I2P'nin bakımsız tarayıcılarla kullanılması önerilmez."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:548
 msgid "If you're not using IE, it's likely that your browser is pretending to be IE; please configure your browser (or proxy) to use a different User Agent string if you'd like to access the console themes."
@@ -8520,11 +8520,11 @@ msgstr "güncelleme yapılandırması"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:634
 msgid "Router Updates"
-msgstr ""
+msgstr "Router Güncellemeleri"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:536
 msgid "I2P &amp; News Updates"
-msgstr ""
+msgstr "I2P &amp; Haber Güncellemeleri"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:542
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:544
@@ -8533,11 +8533,11 @@ msgstr "Haber Güncellemeleri"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:554
 msgid "I2P update policy"
-msgstr ""
+msgstr "I2P güncelleme politikası"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:562
 msgid "Update check"
-msgstr ""
+msgstr "Güncelleme kontrolü"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:571
 msgid "Update In Progress"
@@ -8647,11 +8647,11 @@ msgstr "İç Hata"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:312
 msgid "ERROR"
-msgstr ""
+msgstr "HATA"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:317
 msgid "Internal Server Error"
-msgstr ""
+msgstr "İç Sunucu Hatası"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/error500_jsp.java:319
 #, java-format
@@ -8692,7 +8692,7 @@ msgstr "işlemler"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/events_jsp.java:431
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:512
 msgid "Event Log"
-msgstr ""
+msgstr "Olay Günlüğü"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:285
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graphs_jsp.java:280
@@ -8702,20 +8702,20 @@ msgstr "çizelgeler"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:454
 msgid "Performance Graph"
-msgstr ""
+msgstr "Performans Çizelgesi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graphs_jsp.java:436
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/updategraphs_jsp.java:429
 msgid "Performance Graphs"
-msgstr ""
+msgstr "Performans Çizelgeleri"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:270
 msgid "Advanced Configuration Help - I2P+"
-msgstr ""
+msgstr "Gelişmiş Yapılandırma Yardımı - I2P+"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:405
 msgid "Advanced Configuration Help"
-msgstr ""
+msgstr "Gelişmiş Yapılandırma Yardımı"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:411
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:411
@@ -8734,7 +8734,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:650
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:700
 msgid "User Interface"
-msgstr ""
+msgstr "Kullanıcı Arayüzü"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:415
@@ -8753,7 +8753,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:415
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:406
 msgid "Tunnel Filtering"
-msgstr ""
+msgstr "Tünel Filtrelemesi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:417
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:423
@@ -8772,7 +8772,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:412
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:704
 msgid "Web Hosting"
-msgstr ""
+msgstr "Web Barındırma"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:421
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:419
@@ -8791,7 +8791,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:419
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:410
 msgid "New User Guide"
-msgstr ""
+msgstr "Yeni Kullanıcı Kılavuzu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:425
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:423
@@ -8808,7 +8808,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:423
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:414
 msgid "Hostname Registration"
-msgstr ""
+msgstr "Ana Bilgisayar Adı Kaydı"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:429
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:427
@@ -8828,7 +8828,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:418
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:676
 msgid "Glossary"
-msgstr ""
+msgstr "Sözlük"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:431
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:429
@@ -8871,299 +8871,284 @@ msgstr "Değişiklik Günlüğü"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:576
 msgid "Advanced Router Configuration"
-msgstr ""
+msgstr "Gelişmiş Yönlendirici Yapılandırması"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:437
 msgid "The router configuration options listed below are not available in the user interface, usually because they are rarely used or provide access to advanced settings that most users will not need. This is not a comprehensive list. Some settings will require a restart of the router to take effect. Note that all settings are case sensitive. You will need to edit your <code>router.config</code> file to add options, or, once you have added <code>routerconsole.advanced=true</code> to the router.config file, you may edit settings within the console on the <a href=/configadvanced>Advanced Configuration page</a>."
-msgstr ""
+msgstr "Aşağıda listelenen yönlendirici yapılandırma seçenekleri kullanıcı arayüzünde mevcut değildir, genellikle nadiren kullanılır veya çoğu kullanıcının ihtiyaç duymayacağı gelişmiş ayarlara erişim sağlar. Bu eksiksiz bir liste değildir. Bazı ayarların etkili olması için yönlendiriciyi yeniden başlatmanız gerekebilir. Tüm ayarların büyük/küçük harfe duyarlı olduğunu unutmayın. Seçenek eklemek için <code>router.config</code> dosyanızı düzenlemeniz gerekecek veya <code>router.config</code> dosyasına <code>routerconsole.advanced=true</code> ekledikten sonra, ayarları konsol içinde <a href=/configadvanced>Gelişmiş Yapılandırma sayfasında</a> düzenleyebilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:439
 msgid "When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href=/configadvanced>Advanced Configuration page</a>. Extra display options are provided in the <a href=/netdb>Network Database section</a>, including the <a href='/netdb?f=3'>Sybil Analysis tool</a>, and there are additional configuration options on the <a href=/configclients>Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar."
-msgstr ""
+msgstr "True olarak ayarlandığında, konsolda ek işlevsellik etkinleştirilecek ve kullanıcı <a href=/configadvanced>Gelişmiş Yapılandırma sayfasında</a> doğrudan ayarları düzenleyebilecek. <a href=/netdb>Ağ Veritabanı bölümünde</a> ekstra görüntüleme seçenekleri sunulur, bunlar arasında <a href='/netdb?f=3'>Sybil Analiz aracı</a> bulunur ve <a href=/configclients>İstemci Yapılandırma sayfasında</a> ek yapılandırma seçenekleri vardır. Bu ayrıca imzasız güncelleştirmelerin yüklenmesini, haber URL'sinin manuel olarak yapılandırılmasını ve kenar çubuğunda ek bölümlerin etkinleştirilmesini sağlar."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:441
 msgid "Plugins signed with the cryptographic key of the developer are the recommended format, but if you wish to install unsigned plugins (.zip) you can set this to true. Note that you may still encounter issues attempting to install an unsigned plugin if the developer has included additional checks in the plugin build process."
-msgstr ""
+msgstr "Geliştiricinin kriptografik anahtarıyla imzalanmış eklentiler önerilen formattır, ancak imzasız eklentiler (.zip) kurmak isterseniz bunu True olarak ayarlayabilirsiniz. Not: Eğer geliştirici, eklenti derleme işlemi sırasında ek denetimler eklediyse, hâlâ imzasız bir eklenti kurma denemesi yaparken sorunlarla karşılaşabilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:443
 msgid "This setting allows the manual selection of the browser which I2P will launch on startup (if the console is <a href=/configservice#browseronstart>configured</a> to launch a browser on startup), overriding the OS default browser. For more information, see the <a href=#alternative_browser>FAQ entry</a> above."
-msgstr ""
+msgstr "Bu ayar, I2P'nin başlatıldığında (eğer konsol başlatmada bir tarayıcıyı başlatmak için <a href=/configservice#browseronstart>yapılandırılmışsa</a>) başlatacağı tarayıcının manuel olarak seçilmesine izin verir. Bu, OS'un varsayılan tarayıcısını geçersiz kılar. Daha fazla bilgi için yukarıdaki <a href=#alternative_browser>SSS girişine</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:445
 msgid "When set to true, this enables gzip compression for the router console and default web applications. [Enabled by default]"
-msgstr ""
+msgstr "True olarak ayarlandığında, bu yönlendirici konsolu ve varsayılan web uygulamaları için gzip sıkıştırma etkinleştirilir. [Varsayılan olarak etkinleştirilir]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:447
 msgid "When set to true, this enables plugin installation on the <a href=/configplugins>Plugin Configuration page</a>. [Enabled by default]"
-msgstr ""
+msgstr "True olarak ayarlandığında, bu, <a href=/configplugins>Plugin Yapılandırma sayfasında</a> eklenti kurulumunu etkinleştirir. [Varsayılan olarak etkinleştirilmiştir]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:449
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
-msgstr ""
+msgstr "True olarak ayarlandığında, bu ayar, bir eşin ülke bayrağı görüntülendiğinde veya bir eşin host adı veya alan adı açıkça konsolda görüntülenirken veya eşin RouterInfo'si diske yazıldığında tetiklenen ters DNS aramalarını etkinleştirir. Yinelemelerden kaçınmak için, 10 dakika veya daha fazla için DNS aramaları için cömert bir önbellekleme politikası yapılandırmanız ve işletim sisteminizde gizliliği saygılayan bir DNS sunucusu yapılandırmanız önerilir. [Varsayılan olarak devre dışı bırakıldı, yeniden başlatma gerektirir]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:451
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
-msgstr ""
+msgstr "True olarak ayarlandığında, https:// etkin olduğunda http:// üzerinden yönlendirici konsoluna erişim otomatik olarak https://'ye yönlendirilir. Yönlendirici konsol erişimini yapılandırmak için, profil dizininizdeki <code>clients.config</code> dosyasındaki ayarları düzenleyin (<i>uygulama kurulum dizini</i> değil). [Varsayılan olarak etkin]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:453
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
-msgstr ""
+msgstr "Bu ayar, yönlendiricinin <i>blocklist.txt</i> dosyasını ve kullanıcı yapılandırmalı engelleme listelerini kullanarak yönlendiricilerin hash veya IP adresine göre yasaklanmasını etkinleştirip etkinleştirmeyeceğini belirler. IPv4 için aralıklar ve ağ maskeleri desteklenir, ancak IPv6 için desteklenmez. Daha fazla bilgi için I2P+ uygulama dizininizdeki <i>blocklist.txt</i>'yi görüntüleyin. [Varsayılan olarak etkin, yeniden başlatma gereklidir]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:455
 msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr ""
+msgstr "Bu ayar, yönlendiricinin Tor çıkış düğümü IP adreslerinden çalışan yönlendiricilerin yasaklanmasını etkinleştirmek için I2P+ uygulama dizininizdeki <i>blocklist_tor.txt</i> dosyasını kullanıp kullanmayacağını belirler. [Varsayılan olarak etkin, yeniden başlatma gereklidir]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:457
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
-msgstr ""
+msgstr "Bu ayar, geçerli bir engelleme listesi dosyasına işaret eden bir yol ile yapılandırıldığında, kullanıcı yapılandırmalı ek bir engelleme listesinin yönlendirici başlatıldığında yüklenmesini sağlar. [Varsayılan olarak devre dışı bırakıldı, yeniden başlatma gereklidir]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:459
 msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr ""
+msgstr "Bu ayar, blok listeleri aracılığıyla uygulanan yasaklara yapılandırılmış bir süre son kullanma süresi (saniye cinsinden) izin verir. Varsayılan olarak, yasaklar yönlendirici oturumunun süresi boyunca devam eder. [Yeniden başlatma gereklidir]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:461
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
-msgstr ""
+msgstr "Tünellerin oluşturulması için işlemci iş parçacığı sayısını ayırın. İşlemciniz hiperçoklu işlem veya eşzamanlı çoklu iş parçacığı destekliyorsa, işlemci çekirdeklerinin sayısını 2 ile çarparak tahsis edilecek maksimum iş parçacığı sayısını alabilirsiniz; aksi halde işlemci çekirdek sayısı = tahsis edilebilir maksimum iş parçacığı sayısı. Teorik maksimumdan daha az tahsis etmek isteyebileceğinizi unutmayın, böylece başka görevler için yer açmış olursunuz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:463
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
-msgstr ""
+msgstr "Bu ayar, yönlendiricinin tıkanmış olduğu ve tranzit tünel isteklerinin reddedildiği önce, varsayılan mesaj işleme süresi sınırını (Sıkışma kenar çubuğu bölümünde <i>Mesaj Gecikmesi</i> olarak gösterilir) geçersiz kılar. [Varsayılan değer 750 ms veya yönlendirici yavaş olarak işaretlendiğinde 1500 ms'dir]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:465
 msgid "Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]"
-msgstr ""
+msgstr "Ortalama gecikmeyi belirlemek için düzenli olarak tünelleri test eder ve sonuçları Sıkışma yan panel bölümünde görüntüler. Etkinleştirmek için bu değeri false olarak ayarlayın. [Varsayılan değer false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:467
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
-msgstr ""
+msgstr "True olarak ayarlandığında, yönlendirici her yeniden başlatıldığında kimliğini ve UDP bağlantı noktasını değiştirir. [Varsayılan değer false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:469
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
-msgstr ""
+msgstr "Bu ayar, yönlendiricinizin tünellerini oluşturmak için hangi <a href=/profiles#profile_defs>aynı değerlere sahip olmayanlar</a> kullanılmayacaklarını belirler. örneğin <code>router.excludePeerCaps=LMN</code>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:471
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
-msgstr ""
+msgstr "True olarak ayarlandığında, yönlendiriciniz ağ için bir su basmanı olarak hizmet veriyorsa <a href=/configadvanced#ffconf>su basmanı katılımınız</a> diğer yönlendiricilerden gizlenir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:473
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
-msgstr ""
+msgstr "Aynı anda çalıştırılabilen maksimum eş zamanlı <a href=/jobs>görev</a> sayısını tanımlar. Varsayılan değer, <code>wrapper.config</code> aracılığıyla JVM'ye ayrılan bellek miktarına bağlı olarak belirlenir ve 64MB'den daha az için 3'e, 256M'den daha az için 4'e veya 256MB'den daha fazla için 5'e ayarlanır. Not: Bu ayarın değiştirilmesi, yönlendiricinin yeniden başlatılmasını gerektirir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:475
 msgid "Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Default is 8000, or 2000 if running on Arm or Android]"
-msgstr ""
+msgstr "Yönlendiricinin oluşturabileceği katılımcı tünellerin maksimum sayısını belirler. Katılımı tamamen devre dışı bırakmak için 0'a ayarlayın. [Varsayılan değer 8000'dir veya Arm veya Android üzerinde çalışıyorsa 2000'dir]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:477
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
-msgstr ""
+msgstr "Bir eşin kullanabileceği aktif yerel tünellerin (istemci ve keşif) maksimum yüzdesini belirler. [Varsayılan değer I2P+'da% 10, I2P'de% 33]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:479
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
-msgstr ""
+msgstr "True olarak ayarlandığında, profilinizin netDB dizininde depolanan yönlendirici bilgisi dosyaları 64 alt dizine bölünmez. [Varsayılan değer false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:481
 msgid "When set to true, your router will not be classified as slow, regardless of the specifications of your host system. Ordinarily, routers running on hosts with the following characteristics will be classified as slow, and various performance-related router options will be modified accordingly:"
-msgstr ""
+msgstr "True olarak ayarlandığında, ana sistem özelliklerine bakılmaksızın yönlendiriciniz yavaş olarak sınıflandırılmaz. Genellikle, aşağıdaki özelliklere sahip ana sistemlerde çalışan yönlendiriciler yavaş olarak sınıflandırılır ve çeşitli performansla ilgili yönlendirici seçenekleri buna göre değiştirilir:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:483
 msgid "Host OS running Android"
-msgstr ""
+msgstr "Android üzerinde çalışan Ana İşletim Sistemi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:485
 msgid "Host OS running on ARM (MacOS excepted)"
-msgstr ""
+msgstr "ARM üzerinde çalışan Ana İşletim Sistemi (MacOS hariç)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:487
 msgid "32bit host OS running with less than 4 detected cores"
-msgstr ""
+msgstr "4 veya daha az algılanmış çekirağa sahip olan 32 bit işletim sistemi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:489
 msgid "64bit host OS running with 1 detected core and less than 384MB allocated to the JVM"
-msgstr ""
+msgstr "JVM'ye ayrılan 384MB'dan az olan ve 1 algılanmış çekirdeği olan 64 bit işletim sistemi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:491
 msgid "Less than 256MB allocated to the JVM"
-msgstr ""
+msgstr "JVM'ye ayrılan 256MB'dan az"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:493
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
-msgstr ""
+msgstr "Router, Java BigInteger kitaplığının yerli olmayan bir yazılım taklit sürümünü çalıştırıyor"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:495
-msgid "This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr ""
+msgid "This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if the system is running Android, 800 if the system is running on ARM and less than 4 cores available, 1200 if the system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgstr "Bu ayar, router'ın beklenen bant genişliği gereksinimlerine göre tünel isteklerini reddetmeye başlamadan önce barındırılan katılımcı tünellerin minimum sayısını yapılandırmanıza olanak tanır. [Varsayılan olarak, sistem Android üzerinde çalışıyorsa 100, sistem ARM üzerinde çalışıyor ve 4'ten az çekirdek varsa 800, sistem ARM üzerinde çalışıyor ve 4 veya daha fazla çekirdek varsa 1200, aksi durumda 2500]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:497
 msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr ""
+msgstr "True olarak ayarlandığında, router yeniden başladığında kimliğini ve UDP bağlantı noktasını değiştirir ve ardından daha fazla değişikliği önlemek için anahtarı router.config'den siler. [Varsayılan olarak, false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:499
-msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr ""
+msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default, the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
+msgstr "Yapılandırıldığında, router'ın aynı anda inşa etmesine izin verilen tünel sayısı için sert bir sınırlama belirler. Varsayılan olarak, router, optimum inşa oranını belirlemek için ortalama inşa süresini ve mevcut çıkış bant genişliğini kullanır. [Yeniden başlatma gereklidir]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:501
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr ""
+msgstr "Eğer imzasız (.zip) I2P güncellemelerini yüklemek isterseniz, bu seçenek, <code>router.config</code> dosyanıza eklenmelidir. Ancak <code>routerconsole.advanced=true</code> zaten yapılandırılmışsa, bu seçenek zaten hazır olur. Not: I2P+ 0.9.48+ sürümünden itibaren, <a href=/configupdate#i2pupdates>imzasız güncellemeler</a> otomatik olarak etkinleştirilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:503
 msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr ""
+msgstr "Bu ayar, imzasız güncelleme özelliği etkinse, imzasız güncelleme url'sini yapılandırmanızı sağlar. Url, <code>/i2pupdate.zip</code> ile bitmelidir. Not: Güncellemenin kaynağına güvenmiyorsanız imzasız güncellemeleri yüklemeyin!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:505
-msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr ""
-
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:507
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr ""
+msgstr "Bu ayar, diğer öğelerle iletişim kurarken hangi iletimin önceliği olduğunu belirler. Varsayılan olarak, UDP (SSU)'dan daha tercih edilen NTCP'dir. Değerini true olarak ayarlarsanız, var olan bir NTCP bağlantısı olmadıkça UDP tercih edilecektir; her zaman olarak ayarlandığında, mevcut NTCP bağlantısına bakılmaksızın her zaman UDP kullanılacaktır. [Varsayılan değer false'dir]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:509
-msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr ""
-
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:511
-msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr ""
-
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:513
-msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr ""
-
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:515
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr ""
-
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:517
 msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr ""
+msgstr "Bu ayar (mikrosaniye cinsinden) bir paketin CoDel kuyruğunda kalabileceği süreyi belirler. Varsayılan değer 1000ms. [Yeniden başlatma gerekiyor]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:519
 msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr ""
+msgstr "Bu ayar, çıkış kuyruğundaki maksimum mesaj sayısını belirler. [Varsayılan değer 768]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:521
 msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr ""
+msgstr "Bu ayar, daha fazla mesaj atılmadan önce maksimum kuyruk değerinin üzerindeki maksimum mesaj sayısını belirler. [Varsayılan değer 128]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:523
 msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr ""
+msgstr "Bu ayar (mikrosaniye cinsinden) CoDel kuyruk yönetim sistemi için kuyruk gecikme hedef değerini ​​elle yapılandırmanıza olanak sağlar. Varsayılan değer 50ms. [Yeniden başlatma gerekiyor]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:525
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr ""
+msgstr "Bu ayar (saat cinsinden) NetDb'deki bir RouterInfo'nun (son bilinen yayın tarihi) eskimiş ve silinmiş olarak sınıflandırılmadan önce ne kadar eski olması gerektiğini belirler. [Varsayılan değer 28 saat, ancak rotör bir Floodfill ise varsayılan değeri 8 saattir]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:527
 msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr ""
+msgstr "Bu ayar, Peer Exploration Job çalışırken eşzamanlı olarak keşfetmek için kaç eş aranacağını belirler [varsayılan değer 3000'den fazla eş olduğunda, bir seferde 1 eş]. Bu değeri artırmanın, keşif için bant genişliği gereksinimlerini artıracağını ve bu değeri çok yüksek ayarlamanın aşırı mesaj gecikmesine ve diğer hizmetlere müdahaleye neden olabileceğini unutmayın, bu nedenle dikkatli kullanın!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:529
 msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr ""
+msgstr "Bu ayar, Peer Exploration Job çalıştırıldığında kaç tane NetDb DHT kovasını referans alacağını belirler. Varsayılan olarak keşfedilecek kova sayısı, rotörün bir saat veya daha fazla süredir çalışıp çalışmadığına, rotörün gizli veya 'K' bant genişliği seviyesinde olup olmadığına ve bilinen rotör sayısına bağlı olarak değişir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:531
 msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr ""
+msgstr "Bu ayar (saniye cinsinden) NetDb'ye eklemek için yeni düğümler bulmaya çalışan Peer Exploration Job'un çalışması arasındaki gecikmeyi geçersiz kılmanıza olanak tanır. Görev varsayılan olarak her 80 saniyede bir çalışacaktır veya yönlendirici görev veya mesaj gecikmesi yaşıyorsa her 3 dakikada bir. NetDb'nin boyutu 4000 düğümleştirildiğinde, durma süresi 15 dakikaya çıkacaktır. NetDb'nizin iyi dolu olduğu (2000'den fazla düğüm), veya toplam bant genişliği kullanımını azaltmak istiyorsanız, gecikmeyi artırabilirsiniz. Not: Floodfill yönlendiricileri için bu görev çalışmaz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:533
 msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr ""
+msgstr "Bu ayar, keşif için sıraya alınacak maksimum düğüm karma sayısını belirler. I2P'de maksimum 128 ve I2P+'da varsayılan değer 512'dir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:535
 msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr ""
+msgstr "Bu ayar, bir floodfill olarak çalışan bir yönlendiricinin yeni düğümleri öğrenmek için NetDb'yi keşfedeceğini belirler. [Varsayılan false, yeniden başlatma gerekiyor]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:537
 msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr ""
+msgstr "Bu ayar, doğrudan diğer yönlendiricilerle iletişim kurulmasını önleyerek, giriş yapanların kullanılmasını zorlar. [Varsayılan false, yönlendirici gizli moddaysa]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:539
 msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr ""
+msgstr "Bu ayar, NetDb'nizden daha eski yönlendiricileri hariç tutmanıza olanak sağlar. Varsayılan veya belirlediğiniz değerden daha eski yönlendiriciler, NetDb'den silinecek ve yönlendirici oturumunun süresi boyunca yasaklanacaktır. Varsayılan olarak, 0.9.20'den daha eski yönlendiriciler hariç tutulur. Not: I2P+ sürümü 0.9.46+ ile birlikte, sadece çok yeni sürümler çalışan yönlendiriciler yerel tünellerin oluşturulması için kullanılır. [Yeniden başlatma gerekiyor]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:541
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
-msgstr ""
+msgstr "Bu ayar, eş zamanlı olarak çalıştırılacak düğüm testlerinin sayısını belirler, bu da düğüm gecikmesini belirlemek için kullanılır. [Varsayılan 4]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:543
 msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 5000]"
-msgstr ""
+msgstr "Bu ayar, düğüm test işleri arasındaki gecikmeyi milisaniye cinsinden belirler. [Varsayılan 5000]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:545
 msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 1000]"
-msgstr ""
+msgstr "Düğüm gecikmesini belirlemek için bu ayar, bir düğüm testinin başarısızlık olarak kabul edilmeden önce alabileceği maksimum süreyi milisaniye cinsinden ayırır. Zaman aşımının ortalama başarılı testten daha düşük yapılandırıldığı durumda, ortalama başarılı test değeri kullanılır. [Varsayılan 1000]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:547
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
-msgstr ""
+msgstr "Bu ayar, yönlendiricimizle ilgili istatistiklerin düzenli olarak NetDb'ye yayınlanıp yayınlanmayacağını belirler. [Varsayılan false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:549
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
-msgstr ""
+msgstr "Bu ayar, başlangıçta dışarıya gönderilecek mesaj kuyruğunun boyutunu yapılandırır. [Varsayılan değer 64]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:551
 msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr ""
+msgstr "Bu ayar, kullanıcıdan alınacak mesaj kuyruğunun maksimum boyutunu yapılandırır. [Varsayılan değer 1024]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:553
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
-msgstr ""
+msgstr "Bu ayar, periyodik olarak geçerli mesajları almak için izin verilen maksimum mesaj sayısını yapılandırır. [Varsayılan değer 24]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:555
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
-msgstr ""
+msgstr "Bu ayar, periyodik olarak geçerli mesajları göndermek için izin verilen maksimum mesaj sayısını yapılandırır. [Varsayılan değer 64]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:557
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
-msgstr ""
+msgstr "Bu ayar (milisaniye cinsinden) Yenileme Router'lar İş tarafından çalıştırılan güncelleme güncellenmesi arasındaki gecikmeyi elle yapılandırmanıza olanak tanır. Varsayılan olarak, yenileme arasındaki ara NetDb'nin boyutuna bağlı olarak belirlenir ve trafiği azaltmak için zamanlamada rastgelelik tanıtır. 2000 milisaniyeden daha düşük değerler için, <code>router.refreshTimeout</code> değerini artırmanız önerilir. Bu değeri 2000 milisaniyenin altına ayarlamanız, ağ trafiğinizi artıracak ve iş gecikmesine neden olabilir ve sürekli kullanım için önerilmez."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:559
 msgid "This setting (in hours) allows you to manually configure how old a RouterInfo is in order for it to be checked by the Refresh Routers Job. By default, the age of a RouterInfo before a refresh is intitiated scales according to the size of the NetDb, increasing as the NetDb grows in size. A value of 0 will force the Router Refresh Job to check every router in the NetDb, regardless of age."
-msgstr ""
+msgstr "Bu ayar (saat cinsinden) bir RouterInfo'nun kontrol edilmesi için ne kadar eski olması gerektiğini manuel olarak yapılandırmanıza olanak tanır. Varsayılan olarak, bir yenileme başlamadan önceki RouterInfo'nun yaşının büyüyerek NetDb'nin büyüklüğüne göre ölçeklendirilir. 0 değeri, RouterYenileme Görevinin NetDb'deki her rotayı yaşına bakılmaksızın kontrol etmesini sağlar."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:561
 msgid "This setting (in seconds) allows you to manually configure the amount of time to wait before an attempt to refresh a router is determined to have failed. [The default is 20 seconds]"
-msgstr ""
+msgstr "Bu ayar (saniye cinsinden) bir rotayı yenilemeye yönelik bir girişimin başarısız olduğuna karar verilmeden önce bekleme süresini manuel olarak yapılandırmanıza olanak tanır. [Varsayılan değer 20 saniye]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:563
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
-msgstr ""
+msgstr "Bu ayar, 1 saatlik çalışma süresinden sonra yenileme rotayolu işlemi sırasında ilgisiz olarak sınıflandırılan rotaların (K veya L katmanı, erişilemez veya 0.9.50'den daha eski) kontrol edilip edilmeyeceğini belirler. [Varsayılan değer yanlış]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:565
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
-msgstr ""
+msgstr "Bu ayar (dakika cinsinden) başlangıçtan sonra RouterInfos'nin geçerliliği için NetDb'deki rotaların ne kadar süre beklemesinin manuel olarak yapılandırmanıza olanak tanır, bu süreden sonra sadece geçerli rotalar dahil edilir. Doğrulama gerçekleştiğinde, geçerlilik süresi dolmuş RouterInfos'lar ve yalnızca SSU üzerinden erişilebilen yanıt vermeyen eşler, NetDb'den kaldırılır. [Varsayılan değer 60 dakika] Not: Bu ayar, NetDb depolaması denendiği anda NetDb'den ve yönlendirici oturumu için yasaklanan daha eski yönlendiricilere (varsayılan olarak 0.9.29'dan daha eski) etkisi yoktur."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:567
 msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-msgstr ""
+msgstr "Bu ayar true olarak ayarlandığında, <a href=/graphs>grafikler sayfasındaki</a> grafikler için HiDPI modunu etkinleştirir. Etkinleştirdikten sonra, ayarların uygulandığını görmek için sayfayı yenilemeniz gerekebilir ve grafik gösterimi stabilize olması için birkaç yenileme döngüsü sürebilir. Tarayıcınızda JavaScript'in etkinleştirildiğine dikkat edin. [Deneysel]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:569
 msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr ""
+msgstr "Bu ayar, true olarak ayarlandığında, başarılı akran testi ortalaması ile başarısız testlerin ortalama fazla zaman almasının birleşiminden hesaplanan bir Peer Test Ortalama okumasını kenar çubuğunun Tıkanıklık bölümünde gösterecektir. Ortalama değer, optimal <code>router.peerTestTimeout</code> değerini belirlemek için bir rehber olarak kullanılabilir. [Varsayılan değer false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:571
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr ""
+msgstr "Bu ayar, true olarak ayarlandığında, <a href=/sitemap>site haritasında</a> <i>İlgili Siteler</i> bağlantılarını gösterecektir. [Varsayılan değer false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:573
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr ""
+msgstr "Bu ayar, yönlendiricinizin doğru saat dilimini korumasını sağlamak için gereken alternatif NTP sunucularının yapılandırılmasını sağlar. [Varsayılan değer 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:575
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
-msgstr ""
+msgstr "True olarak ayarlanırsa, bu seçenek temel hizmet kontrol seçenekleriyle birlikte sistem tepsisine / bildirim alanına bir simge yerleştirir. [Varsayılan olarak devre dışı]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:577
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr ""
+msgstr "Bu ayar, bir torrent indirildiğinde veya oluşturulduğunda I2PSnark'ın izin vereceği maksimum dosya sayısının yapılandırılmasına izin verir. Bu değeri varsayılan 2000 dosyanın üzerine önemli ölçüde artırmak, işletim sisteminin izin vereceği maksimum açık dosya sayısını artırmak için ek yapılandırmaların gerekebileceği anlamına gelir (örneğin Linux'ta <code>ulimit -n</code>). Değiştirmek için, I2PSnark'ın yapılandırma dosyasına <code>i2psnark.config</code> ekleyin. [I2PSnark veya yönlendiricinin yeniden başlatılması gerekmektedir]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:433
 msgid "Recent I2P+ Changes"
-msgstr ""
+msgstr "Son I2P+ Değişiklikleri"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:448
 msgid "View the full change log"
-msgstr ""
+msgstr "Tüm değişiklik günlüğünü görüntüle"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:541
@@ -10325,240 +10310,240 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:433
 msgid "Introduction to Tunnel Filtering"
-msgstr ""
+msgstr "Tünel Filtrelemeye Giriş"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:435
 msgid "Server tunnels, configurable in the <a href=/i2ptunnelmgr>Tunnel Manager</a>, provide a number of ways to limit access to the hosted service. Destination whitelisting, blacklisting, connection throttling, and tunnel filtering are methods provisioned to mitigate denial of service attacks, grant exclusive access to known I2P destinations, and manage traffic to the server."
-msgstr ""
+msgstr "Sunucu tünelleri, <a href=/i2ptunnelmgr>Tüneller Yöneticisi</a> nde yapılandırılabilen bir dizi yöntem sunarak hizmetin erişimini sınırlamaya yardımcı olur. Çeşitli hizmetler için olumsuz etki yaratabilen saldırı urleri, bant genişliği aşımı, saldırı urleri, ve tünel filtrelemesi yöntemlerinin kullanılması ile tahsis edilen yol kısıtlamaları, bilinen I2P hedeflerine özel erişimi mümkün kılabilirken sunucuya trafik yönetebilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:437
 msgid "A tunnel filter can provide protection against denial of service attacks, without otherwise interrupting the service for genuine users, either in conjunction with the tunnel throttler or as an alternative strategy. It can also be used to log access to a hosted service to determine if the server is under attack, or simply to log all visitors by I2P destination. Additionally, a filter can function simultaneously as a whitelist and blacklist making it more flexible than the Tunnel Manager's access list controls. Note that multiple server tunnels can share a single filter file if you wish to implement a global filter."
-msgstr ""
+msgstr "Tünel filtresi, tünel kısıtlayıcı veya alternatif bir strateji ile birlikte gerçek kullanıcılar için hizmeti kesintiye uğratmadan reddetme saldırılarına karşı koruma sağlayabilir. Ayrıca, sunucunun saldırı altında olup olmadığını belirlemek veya sadece tüm ziyaretçileri I2P hedefiyle birlikte kaydetmek için barındırılan hizmete erişimi kaydetmek için de kullanılabilir. Ayrıca, bir filtre, Tünel Yöneticisi'nin erişim listesi denetimlerinden daha esnek olmasını sağlamak için birlikte bir beyaz liste ve kara liste olarak çalışabilir. Eğer küresel bir filtre uygulamak isterseniz, birden fazla sunucu tüneli tek bir filtre dosyasını paylaşabilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:441
 msgid "A filter is a text file that can contain one or more declarations. Blank lines and lines beginning with <i class=example>#</i> are ignored."
-msgstr ""
+msgstr "Bir filtre, bir veya daha fazla bildirimi içerebilen bir metin dosyasıdır. Boş satırlar ve <i class=example>#</i> ile başlayan satırlar görmezden gelinir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:443
 msgid "A declaration will contain a directive (keyword) with parameters to define the scope of the declaration, and can represent one of the following:"
-msgstr ""
+msgstr "Bir bildiri, bir bildirim kapsamını tanımlamak için parametrelerle bir yönergeler (kelime) içerir ve aşağıdakilerden birini temsil edebilir:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:445
 msgid "A default threshold to apply to all remote destinations not listed in the containing file or any of the referenced files"
-msgstr ""
+msgstr "İçeren dosyada veya başvurulan dosyalardan herhangi birinde listelenmeyen tüm uzak hedefler için uygulanacak varsayılan bir eşik değer"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:447
 msgid "A threshold to apply to a specific remote destination"
-msgstr ""
+msgstr "Belirli bir uzak hedefe uygulanacak bir eşik değeri"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:449
 msgid "A threshold to apply to remote destinations listed in a file"
-msgstr ""
+msgstr "Bir dosyada listelenen uzak hedeflere uygulanacak bir eşik değeri"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:451
 msgid "A threshold that if breached will cause the offending remote destination to be recorded in a specified file"
-msgstr ""
+msgstr "İhlal edilen bir eşik değeri, suçlu uzak hedefin belirli bir dosyada kaydedilmesine neden olur"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:453
 msgid "Note: The order of the declarations matters. The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file. Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager. Once configured, a definition file can be updated without requiring a restart of the target tunnel, although destinations that are blocked will persist until the tunnel is restarted."
-msgstr ""
+msgstr "Not: Deklarasyonların sırası önemlidir. Belirli bir hedef için ilk eşik beyanı (açık veya bir referans dosyasında listelenmiş olsun) gelecekteki açık veya dosyada listelenen herhangi bir eşik beyanını geçersiz kılar. Not: yeni bir filtre dosyası uygulamak için, konum tunel yöneticisinde belirtildikten sonra tünelin yeniden başlatılması gerekmektedir. Yapılandırıldıktan sonra, bir tanım dosyası hedef tünelin yeniden başlatılmasını gerektirmeden güncellenebilir, ancak engellenen hedefler tünel yeniden başlatılana kadar geçerli olur."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:457
 msgid "A threshold is defined by the number of connection attempts a remote destination is permitted to perform over a specified number of seconds before a \"breach\" occurs."
-msgstr ""
+msgstr "Bir eşik, bir uzak hedefin belirtilen bir süre içinde gerçekleştirebildiği bağlantı denemeleri sayısı ile tanımlanır. Bir \"ihlal\" gerçekleşmeden önce izin verilen süre içinde gerçekleştirilen bağlantı denemeleri sayısıdır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:459
 msgid "A threshold declaration can be expressed in one of the following ways:"
-msgstr ""
+msgstr "Bir eşik beyanı aşağıdaki şekillerden biriyle ifade edilebilir:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:461
 msgid "Numeric definition of the number of connection attempts in the period specified (in seconds) e.g. <i class=example>15/5</i>, <i class=example>60/60</i> etc."
-msgstr ""
+msgstr "Belirtilen süre içindeki (saniye olarak) bağlantı denemelerinin sayısının sayısal bir tanımı. Örneğin <i class=example>15/5</i>, <i class=example>60/60</i> vb."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:463
 msgid "Note that if the number of connections is 1 (e.g. <i class=example>1/60</i>), the first connection attempt will result in a breach."
-msgstr ""
+msgstr "Bağlantı sayısı 1 ise (örneğin <i class=example>1/60</i>), ilk bağlantı denemesi bir ihlale neden olacaktır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:465
 msgid "The keyword <i class=example>allow</i>. This threshold is never breached, i.e. an infinite number of connection attempts is permitted."
-msgstr ""
+msgstr "Anahtar kelime <i class=example>allow</i>. Bu eşik hiçbir zaman ihlal edilmez, yani sınırsız sayıda bağlantı denemesi izinlidir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:467
 msgid "The keyword <i class=example>deny</i>. This threshold is always breached, i.e. no connection attempts will be allowed."
-msgstr ""
+msgstr "Anahtar kelime <i class=example>deny</i>. Bu eşik her zaman ihlal edilir, yani hiçbir bağlantı denemesine izin verilmez."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:469
 msgid "Default Threshold"
-msgstr ""
+msgstr "Varsayılan Eşik"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:471
 msgid "The <i class=example>default</i> threshold applies to any remote destination not explicitly listed in the definition or in any of the referenced files. To set a default threshold use the keyword <i class=example>default</i>."
-msgstr ""
+msgstr "<i class=example>default</i> eşiği, tanımda veya herhangi bir referans dosyasında açıkça listelenmeyen herhangi bir uzak hedefe uygulanır. Varsayılan bir eşik tanımlamak için anahtar kelime <i class=example>default</i>'ı kullanın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:473
 msgid "The following threshold definition <i class=example>180/60</i> specifies that the same remote destination is allowed to make 179 connection attempts during a 60 second period. If it makes one more attempt within the same period, the threshold will be breached and further connection attempts will be rejected until the end of the period:"
-msgstr ""
+msgstr "Aşağıdaki eşik tanımı <i class=example>180/60</i>, aynı uzak hedefin 60 saniye içinde 179 bağlantı denemesi yapmasına izin verildiğini belirtir. Aynı dönemde bir kez daha deneme yaparsa, eşik aşılacak ve dönemin sonuna kadar ek bağlantı denemeleri reddedilecektir:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:475
 msgid "To allow all unspecified client destinations:"
-msgstr ""
+msgstr "Belirtilmemiş tüm istemci hedeflere izin vermek için:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:477
 msgid "Or to deny all unspecified destinations:"
-msgstr ""
+msgstr "Belirtilmemiş tüm hedefleri reddetmek için:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:479
 msgid "Note that there can only be a single reference to the <i class=example>default</i> keyword in a filter file. If unstated, all connections are permitted unless explicitly forbidden. Errors in the filter file will prevent a stopped tunnel from starting, so be sure to double check the syntax before deployment."
-msgstr ""
+msgstr "Bir filtre dosyasında yalnızca <i class=example>default</i> anahtar kelimesine bir referans olabilir. Belirtilmezse, tüm bağlantılara izin verilir, ancak açıkça yasaklanmadıkça. Filtre dosyasındaki hatalar durdurulan bir tünelin başlamasını engeller, bu nedenle dağıtımdan önce sözdizimini çift kontrol edin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:481
 msgid "Explicit Thresholds"
-msgstr ""
+msgstr "Açık Eşikler"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:483
 msgid "Using the <i class=example>explicit</i> directive, a threshold can be applied to a remote destination listed in the definition itself, with the option to specify custom thresholds for multiple destinations. Remote destinations can also be excluded from the default threshold using the <i class=example>allow</i> keyword, or permanently blocked using the <i class=example>deny</i> keyword:"
-msgstr ""
+msgstr "<i class=example>explicit</i> yönergesini kullanarak, bir eşik tanımında kendisiyle birlikte listelenen bir uzak hedefe özel eşikler belirtme seçeneğiyle uygulanabilir. Uzak hedefler, <i class=example>allow</i> anahtar kelimesini kullanarak varsayılan eşikten hariç tutulabilir veya <i class=example>deny</i> anahtar kelimesini kullanarak kalıcı olarak engellenebilir:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:485
 msgid "Bulk Thresholds"
-msgstr ""
+msgstr "Toplu Eşikler"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:487
 msgid "For convenience you can maintain a list of destinations in a file and define a threshold for all of them in bulk:"
-msgstr ""
+msgstr "Kolaylık sağlamak için bir dosyada bir hedef listesi koruyabilir ve hepsi için toplu olarak bir eşik tanımlayabilirsiniz:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:489
 msgid "Recorders"
-msgstr ""
+msgstr "Kaydediciler"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:491
 msgid "Recorders keep track of connection attempts made by a remote destination, and if that breaches the defined threshold, the destination gets logged in the specified file. Multiple recorders can be specified:"
-msgstr ""
+msgstr "Kaydediciler, bir uzak hedef tarafından yapılan bağlantı girişimlerini izler ve bu, tanımlanan eşiği ihlal ederse, hedef belirtilen dosyada kaydedilir. Birden fazla kaydedici belirtilebilir:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:493
 msgid "You can use a recorder to log the destinations of aggressive clients to a specified file, and then use that same file to throttle them. The following snippet defines a filter that initially allows all connection requests, but if any single destination exceeds 180 requests in 60 seconds, it gets throttled down to 30 requests every 60 seconds:"
-msgstr ""
+msgstr "Saldırgan istemcilerin hedeflerini belirli bir dosyaya kaydetmek için bir kaydedici kullanabilir ve daha sonra aynı dosyayı kullanarak onları hız kısıtlamaya alabilirsiniz. Aşağıdaki örnek, başlangıçta tüm bağlantı isteklerine izin veren ancak herhangi bir tek hedefin 60 saniye içinde 180 isteği aşması durumunda onu 60 saniyede 30 istekle kısıtlayan bir filtre tanımlar:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:495
 msgid "by default there are no limits"
-msgstr ""
+msgstr "varsayılan olarak hiçbir sınırlama yok"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:497
 msgid "but log overly aggressive destinations"
-msgstr ""
+msgstr "ancak aşırı saldırgan hedefleri kaydet"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:499
 msgid "and any that end up in that file will get throttled in the future"
-msgstr ""
+msgstr "ve o dosyada bulunan herhangi bir hedef gelecekte kısıtlanır"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:501
 msgid "To log all unique remote destinations connecting to a server, and also log aggressive connection attempts:"
-msgstr ""
+msgstr "Bir sunucuya bağlanan tüm benzersiz uzak hedefleri kaydetmek ve ayrıca saldırgan bağlantı girişimlerini kaydetmek için:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:503
 msgid "log all unique destinations"
-msgstr ""
+msgstr "tüm benzersiz hedefleri kaydet"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:505
 msgid "log visitors making 90 or more connections a minute"
-msgstr ""
+msgstr "dakikada 90 veya daha fazla bağlantı yapan ziyaretçileri kaydet"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:507
 msgid "You can use a recorder in one tunnel that writes to a file that another tunnel, or multiple tunnels, can use for throttling. These files can also be edited by hand."
-msgstr ""
+msgstr "Bir kaydediciyi, başka bir tünelin veya birden fazla tünelin hız kısıtlama için kullanabileceği bir dosyaya yazan bir tüneldе kullanabilirsiniz. Bu dosyalar ayrıca elle düzenlenebilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:509
 msgid "The following filter definition applies some throttling by default, no throttling for destinations in the file <i class=example>friends.txt</i>, forbids any connections from destinations in the file <i class=example>enemies.txt</i>, and logs any aggressive behavior in a file called <i class=example>suspicious.txt</i>:"
-msgstr ""
+msgstr "Aşağıdaki filtre tanımı, varsayılan olarak bazı hız kısıtlamalarını uygular, <i class=example>friends.txt</i> dosyasında bulunan hedeflere hız kısıtlaması uygulanmaz, <i class=example>enemies.txt</i> dosyasında bulunan hedeflerden herhangi bir bağlantıya izin vermez ve herhangi bir saldırgan davranışı <i class=example>suspicious.txt</i> adlı bir dosyada kaydeder:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:511
-msgid "Note that the full path to the output files must be accessible before deploying the filter. If the target directory does not exist, the destinations will not be recorded and an error will appear in the router logs. The files will be created as required. The examples provided above are not recommendations; your configuration should be tuned according to the amount of content (number and size of files) your site is serving, the speed of the server, and the frequency with which the site is updated. Configuring recorders and monitoring the resulting files will help you fine tune the settings."
-msgstr ""
+msgid "Note that the full path to the output files must be accessible before deploying the filter. If the target directory does not exist, the destinations will not be recorded and an error will appear in the router logs. The files will be created as required. The examples provided above are not recommendations; your configuration should be tuned according to the amount of content (number and size of files) your site is serving, the speed of the server, and the frequency with which the site is updated. Configuring recorders and monitoring the resulting files will help you fine-tune the settings."
+msgstr "Filtreyi dağıtmadan önce çıktı dosyalarının tam yolu erişilebilir olmalıdır. Hedef dizini mevcut değilse, hedefler kaydedilmez ve yönlendirici kayıtlarında bir hata görüntülenir. Dosyalar ihtiyaç duyulduğunda oluşturulacaktır. Yukarıda verilen örnekler öneriler değildir; yapılandırmanız, sitenizin çektiği içeriğin miktarına (dosya sayısı ve boyutu), sunucunun hızına ve sitenin güncelleme sıklığına göre ayarlanmalıdır. Kaydedicileri yapılandırmak ve elde edilen dosyaları izlemek, ayarları hassaslaştırmanıza yardımcı olacaktır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:270
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:405
 msgid "User Interface Help"
-msgstr ""
+msgstr "Kullanıcı Arayüzü Yardımı"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:433
 msgid "Note: Many of the labels and options in the console have tooltips that indicate purpose or explain the meaning. Hover over the label or option to activate the tooltip."
-msgstr ""
+msgstr "Not: Konsoldaki birçok etiket ve seçeneğin amacını veya anlamını açıklayan araç ipuçları vardır. Araç ipucunu etiketin veya seçeneğin üzerine gelerek etkinleştirebilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:435
 msgid "Theme Overrides"
-msgstr ""
+msgstr "Tema Geçersiz Kılma"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:437
 msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr ""
+msgstr "I2P+, konsol, tünel yöneticisi, I2PSnark, SusiDNS ve Susimail için özel tema geçersiz kılma desteği sağlar, böylece temaları yükseltmelerden sonra kalıcı olarak değiştirebilirsiniz. Bir geçersiz kılma etkinleştirmek için, temayı değiştirmek istediğiniz temanın ilgili temadizini içinde temanızı değiştirerek ve <code>override.css</code> adında bir css dosyası oluşturun veya örnek dosyalardan birini yeniden adlandırın ve ardından tarayıcıyı temizleyin. Tünel yöneticisi ve konsol aynı override.css'yi kullanır. Bir geçersiz kılmayı etkisiz hale getirmek için <code>override.css</code> dosyasını silin veya yeniden adlandırın ve ardından tarayıcıyı temizleyin (genellikle Control + Shift + R)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:439
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr ""
+msgstr "Temalar dizini, <code>docs/themes</code> altında I2P uygulama dizininde bulunur. Konsol ve I2PSnark tema alt dizinlerinde örnek geçersiz kılma dosyaları bulunmaktadır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:441
 msgid "Sidebar Information"
-msgstr ""
+msgstr "Kenar Çubuğu Bilgisi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:443
 msgid "Many of the stats on the sidebar may be <a href='/configstats'>configured</a> to be <a href='/graphs'>graphed</a> for further analysis. You may also customize the sections that appear on the Sidebar and their positioning on the <a href='/configsidebar'>Sidebar Configuration page</a>."
-msgstr ""
+msgstr "Kenar Çubuğundaki birçok istatistik daha fazla analiz için <a href='/configstats'>ayarlanabilir</a> <a href='/graphs'>grafiklerle</a>. Kenar Çubuğunda görünen bölümleri ve yerlerini de <a href='/configsidebar'>Kenar Çubuğu Yapılandırma sayfasında</a> özelleştirebilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:447
 msgid "Local Identity"
-msgstr ""
+msgstr "Yerel Kimlik"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:449
 msgid "If you hover over the <i>Router Info</i> heading, your truncated router identity will be shown (the first four characters (24 bits) of your 44-character (256-bit) Base64 router hash). The full hash is shown on your <a href='netdb?r=.'>Network Database entry</a>. Never reveal this to anyone, as your router identity is uniquely linked to your IP address in the network database."
-msgstr ""
+msgstr "Eğer <i>Yönlendirici Bilgileri</i> başlığının üzerine gelirseniz, kırpılmış yönlendirici kimliğiniz gösterilir (44 karakterlik (256 bit) Base64 yönlendirici özetinin ilk dört karakteri (24 bit)). Tam özet, <a href='netdb?r=.'>Ağ Veritabanı girişinizde</a> görüntülenir. Kimseye açık etmeyin çünkü yönlendirici kimliğiniz ağ veritabanındaki IP adresinizle benzersiz bir şekilde ilişkilidir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:453
 msgid "The version of the I2P software you are running. If a new version is available, you will be notified in the Sidebar. It is recommended to keep your router up to date to ensure optimal performance and security. Router updates are usually made available on average every 2-3 months."
-msgstr ""
+msgstr "Çalıştırdığınız I2P yazılımının sürümü. Eğer yeni bir sürüm mevcutsa, kenar çubuğunda bildirim alacaksınız. Optimal performans ve güvenlik için yönlendiricinizi güncel tutmanız önerilir. Yönlendirici güncellemeleri genellikle ortalama olarak her 2-3 ayda bir sunulur."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:457
 msgid "The skew (offset) of your computer's clock relative to the network-synced time (if known). I2P requires your computer's time be accurate. If the skew is more than a few seconds, please correct the problem by adjusting your computer's time. If I2P cannot connect to the internet, a reading of 0ms may be indicated. Note: This is only displayed in the <i>Router Information (advanced)</i> section. You may add this section to your Sidebar on the <a href='/configsidebar'>Sidebar Configuration page</a>."
-msgstr ""
+msgstr "Bilgisayarınızın saatini, ağ senkronize zamanına göre hizalama farkı (offset). I2P, bilgisayarınızın saatinin doğru olmasını gerektirir. Eğer hizalama birkaç saniyeden fazlaysa, lütfen bilgisayarınızın saatini ayarlayarak probleminizi düzeltin. Eğer I2P internete bağlanamıyorsa, 0ms okuması yapılabilir. Not: Bu sadece <i>Yönlendirici Bilgisi (gelişmiş)</i> bölümünde görüntülenir. Bu bölümü kenar çubuğunuza <a href='/configsidebar'>Kenar Çubuğu Yapılandırma sayfası</a> üzerinden ekleyebilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:461
 msgid "This indicates the amount of RAM I2P is using, and the total amount available, allocated by Java. If the usage is consistently high relative to the available RAM, this may indicate that you need to increase the ram allocated to the JVM. You can allocate more RAM by editing your <code>wrapper.config</code> file which is normally located in the I2P application directory. You will need to edit the <code>wrapper.java.maxmemory</code> parameter, which by default is set to 256(MB) for I2P, or 384 for I2P+. Note: if the memory bar is enabled, the memory entry in the router info section will be suppressed."
-msgstr ""
+msgstr "Bu, I2P'nin kullandığı RAM miktarını ve Java tarafından ayrılan toplam kullanılabilir miktarı gösterir. Kullanım, kullanılabilir RAM'e göre sürekli olarak yüksekse, bu, JVM'ye ayrılan ram miktarını artırmanız gerektiğini gösterebilir. Normalde I2P uygulama dizininde bulunan <code>wrapper.config</code> dosyasını düzenleyerek daha fazla RAM tahsis edebilirsiniz. Varsayılan olarak I2P için 256 (MB) veya I2P+ için 384 olarak ayarlanmış olan <code>wrapper.java.maxmemory</code> parametresini düzenlemeniz gerekecektir. Not: Eğer bellek çubuğu etkinse, yönlendirici bilgi bölümünde bellek girişi bastırılır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:467
 msgid "The first number is the number of peers your router has sent or received a message from in the last few minutes. This may range from 8-10 to several hundred, depending on your total bandwidth, shared bandwidth, and locally-generated traffic. The second number is the number of peers seen in the last hour or so. Do not be concerned if these numbers vary widely. <a href='/configstats#router.activePeers'>[Enable graphing]</a>."
-msgstr ""
+msgstr "İlk sayı, yönlendiricinizin son birkaç dakikada bir ileti gönderdiği veya alıp aldığı eş sayısıdır. Bu, toplam bant genişliğinize, paylaşılan bant genişliğinize ve yerel olarak oluşturulan trafiğe bağlı olarak 8-10'dan yüzlerce sayıya kadar değişebilir. İkinci sayı, son bir saatte görülen eş sayısıdır. Bu sayıların geniş bir aralıkta değişmesiyle ilgilenmeyin. <a href='/configstats#router.activePeers'>[Grafiklemeyi etkinleştir]</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:471
 msgid "This is the number of peers your router has available for building client tunnels. It is generally in the range 8-30. Your fast peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.fastPeers'>[Enable graphing]</a>"
-msgstr ""
+msgstr "Bu, yönlendiricinizin istemci tünelleri oluşturmak için kullanılabilen eş sayısıdır. Genellikle 8-30 aralığında olur. Hızlı eşleriniz <a href='/profiles'>Profiller sayfasında</a> gösterilir. <a href='/configstats#router.fastPeers'>[Grafiklemeyi etkinleştir]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
 msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier.Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
-msgstr ""
+msgstr "Bu, ağ performansını belirlemek için kullanılan keşif tünellerinizi oluşturmak için yönlendiricinizin kullanılabilir eş sayısıdır. Genellikle 8-75 aralığındadır. Hızlı eşler yüksek kapasite seviyesine dahildir. Yüksek kapasiteli eşleriniz <a href='/profiles'>Profiller sayfasında</a> gösterilir. <a href='/configstats#router.highCapacityPeers'>[Grafiklemeyi etkinleştir]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:479
 msgid "This is the number of peers your router will use for network database inquiries. These are usually the <i>floodfill</i> routers which are responsible for maintaining network integrity. Your well integrated peers are shown on the bottom of the <a href='/profiles'>Profiles page</a>."
-msgstr ""
+msgstr "Bu, yönlendiricinizin ağ veritabanı sorgularında kullanacağı eş sayısıdır. Bunlar genellikle ağ bütünlüğünü korumaktan sorumlu olan <i>floodfill</i> yönlendiricileridir. Uygun entegre edilmiş eşleriniz <a href='/profiles'>Profiller sayfasının</a> altında gösterilir. "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:483
 msgid "This is the total number of peers that are known by your router. They are listed on the <a href='/netdb'>Network Database page</a>. This may range from under 100 to 1000 or more. This number is not the total size of the network; it may vary widely depending on your total bandwidth, shared bandwidth, and locally-generated traffic. I2P does not require a router to know every other router in the network."
-msgstr ""
+msgstr "Bu, yönlendiriciniz tarafından bilinen toplam düğüm sayısıdır. Onlar <a href='/netdb'>Ağ Veritabanı sayfasında</a> listelenmiştir. Bu sayı ağın toplam büyüklüğü değildir; tamamen bant genişliğinize, paylaşılan bant genişliğinize ve yerel olarak üretilen trafiğe bağlı olarak geniş bir yelpazede değişebilir. I2P, bir yönlendiricinin ağdaki her yönlendiriciyi bilmesini gerektirmez."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:485
 msgid "Bandwidth In/Out"
-msgstr ""
+msgstr "Bant Genişliği Giriş/Çıkış"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:487
 msgid "This section indicates your average bandwidth speeds and total usage for the session. All values are in bytes per second. You may change your bandwidth limits on the <a href='/config'>Bandwidth Configuration page</a>. The more bandwidth you make available, the more you help the network and improve your own anonymity, so please take the time to review the settings. If you are unsure of your network's speed, using a service such as <a href='http://speedtest.net/'>SpeedTest</a> or similar will give you a good indication of your bandwidth capability. Your upstream share amount (KBps Out) will determine your overall contribution to the network. Bandwidth is <a href='/graphs'>graphed</a> by default."
-msgstr ""
+msgstr "Bu bölüm, oturumunuz için ortalama bant genişliği hızlarını ve toplam kullanımınızı gösterir. Tüm değerler saniye başına bayt cinsinden verilmiştir. Bant genişliği sınırlarınızı <a href='/config'>Bant Genişliği Yapılandırma sayfasından</a> değiştirebilirsiniz. Daha fazla bant genişliği sunarsanız, ağa daha fazla yardımcı olur ve kendi anonimliğinizi artırırsınız, bu nedenle lütfen ayarları gözden geçirmek için zaman ayırın. Ağınızın hızından emin değilseniz, <a href='http://speedtest.net/'>SpeedTest</a> veya benzeri bir servis kullanmak, bant genişliği kapasiteniz hakkında iyi bir fikir verir. Yükleme paylaşım miktarınız (KB/s Çıkış), toplam katkınızı belirleyecektir. Bant genişliği varsayılan olarak <a href='/graphs'>grafikle</a> gösterilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:489
 msgid "Local Destinations"
-msgstr ""
+msgstr "Yerel Hedefler"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:491
 msgid "These are the local services provided by your router. They may be clients started through the <a href='/i2ptunnelmgr'>Tunnel Manager</a> or external programs connecting through SAM, BOB, or directly to I2CP. By default, most of your client services (mail, http proxy, IRC) will share the same set of tunnels and be listed as <i>Shared Clients</i> and <i>Shared Clients(DSA)</i>, which enhances anonymity by blending the traffic from all shared services, and reduces the overhead required to build and maintain tunnels. However, if you experience a tunnel failure, all your services will go offline at the same time, so in some scenarios you may wish to configure client services to use their own set of tunnels. This can be done by unchecking the <i>Share tunnels with other clients&hellip;</i> option listed under <i>Shared Clients</i> on the configuration page of the relevant client service in the Tunnel Manager, after which you will need to restart the client service from the <a href='/i2ptunnelmgr'>main Tunnel Manager page</a>."
-msgstr ""
+msgstr "Bunlar, yönlendiriciniz tarafından sağlanan yerel hizmetlerdir. İ2PTunnel yöneticisi veya SAM, BOB veya doğrudan I2CP üzerinden bağlanan harici programlar aracılığıyla başlatılan istemci olabilirler. Varsayılan olarak, istemci hizmetlerinizin çoğu (postalar, http proxy, IRC), aynı set tünelleri paylaşacak şekilde yapılandırılmışlardır ve <i>Paylaşılan İstemciler</i> ve <i>Paylaşılan İstemciler(DSA)</i> olarak listelenirler, bu, tüm paylaşılan hizmetlerin trafiğini karıştırarak anonimliği artırır ve tünellerin oluşturulması ve bakımı için gereken gereksinimleri azaltır. Bununla birlikte, bir tünel hatası yaşarsanız, tüm hizmetleriniz aynı anda çevrimdışı olur, bu nedenle bazı senaryolarda istemci hizmetlerini kendi tünellerini kullanacak şekilde yapılandırmak isteyebilirsiniz. Bu, İstemci Yöneticisi'ndeki ilgili istemci hizmetinin yapılandırma sayfasında, <i>Diğer istemcilerle tünelleri paylaş</i> seçeneğinin işaretini kaldırarak yapılabilir, ardından istemci hizmetini <a href='/i2ptunnelmgr'>Ana Tünel Yöneticisi sayfasından</a> yeniden başlatmanız gerekecektir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:495
 msgid "The actual tunnels are shown on the <a href='/tunnels'>Tunnels page</a>."
@@ -10594,7 +10579,7 @@ msgstr "İş Gecikmesi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:519
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
-msgstr ""
+msgstr "İşlerin yürütümeden önce beklediği süre. İş sırası <a href='/jobs'>İşler sayfasında</a> listelenir. Ne yazık ki, yönlüde başka tıkanmış iş sıraları da bulunur ve durumları yönlü konsolda mevcut değildir. İş gecikmesi genellikle sıfır olmalıdır. Eğer sürekli olarak 500ms'den yüksekse, bilgisayarınız çok yavaş, ağınız bağlantı sorunları yaşıyor veya yönlünüz ciddi sorunlar yaşıyor olabilir. <a href='/configstats#jobQueue.jobLag'>[Grafiklemeyi etkinleştir]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:521
 msgid "Message Delay"
@@ -10602,11 +10587,11 @@ msgstr "Mesaj Gecikmesi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:523
 msgid "How long an outbound message waits in the queue. This should generally be a few hundred milliseconds or less. If it is consistently higher than 1000ms, your computer is very slow, or you should adjust your bandwidth limits, or your (BitTorrent?) clients may be sending too much data and should have their transmit bandwidth limit reduced. <a href='/configstats#transport.sendProcessingTime'>[Enable graphing]</a> (transport.sendProcessingTime)."
-msgstr ""
+msgstr "Bir çıkış mesajının sıradaki bekleme süresi. Genellikle birkaç yüz milisaniye veya daha az olmalıdır. Eğer sürekli olarak 1000ms'den yüksekse, bilgisayarınız çok yavaş ya da bant genişlik sınırlarını ayarlamanız gerekir veya (BitTorrent?) istemcileriniz çok fazla veri gönderiyor olabilir ve gönderim bant genişlik sınırlarının azaltılması gerekebilir. <a href='/configstats#transport.sendProcessingTime'>[Grafiklemeyi etkinleştir]</a> (transport.sendProcessingTime)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:527
 msgid "This is the number of pending requests from other routers to build a participating tunnel through your router. It should usually be close to zero. If it is consistently high, your computer is too slow, and you should reduce your share bandwidth limits."
-msgstr ""
+msgstr "Bu, diğer yönlüden yönlünüz üzerinden bir katılan tünel oluşturmak için bekleyen isteklerin sayısıdır. Genellikle sıfıra yakın olmalıdır. Eğer sürekli olarak yüksekse, bilgisayarınız çok yavaş ve paylaşım bant genişliği sınırlarını azaltmanız gerekmektedir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:529
 msgid "Accepting/Rejecting"
@@ -10614,19 +10599,19 @@ msgstr "Kabul Etme / Reddetme"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:531
 msgid "Your router's status on accepting or rejecting requests from other routers to build a participating tunnel through your router. Your router may accept all requests, accept or reject a percentage of requests, or reject all requests for a number of reasons, to control the bandwidth and CPU demands and maintain capacity for local clients. <b>Note"
-msgstr ""
+msgstr "Yönlünüzün, diğer yönlülerden yönlünüz üzerinden bir tünel oluşturma isteklerini kabul etme veya reddetme durumu. Yönlü, bant genişliği ve CPU taleplerini kontrol etmek ve yerel istemciler için kapasiteyi korumak için bir dizi nedenle tüm istekleri kabul edebilir, kabul edebilir veya reddedebilir. <b>Not"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:533
 msgid "It will take at least 10 minutes from your router starting for it to accept building participating tunnels in order to ensure your router is stable and successfully bootstrapped to the network."
-msgstr ""
+msgstr "Yönlünüzün başlamasından itibaren katılan tünellerin oluşturulmasını kabul etmesi en az 10 dakika sürecektir, böylece yönlünüzün kararlı olduğu ve ağa başarıyla önyüklendiği sağlanır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:535
 msgid "<b>Note"
-msgstr ""
+msgstr "<b>Not"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:537
 msgid "This section is not enabled by default unless <a href='/help/configuration#advancedconsole'>Advanced Console mode</a> is enabled. You may enable it on the <a href='/configsidebar'>Sidebar Configuration page</a>."
-msgstr ""
+msgstr "Bu bölüm varsayılan olarak etkin değildir, ancak <a href='/help/configuration#advancedconsole'>Gelişmiş Konsol modu</a> etkinleştirildiğinde etkinleştirilebilir. <a href='/configsidebar'>Kenar Çubuğu Yapılandırma sayfasında</a> etkinleştirebilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:539
 msgid "Reachability Help"
@@ -10638,7 +10623,7 @@ msgstr "Güvenlik duvarınızı açtığınız halde I2P hala bağlantının gü
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:545
 msgid "If there is an error, the <a href=\"/logs\">logs</a> may also help diagnose the problem."
-msgstr ""
+msgstr "Hata oluşursa, <a href=/logs>loglar</a> sorunu teşhis etmeye yardımcı olabilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:549
 msgid "Your UDP port does not appear to be firewalled."
@@ -10982,7 +10967,7 @@ msgstr "WordPress Sitenizi Nasıl Güçlendirebilirsiniz?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:490
 msgid "<b>Note:</b> On some Apache installations, the <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> and <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> modules are enabled by default. It is important to disable these, or otherwise protect access to the urls, to avoid compromising the anonymity and security of your server."
-msgstr ""
+msgstr "<b>Not:</b> Bazı Apache kurulumlarında, <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> ve <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> modülleri varsayılan olarak etkinleştirilir. Sunucunuzun anonimliği ve güvenliği tehlikeye atmamak için bunları devre dışı bırakmanız veya diğer şekilde erişimi korumanız önemlidir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:278
 msgid "home"
