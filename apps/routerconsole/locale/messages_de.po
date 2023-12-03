@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-11-21 19:05+0000\n"
+"PO-Revision-Date: 2023-12-03 02:23+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:387
 msgid "Hash"
@@ -155,7 +155,7 @@ msgstr "Peers, an die in letzter Minute gesendet wurde"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:46
 msgid "Known fast peers"
-msgstr "bekannte schnelle Teilnehmer"
+msgstr "Bekannte schnelle teilnehmer"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:47
 msgid "Known integrated (floodfill) peers"
@@ -245,7 +245,7 @@ msgstr "Unerreichbar auf allen Transporten"
 #: ../../../router/java/src/net/i2p/router/transport/TransportManager.java:1059
 #: ../../../router/java/src/net/i2p/router/transport/UPnPManager.java:395
 msgid "UPnP is not enabled"
-msgstr "UPnP ist nicht aktiviert."
+msgstr "UPnP ist nicht aktiviert"
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1066
 #: ../java/src/net/i2p/router/web/helpers/ConfigNavHelper.java:30
@@ -305,7 +305,7 @@ msgstr "Laufzeit"
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1103
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1120
 msgid "External IP"
-msgstr "externe IP"
+msgstr "Externe IP"
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1106
 msgid "Layer 3 Forwarding"
@@ -355,12 +355,12 @@ msgstr "Die gegenwärtige externe IP-Adresse steht nicht zur Verfügung."
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1237
 #, java-format
 msgid "UPnP reports the maximum downstream bit rate is {0}bits/sec"
-msgstr "UPnP meldet eine maximale Downstream-Bitrate von {0} bits/s."
+msgstr "UPnP meldet eine maximale Downstream-Bitrate von {0} bits/s"
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1239
 #, java-format
 msgid "UPnP reports the maximum upstream bit rate is {0}bits/sec"
-msgstr "UPnP meldet eine maximale Upstream-Bitrate von {0} bits/s."
+msgstr "UPnP meldet eine maximale Upstream-Bitrate von {0} bits/s"
 
 #. {0} is TCP or UDP
 #. {1,number,#####} prevents 12345 from being output as 12,345 in the English locale.
@@ -526,7 +526,7 @@ msgstr "Plugin-Update-Server kontaktieren"
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:75
 #, java-format
 msgid "Bad URL {0}"
-msgstr "ungültige URL: {0}"
+msgstr "Ungültige URL: {0}"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:118
 #, java-format
@@ -536,7 +536,7 @@ msgstr "Versuche, von Datei {0} zu installieren"
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:121
 #, java-format
 msgid "Failed to install from file {0}, copy failed."
-msgstr "Installation der Datei {0} fehlgeschlagen, Kopieren fehlgeschlagen"
+msgstr "Installation der Datei {0} fehlgeschlagen, Kopieren fehlgeschlagen."
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:141
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:576
@@ -582,7 +582,7 @@ msgstr "Zusatzprogramm nicht installiert - dem Signierer wird nicht vetraut"
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:382
 #, java-format
 msgid "Plugin from {0} is corrupt"
-msgstr "Zusatzprogramm von {0} ist beschädigt."
+msgstr "Zusatzprogramm von {0} ist beschädigt"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:396
 #, java-format
@@ -613,7 +613,7 @@ msgstr "Dieses Zusatzprogramm benötigt Java-Version {0} oder neuer"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:450
 msgid "Downloaded plugin is for new installs only, but the plugin is already installed"
-msgstr "Heruntergeladenes Zusatzprogramm lässt sich nur neu installieren, jedoch ist es ist bereits installiert."
+msgstr "Heruntergeladenes Zusatzprogramm lässt sich nur neu installieren, jedoch ist es ist bereits installiert"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:460
 msgid "Installed plugin does not contain the required configuration file"
@@ -621,7 +621,7 @@ msgstr "Das installierte Zusatzprogramm enthält nicht die benötigte Konfigurat
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:468
 msgid "Signature of downloaded plugin does not match installed plugin"
-msgstr "Die Signatur des heruntergeladenen Zusatzprogramms stimmt nicht mit dem installierten Zusatzprogramm überein."
+msgstr "Die Signatur des heruntergeladenen Zusatzprogramms stimmt nicht mit dem installierten Zusatzprogramm überein"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:475
 #, java-format
@@ -804,7 +804,7 @@ msgstr "Harter Neustart angefordert"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:260
 msgid "Rekey and Restart"
-msgstr "neue RouterID erstellen und neustarten"
+msgstr "Neue RouterID erstellen und neustarten"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:261
 msgid "Rekeying after graceful restart"
@@ -812,7 +812,7 @@ msgstr "Neue RouterID nach sanftem Neustart"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:264
 msgid "Rekey and Shutdown"
-msgstr "neue RouterID generieren und I2P beenden"
+msgstr "Neue RouterID generieren und I2P beenden"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:265
 msgid "Rekeying after graceful shutdown"
@@ -877,7 +877,7 @@ msgstr "Garbage Collection erzwingen"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:296
 msgid "Full garbage collection requested"
-msgstr "vollständige Garbage Collection angefordert"
+msgstr "Vollständige Garbage Collection angefordert"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:297
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:595
@@ -963,7 +963,7 @@ msgstr "System Tray deaktiviert"
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHandler.java:151
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:560
 msgid "Restart required to take effect"
-msgstr "Ein Neustart ist erforderlich, damit diese Änderungen inkrafttreten."
+msgstr "Ein Neustart ist erforderlich, damit diese Änderungen inkrafttreten"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:436
 msgid "Failed to start systray"
@@ -986,7 +986,7 @@ msgstr "Update Manager nicht registriert, kann nicht nach Updates suchen"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:151
 msgid "Update or check already in progress"
-msgstr "Es wird bereits auf Aktualisierungen geprüft."
+msgstr "Es wird bereits auf Aktualisierungen geprüft"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:177
 msgid "Update available, attempting to download now"
@@ -1050,11 +1050,11 @@ msgstr "Aktualisiere die Aktualisierungsrichtlinien auf {0}"
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:258
 msgid "Updating update URLs."
-msgstr "Aktualisiere die Aktualisierungsadressen auf"
+msgstr "Aktualisiere die Aktualisierungsadressen auf."
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:270
 msgid "Updating trusted keys."
-msgstr "Aktualisiere die vertrauten Schlüssel"
+msgstr "Aktualisiere die vertrauten Schlüssel."
 
 #: ../java/src/net/i2p/router/web/ConfigUpdateHandler.java:281
 #, java-format
@@ -1109,7 +1109,7 @@ msgstr "Sollte das Problem fortbestehen, stellen Sie sicher, dass in Ihrem Brows
 #: ../java/src/net/i2p/router/web/NewsHelper.java:310
 #, java-format
 msgid "News last updated {0} ago."
-msgstr "Zeit seit letzter Aktualisierung der Benachrichtigungen: {0};"
+msgstr "Zeit seit letzter Aktualisierung der Benachrichtigungen: {0}."
 
 #: ../java/src/net/i2p/router/web/NewsHelper.java:316
 #, java-format
@@ -1211,12 +1211,12 @@ msgstr "keine"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:70
 msgid "Permanently banned"
-msgstr "permanent gesperrte IP's"
+msgstr "Permanent gebannt"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:72
 #, java-format
 msgid "Temporary ban expiring in {0}"
-msgstr "vorübergehende Sperrung endet in {0}"
+msgstr "Vorübergehende Sperrung endet in {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:74
 #, java-format
@@ -1411,7 +1411,7 @@ msgstr "Neuer Client hinzugefügt"
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:364
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:379
 msgid "Bad client index."
-msgstr "Falscher Index für den Client"
+msgstr "Falscher Index für den Client."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:347
 #, java-format
@@ -1451,11 +1451,11 @@ msgstr "Fehler beim Starten"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:440
 msgid "Failed to find server."
-msgstr "Konnte keinen Server finden"
+msgstr "Konnte keinen Server finden."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:446
 msgid "No plugin URL specified."
-msgstr "Keine URL des Zusatzprogramms angegeben"
+msgstr "Keine URL des Zusatzprogramms angegeben."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:467
 #: ../java/src/net/i2p/router/web/helpers/ConfigFamilyHandler.java:67
@@ -1777,7 +1777,7 @@ msgstr "Autor"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:328
 msgid "Signed by"
-msgstr "unterschrieben von"
+msgstr "Unterschrieben von"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:342
 msgid "Update link"
@@ -1802,7 +1802,7 @@ msgstr "Aktualisierung"
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:431
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:78
 msgid "Delete"
-msgstr "löschen"
+msgstr "Löschen"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigFamilyHandler.java:29
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:560
@@ -1818,7 +1818,7 @@ msgstr "Sie müssen einen Familien Namen eingeben"
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:185
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:319
 msgid "Configuration saved successfully."
-msgstr "Konfiguration erfolgreich gespeichert"
+msgstr "Konfiguration erfolgreich gespeichert."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigFamilyHandler.java:62
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:548
@@ -2063,7 +2063,7 @@ msgstr "Zusatzoptionen zu Protokollen aktualisiert"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHandler.java:183
 msgid "Log configuration saved"
-msgstr "Protokollkonfiguration gespeichert."
+msgstr "Protokollkonfiguration gespeichert"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:62
 #, java-format
@@ -2330,7 +2330,7 @@ msgstr "Warnung - Ports unter 1024 werden nicht empfohlen"
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:305
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:332
 msgid "Invalid port"
-msgstr "ungültiger Port"
+msgstr "Ungültiger Port"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:310
 msgid "Updating inbound TCP port to auto"
@@ -2406,7 +2406,7 @@ msgstr "Ungültige Adresse"
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:476
 #, java-format
 msgid "The hostname or IP {0} is not publicly routable"
-msgstr "Hostname oder IP {0} ist nicht öffentlich rutbar."
+msgstr "Hostname oder IP {0} ist nicht öffentlich rutbar"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHandler.java:501
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:96
@@ -2467,7 +2467,7 @@ msgstr "gesperrt bis zum Neustart"
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:40
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:61
 msgid "Invalid peer"
-msgstr "ungültiger Teilnehmer"
+msgstr "Ungültiger Teilnehmer"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:30
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:570
@@ -2493,7 +2493,7 @@ msgstr "ungültige Geschwindigkeitsangabe"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:54
 msgid "Bad capacity value"
-msgstr "ungültiger Wert für die Kapazität"
+msgstr "Ungültiger Wert für die Kapazität"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHandler.java:63
 #: ../java/src/net/i2p/router/web/helpers/WizardHandler.java:77
@@ -7721,7 +7721,7 @@ msgstr "Suchmaschinen"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:542
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:423
 msgid "Applications and Configuration"
-msgstr ""
+msgstr "Anwendungen und Konfiguration"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:558
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:451
@@ -8191,7 +8191,7 @@ msgstr "Der Reseed ist ein \"bootstrapping\"-Prozess, der das erstmalige Verbind
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:529
 msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr ""
+msgstr "Um die Konfiguration von Wiederholungs -URLs zu aktivieren, aktivieren Sie die <a href=/help/advancedsettings> fortschrittlicher Modus </a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:535
 msgid "Reseeding Configuration"
@@ -8405,7 +8405,7 @@ msgstr "Statistiken einrichten"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:419
 msgid "Stats Collection &amp; Graphing"
-msgstr ""
+msgstr "Statistiksammlung &amp; Grafik"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:528
 msgid "Configure I2P Stat Collection"
@@ -8413,7 +8413,7 @@ msgstr "I2P-Statistiken anpassen"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:530
 msgid "A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>."
-msgstr ""
+msgstr "Eine beschränkte Auswahl an Statistiken ist standardmäßig aktiviert und wird zur Überwachung der Router-Leistung benötigt. Nur Statistiken, für die optionale Grafiken verfügbar sind, werden hier aufgelistet; für eine vollständige Liste der aktivierten Statistiken besuchen Sie bitte die <a href=/stats>Statistikseite</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:537
 msgid "Enable full stats?"
@@ -8466,15 +8466,15 @@ msgstr "Änderungen an den Client-Tunneln sind nur temporär und werden nicht ge
 #. if (pm.isRegistered(net.i2p.util.PortMapper.SVC_I2PTUNNEL)) {
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:549
 msgid "The default settings are optimized for general usage and normally don't need to be changed."
-msgstr ""
+msgstr "Die Standard-Einstellungen sind für eine generelle Nutzung optimiert und müssen normalerweise nicht geändert werden."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:551
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr ""
+msgstr "Um die Client-Tunnel-Einstellungen zu ändern, verwenden Sie den <a href=/i2ptunnelmgr>Tunnel-Manager</a> oder die <a href=/i2psnark/configure>Konfigurationsseite</a> für I2PSnark."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:553
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr ""
+msgstr "Um Änderungen an den Client-Tunnels nur für diese Sitzung zu ermöglichen, aktivieren Sie den <a href=/help/advancedsettings>Erweiterten Modus</a> der Konsole."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:526
 msgid "Router Console Theme"
@@ -8491,7 +8491,7 @@ msgstr "Themenauswahl für den Internet Explorer ist ausgeschaltet, bedauere."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:546
 msgid "A very old version has been detected. It's not recommended to use I2P with unmaintained browsers."
-msgstr ""
+msgstr "Es wurde eine sehr alte Version erkannt. Es wird nicht empfohlen, I2P mit nicht mehr unterstützten Browsern zu nutzen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:548
 msgid "If you're not using IE, it's likely that your browser is pretending to be IE; please configure your browser (or proxy) to use a different User Agent string if you'd like to access the console themes."
@@ -8867,299 +8867,299 @@ msgstr "Änderungsprotokoll"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:576
 msgid "Advanced Router Configuration"
-msgstr ""
+msgstr "Erweiterte Router-Konfiguration"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:437
 msgid "The router configuration options listed below are not available in the user interface, usually because they are rarely used or provide access to advanced settings that most users will not need. This is not a comprehensive list. Some settings will require a restart of the router to take effect. Note that all settings are case sensitive. You will need to edit your <code>router.config</code> file to add options, or, once you have added <code>routerconsole.advanced=true</code> to the router.config file, you may edit settings within the console on the <a href=/configadvanced>Advanced Configuration page</a>."
-msgstr ""
+msgstr "Die nachfolgend aufgeführten Router-Konfigurationsoptionen sind in der Benutzeroberfläche normalerweise nicht verfügbar, da sie selten genutzt werden oder den Zugriff auf erweiterte Einstellungen ermöglichen, die die meisten Benutzer nicht benötigen. Dies ist keine vollständige Liste. Einige Einstellungen erfordern einen Neustart des Routers, um wirksam zu werden. Beachten Sie, dass alle Einstellungen groß- und kleinschreibempfindlich sind. Sie müssen die Datei <code>router.config</code> bearbeiten, um Optionen hinzuzufügen oder, nachdem Sie <code>routerconsole.advanced=true</code> zur Datei router.config hinzugefügt haben, können Sie die Einstellungen innerhalb der Konsole auf der <a href=/configadvanced>Seite für erweiterte Konfiguration</a> bearbeiten."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:439
 msgid "When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href=/configadvanced>Advanced Configuration page</a>. Extra display options are provided in the <a href=/netdb>Network Database section</a>, including the <a href='/netdb?f=3'>Sybil Analysis tool</a>, and there are additional configuration options on the <a href=/configclients>Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar."
-msgstr ""
+msgstr "Wenn auf „true“ gesetzt, werden zusätzliche Funktionen in der Konsole aktiviert und der Benutzer kann Einstellungen direkt auf der <a href=/configadvanced>Seite für erweiterte Konfiguration</a> bearbeiten. Es stehen zusätzliche Anzeigeoptionen im Abschnitt <a href=/netdb>Datenbank des Netzwerks</a> zur Verfügung, einschließlich des <a href='/netdb?f=3'>Werkzeugs zur Sybil-Analyse</a>, und es gibt zusätzliche Konfigurationsoptionen auf der <a href=/configclients>Seite für Client-Konfiguration</a>. Außerdem wird die Installation nicht signierter Updates, die manuelle Konfiguration der News-URL und zusätzliche Seitenbereiche aktiviert."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:441
 msgid "Plugins signed with the cryptographic key of the developer are the recommended format, but if you wish to install unsigned plugins (.zip) you can set this to true. Note that you may still encounter issues attempting to install an unsigned plugin if the developer has included additional checks in the plugin build process."
-msgstr ""
+msgstr "Plugins, die mit dem kryptographischen Schlüssel des Entwicklers signiert sind, sind das empfohlene Format, aber wenn Sie nicht signierte Plugins (.zip) installieren möchten, können Sie dies hier aktivieren. Beachten Sie, dass Sie bei der Installation nicht signierter Plugins weiterhin auf Probleme stoßen können, wenn der Entwickler zusätzliche Überprüfungen in den Erstellprozess des Plugins eingebaut hat."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:443
 msgid "This setting allows the manual selection of the browser which I2P will launch on startup (if the console is <a href=/configservice#browseronstart>configured</a> to launch a browser on startup), overriding the OS default browser. For more information, see the <a href=#alternative_browser>FAQ entry</a> above."
-msgstr ""
+msgstr "Diese Einstellung ermöglicht die manuelle Auswahl des Browsers, den I2P beim Start öffnet (wenn die Konsole konfiguriert ist, einen Browser beim Start zu öffnen und den Standard-Browser des Betriebssystems überschreibt). Weitere Informationen finden Sie im obigen Eintrag im <a href=#alternative_browser>FAQ</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:445
 msgid "When set to true, this enables gzip compression for the router console and default web applications. [Enabled by default]"
-msgstr ""
+msgstr "Wenn auf „true“ gesetzt, wird die GZIP-Kompression für die Router-Konsole und standardmäßige Webanwendungen aktiviert. [Standardmäßig aktiviert]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:447
 msgid "When set to true, this enables plugin installation on the <a href=/configplugins>Plugin Configuration page</a>. [Enabled by default]"
-msgstr ""
+msgstr "Wenn auf „true“ gesetzt, wird die Installation von Plugins auf der <a href=/configplugins>Seite zur Plugin-Konfiguration</a> aktiviert. [Standardmäßig aktiviert]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:449
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
-msgstr ""
+msgstr "Wenn auf „true“ gesetzt, werden Reverse-DNS-Abfragen für Peers aktiviert, ausgelöst beim Anzeigen der Landesflagge eines Peers oder beim expliziten Anzeigen des Hostnamens oder der Domain in der Konsole oder beim Speichern der RouterInfo des Peers auf Festplatte. Um wiederholte Abfragen zu vermeiden, wird empfohlen, für DNS-Abfragen eine großzügige Zwischenspeicherungsrichtlinie von 10 Minuten oder mehr zu konfigurieren und einen datenschutzfreundlichen DNS-Server im Betriebssystem einzustellen. [Standardmäßig deaktiviert, Neustart erforderlich]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:451
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
-msgstr ""
+msgstr "Wenn auf „true“ gesetzt, erfolgt beim Zugriff auf die Router-Konsole über http://, wenn https:// aktiviert ist, automatisch eine Weiterleitung auf https. Zum Konfigurieren des Zugriffs auf die Router-Konsole bearbeiten Sie die Einstellungen in Ihrer Datei <code>clients.config</code> im Profilverzeichnis (und nicht im Installationsverzeichnis der Anwendung). [Standardmäßig aktiviert]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:453
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
-msgstr ""
+msgstr "Diese Einstellung bestimmt, ob der Router die bereitgestellte Datei <i>blocklist.txt</i> und eventuelle vom Benutzer konfigurierte Blocklisten verwenden soll, um das Sperren von Routern nach Hash oder IP-Adresse zu ermöglichen. Für IPv4 werden Bereiche und Netzmasken unterstützt, nicht jedoch für IPv6. Weitere Informationen finden Sie in der Datei <i>blocklist.txt</i> im Installationsverzeichnis von I2P+. [Standardmäßig aktiviert, Neustart erforderlich]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:455
 msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr ""
+msgstr "Diese Einstellung bestimmt, ob der Router die im Installationsverzeichnis von I2P+ bereitgestellte Datei <i>blocklist_tor.txt</i> verwenden soll, um das Sperren von Routern zu ermöglichen, die von Tor-Exit-Knoten-IP-Adressen betrieben werden. [Standardmäßig aktiviert, Neustart erforderlich]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:457
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
-msgstr ""
+msgstr "Diese Einstellung ermöglicht beim Konfigurieren eines Pfads zu einer gültigen Blocklistdatei das Laden einer zusätzlichen, vom Benutzer konfigurierten Blocklist beim Routerstart. [Standardmäßig deaktiviert, Neustart erforderlich]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:459
 msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr ""
+msgstr "Diese Einstellung ermöglicht das Konfigurieren einer Ablaufzeit (in Sekunden) für über Blocklisten durchgesetzte Sperren. Standardmäßig bleiben Sperren für die Dauer der Router-Sitzung bestehen. [Neustart erforderlich]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:461
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
-msgstr ""
+msgstr "Weisen Sie die Anzahl der Prozessorthreads für den Aufbau von Tunnels zu. Wenn Ihr Prozessor Hyper-Threading oder gleichzeitiges Multithreading unterstützt, können Sie die Anzahl der Prozessorkerne mit 2 multiplizieren, um die maximale Anzahl der zuzuweisenden Threads zu erhalten, andernfalls entspricht die Anzahl der Prozessorkerne der maximal verfügbaren Threads. Beachten Sie, dass Sie möglicherweise weniger als das theoretische Maximum zuweisen möchten, um Spielraum für andere Aufgaben zu haben."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:463
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
-msgstr ""
+msgstr "Diese Einstellung überschreibt in Millisekunden die Standard-Nachrichtenverarbeitungszeitgrenze (angezeigt als <i>Nachrichtenverzögerung</i> im Bereich Stau der Seitenleiste), bevor der Router als überlastet eingestuft und Anfragen für Transit-Tunnels abgewiesen werden. [Standard ist 750ms oder 1500ms, wenn der Router als langsam markiert ist]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:465
 msgid "Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]"
-msgstr ""
+msgstr "Teste periodisch Tunnels, um die durchschnittliche Verzögerung zu bestimmen und die Ergebnisse im Bereich Stau der Seitenleiste anzuzeigen. Zum Aktivieren auf false setzen. [Standard ist false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:467
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
-msgstr ""
+msgstr "Wenn auf „true“ gesetzt, ändert der Router bei jedem Neustart seine Identität und den UDP-Port. [Standardmäßig ist false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:469
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
-msgstr ""
+msgstr "Diese Einstellung legt fest, welche <a href=/profiles#profile_defs>Peer-Fähigkeiten</a> nicht für den Aufbau der Tunnels Ihres Routers verwendet werden. Beispielsweise <code>router.excludePeerCaps=LMN</code>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:471
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
-msgstr ""
+msgstr "Wenn auf „true“ gesetzt, wird Ihre <a href=/configadvanced#ffconf>Teilnahme als Flutverstärker</a> vor anderen Routern verborgen, wenn Ihr Router als Flutverstärker für das Netzwerk fungiert."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:473
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
-msgstr ""
+msgstr "Legt die maximale Anzahl paralleler <a href=/jobs>Jobs</a> fest, die ausgeführt werden können. Der Standardwert wird durch den der JVM über <code>wrapper.config</code> zugewiesenen Speicher festgelegt und liegt bei weniger als 64 MB bei 3, bei weniger als 256 MB bei 4 und bei mehr als 256 MB bei 5. Hinweis: Eine Änderung dieser Einstellung erfordert einen Neustart des Routers."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:475
 msgid "Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Default is 8000, or 2000 if running on Arm or Android]"
-msgstr ""
+msgstr "Legt die maximale Anzahl an Teilnehmertunnels fest, die der Router aufbauen kann. Um die Teilnahme vollständig zu deaktivieren, auf 0 setzen. [Standard sind 8000, oder 2000 wenn auf Arm oder Android ausgeführt]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:477
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
-msgstr ""
+msgstr "Legt den maximalen Prozentsatz aktiver lokaler Tunnels (Client- und Erkundungstunnel) fest, für die ein Peer verwendet wird. [Standard sind 10% in I2P+, 33% in I2P]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:479
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
-msgstr ""
+msgstr "Wenn auf „true“ gesetzt, werden die im NetzDB-Verzeichnis des Profils gespeicherten Router-Info-Dateien nicht in 64 Unterverzeichnisse aufgeteilt. [Standard ist false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:481
 msgid "When set to true, your router will not be classified as slow, regardless of the specifications of your host system. Ordinarily, routers running on hosts with the following characteristics will be classified as slow, and various performance-related router options will be modified accordingly:"
-msgstr ""
+msgstr "Wenn auf „true“ gesetzt, wird Ihr Router unabhängig von den Spezifikationen Ihres Hostsystems nicht als langsam eingestuft. Üblicherweise werden Router, die auf Hosts mit folgenden Merkmalen laufen, als langsam eingestuft und verschiedene leistungsbezogene Router-Optionen werden entsprechend angepasst:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:483
 msgid "Host OS running Android"
-msgstr ""
+msgstr "Host-Betriebssystem läuft unter Android"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:485
 msgid "Host OS running on ARM (MacOS excepted)"
-msgstr ""
+msgstr "Host-Betriebssystem läuft auf ARM (außer MacOS)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:487
 msgid "32bit host OS running with less than 4 detected cores"
-msgstr ""
+msgstr "32-Bit-Host-Betriebssystem läuft mit weniger als 4 erkannten Kernen"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:489
 msgid "64bit host OS running with 1 detected core and less than 384MB allocated to the JVM"
-msgstr ""
+msgstr "64-Bit-Host-Betriebssystem läuft mit 1 erkanntem Kern und weniger als 384MB zugewiesenem Speicher für die JVM"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:491
 msgid "Less than 256MB allocated to the JVM"
-msgstr ""
+msgstr "Weniger als 256MB der JVM zugewiesen"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:493
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
-msgstr ""
+msgstr "Router verwendet eine nicht-native, software-emulierte Version der Java BigInteger-Bibliothek"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:495
 msgid "This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr ""
+msgstr "Diese Einstellung ermöglicht die Konfiguration der minimalen Anzahl aufgenommener Teilnehmertunnels, bevor der Router Tunnelanfragen aufgrund der vorhersehbaren Bandbreitenanforderungen ablehnt. [Standard sind 100 bei Android, 800 bei ARM mit weniger als 4 Kernen, 1200 bei ARM mit 4 oder mehr Kernen, andernfalls 2500]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:497
 msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr ""
+msgstr "Wird auf „true“ gesetzt, ändert der Router bei jedem Neustart seine Identität und den UDP-Port und löscht dann den Schlüssel aus router.config, um weitere Änderungen zu verhindern. [Standardmäßig ist false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:499
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr ""
+msgstr "Beim Konfigurieren wird eine harte Grenze für die Anzahl der gleichzeitig aufgebauten Tunnel durch den Router festgelegt. Standardmäßig nutzt der Router die durchschnittliche Aufbauzeit und die aktuelle Ausgangsbandbreite zur Bestimmung der optimalen Aufbaurate. [Neustart erforderlich]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:501
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr ""
+msgstr "Wenn Sie nicht signierte (.zip) I2P-Updates installieren möchten, sollte dies Ihrer Datei <code>router.config</code> hinzugefügt werden, es sei denn Sie haben bereits <code>routerconsole.advanced=true</code> konfiguriert, in welchem Fall diese Option bereits vorgesehen ist. Hinweis: Ab I2P+ 0.9.48+ ist die Installation von <a href=/configupdate#i2pupdates>nicht signierten Updates</a> standardmäßig aktiviert."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:503
 msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr ""
+msgstr "Diese Einstellung ermöglicht die Konfiguration der Update-URL für das Feature der nicht signierten Updates, wenn es aktiviert ist. Die URL sollte mit <code>/i2pupdate.zip</code> enden. Hinweis: Installieren Sie keine nicht signierten Updates, es sei denn, Sie vertrauen der Quelle des Updates!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:505
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr ""
+msgstr "Diese Einstellung ermöglicht das Deaktivieren von SSU-Tests zur Ermittlung, ob Ihr Router hinter einer Firewall steht, und lässt sich für Router aktivieren, die definitiv nicht hinter einer Firewall stehen, aber gelegentlich Firewall-Probleme aufweisen. Falls die Tests deaktiviert sind, sollten sowohl SSU als auch NTCP Ihre derzeitige öffentliche IP-Adresse auf der<a href=/info> Router-Info-Seite</a> anzeigen. [Neustart erforderlich]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:507
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr ""
+msgstr "Diese Einstellung bestimmt, welcher Transport bei der Kommunikation mit Peers Vorrang hat. Standardmäßig hat NTCP Vorrang vor UDP (SSU). Wenn der Wert auf true gesetzt wird, wird UDP bevorzugt, es sei denn, eine bestehende NTCP-Verbindung existiert; bei immer wird immer UDP unabhängig von einer vorhandenen NTCP-Verbindung verwendet. [Standardmäßig ist false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:509
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr ""
+msgstr "Diese tunnelbezogene Einstellung ermöglicht Ihnen, Antworten auf an Server des Routers gesendete Pings zu aktivieren oder zu deaktivieren. Um Pings zu deaktivieren, müssen Sie die Zeile <code>i2p.streaming.answerPings=false</code> dem Abschnitt <i>Benutzerdefinierte Optionen</i> der Serverkonfiguration im Tunnel-Manager hinzufügen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:511
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr ""
+msgstr "Wird auf true gesetzt, läuft I2P ohne Netzwerkanbindung, was hilfreich ist, wenn der Router ständig neu gestartet wird, um Code-Updates zu testen, da dies Netzwerkunterbrechungen verhindert."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:513
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr ""
+msgstr "Diese Einstellung führt bei Aktivierung eine zufällige Pong-Verzögerung von bis zu 50 ms für alle vom Router gehosteten pingfähigen Server ein. Standardmäßig ist sie deaktiviert. [Neustart erforderlich]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:515
 msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr ""
+msgstr "Diese Einstellung ändert bei Aktivierung die maximale zusätzliche zufällige Pong-Verzögerung für pingfähige Server, wenn auch <code>i2p.streaming.enablePongDelay</code> aktiviert ist. Wird sie nicht explizit gesetzt, wird der Standardwert von 50 ms verwendet."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:517
 msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr ""
+msgstr "Diese Einstellung (in Millisekunden) bestimmt, wie lange ein Paket maximal in der CoDel-Warteschlange verweilen darf, bevor es fallen gelassen wird. Standardmäßig sind es 1000 ms. [Neustart erforderlich]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:519
 msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr ""
+msgstr "Diese Einstellung bestimmt die maximale Anzahl Nachrichten in der Ausgangswarteschlange, bevor sie als voll markiert wird. [Standard ist 768]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:521
 msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr ""
+msgstr "Diese Einstellung bestimmt die maximale Anzahl Nachrichten über dem maximalen Warteschlangenwert, bevor weitere Nachrichten fallen gelassen werden. [Standard ist 128]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:523
 msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr ""
+msgstr "Diese Einstellung (in Millisekunden) ermöglicht die manuelle Konfiguration des Zielverzögerungswerts für die Warteschlangenverwaltung durch CoDel. Standardmäßig sind es 50 ms. [Neustart erforderlich]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:525
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr ""
+msgstr "Diese Einstellung (in Stunden) bestimmt, wie alt ein RouterInfo im NetzDB sein darf (basierend auf seinem letzten bekannten Veröffentlichungsdatum), bevor es als veraltet eingestuft und gelöscht wird. [Standardmäßig sind es 28 Stunden, es sei denn der Router ist ein Flutverstärker, dann sind es 8 Stunden.]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:527
 msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr ""
+msgstr "Diese Einstellung bestimmt die Anzahl der Peers, die parallel beim Ausführen des Peer-Exploration-Jobs erkundet werden [Standard ist 1 Peer zur Zeit, wenn mehr als 3000 Peers bekannt sind]. Beachten Sie, dass eine Erhöhung dieses Werts den Bandbreitenbedarf für die Erkundung erhöht und ein zu hoher Wert zu übermäßigen Nachrichtenverzögerungen führen und andere Dienste stören kann, nutzen Sie diese Einstellung also mit Vorsicht!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:529
 msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr ""
+msgstr "Diese Einstellung bestimmt die Anzahl der NetzDB DHT-Buckets, auf die der Peer-Exploration-Job beim Ausführen zurückgreift. Standardmäßig wird die Anzahl der zu erkundenden Buckets variieren, abhängig davon, ob der Router mehr als eine Stunde läuft, ob der Router versteckt ist oder in der 'K'-Bandbreitenebene liegt sowie der Anzahl der bekannten Router."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:531
 msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr ""
+msgstr "Diese Einstellung (in Sekunden) ermöglicht es Ihnen, die Verzögerung zwischen den Läufen des Peer-Exploration-Jobs zu überschreiben, der versucht, neue Peers zum Hinzufügen zum NetzDB zu finden. Der Job läuft standardmäßig alle 80 Sekunden oder, falls der Router Job- oder Nachrichtenverzögerungen aufweist, alle 3 Minuten. Wenn die Größe des NetzDB 4000 Peers erreicht, erhöht sich die Pause auf 15 Minuten. Sie möchten die Verzögerung möglicherweise erhöhen, wenn Ihr NetzDB gut gefüllt ist (über 2000 Peers), oder wenn Sie die Gesamtbandbreitennutzung reduzieren möchten. Hinweis: Für Flutverstärker-Router läuft dieser Job nicht."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:533
 msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr ""
+msgstr "Diese Einstellung bestimmt die maximale Anzahl an Peer-Hashes, die für die Erkundung in die Warteschlange aufgenommen werden. In I2P ist der Maximalwert 128 und in I2P+ der Standardwert 512."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:535
 msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr ""
+msgstr "Diese Einstellung bestimmt, ob ein Router als Flutverstärker das NetzDB erforscht, um neue Peers zu erfahren. [Standardmäßig ist false, Neustart erforderlich]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:537
 msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr ""
+msgstr "Wird diese Einstellung auf true gesetzt, verhindert sie eine direkte Kommunikation des Routers mit anderen Routern und erzwingt den Einsatz von Introducer-Routern. [Standardmäßig ist sie false, es sei denn der Router ist im versteckten Modus.]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:539
 msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr ""
+msgstr "Diese Einstellung erlaubt es Ihnen, ältere Router von Ihrem NetzDB auszuschließen. Router, die älter sind als der Standardwert oder der von Ihnen gesetzte Wert, werden aus dem NetzDB gelöscht und für die Dauer der Router-Sitzung gesperrt. Standardmäßig werden Router ausgeschlossen, die älter sind als 0.9.20. Hinweis: Ab I2P+ Version 0.9.46 werden nur Router mit sehr aktuellen Versionen zum Aufbau lokaler Tunnel verwendet. [Neustart erforderlich]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:541
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
-msgstr ""
+msgstr "Diese Einstellung bestimmt die Anzahl parallel ausgeführter Peer-Tests zur Bestimmung der Peer-Latenz. [Standardwert ist 4]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:543
 msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 5000]"
-msgstr ""
+msgstr "Diese Einstellung bestimmt die Verzögerung zwischen Peer-Test-Jobs in Millisekunden. [Standardwert ist 5000]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:545
 msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 1000]"
-msgstr ""
+msgstr "Diese Einstellung weist der Peer-Latenz-Bestimmung die maximal zulässige Testdauer in Millisekunden zu, bevor ein Test als Fehler gewertet wird. Falls der Time-out kleiner als der durchschnittliche erfolgreiche Test konfiguriert ist, wird der Durchschnittswert erfolgreicher Tests verwendet. [Standardwert ist 1000]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:547
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
-msgstr ""
+msgstr "Diese Einstellung bestimmt, ob statistische Daten über unseren Router gelegentlich im NetzDB veröffentlicht werden. [Standardwert ist false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:549
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
-msgstr ""
+msgstr "Diese Einstellung konfiguriert die Anfangsgröße der Ausgangsnachrichten-Warteschlange. [Standardwert ist 64]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:551
 msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr ""
+msgstr "Diese Einstellung konfiguriert die maximale Größe der Eingangsnachrichten-Warteschlange. [Standardwert ist 1024]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:553
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
-msgstr ""
+msgstr "Diese Einstellung konfiguriert die maximale Anzahl an in einer Zyklus gepufferten Eingangsnachrichten (Pumpe). [Standardwert ist 24]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:555
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
-msgstr ""
+msgstr "Diese Einstellung konfiguriert die maximale Anzahl an in einer Zyklus gepufferten Ausgangsnachrichten (Pumpe). [Standardwert ist 64]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:557
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
-msgstr ""
+msgstr "Diese Einstellung (in Millisekunden) ermöglicht das manuelle Konfigurieren der Verzögerung zwischen Routenaktualisierungen durchgeführt vom Refresh Routers Job. Standardmäßig wird die Pause zwischen Aktualisierungen durch die Größe des NetzDBs bestimmt und führt eine zeitliche Randomisierung ein, um Traffic-Analysen entgegenzuwirken. Bei Werten unter 2000 Millisekunden wird empfohlen, den Wert von <code>router.refreshTimeout</code> zu erhöhen. Beachten Sie, dass Werte darunter 2000 Millisekunden die Netzwerkauslastung erhöhen und Job-Verzögerungen hervorrufen können, und für einen längerfristigen Gebrauch nicht empfohlen werden."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:559
 msgid "This setting (in hours) allows you to manually configure how old a RouterInfo is in order for it to be checked by the Refresh Routers Job. By default, the age of a RouterInfo before a refresh is intitiated scales according to the size of the NetDb, increasing as the NetDb grows in size. A value of 0 will force the Router Refresh Job to check every router in the NetDb, regardless of age."
-msgstr ""
+msgstr "Diese Einstellung (in Stunden) ermöglicht das manuelle Konfigurieren des Alters eines RouterInfo, um vom Refresh Routers Job überprüft zu werden. Standardmäßig skaliert das Alter eines RouterInfo bevor ein Refresh initiiert wird entsprechend der Größe des NetzDBs und erhöht sich mit wachsender NetzDB-Größe. Ein Wert von 0 erzwingt, dass der Router Refresh Job jeden Router im NetzDB unabhängig vom Alter überprüft."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:561
 msgid "This setting (in seconds) allows you to manually configure the amount of time to wait before an attempt to refresh a router is determined to have failed. [The default is 20 seconds]"
-msgstr ""
+msgstr "Diese Einstellung (in Sekunden) ermöglicht das manuelle Konfigurieren der Wartezeit bis ein Refresh-Versuch eines Routers als fehlgeschlagen erachtet wird. [Der Standardwert liegt bei 20 Sekunden.]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:563
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
-msgstr ""
+msgstr "Diese Einstellung bestimmt, ob Router, die als uninteressant eingestuft sind (K- oder L-Stufe, nicht erreichbar oder älter als 0.9.50) nach 1 Stunde Laufzeit beim Prozess des Refreshs von Routern überprüft werden. [Standardmäßig ist false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:565
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
-msgstr ""
+msgstr "Diese Einstellung (in Minuten) ermöglicht das manuelle Konfigurieren der Wartezeit nach dem Start, bevor RouterInfos im NetzDB auf Gültigkeit überprüft werden, nach der nur noch gültige Router für die Aufnahme akzeptiert werden. Wenn die Validierung stattfindet, werden abgelaufene RouterInfos und über SSU nicht erreichbare Peers aus dem NetzDB entfernt. [Standardwert sind 60 Minuten] Hinweis: Diese Einstellung hat keinen Einfluss auf ältere Router (standardmäßig älter als 0.9.29), die beim Versuch eines NetzDB-Speicherns sofort aus dem NetzDB entfernt und für die Routersitzung gesperrt werden."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:567
 msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-msgstr ""
+msgstr "Diese Einstellung aktiviert, wenn auf true gesetzt, den HiDPI-Modus für die Graphen auf der <a href=/graphs>Graphenseite</a>. Nach der Aktivierung musst Du möglicherweise die Seite neu laden, damit die Einstellungen übernommen werden, und die Anzeige der Graphen kann ein paar Aktualisierungen brauchen, bis sie stabil läuft. Beachte dass JavaScript im Browser aktiviert sein muss. [Experimental]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:569
 msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr ""
+msgstr "Wird diese Einstellung auf true gesetzt, wird in der Seitenleiste im Abschnitt „Kongestion“ der Peer-Test-Durchschnittswert angezeigt, ermittelt durch Addierung des Durchschnitts erfolgreicher Tests und dem überziehenden Durchschnitt fehlgeschlagener Tests. Der Durchschnittswert kann als Richtwert zur Bestimmung des optimalen Werts für <code>router.peerTestTimeout</code> dienen. [Standardmäßig ist false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:571
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr ""
+msgstr "Wird diese Einstellung auf true gesetzt, werden auf der <a href=/sitemap>Site-Karte</a> die Links zu den <i>Interessanten Seiten</i> angezeigt. [Standardmäßig ist false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:573
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr ""
+msgstr "Diese Einstellung ermöglicht die Konfiguration alternativer NTP-Server, um sicherzustellen, dass die Uhrzeit des Routers genau bleibt. [Standardmäßig sind es 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:575
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
-msgstr ""
+msgstr "Wird diese Option auf true gesetzt, wird ein Symbol in der Benachrichtigungsleiste angezeigt, mit grundlegenden Dienstkontrollfunktionen. [Standardmäßig deaktiviert]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:577
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr ""
+msgstr "Diese Einstellung ermöglicht die Konfiguration der maximalen Anzahl von Dateien pro Torrent, die I2PSnark beim Herunterladen oder Erstellen eines Torrents erlaubt. Beachte, dass eine substanzielle Erhöhung dieses Wertes über den Standard von 2000 Dateien zusätzliche Konfigurationen des Hostsystems erfordern kann, um die maximale Anzahl von vom Betriebssystem erlaubten offenen Dateien zu erhöhen (z.B. <code>ulimit -n</code> unter Linux). Zum Ändern werden Werte der Konfigurationsdatei von I2PSnark <code>i2psnark.config</code> hinzugefügt. [Neustart von I2PSnark oder Router erforderlich]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:433
 msgid "Recent I2P+ Changes"
-msgstr ""
+msgstr "Letzte Änderungen an I2P+"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:448
 msgid "View the full change log"
-msgstr ""
+msgstr "Den vollständigen Änderungsprotokoll ansehen"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:541
@@ -9168,38 +9168,27 @@ msgstr "I2P funktioniert auch hinter den meisten Firewalls, aber die Geschwindig
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:439
 msgid "If you can, please poke a hole in your firewall to allow unsolicited UDP and TCP packets to reach you."
-msgstr ""
-"Falls es Ihnen möglich ist, richten Sie bitte Ihre Firewall so ein, dass \n"
-"TCP- und UDP-Pakete Ihren Computer unverändert erreichen."
+msgstr "Falls es Ihnen möglich ist, richten Sie bitte Ihre Firewall so ein, dass TCP- und UDP-Pakete Ihren Computer unverändert erreichen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:441
 msgid "If you can't, I2P supports UPnP (Universal Plug and Play) and UDP hole punching with \"SSU introductions\" to relay traffic."
-msgstr ""
-"Falls Ihnen das nicht möglich ist, hat I2P UPnP-Unterstützung (Universelles \n"
-"Plug and Play) und UDP-Weiterleitung mit Hilfe der „SSU-Hilfsrouter“ eingebaut."
+msgstr "Falls Ihnen das nicht möglich ist, hat I2P UPnP-Unterstützung (Universelles Plug and Play) und UDP-Weiterleitung mit Hilfe der „SSU-Hilfsrouter“ eingebaut."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:443
 msgid "Most of the options on the Network Configuration page are for special situations, for example where UPnP does not work correctly, or a firewall not under your control is doing harm."
-msgstr ""
-"Die meisten der Optionen auf der Netzwerkkonfigurationsseite  sind für besondere Situationen,\n"
-"wenn z.&nbsp;B. UPnP nicht funktioniert oder die Firewall nicht geändert werden \n"
-"kann und Probleme bereitet."
+msgstr "Die meisten der Optionen auf der Netzwerkkonfigurationsseite  sind für besondere Situationen, wenn z.&nbsp;B. UPnP nicht funktioniert oder die Firewall nicht geändert werden kann und Probleme bereitet."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:445
 msgid "Certain firewalls such as symmetric NATs may not work well with I2P."
-msgstr ""
-"Bestimmte Firewalls, wie auch symmetrische NATs, arbeiten unter Umständen\n"
-"nicht gut mit I2P zusammen."
+msgstr "Bestimmte Firewalls, wie auch symmetrische NATs, arbeiten unter Umständen nicht gut mit I2P zusammen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:447
 msgid "UPnP is used to communicate with Internet Gateway Devices (IGDs) to detect the external IP address and forward ports."
-msgstr ""
-"UPnP kommuniziert normalerweise mit den Internet Gateway Devices (IGDs), um \n"
-"die extern erreichbare IP-Adresse zu ermitteln und die Ports weiterzuleiten."
+msgstr "UPnP kommuniziert normalerweise mit den Internet Gateway Devices (IGDs), um die extern erreichbare IP-Adresse zu ermitteln und die Ports weiterzuleiten."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:449
 msgid "UPnP support is beta, and may not work for any number of reasons"
-msgstr ""
+msgstr "UPNP -Unterstützung ist Beta und funktioniert möglicherweise nicht aus einer Reihe von Gründen"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:451
 msgid "No UPnP-compatible device present"
@@ -9227,13 +9216,11 @@ msgstr "UPnP-Gerät geändert, neugestartet oder mit geänderter Adresse"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:463
 msgid "UPnP may be enabled or disabled on the Network Configuration page, but a change requires a router restart to take effect."
-msgstr ""
-"UPnP kann aktiviert oder deaktiviert werden auf der Netzwerkkonfigurationsseite, aber ein Wechseln \n"
-"erfordert einen Routerneustart um wirksam zu werden."
+msgstr "UPnP kann aktiviert oder deaktiviert werden auf der Netzwerkkonfigurationsseite, aber ein Wechseln erfordert einen Routerneustart um wirksam zu werden."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:465
 msgid "Review the UPnP status here."
-msgstr ""
+msgstr "Überprüfen Sie den UPNP -Status hier."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:467
 msgid "Also, <b>do not enter a private IP address</b> like 127.0.0.1 or 192.168.1.1."
@@ -9241,7 +9228,7 @@ msgstr "Geben Sie auch <b>keine IP-Adresse für den privaten Gebrauch</b> wie 12
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:469
 msgid "If you specify the wrong IP address, or do not properly configure your NAT or firewall, your network performance will degrade substantially."
-msgstr ""
+msgstr "Wenn Sie die falsche IP-Adresse angeben oder Ihr NAT oder Ihre Firewall nicht ordnungsgemäß konfigurieren, wird die Leistung Ihres Netzwerks erheblich beeinträchtigt."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:471
 msgid "When in doubt, leave the settings at the defaults."
@@ -9249,79 +9236,79 @@ msgstr "Wenn Sie Zweifel haben, lassen Sie die Einstellungen auf den Standardwer
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:473
 msgid "Web Browser Configuration"
-msgstr ""
+msgstr "Webbrowser-Konfiguration"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:475
 msgid "In order to access websites hosted on I2P, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P HTTP proxy, by default running on <code>127.0.0.1 port 4444</code>. Most browsers offer an option to configure your proxy; in this mini-tutorial we'll focus on Firefox."
-msgstr ""
+msgstr "Um auf Websites zuzugreifen, die auf I2P gehostet sind, und optional den Standard-Outproxy zum Verbinden mit Websites im Clearnet zu verwenden, müssen Sie Ihren Browser so konfigurieren, dass er den I2P-HTTP-Proxy verwendet, der standardmäßig auf <code>127.0.0.1 Port 4444</code> läuft. Die meisten Browser bieten eine Option zur Konfiguration des Proxys; in diesem Minitutorial werden wir uns auf Firefox konzentrieren."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:477
 msgid "Open the Preferences page in Firefox and scroll to the bottom of the General section."
-msgstr ""
+msgstr "Öffnen Sie die Einstellungsseite in Firefox und blättern Sie bis zum Ende des Allgemein-Abschnitts."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:479
 msgid "In the Network Settings sub-section, hit the <i>Settings</i> button."
-msgstr ""
+msgstr "Unter dem Teilabschnitt Netzwerkeinstellungen klicken Sie auf die Schaltfläche <i>Einstellungen</i>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:481
 msgid "Under <i>Configure Proxy Access to Internet</i> select the <i>Manual proxy configuration</i> option."
-msgstr ""
+msgstr "Wählen Sie unter <i>Proxyzugriff auf das Internet konfigurieren</i> die Option <i>Manuelle Proxy-Konfiguration</i> aus."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:483
 msgid "Enter <code>127.0.0.1</code> in the <i>HTTP Proxy</i> field, and <code>4444</code> in the <i>Port</i> field."
-msgstr ""
+msgstr "Geben Sie <code>127.0.0.1</code> im Feld <i>HTTP-Proxy</i> und <code>4444</code> im Feld <i>Port</i> ein."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:485
 msgid "Tick the box marked <i>Use this proxy server for all protocols</i> to avoid requests escaping the proxy."
-msgstr ""
+msgstr "Aktivieren Sie das Kästchen mit der Bezeichnung <i>Diesen Proxyserver für alle Protokolle verwenden</i>, um zu verhindern, dass Anfragen den Proxy umgehen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:487
 msgid "In the box marked <i>No Proxy for</i> add the line <code>127.0.0.1,localhost</code> to ensure the I2P console and other locally hosted websites are still available."
-msgstr ""
+msgstr "Fügen Sie in das Feld <i>Kein Proxy für</i> die Zeile <code>127.0.0.1,localhost</code> hinzu, um sicherzustellen, dass die I2P-Konsole und andere lokal gehostete Websites weiterhin verfügbar sind."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:489
 msgid "Tick the box marked <i>Proxy DNS when using SOCKS v5</i> to prevent DNS leaks."
-msgstr ""
+msgstr "Markieren Sie das Kästchen mit der Aufschrift <i>Proxy DNS bei Verwendung von SOCKS v5</i>, um DNS-Lecks zu verhindern."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:491
 msgid "Hit the <i>OK</i> button and test the proxy is working by visiting <a href=http://planeta.i2p/ target=_blank rel=noreferrer class=sitelink>planeta.i2p</a> and <a href=https://www.myip.com/ target=_blank rel=noreferrer class='sitelink external'>www.myip.com</a>."
-msgstr ""
+msgstr "Klicken Sie auf die Schaltfläche <i>OK</i> und testen Sie, ob der Proxy funktioniert, indem Sie <a href=http://planeta.i2p/ target=_blank rel=noreferrer class=sitelink>planeta.i2p</a> und <a href=https://www.myip.com/ target=_blank rel=noreferrer class='sitelink external'>www.myip.com</a> besuchen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:493
 msgid "Note: To enhance your security when browsing .i2p sites, you may wish to consider installing an addon to prevent Javascript from running in the browser such as <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>, though it's recommended to whitelist the address I2P+ is running on to enable various router console enhancements. In addition, an addon that prevents requests to offsite resources is also recommended, for example <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
-msgstr ""
+msgstr "Hinweis: Um Ihre Sicherheit beim Surfen auf .i2p-Websites zu erhöhen, sollten Sie in Betracht ziehen, ein Addon zu installieren, das das Ausführen von Javascript im Browser verhindert, wie z.B. <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>. Es wird jedoch empfohlen, die Adresse, auf der I2P+ ausgeführt wird, zur Whitelist hinzuzufügen, um verschiedene Verbesserungen der Routerkonsole zu ermöglichen. Darüber hinaus wird auch ein Addon empfohlen, das Anfragen an externe Ressourcen verhindert, wie z.B. <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:495
-msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>.."
-msgstr ""
+msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>."
+msgstr "Für eine umfangreichere Anleitung zur Konfiguration für verschiedene Browser lesen Sie den <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>Browser-Konfigurationsleitfaden</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497
 msgid "The Tunnel Manager"
-msgstr ""
+msgstr "Der Tunnel-Manager"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:499
 msgid "The Tunnel Manager enables configuration of local services provided by your router."
-msgstr ""
+msgstr "Der Tunnel-Manager ermöglicht die Konfiguration der von Ihrem Router bereitgestellten lokalen Dienste."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:501
 msgid "You can determine which services automatically start when the router starts, manage tunnel allocation to optimize for high usage services or to minimize the the cpu and memory overhead, add server and client tunnels to host or access services on the network, set rate limiting or tunnel filtering for your server tunnels and more."
-msgstr ""
+msgstr "Sie können festlegen, welche Dienste automatisch gestartet werden, wenn der Router gestartet wird, die Tunnelzuweisung verwalten, um die Nutzung von Diensten mit hoher Auslastung zu optimieren oder die CPU- und Speicherüberlastung zu minimieren, Server- und Client-Tunnel hinzufügen, um Dienste im Netzwerk zu hosten oder darauf zuzugreifen, Geschwindigkeitsbegrenzung oder Tunnel-Filterung für Ihre Server-Tunnel einstellen und vieles mehr."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:503
 msgid "By default, most of your client services (mail, http proxy, IRC) will share the same set of tunnels (for performance reasons) and be listed as <i>Shared Clients</i> and <i>Shared Clients(DSA)</i> in the sidebar under Service Tunnels and on the <a href=/tunnels>Tunnels page</a>."
-msgstr ""
+msgstr "Standardmäßig teilen die meisten Ihrer Client-Dienste (E-Mail, HTTP-Proxy, IRC) denselben Satz von Tunneln (aus Leistungsgründen) und werden in der Seitenleiste unter Service-Tunnel als <i>Gemeinsam genutzte Clients</i> und <i>Gemeinsam genutzte Clients (DSA)</i> aufgeführt und auf der <a href=/tunnels>Tunnelseite</a> angezeigt."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:505
 msgid "However, if you experience a tunnel failure, all your services will go offline at the same time, so in some scenarios you may wish to configure client services to use their own set of tunnels."
-msgstr ""
+msgstr "Wenn jedoch ein Tunnelausfall auftritt, werden alle Ihre Dienste gleichzeitig offline geschaltet. In einigen Szenarien möchten Sie daher möglicherweise konfigurieren, dass Client-Dienste ihren eigenen Satz von Tunneln verwenden."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:507
 msgid "This can be done by unchecking the <i>Share tunnels with other configured clients</i> option listed under <i>Shared Client</i> on the configuration page of the relevant client service, after which you will need to restart the client service from the <a href=/i2ptunnelmgr>Tunnel Manager index page</a>."
-msgstr ""
+msgstr "Dies kann erreicht werden, indem Sie das Kontrollkästchen <i>Tunnel freigeben mit anderen konfigurierten Clients</i> deaktivieren, das unter <i>Gemeinsamer Client</i> auf der Konfigurationsseite des betreffenden Client-Dienstes aufgeführt ist. Danach müssen Sie den Client-Dienst von der <a href=/i2ptunnelmgr>Indexseite des Tunnelmanagers</a> neu starten."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:509
 msgid "Note: Most of the options in the Tunnel Manager have tooltips; be sure to check those before you change settings you don't fully understand!"
-msgstr ""
+msgstr "Hinweis: Die meisten Optionen im Tunnel Manager haben Tooltips. Überprüfen Sie diese, bevor Sie Einstellungen ändern, die Sie nicht vollständig verstehen!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:433
 msgid "Abridged I2P FAQ"
@@ -9329,7 +9316,7 @@ msgstr "I2P Kurz-FAQ"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:435
 msgid "This is a shortened version of the official FAQ. For the full version, please visit <a href=https://geti2p.net/faq target=_blank rel=noreferrer class='sitelink external'>https://geti2p.net/faq</a> or <a href=http://i2p-projekt.i2p/faq target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p/faq</a>."
-msgstr ""
+msgstr "Dies ist eine gekürzte Version der offiziellen FAQ. Für die vollständige Version besuchen Sie bitte <a href=https://geti2p.net/faq target=_blank rel=noreferrer class='sitelink external'>https://geti2p.net/faq</a> oder <a href=http://i2p-projekt.i2p/faq target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p/faq</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:437
 msgid "My router has been up for several minutes and has zero or very few connections"
@@ -9337,7 +9324,7 @@ msgstr "Ihr Router ist für einige Minuten aktiv und hat keine oder wenige Verbi
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:439
 msgid "If after a few minutes of uptime your router is indicating 0 Active Peers and 0 Known Peers, with a notification in the sidebar that you need to check your network connection, verify that you can access the internet. If your internet connection is functional, you may need to unblock Java in your firewall. Otherwise, you may need to reseed your I2P router. Visit the <a href=/configreseed#reseedconfig>Reseed Configuration page</a> and click the <i>Save Changes and Reseed Now</i> button. For more information, see the <a href=#reseedhelp>Reseed help section</a> above."
-msgstr ""
+msgstr "Wenn Ihr Router nach einigen Minuten Betriebszeit 0 aktive Peers und 0 bekannte Peers anzeigt und in der Seitenleiste eine Benachrichtigung erscheint, dass Sie Ihre Netzwerkverbindung überprüfen müssen, überprüfen Sie zunächst, ob Sie auf das Internet zugreifen können. Wenn Ihre Internetverbindung funktioniert, müssen Sie möglicherweise Java in Ihrer Firewall freigeben. Andernfalls müssen Sie Ihren I2P-Router erneut auffüllen. Besuchen Sie die Seite <a href=/configreseed#reseedconfig>Reseed-Konfiguration</a> und klicken Sie auf die Schaltfläche <i>Änderungen speichern und jetzt neu auffüllen</i>. Weitere Informationen finden Sie im obigen Abschnitt <a href=#reseedhelp>Reseed-Hilfe</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:441
 msgid "My router has very few active peers, is this OK?"
@@ -9345,23 +9332,23 @@ msgstr "Mein Router hat sehr wenige aktive Peers, ist das OK?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:443
 msgid "If your router has 10 or more active peers, everything is fine. The router should maintain connections to a few peers at all times. The best way to stay \"better-connected\" to the network is to <a href=/config>share more bandwidth</a>."
-msgstr ""
+msgstr "Wenn Ihr Router 10 oder mehr aktive Peers hat, ist alles in Ordnung. Der Router sollte jederzeit Verbindungen zu einigen Peers aufrechterhalten. Die beste Möglichkeit, eine bessere Verbindung zum Netzwerk herzustellen, besteht darin, <a href=/config>mehr Bandbreite zu teilen</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:445
 msgid "I'm missing lots of hosts in my addressbook. What are some good subscription links?"
-msgstr ""
+msgstr "Mir fehlen viele Hosts in meinem Adressbuch. Welche sind gute Abonnement-Links?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:447
 msgid "The default subscription is to <code>http://i2p-projekt.i2p/hosts.txt</code> which is seldom updated. If you don't have another subscription, you may often have to use \"jump\" links which is much slower but ensures that your addressbook is only populated by sites you use (in addition to the default subscription addresses). To speed up browsing on I2P, it's a good idea to add some addressbook subscriptions."
-msgstr ""
+msgstr "Das Standardabonnement ist <code>http://i2p-projekt.i2p/hosts.txt</code>, das selten aktualisiert wird. Wenn Sie kein anderes Abonnement haben, müssen Sie oft \"Jump\"-Links verwenden, was viel langsamer ist, aber sicherstellt, dass Ihr Adressbuch nur von Seiten verwendet wird, die Sie verwenden (zusätzlich zu den Standard-Abonnementadressen). Um das Surfen im I2P zu beschleunigen, ist es eine gute Idee, einige Adressbuchabonnements hinzuzufügen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:449
 msgid "Here are some other public addressbook subscription links. You may wish to add one or two to your <a href=/susidns/subscriptions target=_blank rel=noreferrer>susidns subscription list</a>. In the event that addresses conflict in the subscriptions, the lists placed at the top of your susidns configuration will take precedence over those placed further down."
-msgstr ""
+msgstr "Hier sind einige andere öffentliche Adressbuch-Abonnement-Links. Sie können ein oder zwei zu Ihrer <a href=/susidns/subscriptions target=_blank rel=noreferrer>susidns Abonnementliste</a> hinzufügen. Wenn sich Adressen in den Abonnements überschneiden, haben die ganz oben in Ihrer susidns-Konfiguration platzierten Listen Vorrang vor denen, die weiter unten platziert wurden."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:451
 msgid "Note that subscribing to a hosts.txt service is an act of trust, as a malicious subscription could give you incorrect addresses, so be careful subscribing to lists from unknown sources. The operators of these services may have various policies for listing hosts. Presence on this list does not imply endorsement."
-msgstr ""
+msgstr "Beachten Sie, dass das Abonnieren eines hosts.txt-Dienstes ein Akt des Vertrauens ist, da ein bösartiges Abonnement falsche Adressen liefern kann. Achten Sie daher darauf, keine Listen von unbekannten Quellen zu abonnieren. Die Betreiber dieser Dienste haben möglicherweise unterschiedliche Richtlinien für die Auflistung von Hosts. Das Vorhandensein auf dieser Liste bedeutet keine Zustimmung."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:453
 msgid "How do I access IRC, BitTorrent, or other services on the regular Internet?"
@@ -9369,31 +9356,31 @@ msgstr "Wie stelle ich Verbindung zu IRC, BitTorrent oder anderen Diensten im no
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:455
 msgid "Unless an outproxy has been set up for the service you want to connect to, this is not possible, with the exception of BitTorrent (see below). There are only three types of outproxies running right now: HTTP, HTTPS, and email. Note that there is currently no publicly listed SOCKS outproxy. If this type of service is required, try <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a>."
-msgstr ""
+msgstr "Sofern für den Dienst, mit dem Sie eine Verbindung herstellen möchten, kein Ausleitserver eingerichtet wurde, ist dies nicht möglich, mit Ausnahme von BitTorrent (siehe unten). Derzeit sind nur drei Arten von Ausleitservern aktiv: HTTP, HTTPS und E-Mail. Beachten Sie, dass derzeit kein öffentlich gezeigter SOCKS-Ausleitserver existiert. Wenn dieser Dienst benötigt wird, versuchen Sie es mit <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:457
 msgid "Can I download torrents from non-I2P trackers?"
-msgstr ""
+msgstr "Kann ich Torrents von Nicht-I2P-Tracker herunterladen?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:459
 msgid "Until the advent of I2P integration in <a href=http://www.vuze.com/ target=_blank rel=noreferrer class='sitelink external'>Vuze</a>, it wasn't possible to download torrents that weren't hosted on the I2P network. However, now that Vuze (and latterly <a href=https://www.biglybt.com/ target=_blank rel=noreferrer class='sitelink external'>Bigly</a>) allow users to share non-I2P torrents on I2P, non-I2P torrents can be downloaded over I2P if Vuze/Bigly users have chosen to make content available to the I2P network. Popular torrents with a large number of peers are more likely to be accessible via I2P; to determine if the content is available, add the torrent link, magnet or infohash to your I2P-enabled BitTorrent client."
-msgstr ""
+msgstr "Bis zur Integration von I2P in <a href=http://www.vuze.com/ target=_blank rel=noreferrer class='sitelink external'>Vuze</a> war es nicht möglich, Torrents herunterzuladen, die nicht im I2P-Netzwerk gehostet wurden. Jetzt können Nicht-I2P-Torrents jedoch über I2P heruntergeladen werden, wenn Vuze/Bigly-Benutzer sich dafür entschieden haben, Inhalte im I2P-Netzwerk verfügbar zu machen. Beliebte Torrents mit vielen Peers sind wahrscheinlicher über I2P zugänglich. Um festzustellen, ob der Inhalt verfügbar ist, fügen Sie den Torrent-Link, Magnet oder Infohash zu Ihrem I2P-fähigen BitTorrent-Client hinzu."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:461
 msgid "How do I configure I2P to open at startup in a specific web browser?"
-msgstr ""
+msgstr "Wie konfiguriere ich I2P so, dass es beim Start in einem bestimmten Webbrowser geöffnet wird?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:463
 msgid "By default, I2P will use the system configured default browser to launch at startup. If you wish to nominate an alternative browser, you will need to edit your router.config file (or the <a href=/configadvanced>Advanced Configuration page</a> if you have enabled advanced console mode) and add a new configuration line <code>routerconsole.browser=/path/to/browser</code> or <code>routerconsole.browser=\\path\\to\\browser.exe</code> if using Windows, replacing <code>\\path\\to\\browser</code> with the location of the browser you wish to use. Note: If the path to your chosen browser contains spaces, you may need to encase the path in quotes e.g. <code>routerconsole.browser=\"C:\\Program Files\\Mozilla\\Firefox.exe\"</code>"
-msgstr ""
+msgstr "Standardmäßig verwendet I2P den systemkonfigurierten Standardbrowser zum Starten beim Start. Wenn Sie einen alternativen Browser verwenden möchten, müssen Sie Ihre router.config-Datei (oder die <a href=/configadvanced>Erweiterte Konfigurationsseite</a>, wenn Sie den erweiterten Konsolenmodus aktiviert haben) bearbeiten und eine neue Konfigurationszeile hinzufügen: <code>routerconsole.browser=/pfad/zum/browser</code> oder <code>routerconsole.browser=\\pfad\\zum\\browser.exe</code> für Windows, wobei <code>\\pfad\\zum\\browser</code> durch den Pfad zum zu verwendenden Browser ersetzt wird. Hinweis: Wenn der Pfad zu Ihrem gewählten Browser Leerzeichen enthält, müssen Sie den Pfad möglicherweise in Anführungszeichen setzen, z.B. <code>routerconsole.browser=\"C:\\Program Files\\Mozilla\\Firefox.exe\"</code>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:465
 msgid "How do I configure my browser to access .i2p websites?"
-msgstr ""
+msgstr "Wie konfiguriere ich meinen Browser, um auf .i2p-Websites zuzugreifen?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:467
 msgid "You will need to configure your browser to use the HTTP proxy server (by default on host: <code>127.0.0.1</code> port: <code>4444</code>). See the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>Browser Proxy Configuration Guide</a> for a more detailed explanation."
-msgstr ""
+msgstr "Sie müssen Ihren Browser so konfigurieren, dass er den HTTP-Proxy-Server verwendet (standardmäßig auf Host: <code>127.0.0.1</code> Port: <code>4444</code>). Weitere Informationen finden Sie in der <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>Anleitung zur Browser-Proxy-Konfiguration</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:469
 msgid "What is an eepsite?"
@@ -9401,35 +9388,35 @@ msgstr "Was ist eine Eep-Site?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:471
 msgid "An eepsite is a website that is hosted anonymously on the I2P network - you can access it by configuring your web browser to use I2P's HTTP proxy (see above) and browsing to the <code>.i2p</code> suffixed website (e.g. <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Also ensure your browser is configured to resolve DNS remotely when using the proxy to avoid DNS leaks."
-msgstr ""
+msgstr "Ein Eepsite ist eine Website, die anonym im I2P-Netzwerk gehostet wird - Sie können darauf zugreifen, indem Sie Ihren Webbrowser so konfigurieren, dass er den HTTP-Proxy von I2P verwendet (siehe oben) und zu einer Website mit der Endung <code>.i2p</code>navigiert (z.B. <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Stellen Sie außerdem sicher, dass Ihr Browser so konfiguriert ist, dass er DNS-Abfragen nur über den Proxy auflöst, um DNS-Leaks zu vermeiden."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:473
 msgid "Most of the eepsites are down?"
-msgstr ""
+msgstr "Sind die meisten Eepsites nicht erreichbar?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:475
 msgid "If you consider every eepsite that has ever been created, yes, most of them are down. People and eepsites come and go. A good way to get started in I2P is check out a list of eepsites that are currently up. <a href=http://notbob.i2p/ target=_blank rel=noreferrer class=sitelink>http://notbob.i2p</a> tracks active eepsites."
-msgstr ""
+msgstr "Wenn man jede jemals erstellte Eepsite betrachtet, ja, die meisten von ihnen sind nicht erreichbar. Menschen und Eepsites kommen und gehen. Ein guter Einstieg in I2P ist es, sich eine Liste der derzeit aktiven Eepsites anzusehen. <a href=http://notbob.i2p/ target=_blank rel=noreferrer class=sitelink>http://notbob.i2p</a> verfolgt aktive Eepsites."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:477
 msgid "Where are my I2P configuration files stored?"
-msgstr ""
+msgstr "Wo werden meine I2P-Konfigurationsdateien gespeichert?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:479
 msgid "Configuration files for the router, installed plugins, and router logs are stored in the following location:"
-msgstr ""
+msgstr "Konfigurationsdateien für den Router, installierte Plugins und Router-Protokolle werden an folgendem Speicherort abgelegt:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:481
 msgid "Windows"
-msgstr ""
+msgstr "Windows"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:483
 msgid "OS X"
-msgstr ""
+msgstr "OS X / MacOS"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:485
 msgid "Linux"
-msgstr ""
+msgstr "Linux"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:487
 msgid "Standard Java Installation"
