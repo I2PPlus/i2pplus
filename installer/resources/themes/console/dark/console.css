@@ -2448,7 +2448,7 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #helptoc li:hover{box-shadow:0 0 0 1px #242,var(--highlight),inset 0 0 0 2px rgba(146,48,0,.7);background-blend-mode:normal;transition:ease box-shadow .3s}
 #helptoc li:last-child{margin-bottom:0}
 #helptoc{margin:11px 0 10px;columns:550px 2;column-gap:12px}
-#help_troubleshoot{background:var(--wrench) no-repeat 15px center/32px,var(--helpbox)}
+#help_troubleshoot{background:url(../images/troubleshoot.svg) no-repeat 15px center/32px,var(--helpbox)}
 #help_ui{background:var(--ui) no-repeat 15px center/32px,var(--helpbox)}
 #help_webhosting{background:var(--server) no-repeat 15px center/32px,var(--helpbox)}
 #legal h2{padding-left:38px;background:var(--legal) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
@@ -2456,7 +2456,7 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #reseedhelp h2{padding-left:38px;background:var(--reseed) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #sidebarhelp h2,#reachabilityhelp h2{padding-left:38px;background:url(/themes/console/images/sidebar.svg) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #themeoverride h2{padding-left:38px;background:var(--ui) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
-#troubleshoot h2{padding-left:38px;background:var(--wrench) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
+#troubleshoot h2{padding-left:38px;background:url(../images/troubleshoot.svg) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #tunnman h2{padding-left:38px;background:var(--hardhat) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #webhosting h2{padding-left:38px;background:var(--server) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 
@@ -2803,7 +2803,7 @@ input.search,input.search:focus{padding:6px 8px 6px 28px}
 input[type=file]::file-selector-button{padding:8px 12px}
 input[type=submit],input[type=reset],button{padding:8px 12px}
 input[type=text],input[type=password]{padding:7px 9px}
-select{padding:8px 24px 8px 8px}
+select{padding:8px 24px 8px 10px}
 span#newtab{margin-top:4px}
 .addtobook a::after{margin:-14px -6px -6px 0;padding-left:0;padding-left:8px;width:24px;height:30px;background-size:16px}
 .appicon{padding:5px 0 8px;height:35px}
