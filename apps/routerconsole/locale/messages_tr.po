@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-12-03 04:33+0000\n"
+"PO-Revision-Date: 2023-12-03 06:40+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: tr_TR\n"
@@ -9177,7 +9177,7 @@ msgstr "UPnP, İnternet bağlantısı sağlayan geçitler (IGD, modem vb) ile il
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:449
 msgid "UPnP support is beta, and may not work for any number of reasons"
-msgstr ""
+msgstr "UPnP desteği beta aşamasındadır ve herhangi bir nedenle çalışmayabilir"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:451
 msgid "No UPnP-compatible device present"
@@ -9209,95 +9209,95 @@ msgstr "Ağ Yapılandırması bölümünden UPnP etkinleştirilip devre dışı 
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:465
 msgid "Review the UPnP status here."
-msgstr ""
+msgstr "UPnP durumunu burada inceleyin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:467
 msgid "Also, <b>do not enter a private IP address</b> like 127.0.0.1 or 192.168.1.1."
-msgstr "Ayrıca 127.0.0.1 ya da 192.168.1.1 gibi <b>kişisel bir IP adresi yazmayın</b>."
+msgstr "Ayrıca, 127.0.0.1 veya 192.168.1.1 gibi <b>özel bir IP adresi</b> girmeyin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:469
 msgid "If you specify the wrong IP address, or do not properly configure your NAT or firewall, your network performance will degrade substantially."
-msgstr ""
+msgstr "Yanlış IP adresi belirtirseniz veya NAT veya güvenlik duvarınızı düzgün şekilde yapılandırmazsanız, ağ performansınız önemli ölçüde düşecektir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:471
 msgid "When in doubt, leave the settings at the defaults."
-msgstr "Nasıl olması gerektiğinden emin değilseniz varsayılan ayarları kullanın."
+msgstr "Şüphe durumunda, ayarları varsayılan değerlerde bırakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:473
 msgid "Web Browser Configuration"
-msgstr ""
+msgstr "Web Tarayıcı Yapılandırması"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:475
 msgid "In order to access websites hosted on I2P, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P HTTP proxy, by default running on <code>127.0.0.1 port 4444</code>. Most browsers offer an option to configure your proxy; in this mini-tutorial we'll focus on Firefox."
-msgstr ""
+msgstr "I2P'de barındırılan web sitelerine erişmek ve isteğe bağlı olarak varsayılan çıkan (outproxy) kullanarak net üzerindeki web sitelerine bağlanmak için tarayıcınızı I2P HTTP proxy'si (varsayılan olarak <code>127.0.0.1 4444 numaralı portunda</code>) kullanacak şekilde yapılandırmanız gerekmektedir. Tarayıcıların çoğu proxy yapılandırması seçeneği sunar; bu mini eğitimde Firefox üzerine odaklanacağız."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:477
 msgid "Open the Preferences page in Firefox and scroll to the bottom of the General section."
-msgstr ""
+msgstr "Firefox'ta Tercihler sayfasını açın ve Genel bölümünün altına doğru kaydırın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:479
 msgid "In the Network Settings sub-section, hit the <i>Settings</i> button."
-msgstr ""
+msgstr "Ağ Ayarları alt bölümünde <i>Ayarlar</i> düğmesine tıklayın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:481
 msgid "Under <i>Configure Proxy Access to Internet</i> select the <i>Manual proxy configuration</i> option."
-msgstr ""
+msgstr "<i>İnternet’e Proxy Erişimini Yapılandır</i> altında <i>Manuel proxy yapılandırması</i> seçeneğini seçin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:483
 msgid "Enter <code>127.0.0.1</code> in the <i>HTTP Proxy</i> field, and <code>4444</code> in the <i>Port</i> field."
-msgstr ""
+msgstr "<i>HTTP Proxy</i> alanına <code>127.0.0.1</code>, <i>Port</i> alanına <code>4444</code> girin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:485
 msgid "Tick the box marked <i>Use this proxy server for all protocols</i> to avoid requests escaping the proxy."
-msgstr ""
+msgstr "Proxy'den kaçınmak için işaretli <i>Tüm protokoller için bu proxy sunucusunu kullan</i> kutusunu işaretleyin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:487
 msgid "In the box marked <i>No Proxy for</i> add the line <code>127.0.0.1,localhost</code> to ensure the I2P console and other locally hosted websites are still available."
-msgstr ""
+msgstr "<i>Proxy yok</i> işaretli kutuya <code>127.0.0.1,localhost</code> satırını ekleyerek I2P konsolu ve diğer yerel barındırılan web sitelerinin hâlâ mevcut olduğundan emin olun."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:489
 msgid "Tick the box marked <i>Proxy DNS when using SOCKS v5</i> to prevent DNS leaks."
-msgstr ""
+msgstr "DNS sızıntısını önlemek için işaretli <i>SOCKS v5 kullanırken DNS proxy'si</i> kutusunu işaretleyin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:491
 msgid "Hit the <i>OK</i> button and test the proxy is working by visiting <a href=http://planeta.i2p/ target=_blank rel=noreferrer class=sitelink>planeta.i2p</a> and <a href=https://www.myip.com/ target=_blank rel=noreferrer class='sitelink external'>www.myip.com</a>."
-msgstr ""
+msgstr "Tamam düğmesine tıklayın ve proxy'nin çalışıp çalışmadığını test etmek için <a href=http://planeta.i2p/ target=_blank rel=noreferrer class=sitelink>planeta.i2p</a> ve <a href=https://www.myip.com/ target=_blank rel=noreferrer class='sitelink external'>www.myip.com</a> adreslerini ziyaret edin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:493
 msgid "Note: To enhance your security when browsing .i2p sites, you may wish to consider installing an addon to prevent Javascript from running in the browser such as <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>, though it's recommended to whitelist the address I2P+ is running on to enable various router console enhancements. In addition, an addon that prevents requests to offsite resources is also recommended, for example <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
-msgstr ""
+msgstr "Not: .i2p sitelerini gezinirken güvenliği artırmak için, <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a> gibi tarayıcıda JavaScript'in çalışmasını engelleyen bir eklenti yüklemeyi düşünebilirsiniz, ancak I2P+ 'ın çalıştığı adresi beyaz listeye alarak çeşitli yönlendirici konsolu iyileştirmelerini etkinleştirmek önerilir. Ayrıca, dış kaynaklara istek göndermeyi engelleyen bir eklenti de önerilir, örneğin <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:495
 msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>.."
-msgstr ""
+msgstr "Çeşitli tarayıcılar için daha kapsamlı bir yapılandırma kılavuzu için <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>tarayıcı yapılandırma kılavuzunu</a> inceleyin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497
 msgid "The Tunnel Manager"
-msgstr ""
+msgstr "Tünel Yöneticisi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:499
 msgid "The Tunnel Manager enables configuration of local services provided by your router."
-msgstr ""
+msgstr "Tünel Yöneticisi, yönlendiriciniz tarafından sağlanan yerel hizmetlerin yapılandırılmasını sağlar."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:501
 msgid "You can determine which services automatically start when the router starts, manage tunnel allocation to optimize for high usage services or to minimize the the cpu and memory overhead, add server and client tunnels to host or access services on the network, set rate limiting or tunnel filtering for your server tunnels and more."
-msgstr ""
+msgstr "Yönlendirici başladığında hangi hizmetlerin otomatik olarak başlayacağını belirleyebilir, yüksek kullanımlı hizmetler için tünel tahsisini yönetebilir veya cpu ve bellek üzerindeki yükü en aza indirmek için sunucu ve istemci tünelleri ekleyebilir veya ağdaki hizmetlere erişebilirsiniz veya ağdaki hizmetlere erişmek için sunucu tünellerine hız sınırlaması veya tünel filtreleme ayarlayabilirsiniz ve daha fazlası."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:503
 msgid "By default, most of your client services (mail, http proxy, IRC) will share the same set of tunnels (for performance reasons) and be listed as <i>Shared Clients</i> and <i>Shared Clients(DSA)</i> in the sidebar under Service Tunnels and on the <a href=/tunnels>Tunnels page</a>."
-msgstr ""
+msgstr "Varsayılan olarak, çoğu istemci hizmetiniz (posta, http vekili, IRC) aynı tüneller kümesini (performans nedenleriyle) paylaşacak ve Yan Çubuk'ta Hizmet Tünelleri altında <i>Paylaşılan İstemciler</i> ve <i>Paylaşılan İstemciler (DSA)</i> olarak listelenecektir ve <a href=/tunnels>Tüneller sayfasında</a> yer alacak."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:505
 msgid "However, if you experience a tunnel failure, all your services will go offline at the same time, so in some scenarios you may wish to configure client services to use their own set of tunnels."
-msgstr ""
+msgstr "Ancak, eğer bir tünel hatası yaşarsanız, tüm hizmetleriniz aynı anda çevrimdışı olacaktır, bu nedenle bazı senaryolarda istemci hizmetlerini kendi tünel kümesini kullanacak şekilde yapılandırmak isteyebilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:507
 msgid "This can be done by unchecking the <i>Share tunnels with other configured clients</i> option listed under <i>Shared Client</i> on the configuration page of the relevant client service, after which you will need to restart the client service from the <a href=/i2ptunnelmgr>Tunnel Manager index page</a>."
-msgstr ""
+msgstr "Bu, ilgili istemci hizmetinin yapılandırma sayfasındaki <i>Diğer yapılandırılmış istemcilerle tünelleri paylaş</i> seçeneğinin işaretini kaldırarak yapılabilir. Bunun ardından <a href=/i2ptunnelmgr>Tünel Yöneticisi ana sayfasından</a> istemci hizmetini yeniden başlatmanız gerekecektir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:509
 msgid "Note: Most of the options in the Tunnel Manager have tooltips; be sure to check those before you change settings you don't fully understand!"
-msgstr ""
+msgstr "Not: Tünel Yöneticisi'ndeki çoğu seçeneğin ipuçları vardır; anlamadığınız ayarları değiştirmeden önce bunları kontrol edin!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:433
 msgid "Abridged I2P FAQ"
@@ -9305,39 +9305,39 @@ msgstr "Kısaltılmış I2P SSS"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:435
 msgid "This is a shortened version of the official FAQ. For the full version, please visit <a href=https://geti2p.net/faq target=_blank rel=noreferrer class='sitelink external'>https://geti2p.net/faq</a> or <a href=http://i2p-projekt.i2p/faq target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p/faq</a>."
-msgstr ""
+msgstr "Bu resmi SSS'nin kısaltılmış bir versiyonudur. Tam sürüm için, lütfen <a href=https://geti2p.net/faq target=_blank rel=noreferrer class='sitelink external'>https://geti2p.net/faq</a> veya <a href=http://i2p-projekt.i2p/faq target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p/faq</a> adresini ziyaret edin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:437
 msgid "My router has been up for several minutes and has zero or very few connections"
-msgstr "Yönelticim bir kaç dakikadır çalıştığı halde bağlantı sayısı sıfır ya da çok az sayıda"
+msgstr "Yönelticim bir kaç dakikadır çalışıyor ve sıfır ya da çok az bağlantıya sahip"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:439
 msgid "If after a few minutes of uptime your router is indicating 0 Active Peers and 0 Known Peers, with a notification in the sidebar that you need to check your network connection, verify that you can access the internet. If your internet connection is functional, you may need to unblock Java in your firewall. Otherwise, you may need to reseed your I2P router. Visit the <a href=/configreseed#reseedconfig>Reseed Configuration page</a> and click the <i>Save Changes and Reseed Now</i> button. For more information, see the <a href=#reseedhelp>Reseed help section</a> above."
-msgstr ""
+msgstr "Birkaç dakikalık çalışma süresinden sonra yönelticinizin 0 Etkin Eş ve 0 Bilinen Eş gösterdiği, kenar çubuğunda ağ bağlantınızı kontrol etmeniz gerektiğine dair bir bildirimle karşılaşırsanız, internete erişim sağlayabildiğinizi doğrulayın. İnternet bağlantınız düzgün çalışıyorsa, güvenlik duvarınızda Java'yı engellemiş olabilirsiniz. Aksi takdirde, I2P yönlendiricinizi yeniden aşılamanız gerekebilir. <a href=/configreseed#reseedconfig>Yeniden aşılama yapılandırma sayfasını</a> ziyaret edin ve <i>Değişiklikleri Kaydet ve Şimdi Yeniden Aşılama Yap</i> düğmesini tıklayın. Daha fazla bilgi için yukarıdaki <a href=#reseedhelp>Yeniden aşılama yardım bölümüne</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:441
 msgid "My router has very few active peers, is this OK?"
-msgstr "Yönelticimde çok az etkin eş var. Bu bir sorun mu?"
+msgstr "Yönelticimde çok az etkin eş var, bu normal mi?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:443
 msgid "If your router has 10 or more active peers, everything is fine. The router should maintain connections to a few peers at all times. The best way to stay \"better-connected\" to the network is to <a href=/config>share more bandwidth</a>."
-msgstr ""
+msgstr "Yönelticinizin 10 ya da daha fazla etkin eşi varsa, her şey yolunda demektir. Yöneltici her zaman birkaç eşle bağlantıyı sürdürmelidir. Ağa \"daha iyi bağlanmak\" için en iyi yol, <a href=/config>daha fazla bant genişliği paylaşmak</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:445
 msgid "I'm missing lots of hosts in my addressbook. What are some good subscription links?"
-msgstr ""
+msgstr "Adres defterimde birçok sunucu eksik. İyi bir abonelik linki hangisi?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:447
 msgid "The default subscription is to <code>http://i2p-projekt.i2p/hosts.txt</code> which is seldom updated. If you don't have another subscription, you may often have to use \"jump\" links which is much slower but ensures that your addressbook is only populated by sites you use (in addition to the default subscription addresses). To speed up browsing on I2P, it's a good idea to add some addressbook subscriptions."
-msgstr ""
+msgstr "Varsayılan abonelik <code>http://i2p-projekt.i2p/hosts.txt</code> adresine yapılmaktadır ve nadiren güncellenmektedir. Başka bir aboneliğiniz yoksa, genellikle hızı daha yavaş olan \"jump\" bağlantılarını kullanmanız gerekebilir, ancak bu, adres defterinizin yalnızca kullandığınız siteler tarafından doldurulmasını sağlar (varsayılan abonelik adreslerine ek olarak). I2P'de gezinmeyi hızlandırmak için bazı adres defteri aboneliklerini eklemek iyi bir fikirdir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:449
 msgid "Here are some other public addressbook subscription links. You may wish to add one or two to your <a href=/susidns/subscriptions target=_blank rel=noreferrer>susidns subscription list</a>. In the event that addresses conflict in the subscriptions, the lists placed at the top of your susidns configuration will take precedence over those placed further down."
-msgstr ""
+msgstr "İşte diğer bazı halka açık adres defteri abonelik bağlantıları. <a href=/susidns/subscriptions target=_blank rel=noreferrer>Susidns abonelik listesine</a> bir ya da iki tanesini eklemek isteyebilirsiniz. Aboneliklerde adresler çakışırsa, susidns yapılandırmanın üst kısmına yerleştirilen listeler, daha aşağıda yer alanlardan öncelik alır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:451
 msgid "Note that subscribing to a hosts.txt service is an act of trust, as a malicious subscription could give you incorrect addresses, so be careful subscribing to lists from unknown sources. The operators of these services may have various policies for listing hosts. Presence on this list does not imply endorsement."
-msgstr ""
+msgstr "Hosts.txt servisine abone olmak güvene dayalı bir eylemdir, çünkü kötü niyetli bir abonelik size yanlış adresler verebilir, bu yüzden bilinmeyen kaynaklardan gelen listelere abone olurken dikkatli olun. Bu hizmetlerin işletmecilerinin farklı politikaları olabilir. Bu listede bulunmak bir tavsiye anlamına gelmez."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:453
 msgid "How do I access IRC, BitTorrent, or other services on the regular Internet?"
@@ -9345,111 +9345,111 @@ msgstr "Normal İnternet üzerindeki IRC, BitTorrent ya da diğer hizmetlere nas
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:455
 msgid "Unless an outproxy has been set up for the service you want to connect to, this is not possible, with the exception of BitTorrent (see below). There are only three types of outproxies running right now: HTTP, HTTPS, and email. Note that there is currently no publicly listed SOCKS outproxy. If this type of service is required, try <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a>."
-msgstr ""
+msgstr "Bağlanmak istediğiniz servis için bir dış proxy kurulmadığı sürece, BitTorrent hariç, bu mümkün değildir (aşağıya bakın). Şu anda sadece üç tür dış proxy çalışıyor: HTTP, HTTPS ve e-posta. Şu anda herhangi bir SOCKS dış proxy'si yayınlanmamaktadır. Bu tür bir hizmet gerekiyorsa, <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a>'u deneyin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:457
 msgid "Can I download torrents from non-I2P trackers?"
-msgstr ""
+msgstr "I2P dışı izleyicilerden torrent indirebilir miyim?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:459
 msgid "Until the advent of I2P integration in <a href=http://www.vuze.com/ target=_blank rel=noreferrer class='sitelink external'>Vuze</a>, it wasn't possible to download torrents that weren't hosted on the I2P network. However, now that Vuze (and latterly <a href=https://www.biglybt.com/ target=_blank rel=noreferrer class='sitelink external'>Bigly</a>) allow users to share non-I2P torrents on I2P, non-I2P torrents can be downloaded over I2P if Vuze/Bigly users have chosen to make content available to the I2P network. Popular torrents with a large number of peers are more likely to be accessible via I2P; to determine if the content is available, add the torrent link, magnet or infohash to your I2P-enabled BitTorrent client."
-msgstr ""
+msgstr "I2P entegrasyonunun <a href=http://www.vuze.com/ target=_blank rel=noreferrer class='sitelink external'>Vuze</a>'de gerçekleşmesinden önce, I2P ağı üzerinde barındırılmayan torrentleri indirmek mümkün değildi. Ancak, şimdi Vuze (ve daha sonra <a href=https://www.biglybt.com/ target=_blank rel=noreferrer class='sitelink external'>Bigly</a>) I2P'de I2P dışı torrentleri paylaşabilme olanağı sunuyor, böylece Vuze/Bigly kullanıcıları I2P ağına içeriği kullanıma sunmaya karar verdiklerinde I2P üzerinden I2P dışı torrentler indirilebilir. Birçok eşe sahip popüler torrentlerin I2P üzerinden erişilebilir olma olasılığı daha yüksektir. İçeriğin kullanımda olup olmadığını belirlemek için torrent bağlantısını, mıknatıs bağlantısını veya infohash'i I2P destekli BitTorrent istemcinize ekleyin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:461
 msgid "How do I configure I2P to open at startup in a specific web browser?"
-msgstr ""
+msgstr "I2P'yi belirli bir web tarayıcısında başlangıçta nasıl açılır şeklinde yapılandırabilirim?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:463
 msgid "By default, I2P will use the system configured default browser to launch at startup. If you wish to nominate an alternative browser, you will need to edit your router.config file (or the <a href=/configadvanced>Advanced Configuration page</a> if you have enabled advanced console mode) and add a new configuration line <code>routerconsole.browser=/path/to/browser</code> or <code>routerconsole.browser=\\path\\to\\browser.exe</code> if using Windows, replacing <code>\\path\\to\\browser</code> with the location of the browser you wish to use. Note: If the path to your chosen browser contains spaces, you may need to encase the path in quotes e.g. <code>routerconsole.browser=\"C:\\Program Files\\Mozilla\\Firefox.exe\"</code>"
-msgstr ""
+msgstr "Varsayılan olarak, I2P, başlangıçta başlatmak için sistem yapılandırılmış varsayılan tarayıcıyı kullanır. Başka bir tarayıcı aday göstermek isterseniz, router.config dosyanızı düzenlemeniz gerekecektir (veya gelişmiş konsol modunu etkinleştirmişseniz <a href=/configadvanced>Gelişmiş Yapılandırma sayfası</a>) ve kullanmak istediğiniz tarayıcının adresini içeren yeni bir yapılandırma satırı eklemelisiniz. <code>routerconsole.browser=/path/to/browser</code> veya <code>routerconsole.browser=\\path\\to\\browser.exe</code> Windows kullanıyorsanız, <code>\\path\\to\\browser</code> ifadesini kullanılan tarayıcının konumuyla değiştirin. Not: Seçtiğiniz tarayıcının yolunda boşluk varsa, yolun alıntı işareti içine almanız gerekebilir, örneğin, <code>routerconsole.browser=\"C:\\Program Files\\Mozilla\\Firefox.exe\"</code> gibi."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:465
 msgid "How do I configure my browser to access .i2p websites?"
-msgstr ""
+msgstr "Tarayıcımı .i2p web sitelerine erişmek için nasıl yapılandırabilirim?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:467
-msgid "You will need to configure your browser to use the HTTP proxy server (by default on host: <code>127.0.0.1</code> port: <code>4444</code>). See the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>Browser Proxy Configuration Guide</a> for a more detailed explanation."
-msgstr ""
+msgid "You will need to configure your browser to use the HTTP proxy server (by default on host: <code>127.0.0.1</code> port: <code>4444</code>). See the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>Tarayıcı Proxy Yapılandırma Kılavuzu</a> for more detailed explanation."
+msgstr "Tarayıcınızı HTTP proxy sunucusunu kullanacak şekilde yapılandırmanız gerekecek (varsayılan olarak host: <code>127.0.0.1</code> port: <code>4444</code>). Daha detaylı açıklama için <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>Tarayıcı Proxy Yapılandırma Kılavuzu'na</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:469
 msgid "What is an eepsite?"
-msgstr "eepsitesi nedir?"
+msgstr "Bir eepsite nedir?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:471
 msgid "An eepsite is a website that is hosted anonymously on the I2P network - you can access it by configuring your web browser to use I2P's HTTP proxy (see above) and browsing to the <code>.i2p</code> suffixed website (e.g. <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Also ensure your browser is configured to resolve DNS remotely when using the proxy to avoid DNS leaks."
-msgstr ""
+msgstr "Bir eepsite, I2P ağındaki gizli olarak barındırılan bir web sitesidir - ona I2P'nin HTTP proxy'sini kullanacak şekilde web tarayıcınızı yapılandırarak erişebilirsiniz (yukarıya bakın) ve <code>.i2p</code> ekli web sitesine (örn. <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>) göz atabilirsiniz. Ayrıca, proxyyi kullanırken DNS sızıntılarını önlemek için tarayıcınızın uzaktan DNS çözümlemesi için yapılandırıldığından emin olun."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:473
 msgid "Most of the eepsites are down?"
-msgstr ""
+msgstr "Çoğu eepsite çalışmıyor mu?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:475
 msgid "If you consider every eepsite that has ever been created, yes, most of them are down. People and eepsites come and go. A good way to get started in I2P is check out a list of eepsites that are currently up. <a href=http://notbob.i2p/ target=_blank rel=noreferrer class=sitelink>http://notbob.i2p</a> tracks active eepsites."
-msgstr ""
+msgstr "Şimdiye kadar oluşturulmuş tüm eepsiteleri düşünürseniz, evet, çoğu çalışmıyor. İnsanlar ve eepsiteler gelip gider. I2P'ye başlamak için, şu anda çalışan eepsitelerinin listesine göz atmanız iyi bir yöntemdir. <a href=http://notbob.i2p/ target=_blank rel=noreferrer class=sitelink>http://notbob.i2p</a>, aktif eepsiteleri takip eder."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:477
 msgid "Where are my I2P configuration files stored?"
-msgstr ""
+msgstr "I2P yapılandırma dosyalarım nerede saklanır?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:479
 msgid "Configuration files for the router, installed plugins, and router logs are stored in the following location:"
-msgstr ""
+msgstr "Yönlendirici, yüklenen eklentiler ve yönlendirici günlükleri için yapılandırma dosyaları aşağıdaki konumda saklanır:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:481
 msgid "Windows"
-msgstr ""
+msgstr "Windows"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:483
 msgid "OS X"
-msgstr ""
+msgstr "OS X"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:485
 msgid "Linux"
-msgstr ""
+msgstr "Linux"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:487
 msgid "Standard Java Installation"
-msgstr ""
+msgstr "Standart Java Kurulumu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:489
 msgid "Package / repository installation"
-msgstr ""
+msgstr "Paket / depo kurulumu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:491
 msgid "How do I enable https:// access for the router console?"
-msgstr ""
+msgstr "Yönlendirici konsolu için https:// erişimini nasıl etkinleştiririm?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:493
 msgid "Locate the configuration file: <code>00-net.i2p.router.web.RouterConsoleRunner-clients.config</code> in the <code>clients.config.d</code> folder in your I2P settings directory, and then edit accordingly:"
-msgstr ""
+msgstr "I2P ayarlar dizinindeki <code>clients.config.d</code> klasöründe <code>00-net.i2p.router.web.RouterConsoleRunner-clients.config</code> yapilandırma dosyasını bulun ve aşağıdaki gibi düzenleyin:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:495
 msgid "For both non-SSL and SSL"
-msgstr ""
+msgstr "Non-SSL ve SSL için"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:497
 msgid "For SSL only"
-msgstr ""
+msgstr "Sadece SSL için"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:499
 msgid "How do I connect to IRC within I2P?"
-msgstr "I2P içinden IRC bağlantısı nasıl yapılır?"
+msgstr "I2P içinde IRC'ye nasıl bağlanırım?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:501
 msgid "A tunnel to the main IRC server network within I2P, Irc2P, is created when I2P is installed (see the <a href=/i2ptunnelmgr>Tunnel Manager</a>), and is automatically started when the I2P router starts. To connect to it, tell your IRC client to connect to server: <code>127.0.0.1</code> port: <code>6668</code>."
-msgstr ""
+msgstr "I2P içindeki ana IRC sunucusu ağına, Irc2P, I2P kurulduğunda (Tünel Yöneticisine bakın: <a href=/i2ptunnelmgr>Tünel Yöneticisi</a>), otomatik olarak oluşturulur ve I2P yönlendirici başladığında otomatik olarak başlatılır. Bununa bağlanmak için IRC istemcinizin sunucuya bağlanmasını söyleyin: <code>127.0.0.1</code> port: <code>6668</code>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:503
 msgid "XChat-like client users can create a new network with the server <code>127.0.0.1/6668</code> (remember to tick <i>Bypass proxy server</i> if you have a proxy server configured), or you can connect with the command <code>/server 127.0.0.1 6668</code>. Different IRC clients may vary the syntax."
-msgstr ""
+msgstr "XChat benzeri istemci kullanıcıları, sunucu <code>127.0.0.1/6668</code> ile yeni bir ağ oluşturabilirler (eğer bir proxy sunucusu yapılandırdıysanız <i>Proxy sunucusunu atla</i> işaretini unutmayın) veya komut kullanarak bağlanabilirsiniz: <code>/server 127.0.0.1 6668</code>. Farklı IRC istemcileri sözdizimini değiştirebilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:505
 msgid "My IRC client keeps disconnecting from the network, is there anything I can do?"
-msgstr ""
+msgstr "IRC istemcim ağdan sürekli kopuyor, ne yapabilirim?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:507
 msgid "Some IRC clients are configured to disconnect from the server if there's been no communication with the server for a period of time, which can sometimes be problematic for I2P IRC if the <i>ping timeout</i> value is set too low. Setting the ping timeout value in your client to a high value (e.g. 320 seconds) will often result in a more robust connection to the network. In hexchat you can configure the value by typing <code>/set net_ping_timeout 320</code>. This will write the value to your <code>hexchat.conf</code> file."
-msgstr ""
+msgstr "Bazı IRC istemcileri, bir süre boyunca sunucuyla iletişim olmadıysa sunucudan ayrılmak üzere yapılandırılmış olabilir, bu durum I2P IRC için sorun olabilir eğer <i>ping süresi aşımı</i> değeri çok düşükse. İstemcinizdeki ping süresi aşımını yüksek bir değere ayarlamak (ör. 320 saniye) genellikle ağa daha sağlam bir bağlantı sağlayacaktır. HexChat'te bu değeri ayarlamak için <code>/set net_ping_timeout 320</code> komutunu yazabilirsiniz. Bu değer <code>hexchat.conf</code> dosyanıza yazılacaktır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:509
 msgid "What ports does I2P use?"
@@ -9457,11 +9457,11 @@ msgstr "I2P hangi kapı numaralarını kullanır?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:511
 msgid "LOCAL PORTS"
-msgstr ""
+msgstr "YEREL PORTLAR"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:513
 msgid "These are the local I2P port mappings, listening only to local connections by default, except where noted. Unless you require access from other machines, they should only be accessible from localhost."
-msgstr ""
+msgstr "Bu, yerel I2P port eşlemeleridir ve varsayılan olarak yalnızca yerel bağlantılara dinler, belirtilen yerler dışında. Diğer makinelerden erişiminiz gerekiyorsa, yalnızca localhost'tan erişilebilir olmalıdırlar."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:517
 msgid "Function"
@@ -9473,23 +9473,23 @@ msgstr "Notlar"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:521
 msgid "UPnP SSDP UDP multicast listener"
-msgstr ""
+msgstr "UPnP SSDP UDP çoklayıcısı dinleyici"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:523
 msgid "Cannot be changed. Binds to all interfaces. Can be disabled on the <a href=/confignet>Network Configuration page</a>."
-msgstr ""
+msgstr "Değiştirilemez. Tüm arayüzlere bağlanır. <a href=/confignet>Ağ Yapılandırma sayfasından</a> devre dışı bırakılabilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:525
 msgid "BOB bridge"
-msgstr ""
+msgstr "BOB köprüsü"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:527
 msgid "A higher level socket API for clients. Can be enabled/disabled on the <a href=/configclients>Client Configuration page</a>. Can be changed in the <code>bob.config</code> file. [Disabled by default]"
-msgstr ""
+msgstr "Müşteriler için daha yüksek seviyeli bir soket API'i. <a href=/configclients>Müşteri Yapılandırma sayfasından</a> etkinleştirilebilir/devre dışı bırakılabilir. <code>bob.config</code> dosyasında değiştirilebilir. [Varsayılan olarak devre dışı]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:529
 msgid "HTTP proxy"
-msgstr ""
+msgstr "HTTP proxy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:531
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:535
@@ -9497,11 +9497,11 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:571
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:575
 msgid "Can be disabled or changed in the <a href=/i2ptunnelmgr>Tunnel Manager</a>. Can also be configured to bind to a specific interface or all interfaces."
-msgstr ""
+msgstr "Durdurulabilir veya <a href=/i2ptunnelmgr>Tunnel Yöneticisi</a> üzerinden değiştirilebilir. Ayrıca belirli bir arayüze veya tüm arayüzlere bağlanacak şekilde yapılandırılabilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:533
 msgid "HTTPS proxy"
-msgstr ""
+msgstr "HTTPS proxy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:537
 msgid "IRC proxy"
@@ -9509,51 +9509,47 @@ msgstr "IRC vekil sunucusu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:541
 msgid "UPnP HTTP TCP event listener"
-msgstr ""
+msgstr "UPnP HTTP TCP olay dinleyicisi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:543
 msgid "Binds to the LAN address. Can be changed with advanced config <code>i2np.upnp.HTTPPort=nnnn</code>. Can be disabled on the <a href=/confignet>Network Configuration page</a>."
-msgstr ""
+msgstr "LAN adresine bağlanır. Gelişmiş yapılandırma ile değiştirilebilir <code>i2np.upnp.HTTPPort=nnnn</code>. <a href=/confignet>Ağ Yapılandırma sayfasında</a> devre dışı bırakılabilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:545
 msgid "UPnP SSDP UDP search response listener"
-msgstr ""
+msgstr "UPnP SSDP UDP arama yanıt dinleyicisi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:547
 msgid "Binds to all interfaces. Can be changed with advanced config <code>i2np.upnp.SSDPPort=nnnn</code>. Can be disabled on the <a href=/configclients>Client Configuration page</a>."
-msgstr ""
+msgstr "Tüm arayüzlere bağlanır. Gelişmiş yapılandırma ile değiştirilebilir <code>i2np.upnp.SSDPPort=nnnn</code>. <a href=/configclients>İstemci Yapılandırma sayfasında</a> devre dışı bırakılabilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:549
 msgid "I2P Client Protocol port"
-msgstr ""
-
-#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:551
-msgid "Used by client apps. Can be changed to a different port on the <a href=/configclients>Client Configuration page</a> but this is not recommended. Can be bound to a different interface or all interfaces, or disabled, on the <a href=/configclients>Client Configuration page</a>."
-msgstr ""
+msgstr "I2P İstemci Protokolü portu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:553
 msgid "UDP for SAM bridge"
-msgstr ""
+msgstr "SAM köprüsü için UDP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:555
 msgid "A higher level socket API for clients. Only opened when a SAM V3 client requests a UDP session. Can be enabled/disabled on the <a href=/configclients> Client Configuration page</a>. Can be changed in the <code>clients.config</code> file with the SAM command line option <code>sam.udp.port=nnnn</code>."
-msgstr ""
+msgstr "Müşteriler için daha yüksek düzeyli bir soket API'si. Yalnızca bir SAM V3 müşterisi UDP oturumu istediğinde açılır. <a href=/configclients> Müşteri Yapılandırma sayfasında</a> etkinleştirilebilir / devre dışı bırakılabilir. <code>clients.config</code> dosyasında SAM komut satırı seçeneği <code>sam.udp.port=nnnn</code> ile değiştirilebilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:557
-msgid "SAM bridge"
-msgstr ""
+msgid "SAM köprüsü"
+msgstr "SAM köprüsü"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:559
 msgid "A higher level socket API for clients. Can be enabled/disabled on the <a href=/configclients>Client Configuration page</a>. Can be changed in the <code>clients.config</code> file. [Disabled by default]"
-msgstr ""
+msgstr "Mandant API için daha yüksek seviyeli bir soket API'si. <a href=/configclients>Mandant Yapılandırması sayfasında</a> etkinleştirilebilir/devre dışı bırakılabilir. <code>clients.config</code> dosyasında değiştirilebilir. [Varsayılan olarak devre dışı]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:561
-msgid "I2P Router Console (Web interface)"
-msgstr ""
+msgid "I2P Yönlendirici Konsolu (Web arayüzü)"
+msgstr "I2P Yönlendirici Konsolu (Web arayüzü)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:563
-msgid "Can be disabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces. If you make the Router Console available over the network, you might wish to <a href=/configui#passwordheading>enforce an access password</a> to prevent unauthorized access."
-msgstr ""
+msgid "Disable edilebilir <code>clients.config</code> dosyasında. Ayrıca belirli bir arayüze veya tüm arayüzlere bağlanacak şekilde yapılandırılabilir. Yönlendirici Konsolunu ağ üzerinden erişilebilir hale getirirseniz, yetkisiz erişimi önlemek için bir <a href=/configui#passwordheading>erişim şifresi belirleyebilirsiniz</a>."
+msgstr "Disable edilebilir <code>clients.config</code> dosyasında. Ayrıca <code>jetty.xml</code> dosyasında belirli bir arayüze veya tüm arayüzlere bağlanacak şekilde yapılandırılabilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:567
 msgid "Can be disabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces in the <code>jetty.xml</code> file."
@@ -9561,324 +9557,324 @@ msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:569
 msgid "Outgoing mail to smtp.postman.i2p"
-msgstr ""
+msgstr "smtp.postman.i2p'ye giden posta"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:573
 msgid "Incoming mail from pop.postman.i2p"
-msgstr ""
+msgstr "pop.postman.i2p'den gelen posta"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:577
 msgid "I2P Router Console (https://)"
-msgstr ""
+msgstr "I2P Yönlendirici Kontrol Paneli (https://)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:579
 msgid "Can be enabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces. If both http and https are enabled, automatic redirection to https is enabled by default. If you make the Router Console available over the network, you might wish to <a href=/configui#passwordheading>enforce an access password</a> to prevent unauthorized access."
-msgstr ""
+msgstr "<code>clients.config</code> dosyasında etkinleştirilebilir. Ayrıca belirli bir arabirimle veya tüm arabirimlerle bağlantı kurmak için yapılandırılabilir. Hem http hem de https etkinse, otomatik yönlendirme varsayılan olarak etkinleştirilir. Yönlendirici Kontrol Panelini ağ üzerinden kullanılabilir hale getirirseniz, yetkisiz erişimi önlemek için <a href=/configui#passwordheading>erişim şifresi zorunlu tutabilirsiniz</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:581
 msgid "Local connection to wrapper control channel port"
-msgstr ""
+msgstr "Yerel bağlantı, sarma kaplama kontrol kanalı portuna"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:583
 msgid "Outbound to 32000 only, does not listen on this port. Starts at 31000 and will increment until 31999 looking for a free port. To change, see the <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper documentation</a>."
-msgstr ""
+msgstr "Sadece 32000'e çıkış yapar, bu portu dinlemez. 31000'den başlar ve serbest bir port arayana kadar 31999'a kadar artar. Değiştirmek için, <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper dokümantasyonuna</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:585
 msgid "Local control channel for the service wrapper"
-msgstr ""
+msgstr "Servis sarmalayıcı için yerel kontrol kanalı"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:587
 msgid "To change, see the <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper documentation</a>."
-msgstr ""
+msgstr "Değiştirmek için, <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper dokümantasyonuna</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:589
 msgid "INTERNET FACING PORTS"
-msgstr ""
+msgstr "İNTERNETE YÖNELİK PORTLAR"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:591
 msgid "I2P selects a random port between 9000 and 31000 to communicate with other routers when the program is run for the first time, or when your external IP address changes when running in <a href=/confignet#ipchange>Laptop Mode</a>. The <a href=/confignet#udpconfig>selected port</a> is shown on the <a href=/confignet>Network Configuration page</a>."
-msgstr ""
+msgstr "I2P, program ilk çalıştırıldığında veya <a href=/confignet#ipchange>Laptop Modu</a>'nda çalışırken harici IP adresiniz değiştiğinde, diğer yönlendiricilerle iletişim kurmak için 9000 ila 31000 arasında rastgele bir port seçer. Seçilen port, <a href=/confignet>Ağ Yapılandırma sayfasında</a> gösterilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:593
 msgid "Outbound UDP from the <a href=/confignet#udpconfig>random port</a> noted on the Network Configuration page to arbitrary remote UDP ports, allowing replies."
-msgstr ""
+msgstr "Belirsiz uzak UDP portlarına <a href=/confignet#udpconfig>rastgele port</a> üzerinden çıkış yapılan UDP'ler, cevaplara izin verir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:595
 msgid "Outbound TCP from random high ports to arbitrary remote TCP ports."
-msgstr ""
+msgstr "Rastgele yüksek portlardan belirli olmayan uzak TCP portlarına çıkış yapılır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:597
 msgid "Inbound UDP to the <a href=/confignet#udpconfig>port</a> noted on the Network Configuration page from arbitrary locations (optional, but recommended)."
-msgstr ""
+msgstr "Belirli olmayan konumlardan (isteğe bağlı, ancak önerilen) Ağ Yapılandırma sayfasında belirtilen <a href=/confignet#udpconfig>porttan</a> gelen giriş UDP'leri."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:599
 msgid "Inbound TCP to the <a href=/confignet#externaltcp>port</a> noted on the Network Configuration page from arbitrary locations (optional, but recommended). <a href=/confignet#tcpconfig>Inbound TCP</a> may be disabled on the Network Configuration page."
-msgstr ""
+msgstr "Rastgele konumlardan Ağ Yapılandırma sayfasında belirtilen <a href=/confignet#externaltcp>port</a> üzerinden Gelen TCP trafiği (isteğe bağlı, ama önerilir). <a href=/confignet#tcpconfig>Gelen TCP</a> Ağ Yapılandırma sayfasında devre dışı bırakılabilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:601
 msgid "Outbound UDP on port 123, allowing replies: this is necessary for I2P's internal time sync (via SNTP - querying a random SNTP host in <code>pool.ntp.org</code> or <a href=/help/advancedsettings#ntpserverconfig>another server you specify</a>)."
-msgstr ""
+msgstr "Port 123 üzerinden giden UDP trafiği, yanıtlara izin verilir: Bu, I2P'nin iç zaman senkronizasyonu için gereklidir (SNTP aracılığıyla - <code>pool.ntp.org</code> adresindeki rastgele bir SNTP sunucusuna sorgu yaparak veya <a href=/help/advancedsettings#ntpserverconfig>belirlediğiniz başka bir sunucu</a>)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:433
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:674
 msgid "I2P Terminology"
-msgstr ""
+msgstr "I2P Terimleri"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:437
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "B64 karmaşalarını insan tarafından okunabilir adlara eşleyen ağ için hizmet hedeflerini yöneten bir I2P web uygulamasıdır. Hedefler manuel olarak veya hosts.txt dosyalarına abone olarak eklenir. Ayrıca SusiDNS olarak da adlandırılır. Daha fazla bilgi için <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>çevrimiçi belgelere</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:439
 msgid "Base32 (B32) / Base64 (B64)"
-msgstr ""
+msgstr "Base32 (B32) / Base64 (B64)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:441
 msgid "A <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> link (which always ends with .b32.i2p) is a hash of a <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> destination. For services on the network, the Base64 hash is often mapped to an .i2p domain in the addressbook."
-msgstr ""
+msgstr "Her zaman .b32.i2p ile biten bir <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> bağlantısı, bir <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> hedefinin karma değeridir. Ağdaki hizmetler için, Base64 karma değeri genellikle adres defterinde bir .i2p etki alanına eşlenir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:443
 msgid "B33"
-msgstr ""
+msgstr "B33"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:445
 msgid "An address containing an encrypted LeaseSet is informally referred to as a b33 address, an extension of a base32 address with the host's public key and signature type encoded into the address instead of a lookup hash. This address type is required for blinded Leasesets. More information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 Specification</a>"
-msgstr ""
+msgstr "Şifrelenmiş LeaseSet içeren bir adres, bir arama karma yerine adresin içine hostun genel anahtarını ve imza tipini kodlayan bir base32 adres genişlemesi olarak gayri resmi olarak b33 adresi olarak adlandırılır. Bu adres türü körleştirlmiş LeaseSet'ler için gereklidir. Daha fazla bilgi için: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 Spesifikasyonu</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:447
 msgid "BOB"
-msgstr ""
+msgstr "BOB"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:449
 msgid "BOB (Basic Open Bridge) is a (now-deprecated) simple application-to-router protocol, superseded by <i>SAM</i>. For more information, see the <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "BOB (Basic Open Bridge), basit bir uygulama ile yönlendirici arasındaki protokoldür ve şu anda yerine <i>SAM</i> geçmiştir. Daha fazla bilgi için <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>çevrimiçi belgelendirmeyi</a> inceleyin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:451
 msgid "Clearnet"
-msgstr ""
+msgstr "Açık Ağ"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:453
 msgid "Clearnet normally refers to the publicly accessible internet, the opposite of the darknet that typically describes the encrypted, anonymous services built on I2P, Tor etc. For more information, see the <a href=https://en.wikipedia.org/wiki/Clearnet_(networking) class='sitelink external' target=_blank rel=noreferrer>Wikipedia article</a>."
-msgstr ""
+msgstr "Clearnet, genellikle I2P, Tor vb. üzerine kurulu şifrelenmiş, anonim hizmetleri tanımlayan darknetin karşıtı olarak genel olarak erişilebilir İnternet'i ifade eder. Daha fazla bilgi için <a href=https://en.wikipedia.org/wiki/Clearnet_(networking) class='sitelink external' target=_blank rel=noreferrer>Wikipedia makalesini</a> inceleyin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:457
 msgid "The unique cryptographic identity of the inbound endpoint of a tunnel providing access to a service on the I2P network, represented as a Base32 or Base64 hash of the public key. Equivalent to an IP address and port."
-msgstr ""
+msgstr "I2P ağındaki bir hizmete erişim sağlayan tünelin giriş ucu olan benzersiz kriptografik kimliktir ve genel anahtarın bir Base32 veya Base64 karma değeri olarak temsil edilir. IP adresi ve bağlantı noktasına eşdeğerdir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:459
 msgid "Eepget"
-msgstr ""
+msgstr "Eepget"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:461
 msgid "A command-line application supplied with I2P that is used to request URL resources, similar to <a href=https://www.gnu.org/software/wget/ class='sitelink external' target=_blank rel=noreferrer>wget</a> or <a href=https://curl.haxx.se/ class='sitelink external' target=_blank rel=noreferrer>curl</a>. Eepget is also used internally by the router, for example to reseed from remote hosts. By default, eepget uses the HTTP proxy on <code>127.0.0.1:4444</code>."
-msgstr ""
+msgstr "I2P ile birlikte verilen komut satırı uygulamasıdır ve URL kaynaklarının istenmesi için kullanılır, <a href=https://www.gnu.org/software/wget/ class='sitelink external' target=_blank rel=noreferrer>wget</a> veya <a href=https://curl.haxx.se/ class='sitelink external' target=_blank rel=noreferrer>curl</a> gibi. Eepget ayrıca, örneğin uzaktaki sunuculardan yeniden eklenmek için, rota tarafından dahili olarak da kullanılır. Varsayılan olarak, eepget <code>127.0.0.1:4444</code> üzerindeki HTTP proxy'sini kullanır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:463
 msgid "Eephead"
-msgstr ""
+msgstr "Eephead"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:465
 msgid "A command-line application supplied with I2P+ (Linux/MacOS) that is used to perform a <code>head</code> request on a specified http resource on the network, returning various response headers from the remote server. By default, eephead uses the HTTP proxy on <code>127.0.0.1:4444</code>."
-msgstr ""
+msgstr "I2P+ ile birlikte verilen komut satırı uygulamasıdır (Linux/MacOS) ve ağdaki belirtilen bir http kaynağı üzerinde bir <code>head</code> isteği yapmak ve uzak sunucudan çeşitli yanıt başlıkları döndürmek için kullanılır. Varsayılan olarak, eephead <code>127.0.0.1:4444</code> üzerindeki HTTP proxy'sini kullanır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:467
 msgid "Eepsite"
-msgstr ""
+msgstr "Eepsite"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:469
 msgid "A website hosted on the I2P network. By default, a <a href=https://www.eclipse.org/jetty/about.html class='sitelink external' target=_blank rel=noreferrer>Jetty webserver</a> is configured and running on <a href=http://127.0.0.1:7658/ target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>."
-msgstr ""
+msgstr "I2P ağındaki bir web sitesidir. Varsayılan olarak, bir <a href=https://www.eclipse.org/jetty/about.html class='sitelink external' target=_blank rel=noreferrer>Jetty web sunucusu</a> yapılandırılmış ve <a href=http://127.0.0.1:7658/ target=_blank rel=noreferrer>http://127.0.0.1:7658/</a> üzerinde çalışıyor."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:471
 msgid "Exploratory Tunnel"
-msgstr ""
+msgstr "Keşif Tüneli"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:473
 msgid "A tunnel used by the router for communicating with other routers to perform various \"housekeeping\" functions such as learning and publishing <i>leasesets</i>, testing client tunnels, and learning about and validating other routers in the network. These tunnels are normally low-bandwidth."
-msgstr ""
+msgstr "Rota tarafından diğer rotalarla iletişim kurmak için kullanılan, öğrenme ve yayınlama işlevlerini gerçekleştiren <i>leasesets</i> öğrenme işlemi, istemci tünellerini test etme ve ağdaki diğer rotaları öğrenme ve doğrulama gibi çeşitli \"bakımlık\" işlevleri gerçekleştiren bir tüneldir. Bu tüneller genellikle düşük bant genişliğine sahiptir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:477
 msgid "A router on the network tasked with providing and receiving information about other routers and services on the network. The current minimum share bandwidth for a router to be considered as capable of performing floodfill duties is 128 KBytes/sec, though it's possible to override this requirement and force a router to be a floodfill on the <a href=/configadvanced>Advanced Configuration page</a>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Bir ağ üzerinde, diğer yönlendiriciler ve ağdaki diğer hizmetler hakkında bilgi sağlamak ve almakla görevli olan bir yönlendirici. Bir yönlendiricinin floodfill görevlerini gerçekleştirebilecek kapasitede kabul edilebilmesi için mevcut minimum paylaşımlı bant genişliği 128 Kbayt/sn'dir, ancak bu gereksinimi geçersiz kılmak ve bir yönlendiriciyi floodfill olarak zorlamak mümkündür <a href=/configadvanced>Gelişmiş Yapılandırma</a> sayfasında. Daha fazla bilgi için <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>çevrimiçi belgelere</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:479
 msgid "Garlic Routing"
-msgstr ""
+msgstr "Sarımsak Yönlendirme"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:481
 msgid "A variant of onion routing that encrypts multiple messages together to make it more difficult for attackers to perform traffic analysis and to increase the speed of data transfer. For more information, see the <a href=https://geti2p.net/en/docs/how/garlic-routing class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Trafik analizi yapmayı zorlaştırmak ve veri transferi hızını artırmak amacıyla birden fazla iletiyi birlikte şifreleyen soğan yönlendirme yönteminin bir çeşididir. Daha fazla bilgi için <a href=https://geti2p.net/en/docs/how/garlic-routing class='sitelink external' target=_blank rel=noreferrer>çevrimiçi belgelere</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:483
 msgid "Hidden Mode"
-msgstr ""
+msgstr "Gizli Mod"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:485
 msgid "A router configured to run in Hidden Mode will not publish its details to the <i>Network Database</i> and will not participate in routing traffic for other routers. Routers operating in countries designated as strict and routers manually configured run in Hidden Mode."
-msgstr ""
+msgstr "Gizli Modda çalışacak şekilde yapılandırılmış bir yönlendirici, detaylarını <i>Ağ Veritabanı'na</i> yayınlamaz ve diğer yönlendiriciler için trafik yönlendirmesine katılmaz. Katı olarak belirlenen ülkelerde faaliyet gösteren ve manuel olarak yapılandırılan yönlendiriciler Gizli Modda çalışır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:489
 msgid "The I2P Client Protocol (I2CP) enables external applications (clients) to communicate with I2P over single TCP socket, by default using port 7654. For more information, see the <a href=https://geti2p.net/en/docs/protocol/i2cp class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "I2P İstemci Protokolü (I2CP), dış uygulamaların (istemcilerin) I2P ile tek bir TCP soketi üzerinden iletişim kurmasını sağlar ve varsayılan olarak 7654 numaralı bağlantı noktasını kullanır. Daha fazla bilgi için <a href=https://geti2p.net/en/docs/protocol/i2cp class='sitelink external' target=_blank rel=noreferrer>çevrimiçi belgelere</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:491
 msgid "I2NP"
-msgstr ""
+msgstr "I2NP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:493
 msgid "The I2P Network Protocol (I2NP) manages the routing and mixing of messages between routers, in addition to the transport selection (where more than one is supported) when communicating with a peer. For more information, see the <a href=https://geti2p.net/en/docs/protocol/i2np class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "I2P Ağ Protokolü (I2NP), bir peer ile iletişim kurarken, yönlendirici arasında mesajların yönlendirilmesi ve karıştırılmasını, ayrıca iletişimde birden fazla taşıma seçeneği olduğunda (desteklenenlerden biri) taşıma seçimini yönetir. Daha fazla bilgi için <a href=https://geti2p.net/en/docs/protocol/i2np class='sitelink external' target=_blank rel=noreferrer>çevrimiçi belgelendirmeye</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:495
 msgid "I2P+"
-msgstr ""
+msgstr "I2P+"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:497
-msgid "A soft fork of the Java I2P software which retains full compatibility, providing an enhanced user interface and improvements to network performance. See <a href=http://skank.i2p/ class=sitelink target=_blank rel=noreferrer>http://skank.i2p/</a> or <a href=https://i2pplus.github.io class='sitelink external' target=_blank rel=noreferrer>https://i2pplus.github.io</a>for more information."
-msgstr ""
+msgid "A soft fork of the Java I2P software which retains full compatibility, providing an enhanced user interface and improvements to network performance. See <a href=http://skank.i2p/ class=sitelink target=_blank rel=noreferrer>http://skank.i2p/</a> or <a href=https://i2pplus.github.io class='sitelink external' target=_blank rel=noreferrer>https://i2pplus.gitgub.io</a> for more information."
+msgstr "Java I2P yazılımının tam uyumluluğunu koruyan, geliştirilmiş bir kullanıcı arayüzü ve ağ performansındaki iyileştirmeler sunan bir soft fork. Daha fazla bilgi için <a href=http://skank.i2p/ class=sitelink target=_blank rel=noreferrer>http://skank.i2p/</a> veya <a href=https://i2pplus.github.io class='sitelink external' target=_blank rel=noreferrer>https://i2pplus.gitgub.io</a> adresini ziyaret edin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:499
 msgid "I2PBote (plugin)"
-msgstr ""
+msgstr "I2PBote (eklenti)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:501
 msgid "An unmaintained I2P plugin that provides serverless, end-to-end encrypted e-mail within the I2P network. For more information, see <a href=http://bote.i2p/ class=sitelink target=_blank rel=noreferrer>http://bote.i2p/</a>. Source code is available on <a href=https://github.com/i2p/i2p.i2p-bote class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgstr "I2P ağında sunucusuz, uçtan uca şifrelenmiş e-posta sağlayan bakımsız bir I2P eklentisi. Daha fazla bilgi için <a href=http://bote.i2p/ class=sitelink target=_blank rel=noreferrer>http://bote.i2p/</a> adresine bakınız. Kaynak kodu <a href=https://github.com/i2p/i2p.i2p-bote class='sitelink external' target=_blank rel=noreferrer>github</a> adresinde mevcuttur."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:503
 msgid "i2pd"
-msgstr ""
+msgstr "i2pd"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:505
 msgid "An alternative implementation of an I2P router coded in C++. For more information, see <a href=https://i2pd.website/ class='sitelink external' target=_blank rel=noreferrer>https://i2pd.website/</a> Source code is available on <a href=https://github.com/PurpleI2P/i2pd class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgstr "C++ ile kodlanmış bir I2P yönlendiricisine alternatif bir uygulama. Daha fazla bilgi için <a href=https://i2pd.website/ class='sitelink external' target=_blank rel=noreferrer>https://i2pd.website/</a> adresine bakın. Kaynak kodu <a href=https://github.com/PurpleI2P/i2pd class='sitelink external' target=_blank rel=noreferrer>github</a> adresinde mevcuttur."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:509
 msgid "A fork of the <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>Snark BitTorrent client</a> refactored for use on the I2P network. Usually supplied as part of the default suite of applications with Java I2P, and also available as a <a href=http://skank.i2p/#download class=sitelink target=_blank rel=noreferrer>standalone Java application</a>."
-msgstr ""
+msgstr "I2P ağı için yeniden düzenlenmiş olan <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>Snark BitTorrent istemcisinden türetilmiş bir çatalla birlikte gelir. Genellikle Java I2P'nin varsayılan uygulama paketi olarak sunulur ve ayrıca <a href=http://skank.i2p/#download class=sitelink target=_blank rel=noreferrer>bağımsız bir Java uygulaması olarak da mevcuttur</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:511
 msgid "Introducer"
-msgstr ""
+msgstr "Tanıtıcı"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:513
 msgid "A router that facilitates the connection to the network of another router that is behind a firewall."
-msgstr ""
+msgstr "Bir güvenlik duvarının arkasında bulunan başka bir yönlendiricinin ağa bağlantısını kolaylaştıran bir yönlendirici."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:515
 msgid "Jump Service"
-msgstr ""
+msgstr "Atlamalı Hizmet"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:517
 msgid "A simple CGI application that takes a hostname as a parameter and returns a 301 redirect to the proper URL with a <code>?i2paddresshelper=key</code> string appended. The HTTP proxy will interpret the appended string and use the key as the actual destination. In addition, the proxy will cache the key so the address helper is not necessary until restart, and offer the option to add the resolved address to the addressbook."
-msgstr ""
+msgstr "Bir ana makine adı alarak parametre olarak atan ve bir <code>?i2paddresshelper=key</code> dizesi eklenmiş doğru URL'ye 301 yönlendirme yapan basit bir CGI uygulaması. HTTP proxy, eklenen dizgeyi yorumlar ve anahtar olarak gerçek hedefi kullanır. Ayrıca, proxy anahtarı önbelleğe alır, böylece adres yardımcısı yeniden başlatma yapılmadığı sürece gerekli değildir ve çözülen adı adres defterine ekleme seçeneğini sunar."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:519
 msgid "Laptop Mode"
-msgstr ""
+msgstr "Dizüstü Bilgisayar Modu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:521
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
-msgstr ""
+msgstr "Sisteminizin bulunduğu genel ip adresi değiştiğinde otomatik olarak <a href=/confignet#ipchange>isteğe bağlı yapılandırma</a> olarak <a href=/netdb?r=.>yönlendirici kimliğinizi</a> ve <a href=/confignet#udpconfig>harici bağlantı noktasını</a> değiştirir. Bu, örneğin dizüstü bilgisayardan farklı konumlarda I2P çalıştırdığınız durumlarda ip adresinizin sıklıkla değişebileceği senaryolarda yönlendirici kimliğiniz ve ip adresinizi ilişkilendiren saldırganın önüne geçebilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:525
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
-msgstr ""
+msgstr "Bir <i>Hedef</i> tarafından hedeflenen iletileri almak için belirli bir tünele yetkilendirme tanımlayan bilgiler."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:529
 msgid "A group of tunnel entry points (leases) for a <i>destination</i>. Note: A 0-hop server tunnel will only have one lease, regardless of the number of tunnels configured."
-msgstr ""
+msgstr "Bir <i>hedef</i> için tünel giriş noktalarından (kiralık) oluşan bir grup. Not: 0 atlayıcılı sunucu tüneli, yapılandırılan tünellerin sayısına bakılmaksızın yalnızca bir kira sahibi olacak."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:531
 msgid "Monotone / mtn"
-msgstr ""
+msgstr "Monotone / mtn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:533
 msgid "The distributed version control system (DVCS) previously used to maintain I2P's source code, now superseded by git."
-msgstr ""
+msgstr "I2P'nin kaynak kodunu yönetmek için önceden kullanılan dağıtılmış sürüm kontrol sistemi (DVCS), şu anda git tarafından yerine geçmiştir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:535
 msgid "Multihoming"
-msgstr ""
+msgstr "Birden fazla ana bilgisayara bağlanma"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:537
 msgid "Services may be hosted on multiple routers simultaneously, by sharing the same private key for the destination. Multihoming can further enhance the security and stability of a server by providing redundancy; if a server is multihomed, when a server in the pool goes offline, the provided service will remain available, making it more difficult to correlate server downtime with a router going offline."
-msgstr ""
+msgstr "Hizmetler, hedef için aynı özel anahtarı paylaşarak aynı anda birden fazla yönlendiricide barındırılabilir. Çoklu ana bilgisayara bağlanma, yedeklilik sağlayarak bir sunucunun güvenliğini ve istikrarını artırabilir; bir sunucu çoklu ana bilgisayara bağlıysa, havuzdaki bir sunucu çevrimdışı olduğunda, sağlanan hizmet kullanılabilir durumda kalacak ve sunucu kesintisi ile ana bilgisayarın çevrimdışı olması arasında ilişki kurmak daha zor olacaktır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:541
 msgid "A distributed database containing router contact information (RouterInfos) and destination contact information (LeaseSets). A single router maintains its own (partial) database for communicating with other routers on the network; no single router will maintain a list of all routers. The RouterInfos are stored on disk and read into memory when the router starts, or when new RouterInfos are acquired. Also referred to as the <i>NetDb</i>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Yönlendirici iletişim bilgileri (RouterInfos) ve hedef iletişim bilgileri (LeaseSets) içeren dağıtılmış bir veritabanıdır. Tek bir yönlendirici, ağdaki diğer yönlendiricilerle iletişim kurmak için kendine ait (kısmi) bir veritabanını tutar; tek bir yönlendirici tüm yönlendiricilerin listesini tutmaz. RouterInfos diskte depolanır ve yönlendirici başladığında veya yeni RouterInfos alındığında belleğe yüklenir. Ayrıca <i>NetDb</i> olarak da adlandırılır. Daha fazla bilgi için <a href=https://geti2p.net/en/docs/how/network-database class='sitelink external' target=_blank rel=noreferrer>çevrimiçi belgelere</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:543
 msgid "NTCP / NTCP2"
-msgstr ""
+msgstr "NTCP / NTCP2"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:545
 msgid "NTCP (NIO-based TCP) and NTCP2 are TCP-based network transports which use Java's NIO (New I/O) TCP implementation to deliver I2NP messages between routers on the network. NTCP2 improves the resistance of NTCP to various attacks and automated traffic identification methods. For more information, see the <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "NTCP (NIO tabanlı TCP) ve NTCP2, ağdaki yönlendiriciler arasında I2NP iletilerini iletmek için Java'nın NIO (Yeni Giriş/Çıkış) TCP uygulamasını kullanan TCP tabanlı ağ taşımacılığıdır. NTCP2, NTCP'nin çeşitli saldırılara ve otomatik trafik tanımlama yöntemlerine karşı direncini artırır. Daha fazla bilgi için <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>çevrimiçi belgelere</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:547
 msgid "Orchid (plugin)"
-msgstr ""
+msgstr "Orchid (eklenti)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:549
 msgid "A java implementation of a Tor client, available as an I2P plugin. Can be used as the default <i>outproxy</i> if configured in the relevant SOCKS or HTTP client tunnel in the <i>Tunnel Manager</i>. Available from <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgstr "Bir I2P eklentisi olarak mevcut olan Tor istemci birjava uygulamasıdır. İlgili SOCKS veya HTTP müşteri tüneli yoluyla yapılandırıldığında varsayılan <i>outproxy</i> olarak kullanılabilir. <i>Tunnel Manager</i>. <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>'dan indirilebilir. Kaynak kodu <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>'da mevcuttur."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:551
 msgid "Outproxy"
-msgstr ""
+msgstr "Outproxy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:553
 msgid "A service on the network that provides a proxy connection to the <i>clearnet</i>. By default, I2P has an HTTP outproxy configured for web browsing on <code>127.0.0.1:4444</code>."
-msgstr ""
+msgstr "Ağda <i>clearnet</i> için bir proxy bağlantısı sağlayan bir hizmet. I2P'nin varsayılan olarak yapılandırılmış bir HTTP outproxy'si, web taraması için <code>127.0.0.1:4444</code> üzerinde bulunur."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:555
 msgid "Participation"
-msgstr ""
+msgstr "Katılım"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:557
 msgid "The act of contributing to the network by permitting other routers to build tunnels using your router in a tunnel chain. At least 12KB/s upstream bandwidth (network share) is required to be allocated in order to enable participation. Note that firewalled routers will be limited in how much they contribute to participation, and a router designated as Hidden will not participate at all."
-msgstr ""
+msgstr "Başka yönlendiricilerin, tünel zincirinde kendi yönlendiricinizi kullanarak tünel oluşturmasına izin vererek ağa katkıda bulunma eylemi. Katılımı etkinleştirmek için en az 12 KB/s yukarı doğru bant genişliği (ağ paylaşımı) ayrılması gerekmektedir. Güvenlik duvarı olan yönlendiricilerin katılıma ne kadar katkıda bulunabileceği sınırlı olacak ve Gizli olarak belirlenmiş bir yönlendirici hiçbir şekilde katılmayacaktır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:561
 msgid "The process of acquiring router identities, normally via <i>clearnet</i> servers, to ensure your router can communicate and build tunnels with other routers on the network. When a router has no router identities for other peers (usually immediately after installation), the process of reseeding is also referred to as <i>bootstrapping</i>."
-msgstr ""
+msgstr "Yönlendiricinizin ağda diğer yönlendiricilerle iletişim kurabilmesi ve tüneller oluşturabilmesi için genellikle <i>clearnet</i> sunucuları üzerinden yönlendirici kimliklerinin edinme sürecidir. Bir yönlendiricinin diğer akranlar için yönlendirici kimlikleri olmadığı zamanlarda (genellikle kurulumdan hemen sonra), yeniden tohumlama sürecine <i>bootstrapping</i> de denir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:565
 msgid "The core I2P software, which routes encrypted packets on the I2P network. All routers by default participate in the network except routers running in countries considered hostile (see <i>Strict Countries</i>), which both helps the network and provides cover traffic for any clients or servers connecting to the I2P network through the router."
-msgstr ""
+msgstr "I2P ağında şifreli paketleri yönlendiren çekirdek I2P yazılımı. Tüm yönlendiriciler varsayılan olarak ağda yer alırken, sadece düşmanca ülkelerde çalışan yönlendiriciler (bkz. <i>Strict Countries</i>), hem ağa yardımcı olur hem de yönlendirici aracılığıyla I2P ağına bağlanan herhangi bir istemci veya sunucu için kaplama trafiği sağlar."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:567
 msgid "Router Identity"
-msgstr ""
+msgstr "Yönlendirici Kimliği"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:569
 msgid "Information defining the unique identity of a router on the network which includes its IP address (or the IP addresses of intermediate introducers) and listening port, public signing and encryption keys. Router identities correlate to peers in the NetDB. Also referred to as a <i>RouterInfo</i>."
-msgstr ""
+msgstr "Yönlendiricinin benzersiz kimliğini tanımlayan bilgilerdir. Bu bilgiler, IP adresini (veya ara tanıtıcıların IP adreslerini) ve dinlenen portu, genel imzalama ve şifreleme anahtarlarını içerir. Yönlendirici kimlikleri, NetDB'deki arkadaşlara uyumlu hale getirilir. Ayrıca bir <i>RouterInfo</i> olarak da adlandırılır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:573
 msgid "SAM (Simple Anonymous Messaging) is a protocol which allows a client application written in any programming language to communicate over I2P, by using a socket-based interface to the I2P router. For more information, see the <a href=https://geti2p.net/en/docs/api/samv3 class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "SAM (Basit Anonim Mesajlaşma), herhangi bir programlama dilinde yazılmış bir istemci uygulamasının I2P üzerinde iletişim kurmasına olanak sağlayan bir protokoldür. Bu, I2P yönlendiricisiyle soket tabanlı bir ara yüz kullanarak gerçekleştirilir. Daha fazla bilgi için <a href=https://geti2p.net/en/docs/api/samv3 class='sitelink external' target=_blank rel=noreferrer>çevrimiçi belgelere</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:575
 msgid "Shared Client"
-msgstr ""
+msgstr "Paylaşılan İstemci"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:577
 msgid "In order to use a single set of tunnels for multiple client services, clients can be configured from the <i>Tunnel Manager</i> to operate in <i>Shared Client</i> mode. This mode conserves resources and blends the traffic from multiple clients into a single set of tunnels, making traffic analysis harder. Clients configured as Shared Clients share the same tunnel options."
-msgstr ""
+msgstr "Çoklu istemci hizmetleri için tek bir tünel setini kullanabilmek için, istemciler <i>Tünel Yöneticisi</i>nden <i>Paylaşılan İstemci</i> modunda çalışacak şekilde yapılandırılabilir. Bu mod, kaynakları korur ve çoklu istemcilerden gelen trafiği tek bir tünel setine karıştırır, bu da trafik analizini zorlaştırır. Paylaşılan İstemci olarak yapılandırılan istemciler aynı tünel seçeneklerini paylaşırlar."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:581
 msgid "SSU (Secure Semi-reliable UDP) is an I2P network transport providing encrypted, connection-oriented, point-to-point connections, in addition to IP address detection and NAT traversal services. For more information, see the <a href=https://geti2p.net/en/docs/transport/ssu class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "SSU (Güvenli Yarı-Güvenilir UDP), IP adresi algılama ve NAT aşma hizmetlerine ek olarak, şifreli, bağlantı odaklı, noktadan noktaya bağlantılar sağlayan bir I2P ağ taşımacılığıdır. Daha fazla bilgi için <a href=https://geti2p.net/en/docs/transport/ssu class='sitelink external' target=_blank rel=noreferrer>çevrimiçi belgelere</a> bakın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:583
 msgid "Strict Countries"
-msgstr ""
+msgstr "Sıkı Ülkeler"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:585
 msgid "A list of countries derived from the <a href=https://freedomhouse.org/report/countries-world-freedom-2019 class='sitelink external' target=_blank rel=noreferrer>World Freedom Report</a> with a poor civil liberties reputation. This list is used to place routers running in the specified countries in <i>Hidden Mode</i> to provide enhanced security for users. The following countries are designated as strict: Afghanistan, Azerbaijan, Bahrain, Belarus, Brunei, Burundi, Cameroon, Central African Republic, Chad, China, Cuba, Democratic Republic of the Congo, Egypt, Equatorial Guinea, Eritrea, Ethiopia, Iran, Kazakhstan, Laos, Libya, Myanmar, North Korea, Palestinian Territories, Rwanda, Saudi Arabia, Somalia, South Sudan, Sudan, Eswatini (Swaziland), Syria, Tajikistan, Thailand, Turkey, Turkmenistan, Venezuela, United Arab Emirates, Uzbekistan, Western Sahara, Yemen."
-msgstr ""
+msgstr "Yoksullukla ünlü <a href=https://freedomhouse.org/report/countries-world-freedom-2019 class='sitelink external' target=_blank rel=noreferrer>Dünya Özgürlük Raporu</a>'ndan türetilen ülkelerin listesi. Bu liste, belirtilen ülkelerde çalışan yönlendiricileri <i>Gizli Mod</i>'a yerleştirmek için kullanılır ve kullanıcılar için geliştirilmiş güvenlik sağlar. Aşağıdaki ülkeler şiddetli olarak belirlenmiştir: Afganistan, Azerbaycan, Bahreyn, Belarus, Bruney, Burundi, Kamerun, Orta Afrika Cumhuriyeti, Çad, Çin, Küba, Demokratik Kongo Cumhuriyeti, Mısır, Ekvator Ginesi, Eritre, Etiyopya, İran, Kazakistan, Laos, Libya, Myanmar, Kuzey Kore, Filistin Bölgeleri, Ruanda, Suudi Arabistan, Somali, Güney Sudan, Sudan, Esvatini (Svaziland), Suriye, Tacikistan, Tayland, Türkiye, Türkmenistan, Venezuela, Birleşik Arap Emirlikleri, Özbekistan, Batı Sahra, Yemen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:587
 msgid "Tunnel"
@@ -9886,119 +9882,119 @@ msgstr "Tünel"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:589
 msgid "A <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink external' target=_blank rel=noreferrer>unidirectional</a> encrypted communication pathway between a client or server on the I2P network. Similar to a circuit in Tor, except that Tor circuits are bidirectional."
-msgstr ""
+msgstr "I2P ağındaki bir istemci veya sunucu arasında <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink external' target=_blank rel=noreferrer>tek yönlü</a> şifreli iletişim yolu. Tor devrelerine benzer ancak Tor devreleri çift yönlüdür."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:591
 msgid "Tunnel Endpoint"
-msgstr ""
+msgstr "Tünel Son Noktası"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:593
 msgid "The last router in a tunnel, which may be the <i>Outbound Endpoint</i>, where the client's tunnels meet the <i>Inbound Gateway</i> of the destination server's tunnels, or the <i>Inbound Endpoint</i> which is the final router in the chain that connects to the destination server."
-msgstr ""
+msgstr "Bir tüneldeki son yönlendirici, istemci tünellerinin hedef sunucu tünellerinin <i>Gelen Ağ Geçidi</i>'ne veya <i>Gelen Nokta</i>'ya (son yönlendirici) bağlandığı <i>Dışa Giden Nokta</i> olabilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:595
 msgid "Tunnel Gateway"
-msgstr ""
+msgstr "Tünel Ağ Geçidi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:597
 msgid "The first router in a tunnel. For inbound tunnels, this is the one mentioned in the <i>LeaseSet</i> published in the <i>Network Database</i>. For outbound tunnels, the gateway is the originating router."
-msgstr ""
+msgstr "Bir tüneldeki ilk yönlendirici. Gelen tüneller için, bu <i>Ağ Veritabanı</i>'nda yayınlanan <i>Kira Kümesi</i> ile belirtilen yönlendiricidir. Dışa giden tüneller için, ağ geçidi kaynak yönlendiricidir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:601
 msgid "A web application supplied with the router that permits creation and configuration of client and server tunnels. Also referred to as the <i>Hidden Services Manager</i>."
-msgstr ""
+msgstr "Yönlendirici ile birlikte sağlanan bir web uygulamasıdır, müşteri ve sunucu tünellerinin oluşturulmasına ve yapılandırılmasına olanak tanır. Ayrıca <i>Gizli Hizmetler Yöneticisi</i> olarak da adlandırılır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:603
 msgid "Tunnel Participant"
-msgstr ""
+msgstr "Tünel Katılımcısı"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:605
 msgid "A router in a tunnel not designated as a gateway or endpoint."
-msgstr ""
+msgstr "Ağ geçidi veya uç noktası olarak atanmayan bir tüneldeki bir yönlendirici."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:607
 msgid "ZzzOT (plugin)"
-msgstr ""
+msgstr "ZzzOT (eklenti)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:609
-msgid "A Java I2P plugin implementation of a BitTorrent <a href=https://en.wikipedia.org/wiki/Opentracker class='sitelink external' target=_blank rel=noreferrer>Open Tracker</a>. Available from <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins.zzzot class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgid "A Java I2P plugin implementation of a BitTorrent Open Tracker. Available from http://stats.i2p/i2p/plugins. Source code is available on github."
+msgstr "BitTorrent Open Tracker'ın Java I2P eklenti uygulamasıdır. http://stats.i2p/i2p/plugins adresinden indirilebilir. Kaynak kodu github üzerinde mevcuttur."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:270
 msgid "Web Hosting - I2P+"
-msgstr ""
+msgstr "Web Barındırma - I2P+"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:433
 msgid "Registering an I2P Domain"
-msgstr ""
+msgstr "Bir I2P Alan adı kaydediliyor"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:435
 msgid "To obtain your own hostname, I2P domain registrars such as <a href=http://stats.i2p/i2p/addkey.html target=_blank rel=noreferrer class=sitelink>stats.i2p</a> or <a href=http://reg.i2p/ target=_blank rel=noreferrer class=sitelink>reg.i2p</a> provide registration services that allow you to register and manage an .i2p hostname or sub-domain which will then be propagated across the network. Some registration sites will require the <i>B64 destination address</i> for the tunnel/service you wish to associate with a hostname, which you should copy from the <i>Local destination</i> section on the <a href='http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>."
-msgstr ""
+msgstr "Kendi alan adınızı edinmek için, <a href=http://stats.i2p/i2p/addkey.html target=_blank rel=noreferrer class=sitelink>stats.i2p</a> veya <a href=http://reg.i2p/ target=_blank rel=noreferrer class=sitelink>reg.i2p</a> gibi I2P etki alanı kayıt firmaları kayıt hizmetleri sağlar. Bu hizmetlerle bir .i2p alan adı veya alt alan adı kaydedebilir ve yönetebilirsiniz. Kaydedilen bu alan adı ağı boyunca yayılır. Bazı kayıt siteleri bir alan adıyla ilişkilendirmek istediğiniz tünel/hizmet için <i>B64 hedef adres</i> gerektirebilir. Bu adresi <a href='http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3'>Tünel Yöneticisi Yapılandırma sayfası</a>nın <i>Yerel Hedef</i> bölümünden kopyalamalısınız."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:437
 msgid "If a <i>Registration Authentication</i> string is requested, you can find it on the <a href='http://127.0.0.1:7657/i2ptunnel/register?tunnel=3'>Registration Authentication page</a> linked from the <a href='http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>. Registration authentication ensures only the owner is able to register or otherwise manage the hostname, and is required on stats.i2p and reg.i2p."
-msgstr ""
+msgstr "Eğer bir <i>Kayıt Yetkilendirme</i> dizesi istenirse, onu <a href='http://127.0.0.1:7657/i2ptunnel/register?tunnel=3'>Kayıt Yetkilendirme sayfası</a>'nda bulabilirsiniz. Bu sayfaya <a href='http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3'>Tünel Yöneticisi Yapılandırma sayfası</a>'ndan ulaşabilirsiniz. Kayıt yetkilendirmesi, sadece sahibin alan adını kaydetme veya yönetme yeteneğine sahip olmasını sağlar ve stats.i2p ve reg.i2p üzerinde gereklidir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:439
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
-msgstr ""
+msgstr "Eğer acele ediyorsanız ve birkaç saat bekleyemiyorsanız, insanlara \"jump\" adres yardımcı yönlendirme hizmetini kullanmalarını söyleyebilirsiniz. Bu, genellikle kendi alan adınızı aynı sitede kaydettikten birkaç dakika sonra çalışmaya başlayacaktır. Tarayıcınıza <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> adresini girerek önce kendiniz test edebilirsiniz. Çalıştığında, diğer insanlara kullanmalarını söyleyebilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:441
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='http://127.0.0.1:7657/susidns/details?h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for i2p-projekt.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "Alternatif olarak, alan adınız için <i>adres yardımcı bağlantı</i>yı kopyalayabilirsiniz. Bu bağlantı, adres defteri listesi sayfasında veya alan adınızın ayrıntıları sayfasında (örneğin <a href='http://127.0.0.1:7657/susidns/details?h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>i2p-projekt.i2p için ayrıntılar</a> gibi) belirtilmiştir. Bağlantıyı, diğerleriyle paylaşılması gereken yere yapıştırabilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:443
 msgid "Backup your private key!"
-msgstr ""
+msgstr "Özel anahtarınızı yedekleyin!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:445
 msgid "When a new service tunnel is created, or a service is run for the first time (e.g. the default jetty webserver, plugins), a private encryption key is created which essentially controls the ownership of address. This is usually named <code>&hellip;privKey.dat</code>, or <code>eepPriv.dat</code>, though it's a good idea to change the name to indicate the service it belongs to and then respecify it in the Tunnel Manager server settings. This .dat file should be backed up safely; lose it and you will lose ownership and control of your hostname!"
-msgstr ""
+msgstr "Yeni bir hizmet tüneli oluşturulduğunda veya bir hizmet ilk kez çalıştırıldığında (örneğin, varsayılan jetty web sunucusu, eklentiler) temel olarak adresin sahipliğini kontrol eden özel bir şifreleme anahtarı oluşturulur. Bu genellikle <code>&hellip;privKey.dat</code> veya <code>eepPriv.dat</code> olarak adlandırılır, ancak ismi hizmete ait olduğunu belirtmek ve ardından onu Tünel Yöneticisi sunucu ayarlarında yeniden belirtmek iyi bir fikirdir. Bu .dat dosyasını güvenli bir şekilde yedeklemelisiniz; kaybederseniz, sahiplik ve ana makine adınızın kontrolünü kaybedersiniz!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:447
 msgid "To migrate the key to a new router, or to setup multihoming (running the same service on multiple routers for redundancy and load-balancing), copy the backed up key to your .i2p directory and specify it in the new server tunnel, or replace the default key in the plugin folder (e.g. the zzzot plugin)."
-msgstr ""
+msgstr "Anahtarınızı yeni bir yönlendiriciye taşımak veya çoklama kurmak (aynı hizmeti yedekleme ve yük dengeleme için birden çok yönlendiricide çalıştırma) için, yedeklenmiş anahtarınızı .i2p dizininize kopyalayın ve yeni sunucu tünelinde belirtin veya eklenti klasöründeki varsayılan anahtarı değiştirin (örneğin, zzzot eklentisi)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:270
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:520
 msgid "Help Section"
-msgstr ""
+msgstr "Yardım Bölümü"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:405
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:660
 msgid "Help &amp; Support"
-msgstr ""
+msgstr "Yardım ve Destek"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:409
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:662
 msgid "Advanced configuration settings"
-msgstr ""
+msgstr "Gelişmiş yapılandırma ayarları"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:413
 msgid "Recent code changes to I2P+"
-msgstr ""
+msgstr "I2P+ için son kod değişiklikleri"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:417
 msgid "Configuring I2P+: Network, Firefox, Tunnel Manager"
-msgstr ""
+msgstr "I2P+ yapılandırma: Ağ, Firefox, Tünel Yöneticisi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:419
 msgid "F.A.Q."
-msgstr ""
+msgstr "S.S.S."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:425
 msgid "I2P-specific terminology"
-msgstr ""
+msgstr "I2P'e özel terimler"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:429
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:678
 msgid "Licensing and copyright notices"
-msgstr ""
+msgstr "Lisanslama ve telif hakkı bildirimleri"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:437
 msgid "A guide to reseeding your I2P+ router"
-msgstr ""
+msgstr "I2P+ yönlendiricinizi yeniden eklemenize yönelik bir kılavuz"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:439
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:270
@@ -10006,43 +10002,43 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:433
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:692
 msgid "Troubleshooting"
-msgstr ""
+msgstr "Sorun giderme"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:441
 msgid "What to do in the event I2P+ isn't working"
-msgstr ""
+msgstr "I2P+ çalışmıyorsa ne yapılmalı"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:445
 msgid "An introduction to tunnel access lists"
-msgstr ""
+msgstr "Tünel erişim listelerine giriş"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:449
 msgid "Information about the sidebar, network status messages, and theme overrides"
-msgstr ""
+msgstr "Kenar çubuğu, ağ durumu mesajları ve tema geçersiz kılma hakkında bilgi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:451
 msgid "Webhosting on I2P"
-msgstr ""
+msgstr "I2P'de Web barındırma"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:270
 msgid "Licensing Information"
-msgstr ""
+msgstr "Lisans Bilgisi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/legal_jsp.java:405
 msgid "Legal &amp; Licensing"
-msgstr ""
+msgstr "Yasal &amp; Lisanslama"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/newusers_jsp.java:433
 msgid "Introduction to I2P"
-msgstr ""
+msgstr "I2P'ye giriş"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:433
 msgid "Reseeding Your Router"
-msgstr ""
+msgstr "Yönlendiricinizi yeniden ekleme"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:435
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining. The default settings will work for most people. Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr ""
+msgstr "Reseeding, I2P'yı ilk kurduğunuzda veya yönlendiricinizde yeterli sayıda yönlendirici referansı kalmadığında diğer yönlendiricileri bulmak için kullanılan başlatma sürecidir. Varsayılan ayarlar çoğu kişi için çalışacaktır. Bu ayarları yalnızca HTTPS'nin kısıtlayıcı bir güvenlik duvarı tarafından engellendiği durumlarda ve yeniden tohumlama başarısız olduysa değiştirin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:437
 msgid "If reseeding has failed, you should first check your network connection."
@@ -10050,11 +10046,11 @@ msgstr "Yeniden tohumlama yapılamaz ise ağ bağlantınızı denetleyin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:439
 msgid "If a firewall is blocking your connections to reseed hosts, you may have access to a proxy."
-msgstr "Yeniden tohumlanmış sunuculara bağlantılarınız bir güvenlik duvarı tarafından engelleniyorsa bir vekil sunucuya erişebilirsiniz."
+msgstr "Eğer bir güvenlik duvarı yeniden tohumlanmış sunuculara bağlantılarınızı engelliyorsa, bir proxy'ye erişiminiz olabilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:441
 msgid "The proxy may be remotely hosted or a service running on your computer (localhost/127.0.0.1)."
-msgstr ""
+msgstr "Proxy, uzaktan barındırılan bir hizmet veya bilgisayarınızda çalışan bir servis olabilir (localhost/127.0.0.1)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:443
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:453
@@ -10063,250 +10059,250 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:487
 msgid "Reseed Configuration page"
-msgstr ""
+msgstr "Yeniden Tohumlandırma Yapılandırma sayfası"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:443
 #, java-format
 msgid "To use a proxy to reseed, configure the proxy type, hostname, and port on the {0}."
-msgstr ""
+msgstr "Yeniden tohumlanmak için bir proxy kullanmak için, proxy türünü, ana bilgisayarı ve bağlantı noktasını {0} üzerinde yapılandırın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:445
 msgid "If you are running the Tor Browser, you may use its Tor instance by configuring I2P to use: <i>Proxy type:</i> <code>SOCKS 5</code> <i>Host:</i> <code>127.0.0.1</code> <i>Port:</i> <code>9150</code>."
-msgstr ""
+msgstr "Tor Tarayıcısı kullanıyorsanız, I2P'yi yapılandırarak Tor örneğini kullanabilirsiniz: <i>Proxy türü:</i> <code>SOCKS 5</code> <i>Ana bilgisayar:</i> <code>127.0.0.1</code> <i>Port:</i> <code>9150</code>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:447
 msgid "If you are running a standalone Tor instance locally, you may use it by configuring I2P to use: <i>Proxy type:</i> <code>SOCKS 5</code> <i>Host:</i> <code>127.0.0.1</code> <i>Port:</i> <code>9050</code>."
-msgstr ""
+msgstr "Yerel olarak tek başına bir Tor örneği çalıştırıyorsanız, onu kullanabilirsiniz: I2P'yi kullanacak şekilde yapılandırarak <i>Proxy türü:</i> <code>SOCKS 5</code> <i>Ana bilgisayar:</i> <code>127.0.0.1</code> <i>Port:</i> <code>9050</code>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:449
 msgid "If you have some peers but need more, you may try the I2P Outproxy option. This will not work for the initial reseed when you have 0 known peers. Selecting this option will use the I2P HTTP outproxy (by default on <code>127.0.0.1:4444</code>) or, if configured, the Orchid Tor plugin."
-msgstr ""
+msgstr "Eğer bazı eşlere sahipsiniz ancak daha fazlasına ihtiyacınız varsa, I2P Outproxy seçeneğini deneyebilirsiniz. Bu, 0 bilinen eşe sahip olduğunuz başlangıç tohumlama süreci için çalışmayacaktır. Bu seçeneği seçmek, I2P HTTP outproxy'sini (varsayılan olarak <code>127.0.0.1:4444</code>) veya yapılandırılmışsa Orchid Tor eklentisini kullanacaktır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:451
 msgid "Then click the <i>Save changes</i> button to confirm the proxy configuration and then the <i>Reseed now</i> button to initiate the reseed process."
-msgstr ""
+msgstr "Daha sonra proxy yapılandırmasını onaylamak için <i>Değişiklikleri Kaydet</i> düğmesine tıklayın ve yeniden tohumlama sürecini başlatmak için <i>Şimdi Yeniden Tohumlama</i> düğmesine tıklayın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:453
 #, java-format
 msgid "If you know and trust somebody that runs I2P, ask them to send you a reseed file generated using this page in their router console. Then, select the <i>Reseed from file</i> option on the {0} using the file you received."
-msgstr ""
+msgstr "Eğer I2P yöneten ve güvendiğiniz birisini tanıyorsanız, onlardan size router konsollarındaki bu sayfanın kullanılarak üretilmiş bir tohumlama dosyası göndermelerini isteyin. Ardından, {0} üzerinde size ulaşan dosyayı kullanarak <i>Dosyadan tohumlama</i> seçeneğini belirleyin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:455
 #, java-format
 msgid "If you know and trust somebody that publishes reseed files, ask them for the URL. Then, click the <i>Reseed from URL</i> button on the {0} to reseed using the URL you received."
-msgstr ""
+msgstr "Eğer reseed dosyalarını yayınlayan ve güvendiğiniz birisini tanıyorsanız, URL'yi onlardan isteyin. Ardından, {0} üzerinde size ulaşan URL'yi kullanarak <i>URL'den tohumlama</i> düğmesini tıklayarak tohumlama yapın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:457
 msgid "How do I reseed manually?"
-msgstr ""
+msgstr "Manuel olarak nasıl tohumlama yapabilirim?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:459
 msgid "An I2P router usually only needs to be seeded once, to join the network for the first time. However, if the router is running for an extended period without network connectivity it may also need to be reseeded. Reseeding involves fetching multiple \"RouterInfo\" files (bundled into a signed zip-file) from at least two predefined server URLs picked from a volunteer-run group of clearnet HTTPS servers."
-msgstr ""
+msgstr "Bir I2P yönlendiricisinin genellikle yalnızca bir kez tohumlanması gereklidir, ilk kez ağa katılmak için. Ancak, yönlendirici ağ bağlantısı olmadan uzun süre çalışıyorsa, yeniden tohumlanması gerekebilir. Tohumlama, güvenceye alınmış bir zip dosyasına paketlenmiş birden fazla \"RouterInfo\" dosyasını (gönüllü işletilen, nette çalışan HTTPS sunucularının önceden tanımlanmış en az iki URL'sinden seçilen) indirmeyi içerir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:461
 msgid "If the number of known peers drops below 50, I2P will attempt to reseed automatically. If the reseed attempt fails, a notification will appear in the sidebar with an option to manually reseed. A failed reseed attempt can occur if your local firewall limits outbound traffic, you are experiencing network connectivity issues, or if the reseed request is blocked entirely."
-msgstr ""
+msgstr "Bilinen eşlerin sayısı 50'nin altına düştüğünde, I2P otomatik olarak yeniden tohumlama denemesi yapar. Eğer tohumlama denemesi başarısız olursa, yan çubukta manuel olarak tohumlama yapma seçeneğiyle bir bildirim görünecektir. Bir tohumlama denemesi başarısız olabilir çünkü yerel güvenlik duvarınız çıkış trafiğini sınırlıyor, ağ bağlantı sorunları yaşıyorsunuz veya tohumlama isteği tamamen engelleniyorsa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:463
 #, java-format
 msgid "In the event that you suspect the request is being blocked, you can configure I2P to use a proxy to reseed. Go to the {0} and configure the proxy type, hostname, and port."
-msgstr ""
+msgstr "İstek engellendiğinden şüphelenildiğinde, I2P'nin tohumlama yapmak için bir proxy kullanmasını yapılandırabilirsiniz. {0}'a gidin ve proxy türünü, ana bilgisayar adını ve port numarasını yapılandırın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:465
 msgid "If you are stuck behind an ISP firewall or filter, you can use the following manual method (non-automated technical solution) to join the I2P network."
-msgstr ""
+msgstr "Eğer bir İSP güvenlik duvarı veya filtresi arkasında kaldıysanız, I2P ağına katılmak için aşağıdaki manuel yöntemi (otomatik olmayan teknik çözüm) kullanabilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:467
 msgid "Joining the I2P Network using a reseed file"
-msgstr ""
+msgstr "Yeniden çekim dosyası kullanarak I2P Ağı'na katılma"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:469
 msgid "Please contact a known trustworthy friend who has a running I2P router, and ask them for help with reseeding your I2P router. Request that they send you a reseed file exported from their running I2P router. It is vital that the file is exchanged over a secure channel, e.g. encrypted to avoid external tampering (PGP Sign, Encrypt and Verified with a trusted public key). The file itself is unsigned, so please accept files only from known trusted friends. Never import a reseed file if you cannot verify its source."
-msgstr ""
+msgstr "Lütfen çalışan bir I2P yönlendiricisi olan güvenilir bir arkadaşınıza başvurun ve I2P yönlendiricinizi yeniden çekim yapılması konusunda size yardımcı olmasını isteyin. Çalışan I2P yönlendiricilerinden dışa aktarılmış bir yeniden çekim dosyasını size göndermelerini isteyin. Dosyanın güvenli bir kanal üzerinden, örneğin şifrelenerek, dış müdahalelere karşı korunduğundan emin olun (PGP İmzalama, Şifreleme ve güvenilir bir genel anahtarla doğrulama). Dosya kendisi imzasızdır, bu yüzden sadece tanınan güvendiğiniz arkadaşlardan dosya kabul edin. Kaynağını doğrulayamıyorsanız, asla bir yeniden çekim dosyası yükleme."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:471
 msgid "To import the received i2preseed.zip file into your local I2P router:"
-msgstr ""
+msgstr "Alınan i2preseed.zip dosyasını yerel I2P yönlendiricinize yüklemek için:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:473
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:487
 #, java-format
 msgid "Go to the {0}"
-msgstr ""
+msgstr "{0} adresine gidin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:475
 msgid "Under <i>Select zip or su3 file</i> click <i>Browse&hellip;</i>"
-msgstr ""
+msgstr "<i>Zip veya su3 dosyasını seçin</i> altında <i>Gözat&hellip;</i>ye tıklayın"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:477
 msgid "Select the i2preseed.zip file"
-msgstr ""
+msgstr "i2preseed.zip dosyasını seçin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:479
 msgid "Click the <i>Reseed from File</i> button"
-msgstr ""
+msgstr "<i>Dosyadan Yeniden Çekim</i> düğmesine tıklayın"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:481
 msgid "Service (Wrapper) log"
-msgstr ""
+msgstr "Hizmet (Sarıcı) günlüğü"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:481
 #, java-format
 msgid "The reseed status will be indicated on the sidebar. You can also check the {0} for the following message: <code>Reseed got 100 router infos from file with 0 errors</code>"
-msgstr ""
+msgstr "Yeniden konumlandırma durumu kenar çubuğunda belirtilecektir. Aşağıdaki mesajı kontrol edebilirsiniz: {0} <code>Yeniden konumlandırma, 0 hatayla birlikte dosyadan 100 yönlendirici bilgisi aldı</code>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:483
 msgid "Sharing a reseed file"
-msgstr ""
+msgstr "Yeniden konumlandırma dosyası paylaşımı"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:485
 msgid "For trusted friends you can use your local I2P router to give them a jump start:"
-msgstr ""
+msgstr "Güvenilir arkadaşlarınıza hızlı başlatma yapmak için yerel I2P yönlendiricinizi kullanabilirsiniz:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:489
 msgid "Under <i>Create Reseed File</i> click the <i>Create reseed file</i> button"
-msgstr ""
+msgstr "<i>Yeniden Konumlandırma Dosyasi Oluştur</i> altında <i>Yeniden konumlandırma dosyası oluştur</i> düğmesine tıklayın"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:491
 msgid "Securely send the i2preseed.zip file to your friend"
-msgstr ""
+msgstr "i2preseed.zip dosyasını güvenli bir şekilde arkadaşınıza gönderin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:493
 msgid "Do not reveal this file to unknown users, as it contains sensitive data (100 RouterInfo files) from your own I2P router which potentially could be used by an adversary to decloak your identity. In order to protect your anonymity: you should wait for a few hours/days before sharing the file with your trusted friend. It is also advisable to use this procedure sparingly (no more than once a week)."
-msgstr ""
+msgstr "Bu dosyayı bilinmeyen kullanıcılara açıklamayın, çünkü kendi I2P yönlendiricinizden (100 RouterInfo dosyası) hassas veri içerir ve bu veriler düşman tarafından kimliğinizi gizlemek için potansiyel olarak kullanılabilir. Anonimliğinizi korumak için: güvenilir arkadaşınızla dosyayı paylaşmadan önce birkaç saat / gün beklemelisiniz. Ayrıca bu prosedürü az kullanmanız önerilir (haftada bir kezden fazla değil)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:495
 msgid "General guidelines for manual reseeding of I2P"
-msgstr ""
+msgstr "I2P'nin elle yeniden konumlandırılması için genel kurallar"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:497
 msgid "Do not publicly publish the reseed file or share these files with a friend of a friend!"
-msgstr ""
+msgstr "Reseed dosyasını kamuya açık olarak yayınlamayın veya bu dosyaları bir arkadaşın arkadaşıyla paylaşmayın!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:499
 msgid "This file should be used only for a very limited number of friends (less than 3)."
-msgstr ""
+msgstr "Bu dosya sadece çok sınırlı sayıda arkadaş için (3'ten az) kullanılmalıdır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/reseed_jsp.java:501
 msgid "The file will only be valid for a limited time (less than 3 weeks)."
-msgstr ""
+msgstr "Dosya sadece sınırlı bir süre (3 haftadan az) geçerli olacak."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:435
 msgid "If you're experiencing issues with running I2P+, the following information may help identify and resolve the problem:"
-msgstr ""
+msgstr "I2P+ kullanırken sorunlar yaşıyorsanız, aşağıdaki bilgiler sorunu belirlemeye ve çözmeye yardımcı olabilir:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:437
 msgid "Be Patient!"
-msgstr ""
+msgstr "Sabırlı olun!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:439
 msgid "I2P+ may be slow to integrate into network the first time you run it as it bootstraps into the network and learns of additional peers. The longer your I2P+ router is running, the better it will perform, so try and keep your router on as long as you can, 24/7 if possible! If, after 30 minutes, your <i>Active: [connected/recent]</i> count still has less than 10 peers, or your total number of <i>Integrated</i> peers is less than 5, there are several things you can do to check for problems:"
-msgstr ""
+msgstr "I2P+ ilk çalıştırdığınızda ağa entegre olması ve ek kapsama alanları hakkında bilgiler öğrenmesi için ağı bot yapması gerekebilir. I2P+ yönlendiriciniz ne kadar uzun süre çalışırsa performansı o kadar iyi olur, bu yüzden mümkün olduğunca yönlendiricinizi açık tutmaya çalışın, mümkünse 24/7! 30 dakika sonra <i>Active: [connected/recent]</i> sayım hala 10'dan az veya toplam <i>Integrated</i> sayınız 5'ten az ise, sorunları kontrol etmek için birkaç şey yapabilirsiniz:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:441
 msgid "Check your Configuration &amp; Bandwidth Allocation"
-msgstr ""
+msgstr "Yapılandırmanızı ve Bant Genişliği Tahsisinizi Kontrol Edin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:443
 msgid "I2P+ functions best when you can accurately reflect the speed of your network connection in the <a href=/config>bandwidth configuration section</a>. By default I2P+ is configured with some fairly conservative values that will not suit many use cases, so please take time to review these settings and correct where necessary. The more bandwidth you allocate, <i>specifically</i> upstream bandwidth, the more you will benefit from the network."
-msgstr ""
+msgstr "I2P+, <a href=/config>bant genişliği yapılandırma bölümünde</a> ağ bağlantınızın hızını doğru bir şekilde yansıtabildiğinizde en iyi şekilde çalışır. Varsayılan olarak, I2P+ birçok kullanım durumuna uygun olmayan oldukça muhafazakar değerlerle yapılandırılmıştır, bu nedenle lütfen bu ayarları gözden geçirin ve gerektiğinde düzeltin. Daha fazla bant genişliği, <i>özellikle</i> yukarı doğru bant genişliği ne tahsis ederseniz, ağdan o kadar fazla fayda sağlarsınız."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:445
 msgid "Firewalls, Modems &amp; Routers"
-msgstr ""
+msgstr "Firewall'lar, Modemler ve Router'lar"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:447
 msgid "Where possible, please ensure I2P+/Java is allowed bi-directional port access from the internet by configuring your modem/router/pc firewall accordingly. If you're behind a prohibitive firewall but have unrestricted outbound access, I2P+ can still function; you can turn off inbound access and rely on <a href=http://i2p-projekt.i2p/udp.html target=_blank rel=noreferrer class=sitelink>SSU IP Address Detection</a> (<a href=https://wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer class='sitelink external'>firewall hole punching</a>) to connect you to the network, and your network status in the side panel will indicate \"Status: Firewalled\". For optimal performance, please ensure I2P's <a href=/confignet#udpconfig>external port</a> is visible from the internet (see below for more information)."
-msgstr ""
+msgstr "Mümkün olduğunda, lütfen modem/router/pc güvenlik duvarınızı yapılandırarak I2P+/Java'nın internetten çift yönlü port erişimine izin verildiğinden emin olun. Sıkı bir güvenlik duvarının arkasında olabilir, ancak sınırsız dışa doğru erişiminiz varsa, I2P+ hala çalışabilir; girişe giden rotayı kapatabilir ve <a href=http://i2p-projekt.i2p/udp.html target=_blank rel=noreferrer class=sitelink>SSU IP Adresi Algılama</a> (<a href=https://wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer class='sitelink external'>firewall deliği açma</a>) yöntemine güvenerek ağa bağlanabilirsiniz ve yan paneldeki ağ durumu \"Durum: Güvenlik Duvarında\" olarak gösterilecektir. Optimal performans için, lütfen I2P'nin <a href=/confignet#udpconfig>harici portunun</a> internet üzerinden görülebilir olduğundan emin olun (daha fazla bilgi için aşağıya bakın)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:449
 msgid "Check Your Proxy Settings"
-msgstr ""
+msgstr "Proxy Ayarlarınızı Kontrol Edin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:451
 msgid "If you cannot see any websites at all (not even <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>i2p-projekt.i2p</a>), make sure your browser's proxy is set to access http traffic (<i>not</i> https, <i>not</i> socks) via <code>127.0.0.1 port 4444</code>. If you need some help, there's <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>a guide</a> to configuring your browser for I2P use."
-msgstr ""
+msgstr "Hiçbir web sitesini göremiyorsanız (hatta <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>i2p-projekt.i2p</a> bile) tarayıcınızın proxy ayarlarının http trafiğine (<i>https değil, socks değil</i>) <code>127.0.0.1 port 4444</code> üzerinden erişim sağladığından emin olun. Yardıma ihtiyacınız varsa, tarayıcınızı I2P kullanımı için yapılandırmanıza yardımcı olacak <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>bir kılavuz</a> bulunmaktadır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:453
 msgid "Check Your Logs"
-msgstr ""
+msgstr "Logları Kontrol Edin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:455
 msgid "<a href=/logs>Logs</a> may help resolve a problem. You may wish to paste excerpts in a <a href=http://i2pforum.i2p/ target=_blank rel=noreferrer>forum</a> for help, or perhaps <a href=http://cake.i2p/pastebin/ target=_blank rel=noreferrer class='sitelink external'>paste</a> it instead and reference the link on IRC for help."
-msgstr ""
+msgstr "<a href=/logs>Log'lar</a> bir sorunu çözmenize yardımcı olabilir. Yardım için bir <a href=http://i2pforum.i2p/ target=_blank rel=noreferrer>forumda</a> metinleri yapıştırabilir veya belki de <a href=http://cake.i2p/pastebin/ target=_blank rel=noreferrer class='sitelink external'>yapıştırabilir</a> ve IRC üzerinden yardım için bağlantıya atıfta bulunabilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:457
 msgid "Verify Java is Up to Date"
-msgstr ""
+msgstr "Java'nın Güncel Olduğunu Doğrulayın"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:459
 msgid "Ensure your Java is up to date. Version 1.8 or higher is required; version 11 or higher is recommended. Check your Java version at the top of <a href=/info>the router information page</a>."
-msgstr ""
+msgstr "Java'nızın güncel olduğundan emin olun. Sürüm 1.8 veya üstü gerekmektedir; 11 veya üstü sürüm önerilir. Java sürümünüzü <a href=/info>router bilgi sayfasının en üstünde kontrol edin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:461
 msgid "Problems running on Legacy Hardware"
-msgstr ""
+msgstr "Eski donanımda çalışma sorunları"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:463
 msgid "[Linux/Unix/Solaris] If you can't start the router with <code>i2p/i2prouter start</code> try the <code>runplain.sh</code> script in the same directory. Root privileges are never required to run I2P+. If you need to compile the <a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>jBigi library</a> (which is necessary in rare cases), consult the documentation, visit the forums, or visit <a href=irc://127.0.0.1:6668/saltR class=chatlink>the I2P+ channel</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>IRC developer channel</a>."
-msgstr ""
+msgstr "[Linux/Unix/Solaris] Router'ı <code>i2p/i2prouter start</code> ile başlatamıyorsanız, aynı dizindeki <code>runplain.sh</code> betiğini deneyin. I2P+ çalıştırmak için asla kök ayrıcalığı gerekmektedir. Nadir durumlarda gereken <a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>jBigi kütüphanesi</a>'ni derlemeniz gerekiyorsa, belgelere başvurun, forumları ziyaret edin veya <a href=irc://127.0.0.1:6668/saltR class=chatlink>I2P+ kanalına</a> veya <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>IRC geliştirici kanalına</a> gidin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:465
 msgid "Enable Universal Plug and Play (UPnP)"
-msgstr ""
+msgstr "Evrensel Tak-çalıştır (UPnP) özelliğini etkinleştirin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:467
 msgid "Your modem or router may support <a href=https://wikipedia.org/wiki/Universal_Plug_and_Play target=_blank rel=noreferrer>Universal Plug &amp; Play</a> (UPnP), which permits automatic port forwarding. Ensure UPnP support for I2P+ is enabled on the <a href=/confignet>config page</a>, then try to activate UPnP on your modem/router and possibly your computer also. Now try restarting the <a href=/>I2P+ router</a>. If successful, I2P+ should report \"Status: OK\" in the side panel once the I2P+ router completes initial connectivity tests."
-msgstr ""
+msgstr "Modeminiz veya yönlendiriciniz <a href=https://wikipedia.org/wiki/Universal_Plug_and_Play target=_blank rel=noreferrer>Evrensel Tak-çalıştır (UPnP)</a> özelliğini destekleyebilir, bu da otomatik port yönlendirmesine izin verir. I2P+ için UPnP desteğinin <a href=/confignet>yapılandırma sayfasında</a> etkin olduğundan emin olun, ardından modeminiz/routerınızda ve muhtemelen bilgisayarınızda UPnP'yi etkinleştirmeyi deneyin. Şimdi <a href=/>I2P+ yönlendiriciyi</a> yeniden başlatmayı deneyin. Başarılı olduğunda, I2P+ yönlendirici ilk bağlantı testlerini tamamladığında yan panelde \"Durum: TAMAM\" raporlamalıdır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:469
 msgid "Port Forwarding"
-msgstr ""
+msgstr "Port Yönlendirme"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:471
 msgid "Open <a href=/confignet#udpconfig>I2P+'s port</a> on your modem, router and/or firewall(s) for better connectivity (ideally both UDP and TCP). More information on how to go about port forwarding can be found at <a href=http://portforward.com/ target=_blank rel=noreferrer class='sitelink external'>portforward.com</a>, in addition to our forums and IRC channels listed below. Note that I2P does not support connecting to the internet via an http or socks proxy [patches welcome!], though you can connect to proxies via I2P itself once connected to the network."
-msgstr ""
+msgstr "Daha iyi bağlantı için modeminizde, yönlendiricinizde ve/veya güvenlik duvarınızda <a href=/confignet#udpconfig>I2P+'nın portunu</a> açın (ideal olarak hem UDP hem de TCP). Port yönlendirmenin nasıl yapılacağı hakkında daha fazla bilgi <a href=http://portforward.com/ target=_blank rel=noreferrer class='sitelink external'>portforward.com</a>, forumlarımız ve aşağıda listelenen IRC kanallarında bulunabilir. I2P, internete http veya socks proxy üzerinden bağlanmayı desteklemez [yamalar bekliyoruz!], ancak ağa bağlandıktan sonra I2P üzerinden proxy'lere bağlanabilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:473
 msgid "Getting Support Online"
-msgstr ""
+msgstr "Çevrimiçi Destek Almak"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:475
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "Ayrıca <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P web sitesinde</a>ki bilgileri gözden geçirebilir, mesajlarınızı <a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank rel=noreferrer>I2P tartışma forumuna</a> gönderebilir veya I2P'nin dahili IRC ağındaki <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> veya <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> kanallarına uğrayabilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:477
 msgid "Reporting Bugs"
-msgstr ""
+msgstr "Hataları Bildirme"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:479
 msgid "If you'd like to report a bug, please file a ticket on <a href=http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues target=_blank rel=noreferrer class=sitelink>trac.i2p2.i2p</a>. For developer-related discussions, please visit <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>zzz's developer forums</a> or come and visit the <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>developer channel</a> on I2P's IRC network."
-msgstr ""
+msgstr "Bir hata bildirmek isterseniz, lütfen <a href=http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues target=_blank rel=noreferrer class=sitelink>trac.i2p2.i2p</a> üzerinde bir bildirim oluşturun. Geliştirici ile ilgili tartışmalar için lütfen <a href=http://zzz.i2p/ target=_blank rel=noreferrer class=sitelink>zzz'nin geliştirici forumlarına</a> gidin veya I2P'nin IRC ağındaki <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>geliştirici kanalına</a> ziyaret edin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:481
 msgid "Further assistance is available here:"
-msgstr "Şuradan ayrıntılı yardım alabilirsiniz:"
+msgstr "Daha fazla yardım buradan alınabilir:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:483
 msgid "I2P Support Forum"
-msgstr ""
+msgstr "I2P Destek Forumu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:485
 msgid "I2P Developers' Forum"
-msgstr ""
+msgstr "I2P Geliştiriciler Forumu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:487
 msgid "I2P Wiki"
-msgstr ""
+msgstr "I2P Wiki"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:489
 msgid "The FAQ on <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> or <a href=https://geti2p.net/en/faq target=_blank rel=noreferrer>geti2p.net</a>"
-msgstr ""
+msgstr "Soru-Cevap listesine <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> veya <a href=https://geti2p.net/en/faq target=_blank rel=noreferrer>geti2p.net</a> adreslerinden ulaşabilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:491
 msgid "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink> on I2P's IRC network</a>."
-msgstr ""
+msgstr "Ayrıca I2P'nin IRC ağı üzerinde <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> veya <a href=irc://127.0.0.1:6668/i2p class=chatlink> adresine de deneyebilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:433
 msgid "Introduction to Tunnel Filtering"
@@ -10559,7 +10555,7 @@ msgstr "Yönelticiniz tarafından her bir istemcinin kullanımı için oluşturu
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:507
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
-msgstr ""
+msgstr "Başka yönlendiriciler tarafından yönlendiriciniz üzerinden inşa edilen tüneller. Bu, ağ talebi, paylaşılan bant genişliği ve yerel olarak oluşturulan trafiğe göre büyük ölçüde değişebilir. Katılan tünelleri sınırlamanın önerilen yöntemi, <a  href='/config'>Bant Genişliği Yapılandırma sayfasında</a> paylaşım yüzdenizi değiştirmektir. Ayrıca, <a href='/configadvanced'>Gelişmiş yapılandırma sayfasında</a> <code>router.maxParticipatingTunnels=nnn</code> olarak toplam sayıyı sınırlayabilirsiniz. <a href='/configstats#tunnel.participatingTunnels'>[Grafikleri etkinleştir]</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:509
 msgid "Share Ratio"
@@ -10839,23 +10835,23 @@ msgstr "I2P'de Web Sitelerini Barındırmaya Giriş"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:426
 msgid "By default, I2P is supplied with a webserver to host your own anonymized website (traditionally referred to as an <i>eepsite</i>). Both the site and the I2P Router Console are running on a streamlined version of <a href='https://en.wikipedia.org/wiki/Jetty_(web_server)' target=_blank rel=noreferrer class='sitelink external'>Jetty</a>, customized for I2P."
-msgstr ""
+msgstr "Varsayılan olarak, I2P, kendi anonimleştirilmiş web sitenizi (geleneksel olarak <i>eepsite</i> olarak adlandırılır) barındırmak için bir web sunucusu ile birlikte gelir. Hem site hem de I2P Rotalayıcı Konsolu, I2P için özelleştirilmiş bir Jetty'nin sadeleştirilmiş bir sürümünde çalışıyor."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:428
 msgid "To serve your own static content, you only need to edit or replace the files in the webserver's root directory, and the site will be available on the I2P network after you've followed the instructions below. Additionally, cgi and python scripts can be run from the <code>cgi-bin</code> directory immediately above <code>docroot</code> if you have <a href=https://www.perl.org/about.html target=_blank rel=noreferrer class='sitelink external'>perl</a> and <a href=https://www.python.org/ target=_blank rel=noreferrer class='sitelink external'>python</a> installed."
-msgstr ""
+msgstr "Kendi statik içeriğinizi sunmak için, yalnızca web sunucusunun kök dizininde bulunan dosyaları düzenlemeniz veya değiştirmeniz yeterlidir ve aşağıdaki talimatları izledikten sonra site I2P ağı üzerinde kullanılabilir olacaktır. Ayrıca, <code>cgi-bin</code> dizininden cgi ve python betikleri çalıştırabilirsiniz <code>docroot</code>'un hemen üstündeki dizinde  Perl ve Python yüklüyseniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:430
 msgid "Directory listings (sometimes referred to as virtual directories) are enabled by default, so you can host files from a sub-directory of <code>docroot</code> without providing a page with links to the files. You can also serve content that exists outside of <code>docroot</code> by using a <a href=https://en.wikipedia.org/wiki/Symbolic_link target=_blank rel=noreferrer class='sitelink external'>symbolic link</a> to the desired directory."
-msgstr ""
+msgstr "Dizin listelemeleri (bazen sanal dizinler olarak adlandırılır) varsayılan olarak etkinleştirilir, bu nedenle dosyaların bağlantılarını içeren bir sayfa sağlamadan <code>docroot</code>'un alt dizininden dosyaları barındırabilirsiniz. Ayrıca, istenen dizine <a href=https://en.wikipedia.org/wiki/Symbolic_link target=_blank rel=noreferrer class='sitelink external'>sembolik bir bağlantı</a> kullanarak <code>docroot</code> dışında var olan içeriği sunabilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:432
 msgid "You can override the <a href=http://127.0.0.1:7658/help/images/>default appearance</a> of the directory listing by supplying an edited <a href=http://127.0.0.1:7658/.resources/jetty-dir.css>jetty-dir.css</a> file to set a global appearance. Note that this file will not be displayed in the webserver's directory listing. Files and directories prefixed with . and files named favicon.ico or files ending with ~ or .bak or .old will also be hidden from view (though still accessible). Note: To create hidden files with a . prefix on Windows, add a trailing . to the file or directory e.g. <code>.hidden.</code>; Windows explorer will then save the file with the correct name, removing the trailing dot in the process."
-msgstr ""
+msgstr "Dizin listesinin <a href=http://127.0.0.1:7658/help/images/>varsayılan görünümünü</a> değiştirerek düzenlenmiş bir <a href=http://127.0.0.1:7658/.resources/jetty-dir.css>jetty-dir.css</a> dosyası sağlayarak genel bir görünüm belirleyebilirsiniz. Bu dosyanın web sunucusunun dizin listesinde görüntülenmeyeceğini unutmayın. Dosyalar ve . ile başlayan dizinler ve favicon.ico adlı dosyalar veya ~ veya .bak veya .old ile biten dosyalar da görünmez olacaktır (ancak hala erişilebilir olacaktır). Not: Windows üzerinde . ile başlayan gizli dosyalar oluşturmak için, dosyaya veya dizine sonuna bir nokta . ekleyin, örneğin <code>.gizli.</code>; Windows gezgini dosyayı doğru isimle kaydedecek ve son noktayı kaldıracaktır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:434
 msgid "To disable directory listings, find the entry for <code>org.eclipse.jetty.servlet.Default.dirAllowed</code> in the <code>base-context.xml</code> file, located in the <code>eepsite/contexts</code> folder (just above docroot folder), and change 'true' to 'false' immediately underneath. To apply the change immediately, stop and restart the <i>I2P Webserver</i> client on the <a href=/configclients>Client Configuration page</a>. You can also drop an empty <code>index.html</code> file in any exposed directory to suppress directory listings for that location."
-msgstr ""
+msgstr "Dizin listelerini devre dışı bırakmak için, <code>eepsite/contexts</code> klasöründeki (<code>docroot</code> klasöründen hemen önce) <code>base-context.xml</code> dosyasında <code>org.eclipse.jetty.servlet.Default.dirAllowed</code> girişini bulun ve hemen altına 'true' yazan yeri 'false' olarak değiştirin. Değişikliği hemen uygulamak için  <a href=/configclients>Müşteri Yapılandırma sayfasında</a> <i>I2P Web Sunucusu</i> istemcisini durdurup yeniden başlatın. Ayrıca herhangi bir açık dizine boş bir <code>index.html</code> dosyası bırakarak o konumdaki dizin listelemelerini bastırabilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:436
 msgid "Location of the I2P webserver root directory"
@@ -10871,39 +10867,39 @@ msgstr "Paket/depo kurulumu"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:442
 msgid "On the I2P network, remotely hosted services can be accessed using a <a href=https://en.wikipedia.org/wiki/Base32 target=_blank rel=noreferrer class='sitelink external'>Base32</a> address ending in \".b32.i2p\", a <i>destination</i> represented as a long <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external'>Base64</a> string, or more usually by using an .i2p domain. A destination is I2P's equivalent to an IP address, and is shown on the <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>. You can share your b32.i2p address to allow others to access to your website until you've registered your own .i2p domain."
-msgstr ""
+msgstr "I2P ağında, uzaktan barındırılan hizmetlere, \".b32.i2p\" ile biten bir <a href=https://en.wikipedia.org/wiki/Base32 target=_blank rel=noreferrer class='sitelink external'>Base32</a> adresi, uzun bir <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external'>Base64</a> dizesi olarak temsil edilen bir <i>hedef</i>, veya daha yaygın olarak bir .i2p alan adı kullanılarak erişilebilir. Bir hedef, I2P'nin bir IP adresine eşdeğeridir ve <a href='/i2ptunnel/edit?tunnel=3'>Tünel Yöneticisi Yapılandırma sayfasında</a> gösterilir. Kendi .i2p alan adınızı kaydettirmediğiniz sürece, b32.i2p adresinizi başkalarının web sitenize erişmesine izin vermek için paylaşabilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:444
 msgid "Setting up &amp; announcing your website"
-msgstr ""
+msgstr "Web sitenizi kurma ve duyurma"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:446
 msgid "Your webserver is running by default at <a href=http://127.0.0.1:7658/>http://127.0.0.1:7658</a>, but is not accessible by others until you start the <i>I2P Webserver</i> tunnel. After starting the tunnel, your site will be difficult for other people to find. You could just tell people the destination or the Base32 address, but thankfully I2P has an address book to store domain names, and various services where you can <a href=/help/hostnameregistration>register a new .i2p domain</a> for free."
-msgstr ""
+msgstr "Web sunucunuz varsayılan olarak <a href=http://127.0.0.1:7658/>http://127.0.0.1:7658</a> adresinde çalışıyor, ancak <i>I2P Web Sunucusu</i> tünelini başlatana kadar başkaları tarafından erişilemez. Tüneli başlattıktan sonra, siteniz başkaları için zor bulunur hale gelecektir. İnsanlara hedefi veya Base32 adresi söyleyebilirsiniz, ancak neyse ki I2P'nin alan adlarını depolayan bir adres defteri ve ücretsiz bir şekilde yeni bir .i2p alan adı <a href=/help/hostnameregistration>kaydedebileceğiniz</a> çeşitli hizmetler bulunmaktadır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:448
 msgid "Choose a name for your website (<i>hostname</i>.i2p), using lower-case. To verify that the hostname is available, check <a href=http://notbob.i2p/ target=_blank>notbob.i2p</a> or <a href=http://reg.i2p target=_blank>reg.i2p</a> before you decide. Enter the new name for your website on the <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a> where it says <i>Website name</i>, replacing the default <i>mysite.i2p</i> placeholder. If you want your website to be available when I2P starts, enable <i>Auto Start</i> and then click <i>Save</i>."
-msgstr ""
+msgstr "Web siteniz için bir isim seçin (<i>hostname</i>.i2p), küçük harf kullanarak. Ana bilgisayar adının müsait olduğunu doğrulamak için karar vermeden önce <a href=http://notbob.i2p/ target=_blank>notbob.i2p</a> veya <a href=http://reg.i2p target=_blank>reg.i2p</a> adresini kontrol edin. Web sitenizin adını, <a href='/i2ptunnel/edit?tunnel=3'>Tünel Yöneticisi Yapılandırma sayfasında</a> <i>Website adı</i> olarak belirtilen yere, varsayılan <i>mysite.i2p</i> yer tutucusunu değiştirerek girin. Web sitenizin I2P başladığında kullanılabilir olmasını isterseniz, <i>Otomatik Başlat</i> özelliğini etkinleştirin ve ardından <i>Kaydet</i> düğmesine tıklayın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:450
 msgid "Click the <i>Start</i> button for your webserver tunnel on the <a href=/i2ptunnelmgr/>main Tunnel Manager page</a>. You should now see it listed under <i>Service Tunnels</i> on the <a href=/>Router Console</a> sidebar. A green star displayed next to the tunnel name (<i>I2P Webserver</i> by default) indicates that your website is active on the I2P network."
-msgstr ""
+msgstr "Ana <a href=/i2ptunnelmgr/>Tünel Yöneticisi sayfasında</a> web sunucu tünelinizin <i>Başlat</i> düğmesine tıklayın. Şimdi <a href=/>Yönlendirici Konsolu</a> kenar çubuğunda <i>Hizmet Tünelleri</i> altında listelendiğini görmelisiniz. Tünel adının yanındaki yeşil yıldız (<i>I2P Web Sunucusu</i> varsayılan olarak) web sitenizin I2P ağındaki aktif olduğunu gösterir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:452
 msgid "Highlight and copy the entire <i>Local destination</i> on the <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>."
-msgstr ""
+msgstr "<a href='/i2ptunnel/edit?tunnel=3'>Tünel Yöneticisi Yapılandırma sayfasında</a> tamamını seçin ve <i>Yerel hedef</i>'i kopyalayın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:454
 msgid "Enter the name and paste the destination into your <a href='/susidns/addressbook?book=router&amp;filter=none'>address book</a>. Click <i>Add</i> to save the new entry."
-msgstr ""
+msgstr "İsmi girip hedefi <a href='/susidns/addressbook?book=router&amp;filter=none'>adres defterinize</a> yapıştırın. Yeni girişi kaydetmek için <i>Ekle</i> düğmesine tıklayın."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:456
 msgid "In the web browser you have configured for I2P usage, browse to your website name (<i>chosenhostname</i>.i2p) and you should be returned to this page."
-msgstr ""
+msgstr "I2P kullanımı için yapılandırdığınız web tarayıcısında, web sitenizin adına (<i>seçilensiteadı</i>.i2p) gidin ve bu sayfaya geri dönmelisiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:458
 msgid "Before you tell the world about your new website, you should add some content. Go to the server's root directory <a href=#rootdir>listed above</a> and replace the <i>index.html</i> redirect page with your own content. If you need a template for a basic site, feel free to adapt <a href=http://127.0.0.1:7658/help/pagetemplate.html>this page</a>. If you're returned to this page after editing the content, try clearing your browser's web cache."
-msgstr ""
+msgstr "Yeni web sitenizi dünyaya duyurmadan önce, bazı içerikler eklemeniz gerekmektedir. Sunucunun kök dizinine gidin ve <a href=#rootdir>yukarıda listelenen</a> <i>index.html</i> yönlendirme sayfasını kendi içeriğinizle değiştirin. Basit bir site için bir şablon gerekiyorsa, <a href=http://127.0.0.1:7658/help/pagetemplate.html>bu sayfayı</a> uyarlamaktan çekinmeyin. İçeriği düzenledikten sonra bu sayfaya geri dönerseniz, tarayıcınızın web önbelleğini temizlemeyi deneyin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:460
 msgid "Content Optimization"
@@ -10919,7 +10915,7 @@ msgstr "Görsellerinizi optimize edin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:466
 msgid "If you want your site to feel responsive, image compression is essential when hosting large images. Using a service like <a href=https://tinypng.com/ target=_blank class='sitelink external'>tinypng.com</a> to compress your png and jpeg images will often result in much smaller files with minimal loss of quality. In some situations the webp format can best jpegs, generating smaller files with approximately the same or better visual fidelity, and has wide browser support. Also consider using svgs instead of bitmaps for icons and illustrations - they're often smaller than the equivalent bitmap file (run them through a service like <a href=https://vecta.io/nano target=_blank class='sitelink external'>Nano SVG Optimizer</a> to remove unneeded cruft), scale without loss of quality, and can be gzipped by your webserver."
-msgstr ""
+msgstr "Eğer sitenizin hızlı tepki vermesini istiyorsanız, büyük resimleri barındırırken görüntü sıkıştırması önemlidir. Png ve jpeg resimlerinizi sıkıştırmak için <a href=https://tinypng.com/ target=_blank class='sitelink external'>tinypng.com</a> gibi bir hizmet kullanmak genellikle daha küçük dosyaları minimal kalite kaybıyla elde etmenizi sağlar. Bazı durumlarda jepgresin yerine webp formatı daha iyi sonuç verebilir, yaklaşık olarak aynı veya daha iyi görsel kaliteye sahip daha küçük dosyalar üretebilir ve geniş tarayıcı desteği bulunmaktadır. Ayrıca simgeler ve illüstrasyonlar için bitmap yerine svg kullanmayı düşünün - genellikle eşdeğer bitmap dosyasından daha küçüktürler (gereksiz artıkları kaldıran <a href=https://vecta.io/nano target=_blank class='sitelink external'>Nano SVG Optimizer</a> gibi bir hizmetten geçirin), kalite kaybı olmadan ölçeklendirilebilirler ve web sunucusunuz tarafından sıkıştırılabilirler"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:468
 msgid "Use separate files for multi-use assets"
@@ -10927,7 +10923,7 @@ msgstr "Çok kullanımlı varlıklar için ayrı dosyalar kullanın"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:470
 msgid "Wherever possible, assets that are used repeatedly on your site should be loaded from an external file and not inlined. If you're using the same CSS on several pages, create a separate css file and load that in the <code>&lt;head&gt;</code> section of your pages. This will make styling updates to your site easier to manage, and will also allow the file to be cached in the visitor's browser, resulting in less bandwidth demands on your webserver and faster page loads for your visitors."
-msgstr ""
+msgstr "Mümkün olduğunca, sitenizde tekrar tekrar kullanılan varlıklar harici bir dosyadan yüklenmeli ve iç içe yerleştirilmemelidir. Aynı CSS'i birkaç sayfada kullanıyorsanız, ayrı bir CSS dosyası oluşturun ve bunu sayfalarınızın <code>&lt;head&gt;</code> bölümünde yükleyin. Bu, sitenizin stil güncellemelerini yönetmeyi kolaylaştıracak ve ayrıca dosyanın ziyaretçinin tarayıcısında önbelleğe alınmasına izin verecektir, bu da web sunucusundan daha az bant genişliği talebi ve ziyaretçileriniz için daha hızlı sayfa yükleme sonuçları doğuracaktır."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:472
 msgid "Consider using a backend cache"
@@ -10935,7 +10931,7 @@ msgstr "Arka uç önbellek kullanmayı düşünün"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:474
 msgid "If you're running a dynamic site handling a large number of concurrent users, content caching can often improve the time taken to deliver pages. For content that rapidly changes, a <a href=https://blog.stackpath.com/glossary-micro-caching/ target=_blank class='sitelink external'>micro-caching strategy</a> may still yield some benefits. The <a href=https://www.nginx.com/ target=_blank class='sitelink external'>Nginx webserver</a> provides a competent caching sub-system, or for a more heavy-weight solution, have a look at <a href=https://varnish-cache.org/ target=_blank class='sitelink external'>Varnish</a>."
-msgstr ""
+msgstr "Eş zamanlı kullanıcı sayısını yöneten bir dinamik bir site çalıştırıyorsanız, içerik önbelleklendirme genellikle sayfaların teslim süresini iyileştirebilir. Hızla değişen içerikler için, <a href=https://blog.stackpath.com/glossary-micro-caching/ target=_blank class='sitelink external'>mikro-önbellekleme stratejisi</a> hala bazı avantajlar sağlayabilir. <a href=https://www.nginx.com/ target=_blank class='sitelink external'>Nginx web sunucusu</a> yetenekli bir önbellek alt sistemi sağlar veya daha ağır bir çözüm için <a href=https://varnish-cache.org/ target=_blank class='sitelink external'>Varnish</a>'a göz atabilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:476
 msgid "Using an alternative webserver"
@@ -10943,7 +10939,7 @@ msgstr "Alternatif bir web sunucusu kullanma"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:478
 msgid "To configure an alternative webserver for use on I2P, you can either use the existing webserver tunnel and <a href=/configclients>disable the default webserver</a> from running, or create a new HTTP Server tunnel in the <a href=/i2ptunnelmgr>Tunnel Manager</a>. Ensure that the webserver's <i>listening port</i> is also configured in the Tunnel Manager settings. For example, if your webserver is listening by default on address 127.0.0.1 port 80, you'd also need to ensure that the <i>Target port</i> in the Tunnel Manager settings page for the service is also configured to port 80."
-msgstr ""
+msgstr "I2P için alternatif bir web sunucusunu yapılandırmak için, mevcut web sunucusu tünelini kullanabilir ve varsayılan web sunucusunu devre dışı bırakmak için <a href=/configclients>ağırlıklı olarak</a> kullanabilirsiniz, veya <a href=/i2ptunnelmgr>Tünel Yöneticisi</a>'nde yeni bir HTTP Sunucusu tüneli oluşturun. Web sunucusunun <i>alış portunun</i> de Tünel Yöneticisi ayarlarında yapılandırıldığından emin olun. Örneğin, web sunucusunun varsayılan olarak 127.0.0.1 adresinde 80 numaralı portta dinleme yapması durumunda, hizmet için Tünel Yöneticisi ayarları sayfasında da <i>Hedef portun</i> 80'e yapılandırıldığından emin olmanız gerekecektir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:480
 msgid "To preserve anonymity, make sure that the webserver is not publicly available outside of the I2P network, which is normally achieved by configuring the webserver to listen on localhost (127.0.0.1) rather than all interfaces (0.0.0.0)."
