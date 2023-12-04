@@ -9267,7 +9267,7 @@ msgid "Note: To enhance your security when browsing .i2p sites, you may wish to 
 msgstr "Note: Pour renforcer votre sécurité lors de la navigation sur des sites .i2p, vous pouvez envisager d'installer un addon pour empêcher l'exécution de Javascript dans le navigateur, comme <a href=https://addons.mozilla.org/fr/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>, bien qu'il soit recommandé d'autoriser l'adresse sur laquelle I2P+ est en cours d'exécution pour activer diverses améliorations de la console du routeur. De plus, un addon empêchant les requêtes vers des ressources externes est également recommandé, par exemple <a href=https://addons.mozilla.org/fr/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:495
-msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>.."
+msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>."
 msgstr "Pour un guide plus complet sur la configuration pour différents navigateurs, voir le <a href=https://geti2p.net/fr/about/browser-config target=_blank rel=noreferrer class='sitelink external'>guide de configuration de navigateur</a>.."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497

@@ -9268,7 +9268,7 @@ msgid "Note: To enhance your security when browsing .i2p sites, you may wish to 
 msgstr "Not: .i2p sitelerini gezinirken güvenliği artırmak için, <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a> gibi tarayıcıda JavaScript'in çalışmasını engelleyen bir eklenti yüklemeyi düşünebilirsiniz, ancak I2P+ 'ın çalıştığı adresi beyaz listeye alarak çeşitli yönlendirici konsolu iyileştirmelerini etkinleştirmek önerilir. Ayrıca, dış kaynaklara istek göndermeyi engelleyen bir eklenti de önerilir, örneğin <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:495
-msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>.."
+msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>."
 msgstr "Çeşitli tarayıcılar için daha kapsamlı bir yapılandırma kılavuzu için <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>tarayıcı yapılandırma kılavuzunu</a> inceleyin."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497

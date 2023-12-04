@@ -9352,7 +9352,7 @@ msgid "Note: To enhance your security when browsing .i2p sites, you may wish to 
 msgstr "ملاحظة: لتعزيز أمنك أثناء التجول في المواقع .i2p، قد ترغب بتثبيت إضافة تمنع تشغيل لغة الجافاسكريبت في المتصفح مثل <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>، على الرغم من أنه من المستحسن قائمة بيضاء العنوان الذي يعمل عليه I2P+ لتمكين تحسينات مختلفة لمحطة التوجيه. بالإضافة إلى ذلك، يوصى أيضاً بإضافة تمنع الطلبات من المصادر خارجية، على سبيل المثال <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:495
-msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>.."
+msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>."
 msgstr "لدليل أكثر شمولاً حول التكويف لمتصفحات مختلفة، شاهد <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>دليل تكويف المتصفح</a>.."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497

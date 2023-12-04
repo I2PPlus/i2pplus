@@ -9262,7 +9262,7 @@ msgid "Note: To enhance your security when browsing .i2p sites, you may wish to 
 msgstr "Lưu ý: Để tăng cường bảo mật khi duyệt các trang .i2p, bạn có thể cân nhắc cài đặt thêm tiện ích ngăn chặn Javascript chạy trong trình duyệt như <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>, mặc dù được khuyến cáo là cho phép danh sách trắng địa chỉ I2P+ đang chạy để bật tính năng cải tiến bảng điều khiển bộ định tuyến. Ngoài ra, cũng được khuyến cáo cài thêm tiện ích ngăn các yêu cầu tới tài nguyên ngoài trang, ví dụ như <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:495
-msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>.."
+msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>."
 msgstr "Để tham khảo hướng dẫn cấu hình chi tiết hơn cho các trình duyệt khác nhau, xem <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>hướng dẫn cấu hình trình duyệt</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497

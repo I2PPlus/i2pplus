@@ -9279,7 +9279,7 @@ msgid "Note: To enhance your security when browsing .i2p sites, you may wish to 
 msgstr "توجه: برای افزایش امنیت خود هنگام مرور سایت‌های i2p، ممکن است بخواهید افزونه‌ای را نصب کنید تا از اجرای جاوا اسکریپت در مرورگر مانند <a href=https://addons.mozilla.org/en-US/ جلوگیری کنید. "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:495
-msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>.."
+msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>."
 msgstr "برای راهنمایی گسترده تر برای پیکربندی برای مرورگرهای مختلف، به <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>راهنمای پیکربندی مرورگر مراجعه کنید. "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497

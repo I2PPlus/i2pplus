@@ -9298,7 +9298,7 @@ msgid "Note: To enhance your security when browsing .i2p sites, you may wish to 
 msgstr "Зауваження: для посилення безпеки при перегляді сайтів .i2p варто розглянути встановлення додатку, що блокує JavaScript у браузері, як, наприклад, <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>, хоча рекомендується дозволити адресі на якій працює I2P+ для увімкнення різних можливостей консолі роутера. Крім того, рекомендується додаток, що блокує запити до зовнішніх ресурсів, наприклад <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
 
 #: ../jsp/WEB-INF-classes/net/i2p/router/web/jsp/help/configuration_jsp.java:495
-msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>.."
+msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>."
 msgstr "Для більш детального посібника з налаштування для різних браузерів перегляньте <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>інструкцію з налаштування браузера</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497

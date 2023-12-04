@@ -9280,7 +9280,7 @@ msgid "Note: To enhance your security when browsing .i2p sites, you may wish to 
 msgstr "Nota: Para mejorar su seguridad al navegar sitios .i2p, puede considerar instalar un addon para evitar que Javascript se ejecute en el navegador, como <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>, aunque se recomienda permitir la dirección en la que se ejecuta I2P+ para habilitar diversas mejoras de la consola del enrutador. Además, se recomienda un addon que impida las solicitudes a recursos externos, como <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:495
-msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>.."
+msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>."
 msgstr "Para una guía más extensa sobre la configuración de varios navegadores, consulte la <a href=https://geti2p.net/es/about/browser-config target=_blank rel=noreferrer class='sitelink external'>guía de configuración de navegadores</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497

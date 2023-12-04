@@ -9262,7 +9262,7 @@ msgid "Note: To enhance your security when browsing .i2p sites, you may wish to 
 msgstr "注意：为了提高浏览.i2p站点时的安全性，您需要考虑安装JS拦截插件（如<a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a> ），尽管如此，还是建议将I2P +的本地地址列入白名单，以启用各种路由器控制台增强功能。 此外，还建议使用防止对异地资源的请求的扩展，例如<a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:495
-msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>.."
+msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>."
 msgstr "关于更广泛的各种浏览器配置指南南，见<a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>浏览器配置指南</a>。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497

@@ -9261,7 +9261,7 @@ msgid "Note: To enhance your security when browsing .i2p sites, you may wish to 
 msgstr "Catatan: Untuk meningkatkan keamanan saat menjelajahi situs .i2p, Anda dapat mempertimbangkan menginstal plugin untuk mencegah JavaScrip dijalankan di browser seperti <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>, meskipun disarankan untuk memasukkan alamat I2P+ ke daftar putih agar berbagai peningkatan konsol router dapat diaktifkan. Disarankan juga menggunakan plugin yang mencegah permintaan ke sumber daya luar, seperti <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:495
-msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>.."
+msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>."
 msgstr "Untuk panduan lebih lengkap tentang konfigurasi berbagai browser, lihat <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>panduan konfigurasi browser</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497
