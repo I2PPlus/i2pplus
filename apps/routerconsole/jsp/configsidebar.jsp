@@ -70,6 +70,12 @@
 </div>
 </form>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+<script nonce=<%=cspNonce%>>
+  const sidebarForm = document.getElementById("form_sidebar");
+  const processForm = document.getElementById("processForm");
+  window.addEventListener("DOMContentLoaded", progressx.hide);
+  sidebarForm.addEventListener("submit", progressx.show);
+  processForm.addEventListener("load", progressx.hide);
+</script>
 </body>
 </html>

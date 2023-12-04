@@ -201,11 +201,38 @@
 </form>
 </div>
 <script nonce=<%=cspNonce%>>
+  function refresh() {
+    const main = document.getElementById("config_update");
+    const xhrRefresh = new XMLHttpRequest();
+    xhrRefresh.open("GET", "/configupdate", true);
+    xhrRefresh.responseType = "document";
+    xhrRefresh.onreadystatechange = function() {
+      if (xhrRefresh.readyState === XMLHttpRequest.DONE) {
+        if (xhrRefresh.status === 200) {
+          progressx.show();
+          const mainResponse = xhrRefresh.responseXML.getElementById("config_update");
+          main.innerHTML = mainResponse.innerHTML;
+        }
+      }
+    };
+    xhrRefresh.send();
+    progressx.hide();
+  }
   const updatesForm = document.getElementById("form_updates");
   const processForm = document.getElementById("processForm");
+  let formSubmit = false;
   window.addEventListener("DOMContentLoaded", progressx.hide);
-  updatesForm.addEventListener("submit", progressx.show);
-  processForm.addEventListener("load", progressx.hide);
+  updatesForm.addEventListener("submit", function() {
+    progressx.show();
+    formSubmit = true;
+  });
+  processForm.addEventListener("load", function() {
+    if (formSubmit) {
+      refresh();
+      progressx.hide();
+      formSubmit = false;
+    }
+  });
 </script>
 </body>
 </html>

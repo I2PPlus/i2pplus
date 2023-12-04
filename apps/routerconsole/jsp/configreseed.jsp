@@ -124,29 +124,6 @@
 </div>
 </td>
 </tr>
-<!-- SSL auth not fully implemented, not necessary?
-<tr>
-<td colspan=2>
-<b class=suboption>
-<!-- SSL auth not implemented
-<label for ="useproxyauthssl">
-<input type=checkbox class=optbox name="sauth" id=useproxyauthssl value=true <jsp:getProperty name="reseedHelper" property="sauth" /> >
-<%=intl._t("Proxy requires authorization")%>
-</label>
-</b><br>
-<div class=optionlist>
-<span class=nowrap>
-<b><%=intl._t("Username")%>:</b>
-<input name="susername" type=text value="<jsp:getProperty name="reseedHelper" property="susername" />" >
-</span><br>
-<span class=nowrap>
-<b><%=intl._t("Password")%>:</b>
-<input name="nofilter_spassword" type=password value="<jsp:getProperty name="reseedHelper" property="nofilter_spassword" />" >
-</span>
-</div>
-</td>
-</tr>
--->
 <% } // shouldShowHTTPSProxy %>
 <% if (reseedHelper.shouldShowHTTPProxy()) { %>
 <tr>
@@ -275,6 +252,38 @@
 </tr>
 </table>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+<script nonce=<%=cspNonce%>>
+  function refresh() {
+    const main = document.getElementById("config_reseed");
+    const xhrRefresh = new XMLHttpRequest();
+    xhrRefresh.open("GET", "/configreseed", true);
+    xhrRefresh.responseType = "document";
+    xhrRefresh.onreadystatechange = function() {
+      if (xhrRefresh.readyState === XMLHttpRequest.DONE) {
+        if (xhrRefresh.status === 200) {
+          const mainResponse = xhrRefresh.responseXML.getElementById("config_reseed");
+          progressx.show();
+          main.innerHTML = mainResponse.innerHTML;
+        }
+      }
+    };
+    xhrRefresh.send();
+    progressx.hide();
+  }
+  const reseedForm = document.getElementById("form_reseed");
+  const processForm = document.getElementById("processForm");
+  window.addEventListener("DOMContentLoaded", progressx.hide);
+  reseedForm.addEventListener("submit", function() {
+    progressx.show();
+    formSubmit = true;
+  });
+  processForm.addEventListener("load", function() {
+    if (formSubmit) {
+      refresh();
+      progressx.hide();
+      formSubmit = false;
+    }
+  });
+</script>
 </body>
 </html>
