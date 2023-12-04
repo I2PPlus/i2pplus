@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-31 12:17+0000\n"
-"PO-Revision-Date: 2023-10-31 20:53+0000\n"
+"PO-Revision-Date: 2023-12-04 07:28+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ko\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: ../../../router/java/src/net/i2p/router/Blocklist.java:387
 msgid "Hash"
@@ -78,7 +78,7 @@ msgstr[0] "Reseed 호스트에서 획득 한 {0} 라우터 정보"
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] "Reseed 호스트에서 {0} Router Infos 만 취득했습니다."
+msgstr[0] "Reseed 호스트에서 {0} Router Infos 만 취득했습니다"
 
 #. remove dupe error msgs
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:407
@@ -108,7 +108,7 @@ msgstr "재배포: 시드 URL에서 라우터 정보 불러오는중 ({0} succes
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:848
 #, java-format
 msgid "Acquired {0} router infos from reseed hosts"
-msgstr "리시드 호스트로부터 {0} 라우터 정보를 획득했습니다."
+msgstr "리시드 호스트로부터 {0} 라우터 정보를 획득했습니다"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:852
 #, java-format
@@ -157,7 +157,7 @@ msgstr "알려진 빠른 피어들"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:47
 msgid "Known integrated (floodfill) peers"
-msgstr ""
+msgstr "알려진 통합 (플러드필) 피어"
 
 #: ../../../router/java/src/net/i2p/router/tasks/CoalesceStatsEvent.java:48
 msgid "Total peers in our banlist"
@@ -430,7 +430,7 @@ msgstr "{0}에서 이동하는것을 실패했습니다"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1115
 msgid "Error"
-msgstr ""
+msgstr "오류"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1368
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1453
@@ -515,7 +515,7 @@ msgstr "{0} 플러그인 업데이트를 확인하세요"
 #. set status before thread to ensure UI feedback
 #: ../java/src/net/i2p/router/update/PluginUpdateHandler.java:90
 msgid "Contacting plugin update server"
-msgstr ""
+msgstr "플러그인 업데이트 서버에 연락 중"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:113
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHandler.java:561
@@ -654,7 +654,7 @@ msgstr "플러그인이 Jetty 버전 {0} 또는 더 낮은 버전을 요구합�
 #: ../java/src/net/i2p/router/web/PluginStarter.java:401
 #, java-format
 msgid "Plugin requires Java version {0} or lower"
-msgstr ""
+msgstr "플러그인은 Java 버전 {0} 이하를 요구합니다"
 
 #: ../java/src/net/i2p/router/update/PluginUpdateRunner.java:530
 #, java-format
@@ -754,7 +754,7 @@ msgstr "구성"
 
 #: ../java/src/net/i2p/router/web/CSSHelper.java:191
 msgid "config"
-msgstr ""
+msgstr "구성"
 
 #: ../java/src/net/i2p/router/web/ConfigServiceHandler.java:235
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configservice_jsp.java:533
@@ -1218,7 +1218,7 @@ msgstr "일시적으로 차단됨: {0} 남음"
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:74
 #, java-format
 msgid "Banned for {0} / until restart"
-msgstr ""
+msgstr "재시작까지 {0} 동안 차단됨"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:90
 msgid "unban now"
@@ -1226,7 +1226,7 @@ msgstr "지금 차단 해제"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:106
 msgid "No bans currently active"
-msgstr ""
+msgstr "현재 활성화된 차단 없음"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:113
 msgid "Reason"
@@ -1241,7 +1241,7 @@ msgstr "라우터 해시"
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:171
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:770
 msgid "Expiry"
-msgstr ""
+msgstr "만기"
 
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:145
 msgid "Total session-only bans"
@@ -1249,7 +1249,7 @@ msgstr "총 세션 전용 금지"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:33
 msgid "Certificates are used to authenticate encrypted services running on the network, provision optional SSL for hosted services and the router console, or provide proof of ownership of a router family."
-msgstr ""
+msgstr "인증서는 네트워크에서 실행되는 암호화된 서비스의 인증에 사용되며, 호스팅된 서비스 및 라우터 콘솔에 대한 선택적 SSL을 제공하거나 라우터 패밀리의 소유권을 증명합니다."
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:36
 msgid "Local SSL Certificates"
@@ -1287,7 +1287,7 @@ msgstr "I2P터널"
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:68
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:571
 msgid "SAM"
-msgstr ""
+msgstr "SAM"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:84
 #: ../java/src/net/i2p/router/web/helpers/ConfigClientsHelper.java:348
@@ -1320,7 +1320,7 @@ msgstr "콘솔"
 
 #: ../java/src/net/i2p/router/web/helpers/CertHelper.java:144
 msgid "To enable SSL access for the Router Console, see the commented <code>clients.config</code> file located in your I2P application directory for more information. You will need to edit the RouterConsoleRunner config file located in the directory: "
-msgstr ""
+msgstr "SSL 액세스를 사용하려면 I2P 응용 프로그램 디렉토리에 위치한 주석 처리된 <code>clients.config</code> 파일을 참조하십시오. 자세한 내용은 <code>RouterConsoleRunner</code> 구성 파일이 있는 디렉토리에서 편집해야합니다. "
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigAdvancedHandler.java:73
 msgid "Error updating the configuration - please see the error logs"
@@ -2428,7 +2428,7 @@ msgstr "비활성화하려면이 값을 삭제하십시오"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:307
 msgid "bps"
-msgstr ""
+msgstr "b/s"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigNetHelper.java:309
 #, java-format
@@ -2566,7 +2566,7 @@ msgstr "파일 재시드"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:83
 msgid "No file specified. Please select a valid .zip or .su3 file to reseed from."
-msgstr ""
+msgstr "파일이 지정되지 않았습니다. 재활용할 .zip 또는 .su3 파일을 선택하십시오. 유효한 파일을 선택하십시오."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:88
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:96
@@ -2678,22 +2678,22 @@ msgstr "완전판 기본값으로 복구"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:61
 msgid "Full summary bar default restored."
-msgstr ""
+msgstr "전체 요약 막대 기본값이 복원되었습니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:62
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:66
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:159
 msgid "Summary bar will refresh shortly."
-msgstr ""
+msgstr "요약 막대가 곧 새로 고침됩니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:63
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configsidebar_jsp.java:568
 msgid "Restore minimal default"
-msgstr "최소판 기본값으로 복구"
+msgstr "최소 기본값 복원"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:65
 msgid "Minimal summary bar default restored."
-msgstr ""
+msgstr "최소 요약 막대 기본값이 복원되었습니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:82
 #: ../java/src/net/i2p/router/web/helpers/ConfigSummaryHandler.java:104
@@ -2758,7 +2758,7 @@ msgstr "{0} 클라이언트 터널"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:126
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
-msgstr "익명 경고 - 설정이 0단계 터널을 포함합니다"
+msgstr "익명 경고 - 설정이 0단계 터널을 포함합니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:131
 msgid "WARNING - 0-hop tunnels not recommended for IPv6-only routers."
@@ -2770,7 +2770,7 @@ msgstr "경고 - 숨겨진 라우터에는 인바운드 0-홉 터널이 권장�
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:145
 msgid "ANONYMITY WARNING - Settings include 1-hop tunnels."
-msgstr "익명 경고 - 설정이 1단계 터널을 포함합니다"
+msgstr "익명 경고 - 설정이 1단계 터널을 포함합니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:151
 msgid "PERFORMANCE WARNING - Settings include very long tunnels."
@@ -2887,7 +2887,7 @@ msgstr "콘솔에 i2psnark 및 i2pmail을 포함시킵니다"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:231
 msgid "Add a user and password to enable."
-msgstr "활성화하려면 유저와 패스워드를 추가하세요"
+msgstr "활성화하려면 유저와 패스워드를 추가하세요."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:232
 msgid "Note: If you forget your password, removing the configuration entry in your router.config file will clear it (restart required)."
@@ -2895,7 +2895,7 @@ msgstr "참고 : 비밀번호를 잊어 버린 경우 router.config 파일에서
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:236
 msgid "Router console password is enabled."
-msgstr ""
+msgstr "라우터 콘솔 비밀번호가 활성화되었습니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigUIHelper.java:238
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:488
@@ -3212,12 +3212,12 @@ msgstr "그래프 설정 저장됨"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:562
 msgid "Graph settings unchanged"
-msgstr ""
+msgstr "그래프 설정 변경되지 않음"
 
 #: ../java/src/net/i2p/router/web/helpers/HelpSectionHelper.java:28
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:439
 msgid "Overview"
-msgstr ""
+msgstr "개요"
 
 #: ../java/src/net/i2p/router/web/helpers/HelpSectionHelper.java:29
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:189
@@ -3271,7 +3271,7 @@ msgstr "I2P 호스트 파일을 여기서 관리합니다 (I2P 도메인 이름 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:67
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:87
 msgid "Graph Router Performance"
-msgstr ""
+msgstr "라우터 성능 그래프"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:46
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:67
@@ -3294,7 +3294,7 @@ msgstr "익명 웹메일 클라이언트"
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:279
 #: ../java/strings/Strings.java:16
 msgid "I2PMail"
-msgstr ""
+msgstr "I2PMail"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:48
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:69
@@ -3519,11 +3519,11 @@ msgstr "자주 묻는 질문들"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:106
 msgid "I2P FAQ"
-msgstr ""
+msgstr "I2P FAQ"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:107
 msgid "Historical infrastructure data from the I2P network"
-msgstr "I2P 네트워크의 역사적 인프라 데이터"
+msgstr "I2P 네트워크에서의 역사적 인프라 데이터"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:108
 msgid "I2P home page"
@@ -3535,11 +3535,11 @@ msgstr "프로젝트 웹사이트"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:109
 msgid "I2P+ API documentation"
-msgstr ""
+msgstr "I2P+ API 문서"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:109
 msgid "Javadocs"
-msgstr ""
+msgstr "Javadocs"
 
 #. _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "plugin.svg" + S +
 #. "stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "stats.svg" + S +
@@ -3630,7 +3630,7 @@ msgstr "Base64 이미지 인코더"
 #. hosting + other services
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:148
 msgid "base64-image.i2p"
-msgstr ""
+msgstr "base64-image.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "An image cache and resize service"
@@ -3638,7 +3638,7 @@ msgstr "이미지 캐시 및 서비스 크기 조정"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:149
 msgid "imageproxy.i2p"
-msgstr ""
+msgstr "imageproxy.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:150
 msgid "IRC Logs for multiple networks"
@@ -3658,7 +3658,7 @@ msgstr "스트리밍 라디오 서비스"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:152
 msgid "radio.r4sas.i2p"
-msgstr ""
+msgstr "radio.r4sas.i2p"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:153
 msgid "Privacy-focused not-for-profit organization"
@@ -3882,7 +3882,7 @@ msgstr "전 세계적으로 인권을 방어합니다"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:212
 msgid "HumanRightsWatch"
-msgstr ""
+msgstr "인권위원회"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:213
 msgid "Fresh hacks every day"
@@ -3930,7 +3930,7 @@ msgstr "오늘 일본"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "JStorDaily"
-msgstr ""
+msgstr "JStorDaily"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:221
 msgid "Where news meets its scholarly match"
@@ -3938,7 +3938,7 @@ msgstr "뉴스가 학술적 일치를 만나는 곳"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Jurist"
-msgstr ""
+msgstr "Jurist"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:222
 msgid "Legal News &amp; Commentary"
@@ -3950,7 +3950,7 @@ msgstr "심층 보안 뉴스 및 조사"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:223
 msgid "KrebsOnSecurity"
-msgstr ""
+msgstr "KrebsOnSecurity"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:224
 msgid "Linux Kernel Mailing List"
@@ -3958,11 +3958,11 @@ msgstr "Linux 커널 메일 링리스트"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "MetaCritic"
-msgstr ""
+msgstr "MetaCritic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:225
 msgid "Movie + TV + Music + Game reviews"
-msgstr ""
+msgstr "영화 + TV + 음악 + 게임 리뷰"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:226
 msgid "NakedSecurity"
@@ -4079,7 +4079,7 @@ msgstr "뉴스 및 리뷰"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:243
 msgid "TheAtlantic"
-msgstr ""
+msgstr "TheAtlantic"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:244
 msgid "Academic commentary and essays"
@@ -4107,7 +4107,7 @@ msgstr "미국 정치 뉴스"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "TheMarkup"
-msgstr ""
+msgstr "TheMarkup"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:247
 msgid "Watching Big Tech..."
@@ -4159,7 +4159,7 @@ msgstr "중동에 대한 미국의 이해관계에 대한 균형있고 현실적
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:254
 msgid "WashingtonInstitute"
-msgstr ""
+msgstr "WashingtonInstitute"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:351
 msgid "The HTTP proxy is not up"
@@ -4503,7 +4503,7 @@ msgstr "포트"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:536
 msgid "MTU"
-msgstr ""
+msgstr "MTU"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:563
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1026
@@ -4513,23 +4513,23 @@ msgstr "다음 페이지"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:693
 msgid "No Leasesets currently active."
-msgstr ""
+msgstr "현재 활성화된 리즈셋이 없습니다."
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:719
 msgid "Network data"
-msgstr ""
+msgstr "네트워크 데이터"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:724
 msgid "Median distance (bits)"
-msgstr ""
+msgstr "중심 거리 (비트)"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:728
 msgid "Estimated total floodfills"
-msgstr ""
+msgstr "전체 플러드필 예상값"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:729
 msgid "Estimated total leasesets"
-msgstr ""
+msgstr "전체 리즈셋 예상값"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:775
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:795
@@ -4539,15 +4539,15 @@ msgstr "리즈셋"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:796
 msgid "LeaseSet Key"
-msgstr ""
+msgstr "리즈셋 키"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:809
 msgid "View local tunnels for destination"
-msgstr ""
+msgstr "목적지에 대한 로컬 터널 보기"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:811
 msgid "published"
-msgstr ""
+msgstr "게시됨"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:836
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:859
@@ -4673,7 +4673,7 @@ msgstr "전송"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1224
 msgid "Initializing"
-msgstr ""
+msgstr "초기화 중"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1325
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:965
@@ -5011,7 +5011,7 @@ msgstr "마지막 순간에 활성"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:196
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:197
 msgid "IPv4"
-msgstr ""
+msgstr "IPv4"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:200
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:201
@@ -5100,7 +5100,7 @@ msgstr "업"
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:354
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:597
 msgid "Peer's clockskew relative to our clock"
-msgstr ""
+msgstr "우리의 시계에 상대적인 피어의 시계 편차"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:354
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:598
@@ -5297,11 +5297,11 @@ msgstr "정의"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:895
 msgid "Remote peer, identified by truncated router hash"
-msgstr ""
+msgstr "트렁크 확장으로 식별된 원격 피어"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:897
 msgid "Direction"
-msgstr ""
+msgstr "방향"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:899
 msgid "Outbound connection"
@@ -5309,7 +5309,7 @@ msgstr "송신 연결"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:901
 msgid "They offered to introduce us (help peers traverse our firewall)"
-msgstr ""
+msgstr "그들은 우리를 소개하기를 제의했습니다 (피어들이 우리의 방화벽을 통과하는 데 도움)"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:903
 msgid "Inbound connection"
@@ -5317,7 +5317,7 @@ msgstr "수신 연결"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:905
 msgid "We offered to introduce them (help peers traverse their firewall)"
-msgstr ""
+msgstr "우리는 그들을 소개하기를 제의했습니다 (피어들이 그들의 방화벽을 통과하는 데 도움)"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:907
 msgid "How long since a packet has been received / sent"
@@ -5859,7 +5859,7 @@ msgstr "메모리 사용 막대"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:59
 msgid "Network Reachability"
-msgstr ""
+msgstr "네트워크 접속성"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:60
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:868
@@ -6105,7 +6105,7 @@ msgstr "고급 설정"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:589
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:591
 msgid "Documentation for the I2P API"
@@ -6447,7 +6447,7 @@ msgstr "라우터가 참여 터널을 구축할 준비가 되었습니다."
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1296
 #, java-format
 msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "참여 터널 요청을 수락하고 {0} 터널에 참여 중입니다."
+msgstr "참여 터널 요청을 수락하고 {0} 터널에 참여 중입니다"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1298
 msgid "No transit tunnels are built when Hidden mode is active"
@@ -6563,7 +6563,7 @@ msgstr "터널 구축중"
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:866
 #: ../java/strings/Strings.java:39
 msgid "Shared Clients"
-msgstr ""
+msgstr "공유된 클라이언트"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:1167
 msgid "Click Restart to install"
@@ -6721,7 +6721,7 @@ msgstr "목적지와 가까움"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:258
 msgid "This is an experimental network database tool for debugging and analysis. Do not panic even if you see warnings indicated. Possible \"threats\" are summarized, however these are unlikely to be real threats. If you see anything you would like to discuss with the devs, contact us on IRC #i2p-dev."
-msgstr ""
+msgstr "이것은 디버깅 및 분석을 위한 실험용 네트워크 데이터베이스 도구입니다. 경고가 표시되더라도 긴장하지 마십시오. 가능한 \"위험\"은 요약되지만, 이러한 위협은 실제 위협이 아닐 것입니다. 개발자와 논의하고 싶은 사항이 있다면 IRC # i2p-dev에서 저희에게 연락하세요."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:266
 msgid "No stored analysis"
@@ -6741,7 +6741,7 @@ msgstr "NetDb의 모든 라우터에 대한 분석 실행"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:324
 msgid "The sybil detection routine can be configured to scan the Network Database on a regular interval, with the option to block peers meeting the configured threshold. Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."
-msgstr ""
+msgstr "이 실비 검출 루틴은 일정한 간격으로 네트워크 데이터베이스를 스캔하도록 구성할 수 있으며, 구성된 임계값을 충족하는 피어를 차단하는 옵션이 있습니다. 피어 차단은 구성된 기간 동안 또는 라우터가 다시 시작될 때까지 라우터가 해당 피어와 터널을 구축하지 못하도록 방지합니다."
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:327
 msgid "Configure Background Analysis"
@@ -7065,7 +7065,7 @@ msgstr "참가자"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:222
 msgid "sec"
-msgstr ""
+msgstr "초"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:224
 msgid "grace period"
@@ -7076,7 +7076,7 @@ msgstr "유예 기간"
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:822
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:830
 msgid "Tunnel identity"
-msgstr ""
+msgstr "터널 식별"
 
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:280
 #, java-format
@@ -7289,11 +7289,11 @@ msgstr "내 eepSite 웹 서버"
 
 #: ../java/strings/Strings.java:27
 msgid "I2P webserver (eepsite)"
-msgstr "i2P 웹서버 (eepSite)"
+msgstr "I2P 웹서버 (eepSite)"
 
 #: ../java/strings/Strings.java:28
 msgid "I2P Web Server (eepsite)"
-msgstr ""
+msgstr "I2P 웹서버 (eepSite)"
 
 #: ../java/strings/Strings.java:29
 msgid "Browser launch at startup"
@@ -7317,27 +7317,27 @@ msgstr "공유 클라이언트"
 
 #: ../java/strings/Strings.java:40
 msgid "I2PMail SMTP Server"
-msgstr ""
+msgstr "I2PMail SMTP 서버"
 
 #: ../java/strings/Strings.java:41
 msgid "I2PMail POP3 Server"
-msgstr ""
+msgstr "I2PMail POP3 서버"
 
 #: ../java/strings/Strings.java:42
 msgid "Postman's SMTP Mail Server (smtp.postman.i2p)"
-msgstr ""
+msgstr "포스트맨의 SMTP 메일 서버 (smtp.postman.i2p)"
 
 #: ../java/strings/Strings.java:43
 msgid "Postman's POP3 Mail Server (pop3.postman.i2p)"
-msgstr ""
+msgstr "포스트맨의 POP3 메일 서버 (pop3.postman.i2p)"
 
 #: ../java/strings/Strings.java:44
 msgid "I2P IRC Network"
-msgstr ""
+msgstr "I2P IRC 네트워크"
 
 #: ../java/strings/Strings.java:45
 msgid "Proxy to connect to I2P's anonymized IRC chat network"
-msgstr ""
+msgstr "I2P의 익명화된 IRC 채팅 네트워크에 연결하기 위한 프록시"
 
 #: ../java/strings/Strings.java:46
 msgid "I2P webserver"
@@ -7354,7 +7354,7 @@ msgstr "I2P 웹서버"
 
 #: ../java/strings/Strings.java:49
 msgid "Personal I2P Webserver (eepsite)"
-msgstr ""
+msgstr "I2P 웹서버 (eepSite)"
 
 #: ../java/strings/Strings.java:50
 msgid "HTTP Proxy"
@@ -7363,11 +7363,11 @@ msgstr "HTTP 프록시"
 #. hardcoded in iMule?
 #: ../java/strings/Strings.java:55
 msgid "iMule"
-msgstr ""
+msgstr "iMule"
 
 #: ../java/strings/Strings.java:56
 msgid "Official I2P Source Repository"
-msgstr ""
+msgstr "공식 I2P 소스 저장소"
 
 #. standard themes for ConfigUIHelper
 #: ../java/strings/Strings.java:59
@@ -7534,7 +7534,7 @@ msgstr "플러드 필 설정"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:528
 msgid "Floodfill participation helps the network, but may use more of your computer's resources."
-msgstr ""
+msgstr "플러드필 참여는 네트워크에 도움이 되지만, 컴퓨터의 자원을 더 많이 사용할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configadvanced_jsp.java:534
 msgid "This router is currently a floodfill participant."
@@ -7978,7 +7978,7 @@ msgstr "방화벽 포트를 열기위해 UPnP 활성화"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:595
 msgid "This mode enhances anonymity by preventing correlation between public IP address changes and your router identity. Both your router identity and UDP port will be changed."
-msgstr ""
+msgstr "이 모드는 공용 IP 주소 변경과 라우터 신원 간의 상관관계를 방지하여 익명성을 높입니다. 라우터 신원과 UDP 포트 모두 변경됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:601
 msgid "Laptop mode"
@@ -8000,7 +8000,7 @@ msgstr "IPv6 설정"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:613
 msgid "Disable inbound (firewalled)"
-msgstr ""
+msgstr "수신 차단 (방화벽 켜짐)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:619
 msgid "Disable IPv6"
@@ -8084,7 +8084,7 @@ msgstr "UDP 연결을 완전히 비활성화합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:725
 msgid "The router's external port allows communication with other routers. It is recommended to configure your firewall to allow inbound and outbound traffic on this port to optimize your router's performance on the network."
-msgstr ""
+msgstr "라우터의 외부 포트는 다른 라우터들과의 통신을 허용합니다. 네트워크에서 라우터의 성능을 최적화하려면 방화벽을 이 포트에 대한 수신 및 송신 트래픽을 허용하도록 구성하는 것이 좋습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:727
 msgid "Do not reveal your port numbers to anyone, as they can be used to discover your IP address."
@@ -8096,7 +8096,7 @@ msgstr "피어 관리"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:421
 msgid "Peer Manager"
-msgstr ""
+msgstr "피어 매니저"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:549
 msgid "Manual Peer Controls"
@@ -8116,7 +8116,7 @@ msgstr "프로필 보너스 조절"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:578
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
-msgstr ""
+msgstr "보너스는 양수 또는 음수 일 수 있으며, 피어의 빠른 및 고용량 계층에 포함되는 것에 영향을 미칩니다. 빠른 피어는 클라이언트 터널에 사용되며, 고용량 피어는 일부 탐색 터널에 사용됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:596
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:447
@@ -8174,7 +8174,7 @@ msgstr "리시딩은 처음 I2P를 설치했을 때 다룬 라우터를 찾기�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:529
 msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr ""
+msgstr "파일 재구성 URL의 구성을 활성화하려면 콘솔의 <a href=/help/advancedsettings>고급 모드</a>를 활성화하십시오."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:535
 msgid "Reseeding Configuration"
@@ -8228,7 +8228,7 @@ msgstr "HTTPS"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:600
 msgid "SOCKS 4/4a"
-msgstr ""
+msgstr "SOCKS 4/4a"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:606
 msgid "SOCKS 5"
@@ -8236,7 +8236,7 @@ msgstr "SOCKS 5"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:608
 msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers."
-msgstr ""
+msgstr "이 옵션은 I2P의 HTTP 아웃프록시를 사용하여 리시드(재시작)하거나 Orchid 플러그인을 사용합니다. 참고: 이 옵션은 알려진 피어가 0개인 경우에는 작동하지 않습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:614
 msgid "I2P Outproxy"
@@ -8388,7 +8388,7 @@ msgstr "통계 설정"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:419
 msgid "Stats Collection &amp; Graphing"
-msgstr ""
+msgstr "통계 수집 및 그래프"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:528
 msgid "Configure I2P Stat Collection"
@@ -8449,15 +8449,15 @@ msgstr "클라이언트 터널 변경사항이 임시적으로 변경됨. 저장
 #. if (pm.isRegistered(net.i2p.util.PortMapper.SVC_I2PTUNNEL)) {
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:549
 msgid "The default settings are optimized for general usage and normally don't need to be changed."
-msgstr ""
+msgstr "기본 설정은 일반 사용을 위해 최적화되어 있으며 보통 변경할 필요가 없습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:551
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr ""
+msgstr "클라이언트 터널 설정을 변경하려면 <a href=/i2ptunnelmgr>터널 관리자</a> 또는 I2PSnark의 <a href=/i2psnark/configure>구성 페이지</a>를 사용하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:553
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr ""
+msgstr "세션에만 클라이언트 터널 변경을 활성화하려면 콘솔의 <a href=/help/advancedsettings>고급 모드</a>를 활성화하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:526
 msgid "Router Console Theme"
@@ -8474,7 +8474,7 @@ msgstr "테마 설정은 인터넷 익스플로러에서 불가능합니다. 브
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:546
 msgid "A very old version has been detected. It's not recommended to use I2P with unmaintained browsers."
-msgstr ""
+msgstr "아주 오래된 버전이 감지되었습니다. 유지보수되지 않은 브라우저로 I2P를 사용하는 것은 권장되지 않습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:548
 msgid "If you're not using IE, it's likely that your browser is pretending to be IE; please configure your browser (or proxy) to use a different User Agent string if you'd like to access the console themes."
@@ -8589,7 +8589,7 @@ msgstr "웹앱 설정"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configwebapps_jsp.java:540
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
-msgstr ""
+msgstr "아래에 나열된 Java 웹 애플리케이션들은 webConsole 클라이언트에 의해 시작되며 라우터와 동일한 JVM에서 실행됩니다. 일반적으로 라우터 콘솔을 통해 접근할 수 있는 웹 애플리케이션입니다. 완전한 애플리케이션 (예: i2psnark), 다른 클라이언트나 애플리케이션의 프런트엔드로 작동하여 별도로 활성화해야 하는 경우 (예: susidns, i2ptunnel) 또는 웹 인터페이스가 전혀 없는 경우 (예: addressbook) 일 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/dns_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/dns_jsp.java:453
@@ -8854,95 +8854,95 @@ msgstr "고급 라우터 구성"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:437
 msgid "The router configuration options listed below are not available in the user interface, usually because they are rarely used or provide access to advanced settings that most users will not need. This is not a comprehensive list. Some settings will require a restart of the router to take effect. Note that all settings are case sensitive. You will need to edit your <code>router.config</code> file to add options, or, once you have added <code>routerconsole.advanced=true</code> to the router.config file, you may edit settings within the console on the <a href=/configadvanced>Advanced Configuration page</a>."
-msgstr ""
+msgstr "아래에 나열된 라우터 구성 옵션은 사용자 인터페이스에서 사용할 수 없습니다. 일반적으로 사용되지 않거나 대부분의 사용자가 필요로하지 않는 고급 설정에 대한 액세스를 제공하기 때문입니다. 이것은 완전한 목록이 아닙니다. 일부 설정은 라우터를 다시 시작해야 합니다. 모든 설정은 대소문자를 구분합니다. 옵션을 추가하려면 <code>router.config</code> 파일을 편집해야하며, <code>routerconsole.advanced=true</code>를 router.config 파일에 추가 한 후에는 console에서 <a href=/configadvanced>고급 구성 페이지</a>에서 설정을 편집 할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:439
 msgid "When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href=/configadvanced>Advanced Configuration page</a>. Extra display options are provided in the <a href=/netdb>Network Database section</a>, including the <a href='/netdb?f=3'>Sybil Analysis tool</a>, and there are additional configuration options on the <a href=/configclients>Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar."
-msgstr ""
+msgstr "true로 설정하면 콘솔에서 추가 기능이 활성화되며 사용자는 <a href=/configadvanced>고급 구성 페이지</a>에서 설정을 직접 편집할 수 있습니다. 추가적인 디스플레이 옵션은 <a href=/netdb>네트워크 데이터베이스 섹션</a> 에서 제공되며, <a href='/netdb?f=3'>Sybil 분석 도구</a> 및 <a href=/configclients>Clients 구성 페이지</a> 에 추가 구성 옵션이 있습니다. 또한 미인증 업데이트 설치, 뉴스 URL의 수동 구성 및 사이드바에서 추가 섹션이 가능합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:441
 msgid "Plugins signed with the cryptographic key of the developer are the recommended format, but if you wish to install unsigned plugins (.zip) you can set this to true. Note that you may still encounter issues attempting to install an unsigned plugin if the developer has included additional checks in the plugin build process."
-msgstr ""
+msgstr "개발자의 암호화 키로 서명 된 플러그인은 권장되는 형식이지만, 미서명 플러그인(.zip)을 설치하려는 경우 true로 설정할 수 있습니다. 미서명 플러그인을 설치하려는 경우에는 개발자가 플러그인 빌드 과정에 추가적인 검사를 포함한 경우에도 여전히 문제가 발생할 수 있다는 점에 유의하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:443
 msgid "This setting allows the manual selection of the browser which I2P will launch on startup (if the console is <a href=/configservice#browseronstart>configured</a> to launch a browser on startup), overriding the OS default browser. For more information, see the <a href=#alternative_browser>FAQ entry</a> above."
-msgstr ""
+msgstr "이 설정은 I2P가 시작될 때 (콘솔이 기동 시 브라우저를 실행하도록<a href=/configservice#browseronstart>구성</a> 된 경우) OS 기본 브라우저를 재정의하여 시작 시 브라우저를 수동으로 선택할 수 있습니다. 자세한 내용은 위의 <a href=#alternative_browser>FAQ 항목</a> 참조."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:445
 msgid "When set to true, this enables gzip compression for the router console and default web applications. [Enabled by default]"
-msgstr ""
+msgstr "true로 설정하면 라우터 콘솔 및 기본 웹 응용 프로그램에 대한 gzip 압축이 활성화됩니다. [기본적으로 활성화됨]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:447
 msgid "When set to true, this enables plugin installation on the <a href=/configplugins>Plugin Configuration page</a>. [Enabled by default]"
-msgstr ""
+msgstr "true로 설정하면 <a href=/configplugins>플러그인 구성 페이지</a>에서 플러그인 설치가 가능해집니다. [기본적으로 활성화됨]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:449
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
-msgstr ""
+msgstr "참으로 설정되면 이 설정은 피어의 국기 표시 시에 반대 DNS 조회를 활성화하고, 콘솔에 호스트명이나 도메인이 명시적으로 표시되거나 피어의 RouterInfo가 디스크에 기록될 때 활성화됩니다. 반복 조회를 방지하기 위해 DNS 조회에 대한 10분 이상의 캐싱 정책을 구성하고 운영 체제에서 개인정보 보호를 위한 DNS 서버를 구성하는 것이 권장됩니다. [기본적으로 비활성화되어 있으며, 재시작이 필요합니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:451
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
-msgstr ""
+msgstr "참으로 설정되면 https://가 활성화된 경우 http://를 통해 라우터 콘솔에 액세스할 경우 자동으로 https로 리디렉션됩니다. 라우터 콘솔 액세스를 구성하려면 프로필 디렉터리의 <code>clients.config</code> 파일에서 설정을 편집하십시오 (응용 프로그램 설치 디렉터리가 아님). [기본적으로 활성화되어 있습니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:453
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
-msgstr ""
+msgstr "이 설정은 라우터가 제공된 <i>blocklist.txt</i> 파일과 사용자가 구성한 블록 목록을 사용하여 해시 또는 IP 주소에 따른 라우터 차단을 활성화할지 여부를 결정합니다. IPv4의 경우 범위와 넷 마스크를 지원하지만 IPv6는 지원하지 않습니다. 자세한 정보는 I2P+ 응용 프로그램 디렉터리에 있는 <i>blocklist.txt</i>를 참조하십시오. [기본적으로 활성화되어 있으며, 재시작이 필요합니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:455
 msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr ""
+msgstr "이 설정은 라우터가 Tor 출구 노드 IP 주소에서 작동하는 라우터의 차단을 활성화하기 위해 I2P+ 응용 프로그램 디렉터리의 제공된 <i>blocklist_tor.txt</i> 파일을 사용할지 여부를 결정합니다. [기본적으로 활성화되어 있으며, 재시작이 필요합니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:457
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
-msgstr ""
+msgstr "이 설정은 유효한 블록 목록 파일을 가리키는 경로와 함께 구성되면 추가로 사용자 구성된 블록 목록을 라우터 시작 시에 로드할 수 있습니다. [기본적으로 비활성화되어 있으며, 재시작이 필요합니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:459
 msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr ""
+msgstr "이 설정은 블록 목록을 통해 강제되는 금지에 대한 만료 시간을 구성할 수 있습니다 (초 단위). 기본적으로 금지 사항은 라우터 세션의 기간 동안 유지됩니다. [재시작이 필요합니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:461
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
-msgstr ""
+msgstr "터널 구축을 위한 프로세서 스레드 수 할당. 프로세서가 하이퍼스레딩 또는 동시 멀티스레딩을 지원하는 경우, 프로세서 코어 수를 2배로 곱하여 할당할 수 있는 최대 스레드 수를 얻을 수 있습니다. 그렇지 않으면 프로세서 코어 수 = 사용 가능한 최대 스레드 수입니다. 이론적인 최대값보다 적은 값을 할당하여 다른 작업에 대한 여유 공간을 확보하는 것이 좋습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:463
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
-msgstr ""
+msgstr "이 설정은 라우터가 혼잡 상태로 판단되고 트랜지트 터널 요청이 거부되기 전에 기본 메시지 처리 시간 제한(혼잡 사이드바 섹션의 <i>메시지 지연</i>으로 표시됨)을 무시합니다. [기본값은 750ms이며, 라우터가 느린 것으로 표시된 경우 1500ms입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:465
 msgid "Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]"
-msgstr ""
+msgstr "평균적인 지연 시간을 결정하기 위해 주기적으로 터널을 테스트하고 혼잡 사이드패널 섹션에 결과를 표시합니다. 활성화하려면 이 값을 false로 설정하세요. [기본값은 false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:467
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
-msgstr ""
+msgstr "true로 설정하면 라우터가 재시작할 때마다 신원과 UDP 포트를 변경합니다. [기본값은 false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:469
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
-msgstr ""
+msgstr "이 설정은 라우터의 터널을 구축할 때 사용하지 않을 <a href=/profiles#profile_defs>피어 기능</a>을 결정합니다. 예: <code>router.excludePeerCaps=LMN</code>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:471
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
-msgstr ""
+msgstr "true로 설정하면 라우터가 네트워크의 플러드필 역할을 할 경우 <a href=/configadvanced#ffconf>플러드필 참여</a>가 다른 라우터에 숨겨집니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:473
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
-msgstr ""
+msgstr "병렬로 실행될 수 있는 최대 작업수를 정의합니다. 기본값은 <code>wrapper.config</code>를 통해 JVM에 할당된 메모리 양으로 결정되며, 64MB 미만의 경우 3으로, 256MB 미만의 경우 4으로, 256MB 이상의 경우 5로 설정됩니다. 참고: 이 설정 변경은 라우터를 다시 시작해야 합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:475
 msgid "Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Default is 8000, or 2000 if running on Arm or Android]"
-msgstr ""
+msgstr "라우터가 구축할 수 있는 최대 참여 터널 수를 결정합니다. 참여를 완전히 비활성화하려면 0으로 설정하세요. [기본값은 8000이며, Arm 또는 Android에서 실행 중인 경우 2000입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:477
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
-msgstr ""
+msgstr "동료가 사용될 수 있는 활성 로컬 터널(클라이언트 및 스카우터)의 최대 비율을 정의합니다. [기본값은 I2P+에서 10%, I2P에서 33%입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:479
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
-msgstr ""
+msgstr "true로 설정하면 프로필의 netDB 디렉토리에 저장된 라우터 정보 파일이 64개 하위 디렉토리로 분할되지 않습니다. [기본값은 false입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:481
 msgid "When set to true, your router will not be classified as slow, regardless of the specifications of your host system. Ordinarily, routers running on hosts with the following characteristics will be classified as slow, and various performance-related router options will be modified accordingly:"
-msgstr ""
+msgstr "true로 설정하면 호스트 시스템의 사양과는 관계없이 라우터가 느린 것으로 분류되지 않습니다. 보통 다음 특성을 가진 호스트에서 실행되는 라우터는 느린 것으로 분류되며, 여러 성능 관련 라우터 옵션이 그에 따라 수정됩니다:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:483
 msgid "Host OS running Android"
@@ -8954,11 +8954,11 @@ msgstr "ARM에서 실행되는 호스트 OS(MacOS 제외)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:487
 msgid "32bit host OS running with less than 4 detected cores"
-msgstr ""
+msgstr "4개 미만의 코어가 감지된 32비트 호스트 운영 체제"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:489
 msgid "64bit host OS running with 1 detected core and less than 384MB allocated to the JVM"
-msgstr ""
+msgstr "1개 감지된 코어와 JVM에 384MB 미만 할당된 64비트 호스트 운영 체제"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:491
 msgid "Less than 256MB allocated to the JVM"
@@ -8970,171 +8970,171 @@ msgstr "Java BigInteger 라이브러리의 기본이 아닌 소프트웨어 에�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:495
 msgid "This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr ""
+msgstr "이 설정은 라우터가 예상 대역폭 요구 사항에 따라 터널 요청을 거부하기 시작하기 전에 호스팅 참가 터널의 최소 수를 구성할 수 있게 합니다. [기본값은 안드로이드 운영체제에서 실행 중인 경우 100, ARM 운영체제에서 실행 중이고 4개 미만의 코어가 있는 경우 800, ARM 운영체제에서 실행 중이고 4개 이상의 코어가 있는 경우 1200, 그렇지 않으면 2500입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:497
 msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr ""
+msgstr "true로 설정하면, 라우터는 다음에 라우터가 다시 시작될 때 신원과 UDP 포트를 변경하고, 그런 다음 router.config에서 키를 삭제하여 추가 변경을 방지합니다. [기본값은 false입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:499
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr ""
+msgstr "구성되면 이 설정은 라우터가 동시에 구축할 수 있는 터널 수에 대한 엄격한 제한을 설정합니다. 기본적으로 라우터는 평균 구축 시간과 현재 나가는 대역폭을 사용하여 최적의 구축률을 결정합니다. [다시 시작이 필요함]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:501
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr ""
+msgstr "만약 서명되지 않은 (.zip) I2P 업데이트를 설치하길 원한다면, 이를 <code>router.config</code> 파일에 추가해야 합니다. 이미 <code>routerconsole.advanced=true</code>를 구성한 경우 이미 이 옵션이 준비되어 있습니다. 참고: I2P+ 0.9.48+부터, <a href=/configupdate#i2pupdates>서명되지 않은 업데이트</a>의 설치가 기본적으로 활성화되었습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:503
 msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr ""
+msgstr "이 설정을 통해, 사용 가능한 경우 서명되지 않은 업데이트 기능의 업데이트 URL을 구성할 수 있습니다. URL은 <code>/i2pupdate.zip</code>로 끝나야 합니다. 참고: 업데이트 지원 출처를 신뢰하지 않을 경우 서명되지 않은 업데이트를 설치하지 마십시오!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:505
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr ""
+msgstr "이 설정은 라우터가 방화벽으로 막히고 있는지 여부를 확인하는 SSU 테스트를 비활성화하는 것을 허용하며, 분명히 방화벽으로 막히지 않았지만 간헐적인 방화벽 문제가 있는 라우터에 대해서만 활성화할 수 있습니다. 테스트가 비활성화된 경우, SSU 및 NTCP 모두 <a href=/info>라우터 정보 페이지</a>에서 현재 공인 IP 주소를 보고해야 합니다. [재부팅이 필요함]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:507
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr ""
+msgstr "이 설정은 동료들과 통신할 때 어떤 전송 방식을 우선시할지를 결정합니다. 기본적으로 NTCP가 UDP(SSU)보다 우선합니다. 값을 true로 설정하면, 기존의 NTCP 연결이 없으면 UDP를 우선시하며, always로 설정하면 기존의 NTCP 연결과 상관없이 항상 UDP를 사용합니다. [기본값은 false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:509
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr ""
+msgstr "이 터널별 설정을 사용하면 라우터에서 호스팅되는 서버로 보내진 핑에 대한 응답을 활성화 또는 비활성화할 수 있습니다. 핑을 비활성화하려면 터널 관리자에서 서버 구성의 <i>사용자 정의 옵션</i> 섹션에 <code>i2p.streaming.answerPings=false</code> 라인을 추가해야 합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:511
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr ""
+msgstr "true로 설정하면 I2P는 네트워크 연결 없이 실행되며, 이는 코드 업데이트를 테스트하기 위해 라우터를 계속해서 재시작하는 경우에 유용합니다. 이로 인해 네트워크 중단을 방지할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:513
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr ""
+msgstr "이 설정을 활성화하면, 라우터에서 호스팅되는 모든 핑이 가능한 서버에 대해 최대 50ms까지의 임의의 pong 지연을 도입합니다. 기본적으로 비활성화되어 있습니다. [재부팅이 필요함]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:515
 msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr ""
+msgstr "이 설정은 활성화되었을 때, <code>i2p.streaming.enablePongDelay</code>가 활성화된 경우 ping 가능한 서버에 추가되는 최대 무작위 pong 지연을 수정합니다. 명시적으로 설정하지 않은 경우 50ms의 기본값을 사용합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:517
 msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr ""
+msgstr "이 설정은 (밀리초 단위로) 패킷이 CoDel 큐에 머무를 수 있는 시간을 결정합니다. 기본값은 1000ms입니다. [재시작 필요]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:519
 msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr ""
+msgstr "이 설정은 발신 큐에 포함될 수 있는 최대 메시지 수를 결정합니다. [기본값은 768입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:521
 msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr ""
+msgstr "이 설정은 추가 메시지가 삭제되기 전에 최대 큐 값보다 많을 수 있는 최대 메시지 수를 결정합니다. [기본값은 128입니다.]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:523
 msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr ""
+msgstr "이 설정은 (밀리초 단위로) CoDel 큐 관리 시스템의 대기 시간 목표 값을 수동으로 구성할 수 있게 합니다. 기본값은 50ms입니다. [재시작 필요]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:525
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr ""
+msgstr "이 설정은 RouterInfo가 NetDb에 있는 경우 (마지막 알려진 게시 날짜) RouterInfo가 오래되었다고 분류되고 삭제되기 전까지의 기간을 결정합니다. [기본값은 28시간입니다. 자주 알림을 수행하는 경우 기본값은 8시간입니다.]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:527
 msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr ""
+msgstr "이 설정은 피어 탐색 작업이 실행될 때 병렬로 탐색할 피어 수를 결정합니다. [기본값은 3000개 이상의 피어가 알려진 경우 한 번에 1개의 피어입니다]. 이 값을 높이면 탐색에 대한 대역폭 요구 사항이 증가하며, 이 값을 너무 높게 설정하면 과도한 메시지 지연과 다른 서비스에 간섭할 수 있으므로 신중히 사용하십시오!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:529
 msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr ""
+msgstr "이 설정은 Peer Exploration Job이 실행될 때 참조할 NetDb DHT 버킷 수를 결정합니다. 기본적으로 탐색할 버킷 수는 라우터가 1시간 이상 실행 중인지 여부, 라우터가 숨겨진 상태인지 또는 'K' 대역폭 티어에 있는지 여부, 그리고 알려진 라우터의 수에 따라 다릅니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:531
 msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr ""
+msgstr "이 설정(초 단위)은 NetDb에 추가하려는 새로운 피어를 찾기 위해 Peer Exploration Job 실행 간의 지연을 무시할 수 있게 합니다. 기본적으로 작업은 80초마다 실행되거나, 라우터가 작업이나 메시지 지연을 겪고있을 경우 매 3분마다 실행됩니다. NetDb의 크기가 4000개의 피어에 이르면 일시정지가 15분으로 증가합니다. NetDb가 적당히 채워져 있거나 (2000개 이상의 피어), 전체 대역폭 사용량을 줄이려는 경우 지연 시간을 늘리고 싶을 수 있습니다. 주의: Floodfill 라우터의 경우이 작업은 실행되지 않습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:533
 msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr ""
+msgstr "이 설정은 탐색을 위해 대기열에 추가 할 최대 피어 해시 수를 결정합니다. I2P의 최대 값은 128이고 I2P+의 기본 값은 512입니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:535
 msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr ""
+msgstr "이 설정은 플러드필 기능을 하는 라우터가 NetDb를 탐색하여 새로운 피어에 대해 알아보도록 할지 여부를 결정합니다. [기본값은 false이며, 재시작이 필요합니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:537
 msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr ""
+msgstr "이 설정을 true로 설정하면 라우터가 직접 다른 라우터와 통신하는 것을 방지하여 소개자의 사용을 강제화합니다. [기본값은 false이며, 숨김 모드에 있는 경우를 제외하고 재시작이 필요합니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:539
 msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr ""
+msgstr "이 설정을 사용하면 NetDb에서 오래된 라우터를 제외할 수 있습니다. 기본값보다 오래된 라우터 또는 설정한 값보다 오래된 라우터는 NetDb에서 삭제되고 라우터 세션 동안 금지됩니다. 기본적으로 0.9.20보다 오래된 라우터는 제외됩니다. 참고: I2P+ 버전 0.9.46+부터는 최신 버전을 실행하는 라우터만 로컬 터널을 구축하는 데 사용됩니다. [재시작 필요]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:541
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
-msgstr ""
+msgstr "이 설정은 동시에 실행할 피어 테스트의 수를 결정하며, 피어 지연 시간을 결정하는 데 사용됩니다. [기본값은 4입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:543
 msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 5000]"
-msgstr ""
+msgstr "이 설정은 피어 테스트 작업 사이의 지연 시간을 밀리초 단위로 설정합니다. [기본값은 5000입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:545
 msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 1000]"
-msgstr ""
+msgstr "피어 지연 시간을 결정하기 위해 이 설정은 피어 테스트가 실패로 간주되기 전에 소요되는 최대 시간을 밀리초 단위로 할당합니다. 타임아웃이 평균 성공 테스트보다 낮게 설정된 경우, 평균 성공 테스트 값이 사용됩니다. [기본값은 1000입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:547
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
-msgstr ""
+msgstr "이 설정은 온전히 작동하는 라우터에 대한 통계를 NetDb에 가끔씩 게시할지 여부를 결정합니다. [기본값은 false입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:549
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
-msgstr ""
+msgstr "이 설정은 아웃바운드 메시지 큐의 초기 크기를 구성합니다. [기본값은 64입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:551
 msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr ""
+msgstr "이 설정은 인바운드 메시지 큐의 최대 크기를 구성합니다. [기본값은 1024입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:553
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
-msgstr ""
+msgstr "이 설정은 사이클(펌프)당 대기 중인 인바운드 메시지의 최대 수를 구성합니다. [기본값은 24입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:555
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
-msgstr ""
+msgstr "이 설정은 한 주기(pump)당 대기 중인 최대 아웃바운드 메시지 수를 구성합니다. [기본값은 64입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:557
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
-msgstr ""
+msgstr "이 설정 (밀리초 단위)은 Refresh Routers Job에 의해 실행되는 라우터 갱신 업데이트 사이의 딜레이를 수동으로 구성할 수 있게 해줍니다. 기본적으로 갱신 사이의 일시정지는 NetDb의 크기에 따라 결정되며, 일부 무작위성을 도입하여 트래픽 분석을 완화합니다. 2000밀리초 미만의 값인 경우, <code>router.refreshTimeout</code>의 값을 증가시키는 것이 권장됩니다. 이 값을 2000밀리초 미만으로 설정하면 네트워크 트래픽이 증가하고 작업 지연이 발생할 수 있으며, 지속적인 사용에는 권장되지 않습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:559
 msgid "This setting (in hours) allows you to manually configure how old a RouterInfo is in order for it to be checked by the Refresh Routers Job. By default, the age of a RouterInfo before a refresh is intitiated scales according to the size of the NetDb, increasing as the NetDb grows in size. A value of 0 will force the Router Refresh Job to check every router in the NetDb, regardless of age."
-msgstr ""
+msgstr "이 설정 (시간 단위)을 사용하면 Refresh Routers Job에 의해 확인되기 위해 라우터가 얼마나 오래되어야하는지를 수동으로 구성할 수 있습니다. 기본적으로 갱신 전에 RouterInfo의 나이는 NetDb의 크기에 따라 증가합니다. 0의 값을 설정하면 Router Refresh Job이 NetDb의 모든 라우터를 나이와 상관없이 확인하도록 강제합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:561
 msgid "This setting (in seconds) allows you to manually configure the amount of time to wait before an attempt to refresh a router is determined to have failed. [The default is 20 seconds]"
-msgstr ""
+msgstr "이 설정 (초 단위)은 라우터 갱신 시도가 실패로 판단되기 전에 기다릴 시간을 수동으로 구성할 수 있습니다. [기본값은 20초입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:563
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
-msgstr ""
+msgstr "이 설정은 라우터 갱신 프로세스에서 1시간 동안 운영 시간이 지난 후에도 흥미로운 요소로 분류되지 않은(K 또는 L 계층, 도달할 수 없거나 0.9.50 이전 버전) 라우터를 확인할지 여부를 결정합니다. [기본값은 false입니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:565
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
-msgstr ""
+msgstr "이 설정(분 단위)은 시작 후 NetDb의 RouterInfos의 유효성을 확인하기 전까지의 대기 시간을 수동으로 구성할 수 있게 합니다. 이 시점 이후에는 유효한 라우터만 포함됩니다. 유효성 확인 시, 만료된 RouterInfos 및 SSU로만 접속 가능한 응답이 없는 동료는 NetDb에서 제거됩니다. [기본값은 60분] 참고: 이 설정은 NetDb 저장이 시도되자마자 NetDb에서 삭제되고 라우터 세션에 금지되는 기본값인 0.9.29보다 오래된 라우터에 영향을 주지 않습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:567
 msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-msgstr ""
+msgstr "이 설정을 true로 설정할 경우 <a href=/graphs>그래프 페이지</a>에 대한 HiDPI 모드가 활성화됩니다. 활성화된 후 설정이 적용되는 것을 보려면 페이지를 새로 고칠 필요가 있으며, 그래프 표시는 안정화되기까지 몇 차례의 새로 고침이 필요할 수 있습니다. 또한, 브라우저에서 Javascript가 활성화되어 있어야 합니다. [실험적 기능]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:569
 msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr ""
+msgstr "이 설정을 true로 설정할 경우, 사이드바의 혼잡 섹션에 피어 테스트 평균을 표시합니다. 이 값은 성공한 피어 테스트의 평균과 실패한 테스트의 평균적인 초과 시간을 더한 값으로 계산됩니다. 이 평균 값은 최적의 <code>router.peerTestTimeout</code> 값 결정을 위한 가이드로 사용될 수 있습니다. [기본값은 false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:571
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr ""
+msgstr "이 설정을 true로 설정할 경우, <a href=/sitemap>사이트맵</a>에 <i>관심 있는 사이트</i> 링크를 표시합니다. [기본값은 false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:573
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr ""
+msgstr "이 설정은 라우터가 정확한 시간을 유지하기 위해 필요한 대체 NTP 서버의 구성을 허용합니다. [기본값은 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:575
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
-msgstr ""
+msgstr "true로 설정한 경우,이 옵션은 기본 서비스 제어 옵션이 있는 시스템 트레이 / 알림 영역에 아이콘을 배치합니다. [기본적으로 비활성화됨]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:577
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr ""
+msgstr "이 설정은 토렌트를 다운로드하거나 생성할 때 I2PSnark가 허용할 수 있는 최대 파일 수를 구성합니다. 기본값인 2000 파일에서 크게 증가시키면 호스트 시스템에서 추가 구성이 필요할 수 있습니다. 운영 체제가 허용하는 최대 열린 파일 수를 늘리려면 (예: Linux의 <code>ulimit -n</code>) 필요합니다. 변경하려면 I2PSnark의 구성 파일 <code>i2psnark.config</ code>에 추가하십시오. [I2PSnark 또는 라우터의 재시작이 필요합니다]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:433
 msgid "Recent I2P+ Changes"
@@ -9159,11 +9159,11 @@ msgstr "할 수 없다면, i2P는 UPnP (Universal Plug and Play) 와 UDP hole pu
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:443
 msgid "Most of the options on the Network Configuration page are for special situations, for example where UPnP does not work correctly, or a firewall not under your control is doing harm."
-msgstr ""
+msgstr "네트워크 구성 페이지의 대부분 옵션은 UPnP가 올바르게 작동하지 않거나 제어하지 못하는 방화벽이 문제를 일으키는 특수한 상황에서 사용됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:445
 msgid "Certain firewalls such as symmetric NATs may not work well with I2P."
-msgstr "symmetric NATs 같은 방화벽들은 I2P와 함께 동작하지 않습니다."
+msgstr "Symmetric NATs 같은 방화벽들은 I2P와 함께 동작하지 않습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:447
 msgid "UPnP is used to communicate with Internet Gateway Devices (IGDs) to detect the external IP address and forward ports."
@@ -9171,7 +9171,7 @@ msgstr "UPnP는 외부 IP를 감지하고 포트 포워딩을 위해 Internet Ga
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:449
 msgid "UPnP support is beta, and may not work for any number of reasons"
-msgstr ""
+msgstr "UPnP 지원은 베타 버전이며 다양한 이유로 인해 작동하지 않을 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:451
 msgid "No UPnP-compatible device present"
@@ -9199,11 +9199,11 @@ msgstr "UPnP 장치 변경, 리셋, 또는 주소 변경"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:463
 msgid "UPnP may be enabled or disabled on the Network Configuration page, but a change requires a router restart to take effect."
-msgstr ""
+msgstr "UPnP는 네트워크 구성 페이지에서 활성화 또는 비활성화될 수 있으며 변경 사항은 라우터 재시작이 필요합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:465
 msgid "Review the UPnP status here."
-msgstr ""
+msgstr "UPnP 상태를 여기에서 확인하십시오."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:467
 msgid "Also, <b>do not enter a private IP address</b> like 127.0.0.1 or 192.168.1.1."
@@ -9223,7 +9223,7 @@ msgstr "웹 브라우저 구성"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:475
 msgid "In order to access websites hosted on I2P, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P HTTP proxy, by default running on <code>127.0.0.1 port 4444</code>. Most browsers offer an option to configure your proxy; in this mini-tutorial we'll focus on Firefox."
-msgstr ""
+msgstr "I2P에서 호스팅된 웹 사이트에 액세스하고 선택적으로 클리어넷의 웹 사이트에 연결하기 위해서는 기본 아웃프록시를 사용하여 브라우저를 설정해야 합니다. 기본값으로 <code>127.0.0.1 포트 4444</code>에서 실행되는 I2P HTTP 프록시를 사용하도록 브라우저를 구성해야 합니다. 대부분의 브라우저는 프록시를 구성할 수 있는 옵션을 제공합니다. 이 미니 튜토리얼에서는 Firefox에 초점을 맞출 것입니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:477
 msgid "Open the Preferences page in Firefox and scroll to the bottom of the General section."
@@ -9255,15 +9255,15 @@ msgstr "DNS 누출을 방지하려면 <i>SOCKS v5 사용 시 프록시 DNS</i>�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:491
 msgid "Hit the <i>OK</i> button and test the proxy is working by visiting <a href=http://planeta.i2p/ target=_blank rel=noreferrer class=sitelink>planeta.i2p</a> and <a href=https://www.myip.com/ target=_blank rel=noreferrer class='sitelink external'>www.myip.com</a>."
-msgstr ""
+msgstr "OK 버튼을 클릭하고 프록시가 작동하는지 확인하기 위해 <a href=http://planeta.i2p/ target=_blank rel=noreferrer class=sitelink>planeta.i2p</a>와 <a href=https://www.myip.com/ target=_blank rel=noreferrer class='sitelink external'>www.myip.com</a>을 방문하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:493
 msgid "Note: To enhance your security when browsing .i2p sites, you may wish to consider installing an addon to prevent Javascript from running in the browser such as <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>, though it's recommended to whitelist the address I2P+ is running on to enable various router console enhancements. In addition, an addon that prevents requests to offsite resources is also recommended, for example <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
-msgstr ""
+msgstr "참고: .i2p 사이트를 브라우징할 때 보안을 향상시키기 위해 브라우저에서 Javascript가 실행되지 않도록 방지하는 애드온을 설치하는 것을 고려할 수 있습니다. 예를 들어 <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>와 같은 애드온이 있습니다. 또한, 다양한 라우터 콘솔 기능을 활성화하기 위해 I2P+가 실행 중인 주소를 화이트리스트에 등록하는 것이 권장됩니다. 게다가, 외부 자원으로의 요청을 방지하는 애드온도 권장됩니다. 예를 들어 <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>가 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:495
 msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>."
-msgstr ""
+msgstr "다양한 브라우저에 대한 더 상세한 구성 가이드는 <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>브라우저 구성 가이드</a>를 참조하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497
 msgid "The Tunnel Manager"
@@ -9275,11 +9275,11 @@ msgstr "터널 관리자를 사용하면 라우터에서 제공하는 로컬 서
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:501
 msgid "You can determine which services automatically start when the router starts, manage tunnel allocation to optimize for high usage services or to minimize the the cpu and memory overhead, add server and client tunnels to host or access services on the network, set rate limiting or tunnel filtering for your server tunnels and more."
-msgstr ""
+msgstr "라우터를 시작할 때 자동으로 시작되는 서비스를 결정하고, 고사양 서비스에 대한 터널 할당을 관리하거나 CPU 및 메모리 오버헤드를 최소화하기 위해 서버 및 클라이언트 터널을 추가로 호스팅하거나 네트워크에서 서비스에 액세스 할 수 있습니다. 서버 터널에 대한 비율 제한 또는 터널 필터링을 설정할 수 있으며, 기타 기능도 제공됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:503
 msgid "By default, most of your client services (mail, http proxy, IRC) will share the same set of tunnels (for performance reasons) and be listed as <i>Shared Clients</i> and <i>Shared Clients(DSA)</i> in the sidebar under Service Tunnels and on the <a href=/tunnels>Tunnels page</a>."
-msgstr ""
+msgstr "기본적으로 대부분의 클라이언트 서비스(메일, HTTP 프록시, IRC)는 동일한 터널 세트를 공유하며(성능상의 이유로), 사이드바에는 서비스 터널 아래의 <i>공유 클라이언트</i> 및 <i>공유 클라이언트(DSA)</i>로 나열되고 <a href=/tunnels>터널 페이지</a>에서도 확인할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:505
 msgid "However, if you experience a tunnel failure, all your services will go offline at the same time, so in some scenarios you may wish to configure client services to use their own set of tunnels."
@@ -9287,7 +9287,7 @@ msgstr "그러나 터널 오류가 발생하면 모든 서비스가 동시에 �
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:507
 msgid "This can be done by unchecking the <i>Share tunnels with other configured clients</i> option listed under <i>Shared Client</i> on the configuration page of the relevant client service, after which you will need to restart the client service from the <a href=/i2ptunnelmgr>Tunnel Manager index page</a>."
-msgstr ""
+msgstr "이는 관련 클라이언트 서비스의 구성 페이지에서 <i>공유된 클라이언트</i> 아래에 나열된 <i>다른 구성된 클라이언트와 터널 공유</i> 옵션의 선택을 해제하여 수행할 수 있습니다. 이후 <a href=/i2ptunnelmgr>터널 관리자 인덱스 페이지</a>에서 클라이언트 서비스를 재시작해야합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:509
 msgid "Note: Most of the options in the Tunnel Manager have tooltips; be sure to check those before you change settings you don't fully understand!"
@@ -9299,7 +9299,7 @@ msgstr "I2P FAQ 요약"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:435
 msgid "This is a shortened version of the official FAQ. For the full version, please visit <a href=https://geti2p.net/faq target=_blank rel=noreferrer class='sitelink external'>https://geti2p.net/faq</a> or <a href=http://i2p-projekt.i2p/faq target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p/faq</a>."
-msgstr ""
+msgstr "이것은 공식 FAQ의 요약판입니다. 전체 버전은 <a href=https://geti2p.net/faq target=_blank rel=noreferrer class='sitelink external'>https://geti2p.net/faq</a> 또는 <a href=http://i2p-projekt.i2p/faq target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p/faq</a>를 방문해주세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:437
 msgid "My router has been up for several minutes and has zero or very few connections"
@@ -9307,7 +9307,7 @@ msgstr "제 라우터가 몇분동안 켜져 있는데도 연결이 없거나 �
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:439
 msgid "If after a few minutes of uptime your router is indicating 0 Active Peers and 0 Known Peers, with a notification in the sidebar that you need to check your network connection, verify that you can access the internet. If your internet connection is functional, you may need to unblock Java in your firewall. Otherwise, you may need to reseed your I2P router. Visit the <a href=/configreseed#reseedconfig>Reseed Configuration page</a> and click the <i>Save Changes and Reseed Now</i> button. For more information, see the <a href=#reseedhelp>Reseed help section</a> above."
-msgstr ""
+msgstr "만약 몇 분간 사용 시간 후에 라우터가 0개의 활성 피어와 0개의 알려진 피어를 나타내며, 네트워크 연결을 확인하라는 사이드바에 알림이 표시된다면, 인터넷에 액세스할 수 있는지 확인하세요. 인터넷 연결이 정상이라면 방화벽에서 Java의 차단을 해제해야 할 수도 있습니다. 그렇지 않으면 I2P 라우터를 재시작해야 할 수도 있습니다. <a href=/configreseed#reseedconfig>리시드 설정 페이지</a>를 방문하여 <i>변경 사항 저장 및 지금 리시드</i> 버튼을 클릭하세요. 더 자세한 정보는 위의 <a href=#reseedhelp>리시드 도움말 섹션</a>을 참조하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:441
 msgid "My router has very few active peers, is this OK?"
@@ -9315,23 +9315,23 @@ msgstr "제 라우터가 매우 적은 활성 피어만 있습니다, 괜찮은 
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:443
 msgid "If your router has 10 or more active peers, everything is fine. The router should maintain connections to a few peers at all times. The best way to stay \"better-connected\" to the network is to <a href=/config>share more bandwidth</a>."
-msgstr ""
+msgstr "만약 귀하의 라우터에 10개 이상의 활성 피어가 있다면, 모든 것이 정상입니다. 라우터는 항상 몇 개의 피어와 연결을 유지해야 합니다. 네트워크에 더 잘 연결되기 위한 가장 좋은 방법은 <a href=/config>더 많은 대역폭을 공유하는 것</a>입니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:445
 msgid "I'm missing lots of hosts in my addressbook. What are some good subscription links?"
-msgstr ""
+msgstr "주소록에 많은 호스트가 누락되었습니다. 어떤 좋은 구독 링크가 있을까요?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:447
 msgid "The default subscription is to <code>http://i2p-projekt.i2p/hosts.txt</code> which is seldom updated. If you don't have another subscription, you may often have to use \"jump\" links which is much slower but ensures that your addressbook is only populated by sites you use (in addition to the default subscription addresses). To speed up browsing on I2P, it's a good idea to add some addressbook subscriptions."
-msgstr ""
+msgstr "기본 구독은 흔히 업데이트되지 않는 <code>http://i2p-projekt.i2p/hosts.txt</code>로 설정되어 있습니다. 다른 구독이 없다면, 자주 \"jump\" 링크를 사용해야 할 수 있습니다. 이는 훨씬 느리지만 주소록이 기본 구독 주소 외에 사용하는 사이트로만 구성되도록 보장합니다. I2P에서 브라우징 속도를 높이기 위해 몇 가지 주소록 구독을 추가하는 것이 좋습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:449
 msgid "Here are some other public addressbook subscription links. You may wish to add one or two to your <a href=/susidns/subscriptions target=_blank rel=noreferrer>susidns subscription list</a>. In the event that addresses conflict in the subscriptions, the lists placed at the top of your susidns configuration will take precedence over those placed further down."
-msgstr ""
+msgstr "다음은 몇 가지 다른 공개 주소록 구독 링크입니다. <a href=/susidns/subscriptions target=_blank rel=noreferrer>수시디엔스 구독 목록</a>에 하나 또는 두 개를 추가할 수 있습니다. 구독 중 주소가 충돌하는 경우, 수시디엔스 구성의 맨 위에 배치된 목록이 아래에 배치된 목록보다 우선합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:451
 msgid "Note that subscribing to a hosts.txt service is an act of trust, as a malicious subscription could give you incorrect addresses, so be careful subscribing to lists from unknown sources. The operators of these services may have various policies for listing hosts. Presence on this list does not imply endorsement."
-msgstr ""
+msgstr "hosts.txt 서비스에 구독하는 것은 신뢰의 표시입니다. 악성 구독으로 인해 잘못된 주소를 받을 수 있으므로 알려지지 않은 소스에서 목록에 구독하는 데 주의해야 합니다. 이러한 서비스의 운영자는 호스트를 나열하는 데 다양한 정책을 가지고 있을 수 있습니다. 이 목록에 있는 것이 반드시 지지됨을 의미하지는 않습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:453
 msgid "How do I access IRC, BitTorrent, or other services on the regular Internet?"
@@ -9339,7 +9339,7 @@ msgstr "어떻게 일반 인터넷의 IRC, BitTorrent 혹은 다른 서비스에
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:455
 msgid "Unless an outproxy has been set up for the service you want to connect to, this is not possible, with the exception of BitTorrent (see below). There are only three types of outproxies running right now: HTTP, HTTPS, and email. Note that there is currently no publicly listed SOCKS outproxy. If this type of service is required, try <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a>."
-msgstr ""
+msgstr "서비스에 연결하려면 outproxy가 설정되어 있지 않으면 이것은 가능하지 않습니다. 하지만 BitTorrent는 예외입니다 (아래 참조). 현재 동작 중인 outproxy는 HTTP, HTTPS, 이메일의 세 가지 유형뿐입니다. 현재 공개적으로 목록에 있는 SOCKS outproxy는 없습니다. 이 유형의 서비스가 필요한 경우 <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a>를 시도해보세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:457
 msgid "Can I download torrents from non-I2P trackers?"
@@ -9347,7 +9347,7 @@ msgstr "I2P 트래커가 아닌 곳에서 토렌트를 다운로드할 수 있�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:459
 msgid "Until the advent of I2P integration in <a href=http://www.vuze.com/ target=_blank rel=noreferrer class='sitelink external'>Vuze</a>, it wasn't possible to download torrents that weren't hosted on the I2P network. However, now that Vuze (and latterly <a href=https://www.biglybt.com/ target=_blank rel=noreferrer class='sitelink external'>Bigly</a>) allow users to share non-I2P torrents on I2P, non-I2P torrents can be downloaded over I2P if Vuze/Bigly users have chosen to make content available to the I2P network. Popular torrents with a large number of peers are more likely to be accessible via I2P; to determine if the content is available, add the torrent link, magnet or infohash to your I2P-enabled BitTorrent client."
-msgstr ""
+msgstr "I2P 네트워크에 호스팅되지 않은 토렌트를 다운로드하는 것은 <a href=http://www.vuze.com/ target=_blank rel=noreferrer class='sitelink external'>Vuze</a>에서 I2P 통합 등장 이전에는 불가능했습니다. 하지만 이제 Vuze (그리고 최근에는 <a href=https://www.biglybt.com/ target=_blank rel=noreferrer class='sitelink external'>Bigly</a>)가 사용자들이 I2P에서 I2P가 아닌 토렌트를 공유할 수 있도록 허용하므로, Vuze/Bigly 사용자가 콘텐츠를 I2P 네트워크에서 이용 가능하도록 선택했다면 I2P를 통해 I2P가 아닌 토렌트를 다운로드할 수 있습니다. 대량의 피어를 가진 인기 있는 토렌트는 I2P를 통해 접근할 확률이 높습니다. 콘텐츠가 이용 가능한지 확인하려면 토렌트 링크, 자석 또는 infohash를 I2P를 지원하는 BitTorrent 클라이언트에 추가하면 됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:461
 msgid "How do I configure I2P to open at startup in a specific web browser?"
@@ -9355,7 +9355,7 @@ msgstr "특정 웹 브라우저에서 시작시 I2P를 열도록 구성하려면
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:463
 msgid "By default, I2P will use the system configured default browser to launch at startup. If you wish to nominate an alternative browser, you will need to edit your router.config file (or the <a href=/configadvanced>Advanced Configuration page</a> if you have enabled advanced console mode) and add a new configuration line <code>routerconsole.browser=/path/to/browser</code> or <code>routerconsole.browser=\\path\\to\\browser.exe</code> if using Windows, replacing <code>\\path\\to\\browser</code> with the location of the browser you wish to use. Note: If the path to your chosen browser contains spaces, you may need to encase the path in quotes e.g. <code>routerconsole.browser=\"C:\\Program Files\\Mozilla\\Firefox.exe\"</code>"
-msgstr ""
+msgstr "기본적으로, I2P는 시작시 시스템에 구성된 기본 브라우저를 사용합니다. 대체 브라우저를 지정하려면 router.config 파일 (또는 고급 콘솔 모드를 활성화한 경우 <a href=/configadvanced>고급 구성 페이지</a>)를 편집하여 새로운 설정 라인 routerconsole.browser=/path/to/browser 또는 routerconsole.browser=\\path\\to\\browser.exe(if using Windows)를 추가해야 합니다. \\path\\to\\browser를 사용할 원하는 브라우저의 위치로 대체합니다. 참고: 선택한 브라우저의 경로에 공백이 포함된 경우 경로를 따옴표로 감싸야 할 수도 있습니다. 예: routerconsole.browser=\"C:\\Program Files\\Mozilla\\Firefox.exe\""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:465
 msgid "How do I configure my browser to access .i2p websites?"
@@ -9363,7 +9363,7 @@ msgstr "i2p 웹사이트에 액세스하려면 브라우저를 어떻게 구성�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:467
 msgid "You will need to configure your browser to use the HTTP proxy server (by default on host: <code>127.0.0.1</code> port: <code>4444</code>). See the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>Browser Proxy Configuration Guide</a> for a more detailed explanation."
-msgstr ""
+msgstr "브라우저를 HTTP 프록시 서버(기본적으로 호스트: <code>127.0.0.1</code> 포트: <code>4444</code>)를 사용하도록 구성해야 합니다. 자세한 설명은 <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>브라우저 프록시 구성 가이드</a>를 참조하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:469
 msgid "What is an eepsite?"
@@ -9371,15 +9371,15 @@ msgstr "epsite란 무엇인가요?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:471
 msgid "An eepsite is a website that is hosted anonymously on the I2P network - you can access it by configuring your web browser to use I2P's HTTP proxy (see above) and browsing to the <code>.i2p</code> suffixed website (e.g. <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Also ensure your browser is configured to resolve DNS remotely when using the proxy to avoid DNS leaks."
-msgstr ""
+msgstr "이입네트워크상에 익명으로 호스팅되는 웹사이트입니다 - 웹브라우저를 I2P의 HTTP 프록시(위의 내용 참조)로 구성하고 <code>.i2p</code> 접미사가 붙은 웹사이트(예: <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>)로 접속할 수 있습니다. 또한, 프록시를 사용할 때 브라우저가 원격으로 DNS를 해결하도록 구성하여 DNS 누출을 피하십시오."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:473
 msgid "Most of the eepsites are down?"
-msgstr ""
+msgstr "대부분의 이입사이트는 다운되어 있나요?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:475
 msgid "If you consider every eepsite that has ever been created, yes, most of them are down. People and eepsites come and go. A good way to get started in I2P is check out a list of eepsites that are currently up. <a href=http://notbob.i2p/ target=_blank rel=noreferrer class=sitelink>http://notbob.i2p</a> tracks active eepsites."
-msgstr ""
+msgstr "지금까지 생성된 모든 이입사이트를 고려한다면, 대부분의 사이트는 다운되어 있습니다. 사람들과 이입사이트는 오고가기 마련입니다. I2P로 시작하는 좋은 방법은 현재 사용 가능한 이입사이트 목록을 확인하는 것입니다. <a href=http://notbob.i2p/ target=_blank rel=noreferrer class=sitelink>http://notbob.i2p</a>에서 활성 이입사이트를 추적합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:477
 msgid "Where are my I2P configuration files stored?"
@@ -9391,15 +9391,15 @@ msgstr "라우터 구성 파일, 설치된 플러그인 및 라우터 로그는 
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:481
 msgid "Windows"
-msgstr ""
+msgstr "Windows"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:483
 msgid "OS X"
-msgstr ""
+msgstr "OS X / MacOS"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:485
 msgid "Linux"
-msgstr ""
+msgstr "Linux"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:487
 msgid "Standard Java Installation"
@@ -9443,15 +9443,15 @@ msgstr "내 IRC 클라이언트는 네트워크에서 계속 연결을 끊고 �
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:507
 msgid "Some IRC clients are configured to disconnect from the server if there's been no communication with the server for a period of time, which can sometimes be problematic for I2P IRC if the <i>ping timeout</i> value is set too low. Setting the ping timeout value in your client to a high value (e.g. 320 seconds) will often result in a more robust connection to the network. In hexchat you can configure the value by typing <code>/set net_ping_timeout 320</code>. This will write the value to your <code>hexchat.conf</code> file."
-msgstr ""
+msgstr "일부 IRC 클라이언트는 일정 시간 동안 서버와의 통신이 없을 경우 서버와의 연결을 해제하도록 구성되어 있습니다. 이는 <i>핑 시간 제한</i> 값이 너무 낮게 설정된 경우 I2P IRC에 문제가 발생할 수 있습니다. 클라이언트에서 핑 시간 제한 값을 높은 값 (예: 320초)으로 설정하면 종종 네트워크와의 견고한 연결이 이루어집니다. Hexchat에서는 <code>/set net_ping_timeout 320</code>을 입력하여 값을 구성할 수 있습니다. 이는 값이 <code>hexchat.conf</code> 파일에 기록됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:509
 msgid "What ports does I2P use?"
-msgstr "I2P가 이용하는 포트는 무엇인가요?"
+msgstr "I2P는 어떤 포트를 사용하나요?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:511
 msgid "LOCAL PORTS"
-msgstr ""
+msgstr "로컬 포트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:513
 msgid "These are the local I2P port mappings, listening only to local connections by default, except where noted. Unless you require access from other machines, they should only be accessible from localhost."
@@ -9459,7 +9459,7 @@ msgstr "이들은 로컬 I2P 포트 매핑으로, 언급 된 경우를 제외하
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:517
 msgid "Function"
-msgstr ""
+msgstr "기능"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:519
 msgid "Notes"
@@ -9467,23 +9467,23 @@ msgstr "참고"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:521
 msgid "UPnP SSDP UDP multicast listener"
-msgstr ""
+msgstr "UPnP SSDP UDP 멀티캐스트 수신기"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:523
 msgid "Cannot be changed. Binds to all interfaces. Can be disabled on the <a href=/confignet>Network Configuration page</a>."
-msgstr ""
+msgstr "변경할 수 없습니다. 모든 인터페이스에 바인딩됩니다. <a href=/confignet>네트워크 구성 페이지</a>에서 비활성화할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:525
 msgid "BOB bridge"
-msgstr ""
+msgstr "BOB 브릿지"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:527
 msgid "A higher level socket API for clients. Can be enabled/disabled on the <a href=/configclients>Client Configuration page</a>. Can be changed in the <code>bob.config</code> file. [Disabled by default]"
-msgstr ""
+msgstr "클라이언트를 위한 더 높은 수준의 소켓 API입니다. <a href=/configclients>클라이언트 구성 페이지</a>에서 활성화/비활성화할 수 있습니다. <code>bob.config</code> 파일에서 변경할 수 있습니다. [기본적으로 비활성화됨]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:529
 msgid "HTTP proxy"
-msgstr ""
+msgstr "HTTP 프록시"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:531
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:535
@@ -9491,11 +9491,11 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:571
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:575
 msgid "Can be disabled or changed in the <a href=/i2ptunnelmgr>Tunnel Manager</a>. Can also be configured to bind to a specific interface or all interfaces."
-msgstr ""
+msgstr "<a href=/i2ptunnelmgr>터널 관리자</a>에서 비활성화하거나 변경할 수 있습니다. 특정 인터페이스 또는 모든 인터페이스에 바인딩하도록 구성할 수도 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:533
 msgid "HTTPS proxy"
-msgstr ""
+msgstr "HTTPS 프록시"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:537
 msgid "IRC proxy"
@@ -9503,115 +9503,115 @@ msgstr "IRC 프록시"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:541
 msgid "UPnP HTTP TCP event listener"
-msgstr ""
+msgstr "UPnP HTTP TCP 이벤트 리스너"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:543
 msgid "Binds to the LAN address. Can be changed with advanced config <code>i2np.upnp.HTTPPort=nnnn</code>. Can be disabled on the <a href=/confignet>Network Configuration page</a>."
-msgstr ""
+msgstr "LAN 주소에 바인딩됩니다. 고급 설정을 사용하여 변경할 수 있습니다. <code>i2np.upnp.HTTPPort=nnnn</code>. <a href=/confignet>네트워크 구성 페이지</a>에서 비활성화할 수도 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:545
 msgid "UPnP SSDP UDP search response listener"
-msgstr ""
+msgstr "UPnP SSDP UDP 검색 응답 리스너"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:547
 msgid "Binds to all interfaces. Can be changed with advanced config <code>i2np.upnp.SSDPPort=nnnn</code>. Can be disabled on the <a href=/configclients>Client Configuration page</a>."
-msgstr ""
+msgstr "모든 인터페이스에 바인딩됩니다. 고급 설정을 사용하여 변경할 수 있습니다. <code>i2np.upnp.SSDPPort=nnnn</code>. <a href=/configclients>클라이언트 구성 페이지</a>에서 비활성화할 수도 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:549
 msgid "I2P Client Protocol port"
-msgstr ""
+msgstr "I2P 클라이언트 프로토콜 포트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:551
 msgid "Used by client apps. Can be changed to a different port on the <a href=/configclients>Client Configuration page</a> but this is not recommended. Can be bound to a different interface or all interfaces, or disabled, on the <a href=/configclients>Client Configuration page</a>."
-msgstr ""
+msgstr "클라이언트 앱에서 사용됩니다. <a href=/configclients>클라이언트 구성 페이지</a>에서 다른 포트로 변경할 수 있으나 권장되지 않습니다. 다른 인터페이스 또는 모든 인터페이스에 바인딩하거나 비활성화할 수도 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:553
 msgid "UDP for SAM bridge"
-msgstr ""
+msgstr "SAM 브리지용 UDP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:555
 msgid "A higher level socket API for clients. Only opened when a SAM V3 client requests a UDP session. Can be enabled/disabled on the <a href=/configclients> Client Configuration page</a>. Can be changed in the <code>clients.config</code> file with the SAM command line option <code>sam.udp.port=nnnn</code>."
-msgstr ""
+msgstr "클라이언트를 위한 더 높은 수준의 소켓 API. SAM V3 클라이언트가 UDP 세션을 요청할 때만 열립니다. <a href=/configclients> 클라이언트 구성 페이지</a>에서 활성화/비활성화 할 수 있습니다. <code>clients.config</code> 파일에서 SAM 명령 줄 옵션 <code>sam.udp.port=nnnn</code>을 사용하여 변경할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:557
 msgid "SAM bridge"
-msgstr ""
+msgstr "SAM 브릿지"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:559
 msgid "A higher level socket API for clients. Can be enabled/disabled on the <a href=/configclients>Client Configuration page</a>. Can be changed in the <code>clients.config</code> file. [Disabled by default]"
-msgstr ""
+msgstr "클라이언트를 위한 더 높은 수준의 소켓 API. <a href=/configclients> 클라이언트 구성 페이지</a>에서 활성화/비활성화 할 수 있습니다. <code>clients.config</code> 파일에서 변경할 수 있습니다. [기본적으로 비활성화됨]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:561
 msgid "I2P Router Console (Web interface)"
-msgstr ""
+msgstr "I2P 라우터 콘솔 (웹 인터페이스)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:563
 msgid "Can be disabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces. If you make the Router Console available over the network, you might wish to <a href=/configui#passwordheading>enforce an access password</a> to prevent unauthorized access."
-msgstr ""
+msgstr "<code>clients.config</code> 파일에서 비활성화할 수 있습니다. 특정 인터페이스 또는 모든 인터페이스에 바인딩하도록 구성할 수도 있습니다. 라우터 콘솔을 네트워크에서 사용 가능하게 만드는 경우, 무단 액세스를 방지하기 위해 <a href=/configui#passwordheading>액세스 암호를 강제로 설정</a>할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:567
 msgid "Can be disabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces in the <code>jetty.xml</code> file."
-msgstr ""
+msgstr "<code>clients.config</code> 파일에서 비활성화할 수 있습니다. <code>jetty.xml</code> 파일에서 특정 인터페이스 또는 모든 인터페이스에 바인딩하도록 구성할 수도 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:569
 msgid "Outgoing mail to smtp.postman.i2p"
-msgstr ""
+msgstr "smtp.postman.i2p로 나가는 메일"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:573
 msgid "Incoming mail from pop.postman.i2p"
-msgstr ""
+msgstr "pop.postman.i2p에서 들어오는 메일"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:577
 msgid "I2P Router Console (https://)"
-msgstr ""
+msgstr "I2P 라우터 콘솔(https://)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:579
 msgid "Can be enabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces. If both http and https are enabled, automatic redirection to https is enabled by default. If you make the Router Console available over the network, you might wish to <a href=/configui#passwordheading>enforce an access password</a> to prevent unauthorized access."
-msgstr ""
+msgstr "<code>clients.config</code> 파일에서 활성화할 수 있습니다. 특정 인터페이스 또는 모든 인터페이스에 바인딩되도록 구성할 수도 있습니다. http와 https 모두 활성화되어 있는 경우, 자동으로 https로 리디렉션됩니다. 라우터 콘솔을 네트워크 상에서 사용할 수 있게 한 경우, 무단 액세스를 방지하기 위해 <a href=/configui#passwordheading>액세스 비밀번호를 설정하는 것이 좋습니다.</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:581
 msgid "Local connection to wrapper control channel port"
-msgstr ""
+msgstr "랩퍼 컨트롤 채널 포트에 대한 로컬 연결"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:583
 msgid "Outbound to 32000 only, does not listen on this port. Starts at 31000 and will increment until 31999 looking for a free port. To change, see the <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper documentation</a>."
-msgstr ""
+msgstr "32000으로만 전방 연결됩니다. 이 포트에서 수신 대기하지 않습니다. 31000에서 시작하여 빈 포트를 찾을 때까지 31999까지 증가합니다. 변경하려면, <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper 문서</a>를 참조하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:585
 msgid "Local control channel for the service wrapper"
-msgstr ""
+msgstr "서비스 래퍼에 대한 로컬 컨트롤 채널"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:587
 msgid "To change, see the <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper documentation</a>."
-msgstr ""
+msgstr "변경하려면, <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper 문서</a>를 참조하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:589
 msgid "INTERNET FACING PORTS"
-msgstr ""
+msgstr "인터넷 연결 포트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:591
 msgid "I2P selects a random port between 9000 and 31000 to communicate with other routers when the program is run for the first time, or when your external IP address changes when running in <a href=/confignet#ipchange>Laptop Mode</a>. The <a href=/confignet#udpconfig>selected port</a> is shown on the <a href=/confignet>Network Configuration page</a>."
-msgstr ""
+msgstr "I2P는 프로그램이 처음 실행될 때 또는 종료되었을 때 외부 IP 주소가 변경되었을 때 다른 라우터와 통신하기 위해 9000에서 31000 사이의 임의의 포트를 선택합니다. <a href=/confignet#ipchange>Laptop Mode</a>에서 실행 중일 때는 외부 IP 주소가 변경되었을 때입니다. <a href=/confignet>네트워크 구성 페이지</a>에 <a href=/confignet#udpconfig>선택한 포트</a>가 표시됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:593
 msgid "Outbound UDP from the <a href=/confignet#udpconfig>random port</a> noted on the Network Configuration page to arbitrary remote UDP ports, allowing replies."
-msgstr ""
+msgstr "임의의 원격 UDP 포트로부터 <a href=/confignet#udpconfig>네트워크 구성 페이지</a>에 표시된 <a href=/confignet#udpconfig>임의의 포트</a>로부터 아웃바운드 UDP가 발신되며, 답장이 허용됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:595
 msgid "Outbound TCP from random high ports to arbitrary remote TCP ports."
-msgstr ""
+msgstr "임의의 원격 TCP 포트로부터 랜덤한 고정 포트로 아웃바운드 TCP가 발신됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:597
 msgid "Inbound UDP to the <a href=/confignet#udpconfig>port</a> noted on the Network Configuration page from arbitrary locations (optional, but recommended)."
-msgstr ""
+msgstr "임의의 위치로부터 <a href=/confignet#udpconfig>네트워크 구성 페이지</a>에 표시된 <a href=/confignet#udpconfig>포트</a>로 인바운드 UDP가 수신됩니다. (선택 사항이지만 권장됩니다)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:599
 msgid "Inbound TCP to the <a href=/confignet#externaltcp>port</a> noted on the Network Configuration page from arbitrary locations (optional, but recommended). <a href=/confignet#tcpconfig>Inbound TCP</a> may be disabled on the Network Configuration page."
-msgstr ""
+msgstr "임의의 위치로부터 <a href=/confignet#externaltcp>네트워크 구성 페이지</a>에 표시된 <a href=/confignet#externaltcp>포트</a>로 인바운드 TCP가 수신됩니다 (선택 사항이지만 권장됩니다). <a href=/confignet#tcpconfig>네트워크 구성 페이지</a>에서 인바운드 TCP를 비활성화 할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:601
 msgid "Outbound UDP on port 123, allowing replies: this is necessary for I2P's internal time sync (via SNTP - querying a random SNTP host in <code>pool.ntp.org</code> or <a href=/help/advancedsettings#ntpserverconfig>another server you specify</a>)."
-msgstr ""
+msgstr "답장을 허용하는 123 포트에서 아웃바운드 UDP: 이는 I2P의 내부 시간 동기화에 필요합니다 (SNTP를 통한 - <code>pool.ntp.org</code>의 임의의 SNTP 호스트 또는 <a href=/help/advancedsettings#ntpserverconfig>지정한 다른 서버</a>를 호출). "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:433
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:674
@@ -9620,67 +9620,67 @@ msgstr "I2P 용어"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:437
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "I2P 웹 애플리케이션으로 네트워크의 서비스 목적지를 관리하며, B64 해시를 사람이 읽을 수 있는 이름으로 매핑합니다. 목적지는 수동으로 추가하거나 호스트 목록.txt 파일에 구독을 통해 추가할 수 있습니다. SusiDNS로도 알려져 있습니다. 더 많은 정보는 <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>온라인 문서</a>를 참조하십시오."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:439
 msgid "Base32 (B32) / Base64 (B64)"
-msgstr ""
+msgstr "Base32 (B32) / Base64 (B64)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:441
 msgid "A <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> link (which always ends with .b32.i2p) is a hash of a <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> destination. For services on the network, the Base64 hash is often mapped to an .i2p domain in the addressbook."
-msgstr ""
+msgstr "<a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> 링크(.b32.i2p로 끝나는)는 <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> 목적지의 해시입니다. 네트워크 상의 서비스를 위해 Base64 해시는 주소록에 종종 .i2p 도메인으로 매핑됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:443
 msgid "B33"
-msgstr ""
+msgstr "B33"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:445
 msgid "An address containing an encrypted LeaseSet is informally referred to as a b33 address, an extension of a base32 address with the host's public key and signature type encoded into the address instead of a lookup hash. This address type is required for blinded Leasesets. More information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 Specification</a>"
-msgstr ""
+msgstr "암호화된 LeaseSet이 포함 된 주소는 비공식적으로 b33 주소라고 불립니다. 이는 검색 해시 대신 호스트의 공개 키와 서명 유형이 주소에 인코딩된 기본 32 주소의 확장입니다. 이 주소 유형은 블라인드된 Leaseset에 필요합니다. 자세한 정보: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 Specification</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:447
 msgid "BOB"
-msgstr ""
+msgstr "BOB"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:449
 msgid "BOB (Basic Open Bridge) is a (now-deprecated) simple application-to-router protocol, superseded by <i>SAM</i>. For more information, see the <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "BOB (Basic Open Bridge)은 (이제는 사용되지 않는) 간단한 애플리케이션 대 라우터 프로토콜이며, <i>SAM</i>에 의해 대체되었습니다. 더 많은 정보는 <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>온라인 문서</a>를 참조하십시오."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:451
 msgid "Clearnet"
-msgstr ""
+msgstr "클리어넷"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:453
 msgid "Clearnet normally refers to the publicly accessible internet, the opposite of the darknet that typically describes the encrypted, anonymous services built on I2P, Tor etc. For more information, see the <a href=https://en.wikipedia.org/wiki/Clearnet_(networking) class='sitelink external' target=_blank rel=noreferrer>Wikipedia article</a>."
-msgstr ""
+msgstr "클리어넷은 일반적으로 I2P, Tor 등에 구축된 암호화되고 익명의 서비스를 설명하는 다크넷의 반대인 대중적으로 접근 가능한 인터넷을 가리킵니다. 자세한 내용은 <a href=https://en.wikipedia.org/wiki/Clearnet_(networking) class='sitelink external' target=_blank rel=noreferrer>위키백과 문서</a>를 참조하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:457
 msgid "The unique cryptographic identity of the inbound endpoint of a tunnel providing access to a service on the I2P network, represented as a Base32 or Base64 hash of the public key. Equivalent to an IP address and port."
-msgstr "공개 키의 Base32 또는 Base64 해시로 표시되는 I2P 네트워크의 서비스에 대한 액세스를 제공하는 터널의 인바운드 엔드포인트의 고유한 암호화 ID입니다. IP 주소 및 포트와 동일합니다."
+msgstr "I2P 네트워크의 서비스에 액세스를 제공하는 터널의 인바운드 엔드포인트의 고유한 암호 식별자로, 공개 키의 Base32 또는 Base64 해시로 표시됩니다. IP 주소와 포트와 동일합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:459
 msgid "Eepget"
-msgstr ""
+msgstr "Eepget"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:461
 msgid "A command-line application supplied with I2P that is used to request URL resources, similar to <a href=https://www.gnu.org/software/wget/ class='sitelink external' target=_blank rel=noreferrer>wget</a> or <a href=https://curl.haxx.se/ class='sitelink external' target=_blank rel=noreferrer>curl</a>. Eepget is also used internally by the router, for example to reseed from remote hosts. By default, eepget uses the HTTP proxy on <code>127.0.0.1:4444</code>."
-msgstr ""
+msgstr "I2P와 함께 제공되는 명령 줄 응용 프로그램으로, URL 자원을 요청하는 데 사용되며 <a href=https://www.gnu.org/software/wget/ class='sitelink external' target=_blank rel=noreferrer>wget</a> 또는 <a href=https://curl.haxx.se/ class='sitelink external' target=_blank rel=noreferrer>curl</a>과 유사합니다. 예를 들어 eepget은 라우터 내부에서 원격 호스트에서 재배당하는 데 사용됩니다. 기본적으로 eepget은 <code>127.0.0.1:4444</code>의 HTTP 프록시를 사용합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:463
 msgid "Eephead"
-msgstr ""
+msgstr "Eephead"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:465
 msgid "A command-line application supplied with I2P+ (Linux/MacOS) that is used to perform a <code>head</code> request on a specified http resource on the network, returning various response headers from the remote server. By default, eephead uses the HTTP proxy on <code>127.0.0.1:4444</code>."
-msgstr ""
+msgstr "I2P+ (Linux/MacOS)와 함께 제공되는 명령 줄 응용 프로그램으로, 네트워크 상의 지정된 HTTP 리소스에 대한 <code>head</code> 요청을 수행하고 원격 서버에서 다양한 응답 헤더를 반환합니다. 기본적으로 eephead는 <code>127.0.0.1:4444</code>의 HTTP 프록시를 사용합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:467
 msgid "Eepsite"
-msgstr ""
+msgstr "Eepsite"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:469
 msgid "A website hosted on the I2P network. By default, a <a href=https://www.eclipse.org/jetty/about.html class='sitelink external' target=_blank rel=noreferrer>Jetty webserver</a> is configured and running on <a href=http://127.0.0.1:7658/ target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>."
-msgstr ""
+msgstr "I2P 네트워크에서 호스팅되는 웹사이트입니다. 기본적으로 <a href=https://www.eclipse.org/jetty/about.html class='sitelink external' target=_blank rel=noreferrer>Jetty 웹서버</a>가 구성되어 <a href=http://127.0.0.1:7658/ target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>에서 실행 중입니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:471
 msgid "Exploratory Tunnel"
@@ -9688,11 +9688,11 @@ msgstr "탐사터널"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:473
 msgid "A tunnel used by the router for communicating with other routers to perform various \"housekeeping\" functions such as learning and publishing <i>leasesets</i>, testing client tunnels, and learning about and validating other routers in the network. These tunnels are normally low-bandwidth."
-msgstr ""
+msgstr "라우터가 다른 라우터와 통신하기 위해 사용하는 터널로, <i>리스셋</i>을 학습하고 게시하며 클라이언트 터널을 테스트하고 네트워크의 다른 라우터에 대해 학습 및 검증하는 등 다양한 \"하우스키핑\" 기능을 수행합니다. 이러한 터널은 일반적으로 대역폭이 낮습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:477
 msgid "A router on the network tasked with providing and receiving information about other routers and services on the network. The current minimum share bandwidth for a router to be considered as capable of performing floodfill duties is 128 KBytes/sec, though it's possible to override this requirement and force a router to be a floodfill on the <a href=/configadvanced>Advanced Configuration page</a>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "네트워크에서 다른 라우터 및 서비스에 대한 정보를 제공하고 수신하는 라우터입니다. 플러드필 임무를 수행할 수 있다고 인정받으려면 현재 최소 공유 대역폭은 128 KBytes/sec이지만, 이 요구 사항을 무시하고 라우터를 플러드필로 지정하는 것도 가능합니다. 자세한 내용은 <a href=/configadvanced>고급 설정 페이지</a>에서 확인하십시오. 추가 정보는 <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>온라인 문서</a>를 참조하십시오."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:479
 msgid "Garlic Routing"
@@ -9712,11 +9712,11 @@ msgstr "숨겨진 모드에서 실행되도록 구성된 라우터는 해당 세
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:489
 msgid "The I2P Client Protocol (I2CP) enables external applications (clients) to communicate with I2P over single TCP socket, by default using port 7654. For more information, see the <a href=https://geti2p.net/en/docs/protocol/i2cp class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "I2P 클라이언트 프로토콜 (I2CP)은 외부 응용 프로그램 (클라이언트)이 기본적으로 포트 7654를 사용하여 단일 TCP 소켓을 통해 I2P와 통신할 수 있게합니다. 자세한 정보는 <a href=https://geti2p.net/en/docs/protocol/i2cp class='sitelink external' target=_blank rel=noreferrer>온라인 문서</a>를 참조하십시오."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:491
 msgid "I2NP"
-msgstr ""
+msgstr "I2NP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:493
 msgid "The I2P Network Protocol (I2NP) manages the routing and mixing of messages between routers, in addition to the transport selection (where more than one is supported) when communicating with a peer. For more information, see the <a href=https://geti2p.net/en/docs/protocol/i2np class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
@@ -9727,28 +9727,28 @@ msgid "I2P+"
 msgstr "I2P+"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:497
-msgid "A soft fork of the Java I2P software which retains full compatibility, providing an enhanced user interface and improvements to network performance. See <a href=http://skank.i2p/ class=sitelink target=_blank rel=noreferrer>http://skank.i2p/</a> or <a href=https://i2pplus.github.io class='sitelink external' target=_blank rel=noreferrer>https://i2pplus.github.io</a>for more information."
-msgstr ""
+msgid "A soft fork of the Java I2P software which retains full compatibility, providing an enhanced user interface and improvements to network performance. See <a href=http://skank.i2p/ class=sitelink target=_blank rel=noreferrer>http://skank.i2p/</a> or <a href=https://i2pplus.github.io class='sitelink external' target=_blank rel=noreferrer>https://i2pplus.github.io</a> for more information."
+msgstr "Java I2P 소프트웨어의 소프트 포크로서 전체 호환성을 유지하면서 향상된 사용자 인터페이스와 네트워크 성능 개선을 제공합니다. 자세한 정보는 <a href=http://skank.i2p/ class=sitelink target=_blank rel=noreferrer>http://skank.i2p/</a> 또는 <a href=https://i2pplus.github.io class='sitelink external' target=_blank rel=noreferrer>https://i2pplus.github.io</a>를 참조하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:499
 msgid "I2PBote (plugin)"
-msgstr ""
+msgstr "I2PBote (플러그인)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:501
 msgid "An unmaintained I2P plugin that provides serverless, end-to-end encrypted e-mail within the I2P network. For more information, see <a href=http://bote.i2p/ class=sitelink target=_blank rel=noreferrer>http://bote.i2p/</a>. Source code is available on <a href=https://github.com/i2p/i2p.i2p-bote class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgstr "I2P 네트워크 내에서 서버 없이 끝간단 암호화된 이메일을 제공하는 유지보수되지 않는 I2P 플러그인입니다. 자세한 정보는 <a href=http://bote.i2p/ class=sitelink target=_blank rel=noreferrer>http://bote.i2p/</a>를 참조하세요. 소스 코드는 <a href=https://github.com/i2p/i2p.i2p-bote class='sitelink external' target=_blank rel=noreferrer>github</a>에서 확인할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:503
 msgid "i2pd"
-msgstr ""
+msgstr "i2pd"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:505
-msgid "An alternative implementation of an I2P router coded in C++. For more information, see <a href=https://i2pd.website/ class='sitelink external' target=_blank rel=noreferrer>https://i2pd.website/</a> Source code is available on <a href=https://github.com/PurpleI2P/i2pd class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgid "An alternative implementation of an I2P router coded in C++. For more information, see <a href=https://i2pd.website/ class='sitelink external' target=_blank rel=noreferrer>https://i2pd.website/</a>. Source code is available on <a href=https://github.com/PurpleI2P/i2pd class='sitelink external' target=_blank rel=noreferrer>github</a>."
+msgstr "C++로 작성된 I2P 라우터의 대체 구현입니다. 자세한 정보는 <a href=https://i2pd.website/ class='sitelink external' target=_blank rel=noreferrer>https://i2pd.website/</a>를 참조하세요. 소스 코드는 <a href=https://github.com/PurpleI2P/i2pd class='sitelink external' target=_blank rel=noreferrer>github</a>에서 확인할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:509
 msgid "A fork of the <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>Snark BitTorrent client</a> refactored for use on the I2P network. Usually supplied as part of the default suite of applications with Java I2P, and also available as a <a href=http://skank.i2p/#download class=sitelink target=_blank rel=noreferrer>standalone Java application</a>."
-msgstr ""
+msgstr "I2P 네트워크에서 사용하기 위해 재구성된 <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>Snark BitTorrent 클라이언트</a>의 포크입니다. 일반적으로 Java I2P의 기본 애플리케이션 스위트의 일부로 제공되며, <a href=http://skank.i2p/#download class=sitelink target=_blank rel=noreferrer>독립 실행형 Java 애플리케이션</a>으로도 사용할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:511
 msgid "Introducer"
@@ -9764,7 +9764,7 @@ msgstr "점프 서비스"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:517
 msgid "A simple CGI application that takes a hostname as a parameter and returns a 301 redirect to the proper URL with a <code>?i2paddresshelper=key</code> string appended. The HTTP proxy will interpret the appended string and use the key as the actual destination. In addition, the proxy will cache the key so the address helper is not necessary until restart, and offer the option to add the resolved address to the addressbook."
-msgstr ""
+msgstr "호스트 이름을 매개 변수로 받아와 해당 URL로 <code>?i2paddresshelper=key</code> 문자열이 추가된 301 리디렉션을 반환하는 간단한 CGI 애플리케이션입니다. HTTP 프록시는 추가된 문자열을 해석하고 해당 키를 실제 대상으로 사용합니다. 또한, 프록시는 키를 캐시하여 주소 도우미가 재시작되기 전에는 필요하지 않으며, 해결된 주소를 주소록에 추가하는 옵션을 제공합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:519
 msgid "Laptop Mode"
@@ -9772,7 +9772,7 @@ msgstr "노트북 모드"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:521
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
-msgstr ""
+msgstr "공용 IP 주소가 변경될 때 시스템의 <a href=/confignet#ipchange>선택적 설정</a>을 통해 자동으로 <a href=/netdb?r=.>라우터 식별자</a>와 <a href=/confignet#udpconfig>외부 포트</a>를 변경할 수 있습니다. 이를 통해 적이 라우터 식별자와 IP 주소를 연결하는 것을 방지할 수 있습니다. IP 주소가 자주 변경될 수 있는 상황에서 이 기능을 사용할 수 있습니다. 예를 들어, 노트북에서 I2P를 여러 위치에서 실행하는 경우입니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:525
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
@@ -9784,7 +9784,7 @@ msgstr "<i>목적지</i>에 대한 터널 진입점(임대) 그룹입니다. 참
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:531
 msgid "Monotone / mtn"
-msgstr ""
+msgstr "Monotone / mtn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:533
 msgid "The distributed version control system (DVCS) previously used to maintain I2P's source code, now superseded by git."
@@ -9792,39 +9792,39 @@ msgstr "이전에 I2P의 소스 코드를 유지하는 데 사용되었던 DVCS(
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:535
 msgid "Multihoming"
-msgstr ""
+msgstr "멀티홈(다중 홈)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:537
 msgid "Services may be hosted on multiple routers simultaneously, by sharing the same private key for the destination. Multihoming can further enhance the security and stability of a server by providing redundancy; if a server is multihomed, when a server in the pool goes offline, the provided service will remain available, making it more difficult to correlate server downtime with a router going offline."
-msgstr ""
+msgstr "서비스는 여러 라우터에서 동시에 호스팅될 수 있으며 대상에 대한 동일한 개인 키를 공유함으로써 가능합니다. 멀티홈은 서버의 보안과 안정성을 강화하기 위해 제공되는 중복성을 제공할 수 있습니다. 서버에 멀티홈이 지원되는 경우 풀 안의 서버가 오프라인 상태가 될 때도 제공된 서비스는 계속해서 사용 가능하므로 서버 다운타임과 라우터의 오프라인 상태를 연관짓는 것이 어려워집니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:541
 msgid "A distributed database containing router contact information (RouterInfos) and destination contact information (LeaseSets). A single router maintains its own (partial) database for communicating with other routers on the network; no single router will maintain a list of all routers. The RouterInfos are stored on disk and read into memory when the router starts, or when new RouterInfos are acquired. Also referred to as the <i>NetDb</i>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "라우터 연락처 정보(RouterInfos)와 대상 연락처 정보(LeaseSets)를 포함하는 분산 데이터베이스입니다. 단일 라우터는 네트워크 상의 다른 라우터와 통신하기 위해 자체(부분적) 데이터베이스를 유지하며, 단일 라우터는 모든 라우터의 목록을 유지하지 않습니다. RouterInfos는 디스크에 저장되고 라우터 시작 시 또는 새로운 RouterInfos를 획득할 때 메모리로 읽어옵니다. 또한 <i>NetDb</i>라고도 합니다. 자세한 정보는 <a href=https://geti2p.net/en/docs/how/network-database class='sitelink external' target=_blank rel=noreferrer>온라인 문서</a>를 참조하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:543
 msgid "NTCP / NTCP2"
-msgstr ""
+msgstr "NTCP / NTCP2"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:545
 msgid "NTCP (NIO-based TCP) and NTCP2 are TCP-based network transports which use Java's NIO (New I/O) TCP implementation to deliver I2NP messages between routers on the network. NTCP2 improves the resistance of NTCP to various attacks and automated traffic identification methods. For more information, see the <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "NTCP(NIO 기반 TCP)와 NTCP2는 Java의 NIO(New I/O) TCP 구현을 사용하여 네트워크 상의 라우터 간에 I2NP 메시지를 전달하는 TCP 기반의 네트워크 전송입니다. NTCP2는 NTCP의 다양한 공격과 자동 트래픽 식별 방법에 대한 내성을 향상시킵니다. 자세한 정보는 <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>온라인 문서</a>를 참조하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:547
 msgid "Orchid (plugin)"
-msgstr ""
+msgstr "Orchid (플러그인)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:549
 msgid "A java implementation of a Tor client, available as an I2P plugin. Can be used as the default <i>outproxy</i> if configured in the relevant SOCKS or HTTP client tunnel in the <i>Tunnel Manager</i>. Available from <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgstr "I2P 플러그인으로 제공되는 Tor 클라이언트의 자바 구현입니다. <i>Tunnel Manager</i>의 해당 SOCKS 또는 HTTP 클라이언트 터널에 구성되어 있다면 기본 <i>아웃프록시</i>로 사용할 수 있습니다. <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>에서 다운로드할 수 있습니다. 소스 코드는 <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>에서 확인할 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:551
 msgid "Outproxy"
-msgstr ""
+msgstr "아웃프록시"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:553
 msgid "A service on the network that provides a proxy connection to the <i>clearnet</i>. By default, I2P has an HTTP outproxy configured for web browsing on <code>127.0.0.1:4444</code>."
-msgstr ""
+msgstr "네트워크에서 <i>clearnet</i>에 대한 프록시 연결을 제공하는 서비스입니다. 기본적으로 I2P는 <code>127.0.0.1:4444</code>에서 웹 브라우징을 위한 HTTP 아웃프록시가 구성되어 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:555
 msgid "Participation"
@@ -9832,15 +9832,15 @@ msgstr "참여"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:557
 msgid "The act of contributing to the network by permitting other routers to build tunnels using your router in a tunnel chain. At least 12KB/s upstream bandwidth (network share) is required to be allocated in order to enable participation. Note that firewalled routers will be limited in how much they contribute to participation, and a router designated as Hidden will not participate at all."
-msgstr ""
+msgstr "타 터널 체인에서 당신의 라우터를 사용하여 다른 라우터가 터널을 구축할 수 있도록 허용함으로써 네트워크에 기여하는 행위입니다. 참여를 가능하게 하려면 최소 12KB/s 업스트림 대역폭(네트워크 공유)을 할당해야 합니다. 방화벽이 설정된 라우터는 참여에 제한이 있으며, 히든으로 지정된 라우터는 전혀 참여하지 않습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:561
 msgid "The process of acquiring router identities, normally via <i>clearnet</i> servers, to ensure your router can communicate and build tunnels with other routers on the network. When a router has no router identities for other peers (usually immediately after installation), the process of reseeding is also referred to as <i>bootstrapping</i>."
-msgstr ""
+msgstr "라우터가 네트워크의 다른 라우터와 통신하고 터널을 구축할 수 있는지를 보장하기 위해 일반적으로 <i>clearnet</i> 서버를 통해 라우터 식별자를 획득하는 과정입니다. 라우터가 다른 피어를 위한 라우터 식별자를 갖지 않는 경우(일반적으로 설치 직후), 다시 뿌리까지의 과정은 <i>부트스트래핑</i>이라고도 합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:565
 msgid "The core I2P software, which routes encrypted packets on the I2P network. All routers by default participate in the network except routers running in countries considered hostile (see <i>Strict Countries</i>), which both helps the network and provides cover traffic for any clients or servers connecting to the I2P network through the router."
-msgstr ""
+msgstr "I2P 네트워크에서 암호화된 패킷을 라우팅하는 핵심 I2P 소프트웨어입니다. 모든 라우터는 기본적으로 네트워크에 참여하며, 라우터를 통해 I2P 네트워크에 연결되는 모든 클라이언트나 서버에게 네트워크를 도와주고 커버 트래픽을 제공합니다. 단, 미국이 적대적인 것으로 간주된 국가에서 실행 중인 라우터는 기본적으로 네트워크에 참여하지 않습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:567
 msgid "Router Identity"
@@ -9848,11 +9848,11 @@ msgstr "라우터 ID"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:569
 msgid "Information defining the unique identity of a router on the network which includes its IP address (or the IP addresses of intermediate introducers) and listening port, public signing and encryption keys. Router identities correlate to peers in the NetDB. Also referred to as a <i>RouterInfo</i>."
-msgstr ""
+msgstr "네트워크 상에서 라우터의 고유 식별 정보를 정의하는 것으로, IP 주소(또는 중간 소개자의 IP 주소)와 수신 포트, 공용 서명 및 암호화 키를 포함합니다. 라우터 신원은 NetDB의 피어에 연결됩니다. 또한 <i>RouterInfo</i>로도 알려져 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:573
 msgid "SAM (Simple Anonymous Messaging) is a protocol which allows a client application written in any programming language to communicate over I2P, by using a socket-based interface to the I2P router. For more information, see the <a href=https://geti2p.net/en/docs/api/samv3 class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "SAM (Simple Anonymous Messaging)은 모든 프로그래밍 언어로 작성된 클라이언트 응용 프로그램이 I2P를 통해 통신할 수 있게하는 프로토콜로, I2P 라우터와의 소켓 기반 인터페이스를 사용합니다. 자세한 정보는 <a href=https://geti2p.net/en/docs/api/samv3 class='sitelink external' target=_blank rel=noreferrer>온라인 문서</a>를 참조하십시오."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:575
 msgid "Shared Client"
@@ -9860,11 +9860,11 @@ msgstr "공유 클라이언트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:577
 msgid "In order to use a single set of tunnels for multiple client services, clients can be configured from the <i>Tunnel Manager</i> to operate in <i>Shared Client</i> mode. This mode conserves resources and blends the traffic from multiple clients into a single set of tunnels, making traffic analysis harder. Clients configured as Shared Clients share the same tunnel options."
-msgstr ""
+msgstr "다중 클라이언트 서비스에 단일 터널 세트를 사용하기 위해 클라이언트는 <i>Tunnel Manager</i>에서 <i>공유 클라이언트</i> 모드로 구성할 수 있습니다. 이 모드는 자원을 절약하며, 다중 클라이언트의 트래픽을 단일 터널 세트로 혼합하여 트래픽 분석을 어렵게 만듭니다. 공유 클라이언트로 구성된 클라이언트는 동일한 터널 옵션을 공유합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:581
 msgid "SSU (Secure Semi-reliable UDP) is an I2P network transport providing encrypted, connection-oriented, point-to-point connections, in addition to IP address detection and NAT traversal services. For more information, see the <a href=https://geti2p.net/en/docs/transport/ssu class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "SSU (Secure Semi-reliable UDP)는 IP 주소 탐지와 NAT 트래버스 서비스 외에도 암호화된 연결 지향적인 1대1 연결을 제공하는 I2P 네트워크 전송입니다. 자세한 정보는 <a href=https://geti2p.net/en/docs/transport/ssu class='sitelink external' target=_blank rel=noreferrer>온라인 문서</a>를 참조하십시오."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:583
 msgid "Strict Countries"
@@ -9880,7 +9880,7 @@ msgstr "터널"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:589
 msgid "A <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink external' target=_blank rel=noreferrer>unidirectional</a> encrypted communication pathway between a client or server on the I2P network. Similar to a circuit in Tor, except that Tor circuits are bidirectional."
-msgstr ""
+msgstr "I2P 네트워크 상의 클라이언트나 서버 간의 <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink external' target=_blank rel=noreferrer>일방향</a> 암호화된 통신 경로입니다. Tor의 회로와 유사하지만, Tor 회로는 양방향입니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:591
 msgid "Tunnel Endpoint"
@@ -9900,7 +9900,7 @@ msgstr "터널의 첫 번째 라우터입니다. 인바운드 터널의 경우 �
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:601
 msgid "A web application supplied with the router that permits creation and configuration of client and server tunnels. Also referred to as the <i>Hidden Services Manager</i>."
-msgstr ""
+msgstr "라우터와 함께 제공되는 웹 어플리케이션으로, 클라이언트와 서버 터널의 생성과 설정을 허용합니다. 또한 <i>숨겨진 서비스 관리자</i>로도 알려져 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:603
 msgid "Tunnel Participant"
@@ -9912,47 +9912,47 @@ msgstr "게이트웨이나 엔드포인트로 지정되지 않은 터널의 라�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:607
 msgid "ZzzOT (plugin)"
-msgstr ""
+msgstr "ZzzOT (플러그인)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:609
 msgid "A Java I2P plugin implementation of a BitTorrent <a href=https://en.wikipedia.org/wiki/Opentracker class='sitelink external' target=_blank rel=noreferrer>Open Tracker</a>. Available from <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins.zzzot class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgstr "BitTorrent의 Java I2P 플러그인 구현인 <a href=https://en.wikipedia.org/wiki/Opentracker class='sitelink external' target=_blank rel=noreferrer>Open Tracker</a>. <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>에서 사용할 수 있습니다. 소스 코드는 <a href=https://github.com/i2p/i2p.plugins.zzzot class='sitelink external' target=_blank rel=noreferrer>github</a>에서 제공됩니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:270
 msgid "Web Hosting - I2P+"
-msgstr ""
+msgstr "웹 호스팅 - I2P+"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:433
 msgid "Registering an I2P Domain"
-msgstr ""
+msgstr "I2P 도메인 등록"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:435
 msgid "To obtain your own hostname, I2P domain registrars such as <a href=http://stats.i2p/i2p/addkey.html target=_blank rel=noreferrer class=sitelink>stats.i2p</a> or <a href=http://reg.i2p/ target=_blank rel=noreferrer class=sitelink>reg.i2p</a> provide registration services that allow you to register and manage an .i2p hostname or sub-domain which will then be propagated across the network. Some registration sites will require the <i>B64 destination address</i> for the tunnel/service you wish to associate with a hostname, which you should copy from the <i>Local destination</i> section on the <a href='http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>."
-msgstr ""
+msgstr "독자적인 호스트 이름을 얻으려면, <a href=http://stats.i2p/i2p/addkey.html target=_blank rel=noreferrer class=sitelink>stats.i2p</a> 또는 <a href=http://reg.i2p/ target=_blank rel=noreferrer class=sitelink>reg.i2p</a>와 같은 I2P 도메인 등록기가 네트워크 전체로 전파될 .i2p 호스트 이름 또는 서브 도메인을 등록하고 관리할 수 있는 등록 서비스를 제공합니다. 일부 등록 사이트에서는 호스트 이름에 연결할 터널/서비스의 <i>B64 대상 주소</i>가 필요할 수 있으며, 이 주소는 <a href='http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3'>터널 관리자 구성 페이지</a>의 <i>로컬 대상</i> 부분에서 복사해야 합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:437
 msgid "If a <i>Registration Authentication</i> string is requested, you can find it on the <a href='http://127.0.0.1:7657/i2ptunnel/register?tunnel=3'>Registration Authentication page</a> linked from the <a href='http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>. Registration authentication ensures only the owner is able to register or otherwise manage the hostname, and is required on stats.i2p and reg.i2p."
-msgstr ""
+msgstr "<i>등록 인증</i> 문자열을 요청하는 경우, <a href='http://127.0.0.1:7657/i2ptunnel/register?tunnel=3'>등록 인증 페이지</a>에서 찾을 수 있습니다. 해당 페이지는 <a href='http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3'>터널 관리자 구성 페이지</a>에서 링크되어 있습니다. 등록 인증은 소유자만 호스트 이름을 등록하거나 관리할 수 있도록 보장하며, stats.i2p와 reg.i2p에서 필요합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:439
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
-msgstr ""
+msgstr "급하게 시간을 기다릴 수 없다면, 사람들에게 \"점프\" 주소 도우미 리다이렉션 서비스를 사용하도록 알릴 수 있습니다. 이는 주소를 등록한 후 일반적으로 몇 분 내에 작동할 것입니다. 우선 브라우저에 <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code>를 입력하여 테스트해보세요. 작동할 때 다른 사람들에게 알릴 수 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:441
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='http://127.0.0.1:7657/susidns/details?h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for i2p-projekt.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "또는 도메인에 대한 <i>주소 도우미 링크</i>를 복사하여 다른 사람들과 공유해야 하는 위치에 붙여넣을 수 있습니다.이 링크는 주소록 목록 페이지나 도메인의 세부 사항 페이지에 표시됩니다. 예를 들어, <a href='http://127.0.0.1:7657/susidns/details?h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>i2p-projekt.i2p에 대한 세부 정보</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:443
 msgid "Backup your private key!"
-msgstr ""
+msgstr "개인 키를 백업하세요!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:445
 msgid "When a new service tunnel is created, or a service is run for the first time (e.g. the default jetty webserver, plugins), a private encryption key is created which essentially controls the ownership of address. This is usually named <code>&hellip;privKey.dat</code>, or <code>eepPriv.dat</code>, though it's a good idea to change the name to indicate the service it belongs to and then respecify it in the Tunnel Manager server settings. This .dat file should be backed up safely; lose it and you will lose ownership and control of your hostname!"
-msgstr ""
+msgstr "새로운 서비스 터널이 생성되었거나 서비스가 처음 실행될 때 (예: 기본 제티 웹 서버, 플러그인) 주소의 소유권을 실질적으로 제어하는 개인 암호화 키가 생성됩니다. 이 키는 보통 <code>&hellip;privKey.dat</code> 또는 <code>eepPriv.dat</code>로 이름 지어집니다. 하지만 이 키의 이름을 서비스가 속한 것을 나타내도록 변경하고 터널 관리자 서버 설정에서 다시 지정하는 것이 좋습니다. 이 .dat 파일은 안전하게 백업되어야 합니다. 이 파일을 분실하면 호스트 이름의 소유권과 제어권을 잃게 됩니다!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:447
 msgid "To migrate the key to a new router, or to setup multihoming (running the same service on multiple routers for redundancy and load-balancing), copy the backed up key to your .i2p directory and specify it in the new server tunnel, or replace the default key in the plugin folder (e.g. the zzzot plugin)."
-msgstr ""
+msgstr "키를 새로운 라우터로 이전하거나 다중 홈(여러 라우터에서 같은 서비스를 장애 조치 및 부하 분산을 위해 실행)을 설정하려면 백업된 키를 .i2p 디렉토리에 복사하고 새 서버 터널에서 지정하거나 플러그인 폴더(예: zzzot 플러그인)의 기본 키를 대체하세요."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/index_jsp.java:270
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:520
