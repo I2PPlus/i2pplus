@@ -10299,7 +10299,7 @@ msgid "The FAQ on <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=norefe
 msgstr "Các câu hỏi thường gặp trên <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> hoặc <a href=https://geti2p.net/en/faq target=_blank rel=noreferrer>geti2p.net</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:491
-msgid "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink> on I2P's IRC network</a>."
+msgid "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's IRC network."
 msgstr "Bạn cũng có thể thử <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> hoặc <a href=irc://127.0.0.1:6668/i2p class=chatlink> trên mạng IRC của I2P</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:433

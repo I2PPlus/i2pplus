@@ -10298,7 +10298,7 @@ msgid "The FAQ on <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=norefe
 msgstr "FAQ di <a href=http://i2p-projekt.i2p/id/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> atau <a href=https://geti2p.net/id/faq target=_blank rel=noreferrer>geti2p.net</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:491
-msgid "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink> on I2P's IRC network</a>."
+msgid "You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's IRC network."
 msgstr "Anda juga dapat mencoba <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> atau <a href=irc://127.0.0.1:6668/i2p class=chatlink> di jaringan IRC I2P</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:433
