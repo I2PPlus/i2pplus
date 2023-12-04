@@ -81,7 +81,7 @@
 <li><a href=http://wiki.i2p-projekt.i2p/wiki/index.php/Eepsite/Services target=_blank rel=noreferrer><%=intl._t("I2P Wiki")%></a></li>
 <li><%=intl._t("The FAQ on <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> or <a href=https://geti2p.net/en/faq target=_blank rel=noreferrer>geti2p.net</a>")%></li>
 </ul>
-<p><%=intl._t("You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink> on I2P's IRC network</a>.")%></p>
+<p><%=intl._t("You may also try <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's IRC network.")%></p>
 </div>
 </div>
 <script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
