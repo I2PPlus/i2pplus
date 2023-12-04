@@ -12,14 +12,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
-<%
-    if ("POST".equals(request.getMethod())) {
-        // refresh the sidebar after page loads
-%>
-<script src="/js/configupdate.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
-<%
-    }
-%>
 <%=intl.title("config update")%>
 </head>
 <body>
@@ -35,7 +27,8 @@
 <div class=messages>
 <jsp:getProperty name="updatehelper" property="newsStatus" />
 </div>
-<form action="" method=POST>
+<iframe name=processForm id=processForm hidden></iframe>
+<form id=form_updates action="" method=POST target=processForm>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <% /* set hidden default */ %>
 <input type=submit name=action value="" style=display:none>
@@ -207,6 +200,12 @@
 </table>
 </form>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+<script nonce=<%=cspNonce%>>
+  const updatesForm = document.getElementById("form_updates");
+  const processForm = document.getElementById("processForm");
+  window.addEventListener("DOMContentLoaded", progressx.hide);
+  updatesForm.addEventListener("submit", progressx.show);
+  processForm.addEventListener("load", progressx.hide);
+</script>
 </body>
 </html>

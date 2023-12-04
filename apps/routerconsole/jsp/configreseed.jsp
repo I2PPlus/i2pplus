@@ -29,7 +29,8 @@
 <%=intl._t("To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>.")%>
 </p>
 <% }  // !isAdvanced %>
-<form action="" method=POST>
+<iframe name=processForm id=processForm hidden></iframe>
+<form id=form_reseed action="" method=POST target=processForm>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <h3 class=tabletitle id=reseedsetup><%=intl._t("Reseeding Configuration")%>&nbsp;<span class=h3navlinks><a title="<%=intl._t("Help with reseeding")%>" href="/help/reseed">[<%=intl._t("Reseeding Help")%>]</a></span></h3>
 <table id=reseedconfig class=configtable>

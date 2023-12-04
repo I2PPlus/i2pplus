@@ -29,7 +29,8 @@
 <jsp:useBean class="net.i2p.router.web.helpers.SummaryHelper" id="summaryhelper" scope="request" />
 <jsp:setProperty name="summaryhelper" property="contextId" value="<%=i2pcontextId%>" />
 <h3 class=tabletitle><%=intl._t("Refresh Interval")%></h3>
-<form action="" method=POST>
+<iframe name=processForm id=processForm hidden></iframe>
+<form action="" method=POST target=processForm>
 <table class=configtable id=refreshsidebar>
 <tr>
 <td>
@@ -59,7 +60,7 @@
 </table>
 </form>
 <h3 class=tabletitle><%=intl._t("Customize Sidebar")%></h3>
-<form action="" method=POST>
+<form id=form_sidebar action="" method=POST target=processForm>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <input type=hidden name="group" value="2">
 <jsp:getProperty name="summaryhelper" property="configTable" />

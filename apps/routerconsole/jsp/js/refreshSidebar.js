@@ -352,6 +352,28 @@ function refreshSidebar() {
       window.requestAnimationFrame(countTunnels);
       window.requestAnimationFrame(countNewsItems);
     }
+
+    const reseedform = document.getElementById("form_reseed");
+    const sidebarform = document.getElementById("form_sidebar");
+    const updatesform = document.getElementById("form_updates");
+    if (reseedform) {
+      reseedform.onsubmit = function() {
+        handleFormSubmit();
+      };
+    } else if (sidebarform) {
+      sidebarform.onsubmit = function() {
+        handleFormSubmit();
+      };
+    } else if (updatesform) {
+      updatesform.onsubmit = function() {
+        handleFormSubmit();
+      };
+    }
+
+    function handleFormSubmit() {
+      setTimeout(refreshAll, 3000);
+    }
+
   };
 
   function ready() {
