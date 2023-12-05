@@ -317,6 +317,15 @@ public class NewsHelper extends ContentHelper {
                                            DataHelper.formatDuration2(now - lastFetch),
                                            ctx));
          }
+         String unsignedUpdateURL = ctx.getProperty("router.updateUnsignedURL");
+         boolean isPlus = unsignedUpdateURL == null || unsignedUpdateURL.contains("skank.i2p");
+         if (isDevSU3UpdateAvailable(ctx)) {
+             buf.append("\nSigned development update available (").append(updateVersion()).append(")");
+         } else if (isUnsignedUpdateAvailable(ctx) && isPlus) {
+             buf.append("\nI2P+ update available (").append(unsignedUpdateVersion()).append(")");
+         } else {
+             buf.append("\nUnsigned update available (").append(unsignedUpdateVersion()).append(")");
+         }
          buf.append("</i></span><span id=newsDisplay>");
          String consoleNonce = CSSHelper.getNonce();
          boolean oldHome = ctx.getBooleanProperty("routerconsole.oldHomePage");
