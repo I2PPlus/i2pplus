@@ -10548,7 +10548,7 @@ msgid "This is the number of peers your router has available for building client
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
-msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier.Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
+msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier. Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
 msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:479
@@ -11530,7 +11530,7 @@ msgid "Bandwidth Test"
 msgstr "Test przepustowości"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:498
-msgid "I2P will now test your internet connection to identify the optimal speed settings."
+msgid "I2P+ will now test your internet connection to identify the optimal speed settings."
 msgstr "I2P sprawdzi Twoje połączenie internetowe, aby wyznaczyć optymalne parametry przepustowości."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:500

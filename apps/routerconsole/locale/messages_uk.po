@@ -10532,7 +10532,7 @@ msgid "This is the number of peers your router has available for building client
 msgstr "Це кількість пірів, які доступні вашому маршрутизатору для формування клієнтських тунелів. Зазвичай це 8-30. Ваші швидкі піри показані на сторінці <a href='/profiles'>Профілів</a>. <a href='/configstats#router.fastPeers'>[Увімкнути графіку]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
-msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier.Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
+msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier. Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
 msgstr "Це кількість пірів, доступних вашому маршрутизатору для формування розвідувальних тунелів, які використовуються для визначення продуктивності мережі. Зазвичай це 8-75. Швидкі піри входять до верхнього тиру пропускної здатності. Ваші піри верхнього тиру пропускної здатності показані на сторінці <a href='/profiles'>Профілів</a>. <a href='/configstats#router.highCapacityPeers'>[Увімкнути графіку]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:479
@@ -11510,7 +11510,7 @@ msgid "Bandwidth Test"
 msgstr "Перевірка пропускної здатності"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:498
-msgid "I2P will now test your internet connection to identify the optimal speed settings."
+msgid "I2P+ will now test your internet connection to identify the optimal speed settings."
 msgstr "I2P тепер перевірить ваше інтернет-з’єднання, щоб визначити оптимальні налаштування швидкості."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:500

@@ -10525,7 +10525,7 @@ msgid "This is the number of peers your router has available for building client
 msgstr "Este es el número de pares que tiene disponible tu enrutador para construir túneles cliente. Generalmente está entre 8-30. Tus pares rápidos se muestran en la página <a href='/profiles'>Perfiles</a>. <a href='/configstats#router.fastPeers'>[Habilitar gráficos]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
-msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier.Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
+msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier. Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
 msgstr "Este es el número de pares que tiene disponible tu enrutador para construir tus túneles exploratorios, que se usan para determinar el rendimiento de la red. Generalmente está entre 8-75. Los pares rápidos se incluyen en el nivel de alta capacidad. Tus pares de alta capacidad se muestran en la página <a href='/profiles'>Perfiles</a>. <a href='/configstats#router.highCapacityPeers'>[Habilitar gráficos]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:479
@@ -11504,7 +11504,7 @@ msgid "Bandwidth Test"
 msgstr "Prueba de ancho de banda"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:498
-msgid "I2P will now test your internet connection to identify the optimal speed settings."
+msgid "I2P+ will now test your internet connection to identify the optimal speed settings."
 msgstr "Su ancho de banda ahora será probado para determinar su velocidad."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:500

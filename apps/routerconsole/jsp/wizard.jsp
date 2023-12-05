@@ -150,7 +150,7 @@
 </p>
 <h3><%=intl._t("Bandwidth Test")%></h3>
 <p>
-<%=intl._t("I2P will now test your internet connection to identify the optimal speed settings.").replace("I2P", "I2P+")%>&nbsp;<wbr>
+<%=intl._t("I2P+ will now test your internet connection to identify the optimal speed settings.").replace("I2P", "I2P+")%>&nbsp;<wbr>
 <%=intl._t("This is done using the third-party M-Lab service.")%>
 </p>
 <p>

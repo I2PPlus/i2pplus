@@ -10598,7 +10598,7 @@ msgid "This is the number of peers your router has available for building client
 msgstr "هذا عدد الأقران المتاحين لبناء أنفاق العملاء عن طريق موجهك. عادة ما يتراوح هذا العدد بين 8-30. يتم عرض أقرانك سريعي الاتصال على صفحة <a href='/profiles'>الملفات الشخصية</a>. <a href='/configstats#router.fastPeers'>[تمكين الرسم البياني]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
-msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier.Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
+msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier. Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
 msgstr "هذا العدد الذي يتوفر لدى موجهك لبناء أنفاقك الاستكشافية التي تستخدم لتحديد أداء الشبكة. بشكل عام يتراوح بين 8-75. يتم تضمين الأقران سريعي الاتصال في الطبقة عالية السعة. يتم عرض أقرانك عالية السعة على صفحة <a href='/profiles'>صفحة الملفات</a>. <a href='/configstats#router.highCapacityPeers'>[تمكين الرسم البياني]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:479
@@ -11577,7 +11577,7 @@ msgid "Bandwidth Test"
 msgstr "اختبار عرض النطاق الترددي"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:498
-msgid "I2P will now test your internet connection to identify the optimal speed settings."
+msgid "I2P+ will now test your internet connection to identify the optimal speed settings."
 msgstr "سيقوم I2P الآن باختبار اتصالك بالإنترنت لتحديد إعدادات السرعة المثالية."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:500

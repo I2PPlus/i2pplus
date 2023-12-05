@@ -10514,7 +10514,7 @@ msgid "This is the number of peers your router has available for building client
 msgstr "Bu, yönlendiricinizin istemci tünelleri oluşturmak için kullanılabilen eş sayısıdır. Genellikle 8-30 aralığında olur. Hızlı eşleriniz <a href='/profiles'>Profiller sayfasında</a> gösterilir. <a href='/configstats#router.fastPeers'>[Grafiklemeyi etkinleştir]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
-msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier.Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
+msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier. Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
 msgstr "Bu, ağ performansını belirlemek için kullanılan keşif tünellerinizi oluşturmak için yönlendiricinizin kullanılabilir eş sayısıdır. Genellikle 8-75 aralığındadır. Hızlı eşler yüksek kapasite seviyesine dahildir. Yüksek kapasiteli eşleriniz <a href='/profiles'>Profiller sayfasında</a> gösterilir. <a href='/configstats#router.highCapacityPeers'>[Grafiklemeyi etkinleştir]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:479
@@ -11496,7 +11496,7 @@ msgid "Bandwidth Test"
 msgstr "Bant Genişliği Sınaması"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:498
-msgid "I2P will now test your internet connection to identify the optimal speed settings."
+msgid "I2P+ will now test your internet connection to identify the optimal speed settings."
 msgstr "I2P şimdi en uygun hız ayarlarının yapılabilmesi için İnternet bağlantınızı sınayacak."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:500

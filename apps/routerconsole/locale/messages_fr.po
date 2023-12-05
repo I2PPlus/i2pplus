@@ -10517,7 +10517,7 @@ msgid "This is the number of peers your router has available for building client
 msgstr "C'est le nombre de pairs disponibles pour la construction des tunnels clients par votre routeur. Il se situe généralement entre 8 et 30. Vos pairs rapides sont affichés sur la page <a href='/profiles'>Profils</a>. <a href='/configstats#router.fastPeers'>[Activer le graphique]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
-msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier.Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
+msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier. Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
 msgstr "C'est le nombre de pairs dont dispose votre routeur pour la construction de vos tunnels exploratoires qui servent à déterminer les performances réseau. Il se situe généralement entre 8 et 75. Les pairs rapides sont inclus dans le niveau haute capacité. Vos pairs à haute capacité sont affichés sur la page <a href='/profiles'>Profils</a>. <a href='/configstats#router.highCapacityPeers'>[Activer le graphique]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:479
@@ -11499,7 +11499,7 @@ msgid "Bandwidth Test"
 msgstr "Test de bande passante"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:498
-msgid "I2P will now test your internet connection to identify the optimal speed settings."
+msgid "I2P+ will now test your internet connection to identify the optimal speed settings."
 msgstr "I2P testera maintenant votre connexion Internet pour déterminer les paramètres de vitesse optimaux."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:500

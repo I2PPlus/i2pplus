@@ -10512,7 +10512,7 @@ msgid "This is the number of peers your router has available for building client
 msgstr "这是您的路由器可用于构建客户端隧道的对等点数量。它通常在8-30的范围内。您的快速对等点显示在<a href='/profiles'>概况页面</a>上。<a href='/configstats#router.fastPeers'>[启用图表]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
-msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier.Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
+msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier. Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
 msgstr "这是你的路由器可用于建立探索隧道的对等节点数量,用于确定网络性能,它通常在8-75的范围内,且已经包含了快速节点。高容量节点数量显示在<a href='/profiles'>概况页</a>上。<a href='/configstats#router.highCapacityPeers'>[启用图表]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:479
@@ -11494,7 +11494,7 @@ msgid "Bandwidth Test"
 msgstr "带宽测试"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:498
-msgid "I2P will now test your internet connection to identify the optimal speed settings."
+msgid "I2P+ will now test your internet connection to identify the optimal speed settings."
 msgstr "I2P 现在将测试您的网络连接以确定最优速度设置。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:500

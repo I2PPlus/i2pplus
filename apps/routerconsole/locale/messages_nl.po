@@ -10517,7 +10517,7 @@ msgid "This is the number of peers your router has available for building client
 msgstr "Dit is het aantal peers dat uw router beschikbaar heeft om clienttunnels te maken. Het ligt meestal tussen 8-30. Uw snelle peers worden weergegeven op de <a href='/profiles'>Profielpagina</a>. <a href='/configstats#router.fastPeers'>[Schakel grafieken in]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
-msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier.Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
+msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier. Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
 msgstr "Dit is het aantal peers dat uw router beschikbaar heeft om uw verkennende tunnels te maken die worden gebruikt om de netwerkprestaties te bepalen. Dit ligt meestal tussen 8-75. De snelle peers zijn inbegrepen in het hoogcapacitaire niveau. Uw hoogcapacitaire peers worden weergegeven op de <a href='/profiles'>Profielpagina</a>. <a href='/configstats#router.highCapacityPeers'>[Schakel grafieken in]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:479
@@ -11496,7 +11496,7 @@ msgid "Bandwidth Test"
 msgstr "Bandbreedtetest"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:498
-msgid "I2P will now test your internet connection to identify the optimal speed settings."
+msgid "I2P+ will now test your internet connection to identify the optimal speed settings."
 msgstr "I2P test nu uw internetverbinding om de optimale snelheidsinstellingen te identificeren."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:500

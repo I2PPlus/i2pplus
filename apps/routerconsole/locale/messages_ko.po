@@ -11494,7 +11494,7 @@ msgid "Bandwidth Test"
 msgstr "대역폭 테스트"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:498
-msgid "I2P will now test your internet connection to identify the optimal speed settings."
+msgid "I2P+ will now test your internet connection to identify the optimal speed settings."
 msgstr "I2P는 이제 인터넷 연결을 테스트하여 최적의 속도 설정을 식별합니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:500

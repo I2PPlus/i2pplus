@@ -10511,7 +10511,7 @@ msgid "This is the number of peers your router has available for building client
 msgstr "Ini adalah jumlah peer yang dimiliki router Anda dan tersedia untuk membangun terowongan klien. Secara umum berkisar antara 8-30. Peer cepat Anda ditampilkan di halaman <a href='/profiles'>Profil</a>. <a href='/configstats#router.fastPeers'>[Aktifkan grafik]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
-msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier.Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
+msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier. Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
 msgstr "Ini adalah jumlah peer yang dimiliki router Anda dan tersedia untuk membangun terowongan eksplorasi yang digunakan untuk menentukan kinerja jaringan. Secara umum berkisar antara 8-75. Peer cepat termasuk dalam tingkat kapasitas tinggi. Peer kapasitas tinggi Anda ditampilkan di halaman <a href='/profiles'>Profil</a>. <a href='/configstats#router.highCapacityPeers'>[Aktifkan grafik]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:479
@@ -11490,7 +11490,7 @@ msgid "Bandwidth Test"
 msgstr "Tes Bandwidth"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:498
-msgid "I2P will now test your internet connection to identify the optimal speed settings."
+msgid "I2P+ will now test your internet connection to identify the optimal speed settings."
 msgstr "I2P sekarang akan menguji koneksi internet Anda untuk mengidentifikasi pengaturan kecepatan optimal."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:500
