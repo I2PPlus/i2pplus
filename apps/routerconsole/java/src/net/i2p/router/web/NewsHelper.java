@@ -323,7 +323,7 @@ public class NewsHelper extends ContentHelper {
              buf.append("\nSigned development update available (").append(updateVersion()).append(")");
          } else if (isUnsignedUpdateAvailable(ctx) && isPlus) {
              buf.append("\nI2P+ update available (").append(unsignedUpdateVersion()).append(")");
-         } else if (isUnsignedUpdateAvailable(ctx) {
+         } else if (isUnsignedUpdateAvailable(ctx)) {
              buf.append("\nUnsigned update available (").append(unsignedUpdateVersion()).append(")");
          } else {
              buf.append("\nNo update currently available.");
