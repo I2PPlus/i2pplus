@@ -323,8 +323,10 @@ public class NewsHelper extends ContentHelper {
              buf.append("\nSigned development update available (").append(updateVersion()).append(")");
          } else if (isUnsignedUpdateAvailable(ctx) && isPlus) {
              buf.append("\nI2P+ update available (").append(unsignedUpdateVersion()).append(")");
-         } else {
+         } else if (isUnsignedUpdateAvailable(ctx) {
              buf.append("\nUnsigned update available (").append(unsignedUpdateVersion()).append(")");
+         } else {
+             buf.append("\nNo update currently available.");
          }
          buf.append("</i></span><span id=newsDisplay>");
          String consoleNonce = CSSHelper.getNonce();
