@@ -2428,17 +2428,12 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #volunteer{background:var(--hat) right bottom no-repeat,#000;background-size:auto 40%}
 
 /* help toc */
-#browserconfig h2{padding-left:38px;background:var(--firefox) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
-#browserconfig ol{margin:-10px 20px -5px -20px;display:inline-block}
-#changelog h2{padding-left:38px;background:var(--changelog) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
-#configurationhelp h2,#advancedsettings h2,#filterlist h2{padding-left:38px;background:var(--settings_inert) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
-#faq h2,#glossary h2{padding-left:38px;background:var(--ask) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #help_changelog{background:var(--changelog) no-repeat 15px center/32px,var(--helpbox)}
 #help_configadv{background:var(--configure) no-repeat 15px center/32px,var(--helpbox)}
 #help_configuration{background:var(--wrench) no-repeat 15px center/32px,var(--helpbox)}
-#help_faq,#help_glossary{background:var(--ask) no-repeat 15px center/32px,var(--helpbox)}
+#help_faq{background:var(--faq) no-repeat 15px center/32px,var(--helpbox)}
 #help_filter{background:var(--filter) no-repeat 15px center/32px,var(--helpbox)}
-#help h2,#help h3,#help #faq h3,#help #webhosting h3{background-repeat:no-repeat,repeat,repeat,no-repeat,repeat;background-blend-mode:normal,exclusion,overlay}
+#help_glossary{background:var(--ask) no-repeat 15px center/32px,var(--helpbox)}
 #help_legal{background:var(--legal) no-repeat 15px center/32px,var(--helpbox)}
 #help_newusers{background:url(images/favicon.svg) no-repeat 15px center/32px,var(--helpbox)}
 #help_reseed{background:var(--reseed) no-repeat 15px center/32px,var(--helpbox)}
@@ -2451,6 +2446,18 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #help_troubleshoot{background:url(../images/troubleshoot.svg) no-repeat 15px center/32px,var(--helpbox)}
 #help_ui{background:var(--ui) no-repeat 15px center/32px,var(--helpbox)}
 #help_webhosting{background:var(--server) no-repeat 15px center/32px,var(--helpbox)}
+#browserconfig ol{margin:-10px 20px -5px -20px;display:inline-block}
+
+/* help headings */
+.confignav a[href="/help/glossary"], .tab2#terms span{background-image:var(--ask)!important}
+#help h2,#help h3,#help #faq h3,#help #webhosting h3{background-repeat:no-repeat,repeat,repeat,no-repeat,repeat;background-blend-mode:normal,exclusion,overlay}
+#browserconfig h2{padding-left:38px;background:var(--firefox) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
+#changelog h2{padding-left:38px;background:var(--changelog) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
+#configurationhelp h2,#advancedsettings h2{padding-left:38px;background:var(--settings_inert) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
+#configurationhelp h2#confignet{background-image:url(../images/networkconfig.svg)}
+#faq h2{padding-left:38px;background:var(--faq) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
+#filterlist h2{padding-left:38px;background:var(--filter) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
+#glossary h2{padding-left:38px;background:var(--ask) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #legal h2{padding-left:38px;background:var(--legal) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #newuserguide h2{padding-left:38px;background:url(images/favicon.svg) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #reseedhelp h2{padding-left:38px;background:var(--reseed) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
@@ -2458,7 +2465,7 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #themeoverride h2{padding-left:38px;background:var(--ui) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #troubleshoot h2{padding-left:38px;background:url(../images/troubleshoot.svg) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #tunnman h2{padding-left:38px;background:var(--hardhat) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
-#webhosting h2{padding-left:38px;background:var(--server) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
+#webhosting h2{padding-left:38px;background:url(../images/eepsites/registrar.svg) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 
 /* faq */
 #faq code{user-select:all}
