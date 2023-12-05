@@ -24,7 +24,7 @@
 <%@include file="formhandler.jsi" %>
 <jsp:useBean class="net.i2p.router.web.ConfigUpdateHelper" id="updatehelper" scope="request" />
 <jsp:setProperty name="updatehelper" property="contextId" value="<%=i2pcontextId%>" />
-<div class=messages id=newsStatus>
+<div class=messages id=statusNews>
 <jsp:getProperty name="updatehelper" property="newsStatus" />
 </div>
 <iframe name=processForm id=processForm hidden></iframe>
@@ -202,7 +202,7 @@
 </div>
 <script nonce=<%=cspNonce%>>
   function refresh() {
-    const message = document.getElementById("newsStatus");
+    const message = document.getElementById("statusNews");
     const xhrRefresh = new XMLHttpRequest();
     xhrRefresh.open("GET", "/configupdate", true);
     xhrRefresh.responseType = "document";
@@ -210,7 +210,7 @@
       if (xhrRefresh.readyState === XMLHttpRequest.DONE) {
         if (xhrRefresh.status === 200) {
           progressx.show();
-          const messageResponse = xhrRefresh.responseXML.getElementById("newsStatus");
+          const messageResponse = xhrRefresh.responseXML.getElementById("statusNews");
           message.innerHTML = messageResponse.innerHTML;
         }
       }
