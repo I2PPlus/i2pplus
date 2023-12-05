@@ -1,13 +1,13 @@
 HTTP/1.1 407 Proxy Authorization Required
 Content-Type: text/html; charset=UTF-8
 Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.5
+Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline' http://proxy.i2p; form-action 'self' http://proxy.i2p; frame-ancestors 'self' http://127.0.0.1:7657/; img-src http://proxy.i2p data:; font-src http://proxy.i2p
 Proxy-Authenticate: Basic realm="I2P HTTP Proxy"
-Connection: close
-X-XSS-Protection: 1; mode=block
+Referrer-Policy: no-referrer
 X-Content-Type-Options: nosniff
 X-Frame-Options: DENY
-Referrer-Policy: no-referrer
-Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline' http://proxy.i2p; form-action 'self' http://proxy.i2p; frame-ancestors 'self' http://127.0.0.1:7657/; img-src http://proxy.i2p data:; font-src http://proxy.i2p
+X-XSS-Protection: 1; mode=block
+Connection: close
 
 <!DOCTYPE HTML>
 <html>

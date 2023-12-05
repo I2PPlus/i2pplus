@@ -1,12 +1,11 @@
 HTTP/1.1 409 Conflict
 Content-Type: text/html; charset=UTF-8
+Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline' http://proxy.i2p; form-action 'self' http://proxy.i2p; frame-ancestors 'self' http://127.0.0.1:7657/; img-src * data:; font-src http://proxy.i2p
 Referrer-Policy: no-referrer
-Connection: close
-X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
 X-Frame-Options: DENY
-Referrer-Policy: no-referrer
-Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline' http://proxy.i2p; form-action 'self' http://proxy.i2p; frame-ancestors 'self' http://127.0.0.1:7657/; img-src * data:; font-src http://proxy.i2p
+X-XSS-Protection: 1; mode=block
+Connection: close
 
 <!DOCTYPE HTML>
 <html>
