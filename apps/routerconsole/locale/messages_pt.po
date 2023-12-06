@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-01 15:12+0000\n"
-"PO-Revision-Date: 2023-12-06 07:41+0000\n"
+"PO-Revision-Date: 2023-12-06 08:31+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt\n"
@@ -72,15 +72,15 @@ msgstr "Iniciando nova propagação"
 #, java-format
 msgid "Acquired {0} router info from reseed hosts"
 msgid_plural "Acquired {0} router infos from reseed hosts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Adquirida {0} informação do roteador dos hosts de reseed"
+msgstr[1] "Adquiridas {0} informações do roteador dos hosts de reseed"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:382
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Adquirida apenas 1 informação do roteador dos hosts de reseed"
+msgstr[1] "Adquiridas apenas {0} informações do roteador dos hosts de reseed"
 
 #. remove dupe error msgs
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:407
@@ -1142,8 +1142,8 @@ msgstr "A verificação da atualização do plug-in falhou"
 #, java-format
 msgid "{0} plugin updated"
 msgid_plural "{0} plugins updated"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} plugin atualizado"
+msgstr[1] "{0} plugins atualizados"
 
 #: ../java/src/net/i2p/router/web/PluginStarter.java:252
 msgid "Plugin check complete"
@@ -2580,8 +2580,8 @@ msgstr "Reenvio de ficheiro falhou"
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Reseed bem-sucedido, carregado {0} informações de roteador do arquivo."
+msgstr[1] "Reseed bem-sucedido, carregado {0} informações de roteadores do arquivo."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:105
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:681
@@ -2628,8 +2628,8 @@ msgstr "Desligar em {0}"
 #, java-format
 msgid "{0} transit tunnel still active"
 msgid_plural "{0} transit tunnels still active"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} túnel de trânsito ainda ativo"
+msgstr[1] "{0} túneis de trânsito ainda ativos"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:88
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:103
@@ -2745,15 +2745,15 @@ msgstr "Erro ao salvar a configuração (aplicada, mas não salva) - consulte os
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} salto"
+msgstr[1] "{0} saltos"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:23
 #, java-format
 msgid "{0} tunnel"
 msgid_plural "{0} tunnels"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} túnel"
+msgstr[1] "{0} túneis"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:51
 msgid "Exploratory tunnels"
@@ -5284,8 +5284,8 @@ msgstr "Eles oferecem-se para nos apresentar"
 #, java-format
 msgid "{0} fail"
 msgid_plural "{0} fails"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} falha"
+msgstr[1] "{0} falhas"
 
 #. 2
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:704
@@ -5405,22 +5405,22 @@ msgstr "Pacotes duplicados recebidos do peer"
 #, java-format
 msgid "Showing {0} recent profile."
 msgid_plural "Showing {0} recent profiles."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Mostrando {0} perfil recente."
+msgstr[1] "Mostrando {0} perfis recentes."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Escondendo {0} perfil antigo."
+msgstr[1] "Escondendo {0} perfis antigos."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:103
 #, java-format
 msgid "Hiding {0} standard profile."
 msgid_plural "Hiding {0} standard profiles."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Escondendo {0} perfil padrão."
+msgstr[1] "Escondendo {0} perfis padrão."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:104
 msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
@@ -5557,22 +5557,22 @@ msgstr "pares"
 #, java-format
 msgid "{0} fast peer"
 msgid_plural "{0} fast peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} par rápido"
+msgstr[1] "{0} pares rápidos"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:377
 #, java-format
 msgid "{0} high capacity peer"
 msgid_plural "{0} high capacity peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} par de alta capacidade"
+msgstr[1] "{0} pares de alta capacidade"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:379
 #, java-format
 msgid "{0} integrated peer"
 msgid_plural "{0} integrated peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} par integrado"
+msgstr[1] "{0} pares integrados"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:393
 msgid "1h Fail Rate"
@@ -5780,8 +5780,8 @@ msgstr "Média total de frequência"
 #, java-format
 msgid "{0} event"
 msgid_plural "{0} events"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} evento"
+msgstr[1] "{0} eventos"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:170
 msgid "rate"
