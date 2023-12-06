@@ -70,19 +70,57 @@
 </td>
 </tr>
 <tr>
-<td class=optionsave>
-<%
-    if ("true".equals(System.getProperty("net.i2p.router.web.UpdateHandler.updateInProgress", "false"))) { %>
-<i><%=intl._t("Update In Progress")%></i><br>
-<%
-    } else {
-%>
-<input type=submit name=action class=check value="<%=intl._t("Check for updates")%>" />
-<%
-    }
-%>
+<td>
+<b id=devSU3build class=suboption>
+<jsp:getProperty name="updatehelper" property="updateDevSU3" />
+<label for="updateDevSU3">
+<%=intl._t("Update with signed development builds")%>
+</label>
+</b>
+<div class=optionsingle>
+<span class=nowrap>
+<b><%=intl._t("Update URL")%>:</b>
+<input type=text size=60 name="devSU3URL" value="<jsp:getProperty name="updatehelper" property="devSU3URL" />">
+</span>
+</div>
 </td>
 </tr>
+<tr>
+<td class=infohelp><%=intl._t("To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>")%></td>
+</tr>
+<tr>
+<td>
+<b id=unsignedbuild class=suboption>
+<jsp:getProperty name="updatehelper" property="updateUnsigned" />
+<label for="updateUnsigned">
+<%=intl._t("Update with unsigned development builds")%>
+</label>
+</b>
+<div class=optionsingle>
+<span class=nowrap>
+<b><%=intl._t("Update URL")%>:</b>
+<input type=text size=60 name="zipURL" value="<jsp:getProperty name="updatehelper" property="zipURL" />">
+</span>
+</div>
+</td>
+</tr>
+<tr>
+<td class=optionsave>
+<span id=checkforupdates>
+<%  if ("true".equals(System.getProperty("net.i2p.router.web.UpdateHandler.updateInProgress", "false"))) { %>
+<i><%=intl._t("Update In Progress")%>&hellip;</i>
+<%  } else { %>
+<input type=submit name=action class=check value="<%=intl._t("Check for updates")%>" />
+<%  } %>
+</span>
+<input type=reset class=cancel value="<%=intl._t("Cancel")%>" hidden>
+<input type=submit name=action class=accept value="<%=intl._t("Save")%>" >
+</td>
+</tr>
+</table>
+<input type=checkbox name="miscConfig" id=miscConfig hidden>
+<label class=tabletitle for=miscConfig><%=intl._t("Advanced Options")%></label>
+<table id=newsupdateconfig class=configtable>
 <%
     if (updatehelper.canInstall()) {
         if (updatehelper.isAdvanced()) {
@@ -148,41 +186,6 @@
 </div>
 </td>
 </tr>
-<tr>
-<td>
-<b id=devSU3build class=suboption>
-<jsp:getProperty name="updatehelper" property="updateDevSU3" />
-<label for="updateDevSU3">
-<%=intl._t("Update with signed development builds")%>
-</label>
-</b>
-<div class=optionsingle>
-<span class=nowrap>
-<b><%=intl._t("Update URL")%>:</b>
-<input type=text size=60 name="devSU3URL" value="<jsp:getProperty name="updatehelper" property="devSU3URL" />">
-</span>
-</div>
-</td>
-</tr>
-<tr>
-<td class=infohelp><%=intl._t("To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>")%></td>
-</tr>
-<tr>
-<td>
-<b id=unsignedbuild class=suboption>
-<jsp:getProperty name="updatehelper" property="updateUnsigned" />
-<label for="updateUnsigned">
-<%=intl._t("Update with unsigned development builds")%>
-</label>
-</b>
-<div class=optionsingle>
-<span class=nowrap>
-<b><%=intl._t("Update URL")%>:</b>
-<input type=text size=60 name="zipURL" value="<jsp:getProperty name="updatehelper" property="zipURL" />">
-</span>
-</div>
-</td>
-</tr>
 <%
     } else {
 %>
@@ -192,11 +195,7 @@
 <%
     }   // if canInstall
 %>
-<tr class=tablefooter><td class=optionsave>
-<input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
-<input type=submit name=action class=accept value="<%=intl._t("Save")%>" >
-</td>
-</tr>
+<tr><td class=optionsave><input type=submit name=action class=accept value="<%=intl._t("Save")%>" ></td></tr>
 </table>
 </form>
 </div>

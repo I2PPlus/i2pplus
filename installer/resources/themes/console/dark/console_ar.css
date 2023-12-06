@@ -68,7 +68,7 @@ td{text-align:right}
 #bandwidthconfig td:first-child:not(.infohelp){padding:0 5px 0 80px;background:url(/themes/console/images/info/arrow_left.png) no-repeat 30px center}
 #bannedips,#bannedips table{direction:ltr}
 #clientconfig td:nth-child(2){text-align:center}
-#clientconfig th:first-child,#clientconfig td:first-child,#loggingoptions td:first-child,#i2pupdates td:first-child,#tunnelconfig td:first-child,table#i2pupdates input[name*="URL"],table#i2pupdates textarea,#addkeyring td:first-child,#reseedconfig td:first-child{text-align:left}
+#clientconfig th:first-child,#clientconfig td:first-child,#loggingoptions td:first-child,#config_update td:first-child,#tunnelconfig td:first-child,table#config_update input[name*="URL"],table#config_update textarea,#addkeyring td:first-child,#reseedconfig td:first-child{text-align:left}
 #config_logging p,#reseedconfig td.infohelp{text-align:right}
 #config_reseed .confignav+.infohelp+form{margin-left:-16px;margin-right:16px}
 #config_reseed #reseedurl,#config_reseed #reseedzip,#config_reseed #reseedcreatefile,#config_reseed #reseedurl:hover,#config_reseed #reseedzip:hover,#config_reseed #reseedcreatefile:hover{background-position:right 10px center;padding:10px 45px 10px 10px}
@@ -89,8 +89,8 @@ td{text-align:right}
 #enviro td:first-child{text-align:left}
 #enviro td{padding:5px 10px 5px 5px}
 #eventlog th{text-align:right;padding-right:10px}
-#i2pupdates .optbox{margin-right:10px}
-#i2pupdates td:first-child,#reseedconfig td:first-child,#configstats tr:last-child td,textarea[name="levels"]{text-align:right}
+#config_update .optbox{margin-right:10px}
+#config_update td:first-child,#reseedconfig td:first-child,#configstats tr:last-child td,textarea[name="levels"]{text-align:right}
 #installPluginFile td:last-child,#installPluginUrl td:last-child,#newfamily table td:last-child,#joinfamily table td:last-child{padding:10px 15px 10px 0}
 #installPluginUrl{padding:5px}
 #installPluginUrl td:first-child,#plugininstall tr:nth-child(n+2) table td:first-child{background-position:right 8px center;padding-right:45px}
@@ -139,7 +139,7 @@ td{text-align:right}
 #themeoptions input, #enablefull input{margin:1px 2px 1px 10px}
 #tunnelconfig th{text-align:right}
 #tunnels.main h3 a{float:left}
-#updateHelper b,#updateProxyHostPort b,#i2pupdates b{text-align:left}
+#updateHelper b,#updateProxyHostPort b,#config_update b{text-align:left}
 #service_logs,table[id$="logs"] ul,.logtable ul li{direction:ltr;text-align:left}
 #xhr{margin:0 -9px 0 auto}
 html[lang="fa"] .links:not(.twocol) li{margin-right:42px}

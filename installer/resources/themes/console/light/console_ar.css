@@ -263,12 +263,12 @@ form[action="configpeer"]>h3.tabletitle{margin-left:16px;margin-right:-16px}
 form[action="configpeer"]{margin-left:-16px;margin-right:16px}
 h3#advancedconfig a,h3#bwlimiter a,h3.tabletitle a,h3.ptitle a,th a.script,th#upnpconfig a,h3#graphinfo a,h3#graphdisplay a{float:left}
 #helptranslate{padding:20px 20px 20px 20px;text-align:right;background:var(--infohelp) no-repeat right 14px center/28px}
-#i2pupdates input[type=text]:not([readonly]),#i2pupdates textarea,.main[id^="config_"] textarea,input[name="newsURL"]{width:calc(100% - 208px)}
-#i2pupdates td:first-child,#reseedconfig td:first-child,#configstats tr:last-child td,textarea[name="levels"],#loggingoptions td:first-child{text-align:left}
+#config_update input[type=text]:not([readonly]),#config_update textarea,.main[id^="config_"] textarea,input[name="newsURL"]{width:calc(100% - 208px)}
+#config_update td:first-child,#reseedconfig td:first-child,#configstats tr:last-child td,textarea[name="levels"],#loggingoptions td:first-child{text-align:left}
 .infohelp#webappconfig,h3#webappconfiguration,#pluginconfig,h3#pconfig{margin-right:0}
 #installPluginUrl,#installPluginFile,#reseedzip,#reseedcreatefile{padding:5px 55px 0 5px}
 #joinfamily tr:nth-child(3) td:first-child,#newfamily tr:last-child td:first-child{padding:5px}
-#loggingoptions input[type=text],#i2pupdates input[type=text],#addkeyring input[type=text],#reseedconfig input[type=text],#manualreseed input[type=text],#plugininstall input[type=text],.homelinkedit input[type=text]{direction:ltr;text-align:right}
+#loggingoptions input[type=text],#config_update input[type=text],#addkeyring input[type=text],#reseedconfig input[type=text],#manualreseed input[type=text],#plugininstall input[type=text],.homelinkedit input[type=text]{direction:ltr;text-align:right}
 #loggingoptions p{text-align:right}
 #loggingoptions td:last-child:not(.optionsave){text-align:right}
 #manualreseed{margin-bottom:16px}
@@ -289,12 +289,12 @@ h3#advancedconfig a,h3#bwlimiter a,h3.tabletitle a,h3.ptitle a,th a.script,th#up
 #sidebarconf th{text-align:right}
 #sidebarconf tr:last-child td:last-child{text-align:right}
 #statsForm,#joinfamily,#newfamily,#permabanned{margin-left:0;margin-right:0}
-textarea#advancedsettings,#i2pupdates textarea,#addkeyring textarea,#reseedconfig textarea,#enviro{direction:ltr}
+textarea#advancedsettings,#config_update textarea,#addkeyring textarea,#reseedconfig textarea,#enviro{direction:ltr}
 #themesettings,#langsettings{margin-left:16px;margin-right:-16px;margin-bottom:16px}
 #tunnelconfig+hr{background:#fff}
 #tunnelconfig th font[color="#900"]{padding:4px 24px 4px 5px;background-position:right center}
 #tunnelconfig td:nth-child(n+2){text-align:right}
-#updateHelper b,#updateProxyHostPort b,#i2pupdates b{text-align:left}
+#updateHelper b,#updateProxyHostPort b,#config_update b{text-align:left}
 #updateplugins{margin:0}
 #webappconfigactions{margin-left:0;margin-right:0}
 #webappconfig th:nth-child(2),#webappconfig td:nth-child(2),#webappconfig th:nth-child(3),#webappconfig td:nth-child(3){text-align:center}
