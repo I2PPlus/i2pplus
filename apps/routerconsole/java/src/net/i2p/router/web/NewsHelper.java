@@ -330,20 +330,15 @@ public class NewsHelper extends ContentHelper {
          }
          buf.append("</i></span><span id=newsDisplay>");
          String consoleNonce = CSSHelper.getNonce();
-         boolean oldHome = ctx.getBooleanProperty("routerconsole.oldHomePage");
          if (lastUpdated > 0 && consoleNonce != null) {
              if (shouldShowNews(ctx)) {
                  buf.append(" <a href=\"/home?news=0&amp;consoleNonce=").append(consoleNonce).append("\">")
                     .append(Messages.getString("Hide news", ctx));
-             } else if (oldHome) {
-                 buf.append(" <a href=\"/sitemap?news=1&amp;consoleNonce=").append(consoleNonce).append("\">")
-                    .append(Messages.getString("Show news", ctx));
              } else {
                  buf.append(" <a href=\"/home?news=1&amp;consoleNonce=").append(consoleNonce).append("\">")
                     .append(Messages.getString("Show news", ctx));
              }
-             buf.append("</a>" +
-                        " | <a href=\"/news\">")
+             buf.append("</a> | <a href=\"/news\">")
                 .append(Messages.getString("Show all news", ctx))
                 .append("</a></span>");
          }
@@ -406,4 +401,5 @@ public class NewsHelper extends ContentHelper {
         ctx.router().saveConfig(PROP_LAST_NEW_ENTRY, Long.toString(rv));
         return rv;
     }
+
 }
