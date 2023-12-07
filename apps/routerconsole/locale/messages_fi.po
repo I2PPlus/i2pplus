@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-12-07 00:18+0000\n"
+"PO-Revision-Date: 2023-12-07 06:05+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fi\n"
@@ -72,15 +72,15 @@ msgstr "Aloitetaan Reseed"
 #, java-format
 msgid "Acquired {0} router info from reseed hosts"
 msgid_plural "Acquired {0} router infos from reseed hosts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hankittiin {0} reseed-isännällä olevaa reitittimen tietoa"
+msgstr[1] "Hankittiin {0} reseed-isännällä olevaa reitittimen tietoa"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:382
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hankittiin vain 1 reseed-isännällä olevaa reitittimen tietoa"
+msgstr[1] "Hankittiin vain {0} reseed-isännällä olevaa reitittimen tietoa"
 
 #. remove dupe error msgs
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:407
@@ -368,12 +368,12 @@ msgstr "UPnP ilmoittaa, että ylävirran suurin bittinopeus on {0} bittiä/s"
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1255
 #, java-format
 msgid "{0} port {1,number,#####} was successfully forwarded by UPnP."
-msgstr ""
+msgstr "{0} portti {1,number,#####} ohjattiin onnistuneesti eteenpäin UPnP:n avulla."
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1257
 #, java-format
 msgid "{0} port {1,number,#####} was not forwarded by UPnP."
-msgstr ""
+msgstr "{0} portti {1,number,#####} ei ollut ohjattu eteenpäin UPnP:n avulla."
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:904
 #: ../java/src/net/i2p/router/web/DeadlockDetector.java:110
@@ -1142,8 +1142,8 @@ msgstr "Plugin-päivityksen tarkistus epäonnistui"
 #, java-format
 msgid "{0} plugin updated"
 msgid_plural "{0} plugins updated"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} liitännäinen päivitetty"
+msgstr[1] "{0} liitännäistä päivitetty"
 
 #: ../java/src/net/i2p/router/web/PluginStarter.java:252
 msgid "Plugin check complete"
@@ -2580,8 +2580,8 @@ msgstr "Uudelleenseeraus tiedostosta epäonnistui"
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Reseed onnistui, ladattu {0} reitittimen tietoja tiedostosta."
+msgstr[1] "Reseed onnistui, ladattu {0} reitittimen tietoja tiedostosta."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:105
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:681
@@ -2628,16 +2628,16 @@ msgstr "Sammutukseen aikaa {0}"
 #, java-format
 msgid "{0} transit tunnel still active"
 msgid_plural "{0} transit tunnels still active"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} läpikulkutunneli edelleen aktiivinen"
+msgstr[1] "{0} läpikulkutunnelia edelleen aktiivisia"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:88
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:103
 #, java-format
 msgid "Please wait for routing commitment to expire for {0} tunnel"
 msgid_plural "Please wait for routing commitments to expire for {0} tunnels"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Odota, että reititysvelvoite vanhenee {0} tunnelille"
+msgstr[1] "Odota, että reititysvelvoitteet vanhenevat {0} tunnelille"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:96
 #, java-format
@@ -2745,15 +2745,15 @@ msgstr "Virhe tallennettaessa asetuksia (sovellettu, mutta ei tallennettu) - tar
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} hyppy"
+msgstr[1] "{0} hyppyä"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:23
 #, java-format
 msgid "{0} tunnel"
 msgid_plural "{0} tunnels"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} tunneli"
+msgstr[1] "{0} tunnelia"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:51
 msgid "Exploratory tunnels"
@@ -5284,8 +5284,8 @@ msgstr "He tarjoituivat esittelemään meidät"
 #, java-format
 msgid "{0} fail"
 msgid_plural "{0} fails"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} epäonnistuminen"
+msgstr[1] "{0} epäonnistumista"
 
 #. 2
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:704
@@ -5405,22 +5405,22 @@ msgstr "Kaksinkertaiset paketit vastaanotettu vertaiselta"
 #, java-format
 msgid "Showing {0} recent profile."
 msgid_plural "Showing {0} recent profiles."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Näytetään {0} viimeisintä profiilia."
+msgstr[1] "Näytetään {0} viimeisintä profiilia."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Piilotetaan {0} vanhempaa profiilia."
+msgstr[1] "Piilotetaan {0} vanhempaa profiilia."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:103
 #, java-format
 msgid "Hiding {0} standard profile."
 msgid_plural "Hiding {0} standard profiles."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Piilotetaan {0} tavallista profiilia."
+msgstr[1] "Piilotetaan {0} tavallista profiilia."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:104
 msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
@@ -5557,22 +5557,22 @@ msgstr "vertaisia"
 #, java-format
 msgid "{0} fast peer"
 msgid_plural "{0} fast peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} nopea solmu"
+msgstr[1] "{0} nopeaa solmua"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:377
 #, java-format
 msgid "{0} high capacity peer"
 msgid_plural "{0} high capacity peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} suuren kapasiteetin solmu"
+msgstr[1] "{0} suurta kapasiteettia solmua"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:379
 #, java-format
 msgid "{0} integrated peer"
 msgid_plural "{0} integrated peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} integroitu kumppani"
+msgstr[1] "{0} integroitua kumppania"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:393
 msgid "1h Fail Rate"
@@ -5780,8 +5780,8 @@ msgstr "Elinikäinen keskimääräinen taajuus"
 #, java-format
 msgid "{0} event"
 msgid_plural "{0} events"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} tapahtuma"
+msgstr[1] "{0} tapahtumaa"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:170
 msgid "rate"
@@ -9373,7 +9373,7 @@ msgstr "Kuinka konfiguroin I2P:n avautumaan käynnistyksen yhteydessä tiettyyn 
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:463
 msgid "By default, I2P will use the system configured default browser to launch at startup. If you wish to nominate an alternative browser, you will need to edit your router.config file (or the <a href=/configadvanced>Advanced Configuration page</a> if you have enabled advanced console mode) and add a new configuration line <code>routerconsole.browser=/path/to/browser</code> or <code>routerconsole.browser=\\path\\to\\browser.exe</code> if using Windows, replacing <code>\\path\\to\\browser</code> with the location of the browser you wish to use. Note: If the path to your chosen browser contains spaces, you may need to encase the path in quotes e.g. <code>routerconsole.browser=\"C:\\Program Files\\Mozilla\\Firefox.exe\"</code>"
-msgstr ""
+msgstr "Oletusarvoisesti I2P käyttää järjestelmän määrittämää oletusselainta käynnistyksessä. Jos haluat asettaa vaihtoehtoisen selaimen, sinun täytyy muokata router.config-tiedostoa (tai <a href=/configadvanced>Edistyneen asetussivun</a> avulla, jos olet ottanut käyttöön laajennetun konsolitilan) ja lisätä uusi asetusriville seuraava konfiguraatiorivi <code>routerconsole.browser=/polku/selaimeen</code> tai <code>routerconsole.browser=\\polku\\selain.exe</code> käytettäessä Windowsia. Korvaa <code>\\polku\\selain</code> haluamasi selaimen sijainnilla. Huomaa: Jos valitsemasi selaimen polku sisältää välilyöntejä, sinun saattaa tarvita lisätä polku lainausmerkkien sisään, esim. <code>routerconsole.browser=\"C:\\Program Files\\Mozilla\\Firefox.exe\"</code>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:465
 msgid "How do I configure my browser to access .i2p websites?"
@@ -10475,171 +10475,171 @@ msgstr "Huomaa, että tulostustiedostojen täydellisen polun on oltava saavutett
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:270
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:405
 msgid "User Interface Help"
-msgstr ""
+msgstr "Käyttöliittymä Ohje"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:433
 msgid "Note: Many of the labels and options in the console have tooltips that indicate purpose or explain the meaning. Hover over the label or option to activate the tooltip."
-msgstr ""
+msgstr "Huomautus: Monilla labeleilla ja vaihtoehdoilla hallintapaneelissa on työkaluvihjeitä, jotka osoittavat tarkoituksen tai selittävät merkityksen. Vie hiiri opastuksen päälle aktivoidaksesi sen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:435
 msgid "Theme Overrides"
-msgstr ""
+msgstr "Teemaylikirjoitukset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:437
 msgid "I2P+ supports custom theme overrides for the console, the tunnel manager, I2PSnark, SusiDNS and Susimail, permitting changes to the themes which are persistent after upgrades. In order to activate an override, create a css file named <code>override.css</code> with your theme modifications and place it in the relevant theme directory of the theme you wish to change, or rename one of the example files, and then hard refresh the browser. Note that the tunnel manager and the console share the same override.css. To deactivate an override, delete or rename the <code>override.css</code> file and then hard refresh the browser (usually Control + Shift + R)."
-msgstr ""
+msgstr "I2P+ tukee mukautettuja teemaylikirjoituksia hallintapaneeliin, tunnelin hallintaan, I2PSnarkiin, SusiDNS:ään ja Susimailiin, mahdollistaen teemojen muutokset, jotka säilyvät päivitysten jälkeen. Jotta ylikirjoitus aktivoidaan, luo css-tiedosto nimeltä <code>override.css</code> kansiossa jossa haluat vaihtaa teemaa olevaan teemakansioon ja tee teemamuokkauksesi siihen, tai nimeä jokin esimerkkitiedosto uudelleen ja sitten kovapäivitä selain. Huomaa, että tunnelin hallinta ja hallintapaneeli jakavat saman override.css-tiedoston. Ylikirjoituksen deaktivoimiseksi poista tai nimeä uudelleen <code>override.css</code> tiedosto ja kovapäivitä selain (yleensä Ctrl + Shift + R)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:439
 msgid "The themes directory is located in the I2P application directory under <code>docs/themes</code>. There are example override files in the console and I2PSnark theme sub-directories."
-msgstr ""
+msgstr "Teemakansio sijaitsee I2P-sovelluskansion alla kohdassa <code>docs/themes</code>. Hallintapaneelissa ja I2PSnark-teeman alikansioissa on esimerkkiylikirjoitustiedostoja."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:441
 msgid "Sidebar Information"
-msgstr ""
+msgstr "Sivupalkki Tiedot"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:443
 msgid "Many of the stats on the sidebar may be <a href='/configstats'>configured</a> to be <a href='/graphs'>graphed</a> for further analysis. You may also customize the sections that appear on the Sidebar and their positioning on the <a href='/configsidebar'>Sidebar Configuration page</a>."
-msgstr ""
+msgstr "Monia sivupalkin tilastoja voidaan <a href='/configstats'>määrittää</a> <a href='/graphs'>graafisiksi</a> lisätarkastelua varten. Voit myös mukauttaa sivupalkilla näkyviä osioita ja niiden sijaintia <a href='/configsidebar'>Sivupalkin konfigurointisivulla.</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:447
 msgid "Local Identity"
-msgstr ""
+msgstr "Paikallinen Identiteetti"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:449
 msgid "If you hover over the <i>Router Info</i> heading, your truncated router identity will be shown (the first four characters (24 bits) of your 44-character (256-bit) Base64 router hash). The full hash is shown on your <a href='netdb?r=.'>Network Database entry</a>. Never reveal this to anyone, as your router identity is uniquely linked to your IP address in the network database."
-msgstr ""
+msgstr "Jos pidät hiiren osoittimen <i>Reititin tiedot</i> -otsikon päällä, leikattu reititin tunnisteesi näytetään (Tämä tarkoittaa 24 bittiä eli 4 ensimmäistä merkkiä 44 merkin (256 bittiä) pituisesta base64-reititinviiteestäsi). Koko viite näytetään <a href='netdb?r=.'>Virtuaalisessa reititintietokannassa</a>. Älä ikinä paljasta tätä kenellekään. reititin identiteettisi on yksilöivästi linkitetty IP-osoitteeseesi reititintietokannassa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:453
 msgid "The version of the I2P software you are running. If a new version is available, you will be notified in the Sidebar. It is recommended to keep your router up to date to ensure optimal performance and security. Router updates are usually made available on average every 2-3 months."
-msgstr ""
+msgstr "Käytössä oleva I2P-ohjelmiston versio. Jos uusi versio on saatavilla, ilmoitus tulee Sivupalkissa. On suositeltavaa pitää reititin ajan tasalla, jotta varmistetaan optimaalinen suorituskyky ja tietoturva. Reititin päivitykset yleensä tulevat saataville keskimäärin 2-3 kuukauden välein."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:457
 msgid "The skew (offset) of your computer's clock relative to the network-synced time (if known). I2P requires your computer's time be accurate. If the skew is more than a few seconds, please correct the problem by adjusting your computer's time. If I2P cannot connect to the internet, a reading of 0ms may be indicated. Note: This is only displayed in the <i>Router Information (advanced)</i> section. You may add this section to your Sidebar on the <a href='/configsidebar'>Sidebar Configuration page</a>."
-msgstr ""
+msgstr "Tietokoneesi kellon heitto (ero) suhteessa verkko-synkronoituun aikaan (jos tiedossa). I2P vaatii, että tietokoneesi aika on tarkka. Jos heitto on enemmän kuin muutama sekunti, korjaa ongelma säätämällä tietokoneen aikaa. Jos I2P ei pysty yhdistymään internettiin, lukema voi olla 0 ms. Huomaa: Tämä näkyy vain <i>Reititintiedot (edistynyt)</i> -osiossa. Voit lisätä tämän osion Sivupalkkiisi <a href='/configsidebar'>Sivupalkin asetukset -sivulta</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:461
 msgid "This indicates the amount of RAM I2P is using, and the total amount available, allocated by Java. If the usage is consistently high relative to the available RAM, this may indicate that you need to increase the ram allocated to the JVM. You can allocate more RAM by editing your <code>wrapper.config</code> file which is normally located in the I2P application directory. You will need to edit the <code>wrapper.java.maxmemory</code> parameter, which by default is set to 256(MB) for I2P, or 384 for I2P+. Note: if the memory bar is enabled, the memory entry in the router info section will be suppressed."
-msgstr ""
+msgstr "Kertoo kuinka paljon RAM-muistia I2P käyttää sekä käytettävissä olevan kokonaismuistin määrän, joka on jaettu Javan toimesta. Jos käyttö on jatkuvasti korkea suhteessa käytettävissä olevaan RAM-muistiin, tämä voi kertoa, että sinun on lisättävä RAM-muistia JVM:lle. Voit jakaa enemmän RAM-muistia muokkaamalla <code>wrapper.config</code> -tiedostoa, joka sijaitsee tavallisesti I2P-sovelluksen hakemistossa. Sinun on muokattava <code>wrapper.java.maxmemory</code> -parametriä, jonka oletusarvo on 256(MB) I2P:lle tai 384 I2P+:lle. Huomio: jos muistipalkki on käytössä, muistiotteen reititintiedon osiosta tukitaan."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:467
 msgid "The first number is the number of peers your router has sent or received a message from in the last few minutes. This may range from 8-10 to several hundred, depending on your total bandwidth, shared bandwidth, and locally-generated traffic. The second number is the number of peers seen in the last hour or so. Do not be concerned if these numbers vary widely. <a href='/configstats#router.activePeers'>[Enable graphing]</a>."
-msgstr ""
+msgstr "Ensimmäinen numero on vertaiskäyttäjiä, joiden kanssa reitittimesi on lähettänyt tai vastaanottanut viestejä viimeisten muutaman minuutin aikana. Tämä voi vaihdella 8-10:stä useisiin satoihin riippuen kokonaiskaistanleveydestäsi, jaettavasta kaistanleveydestäsi sekä paikallisesti generoidusta liikenteestäsi. Toinen numero on vertaiskäyttäjien määrä, jotka on havaittu viimeisen tunnin aikana. Älä huolehdi, vaikka nämä numerot vaihtelevat paljon. <a href='/configstats#router.activePeers'>[Ota grafiikka käyttöön]</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:471
 msgid "This is the number of peers your router has available for building client tunnels. It is generally in the range 8-30. Your fast peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.fastPeers'>[Enable graphing]</a>"
-msgstr ""
+msgstr "Tämä on reitittimesi käytettävissä olevien vertaisverkkojen määrä asiakastunnelien luomiseen. Yleensä se on 8-30. Nopeat vertaisverkkosi näkyvät <a href='/profiles'>Profiilit-sivulla</a>. <a href='/configstats#router.fastPeers'>[Ota graafiset tiedot käyttöön]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:475
 msgid "This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier. Your high capacity peers are shown on the <a href='/profiles'>Profiles page</a>. <a href='/configstats#router.highCapacityPeers'>[Enable graphing]</a>"
-msgstr ""
+msgstr "Tämä on reitittimesi käytettävissä olevien vertaisverkkojen määrä tutkimustunnelien luomiseen, joita käytetään verkon suorituskyvyn mittaamiseen. Yleensä se on 8-75. Nopeat käyttäjäsi sisältyvät suurikapasiteettiseen tasoon. Suurikapasiteettiset käyttäjäsi näkyvät <a href='/profiles'>Profiilit-sivulla</a>. <a href='/configstats#router.highCapacityPeers'>[Ota graafiset tiedot käyttöön]</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:479
 msgid "This is the number of peers your router will use for network database inquiries. These are usually the <i>floodfill</i> routers which are responsible for maintaining network integrity. Your well integrated peers are shown on the bottom of the <a href='/profiles'>Profiles page</a>."
-msgstr ""
+msgstr "Tämä on vertaisverkkojen määrä, jota reitittimesi käyttää verkko-tietokantakyselyissä. Nämä ovat yleensä tulvasuojauksen reitittimiä, jotka vastaavat verkkojen eheyden ylläpidosta. Hyvin integroidut käyttäjäsi näkyvät alareunassa <a href='/profiles'>Profiilit-sivulla</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:483
 msgid "This is the total number of peers that are known by your router. They are listed on the <a href='/netdb'>Network Database page</a>. This may range from under 100 to 1000 or more. This number is not the total size of the network; it may vary widely depending on your total bandwidth, shared bandwidth, and locally-generated traffic. I2P does not require a router to know every other router in the network."
-msgstr ""
+msgstr "Tämä on reitittimesi tuntemien vertaisverkkojen kokonaismäärä. Ne on lueteltu <a href='/netdb'>Verkkotietokannan sivulla</a>. Tämä voi vaihdella alle 100:sta yli 1000:een tai enemmän. Tämä luku ei ole verkon kokonaiskoko; se voi vaihdella huomattavasti kokonaiskaistanleveytesi, jaettujen kaistanleveyksien ja paikallisesti luodun liikenteen mukaan. I2P ei vaadi reitittimen tuntevan jokaista toista reititintä verkossa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:485
 msgid "Bandwidth In/Out"
-msgstr ""
+msgstr "Kaistanleveys Sisään/Ulos"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:487
 msgid "This section indicates your average bandwidth speeds and total usage for the session. All values are in bytes per second. You may change your bandwidth limits on the <a href='/config'>Bandwidth Configuration page</a>. The more bandwidth you make available, the more you help the network and improve your own anonymity, so please take the time to review the settings. If you are unsure of your network's speed, using a service such as <a href='http://speedtest.net/'>SpeedTest</a> or similar will give you a good indication of your bandwidth capability. Your upstream share amount (KBps Out) will determine your overall contribution to the network. Bandwidth is <a href='/graphs'>graphed</a> by default."
-msgstr ""
+msgstr "Tämä osio osoittaa keskimääräiset kaistanleveytesi ja kokonaiskäytön istunnolle. Kaikki arvot ovat tavuina sekunnissa. Voit muuttaa kaistanleveyden rajoituksia <a href='/config'>Kaistanleveysasetukset -sivulla</a>. Mitä enemmän kaistanleveyttä teet käytettäväksi, sitä enemmän autat verkkoa ja parannat omaa anonymiteettiäsi, joten ota aikaa arvioidaksesi asetukset. Jos et ole varma verkkosi nopeudesta, palvelun käyttäminen, kuten <a href='http://speedtest.net/'>SpeedTest</a> tai vastaava, antaa sinulle hyvän käsityksen kaistanleveyskapasiteetistasi. Ylävirtasi osuus (KBps -ulko) määrittää kokonaispanoksenne verkossa. Oletusarvoisesti kaistanleveys on <a href='/graphs'>graafisessa muodossa</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:489
 msgid "Local Destinations"
-msgstr ""
+msgstr "Paikalliset kohteet"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:491
 msgid "These are the local services provided by your router. They may be clients started through the <a href='/i2ptunnelmgr'>Tunnel Manager</a> or external programs connecting through SAM, BOB, or directly to I2CP. By default, most of your client services (mail, http proxy, IRC) will share the same set of tunnels and be listed as <i>Shared Clients</i> and <i>Shared Clients(DSA)</i>, which enhances anonymity by blending the traffic from all shared services, and reduces the overhead required to build and maintain tunnels. However, if you experience a tunnel failure, all your services will go offline at the same time, so in some scenarios you may wish to configure client services to use their own set of tunnels. This can be done by unchecking the <i>Share tunnels with other clients&hellip;</i> option listed under <i>Shared Clients</i> on the configuration page of the relevant client service in the Tunnel Manager, after which you will need to restart the client service from the <a href='/i2ptunnelmgr'>main Tunnel Manager page</a>."
-msgstr ""
+msgstr "Nämä ovat reitittimesi tarjoamat paikalliset palvelut. Ne voivat olla asiakkaita, jotka on käynnistetty <a href='/i2ptunnelmgr'>Tunnelin hallintaohjelmassa</a> tai ulkoisia ohjelmia, jotka yhdistävät SAMin, BOBin kautta tai suoraan I2CP:hen. Oletuksena useimmat asiakaspalvelut (sähköposti, http-välityspalvelin, IRC) jakavat saman joukon tunneleita ja ne näkyvät listattuna <i>Jakamattomat asiakkaat</i> ja <i>Jakamattomat asiakkaat (DSA)</i>, mikä parantaa anonymiteettia sekoittamalla liikenteen kaikista jaetuilta palveluilta ja vähentää tunneleiden rakentamiseen ja ylläpitämiseen tarvittavaa yläkantaa. Jos kuitenkin koet tunnelevian, kaikki palvelusi menevät offline-tilaan samanaikaisesti. Siksi joissakin tilanteissa voi olla tarpeen määrittää asiakaspalvelut käyttämään omaa joukkoaan tunneleita. Tämä voidaan tehdä poistamalla valinta <i>Jaa tunneleita muiden asiakkaiden kanssa&hellip;</i> -vaihtoehdosta <i>Jakamattomat asiakkaat</i> -kohdassa kyseisen asiakaspalvelun määrittämissivulla Tunnelin hallintaohjelmassa. Tämän jälkeen sinun tulee käynnistää asiakaspalvelu uudelleen <a href='/i2ptunnelmgr'>pää-Tunnelin hallintaohjelman sivulta</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:495
 msgid "The actual tunnels are shown on the <a href='/tunnels'>Tunnels page</a>."
-msgstr ""
+msgstr "Todelliset tunnelit näytetään <a href='/tunnels'>Tunnels sivulla</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:499
 msgid "Tunnels built by your router and used for communication with the floodfill peers, building new tunnels, and testing existing tunnels."
-msgstr ""
+msgstr "Routerisi rakentamat tunnelit, joita käytetään viestintään floodfill vertaisteni kanssa, uusien tunnelien rakentamiseen ja olemassa olevien tunnelien testaamiseen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:503
 msgid "Tunnels built by your router for each client's use."
-msgstr ""
+msgstr "Routerisi rakentamat tunnelit, jotka on tarkoitettu jokaisen asiakkaan käyttöön."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:507
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
-msgstr ""
+msgstr "Muiden reitittimien läpi rakennetut tunnelit reitittimelläsi. Tämä voi vaihdella suuresti riippuen verkon tarpeesta, jaetusta kaistanleveydestäsi ja paikallisesti tuotetun liikenteen määrästä. Osallistuvien tunnelien rajoittamiseksi suositeltu menetelmä on muuttaa osuusprosenttia <a  href='/config'>Bandwidth Configuration sivulla</a>. Voit myös rajoittaa kokonaislukumäärää asettamalla <code>router.maxParticipatingTunnels=nnn</code> <a href='/configadvanced'>Advanced configuration sivulla</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:509
 msgid "Share Ratio"
-msgstr ""
+msgstr "Osuusprosentti"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:511
 msgid "The number of participating tunnels you route for others, divided by the total number of hops in all your exploratory and client tunnels. A number greater than 1.00 means you are contributing more tunnels to the network than you are using."
-msgstr ""
+msgstr "Muiden käyttäjien puolesta reitittämiesi osallistuvien tunnelien määrä jaettuna kaikkien tutkimus- ja asiakastunnistesi yhteisten hyppyjen määrällä. Luku yli 1,00 tarkoittaa, että tuot enemmän verkostotunneleita kuin käytät."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:515
 msgid "Some basic indications of router overload:"
-msgstr ""
+msgstr "Joitakin perusmerkkejä reitittimen ylikuormituksesta:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:517
 msgid "Job Lag"
-msgstr ""
+msgstr "Tehtävän viive"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:519
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
-msgstr ""
+msgstr "Kuinka kauan työt odottavat ennen suoritusta. Työjonot on lueteltu <a href='/jobs'>Työt-sivulla</a>. Valitettavasti reitittimessä on useita muita työjonoja, jotka saattavat olla ruuhkautuneita, eikä niiden tilaa ole saatavilla reitittimen ohjauskeskuksesta. Työn viiveen tulisi yleensä olla nolla. Jos se on jatkuvasti yli 500 ms, tietokoneesi on erittäin hidas, verkossasi on yhteyshäiriöitä tai reitittimessä on vakavia ongelmia. <a href='/configstats#jobQueue.jobLag'>[Ota käyttöön graafit]</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:521
 msgid "Message Delay"
-msgstr ""
+msgstr "Viestin viive"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:523
 msgid "How long an outbound message waits in the queue. This should generally be a few hundred milliseconds or less. If it is consistently higher than 1000ms, your computer is very slow, or you should adjust your bandwidth limits, or your (BitTorrent?) clients may be sending too much data and should have their transmit bandwidth limit reduced. <a href='/configstats#transport.sendProcessingTime'>[Enable graphing]</a> (transport.sendProcessingTime)."
-msgstr ""
+msgstr "Kuinka kauan ulospäin suuntautuva viesti odottaa jonossa. Tämän pitäisi yleensä olla muutama sata millisekuntia tai vähemmän. Jos se on jatkuvasti yli 1000 ms, tietokoneesi on hyvin hidas tai sinun tulisi säätää kaistanleveysrajat tai (BitTorrent?) asiakkaasi saattavat lähettää liikaa dataa ja niiden lähetyskaistanleveysrajoitusta tulisi vähentää. <a href='/configstats#transport.sendProcessingTime'>[Ota käyttöön kaavion piirtäminen]</a> (transport.sendProcessingTime)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:527
 msgid "This is the number of pending requests from other routers to build a participating tunnel through your router. It should usually be close to zero. If it is consistently high, your computer is too slow, and you should reduce your share bandwidth limits."
-msgstr ""
+msgstr "Tämä on muiden reitittimien päättymättömien pyyntöjen määrä, joiden avulla rakennetaan osallistuva tunneli reitittimesi kautta. Sen pitäisi yleensä olla lähellä nollaa. Jos se on jatkuvasti korkea, tietokoneesi on liian hidas ja sinun tulisi vähentää jaettua kaistanleveyttä."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:529
 msgid "Accepting/Rejecting"
-msgstr ""
+msgstr "Hyväksyminen/Hylkääminen"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:531
 msgid "Your router's status on accepting or rejecting requests from other routers to build a participating tunnel through your router. Your router may accept all requests, accept or reject a percentage of requests, or reject all requests for a number of reasons, to control the bandwidth and CPU demands and maintain capacity for local clients. <b>Note"
-msgstr ""
+msgstr "Reitittimesi tila siitä, hyväksyykö vai hylkääkö se muiden reitittimien pyynnöt osallistua tunnelin rakentamiseen reitittimesi kautta. Reitittimesi voi hyväksyä kaikki pyynnöt, hyväksyä tai hylätä prosentuaalisesti osan pyynnöistä tai hylätä kaikki pyynnöt useista syistä, jotta se voi hallita kaistanleveyden ja CPU-vaatimusten määrää ja ylläpitää kapasiteettia paikallisille asiakkaille. <b>Huomaa"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:533
 msgid "It will take at least 10 minutes from your router starting for it to accept building participating tunnels in order to ensure your router is stable and successfully bootstrapped to the network."
-msgstr ""
+msgstr "Reitittimesi hyväksyy tunneleiden rakentamisen vasta vähintään 10 minuutin kuluttua käynnistymisestä varmistaakseen, että reititin on vakaa ja onnistuneesti käynnistynyt verkkoon."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:535
 msgid "<b>Note"
-msgstr ""
+msgstr "<b>Huomaa"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:537
 msgid "This section is not enabled by default unless <a href='/help/configuration#advancedconsole'>Advanced Console mode</a> is enabled. You may enable it on the <a href='/configsidebar'>Sidebar Configuration page</a>."
-msgstr ""
+msgstr "Tätä osiota ei ole oletuksena käytössä, ellessäsi <a href='/help/configuration#advancedconsole'>Advanced Console -tilaa</a> ole vielä otettu käyttöön. Voit ottaa sen käyttöön <a href='/configsidebar'>Sidebar Configuration -sivulla</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:539
 msgid "Reachability Help"
-msgstr ""
+msgstr "Tavoitettavuuden ohje"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:543
 msgid "If you think you have opened up your firewall and I2P still thinks you are firewalled, remember that you may have multiple firewalls, for example both software packages and external hardware routers."
-msgstr ""
+msgstr "Jos luulet avanneesi palomuuriin ja I2P edelleen näkee sinut palomuuratuksi, muista että voi olla useampia palomuureja, kuten esimerkiksi sekä ohjelmistopohjaisia että ulkoisia laiteohjaimia."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:545
 msgid "If there is an error, the <a href=\"/logs\">logs</a> may also help diagnose the problem."
-msgstr ""
+msgstr "Jos ilmenee virhe, myös <a href=\"/logs\">lokit</a> voivat auttaa ongelman diagnosoinnissa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:549
 msgid "Your UDP port does not appear to be firewalled."
-msgstr ""
+msgstr "UDP-porttisi ei näytä olevan palomuuri."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:551
 msgid "Firewalled"
@@ -10655,11 +10655,11 @@ msgstr "Koska palomuurin tunnistusmenetelmät eivät ole 100 % luotettavia, täm
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:557
 msgid "However, if it appears consistently, you should check whether both your external and internal firewalls are open for your port."
-msgstr ""
+msgstr "Kuitenkin, jos se näkyy jatkuvasti, sinun tulisi tarkistaa, ovatko sekä ulkoinen että sisäinen palomuurisi avoimia portillesi."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:559
 msgid "I2P will work fine when firewalled, there is no reason for concern. When firewalled, the router uses \"introducers\" to relay inbound connections."
-msgstr ""
+msgstr "I2P toimii hyvin palomuurin läpi, ei ole syytä huoleen. Kun palomuuri on päällä, reititin käyttää \"esittelyä\" saapuvien yhteyksien välittämiseen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:561
 msgid "However, you will get more participating traffic and help the network if you open your firewall."
@@ -10667,11 +10667,11 @@ msgstr "Saat kuitenkin enemmän osallistuvaa liikennettä ja autat verkkoa, jos 
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:563
 msgid "If you think you have already done so, remember that you may have both a hardware and a software firewall, or be behind an additional, institutional firewall you cannot control."
-msgstr ""
+msgstr "Jos luulet jo tehneesi niin, muista että sinulla voi olla sekä laitteistopalo- että ohjelmistopalomuuri tai olla ylimääräisenä kontrolloimattomana laitoksellisena palomuurina."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:565
 msgid "Also, some routers cannot correctly forward both TCP and UDP on a single port, or may have other limitations or bugs that prevent them from passing traffic through to I2P."
-msgstr ""
+msgstr "Lisäksi jotkut reitittimet eivät voi oikein välittää sekä TCP:ta että UDP:ta yhteen porttiin tai niillä voi olla muita rajoituksia tai bugeja, jotka estävät liikenteen siirtymisen I2P:hen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:569
 msgid "The router is currently testing whether your UDP port is firewalled."
@@ -10763,7 +10763,7 @@ msgstr "Et saa mainostaa osoitetta, johon ei voi muodostaa yhteyttä ulkopuolelt
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:612
 msgid "Correct the address or disable inbound TCP on the Network Configuration page."
-msgstr ""
+msgstr "Korjaa osoite tai poista TCP-verkkoasetuksissa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:614
 msgid "ERR - SymmetricNAT"
@@ -10783,7 +10783,7 @@ msgstr "VIRHE - UDP portti käytössä. - Aseta i2np.udp.internalPort=xxxx eriko
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:621
 msgid "I2P was unable to bind to the configured port noted on the advanced network configuration page ."
-msgstr ""
+msgstr "I2P ei voinut sitoutua määritettyyn porttiin, joka on mainittu kehittyneen verkkokonfiguraatiosivulla."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:623
 msgid "Check to see if another program is using the configured port. If so, stop that program or configure I2P to use a different port."
@@ -10851,23 +10851,23 @@ msgstr "Johdatus I2P-verkkosivustojen isännöintiin"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:426
 msgid "By default, I2P is supplied with a webserver to host your own anonymized website (traditionally referred to as an <i>eepsite</i>). Both the site and the I2P Router Console are running on a streamlined version of <a href='https://en.wikipedia.org/wiki/Jetty_(web_server)' target=_blank rel=noreferrer class='sitelink external'>Jetty</a>, customized for I2P."
-msgstr ""
+msgstr "I2P:llä on oletuksena verkkopalvelin, jolla voi isännöidä omaa anonyymiä verkkosivustoa (perinteisesti kutsuttu eepsiteksi). Sekä sivusto että I2P-ruutuohjain toimivat virtaviivaistetussa Jetty-version versiossa, joka on räätälöity I2P:lle."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:428
 msgid "To serve your own static content, you only need to edit or replace the files in the webserver's root directory, and the site will be available on the I2P network after you've followed the instructions below. Additionally, cgi and python scripts can be run from the <code>cgi-bin</code> directory immediately above <code>docroot</code> if you have <a href=https://www.perl.org/about.html target=_blank rel=noreferrer class='sitelink external'>perl</a> and <a href=https://www.python.org/ target=_blank rel=noreferrer class='sitelink external'>python</a> installed."
-msgstr ""
+msgstr "Voit toimittaa oman staattisen sisällön korvaamalla tiedostot verkkopalvelimen juurihakemistossa, niin sivusto on saatavilla I2P-verkossa seurattuasi ohjeita alla. Lisäksi, cgi ja python skriptit voidaan suorittaat <code>docroot</code>:n välittömässä yläpuolella sijaitsevasta <code>cgi-bin</code> hakemistosta, mikäli sinulla on <a href=https://www.perl.org/about.html target=_blank rel=noreferrer class='sitelink external'>perl</a> ja <a href=https://www.python.org/ target=_blank rel=noreferrer class='sitelink external'>python</a> asennettuna."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:430
 msgid "Directory listings (sometimes referred to as virtual directories) are enabled by default, so you can host files from a sub-directory of <code>docroot</code> without providing a page with links to the files. You can also serve content that exists outside of <code>docroot</code> by using a <a href=https://en.wikipedia.org/wiki/Symbolic_link target=_blank rel=noreferrer class='sitelink external'>symbolic link</a> to the desired directory."
-msgstr ""
+msgstr "Hakemistoluettelo (joskus kutsuttu virtuaalisiksi hakemistoiksi) on oletuksena käytössä, jolloin voit isännöidä tiedostoja <code>docroot</code>:n alahakemistosta ilman, että tarvitset sivua, jossa on linkkejä tiedostoihin. Voit myös palvella sisältöä, joka sijaitsee <code>docroot</code>:n ulkopuolella käyttämällä halutulle hakemistolle <a href=https://en.wikipedia.org/wiki/Symbolic_link target=_blank rel=noreferrer class='sitelink external'>symbolista linkkiä</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:432
 msgid "You can override the <a href=http://127.0.0.1:7658/help/images/>default appearance</a> of the directory listing by supplying an edited <a href=http://127.0.0.1:7658/.resources/jetty-dir.css>jetty-dir.css</a> file to set a global appearance. Note that this file will not be displayed in the webserver's directory listing. Files and directories prefixed with . and files named favicon.ico or files ending with ~ or .bak or .old will also be hidden from view (though still accessible). Note: To create hidden files with a . prefix on Windows, add a trailing . to the file or directory e.g. <code>.hidden.</code>; Windows explorer will then save the file with the correct name, removing the trailing dot in the process."
-msgstr ""
+msgstr "Hakemistoluettelon <a href=http://127.0.0.1:7658/help/images/>oletusnäkymän</a> voi korvata toimittamalla muokatun <a href=http://127.0.0.1:7658/.resources/jetty-dir.css>jetty-dir.css</a> tiedoston, jolla määritetään globaali ulkoasu. Huomaa, että tämä tiedosto ei näy palvelimen hakemistoluettelossa. Pisteellä alkavat tiedostot ja hakemistot sekä favicon.ico-tiedostot tai ~-tai .bak- tai .old-päätteiset tiedostot ovat myös piilossa (mutta silti saavutettavissa). Huomio: Windowsissa piilossa olevien tiedostojen luomiseksi pisteellä alkavilla nimillä lisää tiedoston tai hakemiston loppuun piste, esim. <code>.hidden.</code>; Windows Explorer tallentaa sitten tiedoston oikealla nimellä poistaen loppupiste."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:434
 msgid "To disable directory listings, find the entry for <code>org.eclipse.jetty.servlet.Default.dirAllowed</code> in the <code>base-context.xml</code> file, located in the <code>eepsite/contexts</code> folder (just above docroot folder), and change 'true' to 'false' immediately underneath. To apply the change immediately, stop and restart the <i>I2P Webserver</i> client on the <a href=/configclients>Client Configuration page</a>. You can also drop an empty <code>index.html</code> file in any exposed directory to suppress directory listings for that location."
-msgstr ""
+msgstr "Hakemistoluettelojen poistamiseksi etsi tiedoston <code>base-context.xml</code> kohta <code>org.eclipse.jetty.servlet.Default.dirAllowed</code>, joka sijaitsee kansiossa <code>eepsite/contexts</code> (suoraan kohteen docroot-kansio yläpuolella) ja muuta sen arvo 'true' lukemasta 'false' lukioksi. Muutos otetaan välittömästi käyttöön, kun pysäytät ja käynnistät <i>I2P-palvelin</i> asiakkaan sivulla <a href=/configclients>Asiakaskonfiguraatiosivu</a>. Voit myös pudottaa tyhjän <code>index.html</code>-tiedoston mihin tahansa alttiiksi jäävään kansioon estääksesi hakemistoluettelot tässä sijainnissa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:436
 msgid "Location of the I2P webserver root directory"
@@ -10883,47 +10883,47 @@ msgstr "Paketin/varaston asennus"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:442
 msgid "On the I2P network, remotely hosted services can be accessed using a <a href=https://en.wikipedia.org/wiki/Base32 target=_blank rel=noreferrer class='sitelink external'>Base32</a> address ending in \".b32.i2p\", a <i>destination</i> represented as a long <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external'>Base64</a> string, or more usually by using an .i2p domain. A destination is I2P's equivalent to an IP address, and is shown on the <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>. You can share your b32.i2p address to allow others to access to your website until you've registered your own .i2p domain."
-msgstr ""
+msgstr "I2P-verkossa etänä sijaitseviin palveluihin päästään käsiksi käyttämällä \".b32.i2p\"-päättyvää <a href=https://en.wikipedia.org/wiki/Base32 target=_blank rel=noreferrer class='sitelink external'>Base32</a>-osoitetta, joka on esitetty pitkänä <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external'>Base64</a>-merkkijonona tai yleisimmin käyttämällä .i2p-verkkotunnusta. Verkkotunnus vastaa I2P:ssä IP-osoitetta, ja se näkyy <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a> :lla. Voit jakaa b32.i2p-osoitteesi, jotta muut pääsevät verkkosivustoosi, kunnes rekisteröit oman .i2p-verkkotunnuksesi."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:444
 msgid "Setting up &amp; announcing your website"
-msgstr ""
+msgstr "Verkkosivustosi asentaminen ja ilmoittaminen"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:446
 msgid "Your webserver is running by default at <a href=http://127.0.0.1:7658/>http://127.0.0.1:7658</a>, but is not accessible by others until you start the <i>I2P Webserver</i> tunnel. After starting the tunnel, your site will be difficult for other people to find. You could just tell people the destination or the Base32 address, but thankfully I2P has an address book to store domain names, and various services where you can <a href=/help/hostnameregistration>register a new .i2p domain</a> for free."
-msgstr ""
+msgstr "Verkkopalvelimeni toimii oletusarvoisesti osoitteessa <a href=http://127.0.0.1:7658/>http://127.0.0.1:7658</a>, mutta muut eivät pääse siihen käsiksi, ennen kuin käynnistät <i>I2P Webserver</i> -tunnelin. Kun olet käynnistänyt tunnelin, sivustosi on vaikea löytää muille. Voit kertoa ihmisille vain kohteen tai Base32-osoitteen, mutta onneksi I2P:lle on olemassa osoitekirja, jossa voit tallentaa verkkotunnuksia, ja erilaisia palveluita, joissa voit <a href=/help/hostnameregistration>rekisteröidä uuden ilmaisen .i2p-verkkotunnuksen</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:448
 msgid "Choose a name for your website (<i>hostname</i>.i2p), using lower-case. To verify that the hostname is available, check <a href=http://notbob.i2p/ target=_blank>notbob.i2p</a> or <a href=http://reg.i2p target=_blank>reg.i2p</a> before you decide. Enter the new name for your website on the <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a> where it says <i>Website name</i>, replacing the default <i>mysite.i2p</i> placeholder. If you want your website to be available when I2P starts, enable <i>Auto Start</i> and then click <i>Save</i>."
-msgstr ""
+msgstr "Valitse verkkosivustosi nimi (<i>isäntänimi</i>.i2p) käyttäen pieniä kirjaimia. Varmista, että isäntänimi on saatavilla tarkistamalla <a href=http://notbob.i2p/ target=_blank>notbob.i2p</a> tai <a href=http://reg.i2p target=_blank>reg.i2p</a> ennen päätöksentekoa. Kirjoita uusi nimi verkkosivustollesi <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page -sivulle</a>, jossa lukee <i>Verkkosivun nimi</i>, korvaten oletusarvon  <i>mysite.i2p</i>. Jos haluat, että verkkosivustosi on käytettävissä I2P:n käynnistyessä, ota käyttöön <i>Automaattinen käynnistys</i> ja napsauta sitten <i>Tallenna</i>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:450
 msgid "Click the <i>Start</i> button for your webserver tunnel on the <a href=/i2ptunnelmgr/>main Tunnel Manager page</a>. You should now see it listed under <i>Service Tunnels</i> on the <a href=/>Router Console</a> sidebar. A green star displayed next to the tunnel name (<i>I2P Webserver</i> by default) indicates that your website is active on the I2P network."
-msgstr ""
+msgstr "Klikkaa <i>Aloita</i> painiketta verkkopalvelin tunnelillesi <a href=/i2ptunnelmgr/>Tunnel Manager pääsivulla</a>. Nyt sen tulisi näkyä listattuna <i>Palvelutunnelit</i> kohdassa <a href=/>Reitittimen hallintapaneelissa</a>. Vihreä tähti näytetään tunnelin nimen vieressä (<i>I2P-verkkopalvelin</i> oletuksena) osoittaa, että verkkosivustosi on aktiivinen I2P-verkossa."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:452
 msgid "Highlight and copy the entire <i>Local destination</i> on the <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>."
-msgstr ""
+msgstr "Korosta ja kopioi koko <i>Paikallinen määränpää</i> <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Managerin konfiguraatiosivulla</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:454
 msgid "Enter the name and paste the destination into your <a href='/susidns/addressbook?book=router&amp;filter=none'>address book</a>. Click <i>Add</i> to save the new entry."
-msgstr ""
+msgstr "Syötä nimi ja liitä määränpää <a href='/susidns/addressbook?book=router&amp;filter=none'>osoitekirjaan</a>. Klikkaa <i>Lisää</i> tallentaaksesi uuden merkinnän."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:456
 msgid "In the web browser you have configured for I2P usage, browse to your website name (<i>chosenhostname</i>.i2p) and you should be returned to this page."
-msgstr ""
+msgstr "I2P-käyttöön konfiguroimassasi verkkoselaimessa, selaa verkkosivuston nimeen (<i>chosenhostname</i>.i2p) ja sinun tulisi palata tälle sivulle."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:458
 msgid "Before you tell the world about your new website, you should add some content. Go to the server's root directory <a href=#rootdir>listed above</a> and replace the <i>index.html</i> redirect page with your own content. If you need a template for a basic site, feel free to adapt <a href=http://127.0.0.1:7658/help/pagetemplate.html>this page</a>. If you're returned to this page after editing the content, try clearing your browser's web cache."
-msgstr ""
+msgstr "Ennen kuin kerrot maailmalle uudesta verkkosivustostasi, sinun pitäisi lisätä sisältöä. Mene palvelimen juurihakemistoon <a href=#rootdir>yllä listattu</a> ja korvaa <i>index.html</i> uudelleenohjaussivu omalla sisällölläsi. Jos tarvitset perussivustolle mallipohjaa, voit vapaasti sopeuttaa <a href=http://127.0.0.1:7658/help/pagetemplate.html>tätä sivua</a>. Jos palaat tälle sivulle sisällön muokkauksen jälkeen, yritä tyhjentää selaimen välimuisti."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:460
 msgid "Content Optimization"
-msgstr ""
+msgstr "Sisällön optimointi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:462
 msgid "In order to provide the best experience for visitors to your site, there are various additional steps you may wish to consider once your site is up and running:"
-msgstr ""
+msgstr "Tarjotaksesi parhaan käyttökokemuksen sivustosi vierailijoille, voit harkita useita muita toimenpiteitä, kun sivustosi on käynnissä:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:464
 msgid "Optimize your images"
@@ -10931,7 +10931,7 @@ msgstr "Optimoi kuvat"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:466
 msgid "If you want your site to feel responsive, image compression is essential when hosting large images. Using a service like <a href=https://tinypng.com/ target=_blank class='sitelink external'>tinypng.com</a> to compress your png and jpeg images will often result in much smaller files with minimal loss of quality. In some situations the webp format can best jpegs, generating smaller files with approximately the same or better visual fidelity, and has wide browser support. Also consider using svgs instead of bitmaps for icons and illustrations - they're often smaller than the equivalent bitmap file (run them through a service like <a href=https://vecta.io/nano target=_blank class='sitelink external'>Nano SVG Optimizer</a> to remove unneeded cruft), scale without loss of quality, and can be gzipped by your webserver."
-msgstr ""
+msgstr "Jos haluat sivustosi tuntuvan reagoivalta, kuvien pakkaaminen on välttämätöntä, kun isännöit suuria kuvia. Käyttämällä palvelua kuten <a href=https://tinypng.com/ target=_blank class='sitelink external'>tinypng.com</a> png- ja jpeg-kuvien pakkaamiseen, saat usein paljon pienempiä tiedostoja vähäisellä laadun menetyksellä. Joissakin tilanteissa webp-muoto voi olla parempi kuin jpegit, tuottaen pienempiä tiedostoja, joissa on suunnilleen sama tai parempi visuaalinen tarkkuus, ja tukee laajasti eri selaimia. Harkitse myös svg-kuvien käyttöä ikoneissa ja kuvituksissa - ne ovat usein pienempiä kuin vastaava bittikartta (ajaa ne palvelun kautta, kuten <a href=https://vecta.io/nano target=_blank class='sitelink external'>Nano SVG Optimizer</a> poistaaksesi tarpeettoman roskan), skaalautuvat laadun menettämättä, ja voivat olla gzip-pakattuja palvelimellasi."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:468
 msgid "Use separate files for multi-use assets"
@@ -10939,7 +10939,7 @@ msgstr "Käytä erillisiä tiedostoja monikäyttöisille resursseille"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:470
 msgid "Wherever possible, assets that are used repeatedly on your site should be loaded from an external file and not inlined. If you're using the same CSS on several pages, create a separate css file and load that in the <code>&lt;head&gt;</code> section of your pages. This will make styling updates to your site easier to manage, and will also allow the file to be cached in the visitor's browser, resulting in less bandwidth demands on your webserver and faster page loads for your visitors."
-msgstr ""
+msgstr "Missä tahansa mahdollista, sivustollasi toistuvasti käytettävät tiedostot tulisi ladata ulkoisesta tiedostosta eikä sisällyttää sivun sisään. Jos käytät samaa CSS-tiedostoa usealla sivulla, luo erillinen CSS-tiedosto ja lataa se sivujesi <code>&lt;head&gt;</code>-osaan. Tämä helpottaa sivustosi ulkoasun päivitysten hallintaa ja mahdollistaa tiedoston välimuistitamisen vierailijan selaimessa, mikä vähentää kaistanleveyden tarvetta ja nopeuttaa sivujen latautumista vierailijoillesi."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:472
 msgid "Consider using a backend cache"
@@ -10947,7 +10947,7 @@ msgstr "Harkitse taustavälimuistin käyttöä"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:474
 msgid "If you're running a dynamic site handling a large number of concurrent users, content caching can often improve the time taken to deliver pages. For content that rapidly changes, a <a href=https://blog.stackpath.com/glossary-micro-caching/ target=_blank class='sitelink external'>micro-caching strategy</a> may still yield some benefits. The <a href=https://www.nginx.com/ target=_blank class='sitelink external'>Nginx webserver</a> provides a competent caching sub-system, or for a more heavy-weight solution, have a look at <a href=https://varnish-cache.org/ target=_blank class='sitelink external'>Varnish</a>."
-msgstr ""
+msgstr "Jos suoritat dynaamista sivustoa, jossa on suuri määrä samanaikaisia käyttäjiä, sisällön välimuisti voi usein parantaa sivujen toimitusaikaa. Sisällölle, joka muuttuu nopeasti, <a href=https://blog.stackpath.com/glossary-micro-caching/ target=_blank class='sitelink external'>mikrovälimuististrategia</a> voi silti olla hyödyksi. <a href=https://www.nginx.com/ target=_blank class='sitelink external'>Nginx-webpalvelin</a> tarjoaa pätevän välimuistijärjestelmän, mutta jos tarvitset raskaampaa ratkaisua, tutustu <a href=https://varnish-cache.org/ target=_blank class='sitelink external'>Varnish</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:476
 msgid "Using an alternative webserver"
@@ -10955,15 +10955,15 @@ msgstr "Käytä vaihtoehtoista verkkopalvelinta"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:478
 msgid "To configure an alternative webserver for use on I2P, you can either use the existing webserver tunnel and <a href=/configclients>disable the default webserver</a> from running, or create a new HTTP Server tunnel in the <a href=/i2ptunnelmgr>Tunnel Manager</a>. Ensure that the webserver's <i>listening port</i> is also configured in the Tunnel Manager settings. For example, if your webserver is listening by default on address 127.0.0.1 port 80, you'd also need to ensure that the <i>Target port</i> in the Tunnel Manager settings page for the service is also configured to port 80."
-msgstr ""
+msgstr "Vaihtoehtoisen web-palvelimen määrittämiseksi I2P:llä voit joko käyttää olemassa olevaa web-palvelinyhteyttä ja <a href=/configclients>poistaa käytöstä oletus-web-palvelimen</a> tai luoda uuden HTTP-palvelinyhteyden <a href=/i2ptunnelmgr>Tunnel Managerissa</a>. Varmista, että web-palvelimen <i>kuunteluportti</i> on myös määritetty Tunnel Managerin asetuksiin. Esimerkiksi, jos web-palvelimesi kuuntelee oletusarvoisesti osoitteessa 127.0.0.1 portissa 80, sinun tulee myös varmistaa, että palvelulle tarkoitettu <i>kohdeportti</i> on määritetty Tunnel Managerin asetussivulle porttiin 80."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:480
 msgid "To preserve anonymity, make sure that the webserver is not publicly available outside of the I2P network, which is normally achieved by configuring the webserver to listen on localhost (127.0.0.1) rather than all interfaces (0.0.0.0)."
-msgstr ""
+msgstr "Säilyttääksesi anonymiteetin, varmista, että web-palvelin ei ole julkisesti saatavilla I2P-verkon ulkopuolella, mikä yleensä saavutetaan määrittämällä web-palvelin kuuntelemaan localhostia (127.0.0.1) eikä kaikkia liitäntöjä (0.0.0.0)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:482
 msgid "Be aware that a poorly configured webserver or web appplication can leak information such as your real IP address or server details that may reduce your anonymity or assist a hacker. If using an alternative platform, be sure to secure it before putting it online. If in doubt, consult online guides about web server and web application hardening, for example:"
-msgstr ""
+msgstr "Huomioi, että huonosti määritetty web-palvelin tai web-sovellus voi vuotaa tietoja, kuten todellisen IP-osoitteesi tai palvelimen yksityiskohdat, mikä voi vähentää anonymiteettiäsi tai auttaa hakkeria. Jos käytät vaihtoehtoista alustaa, varmista sen turvallisuus ennen sen verkkoon asettamista. Epävarmassa tapauksessa, tutustu verkkopohjaisiin oppaisiin web-palvelimen ja web-sovelluksen vahvistamisesta, esimerkiksi:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:484
 msgid "Apache Web Server Security Guide"
@@ -10979,7 +10979,7 @@ msgstr "Kuinka vahvistaa WordPress-sivustoasi"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:490
 msgid "<b>Note:</b> On some Apache installations, the <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> and <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> modules are enabled by default. It is important to disable these, or otherwise protect access to the urls, to avoid compromising the anonymity and security of your server."
-msgstr ""
+msgstr "<b>Huomio:</b> Jotkut Apache-asennukset voivat olla oletuksena käynnistäneet <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a>- ja <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a>-moduulit. On tärkeää poistaa nämä käytöstä tai muuten suojata pääsy URL-osoitteisiin, jotta palvelimesi anonymiteetti ja tietoturva eivät vaarannu."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:278
 msgid "home"
@@ -11493,7 +11493,7 @@ msgstr "Ohita asennus"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:481
 msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr ""
+msgstr "Valitse käytettävä kieli reitittimen konsolissa ja verkkosovelluksissa (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnelin hallinta</a> jne). Jos haluat vaihtaa kieltä tulevaisuudessa, vaihtaa reitittimen konsoliteemaa tai määrittää salasanan konsoliin pääsemiseksi, voit tehdä sen <a href=/configui target=_blank rel=noreferrer>Käyttöliittymän konfigurointisivulla</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:483
 msgid "Router Console &amp; WebApps Display Language"
@@ -11501,11 +11501,11 @@ msgstr "Reititinkonsoli ja WebApps -näyttökieli"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:492
 msgid "Your I2P+ router by default contributes to the network by routing internal, end-to-end encrypted traffic for other routers, known as <i>participation</i>. Bandwidth participation improves the anonymity level of all users on the network and maximizes your download speed."
-msgstr ""
+msgstr "Oletusarvoisesti I2P+ -reitittimesi osallistuu verkkoon reitittämällä sisäistä ja päästä päähän salattua liikennettä muiden reitittimien puolesta. Kaistanleveyden osallistuminen parantaa kaikkien käyttäjien anonymiteettitasoa verkossa ja maksimoi latausnopeutesi."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:494
 msgid "For the best experience, it's recommended to configure your bandwidth settings to match the values provided by your ISP. If you are unsure of your bandwidth, you can run a test to determine your download and upload speeds."
-msgstr ""
+msgstr "Parhaan kokemuksen saamiseksi suositellaan määrittämään kaistanleveysasetukset vastaamaan ISP:ltä saatuja arvoja. Jos et ole varma kaistanleveydestäsi, voit suorittaa testin ladataksesi ja lähettääksesi nopeudet."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:496
 msgid "Bandwidth Test"
@@ -11598,7 +11598,7 @@ msgstr "Selaimen asetukset"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:677
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr ""
+msgstr "Jotta voit käyttää I2P-verkossa sijaitsevia verkkosivustoja ja valinnaisesti käyttää oletusarvoista ulkoproksia yhdistääksesi verkkosivustoihin selkeissä verkko-olosuhteissa, sinun on määritettävä selain käyttämään I2P+ <b>HTTP</b> välityspalvelinta, joka oletuksena toimii osoitteessa <code>127.0.0.1 portti 4444</code>. Lisäohjeita saat katsomalla <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>konfigurointioppaan</a> tai <a href=/help/configuration#browserconfig>mini-oppaan Firefox-selainta varten</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:684
 msgid "Welcome to I2P+!"
