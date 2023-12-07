@@ -3364,7 +3364,7 @@ public class WebMail extends HttpServlet
             out.print(jslink + ">");
             if (mail.isNew() && !mail.isSpam()) {
                 out.println("<img src=/susimail/icons/flag_green.png alt=\"\" title=\"" + _t("Message is new") + "\">");
-            } else if (mail.isSpam()) {
+            } else if (isSpamFolder || mail.isSpam()) {
                 out.println("<img src=/susimail/icons/flag_red.png alt=\"\" title=\"" + _t("Message is spam") + "\">");
             }
             out.println("<td class=\"mailListSize " + jslink + "><span class=\"listSize\">" +
