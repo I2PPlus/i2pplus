@@ -21,7 +21,7 @@ body{margin:6px;line-height:1.3;text-align:center;font-size:9pt;background:var(-
 a,h1,h2,h3,h4,th,input[type=submit],input[type=reset],button,select{text-shadow:var(--txt_shadow)}
 a:hover,a:focus,a:active,.applink:hover a,.applink:focus a,.applink:active a,input[type=submit]:hover,input[type=submit]:focus,input[type=submit]:active,input[type=reset]:hover,input[type=reset]:focus,input[type=reset]:active,button:hover,button:focus,button:active,select:hover,select:focus,select:active,.graphspanel a{text-shadow:none}
 b,#routerinformation td:first-child{color:var(--ink_light)}
-code,tt{font-size:8.5pt;color:var(--ink_code)}
+code,tt{color:var(--ink_code)}
 code,pre,tt,textarea,#logs li,.bucket,.b32{font-family:var(--monospaced);font-weight:500}
 code{text-align:left}
 h1,.confignav{position:relative}
@@ -2097,6 +2097,7 @@ td#pw_adduser input{margin:5px 20px 5px 5px}
 
 /* update */
 #config_update input[type=text]:not([readonly]),#config_update textarea,.main[id^="config_"] textarea,input[name="newsURL"]{margin-left:3px;width:calc(100% - 6px)}
+#config_update input.check{vertical-align:middle}
 #config_update td:not(.infohelp){padding-top:6px;padding-bottom:6px}
 #config_update .optionsave{border-bottom:var(--border_inner)}
 #config_update textarea{margin-left:6px}
@@ -2112,7 +2113,6 @@ td#pw_adduser input{margin:5px 20px 5px 5px}
 #config_update .optiontextarea .nowrap b{margin-top:-48px;margin-bottom:-28px;height:76px;vertical-align:middle}
 #config_update textarea,#config_update input[type=text]{margin:5px 0 5px 10px;width:calc(100% - 210px);min-width:0;box-sizing:border-box}
 #config_update input[name="devSU3URL"],#config_update input[name="newsURL"],#config_update input[name="zipURL"]{width:calc(100% - 210px)!important}
-#config_update .check{float:left}
 #config_update textarea{margin:8px 0 8px 3px;height:76px;min-height:32px}
 #config_update form{margin-bottom:0}
 #config_update .suboption label[for="newsThroughProxy"]{margin-right:20px}
@@ -2126,6 +2126,7 @@ td#pw_adduser input{margin:5px 20px 5px 5px}
 #miscConfig:not(:checked)+label.tabletitle:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:6px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #miscConfig:not(:checked)~#newsupdateconfig{display:none}
 #newsupdateconfig{margin-bottom:11px}
+#checkforupdates{width:100%;display:block!important;text-align:center;column-span:all}
 
 /* reseed */
 #config_reseed input[type=text],#config_reseed input[type=password]{min-width:300px}
@@ -2670,7 +2671,7 @@ th.queue{white-space:nowrap}
 body,button,input,select,th,.infohelp,.infowarn,.main,.main li b,.main td,.newscontent p,.news p,.percentBarText,.statusnotes,.tab,.tab2,.themelabel,.ui_lang,#configinfo,#configinfo th,#help code,#news p,#peerdefs,#profile_defs,#sidebar button.download,#sidebar .cancel,#sidebar .reload[value="restartImmediate"],#thresholds{font-size:10pt}
 body:not(#homepage) #sb_advancedgeneral:not([hidden])~#sb_tunnels{margin-bottom:-8px}
 button.control{padding:14px}
-code,code a,pre,textarea,.applabel a,.main[id^="config_"] th,#changelog pre,#logs li,#news tt,#updateAvailable{font-size:9.5pt}
+.applabel a,.main[id^="config_"] th,#changelog pre,#logs li,#news tt,#updateAvailable{font-size:9.5pt}
 pre,.footnote,div.news,.news,.links code,.main[id^="config_"] .encDests th,.sb_notice,.topness,#help code,#jardump td,#jardump th,#jobs li b,#jobs .jobcount,#jobs .joblog li,#jobs #schedjobs td,#jobstats td:first-child,#logs li,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,#sidebar td,#sidebar .sb_update b{font-size:9pt}
 tt{margin-left:0;margin-right:3px;letter-spacing:.1em}
 form[action="configplugins"] input.reload{margin-top:1px;margin-right:4px}

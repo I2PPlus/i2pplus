@@ -939,7 +939,7 @@ input[type="hidden"]+p+p{border:var(--border_inner);padding:10px;margin-top:20px
 #config_update input,#config_update button,#config_update select,#config_update textarea{margin-left:0}
 #config_update input[type=submit]{margin:0}
 #config_update input[name*="URL"],#config_update textarea{width:calc(100% - 10px);resize:none}
-#config_update input.check{float:left}
+#config_update input.check{margin:12px}
 #config_update .suboption .optbox{margin:0 3px 3px -5px}
 #config_update .messages{box-shadow:var(--highlight);background:var(--update) no-repeat 15px center,var(--earth) bottom right no-repeat,linear-gradient(135deg,#000020,#000);background-size:28px,80px auto,100%}
 #config_update .infohelp code{user-select:all}
@@ -968,6 +968,7 @@ input[type="hidden"]+p+p{border:var(--border_inner);padding:10px;margin-top:20px
 #miscConfig:not(:checked)+label.tabletitle::after{width:12px;display:inline-block;height:12px;position:absolute;right:6px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
 #miscConfig:not(:checked)+label.tabletitle:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:6px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #miscConfig:not(:checked)~#newsupdateconfig{display:none}
+#checkforupdates{width:100%;display:block!important;text-align:center;column-span:all}
 
 /* reseed */
 #resetreseed{margin:-4px -5px 0 0}

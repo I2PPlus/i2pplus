@@ -52,9 +52,7 @@
 <tr>
 <td id=updateHelper>
 <div class=optionlist>
-<%
-    if (updatehelper.canInstall()) {
-%>
+<%  if (updatehelper.canInstall()) { %>
 <span class=nowrap>
 <b><%=formhandler._t("I2P update policy")%>:</b>
 <jsp:getProperty name="updatehelper" property="updatePolicySelectBox" />
@@ -65,6 +63,13 @@
 <span class=nowrap>
 <b><%=intl._t("Update check")%>:</b>
 <jsp:getProperty name="updatehelper" property="refreshFrequencySelectBox" />
+</span><br>
+<span class=nowrap id=checkforupdates>
+<%  if ("true".equals(System.getProperty("net.i2p.router.web.UpdateHandler.updateInProgress", "false"))) { %>
+<i><%=intl._t("Update In Progress")%>&hellip;</i>
+<%  } else { %>
+<input type=submit name=action class=check value="<%=intl._t("Check for updates")%>" />
+<%  } %>
 </span>
 </div>
 </td>
@@ -106,13 +111,6 @@
 </tr>
 <tr>
 <td class=optionsave>
-<span id=checkforupdates>
-<%  if ("true".equals(System.getProperty("net.i2p.router.web.UpdateHandler.updateInProgress", "false"))) { %>
-<i><%=intl._t("Update In Progress")%>&hellip;</i>
-<%  } else { %>
-<input type=submit name=action class=check value="<%=intl._t("Check for updates")%>" />
-<%  } %>
-</span>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>" hidden>
 <input type=submit name=action class=accept value="<%=intl._t("Save")%>" >
 </td>

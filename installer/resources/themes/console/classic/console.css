@@ -1600,7 +1600,6 @@ b.suboption{margin:0;padding:5px 10px;position:relative;z-index:10;display:inlin
 #reseedconfig .optiontextarea:hover{box-shadow:var(--highlight_hover);transition:ease box-shadow .5s,ease background .2s .01s}
 #updatehelper .optionlist:hover,#updateProxyHostPort.optionlist:hover{vertical-align:middle;background:var(--bg);transition:ease box-shadow .2s;box-shadow:var(--highlight_hover),inset 0 0 0 2px var(--bg)}
 #bandwidthconfig .optionsingle:hover,#reseedproxytype label:hover,#graphs .nowrap:hover{background-color:var(--row_hover)}
-#config_update input.check{float:left}
 #config_reseed .suboption label,#externali2cp .suboption label{margin:0 18px 0 -8px;padding:1px 0}
 #config_update .suboption label[for="newsThroughProxy"]{margin-right:20px}
 #config_update .suboption .optbox{margin:0 3px 0 -5px}
@@ -1616,6 +1615,7 @@ b.suboption{margin:0;padding:5px 10px;position:relative;z-index:10;display:inlin
 #miscConfig:not(:checked)+label.tabletitle::after{width:12px;display:inline-block;height:12px;position:absolute;right:6px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
 #miscConfig:not(:checked)+label.tabletitle:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:6px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
 #miscConfig:not(:checked)~#newsupdateconfig{display:none}
+#checkforupdates{width:100%;display:block!important;text-align:center;column-span:all}
 
 /* bandwidth config */
 #bandwidthconfig input[type=text],#bandwidthconfig select{width:90px;min-width:90px;text-align:right}
