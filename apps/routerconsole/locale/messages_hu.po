@@ -8247,7 +8247,7 @@ msgstr "HTTPS"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:600
 msgid "SOCKS 4/4a"
-msgstr ""
+msgstr "SOCKS 4/4a"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:606
 msgid "SOCKS 5"
@@ -8296,7 +8296,7 @@ msgstr "Válassza ki a zip vagy su3 fájlt"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:731
 msgid "Create Reseed File"
-msgstr ""
+msgstr "Létrehozza a Reseed fájlt"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:733
 msgid "Create a new reseed zip file you may share for others to reseed manually."
@@ -8407,15 +8407,15 @@ msgstr "státusz beállításai"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:419
 msgid "Stats Collection &amp; Graphing"
-msgstr ""
+msgstr "Statisztikai gyűjtés és grafikonok"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:528
 msgid "Configure I2P Stat Collection"
-msgstr "Az I2P Statisztikai Gyűjtés Beállításai"
+msgstr "Az I2P Statisztikai Gyűjtés Beállítása"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:530
 msgid "A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>."
-msgstr ""
+msgstr "Alapértelmezetten néhány korlátozott adatgyűjtés van engedélyezve, amelyek szükségesek a router teljesítményének monitorozásához. Csak azon statisztikák szerepelnek itt, amelyekhez opcionális grafikon tartozik; az engedélyezett összes statisztika listájához tekintse <a href=\"/stats\">a statisztika oldalt</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:537
 msgid "Enable full stats?"
@@ -8468,15 +8468,15 @@ msgstr "A kliens alagút változtatásai ideiglenesek és nincsenek mentve."
 #. if (pm.isRegistered(net.i2p.util.PortMapper.SVC_I2PTUNNEL)) {
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:549
 msgid "The default settings are optimized for general usage and normally don't need to be changed."
-msgstr ""
+msgstr "A beállítások alapértelmezett értékei az általános használatra vannak optimalizálva, és általában nem szükséges őket megváltoztatni."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:551
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr ""
+msgstr "Az ügyfél alagút beállításainak módosításához használja a <a href=\"/i2ptunnelmgr\">Alagútkezelőt</a>, vagy az I2PSnark <a href=\"/i2psnark/configure\">konfigurációs oldalát</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:553
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr ""
+msgstr "A kliens alagutakhoz csak a munkamenet során módosításokat tenni aktiválja a konzol <a href=\"/help/advancedsettings\">Speciális módját</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:526
 msgid "Router Console Theme"
@@ -8493,7 +8493,7 @@ msgstr "Sajnálom. A kiválasztott téma Internet Explorer-re tiltva."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:546
 msgid "A very old version has been detected. It's not recommended to use I2P with unmaintained browsers."
-msgstr ""
+msgstr "Egy nagyon régi verziót észleltek. Nem javasolt az I2P használata karbantartatlan böngészőkkel."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:548
 msgid "If you're not using IE, it's likely that your browser is pretending to be IE; please configure your browser (or proxy) to use a different User Agent string if you'd like to access the console themes."
@@ -8873,295 +8873,295 @@ msgstr "Speciális Útválasztó Konfiguráció"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:437
 msgid "The router configuration options listed below are not available in the user interface, usually because they are rarely used or provide access to advanced settings that most users will not need. This is not a comprehensive list. Some settings will require a restart of the router to take effect. Note that all settings are case sensitive. You will need to edit your <code>router.config</code> file to add options, or, once you have added <code>routerconsole.advanced=true</code> to the router.config file, you may edit settings within the console on the <a href=/configadvanced>Advanced Configuration page</a>."
-msgstr ""
+msgstr "Az alább felsorolt ​​útválasztási konfigurációs beállítások nem érhetők el az felhasználói felületen, általában azért, mert ritkán használatosak vagy a legtöbb felhasználó számára nem szükségesek. Ez nem teljes lista. Néhány beállításnak újraindítania kell az útválasztódat a hatás érdekében. Vegye figyelembe, hogy az összes beállítás érzékeny a kis- és nagybetűkre. Az opciók hozzáadásához szerkesztenie kell a <code>router.config</code> fájlt, vagy ha már hozzáadta <code>routerconsole.advanced=true</code> a router.config fájlhoz, szerkesztheti a beállításokat a vezérlőpulton az <a href=/configadvanced>Haladó konfigurációs oldalon</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:439
 msgid "When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href=/configadvanced>Advanced Configuration page</a>. Extra display options are provided in the <a href=/netdb>Network Database section</a>, including the <a href='/netdb?f=3'>Sybil Analysis tool</a>, and there are additional configuration options on the <a href=/configclients>Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar."
-msgstr ""
+msgstr "Ha igazra van állítva, további funkciók lesznek engedélyezve a konzolon, és a felhasználó szerkesztheti a beállításokat közvetlenül az <a href=/configadvanced>Haladó konfigurációs oldalon</a>. Extra megjelenítési lehetőségek találhatóak a <a href=/netdb>Hálózati adatbázis szakaszban</a>, beleértve a <a href='/netdb?f=3'>Sybil elemző eszközt</a>, és további konfigurációs lehetőségek vannak a <a href=/configclients>Clients konfigurációs oldalon</a>. Ez lehetővé teszi a nem aláírt frissítések telepítését, a hírek URL címének manuális konfigurálását és további szakaszokat az oldalsávon."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:441
 msgid "Plugins signed with the cryptographic key of the developer are the recommended format, but if you wish to install unsigned plugins (.zip) you can set this to true. Note that you may still encounter issues attempting to install an unsigned plugin if the developer has included additional checks in the plugin build process."
-msgstr ""
+msgstr "A fejlesztő kriptográfiai kulcsával aláírt bővítmények ajánlott formátumot használnak, de ha telepíteni kívánsz aláíratlan bővítményeket (.zip), ezt beállíthatod igazra. Figyelem, ha a fejlesztő további ellenőrzéseket végzett a bővítményhez tartozó építési folyamat során, továbbra is problémákba ütközhetsz az aláíratlan bővítmény telepítésével kapcsolatban."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:443
 msgid "This setting allows the manual selection of the browser which I2P will launch on startup (if the console is <a href=/configservice#browseronstart>configured</a> to launch a browser on startup), overriding the OS default browser. For more information, see the <a href=#alternative_browser>FAQ entry</a> above."
-msgstr ""
+msgstr "Ez a beállítás lehetővé teszi, hogy manuálisan kiválaszd a böngészőt, amelyet az I2P indít a rendszerindításkor (ha a konzolon be van állítva, hogy indítson egy böngészőt a rendszerindításkor), felülírva az operációs rendszer alapértelmezett böngészőjét. További információért lásd a fenti <a href=#alternative_browser>Gyakran Ismételt Kérdések</a> bejegyzést."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:445
 msgid "When set to true, this enables gzip compression for the router console and default web applications. [Enabled by default]"
-msgstr ""
+msgstr "Ha igazra van állítva, ez engedélyezi a gzip tömörítést a router konzolon és a webalkalmazásokon. [Alapértelmezetten engedélyezve]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:447
 msgid "When set to true, this enables plugin installation on the <a href=/configplugins>Plugin Configuration page</a>. [Enabled by default]"
-msgstr ""
+msgstr "Ha igazra van állítva, ez engedélyezi a bővítmények telepítését a <a href=/configplugins>Bővítmény Konfiguráció oldalon</a>. [Alapértelmezetten engedélyezve]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:449
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
-msgstr ""
+msgstr "Amikor igazra van állítva, ez a beállítás lehetővé teszi a peers visszafelé DNS nézeteit, amelyek akkor aktiválódnak, amikor egy peer országának zászlaja jelenik meg, vagy amikor a gépnevet vagy a domainnevet az eredményfüggönyön jeleníti meg, vagy akkor is, amikor a peer RouterInfo-ja lemezre kerül. Ahhoz, hogy elkerülje a többszörös keresést, javasolt, hogy állítsa be a DNS keresések bőséges gyorsítótárazási politikáját 10 percnél hosszabb időre, és állítsa be a magánszférát tiszteletben tartó DNS kiszolgáló beállításait a működési rendszerben. [Elsődlegesen kikapcsolt, újraindítás szükséges]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:451
 msgid "When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]"
-msgstr ""
+msgstr "Amikor az igazra van állítva, automatikus átirányítást hoz létre a https-be, amikor a https:// engedélyezve van, hozzáférés a router: konzolhoz http:// -n keresztül. A router konzolhoz való hozzáférés konfigurálásához szerkesztse a beállításokat <code>clients.config</code> fájlban a profil könyvtárában (<i> nem </i> a program telepítési könyvtárában). [Elsődlegesen engedélyezve]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:453
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
-msgstr ""
+msgstr "Ezt a beállítástól függ, használja-e a router a rendelkezésre bocsátott <i>blocklist.txt</i> fájlt és a felhasználó által konfigurált tilalmi listákat a routerek tiltásához hash vagy IP cím alapján. Az IPv4 esetében tartományok és hálózati maszkok támogatottak, de az IPv6 esetében nem. További információkért tekintse meg az I2P+ alkalmazás könyvtárában található <i>blocklist.txt</i> fájlt. [Elsődlegesen engedélyezve, újraindítás szükséges]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:455
 msgid "This setting determines whether or not the router should use the provided <i>blocklist_tor.txt</i> file in your I2P+ application directory to enable banning of routers operating from Tor exit node ip addresses. [Enabled by default, restart required]"
-msgstr ""
+msgstr "Ezt a beállítástól függ, hogy a router használja-e a rendelkezésre bocsátott <i>blocklist_tor.txt</i> fájlt az I2P+ alkalmazás könyvtárában annak érdekében, hogy a Tor exit node IP címéről működő routereket tiltsa. [Elsődlegesen engedélyezve, újraindítás szükséges]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:457
 msgid "This setting, when configured with a path pointing at a valid blocklist file, enables an additional, user-configured blocklist to be loaded at router startup. [Disabled by default, restart required]"
-msgstr ""
+msgstr "Ennek a beállításnak a bekapcsolása esetén használható egy további, felhasználó által konfigurálható blokklista a router indításakor. [Alapértelmezett beállításban le van tiltva, újraindítás szükséges]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:459
 msgid "This setting permits an expiry time to be configured (in seconds) for bans enforced via blocklists. By default bans persist for the duration of the router session. [Restart required]"
-msgstr ""
+msgstr "Ennek a beállításnak a segítségével konfigurálhatók a blokklistákon keresztül alkalmazott kitiltások lejárati ideje (másodpercben). Alapértelmezetten a kitiltások a router működésének idejére tartanak. [Újraindítás szükséges]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:461
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
-msgstr ""
+msgstr "Kiosztja a processzorszálonkénti több szál létrehozásához a processzormagok számát. Ha a processzor támogatja a hiperszálhúzást vagy a párhuzamos többszálasítást, akkor a processzormagok számát 2-vel kell szorozni, hogy megtudja a kiosztható szálak maximális számát, egyébként a processzormagok száma = a rendelkezésre álló szálak maximális száma. Vegye figyelembe, hogy kevesebbet szeretne kiosztani a teoretikus maximális mennyiségnél, hogy biztosítson helyet más feladatoknak."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:463
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
-msgstr ""
+msgstr "Ez a beállítás milliszekundumban felülírja a router torlódás észlelését megelőző alapértelmezett üzenetfeldolgozási időkorlátot (jelölve mint <i>Üzenet Késleltetés</i> a Torlódás oldalsáv szakaszában), mielőtt a router tömöttnek és átmeneti alagútigényeket visszautasítaná. [Az alapértelmezett 750 ms, vagy 1500 ms, ha a router lassúnak jelölt.]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:465
 msgid "Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]"
-msgstr ""
+msgstr "Az átlagos késleltetés meghatározása érdekében időről időre tesztelje az alagutakat és jelenítse meg az eredményeket a Torlódás oldalsávjának szakaszában. Engedélyezéshez állítsa ezt az értéket hamisra. [Az alapértelmezett hamis.]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:467
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
-msgstr ""
+msgstr "Ha igazra van állítva, a router minden újraindításkor megváltoztatja az azonosságát és UDP portját. [Az alapérték hamis]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:469
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
-msgstr ""
+msgstr "Ez a beállítás meghatározza, melyik <a href=/profiles#profile_defs>peer képességek</a> nem lesznek használva a router alagútjainak létrehozásához. pl. <code>router.excludePeerCaps=LMN</code>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:471
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
-msgstr ""
+msgstr "Ha igazra van állítva, és a router a hálózat központi szervereként működik, a <a href=/configadvanced#ffconf>flódfill részvétele</a> más routerek elől el lesz rejtve."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:473
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
-msgstr ""
+msgstr "Meghatározza a futtatható párhuzamos <a href=/jobs>munkafolyamatok</a> maximális számát. Az alapérték a JVM-nek a <code>wrapper.config</code> segítségével rendelt memóriamennyiségtől függ: 3, ha kevesebb, mint 64MB, 4, ha kevesebb, mint 256MB, vagy 5, ha 256MB-nál több. Megjegyzés: A beállítás megváltoztatása a router újraindítását igényli."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:475
 msgid "Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Default is 8000, or 2000 if running on Arm or Android]"
-msgstr ""
+msgstr "Meghatározza, hogy a routernak legfeljebb hány résztvevő alagútat lehet építeni. Teljes részvételi tilalom esetén állítsa 0-ra. [Az alapértelmezett érték 8000, vagy ha Arm vagy Android fut, akkor 2000]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:477
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
-msgstr ""
+msgstr "Meghatározza az aktív helyi alagutak (kliens és felfedező) maximális százalékát, amelyet egy kapcsolódó felhasználhat. [Az alapértelmezett érték 10% I2P+-ban, 33% I2P-ben]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:479
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
-msgstr ""
+msgstr "Amikor engedélyezve van, a router információs fájljai nem lesznek felosztva 64 almappába a profil netDB könyvtárában. [Az alapértelmezett érték hamis]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:481
 msgid "When set to true, your router will not be classified as slow, regardless of the specifications of your host system. Ordinarily, routers running on hosts with the following characteristics will be classified as slow, and various performance-related router options will be modified accordingly:"
-msgstr ""
+msgstr "Amikor engedélyezve van, a routerét nem sorolják a lassú kategóriába a gépének specifikációja függetlenül. Rendes esetben a következő jellegzetességekkel rendelkező gépeken futó routerek lassúnak tekintendők, és ennek megfelelően módosulnak a különböző teljesítményhez kapcsolódó router beállítások:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:483
 msgid "Host OS running Android"
-msgstr ""
+msgstr "Android futó operációs rendszer"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:485
 msgid "Host OS running on ARM (MacOS excepted)"
-msgstr ""
+msgstr "ARM processzorral működő operációs rendszer (kivéve MacOS)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:487
 msgid "32bit host OS running with less than 4 detected cores"
-msgstr ""
+msgstr "32 bites operációs rendszer kevesebb, mint 4 észlelt maggal"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:489
 msgid "64bit host OS running with 1 detected core and less than 384MB allocated to the JVM"
-msgstr ""
+msgstr "64 bites operációs rendszer kevesebb, mint 384MB JVM-nek kiosztott memóriával és 1 észlelt maggal"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:491
 msgid "Less than 256MB allocated to the JVM"
-msgstr ""
+msgstr "Kevesebb, mint 256MB JVM-nek kiosztott memória"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:493
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
-msgstr ""
+msgstr "A router egy nem natív, szoftver emulált Java BigInteger könyvtárat futtat"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:495
 msgid "This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
-msgstr ""
+msgstr "Ezzel a beállítással konfigurálhatja a minimális tárolt résztvevő alagutak számát, mielőtt a router elutasítja az alagtúra vonatkozó kérelmeket az előre várható sávszélesség alapján. [Alapértelmezett érték: 100, ha az rendszer Androidot futtat, 800, ha az rendszer ARM-en fut és kevesebb, mint 4 mag áll rendelkezésre, 1200, ha az rendszer ARM-en fut és 4 vagy több mag áll rendelkezésre, különben 2500]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:497
 msgid "When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]"
-msgstr ""
+msgstr "Ha az érték igazra van állítva, a router az újraindítás során megváltoztatja az azonosítását és az UDP portját, majd törli a kulcsot a router.config fájlból, hogy további változtatásokat megakadályozzon. [Alapértelmezett érték: hamis]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:499
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr ""
+msgstr "Amikor konfigurálva van, ez meghatározza a router által egyszerre felépíthető alagutak általános korlátát. Alapértelmezés szerint a router az átlagos felépítési időt és a jelenlegi kimenő sávszélességet használja az optimális felépítési sebesség meghatározásához. [Újraindítás szükséges]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:501
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr ""
+msgstr "Amennyiben telepíteni kíván honosítatlan (.zip) I2P frissítéseket, akkor hozzá kell adni a <code>router.config</code> fájlhoz, hacsak már nincs konfigurálva <code>routerconsole.advanced=true</code>, mivel ebben az esetben ez a beállítás már kész. Megjegyzés: I2P+ 0.9.48+ verziótól kezdve az <a href=/configupdate#i2pupdates>aláíratlan frissítések</a> telepítése az alapértelmezés szerint engedélyezett."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:503
 msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr ""
+msgstr "Ezzel a beállítással konfigurálhatja a honosítatlan frissítési funkcióhoz tartozó frissítési URL-t, amennyiben engedélyezve van. Az URL-nek <code>/i2pupdate.zip</code>-re kell végződnie. Megjegyzés: ne telepítsen honosítatlan frissítéseket, hacsak nem bízik az frissítés forrásában!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:505
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr ""
+msgstr "Ez a beállítás lehetővé teszi az SSU tesztek letiltását a router tűzfalállapotának meghatározásához, és engedélyezhető azokon a routerekre, amelyek határozottan nincsenek tűzfalon kívül, de időszakos tűzfalozási problémákkal küzdenek. Abban az esetben, ha a tesztelés le van tiltva, mind az SSU, mind az NTCP jelentenie kell a jelenlegi nyilvános IP-címet a <a href=/info>tűzfal információ oldal</a>on. [Újraindítás szükséges]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:507
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr ""
+msgstr "Ez a beállítás meghatározza, hogy melyik átviteli mód kap előnyt a többi résztvevővel való kommunikáció során. Alapértelmezés szerint az NTCP kedvez a UDP (SSU) előtt. Az érték true-ra állításával az UDP lesz az elsődleges, hacsak nem létezik előre meghatározott NTCP kapcsolat; ha mindigre van állítva, mindig az UDP-t használja, függetlenül az előre meghatározott NTCP kapcsolattól. [Az alapérték false]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:509
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr ""
+msgstr "Ez a specifikus beállítás lehetővé teszi, hogy engedélyezze vagy letiltsa a a routernél hostolt szerverekre küldött ping válaszait. A pingek letiltásához hozzá kell adnia a <code>i2p.streaming.answerPings=false</code> sorat a szerver konfigurációja <i>Egyedi beállítások</i> szakaszához a Tunnel Managerben."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:511
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr ""
+msgstr "Ha az érték igaz-ra van állítva, az I2P hálózati kapcsolat nélkül fut, ami hasznos lehet, ha folyamatosan újraindítja a routert a kódfrissítések teszteléséhez, mivel ez megakadályozza a hálózat megszakadását."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:513
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr ""
+msgstr "Ez a beállítás, ha engedélyezve van, akkor az összes ping engedélyezett szerveréhez véletlenszerű pong késleltetést vezet be, akár 50 ms-ig. Az alapértelmezett érték letiltva. [Újraindítás szükséges]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:515
 msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr ""
+msgstr "Ez a beállítás akkor módosítja a maximális további véletlenszerű \"pong\" késleltetést, ha engedélyezve van a ping-kapcsolatú szerverekre a beállítás (i2p.streaming.enablePongDelay). Hacsak nincs kifejezetten beállítva, akkor az alapértelmezett értéket, 50 ms-t veszi figyelembe."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:517
 msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr ""
+msgstr "Ez a beállítás (ezredmásodpercben) meghatározza, hogy egy csomag mennyi ideig maradhat a CoDel várakozási sorban, mielőtt eldobódna. Az alapértelmezett érték 1000 ms. [Újraindítás szükséges]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:519
 msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr ""
+msgstr "Ez a beállítás meghatározza a kimenő várakozási sor maximális üzenetszámát, mielőtt az megtelne. [Az alapértelmezett érték 768]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:521
 msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr ""
+msgstr "Ez a beállítás meghatározza a maximum várakozási soron felüli üzenetszámot, mielőtt a további üzenetek eldobódnának. [Az alapértelmezett érték 128]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:523
 msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr ""
+msgstr "Ez a beállítás (ezredmásodpercben) lehetővé teszi, hogy manuálisan beállítsa a várakozási sor késleltetés cértéket a CoDel várakozási sorkezelő rendszeréhez. Az alapértelmezett érték 50 ms. [Újraindítás szükséges]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:525
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr ""
+msgstr "Ez a beállítás (órákat) meghatározza, hogy mennyi idős egy RouterInfo az NetDb-ban (utolsó ismert közzétételi dátuma) mielőtt elavultnak és törlendőnek minősül. [Az alapértelmezett érték 28 óra, hacsak a router nem Floodfill, ebben az esetben az alapértelmezett érték 8 óra]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:527
 msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr ""
+msgstr "Ez a beállítás meghatározza, hogy párhuzamosan hány peert vizsgáljon meg a Peer Exploration Job futásakor [az alapértelmezett érték az, hogy egyszerre 1 peer-t vizsgál, amikor több mint 3000 peer ismert]. Vegye figyelembe, hogy ez az érték növeli a sávszélességigényeket a felderítéshez, és ha túl magasra állítja ezt az értéket, ez túlzott üzenetkésleltetést okozhat és akadályozhatja más szolgáltatások működését, ezért legyen óvatos!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:529
 msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr ""
+msgstr "Ez a beállítás meghatározza, hogy hány NetDb DHT vödröt fog hivatkozni a Peer Exploration Job futásakor. Alapértelmezés szerint a vizsgálandó vödrök száma attól függ, hogy a router több mint egy órája fut-e, a router el van-e rejtve vagy az „K” sávszélességi kategóriában van-e, valamint az ismert routerek számától."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:531
 msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr ""
+msgstr "Ez a beállítás (másodpercekben) lehetővé teszi a Peer Exploration Job futásai közötti késleltetés felülírását, amely megpróbálja megtalálni az új megbízható partnereket a NetDbhez való hozzáadáshoz. A feladat alapértelmezés szerint 80 másodpercenként fut le, vagy ha a router munka- vagy üzenetkésleltetéssel küzd, akkor 3 percenként. Ha a NetDb mérete eléri a 4000 megbízható partnert, akkor a feladat szünetel 15 percig. Ha a NetDb jól megszállott (több mint 2000 megbízható partnerrel rendelkezik), vagy ha az összes sávszélesség használatát csökkenteni szeretné, akkor növelheti a késleltetést. Megjegyzés: A Floodfill routerekre ez a feladat nem fut."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:533
 msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr ""
+msgstr "Ez a beállítás meghatározza a tárolóba állítandó maximális peer-hash mennyiséget a felderítéshez. Az I2P-ben a maximum 128, és az I2P+-ban az alapértéke 512."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:535
 msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
-msgstr ""
+msgstr "Ez a beállítás meghatározza, hogy egy fluxustöltőként működő útválasztó felderíti-e a NetDb-t az új közvetítők megismeréséhez. [Az alapérték hamis, újraindítás szükséges]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:537
 msgid "This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]"
-msgstr ""
+msgstr "Ez a beállítás, ha igazra állítva, megakadályozza az útválasztó közvetlen kommunikációját más útválasztókkal, és az beajánlók használatát erőlteti. [Az alapérték hamis, kivéve, ha az útválasztó rejtett módban van]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:539
 msgid "This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]"
-msgstr ""
+msgstr "Ez a beállítás lehetővé teszi a Régi útválasztók kizárását a NetDb-dől. A közvetítőknél régebbiek az alapértéknél vagy az általad beállított értéknél, a NetDb-ből törlődnek és az útválasztó működése során kitiltásra kerülnek. Alapértelmezés szerint a 0.9.20-nál régebbi útválasztók vannak kizárva. Megjegyzés: Az I2P+ 0.9.46+ verziótól kezdve csak az új verziókat futtató közvetítők használatosak helyi alagutak létrehozásához. [Újraindítás szükséges]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:541
 msgid "This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]"
-msgstr ""
+msgstr "Ez a beállítás meghatározza a közvetítő tesztek számát egyidejűleg, ami a peer lassúságának meghatározásához használatos. [Az alapérték 4]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:543
 msgid "This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 5000]"
-msgstr ""
+msgstr "Ez a beállítás meghatározza a közvetítő tesztfeladataink közötti késleltetést, milliszekundumban konfigurálva. [Az alapérték 5000]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:545
 msgid "To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 1000]"
-msgstr ""
+msgstr "A peer lassúságának meghatározása érdekében ez a beállítás a maximális időt szánja, amit egy peer tesztnek vegyen igénybe a kudarcnak való tekintet nélkül, milliszekundumban bemérve. Amennyiben a válaszidő a sikeres tesztek átlagánál kisebbre van konfigurálva, használatba veszi az átlag sikeres teszt értékét. [Az alapérték 1000]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:547
 msgid "This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]"
-msgstr ""
+msgstr "Ez a beállítás meghatározza, hogy a mi Útválasztónk adatai közvetett módon megjelennek-e a NetDb-ben. [Az alapérték hamis]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:549
 msgid "This setting configures the initial size of the outbound message queue. [Default is 64]"
-msgstr ""
+msgstr "Ez a beállítás kiállítja az elsődleges méretet a kimenő adatközvetítő üzenet sorbanak. [Az alapérték 64]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:551
 msgid "This setting configures the maximum size of the inbound message queue. [Default is 1024]"
-msgstr ""
+msgstr "Ez a beállítás konfigurálja a bejövő üzenetek sorának maximális méretét. [Az alapértelmezett érték 1024]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:553
 msgid "This setting configures the maximum number of inbound messages queued per cycle (pump). [Default is 24]"
-msgstr ""
+msgstr "Ez a beállítás konfigurálja a ciklusonkénti (pump) maximálisan megengedett bejövő üzenetek számát. [Az alapértelmezett érték 24]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:555
 msgid "This setting configures the maximum number of outbound messages queued per cycle (pump). [Default is 64]"
-msgstr ""
+msgstr "Ez a beállítás konfigurálja a ciklusonkénti (pump) maximálisan megengedett kimenő üzenetek számát. [Az alapértelmezett érték 64]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:557
 msgid "This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use."
-msgstr ""
+msgstr "Ez a beállítás (milliszekundumban) lehetővé teszi, hogy kézzel állítsa be a Refresh Routers Job által végzett router-frissítések közötti késleltetést. Az alapértelmezett beállítás szerint a frissítések közötti szünetet a NetDb mérete határozza meg, és a véletlenszerűséget bevezeti az időzítésben a forgalom elemzésének csökkentése érdekében. Az alábbi 2000 milliszekundumnál alacsonyabb értékekhez javasolt a <code>router.refreshTimeout</code> értékének növelése. Fontos megjegyezni, hogy az 2000 milliszekundumnál alacsonyabb érték beállítása növeli a hálózati forgalmat és késést okozhat a munkavégzésben, ezért nem ajánlott folyamatos használatra."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:559
 msgid "This setting (in hours) allows you to manually configure how old a RouterInfo is in order for it to be checked by the Refresh Routers Job. By default, the age of a RouterInfo before a refresh is intitiated scales according to the size of the NetDb, increasing as the NetDb grows in size. A value of 0 will force the Router Refresh Job to check every router in the NetDb, regardless of age."
-msgstr ""
+msgstr "Ez a beállítás (órában) lehetővé teszi, hogy kézzel konfigurálja, hogy milyen régi legyen egy RouterInfo ellenőrzéséhez a Refresh Routers Job által. Az alapértelmezés szerint az idő, amelyen belül egy RouterInfo értékelődik újra, a NetDb méretével arányosan növekszik, ahogy a NetDb nagyobb lesz. A 0 érték arra kényszeríti, hogy a Router Refresh Job minden routert ellenőrizzen a NetDb-ben, függetlenül az életkortól."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:561
 msgid "This setting (in seconds) allows you to manually configure the amount of time to wait before an attempt to refresh a router is determined to have failed. [The default is 20 seconds]"
-msgstr ""
+msgstr "Ez a beállítás (másodpercben) lehetővé teszi, hogy kézzel állítsa be a várakozási időt, mielőtt egy routert frissíteni kísérelne meg, és ez nem sikerülne. [Az alapértelmezés 20 másodperc]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:563
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
-msgstr ""
+msgstr "Ez a beállítás meghatározza, hogy az érdektelennek minősített routerek (K vagy L szint, elérhetetlen vagy 0.9.50-nél régebbiek) ellenőrizve lesznek-e a router frissítési folyamata után 1 óra üzemidő után. [Az alapértelmezés hamis]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:565
 msgid "This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted."
-msgstr ""
+msgstr "Ez a beállítás (percben) lehetővé teszi, hogy kézzel állítsa be, mennyi ideig kell várni a rendszerindítás után, mielőtt a RouterInfo-kat a NetDb-ben ellenőriznék. Ezt követően csak érvényes routerek lesznek elfogadva a felvételre. Amikor a ellenőrzés megtörténik, a lejárt RouterInfo-k és az SSU-n keresztül elérhetetlen társak eltávolításra kerülnek a NetDb-ből. [Az alapértelmezés 60 perc] Megjegyzés: Ez a beállítás nem érinti a régebbi routereket (alapértelmezetten 0.9.29-nél régebbiek), amelyek eltávolításra kerülnek a NetDb-ből, és az útválasztói munkamenetet követően tiltásra kerülnek, amint egy NetDb tárolás megkísérelve lesz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:567
 msgid "This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]"
-msgstr ""
+msgstr "Ez a beállítás, ha igazra van állítva, lehetővé teszi a HiDPI módot a grafikonokon a <a href=/graphs>a grafikonok oldalon</a>. Miután engedélyezve lett, lehet, hogy frissíteni kell az oldalt, hogy lássa a beállításokat, és a grafikonok megjelenítése stabilizáláshoz néhány frissítési ciklusra lehet szükség. Fontos, hogy a böngészőben engedélyezve legyen a JavaScript. [Eksperimentális]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:569
 msgid "This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]"
-msgstr ""
+msgstr "Ez a beállítás, ha igazra van állítva, megjelenít egy Peer Test átlagot a Congesion részben az oldalsávban, amit úgy állapítanak meg, hogy a sikeres peer teszt átlagot hozzáadják a sikertelen tesztek során felhasznált átlagos túraátlépési időhöz. Az átlag értéket útmutatóként lehet használni a legjobb <code>router.peerTesztTimeout</code> érték meghatározásához. [Az alapértelmezés hamis]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:571
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
-msgstr ""
+msgstr "Ez a beállítás, amikor igazra van állítva, megjeleníti az érdekes oldalak linkeit a <a href=/sitemap>webhelytérképen</a>. [Az alapértelmezett érték hamis]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:573
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
-msgstr ""
+msgstr "Ez a beállítás lehetővé teszi alternatív NTP szerverek beállítását, amelyek szükségesek ahhoz, hogy a router pontos időtartamot tartsa. [Az alapértelmezett érték: 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:575
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
-msgstr ""
+msgstr "Ha igazra van állítva, ez az opció ikont helyez el a rendszer tálca / értesítési területén alapvető szolgáltatás-vezérlő lehetőségekkel. [Alapértelmezés szerint letiltva]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:577
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr ""
+msgstr "Ez a beállítás lehetővé teszi a torrentek letöltése vagy létrehozása során az I2PSnark által engedélyezett fájlok maximális számának beállítását. Megjegyzés: Ezen érték jelentős növelése az alapértelmezett 2000 fájltól további beállításokat igényelhet a gépház rendszeren a fájlok maximális számának növeléséhez, amit az operációs rendszer engedélyez (pl. <code>ulimit -n</code> Linuxon). A módosításhoz adja hozzá az I2PSnark konfigurációs fájlhoz <code>i2psnark.config</code>. [Az I2PSnark vagy a router újraindítása szükséges]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:433
 msgid "Recent I2P+ Changes"
-msgstr ""
+msgstr "Legutóbbi I2P+ változások"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/changelog_jsp.java:448
 msgid "View the full change log"
-msgstr ""
+msgstr "Teljes változási napló megtekintése"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:435
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:541
@@ -9178,7 +9178,7 @@ msgstr "Ha ez nem lehetséges, az I2P támogatja az UPnP-t (Universal Plug and P
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:443
 msgid "Most of the options on the Network Configuration page are for special situations, for example where UPnP does not work correctly, or a firewall not under your control is doing harm."
-msgstr ""
+msgstr "A hálózati konfigurációs oldalon található beállítások többsége különleges helyzetekre van, például amikor az UPnP nem működik megfelelően, vagy egy felügyelet alatt nem álló tűzfal kárt okoz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:445
 msgid "Certain firewalls such as symmetric NATs may not work well with I2P."
@@ -9190,7 +9190,7 @@ msgstr "Az UPnP Internet Átjáró Eszközökkel (Internet Gateway Devices, IGD)
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:449
 msgid "UPnP support is beta, and may not work for any number of reasons"
-msgstr ""
+msgstr "Az UPnP támogatás béta fázisban van, és bármi okból kifolyólag nem működhet"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:451
 msgid "No UPnP-compatible device present"
@@ -9218,11 +9218,11 @@ msgstr "UPnP eszköz váltása, újraindítása vagy cím cseréje"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:463
 msgid "UPnP may be enabled or disabled on the Network Configuration page, but a change requires a router restart to take effect."
-msgstr ""
+msgstr "UPnP engedélyezhető vagy letiltható a Hálózati Konfiguráció oldalon, de a változtatás érvényesüléséhez szükséges újraindítani a routert."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:465
 msgid "Review the UPnP status here."
-msgstr ""
+msgstr "Itt ellenőrizheti az UPnP állapotát."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:467
 msgid "Also, <b>do not enter a private IP address</b> like 127.0.0.1 or 192.168.1.1."
@@ -9230,7 +9230,7 @@ msgstr "Ezen kívül, <b>ne adj meg privát IP címet</b>, mint 127.0.0.1 vagy 1
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:469
 msgid "If you specify the wrong IP address, or do not properly configure your NAT or firewall, your network performance will degrade substantially."
-msgstr ""
+msgstr "Ha helytelen IP-címet ad meg, vagy nem megfelelően konfigurálja a NAT-ot vagy tűzfalát, a hálózati teljesítménye jelentősen csökkenni fog."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:471
 msgid "When in doubt, leave the settings at the defaults."
@@ -9238,127 +9238,127 @@ msgstr "Bizonytalanság esetén célszerű az alapbeállításoknál maradni."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:473
 msgid "Web Browser Configuration"
-msgstr ""
+msgstr "Webböngésző konfigurációja"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:475
 msgid "In order to access websites hosted on I2P, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P HTTP proxy, by default running on <code>127.0.0.1 port 4444</code>. Most browsers offer an option to configure your proxy; in this mini-tutorial we'll focus on Firefox."
-msgstr ""
+msgstr "Az I2P-n hostolt webhelyek eléréséhez és opcionálisan a default outproxy használatához az I2P HTTP proxy használatára kell konfigurálnod a böngésződet, amely alapértelmezés szerint a <code>127.0.0.1 port 4444</code>-en fut. A legtöbb böngésző lehetőséget kínál a proxy beállítására; ebben az útmutatóban a Firefoxra fogunk összpontosítani."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:477
 msgid "Open the Preferences page in Firefox and scroll to the bottom of the General section."
-msgstr ""
+msgstr "Nyisd meg a Firefox Beállítások oldalt, majd görgess az Általános rész aljára."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:479
 msgid "In the Network Settings sub-section, hit the <i>Settings</i> button."
-msgstr ""
+msgstr "A Hálózati Beállítások részben kattints a <i>Beállítások</i> gombra."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:481
 msgid "Under <i>Configure Proxy Access to Internet</i> select the <i>Manual proxy configuration</i> option."
-msgstr ""
+msgstr "<i>Konfiguráld a proxy hozzáférést az internethez</i> alatt válaszd ki a <i>Kézi proxy konfiguráció</i> lehetőséget."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:483
 msgid "Enter <code>127.0.0.1</code> in the <i>HTTP Proxy</i> field, and <code>4444</code> in the <i>Port</i> field."
-msgstr ""
+msgstr "Írd be a <code>127.0.0.1</code>-t a <i>HTTP Proxy</i> mezőbe, és a <code>4444</code>-et a <i>Port</i> mezőbe."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:485
 msgid "Tick the box marked <i>Use this proxy server for all protocols</i> to avoid requests escaping the proxy."
-msgstr ""
+msgstr "Jelöld ki a jelölőnégyzetet a <i>Ezt a proxy szerveret használd minden protokollhoz</i> opció mellett, hogy elkerüld a kérések proxy-n kívülének."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:487
 msgid "In the box marked <i>No Proxy for</i> add the line <code>127.0.0.1,localhost</code> to ensure the I2P console and other locally hosted websites are still available."
-msgstr ""
+msgstr "A <i>No Proxy for</i> opció melletti mezőbe add hozzá a <code>127.0.0.1,localhost</code> sort, hogy biztosítsd az I2P konzol és más lokálisan hostolt webhelyek rendelkezésre állását."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:489
 msgid "Tick the box marked <i>Proxy DNS when using SOCKS v5</i> to prevent DNS leaks."
-msgstr ""
+msgstr "Jelöld ki a jelölőnégyzetet a <i>Kerüljön proxy használatra a DNS, ha SOCKS v5 használatban van</i> opció mellett, hogy megakadályozd a DNS szivárgást."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:491
 msgid "Hit the <i>OK</i> button and test the proxy is working by visiting <a href=http://planeta.i2p/ target=_blank rel=noreferrer class=sitelink>planeta.i2p</a> and <a href=https://www.myip.com/ target=_blank rel=noreferrer class='sitelink external'>www.myip.com</a>."
-msgstr ""
+msgstr "Nyomj a <i>OK</i> gombra és teszteld a proxy működését azzal, hogy meglátogatod a <a href=http://planeta.i2p/ target=_blank rel=noreferrer class=sitelink>planeta.i2p</a> és a <a href=https://www.myip.com/ target=_blank rel=noreferrer class='sitelink external'>www.myip.com</a> oldalakat."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:493
 msgid "Note: To enhance your security when browsing .i2p sites, you may wish to consider installing an addon to prevent Javascript from running in the browser such as <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>, though it's recommended to whitelist the address I2P+ is running on to enable various router console enhancements. In addition, an addon that prevents requests to offsite resources is also recommended, for example <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
-msgstr ""
+msgstr "Megjegyzés: Annak érdekében, hogy növeld a biztonságot, amikor .i2p oldalakat böngészel, érdemes lehet egy kiegészítőt telepíteni, amely megakadályozza a Javascript futását a böngészőben, például az <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>. Ugyanakkor ajánlott megadni az I2P+-t futtató cím fehérlistáját annak érdekében, hogy engedélyezze a különböző router konzol bővítményeket. Emellett ajánlott egy olyan kiegészítő is, amely megakadályozza a kéréseket a külső erőforrások felé, például az <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:495
 msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>."
-msgstr ""
+msgstr "További részletes útmutatót a különböző böngészők konfigurációjához a <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>böngésző konfigurációs útmutatóban</a> találod."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:497
 msgid "The Tunnel Manager"
-msgstr ""
+msgstr "A Tunnel menedzser"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:499
 msgid "The Tunnel Manager enables configuration of local services provided by your router."
-msgstr ""
+msgstr "A Tunnel Manager lehetővé teszi a helyi szolgáltatások beállítását, amelyeket a hálózatrouter biztosít."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:501
 msgid "You can determine which services automatically start when the router starts, manage tunnel allocation to optimize for high usage services or to minimize the the cpu and memory overhead, add server and client tunnels to host or access services on the network, set rate limiting or tunnel filtering for your server tunnels and more."
-msgstr ""
+msgstr "Meghatározhatja, hogy mely szolgáltatások indulnak el automatikusan a router indításakor, fejlesztheti az átjárók kiosztását annak érdekében, hogy optimalizálja a magas fogyasztású képességek használatát vagy minimalizálja a CPU és a memória fejfeszültséget, beállíthat szerver és kliens alagutakat a hálózaton való szolgáltatásokhoz vagy eléréséhez, beállíthat sebességkorlátozást vagy alagút szűrést a szervertunneljeihez és még sok más mást."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:503
 msgid "By default, most of your client services (mail, http proxy, IRC) will share the same set of tunnels (for performance reasons) and be listed as <i>Shared Clients</i> and <i>Shared Clients(DSA)</i> in the sidebar under Service Tunnels and on the <a href=/tunnels>Tunnels page</a>."
-msgstr ""
+msgstr "Alapértelmezés szerint legtöbb kliens szolgáltatás (e-mail, HTTP proxy, IRC) ugyanazt az alagútállományt használja (teljesítmény okokból), és <i>Shared Clients</i> és <i>Shared Clients(DSA)</i> néven lesznek feltüntetve a Service Tunnels oldalsávon, valamint a <a href=/tunnels>Tunnels oldalon</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:505
 msgid "However, if you experience a tunnel failure, all your services will go offline at the same time, so in some scenarios you may wish to configure client services to use their own set of tunnels."
-msgstr ""
+msgstr "Azonban, ha alagúthiba lép fel, akkor minden szolgáltatás egyszerre kiesik az online állapotból, ezért néhány forgatókönyvben meg kívánja adni, hogy a kliens szolgáltatások a saját alagútkészletüket használják."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:507
 msgid "This can be done by unchecking the <i>Share tunnels with other configured clients</i> option listed under <i>Shared Client</i> on the configuration page of the relevant client service, after which you will need to restart the client service from the <a href=/i2ptunnelmgr>Tunnel Manager index page</a>."
-msgstr ""
+msgstr "Ezt azzal teheti meg, hogy a megfelelő kliensszolgáltatás beállítási oldalán a <i>Share tunnels with other configured clients</i> lehetőséget nincs bejelölve <i>Shared Client</i> mellett, majd újra kell indítania a kliensszolgáltatást a <a href=/i2ptunnelmgr>Tunnel Manager index oldalon</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:509
 msgid "Note: Most of the options in the Tunnel Manager have tooltips; be sure to check those before you change settings you don't fully understand!"
-msgstr ""
+msgstr "Megjegyzés: A legtöbb beállítási lehetőség a Tunnel Managerben tooltippekkel rendelkezik; győződjön meg róluk, mielőtt olyan beállításokat változtat, amelyeket nem teljesen ért!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:433
 msgid "Abridged I2P FAQ"
-msgstr ""
+msgstr "Rövidített I2P GYIK"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:435
 msgid "This is a shortened version of the official FAQ. For the full version, please visit <a href=https://geti2p.net/faq target=_blank rel=noreferrer class='sitelink external'>https://geti2p.net/faq</a> or <a href=http://i2p-projekt.i2p/faq target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p/faq</a>."
-msgstr ""
+msgstr "Ez egy rövidített változata az hivatalos GYIK-nak. A teljes változatért kérjük, látogasson el a <a href=https://geti2p.net/faq target=_blank rel=noreferrer class='sitelink external'>https://geti2p.net/faq</a> vagy az <a href=http://i2p-projekt.i2p/faq target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p/faq</a> oldalra."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:437
 msgid "My router has been up for several minutes and has zero or very few connections"
-msgstr ""
+msgstr "A központom pár perce működik és nincs kapcsolat vagy nagyon kevés kapcsolat van"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:439
 msgid "If after a few minutes of uptime your router is indicating 0 Active Peers and 0 Known Peers, with a notification in the sidebar that you need to check your network connection, verify that you can access the internet. If your internet connection is functional, you may need to unblock Java in your firewall. Otherwise, you may need to reseed your I2P router. Visit the <a href=/configreseed#reseedconfig>Reseed Configuration page</a> and click the <i>Save Changes and Reseed Now</i> button. For more information, see the <a href=#reseedhelp>Reseed help section</a> above."
-msgstr ""
+msgstr "Ha pár perce működik a központja és 0 aktív vagy ismert kapcsolatot jelent, és a oldalsávon a hálózati kapcsolat megvizsgálása üzenet jelenik meg, ellenőrizze, hogy elérhető-e az internet. Ha az internetkapcsolat működik, jelentkezhet, hogy feloldja a tűzfalban a Javát. Más esetben újra kell ültetni az I2P központját. Látogasson el a <a href=/configreseed#reseedconfig>Termesztési konfiguráció oldalra</a> és kattintson a <i>Változtatások mentése és újrateljesítés</i> gombra. További információért lásd az <a href=#reseedhelp>Újraültetési segédlet</a> szakaszt."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:441
 msgid "My router has very few active peers, is this OK?"
-msgstr ""
+msgstr "A routeremnek nagyon kevés aktív társa van, ez rendben van?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:443
 msgid "If your router has 10 or more active peers, everything is fine. The router should maintain connections to a few peers at all times. The best way to stay \"better-connected\" to the network is to <a href=/config>share more bandwidth</a>."
-msgstr ""
+msgstr "Ha a routernek 10 vagy több aktív társa van, minden rendben van. A routernek állandóan fennt kell tartania néhány társ kapcsolatát. A legjobb módja a \"jobb kapcsolattartásnak\" a hálózattal az, hogy <a href=/config>több sávszélességet oszt meg</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:445
 msgid "I'm missing lots of hosts in my addressbook. What are some good subscription links?"
-msgstr ""
+msgstr "Sok host hiányzik az addressbookomból. Melyek a jó előfizetési linkek?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:447
 msgid "The default subscription is to <code>http://i2p-projekt.i2p/hosts.txt</code> which is seldom updated. If you don't have another subscription, you may often have to use \"jump\" links which is much slower but ensures that your addressbook is only populated by sites you use (in addition to the default subscription addresses). To speed up browsing on I2P, it's a good idea to add some addressbook subscriptions."
-msgstr ""
+msgstr "Az alapértelmezett előfizetés a <code>http://i2p-projekt.i2p/hosts.txt</code> címre történik, amit ritkán frissítenek. Ha nincs más előfizetésed, gyakran használnod kell az \"ugrás\" linkeket, amelyek sokkal lassabbak, de biztosítják, hogy az addressbook-od csak az általad használt oldalakkal legyen betöltve (az alapértelmezett előfizetési címeken kívül). Az I2P böngészés gyorsítása érdekében érdemes néhány címtár előfizetést hozzáadni."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:449
 msgid "Here are some other public addressbook subscription links. You may wish to add one or two to your <a href=/susidns/subscriptions target=_blank rel=noreferrer>susidns subscription list</a>. In the event that addresses conflict in the subscriptions, the lists placed at the top of your susidns configuration will take precedence over those placed further down."
-msgstr ""
+msgstr "Íme néhány más könyvjelző feliratkozási link. Lehet, hogy érdemes hozzáadni egy-kétet a <a href=/susidns/subscriptions target=_blank rel=noreferrer>susidns előfizetési listádhoz</a>. Abban az esetben, ha a címek ütköznek az előfizetésekben, az előfizetések felső részén elhelyezett listák elsőbbséget élveznek a továbbiakban elhelyezettekhez képest."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:451
 msgid "Note that subscribing to a hosts.txt service is an act of trust, as a malicious subscription could give you incorrect addresses, so be careful subscribing to lists from unknown sources. The operators of these services may have various policies for listing hosts. Presence on this list does not imply endorsement."
-msgstr ""
+msgstr "Ne feledd, hogy a hosts.txt szolgáltatásra való előfizetés bizalmi kifejezése, mivel egy rosszindulatú előfizetés helytelen címeket adhat meg neked, így vigyázz, hogy az ismeretlen forrásból származó listákra feliratkozol. Ezeknek a szolgáltatásoknak az üzemeltetői különféle eljárásrendet alkalmazhatnak a hostok felsorolására vonatkozóan. Az jelenléte a listán nem jelent ajánlást."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:453
 msgid "How do I access IRC, BitTorrent, or other services on the regular Internet?"
-msgstr ""
+msgstr "Hogyan férhetek hozzá az IRC-hez, a BitTorrent-hez vagy más szokásos internetes szolgáltatásokhoz?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:455
 msgid "Unless an outproxy has been set up for the service you want to connect to, this is not possible, with the exception of BitTorrent (see below). There are only three types of outproxies running right now: HTTP, HTTPS, and email. Note that there is currently no publicly listed SOCKS outproxy. If this type of service is required, try <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a>."
-msgstr ""
+msgstr "Hacsak nincs létrehozva egy outproxy a kapcsolódni kívánt szolgáltatáshoz, ez nem lehetséges, a BitTorrent kivételével (lásd alább). Jelenleg csak háromféle outproxy működik: HTTP, HTTPS és e-mail. Vegye figyelembe, hogy jelenleg nincs nyilvánosan nyilvántartott SOCKS outproxy. Ha ilyen típusú szolgáltatásra van szükség, próbálja ki a <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a> projektet."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:457
 msgid "Can I download torrents from non-I2P trackers?"
@@ -9382,7 +9382,7 @@ msgstr "Hogyan állíthatom be a böngészőmet .i2p webhelyek eléréséhez?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:467
 msgid "You will need to configure your browser to use the HTTP proxy server (by default on host: <code>127.0.0.1</code> port: <code>4444</code>). See the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>Browser Proxy Configuration Guide</a> for a more detailed explanation."
-msgstr ""
+msgstr "Be kell állítania a böngészőjét, hogy használja az HTTP proxy szervert (alapértelmezés szerint az állomáson található: <code>127.0.0.1</code> port: <code>4444</code>). További részletes magyarázatért látogassa meg a <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>Böngésző proxy konfigurációs útmutatót</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:469
 msgid "What is an eepsite?"
@@ -9390,7 +9390,7 @@ msgstr "Mi az eepsite?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:471
 msgid "An eepsite is a website that is hosted anonymously on the I2P network - you can access it by configuring your web browser to use I2P's HTTP proxy (see above) and browsing to the <code>.i2p</code> suffixed website (e.g. <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Also ensure your browser is configured to resolve DNS remotely when using the proxy to avoid DNS leaks."
-msgstr ""
+msgstr "Egy eepsite egy weboldal, amely névtelenül van tárolva az I2P hálózatban - hozzáférhet ehhez a weboldalhoz, amikor konfigurálja böngészőjét az I2P HTTP proxy használatára (ld. fentebb) és böngészi a <code>.i2p</code> végződésű webhelyet (például: <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Biztosítson arról, hogy a böngészője be van állítva a távoli DNS feloldásra a proxy használata közben a DNS-szivárgás elkerülése érdekében."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:473
 msgid "Most of the eepsites are down?"
@@ -9398,7 +9398,7 @@ msgstr "A legtöbb eepsite nem működik?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:475
 msgid "If you consider every eepsite that has ever been created, yes, most of them are down. People and eepsites come and go. A good way to get started in I2P is check out a list of eepsites that are currently up. <a href=http://notbob.i2p/ target=_blank rel=noreferrer class=sitelink>http://notbob.i2p</a> tracks active eepsites."
-msgstr ""
+msgstr "Ha minden olyan eepsitét figyelembe veszünk, ami valaha létrejött, akkor igen, a legtöbbük ki van kapcsolva. Az emberek és az eepsite-ok jönnek és mennek. Hogy belemerülj az I2P-be, jó ötlet megnézni egy listát azokról az eepsite-okról, amelyek jelenleg elérhetőek. Az aktív eepsite-okat a <a href=http://notbob.i2p/ target=_blank rel=noreferrer class=sitelink>http://notbob.i2p</a> címen követheted nyomon."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:477
 msgid "Where are my I2P configuration files stored?"
@@ -9434,7 +9434,7 @@ msgstr "Hogyan engedélyezhetem a https:// hozzáférést az útválasztó konzo
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:493
 msgid "Locate the configuration file: <code>00-net.i2p.router.web.RouterConsoleRunner-clients.config</code> in the <code>clients.config.d</code> folder in your I2P settings directory, and then edit accordingly:"
-msgstr ""
+msgstr "A konfigurációs fájl helyének megkeresése: <code>00-net.i2p.router.web.RouterConsoleRunner-clients.config</code> a <code>clients.config.d</code> mappában az I2P beállítások könyvtárában, majd szerkesztse megfelelően:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:495
 msgid "For both non-SSL and SSL"
@@ -9450,11 +9450,11 @@ msgstr "Hogyan csatlakozhatok IRC-hez I2P-n belül?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:501
 msgid "A tunnel to the main IRC server network within I2P, Irc2P, is created when I2P is installed (see the <a href=/i2ptunnelmgr>Tunnel Manager</a>), and is automatically started when the I2P router starts. To connect to it, tell your IRC client to connect to server: <code>127.0.0.1</code> port: <code>6668</code>."
-msgstr ""
+msgstr "Az I2P telepítésekor egy alagút létrejön a fő I2P IRC szerverhálózathoz, az Irc2P-hez (lásd: a <a href=/i2ptunnelmgr>Alagút vezérlőt</a>), és akkor automatikusan elindul, amikor az I2P útválasztó elindul. A csatlakozáshoz mondja az IRC kliensednek, hogy csatlakozzon a szerverhez: <code>127.0.0.1</code> port: <code>6668</code>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:503
 msgid "XChat-like client users can create a new network with the server <code>127.0.0.1/6668</code> (remember to tick <i>Bypass proxy server</i> if you have a proxy server configured), or you can connect with the command <code>/server 127.0.0.1 6668</code>. Different IRC clients may vary the syntax."
-msgstr ""
+msgstr "Az XChat-szerű klienshasználók új hálózatot hozhatnak létre a <code>127.0.0.1/6668</code> szervert használva (ne felejtse el bepipálni a <i>Proxy szerver kihagyása</i> lehetőséget, ha beállított proxy szervere van), vagy csatlakozhat a <code>/server 127.0.0.1 6668</code> parancs használatával. Különböző IRC kliensek eltérő szintaxist használhatnak."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:505
 msgid "My IRC client keeps disconnecting from the network, is there anything I can do?"
@@ -9462,7 +9462,7 @@ msgstr "Az IRC kliensem folyamatosan lekapcsol a hálózatról, tehetek valamit?
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:507
 msgid "Some IRC clients are configured to disconnect from the server if there's been no communication with the server for a period of time, which can sometimes be problematic for I2P IRC if the <i>ping timeout</i> value is set too low. Setting the ping timeout value in your client to a high value (e.g. 320 seconds) will often result in a more robust connection to the network. In hexchat you can configure the value by typing <code>/set net_ping_timeout 320</code>. This will write the value to your <code>hexchat.conf</code> file."
-msgstr ""
+msgstr "Néhány IRC kliens úgy van konfigurálva, hogy lecsatlakozik a szerverről, ha egy ideig nincs kommunikáció a szerverrel, ez néha problémát jelenthet az I2P IRC-nél, ha az <i>ping timeout</i> értéke túl alacsonyra van állítva. A ping timeout érték beállítása a kliensben egy magas értékre (pl. 320 másodperc) általában erősebb kapcsolatot eredményez a hálózattal. A hexchat-ben beállíthatja az értéket a <code>/set net_ping_timeout 320</code> parancsal. Ez az értékét fogja beírni a <code>hexchat.conf</code> fájlba."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:509
 msgid "What ports does I2P use?"
@@ -9474,7 +9474,7 @@ msgstr "HELYI KIKÖTŐK"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:513
 msgid "These are the local I2P port mappings, listening only to local connections by default, except where noted. Unless you require access from other machines, they should only be accessible from localhost."
-msgstr ""
+msgstr "Ezek a helyi i2p port leképezések, amelyek alapértelmezés szerint csak a helyi kapcsolatokra hallgatnak, kivéve, ha megjegyezzük. Hacsak nem igényel hozzáférést más gépektől, akkor csak a LocalHost -ból érhetők el."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:517
 msgid "Function"
@@ -9486,23 +9486,23 @@ msgstr "Megjegyzések"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:521
 msgid "UPnP SSDP UDP multicast listener"
-msgstr ""
+msgstr "UPnP SSDP UDP multicast hallgató"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:523
 msgid "Cannot be changed. Binds to all interfaces. Can be disabled on the <a href=/confignet>Network Configuration page</a>."
-msgstr ""
+msgstr "Nem lehet megváltoztatni. Minden interfészhez kötődik. Letiltható az <a href=/confignet>Hálózati konfigurációs oldalon</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:525
 msgid "BOB bridge"
-msgstr ""
+msgstr "BOB híd"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:527
 msgid "A higher level socket API for clients. Can be enabled/disabled on the <a href=/configclients>Client Configuration page</a>. Can be changed in the <code>bob.config</code> file. [Disabled by default]"
-msgstr ""
+msgstr "Egy magasabb szintű socket API kliensek számára. Engedélyezhető/tiltható az <a href=/configclients>Kliens konfigurációs oldalon</a>. A <code>bob.config</code> fájlban megváltoztatható. [Alapértelmezett beállítás szerint le van tiltva]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:529
 msgid "HTTP proxy"
-msgstr ""
+msgstr "HTTP proxy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:531
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:535
@@ -9510,11 +9510,11 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:571
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:575
 msgid "Can be disabled or changed in the <a href=/i2ptunnelmgr>Tunnel Manager</a>. Can also be configured to bind to a specific interface or all interfaces."
-msgstr ""
+msgstr "Letilmezhet vagy módosítható az <a href=/i2ptunnelmgr>Tunnelmenadzserben</a>. Beállítható továbbá egy adott interfészre vagy az összes interfészre."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:533
 msgid "HTTPS proxy"
-msgstr ""
+msgstr "HTTPS proxy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:537
 msgid "IRC proxy"
@@ -9522,344 +9522,344 @@ msgstr "IRC proxy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:541
 msgid "UPnP HTTP TCP event listener"
-msgstr ""
+msgstr "UPnP HTTP TCP eseményfigyelő"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:543
 msgid "Binds to the LAN address. Can be changed with advanced config <code>i2np.upnp.HTTPPort=nnnn</code>. Can be disabled on the <a href=/confignet>Network Configuration page</a>."
-msgstr ""
+msgstr "A LAN címhez köti. Megváltoztatható a kiterjesztett konfigurációval <code>i2np.upnp.HTTPPort=nnnn</code>. Letiltható a <a href=/confignet>Hálózati Konfigurációs oldalon</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:545
 msgid "UPnP SSDP UDP search response listener"
-msgstr ""
+msgstr "UPnP SSDP UDP keresési válaszfigyelő"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:547
 msgid "Binds to all interfaces. Can be changed with advanced config <code>i2np.upnp.SSDPPort=nnnn</code>. Can be disabled on the <a href=/configclients>Client Configuration page</a>."
-msgstr ""
+msgstr "Minden interfészhez kötődik. Megváltoztatható a kiterjesztett konfigurációval <code>i2np.upnp.SSDPPort=nnnn</code>. Letiltható a <a href=/configclients>Kliens Konfigurációs oldalon</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:549
 msgid "I2P Client Protocol port"
-msgstr ""
+msgstr "I2P kliens protokoll port"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:551
 msgid "Used by client apps. Can be changed to a different port on the <a href=/configclients>Client Configuration page</a> but this is not recommended. Can be bound to a different interface or all interfaces, or disabled, on the <a href=/configclients>Client Configuration page</a>."
-msgstr ""
+msgstr "A kliens alkalmazások által használt. Megváltoztatható egy másik portra a <a href=/configclients>Kliens Konfigurációs oldalon</a>, de ez nem javasolt. Egy másik interfészre vagy minden interfészre is köthető, vagy letiltható a <a href=/configclients>Kliens Konfigurációs oldalon</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:553
 msgid "UDP for SAM bridge"
-msgstr ""
+msgstr "UDP a SAM hídnak"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:555
 msgid "A higher level socket API for clients. Only opened when a SAM V3 client requests a UDP session. Can be enabled/disabled on the <a href=/configclients> Client Configuration page</a>. Can be changed in the <code>clients.config</code> file with the SAM command line option <code>sam.udp.port=nnnn</code>."
-msgstr ""
+msgstr "Egy magasabb szintű kliens számára készült socket API. Csak akkor nyílik meg, ha egy SAM V3 kliens egy UDP munkamenetet kér. Engedélyezhető / tiltott lehet a <a href=/configclients>Ügyfél konfigurációs oldalon</a>. A <code>clients.config</code> fájlban megváltoztatható a SAM parancssor opcióval <code>sam.udp.port=nnnn</code>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:557
 msgid "SAM bridge"
-msgstr ""
+msgstr "SAM híd"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:559
 msgid "A higher level socket API for clients. Can be enabled/disabled on the <a href=/configclients>Client Configuration page</a>. Can be changed in the <code>clients.config</code> file. [Disabled by default]"
-msgstr ""
+msgstr "Egy magasabb szintű kliens számára készült socket API. Engedélyezhető / tiltott lehet a <a href=/configclients>Ügyfélnyitás konfigurációs oldalon</a>. Megváltoztatható a <code>clients.config</code> fájlban. [Alapértelmezetten letiltva]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:561
 msgid "I2P Router Console (Web interface)"
-msgstr ""
+msgstr "I2P Router konzol (Webes felület)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:563
 msgid "Can be disabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces. If you make the Router Console available over the network, you might wish to <a href=/configui#passwordheading>enforce an access password</a> to prevent unauthorized access."
-msgstr ""
+msgstr "Letiltható a <code>clients.config</code> fájlban. Akár egy specifikus felületre akár az összes felületre is köthető. Ha a Router konzolt hálózat utján elérhetővé teszi, talán szeretne egy <a href=/configui#passwordheading>hozzáférés jelszót bevezetni</a> jogosulatlan hozzáférés megakadályozása végett."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:567
 msgid "Can be disabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces in the <code>jetty.xml</code> file."
-msgstr ""
+msgstr "Letiltható a <code>clients.config</code> fájlban. Akár egy specifikus felületre akár az összes felületre is köthető a <code>jetty.xml</code> fileban."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:569
 msgid "Outgoing mail to smtp.postman.i2p"
-msgstr ""
+msgstr "Kimenő levél az smtp.postman.i2p címre"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:573
 msgid "Incoming mail from pop.postman.i2p"
-msgstr ""
+msgstr "Bejövő levél a pop.postman.i2p címre"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:577
 msgid "I2P Router Console (https://)"
-msgstr ""
+msgstr "I2P útválasztó konzol (https:)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:579
 msgid "Can be enabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces. If both http and https are enabled, automatic redirection to https is enabled by default. If you make the Router Console available over the network, you might wish to <a href=/configui#passwordheading>enforce an access password</a> to prevent unauthorized access."
-msgstr ""
+msgstr "Engedélyezhető a <code>clients.config</code> fájlban. Konfigurálható, hogy egy adott felületre vagy összes felületre kötődjön. Ha mind a http, mind az https engedélyezve van, az automatikus irányítás az https-re alapértelmezés szerint be van kapcsolva. Ha a Router konzolt hálózaton keresztül hozzáférhetővé teszi, akkor a hozzáférési jelszót meg kell adni az engedély nélküli hozzáférés megakadályozásához."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:581
 msgid "Local connection to wrapper control channel port"
-msgstr ""
+msgstr "Helyi kapcsolat a burkoló vezérlőcsatornájához"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:583
 msgid "Outbound to 32000 only, does not listen on this port. Starts at 31000 and will increment until 31999 looking for a free port. To change, see the <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper documentation</a>."
-msgstr ""
+msgstr "Csak kimenő 32000-ig, nem hallgatózik ezen a porton. 31000-től kezdődik, és egészen 31999-ig növekszik, szabad portot keresve. A változtatáshoz lásd a <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper dokumentációt</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:585
 msgid "Local control channel for the service wrapper"
-msgstr ""
+msgstr "Helyi vezérlőcsatorna a szolgáltatásburkolóhoz"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:587
 msgid "To change, see the <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper documentation</a>."
-msgstr ""
+msgstr "A változtatáshoz lásd a <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper dokumentációt</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:589
 msgid "INTERNET FACING PORTS"
-msgstr ""
+msgstr "AZ INTERNET FELÉ NYITOTT PORTOK"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:591
 msgid "I2P selects a random port between 9000 and 31000 to communicate with other routers when the program is run for the first time, or when your external IP address changes when running in <a href=/confignet#ipchange>Laptop Mode</a>. The <a href=/confignet#udpconfig>selected port</a> is shown on the <a href=/confignet>Network Configuration page</a>."
-msgstr ""
+msgstr "Az I2P véletlenszerű portot választ ki 9000 és 31000 között, hogy más routerekkel kommunikáljon, amikor a program először fut, vagy amikor a külső IP-címed megváltozik <a href=/confignet#ipchange>Laptop Mód</a> használatakor. A <a href=/confignet#udpconfig>kiválasztott port</a> látható a <a href=/confignet>hálózati konfigurációs oldalon</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:593
 msgid "Outbound UDP from the <a href=/confignet#udpconfig>random port</a> noted on the Network Configuration page to arbitrary remote UDP ports, allowing replies."
-msgstr ""
+msgstr "Kimenő UDP a Hálózati Konfigurációs oldalra jegyzett <a href=/confignet#udpconfig>véletlen portból</a> tetszőleges távoli UDP portokra, válaszok lehetővé tétele."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:595
 msgid "Outbound TCP from random high ports to arbitrary remote TCP ports."
-msgstr ""
+msgstr "Kimenő TCP véletlenszerű magas portokból tetszőleges távoli TCP portokra."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:597
-msgid "Inbound UDP to the <a href=/confignet#udpconfig>port</a> noted on the Network Configuration page from arbitrary locations (optional, but recommended)."
-msgstr ""
+msgid "Inbound UDP a <a href=/confignet#udpconfig>porton</a> jegyzett távoli Hálózati Konfigurációs oldalról tetszőleges helyről (opcionális, de ajánlott)."
+msgstr "Bejövő UDP <a href=/confignet#udpconfig>port</a> a Hálózati Konfigurációs oldalról tetszőleges helyről (opcionális, de ajánlott)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:599
-msgid "Inbound TCP to the <a href=/confignet#externaltcp>port</a> noted on the Network Configuration page from arbitrary locations (optional, but recommended). <a href=/confignet#tcpconfig>Inbound TCP</a> may be disabled on the Network Configuration page."
-msgstr ""
+msgid "Inbound TCP a <a href=/confignet#externaltcp>portján</a> jegyzett távoli Hálózati Konfigurációs oldalról tetszőleges helyről (opcionális, de ajánlott). A <a href=/confignet#tcpconfig>bejövő TCP</a> letiltható a Hálózati Konfigurációs oldalon."
+msgstr "Bejövő TCP a <a href=/confignet#externaltcp>porton</a> jegyzett távoli Hálózati Konfigurációs oldalról tetszőleges helyről (opcionális, de ajánlott). A <a href=/confignet#tcpconfig>bejövő TCP</a> letiltható a Hálózati Konfigurációs oldalon."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:601
-msgid "Outbound UDP on port 123, allowing replies: this is necessary for I2P's internal time sync (via SNTP - querying a random SNTP host in <code>pool.ntp.org</code> or <a href=/help/advancedsettings#ntpserverconfig>another server you specify</a>)."
-msgstr ""
+msgid "Outbound UDP port 123, válaszok lehetővé tétele: ez szükséges az I2P belső időszinkronizálásához (a SNTP-n keresztül - véletlenszerű SNTP gazda lekérdezése a <code>pool.ntp.org</code> vagy <a href=/help/advancedsettings#ntpserverconfig>egy másik általad meghatározott kiszolgáló</a>)."
+msgstr "Kimenő UDP 123-as porton, válaszok lehetővé tétele: ez szükséges az I2P belső időszinkronizálásához (az SNTP lekérdezése - véletlenszerű SNTP kiszolgáló a <code>pool.ntp.org</code> vagy <a href=/help/advancedsettings#ntpserverconfig>egy másik általad meghatározott</a>)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:433
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:674
 msgid "I2P Terminology"
-msgstr ""
+msgstr "I2P Terminológia"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:437
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Egy I2P webalkalmazás, amely a hálózathoz tartozó szolgáltatási célállomásokat kezeli, az ember által olvasható neveket B64-hasnikhoz (B64 hash) rendel. A célállomások kézzel is hozzáadhatók, vagy hozzárendelhetők hosts.txt fájlokra iratkozással. Ezt SusiDNS néven is emlegetik. További információért lásd az <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online dokumentációt</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:439
 msgid "Base32 (B32) / Base64 (B64)"
-msgstr ""
+msgstr "Base32 (B32) / Base64 (B64)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:441
 msgid "A <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> link (which always ends with .b32.i2p) is a hash of a <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> destination. For services on the network, the Base64 hash is often mapped to an .i2p domain in the addressbook."
-msgstr ""
+msgstr "A <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> link (amely mindig .b32.i2p végződik) az egy <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> célállomás hashe. A hálózaton elérhető szolgáltatások esetében a Base64 hash gyakran egy .i2p tartományhoz van hozzárendelve a címjegyzékben."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:443
 msgid "B33"
-msgstr ""
+msgstr "B33"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:445
 msgid "An address containing an encrypted LeaseSet is informally referred to as a b33 address, an extension of a base32 address with the host's public key and signature type encoded into the address instead of a lookup hash. This address type is required for blinded Leasesets. More information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 Specification</a>"
-msgstr ""
+msgstr "Egy titkosított LeaseSet-tel rendelkező címet informálisan b33 címként említenek, egy bázis32 cím kiterjesztéseként, amelyben a gép nyilvános kulcsa és aláírás típusa van beágyazva a helyett, hogy egy keresési hash-t használna. Ez a címtípus szükséges a vak LeaseSet-ekhez. További információ: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 specifikáció</a>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:447
 msgid "BOB"
-msgstr ""
+msgstr "BOB"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:449
 msgid "BOB (Basic Open Bridge) is a (now-deprecated) simple application-to-router protocol, superseded by <i>SAM</i>. For more information, see the <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "BOB (Basic Open Bridge) egy (most elavult) egyszerű alkalmazás-router protokoll, amit a <i>SAM</i> felváltott. További információért lásd a <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>online dokumentációt</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:451
 msgid "Clearnet"
-msgstr ""
+msgstr "Clearnet"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:453
 msgid "Clearnet normally refers to the publicly accessible internet, the opposite of the darknet that typically describes the encrypted, anonymous services built on I2P, Tor etc. For more information, see the <a href=https://en.wikipedia.org/wiki/Clearnet_(networking) class='sitelink external' target=_blank rel=noreferrer>Wikipedia article</a>."
-msgstr ""
+msgstr "A Clearnet általában a nyilvánosan elérhető internetre utal, a sötétháló ellenkezője, amely tipikusan az I2P, Tor, stb. titkosított, anonim szolgáltatásait mutatja be. További információért lásd a <a href=https://en.wikipedia.org/wiki/Clearnet_(networking) class='sitelink external' target=_blank rel=noreferrer>Wikipedia cikket</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:457
 msgid "The unique cryptographic identity of the inbound endpoint of a tunnel providing access to a service on the I2P network, represented as a Base32 or Base64 hash of the public key. Equivalent to an IP address and port."
-msgstr ""
+msgstr "Az I2P hálózaton szolgáltatást biztosító alagút bejövő csúcspontjának egyedülálló kriptográfiai azonosítója, amit a nyilvános kulcs Base32 vagy Base64 hash-e képvisel. Egyenértékű az egy IP címmel és porttal."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:459
 msgid "Eepget"
-msgstr ""
+msgstr "Eepget"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:461
 msgid "A command-line application supplied with I2P that is used to request URL resources, similar to <a href=https://www.gnu.org/software/wget/ class='sitelink external' target=_blank rel=noreferrer>wget</a> or <a href=https://curl.haxx.se/ class='sitelink external' target=_blank rel=noreferrer>curl</a>. Eepget is also used internally by the router, for example to reseed from remote hosts. By default, eepget uses the HTTP proxy on <code>127.0.0.1:4444</code>."
-msgstr ""
+msgstr "Az I2P-vel együtt szállított parancssori alkalmazás, amelyet URL erőforrások kéréséhez használnak, hasonlóan a <a href=https://www.gnu.org/software/wget/ class='sitelink external' target=_blank rel=noreferrer>wget</a> vagy a <a href=https://curl.haxx.se/ class='sitelink external' target=_blank rel=noreferrer>curl</a> alkalmazáshoz. Az eepget-t az útválasztó is belsőleg használja, például távoli hosztok újratelepítésére. Az alapértelmezés szerint az eepget a HTTP proxyt használja a <code>127.0.0.1:4444</code> címen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:463
 msgid "Eephead"
-msgstr ""
+msgstr "Eephead"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:465
 msgid "A command-line application supplied with I2P+ (Linux/MacOS) that is used to perform a <code>head</code> request on a specified http resource on the network, returning various response headers from the remote server. By default, eephead uses the HTTP proxy on <code>127.0.0.1:4444</code>."
-msgstr ""
+msgstr "Az I2P+ (Linux/MacOS) alkalmazással szállított parancssori alkalmazás, amelyet egy meghatározott hálózati http erőforrásra való <code>head</code> kérések végrehajtására használnak, különböző válaszfejeket visszaadva a távoli kiszolgálótól. Az alapértelmezés szerint az eephead a HTTP proxyt használja a <code>127.0.0.1:4444</code> címen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:467
 msgid "Eepsite"
-msgstr ""
+msgstr "Eepsite"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:469
 msgid "A website hosted on the I2P network. By default, a <a href=https://www.eclipse.org/jetty/about.html class='sitelink external' target=_blank rel=noreferrer>Jetty webserver</a> is configured and running on <a href=http://127.0.0.1:7658/ target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>."
-msgstr ""
+msgstr "Egy weboldal, amit az I2P hálózaton hostolnak. Alapértelmezetten egy <a href=https://www.eclipse.org/jetty/about.html class='sitelink external' target=_blank rel=noreferrer>Jetty webszerver</a> van konfigurálva és fut a következő címen: <a href=http://127.0.0.1:7658/ target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:471
 msgid "Exploratory Tunnel"
-msgstr ""
+msgstr "Kutató Tunnel"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:473
 msgid "A tunnel used by the router for communicating with other routers to perform various \"housekeeping\" functions such as learning and publishing <i>leasesets</i>, testing client tunnels, and learning about and validating other routers in the network. These tunnels are normally low-bandwidth."
-msgstr ""
+msgstr "Egy tunnel, amit a közvetítő használ más közvetítőkkel való kommunikációra, hogy végezzen különböző \"karbantartási\" funkciókat, mint például olyan \"leasesetek\" tanulmányozása és publikálása, kliens tunnel-ek tesztelése, és más közvetítők megtanulása és érvényesítése a hálózatban. Ezek a tunnel-ek általában alacsony sávszélességűek."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:477
 msgid "A router on the network tasked with providing and receiving information about other routers and services on the network. The current minimum share bandwidth for a router to be considered as capable of performing floodfill duties is 128 KBytes/sec, though it's possible to override this requirement and force a router to be a floodfill on the <a href=/configadvanced>Advanced Configuration page</a>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Egy közvetítő a hálózaton, amelynek feladata más közvetítőkkel és szolgáltatásokkal kapcsolatos információk megadása és fogadása a hálózaton. Az aktuális minimális osztozott sávszélesség a közvetítő számára ahhoz, hogy képesnek tekinthető legyen a tulajdonában lévő floodfill feladatok elvégzésére, 128 KByte/sec, bár lehetséges felülbírálni ezt az elvárást és kényszeríteni a közvetítőt a floodfill funkcióra a <a href=/configadvanced>Speciális Konfigurációs oldalon</a>. További információért lásd az <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>online dokumentációt</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:479
 msgid "Garlic Routing"
-msgstr ""
+msgstr "Fokhagyma Routing"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:481
 msgid "A variant of onion routing that encrypts multiple messages together to make it more difficult for attackers to perform traffic analysis and to increase the speed of data transfer. For more information, see the <a href=https://geti2p.net/en/docs/how/garlic-routing class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Az egy hagymás menetrend variáció, amely több üzenetet titkosít együtt, hogy az adatforgalmat elemző támadók számára nehezebb legyen, és növeli az adatátvitel sebességét. További információért lásd a(z) <a href=https://geti2p.net/en/docs/how/garlic-routing class='sitelink external' target=_blank rel=noreferrer>online dokumentációt</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:483
 msgid "Hidden Mode"
-msgstr ""
+msgstr "Rejtett mód"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:485
 msgid "A router configured to run in Hidden Mode will not publish its details to the <i>Network Database</i> and will not participate in routing traffic for other routers. Routers operating in countries designated as strict and routers manually configured run in Hidden Mode."
-msgstr ""
+msgstr "A rejtett módban futó útválasztó nem teszi közzé részleteit a <i>Hálózati adatbázisban</i>, és nem vesz részt más útválasztók adatforgalmának útvonalazásában. Az összesítők országokban működnek, amelyeket szigorúan kijelöltek, az útválasztóknak pedig kézi beállításokkal rendelkezők a rejtett módban működnek."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:489
 msgid "The I2P Client Protocol (I2CP) enables external applications (clients) to communicate with I2P over single TCP socket, by default using port 7654. For more information, see the <a href=https://geti2p.net/en/docs/protocol/i2cp class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Az I2P ügyfélprotokoll (I2CP) lehetővé teszi a külső alkalmazások (kliensek) számára az I2P-vel történő kommunikációt egyetlen TCP-socketen keresztül, alapértelmezés szerint a 7654-es portot használva. További információért lásd a(z) <a href=https://geti2p.net/en/docs/protocol/i2cp class='sitelink external' target=_blank rel=noreferrer>online dokumentációt</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:491
 msgid "I2NP"
-msgstr ""
+msgstr "I2NP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:493
 msgid "The I2P Network Protocol (I2NP) manages the routing and mixing of messages between routers, in addition to the transport selection (where more than one is supported) when communicating with a peer. For more information, see the <a href=https://geti2p.net/en/docs/protocol/i2np class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Az I2P-hálózati protokoll (I2NP) kezeli az üzenetek útválasztását és összekeverését az útválasztók között, valamint a szállítási kiválasztást (amikor több mint egy támogatott) a többi részével való kommunikáció során. További információért lásd a(z) <a href=https://geti2p.net/en/docs/protocol/i2np class='sitelink external' target=_blank rel=noreferrer>online dokumentációt</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:495
 msgid "I2P+"
-msgstr ""
+msgstr "I2P+"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:497
 msgid "A soft fork of the Java I2P software which retains full compatibility, providing an enhanced user interface and improvements to network performance. See <a href=http://skank.i2p/ class=sitelink target=_blank rel=noreferrer>http://skank.i2p/</a> or <a href=https://i2pplus.github.io class='sitelink external' target=_blank rel=noreferrer>https://i2pplus.github.io</a>for more information."
-msgstr ""
+msgstr "A Java I2P szoftver lágy forkja, amely teljes kompatibilitást biztosít, fejlettebb felhasználói felületet és hálózati teljesítménynövekedést nyújt. További információért lásd a <a href=http://skank.i2p/ class=sitelink target=_blank rel=noreferrer>http://skank.i2p/</a> vagy <a href=https://i2pplus.github.io class='sitelink external' target=_blank rel=noreferrer>https://i2pplus.github.io</a> linket."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:499
 msgid "I2PBote (plugin)"
-msgstr ""
+msgstr "I2PBote (bővítmény)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:501
 msgid "An unmaintained I2P plugin that provides serverless, end-to-end encrypted e-mail within the I2P network. For more information, see <a href=http://bote.i2p/ class=sitelink target=_blank rel=noreferrer>http://bote.i2p/</a>. Source code is available on <a href=https://github.com/i2p/i2p.i2p-bote class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgstr "Egy nem karbantartott I2P bővítmény, amely szerver nélküli, végponttól-végpontig titkosított e-mailt biztosít az I2P hálózaton belül. További információért lásd a <a href=http://bote.i2p/ class=sitelink target=_blank rel=noreferrer>http://bote.i2p/</a> linket. A forráskód elérhető a <a href=https://github.com/i2p/i2p.i2p-bote class='sitelink external' target=_blank rel=noreferrer>github</a> oldalon."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:503
 msgid "i2pd"
-msgstr ""
+msgstr "i2pd"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:505
 msgid "An alternative implementation of an I2P router coded in C++. For more information, see <a href=https://i2pd.website/ class='sitelink external' target=_blank rel=noreferrer>https://i2pd.website/</a> Source code is available on <a href=https://github.com/PurpleI2P/i2pd class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgstr "Az I2P útválasztó alternatív megvalósítása C++ nyelven írva. További információért lásd a <a href=https://i2pd.website/ class='sitelink external' target=_blank rel=noreferrer>https://i2pd.website/</a> linket. A forráskód elérhető a <a href=https://github.com/PurpleI2P/i2pd class='sitelink external' target=_blank rel=noreferrer>github</a> oldalon."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:509
 msgid "A fork of the <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>Snark BitTorrent client</a> refactored for use on the I2P network. Usually supplied as part of the default suite of applications with Java I2P, and also available as a <a href=http://skank.i2p/#download class=sitelink target=_blank rel=noreferrer>standalone Java application</a>."
-msgstr ""
+msgstr "Az I2P hálózaton történő használatra átalakított <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>Snark BitTorrent kliens</a> forkja. Általában a Java I2P alapértelmezett alkalmazáscsomagjának részeként szállítják, valamint elérhető egy <a href=http://skank.i2p/#download class=sitelink target=_blank rel=noreferrer>önálló Java alkalmazásként</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:511
 msgid "Introducer"
-msgstr ""
+msgstr "Introducer"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:513
 msgid "A router that facilitates the connection to the network of another router that is behind a firewall."
-msgstr ""
+msgstr "Egy útválasztó, amely megkönnyíti a kapcsolatot egy másik útválasztó hálózatához, amely tűzfal mögött van."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:515
 msgid "Jump Service"
-msgstr ""
+msgstr "Ugrás Szolgáltatás"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:517
 msgid "A simple CGI application that takes a hostname as a parameter and returns a 301 redirect to the proper URL with a <code>?i2paddresshelper=key</code> string appended. The HTTP proxy will interpret the appended string and use the key as the actual destination. In addition, the proxy will cache the key so the address helper is not necessary until restart, and offer the option to add the resolved address to the addressbook."
-msgstr ""
+msgstr "Egy egyszerű CGI alkalmazás, amely egy hostnevet kap paraméterként és visszatér egy 301 átirányítással a megfelelő URL-címmel, amelyhez egy <code>?i2paddresshelper= kulcs</code> karakterláncot fűz hozzá. Az HTTP proxy a fűzött karakterláncot értelmezni fogja és a kulcsot valós célpontként használja. Ezenkívül a proxy gyorsítótárazza a kulcsot, így az elérési segédlet nem szükséges a restart előtt, és lehetőséget nyújt a feloldott cím hozzáadására az addressbookhoz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:519
 msgid "Laptop Mode"
-msgstr ""
+msgstr "Laptop Mód"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:521
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
-msgstr ""
+msgstr "Egy <a href=/confignet#ipchange>opcionális konfiguráció</a>, amely automatikusan megváltoztatja a <a href=/netdb?r=.>router azonosítóját</a> és az <a href=/confignet#udpconfig>külső portot</a>, amikor a rendszer nyilvános IP-címe megváltozik. Ez megakadályozhatja, hogy egy ellenfél korrelálja a router azonosítóját és az IP-címét olyan helyzetekben, ahol az IP-címe gyakran változhat, például amikor több helyről futtatod az I2P-t egy laptopon."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:525
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
-msgstr ""
+msgstr "Az az információ, amely definiálja egy adott alagútnak a megfelelő engedélyezését annak érdekében, hogy üzeneteket fogadjon egy <i>Célpontra</i>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:529
 msgid "A group of tunnel entry points (leases) for a <i>destination</i>. Note: A 0-hop server tunnel will only have one lease, regardless of the number of tunnels configured."
-msgstr ""
+msgstr "Egy alagút belépési pontjainak (befogadói jogok) csoportja egy <i>célpontra</i>. Megjegyzés: Egy 0-kitételű szerveralagútnak csak egy bérlete lesz, függetlenül a beállított alagutak számától."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:531
 msgid "Monotone / mtn"
-msgstr ""
+msgstr "Monotone / mtn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:533
 msgid "The distributed version control system (DVCS) previously used to maintain I2P's source code, now superseded by git."
-msgstr ""
+msgstr "Az elosztott verziókezelő rendszer (DVCS), amely korábban a I2P forráskódjának karbantartására szolgált, most már a git által felváltva."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:535
 msgid "Multihoming"
-msgstr ""
+msgstr "Többhelyzetben található"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:537
 msgid "Services may be hosted on multiple routers simultaneously, by sharing the same private key for the destination. Multihoming can further enhance the security and stability of a server by providing redundancy; if a server is multihomed, when a server in the pool goes offline, the provided service will remain available, making it more difficult to correlate server downtime with a router going offline."
-msgstr ""
+msgstr "A szolgáltatások egyszerre több kiszolgálón is üzemeltethetők, a célhelyhez ugyanazzal a privát kulccsal. A többlakós működés fokozhatja egy szerver biztonságát és stabilitását a redundancia biztosításával; ha egy szerver többlakós, akkor ha a szerver egyik kiszolgálója kiesik, a szolgáltatás elérhető marad, nehezebb lesz összefüggést találni a kiszolgáló kiesésének és a készülék kiesésének között."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:541
 msgid "A distributed database containing router contact information (RouterInfos) and destination contact information (LeaseSets). A single router maintains its own (partial) database for communicating with other routers on the network; no single router will maintain a list of all routers. The RouterInfos are stored on disk and read into memory when the router starts, or when new RouterInfos are acquired. Also referred to as the <i>NetDb</i>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Egy központosított adatbázis, amely tartalmazza a router kapcsolat adatait (RouterInfos) és a céladatkapcsolat adatait (LeaseSets). Egy router saját (részleges) adatbázist tart fenn más routerekkel való kommunikációhoz a hálózaton; egyetlen router sem fogja fenntartani az összes router listáját. A RouterInfos lemezen tárolódnak, és a router indításakor, vagy új RouterInfos szerzésekor beolvassák a memóriába. Ismert is mint a <i>NetDb</i>. További információért lásd az <a href=https://geti2p.net/en/docs/how/network-database class='sitelink external' target=_blank rel=noreferrer>online dokumentációt</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:543
 msgid "NTCP / NTCP2"
-msgstr ""
+msgstr "NTCP / NTCP2"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:545
 msgid "NTCP (NIO-based TCP) and NTCP2 are TCP-based network transports which use Java's NIO (New I/O) TCP implementation to deliver I2NP messages between routers on the network. NTCP2 improves the resistance of NTCP to various attacks and automated traffic identification methods. For more information, see the <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Az NTCP (NIO alapú TCP) és az NTCP2 olyan TCP alapú hálózati szállítási módok, amelyek a Java NIO (New I/O) TCP implementációját használják az I2NP üzenetek továbbítására a hálózaton belül működő routerek között. Az NTCP2 javítja az NTCP ellenállását a különböző támadásokra és az automatikus forgalomazonosítási módszerekre. További információért lásd az <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>online dokumentációt</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:547
 msgid "Orchid (plugin)"
-msgstr ""
+msgstr "Orchid (dugó)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:549
 msgid "A java implementation of a Tor client, available as an I2P plugin. Can be used as the default <i>outproxy</i> if configured in the relevant SOCKS or HTTP client tunnel in the <i>Tunnel Manager</i>. Available from <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgstr "Egy java implementációja a Tor kliensnek, elérhető I2P pluginként. Ha a megfelelő SOCKS vagy HTTP ügyfél alagútban a <i>Tunnel Manager</i> lett beállítva az alapértelmezett <i>outproxy</i> -ként van használva. Elérhető itt: <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. A forráskód elérhető a  <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>Github</a> -on."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:551
 msgid "Outproxy"
-msgstr ""
+msgstr "Kimenő proxy"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:553
 msgid "A service on the network that provides a proxy connection to the <i>clearnet</i>. By default, I2P has an HTTP outproxy configured for web browsing on <code>127.0.0.1:4444</code>."
-msgstr ""
+msgstr "Egy szolgáltatás a hálózatban, amely proxy kapcsolatot biztosít a <i>clearnet</i>-hez. Alapértelmezésben, az I2P rendelkezik egy HTTP outproxy konfigurációval a webes böngészéshez a <code>127.0.0.1:4444</code> -es címen."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:555
 msgid "Participation"
-msgstr ""
+msgstr "Részvétel"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:557
 msgid "The act of contributing to the network by permitting other routers to build tunnels using your router in a tunnel chain. At least 12KB/s upstream bandwidth (network share) is required to be allocated in order to enable participation. Note that firewalled routers will be limited in how much they contribute to participation, and a router designated as Hidden will not participate at all."
-msgstr ""
+msgstr "A hálózatba történő hozzájárulás tevékenysége, amely más routereknek lehetővé teszi, hogy alagutakat építsenek a te routeredet használva az alagút sorban. Ahhoz, hogy lehetővé váljon a részvétel, szükséges legalább 12KB/s fölfelé irányú sávszélességet (hálózati részesedést) hozzárendelni. Tekintsd figyelembe, hogy a tűzfalakkal védett routerek korlátozva lesznek abban, hogy mennyit járulnak hozzá a részvételhez, és egy Megjelölt<br> router egyáltalán nem vesz részt."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:561
 msgid "The process of acquiring router identities, normally via <i>clearnet</i> servers, to ensure your router can communicate and build tunnels with other routers on the network. When a router has no router identities for other peers (usually immediately after installation), the process of reseeding is also referred to as <i>bootstrapping</i>."
-msgstr ""
+msgstr "Az útválasztóazonosítók megszerzése folyamata, általában a <i> tiszta hálózati </ i> szervereken keresztül, hogy biztosítsa az útválasztója kommunikációját és alagutak kialakítását más útválasztókkal a hálózaton. Ha az útválasztónak nincs más peerekre vonatkozó útválasztóazonosítója (általában rögtön a telepítést követően), az újraértekelnéssel járó folyamatot <i> bootolókká </i> is nevezik."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:565
 msgid "The core I2P software, which routes encrypted packets on the I2P network. All routers by default participate in the network except routers running in countries considered hostile (see <i>Strict Countries</i>), which both helps the network and provides cover traffic for any clients or servers connecting to the I2P network through the router."
-msgstr ""
+msgstr "A központi I2P-szoftver, amely titkosított csomagokat árutál az I2P-hálózaton. Az alapértelmezés szerint minden útválasztó részt vesz a hálózatban, kivéve azokat az országokban működő útválasztókat, amelyeket ellenségesnek tekintenek (lásd: <i> szigorú országok </i>), amelyek mind a hálózatnak segítnek, mind a kliensek vagy szerverek távirányítását az I2P-hálózaton keresztül."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:567
 msgid "Router Identity"
