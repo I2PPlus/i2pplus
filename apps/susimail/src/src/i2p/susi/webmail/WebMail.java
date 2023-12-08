@@ -2458,10 +2458,10 @@ public class WebMail extends HttpServlet
                     showConfig(out, folder);
 
                 if (state == State.AUTH) {
-                out.println("\n<div class=\"footer\">\n" +
-                    //"<p class=\"footer\">susimail &copy; 2004-2005 susi</p>" +
+                out.println("\n<div class=footer>\n" +
+                    //"<p class=footer>susimail &copy; 2004-2005 susi</p>" +
                     "<script charset=utf-8 src=\"/js/togglePassword.js?" + CoreVersion.VERSION + "\"></script>" +
-                    "<p class=\"footer\">" +
+                    "<p class=footer>" +
                     _t("{0} is an I2P-exclusive service provided by {1}.", "<b>I2PMail</b>",
                         "<a href=\"http://hq.postman.i2p/\" target=_blank>Postman</a>") + ' ' +
                     _t("{0} webmail client &copy Susi 2004-2005.", "<b>SusiMail</b>") +
@@ -2986,7 +2986,7 @@ public class WebMail extends HttpServlet
      * @param request
      */
     private static void showCompose(PrintWriter out, SessionObject sessionObject, RequestWrapper request) {
-        out.println("<div class=\"topbuttons\">");
+        out.println("<div class=topbuttons>");
         out.println(button(SEND, _t("Send")) +
                 button(SAVE_AS_DRAFT, _t("Save as Draft")) +
                 button(CANCEL, _t("Cancel")));
@@ -3367,13 +3367,13 @@ public class WebMail extends HttpServlet
             } else if (isSpamFolder || mail.isSpam()) {
                 out.println("<img src=/susimail/icons/flag_red.png alt=\"\" title=\"" + _t("Message is spam") + "\">");
             }
-            out.println("<td class=\"mailListSize " + jslink + "><span class=\"listSize\">" +
+            out.println("<td class=\"mailListSize " + jslink + "><span class=listSize>" +
                         ((mail.getSize() > 0) ? (DataHelper.formatSize2(mail.getSize()) + 'B')
                         // truncate the unit to B/K/M to optimize presentation/alignment
-                        .replace("&#8239;KiB", " <span class=\"listSizeUnit\">K")
-                        .replace("&#8239;MiB", " <span class=\"listSizeUnit\">M")
-                        .replace("&#8239;GiB", " <span class=\"listSizeUnit\">G")
-                        .replace("&#8239;B", " <span class=\"listSizeUnit\">B") : "<span class=\"unknown\" title=\"" +
+                        .replace("&#8239;KiB", " <span class=listSizeUnit>K")
+                        .replace("&#8239;MiB", " <span class=listSizeUnit>M")
+                        .replace("&#8239;GiB", " <span class=listSizeUnit>G")
+                        .replace("&#8239;B", " <span class=listSizeUnit>B") : "<span class=unknown title=\"" +
                         _t("Message body not downloaded") + "\">???"));
             out.println("</span></span></td>\n" +
                         "<td class=mailListDelete><input type=checkbox class=\"optbox delete1\" name=\"check" + b64UIDL + "\" value=1" +
@@ -3400,7 +3400,7 @@ public class WebMail extends HttpServlet
                 if (i > 25)
                     out.print("<tr class=\"bottombuttons floating\" ");
                 else
-                    out.print("<tr class=\"bottombuttons\" ");
+                    out.print("<tr class=bottombuttons ");
                 out.print("id=confirmdelete>\n<td colspan=7>");
                 if (i > 25)
                     out.print("<p class=\"error floating\" ");
