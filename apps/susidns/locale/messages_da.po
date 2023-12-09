@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 03:22+0000\n"
-"PO-Revision-Date: 2023-11-25 03:39+0000\n"
+"PO-Revision-Date: 2023-12-09 11:33+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: da\n"
@@ -80,29 +80,29 @@ msgstr "DSA 1024 bit"
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:184
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Søg efter <span class=active>"
+msgstr[1] "Søg efter <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:189
 #, java-format
 msgid "Filtered list contains 1 entry."
 msgid_plural "Filtered list contains {0} entries."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Filtreret liste indeholder 1 post."
+msgstr[1] "Filtreret liste indeholder {0} poster."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:195
 #, java-format
 msgid "One result for: <span class=active>"
 msgid_plural "{0} results for: <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ét resultat for: <span class=active>"
+msgstr[1] "{0} resultater for: <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:204
 #, java-format
 msgid "1 entry"
 msgid_plural "{0} entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 indgang"
+msgstr[1] "{0} indtastninger"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
@@ -128,7 +128,7 @@ msgstr "Værtsnavnet {0} er allerede i adressebogen, uændret."
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:255
 #, java-format
 msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
-msgstr "Værtsnavnet {0} er allerede i adressebogen med en anden destination. "
+msgstr "Værtsnavnet {0} er allerede i adressebogen med en anden destination. Klik på \"Erstat\" for at overskrive."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:282
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:289
@@ -162,7 +162,7 @@ msgstr "Ugyldigt base 32-værtsnavn."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:320
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:331
 msgid "Invalid Base 64 destination."
-msgstr "Ugyldig Base 64 destination"
+msgstr "Ugyldig Base64 destination."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:327
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:337
@@ -205,8 +205,8 @@ msgstr "Destination {0} slettet."
 #, java-format
 msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 destination slettet."
+msgstr[1] "{0} destinationer slettet."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:353
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:379
@@ -326,15 +326,15 @@ msgstr "Importeret fra fil"
 #, java-format
 msgid "Loaded {0} entry from file"
 msgid_plural "Loaded {0} entries from file"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Indlæste {0} post fra fil"
+msgstr[1] "Indlæste {0} poster fra fil"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:594
 #, java-format
 msgid "Skipped {0} duplicate entry from file"
 msgid_plural "Skipped {0} duplicate entries from file"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sprang {0} dubletindtastning over fra fil"
+msgstr[1] "Sprang {0} dubletposter over fra filen"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:600
 msgid "Import from file failed"
@@ -342,7 +342,7 @@ msgstr "Import fra fil mislykkedes"
 
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:139
 msgid "Subscriptions saved."
-msgstr "Abonnementer gemt. "
+msgstr "Abonnementer gemt."
 
 #. ******
 #. String nonce = System.getProperty("addressbook.nonce");
@@ -490,7 +490,7 @@ msgstr "Hostnavn"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:753
 msgid "Link (b32)"
-msgstr ""
+msgstr "Link (b32)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:755
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:353
@@ -652,7 +652,7 @@ msgstr "Adressehjælper"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:297
 msgid "link"
-msgstr ""
+msgstr "link"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:301
 msgid "Encoded Name"
@@ -664,7 +664,7 @@ msgstr "Base 32 Adresse"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:315
 msgid "Base 64 Hash"
-msgstr ""
+msgstr "Base64 Hash"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:319
 msgid "Public Key"

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 03:22+0000\n"
-"PO-Revision-Date: 2023-11-25 03:44+0000\n"
+"PO-Revision-Date: 2023-12-09 11:28+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fi\n"
@@ -51,7 +51,7 @@ msgstr "Ei mitään"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:232
 msgid "Hashcash"
-msgstr ""
+msgstr "Hashcash"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:234
 msgid "Hidden"
@@ -80,29 +80,29 @@ msgstr "DSA 1024-bittinen"
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:184
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hae <span class=active>"
+msgstr[1] "Hae <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:189
 #, java-format
 msgid "Filtered list contains 1 entry."
 msgid_plural "Filtered list contains {0} entries."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Suodatettu luettelo sisältää 1 merkinnän."
+msgstr[1] "Suodatettu luettelo sisältää {0} merkintää."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:195
 #, java-format
 msgid "One result for: <span class=active>"
 msgid_plural "{0} results for: <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Yksi tulos haulle: <span class=active>"
+msgstr[1] "{0} tulosta haulle: <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:204
 #, java-format
 msgid "1 entry"
 msgid_plural "{0} entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 merkintä"
+msgstr[1] "{0} merkintää"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
@@ -205,8 +205,8 @@ msgstr "Kohde {0} poistettu."
 #, java-format
 msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 kohde poistettu."
+msgstr[1] "{0} kohdetta poistettu."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:353
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:379
@@ -326,15 +326,15 @@ msgstr "Tuotu tiedostosta"
 #, java-format
 msgid "Loaded {0} entry from file"
 msgid_plural "Loaded {0} entries from file"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ladattu {0} merkintä tiedostosta"
+msgstr[1] "Ladattu {0} merkintää tiedostosta"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:594
 #, java-format
 msgid "Skipped {0} duplicate entry from file"
 msgid_plural "Skipped {0} duplicate entries from file"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ohitettiin {0} kaksoiskappaletta tiedostosta"
+msgstr[1] "Ohitettiin {0} päällekkäistä merkintää tiedostosta"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:600
 msgid "Import from file failed"
@@ -480,7 +480,7 @@ msgstr "kirkas suodatin"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:749
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:751
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:967
@@ -550,7 +550,7 @@ msgstr "Valitse tiedosto"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:194
 msgid "configuration"
-msgstr ""
+msgstr "kokoonpano"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:232
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:236
@@ -664,7 +664,7 @@ msgstr "Base 32 Osoite"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:315
 msgid "Base 64 Hash"
-msgstr ""
+msgstr "Base64 Hash"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:319
 msgid "Public Key"
@@ -716,7 +716,7 @@ msgstr "Lisää muistiinpanoja verkkotunnuksesta"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:388
 msgid "Visual Identification for"
-msgstr ""
+msgstr "Visuaalinen tunnistus"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:400
 msgid "Create your own identification images"
@@ -840,7 +840,7 @@ msgstr "Yksityinen osoitekirja"
 
 #: build/HowSVG.java:12
 msgid "Local Records"
-msgstr ""
+msgstr "Paikalliset Levyt"
 
 #: build/HowSVG.java:13
 msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."

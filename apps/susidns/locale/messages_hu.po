@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 03:22+0000\n"
-"PO-Revision-Date: 2023-11-25 03:04+0000\n"
+"PO-Revision-Date: 2023-12-09 11:39+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: hu\n"
@@ -80,8 +80,8 @@ msgstr "1024 bites DSA"
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:184
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Keresse meg a következőt: <span class=active>"
+msgstr[1] "Keresse meg a következőt: <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:189
 #, java-format
@@ -94,15 +94,15 @@ msgstr[1] "A szűrés után a lista {0} bejegyzést tartalmaz."
 #, java-format
 msgid "One result for: <span class=active>"
 msgid_plural "{0} results for: <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Egy eredmény a következőre: <span class=active>"
+msgstr[1] "{0} találat a következőre: <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:204
 #, java-format
 msgid "1 entry"
 msgid_plural "{0} entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 bejegyzés"
+msgstr[1] "{0} bejegyzés"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
@@ -316,7 +316,7 @@ msgstr "Nem található bejegyzés a fájlban"
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:576
 #, java-format
 msgid "Imported from file {0}"
-msgstr "importálva a(z) {0} fájlból"
+msgstr "Importálva a(z) {0} fájlból"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:578
 msgid "Imported from file"
@@ -326,15 +326,15 @@ msgstr "Fájlból importálva"
 #, java-format
 msgid "Loaded {0} entry from file"
 msgid_plural "Loaded {0} entries from file"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} bejegyzés betöltve a fájlból"
+msgstr[1] "{0} bejegyzés betöltve a fájlból"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:594
 #, java-format
 msgid "Skipped {0} duplicate entry from file"
 msgid_plural "Skipped {0} duplicate entries from file"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} ismétlődő bejegyzés kihagyva a fájlból"
+msgstr[1] "{0} ismétlődő bejegyzés kihagyva a fájlból"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:600
 msgid "Import from file failed"
@@ -490,7 +490,7 @@ msgstr "Gépnév"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:753
 msgid "Link (b32)"
-msgstr ""
+msgstr "Link (b32)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:755
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:353
@@ -716,7 +716,7 @@ msgstr "Megjegyzések hozzáadása a domainhez"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:388
 msgid "Visual Identification for"
-msgstr ""
+msgstr "Vizuális azonosítás a számára"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:400
 msgid "Create your own identification images"
@@ -832,7 +832,7 @@ msgstr "Router címjegyzéke"
 
 #: build/HowSVG.java:10
 msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
-msgstr "Az itt kézzel hozzáadott gazdagépek soha nem lesznek közzétéve. "
+msgstr "Az itt kézzel hozzáadott gazdagépek soha nem lesznek közzétéve. Itt álneveket is hozzáadhat más címjegyzékek gazdagépeihez."
 
 #: build/HowSVG.java:11
 msgid "Private Addressbook"
@@ -840,11 +840,11 @@ msgstr "Privát címjegyzék"
 
 #: build/HowSVG.java:12
 msgid "Local Records"
-msgstr ""
+msgstr "Helyi Rekordok"
 
 #: build/HowSVG.java:13
 msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
-msgstr ""
+msgstr "Az I2P-alkalmazások (beleértve a HTTP-proxyt is) a helyi címjegyzékekben található gazdagépeket használják az .i2p gazdagépnevek feloldásához."
 
 #: build/HowSVG.java:14
 msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
