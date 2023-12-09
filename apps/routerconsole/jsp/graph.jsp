@@ -11,7 +11,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
-<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("graphs")%>
  <jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request" />
  <jsp:setProperty name="graphHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -26,6 +25,7 @@
         out.print(graphHelper.getRefreshMeta());
     }
 %>
+<script nonce="<%=cspNonce%>" src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body id=perfgraphs>
 <script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
