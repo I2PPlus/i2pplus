@@ -3566,7 +3566,7 @@ msgstr "Rumah I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "BitTorrent tracker"
-msgstr "Pelacak Bittorrent"
+msgstr "Pelacak BitTorrent"
 
 #. torrent trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122

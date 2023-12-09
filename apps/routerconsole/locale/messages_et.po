@@ -3576,7 +3576,7 @@ msgstr "I2P kodu"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "BitTorrent tracker"
-msgstr "Bittorrenti jälgija"
+msgstr "BitTorrenti jälgija"
 
 #. torrent trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
@@ -10227,7 +10227,7 @@ msgstr "Tulemüürid, modemid ja ruuterid"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:447
 msgid "Where possible, please ensure I2P+/Java is allowed bi-directional port access from the internet by configuring your modem/router/pc firewall accordingly. If you're behind a prohibitive firewall but have unrestricted outbound access, I2P+ can still function; you can turn off inbound access and rely on <a href=http://i2p-projekt.i2p/udp.html target=_blank rel=noreferrer class=sitelink>SSU IP Address Detection</a> (<a href=https://wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer class='sitelink external'>firewall hole punching</a>) to connect you to the network, and your network status in the side panel will indicate \"Status: Firewalled\". For optimal performance, please ensure I2P's <a href=/confignet#udpconfig>external port</a> is visible from the internet (see below for more information)."
-msgstr "Kui võimalik, veenduge, et I2P + / Java saaks internetist kahesuunalise pordiühenduse juurdepääsu, konfigureerides vastavalt oma modem/router/pc tulemüüri. Kui olete piiravast tulemüürist taga, kuid teil on piiramatu väljuv juurdepääs, saab I2P + ikkagi töötada; saate sissepääsu välja lülitada ja tugineda <a href=http://i2p-projekt.i2p/udp.html target=_blank rel=noreferrer class=sitelink>SSU IP-aadressi tuvastamisele</a> (<a href=https://wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer class='sitelink external'>tulemüüri augu tuvastamine</a>) ühendamiseks võrguga ja teie võrgu olek külgpaneelil näitab \"Staatus: tulemüüriga kaitstud\". Optimaalse jõudluse tagamiseks veenduge, et I2P <a href=/confignet#udpconfig>väline port</a> oleks internetis nähtav (rohkem teavet vt allpool)."
+msgstr "Kui võimalik, veenduge, et I2P+ / Java saaks internetist kahesuunalise pordiühenduse juurdepääsu, konfigureerides vastavalt oma modem/router/pc tulemüüri. Kui olete piiravast tulemüürist taga, kuid teil on piiramatu väljuv juurdepääs, saab I2P+ ikkagi töötada; saate sissepääsu välja lülitada ja tugineda <a href=http://i2p-projekt.i2p/udp.html target=_blank rel=noreferrer class=sitelink>SSU IP-aadressi tuvastamisele</a> (<a href=https://wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer class='sitelink external'>tulemüüri augu tuvastamine</a>) ühendamiseks võrguga ja teie võrgu olek külgpaneelil näitab \"Staatus: tulemüüriga kaitstud\". Optimaalse jõudluse tagamiseks veenduge, et I2P <a href=/confignet#udpconfig>väline port</a> oleks internetis nähtav (rohkem teavet vt allpool)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:449
 msgid "Check Your Proxy Settings"

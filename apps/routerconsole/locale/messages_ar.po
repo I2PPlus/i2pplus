@@ -3607,7 +3607,7 @@ msgid "Home of I2P+"
 msgstr "منزل I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
-msgid "Bittorrent tracker"
+msgid "BitTorrent tracker"
 msgstr "برنامج تعقب التورنت"
 
 #. torrent trackers
@@ -3615,7 +3615,7 @@ msgstr "برنامج تعقب التورنت"
 msgid "Postman's Tracker"
 msgstr "تعقب ساعي البريد"
 
-#. _x("Chudo") + S + _x("No login Bittorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
+#. _x("Chudo") + S + _x("No login BitTorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "magnet.svg" + S +
 #. domain name registration + uptime trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:126
 msgid "List of active eepsites and uptime monitor"
@@ -10282,7 +10282,7 @@ msgstr "كن صبورا!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:439
 msgid "I2P+ may be slow to integrate into network the first time you run it as it bootstraps into the network and learns of additional peers. The longer your I2P+ router is running, the better it will perform, so try and keep your router on as long as you can, 24/7 if possible! If, after 30 minutes, your <i>Active: [connected/recent]</i> count still has less than 10 peers, or your total number of <i>Integrated</i> peers is less than 5, there are several things you can do to check for problems:"
-msgstr "قد تتباطأ I2P + في الاندماج مع الشبكة في المرة الأولى التي تقوم فيها بتشغيلها أثناء تهيئتها للشبكة وتعلمها بأقران إضافية. كلما استمر تشغيل موجهك I2P +، ستؤدي بشكل أفضل، لذا حاول الاحتفاظ بموجهك مشغلاً مدة أطول قدر الإمكان، 24 \\ 7 إذا أمكن! إذا لم يزل عدد أقرانك النشطين <i>نشط: [متصل \\ حديث]</i> بعد 30 دقيقة أقل من 10 أقران، أو إذا كان إجمالي عدد أقرانك المتكاملين أقل من 5، هناك عدة أمور يمكنك فعلها للتحقق من وجود مشاكل:"
+msgstr "قد تتباطأ I2P+ في الاندماج مع الشبكة في المرة الأولى التي تقوم فيها بتشغيلها أثناء تهيئتها للشبكة وتعلمها بأقران إضافية. كلما استمر تشغيل موجهك I2P+، ستؤدي بشكل أفضل، لذا حاول الاحتفاظ بموجهك مشغلاً مدة أطول قدر الإمكان، 24 \\ 7 إذا أمكن! إذا لم يزل عدد أقرانك النشطين <i>نشط: [متصل \\ حديث]</i> بعد 30 دقيقة أقل من 10 أقران، أو إذا كان إجمالي عدد أقرانك المتكاملين أقل من 5، هناك عدة أمور يمكنك فعلها للتحقق من وجود مشاكل:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:441
 msgid "Check your Configuration &amp; Bandwidth Allocation"
@@ -10290,7 +10290,7 @@ msgstr "تحقق من التكوين وتخصيص النطاق الترددي"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:443
 msgid "I2P+ functions best when you can accurately reflect the speed of your network connection in the <a href=/config>bandwidth configuration section</a>. By default I2P+ is configured with some fairly conservative values that will not suit many use cases, so please take time to review these settings and correct where necessary. The more bandwidth you allocate, <i>specifically</i> upstream bandwidth, the more you will benefit from the network."
-msgstr "تعمل I2P + بشكل أفضل عندما تستطيع أن تعكس بدقة سرعة اتصال الشبكة الخاص بك في قسم <a href=/config>تكوين العرض الترددي</a>. بالافتراض، تم تكوين I2P + ببعض القيم المحافظة نسبيًا التي لن تناسب العديد من حالات الاستخدام، لذا يرجى أخذ الوقت لمراجعة هذه الإعدادات وتصحيحها عند الضرورة. كلما خصصت المزيد من العرض الترددي، <i>بصفة خاصة</i> العرض الترددي الصاعد، ستستفيد أكثر من الشبكة."
+msgstr "تعمل I2P+ بشكل أفضل عندما تستطيع أن تعكس بدقة سرعة اتصال الشبكة الخاص بك في قسم <a href=/config>تكوين العرض الترددي</a>. بالافتراض، تم تكوين I2P+ ببعض القيم المحافظة نسبيًا التي لن تناسب العديد من حالات الاستخدام، لذا يرجى أخذ الوقت لمراجعة هذه الإعدادات وتصحيحها عند الضرورة. كلما خصصت المزيد من العرض الترددي، <i>بصفة خاصة</i> العرض الترددي الصاعد، ستستفيد أكثر من الشبكة."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:445
 msgid "Firewalls, Modems &amp; Routers"
@@ -10298,7 +10298,7 @@ msgstr "أنظمة الحماية، المودمات والموجهات"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:447
 msgid "Where possible, please ensure I2P+/Java is allowed bi-directional port access from the internet by configuring your modem/router/pc firewall accordingly. If you're behind a prohibitive firewall but have unrestricted outbound access, I2P+ can still function; you can turn off inbound access and rely on <a href=http://i2p-projekt.i2p/udp.html target=_blank rel=noreferrer class=sitelink>SSU IP Address Detection</a> (<a href=https://wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer class='sitelink external'>firewall hole punching</a>) to connect you to the network, and your network status in the side panel will indicate \"Status: Firewalled\". For optimal performance, please ensure I2P's <a href=/confignet#udpconfig>external port</a> is visible from the internet (see below for more information)."
-msgstr "حيثما أمكن، يرجى التأكد من السماح لـ I2P + / Java بالوصول المتبادل للمنافذ من الإنترنت عن طريق تكوين مودمك/موجهك/درع نارك بشكل مناسب. إذا كنت وراء درع ناري مقيد ولكن لديك وصول خارجي غير مقيد، يمكن لـ I2P + الاستمرار في العمل؛ يمكنك إيقاف الوصول الداخلي والاعتماد على <a href=http://i2p-projekt.i2p/udp.html target=_blank rel=noreferrer class=sitelink>كشف عنوان IP من SSU </a> (<a href=https://wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer class='sitelink external'>ثقب الناري </a>) لربطك بالشبكة، وسيشير حالة الشبكة في اللوحة الجانبية إلى \"الحالة: محمي بدرع ناري\". لأقصى أداء، يرجى التأكد من أن المنفذ الخارجي لـ I2P <a href=/confignet#udpconfig> مرئي من الإنترنت</a> (انظر أدناه لمزيد من المعلومات)."
+msgstr "حيثما أمكن، يرجى التأكد من السماح لـ I2P+ / Java بالوصول المتبادل للمنافذ من الإنترنت عن طريق تكوين مودمك/موجهك/درع نارك بشكل مناسب. إذا كنت وراء درع ناري مقيد ولكن لديك وصول خارجي غير مقيد، يمكن لـ I2P+ الاستمرار في العمل؛ يمكنك إيقاف الوصول الداخلي والاعتماد على <a href=http://i2p-projekt.i2p/udp.html target=_blank rel=noreferrer class=sitelink>كشف عنوان IP من SSU </a> (<a href=https://wikipedia.org/wiki/Hole_punching target=_blank rel=noreferrer class='sitelink external'>ثقب الناري </a>) لربطك بالشبكة، وسيشير حالة الشبكة في اللوحة الجانبية إلى \"الحالة: محمي بدرع ناري\". لأقصى أداء، يرجى التأكد من أن المنفذ الخارجي لـ I2P <a href=/confignet#udpconfig> مرئي من الإنترنت</a> (انظر أدناه لمزيد من المعلومات)."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:449
 msgid "Check Your Proxy Settings"

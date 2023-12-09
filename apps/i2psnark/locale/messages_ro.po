@@ -624,7 +624,7 @@ msgstr "Mod de depanare"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:386
 msgid "Anonymous BitTorrent Client"
-msgstr "Client Bittorrent Anonim"
+msgstr "Client BitTorrent Anonim"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:399
 msgid "I2PSnark has stopped"

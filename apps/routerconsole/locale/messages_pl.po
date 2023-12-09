@@ -3583,7 +3583,7 @@ msgstr "Strona główna I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "BitTorrent tracker"
-msgstr "Moduł śledzący Bittorrent"
+msgstr "Moduł śledzący BitTorrent"
 
 #. torrent trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
@@ -9082,7 +9082,7 @@ msgstr "Ta opcja (w sekundach) pozwala na zastąpienie opóźnienie między uruc
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:533
 msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
-msgstr "To ustawienie określa maksymalną liczbę sum kontrolnych równolegle kolejki przeszukiwania. W I2P maksymalna liczba wynosi 128, a w I2P + wartość domyślna to 512."
+msgstr "To ustawienie określa maksymalną liczbę sum kontrolnych równolegle kolejki przeszukiwania. W I2P maksymalna liczba wynosi 128, a w I2P+ wartość domyślna to 512."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:535
 msgid "This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false, restart required]"
@@ -10279,8 +10279,8 @@ msgid "Problems running on Legacy Hardware"
 msgstr "Problemy z działaniem na starszym sprzęcie"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:463
-msgid "[Linux/Unix/Solaris] If you can't start the router with <code>i2p/i2prouter start</code> try the <code>runplain.sh</code> script in the same directory. Root privileges are never required to run I2P +. If you need to compile the <a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>jBigi library</a> (which is necessary in rare cases), consult the documentation, visit the forums, or visit <a href=irc://127.0.0.1:6668/saltR class=chatlink>the I2P + channel</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>IRC developer channel</a>."
-msgstr "[Linux/Unix/Solaris] Jeżeli nie możesz uruchomić routera za pomocą polecenia <code>i2p/i2prouter start</code>, spróbuj skryptu <code>runplain.sh</code> w tym samym katalogu. Nigdy nie są wymagane uprawnienia administratora do uruchomienia I2P +. Jeżeli musisz skompilować <a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>jBigi library</a> (co jest rzadko potrzebne), skonsultuj dokumentację, odwiedź fora lub odwiedź <a href=irc://127.0.0.1:6668/saltR class=chatlink>kanał I2P +</a> lub <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>kanał deweloperów IRC</a>."
+msgid "[Linux/Unix/Solaris] If you can't start the router with <code>i2p/i2prouter start</code> try the <code>runplain.sh</code> script in the same directory. Root privileges are never required to run I2P+. If you need to compile the <a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>jBigi library</a> (which is necessary in rare cases), consult the documentation, visit the forums, or visit <a href=irc://127.0.0.1:6668/saltR class=chatlink>the I2P+ channel</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>IRC developer channel</a>."
+msgstr "[Linux/Unix/Solaris] Jeżeli nie możesz uruchomić routera za pomocą polecenia <code>i2p/i2prouter start</code>, spróbuj skryptu <code>runplain.sh</code> w tym samym katalogu. Nigdy nie są wymagane uprawnienia administratora do uruchomienia I2P+. Jeżeli musisz skompilować <a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>jBigi library</a> (co jest rzadko potrzebne), skonsultuj dokumentację, odwiedź fora lub odwiedź <a href=irc://127.0.0.1:6668/saltR class=chatlink>kanał I2P+</a> lub <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>kanał deweloperów IRC</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:465
 msgid "Enable Universal Plug and Play (UPnP)"
@@ -10288,7 +10288,7 @@ msgstr "Włącz Universal Plug and Play (UPnP)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:467
 msgid "Your modem or router may support <a href=https://wikipedia.org/wiki/Universal_Plug_and_Play target=_blank rel=noreferrer>Universal Plug &amp; Play</a> (UPnP), which permits automatic port forwarding. Ensure UPnP support for I2P+ is enabled on the <a href=/confignet>config page</a>, then try to activate UPnP on your modem/router and possibly your computer also. Now try restarting the <a href=/>I2P+ router</a>. If successful, I2P+ should report \"Status: OK\" in the side panel once the I2P+ router completes initial connectivity tests."
-msgstr "Twój modem lub router może obsługiwać <a href=https://wikipedia.org/wiki/Universal_Plug_and_Play target=_blank rel=noreferrer>Universal Plug &amp; Play</a> (UPnP), co umożliwia automatyczne przekierowywanie portów. Upewnij się, że wsparcie UPnP dla I2P + jest włączone na <a href=/confignet>stronie konfiguracyjnej</a>, a następnie spróbuj aktywować UPnP na swoim modemie/routerze, a także na swoim komputerze. Teraz spróbuj zrestartować router <a href=/>I2P+</a>. Jeśli się uda, I2P+ powinien zgłosić „Status: OK” w panelu bocznym po zakończeniu początkowych testów połączenia przez router I2P+."
+msgstr "Twój modem lub router może obsługiwać <a href=https://wikipedia.org/wiki/Universal_Plug_and_Play target=_blank rel=noreferrer>Universal Plug &amp; Play</a> (UPnP), co umożliwia automatyczne przekierowywanie portów. Upewnij się, że wsparcie UPnP dla I2P+ jest włączone na <a href=/confignet>stronie konfiguracyjnej</a>, a następnie spróbuj aktywować UPnP na swoim modemie/routerze, a także na swoim komputerze. Teraz spróbuj zrestartować router <a href=/>I2P+</a>. Jeśli się uda, I2P+ powinien zgłosić „Status: OK” w panelu bocznym po zakończeniu początkowych testów połączenia przez router I2P+."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:469
 msgid "Port Forwarding"

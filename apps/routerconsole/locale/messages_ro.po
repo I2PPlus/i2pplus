@@ -9705,7 +9705,7 @@ msgstr "Eephead"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:465
 msgid "A command-line application supplied with I2P+ (Linux/MacOS) that is used to perform a <code>head</code> request on a specified http resource on the network, returning various response headers from the remote server. By default, eephead uses the HTTP proxy on <code>127.0.0.1:4444</code>."
-msgstr "O aplicație de linie de comandă furnizată cu I2P + (Linux/MacOS) care este utilizată pentru a efectua o solicitare <code>head</code> pe o resursă http specificată în rețea, returnând diverse antete de răspuns de la serverul remote. În mod implicit, eephead utilizează proxy-ul HTTP la <code>127.0.0.1:4444</code>."
+msgstr "O aplicație de linie de comandă furnizată cu I2P+ (Linux/MacOS) care este utilizată pentru a efectua o solicitare <code>head</code> pe o resursă http specificată în rețea, returnând diverse antete de răspuns de la serverul remote. În mod implicit, eephead utilizează proxy-ul HTTP la <code>127.0.0.1:4444</code>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:467
 msgid "Eepsite"

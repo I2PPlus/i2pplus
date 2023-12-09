@@ -9259,7 +9259,7 @@ msgstr "点击<i>OK</i>按钮，并通过访问<a href=http://planeta.i2p/ targe
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:493
 msgid "Note: To enhance your security when browsing .i2p sites, you may wish to consider installing an addon to prevent Javascript from running in the browser such as <a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a>, though it's recommended to whitelist the address I2P+ is running on to enable various router console enhancements. In addition, an addon that prevents requests to offsite resources is also recommended, for example <a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>."
-msgstr "注意：为了提高浏览.i2p站点时的安全性，您需要考虑安装JS拦截插件（如<a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a> ），尽管如此，还是建议将I2P +的本地地址列入白名单，以启用各种路由器控制台增强功能。 此外，还建议使用防止对异地资源的请求的扩展，例如<a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>。"
+msgstr "注意：为了提高浏览.i2p站点时的安全性，您需要考虑安装JS拦截插件（如<a href=https://addons.mozilla.org/en-US/firefox/addon/noscript/ target=_blank rel=noreferrer class='sitelink external'>NoScript</a> ），尽管如此，还是建议将I2P+的本地地址列入白名单，以启用各种路由器控制台增强功能。 此外，还建议使用防止对异地资源的请求的扩展，例如<a href=https://addons.mozilla.org/en-US/firefox/addon/umatrix/ target=_blank rel=noreferrer class='sitelink external'>uMatrix</a>。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:495
 msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>."
@@ -10196,7 +10196,7 @@ msgstr "要有耐心！"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:439
 msgid "I2P+ may be slow to integrate into network the first time you run it as it bootstraps into the network and learns of additional peers. The longer your I2P+ router is running, the better it will perform, so try and keep your router on as long as you can, 24/7 if possible! If, after 30 minutes, your <i>Active: [connected/recent]</i> count still has less than 10 peers, or your total number of <i>Integrated</i> peers is less than 5, there are several things you can do to check for problems:"
-msgstr "第一次运行I2P +时，I2P +较为缓慢，它会连接到网络中并了解其他对等节点。 您的I2P +路由器运行时间越长，性能越好，因此请尝试尽可能长时间地保持路由器开机，如果可能的话，全天候不关机！ 如果30分钟后，您的<i>活跃节点</i>计数仍少于10个，或者您的<i>已整合</i>节点总数少于5个，您可以通过以下几种方式检查是否有问题："
+msgstr "第一次运行I2P+时，I2P+较为缓慢，它会连接到网络中并了解其他对等节点。 您的I2P+路由器运行时间越长，性能越好，因此请尝试尽可能长时间地保持路由器开机，如果可能的话，全天候不关机！ 如果30分钟后，您的<i>活跃节点</i>计数仍少于10个，或者您的<i>已整合</i>节点总数少于5个，您可以通过以下几种方式检查是否有问题："
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:441
 msgid "Check your Configuration &amp; Bandwidth Allocation"
@@ -10244,7 +10244,7 @@ msgstr "老硬件可能有兼容性问题"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:463
 msgid "[Linux/Unix/Solaris] If you can't start the router with <code>i2p/i2prouter start</code> try the <code>runplain.sh</code> script in the same directory. Root privileges are never required to run I2P+. If you need to compile the <a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>jBigi library</a> (which is necessary in rare cases), consult the documentation, visit the forums, or visit <a href=irc://127.0.0.1:6668/saltR class=chatlink>the I2P+ channel</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>IRC developer channel</a>."
-msgstr "[Linux/Unix/Solaris]如果无法使用<code>i2p/i2prouter</code>启动路由器，请尝试使用同一目录中的<code>runplain.sh</code>脚本。 运行I2P +从不需要root特权。 如果您需要编译<a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>jBigi库</a>（在极少数情况下是必要的） ，请参阅文档，访问论坛，或访问<a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a>或<a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p-dev</a>。"
+msgstr "[Linux/Unix/Solaris]如果无法使用<code>i2p/i2prouter</code>启动路由器，请尝试使用同一目录中的<code>runplain.sh</code>脚本。 运行I2P+从不需要root特权。 如果您需要编译<a href=http://i2p-projekt.i2p/jbigi.html target=_blank rel=noreferrer>jBigi库</a>（在极少数情况下是必要的） ，请参阅文档，访问论坛，或访问<a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a>或<a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p-dev</a>。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:465
 msgid "Enable Universal Plug and Play (UPnP)"
@@ -10252,7 +10252,7 @@ msgstr "启用路由器的UPnP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:467
 msgid "Your modem or router may support <a href=https://wikipedia.org/wiki/Universal_Plug_and_Play target=_blank rel=noreferrer>Universal Plug &amp; Play</a> (UPnP), which permits automatic port forwarding. Ensure UPnP support for I2P+ is enabled on the <a href=/confignet>config page</a>, then try to activate UPnP on your modem/router and possibly your computer also. Now try restarting the <a href=/>I2P+ router</a>. If successful, I2P+ should report \"Status: OK\" in the side panel once the I2P+ router completes initial connectivity tests."
-msgstr "您的调制解调器或路由器可能支持<a href=https://wikipedia.org/wiki/Universal_Plug_and_Play target=_blank rel=noreferrer>通用即插即用</a>(UPnP) 来实现自动端口转发。 确保<a href=/confignet>配置页面</a>上启用了对I2P +的UPnP支持，然后尝试在您的调制解调器/路由器上启用UPnP ，也可能是在您的计算机上启用UPnP。 现在尝试重新启动<a href=/>I2P +路由器</a>。 如果成功，一旦I2P +路由器完成初始连接测试， I2P +应在侧面板中报告“状态：正常”。"
+msgstr "您的调制解调器或路由器可能支持<a href=https://wikipedia.org/wiki/Universal_Plug_and_Play target=_blank rel=noreferrer>通用即插即用</a>(UPnP) 来实现自动端口转发。 确保<a href=/confignet>配置页面</a>上启用了对I2P+的UPnP支持，然后尝试在您的调制解调器/路由器上启用UPnP ，也可能是在您的计算机上启用UPnP。 现在尝试重新启动<a href=/>I2P+路由器</a>。 如果成功，一旦I2P+路由器完成初始连接测试， I2P+应在侧面板中报告“状态：正常”。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:469
 msgid "Port Forwarding"
@@ -10260,7 +10260,7 @@ msgstr "端口转发"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:471
 msgid "Open <a href=/confignet#udpconfig>I2P+'s port</a> on your modem, router and/or firewall(s) for better connectivity (ideally both UDP and TCP). More information on how to go about port forwarding can be found at <a href=http://portforward.com/ target=_blank rel=noreferrer class='sitelink external'>portforward.com</a>, in addition to our forums and IRC channels listed below. Note that I2P does not support connecting to the internet via an http or socks proxy [patches welcome!], though you can connect to proxies via I2P itself once connected to the network."
-msgstr "在调制解调器、路由器和/或防火墙上打开<a href=/confignet#udpconfig>I2P +的端口</a>，以获得更好的连接（最好是UDP和TCP都打开）。 有关设置端口转发的更多信息，请访问<a href=http://portforward.com/ target=_blank rel=noreferrer class='sitelink external'>portforward.com</a> ，以及我们的论坛和下面列出的IRC频道。 请注意， I2P不支持通过HTTP或SOCKS代理连接到互联网[patches welcome!]，但您可以在连接到网络后通过I2P连接到出口代理。"
+msgstr "在调制解调器、路由器和/或防火墙上打开<a href=/confignet#udpconfig>I2P+的端口</a>，以获得更好的连接（最好是UDP和TCP都打开）。 有关设置端口转发的更多信息，请访问<a href=http://portforward.com/ target=_blank rel=noreferrer class='sitelink external'>portforward.com</a> ，以及我们的论坛和下面列出的IRC频道。 请注意， I2P不支持通过HTTP或SOCKS代理连接到互联网[patches welcome!]，但您可以在连接到网络后通过I2P连接到出口代理。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:473
 msgid "Getting Support Online"
@@ -10501,7 +10501,7 @@ msgstr "你的电脑时钟相对于网络同步时间的偏移。I2P要求您的
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:461
 msgid "This indicates the amount of RAM I2P is using, and the total amount available, allocated by Java. If the usage is consistently high relative to the available RAM, this may indicate that you need to increase the ram allocated to the JVM. You can allocate more RAM by editing your <code>wrapper.config</code> file which is normally located in the I2P application directory. You will need to edit the <code>wrapper.java.maxmemory</code> parameter, which by default is set to 256(MB) for I2P, or 384 for I2P+. Note: if the memory bar is enabled, the memory entry in the router info section will be suppressed."
-msgstr "这表示I2P正在使用的RAM 的数量以及可用的总量。 如果RAM使用率一直较高，这可能表明您需要增加分配给JVM的RAM。 您可以通过编辑通常位于I2P安装目录中的<code>wrapper.config</code>文件的<code>wrapper.java.maxmemory</code>参数来分配更多RAM。默认设置为256 MB ，I2P +为384 MB。 注意：如果启用了内存栏，则路由器信息部分的内存条目将隐藏。"
+msgstr "这表示I2P正在使用的RAM 的数量以及可用的总量。 如果RAM使用率一直较高，这可能表明您需要增加分配给JVM的RAM。 您可以通过编辑通常位于I2P安装目录中的<code>wrapper.config</code>文件的<code>wrapper.java.maxmemory</code>参数来分配更多RAM。默认设置为256 MB ，I2P+为384 MB。 注意：如果启用了内存栏，则路由器信息部分的内存条目将隐藏。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:467
 msgid "The first number is the number of peers your router has sent or received a message from in the last few minutes. This may range from 8-10 to several hundred, depending on your total bandwidth, shared bandwidth, and locally-generated traffic. The second number is the number of peers seen in the last hour or so. Do not be concerned if these numbers vary widely. <a href='/configstats#router.activePeers'>[Enable graphing]</a>."

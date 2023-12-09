@@ -10199,7 +10199,7 @@ msgstr "Το αρχείο θα είναι έγκυρο μόνο για περι�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:435
 msgid "If you're experiencing issues with running I2P+, the following information may help identify and resolve the problem:"
-msgstr "Αν αντιμετωπίζετε προβλήματα με την εκτέλεση του I2P +, οι παρακάτω πληροφορίες μπορεί να βοηθήσουν να αναγνωριστεί και να επιλυθεί το πρόβλημα:"
+msgstr "Αν αντιμετωπίζετε προβλήματα με την εκτέλεση του I2P+, οι παρακάτω πληροφορίες μπορεί να βοηθήσουν να αναγνωριστεί και να επιλυθεί το πρόβλημα:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:437
 msgid "Be Patient!"
@@ -10207,7 +10207,7 @@ msgstr "Παραμείνετε υπομονετικοί!"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:439
 msgid "I2P+ may be slow to integrate into network the first time you run it as it bootstraps into the network and learns of additional peers. The longer your I2P+ router is running, the better it will perform, so try and keep your router on as long as you can, 24/7 if possible! If, after 30 minutes, your <i>Active: [connected/recent]</i> count still has less than 10 peers, or your total number of <i>Integrated</i> peers is less than 5, there are several things you can do to check for problems:"
-msgstr "Το I2P + μπορεί να είναι αργό για να ενσωματωθεί στο δίκτυο την πρώτη φορά που το εκτελέσετε, καθώς εκκινεί στο δίκτυο και μαθαίνει για επιπλέον ομότιμους. Όσο περισσότερο χρονικό διάστημα λειτουργεί ο δρομολογητής σας I2P +, τόσο καλύτερα θα λειτουργεί, οπότε προσπαθήστε να κρατήσετε τον δρομολογητή σας ενεργό όσο το δυνατόν περισσότερο, 24/7 αν είναι δυνατόν! Αν, μετά από 30 λεπτά, ο αριθμός σας <i>Ενεργοί: [συνδεδεμένος/πρόσφατος]</i> εξακολουθεί να έχει λιγότερους από 10 ομότιμους συνεργάτες, ή ο συνολικός αριθμός των ομότιμων είναι μικρότερος από 5, υπάρχουν αρκετά πράγματα που μπορείτε να κάνετε για να ελέγξετε τα προβλήματα:"
+msgstr "Το I2P+ μπορεί να είναι αργό για να ενσωματωθεί στο δίκτυο την πρώτη φορά που το εκτελέσετε, καθώς εκκινεί στο δίκτυο και μαθαίνει για επιπλέον ομότιμους. Όσο περισσότερο χρονικό διάστημα λειτουργεί ο δρομολογητής σας I2P+, τόσο καλύτερα θα λειτουργεί, οπότε προσπαθήστε να κρατήσετε τον δρομολογητή σας ενεργό όσο το δυνατόν περισσότερο, 24/7 αν είναι δυνατόν! Αν, μετά από 30 λεπτά, ο αριθμός σας <i>Ενεργοί: [συνδεδεμένος/πρόσφατος]</i> εξακολουθεί να έχει λιγότερους από 10 ομότιμους συνεργάτες, ή ο συνολικός αριθμός των ομότιμων είναι μικρότερος από 5, υπάρχουν αρκετά πράγματα που μπορείτε να κάνετε για να ελέγξετε τα προβλήματα:"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:441
 msgid "Check your Configuration &amp; Bandwidth Allocation"
@@ -10215,7 +10215,7 @@ msgstr "Ελέγξτε την διαμόρφωση και τον Χρονικό 
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:443
 msgid "I2P+ functions best when you can accurately reflect the speed of your network connection in the <a href=/config>bandwidth configuration section</a>. By default I2P+ is configured with some fairly conservative values that will not suit many use cases, so please take time to review these settings and correct where necessary. The more bandwidth you allocate, <i>specifically</i> upstream bandwidth, the more you will benefit from the network."
-msgstr "Το I2P + λειτουργεί καλύτερα όταν μπορείτε να αντικατοπτρίσετε ακριβώς την ταχύτητα της σύνδεσης του δικτύου σας στην ενότητα διαμόρφωσης ζώνης <a href=/config>Χρονοδιάγραμμα Ανάθεσης</a>. Με τις προεπιλεγμένες τιμές, το I2P + είναι διαμορφωμένο με μερικές αρκετά συντηρητικές τιμές που δεν ικανοποιούν πολλές περιπτώσεις χρήσης, επομένως παρακαλούμε να αφιερώσετε χρόνο για να αναθεωρήσετε αυτές τις ρυθμίσεις και να τις διορθώσετε όπου χρειάζεται. Πόσο περισσότερη ζωντανή ζώνη θέλετε να εκχωρίσετε, <i>ειδικότερα</i> εκχωρημένης ζώνης, τόσο περισσότερο θα επωφεληθείτε από το δίκτυο."
+msgstr "Το I2P+ λειτουργεί καλύτερα όταν μπορείτε να αντικατοπτρίσετε ακριβώς την ταχύτητα της σύνδεσης του δικτύου σας στην ενότητα διαμόρφωσης ζώνης <a href=/config>Χρονοδιάγραμμα Ανάθεσης</a>. Με τις προεπιλεγμένες τιμές, το I2P+ είναι διαμορφωμένο με μερικές αρκετά συντηρητικές τιμές που δεν ικανοποιούν πολλές περιπτώσεις χρήσης, επομένως παρακαλούμε να αφιερώσετε χρόνο για να αναθεωρήσετε αυτές τις ρυθμίσεις και να τις διορθώσετε όπου χρειάζεται. Πόσο περισσότερη ζωντανή ζώνη θέλετε να εκχωρίσετε, <i>ειδικότερα</i> εκχωρημένης ζώνης, τόσο περισσότερο θα επωφεληθείτε από το δίκτυο."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:445
 msgid "Firewalls, Modems &amp; Routers"

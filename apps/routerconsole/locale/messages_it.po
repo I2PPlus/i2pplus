@@ -3576,7 +3576,7 @@ msgstr "Sede di I2P+"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "BitTorrent tracker"
-msgstr "Tracciatore Bittorrent"
+msgstr "Tracciatore BitTorrent"
 
 #. torrent trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
@@ -9354,7 +9354,7 @@ msgstr "Si noti che la sottoscrizione a un servizio hosts.txt è un atto di fidu
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:453
 msgid "How do I access IRC, BitTorrent, or other services on the regular Internet?"
-msgstr "Come posso accedere a IRC, Bittorrent o altri servizi sull'Internet normale?"
+msgstr "Come posso accedere a IRC, BitTorrent o altri servizi sull'Internet normale?"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:455
 msgid "Unless an outproxy has been set up for the service you want to connect to, this is not possible, with the exception of BitTorrent (see below). There are only three types of outproxies running right now: HTTP, HTTPS, and email. Note that there is currently no publicly listed SOCKS outproxy. If this type of service is required, try <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a>."

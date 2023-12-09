@@ -33,11 +33,11 @@ msgstr "Garaşýan wagtyňyz, {2}konfigurasiýa sahypasynda{3} {0}geçirijilik g
 
 #, java-format
 msgid "You can also run the bandwidth test via the {0}Setup Wizard{1} to help with determining your bandwidth, and a guide for new users and additional documentation including an FAQ is available in the {2}help section{1}."
-msgstr "Bar bolan geçiriş giňligini kesgitlemek üçin {0}gurnama jadygöý{1} dolandyryp bilersiňiz. I2P + Giriş üçin giriş üçin {2}Help Bölüm{1} görüň."
+msgstr "Bar bolan geçiriş giňligini kesgitlemek üçin {0}gurnama jadygöý{1} dolandyryp bilersiňiz. I2P+ Giriş üçin giriş üçin {2}Help Bölüm{1} görüň."
 
 #, java-format
 msgid "You may also wish to enable I2P+ updates on {0}the update configuration page{1}."
-msgstr "Şeýle hem, {0}täzelenme konfigurasiýa sahypasynda{1} I2P + täzelenmeleri işletmek isläp bilersiňiz."
+msgstr "Şeýle hem, {0}täzelenme konfigurasiýa sahypasynda{1} I2P+ täzelenmeleri işletmek isläp bilersiňiz."
 
 msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
 msgstr "Şeýle hem, e2 sahypalaryna ýetmek üçin I2P proksi ulanmak üçin brauzeriňizi sazlap bilersiňiz."

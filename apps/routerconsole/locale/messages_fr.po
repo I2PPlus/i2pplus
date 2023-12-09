@@ -3574,7 +3574,7 @@ msgstr "Accueil d'I2P+"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "BitTorrent tracker"
-msgstr "traqueur Bittorrent"
+msgstr "traqueur BitTorrent"
 
 #. torrent trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
@@ -11577,7 +11577,7 @@ msgstr "Vous avez configuré I2P pour partager {0} ko/s."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:673
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
-msgstr "I2P + nécessite un navigateur Web configuré pour utiliser le proxy HTTP résident afin de parcourir des sites Web sur le réseau I2P."
+msgstr "I2P+ nécessite un navigateur Web configuré pour utiliser le proxy HTTP résident afin de parcourir des sites Web sur le réseau I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:675
 msgid "Browser Setup"

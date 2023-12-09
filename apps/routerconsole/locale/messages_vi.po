@@ -3567,7 +3567,7 @@ msgstr "Trang chủ của I2P"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "BitTorrent tracker"
-msgstr "Trình theo dõi Bittorrent"
+msgstr "Trình theo dõi BitTorrent"
 
 #. torrent trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
@@ -9916,7 +9916,7 @@ msgstr "ZzzOT (plugin)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:609
 msgid "A Java I2P plugin implementation of a BitTorrent <a href=https://en.wikipedia.org/wiki/Opentracker class='sitelink external' target=_blank rel=noreferrer>Open Tracker</a>. Available from <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins.zzzot class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr "Việc triển khai plugin Java I2P của Bittorrent <a href=https://en.wikipedia.org/wiki/opentracker Class='Sitelink bên ngoài' Target=_Blank rel=noreFerrer> Trình theo dõi mở </a>. Có sẵn từ <a href=http://stats.i2p/i2p/plugins Class=Sitelink> http: //stats.i2p/i2p/plugins </a>. Mã nguồn có sẵn trên <a href=https://github.com/i2p/i2p.plugins.zzzot class='Sitelink bên ngoài' Target=_Blank rel=noreferrer> GitHub </a>."
+msgstr "Việc triển khai plugin Java I2P của BitTorrent <a href=https://en.wikipedia.org/wiki/opentracker Class='Sitelink bên ngoài' Target=_Blank rel=noreFerrer> Trình theo dõi mở </a>. Có sẵn từ <a href=http://stats.i2p/i2p/plugins Class=Sitelink> http: //stats.i2p/i2p/plugins </a>. Mã nguồn có sẵn trên <a href=https://github.com/i2p/i2p.plugins.zzzot class='Sitelink bên ngoài' Target=_Blank rel=noreferrer> GitHub </a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:270
 msgid "Web Hosting - I2P+"

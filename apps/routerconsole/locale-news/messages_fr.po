@@ -37,7 +37,7 @@ msgstr "Vous pouvez également exécuter le test de bande passante via {0}l'assi
 
 #, java-format
 msgid "You may also wish to enable I2P+ updates on {0}the update configuration page{1}."
-msgstr "Vous pouvez également souhaiter activer les mises à jour I2P + sur {0}la page de configuration de mise à jour{1}."
+msgstr "Vous pouvez également souhaiter activer les mises à jour I2P+ sur {0}la page de configuration de mise à jour{1}."
 
 msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
 msgstr "Vous pouvez également configurer votre navigateur afin qu’il utilise le mandataire d’I2P pour consulter les sites eep."

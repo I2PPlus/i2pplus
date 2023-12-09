@@ -3414,7 +3414,7 @@ msgstr "Webbplatskarta"
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:95
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:320
 msgid "Built-in anonymous BitTorrent Client"
-msgstr "Inbyggd anonym Bittorrentklient"
+msgstr "Inbyggd anonym BitTorrentklient"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:56
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:76

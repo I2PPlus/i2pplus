@@ -3575,7 +3575,7 @@ msgstr "I2P-nin evi"
 
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
 msgid "BitTorrent tracker"
-msgstr "Bittorrent izləyicisi"
+msgstr "BitTorrent izləyicisi"
 
 #. torrent trackers
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:122
