@@ -2053,7 +2053,8 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #config_bandwidth tr:nth-last-child(2) .infohelp b{margin-right:-1px;font-size:120%}
 
 /* update */
-#updateHelper .optionlist,#updateProxyHostPort .optionlist{column-gap:1px;columns:500px 2;margin:-1px 0}
+#checkforupdates{text-align:center}
+#updateHelper .optionlist,#updateProxyHostPort .optionlist{column-gap:1px;columns:400px 3;margin:-1px 0}
 #updateHelper select,#updateProxyHostPort input,#updateProxyHostPort input[disabled]{min-width:220px;max-width:220px;margin-left:6px;text-overflow:ellipsis;position:relative;z-index:999}
 #i2pupdates{margin:0 0 -4px}
 #config_update td:not(.infohelp),#manualreseed td:not(.infohelp),#newsupdateconfig td:not(.infohelp),#reseedconfig td:not(.infohelp),#netconfig td:not(.infohelp):not(.infowarn),#graphs td{padding:5px}
@@ -2071,9 +2072,8 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #config_update b.suboption{padding:3px 8px 4px 10px}
 #config_update .suboption .optbox{margin:-2px 3px 0 -5px}
 #config_update h3.tabletitle{margin-bottom:-2px}
-#config_update input.check{float:left}
 #config_update label.tabletitle{margin-top:3px}
-#updateHelper select{margin-left:10px;max-width:calc(100% - 220px)}
+#updateHelper select{margin-left:10px;width:calc(100% - 220px)}
 #updateProxyHostPort input{max-width:200px}
 #updateHelper b,#updateProxyHostPort b,#config_update b,#newsupdateconfig .nowrap b{margin-right:9px;min-width:190px;display:inline-block;text-align:right}
 #config_update .nowrap,#config_update .nowrap b,#newsupdateconfig .nowrap b{display:inline-block;vertical-align:middle}
@@ -2771,7 +2771,11 @@ table:not(:first-of-type).netdbentry tr:nth-child(2) td:nth-child(2)::before{dis
 #tunnels .tunneldisplay td:nth-child(n+2) span,#tunnels .tunneldisplay tt{margin:1px;padding:0;display:inline-block;vertical-align:middle;line-height:1.2;border:0;box-shadow:none;background:none}
 #tunnels .tunneldisplay .tunnel_cap{min-width:14px;text-align:center}
 #tunnels .tunneldisplay .tunnel_peer.tunnel_local{width:74px;box-sizing:border-box}
-#updateHelper select{max-width:200px}
+#config_update .nowrap{min-width:300px}
+#config_update #checkforupdates{display:block!important;column-span:all;border-top:var(--border_soft)}
+#updateHelper b{min-width:140px}
+#updateHelper select{margin:4px;width:160px;min-width:unset}
+#updateHelper .optionlist{min-width:300px;columns:300px 2}
 }
 
 @media (max-width:900px){
