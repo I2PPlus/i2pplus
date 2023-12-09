@@ -3,9 +3,9 @@
 
 @import url(global.css);
 
+.wizardbuttons{margin-bottom:10px}
 html#consolewizard{background:var(--vstripe) #000}
 body#wizardpage{background:none}
-.wizardbuttons{margin-bottom:10px}
 #bandwidthTestRunning{margin:10px 0;padding:10px;width:100%;text-align:center;font-style:italic;font-weight:700;border:var(--border);box-shadow:inset 0 0 0 1px #000,inset 0 3px 3px rgba(0,0,0,.7);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.3)),repeating-linear-gradient(90deg,rgba(0,0,0,.3),rgba(0,0,0,.1) 10px,rgba(0,32,0,.3) 10px,rgba(0,32,0,.3) 20px) #010;background-size:400%;animation:progress 360s 3s linear infinite both}
 #config_ui + .wizardbuttons{margin:-14px 0 10px}
 #setupwizard input[name="skipbw"],#setupwizard input[name="cancelbw"]{float:left}
@@ -27,7 +27,7 @@ body#wizardpage{background:none}
 #wizard p:not(.infohelp):last-of-type{padding-bottom:20px}
 #wizard .infohelp{font-size:115%}
 #wizardpage #bandwidthconfig tr:nth-child(n+2) td:last-child:not(.infohelp){background:#000800}
-#wizardpage #langsettings{padding:7px 6px}
+#wizardpage #langsettings{padding:7px 6px 100px 6px;background:url(/themes/console/images/bot.webp) no-repeat right 6px bottom / 100px auto,var(--bg_dots)}
 #wizardpage #messages{animation:hide-up .5s ease-out 3.5s forwards!important}
 #wizardpage #messages li{padding:0;text-align:center}
 #xhr #bandwidth{padding:38px 24px 38px 86px;width:100%;position:absolute;top:-10px;left:-1px;right:-1px}
