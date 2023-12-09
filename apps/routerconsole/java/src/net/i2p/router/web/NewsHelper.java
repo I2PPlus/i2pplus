@@ -323,8 +323,12 @@ public class NewsHelper extends ContentHelper {
              buf.append("\nSigned development update available (").append(updateVersion()).append(")");
          } else if (isUnsignedUpdateAvailable(ctx) && isPlus) {
              buf.append("\nI2P+ update available (").append(unsignedUpdateVersion()).append(")");
+         } else if (isPlus && unsignedVersionDownloaded() != null) {
+             buf.append("\nI2P+ update downloaded (").append(unsignedVersionDownloaded()).append(") - restart to install.");
          } else if (isUnsignedUpdateAvailable(ctx)) {
              buf.append("\nUnsigned update available (").append(unsignedUpdateVersion()).append(")");
+         } else if (unsignedVersionDownloaded() != null) {
+             buf.append("\nUnsigned update downloaded (").append(unsignedVersionDownloaded()).append(") - restart to install.");
          } else {
              buf.append("\nNo update currently available.");
          }
