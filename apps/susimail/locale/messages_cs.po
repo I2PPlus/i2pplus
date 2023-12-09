@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-11-25 13:24+0000\n"
+"PO-Revision-Date: 2023-12-09 10:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -22,9 +22,9 @@ msgstr ""
 #, java-format
 msgid "{0} new message"
 msgid_plural "{0} new messages"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} nová zpráva"
+msgstr[1] "Nové zprávy: {0}"
+msgstr[2] "Nové zprávy: {0}"
 
 #: src/src/i2p/susi/webmail/MailCache.java:532
 msgid "Email"
@@ -266,9 +266,9 @@ msgstr "Načítání zpráv, čekejte prosím..."
 #, java-format
 msgid "1 message"
 msgid_plural "{0} messages"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 zpráva"
+msgstr[1] "Počet zpráv: {0}"
+msgstr[2] "Počet zpráv: {0}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2294
 #: src/src/i2p/susi/webmail/WebMail.java:3380
@@ -415,7 +415,7 @@ msgstr "Smazat vybrané přílohy"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3125
 msgid "I2PMail Login"
-msgstr ""
+msgstr "I2PMail Login"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3129
 msgid "User"

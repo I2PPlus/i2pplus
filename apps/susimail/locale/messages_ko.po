@@ -7,20 +7,22 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-10-23 08:10+0000\n"
+"PO-Revision-Date: 2023-12-09 10:11+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: src/src/i2p/susi/webmail/MailCache.java:529
 #: src/src/i2p/susi/webmail/WebMail.java:2410
 #, java-format
 msgid "{0} new message"
 msgid_plural "{0} new messages"
-msgstr[0] ""
+msgstr[0] "{0}개의 새 메시지"
 
 #: src/src/i2p/susi/webmail/MailCache.java:532
 msgid "Email"
@@ -235,9 +237,7 @@ msgstr "삭제하려는 메세지 없음."
 #: src/src/i2p/susi/webmail/WebMail.java:1800
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"호스트가 변경되지 않았습니다. 호스트를 바꾸지 않았습니다. 설정 파일 {0}을 편"
-"집해 호스트를 변경하세요."
+msgstr "호스트가 변경되지 않았습니다. 호스트를 바꾸지 않았습니다. 설정 파일 {0}을 편집해 호스트를 변경하세요."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1820
 msgid "Configuration saved"
@@ -259,10 +259,10 @@ msgid "Loading messages, please wait..."
 msgstr "메시지를 로드하는 중입니다. 잠시 기다려 주세요..."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2292
-#, fuzzy, java-format
+#, java-format
 msgid "1 message"
 msgid_plural "{0} messages"
-msgstr[0] "{0} 메세지"
+msgstr[0] "{0} 메시지"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2294
 #: src/src/i2p/susi/webmail/WebMail.java:3380
@@ -305,7 +305,7 @@ msgstr "{0}은 {1}에서 제공하는 I2P 전용 서비스입니다."
 #: src/src/i2p/susi/webmail/WebMail.java:2467
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
-msgstr "{0} 웹메일 클라이언트"
+msgstr "{0} webmail client &copy Susi 2004-2005."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2648
 #: src/src/i2p/susi/webmail/WebMail.java:3296
@@ -330,7 +330,7 @@ msgstr "받는이 없음."
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:302
 #, java-format
 msgid "Email is too large, max is {0}"
-msgstr ""
+msgstr "이메일이 너무 큽니다. 최대 크기는 {0}입니다."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2855
 #: src/src/i2p/susi/webmail/WebMail.java:2936
@@ -396,7 +396,6 @@ msgstr "첨부파일 추가"
 
 #. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
 #: src/src/i2p/susi/webmail/WebMail.java:3091
-#, fuzzy
 msgid "Add attachment"
 msgstr "첨부파일 추가"
 
@@ -519,7 +518,7 @@ msgstr "해당 메세지들을 삭제합니까?"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3404
 msgid "Yes, really delete them!"
-msgstr "예"
+msgstr "네, 정말로 삭제하세요!"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3410
 msgid "Delete Selected"
@@ -561,7 +560,7 @@ msgstr "이 메세지를 삭제합니까?"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3494
 msgid "Yes, really delete it!"
-msgstr "예"
+msgstr "응 정말 삭제해!"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3522
 msgid "Reply"
@@ -620,11 +619,11 @@ msgstr "서버 응답 없음"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
+msgstr "메일 서버 로그인에 실패했습니다. 사용자 이름이나 비밀번호가 잘못되었습니다."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
+msgstr "로그아웃한 후 올바른 사용자 이름과 비밀번호로 다시 로그인하세요."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

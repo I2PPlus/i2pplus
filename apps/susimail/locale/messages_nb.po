@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-11-25 04:53+0000\n"
+"PO-Revision-Date: 2023-12-09 10:07+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb\n"
@@ -22,8 +22,8 @@ msgstr ""
 #, java-format
 msgid "{0} new message"
 msgid_plural "{0} new messages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} ny melding"
+msgstr[1] "{0} nye meldinger"
 
 #: src/src/i2p/susi/webmail/MailCache.java:532
 msgid "Email"
@@ -45,7 +45,7 @@ msgstr "Re:"
 #: src/src/i2p/susi/webmail/WebMail.java:1255
 #: src/src/i2p/susi/webmail/WebMail.java:1256
 msgid "Fwd:"
-msgstr ""
+msgstr "Fwd:"
 
 #. MailDir-like
 #: src/src/i2p/susi/webmail/WebMail.java:214
@@ -228,8 +228,8 @@ msgstr "Meldingen ble ikke funnet."
 #, java-format
 msgid "1 message deleted."
 msgid_plural "{0} messages deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 melding slettet."
+msgstr[1] "{0} meldinger slettet."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1727
 #: src/src/i2p/susi/webmail/WebMail.java:1736
@@ -264,8 +264,8 @@ msgstr "Laster meldinger, vennligst vent..."
 #, java-format
 msgid "1 message"
 msgid_plural "{0} messages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 melding"
+msgstr[1] "{0} meldinger"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2294
 #: src/src/i2p/susi/webmail/WebMail.java:3380
@@ -286,7 +286,7 @@ msgstr "Oppsett"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2320
 msgid "I2PMail"
-msgstr ""
+msgstr "I2PMail"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2413
 msgid "No new messages"
@@ -381,11 +381,11 @@ msgstr "Til"
 #: src/src/i2p/susi/webmail/WebMail.java:3078
 #: src/src/i2p/susi/webmail/WebMail.java:3596
 msgid "Cc"
-msgstr ""
+msgstr "Cc"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3080
 msgid "Bcc"
-msgstr ""
+msgstr "Bcc"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3082
 #: src/src/i2p/susi/webmail/WebMail.java:3249
@@ -477,8 +477,8 @@ msgstr "Oppdater siden"
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 melding"
+msgstr[1] "{0} meldinger"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3228
 #: src/src/i2p/susi/webmail/WebMail.java:3531
