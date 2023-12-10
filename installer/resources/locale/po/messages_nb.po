@@ -156,11 +156,11 @@ msgid "Stop if running as a daemon or in another console."
 msgstr "Stopp hvis kjører som en daemon eller i en annen konsoll."
 
 #: ../i2prouter:1888
-msgid "Stop gracefully, may take up to 11 minutes or more."
+msgid "Stop gracefully, may take up to 11 minutes."
 msgstr "Stopp på en høflig måte, kan ta opptil 11 minutter eller mer."
 
 #: ../i2prouter:1889
-msgid "Restart gracefully, may take up to 11 minutes or more."
+msgid "Restart gracefully, may take up to 11 minutes."
 msgstr "Start på nytt på en høflig måte, kan ta opptil 11 minutter eller mer."
 
 #: ../i2prouter:1890

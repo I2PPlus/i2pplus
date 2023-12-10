@@ -156,11 +156,11 @@ msgid "Stop if running as a daemon or in another console."
 msgstr "关闭作为服务进程或从其他控制台启动的I2P。"
 
 #: ../i2prouter:1888
-msgid "Stop gracefully, may take up to 11 minutes or more."
+msgid "Stop gracefully, may take up to 11 minutes."
 msgstr "自然关闭，可以需要最多11分钟。"
 
 #: ../i2prouter:1889
-msgid "Restart gracefully, may take up to 11 minutes or more."
+msgid "Restart gracefully, may take up to 11 minutes."
 msgstr "自然关闭，可以需要最多11分钟。"
 
 #: ../i2prouter:1890

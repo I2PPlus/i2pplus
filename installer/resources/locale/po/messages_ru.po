@@ -7,14 +7,15 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2017-09-19 14:41+0000\n"
+"PO-Revision-Date: 2023-12-10 12:34+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
-"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: ../i2prouter:236
 msgid "Failed to load the wrapper"
@@ -155,14 +156,12 @@ msgid "Stop if running as a daemon or in another console."
 msgstr "Остановить, если демон запущен в другой консоли."
 
 #: ../i2prouter:1888
-#, fuzzy
-msgid "Stop gracefully, may take up to 11 minutes or more."
-msgstr "Остановить медленно, может отнять до 11 минут."
+msgid "Stop gracefully, may take up to 11 minutes."
+msgstr "Остановитесь изящно, это может занять до 11 минут."
 
 #: ../i2prouter:1889
-#, fuzzy
-msgid "Restart gracefully, may take up to 11 minutes or more."
-msgstr "Остановить медленно, может отнять до 11 минут."
+msgid "Restart gracefully, may take up to 11 minutes."
+msgstr "Перезапустите корректно. Это может занять до 11 минут."
 
 #: ../i2prouter:1890
 msgid "Stop if running and then start."
@@ -190,8 +189,7 @@ msgstr "Запросить дамп нитей Java, если запущено."
 
 #: ../i2prouter:1908
 msgid "Please edit i2prouter and set the variable RUN_AS_USER"
-msgstr ""
-"Пожалуйста, отредактируйте i2prouter и установите переменную RUN_AS_USER"
+msgstr "Пожалуйста, отредактируйте i2prouter и установите переменную RUN_AS_USER"
 
 #: ../i2prouter:1913
 msgid "Running I2P as the root user is *not* recommended."
@@ -199,6 +197,4 @@ msgstr "Запускать I2P от имени root'а *НЕ* рекоменду
 
 #: ../i2prouter:1916
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
-msgstr ""
-"Чтобы всё равно запустить под root'ом, отредактируйте i2prouter и установите "
-"ALLOW_ROOT=true."
+msgstr "Чтобы всё равно запустить под root'ом, отредактируйте i2prouter и установите ALLOW_ROOT=true."

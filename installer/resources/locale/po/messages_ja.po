@@ -7,12 +7,15 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2017-06-30 21:33+0000\n"
+"PO-Revision-Date: 2023-12-10 12:15+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: ../i2prouter:236
 msgid "Failed to load the wrapper"
@@ -96,9 +99,7 @@ msgstr "$APP_LONG_NAME は起動しています: PID:$pid"
 #: ../i2prouter:1305
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr ""
-"$APP_LONG_NAME は起動しています: PID:$pid、 ラッパー:$STATUS、 Java:"
-"$JAVASTATUS"
+msgstr "$APP_LONG_NAME は起動しています: PID:$pid、 ラッパー:$STATUS、 Java:$JAVASTATUS"
 
 #: ../i2prouter:1358 ../i2prouter:1370 ../i2prouter:1389 ../i2prouter:1406
 #: ../i2prouter:1473 ../i2prouter:1493 ../i2prouter:1507 ../i2prouter:1521
@@ -155,14 +156,12 @@ msgid "Stop if running as a daemon or in another console."
 msgstr "デーモンとして、あるいは他のコンソールで起動中の場合停止"
 
 #: ../i2prouter:1888
-#, fuzzy
-msgid "Stop gracefully, may take up to 11 minutes or more."
-msgstr "適切に停、最大11分掛かる恐れがあります。"
+msgid "Stop gracefully, may take up to 11 minutes."
+msgstr "正常に停止します。最大 11 分かかる場合があります。"
 
 #: ../i2prouter:1889
-#, fuzzy
-msgid "Restart gracefully, may take up to 11 minutes or more."
-msgstr "適切に停、最大11分掛かる恐れがあります。"
+msgid "Restart gracefully, may take up to 11 minutes."
+msgstr "正常に再起動します。最大 11 分かかる場合があります。"
 
 #: ../i2prouter:1890
 msgid "Stop if running and then start."
@@ -198,6 +197,4 @@ msgstr "root ユーザーとしての I2P の起動は推奨され*ません*。
 
 #: ../i2prouter:1916
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
-msgstr ""
-"とにかく root として起動し、 i2prouter を編集して、ALLOW_ROOT=true と設定す"
-"る。"
+msgstr "とにかく root として起動し、 i2prouter を編集して、ALLOW_ROOT=true と設定する。"
