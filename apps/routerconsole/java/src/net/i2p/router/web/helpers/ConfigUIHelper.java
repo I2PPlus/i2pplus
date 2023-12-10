@@ -109,17 +109,15 @@ public class ConfigUIHelper extends HelperBase {
      *  Note: To avoid truncation, ensure language name is no longer than 17 chars.
      */
     private static final String langs[][] = {
-        //
-        // Note: any additions, also add to:
-        // apps/i2psnark/java/src/org/klomp/snark/standalone/ConfigUIHelper.java
-        // apps/routerconsole/jsp/console.jsp
-        // apps/routerconsole/jsp/home.jsp
-        // .tx/config
-        // New lang_xx flags: Add to top-level build.xml
-        // Names must be 18 chars or less (including country if specified)
-        //
-        // NOTE: flag field now unused, flags are not displayed
-        //
+        /**
+            Note: any additions, also add to:
+            apps/i2psnark/java/src/org/klomp/snark/standalone/ConfigUIHelper.java
+            apps/routerconsole/jsp/console.jsp
+            apps/routerconsole/jsp/home.jsp
+            .tx/config
+            New lang_xx flags: Add to top-level build.xml
+            Names must be 18 chars or less (including country if specified)
+        **/
         { "ar", "lang_ar", "Arabic عربية", null },
         { "az", "az", "Azerbaijani", null },
         { "cs", "cz", "Čeština", null },
@@ -127,38 +125,37 @@ public class ConfigUIHelper extends HelperBase {
         { "de", "de", "Deutsch", null },
         { "el", "gr", "Greek Ελληνικά", null },
         { "en", "us", "English", null },
-        //{ "es_AR", "ar", "Español" ,"Argentina" },
         { "es", "es", "Español", null },
         { "et", "ee", "Eesti", null },
         { "fa", "ir", "Persian فارسی", null },
         { "fi", "fi", "Suomi", null },
         { "fr", "fr", "Français", null },
-        //{ "gl", "lang_gl", "Galego", null },
         { "hu", "hu", "Magyar", null },
         { "in", "id", "Bahasa Indonesia", null },
         { "it", "it", "Italiano", null },
-        //{ "iw", "il", "Hebrew עברית", null },
         { "ja", "jp", "Japanese 日本語", null },
         { "ko", "kr", "Korean 한국어", null },
-        //{ "ku", "ku", "Kurdî", null },
-        //{ "mg", "mg", "Malagasy", null },
         { "nb", "no", "Norsk (bokmål)", null },
         { "nl", "nl", "Nederlands", null },
         { "pl", "pl", "Polski", null },
-        //{ "pt_BR", "br", "Português", "Brazil" },
         { "pt", "pt", "Português", null },
         { "ro", "ro", "Română", null },
         { "ru", "ru", "Russian Русский", null },
-        //{ "sk", "sk", "Slovenčina", null },
         { "sv", "se", "Svenska", null },
-        //{ "tk", "tm", "Türkmen", null },
         { "tr", "tr", "Türkçe", null },
         { "uk", "ua", "Ukraine Українська", null },
         { "vi", "vn", "Vietnam Tiếng Việt", null },
-        { "xx", "a1", "Untagged strings", null },
         { "zh", "cn", "Chinese 中文", null },
         { "zh_TW", "tw", "Chinese 中文", "Taiwan" },
-
+        { "xx", "a1", "Untagged strings", null },
+        //{ "es_AR", "ar", "Español" ,"Argentina" },
+        //{ "gl", "lang_gl", "Galego", null },
+        //{ "iw", "il", "Hebrew עברית", null },
+        //{ "ku", "ku", "Kurdî", null },
+        //{ "mg", "mg", "Malagasy", null },
+        //{ "pt_BR", "br", "Português", "Brazil" },
+        //{ "sk", "sk", "Slovenčina", null },
+        //{ "tk", "tm", "Türkmen", null },
     };
 
 
