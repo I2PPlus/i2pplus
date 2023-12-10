@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-12-03 23:16+0000\n"
+"PO-Revision-Date: 2023-12-10 07:47+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: tr_TR\n"
@@ -72,15 +72,15 @@ msgstr "Reseed'i Başlatma"
 #, java-format
 msgid "Acquired {0} router info from reseed hosts"
 msgid_plural "Acquired {0} router infos from reseed hosts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Yeniden ev sahiplerinden alındı {0} yönlendirici bilgileri"
+msgstr[1] "Reseed ana bilgisayarlardan alındı {0} yönlendirici infos"
 
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:382
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Reseed ana bilgisayarlardan sadece 1 yönlendirici bilgisi edinildi"
+msgstr[1] "Yalnızca Reseed Ana Bilgisayarlardan {0} yönlendirici infos edinildi"
 
 #. remove dupe error msgs
 #: ../../../router/java/src/net/i2p/router/networkdb/reseed/Reseeder.java:407
@@ -2582,8 +2582,8 @@ msgstr "Dosyadan yeniden tohumlanamadı"
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Dosyadan yeniden başarılı, yüklü {0} yönlendirici bilgileri."
+msgstr[1] "Dosyadan yeniden başarılı, yüklü {0} yönlendirici infos."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:105
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:681
@@ -5407,22 +5407,22 @@ msgstr "Eşten kopya paketler alındı"
 #, java-format
 msgid "Showing {0} recent profile."
 msgid_plural "Showing {0} recent profiles."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} son profili gösteriyor."
+msgstr[1] "{0} son profilleri gösteriyor."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} eski profili gizleme."
+msgstr[1] "{0} eski profilleri gizleme."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:103
 #, java-format
 msgid "Hiding {0} standard profile."
 msgid_plural "Hiding {0} standard profiles."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} standart profili gizleme."
+msgstr[1] "{0} standart profilleri gizleme."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:104
 msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
@@ -9553,7 +9553,7 @@ msgstr "Disable edilebilir <code>clients.config</code> dosyasında. Ayrıca <cod
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:567
 msgid "Can be disabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces in the <code>jetty.xml</code> file."
-msgstr ""
+msgstr "<code>clients.config</code> dosyasında devre dışı bırakılabilir. Ayrıca, <code>jetty.xml</code> dosyasında belirli bir arayüze veya tüm arayüzlere bağlanacak şekilde yapılandırılabilir."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:569
 msgid "Outgoing mail to smtp.postman.i2p"
@@ -11477,7 +11477,7 @@ msgstr "Kurulumu Atla"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:481
 msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr ""
+msgstr "Bu yönlendirici konsolu ve web uygulamaları (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrentlar</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tünel yöneticisi</a> vb.) için kullanılacak dili seçin. Dilinizi ileride değiştirmek, yönlendirici konsolu temasını değiştirmek veya konsola erişmek için bir şifre yapılandırmak isterseniz, bunu <a href=/configui target=_blank rel=noreferrer>Kullanıcı Arayüzü yapılandırma sayfasında</a> yapabilirsiniz."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:483
 msgid "Router Console &amp; WebApps Display Language"

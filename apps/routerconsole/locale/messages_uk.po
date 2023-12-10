@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-11-28 02:47+0000\n"
+"PO-Revision-Date: 2023-12-10 07:40+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk_UA\n"
@@ -80,7 +80,7 @@ msgstr[2] "Отримав {0} routerinfos від Reseed Hosts"
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] "Отримав лише 1 інформацію про маршрутизатор від Reseed Hosts"
+msgstr[0] "Acquired only {0} router infos from reseed hosts"
 msgstr[1] "Отримав лише {0} маршрутизатор Infos від Reseed Hosts"
 msgstr[2] "Отримав лише {0} маршрутизатор Infos від Reseed Hosts"
 
@@ -5859,9 +5859,9 @@ msgstr "Середнє значення за весь період"
 #, java-format
 msgid "1 event"
 msgid_plural "{0} events"
-msgstr[0] "1 події"
-msgstr[1] "{0} events"
-msgstr[2] "{0} events"
+msgstr[0] "{0} події"
+msgstr[1] "{0} події"
+msgstr[2] "{0} події"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:52
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:164
@@ -11491,7 +11491,7 @@ msgstr "Пропустити налаштування"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:481
 msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr ""
+msgstr "Виберіть мову, яка буде використовуватися для консолі маршрутизатора та веб-додатків (<a href=/webmail target=_blank rel=noreferrer>веб-пошта</a>, <a href=/torrents target=_blank rel=noreferrer>торенти</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>керування тунелями</a> тощо). Якщо ви бажаєте змінити мову у майбутньому, змінити тему консолі маршрутизатора або налаштувати пароль для доступу до консолі, ви можете зробити це на сторінці налаштування <a href=/configui target=_blank rel=noreferrer>інтерфейсу користувача</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:483
 msgid "Router Console & WebApps Display Language"

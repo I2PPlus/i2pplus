@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:50+0000\n"
-"PO-Revision-Date: 2023-12-03 01:28+0000\n"
+"PO-Revision-Date: 2023-12-10 07:32+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ar\n"
@@ -376,12 +376,12 @@ msgstr "يُبلغ UPnP أن الحد الأقصى لمعدل بتات المن�
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1255
 #, java-format
 msgid "{0} port {1,number,#####} was successfully forwarded by UPnP."
-msgstr ""
+msgstr "{0} تم توجيه المنفذ {1,number,#####} بنجاح عن طريق UPnP."
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1257
 #, java-format
 msgid "{0} port {1,number,#####} was not forwarded by UPnP."
-msgstr ""
+msgstr "{0} لم يتم توجيه المنفذ {1,number,#####} بواسطة UPnP."
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:904
 #: ../java/src/net/i2p/router/web/DeadlockDetector.java:110
@@ -2593,12 +2593,12 @@ msgstr "فشلت Reseed من الملف"
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "Reseed ناجح ، محمّل {0} infos من ملف."
+msgstr[1] "Reseed ناجح ، محمّل {0} infos من ملف."
+msgstr[2] "Reseed ناجح ، محمّل {0} infos من ملف."
+msgstr[3] "Reseed ناجح ، محمّل {0} infos من ملف."
+msgstr[4] "Reseed ناجح ، محمّل {0} infos من ملف."
+msgstr[5] "Reseed ناجح ، محمّل {0} infos من ملف."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:105
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:681
@@ -2657,12 +2657,12 @@ msgstr[5] "{0} أنفاق النقل لا تزال نشطة"
 #, java-format
 msgid "Please wait for routing commitment to expire for {0} tunnel"
 msgid_plural "Please wait for routing commitments to expire for {0} tunnels"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "يرجى انتظار التزامات التوجيه لتنتهي صلاحية الأنفاق {0}"
+msgstr[1] "يرجى انتظار التزامات التوجيه لتنتهي صلاحية الأنفاق {0}"
+msgstr[2] "يرجى انتظار التزامات التوجيه لتنتهي صلاحية الأنفاق {0}"
+msgstr[3] "يرجى انتظار التزامات التوجيه لتنتهي صلاحية الأنفاق {0}"
+msgstr[4] "يرجى انتظار التزامات التوجيه لتنتهي صلاحية الأنفاق {0}"
+msgstr[5] "يرجى انتظار التزامات التوجيه لتنتهي صلاحية الأنفاق {0}"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigRestartBean.java:96
 #, java-format
@@ -5445,34 +5445,34 @@ msgstr "الحزم المكررة المستلمة من النظير"
 #, java-format
 msgid "Showing {0} recent profile."
 msgid_plural "Showing {0} recent profiles."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "عرض {0} ملفات تعريف حديثة."
+msgstr[1] "عرض {0} ملفات تعريف حديثة."
+msgstr[2] "عرض {0} ملفات تعريف حديثة."
+msgstr[3] "عرض {0} ملفات تعريف حديثة."
+msgstr[4] "عرض {0} ملفات تعريف حديثة."
+msgstr[5] "عرض {0} ملفات تعريف حديثة."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "إخفاء {0} ملف تعريف أقدم."
+msgstr[1] "إخفاء {0} ملف تعريف أقدم."
+msgstr[2] "إخفاء {0} ملف تعريف أقدم."
+msgstr[3] "إخفاء {0} ملف تعريف أقدم."
+msgstr[4] "إخفاء {0} ملف تعريف أقدم."
+msgstr[5] "إخفاء {0} ملف تعريف أقدم."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:103
 #, java-format
 msgid "Hiding {0} standard profile."
 msgid_plural "Hiding {0} standard profiles."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "إخفاء ملف التعريف القياسي {0}."
+msgstr[1] "إخفاء ملف التعريف القياسي {0}."
+msgstr[2] "إخفاء ملف التعريف القياسي {0}."
+msgstr[3] "إخفاء ملف التعريف القياسي {0}."
+msgstr[4] "إخفاء ملف التعريف القياسي {0}."
+msgstr[5] "إخفاء ملف التعريف القياسي {0}."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:104
 msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
@@ -11253,7 +11253,7 @@ msgstr "بريد الويب"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:492
 msgid "Local webserver for hosting content on the I2P network"
-msgstr ""
+msgstr "خادم الويب المحلي لاستضافة المحتوى على شبكة I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:496
 msgid "Information &amp; Diagnostics"
@@ -11377,7 +11377,7 @@ msgstr "إحصائيات جهاز التوجيه"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:632
 msgid "Configure router updates"
-msgstr ""
+msgstr "تكوين تحديثات جهاز التوجيه"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:636
 msgid "Configuration wizard for new users"
@@ -11663,7 +11663,7 @@ msgstr "إعداد المتصفح"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:677
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr ""
+msgstr "للوصول إلى مواقع الويب المستضافة على شبكة I2P واستخدام البروكسي الافتراضي للاتصال بمواقع الويب على الشبكة العادية اختياريًا، ستحتاج إلى تكوين المتصفح الخاص بك لاستخدام البروكسي <b>HTTP</b> لـ I2P +، والذي يعمل بشكل افتراضي على <code>127.0.0.1 البورت 4444</code>. لمزيد من المساعدة، انظر <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>دليل التكوين </a> ، أو <a href=/help/configuration#browserconfig>البرنامج التعليمي الصغير لفايرفوكس</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/wizard_jsp.java:684
 msgid "Welcome to I2P+!"

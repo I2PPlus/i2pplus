@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:54+0000\n"
-"PO-Revision-Date: 2023-12-01 18:10+0000\n"
+"PO-Revision-Date: 2023-12-10 06:30+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fa\n"
@@ -368,12 +368,12 @@ msgstr "UPnP گزارش می دهد که حداکثر نرخ بیت بالادس
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1255
 #, java-format
 msgid "{0} port {1,number,#####} was successfully forwarded by UPnP."
-msgstr ""
+msgstr "msgstr \"{0} پورت {1,number,#####} با موفقیت توسط UPnP پیشگیری شد.\""
 
 #: ../../../router/java/src/net/i2p/router/transport/UPnP.java:1257
 #, java-format
 msgid "{0} port {1,number,#####} was not forwarded by UPnP."
-msgstr ""
+msgstr "msgstr \"{0} پورت {1,number,#####} توسط UPnP پیشگیری نشد.\""
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:904
 #: ../java/src/net/i2p/router/web/DeadlockDetector.java:110
@@ -2580,8 +2580,8 @@ msgstr "Reseed از فایل انجام نشد"
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Reseed موفق ، بارگیری {0} روتر از پرونده."
+msgstr[1] "Reseed موفق ، بارگیری اطلاعات روتر {0} از پرونده."
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigReseedHandler.java:105
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:681
@@ -2745,15 +2745,15 @@ msgstr "خطا در ذخیره پیکربندی (اعمال شده اما ذخی
 #, java-format
 msgid "{0} hop"
 msgid_plural "{0} hops"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} هاپ"
+msgstr[1] "{0} هاپ"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:23
 #, java-format
 msgid "{0} tunnel"
 msgid_plural "{0} tunnels"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} تونل ها"
+msgstr[1] "{0} تونل"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigTunnelsHelper.java:51
 msgid "Exploratory tunnels"
@@ -4446,7 +4446,7 @@ msgstr "جستجوی پیشرفته"
 #: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:61
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:527
 msgid "LeaseSet Lookup"
-msgstr ""
+msgstr "Pencarian LeaseSet"
 
 #. 9  -
 #. 10 - f=5
@@ -4543,7 +4543,7 @@ msgstr "برآورد کل اجاره"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:795
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:527
 msgid "LeaseSet"
-msgstr ""
+msgstr "LeaseSet"
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:796
 msgid "LeaseSet Key"
@@ -5155,8 +5155,8 @@ msgstr "اتصال عقب افتاده است"
 #, java-format
 msgid "{0} peer"
 msgid_plural "{0} peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} همسالان"
+msgstr[1] "{0} همکار"
 
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:546
 msgid "UDP connections"
@@ -5284,8 +5284,8 @@ msgstr "آنها پیشنهاد دادند که ما را معرفی کنند"
 #, java-format
 msgid "{0} fail"
 msgid_plural "{0} fails"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} شکست می خورد"
+msgstr[1] "{0} شکست"
 
 #. 2
 #: ../java/src/net/i2p/router/web/helpers/PeerHelper.java:704
@@ -5405,22 +5405,22 @@ msgstr "بسته های تکراری دریافت شده از همتایان"
 #, java-format
 msgid "Showing {0} recent profile."
 msgid_plural "Showing {0} recent profiles."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "نمایش پروفایل های {0} اخیر."
+msgstr[1] "نمایش مشخصات {0} اخیر."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101
 #, java-format
 msgid "Hiding {0} older profile."
 msgid_plural "Hiding {0} older profiles."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "مخفی کردن {0} پروفایل های قدیمی."
+msgstr[1] "مخفی کردن مشخصات {0} قدیمی تر."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:103
 #, java-format
 msgid "Hiding {0} standard profile."
 msgid_plural "Hiding {0} standard profiles."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "مخفی کردن {0} پروفایل های استاندارد."
+msgstr[1] "مخفی کردن {0} نمایه استاندارد."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:104
 msgid "Note that the profiler relies on sustained client tunnel usage to accurately profile peers."
@@ -5557,22 +5557,22 @@ msgstr "همتایان"
 #, java-format
 msgid "{0} fast peer"
 msgid_plural "{0} fast peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} همسالان سریع"
+msgstr[1] "{0} همسالان سریع"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:377
 #, java-format
 msgid "{0} high capacity peer"
 msgid_plural "{0} high capacity peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} همسالان با ظرفیت بالا"
+msgstr[1] "{0} همتا با ظرفیت بالا"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:379
 #, java-format
 msgid "{0} integrated peer"
 msgid_plural "{0} integrated peers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} همسالان یکپارچه"
+msgstr[1] "{0} همکار یکپارچه"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:393
 msgid "1h Fail Rate"
@@ -5779,8 +5779,8 @@ msgstr "فرکانس متوسط ​​طول عمر"
 #, java-format
 msgid "{0} event"
 msgid_plural "{0} events"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} رویدادها"
+msgstr[1] "{0} رویداد"
 
 #: ../java/src/net/i2p/router/web/helpers/StatsGenerator.java:170
 msgid "rate"
@@ -5841,8 +5841,8 @@ msgstr "مقدار متوسط ​​مادام العمر"
 #, java-format
 msgid "1 event"
 msgid_plural "{0} events"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} رویدادها"
+msgstr[1] "1 رویداد"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:52
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:164
@@ -7279,7 +7279,7 @@ msgstr "سوسیمیل"
 
 #: ../java/strings/Strings.java:17
 msgid "susidns"
-msgstr ""
+msgstr "susidns"
 
 #: ../java/strings/Strings.java:18
 msgid "routerconsole"
@@ -7409,7 +7409,7 @@ msgstr "رمزگذاری"
 
 #: ../java/strings/Strings.java:70
 msgid "Stream"
-msgstr ""
+msgstr "Mengalir"
 
 #. parameters in transport addresses (netdb.jsp)
 #. may or may not be worth translating
@@ -7592,17 +7592,17 @@ msgstr "برای ایجاد تغییرات ، پرونده را ویرایش ک�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:280
 msgid "config clients"
-msgstr ""
+msgstr "تنظیم‌های مشتری"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:284
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:286
 #, java-format
 msgid "Are you sure you want to delete {0}?"
-msgstr ""
+msgstr "آیا از حذف {0} اطمینان دارید؟"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:433
 msgid "Router Clients"
-msgstr ""
+msgstr "مشتریان مسیریاب"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:532
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configplugins_jsp.java:539
@@ -7624,12 +7624,12 @@ msgstr "تنظیمات وب‌اپ"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:540
 #, java-format
 msgid "To change client options, edit the files in: {0}"
-msgstr ""
+msgstr "برای تغییر گزینه‌های کلاینت، فایل‌ها را در: {0} ویرایش کنید"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:542
 #, java-format
 msgid "To change client options, edit the file: {0}"
-msgstr ""
+msgstr "برای تغییر گزینه‌های کلاینت، فایل را ویرایش کنید: {0}"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configclients_jsp.java:547
 msgid "Be careful changing any settings here. The 'router console' and 'application tunnels' are required for most uses of I2P. Only advanced users should change these."
@@ -7691,7 +7691,7 @@ msgstr "صادر کردن کلید محرمانه خانواده برای وار
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:581
 #, java-format
 msgid "Restart required to activate family {0}."
-msgstr ""
+msgstr "به منظور فعال سازی خانواده {0} نیاز است دوباره راه‌اندازی شود."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:583
 msgid "After restarting, you may export the family key."
@@ -7704,7 +7704,7 @@ msgstr "ترک خانواده روتر"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configfamily_jsp.java:593
 #, java-format
 msgid "No longer be a member of the family {0}."
-msgstr ""
+msgstr "دیگر عضو خانواده {0} نباش."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confighome_jsp.java:282
 msgid "config home"
@@ -7757,7 +7757,7 @@ msgstr "همه تغییرات برای اعمال شدن نیاز به راه ا
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configi2cp_jsp.java:538
 msgid "External I2P Client Protocol (I2CP) Interface Access"
-msgstr ""
+msgstr "پروتکل مشتری I2P خارجی (I2CP) دسترسی به رابط"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configi2cp_jsp.java:544
 msgid "Enabled without SSL"
@@ -7995,7 +7995,7 @@ msgstr "UPnP را برای باز کردن پورت های فایروال فعا
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:595
 msgid "This mode enhances anonymity by preventing correlation between public IP address changes and your router identity. Both your router identity and UDP port will be changed."
-msgstr ""
+msgstr "این حالت انونیمیتی را ارتقا می‌دهد و ارتباط بین تغییرات آدرس IP عمومی و هویت روتر شما را جلوگیری می‌کند. هر دو هویت روتر و درگاه UDP شما تغییر خواهند کرد. "
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:601
 msgid "Laptop mode"
@@ -8101,7 +8101,7 @@ msgstr "اتصالات UDP را به طور کامل غیرفعال کنید"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:725
 msgid "The router's external port allows communication with other routers. It is recommended to configure your firewall to allow inbound and outbound traffic on this port to optimize your router's performance on the network."
-msgstr ""
+msgstr "پورت خارجی روتر به ارتباط با روترهای دیگر اجازه می دهد. برای بهینه سازی عملکرد روتر خود در شبکه، توصیه می شود فایروال خود را به گونه ای پیکربندی کنید که ارتباطات ورودی و خروجی از این پورت را مجاز کند."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/confignet_jsp.java:727
 msgid "Do not reveal your port numbers to anyone, as they can be used to discover your IP address."
@@ -8113,7 +8113,7 @@ msgstr "همتایان پیکربندی"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:421
 msgid "Peer Manager"
-msgstr ""
+msgstr "مدیر همتا"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:549
 msgid "Manual Peer Controls"
@@ -8133,7 +8133,7 @@ msgstr "پاداش های نمایه را تنظیم کنید"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:578
 msgid "Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels."
-msgstr ""
+msgstr "بونوس ها ممکن است مثبت یا منفی باشند و بر شامل شدن همتای در لایه های سرعت بالا و ظرفیت بالا تأثیر می گذارند. همتایان سریع برای تونل های مشتری مورد استفاده قرار می گیرند و همتایان با ظرفیت بالا برای برخی از تونل های جستجویی استفاده می شوند."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configpeer_jsp.java:596
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/profiles_jsp.java:447
@@ -8187,11 +8187,11 @@ msgstr "پیکربندی مجدد"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:527
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
-msgstr ""
+msgstr "بازیابی منابع فرآیند راه‌اندازی استفاده شده برای پیدا کردن روترهای دیگر هنگام نصب اولیه I2P یا هنگامی که روتر شما تنها چند ارجاع دهنده روتر دارد."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:529
 msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr ""
+msgstr "برای فعال کردن تنظیم urlهای بازیابی، حالت <a href=\"/help/advancedsettings\">پیشرفته</a> کنسول را فعال کنید."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configreseed_jsp.java:535
 msgid "Reseeding Configuration"
@@ -8409,7 +8409,7 @@ msgstr "مجموعه آمار"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:528
 msgid "Configure I2P Stat Collection"
-msgstr ""
+msgstr "پیکربندی جمع‌آوری آمار I2P"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configstats_jsp.java:530
 msgid "A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>."
@@ -8470,7 +8470,7 @@ msgstr "تنظیمات پیش فرض برای استفاده عمومی بهین
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:551
 msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark."
-msgstr ""
+msgstr "برای تغییر تنظیمات تونل مشتری، از <a href=\"/i2ptunnelmgr\">مدیر تونل</a> یا صفحه <a href=\"/i2psnark/configure\">پیکربندی</a> برای I2PSnark استفاده کنید."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configtunnels_jsp.java:553
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
@@ -8495,7 +8495,7 @@ msgstr "(یک نسخه بسیار قدیمی شناسایی شده است. اس�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:548
 msgid "If you're not using IE, it's likely that your browser is pretending to be IE; please configure your browser (or proxy) to use a different User Agent string if you'd like to access the console themes."
-msgstr ""
+msgstr "اگر از مرورگر IE استفاده نمی‌کنید، احتمالا مرورگرتان تظاهر می‌کند که IE است؛ لطفاً اگر می‌خواهید به پوسته‌های کنسول دسترسی داشته باشید، مرورگرتان (یا پروکسی) را به‌گونه‌ای تنظیم کنید که از رشتهٔ عامل کاربر متفاوت استفاده کند."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configui_jsp.java:552
 msgid "Router Console Password"
@@ -8573,7 +8573,7 @@ msgstr "URL ها را به روز کنید"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:626
 msgid "These keys are used to validate official router updates, signed development builds and the official news feed"
-msgstr ""
+msgstr "این کلیدها برای اعتبارسنجی به‌روزرسانی‌های رسمی روتر، نسخه‌های توسعه امضا شده و فید خبری رسمی استفاده می‌شوند"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:628
 msgid "Trusted keys"
@@ -8590,7 +8590,7 @@ msgstr "URL را به روز کنید"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:640
 msgid "To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>"
-msgstr ""
+msgstr "برای به روز رسانی با نسخه های برخوردار از  I2P+ بی امضا: <code>http://skank.i2p/i2pupdate.zip</code>  و یا برای جدیدترین نسخه های توسعه بی امضا: <code>http://skank.i2p/dev/i2pupdate.zip</code>"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configupdate_jsp.java:644
 msgid "Update with unsigned development builds"
@@ -8606,7 +8606,7 @@ msgstr "پیکربندی برنامه های وب"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/configwebapps_jsp.java:540
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
-msgstr ""
+msgstr "برنامه های وب جاوا موجود در زیر توسط مشتری webConsole شروع و در  JVM همان مسیریاب اجرا می شوند. آن ها معمولا برنامه های وب قابل دسترس است از طریق کنسول مسیریاب هستند. آن ها می توانند برنامه های کامل ( مثلاً i2psnark) ، رابط های کاربری برای برنامه یا مشتری دیگری که باید به طور جداگانه فعال باشند ( مثلاً susidns ، i2ptunnel) یا اینکه هیچ رابط کاربری وبی نداشته باشند ( مثلاً addressbook) باشند."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/dns_jsp.java:449
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/dns_jsp.java:453
@@ -8939,7 +8939,7 @@ msgstr "این تنظیم تعیین می کند که کدام <a href=/profiles
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:471
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
-msgstr ""
+msgstr "وقتی به درستی تنظیم شود، در صورتی که روتر شما به عنوان یک floodfill برای شبکه خدمت می‌کند، مشارکت شما در floodfill از سایر روترها پنهان می‌شود. <a href=/configadvanced#ffconf>اطلاعات floodfill شما</a> مخفی خواهد شد."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:473
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
@@ -9488,7 +9488,7 @@ msgstr "گوش دادن UDP چندرسانه‌ای SSDP UPnP"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:523
 msgid "Cannot be changed. Binds to all interfaces. Can be disabled on the <a href=/confignet>Network Configuration page</a>."
-msgstr ""
+msgstr "نمیتواند تغییر کند. به همه رابط ها متصل میشود. میتواند در صفحه <a href=/confignet> پیکربندی شبکه </a> غیرفعال شود."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/faq_jsp.java:525
 msgid "BOB bridge"
@@ -9953,7 +9953,7 @@ msgstr "اگر به رشته «تایید ثبت‌نام» نیاز باشد، 
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:439
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
-msgstr ""
+msgstr "اگر شما عجله دارید و نمی‌توانید چند ساعت صبر کنید، می‌توانید به مردم بگویید از سرویس هدایت بازآدرسی \"پرش\" استفاده کنند. این سرویس معمولاً در عرض چند دقیقه پس از ثبت نام نام میزبان خود در همان سایت کار می‌کند. ابتدا با وارد کردن <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> در مرورگر خود آن را تست کنید. پس از آن که کار می‌کند، می‌توانید به دیگران بگویید از آن استفاده کنند."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/hostnameregistration_jsp.java:441
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='http://127.0.0.1:7657/susidns/details?h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for i2p-projekt.i2p</a>, and paste the link where it's required to share it with others."
@@ -10325,11 +10325,11 @@ msgstr "مقدمه ای برای فیلتر تونل"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:435
 msgid "Server tunnels, configurable in the <a href=/i2ptunnelmgr>Tunnel Manager</a>, provide a number of ways to limit access to the hosted service. Destination whitelisting, blacklisting, connection throttling, and tunnel filtering are methods provisioned to mitigate denial of service attacks, grant exclusive access to known I2P destinations, and manage traffic to the server."
-msgstr ""
+msgstr "تونل های سرور، قابل تنظیم در <a href=/i2ptunnelmgr>مدیر تونل</a>، روش هایی را برای محدود کردن دسترسی به سرویس میزبان فراهم می کنند. فهرست سفید مقصد، فهرست سیاه مقصد، نات اتصال کردن، و فیلترینگ تونل روش هایی هستند که برای پیشگیری از حملات امداد خدمات، اعطای دسترسی انحصاری به مقاصد آی تو پی شناخته شده، و مدیریت ترافیک به سرور به کار گرفته می شوند."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:437
 msgid "A tunnel filter can provide protection against denial of service attacks, without otherwise interrupting the service for genuine users, either in conjunction with the tunnel throttler or as an alternative strategy. It can also be used to log access to a hosted service to determine if the server is under attack, or simply to log all visitors by I2P destination. Additionally, a filter can function simultaneously as a whitelist and blacklist making it more flexible than the Tunnel Manager's access list controls. Note that multiple server tunnels can share a single filter file if you wish to implement a global filter."
-msgstr ""
+msgstr "فیلتر تونل می تواند محافظت در برابر حملات امداد خدمات فراهم کند، بدون متداول شدن خدمت برای کاربران واقعی، هم به همراه کنترل کننده نات یا به عنوان راه کار جایگزین. همچنین می تواند برای ثبت دسترسی به یک خدمت میزبان برای تشخیص آیا سرور به هجوم آمده است، یا به عنوان روشی برای ثبت تمام بازدیدکنندگان بر اساس مقصد آی تو پی استفاده شود. علاوه بر این، یک فیلتر همزمان می تواند به عنوان فهرست سفید و فهرست سیاه عمل کرده، که این خلاقانه تر از کنترل های لیست دسترسی مدیر تونل است. توجه کنید که اگر می خواهید فیلتر عمومی پیاده سازی کنید، چندین تونل سرور می توانند از یک فایل فیلتر بهره ببرند."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/tunnelfilter_jsp.java:441
 msgid "A filter is a text file that can contain one or more declarations. Blank lines and lines beginning with <i class=example>#</i> are ignored."
@@ -11019,7 +11019,7 @@ msgstr "خلاصه روتر"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jars_jsp.java:280
 msgid "Jar File Dump"
-msgstr ""
+msgstr "متن نوار ابزار فایل Jar"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/jobqueue_jsp.java:280
 msgid "job queue stats"
