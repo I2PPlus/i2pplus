@@ -6,7 +6,7 @@
 #setupwizard .langselect{float:none;display:inline-block}
 #setupwizard #langsettings{padding-bottom:4px}
 #wizardpage p{font-size:110%}
-#wizardpage .yes,#wizardpage .no{font-size:0;display:inline-block;width:20px;height:20px}
+#wizardpage .yes,#wizardpage .no{vertical-align:middle;font-size:0;display:inline-block;width:20px;height:20px}
 #wizardpage .yes{background:var(--yes) no-repeat center center/11px}
 #wizardpage .no{background:var(--no) no-repeat center center/10px}
 #wizardpage .wizardbuttons{margin-top:-6px}

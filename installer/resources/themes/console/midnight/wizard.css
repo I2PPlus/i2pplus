@@ -9,7 +9,7 @@ body{height:calc(100% - 2px)}
 #wizardpage #messages{top:-13px}
 #wizardpage .yes{background:var(--yes) no-repeat center center}
 #wizardpage .no{background:var(--no) no-repeat center center}
-#wizardpage .yes,#wizardpage .no{width:20px;height:20px;display:inline-block;font-size:0;background-size:12px}
+#wizardpage .yes,#wizardpage .no{vertical-align:middle;width:20px;height:20px;display:inline-block;font-size:0;background-size:12px}
 #wizard p,#wizard td{white-space:normal}
 #wizard .configtable{margin:0 0 11px}
 #wizard td{padding:10px}

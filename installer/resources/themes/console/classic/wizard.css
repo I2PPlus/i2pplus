@@ -8,7 +8,7 @@
 #wizardpage #sidebar .cancel{margin:4px 0 6px}
 #wizardpage #sidebar #sb_logo{height:44px!important}
 #wizardpage p{font-size:110%}
-#wizardpage .yes,#wizardpage .no{width:20px;height:20px;display:inline-block;font-size:0}
+#wizardpage .yes,#wizardpage .no{vertical-align:middle;width:20px;height:20px;display:inline-block;font-size:0}
 #wizardpage .yes{background:var(--yes) no-repeat center center}
 #wizardpage .no{background:var(--no) no-repeat center center}
 #langsettings{margin-bottom:-1px;padding:6px 8px 5px}
