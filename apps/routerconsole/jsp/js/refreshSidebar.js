@@ -95,6 +95,9 @@ function refreshSidebar() {
       document.querySelector("body").classList.remove("isDown");
     } else if (xhrsb.status === 404 || xhrsb.status === 500) {
       window.requestAnimationFrame(tangoDown);
+      if (isDown) {
+        setTimeout(refreshSidebar, 5000);
+      }
     } else {
       console.log("Unexpected status code: " + xhrsb.status);
     }
