@@ -2294,7 +2294,6 @@ table[id$="logs"] tr:nth-child(even){background:#000}
 table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #bugreports{margin-top:11px}
 #bugreports td{padding:20px 24px 20px 58px;background:var(--infohelp) no-repeat 15px center}
-#criticallogs+.tabletitle{margin-bottom:-2px}
 #criticallogs tr:first-child{display:none}
 #criticallogs td ,#routerlogs td,#eventlogs td,#wrapperlogs td{padding:5px 10px;font-weight:400;border-top:var(--border)}
 #criticallogs ul{margin:-6px -11px;border:var(--border)}
@@ -2317,6 +2316,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logs #eventlogLink:hover::after{transform:scale(1.2)}
 #logs h3 a{margin:-8px 0;padding:10px 2px 9px 10px;border-left:var(--border)}
 #logs h3 a:first-of-type::after{margin-right:-3px}
+#logs h3{margin-bottom:-2px}
 #logs h3+table{position:relative;z-index:1}
 #logs pre,#logs li{font-weight:600;opacity:.9}
 #logs li{width:100%;list-style:none;word-break:break-all;line-height:1.6;text-align:left;font:500 8.5pt var(--monospaced);border-top:1px solid #001800;border-right:1px solid #001800;border-bottom:1px solid #000}
