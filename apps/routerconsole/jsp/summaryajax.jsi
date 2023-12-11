@@ -29,7 +29,20 @@
   const onDomContentLoaded = () => {
     sectionToggler();
     stickySidebar();
-    initSidebarRefresh();
+    if (sbRefreshTimerId === null) {
+      initSidebarRefresh();
+    }
+    if (sbRefreshTimerId === null && sb) {
+      onVisible(sb, () => {
+        if (sbRefreshTimerId === null) {
+          initSidebarRefresh();
+        }
+      }, () => {
+        if (sbRefreshTimerId !== null) {
+          stopSidebarRefresh();
+        }
+      });
+    }
   };
   window.addEventListener("DOMContentLoaded", onDomContentLoaded);
   window.addEventListener("resize", () => stickySidebar());
