@@ -24,6 +24,7 @@ body{height:calc(100% - 2px)}
 #wizard #config_ui .infohelp{padding:20px 20px 20px 55px;background:#000 url(/themes/console/images/flags.png) no-repeat 15px center/28px}
 #wizard .langselect{margin:0 2px 7px;float:none;display:inline-block}
 #wizard #langsettings{padding-bottom:2px}
+#wizardpage #langsettings label[for="xx"]{display:none}
 #wizard h3{padding:10px 12px;border-width:1px}
 #wizardpage .sb form{padding:13px 0 15px}
 .wizardbuttons{margin-top:-14px}

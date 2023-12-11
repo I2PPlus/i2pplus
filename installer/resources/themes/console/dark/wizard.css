@@ -28,6 +28,7 @@ body#wizardpage{background:none}
 #wizard .infohelp{font-size:115%}
 #wizardpage #bandwidthconfig tr:nth-child(n+2) td:last-child:not(.infohelp){background:#000800}
 #wizardpage #langsettings{padding:7px 6px 100px 6px;background:url(/themes/console/images/bot.webp) no-repeat right 6px bottom / 100px auto,var(--bg_dots)}
+#wizardpage #langsettings label[for="xx"]{display:none}
 #wizardpage #messages{animation:hide-up .5s ease-out 3.5s forwards!important}
 #wizardpage #messages li{padding:0;text-align:center}
 #xhr #bandwidth{padding:38px 24px 38px 86px;width:100%;position:absolute;top:-10px;left:-1px;right:-1px}

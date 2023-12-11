@@ -20,3 +20,4 @@
 #wizardpage #bandwidth~p:last-of-type{padding-bottom:30px}
 #wizardpage #bandwidth+h3{border-left-width:1px}
 #wizardpage #bandwidthconfig+.wizardbuttons{margin-top:-6px}
+#wizardpage #langsettings label[for="xx"]{display:none}
