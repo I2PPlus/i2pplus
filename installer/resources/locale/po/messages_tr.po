@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "POT-Creation-Date: 2023-12-12 04:57+0000\n"
-"PO-Revision-Date: 2023-12-12 05:20+0000\n"
+"PO-Revision-Date: 2023-12-12 12:44+0000\n"
 "Language: tr_TR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -152,14 +152,12 @@ msgid "Stop if running as a daemon or in another console."
 msgstr "Arka plan hizmeti olarak ya da başka bir konsolda çalışıyorsa durdurun."
 
 #: ../i2prouter:1888
-#, fuzzy
 msgid "Stop gracefully, may take up to 11 minutes or more."
-msgstr "Uygun şekilde kapatın. 11 dakika sürebilir."
+msgstr "Zarifçe durun, 11 dakikaya kadar sürebilir."
 
 #: ../i2prouter:1889
-#, fuzzy
 msgid "Restart gracefully, may take up to 11 minutes or more."
-msgstr "Uygun şekilde kapatın. 11 dakika sürebilir."
+msgstr "Zarifçe yeniden başlatın, 11 dakikaya kadar sürebilir."
 
 #: ../i2prouter:1890
 msgid "Stop if running and then start."

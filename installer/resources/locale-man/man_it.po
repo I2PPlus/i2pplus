@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P man pages\n"
 "POT-Creation-Date: 2017-01-26 15:24+0000\n"
-"PO-Revision-Date: 2023-12-12 05:19+0000\n"
+"PO-Revision-Date: 2023-12-12 13:08+0000\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -69,7 +69,7 @@ msgstr "Scarica un file non interattivo via HTTP. I trasferimenti tramite I2P e 
 #. type: Plain text
 #: man/eepget.1:21
 msgid "Eepget is able to cope with slow or unstable network connections; if a download is not successful because of a network problem, it will keep retrying until the whole file has been retrieved (if the -n option is set).  If supported by the remote server, eepget will instruct the server to continue the download from the point of interruption."
-msgstr ""
+msgstr "Eepget è in grado di far fronte a connessioni di rete lente o instabili; Se un download non ha successo a causa di un problema di rete, continuerà a riprovare fino a quando l'intero file non sarà stato recuperato (se l'opzione -n è impostata). Se supportato dal server remoto, EepGet istruirà al server di continuare il download dal punto di interruzione."
 
 #. type: SH
 #: man/eepget.1:22
@@ -130,7 +130,7 @@ msgstr "B<-m> markSize"
 #: man/eepget.1:49
 #, no-wrap
 msgid "Controls the progress display. B<\\ markSize > is the number of bytes one '#' character represents. The default is 1024."
-msgstr ""
+msgstr "Controlla il display progress. B <\\ markSize> è il numero di byte che rappresenta il personaggio '#'. L'impostazione predefinita è 1024."
 
 #. type: Plain text
 #: man/eepget.1:55
@@ -141,7 +141,7 @@ msgstr "B<-n> numeroTentativi"
 #: man/eepget.1:55
 #, no-wrap
 msgid "Specify the number of times to retry downloading if the download isn't successful. If this option is not specified, eepget will not retry."
-msgstr ""
+msgstr "Specificare il numero di volte per riprovare il download se il download non ha esito positivo. Se questa opzione non è specificata, eepget non si riproverà."
 
 #. type: Plain text
 #: man/eepget.1:61
@@ -152,7 +152,7 @@ msgstr "B<-o> file"
 #: man/eepget.1:61
 #, no-wrap
 msgid "Sets the output file to write to. If this option is not given, the output filename will be determined by the URL."
-msgstr ""
+msgstr "Imposta il file di output su cui scrivere. Se questa opzione non viene fornita, il nome file di output verrà determinato dall'URL."
 
 #. type: Plain text
 #: man/eepget.1:67
@@ -202,12 +202,12 @@ msgstr "Imposta la password per l'autorizzazione proxy, se necessario. se è spe
 #: man/eepget.1:89
 #, no-wrap
 msgid "EXIT STATUS"
-msgstr ""
+msgstr "EXIT STATUS"
 
 #. type: Plain text
 #: man/eepget.1:93
 msgid "B<eepget> exits with status zero upon successful transfer and non-zero if there were problems with the download."
-msgstr ""
+msgstr "B<eepget> esce con lo stato zero dopo trasferimento riuscito e diverso da zero se ci sono stati problemi con il download."
 
 #. type: SH
 #: man/eepget.1:94 man/i2prouter.1:54 man/i2prouter-nowrapper.1:24
@@ -218,7 +218,7 @@ msgstr "SEGNALAZIONE BUG"
 #. type: Plain text
 #: man/eepget.1:99 man/i2prouter.1:59 man/i2prouter-nowrapper.1:29
 msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
-msgstr ""
+msgstr "Inserisci un ticket su E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/--/issues> il big tracker i2p E<.UE.>"
 
 #. type: SH
 #: man/eepget.1:100 man/i2prouter.1:60 man/i2prouter-nowrapper.1:30
@@ -338,7 +338,7 @@ msgstr "B<remove>"
 #. type: Plain text
 #: man/i2prouter.1:45
 msgid "Uninstall initscript that was installed with B<install>"
-msgstr ""
+msgstr "Disinstalla Initscript installata con B<install>"
 
 #. type: IP
 #: man/i2prouter.1:47
@@ -360,7 +360,7 @@ msgstr "B<dump>"
 #. type: Plain text
 #: man/i2prouter.1:53
 msgid "Dumps the current threads into B<wrapper.log>."
-msgstr ""
+msgstr "Scarica i thread di corrente in B<wrapper.log>."
 
 #. type: Plain text
 #: man/i2prouter.1:61
@@ -391,7 +391,7 @@ msgstr "Avvia il router I2P, senza il wrapper di servizio. Ciò significa che il
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:23
 msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
-msgstr ""
+msgstr "Dovresti davvero usare lo script B<i2prouter>(1). Non ci sono opzioni. Per fermare il router, usa il browser per accedere a E<.UR http://localhost:7657/> la console del router E<.UE.>"
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:31
