@@ -9,15 +9,12 @@ msgstr ""
 "Project-Id-Version: I2P man pages\n"
 "POT-Creation-Date: 2021-11-27 13:31-0000\n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "POT-Revision-Date: 2021-11-27 13:31-0000\n"
-"X-Generator: Poedit 3.4.1\n"
 
 #. type: TH
 #: man/eepget.1:1
