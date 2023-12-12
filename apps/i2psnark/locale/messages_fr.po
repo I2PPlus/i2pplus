@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-11-02 02:37+0000\n"
+"PO-Revision-Date: 2023-12-12 02:39+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: ../java/src/org/klomp/snark/IdleChecker.java:76
 msgid "No more torrents running."
@@ -329,7 +329,7 @@ msgstr "Un torrent avec ce hachage d’informations est déjà en cours: {0}"
 #: ../java/src/org/klomp/snark/SnarkManager.java:2125
 #, java-format
 msgid "Torrent with the same data location is already running: {0}"
-msgstr "Torrent avec le même emplacement de données est déjà en cours d'exécution : {0}"
+msgstr "Torrent avec le même emplacement de données est déjà en cours d'exécution: {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1876
 #, java-format
@@ -489,7 +489,7 @@ msgstr "Démarrage du torrent {0}"
 #: ../java/src/org/klomp/snark/SnarkManager.java:2841
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
-msgstr "La limite de bande passante supérieure est de {0} Ko/s"
+msgstr "La limite de bande passante supérieure est de {0} Ko/s"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2874
 #, java-format
@@ -499,7 +499,7 @@ msgstr "I2P+ I2PSnark Version autonome {0} a commencé"
 #: ../java/src/org/klomp/snark/SnarkManager.java:2880
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
-msgstr "La limite de bande passante de téléchargement est de {0} Ko/s jusqu'à un maximum de {1} homologues simultanés."
+msgstr "La limite de bande passante de téléchargement est de {0} Ko/s jusqu'à un maximum de {1} homologues simultanés."
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2915
 #: ../java/src/org/klomp/snark/SnarkManager.java:2921
@@ -523,7 +523,7 @@ msgstr "I2PSnark"
 #: ../java/src/org/klomp/snark/SnarkManager.java:3302
 #, java-format
 msgid "Starting torrent: {0}"
-msgstr "Démarrage du torrent : {0}"
+msgstr "Démarrage du torrent: {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:3286
 msgid "Torrent not found"
@@ -585,12 +585,12 @@ msgstr "Téléchargement {0}"
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:94
 #, java-format
 msgid "Requesting torrent file: {0}"
-msgstr "Demande de fichier torrent : {0}"
+msgstr "Demande de fichier torrent: {0}"
 
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:104
 #, java-format
 msgid "Failed to retrieve torrent file: {0}"
-msgstr "Échec de la récupération du fichier torrent : {0}"
+msgstr "Échec de la récupération du fichier torrent: {0}"
 
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:158
 #, java-format
