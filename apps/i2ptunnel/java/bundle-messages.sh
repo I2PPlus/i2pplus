@@ -24,7 +24,7 @@ then
 	POUPDATE=1
 fi
 
-# on windows, one must specify the path of commnad find
+# on windows, one must specify the path of command find
 # since windows has its own version of find.
 if which find|grep -q -i windows ; then
 	export PATH=.:/bin:/usr/local/bin:$PATH
@@ -70,7 +70,7 @@ do
 		# To start a new translation, copy the header from an old translation to the new .po file,
 		# then ant distclean updater.
 		find $JPATHS -name *.java > $TMPFILE
-		xgettext -f $TMPFILE -F -L java --from-code=UTF-8 --no-wrap --add-comments\
+		xgettext -f $TMPFILE -F -L java --from-code=UTF-8 --width=0 --add-comments \
 	                 --keyword=_t --keyword=_x --keyword=intl._ --keyword=intl.title --keyword=unlessAdvanced \
 		         -o ${i}t
 		if [ $? -ne 0 ]
