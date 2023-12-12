@@ -308,7 +308,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         return dflt;
     }
 
-    /** @since 0.9.60+ */
+    /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderAllow() {
         Properties opts = getTunnel().getClientOptions();
             boolean addAllowHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_ALLOW));
@@ -319,7 +319,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /** @since 0.9.60+ */
+    /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeadercacheControl() {
         Properties opts = getTunnel().getClientOptions();
             boolean addCacheControlHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL));
@@ -330,7 +330,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /** @since 0.9.60+ */
+    /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderCacheControl() {
         Properties opts = getTunnel().getClientOptions();
             boolean addCacheControlHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL));
@@ -341,7 +341,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /** @since 0.9.60+ */
+    /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderReferrerPolicy() {
         Properties opts = getTunnel().getClientOptions();
             boolean addReferrerPolicyHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY));
@@ -352,7 +352,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /** @since 0.9.60+ */
+    /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderNoSniff() {
         Properties opts = getTunnel().getClientOptions();
             boolean addNoSniffPolicyHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_NOSNIFF));

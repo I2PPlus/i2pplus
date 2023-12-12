@@ -830,7 +830,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
     }
 
-    /* @since 0.9.60+ */
+    /* @since 0.9.61+ */
     public static int countRdnsCacheEntries() {
         synchronized (rdnslock) {
             return rdnsCache.size();
