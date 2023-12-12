@@ -5,14 +5,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2017-06-30 21:32+0000\n"
+"PO-Revision-Date: 2023-12-12 09:03+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: src/net/i2p/desktopgui/ExternalTrayManager.java:31
 msgid "Start I2P"
@@ -36,12 +38,12 @@ msgstr "Start I2P Browseren"
 #: src/net/i2p/desktopgui/InternalTrayManager.java:86
 #: src/net/i2p/desktopgui/InternalTrayManager.java:242
 msgid "Configure I2P System Tray"
-msgstr ""
+msgstr "Konfigurer I2P -systembakke"
 
 #: src/net/i2p/desktopgui/InternalTrayManager.java:88
 #: src/net/i2p/desktopgui/InternalTrayManager.java:244
 msgid "Disable system tray"
-msgstr ""
+msgstr "Deaktiver systembakken"
 
 #: src/net/i2p/desktopgui/InternalTrayManager.java:104
 #: src/net/i2p/desktopgui/InternalTrayManager.java:260
@@ -56,17 +58,17 @@ msgstr "Stop I2P"
 #: src/net/i2p/desktopgui/InternalTrayManager.java:137
 #: src/net/i2p/desktopgui/InternalTrayManager.java:293
 msgid "Restart I2P Immediately"
-msgstr ""
+msgstr "Genstart I2P med det samme"
 
 #: src/net/i2p/desktopgui/InternalTrayManager.java:154
 #: src/net/i2p/desktopgui/InternalTrayManager.java:310
 msgid "Stop I2P Immediately"
-msgstr ""
+msgstr "Stop I2P med det samme"
 
 #: src/net/i2p/desktopgui/InternalTrayManager.java:168
 #: src/net/i2p/desktopgui/InternalTrayManager.java:324
 msgid "Cancel I2P Shutdown"
-msgstr ""
+msgstr "Annuller I2P -nedlukning"
 
 #: src/net/i2p/desktopgui/InternalTrayManager.java:381
 #, java-format
@@ -85,14 +87,14 @@ msgstr "Netværk"
 #. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
 #: src/net/i2p/desktopgui/TrayManager.java:74
 msgid "I2P: Right-click for menu"
-msgstr ""
+msgstr "I2P: Højreklik til menu"
 
 #: src/net/i2p/desktopgui/TrayManager.java:301
 #: src/net/i2p/desktopgui/TrayManager.java:338
 msgid "Enable notifications"
-msgstr ""
+msgstr "Aktivér meddelelser"
 
 #: src/net/i2p/desktopgui/TrayManager.java:316
 #: src/net/i2p/desktopgui/TrayManager.java:353
 msgid "Disable notifications"
-msgstr ""
+msgstr "Deaktiver meddelelser"

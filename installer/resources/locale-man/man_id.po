@@ -3,17 +3,20 @@
 # This file is distributed under the same license as the routerconsole package.
 # To contribute translations, see https://www.transifex.com/otf/I2P/dashboard/
 # zzz <zzz@mail.i2p>, 2017.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P man pages\n"
 "POT-Creation-Date: 2017-01-26 15:24+0000\n"
-"PO-Revision-Date: 2017-01-26 15:24+0000\n"
+"PO-Revision-Date: 2023-12-12 05:18+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: id\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #. type: TH
 #: man/eepget.1:1
@@ -63,27 +66,13 @@ msgstr "DESKRIPSI"
 
 #. type: Plain text
 #: man/eepget.1:15
-msgid ""
-"Download a file non-interactively via HTTP. Transfers through both I2P and "
-"the regular Internet are supported."
-msgstr ""
-"Unduh file non-interaktif via HTTP. Dapat melakukan transfer melalui I2P dan"
-" Internet biasa ."
+msgid "Download a file non-interactively via HTTP. Transfers through both I2P and the regular Internet are supported."
+msgstr "Unduh file non-interaktif via HTTP. Dapat melakukan transfer melalui I2P dan Internet biasa ."
 
 #. type: Plain text
 #: man/eepget.1:21
-msgid ""
-"Eepget is able to cope with slow or unstable network connections; if a "
-"download is not successful because of a network problem, it will keep "
-"retrying until the whole file has been retrieved (if the -n option is set)."
-"  If supported by the remote server, eepget will instruct the server to "
-"continue the download from the point of interruption."
-msgstr ""
-"Eepget mampu mengatasi koneksi jaringan yang lamban atau tidak stabil; Jika "
-"unduhan tidak berhasil karena masalah jaringan, unduhan akan terus dicoba "
-"sampai keseluruhan file diambil (jika opsi -n disetel). Jika didukung oleh "
-"remote server, eepget akan menginstruksikan server untuk melanjutkan unduh "
-"dari titik interupsi."
+msgid "Eepget is able to cope with slow or unstable network connections; if a download is not successful because of a network problem, it will keep retrying until the whole file has been retrieved (if the -n option is set).  If supported by the remote server, eepget will instruct the server to continue the download from the point of interruption."
+msgstr "Eepget mampu mengatasi koneksi jaringan yang lamban atau tidak stabil; Jika unduhan tidak berhasil karena masalah jaringan, unduhan akan terus dicoba sampai keseluruhan file diambil (jika opsi -n disetel). Jika didukung oleh remote server, eepget akan menginstruksikan server untuk melanjutkan unduh dari titik interupsi."
 
 #. type: SH
 #: man/eepget.1:22
@@ -100,8 +89,7 @@ msgstr "B<-c>"
 #: man/eepget.1:25
 #, no-wrap
 msgid "Clearnet. Do not use a proxy. Same as B<-p> :0 ."
-msgstr ""
-"Clearnet. Internet biasa. Jangan gunakan proxy. Sama dengan B<-p> :0 ."
+msgstr "Clearnet. Internet biasa. Jangan gunakan proxy. Sama dengan B<-p> :0 ."
 
 #. type: Plain text
 #: man/eepget.1:31
@@ -133,12 +121,8 @@ msgstr "B<-l> lineLen"
 #. type: TP
 #: man/eepget.1:43
 #, no-wrap
-msgid ""
-"Controls the progress display. B<\\ lineLen > is the length of one progress "
-"line in characters. The default is 40."
-msgstr ""
-"Mengontrol tampilan progress. B<\\ lineLen> adalah panjang satu baris "
-"progress dalam karakter. Default-nya adalah 40."
+msgid "Controls the progress display. B<\\ lineLen > is the length of one progress line in characters. The default is 40."
+msgstr "Mengontrol tampilan progress. B<\\ lineLen> adalah panjang satu baris progress dalam karakter. Default-nya adalah 40."
 
 #. type: Plain text
 #: man/eepget.1:49
@@ -148,12 +132,8 @@ msgstr "B<-m>markSize"
 #. type: TP
 #: man/eepget.1:49
 #, no-wrap
-msgid ""
-"Controls the progress display. B<\\ markSize > is the number of bytes one "
-"'#' character represents. The default is 1024."
-msgstr ""
-"Mengontrol tampilan progress. B<\\ markSize> adalah jumlah byte yang "
-"ditunjukkan oleh karakter '#'. Default-nya adalah 1024."
+msgid "Controls the progress display. B<\\ markSize > is the number of bytes one '#' character represents. The default is 1024."
+msgstr "Mengontrol tampilan progress. B<\\ markSize> adalah jumlah byte yang ditunjukkan oleh karakter '#'. Default-nya adalah 1024."
 
 #. type: Plain text
 #: man/eepget.1:55
@@ -163,12 +143,8 @@ msgstr "B<-n> retries"
 #. type: TP
 #: man/eepget.1:55
 #, no-wrap
-msgid ""
-"Specify the number of times to retry downloading if the download isn't "
-"successful. If this option is not specified, eepget will not retry."
-msgstr ""
-"Mementukan berapa kali mencoba unduhan jika unduhan tidak berhasil. Jika "
-"opsi ini tidak ditentukan, eepget tidak akan mencoba lagi."
+msgid "Specify the number of times to retry downloading if the download isn't successful. If this option is not specified, eepget will not retry."
+msgstr "Mementukan berapa kali mencoba unduhan jika unduhan tidak berhasil. Jika opsi ini tidak ditentukan, eepget tidak akan mencoba lagi."
 
 #. type: Plain text
 #: man/eepget.1:61
@@ -178,12 +154,8 @@ msgstr "B<-o> file"
 #. type: TP
 #: man/eepget.1:61
 #, no-wrap
-msgid ""
-"Sets the output file to write to. If this option is not given, the output "
-"filename will be determined by the URL."
-msgstr ""
-"Menetapkan file output untuk ditulis. Jika opsi ini tidak diberikan, nama "
-"file output akan ditentukan oleh URL."
+msgid "Sets the output file to write to. If this option is not given, the output filename will be determined by the URL."
+msgstr "Menetapkan file output untuk ditulis. Jika opsi ini tidak diberikan, nama file output akan ditentukan oleh URL."
 
 #. type: Plain text
 #: man/eepget.1:67
@@ -193,15 +165,8 @@ msgstr "B<-p> proxy_host[:port]"
 #. type: TP
 #: man/eepget.1:67
 #, no-wrap
-msgid ""
-"Specify an I2P proxy server (eeproxy) to use. If the port is not specified, "
-"eepget will use 4444. If this option is not specified, eepget will use "
-"127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
-msgstr ""
-"Tentukan server proxy I2P (eeproxy) untuk digunakan. Jika port tidak "
-"ditentukan, eepget akan menggunakan 4444. Jika opsi ini tidak ditentukan, "
-"eepget akan menggunakan 127.0.0.1:4444. Tentukan B atau B: 0 untuk "
-"menonaktifkan eeproxy."
+msgid "Specify an I2P proxy server (eeproxy) to use. If the port is not specified, eepget will use 4444. If this option is not specified, eepget will use 127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
+msgstr "Tentukan server proxy I2P (eeproxy) untuk digunakan. Jika port tidak ditentukan, eepget akan menggunakan 4444. Jika opsi ini tidak ditentukan, eepget akan menggunakan 127.0.0.1:4444. Tentukan B atau B: 0 untuk menonaktifkan eeproxy."
 
 #. type: Plain text
 #: man/eepget.1:73
@@ -233,12 +198,8 @@ msgstr "B<-x> password"
 #. type: TP
 #: man/eepget.1:85
 #, no-wrap
-msgid ""
-"Sets the password for proxy authorization, if required. If a username is "
-"specified but not a password, EepGet will prompt for the password."
-msgstr ""
-"Menetapkan password untuk otorisasi proxy, jika diperlukan. Jika nama "
-"pengguna ditentukan tapi password tidak, EepGet akan meminta password."
+msgid "Sets the password for proxy authorization, if required. If a username is specified but not a password, EepGet will prompt for the password."
+msgstr "Menetapkan password untuk otorisasi proxy, jika diperlukan. Jika nama pengguna ditentukan tapi password tidak, EepGet akan meminta password."
 
 #. type: SH
 #: man/eepget.1:89
@@ -248,12 +209,8 @@ msgstr "EXIT STATUS"
 
 #. type: Plain text
 #: man/eepget.1:93
-msgid ""
-"B<eepget> exits with status zero upon successful transfer and non-zero if "
-"there were problems with the download."
-msgstr ""
-"B<eepget> keluar dengan status nol setelah berhasil transfer dan non-nol "
-"jika ada masalah dengan unduhan."
+msgid "B<eepget> exits with status zero upon successful transfer and non-zero if there were problems with the download."
+msgstr "B<eepget> keluar dengan status nol setelah berhasil transfer dan non-nol jika ada masalah dengan unduhan."
 
 #. type: SH
 #: man/eepget.1:94 man/i2prouter.1:54 man/i2prouter-nowrapper.1:24
@@ -263,11 +220,8 @@ msgstr "REPORTING BUGS"
 
 #. type: Plain text
 #: man/eepget.1:99 man/i2prouter.1:59 man/i2prouter-nowrapper.1:29
-msgid ""
-"Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker "
-"E<.UE .>"
-msgstr ""
-"Masukkan tiket di E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> trafik I2P halaman E<.UE.>"
+msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "Masukkan tiket di E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> trafik I2P halaman E<.UE.>"
 
 #. type: SH
 #: man/eepget.1:100 man/i2prouter.1:60 man/i2prouter-nowrapper.1:30
@@ -289,16 +243,12 @@ msgstr "I2PROUTER"
 #. type: Plain text
 #: man/i2prouter.1:5
 msgid "i2prouter - start and stop the I2P router"
-msgstr "I2prouter - mulai dan hentikan router I2P"
+msgstr "i2prouter - mulai dan hentikan router I2P"
 
 #. type: Plain text
 #: man/i2prouter.1:9
-msgid ""
-"B<i2prouter> "
-"{I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
-msgstr ""
-"B<i2prouter> "
-"{I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+msgid "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+msgstr "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
 
 #. type: Plain text
 #: man/i2prouter.1:13
@@ -369,8 +319,7 @@ msgstr "B<graceful>"
 #. type: Plain text
 #: man/i2prouter.1:37
 msgid "Stop I2P gracefully (may take up to 11 minutes)"
-msgstr ""
-"Menghentikan I2P dengan anggun (mungkin memakan waktu hingga 11 menit)"
+msgstr "Menghentikan I2P dengan anggun (mungkin memakan waktu hingga 11 menit)"
 
 #. type: IP
 #: man/i2prouter.1:39
@@ -381,8 +330,7 @@ msgstr "B<install>"
 #. type: Plain text
 #: man/i2prouter.1:41
 msgid "Install initscript to start I2P automatically when the system boots."
-msgstr ""
-"Install initscript untuk memulai I2P secara otomatis saat sistem boot."
+msgstr "Install initscript untuk memulai I2P secara otomatis saat sistem boot."
 
 #. type: IP
 #: man/i2prouter.1:43
@@ -440,25 +388,13 @@ msgstr "B<i2prouter-nowrapper>"
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:14
-msgid ""
-"Start the I2P router, without the service wrapper.  This means the router "
-"will not restart if it crashes.  Also, it will use the default memory size, "
-"which may not be enough for I2P."
-msgstr ""
-"Menjalankan router I2P, tanpa service wrapper. Ini berarti router tidak akan"
-" restart jika macet. Selain itu, router akan menggunakan ukuran memori "
-"default, yang mungkin tidak cukup untuk I2P."
+msgid "Start the I2P router, without the service wrapper.  This means the router will not restart if it crashes.  Also, it will use the default memory size, which may not be enough for I2P."
+msgstr "Menjalankan router I2P, tanpa service wrapper. Ini berarti router tidak akan restart jika macet. Selain itu, router akan menggunakan ukuran memori default, yang mungkin tidak cukup untuk I2P."
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:23
-msgid ""
-"You should really use the B<i2prouter>(1)  script instead.  There are no "
-"options.  To stop the router, use your browser to access E<.UR "
-"http://localhost:7657/> the router console E<.UE .>"
-msgstr ""
-"Anda sebaiknya hanya menggunakan B (1) script sebagai gantinya. Tidak ada "
-"pilihan lain. Untuk menghentikan router, gunakan browser Anda untuk "
-"mengakses E<.UR http: // localhost: 7657 /> router console E<.UE.>"
+msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
+msgstr "Anda sebaiknya hanya menggunakan B (1) script sebagai gantinya. Tidak ada pilihan lain. Untuk menghentikan router, gunakan browser Anda untuk mengakses E<.UR http: // localhost: 7657 /> router console E<.UE.>"
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:31

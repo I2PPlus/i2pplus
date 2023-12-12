@@ -3,17 +3,20 @@
 # This file is distributed under the same license as the routerconsole package.
 # To contribute translations, see https://www.transifex.com/otf/I2P/dashboard/
 # zzz <zzz@mail.i2p>, 2017.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P man pages\n"
 "POT-Creation-Date: 2017-01-26 15:24+0000\n"
-"PO-Revision-Date: 2017-01-26 15:31+0000\n"
+"PO-Revision-Date: 2023-12-12 05:15+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #. type: TH
 #: man/eepget.1:1
@@ -63,27 +66,13 @@ msgstr "LEÍRÁS"
 
 #. type: Plain text
 #: man/eepget.1:15
-msgid ""
-"Download a file non-interactively via HTTP. Transfers through both I2P and "
-"the regular Internet are supported."
-msgstr ""
-"Beavatkozás nélkül HTTP-n keresztül tölt le fájlokat. Mind I2P-n keresztüli,"
-" mint normál Interneten keresztüli átvitel támogatott."
+msgid "Download a file non-interactively via HTTP. Transfers through both I2P and the regular Internet are supported."
+msgstr "Beavatkozás nélkül HTTP-n keresztül tölt le fájlokat. Mind I2P-n keresztüli, mint normál Interneten keresztüli átvitel támogatott."
 
 #. type: Plain text
 #: man/eepget.1:21
-msgid ""
-"Eepget is able to cope with slow or unstable network connections; if a "
-"download is not successful because of a network problem, it will keep "
-"retrying until the whole file has been retrieved (if the -n option is set)."
-"  If supported by the remote server, eepget will instruct the server to "
-"continue the download from the point of interruption."
-msgstr ""
-"Az Eepget meg tud birkózni lassú vagy instabil hálózati kapcsolatokkal; ha "
-"hálózati probléma miatt sikertelen a letöltés, addig fogja újrapróbálni, "
-"amíg leszed az egész fájlt (ha a -n opció be van állítva). Ha a távoli "
-"szerver támogatja, eepget utasítani fogja a szervert, hogy folytassa a "
-"letöltést attól a ponttól, ahol megszakadt."
+msgid "Eepget is able to cope with slow or unstable network connections; if a download is not successful because of a network problem, it will keep retrying until the whole file has been retrieved (if the -n option is set).  If supported by the remote server, eepget will instruct the server to continue the download from the point of interruption."
+msgstr "Az Eepget meg tud birkózni lassú vagy instabil hálózati kapcsolatokkal; ha hálózati probléma miatt sikertelen a letöltés, addig fogja újrapróbálni, amíg leszed az egész fájlt (ha a -n opció be van állítva). Ha a távoli szerver támogatja, eepget utasítani fogja a szervert, hogy folytassa a letöltést attól a ponttól, ahol megszakadt."
 
 #. type: SH
 #: man/eepget.1:22
@@ -132,12 +121,8 @@ msgstr "B<-l> lineLen"
 #. type: TP
 #: man/eepget.1:43
 #, no-wrap
-msgid ""
-"Controls the progress display. B<\\ lineLen > is the length of one progress "
-"line in characters. The default is 40."
-msgstr ""
-"A folyamatkijelzőt irányítja. B<\\ lineLen > egy folyamatsor hossza, "
-"karakterekben megadva. Alapértelmezésben 40."
+msgid "Controls the progress display. B<\\ lineLen > is the length of one progress line in characters. The default is 40."
+msgstr "A folyamatkijelzőt irányítja. B<\\ lineLen > egy folyamatsor hossza, karakterekben megadva. Alapértelmezésben 40."
 
 #. type: Plain text
 #: man/eepget.1:49
@@ -147,12 +132,8 @@ msgstr "B<-m> markSize"
 #. type: TP
 #: man/eepget.1:49
 #, no-wrap
-msgid ""
-"Controls the progress display. B<\\ markSize > is the number of bytes one "
-"'#' character represents. The default is 1024."
-msgstr ""
-"A folyamatkijelzőt irányítja. B<\\ markSize > a bájtok száma, melyet egy '#'"
-" karakter jelez. Alapértelmezésben 1024."
+msgid "Controls the progress display. B<\\ markSize > is the number of bytes one '#' character represents. The default is 1024."
+msgstr "A folyamatkijelzőt irányítja. B<\\ markSize > a bájtok száma, melyet egy '#' karakter jelez. Alapértelmezésben 1024."
 
 #. type: Plain text
 #: man/eepget.1:55
@@ -162,12 +143,8 @@ msgstr "B<-n> retries"
 #. type: TP
 #: man/eepget.1:55
 #, no-wrap
-msgid ""
-"Specify the number of times to retry downloading if the download isn't "
-"successful. If this option is not specified, eepget will not retry."
-msgstr ""
-"Megadja, hogy hányszor próbálja újra a letöltést, ha sikertelen. Ha nincs ez"
-" az opció megadva, eepget nem fogja újrapróbálni."
+msgid "Specify the number of times to retry downloading if the download isn't successful. If this option is not specified, eepget will not retry."
+msgstr "Megadja, hogy hányszor próbálja újra a letöltést, ha sikertelen. Ha nincs ez az opció megadva, eepget nem fogja újrapróbálni."
 
 #. type: Plain text
 #: man/eepget.1:61
@@ -177,12 +154,8 @@ msgstr "B<-o> file"
 #. type: TP
 #: man/eepget.1:61
 #, no-wrap
-msgid ""
-"Sets the output file to write to. If this option is not given, the output "
-"filename will be determined by the URL."
-msgstr ""
-"Beállítja a kimeneti fájlt, mely írásra kerül. Ha nincs ez az opció megadva,"
-" a kimeneti fájlnevet az URL határozza meg."
+msgid "Sets the output file to write to. If this option is not given, the output filename will be determined by the URL."
+msgstr "Beállítja a kimeneti fájlt, mely írásra kerül. Ha nincs ez az opció megadva, a kimeneti fájlnevet az URL határozza meg."
 
 #. type: Plain text
 #: man/eepget.1:67
@@ -192,15 +165,8 @@ msgstr "B<-p> proxy_host[:port]"
 #. type: TP
 #: man/eepget.1:67
 #, no-wrap
-msgid ""
-"Specify an I2P proxy server (eeproxy) to use. If the port is not specified, "
-"eepget will use 4444. If this option is not specified, eepget will use "
-"127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
-msgstr ""
-"Megadja a használandó I2P proxy szervert. Ha nincs port megadva, eepget a "
-"4444-es portot fogja használni. Ha nincs ez az opció megadva, eepget a "
-"127.0.0.1:444-et fogja használni. Add meg ezt: B<-c> vagy ezt: B<-p> :0 az "
-"eeproxy kikapcsolásához."
+msgid "Specify an I2P proxy server (eeproxy) to use. If the port is not specified, eepget will use 4444. If this option is not specified, eepget will use 127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
+msgstr "Megadja a használandó I2P proxy szervert. Ha nincs port megadva, eepget a 4444-es portot fogja használni. Ha nincs ez az opció megadva, eepget a 127.0.0.1:444-et fogja használni. Add meg ezt: B<-c> vagy ezt: B<-p> :0 az eeproxy kikapcsolásához."
 
 #. type: Plain text
 #: man/eepget.1:73
@@ -232,12 +198,8 @@ msgstr "B<-x> password"
 #. type: TP
 #: man/eepget.1:85
 #, no-wrap
-msgid ""
-"Sets the password for proxy authorization, if required. If a username is "
-"specified but not a password, EepGet will prompt for the password."
-msgstr ""
-"Beállítja a jelszót a proxy azonosításhoz, ha szükséges. Ha felhasználónév "
-"meg van adva, de a jelszó nincs, EepGet kérni fogja a jelszót"
+msgid "Sets the password for proxy authorization, if required. If a username is specified but not a password, EepGet will prompt for the password."
+msgstr "Beállítja a jelszót a proxy azonosításhoz, ha szükséges. Ha felhasználónév meg van adva, de a jelszó nincs, EepGet kérni fogja a jelszót"
 
 #. type: SH
 #: man/eepget.1:89
@@ -247,12 +209,8 @@ msgstr "KILÉPÉSI ÁLLAPOT"
 
 #. type: Plain text
 #: man/eepget.1:93
-msgid ""
-"B<eepget> exits with status zero upon successful transfer and non-zero if "
-"there were problems with the download."
-msgstr ""
-"B<eepget> kilép 0 állapottal sikeres átvitel esetén és nem 0 állapottal, ha "
-"probléma volt a letöltéssel."
+msgid "B<eepget> exits with status zero upon successful transfer and non-zero if there were problems with the download."
+msgstr "B<eepget> kilép 0 állapottal sikeres átvitel esetén és nem 0 állapottal, ha probléma volt a letöltéssel."
 
 #. type: SH
 #: man/eepget.1:94 man/i2prouter.1:54 man/i2prouter-nowrapper.1:24
@@ -262,12 +220,8 @@ msgstr "HIBAJELENTÉS"
 
 #. type: Plain text
 #: man/eepget.1:99 man/i2prouter.1:59 man/i2prouter-nowrapper.1:29
-msgid ""
-"Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker "
-"E<.UE .>"
-msgstr ""
-"Kérünk, adj le jelentést itt: E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> az I2P trac "
-"oldalon E<.UE .>"
+msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "Kérünk, adj le jelentést itt: E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> az I2P trac oldalon E<.UE .>"
 
 #. type: SH
 #: man/eepget.1:100 man/i2prouter.1:60 man/i2prouter-nowrapper.1:30
@@ -293,12 +247,8 @@ msgstr "i2prouter - az I2P router indítása és leállítása"
 
 #. type: Plain text
 #: man/i2prouter.1:9
-msgid ""
-"B<i2prouter> "
-"{I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
-msgstr ""
-"B<i2prouter> "
-"{I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+msgid "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+msgstr "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
 
 #. type: Plain text
 #: man/i2prouter.1:13
@@ -314,8 +264,7 @@ msgstr "B<console>"
 #. type: Plain text
 #: man/i2prouter.1:17
 msgid "Runs I2P as a console application under the current user."
-msgstr ""
-"Parancssori alkalmazásként futtatja az I2P-t a jelenlegi felhasználóként."
+msgstr "Parancssori alkalmazásként futtatja az I2P-t a jelenlegi felhasználóként."
 
 #. type: IP
 #: man/i2prouter.1:19
@@ -381,9 +330,7 @@ msgstr "B<install>"
 #. type: Plain text
 #: man/i2prouter.1:41
 msgid "Install initscript to start I2P automatically when the system boots."
-msgstr ""
-"Initscript-et telepít, ami automatikusan elindítja az I2P-t "
-"rendszerindításkor."
+msgstr "Initscript-et telepít, ami automatikusan elindítja az I2P-t rendszerindításkor."
 
 #. type: IP
 #: man/i2prouter.1:43
@@ -394,8 +341,7 @@ msgstr "B<remove>"
 #. type: Plain text
 #: man/i2prouter.1:45
 msgid "Uninstall initscript that was installed with B<install>"
-msgstr ""
-"Eltávolítja az initscript-et, ami telepítésre került ezzel: B<install>"
+msgstr "Eltávolítja az initscript-et, ami telepítésre került ezzel: B<install>"
 
 #. type: IP
 #: man/i2prouter.1:47
@@ -442,26 +388,13 @@ msgstr "B<i2prouter-nowrapper>"
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:14
-msgid ""
-"Start the I2P router, without the service wrapper.  This means the router "
-"will not restart if it crashes.  Also, it will use the default memory size, "
-"which may not be enough for I2P."
-msgstr ""
-"A szolgáltatás-burkolat nélkül indítja el az I2P router-t. Ez azt jelenti, "
-"hogy a router nem fog újraindulni összeomlás esetén. Ezen felül az "
-"alapértelmezett memóriaméretet fogja használni, ami nem biztos, hogy elég "
-"lesz az I2P-nek."
+msgid "Start the I2P router, without the service wrapper.  This means the router will not restart if it crashes.  Also, it will use the default memory size, which may not be enough for I2P."
+msgstr "A szolgáltatás-burkolat nélkül indítja el az I2P router-t. Ez azt jelenti, hogy a router nem fog újraindulni összeomlás esetén. Ezen felül az alapértelmezett memóriaméretet fogja használni, ami nem biztos, hogy elég lesz az I2P-nek."
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:23
-msgid ""
-"You should really use the B<i2prouter>(1)  script instead.  There are no "
-"options.  To stop the router, use your browser to access E<.UR "
-"http://localhost:7657/> the router console E<.UE .>"
-msgstr ""
-"Tényleg a(z) B<i2prouter>(1)  szkriptet kellene használnod ehelyett. Nem "
-"adhatód meg opciók. A router leállításához használd a böngésződ, hogy elérd "
-"ezt: E<.UR http://localhost:7657/> a router konzol E<.UE .>"
+msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
+msgstr "Tényleg a(z) B<i2prouter>(1)  szkriptet kellene használnod ehelyett. Nem adhatód meg opciók. A router leállításához használd a böngésződ, hogy elérd ezt: E<.UR http://localhost:7657/> a router konzol E<.UE .>"
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:31

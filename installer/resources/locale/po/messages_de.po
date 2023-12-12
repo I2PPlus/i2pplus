@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-12-10 12:09+0000\n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 05:21+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -156,11 +156,11 @@ msgid "Stop if running as a daemon or in another console."
 msgstr "Beende den Router, falls er als Dämon oder in einer anderen Konsole ausgeführt wird."
 
 #: ../i2prouter:1888
-msgid "Stop gracefully, may take up to 11 minutes."
+msgid "Stop gracefully, may take up to 11 minutes or more."
 msgstr "Stoppen Sie sanft, es kann bis zu 11 Minuten dauern."
 
 #: ../i2prouter:1889
-msgid "Restart gracefully, may take up to 11 minutes."
+msgid "Restart gracefully, may take up to 11 minutes or more."
 msgstr "Ordentlicher Neustart, kann bis zu 11 Minuten dauern."
 
 #: ../i2prouter:1890

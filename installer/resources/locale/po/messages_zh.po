@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-12-09 10:43+0000\n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 05:20+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -156,11 +156,11 @@ msgid "Stop if running as a daemon or in another console."
 msgstr "关闭作为服务进程或从其他控制台启动的I2P。"
 
 #: ../i2prouter:1888
-msgid "Stop gracefully, may take up to 11 minutes."
+msgid "Stop gracefully, may take up to 11 minutes or more."
 msgstr "自然关闭，可以需要最多11分钟。"
 
 #: ../i2prouter:1889
-msgid "Restart gracefully, may take up to 11 minutes."
+msgid "Restart gracefully, may take up to 11 minutes or more."
 msgstr "自然关闭，可以需要最多11分钟。"
 
 #: ../i2prouter:1890

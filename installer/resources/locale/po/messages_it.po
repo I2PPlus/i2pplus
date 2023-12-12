@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-12-10 12:13+0000\n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 05:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: it\n"
@@ -156,11 +156,11 @@ msgid "Stop if running as a daemon or in another console."
 msgstr "Interrompi se è in esecuzione come demone o in un altro terminale."
 
 #: ../i2prouter:1888
-msgid "Stop gracefully, may take up to 11 minutes."
+msgid "Stop gracefully, may take up to 11 minutes or more."
 msgstr "Fermati con grazia, potrebbe richiedere fino a 11 minuti."
 
 #: ../i2prouter:1889
-msgid "Restart gracefully, may take up to 11 minutes."
+msgid "Restart gracefully, may take up to 11 minutes or more."
 msgstr "Riavviare correttamente, potrebbe richiedere fino a 11 minuti."
 
 #: ../i2prouter:1890

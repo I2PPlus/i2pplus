@@ -3,17 +3,20 @@
 # This file is distributed under the same license as the routerconsole package.
 # To contribute translations, see https://www.transifex.com/otf/I2P/dashboard/
 # zzz <zzz@mail.i2p>, 2017.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P man pages\n"
 "POT-Creation-Date: 2017-01-26 15:24+0000\n"
-"PO-Revision-Date: 2017-01-26 15:24+0000\n"
+"PO-Revision-Date: 2023-12-12 05:19+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #. type: TH
 #: man/eepget.1:1
@@ -63,21 +66,12 @@ msgstr "DESCRIZIONE"
 
 #. type: Plain text
 #: man/eepget.1:15
-msgid ""
-"Download a file non-interactively via HTTP. Transfers through both I2P and "
-"the regular Internet are supported."
-msgstr ""
-"Scarica un file non interattivo via HTTP. I trasferimenti tramite I2P e il "
-"regolare internet è supportato."
+msgid "Download a file non-interactively via HTTP. Transfers through both I2P and the regular Internet are supported."
+msgstr "Scarica un file non interattivo via HTTP. I trasferimenti tramite I2P e il regolare internet è supportato."
 
 #. type: Plain text
 #: man/eepget.1:21
-msgid ""
-"Eepget is able to cope with slow or unstable network connections; if a "
-"download is not successful because of a network problem, it will keep "
-"retrying until the whole file has been retrieved (if the -n option is set)."
-"  If supported by the remote server, eepget will instruct the server to "
-"continue the download from the point of interruption."
+msgid "Eepget is able to cope with slow or unstable network connections; if a download is not successful because of a network problem, it will keep retrying until the whole file has been retrieved (if the -n option is set).  If supported by the remote server, eepget will instruct the server to continue the download from the point of interruption."
 msgstr ""
 
 #. type: SH
@@ -117,36 +111,28 @@ msgstr "B<-h> nome=valore"
 #: man/eepget.1:37
 #, no-wrap
 msgid "Adds an arbitrary request header with the given name and value."
-msgstr ""
-"Aggiunge un'intestazione di richiesta arbitraria con il nome e valore "
-"specificati."
+msgstr "Aggiunge un'intestazione di richiesta arbitraria con il nome e valore specificati."
 
 #. type: Plain text
 #: man/eepget.1:43
 msgid "B<-l> lineLen"
-msgstr ""
+msgstr "B<-l> lineLen"
 
 #. type: TP
 #: man/eepget.1:43
 #, no-wrap
-msgid ""
-"Controls the progress display. B<\\ lineLen > is the length of one progress "
-"line in characters. The default is 40."
-msgstr ""
-"Controlla il display di avanzamento. B<\\ lineLen > è la lunghezza di una "
-"linea di progresso in caratteri. L'impostazione predefinita è 40."
+msgid "Controls the progress display. B<\\ lineLen > is the length of one progress line in characters. The default is 40."
+msgstr "Controlla il display di avanzamento. B<\\ lineLen > è la lunghezza di una linea di progresso in caratteri. L'impostazione predefinita è 40."
 
 #. type: Plain text
 #: man/eepget.1:49
 msgid "B<-m> markSize"
-msgstr ""
+msgstr "B<-m> markSize"
 
 #. type: TP
 #: man/eepget.1:49
 #, no-wrap
-msgid ""
-"Controls the progress display. B<\\ markSize > is the number of bytes one "
-"'#' character represents. The default is 1024."
+msgid "Controls the progress display. B<\\ markSize > is the number of bytes one '#' character represents. The default is 1024."
 msgstr ""
 
 #. type: Plain text
@@ -157,9 +143,7 @@ msgstr "B<-n> numeroTentativi"
 #. type: TP
 #: man/eepget.1:55
 #, no-wrap
-msgid ""
-"Specify the number of times to retry downloading if the download isn't "
-"successful. If this option is not specified, eepget will not retry."
+msgid "Specify the number of times to retry downloading if the download isn't successful. If this option is not specified, eepget will not retry."
 msgstr ""
 
 #. type: Plain text
@@ -170,28 +154,19 @@ msgstr "B<-o> file"
 #. type: TP
 #: man/eepget.1:61
 #, no-wrap
-msgid ""
-"Sets the output file to write to. If this option is not given, the output "
-"filename will be determined by the URL."
+msgid "Sets the output file to write to. If this option is not given, the output filename will be determined by the URL."
 msgstr ""
 
 #. type: Plain text
 #: man/eepget.1:67
 msgid "B<-p> proxy_host[:port]"
-msgstr ""
+msgstr "B<-p> proxy_host[:port]"
 
 #. type: TP
 #: man/eepget.1:67
 #, no-wrap
-msgid ""
-"Specify an I2P proxy server (eeproxy) to use. If the port is not specified, "
-"eepget will use 4444. If this option is not specified, eepget will use "
-"127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
-msgstr ""
-"Specifica un server proxy I2P (eeproxy) da utilizzare. Se la porta non è "
-"specificata, eepget userà la porta 4444. Se questa opzione non è "
-"specificata, eepget userà 127.0.0.1:4444. Specifica B<-c> oppure B<-p> :0 to"
-" disable the eeproxy."
+msgid "Specify an I2P proxy server (eeproxy) to use. If the port is not specified, eepget will use 4444. If this option is not specified, eepget will use 127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
+msgstr "Specifica un server proxy I2P (eeproxy) da utilizzare. Se la porta non è specificata, eepget userà la porta 4444. Se questa opzione non è specificata, eepget userà 127.0.0.1:4444. Specifica B<-c> oppure B<-p> :0 to disable the eeproxy."
 
 #. type: Plain text
 #: man/eepget.1:73
@@ -202,8 +177,7 @@ msgstr "B<-t> secondi"
 #: man/eepget.1:73
 #, no-wrap
 msgid "Sets the inactivity timeout. The default is 60 seconds."
-msgstr ""
-"Imposta il tempo di inattività. L'impostazione predefinita è di 60 secondi."
+msgstr "Imposta il tempo di inattività. L'impostazione predefinita è di 60 secondi."
 
 #. type: Plain text
 #: man/eepget.1:79
@@ -224,13 +198,8 @@ msgstr "B<-x> password"
 #. type: TP
 #: man/eepget.1:85
 #, no-wrap
-msgid ""
-"Sets the password for proxy authorization, if required. If a username is "
-"specified but not a password, EepGet will prompt for the password."
-msgstr ""
-"Imposta la password per l'autorizzazione proxy, se necessario. se è "
-"specificato un nome utente ma non una password, EepGet richiederà la "
-"password."
+msgid "Sets the password for proxy authorization, if required. If a username is specified but not a password, EepGet will prompt for the password."
+msgstr "Imposta la password per l'autorizzazione proxy, se necessario. se è specificato un nome utente ma non una password, EepGet richiederà la password."
 
 #. type: SH
 #: man/eepget.1:89
@@ -240,9 +209,7 @@ msgstr ""
 
 #. type: Plain text
 #: man/eepget.1:93
-msgid ""
-"B<eepget> exits with status zero upon successful transfer and non-zero if "
-"there were problems with the download."
+msgid "B<eepget> exits with status zero upon successful transfer and non-zero if there were problems with the download."
 msgstr ""
 
 #. type: SH
@@ -253,9 +220,7 @@ msgstr "SEGNALAZIONE BUG"
 
 #. type: Plain text
 #: man/eepget.1:99 man/i2prouter.1:59 man/i2prouter-nowrapper.1:29
-msgid ""
-"Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker "
-"E<.UE .>"
+msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
 msgstr ""
 
 #. type: SH
@@ -282,12 +247,8 @@ msgstr "i2prouter - lancia e termina il router I2P"
 
 #. type: Plain text
 #: man/i2prouter.1:9
-msgid ""
-"B<i2prouter> "
-"{I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
-msgstr ""
-"B<i2prouter> "
-"{I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+msgid "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+msgstr "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
 
 #. type: Plain text
 #: man/i2prouter.1:13
@@ -369,9 +330,7 @@ msgstr "B<install>"
 #. type: Plain text
 #: man/i2prouter.1:41
 msgid "Install initscript to start I2P automatically when the system boots."
-msgstr ""
-"Installa initscript per avviare I2P automaticamente quando il sistema viene "
-"avviato."
+msgstr "Installa initscript per avviare I2P automaticamente quando il sistema viene avviato."
 
 #. type: IP
 #: man/i2prouter.1:43
@@ -429,22 +388,12 @@ msgstr "B<i2prouter-nowrapper>"
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:14
-msgid ""
-"Start the I2P router, without the service wrapper.  This means the router "
-"will not restart if it crashes.  Also, it will use the default memory size, "
-"which may not be enough for I2P."
-msgstr ""
-"Avvia il router I2P, senza il wrapper di servizio. Ciò significa che il "
-"router non si riavvierà se si dovesse bloccare. Inoltre, utilizzerà la "
-"dimensione di memoria predefinita, che potrebbe non essere sufficiente per "
-"I2P."
+msgid "Start the I2P router, without the service wrapper.  This means the router will not restart if it crashes.  Also, it will use the default memory size, which may not be enough for I2P."
+msgstr "Avvia il router I2P, senza il wrapper di servizio. Ciò significa che il router non si riavvierà se si dovesse bloccare. Inoltre, utilizzerà la dimensione di memoria predefinita, che potrebbe non essere sufficiente per I2P."
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:23
-msgid ""
-"You should really use the B<i2prouter>(1)  script instead.  There are no "
-"options.  To stop the router, use your browser to access E<.UR "
-"http://localhost:7657/> the router console E<.UE .>"
+msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
 msgstr ""
 
 #. type: Plain text

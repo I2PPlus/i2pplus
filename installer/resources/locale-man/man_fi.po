@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P man pages\n"
 "POT-Creation-Date: 2017-01-26 15:24+0000\n"
-"PO-Revision-Date: 2023-12-10 12:44+0000\n"
+"PO-Revision-Date: 2023-12-12 05:17+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fi\n"
@@ -221,7 +221,7 @@ msgstr "ILMOITETAAN VIRHEISTÄ"
 #. type: Plain text
 #: man/eepget.1:99 man/i2prouter.1:59 man/i2prouter-nowrapper.1:29
 msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues> the I2P Bug Tracker E<.UE .>"
-msgstr "Ole hyvä ja lisää vikailmoitus I2P Bug Trackeriin osoitteessa http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues."
+msgstr "Ole hyvä ja lisää vikailmoitus I2P Bug Trackeriin osoitteessa http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues E<.UE .>"
 
 #. type: SH
 #: man/eepget.1:100 man/i2prouter.1:60 man/i2prouter-nowrapper.1:30

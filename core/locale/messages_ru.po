@@ -5,16 +5,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-31 12:17+0000\n"
-"PO-Revision-Date: 2019-11-24 19:23+0000\n"
+"PO-Revision-Date: 2023-12-12 05:25+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
-"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #. NOTE TO TRANSLATORS: Feel free to translate all these as you see fit, there are several options...
 #. spaces or not, '.' or not, plural or not. Try not to make it too long, it is used in
@@ -32,7 +32,6 @@ msgid_plural "{0,number,####} ms"
 msgstr[0] "{0,number,####} мс"
 msgstr[1] "{0,number,####} мс"
 msgstr[2] "{0,number,####} мс"
-msgstr[3] "{0,number,####} мс"
 
 #. seconds
 #. alternates: secs, sec. 'seconds' is probably too long.
@@ -44,7 +43,6 @@ msgid_plural "{0} sec"
 msgstr[0] "{0} с."
 msgstr[1] "{0} с."
 msgstr[2] "{0} с"
-msgstr[3] "{0} с"
 
 #. minutes
 #. alternates: mins, min. 'minutes' is probably too long.
@@ -56,7 +54,6 @@ msgid_plural "{0} min"
 msgstr[0] "{0} мин."
 msgstr[1] "{0} мин."
 msgstr[2] "{0} мин."
-msgstr[3] "{0} мин."
 
 #. hours
 #. alternates: hrs, hr., hrs.
@@ -68,7 +65,6 @@ msgid_plural "{0} hours"
 msgstr[0] "{0} час"
 msgstr[1] "{0} часа"
 msgstr[2] "{0} часов"
-msgstr[3] "{0} часов"
 
 #. days
 #: ../java/src/net/i2p/data/DataHelper.java:1436
@@ -79,7 +75,6 @@ msgid_plural "{0} days"
 msgstr[0] "{0} день"
 msgstr[1] "{0} дня"
 msgstr[2] "{0} дней"
-msgstr[3] "{0} дней"
 
 #. years
 #: ../java/src/net/i2p/data/DataHelper.java:1439
@@ -90,7 +85,6 @@ msgid_plural "{0} years"
 msgstr[0] "{0} год"
 msgstr[1] "{0} года"
 msgstr[2] "{0} лет"
-msgstr[3] "{0} лет"
 
 #: ../java/src/net/i2p/data/DataHelper.java:1441
 #: ../java/src/net/i2p/data/DataHelper.java:1488
@@ -104,7 +98,6 @@ msgid_plural "{0,number,###} ns"
 msgstr[0] "{0,number,##} нс"
 msgstr[1] "{0,number,###} нс"
 msgstr[2] "{0,number,###} нс"
-msgstr[3] "{0,number,###} нс"
 
 #: ../java/src/net/i2p/data/DataHelper.java:1472
 #, java-format
@@ -113,7 +106,6 @@ msgid_plural "{0,number,###} μs"
 msgstr[0] "{0,number,##} мкс"
 msgstr[1] "{0,number,###} мкс"
 msgstr[2] "{0,number,###} мкс"
-msgstr[3] "{0,number,###} мкс"
 
 #. just for tagging
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
@@ -140,7 +132,6 @@ msgstr "WARN"
 #, java-format
 msgid "{0} similar message omitted"
 msgid_plural "{0} similar messages omitted"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{0} подобное сообщение опущено"
+msgstr[1] "{0} подобных сообщений пропущено"
+msgstr[2] "{0} подобных сообщений пропущено"

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-12-10 12:28+0000\n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 05:21+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ko\n"
@@ -156,11 +156,11 @@ msgid "Stop if running as a daemon or in another console."
 msgstr "다른 콘솔이나 데몬으로 실행중일 경우 정지."
 
 #: ../i2prouter:1888
-msgid "Stop gracefully, may take up to 11 minutes."
+msgid "Stop gracefully, may take up to 11 minutes or more."
 msgstr "정상적으로 중지하세요. 최대 11분이 걸릴 수 있습니다."
 
 #: ../i2prouter:1889
-msgid "Restart gracefully, may take up to 11 minutes."
+msgid "Restart gracefully, may take up to 11 minutes or more."
 msgstr "정상적으로 다시 시작하는 데 최대 11분이 걸릴 수 있습니다."
 
 #: ../i2prouter:1890
