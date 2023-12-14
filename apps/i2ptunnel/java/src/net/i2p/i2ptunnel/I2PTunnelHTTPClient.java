@@ -1111,7 +1111,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         if (!usingInternalOutproxy)
                             newRequest.append("X-Accept-Encoding: x-i2p-gzip;q=1.0, identity;q=0.5, deflate;q=0, gzip;q=0, *;q=0\r\n");
                     }
-                    if (!shout && !isConnect) {
+//                    if (!shout && !isConnect) {
+                    if (!shout) {
                         if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USER_AGENT))) {
                             // let's not advertise to external sites that we are from I2P
                             String ua;
