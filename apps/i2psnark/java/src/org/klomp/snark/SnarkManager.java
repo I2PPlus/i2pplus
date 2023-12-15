@@ -621,7 +621,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     *  @since 0.9.60+ (I2P+)
+     *  @since 0.9.61+ (I2P+)
      */
     public int getMaxLogMessages() {
         try {

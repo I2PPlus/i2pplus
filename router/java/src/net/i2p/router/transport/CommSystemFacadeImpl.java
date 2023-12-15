@@ -608,7 +608,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  Implements persistent cache file with an intermediary
      *  write to temp file to avoid file corruption
      *
-     *  @since 0.9.60+
+     *  @since 0.9.61+
      */
     private static final String RDNS_CACHE_FILE = I2PAppContext.getGlobalContext().getConfigDir() +
                                                   File.separator + "rdnscache.txt"; // File name for cache serialization

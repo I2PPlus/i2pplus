@@ -840,7 +840,7 @@ class SAMv3Handler extends SAMv1Handler
                     _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
                     notifyStreamResult( verbose, "TIMEOUT", e.getMessage() );
             } catch (I2PSessionException e) {
-                // As of 0.9.60, this is thrown for a destroyed session.
+                // As of 0.9.61, this is thrown for a destroyed session.
                 // Kill the SAM session.
                 if (_log.shouldDebug())
                     _log.debug("STREAM ACCEPT failed", e);
