@@ -2055,7 +2055,7 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 /* update */
 #checkforupdates{text-align:center}
 #updateHelper .optionlist,#updateProxyHostPort .optionlist{column-gap:1px;columns:400px 3;margin:-1px 0}
-#updateHelper select,#updateProxyHostPort input,#updateProxyHostPort input[disabled]{min-width:220px;max-width:220px;margin-left:6px;text-overflow:ellipsis;position:relative;z-index:999}
+#updateHelper select,#updateProxyHostPort input,#updateProxyHostPort input[disabled]{min-width:240px;max-width:240px;margin-left:6px;text-overflow:ellipsis;position:relative;z-index:999}
 #i2pupdates{margin:0 0 -4px}
 #config_update td:not(.infohelp),#manualreseed td:not(.infohelp),#newsupdateconfig td:not(.infohelp),#reseedconfig td:not(.infohelp),#netconfig td:not(.infohelp):not(.infowarn),#graphs td{padding:5px}
 #config_update tr:first-child td{padding:6px 5px}
@@ -2707,18 +2707,19 @@ td.optionsave{white-space:normal}
 .tunnel_local{margin-right:0;width:64px;line-height:1.08;box-sizing:border-box}
 #allTransit td{white-space:nowrap}
 #clientconf code{display:inline-block;white-space:nowrap}
+#config_update td:first-child{white-space:normal;width:30%}
+#config_update #newsDisplay{display:none}
 #faq h3{font-size:10pt}
 #floodfills th:nth-child(8),#floodfills td:nth-child(8),#floodfills th:nth-child(13),#floodfills td:nth-child(13),#floodfills th:nth-child(14),#floodfills td:nth-child(14){display:none}
 #help h3,#faq h3{font-size:10pt}
-#config_update td:first-child{white-space:normal;width:30%}
 #netconfig label,#externali2cp td label,#externali2cp .optionlist .nowrap,#reseedconfig .nowrap{width:calc(100% - 10px)}
 #participating a::after,#peercount a::after{width:16px;height:16px;background-size:16px}
 #participatingtunnels .statusnotes:last-of-type{margin-bottom:6px}
 #peercount img{margin:-2px -4px}
+#peers .duptx,#peers .duprx{display:none}
 #peers .idle,#peers .inout{min-width:104px}
 #peers .skew{display:none}
 #peers .widescroll .cells{font-size:8pt}
-#peers .duptx,#peers .duprx{display:none}
 #plugininstall input[type=text]{min-width:200px}
 #portfaq td:nth-child(2){white-space:normal}
 #profilelist .fast,#profilelist .highcap.integrated,#profilelist .standard.integrated{background-position:calc(50% - 8px) center,calc(50% + 8px) center;background-size:14px}
@@ -2726,16 +2727,17 @@ td.optionsave{white-space:normal}
 #profilelist td:nth-last-child(2) span,#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(5) span{text-align:center}
 #tunnel_defs{margin-bottom:5px}
 #tunnelPeerCount{margin-bottom:4px}
+#tunnels{padding:0 5px;min-width:640px}
 #tunnels .cells:first-child{width:1%;max-width:48px;min-width:48px}
 #tunnels .cells:nth-child(2),#tunnels .cells:nth-child(3),.tunnels_participating td:nth-child(4){width:1%;min-width:72px}
 #tunnels h3{margin-top:6px}
-#tunnels{padding:0 5px;min-width:640px}
 #tunnels .percentBarOuter,#tunnels .percentBarText{margin:0 2px;width:70px}
 #tunnels .tunnel_cap{margin:0;padding:3px 2px 2px;line-height:1.2}
 #tunnels .tunneldisplay td{padding-left:2px;padding-right:2px}
 #tunnels .tunneldisplay .tunnel_id{display:none}
 #tunnels .tunneldisplay .tunnel_peer.tunnel_local{padding:4px}
 #udpconnections .cells{border:1px inset #131}
+#updateHelper .optionlist{min-width:300px;columns:300px 1}
 }
 
 @media (max-width:1150px){
@@ -2775,8 +2777,7 @@ table:not(:first-of-type).netdbentry tr:nth-child(2) td:nth-child(2)::before{dis
 #config_update .nowrap{min-width:300px}
 #config_update #checkforupdates{display:block!important;column-span:all;border-top:var(--border_soft)}
 #updateHelper b{min-width:140px}
-#updateHelper select{margin:4px;width:160px;min-width:unset}
-#updateHelper .optionlist{min-width:300px;columns:300px 2}
+#updateHelper select{margin:4px;width:160px;max-width:160px;min-width:unset}
 }
 
 @media (max-width:900px){
