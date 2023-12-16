@@ -1611,7 +1611,7 @@ public class Router implements RouterClock.ClockShiftListener {
         int delay = 2000;
         if (_log.shouldWarn())
             _log.warn("Stopping ClientManager...");
-        try { _context.clientManager().shutdown(); } catch (Throwable t) { _log.error("[ClientManager] Shutdown error: " + t.getMessage()); }
+        try { _context.clientManager().shutdown(); } catch (Throwable t) { _log.error("[ClientManager] " + t.getMessage()); }
         if (waitForClients) {
             // Give time for the disconnect messages to get to them
             // so they can shut down correctly before the JVM goes away
@@ -1622,41 +1622,42 @@ public class Router implements RouterClock.ClockShiftListener {
         }
 
         if (_log.shouldDebug()) {
-            try { _context.namingService().shutdown(); } catch (Throwable t) { _log.error("[NamingService] Shutdown error: ", t); }
-            try { _context.jobQueue().shutdown(); } catch (Throwable t) { _log.error("[JobQueue] Shutdown error: ", t); }
-            try { _context.tunnelManager().shutdown(); } catch (Throwable t) { _log.error("[TunnelManager] Shutdown error: ", t); }
-            try { _context.tunnelDispatcher().shutdown(); } catch (Throwable t) { _log.error("[TunnelDispatcher] Shutdown error: ", t); }
-            try { _context.netDbSegmentor().shutdown(); } catch (Throwable t) { _log.error("[NetworkDb] Shutdown error: ", t); }
-            try { _context.commSystem().shutdown(); } catch (Throwable t) { _log.error("[CommSystem] Shutdown error: ", t); }
+            try { _context.namingService().shutdown(); } catch (Throwable t) { _log.error("[NamingService] ", t); }
+            try { _context.jobQueue().shutdown(); } catch (Throwable t) { _log.error("[JobQueue] ", t); }
+            try { _context.tunnelManager().shutdown(); } catch (Throwable t) { _log.error("[TunnelManager] ", t); }
+            try { _context.tunnelDispatcher().shutdown(); } catch (Throwable t) { _log.error("[TunnelDispatcher] ", t); }
+            try { _context.netDbSegmentor().shutdown(); } catch (Throwable t) { _log.error("[NetworkDb] ", t); }
+            try { _context.commSystem().shutdown(); } catch (Throwable t) { _log.error("[CommSystem] ", t); }
             try { _context.bandwidthLimiter().shutdown(); } catch (Throwable t) { _log.error("[BandwidthLimiter]", t); }
-            try { _context.peerManager().shutdown(); } catch (Throwable t) { _log.error("[PeerManager] Shutdown error: ",  t); }
-            try { _context.messageRegistry().shutdown(); } catch (Throwable t) { _log.error("[MessageRegistry] Shutdown error: ",  t); }
-            try { _context.messageValidator().shutdown(); } catch (Throwable t) { _log.error("[MessageValidator] Shutdown error: ",  t); }
-            try { _context.inNetMessagePool().shutdown(); } catch (Throwable t) { _log.error("[InboundNetPool] Shutdown error: ",  t); }
-            try { _context.clientMessagePool().shutdown(); } catch (Throwable t) { _log.error("[ClientMessagePool] Shutdown error: ",  t); }
-            try { _context.sessionKeyManager().shutdown(); } catch (Throwable t) { _log.error("[SessionKeyManager] Shutdown error: ",  t); }
-            try { _context.eciesEngine().shutdown(); } catch (Throwable t) { _log.error("[ECIES engine] Shutdown error: ",  t); }
-            try { _context.messageHistory().shutdown(); } catch (Throwable t) { _log.error("[MessageHistoryLogger] Shutdown error: ",  t); }
+            try { _context.peerManager().shutdown(); } catch (Throwable t) { _log.error("[PeerManager] ",  t); }
+            try { _context.messageRegistry().shutdown(); } catch (Throwable t) { _log.error("[MessageRegistry] ",  t); }
+            try { _context.messageValidator().shutdown(); } catch (Throwable t) { _log.error("[MessageValidator] ",  t); }
+            try { _context.inNetMessagePool().shutdown(); } catch (Throwable t) { _log.error("[InboundNetPool] ",  t); }
+            try { _context.clientMessagePool().shutdown(); } catch (Throwable t) { _log.error("[ClientMessagePool] ",  t); }
+            try { _context.sessionKeyManager().shutdown(); } catch (Throwable t) { _log.error("[SessionKeyManager] ",  t); }
+            try { _context.eciesEngine().shutdown(); } catch (Throwable t) { _log.error("[ECIES engine] ",  t); }
+            try { _context.messageHistory().shutdown(); } catch (Throwable t) { _log.error("[MessageHistoryLogger] ",  t); }
             // do stat manager last to reduce chance of NPEs in other threads
-            try { _context.statManager().shutdown(); } catch (Throwable t) { _log.error("[StatsManager] Shutdown error: ",  t); }
+            try { _context.statManager().shutdown(); } catch (Throwable t) { _log.error("[StatsManager] ",  t); }
         } else if (isAdvanced()) {
-            try { _context.namingService().shutdown(); } catch (Throwable t) { _log.error("[Naming service] Shutdown error: " + t.getMessage()); }
-            try { _context.jobQueue().shutdown(); } catch (Throwable t) { _log.error("[JobQueue] Shutdown error: " + t.getMessage()); }
-            try { _context.tunnelManager().shutdown(); } catch (Throwable t) { _log.error("[TunnelManager] Shutdown error: " + t.getMessage()); }
-            try { _context.tunnelDispatcher().shutdown(); } catch (Throwable t) { _log.error("[TunnelDispatcher] Shutdown error: " + t.getMessage()); }
-            try { _context.netDbSegmentor().shutdown(); } catch (Throwable t) { _log.error("[networkDb] Shutdown error: " + t.getMessage()); }
-            try { _context.commSystem().shutdown(); } catch (Throwable t) { _log.error("[CommSystem] Shutdown error: " + t.getMessage()); }
-            try { _context.bandwidthLimiter().shutdown(); } catch (Throwable t) { _log.error("[BandwidthLimiter] Shutdown error: " + t.getMessage()); }
-            try { _context.peerManager().shutdown(); } catch (Throwable t) { _log.error("[PeerManager] Shutdown error: " + t.getMessage()); }
-            try { _context.messageRegistry().shutdown(); } catch (Throwable t) { _log.error("[MessageRegistry] Shutdown error: " + t.getMessage()); }
-            try { _context.messageValidator().shutdown(); } catch (Throwable t) { _log.error("[MessageValidator] Shutdown error: " + t.getMessage()); }
-            try { _context.inNetMessagePool().shutdown(); } catch (Throwable t) { _log.error("[InboundNetPool] Shutdown error: " + t.getMessage()); }
-            try { _context.clientMessagePool().shutdown(); } catch (Throwable t) { _log.error("[ClientMesssagePool] Shutdown error: " + t.getMessage()); }
-            try { _context.sessionKeyManager().shutdown(); } catch (Throwable t) { _log.error("[SessionKeyManager] Shutdown error: " + t.getMessage()); }
-            try { _context.eciesEngine().shutdown(); } catch (Throwable t) { _log.error("[ECIES engine] Shutdown error: " + t.getMessage()); }
-            try { _context.messageHistory().shutdown(); } catch (Throwable t) { _log.error("[MessageHistoryLogger] Shutdown error: " + t.getMessage()); }
+            try { _context.namingService().shutdown(); } catch (Throwable t) { _log.error("[Naming service] " + t.getMessage()); }
+            try { _context.jobQueue().shutdown(); } catch (Throwable t) { _log.error("[JobQueue] " + t.getMessage()); }
+            try { _context.tunnelManager().shutdown(); } catch (Throwable t) { _log.error("[TunnelManager] " + t.getMessage()); }
+            try { _context.tunnelDispatcher().shutdown(); } catch (Throwable t) { _log.error("[TunnelDispatcher] " + t.getMessage()
+                 .replace("Cannot invoke \"net.i2p.router.tunnel.TunnelGateway$Receiver.getSendTo()\"", "Cannot send to TunnelGateway")); }
+            try { _context.netDbSegmentor().shutdown(); } catch (Throwable t) { _log.error("[networkDb] " + t.getMessage()); }
+            try { _context.commSystem().shutdown(); } catch (Throwable t) { _log.error("[CommSystem] " + t.getMessage()); }
+            try { _context.bandwidthLimiter().shutdown(); } catch (Throwable t) { _log.error("[BandwidthLimiter] " + t.getMessage()); }
+            try { _context.peerManager().shutdown(); } catch (Throwable t) { _log.error("[PeerManager] " + t.getMessage()); }
+            try { _context.messageRegistry().shutdown(); } catch (Throwable t) { _log.error("[MessageRegistry] " + t.getMessage()); }
+            try { _context.messageValidator().shutdown(); } catch (Throwable t) { _log.error("[MessageValidator] " + t.getMessage()); }
+            try { _context.inNetMessagePool().shutdown(); } catch (Throwable t) { _log.error("[InboundNetPool] " + t.getMessage()); }
+            try { _context.clientMessagePool().shutdown(); } catch (Throwable t) { _log.error("[ClientMesssagePool] " + t.getMessage()); }
+            try { _context.sessionKeyManager().shutdown(); } catch (Throwable t) { _log.error("[SessionKeyManager] " + t.getMessage()); }
+            try { _context.eciesEngine().shutdown(); } catch (Throwable t) { _log.error("[ECIES engine] " + t.getMessage()); }
+            try { _context.messageHistory().shutdown(); } catch (Throwable t) { _log.error("[MessageHistoryLogger] " + t.getMessage()); }
             // do stat manager last to reduce chance of NPEs in other threads
-            try { _context.statManager().shutdown(); } catch (Throwable t) { _log.error("[StatsManager] Shutdown error: " + t.getMessage()); }
+            try { _context.statManager().shutdown(); } catch (Throwable t) { _log.error("[StatsManager] " + t.getMessage()); }
         } else {
             try { _context.namingService().shutdown(); } catch (Throwable t) {}
             try { _context.jobQueue().shutdown(); } catch (Throwable t) {}
@@ -1685,7 +1686,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
         try {
             _context.elGamalEngine().shutdown();
-        } catch (Throwable t) { _log.log(Log.CRIT, "[elGamal engine] Shutdown error: " + t.getMessage()); }
+        } catch (Throwable t) { _log.log(Log.CRIT, "[elGamal engine] " + t.getMessage()); }
 
         if (contexts.isEmpty()) {
             // any thing else to shut down?
@@ -1694,7 +1695,7 @@ public class Router implements RouterClock.ClockShiftListener {
         }
         try {
             ((FortunaRandomSource)_context.random()).shutdown();
-        } catch (Throwable t) { _log.log(Log.CRIT, "[FortunaRandomSource] Shutdown error: " + t.getMessage()); }
+        } catch (Throwable t) { _log.log(Log.CRIT, "[FortunaRandomSource] " + t.getMessage()); }
 
         // logManager shut down in finalShutdown()
         _watchdog.shutdown();
