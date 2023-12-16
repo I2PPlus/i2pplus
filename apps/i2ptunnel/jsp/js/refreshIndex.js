@@ -1,11 +1,14 @@
 import {initToggleInfo} from "./toggleTunnelInfo.js";
+
 var control = document.getElementById("globalTunnelControl");
 var countClient = document.getElementById("countClient");
 var countServer = document.getElementById("countServer");
+var globalControl = document.getElementById("globalTunnelControl");
 var index = document.getElementById("page");
 var messages = document.getElementById("tunnelMessages");
 var notReady = document.getElementById("notReady");
 var toggle = document.getElementById("toggleInfo");
+var tunnelIndex = document.getElementById("page");
 var url = window.location.pathname;
 var xhrtunnman = new XMLHttpRequest();
 
@@ -124,7 +127,7 @@ function refreshPanels() {
   var clientsResponse = xhrtunnman.responseXML.getElementById("clientTunnels");
   if (messages) {
     var messagesResponse = xhrtunnman.responseXML.getElementById("tunnelMessages");
-    if (!Object.is(messages.innerHTML, messagesResponse.innerHTML)) {
+    if (messagesResponse && !Object.is(messages.innerHTML, messagesResponse.innerHTML)) {
       messages.innerHTML = messagesResponse.innerHTML;
     }
   }
@@ -150,14 +153,51 @@ function reloadPage() {
 function bindToggle() {
   if (toggle) {
     toggle.addEventListener("click", initToggleInfo, false);
+    if (!globalControl.classList.contains("listener")) {globalControl.classList.add("listener");}
   }
 }
 
 function refreshIndex() {
-  refreshTunnelStatus();
-  bindToggle();
+  refreshTunnelStatus()
+  if (!globalControl.classList.contains("listener")) {bindToggle();}
+  if (!tunnelIndex.classList.contains("listener")) {initTunnelControl();}
 }
 
-bindToggle();
+function initTunnelControl() {
+  var startButtons = document.querySelectorAll(".control.start");
+  var stopButtons = document.querySelectorAll(".control.stop");
+  var startAll = document.querySelector(".control.startall");
+  var stopAll = document.querySelector(".control.stopall");
+  var restartAll = document.querySelector(".control.restartall");
+  var xhrcontrol = new XMLHttpRequest();
+
+  tunnelIndex.addEventListener("click", function(event) {
+    var target = event.target;
+    if (target.classList.contains("control.start") ||
+        target.classList.contains("control.stop") ||
+        target.classList.contains("control.startall") ||
+        target.classList.contains("control.stopall") ||
+        target.classList.contains("control.restartall")) {
+      event.preventDefault();
+      target.classList.add("processing");
+      tunnelControl(target.href, target);
+    }
+  });
+
+  function tunnelControl(url, target) {
+    xhrcontrol.onreadystatechange = function() {
+      if (xhrcontrol.readyState === 4 && xhrcontrol.status === 200) {
+        target.classList.remove("processing");
+        countServices();
+        updateVolatile();
+      }
+    };
+    xhrcontrol.open("GET", url, true);
+    xhrcontrol.send();
+  }
+}
+
+if (toggle) {bindToggle();}
+if (globalControl) {initTunnelControl();}
 setInterval(refreshIndex, 5000);
 document.addEventListener("DOMContentLoaded", countServices);

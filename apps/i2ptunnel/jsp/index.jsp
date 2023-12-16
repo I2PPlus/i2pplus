@@ -10,8 +10,19 @@
 <jsp:setProperty name="indexBean" property="tunnel" /><%-- must be set before key1-4 --%>
 <jsp:setProperty name="indexBean" property="*" />
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
+<% String activeTheme = indexBean.getTheme(); %>
 <!DOCTYPE html>
+<%
+  if (activeTheme.contains("dark") || activeTheme.contains("midnight")) {
+%>
+<html id=tman style=background:#000>
+<%
+  } else {
+%>
 <html id=tman>
+<%
+  }
+%>
 <head>
 <meta charset=utf-8>
 <title><%=intl._t("Tunnel Manager")%></title>
@@ -46,6 +57,7 @@
 <style>body{display:none;pointer-events:none}</style>
 </head>
 <body id=tunnelListPage>
+<iframe name=processForm id=processForm hidden></iframe>
 <div id=page>
 <%
   boolean isInitialized = indexBean.isInitialized();
@@ -62,7 +74,7 @@
       if (isInitialized) {
 %>
 <span>
-<a class="control clearlog iconize script" href="list?action=Clear&amp;msgid=<%=lastID%>&amp;nonce=<%=nextNonce%>"><%=intl._t("Clear")%></a>
+<a class="control clearlog iconize script" target=processForm href="list?action=Clear&amp;msgid=<%=lastID%>&amp;nonce=<%=nextNonce%>"><%=intl._t("Clear")%></a>
 </span>
 <%
       }  // isInitialized
@@ -77,11 +89,11 @@
 </tr>
 <tr id=screenlog_buttons hidden>
 <td class=buttons>
-<a class="control refresh iconize" href="list"><%=intl._t("Refresh")%></a>
+<a class="control refresh iconize" target=processForm href="list"><%=intl._t("Refresh")%></a>
 <%
       if (isInitialized) {
 %>
-<a class="control clearlog iconize" href="list?action=Clear&amp;msgid=<%=lastID%>&amp;nonce=<%=nextNonce%>"><%=intl._t("Clear")%></a>
+<a class="control clearlog iconize" target=processForm href="list?action=Clear&amp;msgid=<%=lastID%>&amp;nonce=<%=nextNonce%>"><%=intl._t("Clear")%></a>
 <%
       }  // isInitialized
 %>
@@ -99,12 +111,12 @@
 <tr>
 <td class=buttons>
 <a class="control wizard iconize" href="wizard"><%=intl._t("Tunnel Wizard")%></a>
-<a class="control stopall iconize" href="list?nonce=<%=nextNonce%>&amp;action=Stop%20all"><%=intl._t("Stop All")%></a>
-<a class="control startall iconize" href="list?nonce=<%=nextNonce%>&amp;action=Start%20all"><%=intl._t("Start All")%></a>
-<a class="control restartall iconize" href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all"><%=intl._t("Restart All")%></a>
+<a class="control stopall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Stop%20all"><%=intl._t("Stop All")%></a>
+<a class="control startall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Start%20all"><%=intl._t("Start All")%></a>
+<a class="control restartall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all"><%=intl._t("Restart All")%></a>
 <%--
 //this is really bad because it stops and restarts all tunnels, which is probably not what you want
-<a class="control reloadconfig iconize" href="list?nonce=<%=nextNonce%>&amp;action=Reload%20configuration"><%=intl._t("Reload Config")%></a>
+<a class="control reloadconfig iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Reload%20configuration"><%=intl._t("Reload Config")%></a>
 --%>
 </td>
 </tr>
@@ -127,7 +139,7 @@
 <th class=tunnelLocation><%=intl._t("Points at")%></th>
 <th class=tunnelPreview><%=intl._t("Preview")%></th>
 <th class=tunnelStatus><%=intl._t("Status")%></th>
-<th class=tunnelControl><%=intl._t("Control")%></th>
+<th class="tunnelControl volatile"><%=intl._t("Control")%></th>
 </tr>
 <%
         for (int curServer : indexBean.getControllerNumbers(false)) {
@@ -215,23 +227,23 @@ SSL
 <div class="statusStarting svr"><span class=tooltip hidden><b><%=intl._t("Starting...")%></b></span><%=intl._t("Starting...")%></div>
 </td>
 <td class="tunnelControl volatile">
-<a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
+<a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
 <%
                 break;
                 case IndexBean.RUNNING:
 %>
 <div class="statusRunning svr"><span class=tooltip hidden><b><%=intl._t("Running")%></b><hr><%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curServer, 3)%>&nbsp;<%=intl._t("in")%>, <%=editBean.getTunnelDepthOut(curServer, 3)%>&nbsp;<%=intl._t("out")%><br><%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curServer,2)%>&nbsp;<%=intl._t("in")%>, <%=editBean.getTunnelQuantityOut(curServer,2)%>&nbsp;<%=intl._t("out")%><br><%=intl._t("Variance")%>: <%=editBean.getTunnelVariance(curServer,0)%>&nbsp;<%=intl._t("in")%>,&nbsp;<%=editBean.getTunnelVarianceOut(curServer,0)%>&nbsp;<%=intl._t("out")%></span><%=intl._t("Running")%></div>
 </td>
-<td class=tunnelControl>
-<a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
+<td class="tunnelControl volatile">
+<a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
 <%
                 break;
                 case IndexBean.NOT_RUNNING:
 %>
 <div class="statusNotRunning svr"><span class=tooltip hidden><b><%=intl._t("Stopped")%></b></span><%=intl._t("Stopped")%></div>
 </td>
-<td class=tunnelControl>
-<a class="control start iconize" title="<%=intl._t("Start this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curServer%>"><%=intl._t("Start")%></a>
+<td class="tunnelControl volatile">
+<a class="control start iconize" title="<%=intl._t("Start this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curServer%>"><%=intl._t("Start")%></a>
 <%
                 break;
             }
@@ -389,7 +401,7 @@ ElGamal-2048
 <th class=tunnelInterface><%=intl._t("Interface")%></th>
 <th class=tunnelPort><%=intl._t("Port")%></th>
 <th class=tunnelStatus><%=intl._t("Status")%></th>
-<th class=tunnelControl><%=intl._t("Control")%></th>
+<th class="tunnelControl volatile"><%=intl._t("Control")%></th>
 </tr>
 <%
         for (int curClient : indexBean.getControllerNumbers(true)) {
@@ -450,7 +462,7 @@ ElGamal-2048
 <div class="statusStarting cli"><span class=tooltip hidden><b><%=intl._t("Starting...")%></b></span><%=intl._t("Starting...")%></div>
 </td>
 <td class="tunnelControl volatile">
-<a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
+<a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
 <%
                    break;
                    case IndexBean.STANDBY:
@@ -458,7 +470,7 @@ ElGamal-2048
 <div class="statusStandby cli"><span class=tooltip hidden><b><%=intl._t("Standby")%></b></span><%=intl._t("Standby")%></div>
 </td>
 <td class="tunnelControl volatile">
-<a class="control stop iconize" title="Stop this Tunnel" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
+<a class="control stop iconize" title="Stop this Tunnel" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
 <%
                    break;
                    case IndexBean.RUNNING:
@@ -466,7 +478,7 @@ ElGamal-2048
 <div class="statusRunning cli"><span class=tooltip hidden><b><%=intl._t("Running")%></b><hr><%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curClient, 3)%><br><%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curClient,2)%><br><%=intl._t("Variance")%>: <%=editBean.getTunnelVariance(curClient,0)%></span><%=intl._t("Running")%></div>
 </td>
 <td class="tunnelControl volatile">
-<a class="control stop iconize" title="Stop this Tunnel" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
+<a class="control stop iconize" title="Stop this Tunnel" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
 <%
                    break;
                    case IndexBean.NOT_RUNNING:
@@ -474,7 +486,7 @@ ElGamal-2048
 <div class="statusNotRunning cli"><span class=tooltip hidden><b><%=intl._t("Stopped")%></b></span><%=intl._t("Stopped")%></div>
 </td>
 <td class="tunnelControl volatile">
-<a class="control start iconize" title="<%=intl._t("Start this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curClient%>"><%=intl._t("Start")%></a>
+<a class="control start iconize" title="<%=intl._t("Start this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curClient%>"><%=intl._t("Start")%></a>
 <%
                    break;
                }
@@ -619,7 +631,7 @@ ElGamal-2048
   }  // !isInitialized()
 %>
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
+<script src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
 </div>
 <span data-iframe-height></span>
 <noscript><style>.script{display:none!important}.tunnelInfo{display:table-row!important}#screenlog_buttons{display:table-row!important}</style></noscript>
