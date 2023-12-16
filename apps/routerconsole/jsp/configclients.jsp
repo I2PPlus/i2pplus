@@ -49,7 +49,8 @@
 </p>
 <%    } %>
 <div class=wideload>
-<form action="" method=POST>
+<iframe name=processForm id=processForm hidden></iframe>
+<form id=form_clients action="" method=POST target=processForm>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="clientshelper" property="form1" />
 <div class=formaction id=clientsconfig>
@@ -63,6 +64,12 @@
 </div>
 </div>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+<script nonce=<%=cspNonce%>>
+  const clientsForm = document.getElementById("form_clients");
+  const processForm = document.getElementById("processForm");
+  window.addEventListener("DOMContentLoaded", progressx.hide);
+  clientsForm.addEventListener("submit", progressx.show);
+  processForm.addEventListener("load", progressx.hide);
+</script>
 </body>
 </html>
