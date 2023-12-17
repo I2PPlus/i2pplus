@@ -148,23 +148,11 @@ public class RouterThrottleImpl implements RouterThrottle {
 
         // Don't use CRIT because we don't want peers to think we're failing
         if (_context.router().getUptime() < _rejectStartupTime && !_context.router().isHidden()) {
-//            setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-            setTunnelStatus(_x("Starting up") + "&hellip;");
+            setTunnelStatus("[starting]" + _x("Starting up") + "&hellip;");
         } else if (_context.router().isHidden()) {
-            setTunnelStatus(_x("Declining all tunnel requests" + ":<br>" + _x("Hidden Mode")));
+            setTunnelStatus("[hidden]" + _x("Declining all tunnel requests" + ":<br>" + _x("Hidden Mode")));
             return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
         }
-
-    /**** Moved to BuildHandler
-        long lag = _context.jobQueue().getMaxLag();
-        if (lag > JOB_LAG_LIMIT_TUNNEL) {
-            if (_log.shouldWarn())
-                _log.warn("Refusing tunnel request, as the job lag is " + lag);
-            _context.statManager().addRateData("router.throttleTunnelCause", lag);
-            setTunnelStatus(_x("Declining tunnel requests" + ":<br>" + _x(High job lag"));
-            return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
-        }
-     ****/
 
         RateAverages ra = RateAverages.getTemp();
 
@@ -190,32 +178,33 @@ public class RouterThrottleImpl implements RouterThrottle {
             //Set throttling if necessary
             if ((ra.getAverage() > maxProcessingTime * 0.9 || ra.getCurrent() > maxProcessingTime ||
                  ra.getLast() > maxProcessingTime) && maxTunnels > 0) {
-//                if (_log.shouldWarn()) {
-                _log.warn("Refusing tunnel request -> Message processing congestion" +
-                          "\n* Current: " + ((int)ra.getCurrent()) + "ms" +
-                          "\n* Last: " + ((int)ra.getLast()) + "ms" +
-                          "\n* Average: " + ((int)ra.getAverage()) + "ms" +
-                          "\n* Max time to process: " + maxProcessingTime + "ms");
-//                }
-                setTunnelStatus(_x("Declining tunnel requests" + ":<br>" + _x("High message delay")));
+                if (_log.shouldWarn()) {
+                    _log.warn("Refusing tunnel request -> Message processing congestion" +
+                              "\n* Current: " + ((int)ra.getCurrent()) + "ms" +
+                              "\n* Last: " + ((int)ra.getLast()) + "ms" +
+                              "\n* Average: " + ((int)ra.getAverage()) + "ms" +
+                              "\n* Max time to process: " + maxProcessingTime + "ms");
+                }
+                setTunnelStatus("[rejecting/overload]" + _x("Declining tunnel requests" + ":<br>" + _x("High message delay")));
                 return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
             }
         }
 
-
         int numTunnels = _context.tunnelManager().getParticipatingCount();
         if (numTunnels >= maxTunnels) {
             if (maxTunnels > 0) {
-//                if (_log.shouldWarn())
-                _log.warn("Refusing tunnel request -> Already participating in "
-                          + numTunnels + " (max: " + maxTunnels + ")");
+                if (_log.shouldWarn()) {
+                    _log.warn("Refusing tunnel request -> Already participating in "
+                              + numTunnels + " (max: " + maxTunnels + ")");
+                }
                 _context.statManager().addRateData("router.throttleTunnelMaxExceeded", numTunnels);
-                setTunnelStatus(_x("Declining requests" + ": " + _x("Limit reached")));
+                setTunnelStatus("[rejecting/max]" + _x("Declining requests" + ": " + _x("Limit reached")));
             } else {
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("Refusing tunnel request -> Disabled by configuration");
+                }
                 _context.statManager().addRateData("router.throttleTunnelMaxExceeded", numTunnels);
-                setTunnelStatus(_x("Declining tunnel requests" + ":<br>" + _x("Participation disabled")));
+                setTunnelStatus("[disabled]" + _x("Declining tunnel requests" + ":<br>" + _x("Participation disabled")));
             }
             return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
         }
@@ -229,7 +218,7 @@ public class RouterThrottleImpl implements RouterThrottle {
          * Reduce tunnel growth if we are growing faster than the lag based metrics can detect reliably.
          */
         if (SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() > 90) {
-            setTunnelStatus(_x("Rejecting all tunnel requests" + ":<br>" + _x("High system load")));
+            setTunnelStatus("[rejecting/overload]" + _x("Rejecting all tunnel requests" + ":<br>" + _x("High system load")));
         } else if ((numTunnels > getMinThrottleTunnels()) && (DEFAULT_MAX_TUNNELS >= maxTunnels)) {
             Rate avgTunnels = _context.statManager().getRate("tunnel.participatingTunnels").getRate(10*60*1000);
             if (avgTunnels != null) {
@@ -257,11 +246,13 @@ public class RouterThrottleImpl implements RouterThrottle {
                         // hard to do {0} from here
                         //setTunnelStatus("Rejecting " + (100 - (int) probAccept*100) + "% of tunnels: High number of requests");
                         if (probAccept <= 0.5)
-                            setTunnelStatus(_x("Rejecting most tunnel requests" + ":<br>" + _x("High number of requests")));
+                            setTunnelStatus("[rejecting/overload]" + _x("Rejecting most tunnel requests" + ":<br>" + _x("High number of requests")));
                         else if (probAccept <= 0.9)
-                            setTunnelStatus(_x("Accepting most tunnel requests"));
+                            setTunnelStatus("[accepting]" + _x("Accepting most tunnel requests"));
+                        else if (numTunnels > 0)
+                            setTunnelStatus("[accepting]" + _x("Accepting tunnel requests"));
                         else
-                            setTunnelStatus(_x("Accepting tunnel requests"));
+                            setTunnelStatus("[ready]" + _x("Accepting tunnel requests"));
                         return TunnelHistory.TUNNEL_REJECT_PROBABALISTIC_REJECT;
                     }
                 } else {
@@ -392,7 +383,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 //            if (_log.shouldWarn())
             _log.warn("Rejecting participating tunnel requests \n* Available bandwidth (" + availBps +
                       "Bps) is less than minimum required (" + MIN_AVAILABLE_BPS + "Bps)");
-            setTunnelStatus(LIMIT_STR);
+            setTunnelStatus("[rejecting/max]" + LIMIT_STR);
             return false;
         }
 
@@ -414,9 +405,8 @@ public class RouterThrottleImpl implements RouterThrottle {
         long overage = Math.max(used1mIn - (maxKBpsIn*1024), used1mOut - (maxKBpsOut*1024));
         if ( (overage > 0) &&
              ((overage/(maxKBps*1024f)) > _context.random().nextFloat()) ) {
-//            if (_log.shouldWarn())
             _log.warn("Rejecting participating tunnel request \n* 1 minute rate (" + overage + " over) indicates overload.");
-            setTunnelStatus(LIMIT_STR);
+            setTunnelStatus("[rejecting/overload]" + LIMIT_STR);
             return false;
         }
 
@@ -457,61 +447,15 @@ public class RouterThrottleImpl implements RouterThrottle {
         }
 
             if (probReject >= 0.9)
-                setTunnelStatus(LIMIT_STR);
+                setTunnelStatus("[rejecting]" + LIMIT_STR);
             else if (probReject >= 0.5)
-                // hard to do {0} from here
-                //setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
-                //setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
-                setTunnelStatus(_x("Declining requests" + ": " + "Bandwidth limit"));
+                setTunnelStatus("[rejecting/bandwidth]" + _x("Declining requests" + ": " + "Bandwidth limit"));
             else if(probReject >= 0.1)
                 // hard to do {0} from here
-                //setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
-                setTunnelStatus(_x("Accepting most tunnel requests"));
+                setTunnelStatus("[accepting]" + _x("Accepting most tunnel requests"));
             else
-                setTunnelStatus(_x("Accepting tunnel requests"));
+                setTunnelStatus("[accepting]" + _x("Accepting tunnel requests"));
             return !reject;
-
-
-        /*
-        if (availBps <= 8*1024) {
-            // lets be more conservative for people near their limit and assume 1KBps per tunnel
-            boolean rv = ( (numTunnels + 1)*1024 < availBps);
-            if (_log.shouldDebug())
-                _log.debug("Nearly full router (" + availBps + ") with " + numTunnels + " tunnels, allow a new request? " + rv);
-            return rv;
-        }
-        */
-
-/***
-        double growthFactor = ((double)(numTunnels+1))/(double)numTunnels;
-        double toAllocate = (numTunnels > 0 ? bytesAllocated * growthFactor : 0);
-
-        double allocatedBps = toAllocate / (10 * 60);
-        double pctFull = allocatedBps / availBps;
-
-        if ( (pctFull < 1.0) && (pctFull >= 0.0) ) { // (_context.random().nextInt(100) > 100 * pctFull) {
-            if (_log.shouldDebug())
-                _log.debug("Allowing the tunnel w/ " + pctFull + " of our " + availBps
-                           + "Bps/" + allocatedBps + "KBps allocated through " + numTunnels + " tunnels");
-            return true;
-        } else {
-            double probAllow = availBps / (allocatedBps + availBps);
-            boolean allow = (availBps > MIN_AVAILABLE_BPS) && (_context.random().nextFloat() <= probAllow);
-            if (allow) {
-                if (_log.shouldInfo())
-                    _log.info("Probabalistically allowing the tunnel w/ " + (pctFull*100d) + "% of our " + availBps
-                               + "Bps allowed (" + toAllocate + "bytes / " + allocatedBps
-                               + "Bps) through " + numTunnels + " tunnels");
-                return true;
-            } else {
-                if (_log.shouldWarn())
-                    _log.warn("Rejecting the tunnel w/ " + (pctFull*100d) + "% of our " + availBps
-                               + "Bps allowed (" + toAllocate + "bytes / " + allocatedBps
-                               + "Bps) through " + numTunnels + " tunnels");
-                return false;
-            }
-        }
-***/
     }
 
     /** don't ever probabalistically throttle tunnels if we have less than this many */
@@ -567,17 +511,12 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     private void setTunnelStatus() {
-// NPE, too early
-//        if (_context.router().getRouterInfo().getBandwidthTier().equals("K"))
-//            setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
-//        else
-//            setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-            setTunnelStatus(_x("Starting up") + "&hellip;");
+        setTunnelStatus("[starting]" + _x("Starting up") + "&hellip;");
     }
 
     /** @since 0.8.12 */
     public void setShutdownStatus() {
-        setTunnelStatus(_x("Declining requests") + ": " + _x("Shutting down") + "&hellip;");
+        setTunnelStatus("[shutdown]" + _x("Declining requests") + ": " + _x("Shutting down") + "&hellip;");
     }
 
     /** @since 0.8.12 */
@@ -585,12 +524,10 @@ public class RouterThrottleImpl implements RouterThrottle {
         // try hard to guess the state, before we actually get a request
         int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, DEFAULT_MAX_TUNNELS);
         RouterInfo ri = _context.router().getRouterInfo();
-        if (maxTunnels > 0 &&
-            !_context.router().isHidden() &&
-            ri != null && !ri.getBandwidthTier().equals("K")) {
-            setTunnelStatus(_x("Accepting tunnel requests"));
+        if (maxTunnels > 0 && !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K")) {
+            setTunnelStatus("[accepting]" + _x("Accepting tunnel requests"));
         } else {
-            setTunnelStatus(_x("Declining tunnel requests"));
+            setTunnelStatus("[rejecting/disabled]" + _x("Declining tunnel requests"));
         }
     }
 
