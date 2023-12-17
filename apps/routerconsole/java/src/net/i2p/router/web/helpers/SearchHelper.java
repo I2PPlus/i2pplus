@@ -47,7 +47,6 @@ public class SearchHelper extends HelperBase {
         "tube.i2p"                 + S +     "http://tube.i2p/search?query=%s" + S +
         "wiki.i2p-projekt.i2p"     + S +     "http://wiki.i2p-projekt.i2p/wiki/index.php?search=%s" + S +
         "wikiless.i2p"             + S +     "http://wikiless.i2p/w/index.php?search=%s&fulltext=Search" + S +
-        "wired.i2p"                + S +     "http://wired.i2p/search/?q=%s" + S +
         "wordnik.i2p"              + S +     "http://wordnik.i2p/words?myWord=%s" +
         //"ebooks.i2p"               + S +     "http://ebooks.i2p/index.php?page=9&query=%s" + S +
         //"eepsites.i2p"             + S +     "http://eepsites.i2p/Content/Search/SearchResults.aspx?inpQuery=%s" + S +
@@ -64,6 +63,7 @@ public class SearchHelper extends HelperBase {
         //"tome.i2p"                 + S +     "http://tome.i2p/search.php?q=%s" + S +
         //"torrentfinder.i2p"        + S +     "http://torrentfinder.i2p/?searchq=%s" + S +
         //"trac.i2p2.i2p"            + S +     "http://trac.i2p2.i2p/search?q=%s" + S +
+        //"wired.i2p"                + S +     "http://wired.i2p/search/?q=%s" + S +
         //"yacy.idk.i2p"             + S +     "http://yacy.idk.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + S +
         //"zzz.i2p"                  + S +     "http://zzz.i2p/search?type=posts&query=%s" + //S +
         "";
