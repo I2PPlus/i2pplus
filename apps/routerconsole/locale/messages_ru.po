@@ -9463,7 +9463,7 @@ msgstr "Примечание: Для увеличения вашей безоп�
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:530
 msgid "For a more extensive guide to configuration for various browsers, see the <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>browser configuration guide</a>."
-msgstr "Более подробное руководство по настройке для различных браузеров можно найти в <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>руководстве по настройке браузера</а>."
+msgstr "Более подробное руководство по настройке для различных браузеров можно найти в <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>руководстве по настройке браузера</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/configuration_jsp.java:532
 msgid "The Tunnel Manager"
