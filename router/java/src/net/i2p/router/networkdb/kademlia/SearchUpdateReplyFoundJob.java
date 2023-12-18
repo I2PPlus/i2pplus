@@ -92,6 +92,7 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
                     RouterInfo ri = (RouterInfo) entry;
                     _facade.store(ri.getHash(), ri);
                 }
+                getContext().profileManager().dbLookupSuccessful(_peer, timeToReply);
             } catch (UnsupportedCryptoException iae) {
                 // don't blame the peer
                 getContext().profileManager().dbLookupSuccessful(_peer, timeToReply);
