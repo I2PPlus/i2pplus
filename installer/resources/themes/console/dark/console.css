@@ -844,7 +844,7 @@ td.ipv6{width:1%;max-width:24px}
 #view_profile .viewprofile{margin-right:6px}
 #view_profile .identicon{margin:0;width:27px;height:27px;position:absolute;top:2px;right:2px}
 #viewprofile td{padding:0}
-#viewprofile pre,pre#activetransports{margin:0;padding:20px 20px 0;width:calc(100% - 48px);line-height:20px;letter-spacing:.05em;text-shadow:var(--textshadow);border:var(--border);border-left:7px solid #242;background:var(--silhouette) no-repeat right 12px bottom,repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0,rgba(0,8,0,.6) 20px,rgba(0,20,0,.6) 20px,rgba(0,20,0,.6) 40px);background-size:auto 90%,100% 40px}
+#viewprofile pre,pre#activetransports{margin:0;padding:20px 20px 0;width:calc(100% - 48px);line-height:20px;letter-spacing:.05em;font-size:100%;text-shadow:var(--textshadow);border:var(--border);border-left:7px solid #242;background:var(--silhouette) no-repeat right 12px bottom,repeating-linear-gradient(180deg,rgba(0,8,0,.6) 0,rgba(0,8,0,.6) 20px,rgba(0,20,0,.6) 20px,rgba(0,20,0,.6) 40px);background-size:auto 90%,100% 40px}
 #viewprofile span{margin:-26px -1px -1px 0;padding:5px;float:right;border:var(--border);background:#000}
 #profiles_overview{margin-bottom:9px;background:url(../images/profile.svg) no-repeat 15px center/28px,var(--msg)}
 #peerprofiles+h3{margin-top:0}
@@ -1275,15 +1275,16 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .netdb_leases .tunnel_peer a{margin:0;padding:0;letter-spacing:.1em}
 .netdb_name{text-transform:capitalize;font-weight:700;color:var(--ink)}
 .netdb_tunnel{margin:0 5px 0 -1px;padding:1px 4px;display:inline-block;border:var(--border_badge);border-radius:2px;box-shadow:var(--outline);background:#020}
+#leasesetsummary,#leasesetdebug{margin-bottom:14px}
 #leasesetdebug td:nth-child(even){white-space:nowrap;text-align:left}
 #leasesetdebug td:nth-child(odd){width:200px;white-space:nowrap;text-align:right;border-right:1px inset #131}
 #leasesetdebug td:nth-child(2){width:10px}
 #leasesetdebug th a,#leasesetsummary a{word-spacing:normal;letter-spacing:normal;font-size:9pt;text-transform:capitalize}
+#leasesetdebug th,#leasesetsummary th{padding:8px 10px;word-spacing:.1em;letter-spacing:.08em;font-size:10pt;font-weight:700;text-transform:uppercase}
 #leasesetdebug th:first-child,#leasesetsummary th:first-child{white-space:nowrap;text-align:left}
-#leasesetdebug th,#leasesetsummary th{padding:8px 10px;word-spacing:.1em;letter-spacing:.08em;font-size:10pt;font-weight:700;text-transform:uppercase;background:var(--title)}
-#leasesetsummary,#leasesetdebug{margin-bottom:14px}
-#leasesetsummary td:first-child{padding-left:10px;width:100px;white-space:nowrap}
+#leasesetsummary th:last-child{text-align:left}
 #leasesetsummary th:first-child{padding:8px 10px}
+#leasesetsummary td:first-child{padding-left:10px;width:100px;white-space:nowrap}
 #leasesetsummary tr:last-child td:last-child{text-align:left}
 #netdb a[href$="i2p"]{margin-left:6px;display:inline-block}
 #netdb code{font-weight:400}
