@@ -84,6 +84,7 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
             long timeToReply = _state.dataFound(_peer);
             DatabaseStoreMessage msg = (DatabaseStoreMessage)message;
             DatabaseEntry entry = msg.getEntry();
+            getContext().profileManager().dbLookupSuccessful(_peer, timeToReply);
             try {
                 if (entry.isLeaseSet()) {
                     LeaseSet ls = (LeaseSet) entry;
@@ -92,7 +93,6 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
                     RouterInfo ri = (RouterInfo) entry;
                     _facade.store(ri.getHash(), ri);
                 }
-                getContext().profileManager().dbLookupSuccessful(_peer, timeToReply);
             } catch (UnsupportedCryptoException iae) {
                 // don't blame the peer
                 getContext().profileManager().dbLookupSuccessful(_peer, timeToReply);
