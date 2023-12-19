@@ -1544,15 +1544,13 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writePageNav(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total, String filter, boolean noThinsp) {
         StringBuilder buf = new StringBuilder(1024);
 
-        // TODO: assign disabled class to a tag, not span
-
         // First
         buf.append("<a href=\"")
            .append(_contextPath)
            .append(getQueryString(req, null, "", null, filter))
-           .append("\"><span id=\"first\"")
-           .append(start > 0 ? "" : " class=\"disabled\"")
-           .append(">")
+           .append("\"")
+           .append(start > 0 ? "" : " class=disabled")
+           .append("><span id=first>")
            .append(toThemeSVG("first", _t("First"), _t("First page")))
            .append("</span></a>");
 
@@ -1561,9 +1559,9 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<a href=\"")
            .append(_contextPath)
            .append(getQueryString(req, null, String.valueOf(prev), null, filter))
-           .append("\"><span id=\"previous\"")
-           .append(prev > 0 ? "" : " class=\"disabled\"")
-           .append(">")
+           .append("\"")
+           .append(prev > 0 ? "" : " class=disabled")
+           .append("><span id=previous>")
            .append(toThemeSVG("previous", _t("Prev"), _t("Previous page")))
            .append("</span></a>");
 
@@ -1574,7 +1572,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         if (pages > 1) {
             int page = (start + pageSize >= total) ? pages : (1 + (start / pageSize));
-            buf.append("<span id=\"pagecount\">")
+            buf.append("<span id=pagecount>")
                .append(page)
                .append(thinsp(noThinsp))
                .append(pages)
@@ -1586,9 +1584,9 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<a href=\"")
            .append(_contextPath)
            .append(getQueryString(req, null, String.valueOf(next), null, filter))
-           .append("\"><span id=\"next\"")
-           .append(next + pageSize < total ? "" : " class=\"disabled\"")
-           .append(">")
+           .append("\"")
+           .append(next + pageSize < total ? "" : " class=disabled")
+           .append("><span id=next>")
            .append(toThemeSVG("next", _t("Next"), _t("Next page")))
            .append("</span></a>");
 
@@ -1597,13 +1595,15 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<a href=\"")
            .append(_contextPath)
            .append(getQueryString(req, null, String.valueOf(last), null, filter))
-           .append("\"><span id=\"last\"")
-           .append(start + pageSize < total ? "" : " class=\"disabled\"")
-           .append(">")
+           .append("\"")
+           .append(start + pageSize < total ? "" : " class=disabled")
+           .append("><span id=last>")
            .append(toThemeSVG("last", _t("Last"), _t("Last page")))
            .append("</span></a>");
 
         out.write(buf.toString());
+        buf.setLength(0);
+        out.flush();
     }
 
     /**

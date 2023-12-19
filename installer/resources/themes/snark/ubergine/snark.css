@@ -583,7 +583,7 @@ td.tAction input[type=submit]{margin-top:1px}
 .pagenavcontrols a img:active{box-shadow:var(--highlight),var(--shadow_inset);background:var(--btnAction_active);transform:scale(.9)}
 .pagenavcontrols img.disable{opacity:.3;pointer-events:none}
 .pagenavcontrols .disabled{position:relative;border:0;box-shadow:none;background:none;opacity:.5;filter:saturate(0);pointer-events:none!important}
-#pagecount{margin:0 6px;padding:5px 10px 4px;display:inline-block;vertical-align:middle;letter-spacing:.2em;color:#a8a;text-shadow:var(--txt_shadow);border-radius:3px;box-shadow:var(--highlight);background:var(--badge);mix-blend-mode:luminosity}
+#pagecount{margin:3px 6px;padding:3px 10px 2px;display:inline-block;vertical-align:middle;letter-spacing:.2em;color:#a8a;text-shadow:var(--txt_shadow);border-radius:3px;box-shadow:var(--highlight);background:var(--badge);mix-blend-mode:luminosity}
 #pagenavbottom{display:none}
 
 /* panels */

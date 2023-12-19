@@ -198,6 +198,9 @@ input[type=submit]:active,a.control:active,.snarkNav:active,#torrentDisplay .fil
 .pagenavcontrols #last:hover,.pagenavcontrols a:focus #last{background:var(--last_hover)}
 .pagenavcontrols .disable{opacity:.5;pointer-events:none}
 #pagecount{margin:0 8px;font-weight:700;font-size:110%;display:inline-block;vertical-align:middle;letter-spacing:.1em}
+#pagenavbottom{text-align:center}
+#torrents #pagenavbottom td{padding:0}
+#pagenavbottom .pagenavcontrols{border:0;border-bottom:var(--border)}
 
 /* torrents */
 tbody tr:not(.peerinfo) .txd:empty::after{content:"‒";display:inline;font-size:9pt}
