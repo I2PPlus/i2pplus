@@ -159,6 +159,7 @@ select{margin:2px 4px 2px 0;padding:7px 24px 7px 7px;min-width:120px;font-size:8
 .pagenavcontrols img:active{box-shadow:inset 3px 3px 3px #000}
 .pagenavcontrols img.disable,.pagenavcontrols img.disable:hover{opacity:.3}
 .pagenavcontrols img::before{content:"";display:inline-block;height:16px;width:14px;vertical-align:middle}
+.pagenavcontrols .disabled{opacity:.5;pointer-events:none}
 #pagenavtop.pagenavcontrols{padding:8px 0 6px;display:block}
 #pagenavbottom .pagenavcontrols img{margin:0 3px}
 #pagenavbottom td{vertical-align:middle;text-align:center;border-top:var(--border)}
@@ -565,7 +566,8 @@ th.torrentlink{text-align:left}
 #completion #metainfo img{margin:0 4px 0 0}
 
 /* configure */
-input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 194px)}
+input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 181px)}
+.configOption input[name="nofilter_dataDir"],.configOption input[name="i2cpOpts"]{font-size:80%}
 input[name="nofilter_commentsName"]{max-width:248px}
 input.trackername{width:100px}
 input.trackerhome,input.trackerannounce{width:210px}

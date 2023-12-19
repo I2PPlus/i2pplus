@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -1190,7 +1191,11 @@ public class I2PSnarkServlet extends BasicServlet {
             // TODO: disable on pages where torrents is < 50 e.g. last page
             if (total > 0 && (start > 0 || total > pageSize) && pageSize >= 50 && total - start >= 20) {
                 footer.append("<tr id=pagenavbottom><td colspan=12><div class=pagenavcontrols>");
-                writePageNav(out, req, start, (pageSize), total, filter, noThinsp);
+                StringWriter stringWriter = new StringWriter();
+                PrintWriter tempPrintWriter = new PrintWriter(stringWriter);
+                writePageNav(tempPrintWriter, req, start, pageSize, total, filter, noThinsp);
+                tempPrintWriter.flush();
+                footer.append(stringWriter.getBuffer().toString());
                 footer.append("</div></td></tr>\n</tbody>\n");
             }
             footer.append("<tfoot id=snarkFoot><tr class=volatile><th id=torrentTotals align=left colspan=6>");
@@ -1203,7 +1208,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (_manager.util().connected() && total > 0 && stats[4] > 0) {
                 footer.append(" &bullet; ");
                 footer.append(ngettext("1 connected peer", "{0} connected peers", (int) stats[4])
-                   .replace("connected peers", "peer connections"));
+                      .replace("connected peers", "peer connections"));
             }
 
             DHT dht = _manager.util().getDHT();
@@ -1535,70 +1540,70 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      *  @since 0.9.6
      */
-    private void writePageNav(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total, String filter,
-                              boolean noThinsp) {
-            // Page nav
-            if (start > 0) {
-                // First
-                out.write("<a href=\"" + _contextPath);
-                out.write(getQueryString(req, null, "", null, filter));
-                out.write("\"><span id=first>");
-                out.write(toThemeSVG("first", _t("First"), _t("First page")));
-                out.write("</span></a>");
-                int prev = Math.max(0, start - pageSize);
-                //if (prev > 0) {
-                if (true) {
-                    // Back
-                    out.write("<a href=\"" + _contextPath);
-                    String sprev = (prev > 0) ? Integer.toString(prev) : "";
-                    out.write(getQueryString(req, null, sprev, null, filter));
-                    out.write("\"><span id=previous>");
-                    out.write(toThemeSVG("previous", _t("Prev"), _t("Previous page")));
-                    out.write("</span></a>");
-                }
-            } else {
-                out.write(
-                          "<span id=first class=disable><img alt=\"\" border=0 class=disable src=\"" +
-                          _imgPath + "first.svg\"></span>" +
-                          "<span id=previous class=disable><img alt=\"\" border=0 class=disable src=\"" +
-                          _imgPath + "previous.svg\"></span>");
-            }
-            // Page count
-            int pages = 1 + ((total - 1) / pageSize);
-            if (pages == 1 && start > 0)
-                pages = 2;
-            if (pages > 1) {
-                int page;
-                if (start + pageSize >= total)
-                    page = pages;
-                else
-                    page = 1 + (start / pageSize);
-                out.write("<span id=pagecount>" + page + thinsp(noThinsp) + pages + "</span>");
-            }
-            if (start + pageSize < total) {
-                int next = start + pageSize;
-                //if (next + pageSize < total) {
-                if (true) {
-                    // Next
-                    out.write("<a href=\"" + _contextPath);
-                    out.write(getQueryString(req, null, Integer.toString(next), null, filter));
-                    out.write("\"><span id=next>");
-                    out.write(toThemeSVG("next", _t("Next"), _t("Next page")));
-                    out.write("</span></a>");
-                }
-                // Last
-                int last = ((total - 1) / pageSize) * pageSize;
-                out.write("<a href=\"" + _contextPath);
-                out.write(getQueryString(req, null, Integer.toString(last), null, filter));
-                out.write("\"><span id=last>");
-                out.write(toThemeSVG("last", _t("Last"), _t("Last page")));
-                out.write("</span></a>");
-            } else {
-                out.write("<span id=next class=disable><img alt=\"\" border=0 class=disable src=\"" +
-                          _imgPath + "next.svg\"></span>" +
-                          "<span id=last class=disable><img alt=\"\" border=0 class=disable src=\"" +
-                          _imgPath + "last.svg\">");
-            }
+
+    private void writePageNav(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total, String filter, boolean noThinsp) {
+        StringBuilder buf = new StringBuilder(1024);
+
+        // TODO: assign disabled class to a tag, not span
+
+        // First
+        buf.append("<a href=\"")
+           .append(_contextPath)
+           .append(getQueryString(req, null, "", null, filter))
+           .append("\"><span id=\"first\"")
+           .append(start > 0 ? "" : " class=\"disabled\"")
+           .append(">")
+           .append(toThemeSVG("first", _t("First"), _t("First page")))
+           .append("</span></a>");
+
+        // Back
+        int prev = Math.max(0, start - pageSize);
+        buf.append("<a href=\"")
+           .append(_contextPath)
+           .append(getQueryString(req, null, String.valueOf(prev), null, filter))
+           .append("\"><span id=\"previous\"")
+           .append(prev > 0 ? "" : " class=\"disabled\"")
+           .append(">")
+           .append(toThemeSVG("previous", _t("Prev"), _t("Previous page")))
+           .append("</span></a>");
+
+        // Page count
+        int pages = 1 + ((total - 1) / pageSize);
+        if (pages == 1 && start > 0) {
+            pages = 2;
+        }
+        if (pages > 1) {
+            int page = (start + pageSize >= total) ? pages : (1 + (start / pageSize));
+            buf.append("<span id=\"pagecount\">")
+               .append(page)
+               .append(thinsp(noThinsp))
+               .append(pages)
+               .append("</span>");
+        }
+
+        // Next
+        int next = start + pageSize;
+        buf.append("<a href=\"")
+           .append(_contextPath)
+           .append(getQueryString(req, null, String.valueOf(next), null, filter))
+           .append("\"><span id=\"next\"")
+           .append(next + pageSize < total ? "" : " class=\"disabled\"")
+           .append(">")
+           .append(toThemeSVG("next", _t("Next"), _t("Next page")))
+           .append("</span></a>");
+
+        // Last
+        int last = ((total - 1) / pageSize) * pageSize;
+        buf.append("<a href=\"")
+           .append(_contextPath)
+           .append(getQueryString(req, null, String.valueOf(last), null, filter))
+           .append("\"><span id=\"last\"")
+           .append(start + pageSize < total ? "" : " class=\"disabled\"")
+           .append(">")
+           .append(toThemeSVG("last", _t("Last"), _t("Last page")))
+           .append("</span></a>");
+
+        out.write(buf.toString());
     }
 
     /**

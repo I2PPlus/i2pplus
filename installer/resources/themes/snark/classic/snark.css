@@ -171,6 +171,7 @@ a.controld{display:none}
 .pagenavcontrols img{opacity:.9}
 .pagenavcontrols a:hover img,.pagenavcontrols a:focus img{opacity:1}
 .pagenavcontrols img.disable,.pagenavcontrols img.disable:hover{opacity:.3}
+.pagenavcontrols .disabled{opacity:.5;pointer-events:none}
 #pagecount{margin:0 6px;padding:2px 10px 1px;display:inline-block;vertical-align:middle;letter-spacing:.2em;font-size:10pt;color:var(--ink_light);border-radius:1px;border:var(--border_soft);background:linear-gradient(180deg,var(--bg),var(--bg3))}
 #pagenavbottom td{text-align:center}
 

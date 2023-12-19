@@ -187,6 +187,7 @@ input[type=submit]:active,a.control:active,.snarkNav:active,#torrentDisplay .fil
 .pagenavcontrols span:not(#pagecount){margin:0 3px;border:var(--border);border-radius:1px;background-size:16px;background-repeat:no-repeat;background-position:center center;background-color:#fff}
 .pagenavcontrols span:not(#pagecount):hover{border:1px solid #b23}
 .pagenavcontrols span:not(#pagecount):active{border:var(--border_hard);box-shadow:var(--btn_shadow_active);background-color:#fff;background-blend-mode:luminosity}
+.pagenavcontrols .disabled{opacity:.5;pointer-events:none}
 .pagenavcontrols #first{width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--first)}
 .pagenavcontrols #first:hover,.pagenavcontrols a:focus #first{background:var(--first_hover)}
 .pagenavcontrols #previous{width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--previous)}
