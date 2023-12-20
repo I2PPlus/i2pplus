@@ -627,6 +627,8 @@ td.peerCount,.nopeers td.peerCount{text-align:center;white-space:nowrap}
 .status img{width:auto;height:22px}
 .trackerLink img{height:18px;width:18px}
 
+#torrents th:nth-child(n+5):empty,#torrents td:nth-child(n+5):empty,#torrents .rateDown:empty{min-width:0!important}
+
 /* filter bar */
 #torrentDisplay{margin:-1px 0 0;display:block;position:sticky;top:42px;z-index:500;background:var(--th);border-top:var(--border);border-bottom:var(--border);contain:paint}
 .iframed #torrentDisplay{position:static}
@@ -671,7 +673,6 @@ td.peerCount{padding-left:0;width:1%;white-space:nowrap;text-align:left;font-wei
 /* end peer + client */
 .rateUp,.txd{font-style:italic}
 .trackerLink{padding-left:6px}
-@media (max-width:1500px){#torrents .infohash{max-width:56px}}
 
 /* debug */
 #debugMode{padding:8px;display:inline-block;vertical-align:middle;font-size:0;background:var(--debug) no-repeat center center;opacity:0}
@@ -754,11 +755,13 @@ th #nameRequired,th .commentAuthorName{margin-top:8px;vertical-align:middle}
 
 /* responsive layout */
 @media (max-width:1499px){
+.dirInfo th img,#torrents thead img{max-height:20px}
 .tAction input[type=submit]{margin-top:-2px;margin-bottom:-2px;padding:10px;background-size:12px}
-#actionStopAll,#actionStartAll{padding:10px 17px}
-#torrents thead img,.dirInfo th img{max-height:20px}
 .status img{width:auto;height:20px}
 .trackerLink img{height:16px;width:16px}
+#actionStopAll,#actionStartAll{padding:10px 17px}
+#pagenavtop.pagenavcontrols {margin:-30px 0 0;padding:6px 0 3px}
+#torrents .infohash{max-width:56px}
 }
 
 @media (max-width:1400px){
@@ -784,22 +787,22 @@ th #nameRequired,th .commentAuthorName{margin-top:8px;vertical-align:middle}
 }
 
 @media (max-width:1100px){
-.toggleview,.configTitle{font-size:9.5pt}
-.configPanel .configTitle{padding-top:2px}
-.dirInfo th a img,.dirInfo th img{max-height:18px;width:auto}
 body{margin:3px}
-.page{padding:4px}
-.logshim{margin-top:-5px}
-.snarkNav,.snarkNav:hover,.snarkNav:focus{background-size:14px,100%}
-.nav_main{padding-left:22px}
-#addSection,#createSection,#configSection,.configPanel{margin-top:4px;margin-bottom:4px}
-.iframed #new,.iframed #new + #configSection{margin-top:-5px}
-#configSection,.configPanel:last-child{margin-bottom:0}
-.dirInfo{margin-top:4px}
-.dirInfoComplete{display:none}
 .barText,.barOuter{width:100px;line-height:15px}
-.dirInfo .barText,.dirInfo .barOuter{width:60px}
 .configOption b,.configOption label{font-size:8.5pt}
+.configPanel .configTitle{padding-top:2px}
+.dirInfo{margin-top:4px}
+.dirInfo .barText,.dirInfo .barOuter{width:60px}
+.dirInfoComplete{display:none}
+.dirInfo th a img,.dirInfo th img{max-height:18px;width:auto}
+.iframed #new,.iframed #new + #configSection{margin-top:-5px}
+.logshim{margin-top:-5px}
+.nav_main{padding-left:22px}
+.page{padding:4px}
+.snarkNav,.snarkNav:hover,.snarkNav:focus{background-size:14px,100%}
+.toggleview,.configTitle{font-size:9.5pt}
+#addSection,#createSection,#configSection,.configPanel{margin-top:4px;margin-bottom:4px}
+#configSection,.configPanel:last-child{margin-bottom:0}
 }
 
 @media (max-width:1000px){
