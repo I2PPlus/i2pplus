@@ -1,3 +1,6 @@
+2023-12-20 dr|z3d
+ * I2PSnark: Fix display of bottom page navigation buttons
+
 2023-12-18 I2P+ 2.4.0+ released
 
 2023-12-18 dr|z3d
