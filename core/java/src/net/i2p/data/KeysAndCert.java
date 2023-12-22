@@ -210,13 +210,16 @@ public class KeysAndCert extends DataStructureImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-// Remove for now because 'Destination: Destination:' is fail
-//        buf.append(getClass().getSimpleName()).append(": ");
-        buf.append("\n* Hash: ").append(getHash().toBase64());
-        // TODO: avoid duplication of info: "Certificate type: Certificate: Type..."
-        buf.append("\n* Certificate type: ").append(_certificate);
+        String cls = getClass().getSimpleName();
+        buf.append('[').append(cls).append(": ");
+        buf.append("\n* Hash: ");
+        if (cls.equals("Destination"))
+            buf.append(getHash().toBase32());
+        else
+            buf.append(getHash().toBase64());
+        buf.append("\n* Certificate: ").append(_certificate);
         if ((_publicKey != null && _publicKey.getType() != EncType.ELGAMAL_2048) ||
-            !(this instanceof Destination)) {
+            !cls.equals("Destination")) {
             // router identities only
             buf.append("\n* Public Key: ").append(_publicKey);
         }
