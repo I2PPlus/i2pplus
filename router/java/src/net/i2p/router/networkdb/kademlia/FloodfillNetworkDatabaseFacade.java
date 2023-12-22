@@ -38,7 +38,6 @@ import net.i2p.util.VersionComparator;
  *  The network database
  */
 public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacade {
-    private static final String MINIMUM_SUBDB_PEERS = "router.subDbMinimumPeers";
     public static final char CAPABILITY_FLOODFILL = 'f';
     public static final char CAPABILITY_UNREACHABLE = 'U';
     public static final char CAPABILITY_BW12 = 'K';
