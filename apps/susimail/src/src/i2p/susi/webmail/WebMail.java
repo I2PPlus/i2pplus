@@ -713,23 +713,24 @@ public class WebMail extends HttpServlet
                 if (user == null || user.length() == 0) {
                     sessionObject.error += _t("Need username for authentication.") + '\n';
                     doContinue = false;
-				} else {
-					user = user.trim();
-					if (user.endsWith("@mail.i2p")) {
-						sessionObject.error += _t("Do not include @mail.i2p in the username") + '\n';
-						doContinue = false;
+                } else {
+                    user = user.trim();
+                    if (user.endsWith("@mail.i2p")) {
+                        sessionObject.error += _t("Do not include @mail.i2p in the username") + '\n';
+                        doContinue = false;
+                    }
                 }
                 if (pass == null || pass.length() == 0) {
                     sessionObject.error += _t("Need password for authentication.") + '\n';
                     doContinue = false;
-				} else {
-					pass = pass.trim();
+                } else {
+                    pass = pass.trim();
                 }
                 if (host == null || host.length() == 0) {
                     sessionObject.error += _t("Need hostname for connect.") + '\n';
                     doContinue = false;
-				} else {
-					host = host.trim();
+                } else {
+                    host = host.trim();
                 }
                 int pop3PortNo = 0;
                 if (pop3Port == null || pop3Port.length() == 0) {
@@ -737,7 +738,7 @@ public class WebMail extends HttpServlet
                     doContinue = false;
                 }
                 else {
-					pop3Port = pop3Port.trim();
+                    pop3Port = pop3Port.trim();
                     try {
                         pop3PortNo = Integer.parseInt(pop3Port);
                         if (pop3PortNo < 0 || pop3PortNo > 65535) {
@@ -757,7 +758,7 @@ public class WebMail extends HttpServlet
                     doContinue = false;
                 }
                 else {
-					smtpPort = smtpPort.trim();
+                    smtpPort = smtpPort.trim();
                     try {
                         smtpPortNo = Integer.parseInt(smtpPort);
                         if (smtpPortNo < 0 || smtpPortNo > 65535) {
@@ -2539,25 +2540,25 @@ public class WebMail extends HttpServlet
             String name3 = FilenameUtil.encodeFilenameRFC5987(name);
             response.setHeader("Cache-Control", "no-cache, private, max-age=604800");
             if (isRaw) {
-				OutputStream out = null;
+                OutputStream out = null;
                 try {
                     response.addHeader("Content-Disposition", "inline; filename=\"" + name2 + "\"; " +
                                        "filename*=" + name3);
                     if (part.type != null)
                         response.setContentType(part.type);
-					if (part.charset != null)
-						response.setCharacterEncoding(part.charset);
+                    if (part.charset != null)
+                        response.setCharacterEncoding(part.charset);
                     if (part.decodedLength >= 0)
                         response.setContentLength(part.decodedLength);
                     if (log.shouldDebug()) log.debug("Sending raw attachment " + name + " length " + part.decodedLength);
-					out = response.getOutputStream();
-					part.decode(0, new OutputStreamBuffer(out));
+                    out = response.getOutputStream();
+                    part.decode(0, new OutputStreamBuffer(out));
                     shown = true;
                 } catch (IOException e) {
                     log.error("Error sending raw attachment " + name + " length " + part.decodedLength, e);
-				} finally {
-					if (out != null)
-						try { out.close(); } catch (IOException ioe) {}
+                } finally {
+                    if (out != null)
+                        try { out.close(); } catch (IOException ioe) {}
                 }
             } else {
                 ZipOutputStream zip = null;
