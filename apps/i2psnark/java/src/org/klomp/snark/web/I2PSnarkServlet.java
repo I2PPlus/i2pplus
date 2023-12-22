@@ -403,6 +403,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 // fallback to metarefresh when javascript is disabled
                 buf.append("<noscript><meta http-equiv=refresh content=\"").append(delay).append(";")
                    .append(_contextPath).append("/").append(peerString).append("\"></noscript>\n")
+                   .append("<script nonce=" + cspNonce + " type=module src=" + resourcePath + "js/onVisible.js></script>\n")
                    .append("<script nonce=").append(cspNonce).append(" type=module>\n")
                    .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
                    .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
