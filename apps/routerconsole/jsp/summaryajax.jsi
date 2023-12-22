@@ -44,8 +44,11 @@
       });
     }
   };
-  window.addEventListener("DOMContentLoaded", onDomContentLoaded);
-  window.addEventListener("resize", () => stickySidebar());
+  document.addEventListener("DOMContentLoaded", function() {
+    sectionToggler();
+    stickySidebar();
+  });
+  window.addEventListener("resize", stickySidebar);
 </script>
 <% } else { %>
 <script nonce="<%=cspNonce%>" type="module">
@@ -57,11 +60,10 @@
     sectionToggler();
     stickySidebar();
   }
-  function onWindowResize() {
+  document.addEventListener("DOMContentLoaded", function() {
+    sectionToggler();
     stickySidebar();
-  }
-  document.addEventListener("DOMContentLoaded", onDomContentLoaded);
-  window.addEventListener("DOMContentLoaded", onDomContentLoaded);
-  window.addEventListener("resize", onWindowResize);
+  });
+  window.addEventListener("resize", stickySidebar);
 </script>
 <% } %>

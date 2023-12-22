@@ -2493,7 +2493,7 @@ p#pluginconfigtext{margin-top:11px}
 #homepage #sb_shortgeneral~#sb_peers_condensed{margin-bottom:-10px}
 #sb_tunnelstatus .tunnelBuildStatus::before{margin:-1px 0 0;background-size:12px}
 #sb_warning+.sb_notice{margin-bottom:-6px}
-#sb_wrap{position:fixed!important}
+#sb_wrap{position:absolute!important}
 #searchbar select{padding:6px 24px 7px 8px}
 #sidebar{margin-top:-1px}
 #sidebar h3:active::after{display:inline-block;vertical-align:middle;min-height:17px;content:""}
