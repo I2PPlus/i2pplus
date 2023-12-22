@@ -27,17 +27,17 @@
 <meta charset=utf-8>
 <title><%=intl._t("Tunnel Manager")%></title>
 <link href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" rel=preload as=script> 
-<link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet> 
-<link href="<%=indexBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
-<link href="<%=indexBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
-<link href="<%=indexBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
+<link href="<%=activeTheme%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet> 
+<link href="<%=activeTheme%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
+<link href="<%=activeTheme%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
+<link href="<%=activeTheme%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <%
   if (indexBean.useSoraFont()) {
 %>
-<link href="<%=indexBean.getTheme()%>../../fonts/Sora.css" rel=stylesheet>
+<link href="<%=activeTheme%>../../fonts/Sora.css" rel=stylesheet>
 <%
   }
-  String overrideURL = indexBean.getTheme() + "override.css";
+  String overrideURL = activeTheme + "override.css";
   boolean overrideEnabled = false;
   try {
     URL url = new URL(overrideURL);
@@ -49,11 +49,11 @@
   }
   if (overrideEnabled) {
 %>
-<link href="<%=indexBean.getTheme()%>override.css" rel=stylesheet>
+<link href="<%=activeTheme%>override.css" rel=stylesheet>
 <%
   }
 %>
-<link rel=icon href="<%=indexBean.getTheme()%>images/favicon.svg">
+<link rel=icon href="<%=activeTheme%>images/favicon.svg">
 <style>body{display:none;pointer-events:none}</style>
 </head>
 <body id=tunnelListPage>
