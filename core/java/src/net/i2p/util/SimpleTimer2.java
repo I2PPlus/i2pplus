@@ -441,6 +441,9 @@ public class SimpleTimer2 {
             } catch (RuntimeException re) {
                 _log.error("Timer error", re);
                 throw re;
+            } catch (OutOfMemoryError oome) {
+                _log.error("timer error", oome);
+                throw new RuntimeException("timer error", oome);
             }
         }
 
