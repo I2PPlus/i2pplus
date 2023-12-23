@@ -61,6 +61,7 @@ th.mailListSubject{text-align:left}
 tr.bottombuttons:last-child td{padding-bottom:20px;border-bottom:var(--border_inner)}
 tr.bottombuttons td{padding-left:0;padding-right:0}
 tr.spacer{display:none}
+.attachSize{font-size:80%}
 #attachedfile input[type=checkbox]{margin:0 2px 0 0;vertical-align:middle}
 #attachedfile{padding:5px 5px 5px 8px;border-bottom:1px dotted #322e6b}
 #mailbox{margin-bottom:0}
@@ -104,6 +105,7 @@ td#attachedfile{padding:2px 0}
 #composemail table{width:auto;margin:auto}
 #composemail table td{padding:2px 5px}
 #newmail input[type=text],#composemail textarea{width:100%}
+#composemail textarea{resize:vertical}
 
 input,label{cursor:pointer}
 input[type="file"]{border:0;padding:0}

@@ -1630,7 +1630,7 @@ public class WebMail extends HttpServlet
                             if (ct != null)
                                 response.setContentType(ct);
                             response.setContentLength((int) att.getSize());
-                            response.setHeader("Cache-Control", "public, max-age=3600");
+                            response.setHeader("Cache-Control", "private, max-age=3600");
                             in = att.getData();
                             out = response.getOutputStream();
                             DataHelper.copy(in, out);
@@ -3045,10 +3045,6 @@ public class WebMail extends HttpServlet
                 button(SAVE_AS_DRAFT, _t("Save as Draft")) +
                 button(CANCEL, _t("Cancel")));
         out.println("</div>");
-        //if (Config.hasConfigFile())
-        //out.println(button(RELOAD, _t("Reload Config")) + spacer);
-        //out.println(button(LOGOUT, _t("Logout")));
-
 
         Draft draft = null;
         String from = "";
@@ -3155,6 +3151,8 @@ public class WebMail extends HttpServlet
         if (sessionObject.attachments != null && !sessionObject.attachments.isEmpty()) {
             boolean wroteHeader = false;
             for(Attachment attachment : sessionObject.attachments) {
+                String attachSize = DataHelper.formatSize2(attachment.getSize());
+                attachSize = attachSize.replace("i", "");
                 if(!wroteHeader) {
                     out.print("<tr><td class=right>" + _t("Attachments") + "</td>");
                     wroteHeader = true;
@@ -3162,12 +3160,12 @@ public class WebMail extends HttpServlet
                     out.print("<tr><td>&nbsp;</td>");
                 }
                 out.print("<td id=attachedfile class=left><label><input type=checkbox class=optbox name=\"check" +
-                                attachment.hashCode() + "\" value=1>&nbsp;" + quoteHTML(attachment.getFileName()) + "</label>");
-                out.print("<span class=attachSize>" + DataHelper.formatSize2(attachment.getSize()) + "B</span>");
+                          attachment.hashCode() + "\" value=1>&nbsp;" + quoteHTML(attachment.getFileName()));
+                out.print(" <span class=attachSize>(" + attachSize + ")</span></label>");
                 String type = attachment.getContentType();
                 if (type != null && type.startsWith("image/")) {
                     out.print("<span class=thumbnail><img alt=\"\" src=\"" + myself + '?' + DRAFT_ATTACHMENT + '=' +
-                              attachment.hashCode() + "\"></span>");
+                              attachment.hashCode() + "\" hidden></span>");
                 }
                 out.print("</td></tr>\n");
             }
