@@ -1,3 +1,6 @@
+2023-12-23 dr|z3d
+ * Console: Add redirect for /help/changelog at /changelog
+
 2023-12-22 zzz
  * Blockfile: Fix bug in unused getNames()
  * Console: Fix encoding issues in persisted news
@@ -9,7 +12,7 @@
  * NTCP2: Add key validity check
  * Plugins: Don't auto-update in test mode
  * Ratchet: Use correct method for Elg2 keygen
- * Susimail: Include attachment sizes in displayed draft size
+ * SusiMail: Include attachment sizes in displayed draft size
  * Transports: Don't flood huge RIs
  * Util:
    - Catch OOM in timer
@@ -24,7 +27,7 @@
 2023-12-18 I2P+ 2.4.0+ released
 
 2023-12-18 dr|z3d
- * Console: Ensure we write out the news.xml feeds in utf-8 fix by zzz
+ * Console: Ensure we write out the news.xml feeds in utf-8 (fix by zzz)
  * Router: stat when we receive a good search reply
 
 2023-12-17 dr|z3d
@@ -63,7 +66,7 @@
  * Console: Iconize help section nav menu
 
 2023-12-02 zzz
- * Susimail: Fix binary content-encoding
+ * SusiMail: Fix binary content-encoding
 
 2023-12-01 zzz
  * I2PSnark: Change js mime type as per RFC 9239
@@ -115,11 +118,11 @@
 
 2023-11-10 dr|z3d
  * I2PTunnel: Exempt tunnel name from XSS filter (upstream Gitlab #467)
- * NetDB Lookup handler throttler fixes (upstream Gitlab #468)
+ * NetDb Lookup handler throttler fixes (upstream Gitlab #468)
 
 2023-11-10 zzz
  * I2PTunnel: Exempt tunnel name from XSS filter (upstream Gitlab #467)
- * NetDB: Lookup handler/throttler fixes
+ * NetDb: Lookup handler/throttler fixes
    - Allow limited lookups when non-ff, but still disallow expl. lookups
    - Remove unnecessary banlist checks in handler
    - Add lower non-ff limit in throttler
@@ -130,10 +133,10 @@
  * Console: Fix published LS count on the debug LS tab
 
 2023-11-08 zzz
- * NetDB: Fix and deprecate unused store() method
+ * NetDb: Fix and deprecate unused store() method
 
 2023-11-04 zzz
- * NetDB: Type changes (Gitlab #402)
+ * NetDb: Type changes (Gitlab #402)
    - Revert ctx.netDb() return type change
    - Revert all DummyNetworkDatabaseFacade changes
    - Add DummyNetworkDatabaseSegmentor
@@ -142,7 +145,7 @@
    - Fix console NPE when using DummyNDF
 
 2023-11-02 zzz
- * NetDB: Enforce no RIs in subdbs (Gitlab #465)
+ * NetDb: Enforce no RIs in subdbs (Gitlab #465)
    - Throw IAE if attempting to store/publish RI to subdb
    - Log warnings if attempting to lookup RI in subdb
    - Revert changes to createPeerSelector()
@@ -157,13 +160,13 @@
  * I2PTunnel:
    - Remove nonstandard Proxy-Connection headers (Gitlab #452)
    - Fix gzip footer check in GunzipOutputStream (Gitlab #458)
- * NetDB: Fix lifecycle issues for subsessions (Gitlab #460, #406)
+ * NetDb: Fix lifecycle issues for subsessions (Gitlab #460, #406)
    - Don't create subdb for subsession and lose ref for primary subsession;
    - Simplify CCR.getFNDF() to simply return the subdb or null; nothing else is necessary
    - Do not unpublish LS from main db on session shutdown; not necessary, it is not in there
 
 2023-10-24 zzz
- * Netdb: Subdb lifecycle fixes (Gitlab #406)
+ * NetDb: Subdb lifecycle fixes (Gitlab #406)
    - Disable RefreshRoutersJob for subdbs
    - Cancel ExpireRoutersJob and ExpireLeasesJob at netdb shutdown
    - Do not run ExpireRoutersJob at shutdown for subdbs
@@ -482,7 +485,7 @@
 
 2023-02-12 zzz
  * Console: Reduce max age of displayed profiles
- * NetDB:
+ * NetDb:
    - Don't create profile unless peer is reachable
    - Store handler updates
  * Profiles:
@@ -497,7 +500,7 @@
  * Router: Prevent incoming connections from banlisted peers
 
 2023-02-11 zzz
- * NetDB:
+ * NetDb:
    - Expiration tweaks
    - Increase flood thottle time
 
@@ -509,7 +512,7 @@
 
 2023-02-09 zzz
  * DTG: Support notification disable/enable in non-router context
- * NetDB:
+ * NetDb:
    - Don't lookup before dropping after shutdown initiated
    - Improve efficiency of ExpireRoutersJob
  * Profiles: Don't delete old profiles from disk until 90m uptime
@@ -519,7 +522,7 @@
    - Add routing key to router infos (advanced)
    - Debug page sockets table cleanup
    - Load router infos more efficiently
- * NetDB:
+ * NetDb:
    - Don't explore if we have enough RIs
    - Further restrict what RIs we lookup before dropping
    - Implement faster RI expiration mode
@@ -963,7 +966,7 @@
    - Cleanup /debug update and app manager sections
  * Crypto: Don't use AccessController in I2PProvider, deprecated as of Java 17
  * I2PTunnel:
-   - SOCKS 5 tunnel improvements and torsocks support
+   - SOCKS5 tunnel improvements and torsocks support
    - Fix log message on config migration
  * Router: KeysAndCert compressible padding (Proposal 161, Gitlab MR !66)
  * SSU2: Increase Session Created max padding
@@ -1066,14 +1069,14 @@
  * Transports: Don't rekey noise params on testnet
 
 2022-09-06 zzz
- * NetDB: Fix reseeding when clock is skewed
+ * NetDb: Fix reseeding when clock is skewed
  * SSU2: Don't publish or connect if our MTU becomes too small
 
 2022-09-04 zzz
  * SusiDNS: Fix adding to empty address book
 
 2022-09-03 zzz
- * NetDB: Query connected peers for their RI directly
+ * NetDb: Query connected peers for their RI directly
  * UPnP: Fix opening IPv6 ports
 
 2022-09-01 zzz
@@ -1158,7 +1161,7 @@
  * LogManager: Prevent hangs at shutdown on Mac after dock right-click-quit (Gitlab #363)
 
 2022-07-27 zzz
- * NetDB: Publish ff stats based on current caps, not previous
+ * NetDb: Publish ff stats based on current caps, not previous
  * Router: Log warning if no family keys loaded
  * SSU: Decrease MTU only on retransmit of large packets
  * SSU2: Stub out path challenge
@@ -1238,13 +1241,13 @@
 
 2022-07-04 zzz
  * Console: Add cancel button to netdb search form
- * NetDB: Lookup handling cleanups
+ * NetDb: Lookup handling cleanups
 
 2022-07-02 dr|z3d
- * Router
+ * Router:
    - Increase timeout for iterative search job and increase concurrency
      for non-slow routers
- * Increase max floodfills we attempt to store keys with and increase
+   - Increase max floodfills we attempt to store keys with and increase
    parallelization
 
 2022-07-02 zzz
@@ -1517,7 +1520,7 @@
  * Console: Streamline, refactor and optimize sidebar refresh javascript
 
 2022-03-20 zzz
- * NetDB:
+ * NetDb:
    - Refactor family validation
    - Remove duplicate store in FloodOnlyLookupMatchJob
    - Don't store an entry which is older
@@ -1602,7 +1605,7 @@
  * Router: Increase tunnel requests before throttle; log throttle events
 
 2022-03-03 zzz
- * NetDB: Load reseed RI if newer than in-memory
+ * NetDb: Load reseed RI if newer than in-memory
  * NTCP: Start out reachable if SSU disabled
 
 2022-03-02 zzz
@@ -1614,7 +1617,7 @@
  * I2PSnark: Add new .sh icon to filetypes
 
 2022-03-01 zzz
- * NetDB: Add new reseeds
+ * NetDb: Add new reseeds
  * Util: More efficient detection of connectivity
 
 2022-02-28 dr|z3d
@@ -1640,7 +1643,7 @@
 2022-02-22 zzz
  * BOB: Remove source
  * Crypto: Prep for SSU2
- * NetDB: Prevent rare deadlock via FloodfillMonitorJob at startup
+ * NetDb: Prevent rare deadlock via FloodfillMonitorJob at startup
  * NTCP: Reduce max writer threads
  * SSU: PacketHandler cleanup (prep for SSU2)
  * SSU: Start of SSU2 support
@@ -1784,7 +1787,7 @@
 2021-12-28 zzz
  * Console: Partial string case-insensitive match for netdb family search
  * I2PTunnel: Add IRC filter support for IRCv3 message tags
- * NetDB:
+ * NetDb:
    - StoreJob reliability improvements
    - Ensure tunnel diversity in lookup retries
    - Fix usage of dbResponseTime stat
@@ -1947,7 +1950,7 @@
  * Jetty 9.3.30.v20211001
 
 2021-10-05 zzz
- * NetDB: Reduce ban time for routers without netId
+ * NetDb: Reduce ban time for routers without netId
 
 2021-10-05 dr|z3d
  * Router:
@@ -2074,7 +2077,7 @@
  * Tunnels: Fixes for proposal 157
 
 2021-07-20 zzz
- * NetDB: Increase min ff version to 0.9.38
+ * NetDb: Increase min ff version to 0.9.38
 
 2021-07-20 dr|z3d
  * I2PSnark: Update file icons to svg
@@ -2170,7 +2173,7 @@
    - Make backup news URL configurable (see gitlab MR !33)
 
 2021-06-08 zzz
- * NetDB: Prevent rare deadlock in rebuildRouterInfo()
+ * NetDb: Prevent rare deadlock in rebuildRouterInfo()
  * Tunnels:
    - More work on short tunnel build messages (proposal 157)
    - Fix compare logic in ITBM parser (ticket #2814)
@@ -2370,7 +2373,7 @@
  * SSU: Fix dup IPv6 introducers
 
 2021-04-01 zzz
- * NetDB: Negative cache LS received with zero leases
+ * NetDb: Negative cache LS received with zero leases
 
 2021-03-31 zzz
  * SSU: Update address when IPv6 introducers change (prop. 158)
@@ -2406,7 +2409,7 @@
  * Transports: Don't open UPnP ports for disabled IPv4/v6
 
 2021-03-23 zzz
- * NetDB: Sort published addresses for consistency
+ * NetDb: Sort published addresses for consistency
  * SSU: Fix IPv6 transition from firewalled to non-firewalled
 
 2021-03-22 dr|z3d
@@ -2445,7 +2448,7 @@
  * Console: Limit share to 90% max
 
 2021-03-11 zzz
- * NetDB: Queue RI file deletion and delete in a single thread
+ * NetDb: Queue RI file deletion and delete in a single thread
  * SSU: Limit port changes
 
 2021-03-09 dr|z3d
@@ -2541,7 +2544,7 @@
  * RefreshRoutersJob: Suspend if job lag > 500ms or > 10K known peers
 
 2021-02-25 zzz
- * NetDB: Fix NPE validating expired blinded LS2
+ * NetDb: Fix NPE validating expired blinded LS2
  * NTCP: Don't publish IP at startup when configured as firewalled
  * SSU: Enable RelayRequest over IPv6
  * Transports: Adjust conn limits for some platforms
@@ -2611,7 +2614,7 @@
 
 2021-02-06 zzz
  * Proxy: Update default jump servers
- * NetDB:
+ * NetDb:
    - Ensure RI is published after netdb is initialized
    - Only rewrite blind cache at shutdown if changed
  * NTCP: Don't publish saved local address when hidden
@@ -2754,7 +2757,7 @@
 
 2020-12-31 zzz
  * Console: Use local time on graphs by default
- * NetDB:
+ * NetDb:
    - Drop lookups with replies going to us
    - Extend lookup expire time
 
@@ -2771,7 +2774,7 @@
 2020-12-29 zzz
  * Crypto: Cache AES Ciphers
  * I2PTunnel: Disable shared clients (DSA)
- * NetDB: Verify RI stores for a while after starting
+ * NetDb: Verify RI stores for a while after starting
  * Ratchet: mixHash() not required after message for N pattern
 
 2020-12-28 zzz
@@ -2824,7 +2827,7 @@
    - larger bloom filter for > 2048MB routers if >= 6 cores
 
 2020-12-16 zzz
- * NetDB: Fix rare floodfill monitor NPE
+ * NetDb: Fix rare floodfill monitor NPE
  * SSU: Fix occasional high CPU usage
 
 2020-12-11 zzz
@@ -2866,7 +2869,7 @@
  * i2pcontrol: Basic HTML fixes and HTTP headers for static pages
 
 2020-11-22 zzz
- * NetDB: Increase min FF version for LS lookups
+ * NetDb: Increase min FF version for LS lookups
 
 2020-11-21 zzz
  * I2PSnark: Remove old default opentrackers
@@ -2875,7 +2878,7 @@
    - Fix CSP for conflict error page
 
 2020-11-20 zzz
- * NetDB: Increase exploration rate when hidden
+ * NetDb: Increase exploration rate when hidden
  * Tomcat 9.0.40
 
 2020-11-19 zzz
@@ -2894,7 +2897,7 @@
  * Jetty:
    - Update to 9.3.29.v20201019
    - Patch to fix console not starting on Java 11.0.9.1
- * NetDB: Disable sending encrypted messages to ECIES routers
+ * NetDb: Disable sending encrypted messages to ECIES routers
  * Wrapper: Add missing binaries for armv7 and aarch64
    to installer (ticket #2308)
 
@@ -2926,7 +2929,7 @@
  * Tunnels: Simplify TunnelId and HopConfig to save space
 
 2020-11-05 zzz
- * NetDB: Ensure RI republish time is less than validation time
+ * NetDb: Ensure RI republish time is less than validation time
 
 2020-11-04 zzz
  * Util: ELiminate unneeded data copying in ByteArrayOutputStream
@@ -2991,7 +2994,7 @@
    - Add missing expiration field to ECIES BRR
 
 2020-10-21 zzz
- * NetDB:
+ * NetDb:
    - ECIES router support for encrypted lookups and stores (proposal #156)
    - Reseed after a long downtime
  * SSU:
@@ -3127,7 +3130,7 @@
  * I2PTunnel: Change enctype default to both for:
    HTTP, IRC, and Streamr servers
    IRC, SOCKS IRC, and Streamr clients
- * Susimail, SAM: More defensive ByteBuffer casting (ticket #2775)
+ * SusiMail, SAM: More defensive ByteBuffer casting (ticket #2775)
 
 2020-09-21 dr|z3d
  * Console: optimize width of b32s under local services in sidepanel
@@ -3254,7 +3257,7 @@
 2020-08-01 zzz
  * Debian: Support libjson-simple-java 3 for bullseye
  * I2NP: Locking for message ID
- * NetDB: Track client that requested LS
+ * NetDb: Track client that requested LS
  * OCMOSJ: Don't send to a RAP LS
  * Router: Logging fix for client start failures
  * Util:
@@ -3291,7 +3294,7 @@
  * Reseed: Enforce minimum version in generated bundle
 
 2020-06-28 zzz
- * NetDB: Check signature in verify
+ * NetDb: Check signature in verify
 
 2020-06-26 dr|z3d
  * Console: Replace icons on /home and /sitemap with svgs
@@ -3386,7 +3389,7 @@
  * Util: Speed up zero compression
 
 2020-05-18 zzz
- * NetDB: Reseed update
+ * NetDb: Reseed update
  * Proxy: Fix error code for incompatible encryption
  * Ratchet: Prep for ratchet-layer acks (WIP)
 
@@ -3555,7 +3558,7 @@
 
 2020-04-08 zzz
  * I2PSnark: Give peers preference to get first pieces (ticket #2473)
- * NetDB: Remove class M from auto-floodfill
+ * NetDb: Remove class M from auto-floodfill
  * NTCP: Retain pending messages when replacing connection
  * Ratchet: TagSet cleanups
 
@@ -3585,7 +3588,7 @@
    - Validate NS datetime block; add NS key bloom filter
 
 2020-03-31 zzz
- * NetDB:
+ * NetDb:
    - Add support for ratchet replies (proposal 154)
    - Add support for ElG lookups and stores from ECIES-only destinations
    - Variable timeout for MessageWrapper-generated tags
@@ -3655,7 +3658,7 @@
 
 2020-02-25 zzz
  * Graphs: Replace jrobin with rrd4j 3.5 (ticket #2684)
- * NetDB: Don't send 'fake hash' for exploration any more
+ * NetDb: Don't send 'fake hash' for exploration any more
 
 * 2020-02-25 0.9.45 released
 
@@ -3806,7 +3809,7 @@
 
 2019-12-17 zzz
  * Util: Move some from console to new core bundle
- * NetDB: Fixes for hidden routers losing peers (ticket #2673)
+ * NetDb: Fixes for hidden routers losing peers (ticket #2673)
 
 2019-12-16 zzz
  * Console: Partial az translation
@@ -3920,7 +3923,7 @@
    latest Tor Browser
 
 2019-10-27 zzz
- * NetDB: Don't send encrypted lookup reply to ratchet dest
+ * NetDb: Don't send encrypted lookup reply to ratchet dest
  * OCMOSJ:
    - Bundle unwrapped ack with LS for ratchet dest
    - Keep bundling LS until acked
@@ -4050,7 +4053,7 @@
  * Transport: Detect IPv6 address changes (ticket #2175)
 
 2019-09-07 dr|z3d
- * Susimail: Only show floating delete confirmation if page contains
+ * SusiMail: Only show floating delete confirmation if page contains
    more than 25 messages
 
 2019-09-06 zzz
@@ -4187,7 +4190,7 @@
  * Router: Checks for new enc types
 
 2019-07-22 zzz
- * NetDB: Handle LS2 blinded flag bit
+ * NetDb: Handle LS2 blinded flag bit
 
 2019-07-20 dr|z3d
  * Console: Add mini-tutorial for Firefox config to Configuration help page
@@ -4288,12 +4291,12 @@
  * UPnP: Set lease duration of 3 hours, always refresh the lease
 
 2019-06-08 zzz
- * NetDB:
+ * NetDb:
    - Fix Deliv. Status msg sent direct to tunnel
    - Faster startup for non-Android
 
 2019-06-07 zzz
- * NetDB: Fix NPE on failed decrypt of enc. ls2
+ * NetDb: Fix NPE on failed decrypt of enc. ls2
 
 2019-06-06 zzz
  * CPUID/NBI:
@@ -4316,7 +4319,7 @@
  * Update PAC file for additional security
 
 2019-06-01 zzz
- * NetDB: Don't wait for all RIs to be read in on Android
+ * NetDb: Don't wait for all RIs to be read in on Android
  * Tunnels: Ensure GW Pumper threads stop on Android
 
 2019-06-01 dr|z3d
@@ -4441,7 +4444,7 @@
  * Utils: Allow absolute path to certs in I2PSSLSocketFactory
 
 2019-05-10 zzz
- * NetDB: Store Meta LS2 to floodfills (proposal #123)
+ * NetDb: Store Meta LS2 to floodfills (proposal #123)
 
 2019-05-09 zzz
  * Console:
@@ -4568,7 +4571,7 @@
  * Console: Add page load progress bar (js)
 
 2019-04-04 dr|z3d
- * Susimail: Add toggle password visibility button on login page (js)
+ * SusiMail: Add toggle password visibility button on login page (js)
 
 2019-04-03 zzz
  * I2PTunnel: Start/stop POST throttle timer
@@ -4589,7 +4592,7 @@
 
 2019-03-29 zzz
  * Crypto: SigContext (WIP) (proposal #148)
- * NetDB: Persist cached blinding data (proposal #123)
+ * NetDb: Persist cached blinding data (proposal #123)
 
 2019-03-29 dr|z3d
  * Snark:
@@ -4609,7 +4612,7 @@
    is tier 'K', participation is disabled via config, or hidden mode is active
 
 2019-03-27 zzz
- * NetDB: Cache blinding data for lookups and decryption (proposal #123)
+ * NetDb: Cache blinding data for lookups and decryption (proposal #123)
 
 2019-03-23 zzz
  * Data: Preliminary work on new b32 format (proposal #149)
@@ -4672,14 +4675,14 @@
  * I2PTunnel: Prevent registration auth if key offline
 
 2019-03-07 zzz
- * NetDB: Minor performance improvement in selectors
+ * NetDb: Minor performance improvement in selectors
 
 2019-03-06 dr|z3d
  * Graphs: Natively render graphs in dark and midnight themes
    with a custom palette instead of relying on css filters
 
 2019-03-06 zzz
- * NetDB: Fix flood version check, add version check for RedDSA
+ * NetDb: Fix flood version check, add version check for RedDSA
 
 2019-03-05 zzz
  * Data: Update Encrypted LS2 blinding and encryption
@@ -4688,7 +4691,7 @@
  * Console: Fix NPEs displaying encrypted LS2
  * Data: Fix NPE in debug logging
  * I2CP, NetDB: More fixes for encrypted LS2 (proposal 123)
- * NetDB: Call fail callback when lookup is negative cached (thx zab)
+ * NetDb: Call fail callback when lookup is negative cached (thx zab)
 
 2019-03-02 zzz
  * I2CP, NetDB: Fixes for encrypted LS2 (proposal 123)
@@ -4711,7 +4714,7 @@
    multiflag icon in 'Apps and Configuration' header
 
 2019-02-25 zzz
- * NetDB: Fix dup publish of RI at startup
+ * NetDb: Fix dup publish of RI at startup
  * NTCP: Fix number of SendFinisher threads (ticket #2438)
 
 2019-02-24 dr|z3d
@@ -4720,7 +4723,7 @@
 
 2019-02-23 zzz
  * Console: Flip order of router logs
- * NetDB:
+ * NetDb:
    - Use published date, not earliest lease expiration, for LS2 comparisons
    - Fix earliest LS expiration adjustment when publishing for LS2
    - Increase flood candidates for LS2
@@ -4901,11 +4904,11 @@
 2019-01-13 dr|z3d
  * Console: Reorder page title so page name precedes 'I2P Router Console' and
    capitalize words on the fly
- * Susimail: Add form validation to login page and migrate 'settings' button
+ * SusiMail: Add form validation to login page and migrate 'settings' button
    to static link
 
 2019-01-12 zzz
- * NetDB: Use isSlow() in floodfill criteria
+ * NetDb: Use isSlow() in floodfill criteria
  * SSU: More consolidation of clock().now() calls
 
 2019-01-12 dr|z3d
@@ -4935,12 +4938,12 @@
  * Wrapper: Increase default heap to 256 MB
 
 2019-01-08 dr|z3d
- * Susimail:
+ * SusiMail:
    - Display mail delete confirmation as pseudo-modal dialog box
    - Fix issue with mail delete cancel button not working
 
 2019-01-06 dr|z3d
- * Susimail: Add toggle headers function to received mail (requires js)
+ * SusiMail: Add toggle headers function to received mail (requires js)
 
 2019-01-05 zzz
  * Crypto: Stub out EdDSA blinding (proposal 123)
@@ -5162,7 +5165,7 @@
    - Add Unreachable count to Peers sidebar section
    - Add Bandwith Tier count to NetDB overview page
  * I2PSnark: Increase max inbound/outbound tunnels to 16
- * Susimail: Only show port mappings and host on login if portsfixed=false
+ * SusiMail: Only show port mappings and host on login if portsfixed=false
 
 2018-09-24 zzz
  * Build: Compile jsps in-order for reproducibility (ticket #2279)
@@ -5354,7 +5357,7 @@
    - Increase time before service tunnel build attempts are aborted
      (from 5 to 20 minutes) to mitigate temp outage at tunnel startup
  * Logging: More presentational improvements to logging data
- * Susimail: Overhaul dark theme, add icon buttons and improve presentation
+ * SusiMail: Overhaul dark theme, add icon buttons and improve presentation
 
 2018-07-04 zzz
  * NTCP: Don't advertise interface address when configured for force-firewalled
@@ -5771,7 +5774,7 @@
      rationalize heading names to better describe functions
    - Buttonize all embedded h3 links and remove square brackets (ticket #1996)
 
- * Susimail
+ * SusiMail
    - Fix broken header logo link
    - Fix placement of notification messages in light theme so they appear
      at top of page (ticket #2089)
@@ -6044,7 +6047,7 @@
 2018-03-10 zzz
  * Console: Fix compression logic
  * I2PTunnel: Strip server Date header
- * NetDB: Wake up FloodfillMonitor when setting changes
+ * NetDb: Wake up FloodfillMonitor when setting changes
  * Router: Fix rekey after hidden config change
 
 2018-03-09 zzz
@@ -6195,7 +6198,7 @@
  * Console: Fix number formatting (tickets #1912, #1913, #2126)
  * I2PSnark: URL escape fixes
  * I2PTunnel: Reset connection if out of threads
- * NetDB: Increase min floodfill version
+ * NetDb: Increase min floodfill version
  * SusiMail: Don't duplicate Re: and Fwd: in subject
 
 * 2018-01-30 0.9.33 released
@@ -6448,7 +6451,7 @@
    - Add sort direction hover indicators to .snarkTorrents header icons
      (dark/midnight)
    - Various cosmetic tweaks, fixes and enhancements
- * Susimail/SusiDNS:
+ * SusiMail/SusiDNS:
    - Various cosmetic tweaks, fixes and enhancements
 
 2017-11-02 str4d
@@ -6491,7 +6494,7 @@
    - Homepage: Add 'Customize Sidebar' link to signpost the feature now that
      there are more optional sections available (ticket #1996)
    - /configui:
-     - Add option to embed Susimail and I2PSnark in console
+     - Add option to embed SusiMail and I2PSnark in console
      - Use larger flags for language selection
    - /help:
      - Update sidebar help section (en)
@@ -6537,7 +6540,7 @@
    - Reduce vertical padding for filter buttons section
    - Migrate search section to div and reposition page elements to better
      integrate with host list and minimize whitespace
- * Susimail:
+ * SusiMail:
    - Overhaul dark theme
    - Sync theme to console theme by default, override if user sets theme
      (unless universal themeing is enabled)
@@ -6585,7 +6588,7 @@
  * I2PSnark (ubergine):
    - Fix hover state for inert section headings
    - Minor adjustments to DHT debug section
- * Susimail (light): Minor adjustment of notifications in embedded view
+ * SusiMail (light): Minor adjustment of notifications in embedded view
 
 * 2017-08-07 0.9.31 released
 
@@ -7370,22 +7373,22 @@ Prop from i2p.i2p.zzz.test2:
 
 2016-11-23 zzz
  * Console: Support RI lookup by caps or IP
- * NetDB: Penalize new and slow peers
+ * NetDb: Penalize new and slow peers
  * News: Add command line utility support
  * Router: Support blocklist in the news feed (proposal #129)
 
 2016-11-21 zzz
- * NetDB: Fix detection of bandwidth class with multiple values specified
+ * NetDb: Fix detection of bandwidth class with multiple values specified
 
 2016-11-20 zzz
- * NetDB: When doing lookups, don't use floodfills too close
+ * NetDb: When doing lookups, don't use floodfills too close
  * Router: Change default family sig type to EdDSA
 
 2016-11-17 zzz
  * Build: Add attributes for java version to all jars and wars
  * Blocklist: Add support for IPv6 in blocklist.txt
  * Console: Add netdb lookup by family
- * NetDB: When verifying store, don't use floodfills too close
+ * NetDb: When verifying store, don't use floodfills too close
  * Tomcat 6.0.48
 
 2016-11-16 zzz
@@ -7414,7 +7417,7 @@ Prop from i2p.i2p.zzz.test2:
  * I2CP: Reduce error level on session closed while signing LS (ticket #1606)
  * JRobin: Move DeallocationHelper logging from wrapper log to router log
  * Profiles: Periodically save, delete old ones after saving (ticket #1328)
- * Susimail:
+ * SusiMail:
    - Add logout button to more pages (ticket #1374)
    - Fix nonce error on login after logout
    - Fix internal error after cancel button on settings form when not logged in
@@ -7493,7 +7496,7 @@ Prop from i2p.i2p.zzz.test2:
    - Remove calls to deprecated two-arg setStatus()
  * Crypto: Actually use a random nonzero byte in ElGamal
  * Data: Cache serialized leasesets on floodfills
- * NetDB: Disallow RSA for RI or LS
+ * NetDb: Disallow RSA for RI or LS
  * Tomcat 6.0.47
  * Utils: Add MTU to command line utils
  * Wrapper 3.5.30
@@ -7622,7 +7625,7 @@ Prop from i2p.i2p.zzz.test2:
  * jbigi:
    - Fix GMP version reporting for shared library (ticket #1800)
    - mbuild-all script fixes
- * NetDB: Improve handling of deferred search result jobs
+ * NetDb: Improve handling of deferred search result jobs
 
 * 2016-06-07 0.9.26 released
 
@@ -7913,7 +7916,7 @@ Prop from i2p.i2p.zzz.gmp6-prop:
  * Console: Replace pastethis with zerobin
  * Peer selection: Don't truncate data used for random slice
  * Router: Fix corner cases maintaining local leasesets (ticket #1768)
- * Susimail: Fix NPE
+ * SusiMail: Fix NPE
  * UPnP: Fix NPE in HTML output on /peers (ticket #1779)
 
 2016-03-01 zzz
@@ -7958,7 +7961,7 @@ Prop from i2p.i2p.zzz.gmp6-prop:
    - Implement mayDisconnect() for outbound connections also,
      use when publishing RI directly to floodfill
    - Run SSU idle disconnect check faster if floodfill or near connection limit
- * NetDB: Fix bug publishing router info too often
+ * NetDb: Fix bug publishing router info too often
 
 2016-02-17 zzz
  * I2PSnark: Increase max files per torrent to 2000
@@ -8088,7 +8091,7 @@ Prop from i2p.i2p.zzz.imagegen:
  * Jetty: Change default source logging from b64 to b32.
    To change back to b64, add the following to the RequestLogImpl
    section of jetty.xml: <Set name="b64">true</Set>
- * NetDB: Don't query floodfills if they are too old to
+ * NetDb: Don't query floodfills if they are too old to
    support sig types or encrypted replies (ticket #1742)
  * PortMapper: Add method to convert wildcard host to actual host
 
@@ -8371,7 +8374,7 @@ Prop from i2p.i2p.zzz.test2:
 2015-09-28 zzz
  * Addressbook: Fix isValidDest() for EC/Ed dests
  * I2PSnark: Support adding plain base 32 hashes
- * Susimail: Hide headers and buttons if search results are empty
+ * SusiMail: Hide headers and buttons if search results are empty
 
 2015-09-27 dg
  * Router: Fix soft restarts for 'massive' clock jumps (over +150s or -61s) and recover from standby
@@ -8483,7 +8486,7 @@ Prop from i2p.i2p.zzz.test2:
 
 2015-07-25 zzz
  * I2PSnark: Fix total_size in metadata message (ticket #1618)
- * NetDB: Fix NPE (ticket #1619)
+ * NetDb: Fix NPE (ticket #1619)
 
 2015-07-21 str4d
  * Core: Throw DFE in Certificate.create() instead of AIOOBE (ticket #1016)
@@ -8534,12 +8537,12 @@ Prop from i2p.i2p.zzz.test2:
    raise class L/M boundary to match so defaulted routers are still L
 
 2015-06-22 dg
- * NetDB: Partially revert last NetDB change: flood because we don't want
+ * NetDb: Partially revert last NetDB change: flood because we don't want
    to create a hole in the DHT before publisher resends to somebody else.
 
 2015-06-20 dg
  * I2PSnark: Auto-start now only starts torrents which were running at shutdown (#766)
- * NetDB: Don't say we stored, and don't flood, if we're shutting down
+ * NetDb: Don't say we stored, and don't flood, if we're shutting down
 
 2015-06-19 zzz
  * I2CP: Fix simple session lookups, broken in prop
@@ -8573,7 +8576,7 @@ Prop from i2p.i2p.zzz.multisess:
 
 2015-06-13 zzz
  * I2PSnark: Fix NPE (ticket #1602)
- * NetDB:
+ * NetDb:
    - Improve routing of DatabaseStoreMessage acks
    - Send our own RI unsolicited in reply if we aren't floodfill
    - Don't ack or flood a store of an unknown type
@@ -8593,7 +8596,7 @@ Prop from i2p.i2p.zzz.multisess:
 
 2015-06-07 zzz
  * Logs: Correct wrapper.config location when running as a service
- * NetDB: Fix early NPE
+ * NetDb: Fix early NPE
  * SSU: Possible fix for NPE in establisher
 
 2015-06-06 zzz
@@ -8634,7 +8637,7 @@ Prop from i2p.i2p.zzz.test2:
  * LogWriter: Write dup message to wrapper log and crit buf also (ticket #1585)
  * Reseed: Only log reseed network disconnected warning once
  * Router: Add gzip and translate caches to clearCaches()
- * Susidns, addressbook: Don't attempt to fetch subscriptions if
+ * SusiDNS, addressbook: Don't attempt to fetch subscriptions if
    HTTP proxy is down (ticket #1530)
  * SSU: More synchronization in PeerState
  * Stats: Reduce number of rates in required stats to save memory
@@ -8819,7 +8822,7 @@ Prop from i2p.i2p.zzz.test2:
  * I2CP: Run DistributeLocal jobs inline (ticket #1506)
  * I2PSnark: Increase max tunnels to 10
  * I2PTunnel: Don't start tunnels in constructors (ticket #815)
- * NetDB: Reduce max search depth
+ * NetDb: Reduce max search depth
  * Transport: Fix active peer count for NTCP
 
 2015-04-15 tuna
@@ -8882,7 +8885,7 @@ Prop from i2p.i2p.zzz.test2:
 
 2015-03-22 zzz
  * Console: Better status feedback on manual reseed from URL
- * NetDB: Don't become floodfill w/o ECDSA support
+ * NetDb: Don't become floodfill w/o ECDSA support
  * Reseed: Better status feedback and cleanup in summary bar
 
 2015-03-21 zzz
@@ -8902,7 +8905,7 @@ Prop from i2p.i2p.zzz.test2:
   - Backend support and refactoring in reseed code
 
 2015-03-18 zzz
- * NetDB:
+ * NetDb:
   - Send exploratory lookups directly to the floodfill if
     we are already connected to him
   - Don't encrypt RI lookups when overloaded
@@ -8916,7 +8919,7 @@ Prop from i2p.i2p.zzz.test2:
 
 2015-03-16 zzz
  * Apache Tomcat 6.0.43
- * NetDB: Send RI lookups directly to the floodfill if
+ * NetDb: Send RI lookups directly to the floodfill if
    we are already connected to him
  * Router:
    - Republish RI early if capabilities change
@@ -8967,7 +8970,7 @@ Prop from i2p.i2p.zzz.test2:
  * Transport: Ban routers if they are too old and we are non-DSA
 
 2015-02-06 zzz
- * NetDB: Reduce max job lag for floodfill
+ * NetDb: Reduce max job lag for floodfill
  * NTCP: Block IP for a while when incoming connection is dropped before
    receiving a message. Possible workaround for tickets #551, #1075, #1411.
  * Transport:
@@ -8977,7 +8980,7 @@ Prop from i2p.i2p.zzz.test2:
 
 2015-02-01 zzz
  * Crypto: Catch IAE in generateCertificate()
- * NetDB: Don't flood an RI back to itself. While Java ffs self-flood,
+ * NetDb: Don't flood an RI back to itself. While Java ffs self-flood,
    other implementations may not.
  * OCMOSJ: Pick a OB tunnel at random, not with the OBEP closest
    to the lease, as that may be hurting connection reliability.
@@ -9023,17 +9026,17 @@ Prop from i2p.i2p.zzz.test2:
  * I2PTunnel: Add option for multihoming optimization
 
 2015-01-10 zzz
- * NetDB: Stubs for bandwidth estimation during reseed (ticket #935)
+ * NetDb: Stubs for bandwidth estimation during reseed (ticket #935)
 
 2015-01-09 zzz
- * NetDB: Publish RI faster when costs change (ticket #1437)
+ * NetDb: Publish RI faster when costs change (ticket #1437)
 
 2015-01-08 zzz
  * Console, i2ptunnel, proxy: Renaming of various things to "hidden services"
 
 2015-01-07 zzz
  * ClientAppConfig: Start i2ptunnel sooner (ticket #1162)
- * NetDB: Possible fixes for reseed completion not recognized (ticket #1384)
+ * NetDb: Possible fixes for reseed completion not recognized (ticket #1384)
  * Router:
    - Add startup/shutdown state machine
    - Don't reset uptime after a soft restart
@@ -9079,7 +9082,7 @@ Prop from i2p.i2p.zzz.test2:
 
 2014-12-08 zzz
  * HTTP Proxy: Fix parsing of ECDSA address helper
- * NetDB: Increase lookup throttle time
+ * NetDb: Increase lookup throttle time
 
 2014-12-05 zzz
 Prop from i2p.i2p.zzz.test2:
@@ -9143,7 +9146,7 @@ Prop from i2p.i2p.zzz.test2:
  * SAM: Fix v3 bug accepting incoming connections
 
 2014-11-17 zzz
- * NetDB: Exclude A1/A2 "countries" from auto-floodfill
+ * NetDb: Exclude A1/A2 "countries" from auto-floodfill
 
 2014-11-15 zzz
  * I2NP:
@@ -9334,7 +9337,7 @@ Prop from i2p.i2p.zzz.test2:
  * I2PSnark:
    - Increase default to 3 hops (ticket #966)
    - Show info hash on details page
- * NetDB: Increase max age of RIs to reduce number refreshed after restart
+ * NetDb: Increase max age of RIs to reduce number refreshed after restart
  * SAM:
    - Don't publish LS for DIRECTION=CREATE
    - Set default tunnel name
@@ -9368,7 +9371,7 @@ Prop from i2p.i2p.zzz.test2:
  * Jetty 8.1.16.v20140903
  * KeyGenerator: Add support for converting
    all signing key types from private to public
- * NetDB:
+ * NetDb:
    - Encrypt RI lookups and request encrypted reply on
      faster boxes, to prevent scraping by OBEPs and IBGWs
    - Encrypt exploratory lookups too
@@ -9493,7 +9496,7 @@ Prop from i2p.i2p.zzz.test2:
    - Recognize Vuze tracker rejections
    - Don't retry rejected announces unless seeding
    - Better UI handling of announces with ports or full destination
- * NetDB: Don't abort initialization on an unsupported RI sig type
+ * NetDb: Don't abort initialization on an unsupported RI sig type
  * Streaming: Fix P521 and RSA sig types
 
 2014-08-23 zzz
@@ -9666,10 +9669,10 @@ Prop from i2p.i2p.zzz.test2:
       Tanuki.
 
 2014-06-29 zzz
- * NetDB: Fix handling reseed URLs with ports (ticket #1278)
+ * NetDb: Fix handling reseed URLs with ports (ticket #1278)
 
 2014-06-28 zzz
- * NetDB: Add support for reseeding with su3 files (ticket #934)
+ * NetDb: Add support for reseeding with su3 files (ticket #934)
  * SAM:
    - Support SIGNATURE_TYPE, bump to 3.1 (ticket #1318)
    - Private key checking fixes (ticket #1318)
@@ -9715,7 +9718,7 @@ Prop from i2p.i2p.zzz.test2:
  * Console: Fix NPE in summary bar
  * Eepsite: Updated French help page (thx hummingbird)
  * I2PSnark: Fix errors when checking read-only files
- * NetDB: Reduce negative lookup cache time
+ * NetDb: Reduce negative lookup cache time
  * OCMOSJ:
    - Increase timeout if we must lookup leaseset
  * Streaming:
@@ -9975,18 +9978,18 @@ Prop from i2p.i2p.zzz.test2:
  * Tunnels: Increase OBEP throttle limit
 
 2014-04-06 zzz
- * NetDB: Iterative search improvements
+ * NetDb: Iterative search improvements
 
 2014-04-05 zzz
  * I2PTunnel:
    - Add server option for unique local address per-client
    - Fix changing outproxy without stopping tunnel (ticket #1164)
    - Fix add-to-addressbook hostname link in i2ptunnel (ticket #688)
- * NetDB: Skip key cert LS stores and verifies for floodfills that don't support them
+ * NetDb: Skip key cert LS stores and verifies for floodfills that don't support them
 
 2014-04-01 zzz
  * Console: Fix summary bar html when displaying an update constraint
- * NetDB: Handle RI response from non-floodfill router down a client tunnel
+ * NetDb: Handle RI response from non-floodfill router down a client tunnel
 
 * 2014-03-31 0.9.12 released
 
@@ -10009,7 +10012,7 @@ Prop from i2p.i2p.zzz.test2:
 2014-03-15 zzz
  * Certificate: Fix null cert hash code
  * Hash: Cleanup of cached hash
- * NetDB: Randomize returned DSM timestamp
+ * NetDb: Randomize returned DSM timestamp
 
 2014-03-13 zzz
  * SAM: Class, field, findbugs cleanups
@@ -10051,7 +10054,7 @@ Prop from i2p.i2p.zzz.test2:
    (patch from wockenfuss) (ticket #1165)
 
 2014-02-24 zzz
- * NetDB: Slow down router refresh after startup to reduce load
+ * NetDb: Slow down router refresh after startup to reduce load
    on exploratory tunnels
  * NTCP:
    - Add check for replayed session requests (ticket #1212)
@@ -10193,7 +10196,7 @@ Prop from i2p.i2p.zzz.test2:
 
 2014-01-31 zzz
  * /logs: Fix encoding of wrapper log section (ticket #1193)
- * NetDB: Fix cases where corrupt RouterInfo files were not deleted (ticket #1190)
+ * NetDb: Fix cases where corrupt RouterInfo files were not deleted (ticket #1190)
  * SOCKS: Remove static logs
 
 2014-01-30 zzz
@@ -10257,7 +10260,7 @@ Prop from i2p.i2p.zzz.outproxy:
    - Add support for HTTPS
    - Add support for outproxy plugins
  * Installer: Update links
- * NetDB: Fix NPE after client shutdown (ticket #1174)
+ * NetDb: Fix NPE after client shutdown (ticket #1174)
  * Router: Lower frequency for publishing stats
  * Update: All updates via torrent
 
@@ -10278,10 +10281,10 @@ Prop from i2p.i2p.zzz.outproxy:
  * Reseed: Remove netdb.i2p2.de
 
 2014-01-12 zzz
- * NetDB: Fix handling of DSRM and DSM down client tunnels
+ * NetDb: Fix handling of DSRM and DSM down client tunnels
 
 2014-01-11 zzz
- * NetDB:
+ * NetDb:
    - Reduce min part tunnels for ffs to 35
    - Use client tunnels for LS lookups from OCMOSJ (ticket #1166)
 
@@ -10324,7 +10327,7 @@ Prop from i2p.i2p.zzz.outproxy:
  * SOCKS5Server: Remove redundant, commented out line from my previous findbugs
 
 2013-12-19 zzz
- * NetDB: Fixes for ExpireRoutersJob
+ * NetDb: Fixes for ExpireRoutersJob
   - Don't expire if too few routers
   - Don't expire if net is disconnected
   - Don't run in VMCommSystem
@@ -10334,7 +10337,7 @@ Prop from i2p.i2p.zzz.outproxy:
 * I2PSnark: Set User-Agent
 
 2013-12-14 zzz
-* NetDB:
+* NetDb:
  - Just before midnight, flood to new location too so lookups
    don't fail after keyspace rotation (ticket #510)
  - Refactor RoutingKeyGenerator and UpdateRoutingKeyModifierJob
@@ -10343,7 +10346,7 @@ Prop from i2p.i2p.zzz.outproxy:
 2013-12-13 zzz
  * I2PTunnel: Show destination for persistent client key only if available;
               show b32 for the key as well
- * NetDB:
+ * NetDb:
    - Increase new kad size to K=24, B=4
    - Fix router count by counting in the data store, not the kbuckets
    - Randomize the order we load router infos at startup so we
@@ -10374,7 +10377,7 @@ Prop from i2p.i2p.zzz.test2:
    - Refactor data in ConfigUIHelper
  * UDP PeerState: findbugs volatile/atomic/synch
 Prop from i2p.i2p.zzz.netdbkad:
- * NetDB:
+ * NetDb:
    - Move net.i2p.kademlia package from i2psnark to core, and convert
      netdb to use it.
    - Delete old implementation in netdb
@@ -10428,10 +10431,10 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 2013-11-07 zzz
  * I2PSnark: Fix file links, broken in -12 (ticket #1114)
  * Logging: Track duplicates across flush interval (ticket #1110)
- * NetDB: Fix RI publish interval, broken in -7
+ * NetDb: Fix RI publish interval, broken in -7
 
 2013-11-03 zzz
- * NetDB: Allow store of leaseset as long as one lease has not expired
+ * NetDb: Allow store of leaseset as long as one lease has not expired
  * Transport:
    - Expire wasUnreachable entries, so inbound tunnel build failures
      don't escalate
@@ -10456,7 +10459,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
      down a tunnel, just strip the hashes like we do for unencrypted
    - Send a store of our own encrypted LS received down a tunnel to
      the InNetMessagePool so the FloodfillVerifyStoreJob will see it.
- * NetDB: Fix LS store verifies with encrypted replies
+ * NetDb: Fix LS store verifies with encrypted replies
    by storing the tagset with the correct SKM for the inbound tunnel used.
    Broken since 0.9.7 when it was introduced.
  * Tunnels:
@@ -10507,12 +10510,12 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
    - Don't fail start if hostname is unresolvable; retry at connect time (ticket #946)
    - Output IRC message on connect exception
    - Update target list on-the-fly when configuration changes
- * NetDB:
+ * NetDb:
    - Increase RI publish interval to reduce the connection load on ffs
    - Save RI-last-published time; check it before publishing
 
 2013-10-19 zzz
- * NetDB:
+ * NetDb:
    - Reinstate ExpireRoutersJob
    - Reduce min part. tunnels for floodfill
    - Reduce floodfill redundancy
@@ -10795,7 +10798,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2013-07-28 zzz
  * Addresses: Treat RFC 4193 addresses fc00::/7 as local
- * NetDB: Disable RI verifies for now
+ * NetDb: Disable RI verifies for now
 
 2013-07-26 zzz
  * Transports:
@@ -11052,7 +11055,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2013-06-21 zzz
  * Crypto: AES decrypt speedups
- * NetDB, i2psnark: Speed up XORComparators
+ * NetDb, i2psnark: Speed up XORComparators
  * SSU: Ignore non-mod-16 padding
 
 2013-06-20 zzz
@@ -11063,7 +11066,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
  * Console: Don't display 'unsupported' message when restart button clicked
  * I2CP: Don't send SendMessageEndMessages from client to router if
          in fast receive mode and the router doesn't require them.
- * NetDB:
+ * NetDb:
    - Don't instantiate unused success job for republish LS
    - Add debug setting to encrypt RI lookups
  * NTCP: Extend interval for sending time sync messages
@@ -11084,11 +11087,11 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2013-06-10 zzz
  * Installer: Don't install Windows service by default
- * NetDB: Let class N routers become floodfill; scale max connections for non-O floodfills
+ * NetDb: Let class N routers become floodfill; scale max connections for non-O floodfills
  * Transports: Reduce idle timeouts to mitigate conn limit issues
 
 2013-06-09 zzz
- * NetDB: Prep for leasesets with different expire times
+ * NetDb: Prep for leasesets with different expire times
    - Add new I2CP RequestVariableLeaseSetMessage
    - Send RVLSM if client supports it; handle on client side;
      disabled by default for the moment.
@@ -11120,7 +11123,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
  * I2CP: Save client version for future reference
  * InboundMessageDistributor: Cleanups
  * LeaseSet: Don't allow changes after signature added
- * NetDB:
+ * NetDb:
    - Debugging option for encrypting RI lookups
    - Remove unused classes
 
@@ -11136,7 +11139,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 2013-05-31 zzz
  * configtunnels.jsp: Allow more hops and tunnels when routerconsole.advanced=true
  * I2PSnark: Fix details page on Windows
- * NetDB:
+ * NetDb:
    - Add DLM fields for requesting an encrypted reply
    - Add support for encrypted DSRM and DSM in response to a DLM
    - Fix netDb.alwaysQuery debug setting so it works again, and always
@@ -11177,7 +11180,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
  * I2PSnark:
    - Adjust target piece size calculation
    - Tweak to make it easier for new peers to connect
- * NetDB: Increase floodfill count for good
+ * NetDb: Increase floodfill count for good
  * UPnP: Detect devices without port forwarding capability (ticket #930)
 
 2013-05-07 zzz
@@ -11351,7 +11354,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
  * Flag for Curaçao (CW), public domain
 
 2013-02-12 zzz
- * NetDB: Randomize delay before floodfill store verify
+ * NetDb: Randomize delay before floodfill store verify
 
 2013-02-10 zzz
  * Logs: Again fix setting log filename (ticket #805)
@@ -11359,7 +11362,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
  * Wrapper: Update ARMv6 Java Service Wrapper to v3.5.17 (ticket #826).
 
 2013-02-09 zzz
- * NetDB:
+ * NetDb:
    - Encrypt DatabaseLookup messages out exploratory tunnels
      when we already have the RI of the ff
    - Don't use multiple routers from the same /16 in lookups or stores
@@ -11393,7 +11396,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
  * BuildHandler:
    - Add early throttler based on previous hop
    - Limit concurrent next-hop lookups
- * NetDB: Increase floodfills again
+ * NetDb: Increase floodfills again
  * RandomSource: Seed from SecureRandom too
 
 2013-01-23 str4d
@@ -11421,7 +11424,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
  * EepGet: Don't retry if proxy isn't there
  * I2CP: Failsafe check for delivery job requeueing forever (ticket #819)
  * jobs.jsp: Add table of pending jobs
- * NetDB: Split up files into subdirectories
+ * NetDb: Split up files into subdirectories
  * SAM: Force i2cp.messageReliability=None (ticket #819)
 
 2013-01-02 zzz
@@ -11458,7 +11461,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
    - Prep for delivery of detailed failure codes to the client (ticket #788)
    - Minor optimizations and cleanups
  * I2PSnark: Create torrent form tweaks
- * NetDB: Split routerInfo files into subdirectories, disabled for now,
+ * NetDb: Split routerInfo files into subdirectories, disabled for now,
    enable with router.networkDatabase.flat=false
  * Stats: Clean up some duplicate createRateStat calls (ticket #787 comment 2)
  * Tunnels: Catch rare BuildExecutor IAE only in Java 7 (ticket #811)
@@ -11536,7 +11539,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2012-11-19 zzz
  * BuildHandler: Disable CoDel, wasn't helping
- * NetDB: Add negative lookup cache
+ * NetDb: Add negative lookup cache
  * Profiles: Split up files into subdirectories
 
 2012-11-17 zzz
@@ -11546,7 +11549,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2012-11-16 zzz
  * I2PSnark: Fix rare IOOBE (ticket #777)
- * NetDB:
+ * NetDb:
    - Implement automatic reseeding (ticket #521)
    - Increase minimum routers
    - Log reseeds in event log
@@ -11729,7 +11732,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 2012-10-09 zzz
  * Console, i2ptunnel: Warn on low ports
  * EventLog: Add more events
- * NetDB: Increase floodfills again
+ * NetDb: Increase floodfills again
  * RouterInfo: Exit 1 on error in main()
  * SSU:
    - Add peer test throttling
@@ -11992,7 +11995,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2012-08-26 zzz
  * DataHelper: Trim trailing whitespace when loading properties
- * NetDB: Increase floodfills, decrease flood redundancy
+ * NetDb: Increase floodfills, decrease flood redundancy
  * SendMessageOptions: Increase tag fields to 4 bits and use
                        table lookup for more flexibility
  * Streaming: Use packet type and current window size to adjust
@@ -12035,7 +12038,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
    - Various spoof detections
 
 2012-08-22 zzz
- * NetDB: Add hash collision detection
+ * NetDb: Add hash collision detection
  * SimpleTimer2: Synchronization improvements (ticket #653)
  * SSU:
    - Fail establishment immediately on SessionCreated
@@ -12047,7 +12050,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
    - More cleanups
 
 2012-08-21 zzz
- * NetDB: Decrease stat publish probability
+ * NetDb: Decrease stat publish probability
  * SSU:
    - Use external, not internal port to sign SessionCreated message.
      Together with previous fix to allow external port change, this
@@ -12414,7 +12417,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
    - Options changes now propagate to running
      socket managers and sessions, and through to the router
    - Better parsing of jump server URLs
- * NetDB: Only publish stats every so often, to improve
+ * NetDb: Only publish stats every so often, to improve
    anonymity while preserving the ability to monitor
    the network (effective next release)
  * SocketManager:
@@ -12452,7 +12455,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
    - Move private tracker config from create box to torrent config
    - Refactor private and open tracker configuration
    - Add private indication on details page
- * netdb.jsp: Don't show our info on summary page
+ * NetDb.jsp: Don't show our info on summary page
 
 2012-06-04 zzz
  * I2PSnark: Take tracker out of opentracker list when removed
@@ -12469,7 +12472,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 2012-06-01 zzz
  * Console: Tab the netdb and profile pages
  * I2PSnark: Fix partially-complete torrent not announcing
- * NetDB: Reduce flood redundancy from 8x to 6x
+ * NetDb: Reduce flood redundancy from 8x to 6x
 
 2012-05-31 zzz
  * I2PSnark:
@@ -12615,7 +12618,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2012-03-20 zzz
   * I2PSnark: Message area tweaks and clear link
-  * NetDB:
+  * NetDb:
     - Don't reread RI if netdb date is recent
     - Prevent LS/RI overwrites
     - Disallow hash mismatches in RI files
@@ -12758,7 +12761,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
   * Build: Make windows and non-windows installers for release
   * configclients: Tweaks
   * Graphs: Add time interval to legend
-  * NetDB: Increase min ff to 250
+  * NetDb: Increase min ff to 250
   * Plugins: Fix setting webapp classpath on Jetty 6
   * UDP: Log tweaks
   * viewstat.jsp: Set Connection: Close to work around Jetty bug
@@ -12812,7 +12815,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     - CSS tweaks
     - Ajax and link fixes
     - Move js to console in prep for merging w/ homepage
-  * NetDB: Remove bw stats (effective next release)
+  * NetDb: Remove bw stats (effective next release)
 
 2012-03-02 zzz
   * BlockfileNamingService: Add negative cache
@@ -12840,11 +12843,11 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     - Rewrite i2paddresshelper scanning/removal
     - Refactor out local server code
     - Nicer address helper error page
-  * NetDB:
+  * NetDb:
     - Reenable verify of RI stores, disabled in 0.7.9,
       checkin comments claim reenabled in 0.7.10 but didn't happen.
     - Synchronize StoreJob.sendNext() to avoid dups
-  * netdb.jsp: Fix debug leaseset count again
+  * NetDb.jsp: Fix debug leaseset count again
   * susidns: Add b64 hash to details page
 
 * 2012-02-27 0.8.13 released
@@ -12856,7 +12859,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 2012-02-22 zzz
   * ExploratoryPeerSelector: Use fast peers if hidden for
     inbound tunnels to improve success
-  * NetDB:
+  * NetDb:
     - Don't publish our RI if it has no addresses
     - Publish our RI sooner after startup
       to facilitate our IB tunnel builds
@@ -12870,7 +12873,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2012-02-17 zzz
   * I2PSnark: Escape fixes
-  * netdb.jsp: Fix debug median calculation
+  * NetDb.jsp: Fix debug median calculation
 
 2012-02-17 kytv
   * Add Czech language from Transifex (thanks Waseihou)
@@ -12917,7 +12920,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2012-01-26 zzz
   * configclients: Fix form action default
-  * NetDB: Increase min ff to 200
+  * NetDb: Increase min ff to 200
   * Plugins: Fix updated count
   * SusiDNS: Make UI 1-based
 
@@ -12961,7 +12964,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2012-01-16 zzz
   * Build: Put Implementation-Version in manifests
-  * NetDB: Hopefully fix rare NPE (ticket #589)
+  * NetDb: Hopefully fix rare NPE (ticket #589)
   * Plugins:
     - Only stop a plugin before update if it was running
     - Only stop a plugin at shutdown if it was running
@@ -13156,7 +13159,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
   * Router:
     - More refactoring tasks to their own files
     - Adjust some thread priorities
-  * Susimail: Adjust login form sizes
+  * SusiMail: Adjust login form sizes
   * Tunnels: Increase next hop send timeout
   * UDP: Fix major MTU bug introduced in 0.8.9.
     - Change large MTU from 1492 to 1484 and small from 608 to 620
@@ -13193,7 +13196,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     - Summary bar tweaks
     - Config nav CSS tabs
     - CSS cleanups from last checkin
-  * Susimail:
+  * SusiMail:
     - Login screen tweaks
     - Cleanups, generics, static
 
@@ -13309,7 +13312,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
   * Update i2prouter script for better compatibility with Gentoo
 
 2011-10-31 zzz
-  * NetDB: Reduce max RI publish interval
+  * NetDb: Reduce max RI publish interval
   * ProfileOrganizer:
     - Fix expiration of old profiles
     - Don't exceed high cap limit between reorgs
@@ -13365,7 +13368,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2011-10-19 zzz
   * I2PTunnel: Fix timeout message on POST (ticket #531)
-  * NetDB: Reduce RI max expiration again
+  * NetDb: Reduce RI max expiration again
 
 2011-10-18 zzz
   * StoreJob: Ensure nonzero token
@@ -13378,7 +13381,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 2011-10-17 zzz
   * BuildExecutor: Efficiency tweak
   * Console: Hide tunnel lag if tunnel testing is disabled
-  * NetDB: Fix rare NPE from netdb.jsp (ticket #539)
+  * NetDb: Fix rare NPE from netdb.jsp (ticket #539)
   * Router: Change all shutdown CRITs to ERRORs; shutdown
     the stat manager last to reduce chance of NPEs
     (similar to that in tickets #534,535)
@@ -13508,7 +13511,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
   * I2PTunnel, NTCP: Catch unchecked exceptions from GNU NIO (ticket # 519)
   * JobQueue, RepublishLeaseSetJob, StartExplorerJob:
     Out-of-order JobQueue 2nd try to fix
-  * NetDB: Limit max explore queue
+  * NetDb: Limit max explore queue
   * RouterContext: Remove unused MessageStateMonitor
 
 2011-09-18 kytv
@@ -13551,7 +13554,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     - Limit max parallel builds on really slow machines (ticket #519)
     - Slow down build loop when network is apparently disconnected (ticket #519)
   * I2PSnark: Fix inaccuracy in the completed bytes display
-  * NetDB: Disable floodfill at shutdown time if enabled
+  * NetDb: Disable floodfill at shutdown time if enabled
 
 2011-09-09 zzz
   * TunnelDispatcher: Fix bug in -13 preventing participating
@@ -13586,7 +13589,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
   * SDSCache: Use weak refs; increase size for pub keys
 
 2011-09-04 zzz
-  * NetDB:
+  * NetDb:
     - Try again to fix ISJ deadlock, thx devzero
     - Lower RI expiration again
     - Expire RIs with SSU only and no introducers sooner
@@ -13602,7 +13605,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2011-09-02 zzz
   * Console: Cache user-agent processing
-  * NetDB: Hopefully fix ISJ deadlock, thx devzero
+  * NetDb: Hopefully fix ISJ deadlock, thx devzero
 
 2011-09-02 sponge
   * I2PSnark: Fix GUI html tag for adding a torrent, it was missing a space.
@@ -13610,7 +13613,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 2011-09-01 zzz
   * Console: Enable color logs
   * GeoIP: Cache country codes
-  * NetDB: Explore more aggressively if hidden or K
+  * NetDb: Explore more aggressively if hidden or K
   * UDP: Cleanups and introduction fixes
 
 2011-08-31 zzz
@@ -13623,7 +13626,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
   * Naming: Increase b32 lookup timeout to 15 sec.
 
 2011-08-29 zzz
-  * NetDB:
+  * NetDb:
     - Replace the old parallel lookup method with a true
       Kademlia lookup that iteratively queries additional floodfill
       peers returned in DatabaseSearchReplyMessages. This is a more
@@ -13716,7 +13719,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
   * Crypto: Implement and then comment out an alternate
             AES-256/CBC implementation using the JVM crypto libs,
             and tests, it isn't faster
-  * Netdb: Add a job to refresh all the old router infos at startup,
+  * NetDb: Add a job to refresh all the old router infos at startup,
            to speed integration
 
 2011-07-30 kytv
@@ -13728,7 +13731,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
  * Remove unused lock
 
 2011-07-29 zzz
-  * Netdb Search:
+  * NetDb Search:
     - Follow all DSRM's, not just the last one, by moving the code
       from the match job to the selector
     - Update peer profile after SingleSearchJob
@@ -13747,7 +13750,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
   * Installer: The previous wrapper files only work on armv7
   * NativeBigInteger: Move libjbigi-linux-arm.so to libjbigi-linux-armv7.so,
                       do ARM version detection in NBI.
-  * NetDB:
+  * NetDb:
     - Explore even more aggressively at startup
     - Increase SingleSearchJob timeout
     - Increase time at startup for processing DSRM
@@ -13764,7 +13767,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
   * Atalk: Remove this terrible example
   * Console: Use capability method for counting integrated peers
   * I2PSnark: Don't let connection problem crash the DirMonitor (ticket #495)
-  * Netdb: Speed up collection of all the floodfill peers by using
+  * NetDb: Speed up collection of all the floodfill peers by using
            PeerManager.getPeersByCapability()
   * PeerManager: Capability cleanups
   * Tunnel TestJob:
@@ -13775,7 +13778,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 2011-07-18 zzz
   * FileUtil: Add a rename method and a new copy method
   * I2PTunnel: Rename privkey file when deleting tunnel to prevent inadvertent reuse
-  * Netdb: Update reseed lists
+  * NetDb: Update reseed lists
   * Streaming: Improve conn limit log message
   * UDP: Lower max port below 31000 since wrapper uses that
 
@@ -13815,7 +13818,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
   * Findbugs: Several fixes and cleanups
   * I2NP: Consolidate common code from TunnelBuildMessage and
           TunnelBuildReplyMessage into a common base class
-  * NetDB, TestJob: Fix NPEs at startup (ticket #493)
+  * NetDb, TestJob: Fix NPEs at startup (ticket #493)
   * Sha256Standalone:
     - Use system SHA-256 MessageDigest instead of Sha256Standalone in PRNG
     - Deprecate DataHelper functions using Sha256Standalone arguments;
@@ -13836,8 +13839,8 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
   * Floodfills: Increase again
   * HTTP Proxy: Fix error on shutdown
   * NamingService: Use HostsTxtNamingService if default fails to initialize
-  * Netdb: Catch exception on dup netdb entries
-  * Netdb exploration:
+  * NetDb: Catch exception on dup netdb entries
+  * NetDb exploration:
     - Remove floodfills from dont-include list in exploration
       DatabaseLookupMessage, as the dont-include-floodfills flag
       has been supported since release 0.7.9.
@@ -13941,7 +13944,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     jbigi and wrapper files for arm.
     Compiled on trimslice with gcc version 4.4.5 (Ubuntu/Linaro 4.4.4-14ubuntu5)
     Log postinstall errors to postinstall.log.
-  * NetDB: Increase floodfills and better adjustment based on available memory
+  * NetDb: Increase floodfills and better adjustment based on available memory
   * RateStat: final
   * Router: Delete old libjbigi.so and libjcpuid.so at startup if jbigi.jar is newer.
             This will force a reextraction by CPUID and NBI.
@@ -14121,7 +14124,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
       - Prevent a client from setting the router's clock
       - Javadocs
     * I2PSnark: Restrict swarm size for small torrents
-    * netDb: Don't refetch expiring router infos if we have enough
+    * NetDb: Don't refetch expiring router infos if we have enough
 
 2011-05-28 zzz
     * I2PSnark: Fix bug preventing Robert from connecting to snark (thx sponge)
@@ -14148,7 +14151,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
       - Start updating NativeBigInteger
       - Remove k63 libs that are dup of k62; handle in NBI
     * Naming: B32 fixes
-    * NetDB: Increase floodfills again
+    * NetDb: Increase floodfills again
 
 2011-05-23 zzz
     * Console:
@@ -14260,13 +14263,13 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * Console: Hide iframe on mobile browsers
     * DataHelper: Speed up eq() (Ticket #437)
     * HTTPServer: Strip inbound X-Accept-Encoding header
-    * netdb.jsp: HTML fixes
+    * NetDb.jsp: HTML fixes
     * Plugins: Log error when console server not found
     * Reseed: Log tweak
 
 2011-04-02 m1xxy
     * routerconsole, i2psnark, ...  I2P ahora también en español: ¡Bienvenidos los hispanohablantes!
-      - routerconsole, i2ptunnel, i2psnark, SusiDNS, Susimail fully translated into Spanish
+      - routerconsole, i2ptunnel, i2psnark, SusiDNS, SusiMail fully translated into Spanish
         (thx to PunkiBastardo and user)
     * routerconsole, i2psnark, ...
       - French translations completed by magma
@@ -14299,7 +14302,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * LogWriter: Prevent NPE after permissions fail
 
 2011-03-11 duck
-    * Susimail: translation support, including dutch translation.
+    * SusiMail: translation support, including dutch translation.
 
 2011-03-10 zzz
     * configclients.jsp: Split form up, fix HTML warnings
@@ -14307,7 +14310,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * Console: Consolidate nonce handling
     * eepget: Don't send X-Accept-Encoding header to proxy (ticket #422)
     * logs.jsp: Fix NPE (ticket #430)
-    * netdb.jsp: Fix table alignment
+    * NetDb.jsp: Fix table alignment
     * Tunnel Preprocessor: Use entropy for padding more efficiently
 
 2011-03-08 zzz
@@ -14398,7 +14401,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * Connect Client: Minor NPE fix cleanup
     * JobQueue: Prevent NPE at shutdown (thanks liberty)
     * GeoIP: Prevent startup NPE (ticket #413, thanks RN)
-    * NetDB: Prevent ExpireLeaseJob NPE (thanks sponge)
+    * NetDb: Prevent ExpireLeaseJob NPE (thanks sponge)
 
 2011-02-11 Mathiasdm
     * routerconsole: fixed graphs using jrobin; and headless issue
@@ -14495,7 +14498,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * I2PAppContext: New getProperties() method
     * I2PTunnel:
       - Use context properties as defaults
-    * NetDB, DatabaseStoreMessage:
+    * NetDb, DatabaseStoreMessage:
       - Convert everything from DataStructure to the
         new DatabaseEntry superclass
       - Optimizations made possible by DatabaseEntry
@@ -14534,7 +14537,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 2011-01-09 zzz
     * DataHelper: Speed up and annotate sortStructures()
     * Data Structures: More caching improvements, don't cache where we shouldn't
-    * NetDB: Don't rescan netDb directory unless changed,
+    * NetDb: Don't rescan netDb directory unless changed,
              to reduce Hash cache thrash (backport from test4)
     * RouterInfo:
       - Don't cache byteified data by default, to save ~1.5 MB
@@ -14908,7 +14911,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
       - Filter hop-by-hop Proxy headers appropriately
     * I2PTunnel SOCKS and SOCKS IRC clients:
       - Add local proxy username/password authorization
-      - Add SOCKS 5 outproxy support, with username/password authorization
+      - Add SOCKS5 outproxy support, with username/password authorization
     * logs.jsp: Format multiline messages better
     * Stats: Improve Frequency, enable coalescing; cleanup and javadocs
     * stats.jsp: Cleanup, more tagging, hide obscure stuff unless ?f=1
@@ -15051,7 +15054,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
       - Add clearCache() method
       - Don't use EepGet or Exec for b32
       - Javadoc updates
-    * NetDB:
+    * NetDb:
       - Expire unreachable routers quickly, even if they don't have introducers,
         so we don't have old data on routers that ran out of introducers.
       - Fix rare NPEs at shutdown
@@ -15161,7 +15164,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * Misc tweaks after code review
 
 2010-06-05 zzz
-    * Netdb:
+    * NetDb:
       - Use new receivedAsReply flag in LeaseSet to mark
         those received as response to a query
       - Mark which methods in FloodfillPeerSelector may return
@@ -15243,7 +15246,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * Log: Translate priority
 
 2010-05-13 zzz
-    * netdb.jsp debug tweaks
+    * NetDb.jsp debug tweaks
     * Plugins: Try to prevent ZipErrors after upgrade
 
 2010-05-10 zzz
@@ -15254,7 +15257,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * I2PSnark:
       - Add tunnel config dropdowns
       - Comment out old proxy stuff
-    * NetDB:
+    * NetDb:
       - Handle old and duplicate stores more efficiently
       - Have DataStore put() return success
       - Move getDistance() to its own class
@@ -15413,7 +15416,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
         if higher than peer count
       - Allow missing peer list
       - Log tweaks
-    * netdb.jsp: Tag transport properties
+    * NetDb.jsp: Tag transport properties
     * Plugins: Remove final check and install console
       messages after a while
     * PrivateKeyFile: Add b32 output
@@ -15447,7 +15450,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
       - Java 5 and debug cleanup
     * KeyManager: Concurrent
     * logs.jsp: Add link to trac
-    * netdb.jsp: Display transport cost if not default
+    * NetDb.jsp: Display transport cost if not default
     * Peer Manager:
       - Replace some locks with concurrent
       - Switch back to fast version of getPeersByCapability()
@@ -15524,7 +15527,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * I2PSnark:
       - Fix NPE after create file failure
       - Sanitize more characters in file names
-    * netdb: Fix NPE after OOM http://trac.i2p2.i2p/ticket/38
+    * NetDb: Fix NPE after OOM http://trac.i2p2.i2p/ticket/38
     * NTCP Transport:
       - Replace lists with concurrent queues in EventPumper
         and NTCPConnection to remove global locks
@@ -16016,7 +16019,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * Misc. cleanups after review, prep for release
 
 2009-12-06 zzz
-    * netdb.jsp: Fix bug caused by XSS fix
+    * NetDb.jsp: Fix bug caused by XSS fix
     * Translations: drop ru until after release
 
 2009-12-05 zzz
@@ -16067,20 +16070,20 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2009-11-21 zzz
     * GeoIP: Update to Nov 17 2009 data
-    * Netdb Floodfill rework part 4 of N:
+    * NetDb Floodfill rework part 4 of N:
       - Search closest-to-the-key
       - Put closest-to-the-key in explore don't-include-list
       - Use facade's peer selector for exploration rather than
         instantiating a new one
       - Adjust response time limit
-    * netdb.jsp: Add popups on flags
+    * NetDb.jsp: Add popups on flags
     * Routerconsole build: rename include files so they aren't
       compiled and bundled separately (~15KB)
 
 2009-11-18 zzz
     * Build: Don't update the po files by default, add new
       target "poupdate" to do that.
-    * Netdb:
+    * NetDb:
       - Floodfill rework part 3 of N: Send closest-to-the-key
         in DSRM replies
       - Adjust criteria for following DSRM
@@ -16122,10 +16125,10 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
       - Reject torrents with a single file named *.torrent
       - Increase max piece size to 2MB (was 1MB), but reduce
         max number of connections to lessen ooms
-    * Netdb FloodOnlySearchJob:
+    * NetDb FloodOnlySearchJob:
       - Fix up field hiding and duplicate overrides
       - Other javadoc and java 5 improvements
-    * Netdb StoreJob, FloodfillVerifyStoreJob:
+    * NetDb StoreJob, FloodfillVerifyStoreJob:
       - Fix bug where reply selector wasn't registered for
         routerinfo stores, so we didn't get stats, and
         we kept retrying. This also prevented verification
@@ -16136,7 +16139,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
         call it or dbStoreFailed() as appropriate to give
         credit or blame to the floodfill we stored to.
       - Don't let FVSJ verify using the peer we stored to
-    * Netdb Stores:
+    * NetDb Stores:
       - Floodfill rework part 2 of N:
         Store and verify closest to the key, subject to
         last-failed lookup and store stats.
@@ -16200,7 +16203,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
       - Show user-installed themes on configui.jsp
       - Fix reseed button spacing
     * GraphHelper cleanup
-    * Susidns: add link to subscription faq
+    * SusiDNS: add link to subscription faq
 
 2009-10-29 zzz
     * Console tag fixes, bundle script fix
@@ -16453,7 +16456,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * jobs.jsp: Cleanup
     * logs.jsp: Add system encoding
     * Ministreaming: Cleanups, deprecation, move demos out of the lib
-    * netdb.jsp: Flags for leases
+    * NetDb.jsp: Flags for leases
     * NTCP: Clean up clock skew banlist message
     * profiles.jsp:
       - Rename the Failing column
@@ -16750,7 +16753,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * orange flash remove take 2
 
 2009-07-11 zzz
-    * netdb.jsp: Fix bad tag causing orange mouseovers
+    * NetDb.jsp: Fix bad tag causing orange mouseovers
 
 2009-07-11 dr|z3d
     * More enhancements to the router console, consolidation of the
@@ -16971,7 +16974,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 2009-06-21 zzz
     * Browser Launch: Wait until the routerconsole is up before launching the browser
     * Installer: Fix wrapper.config parsing on windows
-    * netdb.jsp: Add country chart at bottom, clean up version chart
+    * NetDb.jsp: Add country chart at bottom, clean up version chart
     * News Fetcher:
       - Change default news URL, use it instead of the old one even if
         the old one is saved in the configuration, to assist in the transition
@@ -17736,7 +17739,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
       - Move ActivityTimer and Flusher from SimpleTimer to RetransmissionTimer
       - SimpleTimer2 allows specifying "fuzz" to reduce
         timer queue churn further
-    * Susidns: Fix save of new dest broken in 0.7
+    * SusiDNS: Fix save of new dest broken in 0.7
     * TunnelPool:
       - Allow leasesets with reduced leases for robustness and startup speed
       - Plug in-progress build leak
@@ -17821,7 +17824,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
       - Beginnings of SOCKS configuration by port
       - HTML error msg for attempted HTTP access
     * LeaseSet: Add encrypt/decrypt methods
-    * netdb.jsp: Don't show stats by default
+    * NetDb.jsp: Don't show stats by default
     * OCMOSJ: Bundle a reply when we switch tunnel or lease,
       to detect failure sooner
     * PublishLocalRouterInfoJob:
@@ -18131,7 +18134,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * config.jsp: Add more help
     * peers.jsp: Clean up 'Listening on' formatting
     * profiles.jsp: Don't override locale number format
-    * netdb.jsp: Indicate if hidden
+    * NetDb.jsp: Indicate if hidden
     * summary.jsp: Indicate if hidden
     * i2ptunnel/edit.jsp: Disable word wrap in textarea
     * Blocklist: Change logging from ERROR to WARN
@@ -18284,7 +18287,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
         (Stop i2psnark, add to i2psnark.config, restart)
       - Remove Galen and NickyB trackers
     * NetDb: Add netDb.exploreKeySet stat
-    * netdb.jsp: Add parameter ?r=xxxxxx to view a single routerinfo,
+    * NetDb.jsp: Add parameter ?r=xxxxxx to view a single routerinfo,
       and ?r=. to view our own; change links on other pages too
     * Transport: Make 0.0.0.0/8 and 169.254.0.0/16 private
 
@@ -18466,7 +18469,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * Banlist:
       - Add banlistForever() and isBanlistedForever(), unused for now
       - Sort the HTML output by router hash
-    * netdb.jsp:
+    * NetDb.jsp:
       - Sort the lease HTML output by dest hash, local first
       - Sort the router HTML output by router hash
 
@@ -18726,7 +18729,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * checklist.txt: Minor edit
     * hosts.txt: Add perv.i2p, false.i2p, mtn.i2p2.i2p
     * i2ptunnel.config: Change CVS client to mtn
-    * netdb.jsp: Show leaseSet destinations using reverse lookup
+    * NetDb.jsp: Show leaseSet destinations using reverse lookup
     * profiles.jsp: First cut at showing floodfill data
 
 2008-03-27 zzz
@@ -18764,7 +18767,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * build.xml: Add to help
     * checklist.txt: Tweak
     * readme.html: Fix forum links
-    * netDb: Remove tunnel.testFailedTime
+    * NetDb: Remove tunnel.testFailedTime
 
 2008-03-19 zzz
     * ExploratoryPeerSelector:
@@ -18791,7 +18794,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
        - Show that fast peers are also high-capacity on profiles.jsp
     * readme.html: Update Syndie link
     * TunnelPool: Update comments
-    * netDb: Report 1-2h uptime as 90m to further frustrate tracking,
+    * NetDb: Report 1-2h uptime as 90m to further frustrate tracking,
       get rid of the 60s tunnel stats
       (effective as of .33 to provide cover)
 
