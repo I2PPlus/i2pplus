@@ -251,7 +251,7 @@ td p.error{padding:10px}
 #composemail{text-align:center;padding:4px 8px 12px;border-radius:0 0 2px 2px;background:linear-gradient(90deg,#efefff,#fff,#efefff)}
 .iframed #composemail{border-bottom:0}
 #composemail hr{display:none}
-#composemail textarea{margin-bottom:7px;min-height:200px}
+#composemail textarea{margin-bottom:7px;min-height:200px;resize:vertical}
 #composemail textarea,#composemail input[type=text]{width:calc(100% - 20px);min-width:565px}
 #newmail{width:auto;margin:auto}
 #newmail td{padding:5px}

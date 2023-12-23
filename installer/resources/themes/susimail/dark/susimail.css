@@ -297,7 +297,7 @@ td p.error{padding:10px}
 #composemail{padding:4px 8px 12px;text-align:center;border-radius:0 0 2px 2px;background:#010;background:repeating-linear-gradient(90deg,rgba(0,32,0,.4),rgba(0,0,0,.4) 1px,rgba(0,0,0,.4) 2px),repeating-linear-gradient(180deg,rgba(0,0,0,.4) 1px,rgba(0,0,0,.4) 2px,rgba(0,64,0,.4) 3px),url(/themes/console/dark/images/camotile2.png)}
 .iframed #composemail{margin-bottom:-7px;border-bottom:0}
 #composemail hr{display:none}
-#composemail textarea{margin-bottom:7px;min-height:200px}
+#composemail textarea{margin-bottom:7px;min-height:200px;resize:vertical}
 #composemail textarea,#composemail input[type=text]{width:calc(100% - 20px);min-width:565px}
 #newmail{width:auto;margin:auto}
 #newmail td{padding:5px}
@@ -349,14 +349,14 @@ tr:hover td.mailListSubject a{width:calc(100% - 2px);border-radius:2px 15px 15px
 tr:active td.mailListSubject a{box-shadow:inset 2px 2px 1px #000}
 tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td,.topbuttons tr:hover td,.topbuttons:hover td,#mailbox tr:hover,#mailbox tr:hover td{box-shadow:none}
 .folders{display:inline-block;margin:0}
-.listClock{margin-top:1px;padding-left:1px;min-width:18px;vertical-align:text-top;font-size:80%;text-align:left;text-transform:lowercase}
+.listClock{margin:1px 0 0 -1px;min-width:18px;vertical-align:text-top;font-size:80%;text-align:left;text-transform:lowercase}
 .listDate,.listTime,.listClock{display:inline-block;white-space:nowrap;text-align:right}
 .listDate{padding:3px 4px;min-width:64px;text-align:right;font-weight:700;color:var(--ink);border-radius:2px;box-shadow:0 0 0 1px #000;background:var(--badge);opacity:.8}
 .listDate span{padding:1px 0;display:inline-block;min-width:18px;text-align:center;border-radius:2px}
 .listSize,.listDate,.mailListSender,.mailListSubject a{will-change:transform}
 .listSize{min-width:56px;display:inline-block;vertical-align:middle;text-align:right;border-radius:2px;box-shadow:0 0 0 1px #000;background:var(--badge)}
 .listSizeUnit{margin:1px 1px 1px 2px;padding:2px 1px;display:inline-block;min-width:14px;color:var(--ink);text-align:center;font-size:90%;font-style:normal;font-weight:700;text-shadow:var(--txt_shadow);border-radius:0 1px 1px 0;background:#010}
-.listTime{margin-right:2px;min-width:42px;opacity:.85}
+.listTime{margin:0 2px;min-width:42px;font-size:90%;opacity:.85}
 .mailListAttachment.isAttached{background:var(--attach) no-repeat center center/14px}
 .mailListAttachment{min-width:16px}
 .mailListCount{text-align:right}
