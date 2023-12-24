@@ -2301,7 +2301,7 @@ public class WebMail extends HttpServlet
                 if (state == State.LIST) {
                     for (Iterator<String> it = folder.currentPageIterator(); it != null && it.hasNext();) {
                         String uidl = it.next();
-                        Mail mail = mc.getMail(uidl, MailCache.FetchMode.HEADER);
+                        Mail mail = mc.getMail(uidl, MailCache.FetchMode.HEADER_CACHE_ONLY);
                         if (mail != null && mail.error.length() > 0) {
                             sessionObject.error += mail.error;
                             mail.error = "";
@@ -2322,8 +2322,7 @@ public class WebMail extends HttpServlet
                 }
             }
 
-            response.setHeader("Pragma", "no-cache");
-            response.setHeader("Cache-Control","no-cache");
+            response.setHeader("Cache-Control","private, no-cache, max-age=3600");
 
             //// Begin output
 
@@ -3315,7 +3314,7 @@ public class WebMail extends HttpServlet
         int i = 0;
         for (Iterator<String> it = folder.currentPageIterator(); it != null && it.hasNext();) {
             String uidl = it.next();
-            Mail mail = mc.getMail(uidl, MailCache.FetchMode.CACHE_ONLY);
+            Mail mail = mc.getMail(uidl, MailCache.FetchMode.HEADER_CACHE_ONLY);
             if (mail == null || !mail.hasHeader()) {
                 continue;
             }
