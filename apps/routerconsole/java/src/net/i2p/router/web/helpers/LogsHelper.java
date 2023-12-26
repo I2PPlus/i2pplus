@@ -215,8 +215,9 @@ public class LogsHelper extends HelperBase {
                         !line.contains("If you would like to submit a bug report") &&
                         !line.contains("Problematic frame:") &&
                         !line.contains("INFO | #   Unknown") &&
-                        !line.contains("INFO | #\n") &&
-                        !line.endsWith("| INFO | #\n") &&
+                        !line.matches("^.*[^\\n]#\\s*$") &&
+                        !line.matches(".*#$") &&
+                        !line.matches(".*\\* $") &&
                         !line.contains("  \n")) {
                         filtered.append(line).append("\n");
                     }
