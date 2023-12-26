@@ -3330,7 +3330,7 @@ public class WebMail extends HttpServlet
             // this is I2P Base64, not the encoder
             String b64UIDL = Base64.encode(uidl);
             String loc = myself + '?' + (folderName.equals(DIR_DRAFTS) ? NEW_UIDL : SHOW) + '=' + b64UIDL + floc;
-            String link = "<a href=\"" + loc + "\" class=\"" + type + "\">";
+            String link = "<a href=\"" + loc + "\" class=" + type + ">";
             String jslink = "tdclick\" onclickloc=\"" + loc + "\"";
 
             boolean idChecked = false;
@@ -3353,7 +3353,7 @@ public class WebMail extends HttpServlet
             StringBuilder tbuf = new StringBuilder(2048);
             tbuf.append("<tr class=\"list" + bg + "\">\n")
                 .append("<td class=\"mailListDate " + jslink + ">")
-                .append("<span class=listDate  title=\"").append(mail.dateOnly).append("\"><span>")
+                .append("<span class=listDate title=\"").append(mail.dateOnly).append("\"><span>")
                 // let's format time and date so it aligns and wraps nicely (for mobile)
                 .append(mail.localFormattedDate
                         .replace("/", "</span>&#8239;/&#8239;<span>")
@@ -3372,17 +3372,17 @@ public class WebMail extends HttpServlet
                         if (buf.length() > 45)
                             break;
                     }
+                    // remove angle brackets and trim to (consistent) name only so only name shown (with full address on tooltip)
                     String to = buf.toString();
+                    to = to.replace("&lt;", "").replace("&gt;", "").replace("@.*", "");
                     boolean trim = to.length() > 45;
                     if (trim) {
                         to = ServletUtil.truncate(to, 42).trim();
                     }
-                    to = quoteHTML(to).replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", "");
+                    to = quoteHTML(to);
                     tbuf.append("<td class=\"mailListSender ").append(jslink).append(" title=\"")
                         .append(buildRecipientLine(mail.to).replace("\"", "") + "\">")
-                         // remove angle brackets and trim to (consistent) name only so only name shown (with full address on tooltip)
-                         //link + buildRecipientLine(mail.to).replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", ""));
-                         .append(link).append(to);
+                        .append(link).append(to);
                     if (trim) {
                         tbuf.append("&hellip;");  // must be after html encode
                     }
