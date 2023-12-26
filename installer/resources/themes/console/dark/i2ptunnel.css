@@ -160,6 +160,7 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 #encryptMode,#tunnelBackupQuantity,#tunnelBackupQuantityOut,#tunnelDepth,#tunnelDepthOut,#tunnelQuantity,#tunnelQuantityOut,#tunnelVariance,#tunnelVarianceOut{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #filter input::placeholder{color:#ee8;opacity:.4}
 #hostField,#leasesetKey,#userAgents{margin:0;width:calc(100% - 10px);text-align:left}
+#hostField{margin:5px;height:64px!important;min-height:64px;resize:vertical}
 #localDestination{margin:0;height:34px}
 #oldName:focus::placeholder{opacity:0}
 #oldName::placeholder{color:#ee9;opacity:.5}
