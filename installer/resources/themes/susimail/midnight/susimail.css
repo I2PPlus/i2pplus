@@ -62,6 +62,7 @@ tr.bottombuttons:last-child td{padding-bottom:20px;border-bottom:var(--border_in
 tr.bottombuttons td{padding-left:0;padding-right:0}
 tr.spacer{display:none}
 .attachSize{font-size:80%}
+.thumbnail img{margin-left:16px;width:32px;height:32px;display:inline-block;object-fit:cover;vertical-align:middle;border-radius:4px;background:#004;image-orientation:from-image}
 #attachedfile input[type=checkbox]{margin:0 2px 0 0;vertical-align:middle}
 #attachedfile{padding:5px 5px 5px 8px;border-bottom:1px dotted #322e6b}
 #mailbox{margin-bottom:0}

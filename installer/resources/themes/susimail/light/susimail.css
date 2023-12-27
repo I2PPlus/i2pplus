@@ -262,6 +262,7 @@ td p.error{padding:10px}
 /* attachments */
 .attached{margin:0;padding:15px 35px 15px 35px;overflow:auto;text-align:left;box-shadow:var(--highlight);background:var(--attach) no-repeat 10px center/16px,rgba(220,220,255,.2)}
 .attached img{margin-top:4px;padding:3px;max-width:100%;max-width:calc(100% - 10px);border:1px solid #555;border-radius:2px;background:#fff;text-align:center;filter:drop-shadow(0 0 1px #999);image-orientation:from-image}
+.thumbnail img{margin-left:16px;width:32px;height:32px;display:inline-block;object-fit:cover;vertical-align:middle;border-radius:4px;background:#ddf;image-orientation:from-image}
 #addattachment td{border-top:1px solid #bbd;padding-top:7px}
 #addattachment td:last-child::after{margin:5px 0 1px}
 #attachedfile{padding:4px 5px}

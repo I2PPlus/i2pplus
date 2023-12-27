@@ -297,8 +297,8 @@ td p.error{padding:10px}
 #composemail{padding:4px 8px 12px;text-align:center;border-radius:0 0 2px 2px;background:#010;background:repeating-linear-gradient(90deg,rgba(0,32,0,.4),rgba(0,0,0,.4) 1px,rgba(0,0,0,.4) 2px),repeating-linear-gradient(180deg,rgba(0,0,0,.4) 1px,rgba(0,0,0,.4) 2px,rgba(0,64,0,.4) 3px),url(/themes/console/dark/images/camotile2.png)}
 .iframed #composemail{margin-bottom:-7px;border-bottom:0}
 #composemail hr{display:none}
-#composemail textarea{margin-bottom:7px;min-height:200px;resize:vertical}
 #composemail textarea,#composemail input[type=text]{width:calc(100% - 20px);min-width:565px}
+#composemail textarea{margin-bottom:7px;padding:8px 10px;min-height:200px;resize:vertical;font-size:110%}
 #newmail{width:auto;margin:auto}
 #newmail td{padding:5px}
 #newmail td:first-child{padding-right:3px;font-weight:700;color:var(--ink)}
@@ -313,7 +313,7 @@ td p.error{padding:10px}
 #addattachment td:last-child::after{margin:5px 0 1px}
 #attachedfile{padding:4px 5px}
 #attachedfile input[type=checkbox]{margin:1px;float:right}
-#attachedfile label{padding:5px 10px 5px 24px;width:calc(100% - 34px);min-width:400px;max-width:600px;display:inline-block;white-space:nowrap;line-height:1.4;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;font-style:italic;border-radius:2px 15px 15px 2px;box-shadow:inset 0 0 0 1px #020,inset 0 0 0 2px #010,0 0 0 1px #000;background:var(--attach_active) no-repeat 9px center/14px,linear-gradient(90deg,#010 70%,#020)}
+#attachedfile label{padding:8px 10px 8px 24px;width:calc(100% - 84px);min-width:400px;display:inline-block;white-space:nowrap;line-height:1.4;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;font-style:italic;border-radius:2px 15px 15px 2px;box-shadow:inset 0 0 0 1px #020,inset 0 0 0 2px #010,0 0 0 1px #000;background:var(--attach_active) no-repeat 9px center/14px,linear-gradient(90deg,#010 70%,#020)}
 #attachedfile label:hover{color:#930;box-shadow:var(--highlight),inset 0 0 0 2px #930;background:var(--attach_hover) no-repeat 9px center/14px,linear-gradient(90deg,#020 70%,#010)}
 #attachedfile label:active{box-shadow:inset 0 0 0 1px #020,inset 0 0 0 2px #010,inset 4px 4px 3px #000}
 #deleteattached{text-align:right}
@@ -322,6 +322,7 @@ td p.error{padding:10px}
 #imageInfo{margin-top:16px;padding-top:10px;width:100%;display:block;text-align:left;font-weight:700;border-top:1px dotted #242}
 #imageInfo::before{width:20px;height:16px;display:inline-block;vertical-align:text-bottom;background:var(--package) no-repeat left center/16px;content:""}
 #newmail input[type=checkbox]{margin:0}
+.thumbnail img{margin-left:16px;width:32px;height:32px;object-fit:cover;vertical-align:middle;border-radius:4px;background:#252;image-orientation:from-image}
 
 /* mail list */
 tr.list0,tr.list1{background:var(--row)}

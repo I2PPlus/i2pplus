@@ -616,13 +616,11 @@ public class WebMail extends HttpServlet
                                 name = mailPart.description;
                         }
                         name = quoteHTML(name);
-                        out.println("<img src=\"" + myself + '?' + RAW_ATTACHMENT + '=' +
-                             mailPart.getID() +
-                             "&amp;" + B64UIDL + '=' + Base64.encode(mailPart.uidl) +
-                             "\" alt=\"" + name + "\">");
-                        out.println("<span id=imageInfo><b>" + _t("File") + ": " + "</b><a target=_blank href=\"" + myself + '?' + RAW_ATTACHMENT + '='
-                                        + mailPart.getID() + "&amp;" + B64UIDL + '=' + Base64.encode(mailPart.uidl) + "\">"
-                                        + name + "</a>"); // TODO: Add filesize
+                        out.println("<img src=\"" + myself + '?' + RAW_ATTACHMENT + '=' + mailPart.getID() + "&amp;" +
+                                    B64UIDL + '=' + Base64.encode(mailPart.uidl) + "\" alt=\"" + name + "\">");
+                        out.println("<span id=imageInfo><b>" + _t("File") + ": " + "</b><a target=_blank href=\"" +
+                                    myself + '?' + RAW_ATTACHMENT + '=' + mailPart.getID() + "&amp;" + B64UIDL +
+                                    '=' + Base64.encode(mailPart.uidl) + "\">" + name + "</a>");
                     } else if (type != null && (
                         // type list from snark
                         type.startsWith("audio/") || type.equals("application/ogg") ||
@@ -637,19 +635,16 @@ public class WebMail extends HttpServlet
                         type.equals("application/pgp-encrypted") ||
                         type.equals("application/pgp-signature") ||
                         (type.equals("application/octet-stream") &&
-                         ((mailPart.filename != null && mailPart.filename.endsWith(".asc")) ||
-                          (mailPart.name != null && mailPart.name.endsWith(".asc"))))
-                                          )) {
+                        ((mailPart.filename != null && mailPart.filename.endsWith(".asc")) ||
+                        (mailPart.name != null && mailPart.name.endsWith(".asc")))))) {
                         out.println("<a href=\"" + myself + '?' + RAW_ATTACHMENT + '=' +
-                             mailPart.getID() +
-                             "&amp;" + B64UIDL + '=' + Base64.encode(mailPart.uidl) + "\">" +
-                             _t("Download attachment {0}", ident) + "</a>");
+                                    mailPart.getID() + "&amp;" + B64UIDL + '=' + Base64.encode(mailPart.uidl) + "\">" +
+                                    _t("Download attachment {0}", ident) + "</a>");
                     } else {
                         out.println("<a target=_blank href=\"" + myself + '?' + DOWNLOAD + '=' +
-                             mailPart.getID() +
-                             "&amp;" + B64UIDL + '=' + Base64.encode(mailPart.uidl) + "\">" +
-                             _t("Download attachment {0}", ident) + "</a>" +
-                             " (" + _t("File is packed into a zipfile for security reasons.") + ')');
+                                    mailPart.getID() + "&amp;" + B64UIDL + '=' + Base64.encode(mailPart.uidl) + "\">" +
+                                    _t("Download attachment {0}", ident) + "</a>" +
+                                    " (" + _t("File is packed into a zipfile for security reasons.") + ')');
                     }
                     out.println("</div>");
                 }
@@ -1124,6 +1119,9 @@ public class WebMail extends HttpServlet
                    buttonPressed(request, RAW_ATTACHMENT)) {
             // GET params
             state = State.SHOW;
+        } else if (buttonPressed(request, DRAFT_ATTACHMENT)) {
+            // GET params
+            state = State.NEW;
         }
 
         /*
@@ -2208,6 +2206,10 @@ public class WebMail extends HttpServlet
                     sendRedirect(httpRequest, response, q);
                     return;
                 }
+                if (request.getParameter(DRAFT_ATTACHMENT) != null) {
+                    processDraftAttachmentLink(sessionObject, request, response);
+                    return;
+                }
             }
 
             // ?show= links - this forces State.SHOW
@@ -3162,9 +3164,31 @@ public class WebMail extends HttpServlet
                           attachment.hashCode() + "\" value=1>&nbsp;" + quoteHTML(attachment.getFileName()));
                 out.print(" <span class=attachSize>(" + attachSize + ")</span></label>");
                 String type = attachment.getContentType();
-                if (type != null && type.startsWith("image/")) {
-                    out.print("<span class=thumbnail><img alt=\"\" src=\"" + myself + '?' + DRAFT_ATTACHMENT + '=' +
-                              attachment.hashCode() + "\" hidden></span>");
+                String iconDir = "/themes/susimail/images/";
+                if (type != null) {
+                    out.print("<span class=thumbnail><img alt=\"\" src=\"");
+                    if (type.startsWith("image/")) {
+                        out.print(myself + '?' + DRAFT_ATTACHMENT + '=' + attachment.hashCode());
+                    } else if (type.startsWith("audio/")) {
+                        out.print(iconDir + "audio.svg");
+                    } else if (type.startsWith("text/")) {
+                        out.print(iconDir + "text.svg");
+                    } else if (type.startsWith("video/")) {
+                        out.print(iconDir + "video.svg");
+                    } else if (type.contains("pgp")) {
+                        out.print(iconDir + "sig.svg");
+                    } else if (type.equals("application/zip") || type.equals("application/x-gtar") ||
+                               type.equals("application/x-zip-compressed") || type.equals("application/compress") ||
+                               type.equals("application/gzip") || type.equals("application/x-7z-compressed") ||
+                               type.equals("application/x-rar-compressed") || type.equals("application/x-tar") ||
+                               type.equals("application/x-bzip2")) {
+                        out.print(iconDir + "compress.svg");
+                    } else if (type.equals("application/pdf")) {
+                        out.print(iconDir + "pdf.svg");
+                    } else {
+                        out.print(iconDir + "generic.svg");
+                    }
+                    out.print("\" hidden></span>");
                 }
                 out.print("</td></tr>\n");
             }

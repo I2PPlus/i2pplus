@@ -95,6 +95,7 @@ tr.mailbody p.error{margin:-3px -1px}
 .bottombuttons br{display:none}
 .bottombuttons input:disabled{display:none}
 tr.bottombuttons table.pagenav{margin:0;width:100%;border-bottom:1px solid #555}
+.thumbnail img{margin-left:16px;width:32px;height:32px;display:inline-block;object-fit:cover;vertical-align:middle;border-radius:4px;background:#ddf;image-orientation:from-image}
 
 /* login */
 #dologin{border:var(--border);padding:10px 0 0;width:500px;margin:55px auto 40px;box-shadow:0 0 0 1px #fff;background:linear-gradient(180deg,rgba(240,240,255,.4),rgba(220,220,255,.5)) #fefefe;box-shadow:var(--highlight),0 0 1px #ccc;filter:opacity(0);animation:linear fade-in .15s .5s forwards}
