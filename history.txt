@@ -1,3 +1,9 @@
+2023-12-27 dr|z3d
+ * SusiMail: enable image attachment thumbnail previews;
+   display file icons for non-images
+ * Router: bump minimum version in various places for RI storage,
+   selective transit tunnel hosting etc
+
 2023-12-23 dr|z3d
  * Console: Add redirect for /help/changelog at /changelog
 
