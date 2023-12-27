@@ -81,7 +81,7 @@ class RequestThrottler {
         boolean shouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         boolean noSSU = true;
         boolean isFF = false;
-        String MIN_VERSION = "0.9.59";
+        String MIN_VERSION = "0.9.61";
         String v = MIN_VERSION;
         String country = "unknown";
         boolean noCountry = true;

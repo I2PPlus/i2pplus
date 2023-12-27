@@ -312,8 +312,8 @@ public class PersistentDataStore extends TransientDataStore {
         OutputStream fos = null;
         File dbFile = null;
         String filename = null;
-        String MIN_VERSION = "0.9.58";
-        String CURRENT_VERSION = "0.9.59";
+        String MIN_VERSION = "0.9.60";
+        String CURRENT_VERSION = "0.9.61";
         String v = MIN_VERSION;
         String bw = "K";
         String ip = null;
@@ -687,7 +687,7 @@ public class PersistentDataStore extends TransientDataStore {
                     ri.readBytes(fis, true);  // true = verify sig on read
                     Hash h = ri.getIdentity().calculateHash();
                     String v = ri.getVersion();
-                    String MIN_VERSION = "0.9.58";
+                    String MIN_VERSION = "0.9.60";
                     String ip = null;
                     String truncHash = "";
                     Hash us = _context.routerHash();
