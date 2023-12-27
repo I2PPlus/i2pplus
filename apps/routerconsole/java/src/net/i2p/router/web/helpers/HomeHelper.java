@@ -139,7 +139,9 @@ public class HomeHelper extends HelperBase {
         "Natter" + S + _x("Alternative front-end for Twitter") + S + "http://natter.i2p/" + S + I + "eepsites/twitter.svg" + S +
         "novabbs.i2p" + S + _x("Rocksolid forums for the darknets") + S + "http://novabbs.i2p/" + S + I + "eepsites/forum.svg" + S +
         "ramble.i2p" + S + _x("Cross-network micro-blogging &amp; forums &amp; wiki") + S + "http://ramble.i2p/" + S + I + "eepsites/ramble.svg" + S +
-        "teddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.i2p/" + S + I + "eepsites/teddit.svg" + S +
+        "shreddit" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://shreddit.i2p/" + S + I + "eepsites/shreddit.svg" + S +
+        "teddit" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.ls.i2p/" + S + I + "eepsites/teddit.svg" + S +
+        //"teddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.i2p/" + S + I + "eepsites/teddit.svg" + S +
         //"StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
         //"dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
         //_x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "eepsites/forum.svg" + S +
