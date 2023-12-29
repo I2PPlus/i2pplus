@@ -1,4 +1,7 @@
 2023-12-27 dr|z3d
+ * Console: Ensure sidebar continues auto-refresh after router restart
+
+2023-12-27 dr|z3d
  * SusiMail: enable image attachment thumbnail previews;
    display file icons for non-images
  * Router: bump minimum version in various places for RI storage,

@@ -118,7 +118,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
      * @since 0.9.58
      */
     public void setReceivedAsReply() { _receivedAsReply = true; }
-    
+
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
@@ -185,6 +185,9 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
                 // If we do delay it, getEntry() will have to check if _dbEntry is null and _byteCache
                 // is non-null, and then decompress.
                 byte decompressed[] = DataHelper.decompress(data, curIndex, compressedSize);
+                if (decompressed.length > RouterInfo.MAX_UNCOMPRESSED_SIZE) {
+                    throw new I2NPMessageException("RouterInfo too big: " + decompressed.length);
+                }
                 _dbEntry.readBytes(new ByteArrayInputStream(decompressed));
             } catch (DataFormatException dfe) {
                 throw new I2NPMessageException("Error reading the routerInfo", dfe);
