@@ -89,17 +89,18 @@
           var graphsResponse = xhrgraphs.responseXML.getElementById("allgraphs");
           var graphsParent = graphs.parentNode;
           graphsParent.replaceChild(graphsResponse, graphs);
+          progressx.hide();
         } else {
           function isDown() {
             if (!nographs) {
               graphs.innerHTML = "<span id=nographs><b>No connection to Router<\/b><\/span>";
+              progressx.hide();
             }
           }
           setTimeout(isDown, 60000);
         }
       }
     }
-    window.addEventListener("DOMContentLoaded", progressx.hide);
     graph.addEventListener("load", initCss());
     if (visibility === "visible") {
       xhrgraphs.send();
