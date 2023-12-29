@@ -107,9 +107,9 @@ function updateVolatile() {
   updateLog();
   var i;
   for (i = 0; i < updating.length; i++) {
-    if (!Object.is(updating[i].innerHTML, updatingResponse[i].innerHTML)) {
+    if (updatingResponse && !Object.is(updating[i].innerHTML, updatingResponse[i].innerHTML)) {
       updating[i].innerHTML = updatingResponse[i].innerHTML;
-    } else if (updating.length != updatingResponse.length) {
+    } else if (updatingResponse && updating.length != updatingResponse.length) {
       refreshPanels();
     }
   }
