@@ -5,8 +5,8 @@
   import {stickySidebar} from "/js/stickySidebar.js";
   import {onVisible} from "/js/onVisible.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
-  const refreshInterval = refresh * 1000;
-  let sbRefreshTimerId = null;
+  window.refreshInterval = refresh * 1000;
+  window.sbRefreshTimerId = null;
   const sb = document.getElementById("sidebar");
   const initSidebarRefresh = () => {
     clearInterval(sbRefreshTimerId);

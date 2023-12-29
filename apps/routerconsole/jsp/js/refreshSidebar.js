@@ -75,7 +75,7 @@ function tangoDown() {
   }
   isDown = true;
   onVisible(sb, () => {
-    setTimeout(refreshSidebar, 5000);
+    window.requestAnimationFrame(refreshSidebar);
   });
 }
 
@@ -91,7 +91,7 @@ function refreshSidebar() {
   xhrsb.onload = function () {
     if (xhrsb.status === 200) {
       isDown = false;
-      if (isDownTimer !== null) {clearTimeout(isDownTimer);}
+      if (isDownTimer !== null) {location.reload();}
       document.querySelector("body").classList.remove("isDown");
     } else if (xhrsb.status === 404 || xhrsb.status === 500) {
       window.requestAnimationFrame(tangoDown);
