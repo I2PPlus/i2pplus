@@ -560,10 +560,10 @@ class BuildHandler implements Runnable {
                                 if (knocks > 10) {
                                     if (_log.shouldLog(Log.WARN))
                                         _log.warn("Banning peer: " + fromRI.getHash() + " due to it disrespecting our congestion flags");
-                                    _context.banlist().banlistRouter(from, "disrespected our tunnel flags", null, false);    
+                                    _context.banlist().banlistRouter(from, "disrespected our tunnel flags", null, false);
                                 } else if (knocks <= 1) {
                                     if (_log.shouldLog(Log.WARN))
-                                        _log.warn("Replying with our RouterInfo to peer:" +fromRI.getHash() + 
+                                        _log.warn("Replying with our RouterInfo to peer:" +fromRI.getHash() +
                                             " to give it a chance to update their own netDb and stop asking for new tunnels");
                                     // send the peer our RouterInfo
                                     int TIMEOUT = 10*1000;
@@ -965,7 +965,7 @@ class BuildHandler implements Runnable {
             pDrop = (float)Math.pow(pDrop, 16);
             if (_context.random().nextFloat() < pDrop) { // || (proactiveDrops > MAX_PROACTIVE_DROPS) ) ) {
                 _context.statManager().addRateData("tunnel.rejectOverloaded", recvDelay);
-                _context.throttle().setTunnelStatus(_x("Declining tunnel requests" + ":<br>" + _x("Request overload")));
+                _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Declining tunnel requests" + ":<br>" + _x("Request overload")));
                 //if (true || (proactiveDrops < MAX_PROACTIVE_DROPS*2))
                     response = TunnelHistory.TUNNEL_REJECT_TRANSIENT_OVERLOAD;
                 //else

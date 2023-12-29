@@ -1282,6 +1282,10 @@ class SummaryBarRenderer {
         String getStatus = _helper.getTunnelStatus();
         String tunnelStatus = getStatus.indexOf('[') >= 0 && getStatus.indexOf(']') > getStatus.indexOf('[')
                               ? getStatus.substring(getStatus.indexOf(']') + 1) : getStatus;
+        boolean linebreak = tunnelStatus.indexOf("<br>") >= 0;
+        if (linebreak) {
+            tunnelStatus = tunnelStatus.substring(tunnelStatus.indexOf("<br>") + 4);
+        }
         buf.append("<h4 id=sb_tunnelstatus class=\"volatile collapse\"><span class=\"tunnelBuildStatus");
         if (getStatus.startsWith("[starting]"))
             buf.append(" starting\" title=\"").append(_t("No transit tunnel requests are accepted for the first 10 minutes while router stabilizes"));
