@@ -841,22 +841,27 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @return domain name only from reverse dns hostname lookups
      *  @since 0.9.58+
      */
-    public static String getDomain(String hostname) throws IOException {
+
+    public static String getDomain(String hostname) {
         String[] domainArray = hostname.split("\\.");
-        if (domainArray.length >= 3 && hostname.endsWith(".uk") ||
-            hostname.endsWith(".au") || hostname.endsWith(".nz") ||
-            hostname.contains(".co.") || hostname.contains(".ne.") ||
-            hostname.contains(".com.") || hostname.contains(".net.") ||
-            hostname.contains(".org.") || hostname.contains(".gov.")) {
-            return domainArray[domainArray.length - 3] + "." +
-                   domainArray[domainArray.length - 2] + "." +
-                   domainArray[domainArray.length - 1];
-        } else if (domainArray.length == 1) {
+        int length = domainArray.length;
+
+        if (length > 3 && (hostname.endsWith(".uk") ||
+                            hostname.endsWith(".au") || hostname.endsWith(".nz") ||
+                            hostname.contains(".co.") || hostname.contains(".ne.") ||
+                            hostname.contains(".com.") || hostname.contains(".net.") ||
+                            hostname.contains(".org.") || hostname.contains(".gov."))) {
+            return domainArray[length - 3] + "." +
+                   domainArray[length - 2] + "." +
+                   domainArray[length - 1];
+        } else if (length == 1) {
             return domainArray[0];
-        } else {
-            return domainArray[domainArray.length - 2] + "." +
-                   domainArray[domainArray.length - 1];
+        } else if (length > 2) {
+            return domainArray[length - 2] + "." +
+                   domainArray[length - 1];
         }
+
+        return "";
     }
 
     /**
