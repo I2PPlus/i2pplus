@@ -1,3 +1,4 @@
+<%@page trimDirectiveWhitespaces="true"%>
 <% if (!intl.getDisableRefresh()) { %>
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
