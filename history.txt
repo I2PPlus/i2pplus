@@ -1,3 +1,7 @@
+2023-12-30 dr|z3d
+ * Router: Fix out-of-bounds error for RDNS domain truncation
+ * I2PTunnel: Case-insensitivity when detecting existing http server headers
+
 2023-12-27 dr|z3d
  * Console: Ensure sidebar continues auto-refresh after router restart
 
