@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Stream;
 import java.util.zip.GZIPOutputStream;
 
 import java.net.InetAddress;
@@ -1022,12 +1023,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // Add referrer-policy headers if not set
                 boolean securityHeaders = Arrays.asList(customWhitelist).contains(mimeType);
                 if (_headers != null && securityHeaders) {
-                    boolean rp = headers.containsKey("Referrer-Policy".toLowerCase());
+                    boolean rp = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("Referrer-Policy"));
                     if (!rp) {
                         setEntry(headers, "Referrer-Policy", "same-origin");
                     }
                     // Set restrictive allow headers if not set
-                    boolean allow = headers.containsKey("Allow".toLowerCase());
+                    boolean allow = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("Allow"));
                     if (!allow) {
                         setEntry(headers, "Allow", "GET, POST, HEAD");
                     }
@@ -1036,7 +1037,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // Set cache-control to immutable if not set for custom mimetypes, no-cache for everything else
                 boolean immutableCache = Arrays.stream(immutableCacheWhitelist).anyMatch(mimeType::matches);
                 if (_headers != null) {
-                    boolean cc = headers.containsKey("Cache-Control".toLowerCase());
+                    boolean cc = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("Cache-Control"));
                     if (cacheControlList != null) {
                         boolean hasNoCache = cc && headers.get("Cache-Control").contains("no-cache".toLowerCase());
                         // Override cache-control for static content with no-cache policy
@@ -1052,12 +1053,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
 
                 // Add x-xss-protection header if not present
-                boolean xss = headers.containsKey("X-XSS-Protection".toLowerCase());
+                boolean xss = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("X-XSS-Protection"));
                 if (_headers != null && !xss) {
                     setEntry(headers, "X-XSS-Protection", "1; mode=block");
                 }
 
-                boolean nosniff = headers.containsKey("X-Content-Type-Options".toLowerCase());
+                boolean nosniff = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("X-Content-Type-Options"));
                 if (_headers != null && !nosniff) {
                     setEntry(headers, "X-Content-Type-Options", "nosniff");
                 }
