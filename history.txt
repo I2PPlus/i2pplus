@@ -1,3 +1,6 @@
+2023-12-31 dr|z3d
+ * Console: Add support for Noto Sans / Source Sans CJK fonts for graphs
+
 2023-12-30 dr|z3d
  * Router: Fix out-of-bounds error for RDNS domain truncation
  * I2PTunnel: Case-insensitivity when detecting existing http server headers
