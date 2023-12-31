@@ -299,7 +299,7 @@ class BuildHandler implements Runnable {
                               + ", since we received it a long time ago: " + (now - state.recvTime));
                 _context.statManager().addRateData("tunnel.dropLoadDelay", now - state.recvTime);
                 if (maxTunnels > 0)
-                    _context.throttle().setTunnelStatus(_x("Dropping tunnel requests: Too slow").replace("tunnel requests:", "requests:"));
+                    _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping tunnel requests: Too slow").replace("tunnel requests:", "requests:"));
                 return;
             }
 
@@ -308,7 +308,7 @@ class BuildHandler implements Runnable {
             if (lag > JOB_LAG_LIMIT_TUNNEL && maxTunnels > 0) {
                 if (_log.shouldWarn()) {
                     _log.warn("Dropping tunnel request -> Job lag (" + lag + "ms)");
-                    _context.throttle().setTunnelStatus(_x("Dropping tunnel requests: High job lag").replace("requests: ", "requests:<br>"));
+                    _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping tunnel requests: High job lag").replace("requests: ", "requests:<br>"));
                 }
                 _context.statManager().addRateData("router.throttleTunnelCause", lag);
                 return;
@@ -317,7 +317,7 @@ class BuildHandler implements Runnable {
             if (highLoad && maxTunnels > 0) {
                 if (_log.shouldWarn()) {
                     _log.warn("Dropping tunnel request -> High CPU load");
-                    _context.throttle().setTunnelStatus(_x("Dropping tunnel requests:<br>High CPU load"));
+                    _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping tunnel requests:<br>High CPU load"));
                 }
                 _context.statManager().addRateData("router.throttleTunnelCause", lag);
                 return;
@@ -540,16 +540,16 @@ class BuildHandler implements Runnable {
         if (myRI != null) {
             String caps = myRI.getCapabilities();
             if (caps != null) {
-                if (caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0){
+                if (caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) {
                     _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability", 1);
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Drop request, we are denying tunnels due to congestion: " + from);
+                        _log.warn("Dropped request from [" + from.toBase64().substring(0,6) + "] -> Local congestion");
                     RouterInfo fromRI = _context.netDb().lookupRouterInfoLocally(from);
-                    if (fromRI != null){
+                    if (fromRI != null) {
                         String fromVersion = fromRI.getVersion();
                         // if fromVersion is greater than 0.9.58, then then ban the router due to it disrespecting our
                         // congestion flags
-                        if (fromVersion != null){
+                        if (fromVersion != null) {
                             if (VersionComparator.comp(fromVersion, MIN_VERSION_HONOR_CAPS) >= 0) {
                                 _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability"+from, 1);
                                 _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability"+fromVersion, 1);
@@ -584,7 +584,7 @@ class BuildHandler implements Runnable {
 
         if (timeSinceReceived > (BuildRequestor.REQUEST_TIMEOUT*3)) {
             // don't even bother, since we are so overloaded locally
-            _context.throttle().setTunnelStatus(_x("Dropping tunnel requests: Overloaded"));
+            _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping tunnel requests: Overloaded"));
             if (_log.shouldWarn())
                 _log.warn("Not even trying to handle/decrypt the request " + state.msg.getUniqueId()
                            + ", since we received it a long time ago: " + timeSinceReceived);
@@ -927,7 +927,7 @@ class BuildHandler implements Runnable {
 
         int response;
         if (_context.router().isHidden()) {
-            _context.throttle().setTunnelStatus(_x("Declining requests" + ":" + _x("Hidden Mode")));
+            _context.throttle().setTunnelStatus("[hidden]" + _x("Declining requests" + ":" + _x("Hidden Mode")));
             response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
         } else {
             response = _context.throttle().acceptTunnelRequest();
@@ -996,7 +996,7 @@ class BuildHandler implements Runnable {
                     ((isInGW && ! _context.commSystem().haveInboundCapacity(87)) ||
                      (isOutEnd && ! _context.commSystem().haveOutboundCapacity(87)))) {
                         _context.statManager().addRateData("tunnel.rejectConnLimits", 1);
-                        _context.throttle().setTunnelStatus(_x("Declining tunnel requests" + ":<br>" + _x("Connection limit reached")));
+                        _context.throttle().setTunnelStatus("[rejecting/max]" + _x("Declining tunnel requests" + ":<br>" + _x("Connection limit reached")));
                         response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
                 }
             }
@@ -1264,7 +1264,7 @@ class BuildHandler implements Runnable {
                         long age = _context.clock().now() - cur.recvTime;
                         if (age >= BuildRequestor.REQUEST_TIMEOUT/4) {
                             _context.statManager().addRateData("tunnel.dropLoad", age, sz);
-                            _context.throttle().setTunnelStatus(_x("Dropping tunnel requests: High load"));
+                            _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping tunnel requests: High load"));
                             // if the queue is backlogged, stop adding new messages
                             accept = false;
                         }
@@ -1291,7 +1291,7 @@ class BuildHandler implements Runnable {
                         //float f = _context.random().nextFloat();
                         //if ( (pDrop > f) && (allowProactiveDrop()) ) {
                         //if (pDrop > f) {
-                        //    _context.throttle().setTunnelStatus(_x("Dropping tunnel requests: Queue time"));
+                        //    _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping tunnel requests: Queue time"));
                         //    _context.statManager().addRateData("tunnel.dropLoadProactive", queueTime, sz);
                         //} else {
                             accept = _inboundBuildMessages.offer(new BuildMessageState(_context, receivedMessage, from, fromHash));
@@ -1299,7 +1299,7 @@ class BuildHandler implements Runnable {
                                 // wake up the Executor to call handleInboundRequests()
                                 _exec.repoll();
                             } else {
-                                _context.throttle().setTunnelStatus(_x("Dropping tunnel requests: High load"));
+                                _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping tunnel requests: High load"));
                                 _context.statManager().addRateData("tunnel.dropLoadBacklog", sz);
                             }
                         //}
@@ -1382,7 +1382,7 @@ class BuildHandler implements Runnable {
         }
 
         public void drop() {
-            _ctx.throttle().setTunnelStatus(_x("Dropping tunnel requests: Queue time"));
+            _ctx.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping tunnel requests: Queue time"));
             _ctx.statManager().addRateData("tunnel.dropLoadProactive", _ctx.clock().now() - recvTime);
         }
     }
