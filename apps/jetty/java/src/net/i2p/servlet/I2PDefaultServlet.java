@@ -226,10 +226,10 @@ public class I2PDefaultServlet extends DefaultServlet
                              "#dirlist a:visited {color: #700}\n" +
                              "#dirlist a:hover, #dirlist a:focus {color: #d30}\n" +
                              "</style>\n";
-        String tableHeader = "<table border=0 width=100% class=\"listing\">\n" +
-                             "<thead>\n<tr><th align=left class=\"name\"><b>Name</b></th>" +
-                             "<th align=right nowrap class=\"lastmodified\"><b>Last modified (UTC)</b></th>" +
-                             "<th align=right nowrap class=\"size\"><b>Size (bytes)</b></th></tr>\n</thead>\n<tbody>\n";
+        String tableHeader = "<table border=0 width=100% class=listing>\n" +
+                             "<thead>\n<tr><th align=left class=name><b>Name</b></th>" +
+                             "<th align=right nowrap class=lastmodified><b>Last modified (UTC)</b></th>" +
+                             "<th align=right nowrap class=size><b>Size (bytes)</b></th></tr>\n</thead>\n<tbody>\n";
         StringBuilder buf=new StringBuilder(4096);
         buf.append("<!DOCTYPE HTML>\n<html>\n<head>\n<title>");
         buf.append(title);
@@ -276,7 +276,7 @@ public class I2PDefaultServlet extends DefaultServlet
             if (!(ls[i].startsWith(".") || ls[i].equals("jetty-dir.css") || ls[i].equals("favicon.ico") || ls[i].equals("favicon.svg") ||
                   ls[i].equals("favicon.png") || ls[i].endsWith("~") || ls[i].endsWith("_") || ls[i].endsWith(".bak") ||
                   ls[i].endsWith(".backup") || ls[i].endsWith(".orig") || ls[i].endsWith(".old") || ls[i].endsWith("_files/"))) {
-                buf.append("<tr><td class=\"name\"><a href=\"");
+                buf.append("<tr><td class=name><a href=\"");
                 String path = URIUtil.addPaths(encodedBase,URIUtil.encodePath(ls[i]));
 
                 buf.append(path);

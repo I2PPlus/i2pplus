@@ -781,7 +781,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<h3 class=\"debug_inboundsessions\">ElGamal Inbound Sessions</h3>\n" +
+        buf.append("<h3 class=debug_inboundsessions>ElGamal Inbound Sessions</h3>\n" +
                    "<table>\n");
         Map<SessionKey, Set<TagSet>> inboundSets = getInboundTagSetsBySessionKey();
         int total = 0;
@@ -793,9 +793,9 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             sets.clear();
             sets.addAll(e.getValue());
             totalSets += sets.size();
-            buf.append("\n<tr class=\"skm_key\">\n<td><b>Session key:</b> ").append(skey.toBase64()).append("</td>" +
+            buf.append("\n<tr class=skm_key>\n<td><b>Session key:</b> ").append(skey.toBase64()).append("</td>" +
                        "<td><b>Sets:</b> ").append(sets.size()).append("</td>\n</tr>" +
-                       "\n<tr class=\"expiry\">\n<td colspan=2>\n<ul>");
+                       "\n<tr class=expiry>\n<td colspan=2>\n<ul>");
             for (TagSet ts : sets) {
                 int size = ts.getTags().size();
                 total += size;
@@ -816,7 +816,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
            .append("; sessions: ").append(inboundSets.size())
            .append("</th>\n</tr>\n" +
                    "</table>\n" +
-                   "<h3 class=\"debug_outboundsessions\">ElGamal Outbound sessions</h3>\n" +
+                   "<h3 class=debug_outboundsessions>ElGamal Outbound sessions</h3>\n" +
                    "<table>");
         total = 0;
         totalSets = 0;
@@ -826,14 +826,14 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             sets.clear();
             sets.addAll(sess.getTagSets());
             totalSets += sets.size();
-            buf.append("\n<tr class=\"debug_outboundtarget\">\n<td>\n<div class=\"debug_targetinfo\">\n" +
-                       "<b>Session key:</b> <span class=\"debug_sesskey\">").append(sess.getCurrentKey().toBase64()).append("</span><br>\n" +
-                       "<b>Target public key:</b> <span class=\"debug_pubkey\">").append(toString(sess.getTarget())).append("</span><br>\n" +
+            buf.append("\n<tr class=debug_outboundtarget>\n<td>\n<div class=debug_targetinfo>\n" +
+                       "<b>Session key:</b> <span class=debug_sesskey>").append(sess.getCurrentKey().toBase64()).append("</span><br>\n" +
+                       "<b>Target public key:</b> <span class=debug_pubkey>").append(toString(sess.getTarget())).append("</span><br>\n" +
                        "<b>Established:</b> ").append(DataHelper.formatDuration2(now - sess.getEstablishedDate())).append(" ago&nbsp;&nbsp;&nbsp;" +
                        "<b>Ack Received?</b> ").append(sess.getAckReceived()).append("&nbsp;&nbsp;&nbsp;" +
                        "<b>Last Used:</b> ").append(DataHelper.formatDuration2(now - sess.getLastUsedDate())).append(" ago\n</div>\n</td>" +
                        "<td><b>Sets:</b> ").append(sess.getTagSets().size()).append("</td></tr>\n" +
-                       "<tr class=\"sentTags\">\n<td colspan=2>\n<ul>");
+                       "<tr class=sentTags>\n<td colspan=2>\n<ul>");
             for (Iterator<TagSet> siter = sets.iterator(); siter.hasNext();) {
                 TagSet ts = siter.next();
                 int size = ts.getTags().size();

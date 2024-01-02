@@ -1809,41 +1809,41 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<h2>Update Manager</h2>");
         buf.append("<h3>Installed</h3>");
-        buf.append("<div class=\"debug_container\">");
+        buf.append("<div class=debug_container>");
         toString(buf, _installed);
         buf.append("</div>");
         buf.append("<h3>Available</h3>");
-        buf.append("<div class=\"debug_container\">");
+        buf.append("<div class=debug_container>");
         toString(buf, _available);
         buf.append("</div>");
         if (_downloaded != null) {
             buf.append("<h3>Downloaded</h3>");
-            buf.append("<div class=\"debug_container\">");
+            buf.append("<div class=debug_container>");
             toString(buf, _downloaded);
             buf.append("</div>");
         }
         buf.append("<h3>Registered Checkers</h3>");
-        buf.append("<div class=\"debug_container\">");
+        buf.append("<div class=debug_container>");
         toString(buf, _registeredCheckers);
         buf.append("</div>");
         buf.append("<h3>Registered Updaters</h3>");
-        buf.append("<div class=\"debug_container\">");
+        buf.append("<div class=debug_container>");
         toString(buf, _registeredUpdaters);
         buf.append("</div>");
         buf.append("<h3>Registered PostProcessors</h3>");
-        buf.append("<div class=\"debug_container\">");
+        buf.append("<div class=debug_container>");
         toString(buf, _registeredPostProcessors.values());
         buf.append("</div>");
         buf.append("<h3>Active Checkers</h3>");
         if (_activeCheckers != null) {
             buf.append("<h3>Active Checkers</h3>");
-            buf.append("<div class=\"debug_container\">");
+            buf.append("<div class=debug_container>");
             toString(buf, _activeCheckers);
             buf.append("</div>");
         }
         if (_downloaders != null) {
             buf.append("<h3>Active Updaters</h3>");
-            buf.append("<div class=\"debug_container\">");
+            buf.append("<div class=debug_container>");
             toString(buf, _downloaders);
             buf.append("</div>");
         }
