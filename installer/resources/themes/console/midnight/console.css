@@ -905,24 +905,20 @@ input[type="hidden"]+p+p{border:var(--border_inner);padding:10px;margin-top:20px
 #advancedconfig{margin-top:14px}
 
 /* tunnels */
-#tunnelconfig th a{pointer-events:none}
-#tunnelconfig td:first-child{font-weight:700}
-#tunnelconfig td:nth-child(n+2){text-align:left}
-#tunnelconfigsave{margin-top:-32px}
-#tunnelconfig th{background:#000}
-#tunnelconfig th[colspan="3"]>font::before{display:inline-block;width:20px;height:16px;vertical-align:middle;background:var(--infowarn) no-repeat left center/16px;opacity:.7;content:""}
-#tunnelconfig .inbound,#tunnelconfig .outbound{padding-left:34px;width:auto;height:auto;display:table-cell;background:var(--in) no-repeat 10px center/14px,var(--th)}
-#tunnelconfig .outbound{background:var(--out) no-repeat 10px center/14px,var(--th)}
-#tunnelconfig th{padding:10px 8px;background:var(--th)}
-#tunnelconfig th:not(.th_title)[colspan="4"]{padding:10px 10px 10px 34px;text-transform:none;letter-spacing:0;word-spacing:0;text-shadow:var(--textshadow);background:var(--infowarn) no-repeat 10px center/20px,var(--th)}
-#tunnelconfig th:not([colspan="4"]):first-child,#tunnelconfig th:not([colspan="4"]):last-child{width:30%}
-#tunnelconfig th a{pointer-events:none}
-#tunnelconfig td:first-child{white-space:nowrap;text-align:right;font-weight:700}
 #config_tunnels .cancel{display:none}
-#config_tunnels select{width:calc(100% - 10px);text-align:center}
 #config_tunnels input[type=text][disabled]{width:calc(100% - 15px)}
+#config_tunnels select{width:calc(100% - 10px);text-align:center}
 #config_tunnels select[disabled]{opacity:.7;pointer-events:none}
 #refreshPage{cursor:pointer}
+#tunnelconfig .inbound,#tunnelconfig .outbound{padding-left:34px;width:auto;height:auto;display:table-cell;background:var(--in) no-repeat 10px center/14px,var(--th)}
+#tunnelconfig .outbound{background:var(--out) no-repeat 10px center/14px,var(--th)}
+#tunnelconfigsave{margin-top:-32px}
+#tunnelconfig td:first-child{white-space:nowrap;text-align:right;font-weight:700}
+#tunnelconfig td:nth-child(n+2){text-align:left}
+#tunnelconfig th{padding:10px 8px;background:var(--th)}
+#tunnelconfig th[colspan="3"]>font::before{display:inline-block;width:20px;height:16px;vertical-align:middle;background:var(--infowarn) no-repeat left center/16px;opacity:.7;content:""}
+#tunnelconfig th:not([colspan="4"]):first-child,#tunnelconfig th:not([colspan="4"]):last-child{width:30%}
+#tunnelconfig th:not(.th_title)[colspan="4"]{padding:10px 10px 10px 34px;text-transform:none;letter-spacing:0;word-spacing:0;text-shadow:var(--textshadow);background:var(--infowarn) no-repeat 10px center/20px,var(--th)}
 #tunnels td:not(.rif):not(.rih):not(.rbw){text-align:center}
 
 /* transit summary */
@@ -1620,8 +1616,8 @@ p#pluginconfigtext{padding:15px 25px 15px 55px;vertical-align:middle;background:
 /* tunnels */
 a[href^="https://gwhois"]:hover::after,a[href^="https://gwhois"]:focus::after{opacity:1;mix-blend-mode:normal;transform:scale(1.2);overflow:auto}
 a[href^="https://gwhois"]::after{margin:0 1px 0;width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--search) no-repeat left center/11px;opacity:.7;content:"";mix-blend-mode:luminosity}
-.b32{margin:-2px 8px 0 0;text-transform:none;font-size:80%;color:#990;float:right;vertical-align:middle}
-.b32{margin:-3px 6px 0 0;padding:4px 8px;min-width:0;line-height:1}
+.b32{margin:-2px 8px 0 0;padding:4px 8px;min-width:0;line-height:1;text-transform:none;font-size:80%;color:#990;float:right;vertical-align:middle}
+#config_tunnels .b32{margin:-2px;padding:4px 5px 4px 24px;vertical-align:middle;background:rgba(0,0,48,.5) var(--hardhat) no-repeat 6px center/14px}
 h3 .b32{font-size:inherit}
 .tunnel_cap,.tier,.ff,.unreachable,.reachable,#capabilities_key b{margin:1px 2px;padding:2px 4px;display:inline-block;min-width:16px;vertical-align:middle;text-align:center;border:var(--border_badge);text-shadow:0 1px 1px #000;border-radius:1px;box-shadow:var(--highlight);background:var(--element)}
 .tier.isD,#netdbcongestion a.isD{background:var(--isD),var(--element)}
