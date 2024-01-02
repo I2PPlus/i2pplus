@@ -65,7 +65,7 @@ function countServices() {
     if (runningClient && runningClient.length > 0) {
       runningClientCount.textContent = " x " + runningClient.length;
     } else if (runningClient && runningClientCount) {
-      runningClientCount.textContent == "";
+      runningClientCount.textContent = "";
     }
     if (runningServer && runningServer.length > 0) {
       runningServerCount.textContent = " x " + runningServer.length;
