@@ -4,14 +4,6 @@
  * Susimail: Speed up initial loading (Gitlab MR !162)
  * Tunnels: Peer selection adjustments (Gitlab MR !167)
 
-2023-12-23 zzz
- * Susimail:
-   - Add regex util (WIP)
-   - Extract multipart type and content id (WIP)
-   - Logging enhancements on file read failures
-   - Show size and thumbnail of draft attachments
- * Util: Move SyntheticREDQueue from router to core
-
 2023-12-31 dr|z3d
  * Console: Add support for Noto Sans / Source Sans CJK fonts for graphs
 
@@ -27,6 +19,14 @@
    display file icons for non-images
  * Router: bump minimum version in various places for RI storage,
    selective transit tunnel hosting etc
+
+2023-12-23 zzz
+ * Susimail:
+   - Add regex util (WIP)
+   - Extract multipart type and content id (WIP)
+   - Logging enhancements on file read failures
+   - Show size and thumbnail of draft attachments
+ * Util: Move SyntheticREDQueue from router to core
 
 2023-12-23 dr|z3d
  * Console: Add redirect for /help/changelog at /changelog
