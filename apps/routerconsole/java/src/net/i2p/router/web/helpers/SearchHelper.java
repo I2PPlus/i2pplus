@@ -42,7 +42,7 @@ public class SearchHelper extends HelperBase {
         "ramble.i2p"               + S +     "http://ramble.i2p/search?q=%s" + S +
         "slashdot.i2p"             + S +     "http://slashdot.i2p/index2.pl?fhfilter=%s" + S +
         "shmoogle.i2p"             + S +     "http://shmoogle.i2p/yacysearch.html?query=%s" + S +
-        "teddit.i2p/r/i2p"         + S +     "http://teddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
+        "shreddit.i2p/r/i2p"       + S +     "http://shreddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
         "tracker2.postman.i2p"     + S +     "http://tracker2.postman.i2p/?search=%s" + S +
         "tube.i2p"                 + S +     "http://tube.i2p/search?query=%s" + S +
         "wiki.i2p-projekt.i2p"     + S +     "http://wiki.i2p-projekt.i2p/wiki/index.php?search=%s" + S +
@@ -60,6 +60,7 @@ public class SearchHelper extends HelperBase {
         //"simple-search.i2p"        + S +     "http://simple-search.i2p/search.sh?search=%s" + S +
         //"sprongle.i2p"             + S +     "http://sprongle.i2p/sprongle.php?q=%s" + S +
         //"stackoverflow.i2p"        + S +     "http://duckduckgo.i2p/?q=site%3Astackoverflow.com+%s" + S +
+        //"teddit.i2p/r/i2p"         + S +     "http://teddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
         //"tome.i2p"                 + S +     "http://tome.i2p/search.php?q=%s" + S +
         //"torrentfinder.i2p"        + S +     "http://torrentfinder.i2p/?searchq=%s" + S +
         //"trac.i2p2.i2p"            + S +     "http://trac.i2p2.i2p/search?q=%s" + S +
