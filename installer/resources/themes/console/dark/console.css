@@ -1881,6 +1881,18 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #advancedconfig a{padding-top:12px;padding-right:5px}
 #advancedconfig{position:relative;z-index:100}
 #advconf{margin-bottom:-2px}
+#advconf.readonly .section:hover{color:var(--hover);cursor:pointer;transition:ease color .15s}
+#advconf.readonly th{padding:6px 8px;border-bottom:var(--border_soft)}
+#advconf.readonly .section th{position:relative;border-top:var(--border);border-bottom:var(--border);transition:ease color .15s}
+#advconf.readonly .section th::after{margin-top:3px;width:10px;height:10px;float:right;background:var(--dropdown);transform:rotate(-90deg);content:""}
+#advconf.readonly .section th:hover::after{background:var(--dropdown_hover)}
+#advconf.readonly .section.active th{padding-left:13px}
+#advconf.readonly .section.active th::before{display:block;position:absolute;top:0;bottom:0;left:0;width:5px;background:#242;content:""}
+#advconf.readonly .section.active th::after{transform:none}
+#advconf.readonly td:not(.infohelp){padding:5px 8px;line-height:1.2;font-family:var(--monospaced);box-shadow:0 0 0 1px #000 inset}
+#advconf.readonly td:not(.infohelp):first-child{width:1%;white-space:nowrap;border-right:var(--border_softer)}
+#advconf.readonly td:nth-child(2){word-break:break-all}
+#advconf.readonly .section+tr td{border-top:var(--border)}
 
 /* configtunnels */
 #config_tunnels hr{display:none}
