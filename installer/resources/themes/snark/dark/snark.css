@@ -977,15 +977,15 @@ th.peerCount a img{margin-left:-20px}
 .iframed #torrents{margin-bottom:0}
 .optionlist{margin-bottom:-28px}
 .page{padding:10px;border:var(--border)}
+.peerCount .left,.peerCount .right{text-align:center!important}
 .peerCount .left{margin-left:2px}
 .peerCount .right{margin-right:2px}
 .barComplete{padding-top:4px;padding-bottom:2px}
+.rxd,.txd,.rateDown,.rateUp{min-width:76px}
 .rateUp:not(:empty),.rateDown:not(:empty){min-width:80px}
 .routerdown{margin-bottom:10px}
 .snarkNav{margin-top:0;font-size:11pt}
 .snarkNav,.snarkNav:hover,.snarkNav:focus,.snarkNav:active{background-size:17px,100%}
-.rxd,.txd,.rateDown,.rateUp{min-width:76px}
-#torrentInfo th:first-child img{margin:-3px 3px 0 1px;max-height:16px}
 .tName:active a,.snarkFileName:active a{box-shadow:inset 4px 4px 4px rgba(0,8,0,.8)}
 .tName a,.snarkFileName a,.tName:hover a,.snarkFileName:hover a{margin:-2px 0;border-radius:2px 20px 20px 2px;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,16,0,.3))}
 .txd,.rateDown,.rateUp{min-width:76px;text-align:center}
@@ -1001,6 +1001,7 @@ th.peerCount a img{margin-left:-20px}
 #screenlog li,#screenlog li a,#ourDest code,#screenlog,#screenlog a{font-size:9pt}
 #screenlog{margin:-11px -11px 0;min-height:60px}
 #torrentDisplay .filter{min-width:160px}
+#torrentInfo th:first-child img{margin:-3px 3px 0 1px;max-height:16px}
 #torrentinfostats img,#trackers img{margin:-3px 5px 0;max-height:18px}
 #torrentInfoStats .nowrap{margin-right:6px}
 #torrents{margin-bottom:11px}
