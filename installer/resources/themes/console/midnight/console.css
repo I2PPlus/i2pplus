@@ -911,7 +911,7 @@ input[type="hidden"]+p+p{border:var(--border_inner);padding:10px;margin-top:20px
 #advconf.readonly .section.active th{padding-left:13px}
 #advconf.readonly .section.active th::before{display:block;position:absolute;top:0;bottom:0;left:0;width:5px;background:#1e1c4a;content:""}
 #advconf.readonly .section.active th::after{transform:none}
-#advconf.readonly td:not(.infohelp){padding:5px 8px;line-height:1.2;font-family:var(--monospaced);box-shadow:0 0 0 1px #000 inset}
+#advconf.readonly td:not(.infohelp){padding:5px 8px;line-height:1.2;font-family:var(--monospaced);font-weight:600;box-shadow:0 0 0 1px #000 inset}
 #advconf.readonly td:not(.infohelp):first-child{width:1%;white-space:nowrap;border-right:var(--border_softer)}
 #advconf.readonly td:nth-child(2){word-break:break-all}
 #advconf.readonly .section+tr td{border-top:var(--border)}
