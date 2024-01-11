@@ -1,3 +1,6 @@
+2023-01-11 dr|z3d
+ * Console: Add tunnelId toggler to /tunnels if advanced mode enabled
+
 2024-01-02 zzz
  * Console: News fetch improvements (Gitlab MR !163)
  * Router: Enforce max RI size (Gitlab MR !168)
