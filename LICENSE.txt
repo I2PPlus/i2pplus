@@ -334,6 +334,12 @@ Applications:
    See licenses/LICENSE-Apache2.0.txt
    See licenses/NOTICE-Tomcat.txt
 
+   SusiMail Pagedown:
+   Original Markdown Copyright (c) 2004-2005 John Gruber
+   Original Showdown code copyright (c) 2007 John Fraser
+   Modifications and bugfixes (c) 2009 Dana Robinson
+   Modifications and bugfixes (c) 2009-2014 Stack Exchange Inc.
+   See licenses/LICENSE-pagedown.txt
 
 Other Applications and Libraries
 --------------------------------

@@ -2380,7 +2380,7 @@ public class WebMail extends HttpServlet
                     "<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"" + sessionObject.themePath + "images/favicon.svg\">\n");
                 if (sessionObject.isMobile) {
                     out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes\" />\n" +
-                        "<link rel=stylesheet href=\"" + sessionObject.themePath + "mobile.css?" + CoreVersion.VERSION + "\" />");
+                                "<link rel=stylesheet href=\"" + sessionObject.themePath + "mobile.css?" + CoreVersion.VERSION + "\" />");
                 }
                 if (enableSoraFont) {
                     out.println("<link rel=stylesheet href=\"" + sessionObject.themePath + "../../fonts/Sora.css?" + CoreVersion.VERSION + "\">");
@@ -2505,6 +2505,8 @@ public class WebMail extends HttpServlet
                     showMessage(out, sessionObject, mc, showUIDL, buttonPressed(request, DELETE));
                     out.println("<script charset=utf-8 src=\"/susimail/js/toggleHeaders.js?" + CoreVersion.VERSION + "\"></script>");
                     //out.println("<script charset=utf-8 src=\"/themes/toggleHeaders.js?" + CoreVersion.VERSION + "\"></script>"); // debug
+                    out.println("<script src=\"/susimail/js/markdown.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
+                    out.println("<script src=\"/susimail/js/Markdown.Converter.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
 
                 } else if (state == State.NEW)
                     showCompose(out, sessionObject, request);
@@ -2514,7 +2516,6 @@ public class WebMail extends HttpServlet
 
                 if (state == State.AUTH) {
                 out.println("\n<div class=footer>\n" +
-                    //"<p class=footer>susimail &copy; 2004-2005 susi</p>" +
                     "<script charset=utf-8 src=\"/js/togglePassword.js?" + CoreVersion.VERSION + "\"></script>" +
                     "<p class=footer>" +
                     _t("{0} is an I2P-exclusive service provided by {1}.", "<b>I2PMail</b>",
