@@ -1,0 +1,6 @@
+.tunnel_id.hidden{display:none}
+#toggleTunnels{width:20px;height:20px;display:inline-block;position:absolute;top:calc(50% - 10px);right:12px;background:url(/themes/console/images/off.svg) no-repeat center center/20px, url(/themes/console/images/hardhat.svg) no-repeat center center/16px;opacity:.7}
+#toggleTunnels.off{background:url(/themes/console/images/hardhat.svg) no-repeat center center/20px}
+#toggleTunnels:hover{opacity:1;transform:scale(1.2)}
+#toggleTunnels:active{transform:scale(.9)}
+#tunnels .confignav{position:sticky;top:-2px;z-index:999}
