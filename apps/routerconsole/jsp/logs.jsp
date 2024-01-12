@@ -38,19 +38,11 @@
 <tbody>
 <tr><td><b>I2P:</b></td><td><%=net.i2p.router.RouterVersion.FULL_VERSION%>&ensp;<b>API:</b>&ensp;<%=net.i2p.CoreVersion.PUBLISHED_VERSION%>&ensp;<b>Wrapper:</b>&ensp;<%=System.getProperty("wrapper.version", "none")%> &ensp;<b>Built by:</b>&ensp;<jsp:getProperty name="logsHelper" property="builtBy" /></td></tr>
 <tr><td><b>Platform:</b></td><td><%=System.getProperty("os.name")%>&ensp;<%=System.getProperty("os.arch")%>&ensp;<%=System.getProperty("os.version")%></td></tr>
-<%
-       boolean isX86 = net.i2p.util.SystemVersion.isX86();
-       if (isX86) {
-%>
-<%
-       }
-%><tr><td><b>Processor:</b></td><td><span id=cputype><%=net.i2p.util.NativeBigInteger.cpuType()%></span>
-<%
-       if (isX86) {
-%>&ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>
-<%
-       }
-%>
+<tr><td><b>Processor:</b></td><td><span id=cputype><%=net.i2p.util.NativeBigInteger.cpuType()%></span>
+<%      boolean isX86 = net.i2p.util.SystemVersion.isX86();
+        if (isX86) { %>
+&ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>
+<%      } %>
 &ensp;<span class=nowrap>[Jcpuid version: <%=freenet.support.CPUInformation.CPUID.getJcpuidVersion()%></span>]</td></tr>
 <tr><td><b>Java:</b></td><td><%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%>&ensp;<%=System.getProperty("java.runtime.version")%>)</td></tr>
 <jsp:getProperty name="logsHelper" property="unavailableCrypto" />
@@ -109,13 +101,8 @@
     }
 %>
 &nbsp;<a class=configure title="<%=intl._t("Configure router logging options")%>" href="configlogging">[<%=intl._t("Configure")%>]</a>
-<%
-    if (logsHelper.isAdvanced()) {
-%>
 &nbsp;<a id=eventlogLink title="<%=intl._t("View event log")%>" href="/events?from=604800">[<%=intl._t("Events")%>]</a>
-<%
-    }
-%>
+&nbsp;<span id=toggleRefresh></span>
 </h3>
 <table id=routerlogs class=logtable>
 <tbody>
@@ -161,10 +148,20 @@
   const xhrlogs = new XMLHttpRequest();
   let refreshId;
   progressx.hide();
+
   function initRefresh() {
-    if (refreshId) {clearInterval(refreshId);}
+    const toggleRefresh = document.getElementById("toggleRefresh");
+    stopRefresh();
     refreshId = setInterval(refreshLogs, 30000);
+    if (!toggleRefresh.classList.contains("enabled")) {
+      toggleRefresh.classList.add("enabled");
+    }
   }
+
+  function stopRefresh() {
+    if (refreshId) {clearInterval(refreshId);}
+  }
+
   function refreshLogs() {
     xhrlogs.open('GET', '/logs', true);
     xhrlogs.responseType = "document";
@@ -177,7 +174,7 @@
 
       if (criticallogs) {
         const criticallogsResponse = xhrlogs.responseXML.getElementById("criticallogs");
-        if (criticallogsResponse && !criticallogs) {
+        if (mainLogsResponse && criticallogsResponse && !criticallogs) {
           mainLogs.innerHTML = mainLogsResponse.innerHTML;
         } else if (criticallogsResponse && criticallogs !== criticallogsResponse && !noCritLogs) {
           criticallogs.innerHTML = criticallogsResponse.innerHTML;
@@ -211,7 +208,28 @@
     xhrlogs.send();
   }
   window.addEventListener("DOMContentLoaded", progressx.hide);
-  document.addEventListener("DOMContentLoaded", initRefresh);
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const toggleRefresh = document.getElementById("toggleRefresh");
+    initRefresh();
+
+    document.addEventListener("click", function(event) {
+      if (event.target === toggleRefresh) {
+        var isRefreshOn = toggleRefresh.classList.contains("enabled");
+        if (isRefreshOn) {
+          toggleRefresh.classList.remove("enabled");
+          toggleRefresh.classList.add("disabled");
+          stopRefresh();
+        } else {
+          toggleRefresh.classList.remove("disabled");
+          toggleRefresh.classList.add("enabled");
+          refreshLogs();
+          initRefresh();
+        }
+      }
+    });
+  });
 </script>
+<noscript><style>#toggleRefresh{display:none}</style></noscript>
 </body>
 </html>

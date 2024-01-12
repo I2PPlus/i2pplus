@@ -646,6 +646,9 @@ table[id$="logs"] ul li:last-child{margin-bottom:10px}
 #wrapperlogs tr:last-child td{padding:0}
 #service_logs{margin:0 0 -1px;padding:3px 0 0 5px;width:calc(100% - 5px);max-height:500px;white-space:pre-wrap;word-wrap:break-word;overflow:auto;font-weight:500;will-change:transform}
 #wrapperlogs p,#routerlogs p{margin:0;vertical-align:middle}
+#toggleRefresh{margin:-7px -4px -10px;padding:0 4px 0 24px;width:24px;height:32px;float:right;border-left:var(--border_inner);background:var(--stop) no-repeat center center/16px}
+#toggleRefresh.disabled{background:var(--start) no-repeat center center/16px}
+#toggleRefresh:hover{cursor:pointer}
 
 /* critical */
 #logs li font[color="#cc0000"]::before{background:#c00}

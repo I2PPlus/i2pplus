@@ -2345,6 +2345,9 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #wrapperlogs{margin-bottom:10px;width:100%;table-layout:fixed}
 #wrapperlogs tr:nth-child(2){background:rgba(0,16,0,.3)}
 #wrapperlogs tr:last-child td{padding:0}
+#toggleRefresh{margin:-6px 0 -10px;width:26px;height:32px;float:right;padding-left:10px;border-left:var(--border);background:url(/themes/console/images/off.svg) no-repeat center center/18px,url(/themes/console/images/update.svg) no-repeat center center/14px}
+#toggleRefresh.disabled{background:url(/themes/console/images/update.svg) no-repeat center center/18px}
+#toggleRefresh:hover{cursor:pointer}
 
 #logs font[color^="#"]::before{margin-left:0;margin-right:5px;content:"";display:inline-block;width:6px;height:6px;vertical-align:calc(1px);color:#777;border-radius:50%;filter:saturate(1);animation:linear ping .1s}
 /* critical */

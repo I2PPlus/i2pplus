@@ -1338,6 +1338,9 @@ table[id$="logs"] ul{margin:1px 17px -6px -12px}
 #service_logs{margin:2px 0;width:100%;max-height:600px;white-space:pre-wrap;word-wrap:break-word;color:#a2a6d1}
 #wrapperlogs tr:last-child td{padding:0 0 0 5px;background:rgba(10,10,34,.6)}
 .log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{padding:1px 2px;min-width:36px;max-width:36px;display:inline-block;overflow:hidden;line-height:.9;white-space:nowrap;text-overflow:ellipsis;text-align:center;color:#000;border-radius:2px}
+#toggleRefresh{margin:-8px 0 -10px;width:26px;height:32px;float:right;padding-left:10px;border-left:var(--border_inner);background:url(/themes/console/images/off.svg) no-repeat center center/18px,url(/themes/console/images/update.svg) no-repeat center center/14px}
+#toggleRefresh.disabled{background:url(/themes/console/images/update.svg) no-repeat center center/18px}
+#toggleRefresh:hover{cursor:pointer}
 
 /* Override error log colors */
 .log_omitted{font-weight:700}
@@ -2760,6 +2763,7 @@ h4#updateplugins{margin-top:-15px}
 #newtab{margin-top:5px}
 #sybilTask th{font-size:12pt}
 table[id^="sb_"],#sidebar #sb_localtunnels{width:236px}
+#toggleRefresh{margin:-12px 0;padding:0 12px;height:39px}
 #tunnels .tab,#tunnels .tab2{line-height:1.3}
 #webappconfig td:first-child::after{min-height:30px}
 }
