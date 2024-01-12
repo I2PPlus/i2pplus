@@ -2,5 +2,4 @@
 #toggleTunnels.off{background:url(/themes/console/images/hardhat.svg) no-repeat center center/20px}
 #toggleTunnels:hover{cursor:pointer;opacity:1;transform:scale(1.2)}
 #toggleTunnels:active{transform:scale(.9)}
-#tunnels .confignav{position:sticky;top:-2px;z-index:999}
 .tunnel_id.hidden,#tunnels.main:not(.isAdvanced) #toggleTunnels{display:none}
