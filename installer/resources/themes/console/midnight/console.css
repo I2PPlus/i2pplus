@@ -2832,6 +2832,7 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #sidebar #sb_localtunnels td:first-child{padding:2px 0 2px 5px;width:16px}
 #sidebar #sb_localtunnels td:first-child img{margin-left:2px}
 #sidebar #sb_localtunnels td:last-child{padding-right:5px}
+#sb_tunnels_condensed td,#sb_peers_condensed td{width:257px}
 #sb_logo img{margin-top:-1px;margin-left:-6px;width:244px;height:auto!important;transform:none}
 #sidebar #sb_advanced.collapsed td,#sidebar #sb_internals.collapsed td,#sidebar #sb_services.collapsed td{width:257px}
 #tunnels h3 a:not(.lsview),#criticallogs+h3.tabletitle a,#iptransport a,#advancedconfig a,#reseedsetup a{font-size:0}
