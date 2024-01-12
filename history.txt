@@ -1,4 +1,7 @@
-2023-01-11 dr|z3d
+2024-01-12 dr|z3d
+ * Console: Add auto-refresh toggle button to /logs
+
+2024-01-11 dr|z3d
  * Console: Add tunnelId toggler to /tunnels if advanced mode enabled
 
 2024-01-02 zzz
