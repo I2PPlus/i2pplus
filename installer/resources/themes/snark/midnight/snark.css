@@ -414,7 +414,7 @@ input:checked+.toggleview:active .tab_label::after{transform:scale(.9) rotate(-9
 form{margin-bottom:0}
 .configPanel hr{margin-bottom:10px}
 input.r{text-align:right;border:var(--border);background:#001}
-input[type=submit],input[type="reset"],a.control,a.controld,a.controld:hover,a.controld:focus,a.controld:active,input:disabled[type=submit],input:disabled:hover[type=submit],input:disabled:active[type=submit]{padding:6px 12px;min-width:95px;text-align:center;font:bold 9pt var(--bodyfont);color:var(--a);border:var(--border_btn);border-radius:1px;box-shadow:var(--highlight),inset 0 0 2px 0 #559;background:var(--btn)}
+input[type=submit],input[type="reset"],a.control,a.controld,a.controld:hover,a.controld:focus,a.controld:active,input:disabled[type=submit],input:disabled:hover[type=submit],input:disabled:active[type=submit]{padding:6px 12px;min-width:95px;text-align:center;font:700 9pt var(--bodyfont);color:var(--a);border:var(--border_btn);border-radius:1px;box-shadow:var(--highlight),inset 0 0 2px 0 #559;background:var(--btn)}
 input[type=submit],input[type="reset"]{min-width:120px}
 a.control,a.controld,a.control:hover,a.controld:hover,a.control:focus,a.controld:focus{margin:0 5px 0 1px;min-width:0;display:inline-block}
 a.control img,a.controld img{padding:0;max-height:16px;max-width:16px;display:inline-block}

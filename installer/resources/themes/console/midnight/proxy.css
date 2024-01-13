@@ -40,7 +40,7 @@ div.logo hr{margin:11px -11px 10px;height:4px;color:#44175f;border:0 solid #225;
 .logo hr ~ a:active{box-shadow:var(--highlight),inset 0 0 1px 1px #737,inset 0 0 0 3px #101,inset 5px 5px 5px 2px #000;background:radial-gradient(at center bottom,rgba(160,48,160,.2),rgba(0,0,0,0) 35%),linear-gradient(90deg,rgba(64,0,64,.1),rgba(64,0,64,.2),rgba(64,0,64,.1)),linear-gradient(180deg,#080820,#1d1a2d)}
 .formaction{text-align:right}
 button,select{border-radius:1px;box-shadow:var(--highlight),inset 0 0 2px 0 #559;background:8px 5px no-repeat,var(-button);cursor:pointer}
-button{margin:2px 3px;font:bold 9pt var(--bodyfont);color:var(--a);text-decoration:none;text-align:center;text-shadow:0 1px 1px #000;vertical-align:middle;border:1px solid #27235c;background:#000;background:var(--button)}
+button{margin:2px 3px;font:700 9pt var(--bodyfont);color:var(--a);text-decoration:none;text-align:center;text-shadow:0 1px 1px #000;vertical-align:middle;border:1px solid #27235c;background:#000;background:var(--button)}
 button:hover,button:focus,select:hover,select:focus{color:#652787;border:var(--border_input_hover);box-shadow:var(--highlight),inset 0 0 2px 1px #757;cursor:pointer}
 button{min-width:0;background-size:12px,100%}
 button:hover{background-blend-mode:luminosity;background-size:12px,100%}

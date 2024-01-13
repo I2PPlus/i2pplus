@@ -142,10 +142,10 @@ input[type="hidden"],input.default{display:none}
 select,button,.control{resize:none;box-sizing:border-box;vertical-align:middle;text-decoration:none;font-family:var(--bodyfont);font-size:9pt;color:var(--a);cursor:pointer}
 button.control{box-sizing:border-box}
 input{margin:0 2px 0 2px;float:none;vertical-align:middle}
-select{text-align:left}
+select{text-align:left;font-weight:700}
 select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active{margin:0 5px;padding:0;font-weight:400;color:var(--ink);border:0;box-shadow:none;background:none;cursor:default}
 a.control,input.control{white-space:nowrap;vertical-align:middle}
-.control,.control:link,.control:visited,button{margin:2px;padding:5px 12px;min-width:80px;box-sizing:border-box;overflow:hidden;white-space:nowrap;text-decoration:none;text-align:center;background:var(--btn)}
+.control,.control:link,.control:visited,button{margin:2px;padding:5px 12px;min-width:80px;box-sizing:border-box;overflow:hidden;white-space:nowrap;text-decoration:none;text-align:center;font-weight:700;background:var(--btn)}
 .control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--a_hover);background:var(--btn_hover)}
 .control:active,button:active{text-decoration:none;background:var(--hover)}
 #serverTunnels .iconize,#clientTunnels .iconize{min-width:80px}
@@ -162,11 +162,11 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 .control.preview:active{background:var(--hover) var(--eye_active) no-repeat center center/18px}
 .control.create:active{background:var(--hover) var(--create_active) no-repeat center center/14px}
 a.control{display:inline-block}
-input[type=text],input[type=password],textarea{color:var(--ink_darker);-webkit-text-stroke:0}
+input[type=text],input[type=password],textarea{font-weight:700;color:var(--ink_darker);-webkit-text-stroke:0}
 input[type=text]:focus,textarea:focus{color:var(--ink)}
-textarea{margin-left:4px;margin-right:4px;resize:none;box-sizing:border-box;font:bold 9pt var(--monospaced);border:1px solid #302b74;background:#001}
+textarea{margin-left:4px;margin-right:4px;resize:none;box-sizing:border-box;font:700 9pt var(--monospaced);border:1px solid #302b74;background:#001}
 textarea:focus{color:var(--ink);border:1px solid #6466a5;box-shadow:0 0 0 1px rgba(101,39,135,.5),0 0 2px 2px #202;background:#000;transition:ease filter .3s 0s}
-#statusMessages,#statusMessages:active,#statusMessages:focus{margin:0;padding:2px 4px;width:100%;height:80px;font-size:8.5pt;color:#69f;border:0;border-radius:0;box-shadow:var(--highlight),0 0 1px 2px rgba(16,16,96,.4) inset;background:url(../dark/images/chimp.webp) no-repeat right bottom/auto 95%,linear-gradient(180deg,#000,#001)}
+#statusMessages,#statusMessages:active,#statusMessages:focus{margin:0;padding:2px 4px;width:100%;height:80px;font-size:8.5pt;font-weight:700;color:#69f;border:0;border-radius:0;box-shadow:var(--highlight),0 0 1px 2px rgba(16,16,96,.4) inset;background:url(../dark/images/chimp.webp) no-repeat right bottom/auto 95%,linear-gradient(180deg,#000,#001)}
 .freetext[type=text][readonly],.freetext[type=text][readonly]:focus{color:#669;opacity:.8;cursor:default;border:1px solid #302b74;box-shadow:inset 2px 2px 1px #000;background:#000}
 .editDisabled input[type=radio],.editDisabled label{cursor:not-allowed}
 .editDisabled input[type=radio]:checked{opacity:1}
