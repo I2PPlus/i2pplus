@@ -104,7 +104,7 @@ input[type=submit]:hover,a.control:hover{color:var(--a);border:1px solid #b32;ba
 input[type=submit]:active,a.control:active{background:var(--btn_active)}
 input[type=text]{margin:1px 2px;padding:5px;color:#555;font-weight:700;border:var(--border);border-radius:1px;box-shadow:var(--shadow_inline);background:#f8f8f8}
 input[type=text]:focus{color:#b23;box-shadow:inset 0 0 0 1px #d30;background:#fff}
-select{margin:2px 4px 2px 0;padding:6px 16px 6px 6px;min-width:120px;color:var(--ink);font:bold 9pt var(--bodyfont);border:var(--border);border-radius:3px;box-shadow:var(--highlight);background:var(--dropdown) no-repeat right 6px center/10px,var(--btn);appearance:none}
+select{margin:2px 4px 2px 0;padding:6px 16px 6px 6px;min-width:120px;color:var(--ink);font:700 9pt var(--bodyfont);border:var(--border);border-radius:3px;box-shadow:var(--highlight);background:var(--dropdown) no-repeat right 6px center/10px,var(--btn);appearance:none}
 select:hover,select:focus{color:#b23;border:1px solid #b23;background:var(--dropdown_hover) no-repeat right 6px center #fff;background-size:10px}
 textarea{padding:8px 10px;width:100%;height:40px;min-height:40px;resize:vertical;color:#555;box-shadow:inset 2px 2px 2px #ddd;border:var(--border);background:#eee}
 textarea:focus{background:#fff;color:#333}

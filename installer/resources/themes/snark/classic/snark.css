@@ -33,7 +33,7 @@ body.iframed{margin:1px 0}
 p{line-height:1.5}
 hr{width:0;height:1px;margin:5px 0 7px 0;text-align:center;color:transparent;background:transparent}
 img{margin:0 3px 1px 3px;vertical-align:middle;line-height:1;border:0}
-code,.bucket{font:bold 8.5pt var(--monospaced);padding:0 2px;color:#050}
+code,.bucket{font:700 8.5pt var(--monospaced);padding:0 2px;color:#050}
 .center{text-align:center}
 .nowrap{white-space:nowrap;display:inline-block}
 .script{margin:5px 0 2px;display:inline-block}
@@ -71,7 +71,7 @@ tr,.navbar,.lowersection{contain:layout}
 form{margin-bottom:0}
 input::-moz-focus-inner{border:0;outline:0}
 input.default{visibility:hidden;width:1px;height:1px}
-input{font:bold 9pt var(--bodyfont);margin:2px 4px 2px 0;cursor:pointer;text-align:left;color:#006;border:var(--border);border-radius:2px;background:var(--bg)}
+input{font:700 9pt var(--bodyfont);margin:2px 4px 2px 0;cursor:pointer;text-align:left;color:#006;border:var(--border);border-radius:2px;background:var(--bg)}
 input[disabled]{opacity:.5}
 input[disabled][type=submit]:hover,input[disabled][type=submit]:focus{border:1px solid #999;background:var(--th);box-shadow:var(--highlight);color:#555;pointer-events:none}
 #configs input[type=submit],.trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}

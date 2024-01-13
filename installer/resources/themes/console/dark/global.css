@@ -113,7 +113,7 @@ input[type=submit]:active,input[type=reset]:active,button:active,.control:active
 input[type=file]{margin:5px 8px;padding:0;font-weight:400;color:var(--ink);box-shadow:none;border:0;background:#000;cursor:pointer}
 input[type=file]:hover{border-radius:0 15px 15px 0;background:linear-gradient(90deg,rgba(0,0,0,0),#000)}
 input[type=file]:hover,input[type=file]:active{color:var(--hover)}
-input[type=file]::file-selector-button{margin:2px 10px 2px 3px;padding:7px 12px;min-width:75px;vertical-align:middle;font:bold 9pt var(--bodyfont);text-align:center;text-decoration:none;color:var(--a);border:1px solid #000;border-radius:2px;box-shadow:var(--btn_shadow);background:#000}
+input[type=file]::file-selector-button{margin:2px 10px 2px 3px;padding:7px 12px;min-width:75px;vertical-align:middle;font:700 9pt var(--bodyfont);text-align:center;text-decoration:none;color:var(--a);border:1px solid #000;border-radius:2px;box-shadow:var(--btn_shadow);background:#000}
 input[type=file]:hover::file-selector-button,input[type=file]:focus::file-selector-button{color:var(--hover);border:1px solid var(--hover);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover_radial);cursor:pointer}
 input[type=file]:active::file-selector-button{color:var(--ink);text-shadow:var(--textshadow);border:1px solid var(--hover);box-shadow:var(--btn_shadow_active);background:var(--hover)}
 input[type=text],input[type=password],textarea{color:#bb7;border:var(--border_hard);background:#000;cursor:text}
