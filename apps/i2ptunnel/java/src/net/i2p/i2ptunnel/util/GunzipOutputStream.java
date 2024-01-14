@@ -42,7 +42,6 @@ public class GunzipOutputStream extends InflaterOutputStream {
     private HeaderState _state = HeaderState.MB1;
     private int _flags;
     private int _extHdrToRead;
-
     private final DoneCallback _callback;
     private final Log _log;
 
