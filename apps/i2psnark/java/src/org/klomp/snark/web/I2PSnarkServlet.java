@@ -412,6 +412,8 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(_t("Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?")).append("\";\n</script>\n")
                .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/delete.js?")
                .append(CoreVersion.VERSION).append("\"></script>\n")
+               .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/ignorepattern.js?")
+               .append(CoreVersion.VERSION).append("\"></script>\n")
                .append("<link rel=stylesheet href=").append(resourcePath).append("toast.css>\n");
         }
 
@@ -2005,6 +2007,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 processTrackerForm(taction, req);
         } else if ("Create".equals(action)) {
             String baseData = req.getParameter("nofilter_baseFile");
+            String ignorePattern = req.getParameter("nofilter_ignorePattern");
             if (baseData != null && baseData.trim().length() > 0) {
                 File baseFile = new File(baseData.trim());
                 if (!baseFile.isAbsolute())
@@ -2102,7 +2105,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         // it shouldn't be THAT bad, so keep it in this thread.
                         // TODO thread it for big torrents, perhaps a la FetchAndAdd
                         boolean isPrivate = _manager.getPrivateTrackers().contains(announceURL);
-                        Storage s = new Storage(_manager.util(), baseFile, announceURL, announceList, null, isPrivate, null);
+                        Storage s = new Storage(_manager.util(), baseFile, announceURL, announceList, null, isPrivate, null, ignorePattern);
                         s.close(); // close the files... maybe need a way to pass this Storage to addTorrent rather than starting over
                         MetaInfo info = s.getMetaInfo();
                         File torrentFile = new File(_manager.getDataDir(), s.getBaseName() + ".torrent");
@@ -3290,6 +3293,14 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("\" required> <input type=submit class=create value=\"")
            .append(_t("Create torrent"))
            .append("\" name=foo>")
+           .append("</td></tr>\n")
+           .append("<tr><td>")
+           .append(_t("Ignore Pattern"))
+           .append(":</td><td>")
+           .append("<input type=text id=nofilter_ignorePattern name=nofilter_ignorePattern size=85 value=\"")
+           .append("\" spellcheck=false  title=\"")
+           .append(_t("Regular Expression pattern of files to ignore in path"))
+           .append("\">")
            .append("</td></tr>\n")
            .append("<tr><td>")
            .append(_t("Trackers"))
