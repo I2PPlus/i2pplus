@@ -54,6 +54,7 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
 
+import org.klomp.snark.BandwidthListener;
 import org.klomp.snark.I2PSnarkUtil;
 import org.klomp.snark.MagnetURI;
 import org.klomp.snark.MetaInfo;
@@ -1331,6 +1332,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     footer.append("<tr id=dhtDebug>");
                     footer.append("<th colspan=12><span class=volatile>");
                     if (dht != null) {
+                        //out.write(_manager.getBandwidthListener().toString());
                         footer.append(dht.renderStatusHTML());
                     } else {
                         footer.append("<b>");
@@ -1981,6 +1983,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String i2cpOpts = buildI2CPOpts(req);
             String upLimit = req.getParameter("upLimit");
             String upBW = req.getParameter("upBW");
+            String downBW = req.getParameter("downBW");
             String refreshDel = req.getParameter("refreshDelay");
             String startupDel = req.getParameter("startupDelay");
             String pageSize = req.getParameter("pageSize");
@@ -1999,7 +2002,7 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean enableAddCreate = req.getParameter("enableAddCreate") != null;
             _manager.updateConfig(dataDir, filesPublic, autoStart, smartSort, refreshDel, startupDel, pageSize,
                                   seedPct, eepHost, eepPort, i2cpHost, i2cpPort, i2cpOpts,
-                                  upLimit, upBW, useOpenTrackers, useDHT, theme,
+                                  upLimit, upBW, downBW, useOpenTrackers, useDHT, theme,
                                   lang, ratings, comments, commentsName, collapsePanels, showStatusFilter, enableLightbox, enableAddCreate);
             // update servlet
             try {
@@ -3571,11 +3574,9 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_manager.util().getMaxUpBW()).append("\" size=5 maxlength=5 pattern=\"[0-9]{1,5}\"")
            .append(" title=\"")
            .append(_t("Maximum bandwidth allocated for uploading"))
-           .append("\"> KBps</label> <span id=bwHoverHelp>")
-           .append(toThemeSVG("details", "", ""))
-           .append("<span id=bwHelp><i>")
+           .append(" (")
            .append(_t("Half available bandwidth recommended."))
-           .append("</i></span></span>");
+           .append(")\"> KBps</label>");
         if (_context.isRouterContext()) {
             buf.append(" <a href=\"/config.jsp\" target=_blank title=\"")
                .append(_t("View or change router bandwidth"))
@@ -3583,6 +3584,28 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(_t("Configure"))
                .append("]</a>");
         }
+
+
+
+           .append("<span class=configOption><label><b>")
+           .append(_t("Down bandwidth limit"))
+           .append("</b> <input type=text name=downBW class=\"r numeric\" value=\"")
+           .append(_manager.getBandwidthListener().getDownBWLimit() / 1000).append("\" size=5 maxlength=5 pattern=\"[0-9]{1,5}\"")
+           .append(" title=\"")
+           .append(_t("Maximum bandwidth allocated for downloading"))
+           .append(" (")
+           .append(_t("Half available bandwidth recommended."))
+           .append(")\"> KBps</label>");
+        if (_context.isRouterContext()) {
+            buf.append(" <a href=\"/config.jsp\" target=_blank title=\"")
+               .append(_t("View or change router bandwidth"))
+               .append("\">[")
+               .append(_t("Configure"))
+               .append("]</a>");
+        }
+
+
+
         buf.append("</span><br>\n");
         buf.append("<span class=configOption><label><b>")
            .append(_t("Total uploader limit"))
