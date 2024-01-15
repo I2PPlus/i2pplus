@@ -502,6 +502,9 @@ input#toggle_addtorrent:checked + label + hr + table,input#toggle_createtorrent:
 #configs td:first-child{padding-left:15px;width:25%;min-width:180px}
 td#bwHelp{padding-left:24px;width:100%;background:url(images/details.svg) no-repeat left 10px center/14px}
 td#bwHelp a{margin-left:3px;display:inline-block;white-space:nowrap;line-height:1}
+#bwAllocation .numeric,.numeric[name="upLimit"]{min-width:48px}
+#configs a[href^="/config"]{font-size:9pt}
+#configs .numeric[name="upBW"]{margin-left:8px}
 
 /* comments */
 .addCommentText,.commentText{padding-right:0}

@@ -672,6 +672,8 @@ input.trackername{width:100px}
 #filecheck a{margin:8px}
 #snarkLang{margin-right:5px;padding:4px 8px;display:inline-block;line-height:1.6;vertical-align:middle;color:#ff7;font-weight:700;text-align:center;border-radius:4px;background:#212}
 #torrentOrderControl b{background:linear-gradient(180deg,#303,#101)}
+#bwAllocation .numeric,.numeric[name="upLimit"]{min-width:48px}
+#configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}
 
 /* tracker config */
 .info_tracker{margin:2px;padding:1px 8px 1px 18px;display:inline-block;max-width:130px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 0 0 1px #101,inset 0 0 0 1px rgba(96,32,96,.2);border-radius:3px;background:var(--tracker) no-repeat left 3px center/14px,linear-gradient(180deg,rgba(24,0,24,.5) 50%,rgba(12,0,12,.5) 50%)}
@@ -1262,7 +1264,7 @@ td.peerCount:empty::after{margin:0 -2px;width:8px;height:8px;display:inline-bloc
 
 @media (min-width:1500px){
 body,button,code,input,input[type=reset],input[type=submit],input.r,select,select option,textarea,td,th,.configPanel,.configPanel td,a.control,.snarkNewTorrent,.snarkNewTorrent td,#torrents a:not(#debugMode){font-size:10pt}
-label,.configOption b,.trackerconfig th{font-size:9pt}
+label,.configOption b,.trackerconfig th,#bwAllocation{font-size:9pt}
 textarea,#commentInfo textarea{font-size:9.5pt}
 td.status img{height:24px}
 td.details img,.dirInfo td:first-child img:not(.thumb){margin-top:-2px;margin-bottom:-2px;width:22px;height:22px}

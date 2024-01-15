@@ -623,6 +623,9 @@ input[name="nofilter_commentsName"]{max-width:248px}
 td#bwHelp{padding-left:30px;width:90%;line-height:1;background:url(images/details.svg) no-repeat left 12px center/14px}
 td#bwHelp a{display:inline-block;white-space:nowrap;margin-left:4px}
 #torrentOrderControl{line-height:1}
+#configs #bwAllocation .numeric,#configs .numeric[name="upLimit"]{min-width:48px}
+#configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}
+#configs input[name="i2cpOpts"],#configs input[name="nofilter_dataDir"]{font-size:90%}
 
 /* language overrides */
 .lang_fr .optionlist,.lang_hu .optionlist,.lang_in .optionlist,.lang_it .optionlist,.lang_sk .optionlist,.lang_nl .optionlist,.lang_pl .optionlist,.lang_pt .optionlist,.lang_ro .optionlist,.lang_sv .optionlist,.lang_tr .optionlist,.lang_uk .optionlist{columns:500px auto;column-gap:5px}

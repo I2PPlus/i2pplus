@@ -594,6 +594,9 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 #configs td b::after{content:":"}
 #configs td label b:hover{color:#4d2200}
 #snarkLang{margin:0 5px;padding:2px 8px;display:inline-block;vertical-align:middle;line-height:1.6;font-weight:700;text-align:center;border-radius:2px;background:#fef6f0}
+#configs #bwAllocation .numeric,#configs .numeric[name="upLimit"]{min-width:48px}
+#configs #bwAllocation{font-size:9pt}
+#configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}
 
 /* language overrides */
 .lang_fr .optionlist,.lang_hu .optionlist,.lang_in .optionlist,.lang_it .optionlist,.lang_sk .optionlist,.lang_nl .optionlist,.lang_pl .optionlist,.lang_pt .optionlist,.lang_ro .optionlist,.lang_sv .optionlist,.lang_tr .optionlist,.lang_uk .optionlist{columns:500px auto}

@@ -183,6 +183,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String PROP_MAX_MESSAGES = "i2psnark.maxLogMessages";
 
     public static final int MIN_UP_BW = 30;
+    public static final int MIN_DOWN_BW = 2 * MIN_UP_BW;
     public static final int DEFAULT_MAX_UP_BW = 1024;
     private static final int DEFAULT_MAX_DOWN_BW = 1024;
     public static final int DEFAULT_STARTUP_DELAY = 3;

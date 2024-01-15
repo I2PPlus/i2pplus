@@ -1332,8 +1332,10 @@ public class I2PSnarkServlet extends BasicServlet {
                     footer.append("<tr id=dhtDebug>");
                     footer.append("<th colspan=12><span class=volatile>");
                     if (dht != null) {
-                        //out.write(_manager.getBandwidthListener().toString());
-                        footer.append(dht.renderStatusHTML());
+                        footer.append("<span id=bwManager hidden>")
+                              .append(_manager.getBandwidthListener().toString())
+                              .append("</span>")
+                              .append(dht.renderStatusHTML());
                     } else {
                         footer.append("<b>");
                         footer.append(_t("No DHT Peers"));
@@ -3568,15 +3570,15 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<tr><th class=suboption>")
            .append(_t("Torrent Options"))
            .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
-           .append("<span class=configOption><label><b>")
-           .append(_t("Up bandwidth limit"))
-           .append("</b> <input type=text name=upBW class=\"r numeric\" value=\"")
+
+           .append("<span id=bwAllocation class=configOption title=\"").append(_t("Half available bandwidth recommended.")).append("\">")
+           .append("<b>").append(_t("Bandwidth limit")).append("</b> ")
+           .append("<span id=bwDown></span><input type=text name=downBW class=\"r numeric\" value=\"")
+           .append(_manager.getBandwidthListener().getDownBWLimit() / 1024).append("\" size=5 maxlength=5 pattern=\"[0-9]{1,5}\"")
+           .append(" title=\"").append(_t("Maximum bandwidth allocated for downloading")).append("\"> KB/s down")
+           .append(" <span id=bwUp></span><input type=text name=upBW class=\"r numeric\" value=\"")
            .append(_manager.util().getMaxUpBW()).append("\" size=5 maxlength=5 pattern=\"[0-9]{1,5}\"")
-           .append(" title=\"")
-           .append(_t("Maximum bandwidth allocated for uploading"))
-           .append(" (")
-           .append(_t("Half available bandwidth recommended."))
-           .append(")\"> KBps</label>");
+           .append(" title=\"").append(_t("Maximum bandwidth allocated for uploading")).append("\"> KB/s up");
         if (_context.isRouterContext()) {
             buf.append(" <a href=\"/config.jsp\" target=_blank title=\"")
                .append(_t("View or change router bandwidth"))
@@ -3584,27 +3586,6 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(_t("Configure"))
                .append("]</a>");
         }
-
-
-
-           .append("<span class=configOption><label><b>")
-           .append(_t("Down bandwidth limit"))
-           .append("</b> <input type=text name=downBW class=\"r numeric\" value=\"")
-           .append(_manager.getBandwidthListener().getDownBWLimit() / 1000).append("\" size=5 maxlength=5 pattern=\"[0-9]{1,5}\"")
-           .append(" title=\"")
-           .append(_t("Maximum bandwidth allocated for downloading"))
-           .append(" (")
-           .append(_t("Half available bandwidth recommended."))
-           .append(")\"> KBps</label>");
-        if (_context.isRouterContext()) {
-            buf.append(" <a href=\"/config.jsp\" target=_blank title=\"")
-               .append(_t("View or change router bandwidth"))
-               .append("\">[")
-               .append(_t("Configure"))
-               .append("]</a>");
-        }
-
-
 
         buf.append("</span><br>\n");
         buf.append("<span class=configOption><label><b>")

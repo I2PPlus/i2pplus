@@ -598,6 +598,7 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #trackers .knownTracker td,#trackers #addtracker td,#trackers .trackerconfig td[colspan="7"]{border-bottom:0}
 #trackers .trackerconfig td[colspan="7"]{padding:5px 3px 5px 0}
 #trackers #addtracker td{padding-top:10px;padding-bottom:10px}
+#configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}
 
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
 @keyframes progress{from{background-position:0}to{background-position:-12px}}
