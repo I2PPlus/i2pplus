@@ -56,19 +56,16 @@ class LocalClientManager extends ClientManager {
      * @param flags ignored for local
      */
     @Override
-    void distributeMessage(Destination fromDest, Destination toDest, Payload payload,
+    void distributeMessage(ClientConnectionRunner sender, Destination fromDest, Destination toDest, Payload payload,
                            MessageId msgId, long messageNonce, long expiration, int flags) {
         // check if there is a runner for it
-        ClientConnectionRunner sender = getRunner(fromDest);
         ClientConnectionRunner runner = getRunner(toDest);
         if (runner != null) {
             if (dropX1000 > 0) {
                 if (100 * 1000 * _ctx.random().nextFloat() < dropX1000) {
                     System.out.println("Message " + msgId + " DROPPED randomly");
-                    if (sender != null) {
-                        // pretend success
-                        sender.updateMessageDeliveryStatus(fromDest, msgId, messageNonce, MessageStatusMessage.STATUS_SEND_GUARANTEED_SUCCESS);
-                    }
+                    // pretend success
+                    sender.updateMessageDeliveryStatus(fromDest, msgId, messageNonce, MessageStatusMessage.STATUS_SEND_GUARANTEED_SUCCESS);
                 }
             }
             if (latency > 0 || jitter > 0) {
@@ -83,15 +80,12 @@ class LocalClientManager extends ClientManager {
                 }
             }
             boolean ok = runner.receiveMessage(toDest, fromDest, payload);
-            if (sender != null) {
-                int rc = ok ? MessageStatusMessage.STATUS_SEND_SUCCESS_LOCAL : MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL;
-                sender.updateMessageDeliveryStatus(fromDest, msgId, messageNonce, rc);
-            }
+            int rc = ok ? MessageStatusMessage.STATUS_SEND_SUCCESS_LOCAL : MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL;
+            sender.updateMessageDeliveryStatus(fromDest, msgId, messageNonce, rc);
         } else {
             // remote.  ignore.
             System.out.println("Message " + msgId + " is targeting a REMOTE destination - DROPPED");
-            if (sender != null)
-                sender.updateMessageDeliveryStatus(fromDest, msgId, messageNonce, MessageStatusMessage.STATUS_SEND_GUARANTEED_FAILURE);
+            sender.updateMessageDeliveryStatus(fromDest, msgId, messageNonce, MessageStatusMessage.STATUS_SEND_GUARANTEED_FAILURE);
         }
     }
 
@@ -113,17 +107,16 @@ class LocalClientManager extends ClientManager {
 
         public void timeReached() {
             boolean ok = r.receiveMessage(td, fd, pl);
-            if (s != null) {
-                int rc = ok ? MessageStatusMessage.STATUS_SEND_SUCCESS_LOCAL : MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL;
-                s.updateMessageDeliveryStatus(fd, id, nonce, rc);
-            }
+            int rc = ok ? MessageStatusMessage.STATUS_SEND_SUCCESS_LOCAL : MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL;
+            s.updateMessageDeliveryStatus(fd, id, nonce, rc);
         }
     }
 
     public static void main(String args[]) {
         int dropX1000 = 0, jitter = 0, latency = 0;
+        int port = ClientManagerFacadeImpl.DEFAULT_PORT;
         boolean error = false;
-        Getopt g = new Getopt("router", args, "d:j:l:");
+        Getopt g = new Getopt("router", args, "d:j:l:p:");
         try {
             int c;
             while ((c = g.getopt()) != -1) {
@@ -147,6 +140,12 @@ class LocalClientManager extends ClientManager {
                             error = true;
                         break;
 
+                    case 'p':
+                        port = Integer.parseInt(g.getOptarg());
+                        if (port < 1024 || port > 65535)
+                            error = true;
+                        break;
+
                     default:
                         error = true;
                 }
@@ -164,7 +163,6 @@ class LocalClientManager extends ClientManager {
         // prevent NTP queries
         props.setProperty("time.disabled", "true");
         RouterContext ctx = new RouterContext(null, props);
-        int port = ClientManagerFacadeImpl.DEFAULT_PORT;
         LocalClientManager mgr = new LocalClientManager(ctx, port);
         mgr.dropX1000 = dropX1000;
         mgr.jitter = jitter;
@@ -179,6 +177,7 @@ class LocalClientManager extends ClientManager {
         System.err.println("usage: LocalClientManager\n" +
                            "         [-d droppercent] // 0.0 - 99.99999 (default 0)\n" +
                            "         [-j jitter]      // (integer ms for 1 std. deviation, default 0)\n" +
-                           "         [-l latency]     // (integer ms, default 0)");
+                           "         [-l latency]     // (integer ms, default 0)\n" +
+                           "         [-p port]        // (I2CP port, default 7654)");
     }
 }
