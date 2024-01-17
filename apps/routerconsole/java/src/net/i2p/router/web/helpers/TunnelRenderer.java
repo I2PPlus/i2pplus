@@ -64,7 +64,7 @@ class TunnelRenderer {
     }
 
     public void renderStatusHTML(Writer out) throws IOException {
-        boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
+        boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
         TunnelManagerFacade tm = _context.tunnelManager();
         TunnelPool ei = tm.getInboundExploratoryPool();
         TunnelPool eo = tm.getOutboundExploratoryPool();
@@ -86,7 +86,7 @@ class TunnelRenderer {
         for (TunnelPool in : sorted) {
             Hash client = in.getSettings().getDestination();
             boolean isLocal = _context.clientManager().isLocal(client);
-            if ((!isLocal) && (!debug))
+            if ((!isLocal) && (!isAdvanced))
                 continue;
             TunnelPool outPool = tm.getOutboundPool(client);
             if (in.getSettings().getAliasOf() != null ||
@@ -107,14 +107,14 @@ class TunnelRenderer {
                 out.write("id=\"" + client.toBase64().substring(0,4) + "\" >");
                 out.write(getTunnelName(in));
                 // links are set to float:right in CSS so they will be displayed in reverse order
-                if (debug /*&& (!name.startsWith("Ping") && !name.contains("[")) || !name.equals("I2Ping")*/)
+                if (isAdvanced /*&& (!name.startsWith("Ping") && !name.contains("[")) || !name.equals("I2Ping")*/)
                     out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
                               _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a>");
                 else /*if ((!name.startsWith("Ping") && !name.contains("[")) || !name.equals("I2Ping"))*/
                     out.write(" <a href=\"/tunnelmanager\" title=\"" +
                               _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
                 writeGraphLinks(out, in, outPool);
-                out.write(" <a class=\"lsview\" href=\"/netdb?l=1#ls_" + client.toBase32().substring(0,4) + "\">" +
+                out.write(" <a class=\"lsview\" href=\"/netdb?l=3#ls_" + client.toBase32().substring(0,4) + "\">" +
                           "<span class=\"b32\" title=\"" + _t("View LeaseSet") + "\">" +
                           client.toBase32().substring(0,4) + "</span></a>");
                 out.write("</h3>\n");
@@ -132,7 +132,7 @@ class TunnelRenderer {
                         out.write("<h3 class=tabletitle ");
                         out.write("id=\"" + ab64 + "\" >");
                         out.write(DataHelper.escapeHTML(_t(aname)));
-                        if (debug)
+                        if (isAdvanced)
                             out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
                                       _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a>");
                         else
@@ -148,7 +148,7 @@ class TunnelRenderer {
     }
 
     public void renderParticipating(Writer out, boolean bySpeed) throws IOException {
-        boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
+        boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         if (!participating.isEmpty()) {
             out.write("<h3 class=tabletitle id=participating>");
@@ -176,10 +176,10 @@ class TunnelRenderer {
                     }
                     out.write(">" + _t("Speed") + "</th>" +
                               "<th data-sortable>");
-                    if (debug)
+                    if (isAdvanced)
                         out.write(_t("Receive on") + "</th>" + "<th data-sortable data-sort-method=number>");
                     out.write(_t("From") + "</th><th data-sortable>");
-                    if (debug)
+                    if (isAdvanced)
                         out.write(_t("Send on") + "</th><th data-sortable data-sort-method=number>");
                     out.write(_t("To") + "</th></tr></thead>\n<tbody id=transitPeers>\n");
                 }
@@ -244,7 +244,7 @@ class TunnelRenderer {
                     sb.append("</span></td>");
 */
                     long recv = cfg.getReceiveTunnelId();
-                    if (debug) {
+                    if (isAdvanced) {
                         if (recv != 0)
                             sb.append("<td title=\"" + _t("Tunnel identity") + "\"><span class=tunnel_id>" +
                                       recv + "</span></td>");
@@ -257,7 +257,7 @@ class TunnelRenderer {
                     else
                         sb.append("<td><span hidden>&ndash;</span></td>");
                     long send = cfg.getSendTunnelId();
-                    if (debug) {
+                    if (isAdvanced) {
                         if (send != 0)
                             sb.append("<td title=\"" + _t("Tunnel identity") + "\"><span class=tunnel_id>" +
                                       send + "</span></td>");
@@ -802,7 +802,7 @@ class TunnelRenderer {
                 buf.append("<span class=right>" + count + "</span><span class=left>&#8239;KB</span>");
             buf.append("</td>\n");
             int length = info.getLength();
-            boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
+            boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
             for (int j = 0; j < length; j++) {
                 Hash peer = info.getPeer(j);
                 TunnelId id = (info.isInbound() ? info.getReceiveTunnelId(j) : info.getSendTunnelId(j));
@@ -818,7 +818,7 @@ class TunnelRenderer {
                     buf.append(" <td><span class=\"tunnel_peer tunnel_local\" title=\"" +
                               _t("Locally hosted tunnel") + "\">" + _t("Local") + "</span>");//&nbsp;" +
                               //"<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
-                    if (debug) {
+                    if (isAdvanced) {
                         buf.append("<span class=tunnel_id title=\"" + _t("Tunnel identity") + "\">" +
                                   (id == null ? "" : "" + id) + "</span>");
                     }
@@ -826,7 +826,7 @@ class TunnelRenderer {
                 } else {
                     buf.append(" <td><span class=tunnel_peer>" + netDbLink(peer) +
                               "</span>");//&nbsp;<b class=tunnel_cap title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
-                    if (debug) {
+                    if (isAdvanced) {
                         buf.append("<span class=tunnel_id title=\"" + _t("Tunnel identity") + "\">" +
                                   (id == null ? "" : " " + id) + "</span>");
                     }

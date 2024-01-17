@@ -1,6 +1,7 @@
 package net.i2p.router.web.helpers;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -29,22 +30,64 @@ public class ConfigAdvancedHelper extends HelperBase {
         _hideKeys = new HashSet<String>(Arrays.asList(keys));
     }
 
+    private static final Map<String, String> _headers = new HashMap<String, String>(16);
+    static {
+        _headers.put("crypto", "Crypto");
+        _headers.put("desktopgui", "System Tray");
+        _headers.put("i2cp", "I2P Client Protocol");
+        _headers.put("i2np", "I2P Network Protocol");
+        _headers.put("i2p", "I2P");
+        _headers.put("jbigi", "Java Big Integer");
+        _headers.put("netdb", "Network Database");
+        _headers.put("prng", "Random Number Generator");
+        _headers.put("routerconsole", "Router Console");
+        _headers.put("router", "Router");
+        _headers.put("stat", "Statistics");
+        _headers.put("time", "Time");
+    }
+
     public String getSettings() {
         StringBuilder buf = new StringBuilder(4*1024);
         TreeMap<String, String> sorted = new TreeMap<String, String>();
         sorted.putAll(_context.router().getConfigMap());
         boolean adv = isAdvanced();
+        String lastType = null;
         for (Map.Entry<String, String> e : sorted.entrySet()) {
             String key = e.getKey();
-            if (!adv &&
-                ( _hideKeys.contains(key) ||
-                  key.startsWith("i2cp.auth.") ||
-                  key.startsWith(PROP_AUTH_PFX))) {
-                continue;
-            }
             String name = DataHelper.escapeHTML(key);
             String val = DataHelper.escapeHTML(e.getValue());
-            buf.append(name).append('=').append(val).append('\n');
+            if (!adv) {
+                if (_hideKeys.contains(key) ||
+                    key.startsWith("i2cp.auth.") ||
+                    key.startsWith(PROP_AUTH_PFX) ||
+                    key.startsWith("X") ||
+                    key.startsWith("homehelper") ||
+                    key.startsWith("desktopgui") ||
+                    key.startsWith("jbigi") ||
+                    key.startsWith("prng")) {
+                    continue;
+                }
+                String type = key;
+                int dot = key.indexOf('.');
+                if (dot > 0) {
+                    type = type.substring(0, dot);
+                }
+                if (!type.equals(lastType)) {
+                    lastType = type;
+                    String dtype = _headers.get(type);
+                    if (dtype == null) {
+                        dtype = type;
+                    }
+                    if (type.length() > 0) {
+                        buf.append("<tr class=section><th colspan=2>").append(_t(dtype)).append("</th></tr>\n");
+                    }
+                } else {
+                    buf.append("<tr><td>").append(name).append("</td>")
+                       .append("<td>").append(val).append("</td></tr>\n");
+                }
+            } else {
+                buf.append(name).append('=').append(val).append('\n');
+            }
         }
         return buf.toString();
     }

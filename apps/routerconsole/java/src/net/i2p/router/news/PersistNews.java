@@ -59,13 +59,13 @@ class PersistNews {
             Node nid = entry.getNode("id");
             if (nid == null) {
                 if (log.shouldWarn())
-                    log.warn("entry without UUID");
+                    log.warn("News entry without UUID");
                 continue;
             }
             String id = nid.getValue();
             if (id == null) {
                 if (log.shouldWarn())
-                    log.warn("entry without UUID");
+                    log.warn("News entry without UUID");
                 continue;
             }
             String name = idToName(ctx, id);
@@ -74,14 +74,14 @@ class PersistNews {
                 rv = true;
             Writer out = null;
             try {
-                out = new OutputStreamWriter(new GZIPOutputStream(new SecureFileOutputStream(file)));
+                out = new OutputStreamWriter(new GZIPOutputStream(new SecureFileOutputStream(file)), "UTF-8");
                 out.write(XML_START);
                 XMLParser.toString(buf, entry);
                 out.write(buf.toString());
                 buf.setLength(0);
             } catch (IOException ioe) {
                 if (log.shouldWarn())
-                    log.warn("failed store to " + file, ioe);
+                    log.warn("Failed to write " + file + " to storage", ioe);
             } finally {
                 if (out != null) try { out.close(); } catch (IOException ioe) {}
             }

@@ -45,8 +45,8 @@
 </tr>
 <tr>
 <td>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
-<input type=hidden name=action value="ff" >
+<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=action value="ff">
 <b><%=intl._t("Enrollment")%>:</b>
 <label><input type=radio class=optbox name="ff" value=auto <%=advancedhelper.getFFChecked(2) %> >
 <%=intl._t("Automatic")%></label>&nbsp;
@@ -56,73 +56,40 @@
 <%=intl._t("Disable")%></label>
 </td>
 </tr>
-<tr>
-<td class=optionsave align=right>
-<input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>" >
-</td>
-</tr>
+<tr><td class=optionsave><input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>"></td></tr>
 </table>
 </form>
 <h3 id=advancedconfig class=tabletitle><%=intl._t("Advanced I2P Configuration")%>&nbsp;<span class=h3navlinks><a title="Help with additional configuration settings" href="/help/advancedsettings">[Additional Options]</a></span></h3>
 <%
     String advConfig = advancedhelper.getSettings();
-    if (advancedhelper.isAdvanced()) {
+    boolean isAdvanced = advancedhelper.isAdvanced();
+    if (isAdvanced) {
 %>
 <form action="" method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
-<input type=hidden name=action value="blah" >
-<input type=hidden name="nofilter_oldConfig" value="<%=advConfig%>" >
-<%
-    }  // isAdvanced
-%>
+<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=action value="blah">
+<input type=hidden name="nofilter_oldConfig" value="<%=advConfig%>">
 <table class=configtable id=advconf>
-<%
-    if (advancedhelper.isAdvanced()) {
-%>
-<tr>
-<td class=infohelp>
-<b><%=intl._t("NOTE")%>:</b> <%=intl._t("Some changes may require a restart to take effect.")%>
-</td>
-</tr>
-<%
-    } else {
-%>
-<tr>
-<td>
-<%=intl._t("To make changes, edit the file: {0}", "<tt>" + advancedhelper.getConfigFileName() + "</tt>")%>
-</td>
-</tr>
-<%
-    }  // isAdvanced
-%>
-<tr>
-<td class=tabletextarea>
-<textarea id=advancedsettings rows=32 cols=60 name="nofilter_config" wrap=off spellcheck=false <% if (!advancedhelper.isAdvanced()) { %>readonly=readonly<% } %>><%=advConfig%></textarea>
-</td>
-</tr>
-<%
-    if (advancedhelper.isAdvanced()) {
-%>
-<tr>
-<td class=optionsave align=right>
-<input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
-<input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>" >
-</td>
-</tr>
-<%
-    }  // isAdvanced
-%>
+<tr><td class=infohelp><b><%=intl._t("NOTE")%>:</b> <%=intl._t("Some changes may require a restart to take effect.")%></td></tr>
+<tr><td class=tabletextarea><textarea id=advancedsettings rows=32 cols=60 name="nofilter_config" wrap=off spellcheck=false><%=advConfig%></textarea></td></tr>
+<tr><td class=optionsave><input type=reset class=cancel value="<%=intl._t("Cancel")%>"><input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>"></td></tr>
 </table>
-<%
-    if (advancedhelper.isAdvanced()) {
-%>
 </form>
 <%
-    }  // isAdvanced
+    } else {  // isAdvanced
+%>
+<table class="configtable readonly" id=advconf>
+<tr><td class=infohelp colspan=2><%=intl._t("To make changes, edit the file: {0}", "<code>" + advancedhelper.getConfigFileName() + "</code>")%></td></tr>
+<%=advConfig%>
+</table>
+<%
+    }
 %>
 </div>
 </div>
 </div>
+<noscript><style>#advconf.readonly tr.section{pointer-events:none}#advconf.readonly tr.section th::after{display:none}</style></noscript>
 <script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+<script nonce=<%=cspNonce%> src=/js/tableSectionToggler.js></script>
 </body>
 </html>

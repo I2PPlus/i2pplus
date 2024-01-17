@@ -116,8 +116,9 @@ public class ConfigTunnelsHelper extends HelperBase {
 
         boolean advanced = isAdvanced();
 
-        buf.append("<tr><th colspan=4 class=\"th_title\"><a name=\"").append(prefix).append("\">");
-        buf.append(name).append("</a></th></tr>\n");
+        buf.append("<tr id=").append(prefix).append("><th colspan=3 class=\"th_title left\">").append(name).append("</th>")
+           .append("<th class=\"th_title right\"><a href=/tunnels#").append(prefix).append("><span class=b32>")
+           .append(prefix).append("</span></a></th></tr>\n");
         if (in.getLength() <= 0 ||
             in.getLength() + in.getLengthVariance() <= 0 ||
             out.getLength() <= 0 ||
@@ -126,7 +127,6 @@ public class ConfigTunnelsHelper extends HelperBase {
                .append(_t("ANONYMITY WARNING - Settings include 0-hop tunnels."))
                .append("</font></th></tr>\n");
             if (TransportUtil.getIPv6Config(_context, "SSU") == TransportUtil.IPv6Config.IPV6_ONLY) {
-                // rare, don't bother translating
                 buf.append("<tr><th colspan=4><font color=#900>")
                    .append(_t("WARNING - 0-hop tunnels not recommended for IPv6-only routers."))
                    .append("</font></th></tr>\n");
@@ -210,7 +210,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         int maxQuantity = advanced ? MAX_ADVANCED_QUANTITY : MAX_QUANTITY;
         buf.append("<tr");
         if (!advanced)
-            buf.append(" class=\"lastrow\"");
+            buf.append(" class=lastrow");
         buf.append("><td><b>").append(_t("Quantity")).append(":</b></td>\n")
            .append("<td><select name=\"").append(index).append(".quantityInbound\"");
         if (!advanced && prefix != "exploratory")
@@ -236,7 +236,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         // tunnel backup quantity
         if (advanced) {
             int maxBQuantity = advanced ? MAX_ADVANCED_BACKUP_QUANTITY : MAX_BACKUP_QUANTITY;
-            buf.append("<tr class=\"lastrow\"><td><b>").append(_t("Backup quantity")).append(":</b></td>\n")
+            buf.append("<tr class=lastrow><td><b>").append(_t("Backup quantity")).append(":</b></td>\n")
                .append("<td><select name=\"").append(index).append(".backupInbound\">\n");
             now = in.getBackupQuantity();
             renderOptions(buf, 0, maxBQuantity, now, "", TUNNEL);

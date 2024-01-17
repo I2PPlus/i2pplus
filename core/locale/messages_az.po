@@ -5,9 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-31 12:16+0000\n"
-"PO-Revision-Date: 2019-11-24 13:40+0000\n"
+"PO-Revision-Date: 2023-12-12 05:28+0000\n"
 "Language: az\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,8 +26,8 @@ msgstr ""
 #, java-format
 msgid "{0,number,####} ms"
 msgid_plural "{0,number,####} ms"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0,number,####} ms"
+msgstr[1] "{0,number,####} ms"
 
 #. seconds
 #. alternates: secs, sec. 'seconds' is probably too long.
@@ -37,8 +36,8 @@ msgstr[1] ""
 #, java-format
 msgid "{0} sec"
 msgid_plural "{0} sec"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} saniyə"
+msgstr[1] "{0} saniyə"
 
 #. minutes
 #. alternates: mins, min. 'minutes' is probably too long.
@@ -47,8 +46,8 @@ msgstr[1] ""
 #, java-format
 msgid "{0} min"
 msgid_plural "{0} min"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} dəqiqə"
+msgstr[1] "{0} dəqiqə"
 
 #. hours
 #. alternates: hrs, hr., hrs.
@@ -57,8 +56,8 @@ msgstr[1] ""
 #, java-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} saat"
+msgstr[1] "{0} saat"
 
 #. days
 #: ../java/src/net/i2p/data/DataHelper.java:1436
@@ -66,8 +65,8 @@ msgstr[1] ""
 #, java-format
 msgid "{0} day"
 msgid_plural "{0} days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} gün"
+msgstr[1] "{0} gün"
 
 #. years
 #: ../java/src/net/i2p/data/DataHelper.java:1439
@@ -75,52 +74,52 @@ msgstr[1] ""
 #, java-format
 msgid "{0} year"
 msgid_plural "{0} years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} il"
+msgstr[1] "{0} il"
 
 #: ../java/src/net/i2p/data/DataHelper.java:1441
 #: ../java/src/net/i2p/data/DataHelper.java:1488
 msgid "n/a"
-msgstr "n/a"
+msgstr "yok"
 
 #: ../java/src/net/i2p/data/DataHelper.java:1470
 #, java-format
 msgid "{0,number,####} ns"
 msgid_plural "{0,number,###} ns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0,number,####} nönəsec"
+msgstr[1] "{0,number,####} nönəsec"
 
 #: ../java/src/net/i2p/data/DataHelper.java:1472
 #, java-format
 msgid "{0,number,####} μs"
 msgid_plural "{0,number,###} μs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0,number,####} μs"
+msgstr[1] "{0,number,####} μs"
 
 #. just for tagging
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "CRIT"
-msgstr ""
+msgstr "KRİT"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "DEBUG"
-msgstr ""
+msgstr "DEBUG"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "ERROR"
-msgstr ""
+msgstr "ERROR"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "INFO"
-msgstr ""
+msgstr "INFO"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "WARN"
-msgstr ""
+msgstr "WARN"
 
 #: ../java/src/net/i2p/util/LogWriter.java:166
 #, java-format
 msgid "{0} similar message omitted"
 msgid_plural "{0} similar messages omitted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} oxşar mesaj ötürüldü"
+msgstr[1] "{0} oxşar mesaj ötürüldü"

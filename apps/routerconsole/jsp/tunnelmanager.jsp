@@ -64,7 +64,7 @@
   });
 </script>
 </div>
-<style>iframe{display:block;pointer-events:auto}#tunnelmgr::before{width:100%;animation:fade .3s linear .7s both}</style>
+<style>#i2ptunnelframe{display:block;pointer-events:auto}#tunnelmgr::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
 </html><%
     }

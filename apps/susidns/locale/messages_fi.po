@@ -5,17 +5,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 03:22+0000\n"
-"PO-Revision-Date: 2023-11-25 03:44+0000\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 09:35+0000\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.1\n"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:132
 #, java-format
@@ -51,7 +47,7 @@ msgstr "Ei mitään"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:232
 msgid "Hashcash"
-msgstr ""
+msgstr "Hashcash"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:234
 msgid "Hidden"
@@ -80,29 +76,29 @@ msgstr "DSA 1024-bittinen"
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:184
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hae <span class=active>"
+msgstr[1] "Hae <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:189
 #, java-format
 msgid "Filtered list contains 1 entry."
 msgid_plural "Filtered list contains {0} entries."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Suodatettu luettelo sisältää 1 merkinnän."
+msgstr[1] "Suodatettu luettelo sisältää {0} merkintää."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:195
 #, java-format
 msgid "One result for: <span class=active>"
 msgid_plural "{0} results for: <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Yksi tulos haulle: <span class=active>"
+msgstr[1] "{0} tulosta haulle: <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:204
 #, java-format
 msgid "1 entry"
 msgid_plural "{0} entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 merkintä"
+msgstr[1] "{0} merkintää"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
@@ -205,8 +201,8 @@ msgstr "Kohde {0} poistettu."
 #, java-format
 msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 kohde poistettu."
+msgstr[1] "{0} kohdetta poistettu."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:353
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:379
@@ -240,19 +236,19 @@ msgstr "VIRHE: Osoitekirjatiedostoa ei voitu kirjoittaa."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:372
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:163
 msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
 msgstr "Virheellinen lomakkeen lähetys, luultavasti siksi, että käytit selaimesi \"takaosaa\" tai \"lataa\" -painiketta. Lähetä uudelleen."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Jos pulma jatkuu, vahvista, että evästeet ovar käytössä selaimessasi."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:137
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:136
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:246
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:244
 msgid "Save"
@@ -263,7 +259,7 @@ msgid "Configuration saved."
 msgstr "Asetukset tallennettu."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:102
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:159
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:158
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:244
 msgid "Reload"
 msgstr "Lataa uudelleen"
@@ -326,21 +322,21 @@ msgstr "Tuotu tiedostosta"
 #, java-format
 msgid "Loaded {0} entry from file"
 msgid_plural "Loaded {0} entries from file"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ladattu {0} merkintä tiedostosta"
+msgstr[1] "Ladattu {0} merkintää tiedostosta"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:594
 #, java-format
 msgid "Skipped {0} duplicate entry from file"
 msgid_plural "Skipped {0} duplicate entries from file"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ohitettiin {0} kaksoiskappaletta tiedostosta"
+msgstr[1] "Ohitettiin {0} päällekkäistä merkintää tiedostosta"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:600
 msgid "Import from file failed"
 msgstr "Tuonti tiedostosta epäonnistui"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:139
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:138
 msgid "Subscriptions saved."
 msgstr "Tilaukset tallennettu."
 
@@ -353,20 +349,20 @@ msgstr "Tilaukset tallennettu."
 #. // with the correct parameters will kick off a
 #. // config reload and fetch.
 #. ******
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:150
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:149
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:242
 msgid "Update"
 msgstr "Päivitys"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:153
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:152
 msgid "Attempting to update addressbook from subscription sources..."
 msgstr "Yritetään päivittää osoitekirjaa tilauslähteistä..."
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:157
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:156
 msgid "Cannot update subscriptions: HTTP proxy is not running!"
 msgstr "Tilauksia ei voi päivittää: HTTP-välityspalvelin ei ole käynnissä!"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:161
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:160
 msgid "Subscriptions reloaded."
 msgstr "Tilaukset ladattu uudelleen."
 
@@ -480,7 +476,7 @@ msgstr "kirkas suodatin"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:749
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:751
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:967
@@ -550,7 +546,7 @@ msgstr "Valitse tiedosto"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:194
 msgid "configuration"
-msgstr ""
+msgstr "kokoonpano"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:232
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:236
@@ -664,7 +660,7 @@ msgstr "Base 32 Osoite"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:315
 msgid "Base 64 Hash"
-msgstr ""
+msgstr "Base64 Hash"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:319
 msgid "Public Key"
@@ -716,7 +712,7 @@ msgstr "Lisää muistiinpanoja verkkotunnuksesta"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:388
 msgid "Visual Identification for"
-msgstr ""
+msgstr "Visuaalinen tunnistus"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:400
 msgid "Create your own identification images"
@@ -840,7 +836,7 @@ msgstr "Yksityinen osoitekirja"
 
 #: build/HowSVG.java:12
 msgid "Local Records"
-msgstr ""
+msgstr "Paikalliset Levyt"
 
 #: build/HowSVG.java:13
 msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."

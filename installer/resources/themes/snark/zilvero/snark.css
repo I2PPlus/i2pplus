@@ -104,7 +104,7 @@ input[type=submit]:hover,a.control:hover{color:var(--a);border:1px solid #b32;ba
 input[type=submit]:active,a.control:active{background:var(--btn_active)}
 input[type=text]{margin:1px 2px;padding:5px;color:#555;font-weight:700;border:var(--border);border-radius:1px;box-shadow:var(--shadow_inline);background:#f8f8f8}
 input[type=text]:focus{color:#b23;box-shadow:inset 0 0 0 1px #d30;background:#fff}
-select{margin:2px 4px 2px 0;padding:6px 16px 6px 6px;min-width:120px;color:var(--ink);font:bold 9pt var(--bodyfont);border:var(--border);border-radius:3px;box-shadow:var(--highlight);background:var(--dropdown) no-repeat right 6px center/10px,var(--btn);appearance:none}
+select{margin:2px 4px 2px 0;padding:6px 16px 6px 6px;min-width:120px;color:var(--ink);font:700 9pt var(--bodyfont);border:var(--border);border-radius:3px;box-shadow:var(--highlight);background:var(--dropdown) no-repeat right 6px center/10px,var(--btn);appearance:none}
 select:hover,select:focus{color:#b23;border:1px solid #b23;background:var(--dropdown_hover) no-repeat right 6px center #fff;background-size:10px}
 textarea{padding:8px 10px;width:100%;height:40px;min-height:40px;resize:vertical;color:#555;box-shadow:inset 2px 2px 2px #ddd;border:var(--border);background:#eee}
 textarea:focus{background:#fff;color:#333}
@@ -187,6 +187,7 @@ input[type=submit]:active,a.control:active,.snarkNav:active,#torrentDisplay .fil
 .pagenavcontrols span:not(#pagecount){margin:0 3px;border:var(--border);border-radius:1px;background-size:16px;background-repeat:no-repeat;background-position:center center;background-color:#fff}
 .pagenavcontrols span:not(#pagecount):hover{border:1px solid #b23}
 .pagenavcontrols span:not(#pagecount):active{border:var(--border_hard);box-shadow:var(--btn_shadow_active);background-color:#fff;background-blend-mode:luminosity}
+.pagenavcontrols .disabled{opacity:.5;pointer-events:none}
 .pagenavcontrols #first{width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--first)}
 .pagenavcontrols #first:hover,.pagenavcontrols a:focus #first{background:var(--first_hover)}
 .pagenavcontrols #previous{width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--previous)}
@@ -197,6 +198,9 @@ input[type=submit]:active,a.control:active,.snarkNav:active,#torrentDisplay .fil
 .pagenavcontrols #last:hover,.pagenavcontrols a:focus #last{background:var(--last_hover)}
 .pagenavcontrols .disable{opacity:.5;pointer-events:none}
 #pagecount{margin:0 8px;font-weight:700;font-size:110%;display:inline-block;vertical-align:middle;letter-spacing:.1em}
+#pagenavbottom{text-align:center}
+#torrents #pagenavbottom td{padding:0}
+#pagenavbottom .pagenavcontrols{border:0;border-bottom:var(--border)}
 
 /* torrents */
 tbody tr:not(.peerinfo) .txd:empty::after{content:"‒";display:inline;font-size:9pt}
@@ -594,6 +598,7 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #trackers .knownTracker td,#trackers #addtracker td,#trackers .trackerconfig td[colspan="7"]{border-bottom:0}
 #trackers .trackerconfig td[colspan="7"]{padding:5px 3px 5px 0}
 #trackers #addtracker td{padding-top:10px;padding-bottom:10px}
+#configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}
 
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
 @keyframes progress{from{background-position:0}to{background-position:-12px}}

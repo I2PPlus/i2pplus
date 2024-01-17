@@ -1,11 +1,13 @@
 import {initToggleInfo} from "./toggleTunnelInfo.js";
+
 var control = document.getElementById("globalTunnelControl");
 var countClient = document.getElementById("countClient");
 var countServer = document.getElementById("countServer");
-var index = document.getElementById("page");
+var globalControl = document.getElementById("globalTunnelControl");
 var messages = document.getElementById("tunnelMessages");
 var notReady = document.getElementById("notReady");
 var toggle = document.getElementById("toggleInfo");
+var tunnelIndex = document.getElementById("page");
 var url = window.location.pathname;
 var xhrtunnman = new XMLHttpRequest();
 
@@ -30,7 +32,7 @@ function refreshTunnelStatus() {
         setTimeout(noRouter, 10000);
         function noRouter() {
           var down = "<div id=down class=notReady><b><span>Router is down</span></b></div>";
-          index.innerHTML = down;
+          tunnelIndex.innerHTML = down;
           if (isDown && xhrtunnman.responseXML.getElementById("globalTunnelControl")) {
             reloadPage();
           }
@@ -63,7 +65,7 @@ function countServices() {
     if (runningClient && runningClient.length > 0) {
       runningClientCount.textContent = " x " + runningClient.length;
     } else if (runningClient && runningClientCount) {
-      runningClientCount.textContent == "";
+      runningClientCount.textContent = "";
     }
     if (runningServer && runningServer.length > 0) {
       runningServerCount.textContent = " x " + runningServer.length;
@@ -102,18 +104,26 @@ function updateVolatile() {
   var updating = document.querySelectorAll(".tunnelProperties .volatile");
   var updatingResponse = xhrtunnman?.responseXML.querySelectorAll(".tunnelProperties .volatile");
   var messagesResponse = xhrtunnman?.responseXML.getElementById("tunnelMessages");
-  if (messages && messagesResponse) {
-    if (!Object.is(messages.innerHTML, messages.innerHTML)) {
-      messages.innerHTML = messagesResponse.innerHTML;
-    }
-  }
+  updateLog();
   var i;
   for (i = 0; i < updating.length; i++) {
-    if (!Object.is(updating[i].innerHTML, updatingResponse[i].innerHTML)) {
+    if (updatingResponse && !Object.is(updating[i].innerHTML, updatingResponse[i].innerHTML)) {
       updating[i].innerHTML = updatingResponse[i].innerHTML;
-    } else if (updating.length != updatingResponse.length) {
+    } else if (updatingResponse && updating.length != updatingResponse.length) {
       refreshPanels();
     }
+  }
+}
+
+function updateLog() {
+  if (messages) {
+    var messagesResponse = xhrtunnman.responseXML.getElementById("tunnelMessages");
+    if (messagesResponse && !Object.is(messages.innerHTML, messagesResponse.innerHTML)) {
+      messages.innerHTML = messagesResponse.innerHTML;
+    }
+  } else if (xhrtunnman.responseXML) {
+    var messagesResponse = xhrtunnman.responseXML.getElementById("tunnelMessages");
+    if (messagesResponse && !messages) {refreshAll();}
   }
 }
 
@@ -122,12 +132,7 @@ function refreshPanels() {
   var serversResponse = xhrtunnman.responseXML.getElementById("serverTunnels");
   var clients = document.getElementById("clientTunnels");
   var clientsResponse = xhrtunnman.responseXML.getElementById("clientTunnels");
-  if (messages) {
-    var messagesResponse = xhrtunnman.responseXML.getElementById("tunnelMessages");
-    if (!Object.is(messages.innerHTML, messagesResponse.innerHTML)) {
-      messages.innerHTML = messagesResponse.innerHTML;
-    }
-  }
+  updateLog();
   if (!Object.is(servers.innerHTML, serversResponse.innerHTML)) {
     servers.innerHTML = serversResponse.innerHTML;
   }
@@ -137,9 +142,13 @@ function refreshPanels() {
 }
 
 function refreshAll() {
-  var indexResponse = xhrtunnman.responseXML.getElementById("page");
-  if (typeof indexResponse != "undefined" && !Object.is(index.innerHTML, indexResponse.innerHTML)) {
-    index.innerHTML = indexResponse.innerHTML;
+  if (xhrtunnman.responseXML) {
+    var tunnelIndexResponse = xhrtunnman.responseXML.getElementById("page");
+    if (typeof tunnelIndexResponse != "undefined" && !Object.is(tunnelIndex.innerHTML, tunnelIndexResponse.innerHTML)) {
+      tunnelIndex.innerHTML = tunnelIndexResponse.innerHTML;
+    }
+    initTunnelControl();
+    bindToggle();
   }
 }
 
@@ -149,15 +158,55 @@ function reloadPage() {
 
 function bindToggle() {
   if (toggle) {
-    toggle.addEventListener("click", initToggleInfo, false);
+    if (!globalControl.classList.contains("listener")) {
+      toggle.addEventListener("click", initToggleInfo, false);
+      globalControl.classList.add("listener");
+    }
   }
 }
 
 function refreshIndex() {
   refreshTunnelStatus();
-  bindToggle();
+  if (!globalControl.classList.contains("listener")) {bindToggle();}
+  if (!tunnelIndex.classList.contains("listener")) {initTunnelControl();}
 }
 
-bindToggle();
+function initTunnelControl() {
+  var startButtons = document.querySelectorAll(".control.start");
+  var stopButtons = document.querySelectorAll(".control.stop");
+  var startAll = document.querySelector(".control.startall");
+  var stopAll = document.querySelector(".control.stopall");
+  var restartAll = document.querySelector(".control.restartall");
+  var xhrcontrol = new XMLHttpRequest();
+
+  if (!tunnelIndex.classList.contains("listener")) {
+    tunnelIndex.addEventListener("click", function(event) {
+      var target = event.target;
+      if (target.classList.contains("control.start") ||
+          target.classList.contains("control.stop") ||
+          target.classList.contains("control.startall") ||
+          target.classList.contains("control.stopall") ||
+          target.classList.contains("control.restartall")) {
+        event.preventDefault();
+        tunnelControl(target.href, target);
+        tunnelIndex.classList.add("listener");
+      }
+    });
+  }
+
+  function tunnelControl(url, target) {
+    xhrcontrol.onreadystatechange = function() {
+      if (xhrcontrol.readyState === 4 && xhrcontrol.status === 200) {
+        countServices();
+        updateVolatile();
+      }
+    };
+    xhrcontrol.open("GET", url, true);
+    xhrcontrol.send();
+  }
+}
+
+if (toggle) {bindToggle();}
+if (globalControl) {initTunnelControl();}
 setInterval(refreshIndex, 5000);
 document.addEventListener("DOMContentLoaded", countServices);

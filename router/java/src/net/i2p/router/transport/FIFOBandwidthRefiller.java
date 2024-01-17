@@ -9,6 +9,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter.Request;
 import net.i2p.util.Log;
+import net.i2p.util.SyntheticREDQueue;
 import net.i2p.util.SystemVersion;
 
 /**

@@ -5,51 +5,51 @@
 @import url(../images/images.css);
 @import url(images/images.css);
 
-html{background:none}
-body{margin:5px;min-width:920px}
-body,input,select,.fakebutton{vertical-align:middle;font-family:var(--bodyfont);font-size:9pt}
-pre,textarea,p.mailbody{font-family:var(--monospaced)}
-body.iframed{margin:-1px -1px -5px}
-body.iframed{background:var(--compose_hover),var(--login_hover),var(--logout_hover),var(--offline_hover),var(--save_hover),var(--send_hover),var(--configure_hover),var(--refresh_hover),var(--dropdown_hover),transparent;background-size:0}
-.pagenav,.sort,.topbuttons,h3,.footer,.bottombuttons,.topbuttons,th img,h3,#dologin,th,#loading{user-select:none}
+a:active,tr:hover td[onclick]:active a{color:var(--active)}
+a:hover,a:focus,tr:hover td[onclick] a{text-decoration:none;color:var(--hover);will-change:transform}
+a:visited{color:#252}
 b,h3,.pagenav td,th{color:var(--ink);text-shadow:var(--txt_shadow)}
+body,input,select,.fakebutton{vertical-align:middle;font-family:var(--bodyfont);font-size:9pt}
+body{margin:5px;min-width:920px}
+body.iframed{margin:-1px -1px -5px;background:var(--compose_hover),var(--login_hover),var(--logout_hover),var(--offline_hover),var(--save_hover),var(--send_hover),var(--configure_hover),var(--refresh_hover),var(--dropdown_hover),transparent;background-size:0}
+form{line-height:1.6;border-top:0}
+hr{margin:5px;width:100%;height:1px;border:0;background:#252;opacity:.5}
+html{background:none}
 li{margin-left:5px;margin-right:5px;line-height:12pt;color:var(--ink)}
+th{font-weight:700;vertical-align:middle}
+div.footer{margin:0 -1px -1px;border-top:0;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #040,inset 0 0 0 3px #000;background:linear-gradient(90deg,#000800 15%,#000 50%,#000800 85%)}
+div.header,.iframed .header{display:none}
+.footer hr{display:none}
+.header+form{border:var(--border);box-shadow:0 0 1px 1px #000}
+.linknew{color:#5a5}
+.linkold{color:#494}
+.linkspam{color:#300}
+.mailbody p.info{margin:10px 0;padding:20px 10px;width:calc(100% - 40px);display:block;font-weight:700;color:#900;border:1px solid #000;border-radius:2px;box-shadow:var(--highlight),inset 0 0 2px 1px #d00;background:#000}
+.mailbody td{padding:0;width:100%;word-break:normal;word-wrap:normal;box-shadow:var(--highlight),inset 0 0 2px 1px #030}
+.noborder{margin-left:0;margin-top:0;margin-right:0}
+.page{margin:0;padding:10px;min-width:600px;line-height:1.6;text-align:center;color:var(--ink);box-shadow:var(--highlight);border:var(--border);border-radius:1px}
+.pagenav,.sort,.topbuttons,h3,.footer,.bottombuttons,.topbuttons,th img,h3,#dologin,th,#loading{user-select:none}
 p{margin-left:15px;margin-right:15px;color:var(--ink)}
-p.text{margin-left:10px;margin-right:10px}
 p.error{color:#c00}
-p.info{color:#030}
 p.footer{margin:0;line-height:10pt;text-align:center;padding:5px 3px;color:#373}
 p.footer,p.footer a{font-size:8pt}
 p.footer,p.footer b{color:#373;text-shadow:0 0 1px #000}
-tr.mailbody,#message_full tr:first-child{background:#000800}
-#message_full tr:first-child{box-shadow:var(--highlight),inset 0 0 2px 1px #030}
-#mailhead tr{box-shadow:none}
-.mailbody td{padding:0;width:100%;word-break:normal;word-wrap:normal;box-shadow:var(--highlight),inset 0 0 2px 1px #030}
-.mailbody p.info{margin:10px 0;padding:20px 10px;width:calc(100% - 40px);display:block;font-weight:700;color:#900;border:1px solid #000;border-radius:2px;box-shadow:var(--highlight),inset 0 0 2px 1px #d00;background:#000}
-p.mailbody + p.info{margin-top:-48px}
-span.coloured{color:#327bbf}
-div.header,.iframed .header{display:none}
-div.footer{margin:0 -1px -1px;border-top:0;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #040,inset 0 0 0 3px #000;background:linear-gradient(90deg,#000800 15%,#000 50%,#000800 85%)}
-.iframed .footer{display:none}
-hr{margin:5px;width:100%;height:1px;border:0;background:#252;opacity:.5}
-.footer hr{display:none}
+p.info{color:#030}
 p.mailbody{margin-top:0;padding:0 0 15px;word-break:break-all;line-height:1.3;text-align:left;color:#b5b774}
-.linkspam{color:#300}
-.linknew{color:#5a5}
-.linkold{color:#494}
-a:visited{color:#252}
-a:hover,a:focus,tr:hover td[onclick] a{text-decoration:none;color:var(--hover);will-change:transform}
-a:active,tr:hover td[onclick]:active a{color:var(--active)}
-.noborder{margin-left:0;margin-top:0;margin-right:0}
+p.mailbody+p.info{margin-top:-48px}
+p.text{margin-left:10px;margin-right:10px}
+pre,textarea,p.mailbody{font-family:var(--monospaced)}
 pre{margin-left:10px;margin-right:10px;font-size:9pt}
-.page{margin:0;padding:10px;min-width:600px;line-height:1.6;text-align:center;color:var(--ink);box-shadow:var(--highlight);border:var(--border);border-radius:1px}
-.iframed .page{margin:0;padding:1px;min-width:620px;border:0;border-radius:0}
-th{font-weight:700;vertical-align:middle}
 .spacer{display:none}
-form{line-height:1.6;border-top:0}
-.header + form{border:var(--border);box-shadow:0 0 1px 1px #000}
+span.coloured{color:#327bbf}
+tr.mailbody,#message_full tr:first-child{background:#000800}
+#mailhead tr{box-shadow:none}
+#message_full tr:first-child{box-shadow:var(--highlight),inset 0 0 2px 1px #030}
 .iframed form{margin-bottom:8px;border:0;box-shadow:none}
-.iframed .header + form{margin-bottom:-10px;padding-bottom:17px}
+.iframed .footer{display:none}
+.iframed .header+form{margin-bottom:-10px;padding-bottom:17px}
+.iframed .page{margin:0;padding:1px;min-width:620px;border:0;border-radius:0}
+
 
 /* message view */
 .debugHeader{display:table-row}
@@ -57,7 +57,6 @@ form{line-height:1.6;border-top:0}
 .debugHeader pre{margin:5px 3px 6px 10px;line-height:1.3;white-space:pre-wrap;word-break:break-all;color:#bb0;text-shadow:var(--txt_shadow);opacity:.9}
 .debugHeader td{box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:rgba(0,0,0,.4)}
 #message_full{margin:0;padding:0;border-collapse:separate;border-spacing:0}
-.iframed #message_full{margin-bottom:-9px;border-bottom:0}
 #message_full tr:first-child{background:repeating-linear-gradient(180deg,#010 1px,#010 2px,#000 3px)}
 #mailhead{margin:0;padding:0}
 #mailhead tr:first-child{background:none}
@@ -69,6 +68,7 @@ form{line-height:1.6;border-top:0}
 #toggleHeaders:hover a,#toggleHeaders a:focus{color:#f60;background:var(--btn_hover)}
 #toggleHeaders:active a{color:#f60;background:var(--hover)}
 #toggleHeaders{margin-right:-8px;padding:4px;min-width:110px;vertical-align:middle;text-align:center}
+.iframed #message_full{margin-bottom:-9px;border-bottom:0}
 
 /* buttons and inputs */
 label:hover{color:#000}
@@ -297,30 +297,32 @@ td p.error{padding:10px}
 #composemail{padding:4px 8px 12px;text-align:center;border-radius:0 0 2px 2px;background:#010;background:repeating-linear-gradient(90deg,rgba(0,32,0,.4),rgba(0,0,0,.4) 1px,rgba(0,0,0,.4) 2px),repeating-linear-gradient(180deg,rgba(0,0,0,.4) 1px,rgba(0,0,0,.4) 2px,rgba(0,64,0,.4) 3px),url(/themes/console/dark/images/camotile2.png)}
 .iframed #composemail{margin-bottom:-7px;border-bottom:0}
 #composemail hr{display:none}
-#composemail textarea{margin-bottom:7px;min-height:200px}
 #composemail textarea,#composemail input[type=text]{width:calc(100% - 20px);min-width:565px}
+#composemail textarea{margin-bottom:7px;padding:8px 10px;min-height:200px;resize:vertical;font-size:110%}
 #newmail{width:auto;margin:auto}
 #newmail td{padding:5px}
 #newmail td:first-child{padding-right:3px;font-weight:700;color:var(--ink)}
 #newmail label:hover{color:var(--ink)}
 
 /* attachments */
-#addattachment td{border-top:var(--border);padding-top:7px}
-#attachedfile{padding:4px 5px}
-#newmail input[type=checkbox]{margin:0}
-#attachedfile input[type=checkbox]{margin:1px;float:right}
-#attachedfile label{padding:5px 10px 5px 24px;width:calc(100% - 34px);min-width:400px;max-width:600px;display:inline-block;white-space:nowrap;line-height:1.4;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;font-style:italic;border-radius:2px 15px 15px 2px;box-shadow:inset 0 0 0 1px #020,inset 0 0 0 2px #010,0 0 0 1px #000;background:var(--attach_active) no-repeat 9px center/14px,linear-gradient(90deg,#010 70%,#020)}
-#attachedfile label:hover{color:#930;box-shadow:var(--highlight),inset 0 0 0 2px #930;background:var(--attach_hover) no-repeat 9px center/14px,linear-gradient(90deg,#020 70%,#010)}
-#attachedfile label:active{box-shadow:inset 0 0 0 1px #020,inset 0 0 0 2px #010,inset 4px 4px 3px #000}
 .attached{margin:0;padding:15px 35px 15px 30px;overflow:auto;text-align:left;box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:var(--attached) no-repeat 10px center/16px,repeating-linear-gradient(180deg,#010,#000 2px)}
 .attached img{margin-top:4px;padding:3px;max-width:100%;max-width:calc(100% - 10px);border:1px solid #030;border-radius:2px;background:#000;text-align:center;image-orientation:from-image}
-#deleteattached::before,#addattachment td:last-child::after{margin:1px 0 2px;height:1px;display:block;background:#252;content:""}
+.attachSize{font-size:80%}
+#addattachment td{border-top:var(--border);padding-top:7px}
 #addattachment td:first-child::after{width:100%;height:7px;display:block;content:""}
 #addattachment td:last-child::after{margin:5px 0 1px}
+#attachedfile{padding:4px 5px}
+#attachedfile input[type=checkbox]{margin:1px;float:right}
+#attachedfile label{padding:8px 10px 8px 24px;width:calc(100% - 84px);min-width:400px;display:inline-block;white-space:nowrap;line-height:1.4;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;font-style:italic;border-radius:2px 15px 15px 2px;box-shadow:inset 0 0 0 1px #020,inset 0 0 0 2px #010,0 0 0 1px #000;background:var(--attach_active) no-repeat 9px center/14px,linear-gradient(90deg,#010 70%,#020)}
+#attachedfile label:hover{color:#930;box-shadow:var(--highlight),inset 0 0 0 2px #930;background:var(--attach_hover) no-repeat 9px center/14px,linear-gradient(90deg,#020 70%,#010)}
+#attachedfile label:active{box-shadow:inset 0 0 0 1px #020,inset 0 0 0 2px #010,inset 4px 4px 3px #000}
 #deleteattached{text-align:right}
+#deleteattached::before,#addattachment td:last-child::after{margin:1px 0 2px;height:1px;display:block;background:#252;content:""}
 #deleteattached input{margin:8px 0 0 0}
 #imageInfo{margin-top:16px;padding-top:10px;width:100%;display:block;text-align:left;font-weight:700;border-top:1px dotted #242}
 #imageInfo::before{width:20px;height:16px;display:inline-block;vertical-align:text-bottom;background:var(--package) no-repeat left center/16px;content:""}
+#newmail input[type=checkbox]{margin:0}
+.thumbnail img{margin-left:16px;width:32px;height:32px;object-fit:cover;vertical-align:middle;border-radius:4px;background:#252;image-orientation:from-image}
 
 /* mail list */
 tr.list0,tr.list1{background:var(--row)}
@@ -338,6 +340,7 @@ td.mailListFlagged,td.mailListSender,td.mailListAttachment,td.mailListSubject,td
 td.mailListSize{font-style:italic;box-shadow:var(--highlight)}
 td.mailListAttached{padding:3px}
 td.mailListAttachment img{opacity:0}
+td.mailListDate{text-align:left}
 td.mailListFlagged img{display:none}
 td.mailListFlagged.new{background:var(--newmail) no-repeat center center/14px}
 td.mailListSender a,td.mailListSender a:hover{font-weight:400;color:var(--ink);line-height:1.2}
@@ -349,14 +352,14 @@ tr:hover td.mailListSubject a{width:calc(100% - 2px);border-radius:2px 15px 15px
 tr:active td.mailListSubject a{box-shadow:inset 2px 2px 1px #000}
 tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td,.topbuttons tr:hover td,.topbuttons:hover td,#mailbox tr:hover,#mailbox tr:hover td{box-shadow:none}
 .folders{display:inline-block;margin:0}
-.listClock{margin-top:1px;padding-left:1px;min-width:18px;vertical-align:text-top;font-size:80%;text-align:left;text-transform:lowercase}
+.listClock{margin:1px 0 0 -1px;min-width:18px;vertical-align:text-top;font-size:80%;text-align:left;text-transform:lowercase}
 .listDate,.listTime,.listClock{display:inline-block;white-space:nowrap;text-align:right}
 .listDate{padding:3px 4px;min-width:64px;text-align:right;font-weight:700;color:var(--ink);border-radius:2px;box-shadow:0 0 0 1px #000;background:var(--badge);opacity:.8}
 .listDate span{padding:1px 0;display:inline-block;min-width:18px;text-align:center;border-radius:2px}
 .listSize,.listDate,.mailListSender,.mailListSubject a{will-change:transform}
 .listSize{min-width:56px;display:inline-block;vertical-align:middle;text-align:right;border-radius:2px;box-shadow:0 0 0 1px #000;background:var(--badge)}
 .listSizeUnit{margin:1px 1px 1px 2px;padding:2px 1px;display:inline-block;min-width:14px;color:var(--ink);text-align:center;font-size:90%;font-style:normal;font-weight:700;text-shadow:var(--txt_shadow);border-radius:0 1px 1px 0;background:#010}
-.listTime{margin-right:2px;min-width:42px;opacity:.85}
+.listTime{margin:0 2px;min-width:54px;font-size:90%;opacity:.85}
 .mailListAttachment.isAttached{background:var(--attach) no-repeat center center/14px}
 .mailListAttachment{min-width:16px}
 .mailListCount{text-align:right}

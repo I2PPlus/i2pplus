@@ -5,9 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2018-07-06 21:05+0000\n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 05:21+0000\n"
 "Language: az\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -153,14 +152,12 @@ msgid "Stop if running as a daemon or in another console."
 msgstr "İşlək proqram olaraq və ya başqa konsolda işləyirsə, dayandırın."
 
 #: ../i2prouter:1888
-#, fuzzy
 msgid "Stop gracefully, may take up to 11 minutes or more."
-msgstr "Düzgün şəkildə dayandırın, 11 dəqiqə çəkə bilər."
+msgstr "Nəzakətlə dayandırın, 11 dəqiqə çəkə bilər."
 
 #: ../i2prouter:1889
-#, fuzzy
 msgid "Restart gracefully, may take up to 11 minutes or more."
-msgstr "Düzgün şəkildə dayandırın, 11 dəqiqə çəkə bilər."
+msgstr "Nəzakətlə yenidən başladın, 11 dəqiqə çəkə bilər."
 
 #: ../i2prouter:1890
 msgid "Stop if running and then start."
@@ -196,6 +193,4 @@ msgstr "I2P-nin əsas istifadəçi kimi işlətməniz tövsiyə \"olunmur\"."
 
 #: ../i2prouter:1916
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
-msgstr ""
-"Əsas olaraq işlətmək üçün i2prouter faylını dəyişin və ALLOW_ROOT=true "
-"tənzimləyin."
+msgstr "Əsas olaraq işlətmək üçün i2prouter faylını dəyişin və ALLOW_ROOT=true tənzimləyin."

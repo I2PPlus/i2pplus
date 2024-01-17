@@ -25,7 +25,7 @@ then
 	POUPDATE=1
 fi
 
-# on windows, one must specify the path of commnad find
+# on windows, one must specify the path of command find
 # since windows has its own version of find.
 if which find|grep -q -i windows ; then
 	export PATH=.:/bin:/usr/local/bin:$PATH
@@ -104,7 +104,7 @@ do
         then
             # slow way
             # convert to class files in build/obj
-            msgfmt --java2 --statistics -r $CLASS -l $LG -d build/obj $i --no-wrap
+            msgfmt --java2 --statistics -r $CLASS -l $LG -d build/obj $i
             if [ $? -ne 0 ]
             then
                 echo "ERROR - msgfmt failed on ${i}, not updating translations"

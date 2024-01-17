@@ -38,7 +38,15 @@ public class KeysAndCert extends DataStructureImpl {
     protected SigningPublicKey _signingKey;
     protected Certificate _certificate;
     private Hash __calculatedHash;
-    protected byte[] _padding;
+    // if compressed, 32 bytes only
+    private byte[] _padding;
+    /**
+     *  If compressed, the padding size / 32, else 0
+     *  @since 0.9.62
+     */
+    protected int _paddingBlocks;
+
+    private static final int PAD_COMP_LEN = 32;
 
     public Certificate getCertificate() {
         return _certificate;
@@ -119,7 +127,13 @@ public class KeysAndCert extends DataStructureImpl {
      * @since 0.9.16
      */
     public byte[] getPadding() {
-        return _padding;
+        if (_paddingBlocks <= 1)
+            return _padding;
+        byte[] rv = new byte[PAD_COMP_LEN * _paddingBlocks];
+        for (int i = 0; i <_paddingBlocks; i++) {
+            System.arraycopy(_padding, 0, _paddingBlocks, i * PAD_COMP_LEN, PAD_COMP_LEN);
+        }
+        return rv;
     }
 
     /**
@@ -130,6 +144,7 @@ public class KeysAndCert extends DataStructureImpl {
         if (_padding != null)
             throw new IllegalStateException();
         _padding = padding;
+        compressPadding();
     }
 
     /**
@@ -172,15 +187,64 @@ public class KeysAndCert extends DataStructureImpl {
         return rv;
     }
 
+    /**
+     * This only does the padding, does not compress the unused 256 byte LS public key.
+     * Savings is 288 bytes for RI and 64 bytes for LS.
+     * @since 0.9.62
+     */
+    private void compressPadding() {
+        _paddingBlocks = 0;
+        // > 32 and a mult. of 32
+        if (_padding == null || (_padding.length & (2 * PAD_COMP_LEN) - 1) != PAD_COMP_LEN)
+            return;
+        int blks = _padding.length / PAD_COMP_LEN;
+        for (int i = 1; i < blks; i++) {
+            if (!DataHelper.eq(_padding, 0, _padding, i, PAD_COMP_LEN)) {
+                return;
+            }
+        }
+        byte[] comp = new byte[PAD_COMP_LEN];
+        System.arraycopy(_padding, 0, comp, 0, PAD_COMP_LEN);
+        _padding = comp;
+        _paddingBlocks = blks;
+    }
+
+    /**
+     * For Destination.writeBytes()
+     * @return the new offset
+     * @since 0.9.62
+     */
+   protected int writePaddingBytes(byte[] target, int off) {
+        if (_padding == null)
+            return off;
+        if (_paddingBlocks > 1) {
+            for (int i = 0; i < _paddingBlocks; i++) {
+                System.arraycopy(_padding, 0, target, off, _padding.length);
+                off += PAD_COMP_LEN;
+           }
+        } else {
+            System.arraycopy(_padding, 0, target, off, _padding.length);
+            off += _padding.length;
+        }
+        return off;
+    }
+
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if ((_certificate == null) || (_publicKey == null) || (_signingKey == null))
             throw new DataFormatException("Not enough data to format the router identity");
         _publicKey.writeBytes(out);
-        if (_padding != null)
-            out.write(_padding);
-        else if (_signingKey.length() < SigningPublicKey.KEYSIZE_BYTES ||
-                 _publicKey.length() < PublicKey.KEYSIZE_BYTES)
+        if (_padding != null) {
+            if (_paddingBlocks <= 1) {
+                out.write(_padding);
+            } else {
+                for (int i = 0; i <_paddingBlocks; i++) {
+                    out.write(_padding, 0, PAD_COMP_LEN);
+                }
+            }
+        } else if (_signingKey.length() < SigningPublicKey.KEYSIZE_BYTES ||
+                   _publicKey.length() < PublicKey.KEYSIZE_BYTES) {
             throw new DataFormatException("No padding set");
+        }
         _signingKey.writeTruncatedBytes(out);
         _certificate.writeBytes(out);
     }
@@ -210,19 +274,26 @@ public class KeysAndCert extends DataStructureImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-// Remove for now because 'Destination: Destination:' is fail
-//        buf.append(getClass().getSimpleName()).append(": ");
-        buf.append("\n* Hash: ").append(getHash().toBase64());
-        // TODO: avoid duplication of info: "Certificate type: Certificate: Type..."
-        buf.append("\n* Certificate type: ").append(_certificate);
+        String cls = getClass().getSimpleName();
+        buf.append('[').append(cls).append(": ");
+        buf.append("\n* Hash: ");
+        if (cls.equals("Destination"))
+            buf.append(getHash().toBase32());
+        else
+            buf.append(getHash().toBase64());
+        buf.append("\n* Certificate: ").append(_certificate);
         if ((_publicKey != null && _publicKey.getType() != EncType.ELGAMAL_2048) ||
-            !(this instanceof Destination)) {
+            !cls.equals("Destination")) {
             // router identities only
             buf.append("\n* Public Key: ").append(_publicKey);
         }
         buf.append("\n* Public Signing Key: ").append(_signingKey);
-        if (_padding != null)
-            buf.append("\n* Padding: ").append(_padding.length).append(" bytes");
+        if (_padding != null) {
+            int len = _padding.length;
+            if (_paddingBlocks > 1)
+                len *= _paddingBlocks;
+            buf.append("\n* Padding: ").append(len).append(" bytes");
+        }
         return buf.toString();
     }
 

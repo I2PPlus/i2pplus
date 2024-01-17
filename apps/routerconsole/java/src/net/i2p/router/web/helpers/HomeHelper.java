@@ -51,6 +51,7 @@ public class HomeHelper extends HelperBase {
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "globe.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info.svg" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "logs.svg" + S +
+        _x("Router Updates") + S + _x("Configure update URLs and policy") + S + "/configupdate" + S + I + "update.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +
         _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/tunnelmanager" + S + I + "tunnelmanager.svg" + S +
@@ -71,6 +72,7 @@ public class HomeHelper extends HelperBase {
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "globe.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info.svg" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "logs.svg" + S +
+        _x("Router Updates") + S + _x("Configure update URLs and policy") + S + "/configupdate" + S + I + "update.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +
         _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/tunnelmanager" + S + I + "tunnelmanager.svg" + S +
@@ -91,6 +93,7 @@ public class HomeHelper extends HelperBase {
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "globe.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info.svg" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "logs.svg" + S +
+        _x("Router Updates") + S + _x("Configure update URLs and policy") + S + "/configupdate" + S + I + "update.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +
         _x("Tunnel Manager") + S + _x("Manage server and client tunnels") + S + "/tunnelmanager" + S + I + "tunnelmanager.svg" + S +
@@ -136,7 +139,9 @@ public class HomeHelper extends HelperBase {
         "Natter" + S + _x("Alternative front-end for Twitter") + S + "http://natter.i2p/" + S + I + "eepsites/twitter.svg" + S +
         "novabbs.i2p" + S + _x("Rocksolid forums for the darknets") + S + "http://novabbs.i2p/" + S + I + "eepsites/forum.svg" + S +
         "ramble.i2p" + S + _x("Cross-network micro-blogging &amp; forums &amp; wiki") + S + "http://ramble.i2p/" + S + I + "eepsites/ramble.svg" + S +
-        "teddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.i2p/" + S + I + "eepsites/teddit.svg" + S +
+        "shreddit" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://shreddit.i2p/" + S + I + "eepsites/shreddit.svg" + S +
+        "teddit" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.ls.i2p/" + S + I + "eepsites/teddit.svg" + S +
+        //"teddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.i2p/" + S + I + "eepsites/teddit.svg" + S +
         //"StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
         //"dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
         //_x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "eepsites/forum.svg" + S +
@@ -169,12 +174,12 @@ public class HomeHelper extends HelperBase {
         "I2PSearch" + S +_x("I2P Web Search Engine") + S + "http://i2psearch.i2p/" + S + I + "search.svg" + S +
         "LibreX" + S +_x("Clearnet Search Engine") + S + "http://libxsearch.i2p/" + S + I + "search.svg" + S +
         "Mojeek" + S +_x("Privacy-focused Clearnet Search Engine") + S + "http://mojeek.i2p/" + S + I + "search.svg" + S +
+        "shmoogle.i2p" + S +_x("I2P Web Search Engine") + S + "http://shmoogle.i2p/" + S + I + "search.svg" + S +
         "torch.i2p" + S +_x("Tor-focused Search Engine") + S + "http://torch.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
         //"Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
         //"LibreY" + S +_x("Clearnet Search Engine") + S + "http://librey.i2p/" + S + I + "search.svg" + S +
         //"raklet.i2p" + S +_x("Tor-focused Search Engine") + S + "http://raklet.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
         //"Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
-        //"shmoogle.i2p" + S +_x("I2P Web Search Engine") + S + "http://shmoogle.i2p/" + S + I + "search.svg" + S +
 
 // wikis & reference
         "ddosecrets.i2p" + S + _x("Enabling the free transmission of data in the public interest") + S + "http://ddosecrets.i2p/" + S + I + "wiki.svg" + S +
@@ -228,7 +233,6 @@ public class HomeHelper extends HelperBase {
         _x("Jurist") + S + _x("Legal News &amp; Commentary") + S + "http://jurist.i2p/" + S + I + "eepsites/jurist.svg" + S +
         _x("KrebsOnSecurity") + S + _x("In-depth security news &amp; investigation") + S + "http://krebsonsecurity.i2p/" + S + I + "eepsites/krebs.png" + S +
         "LKML" + S + _x("Linux Kernel Mailing List") + S + "http://lkml.i2p/" + S + I + "news.svg" + S +
-        _x("NakedSecurity") + S + _x("Security news and research blog") + S + "http://nakedsecurity.i2p/" + S + I + "news.svg" + S +
         "MotherJones" + S + _x("Smart &amp; fearless journalism") + S + "http://motherjones.i2p/" + S + I + "news.svg" + S +
         _x("NewStatesman") + S + _x("Politics &amp; Current Affairs magazine") + S + "http://newstatesman.i2p/" + S + I + "eepsites/newstatesman.svg" + S +
         _x("OpenDemocracy") + S + _x("Independent International Media Platform") + S + "http://opendemocracy.i2p/" + S + I + "news.svg" + S +
@@ -274,6 +278,7 @@ public class HomeHelper extends HelperBase {
         //_x("KyivIndependent") + S + _x("News from Ukraine") + S + "http://kyivindependent.i2p/" + S + I + "kyivindependent.svg" + S +
         //_x("LittleAtoms") + S + _x("A rationalist journal") + S + "http://littleatoms.i2p/" + S + I + "eepsites/littleatoms.svg" + S +
         //_x("MetaCritic") + S + _x("Movie + TV + Music + Game reviews") + S + "http://metacritic.i2p/" + S + I + "eepsites/metacritic.svg" + S +
+        //_x("NakedSecurity") + S + _x("Security news and research blog") + S + "http://nakedsecurity.i2p/" + S + I + "news.svg" + S +
         //_x("NewsNow") + S + _x("The Independent News Discovery Platform") + S + "http://newsnow.i2p/" + S + I + "eepsites/newsnow.svg" + S +
         //_x("Newsweek") + S + _x("American &amp; International News") + S + "http://newsweek.i2p/" + S + I + "eepsites/newsweek.svg" + S +
         //_x("NewVoiceUkraine") + S + _x("Independent News from Ukraine") + S + "http://newvoiceukraine.i2p/" + S + I + "eepsites/newvoice.svg" + S +

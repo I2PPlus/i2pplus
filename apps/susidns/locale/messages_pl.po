@@ -5,17 +5,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 03:22+0000\n"
-"PO-Revision-Date: 2023-11-25 03:13+0000\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 10:01+0000\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
-"X-Generator: Poedit 3.4.1\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:132
 #, java-format
@@ -80,10 +76,9 @@ msgstr "DSA 1024 bity"
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:184
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Wyszukaj <can class=active>"
+msgstr[1] "Wyszukaj <can class=active>"
+msgstr[2] "Wyszukaj <can class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:189
 #, java-format
@@ -92,25 +87,22 @@ msgid_plural "Filtered list contains {0} entries."
 msgstr[0] "Filtrowana lista zawiera 1 wpis."
 msgstr[1] "Filtrowana lista zawiera {0} wpisy."
 msgstr[2] "Filtrowana lista zawiera {0} wpisów."
-msgstr[3] "Filtrowana lista zawiera {0} wpisów."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:195
 #, java-format
 msgid "One result for: <span class=active>"
 msgid_plural "{0} results for: <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Jeden wynik dla: <span class=active>"
+msgstr[1] "{0} Wyniki dla: <span class=active>"
+msgstr[2] "{0} Wyniki dla: <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:204
 #, java-format
 msgid "1 entry"
 msgid_plural "{0} entries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "1 wpis"
+msgstr[1] "{0} wpisy"
+msgstr[2] "{0} wpisy"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
@@ -216,7 +208,6 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "1 miejsce przeznaczenia usunięte."
 msgstr[1] "{0} miejsca przeznaczenia usunięte."
 msgstr[2] "{0} miejsc przeznaczenia usunięte."
-msgstr[3] "{0} miejsc przeznaczenia usunięte."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:353
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:379
@@ -250,19 +241,19 @@ msgstr "BŁĄD: Nie można zapisać pliku książki adresowej."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:372
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:163
 msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
 msgstr "Nieprawidłowy formularz, prawdopodobnie dlatego, że użyto przycisku \"wstecz\" lub \"przeładuj\" w przeglądarce. Proszę prześlij ponownie."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Jeśli problem będzie się powtarzał, sprawdź, czy masz włączoną obsługę plików cookie w przeglądarce."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:137
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:136
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:246
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:244
 msgid "Save"
@@ -273,7 +264,7 @@ msgid "Configuration saved."
 msgstr "Konfiguracja zapisana."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:102
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:159
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:158
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:244
 msgid "Reload"
 msgstr "Przeładuj"
@@ -336,25 +327,23 @@ msgstr "Importowano z pliku"
 #, java-format
 msgid "Loaded {0} entry from file"
 msgid_plural "Loaded {0} entries from file"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Załadowany {0} wpis z pliku"
+msgstr[1] "Załadowane {0} wpisy z pliku"
+msgstr[2] "Załadowane {0} wpisy z pliku"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:594
 #, java-format
 msgid "Skipped {0} duplicate entry from file"
 msgid_plural "Skipped {0} duplicate entries from file"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Pominęło {0} duplikat wpisu z pliku"
+msgstr[1] "Pominęło {0} zduplikowane wpisy z pliku"
+msgstr[2] "Pominęło {0} zduplikowane wpisy z pliku"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:600
 msgid "Import from file failed"
 msgstr "Import z pliku nie powiódł się"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:139
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:138
 msgid "Subscriptions saved."
 msgstr "Subskrypcje zapisane."
 
@@ -367,20 +356,20 @@ msgstr "Subskrypcje zapisane."
 #. // with the correct parameters will kick off a
 #. // config reload and fetch.
 #. ******
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:150
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:149
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:242
 msgid "Update"
 msgstr "Aktualizacja"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:153
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:152
 msgid "Attempting to update addressbook from subscription sources..."
 msgstr "Próba aktualizacji książki adresowej ze źródeł subskrypcji..."
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:157
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:156
 msgid "Cannot update subscriptions: HTTP proxy is not running!"
 msgstr "Nie można zaktualizować subskrypcji: serwer proxy HTTP nie działa!"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:161
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:160
 msgid "Subscriptions reloaded."
 msgstr "Subskrypcje przeładowane."
 

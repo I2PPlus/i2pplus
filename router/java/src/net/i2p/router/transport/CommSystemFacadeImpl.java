@@ -608,7 +608,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  Implements persistent cache file with an intermediary
      *  write to temp file to avoid file corruption
      *
-     *  @since 0.9.60+
+     *  @since 0.9.61+
      */
     private static final String RDNS_CACHE_FILE = I2PAppContext.getGlobalContext().getConfigDir() +
                                                   File.separator + "rdnscache.txt"; // File name for cache serialization
@@ -830,7 +830,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
     }
 
-    /* @since 0.9.60+ */
+    /* @since 0.9.61+ */
     public static int countRdnsCacheEntries() {
         synchronized (rdnslock) {
             return rdnsCache.size();
@@ -841,22 +841,27 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @return domain name only from reverse dns hostname lookups
      *  @since 0.9.58+
      */
-    public static String getDomain(String hostname) throws IOException {
+
+    public static String getDomain(String hostname) {
         String[] domainArray = hostname.split("\\.");
-        if (domainArray.length >= 3 && hostname.endsWith(".uk") ||
-            hostname.endsWith(".au") || hostname.endsWith(".nz") ||
-            hostname.contains(".co.") || hostname.contains(".ne.") ||
-            hostname.contains(".com.") || hostname.contains(".net.") ||
-            hostname.contains(".org.") || hostname.contains(".gov.")) {
-            return domainArray[domainArray.length - 3] + "." +
-                   domainArray[domainArray.length - 2] + "." +
-                   domainArray[domainArray.length - 1];
-        } else if (domainArray.length == 1) {
+        int length = domainArray.length;
+
+        if (length > 3 && (hostname.endsWith(".uk") ||
+                            hostname.endsWith(".au") || hostname.endsWith(".nz") ||
+                            hostname.contains(".co.") || hostname.contains(".ne.") ||
+                            hostname.contains(".com.") || hostname.contains(".net.") ||
+                            hostname.contains(".org.") || hostname.contains(".gov."))) {
+            return domainArray[length - 3] + "." +
+                   domainArray[length - 2] + "." +
+                   domainArray[length - 1];
+        } else if (length == 1) {
             return domainArray[0];
-        } else {
-            return domainArray[domainArray.length - 2] + "." +
-                   domainArray[domainArray.length - 1];
+        } else if (length > 2) {
+            return domainArray[length - 2] + "." +
+                   domainArray[length - 1];
         }
+
+        return "";
     }
 
     /**

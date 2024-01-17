@@ -5,17 +5,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 03:22+0000\n"
-"PO-Revision-Date: 2023-11-25 03:46+0000\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 09:35+0000\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
-"X-Generator: Poedit 3.4.1\n"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:132
 #, java-format
@@ -51,7 +47,7 @@ msgstr "Žádný"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:232
 msgid "Hashcash"
-msgstr ""
+msgstr "Hashcash"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:234
 msgid "Hidden"
@@ -75,38 +71,38 @@ msgstr "Typ {0}"
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:259
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:262
 msgid "DSA 1024 bit"
-msgstr ""
+msgstr "DSA 1024 bit"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:184
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Vyhledejte <span class=active>"
+msgstr[1] "Vyhledejte <span class=active>"
+msgstr[2] "Vyhledejte <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:189
 #, java-format
 msgid "Filtered list contains 1 entry."
 msgid_plural "Filtered list contains {0} entries."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Filtrovaný seznam obsahuje 1 záznam."
+msgstr[1] "Filtrovaný seznam obsahuje {0} záznamů."
+msgstr[2] "Filtrovaný seznam obsahuje {0} záznamů."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:195
 #, java-format
 msgid "One result for: <span class=active>"
 msgid_plural "{0} results for: <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Jeden výsledek pro: <span class=active>"
+msgstr[1] "{0} výsledků pro: <span class=active>"
+msgstr[2] "{0} výsledků pro: <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:204
 #, java-format
 msgid "1 entry"
 msgid_plural "{0} entries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 záznam"
+msgstr[1] "Počet záznamů: {0}"
+msgstr[2] "Počet záznamů: {0}"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
@@ -132,7 +128,7 @@ msgstr "Název hostitele {0} je již v adresáři, nezměněn."
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:255
 #, java-format
 msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
-msgstr "Název hostitele {0} je již v adresáři s jiným cílem. "
+msgstr "Název hostitele {0} je již ve vašem adresáři s jiným cílem. Klikněte na \"Nahradit\" pro přepsání."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:282
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:289
@@ -177,7 +173,7 @@ msgstr "Neplatný název hostitele \"{0}\"."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:330
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:340
 msgid "Please enter a host name and destination"
-msgstr "Prosím vložte jméno hostitele a cíl."
+msgstr "Prosím vložte jméno hostitele a cíl"
 
 #. clear search when deleting
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334
@@ -209,9 +205,9 @@ msgstr "Cíl {0} byl smazán."
 #, java-format
 msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 cíl smazán."
+msgstr[1] "Počet smazaných cílů: {0}."
+msgstr[2] "Počet smazaných cílů: {0}."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:353
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:379
@@ -245,19 +241,19 @@ msgstr "ERROR: Nelze zapsat soubor adresáře.Chyba: nepodařilo se zapsat do so
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:372
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:163
 msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
 msgstr "Neplatné odeslání formuláře, pravděpodobně proto, že jste v prohlížeči použili tlačítko „Zpět“ nebo „Znovu načíst“. Prosím znovu odeslává."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Pokud problém přetrvává, ověřte, zda máte ve svém prohlížeči povoleny soubory cookie."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:137
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:136
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:246
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:244
 msgid "Save"
@@ -268,7 +264,7 @@ msgid "Configuration saved."
 msgstr "Nastavení uloženo."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:102
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:159
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:158
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:244
 msgid "Reload"
 msgstr "Načíst znovu"
@@ -331,23 +327,23 @@ msgstr "Importováno ze souboru"
 #, java-format
 msgid "Loaded {0} entry from file"
 msgid_plural "Loaded {0} entries from file"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Načten záznam {0} ze souboru"
+msgstr[1] "Načteno {0} záznamů ze souboru"
+msgstr[2] "Načteno {0} záznamů ze souboru"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:594
 #, java-format
 msgid "Skipped {0} duplicate entry from file"
 msgid_plural "Skipped {0} duplicate entries from file"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Vynechán {0} duplicitní záznam ze souboru"
+msgstr[1] "Vynecháno {0} duplicitních záznamů ze souboru"
+msgstr[2] "Vynecháno {0} duplicitních záznamů ze souboru"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:600
 msgid "Import from file failed"
 msgstr "Import ze souboru se nezdařil"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:139
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:138
 msgid "Subscriptions saved."
 msgstr "Předplatné uloženo."
 
@@ -360,20 +356,20 @@ msgstr "Předplatné uloženo."
 #. // with the correct parameters will kick off a
 #. // config reload and fetch.
 #. ******
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:150
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:149
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:242
 msgid "Update"
 msgstr "Aktualizace"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:153
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:152
 msgid "Attempting to update addressbook from subscription sources..."
 msgstr "Pokus o aktualizaci adresáře ze zdrojů předplatného..."
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:157
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:156
 msgid "Cannot update subscriptions: HTTP proxy is not running!"
 msgstr "Nelze aktualizovat odběry: HTTP proxy neběží!"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:161
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:160
 msgid "Subscriptions reloaded."
 msgstr "Předplatné znovu načteno."
 
@@ -393,7 +389,7 @@ msgstr "adresář"
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:218
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:216
 msgid "Router"
-msgstr ""
+msgstr "Router"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:279
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:218
@@ -411,7 +407,7 @@ msgstr "Mistr"
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:222
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:220
 msgid "Private"
-msgstr "Soukromé "
+msgstr "Soukromé"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:287
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:222
@@ -679,7 +675,7 @@ msgstr "Veřejný klíč"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:321
 msgid "ElGamal 2048 bit"
-msgstr ""
+msgstr "ElGamal 2048 bit"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:323
 msgid "Signing Key"
@@ -699,7 +695,7 @@ msgstr "č"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:333
 msgid "yes"
-msgstr "Ano"
+msgstr "ano"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:335
 msgid "Source"
@@ -847,7 +843,7 @@ msgstr "Soukromý adresář"
 
 #: build/HowSVG.java:12
 msgid "Local Records"
-msgstr ""
+msgstr "Místní záznamy"
 
 #: build/HowSVG.java:13
 msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."

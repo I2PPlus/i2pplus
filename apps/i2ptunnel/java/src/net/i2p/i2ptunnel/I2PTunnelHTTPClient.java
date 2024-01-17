@@ -841,6 +841,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             if(query != null) {
                                 newURI += '?' + query;
                             }
+                            // strip :80 from request if we are http://
+                            if (newURI.contains(":80/")) {
+                                newURI.replace(":80/", "/");
+                            }
                             try {
                                 requestURI = new URI(newURI);
                             } catch(URISyntaxException use) {
@@ -1436,7 +1440,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     data = null;
                     response = SUCCESS_RESPONSE.getBytes("UTF-8");
                 }
-                t = new I2PTunnelRunner(s, i2ps, sockLock, data, response, mySockets, onTimeout);
+                // no OnTimeout, we can't send HTTP error responses after sending SUCCESS_RESPONSE.
+                t = new I2PTunnelRunner(s, i2ps, sockLock, data, response, mySockets, (OnTimeout) null);
             } else {
                 byte[] data = newRequest.toString().getBytes("ISO-8859-1");
                 hrunner = new I2PTunnelHTTPClientRunner(s, i2ps, sockLock, data, mySockets, onTimeout, keepalive, isHead);
@@ -1511,7 +1516,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                   "<form method=GET action=\"" + targetRequest + "\">\n<hr>\n<div class=option>" +
                   "<h4>" + _t("Continue to {0} without saving", idn) + "</h4>\n<p>" +
                   _t("You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router.") +
-                  "</p>\n<div class=formaction><button type=submit class=\"go\">" + _t("Continue without saving") + "</button></div>" + "\n</div>\n</form>\n" +
+                  "</p>\n<div class=formaction><button type=submit class=go>" + _t("Continue without saving") + "</button></div>" + "\n</div>\n</form>\n" +
 
                   "<form method=GET action=\"http://" + LOCAL_SERVER + "/add\">\n" +
                   "<input type=hidden name=\"host\" value=\"" + destination + "\">\n" +
@@ -1589,7 +1594,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                       "<p><b>PSK:</b> " + _t("Enter PSK encryption key") + ":</p>\n" +
                       "<input type=text size=55 name=\"privkey\" value=\"\">\n" +
                       "<p><b>DH:</b> " + _t("Generate new DH encryption key") + ":</p>\n" +
-                      "<div class=\"formaction_xx\">" + "<button type=submit class=accept name=action value=\"newdh\">" +
+                      "<div class=formaction_xx>" + "<button type=submit class=accept name=action value=\"newdh\">" +
                       label + "</button>\n</div>\n");
                       //"<p>" + _t("Generate new PSK encryption key") +
                       //"<button type=submit class=accept name=action value=\"newpsk\">" + label + "</button>\n");

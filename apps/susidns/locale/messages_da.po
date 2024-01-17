@@ -5,17 +5,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 03:22+0000\n"
-"PO-Revision-Date: 2023-11-25 03:39+0000\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 09:56+0000\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.1\n"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:132
 #, java-format
@@ -80,29 +76,29 @@ msgstr "DSA 1024 bit"
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:184
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Søg efter <span class=active>"
+msgstr[1] "Søg efter <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:189
 #, java-format
 msgid "Filtered list contains 1 entry."
 msgid_plural "Filtered list contains {0} entries."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Filtreret liste indeholder 1 post."
+msgstr[1] "Filtreret liste indeholder {0} poster."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:195
 #, java-format
 msgid "One result for: <span class=active>"
 msgid_plural "{0} results for: <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ét resultat for: <span class=active>"
+msgstr[1] "{0} resultater for: <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:204
 #, java-format
 msgid "1 entry"
 msgid_plural "{0} entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 indgang"
+msgstr[1] "{0} indtastninger"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
@@ -128,7 +124,7 @@ msgstr "Værtsnavnet {0} er allerede i adressebogen, uændret."
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:255
 #, java-format
 msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
-msgstr "Værtsnavnet {0} er allerede i adressebogen med en anden destination. "
+msgstr "Værtsnavnet {0} er allerede i adressebogen med en anden destination. Klik på \"Erstat\" for at overskrive."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:282
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:289
@@ -162,7 +158,7 @@ msgstr "Ugyldigt base 32-værtsnavn."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:320
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:331
 msgid "Invalid Base 64 destination."
-msgstr "Ugyldig Base 64 destination"
+msgstr "Ugyldig Base64 destination."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:327
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:337
@@ -205,8 +201,8 @@ msgstr "Destination {0} slettet."
 #, java-format
 msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 destination slettet."
+msgstr[1] "{0} destinationer slettet."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:353
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:379
@@ -240,19 +236,19 @@ msgstr "FEJL: Kunne ikke skrive adressebog filen."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:372
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:163
 msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
 msgstr "Ugyldig formularindsendelse, sandsynligvis fordi du brugte knappen \"tilbage\" eller \"genindlæs\" i din browser. Ugyldig formularafsendelse, sandsynligvis fordi du har brugt \"tilbage\" eller \"reload\" knappen i din browser. Prøv venligst at sende igen."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Hvis problemet fortsætter, skal du kontrollere, at du har aktiveret cookies i din browser.Hvis problemet fortsætter, kontrollere, at du har slået cookies til i din browser."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:137
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:136
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:246
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:244
 msgid "Save"
@@ -263,7 +259,7 @@ msgid "Configuration saved."
 msgstr "Konfiguration gemt."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:102
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:159
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:158
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:244
 msgid "Reload"
 msgstr "Genindlæs"
@@ -326,23 +322,23 @@ msgstr "Importeret fra fil"
 #, java-format
 msgid "Loaded {0} entry from file"
 msgid_plural "Loaded {0} entries from file"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Indlæste {0} post fra fil"
+msgstr[1] "Indlæste {0} poster fra fil"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:594
 #, java-format
 msgid "Skipped {0} duplicate entry from file"
 msgid_plural "Skipped {0} duplicate entries from file"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sprang {0} dubletindtastning over fra fil"
+msgstr[1] "Sprang {0} dubletposter over fra filen"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:600
 msgid "Import from file failed"
 msgstr "Import fra fil mislykkedes"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:139
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:138
 msgid "Subscriptions saved."
-msgstr "Abonnementer gemt. "
+msgstr "Abonnementer gemt."
 
 #. ******
 #. String nonce = System.getProperty("addressbook.nonce");
@@ -353,20 +349,20 @@ msgstr "Abonnementer gemt. "
 #. // with the correct parameters will kick off a
 #. // config reload and fetch.
 #. ******
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:150
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:149
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:242
 msgid "Update"
 msgstr "Opdatering"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:153
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:152
 msgid "Attempting to update addressbook from subscription sources..."
 msgstr "Forsøg på at opdatere adressebogen fra abonnementskilder..."
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:157
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:156
 msgid "Cannot update subscriptions: HTTP proxy is not running!"
 msgstr "Kan ikke opdatere abonnementer: HTTP-proxy kører ikke!"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:161
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:160
 msgid "Subscriptions reloaded."
 msgstr "Abonnementer genindlæst."
 
@@ -490,7 +486,7 @@ msgstr "Hostnavn"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:753
 msgid "Link (b32)"
-msgstr ""
+msgstr "Link (b32)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:755
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:353
@@ -652,7 +648,7 @@ msgstr "Adressehjælper"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:297
 msgid "link"
-msgstr ""
+msgstr "link"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:301
 msgid "Encoded Name"
@@ -664,7 +660,7 @@ msgstr "Base 32 Adresse"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:315
 msgid "Base 64 Hash"
-msgstr ""
+msgstr "Base64 Hash"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:319
 msgid "Public Key"

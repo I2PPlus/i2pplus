@@ -5,9 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2019-09-26 05:28+0000\n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 05:22+0000\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -153,14 +152,12 @@ msgid "Stop if running as a daemon or in another console."
 msgstr "Stanna om demon körs i annan konsoll."
 
 #: ../i2prouter:1888
-#, fuzzy
 msgid "Stop gracefully, may take up to 11 minutes or more."
-msgstr "Stanna graciöst, kan ta upp till 11 minuter."
+msgstr "Stoppa graciöst, kan ta upp till 11 minuter."
 
 #: ../i2prouter:1889
-#, fuzzy
 msgid "Restart gracefully, may take up to 11 minutes or more."
-msgstr "Stanna graciöst, kan ta upp till 11 minuter."
+msgstr "Starta om på ett elegant sätt, kan ta upp till 11 minuter."
 
 #: ../i2prouter:1890
 msgid "Stop if running and then start."
@@ -196,5 +193,4 @@ msgstr "Att köra I2P som användare root är *inte* rekommenderat."
 
 #: ../i2prouter:1916
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
-msgstr ""
-"För att köra som root oavsett, ändra i2prouter och sätt ALLOW_ROOT=true"
+msgstr "För att köra som root oavsett, ändra i2prouter och sätt ALLOW_ROOT=true"

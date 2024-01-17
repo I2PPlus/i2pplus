@@ -5,9 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-31 12:16+0000\n"
-"PO-Revision-Date: 2019-11-24 13:40+0000\n"
+"PO-Revision-Date: 2023-12-12 05:27+0000\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,8 +26,8 @@ msgstr ""
 #, java-format
 msgid "{0,number,####} ms"
 msgid_plural "{0,number,####} ms"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "میلی ثانیه{0,number,####}"
+msgstr[1] "میلی ثانیه{0,number,####}"
 
 #. seconds
 #. alternates: secs, sec. 'seconds' is probably too long.
@@ -47,8 +46,8 @@ msgstr[1] "{0} ثانیه"
 #, java-format
 msgid "{0} min"
 msgid_plural "{0} min"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} دقیقه"
+msgstr[1] "{0} دقیقه"
 
 #. hours
 #. alternates: hrs, hr., hrs.
@@ -57,8 +56,8 @@ msgstr[1] ""
 #, java-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} ساعت"
+msgstr[1] "{0} ساعت ها"
 
 #. days
 #: ../java/src/net/i2p/data/DataHelper.java:1436
@@ -66,8 +65,8 @@ msgstr[1] ""
 #, java-format
 msgid "{0} day"
 msgid_plural "{0} days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} روز"
+msgstr[1] "{0} روزها"
 
 #. years
 #: ../java/src/net/i2p/data/DataHelper.java:1439
@@ -75,8 +74,8 @@ msgstr[1] ""
 #, java-format
 msgid "{0} year"
 msgid_plural "{0} years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} سال"
+msgstr[1] "{0} سال ها"
 
 #: ../java/src/net/i2p/data/DataHelper.java:1441
 #: ../java/src/net/i2p/data/DataHelper.java:1488
@@ -87,24 +86,24 @@ msgstr "n/a"
 #, java-format
 msgid "{0,number,####} ns"
 msgid_plural "{0,number,###} ns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0,number,####} نانوثانیه"
+msgstr[1] "{0,number,####} نانوثانیه"
 
 #: ../java/src/net/i2p/data/DataHelper.java:1472
 #, java-format
 msgid "{0,number,####} μs"
 msgid_plural "{0,number,###} μs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0,number,####} میکروثانیه"
+msgstr[1] "{0,number,####} میکروثانیه"
 
 #. just for tagging
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "CRIT"
-msgstr ""
+msgstr "CRIT"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "DEBUG"
-msgstr ""
+msgstr "DEBUG"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "ERROR"
@@ -112,15 +111,15 @@ msgstr "خطا"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "INFO"
-msgstr ""
+msgstr "INFO"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "WARN"
-msgstr ""
+msgstr "WARN"
 
 #: ../java/src/net/i2p/util/LogWriter.java:166
 #, java-format
 msgid "{0} similar message omitted"
 msgid_plural "{0} similar messages omitted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} پیام مشابه حذف شد"
+msgstr[1] "{0} پیام مشابه حذف شد"

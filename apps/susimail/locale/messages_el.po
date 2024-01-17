@@ -5,17 +5,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-11-25 04:59+0000\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 05:55+0000\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.1\n"
 
 #: src/src/i2p/susi/webmail/MailCache.java:529
 #: src/src/i2p/susi/webmail/WebMail.java:2410
@@ -169,8 +165,8 @@ msgstr "Το σχέδιο αποθηκεύτηκε."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1049
 #: src/src/i2p/susi/webmail/WebMail.java:1290
-#: src/src/i2p/susi/webmail/WebMail.java:2740
-#: src/src/i2p/susi/webmail/WebMail.java:2923
+#: src/src/i2p/susi/webmail/WebMail.java:2747
+#: src/src/i2p/susi/webmail/WebMail.java:2930
 msgid "Unable to save mail."
 msgstr "Δεν είναι δυνατή η αποθήκευση αλληλογραφίας."
 
@@ -194,7 +190,7 @@ msgid "end forwarded mail"
 msgstr "τέλος προωθημένη αλληλογραφία"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1296
-#: src/src/i2p/susi/webmail/WebMail.java:3611
+#: src/src/i2p/susi/webmail/WebMail.java:3618
 msgid "Could not fetch mail body."
 msgstr "Δεν ήταν δυνατή η ανάκτηση του σώματος της αλληλογραφίας."
 
@@ -220,7 +216,7 @@ msgstr "Το συνημμένο δεν βρέθηκε."
 #: src/src/i2p/susi/webmail/WebMail.java:1620
 #: src/src/i2p/susi/webmail/WebMail.java:1622
 #: src/src/i2p/susi/webmail/WebMail.java:2304
-#: src/src/i2p/susi/webmail/WebMail.java:3617
+#: src/src/i2p/susi/webmail/WebMail.java:3624
 msgid "Message not found."
 msgstr "Δε βρέθηκε το μήνυμα."
 
@@ -250,13 +246,13 @@ msgid "Invalid pagesize number, resetting to default value."
 msgstr "Μη έγκυρος αριθμός μεγέθους σελίδας, επαναφορά στην προεπιλεγμένη τιμή."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2282
-#: src/src/i2p/susi/webmail/WebMail.java:3162
+#: src/src/i2p/susi/webmail/WebMail.java:3169
 msgid "Login"
 msgstr "Σύνδεση"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2284
 #: src/src/i2p/susi/webmail/WebMail.java:2426
-#: src/src/i2p/susi/webmail/WebMail.java:3179
+#: src/src/i2p/susi/webmail/WebMail.java:3186
 msgid "Loading messages, please wait..."
 msgstr "Φόρτωση μηνυμάτων, περιμένετε..."
 
@@ -268,7 +264,7 @@ msgstr[0] "1 μήνυμα"
 msgstr[1] "{0} μηνύματα"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2294
-#: src/src/i2p/susi/webmail/WebMail.java:3380
+#: src/src/i2p/susi/webmail/WebMail.java:3387
 msgid "No messages"
 msgstr "Κανένα μήνυμα"
 
@@ -310,304 +306,304 @@ msgstr "Το {0} είναι μια αποκλειστική υπηρεσία I2P
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2648
-#: src/src/i2p/susi/webmail/WebMail.java:3296
-#: src/src/i2p/susi/webmail/WebMail.java:3586
+#: src/src/i2p/susi/webmail/WebMail.java:2655
+#: src/src/i2p/susi/webmail/WebMail.java:3303
+#: src/src/i2p/susi/webmail/WebMail.java:3593
 msgid "no subject"
 msgstr "κανένα θέμα"
 
-#: src/src/i2p/susi/webmail/WebMail.java:2776
+#: src/src/i2p/susi/webmail/WebMail.java:2783
 msgid "Found no valid sender address."
 msgstr "Δεν βρέθηκε έγκυρη διεύθυνση αποστολέα."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2782
+#: src/src/i2p/susi/webmail/WebMail.java:2789
 #, java-format
 msgid "Found no valid address in \\''{0}\\''."
 msgstr "Δεν βρέθηκε έγκυρη διεύθυνση στο \\''{0}\\''."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2796
+#: src/src/i2p/susi/webmail/WebMail.java:2803
 msgid "No recipients found."
 msgstr "Δεν βρέθηκαν παραλήπτες."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2810
+#: src/src/i2p/susi/webmail/WebMail.java:2817
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:302
 #, java-format
 msgid "Email is too large, max is {0}"
 msgstr "Το email είναι πολύ μεγάλο, το μέγιστο είναι {0}"
 
-#: src/src/i2p/susi/webmail/WebMail.java:2855
-#: src/src/i2p/susi/webmail/WebMail.java:2936
+#: src/src/i2p/susi/webmail/WebMail.java:2862
+#: src/src/i2p/susi/webmail/WebMail.java:2943
 msgid "Sending mail."
 msgstr "Αποστολή αλληλογραφίας."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2860
+#: src/src/i2p/susi/webmail/WebMail.java:2867
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:254
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:346
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:351
 msgid "Error sending mail"
 msgstr "Σφάλμα κατά την αποστολή αλληλογραφίας"
 
-#: src/src/i2p/susi/webmail/WebMail.java:2894
+#: src/src/i2p/susi/webmail/WebMail.java:2901
 msgid "Mail sent."
 msgstr "Η αλληλογραφία εστάλη."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2983
+#: src/src/i2p/susi/webmail/WebMail.java:2990
 msgid "Send"
 msgstr "Αποστολή"
 
-#: src/src/i2p/susi/webmail/WebMail.java:2984
+#: src/src/i2p/susi/webmail/WebMail.java:2991
 msgid "Save as Draft"
 msgstr "Αποθήκευση ως πρόχειρο"
 
-#: src/src/i2p/susi/webmail/WebMail.java:2985
-#: src/src/i2p/susi/webmail/WebMail.java:3405
-#: src/src/i2p/susi/webmail/WebMail.java:3495
-#: src/src/i2p/susi/webmail/WebMail.java:3669
+#: src/src/i2p/susi/webmail/WebMail.java:2992
+#: src/src/i2p/susi/webmail/WebMail.java:3412
+#: src/src/i2p/susi/webmail/WebMail.java:3502
+#: src/src/i2p/susi/webmail/WebMail.java:3676
 msgid "Cancel"
 msgstr "Ακύρωση"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3073
-#: src/src/i2p/susi/webmail/WebMail.java:3247
-#: src/src/i2p/susi/webmail/WebMail.java:3591
+#: src/src/i2p/susi/webmail/WebMail.java:3080
+#: src/src/i2p/susi/webmail/WebMail.java:3254
+#: src/src/i2p/susi/webmail/WebMail.java:3598
 msgid "From"
 msgstr "Από"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3076
-#: src/src/i2p/susi/webmail/WebMail.java:3247
-#: src/src/i2p/susi/webmail/WebMail.java:3593
+#: src/src/i2p/susi/webmail/WebMail.java:3083
+#: src/src/i2p/susi/webmail/WebMail.java:3254
+#: src/src/i2p/susi/webmail/WebMail.java:3600
 msgid "To"
 msgstr "Προς"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3078
-#: src/src/i2p/susi/webmail/WebMail.java:3596
+#: src/src/i2p/susi/webmail/WebMail.java:3085
+#: src/src/i2p/susi/webmail/WebMail.java:3603
 msgid "Cc"
 msgstr "CC"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3080
+#: src/src/i2p/susi/webmail/WebMail.java:3087
 msgid "Bcc"
 msgstr "Bcc"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3082
-#: src/src/i2p/susi/webmail/WebMail.java:3249
-#: src/src/i2p/susi/webmail/WebMail.java:3598
+#: src/src/i2p/susi/webmail/WebMail.java:3089
+#: src/src/i2p/susi/webmail/WebMail.java:3256
+#: src/src/i2p/susi/webmail/WebMail.java:3605
 msgid "Subject"
 msgstr "Θέμα"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3088
+#: src/src/i2p/susi/webmail/WebMail.java:3095
 msgid "Add Attachment"
 msgstr "Προσθήκη Συνημμένου"
 
 #. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
-#: src/src/i2p/susi/webmail/WebMail.java:3091
+#: src/src/i2p/susi/webmail/WebMail.java:3098
 msgid "Add attachment"
 msgstr "Προσθήκη συνημμένου"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3098
+#: src/src/i2p/susi/webmail/WebMail.java:3105
 msgid "Attachments"
 msgstr "Επισυνάψεις"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3109
+#: src/src/i2p/susi/webmail/WebMail.java:3116
 msgid "Delete selected attachments"
 msgstr "Διαγραφή επιλεγμένων συνημμένων"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3125
+#: src/src/i2p/susi/webmail/WebMail.java:3132
 msgid "I2PMail Login"
 msgstr "Είσοδος I2PMMail"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3129
+#: src/src/i2p/susi/webmail/WebMail.java:3136
 msgid "User"
 msgstr "Χρήστης"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3130
+#: src/src/i2p/susi/webmail/WebMail.java:3137
 msgid "Username"
 msgstr "Όνομα χρήστη"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3134
-#: src/src/i2p/susi/webmail/WebMail.java:3135
+#: src/src/i2p/susi/webmail/WebMail.java:3141
+#: src/src/i2p/susi/webmail/WebMail.java:3142
 msgid "Password"
 msgstr "Κωδικός"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3137
+#: src/src/i2p/susi/webmail/WebMail.java:3144
 msgid "Toggle password visibility"
 msgstr "Εναλλαγή ορατότητας κωδικού πρόσβασης"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3143
+#: src/src/i2p/susi/webmail/WebMail.java:3150
 msgid "Host"
 msgstr "Οικοδεσπότης"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3148
+#: src/src/i2p/susi/webmail/WebMail.java:3155
 msgid "POP3 Port"
 msgstr "Θύρα POP3"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3153
+#: src/src/i2p/susi/webmail/WebMail.java:3160
 msgid "SMTP Port"
 msgstr "Θύρα SMTP"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3162
+#: src/src/i2p/susi/webmail/WebMail.java:3169
 msgid "Read Mail Offline"
 msgstr "Ανάγνωση αλληλογραφίας εκτός σύνδεσης"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3163
-#: src/src/i2p/susi/webmail/WebMail.java:3409
+#: src/src/i2p/susi/webmail/WebMail.java:3170
+#: src/src/i2p/susi/webmail/WebMail.java:3416
 msgid "Settings"
 msgstr "Ρυθμίσεις"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3168
+#: src/src/i2p/susi/webmail/WebMail.java:3175
 msgid "Learn about I2PMail"
 msgstr "Μάθετε για το I2PMail"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3169
+#: src/src/i2p/susi/webmail/WebMail.java:3176
 msgid "Create Account"
 msgstr "Δημιουργία Λογαριασμού"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3194
-#: src/src/i2p/susi/webmail/WebMail.java:3519
+#: src/src/i2p/susi/webmail/WebMail.java:3201
+#: src/src/i2p/susi/webmail/WebMail.java:3526
 msgid "New"
 msgstr "Νέο"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3207
+#: src/src/i2p/susi/webmail/WebMail.java:3214
 msgid "Check Mail"
 msgstr "Ελέγξτε την αλληλογραφία"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3215
+#: src/src/i2p/susi/webmail/WebMail.java:3222
 msgid "Refresh Page"
 msgstr "Ανανέωση σελίδας"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3228
+#: src/src/i2p/susi/webmail/WebMail.java:3235
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
 msgstr[0] "1 Μήνυμα"
 msgstr[1] "{0} Μηνύματα"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3228
-#: src/src/i2p/susi/webmail/WebMail.java:3531
-#: src/src/i2p/susi/webmail/WebMail.java:3672
+#: src/src/i2p/susi/webmail/WebMail.java:3235
+#: src/src/i2p/susi/webmail/WebMail.java:3538
+#: src/src/i2p/susi/webmail/WebMail.java:3679
 msgid "Logout"
 msgstr "Αποσύνδεση"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3246
-#: src/src/i2p/susi/webmail/WebMail.java:3590
+#: src/src/i2p/susi/webmail/WebMail.java:3253
+#: src/src/i2p/susi/webmail/WebMail.java:3597
 msgid "Date"
 msgstr "Ημερομηνία"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3251
+#: src/src/i2p/susi/webmail/WebMail.java:3258
 msgid "Size"
 msgstr "Μέγεθος"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3252
+#: src/src/i2p/susi/webmail/WebMail.java:3259
 msgid "Mark for deletion"
 msgstr "Επιλογή προς διαγραφή"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3349
+#: src/src/i2p/susi/webmail/WebMail.java:3356
 msgid "Message has an attachment"
 msgstr "Το μήνυμα έχει συνημμένο"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3359
+#: src/src/i2p/susi/webmail/WebMail.java:3366
 msgid "Message is new"
 msgstr "Το μήνυμα είναι νέο"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3361
+#: src/src/i2p/susi/webmail/WebMail.java:3368
 msgid "Message is spam"
 msgstr "Το μήνυμα είναι ανεπιθύμητο"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3370
+#: src/src/i2p/susi/webmail/WebMail.java:3377
 msgid "Message body not downloaded"
 msgstr "Δεν έγινε λήψη του σώματος του μηνύματος"
 
 #. TODO ngettext
-#: src/src/i2p/susi/webmail/WebMail.java:3403
+#: src/src/i2p/susi/webmail/WebMail.java:3410
 msgid "Really delete the marked messages?"
 msgstr "Αλήθεια να διαγραφούν τα επισημασμένα μηνύματα;"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3404
+#: src/src/i2p/susi/webmail/WebMail.java:3411
 msgid "Yes, really delete them!"
 msgstr "Ναι, διέγραψέ τα!"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3410
+#: src/src/i2p/susi/webmail/WebMail.java:3417
 msgid "Delete Selected"
 msgstr "Διαγραφή Επιλεγμένων"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3411
+#: src/src/i2p/susi/webmail/WebMail.java:3418
 msgid "Mark All"
 msgstr "Επιλογή Όλων"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3412
+#: src/src/i2p/susi/webmail/WebMail.java:3419
 msgid "Clear All"
 msgstr "Καθαρισμός Όλων"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3425
+#: src/src/i2p/susi/webmail/WebMail.java:3432
 msgid "Change to Folder"
 msgstr "Αλλαγή σε Φάκελο"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3433
+#: src/src/i2p/susi/webmail/WebMail.java:3440
 msgid "First"
 msgstr "Πρώτο"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3434
-#: src/src/i2p/susi/webmail/WebMail.java:3543
+#: src/src/i2p/susi/webmail/WebMail.java:3441
+#: src/src/i2p/susi/webmail/WebMail.java:3550
 msgid "Previous"
 msgstr "Προηγούμενο"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3443
-#: src/src/i2p/susi/webmail/WebMail.java:3558
+#: src/src/i2p/susi/webmail/WebMail.java:3450
+#: src/src/i2p/susi/webmail/WebMail.java:3565
 msgid "Next"
 msgstr "Επόμενο"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3444
+#: src/src/i2p/susi/webmail/WebMail.java:3451
 msgid "Last"
 msgstr "Τελευταίο"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3493
+#: src/src/i2p/susi/webmail/WebMail.java:3500
 msgid "Really delete this message?"
 msgstr "Αλήθεια να διαγραφεί αυτό το μήνυμα;"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3494
+#: src/src/i2p/susi/webmail/WebMail.java:3501
 msgid "Yes, really delete it!"
 msgstr "Ναι, όντως διεγραψέ το!"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3522
+#: src/src/i2p/susi/webmail/WebMail.java:3529
 msgid "Reply"
 msgstr "Απάντηση"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3523
+#: src/src/i2p/susi/webmail/WebMail.java:3530
 msgid "Reply All"
 msgstr "Απάντηση Όλων"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3524
+#: src/src/i2p/susi/webmail/WebMail.java:3531
 msgid "Forward"
 msgstr "Μπροστά"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3525
+#: src/src/i2p/susi/webmail/WebMail.java:3532
 msgid "Save As"
 msgstr "Αποθήκευση Ως"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3527
-#: src/src/i2p/susi/webmail/WebMail.java:3529
+#: src/src/i2p/susi/webmail/WebMail.java:3534
+#: src/src/i2p/susi/webmail/WebMail.java:3536
 msgid "Delete"
 msgstr "Διαγραφή"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3555
+#: src/src/i2p/susi/webmail/WebMail.java:3562
 msgid "Back to Folder"
 msgstr "Πίσω στο Φάκελο"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3576
+#: src/src/i2p/susi/webmail/WebMail.java:3583
 msgid "Move to Folder"
 msgstr "Μετακίνηση στο φάκελο"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3656
+#: src/src/i2p/susi/webmail/WebMail.java:3663
 msgid "Folder Page Size"
 msgstr "Μέγεθος σελίδας φακέλου"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3657
+#: src/src/i2p/susi/webmail/WebMail.java:3664
 msgid "Set"
 msgstr "Ρύθμιση"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3659
+#: src/src/i2p/susi/webmail/WebMail.java:3666
 msgid "Advanced Configuration"
 msgstr "Προηγμένη διαμόρφωση"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3670
+#: src/src/i2p/susi/webmail/WebMail.java:3677
 msgid "Save Configuration"
 msgstr "Αποθήκευση διαμόρφωσης"
 

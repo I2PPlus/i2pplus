@@ -41,6 +41,10 @@
 %>
 <link href=/themes/fonts/Sora.css rel=stylesheet>
 <%
+    } else {
+%>
+<link href=/themes/fonts/DroidSans.css rel=stylesheet>
+<%
     }
 %>
 <%=intl.title("Page Not Found")%>

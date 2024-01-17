@@ -113,13 +113,11 @@ class SummaryRenderer {
     private static final int SIZE_LEGEND = 11;
     private static final int SIZE_TITLE = 12;
     private static final long[] RATES = new long[] { 60*1000, 60*60*1000 };
-    // dotted line
-//    private static final Stroke GRID_STROKE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1, new float[] {1, 1}, 0);
     private static final Stroke GRID_STROKE = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] {1, 1}, 0);
 
     GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        String[] sysfonts = e.getAvailableFontFamilyNames();
-        List<String> fontlist = Arrays.asList(sysfonts);
+    String[] sysfonts = e.getAvailableFontFamilyNames();
+    List<String> fontlist = Arrays.asList(sysfonts);
 
     public SummaryRenderer(I2PAppContext ctx, SummaryListener lsnr) {
         _log = ctx.logManager().getLog(SummaryRenderer.class);
@@ -275,14 +273,74 @@ class SummaryRenderer {
     private static String DEFAULT_TITLE_FONT_NAME = "Dialog";
     private static String DEFAULT_LEGEND_FONT_NAME = "Dialog";
 **/
-            if  (fontlist.contains("Droid Sans")) {
+            /* CJK support */
+
+            if ("zh".equals(Messages.getLanguage(_context))) {
+                if (fontlist.contains("Noto Sans SC")) {
+                    DEFAULT_TITLE_FONT_NAME = "Noto Sans SC";
+                } else if (fontlist.contains("Noto Sans CJK SC")) {
+                    DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK SC";
+                } else if (fontlist.contains("Source Han Sans SC")) {
+                    DEFAULT_TITLE_FONT_NAME = "Source Han Sans SC";
+                } else {
+                    DEFAULT_TITLE_FONT_NAME = "Dialog";
+                }
+                if (fontlist.contains("Noto Sans Mono SC")) {
+                    DEFAULT_FONT_NAME = "Noto Sans Mono SC";
+                    DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono SC";
+                } else if (fontlist.contains("Noto Sans Mono CJK SC")) {
+                    DEFAULT_FONT_NAME = "Noto Sans Mono CJK SC";
+                    DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono CJK SC";
+                } else {
+                    DEFAULT_FONT_NAME = "Monospaced";
+                    DEFAULT_LEGEND_FONT_NAME = "Monospaced";
+                }
+            } else if ("jp".equals(Messages.getLanguage(_context))) {
+                if (fontlist.contains("Noto Sans JP")) {
+                    DEFAULT_TITLE_FONT_NAME = "Noto Sans JP";
+                } else if (fontlist.contains("Noto Sans CJK JP")) {
+                    DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK JP";
+                } else if (fontlist.contains("Source Han Sans JP")) {
+                    DEFAULT_TITLE_FONT_NAME = "Source Han Sans JP";
+                } else {
+                    DEFAULT_TITLE_FONT_NAME = "Dialog";
+                }
+                if (fontlist.contains("Noto Sans Mono JP")) {
+                    DEFAULT_FONT_NAME = "Noto Sans Mono JP";
+                    DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono JP";
+                } else if (fontlist.contains("Noto Sans Mono CJK JP")) {
+                    DEFAULT_FONT_NAME = "Noto Sans Mono CJK JP";
+                    DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono CJK JP";
+                } else {
+                    DEFAULT_FONT_NAME = "Monospaced";
+                    DEFAULT_LEGEND_FONT_NAME = "Monospaced";
+                }
+            } else if ("ko".equals(Messages.getLanguage(_context))) {
+                if (fontlist.contains("Noto Sans KO")) {
+                    DEFAULT_TITLE_FONT_NAME = "Noto Sans KO";
+                } else if (fontlist.contains("Noto Sans CJK KO")) {
+                    DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK KO";
+                } else if (fontlist.contains("Source Han Sans KO")) {
+                    DEFAULT_TITLE_FONT_NAME = "Source Han Sans KO";
+                } else {
+                    DEFAULT_TITLE_FONT_NAME = "Dialog";
+                }
+                if (fontlist.contains("Noto Sans Mono KO")) {
+                    DEFAULT_FONT_NAME = "Noto Sans Mono KO";
+                    DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono KO";
+                } else if (fontlist.contains("Noto Sans Mono CJK KO")) {
+                    DEFAULT_FONT_NAME = "Noto Sans Mono CJK KO";
+                    DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono CJK KO";
+                } else {
+                    DEFAULT_FONT_NAME = "Monospaced";
+                    DEFAULT_LEGEND_FONT_NAME = "Monospaced";
+                }
+            } else if  (fontlist.contains("Droid Sans")) {
                 DEFAULT_TITLE_FONT_NAME = "Droid Sans";
             } else if (fontlist.contains("Open Sans")) {
                 DEFAULT_TITLE_FONT_NAME = "Open Sans";
             } else if (fontlist.contains("Noto Sans")) {
                 DEFAULT_TITLE_FONT_NAME = "Noto Sans";
-            } else if (fontlist.contains("Ubuntu")) {
-                DEFAULT_TITLE_FONT_NAME = "Ubuntu";
             } else if (fontlist.contains("Segoe UI")) {
                 DEFAULT_TITLE_FONT_NAME = "Segoe UI";
             } else if (fontlist.contains("Bitstream Vera Sans")) {
@@ -298,7 +356,6 @@ class SummaryRenderer {
             } else {
                 DEFAULT_TITLE_FONT_NAME = "Dialog";
             }
-
             if  (fontlist.contains("Droid Sans Mono")) {
                 DEFAULT_FONT_NAME = "Droid Sans Mono";
                 DEFAULT_LEGEND_FONT_NAME = "Droid Sans Mono";
@@ -313,11 +370,10 @@ class SummaryRenderer {
                 DEFAULT_LEGEND_FONT_NAME = "Lucida Console";
             } else {
                 DEFAULT_FONT_NAME = "Monospaced";
+                DEFAULT_LEGEND_FONT_NAME = "Monospaced";
             }
 
-
             String ssmall = _context.getProperty(PROP_FONT_MONO, DEFAULT_FONT_NAME);
-//            String slegend = _context.getProperty(PROP_FONT_LEGEND, DEFAULT_LEGEND_FONT_NAME);
             String slegend = _context.getProperty(PROP_FONT_TITLE, DEFAULT_TITLE_FONT_NAME);
             String stitle = _context.getProperty(PROP_FONT_TITLE, DEFAULT_TITLE_FONT_NAME);
             Font small = new Font(ssmall, Font.PLAIN, smallSize);
@@ -399,11 +455,10 @@ class SummaryRenderer {
                 graphTitle = name.replace("OutBps", "Outbound B/s");
             graphTitle = CSSHelper.StringFormatter.capitalizeWord(graphTitle);
             // heuristic to set K=1024
-            //if ((name.startsWith("bw.") || name.indexOf("Size") >= 0 || name.indexOf("Bps") >= 0 || name.indexOf("memory") >= 0)
-
-            if ((name.indexOf("Size") >= 0 || name.indexOf("memory") >= 0) || name.contains("B/s") || name.contains("Bandwidth")
-                && !showEvents)
+            if ((name.indexOf("Size") >= 0 || name.indexOf("memory") >= 0) ||
+                name.contains("B/s") || name.contains("Bandwidth") && !showEvents) {
                 def.setBase(1024);
+            }
             if (titleOverride != null) {
                 def.setTitle(titleOverride);
             } else if (!hideTitle) {

@@ -5,17 +5,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 03:22+0000\n"
-"PO-Revision-Date: 2023-11-24 00:39+0000\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"POT-Creation-Date: 2023-12-12 04:56+0000\n"
+"PO-Revision-Date: 2023-12-12 06:11+0000\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Poedit 3.4.1\n"
 
 msgid "I2P+ installation complete!"
 msgstr "I2P+ التثبيت كاملة!"
@@ -40,7 +36,7 @@ msgid "You may also wish to enable I2P+ updates on {0}the update configuration p
 msgstr "قد تود أيضًا تمكين تحديثات I2P+ على {0}صفحة تكوين التحديث{1}."
 
 msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
-msgstr " كما يمكنك أيضًا إعداد متصفحك لاستخدام وكيل  I2P للوصول إلى eepsites - مواقع ويب يتم استضافتها بشكل مجهول داخل شبكة I2P -."
+msgstr "كما يمكنك أيضًا إعداد متصفحك لاستخدام وكيل I2P للوصول إلى eepsites - مواقع ويب يتم استضافتها بشكل مجهول داخل شبكة I2P -."
 
 msgid "Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your browser settings."
 msgstr "فقط قم بإدخال 127.0.0.1 (أو المضيف المحليّ) على منفذ 4444 كوكيل http في إعدادات متصفحك."

@@ -21,6 +21,7 @@ th{font-size:10pt}
 td{padding:1px 3px;line-height:12pt;font-size:9pt}
 
 .attached img{padding:2px;border:1px solid #cfd6ff;image-orientation:from-image}
+.attachSize{font-size:80%}
 div.attached{padding:5px 0 5px 25px;vertical-align:middle;text-align:left;background:var(--attach) no-repeat 5px center/16px}
 div.footer{margin:0 -10px -10px;padding:1px;display:none;border-top:var(--border);background:rgba(255,255,255,.5)}
 div.header{display:none}
@@ -94,6 +95,7 @@ tr.mailbody p.error{margin:-3px -1px}
 .bottombuttons br{display:none}
 .bottombuttons input:disabled{display:none}
 tr.bottombuttons table.pagenav{margin:0;width:100%;border-bottom:1px solid #555}
+.thumbnail img{margin-left:16px;width:32px;height:32px;display:inline-block;object-fit:cover;vertical-align:middle;border-radius:4px;background:#ddf;image-orientation:from-image}
 
 /* login */
 #dologin{border:var(--border);padding:10px 0 0;width:500px;margin:55px auto 40px;box-shadow:0 0 0 1px #fff;background:linear-gradient(180deg,rgba(240,240,255,.4),rgba(220,220,255,.5)) #fefefe;box-shadow:var(--highlight),0 0 1px #ccc;filter:opacity(0);animation:linear fade-in .15s .5s forwards}
@@ -203,7 +205,7 @@ input.nextpage:hover,input.next:hover,input[name="nextpage"]:hover,input.nextpag
 #composemail input{margin-left:0}
 #composemail input[type="file"]{padding:0}
 #composemail td{padding:3px}
-#composemail textarea{width:665px;min-width:665px;min-height:200px;margin-top:5px}
+#composemail textarea{margin-top:5px;width:665px;min-width:665px;min-height:200px;resize:vertical}
 #composemail{padding:10px;text-align:center}
 #composemail table{margin:auto;width:auto}
 

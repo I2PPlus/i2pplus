@@ -27,6 +27,8 @@ public class NewsHelper extends ContentHelper {
     public static final String PROP_LAST_UPDATED = "routerconsole.newsLastUpdated";
     /** @since 0.9.55 */
     public static final String PROP_LAST_NEW_ENTRY = "routerconsole.newsLastNewEntry";
+    /** @since 0.9.62 */
+    public static final String PROP_LAST_LANG = "routerconsole.newsLastLanguage";
     /**
      * Default true
      * @since 0.9.21
@@ -317,22 +319,32 @@ public class NewsHelper extends ContentHelper {
                                            DataHelper.formatDuration2(now - lastFetch),
                                            ctx));
          }
+         String unsignedUpdateURL = ctx.getProperty("router.updateUnsignedURL");
+         boolean isPlus = unsignedUpdateURL == null || unsignedUpdateURL.contains("skank.i2p");
+         if (isDevSU3UpdateAvailable(ctx)) {
+             buf.append("\nSigned development update available (").append(updateVersion()).append(")");
+         } else if (isUnsignedUpdateAvailable(ctx) && isPlus) {
+             buf.append("\nI2P+ update available (").append(unsignedUpdateVersion()).append(")");
+         } else if (isPlus && unsignedVersionDownloaded() != null) {
+             buf.append("\nI2P+ update downloaded (").append(unsignedVersionDownloaded()).append(") - restart to install.");
+         } else if (isUnsignedUpdateAvailable(ctx)) {
+             buf.append("\nUnsigned update available (").append(unsignedUpdateVersion()).append(")");
+         } else if (unsignedVersionDownloaded() != null) {
+             buf.append("\nUnsigned update downloaded (").append(unsignedVersionDownloaded()).append(") - restart to install.");
+         } else {
+             buf.append("\nNo update currently available.");
+         }
          buf.append("</i></span><span id=newsDisplay>");
          String consoleNonce = CSSHelper.getNonce();
-         boolean oldHome = ctx.getBooleanProperty("routerconsole.oldHomePage");
          if (lastUpdated > 0 && consoleNonce != null) {
              if (shouldShowNews(ctx)) {
                  buf.append(" <a href=\"/home?news=0&amp;consoleNonce=").append(consoleNonce).append("\">")
                     .append(Messages.getString("Hide news", ctx));
-             } else if (oldHome) {
-                 buf.append(" <a href=\"/sitemap?news=1&amp;consoleNonce=").append(consoleNonce).append("\">")
-                    .append(Messages.getString("Show news", ctx));
              } else {
                  buf.append(" <a href=\"/home?news=1&amp;consoleNonce=").append(consoleNonce).append("\">")
                     .append(Messages.getString("Show news", ctx));
              }
-             buf.append("</a>" +
-                        " | <a href=\"/news\">")
+             buf.append("</a> | <a href=\"/news\">")
                 .append(Messages.getString("Show all news", ctx))
                 .append("</a></span>");
          }
@@ -395,4 +407,5 @@ public class NewsHelper extends ContentHelper {
         ctx.router().saveConfig(PROP_LAST_NEW_ENTRY, Long.toString(rv));
         return rv;
     }
+
 }

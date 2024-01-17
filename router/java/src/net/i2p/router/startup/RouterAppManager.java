@@ -230,11 +230,11 @@ public class RouterAppManager extends ClientAppManagerImpl {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<h2>App Manager</h2>");
         buf.append("<h3>Tracked</h3>");
-        buf.append("<div class=\"debug_container\">");
+        buf.append("<div class=debug_container>");
         toString1(buf);
         buf.append("</div>");
         buf.append("<h3>Registered</h3>");
-        buf.append("<div class=\"debug_container\">");
+        buf.append("<div class=debug_container>");
         toString2(buf);
         buf.append("</div>");
         out.write(buf.toString());

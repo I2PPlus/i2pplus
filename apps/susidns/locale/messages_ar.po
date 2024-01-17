@@ -5,17 +5,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 03:22+0000\n"
-"PO-Revision-Date: 2023-11-25 03:24+0000\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 09:44+0000\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Poedit 3.4.1\n"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:132
 #, java-format
@@ -80,45 +76,45 @@ msgstr "DSA 1024 بت"
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:184
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "ابحث عن <span class=active>"
+msgstr[1] "ابحث عن <span class=active>"
+msgstr[2] "ابحث عن <span class=active>"
+msgstr[3] "ابحث عن <span class=active>"
+msgstr[4] "ابحث عن <span class=active>"
+msgstr[5] "ابحث عن <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:189
 #, java-format
 msgid "Filtered list contains 1 entry."
 msgid_plural "Filtered list contains {0} entries."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "تحتوي القائمة المصفاة على 0 إدخالات."
+msgstr[1] "القائمة المصفاة تحتوي على إدخال واحد."
+msgstr[2] "تحتوي القائمة المصفاة على 2 إدخالات."
+msgstr[3] "تحتوي القائمة المصفاة على إدخالات {0}."
+msgstr[4] "تحتوي القائمة المصفاة على إدخالات {0}."
+msgstr[5] "تحتوي القائمة المصفاة على إدخالات {0}."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:195
 #, java-format
 msgid "One result for: <span class=active>"
 msgid_plural "{0} results for: <span class=active>"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "لا توجد نتائج لـ: <span class=active>"
+msgstr[1] "نتيجة واحدة لـ: <span class=active>"
+msgstr[2] "2 نتائج: <span class=active>"
+msgstr[3] "{0} نتائج: <span class = active>"
+msgstr[4] "{0} نتائج: <span class = active>"
+msgstr[5] "{0} نتائج: <span class=active>"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:204
 #, java-format
 msgid "1 entry"
 msgid_plural "{0} entries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "0 إدخالات"
+msgstr[1] "1 دخول"
+msgstr[2] "2 إدخالات"
+msgstr[3] "{0} إدخالات"
+msgstr[4] "{0} إدخالات"
+msgstr[5] "{0} إدخالات"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
@@ -221,12 +217,12 @@ msgstr "وجهة {0} محذوفة."
 #, java-format
 msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "لا توجد وجهات محذوفة."
+msgstr[1] "1 الوجهة المحذوفة."
+msgstr[2] "2 الوجهات المحذوفة."
+msgstr[3] "{0} تم حذف الوجهات."
+msgstr[4] "{0} تم حذف الوجهات."
+msgstr[5] "{0} تم حذف الوجهات."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:353
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:379
@@ -260,19 +256,19 @@ msgstr "خطأ: لم يتم حفظ دفتر العناوين"
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:372
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:163
 msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
 msgstr "إرسال نموذج غير صالح، ربما لأنك استخدمت زر \"رجوع\" أو \"إعادة تحميل\" في متصفحك. فشل في الارسال، ربما لاستعمال زر \"رجوع\" او  \"أنعش\". قم بالارسال مرة أخرى."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:165
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "إذا استمرت المشكلة، فتأكد من تمكين ملفات تعريف الارتباط في متصفحك."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:137
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:136
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:246
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:244
 msgid "Save"
@@ -283,7 +279,7 @@ msgid "Configuration saved."
 msgstr "حفظ الخيارات"
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:102
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:159
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:158
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:244
 msgid "Reload"
 msgstr "أعد تشغيل"
@@ -346,29 +342,29 @@ msgstr "مستورد من الملف"
 #, java-format
 msgid "Loaded {0} entry from file"
 msgid_plural "Loaded {0} entries from file"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "تحميل 0 إدخالات من الملف"
+msgstr[1] "تم تحميل 1 إدخال من الملف"
+msgstr[2] "تم تحميل 2 إدخالات من الملف"
+msgstr[3] "إدخال {0} من الملف"
+msgstr[4] "إدخال {0} من الملف"
+msgstr[5] "إدخال {0} من الملف"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:594
 #, java-format
 msgid "Skipped {0} duplicate entry from file"
 msgid_plural "Skipped {0} duplicate entries from file"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "تخطي 0 إدخالات مكررة من الملف"
+msgstr[1] "تخطي 1 مكرر إين من الملف"
+msgstr[2] "تخطي 2 إدخالات مكررة من الملف"
+msgstr[3] "تخطي {0} إدخالات مكررة من الملف"
+msgstr[4] "تخطي {0} إدخالات مكررة من الملف"
+msgstr[5] "تخطي {0} إدخالات مكررة من الملف"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:600
 msgid "Import from file failed"
 msgstr "فشل الاستيراد من الملف"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:139
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:138
 msgid "Subscriptions saved."
 msgstr "تم حفظ الاشتراك."
 
@@ -381,20 +377,20 @@ msgstr "تم حفظ الاشتراك."
 #. // with the correct parameters will kick off a
 #. // config reload and fetch.
 #. ******
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:150
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:149
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:242
 msgid "Update"
 msgstr "تحديث"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:153
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:152
 msgid "Attempting to update addressbook from subscription sources..."
 msgstr "محاولة تحديث دفتر العناوين من مصادر الاشتراك..."
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:157
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:156
 msgid "Cannot update subscriptions: HTTP proxy is not running!"
 msgstr "لا يمكن تحديث الاشتراكات: وكيل HTTP لا يعمل!"
 
-#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:161
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:160
 msgid "Subscriptions reloaded."
 msgstr "تم اعادة تحميل الاشتراك."
 

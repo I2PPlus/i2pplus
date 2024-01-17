@@ -5,46 +5,42 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-11-02 02:45+0000\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"POT-Creation-Date: 2023-12-12 04:56+0000\n"
+"PO-Revision-Date: 2023-12-12 05:43+0000\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
 
 #: ../java/src/org/klomp/snark/IdleChecker.java:76
 msgid "No more torrents running."
 msgstr "Δεν τρέχουν άλλα torrents."
 
 #: ../java/src/org/klomp/snark/IdleChecker.java:77
-#: ../java/src/org/klomp/snark/SnarkManager.java:3453
-#: ../java/src/org/klomp/snark/SnarkManager.java:3464
+#: ../java/src/org/klomp/snark/SnarkManager.java:3456
+#: ../java/src/org/klomp/snark/SnarkManager.java:3467
 msgid "I2P tunnel closed."
 msgstr "Η σήραγγα I2P έκλεισε."
 
 #: ../java/src/org/klomp/snark/MagnetURI.java:50
 #: ../java/src/org/klomp/snark/MagnetURI.java:60
-#: ../java/src/org/klomp/snark/SnarkManager.java:3059
+#: ../java/src/org/klomp/snark/SnarkManager.java:3062
 msgid "Magnet"
 msgstr "Μαγνήτης"
 
 #: ../java/src/org/klomp/snark/Snark.java:595
 #: ../java/src/org/klomp/snark/SnarkManager.java:401
 #: ../java/src/org/klomp/snark/SnarkManager.java:1947
-#: ../java/src/org/klomp/snark/SnarkManager.java:2813
-#: ../java/src/org/klomp/snark/SnarkManager.java:2890
+#: ../java/src/org/klomp/snark/SnarkManager.java:2816
+#: ../java/src/org/klomp/snark/SnarkManager.java:2893
 msgid "Unable to connect to I2P"
 msgstr "Δεν είναι δυνατή η σύνδεση στο I2P"
 
 #: ../java/src/org/klomp/snark/Snark.java:597
 #: ../java/src/org/klomp/snark/SnarkManager.java:1949
-#: ../java/src/org/klomp/snark/SnarkManager.java:2815
-#: ../java/src/org/klomp/snark/SnarkManager.java:2892
+#: ../java/src/org/klomp/snark/SnarkManager.java:2818
+#: ../java/src/org/klomp/snark/SnarkManager.java:2895
 msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Σφάλμα σύνδεσης στο I2P - ελέγξτε τις ρυθμίσεις I2CP!"
 
@@ -54,18 +50,18 @@ msgstr "Διαμόρφωση του I2PSnark με επιλογές I2CP"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1105
 #: ../java/src/org/klomp/snark/SnarkManager.java:1314
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1172
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1696
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1834
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1870
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1982
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1174
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1629
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1874
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1910
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2022
 msgid "No write permissions for data directory"
 msgstr "Δεν υπάρχουν δικαιώματα εγγραφής για τον κατάλογο δεδομένων"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1112
 #: ../java/src/org/klomp/snark/SnarkManager.java:1298
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1166
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1677
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1168
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1721
 msgid "Data directory cannot be created"
 msgstr "Δεν είναι δυνατή η δημιουργία καταλόγου δεδομένων"
 
@@ -117,7 +113,7 @@ msgid "New files will not be publicly readable"
 msgstr "Τα νέα αρχεία δεν θα είναι δημόσια αναγνώσιμα"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1286
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1673
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1717
 msgid "Data directory must be an absolute path"
 msgstr "Ο κατάλογος δεδομένων πρέπει να είναι μια απόλυτη διαδρομή"
 
@@ -126,12 +122,12 @@ msgid "Data directory does not exist"
 msgstr "Ο κατάλογος δεδομένων δεν υπάρχει"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1303
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1168
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1170
 msgid "Not a directory"
 msgstr "Δεν είναι κατάλογος"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1308
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1170
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1172
 msgid "Unreadable"
 msgstr "Αδιάβαστο"
 
@@ -282,8 +278,8 @@ msgid "Unable to save the config to {0}"
 msgstr "Δεν είναι δυνατή η αποθήκευση της διαμόρφωσης στο {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1783
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1831
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1867
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1871
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1907
 #, java-format
 msgid "Torrent file deleted: {0}"
 msgstr "Το αρχείο torrent διαγράφηκε: {0}"
@@ -294,18 +290,19 @@ msgid "Torrent file moved from {0} to {1}"
 msgstr "Το αρχείο torrent μετακινήθηκε από το {0} στο {1}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1820
-#: ../java/src/org/klomp/snark/SnarkManager.java:3116
-#: ../java/src/org/klomp/snark/SnarkManager.java:3122
-#: ../java/src/org/klomp/snark/SnarkManager.java:3126
+#: ../java/src/org/klomp/snark/SnarkManager.java:3119
+#: ../java/src/org/klomp/snark/SnarkManager.java:3125
+#: ../java/src/org/klomp/snark/SnarkManager.java:3129
 #, java-format
 msgid "Error: Could not add torrent: {0}"
 msgstr "Σφάλμα: Δεν ήταν δυνατή η προσθήκη torrent: {0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1835
 #: ../java/src/org/klomp/snark/SnarkManager.java:1922
-#: ../java/src/org/klomp/snark/SnarkManager.java:3296
+#: ../java/src/org/klomp/snark/SnarkManager.java:3299
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:179
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1755
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1654
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1794
 #, java-format
 msgid "Torrent already running: {0}"
 msgstr "Το torrent εκτελείται ήδη: {0}"
@@ -321,7 +318,8 @@ msgstr "Δεν είναι δυνατό το άνοιγμα του \"{0}\""
 #: ../java/src/org/klomp/snark/SnarkManager.java:2030
 #: ../java/src/org/klomp/snark/SnarkManager.java:2119
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:167
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1743
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1676
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1782
 #, java-format
 msgid "Torrent with this info hash is already running: {0}"
 msgstr "Το torrent με αυτόν τον κατακερματισμό πληροφοριών εκτελείται ήδη: {0}"
@@ -359,7 +357,8 @@ msgstr "Το torrent στο \"{0}\" δεν είναι έγκυρο"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1914
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:196
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1773
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1699
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1812
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
 msgstr "ΣΦΑΛΜΑ - Δεν υπάρχει μνήμη, δεν είναι δυνατή η δημιουργία torrent από το {0}"
@@ -403,7 +402,7 @@ msgstr "Η λήψη εκτελείται ήδη: {0}"
 #: ../java/src/org/klomp/snark/SnarkManager.java:2135
 #: ../java/src/org/klomp/snark/SnarkManager.java:2145
 #: ../java/src/org/klomp/snark/SnarkManager.java:2171
-#: ../java/src/org/klomp/snark/SnarkManager.java:2985
+#: ../java/src/org/klomp/snark/SnarkManager.java:2988
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "Απέτυχε η αντιγραφή του αρχείου torrent στο {0}"
@@ -477,88 +476,88 @@ msgstr "Το torrent καταργήθηκε: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "Προσθήκη torrent στο {0}"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:2794
-#: ../java/src/org/klomp/snark/SnarkManager.java:2805
+#: ../java/src/org/klomp/snark/SnarkManager.java:2797
+#: ../java/src/org/klomp/snark/SnarkManager.java:2808
 msgid "Connecting to I2P"
 msgstr "Σύνδεση σε I2P"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:2829
+#: ../java/src/org/klomp/snark/SnarkManager.java:2832
 #, java-format
 msgid "Starting up torrent {0}"
 msgstr "Εκκίνηση torrent {0}"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:2841
+#: ../java/src/org/klomp/snark/SnarkManager.java:2844
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
 msgstr "Το ανώτατο όριο εύρους ζώνης είναι {0} KBps"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:2874
+#: ../java/src/org/klomp/snark/SnarkManager.java:2877
 #, java-format
 msgid "I2P+ I2PSnark standalone version {0} started"
 msgstr "I2P+ I2PSNARK Standalone έκδοση {0} ξεκίνησε"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:2880
+#: ../java/src/org/klomp/snark/SnarkManager.java:2883
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "Το όριο εύρους ζώνης μεταφόρτωσης είναι {0} KBps σε μέγιστο αριθμό {1} ταυτόχρονων ομότιμων."
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:2915
-#: ../java/src/org/klomp/snark/SnarkManager.java:2921
+#: ../java/src/org/klomp/snark/SnarkManager.java:2918
+#: ../java/src/org/klomp/snark/SnarkManager.java:2924
 #, java-format
 msgid "Download finished: {0}"
 msgstr "Η λήψη ολοκληρώθηκε: {0}"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:2920
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:375
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:464
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:473
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2786
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4060
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4106
+#: ../java/src/org/klomp/snark/SnarkManager.java:2923
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:377
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:466
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:475
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2826
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4095
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4141
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
 #. addMessage(_t("Metainfo received for {0}", snark.getName()));
 #. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
-#: ../java/src/org/klomp/snark/SnarkManager.java:2982
-#: ../java/src/org/klomp/snark/SnarkManager.java:3302
+#: ../java/src/org/klomp/snark/SnarkManager.java:2985
+#: ../java/src/org/klomp/snark/SnarkManager.java:3305
 #, java-format
 msgid "Starting torrent: {0}"
 msgstr "Έναρξη torrent: {0}"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:3286
+#: ../java/src/org/klomp/snark/SnarkManager.java:3289
 msgid "Torrent not found"
 msgstr "Το torrent δεν βρέθηκε"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:3301
+#: ../java/src/org/klomp/snark/SnarkManager.java:3304
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:131
 msgid "Opening the I2P tunnel"
 msgstr "Άνοιγμα της σήραγγας I2P"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:3319
+#: ../java/src/org/klomp/snark/SnarkManager.java:3322
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "Άνοιγμα της σήραγγας I2P και εκκίνηση όλων των torrents."
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:3395
-#: ../java/src/org/klomp/snark/SnarkManager.java:3411
+#: ../java/src/org/klomp/snark/SnarkManager.java:3398
+#: ../java/src/org/klomp/snark/SnarkManager.java:3414
 msgid "Stopping all torrents and closing the I2P tunnel."
 msgstr "Διακοπή όλων των χειμάρρων και κλείσιμο της σήραγγας I2P."
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:3438
+#: ../java/src/org/klomp/snark/SnarkManager.java:3441
 msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Κλείσιμο της σήραγγας I2P μετά την ειδοποίηση των ιχνηλατών."
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:3508
+#: ../java/src/org/klomp/snark/SnarkManager.java:3511
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "Ολοκληρώθηκε ο επανέλεγχος του torrent {0}, τώρα ολοκληρώθηκε το {1}"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:3510
+#: ../java/src/org/klomp/snark/SnarkManager.java:3513
 #, java-format
 msgid "Finished recheck of torrent {0}, unchanged"
 msgstr "Ολοκληρώθηκε ο επανέλεγχος του torrent {0}, αμετάβλητος"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:3514
+#: ../java/src/org/klomp/snark/SnarkManager.java:3517
 #, java-format
 msgid "Error checking the torrent {0}"
 msgstr "Σφάλμα κατά τον έλεγχο του torrent {0}"
@@ -599,1287 +598,1298 @@ msgid "Torrent downloaded from {0}"
 msgstr "Λήψη torrent από {0}"
 
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:181
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1757
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1656
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1796
 #, java-format
 msgid "Torrent already in the queue: {0}"
 msgstr "Torrent ήδη στην ουρά: {0}"
 
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:194
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1730
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1770
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1692
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1769
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1809
 #, java-format
 msgid "Torrent at {0} was not valid"
 msgstr "Το torrent στο {0} δεν ήταν έγκυρο"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:380
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3341
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3778
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:382
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3376
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3813
 msgid "Configuration"
 msgstr "Ρυθμίσεις"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:384
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1310
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:386
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1312
 msgid "Debug Mode"
 msgstr "Λειτουργία εντοπισμού σφαλμάτων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:386
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:388
 msgid "Anonymous BitTorrent Client"
 msgstr "Ανώνυμος πελάτης BitTorrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:399
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:401
 msgid "I2PSnark has stopped"
 msgstr "Το I2PSnark έχει σταματήσει"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:399
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:401
 msgid "Router is down"
 msgstr "To router είναι εκτός λειτουργίας"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:408
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:410
 #, java-format
 msgid "Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?"
 msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε το αρχείο \\''{0}\\'' (τα δεδομένα που έχουν ληφθεί δεν θα διαγραφούν) ;"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:410
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:412
 #, java-format
 msgid "Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?"
 msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε το torrent \\''{0}\\'' και όλα τα ληφθέντα δεδομένα;"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:461
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:463
 msgid "Torrents"
 msgstr "Torrents"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:471
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:473
 msgid "Refresh page"
 msgstr "Ανανέωση σελίδας"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:480
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:482
 msgid "Forum"
 msgstr "Φόρουμ"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:480
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:482
 msgid "Torrent &amp; filesharing forum"
 msgstr "Torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:491
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:493
 msgid "BTDigg"
 msgstr "BTDigg"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:491
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:493
 msgid "I2P-based search engine for clearnet-hosted torrents"
 msgstr "Μηχανή αναζήτησης βασισμένη σε I2P για torrent που φιλοξενούνται στο clearnet"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:497
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:499
 msgid "Search torrents"
 msgstr "Αναζήτηση torrents"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:502
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:504
 msgid "Clear search"
 msgstr "Εκκαθάριση αναζήτησης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:509
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:511
 msgid "Click \"Add torrent\" button to fetch torrent"
 msgstr "Κάντε κλικ στο κουμπί \"Προσθήκη torrent\" για λήψη torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:663
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:665
 msgid "clear messages"
 msgstr "καθαρισμός μηνυμάτων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:667
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:669
 msgid "Expand"
 msgstr "Ανάπτυξη"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:671
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:673
 msgid "Shrink"
 msgstr "Συρρίκνωση"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:678
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:680
 #, java-format
 msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
 msgstr "Προειδοποίηση! Η Javascript είναι απενεργοποιημένη στον browser σας. Εάν το {0} είναι ενεργοποιημένο, θα χάσετε οποιαδήποτε εισροή στα τμήματα Add/Create Torrent όταν εμφανιστεί μια ανανέωση."
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:680
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:682
 msgid "page refresh"
 msgstr "ανανέωση σελίδας"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:689
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:691
 msgid "Warning - No I2P"
 msgstr "Προειδοποίηση - Όχι I2P"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:777
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:779
 msgid "Search"
 msgstr "Αναζήτηση"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:779
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:781
 msgid "Show All"
 msgstr "Εμφάνιση όλων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:793
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:795
 msgid "Active"
 msgstr "Ενεργός"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:795
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2848
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:797
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2888
 msgid "Inactive"
 msgstr "Ανενεργό"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:797
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:799
 msgid "Connected"
 msgstr "Συνδεδεμένο"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:799
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:801
 msgid "Downloading"
 msgstr "Λήψη"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:801
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2401
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:803
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2441
 msgid "Seeding"
 msgstr "Σπορά"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:803
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2411
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2457
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4294
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4765
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:805
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2451
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2497
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4329
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4800
 msgid "Complete"
 msgstr "Ολοκληρώθηκε"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:805
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:807
 msgid "Incomplete"
 msgstr "Ημιτελές"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:807
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2498
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:809
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2538
 msgid "Stopped"
 msgstr "Σταμάτησε"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:893
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:895
 msgid "Status"
 msgstr "Κατάσταση"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:894
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:946
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:978
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1013
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1051
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1088
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1121
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4665
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4678
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4691
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4701
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:896
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:948
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:980
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1015
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1053
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1090
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1123
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4700
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4713
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4726
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4736
 #, java-format
 msgid "Sort by {0}"
 msgstr "Ταξινόμηση κατά {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:910
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2437
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2472
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2484
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:912
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2477
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2512
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2524
 msgid "Hide Peers"
 msgstr "Απόκρυψη συνομηλίκων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:910
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:912
 msgid "Show Peers"
 msgstr "Εμφάνιση συνομηλίκων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:944
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4060
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4140
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4511
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4526
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:946
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4095
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4175
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4546
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4561
 msgid "Torrent"
 msgstr "Χείμαρος"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:946
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4665
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:948
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4700
 msgid "File type"
 msgstr "Τύπος αρχείου"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:946
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:948
 msgid "Torrent name"
 msgstr "Όνομα torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:977
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:979
 msgid "ETA"
 msgstr "ΕΤΑ"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:978
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:980
 msgid "Estimated time remaining"
 msgstr "Εκτιμώμενος χρόνος που απομένει"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1012
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1014
 msgid "RX"
 msgstr "RX"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1013
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1015
 msgid "Downloaded"
 msgstr "Λήψη"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1013
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4235
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4677
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1015
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4270
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4712
 msgid "Size"
 msgstr "Μέγεθος"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1050
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1052
 msgid "RX Rate"
 msgstr "Ρυθμός λήψης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1051
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1053
 msgid "Down Rate"
 msgstr "Μείωση ποσοστού"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1087
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1089
 msgid "TX"
 msgstr "Αποστολή"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1088
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2667
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4267
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1090
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2707
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4302
 msgid "Upload ratio"
 msgstr "Αναλογία μεταφόρτωσης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1088
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1090
 msgid "Uploaded"
 msgstr "Μεταφορτώθηκε"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1120
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1122
 msgid "TX Rate"
 msgstr "Επιτόκιο φόρτωσης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1121
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1123
 msgid "Up Rate"
 msgstr "Ανώτερος ρυθμός"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1132
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1134
 msgid "Stop All"
 msgstr "Σταματήστε όλα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1132
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1134
 msgid "Stop all torrents and the I2P tunnel"
 msgstr "Σταματήστε όλα τα torrents και τη σήραγγα I2P"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1137
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1143
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1139
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1145
 msgid "Start All"
 msgstr "Έναρξη όλων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1137
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1139
 msgid "Start all stopped torrents"
 msgstr "Έναρξη όλων των σταματημένων torrents"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1143
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1145
 msgid "Start all torrents and the I2P tunnel"
 msgstr "Ξεκινήστε όλα τα torrents και το τούνελ I2P"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1174
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1176
 msgid "No torrents found."
 msgstr "Δεν βρέθηκαν torrents."
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1176
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1178
 msgid "No torrents loaded."
 msgstr "Δεν έχουν φορτωθεί torrents."
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1196
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1198
 msgid "Totals"
 msgstr "Σύνολο"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1198
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1200
 #, java-format
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "1 torrent"
 msgstr[1] "{0} torrents"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1203
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1205
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} connected peers"
 msgstr[0] "1 συνδεδεμένος ομότιμος"
 msgstr[1] "{0} συνδέσεις ομότιμων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1212
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1214
 #, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "1 ομότιμος DHT"
 msgstr[1] "{0} DHT Peers"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1220
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1222
 msgid "Configured maximum (actual usage may be less)"
 msgstr "Ρυθμισμένο μέγιστο (η πραγματική χρήση μπορεί να είναι μικρότερη)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1221
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1223
 msgid "Tunnels"
 msgstr "Σήραγγες"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1224
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1226
 msgid "in"
 msgstr "σε"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1228
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1230
 msgid "out"
 msgstr "έξω"
 
 #. Only truncate if it's an actual dest
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1235
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1237
 msgid "Our destination (identity) for this session"
 msgstr "Ο προορισμός μας (ταυτότητα) για αυτήν την περίοδο σύνδεσης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1236
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1238
 msgid "Dest."
 msgstr "Dest."
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1265
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1267
 msgid "Estimated download time for all torrents"
 msgstr "Εκτιμώμενος χρόνος λήψης για όλα τα torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1275
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1277
 msgid "Data downloaded this session"
 msgstr "Η λήψη δεδομένων αυτής της περιόδου σύνδεσης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1281
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1283
 msgid "Total download speed"
 msgstr "Συνολική ταχύτητα λήψης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1287
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1289
 msgid "Total data uploaded (for listed torrents)"
 msgstr "Συνολικά μεταφορτωμένα δεδομένα (για καταχωρισμένα torrents)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1293
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1295
 msgid "Total upload speed"
 msgstr "Συνολική ταχύτητα μεταφόρτωσης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1309
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1311
 msgid "Enable Debug Mode"
 msgstr "Ενεργοποίηση λειτουργίας εντοπισμού σφαλμάτων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1313
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1315
 msgid "Disable Debug Mode"
 msgstr "Απενεργοποιήστε τη λειτουργία εντοπισμού σφαλμάτων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1314
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1316
 msgid "Normal Mode"
 msgstr "Κανονική λειτουργία"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1329
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1331
 msgid "No DHT Peers"
 msgstr "Χωρίς ομοτίμους DHT"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1544
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1546
 msgid "First"
 msgstr "Πρώτο"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1544
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1546
 msgid "First page"
 msgstr "Πρώτη σελίδα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1554
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1556
 msgid "Prev"
 msgstr "Προηγούμενο"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1554
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1556
 msgid "Previous page"
 msgstr "Προηγούμενη σελίδα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1584
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1586
 msgid "Next"
 msgstr "Επόμενο"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1584
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1586
 msgid "Next page"
 msgstr "Επόμενη σελίδα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1592
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1594
 msgid "Last"
 msgstr "Τελευταίο"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1592
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1594
 msgid "Last page"
 msgstr "Τελευταία σελίδα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1687
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2008
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1731
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2048
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "Δεν είναι δυνατή η προσθήκη torrent {0} μέσα σε άλλο torrent: {1}"
 
 #. TODO
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1705
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1744
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "Η λήψη από τοποθεσία που δεν ανήκει στο I2P {0} δεν υποστηρίζεται"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1779
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1818
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "Μη έγκυρη διεύθυνση URL: Πρέπει να ξεκινά με \"{0}\" ή \"{1}\""
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1822
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1858
+#. no file or URL specified
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1824
+msgid "Enter URL or select torrent file"
+msgstr "Εισαγάγετε τη διεύθυνση URL ή επιλέξτε αρχείο torrent"
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1862
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1898
 #, java-format
 msgid "Magnet deleted: {0}"
 msgstr "Διαγράφηκε ο μαγνήτης: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1835
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1871
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1875
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1911
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "Δεν ήταν δυνατή η διαγραφή του αρχείου torrent: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1856
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1896
 #, java-format
 msgid "Download deleted: {0}"
 msgstr "Η λήψη διαγράφηκε: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1882
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1922
 #, java-format
 msgid "Data file deleted: {0}"
 msgstr "Το αρχείο δεδομένων διαγράφηκε: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1884
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1894
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1924
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1934
 #, java-format
 msgid "Data file could not be deleted: {0}"
 msgstr "Δεν ήταν δυνατή η διαγραφή του αρχείου δεδομένων: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1911
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1951
 #, java-format
 msgid "Directory could not be deleted: {0}"
 msgstr "Δεν ήταν δυνατή η διαγραφή του καταλόγου: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1919
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1959
 #, java-format
 msgid "Directory deleted: {0}"
 msgstr "Διαγράφηκε ο κατάλογος: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1987
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2027
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
 msgstr "Δεν είναι δυνατή η προσθήκη torrent που τελειώνει σε \".torrent\": {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1992
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2032
 #, java-format
 msgid "Torrent with this name is already running: {0}"
 msgstr "Το torrent με αυτό το όνομα εκτελείται ήδη: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1998
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2038
 #, java-format
 msgid "Cannot add a torrent including an I2P directory: {0}"
 msgstr "Δεν είναι δυνατή η προσθήκη torrent που περιλαμβάνει έναν κατάλογο I2P: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2013
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2053
 #, java-format
 msgid "Cannot add torrent {0} including another torrent: {1}"
 msgstr "Δεν είναι δυνατή η προσθήκη torrent {0} συμπεριλαμβανομένου άλλου torrent: {1}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2039
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2079
 msgid "Error - Cannot include alternate trackers without a primary tracker"
 msgstr "Σφάλμα - Δεν είναι δυνατή η συμπερίληψη εναλλακτικών ιχνηλατών χωρίς κύριο πρόγραμμα παρακολούθησης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2052
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2092
 msgid "Error - Cannot mix private and public trackers in a torrent"
 msgstr "Σφάλμα - Δεν είναι δυνατή η ανάμειξη ιδιωτικών και δημόσιων ιχνηλατών σε ένα torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2074
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2114
 #, java-format
 msgid "Torrent created for \"{0}\""
 msgstr "Το torrent δημιουργήθηκε για το \"{0}\""
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2076
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2116
 #, java-format
 msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
 msgstr "Πολλοί ανιχνευτές I2P απαιτούν να καταχωρήσετε νέα torrents πριν από τη σπορά - κάντε το πριν ξεκινήσετε το \"{0}\""
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2078
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2118
 #, java-format
 msgid "Error creating a torrent for \"{0}\""
 msgstr "Σφάλμα κατά τη δημιουργία ενός torrent για το \"{0}\""
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2082
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2122
 #, java-format
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "Δεν είναι δυνατή η δημιουργία torrent για τα ανύπαρκτα δεδομένα: {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2085
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2125
 msgid "Error creating torrent - you must enter a file or directory"
 msgstr "Σφάλμα δημιουργίας torrent - πρέπει να εισαγάγετε ένα αρχείο ή έναν κατάλογο"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2151
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3758
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2191
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3793
 msgid "Delete selected"
 msgstr "Διαγραφή επιλεγμένων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2151
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3762
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2191
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3797
 msgid "Save tracker configuration"
 msgstr "Αποθήκευση διαμόρφωσης παρακολούθησης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2168
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2208
 msgid "Removed"
 msgstr "Αφαιρέθηκε"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2200
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3756
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3760
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5828
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2240
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3791
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3795
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5863
 msgid "Add tracker"
 msgstr "Προσθήκη ιχνηλάτη"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2223
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2226
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2263
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2266
 msgid "Enter valid tracker name and URLs"
 msgstr "Εισαγάγετε έγκυρο όνομα παρακολούθησης και διευθύνσεις URL"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2228
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3765
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2268
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3800
 msgid "Restore defaults"
 msgstr "Επαναφορά προεπιλογών"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2231
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2271
 msgid "Restored default trackers"
 msgstr "Επαναφορά προεπιλεγμένων ιχνηλατών"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2377
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4459
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2417
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4494
 msgid "Checking"
 msgstr "Γίνεται έλεγχος"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2382
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4466
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2422
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4501
 msgid "Allocating"
 msgstr "Κατανομή"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2390
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4464
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2430
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4499
 msgid "Starting"
 msgstr "Έναρξη"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2402
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2442
 #, java-format
 msgid "Seeding to {0} peer"
 msgid_plural "Seeding to {0} peers"
 msgstr[0] "Σπορά σε {0} ομότιμο"
 msgstr[1] "Σπορά στους συνομηλίκους {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2415
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2455
 #, java-format
 msgid "Seeding to {0} of {1} peers in swarm"
 msgstr "Σπορά σε {0} από {1} συνομηλίκους στο σμήνος"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2463
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2470
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2503
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2510
 msgid "OK"
 msgstr "ΟΚ"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2464
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2504
 #, java-format
 msgid "Downloading from {0} of {1} peers in swarm"
 msgstr "Λήψη από {0} από {1} ομότιμους στο σμήνος"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2470
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2510
 #, java-format
 msgid "Downloading from {0} peer"
 msgid_plural "Downloading from {0} peers"
 msgstr[0] "Λήψη από {0} ομότιμο"
 msgstr[1] "Λήψη από {0} συνομηλίκους"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2476
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2516
 #, java-format
 msgid "Connected to {0} peer"
 msgid_plural "Connected to {0} peers"
 msgstr[0] "Συνδεδεμένο με {0} peer"
 msgstr[1] "Συνδεδεμένο με τους συνομηλίκους {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2476
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2482
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2516
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2522
 msgid "Stalled"
 msgstr "Σταμάτημα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2483
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2489
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2523
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2529
 #, java-format
 msgid "Connected to {0} of {1} peers in swarm"
 msgstr "Συνδέθηκε με {0} από {1} συνομηλίκους στο σμήνος"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2488
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2494
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2528
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2534
 msgid "No Peers"
 msgstr "Όχι συνομήλικοι"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2555
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2595
 msgid "Torrent details"
 msgstr "Λεπτομέρειες torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2557
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2597
 msgid "Torrent has comments"
 msgstr "Το Torrent έχει σχόλια"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2586
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2626
 msgid "View files"
 msgstr "Εμφάνιση αρχείων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2588
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2628
 msgid "Open file"
 msgstr "Άνοιγμα αρχείου"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2611
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2651
 msgid "complete"
 msgstr "πλήρης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2611
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4777
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2651
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4812
 msgid "remaining"
 msgstr "απομένουν"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2622
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4285
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2662
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4320
 msgid "Completed"
 msgstr "Ολοκληρώθηκε"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2678
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4330
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2718
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4365
 msgid "Last activity"
 msgstr "Τελευταία δραστηριότητα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2716
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4471
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2756
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4506
 msgid "Stop"
 msgstr "Σταμάτα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2716
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2756
 msgid "Stop the torrent"
 msgstr "Σταματήστε το torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2722
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4473
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2762
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4508
 msgid "Start"
 msgstr "Έναρξη"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2722
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2762
 msgid "Start the torrent"
 msgstr "Ξεκινήστε το torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2728
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2768
 msgid "Remove"
 msgstr "Αφαίρεση"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2728
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2768
 msgid "Remove the torrent from the active list, deleting the .torrent file"
 msgstr "Καταργήστε το torrent από την ενεργή λίστα, διαγράφοντας το αρχείο .torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2737
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5780
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2777
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5815
 msgid "Delete"
 msgstr "Διαγραφή"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2737
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2777
 msgid "Delete the .torrent file and the associated data files"
 msgstr "Διαγράψτε το αρχείο .torrent και τα σχετικά αρχεία δεδομένων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2764
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2804
 msgid "Peer attached to swarm"
 msgstr "Συνομήλικοι προσκολλημένοι στο σμήνος"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2782
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2822
 msgid "Destination (identity) of peer"
 msgstr "Προορισμός (ταυτότητα) συνομήλικου"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2833
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2873
 msgid "Unknown"
 msgstr "Άγνωστο"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2845
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2885
 msgid "inactive"
 msgstr "ανενεργός"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2849
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2889
 msgid "seconds"
 msgstr "δευτερόλεπτα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2860
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2900
 msgid "Seed"
 msgstr "Σπόρος"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2896
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2936
 msgid "Uninteresting (The peer has no pieces we need)"
 msgstr "Δεν έχει ενδιαφέρον (Ο ομότιμος δεν έχει κομμάτια που χρειαζόμαστε)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2898
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2938
 msgid "Choked (The peer is not allowing us to request pieces)"
 msgstr "Πνιγμένος (Ο ομότιμος δεν μας επιτρέπει να ζητήσουμε κομμάτια)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2940
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2980
 msgid "Peer is interested but currently idle"
 msgstr "Ο Peer ενδιαφέρεται αλλά επί του παρόντος είναι αδρανής"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2945
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2985
 msgid "Uninterested (We have no pieces the peer needs)"
 msgstr "Χωρίς ενδιαφέρον (Δεν έχουμε κομμάτια που χρειάζονται οι συνομήλικοι)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2947
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2987
 msgid "Choking (We are not allowing the peer to request pieces)"
 msgstr "Πνιγμός (Δεν επιτρέπουμε στον ομότιμο να ζητήσει κομμάτια)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3081
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3121
 #, java-format
 msgid "Details at {0} tracker"
 msgstr "Λεπτομέρειες στο πρόγραμμα παρακολούθησης {0}"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3098
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3138
 msgid "Info"
 msgstr "Πληροφορίες"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3209
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3246
 msgid "Add Torrent"
 msgstr "Προσθήκη Torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3213
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3249
 msgid "From URL"
 msgstr "Από το URL"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3216
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3252
 msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
 msgstr "Εισαγάγετε τη διεύθυνση URL λήψης του αρχείου torrent (μόνο I2P), τον σύνδεσμο μαγνήτη ή τον κατακερματισμό πληροφοριών"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3221
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3255
 msgid "Add torrent"
 msgstr "Προσθήκη torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3225
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3257
+msgid "Torrent file"
+msgstr "Αρχείο torrent"
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3259
 msgid "Data dir"
 msgstr "Δεδομένα σκην"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3228
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3263
 #, java-format
 msgid "Enter the directory to save the data in (default {0})"
 msgstr "Εισαγάγετε τον κατάλογο στον οποίο θα αποθηκεύσετε τα δεδομένα (προεπιλογή {0})"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3246
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3281
 msgid "Create Torrent"
 msgstr "Δημιουργία Torrent"
 
 #. buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3249
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3284
 msgid "Data to seed"
 msgstr "Δεδομένα για σπόρους"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3253
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3288
 #, java-format
 msgid "File or directory to seed (full path or within the directory {0} )"
 msgstr "Αρχείο ή κατάλογος προς δημιουργία (πλήρης διαδρομή ή εντός του καταλόγου {0} )"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3256
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3291
 msgid "Create torrent"
 msgstr "Δημιουργία torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3260
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3681
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4343
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3295
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3716
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4378
 msgid "Trackers"
 msgstr "Ιχνηλάτες"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3262
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5780
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5812
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3297
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5815
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5847
 msgid "Primary"
 msgstr "Δημοτικό"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3264
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3299
 msgid "Alternates"
 msgstr "Αναπληρωματικοί"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3266
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3301
 msgid "Tracker Type"
 msgstr "Τύπος ιχνηλάτη"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3291
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3690
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3326
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3725
 msgid "Standard"
 msgstr "Γουιάνα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3294
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3692
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4842
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3329
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3727
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4877
 msgid "Open"
 msgstr "Άνοιγμα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3297
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3694
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3332
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3729
 msgid "Private"
 msgstr "Ιδιωτικό"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3301
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3336
 msgid "none"
 msgstr "κανένα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3348
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3383
 msgid "User Interface"
 msgstr "Διεπαφή χρήστη"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3351
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3386
 msgid "Switch to Embedded Mode"
 msgstr "Μετάβαση σε ενσωματωμένη λειτουργία"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3354
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3389
 msgid "Switch to Fullscreen Mode"
 msgstr "Μετάβαση σε λειτουργία πλήρους οθόνης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3359
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3394
 msgid "Theme"
 msgstr "Θέμμα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3363
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3398
 msgid "To change themes manually, disable universal theming"
 msgstr "Για να αλλάξετε θέματα με μη αυτόματο τρόπο, απενεργοποιήστε το καθολικό θέμα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3369
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3404
 msgid "Universal theming is enabled."
 msgstr "Το καθολικό θέμα είναι ενεργοποιημένο."
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3372
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3440
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3542
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5194
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3407
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3475
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3577
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5229
 msgid "Configure"
 msgstr "Διαμόρφωση"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3389
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3424
 msgid "Refresh time"
 msgstr "Χρόνος ανανέωσης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3391
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3426
 msgid "How frequently torrent status is updated on the main page"
 msgstr "Πόσο συχνά ενημερώνεται η κατάσταση torrent στην κύρια σελίδα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3405
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3440
 msgid "Never"
 msgstr "Ποτέ"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3410
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3445
 msgid "Page size"
 msgstr "Μέγεθος σελίδας"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3413
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3448
 msgid "Maximum number of torrents to display per page"
 msgstr "Μέγιστος αριθμός torrent για εμφάνιση ανά σελίδα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3415
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3450
 msgid "torrents"
 msgstr "torrents"
 
 #. If we get to here, we have the language settings
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3425
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3435
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3460
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3470
 msgid "Language"
 msgstr "Γλώσσα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3445
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3480
 msgid "Smart torrent sorting"
 msgstr "Έξυπνη ταξινόμηση torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3450
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3485
 msgid "Ignore words such as 'a' and 'the' when sorting"
 msgstr "Αγνοήστε λέξεις όπως 'a' και 'the' κατά την ταξινόμηση"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3453
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3488
 msgid "Collapsible panels"
 msgstr "Πτυσσόμενα πάνελ"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3460
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3495
 msgid "Your browser does not support this feature."
 msgstr "Το πρόγραμμα περιήγησής σας δεν υποστηρίζει αυτήν τη δυνατότητα."
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3464
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3499
 msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
 msgstr "Να επιτρέπεται η σύμπτυξη των πλαισίων «Προσθήκη Torrent» και «Δημιουργία Torrent» και η σύμπτυξη από προεπιλογή σε λειτουργία μη ενσωματωμένης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3468
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3503
 msgid "Torrent filter bar"
 msgstr "Γραμμή φίλτρου torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3473
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3508
 msgid "Show filter bar above torrents for selective display based on status"
 msgstr "Εμφάνιση γραμμής φίλτρου πάνω από torrents για επιλεκτική εμφάνιση με βάση την κατάσταση"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3474
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3483
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3509
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3518
 msgid "requires javascript"
 msgstr "Απαιτεί javascript"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3477
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3512
 msgid "Enable lightbox"
 msgstr "Ενεργοποίηση lightbox"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3482
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3517
 msgid "Use a lightbox to display images when thumbnails are clicked"
 msgstr "Χρησιμοποιήστε ένα lightbox για να εμφανίσετε εικόνες όταν κάνετε κλικ στις μικρογραφίες"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3486
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3521
 msgid "Persist Add/Create"
 msgstr "Επιμονή Προσθήκη/Δημιουργία"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3491
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3526
 msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
 msgstr "Εμφάνιση των ενοτήτων 'Προσθήκη' και 'Δημιουργία' σε όλες τις σελίδες καταχώρισης torrent όταν βρίσκεστε σε λειτουργία πολλών σελίδων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3498
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4586
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3533
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4621
 msgid "Comments &amp; Ratings"
 msgstr "Σχόλια"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3501
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3536
 msgid "Enable Ratings"
 msgstr "Ενεργοποίηση αξιολογήσεων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3505
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3540
 msgid "Show ratings on torrent pages"
 msgstr "Εμφάνιση αξιολογήσεων σε σελίδες torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3508
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3543
 msgid "Enable Comments"
 msgstr "Ενεργοποίηση σχολίων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3512
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3547
 msgid "Show comments on torrent pages"
 msgstr "Εμφάνιση σχολίων σε σελίδες torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3515
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3550
 msgid "Comment Author"
 msgstr "Σχόλιο Συγγραφέας"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3518
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3553
 msgid "Set the author name for your comments and ratings"
 msgstr "Ορίστε το όνομα του συγγραφέα για τα σχόλια και τις αξιολογήσεις σας"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3525
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3560
 msgid "Torrent Options"
 msgstr "Επιλογές torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3528
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3563
 msgid "Up bandwidth limit"
 msgstr "Αύξηση ορίου εύρους ζώνης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3532
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3567
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "Μέγιστο εύρος ζώνης που εκχωρείται για μεταφόρτωση"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3536
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3571
 msgid "Half available bandwidth recommended."
 msgstr "Συνιστάται το μισό διαθέσιμο εύρος ζώνης."
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3540
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3575
 msgid "View or change router bandwidth"
 msgstr "Προβολή ή αλλαγή εύρους ζώνης δρομολογητή"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3547
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3582
 msgid "Total uploader limit"
 msgstr "Συνολικό όριο μεταφόρτωσης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3551
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3586
 msgid "Maximum number of peers to upload to"
 msgstr "Μέγιστος αριθμός ομότιμων για μεταφόρτωση"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3553
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3588
 msgid "peers"
 msgstr "ομότιμοι"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3556
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3591
 msgid "Use open trackers also"
 msgstr "Χρησιμοποιήστε επίσης ανοιχτούς ιχνηλάτες"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3560
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3595
 msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
 msgstr "Ανακοινώστε torrents σε ανοιχτούς ιχνηλάτες καθώς και σε trackers που αναφέρονται στο αρχείο torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3563
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3598
 msgid "Enable DHT"
 msgstr "Ενεργοποίηση DHT"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3567
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3602
 msgid "Use DHT to find additional peers"
 msgstr "Χρησιμοποιήστε DHT για να βρείτε επιπλέον ομότιμους"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3570
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3605
 msgid "Auto start torrents"
 msgstr "Αυτόματη εκκίνηση torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3574
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3609
 msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
 msgstr "Αυτόματη εκκίνηση torrent όταν προστίθεται και επανεκκίνηση torrent όταν ξεκινά το I2PSnark"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3579
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3614
 msgid "Startup delay"
 msgstr "Καθυστέρηση εκκίνησης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3582
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3617
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
 msgstr "Πόσο καιρό πριν φορτωθούν τα torrent που ξεκινούν αυτόματα κατά την εκκίνηση του I2PSnark"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3584
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3619
 msgid "minutes"
 msgstr "λεπτά"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3592
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3627
 msgid "Data Storage"
 msgstr "Αποθήκευση δεδομένων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3595
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3630
 msgid "Data directory"
 msgstr "Κατάλογος δεδομένων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3597
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3632
 msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Κατάλογος όπου αποθηκεύονται τα torrent και τα ληφθέντα/κοινόχρηστα αρχεία"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3600
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3635
 msgid "Files readable by all"
 msgstr "Αρχεία αναγνώσιμα από όλους"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3603
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3638
 msgid "Set file permissions to allow other local users to access the downloaded files"
 msgstr "Ορισμός δικαιωμάτων αρχείων ώστε να επιτρέπεται σε άλλους τοπικούς χρήστες να έχουν πρόσβαση στα ληφθέντα αρχεία"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3606
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3641
 msgid "Max files per torrent"
 msgstr "Μέγιστος αριθμός αρχείων ανά torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3608
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3643
 msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
 msgstr "Μέγιστος επιτρεπόμενος αριθμός αρχείων ανά torrent - σημειώστε ότι οι ιχνηλάτες μπορούν να ορίσουν τα δικά τους όρια και το λειτουργικό σύστημα σας μπορεί να περιορίσει τον αριθμό των ανοιχτών αρχείων, αποτρέποντας τη φόρτωση torrent με πολλά αρχεία (και επακόλουθους torrents)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3615
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3650
 msgid "Tunnel Configuration"
 msgstr "Διαμόρφωση σήραγγας"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3621
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3656
 msgid "Inbound Settings"
 msgstr "Ρυθμίσεις εισερχόμενων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3628
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3663
 msgid "Outbound Settings"
 msgstr "Ρυθμίσεις εξόδου"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3637
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3672
 msgid "I2CP host"
 msgstr "Κεντρικός υπολογιστής I2CP"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3641
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3676
 msgid "I2CP port"
 msgstr "Θύρα I2CP"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3656
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3691
 msgid "I2CP options"
 msgstr "Επιλογές I2CP"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3665
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3700
 msgid "Save configuration"
 msgstr "Αποθήκευση διαμόρφωσης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3684
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3719
 msgid "Select trackers for removal from I2PSnark's known list"
 msgstr "Επιλέξτε ιχνηλάτες για κατάργηση από τη γνωστή λίστα του I2PSnark"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3686
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4665
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3721
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4700
 msgid "Name"
 msgstr "Όνομα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3688
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3723
 msgid "Website URL"
 msgstr "Διεύθυνση URL ιστότοπου"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3696
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5779
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5812
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3731
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5814
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5847
 msgid "Announce URL"
 msgstr "Ανακοινώστε τη διεύθυνση URL"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3709
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3744
 msgid "Mark tracker for deletion"
 msgstr "Επισήμανση παρακολούθησης για διαγραφή"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3746
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3781
 msgid "Add"
 msgstr "Προσθηκη"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3802
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3837
 #, java-format
 msgid "Invalid magnet URL {0}"
 msgstr "Μη έγκυρη διεύθυνση URL μαγνήτη {0}"
 
 #. * dummies for translation
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3810
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3845
 #, java-format
 msgid "1 hop"
 msgid_plural "{0} hops"
 msgstr[0] "1 λυκίσκο"
 msgstr[1] "{0} λυκίσκου"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3811
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3846
 #, java-format
 msgid "1 tunnel"
 msgid_plural "{0} tunnels"
 msgstr[0] "1 σήραγγα"
 msgstr[1] "{0} σήραγγες"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3826
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3861
 msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
 msgstr "Αυτό διαμορφώνει τον μέγιστο αριθμό σηράγγων προς άνοιγμα, που καθορίζεται από τον αριθμό των συνδεδεμένων ομότιμων (η πραγματική χρήση μπορεί να είναι μικρότερη)"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3830
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3865
 msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
 msgstr "Η αλλαγή αυτής της ρύθμισης σε λιγότερο από 3 άλματα μπορεί να βελτιώσει την ταχύτητα σε βάρος της ανωνυμίας και δεν συνιστάται"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4149
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4184
 msgid "Info hash"
 msgstr "Κατακερματισμός πληροφοριών"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4230
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4265
 msgid "Created"
 msgstr "Δημιουργία"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4243
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4643
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4278
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4678
 msgid "Files"
 msgstr "Αρχεία"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4252
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4287
 msgid "Added"
 msgstr "Προστέθηκε"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4257
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4292
 msgid "Pieces"
 msgstr "Κομμάτια"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4291
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4326
 msgid "Completion"
 msgstr "Ολοκλήρωση"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4310
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4691
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4345
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4726
 msgid "Remaining"
 msgstr "Υπόλοιπα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4319
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4354
 msgid "Skipped"
 msgstr "Παράλειψη"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4339
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4401
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4374
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4436
 msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
 msgstr "Θα χρησιμοποιηθούν μόνο ιχνηλάτες I2P. Εμφανίζονται μόνο οι ιχνηλάτες I2P μόνο για ενημερωτικούς σκοπούς"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4405
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4440
 msgid "Tracker"
 msgstr "Ιχνηλάτης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4425
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4460
 msgid "Web Seeds"
 msgstr "Σπόροι ιστού"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4462
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4497
 msgid "Refresh page for results"
 msgstr "Ανανέωση σελίδας για αποτελέσματα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4475
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4510
 msgid "Force Recheck"
 msgstr "Αναγκαστικός επανέλεγχος"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4478
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4513
 msgid "Stop the torrent in order to check file integrity"
 msgstr "Σταματήστε το torrent για να ελέγξετε την ακεραιότητα του αρχείου"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4482
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4517
 msgid "Check integrity of the downloaded files"
 msgstr "Ελέγξτε την ακεραιότητα των ληφθέντων αρχείων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4510
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4545
 msgid "Resource Not found"
 msgstr "Ο πόρος δεν βρέθηκε"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4512
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4525
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4547
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4560
 msgid "Base"
 msgstr "Βάση"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4523
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4558
 msgid "Resource Does Not Exist"
 msgstr "Ο πόρος δεν υπάρχει"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4524
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4559
 msgid "Resource"
 msgstr "Πόρος"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4550
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4585
 msgid "Audio file: "
 msgstr "Αρχείο ήχου: "
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4558
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4593
 msgid "Video file: "
 msgstr "Αρχείο βίντεο: "
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4646
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4681
 msgid "Directory"
 msgstr "Κατάλογος"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4689
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4724
 msgid "Download Status"
 msgstr "Κατάσταση λήψης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4700
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4735
 msgid "Download Priority"
 msgstr "Προτεραιότητα λήψης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4716
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4751
 msgid "Up to higher level directory"
 msgstr "Κατάλογος μέχρι υψηλότερου επιπέδου"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4728
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4763
 msgid "Audio Playlist"
 msgstr "Λίστα αναπαραγωγής ήχου"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4757
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4792
 msgid "Not found"
 msgstr "Δεν βρέθηκε"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4757
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4792
 msgid "Torrent not found?"
 msgstr "Το torrent δεν βρέθηκε;"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4762
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4797
 msgid "File not found in torrent?"
 msgstr "Δεν βρέθηκε το αρχείο σε torrent;"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4762
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4797
 msgid "Unrecognized"
 msgstr "Μη αναγνωρισμένη"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4816
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4851
 msgid "Preview"
 msgstr "Προεπισκόπηση"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4901
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4936
 msgid "Download file at high priority"
 msgstr "Λήψη αρχείου με υψηλή προτεραιότητα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4907
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4942
 msgid "High"
 msgstr "Υψηλό"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4909
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4944
 msgid "Download file at normal priority"
 msgstr "Λήψη αρχείου με κανονική προτεραιότητα"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4914
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4949
 msgid "Normal"
 msgstr "Τυπικός"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4915
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4950
 msgid "Do not download this file"
 msgstr "Μην κάνετε λήψη αυτού του αρχείου"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4920
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4955
 msgid "Skip"
 msgstr "Παράλειψη"
 
@@ -1894,108 +1904,108 @@ msgstr "Παράλειψη"
 #. .append("<a class=control id=setallskip href=#>")
 #. .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
 #.
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4941
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4976
 msgid "Save priorities"
 msgstr "Αποθήκευση προτεραιοτήτων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4957
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4992
 msgid "Comments"
 msgstr "Σχόλια"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5188
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5223
 msgid "Ratings and Comments"
 msgstr "Βαθμολογίες και σχόλια"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5192
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5227
 msgid "Author name required to rate or comment"
 msgstr "Απαιτείται όνομα συγγραφέα για αξιολόγηση ή σχόλιο"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5198
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5233
 msgid "Your author name for published comments and ratings"
 msgstr "Το όνομα του συγγραφέα σας για δημοσιευμένα σχόλια και αξιολογήσεις"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5205
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5240
 msgid "Enable viewing and posting comments for this torrent"
 msgstr "Ενεργοποιήστε την προβολή και τη δημοσίευση σχολίων για αυτό το torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5214
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5249
 msgid "Save Preference"
 msgstr "Αποθήκευση Προτίμησης"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5234
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5269
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
 msgstr[0] "1 αστέρι"
 msgstr[1] "{0} αστέρια"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5236
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5271
 msgid "No rating"
 msgstr "Χωρίς βαθμολογία"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5251
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5286
 msgid "Rate and Comment"
 msgstr "Βαθμολογία και Σχόλιο"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5253
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5288
 msgid "Rate Torrent"
 msgstr "Βαθμολογήστε το Torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5255
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5290
 msgid "Add Comment"
 msgstr "Προσθήκη σχολίου"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5268
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5303
 msgid "My Rating"
 msgstr "Η βαθμολογία μου"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5281
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5283
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5316
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5318
 msgid "Average Rating"
 msgstr "Μέση Βαθμολογία"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5284
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5319
 msgid "No community ratings currently available"
 msgstr "Δεν υπάρχουν διαθέσιμες αξιολογήσεις κοινότητας αυτήν τη στιγμή"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5330
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5365
 msgid "Submitted"
 msgstr "Υποβλήθηκε"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5334
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5795
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5369
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5830
 msgid "Mark for deletion"
 msgstr "Επιλογή προς διαγραφή"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5348
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5383
 msgid "Delete Selected"
 msgstr "Διαγραφή Επιλεγμένων"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5749
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5784
 msgid "Edit Torrent"
 msgstr "Επεξεργασία Torrent"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5779
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5814
 msgid "Active Trackers"
 msgstr "Ενεργοί ιχνηλάτες"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5810
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5845
 msgid "Add Tracker"
 msgstr "Προσθήκη Tracker"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5842
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5877
 msgid "Torrent Comment"
 msgstr "Torrent σχόλιο"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5849
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5884
 msgid "Torrent must be stopped in order to edit"
 msgstr "Το torrent πρέπει να σταματήσει για να γίνει επεξεργασία"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5855
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5890
 msgid "Save Changes"
 msgstr "Αποθήκευση αλλαγών"
 
 #. shouldn't happen
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5867
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:5902
 msgid "Torrent must be stopped"
 msgstr "Το torrent πρέπει να σταματήσει"

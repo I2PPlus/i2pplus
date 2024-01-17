@@ -5,9 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-23 13:20+0000\n"
-"PO-Revision-Date: 2017-10-30 21:21+0000\n"
+"PO-Revision-Date: 2023-12-12 06:17+0000\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -456,7 +455,7 @@ msgid "Marshall Islands"
 msgstr "Νησιά Μάρσαλ"
 
 msgid "Macedonia"
-msgstr "πρώην Γιουγκοσλαβική Δημοκρατία της Μακεδονίας"
+msgstr "Μακεδόνια"
 
 msgid "Mali"
 msgstr "Μάλι"
@@ -756,7 +755,7 @@ msgid "Samoa"
 msgstr "Σαμόα"
 
 msgid "Kosovo"
-msgstr ""
+msgstr "Κοσσυφοπέδιο"
 
 msgid "Yemen"
 msgstr "Υεμένη"

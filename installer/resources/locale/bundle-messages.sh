@@ -18,7 +18,7 @@ then
 	POUPDATE=1
 fi
 
-# on windows, one must specify the path of commnad find
+# on windows, one must specify the path of command find
 # since windows has its own version of find.
 if which find|grep -q -i windows ; then
 	export PATH=.:/bin:/usr/local/bin:$PATH

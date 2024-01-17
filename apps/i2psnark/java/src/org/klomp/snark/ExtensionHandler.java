@@ -191,6 +191,8 @@ abstract class ExtensionHandler {
                 }
                 if (log.shouldInfo())
                     log.info("Requesting chunk " + chk + " from [" + peer + "]");
+                // ignore the rv, always request
+                peer.shouldRequest(state.chunkSize(chk));
                 sendRequest(peer, chk);
             }
         } catch (Exception e) {
@@ -231,7 +233,6 @@ abstract class ExtensionHandler {
                 sendPiece(peer, piece, pc, totalSize);
                 // Do this here because PeerConnectionOut only reports for PIECE messages
                 peer.uploaded(pc.length);
-                listener.uploaded(peer, pc.length);
             } else if (type == TYPE_DATA) {
                 // On close reading of BEP 9, this is the total metadata size.
                 // Prior to 0.9.21, we sent the piece size, so we can't count on it.
@@ -246,7 +247,6 @@ abstract class ExtensionHandler {
                         return;
                     int len = is.available();
                     peer.downloaded(len);
-                    listener.downloaded(peer, len);
                     // this checks the size
                     done = state.saveChunk(piece, bs, bs.length - len, len);
                     if (log.shouldInfo())
@@ -265,6 +265,8 @@ abstract class ExtensionHandler {
                     // get the next chunk
                     if (log.shouldInfo())
                         log.info("Requesting chunk [" + chk + "] from [" + peer + "]");
+                    // ignore the rv, always request
+                    peer.shouldRequest(state.chunkSize(chk));
                     sendRequest(peer, chk);
                 }
             } else if (type == TYPE_REJECT) {

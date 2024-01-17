@@ -49,7 +49,7 @@
 </p>
 <%    } %>
 <div class=wideload>
-<form action="" method=POST>
+<form id=form_clients action="" method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="clientshelper" property="form1" />
 <div class=formaction id=clientsconfig>

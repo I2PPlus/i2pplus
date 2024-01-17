@@ -11,7 +11,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
-<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("graphs")%>
  <jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request" />
  <jsp:setProperty name="graphHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -26,6 +25,7 @@
         out.print(graphHelper.getRefreshMeta());
     }
 %>
+<script nonce="<%=cspNonce%>" src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body id=perfgraphs>
 <script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
@@ -58,47 +58,54 @@
 
   function injectCss() {
     graphImage.addEventListener("load", function() {
-      if (document.head.contains(graphcss))
-        if (graphcss)
+      if (document.head.contains(graphcss)) {
+        if (graphcss) {
           graphcss.remove();
-        var s = document.createElement("style");
-        s.setAttribute("id", "graphcss");
+        }
+      }
+      var s = document.createElement("style");
+      s.setAttribute("id", "graphcss");
 <%
-    if (graphHelper.getGraphHiDpi()) {
+      if (graphHelper.getGraphHiDpi()) {
 %>
-        if (graphWidth !== 0)
+        if (graphWidth !== 0) {
           var w = graphWidth / 2 + 8;
-        else
+        } else {
           var w = graphImage.width / 2 + 8;
-        if (graphHeight !== 0)
+        }
+        if (graphHeight !== 0) {
           var h = graphHeight / 2 + 8;
-        else
+        } else {
           var h = graphImage.height / 2 + 8;
+        }
         s.innerHTML = ".graphContainer#hidpi {width: " + w + "px; height: " + h + "px;}";
 <%
-    } else {
+      } else {
 %>
-        if (graphWidth !== 0)
+        if (graphWidth !== 0) {
           var w = graphWidth + 4;
-        else
+        } else {
           var w = graphImage.width + 4;
-        if (graphHeight !== 0)
+        }
+        if (graphHeight !== 0) {
           var h = graphHeight + 4;
-        else
+        } else {
           var h = graphImage.height + 4;
+        }
         s.innerHTML = ".graphContainer {width: " + w + "px; height: " + h + "px;}";
 <%
-    }
+      }
 %>
-        document.head.appendChild(s);
+      document.head.appendChild(s);
     });
   }
   function initCss() {
-      injectCss();
-      if (timer)
-        clearInterval(timer);
-      else if (!graphcss)
-        var timer = function() {setInterval(injectCss, 500)};
+    injectCss();
+    if (timer) {
+      clearInterval(timer);
+    } else if (!graphcss) {
+      var timer = function() {setInterval(injectCss, 500)};
+    }
   }
   initCss();
 <%
@@ -117,14 +124,16 @@ if (graph && visibility == "visible") {
         var graphResponse = xhrgraph.responseXML.getElementById("single");
         graph.innerHTML = graphResponse.innerHTML;
         graphImage.addEventListener("load", initCss());
+        progressx.hide();
+      } else {
+        progress.hide();
       }
     }
-    window.addEventListener("DOMContentLoaded", progressx.hide);
     xhrgraph.send();
   }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
 }
 <%  } %>
+window.addEventListener("DOMContentLoaded", progressx.hide);
 </script>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
 </body>
 </html>

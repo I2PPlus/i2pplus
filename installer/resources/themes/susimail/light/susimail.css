@@ -67,6 +67,7 @@ input,label{cursor:pointer}
 label:hover{color:#000}
 input[type=text]::placeholder,input[type=password]::placeholder{font-style:italic;text-transform:lowercase;opacity:.4}
 input[type=text]:focus::placeholder,input[type=password]:focus::placeholder{opacity:0}
+.attachSize{font-size:80%}
 #attachedfile input[type=checkbox]:hover,#attachedfile input[type=checkbox]:focus,.mailListDelete input[type=checkbox]:hover,.mailListDelete input[type=checkbox]:focus{filter:sepia(100%) hue-rotate(185deg) drop-shadow(0 0 2px #933)}
 input[type=text],input[type=password]{cursor:text;font-family:var(--bodyfont);font-size:9pt}
 input[type=submit],input[type=reset],#settings,.fakebutton{margin:3px;padding:4px 5px;vertical-align:middle;font:9pt var(--bodyfont);text-decoration:none;text-shadow:var(--txt_shadow);color:var(--ink_light);border:1px solid #9ea8d1;border-radius:2px;box-shadow:0 2px 0 rgba(255,255,255,.85) inset,0 0 10px rgba(0,0,0,.1) inset,0 1px 1px rgba(0,0,0,.05),0 7px 4px -4px rgba(0,0,0,.1);background:var(--btn);background-size:14px,100%;cursor:pointer;opacity:1;filter:drop-shadow(0 0 1px rgba(220,220,255,.7));}
@@ -251,7 +252,7 @@ td p.error{padding:10px}
 #composemail{text-align:center;padding:4px 8px 12px;border-radius:0 0 2px 2px;background:linear-gradient(90deg,#efefff,#fff,#efefff)}
 .iframed #composemail{border-bottom:0}
 #composemail hr{display:none}
-#composemail textarea{margin-bottom:7px;min-height:200px}
+#composemail textarea{margin-bottom:7px;min-height:200px;resize:vertical}
 #composemail textarea,#composemail input[type=text]{width:calc(100% - 20px);min-width:565px}
 #newmail{width:auto;margin:auto}
 #newmail td{padding:5px}
@@ -261,6 +262,7 @@ td p.error{padding:10px}
 /* attachments */
 .attached{margin:0;padding:15px 35px 15px 35px;overflow:auto;text-align:left;box-shadow:var(--highlight);background:var(--attach) no-repeat 10px center/16px,rgba(220,220,255,.2)}
 .attached img{margin-top:4px;padding:3px;max-width:100%;max-width:calc(100% - 10px);border:1px solid #555;border-radius:2px;background:#fff;text-align:center;filter:drop-shadow(0 0 1px #999);image-orientation:from-image}
+.thumbnail img{margin-left:16px;width:32px;height:32px;display:inline-block;object-fit:cover;vertical-align:middle;border-radius:4px;background:#ddf;image-orientation:from-image}
 #addattachment td{border-top:1px solid #bbd;padding-top:7px}
 #addattachment td:last-child::after{margin:5px 0 1px}
 #attachedfile{padding:4px 5px}

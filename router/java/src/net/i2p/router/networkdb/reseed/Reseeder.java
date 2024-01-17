@@ -25,6 +25,7 @@ import net.i2p.crypto.SU3File;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterClock;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.EventLog;
@@ -935,7 +936,7 @@ public class Reseeder {
                     String name = f.getName();
                     if (name.length() != ROUTERINFO_PREFIX.length() + 44 + ROUTERINFO_SUFFIX.length() ||
                         name.equals(ourB64) ||
-                        f.length() > 10*1024 ||
+                        f.length() > RouterInfo.MAX_UNCOMPRESSED_SIZE ||
                         f.lastModified() < minTime ||
                         !name.startsWith(ROUTERINFO_PREFIX) ||
                         !name.endsWith(ROUTERINFO_SUFFIX) ||
@@ -1264,7 +1265,7 @@ public class Reseeder {
             System.exit(1);
         }
         String[] urls = (args.length > 0) ? args : DataHelper.split(DEFAULT_SSL_SEED_URL, ",");
-        int pass = 0, fail = 0;
+        int pass = 0, warn = 0, fail = 0;
         SSLEepGet.SSLState sslState = null;
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         System.out.println("Initiating reseed hosts test...\n");
@@ -1283,6 +1284,7 @@ public class Reseeder {
                 } else {
                     get = new SSLEepGet(ctx, su3.getPath(), url, sslState);
                 }
+                long start = System.currentTimeMillis();
                 if (get.fetch()) {
                     int rc = get.getStatusCode();
                     if (rc == 200) {
@@ -1317,6 +1319,11 @@ public class Reseeder {
                         } else if (ri >= 50) {
                             System.out.println("Success:  " + ri + " RouterInfos returned");
                             pass++;
+                            long time = System.currentTimeMillis() - start;
+                            if (time > 30*1000) {
+                                System.out.println("Test very slow for " + host + ", took " + DataHelper.formatDuration(time));
+                                warn++;
+                            }
                         } else {
                             System.out.println("Failure:  only " + ri + " RouterInfos returned (less than 50)");
                             fail++;
@@ -1345,7 +1352,7 @@ public class Reseeder {
             }
             System.out.println();
         }
-        System.out.println("Test complete: " + (pass + fail) + " reseed hosts tested - " + pass + " passed, " + fail + " failed");
+        System.out.println("Test complete: " + (pass + fail) + " reseed hosts tested - " + pass + " passed, " + warn + " slow, " + fail + " failed");
         if (fail > 0)
             System.exit(1);
     }

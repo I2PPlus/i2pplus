@@ -5,16 +5,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2017-06-30 21:33+0000\n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 05:21+0000\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && "
-"(n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && "
-"n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
 #: ../i2prouter:236
 msgid "Failed to load the wrapper"
@@ -98,8 +95,7 @@ msgstr "$APP_LONG_NAME jest uruchomione: PID:$pid"
 #: ../i2prouter:1305
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr ""
-"$APP_LONG_NAME jest uruchomione: PID:$pid, Osłona:$STATUS, Java:$JAVASTATUS"
+msgstr "$APP_LONG_NAME jest uruchomione: PID:$pid, Osłona:$STATUS, Java:$JAVASTATUS"
 
 #: ../i2prouter:1358 ../i2prouter:1370 ../i2prouter:1389 ../i2prouter:1406
 #: ../i2prouter:1473 ../i2prouter:1493 ../i2prouter:1507 ../i2prouter:1521
@@ -153,19 +149,15 @@ msgstr "Uruchom w tle jako proces deamon."
 
 #: ../i2prouter:1887
 msgid "Stop if running as a daemon or in another console."
-msgstr ""
-"Zatrzymaj jeśli jest uruchomione jako deamon lub jest uruchomione w innej "
-"konsoli."
+msgstr "Zatrzymaj jeśli jest uruchomione jako deamon lub jest uruchomione w innej konsoli."
 
 #: ../i2prouter:1888
-#, fuzzy
 msgid "Stop gracefully, may take up to 11 minutes or more."
-msgstr "Wdzięczne zatrzymanie może potrwać nawet 11 minut."
+msgstr "Zatrzymaj się delikatnie. Może to zająć do 11 minut."
 
 #: ../i2prouter:1889
-#, fuzzy
 msgid "Restart gracefully, may take up to 11 minutes or more."
-msgstr "Wdzięczne zatrzymanie może potrwać nawet 11 minut."
+msgstr "Uruchom ponownie płynnie, może to potrwać do 11 minut."
 
 #: ../i2prouter:1890
 msgid "Stop if running and then start."

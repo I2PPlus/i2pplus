@@ -11,12 +11,12 @@ function stickySidebar() {
   var viewportWidth = window.visualViewport.width;
   var sectionToggle = document.querySelector("toggleSection");
   var iframe = document.querySelector(".embed");
+  let debug = false;
 
   function calcHeight() {
     if (sbWrap) {
-//      if ((sbHeight + 5) < viewportHeight && (htmlHeight > viewportHeight) && viewportWidth > 1500) {
-      if ((sbHeight + 5) < viewportHeight && (htmlHeight > viewportHeight) ||
-          (iframe !== null && iframe.getBoundingClientRect().height > viewportHeight)) {
+      if ((sbHeight + 5 < viewportHeight && (htmlHeight > viewportHeight) && viewportHeight > 700) ||
+          (iframe !== null && iframe.getBoundingClientRect().height > viewportHeight && viewportHeight > 700)) {
         sbWrap.style.position = "sticky";
         sbWrap.style.top = "5px";
         sbWrap.classList.add("sticky");
@@ -25,9 +25,11 @@ function stickySidebar() {
         sbWrap.style.top = null;
         sbWrap.classList.remove("sticky");
       }
-      //if (iframe !== null && iframe.getBoundingClientRect().height > viewportHeight) {
-      //  console.log("Iframe height currently reported as:" + iframe.getBoundingClientRect().height);
-      //}
+      if (debug) {
+        if (iframe !== null && iframe.getBoundingClientRect().height > viewportHeight) {
+          console.log("Iframe height currently reported as:" + iframe.getBoundingClientRect().height);
+        }
+      }
     }
   }
   calcHeight();

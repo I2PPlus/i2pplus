@@ -110,7 +110,7 @@ class ParticipatingThrottler {
         } else {
           v = "NoRI";
         }
-        String MIN_VERSION = "0.9.59";
+        String MIN_VERSION = "0.9.61";
 
         if (v.equals("0.0.0")) {
             if (shouldDisconnect) {

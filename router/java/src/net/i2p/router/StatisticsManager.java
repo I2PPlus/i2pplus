@@ -39,8 +39,7 @@ public class StatisticsManager {
     /** enhance anonymity by only including build stats one out of this many times */
 //    private static final int RANDOM_INCLUDE_STATS = 16;
     private static final int RANDOM_INCLUDE_STATS = 1024;
-    //// remove after release ////
-    private static final boolean SIMPLE_STATS = CoreVersion.PUBLISHED_VERSION.equals("0.9.58");
+    private static final boolean SIMPLE_STATS = true;
 
     private final DecimalFormat _fmt;
     private final DecimalFormat _pct;

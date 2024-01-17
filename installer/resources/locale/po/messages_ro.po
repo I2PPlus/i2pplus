@@ -5,15 +5,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2017-06-30 21:33+0000\n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 05:19+0000\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?"
-"2:1));\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
 #: ../i2prouter:236
 msgid "Failed to load the wrapper"
@@ -154,14 +152,12 @@ msgid "Stop if running as a daemon or in another console."
 msgstr "Oprește dacă rulează ca un daemon sau într-o altă consolă."
 
 #: ../i2prouter:1888
-#, fuzzy
 msgid "Stop gracefully, may take up to 11 minutes or more."
-msgstr "Oprirea corectă, poate dura peste 11 minute."
+msgstr "Oprește-te cu grație, poate dura până la 11 minute."
 
 #: ../i2prouter:1889
-#, fuzzy
 msgid "Restart gracefully, may take up to 11 minutes or more."
-msgstr "Oprirea corectă, poate dura peste 11 minute."
+msgstr "Reporniți bine, poate dura până la 11 minute."
 
 #: ../i2prouter:1890
 msgid "Stop if running and then start."
@@ -197,5 +193,4 @@ msgstr "Rularea I2P ca root *nu* este recomandată."
 
 #: ../i2prouter:1916
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
-msgstr ""
-"Pentru a rula ca root, oricum, editați i2prouter și setați ALLOW_ROOT=true."
+msgstr "Pentru a rula ca root, oricum, editați i2prouter și setați ALLOW_ROOT=true."

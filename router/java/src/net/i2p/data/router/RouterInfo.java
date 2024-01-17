@@ -87,6 +87,15 @@ public class RouterInfo extends DatabaseEntry {
     public static final char CAPABILITY_HIDDEN = 'H';
     private static final int MAX_ADDRESSES = 16;
 
+    /**
+     *  All legit RIs are currently under 2KB.
+     *  May need to be adjusted if we add a huge new enctype or sigtype.
+     *  Enforced in DatabaseStoreMessage, the transports, and reseed.
+     *
+     *  @since 0.9.62
+     */
+    public static final int MAX_UNCOMPRESSED_SIZE = 4*1024;
+
     /** Public string of chars which serve as bandwidth capacity markers
      * NOTE: individual chars defined in Router.java
      */
@@ -462,7 +471,6 @@ public class RouterInfo extends DatabaseEntry {
         return true;
     }
 
-
     /**
      * Pull the first workable target address for the given transport.
      * Use to check for any address. For all addresses, use getTargetAddresses(),
@@ -610,10 +618,11 @@ public class RouterInfo extends DatabaseEntry {
                 _isValid = DSAEngine.getInstance().verifySignature(_signature, hash, _identity.getSigningPublicKey());
                 _validated = true;
             } else {
+                // doValidate will log
                 doValidate();
             }
             if (!_isValid) {
-                throw new DataFormatException("Bad sig");
+                throw new DataFormatException("Bad RouterInfo signature");
             }
         }
 

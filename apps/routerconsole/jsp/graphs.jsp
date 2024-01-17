@@ -16,7 +16,7 @@
 <jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request" />
 <jsp:setProperty name="graphHelper" property="contextId" value="<%=i2pcontextId%>" />
 <% /* GraphHelper sets the defaults in setContextId, so setting the properties must be after the context */ %>
- <jsp:setProperty name="graphHelper" property="*" />
+<jsp:setProperty name="graphHelper" property="*" />
 <%
     graphHelper.storeWriter(out);
     graphHelper.storeMethod(request.getMethod());
@@ -89,17 +89,18 @@
           var graphsResponse = xhrgraphs.responseXML.getElementById("allgraphs");
           var graphsParent = graphs.parentNode;
           graphsParent.replaceChild(graphsResponse, graphs);
+          progressx.hide();
         } else {
           function isDown() {
             if (!nographs) {
               graphs.innerHTML = "<span id=nographs><b>No connection to Router<\/b><\/span>";
+              progressx.hide();
             }
           }
           setTimeout(isDown, 60000);
         }
       }
     }
-    window.addEventListener("DOMContentLoaded", progressx.hide);
     graph.addEventListener("load", initCss());
     if (visibility === "visible") {
       xhrgraphs.send();

@@ -1,11 +1,11 @@
 HTTP/1.1 403 Connection Reset
 Content-Type: text/html; charset=UTF-8
-Connection: close
-X-XSS-Protection: 1; mode=block
+Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline' http://proxy.i2p; form-action 'self' http://proxy.i2p; frame-ancestors 'self' http://127.0.0.1:7657/; img-src http://proxy.i2p data:; font-src http://proxy.i2p
+Referrer-Policy: no-referrer
 X-Content-Type-Options: nosniff
 X-Frame-Options: DENY
-Referrer-Policy: no-referrer
-Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline' http://proxy.i2p; form-action 'self' http://proxy.i2p; frame-ancestors 'self' http://127.0.0.1:7657/; img-src http://proxy.i2p data:; font-src http://proxy.i2p
+X-XSS-Protection: 1; mode=block
+Connection: close
 
 <!DOCTYPE HTML>
 <html>
@@ -15,7 +15,7 @@ Content-Security-Policy: default-src 'none'; style-src 'self' 'unsafe-inline' ht
 <link href=http://proxy.i2p/themes/console/default/proxy.css rel=stylesheet>
 <link rel="shortcut icon" href=http://proxy.i2p/themes/console/default/images/favicon.svg>
 <meta http-equiv="refresh" content="90">
-<style type="text/css">body::before{animation:linear loader 90s forwards}</style>
+<style>body::before{animation:linear loader 90s forwards}</style>
 </head>
 <body id=proxy_error style=display:none;pointer-events:none>
 <div class=logo>

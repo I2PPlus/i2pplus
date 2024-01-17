@@ -75,7 +75,7 @@ p.infowarn,td.infowarn{background:#000 url(images/infowarn.png) no-repeat right 
 #bandwidthconfig td:first-child:not(.infohelp){padding:0 5px 0 80px;background:url(/themes/console/images/info/arrow_left.png) no-repeat 30px center}
 #bannedips,#bannedips table{direction:ltr}
 #clientconfig td:nth-child(2){text-align:center}
-#clientconfig th:first-child,#clientconfig td:first-child,#loggingoptions td:first-child,#i2pupdates td:first-child,#tunnelconfig td:first-child,#i2pupdates textarea,#addkeyring td:first-child,#reseedconfig td:first-child{text-align:left}
+#clientconfig th:first-child,#clientconfig td:first-child,#loggingoptions td:first-child,#config_update td:first-child,#tunnelconfig td:first-child,#config_update textarea,#addkeyring td:first-child,#reseedconfig td:first-child{text-align:left}
 #config_logging p,#reseedconfig td.infohelp{text-align:right}
 #config_reseed .confignav + .infohelp + form{margin-left:-16px;margin-right:16px}
 #config_reseed #reseedurl,#config_reseed #reseedzip,#config_reseed #reseedcreatefile,#config_reseed #reseedurl:hover,#config_reseed #reseedzip:hover,#config_reseed #reseedcreatefile:hover{background-position:right 10px center;padding:10px 45px 10px 10px}
@@ -97,8 +97,8 @@ div[lang="ar"] ul li{list-style-image:url("images/link.png");list-style-position
 h3#iptransport a,th#upnpconfig a,h3#bwlimiter a,#config_stats h3 a,#config_logging h3 a,h3#graphdisplay a,#logs h3 a,h3#advancedconfig a{float:left}
 .h3navlinks,h3#servicedebug a,h3#graphinfo a,#config_stats.main h3 a,#config_logging.main h3 a,#configstats th a{float:left}
 .homelinkedit th:nth-child(3),.homelinkedit th:last-child{text-align:right}
-#i2pupdates .optbox{margin-right:10px}
-#i2pupdates td:first-child,#reseedconfig td:first-child,#configstats tr:last-child td,textarea[name="levels"]{text-align:right}
+#config_update .optbox{margin-right:10px}
+#config_update td:first-child,#reseedconfig td:first-child,#configstats tr:last-child td,textarea[name="levels"]{text-align:right}
 input[type="file"]:hover{border-radius:15px 0 0 15px;background:linear-gradient(to left,rgba(0,0,0,0),#003)}
 input[type=submit],input[type="reset"],input[type=submit]:hover,input[type="reset"]:hover,input[type=submit]:focus,input[type="reset"]:focus,input[type=submit]:active,input[type="reset"]:active{background-position:right 6px center;padding:5px 23px 7px 7px;max-height:28px}
 #installPluginFile td:last-child,#installPluginUrl td:last-child,#newfamily table td:last-child,#joinfamily table td:last-child{padding:10px 15px 10px 0}
@@ -128,7 +128,7 @@ select,select:hover,select:focus,select:active{background-position:left center;p
 textarea[name="trustedKeys"]{direction:ltr}
 #tunnelconfig th{text-align:right}
 #tunnels.main h3 a{float:left}
-#updateHelper b,#updateProxyHostPort b,#i2pupdates b{text-align:left}
+#updateHelper b,#updateProxyHostPort b,#config_update b{text-align:left}
 #service_logs,table[id$="logs"] ul,.logtable ul li{direction:ltr;text-align:left}
 #netconfig th,#externali2cp th,#plugininstall th,#plugininstall2 th,.configtable th,th.th_title{text-align:right}
 

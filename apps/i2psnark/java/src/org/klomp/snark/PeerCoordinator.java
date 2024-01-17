@@ -55,7 +55,7 @@ import org.klomp.snark.dht.DHT;
 /**
  * Coordinates what peer does what.
  */
-class PeerCoordinator implements PeerListener
+class PeerCoordinator implements PeerListener, BandwidthListener
 {
   private final Log _log;
 
@@ -128,6 +128,12 @@ class PeerCoordinator implements PeerListener
   /** Timer to handle all periodical tasks. */
   private final CheckEvent timer;
 
+  // RerequestEvent and related values
+  private final SimpleTimer2.TimedEvent rerequestTimer;
+  private final Object rerequestLock = new Object();
+  private boolean wasRequestAllowed;
+  private boolean isRerequestScheduled;
+
   private final byte[] id;
   private final byte[] infohash;
 
@@ -149,6 +155,7 @@ class PeerCoordinator implements PeerListener
 
   private final MagnetState magnetState;
   private final CoordinatorListener listener;
+  private final BandwidthListener bwListener;
   private final I2PSnarkUtil _util;
   private final RandomSource _random;
 
@@ -167,7 +174,7 @@ class PeerCoordinator implements PeerListener
    *  @param storage null if in magnet mode
    */
   public PeerCoordinator(I2PSnarkUtil util, byte[] id, byte[] infohash, MetaInfo metainfo, Storage storage,
-                         CoordinatorListener listener, Snark torrent)
+                         CoordinatorListener listener, Snark torrent, BandwidthListener bwl)
   {
     _util = util;
     _random = util.getContext().random();
@@ -178,6 +185,7 @@ class PeerCoordinator implements PeerListener
     this.storage = storage;
     this.listener = listener;
     this.snark = torrent;
+    bwListener = bwl;
 
     wantedPieces = new ArrayList<Piece>();
     setWantedPieces();
@@ -191,6 +199,9 @@ class PeerCoordinator implements PeerListener
     // this will help the behavior with global limits
     timer = new CheckEvent(_util.getContext(), new PeerCheckerTask(_util, this));
     timer.schedule((CHECK_PERIOD * 8 / 2) + _random.nextInt((int) CHECK_PERIOD * 8));
+
+    // NOT scheduled until needed
+    rerequestTimer = new RerequestEvent();
 
     // we don't store the last-requested time, so just delay a random amount
     _commentsLastRequested.set(util.getContext().clock().now() - (COMMENT_REQ_INTERVAL - _random.nextLong(COMMENT_REQ_DELAY)));
@@ -209,6 +220,42 @@ class PeerCoordinator implements PeerListener
       public void timeReached() {
           _task.run();
           schedule(CHECK_PERIOD);
+      }
+  }
+
+  /**
+   *  Rerequest after unthrottled
+   *  @since 0.9.62
+   */
+  private class RerequestEvent extends SimpleTimer2.TimedEvent {
+      /** caller must schedule */
+      public RerequestEvent() {
+          super(_util.getContext().simpleTimer2());
+      }
+
+      public void timeReached() {
+          if (bwListener.shouldRequest(null, 0)) {
+              if (_log.shouldWarn())
+                  _log.warn("Now unthrottled, rerequest timer poking all peers");
+              // so shouldRequest() won't fire us up again
+              synchronized(rerequestLock) {
+                  wasRequestAllowed = true;
+              }
+              for (Peer p : peers) {
+                  if (p.isInteresting() && !p.isChoked())
+                      p.request();
+              }
+              synchronized(rerequestLock) {
+                  isRerequestScheduled = false;
+              }
+          } else {
+              if (_log.shouldWarn())
+                  _log.warn("Still throttled, rerequest timer reschedule");
+              synchronized(rerequestLock) {
+                  wasRequestAllowed = false;
+              }
+              schedule(2*1000);
+          }
       }
   }
 
@@ -332,6 +379,78 @@ class PeerCoordinator implements PeerListener
     return downloaded.get();
   }
 
+  /////// begin BandwidthListener interface ///////
+
+  /**
+   * Called when a peer has uploaded some bytes of a piece.
+   * @since 0.9.62 params changed
+   */
+  public void uploaded(int size) {
+    uploaded.addAndGet(size);
+    bwListener.uploaded(size);
+  }
+
+  /**
+   * Called when a peer has downloaded some bytes of a piece.
+   * @since 0.9.62 params changed
+   */
+  public void downloaded(int size) {
+    downloaded.addAndGet(size);
+    bwListener.downloaded(size);
+  }
+
+  /**
+   * Should we send this many bytes?
+   * Do NOT call uploaded() if this returns true.
+   * @since 0.9.62
+   */
+  public boolean shouldSend(int size) {
+      boolean rv = bwListener.shouldSend(size);
+      if (rv)
+          uploaded.addAndGet(size);
+      return rv;
+  }
+
+  /**
+   * Should we request this many bytes?
+   * @since 0.9.62
+   */
+  public boolean shouldRequest(Peer peer, int size) {
+      boolean rv;
+      synchronized(rerequestLock) {
+          rv = bwListener.shouldRequest(peer, size);
+          if (!wasRequestAllowed && rv) {
+              // we weren't allowed and now we are
+              if (isRerequestScheduled) {
+                  // just let the timer run when scheduled, do not pull it in
+                  // to prevent thrashing
+                  //if (_log.shouldWarn())
+                  //    _log.warn("Now unthrottled, BUT DON'T reschedule rerequest timer");
+              } else {
+                  // schedule the timer
+                  // we still have to throw it to the timer so we don't loop
+                  if (_log.shouldWarn())
+                      _log.warn("Now unthrottled, schedule rerequest timer");
+                  isRerequestScheduled = true;
+                  // no rush, wait at little while
+                  rerequestTimer.reschedule(1000);
+              }
+              wasRequestAllowed = true;
+          } else if (wasRequestAllowed && !rv) {
+              // we were allowed and now we aren't
+              if (!isRerequestScheduled) {
+                  // schedule the timer
+                  if (_log.shouldWarn())
+                      _log.warn("Now throttled, schedule rerequest timer");
+                  isRerequestScheduled = true;
+                  rerequestTimer.schedule(3*1000);
+              }
+              wasRequestAllowed = false;
+          }
+      }
+      return rv;
+  }
+
   /**
    * Push the total uploaded/downloaded onto a RATE_DEPTH deep stack
    */
@@ -406,6 +525,49 @@ class PeerCoordinator implements PeerListener
     return rate / (factor * CHECK_PERIOD / 1000);
   }
 
+  /**
+   * Current limit in Bps
+   * @since 0.9.62
+   */
+  public long getUpBWLimit() {
+      return bwListener.getUpBWLimit();
+  }
+
+  /**
+   *  Is snark as a whole over its limit?
+   */
+  public boolean overUpBWLimit()
+  {
+    return bwListener.overUpBWLimit();
+  }
+
+  /**
+   *  Is a particular peer who has downloaded this many bytes from us
+   *  in the last CHECK_PERIOD over its limit?
+   */
+  public boolean overUpBWLimit(long total)
+  {
+    return total * 1000 / CHECK_PERIOD > getUpBWLimit();
+  }
+
+  /**
+   * Current limit in Bps
+   * @since 0.9.62
+   */
+  public long getDownBWLimit() {
+      return bwListener.getDownBWLimit();
+  }
+
+  /**
+   * Are we currently over the limit?
+   * @since 0.9.62
+   */
+  public boolean overDownBWLimit() {
+      return bwListener.overDownBWLimit();
+  }
+
+  /////// end BandwidthListener interface ///////
+
   public MetaInfo getMetaInfo()
   {
     return metainfo;
@@ -456,10 +618,12 @@ class PeerCoordinator implements PeerListener
     if (metainfo == null)
         return 6;
     int pieces = metainfo.getPieces();
-    if (pieces <= 2)
+    if (pieces <= 10)
         return 4;
-    if (pieces <= 5)
-        return 6;
+    if (pieces <= 25)
+        return 10;
+    if (pieces <= 80)
+        return 16;
     //int size = metainfo.getPieceLength(0);
     int max = _util.getMaxConnections();
     // Now that we use temp files, no memory concern
@@ -661,7 +825,7 @@ class PeerCoordinator implements PeerListener
           {
             public void run()
             {
-              peer.runConnection(_util, listener, bitfield, magnetState, partialComplete);
+              peer.runConnection(_util, listener, PeerCoordinator.this, bitfield, magnetState, partialComplete);
             }
           };
         String threadName = "Snark peer " + peer.toString();
@@ -684,6 +848,8 @@ class PeerCoordinator implements PeerListener
   void unchokePeer()
   {
     if (storage == null || storage.getBitField().size() == 0)
+        return;
+    if (overUpBWLimit())
         return;
 
     // linked list will contain all interested peers that we choke.
@@ -784,15 +950,6 @@ class PeerCoordinator implements PeerListener
    */
 //  private static final int MAX_PARALLEL_REQUESTS = 4;
   private static final int MAX_PARALLEL_REQUESTS = 8;
-
-  /**
-   * Returns one of pieces in the given BitField that is still wanted or
-   * -1 if none of the given pieces are wanted.
-   */
-  public int wantPiece(Peer peer, BitField havePieces) {
-      Piece pc = wantPiece(peer, havePieces, true);
-      return pc != null ? pc.getId() : -1;
-  }
 
   /**
    * Returns one of pieces in the given BitField that is still wanted or
@@ -1016,28 +1173,6 @@ class PeerCoordinator implements PeerListener
   }
 
   /**
-   * Called when a peer has uploaded some bytes of a piece.
-   */
-  public void uploaded(Peer peer, int size)
-  {
-    uploaded.addAndGet(size);
-
-    //if (listener != null)
-    //  listener.peerChange(this, peer);
-  }
-
-  /**
-   * Called when a peer has downloaded some bytes of a piece.
-   */
-  public void downloaded(Peer peer, int size)
-  {
-    downloaded.addAndGet(size);
-
-    //if (listener != null)
-    //  listener.peerChange(this, peer);
-  }
-
-  /**
    * Returns false if the piece is no good (according to the hash).
    * In that case the peer that supplied the piece should probably be
    * blacklisted.
@@ -1174,7 +1309,7 @@ class PeerCoordinator implements PeerListener
             }
             if (uploaders.get() < allowedUploaders())
               {
-                if(peer.isChoking())
+                if(peer.isChoking() && !overUpBWLimit())
                   {
                     uploaders.incrementAndGet();
                     interestedUploaders.incrementAndGet();
@@ -1233,7 +1368,7 @@ class PeerCoordinator implements PeerListener
    *  Also mark the piece unrequested if this peer was the only one.
    *
    *  @param peer partials, must include the zero-offset (empty) ones too.
-   *              No dup pieces, piece.setDownloaded() must be set.
+   *              No dup pieces.
    *              len field in Requests is ignored.
    *  @since 0.8.2
    */
@@ -1752,27 +1887,6 @@ class PeerCoordinator implements PeerListener
    */
   public void addInterestedAndChoking(int toAdd) {
       interestedAndChoking.addAndGet(toAdd);
-  }
-
-  /**
-   *  Is snark as a whole over its limit?
-   */
-  public boolean overUpBWLimit()
-  {
-    if (listener != null)
-        return listener.overUpBWLimit();
-    return false;
-  }
-
-  /**
-   *  Is a particular peer who has downloaded this many bytes from us
-   *  in the last CHECK_PERIOD over its limit?
-   */
-  public boolean overUpBWLimit(long total)
-  {
-    if (listener != null)
-        return listener.overUpBWLimit(total * 1000 / CHECK_PERIOD);
-    return false;
   }
 
   /**

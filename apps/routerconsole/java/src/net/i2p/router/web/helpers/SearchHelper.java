@@ -41,12 +41,12 @@ public class SearchHelper extends HelperBase {
         "psychonaut.i2p"           + S +     "http://psychonaut.i2p/w/index.php?search=%s&fulltext=Search" + S +
         "ramble.i2p"               + S +     "http://ramble.i2p/search?q=%s" + S +
         "slashdot.i2p"             + S +     "http://slashdot.i2p/index2.pl?fhfilter=%s" + S +
-        "teddit.i2p/r/i2p"         + S +     "http://teddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
+        "shmoogle.i2p"             + S +     "http://shmoogle.i2p/yacysearch.html?query=%s" + S +
+        "shreddit.i2p/r/i2p"       + S +     "http://shreddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
         "tracker2.postman.i2p"     + S +     "http://tracker2.postman.i2p/?search=%s" + S +
         "tube.i2p"                 + S +     "http://tube.i2p/search?query=%s" + S +
         "wiki.i2p-projekt.i2p"     + S +     "http://wiki.i2p-projekt.i2p/wiki/index.php?search=%s" + S +
         "wikiless.i2p"             + S +     "http://wikiless.i2p/w/index.php?search=%s&fulltext=Search" + S +
-        "wired.i2p"                + S +     "http://wired.i2p/search/?q=%s" + S +
         "wordnik.i2p"              + S +     "http://wordnik.i2p/words?myWord=%s" +
         //"ebooks.i2p"               + S +     "http://ebooks.i2p/index.php?page=9&query=%s" + S +
         //"eepsites.i2p"             + S +     "http://eepsites.i2p/Content/Search/SearchResults.aspx?inpQuery=%s" + S +
@@ -57,13 +57,14 @@ public class SearchHelper extends HelperBase {
         //"ransack.i2p"              + S +     "http://ransack.i2p/?q=%s" + S +
         //"searchthis.i2p"           + S +     "http://searchthis.i2p/cgi-bin/search.cgi?q=%s" + S +
         //"seeker.i2p"               + S +     "http://seeker.i2p/index.php?query=%s" + S +
-        //"shmoogle.i2p"             + S +     "http://shmoogle.i2p/yacysearch.html?query=%s" + S +
         //"simple-search.i2p"        + S +     "http://simple-search.i2p/search.sh?search=%s" + S +
         //"sprongle.i2p"             + S +     "http://sprongle.i2p/sprongle.php?q=%s" + S +
         //"stackoverflow.i2p"        + S +     "http://duckduckgo.i2p/?q=site%3Astackoverflow.com+%s" + S +
+        //"teddit.i2p/r/i2p"         + S +     "http://teddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
         //"tome.i2p"                 + S +     "http://tome.i2p/search.php?q=%s" + S +
         //"torrentfinder.i2p"        + S +     "http://torrentfinder.i2p/?searchq=%s" + S +
         //"trac.i2p2.i2p"            + S +     "http://trac.i2p2.i2p/search?q=%s" + S +
+        //"wired.i2p"                + S +     "http://wired.i2p/search/?q=%s" + S +
         //"yacy.idk.i2p"             + S +     "http://yacy.idk.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + S +
         //"zzz.i2p"                  + S +     "http://zzz.i2p/search?type=posts&query=%s" + //S +
         "";

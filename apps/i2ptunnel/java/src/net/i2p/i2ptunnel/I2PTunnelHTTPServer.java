@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Stream;
 import java.util.zip.GZIPOutputStream;
 
 import java.net.InetAddress;
@@ -186,6 +187,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</body>\n" +
          "</html>";
 
+/*
     private final static String ERR_SSL =
          "HTTP/1.1 503 Service Unavailable\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n" +
@@ -197,6 +199,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "<hr>\n" +
          "</body>\n" +
          "</html>";
+*/
 
     private final static String ERR_REQUEST_URI_TOO_LONG =
          "HTTP/1.1 414 Request URI too long\r\n" +
@@ -308,7 +311,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         return dflt;
     }
 
-    /** @since 0.9.60+ */
+    /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderAllow() {
         Properties opts = getTunnel().getClientOptions();
             boolean addAllowHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_ALLOW));
@@ -319,7 +322,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /** @since 0.9.60+ */
+    /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeadercacheControl() {
         Properties opts = getTunnel().getClientOptions();
             boolean addCacheControlHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL));
@@ -330,7 +333,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /** @since 0.9.60+ */
+    /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderCacheControl() {
         Properties opts = getTunnel().getClientOptions();
             boolean addCacheControlHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL));
@@ -341,7 +344,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /** @since 0.9.60+ */
+    /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderReferrerPolicy() {
         Properties opts = getTunnel().getClientOptions();
             boolean addReferrerPolicyHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY));
@@ -352,7 +355,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /** @since 0.9.60+ */
+    /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderNoSniff() {
         Properties opts = getTunnel().getClientOptions();
             boolean addNoSniffPolicyHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_NOSNIFF));
@@ -394,21 +397,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     protected void blockingHandle(I2PSocket socket) {
         Hash peerHash = socket.getPeerDestination().calculateHash();
         String peerB32 = socket.getPeerDestination().toBase32();
-        if (_log.shouldInfo())
+        if (_log.shouldInfo()) {
             _log.info("[HTTPServer] Incoming connection to " + toString() + " (port " + socket.getLocalPort() + ")" +
                       "\n* From: " + peerB32 + " on port " + socket.getPort());
+        }
         // local is fast, so synchronously. Does not need that many threads.
         try {
             if (socket.getLocalPort() == 443) {
                 if (getTunnel().getClientOptions().getProperty("targetForPort.443") == null) {
                     try {
-                        socket.getOutputStream().write(ERR_SSL.getBytes("UTF-8"));
-                    } catch (IOException ioe) {
-                    } finally {
-                        try {
-                            socket.close();
-                        } catch (IOException ioe) {}
-                    }
+                        // can't write non-ssl error message
+                        // client side already sent 200 to browser
+                        socket.reset();
+                    } catch (IOException ioe) {}
                     return;
                 }
                 Socket s = getSocket(socket.getPeerDestination().calculateHash(), 443);
@@ -431,53 +432,58 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 headers = readHeaders(socket, null, command, CLIENT_SKIPHEADERS, getTunnel().getContext());
             } catch (SocketTimeoutException ste) {
                 try {
-                    socket.getOutputStream().write(ERR_REQUEST_TIMEOUT.getBytes("UTF-8"));
+                    sendError(socket, ERR_REQUEST_TIMEOUT);
                 } catch (IOException ioe) {
                 } finally {
-                     try { socket.close(); } catch (IOException ioe) {}
+                    try { socket.close(); } catch (IOException ioe) {}
                 }
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("[HTTPServer] Error in the HTTP request (timeout) \n* Client: " + peerB32);
+                }
                 return;
             } catch (EOFException eofe) {
                 try {
-                    socket.getOutputStream().write(ERR_BAD_REQUEST.getBytes("UTF-8"));
+                    sendError(socket, ERR_BAD_REQUEST);
                 } catch (IOException ioe) {
                 } finally {
-                     try { socket.close(); } catch (IOException ioe) {}
+                    try { socket.close(); } catch (IOException ioe) {}
                 }
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("[HTTPServer] Error in the HTTP request (EOF exception) \n* Client: " + peerB32);
+                }
                 return;
             } catch (LineTooLongException ltle) {
                 try {
-                    socket.getOutputStream().write(ERR_HEADERS_TOO_LARGE.getBytes("UTF-8"));
+                    sendError(socket, ERR_HEADERS_TOO_LARGE);
                 } catch (IOException ioe) {
                 } finally {
-                     try { socket.close(); } catch (IOException ioe) {}
+                    try { socket.close(); } catch (IOException ioe) {}
                 }
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("[HTTPServer] Error in the HTTP request (headers too large) \n* Client: " + peerB32);
+                }
                 return;
             } catch (RequestTooLongException rtle) {
                 try {
-                    socket.getOutputStream().write(ERR_REQUEST_URI_TOO_LONG.getBytes("UTF-8"));
+                    sendError(socket, ERR_REQUEST_URI_TOO_LONG);
                 } catch (IOException ioe) {
                 } finally {
                      try { socket.close(); } catch (IOException ioe) {}
                 }
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("[HTTPServer] Error in the HTTP request (URI too long) \n* Client: " + peerB32);
+                }
                 return;
             } catch (BadRequestException bre) {
                 try {
-                    socket.getOutputStream().write(ERR_BAD_REQUEST.getBytes("UTF-8"));
+                    sendError(socket, ERR_BAD_REQUEST);
                 } catch (IOException ioe) {
                 } finally {
-                     try { socket.close(); } catch (IOException ioe) {}
+                    try { socket.close(); } catch (IOException ioe) {}
                 }
-                if (_log.shouldWarn())
+                if (_log.shouldWarn()) {
                     _log.warn("[HTTPServer] Error in the HTTP request (bad request) \n* Client: " + peerB32, bre);
+                }
                 return;
             }
             long afterHeaders = getTunnel().getContext().clock().now();
@@ -508,7 +514,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 try {
                     // Send a 403, so the user doesn't get an HTTP Proxy error message
                     // and blame his router or the network.
-                    socket.getOutputStream().write(ERR_INPROXY.getBytes("UTF-8"));
+                    sendError(socket, ERR_INPROXY);
                 } catch (IOException ioe) {}
                 try {
                     socket.close();
@@ -525,11 +531,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         // "Referer: "
                         referer = referer.substring(9);
                         if (referer.startsWith("http://") || referer.startsWith("https://")) {
-                            if (_log.shouldWarn())
+                            if (_log.shouldWarn()) {
                                 _log.warn("[HTTPServer] Refusing access (bad referer) \n* Client: " + peerB32 +
                                           "\n* Referer: " + referer);
+                            }
                             try {
-                                socket.getOutputStream().write(ERR_INPROXY.getBytes("UTF-8"));
+                                sendError(socket, ERR_INPROXY);
                             } catch (IOException ioe) {}
                             try {
                                 socket.close();
@@ -552,11 +559,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                 if (ag.equals("none"))
                                     continue;
                                 if (ag.length() > 0 && ua.contains(ag)) {
-                                    if (_log.shouldWarn())
+                                    if (_log.shouldWarn()) {
                                         _log.warn("[HTTPServer] Refusing access (bad user agent) \n* Client: " + peerB32 +
                                                   "\n* User-Agent: " + ua);
+                                    }
                                     try {
-                                        socket.getOutputStream().write(ERR_INPROXY.getBytes("UTF-8"));
+                                        sendError(socket, ERR_INPROXY);
                                     } catch (IOException ioe) {}
                                     try {
                                         socket.close();
@@ -574,10 +582,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         for (int i = 0; i < agents.length; i++) {
                             String ag = agents[i].trim();
                             if (ag.equals("none")) {
-                                if (_log.shouldWarn())
+                                if (_log.shouldWarn()) {
                                     _log.warn("[HTTPServer] Refusing access (blank user agent) \n* Client: " + peerB32);
+                                }
                                 try {
-                                    socket.getOutputStream().write(ERR_INPROXY.getBytes("UTF-8"));
+                                    sendError(socket, ERR_INPROXY);
                                 } catch (IOException ioe) {}
                                 try {
                                     socket.close();
@@ -593,12 +602,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 (command.substring(0, 5).toUpperCase(Locale.US).equals("POST ") ||
                  command.substring(0, 4).toUpperCase(Locale.US).equals("PUT "))) {
                 if (_postThrottler.shouldThrottle(peerHash)) {
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("[HTTPServer] Refusing POST/PUT since peer is throttled \n* Client: " + peerB32);
+                    }
                     try {
                         // Send a 429, so the user doesn't get an HTTP Proxy error message
                         // and blame his router or the network.
-                        socket.getOutputStream().write(ERR_DENIED.getBytes("UTF-8"));
+                        sendError(socket, ERR_DENIED);
                     } catch (IOException ioe) {}
                     try {
                         socket.close();
@@ -690,10 +700,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                           "ms; Socket create: " + (afterSocket-afterHeaders) +
                           "ms; Start runners: " + (afterHandle-afterSocket) + "ms");
         } catch (SocketException ex) {
+            int port = socket.getLocalPort();
             try {
                 // Send a 503, so the user doesn't get an HTTP Proxy error message
                 // and blame his router or the network.
-                socket.getOutputStream().write(ERR_UNAVAILABLE.getBytes("UTF-8"));
+                sendError(socket, ERR_UNAVAILABLE);
             } catch (IOException ioe) {}
             try {
                 socket.close();
@@ -701,7 +712,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             // Don't complain too early, Jetty may not be ready.
             int level = getTunnel().getContext().clock().now() - _startedOn > START_INTERVAL ? Log.ERROR : Log.WARN;
             if (_log.shouldLog(level))
-                _log.log(level, "[HTTPServer] Error connecting to " + remoteHost + ':' + remotePort + "\n* " + ex.getMessage());
+                _log.log(level, "Error connecting to HTTP server " + getSocketString(port));
         } catch (IOException ex) {
             try {
                 socket.close();
@@ -714,7 +725,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             try {
                 // Send a 503, so the user doesn't get an HTTP Proxy error message
                 // and blame his router or the network.
-                socket.getOutputStream().write(ERR_UNAVAILABLE.getBytes("UTF-8"));
+                sendError(socket, ERR_UNAVAILABLE);
             } catch (IOException ioe) {}
             try {
                 socket.close();
@@ -722,6 +733,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             if (_log.shouldError())
                 _log.error("[HTTPServer] Out of Memory error", oom);
         }
+    }
+
+    /**
+     *  Send the message, unless port 443, then just reset
+     *  @since 0.9.62
+     */
+    private static void sendError(I2PSocket socket, String resp) throws IOException {
+        if (socket.getLocalPort() == 443)
+            socket.reset();
+        else
+            socket.getOutputStream().write(resp.getBytes("UTF-8"));
     }
 
     private static class CompressedRequestor implements Runnable {
@@ -1021,12 +1043,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // Add referrer-policy headers if not set
                 boolean securityHeaders = Arrays.asList(customWhitelist).contains(mimeType);
                 if (_headers != null && securityHeaders) {
-                    boolean rp = headers.containsKey("Referrer-Policy".toLowerCase());
+                    boolean rp = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("Referrer-Policy"));
                     if (!rp) {
                         setEntry(headers, "Referrer-Policy", "same-origin");
                     }
                     // Set restrictive allow headers if not set
-                    boolean allow = headers.containsKey("Allow".toLowerCase());
+                    boolean allow = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("Allow"));
                     if (!allow) {
                         setEntry(headers, "Allow", "GET, POST, HEAD");
                     }
@@ -1035,7 +1057,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // Set cache-control to immutable if not set for custom mimetypes, no-cache for everything else
                 boolean immutableCache = Arrays.stream(immutableCacheWhitelist).anyMatch(mimeType::matches);
                 if (_headers != null) {
-                    boolean cc = headers.containsKey("Cache-Control".toLowerCase());
+                    boolean cc = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("Cache-Control"));
                     if (cacheControlList != null) {
                         boolean hasNoCache = cc && headers.get("Cache-Control").contains("no-cache".toLowerCase());
                         // Override cache-control for static content with no-cache policy
@@ -1051,12 +1073,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
 
                 // Add x-xss-protection header if not present
-                boolean xss = headers.containsKey("X-XSS-Protection".toLowerCase());
+                boolean xss = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("X-XSS-Protection"));
                 if (_headers != null && !xss) {
                     setEntry(headers, "X-XSS-Protection", "1; mode=block");
                 }
 
-                boolean nosniff = headers.containsKey("X-Content-Type-Options".toLowerCase());
+                boolean nosniff = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("X-Content-Type-Options"));
                 if (_headers != null && !nosniff) {
                     setEntry(headers, "X-Content-Type-Options", "nosniff");
                 }

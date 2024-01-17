@@ -84,16 +84,13 @@ class ClientManager {
     /** Disable local-local "loopback", force all traffic through tunnels @since 0.9.44 */
     private static final String PROP_DISABLE_LOOPBACK = "i2cp.disableLoopback";
 
-//    private static final int INTERNAL_QUEUE_SIZE = 256;
     private static final int INTERNAL_QUEUE_SIZE = SystemVersion.isSlow() ? 192 : SystemVersion.getMaxMemory() < 1024*1024*1024 ? 384 : 512;
 
-//    private static final long REQUEST_LEASESET_TIMEOUT = 60*1000;
     private static final long REQUEST_LEASESET_TIMEOUT = 90*1000;
 
     /** 2 bytes, save 65535 for unknown */
     private static final int MAX_SESSION_ID = 65534;
     private static final String PROP_MAX_SESSIONS = "i2cp.maxSessions";
-//    private static final int DEFAULT_MAX_SESSIONS = 50;
     private static final int DEFAULT_MAX_SESSIONS = 512;
     /** 65535 */
     public static final SessionId UNKNOWN_SESSION_ID = new SessionId(MAX_SESSION_ID + 1);
@@ -459,11 +456,13 @@ class ClientManager {
 
     /**
      * Distribute message to a local or remote destination.
+     *
+     * @param sender non-null
      * @param msgId the router's ID for this message
      * @param messageNonce the client's ID for this message
      * @param flags ignored for local
      */
-    void distributeMessage(Destination fromDest, Destination toDest, Payload payload,
+    void distributeMessage(ClientConnectionRunner sender, Destination fromDest, Destination toDest, Payload payload,
                            MessageId msgId, long messageNonce, long expiration, int flags) {
         ClientConnectionRunner runner;
         if (_ctx.getBooleanProperty(PROP_DISABLE_LOOPBACK)) {
@@ -475,22 +474,19 @@ class ClientManager {
         if (runner != null) {
             if (_log.shouldDebug())
                 _log.debug("[Message " + msgId + "] is targeting a local destination; distribute it as such");
-            ClientConnectionRunner sender = getRunner(fromDest);
-            if (sender == null) {
-                // sender went away
-                return;
-            }
+            if (runner != sender) {
             // run this inline so we don't clog up the job queue
             Job j = new DistributeLocal(toDest, runner, sender, fromDest, payload, msgId, messageNonce);
             //_ctx.jobQueue().addJob(j);
             j.runJob();
+            } else {
+                if (_log.shouldWarn())
+                    _log.warn("Loopback attempt from client " + fromDest.getHash());
+                int rc = MessageStatusMessage.STATUS_SEND_FAILURE_LOOPBACK;
+                sender.updateMessageDeliveryStatus(fromDest, msgId, messageNonce, rc);
+            }
         } else if (!_metaDests.isEmpty() && _metaDests.contains(toDest)) {
             // meta dests don't have runners but are local, and you can't send to them
-            ClientConnectionRunner sender = getRunner(fromDest);
-            if (sender == null) {
-                // sender went away
-                return;
-            }
             int rc = MessageStatusMessage.STATUS_SEND_FAILURE_BAD_LEASESET;
             sender.updateMessageDeliveryStatus(fromDest, msgId, messageNonce, rc);
         } else {
@@ -787,7 +783,7 @@ class ClientManager {
      *
      * @param destHash destination hash associated with the client who's subDb we're looking for, may be null
      * @return will be null if desthash is null or client does not exist or its netDb is not initialized
-     * @since 0.9.60
+     * @since 0.9.61
      */
     public FloodfillNetworkDatabaseFacade getClientFloodfillNetworkDatabaseFacade(Hash destHash) {
         if (destHash != null) {
@@ -810,7 +806,7 @@ class ClientManager {
      * get all the primary hashes for all the clients and return them as a set
      *
      * @return non-null
-     * @since 0.9.60
+     * @since 0.9.61
      */
     public Set<Hash> getPrimaryHashes() {
         Set<Hash> rv = new HashSet<Hash>();

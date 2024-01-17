@@ -529,7 +529,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
 
     /**
-     * @throws I2PException if session is closed; as of 0.9.60, this is an I2PSessionException which extends I2PException
+     * @throws I2PException if session is closed; as of 0.9.61, this is an I2PSessionException which extends I2PException
      */
     private void verifySession() throws I2PException {
         verifySession(_connectionManager.getSession());

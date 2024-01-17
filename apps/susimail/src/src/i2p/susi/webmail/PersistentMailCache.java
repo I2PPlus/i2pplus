@@ -205,22 +205,33 @@ class PersistentMailCache {
 	}
 
 	private boolean locked_getMail(Mail mail, boolean headerOnly) {
+		boolean found = false;
 		File f = getFullFile(mail.uidl);
 		if (f.exists()) {
+			found = true;
 			Buffer rb = read(f);
 			if (rb != null) {
 				mail.setBody(rb);
 				return true;
+			} else {
+				if (_log.shouldWarn())
+					_log.warn("Unable to read file " + f);
 			}
 		}
 		f = getHeaderFile(mail.uidl);
 		if (f.exists()) {
+			found = true;
 			Buffer rb = read(f);
 			if (rb != null) {
 				mail.setHeader(rb);
 				return true;
+			} else {
+				if (_log.shouldWarn())
+					_log.warn("Unable to read file " + f);
 			}
 		}
+		if (!found && _log.shouldWarn())
+			_log.warn("Unable to find file " + f + " for mail " + Base64.encode(mail.uidl));
 		return false;
 	}
 
@@ -374,6 +385,8 @@ class PersistentMailCache {
 	 *  @return null on failure
 	 */
 	private static Buffer read(File f) {
+		if (!f.canRead())
+			return null;
 		return new GzipFileBuffer(f);
 	}
 
@@ -396,20 +409,44 @@ class PersistentMailCache {
 		} else {
 			return null;
 		}
-		if (uidl == null)
+		if (uidl == null) {
+			Log log = I2PAppContext.getGlobalContext().logManager().getLog(PersistentMailCache.class);
+			if (log.shouldWarn())
+				log.warn("Unable to extract UIDL from file " + f);
 			return null;
+		}
 		Buffer rb = read(f);
-		if (rb == null)
+		if (rb == null) {
+			Log log = I2PAppContext.getGlobalContext().logManager().getLog(PersistentMailCache.class);
+			if (log.shouldWarn())
+				log.warn("Unable to read file " + f);
 			return null;
+		}
 		Mail mail;
 		if (isDrafts)
 			mail = new Draft(uidl);
 		else
 			mail = new Mail(uidl);
-		if (headerOnly)
+		if (headerOnly) {
 			mail.setHeader(rb);
-		else
+		} else if (isDrafts) {
+			// drafts always have FULL_SUFFIX but
+			// may not actually have a real body or part.
+			// If we don't call setBody(), it has
+			// a null part and we NPE on the compose page.
+			// Attachments are stored in separate files so
+			// these are all small.
 			mail.setBody(rb);
+		} else {
+			// Deferred loading, body will be loaded
+			// on-demand in MailCache.getMail()
+			// We set the size of the gzipped file to be the
+			// size so the UI doesn't have ?? in it.
+			// The size will be corrected if and when the body is read.
+			//mail.setBody(rb);
+			mail.setHeader(rb);
+			mail.setSize(f.length());
+		}
 		return mail;
 	}
 

@@ -37,6 +37,13 @@
     xhrstats.responseType = "document";
     xhrstats.onreadystatechange = function () {
       if (xhrstats.readyState==4 && xhrstats.status==200) {
+        var info = document.getElementById("gatherstats");
+        if (info) {
+          var infoResponse = xhrstats.responseXML.getElementById("gatherstats");
+          if (infoResponse && !Object.is(info.innerHTML, infoResponse.innerHTML)) {
+            info.innerHTML = infoResponse.innerHTML;
+          }
+        }
         var statlist = document.getElementById("statlist");
         var statlistResponse = xhrstats.responseXML.getElementById("statlist");
         var statlistParent = statlist.parentNode;

@@ -35,7 +35,8 @@
 <p class=infohelp id=webappconfigtext>
 <%=intl._t("The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook).").replace(" They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook).", "")%>
 </p>
-<form action="configwebapps" method=POST>
+<iframe name=processForm id=processForm hidden></iframe>
+<form id=form_webapps action="configwebapps" method=POST target=processForm>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="clientshelper" property="form2" />
 <div class=formaction id=webappconfigactions>
@@ -45,6 +46,12 @@
 </form>
 </div>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+<script nonce=<%=cspNonce%>>
+  const webappsForm = document.getElementById("form_webapps");
+  const processForm = document.getElementById("processForm");
+  window.addEventListener("DOMContentLoaded", progressx.hide);
+  webappsForm.addEventListener("submit", progressx.show);
+  processForm.addEventListener("load", progressx.hide);
+</script>
 </body>
 </html>

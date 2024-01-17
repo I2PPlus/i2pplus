@@ -448,7 +448,6 @@ class ClientConnectionRunner {
         if (id == null)
             return;
         boolean isPrimary = false;
-        Hash dbid = getDestHash();
         for (Iterator<SessionParams> iter = _sessions.values().iterator(); iter.hasNext(); ) {
             SessionParams sp = iter.next();
             if (id.equals(sp.sessionId)) {
@@ -806,7 +805,7 @@ class ClientConnectionRunner {
         // the following blocks as described above
         Destination fromDest = getDestination(message.getSessionId());
         if (fromDest != null)
-            _manager.distributeMessage(fromDest, dest, payload,
+            _manager.distributeMessage(this, fromDest, dest, payload,
                                        id, message.getNonce(), expiration, flags);
         // else log error?
         //long timeToDistribute = _context.clock().now() - beforeDistribute;
@@ -1161,7 +1160,7 @@ class ClientConnectionRunner {
      * If a session has not been created yet, it will return null.
      *
      * @return the client netdb or null if no session was created yet
-     * @since 0.9.60
+     * @since 0.9.61
      */
     public FloodfillNetworkDatabaseFacade getFloodfillNetworkDatabaseFacade() {
         return _floodfillNetworkDatabaseFacade;

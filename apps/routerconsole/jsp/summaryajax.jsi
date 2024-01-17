@@ -1,3 +1,4 @@
+<%@page trimDirectiveWhitespaces="true"%>
 <% if (!intl.getDisableRefresh()) { %>
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
@@ -5,8 +6,8 @@
   import {stickySidebar} from "/js/stickySidebar.js";
   import {onVisible} from "/js/onVisible.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
-  const refreshInterval = refresh * 1000;
-  let sbRefreshTimerId = null;
+  window.refreshInterval = refresh * 1000;
+  window.sbRefreshTimerId = null;
   const sb = document.getElementById("sidebar");
   const initSidebarRefresh = () => {
     clearInterval(sbRefreshTimerId);
@@ -29,10 +30,26 @@
   const onDomContentLoaded = () => {
     sectionToggler();
     stickySidebar();
-    initSidebarRefresh();
+    if (sbRefreshTimerId === null) {
+      initSidebarRefresh();
+    }
+    if (sbRefreshTimerId === null && sb) {
+      onVisible(sb, () => {
+        if (sbRefreshTimerId === null) {
+          initSidebarRefresh();
+        }
+      }, () => {
+        if (sbRefreshTimerId !== null) {
+          stopSidebarRefresh();
+        }
+      });
+    }
   };
-  window.addEventListener("DOMContentLoaded", onDomContentLoaded);
-  window.addEventListener("resize", () => stickySidebar());
+  document.addEventListener("DOMContentLoaded", function() {
+    sectionToggler();
+    stickySidebar();
+  });
+  window.addEventListener("resize", stickySidebar);
 </script>
 <% } else { %>
 <script nonce="<%=cspNonce%>" type="module">
@@ -44,11 +61,10 @@
     sectionToggler();
     stickySidebar();
   }
-  function onWindowResize() {
+  document.addEventListener("DOMContentLoaded", function() {
+    sectionToggler();
     stickySidebar();
-  }
-  document.addEventListener("DOMContentLoaded", onDomContentLoaded);
-  window.addEventListener("DOMContentLoaded", onDomContentLoaded);
-  window.addEventListener("resize", onWindowResize);
+  });
+  window.addEventListener("resize", stickySidebar);
 </script>
 <% } %>

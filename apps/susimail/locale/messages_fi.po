@@ -5,25 +5,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2023-11-25 14:02+0000\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 05:56+0000\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.1\n"
 
 #: src/src/i2p/susi/webmail/MailCache.java:529
 #: src/src/i2p/susi/webmail/WebMail.java:2410
 #, java-format
 msgid "{0} new message"
 msgid_plural "{0} new messages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} uusi viesti"
+msgstr[1] "{0} uutta viestiä"
 
 #: src/src/i2p/susi/webmail/MailCache.java:532
 msgid "Email"
@@ -169,8 +165,8 @@ msgstr "Luonnos tallennettu."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1049
 #: src/src/i2p/susi/webmail/WebMail.java:1290
-#: src/src/i2p/susi/webmail/WebMail.java:2740
-#: src/src/i2p/susi/webmail/WebMail.java:2923
+#: src/src/i2p/susi/webmail/WebMail.java:2747
+#: src/src/i2p/susi/webmail/WebMail.java:2930
 msgid "Unable to save mail."
 msgstr "Sähköpostia ei voi tallentaa."
 
@@ -194,7 +190,7 @@ msgid "end forwarded mail"
 msgstr "edelleenlähetetyn sähköpostiviestin loppu"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1296
-#: src/src/i2p/susi/webmail/WebMail.java:3611
+#: src/src/i2p/susi/webmail/WebMail.java:3618
 msgid "Could not fetch mail body."
 msgstr "Sähköpostiviestin rungon noutaminen epäonnistui."
 
@@ -220,7 +216,7 @@ msgstr "Liitettä ei löytynyt."
 #: src/src/i2p/susi/webmail/WebMail.java:1620
 #: src/src/i2p/susi/webmail/WebMail.java:1622
 #: src/src/i2p/susi/webmail/WebMail.java:2304
-#: src/src/i2p/susi/webmail/WebMail.java:3617
+#: src/src/i2p/susi/webmail/WebMail.java:3624
 msgid "Message not found."
 msgstr "Viestiä ei löydetty."
 
@@ -250,13 +246,13 @@ msgid "Invalid pagesize number, resetting to default value."
 msgstr "SIvun koko virheellinen, käytetään oletusarvoa."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2282
-#: src/src/i2p/susi/webmail/WebMail.java:3162
+#: src/src/i2p/susi/webmail/WebMail.java:3169
 msgid "Login"
 msgstr "Kirjaudu sisään"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2284
 #: src/src/i2p/susi/webmail/WebMail.java:2426
-#: src/src/i2p/susi/webmail/WebMail.java:3179
+#: src/src/i2p/susi/webmail/WebMail.java:3186
 msgid "Loading messages, please wait..."
 msgstr "Ladataan viestejä, odota..."
 
@@ -268,7 +264,7 @@ msgstr[0] "1 viesti"
 msgstr[1] "{0} viestiä"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2294
-#: src/src/i2p/susi/webmail/WebMail.java:3380
+#: src/src/i2p/susi/webmail/WebMail.java:3387
 msgid "No messages"
 msgstr "Ei viestejä"
 
@@ -310,304 +306,304 @@ msgstr "{0} on I2P-yksinomainen palvelu, jonka tarjoaa {1}."
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2648
-#: src/src/i2p/susi/webmail/WebMail.java:3296
-#: src/src/i2p/susi/webmail/WebMail.java:3586
+#: src/src/i2p/susi/webmail/WebMail.java:2655
+#: src/src/i2p/susi/webmail/WebMail.java:3303
+#: src/src/i2p/susi/webmail/WebMail.java:3593
 msgid "no subject"
 msgstr "ei aihetta"
 
-#: src/src/i2p/susi/webmail/WebMail.java:2776
+#: src/src/i2p/susi/webmail/WebMail.java:2783
 msgid "Found no valid sender address."
 msgstr "Kelvollinen lähettäjän osoite puuttuu."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2782
+#: src/src/i2p/susi/webmail/WebMail.java:2789
 #, java-format
 msgid "Found no valid address in \\''{0}\\''."
 msgstr "Kohdassa ”{0}” ei ollut kelvollista osoitetta."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2796
+#: src/src/i2p/susi/webmail/WebMail.java:2803
 msgid "No recipients found."
 msgstr "Ei vastaanottajia."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2810
+#: src/src/i2p/susi/webmail/WebMail.java:2817
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:302
 #, java-format
 msgid "Email is too large, max is {0}"
 msgstr "Sähköposti on liian suuri, maksimi on {0}"
 
-#: src/src/i2p/susi/webmail/WebMail.java:2855
-#: src/src/i2p/susi/webmail/WebMail.java:2936
+#: src/src/i2p/susi/webmail/WebMail.java:2862
+#: src/src/i2p/susi/webmail/WebMail.java:2943
 msgid "Sending mail."
 msgstr "Postin lähettäminen."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2860
+#: src/src/i2p/susi/webmail/WebMail.java:2867
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:254
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:346
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:351
 msgid "Error sending mail"
 msgstr "Virhe lähetettäessä postia"
 
-#: src/src/i2p/susi/webmail/WebMail.java:2894
+#: src/src/i2p/susi/webmail/WebMail.java:2901
 msgid "Mail sent."
 msgstr "Viesti lähetetty."
 
-#: src/src/i2p/susi/webmail/WebMail.java:2983
+#: src/src/i2p/susi/webmail/WebMail.java:2990
 msgid "Send"
 msgstr "Lähetä"
 
-#: src/src/i2p/susi/webmail/WebMail.java:2984
+#: src/src/i2p/susi/webmail/WebMail.java:2991
 msgid "Save as Draft"
 msgstr "Tallenna luonnoksena"
 
-#: src/src/i2p/susi/webmail/WebMail.java:2985
-#: src/src/i2p/susi/webmail/WebMail.java:3405
-#: src/src/i2p/susi/webmail/WebMail.java:3495
-#: src/src/i2p/susi/webmail/WebMail.java:3669
+#: src/src/i2p/susi/webmail/WebMail.java:2992
+#: src/src/i2p/susi/webmail/WebMail.java:3412
+#: src/src/i2p/susi/webmail/WebMail.java:3502
+#: src/src/i2p/susi/webmail/WebMail.java:3676
 msgid "Cancel"
 msgstr "Peruuta"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3073
-#: src/src/i2p/susi/webmail/WebMail.java:3247
-#: src/src/i2p/susi/webmail/WebMail.java:3591
+#: src/src/i2p/susi/webmail/WebMail.java:3080
+#: src/src/i2p/susi/webmail/WebMail.java:3254
+#: src/src/i2p/susi/webmail/WebMail.java:3598
 msgid "From"
 msgstr "Lähettäjä"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3076
-#: src/src/i2p/susi/webmail/WebMail.java:3247
-#: src/src/i2p/susi/webmail/WebMail.java:3593
+#: src/src/i2p/susi/webmail/WebMail.java:3083
+#: src/src/i2p/susi/webmail/WebMail.java:3254
+#: src/src/i2p/susi/webmail/WebMail.java:3600
 msgid "To"
 msgstr "Vastaanottaja"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3078
-#: src/src/i2p/susi/webmail/WebMail.java:3596
+#: src/src/i2p/susi/webmail/WebMail.java:3085
+#: src/src/i2p/susi/webmail/WebMail.java:3603
 msgid "Cc"
 msgstr "Kopio"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3080
+#: src/src/i2p/susi/webmail/WebMail.java:3087
 msgid "Bcc"
 msgstr "Piilokopio"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3082
-#: src/src/i2p/susi/webmail/WebMail.java:3249
-#: src/src/i2p/susi/webmail/WebMail.java:3598
+#: src/src/i2p/susi/webmail/WebMail.java:3089
+#: src/src/i2p/susi/webmail/WebMail.java:3256
+#: src/src/i2p/susi/webmail/WebMail.java:3605
 msgid "Subject"
 msgstr "Aihe"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3088
+#: src/src/i2p/susi/webmail/WebMail.java:3095
 msgid "Add Attachment"
 msgstr "Lisää liite"
 
 #. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
-#: src/src/i2p/susi/webmail/WebMail.java:3091
+#: src/src/i2p/susi/webmail/WebMail.java:3098
 msgid "Add attachment"
 msgstr "Lisää liite"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3098
+#: src/src/i2p/susi/webmail/WebMail.java:3105
 msgid "Attachments"
 msgstr "Liitteet"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3109
+#: src/src/i2p/susi/webmail/WebMail.java:3116
 msgid "Delete selected attachments"
 msgstr "Poista valitut liitteet"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3125
+#: src/src/i2p/susi/webmail/WebMail.java:3132
 msgid "I2PMail Login"
 msgstr "I2PMmail Kirjautuminen"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3129
+#: src/src/i2p/susi/webmail/WebMail.java:3136
 msgid "User"
 msgstr "Käyttäjä"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3130
+#: src/src/i2p/susi/webmail/WebMail.java:3137
 msgid "Username"
 msgstr "Käyttäjänimi"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3134
-#: src/src/i2p/susi/webmail/WebMail.java:3135
+#: src/src/i2p/susi/webmail/WebMail.java:3141
+#: src/src/i2p/susi/webmail/WebMail.java:3142
 msgid "Password"
 msgstr "Salasana"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3137
+#: src/src/i2p/susi/webmail/WebMail.java:3144
 msgid "Toggle password visibility"
 msgstr "Vaihda salasanan näkyvyys"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3143
+#: src/src/i2p/susi/webmail/WebMail.java:3150
 msgid "Host"
 msgstr "Tietokoneen nimi"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3148
+#: src/src/i2p/susi/webmail/WebMail.java:3155
 msgid "POP3 Port"
 msgstr "POP3 -portti"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3153
+#: src/src/i2p/susi/webmail/WebMail.java:3160
 msgid "SMTP Port"
 msgstr "SMTP -portti"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3162
+#: src/src/i2p/susi/webmail/WebMail.java:3169
 msgid "Read Mail Offline"
 msgstr "Lue postia ilman verkkoyhteyttä"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3163
-#: src/src/i2p/susi/webmail/WebMail.java:3409
+#: src/src/i2p/susi/webmail/WebMail.java:3170
+#: src/src/i2p/susi/webmail/WebMail.java:3416
 msgid "Settings"
 msgstr "Asetukset"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3168
+#: src/src/i2p/susi/webmail/WebMail.java:3175
 msgid "Learn about I2PMail"
 msgstr "Lisätietoja I2PMailista"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3169
+#: src/src/i2p/susi/webmail/WebMail.java:3176
 msgid "Create Account"
 msgstr "Luo tili"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3194
-#: src/src/i2p/susi/webmail/WebMail.java:3519
+#: src/src/i2p/susi/webmail/WebMail.java:3201
+#: src/src/i2p/susi/webmail/WebMail.java:3526
 msgid "New"
 msgstr "Uusi"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3207
+#: src/src/i2p/susi/webmail/WebMail.java:3214
 msgid "Check Mail"
 msgstr "Tarkista posti"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3215
+#: src/src/i2p/susi/webmail/WebMail.java:3222
 msgid "Refresh Page"
 msgstr "Päivitä sivu"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3228
+#: src/src/i2p/susi/webmail/WebMail.java:3235
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
 msgstr[0] "1 viesti"
 msgstr[1] "{0} viestiä"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3228
-#: src/src/i2p/susi/webmail/WebMail.java:3531
-#: src/src/i2p/susi/webmail/WebMail.java:3672
+#: src/src/i2p/susi/webmail/WebMail.java:3235
+#: src/src/i2p/susi/webmail/WebMail.java:3538
+#: src/src/i2p/susi/webmail/WebMail.java:3679
 msgid "Logout"
 msgstr "Kirjaudu ulos"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3246
-#: src/src/i2p/susi/webmail/WebMail.java:3590
+#: src/src/i2p/susi/webmail/WebMail.java:3253
+#: src/src/i2p/susi/webmail/WebMail.java:3597
 msgid "Date"
 msgstr "Päiväys"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3251
+#: src/src/i2p/susi/webmail/WebMail.java:3258
 msgid "Size"
 msgstr "Koko"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3252
+#: src/src/i2p/susi/webmail/WebMail.java:3259
 msgid "Mark for deletion"
 msgstr "Merkitse poistettavaksi"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3349
+#: src/src/i2p/susi/webmail/WebMail.java:3356
 msgid "Message has an attachment"
 msgstr "Viestissä on liite"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3359
+#: src/src/i2p/susi/webmail/WebMail.java:3366
 msgid "Message is new"
 msgstr "Viesti on uusi"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3361
+#: src/src/i2p/susi/webmail/WebMail.java:3368
 msgid "Message is spam"
 msgstr "Viesti on roskapostia"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3370
+#: src/src/i2p/susi/webmail/WebMail.java:3377
 msgid "Message body not downloaded"
 msgstr "Viestin runkoa ei ladattu"
 
 #. TODO ngettext
-#: src/src/i2p/susi/webmail/WebMail.java:3403
+#: src/src/i2p/susi/webmail/WebMail.java:3410
 msgid "Really delete the marked messages?"
 msgstr "Poistetaanko merkityt viestit oikeasti?"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3404
+#: src/src/i2p/susi/webmail/WebMail.java:3411
 msgid "Yes, really delete them!"
 msgstr "Kyllä, poista ne oikeasti!"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3410
+#: src/src/i2p/susi/webmail/WebMail.java:3417
 msgid "Delete Selected"
 msgstr "Poista valitut"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3411
+#: src/src/i2p/susi/webmail/WebMail.java:3418
 msgid "Mark All"
 msgstr "Merkitse kaikki"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3412
+#: src/src/i2p/susi/webmail/WebMail.java:3419
 msgid "Clear All"
 msgstr "Nollaa kaikki"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3425
+#: src/src/i2p/susi/webmail/WebMail.java:3432
 msgid "Change to Folder"
 msgstr "Vaihda kansioon"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3433
+#: src/src/i2p/susi/webmail/WebMail.java:3440
 msgid "First"
 msgstr "Ensimmäinen"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3434
-#: src/src/i2p/susi/webmail/WebMail.java:3543
+#: src/src/i2p/susi/webmail/WebMail.java:3441
+#: src/src/i2p/susi/webmail/WebMail.java:3550
 msgid "Previous"
 msgstr "Edellinen"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3443
-#: src/src/i2p/susi/webmail/WebMail.java:3558
+#: src/src/i2p/susi/webmail/WebMail.java:3450
+#: src/src/i2p/susi/webmail/WebMail.java:3565
 msgid "Next"
 msgstr "Seuraava"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3444
+#: src/src/i2p/susi/webmail/WebMail.java:3451
 msgid "Last"
 msgstr "Viimeinen"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3493
+#: src/src/i2p/susi/webmail/WebMail.java:3500
 msgid "Really delete this message?"
 msgstr "Poistetaanko tämä viesti oikeasti?"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3494
+#: src/src/i2p/susi/webmail/WebMail.java:3501
 msgid "Yes, really delete it!"
 msgstr "Kyllä, poista se oikeasti!"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3522
+#: src/src/i2p/susi/webmail/WebMail.java:3529
 msgid "Reply"
 msgstr "Vastaa"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3523
+#: src/src/i2p/susi/webmail/WebMail.java:3530
 msgid "Reply All"
 msgstr "Vastaa kaikille"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3524
+#: src/src/i2p/susi/webmail/WebMail.java:3531
 msgid "Forward"
 msgstr "Lähetä edelleen"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3525
+#: src/src/i2p/susi/webmail/WebMail.java:3532
 msgid "Save As"
 msgstr "Tallenna nimellä"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3527
-#: src/src/i2p/susi/webmail/WebMail.java:3529
+#: src/src/i2p/susi/webmail/WebMail.java:3534
+#: src/src/i2p/susi/webmail/WebMail.java:3536
 msgid "Delete"
 msgstr "Poista"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3555
+#: src/src/i2p/susi/webmail/WebMail.java:3562
 msgid "Back to Folder"
 msgstr "Takaisin kansioon"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3576
+#: src/src/i2p/susi/webmail/WebMail.java:3583
 msgid "Move to Folder"
 msgstr "Siirrä kansioon"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3656
+#: src/src/i2p/susi/webmail/WebMail.java:3663
 msgid "Folder Page Size"
 msgstr "Kansiosivukoko"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3657
+#: src/src/i2p/susi/webmail/WebMail.java:3664
 msgid "Set"
 msgstr "Aseta"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3659
+#: src/src/i2p/susi/webmail/WebMail.java:3666
 msgid "Advanced Configuration"
 msgstr "Lisäasetukset"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3670
+#: src/src/i2p/susi/webmail/WebMail.java:3677
 msgid "Save Configuration"
 msgstr "Tallenna asetukset"
 

@@ -12,14 +12,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
-<%
-    if ("POST".equals(request.getMethod())) {
-        // refresh the sidebar after page loads
-%>
-<script src="/js/configupdate.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
-<%
-    }
-%>
 <%=intl.title("config update")%>
 </head>
 <body>
@@ -32,10 +24,11 @@
 <%@include file="formhandler.jsi" %>
 <jsp:useBean class="net.i2p.router.web.ConfigUpdateHelper" id="updatehelper" scope="request" />
 <jsp:setProperty name="updatehelper" property="contextId" value="<%=i2pcontextId%>" />
-<div class=messages>
+<div class=messages id=statusNews>
 <jsp:getProperty name="updatehelper" property="newsStatus" />
 </div>
-<form action="" method=POST>
+<iframe name=processForm id=processForm hidden></iframe>
+<form id=form_updates action="" method=POST target=processForm>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <% /* set hidden default */ %>
 <input type=submit name=action value="" style=display:none>
@@ -59,9 +52,7 @@
 <tr>
 <td id=updateHelper>
 <div class=optionlist>
-<%
-    if (updatehelper.canInstall()) {
-%>
+<%  if (updatehelper.canInstall()) { %>
 <span class=nowrap>
 <b><%=formhandler._t("I2P update policy")%>:</b>
 <jsp:getProperty name="updatehelper" property="updatePolicySelectBox" />
@@ -72,24 +63,62 @@
 <span class=nowrap>
 <b><%=intl._t("Update check")%>:</b>
 <jsp:getProperty name="updatehelper" property="refreshFrequencySelectBox" />
+</span><br>
+<span class=nowrap id=checkforupdates>
+<%  if ("true".equals(System.getProperty("net.i2p.router.web.UpdateHandler.updateInProgress", "false"))) { %>
+<i><%=intl._t("Update In Progress")%>&hellip;</i>
+<%  } else { %>
+<input type=submit name=action class=check value="<%=intl._t("Check for updates")%>" />
+<%  } %>
+</span>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<b id=devSU3build class=suboption>
+<jsp:getProperty name="updatehelper" property="updateDevSU3" />
+<label for="updateDevSU3">
+<%=intl._t("Update with signed development builds")%>
+</label>
+</b>
+<div class=optionsingle>
+<span class=nowrap>
+<b><%=intl._t("Update URL")%>:</b>
+<input type=text size=60 name="devSU3URL" value="<jsp:getProperty name="updatehelper" property="devSU3URL" />">
+</span>
+</div>
+</td>
+</tr>
+<tr>
+<td class=infohelp><%=intl._t("To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>")%></td>
+</tr>
+<tr>
+<td>
+<b id=unsignedbuild class=suboption>
+<jsp:getProperty name="updatehelper" property="updateUnsigned" />
+<label for="updateUnsigned">
+<%=intl._t("Update with unsigned development builds")%>
+</label>
+</b>
+<div class=optionsingle>
+<span class=nowrap>
+<b><%=intl._t("Update URL")%>:</b>
+<input type=text size=60 name="zipURL" value="<jsp:getProperty name="updatehelper" property="zipURL" />">
 </span>
 </div>
 </td>
 </tr>
 <tr>
 <td class=optionsave>
-<%
-    if ("true".equals(System.getProperty("net.i2p.router.web.UpdateHandler.updateInProgress", "false"))) { %>
-<i><%=intl._t("Update In Progress")%></i><br>
-<%
-    } else {
-%>
-<input type=submit name=action class=check value="<%=intl._t("Check for updates")%>" />
-<%
-    }
-%>
+<input type=reset class=cancel value="<%=intl._t("Cancel")%>" hidden>
+<input type=submit name=action class=accept value="<%=intl._t("Save")%>" >
 </td>
 </tr>
+</table>
+<input type=checkbox name="miscConfig" id=miscConfig hidden>
+<label class=tabletitle for=miscConfig><%=intl._t("Advanced Options")%></label>
+<table id=newsupdateconfig class=configtable>
 <%
     if (updatehelper.canInstall()) {
         if (updatehelper.isAdvanced()) {
@@ -155,41 +184,6 @@
 </div>
 </td>
 </tr>
-<tr>
-<td>
-<b id=devSU3build class=suboption>
-<jsp:getProperty name="updatehelper" property="updateDevSU3" />
-<label for="updateDevSU3">
-<%=intl._t("Update with signed development builds")%>
-</label>
-</b>
-<div class=optionsingle>
-<span class=nowrap>
-<b><%=intl._t("Update URL")%>:</b>
-<input type=text size=60 name="devSU3URL" value="<jsp:getProperty name="updatehelper" property="devSU3URL" />">
-</span>
-</div>
-</td>
-</tr>
-<tr>
-<td class=infohelp><%=intl._t("To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>")%></td>
-</tr>
-<tr>
-<td>
-<b id=unsignedbuild class=suboption>
-<jsp:getProperty name="updatehelper" property="updateUnsigned" />
-<label for="updateUnsigned">
-<%=intl._t("Update with unsigned development builds")%>
-</label>
-</b>
-<div class=optionsingle>
-<span class=nowrap>
-<b><%=intl._t("Update URL")%>:</b>
-<input type=text size=60 name="zipURL" value="<jsp:getProperty name="updatehelper" property="zipURL" />">
-</span>
-</div>
-</td>
-</tr>
 <%
     } else {
 %>
@@ -199,14 +193,43 @@
 <%
     }   // if canInstall
 %>
-<tr class=tablefooter><td class=optionsave>
-<input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
-<input type=submit name=action class=accept value="<%=intl._t("Save")%>" >
-</td>
-</tr>
+<tr><td class=optionsave><input type=submit name=action class=accept value="<%=intl._t("Save")%>" ></td></tr>
 </table>
 </form>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+<script nonce=<%=cspNonce%>>
+  function refresh() {
+    const message = document.getElementById("statusNews");
+    const xhrRefresh = new XMLHttpRequest();
+    xhrRefresh.open("GET", "/configupdate", true);
+    xhrRefresh.responseType = "document";
+    xhrRefresh.onreadystatechange = function() {
+      if (xhrRefresh.readyState === XMLHttpRequest.DONE) {
+        if (xhrRefresh.status === 200) {
+          progressx.show();
+          const messageResponse = xhrRefresh.responseXML.getElementById("statusNews");
+          message.innerHTML = messageResponse.innerHTML;
+        }
+      }
+    };
+    xhrRefresh.send();
+    progressx.hide();
+  }
+  const updatesForm = document.getElementById("form_updates");
+  const processForm = document.getElementById("processForm");
+  let formSubmit = false;
+  window.addEventListener("DOMContentLoaded", progressx.hide);
+  updatesForm.addEventListener("submit", function() {
+    progressx.show();
+    formSubmit = true;
+  });
+  processForm.addEventListener("load", function() {
+    if (formSubmit) {
+      refresh();
+      progressx.hide();
+      formSubmit = false;
+    }
+  });
+</script>
 </body>
 </html>

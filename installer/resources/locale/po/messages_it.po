@@ -5,9 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2017-06-30 21:33+0000\n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 05:24+0000\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -96,8 +95,7 @@ msgstr "$APP_LONG_NAME è in esecuzione: PID:$pid"
 #: ../i2prouter:1305
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr ""
-"$APP_LONG_NAME è in esecuzione: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+msgstr "$APP_LONG_NAME è in esecuzione: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
 
 #: ../i2prouter:1358 ../i2prouter:1370 ../i2prouter:1389 ../i2prouter:1406
 #: ../i2prouter:1473 ../i2prouter:1493 ../i2prouter:1507 ../i2prouter:1521
@@ -154,14 +152,12 @@ msgid "Stop if running as a daemon or in another console."
 msgstr "Interrompi se è in esecuzione come demone o in un altro terminale."
 
 #: ../i2prouter:1888
-#, fuzzy
 msgid "Stop gracefully, may take up to 11 minutes or more."
-msgstr "Interruzione elegante, potrebbero servire fino ad 11 minuti."
+msgstr "Fermati con grazia, potrebbe richiedere fino a 11 minuti."
 
 #: ../i2prouter:1889
-#, fuzzy
 msgid "Restart gracefully, may take up to 11 minutes or more."
-msgstr "Interruzione elegante, potrebbero servire fino ad 11 minuti."
+msgstr "Riavviare correttamente, potrebbe richiedere fino a 11 minuti."
 
 #: ../i2prouter:1890
 msgid "Stop if running and then start."
@@ -197,6 +193,4 @@ msgstr "Eseguire I2P come amministratore *non* è consigliato."
 
 #: ../i2prouter:1916
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
-msgstr ""
-"Per eseguirlo comunque come amministratore, modifica  i2prouter e imposta "
-"ALLOW_ROOT=true."
+msgstr "Per eseguirlo comunque come amministratore, modifica  i2prouter e imposta ALLOW_ROOT=true."

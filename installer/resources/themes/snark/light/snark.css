@@ -642,6 +642,7 @@ th img{filter:none;opacity:.85}
 .pagenavcontrols a:active img{box-shadow:inset 0 0 0 1px #ddf,inset 3px 3px 3px #558;filter:none;transform:none}
 .pagenavcontrols img.disable,.pagenavcontrols img.disable:hover,.pagenavcontrols a:active img.disable{background:none;opacity:.2;filter:none}
 .pagenavcontrols img{margin:0 3px}
+.pagenavcontrols .disabled{opacity:.5;pointer-events:none}
 #pagecount{padding:2px 15px;margin:0 5px;text-align:center;color:#669;background:linear-gradient(180deg,#f2f2ff 50%,#e2e2ff 50%);border-radius:2px;letter-spacing:.2em;box-shadow:var(--highlight);border:1px solid #ccf;cursor:default;user-select:none}
 #pagenavbottom,#pagenavbottom td{text-align:center;padding:0;vertical-align:middle;border-top:var(--border_soft);background:linear-gradient(180deg,#fafaff 50%,rgb(240,240,255)) #fafaff}
 #pagenavbottom .pagenavcontrols{margin:1px 0 0;padding:2px 0 2px;position:static}

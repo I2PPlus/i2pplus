@@ -166,6 +166,7 @@ public class WebMail extends HttpServlet
     private static final String SHOW = "show";
     private static final String DOWNLOAD = "download";
     private static final String RAW_ATTACHMENT = "att";
+    private static final String DRAFT_ATTACHMENT = "datt";
 
     private static final String MARKALL = "markall";
     private static final String CLEAR = "clearselection";
@@ -615,13 +616,11 @@ public class WebMail extends HttpServlet
                                 name = mailPart.description;
                         }
                         name = quoteHTML(name);
-                        out.println("<img src=\"" + myself + '?' + RAW_ATTACHMENT + '=' +
-                             mailPart.getID() +
-                             "&amp;" + B64UIDL + '=' + Base64.encode(mailPart.uidl) +
-                             "\" alt=\"" + name + "\">");
-                        out.println("<span id=imageInfo><b>" + _t("File") + ": " + "</b><a target=_blank href=\"" + myself + '?' + RAW_ATTACHMENT + '='
-                                        + mailPart.getID() + "&amp;" + B64UIDL + '=' + Base64.encode(mailPart.uidl) + "\">"
-                                        + name + "</a>"); // TODO: Add filesize
+                        out.println("<img src=\"" + myself + '?' + RAW_ATTACHMENT + '=' + mailPart.getID() + "&amp;" +
+                                    B64UIDL + '=' + Base64.encode(mailPart.uidl) + "\" alt=\"" + name + "\">");
+                        out.println("<span id=imageInfo><b>" + _t("File") + ": " + "</b><a target=_blank href=\"" +
+                                    myself + '?' + RAW_ATTACHMENT + '=' + mailPart.getID() + "&amp;" + B64UIDL +
+                                    '=' + Base64.encode(mailPart.uidl) + "\">" + name + "</a>");
                     } else if (type != null && (
                         // type list from snark
                         type.startsWith("audio/") || type.equals("application/ogg") ||
@@ -636,19 +635,16 @@ public class WebMail extends HttpServlet
                         type.equals("application/pgp-encrypted") ||
                         type.equals("application/pgp-signature") ||
                         (type.equals("application/octet-stream") &&
-                         ((mailPart.filename != null && mailPart.filename.endsWith(".asc")) ||
-                          (mailPart.name != null && mailPart.name.endsWith(".asc"))))
-                                          )) {
+                        ((mailPart.filename != null && mailPart.filename.endsWith(".asc")) ||
+                        (mailPart.name != null && mailPart.name.endsWith(".asc")))))) {
                         out.println("<a href=\"" + myself + '?' + RAW_ATTACHMENT + '=' +
-                             mailPart.getID() +
-                             "&amp;" + B64UIDL + '=' + Base64.encode(mailPart.uidl) + "\">" +
-                             _t("Download attachment {0}", ident) + "</a>");
+                                    mailPart.getID() + "&amp;" + B64UIDL + '=' + Base64.encode(mailPart.uidl) + "\">" +
+                                    _t("Download attachment {0}", ident) + "</a>");
                     } else {
                         out.println("<a target=_blank href=\"" + myself + '?' + DOWNLOAD + '=' +
-                             mailPart.getID() +
-                             "&amp;" + B64UIDL + '=' + Base64.encode(mailPart.uidl) + "\">" +
-                             _t("Download attachment {0}", ident) + "</a>" +
-                             " (" + _t("File is packed into a zipfile for security reasons.") + ')');
+                                    mailPart.getID() + "&amp;" + B64UIDL + '=' + Base64.encode(mailPart.uidl) + "\">" +
+                                    _t("Download attachment {0}", ident) + "</a>" +
+                                    " (" + _t("File is packed into a zipfile for security reasons.") + ')');
                     }
                     out.println("</div>");
                 }
@@ -713,14 +709,24 @@ public class WebMail extends HttpServlet
                 if (user == null || user.length() == 0) {
                     sessionObject.error += _t("Need username for authentication.") + '\n';
                     doContinue = false;
+                } else {
+                    user = user.trim();
+                    if (user.endsWith("@mail.i2p")) {
+                        sessionObject.error += _t("Do not include @mail.i2p in the username") + '\n';
+                        doContinue = false;
+                    }
                 }
                 if (pass == null || pass.length() == 0) {
                     sessionObject.error += _t("Need password for authentication.") + '\n';
                     doContinue = false;
+                } else {
+                    pass = pass.trim();
                 }
                 if (host == null || host.length() == 0) {
                     sessionObject.error += _t("Need hostname for connect.") + '\n';
                     doContinue = false;
+                } else {
+                    host = host.trim();
                 }
                 int pop3PortNo = 0;
                 if (pop3Port == null || pop3Port.length() == 0) {
@@ -728,6 +734,7 @@ public class WebMail extends HttpServlet
                     doContinue = false;
                 }
                 else {
+                    pop3Port = pop3Port.trim();
                     try {
                         pop3PortNo = Integer.parseInt(pop3Port);
                         if (pop3PortNo < 0 || pop3PortNo > 65535) {
@@ -747,6 +754,7 @@ public class WebMail extends HttpServlet
                     doContinue = false;
                 }
                 else {
+                    smtpPort = smtpPort.trim();
                     try {
                         smtpPortNo = Integer.parseInt(smtpPort);
                         if (smtpPortNo < 0 || smtpPortNo > 65535) {
@@ -1111,6 +1119,9 @@ public class WebMail extends HttpServlet
                    buttonPressed(request, RAW_ATTACHMENT)) {
             // GET params
             state = State.SHOW;
+        } else if (buttonPressed(request, DRAFT_ATTACHMENT)) {
+            // GET params
+            state = State.NEW;
         }
 
         /*
@@ -1596,6 +1607,47 @@ public class WebMail extends HttpServlet
         return false;
     }
 
+/**
+     * Process thumbnail link in compose view
+     * Draft attachments are stored in the SessionObject and identified by hashcode only.
+     *
+     * @since 0.9.62
+     */
+    private static void processDraftAttachmentLink(SessionObject sessionObject,
+                                                   RequestWrapper request, HttpServletResponse response) {
+        String str = request.getParameter(DRAFT_ATTACHMENT);
+        if (str != null) {
+            InputStream in = null;
+            OutputStream out = null;
+            try {
+                if (sessionObject.attachments != null) {
+                    int hc = Integer.parseInt(str);
+                    for (Attachment att : sessionObject.attachments) {
+                        if (hc == att.hashCode()) {
+                            String ct = att.getContentType();
+                            if (ct != null)
+                                response.setContentType(ct);
+                            response.setContentLength((int) att.getSize());
+                            response.setHeader("Cache-Control", "private, max-age=3600");
+                            in = att.getData();
+                            out = response.getOutputStream();
+                            DataHelper.copy(in, out);
+                            return;
+                        }
+                    }
+                }
+            } catch (NumberFormatException nfe ) {
+            } catch (IOException ioe ) {
+            } finally {
+                if (in != null) try { in.close(); } catch (IOException ioe) {}
+                if (out != null) try { out.close(); } catch (IOException ioe) {}
+            }
+        }
+        // error if we get here
+        try {
+            response.sendError(404, _t("Attachment not found."));
+        } catch (IOException ioe) {}
+    }
 
     /**
      * Process save-as link in message view
@@ -2154,6 +2206,10 @@ public class WebMail extends HttpServlet
                     sendRedirect(httpRequest, response, q);
                     return;
                 }
+                if (request.getParameter(DRAFT_ATTACHMENT) != null) {
+                    processDraftAttachmentLink(sessionObject, request, response);
+                    return;
+                }
             }
 
             // ?show= links - this forces State.SHOW
@@ -2247,7 +2303,7 @@ public class WebMail extends HttpServlet
                 if (state == State.LIST) {
                     for (Iterator<String> it = folder.currentPageIterator(); it != null && it.hasNext();) {
                         String uidl = it.next();
-                        Mail mail = mc.getMail(uidl, MailCache.FetchMode.HEADER);
+                        Mail mail = mc.getMail(uidl, MailCache.FetchMode.HEADER_CACHE_ONLY);
                         if (mail != null && mail.error.length() > 0) {
                             sessionObject.error += mail.error;
                             mail.error = "";
@@ -2268,8 +2324,7 @@ public class WebMail extends HttpServlet
                 }
             }
 
-            response.setHeader("Pragma", "no-cache");
-            response.setHeader("Cache-Control","no-cache");
+            response.setHeader("Cache-Control","private, no-cache, max-age=3600");
 
             //// Begin output
 
@@ -2325,7 +2380,7 @@ public class WebMail extends HttpServlet
                     "<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"" + sessionObject.themePath + "images/favicon.svg\">\n");
                 if (sessionObject.isMobile) {
                     out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes\" />\n" +
-                        "<link rel=stylesheet href=\"" + sessionObject.themePath + "mobile.css?" + CoreVersion.VERSION + "\" />");
+                                "<link rel=stylesheet href=\"" + sessionObject.themePath + "mobile.css?" + CoreVersion.VERSION + "\" />");
                 }
                 if (enableSoraFont) {
                     out.println("<link rel=stylesheet href=\"" + sessionObject.themePath + "../../fonts/Sora.css?" + CoreVersion.VERSION + "\">");
@@ -2450,6 +2505,8 @@ public class WebMail extends HttpServlet
                     showMessage(out, sessionObject, mc, showUIDL, buttonPressed(request, DELETE));
                     out.println("<script charset=utf-8 src=\"/susimail/js/toggleHeaders.js?" + CoreVersion.VERSION + "\"></script>");
                     //out.println("<script charset=utf-8 src=\"/themes/toggleHeaders.js?" + CoreVersion.VERSION + "\"></script>"); // debug
+                    out.println("<script src=\"/susimail/js/markdown.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
+                    out.println("<script src=\"/susimail/js/Markdown.Converter.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
 
                 } else if (state == State.NEW)
                     showCompose(out, sessionObject, request);
@@ -2458,10 +2515,9 @@ public class WebMail extends HttpServlet
                     showConfig(out, folder);
 
                 if (state == State.AUTH) {
-                out.println("\n<div class=\"footer\">\n" +
-                    //"<p class=\"footer\">susimail &copy; 2004-2005 susi</p>" +
+                out.println("\n<div class=footer>\n" +
                     "<script charset=utf-8 src=\"/js/togglePassword.js?" + CoreVersion.VERSION + "\"></script>" +
-                    "<p class=\"footer\">" +
+                    "<p class=footer>" +
                     _t("{0} is an I2P-exclusive service provided by {1}.", "<b>I2PMail</b>",
                         "<a href=\"http://hq.postman.i2p/\" target=_blank>Postman</a>") + ' ' +
                     _t("{0} webmail client &copy Susi 2004-2005.", "<b>SusiMail</b>") +
@@ -2528,18 +2584,25 @@ public class WebMail extends HttpServlet
             String name3 = FilenameUtil.encodeFilenameRFC5987(name);
             response.setHeader("Cache-Control", "no-cache, private, max-age=604800");
             if (isRaw) {
+                OutputStream out = null;
                 try {
                     response.addHeader("Content-Disposition", "inline; filename=\"" + name2 + "\"; " +
                                        "filename*=" + name3);
                     if (part.type != null)
                         response.setContentType(part.type);
+                    if (part.charset != null)
+                        response.setCharacterEncoding(part.charset);
                     if (part.decodedLength >= 0)
                         response.setContentLength(part.decodedLength);
                     if (log.shouldDebug()) log.debug("Sending raw attachment " + name + " length " + part.decodedLength);
-                    part.decode(0, new OutputStreamBuffer(response.getOutputStream()));
+                    out = response.getOutputStream();
+                    part.decode(0, new OutputStreamBuffer(out));
                     shown = true;
                 } catch (IOException e) {
                     log.error("Error sending raw attachment " + name + " length " + part.decodedLength, e);
+                } finally {
+                    if (out != null)
+                        try { out.close(); } catch (IOException ioe) {}
                 }
             } else {
                 ZipOutputStream zip = null;
@@ -2979,15 +3042,11 @@ public class WebMail extends HttpServlet
      * @param request
      */
     private static void showCompose(PrintWriter out, SessionObject sessionObject, RequestWrapper request) {
-        out.println("<div class=\"topbuttons\">");
+        out.println("<div class=topbuttons>");
         out.println(button(SEND, _t("Send")) +
                 button(SAVE_AS_DRAFT, _t("Save as Draft")) +
                 button(CANCEL, _t("Cancel")));
         out.println("</div>");
-        //if (Config.hasConfigFile())
-        //out.println(button(RELOAD, _t("Reload Config")) + spacer);
-        //out.println(button(LOGOUT, _t("Logout")));
-
 
         Draft draft = null;
         String from = "";
@@ -3067,42 +3126,72 @@ public class WebMail extends HttpServlet
             }
         }
 
-        out.println("<div id=composemail>" +
-                        "<table id=newmail width=100%>\n" +
-                        "<tr><td colspan=2><hr></td></tr>\n" +
-                        "<tr><td class=right>" + _t("From") + "</td>" +
-                        "<td><input type=text size=80 name=\"" +
-                        NEW_FROM + "\" value=\"" + quoteHTML(from) + "\" " + (fixed ? "disabled" : "") +"></td></tr>\n" +
-                        "<tr><td class=right>" + _t("To") + "</td><td><input type=text size=80 name=\"" +
-                        NEW_TO + "\" value=\"" + quoteHTML(to) + "\"></td></tr>\n" +
-                        "<tr><td class=right>" + _t("Cc") + "</td><td><input type=text size=80 name=\"" +
-                        NEW_CC + "\" value=\"" + quoteHTML(cc) + "\"></td></tr>\n" +
-                        "<tr><td class=right>" + _t("Bcc") + "</td><td><input type=text size=80 name=\"" +
-                        NEW_BCC + "\" value=\"" + quoteHTML(bcc) + "\"></td></tr>\n" +
-                        "<tr><td class=right>" + _t("Subject") + "</td>" +
-                        "<td><input type=text size=80 name=\"" +
-                        NEW_SUBJECT + "\" value=\"" + quoteHTML(subject) + "\"></td></tr>\n" +
-                        "<tr><td></td><td><textarea cols=\"" + Config.getProperty(CONFIG_COMPOSER_COLS, 80) + "\" rows=\"" +
-                        Config.getProperty(CONFIG_COMPOSER_ROWS, 10)+ "\" name=\"" + NEW_TEXT + "\">" + text + "</textarea></td></tr>" +
-                        "<tr class=\"bottombuttons spacer\"><td colspan=7><hr></td></tr>\n" +
-                        "<tr class=bottombuttons id=addattachment><td class=right>" + _t("Add Attachment") + "</td>" +
-                        "<td class=left><input type=file size=50% name=\"" + NEW_FILENAME + "\" value=\"\">&nbsp;");
-                        // TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
-            out.print(button(NEW_UPLOAD, _t("Add attachment")));
-            out.print("</td></tr>");
+        out.print("<div id=composemail>" +
+                   "<table id=newmail width=100%>\n" +
+                   "<tr><td colspan=2><hr></td></tr>\n" +
+                   "<tr><td class=right>" + _t("From") + "</td>" +
+                   "<td><input type=text size=80 name=\"" +
+                   NEW_FROM + "\" value=\"" + quoteHTML(from) + "\" " + (fixed ? "disabled" : "") +"></td></tr>\n" +
+                   "<tr><td class=right>" + _t("To") + "</td><td><input type=text size=80 name=\"" +
+                   NEW_TO + "\" value=\"" + quoteHTML(to) + "\"></td></tr>\n" +
+                   "<tr><td class=right>" + _t("Cc") + "</td><td><input type=text size=80 name=\"" +
+                   NEW_CC + "\" value=\"" + quoteHTML(cc) + "\"></td></tr>\n" +
+                   "<tr><td class=right>" + _t("Bcc") + "</td><td><input type=text size=80 name=\"" +
+                   NEW_BCC + "\" value=\"" + quoteHTML(bcc) + "\"></td></tr>\n" +
+                   "<tr><td class=right>" + _t("Subject") + "</td>" +
+                   "<td><input type=text size=80 name=\"" +
+                   NEW_SUBJECT + "\" value=\"" + quoteHTML(subject) + "\"></td></tr>\n" +
+                   "<tr><td></td><td><textarea cols=\"" + Config.getProperty(CONFIG_COMPOSER_COLS, 80) + "\" rows=\"" +
+                   Config.getProperty(CONFIG_COMPOSER_ROWS, 10)+ "\" name=\"" + NEW_TEXT + "\">" + text + "</textarea></td></tr>" +
+                   "<tr class=\"bottombuttons spacer\"><td colspan=7><hr></td></tr>\n" +
+                   "<tr class=bottombuttons id=addattachment><td class=right>" + _t("Add Attachment") + "</td>" +
+                   "<td class=left><input type=file size=50% name=\"" + NEW_FILENAME + "\" value=\"\">&nbsp;");
+        // TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
+        out.print(button(NEW_UPLOAD, _t("Add attachment")));
+        out.print("</td></tr>\n");
 
         if (sessionObject.attachments != null && !sessionObject.attachments.isEmpty()) {
             boolean wroteHeader = false;
             for(Attachment attachment : sessionObject.attachments) {
+                String attachSize = DataHelper.formatSize2(attachment.getSize());
+                attachSize = attachSize.replace("i", "");
                 if(!wroteHeader) {
-                    out.println("<tr><td class=right>" + _t("Attachments") + "</td>");
+                    out.print("<tr><td class=right>" + _t("Attachments") + "</td>");
                     wroteHeader = true;
                 } else {
-                    out.println("<tr><td>&nbsp;</td>");
+                    out.print("<tr><td>&nbsp;</td>");
                 }
                 out.print("<td id=attachedfile class=left><label><input type=checkbox class=optbox name=\"check" +
-                                attachment.hashCode() + "\" value=1>&nbsp;" + quoteHTML(attachment.getFileName()) + "</label></td>" +
-                                "</tr>\n");
+                          attachment.hashCode() + "\" value=1>&nbsp;" + quoteHTML(attachment.getFileName()));
+                out.print(" <span class=attachSize>(" + attachSize + ")</span></label>");
+                String type = attachment.getContentType();
+                String iconDir = "/themes/susimail/images/";
+                if (type != null) {
+                    out.print("<span class=thumbnail><img alt=\"\" src=\"");
+                    if (type.startsWith("image/")) {
+                        out.print(myself + '?' + DRAFT_ATTACHMENT + '=' + attachment.hashCode());
+                    } else if (type.startsWith("audio/")) {
+                        out.print(iconDir + "audio.svg");
+                    } else if (type.startsWith("text/")) {
+                        out.print(iconDir + "text.svg");
+                    } else if (type.startsWith("video/")) {
+                        out.print(iconDir + "video.svg");
+                    } else if (type.contains("pgp")) {
+                        out.print(iconDir + "sig.svg");
+                    } else if (type.equals("application/zip") || type.equals("application/x-gtar") ||
+                               type.equals("application/x-zip-compressed") || type.equals("application/compress") ||
+                               type.equals("application/gzip") || type.equals("application/x-7z-compressed") ||
+                               type.equals("application/x-rar-compressed") || type.equals("application/x-tar") ||
+                               type.equals("application/x-bzip2")) {
+                        out.print(iconDir + "compress.svg");
+                    } else if (type.equals("application/pdf")) {
+                        out.print(iconDir + "pdf.svg");
+                    } else {
+                        out.print(iconDir + "generic.svg");
+                    }
+                    out.print("\" hidden></span>");
+                }
+                out.print("</td></tr>\n");
             }
             // TODO disable in JS if none selected
             out.println("<tr class=bottombuttons><td>&nbsp;</td><td id=deleteattached class=left>" +
@@ -3121,54 +3210,53 @@ public class WebMail extends HttpServlet
         String pop3 = Config.getProperty(CONFIG_PORTS_POP3, Integer.toString(DEFAULT_POP3PORT));
         String smtp = Config.getProperty(CONFIG_PORTS_SMTP, Integer.toString(DEFAULT_SMTPPORT));
 
-        out.println("<div id=dologin>" +
-                        "<h1>" + _t("I2PMail Login") + "</h1>" +
-                        "<table width=100%>\n" +
-                        // current postman hq length limits 16/12, new postman version 32/32
-                        "<tr>" +
-                        "<td width=30% class=right>" + _t("User") + "</td>" +
-                        "<td width=40% class=left><input type=text required placeholder=\"" + _t("Username") +
-                        "\" size=32 autocomplete=\"username\" name=\"" + USER + "\" value=\"" + "\"> @mail.i2p</td>" +
-                        "</tr>\n" +
-                        "<tr>" +
-                        "<td width=30% class=right>" + _t("Password") + "</td>" +
-                        "<td width=40% class=left><input type=password id=password required placeholder=\"" + _t("Password") +
-                        "\" size=32 autocomplete=\"current-password\" name=\"pass\" value=\"" + "\">\n<button type=\"button\" class=script id=toggle" +
-                        " title=\"" + _t("Toggle password visibility") + "\">Show password</button></td>" +
-                        "</tr>\n");
+        out.print("<div id=dologin>\n" +
+                  "<h1>" + _t("I2PMail Login") + "</h1>\n" +
+                  "<table width=100%>\n" +
+                  // current postman hq length limits 16/12, new postman version 32/32
+                  "<tr>" +
+                  "<td width=30% class=right>" + _t("User") + "</td>" +
+                  "<td width=40% class=left><input type=text required placeholder=\"" + _t("Username") +
+                  "\" size=32 autocomplete=\"username\" name=\"" + USER + "\" value=\"" + "\"> @mail.i2p</td>" +
+                  "</tr>\n" +
+                  "<tr>" +
+                  "<td width=30% class=right>" + _t("Password") + "</td>" +
+                  "<td width=40% class=left><input type=password id=password required placeholder=\"" + _t("Password") +
+                  "\" size=32 autocomplete=\"current-password\" name=\"pass\" value=\"" + "\">\n<button type=\"button\" class=script id=toggle" +
+                  " title=\"" + _t("Toggle password visibility") + "\">Show password</button></td>" +
+                  "</tr>\n");
         // which is better?
         if (!fixed) {
         //if (true) {
-            out.println("<tr>" +
-                            "<td width=30%>" + _t("Host") + "</td>" +
-                            "<td width=40%><input type=text size=32 name=\"" + HOST +"\" value=\"" +
-                            quoteHTML(host) + "\"" + (fixed ? " disabled" : "") + "></td>" +
-                            "</tr>\n" +
-                            "<tr>" +
-                            "<td width=30%>" + _t("POP3 Port") + "</td>" +
-                            "<td width=40%><input type=text style=text-align:right size=5 name=\"" + POP3 +"\" value=\"" +
-                            quoteHTML(pop3) + "\"" + (fixed ? " disabled" : "") + "></td>" +
-                            "</tr>\n" +
-                            "<tr>" +
-                            "<td width=30%>" + _t("SMTP Port") + "</td>" +
-                            "<td width=40%><input type=text style=text-align:right size=5 name=\"" + SMTP +"\" value=\"" +
-                            quoteHTML(smtp) + "\"" + (fixed ? " disabled" : "") + "></td>" +
-                            "</tr>\n");
+            out.print("<tr>" +
+                      "<td width=30%>" + _t("Host") + "</td>" +
+                      "<td width=40%><input type=text size=32 name=\"" + HOST +"\" value=\"" +
+                      quoteHTML(host) + "\"" + (fixed ? " disabled" : "") + "></td>" +
+                      "</tr>\n" +
+                      "<tr>" +
+                      "<td width=30%>" + _t("POP3 Port") + "</td>" +
+                      "<td width=40%><input type=text style=text-align:right size=5 name=\"" + POP3 +"\" value=\"" +
+                      quoteHTML(pop3) + "\"" + (fixed ? " disabled" : "") + "></td>" +
+                      "</tr>\n" +
+                      "<tr>" +
+                      "<td width=30%>" + _t("SMTP Port") + "</td>" +
+                      "<td width=40%><input type=text style=text-align:right size=5 name=\"" + SMTP +"\" value=\"" +
+                      quoteHTML(smtp) + "\"" + (fixed ? " disabled" : "") + "></td>" +
+                      "</tr>\n");
         }
-        out.println(
-            "<tr><td colspan=2><hr></td></tr>\n" +
-            "<tr>" +
-            "<td colspan=2>" +
-            button(LOGIN, _t("Login")) + spacer + button(OFFLINE, _t("Read Mail Offline")) + spacer +
-            "<a href=\"/susimail/?configure\" id=settings class=fakebutton>" + _t("Settings") + "</a>" +
-            "</td>" +
-            "</tr>\n" +
-            "<tr>" +
-            "<td colspan=2><hr>" +
-            "<a href=\"http://hq.postman.i2p/?page_id=14\" target=_blank>" + _t("Learn about I2PMail") + "</a> | " +
-            "<a href=\"http://hq.postman.i2p/?page_id=16\" target=_blank>" + _t("Create Account") + "</a></td>" +
-            "</tr>\n" +
-            "</table></div>");
+        out.print("<tr><td colspan=2><hr></td></tr>\n" +
+                  "<tr>" +
+                  "<td colspan=2>" +
+                  button(LOGIN, _t("Login")) + spacer + button(OFFLINE, _t("Read Mail Offline")) + spacer +
+                  "<a href=\"/susimail/?configure\" id=settings class=fakebutton>" + _t("Settings") + "</a>" +
+                  "</td>" +
+                  "</tr>\n" +
+                  "<tr>" +
+                  "<td colspan=2><hr>" +
+                  "<a href=\"http://hq.postman.i2p/?page_id=14\" target=_blank>" + _t("Learn about I2PMail") + "</a> | " +
+                  "<a href=\"http://hq.postman.i2p/?page_id=16\" target=_blank>" + _t("Create Account") + "</a></td>" +
+                  "</tr>\n" +
+                  "</table>\n</div>\n");
     }
 
     /**
@@ -3178,9 +3266,6 @@ public class WebMail extends HttpServlet
         out.println("<p id=loading><span id=loadbar><b>");
         out.println(_t("Loading messages, please wait..."));
         out.println("</b></span>");
-        // no need for this, meta refresh has it covered
-        //out.println(_t("Refresh the page for updates"));
-        //out.println("</b></p>");
     }
 
     /**
@@ -3217,7 +3302,6 @@ public class WebMail extends HttpServlet
 
         boolean isSpamFolder = folderName.equals(DIR_SPAM);
         boolean showToColumn = folderName.equals(DIR_DRAFTS) || folderName.equals(DIR_SENT);
-//        out.println(button(LOGOUT, _t("Logout")));
         out.println("</span>");
 
         String domain = Config.getProperty(CONFIG_SENDER_DOMAIN, "mail.i2p");
@@ -3241,21 +3325,21 @@ public class WebMail extends HttpServlet
 
         String curSort = folder.getCurrentSortBy();
         SortOrder curOrder = folder.getCurrentSortingDirection();
-        out.println("</div><table id=mailbox width=100%>\n" +
-                    "<tr class=spacer><td colspan=7><hr></td></tr>\n<tr>\n" +
-                    "<th class=\"mailListDate left\">" + sortHeader(SORT_DATE, _t("Date"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
-                    "<th class=\"mailListSender left\">" + sortHeader(SORT_SENDER, showToColumn ? _t("To") : _t("From"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
-                    "<th class=\"mailListAttachment center\"></th>\n" +
-                    "<th class=\"mailListSubject left\">" + sortHeader(SORT_SUBJECT, _t("Subject"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
-                    "<th class=\"mailListFlagged center\"></th>\n" +
-                    "<th class=\"mailListSize right\">" + sortHeader(SORT_SIZE, _t("Size"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
-                    "<th class=\"mailListDelete center\" title=\"" + _t("Mark for deletion") + "\"></th>\n" +
-                    "</tr>\n");
+        out.print("</div>\n<table id=mailbox width=100%>\n" +
+                  "<tr class=spacer><td colspan=7><hr></td></tr>\n<tr>\n" +
+                  "<th class=\"mailListDate left\">" + sortHeader(SORT_DATE, _t("Date"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
+                  "<th class=\"mailListSender left\">" + sortHeader(SORT_SENDER, showToColumn ? _t("To") : _t("From"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
+                  "<th class=\"mailListAttachment center\"></th>\n" +
+                  "<th class=\"mailListSubject left\">" + sortHeader(SORT_SUBJECT, _t("Subject"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
+                  "<th class=\"mailListFlagged center\"></th>\n" +
+                  "<th class=\"mailListSize right\">" + sortHeader(SORT_SIZE, _t("Size"), sessionObject.imgPath, curSort, curOrder, page, folderName) + "</th>\n" +
+                  "<th class=\"mailListDelete center\" title=\"" + _t("Mark for deletion") + "\"></th>\n" +
+                  "</tr>\n");
         int bg = 0;
         int i = 0;
         for (Iterator<String> it = folder.currentPageIterator(); it != null && it.hasNext();) {
             String uidl = it.next();
-            Mail mail = mc.getMail(uidl, MailCache.FetchMode.CACHE_ONLY);
+            Mail mail = mc.getMail(uidl, MailCache.FetchMode.HEADER_CACHE_ONLY);
             if (mail == null || !mail.hasHeader()) {
                 continue;
             }
@@ -3271,7 +3355,7 @@ public class WebMail extends HttpServlet
             // this is I2P Base64, not the encoder
             String b64UIDL = Base64.encode(uidl);
             String loc = myself + '?' + (folderName.equals(DIR_DRAFTS) ? NEW_UIDL : SHOW) + '=' + b64UIDL + floc;
-            String link = "<a href=\"" + loc + "\" class=\"" + type + "\">";
+            String link = "<a href=\"" + loc + "\" class=" + type + ">";
             String jslink = "tdclick\" onclickloc=\"" + loc + "\"";
 
             boolean idChecked = false;
@@ -3287,25 +3371,22 @@ public class WebMail extends HttpServlet
             if (sessionObject.clear)
                 idChecked = false;
 
-            //if (_log.shouldDebug()) _log.debug("check" + i + ": checkId=" + checkId + ", idChecked=" + idChecked + ", pageChanged=" + sessionObject.pageChanged +
-            //", markAll=" + sessionObject.markAll +
-            //", invert=" + sessionObject.invert +
-            //", clear=" + sessionObject.clear);
             String subj = mail.shortSubject;
-            if (subj.length() <= 0)
+            if (subj.length() <= 0) {
                 subj = "<i>" + _t("no subject") + "</i>";
-            out.println("<tr class=\"list" + bg + "\">\n" +
-                "<td class=\"mailListDate " + jslink + "><span class=listDate  title=\"" + mail.dateOnly + "\"><span>" +
+            }
+            StringBuilder tbuf = new StringBuilder(2048);
+            tbuf.append("<tr class=\"list" + bg + "\">\n")
+                .append("<td class=\"mailListDate " + jslink + ">")
+                .append("<span class=listDate title=\"").append(mail.dateOnly).append("\"><span>")
                 // let's format time and date so it aligns and wraps nicely (for mobile)
-                mail.localFormattedDate
-                .replace("/", "</span>&#8239;/&#8239;<span>")
-                .replace(":", "&#8239;:&#8239;")
-                .replaceFirst(" ", "</span></span>&nbsp;<span class=listTime>")
-                .replace(" AM", "&#8239;<span class=listClock>AM</span>")
-                .replace(" PM", "&#8239;<span class=listClock>PM</span>")
-                .replace(",", "") +
-                "</span></td>");
-
+                .append(mail.localFormattedDate
+                        .replace("/", "</span>&#8239;/&#8239;<span>")
+                        .replace(":", "&#8239;:&#8239;")
+                        .replaceFirst(" ", "</span></span>&nbsp;<span class=listTime>")
+                        .replace(" AM", "&#8239;<span class=listClock>AM</span>")
+                        .replace(" PM", "&#8239;<span class=listClock>PM</span>")
+                        .replace(",", "") + "</span></td>");
             if (showToColumn) {
                 if (mail.to != null) {
                     StringBuilder buf = new StringBuilder(mail.to.length * 16);
@@ -3316,72 +3397,75 @@ public class WebMail extends HttpServlet
                         if (buf.length() > 45)
                             break;
                     }
-                    String to = buf.toString();
-                    boolean trim = to.length() > 45;
-                    if (trim)
-                        to = ServletUtil.truncate(to, 42).trim();
-                    to = quoteHTML(to).replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", "");
-                    //out.print(link);
-                    //out.print(to);
-                    //if (trim)
-                    //out.print("&hellip;");  // must be after html encode
-                    //out.println("</a>");
-                    //}
-                    out.print("<td class=\"mailListSender " + jslink + " title=\"" + buildRecipientLine(mail.to).replace("\"", "") + "\">" +
                     // remove angle brackets and trim to (consistent) name only so only name shown (with full address on tooltip)
-                    //link + buildRecipientLine(mail.to).replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", ""));
-                    link + to);
-                    if (trim)
-                        out.print("&hellip;");  // must be after html encode
-                    out.print("</a></td>\n");
-                    } else {
-                        out.print("<td class=\"mailListSender " + jslink + "></td>\n");
+                    String to = buf.toString();
+                    to = to.replace("&lt;", "").replace("&gt;", "").replace("@.*", "");
+                    boolean trim = to.length() > 45;
+                    if (trim) {
+                        to = ServletUtil.truncate(to, 42).trim();
                     }
+                    to = quoteHTML(to);
+                    tbuf.append("<td class=\"mailListSender ").append(jslink).append(" title=\"")
+                        .append(buildRecipientLine(mail.to).replace("\"", "") + "\">")
+                        .append(link).append(to);
+                    if (trim) {
+                        tbuf.append("&hellip;");  // must be after html encode
+                    }
+                    tbuf.append("</a></td>\n");
+                } else {
+                    tbuf.append("<td class=\"mailListSender ").append(jslink).append("></td>\n");
+                }
             } else {
                 // mail.shortSender and mail.shortSubject already html encoded
-                out.println("<td class=\"mailListSender " + jslink + " title=\"" + mail.sender.replace("\"", "") + "\">" +
-                // remove angle brackets and trim to (consistent) name only so only name shown (with full address on tooltip)
-                link + mail.shortSender.replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", "") + "</a></td>\n");
-                // TODO: add name of attachment(s) to tooltip
+                tbuf.append("<td class=\"mailListSender ").append(jslink).append(" title=\"").append(mail.sender.replace("\"", "") + "\">")
+                    // remove angle brackets and trim to (consistent) name only so only name shown (with full address on tooltip)
+                    .append(link).append(mail.shortSender.replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", "")).append("</a></td>\n");
+                    // TODO: add name of attachment(s) to tooltip
             }
-            out.print("<td class=\"mailListAttachment " + (mail.hasAttachment() ? "isAttached " : "") + jslink + ">" +
-                      (mail.hasAttachment() ? "<img src=/susimail/icons/attach.png alt=\"\" title=\"" +
-                      _t("Message has an attachment") + "\">" : "&nbsp;") + "</td>\n" +
-                      // TODO: show mail fragment on tooltip or hover span
-                      "<td class=\"mailListSubject " + jslink + ">" + link + subj + "</a></td>\n" +
-                      "<td class=\"mailListFlagged ");
-            if (mail.isNew() && !mail.isSpam())
-                out.print("new ");
-            else if (mail.isSpam())
-                out.print("spam ");
-            out.print(jslink + ">");
+            tbuf.append("<td class=\"mailListAttachment ").append(mail.hasAttachment() ? "isAttached " : "").append(jslink).append(">")
+                .append(mail.hasAttachment() ? "<img src=/susimail/icons/attach.png alt=\"\" title=\"" +
+                _t("Message has an attachment") + "\">" : "&nbsp;").append("</td>\n")
+                // TODO: show mail fragment on tooltip or hover span
+                .append("<td class=\"mailListSubject ").append(jslink).append(">").append(link).append(subj).append("</a></td>\n")
+                .append("<td class=\"mailListFlagged ");
             if (mail.isNew() && !mail.isSpam()) {
-                out.println("<img src=/susimail/icons/flag_green.png alt=\"\" title=\"" + _t("Message is new") + "\">");
+                tbuf.append("new ");
             } else if (mail.isSpam()) {
-                out.println("<img src=/susimail/icons/flag_red.png alt=\"\" title=\"" + _t("Message is spam") + "\">");
+                tbuf.append("spam ");
             }
-            out.println("<td class=\"mailListSize " + jslink + "><span class=\"listSize\">" +
-                        ((mail.getSize() > 0) ? (DataHelper.formatSize2(mail.getSize()) + 'B')
-                        // truncate the unit to B/K/M to optimize presentation/alignment
-                        .replace("&#8239;KiB", " <span class=\"listSizeUnit\">K")
-                        .replace("&#8239;MiB", " <span class=\"listSizeUnit\">M")
-                        .replace("&#8239;GiB", " <span class=\"listSizeUnit\">G")
-                        .replace("&#8239;B", " <span class=\"listSizeUnit\">B") : "<span class=\"unknown\" title=\"" +
-                        _t("Message body not downloaded") + "\">???"));
-            out.println("</span></span></td>\n" +
-                        "<td class=mailListDelete><input type=checkbox class=\"optbox delete1\" name=\"check" + b64UIDL + "\" value=1" +
-                        " " + (idChecked ? "checked" : "") + ">" + "</td>\n" +
-                        "</tr>\n");
+            tbuf.append(jslink).append(">");
+            if (mail.isNew() && !mail.isSpam()) {
+                tbuf.append("<img src=/susimail/icons/flag_green.png alt=\"\" title=\"" + _t("Message is new") + "\">\n");
+            } else if (isSpamFolder || mail.isSpam()) {
+                tbuf.append("<img src=/susimail/icons/flag_red.png alt=\"\" title=\"" + _t("Message is spam") + "\">\n");
+            }
+            tbuf.append("<td class=\"mailListSize ").append(jslink).append("><span class=listSize>");
+            String mailSize = mail.getSize() > 0 ? DataHelper.formatSize2(mail.getSize()) + "B" : "???";
+            if (mail.getSize() > 0) {
+                // truncate the unit to B/K/M to optimize presentation/alignment
+                mailSize = mailSize.replace("&#8239;KiB", " <span class=listSizeUnit>K")
+                                   .replace("&#8239;MiB", " <span class=listSizeUnit>M")
+                                   .replace("&#8239;GiB", " <span class=listSizeUnit>G")
+                                   .replace("&#8239;B", " <span class=listSizeUnit>B");
+            } else {
+                mailSize = "<span class=unknown title=\"" + _t("Message body not downloaded") + "\">???";
+            }
+            tbuf.append(mailSize).append("</span></span></td>\n")
+                .append("<td class=mailListDelete><input type=checkbox class=\"optbox delete1\" name=\"check").append(b64UIDL).append("\" value=1")
+                .append(' ').append(idChecked ? "checked" : "").append("></td>\n</tr>\n");
             bg = 1 - bg;
             i++;
+            out.print(tbuf.toString());
+            out.flush();
         }
-        if (i == 0)
-            out.println("<tr>\n" +
-                            "<td colspan=7>\n<div id=emptymailbox><i>" + _t("No messages") + "</i>\n</div>\n</td>\n" +
-                            "</tr>");
-        out.println("<tr class=\"bottombuttons spacer\">\n" +
-                        "<td colspan=7></td>\n" +
-                        "</tr>\n");
+        if (i == 0) {
+            out.print("<tr>\n" +
+                      "<td colspan=7>\n<div id=emptymailbox><i>" + _t("No messages") + "</i>\n</div>\n</td>\n" +
+                      "</tr>\n");
+        }
+        out.print("<tr class=\"bottombuttons spacer\">\n" +
+                  "<td colspan=7></td>\n" +
+                  "</tr>\n");
         if (folder.getPages() > 1 && i > 30) {
             // show the buttons again if page is big
             out.println("<tr id=pagenavbottom>\n<td colspan=7>");
@@ -3390,29 +3474,31 @@ public class WebMail extends HttpServlet
         if (i > 0) {
             // TODO do this in js
             if(sessionObject.reallyDelete) {
-                if (i > 25)
+                if (i > 25) {
                     out.print("<tr class=\"bottombuttons floating\" ");
-                else
-                    out.print("<tr class=\"bottombuttons\" ");
+                } else {
+                    out.print("<tr class=bottombuttons ");
+                }
                 out.print("id=confirmdelete>\n<td colspan=7>");
-                if (i > 25)
+                if (i > 25) {
                     out.print("<p class=\"error floating\" ");
-                else
+                } else {
                     out.print("<p class=error ");
+                }
                 // TODO ngettext
                 out.print("id=nukemail><span>" + _t("Really delete the marked messages?") + "</span><br>" +
                         button(REALLYDELETE, _t("Yes, really delete them!")) + "&nbsp;" +
                         button(CLEAR, _t("Cancel")));
                 out.print("</p></td>\n");
             } else {
-                out.println("<tr class=bottombuttons>\n" +
-                                "<td class=left colspan=3>" + (button(CONFIGURE, _t("Settings"))) + "</td>\n" +
-                                "<td class=right colspan=4>" + (button(DELETE, _t("Delete Selected"))) +
-                                "<span class=script>" + button(MARKALL, _t("Mark All")) + "&nbsp;" +
-                                (button(CLEAR, _t("Clear All"))) + "</span></td>");
+                out.print("<tr class=bottombuttons>\n" +
+                          "<td class=left colspan=3>" + (button(CONFIGURE, _t("Settings"))) + "</td>\n" +
+                          "<td class=right colspan=4>" + (button(DELETE, _t("Delete Selected"))) +
+                          "<span class=script>" + button(MARKALL, _t("Mark All")) + "&nbsp;" +
+                          (button(CLEAR, _t("Clear All"))) + "</span></td>");
             }
         }
-        out.println("</tr>\n</table>");
+        out.print("</tr>\n</table>\n");
     }
 
     /**
@@ -3426,7 +3512,7 @@ public class WebMail extends HttpServlet
         showFolderSelect(out, folderName, false);
         out.println("</div>");
         out.println("<div class=pagenavcontainer><table class=pagenav width=100%>\n" +
-                        "<tr class=pagenavcontrols>\n<td>");
+                    "<tr class=pagenavcontrols>\n<td>");
         if (pages > 1) {
             if (outputHidden)
                 out.println("<input type=hidden name=\"" + CUR_PAGE + "\" value=\"" + page + "\">");

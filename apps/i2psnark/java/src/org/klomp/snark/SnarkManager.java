@@ -94,6 +94,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private final I2PSnarkUtil _util;
     private final PeerCoordinatorSet _peerCoordinatorSet;
     private final ConnectionAcceptor _connectionAcceptor;
+    private final BandwidthManager _bwManager;
     private Thread _monitor;
     private volatile boolean _running;
     private volatile boolean _stopping;
@@ -109,6 +110,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     //public static final String PROP_EEP_PORT = "i2psnark.eepPort";
     public static final String PROP_UPLOADERS_TOTAL = "i2psnark.uploaders.total";
     public static final String PROP_UPBW_MAX = "i2psnark.upbw.max";
+    /** @since 0.9.62 */
+    public static final String PROP_DOWNBW_MAX = "i2psnark.downbw.max";
     public static final String PROP_DIR = "i2psnark.dir";
     private static final String PROP_META_PREFIX = "i2psnark.zmeta.";
     private static final String PROP_META_RUNNING = "running";
@@ -176,11 +179,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /** @since 0.9.58 */
     public static final String PROP_MAX_FILES_PER_TORRENT = "i2psnark.maxFilesPerTorrent";
 
-    /** @since 0.9.60+ */
+    /** @since 0.9.61+ */
     public static final String PROP_MAX_MESSAGES = "i2psnark.maxLogMessages";
 
     public static final int MIN_UP_BW = 30;
+    public static final int MIN_DOWN_BW = 2 * MIN_UP_BW;
     public static final int DEFAULT_MAX_UP_BW = 1024;
+    private static final int DEFAULT_MAX_DOWN_BW = 1024;
     public static final int DEFAULT_STARTUP_DELAY = 3;
     public static final int DEFAULT_REFRESH_DELAY_SECS = 5;
     private static final int DEFAULT_PAGE_SIZE = 50;
@@ -308,6 +313,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _util = new I2PSnarkUtil(_context, ctxName, this);
         _peerCoordinatorSet = new PeerCoordinatorSet();
         _connectionAcceptor = new ConnectionAcceptor(_util, _peerCoordinatorSet);
+        _bwManager = new BandwidthManager(ctx, DEFAULT_MAX_UP_BW * 1024, DEFAULT_MAX_DOWN_BW * 1024);
 //        DEFAULT_AUTO_START = !ctx.isRouterContext();
         DEFAULT_AUTO_START = true;
         String cfile = ctxName + CONFIG_FILE_SUFFIX;
@@ -489,6 +495,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public I2PSnarkUtil util() { return _util; }
 
     /**
+     *  The BandwidthManager.
+     *  @since 0.9.62
+     */
+    public BandwidthListener getBandwidthListener() {
+        return _bwManager;
+    }
+
+    /**
      *  Use if it does not include a link.
      *  Escapes '&lt;' and '&gt;' before queueing
      */
@@ -621,7 +635,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     *  @since 0.9.60+ (I2P+)
+     *  @since 0.9.61+ (I2P+)
      */
     public int getMaxLogMessages() {
         try {
@@ -1042,13 +1056,19 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @return true if we got a response from the router
      */
     private boolean getBWLimit() {
-        boolean shouldSet = !_config.containsKey(PROP_UPBW_MAX);
-        if (shouldSet || !_context.isRouterContext()) {
             int[] limits = BWLimits.getBWLimits(_util.getI2CPHost(), _util.getI2CPPort());
             if (limits == null)
                 return false;
-            if (shouldSet && limits[1] > 0)
-                _util.setMaxUpBW(limits[1]);
+        int up = limits[1];
+        if (up > 0) {
+            int maxup = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
+            _util.setMaxUpBW(up);
+            _bwManager.setUpBWLimit(Math.min(up, maxup) * 1000L);
+        }
+        int down = limits[0];
+        if (down > 0) {
+            int maxdown = getInt(PROP_DOWNBW_MAX, DEFAULT_MAX_DOWN_BW);
+            _bwManager.setDownBWLimit(Math.min(down, maxdown) * 1000L);
         }
         return true;
     }
@@ -1135,14 +1155,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public void updateConfig(String dataDir, boolean filesPublic, boolean autoStart, boolean smartSort, String refreshDelay,
                              String startDelay, String pageSize, String seedPct, String eepHost,
                              String eepPort, String i2cpHost, String i2cpPort, String i2cpOpts,
-                             String upLimit, String upBW, boolean useOpenTrackers, boolean useDHT, String theme,
+                             String upLimit, String upBW, String downBW, boolean useOpenTrackers, boolean useDHT, String theme,
                              String lang, boolean enableRatings, boolean enableComments, String commentName,
                              boolean collapsePanels, boolean showStatusFilter, boolean enableLightbox, boolean enableAddCreate) {
         synchronized(_configLock) {
             locked_updateConfig(dataDir, filesPublic, autoStart, smartSort, refreshDelay,
                                 startDelay, pageSize, seedPct, eepHost,
                                 eepPort, i2cpHost, i2cpPort, i2cpOpts,
-                                upLimit, upBW, useOpenTrackers, useDHT, theme,
+                                upLimit, upBW, downBW, useOpenTrackers, useDHT, theme,
                                 lang, enableRatings, enableComments, commentName, collapsePanels, showStatusFilter, enableLightbox, enableAddCreate);
         }
     }
@@ -1150,7 +1170,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private void locked_updateConfig(String dataDir, boolean filesPublic, boolean autoStart, boolean smartSort, String refreshDelay,
                              String startDelay, String pageSize, String seedPct, String eepHost,
                              String eepPort, String i2cpHost, String i2cpPort, String i2cpOpts,
-                             String upLimit, String upBW, boolean useOpenTrackers, boolean useDHT, String theme,
+                             String upLimit, String upBW, String downBW, boolean useOpenTrackers, boolean useDHT, String theme,
                              String lang, boolean enableRatings, boolean enableComments, String commentName,
                              boolean collapsePanels, boolean showStatusFilter, boolean enableLightbox, boolean enableAddCreate) {
         boolean changed = false;
@@ -1195,6 +1215,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if ( limit != _util.getMaxUpBW()) {
                 if ( limit >= MIN_UP_BW ) {
                     _util.setMaxUpBW(limit);
+                    _bwManager.setUpBWLimit(limit * 1000L);
                     changed = true;
                     _config.setProperty(PROP_UPBW_MAX, Integer.toString(limit));
                     String msg = _t("Up BW limit changed to {0}KBps", limit);
@@ -1206,6 +1227,20 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     addMessage(msg);
                     if (!_context.isRouterContext())
                         System.out.println(" • " + msg);
+                }
+            }
+        }
+        if (downBW != null) {
+            int limit = (int) (_bwManager.getDownBWLimit() / 1024);
+            try { limit = Integer.parseInt(downBW.trim()); } catch (NumberFormatException nfe) {}
+            if ( limit != _bwManager.getDownBWLimit()) {
+                if ( limit >= MIN_DOWN_BW ) {
+                    _bwManager.setDownBWLimit(limit * 1000L);
+                    changed = true;
+                    _config.setProperty(PROP_DOWNBW_MAX, Integer.toString(limit));
+                    //addMessage(_t("Up BW limit changed to {0}KBps", limit));
+                } else {
+                    //addMessage(_t("Minimum up bandwidth limit is {0}KBps", MIN_UP_BW));
                 }
             }
         }
@@ -1399,7 +1434,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 Properties p = new Properties();
                 p.putAll(opts);
                 _util.setI2CPConfig(i2cpHost, port, p);
-                _util.setMaxUpBW(getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW));
+                int max = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
+                _util.setMaxUpBW(max);
+                _bwManager.setUpBWLimit(max * 1000);
                 String msg = _t("I2CP and tunnel changes will take effect after stopping all torrents");
                 addMessage(msg);
                 if (!_context.isRouterContext())
@@ -1423,7 +1460,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if (!_context.isRouterContext())
                     System.out.println(" • " + msg);
                 _util.setI2CPConfig(i2cpHost, port, opts);
-                _util.setMaxUpBW(getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW));
+                    int max = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
+                    _util.setMaxUpBW(max);
+                    _bwManager.setUpBWLimit(max * 1000);
                 boolean ok = _util.connect();
                 if (!ok) {
                     msg = _t("Unable to connect with the new settings, reverting to the old I2CP settings");
@@ -2840,16 +2879,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                     }
                                 }
                             }
-                            if (routerOK) {
-                                String msg = _t("Up bandwidth limit is {0} KBps", _util.getMaxUpBW());
-                                addMessage(msg);
-/*
-                                if (!_context.isRouterContext()) {
-                                    System.out.println(" • " + _t("Connected to I2P at ") + _util.getI2CPHost() + ':' + _util.getI2CPPort());
-                                    System.out.println(" • " + msg);
-                                }
-*/
-                            }
+                            if (routerOK)
+                                addMessage(_t("Down bandwidth limit is {0} KBps", _bwManager.getUpBWLimit() / 1024) + "; " +
+                                           _t("Up bandwidth limit is {0} KBps", _util.getMaxUpBW()));
                         }
                     } else {
                         autostart = false;

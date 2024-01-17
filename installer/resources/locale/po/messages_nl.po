@@ -5,9 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 21:55+0000\n"
-"PO-Revision-Date: 2018-01-26 09:33+0000\n"
+"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"PO-Revision-Date: 2023-12-12 05:21+0000\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -153,14 +152,12 @@ msgid "Stop if running as a daemon or in another console."
 msgstr "Stop indien draaiende als een daemon of in een andere console."
 
 #: ../i2prouter:1888
-#, fuzzy
 msgid "Stop gracefully, may take up to 11 minutes or more."
-msgstr "Sierlijk stoppen, kan tot 11 minuten duren."
+msgstr "Stop rustig, dit kan tot 11 minuten duren."
 
 #: ../i2prouter:1889
-#, fuzzy
 msgid "Restart gracefully, may take up to 11 minutes or more."
-msgstr "Sierlijk stoppen, kan tot 11 minuten duren."
+msgstr "Herstart netjes. Dit kan tot 11 minuten duren."
 
 #: ../i2prouter:1890
 msgid "Stop if running and then start."
@@ -196,5 +193,4 @@ msgstr "I2P uitvoeren als root wordt *niet* aanbevolen."
 
 #: ../i2prouter:1916
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
-msgstr ""
-"Om toch als root uit te voeren, bewerk i2prouter en stel ALLOW_ROOT=true in."
+msgstr "Om toch als root uit te voeren, bewerk i2prouter en stel ALLOW_ROOT=true in."

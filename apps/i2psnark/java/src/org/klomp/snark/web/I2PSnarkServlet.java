@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -53,6 +54,7 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
 
+import org.klomp.snark.BandwidthListener;
 import org.klomp.snark.I2PSnarkUtil;
 import org.klomp.snark.MagnetURI;
 import org.klomp.snark.MetaInfo;
@@ -402,6 +404,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 // fallback to metarefresh when javascript is disabled
                 buf.append("<noscript><meta http-equiv=refresh content=\"").append(delay).append(";")
                    .append(_contextPath).append("/").append(peerString).append("\"></noscript>\n")
+                   .append("<script nonce=" + cspNonce + " type=module src=" + resourcePath + "js/onVisible.js></script>\n")
                    .append("<script nonce=").append(cspNonce).append(" type=module>\n")
                    .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
                    .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
@@ -1192,7 +1195,11 @@ public class I2PSnarkServlet extends BasicServlet {
             // TODO: disable on pages where torrents is < 50 e.g. last page
             if (total > 0 && (start > 0 || total > pageSize) && pageSize >= 50 && total - start >= 20) {
                 footer.append("<tr id=pagenavbottom><td colspan=12><div class=pagenavcontrols>");
-                writePageNav(out, req, start, (pageSize), total, filter, noThinsp);
+                StringWriter stringWriter = new StringWriter();
+                PrintWriter tempPrintWriter = new PrintWriter(stringWriter);
+                writePageNav(tempPrintWriter, req, start, pageSize, total, filter, noThinsp);
+                tempPrintWriter.flush();
+                footer.append(stringWriter.getBuffer().toString());
                 footer.append("</div></td></tr>\n</tbody>\n");
             }
             footer.append("<tfoot id=snarkFoot><tr class=volatile><th id=torrentTotals align=left colspan=6>");
@@ -1205,7 +1212,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (_manager.util().connected() && total > 0 && stats[4] > 0) {
                 footer.append(" &bullet; ");
                 footer.append(ngettext("1 connected peer", "{0} connected peers", (int) stats[4])
-                   .replace("connected peers", "peer connections"));
+                      .replace("connected peers", "peer connections"));
             }
 
             DHT dht = _manager.util().getDHT();
@@ -1327,7 +1334,10 @@ public class I2PSnarkServlet extends BasicServlet {
                     footer.append("<tr id=dhtDebug>");
                     footer.append("<th colspan=12><span class=volatile>");
                     if (dht != null) {
-                        footer.append(dht.renderStatusHTML());
+                        footer.append("<span id=bwManager hidden>")
+                              .append(_manager.getBandwidthListener().toString())
+                              .append("</span>")
+                              .append(dht.renderStatusHTML());
                     } else {
                         footer.append("<b>");
                         footer.append(_t("No DHT Peers"));
@@ -1537,70 +1547,70 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      *  @since 0.9.6
      */
-    private void writePageNav(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total, String filter,
-                              boolean noThinsp) {
-            // Page nav
-            if (start > 0) {
-                // First
-                out.write("<a href=\"" + _contextPath);
-                out.write(getQueryString(req, null, "", null, filter));
-                out.write("\"><span id=first>");
-                out.write(toThemeSVG("first", _t("First"), _t("First page")));
-                out.write("</span></a>");
-                int prev = Math.max(0, start - pageSize);
-                //if (prev > 0) {
-                if (true) {
-                    // Back
-                    out.write("<a href=\"" + _contextPath);
-                    String sprev = (prev > 0) ? Integer.toString(prev) : "";
-                    out.write(getQueryString(req, null, sprev, null, filter));
-                    out.write("\"><span id=previous>");
-                    out.write(toThemeSVG("previous", _t("Prev"), _t("Previous page")));
-                    out.write("</span></a>");
-                }
-            } else {
-                out.write(
-                          "<span id=first class=disable><img alt=\"\" border=0 class=disable src=\"" +
-                          _imgPath + "first.svg\"></span>" +
-                          "<span id=previous class=disable><img alt=\"\" border=0 class=disable src=\"" +
-                          _imgPath + "previous.svg\"></span>");
-            }
-            // Page count
-            int pages = 1 + ((total - 1) / pageSize);
-            if (pages == 1 && start > 0)
-                pages = 2;
-            if (pages > 1) {
-                int page;
-                if (start + pageSize >= total)
-                    page = pages;
-                else
-                    page = 1 + (start / pageSize);
-                out.write("<span id=pagecount>" + page + thinsp(noThinsp) + pages + "</span>");
-            }
-            if (start + pageSize < total) {
-                int next = start + pageSize;
-                //if (next + pageSize < total) {
-                if (true) {
-                    // Next
-                    out.write("<a href=\"" + _contextPath);
-                    out.write(getQueryString(req, null, Integer.toString(next), null, filter));
-                    out.write("\"><span id=next>");
-                    out.write(toThemeSVG("next", _t("Next"), _t("Next page")));
-                    out.write("</span></a>");
-                }
-                // Last
-                int last = ((total - 1) / pageSize) * pageSize;
-                out.write("<a href=\"" + _contextPath);
-                out.write(getQueryString(req, null, Integer.toString(last), null, filter));
-                out.write("\"><span id=last>");
-                out.write(toThemeSVG("last", _t("Last"), _t("Last page")));
-                out.write("</span></a>");
-            } else {
-                out.write("<span id=next class=disable><img alt=\"\" border=0 class=disable src=\"" +
-                          _imgPath + "next.svg\"></span>" +
-                          "<span id=last class=disable><img alt=\"\" border=0 class=disable src=\"" +
-                          _imgPath + "last.svg\">");
-            }
+
+    private void writePageNav(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total, String filter, boolean noThinsp) {
+        StringBuilder buf = new StringBuilder(1024);
+
+        // First
+        buf.append("<a href=\"")
+           .append(_contextPath)
+           .append(getQueryString(req, null, "", null, filter))
+           .append("\"")
+           .append(start > 0 ? "" : " class=disabled")
+           .append("><span id=first>")
+           .append(toThemeSVG("first", _t("First"), _t("First page")))
+           .append("</span></a>");
+
+        // Back
+        int prev = Math.max(0, start - pageSize);
+        buf.append("<a href=\"")
+           .append(_contextPath)
+           .append(getQueryString(req, null, String.valueOf(prev), null, filter))
+           .append("\"")
+           .append(prev > 0 ? "" : " class=disabled")
+           .append("><span id=previous>")
+           .append(toThemeSVG("previous", _t("Prev"), _t("Previous page")))
+           .append("</span></a>");
+
+        // Page count
+        int pages = 1 + ((total - 1) / pageSize);
+        if (pages == 1 && start > 0) {
+            pages = 2;
+        }
+        if (pages > 1) {
+            int page = (start + pageSize >= total) ? pages : (1 + (start / pageSize));
+            buf.append("<span id=pagecount>")
+               .append(page)
+               .append(thinsp(noThinsp))
+               .append(pages)
+               .append("</span>");
+        }
+
+        // Next
+        int next = start + pageSize;
+        buf.append("<a href=\"")
+           .append(_contextPath)
+           .append(getQueryString(req, null, String.valueOf(next), null, filter))
+           .append("\"")
+           .append(next + pageSize < total ? "" : " class=disabled")
+           .append("><span id=next>")
+           .append(toThemeSVG("next", _t("Next"), _t("Next page")))
+           .append("</span></a>");
+
+        // Last
+        int last = ((total - 1) / pageSize) * pageSize;
+        buf.append("<a href=\"")
+           .append(_contextPath)
+           .append(getQueryString(req, null, String.valueOf(last), null, filter))
+           .append("\"")
+           .append(start + pageSize < total ? "" : " class=disabled")
+           .append("><span id=last>")
+           .append(toThemeSVG("last", _t("Last"), _t("Last page")))
+           .append("</span></a>");
+
+        out.write(buf.toString());
+        buf.setLength(0);
+        out.flush();
     }
 
     /**
@@ -1977,6 +1987,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String i2cpOpts = buildI2CPOpts(req);
             String upLimit = req.getParameter("upLimit");
             String upBW = req.getParameter("upBW");
+            String downBW = req.getParameter("downBW");
             String refreshDel = req.getParameter("refreshDelay");
             String startupDel = req.getParameter("startupDelay");
             String pageSize = req.getParameter("pageSize");
@@ -1995,7 +2006,7 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean enableAddCreate = req.getParameter("enableAddCreate") != null;
             _manager.updateConfig(dataDir, filesPublic, autoStart, smartSort, refreshDel, startupDel, pageSize,
                                   seedPct, eepHost, eepPort, i2cpHost, i2cpPort, i2cpOpts,
-                                  upLimit, upBW, useOpenTrackers, useDHT, theme,
+                                  upLimit, upBW, downBW, useOpenTrackers, useDHT, theme,
                                   lang, ratings, comments, commentsName, collapsePanels, showStatusFilter, enableLightbox, enableAddCreate);
             // update servlet
             try {
@@ -3570,17 +3581,15 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<tr><th class=suboption>")
            .append(_t("Torrent Options"))
            .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
-           .append("<span class=configOption><label><b>")
-           .append(_t("Up bandwidth limit"))
-           .append("</b> <input type=text name=upBW class=\"r numeric\" value=\"")
+
+           .append("<span id=bwAllocation class=configOption title=\"").append(_t("Half available bandwidth recommended.")).append("\">")
+           .append("<b>").append(_t("Bandwidth limit")).append("</b> ")
+           .append("<span id=bwDown></span><input type=text name=downBW class=\"r numeric\" value=\"")
+           .append(_manager.getBandwidthListener().getDownBWLimit() / 1024).append("\" size=5 maxlength=5 pattern=\"[0-9]{1,5}\"")
+           .append(" title=\"").append(_t("Maximum bandwidth allocated for downloading")).append("\"> KB/s down")
+           .append(" <span id=bwUp></span><input type=text name=upBW class=\"r numeric\" value=\"")
            .append(_manager.util().getMaxUpBW()).append("\" size=5 maxlength=5 pattern=\"[0-9]{1,5}\"")
-           .append(" title=\"")
-           .append(_t("Maximum bandwidth allocated for uploading"))
-           .append("\"> KBps</label> <span id=bwHoverHelp>")
-           .append(toThemeSVG("details", "", ""))
-           .append("<span id=bwHelp><i>")
-           .append(_t("Half available bandwidth recommended."))
-           .append("</i></span></span>");
+           .append(" title=\"").append(_t("Maximum bandwidth allocated for uploading")).append("\"> KB/s up");
         if (_context.isRouterContext()) {
             buf.append(" <a href=\"/config.jsp\" target=_blank title=\"")
                .append(_t("View or change router bandwidth"))
@@ -3588,6 +3597,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(_t("Configure"))
                .append("]</a>");
         }
+
         buf.append("</span><br>\n");
         buf.append("<span class=configOption><label><b>")
            .append(_t("Total uploader limit"))
