@@ -99,6 +99,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private volatile boolean _running;
     private volatile boolean _stopping;
     private final Map<String, Tracker> _trackerMap;
+    private final Map<String, RegexFilter> _regexMap;
     private UpdateManager _umgr;
     private UpdateHandler _uhandler;
     private SimpleTimer2.TimedEvent _idleChecker;
@@ -272,6 +273,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 //        "crs2nugpvoqygnpabqbopwyjqettwszth6ubr2fh7whstlos3a6q.b32.i2p"
     }));
 
+    private static final String DEFAULT_REGEXES[] = {
+       "NFO Files", "/^.*\\.nfo$/",
+       "Synology NAS Metadata", "/^@eaDir$/"
+    };
+
     static {
         Set<String> ann = new HashSet<String>(8);
         for (int i = 1; i < DEFAULT_TRACKERS.length; i += 2) {
@@ -285,6 +291,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /** comma delimited list of name=announceURL=baseURL for the trackers to be displayed */
     public static final String PROP_TRACKERS = "i2psnark.trackers";
+
+    /** comma delimited list of name=regex for regex filters */
+    public static final String PROP_REGEXES = "i2psnark.regexes";
 
     /**
      *  For embedded.
@@ -323,6 +332,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _configDir = migrateConfig(configFile);
         _configFile = new File(_configDir, CONFIG_FILE);
         _trackerMap = new ConcurrentHashMap<String, Tracker>(4);
+        _regexMap = new ConcurrentHashMap<String, RegexFilter>(2);
         loadConfig(null);
         if (!ctx.isRouterContext())
             Runtime.getRuntime().addShutdownHook(new Thread(new TempDeleter(_util.getTempDir()), "Snark Temp Dir Deleter"));
@@ -1136,6 +1146,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
         initTrackerMap();
+        initRegexMap();
     }
 
     private int getInt(String prop, int defaultVal) {
@@ -3222,10 +3233,25 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     *  Unsorted map of name to RegexFilter object
+     *  Modifiable, not a copy
+     */
+    public Map<String, RegexFilter> getRegexMap() {
+        return _regexMap;
+    }
+
+    /**
      *  Unsorted, do not modify
      */
     public Collection<Tracker> getTrackers() {
         return _trackerMap.values();
+    }
+
+    /**
+     *  Unsorted, do not modify
+     */
+    public Collection<RegexFilter> getRegexStrings() {
+        return _regexMap.values();
     }
 
     /**
@@ -3239,11 +3265,27 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     *  Sorted copy
+     */
+    public List<RegexFilter> getSortedRegexStrings() {
+        List<RegexFilter> rv = new ArrayList<RegexFilter>(_regexMap.values());
+        Collections.sort(rv, new IgnoreCaseComparatorR());
+        return rv;
+    }
+
+    /**
      *  Has the default tracker list been modified?
      *  @since 0.9.35
      */
     public boolean hasModifiedTrackers() {
         return _config.containsKey(PROP_TRACKERS);
+    }
+
+    /**
+     *  Has the default regex list been modified?
+     */
+    public boolean hasModifiedRegexes() {
+        return _config.containsKey(PROP_REGEXES);
     }
 
     /** @since 0.9 */
@@ -3267,9 +3309,35 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
+    private void initRegexMap() {
+        _log.error("wtf3");
+        String regexes = _config.getProperty(PROP_REGEXES);
+        if ( (regexes== null) || (regexes.trim().length() <= 0) )
+            _log.error("wtf3 got prop");
+            regexes = _context.getProperty(PROP_REGEXES);
+        if ( (regexes == null) || (regexes.trim().length() <= 0) ) {
+            _log.error("wtf3 set default");
+            setDefaultRegexMap(true);
+        } else {
+            _log.error("wtf3 bees are on the what now?");
+            String[] toks = DataHelper.split(regexes, ",");
+            for (int i = 0; i < toks.length; i += 2) {
+                String name = toks[i].trim().replace("&#44;", ",");
+                String regex = toks[i+1].trim().replace("&#44;", ",");
+                if ( (name.length() > 0) && (regex.length() > 0) ) {
+                    _regexMap.put(name, new RegexFilter(name, regex, true));
+                }
+            }
+        }
+    }
+
     /** @since 0.9 */
     public void setDefaultTrackerMap() {
         setDefaultTrackerMap(true);
+    }
+
+    public void setDefaultRegexMap() {
+        setDefaultRegexMap(true);
     }
 
     /** @since 0.9.1 */
@@ -3284,6 +3352,20 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             _trackerMap.put(name, new Tracker(name, urls[0], url2));
         }
         if (save && _config.remove(PROP_TRACKERS) != null) {
+            saveConfig();
+        }
+    }
+
+    private void setDefaultRegexMap(boolean save) {
+        _regexMap.clear();
+        for (int i = 0; i < DEFAULT_REGEXES.length; i += 2) {
+            String name = DEFAULT_REGEXES[i];
+            String regex = DEFAULT_REGEXES[i+1];
+            _log.error("wtf2: " + name);
+            _log.error("wtf2: " + regex);
+            _regexMap.put(name, new RegexFilter(name, regex, true));
+        }
+        if (save && _config.remove(PROP_REGEXES) != null) {
             saveConfig();
         }
     }
@@ -3303,6 +3385,23 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 buf.append('=').append(t.baseURL);
         }
         _config.setProperty(PROP_TRACKERS, buf.toString());
+        saveConfig();
+    }
+
+    public void saveRegexMap() {
+        StringBuilder buf = new StringBuilder(2048);
+        boolean comma = false;
+        for (Map.Entry<String, RegexFilter> e : _regexMap.entrySet()) {
+            if (comma)
+                buf.append(',');
+            else
+                comma = true;
+            RegexFilter r = e.getValue();
+            buf.append(e.getKey().replace(",", "&#44;")).append(',').append(r.regex.replace(",", "&#44;"));
+            if (r.isDefault)
+                buf.append('=').append("true");
+        }
+        _config.setProperty(PROP_REGEXES, buf.toString());
         saveConfig();
     }
 
@@ -3558,6 +3657,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static class IgnoreCaseComparator implements Comparator<Tracker>, Serializable {
         private final Collator coll = Collator.getInstance();
         public int compare(Tracker l, Tracker r) {
+            return coll.compare(l.name, r.name);
+        }
+    }
+
+    private static class IgnoreCaseComparatorR implements Comparator<RegexFilter>, Serializable {
+        private final Collator coll = Collator.getInstance();
+        public int compare(RegexFilter l, RegexFilter r) {
             return coll.compare(l.name, r.name);
         }
     }

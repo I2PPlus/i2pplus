@@ -60,6 +60,7 @@ import org.klomp.snark.MagnetURI;
 import org.klomp.snark.MetaInfo;
 import org.klomp.snark.Peer;
 import org.klomp.snark.PeerID;
+import org.klomp.snark.RegexFilter;
 import org.klomp.snark.Snark;
 import org.klomp.snark.SnarkManager;
 import org.klomp.snark.Storage;
@@ -417,6 +418,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(CoreVersion.VERSION).append("\"></script>\n")
                .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/ignorepattern.js?")
                .append(CoreVersion.VERSION).append("\"></script>\n")
+
                .append("<link rel=stylesheet href=").append(resourcePath).append("toast.css>\n");
         }
 
@@ -525,6 +527,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // end of mainsection div
             out.write("<div class=logshim></div>\n</div>\n");
             writeConfigForm(out, req);
+            writeRegexFilterForm(out, req);
             writeTrackerForm(out, req);
 
         } else {
@@ -2016,9 +2019,13 @@ public class I2PSnarkServlet extends BasicServlet {
             String taction = req.getParameter("taction");
             if (taction != null)
                 processTrackerForm(taction, req);
+        } else if ("Save3".equals(action)) {
+            String raction = req.getParameter("raction");
+            _log.error("wtf save3");
+            if (raction != null)
+                processRegexForm(raction, req);
         } else if ("Create".equals(action)) {
             String baseData = req.getParameter("nofilter_baseFile");
-            String ignorePattern = req.getParameter("nofilter_ignorePattern");
             if (baseData != null && baseData.trim().length() > 0) {
                 File baseFile = new File(baseData.trim());
                 if (!baseFile.isAbsolute())
@@ -2116,6 +2123,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         // it shouldn't be THAT bad, so keep it in this thread.
                         // TODO thread it for big torrents, perhaps a la FetchAndAdd
                         boolean isPrivate = _manager.getPrivateTrackers().contains(announceURL);
+                        String ignorePattern = req.getParameter("nofilter_ignorePattern");
                         Storage s = new Storage(_manager.util(), baseFile, announceURL, announceList, null, isPrivate, null, ignorePattern);
                         s.close(); // close the files... maybe need a way to pass this Storage to addTorrent rather than starting over
                         MetaInfo info = s.getMetaInfo();
@@ -2284,6 +2292,37 @@ public class I2PSnarkServlet extends BasicServlet {
             _manager.saveOpenTrackers(null);
             _manager.addMessage(_t("Restored default trackers"));
         } else {
+            _manager.addMessage("Unknown POST action: \"" + action + '\"');
+        }
+    }
+
+    private void processRegexForm(String action, HttpServletRequest req) {
+        if (action.equals(_t("Delete selected")) || action.equals(_t("Save"))) {
+            _log.error("wtf delete/save");
+        } else if (action.equals(_t("Add Regex Filter"))) {
+            _log.error("wtf add");
+            String name = req.getParameter("rname");
+            String regex = req.getParameter("regex");
+            String rDefault = req.getParameter("regexIsDefault");
+            _log.error("rname: " + name);
+            _log.error("regex: " + regex);
+            _log.error("rDefault: " + rDefault);
+            if (name != null && !name.trim().isEmpty() && regex != null && !regex.trim().isEmpty()) {
+                try {
+                    java.util.regex.Pattern.compile(regex);
+                }
+                catch(PatternSyntaxException e) {
+                    _log.error("regex invalid");
+                    _manager.addMessage(_t("Enter a valid regex"));
+                }
+            } else {
+                _log.error("something null");
+                _manager.addMessage(_t("Enter valid name and regex"));
+            }
+        } else if (action.equals(_t("Restore defaults"))) {
+            _log.error("wtf restore");
+        } else {
+            _log.error("wtf unknown");
             _manager.addMessage("Unknown POST action: \"" + action + '\"');
         }
     }
@@ -3306,14 +3345,6 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("\" name=foo>")
            .append("</td></tr>\n")
            .append("<tr><td>")
-           .append(_t("Ignore Pattern"))
-           .append(":</td><td>")
-           .append("<input type=text id=nofilter_ignorePattern name=nofilter_ignorePattern size=85 value=\"")
-           .append("\" spellcheck=false  title=\"")
-           .append(_t("Regular Expression pattern of files to ignore in path"))
-           .append("\">")
-           .append("</td></tr>\n")
-           .append("<tr><td>")
            .append(_t("Trackers"))
            .append(":<td>\n<table id=trackerselect>\n<tr><td>Name</td><td>")
            .append(_t("Primary"))
@@ -3727,6 +3758,54 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.setLength(0);
     }
 
+    /** @since 0.9.62+ */
+    private void writeRegexFilterForm(PrintWriter out, HttpServletRequest req) throws IOException {
+        StringBuilder buf = new StringBuilder(5*1024);
+        buf.append("<form id=regexFilters action=\"").append(_contextPath).append("/configure#navbar\" method=POST hidden>\n")
+           .append("<div class=configPanel id=regex><div class=snarkConfig>\n");
+        writeHiddenInputs(buf, req, "Save3");
+        buf.append("<span class=configTitle>")
+           .append(_t("Regex Filtering"))
+           .append("</span><hr>\n")
+           .append("<table class=regexFiltering>\n<tr>")
+           .append("<th title=\"").append(_t("Mark regex filter for deletion")).append("\"></th>")
+           .append("<th>").append(_t("Regex Name")).append("</th>")
+           .append("<th>").append(_t("Regex String")).append("</th>")
+           .append("<th>").append(_t("Enabled by Default")).append("</th>")
+           .append("</tr>\n");
+        for (RegexFilter r : _manager.getSortedRegexStrings()) {
+            _log.error("r.name: " + r.name);
+            _log.error("r.regex: " + r.regex);
+            String name = "name"; //r.name;
+            String regex = "regex"; //r.regex;
+            boolean isDefault = true; //r.isDefault;
+            buf.append("<tr class=regexString>")
+               .append("<td><input type=checkbox class=optbox name=\"delete_").append(name).append("\"></td>")
+               .append("<td>").append(name).append("</td>")
+               .append("<td>").append(regex).append("</td>")
+               .append("<td><input type=checkbox class=optbox name=\"defaultEnabled_").append(name).append(isDefault ? "checked=checked" : "").append("\">").append("</td>")
+               .append("</tr>");
+        }
+        buf.append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
+           .append("<tr id=addRegex>")
+           .append("<td><b>").append(_t("Add")).append(":</b></td>")
+           .append("<td><input type=text class=regexName name=rname spellcheck=false></td>")
+           .append("<td><input type=text class=regexString name=regex spellcheck=false></td>")
+           .append("<td><input type=checkbox class=optbox name=regexIsDefault></td>")
+           .append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
+           .append("<tr><td colspan=4>\n")
+           .append("<input type=submit name=raction class=delete value=\"").append(_t("Delete selected")).append("\">\n")
+           .append("<input type=submit name=raction class=accept value=\"").append(_t("Save")).append("\">\n")
+           .append("<input type=submit name=raction class=reload value=\"").append(_t("Restore defaults")).append("\">\n")
+           .append("<input type=submit name=raction class=default value=\"").append(_t("Add Regex Filter")).append("\">\n")
+           .append("</td></tr>")
+           .append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
+           .append("</table>\n</div>\n</div></form>\n");
+        out.write(buf.toString());
+        out.flush();
+        buf.setLength(0);
+    }
+
     /** @since 0.9 */
     private void writeTrackerForm(PrintWriter out, HttpServletRequest req) throws IOException {
         StringBuilder buf = new StringBuilder(5*1024);
@@ -3816,7 +3895,6 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_t("Add tracker")).append("\">\n")
            .append("<input type=submit name=taction class=accept value=\"")
            .append(_t("Save tracker configuration")).append("\">\n")
-           // "<input type=reset class=cancel value=\"").append(_t("Cancel")).append("\">\n" +
            .append("<input type=submit name=taction class=reload value=\"")
            .append(_t("Restore defaults")).append("\">\n")
            .append("</td></tr>")
