@@ -2296,6 +2296,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
     }
 
+    /** @since 0.9.62+ */
     private void processRegexForm(String action, HttpServletRequest req) {
         if (action.equals(_t("Delete selected")) || action.equals(_t("Save"))) {
             _log.error("wtf delete/save");
