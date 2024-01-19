@@ -6,6 +6,7 @@ package org.klomp.snark;
 
 /**
  * A structure for regex filters
+ * @since 0.9.62+ **/
  */
 public class RegexFilter {
 

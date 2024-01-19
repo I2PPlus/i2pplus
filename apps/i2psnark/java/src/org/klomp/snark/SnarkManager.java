@@ -3235,6 +3235,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      *  Unsorted map of name to RegexFilter object
      *  Modifiable, not a copy
+     *  @since 0.9.62+
      */
     public Map<String, RegexFilter> getRegexMap() {
         return _regexMap;
@@ -3249,6 +3250,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      *  Unsorted, do not modify
+     *  @since 0.9.62+
      */
     public Collection<RegexFilter> getRegexStrings() {
         return _regexMap.values();
@@ -3266,6 +3268,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      *  Sorted copy
+     *  @since 0.9.62+
      */
     public List<RegexFilter> getSortedRegexStrings() {
         List<RegexFilter> rv = new ArrayList<RegexFilter>(_regexMap.values());
@@ -3283,6 +3286,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      *  Has the default regex list been modified?
+     *  @since 0.9.62+
      */
     public boolean hasModifiedRegexes() {
         return _config.containsKey(PROP_REGEXES);
@@ -3309,6 +3313,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
+    /** @since 0.9.62+ */
     private void initRegexMap() {
         _log.error("wtf3");
         String regexes = _config.getProperty(PROP_REGEXES);
@@ -3342,6 +3347,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         setDefaultTrackerMap(true);
     }
 
+    /** @since 0.9.62+ */
     public void setDefaultRegexMap() {
         setDefaultRegexMap(true);
     }
@@ -3362,6 +3368,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
+    /** @since 0.9.62+ */
     private void setDefaultRegexMap(boolean save) {
         _regexMap.clear();
         for (int i = 0; i < DEFAULT_REGEXES.length; i += 2) {
@@ -3394,6 +3401,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         saveConfig();
     }
 
+    /** @since 0.9.62+ */
     public void saveRegexMap() {
         StringBuilder buf = new StringBuilder(2048);
         boolean comma = false;
@@ -3669,6 +3677,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
+    /**
+     *  ignore case, current locale
+     *  @since 0.9.62+
+     */
     private static class IgnoreCaseComparatorR implements Comparator<RegexFilter>, Serializable {
         private final Collator coll = Collator.getInstance();
         public int compare(RegexFilter l, RegexFilter r) {
