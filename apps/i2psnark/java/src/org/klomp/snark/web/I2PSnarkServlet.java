@@ -2299,17 +2299,51 @@ public class I2PSnarkServlet extends BasicServlet {
     private void processRegexForm(String action, HttpServletRequest req) {
         if (action.equals(_t("Delete selected")) || action.equals(_t("Save"))) {
             _log.error("wtf delete/save");
+            boolean changed = false;
+            Map<String, RegexFilter> regexes = _manager.getRegexMap();
+            List<String> removed = new ArrayList<String>();
+            Enumeration<?> e = req.getParameterNames();
+            while (e.hasMoreElements()) {
+                 Object o = e.nextElement();
+                 if (!(o instanceof String))
+                     continue;
+                 String k = (String) o;
+                 if (k.startsWith("delete_")) {
+                     k = k.substring(7);
+                     RegexFilter r;
+                     if ((r = regexes.remove(k)) != null) {
+                        removed.add(r.regex);
+                        _manager.addMessage(_t("Removed") + ": " + DataHelper.stripHTML(k));
+                        changed = true;
+                     }
+                }
+            }
+            if (changed)
+                _manager.saveRegexMap();
+
         } else if (action.equals(_t("Add Regex Filter"))) {
             _log.error("wtf add");
+            Enumeration<String> paramNames = req.getParameterNames();
+
+            while (paramNames.hasMoreElements()) {
+                String pName = paramNames.nextElement();
+                _log.error("param: " + pName);
+            }
+
             String name = req.getParameter("rname");
             String regex = req.getParameter("regex");
-            String rDefault = req.getParameter("regexIsDefault");
+            boolean isDefault = req.getParameter("regexIsDefault") != null;
             _log.error("rname: " + name);
             _log.error("regex: " + regex);
-            _log.error("rDefault: " + rDefault);
+            _log.error("rDefault: " + isDefault);
             if (name != null && !name.trim().isEmpty() && regex != null && !regex.trim().isEmpty()) {
                 try {
                     java.util.regex.Pattern.compile(regex);
+                    Map<String, RegexFilter> regexFilters = _manager.getRegexMap();
+                    regexFilters.put(name, new RegexFilter(name, regex, isDefault));
+                    _log.error("wtf call saveRegexMap");
+                    _manager.saveRegexMap();
+                    _log.error("wtf return from call saveRegexMap");
                 }
                 catch(PatternSyntaxException e) {
                     _log.error("regex invalid");
@@ -2321,6 +2355,8 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         } else if (action.equals(_t("Restore defaults"))) {
             _log.error("wtf restore");
+            _manager.setDefaultRegexMap();
+            _manager.addMessage(_t("Restored default regex filters"));
         } else {
             _log.error("wtf unknown");
             _manager.addMessage("Unknown POST action: \"" + action + '\"');
@@ -3776,15 +3812,18 @@ public class I2PSnarkServlet extends BasicServlet {
         for (RegexFilter r : _manager.getSortedRegexStrings()) {
             _log.error("r.name: " + r.name);
             _log.error("r.regex: " + r.regex);
-            String name = "name"; //r.name;
-            String regex = "regex"; //r.regex;
-            boolean isDefault = true; //r.isDefault;
+            _log.error("r.isDefault: " + r.isDefault);
+            boolean isDefault = r.isDefault;
             buf.append("<tr class=regexString>")
-               .append("<td><input type=checkbox class=optbox name=\"delete_").append(name).append("\"></td>")
-               .append("<td>").append(name).append("</td>")
-               .append("<td>").append(regex).append("</td>")
-               .append("<td><input type=checkbox class=optbox name=\"defaultEnabled_").append(name).append(isDefault ? "checked=checked" : "").append("\">").append("</td>")
-               .append("</tr>");
+               .append("<td><input type=checkbox class=optbox name=\"delete_").append(r.name).append("\"></td>")
+               .append("<td>").append(r.name).append("</td>")
+               .append("<td>").append(r.regex).append("</td>")
+               .append("<td><input type=checkbox class=optbox name=\"defaultEnabled_").append(r.name).append("\"");
+            if (r.isDefault) {
+                buf.append(" checked=checked");
+            }
+            buf.append(">").append("</td>")
+                .append("</tr>");
         }
         buf.append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
            .append("<tr id=addRegex>")
