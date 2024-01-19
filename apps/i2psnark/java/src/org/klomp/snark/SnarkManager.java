@@ -3315,20 +3315,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /** @since 0.9.62+ */
     private void initRegexMap() {
-        _log.error("wtf3");
         String regexes = _config.getProperty(PROP_REGEXES);
-        if ( (regexes== null) || (regexes.trim().length() <= 0) ) {
+        if ( (regexes== null) || (regexes.trim().length() <= 0) )
             regexes = _context.getProperty(PROP_REGEXES);
-            _log.error("wtf3 conext prop: " + regexes);
-        }
         if ( (regexes == null) || (regexes.trim().length() <= 0) ) {
-            _log.error("wtf3 set default: " + regexes);
             setDefaultRegexMap(true);
         } else {
-            _log.error("wtf3 got prop 2: " + regexes);
             byte decoded[] = Base64.decode(regexes);
             regexes = new String(decoded);
-            _log.error("wtf3 decoded: " + regexes);
             String[] toks = DataHelper.split(regexes, ",");
             for (int i = 0; i < toks.length; i += 2) {
                 String name = toks[i].trim().replace("&#44;", ",");
@@ -3374,8 +3368,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         for (int i = 0; i < DEFAULT_REGEXES.length; i += 2) {
             String name = DEFAULT_REGEXES[i];
             String regex = DEFAULT_REGEXES[i+1];
-            _log.error("wtf2: " + name);
-            _log.error("wtf2: " + regex);
             _regexMap.put(name, new RegexFilter(name, regex, true));
         }
         if (save && _config.remove(PROP_REGEXES) != null) {
@@ -3414,9 +3406,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             buf.append(e.getKey().replace(",", "&#44;")).append(',').append(r.regex.replace(",", "&#44;"));
             if (r.isDefault)
                 buf.append('=').append("true");
-            _log.error("wtfbuf: " + buf.toString());
         }
-        _log.error("wtfsave: " + Base64.encode(buf.toString().getBytes()));
         _config.setProperty(PROP_REGEXES, Base64.encode(buf.toString().getBytes()));
         saveConfig();
     }
