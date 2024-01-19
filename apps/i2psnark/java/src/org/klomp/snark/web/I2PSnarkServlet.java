@@ -2021,7 +2021,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 processTrackerForm(taction, req);
         } else if ("Save3".equals(action)) {
             String raction = req.getParameter("raction");
-            _log.error("wtf save3");
             if (raction != null)
                 processRegexForm(raction, req);
         } else if ("Create".equals(action)) {
@@ -2299,7 +2298,6 @@ public class I2PSnarkServlet extends BasicServlet {
     /** @since 0.9.62+ */
     private void processRegexForm(String action, HttpServletRequest req) {
         if (action.equals(_t("Delete selected")) || action.equals(_t("Save"))) {
-            _log.error("wtf delete/save");
             boolean changed = false;
             Map<String, RegexFilter> regexes = _manager.getRegexMap();
             List<String> removed = new ArrayList<String>();
@@ -2323,43 +2321,26 @@ public class I2PSnarkServlet extends BasicServlet {
                 _manager.saveRegexMap();
 
         } else if (action.equals(_t("Add Regex Filter"))) {
-            _log.error("wtf add");
-            Enumeration<String> paramNames = req.getParameterNames();
-
-            while (paramNames.hasMoreElements()) {
-                String pName = paramNames.nextElement();
-                _log.error("param: " + pName);
-            }
-
             String name = req.getParameter("rname");
             String regex = req.getParameter("regex");
             boolean isDefault = req.getParameter("regexIsDefault") != null;
-            _log.error("rname: " + name);
-            _log.error("regex: " + regex);
-            _log.error("rDefault: " + isDefault);
             if (name != null && !name.trim().isEmpty() && regex != null && !regex.trim().isEmpty()) {
                 try {
                     java.util.regex.Pattern.compile(regex);
                     Map<String, RegexFilter> regexFilters = _manager.getRegexMap();
                     regexFilters.put(name, new RegexFilter(name, regex, isDefault));
-                    _log.error("wtf call saveRegexMap");
                     _manager.saveRegexMap();
-                    _log.error("wtf return from call saveRegexMap");
                 }
                 catch(PatternSyntaxException e) {
-                    _log.error("regex invalid");
                     _manager.addMessage(_t("Enter a valid regex"));
                 }
             } else {
-                _log.error("something null");
                 _manager.addMessage(_t("Enter valid name and regex"));
             }
         } else if (action.equals(_t("Restore defaults"))) {
-            _log.error("wtf restore");
             _manager.setDefaultRegexMap();
             _manager.addMessage(_t("Restored default regex filters"));
         } else {
-            _log.error("wtf unknown");
             _manager.addMessage("Unknown POST action: \"" + action + '\"');
         }
     }
@@ -3811,9 +3792,6 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<th>").append(_t("Enabled by Default")).append("</th>")
            .append("</tr>\n");
         for (RegexFilter r : _manager.getSortedRegexStrings()) {
-            _log.error("r.name: " + r.name);
-            _log.error("r.regex: " + r.regex);
-            _log.error("r.isDefault: " + r.isDefault);
             boolean isDefault = r.isDefault;
             buf.append("<tr class=regexString>")
                .append("<td><input type=checkbox class=optbox name=\"delete_").append(r.name).append("\"></td>")
