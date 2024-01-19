@@ -263,6 +263,12 @@ td#throttle,#clientAuthConfig{padding:0}
 #throttler tr:nth-child(odd){background:rgba(0,16,0,.7)}
 #throttler tr:nth-child(even){background:rgba(0,8,0,.7)}
 #throttler input[type=text]{width:80px;margin-right:3px}
+#toggleThrottler{width:19px;height:19px;display:inline-block;position:absolute;right:3px;top:5px;background:var(--dropdown) no-repeat center center/10px;transform:rotate(-90deg)}
+#throttleHeader:hover{cursor:pointer}
+#throttleHeader th{position:relative}
+#throttleHeader:hover th{color:var(--hover)}
+#throttleHeader:hover #toggleThrottler{background-image:var(--dropdown_hover)}
+#throttleHeader.isDisplayed #toggleThrottler{right:6px;transform:none}
 
 /* server tunnel options */
 #tunnelOpts table{border:0}
@@ -335,8 +341,9 @@ tr.configerror{box-shadow:var(--highlight),inset 0 -1px 0 1px #000,inset -1px 0 
 /* responsive layout */
 @media (max-width:1499px){
 h2,h3{font-size:11.5pt}
-#countClient,#countServer{margin:-5px -5px 0 0;top:5px;right:11px;line-height:1.185}
 .running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){margin-left:5px}
+#countClient,#countServer{margin:-5px -5px 0 0;top:5px;right:11px;line-height:1.185}
+#toggleThrottler{top:4px}
 }
 
 @media (max-width:1300px){

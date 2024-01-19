@@ -106,6 +106,13 @@ th .help::after{width:16px;height:16px;display:inline-block;background:url(/them
 #clientTunnels th,#serverTunnels th{font-size:85%}
 #clientTunnels th:nth-child(n+2),#clientTunnels td:nth-child(n+2),#serverTunnels th:nth-child(n+2),#serverTunnels td:nth-child(n+2){text-align:center}
 #targetPort{margin-right:10px}
+#toggleInfo{margin:-2px -4px 0 0;padding:2px 5px;min-width:0;vertical-align:middle;cursor:pointer}
+#toggleInfo:hover img,#toggleInfo:focus img{mix-blend-mode:normal}
+#toggleInfo img{height:8px;width:12px;mix-blend-mode:luminosity}
+#tunnelEditPage td#throttle,#clientAuthConfig{padding:0}
+#tunnelMessages{padding:0}
+
+/* throttler */
 #throttler th{padding-left:20px}
 #throttler th:last-child,#throttler td:last-child,#clientAuth th:last-child,#clientAuth td:last-child{border-right:0}
 #throttler td{width:20%}
@@ -114,11 +121,12 @@ th .help::after{width:16px;height:16px;display:inline-block;background:url(/them
 #throttler tr:nth-child(odd),#wizardTunnelTypes tr:nth-child(odd),#wizardSummary tr:nth-child(odd){background:#fff}
 #throttler tr:nth-child(even),#wizardTunnelTypes tr:nth-child(even),#wizardSummary tr:nth-child(even){background:#fafbff}
 #throttler input[type=text]{width:80px}
-#toggleInfo{margin:-2px -4px 0 0;padding:2px 5px;min-width:0;vertical-align:middle;cursor:pointer}
-#toggleInfo:hover img,#toggleInfo:focus img{mix-blend-mode:normal}
-#toggleInfo img{height:8px;width:12px;mix-blend-mode:luminosity}
-#tunnelEditPage td#throttle,#clientAuthConfig{padding:0}
-#tunnelMessages{padding:0}
+#toggleThrottler{width:19px;height:19px;display:inline-block;position:absolute;right:4px;top:7px;background:var(--dropdown) no-repeat center center/10px;transform:rotate(-90deg)}
+#throttleHeader:hover{cursor:pointer}
+#throttleHeader th{position:relative}
+#throttleHeader:hover th{color:var(--hover)}
+#throttleHeader:hover #toggleThrottler{background-image:var(--dropdown_hover)}
+#throttleHeader.isDisplayed #toggleThrottler{right:7px;transform:none}
 
 /* screenlog */
 #statusMessages,#statusMessages:active{margin:0;height:80px;font-size:9pt;border:0;box-shadow:none}
@@ -277,6 +285,8 @@ td[colspan="2"] select#profile{width:calc(50% - 15px)}
 #countClient,#countServer{right:5px;line-height:1.185}
 #serverTunnels .iconize,#clientTunnels .iconize{padding:12.5px 7px;min-width:48px;vertical-align:middle;font-size:0;background-size:12px,100%}
 #serverTunnels .preview.iconize,#clientTunnels .preview.iconize{min-width:64px;background-size:16px,100%}
+#toggleThrottler{top:5px;right:3px}
+#throttleHeader.isDisplayed #toggleThrottler{right:4px;transform:none}
 }
 @media (max-width:1200px){
 th{font-size:9pt}

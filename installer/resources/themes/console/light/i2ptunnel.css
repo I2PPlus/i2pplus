@@ -255,6 +255,12 @@ td#throttle,#clientAuthConfig{padding:0;box-shadow:none}
 #throttler tr:nth-child(even),#wizardTunnelTypes tr:nth-child(even),#wizardSummary tr:nth-child(even),#clientAuth tr:nth-child(odd){background:#eef;background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(230,230,255,.3) 3px,#fff 5px)}
 #throttler tr:nth-child(2) td,#throttler tr:nth-child(6) td,#throttler tr:not(:nth-child(2)) td:first-child b,#throttler tr:not(:nth-child(6)) td:first-child b{font-size:90%}
 #throttler input[type=text]{width:80px}
+#toggleThrottler{width:19px;height:19px;display:inline-block;position:absolute;right:4px;top:7px;background:var(--dropdown) no-repeat center center/10px;transform:rotate(-90deg)}
+#throttleHeader:hover{cursor:pointer}
+#throttleHeader th{position:relative}
+#throttleHeader:hover th{color:var(--hover)}
+#throttleHeader:hover #toggleThrottler{background-image:var(--dropdown_hover)}
+#throttleHeader.isDisplayed #toggleThrottler{right:7px;transform:none}
 
 /* register */
 #clientAuth{width:100%;box-sizing:border-box}
@@ -324,6 +330,8 @@ th .help::after{width:16px;height:16px;display:inline-block;background:var(--hel
 .panel table:last-of-type{margin-bottom:1px}
 .newTunnel form{padding:6px 7px}
 #regDisabled{margin-bottom:4px}
+#toggleThrottler{top:5px;right:3px}
+#throttleHeader.isDisplayed #toggleThrottler{right:4px;transform:none}
 }
 
 @media (max-width:1300px){

@@ -218,6 +218,12 @@ td.blankColumn{width:20%}
 #throttler tr:nth-child(odd){background:#000010}
 #throttler tr:nth-child(even){background:#000017}
 #throttler input[type=text]{width:80px}
+#toggleThrottler{width:19px;height:19px;display:inline-block;position:absolute;right:5px;top:8px;background:var(--dropdown) no-repeat center center/10px;transform:rotate(-90deg)}
+#throttleHeader:hover{cursor:pointer}
+#throttleHeader th{position:relative}
+#throttleHeader:hover th{color:var(--hover)}
+#throttleHeader:hover #toggleThrottler{background-image:var(--dropdown_hover)}
+#throttleHeader.isDisplayed #toggleThrottler{right:8px;transform:none}
 
 #notReady,#down{margin:55px auto 50px;padding:30px;width:400px;text-align:center;font-weight:700;font-size:11pt;border:1px solid #005;box-shadow:var(--highlight),inset 0 0 4px 4px rgba(0,0,0,.4),0 0 0 1px #000,0 0 0 2px #001,0 0 0 6px #002,0 0 0 8px #003;background:repeating-linear-gradient(180deg,#002 2px,#001 4px)}
 #down{font-size:0;border:1px solid #414}
@@ -306,6 +312,8 @@ td.infohelp{padding:15px 10px 15px 38px;background:var(--infohelp) no-repeat 10p
 th,.tunnelOpts tr:nth-child(even) td,#throttler tr:nth-child(even) td{font-size:85%}
 .tunnelName a,.tunnelName a:hover,.tunnelName a:focus,.tunnelName a:active{margin-left:2px;padding-left:22px;width:calc(100% - 40px);background-size:12px,100%}
 #countClient,#countServer{margin:-6px -4px 0 0;line-height:1.2}
+#toggleThrottler{top:3.5px;right:2px}
+#throttleHeader.isDisplayed #toggleThrottler{right:4px}
 }
 
 @media (max-width:1300px){
