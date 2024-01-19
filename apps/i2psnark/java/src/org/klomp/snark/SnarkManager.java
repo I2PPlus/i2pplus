@@ -274,8 +274,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }));
 
     private static final String DEFAULT_REGEXES[] = {
-       "NFO Files", "/^.*\\.nfo$/",
-       "Synology NAS Metadata", "/^@eaDir$/"
+       "NFO Files", "/^.*\\.nfo$/=true",
+       "Synology NAS Metadata", "/^@eaDir$/=true"
     };
 
     static {
@@ -3312,20 +3312,26 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private void initRegexMap() {
         _log.error("wtf3");
         String regexes = _config.getProperty(PROP_REGEXES);
-        if ( (regexes== null) || (regexes.trim().length() <= 0) )
-            _log.error("wtf3 got prop");
+        if ( (regexes== null) || (regexes.trim().length() <= 0) ) {
             regexes = _context.getProperty(PROP_REGEXES);
+            _log.error("wtf3 conext prop: " + regexes);
+        }
         if ( (regexes == null) || (regexes.trim().length() <= 0) ) {
-            _log.error("wtf3 set default");
+            _log.error("wtf3 set default: " + regexes);
             setDefaultRegexMap(true);
         } else {
-            _log.error("wtf3 bees are on the what now?");
+            _log.error("wtf3 got prop 2: " + regexes);
+            byte decoded[] = Base64.decode(regexes);
+            regexes = new String(decoded);
+            _log.error("wtf3 decoded: " + regexes);
             String[] toks = DataHelper.split(regexes, ",");
             for (int i = 0; i < toks.length; i += 2) {
                 String name = toks[i].trim().replace("&#44;", ",");
                 String regex = toks[i+1].trim().replace("&#44;", ",");
                 if ( (name.length() > 0) && (regex.length() > 0) ) {
-                    _regexMap.put(name, new RegexFilter(name, regex, true));
+                    String data[] = DataHelper.split(regex, "=", 2);
+                    boolean isDefault = data.length > 1 ? true : false;
+                    _regexMap.put(name, new RegexFilter(name, regex, isDefault));
                 }
             }
         }
@@ -3400,8 +3406,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             buf.append(e.getKey().replace(",", "&#44;")).append(',').append(r.regex.replace(",", "&#44;"));
             if (r.isDefault)
                 buf.append('=').append("true");
+            _log.error("wtfbuf: " + buf.toString());
         }
-        _config.setProperty(PROP_REGEXES, buf.toString());
+        _log.error("wtfsave: " + Base64.encode(buf.toString().getBytes()));
+        _config.setProperty(PROP_REGEXES, Base64.encode(buf.toString().getBytes()));
         saveConfig();
     }
 
