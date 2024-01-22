@@ -416,10 +416,11 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(_t("Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?")).append("\";\n</script>\n")
                .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/delete.js?")
                .append(CoreVersion.VERSION).append("\"></script>\n")
-               .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/ignorepattern.js?")
-               .append(CoreVersion.VERSION).append("\"></script>\n")
 
                .append("<link rel=stylesheet href=").append(resourcePath).append("toast.css>\n");
+        } else {
+            buf.append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/ignorepattern.js?")
+               .append(CoreVersion.VERSION).append("\"></script>\n");
         }
 
         // custom dialog boxes for javascript alerts
@@ -2322,7 +2323,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
         } else if (action.equals(_t("Add Regex Filter"))) {
             String name = req.getParameter("rname");
-            String regex = req.getParameter("regex");
+            String regex = req.getParameter("regexStr");
+            _log.error("regexStr: '" + regex + "'");
             boolean isDefault = req.getParameter("regexIsDefault") != null;
             if (name != null && !name.trim().isEmpty() && regex != null && !regex.trim().isEmpty()) {
                 try {
@@ -3808,7 +3810,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<tr id=addRegex>")
            .append("<td><b>").append(_t("Add")).append(":</b></td>")
            .append("<td><input type=text class=regexName name=rname spellcheck=false></td>")
-           .append("<td><input type=text class=regexString name=regex spellcheck=false></td>")
+           .append("<td><input type=text class=regexString id=regexStr name=regexStr spellcheck=false></td>")
            .append("<td><input type=checkbox class=optbox name=regexIsDefault></td>")
            .append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
            .append("<tr><td colspan=4>\n")
