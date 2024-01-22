@@ -60,10 +60,10 @@ import org.klomp.snark.MagnetURI;
 import org.klomp.snark.MetaInfo;
 import org.klomp.snark.Peer;
 import org.klomp.snark.PeerID;
-import org.klomp.snark.RegexFilter;
 import org.klomp.snark.Snark;
 import org.klomp.snark.SnarkManager;
 import org.klomp.snark.Storage;
+import org.klomp.snark.TorrentCreateFilter;
 import org.klomp.snark.Tracker;
 import org.klomp.snark.TrackerClient;
 import org.klomp.snark.URIUtil;
@@ -416,11 +416,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(_t("Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?")).append("\";\n</script>\n")
                .append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/delete.js?")
                .append(CoreVersion.VERSION).append("\"></script>\n")
-
                .append("<link rel=stylesheet href=").append(resourcePath).append("toast.css>\n");
-        } else {
-            buf.append("<script nonce=").append(cspNonce).append(" src=\"").append(resourcePath).append("js/ignorepattern.js?")
-               .append(CoreVersion.VERSION).append("\"></script>\n");
         }
 
         // custom dialog boxes for javascript alerts
@@ -528,7 +524,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // end of mainsection div
             out.write("<div class=logshim></div>\n</div>\n");
             writeConfigForm(out, req);
-            writeRegexFilterForm(out, req);
+            writeTorrentCreateFilterForm(out, req);
             writeTrackerForm(out, req);
 
         } else {
@@ -2023,7 +2019,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if ("Save3".equals(action)) {
             String raction = req.getParameter("raction");
             if (raction != null)
-                processRegexForm(raction, req);
+                processTorrentCreateFilterForm(raction, req);
         } else if ("Create".equals(action)) {
             String baseData = req.getParameter("nofilter_baseFile");
             if (baseData != null && baseData.trim().length() > 0) {
@@ -2297,10 +2293,10 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /** @since 0.9.62+ */
-    private void processRegexForm(String action, HttpServletRequest req) {
+    private void processTorrentCreateFilterForm(String action, HttpServletRequest req) {
         if (action.equals(_t("Delete selected")) || action.equals(_t("Save"))) {
             boolean changed = false;
-            Map<String, RegexFilter> regexes = _manager.getRegexMap();
+            Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
             List<String> removed = new ArrayList<String>();
             Enumeration<?> e = req.getParameterNames();
             while (e.hasMoreElements()) {
@@ -2310,38 +2306,31 @@ public class I2PSnarkServlet extends BasicServlet {
                  String k = (String) o;
                  if (k.startsWith("delete_")) {
                      k = k.substring(7);
-                     RegexFilter r;
-                     if ((r = regexes.remove(k)) != null) {
-                        removed.add(r.regex);
+                     TorrentCreateFilter r;
+                     if ((r = torrentCreateFilters.remove(k)) != null) {
+                        removed.add(r.filterPattern);
                         _manager.addMessage(_t("Removed") + ": " + DataHelper.stripHTML(k));
                         changed = true;
                      }
                 }
             }
             if (changed)
-                _manager.saveRegexMap();
+                _manager.saveTorrentCreateFilterMap();
 
-        } else if (action.equals(_t("Add Regex Filter"))) {
-            String name = req.getParameter("rname");
-            String regex = req.getParameter("regexStr");
-            _log.error("regexStr: '" + regex + "'");
-            boolean isDefault = req.getParameter("regexIsDefault") != null;
-            if (name != null && !name.trim().isEmpty() && regex != null && !regex.trim().isEmpty()) {
-                try {
-                    java.util.regex.Pattern.compile(regex);
-                    Map<String, RegexFilter> regexFilters = _manager.getRegexMap();
-                    regexFilters.put(name, new RegexFilter(name, regex, isDefault));
-                    _manager.saveRegexMap();
-                }
-                catch(PatternSyntaxException e) {
-                    _manager.addMessage(_t("Enter a valid regex"));
-                }
+        } else if (action.equals(_t("Add File Filter"))) {
+            String name = req.getParameter("fname");
+            String filterPattern = req.getParameter("filterPattern");
+            boolean isDefault = req.getParameter("filterIsDefault") != null;
+            if (name != null && !name.trim().isEmpty() && filterPattern != null && !filterPattern.trim().isEmpty()) {
+                Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
+                torrentCreateFilters.put(name, new TorrentCreateFilter(name, filterPattern, isDefault));
+                _manager.saveTorrentCreateFilterMap();
             } else {
-                _manager.addMessage(_t("Enter valid name and regex"));
+                _manager.addMessage(_t("Enter valid name and filter pattern"));
             }
         } else if (action.equals(_t("Restore defaults"))) {
-            _manager.setDefaultRegexMap();
-            _manager.addMessage(_t("Restored default regex filters"));
+            _manager.setDefaultTorrentCreateFilterMap();
+            _manager.addMessage(_t("Restored default torrent create filters"));
         } else {
             _manager.addMessage("Unknown POST action: \"" + action + '\"');
         }
@@ -3779,45 +3768,45 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /** @since 0.9.62+ */
-    private void writeRegexFilterForm(PrintWriter out, HttpServletRequest req) throws IOException {
+    private void writeTorrentCreateFilterForm(PrintWriter out, HttpServletRequest req) throws IOException {
         StringBuilder buf = new StringBuilder(5*1024);
-        buf.append("<form id=regexFilters action=\"").append(_contextPath).append("/configure#navbar\" method=POST hidden>\n")
-           .append("<div class=configPanel id=regex><div class=snarkConfig>\n");
+        buf.append("<form action=\"").append(_contextPath).append("/configure#navbar\" method=POST>\n")
+           .append("<div class=configPanel id=torrentCreateFilter><div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save3");
         buf.append("<span class=configTitle>")
-           .append(_t("Regex Filtering"))
+           .append(_t("Torrent Create File Filtering"))
            .append("</span><hr>\n")
-           .append("<table class=regexFiltering>\n<tr>")
-           .append("<th title=\"").append(_t("Mark regex filter for deletion")).append("\"></th>")
-           .append("<th>").append(_t("Regex Name")).append("</th>")
-           .append("<th>").append(_t("Regex String")).append("</th>")
+           .append("<table class=torrentCreateFiltering>\n<tr>")
+           .append("<th title=\"").append(_t("Mark filter for deletion")).append("\"></th>")
+           .append("<th>").append(_t("Filter Name")).append("</th>")
+           .append("<th>").append(_t("Filter Pattern")).append("</th>")
            .append("<th>").append(_t("Enabled by Default")).append("</th>")
            .append("</tr>\n");
-        for (RegexFilter r : _manager.getSortedRegexStrings()) {
-            boolean isDefault = r.isDefault;
-            buf.append("<tr class=regexString>")
-               .append("<td><input type=checkbox class=optbox name=\"delete_").append(r.name).append("\"></td>")
-               .append("<td>").append(r.name).append("</td>")
-               .append("<td>").append(r.regex).append("</td>")
-               .append("<td><input type=checkbox class=optbox name=\"defaultEnabled_").append(r.name).append("\"");
-            if (r.isDefault) {
+        for (TorrentCreateFilter f : _manager.getSortedTorrentCreateFilterStrings()) {
+            boolean isDefault = f.isDefault;
+            buf.append("<tr class=torrentCreateFilterString>")
+               .append("<td><input type=checkbox class=optbox name=\"delete_").append(f.name).append("\"></td>")
+               .append("<td>").append(f.name).append("</td>")
+               .append("<td>").append(f.filterPattern).append("</td>")
+               .append("<td><input type=checkbox class=optbox disabled name=\"defaultEnabled_").append(f.name).append("\"");
+            if (f.isDefault) {
                 buf.append(" checked=checked");
             }
             buf.append(">").append("</td>")
                 .append("</tr>");
         }
         buf.append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
-           .append("<tr id=addRegex>")
+           .append("<tr id=addTorrentCreateFilter>")
            .append("<td><b>").append(_t("Add")).append(":</b></td>")
-           .append("<td><input type=text class=regexName name=rname spellcheck=false></td>")
-           .append("<td><input type=text class=regexString id=regexStr name=regexStr spellcheck=false></td>")
-           .append("<td><input type=checkbox class=optbox name=regexIsDefault></td>")
+           .append("<td><input type=text class=torrentCreateFilterName name=fname spellcheck=false></td>")
+           .append("<td><input type=text class=torrentCreateFilterPattern name=filterPattern spellcheck=false></td>")
+           .append("<td><input type=checkbox class=optbox name=filterIsDefault></td>")
            .append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
            .append("<tr><td colspan=4>\n")
            .append("<input type=submit name=raction class=delete value=\"").append(_t("Delete selected")).append("\">\n")
            .append("<input type=submit name=raction class=accept value=\"").append(_t("Save")).append("\">\n")
            .append("<input type=submit name=raction class=reload value=\"").append(_t("Restore defaults")).append("\">\n")
-           .append("<input type=submit name=raction class=default value=\"").append(_t("Add Regex Filter")).append("\">\n")
+           .append("<input type=submit name=raction class=default value=\"").append(_t("Add File Filter")).append("\">\n")
            .append("</td></tr>")
            .append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
            .append("</table>\n</div>\n</div></form>\n");
