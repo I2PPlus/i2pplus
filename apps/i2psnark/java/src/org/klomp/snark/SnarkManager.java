@@ -274,8 +274,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }));
 
     private static final String DEFAULT_REGEXES[] = {
-       "NFO Files", "/^.*\\.nfo$/=true",
-       "Synology NAS Metadata", "/^@eaDir$/=true"
+       "NFO Files", "/^.*\\.nfo$/",
+       "Synology NAS Metadata", "/^@eaDir$/"
     };
 
     static {
@@ -3330,7 +3330,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if ( (name.length() > 0) && (regex.length() > 0) ) {
                     String data[] = DataHelper.split(regex, "=", 2);
                     boolean isDefault = data.length > 1 ? true : false;
-                    _regexMap.put(name, new RegexFilter(name, regex, isDefault));
+                    _regexMap.put(name, new RegexFilter(name, data[0], isDefault));
                 }
             }
         }
