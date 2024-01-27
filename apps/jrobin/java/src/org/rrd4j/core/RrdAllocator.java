@@ -1,7 +1,5 @@
 package org.rrd4j.core;
 
-import java.io.IOException;
-
 /**
  * An internal usage class.
  *

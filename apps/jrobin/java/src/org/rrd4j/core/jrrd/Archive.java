@@ -185,7 +185,6 @@ public class Archive {
         int cdpIndex = 0;
 
         for (CDPStatusBlock cdp : cdpStatusBlocks) {
-
             s.print(sb);
             s.print(cdpIndex);
             s.print("].value = ");
@@ -228,6 +227,7 @@ public class Archive {
         int row = currentRow;
 
         db.rrdFile.seek(dataOffset + (row + 1) * db.header.dsCount * Constants.SIZE_OF_DOUBLE);
+
         long lastUpdate = db.lastUpdate.getTime() / 1000;
         int pdpStep = db.header.pdpStep;
         NumberFormat numberFormat = new DecimalFormat("0.0000000000E0", DecimalFormatSymbols.getInstance(Locale.US));
@@ -239,7 +239,7 @@ public class Archive {
             if (row == rowCount) {
                 row = 0;
 
-               db.rrdFile.seek(dataOffset);
+                db.rrdFile.seek(dataOffset);
             }
 
             long now = (lastUpdate - lastUpdate % (pdpCount * pdpStep))
@@ -281,7 +281,6 @@ public class Archive {
      * <p>Getter for the field <code>values</code>.</p>
      *
      * @return an array of double.
-     * @throws java.io.IOException if any.
      */
     public double[][] getValues() {
         if (values != null) {

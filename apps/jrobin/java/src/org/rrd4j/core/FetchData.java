@@ -441,8 +441,9 @@ public class FetchData {
 
     /**
      * Dumps fetch data to file in XML format.
-     * @throws java.io.IOException Thrown in case of I/O error
+     *
      * @param filepath Path to destination file
+     * @throws java.io.IOException Thrown in case of I/O error
      */
     public void exportXml(String filepath) throws IOException {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(filepath))) {
@@ -454,9 +455,8 @@ public class FetchData {
      * Dumps fetch data in XML format.
      *
      * @return String containing XML formatted fetch data
-     * @throws java.io.IOException Thrown in case of I/O error
      */
-    public String exportXml() throws IOException {
+    public String exportXml() {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         exportXml(outputStream);
         return outputStream.toString();

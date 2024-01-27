@@ -41,7 +41,6 @@ public class RrdMemoryBackend extends ByteBufferBackend {
      * This method is required by the base class definition, but it does not
      * releases any memory resources at all.
      *
-     * @throws java.io.IOException if any.
      */
     @Override
     protected void close() {

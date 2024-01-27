@@ -396,7 +396,6 @@ public abstract class Variable {
             double lslslope;
 
             for (double value : values) {
-
                 if (!Double.isNaN(value)) {
                     cnt++;
 
@@ -438,7 +437,6 @@ public abstract class Variable {
             double lslint;
 
             for (double value : values) {
-
                 if (!Double.isNaN(value)) {
                     cnt++;
 
@@ -480,7 +478,6 @@ public abstract class Variable {
             double lslcorrel;
 
             for (double value : values) {
-
                 if (!Double.isNaN(value)) {
                     cnt++;
 

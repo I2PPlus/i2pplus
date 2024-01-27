@@ -25,7 +25,7 @@ class Mapper {
             pixieY = im.ysize / (im.maxval - im.minval);
         }
         else {
-            pixieY = (double) im.ysize / (Math.log10(im.maxval) - Math.log10(im.minval));
+            pixieY = im.ysize / (Math.log10(im.maxval) - Math.log10(im.minval));
         }
     }
 

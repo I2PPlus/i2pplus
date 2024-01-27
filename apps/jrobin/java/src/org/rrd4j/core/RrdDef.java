@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -188,12 +189,19 @@ public class RrdDef {
 
     /**
      * Returns path for the new RRD. It's extracted from the URI. If it's an opaque URI, it return the scheme specific part.
+     * <br>
+     * It's not a reliable way to resolve an file path. Instead, one should use <code> Paths.get(def.getUri())</code>
+     * when the URI scheme is file.
      *
      * @return path to the new RRD which should be created
      */
     public String getPath() {
         if (uri.isOpaque()) {
             return uri.getSchemeSpecificPart();
+        } else if ("file".equals(uri.getScheme())) {
+            // Windows path from URI returns strange results.
+            // Ensure that's a compliant path
+            return Paths.get(uri).toString();
         } else {
             return uri.getPath();
         }

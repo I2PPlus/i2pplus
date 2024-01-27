@@ -678,7 +678,6 @@ public class RrdGraph implements RrdGraphConstants {
 
     private void fetchData() throws IOException {
         dproc = new DataProcessor(gdef.startTime, gdef.endTime);
-        //dproc.setPixelCount(im.xsize);
         dproc.setPixelCount(gdef.width);
         if (gdef.poolUsed) {
             dproc.setPoolUsed(gdef.poolUsed);

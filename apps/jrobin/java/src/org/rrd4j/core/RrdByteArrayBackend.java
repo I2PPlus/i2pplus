@@ -65,7 +65,6 @@ public abstract class RrdByteArrayBackend extends ByteBufferBackend {
      *
      * <p>It will reserves a memory section as a RRD storage.</p>
      *
-     *
      */
     protected void setLength(long length) {
         if (length < 0 || length > Integer.MAX_VALUE) {
