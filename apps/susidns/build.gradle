@@ -12,8 +12,13 @@ sourceSets {
 }
 
 dependencies {
-    compile project(':core')
-    providedCompile project(':apps:jetty')
+    implementation project(':core')
+    implementation project(':apps:jetty')
+
+    // seems like it should be compileOnly but that doesn't work
+    implementation 'org.apache.ant:ant:1.10.14'
+    implementation fileTree("../jetty/apache-tomcat-${tomcatVersion}")
+    implementation fileTree("../jetty/jetty-distribution-${jettyVersion}")
 }
 
 // Create the java files from the po files. The jar task will compile them.
@@ -25,10 +30,126 @@ task bundle {
             println "apps/susidns/src/bundle-messages.sh".execute().text
     }
 }
-war.dependsOn bundle
+
+task copyJsps(type: Copy) {
+    doFirst {
+        def f = file("$buildDir/jsp_copy")
+        f.mkdirs()
+    }
+    from("src/jsp")
+    include("**/*.jsp")
+    include("**/*.jsi")
+    into("$buildDir/jsp_copy")
+
+    doLast {
+        fileTree("$buildDir/jsp_copy").getFiles().each {
+            if (it.getName().endsWith("jsi"))
+                it.setLastModified(0)
+        }
+    }
+}
+
+
+task precompileJsp(type: JavaExec) {
+    doFirst {
+        file("$buildDir/tmp_jsp").mkdirs()
+    }
+
+    dependsOn copyJsps
+
+    classpath = sourceSets.main.runtimeClasspath + fileTree("src/lib")
+    main = 'net.i2p.servlet.util.JspC'
+
+    jvmArgs "-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=commons-collections.jar,junit.jar,junit4.jar"
+    jvmArgs "-Dbuild.reproducible=true"
+
+    args "-d"
+    args "$buildDir/tmp_jsp"
+    args "-v"
+    args "-p"
+    args "i2p.susi.dns.jsp"
+    args "-webinc"
+    args "$buildDir/web-fragment.xml"
+    args "-webapp"
+    args "$buildDir/jsp_copy"
+    doLast {
+        // normalize the order of the _jspx_dependents
+        ant.replaceregexp(file : "$buildDir/tmp_jsp/i2p/susi/dns/jsp/addressbook_jsp.java",
+                            match : "_jspx_dependants.put\\(.*\\);",
+                            replace : "//_jspx_dependants.put(@@@);",
+                            flags : "g")
+        ant.replaceregexp(file : "$buildDir/tmp_jsp/i2p/susi/dns/jsp/addressbook_jsp.java",
+                            match : "//_jspx_dependants.put(@@@);",
+                            replace : "_jspx_dependants.put(&quot;jar:file:lib/standard.jar!/META-INF/c.tld&quot;, Long.valueOf(1200000000000L));")
+        ant.replaceregexp(file : "$buildDir/tmp_jsp/i2p/susi/dns/jsp/addressbook_jsp.java",
+                            match : "//_jspx_dependants.put(@@@);",
+                            replace : "_jspx_dependants.put(&quot;file:lib/standard.jar&quot;, Long.valueOf(1200000000000L));")
+
+        def output = new File("$buildDir/compiledJsps")
+        output.mkdirs()
+
+        def classpath = sourceSets.main.runtimeClasspath + fileTree("src/lib")
+
+        ant.javac(srcDir: "$buildDir/tmp_jsp",
+                    classpath: classpath.asPath,
+                    debug : true,
+                    includeAntRuntime : false,
+                    deprecation : "on",
+                    source: project.sourceCompatibility,
+                    target: project.targetCompatibility,
+                    destDir:file("$buildDir/compiledJsps"))
+
+        def fragment = file("$buildDir/web-fragment.xml").text
+        def templateXML = file("src/WEB-INF/web-template.xml").text
+        def webXML = templateXML.replace("<!-- precompiled servlets -->", fragment)
+
+        def multipart = "<multipart-config>" +
+                        "<max-file-size>134217728</max-file-size>" +
+                        "<max-request-size>134217728</max-request-size>" +
+                        "<file-size-threshold>262144</file-size-threshold>" +
+                        "</multipart-config>"
+
+        def multipartServlets = ["addressbook"]
+
+        multipartServlets = multipartServlets.collect {
+            "<servlet-class>net.i2p.router.web.jsp.${it}_jsp</servlet-class>"
+        }
+
+        multipartServlets.each {
+            webXML = webXML.replace(it, it + multipart)
+        }
+
+        file("$buildDir/web.xml").text = webXML
+
+
+    }
+}
+
+war.dependsOn bundle,precompileJsp
 
 war {
+    rootSpec.exclude("**/*.jar")
     from 'src/jsp'
     from 'src/index.html'
-    webXml = file('src/WEB-INF/web-template.xml')
+    from ('src/js', {
+        into "js"
+    })
+    from ('src/svg', {
+        into "svg"
+    })
+    from ('src/themes', {
+        into "themes"
+    })
+    from ("$buildDir/compiledJsps") {
+        include '**/*.class'
+        into 'WEB-INF/classes'
+    }
+    exclude '*.jsi'
+    exclude '*.jsp'
+    webXml = file("$buildDir/web.xml")
 }
+
+artifacts {
+    archives war
+}
+

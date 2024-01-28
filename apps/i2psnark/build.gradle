@@ -1,4 +1,5 @@
 plugins {
+    id 'java-library'
     id 'war'
 }
 
@@ -12,11 +13,14 @@ sourceSets {
 }
 
 dependencies {
-    compile project(':core')
-    providedCompile project(':apps:systray')
-    compile 'gnu.getopt:java-getopt:1.0.13'
-    providedCompile project(':apps:ministreaming')
-    providedCompile project(':apps:jetty')
+    api project(':core')
+    api project(':apps:systray')
+    api 'gnu.getopt:java-getopt:1.0.13'
+    api project(':apps:ministreaming')
+    api project(':apps:jetty')
+    // this is not needed except for standalone,
+    // but we build the standalone classes even for non-standalone
+    api project(':apps:desktopgui')
 }
 
 task i2psnarkJar(type: Jar) {
@@ -32,7 +36,7 @@ task i2psnarkJar(type: Jar) {
 // TODO: standalone jar.  This is rather involved!
 
 artifacts {
-    archives i2psnarkJar
+    archives i2psnarkJar,war
 }
 
 // Create the java files from the po files. The jar task will compile them.
@@ -47,9 +51,14 @@ task bundle {
 war.dependsOn bundle
 
 war {
-    into '.icons', {
-        from 'icons'
-    }
+    rootSpec.exclude('/org/klomp/snark/*.class')
+    rootSpec.exclude('/org/klomp/snark/bencode/**')
+    rootSpec.exclude('/org/klomp/snark/comments/**')
+    rootSpec.exclude('/org/klomp/snark/dht/**')
+    rootSpec.exclude('/org/klomp/snark/standalone/**')
+    from ('resources', {
+        into ".res"
+    })
     webInf {
         into 'classes/org/klomp/snark/web'
         from 'mime.properties'

@@ -85,21 +85,23 @@ task prepUpdate(type: Copy) {
 
 task updaterRouter(type: Zip) {
     dependsOn prepUpdateRouter
-    archiveName 'i2pupdate.zip'
-    destinationDir file('.')
+    // https://stackoverflow.com/questions/54501697/gradle-war-plugin-how-to-change-name-of-an-archive
+    // https://discuss.gradle.org/t/destinationdir-is-deprecated-archivename-is-deprecated/31586
+    archiveFileName.set('i2pupdate.zip')
+    destinationDirectory.set(file('.'))
     from 'pkg-temp'
 }
 
 task updaterSmall(type: Zip) {
     dependsOn prepUpdateSmall
-    archiveName 'i2pupdate.zip'
-    destinationDir file('.')
+    archiveFileName.set('i2pupdate.zip')
+    destinationDirectory.set(file('.'))
     from 'pkg-temp'
 }
 
 task updater(type: Zip) {
     dependsOn prepUpdate
-    archiveName 'i2pupdate.zip'
-    destinationDir file('.')
+    archiveFileName.set('i2pupdate.zip')
+    destinationDirectory.set(file('.'))
     from 'pkg-temp'
 }
