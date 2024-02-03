@@ -18,7 +18,6 @@ class UnivalArray {
      *
      * @param file the RRdFile
      * @param size the numer of elements in the array
-     * @throws java.io.IOException if any.
      */
     public UnivalArray(RRDFile file, int size) {
         sizeoflong = file.getBits();

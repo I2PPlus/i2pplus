@@ -1116,7 +1116,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         int status = ise.getStatus();
                         i2pReset = status == I2PSocketException.STATUS_CONNECTION_RESET;
                         if (i2pReset) {
-                            if (_log.shouldWarn())
+                            if (_log.shouldInfo())
                                 _log.warn("[HTTPServer] Received I2P reset, resetting socket...");
                             try {
                                 _webserver.setSoLinger(true, 0);
@@ -1133,7 +1133,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         String msg = ioex.getMessage();
                         boolean sockReset = msg != null && msg.contains("reset");
                         if (sockReset) {
-                            if (_log.shouldWarn())
+                            if (_log.shouldInfo())
                                 _log.warn("[HTTPServer] Received socket reset, resetting I2P socket...");
                             try {
                                 _browser.reset();
@@ -1176,7 +1176,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     _log.debug("[HTTPServer] " + _name + ": Done sending");
                 //_out.flush();
             } catch (IOException ioe) {
-                if (_log.shouldWarn())
+                if (_log.shouldInfo())
                     _log.warn("[HTTPServer] " + _name + ": Error sending -> " + ioe.getMessage());
                 synchronized(this) {
                     _failure = ioe;

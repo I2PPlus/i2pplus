@@ -13,7 +13,7 @@ public class PDPStatusBlock {
     final String lastReading;
     final int unknownSeconds;
     final double value;
-    private enum pdp_par_en {PDP_unkn_sec_cnt, PDP_val};
+    private enum pdp_par_en {PDP_unkn_sec_cnt, PDP_val}
 
     PDPStatusBlock(RRDFile file) {
 

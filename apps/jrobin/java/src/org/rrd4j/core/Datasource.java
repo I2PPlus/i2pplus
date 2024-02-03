@@ -476,4 +476,3 @@ public class Datasource implements RrdUpdater<Datasource> {
         return parentDb.getRrdAllocator();
     }
 }
-

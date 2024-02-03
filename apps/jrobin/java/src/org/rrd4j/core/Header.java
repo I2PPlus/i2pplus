@@ -23,7 +23,7 @@ public class Header implements RrdUpdater<Header> {
     static final String RRDTOOL_VERSION3 = "0003";
     private static final String[] VERSIONS = {"version 0.1", "version 0.2"};
 
-    private RrdDb parentDb;
+    private final RrdDb parentDb;
     private int version = -1;
 
     private final RrdString<Header> signature;

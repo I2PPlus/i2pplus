@@ -1,4 +1,5 @@
 plugins {
+    id 'java-library'
     id 'war'
     id 'scala'
 }
@@ -15,16 +16,24 @@ sourceSets {
 }
 
 dependencies {
-    compile project(':core')
-    compile project(':router')
-    compile project(':installer')
-    providedCompile project(':apps:desktopgui')
-    providedCompile project(':apps:systray')
-    providedCompile project(':apps:jetty')
-    providedCompile project(':apps:jrobin')
+    api project(':core')
+    api project(':router')
+    api project(':installer')
+    api 'gnu.getopt:java-getopt:1.0.13'
 
-    testCompile "org.scala-lang:scala-library:2.12.4"
-    testCompile 'org.scalatest:scalatest_2.12:3.0.4'
+    api project(':apps:desktopgui')
+    api project(':apps:systray')
+    api project(':apps:jetty')
+    api project(':apps:jrobin')
+    api files('../../installer/lib/wrapper/all/wrapper.jar')
+    api fileTree("../jetty/jetty-distribution-${jettyVersion}")
+
+    // seems like it should be compileOnly but that doesn't work
+    implementation 'org.apache.ant:ant:1.10.14'
+    api fileTree("../jetty/apache-tomcat-${tomcatVersion}")
+    // don't use 2.12.4, stack overflow: https://github.com/sbt/zinc/issues/1010
+    testImplementation "org.scala-lang:scala-library:2.12.5"
+    testImplementation 'org.scalatest:scalatest_2.12:3.0.4'
 }
 
 if (System.getenv("TARGET_JAVA_HOME") == null && JavaVersion.current() != JavaVersion.VERSION_1_7) {
@@ -40,7 +49,11 @@ if (System.getenv("TARGET_JAVA_HOME") == null && JavaVersion.current() != JavaVe
         args = ['-R', 'build/classes/scala/test', '-o']
         classpath = sourceSets.test.runtimeClasspath
     }
-    test.dependsOn scalaTest
+
+    // java.lang.NullPointerException:
+    //  at net.i2p.router.update.PluginUpdateHandler.<init>(PluginUpdateHandler.java:36)
+    // at net.i2p.router.update.PluginUpdateHandlerSpec.pluginUpdateHandler(PluginUpdateHandlerSpec.scala:19)
+    //test.dependsOn scalaTest
 }
 
 // Create the java files from the po files. The jar task will compile them.
@@ -77,26 +90,116 @@ task consoleJar(type: Jar) {
         into "net/i2p/router/news/resources"
     })
 }
-consoleJar.dependsOn bundleJar
-war.dependsOn bundle
 
-artifacts {
-    archives consoleJar
+task helpersJar(type: Jar) {
+    from sourceSets.main.output
+    include 'net/i2p/router/web/helpers/**'
+    archiveBaseName = 'consoleHelpers'
 }
 
+
+task copyJsps(type: Copy) {
+    doFirst {
+        def f = file("$buildDir/jsp_copy")
+        f.mkdirs()
+    }
+    from("jsp") 
+    include("**/*.jsp")
+    include("**/*.jsi")
+    into("$buildDir/jsp_copy")
+    
+    doLast {
+        fileTree("$buildDir/jsp_copy").getFiles().each {
+            if (it.getName().endsWith("jsi"))
+                it.setLastModified(0)
+        }
+    }
+}
+
+task precompileJsp(type: JavaExec) {
+    dependsOn copyJsps
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'net.i2p.servlet.util.JspC'
+
+    jvmArgs "-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=commons-collections.jar,junit.jar,junit4.jar"
+    jvmArgs "-Dbuild.reproducible=true"
+    
+    args "-d"
+    args "jsp/WEB-INF/classes"
+    args "-v"
+    args "-p"
+    args "net.i2p.router.web.jsp"
+    args "-webinc"
+    args "$buildDir/web-fragment.xml"
+    args "-webapp"
+    args "$buildDir/jsp_copy"
+    doLast {
+        def output = new File("$buildDir/compiledJsps")
+        output.mkdirs()
+        ant.javac(srcDir: "jsp/WEB-INF/classes",
+                    classpath: sourceSets.main.runtimeClasspath.asPath,
+                    debug : true,
+                    includeAntRuntime : false,
+                    deprecation : "on",
+                    source: project.sourceCompatibility,
+                    target: project.targetCompatibility,
+                    destDir:file("$buildDir/compiledJsps"))
+        
+        def fragment = file("$buildDir/web-fragment.xml").text
+        def templateXML = file("jsp/web.xml").text
+        def webXML = templateXML.replace("<!-- precompiled servlets -->", fragment)
+
+        def multipart = "<multipart-config>" +
+                        "<max-file-size>134217728</max-file-size>" +
+                        "<max-request-size>134217728</max-request-size>" +
+                        "<file-size-threshold>262144</file-size-threshold>" +
+                        "</multipart-config>"
+
+        def multipartServlets = ["configplugins",
+                                "configfamily",
+                                "configreseed"]
+
+        multipartServlets = multipartServlets.collect {
+            "<servlet-class>net.i2p.router.web.jsp.${it}_jsp</servlet-class>"
+        }
+
+        multipartServlets.each {
+            webXML = webXML.replace(it, it + multipart)
+        }
+
+        file("$buildDir/web.xml").text = webXML
+    }
+        
+}
+
+consoleJar.dependsOn bundleJar
+war.dependsOn(bundle,precompileJsp)
+
+
 war {
+    duplicatesStrategy 'exclude'
+    rootSpec.exclude('**/*.jar')
     rootSpec.exclude('/com/vuze/**/*')
     rootSpec.exclude('/edu/internet2/**/*')
     rootSpec.exclude('/net/i2p/router/news/*')
     rootSpec.exclude('/net/i2p/router/sybil/*')
     rootSpec.exclude('/net/i2p/router/update/*')
     rootSpec.exclude('/net/i2p/router/web/*.class')
-    from 'jsp'
-    exclude 'jsp/web.xml'
-    exclude '*.jsi'
-    exclude '*.jsp'
-    webXml = file('jsp/web.xml')
+    from ("$buildDir/compiledJsps") {
+        into "WEB-INF/classes"
+    }
+    from ('jsp') {
+        exclude 'web.xml'
+        exclude '*.jsi'
+        exclude '*.jsp'
+    }
+    webXml = file("$buildDir/web.xml")
     from ('resources', {
         into "WEB-INF/classes/net/i2p/router/web/resources"
     })
 }
+
+artifacts {
+    archives war,consoleJar
+}
+

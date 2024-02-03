@@ -267,7 +267,7 @@ Applications:
    See licenses/LICENSE-Apache2.0.txt
    See licenses/LICENSE-ECLIPSE-1.0.html
 
-   RRD4J 3.8 (jrobin.jar):
+   RRD4J 3.9 (jrobin.jar):
    Copyright (c) 2001-2005 Sasa Markovic and Ciaran Treanor.
    Copyright (c) 2011 The OpenNMS Group, Inc.
    Copyright 2011 The RRD4J Authors.
@@ -350,7 +350,7 @@ distributions. See the source package for the additional license information.
    Admin Manager:
    Public domain
 
-   Gradle wrapper 5.2.1:
+   Gradle wrapper 8.5:
    (not included in most distribution packages)
-   Copyright (c) 2017 the original author or authors.
+   Copyright (c) 2023 the original author or authors.
    See licenses/LICENSE-Apache2.0.txt
