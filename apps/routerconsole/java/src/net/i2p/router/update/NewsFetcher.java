@@ -95,7 +95,7 @@ class NewsFetcher extends UpdateRunner {
      *                 and we will log status to the sidebar
      *  @since 0.9.62
      */
-    public NewsFetcher(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris, long timeout) { 
+    public NewsFetcher(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris, long timeout) {
         super(ctx, mgr, NEWS, uris);
         _newsFile = new File(ctx.getRouterDir(), NewsHelper.NEWS_FILE);
         _tempFile = new File(ctx.getTempDir(), "tmp-" + ctx.random().nextLong() + TEMP_NEWS_FILE);
@@ -141,6 +141,7 @@ class NewsFetcher extends UpdateRunner {
         for (URI uri : _urls) {
             _currentURI = addLang(uri);
             String newsURL = _currentURI.toString();
+            String newsHost = _currentURI.getHost().substring(0,6) + "...b32.i2p";
 
             if (_tempFile.exists())
                 _tempFile.delete();
@@ -177,9 +178,11 @@ class NewsFetcher extends UpdateRunner {
                             _mgr.notifyComplete(this, "<b>" + _failMsg + "</b>");
                         } else if (_showStatus) {
                             if (status == 200)
-                                _mgr.notifyComplete(this, "News updated from " + _currentURI.getHost());
+                                _mgr.notifyComplete(this, "News updated from " + newsHost);
+                            else if (status == 304)
+                                _mgr.notifyComplete(this, "No news updates from " + newsHost);
                             else
-                                _mgr.notifyComplete(this, "No new news available from " + _currentURI.getHost());
+                                _mgr.notifyComplete(this, "Could not connect to news host [" + status + "]");
                         }
                         return;
                     }
@@ -187,7 +190,7 @@ class NewsFetcher extends UpdateRunner {
                     int status = get.getStatusCode();
                     String msg;
                     if (status == 504 || status <= 0)
-                        msg = "Unable to connect to news server " + _currentURI.getHost();
+                        msg = "Unable to connect to news server " + newsHost;
                     else if (status == 500)
                         msg = "News server " + _currentURI.getHost() + " not found in address book";
                     else if (status == 404)
@@ -250,7 +253,7 @@ class NewsFetcher extends UpdateRunner {
         String lang = Translate.getLanguage(_context);
         return !lang.equals(old);
     }
-    
+
     // Fake XML parsing
     // Line must contain this, and full entry must be on one line
     private static final String VERSION_PREFIX = "<i2p.release ";
