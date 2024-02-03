@@ -432,6 +432,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 if (_log.shouldInfo())
                     _log.info("Keepalive, awaiting request #" + requestCount);
             }
+
             String line, method = null, protocol = null, host = null, destination = null;
             String hostLowerCase = null;
             StringBuilder newRequest = new StringBuilder();
@@ -446,6 +447,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             boolean preserveConnectionHeader = false;
 //            boolean allowGzip = false;
             boolean allowGzip = true;
+
             while((line = reader.readLine(method)) != null) {
                 line = line.trim();
                 if (_log.shouldDebug()) {
@@ -458,8 +460,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
                 if (method == null) {
                     // first line GET/POST/etc.
-                    if (_log.shouldInfo())
+                    if (_log.shouldInfo()) {
                         _log.info(getPrefix(requestId) + "req #" + requestCount + " first line [" + line + "]");
+                    }
 
                     String[] params = DataHelper.split(line, " ", 3);
                     if (params.length != 3) {
@@ -853,7 +856,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         if (!isConnect) {
                             // now strip everything but path and query from URI
                             String newURI = requestURI.getRawPath();
-                            if(query != null) {
+                            if (query != null) {
                                 newURI += '?' + query;
                             }
                             // strip :80 from request if we are http://
@@ -872,8 +875,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
                     // end of (host endsWith(".i2p"))
 
-                    } else if (hostLowerCase.equals("localhost") || host.equals("127.0.0.1") ||
-                            host.startsWith("192.168.") || host.equals("[::1]")) {
+                    } else if (hostLowerCase.equals("localhost") || host.equals("127.0.0.1") || host.startsWith("10.0.") ||
+                               host.startsWith("172.16.") || host.startsWith("192.168.") || host.equals("[::1]")) {
                         // if somebody is trying to get to 192.168.example.com, oh well
                         try {
                             out.write(getErrorPage("localhost", ERR_LOCALHOST).getBytes("UTF-8"));
@@ -889,16 +892,18 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 if (op != null) {
                                     outproxy = (Outproxy) op;
                                     int rPort = requestURI.getPort();
-                                    if (rPort > 0)
+                                    if (rPort > 0) {
                                         remotePort = rPort;
-                                    else if ("https".equals(protocol) || isConnect)
+                                    } else if ("https".equals(protocol) || isConnect) {
                                         remotePort = 443;
-                                    else
+                                    } else {
                                         remotePort = 80;
+                                    }
                                     usingInternalOutproxy = true;
                                     targetRequest = requestURI.toASCIIString();
-                                    if (_log.shouldDebug())
+                                    if (_log.shouldDebug()) {
                                         _log.debug(getPrefix(requestId) + "via outproxy -> " + host);
+                                    }
                                 }
                             }
                         }
@@ -910,7 +915,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             if (_log.shouldDebug()) {
                                 _log.debug("[HTTPClient] Forwarding request for " + host + " to outproxy");
                             }
-                            if ("https".equals(protocol) || isConnect)
+                            if ("https".equals(protocol) || isConnect) {
                                 currentProxy = selectSSLProxy(hostLowerCase);
                                 String outproxyName = currentProxy;
                                 if (currentProxy != null && currentProxy.length() > 20)
@@ -940,8 +945,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             usingWWWProxy = true;
                             targetRequest = requestURI.toASCIIString();
                             String outproxyName = destination;
-                            if (destination != null && destination.length() > 20)
+                            if (destination != null && destination.length() > 20) {
                                 outproxyName = destination.substring(0,12) + "...";
+                            }
                             if (_log.shouldDebug()) {
                                 _log.debug(getPrefix(requestId) + " for [" + host + "] forwarded via outproxy: " + outproxyName);
                             }
@@ -984,8 +990,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     }
 
                     String outproxyName = destination;
-                    if (destination != null && destination.length() > 20)
+                    if (destination != null && destination.length() > 20) {
                         outproxyName = destination.substring(0,12) + "...";
+                    }
+
                     if (_log.shouldDebug()) {
                         _log.debug(getPrefix(requestId) + "Request: " + request );
                         _log.debug(getPrefix(requestId) + "Request URI: " + requestURI );
@@ -1128,7 +1136,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     if (ok != null) {
                         gzip = Boolean.parseBoolean(ok);
                     }
-                    if(gzip && !usingInternalServer && !isConnect) {
+                    if (gzip && !usingInternalServer && !isConnect) {
                         // according to rfc2616 s14.3, this *should* force identity, even if
                         // an explicit q=0 for gzip doesn't.  tested against orion.i2p, and it
                         // seems to work.
@@ -1137,8 +1145,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         if (!usingInternalOutproxy)
                             newRequest.append("X-Accept-Encoding: x-i2p-gzip;q=1.0, identity;q=0.5, deflate;q=0, gzip;q=0, *;q=0\r\n");
                     }
-                    if(!shout && !isConnect) {
-                        if(!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USER_AGENT))) {
+                    if (!shout && !isConnect) {
+                        if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USER_AGENT))) {
                             // let's not advertise to external sites that we are from I2P
                             String ua;
                             if (usingWWWProxy || usingInternalOutproxy) {
@@ -1189,7 +1197,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             if (newRequest.length() > 0 && _log.shouldDebug())
                 _log.debug(getPrefix(requestId) + "NewRequest header: [" + newRequest + ']');
 
-            if(method == null || (destination == null && !usingInternalOutproxy)) {
+            if (method == null || (destination == null && !usingInternalOutproxy)) {
                 if (requestCount > 0) {
                     // SocketTimeout, normal to get here for persistent connections,
                     // because DataHelper.readLine() returns null on EOF
