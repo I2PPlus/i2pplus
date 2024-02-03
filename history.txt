@@ -1,3 +1,33 @@
+2024-02-02 zzz
+ * I2PTunnel: Implement client-side persistence (Gitlab MR !176)
+
+2024-01-31 zzz
+ * CLI: Add sdns stamp decoder
+
+2024-01-30 zzz
+ * Naming: Add .i2p.alt support
+ * Util: DoH server list update
+
+2024-01-29 dr|z3d
+ * Reseeding: Add StormyCloud server
+
+2024-01-29 zzz
+ * Crypto:
+   - More efficient enum lookup by code
+   - Verify RSA sigs after signing
+ * I2PSnark: Sanitize unicode LTR/RTL control chars
+ * Util: Add .alt to selfsigned cert alt names
+
+2024-01-28 zzz
+ * Build: Update gradlew to 8.5 (Gitlab MR !180)
+
+2024-01-27 zzz
+ * Console: Update RRD4J to 3.9 (Gitlab MR !178)
+ * Transport: Remove SSU1 code from EstablishmentManager (Gitlab MR !179)
+
+2024-01-23 zzz
+ * I2PTunnel, susidns: Fix IDN decoding for newer codepoints
+
 2024-01-15 zzz
  * I2CP: Prevent loopback messages to same session (i2pd Github #2005, Gitlab MR !173)
  * I2PSnark: Bandwidth limiter improvements (Gitlab MR !164)
@@ -336,7 +366,7 @@
  * Router: Add reverse DNS lookup file cache when RDNS is enabled
 
 2023-08-20 dr|z3d
- * Console: Update url for /i2ptunnelmgr to /tunnelmanager
+ * Console: Update url for /I2PTunnelmgr to /tunnelmanager
  * Console: Rename some pages with auto redirects from old page names
 
 2023-08-19 dr|z3d
@@ -430,7 +460,7 @@
 * Proxy: Update outproxy UserAgent to latest Tor browser version
 
 2023-03-26 dr|z3d
- * I2PTunnel: Allocate more handler threads for i2ptunnelserver according to
+ * I2PTunnel: Allocate more handler threads for I2PTunnelserver according to
    JVM-allocated RAM
 
 2023-03-26 dr|z3d
@@ -713,7 +743,7 @@
  * Router: Disable SSU1 by default
 
 2023-01-19 zzz
- * Build: Add i2psnark-release target
+ * Build: Add I2PSnark-release target
 
 2023-01-18 dr|z3d
  * I2PSnark: Add required attribute to search input
@@ -838,7 +868,7 @@
  * Router: Adjust min tunnels before throttle, default max part tunnels
 
 2022-12-26 zzz
- * Console: Sort tunnels by name on /tunnels, /configtunnels, /i2ptunnel
+ * Console: Sort tunnels by name on /tunnels, /configtunnels, /I2PTunnel
  * Router: Don't blocklist our own IP
  * SSU:
    - Fix NPE when SSU2 disabled
@@ -1104,7 +1134,7 @@
    - Ensure min packet size for pings
 
 2022-09-20 zzz
- * i2ptunnel, eepget: Add support for SHA-256 digest proxy auth (RFC 7616)
+ * I2PTunnel, eepget: Add support for SHA-256 digest proxy auth (RFC 7616)
 
 2022-09-16 dr|z3d
  * Proxy: Translation updates (de/fr/ru/uk/zh)
@@ -2029,7 +2059,7 @@
    - Reduce TBM Bloom filter size and interval for EC routers
 
 2021-09-25 dr|z3d
- * Router: Increase various ntcp/i2ptunnel buffers and caches
+ * Router: Increase various ntcp/I2PTunnel buffers and caches
 
 2021-09-22 zzz
  * UDP: Replace ACKSender thread with per-PeerState ack timers
@@ -3418,7 +3448,7 @@
    - Enable both encryption types for all default tunnels (new installs only)
    - Add purikoshi.i2p as alternative to false.i2p outproxy (new installs only)
  * I2PSnark: Add configuration information to advanced settings help in console
-   for i2psnark.maxFilesPerTorrent
+   for I2PSnark.maxFilesPerTorrent
 
 2020-05-22 dr|z3d
  * I2PTunnel: Add javascript handler to select all text in readonly inputs
@@ -3428,7 +3458,7 @@
 
 2020-05-20 zzz
  * I2PTunnel: Disable gzip for streamr server
- * i2ptunnel, SusiDNS: Replace onblur with CSP-safe js
+ * I2PTunnel, SusiDNS: Replace onblur with CSP-safe js
  * Tunnels: Reduce the IBGW and client OBGW batch time
 
 2020-05-20 dr|z3d
@@ -3486,7 +3516,7 @@
 
 2020-05-11 zzz
  * Console: Fix delete confirmation dialog on /configplugins
- * Console, i2psnark, I2PTunnel: Refactor js, stricter CSP
+ * Console, I2PSnark, I2PTunnel: Refactor js, stricter CSP
 
 2020-05-10 dr|z3d
  * Router: Add unreachable peers to peerExcludeCaps defaults
@@ -3579,7 +3609,7 @@
 
 2020-04-19 dr|z3d
  * I2PSnark: Add config setting to configure max files per torrent:
-   i2psnark.maxFilesPerTorrent=n & display readonly field on configure page
+   I2PSnark.maxFilesPerTorrent=n & display readonly field on configure page
 
 2020-04-18 zzz
  * I2PSnark: Connect out to other seeds to fetch comments (ticket #2288)
@@ -3749,7 +3779,7 @@
  * Debian: Remove GzipFilter in base-context.xml,
    does nothing with Jetty 9.4 (ticket #2599)
  * Install: Remove commented-out GzipFilter in cgi-context.xml
- * I2PSnark: Revert API changes that broke i2psnark-rpc plugin
+ * I2PSnark: Revert API changes that broke I2PSnark-rpc plugin
 
 2020-02-15 dr|z3d
  * Console: Migrate from JRobin to RRD4J for in-console graphs
@@ -4236,7 +4266,7 @@
  * Debian: Change debian files from stretch (Jetty 9.2, Tomcat 8, Java 8)
    to buster (Jetty 9.4, Tomcat 9, Java 11)
  * Prop from i2p.i2p.zzz.confsplit:
-   Split clients.config and i2ptunnel.config into individual files
+   Split clients.config and I2PTunnel.config into individual files
    for each client and tunnel, except on android and portable.
 
 2019-07-23 zzz
@@ -6475,7 +6505,7 @@
 2017-11-17 zzz
  * Addressbook: Fix adding alternates after importing an empty book (ticket #2072)
  * Reseed: Add HTTPS proxy support (ticket #423)
- * SOCKS: Move code from i2ptunnel to core, in prep for SSLEepGet use (ticket #1130)
+ * SOCKS: Move code from I2PTunnel to core, in prep for SSLEepGet use (ticket #1130)
 
 2017-11-16 zzz
  * Console: Hide Reseed HTTP proxy options if no HTTP URLs (ticket #2007)
@@ -6686,7 +6716,7 @@
      - Add custom radio/checkbox icons for Chrome/Blink
  * Console:
    - Add JavaScript snippet to reset dest address scroll position onblur (fixes
-     Chrome/Blink disappearing text bugs in i2ptunnel and susidns)
+     Chrome/Blink disappearing text bugs in I2PTunnel and susidns)
    - Fix reseed failure notice overlap when "check connection" message shown
    - Enhance presentation of console "error 500" messages
    - Cosmetic tweaks to welcome page presentation, arabic welcome page tidyup
@@ -7222,7 +7252,7 @@ Prop from i2p.i2p.zzz.jetty9:
  * Startup: Add migration code for eepsite Jetty 8 configuration files
 
 2017-03-09 zzz
- * I2PSnark: Prevent RuntimeException caused by corrupt i2psnark.dht.dat file
+ * I2PSnark: Prevent RuntimeException caused by corrupt I2PSnark.dht.dat file
  * Router: Set default sig type to EdDSA for non-Android ARM
  * Streaming: Don't change buffer size when max message size is adjusted
 
@@ -7304,7 +7334,7 @@ Prop from i2p.i2p.zzz.jetty9:
    I2PSnark: Remove most delay between announces at shutdown
 
 2017-01-29 zzz
- * i2ptunnel CONNECT proxy:
+ * I2PTunnel CONNECT proxy:
    - Add support for outproxy plugin (tickets #1364, #1895)
    - Add support for ports
 
@@ -7506,7 +7536,7 @@ Prop from i2p.i2p.zzz.test2:
 
 2016-11-04 zzz
  * Console: Improve handling and logging of webapps that fail to start
- * I2PSnark: Add launch-i2psnark.bat (ticket #1871)
+ * I2PSnark: Add launch-I2PSnark.bat (ticket #1871)
  * Transports:
    - New config i2np.allowLocal, fixes test networks (ticket #1875)
    - New configs i2np.udp.minpeers and i2np.udp.minv6peers, for testing (ticket #1876)
@@ -7666,7 +7696,7 @@ Prop from i2p.i2p.zzz.test2:
 Prop from i2p.i2p.zzz.test2:
  * CPUID: Add CLI output for new AMD tests
  * I2PSnark standalone (ticket #1191):
-   - Cherry-pick fixes from psi's github i2psnark_rpc branch
+   - Cherry-pick fixes from psi's github I2PSnark_rpc branch
    - Fix up Jetty XML file for Jetty 8
    - Start with JettyStart
    - Add UrlLauncher to launch browser
@@ -7675,7 +7705,7 @@ Prop from i2p.i2p.zzz.test2:
    - Fix theme selection
    - Adjust CSS and image paths
    - Add shutdown hook to delete temp dir
- * i2ptunnel CLI: Don't set the listen host to the I2CP host
+ * I2PTunnel CLI: Don't set the listen host to the I2CP host
  * jbigi:
    - Fix GMP version reporting for shared library (ticket #1800)
    - mbuild-all script fixes
@@ -7779,7 +7809,7 @@ Prop from i2p.i2p.zzz.test2:
  * i2prouter: Set JAVA_HOME correctly on Mac OS X 10.5 and later (ticket #1783)
  * Utils: Fix bug in periodic timers triggered by
    a backwards clock shift, caused graphs to be blank
-   and various router, streaming, and i2ptunnel
+   and various router, streaming, and I2PTunnel
    degradations over time (tickets #1702, #1776)
  * Wrapper: Update to wrapper 3.5.29, except for Windows.
    Fixes wrapper failure on FreeBSD 10 (ticket #1118)
@@ -7893,7 +7923,7 @@ Prop from i2p.i2p.zzz.gmp6-prop:
 2016-04-26 zzz
  * Addressbook:
    - Finish implementation of signed actions
-   - Move HostTxtEntry to net.i2p.client.naming for use by i2ptunnel
+   - Move HostTxtEntry to net.i2p.client.naming for use by I2PTunnel
    - Add tests for Daemon to read local subscription file
    - Store last-modified date
    - Logging cleanups and consolidation
@@ -7907,7 +7937,7 @@ Prop from i2p.i2p.zzz.gmp6-prop:
    - Remove old, unused hostname signature generation
  * NamingService: Add new API methods for reverseLookupAll()
  * PrivateKeyFile:
-   - Add InputStream constructor for i2ptunnel
+   - Add InputStream constructor for I2PTunnel
    - Ensure initialization before returning private keys
  * SusiDNS:
    - Display signature validation on details page
@@ -8101,7 +8131,7 @@ Prop from i2p.i2p.zzz.imagegen:
      and random art. Bundles a small part of zxing, most of identicon,
      and a rewrite of randomart from gnutls (ticket #1652)
    - Add identicons to sybil page.
- * I2PTunnel: Add identicons to i2ptunnel address helper conflict page.
+ * I2PTunnel: Add identicons to I2PTunnel address helper conflict page.
      Clean up text on the conflict page for readability.
  * SusiDNS:
    - Display QR and identicon images on details page
@@ -8720,7 +8750,7 @@ Prop from i2p.i2p.zzz.test2:
 
 2015-05-23 zzz
  * I2CP: Add an INIT state for session, so a newly created session
-   isn't treated as CLOSED and immediately replaced by i2ptunnel,
+   isn't treated as CLOSED and immediately replaced by I2PTunnel,
    which caused dup shared clients in a race at startup
    (possible related tickets #642, #650, #815, #1545)
 
@@ -8926,7 +8956,7 @@ Prop from i2p.i2p.zzz.test2:
  * I2CP: Prevent NPE (ticket #1503)
 
 2015-03-25 zzz
- * i2ptunnel HTTP client: Replace all getBytes() calls
+ * I2PTunnel HTTP client: Replace all getBytes() calls
    with a Writer or getBytes("UTF-8") (ticket #457)
 
 2015-03-24 zzz
@@ -9086,10 +9116,10 @@ Prop from i2p.i2p.zzz.test2:
  * NetDb: Publish RI faster when costs change (ticket #1437)
 
 2015-01-08 zzz
- * Console, i2ptunnel, proxy: Renaming of various things to "hidden services"
+ * Console, I2PTunnel, proxy: Renaming of various things to "hidden services"
 
 2015-01-07 zzz
- * ClientAppConfig: Start i2ptunnel sooner (ticket #1162)
+ * ClientAppConfig: Start I2PTunnel sooner (ticket #1162)
  * NetDb: Possible fixes for reseed completion not recognized (ticket #1384)
  * Router:
    - Add startup/shutdown state machine
@@ -9155,7 +9185,7 @@ Prop from i2p.i2p.zzz.test2:
    - Remove unused BuildRequestRecord.readOurIdentityMatches()
    - DatabaseStoreMessage: Mask the unused bits in the type field for future use
  * I2PSnark: Reduce auto-stop threshold for update torrent
- * I2PTunnel: Reduce i2ptunnel threads, more thread pooling.
+ * I2PTunnel: Reduce I2PTunnel threads, more thread pooling.
    - Move client pool from static inI2PTunnelClientBase to TCG.
    - Use client pool for some server threads
    - Run some things inline that were formerly threads
@@ -9322,7 +9352,7 @@ Prop from i2p.i2p.zzz.test2:
  * NTCP: Deadlock fix 2nd try (ticket #1394)
 
 2014-10-15 zzz
- * Console, I2CP, i2ptunnel, SSLEepGet: Set allowed SSL
+ * Console, I2CP, I2PTunnel, SSLEepGet: Set allowed SSL
    protocols and ciphers. Disable SSLv3 and older ciphers.
    Enable TLSv1.1 and TLSv1.2 on Java 7,
    where it is disabled by default client-side.
@@ -9348,7 +9378,7 @@ Prop from i2p.i2p.zzz.test2:
 2014-10-07 zzz
  * CPUID: Remove Intel model 2 again, this is spoofed in the VM
  * Graphs: Catch an error caused by missing fonts
- * I2PTunnel: Handle named sig types from i2ptunnel.config in the GUI
+ * I2PTunnel: Handle named sig types from I2PTunnel.config in the GUI
  * SSU: Improve handling of socket that gets closed (ticket #1385)
  * Startup: Delay ReadConfigJob another minute
 
@@ -9444,7 +9474,7 @@ Prop from i2p.i2p.zzz.test2:
    - Reduce object churn; use SimpleByteCache
    - Synchronization
  * OCMOSJ: Detect unsupported encryption on dest and return the correct failure code
-     through I2CP to streaming to i2ptunnel
+     through I2CP to streaming to I2PTunnel
  * PrivateKeyFile:
    - New constructor with padding
    - New router extension to add getRouterIdentity()
@@ -9554,7 +9584,7 @@ Prop from i2p.i2p.zzz.test2:
  * Streaming: Fix P521 and RSA sig types
 
 2014-08-23 zzz
- * Console, i2psnark, I2PTunnel: Escape fixes and cleanups
+ * Console, I2PSnark, I2PTunnel: Escape fixes and cleanups
  * SSU: Drop peer tests as Bob from unestablished Alices
 
 2014-08-22 zzz
@@ -10038,7 +10068,7 @@ Prop from i2p.i2p.zzz.test2:
  * I2PTunnel:
    - Add server option for unique local address per-client
    - Fix changing outproxy without stopping tunnel (ticket #1164)
-   - Fix add-to-addressbook hostname link in i2ptunnel (ticket #688)
+   - Fix add-to-addressbook hostname link in I2PTunnel (ticket #688)
  * NetDb: Skip key cert LS stores and verifies for floodfills that don't support them
 
 2014-04-01 zzz
@@ -10048,7 +10078,7 @@ Prop from i2p.i2p.zzz.test2:
 * 2014-03-31 0.9.12 released
 
 2014-03-28 zzz
- * i2ptunnel.config: Remove irc.freshcoffee.i2p
+ * I2PTunnel.config: Remove irc.freshcoffee.i2p
  * StatManager: Don't start thread for an empty config
  * StatisticsManager: Don't publish client tunnel stats
 
@@ -10151,10 +10181,10 @@ Prop from i2p.i2p.zzz.test2:
    - Support i2cp.destination.sigType option in TunnelController and
      I2PSocketManagerFactory
    - Fixup of sign/verify in streaming Packet
-   - Add setting in i2ptunnel server edit page (hidden for now)
-   - Comment out cert setting on i2ptunnel server edit page
+   - Add setting in I2PTunnel server edit page (hidden for now)
+   - Comment out cert setting on I2PTunnel server edit page
    - Show key type on susidns details page and LS debug page
-   - Hide setting in i2ptunnel edit pages unless advanced user
+   - Hide setting in I2PTunnel edit pages unless advanced user
    - Only store LS with key certs to routers that support it
    - Only store LS with more than 6 leases to routers that support it
  * Jetty:
@@ -10279,7 +10309,7 @@ Prop from i2p.i2p.zzz.i2cp:
      i2cp.strictAuth=true. Will change default to true in a later release.
    - Block all actions before authentication.
    - Better disconnect messages to clients for diagnostics
-   - Improve lookup command, add auth command in i2ptunnel CLI for testing
+   - Improve lookup command, add auth command in I2PTunnel CLI for testing
    - Don't start ClientWriterRunner thread in constructor
    - Don't flush in ClientWriterRunner unless necessary
    - Send GetDate even in SimpleSession outside of RouterContext
@@ -10305,12 +10335,12 @@ Prop from i2p.i2p.zzz.i2cp:
  * Up version to -5
 
 2014-01-27 zzz
- * i2ptunnel HTTP Proxy: Fix default enable for outproxy plugin
+ * I2PTunnel HTTP Proxy: Fix default enable for outproxy plugin
 
 2014-01-25 zzz
 Prop from i2p.i2p.zzz.outproxy:
  * I2PSnark: Lower threshold for auto-stop
- * i2ptunnel HTTP Proxy:
+ * I2PTunnel HTTP Proxy:
    - Add support for HTTPS
    - Add support for outproxy plugins
  * Installer: Update links
@@ -10417,7 +10447,7 @@ Prop from i2p.i2p.zzz.test2:
      can be private and the lookup for the form is more efficient.
    - Disable streaming pings (ticket #1142)
  * I2PTunnel: Disable streaming pings for clients (ticket #1142)
- * i2ptunnel IRC client: Do not filter server PING or client PONG (ticket #1141)
+ * I2PTunnel IRC client: Do not filter server PING or client PONG (ticket #1141)
  * Jetty 7.6.14.v20131031
  * PeerManager: Thread the periodic reorg so it doesn't clog the timer queue
  * PrivateKeyFile: Fix ISE (ticket #1145)
@@ -10560,7 +10590,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2013-10-23 zzz
  * I2PTunnel standard and IRC clients:
-   - Allow host:port targets; set defaults in i2ptunnel.config (ticket #1066)
+   - Allow host:port targets; set defaults in I2PTunnel.config (ticket #1066)
    - Don't fail start if hostname is unresolvable; retry at connect time (ticket #946)
    - Output IRC message on connect exception
    - Update target list on-the-fly when configuration changes
@@ -10579,7 +10609,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
    move cert location to certificates/i2cp.
  * I2PTunnel: Support SSL for connection to local server
    for Standard, HTTP, and IRC server tunnels.
-   Put server cert in certificates/i2ptunnel if necessary.
+   Put server cert in certificates/I2PTunnel if necessary.
  * Streaming: Throw IOE if socket is closed (ticket #1077)
 
 2013-10-14 kytv
@@ -11039,11 +11069,11 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
    - New TranslateReader to translate static files on-the-fly using _("") tagging
    - Tag proxy error pages for TranslateReader
    - Drop static translated proxy error pages
-   - Add new i2ptunnel bundle for the proxy alone, shipped in the jar.
+   - Add new I2PTunnel bundle for the proxy alone, shipped in the jar.
    - Use TranslateReader in HTTP proxy for error pages
    - Move HTTP proxy strings from the web (war) to proxy (jar) bundle so they will be loaded
      Fixes translations for the lower half of the proxy pages that weren't accessible in the war.
-   - Initial translations created by msgmerge from i2ptunnel and routerconsole po files, un-fuzzied
+   - Initial translations created by msgmerge from I2PTunnel and routerconsole po files, un-fuzzied
    - Tag initialNews.xml for TranslateReader
    - Drop static translated initialNews pages
    - Add new routerconsole bundle for the news alone, shipped in the jar
@@ -12234,7 +12264,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2012-08-05 zzz
  * I2PSessionImpl: One more volatile (ticket #659)
- * i2ptunnel, I2CP, EepGet: Buffer socket input streams (ticket #666)
+ * I2PTunnel, I2CP, EepGet: Buffer socket input streams (ticket #666)
  * UDP:
    - Limit PacketHandler threads to 1 (ticket #660)
    - Limit queue sizes between UDPReceiver and PacketHandler,
@@ -12349,8 +12379,8 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
  * console: work towards better integration
    - Wrapped the bundled apps in iFrames (with a link in the page header to
      open the app in a new tab):
-     - i2ptunnel
-     - i2psnark
+     - I2PTunnel
+     - I2PSnark
      - susimail
      - susidns
    - Theme improvements
@@ -12358,11 +12388,11 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
        - "susimail.theme=foo" in susimail.config
        - "theme=foo" on susidns config page
      - Extensive work on dark console theme (dr|z3d)
-       - Improved integration of i2ptunnel in iframe
+       - Improved integration of I2PTunnel in iframe
        - General improvements
-     - New dark themes for i2psnark, susimail and susidns which integrate well
+     - New dark themes for I2PSnark, susimail and susidns which integrate well
        with dark console theme (dr|z3d)
-     - Tweaks to other themes (console and i2psnark) to work with the various
+     - Tweaks to other themes (console and I2PSnark) to work with the various
        structural changes (dr|z3d)
      - Added per-theme favicons
      - Updated IE shim to fix some issues
@@ -12829,7 +12859,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     - Bundle Jetty 6 rewrite handler and JMX
     - Bundle sample Jetty config files for rewrite, JMX, and SSL
     - Use ant's ant.jar instead of the one from Jetty
-    - Port router console, i2psnark, and I2PRequestLog code to Jetty 6
+    - Port router console, I2PSnark, and I2PRequestLog code to Jetty 6
     - Remove all old Jetty 5 patches and the custom Server() constructor,
       this will break Seedless use of the custom constructor
     - Fix up all .jsps to JSP 2.1 standards
@@ -12853,7 +12883,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     for faster startup and to prevent one failed war from preventing
     startup of the entire console
   * I2PSnark: Disable I2PSnark RunStandalone, unused and instantiated Jetty 5
-  * I2PTunnel: Move i2ptunnel Bean classes from the jar to the war.
+  * I2PTunnel: Move I2PTunnel Bean classes from the jar to the war.
     These were deprecated for external use long ago.
     This will break very old seedless plugins; updates have
     been available for months.
@@ -13187,7 +13217,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2011-12-10 kytv
   * Replace eepget's whitelist of accepted characters with the
-    blacklist from i2psnark. (closes #562)
+    blacklist from I2PSnark. (closes #562)
 
 2011-12-09 zzz
   * Base64: Add decodestring command in main()
@@ -13472,7 +13502,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2011-10-13 kytv
   * Updated translations from Transifex
-    - Swedish: debconf and i2psnark
+    - Swedish: debconf and I2PSnark
     - Finnish: router console
 
 * 2011-10-11 0.8.9 released
@@ -13542,7 +13572,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     issues from clock skews
 
 2011-09-27 kytv
-  * Remove exotrack.i2p from i2psnark
+  * Remove exotrack.i2p from I2PSnark
 
 2011-09-24 zzz
   * HTTPClient: Fix error page not appearing, broken by
@@ -13557,7 +13587,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
   * Crypto: Comment out some main()
   * ClientMessage: Remove unused MessageReceptionInfo
   * I2PSnark: File allocation cleanup to use less heap
-  * i2ptunnel HTTPResponseOutputStream:
+  * I2PTunnel HTTPResponseOutputStream:
     - Use reusable gunzipper and a larger pipe for efficiency
     - Close output stream in StreamForwarder to prevent lost data,
       existing bug but made worse by larger pipe
@@ -13751,7 +13781,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
   * Soft restart:
     - Allow NTP to reinitialize clock after the comm system
       in the first minute of uptime
-    - Fix i2ptunnels not restarting
+    - Fix I2PTunnels not restarting
     - Increase minimum forward clock shift for soft restart
     - Reduce minimum backward clock shift for soft restart
     - Signal the I2CP client with a different message when restarting
@@ -13947,7 +13977,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     - Clear profiles from memory on shutdown
     - Add shutdown hook for AsyncFortunaRandomSource
     - Implement and call shutdown for BandwidthRefiller
-    - Implement and register shutdown hook for i2ptunnel
+    - Implement and register shutdown hook for I2PTunnel
     - Implement and register shutdown hook for Jetty console server
     - Implement and register shutdown hook for Timestamper
     - Fix UPnP-SSDPNotifySocket thread not stopping
@@ -14322,10 +14352,10 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Reseed: Log tweak
 
 2011-04-02 m1xxy
-    * routerconsole, i2psnark, ...  I2P ahora también en español: ¡Bienvenidos los hispanohablantes!
-      - routerconsole, i2ptunnel, i2psnark, SusiDNS, SusiMail fully translated into Spanish
+    * routerconsole, I2PSnark, ...  I2P ahora también en español: ¡Bienvenidos los hispanohablantes!
+      - routerconsole, I2PTunnel, I2PSnark, SusiDNS, SusiMail fully translated into Spanish
         (thx to PunkiBastardo and user)
-    * routerconsole, i2psnark, ...
+    * routerconsole, I2PSnark, ...
       - French translations completed by magma
 
 2011-03-22 zzz
@@ -14489,7 +14519,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Check for dup magnet torrent when adding torrent file
       - Add exotrack.i2p (ticket #403)
       - Disable spellcheck in textarea
-    * I2PTunnel: Generate error message when i2ptunnel.config save fails
+    * I2PTunnel: Generate error message when I2PTunnel.config save fails
                  (ticket #404)
 
 2011-02-06 zzz
@@ -14526,7 +14556,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 2011-02-03 zzz
     * Build:
       - Remove dup flag files (ticket #316)
-      - Remove BOB dependency on i2ptunnel
+      - Remove BOB dependency on I2PTunnel
     * Console: Add DTG to classpath for old installs
     * I2PTunnel: Fix NPE
     * RandomSource: Fix seeding from /dev/urandom
@@ -15039,7 +15069,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 2010-10-15 zzz
     * I2PSnark: Add file priority feature
     * I2PSocketEepGet: Set connect delay to save a RTT, will
-      speed announces in i2psnark
+      speed announces in I2PSnark
 
 2010-10-12 zzz
     *** 1.6 or higher JDK now required to build
@@ -15119,7 +15149,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
         streaming queue rather than "completion" (i.e. ACK from the far end).
         This prevents complete stalls when flushing, and should help performance
         of apps that use flush(), like I2PSnark (and SAM?).
-        close() still does a flush that waits for completion, as i2ptunnel
+        close() still does a flush that waits for completion, as I2PTunnel
         doesn't like a fast return from close().
       - cleanups
     * SusiDNS:
@@ -15533,7 +15563,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 * 2010-03-15  0.7.12 released
 
 2010-03-13 zzz
-    * Partial fix for i2ptunnel nonce troubles
+    * Partial fix for I2PTunnel nonce troubles
 
 2010-03-08 zzz
     * Floodfills: Increase max to 60 (was 28) and min to 45 (was 20)
@@ -15672,7 +15702,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Add method to get key signer name
     * Webapps: Allow additions to a webapp classpath.
       - Pull jstl.jar and standard.jar out of susidns.war
-      - Remove 100KB of duplicate classes from i2psnark.war
+      - Remove 100KB of duplicate classes from I2PSnark.war
 
     i2p.i2p.zzz.VTBM:
     * I2NP: Add UnknownI2NPMessage so we can route unknown message types
@@ -16107,7 +16137,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2009-11-24 zzz
     * DataStructures: Remove unused Logs
-    * OrderedProperties: Simplify, use in i2psnark
+    * OrderedProperties: Simplify, use in I2PSnark
     * Profiles: Record successes in the DB fail rate
       too, so we can calculate a percentage
     * profiles.jsp:
@@ -16439,7 +16469,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * EepGet, I2PSnark:
       - New I2PSocketEepGet fetches through existing tunnels
         rather than through the proxy
-      - Use new eepget for i2psnark
+      - Use new eepget for I2PSnark
       - Add a fake user agent for non-proxied fetches
       - Cleanups
     * NetDb:
@@ -16465,7 +16495,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Put favicon on every page
       - Make every page UTF-8, ☃ safe for snowmen
       - Remove options boxes on configtunnels.jsp
-      - Fix UTF-8 form submission (i2ptunnel too)
+      - Fix UTF-8 form submission (I2PTunnel too)
       - Throw 403 instead of 404 from flags.jsp and viewstat.jsp
         so we don't render error.jsp
     * I2CP: Fix the SessionConfig serializer in DataHelper,
@@ -16546,7 +16576,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2009-08-18 dr|z3d
     * Fixes for sidepanel
-    * Overhauled classic theme for i2ptunnels
+    * Overhauled classic theme for I2PTunnels
     * First stage of code validation to fix broken and "illegal" code
     * Multifarious other UI tweaks and fiddles.
 
@@ -16964,12 +16994,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
         for CSS, image, and favicon
     * I2PSnark build:
       - Move FetchAndAdd to static inner class
-      - Fix standalone build to include i2psnark.jar since classes
+      - Fix standalone build to include I2PSnark.jar since classes
         aren't in the .war anymore
       - Have standalone jetty use I2PAppContext temp directory
-      - Replace launch-i2psnark.jar with launch-I2PSnark script,
+      - Replace launch-I2PSnark.jar with launch-I2PSnark script,
         since RunStandalone is in i2p.jar
-      - Clean up jetty-i2psnark.xml, turn off jetty logging
+      - Clean up jetty-I2PSnark.xml, turn off jetty logging
       - Remove standalone build from the pkg target in the main build.xml
     * Jbigi, CPUID:
       - Reduce memory demand on startup from 4MB to 4KB each
@@ -17431,7 +17461,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * SAM: fix: warnings when generating javadoc
 
 2009-05-11 zzz
-    * Connect client: Fix NPE when used with advanced i2ptunnel features
+    * Connect client: Fix NPE when used with advanced I2PTunnel features
     * Context: Don't instantiate unused AdminManager
     * logs.jsp: Put critical log at the top
     * NetDb: Don't accept stores of our own LeaseSets or RouterInfo
@@ -17599,7 +17629,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * fixed NPE in NTCP transport
 
 2009-04-11 sponge
-    * i2ptunnel janitorial work and fixes on most locks.
+    * I2PTunnel janitorial work and fixes on most locks.
       Some locks still need work, and are marked with LINT in the comment.
       Just grep for "LINT" to see where the remaining places are.
 
@@ -17764,7 +17794,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
         and add a delay even if no tunnels, to allow time for a UI response
       - Sort the summary bar destinations
       - Move dest-to-hash converter to new helper class so we can
-        use it in i2ptunnel
+        use it in I2PTunnel
 
 2009-02-22 sponge
     * BOB: Orphan tunnel issue fix, bump BOB version
@@ -17805,7 +17835,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       use concurrent to prevent blowup
     * HTTP Proxy: Fix error msg for b32 addresses
     * I2CP: Implement optional reduce tunnels on idle - not hooked
-      in to i2ptunnel GUI yet - still needs tweaks
+      in to I2PTunnel GUI yet - still needs tweaks
     * I2CP MessageReader: Prevent rare NPE
     * I2CP Writer: Rewrite using concurrent
     * I2PSnark: Add torrent and connection count
@@ -17834,7 +17864,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * I2PSnark: Increase tunnels and pipeline to 3
     * NTCP: Use a java.util.concurrent execution queue instead of
       SimpleTimer for afterSend() to reduce lock contention
-    * Remove source from susimail.war, susidns.war, i2ptunnel.war (85KB)
+    * Remove source from susimail.war, susidns.war, I2PTunnel.war (85KB)
     * Routerconsole:
       - Move common methods to new HelperBase class
       - Make reseed link a button
@@ -17907,7 +17937,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 2009-01-14 zzz
     * config.jsp: Fix burst seconds display
     * HTTPClient: Fix per-tunnel settings for i2cp.gzip and
-      i2ptunnel.httpclient.send* (thx tino)
+      I2PTunnel.httpclient.send* (thx tino)
     * I2PSnark:
       - Fix double completion message
       - Add crstrack
@@ -17961,7 +17991,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * configservice.jsp: Clean up and fix the broken (?)
       browser launch configuration
     * I2PSnark:
-      - Try again to remove the i2psnarkurl files on shutdown
+      - Try again to remove the I2PSnarkurl files on shutdown
       - Sort torrents with a locale-based sort
     * NetDb:
       - Expire routers with introducers after 90m.
@@ -18016,9 +18046,9 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Remove PRNG stats
     * Eepsite: Disable jetty webapps by default for new installs
     * I2PSnark:
-      - Add default i2psnark.config for new installs
+      - Add default I2PSnark.config for new installs
       - Remove wishlist link
-      - Recognize robert and i2psnarkxl clients
+      - Recognize robert and I2PSnarkxl clients
       - Increase max files to 256
     * Increase standalone heap size to 128MB
     * NetDb: Split classes into their own files for mkvore
@@ -18058,8 +18088,8 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Don't create SnarkManager instance until first call,
         so it doesn't create the I2PSnark dir, read the config,
         etc., for single Snark instances.
-      - Don't read i2psnark.config twice; fix setting
-        i2psnark.dir
+      - Don't read I2PSnark.config twice; fix setting
+        I2PSnark.dir
       - More Snark constructor changes for calling from router
       - Make max connections per torrent configurable
 
@@ -18145,7 +18175,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Don't make susimail build always clean
       - Make pkg depend on distclean to be sure
       - Clean out more routerconsole and susidns files in 'ant clean'
-      - i2ptunnel, routerconsole, susidns:
+      - I2PTunnel, routerconsole, susidns:
         Only build WEB-INF when necessary
       - systray: Only build jar when necessary
       - Don't build I2PSnark standalone for the updater target
@@ -18190,7 +18220,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * profiles.jsp: Don't override locale number format
     * NetDb.jsp: Indicate if hidden
     * summary.jsp: Indicate if hidden
-    * i2ptunnel/edit.jsp: Disable word wrap in textarea
+    * I2PTunnel/edit.jsp: Disable word wrap in textarea
     * Blocklist: Change logging from ERROR to WARN
     * FloodfillMonitor:
        - Fix ff count (we forgot ourselves)
@@ -18334,11 +18364,11 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Blocklist: Fix a log message format
     * HarvesterJob: Don't instantiate if disabled
     * I2PSnark:
-      - Add config i2psnark.linkPrefix to enable access to completed
+      - Add config I2PSnark.linkPrefix to enable access to completed
         torrents from a different machine - examples:
-           i2psnark.linkPrefix=file://///localserver/path/to/files/
-           i2psnark.linkPrefix=http://localwebserver/path/
-        (Stop i2psnark, add to i2psnark.config, restart)
+           I2PSnark.linkPrefix=file://///localserver/path/to/files/
+           I2PSnark.linkPrefix=http://localwebserver/path/
+        (Stop I2PSnark, add to I2PSnark.config, restart)
       - Remove Galen and NickyB trackers
     * NetDb: Add netDb.exploreKeySet stat
     * NetDb.jsp: Add parameter ?r=xxxxxx to view a single routerinfo,
@@ -18458,7 +18488,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * FloodfillMonitorJob: Change range from 5-7 to 4-6
     * NTCP: Remove getIsInbound(), duplicate of isInbound()
     * PersistentDataStore: Don't try to remove nonexistent leaseSet files
-    * Router console: add placeholder pages for i2psnark, i2ptunnel,
+    * Router console: add placeholder pages for I2PSnark, I2PTunnel,
       susidns, and susimail for use when the .wars are not running
     * Streaming lib: Increase max window size to 128
 
@@ -18782,7 +18812,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * I2PSnark TrackerClient: Minor cleanup
     * checklist.txt: Minor edit
     * hosts.txt: Add perv.i2p, false.i2p, mtn.i2p2.i2p
-    * i2ptunnel.config: Change CVS client to mtn
+    * I2PTunnel.config: Change CVS client to mtn
     * NetDb.jsp: Show leaseSet destinations using reverse lookup
     * profiles.jsp: First cut at showing floodfill data
 
@@ -19027,7 +19057,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 2008-01-28 zzz
     * news.xml: Updates, still preliminary
     * ReseedHandler: Change default URL
-    * i2ptunnel.config: Change default outproxies
+    * I2PTunnel.config: Change default outproxies
     * readme.html: Change *.i2p.net URLs
     * help.jsp: Change *.i2p.net URLs
     * eepsite_index.html: Change stats.i2p addressbook subscription URL
@@ -19273,7 +19303,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2007-03-31  zzz
     * Add trevorreznik jump server to the http proxy error page
-    * Add anonymity to the trackers supporting details links in i2psnark
+    * Add anonymity to the trackers supporting details links in I2PSnark
 
 2007-03-24  zzz
     * Remove Syndie from build targets and navbar
@@ -19292,7 +19322,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 2007-03-18  zzz
     * I2PSnark: Cleanup some handling of saved partial pieces
     * I2PSnark: Put bit counting in Bitfield.java for efficiency
-    * I2PSnark: Save torrent completion state in i2psnark.config
+    * I2PSnark: Save torrent completion state in I2PSnark.config
 
 * 2007-03-17  0.6.1.28 released
 
@@ -19336,7 +19366,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Implement priority sending for NTCP
     * Disable trimForOverload() in tunnel BuildExecutor which
       was preventing tunnel builds when outbound traffic was high
-      (i.e. most of the time when running i2psnark)
+      (i.e. most of the time when running I2PSnark)
 
 2007-02-28  zzz
     * I2PSnark: File reopen cleanup
@@ -19561,11 +19591,11 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * I2PSnark: Reduce MAX_UPLOADERS from 12 to 4
 
 2006-09-04  zzz
-    * Enable pipelining in i2psnark
+    * Enable pipelining in I2PSnark
     * Make I2PSnark tunnel default be 1 + 0-1
 
 2006-09-03  zzz
-    * Add rate reporting to i2psnark
+    * Add rate reporting to I2PSnark
 
 2006-09-03  Complication
     * Limit form size in SusiDNS to avoid exceeding a POST size limit on postback
@@ -20493,7 +20523,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2005-12-22  jrandom
     * Bundle the standalone I2PSnark launcher in the installer and update
-      process (launch as "java -jar launch-i2psnark.jar", viewing the
+      process (launch as "java -jar launch-I2PSnark.jar", viewing the
       interface on http://localhost:8002/)
     * Don't autostart swarming torrents by default so that you can run a
       standalone I2PSnark from the I2P install dir and not have the embedded
@@ -20531,8 +20561,8 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2005-12-18  jrandom
     * Added a standalone runner for the I2PSnark web ui (build with the
-      command "ant i2psnark", unzip i2psnark-standalone.zip somewhere, run
-      with "java -jar launch-i2psnark.jar", and go to http://localhost:8002/).
+      command "ant I2PSnark", unzip I2PSnark-standalone.zip somewhere, run
+      with "java -jar launch-I2PSnark.jar", and go to http://localhost:8002/).
     * Further I2PSnark error handling
 
 2005-12-17  jrandom
@@ -20570,12 +20600,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Further I2PSnark web UI cleanup
 
 2005-12-15  jrandom
-    * Added a first pass to the I2PSnark web UI (see /i2psnark/)
+    * Added a first pass to the I2PSnark web UI (see /I2PSnark/)
 
 2005-12-15  jrandom
     * Added multitorrent support to I2PSnark, accessible currently by running
-      "i2psnark.jar --config i2psnark.config" (which may or may not exist).
-      It then joins the swarm for any torrents in ./i2psnark/*.torrent, saving
+      "I2PSnark.jar --config I2PSnark.config" (which may or may not exist).
+      It then joins the swarm for any torrents in ./I2PSnark/*.torrent, saving
       their data in that directory as well.  Removing the .torrent file stops
       participation, and it is currently set to seed indefinitely.  Completion
       is logged to the logger and standard output, with further UI interaction
@@ -20832,8 +20862,8 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       creating their own skins until the markup has solidified.
     * Added "routerconsole.javascript.disabled=true" to disable console
       client-side scripting and "routerconsole.css.disabled=true" to remove
-      css styling (only rolled out in the i2ptunnel interface currently)
-    * Fixed long standing bug with i2ptunnel client and server edit screens
+      css styling (only rolled out in the I2PTunnel interface currently)
+    * Fixed long standing bug with I2PTunnel client and server edit screens
       where tunnel count and depth properties would fail to save. Added
       backup quantity and variance configuration options.
     * Added basic accessibility support (key shortcuts, linear markup, alt and
@@ -20955,7 +20985,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 2005-10-19  jrandom
     * Ported the snark bittorrent client to I2P such that it is compatible
       with i2p-bt and azneti2p.  For usage information, grab an update and run
-      "java -jar lib/i2psnark.jar".  It isn't currently multitorrent capable,
+      "java -jar lib/I2PSnark.jar".  It isn't currently multitorrent capable,
       but adding in support would be fairly easy (see PeerAcceptor.java:49)
     * Don't allow leaseSets expiring too far in the future (thanks postman)
 
@@ -21032,7 +21062,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       USER message (while leaving the nick and 'full name').  The IRC proxy
       doesn't use this by default, but you can enable it by creating a new
       "IRC proxy" tunnel on the web interface, or by changing the tunnel type
-      to "ircclient" in i2ptunnel.config.
+      to "ircclient" in I2PTunnel.config.
 
 2005-10-10  jrandom
     * I2PTunnel http client config cleanup and stats
@@ -21254,7 +21284,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Added 'single user' functionality to syndie - if the single user
       checkbox on the admin page is checked, all users are allowed to control
       the instance and sync up with remote syndie nodes.
-    * Temporarily disable the x-i2p-gzip in i2ptunnel until it is more closely
+    * Temporarily disable the x-i2p-gzip in I2PTunnel until it is more closely
       debugged.
 
 2005-09-16  jrandom
@@ -21267,7 +21297,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       honor x-i2p-gzip encoding.
     * Let windows users build the exes too (thanks bar and redzara!)
     * Allow I2PTunnel httpserver operators to disable gzip compression on
-      individual tunnels with the i2ptunnel.gzip=false client option
+      individual tunnels with the I2PTunnel.gzip=false client option
       (good idea susi!)
 
 2005-09-16  jrandom
@@ -21688,13 +21718,13 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       I2PTunnel client page (thanks maestro^!)
 
 2005-04-17  sirup
-    * Added the possibility for i2ptunnel client and httpclient instances to
+    * Added the possibility for I2PTunnel client and httpclient instances to
       have their own i2p session (and hence, destination and tunnels).  By
       default, tunnels are shared, but that can be changed on the web
-      interface or with the sharedClient config option in i2ptunnel.config.
+      interface or with the sharedClient config option in I2PTunnel.config.
 
 2005-04-17  jrandom
-    * Marked the net.i2p.i2ptunnel.TunnelManager as deprecated.  Anyone use
+    * Marked the net.i2p.I2PTunnel.TunnelManager as deprecated.  Anyone use
       this?  If not, I want to drop it (lots of tiny details with lots of
       duplicated semantics).
 
@@ -21776,7 +21806,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       the file (thanks nickster!)
     * Updated the I2PTunnel HTML (thanks postman!)
     * Added support to the I2PTunnel pages for the URL parameter "passphrase",
-      which, if matched against the router.config "i2ptunnel.passphrase" value,
+      which, if matched against the router.config "I2PTunnel.passphrase" value,
       skips the nonce check.  If the config prop doesn't exist or is blank, no
       passphrase is accepted.
     * Implemented HMAC-SHA256.
@@ -22299,11 +22329,11 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Revised the I2PTunnel client and httpclient connection establishment
       throttles.  There is now a pool of threads that build the I2PSocket
       connections with a default size of 5, configurable via the I2PTunnel
-      client option 'i2ptunnel.numConnectionBuilders' (if set to 0, it will
+      client option 'I2PTunnel.numConnectionBuilders' (if set to 0, it will
       not throttle the number of concurrent builders, but will launch a thread
       per socket during establishment).  In addition, sockets accepted but
       not yet allocated to one of the connection builders will be destroyed
-      after 30 seconds, configurable via 'i2ptunnel.maxWaitTime' (if set to
+      after 30 seconds, configurable via 'I2PTunnel.maxWaitTime' (if set to
       0, it will wait indefinitely).
 
 2004-12-29  jrandom
@@ -22355,10 +22385,10 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       router.highCapacityPeers, updated every minute
 
 2004-12-19  jrandom
-    * Added a new i2ptunnel type: 'httpserver', allowing you to specify what
+    * Added a new I2PTunnel type: 'httpserver', allowing you to specify what
       hostname should be sent to the webserver.  By default, new installs will
       have an httpserver pointing at their jetty instance with the spoofed
-      name 'mysite.i2p' (editable on the /i2ptunnel/edit.jsp page).
+      name 'mysite.i2p' (editable on the /I2PTunnel/edit.jsp page).
 
 2004-12-19  scintilla
     * Convert native jcpuid code from C++ to C. This should alleviate build
@@ -22449,7 +22479,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       immediately discard the data as soon as its sent the first time,
       rather than wait for an ack, since we will never internally resend.
     * Reduce some synchronization to avoid a rare deadlock
-    * Replaced 'localhost' with 127.0.0.1 in the i2ptunnel config, and special
+    * Replaced 'localhost' with 127.0.0.1 in the I2PTunnel config, and special
       case it within the tunnel controller.
     * Script cleanup for building jbigi/jcpuid
     * Logging
@@ -23162,7 +23192,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2004-xx-xx  oOo
     * Implemented ?i2paddresshelper= hook
-    * Many small bugfixes to the web interface, router, i2ptunnel, and core.
+    * Many small bugfixes to the web interface, router, I2PTunnel, and core.
 
 2004-xx-xx  Nightblade
     * libSAM updates.
