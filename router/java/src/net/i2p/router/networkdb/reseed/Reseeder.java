@@ -122,7 +122,6 @@ public class Reseeder {
         "https://i2p.ghativega.in/"                 + ',' +   // arnavbhatt288_at_mail.i2p.crt     CA
         "https://i2p.novg.net/"                     + ',' +   // igor_at_novg.net.crt              CA                                Java 8+
         "https://i2pseed.creativecowpat.net:8443/"  + ',' +   // creativecowpat_at_mail.i2p.crt    i2pseed.creativecowpat.net.crt    Java 7+
-        "https://lapras.bungee.systems/"            + ',' +   // su3-root_at_bungee.systems.crt    CA
         "https://reseed2.i2p.net/"                  + ',' +   // echelon3_at_mail.i2p.crt          CA
         "https://reseed.diva.exchange/"             + ',' +   // reseed_at_diva.exchange.crt       CA
         "https://reseed-fr.i2pd.xyz/"               + ',' +   // r4sas-reseed_at_mail.i2p.crt      CA
@@ -130,10 +129,12 @@ public class Reseeder {
         "https://reseed.memcpy.io/"                 + ',' +   // hottuna_at_mail.i2p.crt           CA                                SNI required
         "https://reseed.onion.im/"                  + ',' +   // lazygravy_at_mail.i2p             CA                                Java 8+
         "https://reseed-pl.i2pd.xyz/"               + ',' +   // r4sas-reseed_at_mail.i2p.crt      CA
-        "https://reseed.is.prestium.org/"           + ',' +   // reheatedburger_at_protonmail.com.crt
-        "https://reseed.us.prestium.org/"           + ',' +   // null_at_i2pmail.org.crt
         "https://reseed.stormycloud.org/"           + ',' +   // admin_at_stormycloud.org.crt      CA
         "https://www2.mk16.de/";                              // i2p-reseed_at_mk16.de.crt         CA
+
+        //"https://lapras.bungee.systems/"            + ',' +   // su3-root_at_bungee.systems.crt    CA
+        //"https://reseed.is.prestium.org/"           + ',' +   // reheatedburger_at_protonmail.com.crt
+        //"https://reseed.us.prestium.org/"           + ',' +   // null_at_i2pmail.org.crt
 
 
     private static final String SU3_FILENAME = "i2pseeds.su3";
