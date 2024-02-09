@@ -3341,27 +3341,23 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<input hidden class=toggle_input id=toggle_createtorrent type=checkbox>")
            .append("<label id=tab_newtorrent class=toggleview for=\"toggle_createtorrent\"><span class=tab_label>")
            .append(_t("Create Torrent"))
-           .append("</span></label><hr>\n<table border=0><tr><td>")
+           .append("</span></label><hr>\n<table border=0>")
         //buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
-           .append(_t("Data to seed"))
-           .append(":</td><td>")
-           .append("<input type=text name=nofilter_baseFile size=85 value=\"")
-           .append("\" spellcheck=false title=\"")
+           .append("<tr><td>").append(_t("Data to seed")).append(":</td>")
+           .append("<td><input type=text name=nofilter_baseFile size=85 value=\"").append("\" spellcheck=false title=\"")
            .append(_t("File or directory to seed (full path or within the directory {0} )",
                    _manager.getDataDir().getAbsolutePath() + File.separatorChar))
-           .append("\" required> <input type=submit class=create value=\"")
-           .append(_t("Create torrent"))
-           .append("\" name=foo>")
-           .append("</td></tr>\n")
-           .append("<tr><td>")
-           .append(_t("Trackers"))
-           .append(":<td>\n<table id=trackerselect>\n<tr><td>Name</td><td>")
-           .append(_t("Primary"))
-           .append("</td><td>")
-           .append(_t("Alternates"))
-           .append("</td><td>")
-           .append(_t("Tracker Type"))
-           .append("</td></tr>\n");
+           .append("\" required> <input type=submit class=create value=\"").append(_t("Create torrent"))
+           .append("\" name=foo>").append("</td></tr>\n")
+           .append("<tr><td>").append(_t("Trackers")).append(":</td>")
+           .append("<td>\n<table id=trackerselect>\n")
+           .append("<tr><td>Name</td><td>").append(_t("Primary")).append("</td><td>")
+           .append(_t("Alternates")).append("</td><td>").append(_t("Tracker Type")).append("</td></tr>\n")
+           .append("<tr id=addTorrentFilter hidden><td>").append(_t("Content Filter")).append(":</td>")
+           .append("<td><select id=contentfilter multiple>")
+           .append("<option value=\"placeholder1\">Filter1 description</option>")
+           .append("<option value=\"placeholder2\">Filter2 description</option>")
+           .append("</select></td></tr>");
 
         for (Tracker t : sortedTrackers) {
             List<String> openTrackers = _manager.util().getOpenTrackers();
