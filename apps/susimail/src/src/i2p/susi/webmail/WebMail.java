@@ -2691,7 +2691,8 @@ public class WebMail extends HttpServlet
                 out.println("<style>body{display:block;pointer-events:auto}</style>\n");
                 out.println("</body>\n</html>");
                 out.flush();
-        }  // synch sessionObject
+            }  // synch sessionObject
+        }
     }
 
     /**
@@ -3662,8 +3663,7 @@ public class WebMail extends HttpServlet
                 }
                 // TODO ngettext
                 out.print("id=nukemail><span>" + _t("Really delete the marked messages?") + "</span><br>" +
-                        button(REALLYDELETE, _t("Yes, really delete them!")) + "&nbsp;" +
-                        button(CLEAR, _t("Cancel")));
+                          button(REALLYDELETE, _t("Yes, really delete them!")) + "&nbsp;" + button(CLEAR, _t("Cancel")));
                 out.print("</p></td>\n");
             } else {
                 out.print("<tr class=bottombuttons>\n" +
@@ -3671,6 +3671,7 @@ public class WebMail extends HttpServlet
                           "<td class=right colspan=4>" + (button(DELETE, _t("Delete Selected"))) +
                           "<span class=script>" + button(MARKALL, _t("Mark All")) + "&nbsp;" +
                           (button(CLEAR, _t("Clear All"))) + "</span></td>");
+            }
         }
         out.print("</tr>\n</table>\n");
     }
