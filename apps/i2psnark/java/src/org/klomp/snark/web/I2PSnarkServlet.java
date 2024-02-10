@@ -463,6 +463,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(" lang_").append(lang).append("\">\n<center>\n")
            .append(IFRAME_FORM);
         List<Tracker> sortedTrackers = null;
+        List<TorrentCreateFilter> sortedFilters = null;
         if (isConfigure) {
             buf.append("<div id=navbar>\n<a href=\"").append(_contextPath).append("/\" title=\"").append(_t("Torrents"))
                .append("\" class=\"snarkNav nav_main\">");
@@ -482,6 +483,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             buf.append("</a>\n");
             sortedTrackers = _manager.getSortedTrackers();
+            sortedFilters = _manager.getSortedTorrentCreateFilterStrings();
             buf.append("<a href=\"http://discuss.i2p/\" class=\"snarkNav nav_forum\" target=_blank title=\"")
                .append(_t("Torrent &amp; filesharing forum")).append("\">").append(_t("Forum")).append("</a>");
             for (Tracker t : sortedTrackers) {
@@ -539,7 +541,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("</div>\n<div id=lowersection>\n");
                 if (canWrite) {
                     writeAddForm(out, req);
-                    writeSeedForm(out, req, sortedTrackers);
+                    writeSeedForm(out, req, sortedTrackers, sortedFilters);
                 }
                 writeConfigLink(out);
                 // end of lowersection div
@@ -3331,7 +3333,7 @@ public class I2PSnarkServlet extends BasicServlet {
         fbuf.setLength(0);
     }
 
-    private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers) throws IOException {
+    private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers, List<TorrentCreateFilter> sortedFilters) throws IOException {
         StringBuilder buf = new StringBuilder(3*1024);
         String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         buf.append("<div class=sectionPanel id=createSection>\n<div>\n");
@@ -3341,27 +3343,32 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<input hidden class=toggle_input id=toggle_createtorrent type=checkbox>")
            .append("<label id=tab_newtorrent class=toggleview for=\"toggle_createtorrent\"><span class=tab_label>")
            .append(_t("Create Torrent"))
-           .append("</span></label><hr>\n<table border=0><tr><td>")
+           .append("</span></label><hr>\n<table border=0>")
         //buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
-           .append(_t("Data to seed"))
-           .append(":</td><td>")
-           .append("<input type=text name=nofilter_baseFile size=85 value=\"")
-           .append("\" spellcheck=false title=\"")
+           .append("<tr><td>").append(_t("Data to seed")).append(":</td>")
+           .append("<td><input type=text name=nofilter_baseFile size=85 value=\"").append("\" spellcheck=false title=\"")
            .append(_t("File or directory to seed (full path or within the directory {0} )",
                    _manager.getDataDir().getAbsolutePath() + File.separatorChar))
-           .append("\" required> <input type=submit class=create value=\"")
-           .append(_t("Create torrent"))
-           .append("\" name=foo>")
-           .append("</td></tr>\n")
-           .append("<tr><td>")
-           .append(_t("Trackers"))
-           .append(":<td>\n<table id=trackerselect>\n<tr><td>Name</td><td>")
-           .append(_t("Primary"))
-           .append("</td><td>")
-           .append(_t("Alternates"))
-           .append("</td><td>")
-           .append(_t("Tracker Type"))
-           .append("</td></tr>\n");
+           .append("\" required> <input type=submit class=create value=\"").append(_t("Create torrent"))
+           .append("\" name=foo>").append("</td></tr>\n")
+           .append("<tr><td>").append(_t("Filters")).append(":</td>")
+           .append("<td>\n<table id=filterselect>\n")
+           .append("<tr><td>Content Filter</td>")
+           .append("<td><select id=contentfilter multiple style=\"width:100%\">");
+
+        for (TorrentCreateFilter f : sortedFilters) {
+           String name = f.name;
+           boolean isDefault = f.isDefault;
+
+           buf.append("<option value=\"" + name + "\"" + (isDefault ? " selected" : "") + ">" + name + "</option>");
+        }
+
+        buf.append("</select></td></tr>")
+           .append("<tr><td>").append(_t("Trackers")).append(":</td>")
+           .append("<td>\n<table id=trackerselect>\n")
+           .append("<tr><td>Name</td><td>").append(_t("Primary")).append("</td><td>")
+           .append(_t("Alternates")).append("</td><td>").append(_t("Tracker Type")).append("</td></tr>\n")
+           .append("<tr id=addTorrentFilter><td>").append(_t("Content Filter")).append(":</td>");
 
         for (Tracker t : sortedTrackers) {
             List<String> openTrackers = _manager.util().getOpenTrackers();
