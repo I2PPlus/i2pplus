@@ -2121,8 +2121,15 @@ public class I2PSnarkServlet extends BasicServlet {
                         // it shouldn't be THAT bad, so keep it in this thread.
                         // TODO thread it for big torrents, perhaps a la FetchAndAdd
                         boolean isPrivate = _manager.getPrivateTrackers().contains(announceURL);
-                        String ignorePattern = req.getParameter("nofilter_ignorePattern");
-                        Storage s = new Storage(_manager.util(), baseFile, announceURL, announceList, null, isPrivate, null, ignorePattern);
+                        String[] filters = req.getParameterValues("filters");
+                        List<String> filterValues = new ArrayList<String>();
+                        Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
+
+                        for (int i = 0; i < filters.length; i++) {
+                            filterValues.add(torrentCreateFilters.get(filters[i]).filterPattern);
+                        }
+
+                        Storage s = new Storage(_manager.util(), baseFile, announceURL, announceList, null, isPrivate, null, filterValues);
                         s.close(); // close the files... maybe need a way to pass this Storage to addTorrent rather than starting over
                         MetaInfo info = s.getMetaInfo();
                         File torrentFile = new File(_manager.getDataDir(), s.getBaseName() + ".torrent");
@@ -3354,7 +3361,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<tr><td>").append(_t("Filters")).append(":</td>")
            .append("<td>\n<table id=filterselect>\n")
            .append("<tr><td>Content Filter</td>")
-           .append("<td><select id=contentfilter multiple style=\"width:100%\">");
+           .append("<td><select id=contentfilter name=filters multiple style=\"width:100%\">");
 
         for (TorrentCreateFilter f : sortedFilters) {
            String name = f.name;
