@@ -393,6 +393,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         super.optionsUpdated(tunnel);
     }
 
+
     /**
      * Called by the thread pool of I2PSocket handlers
      *
@@ -691,7 +692,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 keepalive = false;
             }
 
-
             // we keep the enc sent by the browser before clobbering it, since it may have
             // been x-i2p-gzip
             String enc = getEntryOrNull(headers, "Accept-Encoding");
@@ -724,10 +724,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
             String modifiedHeader = formatHeaders(headers, command);
             if (_log.shouldInfo())
-                _log.info("[HTTPServer] Modified headers\n\t" + modifiedHeader);
+                _log.info("[HTTPServer] Modified headers \n* " + modifiedHeader);
 
             boolean compress = allowGZIP && useGZIP;
-            //boolean addHeaders = shouldAddResponseHeaders();
             // waiter is notified when the thread is done
             AtomicInteger waiter = keepalive ? new AtomicInteger() : null;
             Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
@@ -843,6 +842,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
         /**
          *  @param shouldCompress if false, don't compress, just filter server headers
+         *  @param waiter to notify when done; will set value to 1: not keepalive-able response, or 2: keepalive
          */
         public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
                                    I2PAppContext ctx, Log log, boolean shouldCompress, boolean upgrade,
@@ -1161,7 +1161,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     s = new Sender(browserout, serverin, "Server -> Client uncompressed", _log);
                 }
                 if (_log.shouldInfo())
-                    _log.info("Running server-to-browser: compressed? " + _shouldCompress + " keepalive? " + _keepalive);
+                    _log.info("Server -> Client: Compressed? " + _shouldCompress + " -  KeepAlive? " + _keepalive);
                 s.run(); // same thread
             } catch (SSLException she) {
                 _log.error("[HTTPServer] SSL error", she);
@@ -1299,7 +1299,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         *  Overridden to peek at response code. Always returns line.
          *  Finish gzipping but don't close the output stream,
          *  if keepalive is true.
          *
