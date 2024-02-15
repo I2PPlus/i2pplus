@@ -2238,6 +2238,7 @@
         <ant dir="apps/ministreaming/java/" target="junit.compileTest" />
         <ant dir="apps/streaming/java/" target="junit.compileTest" />
         -->
+        <ant dir="apps/i2ptunnel/java/" target="compileTest" />
     </target>
     <target name="prepTest" depends="prepupdate, buildTest">
         <!-- overwrite i2p.jar and router.jar with the test versions -->
@@ -2257,7 +2258,7 @@
         <ant dir="router/java/" target="scalatest.test" />
     </target>
     <!-- both junit and scala -->
-    <target name="test" depends="testCore, testRouter, testMinistreaming, testStreaming" />
+    <target name="test" depends="testCore, testRouter, testMinistreaming, testStreaming, testI2PTunnel" />
     <target name="testCore" depends="buildProperties, jbigi">
         <ant dir="core/java/" target="test" />
     </target>
@@ -2269,6 +2270,9 @@
     </target>
     <target name="testStreaming" depends="buildProperties">
         <ant dir="apps/streaming/java/" target="test" />
+    </target>
+    <target name="testI2PTunnel" depends="buildStreaming">
+        <ant dir="apps/i2ptunnel/java/" target="test" />
     </target>
     <target name="scalatest.report" depends="buildProperties">
         <ant dir="core/java/" target="scalatest.report" />
