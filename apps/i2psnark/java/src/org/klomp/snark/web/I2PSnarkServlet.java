@@ -463,6 +463,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(" lang_").append(lang).append("\">\n<center>\n")
            .append(IFRAME_FORM);
         List<Tracker> sortedTrackers = null;
+        List<TorrentCreateFilter> sortedFilters = null;
         if (isConfigure) {
             buf.append("<div id=navbar>\n<a href=\"").append(_contextPath).append("/\" title=\"").append(_t("Torrents"))
                .append("\" class=\"snarkNav nav_main\">");
@@ -482,6 +483,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             buf.append("</a>\n");
             sortedTrackers = _manager.getSortedTrackers();
+            sortedFilters = _manager.getSortedTorrentCreateFilterStrings();
             buf.append("<a href=\"http://discuss.i2p/\" class=\"snarkNav nav_forum\" target=_blank title=\"")
                .append(_t("Torrent &amp; filesharing forum")).append("\">").append(_t("Forum")).append("</a>");
             for (Tracker t : sortedTrackers) {
@@ -539,7 +541,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("</div>\n<div id=lowersection>\n");
                 if (canWrite) {
                     writeAddForm(out, req);
-                    writeSeedForm(out, req, sortedTrackers);
+                    writeSeedForm(out, req, sortedTrackers, sortedFilters);
                 }
                 writeConfigLink(out);
                 // end of lowersection div
@@ -2119,8 +2121,15 @@ public class I2PSnarkServlet extends BasicServlet {
                         // it shouldn't be THAT bad, so keep it in this thread.
                         // TODO thread it for big torrents, perhaps a la FetchAndAdd
                         boolean isPrivate = _manager.getPrivateTrackers().contains(announceURL);
-                        String ignorePattern = req.getParameter("nofilter_ignorePattern");
-                        Storage s = new Storage(_manager.util(), baseFile, announceURL, announceList, null, isPrivate, null, ignorePattern);
+                        String[] filters = req.getParameterValues("filters");
+                        List<String> filterValues = new ArrayList<String>();
+                        Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
+
+                        for (int i = 0; i < filters.length; i++) {
+                            filterValues.add(torrentCreateFilters.get(filters[i]).filterPattern);
+                        }
+
+                        Storage s = new Storage(_manager.util(), baseFile, announceURL, announceList, null, isPrivate, null, filterValues);
                         s.close(); // close the files... maybe need a way to pass this Storage to addTorrent rather than starting over
                         MetaInfo info = s.getMetaInfo();
                         File torrentFile = new File(_manager.getDataDir(), s.getBaseName() + ".torrent");
@@ -3331,7 +3340,7 @@ public class I2PSnarkServlet extends BasicServlet {
         fbuf.setLength(0);
     }
 
-    private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers) throws IOException {
+    private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers, List<TorrentCreateFilter> sortedFilters) throws IOException {
         StringBuilder buf = new StringBuilder(3*1024);
         String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         buf.append("<div class=sectionPanel id=createSection>\n<div>\n");
@@ -3349,15 +3358,24 @@ public class I2PSnarkServlet extends BasicServlet {
                    _manager.getDataDir().getAbsolutePath() + File.separatorChar))
            .append("\" required> <input type=submit class=create value=\"").append(_t("Create torrent"))
            .append("\" name=foo>").append("</td></tr>\n")
+           .append("<tr><td>").append(_t("Filters")).append(":</td>")
+           .append("<td>\n<table id=filterselect>\n")
+           .append("<tr><td>Content Filter</td>")
+           .append("<td><select id=contentfilter name=filters multiple style=\"width:100%\">");
+
+        for (TorrentCreateFilter f : sortedFilters) {
+           String name = f.name;
+           boolean isDefault = f.isDefault;
+
+           buf.append("<option value=\"" + name + "\"" + (isDefault ? " selected" : "") + ">" + name + "</option>");
+        }
+
+        buf.append("</select></td></tr>")
            .append("<tr><td>").append(_t("Trackers")).append(":</td>")
            .append("<td>\n<table id=trackerselect>\n")
            .append("<tr><td>Name</td><td>").append(_t("Primary")).append("</td><td>")
            .append(_t("Alternates")).append("</td><td>").append(_t("Tracker Type")).append("</td></tr>\n")
-           .append("<tr id=addTorrentFilter hidden><td>").append(_t("Content Filter")).append(":</td>")
-           .append("<td><select id=contentfilter multiple>")
-           .append("<option value=\"placeholder1\">Filter1 description</option>")
-           .append("<option value=\"placeholder2\">Filter2 description</option>")
-           .append("</select></td></tr>");
+           .append("<tr id=addTorrentFilter><td>").append(_t("Content Filter")).append(":</td>");
 
         for (Tracker t : sortedTrackers) {
             List<String> openTrackers = _manager.util().getOpenTrackers();
