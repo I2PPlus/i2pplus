@@ -393,7 +393,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         super.optionsUpdated(tunnel);
     }
 
-
     /**
      * Called by the thread pool of I2PSocket handlers
      *
@@ -437,7 +436,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
             if (requestCount > 0) {
                 if (_log.shouldInfo())
-                    _log.info("Keepalive, awaiting request #" + requestCount);
+                    _log.info("[HTTPServer] Keepalive, awaiting request [#" + requestCount + "]");
             }
 
             // The headers _should_ be in the first packet, but
@@ -453,20 +452,20 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } catch (SocketTimeoutException ste) {
                 if (requestCount > 0) {
                     if (_log.shouldDebug())
-                         _log.debug("Timeout awaiting request #" + requestCount);
+                         _log.debug("[HTTPServer] Timeout reached awaiting request [#" + requestCount + "]");
                 } else {
                     try {
                         sendError(socket, ERR_REQUEST_TIMEOUT);
                     } catch (IOException ioe) {}
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Error in the HTTP request (" + ste.getMessage() + ") \n* Client: " + peerB32);
+                        _log.warn("[HTTPServer] Error in the HTTP request (" + ste.getMessage() + ") \n* Client: " + peerB32);
                 }
                 try { socket.close(); } catch (IOException ioe) {}
                 return;
             } catch (EOFException eofe) {
                 if (requestCount > 0) {
                     if (_log.shouldDebug())
-                         _log.debug("Client closed awaiting request #" + requestCount);
+                         _log.debug("[HTTPServer] Client closed awaiting request [#" + requestCount + "]");
                 } else {
                     try {
                         sendError(socket, ERR_BAD_REQUEST);
@@ -585,7 +584,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                     continue;
                                 if (ag.length() > 0 && ua.contains(ag)) {
                                     if (_log.shouldWarn()) {
-                                        _log.warn("[HTTPServer] Refusing access (bad user agent) \n* Client: " + peerB32 +
+                                        _log.warn("[HTTPServer] Refusing access (blacklisted user agent) \n* Client: " + peerB32 +
                                                   "\n* User-Agent: " + ua);
                                     }
                                     try {
@@ -692,6 +691,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 keepalive = false;
             }
 
+
             // we keep the enc sent by the browser before clobbering it, since it may have
             // been x-i2p-gzip
             String enc = getEntryOrNull(headers, "Accept-Encoding");
@@ -723,10 +723,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 headers.remove("X-Accept-Encoding");
 
             String modifiedHeader = formatHeaders(headers, command);
-            if (_log.shouldInfo())
-                _log.info("[HTTPServer] Modified headers \n* " + modifiedHeader);
+            if (_log.shouldDebug())
+                _log.debug("[HTTPServer] Modified headers\n\t" + modifiedHeader);
 
             boolean compress = allowGZIP && useGZIP;
+            //boolean addHeaders = shouldAddResponseHeaders();
             // waiter is notified when the thread is done
             AtomicInteger waiter = keepalive ? new AtomicInteger() : null;
             Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
@@ -751,7 +752,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // wait for the response to finish, then determine
                 // if we can receive another request on this socket
                 if (_log.shouldDebug())
-                    _log.debug("Waiting for response " + requestCount + " to finish");
+                    _log.debug("[HTTPServer] Waiting for response [#" + requestCount + "] to finish...");
                 try {
                     synchronized(waiter) {
                         if (waiter.get() == 0)
@@ -759,14 +760,21 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     }
                 } catch (InterruptedException ie) {
                     if (_log.shouldWarn())
-                        _log.warn("Interrupted waiting for response to finish");
+                        _log.warn("[HTTPServer] Interrupted waiting for response to finish");
                     break;
                 }
                 if (_log.shouldInfo()) {
                     long timeToWait = getTunnel().getContext().clock().now() - afterAccept;
-                    _log.info("Waited " + timeToWait + " for response " + requestCount + " to complete, code: " + waiter);
-                }
-                // 0: not done; 1: not keepalive-able response; 2: keepalive
+                    // 0: not done; 1: not keepalive-able response; 2: keepalive
+                    String code;
+                    switch (waiter.get()) {
+                        case 0: code = "Not complete"; break;
+                        case 1: code = "Not keepalive"; break;
+                        case 2: code = "Keepalive"; break;
+                        default: code = "Unknown";
+                   }
+                   _log.info("[HTTPServer] Waited " + timeToWait + "ms for response [#" + requestCount + "] to complete -> " + code);
+               }
                 if (waiter.get() != 2)
                     break;
             }
@@ -791,7 +799,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             // Don't complain too early, Jetty may not be ready.
             int level = getTunnel().getContext().clock().now() - _startedOn > START_INTERVAL ? Log.ERROR : Log.WARN;
             if (_log.shouldLog(level))
-                _log.log(level, "Error connecting to HTTP server " + getSocketString(port));
+                _log.log(level, "[HTTPServer] Error connecting to HTTP server " + getSocketString(port));
         } catch (IOException ex) {
             try {
                 socket.close();
@@ -810,7 +818,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 socket.close();
             } catch (IOException ioe) {}
             if (_log.shouldError())
-                _log.error("[HTTPServer] Out of Memory error", oom);
+                _log.error("[HTTPServer] Out of Memory error (" + oom.getMessage() + ")");
         }
     }
 
@@ -842,7 +850,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
         /**
          *  @param shouldCompress if false, don't compress, just filter server headers
-         *  @param waiter to notify when done; will set value to 1: not keepalive-able response, or 2: keepalive
          */
         public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
                                    I2PAppContext ctx, Log log, boolean shouldCompress, boolean upgrade,
@@ -892,7 +899,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                             SERVER_READ_TIMEOUT_MEDIUM :   // medium
                                             SERVER_READ_TIMEOUT_POST);     // long
                     _keepalive = false;
-                    sender = new Sender(serverout, browserin, "server: browser to server", _log);
+                    sender = new Sender(serverout, browserin, "Server: Client -> Server", _log);
                     // run in the unlimited client pool
                     _tpe.execute(sender);
                 }
@@ -1161,7 +1168,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     s = new Sender(browserout, serverin, "Server -> Client uncompressed", _log);
                 }
                 if (_log.shouldInfo())
-                    _log.info("Server -> Client: Compressed? " + _shouldCompress + " -  KeepAlive? " + _keepalive);
+                    _log.info("[HTTPServer] Running server-to-browser: compressed? " + _shouldCompress + " keepalive? " + _keepalive);
                 s.run(); // same thread
             } catch (SSLException she) {
                 _log.error("[HTTPServer] SSL error", she);
@@ -1299,6 +1306,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
+         *  Overridden to peek at response code. Always returns line.
          *  Finish gzipping but don't close the output stream,
          *  if keepalive is true.
          *
