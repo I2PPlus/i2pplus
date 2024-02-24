@@ -3358,9 +3358,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    _manager.getDataDir().getAbsolutePath() + File.separatorChar))
            .append("\" required> <input type=submit class=create value=\"").append(_t("Create torrent"))
            .append("\" name=foo>").append("</td></tr>\n")
-           .append("<tr><td>").append(_t("Filters")).append(":</td>")
-           .append("<td>\n<table id=filterselect>\n")
-           .append("<tr><td>Content Filter</td>")
+           .append("<tr><td>").append(_t("Content Filters")).append(":</td>")
            .append("<td><select id=contentfilter name=filters multiple style=\"width:100%\">");
 
         for (TorrentCreateFilter f : sortedFilters) {
@@ -3374,8 +3372,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<tr><td>").append(_t("Trackers")).append(":</td>")
            .append("<td>\n<table id=trackerselect>\n")
            .append("<tr><td>Name</td><td>").append(_t("Primary")).append("</td><td>")
-           .append(_t("Alternates")).append("</td><td>").append(_t("Tracker Type")).append("</td></tr>\n")
-           .append("<tr id=addTorrentFilter><td>").append(_t("Content Filter")).append(":</td>");
+           .append(_t("Alternates")).append("</td><td>").append(_t("Tracker Type")).append("</td></tr>\n");
 
         for (Tracker t : sortedTrackers) {
             List<String> openTrackers = _manager.util().getOpenTrackers();
