@@ -138,8 +138,9 @@ public class Storage implements Closeable {
    * @throws IOException when creating and/or checking files fails.
    */
   public Storage(I2PSnarkUtil util, File baseFile, String announce, List<List<String>> announce_list,
-                 String created_by, boolean privateTorrent, StorageListener listener) throws IOException {
-      this(util, baseFile, announce, announce_list, created_by, privateTorrent, null, null, listener);
+                 String created_by, boolean privateTorrent, StorageListener listener,
+                 List<String> filters) throws IOException {
+      this(util, baseFile, announce, announce_list, created_by, privateTorrent, null, null, listener, filters);
   }
 
   /**
@@ -159,14 +160,15 @@ public class Storage implements Closeable {
    */
   public Storage(I2PSnarkUtil util, File baseFile, String announce,
                  List<List<String>> announce_list, String created_by, boolean privateTorrent,
-                 List<String> url_list, String comment, StorageListener listener) throws IOException {
+                 List<String> url_list, String comment, StorageListener listener,
+                 List<String> filters) throws IOException {
       _util = util;
       _base = baseFile;
       _log = util.getContext().logManager().getLog(Storage.class);
       this.listener = listener;
       _preserveFileNames = true;
       // Create names, rafs and lengths arrays.
-      _torrentFiles = getFiles(baseFile);
+      _torrentFiles = getFiles(baseFile, filters);
 
       long total = 0;
       ArrayList<Long> lengthsList = new ArrayList<Long>(_torrentFiles.size());
@@ -250,11 +252,11 @@ public class Storage implements Closeable {
       return piece_hashes;
   }
 
-  private List<TorrentFile> getFiles(File base) throws IOException {
+  private List<TorrentFile> getFiles(File base, List<String> filters) throws IOException {
       if (base.getAbsolutePath().equals("/"))
           throw new IOException("Don't seed root");
       List<File> files = new ArrayList<File>();
-      addFiles(files, base);
+      addFiles(files, base, filters);
 
       int size = files.size();
       List<TorrentFile> rv = new ArrayList<TorrentFile>(size);
@@ -271,8 +273,17 @@ public class Storage implements Closeable {
   /**
    *  @throws IOException if too many total files
    */
-  private void addFiles(List<File> l, File f) throws IOException {
+  private void addFiles(List<File> l, File f, List<String> filters) throws IOException {
     int max = _util.getMaxFilesPerTorrent();
+
+    for (int i = 0; i < filters.size(); i++) {
+        String filterPattern = filters.get(i);
+
+        if (f.getPath().contains(filterPattern)) {
+            return;
+        }
+    }
+
     if (!f.isDirectory()) {
         if (l.size() >= max)
             throw new IOException(_util.getString("Too many files in \"{0}\" ({1})!", metainfo.getName(), l.size()) +
@@ -290,7 +301,7 @@ public class Storage implements Closeable {
             return;
           }
         for (int i = 0; i < files.length; i++)
-          addFiles(l, files[i]);
+          addFiles(l, files[i], filters);
       }
   }
 
@@ -1736,7 +1747,7 @@ public class Storage implements Closeable {
       File file = null;
       FileOutputStream out = null;
       try {
-          Storage storage = new Storage(util, base, announce, null, created_by, false, url_list, comment, null);
+          Storage storage = new Storage(util, base, announce, null, created_by, false, url_list, comment, null, null);
           MetaInfo meta = storage.getMetaInfo();
           file = new File(storage.getBaseName() + ".torrent");
           out = new FileOutputStream(file);

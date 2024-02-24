@@ -99,6 +99,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private volatile boolean _running;
     private volatile boolean _stopping;
     private final Map<String, Tracker> _trackerMap;
+    private final Map<String, TorrentCreateFilter> _torrentCreateFilterMap;
     private UpdateManager _umgr;
     private UpdateHandler _uhandler;
     private SimpleTimer2.TimedEvent _idleChecker;
@@ -272,6 +273,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 //        "crs2nugpvoqygnpabqbopwyjqettwszth6ubr2fh7whstlos3a6q.b32.i2p"
     }));
 
+    private static final String DEFAULT_TORRENT_CREATE_FILTERS[] = {
+       "NFO Files", ".nfo",
+       "Synology NAS Metadata", "@eaDir"
+    };
+
     static {
         Set<String> ann = new HashSet<String>(8);
         for (int i = 1; i < DEFAULT_TRACKERS.length; i += 2) {
@@ -285,6 +291,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /** comma delimited list of name=announceURL=baseURL for the trackers to be displayed */
     public static final String PROP_TRACKERS = "i2psnark.trackers";
+
+    /** comma delimited list of name=filterPattern for torrent create filters */
+    public static final String PROP_TORRENT_CREATE_FILTERS = "i2psnark.torrent_create_filters";
 
     /**
      *  For embedded.
@@ -323,6 +332,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _configDir = migrateConfig(configFile);
         _configFile = new File(_configDir, CONFIG_FILE);
         _trackerMap = new ConcurrentHashMap<String, Tracker>(4);
+        _torrentCreateFilterMap = new ConcurrentHashMap<String, TorrentCreateFilter>(2);
         loadConfig(null);
         if (!ctx.isRouterContext())
             Runtime.getRuntime().addShutdownHook(new Thread(new TempDeleter(_util.getTempDir()), "Snark Temp Dir Deleter"));
@@ -1136,6 +1146,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
         initTrackerMap();
+        initTorrentCreateFilterMap();
     }
 
     private int getInt(String prop, int defaultVal) {
@@ -3222,10 +3233,27 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     *  Unsorted map of name to TorrentCreateFilter object
+     *  Modifiable, not a copy
+     *  @since 0.9.62+
+     */
+    public Map<String, TorrentCreateFilter> getTorrentCreateFilterMap() {
+        return _torrentCreateFilterMap;
+    }
+
+    /**
      *  Unsorted, do not modify
      */
     public Collection<Tracker> getTrackers() {
         return _trackerMap.values();
+    }
+
+    /**
+     *  Unsorted, do not modify
+     *  @since 0.9.62+
+     */
+    public Collection<TorrentCreateFilter> getTorrentCreateFilterStrings() {
+        return _torrentCreateFilterMap.values();
     }
 
     /**
@@ -3239,11 +3267,29 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     *  Sorted copy
+     *  @since 0.9.62+
+     */
+    public List<TorrentCreateFilter> getSortedTorrentCreateFilterStrings() {
+        List<TorrentCreateFilter> fv = new ArrayList<TorrentCreateFilter>(_torrentCreateFilterMap.values());
+        Collections.sort(fv, new IgnoreCaseComparatorF());
+        return fv;
+    }
+
+    /**
      *  Has the default tracker list been modified?
      *  @since 0.9.35
      */
     public boolean hasModifiedTrackers() {
         return _config.containsKey(PROP_TRACKERS);
+    }
+
+    /**
+     *  Has the default torrent create filter list been modified?
+     *  @since 0.9.62+
+     */
+    public boolean hasModifiedTorrentCreateFilters() {
+        return _config.containsKey(PROP_TORRENT_CREATE_FILTERS);
     }
 
     /** @since 0.9 */
@@ -3267,9 +3313,35 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
+    /** @since 0.9.62+ */
+    private void initTorrentCreateFilterMap() {
+        String torrentCreateFilters = _config.getProperty(PROP_TORRENT_CREATE_FILTERS);
+        if ( (torrentCreateFilters == null) || (torrentCreateFilters.trim().length() <= 0) )
+            torrentCreateFilters = _context.getProperty(PROP_TORRENT_CREATE_FILTERS);
+        if ( (torrentCreateFilters == null) || (torrentCreateFilters.trim().length() <= 0) ) {
+            setDefaultTorrentCreateFilterMap(true);
+        } else {
+            String[] toks = DataHelper.split(torrentCreateFilters, ",");
+            for (int i = 0; i < toks.length; i += 2) {
+                String name = toks[i].trim().replace("&#44;", ",");
+                String filterPattern = toks[i+1].trim().replace("&#44;", ",");
+                if ( (name.length() > 0) && (filterPattern.length() > 0) ) {
+                    String data[] = DataHelper.split(filterPattern, "=", 2);
+                    boolean isDefault = data.length > 1 ? true : false;
+                    _torrentCreateFilterMap.put(name, new TorrentCreateFilter(name, data[0], isDefault));
+                }
+            }
+        }
+    }
+
     /** @since 0.9 */
     public void setDefaultTrackerMap() {
         setDefaultTrackerMap(true);
+    }
+
+    /** @since 0.9.62+ */
+    public void setDefaultTorrentCreateFilterMap() {
+        setDefaultTorrentCreateFilterMap(true);
     }
 
     /** @since 0.9.1 */
@@ -3284,6 +3356,19 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             _trackerMap.put(name, new Tracker(name, urls[0], url2));
         }
         if (save && _config.remove(PROP_TRACKERS) != null) {
+            saveConfig();
+        }
+    }
+
+    /** @since 0.9.62+ */
+    private void setDefaultTorrentCreateFilterMap(boolean save) {
+        _torrentCreateFilterMap.clear();
+        for (int i = 0; i < DEFAULT_TORRENT_CREATE_FILTERS.length; i += 2) {
+            String name = DEFAULT_TORRENT_CREATE_FILTERS[i];
+            String filterPattern = DEFAULT_TORRENT_CREATE_FILTERS[i+1];
+            _torrentCreateFilterMap.put(name, new TorrentCreateFilter(name, filterPattern, true));
+        }
+        if (save && _config.remove(PROP_TORRENT_CREATE_FILTERS) != null) {
             saveConfig();
         }
     }
@@ -3303,6 +3388,24 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 buf.append('=').append(t.baseURL);
         }
         _config.setProperty(PROP_TRACKERS, buf.toString());
+        saveConfig();
+    }
+
+    /** @since 0.9.62+ */
+    public void saveTorrentCreateFilterMap() {
+        StringBuilder buf = new StringBuilder(2048);
+        boolean comma = false;
+        for (Map.Entry<String, TorrentCreateFilter> e : _torrentCreateFilterMap.entrySet()) {
+            if (comma)
+                buf.append(',');
+            else
+                comma = true;
+            TorrentCreateFilter f = e.getValue();
+            buf.append(e.getKey().replace(",", "&#44;")).append(',').append(f.filterPattern.replace(",", "&#44;"));
+            if (f.isDefault)
+                buf.append('=').append("true");
+        }
+        _config.setProperty(PROP_TORRENT_CREATE_FILTERS, buf.toString());
         saveConfig();
     }
 
@@ -3558,6 +3661,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static class IgnoreCaseComparator implements Comparator<Tracker>, Serializable {
         private final Collator coll = Collator.getInstance();
         public int compare(Tracker l, Tracker r) {
+            return coll.compare(l.name, r.name);
+        }
+    }
+
+    /**
+     *  ignore case, current locale
+     *  @since 0.9.62+
+     */
+    private static class IgnoreCaseComparatorF implements Comparator<TorrentCreateFilter>, Serializable {
+        private final Collator coll = Collator.getInstance();
+        public int compare(TorrentCreateFilter l, TorrentCreateFilter r) {
             return coll.compare(l.name, r.name);
         }
     }

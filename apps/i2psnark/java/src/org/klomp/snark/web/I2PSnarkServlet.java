@@ -63,6 +63,7 @@ import org.klomp.snark.PeerID;
 import org.klomp.snark.Snark;
 import org.klomp.snark.SnarkManager;
 import org.klomp.snark.Storage;
+import org.klomp.snark.TorrentCreateFilter;
 import org.klomp.snark.Tracker;
 import org.klomp.snark.TrackerClient;
 import org.klomp.snark.URIUtil;
@@ -462,6 +463,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(" lang_").append(lang).append("\">\n<center>\n")
            .append(IFRAME_FORM);
         List<Tracker> sortedTrackers = null;
+        List<TorrentCreateFilter> sortedFilters = null;
         if (isConfigure) {
             buf.append("<div id=navbar>\n<a href=\"").append(_contextPath).append("/\" title=\"").append(_t("Torrents"))
                .append("\" class=\"snarkNav nav_main\">");
@@ -481,6 +483,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             buf.append("</a>\n");
             sortedTrackers = _manager.getSortedTrackers();
+            sortedFilters = _manager.getSortedTorrentCreateFilterStrings();
             buf.append("<a href=\"http://discuss.i2p/\" class=\"snarkNav nav_forum\" target=_blank title=\"")
                .append(_t("Torrent &amp; filesharing forum")).append("\">").append(_t("Forum")).append("</a>");
             for (Tracker t : sortedTrackers) {
@@ -523,6 +526,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // end of mainsection div
             out.write("<div class=logshim></div>\n</div>\n");
             writeConfigForm(out, req);
+            writeTorrentCreateFilterForm(out, req);
             writeTrackerForm(out, req);
 
         } else {
@@ -537,7 +541,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("</div>\n<div id=lowersection>\n");
                 if (canWrite) {
                     writeAddForm(out, req);
-                    writeSeedForm(out, req, sortedTrackers);
+                    writeSeedForm(out, req, sortedTrackers, sortedFilters);
                 }
                 writeConfigLink(out);
                 // end of lowersection div
@@ -2014,6 +2018,10 @@ public class I2PSnarkServlet extends BasicServlet {
             String taction = req.getParameter("taction");
             if (taction != null)
                 processTrackerForm(taction, req);
+        } else if ("Save3".equals(action)) {
+            String raction = req.getParameter("raction");
+            if (raction != null)
+                processTorrentCreateFilterForm(raction, req);
         } else if ("Create".equals(action)) {
             String baseData = req.getParameter("nofilter_baseFile");
             if (baseData != null && baseData.trim().length() > 0) {
@@ -2113,7 +2121,15 @@ public class I2PSnarkServlet extends BasicServlet {
                         // it shouldn't be THAT bad, so keep it in this thread.
                         // TODO thread it for big torrents, perhaps a la FetchAndAdd
                         boolean isPrivate = _manager.getPrivateTrackers().contains(announceURL);
-                        Storage s = new Storage(_manager.util(), baseFile, announceURL, announceList, null, isPrivate, null);
+                        String[] filters = req.getParameterValues("filters");
+                        List<String> filterValues = new ArrayList<String>();
+                        Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
+
+                        for (int i = 0; i < filters.length; i++) {
+                            filterValues.add(torrentCreateFilters.get(filters[i]).filterPattern);
+                        }
+
+                        Storage s = new Storage(_manager.util(), baseFile, announceURL, announceList, null, isPrivate, null, filterValues);
                         s.close(); // close the files... maybe need a way to pass this Storage to addTorrent rather than starting over
                         MetaInfo info = s.getMetaInfo();
                         File torrentFile = new File(_manager.getDataDir(), s.getBaseName() + ".torrent");
@@ -2280,6 +2296,50 @@ public class I2PSnarkServlet extends BasicServlet {
             _manager.setDefaultTrackerMap();
             _manager.saveOpenTrackers(null);
             _manager.addMessage(_t("Restored default trackers"));
+        } else {
+            _manager.addMessage("Unknown POST action: \"" + action + '\"');
+        }
+    }
+
+    /** @since 0.9.62+ */
+    private void processTorrentCreateFilterForm(String action, HttpServletRequest req) {
+        if (action.equals(_t("Delete selected")) || action.equals(_t("Save"))) {
+            boolean changed = false;
+            Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
+            List<String> removed = new ArrayList<String>();
+            Enumeration<?> e = req.getParameterNames();
+            while (e.hasMoreElements()) {
+                 Object o = e.nextElement();
+                 if (!(o instanceof String))
+                     continue;
+                 String k = (String) o;
+                 if (k.startsWith("delete_")) {
+                     k = k.substring(7);
+                     TorrentCreateFilter r;
+                     if ((r = torrentCreateFilters.remove(k)) != null) {
+                        removed.add(r.filterPattern);
+                        _manager.addMessage(_t("Removed") + ": " + DataHelper.stripHTML(k));
+                        changed = true;
+                     }
+                }
+            }
+            if (changed)
+                _manager.saveTorrentCreateFilterMap();
+
+        } else if (action.equals(_t("Add File Filter"))) {
+            String name = req.getParameter("fname");
+            String filterPattern = req.getParameter("filterPattern");
+            boolean isDefault = req.getParameter("filterIsDefault") != null;
+            if (name != null && !name.trim().isEmpty() && filterPattern != null && !filterPattern.trim().isEmpty()) {
+                Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
+                torrentCreateFilters.put(name, new TorrentCreateFilter(name, filterPattern, isDefault));
+                _manager.saveTorrentCreateFilterMap();
+            } else {
+                _manager.addMessage(_t("Enter valid name and filter pattern"));
+            }
+        } else if (action.equals(_t("Restore defaults"))) {
+            _manager.setDefaultTorrentCreateFilterMap();
+            _manager.addMessage(_t("Restored default torrent create filters"));
         } else {
             _manager.addMessage("Unknown POST action: \"" + action + '\"');
         }
@@ -3280,7 +3340,7 @@ public class I2PSnarkServlet extends BasicServlet {
         fbuf.setLength(0);
     }
 
-    private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers) throws IOException {
+    private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers, List<TorrentCreateFilter> sortedFilters) throws IOException {
         StringBuilder buf = new StringBuilder(3*1024);
         String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         buf.append("<div class=sectionPanel id=createSection>\n<div>\n");
@@ -3290,27 +3350,32 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<input hidden class=toggle_input id=toggle_createtorrent type=checkbox>")
            .append("<label id=tab_newtorrent class=toggleview for=\"toggle_createtorrent\"><span class=tab_label>")
            .append(_t("Create Torrent"))
-           .append("</span></label><hr>\n<table border=0><tr><td>")
+           .append("</span></label><hr>\n<table border=0>")
         //buf.append("From file: <input type=file name=\"newFile\" size=50 value=\"" + newFile + "\" /><br>\n");
-           .append(_t("Data to seed"))
-           .append(":</td><td>")
-           .append("<input type=text name=nofilter_baseFile size=85 value=\"")
-           .append("\" spellcheck=false title=\"")
+           .append("<tr><td>").append(_t("Data to seed")).append(":</td>")
+           .append("<td><input type=text name=nofilter_baseFile size=85 value=\"").append("\" spellcheck=false title=\"")
            .append(_t("File or directory to seed (full path or within the directory {0} )",
                    _manager.getDataDir().getAbsolutePath() + File.separatorChar))
-           .append("\" required> <input type=submit class=create value=\"")
-           .append(_t("Create torrent"))
-           .append("\" name=foo>")
-           .append("</td></tr>\n")
-           .append("<tr><td>")
-           .append(_t("Trackers"))
-           .append(":<td>\n<table id=trackerselect>\n<tr><td>Name</td><td>")
-           .append(_t("Primary"))
-           .append("</td><td>")
-           .append(_t("Alternates"))
-           .append("</td><td>")
-           .append(_t("Tracker Type"))
-           .append("</td></tr>\n");
+           .append("\" required> <input type=submit class=create value=\"").append(_t("Create torrent"))
+           .append("\" name=foo>").append("</td></tr>\n")
+           .append("<tr><td>").append(_t("Filters")).append(":</td>")
+           .append("<td>\n<table id=filterselect>\n")
+           .append("<tr><td>Content Filter</td>")
+           .append("<td><select id=contentfilter name=filters multiple style=\"width:100%\">");
+
+        for (TorrentCreateFilter f : sortedFilters) {
+           String name = f.name;
+           boolean isDefault = f.isDefault;
+
+           buf.append("<option value=\"" + name + "\"" + (isDefault ? " selected" : "") + ">" + name + "</option>");
+        }
+
+        buf.append("</select></td></tr>")
+           .append("<tr><td>").append(_t("Trackers")).append(":</td>")
+           .append("<td>\n<table id=trackerselect>\n")
+           .append("<tr><td>Name</td><td>").append(_t("Primary")).append("</td><td>")
+           .append(_t("Alternates")).append("</td><td>").append(_t("Tracker Type")).append("</td></tr>\n")
+           .append("<tr id=addTorrentFilter><td>").append(_t("Content Filter")).append(":</td>");
 
         for (Tracker t : sortedTrackers) {
             List<String> openTrackers = _manager.util().getOpenTrackers();
@@ -3716,6 +3781,54 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.setLength(0);
     }
 
+    /** @since 0.9.62+ */
+    private void writeTorrentCreateFilterForm(PrintWriter out, HttpServletRequest req) throws IOException {
+        StringBuilder buf = new StringBuilder(5*1024);
+        buf.append("<form action=\"").append(_contextPath).append("/configure#navbar\" method=POST>\n")
+           .append("<div class=configPanel id=torrentCreateFilter><div class=snarkConfig>\n");
+        writeHiddenInputs(buf, req, "Save3");
+        buf.append("<span class=configTitle>")
+           .append(_t("Torrent Create File Filtering"))
+           .append("</span><hr>\n")
+           .append("<table class=torrentCreateFiltering>\n<tr>")
+           .append("<th title=\"").append(_t("Mark filter for deletion")).append("\"></th>")
+           .append("<th>").append(_t("Filter Name")).append("</th>")
+           .append("<th>").append(_t("Filter Pattern")).append("</th>")
+           .append("<th>").append(_t("Enabled by Default")).append("</th>")
+           .append("</tr>\n");
+        for (TorrentCreateFilter f : _manager.getSortedTorrentCreateFilterStrings()) {
+            boolean isDefault = f.isDefault;
+            buf.append("<tr class=torrentCreateFilterString>")
+               .append("<td><input type=checkbox class=optbox name=\"delete_").append(f.name).append("\"></td>")
+               .append("<td>").append(f.name).append("</td>")
+               .append("<td>").append(f.filterPattern).append("</td>")
+               .append("<td><input type=checkbox class=optbox disabled name=\"defaultEnabled_").append(f.name).append("\"");
+            if (f.isDefault) {
+                buf.append(" checked=checked");
+            }
+            buf.append(">").append("</td>")
+                .append("</tr>");
+        }
+        buf.append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
+           .append("<tr id=addTorrentCreateFilter>")
+           .append("<td><b>").append(_t("Add")).append(":</b></td>")
+           .append("<td><input type=text class=torrentCreateFilterName name=fname spellcheck=false></td>")
+           .append("<td><input type=text class=torrentCreateFilterPattern name=filterPattern spellcheck=false></td>")
+           .append("<td><input type=checkbox class=optbox name=filterIsDefault></td>")
+           .append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
+           .append("<tr><td colspan=4>\n")
+           .append("<input type=submit name=raction class=delete value=\"").append(_t("Delete selected")).append("\">\n")
+           .append("<input type=submit name=raction class=accept value=\"").append(_t("Save")).append("\">\n")
+           .append("<input type=submit name=raction class=reload value=\"").append(_t("Restore defaults")).append("\">\n")
+           .append("<input type=submit name=raction class=default value=\"").append(_t("Add File Filter")).append("\">\n")
+           .append("</td></tr>")
+           .append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
+           .append("</table>\n</div>\n</div></form>\n");
+        out.write(buf.toString());
+        out.flush();
+        buf.setLength(0);
+    }
+
     /** @since 0.9 */
     private void writeTrackerForm(PrintWriter out, HttpServletRequest req) throws IOException {
         StringBuilder buf = new StringBuilder(5*1024);
@@ -3805,7 +3918,6 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_t("Add tracker")).append("\">\n")
            .append("<input type=submit name=taction class=accept value=\"")
            .append(_t("Save tracker configuration")).append("\">\n")
-           // "<input type=reset class=cancel value=\"").append(_t("Cancel")).append("\">\n" +
            .append("<input type=submit name=taction class=reload value=\"")
            .append(_t("Restore defaults")).append("\">\n")
            .append("</td></tr>")
