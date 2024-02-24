@@ -1187,7 +1187,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 footer.append("\" class=\"initializing");
             }
             footer.append("\"><tr><th id=torrentTotals align=left colspan=12></th></tr></tfoot>\n");
-        } else if (snarks.size() > 1) {
+        } else if (snarks.size() > 0) {
 
             // Add a pagenav to bottom of table if we have 50+ torrents per page
             // TODO: disable on pages where torrents is < 50 e.g. last page
