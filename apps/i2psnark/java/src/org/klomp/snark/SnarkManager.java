@@ -274,8 +274,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }));
 
     private static final String DEFAULT_TORRENT_CREATE_FILTERS[] = {
-       "NFO Files", ".nfo",
-       "Synology NAS Metadata", "@eaDir"
+       //"NFO Files", ".nfo",
+       //"Synology NAS Metadata", "@eaDir"
     };
 
     static {
