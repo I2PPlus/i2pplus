@@ -3359,13 +3359,17 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("\" required> <input type=submit class=create value=\"").append(_t("Create torrent"))
            .append("\" name=foo>").append("</td></tr>\n")
            .append("<tr><td>").append(_t("Content Filters")).append(":</td>")
-           .append("<td><select id=contentfilter name=filters multiple style=\"width:100%\">");
+           .append("<td><div id=contentFilter>");
 
         for (TorrentCreateFilter f : sortedFilters) {
            String name = f.name;
+           String nameUnderscore = name.replace(" ", "_");
+           String pattern = f.filterPattern;
            boolean isDefault = f.isDefault;
-
-           buf.append("<option value=\"" + name + "\"" + (isDefault ? " selected" : "") + ">" + name + "</option>");
+           buf.append("<input type=checkbox id=").append(nameUnderscore).append(" value=\"")
+              .append(name).append(isDefault ? "\" checked" : "").append(" hidden>")
+              .append("<label for=\"").append(nameUnderscore).append("\" class=createFilterToggle title=\"Filter pattern: ")
+              .append(pattern).append("\">").append(name).append("</label>");
         }
 
         buf.append("</select></td></tr>")
@@ -3782,12 +3786,11 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeTorrentCreateFilterForm(PrintWriter out, HttpServletRequest req) throws IOException {
         StringBuilder buf = new StringBuilder(5*1024);
         buf.append("<form action=\"").append(_contextPath).append("/configure#navbar\" method=POST>\n")
-           .append("<div class=configPanel id=torrentCreateFilter><div class=snarkConfig>\n");
+           .append("<div class=configPanel id=fileFilter><div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save3");
-        buf.append("<span class=configTitle>")
-           .append(_t("Torrent Create File Filtering"))
-           .append("</span><hr>\n")
-           .append("<table class=torrentCreateFiltering>\n<tr>")
+        buf.append("<label id=tab_fileFilter class=\"configTitle toggleview\" for=\"toggle_fileFilter\">")
+           .append("<span class=tab_label>").append(_t("Torrent Create File Filtering")).append("</span></label>")
+           .append("<table>\n<tr>")
            .append("<th title=\"").append(_t("Mark filter for deletion")).append("\"></th>")
            .append("<th>").append(_t("Filter Name")).append("</th>")
            .append("<th>").append(_t("Filter Pattern")).append("</th>")
@@ -3795,11 +3798,11 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</tr>\n");
         for (TorrentCreateFilter f : _manager.getSortedTorrentCreateFilterStrings()) {
             boolean isDefault = f.isDefault;
-            buf.append("<tr class=torrentCreateFilterString>")
+            buf.append("<tr class=createFilterString>")
                .append("<td><input type=checkbox class=optbox name=\"delete_").append(f.name).append("\"></td>")
                .append("<td>").append(f.name).append("</td>")
                .append("<td>").append(f.filterPattern).append("</td>")
-               .append("<td><input type=checkbox class=optbox disabled name=\"defaultEnabled_").append(f.name).append("\"");
+               .append("<td><input type=checkbox class=optbox name=\"defaultEnabled_").append(f.name).append("\"");
             if (f.isDefault) {
                 buf.append(" checked=checked");
             }
@@ -3807,7 +3810,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 .append("</tr>");
         }
         buf.append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
-           .append("<tr id=addTorrentCreateFilter>")
+           .append("<tr id=addFileFilter>")
            .append("<td><b>").append(_t("Add")).append(":</b></td>")
            .append("<td><input type=text class=torrentCreateFilterName name=fname spellcheck=false></td>")
            .append("<td><input type=text class=torrentCreateFilterPattern name=filterPattern spellcheck=false></td>")
