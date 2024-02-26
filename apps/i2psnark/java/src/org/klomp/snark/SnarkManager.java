@@ -1332,11 +1332,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
        if (dataDir != null && !dataDir.equals(getDataDir().getAbsolutePath())) {
            dataDir = DataHelper.stripHTML(dataDir.trim());
            File dd = areFilesPublic() ? new File(dataDir) : new SecureDirectory(dataDir);
-           if (!dd.isAbsolute()) {
-               String msg = _t("Data directory must be an absolute path") + ": " + dataDir;
-               addMessage(msg);
-               if (!_context.isRouterContext())
-                   System.out.println(" • " + msg);
+            if (_util.connected()) {
+                addMessage(_t("Stop all torrents before changing data directory"));
+            } else if (!dd.isAbsolute()) {
+                addMessage(_t("Data directory must be an absolute path") + ": " + dataDir);
            } else if (!dd.exists() && !dd.mkdirs()) {
                // save this tag for now, may need it again
                if (false) {
@@ -1368,7 +1367,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                }
                changed = true;
                interruptMonitor = true;
-               _config.setProperty(PROP_DIR, dataDir);
+                synchronized (_snarks) {
+                    for (Snark snark : _snarks.values()) {
+                        // leave magnets alone, remove everything else
+                        if (snark.getMetaInfo() != null)
+                             stopTorrent(snark, true);
+                    }
+                    _config.setProperty(PROP_DIR, dataDir);
+               }
                String msg = _t("Data directory changed to {0}", dataDir);
                addMessage(msg);
                if (!_context.isRouterContext())
