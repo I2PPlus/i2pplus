@@ -600,6 +600,26 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #trackers #addtracker td{padding-top:10px;padding-bottom:10px}
 #configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}
 
+/* create torrent file filters */
+.createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;min-width:80px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-style:italic;border:var(--border)}
+#contentFilter{width:100%;margin:2px 0 -4px 2px;display:flex;flex-wrap:wrap}
+#contentFilter input[type=checkbox]{display:none}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_active);background:#eee url(/i2psnark/.res/icons/tick.svg) no-repeat 8px center/10px}
+#fileFilter{width:100%;margin:0 auto;display:block}
+#fileFilter table {margin:10px 10px 20px;width:calc(100% - 20px);border:var(--border);border-top:0}
+#fileFilter th,#fileFilter td{text-align:left}
+#fileFilter th{font-size:85%;white-space:nowrap;border-bottom:0}
+#fileFilter th:first-child {width:32px;background: var(--nuke) no-repeat center center/14px,var(--th)}
+#fileFilter th:last-child,#fileFilter td:last-child{width:1%;text-align:center}
+#fileFilter th,#fileFilter td{padding: 6px 4px 4px;border-top:var(--border)}
+#fileFilter tr:not(:last-child).spacer td{padding:4px 0;font-size:0;border-bottom:var(--border)}
+#fileFilter input[type=submit]{margin:6px 4px 6px}
+#fileFilter .delete,#fileFilter .reload{margin:6px 12px 6px -3px;float:left}
+#fileFilter .delete{margin-left:4px}
+#fileFilter tr:last-child, #fileFilter tr.spacer{display:none}
+form[action^="/i2psnark/configure"]{display:block}
+#createTorrentFilters{display:table-row}
+
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
 @keyframes progress{from{background-position:0}to{background-position:-12px}}
 @keyframes fade-in{0%{filter:opacity(0)}100%{filter:opacity(1)}}
