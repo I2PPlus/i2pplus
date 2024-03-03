@@ -123,7 +123,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                                         X_NANANANA_HEADER, X_PANTHEON_STYX_HOSTNAME_HEADER, X_POWERED_BY_HEADER, X_RUNTIME_HEADER,
                                                         X_SERVED_BY_HEADER, X_STYX_REQ_ID_HEADER};
     /** timeout for first request line */
-    private static final long HEADER_TIMEOUT = 30*1000;
+//    private static final long HEADER_TIMEOUT = 30*1000;
+    private static final long HEADER_TIMEOUT = 45*1000;
     /** timeout for the rest of the request headers */
     private static final long HEADER_FINISH_TIMEOUT = HEADER_TIMEOUT;
     private static final long START_INTERVAL = (60 * 1000) * 3;
@@ -139,7 +140,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     // Set a relatively short timeout for GET/HEAD,
     // and a long failsafe timeout for POST/CONNECT, since the user
     // could be POSTing a massive file
-    private static final int SERVER_READ_TIMEOUT_GET = 60*1000;
+//    private static final int SERVER_READ_TIMEOUT_GET = 60*1000;
+    private static final int SERVER_READ_TIMEOUT_GET = 90*1000;
     private static final int SERVER_READ_TIMEOUT_MEDIUM = 5*60*1000;
     private static final int SERVER_READ_TIMEOUT_POST = 4*60*60*1000;
 
