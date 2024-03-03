@@ -274,8 +274,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }));
 
     private static final String DEFAULT_TORRENT_CREATE_FILTERS[] = {
-       //"NFO Files", ".nfo",
-       //"Synology NAS Metadata", "@eaDir"
+       ".bak files", ".bak",
+       ".backup files", ".backup",
+       "macOS folder metadata", "DS_Store",
+       "NFO Files", ".nfo",
+       "Placeholder .exe", "DO_NOT_MIRROR.exe",
+       "Synology NAS metadata", "@eaDir"
     };
 
     static {
@@ -3239,6 +3243,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public Map<String, TorrentCreateFilter> getTorrentCreateFilterMap() {
         return _torrentCreateFilterMap;
+    }
+
+    /**
+     *  Returns the current number of configured file filters
+     *  @since 0.9.62+
+     */
+    public int getCreateFilterCount() {
+        return _torrentCreateFilterMap.size();
     }
 
     /**

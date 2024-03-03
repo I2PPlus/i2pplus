@@ -2125,6 +2125,10 @@ public class I2PSnarkServlet extends BasicServlet {
                         List<String> filterValues = new ArrayList<String>();
                         Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
 
+                        if (filters == null) {
+                            filters = new String[0];
+                        }
+
                         for (int i = 0; i < filters.length; i++) {
                             filterValues.add(torrentCreateFilters.get(filters[i]).filterPattern);
                         }
@@ -3357,8 +3361,13 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_t("File or directory to seed (full path or within the directory {0} )",
                    _manager.getDataDir().getAbsolutePath() + File.separatorChar))
            .append("\" required> <input type=submit class=create value=\"").append(_t("Create torrent"))
-           .append("\" name=foo>").append("</td></tr>\n")
-           .append("<tr><td>").append(_t("Content Filters")).append(":</td>")
+           .append("\" name=foo>").append("</td></tr>\n");
+        if (_manager.getCreateFilterCount() > 0) {
+            buf.append("<tr id=createTorrentFilters>");
+        } else {
+           buf.append("<tr hidden>");
+        }
+        buf.append("<td>").append(_t("Content Filters")).append(":</td>")
            .append("<td><div id=contentFilter>");
 
         for (TorrentCreateFilter f : sortedFilters) {
@@ -3366,8 +3375,8 @@ public class I2PSnarkServlet extends BasicServlet {
            String nameUnderscore = name.replace(" ", "_");
            String pattern = f.filterPattern;
            boolean isDefault = f.isDefault;
-           buf.append("<input type=checkbox id=").append(nameUnderscore).append(" value=\"")
-              .append(name).append(isDefault ? "\" checked" : "").append(" hidden>")
+           buf.append("<input type=checkbox id=").append(nameUnderscore).append(" name=filters")
+              .append(" value=\"").append(name).append("\"").append(isDefault ? " checked" : "").append(" hidden>")
               .append("<label for=\"").append(nameUnderscore).append("\" class=createFilterToggle title=\"Filter pattern: ")
               .append(pattern).append("\">").append(name).append("</label>");
         }
@@ -3785,14 +3794,14 @@ public class I2PSnarkServlet extends BasicServlet {
     /** @since 0.9.62+ */
     private void writeTorrentCreateFilterForm(PrintWriter out, HttpServletRequest req) throws IOException {
         StringBuilder buf = new StringBuilder(5*1024);
-        buf.append("<form action=\"").append(_contextPath).append("/configure#navbar\" method=POST>\n")
+        buf.append("<form action=\"").append(_contextPath).append("/configure#navbar\" method=POST hidden>\n")
            .append("<div class=configPanel id=fileFilter><div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save3");
         buf.append("<label id=tab_fileFilter class=\"configTitle toggleview\" for=\"toggle_fileFilter\">")
-           .append("<span class=tab_label>").append(_t("Torrent Create File Filtering")).append("</span></label>")
+           .append("<span class=tab_label>").append(_t("Torrent Create File Filtering")).append("</span></label><hr>")
            .append("<table>\n<tr>")
            .append("<th title=\"").append(_t("Mark filter for deletion")).append("\"></th>")
-           .append("<th>").append(_t("Filter Name")).append("</th>")
+           .append("<th>").append(_t("Name")).append("</th>")
            .append("<th>").append(_t("Filter Pattern")).append("</th>")
            .append("<th>").append(_t("Enabled by Default")).append("</th>")
            .append("</tr>\n");
@@ -3818,7 +3827,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
            .append("<tr><td colspan=4>\n")
            .append("<input type=submit name=raction class=delete value=\"").append(_t("Delete selected")).append("\">\n")
-           .append("<input type=submit name=raction class=accept value=\"").append(_t("Save")).append("\">\n")
+           .append("<input type=submit name=raction class=accept value=\"").append(_t("Save Filter Configuration")).append("\">\n")
            .append("<input type=submit name=raction class=reload value=\"").append(_t("Restore defaults")).append("\">\n")
            .append("<input type=submit name=raction class=default value=\"").append(_t("Add File Filter")).append("\">\n")
            .append("</td></tr>")
