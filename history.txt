@@ -1,3 +1,9 @@
+2024-03-03 dr|z3d
+ * I2PSnark: Activate create torrent filtering for zilvero and ubergine themes
+
+2024-02-10 snex
+ * I2PSnark: Implement create torrent file filtering
+
 2024-02-02 zzz
  * I2PTunnel: Implement client-side persistence (Gitlab MR !176)
 
