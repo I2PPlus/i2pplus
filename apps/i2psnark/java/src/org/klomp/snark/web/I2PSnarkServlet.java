@@ -356,7 +356,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if (theme.equals("vanilla")) {
             pageBackground = "repeating-linear-gradient(180deg,#6f5b4c 1px,#a9927e 1px,#bfa388 4px),#cab39b";
         }
-        buf.append(DOCTYPE).append("<html style=background:").append(pageBackground).append(">\n")
+        buf.append(DOCTYPE).append("<html style=\"background:").append(pageBackground).append("\">\n")
            .append("<head>\n").append("<meta charset=utf-8>\n")
            .append("<meta name=viewport content=\"width=device-width\">\n");
         if (!isStandalone() && useSoraFont()) {
@@ -3362,11 +3362,12 @@ public class I2PSnarkServlet extends BasicServlet {
                    _manager.getDataDir().getAbsolutePath() + File.separatorChar))
            .append("\" required> <input type=submit class=create value=\"").append(_t("Create torrent"))
            .append("\" name=foo>").append("</td></tr>\n");
-        if (_manager.getCreateFilterCount() > 0) {
-            buf.append("<tr id=createTorrentFilters>");
-        } else {
-           buf.append("<tr hidden>");
-        }
+        buf.append("<tr id=createTorrentFilters hidden>");
+        //if (_manager.getCreateFilterCount() > 0) { // TODO: make sure this counts configured filters
+        //    buf.append("<tr id=createTorrentFilters hidden>");
+        //} else {
+        //   buf.append("<tr hidden>");
+        //}
         buf.append("<td>").append(_t("Content Filters")).append(":</td>")
            .append("<td><div id=contentFilter>");
 
@@ -3829,7 +3830,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<input type=submit name=raction class=delete value=\"").append(_t("Delete selected")).append("\">\n")
            .append("<input type=submit name=raction class=accept value=\"").append(_t("Save Filter Configuration")).append("\">\n")
            .append("<input type=submit name=raction class=reload value=\"").append(_t("Restore defaults")).append("\">\n")
-           .append("<input type=submit name=raction class=default value=\"").append(_t("Add File Filter")).append("\">\n")
+           .append("<input type=submit name=raction class=add value=\"").append(_t("Add File Filter")).append("\">\n")
            .append("</td></tr>")
            .append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
            .append("</table>\n</div>\n</div></form>\n");
