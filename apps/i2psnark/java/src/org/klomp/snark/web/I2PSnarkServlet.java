@@ -2307,28 +2307,42 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /** @since 0.9.62+ */
     private void processTorrentCreateFilterForm(String action, HttpServletRequest req) {
-        if (action.equals(_t("Delete selected")) || action.equals(_t("Save"))) {
+        if (action.equals(_t("Delete selected")) || action.equals(_t("Save Filter Configuration"))) {
             boolean changed = false;
             Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
-            List<String> removed = new ArrayList<String>();
             Enumeration<?> e = req.getParameterNames();
+            ArrayList<String> newDefaults = new ArrayList<String>();
+            ArrayList<TorrentCreateFilter> replaceFilters = new ArrayList<TorrentCreateFilter>();
             while (e.hasMoreElements()) {
-                 Object o = e.nextElement();
-                 if (!(o instanceof String))
-                     continue;
-                 String k = (String) o;
-                 if (k.startsWith("delete_")) {
-                     k = k.substring(7);
-                     TorrentCreateFilter r;
-                     if ((r = torrentCreateFilters.remove(k)) != null) {
-                        removed.add(r.filterPattern);
-                        _manager.addMessage(_t("Removed") + ": " + DataHelper.stripHTML(k));
-                        changed = true;
-                     }
+                Object o = e.nextElement();
+                if (!(o instanceof String))
+                    continue;
+                String k = (String) o;
+                if (k.startsWith("delete_")) {
+                    k = k.substring(7);
+                    if ((torrentCreateFilters.remove(k)) != null) {
+                       _manager.addMessage(_t("Removed") + ": " + DataHelper.stripHTML(k));
+                    }
+                } else if (k.startsWith("defaultEnabled_")) {
+                    String filterName = k.replace("defaultEnabled_", "");
+                    newDefaults.add(filterName);
                 }
             }
-            if (changed)
-                _manager.saveTorrentCreateFilterMap();
+
+            for (Map.Entry<String, TorrentCreateFilter> entry : torrentCreateFilters.entrySet()) {
+                String filterName = entry.getKey();
+                String filterPattern = entry.getValue().filterPattern;
+                boolean newDefault = newDefaults.contains(filterName);
+
+                TorrentCreateFilter oldFilter = torrentCreateFilters.remove(filterName);
+                TorrentCreateFilter newFilter = new TorrentCreateFilter(filterName, filterPattern, newDefault);
+                replaceFilters.add(newFilter);
+            }
+            for (int i = 0; i < replaceFilters.size(); i++) {
+                TorrentCreateFilter filter = replaceFilters.get(i);
+                torrentCreateFilters.put(filter.name, filter);
+            }
+            _manager.saveTorrentCreateFilterMap();
 
         } else if (action.equals(_t("Add File Filter"))) {
             String name = req.getParameter("fname");

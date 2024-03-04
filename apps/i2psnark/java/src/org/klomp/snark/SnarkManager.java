@@ -278,7 +278,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
        ".backup files", ".backup",
        "macOS folder metadata", "DS_Store",
        "NFO Files", ".nfo",
-       "Placeholder .exe", "DO_NOT_MIRROR.exe",
+       "DO_NOT_MIRROR.exe", "DO_NOT_MIRROR.exe",
        "Synology NAS metadata", "@eaDir"
     };
 
@@ -3378,7 +3378,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         for (int i = 0; i < DEFAULT_TORRENT_CREATE_FILTERS.length; i += 2) {
             String name = DEFAULT_TORRENT_CREATE_FILTERS[i];
             String filterPattern = DEFAULT_TORRENT_CREATE_FILTERS[i+1];
-            _torrentCreateFilterMap.put(name, new TorrentCreateFilter(name, filterPattern, true));
+            _torrentCreateFilterMap.put(name, new TorrentCreateFilter(name, filterPattern, false));
         }
         if (save && _config.remove(PROP_TORRENT_CREATE_FILTERS) != null) {
             saveConfig();
