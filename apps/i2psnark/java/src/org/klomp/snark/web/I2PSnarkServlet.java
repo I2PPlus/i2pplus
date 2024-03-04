@@ -3812,8 +3812,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<form action=\"").append(_contextPath).append("/configure#navbar\" method=POST hidden>\n")
            .append("<div class=configPanel id=fileFilter><div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save3");
-        buf.append("<label id=tab_fileFilter class=\"configTitle toggleview\" for=\"toggle_fileFilter\">")
-           .append("<span class=tab_label>").append(_t("Torrent Create File Filtering")).append("</span></label><hr>")
+        buf.append("<span class=configTitle>").append(_t("Torrent Create File Filtering")).append("</span><hr>\n")
            .append("<table>\n<tr>")
            .append("<th title=\"").append(_t("Mark filter for deletion")).append("\"></th>")
            .append("<th>").append(_t("Name")).append("</th>")
@@ -3859,9 +3858,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<form action=\"").append(_contextPath).append("/configure#navbar\" method=POST>\n")
            .append("<div class=configPanel id=trackers><div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save2");
-        buf.append("<span class=configTitle>")
-           .append(_t("Trackers"))
-           .append("</span><hr>\n")
+        buf.append("<span class=configTitle>").append(_t("Trackers")).append("</span><hr>\n")
            .append("<table class=trackerconfig><tr><th title=\"")
            .append(_t("Select trackers for removal from I2PSnark's known list"))
            .append("\"></th><th>")
