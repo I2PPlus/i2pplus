@@ -963,13 +963,13 @@ body:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:last-child{border-
 #torrentSort .ascending,th#torrentSort .descending{right:-11px}
 
 /* create torrent file filtering */
-#createForm tr:nth-child(2) td{padding:5px 8px 0}
 .createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-weight:600;font-style:italic;border:var(--border_inner);box-shadow:var(--highlight_light);background:linear-gradient(180deg,#616,#414);transform: translateY(2px)}
 #contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-style:normal;box-shadow:var(--shadow_inset);background:url(/i2psnark/.res/icons/tick.svg) no-repeat 8px center/10px,linear-gradient(180deg,#313,#515)}
 #contentFilter{margin:0;width:80%;display:flex;flex-wrap:wrap;align-items:center}
 #contentFilter input[type=checkbox]{display:none}
 #fileFilter{margin:0 auto;display:block;margin-bottom:10px}
 .iframed #fileFilter{margin-top:-11px}
+#fileFilter .add{float:right}
 #fileFilter .tab_label::after{display:none}
 #fileFilter th,#fileFilter td{text-align:left}
 #fileFilter th{white-space:nowrap;border-bottom:0}
@@ -986,6 +986,7 @@ body:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:last-child{border-
 #addFileFilter input[type=text]{width:200px}
 form[action^="/i2psnark/configure"]{display:block}
 #createTorrentFilters{display:table-row}
+#createTorrentFilters td{padding:5px 8px 0}
 
 /* debug */
 hr.debug{display:none}
