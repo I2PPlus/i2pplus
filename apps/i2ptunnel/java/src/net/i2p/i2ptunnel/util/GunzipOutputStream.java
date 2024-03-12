@@ -181,9 +181,9 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
     @Override
     public String toString() {
-        return "GunzipOutputStream read: " + getTotalRead() + "B, expanded: " + getTotalExpanded() +
+        return "GunzipOutputStream -> Read: " + getTotalRead() + "B, expanded: " + getTotalExpanded() +
                "B, remaining: " + getRemaining() + "B, finished: " + getFinished() +
-               "B -> Footer complete: " + _complete + ", validated: " + _validated;
+               " -> Footer complete: " + _complete + ", validated: " + _validated;
     }
 
     /**

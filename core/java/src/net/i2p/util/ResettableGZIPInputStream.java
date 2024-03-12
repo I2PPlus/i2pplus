@@ -198,7 +198,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      */
     @Override
     public String toString() {
-        return "Read: " + getTotalRead() + " expanded: " + getTotalExpanded() + " remaining: " + getRemaining() + " finished: " + getFinished();
+        return "Read: " + getTotalRead() + "; Expanded: " + getTotalExpanded() + "; Remaining: " + getRemaining() + "; Finished: " + getFinished();
     }
 
     private void verifyFooter() throws IOException {
