@@ -49,7 +49,7 @@ img,input[type=submit],label,th img,.configTitle,.optbox[type=checkbox],.optbox[
 img{margin:0 2px;vertical-align:middle;border:0;line-height:1}
 input,button,textarea,select,a{outline:none}
 input[type=submit],input[type="reset"],button,a:link,.optbox[type=checkbox],.optbox[type=radio],select,label{vertical-align:middle;cursor:pointer}
-input[type=submit],.trackerconfig input[type=submit],input[name="savepri"],select[name="theme"]{text-transform:capitalize}
+input[type=submit],#trackerconfig input[type=submit],input[name="savepri"],select[name="theme"]{text-transform:capitalize}
 input[type=text],input[type=password],textarea,select{box-sizing:border-box;line-height:1.3}
 p{line-height:1.5}
 table{margin:0 0 10px 0;padding:0;width:100%;font-size:8.5pt;border:var(--border_hard);border-spacing:0;border-collapse:collapse}
@@ -442,19 +442,19 @@ input:checked+.toggleview:active::after{transform:rotate(-90deg) scale(.9);trans
 .mainsection#media{padding-top:0}
 .routerdown{color:#7f4c0f}
 .snarkAddInfo code{animation:fade-in .5s linear}
-.snarkConfig tr:nth-last-child(2) td,.trackerconfig tr:nth-last-child(2) td{padding-top:10px;border-top:var(--border_hard)}
-.snarkConfig tr:nth-last-child(4) td,.trackerconfig tr:nth-last-child(4) td{padding-bottom:10px}
+.snarkConfig tr:nth-last-child(2) td,#trackerconfig tr:nth-last-child(2) td{padding-top:10px;border-top:var(--border_hard)}
+.snarkConfig tr:nth-last-child(4) td,#trackerconfig tr:nth-last-child(4) td{padding-bottom:10px}
 .trackerannounce{width:230px}
-.trackerconfig input[type=text]{margin-left:0}
-.trackerconfig{margin-top:11px;text-align:left;border-collapse:separate;border-spacing:0}
-.trackerconfig td:first-child{text-align:right}
-.trackerconfig th{font-size:90%;background:var(--th_config)}
-.trackerconfig th:first-child{border-radius:2px 0 0 0;border-left:var(--border_hard);background:var(--nuke) center right 8px no-repeat,var(--th_config);background-size:14px,100%}
-.trackerconfig th:first-child,.trackerconfig td:first-child{padding-left:0;width:1%;white-space:nowrap}
-.trackerconfig th:last-child{border-radius:0 2px 0 0;border-right:var(--border_hard)}
-.trackerconfig th:nth-child(n+4),.trackerconfig th:nth-child(n+5),.trackerconfig td:nth-child(n+4),.trackerconfig td:nth-child(n+5){text-align:center}
-.trackerconfig th,.trackerconfig td,.trackerconfig th:last-child,.trackerconfig td:last-child{text-align:left}
-.trackerconfig tr:first-child{font-weight:700}
+#trackerconfig input[type=text]{margin-left:0}
+#trackerconfig{margin-top:11px;text-align:left;border-collapse:separate;border-spacing:0}
+#trackerconfig td:first-child{text-align:right}
+#trackerconfig th{font-size:90%;background:var(--th_config)}
+#trackerconfig th:first-child{border-radius:2px 0 0 0;border-left:var(--border_hard);background:var(--nuke) center right 8px no-repeat,var(--th_config);background-size:14px,100%}
+#trackerconfig th:first-child,#trackerconfig td:first-child{padding-left:0;width:1%;white-space:nowrap}
+#trackerconfig th:last-child{border-radius:0 2px 0 0;border-right:var(--border_hard)}
+#trackerconfig th:nth-child(n+4),#trackerconfig th:nth-child(n+5),#trackerconfig td:nth-child(n+4),#trackerconfig td:nth-child(n+5){text-align:center}
+#trackerconfig th,#trackerconfig td,#trackerconfig th:last-child,#trackerconfig td:last-child{text-align:left}
+#trackerconfig tr:first-child{font-weight:700}
 .trackerhome{width:200px}
 .trackername{width:100px}
 #addSection input[type=text],#createSection input[type=text]{width:calc(100% - 200px)}
@@ -579,8 +579,8 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 .numeric:focus{text-align:center}
 .optionlist{margin:0;padding:7px 6px 6px;columns:400px 3;column-gap:5px;transition:ease-in-out .5s box-shadow}
 #configs{border-collapse:separate}
-#configs tr:nth-last-child(2) td,.trackerconfig tr:nth-last-child(2) td{border-top:1px solid #efe6e0}
-#configs tr:nth-last-child(4) td,.trackerconfig tr:nth-last-child(4) td{border-bottom:1px solid #4f3d36}
+#configs tr:nth-last-child(2) td,#trackerconfig tr:nth-last-child(2) td{border-top:1px solid #efe6e0}
+#configs tr:nth-last-child(4) td,#trackerconfig tr:nth-last-child(4) td{border-bottom:1px solid #4f3d36}
 #configs input,#configs select{margin-top:0;margin-bottom:0;vertical-align:middle}
 #configs input{will-change:transform}
 #configs input:disabled,#configs input:disabled:hover,#configs input:disabled:focus{box-shadow:none;cursor:not-allowed;opacity:.7}
@@ -641,11 +641,11 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 .knownTracker td:first-child{padding-left:3px;border-left:var(--border_hard)}
 .knownTracker td:last-child{border-right:var(--border_hard)}
 .knownTracker a{display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;width:220px}
-.trackerconfig{margin-top:-3px}
-.trackerconfig tr:nth-last-child(4) td{padding-top:5px;border-top:1px solid #efe6e0}
-.trackerconfig tr:nth-last-child(5) td{padding:0;line-height:0;font-size:0;border-bottom:1px solid #4f3d36}
-.trackerconfig .delete,.trackerconfig .reload{float:left}
-.trackerconfig input.delete{margin-left:0;margin-right:8px}
+#trackerconfig{margin-top:-3px}
+#trackerconfig tr:nth-last-child(4) td{padding-top:5px;border-top:1px solid #efe6e0}
+#trackerconfig tr:nth-last-child(5) td{padding:0;line-height:0;font-size:0;border-bottom:1px solid #4f3d36}
+#trackerconfig .delete,#trackerconfig .reload{float:left}
+#trackerconfig input.delete{margin-left:0;margin-right:8px}
 .trackerhome,.trackerannounce{width:260px}
 #addtracker td{padding:5px 5px 6px}
 #addtracker td:first-child{max-width:32px}
@@ -925,7 +925,7 @@ td.status img{width:auto;height:19px}
 .tName{padding-left:2px}
 .tName a{max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .txd,.rateUp,.peerinfo,.debuginfo{display:none}
-.trackerconfig a,.trackerconfig input[type=text]{max-width:150px}
+#trackerconfig a,#trackerconfig input[type=text]{max-width:150px}
 #addSection input[type=text],#createSection input[type=text]{width:60%}
 #addSection td:first-child,#createSection td:first-child{width:100px}
 #commentInfo td:first-child,#userComments td:first-child{width:100px}
@@ -1001,8 +1001,8 @@ thead a img,thead img{max-height:21px}
 .stopped.complete .peerCount b::before{border-color:transparent #28f transparent transparent}
 .stopped.incomplete .peerCount b::before,.inactive.neterror .peerCount b::before{border-color:transparent #900 transparent transparent}
 .stopped.incomplete .peerCount b,.inactive.neterror .peerCount b{color:#eee;background:#900}
-.trackerconfig input.trackername{width:180px;max-width:180px}
-.trackerconfig th:last-child,.trackerconfig td:nth-child(7){padding-left:50px}
+#trackerconfig input.trackername{width:180px;max-width:180px}
+#trackerconfig th:last-child,#trackerconfig td:nth-child(7){padding-left:50px}
 .trackerhome,.trackerannounce,.knownTracker a{width:300px;max-width:300px}
 #totals{word-spacing:.15em}
 }
@@ -1011,7 +1011,7 @@ thead a img,thead img{max-height:21px}
 body:not(.iframed) .txd{margin:-1px 0 2px}
 body,#torrents td,.snarkAddInfo,th,td,.snarkFileName,a.control,input[type=submit],input[type="reset"],select,button,code,#pagenavbottom{font-size:10pt}
 img[src$="details.png"]{max-height:18px}
-label b,.configOption b,.configOption label,.trackerconfig th{font-size:9pt}
+label b,.configOption b,.configOption label,#trackerconfig th{font-size:9pt}
 select{padding-left:8px}
 textarea,#torrents code,#screenlog{font-size:9pt}
 thead a img,thead img{max-height:22px}
@@ -1042,7 +1042,7 @@ td.details img{margin-top:-3px;margin-bottom:-3px}
 .tName:hover a,.snarkFileName:hover a{border-radius:2px 20px 20px 2px;background:rgba(207,193,181,.4)}
 .tName:active a,.snarkFileName:active a{border:1px solid #ff2f85;box-shadow:inset 4px 4px 4px rgba(64,52,31,.3)}
 .txd{padding-left:5px}
-.trackerconfig th{font-size:9pt}
+#trackerconfig th{font-size:9pt}
 .trackerhome,.trackerannounce,.knownTracker a{width:400px;max-width:400px}
 #configs th{font-size:10pt}
 #fullscreen,#embed{font-size:8.5pt}

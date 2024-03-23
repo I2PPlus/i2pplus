@@ -74,7 +74,7 @@ input.default{visibility:hidden;width:1px;height:1px}
 input{font:700 9pt var(--bodyfont);margin:2px 4px 2px 0;cursor:pointer;text-align:left;color:#006;border:var(--border);border-radius:2px;background:var(--bg)}
 input[disabled]{opacity:.5}
 input[disabled][type=submit]:hover,input[disabled][type=submit]:focus{border:1px solid #999;background:var(--th);box-shadow:var(--highlight);color:#555;pointer-events:none}
-#configs input[type=submit],.trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}
+#configs input[type=submit],#trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}
 input[type=submit],input[type="reset"],a.control{padding:6px 12px;min-width:90px;font-size:9pt;font-weight:400;color:var(--ink_light);text-align:center;border:var(--border);border-radius:3px;box-shadow:var(--btn_shadow);background:var(--btn);outline:none;cursor:pointer}
 input[type=submit]:hover,input[type="reset"]:hover,input[type=submit]:focus,input[type="reset"]:focus,a.control:hover,a.control:focus{color:var(--ink);border:var(--border);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover)}
 input[type=submit]:active,input[type="reset"]:active,a.control:active{border:1px solid #999;box-shadow:var(--btn_shadow_active),var(--btn_shadow_hover);background:#ddd}
@@ -455,7 +455,7 @@ input#toggle_addtorrent:checked + label + hr + table,input#toggle_createtorrent:
 .priorityHigh,.priorityNormal,.prioritySkip,.priorityHigh:hover,.priorityNormal:hover,.prioritySkip:hover{width:52px;display:inline-block;color:transparent;background-size:18px}
 
 /* configure */
-#configs .spacer,.trackerconfig .spacer{display:none}
+#configs .spacer,#trackerconfig .spacer{display:none}
 #configs a{font-weight:700}
 #createSection #trackerselect{margin:5px 5px 0 5px;width:100%;width:calc(100% - 150px);border-collapse:separate;border:var(--border);border-radius:2px}
 #trackerselect tr:nth-child(even){border-bottom:var(--border_softer);background:var(--bg3)}
@@ -474,28 +474,28 @@ input#toggle_addtorrent:checked + label + hr + table,input#toggle_createtorrent:
 .snarkConfig tr:last-child{border:var(--border)}
 .snarkConfig input[type=submit]{margin:3px 2px 3px 5px;min-width:100px;text-align:center}
 .configPanel td:first-child{padding-right:10px;padding-left:5px;font-weight:700}
-.trackerconfig th{padding-top:6px;padding-bottom:6px;min-width:50px}
-.trackerconfig th:first-child{background:var(--nuke) no-repeat scroll center center/14px,linear-gradient(180deg,var(--bg),var(--bg3))}
-.trackerconfig th:last-child,.trackerconfig td:last-child{padding-left:10px}
-.trackerconfig tr:nth-child(odd),.snarkConfig tr:nth-child(odd){background:#e7e8ff}
-.trackerconfig tr:last-child{border:var(--border);background:var(--bg)}
-.trackerconfig .knownTracker td:first-child{text-align:center}
-.trackerconfig td:first-child{padding:5px 2px;width:24px;text-align:center}
-.trackerconfig tr:nth-child(even),.snarkConfig tr:nth-child(even){background:var(--bg3);background:rgba(240,240,255,.5)}
-.trackerconfig input{margin:3px 0;cursor:default}
+#trackerconfig th{padding-top:6px;padding-bottom:6px;min-width:50px}
+#trackerconfig th:first-child{background:var(--nuke) no-repeat scroll center center/14px,linear-gradient(180deg,var(--bg),var(--bg3))}
+#trackerconfig th:last-child,#trackerconfig td:last-child{padding-left:10px}
+#trackerconfig tr:nth-child(odd),.snarkConfig tr:nth-child(odd){background:#e7e8ff}
+#trackerconfig tr:last-child{border:var(--border);background:var(--bg)}
+#trackerconfig .knownTracker td:first-child{text-align:center}
+#trackerconfig td:first-child{padding:5px 2px;width:24px;text-align:center}
+#trackerconfig tr:nth-child(even),.snarkConfig tr:nth-child(even){background:var(--bg3);background:rgba(240,240,255,.5)}
+#trackerconfig input{margin:3px 0;cursor:default}
 .knownTracker input[type=radio]{opacity:.3;cursor:default}
 .knownTracker input[type=radio]:checked,.knownTracker input[type=radio]:checked:hover{opacity:.5}
-.trackerconfig td,.snarkConfig td{padding:5px 1px;border-top:1px solid var(--border_softer)}
-.trackerconfig{margin-bottom:7px;text-align:left}
+#trackerconfig td,.snarkConfig td{padding:5px 1px;border-top:1px solid var(--border_softer)}
+#trackerconfig{margin-bottom:7px;text-align:left}
 .snarkConfig table tr:first-child{border-top:var(--border)}
-.trackerconfig th:nth-child(n+4),.trackerconfig th:nth-child(n+5),.trackerconfig td:nth-child(n+4),.trackerconfig td:nth-child(n+5){text-align:center}
-.trackerconfig th,.trackerconfig td,.trackerconfig th:last-child,.trackerconfig td:last-child{text-align:left}
+#trackerconfig th:nth-child(n+4),#trackerconfig th:nth-child(n+5),#trackerconfig td:nth-child(n+4),#trackerconfig td:nth-child(n+5){text-align:center}
+#trackerconfig th,#trackerconfig td,#trackerconfig th:last-child,#trackerconfig td:last-child{text-align:left}
 .configPanel tr:last-child td[colspan="3"]{display:none}
 .configPanel td[colspan="5"]{border-top:var(--border)}
 .snarkConfig tr:nth-last-child(2){background:none}
 .snarkConfig tr:nth-last-child(2) td,.configPanel td[colspan="5"]{padding:8px 8px 0;text-align:right;border-top:var(--border)}
 .snarkConfig tr{border:0}
-.trackerconfig table{border:0}
+#trackerconfig table{border:0}
 #bwHelp i{padding-left:5px}
 #configs a{margin-left:3px;font-weight:700}
 #configs td:nth-child(2){white-space:nowrap}
@@ -617,8 +617,8 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 .knownTracker a{display:inline-block;width:220px;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .trackerhome,.trackerannounce{width:260px}
 #addtracker td{border-top:var(--border);background:linear-gradient(180deg,var(--bg2),#e7e8ff)}
-.trackerconfig input.delete,.trackerconfig input.reload{float:left}
-.trackerconfig input.delete{margin-left:2px;margin-right:5px}
+#trackerconfig input.delete,#trackerconfig input.reload{float:left}
+#trackerconfig input.delete{margin-left:2px;margin-right:5px}
 
 .peerCount{padding-left:0}
 th.peerCount{text-align:center}
@@ -780,7 +780,7 @@ th #nameRequired,th .commentAuthorName{margin-top:8px;vertical-align:middle}
 .magnetLabel{max-width:240px}
 .barText{line-height:16px}
 .tAction input[type=submit]{padding:10px;background-size:12px}
-.trackerconfig th{padding-top:5px;padding-bottom:5px}
+#trackerconfig th{padding-top:5px;padding-bottom:5px}
 #actionStopAll,#actionStartAll{padding:10px 17px}
 #commentSection{margin-bottom:0}
 #configs td:first-child::before{min-height:30px;content:""}
@@ -854,7 +854,7 @@ td.status img{margin-left:1px}
 .configTitle{margin-bottom:-3px}
 .toggleview,.configTitle,.configTitle a{font-size:9pt}
 #configs td:first-child,.configPanel input[name="nofilter_dataDir"],.configPanel textarea{min-width:150px;max-width:50%}
-.trackerconfig a,.trackerconfig input[type=text]{max-width:150px}
+#trackerconfig a,#trackerconfig input[type=text]{max-width:150px}
 #trackerselect td a{max-width:200px}
 #torrentInfo{position:relative;z-index:10}
 #torrentInfo th{padding-top:4px;padding-bottom:4px}
@@ -894,14 +894,14 @@ body,th,td,table a,input,input[type=text],input.r,input[name="nofilter_dataDir"]
 #torrents .tName{padding:4px 5px 4px 8px}
 #torrents .rxd{padding-left:9px;padding-right:9px}
 #torrents .ETA:not(:empty),#torrents .rateUp:not(:empty),#torrents .txd:not(:empty),#torrents .rateDown:not(:empty){padding-right:8px;padding-left:8px}
-.trackerconfig th:last-child,.trackerconfig td:last-child{padding-left:50px}
+#trackerconfig th:last-child,#trackerconfig td:last-child{padding-left:50px}
 .trackerhome,.trackerannounce,.knownTracker a{width:300px;max-width:300px}
-.trackerconfig input.trackername{max-width:180px;width:180px}
+#trackerconfig input.trackername{max-width:180px;width:180px}
 }
 
 @media (min-width:1500px){
 body,th,td,table a,input,input[type=text],input.r,input[name="nofilter_dataDir"],select,textarea,.snarkAddInfo,#commentInfo textarea{font-size:10pt}
-label b,.configOption b,.trackerconfig th{font-size:9pt}
+label b,.configOption b,#trackerconfig th{font-size:9pt}
 .dirInfo td:first-child img:not(.thumb){margin:-2px 2px;width:22px;height:22px;max-width:22px;max-height:22px}
 .iframed #snarkFiles{margin-top:5px}
 .barComplete{padding-top:3px}
