@@ -282,7 +282,7 @@ class FloodfillPeerSelector extends PeerSelector {
             if (info != null) {
                 caps = DataHelper.stripHTML(info.getCapabilities());
             }
-            boolean isUnreachable = caps != null && caps.contains("U");
+            boolean isUnreachable = caps != null && !caps.contains("R");
             boolean hasSalt = caps != null && caps.contains("salt");
             for (String ip : entryIPs) {
                 if (!maskedIPs.add(ip))

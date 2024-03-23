@@ -162,7 +162,7 @@ public class BundleRouterInfos {
                     System.out.println("Skipping too old " + key);
                     continue;
                 }
-                if (ri.getCapabilities().contains("U")) {
+                if (ri.getCapabilities().contains("U") || !ri.getCapabilities().contains("R")) {
                     System.out.println("Skipping unreachable " + key);
                     continue;
                 }
