@@ -1964,7 +1964,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                     ok = false;
                                     _manager.addMessage(_t("Directory could not be deleted: {0}", df.getAbsolutePath()));
                                     if (_log.shouldWarn())
-                                        _log.warn("Could not delete dir " + df);
+                                        _log.warn("[I2PSnark] Could not delete directory: " + df);
                                 // else already gone
                                 }
                             }
@@ -3817,35 +3817,44 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<th title=\"").append(_t("Mark filter for deletion")).append("\"></th>")
            .append("<th>").append(_t("Name")).append("</th>")
            .append("<th>").append(_t("Filter Pattern")).append("</th>")
+           .append("<th>").append(_t("Starts With")).append("</th>")
+           .append("<th>").append(_t("Contains")).append("</th>")
+           .append("<th>").append(_t("Ends With")).append("</th>")
            .append("<th>").append(_t("Enabled by Default")).append("</th>")
            .append("</tr>\n");
         for (TorrentCreateFilter f : _manager.getSortedTorrentCreateFilterStrings()) {
             boolean isDefault = f.isDefault;
+            String nameUnderscore = f.name.replace(" ", "_");
             buf.append("<tr class=createFilterString>")
                .append("<td><input type=checkbox class=optbox name=\"delete_").append(f.name).append("\"></td>")
                .append("<td>").append(f.name).append("</td>")
                .append("<td>").append(f.filterPattern).append("</td>")
+               .append("<td>").append("<label><input type=radio class=optbox name=\"filefilter_").append(nameUnderscore).append("\" hidden></label></td>")
+               .append("<td>").append("<label><input type=radio class=optbox name=\"filefilter_").append(nameUnderscore).append("\" checked></label></td>")
+               .append("<td>").append("<label><input type=radio class=optbox name=\"filefilter_").append(nameUnderscore).append("\" hidden></label></td>")
                .append("<td><input type=checkbox class=optbox name=\"defaultEnabled_").append(f.name).append("\"");
             if (f.isDefault) {
                 buf.append(" checked=checked");
             }
-            buf.append(">").append("</td>")
-                .append("</tr>");
+            buf.append("></td></tr>\n");
         }
-        buf.append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
+        buf.append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
            .append("<tr id=addFileFilter>")
            .append("<td><b>").append(_t("Add")).append(":</b></td>")
            .append("<td><input type=text class=torrentCreateFilterName name=fname spellcheck=false></td>")
            .append("<td><input type=text class=torrentCreateFilterPattern name=filterPattern spellcheck=false></td>")
+           .append("<td><label><input type=radio class=optbox name=\"addfilefilter\" hidden></label></td>")
+           .append("<td><label><input type=radio class=optbox name=\"addfilefilter\" checked></label></td>")
+           .append("<td><label><input type=radio class=optbox name=\"addfilefilter\" hidden></label></td>")
            .append("<td><input type=checkbox class=optbox name=filterIsDefault></td>")
-           .append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
-           .append("<tr><td colspan=4>\n")
+           .append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
+           .append("<tr><td colspan=7>\n")
            .append("<input type=submit name=raction class=delete value=\"").append(_t("Delete selected")).append("\">\n")
            .append("<input type=submit name=raction class=accept value=\"").append(_t("Save Filter Configuration")).append("\">\n")
            .append("<input type=submit name=raction class=reload value=\"").append(_t("Restore defaults")).append("\">\n")
            .append("<input type=submit name=raction class=add value=\"").append(_t("Add File Filter")).append("\">\n")
-           .append("</td></tr>")
-           .append("<tr class=spacer><td colspan=4>&nbsp;</td></tr>\n") // spacer
+           .append("</td></tr>\n")
+           .append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
            .append("</table>\n</div>\n</div></form>\n");
         out.write(buf.toString());
         out.flush();
@@ -3859,7 +3868,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<div class=configPanel id=trackers><div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save2");
         buf.append("<span class=configTitle>").append(_t("Trackers")).append("</span><hr>\n")
-           .append("<table class=trackerconfig><tr><th title=\"")
+           .append("<table id=trackerconfig><tr><th title=\"")
            .append(_t("Select trackers for removal from I2PSnark's known list"))
            .append("\"></th><th>")
            .append(_t("Name"))
@@ -3936,9 +3945,9 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<input type=submit name=taction class=delete value=\"")
            .append(_t("Delete selected")).append("\">\n")
            .append("<input type=submit name=taction class=\"add\" value=\"")
-           .append(_t("Add tracker")).append("\">\n")
            .append("<input type=submit name=taction class=accept value=\"")
            .append(_t("Save tracker configuration")).append("\">\n")
+           .append(_t("Add tracker")).append("\">\n")
            .append("<input type=submit name=taction class=reload value=\"")
            .append(_t("Restore defaults")).append("\">\n")
            .append("</td></tr>")
@@ -4331,7 +4340,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String announce = null;
             // FIXME: if b64 appears in link, convert to b32 or domain name (if known)
             String postmanb64 = "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA";
-            String postmanb64_new= "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICrsRuil8qK~whOvj8uNTv~ohZnTZHxTLgi~sDyo98BwJ-4Y4NMSuF4GLzcgLypcR1D1WY2tDqMKRYFVyLE~MTPVjRRgXfcKolykQ666~Go~A~~CNV4qc~zlO6F4bsUhVZDU7WJ7mxCAwqaMiJsL-NgIkb~SMHNxIzaE~oy0agHJMBQAEAAcAAA==";
+            String postmanb64_new = "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICrsRuil8qK~whOvj8uNTv~ohZnTZHxTLgi~sDyo98BwJ-4Y4NMSuF4GLzcgLypcR1D1WY2tDqMKRYFVyLE~MTPVjRRgXfcKolykQ666~Go~A~~CNV4qc~zlO6F4bsUhVZDU7WJ7mxCAwqaMiJsL-NgIkb~SMHNxIzaE~oy0agHJMBQAEAAcAAA==";
             String chudob32 = "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p";
             String cryptb32 = "ri5a27ioqd4vkik72fawbcryglkmwyy4726uu5j3eg6zqh2jswfq.b32.i2p";
             String freedomb32 = "nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p";
@@ -6086,8 +6095,7 @@ public class I2PSnarkServlet extends BasicServlet {
             oldCreatedBy = "";
         if (toAdd.isEmpty() && toDel.isEmpty() &&
             (primary == null || primary.equals(oldPrimary)) &&
-            oldComment.equals(newComment) &&
-            oldCreatedBy.equals(newCreatedBy)) {
+            oldComment.equals(newComment) && oldCreatedBy.equals(newCreatedBy)) {
             _manager.addMessage("No changes to torrent, not saved");
             return;
         }
@@ -6147,11 +6155,14 @@ public class I2PSnarkServlet extends BasicServlet {
         if (newCreatedBy.equals(""))
             newCreatedBy = null;
         MetaInfo newMeta = new MetaInfo(thePrimary, meta.getName(), null, meta.getFiles(), meta.getLengths(),
-                                        meta.getPieceLength(0), meta.getPieceHashes(), meta.getTotalLength(), meta.isPrivate(),
+                                        meta.getPieceLength(0), meta.getPieceHashes(), meta.getTotalLength(), meta.getPrivateTrackerStatus(),
                                         newAnnList, newCreatedBy, meta.getWebSeedURLs(), newComment);
         if (!DataHelper.eq(meta.getInfoHash(), newMeta.getInfoHash())) {
             // shouldn't happen
-            _manager.addMessage("Torrent edit failed, infohash mismatch");
+            _manager.addMessage("Torrent edit of " + meta.getName() + " failed: Infohash mismatch");
+            if (_log.shouldWarn()) {
+                _log.warn("[I2PSnark] Infohash mismatch error when attempting to edit torrent: " + meta.getName());
+            }
             return;
         }
         File f = new File(_manager.util().getTempDir(), "edit-" + _manager.util().getContext().random().nextLong() + ".torrent");
@@ -6167,7 +6178,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         } catch (IOException ioe) {
             try { if (out != null) out.close(); } catch (IOException ioe2) {}
-            _manager.addMessage("Save edit changes failed: " + ioe);
+            _manager.addMessage("Save edit changes failed: " + ioe.getMessage());
             return;
         } finally {
             f.delete();
