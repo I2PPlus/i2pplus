@@ -717,8 +717,9 @@ span.trackerName::before{width:20px;height:20px;display:inline-block;vertical-al
 #trackerconfig tr:nth-last-child(6) td{border-bottom:var(--border_hard)}
 #trackerconfig tr:nth-last-child(5) td,#trackerconfig tr:nth-last-child(4) td,#trackerconfig tr:nth-last-child(3) td,#trackerconfig tr:nth-last-child(2) td{border-top:0}
 #trackerconfig .delete,#trackerconfig .reload{float:left}
+#trackerconfig .add,#trackerconfig .accept{float:right}
 #trackerconfig .delete{margin-left:0;margin-right:7px}
-#trackerconfig .accept{margin-right:1px}
+#trackerconfig .accept{margin:2px 1px 2px 8px}
 .trackerhome,.trackerannounce{width:260px}
 #addtracker input[type=radio]{margin:0}
 #addtracker input[type=text]{margin-left:0}

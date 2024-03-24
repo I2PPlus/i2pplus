@@ -633,24 +633,26 @@ input.trackerhome,input.trackerannounce{width:210px}
 /* tracker config */
 .knownTracker a{width:220px;max-width:220px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
 .trackerannounce,.trackerhome{width:260px}
+.trackerselect tr:first-child td,#addSection tr:first-child td{white-space:nowrap}
 #trackerconfig{margin-bottom:0;text-align:left}
 #trackerconfig th,#fileFilter th{min-width:44px}
 #trackerconfig th:first-child,#fileFilter th:first-child{width:60px}
 #trackerconfig th,#trackerselect tr:first-child td,#fileFilter th{padding-top:7px;padding-bottom:7px}
 #trackerconfig th:first-child,#fileFilter th:first-child{text-align:center;background:var(--nuke) no-repeat center center/16px,var(--th)}
-.trackerselect tr:first-child td,#addSection tr:first-child td{white-space:nowrap}
 #trackerconfig th:last-child,#trackerconfig td:last-child{padding-left:10px}
 #trackerconfig tr:nth-child(odd),.snarkConfig tr:nth-child(odd){background:#000900}
-#trackerconfig tr:nth-last-child(2),#configs tr:nth-last-child(2),#fileFilter tr:nth-last-child(2){box-shadow:var(--row_highlight);background:var(--th)}
+#trackerconfig tr:nth-last-child(2),#configs tr:nth-last-child(2),#fileFilter tr:nth-last-child(2),#trackerconfig tr:nth-last-child(2):hover,#configs tr:nth-last-child(2):hover,#fileFilter tr:nth-last-child(2):hover{box-shadow:var(--row_highlight);background:var(--th)}
 #trackerconfig tr:nth-child(even),.snarkConfig tr:nth-child(even){background:#010}
 #trackerconfig th,#trackerconfig td,#trackerconfig th:last-child,#trackerconfig td:last-child{text-align:left}
 #trackerconfig td,.snarkConfig td{padding:5px 1px}
 #trackerconfig td:first-child,#fileFilter td:first-child{text-align:center}
-#trackerconfig tr:nth-last-child(2) td,#fileFilter tr:nth-last-child(2) td{padding:9px 8px 7px}
+#trackerconfig tr:nth-last-child(2) td,#fileFilter tr:nth-last-child(2) td{padding:7px 8px}
 #trackerconfig th:nth-child(4),#trackerconfig th:nth-child(5),#trackerconfig th:nth-child(6),#trackerconfig td:nth-child(4),#trackerconfig td:nth-child(5),#trackerconfig td:nth-child(6){min-width:64px;text-align:center}
-#trackerconfig input,#fileFilter input{margin:3px 0}
-#trackerconfig input.delete{margin-left:3px;margin-right:5px}
+#trackerconfig input,#fileFilter input{margin:3px}
+#trackerconfig input[type=submit]{margin:4px 3px}
 #trackerconfig .delete,#trackerconfig .reload{float:left}
+#trackerconfig .accept,#trackerconfig .add{float:right}
+#trackerconfig .accept,#trackerconfig .reload{margin-left:5px}
 
 /* tooltip */
 #bwHelp{margin-left:-184px;padding:15px 15px 15px 55px;width:320px;display:block;position:absolute;bottom:125%;left:0;z-index:999;visibility:hidden;white-space:normal;text-align:center;font-size:10pt;font-weight:700;border-radius:3px;background:#030 url(/i2psnark/.res/icons/favicon.svg) no-repeat 10px center/28px;opacity:0;filter:drop-shadow(0 0 1px #000);will-change:transform}
@@ -762,21 +764,22 @@ input:checked+.toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(153,
 #fileFilter{width:calc(100% - 2px);margin:0 auto;display:block}
 #fileFilter th,#fileFilter td{text-align:left}
 #fileFilter th{white-space:nowrap;border-bottom:0;padding-top:7px;padding-bottom:7px}
-#fileFilter th:first-child {background: var(--nuke) no-repeat center center/16px,var(--th)}
+#fileFilter th:first-child{background: var(--nuke) no-repeat center center/16px,var(--th)}
 #fileFilter th:last-child,#fileFilter td:last-child{width:1%;text-align:center}
 #fileFilter th:last-child{padding-left:8px;padding-right:8px}
 #fileFilter th,#fileFilter td{border-top:var(--border)}
 #fileFilter tr:nth-last-child(n+5):not(:nth-child(2)) td{border:0}
 #fileFilter tr:not(:last-child).spacer td{padding:4px 0;font-size:0;border-bottom:var(--border)}
-#addFileFilter td{padding:9px 1px 7px}
-#fileFilter input[type=submit]{margin:5px 4px 6px}
+#fileFilter input[type=submit]{margin:4px 3px}
 #fileFilter .delete,#fileFilter .reload{float:left}
 #fileFilter .add,#fileFilter .accept{float:right}
-#fileFilter input.delete[type=submit]{margin:5px 5px 6px 4px}
-#fileFilter input.accept[type=submit]{margin:5px 2px 6px 5px}
+#fileFilter input.delete[type=submit]{margin:4px 5px 4px 4px}
+#fileFilter input.accept[type=submit]{margin:4px 2px 4px 5px}
 #fileFilter tr:last-child, #fileFilter tr.spacer{display:none}
 form[action^="/i2psnark/configure"]{display:block}
-#fileFilter .snarkConfig {margin:-3px auto -10px}
+#fileFilter .snarkConfig{margin:-3px auto -10px}
+#fileFilter .accept,#fileFilter .reload{margin-left:5px}
+#configs table input[type=text]{margin-left:0}
 
 /* router down */
 .routerdown{padding:15px;font-size:120%;text-shadow:0 0 1px #000;border-bottom:var(--border);box-shadow:var(--highlight),0 0 2px 1px #070 inset,0 0 2px 2px #900 inset;background:repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px,rgba(16,48,16,.5) 4px) repeat center center/4px 4px,url(/themes/console/dark/images/camotile2.png) repeat top left}
