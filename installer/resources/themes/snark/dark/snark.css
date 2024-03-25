@@ -765,7 +765,7 @@ input:checked+.toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(153,
 #fileFilter th,#fileFilter td{text-align:left}
 #fileFilter th{white-space:nowrap;border-bottom:0;padding-top:7px;padding-bottom:7px}
 #fileFilter th:first-child{background: var(--nuke) no-repeat center center/16px,var(--th)}
-#fileFilter th:last-child,#fileFilter td:last-child{width:1%;text-align:center}
+#fileFilter th:first-child,#fileFilter td:first-child,#fileFilter th:nth-child(n+4),#fileFilter td:nth-child(n+4){width:1%;text-align:center}
 #fileFilter th:last-child{padding-left:8px;padding-right:8px}
 #fileFilter th,#fileFilter td{border-top:var(--border)}
 #fileFilter tr:nth-last-child(n+5):not(:nth-child(2)) td{border:0}

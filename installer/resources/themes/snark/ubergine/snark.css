@@ -694,32 +694,33 @@ span.trackerName::before{width:20px;height:20px;display:inline-block;vertical-al
 #trackerconfig,#fileFilter table{margin-top:0;border-spacing:0;border-collapse:collapse}
 #trackerconfig tr:first-child,#fileFilter tr:first-child{background:linear-gradient(90deg,rgba(16,0,16,.6),rgba(16,0,16,.6)),linear-gradient(180deg,rgba(68,51,68,.8) 50%,rgba(28,0,28,.8) 50%)}
 #trackerconfig tr:nth-child(n+2),.createFilterString:nth-child(even){background:rgba(48,30,48,.8)}
-#trackerconfig tr:nth-child(n+2):hover{background:linear-gradient(180deg,#58165e,#4a0d56)}
+#trackerconfig tr:nth-child(2n+3),.createFilterString:nth-child(odd){background:rgba(16,0,16,.3)}
 #trackerconfig tr:nth-last-child(2) input:last-child,#configs tr:nth-last-child(2) input:last-child{margin-right:1px}
 #trackerconfig tr:nth-last-child(2) td,#fileFilter tr:nth-last-child(2) td{padding:9px 0 0;border-left:0;border-right:0}
 #trackerconfig tr:nth-child(2n+4){background:rgba(16,0,16,.5)}
-#trackerconfig tr:nth-child(2n+3),.createFilterString:nth-child(odd){background:rgba(16,0,16,.3)}
 #trackerconfig tr:nth-last-child(2) td{background:none}
 #trackerconfig tr:nth-last-child(2),#trackerconfig tr:nth-last-child(2):hover,.spacer.top:hover,#trackerconfig tr:nth-last-child(3):hover,#trackerconfig tr:nth-last-child(2):hover{background:none;box-shadow:none}
-#trackerconfig th,#fileFilter th{padding:5px 2px;background:none}
-#trackerconfig th:nth-child(3),#trackerconfig th:nth-child(7),#trackerconfig td:nth-child(3),#trackerconfig td:nth-child(7){padding-left:10px}
-#trackerconfig td,#fileFilter td{border-top:1px solid #212;border-bottom:1px solid #212;border-top:1px solid rgba(16,0,16,.5);border-bottom:1px solid rgba(16,0,16,.5)}
-#trackerconfig td:first-child,#fileFilter td:first-child{border-left:var(--border_hard)}
-#trackerconfig td:last-child,#fileFilter td:last-child{border-right:var(--border_hard)}
 #trackerconfig tr:nth-last-child(3) td,#trackerconfig .spacer.top td,#fileFilter tr:nth-last-child(3) td,#fileFilter .spacer.top td{padding:3px 0;font-size:0;line-height:0}
 #trackerconfig tr:nth-last-child(3) td{border-bottom:var(--border_hard);background:#2b1b2b}
 #trackerconfig tr:nth-last-child(4) td,#fileFilter tr:nth-last-child(4) td{background:linear-gradient(180deg,#434 1px,#323 1px,#2b1b2b)}
 #trackerconfig tr:nth-last-child(4) td{padding-top:7px;padding-bottom:0}
 #trackerconfig tr:nth-last-child(5) td{border-bottom:var(--border_hard);padding:3px 0;font-size:0;line-height:0}
 #trackerconfig tr:nth-last-child(5){display:none}
-#trackerconfig tr:hover td{border-top:1px solid transparent}
 #trackerconfig tr:nth-last-child(5){background:rgba(48,30,48,.8)}
 #trackerconfig tr:nth-last-child(6) td{border-bottom:var(--border_hard)}
 #trackerconfig tr:nth-last-child(5) td,#trackerconfig tr:nth-last-child(4) td,#trackerconfig tr:nth-last-child(3) td,#trackerconfig tr:nth-last-child(2) td{border-top:0}
+#trackerconfig tr:nth-child(n+2):hover,.createFilterString:hover{background:linear-gradient(180deg,#58165e,#4a0d56)}
+#trackerconfig tr:hover td{border-top:1px solid transparent}
+#trackerconfig th,#fileFilter th{padding:5px 2px;background:none}
+#trackerconfig th:nth-child(3),#trackerconfig th:nth-child(7),#trackerconfig td:nth-child(3),#trackerconfig td:nth-child(7){padding-left:10px}
+#trackerconfig td,#fileFilter td{border-top:1px solid #212;border-bottom:1px solid #212;border-top:1px solid rgba(16,0,16,.5);border-bottom:1px solid rgba(16,0,16,.5)}
+#trackerconfig td:first-child,#fileFilter td:first-child{border-left:var(--border_hard)}
+#trackerconfig td:last-child,#fileFilter td:last-child{border-right:var(--border_hard)}
 #trackerconfig .delete,#trackerconfig .reload{float:left}
 #trackerconfig .add,#trackerconfig .accept{float:right}
 #trackerconfig .delete{margin-left:0;margin-right:7px}
 #trackerconfig .accept{margin:2px 1px 2px 8px}
+#trackerconfig .optbox,#fileFilter .optbox{margin:4px 6px}
 .trackerhome,.trackerannounce{width:260px}
 #addtracker input[type=radio]{margin:0}
 #addtracker input[type=text]{margin-left:0}
@@ -985,6 +986,7 @@ body:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:last-child{border-
 #fileFilter input.delete[type=submit]{margin-left:0}
 #fileFilter tr:last-child, #fileFilter tr.spacer{display:none}
 #fileFilter tr:nth-last-child(4) td{padding:7px 4px;border-bottom:var(--border_hard)}
+#fileFilter th:nth-child(n+4),#fileFilter td:nth-child(n+4){text-align:center}
 #addFileFilter input[type=text]{width:200px}
 form[action^="/i2psnark/configure"]{display:block}
 #createTorrentFilters{display:table-row}

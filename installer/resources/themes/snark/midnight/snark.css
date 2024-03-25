@@ -498,7 +498,7 @@ code{padding:0 2px;font:8.5pt 700 var(--monospaced);color:#7166ff}
 #createSection #trackerselect{margin:8px auto 4px 5px;width:calc(100% - 150px);border:1px solid #120f35}
 #createSection #trackerselect td:last-child{text-align:left}
 #createSection #trackerselect td:nth-child(n+2){text-align:center}
-form:last-child>.configPanel{margin-top:-1px;margin-bottom:-1px}
+form:last-child>.configPanel{margin-bottom:-1px}
 #createTorrentFilters{display:table-row}
 .createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;min-width:80px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-style:italic;border:var(--border_soft)}
 #contentFilter{margin-bottom:-8px;padding:6px 4px;width:calc(100% - 150px);display:flex;flex-wrap:wrap}
@@ -509,6 +509,7 @@ form:last-child>.configPanel{margin-top:-1px;margin-bottom:-1px}
 .iframed #createSection,.iframed #addSection,.iframed #configSection{margin-left:0;margin-right:0;border-radius:0;border-left:0;border-right:0}
 .iframed #torrentInfo{margin-top:-6px}
 .iframed #torrents,.iframed #screenlog,.iframed .configPanel,.iframed .dirInfo,.iframed #torrentInfo{border-radius:0;border-left:0;border-right:0}
+.iframed #trackers{margin-top:-11px}
 input.toggle_input{position:absolute;opacity:0;z-index:-1;height:0;width:0}
 input.trackerannounce{width:210px}
 input.trackerhome{width:210px}
@@ -696,7 +697,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #fileFilter table{margin-bottom:0}
 #fileFilter tr:nth-last-child(2) td{padding-bottom:8px}
 #fileFilter th,#fileFilter td{text-align:left}
-#fileFilter th:first-child,#fileFilter td:first-child,#fileFilter th:last-child,#fileFilter td:last-child{text-align:center}
+#fileFilter th:first-child,#fileFilter td:first-child,#fileFilter th:nth-child(n+4),#fileFilter td:nth-child(n+4){text-align:center}
 #fileFilter td{border-top:var(--border_inner)}
 
 /* torrent filter bar */
@@ -767,8 +768,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 #metacomment{padding:0;line-height:1.4;text-align:justify}
 #metacomment div{padding:4px 8px}
 .iframed #configSection,.iframed #trackers,.iframed .mainsection#snarkInfo{margin-bottom:-6px}
-.iframed .configPanel:first-of-type{margin-top:-21px}
-.iframed .configPanel#trackers{margin-top:-1px}
+.iframed .configPanel{margin-top:-1px}
 
 /* comment indicator */
 .filetype{position:relative;vertical-align:middle}
