@@ -58,7 +58,7 @@ thead img{margin:0 2px;padding:0;border-radius:0;border:0 none transparent}
 th a img,th a:visited img{opacity:1}
 th,#showRatings{padding:3px 2px;white-space:nowrap;vertical-align:middle;font-size:9pt;border-top:var(--border);border-bottom:var(--border);background:var(--th)}
 tr{contain:layout}
-select{margin:2px 4px 2px 0;padding:7px 24px 7px 7px;min-width:120px;font-size:8pt}
+select{margin:2px 4px 2px 0;padding:7px 24px 7px 12px;min-width:120px;font-size:8pt}
 .page{margin:5px 0 0;min-width:890px;line-height:1.6;text-align:center;font-size:9pt;background:#000}
 .iframed .page{margin:5px 0;padding:0;border:0;background:none}
 .iframed #navbar,.iframed .mainsection,.iframed #addSection,.iframed #createSection,.iframed #configSection,.iframed .configPanel{border-left:0;border-right:0;border-radius:0}
@@ -765,10 +765,11 @@ input:checked+.toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(153,
 #fileFilter th,#fileFilter td{text-align:left}
 #fileFilter th{white-space:nowrap;border-bottom:0;padding-top:7px;padding-bottom:7px}
 #fileFilter th:first-child{background: var(--nuke) no-repeat center center/16px,var(--th)}
-#fileFilter th:first-child,#fileFilter td:first-child,#fileFilter th:nth-child(n+4),#fileFilter td:nth-child(n+4){width:1%;text-align:center}
-#fileFilter th:last-child{padding-left:8px;padding-right:8px}
-#fileFilter th,#fileFilter td{border-top:var(--border)}
+#fileFilter th:first-child,#fileFilter td:first-child,#fileFilter th:nth-child(n+4),#fileFilter td:nth-child(n+4){padding-left:9px;padding-right:9px;width:1%;text-align:center}
+#fileFilter th:nth-child(n+4),#fileFilter td:nth-child(n+4){min-width:96px}
+#fileFilter tr:nth-last-child(n+5):not(:nth-child(1)) td:nth-child(n+4):not(:last-child),#trackerconfig tr:nth-last-child(n+5):not(:nth-child(1)) td:nth-child(n+4):not(:last-child){background:#1312}
 #fileFilter tr:nth-last-child(n+5):not(:nth-child(2)) td{border:0}
+#fileFilter th,#fileFilter td{border-top:var(--border)}
 #fileFilter tr:not(:last-child).spacer td{padding:4px 0;font-size:0;border-bottom:var(--border)}
 #fileFilter input[type=submit]{margin:4px 3px}
 #fileFilter .delete,#fileFilter .reload{float:left}
@@ -780,6 +781,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #fileFilter .snarkConfig{margin:-3px auto -10px}
 #fileFilter .accept,#fileFilter .reload{margin-left:5px}
 #configs table input[type=text]{margin-left:0}
+.createFilterString td:nth-child(n+4) label,#addFileFilter td:nth-child(n+4) label{opacity:.5;pointer-events:none!important}
 
 /* router down */
 .routerdown{padding:15px;font-size:120%;text-shadow:0 0 1px #000;border-bottom:var(--border);box-shadow:var(--highlight),0 0 2px 1px #070 inset,0 0 2px 2px #900 inset;background:repeating-linear-gradient(180deg,rgba(0,0,0,.8) 2px,rgba(16,48,16,.5) 4px) repeat center center/4px 4px,url(/themes/console/dark/images/camotile2.png) repeat top left}
