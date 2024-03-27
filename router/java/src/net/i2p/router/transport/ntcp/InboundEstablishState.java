@@ -717,6 +717,13 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             throw new DataFormatException(mismatchMessage + ri);
         }
 
+        if (ri.getCapabilities().equals("LU") && ri.getVersion().equals("0.9.56")) {
+            _context.banlist().banlistRouter(h, " <b>➜</b> Old and slow", null,
+                                             null, _context.clock().now() + 4*60*60*1000);
+            _msg3p2FailReason = NTCPConnection.REASON_BANNED;
+            throw new DataFormatException("Old and slow: " + h);
+        }
+
         try {
             RouterInfo old = _context.netDb().store(h, ri);
             if (flood && !ri.equals(old)) {
@@ -726,7 +733,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                         _log.debug("Flooded the RouterInfo: " + h);
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Flood request but we didn't: " + h);
+                        _log.info("Flood request declined: " + h);
                 }
             }
         } catch (IllegalArgumentException iae) {

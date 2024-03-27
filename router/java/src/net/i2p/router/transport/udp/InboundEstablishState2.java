@@ -348,6 +348,14 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (!"2".equals(ra.getOption("v")))
             throw new RIException("BAD SSU2 v", REASON_VERSION);
 
+        if (ri.getCapabilities().equals("LU") && ri.getVersion().equals("0.9.56")) {
+            _context.banlist().banlistRouter(h, "<b>➜</b> Old and slow", null,
+                                             null, _context.clock().now() + 4*60*60*1000);
+            if (ri.verifySignature())
+                _context.blocklist().add(_aliceIP);
+            throw new RIException("Old and slow: " + h, REASON_BANNED);
+        }
+
         String smtu = ra.getOption(UDPAddress.PROP_MTU);
         int mtu = 0;
         try {
