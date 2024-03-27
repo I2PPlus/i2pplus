@@ -691,6 +691,7 @@ span.trackerName::before{width:20px;height:20px;display:inline-block;vertical-al
 .spacer.top td{border-bottom:0}
 .spacer.top:hover,#trackerconfig tr:nth-last-child(3):hover,#trackerconfig tr:nth-last-child(4):hover,#trackerconfig tr:nth-last-child(5):hover{background:rgba(48,30,48,.8);box-shadow:none}
 .trackerName a{width:100%;display:inline-block;vertical-align:middle}
+#trackerconfig .spacer{display:none}
 #trackerconfig,#fileFilter table{margin-top:0;border-spacing:0;border-collapse:collapse}
 #trackerconfig tr:first-child,#fileFilter tr:first-child{background:linear-gradient(90deg,rgba(16,0,16,.6),rgba(16,0,16,.6)),linear-gradient(180deg,rgba(68,51,68,.8) 50%,rgba(28,0,28,.8) 50%)}
 #trackerconfig tr:nth-child(n+2),.createFilterString:nth-child(even){background:rgba(48,30,48,.8)}
@@ -699,17 +700,17 @@ span.trackerName::before{width:20px;height:20px;display:inline-block;vertical-al
 #trackerconfig tr:nth-last-child(2) td,#fileFilter tr:nth-last-child(2) td{padding:9px 0 0;border-left:0;border-right:0}
 #trackerconfig tr:nth-child(2n+4){background:rgba(16,0,16,.5)}
 #trackerconfig tr:nth-last-child(2) td{background:none}
-#trackerconfig tr:nth-last-child(2),#trackerconfig tr:nth-last-child(2):hover,.spacer.top:hover,#trackerconfig tr:nth-last-child(3):hover,#trackerconfig tr:nth-last-child(2):hover{background:none;box-shadow:none}
 #trackerconfig tr:nth-last-child(3) td,#trackerconfig .spacer.top td,#fileFilter tr:nth-last-child(3) td,#fileFilter .spacer.top td{padding:3px 0;font-size:0;line-height:0}
 #trackerconfig tr:nth-last-child(3) td{border-bottom:var(--border_hard);background:#2b1b2b}
 #trackerconfig tr:nth-last-child(4) td,#fileFilter tr:nth-last-child(4) td{background:linear-gradient(180deg,#434 1px,#323 1px,#2b1b2b)}
-#trackerconfig tr:nth-last-child(4) td{padding-top:7px;padding-bottom:0}
+#trackerconfig tr:nth-last-child(4) td{padding-top:7px;padding-bottom:7px;border-bottom:var(--border_hard)}
 #trackerconfig tr:nth-last-child(5) td{border-bottom:var(--border_hard);padding:3px 0;font-size:0;line-height:0}
 #trackerconfig tr:nth-last-child(5){display:none}
 #trackerconfig tr:nth-last-child(5){background:rgba(48,30,48,.8)}
 #trackerconfig tr:nth-last-child(6) td{border-bottom:var(--border_hard)}
 #trackerconfig tr:nth-last-child(5) td,#trackerconfig tr:nth-last-child(4) td,#trackerconfig tr:nth-last-child(3) td,#trackerconfig tr:nth-last-child(2) td{border-top:0}
 #trackerconfig tr:nth-child(n+2):hover,.createFilterString:hover{background:linear-gradient(180deg,#58165e,#4a0d56)}
+#trackerconfig tr:nth-last-child(2),#trackerconfig tr:nth-last-child(2):hover,.spacer.top:hover,#trackerconfig tr:nth-last-child(3):hover,#trackerconfig tr:nth-last-child(2):hover{background:none;box-shadow:none}
 #trackerconfig tr:hover td{border-top:1px solid transparent}
 #trackerconfig th,#fileFilter th{padding:5px 2px;background:none}
 #trackerconfig th:nth-child(3),#trackerconfig th:nth-child(7),#trackerconfig td:nth-child(3),#trackerconfig td:nth-child(7){padding-left:10px}
@@ -726,7 +727,7 @@ span.trackerName::before{width:20px;height:20px;display:inline-block;vertical-al
 #addtracker input[type=text]{margin-left:0}
 #addtracker td,#trackerconfig tr:nth-last-child(2) td,#fileFilter tr:nth-last-child(2) td{border-bottom:0}
 #addtracker td:first-child b,#fileFilter td:first-child b{width:22px;height:22px;display:inline-block;vertical-align:middle;font-size:0;background:var(--add) no-repeat center center/22px;mix-blend-mode:luminosity}
-#addtracker:hover td:first-child b,#addtracker:focus-within td:first-child b{mix-blend-mode:normal}
+#addtracker:hover td:first-child b,#addtracker:focus-within td:first-child b,#addFileFilter:hover td:first-child b,#addFileFilter:focus-within td:first-child b{mix-blend-mode:normal}
 #torrentEdit tr:nth-child(even),#trackerselect tr:nth-child(even){background:rgba(12,0,12,.8)}
 #torrentEdit tr:nth-child(odd),#trackerselect tr:nth-child(odd){background:rgba(16,0,16,.5)}
 #torrentEdit tr:nth-child(n+2):hover td,#trackerselect tr:nth-child(n+2):hover td{background:linear-gradient(180deg,#58165e,#4a0d56)}
