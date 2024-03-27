@@ -542,7 +542,7 @@ a.controld img{display:none}
 .disabled,.disabled:hover,.disabled:focus,.disabled:active{border:1px inset #bbb;box-shadow:0 0 1px 1px rgba(48,16,48,.7);background-color:#989;background-blend-mode:luminosity,normal}
 .configOption::after{height:36px;display:inline-block;vertical-align:middle;content:""}
 .configOption{padding:0 4px;width:calc(100% - 20px);display:inline-block;vertical-align:middle;white-space:nowrap}
-.numeric{width:60px;min-width:0}
+.numeric{width:68px;min-width:0}
 .numeric:focus{text-align:center}
 .optionlist{margin:-5px 0 5px;padding:8px 6px 6px;columns:412px 3;column-gap:20px;border:1px solid #212;border-radius:0 0 5px 5px;box-shadow:inset 0 0 0 1px #434;background:rgba(48,30,48,.8);transition:ease-in-out .5s box-shadow}
 .optionlist:hover{box-shadow:inset 0 0 0 1px #646;transition:ease-in-out .5s box-shadow}
@@ -674,7 +674,8 @@ input.trackername{width:100px}
 #filecheck a{margin:8px}
 #snarkLang{margin-right:5px;padding:4px 8px;display:inline-block;line-height:1.6;vertical-align:middle;color:#ff7;font-weight:700;text-align:center;border-radius:4px;background:#212}
 #torrentOrderControl b{background:linear-gradient(180deg,#303,#101)}
-#bwAllocation .numeric,.numeric[name="upLimit"]{min-width:48px}
+#bwAllocation .numeric,.numeric[name="upLimit"],.numeric[name="startupDelay"]{min-width:68px}
+.numeric[name="maxFiles"]{min-width:80px}
 #configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}
 
 /* tracker config + create file filter */
