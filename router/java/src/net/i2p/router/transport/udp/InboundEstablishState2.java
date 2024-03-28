@@ -353,6 +353,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                                              null, _context.clock().now() + 4*60*60*1000);
             if (ri.verifySignature())
                 _context.blocklist().add(_aliceIP);
+            if (_log.shouldWarn())
+                _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                          " -> Old and slow (0.9.56 / LU)");
             throw new RIException("Old and slow: " + h, REASON_BANNED);
         }
 

@@ -721,6 +721,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _context.banlist().banlistRouter(h, " <b>➜</b> Old and slow", null,
                                              null, _context.clock().now() + 4*60*60*1000);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
+            if (_log.shouldWarn())
+                _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                          " -> Old and slow (0.9.56 / LU)");
             throw new DataFormatException("Old and slow: " + h);
         }
 
