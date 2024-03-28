@@ -333,7 +333,7 @@ public class ProfileOrganizer {
             bw = peerInfo.getBandwidthTier();
             cap = peerInfo.getCapabilities();
             version = peerInfo.getVersion();
-            if (cap != null && cap != "" && !isUs) {
+            if (cap != null && !cap.equals("") && !isUs) {
                 reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
                 isFF = cap.contains("f");
                 hasSalt = cap.contains("salt");
@@ -346,7 +346,7 @@ public class ProfileOrganizer {
             }
         }
 
-        boolean isSlow = (cap != null && cap != "") && bw.equals("K") ||
+        boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") ||
                           bw.equals("L") || bw.equals("M") || bw.equals("N") || !reachable;
 
         if (peer != null && peer.equals(_us)) {

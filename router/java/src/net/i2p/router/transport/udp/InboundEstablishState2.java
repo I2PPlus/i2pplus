@@ -32,6 +32,7 @@ import net.i2p.router.transport.TransportImpl;
 import static net.i2p.router.transport.udp.SSU2Util.*;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer;
 import net.i2p.util.VersionComparator;
 
 /**
@@ -348,14 +349,23 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (!"2".equals(ra.getOption("v")))
             throw new RIException("BAD SSU2 v", REASON_VERSION);
 
-        if (ri.getCapabilities().equals("LU") && ri.getVersion().equals("0.9.56")) {
-            _context.banlist().banlistRouter(h, "<b>➜</b> Old and slow", null,
+        String cap = ri.getCapabilities();
+        String bw = ri.getBandwidthTier();
+        boolean reachable = cap != null && cap.contains("R");
+        boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") ||
+                          bw.equals("L") || bw.equals("M") || bw.equals("N");
+        String version = ri.getVersion();
+        boolean isOld = VersionComparator.comp(version, "0.9.60") < 0;
+
+        if (!reachable && isSlow && isOld) {
+            _context.banlist().banlistRouter(h, "<b>➜</b> Old and slow (" + version + " / " + bw + "U)", null,
                                              null, _context.clock().now() + 4*60*60*1000);
             if (ri.verifySignature())
                 _context.blocklist().add(_aliceIP);
             if (_log.shouldWarn())
                 _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
-                          " -> Old and slow (0.9.56 / LU)");
+                          " -> Old and slow (" + version + " / " + bw + "U)");
+            _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             throw new RIException("Old and slow: " + h, REASON_BANNED);
         }
 
@@ -1079,4 +1089,13 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         @Override
         public String getMessage() { return "Code " + rsn + ": " + super.getMessage(); }
     }
+
+    private class Disconnector implements SimpleTimer.TimedEvent {
+        private final Hash h;
+        public Disconnector(Hash h) { this.h = h; }
+        public void timeReached() {
+            _context.commSystem().forceDisconnect(h);
+        }
+    }
+
 }
