@@ -321,7 +321,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         // because we have his ikey and we verified he's the owner of the RI
 
         Hash h = _receivedUnconfirmedIdentity.calculateHash();
-        boolean isBanned = _context.banlist().isBanlistedForever(h);
+        boolean isBanned = _context.banlist().isBanlisted(h);
         if (isBanned) {
             // validate sig to prevent spoofing
             if (ri.verifySignature())
@@ -338,7 +338,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             _context.banlist().banlistRouter(h, " <b>➜</b> Wrong IP address in RouterInfo (SSU2)",
                                              null, null, _context.clock().now() + 4*60*60*1000);
             _context.commSystem().forceDisconnect(h);
-            if (_log.shouldWarn())
+            if (_log.shouldWarn() && !isBanned)
                 _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Wrong IP address in RouterInfo (SSU)");
             if (ri.verifySignature())
@@ -362,7 +362,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                                              null, _context.clock().now() + 4*60*60*1000);
             if (ri.verifySignature())
                 _context.blocklist().add(_aliceIP);
-            if (_log.shouldWarn())
+            if (_log.shouldWarn() && !isBanned)
                 _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Old and slow (" + version + " / " + bw + "U)");
             _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);

@@ -705,12 +705,14 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         if (!ok)
             throw new DataFormatException("NTCP2 verifyInbound() fail");
 
+        boolean isBanned = _context.banlist().isBanlisted(h);
+
         // s is verified, we may now ban the hash
         if (mismatchMessage != null) {
             _context.banlist().banlistRouter(h, " <b>➜</b> Wrong IP address in RouterInfo (NTCP)",
                                              null, null, _context.clock().now() + 4*60*60*1000);
             _context.commSystem().forceDisconnect(h);
-            if (_log.shouldWarn() && !_context.banlist().isBanlisted(h)) {
+            if (_log.shouldWarn() && !isBanned) {
                 _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Wrong IP address in RouterInfo (NTCP)");
             }
@@ -730,7 +732,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _context.banlist().banlistRouter(h, "<b>➜</b> Old and slow (" + version + " / " + bw + "U)", null,
                                              null, _context.clock().now() + 4*60*60*1000);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
-            if (_log.shouldWarn())
+            if (_log.shouldWarn() && !isBanned)
                 _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Old and slow (" + version + " / " + bw + "U)");
             _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
