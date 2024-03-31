@@ -90,6 +90,8 @@ public class ReseedBundler {
                 continue;
             if (ri.getCapabilities().contains("H"))
                 continue;
+            if (!ri.getCapabilities().contains("R"))
+                continue;
             if (VersionComparator.comp(ri.getVersion(), MIN_VERSION) < 0)
                 continue;
             Collection<RouterAddress> addrs = ri.getAddresses();

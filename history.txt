@@ -1,3 +1,35 @@
+2024-03-03 dr|z3d
+ * I2PSnark: Activate create torrent filtering for zilvero and ubergine themes
+
+2024-03-26 zzz
+ * NetDB: Store message handling changes
+ * Transports: Incoming connection checks
+ * Tunnels:
+   - Refactor message distribution
+   - Tunnel test changes
+
+2024-03-23 zzz
+ * I2PSnark: Preserve private=0 in torrent files
+
+2024-03-01 zzz
+ * SSU2: Cancel peer test if Bob picked a Charlie without a B cap
+
+2024-02-29 zzz
+ * SSU2: Treat IPv6 peer test result as unknown if no response from firewalled Charlie
+
+2024-02-26 zzz
+ * I2PSnark:
+   - Don't allow changing data dir when connected
+   - Delete all torrents except magnets when changing data dir
+
+2024-02-25 zzz
+ * SSU2:
+   - Increase min version for peer test
+   - Update last rcv time when receiving data, not acks
+
+2024-02-10 snex
+ * I2PSnark: Implement create torrent file filtering
+
 2024-02-02 zzz
  * I2PTunnel: Implement client-side persistence (Gitlab MR !176)
 

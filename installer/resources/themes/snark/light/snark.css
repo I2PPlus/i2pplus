@@ -336,7 +336,7 @@ input.create:hover,input.create:focus{background:var(--create) no-repeat center 
 #addSection input.add,#addSection input.add:active,input.create,input.create:active{background-blend-mode:luminosity}
 #addSection input[type=text],#createSection input[type=text]{width:80%}
 #addSection input[type=file]{margin-top:-1px;width:calc(80% - 10px)}
-#configs input[type=submit],.trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}
+#configs input[type=submit],#trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}
 #configureAuthor input{width:250px}
 
 .snarkConfig{width:100%;font-size:10pt}
@@ -374,8 +374,8 @@ form:last-child .configPanel{margin-top:10px}
 #snarkInfo~.mainsection{border-bottom:var(--border_soft)}
 #snarkInfo~.mainsection table:last-child,.iframed #snarkInfo~.mainsection:last-child{border-bottom:0}
 .iframed .mainsection#snarkInfo{margin-top:-9px}
-.iframed .trackerconfig{margin-bottom:0}
-.iframed .trackerconfig tr:nth-last-child(2) td{padding-bottom:4px}
+.iframed #trackerconfig{margin-bottom:0}
+.iframed #trackerconfig tr:nth-last-child(2) td{padding-bottom:4px}
 .iframed #commentSection{margin-top:-1px}
 .iframed #configSection,.iframed #commentInfo,.iframed #trackers{border-bottom:0}
 .iframed #configSection,.iframed #trackers,.iframed .mainsection#snarkInfo{margin-bottom:1px}
@@ -468,7 +468,7 @@ hr.debug{display:none}
 #bwHoverHelp{margin-right:26px;line-height:1;background:url(images/details.svg) no-repeat 4px center/14px}
 #bwHoverHelp img[src$="details.svg"]{opacity:0}
 #configs a{white-space:nowrap;font-weight:700}
-#configs a[href="/config.jsp"]{margin-left:-24px}
+#configs a[href="/config.jsp"]{margin-left:2px}
 
 /* comments */
 .addCommentText,.commentText{padding-right:0}
@@ -529,6 +529,7 @@ td.commentAuthor .commentAuthorName{margin-left:2px;padding:0 5px 0 22px;width:1
 #configs td{padding-top:4px;padding-bottom:4px;width:50%;min-width:0;text-align:left;font-weight:400}
 #configs td b,#torrentOrderControl b{margin-right:8px;padding:6px 10px 7px;min-width:160px;display:inline-block;line-height:1.2;text-align:right;font-size:95%;color:var(--ink_lighter);border-radius:15px 5px 5px 15px;box-shadow:inset 0 0 0 1px #e2e2ff;background:linear-gradient(180deg,#fff,#e8e8ff)}
 #configs input,#configs select{margin-top:0;margin-bottom:0;vertical-align:middle}
+#configs input.r.numeric[name="upBW"]{margin-left: 6px}
 #configs td label:hover b,#torrentOrderControl b:hover{color:var(--ink)}
 #configs select[disabled]{margin-left:4px}
 #torrentOrderControl b{line-height:1}
@@ -579,24 +580,26 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 /* tracker config */
 input.trackerannounce{width:230px}
 input.trackerhome{width:200px}
-.knownTracker a{display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;width:220px}
+.knownTracker a{width:220px;max-width:220px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;font-size:90%!important}
 .knownTracker:hover,.knownTracker:hover td{background:#ffb}
-.trackerconfig input.delete,.trackerconfig input.reload{float:left}
-.trackerconfig{margin-bottom:5px}
-.trackerconfig .spacer.top{display:none}
-.trackerconfig{text-align:left;width:100%;border-collapse:separate;border-spacing:0}
-.trackerconfig tr:first-child{filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
-.trackerconfig th,.trackerconfig td,.trackerconfig th:last-child,.trackerconfig td:last-child{text-align:left}
-.trackerconfig th:first-child{border-radius:2px 0 0 2px;border-left:var(--border_soft);background:var(--nuke) no-repeat scroll center center/14px,linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
-.trackerconfig th:last-child{border-radius:0 2px 2px 0;border-right:var(--border_soft)}
-.trackerconfig th:nth-child(4),.trackerconfig th:nth-child(5),.trackerconfig th:nth-child(6),.trackerconfig td:nth-child(4),.trackerconfig td:nth-child(5),.trackerconfig td:nth-child(6){min-width:64px;text-align:center}
-.trackerconfig td:first-child{text-align:center}
-.trackerconfig tr:nth-last-child(3) td,.trackerconfig tr:nth-last-child(5) td{font-size:0;padding:0}
+#trackerconfig input.delete,#trackerconfig input.reload{float:left}
+#trackerconfig input.accept,#trackerconfig input.add{float:right}
+#trackerconfig input.accept{margin-right:6px}
+#trackerconfig{margin-bottom:5px}
+#trackerconfig .spacer.top{display:none}
+#trackerconfig{text-align:left;width:100%;border-collapse:separate;border-spacing:0}
+#trackerconfig tr:first-child{filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
+#trackerconfig th,#trackerconfig td,#trackerconfig th:last-child,#trackerconfig td:last-child{text-align:left}
+#trackerconfig th:first-child{border-radius:2px 0 0 2px;border-left:var(--border_soft);background:var(--nuke) no-repeat scroll center center/14px,linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
+#trackerconfig th:last-child{border-radius:0 2px 2px 0;border-right:var(--border_soft)}
+#trackerconfig th:nth-child(4),#trackerconfig th:nth-child(5),#trackerconfig th:nth-child(6),#trackerconfig td:nth-child(4),#trackerconfig td:nth-child(5),#trackerconfig td:nth-child(6){min-width:64px;text-align:center}
+#trackerconfig td:first-child{text-align:center}
+#trackerconfig tr:nth-last-child(3) td,#trackerconfig tr:nth-last-child(5) td{font-size:0;padding:0}
 .trackerhome,.trackerannounce{width:260px}
 #addtracker td{padding-top:6px;padding-bottom:6px}
-#addtracker td:first-child b{width:22px;height:22px;display:inline-block;vertical-align:middle;font-size:0;background:var(--add) no-repeat center center/22px;mix-blend-mode:luminosity}
+#addtracker td:first-child b,#addFileFilter td:first-child b{width:22px;height:22px;display:inline-block;vertical-align:middle;font-size:0;background:var(--add) no-repeat center center/22px;mix-blend-mode:luminosity}
 #addtracker td input{margin-left:0}
-#addtracker:hover td:first-child b,#addtracker:focus-within td:first-child b{mix-blend-mode:normal}
+#addtracker:hover td:first-child b,#addtracker:focus-within td:first-child b,#addFileFilter:hover td:first-child b,#addFileFilter:focus-within td:first-child b{mix-blend-mode:normal}
 
 /* iconized panel tabs */
 input:checked + .toggleview:active .tab_label::after{transform:rotate(-90deg) scale(.9);transition:linear transform .15s}
@@ -840,12 +843,12 @@ code{font-size:8pt}
 .details img{width:auto;max-height:20px}
 .ETA,.txd,.rateDown,.rateUp{min-width:0}
 .txd,.rateUp,.trackerLink{padding:0;max-width:0;overflow:hidden;white-space:nowrap;font-size:0}
-.trackerconfig a{max-width:140px}
-.trackerconfig input[type=text]{min-width:50px;max-width:140px}
+#trackerconfig a{max-width:140px}
+#trackerconfig input[type=text]{min-width:50px;max-width:140px}
 .txd{display:none}
 #addSection input[type=text],#createSection input[type=text]{width:70%}
 #configs td:first-child{min-width:140px}
-#createSection a,.trackerconfig a{max-width:200px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#createSection a,#trackerconfig a{max-width:200px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #createSection td:first-child,#addSection td:first-child{min-width:80px}
 #navbar,#screenlog{min-width:580px}
 #screenlog li,#screenlog li a{font-weight:700}
@@ -878,8 +881,8 @@ tr:not(.peerinfo) .txd:empty::after{display:inline;font-size:9pt;content:"‒"}
 .snarkNav:link,.snarkNav:visited{letter-spacing:.1em;font-size:11pt}
 .tAction{padding-right:3px}
 .tName{padding-left:4px}
-.trackerconfig input.trackername{width:180px;max-width:180px}
-.trackerconfig th:nth-child(7),.trackerconfig td:nth-child(7){padding-left:50px}
+#trackerconfig input.trackername{width:180px;max-width:180px}
+#trackerconfig th:nth-child(7),#trackerconfig td:nth-child(7){padding-left:50px}
 .trackerhome,.trackerannounce,.knownTracker a{width:300px;max-width:300px}
 #configs tr:nth-last-child(n+4) td{padding-top:3px;padding-bottom:3px}
 #screenlog li::before{background-size:10px}
@@ -924,7 +927,7 @@ td.peerCount{padding-left:0;padding-right:3px;width:1%;white-space:nowrap;font-w
 body,input[type=text],input[type=submit],.control,.snarkAddInfo,#commentInfo textarea{font-size:10pt}
 code,#torrentEdit textarea{font-size:9pt}
 input[type=submit]{min-width:100px}
-label b,.configOption b,.trackerconfig th{font-size:9pt}
+label b,.configOption b,#trackerconfig th{font-size:9pt}
 .debuginfo td{padding-top:4px;padding-bottom:4px;word-spacing:0;font-size:10pt}
 .knownTracker a,.trackerannounce,.trackerhome{width:400px;max-width:400px}
 .magnetLabel{margin:0;padding:2px 6px;line-height:1;border-radius:1px;box-shadow:0 0 0 1px #bbc,inset 0 0 0 1px #fff;background:linear-gradient(180deg,#f2f2ff,#eef)}
@@ -954,3 +957,29 @@ a,a:link,th,td,button,input,select,textarea{font-size:10pt}
 .pagenavcontrols{padding:5px 5px 4px}
 #torrents code{font-size:9pt}
 }
+
+form[action^="/i2psnark/configure"]{display:block}
+.createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;min-width:80px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-style:italic;border:var(--border_input)}
+#contentFilter{margin:-3px 0;padding:0 0 6px;width:100%;display:flex;flex-wrap:wrap}
+#contentFilter input[type=checkbox]{display:none}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_active);background:url(images/delete.svg) no-repeat 9px calc(50% + 1px)/10px,var(--btn_hover)}
+#createTorrentFilters{display:table-row}
+#fileFilter{width:calc(100% - 20px);margin:-1px auto 0;display:block}
+#fileFilter table{margin-bottom:0}
+#fileFilter tr:nth-child(2) td,#fileFilter #addFileFilter td{border-top:var(--border_soft)}
+#fileFilter tr:not(:last-child).spacer td{padding:4px 0;font-size:0;border-bottom:var(--border)}
+#fileFilter tr:nth-last-child(2) td{border:0}
+#fileFilter th,#fileFilter td{padding:4px;text-align:left;border-top:var(--border_soft)}
+#fileFilter th{padding:3px 4px;white-space:nowrap;font-size:85%;border-bottom:0}
+#fileFilter th:first-child {width:32px;border-left:var(--border_soft);border-radius:2px 0 0 2px;background: var(--nuke) no-repeat center center/14px,var(--th)}
+#fileFilter th:last-child,#fileFilter td:last-child{width:1%;text-align:center}
+#fileFilter th:last-child {border-right:var(--border_soft);border-radius:0 2px 2px 0}
+#fileFilter td{border-top:var(--border_softer)}
+#fileFilter #addFileFilter td{padding-top:6px;padding-bottom:6px;border-bottom:var(--border_soft)}
+#fileFilter input[type=submit]{margin:6px 4px 6px}
+#fileFilter .delete,#fileFilter .reload{margin:6px 12px 6px -3px;float:left}
+#fileFilter .accept,#fileFilter .add{margin:6px 6px 6px 12px;float:right}
+#fileFilter .delete,#fileFilter .add{margin-left:4px}
+#fileFilter input.accept[type=submit]{margin-right:0}
+#fileFilter input.delete[type=submit]{margin-left:0}
+#fileFilter tr:last-child, #fileFilter tr.spacer{display:none}

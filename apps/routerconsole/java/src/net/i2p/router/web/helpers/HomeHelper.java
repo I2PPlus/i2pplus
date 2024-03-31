@@ -163,7 +163,7 @@ public class HomeHelper extends HelperBase {
         _x("translate") + S + _x("Text translation engine") + S + "http://translate.i2p/" + S + I + "eepsites/translate.svg" + S +
         "translate.idk.i2p" + S + _x("Text translation engine") + S + "http://translate.idk.i2p/" + S + I + "eepsites/translate.svg" + S +
         "tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "eepsites/tv.svg" + S +
-        "webhosting.i2p" + S + _x("Provider of privacy respecting web hosting and VPN services") + S + "http://webhosting.i2p/" + S + I + "eepsites/incog.svg" + S +
+        "incognet.i2p" + S + _x("Provider of privacy respecting web hosting and VPN services") + S + "http://incognet.i2p/" + S + I + "eepsites/incog.svg" + S +
         //"tinypng.i2p" + S + _x("Image optimizer") + S + "http://tinypng.i2p/" + S + I + "tinypng.png" + S +
         //_x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "radio.svg" + S +
 
@@ -175,6 +175,7 @@ public class HomeHelper extends HelperBase {
         "I2PSearch" + S +_x("I2P Web Search Engine") + S + "http://i2psearch.i2p/" + S + I + "search.svg" + S +
         "LibreX" + S +_x("Clearnet Search Engine") + S + "http://libxsearch.i2p/" + S + I + "search.svg" + S +
         "Mojeek" + S +_x("Privacy-focused Clearnet Search Engine") + S + "http://mojeek.i2p/" + S + I + "search.svg" + S +
+        "Shinobi" + S +_x("I2P Web Search Engine") + S + "http://shinobi.i2p/" + S + I + "eepsites/shinobi.png" + S +
         "shmoogle.i2p" + S +_x("I2P Web Search Engine") + S + "http://shmoogle.i2p/" + S + I + "search.svg" + S +
         "torch.i2p" + S +_x("Tor-focused Search Engine") + S + "http://torch.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
         //"Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +

@@ -21,16 +21,16 @@ import net.i2p.data.ByteArray;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.data.SessionKey;
-import net.i2p.data.Signature;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.I2NPMessageException;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.data.SessionKey;
+import net.i2p.data.Signature;
+import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.transport.crypto.DHSessionKeyBuilder;
 import static net.i2p.router.transport.ntcp.OutboundNTCP2State.*;
 import net.i2p.util.Addresses;
@@ -38,8 +38,9 @@ import net.i2p.util.ByteArrayStream;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
-
+import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.VersionComparator;
 
 /**
  *
@@ -704,17 +705,38 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         if (!ok)
             throw new DataFormatException("NTCP2 verifyInbound() fail");
 
+        boolean isBanned = _context.banlist().isBanlisted(h);
+
         // s is verified, we may now ban the hash
         if (mismatchMessage != null) {
             _context.banlist().banlistRouter(h, " <b>➜</b> Wrong IP address in RouterInfo (NTCP)",
                                              null, null, _context.clock().now() + 4*60*60*1000);
             _context.commSystem().forceDisconnect(h);
-            if (_log.shouldWarn() && !_context.banlist().isBanlisted(h)) {
+            if (_log.shouldWarn() && !isBanned) {
                 _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Wrong IP address in RouterInfo (NTCP)");
             }
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             throw new DataFormatException(mismatchMessage + ri);
+        }
+
+        String cap = ri.getCapabilities();
+        String bw = ri.getBandwidthTier();
+        boolean reachable = cap != null && cap.contains("R");
+        boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") ||
+                          bw.equals("L") || bw.equals("M") || bw.equals("N");
+        String version = ri.getVersion();
+        boolean isOld = VersionComparator.comp(version, "0.9.60") < 0;
+
+        if (!reachable && isSlow && isOld) {
+            _context.banlist().banlistRouter(h, "<b>➜</b> Old and slow (" + version + " / " + bw + "U)", null,
+                                             null, _context.clock().now() + 4*60*60*1000);
+            _msg3p2FailReason = NTCPConnection.REASON_BANNED;
+            if (_log.shouldWarn() && !isBanned)
+                _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                          " -> Old and slow (" + version + " / " + bw + "U)");
+            _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            throw new DataFormatException("Old and slow: " + h);
         }
 
         try {
@@ -723,10 +745,10 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 FloodfillNetworkDatabaseFacade fndf = (FloodfillNetworkDatabaseFacade) _context.netDb();
                 if (fndf.floodConditional(ri)) {
                     if (_log.shouldDebug())
-                        _log.debug("Flooded the RouterInfo: " + h);
+                        _log.debug("Flooded RouterInfo [" + h.toBase64().substring(0,6) + "]");
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Flood request but we didn't: " + h);
+                        _log.info("Flood request declined for RouterInfo [" + h.toBase64().substring(0,6) + "]");
                 }
             }
         } catch (IllegalArgumentException iae) {
@@ -802,4 +824,13 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _msg3tmp = null;
         }
     }
+
+    private class Disconnector implements SimpleTimer.TimedEvent {
+        private final Hash h;
+        public Disconnector(Hash h) { this.h = h; }
+        public void timeReached() {
+            _context.commSystem().forceDisconnect(h);
+        }
+    }
+
 }

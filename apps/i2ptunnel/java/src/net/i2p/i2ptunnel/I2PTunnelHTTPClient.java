@@ -461,7 +461,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 if (method == null) {
                     // first line GET/POST/etc.
                     if (_log.shouldInfo()) {
-                        _log.info(getPrefix(requestId) + "req #" + requestCount + " first line [" + line + "]");
+                        _log.info(getPrefix(requestId) + "Request [#" + requestCount + "] \n* First line: " + line);
                     }
 
                     String[] params = DataHelper.split(line, " ", 3);

@@ -42,6 +42,7 @@ public class SearchHelper extends HelperBase {
         "psychonaut.i2p"           + S +     "http://psychonaut.i2p/w/index.php?search=%s&fulltext=Search" + S +
         "ramble.i2p"               + S +     "http://ramble.i2p/search?q=%s" + S +
         "slashdot.i2p"             + S +     "http://slashdot.i2p/index2.pl?fhfilter=%s" + S +
+        "shinobi.i2p"              + S +     "http://shinobi.i2p/search?query=%s" + S +
         "shmoogle.i2p"             + S +     "http://shmoogle.i2p/yacysearch.html?query=%s" + S +
         "shreddit.i2p/r/i2p"       + S +     "http://shreddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
         "tracker2.postman.i2p"     + S +     "http://tracker2.postman.i2p/?search=%s" + S +

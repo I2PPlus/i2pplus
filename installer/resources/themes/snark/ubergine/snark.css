@@ -17,6 +17,7 @@
 --btn_hover:linear-gradient(180deg,#767,#989);
 --btn:linear-gradient(180deg,#989,#878);
 --highlight:inset 0 0 0 1px #000;
+--highlight_light:inset 0 0 0 1px #fef1;
 --hover:#f60;
 --ink:#e4d3d7;
 --ink_btn:#2f1d30;
@@ -451,7 +452,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #tab_config:hover,.toggleview:hover,input:focus+.toggleview{background:linear-gradient(180deg,#656,#323 51%,#202 51%,#101);box-shadow:inset 0 0 1px #939}
 #tab_config:active,.toggleview:active{box-shadow:inset 0 0 1px #7f2f7f,inset 4px 4px 3px 3px rgba(0,0,0,.6);background:linear-gradient(0deg,#212,#101)}
 #tab_comments{margin-top:-1px}
-.iframed .configPanel .configTitle{box-shadow:inset 0 0 1px #868}
+.iframed .configPanel .configTitle{border:1px solid #878;box-shadow:inset 0 0 1px #868}
 .iframed #tab_config,.iframed .toggleview{border:1px solid #878;border-bottom:1px solid #767;border-top:0;box-shadow:inset 0 0 1px #868,inset 0 -2px 0 2px rgba(0,0,0,.3);filter:drop-shadow(0 1px 2px #101);transition:none}
 .iframed #configSection,.iframed .configPanel#trackers,.iframed .mainsection#snarkInfo{margin-bottom:0}
 .iframed #tab_config:hover,.iframed .toggleview:hover,.iframed input:focus+.toggleview{box-shadow:inset 0 0 1px #434,inset 0 -2px 0 2px rgba(0,0,0,.5)}
@@ -487,7 +488,7 @@ input[type=text],input.r,input[name="nofilter_dataDir"]{padding:6px 8px;box-shad
 input[type=text]:disabled{color:rgba(192,160,192,.5);box-shadow:inset 1px 1px 2px 1px #101;background:#101 var(--tile);cursor:not-allowed}
 input[name="nofilter_commentsName"]:focus::placeholder{opacity:0}
 input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 166px)}
-input[name="i2cpOpts"],input[name="nofilter_dataDir"]{font-size:90%}
+input[name="i2cpOpts"],input[name="nofilter_dataDir"]{font-size:90%;transform:translateY(-1px)}
 input[name="nofilter_commentsName"]{max-width:248px}
 input[type=text]:active,input[type=text]:focus,input.r:focus,input[name="nofilter_dataDir"]:focus,textarea:focus:not([readonly]){outline:none;color:#fff;box-shadow:inset 0 0 0 1px #ffffcf,var(--shadow_inset);background:linear-gradient(180deg,#d60,#c50);transition:box-shadow ease .05s}
 input[type=text]:focus,input.r:focus{padding-right:3px}
@@ -541,7 +542,7 @@ a.controld img{display:none}
 .disabled,.disabled:hover,.disabled:focus,.disabled:active{border:1px inset #bbb;box-shadow:0 0 1px 1px rgba(48,16,48,.7);background-color:#989;background-blend-mode:luminosity,normal}
 .configOption::after{height:36px;display:inline-block;vertical-align:middle;content:""}
 .configOption{padding:0 4px;width:calc(100% - 20px);display:inline-block;vertical-align:middle;white-space:nowrap}
-.numeric{width:60px;min-width:0}
+.numeric{width:68px;min-width:0}
 .numeric:focus{text-align:center}
 .optionlist{margin:-5px 0 5px;padding:8px 6px 6px;columns:412px 3;column-gap:20px;border:1px solid #212;border-radius:0 0 5px 5px;box-shadow:inset 0 0 0 1px #434;background:rgba(48,30,48,.8);transition:ease-in-out .5s box-shadow}
 .optionlist:hover{box-shadow:inset 0 0 0 1px #646;transition:ease-in-out .5s box-shadow}
@@ -641,14 +642,14 @@ input.trackername{width:100px}
 .knownTracker input[type=radio],.knownTracker input[type=radio]:hover{margin-left:20px;margin-right:20px;opacity:.3;cursor:default}
 .knownTracker input[type=radio]:checked,.knownTracker input[type=radio]:checked:hover{opacity:.5;pointer-events:none}
 .spacer td{border-bottom:var(--border_hard)}
-.trackerconfig{margin-top:11px;text-align:left;border-spacing:0;border-collapse:separate}
-.trackerconfig th:first-child,.trackerconfig td:first-child{text-align:center}
-.trackerconfig th:first-child{border-left:var(--border_hard);border-radius:2px 0 0 2px;background:var(--nuke) no-repeat center center;background-size:16px}
-.trackerconfig th:last-child{border-right:var(--border_hard);border-radius:0 2px 2px 0}
-.trackerconfig th:nth-child(n+4),.trackerconfig th:nth-child(n+5),.trackerconfig td:nth-child(n+4),.trackerconfig td:nth-child(n+5){text-align:center}
-.trackerconfig th,.trackerconfig td,.trackerconfig th:last-child,.trackerconfig td:last-child{text-align:left}
-.trackerconfig tr:nth-last-child(2) td{border-top:0}
-.trackerconfig td[colspan="7"]{padding:0;height:0}
+#trackerconfig{margin-top:11px;text-align:left;border-spacing:0;border-collapse:separate}
+#trackerconfig th:first-child,#trackerconfig td:first-child,#fileFilter th:first-child,#fileFilter td:first-child{width:52px;text-align:center}
+#trackerconfig th:first-child,#fileFilter th:first-child{border-left:var(--border_hard);border-radius:2px 0 0 2px;background:var(--nuke) no-repeat center center;background-size:16px}
+#trackerconfig th:last-child,#fileFilter th:last-child{border-right:var(--border_hard);border-radius:0 2px 2px 0}
+#trackerconfig th:nth-child(n+4),#trackerconfig th:nth-child(n+5),#trackerconfig td:nth-child(n+4),#trackerconfig td:nth-child(n+5){text-align:center}
+#trackerconfig th,#trackerconfig td,#trackerconfig th:last-child,#trackerconfig td:last-child{text-align:left}
+#trackerconfig tr:nth-last-child(2) td{border-top:0}
+#trackerconfig td[colspan="7"]{padding:0;height:0}
 #bwHelp{padding-left:26px;width:90%;line-height:1;background:url(images/details.svg) no-repeat left 8px center/14px auto}
 #bwHelp a{margin-left:4px;display:inline-block;line-height:1.5;white-space:nowrap;font-style:normal}
 #configs{border-collapse:separate;user-select:none}
@@ -657,9 +658,10 @@ input.trackername{width:100px}
 #configs a[href^="/config"]:hover::after{border:1px solid var(--hover);background:var(--configure_hover) no-repeat center center/20px,linear-gradient(180deg,#717 50%,#414 50%)}
 #configs a[href^="/config"]:active::after{border:1px solid #212;box-shadow:inset 3px 3px 2px 1px #202;background:#414 var(--configure_hover) no-repeat center center/20px;mix-blend-mode:multiply;transform:scale(0.9);transition:none}
 #configs input,#configs select{margin-top:0;margin-bottom:0;vertical-align:middle;will-change:transform}
-#configs input[type=submit],.trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}
+#configs input[type=submit],#trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}
 #configs th,.optionlist,#configs td b,#torrentOrderControl b{filter:drop-shadow(0 0 2px rgba(16,0,16,.5))}
 #configs th{padding:7px 5px 8px 30px;font-size:9.5pt;color:rgba(255,240,255,.85);text-transform:capitalize;text-shadow:var(--txt_shadow);border:1px solid #212;border-radius:5px 5px 0 0;box-shadow:inset 0 0 0 1px #434;background:url(/i2psnark/.res/icons/favicon.svg) no-repeat 7px center/20px,linear-gradient(135deg,rgba(16,0,16,.6),rgba(16,0,16,.3)),linear-gradient(180deg,rgba(68,51,68,.8) 50%,rgba(28,0,28,.8) 50%);background-blend-mode:luminosity,normal,normal}
+#configs th.suboption{padding-top:9px;position:relative}
 #configs td{text-align:left;font-weight:400;vertical-align:middle;padding:4px 0;min-width:0;width:50%}
 #configs tr:nth-last-child(2) td{padding:10px 0 2px;text-align:right}
 #configs td b,#torrentOrderControl b{margin-right:5px;padding:5px 10px 6px;display:inline-block;min-width:150px;color:rgba(255,240,255,.8);text-align:right;border-radius:15px 5px 5px 15px;box-shadow:0 0 0 1px rgba(17,0,17,.7);background:linear-gradient(180deg,rgba(32,16,32,.2),rgba(16,0,16,.7));opacity:.9;transition:ease width .2s}
@@ -672,10 +674,11 @@ input.trackername{width:100px}
 #filecheck a{margin:8px}
 #snarkLang{margin-right:5px;padding:4px 8px;display:inline-block;line-height:1.6;vertical-align:middle;color:#ff7;font-weight:700;text-align:center;border-radius:4px;background:#212}
 #torrentOrderControl b{background:linear-gradient(180deg,#303,#101)}
-#bwAllocation .numeric,.numeric[name="upLimit"]{min-width:48px}
+#bwAllocation .numeric,.numeric[name="upLimit"],.numeric[name="startupDelay"]{min-width:68px}
+.numeric[name="maxFiles"]{min-width:80px}
 #configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}
 
-/* tracker config */
+/* tracker config + create file filter */
 .info_tracker{margin:2px;padding:1px 8px 1px 18px;display:inline-block;max-width:130px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 0 0 1px #101,inset 0 0 0 1px rgba(96,32,96,.2);border-radius:3px;background:var(--tracker) no-repeat left 3px center/14px,linear-gradient(180deg,rgba(24,0,24,.5) 50%,rgba(12,0,12,.5) 50%)}
 .info_tracker,.info_tracker a,.info_tracker a:visited{color:#f80}
 .info_tracker a[href*=".b32.i2p"]{max-width:60px;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block}
@@ -687,42 +690,45 @@ input.trackername{width:100px}
 span.trackerName{padding:1px 10px 1px 5px;width:calc(100% - 20px);display:inline-block;vertical-align:middle;white-space:nowrap;text-align:left;border:var(--border_hard);border-radius:3px;background:var(--th)}
 span.trackerName::before{width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--tracker) no-repeat left center/16px;content:""}
 .spacer.top td{border-bottom:0}
-.spacer.top:hover,.trackerconfig tr:nth-last-child(3):hover,.trackerconfig tr:nth-last-child(4):hover,.trackerconfig tr:nth-last-child(5):hover{background:rgba(48,30,48,.8);box-shadow:none}
+.spacer.top:hover,#trackerconfig tr:nth-last-child(3):hover,#trackerconfig tr:nth-last-child(4):hover,#trackerconfig tr:nth-last-child(5):hover{background:rgba(48,30,48,.8);box-shadow:none}
 .trackerName a{width:100%;display:inline-block;vertical-align:middle}
-.trackerconfig{margin-top:0;border-spacing:0;border-collapse:collapse}
-.trackerconfig tr:first-child{background:linear-gradient(90deg,rgba(16,0,16,.6),rgba(16,0,16,.6)),linear-gradient(180deg,rgba(68,51,68,.8) 50%,rgba(28,0,28,.8) 50%)}
-.trackerconfig tr:nth-child(n+2){background:rgba(48,30,48,.8)}
-.trackerconfig tr:nth-child(n+2):hover{background:linear-gradient(180deg,#58165e,#4a0d56)}
-.trackerconfig tr:nth-last-child(2) input:last-child,#configs tr:nth-last-child(2) input:last-child{margin-right:1px}
-.trackerconfig tr:nth-last-child(2) td{padding:9px 0 0;border-left:0;border-right:0}
-.trackerconfig tr:nth-child(2n+4){background:rgba(16,0,16,.5)}
-.trackerconfig tr:nth-child(2n+3){background:rgba(16,0,16,.3)}
-.trackerconfig tr:nth-last-child(2) td{background:none}
-.trackerconfig tr:nth-last-child(2),.trackerconfig tr:nth-last-child(2):hover,.spacer.top:hover,.trackerconfig tr:nth-last-child(3):hover,.trackerconfig tr:nth-last-child(2):hover{background:none;box-shadow:none}
-.trackerconfig th{padding:5px 2px;background:none}
-.trackerconfig th:nth-child(3),.trackerconfig th:nth-child(7),.trackerconfig td:nth-child(3),.trackerconfig td:nth-child(7){padding-left:10px}
-.trackerconfig td{border-top:1px solid #212;border-bottom:1px solid #212;border-top:1px solid rgba(16,0,16,.5);border-bottom:1px solid rgba(16,0,16,.5)}
-.trackerconfig td:first-child{border-left:var(--border_hard)}
-.trackerconfig td:last-child{border-right:var(--border_hard)}
-.trackerconfig tr:nth-last-child(3) td,.trackerconfig .spacer.top td{padding:3px 0;font-size:0;line-height:0}
-.trackerconfig tr:nth-last-child(3) td{border-bottom:var(--border_hard);background:#2b1b2b}
-.trackerconfig tr:nth-last-child(4) td{background:linear-gradient(180deg,#434 1px,#323 1px,#2b1b2b)}
-.trackerconfig tr:nth-last-child(4) td{padding-top:7px;padding-bottom:0}
-.trackerconfig tr:nth-last-child(5) td{border-bottom:var(--border_hard);padding:3px 0;font-size:0;line-height:0}
-.trackerconfig tr:nth-last-child(5){display:none}
-.trackerconfig tr:hover td{border-top:1px solid transparent}
-.trackerconfig tr:nth-last-child(5){background:rgba(48,30,48,.8)}
-.trackerconfig tr:nth-last-child(6) td{border-bottom:var(--border_hard)}
-.trackerconfig tr:nth-last-child(5) td,.trackerconfig tr:nth-last-child(4) td,.trackerconfig tr:nth-last-child(3) td,.trackerconfig tr:nth-last-child(2) td{border-top:0}
-.trackerconfig .delete,.trackerconfig .reload{float:left}
-.trackerconfig .delete{margin-left:0;margin-right:7px}
-.trackerconfig .accept{margin-right:1px}
+#trackerconfig .spacer{display:none}
+#trackerconfig,#fileFilter table{margin-top:0;border-spacing:0;border-collapse:collapse}
+#trackerconfig tr:first-child,#fileFilter tr:first-child{background:linear-gradient(90deg,rgba(16,0,16,.6),rgba(16,0,16,.6)),linear-gradient(180deg,rgba(68,51,68,.8) 50%,rgba(28,0,28,.8) 50%)}
+#trackerconfig tr:nth-child(n+2),.createFilterString:nth-child(even){background:rgba(48,30,48,.8)}
+#trackerconfig tr:nth-child(2n+3),.createFilterString:nth-child(odd){background:rgba(16,0,16,.3)}
+#trackerconfig tr:nth-last-child(2) input:last-child,#configs tr:nth-last-child(2) input:last-child{margin-right:1px}
+#trackerconfig tr:nth-last-child(2) td,#fileFilter tr:nth-last-child(2) td{padding:9px 0 0;border-left:0;border-right:0}
+#trackerconfig tr:nth-child(2n+4){background:rgba(16,0,16,.5)}
+#trackerconfig tr:nth-last-child(2) td{background:none}
+#trackerconfig tr:nth-last-child(3) td,#trackerconfig .spacer.top td,#fileFilter tr:nth-last-child(3) td,#fileFilter .spacer.top td{padding:3px 0;font-size:0;line-height:0}
+#trackerconfig tr:nth-last-child(3) td{border-bottom:var(--border_hard);background:#2b1b2b}
+#trackerconfig tr:nth-last-child(4) td,#fileFilter tr:nth-last-child(4) td{background:linear-gradient(180deg,#434 1px,#323 1px,#2b1b2b)}
+#trackerconfig tr:nth-last-child(4) td{padding-top:7px;padding-bottom:7px;border-bottom:var(--border_hard)}
+#trackerconfig tr:nth-last-child(5) td{border-bottom:var(--border_hard);padding:3px 0;font-size:0;line-height:0}
+#trackerconfig tr:nth-last-child(5){display:none}
+#trackerconfig tr:nth-last-child(5){background:rgba(48,30,48,.8)}
+#trackerconfig tr:nth-last-child(6) td{border-bottom:var(--border_hard)}
+#trackerconfig tr:nth-last-child(5) td,#trackerconfig tr:nth-last-child(4) td,#trackerconfig tr:nth-last-child(3) td,#trackerconfig tr:nth-last-child(2) td{border-top:0}
+#trackerconfig tr:nth-child(n+2):hover,.createFilterString:hover{background:linear-gradient(180deg,#58165e,#4a0d56)}
+#trackerconfig tr:nth-last-child(2),#trackerconfig tr:nth-last-child(2):hover,.spacer.top:hover,#trackerconfig tr:nth-last-child(3):hover,#trackerconfig tr:nth-last-child(2):hover{background:none;box-shadow:none}
+#trackerconfig tr:hover td{border-top:1px solid transparent}
+#trackerconfig th,#fileFilter th{padding:5px 2px;background:none}
+#trackerconfig th:nth-child(3),#trackerconfig th:nth-child(7),#trackerconfig td:nth-child(3),#trackerconfig td:nth-child(7){padding-left:10px}
+#trackerconfig td,#fileFilter td{border-top:1px solid #212;border-bottom:1px solid #212;border-top:1px solid rgba(16,0,16,.5);border-bottom:1px solid rgba(16,0,16,.5)}
+#trackerconfig td:first-child,#fileFilter td:first-child{border-left:var(--border_hard)}
+#trackerconfig td:last-child,#fileFilter td:last-child{border-right:var(--border_hard)}
+#trackerconfig .delete,#trackerconfig .reload{float:left}
+#trackerconfig .add,#trackerconfig .accept{float:right}
+#trackerconfig .delete{margin-left:0;margin-right:7px}
+#trackerconfig .accept{margin:2px 1px 2px 8px}
+#trackerconfig .optbox,#fileFilter .optbox{margin:4px 6px}
 .trackerhome,.trackerannounce{width:260px}
 #addtracker input[type=radio]{margin:0}
 #addtracker input[type=text]{margin-left:0}
-#addtracker td,.trackerconfig tr:nth-last-child(2) td{border-bottom:0}
-#addtracker td:first-child b{width:22px;height:22px;display:inline-block;vertical-align:middle;font-size:0;background:var(--add) no-repeat center center/22px;mix-blend-mode:luminosity}
-#addtracker:hover td:first-child b,#addtracker:focus-within td:first-child b{mix-blend-mode:normal}
+#addtracker td,#trackerconfig tr:nth-last-child(2) td,#fileFilter tr:nth-last-child(2) td{border-bottom:0}
+#addtracker td:first-child b,#fileFilter td:first-child b{width:22px;height:22px;display:inline-block;vertical-align:middle;font-size:0;background:var(--add) no-repeat center center/22px;mix-blend-mode:luminosity}
+#addtracker:hover td:first-child b,#addtracker:focus-within td:first-child b,#addFileFilter:hover td:first-child b,#addFileFilter:focus-within td:first-child b{mix-blend-mode:normal}
 #torrentEdit tr:nth-child(even),#trackerselect tr:nth-child(even){background:rgba(12,0,12,.8)}
 #torrentEdit tr:nth-child(odd),#trackerselect tr:nth-child(odd){background:rgba(16,0,16,.5)}
 #torrentEdit tr:nth-child(n+2):hover td,#trackerselect tr:nth-child(n+2):hover td{background:linear-gradient(180deg,#58165e,#4a0d56)}
@@ -819,7 +825,7 @@ th .commentAuthorName{margin-right:-10px;padding-right:6px;font-size:90%}
 .lang_ru #configs input[name="nofilter_dataDir"],.lang_ru input[name="i2cpOpts"],.lang_ru input[name="nofilter_commentsName"]{width:calc(100% - 320px)}
 
 /* embed mode */
-#embed,#fullscreen{margin:-6px -4px -12px;padding:6px 9px 6px 10px;vertical-align:baseline;float:right;text-transform:none;-webkit-text-stroke:0;font-size:8.5pt;color:#757;border-left:1px solid #434;border-radius:0 3px 0 0;box-shadow:inset 0 0 0 1px #101;opacity:.9;background:rgba(17,0,17,.3);transition:ease opacity .15s;will-change:transform}
+#embed,#fullscreen{padding:8px 9px 6px 10px;position:absolute;top:1px;right:1px;bottom:1px;vertical-align:baseline;text-transform:none;-webkit-text-stroke:0;font-size:8.5pt;color:#757;border-left:1px solid #434;border-radius:0 3px 0 0;box-shadow:inset 0 0 0 1px #101;opacity:.9;background:rgba(17,0,17,.3);transition:ease opacity .15s;will-change:transform}
 #fullscreen{display:none}
 .iframed #embed{display:none}
 .iframed #fullscreen{display:inline-block}
@@ -961,6 +967,33 @@ body:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:last-child{border-
 .sortIcon:hover .descending{top:-2px;border-color:var(--hover) transparent transparent transparent}
 #torrentSort .ascending,th#torrentSort .descending{right:-11px}
 
+/* create torrent file filtering */
+.createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-weight:600;font-style:italic;border:var(--border_inner);box-shadow:var(--highlight_light);background:linear-gradient(180deg,#616,#414);transform: translateY(2px)}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-style:normal;box-shadow:var(--shadow_inset);background:url(/i2psnark/.res/icons/tick.svg) no-repeat 8px center/10px,linear-gradient(180deg,#313,#515)}
+#contentFilter{margin:0;width:80%;display:flex;flex-wrap:wrap;align-items:center}
+#contentFilter input[type=checkbox]{display:none}
+#fileFilter{margin:0 auto;display:block;margin-bottom:10px}
+.iframed #fileFilter{margin-top:-11px}
+#fileFilter .add{float:right}
+#fileFilter .tab_label::after{display:none}
+#fileFilter th,#fileFilter td{text-align:left}
+#fileFilter th{white-space:nowrap;border-bottom:0}
+#fileFilter th:last-child,#fileFilter td:last-child{width:1%;text-align:center}
+#fileFilter th,#fileFilter td{padding:2px 4px;border-top:var(--border)}
+#fileFilter th{padding:5px 4px}
+#fileFilter tr:not(:last-child).spacer td{padding:4px 0;font-size:0;border-bottom:var(--border)}
+#fileFilter input[type=submit]{margin:2px 6px}
+#fileFilter input.accept[type=submit] {float:right;margin-right:1px}
+#fileFilter .delete,#fileFilter .reload{margin:6px 12px 6px -3px;float:left}
+#fileFilter input.delete[type=submit]{margin-left:0}
+#fileFilter tr:last-child, #fileFilter tr.spacer{display:none}
+#fileFilter tr:nth-last-child(4) td{padding:7px 4px;border-bottom:var(--border_hard)}
+#fileFilter th:nth-child(n+4),#fileFilter td:nth-child(n+4){text-align:center}
+#addFileFilter input[type=text]{width:200px}
+form[action^="/i2psnark/configure"]{display:block}
+#createTorrentFilters{display:table-row}
+#createTorrentFilters td{padding:5px 8px 0}
+
 /* debug */
 hr.debug{display:none}
 .debuginfo,.debugConnection,.debugConnStat,.debugRequests{font-family:var(--monospaced);font-weight:600}
@@ -1042,8 +1075,8 @@ select{padding:5px 18px 5px 7px}
 
 @media (max-width:1199px){
 td.peerCount:empty::after{display:none}
-.lang_de .knownTracker a,.lang_de .trackerhome,.lang_de .trackerannounce,.lang_de .trackerconfig input[type=text],.lang_ru .knownTracker a,.lang_ru .trackerhome,.lang_ru .trackerannounce,.lang_ru .trackerconfig input[type=text]{width:180px;max-width:180px;min-width:0}
-.lang_de .trackerconfig input.trackername,.lang_ru .trackerconfig input.trackername{width:120px;max-width:120px;min-width:0}
+.lang_de .knownTracker a,.lang_de .trackerhome,.lang_de .trackerannounce,.lang_de #trackerconfig input[type=text],.lang_ru .knownTracker a,.lang_ru .trackerhome,.lang_ru .trackerannounce,.lang_ru #trackerconfig input[type=text]{width:180px;max-width:180px;min-width:0}
+.lang_de #trackerconfig input.trackername,.lang_ru #trackerconfig input.trackername{width:120px;max-width:120px;min-width:0}
 .tAction input[type=submit],#actionStopAll,#actionStartAll,#actionStopAll:hover,#actionStartAll:hover,#actionStopAll:focus,#actionStartAll:focus{padding:10px;background-size:auto 12px,100%}
 .tAction input[type=submit]:active,#actionStopAll:active,#actionStartAll:active{background-size:auto 10px,100%}
 #torrents .txd,#torrents.rateUp,.iframed #torrents .txd,.iframed #torrents .rateUp{padding:0;width:0;min-width:0;font-size:0}
@@ -1172,7 +1205,7 @@ th.peerCount img{display:none}
 .details{padding-right:0;width:1%;text-align:right}
 .tName a{max-width:240px}
 .txd,.rateUp,.debuginfo,.alwaysShow{display:none}
-.trackerconfig a,.trackerconfig input[type=text],#addtracker input[type=text]{max-width:110px;min-width:0;box-sizing:border-box}
+#trackerconfig a,#trackerconfig input[type=text],#addtracker input[type=text]{max-width:110px;min-width:0;box-sizing:border-box}
 #torrentInfo .infohash::before{margin-top:-1px;width:14px;height:14px}
 #torrentInfo .infohash{padding:3px 0 2px 5px;max-width:90px;font-size:8.5pt}
 #torrentInfo{position:relative;z-index:10}
@@ -1251,8 +1284,8 @@ th{font-size:9pt;background:#101}
 @media (min-width:1200px){
 input[type=text],input.r,select{min-width:132px}
 td.details img,.dirInfo td:first-child img:not(.thumb){width:18px;height:18px}
-.trackerconfig input.trackername{width:180px;max-width:180px}
-.trackerconfig th:last-child,.trackerconfig td:last-child{padding-left:50px}
+#trackerconfig input.trackername{width:180px;max-width:180px}
+#trackerconfig th:last-child,#trackerconfig td:last-child{padding-left:50px}
 .trackerhome,.trackerannounce,.knownTracker a{width:300px;max-width:300px}
 .details img[src$="rateme.svg"]{margin-top:-3px;width:10px;height:10px}
 }
@@ -1264,7 +1297,7 @@ td.peerCount:empty::after{margin:0 -2px;width:8px;height:8px;display:inline-bloc
 
 @media (min-width:1500px){
 body,button,code,input,input[type=reset],input[type=submit],input.r,select,select option,textarea,td,th,.configPanel,.configPanel td,a.control,.snarkNewTorrent,.snarkNewTorrent td,#torrents a:not(#debugMode){font-size:10pt}
-label,.configOption b,.trackerconfig th,#bwAllocation{font-size:9pt}
+label,.configOption b,#trackerconfig th,#fileFilter th,#bwAllocation{font-size:9pt}
 textarea,#commentInfo textarea{font-size:9.5pt}
 td.status img{height:24px}
 td.details img,.dirInfo td:first-child img:not(.thumb){margin-top:-2px;margin-bottom:-2px;width:22px;height:22px}

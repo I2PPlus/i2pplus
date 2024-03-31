@@ -583,7 +583,6 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         msg.setMessageId(_message.getReplyToken());
         // Randomize for a little protection against clock-skew fingerprinting.
         // But the "arrival" isn't used for anything, right?
-        // TODO just set to 0?
         // TODO we have no session to garlic wrap this with, needs new message
         msg.setArrival(getContext().clock().now() - getContext().random().nextInt(3*1000));
         // may be null
@@ -639,7 +638,12 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             }
             return;
         }
-        boolean isEstab = getContext().commSystem().isEstablished(toPeer);
+        DatabaseEntry entry = _message.getEntry();
+        int type = entry.getType();
+        // only send direct for RI replies or non-tunnel
+        boolean isEstab = (type == DatabaseEntry.KEY_TYPE_ROUTERINFO || replyTunnel == null) &&
+                          getContext().commSystem().isEstablished(toPeer);
+/*
         if (!isEstab && replyTunnel != null) {
             DatabaseEntry entry = _message.getEntry();
             int type = entry.getType();
@@ -688,6 +692,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 }
             }
         }
+*/
         if (isEstab && !_facade.isClientDb()) {
             I2NPMessage out1 = msg;
             I2NPMessage out2 = msg2;

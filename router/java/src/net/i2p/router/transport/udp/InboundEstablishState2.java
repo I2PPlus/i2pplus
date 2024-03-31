@@ -32,6 +32,7 @@ import net.i2p.router.transport.TransportImpl;
 import static net.i2p.router.transport.udp.SSU2Util.*;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer;
 import net.i2p.util.VersionComparator;
 
 /**
@@ -320,7 +321,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         // because we have his ikey and we verified he's the owner of the RI
 
         Hash h = _receivedUnconfirmedIdentity.calculateHash();
-        boolean isBanned = _context.banlist().isBanlistedForever(h);
+        boolean isBanned = _context.banlist().isBanlisted(h);
         if (isBanned) {
             // validate sig to prevent spoofing
             if (ri.verifySignature())
@@ -337,7 +338,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             _context.banlist().banlistRouter(h, " <b>➜</b> Wrong IP address in RouterInfo (SSU2)",
                                              null, null, _context.clock().now() + 4*60*60*1000);
             _context.commSystem().forceDisconnect(h);
-            if (_log.shouldWarn())
+            if (_log.shouldWarn() && !isBanned)
                 _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Wrong IP address in RouterInfo (SSU)");
             if (ri.verifySignature())
@@ -347,6 +348,26 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
         if (!"2".equals(ra.getOption("v")))
             throw new RIException("BAD SSU2 v", REASON_VERSION);
+
+        String cap = ri.getCapabilities();
+        String bw = ri.getBandwidthTier();
+        boolean reachable = cap != null && cap.contains("R");
+        boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") ||
+                          bw.equals("L") || bw.equals("M") || bw.equals("N");
+        String version = ri.getVersion();
+        boolean isOld = VersionComparator.comp(version, "0.9.60") < 0;
+
+        if (!reachable && isSlow && isOld) {
+            _context.banlist().banlistRouter(h, "<b>➜</b> Old and slow (" + version + " / " + bw + "U)", null,
+                                             null, _context.clock().now() + 4*60*60*1000);
+            if (ri.verifySignature())
+                _context.blocklist().add(_aliceIP);
+            if (_log.shouldWarn() && !isBanned)
+                _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                          " -> Old and slow (" + version + " / " + bw + "U)");
+            _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            throw new RIException("Old and slow: " + h, REASON_BANNED);
+        }
 
         String smtu = ra.getOption(UDPAddress.PROP_MTU);
         int mtu = 0;
@@ -1068,4 +1089,13 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         @Override
         public String getMessage() { return "Code " + rsn + ": " + super.getMessage(); }
     }
+
+    private class Disconnector implements SimpleTimer.TimedEvent {
+        private final Hash h;
+        public Disconnector(Hash h) { this.h = h; }
+        public void timeReached() {
+            _context.commSystem().forceDisconnect(h);
+        }
+    }
+
 }

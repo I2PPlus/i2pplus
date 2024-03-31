@@ -654,14 +654,14 @@ class SOCKS5Server extends SOCKSServer {
         pout.flush();
         // eat the response and headers
         buf.setLength(0);
-        I2PTunnelHTTPServer.readHeaders(destSock, null, buf, _skipHeaders, _context);
+        I2PTunnelHTTPServer.readHeaders(destSock, null, buf, _skipHeaders, _context, 30*1000);
         String[] f = DataHelper.split(buf.toString(), " ", 2);
         if (f.length < 2)
-            throw new IOException("Bad response from proxy");
+            throw new IOException("Bad response from SOCKS5 proxy");
         if (!f[1].startsWith("200 "))
-            throw new IOException("Error from proxy: " + f[1]);
+            throw new IOException("Error from SOCKS5 proxy: " + f[1]);
         if (_log.shouldDebug())
-            _log.debug("Response from proxy: " + buf);
+            _log.debug("Response from SOCKS5 proxy: " + buf);
     }
 
     // This isn't really the right place for this, we can't stop the tunnel once it starts.

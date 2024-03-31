@@ -228,9 +228,13 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
             case DeliveryInstructions.DELIVERY_MODE_LOCAL:
                 if (_log.shouldDebug())
                     _log.debug("Local delivery instructions for clove: " + data.getClass().getSimpleName());
-                if (type == GarlicMessage.MESSAGE_TYPE) {
+                switch (type) {
+                  case GarlicMessage.MESSAGE_TYPE:
                     _receiver.receive((GarlicMessage)data);
-                } else if (type == DatabaseStoreMessage.MESSAGE_TYPE) {
+                    break;
+
+                    case DatabaseStoreMessage.MESSAGE_TYPE:
+
                     // Treat db store explicitly here (not in HandleFloodfillDatabaseStoreMessageJob),
                     // since we don't want to republish (or flood)
                     // unnecessarily. Reply tokens ignored.
@@ -284,7 +288,10 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                             _log.info("Received DBStoreMessage from " +  _clientNickname + " tunnel for RouterInfo [" + dsm.getKey() + "]");
                         _context.inNetMessagePool().add(dsm, null, null, _msgIDBloomXor);
                     }
-                } else if (_client != null && type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
+                    break;
+
+                    case DatabaseSearchReplyMessage.MESSAGE_TYPE:
+
                     // DSRMs show up here now that replies are encrypted
                     // TODO: Strip in IterativeLookupJob etc. instead, depending on
                     // LS or RI and client or expl., so that we can safely follow references
@@ -303,64 +310,78 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                      }
                    ****/
                     _context.inNetMessagePool().add(orig, null, null, _msgIDBloomXor);
-                } else if (type == DataMessage.MESSAGE_TYPE) {
+                    break;
+
+                    case DataMessage.MESSAGE_TYPE:
+
                     // a data message targeting the local router is how we send load tests
                     // (real data messages target destinations)
                     _context.statManager().addRateData("tunnel.handleLoadClove", 1);
                     data = null;
                     //_context.inNetMessagePool().add(data, null, null);
-                } else if (_client != null && type != DeliveryStatusMessage.MESSAGE_TYPE &&
-                           type != OutboundTunnelBuildReplyMessage.MESSAGE_TYPE) {
-                    // drop it, since the data we receive shouldn't include other stuff,
-                    // as that might open an attack vector
-                    _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1, data.getType());
-                    _log.error("Dropping DANGEROUS message (" + data + ") down a tunnel for client [" + _client.toString().substring(0,12) +
-                               "...]", new Exception("cause"));
-                } else {
-                    _context.inNetMessagePool().add(data, null, null, _msgIDBloomXor);
-                }
+                    break;
+
+                  case DeliveryStatusMessage.MESSAGE_TYPE:
+                  case OutboundTunnelBuildReplyMessage.MESSAGE_TYPE:
+                      _context.inNetMessagePool().add(data, null, null, _msgIDBloomXor);
+                      break;
+
+                  default:
+                        // drop it, since the data we receive shouldn't include other stuff,
+                        // as that might open an attack vector
+                        if (_client != null) {
+                            _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1, data.getType());
+                            _log.error("Dropping DANGEROUS message (" + data + ") down a tunnel for client [" +
+                                       _client.toString().substring(0,12) + "...]", new Exception("cause"));
+                        } else {
+                            _log.error("Dropped dangerous message received down an expl. tunnel "
+                                       + data, new Exception("cause"));
+                        }
+                        break;
+
+                } // switch (type)
                 return;
 
-            case DeliveryInstructions.DELIVERY_MODE_DESTINATION:
-                Hash to = instructions.getDestination();
-                // Can we route UnknownI2NPMessages to a destination too?
-                if (type != DataMessage.MESSAGE_TYPE) {
-                    if (_log.shouldError())
-                        _log.error("Cannot send a " + data.getClass().getSimpleName() + " to a destination");
-                } else if (_client != null && _client.equals(to)) {
-                    if (_log.shouldDebug())
-                        _log.debug("Data message came down a tunnel for client [" + _client.toString().substring(0,12) + "...]");
-                    DataMessage dm = (DataMessage)data;
-                    Payload payload = new Payload();
-                    payload.setEncryptedData(dm.getData());
-                    ClientMessage m = new ClientMessage(_client, payload);
-                    _context.clientManager().messageReceived(m);
-                } else if (_client != null) {
-                    // Shared tunnel?
-                    TunnelPoolSettings tgt = _context.tunnelManager().getInboundSettings(to);
-                    if (tgt != null && _client.equals(tgt.getAliasOf())) {
-                        // same as above, just different log
+                case DeliveryInstructions.DELIVERY_MODE_DESTINATION:
+                    Hash to = instructions.getDestination();
+                    // Can we route UnknownI2NPMessages to a destination too?
+                    if (type != DataMessage.MESSAGE_TYPE) {
+                        if (_log.shouldError())
+                            _log.error("Cannot send a " + data.getClass().getSimpleName() + " to a destination");
+                    } else if (_client != null && _client.equals(to)) {
                         if (_log.shouldDebug())
-                            _log.debug("Data message came down a tunnel for client ["+ _client.toString().substring(0,12) +
-                                       "...] targeting Shared Client destination [" + to.toString().substring(0,12) + "]");
+                            _log.debug("Data message came down a tunnel for client [" + _client.toString().substring(0,12) + "...]");
                         DataMessage dm = (DataMessage)data;
                         Payload payload = new Payload();
                         payload.setEncryptedData(dm.getData());
-                        ClientMessage m = new ClientMessage(to, payload);
+                        ClientMessage m = new ClientMessage(_client, payload);
                         _context.clientManager().messageReceived(m);
+                    } else if (_client != null) {
+                        // Shared tunnel?
+                        TunnelPoolSettings tgt = _context.tunnelManager().getInboundSettings(to);
+                        if (tgt != null && _client.equals(tgt.getAliasOf())) {
+                            // same as above, just different log
+                            if (_log.shouldDebug())
+                                _log.debug("Data message came down a tunnel for client ["+ _client.toString().substring(0,12) +
+                                           "...] targeting Shared Client destination [" + to.toString().substring(0,12) + "]");
+                            DataMessage dm = (DataMessage)data;
+                            Payload payload = new Payload();
+                            payload.setEncryptedData(dm.getData());
+                            ClientMessage m = new ClientMessage(to, payload);
+                            _context.clientManager().messageReceived(m);
+                        } else {
+                            if (_log.shouldError())
+                                _log.error("Data message came down a tunnel for client [" + _client.toString().substring(0,12) +
+                                           "...] but targeted [" + to.toString().substring(0,12) + "]");
+                        }
                     } else {
                         if (_log.shouldError())
-                            _log.error("Data message came down a tunnel for client [" + _client.toString().substring(0,12) +
-                                       "...] but targeted [" + to.toString().substring(0,12) + "]");
+                            _log.error("Data message came down an Exploratory tunnel targeting destination [" + to.toString().substring(0,12) + "]");
                     }
-                } else {
-                    if (_log.shouldError())
-                        _log.error("Data message came down an Exploratory tunnel targeting destination [" + to.toString().substring(0,12) + "]");
-                }
-                return;
+                    return;
 
-            case DeliveryInstructions.DELIVERY_MODE_ROUTER: // fall through
-            case DeliveryInstructions.DELIVERY_MODE_TUNNEL:
+                case DeliveryInstructions.DELIVERY_MODE_ROUTER: // fall through
+                case DeliveryInstructions.DELIVERY_MODE_TUNNEL:
                 // Targeted messages are usually dropped, but it is safe to
                 // allow distribute() to evaluate the message.
                 if (_log.shouldInfo())

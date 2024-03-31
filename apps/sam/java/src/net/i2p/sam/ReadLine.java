@@ -19,7 +19,7 @@ class ReadLine {
     private static final int MAX_LINE_LENGTH = 8*1024;
 
     /**
-     *  Read a line teriminated by newline, with a total read timeout.
+     *  Read a line terminated by newline, with a total read timeout.
      *
      *  Warning - strips \n but not \r
      *  Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
