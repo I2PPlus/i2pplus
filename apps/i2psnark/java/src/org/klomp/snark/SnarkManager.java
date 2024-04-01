@@ -278,11 +278,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String DEFAULT_TORRENT_CREATE_FILTERS[] = {
        ".backup files", ".backup", "ends_with",
        ".bak files", ".bak", "ends_with",
+       ".nfo files", ".nfo", "ends_with",
        "DO_NOT_MIRROR.exe", "DO_NOT_MIRROR.exe", "contains",
-       "hidden unix files", ".", "starts_with",
+       "Hidden unix files", ".", "starts_with",
        "macOS folder metadata", "DS_Store", "contains",
-       "NFO Files", ".nfo", "ends_with",
-       "Synology NAS metadata", "@eaDir", "contains"
+       "Synology NAS metadata", "@eaDir", "contains",
+       "Temporary backup files", "~", "ends_with"
     };
 
     static {
@@ -3346,6 +3347,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 _torrentCreateFilterMap.put(name, new TorrentCreateFilter(name, data[0], "contains", isDefault));
             }
         }
+        saveTorrentCreateFilterMap();
     }
 
     /** @since 0.9.62+ */
@@ -3376,13 +3378,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
 
         catch (IOException ex) {
-            _log.error(_t("Unable to load torrent filter config: ") + ex);
-            addMessage(_t("Unable to load torrent filter config: ") + ex);
+            _log.error(_t("Unable to load torrent create file filter config: ") + ex);
+            addMessage(_t("Unable to load torrent create file filter config: ") + ex.getMessage());
         }
 
         catch (ClassNotFoundException ex) {
-            _log.error(_t("Unable to load torrent filter config: ") + ex);
-            addMessage(_t("Unable to load torrent filter config: ") + ex);
+            _log.error(_t("Unable to load torrent create file filter config: ") + ex);
+            addMessage(_t("Unable to load torrent create file filter config: ") + ex.getMessage());
         }
     }
 
