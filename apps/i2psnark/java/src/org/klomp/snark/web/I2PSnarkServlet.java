@@ -3401,11 +3401,13 @@ public class I2PSnarkServlet extends BasicServlet {
            String name = f.name;
            String nameUnderscore = name.replace(" ", "_");
            String pattern = f.filterPattern;
+           String type = f.filterType;
+           String filterTypeLabel = type.replace("_", " ");
            boolean isDefault = f.isDefault;
            buf.append("<input type=checkbox id=").append(nameUnderscore).append(" name=filters")
               .append(" value=\"").append(name).append("\"").append(isDefault ? " checked" : "").append(" hidden>")
-              .append("<label for=\"").append(nameUnderscore).append("\" class=createFilterToggle title=\"Filter pattern: ")
-              .append(pattern).append("\">").append(name).append("</label>");
+              .append("<label for=\"").append(nameUnderscore).append("\" class=createFilterToggle title=\"Filter pattern: (")
+              .append(filterTypeLabel).append(") ").append(pattern).append("\">").append(name).append("</label>");
         }
 
         buf.append("</select></td></tr>")
@@ -3848,7 +3850,6 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(filterType.equals("contains") ? " checked" : "").append("></label></td>")
                .append("<td>").append("<label class=filterEndsWith><input type=radio class=optbox value=\"ends_with\" name=\"filterType_").append(nameUnderscore).append("\"")
                .append(filterType.equals("ends_with") ? " checked" : "").append("></label></td>")
-
                .append("<td><input type=checkbox class=optbox name=\"defaultEnabled_").append(f.name).append("\"");
             if (f.isDefault) {
                 buf.append(" checked=checked");
