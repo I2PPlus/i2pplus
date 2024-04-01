@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.Collator;
@@ -274,12 +276,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }));
 
     private static final String DEFAULT_TORRENT_CREATE_FILTERS[] = {
-       ".bak files", ".bak",
-       ".backup files", ".backup",
-       "macOS folder metadata", "DS_Store",
-       "NFO Files", ".nfo",
-       "DO_NOT_MIRROR.exe", "DO_NOT_MIRROR.exe",
-       "Synology NAS metadata", "@eaDir"
+       ".backup files", ".backup", "ends_with",
+       ".bak files", ".bak", "ends_with",
+       "DO_NOT_MIRROR.exe", "DO_NOT_MIRROR.exe", "contains",
+       "hidden unix files", ".", "starts_with",
+       "macOS folder metadata", "DS_Store", "contains",
+       "NFO Files", ".nfo", "ends_with",
+       "Synology NAS metadata", "@eaDir", "contains"
     };
 
     static {
@@ -296,8 +299,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /** comma delimited list of name=announceURL=baseURL for the trackers to be displayed */
     public static final String PROP_TRACKERS = "i2psnark.trackers";
 
-    /** comma delimited list of name=filterPattern for torrent create filters */
+    /**
+     * comma delimited list of name=filterPattern for torrent create filters.
+     * Deprecated. If detected, filters will be converted to new storage and then this config will be removed.
+     */
     public static final String PROP_TORRENT_CREATE_FILTERS = "i2psnark.torrent_create_filters";
+
+    /** filename for serialized torrent filters config */
+    public static final String PROP_TORRENT_FILTERS_CONFIG = "filters.conf";
 
     /**
      *  For embedded.
@@ -331,15 +340,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         DEFAULT_AUTO_START = true;
         String cfile = ctxName + CONFIG_FILE_SUFFIX;
         File configFile = new File(cfile);
-        if (!configFile.isAbsolute())
-            configFile = new File(_context.getConfigDir(), cfile);
+        if (!configFile.isAbsolute()) {configFile = new File(_context.getConfigDir(), cfile);}
         _configDir = migrateConfig(configFile);
         _configFile = new File(_configDir, CONFIG_FILE);
         _trackerMap = new ConcurrentHashMap<String, Tracker>(4);
-        _torrentCreateFilterMap = new ConcurrentHashMap<String, TorrentCreateFilter>(2);
+        _torrentCreateFilterMap = new ConcurrentHashMap<String, TorrentCreateFilter>(3);
         loadConfig(null);
-        if (!ctx.isRouterContext())
-            Runtime.getRuntime().addShutdownHook(new Thread(new TempDeleter(_util.getTempDir()), "Snark Temp Dir Deleter"));
+        if (!ctx.isRouterContext()) {Runtime.getRuntime().addShutdownHook(new Thread(new TempDeleter(_util.getTempDir()), "Snark Temp Dir Deleter"));}
     }
 
     /** Caller _must_ call loadConfig(file) before this if setting new values
@@ -3302,14 +3309,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return _config.containsKey(PROP_TRACKERS);
     }
 
-    /**
-     *  Has the default torrent create filter list been modified?
-     *  @since 0.9.62+
-     */
-    public boolean hasModifiedTorrentCreateFilters() {
-        return _config.containsKey(PROP_TORRENT_CREATE_FILTERS);
-    }
-
     /** @since 0.9 */
     private void initTrackerMap() {
         String trackers = _config.getProperty(PROP_TRACKERS);
@@ -3331,24 +3330,59 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
+
+    /** @since 0.9.62+ */
+    private void convertFiltersToNewConfig() {
+        String torrentCreateFilters = _config.getProperty(PROP_TORRENT_CREATE_FILTERS);
+        if ( (torrentCreateFilters == null) || (torrentCreateFilters.trim().length() <= 1) )
+            return;
+        String[] toks = DataHelper.split(torrentCreateFilters, ",");
+        for (int i = 0; i < toks.length; i += 2) {
+            String name = toks[i].trim().replace("&#44;", ",");
+            String filterPattern = toks[i+1].trim().replace("&#44;", ",");
+            if ( (name.length() > 0) && (filterPattern.length() > 0) ) {
+                String data[] = DataHelper.split(filterPattern, "=", 2);
+                boolean isDefault = data.length > 1 ? true : false;
+                _torrentCreateFilterMap.put(name, new TorrentCreateFilter(name, data[0], "contains", isDefault));
+            }
+        }
+    }
+
     /** @since 0.9.62+ */
     private void initTorrentCreateFilterMap() {
         String torrentCreateFilters = _config.getProperty(PROP_TORRENT_CREATE_FILTERS);
-        if ( (torrentCreateFilters == null) || (torrentCreateFilters.trim().length() <= 0) )
-            torrentCreateFilters = _context.getProperty(PROP_TORRENT_CREATE_FILTERS);
-        if ( (torrentCreateFilters == null) || (torrentCreateFilters.trim().length() <= 0) ) {
+        if (!( (torrentCreateFilters == null) || (torrentCreateFilters.trim().length() <= 0) )) {
+            convertFiltersToNewConfig();
+            _config.remove(PROP_TORRENT_CREATE_FILTERS);
+            saveConfig();
+            return;
+        }
+
+        File f = new File(_configDir + "/" + PROP_TORRENT_FILTERS_CONFIG);
+        if (!f.exists()) {
             setDefaultTorrentCreateFilterMap(true);
-        } else {
-            String[] toks = DataHelper.split(torrentCreateFilters, ",");
-            for (int i = 0; i < toks.length; i += 2) {
-                String name = toks[i].trim().replace("&#44;", ",");
-                String filterPattern = toks[i+1].trim().replace("&#44;", ",");
-                if ( (name.length() > 0) && (filterPattern.length() > 0) ) {
-                    String data[] = DataHelper.split(filterPattern, "=", 2);
-                    boolean isDefault = data.length > 1 ? true : false;
-                    _torrentCreateFilterMap.put(name, new TorrentCreateFilter(name, data[0], isDefault));
-                }
+            return;
+        }
+
+        try {
+            FileInputStream file = new FileInputStream(_configDir + "/" + PROP_TORRENT_FILTERS_CONFIG);
+            ObjectInputStream in = new ObjectInputStream(file);
+            Map<String, TorrentCreateFilter> filterMap = (Map)in.readObject();
+            for (Map.Entry<String, TorrentCreateFilter> entry : filterMap.entrySet()) {
+                _torrentCreateFilterMap.put(entry.getKey(), entry.getValue());
             }
+            in.close();
+            file.close();
+        }
+
+        catch (IOException ex) {
+            _log.error(_t("Unable to load torrent filter config: ") + ex);
+            addMessage(_t("Unable to load torrent filter config: ") + ex);
+        }
+
+        catch (ClassNotFoundException ex) {
+            _log.error(_t("Unable to load torrent filter config: ") + ex);
+            addMessage(_t("Unable to load torrent filter config: ") + ex);
         }
     }
 
@@ -3381,13 +3415,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /** @since 0.9.62+ */
     private void setDefaultTorrentCreateFilterMap(boolean save) {
         _torrentCreateFilterMap.clear();
-        for (int i = 0; i < DEFAULT_TORRENT_CREATE_FILTERS.length; i += 2) {
+        for (int i = 0; i < DEFAULT_TORRENT_CREATE_FILTERS.length; i += 3) {
             String name = DEFAULT_TORRENT_CREATE_FILTERS[i];
             String filterPattern = DEFAULT_TORRENT_CREATE_FILTERS[i+1];
-            _torrentCreateFilterMap.put(name, new TorrentCreateFilter(name, filterPattern, false));
+            String filterType = DEFAULT_TORRENT_CREATE_FILTERS[i+2];
+            _torrentCreateFilterMap.put(name, new TorrentCreateFilter(name, filterPattern, filterType, false));
         }
-        if (save && _config.remove(PROP_TORRENT_CREATE_FILTERS) != null) {
-            saveConfig();
+        if (save) {
+            saveTorrentCreateFilterMap();
         }
     }
 
@@ -3411,20 +3446,18 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /** @since 0.9.62+ */
     public void saveTorrentCreateFilterMap() {
-        StringBuilder buf = new StringBuilder(2048);
-        boolean comma = false;
-        for (Map.Entry<String, TorrentCreateFilter> e : _torrentCreateFilterMap.entrySet()) {
-            if (comma)
-                buf.append(',');
-            else
-                comma = true;
-            TorrentCreateFilter f = e.getValue();
-            buf.append(e.getKey().replace(",", "&#44;")).append(',').append(f.filterPattern.replace(",", "&#44;"));
-            if (f.isDefault)
-                buf.append('=').append("true");
+        try {
+            FileOutputStream file = new FileOutputStream(_configDir + "/" + PROP_TORRENT_FILTERS_CONFIG);
+            ObjectOutputStream out = new ObjectOutputStream(file);
+            out.writeObject(_torrentCreateFilterMap);
+            out.close();
+            file.close();
         }
-        _config.setProperty(PROP_TORRENT_CREATE_FILTERS, buf.toString());
-        saveConfig();
+
+        catch (IOException ex) {
+            _log.error("[I2PSnark] " + _t("Unable to save torrent create file filter config: ") + ex);
+            addMessage(_t("Unable to save torrent create file filter config: ") + ex.getMessage());
+        }
     }
 
     /**
