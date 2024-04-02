@@ -4,19 +4,23 @@
  */
 package org.klomp.snark;
 
+import java.io.Serializable;
+
 /**
  * A structure for torrent creation filters
  * @since 0.9.62+
  */
-public class TorrentCreateFilter {
+public class TorrentCreateFilter implements java.io.Serializable {
 
     public final String name;
     public final String filterPattern;
+    public final String filterType;
     public final boolean isDefault;
 
-    public TorrentCreateFilter(String name, String filterPattern, boolean isDefault) {
+    public TorrentCreateFilter(String name, String filterPattern, String filterType, boolean isDefault) {
         this.name = name;
         this.filterPattern = filterPattern;
+        this.filterType = filterType;
         this.isDefault = isDefault;
     }
 }

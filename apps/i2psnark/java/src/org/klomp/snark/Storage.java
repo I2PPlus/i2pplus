@@ -33,16 +33,17 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 import gnu.getopt.Getopt;
 
@@ -277,31 +278,31 @@ public class Storage implements Closeable {
     int max = _util.getMaxFilesPerTorrent();
 
     for (int i = 0; i < filters.size(); i++) {
-        String filterPattern = filters.get(i);
+        String pattern = filters.get(i);
 
-        if (f.getPath().contains(filterPattern)) {
+        if (Pattern.matches(pattern, f.getPath())) {
             return;
         }
     }
 
     if (!f.isDirectory()) {
-        if (l.size() >= max)
+        if (l.size() >= max) {
             throw new IOException(_util.getString("Too many files in \"{0}\" ({1})!", metainfo.getName(), l.size()) +
                                   " - limit is " + max + ", zip them or set " +
                                   SnarkManager.PROP_MAX_FILES_PER_TORRENT + '=' + l.size() + " in " +
                                   SnarkManager.CONFIG_FILE + " and restart");
+        }
         l.add(f);
     } else {
         File[] files = f.listFiles();
-        if (files == null)
-          {
-            if (_log.shouldWarn())
-                _log.warn("WARNING: Skipping '" + f
-                        + "' not a normal file.");
+        if (files == null) {
+            if (_log.shouldWarn()) {
+                _log.warn("WARNING: Skipping '" + f + "' not a normal file.");
+            }
             return;
-          }
+        }
         for (int i = 0; i < files.length; i++)
-          addFiles(l, files[i], filters);
+            addFiles(l, files[i], filters);
       }
   }
 
