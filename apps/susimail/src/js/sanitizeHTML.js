@@ -1,4 +1,8 @@
-function remove100PercentHeight() {
+/* SusiMail sanitizeHTML.js by dr|z3d */
+/* Fix various display issues with iframed html messages */
+/* License: AGPL3 or later */
+
+function sanitizeHTML() {
   var elements = document.querySelectorAll("*");
   elements.forEach(function(element) {
     var style = element.style.cssText;
@@ -24,4 +28,4 @@ function remove100PercentHeight() {
   document.documentElement.style.background = "#fff";
 }
 
-document.addEventListener("DOMContentLoaded", remove100PercentHeight);
+document.addEventListener("DOMContentLoaded", sanitizeHTML);

@@ -2182,7 +2182,7 @@ public class WebMail extends HttpServlet
             // img-src allows for cid: urls that were fixed up by RegexOutputStream
             response.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' 'unsafe-inline'; " +
                                "script-src " + me + "/js/iframeResizer/iframeResizer.contentWindow.js " + me + "/susimail/js/htmlView.js " +
-                               me + "/susimail/js/remove100PercentHeight.js 'nonce-" + cspNonce + "'; " +
+                               me + "/susimail/js/sanitizeHTML.js 'nonce-" + cspNonce + "'; " +
                                "form-action 'none'; frame-ancestors " + me + myself + "; object-src 'none'; media-src 'none'; img-src " +
                                me + myself + " data:; font-src 'self'; frame-src 'none'; worker-src 'none'");
             // character encoding will be set in sendAttachment()
@@ -2756,7 +2756,7 @@ public class WebMail extends HttpServlet
                         // inject the js into the iframe
                         String contentWindowJs =
                             "\n<span id=endOfPage data-iframe-height></span>\n" +
-                            "<script src=/susimail/js/remove100PercentHeight.js></script>\n" + 
+                            "<script src=/susimail/js/sanitizeHTML.js></script>\n" + 
                             "<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n"; 
                         out = new RegexOutputStream(out, "</body>", contentWindowJs + "</body>", contentWindowJs);
                         // convert cid: urls to /susimail/?cid= urls
