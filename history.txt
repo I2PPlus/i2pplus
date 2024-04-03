@@ -1,5 +1,10 @@
+
+
 2024-04-03 dr|z3d
- * SusiMail: merge zzz's html mail viewer code, enhance presentation
+ * SusiMail:
+   - Merge zzz's html mail viewer code, enhance presentation
+   - Fix various potential display issues with html messages,
+     swapout broken remote images for a blocked image icon
 
 2024-03-03 dr|z3d
  * I2PSnark: Activate snex's create torrent filtering
