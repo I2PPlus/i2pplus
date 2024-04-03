@@ -31,5 +31,5 @@ function clearNotify() {
   notify.style.display = "none";
   notify.remove();
   autorefresh.remove();
-  window.location.reload(true);
+  //window.location.reload(true);
 }
