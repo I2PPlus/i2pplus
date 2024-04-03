@@ -16,7 +16,7 @@ import net.i2p.util.Log;
  * @since 0.9.62
  */
 public class RegexOutputStream extends FilterOutputStream {
-    
+
     private final String match, repl;
     /** parse in progress */
     private final StringBuilder buf;
@@ -40,11 +40,11 @@ public class RegexOutputStream extends FilterOutputStream {
         repl = replace;
         noMatch = onNoMatch;
         buf = new StringBuilder(64);
-	_log = I2PAppContext.getGlobalContext().logManager().getLog(RegexOutputStream.class);
+        _log = I2PAppContext.getGlobalContext().logManager().getLog(RegexOutputStream.class);
         if (_log.shouldDebug())
             _log.debug("New regex replace '" + match + "' with '" + repl + "'");
     }
-    
+
     @Override
     public void write(int val) throws IOException {
         char c = (char) val;
@@ -133,13 +133,9 @@ public class RegexOutputStream extends FilterOutputStream {
         super.close();
     }
 
-/****
-*/
     public static void main(String[] args) throws Exception {
         OutputStream out = new RegexOutputStream(System.out, args[0], args[1], null);
         net.i2p.data.DataHelper.copy(System.in, out);
         out.flush();
     }
-/*
-****/
 }
