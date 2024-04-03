@@ -113,15 +113,14 @@ input[type="file"]{border:0;padding:0}
 input[type="file"]:hover{color:#652787;color:var(--hover)}
 input.new_upload{float:right}
 input{margin:3px;padding:2px 2px 3px;font:700 9pt var(--bodyfont);color:#4e47bf;text-align:left;border:var(--border_inner)}
-input[type=submit],input.cancel,#settings,.fakebutton,#expand,#collapse{margin:4px 5px;padding:5px 8px;font:700 9pt var(--bodyfont);text-align:center;color:var(--a);border:var(--border_btn);border-radius:1px;box-shadow:var(--highlight),inset 0 0 2px 0 #559;background:var(--btn)}
+input[type=submit],input.cancel,#settings,.fakebutton,#expand,#collapse,#fakeHTMLToggleButton{margin:4px 5px;padding:5px 8px;font:700 9pt var(--bodyfont);text-align:center;color:var(--a);border:var(--border_btn);border-radius:1px;box-shadow:var(--highlight),inset 0 0 2px 0 #559;background:var(--btn)}
 .fakebutton{padding-left:27px;line-height:1.3}
-#collapse,#expand{margin:0 8px;vertical-align:text-bottom}
+#collapse,#expand,#fakeHTMLToggleButton{margin:0 8px;vertical-align:text-bottom}
+#fakeHTMLToggleButton{margin-left:-3px}
 input[type=text],input[type=password],textarea{padding:6px 8px}
 #dologin input:disabled,#dologin input:disabled:hover,#dologin input:disabled:active{margin:0;padding-top:3px;text-align:left;color:#9b9ebf;border:0;box-shadow:none;background:none;cursor:default}
 input[name="user"],input[name="pass"]{padding-left:26px;border:1px solid #322e6b;background:#000;background-blend-mode:luminosity}
 input[name="user"]:focus,input[name="pass"]:focus,input[type=text]:focus,textarea:focus{color:var(--ink)}
-#dologin input[name="user"]{background:#000 var(--user) no-repeat 6px center/14px}
-#dologin input[name="pass"]{background:#000 var(--key) no-repeat 6px center/14px}
 input[name="user"]:focus,input[name="pass"]:focus{background-blend-mode:normal}
 input[name="user"]:focus{background:var(--user) no-repeat 6px center/14px,var(--text_focus)}
 input[name="pass"]:focus{background:var(--key) no-repeat 6px center/14px,var(--text_focus)}
@@ -130,6 +129,14 @@ input[type=submit]:active,input.cancel:active,#settings:active,#settings:visited
 input.delete{margin-left:2px}
 .page td[colspan="2"]{padding:0 0 10px 0;text-align:left}
 .page td[colspan="2"] hr{display:none}
+#dologin input[name="user"]{background:#000 var(--user) no-repeat 6px center/14px}
+#dologin input[name="pass"]{background:#000 var(--key) no-repeat 6px center/14px}
+#dologin input[type=password],#dologin input[type=text]{width:60%}
+#privacywarn{box-shadow:var(--highlight),0 0 1px 2px #700 inset;background:#200}
+#privacywarn td,#toggleHtmlView td{padding:3px 5px;text-align:center;border-top:var(--border_inner);border-bottom:var(--border_inner);box-shadow:var(--highlight),0 0 1px 2px #700 inset;background:#000}
+#privacywarn .info{margin:8px;padding:4px 16px 4px 48px;display:inline-block;font-weight:800;font-size:110%;color:#d00;border:0;box-shadow:none;background:var(--warning) no-repeat 6px center/32px}
+#toggleHtmlView .info{margin:9px;padding:4px 16px 4px 48px;display:inline-block;font-weight:800;font-size:110%;color:#d00;border:0;box-shadow:none;background:var(--infobox) no-repeat 6px center/32px}
+#iframeSusiHtmlView{margin:10px 10px -14px;width:calc(100% - 20px);border-radius:10px}
 
 /* login + misc mods */
 .notifications{text-align:center;padding:0 0 20px}
@@ -277,10 +284,10 @@ select{margin:5px 10px;padding:7px 20px 7px 7px;min-width:110px}
 .topbuttons .folders{margin-top:-6px;margin-bottom:2px}
 .topbuttons .folders input,.topbuttons .folders select{margin-top:5px;margin-bottom:8px}
 #pagenavbottom .folders{display:none}
-#toggle{height:20px;width:24px;vertical-align:middle;font-size:0;border:0;background:var(--show) no-repeat center center/20px;cursor:pointer;mix-blend-mode:luminosity}
+#toggle{height:24px;width:24px;vertical-align:middle;font-size:0;border:0;box-shadow:none;background:var(--show) no-repeat center center/24px;cursor:pointer;mix-blend-mode:luminosity}
 #toggle:hover{mix-blend-mode:normal}
-#toggle.hidepass{background:var(--hide) no-repeat center center/20px}
-#toggle.showpass{background:var(--show) no-repeat center center/20px}
+#toggle.hidepass{background:var(--hide) no-repeat center center/24px}
+#toggle.showpass{background:var(--show) no-repeat center center/24px}
 
 /* notifications */
 .notifications{margin:0 30%;padding:5px 10px 2px;min-width:400px;position:fixed;top:-1px;left:0;right:0;z-index:9999;text-align:center;text-shadow:0 1px 1px #000;border:var(--border_inner);background:#113 var(--no) no-repeat right 24px top 4px/14px;background-blend-mode:luminosity;cursor:crosshair;animation:2s hide-up 4s ease-out forwards}
@@ -304,7 +311,7 @@ div:not(#pagesize).topbuttons,.iframed div:not(#pagesize).topbuttons{border-bott
 .pagenavcontrols input,.pagenavcontrols input:disabled,.pagenavcontrols input:hover:disabled,.pagenavcontrols input:focus:disabled{padding:5px}
 .debugHeader td{color:#cc3;border-bottom:var(--border_inner);box-shadow:var(--highlight),inset 0 0 2px 1px #991;background:repeating-linear-gradient(180deg,#000 2px,#003 4px);background-size:100% 4px}
 .debugHeader pre{margin:10px 20px;line-height:1.55;white-space:pre-wrap}
-#mailhead,.iframed #mailhead{margin:-9px 0}
+#mailhead,.iframed #mailhead{margin:-11px 0}
 
 /* animations */
 @keyframes fade-in{0%,80%{filter:opacity(0)}100%{filter:opacity(1)}}
