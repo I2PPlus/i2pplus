@@ -262,6 +262,7 @@ public class WebMail extends HttpServlet
     public static final String CONFIG_CHECK_MINUTES = "pop3.check.interval.minutes";
     public static final String CONFIG_IDLE_SECONDS = "pop3.idle.timeout.seconds";
     private static final String CONFIG_DEBUG = "debug";
+    private static final String CONFIG_SHOW_HTML_WARNING = "view.html.warning";
 
     //public static final String SHOW_FULL_HEADERS = "display.full.headers";
 
@@ -274,11 +275,7 @@ public class WebMail extends HttpServlet
     private static final String spacer = ""; /* this is best done with css */
     private static final String thSpacer = "<th>&nbsp;</th>\n";
     private static final String CONSOLE_BUNDLE_NAME = "net.i2p.router.web.messages";
-
-    static {
-        Config.setPrefix("susimail");
-    }
-
+    static {Config.setPrefix("susimail");}
 
     /**
      * data structure to hold any persistent data (to store them in session dictionary)
@@ -627,13 +624,14 @@ public class WebMail extends HttpServlet
                     out.println("</p>");
                 reason = "";
             }
-            if (html && allowHtml != HtmlMode.NONE && showBody && "text/html".equals(mailPart.type)) {
-                out.println("<tr id=privacywarn><td colspan=2><p class=info>" +
+            boolean showHTMLWarning = Boolean.parseBoolean(Config.getProperty(CONFIG_SHOW_HTML_WARNING, "true"));
+            if (html && allowHtml != HtmlMode.NONE && showBody && "text/html".equals(mailPart.type) && showHTMLWarning) {
+                out.print("<tr id=privacywarn><td colspan=2><p class=info>" +
                             "<i>" + _t("To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message.") + "</i>");
-                out.println("<noscript><br><i>" + _t("Enable Javascript for enhanced presentation.") + "</i></noscript></p></td></tr>");
+                out.print("<noscript><br><i>" + _t("Enable Javascript for enhanced presentation and additional features.") + "</i></noscript></p></td></tr>\n");
             }
             if (html)
-                out.println("<tr class=\"mailbody htmlView\">\n<td colspan=2>");
+                out.print("<tr class=\"mailbody htmlView\"><td colspan=2>");
             if (html && allowHtml != HtmlMode.NONE && showBody && "text/html".equals(mailPart.type)) {
                 out.print("<iframe src=\"" + myself + '?' + RAW_ATTACHMENT + '=' + mailPart.getID() + "&amp;" +
                             B64UIDL + '=' + Base64.encode(mailPart.uidl) + "\" name=\"mailhtmlframe" + mailPart.getID() +
@@ -2180,12 +2178,12 @@ public class WebMail extends HttpServlet
                 me = uri.getHost() + ':' + uri.getPort();
             } catch(URISyntaxException use) {}
             // img-src allows for cid: urls that were fixed up by RegexOutputStream
+            // character encoding will be set in sendAttachment()
             response.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' 'unsafe-inline'; " +
-                               "script-src " + me + "/js/iframeResizer/iframeResizer.contentWindow.js " + me + "/susimail/js/htmlView.js " +
-                               me + "/susimail/js/sanitizeHTML.js 'nonce-" + cspNonce + "'; " +
+                               "script-src " + me + "/js/iframeResizer/iframeResizer.contentWindow.js " +
+                               me + "/susimail/js/htmlView.js " + me + "/susimail/js/sanitizeHTML.js 'nonce-" + cspNonce + "'; " +
                                "form-action 'none'; frame-ancestors " + me + myself + "; object-src 'none'; media-src 'none'; img-src " +
                                me + myself + " data:; font-src 'self'; frame-src 'none'; worker-src 'none'");
-            // character encoding will be set in sendAttachment()
         } else {
             response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-" + cspNonce + "'; " +
                                "form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'; img-src 'self' data:;");
@@ -2757,7 +2755,7 @@ public class WebMail extends HttpServlet
                         String contentWindowJs =
                             "\n<span id=endOfPage data-iframe-height></span>\n" +
                             "<script src=/susimail/js/sanitizeHTML.js></script>\n" + 
-                            "<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n"; 
+                            "<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n";
                         out = new RegexOutputStream(out, "</body>", contentWindowJs + "</body>", contentWindowJs);
                         // convert cid: urls to /susimail/?cid= urls
                         out = new RegexOutputStream(out, " src=\"cid:", " src=\"/susimail/?msg=" + Base64.encode(part.uidl) + "&amp;cid=", null);
@@ -3592,9 +3590,9 @@ public class WebMail extends HttpServlet
                     .append(link).append(mail.shortSender.replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", "")).append("</a></td>\n");
                     // TODO: add name of attachment(s) to tooltip
             }
-            tbuf.append("<td class=\"mailListAttachment ").append(mail.hasAttachment() ? "isAttached " : "").append(jslink).append(">")
-                .append(mail.hasAttachment() ? "<img src=/susimail/icons/attach.png alt=\"\" title=\"" +
-                _t("Message has an attachment") + "\">" : "&nbsp;").append("</td>\n")
+            boolean isHTML = mail.getAttachmentType().equals("html");
+            tbuf.append("<td ").append(isHTML ? "title=\"" + _t("HTML attachment") + "\"" : "").append(" class=\"mailListAttachment ")
+                .append(mail.hasAttachment() ? "isAttached " : "").append(isHTML ? "htmlMessage " : "").append(jslink).append("></td>\n")
                 // TODO: show mail fragment on tooltip or hover span
                 .append("<td class=\"mailListSubject ").append(jslink).append(">").append(link).append(subj).append("</a></td>\n")
                 .append("<td class=\"mailListFlagged ");

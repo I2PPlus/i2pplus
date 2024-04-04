@@ -1,26 +1,26 @@
 /*
- * Created on Nov 9, 2004
- *
- *  This file is part of susimail project, see http://susi.i2p/
- *
- *  Copyright (C) 2004-2005  susi23@mail.i2p
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- * $Revision: 1.2 $
- */
+* Created on Nov 9, 2004
+*
+*  This file is part of susimail project, see http://susi.i2p/
+*
+*  Copyright (C) 2004-2005  susi23@mail.i2p
+*
+*  This program is free software; you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation; either version 2 of the License, or
+*  (at your option) any later version.
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with this program; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*
+* $Revision: 1.2 $
+*/
 package i2p.susi.webmail;
 
 import i2p.susi.util.Buffer;
@@ -57,10 +57,10 @@ import net.i2p.util.RFC822Date;
 import net.i2p.util.SystemVersion;
 
 /**
- * data structure to hold a single message, mostly used with folder view and sorting
- *
- * @author susi
- */
+* data structure to hold a single message, mostly used with folder view and sorting
+*
+* @author susi
+*/
 class Mail {
 
 	private static final String DATEFORMAT = "date.format";
@@ -70,9 +70,9 @@ class Mail {
 	private static final Pattern PATTERN1 = Pattern.compile(P1);
 	private static final Pattern PATTERN2 = Pattern.compile(P2);
 	/**
-	 *  Also used by MailPart
-	 *  See MailPart for why we don't do \r\n\r\n
-	 */
+	*  Also used by MailPart
+	*  See MailPart for why we don't do \r\n\r\n
+	*/
 	static final byte HEADER_MATCH[] = DataHelper.getASCII("\r\n\r");
 
 	private long size;
@@ -91,7 +91,7 @@ class Mail {
 	public Date date;
 	private Buffer header, body;
 	private MailPart part;
-        /** May be null. Non-empty if non-null. Not HTML escaped. */
+				/** May be null. Non-empty if non-null. Not HTML escaped. */
 	String[] to, cc;        // addresses only, enclosed by <>
 	private boolean isNew, isSpam;
 	public String contentType;
@@ -117,9 +117,9 @@ class Mail {
 	}
 
 	/**
-	 *  This may or may not contain the body also.
-	 *  @return if null, nothing has been loaded yet for this UIDL
-	 */
+	*  This may or may not contain the body also.
+	*  @return if null, nothing has been loaded yet for this UIDL
+	*/
 	public synchronized Buffer getHeader() {
 		return header;
 	}
@@ -156,16 +156,16 @@ class Mail {
 	}
 
 	/**
-	 *  @return if false, nothing has been loaded yet for this UIDL
-	 */
+	*  @return if false, nothing has been loaded yet for this UIDL
+	*/
 	public synchronized boolean hasHeader() {
 		return header != null;
 	}
 
 	/**
-         *  This contains the header also.
-         *  @return may be null
-         */
+				*  This contains the header also.
+				*  @return may be null
+				*/
 	public synchronized Buffer getBody() {
 		return body;
 	}
@@ -216,8 +216,8 @@ class Mail {
 	}
 
 	/**
-	 *  @return 0 if unknown
-	 */
+	*  @return 0 if unknown
+	*/
 	public synchronized long getSize() {
 		return size;
 	}
@@ -249,11 +249,25 @@ class Mail {
 			!contentType.contains("multipart/signed");
 	}
 
+	/** @since 0.9.62+ */
+	public synchronized String getAttachmentType() {
+		if (contentType == null) {return "none";}
+		else if (contentType.contains("text/html")) {return "html";}
+		else if (contentType.contains("image/")) {return "image";}
+		else if (contentType.contains("video/")) {return "video";}
+		else if (contentType.contains("audio/")) {return "audio";}
+		else if (contentType.contains("/pdf")) {return "pdf";}
+		else if (contentType.contains("application/zip") ||
+						contentType.contains("/x-tar") ||
+						contentType.contains("/x-bzip")) {return "zip";}
+		else {return "undefined";}
+	}
+
 	/**
-	 *
-	 * @param address E-mail address to be validated
-	 * @return Is the e-mail address valid?
-	 */
+	*
+	* @param address E-mail address to be validated
+	* @return Is the e-mail address valid?
+	*/
 	public static boolean validateAddress( String address )
 	{
 		if( address == null || address.length() == 0 )
@@ -278,9 +292,9 @@ class Mail {
 	}
 
 	/**
-	 * Returns the first email address portion, enclosed by &lt;&gt;
-	 * @param address
-	 */
+	* Returns the first email address portion, enclosed by &lt;&gt;
+	* @param address
+	*/
 	public static String getAddress(String address )
 	{
 		String[] tokens = DataHelper.split(address, "[ \t]+");
@@ -296,14 +310,14 @@ class Mail {
 	}
 
 	/**
-	 * A little misnamed. Adds all addresses from the comma-separated
-	 * line in text to the recipients list.
-	 *
-	 * @param text comma-separated
-	 * @param recipients out param
-	 * @param ok will be returned
-	 * @return true if ALL e-mail addresses are valid AND the in parameter was true
-	 */
+	* A little misnamed. Adds all addresses from the comma-separated
+	* line in text to the recipients list.
+	*
+	* @param text comma-separated
+	* @param recipients out param
+	* @param ok will be returned
+	* @return true if ALL e-mail addresses are valid AND the in parameter was true
+	*/
 	public static boolean getRecipientsFromList( ArrayList<String> recipients, String text, boolean ok )
 	{
 		if( text != null && text.length() > 0 ) {
@@ -314,14 +328,14 @@ class Mail {
 	}
 
 	/**
-	 * A little misnamed. Adds all addresses from the elements
-	 * in text to the recipients list.
-	 *
-	 * @param recipients out param
-	 * @param ok will be returned
-	 * @return true if ALL e-mail addresses are valid AND the in parameter was true
-	 * @since 0.9.35
-	 */
+	* A little misnamed. Adds all addresses from the elements
+	* in text to the recipients list.
+	*
+	* @param recipients out param
+	* @param ok will be returned
+	* @return true if ALL e-mail addresses are valid AND the in parameter was true
+	* @since 0.9.35
+	*/
 	public static boolean getRecipientsFromList( ArrayList<String> recipients, String[] ccs, boolean ok )
 	{
 		if (ccs != null && ccs.length > 0 ) {
@@ -345,13 +359,13 @@ class Mail {
 	}
 
 	/**
-	 * Adds all items from the list
-	 * to the builder, separated by tabs.
-	 * This is for SMTP/POP.
-	 *
-	 * @param buf out param
-	 * @param prefix prepended to the addresses
-	 */
+	* Adds all items from the list
+	* to the builder, separated by tabs.
+	* This is for SMTP/POP.
+	*
+	* @param buf out param
+	* @param prefix prepended to the addresses
+	*/
 	public static void appendRecipients( StringBuilder buf, ArrayList<String> recipients, String prefix )
 	{
 		for (int i = 0; i < recipients.size(); i++) {
@@ -365,13 +379,13 @@ class Mail {
 	}
 
 	/**
-	 * Adds all items from the array
-	 * to the builder, separated by commas
-	 * This is for display of a forwarded email.
-	 *
-	 * @param prefix prepended to the addresses, includes trailing ": "
-	 * @since 0.9.35
-	 */
+	* Adds all items from the array
+	* to the builder, separated by commas
+	* This is for display of a forwarded email.
+	*
+	* @param prefix prepended to the addresses, includes trailing ": "
+	* @since 0.9.35
+	*/
 	public static void appendRecipients(PrintWriter out, String[] recipients, String prefix)
 	{
 		StringBuilder buf = new StringBuilder(120);
@@ -401,9 +415,9 @@ class Mail {
 	}
 
 	/**
-	 * @param dateLong non-negative
-	 * @since 0.9.34 pulled from parseHeaders()
-	 */
+	* @param dateLong non-negative
+	* @since 0.9.34 pulled from parseHeaders()
+	*/
 	private void setDate(long dateLong) {
 		date = new Date(dateLong);
 		synchronized(dateFormatter) {
@@ -416,8 +430,8 @@ class Mail {
 	}
 
 	/**
-	 * @return all headers, to pass to MailPart, or null on error
-	 */
+	* @return all headers, to pass to MailPart, or null on error
+	*/
 	private String[] parseHeaders(InputStream in)
 	{
 		String[] headerLines = null;
@@ -538,8 +552,8 @@ class Mail {
 							// copied external emails to the cache
 							if (!uidl.equals(line.substring(7).trim()) && _log.shouldWarn())
 								_log.warn("UIDL mismatch, may be unable to load body later. Original: " + uidl +
-								          " b64: " + Base64.encode(uidl) +
-								          " header: " + line.substring(7).trim());
+													" b64: " + Base64.encode(uidl) +
+													" header: " + line.substring(7).trim());
 						}
 					}
 				}

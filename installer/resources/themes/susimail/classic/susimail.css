@@ -66,6 +66,7 @@ td#addattach{border-bottom:var(--border)}
 td#attachedfile{border-bottom:1px dotted #89f}
 td.mailListAttachment img{display:none}
 td.mailListAttachment.isAttached{background-image:var(--attach);background-repeat:no-repeat;background-position:center center;background-size:14px}
+td.mailListAttachment.isAttached.htmlMessage{background-image:var(--html);background-repeat:no-repeat;background-position:center center;background-size:20px}
 td.mailListDelete,td.mailListFlagged,td.mailListAttachment{width:24px;text-align:right}
 td p.info,td p.error{margin:-2px -3px}
 .topbuttons{margin:-1px -11px 10px;padding:6px 0 0;background:var(--bg);background:linear-gradient(180deg,#fff 0%,var(--bg3) 100%);border:var(--border);border-bottom:0}
