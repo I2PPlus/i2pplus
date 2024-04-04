@@ -9,7 +9,7 @@ FILE=GeoLite2-Country.mmdb.gz
 UPDATE_SCRIPT=makegeoip.sh
 export HTTP_PROXY=http://127.0.0.1:4444
 
-# Check for the presence of DL or FILE variables
+# Check for the presence of the update script in the current directory
 if [ ! -f "$UPDATE_SCRIPT" ]; then
     echo " ! Error: This script must be executed from the same folder where makegeoip.sh is located."
     exit 1
@@ -21,21 +21,43 @@ echo " > GeoIP database retrieval from db.ip.com"
 echo " > The IP address of the configured http proxy server is: $IP"
 
 # Prompt the user to continue
-read -p "> Press enter to continue or CTRL+C to cancel" dummy
+read -p " > Press ENTER to continue or CTRL+C to cancel" dummy
 
-# Delete old file (if it exists)
+# Check for the existence of "$FILE.old"
+if [ -f "${FILE}.old" ]; then
+    echo " > Deleting the previous backup file ${FILE}.old"
+    rm -f "${FILE}.old" >/dev/null 2>&1
+fi
+
+# If $FILE exists, rename it before proceeding
 if [ -f "$FILE" ]; then
     echo " > The previous file $FILE has been renamed to ${FILE}.old"
     mv -v "$FILE" "${FILE}.old" >/dev/null 2>&1
 fi
 
-# Invoke wget using proxy and download file
-echo " > Downloading from https://download.db-ip.com/free/$DL ..."
-wget -e use_proxy=yes -e http_proxy=$HTTP_PROXY https://download.db-ip.com/free/$DL || exit 1
+if command -v curl &> /dev/null; then
+    curl -x $HTTP_PROXY https://download.db-ip.com/free/$DL -o $FILE || {
+    echo " > Attempting to download https://download.db-ip.com/free/$DL using curl..."
+        if command -v wget &> /dev/null; then
+            wget $HTTP_PROXY https://download.db-ip.com/free/$DL -O $FILE || exit 1
+        else
+            echo " ! Warning: curl is not detected, falling back to wget for download."
+            echo " > Attempting to download https://download.db-ip.com/free/$DL using wget..."
+            wget -e use_proxy=yes -e http_proxy=$HTTP_PROXY https://download.db-ip.com/free/$DL -O $FILE || exit 1
+        fi
+    }
+else
+    if command -v wget &> /dev/null; then
+        wget -e use_proxy=yes -e http_proxy=$HTTP_PROXY https://download.db-ip.com/free/$DL -O $FILE || exit 1
+    else
+        echo "! Error: Neither curl nor wget is installed. Please install curl or wget before running this command."
+        exit 1
+    fi
+fi
 
 # Exit on download error
 if [ $? -ne 0 ]; then
-    echo " > Error: Failed to download the file using the proxy. Please check your proxy configuration and try again."
+    echo " ! Error: Failed to download the file using the proxy. Please check your proxy configuration and try again."
     if [ -f "$FILE.old" ]; then
         echo " > The file ${FILE}.old has been restored"
         mv -v "${FILE}.old" "$FILE" >/dev/null 2>&1
@@ -45,7 +67,7 @@ fi
 
 # Check if downloaded file exists
 if [ ! -f $FILE ]; then
-    echo " > Error: Downloaded file $FILE is not found. Please check your internet connection and try again."
+    echo " ! Error: Downloaded file $FILE is not found. Please check your internet connection and try again."
     if [ -f "$FILE.old" ]; then
         echo " > The file ${FILE}.old has been restored"
         mv -v "${FILE}.old" "$FILE" >/dev/null 2>&1
@@ -54,18 +76,20 @@ if [ ! -f $FILE ]; then
 fi
 
 # Delete old file and rename new file
-rm -f "${FILE}.old" >/dev/null 2>&1
+# rm -f "${FILE}.old" >/dev/null 2>&1
 mv -v "$DL" "$FILE" >/dev/null 2>&1
 echo " > The file $DL has been renamed to $FILE"
 
 # Check file permissions and hash
 echo " > Checking file permissions and hash"
-ls -l $FILE
-OLD_HASH=$(sha256sum ./installer/resources/$FILE | cut -f 1 -d ' ')
-NEW_HASH=$(sha256sum ./$FILE | cut -f 1 -d ' ')
+ls -l "$FILE"
+OLD_HASH=$(sha256sum "./$FILE.old" | cut -f 1 -d ' ')
+NEW_HASH=$(sha256sum "./$FILE" | cut -f 1 -d ' ')
 echo "Old hash: $OLD_HASH"
 echo "New hash: $NEW_HASH"
-if [ $OLD_HASH != $NEW_HASH ]; then
-    echo " > The new file is different from the previously installed file. Updating installer/resources/$FILE"
-    cp -v "$FILE" "./installer/resources/$FILE"
+
+if [ -n "$OLD_HASH" ] && [ -n "$NEW_HASH" ] && [ "$OLD_HASH" != "$NEW_HASH" ]; then
+    echo " > Updated successful (hashes do not match) -> deleting $FILE.old"
+    #cp -v "$FILE" "./installer/resources/$FILE"
+    rm -f "${FILE}.old" >/dev/null 2>&1
 fi
