@@ -1328,6 +1328,28 @@ public class WebMail extends HttpServlet
                                         out.writeComplete(ok);
                                     }
                                 }
+                            } else if ("text/html".equals(part.type)) {
+                                // HTML-only email, add as attachment
+                                attachments = new ArrayList<Attachment>(1);
+                                MailCache drafts = sessionObject.caches.get(DIR_DRAFTS);
+                                String temp = "susimail-attachment-" + ctx.random().nextLong();
+                                File f;
+                                if (drafts != null) {
+                                    f = new File(drafts.getAttachmentDir(), temp);
+                                } else {
+                                    f = new File(ctx.getTempDir(), temp);
+                                }
+                                Buffer out = new FileBuffer(f);
+                                boolean ok = false;
+                                try {
+                                    part.decode(0, out);
+                                    ok = true;
+                                    attachments.add(new Attachment("email.html", part.type, part.encoding, f));
+                                } catch (IOException e) {
+                                    sessionObject.error += _t("Error reading uploaded file: {0}", e.getMessage()) + '\n';
+                                } finally {
+                                    out.writeComplete(ok);
+                                }
                             }
                             subject = mail.subject;
                             if (!(subject.startsWith("Fwd:") ||
@@ -3591,7 +3613,7 @@ public class WebMail extends HttpServlet
                     // TODO: add name of attachment(s) to tooltip
             }
             boolean isHTML = mail.getAttachmentType().equals("html");
-            tbuf.append("<td ").append(isHTML ? "title=\"" + _t("HTML attachment") + "\"" : "").append(" class=\"mailListAttachment ")
+            tbuf.append("<td ").append(isHTML ? "title=\"" + _t("HTML component") + "\"" : "").append(" class=\"mailListAttachment ")
                 .append(mail.hasAttachment() || mail.getAttachmentType().equals("html") ? "isAttached " : "").append(isHTML ? "htmlMessage " : "").append(jslink).append("></td>\n")
                 // TODO: show mail fragment on tooltip or hover span
                 .append("<td class=\"mailListSubject ").append(jslink).append(">").append(link).append(subj).append("</a></td>\n")
