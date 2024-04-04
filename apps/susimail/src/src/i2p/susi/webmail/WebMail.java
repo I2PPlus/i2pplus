@@ -1916,9 +1916,9 @@ public class WebMail extends HttpServlet
                         mc.delete(toDelete);
                         mc.getFolder().removeElements(toDelete);
                         sessionObject.pageChanged = true;
-                        sessionObject.info += ngettext("1 message deleted.", "{0} messages deleted.", numberDeleted);
+                        sessionObject.info += ' ' + ngettext("1 message deleted.", "{0} messages deleted.", numberDeleted);
                     } else {
-                        sessionObject.error += _t("No messages marked for deletion.") + '\n';
+                        sessionObject.error += ' ' + _t("No messages marked for deletion.") + '\n';
                     }
                     sessionObject.reallyDelete = false;
                 } else {
@@ -1927,7 +1927,7 @@ public class WebMail extends HttpServlet
                 }
             } else {
                 sessionObject.reallyDelete = false;
-                sessionObject.error += _t("No messages marked for deletion.") + '\n';
+                sessionObject.error += ' ' + _t("No messages marked for deletion.") + '\n';
             }
         } else if (buttonPressed(request, CLEAR)) {
             sessionObject.reallyDelete = false;
