@@ -1304,7 +1304,7 @@ public class WebMail extends HttpServlet
                                 attachments = new ArrayList<Attachment>(parts.size());
                                 MailCache drafts = sessionObject.caches.get(DIR_DRAFTS);
                                 for (MailPart mp : parts) {
-                                    if (mp.name == null || mp.type == null || mp.encoding == null) {
+                                    if (mp.name == null || mp.type == null) {
                                         if (log.shouldDebug())
                                             log.debug("Skipping forwarded attachment: " + mp);
                                         continue;
