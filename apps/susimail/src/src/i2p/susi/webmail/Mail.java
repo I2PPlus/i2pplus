@@ -252,14 +252,15 @@ class Mail {
 	/** @since 0.9.62+ */
 	public synchronized String getAttachmentType() {
 		if (contentType == null) {return "none";}
-		else if (contentType.contains("text/html")) {return "html";}
+		else if (contentType.contains("text/html") ||
+						 contentType.contains("multipart/alternative")) {return "html";}
 		else if (contentType.contains("image/")) {return "image";}
 		else if (contentType.contains("video/")) {return "video";}
 		else if (contentType.contains("audio/")) {return "audio";}
 		else if (contentType.contains("/pdf")) {return "pdf";}
 		else if (contentType.contains("application/zip") ||
-						contentType.contains("/x-tar") ||
-						contentType.contains("/x-bzip")) {return "zip";}
+						 contentType.contains("/x-tar") ||
+						 contentType.contains("/x-bzip")) {return "zip";}
 		else {return "undefined";}
 	}
 

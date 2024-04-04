@@ -3592,7 +3592,7 @@ public class WebMail extends HttpServlet
             }
             boolean isHTML = mail.getAttachmentType().equals("html");
             tbuf.append("<td ").append(isHTML ? "title=\"" + _t("HTML attachment") + "\"" : "").append(" class=\"mailListAttachment ")
-                .append(mail.hasAttachment() ? "isAttached " : "").append(isHTML ? "htmlMessage " : "").append(jslink).append("></td>\n")
+                .append(mail.hasAttachment() || mail.getAttachmentType().equals("html") ? "isAttached " : "").append(isHTML ? "htmlMessage " : "").append(jslink).append("></td>\n")
                 // TODO: show mail fragment on tooltip or hover span
                 .append("<td class=\"mailListSubject ").append(jslink).append(">").append(link).append(subj).append("</a></td>\n")
                 .append("<td class=\"mailListFlagged ");
