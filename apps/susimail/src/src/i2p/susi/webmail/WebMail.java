@@ -3613,7 +3613,7 @@ public class WebMail extends HttpServlet
                     // TODO: add name of attachment(s) to tooltip
             }
             boolean isHTML = mail.getAttachmentType().equals("html");
-            tbuf.append("<td ").append(isHTML ? "title=\"" + _t("HTML component") + "\"" : "").append(" class=\"mailListAttachment ")
+            tbuf.append("<td ").append(isHTML ? "title=\"" + _t("Message contains HTML") + "\"" : "").append(" class=\"mailListAttachment ")
                 .append(mail.hasAttachment() || mail.getAttachmentType().equals("html") ? "isAttached " : "").append(isHTML ? "htmlMessage " : "").append(jslink).append("></td>\n")
                 // TODO: show mail fragment on tooltip or hover span
                 .append("<td class=\"mailListSubject ").append(jslink).append(">").append(link).append(subj).append("</a></td>\n")
