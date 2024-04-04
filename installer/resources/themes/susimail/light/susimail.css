@@ -38,7 +38,7 @@ tr.mailbody,#message_full tr:first-child{box-shadow:var(--highlight);background:
 .header+form{margin-bottom:10px;border:var(--border_inner);border-radius:2px 2px 0 0;box-shadow:0 0 1px 1px rgba(220,220,255,.3);background:linear-gradient(180deg,#f8f8ff,#f2f2ff)}
 .iframed .footer{display:none}
 .iframed form{margin-bottom:4px}
-.iframed .page{margin:0 5px;padding:1px;min-width:600px;border:0;border-radius:0;box-shadow:none;background:transparent}
+.iframed .page{margin:0;padding:1px;min-width:600px;border:0;border-radius:0;box-shadow:none;background:transparent}
 .linknew{color:#327b40}
 .linkold{color:#327bbf}
 .linkspam{color:#927b40}
@@ -143,7 +143,7 @@ input[disabled]{opacity:.4;border:1px solid #9ea8d1;pointer-events:none}
 tr.bottombuttons .pagenav{margin:0;width:100%}
 .iframed .pagenavcontainer{top:1px;right:22px}
 .iframed .pagenav{margin-right:-5px}
-.iframed #pagenavbottom .pagenav{position:absolute;right:-15px;top:1px}
+.iframed #pagenavbottom .pagenav{position:absolute;right:15px;top:4px}
 .pagecount{margin:0;padding:4px 0;width:70px;display:inline-block;text-align:center;color:#54586f;border:var(--badgeborder);border-radius:2px;background:var(--badge)}
 .pagenavcontainer,#messagenav{position:absolute;top:6px;right:38px}
 .pagenavcontrols{line-height:100%}
