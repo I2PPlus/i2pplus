@@ -1,4 +1,8 @@
-
+2024-04-04 dr|z3d
+ * SusiMail:
+   - Add icon indicators in list view for HTML attachments
+   - Add config option to disable html remote content warning:
+     view.html.warning={true|false}
 
 2024-04-03 dr|z3d
  * SusiMail:
