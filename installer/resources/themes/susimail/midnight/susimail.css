@@ -120,6 +120,7 @@ input[type=submit],input.cancel,#settings,.fakebutton{margin:4px 5px;padding:5px
 #collapse:hover,#collapse:focus,#expand:hover,#expand:focus,#switchViewMode:hover,#switchViewMode:focus,#newTabHtmlView:hover,#newTabHtmlView:focus{background:var(--btn_hover)}
 #collapse:active,#expand:active,#switchViewMode:active,#newTabHtmlView:active{background:var(--btn_active)}
 #switchViewMode,#newTabHtmlView{margin-left:-3px}
+#switchViewMode:not([href]){display:none}
 input[type=text],input[type=password],textarea{padding:6px 8px}
 #dologin input:disabled,#dologin input:disabled:hover,#dologin input:disabled:active{margin:0;padding-top:3px;text-align:left;color:#9b9ebf;border:0;box-shadow:none;background:none;cursor:default}
 input[name="user"],input[name="pass"]{padding-left:26px;border:1px solid #322e6b;background:#000;background-blend-mode:luminosity}
@@ -228,6 +229,8 @@ input.login{padding:6px 9px 6px 27px;background:var(--login) no-repeat 9px cente
 input.login:hover,input.login:focus{background:var(--login_hover) no-repeat 9px center,var(--btn_hover_radial),var(--btn_hover)}
 input.logout{padding:6px 9px 6px 27px;background:var(--logout) no-repeat 9px center/14px}
 input.logout:hover,input.logout:focus{background:var(--logout_hover) no-repeat 9px center/14px}
+#prefsave input.logout{padding:6px 9px 6px 27px;background:var(--logout) no-repeat 9px center/14px,var(--btn)}
+#prefsave input.logout:hover,input.logout:focus{background:var(--logout_hover) no-repeat 9px center/14px,var(--btn_hover_radial),var(--btn_hover)}
 input.reload,input.refresh,.fakebutton{padding:6px 9px 6px 27px;background:var(--refresh) no-repeat 9px center,var(--btn)}
 input.reload:hover,input.refresh:hover,input.reload:focus,input.refresh:focus,.fakebutton:hover,.fakebutton:focus{background:var(--refresh_hover) no-repeat 9px center,var(--btn_hover_radial),var(--btn_hover)}
 input.invertselection{padding:6px 9px 6px 27px;background:url(../images/selection.png) no-repeat 9px center,var(--btn)}

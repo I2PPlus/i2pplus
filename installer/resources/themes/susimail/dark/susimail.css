@@ -352,13 +352,6 @@ td.mailListFlagged img{display:none}
 td.mailListFlagged.new{background:var(--newmail) no-repeat center center/14px}
 td.mailListSender a,td.mailListSender a:hover{font-weight:400;color:var(--ink);line-height:1.2}
 td.mailListSubject a{padding:3px 0;display:inline-block}
-tr:hover .listDate{box-shadow:0 0 0 1px #000,inset 0 0 0 1px #262;opacity:.9}
-tr:hover .listSize{box-shadow:0 0 0 1px #262;color:var(--ink)}
-tr:hover .mailListAttachment.isAttached{background:var(--attach_hover) no-repeat center center/14px}
-tr:hover td.mailListSubject a{width:calc(100% - 2px);border-radius:2px 15px 15px 2px;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,64,0,.9) 20%)}
-tr:active td.mailListSubject a{box-shadow:inset 2px 2px 1px #000}
-tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td,.topbuttons tr:hover td,.topbuttons:hover td,#mailbox tr:hover,#mailbox tr:hover td{box-shadow:none}
-.folders{display:inline-block;margin:0}
 .listClock{margin:1px 0 0 -1px;min-width:18px;vertical-align:text-top;font-size:80%;text-align:left;text-transform:lowercase}
 .listDate,.listTime,.listClock{display:inline-block;white-space:nowrap;text-align:right}
 .listDate{padding:3px 4px;min-width:64px;text-align:right;font-weight:700;color:var(--ink);border-radius:2px;box-shadow:0 0 0 1px #000;background:var(--badge);opacity:.8}
@@ -368,6 +361,7 @@ tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td
 .listSizeUnit{margin:1px 1px 1px 2px;padding:2px 1px;display:inline-block;min-width:14px;color:var(--ink);text-align:center;font-size:90%;font-style:normal;font-weight:700;text-shadow:var(--txt_shadow);border-radius:0 1px 1px 0;background:#010}
 .listTime{margin:0 2px;min-width:54px;font-size:90%;opacity:.85}
 .mailListAttachment.isAttached{background:var(--attach) no-repeat center center/14px}
+.mailListAttachment.isAttached.htmlMessage{background:var(--html) no-repeat center center/20px}
 .mailListAttachment{min-width:16px}
 .mailListCount{text-align:right}
 .mailListDelete,.mailListDate,.mailListSize,.mailListFlagged,.mailListAttachment{padding:3px 6px;width:1%;white-space:nowrap}
@@ -377,6 +371,14 @@ tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td
 .mailListSize .unknown{padding:2px 0;width:100%;display:inline-block;letter-spacing:.1em;text-align:center}
 .mailListSubject{padding:3px 8px}
 .mailListSubject{white-space:normal;text-align:left;word-break:normal}
+tr:hover .listDate{box-shadow:0 0 0 1px #000,inset 0 0 0 1px #262;opacity:.9}
+tr:hover .listSize{box-shadow:0 0 0 1px #262;color:var(--ink)}
+tr:hover .mailListAttachment.isAttached{background:var(--attach_hover) no-repeat center center/14px}
+tr:hover .mailListAttachment.isAttached.htmlMessage{background:var(--html_hover) no-repeat center center/20px}
+tr:hover td.mailListSubject a{width:calc(100% - 2px);border-radius:2px 15px 15px 2px;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,64,0,.9) 20%)}
+tr:active td.mailListSubject a{box-shadow:inset 2px 2px 1px #000}
+tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td,.topbuttons tr:hover td,.topbuttons:hover td,#mailbox tr:hover,#mailbox tr:hover td{box-shadow:none}
+.folders{display:inline-block;margin:0}
 #emptymailbox{padding:10px}
 #folderName{font-weight:700;color:var(--ink);text-transform:capitalize}
 #mailbox .bottombuttons input[type=submit][disabled]{display:none}

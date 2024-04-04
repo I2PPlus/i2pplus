@@ -293,8 +293,8 @@ td{color:var(--ink);font-size:9pt;padding:1px 3px}
 td[onclick]{cursor:pointer}
 td.mailListDelete,td.mailListFlagged,td.mailListSender,td.mailListAttachment,td.mailListSubject,td.mailListDate,td.mailListSize{border-right:1px solid #ddf}
 td.mailListSender,tr:hover td.mailListSender{padding-left:22px;padding-right:6px;width:1%;white-space:nowrap;text-align:left;background:var(--user) no-repeat 6px center/12px}
+tr:hover td.mailListSender{background:rgba(240,240,200,.4) var(--user) no-repeat 6px center/12px}
 td.mailListAttached{padding:3px}
-td.mailListAttachment.isAttached img{display:none}
 td.mailListDelete{background:rgba(250,240,250,.5)}
 td.mailListFlagged.new{background:var(--newmail) no-repeat center center/16px}
 td.mailListFlagged.new img{display:none}
@@ -329,10 +329,12 @@ td span,td a,td b{vertical-align:middle;line-height:1}
 #mailbox td{border-top:var(--border_soft)}
 #mailbox th:last-child{padding:6px 0;background:var(--nuke) no-repeat center center/14px,linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
 #mailbox th.mailListAttachment,td.mailListAttachment.isAttached{background:var(--attach) no-repeat center center/14px,linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
+td.mailListAttachment.isAttached.htmlMessage{background:var(--html) no-repeat center center/20px,linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
 #mailbox th.mailListFlagged{background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%);background-blend-mode:luminosity,normal}
 #mailbox th{padding:6px 5px;white-space:nowrap;font-size:70%;color:#54586f;border-bottom:var(--border_inner);background:#f6f6ff;background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
 #mailbox tr:hover .mailListSender a{color:var(--ink)}
 #mailbox tr:hover td.mailListAttachment.isAttached{background:rgba(240,240,200,.4) var(--attach) no-repeat center center/14px}
+#mailbox tr:hover td.mailListAttachment.isAttached.htmlMessage{background:rgba(240,240,200,.4) var(--html) no-repeat center center/20px}
 #mailbox tr:nth-child(2){position:sticky;top:42px;z-index:500}
 #mailbox tr:nth-child(3) td{border-top:0}
 .htmlView+tr>td[colspan="2"]:empty{display:none}
