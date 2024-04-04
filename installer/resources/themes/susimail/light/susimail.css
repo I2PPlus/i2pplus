@@ -38,7 +38,7 @@ tr.mailbody,#message_full tr:first-child{box-shadow:var(--highlight);background:
 .header+form{margin-bottom:10px;border:var(--border_inner);border-radius:2px 2px 0 0;box-shadow:0 0 1px 1px rgba(220,220,255,.3);background:linear-gradient(180deg,#f8f8ff,#f2f2ff)}
 .iframed .footer{display:none}
 .iframed form{margin-bottom:4px}
-.iframed .page{margin:0;padding:1px;min-width:600px;border:0;border-radius:0;box-shadow:none;background:transparent}
+.iframed .page{margin:0 5px;padding:1px;min-width:600px;border:0;border-radius:0;box-shadow:none;background:transparent}
 .linknew{color:#327b40}
 .linkold{color:#327bbf}
 .linkspam{color:#927b40}
@@ -335,6 +335,7 @@ td span,td a,td b{vertical-align:middle;line-height:1}
 #mailbox tr:hover td.mailListAttachment.isAttached{background:rgba(240,240,200,.4) var(--attach) no-repeat center center/14px}
 #mailbox tr:nth-child(2){position:sticky;top:42px;z-index:500}
 #mailbox tr:nth-child(3) td{border-top:0}
+.htmlView+tr>td[colspan="2"]:empty{display:none}
 
 /* confirm mail delete */
 #confirmdelete td{box-shadow:var(--highlight);background:repeating-linear-gradient(45deg,#900,#900 10px,#ee9 10px,#ee9 20px);background-size:400%;animation:attention 360s linear infinite both}
@@ -384,6 +385,10 @@ input.switchto,input.moveto{padding:5px 7px 5px 24px;background:var(--folder) no
 #privacywarn td{border-top:var(--border_inner);box-shadow:var(--highlight),0 0 1px 2px #a55 inset}
 #privacywarn .info{margin:8px;padding:4px 16px 4px 48px;display:inline-block;line-height:1.5;font-weight:800;font-size:110%;color:#d00;background:var(--warning) no-repeat 6px center / 32px}
 #iframeSusiHtmlView{margin:10px 10px 5px;width:calc(100% - 20px);border-radius:10px;box-shadow:0 0 0 1px #bbc,0 2px 2px #0003}
+.iframed #iframeSusiHtmlView{margin:5px 10px 0}
+#toggleHeaders,#toggleViewMode{margin:-5px 0}
+#toggleHeaders a,#toggleViewMode a{font-size:90%}
+#toggleViewMode{margin-right:-5px}
 
 @keyframes attention{from{background-position:200%}to{background-position:0}}
 @keyframes bar{from{width:100%;filter:opacity(.5)}}

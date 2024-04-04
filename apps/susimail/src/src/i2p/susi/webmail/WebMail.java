@@ -552,7 +552,7 @@ public class WebMail extends HttpServlet
                             if (allowHtml != HtmlMode.NONE) {
                                 out.println("<tr id=toggleHtmlView class=mailbody><td colspan=2>");
                                 out.println("<p class=info><a id=toggleHtmlLink href=\"" + myself + '?' + SHOW + '=' + Base64.encode(subPart.uidl) +
-                                            "&amp;" + HTML + "=1\">" + _t("View email as HTML") + "</a></p>");
+                                            "&amp;" + HTML + "=1\">" + _t("View message as HTML") + "</a></p>");
                                 out.println("</td></tr>");
                             }
                         } else if ("text/plain".equals(subPart.type) ||
@@ -572,7 +572,7 @@ public class WebMail extends HttpServlet
                                 out.println("<p class=info><a id=toggleHtmlLink class=viewAsPlainText href=\"" + myself + '?' +
                                             SHOW + '=' + Base64.encode(subPart.uidl) +
                                             "&amp;" + HTML + "=0\">" +
-                                            _t("View email as plain text") + "</a></p>");
+                                            _t("View message as plain text") + "</a></p>");
                                 out.println("</td></tr>");
                             }
                         } else {
@@ -3853,7 +3853,8 @@ public class WebMail extends HttpServlet
                 out.print("<tr><td class=right>" + _t("Cc") + ":</td><td class=left>" + buildRecipientLine(mail.cc) + "</td></tr>\n");
             }
             out.print("<tr><td class=right>" + _t("Subject") + ":</td>\n" +
-                      "<td class=left>" + subj + "<span id=toggleViewMode class=script style=float:right hidden><a id=fakeHTMLToggleButton></a></span> " +
+                      "<td class=left>" + subj + "<span id=toggleViewMode class=script style=float:right hidden><a id=switchViewMode></a>" +
+                      "<a id=newTabHtmlView hidden>" + _t("View message in new tab") + "</a></span> " +
                       "<span id=toggleHeaders class=script style=float:right>" +
                       "<a href=\"#\" class=\"script fakebutton\" id=expand>Show Headers</a> " +
                       "<a href=\"#\" class=\"script fakebutton\" id=collapse style=display:none>Hide Headers</a> " +
