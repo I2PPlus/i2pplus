@@ -55,7 +55,6 @@ td.mailListSize{width:1%;white-space:nowrap;text-align:right}
 td{margin:0 5px;padding:2px;font-size:9pt}
 th.mailListAttachment{padding:0;font-size:0;background:var(--attach) no-repeat center center/14px,linear-gradient(180deg,#080818,#001)}
 th.mailListDelete{background:var(--nuke) no-repeat center center/14px,linear-gradient(180deg,#080818,#001);font-size:0;padding:0}
-th.mailListFlagged{background:url(../images/status.png) no-repeat center center,linear-gradient(180deg,#080818,#001);font-size:0;padding:0;background-blend-mode:luminosity,normal}
 th.mailListSubject{text-align:left}
 .topbuttons input.next{margin-bottom:-20px}
 tr.bottombuttons:last-child td{padding-bottom:20px;border-bottom:var(--border_inner)}

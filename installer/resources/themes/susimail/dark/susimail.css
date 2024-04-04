@@ -388,7 +388,6 @@ tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td
 #mailbox td{color:var(--ink)}
 #mailbox th:last-child{padding:6px 0;background:var(--nuke) no-repeat center center/14px,var(--th)}
 #mailbox th.MailListAttachment{background:var(--attach) no-repeat center center/14px ,var(--th)}
-#mailbox th.mailListFlagged{background:url(/themes/susimail/images/status.png) no-repeat center center,var(--th)}
 #mailbox th{padding:6px 5px;white-space:nowrap;font-size:70%;color:var(--ink);background:var(--th)}
 #mailbox tr:hover .mailListSender a{color:var(--ink)}
 #mailbox tr:nth-child(3) td{border-top:var(--border)}

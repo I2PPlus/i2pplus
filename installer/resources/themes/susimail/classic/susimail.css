@@ -234,7 +234,6 @@ tr:hover .listDate{opacity:.9}
 #mailbox th{padding:6px;font-size:70%;border-bottom:var(--border);background:var(--header)}
 #mailbox th.mailListAttachment{background:var(--attach) no-repeat center center/14px,var(--header)}
 #mailbox th.mailListDelete{background:var(--nuke) no-repeat center center/14px,var(--header)}
-#mailbox th.mailListFlagged{background:url(../images/status.png) no-repeat center center,var(--header);background-blend-mode:luminosity}
 #mailbox th>*{vertical-align:middle}
 #mailbox td.mailListSize{text-align:right}
 #mailbox td.mailListSender{padding-left:18px}
