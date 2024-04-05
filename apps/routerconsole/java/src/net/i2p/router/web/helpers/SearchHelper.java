@@ -23,7 +23,7 @@ public class SearchHelper extends HelperBase {
     //private static final String SOURCE = "&ref=console";
     static final String PROP_ENGINES = "routerconsole.searchEngines";
     private static final String PROP_DEFAULT = "routerconsole.searchEngine";
-    private static final String DEFAULT = "i2psearch.i2p";
+    private static final String DEFAULT = "shinobi.i2p";
 
     static final String ENGINES_DEFAULT =
     // TODO: add a checkbox or dropdown to UI to choose default engine
