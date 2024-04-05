@@ -1,3 +1,8 @@
+2024-04-05 zzz
+ * SusiMail:
+   - Fix truncation of quoted-printable encoded attachments
+   - Fix loading mail bodies in non-inbox/drafts folders
+
 2024-04-04 dr|z3d
  * SusiMail:
    - Add icon indicators in list view for HTML attachments
@@ -92,7 +97,7 @@
  * Console: Add tunnelId toggler to /tunnels if advanced mode enabled
 
 2024-01-10 zzz
- * Susimail: Add markdown js for plain text content (Gitlab MR !161)
+ * SusiMail: Add markdown js for plain text content (Gitlab MR !161)
  * SSU2: Delay sending relay tag (Gitlab MR !169)
 
 2024-01-08 zzz
@@ -101,7 +106,7 @@
 2024-01-02 zzz
  * Console: News fetch improvements (Gitlab MR !163)
  * Router: Enforce max RI size (Gitlab MR !168)
- * Susimail: Speed up initial loading (Gitlab MR !162)
+ * SusiMail: Speed up initial loading (Gitlab MR !162)
  * Tunnels: Peer selection adjustments (Gitlab MR !167)
 
 2023-12-31 dr|z3d
@@ -121,7 +126,7 @@
    selective transit tunnel hosting etc
 
 2023-12-23 zzz
- * Susimail:
+ * SusiMail:
    - Add regex util (WIP)
    - Extract multipart type and content id (WIP)
    - Logging enhancements on file read failures
