@@ -262,7 +262,10 @@ public class WebMail extends HttpServlet
     public static final String CONFIG_CHECK_MINUTES = "pop3.check.interval.minutes";
     public static final String CONFIG_IDLE_SECONDS = "pop3.idle.timeout.seconds";
     private static final String CONFIG_DEBUG = "debug";
+    /** @since 0.9.62+ */
     private static final String CONFIG_SHOW_HTML_WARNING = "view.html.warning";
+    /** @since 0.9.62+ */
+    private static final String CONFIG_ENABLE_DARKMODE = "view.html.darkMode";
 
     //public static final String SHOW_FULL_HEADERS = "display.full.headers";
 
@@ -624,7 +627,11 @@ public class WebMail extends HttpServlet
                     out.println("</p>");
                 reason = "";
             }
+
             boolean showHTMLWarning = Boolean.parseBoolean(Config.getProperty(CONFIG_SHOW_HTML_WARNING, "true"));
+            I2PAppContext ctx = I2PAppContext.getGlobalContext();
+            String theme = ctx.getProperty(RC_PROP_THEME, DEFAULT_THEME);
+
             if (html && allowHtml != HtmlMode.NONE && showBody && "text/html".equals(mailPart.type) && showHTMLWarning) {
                 out.print("<tr id=privacywarn><td colspan=2><p class=info>" +
                             "<i>" + _t("To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message.") + "</i>");
@@ -633,9 +640,9 @@ public class WebMail extends HttpServlet
             if (html)
                 out.print("<tr class=\"mailbody htmlView\"><td colspan=2>");
             if (html && allowHtml != HtmlMode.NONE && showBody && "text/html".equals(mailPart.type)) {
-                out.print("<iframe src=\"" + myself + '?' + RAW_ATTACHMENT + '=' + mailPart.getID() + "&amp;" +
-                            B64UIDL + '=' + Base64.encode(mailPart.uidl) + "\" name=\"mailhtmlframe" + mailPart.getID() +
-                            "\" id=iframeSusiHtmlView width=100% height=100% scrolling=auto frameborder=0 border=0 allowtransparency=true></iframe>\n");
+                out.print("<iframe src=\"" + myself + '?' + RAW_ATTACHMENT + '=' + mailPart.getID() + "&amp;" + B64UIDL + '=' +
+                          Base64.encode(mailPart.uidl) + "\" name=\"mailhtmlframe" + mailPart.getID() + "\" id=iframeSusiHtmlView " +
+                          "width=100% height=100% scrolling=auto frameborder=0 border=0 allowtransparency=true data-theme=\"" + theme + "\"></iframe>\n");
                 out.print("</td></tr>\n<tr class=mailbody><td colspan=2>");
                 // TODO scrolling=no if js is on
             } else if (showBody) {
@@ -2773,11 +2780,18 @@ public class WebMail extends HttpServlet
                     if (part.charset != null) {response.setCharacterEncoding(part.charset);}
                     out = response.getOutputStream();
                     if ("text/html".equals(part.type)) {
-                        // inject the js into the iframe
+                        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+                        String theme = ctx.getProperty(RC_PROP_THEME, DEFAULT_THEME);
+                        // inject the js into iframe
                         String contentWindowJs =
                             "\n<span id=endOfPage data-iframe-height></span>\n" +
                             "<script src=/susimail/js/sanitizeHTML.js></script>\n" + 
                             "<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n";
+                        // inject dark mode theme into iframe if dark/midnight theme active
+                        boolean showHTMLWarning = Boolean.parseBoolean(Config.getProperty(CONFIG_ENABLE_DARKMODE, "true"));
+                        if (theme.contains("dark") || theme.contains("midnight") && showHTMLWarning) {
+                            contentWindowJs += "<link rel=stylesheet href=/themes/susimail/darkModeHTML.css>";
+                        }
                         out = new RegexOutputStream(out, "</body>", contentWindowJs + "</body>", contentWindowJs);
                         // convert cid: urls to /susimail/?cid= urls
                         out = new RegexOutputStream(out, " src=\"cid:", " src=\"/susimail/?msg=" + Base64.encode(part.uidl) + "&amp;cid=", null);

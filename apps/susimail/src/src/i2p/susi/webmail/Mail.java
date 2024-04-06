@@ -156,16 +156,16 @@ class Mail {
 	}
 
 	/**
-	*  @return if false, nothing has been loaded yet for this UIDL
-	*/
+	  *  @return if false, nothing has been loaded yet for this UIDL
+	  */
 	public synchronized boolean hasHeader() {
 		return header != null;
 	}
 
 	/**
-				*  This contains the header also.
-				*  @return may be null
-				*/
+		*  This contains the header also.
+		*  @return may be null
+		*/
 	public synchronized Buffer getBody() {
 		return body;
 	}

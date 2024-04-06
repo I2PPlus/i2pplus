@@ -1,0 +1,10 @@
+/* SusiMail Dark Mode CSS override for HTML view */
+/* Author: dr|z3d */
+
+html{filter:saturate(.75)}
+*{color:#ddd!important;text-shadow:0 1px 1px #000}
+a:link,a:link span,p>a{font-weight:600!important;color:#f30!important;text-decoration:none!important}
+a:hover{text-decoration:underline!important}
+body,h1,h2,h3,h4,h5,h6,p,ol,ul{font-family:Open Sans,Segoe UI,Noto Sans, Roboto Sans, sans-serif!important}
+body,html,table,td{background:#000!important}
+table{max-width:90%!important}
