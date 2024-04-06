@@ -255,8 +255,9 @@ public class WebMail extends HttpServlet
 
     private static final String CONFIG_HTML_ALLOWED = "view.html.allowed";
     private static final String CONFIG_HTML_PREFERRED = "view.html.preferred";
-    private static final String CONFIG_SHOW_HTML_WARNING = "view.html.warning";
-    private static final String CONFIG_ENABLE_DARKMODE = "view.html.darkMode";
+    private static final String CONFIG_HTML_SHOW_WARNING = "view.html.warning";
+    private static final String CONFIG_HTML_ENABLE_DARKMODE = "view.html.darkMode";
+    private static final String CONFIG_HTML_SHOW_BLOCKED_IMAGES = "view.html.blockedImages";
 
     private static final String CONFIG_COPY_TO_SENT = "composer.copy.to.sent";
     static final String CONFIG_LEAVE_ON_SERVER = "pop3.leave.on.server";
@@ -626,7 +627,7 @@ public class WebMail extends HttpServlet
                 reason = "";
             }
 
-            boolean showHTMLWarning = Boolean.parseBoolean(Config.getProperty(CONFIG_SHOW_HTML_WARNING, "true"));
+            boolean showHTMLWarning = Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_SHOW_WARNING, "true"));
             I2PAppContext ctx = I2PAppContext.getGlobalContext();
             String theme = ctx.getProperty(RC_PROP_THEME, DEFAULT_THEME);
 
@@ -638,11 +639,13 @@ public class WebMail extends HttpServlet
             if (html)
                 out.print("<tr class=\"mailbody htmlView\"><td colspan=2>");
             if (html && allowHtml != HtmlMode.NONE && showBody && "text/html".equals(mailPart.type)) {
-                boolean enableDarkMode = Boolean.parseBoolean(Config.getProperty(CONFIG_ENABLE_DARKMODE, "true"));
+                boolean enableDarkMode = Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_ENABLE_DARKMODE, "true"));
+                boolean showBlockedImages = Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_SHOW_BLOCKED_IMAGES, "false"));
                 out.print("<iframe src=\"" + myself + '?' + RAW_ATTACHMENT + '=' + mailPart.getID() + "&amp;" + B64UIDL + '=' +
                           Base64.encode(mailPart.uidl) + "\" name=\"mailhtmlframe" + mailPart.getID() + "\" id=iframeSusiHtmlView " +
-                          "width=100% height=100% scrolling=auto frameborder=0 border=0 allowtransparency=true data-theme=\"" + theme + "\"" +
-                          (enableDarkMode ? " class=darkModeActive" : "") + "></iframe>\n");
+                          "width=100% height=100% scrolling=auto frameborder=0 border=0 allowtransparency=true data-theme=\"" + theme +
+                          "\" class=\"" + (enableDarkMode ? "darkModeActive" : "") + (showBlockedImages ? " showBlockedImages" : "") +
+                          "\"></iframe>\n");
                 out.print("</td></tr>\n<tr class=mailbody><td colspan=2>");
                 // TODO scrolling=no if js is on
             } else if (showBody) {
@@ -2788,7 +2791,7 @@ public class WebMail extends HttpServlet
                             "<script src=/susimail/js/sanitizeHTML.js></script>\n" + 
                             "<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n";
                         // inject dark mode theme into iframe if dark/midnight theme active
-                        boolean enableDarkMode = Boolean.parseBoolean(Config.getProperty(CONFIG_ENABLE_DARKMODE, "true"));
+                        boolean enableDarkMode = Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_ENABLE_DARKMODE, "true"));
                         if ((theme.contains("dark") || theme.contains("night")) && enableDarkMode) {
                             contentWindowJs += "<link rel=stylesheet href=/themes/susimail/darkModeHTML.css>";
                         }
