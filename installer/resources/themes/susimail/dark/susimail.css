@@ -40,7 +40,8 @@ p.info{color:#030}
 #toggleHtmlView{box-shadow:var(--highlight),0 0 1px 2px #070 inset;background:#000}
 #toggleHtmlView td{padding:3px 5px}
 #toggleHtmlView .info{padding:4px 16px 4px 48px;font-weight:800;font-size:110%;color:#d00;border:0;box-shadow:none;background:var(--warning) no-repeat 6px center / 32px}
-#iframeSusiHtmlView{margin:10px 10px 3px;width:calc(100% - 20px);border-radius:10px}
+#iframeSusiHtmlView{margin:10px 10px 3px;padding:20px 10px;width:calc(100% - 20px);border-radius:10px;background:#fff}
+#iframeSusiHtmlView.darkModeActive{padding:20px 10px;width:calc(100% - 40px);box-shadow:0 0 0 1px #131;background:#000}
 p.mailbody{margin-top:0;padding:0 0 15px;word-break:break-all;line-height:1.3;text-align:left;color:#b5b774}
 p.mailbody+p.info{margin-top:-48px}
 p.text{margin-left:10px;margin-right:10px}
@@ -64,6 +65,7 @@ tr.mailbody,#message_full tr:first-child{background:#000800}
 #message_full{margin:0;padding:0;border-collapse:separate;border-spacing:0}
 #message_full tr:first-child{background:repeating-linear-gradient(180deg,#010 1px,#010 2px,#000 3px)}
 #message_full td[colspan="2"]{border-bottom:var(--border)}
+#message_full td[colspan="2"]:empty{display:none}
 #mailhead{margin:0;padding:0}
 #mailhead tr:first-child{background:none}
 #mailhead td{padding:3px;vertical-align:text-bottom;border:0}
@@ -168,6 +170,7 @@ input[type=text]::placeholder,input[type=password]::placeholder{text-transform:l
 #toggleHeaders a:hover,#toggleHeaders a:focus,#toggleViewMode a:hover,#toggleViewMode a:focus{color:#f60;background:var(--btn_hover)}
 #toggleHeaders a:active,#toggleViewMode a:active{color:var(--ink);background:var(--hover)}
 #newTabHtmlView{margin-left:0}
+#switchViewMode:empty+#newTabHtmlView{margin-left:3px}
 
 /* pagenav */
 div.pagenav{padding:10px 5px 0;border-top:1px solid #555;border-radius:0 0 2px 2px}
