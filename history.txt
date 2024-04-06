@@ -1,6 +1,9 @@
 2024-04-06 dr|z3d
- * SusiMail: Enable dark mode for HTML messages when dark themes active:
-   view.html.darkMode={true|false}
+ * SusiMail:
+   - Enable dark mode for HTML messages when dark themes active:
+     view.html.darkMode={true|false}
+   - Hide blocked images in HTML messages by default:
+     view.html.blockedImages={true|false}
 
 2024-04-05 zzz
  * SusiMail:
