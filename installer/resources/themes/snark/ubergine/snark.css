@@ -969,6 +969,9 @@ body:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:last-child{border-
 
 /* create torrent file filtering */
 .createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-weight:600;font-style:italic;border:var(--border_inner);box-shadow:var(--highlight_light);background:linear-gradient(180deg,#616,#414);transform: translateY(2px)}
+.createFilterToggle.starts_with{border-left-width:5px}
+.createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
+.createFilterToggle.ends_with{border-right-width:5px}
 #contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-style:normal;box-shadow:var(--shadow_inset);background:url(/i2psnark/.res/icons/tick.svg) no-repeat 8px center/10px,linear-gradient(180deg,#313,#515)}
 #contentFilter{margin:0;width:80%;display:flex;flex-wrap:wrap;align-items:center}
 #contentFilter input[type=checkbox]{display:none}

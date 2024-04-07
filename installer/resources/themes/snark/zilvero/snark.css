@@ -603,6 +603,9 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 
 /* create torrent file filters */
 .createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;min-width:80px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-style:italic;border:var(--border)}
+.createFilterToggle.starts_with{border-left-width:5px}
+.createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
+.createFilterToggle.ends_with{border-right-width:5px}
 #contentFilter{width:100%;margin:2px 0 -4px 2px;display:flex;flex-wrap:wrap}
 #contentFilter input[type=checkbox]{display:none}
 #contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_active);background:#eee url(/i2psnark/.res/icons/tick.svg) no-repeat 8px center/10px}

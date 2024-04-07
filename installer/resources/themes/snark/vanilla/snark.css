@@ -661,6 +661,9 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 /* create torrent file filtering */
 form[action^="/i2psnark/configure"]{display:block}
 .createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-weight:600;font-style:italic;border:var(--btn_border);box-shadow:var(--highlight);background:var(--nav);transform: translateY(2px)}
+.createFilterToggle.starts_with{border-left-width:5px}
+.createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
+.createFilterToggle.ends_with{border-right-width:5px}
 .createFilterToggle:hover{border:var(--btn_border_hover);background:var(--nav_hover)}
 .createFilterToggle:active{box-shadow:var(--btn_shadow_inset)}
 #addFileFilter input[type=text]{width:200px}

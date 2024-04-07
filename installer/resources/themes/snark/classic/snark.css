@@ -752,6 +752,9 @@ th #nameRequired,th .commentAuthorName{margin-top:8px;vertical-align:middle}
 /* create torrent file filters */
 form[action^="/i2psnark/configure"]{display:block}
 .createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;min-width:80px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-style:italic;border:var(--border_soft)}
+.createFilterToggle.starts_with{border-left-width:5px}
+.createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
+.createFilterToggle.ends_with{border-right-width:5px}
 #contentFilter{margin-bottom:-8px;padding:6px 4px;width:calc(100% - 150px);display:flex;flex-wrap:wrap}
 #contentFilter input[type=checkbox]{display:none}
 #contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 18px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_active);background:url(images/delete.svg) no-repeat 8px calc(50% + 1px)/8px,var(--btn_hover)}

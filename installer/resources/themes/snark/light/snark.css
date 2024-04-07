@@ -960,6 +960,9 @@ a,a:link,th,td,button,input,select,textarea{font-size:10pt}
 
 form[action^="/i2psnark/configure"]{display:block}
 .createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;min-width:80px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-style:italic;border:var(--border_input)}
+.createFilterToggle.starts_with{border-left-width:5px}
+.createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
+.createFilterToggle.ends_with{border-right-width:5px}
 #contentFilter{margin:-3px 0;padding:0 0 6px;width:100%;display:flex;flex-wrap:wrap}
 #contentFilter input[type=checkbox]{display:none}
 #contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_active);background:url(images/delete.svg) no-repeat 9px calc(50% + 1px)/10px,var(--btn_hover)}

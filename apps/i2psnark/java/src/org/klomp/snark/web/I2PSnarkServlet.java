@@ -3406,8 +3406,9 @@ public class I2PSnarkServlet extends BasicServlet {
            boolean isDefault = f.isDefault;
            buf.append("<input type=checkbox id=").append(nameUnderscore).append(" name=filters")
               .append(" value=\"").append(name).append("\"").append(isDefault ? " checked" : "").append(" hidden>")
-              .append("<label for=\"").append(nameUnderscore).append("\" class=createFilterToggle title=\"Filter pattern: (")
-              .append(filterTypeLabel).append(") ").append(pattern).append("\">").append(name).append("</label>");
+              .append("<label for=\"").append(nameUnderscore).append("\" class=\"createFilterToggle ").append(type)
+              .append("\" title=\"Filter pattern: (").append(filterTypeLabel).append(") ").append(pattern).append("\">")
+              .append(name).append("</label>");
         }
 
         buf.append("</select></td></tr>")
