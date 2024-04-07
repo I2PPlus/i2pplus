@@ -34,7 +34,7 @@ function setupFallbackCss() {
   const head = iframe.contentWindow.document.head || document.head;
   const body = iframe.contentWindow.document.body || document.body;
   const fallbackStyles = document.createElement("style");
-  fallbackStyles.innerHTML = "html,body{font-family:Open Sans,Segoe UI,Noto Sans,sans-serif;color:#222;background:#fff}body{padding:15px!important}#endOfPage{display:block;height:15px}";
+  fallbackStyles.innerHTML = "html,body{font-family:Open Sans,Segoe UI,Noto Sans,sans-serif;color:#222;background:#fff}#endOfPage{display:block;height:15px}";
   if (head) {head.prepend(fallbackStyles);}
   else {body.prepend(fallbackStyles);}
 }

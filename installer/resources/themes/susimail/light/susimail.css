@@ -338,6 +338,8 @@ td.mailListAttachment.isAttached.htmlMessage{background:var(--html) no-repeat ce
 #mailbox tr:nth-child(2){position:sticky;top:42px;z-index:500}
 #mailbox tr:nth-child(3) td{border-top:0}
 .htmlView+tr>td[colspan="2"]:empty{display:none}
+#blockedImages td{padding:4px;border-top:var(--border_inner)}
+#blockedImages .info{margin:0;padding:0 0 0 28px;display:inline-block;line-height:2.2;font-weight:600;color:#900;background: var(--warning) no-repeat left center/24px}
 
 /* confirm mail delete */
 #confirmdelete td{box-shadow:var(--highlight);background:repeating-linear-gradient(45deg,#900,#900 10px,#ee9 10px,#ee9 20px);background-size:400%;animation:attention 360s linear infinite both}

@@ -629,6 +629,7 @@ public class WebMail extends HttpServlet
 
             boolean showHTMLWarning = Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_SHOW_WARNING, "true"));
             I2PAppContext ctx = I2PAppContext.getGlobalContext();
+            boolean showBlockedImages = Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_SHOW_BLOCKED_IMAGES, "false"));
             String theme = ctx.getProperty(RC_PROP_THEME, DEFAULT_THEME);
 
             if (html && allowHtml != HtmlMode.NONE && showBody && "text/html".equals(mailPart.type) && showHTMLWarning) {
@@ -636,11 +637,15 @@ public class WebMail extends HttpServlet
                             "<i>" + _t("To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message.") + "</i>");
                 out.print("<noscript><br><i>" + _t("Enable Javascript for enhanced presentation and additional features.") + "</i></noscript></p></td></tr>\n");
             }
-            if (html)
+            if (html) {
+                if (!showBlockedImages) {
+                    out.print("<tr id=blockedImages hidden><td colspan=2>" + "<p class=info>" +
+                              _t("Not displaying {0} blocked images in this message", "<span id=blockedImgCount></span>") + "</p></td></tr>");
+                }
                 out.print("<tr class=\"mailbody htmlView\"><td colspan=2>");
+            }
             if (html && allowHtml != HtmlMode.NONE && showBody && "text/html".equals(mailPart.type)) {
                 boolean enableDarkMode = Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_ENABLE_DARKMODE, "true"));
-                boolean showBlockedImages = Boolean.parseBoolean(Config.getProperty(CONFIG_HTML_SHOW_BLOCKED_IMAGES, "false"));
                 out.print("<iframe src=\"" + myself + '?' + RAW_ATTACHMENT + '=' + mailPart.getID() + "&amp;" + B64UIDL + '=' +
                           Base64.encode(mailPart.uidl) + "\" name=\"mailhtmlframe" + mailPart.getID() + "\" id=iframeSusiHtmlView " +
                           "width=100% height=100% scrolling=auto frameborder=0 border=0 allowtransparency=true data-theme=\"" + theme +

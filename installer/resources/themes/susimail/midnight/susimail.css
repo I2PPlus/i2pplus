@@ -136,9 +136,10 @@ input.delete{margin-left:2px}
 #dologin input[name="pass"]{background:#000 var(--key) no-repeat 6px center/14px}
 #dologin input[type=password],#dologin input[type=text]{width:60%}
 #privacywarn{box-shadow:var(--highlight),0 0 1px 2px #700 inset;background:#200}
-#privacywarn td,#toggleHtmlView td{padding:3px 5px;text-align:center;border-top:var(--border_inner);border-bottom:var(--border_inner);box-shadow:var(--highlight),0 0 1px 2px #700 inset;background:#000}
+#privacywarn td,#toggleHtmlView td,#blockedImages td{padding:3px 5px;text-align:center;border-top:var(--border_inner);border-bottom:var(--border_inner);box-shadow:var(--highlight),0 0 1px 2px #700 inset;background:#000}
 #privacywarn .info{margin:8px;padding:4px 16px 4px 48px;display:inline-block;font-weight:800;font-size:110%;color:#d00;border:0;box-shadow:none;background:var(--warning) no-repeat 6px center/32px}
-#toggleHtmlView .info{margin:9px;padding:4px 16px 4px 48px;display:inline-block;font-weight:800;font-size:110%;color:#d00;border:0;box-shadow:none;background:var(--infobox) no-repeat 6px center/32px}
+#toggleHtmlView .info,#blockedImages .info{margin:9px;padding:4px 16px 4px 36px;display:inline-block;font-weight:600;font-size:110%;color:#d00;border:0;box-shadow:none;background:var(--infobox) no-repeat 6px center/24px}
+#blockedImages .info{background:var(--warning) no-repeat 6px center/24px}
 #iframeSusiHtmlView{margin:10px 10px -14px;width:calc(100% - 20px);border-radius:10px}
 
 /* login + misc mods */
