@@ -1,3 +1,7 @@
+2024-04-07 dr|z3d
+ * SusiMail: Display blocked image count in html messages if
+   view.html.blockedImages=false
+
 2024-04-06 dr|z3d
  * SusiMail:
    - Enable dark mode for HTML messages when dark themes active:
