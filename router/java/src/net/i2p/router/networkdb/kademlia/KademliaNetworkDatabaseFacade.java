@@ -1485,7 +1485,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String routerId = "";
         String v = routerInfo.getVersion();
         String minRouterVersion = "0.9.20";
-        String MIN_VERSION = "0.9.60";
+        String MIN_VERSION = "0.9.61";
         String CURRENT_VERSION = "0.9.61";
         String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
         boolean isSlow = routerInfo != null && (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
