@@ -297,7 +297,7 @@ public class Storage implements Closeable {
         File[] files = f.listFiles();
         if (files == null) {
             if (_log.shouldWarn()) {
-                _log.warn("WARNING: Skipping '" + f + "' not a normal file.");
+                _log.warn("[I2PSnark] WARNING: Skipping '" + f + "' -> Not a normal file!");
             }
             return;
         }
@@ -757,7 +757,7 @@ public class Storage implements Closeable {
       if (files == null) {
           // Create base as file.
           if (_log.shouldInfo())
-              _log.info("Creating/checking file: " + _base);
+              _log.info("[I2PSnark] Creating/checking file: " + _base);
           // createNewFile() can throw a "Permission denied" IOE even if the file exists???
           // so do it second
           if (!_base.exists() && !_base.createNewFile())
@@ -774,7 +774,7 @@ public class Storage implements Closeable {
       } else {
           // Create base as dir.
           if (_log.shouldInfo())
-              _log.info("Creating/checking directory: " + _base);
+              _log.info("[I2PSnark] Creating/checking directory: " + _base);
           if (!_base.mkdir() && !_base.isDirectory())
               throw new IOException("Could not create directory " + _base);
 
@@ -825,21 +825,21 @@ public class Storage implements Closeable {
           needed = metainfo.getPieces() - bitfield.count();
           _probablyComplete = complete();
       if (_log.shouldInfo())
-          _log.info("Found saved state and files unchanged, skipping check");
+          _log.info("[I2PSnark] Found saved state and files unchanged, skipping integrity check");
       } else {
           // the following sets the needed variable
           changed = true;
           if (_log.shouldInfo())
-              _log.info("Forcing integrity check...");
+              _log.info("[I2PSnark] Forcing integrity check...");
           checkCreateFiles(false);
       }
       if (complete()) {
           if (_log.shouldInfo())
-              _log.info("Torrent is complete");
+              _log.info("[I2PSnark] Torrent is complete");
       } else {
           // fixme saved priorities
           if (_log.shouldInfo())
-              _log.info("Still need " + needed + " out of " + metainfo.getPieces() + " pieces");
+              _log.info("[I2PSnark] Still need " + needed + " out of " + metainfo.getPieces() + " pieces");
       }
   }
 
@@ -1165,7 +1165,7 @@ public class Storage implements Closeable {
               _checkProgress.set((int) (pieces * lengthProgress / total_length));
         } else {
           String msg = "File '" + tf.name + "' exists, but has wrong length (expected " +
-                       tf.length + " but found " + length + ") - repairing corruption";
+                       tf.length + " but found " + length + ") - repairing corruption...";
           if (listener != null)
               listener.addMessage(msg);
           _log.error(msg);
@@ -1279,7 +1279,7 @@ public class Storage implements Closeable {
         try {
             tf.closeRAF();
         } catch (IOException ioe) {
-            _log.error("Error closing " + tf, ioe);
+            _log.error("[I2PSnark] Error closing " + tf, ioe);
             // gobble gobble
         }
       }
@@ -1306,7 +1306,7 @@ public class Storage implements Closeable {
             rv = new ByteArray(new byte[len]);
     } catch (OutOfMemoryError oom) {
       if (_log.shouldWarn())
-          _log.warn("Out of memory, can't honor request for piece " + piece, oom);
+          _log.warn("[I2PSnark] Out of memory, can't honor request for piece " + piece, oom);
       return null;
     }
     bs = rv.getData();
@@ -1369,7 +1369,7 @@ public class Storage implements Closeable {
                           // Once we have written to it, it isn't empty/sparse any more.
                           if (tf.priority >= 0) {
                               if (_log.shouldInfo())
-                                  _log.info("Ballooning " + tf);
+                                  _log.info("[I2PSnark] Ballooning " + tf);
                               tf.balloonFile();
                           } else {
                               tf.isSparse = false;
@@ -1429,7 +1429,7 @@ public class Storage implements Closeable {
         if (listener != null)
             listener.setWantedPieces(this);
         if (_log.shouldWarn())
-            _log.warn("WARNING: Not really done, missing " + needed
+            _log.warn("[I2PSnark] WARNING: Not really done, missing " + needed
                     + " pieces");
       }
     }
