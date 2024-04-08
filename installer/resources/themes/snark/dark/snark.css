@@ -12,6 +12,7 @@
 --row_highlight:var(--highlight),inset 0 0 2px 1px #040,inset 0 0 0 3px #000800;
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 --tabIcon:linear-gradient(180deg,#000 50%,#040 50%);
+--tr:linear-gradient(180deg,rgba(0,24,0,.5),rgba(0,8,0,.5));
 }
 
 html,body{background:#000}
@@ -764,7 +765,7 @@ input:checked+.toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(153,
 #createTorrentFilters{display:table-row}
 #contentFilter{width:calc(100% - 200px);margin:3px 0 0 3px}
 #contentFilter input[type=checkbox]{display:none}
-#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 10px 1px 24px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_active);background:url(/i2psnark/.res/icons/tick.svg) no-repeat 10px calc(50% + 1px)/10px,var(--badge_active)}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 10px 1px 24px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_active);background:var(--delete_hover) no-repeat 10px calc(50% + 1px)/10px,var(--badge_active);background-blend-mode:hard-light}
 #fileFilter{width:calc(100% - 2px);margin:0 auto;display:block}
 #fileFilter th,#fileFilter td{text-align:left}
 #fileFilter th{white-space:nowrap;border-bottom:0;padding-top:7px;padding-bottom:7px}

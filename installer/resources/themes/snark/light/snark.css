@@ -338,6 +338,7 @@ input.create:hover,input.create:focus{background:var(--create) no-repeat center 
 #addSection input[type=file]{margin-top:-1px;width:calc(80% - 10px)}
 #configs input[type=submit],#trackerconfig input[type=submit],input[name="savepri"]{text-transform:capitalize}
 #configureAuthor input{width:250px}
+.r.numeric{min-width:68px}
 
 .snarkConfig{width:100%;font-size:10pt}
 .snarkNewTorrent{font-size:9pt}
@@ -581,7 +582,8 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 input.trackerannounce{width:230px}
 input.trackerhome{width:200px}
 .knownTracker a{width:220px;max-width:220px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;font-size:90%!important}
-.knownTracker:hover,.knownTracker:hover td{background:#ffb}
+.knownTracker:hover,.knownTracker:hover td,.createFilterString:hover{background:#ffb}
+.knownTracker:nth-child(n+2) td{border-top:var(--border_softer)}
 #trackerconfig input.delete,#trackerconfig input.reload{float:left}
 #trackerconfig input.accept,#trackerconfig input.add{float:right}
 #trackerconfig input.accept{margin-right:6px}
@@ -737,6 +739,36 @@ td.tAction input[type=submit]{margin-top:1px}
 #actionStopAll,#actionStopAll:active{background:var(--stopall) no-repeat center center/auto 14px,var(--btnAction),var(--stopall_hover) no-repeat center center/auto 14px}
 #torrents #actionStopAll,#torrents #actionStartAll{padding:11px 19px}
 #torrents .tAction input:active,#actionStartAll:active,#actionStopAll:active{box-shadow:var(--highlight),inset 2px 2px 3px #557;background-size:auto 12px,100%}
+
+/* create torrent file filtering */
+form[action^="/i2psnark/configure"]{display:block}
+.createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;line-height:1.2;text-align:center;font-style:italic;border:var(--border_input)}
+.createFilterToggle.starts_with{border-left-width:5px}
+.createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
+.createFilterToggle.ends_with{border-right-width:5px}
+#contentFilter{margin:-3px 0;padding:0 0 6px;width:100%;display:flex;flex-wrap:wrap}
+#contentFilter input[type=checkbox]{display:none}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_active);background:var(--delete) no-repeat 9px calc(50% + 1px)/10px,var(--btn_hover)}
+#createTorrentFilters{display:table-row}
+#fileFilter{width:calc(100% - 20px);margin:-1px auto 0;display:block}
+#fileFilter table{margin-bottom:0}
+#fileFilter tr:nth-child(2) td,#fileFilter #addFileFilter td{border-top:var(--border_soft)}
+#fileFilter tr:not(:last-child).spacer td{padding:4px 0;font-size:0;border-bottom:var(--border)}
+#fileFilter tr:nth-last-child(2) td{border:0}
+#fileFilter th,#fileFilter td{padding:4px;text-align:left;border-top:var(--border_soft)}
+#fileFilter th{padding:3px 4px;white-space:nowrap;font-size:85%;border-bottom:0}
+#fileFilter th:first-child {width:32px;border-left:var(--border_soft);border-radius:2px 0 0 2px;background: var(--nuke) no-repeat center center/14px,var(--th)}
+#fileFilter th:last-child,#fileFilter td:last-child{width:1%;text-align:center}
+#fileFilter th:last-child {border-right:var(--border_soft);border-radius:0 2px 2px 0}
+#fileFilter td{border-top:var(--border_softer)}
+#fileFilter #addFileFilter td{padding-top:6px;padding-bottom:6px;border-bottom:var(--border_soft)}
+#fileFilter input[type=submit]{margin:6px 4px 6px}
+#fileFilter .delete,#fileFilter .reload{margin:6px 12px 6px -3px;float:left}
+#fileFilter .accept,#fileFilter .add{margin:6px 6px 6px 12px;float:right}
+#fileFilter .delete,#fileFilter .add{margin-left:4px}
+#fileFilter input.accept[type=submit]{margin-right:0}
+#fileFilter input.delete[type=submit]{margin-left:0}
+#fileFilter tr:last-child, #fileFilter tr.spacer{display:none}
 
 /* torrent edit */
 #torrentEdit{margin-bottom:0}
@@ -957,32 +989,3 @@ a,a:link,th,td,button,input,select,textarea{font-size:10pt}
 .pagenavcontrols{padding:5px 5px 4px}
 #torrents code{font-size:9pt}
 }
-
-form[action^="/i2psnark/configure"]{display:block}
-.createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;min-width:80px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-style:italic;border:var(--border_input)}
-.createFilterToggle.starts_with{border-left-width:5px}
-.createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
-.createFilterToggle.ends_with{border-right-width:5px}
-#contentFilter{margin:-3px 0;padding:0 0 6px;width:100%;display:flex;flex-wrap:wrap}
-#contentFilter input[type=checkbox]{display:none}
-#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_active);background:url(images/delete.svg) no-repeat 9px calc(50% + 1px)/10px,var(--btn_hover)}
-#createTorrentFilters{display:table-row}
-#fileFilter{width:calc(100% - 20px);margin:-1px auto 0;display:block}
-#fileFilter table{margin-bottom:0}
-#fileFilter tr:nth-child(2) td,#fileFilter #addFileFilter td{border-top:var(--border_soft)}
-#fileFilter tr:not(:last-child).spacer td{padding:4px 0;font-size:0;border-bottom:var(--border)}
-#fileFilter tr:nth-last-child(2) td{border:0}
-#fileFilter th,#fileFilter td{padding:4px;text-align:left;border-top:var(--border_soft)}
-#fileFilter th{padding:3px 4px;white-space:nowrap;font-size:85%;border-bottom:0}
-#fileFilter th:first-child {width:32px;border-left:var(--border_soft);border-radius:2px 0 0 2px;background: var(--nuke) no-repeat center center/14px,var(--th)}
-#fileFilter th:last-child,#fileFilter td:last-child{width:1%;text-align:center}
-#fileFilter th:last-child {border-right:var(--border_soft);border-radius:0 2px 2px 0}
-#fileFilter td{border-top:var(--border_softer)}
-#fileFilter #addFileFilter td{padding-top:6px;padding-bottom:6px;border-bottom:var(--border_soft)}
-#fileFilter input[type=submit]{margin:6px 4px 6px}
-#fileFilter .delete,#fileFilter .reload{margin:6px 12px 6px -3px;float:left}
-#fileFilter .accept,#fileFilter .add{margin:6px 6px 6px 12px;float:right}
-#fileFilter .delete,#fileFilter .add{margin-left:4px}
-#fileFilter input.accept[type=submit]{margin-right:0}
-#fileFilter input.delete[type=submit]{margin-left:0}
-#fileFilter tr:last-child, #fileFilter tr.spacer{display:none}

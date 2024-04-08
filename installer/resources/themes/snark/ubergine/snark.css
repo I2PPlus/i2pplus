@@ -972,7 +972,7 @@ body:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:last-child{border-
 .createFilterToggle.starts_with{border-left-width:5px}
 .createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
 .createFilterToggle.ends_with{border-right-width:5px}
-#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-style:normal;box-shadow:var(--shadow_inset);background:url(/i2psnark/.res/icons/tick.svg) no-repeat 8px center/10px,linear-gradient(180deg,#313,#515)}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-style:normal;box-shadow:var(--shadow_inset);background:var(--delete) no-repeat 8px calc(50% + 1px)/10px,linear-gradient(180deg,#313,#515);background-blend-mode:hard-light}
 #contentFilter{margin:0;width:80%;display:flex;flex-wrap:wrap;align-items:center}
 #contentFilter input[type=checkbox]{display:none}
 #fileFilter{margin:0 auto;display:block;margin-bottom:10px}

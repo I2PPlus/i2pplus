@@ -500,13 +500,13 @@ code{padding:0 2px;font:8.5pt 700 var(--monospaced);color:#7166ff}
 #createSection #trackerselect td:nth-child(n+2){text-align:center}
 form:last-child>.configPanel{margin-bottom:-1px}
 #createTorrentFilters{display:table-row}
-.createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;min-width:80px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-style:italic;border:var(--border_soft)}
+.createFilterToggle{margin:0 4px 4px 0;padding:2px 8px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-size:95%;font-style:italic;border:var(--border_soft)}
 .createFilterToggle.starts_with{border-left-width:5px}
 .createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
 .createFilterToggle.ends_with{border-right-width:5px}
-#contentFilter{margin-bottom:-8px;padding:6px 4px;width:calc(100% - 150px);display:flex;flex-wrap:wrap}
+#contentFilter{margin:-2px 1px -9px;padding:6px 4px;width:calc(100% - 150px);display:flex;flex-wrap:wrap}
 #contentFilter input[type=checkbox]{display:none}
-#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 18px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_active);background:#113 url(images/delete.svg) no-repeat 8px calc(50% + 1px)/8px}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_active);background:#113 url(images/delete.svg) no-repeat 8px calc(50% + 1px)/8px}
 .iframed #addSection{margin-top:-1px}
 .iframed #addSection table,.iframed #createSection table:not(#trackerselect){animation:fade-in .1s linear}
 .iframed #createSection,.iframed #addSection,.iframed #configSection{margin-left:0;margin-right:0;border-radius:0;border-left:0;border-right:0}
