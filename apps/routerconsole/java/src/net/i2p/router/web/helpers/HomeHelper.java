@@ -141,7 +141,6 @@ public class HomeHelper extends HelperBase {
         "ramble.i2p" + S + _x("Cross-network micro-blogging &amp; forums &amp; wiki") + S + "http://ramble.i2p/" + S + I + "eepsites/ramble.svg" + S +
         "shreddit" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://shreddit.i2p/" + S + I + "eepsites/shreddit.svg" + S +
         "teddit" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.ls.i2p/" + S + I + "eepsites/teddit.svg" + S +
-        //"teddit.i2p" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.i2p/" + S + I + "eepsites/teddit.svg" + S +
         //"StackOverflow" + S + _x("Developer question &amp; answer forums") + S + "http://stackoverflow.i2p/" + S + I + "eepsites/stackoverflow.svg" + S +
         //"dread.i2p" + S + _x("Darknet forums") + S + "http://dread.i2p/d/i2p/?sort=new" + S + I + "eepsites/dread.svg" + S +
         //_x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "eepsites/forum.svg" + S +
@@ -170,18 +169,18 @@ public class HomeHelper extends HelperBase {
 // search engines
         "ahmia.i2p" + S +_x("Tor-focused Search Engine") + S + "http://ahmia.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
         "binternet" + S +_x("Pinterest Image Search Engine") + S + "http://binternet.lostskunk-dnr.i2p/" + S + I + "eepsites/binternet.svg" + S +
-        "DuckDuckGo" + S +_x("DuckDuckGo Search Engine (no javascript)") + S + "http://duckduckgo.i2p/" + S + I + "eepsites/duckduckgo.svg" + S +
         "btdigg.i2p" + S +_x("Clearnet BitTorrent DHT search engine") + S + "http://btdigg.i2p/" + S + I + "eepsites/torrentsearch.svg" + S +
-        "I2PSearch" + S +_x("I2P Web Search Engine") + S + "http://i2psearch.i2p/" + S + I + "search.svg" + S +
+        "DuckDuckGo" + S +_x("DuckDuckGo Search Engine (no javascript)") + S + "http://duckduckgo.i2p/" + S + I + "eepsites/duckduckgo.svg" + S +
         "LibreX" + S +_x("Clearnet Search Engine") + S + "http://libxsearch.i2p/" + S + I + "search.svg" + S +
         "Mojeek" + S +_x("Privacy-focused Clearnet Search Engine") + S + "http://mojeek.i2p/" + S + I + "search.svg" + S +
         "Shinobi" + S +_x("I2P Web Search Engine") + S + "http://shinobi.i2p/" + S + I + "eepsites/shinobi.png" + S +
-        "shmoogle.i2p" + S +_x("I2P Web Search Engine") + S + "http://shmoogle.i2p/" + S + I + "search.svg" + S +
         "torch.i2p" + S +_x("Tor-focused Search Engine") + S + "http://torch.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
+        //"I2PSearch" + S +_x("I2P Web Search Engine") + S + "http://i2psearch.i2p/" + S + I + "search.svg" + S +
         //"Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "search.svg" + S +
         //"LibreY" + S +_x("Clearnet Search Engine") + S + "http://librey.i2p/" + S + I + "search.svg" + S +
         //"raklet.i2p" + S +_x("Tor-focused Search Engine") + S + "http://raklet.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
         //"Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "search.svg" + S +
+        //"shmoogle.i2p" + S +_x("I2P Web Search Engine") + S + "http://shmoogle.i2p/" + S + I + "search.svg" + S +
 
 // wikis & reference
         "ddosecrets.i2p" + S + _x("Enabling the free transmission of data in the public interest") + S + "http://ddosecrets.i2p/" + S + I + "wiki.svg" + S +

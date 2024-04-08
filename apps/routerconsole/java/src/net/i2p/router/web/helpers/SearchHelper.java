@@ -28,14 +28,11 @@ public class SearchHelper extends HelperBase {
     static final String ENGINES_DEFAULT =
     // TODO: add a checkbox or dropdown to UI to choose default engine
         "ahmia.i2p"                + S +     "http://ahmia.i2p/search/?q=%s" + S +
-        "duckduckgo.i2p"           + S +     "http://duckduckgo.i2p/?q=%s" + S +
         "i2pforum.i2p"             + S +     "http://i2pforum.i2p/search.php?keywords=%s" + S +
-        "i2psearch.i2p"            + S +     "http://i2psearch.i2p/search?q=%s" + S +
         "hackaday.i2p"             + S +     "http://hackaday.i2p/blog/?s=%s" + S +
         "isitup.i2p"               + S +     "http://isitup.i2p/api/check?sitename=%s" + S +
         "libxsearch.i2p"           + S +     "http://libxsearch.i2p/search.php?q=%s" + S +
         "mojeek.i2p"               + S +     "http://mojeek.i2p/search?date=1&size=1&t=40&q=%s" + S +
-        "natter.i2p"               + S +     "http://natter.i2p/search?f=tweets&q=%s" + S +
         "newsnow.i2p"              + S +     "http://newsnow.i2p/?search=%s" + S +
         "notbob.i2p"               + S +     "http://notbob.i2p/cgi-bin/defcon.cgi?search=%s" + S +
         "pinterest"                + S +     "http://binternet.lostskunk-dnr.i2p/search.php?q=%s" + S +
@@ -43,26 +40,29 @@ public class SearchHelper extends HelperBase {
         "ramble.i2p"               + S +     "http://ramble.i2p/search?q=%s" + S +
         "slashdot.i2p"             + S +     "http://slashdot.i2p/index2.pl?fhfilter=%s" + S +
         "shinobi.i2p"              + S +     "http://shinobi.i2p/search?query=%s" + S +
-        "shmoogle.i2p"             + S +     "http://shmoogle.i2p/yacysearch.html?query=%s" + S +
         "shreddit.i2p/r/i2p"       + S +     "http://shreddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
+        "teddit.i2p/r/i2p"         + S +     "http://teddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
         "tracker2.postman.i2p"     + S +     "http://tracker2.postman.i2p/?search=%s" + S +
         "tube.i2p"                 + S +     "http://tube.i2p/search?query=%s" + S +
         "wiki.i2p-projekt.i2p"     + S +     "http://wiki.i2p-projekt.i2p/wiki/index.php?search=%s" + S +
         "wikiless.i2p"             + S +     "http://wikiless.i2p/w/index.php?search=%s&fulltext=Search" + S +
         "wordnik.i2p"              + S +     "http://wordnik.i2p/words?myWord=%s" +
+        //"duckduckgo.i2p"           + S +     "http://duckduckgo.i2p/?q=%s" + S +
         //"ebooks.i2p"               + S +     "http://ebooks.i2p/index.php?page=9&query=%s" + S +
         //"eepsites.i2p"             + S +     "http://eepsites.i2p/Content/Search/SearchResults.aspx?inpQuery=%s" + S +
         //"epsilon.i2p"              + S +     "http://epsilon.i2p/search.jsp?q=%s" +  S +
+        //"i2psearch.i2p"            + S +     "http://i2psearch.i2p/search?q=%s" + S +
         //"imperial.i2p"             + S +     "http://imperial.i2p/search/?q=%s" + S +
         //"legwork.i2p"              + S +     "http://legwork.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + S +
+        //"natter.i2p"               + S +     "http://natter.i2p/search?f=tweets&q=%s" + S +
         //"raklet.i2p"               + S +     "http://raklet.i2p/search?page=1&query=%s" + S +
         //"ransack.i2p"              + S +     "http://ransack.i2p/?q=%s" + S +
         //"searchthis.i2p"           + S +     "http://searchthis.i2p/cgi-bin/search.cgi?q=%s" + S +
         //"seeker.i2p"               + S +     "http://seeker.i2p/index.php?query=%s" + S +
+        //"shmoogle.i2p"             + S +     "http://shmoogle.i2p/yacysearch.html?query=%s" + S +
         //"simple-search.i2p"        + S +     "http://simple-search.i2p/search.sh?search=%s" + S +
         //"sprongle.i2p"             + S +     "http://sprongle.i2p/sprongle.php?q=%s" + S +
         //"stackoverflow.i2p"        + S +     "http://duckduckgo.i2p/?q=site%3Astackoverflow.com+%s" + S +
-        //"teddit.i2p/r/i2p"         + S +     "http://teddit.i2p/r/i2p/search?q=%s&restrict_sr=on" + S +
         //"tome.i2p"                 + S +     "http://tome.i2p/search.php?q=%s" + S +
         //"torrentfinder.i2p"        + S +     "http://torrentfinder.i2p/?searchq=%s" + S +
         //"trac.i2p2.i2p"            + S +     "http://trac.i2p2.i2p/search?q=%s" + S +
