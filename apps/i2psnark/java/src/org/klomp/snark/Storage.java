@@ -171,6 +171,7 @@ public class Storage implements Closeable {
       // Create names, rafs and lengths arrays.
       _torrentFiles = getFiles(baseFile, filters);
 
+
       long total = 0;
       ArrayList<Long> lengthsList = new ArrayList<Long>(_torrentFiles.size());
       for (TorrentFile tf : _torrentFiles) {
@@ -182,7 +183,7 @@ public class Storage implements Closeable {
       if (total <= 0)
           throw new IOException("Torrent contains no data");
       if (total > MAX_TOTAL_SIZE)
-          throw new IOException("Torrent too big (" + total + " bytes), max is " + MAX_TOTAL_SIZE);
+          throw new IOException("Torrent too big (" + total + " bytes), maximum permitted is " + MAX_TOTAL_SIZE);
 
       int pc_size;
       if (total <= 5*1024*1024)
