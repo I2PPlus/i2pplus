@@ -3393,7 +3393,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    _manager.getDataDir().getAbsolutePath() + File.separatorChar))
            .append("\" required> <input type=submit class=create value=\"").append(_t("Create torrent"))
            .append("\" name=foo>").append("</td></tr>\n")
-           .append("<tr id=createTorrentFilters>")
+           .append("<tr id=createTorrentFilters title=\"").append(_t("Exclude files from the torrent if they reside in the torrent folder")).append("\">")
            .append("<td>").append(_t("Content Filters")).append(":</td>")
            .append("<td><div id=contentFilter>");
 
