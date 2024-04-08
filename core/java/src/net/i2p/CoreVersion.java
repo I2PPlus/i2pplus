@@ -48,7 +48,7 @@ public class CoreVersion {
      *
      *  @since 0.9.46
      */
-    public final static String PUBLISHED_VERSION = "0.9.61";
+    public final static String PUBLISHED_VERSION = "0.9.62";
 
     /**
      *  For Vuze.

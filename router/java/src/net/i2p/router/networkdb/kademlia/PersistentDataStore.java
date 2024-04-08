@@ -313,7 +313,7 @@ public class PersistentDataStore extends TransientDataStore {
         File dbFile = null;
         String filename = null;
         String MIN_VERSION = "0.9.61";
-        String CURRENT_VERSION = "0.9.61";
+        String CURRENT_VERSION = "0.9.62";
         String v = MIN_VERSION;
         String bw = "K";
         String ip = null;

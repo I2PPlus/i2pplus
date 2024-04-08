@@ -952,8 +952,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
             boolean isHidden = _context.router().isHidden() || _context.getBooleanProperty("router.hiddenMode");
             String v = ri.getVersion();
-            String MIN_VERSION = "0.9.58";
-            String CURRENT_VERSION = "0.9.61";
+            String MIN_VERSION = "0.9.61";
+            String CURRENT_VERSION = "0.9.62";
             long uptime = _context.router().getUptime();
             boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
             boolean isOlderThanCurrent = VersionComparator.comp(v, CURRENT_VERSION) < 0;
@@ -1486,7 +1486,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String v = routerInfo.getVersion();
         String minRouterVersion = "0.9.20";
         String MIN_VERSION = "0.9.61";
-        String CURRENT_VERSION = "0.9.61";
+        String CURRENT_VERSION = "0.9.62";
         String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
         boolean isSlow = routerInfo != null && (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                                 routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
