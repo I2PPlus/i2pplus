@@ -4960,11 +4960,13 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (storage == null) {
                     // Assume complete, perhaps he removed a completed torrent but kept a bookmark
                     complete = true;
+                    //status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
                     status = toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
                 } else {
                     long remaining = fai.remaining;
-                    if (remaining < 0 || (remaining < 0 && fai.isDirectory)) {
+                    if (remaining < 0) {
                         complete = true;
+                        //status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
                         status = toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
                     } else if (remaining == 0 || length <= 0) {
                         complete = true;
@@ -4986,150 +4988,147 @@ public class I2PSnarkServlet extends BasicServlet {
 
                     }
                 }
-
-                String rowClass = (rowEven ? "rowEven" : "rowOdd");
-                String completed = (complete ? "completed" : "incomplete");
-                rowEven = !rowEven;
-                buf.append("<tr class=\"").append(rowClass).append(' ').append(completed).append("\">");
-                String path = addPaths(decodedBase, item.getName());
-                if (fai.isDirectory && !path.endsWith("/")) {
-                    path=addPaths(path,"/");
-                }
-                path = encodePath(path);
-                String icon = toIcon(item);
-                String mime = getMimeType(path);
-                if (mime == null) {
-                    mime = "";
-                }
-
-                boolean isAudio = isAudio(mime);
-                boolean isVideo = !isAudio && isVideo(mime);
-                int videoCount = 0;
-                buf.append("<td class=\"fileIcon");
-                if (!complete) {
-                    buf.append(" volatile");
-                }
-                buf.append("\">");
-                String preview = null;
-                if (isVideo && complete) {
-                    videoCount++;
-                }
-                if (complete || (isAudio && fai.preview > 100*1024) ||
-                    (isVideo && fai.preview > 5*1024*1024 && fai.preview / (double) fai.length >= 0.01d)) {
-                    String ppath = complete ? path : path + "?limit=" + fai.preview;
-                    if (!complete) {
-                        double pct = fai.preview / (double) fai.length;
-                        preview = " &nbsp;<span class=audioPreview>" + _t("Preview") + ": " +
-                                  (new DecimalFormat("0.00%")).format(pct) + "</span>";
-                    }
-                    if (isAudio || isVideo) {
-                        // scale up image thumbnails if directory also contains audio/video
-                        buf.append("\n<style>.thumb{max-height:inherit!important;max-width:240px!important}</style>\n");
-                        // HTML5
-                        if (isAudio) {
-                            buf.append("<audio");
-                        } else {
-                            buf.append("<video");
-                        }
-                        buf.append(" controls><source src=\"").append(ppath);
-                        if (isVideo) {
-                            // display video 20 seconds in for a better chance of a thumbnail
-                            buf.append("#t=20");
-                        }
-                        buf.append("\" type=\"").append(mime).append("\">");
-                    }
-                    buf.append("<a href=\"").append(ppath).append("\">");
-                    if (mime.startsWith("image/")) {
-                        // thumbnail
-                        buf.append("<img alt=\"\" border=0 class=thumb src=\"")
-                           .append(ppath).append("\" data-lightbox data-lightbox-caption=\"")
-                           .append(item.getName()).append("\" data-lightbox-group=\"allInDir\"></a>");
-                    } else {
-                        buf.append(toSVG(icon, _t("Open"))).append("</a>");
-                    }
-                    if (isAudio) {
-                        buf.append("</audio>");
-                    } else if (isVideo) {
-                        buf.append("</video>");
-                    }
-                    if (videoCount == 1) {
-                        buf.append("<script src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");
-                    }
-                } else {
-                    buf.append(toSVG(icon));
-                }
-                buf.append("</td><td class=\"snarkFileName");
-                if (!complete) {
-                    buf.append(" volatile");
-                }
-                buf.append("\">");
-                if (complete) {
-                    buf.append("<a href=\"").append(path).append("\"");
-                    // send browser-viewable files to new tab to avoid potential display in iframe
-                    if (isAudio || isVideo || mime.startsWith("text/") || mime.startsWith("image/") || mime.equals("application/pdf")) {
-                        buf.append(" target=_blank");
-                    }
-                    if (mime.equals("audio/mpeg")) {
-                        buf.append(" class=targetfile");
-                    }
-                    buf.append(">");
-                }
-                buf.append(DataHelper.escapeHTML(item.getName()));
-                if (complete) {
-                    buf.append("</a>");
-                    if (mime.equals("audio/mpeg")) {
-                        String tags = Mp3Tags.getTags(item);
-                        buf.append("<a class=tags href=\"").append(path);
-                        buf.append("\" target=_blank hidden>");
-                        if (tags != null) {
-                            buf.append(tags);
-                        } else {
-                            buf.append(DataHelper.escapeHTML(item.getName()));
-                        }
-                        buf.append("</a>");
-                    }
-                } else if (preview != null) {
-                    buf.append(preview);
-                }
-                buf.append("</td><td class=snarkFileSize>");
-                if (!fai.isDirectory) {
-                    buf.append(formatSize(length));
-                }
-                buf.append("</td><td class=\"fileStatus volatile\">")
-                   //.append(dfmt.format(new Date(item.lastModified())));
-                   .append(status)
-                   .append("</td>");
-                if (showPriority) {
-                    buf.append("<td class=\"priority volatile\">");
-                    if ((!complete) && (!fai.isDirectory)) {
-                        if (!inOrder) {
-                            buf.append("<label class=priorityHigh title=\"")
-                               .append(_t("Download file at high priority")).append("\">")
-                               .append("\n<input type=radio class=\"prihigh optbox\" value=5 name=\"pri.")
-                               .append(fileIndex).append("\" ");
-                            if (priority > 0) {
-                                buf.append("checked=checked");
-                            }
-                            buf.append('>').append(_t("High")).append("</label>");
-                        }
-                        buf.append("<label class=priorityNormal title=\"").append(_t("Download file at normal priority")).append("\">")
-                           .append("\n<input type=radio class=\"prinorm optbox\" value=\"0\" name=\"pri.").append(fileIndex).append("\" ");
-                        if (priority == 0 || (inOrder && priority >= 0)) {
-                            buf.append("checked=checked");
-                        }
-                        buf.append('>').append(_t("Normal")).append("</label>")
-                           .append("<label class=prioritySkip title=\"").append(_t("Do not download this file")).append("\">")
-                           .append("\n<input type=radio class=\"priskip optbox\" value=\"-9\" name=\"pri.").append(fileIndex).append("\" ");
-                        if (priority < 0) {
-                            buf.append("checked=checked");
-                        }
-                        buf.append('>').append(_t("Skip")).append("</label>");
-                        showSaveButton = true;
-                    }
-                    buf.append("</td>");
-                }
-                buf.append("</tr>\n");
             }
+
+            String rowClass = (rowEven ? "rowEven" : "rowOdd");
+            String completed = (complete ? "completed" : "incomplete");
+            rowEven = !rowEven;
+            buf.append("<tr class=\"").append(rowClass).append(' ').append(completed).append("\">");
+            String path = addPaths(decodedBase, item.getName());
+            if (fai.isDirectory) {
+                complete = true;
+                if (!path.endsWith("/")) {
+                    path=addPaths(path, "/");
+                }
+            }
+            path = encodePath(path);
+            String icon = toIcon(item);
+            String mime = getMimeType(path);
+            if (mime == null) {mime = "";}
+            boolean isAudio = isAudio(mime);
+            boolean isVideo = !isAudio && isVideo(mime);
+            int videoCount = 0;
+            buf.append("<td class=\"fileIcon");
+            if (!complete) {buf.append(" volatile");}
+            buf.append("\">");
+            String preview = null;
+            if (isVideo && complete) {videoCount++;}
+            if (complete || (isAudio && fai.preview > 100*1024) ||
+                (isVideo && fai.preview > 5*1024*1024 && fai.preview / (double) fai.length >= 0.01d)) {
+                String ppath = complete ? path : path + "?limit=" + fai.preview;
+                if (!complete) {
+                    double pct = fai.preview / (double) fai.length;
+                    preview = " &nbsp;<span class=audioPreview>" + _t("Preview") + ": " +
+                               (new DecimalFormat("0.00%")).format(pct) + "</span>";
+                }
+                if (isAudio || isVideo) {
+                    // scale up image thumbnails if directory also contains audio/video
+                    buf.append("\n<style>.thumb{max-height:inherit!important;max-width:240px!important}</style>\n");
+                    // HTML5
+                    if (isAudio) {buf.append("<audio");}
+                    else {buf.append("<video");}
+                    buf.append(" controls><source src=\"").append(ppath);
+                    if (isVideo) {
+                        // display video 20 seconds in for a better chance of a thumbnail
+                        buf.append("#t=20");
+                    }
+                    buf.append("\" type=\"").append(mime).append("\">");
+                }
+                buf.append("<a href=\"").append(ppath).append("\">");
+                if (mime.startsWith("image/") && !ppath.endsWith(".ico")) {
+                    // thumbnail
+                    buf.append("<img alt=\"\" border=0 class=thumb src=\"")
+                       .append(ppath).append("\" data-lightbox data-lightbox-caption=\"")
+                       .append(item.getName()).append("\" data-lightbox-group=\"allInDir\"></a>");
+                } else if (mime.startsWith("image/") && ppath.endsWith(".ico")) {
+                    // favicon without scaling
+                    buf.append("<img alt=\"\" width=16 height=16 class=favicon border=0 src=\"")
+                       .append(ppath).append("\" data-lightbox data-lightbox-caption=\"")
+                       .append(item.getName()).append("\" data-lightbox-group=\"allInDir\"></a>");
+                } else if (fai.isDirectory) {
+                    buf.append(toSVG(icon, _t("Open"))).append("</a>");
+                } else {
+                    buf.append(toSVG(icon, _t("Open"))).append("</a>");
+                }
+                if (isAudio) {buf.append("</audio>");}
+                else if (isVideo) {buf.append("</video>");}
+                if (videoCount == 1) {
+                    buf.append("<script src=\"" + resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");
+                }
+            } else {
+                buf.append(toSVG(icon));
+            }
+            buf.append("</td><td class=\"snarkFileName");
+            if (!complete) {
+                buf.append(" volatile");
+            }
+            buf.append("\">");
+            if (complete) {
+                buf.append("<a href=\"").append(path).append("\"");
+                // send browser-viewable files to new tab to avoid potential display in iframe
+                if (isAudio || isVideo || mime.startsWith("text/") || mime.startsWith("image/") || mime.equals("application/pdf")) {
+                    buf.append(" target=_blank");
+                }
+                if (mime.equals("audio/mpeg")) {
+                    buf.append(" class=targetfile");
+                }
+                buf.append(">");
+            }
+            buf.append(DataHelper.escapeHTML(item.getName()));
+            if (complete) {
+                buf.append("</a>");
+                if (mime.equals("audio/mpeg")) {
+                    String tags = Mp3Tags.getTags(item);
+                    buf.append("<a class=tags href=\"").append(path);
+                    buf.append("\" target=_blank hidden>");
+                    if (tags != null) {
+                        buf.append(tags);
+                    } else {
+                        buf.append(DataHelper.escapeHTML(item.getName()));
+                    }
+                    buf.append("</a>");
+                }
+            } else if (preview != null) {
+                buf.append(preview);
+            }
+            buf.append("</td><td class=snarkFileSize>");
+            if (!fai.isDirectory) {
+                buf.append(formatSize(length));
+            }
+            buf.append("</td><td class=\"fileStatus volatile\">")
+               //.append(dfmt.format(new Date(item.lastModified())));
+               .append(status)
+               .append("</td>");
+            if (showPriority) {
+                buf.append("<td class=\"priority volatile\">");
+                if ((!complete) && (!fai.isDirectory)) {
+                    if (!inOrder) {
+                        buf.append("<label class=priorityHigh title=\"")
+                           .append(_t("Download file at high priority")).append("\">")
+                           .append("\n<input type=radio class=\"prihigh optbox\" value=5 name=\"pri.")
+                           .append(fileIndex).append("\" ");
+                        if (priority > 0) {
+                            buf.append("checked=checked");
+                        }
+                        buf.append('>').append(_t("High")).append("</label>");
+                    }
+                    buf.append("<label class=priorityNormal title=\"").append(_t("Download file at normal priority")).append("\">")
+                       .append("\n<input type=radio class=\"prinorm optbox\" value=\"0\" name=\"pri.").append(fileIndex).append("\" ");
+                    if (priority == 0 || (inOrder && priority >= 0)) {
+                        buf.append("checked=checked");
+                    }
+                    buf.append('>').append(_t("Normal")).append("</label>")
+                       .append("<label class=prioritySkip title=\"").append(_t("Do not download this file")).append("\">")
+                       .append("\n<input type=radio class=\"priskip optbox\" value=\"-9\" name=\"pri.").append(fileIndex).append("\" ");
+                    if (priority < 0) {
+                        buf.append("checked=checked");
+                    }
+                    buf.append('>').append(_t("Skip")).append("</label>");
+                    showSaveButton = true;
+                }
+                buf.append("</td>");
+            }
+            buf.append("</tr>\n");
         }
         if (showSaveButton) {
             buf.append("</tbody>\n<thead><tr id=setPriority><th colspan=5>")
