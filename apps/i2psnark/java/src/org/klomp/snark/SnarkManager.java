@@ -3043,6 +3043,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     }
                     if (!_context.isRouterContext()) {
                         String msg = _t("I2P+ I2PSnark standalone version {0} started", CoreVersion.VERSION);
+                        //msg += " (Revision: ###commitid###)";
                         addMessage(msg);
                         if (!_context.isRouterContext())
                             System.out.println(" • " + msg);

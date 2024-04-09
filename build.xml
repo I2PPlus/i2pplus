@@ -2357,6 +2357,12 @@
 
     <!-- standalone i2psnark zip -->
     <target name="i2psnark" depends="buildStreaming, buildJetty, buildSystray, jbigi">
+        <!--
+        <replace file="apps/i2psnark/java/src/org/klomp/snark/SnarkManager.java">
+            <replacetoken>###commitid###</replacetoken>
+            <replacevalue>${workspace.version}</replacevalue>
+        </replace>
+        -->
         <ant dir="apps/i2psnark/java" target="standalone" />
         <copy file="apps/i2psnark/java/i2psnark-standalone.zip" todir="." />
     </target>
