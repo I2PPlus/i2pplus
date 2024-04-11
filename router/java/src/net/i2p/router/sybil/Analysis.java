@@ -185,8 +185,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                     if (b != null && b.length == Hash.HASH_LENGTH) {
                         Hash h = Hash.create(b);
                         long until = e.getValue().longValue();
-                        String reason = " <b>➜</b> Sybil Analysis {0}", when;
-                        ban.banlistRouter(h, reason, null, null, until);
+                        String reason = " <b>➜</b> Sybil Analysis {0}";
+                        ban.banlistRouter(h, reason, when, null, until);
                     }
                 }
             }
