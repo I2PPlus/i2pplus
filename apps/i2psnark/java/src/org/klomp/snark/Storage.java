@@ -40,7 +40,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Pattern;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
@@ -55,6 +54,9 @@ import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SystemVersion;
+
+import org.klomp.snark.TorrentCreateFilter;
+
 
 /**
  * Maintains pieces on disk. Can be used to store and retrieve pieces.
@@ -81,6 +83,7 @@ public class Storage implements Closeable {
   private final AtomicInteger _allocateCount = new AtomicInteger();
   private final AtomicInteger _checkProgress = new AtomicInteger();
   private final AtomicLong _activity = new AtomicLong();
+  private List<String> _filesExcluded = new ArrayList<String>();
 
   /** The default piece size. */
   private static final int DEFAULT_PIECE_SIZE = 256*1024;
@@ -140,7 +143,7 @@ public class Storage implements Closeable {
    */
   public Storage(I2PSnarkUtil util, File baseFile, String announce, List<List<String>> announce_list,
                  String created_by, boolean privateTorrent, StorageListener listener,
-                 List<String> filters) throws IOException {
+                 List<TorrentCreateFilter> filters) throws IOException {
       this(util, baseFile, announce, announce_list, created_by, privateTorrent, null, null, listener, filters);
   }
 
@@ -162,7 +165,7 @@ public class Storage implements Closeable {
   public Storage(I2PSnarkUtil util, File baseFile, String announce,
                  List<List<String>> announce_list, String created_by, boolean privateTorrent,
                  List<String> url_list, String comment, StorageListener listener,
-                 List<String> filters) throws IOException {
+                 List<TorrentCreateFilter> filters) throws IOException {
       _util = util;
       _base = baseFile;
       _log = util.getContext().logManager().getLog(Storage.class);
@@ -254,7 +257,7 @@ public class Storage implements Closeable {
       return piece_hashes;
   }
 
-  private List<TorrentFile> getFiles(File base, List<String> filters) throws IOException {
+  private List<TorrentFile> getFiles(File base, List<TorrentCreateFilter> filters) throws IOException {
       if (base.getAbsolutePath().equals("/"))
           throw new IOException("Don't seed root");
       List<File> files = new ArrayList<File>();
@@ -272,17 +275,38 @@ public class Storage implements Closeable {
       return rv;
   }
 
+  /* @since 0.9.62+ */
+  public List<String> getExcludedFiles() {
+      return _filesExcluded;
+  }
+
   /**
    *  @throws IOException if too many total files
    */
-  private void addFiles(List<File> l, File f, List<String> filters) throws IOException {
+  private void addFiles(List<File> l, File f, List<TorrentCreateFilter> filters) throws IOException {
     int max = _util.getMaxFilesPerTorrent();
 
     for (int i = 0; i < filters.size(); i++) {
-        String pattern = filters.get(i);
+        TorrentCreateFilter filter = filters.get(i);
 
-        if (Pattern.matches(pattern, f.getPath())) {
-            return;
+        switch(filter.filterType) {
+            case "starts_with":
+                if (f.getName().startsWith(filter.filterPattern)) {
+                    _filesExcluded.add(f.getPath());
+                    return;
+                }
+                break;
+            case "ends_with":
+                if (f.getName().endsWith(filter.filterPattern)) {
+                    _filesExcluded.add(f.getPath());
+                    return;
+                }
+                break;
+            default:
+                if (f.getName().contains(filter.filterPattern)) {
+                    _filesExcluded.add(f.getPath());
+                    return;
+                }
         }
     }
 

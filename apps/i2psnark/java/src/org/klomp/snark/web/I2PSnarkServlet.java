@@ -2121,7 +2121,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         // TODO thread it for big torrents, perhaps a la FetchAndAdd
                         boolean isPrivate = _manager.getPrivateTrackers().contains(announceURL);
                         String[] filters = req.getParameterValues("filters");
-                        List<String> filterPatterns = new ArrayList<String>();
+                        List<TorrentCreateFilter> filterList = new ArrayList<TorrentCreateFilter>();
                         Map<String, TorrentCreateFilter> torrentCreateFilters = _manager.getTorrentCreateFilterMap();
 
                         if (filters == null) {
@@ -2130,21 +2130,10 @@ public class I2PSnarkServlet extends BasicServlet {
 
                         for (int i = 0; i < filters.length; i++) {
                             TorrentCreateFilter filter = torrentCreateFilters.get(filters[i]);
-                            String pattern;
-                            switch(filter.filterType) {
-                                case "starts_with":
-                                    pattern = "^" + filter.filterPattern + ".*$";
-                                    break;
-                                case "ends_with":
-                                    pattern = "^.*" + filter.filterPattern + "$";
-                                    break;
-                                default:
-                                    pattern = "^.*" + filter.filterPattern + ".*$";
-                            }
-                            filterPatterns.add(pattern);
+                            filterList.add(filter);
                         }
 
-                        Storage s = new Storage(_manager.util(), baseFile, announceURL, announceList, null, isPrivate, null, filterPatterns);
+                        Storage s = new Storage(_manager.util(), baseFile, announceURL, announceList, null, isPrivate, null, filterList);
                         s.close(); // close the files... maybe need a way to pass this Storage to addTorrent rather than starting over
                         MetaInfo info = s.getMetaInfo();
                         File torrentFile = new File(_manager.getDataDir(), s.getBaseName() + ".torrent");
@@ -2153,6 +2142,20 @@ public class I2PSnarkServlet extends BasicServlet {
                         boolean ok = _manager.addTorrent(info, s.getBitField(), torrentFile.getAbsolutePath(), baseFile, true);
                         if (!ok)
                             return;
+                        List<String> filesExcluded = s.getExcludedFiles();
+                        if (_log.shouldInfo() && filesExcluded.size() > 0) {
+                            String msg = filesExcluded.size() + " excluded from \"" + baseFile.getName() + "\" due to filter rules [" + String.join(", ", filesExcluded) + "]";
+                            _log.info("[I2PSnark] " + msg);
+                            if (!_context.isRouterContext()) {
+                                System.out.println(" • " + msg);
+                            }
+                        }
+                        if (filesExcluded.size() > 3) {
+                            _manager.addMessage(filesExcluded.size() + _t(" files or folders were excluded from \"{0}\" due to filter rules.", baseFile.getName()));
+                        } else if (filesExcluded.size() > 0) {
+                            _manager.addMessage(_t("The following files or folders were excluded from \"{0}\" due to filter rules: ",
+                                                baseFile.getName()) + String.join(", ", filesExcluded));
+                        }
                         _manager.addMessage(_t("Torrent created for \"{0}\"", baseFile.getName()) + " ➜  " + torrentFile.getAbsolutePath());
                         if (announceURL != null && !_manager.util().getOpenTrackers().contains(announceURL))
                             _manager.addMessage(_t("Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\"", baseFile.getName()));
