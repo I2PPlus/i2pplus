@@ -2150,7 +2150,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                 System.out.println(" • " + msg);
                             }
                         }
-                        if (filesExcluded.size() > 3) {
+                        if (filesExcluded.size() > 5) {
                             _manager.addMessage(filesExcluded.size() + _t(" files or folders were excluded from \"{0}\" due to filter rules.", baseFile.getName()));
                         } else if (filesExcluded.size() > 0) {
                             _manager.addMessage(_t("The following files or folders were excluded from \"{0}\" due to filter rules: ",
