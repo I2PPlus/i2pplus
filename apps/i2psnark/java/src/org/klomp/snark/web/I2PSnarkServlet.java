@@ -2142,7 +2142,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         boolean ok = _manager.addTorrent(info, s.getBitField(), torrentFile.getAbsolutePath(), baseFile, true);
                         if (!ok)
                             return;
-                        List<String> filesExcluded = s.getExcludedFiles();
+                        List<String> filesExcluded = s.getExcludedFiles(_manager.getDataDir());
                         if (_log.shouldInfo() && filesExcluded.size() > 0) {
                             String msg = filesExcluded.size() + " excluded from \"" + baseFile.getName() + "\" due to filter rules [" + String.join(", ", filesExcluded) + "]";
                             _log.info("[I2PSnark] " + msg);

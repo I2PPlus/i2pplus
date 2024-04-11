@@ -28,6 +28,8 @@ import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -276,8 +278,26 @@ public class Storage implements Closeable {
   }
 
   /* @since 0.9.62+ */
-  public List<String> getExcludedFiles() {
-      return _filesExcluded;
+
+  public List<String> getExcludedFiles(File base) {
+      List<String> excludedNames = new ArrayList<>();
+      for (String filePath : _filesExcluded) {
+          Path path = Paths.get(filePath);
+          String folderHierarchy = getFolderHierarchy(path, base.toPath());
+          excludedNames.add(folderHierarchy + "/" + path.getFileName().toString());
+      }
+      return excludedNames;
+  }
+
+  private String getFolderHierarchy(Path path, Path base) {
+      Path relativePath = base.relativize(path);
+      Path parent = relativePath.getParent();
+
+      if (parent == null) {
+          return ""; // Excluded file is directly under the base folder
+      }
+
+      return parent.toString();
   }
 
   /**

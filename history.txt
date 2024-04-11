@@ -1,3 +1,11 @@
+2024-04-11 dr|z3d
+ * I2PSnark: Modify logging output for snark create torrent file filtering
+   so we only display path relative to the data dir, not full paths
+
+2024-04-11 snex
+ * I2PSnark: Fix create torrent filtering when applying a "." filter and
+   log filtered files or filtered file count to screenlogs and terminal
+
 2024-04-08 I2P+ 2.5.0+ released
 
 2024-04-07 dr|z3d
