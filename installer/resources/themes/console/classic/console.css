@@ -1519,9 +1519,10 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 #criticallogs tr:first-child{display:none}
 #wrapperlogs tr:last-child td{padding:0 0 0 2px}
 #service_logs{white-space:pre-wrap;word-break:break-all;margin:0;padding:0;width:100%;max-height:500px;overflow:auto}
-#toggleRefresh{margin:-5px 0 -10px;width:24px;height:32px;float:right;border-left:var(--border_inner);background:var(--stop) no-repeat center center/16px;opacity:.8}
+#toggleRefresh{margin:-5px -3px -10px 0;width:24px;height:32px;float:right;border-left:var(--border_inner);background:var(--pause) no-repeat center center/14px}
+#toggleRefresh:hover{background:var(--pause_hover) no-repeat center center/16px}
 #toggleRefresh.disabled{background:var(--start) no-repeat center center/16px}
-#toggleRefresh:hover{cursor:pointer;opacity:1}
+#toggleRefresh:hover{cursor:pointer}
 
 /* debug */
 .debug_container{margin-top:-14px;padding:10px 15px;border:var(--border)}

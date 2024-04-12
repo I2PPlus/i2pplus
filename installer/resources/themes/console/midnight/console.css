@@ -576,7 +576,7 @@ h3+p,h3+table{position:relative;z-index:20}
 #tunnels h3:first-child{margin-top:10px}
 #tunnels h3 a:not(.lsview),#logs a.delete,#logs a.configure{font-size:0}
 #tunnels h3 a[href^="/configtunnels#"]::after,#tunnels h3 a[href$="i2ptunnelmgr"]::after,#logs a.configure::after,#logs a.delete::after,#applinks a::after,#sitelinks a::after{padding:0;width:16px;height:16px;float:right;background:var(--settings) no-repeat center center;background-size:16px;content:""}
-#tunnels h3 a[href^="/configtunnels#"]:hover::after,#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,#tunnels h3 a[href^="/configtunnels#"]:focus::after,#tunnels h3 a[href$="i2ptunnelmgr"]:focus::after,#logs a.configure:hover::after,#logs a.configure:focus::after,#applinks a:hover::after,#applinks a:focus::after,#sitelinks a:hover::after,#sitelinks a:focus::after{background:var(--settings_hover) no-repeat center center/ 16px}
+#tunnels h3 a[href^="/configtunnels#"]:hover::after,#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,#tunnels h3 a[href^="/configtunnels#"]:focus::after,#tunnels h3 a[href$="i2ptunnelmgr"]:focus::after,#logs a.configure:hover::after,#logs a.configure:focus::after,#applinks a:hover::after,#applinks a:focus::after,#sitelinks a:hover::after,#sitelinks a:focus::after{background:var(--settings_hover) no-repeat center center/16px}
 #tunnels h3 a[href^="/configtunnels#"]:active::after,#tunnels h3 a[href$="i2ptunnelmgr"]:active::after,#logs a.configure:active::after,#applinks a:active::after,#sitelinks a:active::after{background:var(--settings_active) no-repeat center center/16px;transform:rotate(90deg);transition:linear transform .2s}
 #config_logging h3 a::before,#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before,#version a::before{width:18px;height:14px;display:inline-block;vertical-align:middle;background:var(--eye) no-repeat left center/14px;content:""}
 #config_logging h3 a:hover::before,#config_logging h3 a:focus::before,#version a:hover::before,#version a:focus::before{background:var(--eye_hover) no-repeat left center/14px}
@@ -1210,7 +1210,7 @@ td.optionsave{padding:7px 5px;text-align:right;border-top:var(--border_inner);ba
 #permabanned td:last-child{padding-left:10px;width:49%;text-align:left}
 #banneduntilrestart td{border-right:var(--border_inner);text-align:center}
 #ipv4,#ipv6,#permabanned tr:nth-child(2){border-top:var(--border_inner);border-bottom:var(--border_inner);background:linear-gradient(180deg,#080818 50%,#000 50%)}
-#sessionBanned {margin:11px auto 9px}
+#sessionBanned{margin:11px auto 9px}
 #sessionBanned th,#sessionBanned td{padding:6px 12px}
 #sessionBanned thead th{font-size:90%;text-align:left}
 #sessionBanned tfoot th{padding:8px 12px}
@@ -1308,7 +1308,7 @@ table[id$="logs"] ul{margin:1px 17px -6px -12px}
 #logs h3.tabletitle a.delete{padding:12px 6px 8px 8px}
 #logs h3.tabletitle a.delete:active::after{background:var(--close_active) no-repeat center center;transform:scale(.85)}
 #logs h3.tabletitle a.delete::after{margin:0 8px;background:var(--close) no-repeat center center/14px}
-#logs h3.tabletitle a.delete:hover::after,#logs a.delete:focus::after{background:var(--close_hover) no-repeat center center/14px}
+#logs h3.tabletitle a.delete:hover::after,#logs a.delete:focus::after{background:var(--close_hover) no-repeat center center/16px}
 #logs #eventlogLink{padding:12px 4px 8px 9px;float:right;font-size:0;border-bottom:0;background:none}
 #logs #eventlogLink::after{margin:-2px 12px 0 8px;width:16px;height:20px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/logs.svg) no-repeat center center/14px;content:"";filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #000)}
 #logs #eventlogLink:hover::after{transform:scale(1.2)}
@@ -1322,7 +1322,7 @@ table[id$="logs"] ul{margin:1px 17px -6px -12px}
 #logs #enviro:hover td{color:#dd0;border-top:1px inset transparent;border-bottom:1px inset transparent;background:#001}
 #logs #enviro:hover{user-select:all;cursor:text}
 #logs #enviro td:first-child{width:1%;text-align:right;white-space:nowrap}
-#criticallogs li {margin:-5px -2px 5px 8px;width:calc(100% + 1px)}
+#criticallogs li{margin:-5px -2px 5px 8px;width:calc(100% + 1px)}
 #criticallogs td:empty{display:none}
 #criticallogs tr:first-child{display:none}
 #criticallogs tr:last-child td{padding-bottom:0}
@@ -1338,7 +1338,8 @@ table[id$="logs"] ul{margin:1px 17px -6px -12px}
 #service_logs{margin:2px 0;width:100%;max-height:600px;white-space:pre-wrap;word-wrap:break-word;color:#a2a6d1}
 #wrapperlogs tr:last-child td{padding:0 0 0 5px;background:rgba(10,10,34,.6)}
 .log_debug,.log_info,.log_warn,.log_error,.log_crit,.log_omitted{padding:1px 2px;min-width:36px;max-width:36px;display:inline-block;overflow:hidden;line-height:.9;white-space:nowrap;text-overflow:ellipsis;text-align:center;color:#000;border-radius:2px}
-#toggleRefresh{margin:-8px 0 -10px;width:26px;height:32px;float:right;padding-left:10px;border-left:var(--border_inner);background:url(/themes/console/images/off.svg) no-repeat center center/18px,url(/themes/console/images/update.svg) no-repeat center center/14px}
+#toggleRefresh{margin:-8px 0 -10px;width:26px;height:32px;float:right;padding-left:10px;border-left:var(--border_inner);background:var(--pause) no-repeat center center/14px}
+#toggleRefresh:hover{background:var(--pause_hover) no-repeat center center/16px}
 #toggleRefresh.disabled{background:url(/themes/console/images/update.svg) no-repeat center center/18px}
 #toggleRefresh:hover{cursor:pointer}
 
@@ -2794,7 +2795,7 @@ p,.infohelp,.infowarn,td.infohelp,td.infowarn,.logo a,#console code,#console li,
 div[id^="config_"] .encDests td,div[id^="config_"] .encDests th{font-size:9pt}
 div[id^="config_"] td:not(.infowarn):not(.infohelp){padding-top:8px;padding-bottom:8px}
 div[id^="config_"] .confignav{padding:4px 4px 5px 3px;border-left:0}
-div[id^="config_"] .tab,div[id^="config_"] .tab2{margin:0 -1px -1px 0;}
+div[id^="config_"] .tab,div[id^="config_"] .tab2{margin:0 -1px -1px 0}
 div[id^="config_"] .tab2{padding:6px 6px 4px}
 div[id^="config_"] .tab a{padding:4px 6px}
 div[id^="config_"] .confignav{padding:0}
