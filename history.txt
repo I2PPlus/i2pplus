@@ -1,3 +1,7 @@
+2024-04-13 dr|z3d
+ * I2PSnark: Assign active filter query parameter to main nav and close
+   search buttons when filterbar is enabled
+
 2024-04-11 dr|z3d
  * I2PSnark: Modify logging output for snark create torrent file filtering
    so we only display path relative to the data dir, not full paths
