@@ -212,7 +212,7 @@ function refreshScreenLog(callback) {
     const notifyResponse = xhrsnarklog.responseXML.getElementById("notify");
     const screenlogResponse = xhrsnarklog.responseXML.getElementById("messages");
     const toastResponse = xhrsnarklog.responseXML.getElementById("toast");
-    if (screenlog.innerHTML !== screenlogResponse.innerHTML) {
+    if (screenlog && screenlogResponse && screenlog.innerHTML !== screenlogResponse.innerHTML) {
       screenlog.innerHTML = screenlogResponse.innerHTML;
     }
     if (xhrsnarklog.readyState === 4 && xhrsnarklog.status === 200) {

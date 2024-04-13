@@ -68,9 +68,9 @@ function initFilterBar() {
       stopped: { button: btnStopped, key: "stopped" },
     };
 
-    const filter = filters[id];
-    if (!filter) return;
-    window.localStorage.setItem("snarkFilter", filter.key);
+    //const filter = filters[id];
+    //if (!filter) return;
+    //window.localStorage.setItem("snarkFilter", filter.key);
   }
 
   if (filterbar) {
@@ -86,23 +86,26 @@ function initFilterBar() {
       { button: btnStopped, filterFunction: () => {setFilter("stopped"), showBadge()}, localStorageKey: "stopped"},
     ];
 
-    mainsection.addEventListener("click", event => {
-      const filterButton = event.target.closest(".filter");
-      if (filterButton) {
-        const filter = findFilterByButton(filterButton);
-        filter.filterFunction();
-        window.localStorage.setItem("snarkFilter", filter.localStorageKey);
-      }
+    document.addEventListener("DOMContentLoaded", () => {
+      mainsection.addEventListener("click", event => {
+        const filterButton = event.target.closest(".filter");
+        if (filterButton) {
+          filterButton.classList.add("enabled");
+          const filter = findFilterByButton(filterButton);
+          filter.filterFunction();
+          window.localStorage.setItem("snarkFilter", filterButton.id);
+
+          function findFilterByButton(button) {
+            return filterButtons.find(filter => filter.button === button);
+          }
+
+          if (storage === filter.localStorageKey) {
+            const filterButton = filterButtons.find(filter => filter.localStorageKey === storage).button;
+            filterButton.classList.add("enabled");
+          }
+        }
+      });
     });
-
-    function findFilterByButton(button) {
-      return filterButtons.find(filter => filter.button === button);
-    }
-
-    if (storage === filter.localStorageKey) {
-      const filterButton = filterButtons.find(filter => filter.localStorageKey === storage).button;
-      filterButton.classList.add("enabled");
-    }
   }
 }
 
@@ -119,6 +122,7 @@ function showBadge() {
   if (activeFilter) {
     if (!activeFilter.classList.contains("enabled")) {
       activeFilter.classList.add("enabled");
+      window.localStorage.setItem("snarkFilter", activeFilter.id);
     }
     const snarks = document.querySelectorAll("#snarkTbody tr.volatile:not(.peerinfo)").length;
     const activeBadge = activeFilter.querySelector(".badge");
@@ -151,6 +155,7 @@ function checkFilterBar() {
       window.location.search += "?filter=" + storage;
     }
   }
+
 }
 
 function checkIfVisible() {

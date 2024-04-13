@@ -556,6 +556,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<script nonce=" + cspNonce + " type=module ");
             out.write("src=" + resourcePath + "js/toggleLinks.js></script>\n");
         }
+        out.write("<script nonce=" + cspNonce + " src=" + resourcePath + "js/setFilterQuery.js></script>\n");
         if (!isStandalone()) {
             out.write(FOOTER);
         } else {
