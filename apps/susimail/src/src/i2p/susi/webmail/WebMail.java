@@ -3635,11 +3635,14 @@ public class WebMail extends HttpServlet
                             break;
                     }
                     // remove angle brackets and trim to (consistent) name only so only name shown (with full address on tooltip)
-                    String to = buf.toString();
-                    to = to.replace("&lt;", "").replace("&gt;", "").replace("@.*", "");
+                    String to = buf.toString().replace("&lt;", "").replace("&gt;", "").replace("@.*", "");
+                    if (to.contains("(")) {
+                      int index = to.indexOf("(");
+                      to = to.substring(0, index);
+                    }
                     boolean trim = to.length() > 45;
                     if (trim) {
-                        to = ServletUtil.truncate(to, 42).trim();
+                        to = ServletUtil.truncate(to, 42);
                     }
                     to = quoteHTML(to);
                     tbuf.append("<td class=\"mailListSender ").append(jslink).append(" title=\"")
@@ -3654,10 +3657,14 @@ public class WebMail extends HttpServlet
                 }
             } else {
                 // mail.shortSender and mail.shortSubject already html encoded
-                tbuf.append("<td class=\"mailListSender ").append(jslink).append(" title=\"").append(mail.sender.replace("\"", "") + "\">")
+                tbuf.append("<td class=\"mailListSender ").append(jslink).append(" title=\"").append(mail.sender.replace("\"", "") + "\">");
                     // remove angle brackets and trim to (consistent) name only so only name shown (with full address on tooltip)
-                    .append(link).append(mail.shortSender.replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", "")).append("</a></td>\n");
-                    // TODO: add name of attachment(s) to tooltip
+                if (mail.shortSender.contains("(")) {
+                    int index = mail.shortSender.indexOf("(");
+                    mail.shortSender = mail.shortSender.substring(0, index);
+                }
+                tbuf.append(link).append(mail.shortSender.replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", "")).append("</a></td>\n");
+                // TODO: add name of attachment(s) to tooltip
             }
             boolean isHTML = mail.getAttachmentType().equals("html");
             tbuf.append("<td ").append(isHTML ? "title=\"" + _t("Message contains HTML") + "\"" : "").append(" class=\"mailListAttachment ")
