@@ -1223,19 +1223,17 @@ public class SummaryHelper extends HelperBase {
                .append(devSU3Constraint).append("</b></h4>");
             devSU3Avail = false;
         }
-        if ((avail || unsignedAvail || devSU3Avail) &&
-            !NewsHelper.isUpdateInProgress() &&
-            !_context.router().gracefulShutdownInProgress() &&
+        if ((avail || unsignedAvail || devSU3Avail) && !NewsHelper.isUpdateInProgress() &&
+            !_context.router().gracefulShutdownInProgress() && !_context.commSystem().isDummy() &&
             _context.portMapper().isRegistered(PortMapper.SVC_HTTP_PROXY) &&  // assume using proxy for now
-            getAction() == null &&
-            getUpdateNonce() == null) {
+            getAction() == null && getUpdateNonce() == null) {
                 if (needSpace)
                     buf.append("<hr>");
                 long nonce = _context.random().nextLong();
                 String prev = System.getProperty("net.i2p.router.web.UpdateHandler.nonce");
                 if (prev != null)
                     System.setProperty("net.i2p.router.web.UpdateHandler.noncePrev", prev);
-                System.setProperty("net.i2p.router.web.UpdateHandler.nonce", nonce+"");
+                System.setProperty("net.i2p.router.web.UpdateHandler.nonce", nonce + "");
                 String uri = getRequestURI();
                 buf.append("<form id=sb_updateform action=\"").append(uri).append("\" method=POST class=volatile target=processSidebarForm>\n")
                    .append("<input type=hidden name=\"updateNonce\" value=\"").append(nonce).append("\" >\n");
