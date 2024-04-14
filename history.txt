@@ -1,4 +1,8 @@
 2024-04-13 dr|z3d
+ * SusiMail: Remove parenthesis and anything contained therein in
+   From column in list view
+
+2024-04-13 dr|z3d
  * I2PSnark: Assign active filter query parameter to main nav and close
    search buttons when filterbar is enabled
 
