@@ -23,6 +23,12 @@ function sanitizeHTML() {
         element.setAttribute("style", newStyle);
       }
     }
+    /* setup script counter
+    var script = 0;
+    if (element.tagName.toLowerCase() === "script") {
+      script++;
+    }
+    */
     // set divs without explicit margins to auto
     if (element.tagName.toLowerCase() === "div") {
       var marginStyle = getComputedStyle(element).getPropertyValue("margin");
@@ -73,29 +79,41 @@ function sanitizeHTML() {
 }
 
 function toggleBlockedImages() {
-  const iframe = document.getElementById("iframeSusiHtmlView") || window.parent.document.getElementById("iframeSusiHtmlView");
-  const images = iframe.contentWindow.document.querySelectorAll('img');
   const button = window.parent.document.getElementById("toggleBlockedImages");
+  const iframe = document.getElementById("iframeSusiHtmlView") || window.parent.document.getElementById("iframeSusiHtmlView");
+  const blockedImgs = Array.from(iframe.contentWindow.document.querySelectorAll("img"));
+  const webBugs = Array.from(iframe.contentWindow.document.querySelectorAll(".webBug"));
+  const images = [...blockedImgs, ...webBugs];
 
   if (!iframe || !button) {return;}
+
+  webBugs.forEach(webBug => {
+    webBug.style.background = "url(/themes/susimail/images/webBug.svg) no-repeat center center/32px";
+    webBug.style.width = "32px";
+    webBug.style.height = "32px";
+  });
 
   button.classList.toggle("on");
 
   images.forEach(image => {
     if (button.classList.contains("on")) {
       image.style.display = "none";
+      image.setAttribute("hidden", "hidden");
     } else {
-      image.style.display = "";
+      image.style.display = "inline-block";
+      image.removeAttribute("hidden");
     }
   });
 }
 
 function createButton() {
   const iframe = document.getElementById("iframeSusiHtmlView") || window.parent.document.getElementById("iframeSusiHtmlView");
+  const toggle = window.parent.document.getElementById("toggleBlockedImages");
   if (!iframe) {return;}
   else if (iframe && !iframe.classList.contains("showBlockedImages")) {
-    const remoteImages = iframe.contentWindow.document.querySelectorAll("img");
+    const remoteImages = iframe.contentWindow.document.querySelectorAll("img") || iframe.contentWindow.document.querySelectorAll(".webBug");
     if (!remoteImages) {return;}
+    if (toggle) {toggle.remove();}
     const button = document.createElement("button");
     button.id = "toggleBlockedImages";
     button.innerText = "Toggle Images";
@@ -109,12 +127,7 @@ function createButton() {
   }
 }
 
-function addClickListener(func) {
-  document.addEventListener("click", func);
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   sanitizeHTML();
   createButton();
-  //addClickListener(toggleBlockedImages);
 });

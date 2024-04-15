@@ -2200,7 +2200,7 @@ public class WebMail extends HttpServlet
             response.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' 'unsafe-inline'; " +
                                "script-src " + me + "/js/iframeResizer/iframeResizer.contentWindow.js " +
                                me + "/susimail/js/htmlView.js " + me + "/susimail/js/sanitizeHTML.js 'nonce-" + cspNonce + "'; " +
-                               "form-action 'none'; frame-ancestors " + me + myself + "; object-src 'none'; media-src 'none'; img-src " +
+                               "form-action 'none'; frame-ancestors " + me + myself + "; object-src 'none'; media-src 'none'; img-src 'self' " +
                                me + myself + " data:; font-src 'self'; frame-src 'none'; worker-src 'none'");
         } else {
             response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'nonce-" + cspNonce + "'; " +
@@ -2781,15 +2781,23 @@ public class WebMail extends HttpServlet
                         if ((theme.contains("dark") || theme.contains("night")) && enableDarkMode) {
                             contentWindowJs += "<link rel=stylesheet href=/themes/susimail/darkModeHTML.css>";
                         }
-                        out = new RegexOutputStream(out, "<!--*-->", "", ""); // strip out comments
+                        String webBug = "<span class=webBug title=\"" + _t("Removed tracking image placeholder") + "\" hidden></span>";
                         out = new RegexOutputStream(out, "src=\"http", "data-src-blocked=\"http", ""); // defang remote images
                         out = new RegexOutputStream(out, "src=\"//", "data-src-blocked=\"//", ""); // defang remote images
                         out = new RegexOutputStream(out, "src=http", "data-src-blocked=http", ""); // defang remote images
                         out = new RegexOutputStream(out, "src=//", "data-src-blocked=//", ""); // defang remote images
-                        out = new RegexOutputStream(out, "<img*height=\"1\"*>", "<span class=webBug></span>", ""); // remove tracking images
-                        out = new RegexOutputStream(out, "<img*height=1 *>", "<span class=webBug></span>", ""); // remove tracking images
-                        out = new RegexOutputStream(out, "<img*width=\"1\"*>", "<span class=webBug></span>", ""); // remove tracking images
-                        out = new RegexOutputStream(out, "<img*width=1*>", "<span class=webBug></span>", ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*height: 1px *>", webBug, ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*height: 1px\"*>", webBug, ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*height:1px *>", webBug, ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*height:1px\"*>", webBug, ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*height=\"1\"*>", webBug, ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*height=1 *>", webBug, ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*width: 1px*>", webBug, ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*width: 1px\"*>", webBug, ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*width:1px*>", webBug, ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*width:1px\"*>", webBug, ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*width=\"1\"*>", webBug, ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*width=1*>", webBug, ""); // remove tracking images
                         out = new RegexOutputStream(out, "</body>", contentWindowJs + "</body>", contentWindowJs);
                         // convert cid: urls to /susimail/?cid= urls
                         out = new RegexOutputStream(out, " src=\"cid:", " src=\"/susimail/?msg=" + Base64.encode(part.uidl) + "&amp;cid=", null);
