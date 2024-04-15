@@ -164,7 +164,7 @@ input[type=text],input[type=password],textarea{border-radius:1px}
 input[name="new_from"]{box-shadow:none;color:var(--ink)}
 textarea{font-size:9pt}
 input[type=text]::placeholder,input[type=password]::placeholder{text-transform:lowercase}
-#toggleHeaders,#toggleViewMode{margin:-10px -11px -2px 0;padding:0 4px;vertical-align:middle;text-align:center;transform:translateY(2px)}
+#toggleHeaders,#toggleViewMode{margin:-10px -10px 0 0;padding:0 4px;vertical-align:middle;text-align:center;transform:translateY(2px)}
 #toggleHeaders a,#toggleHeaders a:visited,#toggleViewMode a,#toggleViewMode a:visited{min-width:unset;font-size:90%;color:#494;background-image:none}
 #toggleHeaders a:not([hidden]),#toggleViewMode a:not([hidden]){margin-top:0;margin-bottom:0;display:inline-block;vertical-align:middle}
 #toggleHeaders a:hover,#toggleHeaders a:focus,#toggleViewMode a:hover,#toggleViewMode a:focus{color:#f60;background:var(--btn_hover)}
