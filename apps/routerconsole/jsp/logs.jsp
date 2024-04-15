@@ -15,7 +15,7 @@
 <%=intl.title("logs")%>
 </head>
 <body id=i2plogs>
-<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=log><%=intl._t("Logs")%></h1>
 <div class=main id=logs>
@@ -167,7 +167,7 @@
     xhrlogs.responseType = "document";
     xhrlogs.onload = function () {
       const mainLogsResponse = xhrlogs.responseXML.getElementById("logs");
-      progressx.show();
+      progressx.show("<%=theme%>");
       progressx.progress(0.5);
 
       if (!xhrlogs.responseXML) {return;}

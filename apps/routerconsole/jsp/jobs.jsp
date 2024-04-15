@@ -16,7 +16,7 @@
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=routerjobs>
-<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %><h1 class=sched><%=intl._t("Job Queue Stats")%></h1>
 <div class=main id=jobs>
 <div class=confignav>
@@ -82,7 +82,7 @@
     }, 10000);
   }
   window.addEventListener("DOMContentLoaded", progressx.hide);
-  jobs.addEventListener("beforeSort", function() {progressx.show();progressx.progress(0.5);});
+  jobs.addEventListener("beforeSort", function() {progressx.show("<%=theme%>");progressx.progress(0.5);});
   jobs.addEventListener("afterSort", function() {progressx.hide();});
 </script>
 </body>

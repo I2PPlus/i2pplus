@@ -15,7 +15,7 @@
 <%=intl.title("config keyring")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=conf><%=intl._t("Keyring Manager")%></h1>
 <div class=main id=config_keyring>

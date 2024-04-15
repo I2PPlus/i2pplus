@@ -11,8 +11,14 @@
     autoRun: true,
     barThickness: 3,
     barColors: {
-      "0": "rgba(220,  48,  16,  .8)",
-      "1.0": "rgba(255,  96,   0,  .8)"
+      default: {
+        0.0: "rgba(220, 48, 16, .8)",
+        1.0: "rgba(255, 96, 0, .8)"
+      },
+      midnight: {
+        0.0: "rgba(72, 0, 72, .8)",
+        1.0: "rgba(160, 0, 160, .8)"
+      }
     }
   };
 
@@ -32,16 +38,21 @@
     canvas.width = window.innerWidth;
     canvas.height = options.barThickness;
     var ctx = canvas.getContext("2d");
-    var lineGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-    for (var stop in options.barColors) {
-      lineGradient.addColorStop(stop, options.barColors[stop]);
+
+    if (options.barColors.current) {
+      var lineGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+
+      Object.keys(options.barColors.current).forEach(function(stop) {
+        lineGradient.addColorStop(parseFloat(stop), options.barColors.current[stop]);
+      });
+
+      ctx.lineWidth = options.barThickness;
+      ctx.beginPath();
+      ctx.moveTo(0, options.barThickness / 2);
+      ctx.lineTo(Math.ceil(currentProgress * canvas.width), options.barThickness / 2);
+      ctx.strokeStyle = lineGradient;
+      ctx.stroke();
     }
-    ctx.lineWidth = options.barThickness;
-    ctx.beginPath();
-    ctx.moveTo(0, options.barThickness / 2);
-    ctx.lineTo(Math.ceil(currentProgress * canvas.width), options.barThickness / 2);
-    ctx.strokeStyle = lineGradient;
-    ctx.stroke();
   }
 
   function addEvent(elem, type, handler) {
@@ -50,20 +61,23 @@
 
   function progressxConfig(opts) {
     for (var key in opts) {
-      if (options.hasOwnProperty(key)) {
-        options[key] = opts[key];
+      if (key === "barColors") {
+        for (var colorSet in opts[key]) {options.barColors[colorSet] = opts[key][colorSet];}
+      } else {
+        if (options.hasOwnProperty(key)) {options[key] = opts[key];}
       }
     }
   }
 
-  function progressxShow() {
-    if (showing) return;
+  function progressxShow(colorSet) {
+    if (showing) {return;}
     showing = true;
-    if (fadeTimerId !== null) window.cancelAnimationFrame(fadeTimerId);
-    if (!canvas) createCanvas();
+    if (fadeTimerId !== null) {window.cancelAnimationFrame(fadeTimerId);}
+    if (!canvas) {createCanvas();}
     canvas.style.opacity = 1;
     canvas.style.display = "block";
     progressxProgress(0);
+    options.barColors.current = options.barColors[colorSet] || options.barColors.default;
     if (options.autoRun) {
       (function loop() {
         progressTimerId = window.requestAnimationFrame(loop);
@@ -82,7 +96,7 @@
   }
 
   function progressxHide() {
-    if (!showing) return;
+    if (!showing) {return;}
     showing = false;
     if (progressTimerId != null) {
       window.cancelAnimationFrame(progressTimerId);

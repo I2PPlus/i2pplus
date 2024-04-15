@@ -15,7 +15,7 @@
 <%=intl.title("job queue stats")%>
 </head>
 <body id=routerjobqueue>
-<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %><h1 class=sched><%=intl._t("Job Queue")%></h1>
 <div class=main id=jobs>
 <div class=confignav>
@@ -31,7 +31,7 @@
   const visibility = document.visibilityState;
   if (visibility == "visible") {
     setInterval(function() {
-      progressx.show();
+      progressx.show("<%=theme%>");
       progressx.progress(0.5);
       const xhrqueue = new XMLHttpRequest();
       xhrqueue.open('GET', '/jobqueue', true);

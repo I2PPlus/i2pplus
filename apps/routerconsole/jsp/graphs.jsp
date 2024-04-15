@@ -28,7 +28,7 @@
 %>
 </head>
 <body id=perfgraphs>
-<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=perf><%=intl._t("Performance Graphs")%></h1>
 <div class=main id=graphs>
@@ -74,7 +74,7 @@
     if (graphHelper.getRefreshValue() > 0) {
 %>
   function updateGraphs() {
-    progressx.show();
+    progressx.show("<%=theme%>");
     var graphs = document.getElementById("allgraphs");
     var nographs = document.getElementById("nographs");
     var xhrgraphs = new XMLHttpRequest();

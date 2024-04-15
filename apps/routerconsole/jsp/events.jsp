@@ -25,7 +25,7 @@
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <h1 class=log><%=intl._t("Event Log")%></h1>
 <div class=main id=events>

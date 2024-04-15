@@ -28,7 +28,7 @@
 <script nonce="<%=cspNonce%>" src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body id=perfgraphs>
-<script nonce=<%=cspNonce%>>progressx.show();progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
 <%@include file="summary.jsi" %>
 <%
     // needs to be after the summary bar is rendered, so
@@ -114,7 +114,7 @@
 var visibility = document.visibilityState;
 if (graph && visibility == "visible") {
   setInterval(function() {
-    progressx.show();
+    progressx.show("<%=theme%>");
     var graphURL = window.location.href + "&t=" + Date.now();
     var xhrgraph = new XMLHttpRequest();
     xhrgraph.open('GET', graphURL, true);
