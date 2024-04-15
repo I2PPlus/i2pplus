@@ -26,7 +26,7 @@ p.footer,p.footer b{color:#449;text-shadow:var(--txt_shadow)}
 p.footer{margin:0;padding:3px;line-height:10pt;text-align:center;font-size:8pt;color:#449}
 p.hl{line-height:18pt;letter-spacing:2pt;font-size:12pt;font-weight:700}
 p.info{color:#030}
-p.mailbody{margin-top:0;padding:0 0 15px;line-height:130%;text-align:left;word-break:break-all;font:500 9pt var(--monospaced)}
+p.mailbody{margin-top:0;padding:15px 0;line-height:130%;text-align:left;word-break:break-all;font:500 9pt var(--monospaced)}
 p.mailbody+p.info{margin-top:-47px}
 p.text{margin-left:10px;margin-right:10px}
 pre{font:500 9pt var(--monospaced);margin-left:10px;margin-right:10px}
@@ -125,7 +125,9 @@ input.new_upload{float:right;margin-right:0}
 .fakebutton:not(#settings){float:left}
 .fakebutton.script:hover{background:var(--btn_hover)}
 #dologin .fakebutton{display:inline-block;margin-top:-1px}
-
+#toggleBlockedImages{margin:0 0 0 6px;padding:12px 16px;min-width:unset;vertical-align:middle;text-align:center;font-size:90%;font-size:0;border:0;box-shadow:none;background:var(--hide) no-repeat center center/24px;filter:saturate(0)}
+#toggleBlockedImages.on{background:var(--show) no-repeat center center/24px}
+#toggleBlockedImages:hover{filter:saturate(1)}
 
 /* pagenav */
 .pagenav tr{display:table-row;border:0}

@@ -141,6 +141,9 @@ input.delete{margin-left:2px}
 #toggleHtmlView .info,#blockedImages .info{margin:9px;padding:4px 16px 4px 36px;display:inline-block;font-weight:600;font-size:110%;color:#d00;border:0;box-shadow:none;background:var(--infobox) no-repeat 6px center/24px}
 #blockedImages .info{background:var(--warning) no-repeat 6px center/24px}
 #iframeSusiHtmlView{margin:10px 10px -14px;width:calc(100% - 20px);border-radius:10px}
+#toggleBlockedImages{margin:0 0 0 6px;padding:12px 16px;min-width:unset;vertical-align:middle;text-align:center;font-size:90%;font-size:0;border:0;box-shadow:none;background:var(--hide) no-repeat center center/24px;filter:saturate(0)}
+#toggleBlockedImages.on{background:var(--show) no-repeat center center/24px}
+#toggleBlockedImages:hover{filter:saturate(1)}
 
 /* login + misc mods */
 .notifications{text-align:center;padding:0 0 20px}
@@ -168,8 +171,8 @@ h3#config{border:var(--border_inner);padding:5px;margin:9px auto 18px auto;width
 #mailheader table{min-width:300px}
 #mailheader table td{font-size:10pt}
 #mailheader table td:first-child{white-space:nowrap;width:20px}
-p.mailbody{margin:0;background:#000010;padding:0 20px 20px}
-.mailbody + hr,#attached + hr{display:none}
+p.mailbody{margin:0;background:#000010;padding:20px}
+.mailbody+hr,#attached+hr{display:none}
 div.attached{margin:0 -1px -1px;padding:10px 10px 10px 30px;border:var(--border_inner);border-radius:0 0 2px 2px;background:#020019 var(--attach) no-repeat 5px center/20px}
 .iframed div.attached{border-left:0;border-right:0;border-radius:0}
 .attached p.mailbody{padding:5px;background:none}

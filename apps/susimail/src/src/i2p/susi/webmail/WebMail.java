@@ -451,20 +451,20 @@ public class WebMail extends HttpServlet
         buf.append(label).append("&nbsp;&nbsp;");
         // UP is reverse sort (descending). DOWN is normal sort (ascending).
         if (name.equals(currentName) && currentOrder == SortOrder.UP) {
-            buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("../../images/up.svg\" border=0 alt=\"^\">\n");
+            buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("../../images/up.svg\" alt=\"^\">\n");
         } else {
             buf.append("<a class=sort href=\"").append(myself).append("?page=").append(page).append("&amp;sort=-")
-                           .append(name).append("&amp;folder=").append(folder).append("\">");
-            buf.append("<img class=sort src=\"").append(imgPath).append("../../images/up.svg\" border=0 alt=\"^\">");
-            buf.append("</a>\n");
+               .append(name).append("&amp;folder=").append(folder).append("\">")
+               .append("<img class=sort src=\"").append(imgPath).append("../../images/up.svg\" alt=\"^\">")
+               .append("</a>\n");
         }
         if (name.equals(currentName) && currentOrder == SortOrder.DOWN) {
-            buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("../../images/down.svg\" border=0 alt=\"v\">");
+            buf.append("<img class=\"sort selected\" src=\"").append(imgPath).append("../../images/down.svg\" alt=\"v\">");
         } else {
             buf.append("<a class=sort href=\"").append(myself).append("?page=").append(page).append("&amp;sort=")
-                           .append(name).append("&amp;folder=").append(folder).append("\">");
-            buf.append("<img class=sort src=\"").append(imgPath).append("../../images/down.svg\" border=0 alt=\"v\">");
-            buf.append("</a>");
+               .append(name).append("&amp;folder=").append(folder).append("\">")
+               .append("<img class=sort src=\"").append(imgPath).append("../../images/down.svg\" alt=\"v\">")
+               .append("</a>");
         }
         return buf.toString();
     }
@@ -497,12 +497,6 @@ public class WebMail extends HttpServlet
     private static void showPart(PrintWriter out, MailPart mailPart, int level, boolean html, HtmlMode allowHtml) {
         String br = html ? "<br>\r\n" : "\r\n";
         if (html) {
-/*
-            out.println("<!-- ");
-            out.println("Debug: Showing Mail Part at level " + level + " with ID " + mailPart.getID());
-            out.println("Debug: Mail Part headers follow");
-            out.println("-->");
-*/
             out.println("<tr class=debugHeader style=display:none><td><pre class=left>");
             for (int i = 0; i < mailPart.headerLines.length; i++) {
                 // fix Content-Type: multipart/alternative; boundary="----------8CDE39ECAF2633"
@@ -540,71 +534,43 @@ public class WebMail extends HttpServlet
                             if (chosen.equals(subPart))
                                 continue;
                             if ("text/html".equals(subPart.type) || "text/html".equals(subPart.multipart_type)) {
-/*
-                                out.println("<!-- ");
-                                out.println("Debug: Not showing alternative Mail Part at level " + (level + 1) + " with ID " + subPart.getID());
-                                out.println("Debug: HTML Mode: " + allowHtml);
-                                out.println("Debug: Mail Part headers follow");
-                                for (int i = 0; i < subPart.headerLines.length; i++) {
-                                    out.println(subPart.headerLines[i].replace("--", "&#45;&#45;"));
+                                if (allowHtml != HtmlMode.NONE) {
+                                    out.println("<tr id=toggleHtmlView class=mailbody><td colspan=2>");
+                                    out.println("<p class=info><a id=toggleHtmlLink href=\"" + myself + '?' + SHOW + '=' + Base64.encode(subPart.uidl) +
+                                                "&amp;" + HTML + "=1\">" + _t("View message as HTML") + "</a></p>");
+                                    out.println("</td></tr>");
+                                }
+                            } else if ("text/plain".equals(subPart.type) ||
+                                       "text/plain".equals(subPart.multipart_type)) {
+                                if (allowHtml != HtmlMode.NONE) {
+                                    out.println("<tr id=toggleHtmlView class=mailbody><td colspan=2>");
+                                    out.println("<p class=info><a id=toggleHtmlLink class=viewAsPlainText href=\"" + myself + '?' +
+                                                SHOW + '=' + Base64.encode(subPart.uidl) +
+                                                "&amp;" + HTML + "=0\">" +
+                                                _t("View message as plain text") + "</a></p>");
+                                    out.println("</td></tr>");
+                                }
+                            } else {
+                                // show as attachment
+                                // if image is loaded as a CID in the iframe, we will still show it as an attachment also
+                                showPart(out, subPart, level + 1, html, allowHtml);
                             }
-                            out.println("-->");
-*/
-                            if (allowHtml != HtmlMode.NONE) {
-                                out.println("<tr id=toggleHtmlView class=mailbody><td colspan=2>");
-                                out.println("<p class=info><a id=toggleHtmlLink href=\"" + myself + '?' + SHOW + '=' + Base64.encode(subPart.uidl) +
-                                            "&amp;" + HTML + "=1\">" + _t("View message as HTML") + "</a></p>");
-                                out.println("</td></tr>");
-                            }
-                        } else if ("text/plain".equals(subPart.type) ||
-                                   "text/plain".equals(subPart.multipart_type)) {
-/*
-                            out.println("<!-- ");
-                            out.println("Debug: Not showing alternative Mail Part at level " + (level + 1) + " with ID " + subPart.getID());
-                            out.println("Debug: HTML Mode: " + allowHtml);
-                            out.println("Debug: Mail Part headers follow");
-                            for (int i = 0; i < subPart.headerLines.length; i++) {
-                                out.println(subPart.headerLines[i].replace("--", "&#45;&#45;"));
-                            }
-                            out.println("-->");
-*/
-                            if (allowHtml != HtmlMode.NONE) {
-                                out.println("<tr id=toggleHtmlView class=mailbody><td colspan=2>");
-                                out.println("<p class=info><a id=toggleHtmlLink class=viewAsPlainText href=\"" + myself + '?' +
-                                            SHOW + '=' + Base64.encode(subPart.uidl) +
-                                            "&amp;" + HTML + "=0\">" +
-                                            _t("View message as plain text") + "</a></p>");
-                                out.println("</td></tr>");
-                            }
-                        } else {
-                            // show as attachment
-                            // if image is loaded as a CID in the iframe, we will still show it as an attachment also
-                            showPart(out, subPart, level + 1, html, allowHtml);
                         }
                     }
+                    return;
                 }
-                return;
             }
-        }
-        for (MailPart part : mailPart.parts) {
-            showPart(out, part, level + 1, html, allowHtml);
-        }
-    }
-    else if (mailPart.message) {
-        for (MailPart part : mailPart.parts) {
-            showPart(out, part, level + 1, html, allowHtml);
-        }
-    }
-    else {
-        boolean showBody = false;
-        boolean prepareAttachment = false;
-        String reason = "";
-
-        String ident = quoteHTML(
-                (mailPart.description != null ? mailPart.description + " " : "") +
-                (mailPart.filename != null ? mailPart.filename + " " : "") +
-                (mailPart.name != null ? mailPart.name + " " : "") +
-                (mailPart.type != null ? '(' + mailPart.type + ')' : _t("unknown")));
+            for (MailPart part : mailPart.parts) {showPart(out, part, level + 1, html, allowHtml);}
+        } else if (mailPart.message) {
+            for (MailPart part : mailPart.parts) {showPart(out, part, level + 1, html, allowHtml);}
+        } else {
+            boolean showBody = false;
+            boolean prepareAttachment = false;
+            String reason = "";
+            String ident = quoteHTML((mailPart.description != null ? mailPart.description + " " : "") +
+                                     (mailPart.filename != null ? mailPart.filename + " " : "") +
+                                     (mailPart.name != null ? mailPart.name + " " : "") +
+                                     (mailPart.type != null ? '(' + mailPart.type + ')' : _t("unknown")));
 
             if (level == 0 && mailPart.version == null) {
                 /*
@@ -636,13 +602,14 @@ public class WebMail extends HttpServlet
 
             if (html && allowHtml != HtmlMode.NONE && showBody && "text/html".equals(mailPart.type) && showHTMLWarning) {
                 out.print("<tr id=privacywarn><td colspan=2><p class=info>" +
-                            "<i>" + _t("To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message.") + "</i>");
-                out.print("<noscript><br><i>" + _t("Enable Javascript for enhanced presentation and additional features.") + "</i></noscript></p></td></tr>\n");
+                          _t("To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."));
+                out.print("<noscript><br>" + _t("Enable Javascript for enhanced presentation and additional features.") + "</noscript></p></td></tr>\n");
             }
             if (html) {
                 if (!showBlockedImages) {
-                    out.print("<tr id=blockedImages hidden><td colspan=2>" + "<p class=info>" +
-                              _t("Not displaying {0} blocked images in this message", "<span id=blockedImgCount></span>") + "</p></td></tr>");
+                    out.print("<tr id=blockedImages hidden><td colspan=2>" + "<p class=info>" + "<span id=webBugs hidden>" +
+                              _t("Tracking images removed from message: {0}", "<span id=webBugCount></span>") + "<br></span>" +
+                              _t("Blocked images not displayed: {0}", "<span id=blockedImgCount></span>") + "</p></td></tr>");
                 }
                 out.print("<tr class=\"mailbody htmlView\"><td colspan=2>");
             }
@@ -2814,6 +2781,15 @@ public class WebMail extends HttpServlet
                         if ((theme.contains("dark") || theme.contains("night")) && enableDarkMode) {
                             contentWindowJs += "<link rel=stylesheet href=/themes/susimail/darkModeHTML.css>";
                         }
+                        out = new RegexOutputStream(out, "<!--*-->", "", ""); // strip out comments
+                        out = new RegexOutputStream(out, "src=\"http", "data-src-blocked=\"http", ""); // defang remote images
+                        out = new RegexOutputStream(out, "src=\"//", "data-src-blocked=\"//", ""); // defang remote images
+                        out = new RegexOutputStream(out, "src=http", "data-src-blocked=http", ""); // defang remote images
+                        out = new RegexOutputStream(out, "src=//", "data-src-blocked=//", ""); // defang remote images
+                        out = new RegexOutputStream(out, "<img*height=\"1\"*>", "<span class=webBug></span>", ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*height=1 *>", "<span class=webBug></span>", ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*width=\"1\"*>", "<span class=webBug></span>", ""); // remove tracking images
+                        out = new RegexOutputStream(out, "<img*width=1*>", "<span class=webBug></span>", ""); // remove tracking images
                         out = new RegexOutputStream(out, "</body>", contentWindowJs + "</body>", contentWindowJs);
                         // convert cid: urls to /susimail/?cid= urls
                         out = new RegexOutputStream(out, " src=\"cid:", " src=\"/susimail/?msg=" + Base64.encode(part.uidl) + "&amp;cid=", null);

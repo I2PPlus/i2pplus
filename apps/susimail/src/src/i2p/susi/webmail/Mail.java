@@ -29,6 +29,7 @@ import i2p.susi.util.CountingInputStream;
 import i2p.susi.util.EOFOnMatchInputStream;
 import i2p.susi.util.FileBuffer;
 import i2p.susi.util.MemoryBuffer;
+import i2p.susi.webmail.MailPart;
 import i2p.susi.webmail.encoding.Encoding;
 import i2p.susi.webmail.encoding.EncodingFactory;
 
@@ -76,26 +77,26 @@ class Mail {
 	static final byte HEADER_MATCH[] = DataHelper.getASCII("\r\n\r");
 
 	private long size;
-	public String sender,   // as received, trimmed only, not HTML escaped
-		reply,
-		subject,	// as received, trimmed only, not HTML escaped, non-null, default ""
+	public String sender,				// as received, trimmed only, not HTML escaped
+		reply,										// address only, enclosed by <>
+		subject,									// as received, trimmed only, not HTML escaped, non-null, default ""
 		dateString,
-		//formattedSender,    // address only, enclosed with <>, not HTML escaped
-		formattedDate,  // US Locale, UTC
-		localFormattedDate,  // Current Locale, local time zone
-		shortSender,    // Either name or address but not both, HTML escaped, double-quotes removed, truncated with hellip
-		shortSubject,   // HTML escaped, truncated with hellip, non-null, default ""
-		quotedDate,  // Current Locale, local time zone, longer format
-		dateOnly; // Long date only format for mail list date tooltips e.g. Tuesday 30th December, 1999
+		//formattedSender,				// address only, enclosed with <>, not HTML escaped
+		formattedDate,						// US Locale, UTC
+		localFormattedDate,				// Current Locale, local time zone
+		shortSender,							// Either name or address but not both, HTML escaped, double-quotes removed, truncated with hellip
+		shortSubject,							// HTML escaped, truncated with hellip, non-null, default ""
+		quotedDate,								// Current Locale, local time zone, longer format
+		dateOnly;									// Long date only format for mail list date tooltips e.g. Tuesday 30th December, 1999
 	public final String uidl;
 	public Date date;
 	private Buffer header, body;
 	private MailPart part;
 	/** May be null. Non-empty if non-null. Not HTML escaped. */
-	String[] to, cc;        // addresses only, enclosed by <>
+	String[] to, cc;						// addresses only, enclosed by <>
 	private boolean isNew, isSpam, headersParsed;
 	public String contentType;
-	public String messageID; // as received, trimmed only, probably enclosed with <>, not HTML escaped
+	public String messageID;		// as received, trimmed only, probably enclosed with <>, not HTML escaped
 
 	public String error;
 
@@ -244,6 +245,7 @@ class Mail {
 		// if part != null query parts instead?
 		return contentType != null &&
 			!contentType.contains("text/plain") &&
+			!contentType.contains("text/html") &&
 			!contentType.contains("multipart/alternative") &&
 			!contentType.contains("multipart/related") &&
 			!contentType.contains("multipart/signed");
@@ -254,13 +256,16 @@ class Mail {
 		if (contentType == null) {return "none";}
 		else if (contentType.contains("text/html") ||
 						 contentType.contains("multipart/alternative")) {return "html";}
-		else if (contentType.contains("image/")) {return "image";}
-		else if (contentType.contains("video/")) {return "video";}
-		else if (contentType.contains("audio/")) {return "audio";}
-		else if (contentType.contains("/pdf")) {return "pdf";}
-		else if (contentType.contains("application/zip") ||
-						 contentType.contains("/x-tar") ||
-						 contentType.contains("/x-bzip")) {return "zip";}
+/* TODO: support mailPart to determine attachment mimetype
+		else if (mailPart.type.contains("image/")) {return "image";}
+		else if (mailPart.type.contains("video/")) {return "video";}
+		else if (mailPart.type.contains("audio/")) {return "audio";}
+		else if (mailPart.type.contains("/pdf")) {return "pdf";}
+		else if (mailPart.type.contains("application/zip") ||
+						 mailPart.type.endsWith("zip") ||
+						 mailPart.type.contains("/x-tar") ||
+						 mailPart.type.contains("/x-bzip")) {return "zip";}
+*/
 		else {return "undefined";}
 	}
 

@@ -48,7 +48,7 @@ p.error,p.info{margin:-1px -11px;padding:15px 15px 15px 45px;display:block;line-
 p.footer{padding:1px;margin:0;font-size:8pt;line-height:10pt;text-align:center}
 p.hl{font-size:12pt;letter-spacing:2pt;line-height:18pt;font-weight:700}
 p.info{padding:12px 10px 11px 40px;color:#337;background:var(--bg3) var(--infohelp) no-repeat 14px center/18px}
-p.mailbody{margin:0 20px 10px;text-align:left;font:9pt var(--monospaced)}
+p.mailbody{margin:15px 20px;text-align:left;font:9pt var(--monospaced)}
 p.text{margin-left:10px;margin-right:10px}
 #prefsave{margin:10px -10px -21px;padding:6px 0 5px;border-top:var(--border);background:var(--bg)}
 pre{margin-left:25px;margin-right:25px;font:8.5pt var(--monospaced)}
@@ -189,6 +189,9 @@ select{margin:3px;padding:5px 20px 5px 8px;vertical-align:middle;text-overflow:e
 .folders select{margin-left:0}
 select option{background:var(--bg)}
 textarea[name="config_text"]{width:600px;resize:none}
+#toggleBlockedImages{margin:0 0 0 6px;padding:12px 16px;min-width:unset;vertical-align:middle;text-align:center;font-size:90%;font-size:0;border:0;box-shadow:none;background:var(--hide) no-repeat center center/24px;filter:saturate(0)}
+#toggleBlockedImages.on{background:var(--show) no-repeat center center/24px}
+#toggleBlockedImages:hover{filter:saturate(1)}
 
 /* pagenav */
 input.firstpage,input[name="firstpage"],input.firstpage[disabled]:hover,input[name="firstpage"][disabled]:hover,input.firstpage[disabled]:focus,input[name="firstpage"][disabled]:focus{padding:5px 14px;text-indent:-99999px;background:var(--first) no-repeat center center/16px,var(--btn)}
@@ -286,7 +289,7 @@ tr:hover .listDate{opacity:.9}
 .iframed #messagenav{padding-bottom:0}
 .iframed #nukemail{top:230px}
 .iframed .page{margin:-6px 1px 11px;min-width:580px;border:0;box-shadow:none;background:transparent}
-.iframed p.mailbody{margin:0;padding:0 20px 10px}
+.iframed p.mailbody{margin:0;padding:15px 20px}
 .iframed .topbuttons,.iframed p.error,.iframed p.info{margin:-1px -11px;border:var(--border);border-left:0;border-right:0}
 .iframed .topbuttons{margin:0 0 -2px;padding:6px 0 1px}
 .iframed .topbuttons .pagenavcontrols{border:0}
