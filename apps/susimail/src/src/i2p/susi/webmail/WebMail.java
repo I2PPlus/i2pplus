@@ -582,16 +582,12 @@ public class WebMail extends HttpServlet
                 if (mailPart.type.equals("text/plain") ||
                     (html && allowHtml != HtmlMode.NONE && mailPart.type.equals("text/html"))) {
                     showBody = true;
-                }
-                else
-                    prepareAttachment = true;
+                } else {prepareAttachment = true;}
             }
             if (reason != null && reason.length() > 0) {
-                if (html)
-                    out.println("<p class=info>");
+                if (html) {out.print("<p class=info>");}
                 out.println(reason);
-                if (html)
-                    out.println("</p>");
+                if (html) {out.print("</p>\n");}
                 reason = "";
             }
 
@@ -623,8 +619,7 @@ public class WebMail extends HttpServlet
                 out.print("</td></tr>\n<tr class=mailbody><td colspan=2>");
                 // TODO scrolling=no if js is on
             } else if (showBody) {
-                if (html)
-                    out.println("<p class=mailbody><br>");
+                if (html) {out.print("<p class=mailbody>");}
                 String charset = mailPart.charset;
                 if (charset == null) {
                     charset = "ISO-8859-1";
@@ -635,10 +630,8 @@ public class WebMail extends HttpServlet
                 }
                 try {
                     Writer escaper;
-                    if (html)
-                        escaper = new EscapeHTMLWriter(out);
-                    else
-                        escaper = out;
+                    if (html) {escaper = new EscapeHTMLWriter(out);}
+                    else {escaper = out;}
                     Buffer ob = new OutputStreamBuffer(new DecodingOutputStream(escaper, charset));
                     mailPart.decode(0, ob);
                     // todo Finally
@@ -651,17 +644,14 @@ public class WebMail extends HttpServlet
                 catch (IOException e1) {
                     showBody = false;
                     reason += _t("Part ({0}) not shown, because of {1}", ident, e1.toString()) + br +
-                                 _t("Reloading the page may fix the error.");
+                              _t("Reloading the page may fix the error.");
                 }
-                if (html)
-                    out.println("<br></p>");
+                if (html) {out.print("</p>\n");}
             }
             if (reason != null && reason.length() > 0) {
-                if (html)
-                    out.println("<p class=info>");
+                if (html) {out.print("<p class=info>");}
                 out.println(reason);
-                if (html)
-                    out.println("</p>");
+                if (html) {out.print("</p>\n");}
             }
             if (prepareAttachment) {
                 if (html) {
@@ -702,12 +692,9 @@ public class WebMail extends HttpServlet
                     }
                     out.println("</div>");
                 }
-                else {
-                    out.println(_t("Attachment ({0}).", ident));
-                }
+                else {out.println(_t("Attachment ({0}).", ident));}
             }
-            if (html)
-                out.print("</td></tr>\n");
+            if (html) {out.print("</td></tr>\n");}
         }
 /*
         if (html) {
@@ -726,10 +713,8 @@ public class WebMail extends HttpServlet
      * @return escaped string or "" for null input
      */
     static String quoteHTML(String line) {
-        if (line != null)
-            line = DataHelper.escapeHTML(line);
-        else
-            line = "";
+        if (line != null) {line = DataHelper.escapeHTML(line);}
+        else {line = "";}
         return line;
     }
 
@@ -855,20 +840,15 @@ public class WebMail extends HttpServlet
         Log log = sessionObject.log;
         MailCache mc;
         try {
-            mc = new MailCache(ctx, mailbox, DIR_FOLDER,
-                               host, pop3PortNo, user, pass);
+            mc = new MailCache(ctx, mailbox, DIR_FOLDER, host, pop3PortNo, user, pass);
             sessionObject.caches.put(DIR_FOLDER, mc);
-            MailCache mc2 = new MailCache(ctx, null, DIR_DRAFTS,
-                                          host, pop3PortNo, user, pass);
+            MailCache mc2 = new MailCache(ctx, null, DIR_DRAFTS, host, pop3PortNo, user, pass);
             sessionObject.caches.put(DIR_DRAFTS, mc2);
-            mc2 = new MailCache(ctx, null, DIR_SENT,
-                                host, pop3PortNo, user, pass);
+            mc2 = new MailCache(ctx, null, DIR_SENT, host, pop3PortNo, user, pass);
             sessionObject.caches.put(DIR_SENT, mc2);
-            mc2 = new MailCache(ctx, null, DIR_TRASH,
-                                host, pop3PortNo, user, pass);
+            mc2 = new MailCache(ctx, null, DIR_TRASH, host, pop3PortNo, user, pass);
             sessionObject.caches.put(DIR_TRASH, mc2);
-            mc2 = new MailCache(ctx, null, DIR_SPAM,
-                                host, pop3PortNo, user, pass);
+            mc2 = new MailCache(ctx, null, DIR_SPAM, host, pop3PortNo, user, pass);
             sessionObject.caches.put(DIR_SPAM, mc2);
         } catch (IOException ioe) {
             log.error("Error creating disk cache", ioe);
@@ -3771,25 +3751,15 @@ public class WebMail extends HttpServlet
      *  @since 0.9.35
      */
     private static void showFolderSelect(PrintWriter out, String currentName, boolean disableCurrent) {
-        out.println("<select name=\"" + NEW_FOLDER +
-                    "\" class=\"select" + (disableCurrent ? "1" : "2") +
-                    "\">");
+        out.print("<select name=\"" + NEW_FOLDER + "\" class=\"select" + (disableCurrent ? "1" : "2") + "\">\n");
         for (int i = 0; i < DIRS.length; i++) {
             String dir = DIRS[i];
-            if (currentName.equals(dir)) {
-                // can't move or switch to self
-                continue;
-            }
-            if (disableCurrent && DIR_DRAFTS.equals(dir)) {
-                // can't move to drafts
-                continue;
-            }
+            if (currentName.equals(dir)) {continue;} // can't move or switch to self
+            if (disableCurrent && DIR_DRAFTS.equals(dir)) {continue;} // can't move to drafts
             out.print("<option value=\"" + dir + "\" ");
-            if (currentName.equals(dir)) {
-                out.print("selected=selected ");
-            }
+            if (currentName.equals(dir)) {out.print("selected=selected ");}
             out.print('>' + _t(DISPLAY_DIRS[i]));
-            out.println("</option>");
+            out.print("</option>\n");
         }
         out.println("</select>");
     }
