@@ -4,20 +4,40 @@
  * Licensed under the MIT License
  * Modifications and optimizations by dr|z3d, 2024 */
 
-(function(window, document) {
+function initProgressX(window, document) {
   "use strict";
+
+  var lastTime = 0;
+
+  if (!window.requestAnimationFrame) {
+    window.requestAnimationFrame = function(callback) {
+      var currTime = Date.now();
+      var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+      var id = window.setTimeout(function() {callback(currTime + timeToCall);}, timeToCall);
+      lastTime = currTime + timeToCall;
+      return id;
+    };
+  }
+
+  if (!window.cancelAnimationFrame) {
+    window.cancelAnimationFrame = function(id) {clearTimeout(id);};
+  }
 
   var canvas, progressTimerId, fadeTimerId, currentProgress, showing, options = {
     autoRun: true,
     barThickness: 3,
     barColors: {
       default: {
-        0.0: "rgba(220, 48, 16, .8)",
-        1.0: "rgba(255, 96, 0, .8)"
+        "0.0": "rgba(220, 48, 16, .8)",
+        "1.0": "rgba(255, 96, 0, .8)"
+      },
+      classic: {
+        "0.0": "rgba(48, 64, 192, .7)",
+        "1.0": "rgba(48, 64, 255, .7)"
       },
       midnight: {
-        0.0: "rgba(72, 0, 72, .8)",
-        1.0: "rgba(160, 0, 160, .8)"
+        "0.0": "rgba(72, 0, 72, .8)",
+        "1.0": "rgba(160, 0, 160, .8)"
       }
     }
   };
@@ -35,9 +55,9 @@
   }
 
   function repaint() {
+    var ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
     canvas.height = options.barThickness;
-    var ctx = canvas.getContext("2d");
 
     if (options.barColors.current) {
       var lineGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
@@ -60,9 +80,10 @@
   }
 
   function progressxConfig(opts) {
-    for (var key in opts) {
+    for (key in opts) {
       if (key === "barColors") {
-        for (var colorSet in opts[key]) {options.barColors[colorSet] = opts[key][colorSet];}
+        var colorSet;
+        for (colorSet in opts[key]) {options.barColors[colorSet] = opts[key][colorSet];}
       } else {
         if (options.hasOwnProperty(key)) {options[key] = opts[key];}
       }
@@ -124,4 +145,5 @@
   } else {
     window.progressx = { config: progressxConfig, show: progressxShow, progress: progressxProgress, hide: progressxHide };
   }
-})(window, document);
+}
+initProgressX(window, document);
