@@ -15,7 +15,7 @@
 <%=intl.title("config advanced")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigAdvancedHelper" id="advancedhelper" scope="request" />
 <jsp:setProperty name="advancedhelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -27,7 +27,7 @@
 <div class=configure>
 <div class=wideload>
 <h3 id=ffconf class=tabletitle><%=intl._t("Floodfill Configuration")%></h3>
-<form action="" method=POST>
+<form method=POST>
 <table id=floodfillconfig class=configtable>
 <tr>
 <td class=infohelp>
@@ -65,7 +65,7 @@
     boolean isAdvanced = advancedhelper.isAdvanced();
     if (isAdvanced) {
 %>
-<form action="" method=POST>
+<form method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>">
 <input type=hidden name=action value="blah">
 <input type=hidden name="nofilter_oldConfig" value="<%=advConfig%>">

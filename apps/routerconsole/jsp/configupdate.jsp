@@ -15,7 +15,7 @@
 <%=intl.title("config update")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <h1 class=conf><%=intl._t("Router Updates")%></h1>
 <div class=main id=config_update>
@@ -28,7 +28,7 @@
 <jsp:getProperty name="updatehelper" property="newsStatus" />
 </div>
 <iframe name=processForm id=processForm hidden></iframe>
-<form id=form_updates action="" method=POST target=processForm>
+<form id=form_updates method=POST target=processForm>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <% /* set hidden default */ %>
 <input type=submit name=action value="" style=display:none>

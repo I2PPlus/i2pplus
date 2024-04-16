@@ -15,7 +15,7 @@
 <style>input.default{width:1px;height:1px;visibility:hidden}</style>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <h1 class=conf><%=intl._t("Homepage Customization")%></h1>
 <div class=main id=config_homepage>
@@ -25,7 +25,7 @@
 <jsp:useBean class="net.i2p.router.web.helpers.HomeHelper" id="homehelper" scope="request" />
 <jsp:setProperty name="homehelper" property="contextId" value="<%=i2pcontextId%>" />
 <h3 class=tabletitle><%=intl._t("Search Engines")%></h3>
-<form action="" method=POST>
+<form method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <input type=hidden name="group" value="3">
 <jsp:getProperty name="homehelper" property="configSearch" />
@@ -38,7 +38,7 @@
 </div>
 </form>
 <h3 class=tabletitle id=configapps><%=intl._t("Applications and Configuration")%></h3>
-<form action="" method=POST id=homeapps_form>
+<form method=POST id=homeapps_form>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <input type=hidden name="group" value="2">
 <jsp:getProperty name="homehelper" property="configServices" />
@@ -51,7 +51,7 @@
 </div>
 </form>
 <h3 class=tabletitle id=configsites><%=intl._t("Sites of Interest")%></h3>
-<form action="" method=POST id=homesites_form>
+<form method=POST id=homesites_form>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <input type=hidden name="group" value="1">
 <jsp:getProperty name="homehelper" property="configFavorites" />

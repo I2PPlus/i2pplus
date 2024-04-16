@@ -15,7 +15,7 @@
 <%=intl.title("config keyring")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <h1 class=conf><%=intl._t("Keyring Manager")%></h1>
 <div class=main id=config_keyring>
@@ -27,7 +27,7 @@
 <p id=keyringhelp class=infohelp>
 <%=intl._t("The router keyring is used to decrypt encrypted LeaseSets.")%>&nbsp;
 <%=intl._t("The keyring may contain keys for local or remote encrypted destinations.")%></p>
-<form action="" method=POST>
+<form method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="keyringhelper" property="summary" />
 <h3 class=tabletitle><%=intl._t("Manual Keyring Addition")%></h3>

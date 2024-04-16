@@ -16,7 +16,7 @@
 <style>input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request" />
 <jsp:setProperty name="uihelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -51,7 +51,7 @@
 </div>
 </form>
 <h3 id=passwordheading><%=uihelper._t("Router Console Password")%></h3>
-<form action="" method=POST>
+<form method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="uihelper" property="passwordForm" />
 <div class=formaction id=submitconsolepass>
@@ -69,7 +69,7 @@
 </div>
 </form>
 <h3 id=langheading><%=uihelper._t("Router Console Language")%></h3>
-<form action="" method=POST>
+<form method=POST>
 <input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>" >
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <input type=hidden name=action value="blah" >

@@ -15,7 +15,7 @@
 <%=intl.title("configure bandwidth")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigNetHelper" id="nethelper" scope="request" />
 <jsp:setProperty name="nethelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -24,7 +24,7 @@
 <%@include file="confignav.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigNetHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
-<form action="" method=POST>
+<form method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>">
 <input type=hidden name=action value="blah">
 <input type=hidden name="ratesOnly" value="1">

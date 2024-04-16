@@ -14,7 +14,7 @@
 <%=intl.title("config reseeding")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigReseedHelper" id="reseedHelper" scope="request" />
 <jsp:setProperty name="reseedHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -30,7 +30,7 @@
 </p>
 <% }  // !isAdvanced %>
 <iframe name=processForm id=processForm hidden></iframe>
-<form id=form_reseed action="" method=POST target=processForm>
+<form id=form_reseed method=POST target=processForm>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <h3 class=tabletitle id=reseedsetup><%=intl._t("Reseeding Configuration")%>&nbsp;<span class=h3navlinks><a title="<%=intl._t("Help with reseeding")%>" href="/help/reseed">[<%=intl._t("Reseeding Help")%>]</a></span></h3>
 <table id=reseedconfig class=configtable>
@@ -177,7 +177,7 @@
 <td>
 <b class=suboption><%=intl._t("Enter zip or su3 URL")%></b>
 <div class=optionsingle id=reseedurl>
-<form action="" method=POST>
+<form method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <table>
 <tr>
@@ -201,7 +201,7 @@
 <td>
 <b class=suboption><%=intl._t("Select zip or su3 file")%></b>
 <div class=optionsingle id=reseedzip>
-<form action="" method=POST enctype="multipart/form-data" accept-charset=utf-8>
+<form method=POST enctype="multipart/form-data" accept-charset=utf-8>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <table>
 <tr id=file>

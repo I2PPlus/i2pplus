@@ -16,7 +16,7 @@
 <style>input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <h1 class=conf><%=intl._t("Customize Sidebar")%></h1>
 <div class=main id=config_summarybar>
@@ -30,7 +30,7 @@
 <jsp:setProperty name="summaryhelper" property="contextId" value="<%=i2pcontextId%>" />
 <h3 class=tabletitle><%=intl._t("Refresh Interval")%></h3>
 <iframe name=processForm id=processForm hidden></iframe>
-<form action="" method=POST target=processForm>
+<form method=POST target=processForm>
 <table class=configtable id=refreshsidebar>
 <tr>
 <td>
@@ -60,7 +60,7 @@
 </table>
 </form>
 <h3 class=tabletitle><%=intl._t("Customize Sidebar")%></h3>
-<form id=form_sidebar action="" method=POST target=processForm>
+<form id=form_sidebar method=POST target=processForm>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <input type=hidden name="group" value="2">
 <jsp:getProperty name="summaryhelper" property="configTable" />

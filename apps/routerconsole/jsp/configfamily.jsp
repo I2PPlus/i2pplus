@@ -14,7 +14,7 @@
 <%=intl.title("config router family")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigFamilyHelper" id="familyHelper" scope="request" />
 <jsp:setProperty name="familyHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -34,7 +34,7 @@
    if (family.length() <= 0) {
        // no family yet
 %>
-<form action="" method=POST enctype="multipart/form-data" accept-charset=utf-8>
+<form method=POST enctype="multipart/form-data" accept-charset=utf-8>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <table class=configtable id=joinfamily>
 <tr><th colspan=2><%=intl._t("Join Existing Router Family")%></th></tr>
@@ -57,7 +57,7 @@
 </tr>
 </table>
 </form>
-<form action="" method=POST>
+<form method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <table class=configtable id=newfamily>
 <tr><th colspan=2><%=intl._t("Create New Router Family")%></th></tr>
@@ -108,7 +108,7 @@
 <%
        }
 %>
-<form action="" method=POST>
+<form method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <table class=configtable id=leavefamily>
 <tr><th colspan=2><%=intl._t("Leave Router Family")%></th></tr>

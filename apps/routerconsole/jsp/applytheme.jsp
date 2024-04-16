@@ -25,7 +25,7 @@
 <div style=display:none>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
-<form action="" method=POST>
+<form method=POST>
 <input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>" >
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <input type=hidden name=action value="blah" >

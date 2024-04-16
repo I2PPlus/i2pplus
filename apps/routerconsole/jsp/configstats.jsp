@@ -15,7 +15,7 @@
 <%=intl.title("config stats")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.5);</script>
+<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <h1 class=conf><%=intl._t("Stats Collection &amp; Graphing")%></h1>
 <div class=main id=config_stats>
@@ -26,7 +26,7 @@
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigStatsHelper" id="statshelper" scope="request" />
 <jsp:setProperty name="statshelper" property="contextId" value="<%=i2pcontextId%>" />
 <div class=configure>
-<form id=statsForm name="statsForm" action="" method=POST>
+<form id=statsForm name="statsForm" method=POST>
 <input type=hidden name=action value="foo" >
 <input type=hidden name="nonce" value="<%=pageNonce%>" >
 <h3 class=tabletitle><%=intl._t("Configure I2P Stat Collection")%></h3>

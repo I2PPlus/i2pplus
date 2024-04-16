@@ -11,26 +11,18 @@
     final int LAST_PAGE = 5;
     String pg = request.getParameter("page");
     int ipg;
-    if (pg == null) {
-        ipg = 1;
-    } else {
+    if (pg == null) {ipg = 1;}
+    else {
         try {
             ipg = Integer.parseInt(pg);
             if (request.getParameter("prev") != null) {
                 // previous button handling
-                if (ipg == 6)
-                    ipg = 3;
-                else
-                    ipg -= 2;
+                if (ipg == 6) {ipg = 3;}
+                else {ipg -= 2;}
             }
-            if (ipg <= 0 || ipg > LAST_PAGE) {
-                ipg = 1;
-            } else if (ipg == 3 && request.getParameter("skipbw") != null) {
-                ipg++;  // skip bw test
-            }
-        } catch (NumberFormatException nfe) {
-            ipg = 1;
-        }
+            if (ipg <= 0 || ipg > LAST_PAGE) {ipg = 1;}
+            else if (ipg == 3 && request.getParameter("skipbw") != null) {ipg++;} // skip bw test
+        } catch (NumberFormatException nfe) {ipg = 1;}
     }
 
     // detect completion
@@ -39,27 +31,19 @@
         // tell wizard helper we're done
         String i2pcontextId = request.getParameter("i2p.contextId");
         try {
-            if (i2pcontextId != null) {
-                session.setAttribute("i2p.contextId", i2pcontextId);
-            } else {
-                i2pcontextId = (String) session.getAttribute("i2p.contextId");
-            }
+            if (i2pcontextId != null) {session.setAttribute("i2p.contextId", i2pcontextId);}
+            else {i2pcontextId = (String) session.getAttribute("i2p.contextId");}
         } catch (IllegalStateException ise) {}
         wizhelper.setContextId(i2pcontextId);
         wizhelper.complete();
-
-        // redirect to /home
-        response.setStatus(307);
+        response.setStatus(307); // redirect to /home
         response.setHeader("Cache-Control","no-cache");
         String req = request.getRequestURL().toString();
         int slash = req.indexOf("/welcome");
-        if (slash >= 0)
-            req = req.substring(0, slash) + "/home";
-        else // shouldn't happen
-            req = "http://127.0.0.1:7657/home";
+        if (slash >= 0) {req = req.substring(0, slash) + "/home";}
+        else {req = "http://127.0.0.1:7657/home";} // shouldn't happen
         response.setHeader("Location", req);
-        // force commitment
-        response.getOutputStream().close();
+        response.getOutputStream().close(); // force commitment
         return;
     }
 %>
@@ -97,7 +81,7 @@
 <hr>
 <h3>Setup Wizard</h3>
 <hr>
-<form action="" method=POST>
+<form method=POST>
 <input type=submit class=cancel name="skip" value="<%=intl._t("Skip Setup")%>">
 </form>
 </div>
@@ -122,7 +106,7 @@
     formhandler.setWizardHelper(wizhelper);
 %>
 <%@include file="formhandler.jsi" %>
-<form action="" method=POST>
+<form method=POST>
 <input type=hidden name="nonce" value="<%=pageNonce%>">
 <input type=hidden name=action value="blah" >
 <input type=hidden name="page" value="<%=(ipg + 1)%>">
