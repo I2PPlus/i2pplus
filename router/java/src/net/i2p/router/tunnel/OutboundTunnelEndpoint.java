@@ -68,8 +68,8 @@ class OutboundTunnelEndpoint {
                     _log.warn("Dropping messsage at Outbound Endpoint -> Unsupported delivery instruction type (LOCAL)");
                 return;
             }
-            if (_log.shouldDebug())
-                _log.debug("Outbound tunnel " + _config + " received a full message: " + msg +
+            if (_log.shouldInfo())
+                _log.info("Outbound tunnel " + _config + " received a full message: " + msg +
                            " to be forwarded on to [" + toRouter.toBase64().substring(0,6) + "]" +
                            (toTunnel != null ? ":" + toTunnel.getTunnelId() : ""));
             if (toTunnel == null) {
@@ -80,31 +80,36 @@ class OutboundTunnelEndpoint {
                         _ridsm++;
                         _context.statManager().addRateData("tunnel.outboundTunnelEndpointFwdRIDSM", 1);
                         if (_log.shouldLog(Log.INFO))
-                            _log.warn("OutboundEndpoint RouterInfo DbStoreMsg (count: " +
+                            _log.info("OutboundEndpoint RouterInfo DbStoreMsg (Count: " +
                                       _ridsm + "/" + _totalmsg + ") from [TunnelId " + _config.getReceiveTunnelId() + "] " +
                                       "to Router [" + toRouter.toBase64().substring(0,6) + "] with message: " + dsm);
-                        else if (_log.shouldLog(Log.WARN))
+/*                        else if (_log.shouldLog(Log.WARN))
                             _log.warn("OutboundEndpoint RouterInfo DbStoreMsg from [TunnelId " + _config.getReceiveTunnelId() + "] " +
                                       "to Router [" + toRouter.toBase64().substring(0,6) + "] -> Count: " + _ridsm + " / " + _totalmsg);
+*/
                     } else {
                         _lsdsm++;
                         if (_log.shouldLog(Log.INFO))
-                            _log.warn("OutboundEndpoint LeaseSet DbStoreMsg (count: " + _lsdsm + "/" + _totalmsg + ") " +
+                            _log.info("OutboundEndpoint LeaseSet DbStoreMsg (Count: " + _lsdsm + "/" + _totalmsg + ") " +
                                       "from [TunnelId " + _config.getReceiveTunnelId() + "] to Router " +
                                       toRouter.toBase64().substring(0,6) + "] with message: " + dsm);
+/*
                         else if (_log.shouldLog(Log.WARN))
                             _log.warn("OutboundEndpoint LeaseSet DbStoreMsg from [TunnelId " + _config.getReceiveTunnelId() + "] " +
                                       "to Router " + toRouter.toBase64().substring(0,6) + "] -> Count: " + _lsdsm + " / " + _totalmsg);
+*/
                     }
                 } else {
                     _i2npmsg++;
                     if (_log.shouldLog(Log.INFO))
-                        _log.warn("OutboundEndpoint I2NP Message (count: " + _i2npmsg + "/" + _totalmsg + ") from [TunnelId " +
+                        _log.info("OutboundEndpoint I2NP Message (Count: " + _i2npmsg + "/" + _totalmsg + ") from [TunnelId " +
                                   _config.getReceiveTunnelId() + "] to Router [" + toRouter.toBase64().substring(0,6) + "] " +
                                   "with message: " + msg);
+/*
                     else if (_log.shouldLog(Log.WARN))
                         _log.warn("OutboundEndpoint I2NP Message from [TunnelId " + _config.getReceiveTunnelId() + "] " +
                                   "to Router [" + toRouter.toBase64().substring(0,6) + "] -> Count: " + _i2npmsg + " / " + _totalmsg);
+*/
                 }
             }
             int size = msg.getMessageSize();
