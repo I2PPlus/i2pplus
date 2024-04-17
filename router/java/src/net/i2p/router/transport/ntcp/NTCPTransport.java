@@ -702,7 +702,7 @@ public class NTCPTransport extends TransportImpl {
         boolean isBlocklisted = _context.blocklist().isBlocklisted(peer);
         if (con != null) {
             if (_log.shouldWarn()) {
-                _log.warn("[TCP] Forcing immediate disconnection of " +
+                _log.warn("[NTCP] Forcing immediate disconnection of " +
                           (isBannedHard ? "permanently banned " : isBanned ? "temp banned " : isBlocklisted ? "blocklisted " : "") +
                           "Router [" + peer.toBase64().substring(0,6) + "]");
             }

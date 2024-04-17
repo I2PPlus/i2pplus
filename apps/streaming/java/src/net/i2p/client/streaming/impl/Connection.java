@@ -1330,7 +1330,8 @@ class Connection {
                     // fall through
                 default:
                     if (_log.shouldWarn())
-                        _log.warn("Closing inactive connection to " + Connection.this.toString() + toString());
+                        //_log.warn("Closing inactive connection to " + Connection.this.toString() + toString());
+                        _log.warn("Closing inactive connection to " + Connection.this.toString());
                     if (_log.shouldDebug()) {
                         StringBuilder buf = new StringBuilder(128);
                         long now = _context.clock().now();
