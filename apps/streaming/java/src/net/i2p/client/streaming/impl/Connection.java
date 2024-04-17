@@ -1274,7 +1274,7 @@ class Connection {
         }
         public void timeReached() {
             if (_log.shouldDebug())
-                _log.debug("Fire inactivity timer on " + Connection.this.toString());
+                _log.debug("Invoking inactivity timer on " + Connection.this.toString() + "...");
             // uh, nothing more to do...
             if (!_connected.get()) {
                 if (_log.shouldDebug()) _log.debug("Inactivity timeout reached, but we are already closed!");
@@ -1283,18 +1283,20 @@ class Connection {
             // we got rescheduled already
             long left = getTimeLeft();
             if (left > 0) {
-                if (_log.shouldDebug()) _log.debug("Inactivity timeout reached, but there is time left (" + left + "ms)");
+                if (_log.shouldDebug())
+                    _log.debug("Inactivity timeout reached on " + Connection.this.toString() + " but there is time left (" + left + "ms)");
                 schedule(left);
                 return;
             }
             // these are either going to time out or cause further rescheduling
             if (getUnackedPacketsSent() > 0) {
-                if (_log.shouldDebug()) _log.debug("Inactivity timeout reached, but there are unACKed packets");
+                if (_log.shouldDebug())
+                    _log.debug("Inactivity timeout reached on " + Connection.this.toString() + " but there are unACKed packets!");
                 return;
             }
             // this shouldn't have been scheduled
             if (_options.getInactivityTimeout() <= 0) {
-                if (_log.shouldDebug()) _log.debug("Inactivity timeout reached, but there is no timer!");
+                if (_log.shouldDebug()) _log.debug("Inactivity timeout reached on " + Connection.this.toString() + " but there is no timer!");
                 return;
             }
             // if one of us can't talk...
@@ -1308,18 +1310,19 @@ class Connection {
             //    return;
             //}
 
-            if (_log.shouldDebug()) _log.debug("Inactivity timeout reached, with action -> " + _options.getInactivityAction());
+            if (_log.shouldDebug())
+                _log.debug("Inactivity timeout reached on " + Connection.this.toString() + " -> " + _options.getInactivityAction());
 
             // bugger it, might as well do the hard work now
             switch (_options.getInactivityAction()) {
                 case ConnectionOptions.INACTIVITY_ACTION_NOOP:
                     if (_log.shouldWarn())
-                        _log.warn("Inactivity timer expired, not doing anything");
+                        _log.warn("Inactivity timer expired on " + Connection.this.toString() + " -> Not doing anything!");
                     break;
                 case ConnectionOptions.INACTIVITY_ACTION_SEND:
                     if (_closeSentOn.get() <= 0 && _closeReceivedOn.get() <= 0) {
                         if (_log.shouldWarn())
-                            _log.warn("Sending some data due to inactivity...");
+                            _log.warn("Sending some data to " + Connection.this.toString() + " due to inactivity...");
                         _receiver.send(null, 0, 0, true);
                         break;
                     } // else fall through
@@ -1327,7 +1330,7 @@ class Connection {
                     // fall through
                 default:
                     if (_log.shouldWarn())
-                        _log.warn("Closing (inactivity) " + toString());
+                        _log.warn("Closing inactive connection to " + Connection.this.toString() + toString());
                     if (_log.shouldDebug()) {
                         StringBuilder buf = new StringBuilder(128);
                         long now = _context.clock().now();
@@ -1502,12 +1505,12 @@ class Connection {
                 PacketLocal oldest = e.getValue();
                 if (oldest.getNumSends() == 1) {
                     if (_log.shouldDebug())
-                        _log.debug(Connection.this + " cutting ssthresh and window");
+                        _log.debug(Connection.this + " cutting SlowStartThreshold and Window");
                     _ssthresh = Math.max( (int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
                     _ssthresh = Math.min(ConnectionPacketHandler.MAX_SLOW_START_WINDOW, _ssthresh);
                     _options.setWindowSize(1);
                 } else if (_log.shouldDebug())
-                    _log.debug(Connection.this + " not cutting ssthresh and window");
+                    _log.debug(Connection.this + " not cutting SlowStartThreshold and Window");
 
                 toResend = new ArrayList<>(_outboundPackets.values());
 //                toResend = toResend.subList(0, Math.min(MAX_RTX, (toResend.size() + 1) / 2));
@@ -1522,7 +1525,7 @@ class Connection {
                 final int nResends = packet.getNumSends();
                 if (packet.getNumSends() > _options.getMaxResends()) {
                     if (_log.shouldDebug())
-                        _log.debug(Connection.this + " packet " + packet + " resent too many times, closing");
+                        _log.debug(Connection.this + " packet " + packet + " resent too many times, closing...");
                     packet.cancelled();
                     disconnect(false);
                     return;
@@ -1535,7 +1538,7 @@ class Connection {
                     // they sent a close. Only send 3 CLOSE packets total, then
                     // shut down normally.
                     if (_log.shouldDebug())
-                        _log.debug(Connection.this + " too many close resends, closing");
+                        _log.debug(Connection.this + " too many close resends, closing...");
                     packet.cancelled();
                     disconnect(false);
                     return;
