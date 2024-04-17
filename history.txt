@@ -1,6 +1,15 @@
+2024-04-16 dr|z3d
+ * Console: optimize progressx.js and add support for theme-specific colors
+
 2024-04-15 dr|z3d
  * SusiMail: When blocked images are present in HTML view and not shown, add
    a toggle button to enable display of placeholders, with src as tooltip
+
+2024-04-13 zzz
+ * Susimail:
+   - Reply-all improvements
+   - Add sender name to default config, use when replying
+   - Improve validateAddress()
 
 2024-04-13 dr|z3d
  * SusiMail: Remove parenthesis and anything contained therein in
