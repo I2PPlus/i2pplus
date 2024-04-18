@@ -1,5 +1,5 @@
 2024-04-16 dr|z3d
- * Console: optimize progressx.js and add support for theme-specific colors
+ * Console: Optimize progressx.js and add support for theme-specific colors
 
 2024-04-15 dr|z3d
  * SusiMail: When blocked images are present in HTML view and not shown, add

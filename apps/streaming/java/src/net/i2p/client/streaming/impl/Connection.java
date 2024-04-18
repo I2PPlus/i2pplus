@@ -571,13 +571,13 @@ class Connection {
                     if (p.getNumSends() > 1) {
                         _activeResends.decrementAndGet();
                         if (_log.shouldDebug())
-                            _log.debug("Active resend of " + p + " successful, # active left: " + _activeResends);
+                            _log.debug("Active resend of " + p + " successful -> " + _activeResends + " resends remaining...");
                     }
                 }
             }
             if ( (_outboundPackets.isEmpty()) && (_activeResends.get() != 0) ) {
                 if (_log.shouldInfo())
-                    _log.info("All outbound packets acked, clearing " + _activeResends);
+                    _log.info("All outbound packets ACKed, clearing " + _activeResends);
                 _activeResends.set(0);
             }
             anyLeft = !_outboundPackets.isEmpty();
@@ -770,7 +770,8 @@ class Connection {
 
         if (cleanDisconnect) {
             if (_log.shouldDebug())
-                _log.debug("Clean disconnecting -> Removed from Connection Manager? " + removeFromConMgr +
+                _log.debug("Clean disconnecting from " + getRemotePeerString() + " -> " +
+                           (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager") +
                            "\n* " + toString(), new Exception("Disconnected"));
             _outputStream.closeInternal();
         } else {
@@ -778,16 +779,15 @@ class Connection {
             if (_inputStream.getHighestBlockId() >= 0 && !getResetReceived()) {
                 // only send a RESET if we ever got something (and he didn't RESET us),
                 // otherwise don't waste the crypto and tags
-                if (_log.shouldWarn())
-                    _log.warn("Hard disconnecting and sending reset -> Removed from Connection Manager? " + removeFromConMgr +
-//                             "\n* " + toString(), new Exception("cause"));
-                              "\n* " + toString());
+                if (_log.shouldWarn()) {
+                    _log.warn("Hard disconnecting, sending RESET to " + getRemotePeerString() + " -> " +
+                              (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
+                }
                 sendReset();
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Hard disconnecting -> Removed from Connection Manager? " + removeFromConMgr +
-//                              "\n* " + toString(), new Exception("cause"));
-                              "\n* " + toString());
+                    _log.warn("Hard disconnecting from " + getRemotePeerString() + " -> " +
+                              (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
             }
             _outputStream.streamErrorOccurred(new IOException("Hard disconnect"));
         }
@@ -800,7 +800,7 @@ class Connection {
                 long cso = _closeSentOn.get();
                 if (cro > 0 && cro < cso && getUnackedPacketsSent() <= 0) {
                     if (_log.shouldInfo())
-                        _log.info("Rcv close -> send close -> last acked, skip TIME-WAIT for " + toString());
+                        _log.info("Rcv close -> send close -> last ACKed, skip TIME-WAIT for " + toString());
                     // They sent the first CLOSE.
                     // We do not need to enter TIME-WAIT, we are done.
                     // clean disconnect, don't schedule TIME-WAIT
@@ -834,8 +834,7 @@ class Connection {
         _inputStream.streamErrorOccurred(new IOException("Socket closed"));
 
         if (_log.shouldInfo())
-            _log.info("Connection disconnect complete\n"
-                          + toString());
+            _log.info("Connection disconnect complete\n" + toString());
         _connectionManager.removeConnection(this);
         killOutstandingPackets();
     }
@@ -873,9 +872,7 @@ class Connection {
     private class DisconnectEvent implements SimpleTimer.TimedEvent {
         public DisconnectEvent() {
             if (_log.shouldInfo())
-                _log.info("Connection disconnect timer initiated\n* 5 minutes to drop "
-//                          + Connection.this.toString(), new Exception());
-                          + Connection.this.toString());
+                _log.info("Disconnect timer initiated on connection to " + getRemotePeerString() + "-> 5 minutes to drop...");
         }
         public void timeReached() {
             disconnectComplete();
@@ -904,6 +901,11 @@ class Connection {
      * @return peer Destination or null if unset
      */
     public synchronized Destination getRemotePeer() { return _remotePeer; }
+
+    private String getRemotePeerString() {
+        if (_remotePeer != null) {return "[" + _remotePeer.calculateHash().toBase64().substring(0,6) + "]";}
+        else {return "[Unknown]";}
+    }
 
     /**
      *  @param peer non-null
@@ -1274,7 +1276,7 @@ class Connection {
         }
         public void timeReached() {
             if (_log.shouldDebug())
-                _log.debug("Invoking inactivity timer on " + Connection.this.toString() + "...");
+                _log.debug("Invoking inactivity timer on connection to " + getRemotePeerString() + "...");
             // uh, nothing more to do...
             if (!_connected.get()) {
                 if (_log.shouldDebug()) _log.debug("Inactivity timeout reached, but we are already closed!");
@@ -1284,19 +1286,19 @@ class Connection {
             long left = getTimeLeft();
             if (left > 0) {
                 if (_log.shouldDebug())
-                    _log.debug("Inactivity timeout reached on " + Connection.this.toString() + " but there is time left (" + left + "ms)");
+                    _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() + " but there is time left (" + left + "ms)");
                 schedule(left);
                 return;
             }
             // these are either going to time out or cause further rescheduling
             if (getUnackedPacketsSent() > 0) {
                 if (_log.shouldDebug())
-                    _log.debug("Inactivity timeout reached on " + Connection.this.toString() + " but there are unACKed packets!");
+                    _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() + " but there are unACKed packets!");
                 return;
             }
             // this shouldn't have been scheduled
             if (_options.getInactivityTimeout() <= 0) {
-                if (_log.shouldDebug()) _log.debug("Inactivity timeout reached on " + Connection.this.toString() + " but there is no timer!");
+                if (_log.shouldDebug()) _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() + " but there is no timer!");
                 return;
             }
             // if one of us can't talk...
@@ -1311,18 +1313,18 @@ class Connection {
             //}
 
             if (_log.shouldDebug())
-                _log.debug("Inactivity timeout reached on " + Connection.this.toString() + " -> " + _options.getInactivityAction());
+                _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() + " -> " + _options.getInactivityAction());
 
             // bugger it, might as well do the hard work now
             switch (_options.getInactivityAction()) {
                 case ConnectionOptions.INACTIVITY_ACTION_NOOP:
                     if (_log.shouldWarn())
-                        _log.warn("Inactivity timer expired on " + Connection.this.toString() + " -> Not doing anything!");
+                        _log.warn("Inactivity timer expired on connection to " + getRemotePeerString() + " -> Not doing anything!");
                     break;
                 case ConnectionOptions.INACTIVITY_ACTION_SEND:
                     if (_closeSentOn.get() <= 0 && _closeReceivedOn.get() <= 0) {
                         if (_log.shouldWarn())
-                            _log.warn("Sending some data to " + Connection.this.toString() + " due to inactivity...");
+                            _log.warn("Sending some data to " + getRemotePeerString() + " due to inactivity...");
                         _receiver.send(null, 0, 0, true);
                         break;
                     } // else fall through
@@ -1330,14 +1332,13 @@ class Connection {
                     // fall through
                 default:
                     if (_log.shouldWarn())
-                        //_log.warn("Closing inactive connection to " + Connection.this.toString() + toString());
-                        _log.warn("Closing inactive connection to " + Connection.this.toString());
+                        _log.warn("Closing inactive connection to " + getRemotePeerString());
                     if (_log.shouldDebug()) {
                         StringBuilder buf = new StringBuilder(128);
                         long now = _context.clock().now();
-                        buf.append("last sent was: ").append(now - _lastSendTime);
-                        buf.append("ms ago, last received was: ").append(now -_lastReceivedOn);
-                        buf.append("ms ago, inactivity timeout is: ").append(_options.getInactivityTimeout());
+                        buf.append("Last sent packet: ").append(now - _lastSendTime);
+                        buf.append("ms ago, last received: ").append(now -_lastReceivedOn);
+                        buf.append("ms ago -> Inactivity timeout is: ").append(_options.getInactivityTimeout());
                         _log.debug(buf.toString());
                     }
 
@@ -1610,7 +1611,7 @@ class Connection {
             eventOccurred();
         }
         @Override
-        public String toString() { return "event on " + Connection.this.toString(); }
+        public String toString() { return "event on connection to " + getRemotePeerString(); }
     }
 
     /**
