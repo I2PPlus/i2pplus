@@ -24,13 +24,13 @@
 
 package i2p.susi.dns;
 
-import java.io.ByteArrayInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -80,14 +80,13 @@ public class LogBean extends BaseBean
                     }
                 }
                 StringBuilder buf = new StringBuilder(maxLines * 80);
-                // Reverse order, most recent first
-                //for (int i = maxLines - 1; i >= 0; i--) {
-                for (int i = 0; i < lines.size(); i++) {
+
+                for (int i = lines.size() - 1; i >= 0; i--) { // Reverse order, most recent first
                     if (!lines.get(i).contains("Bad hostname")) {
-                        buf.append(lines.get(i)).append('\n');
+                        buf.append(lines.get(i).replace(" added to addressbook", "").replace("GMT", "UTC")).append('\n');
                     }
                 }
-                logged = buf.toString().replace(" added to addressbook","");
+                logged = buf.toString();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -126,4 +125,5 @@ public class LogBean extends BaseBean
         reloadLog();
         return logged;
     }
+
 }
