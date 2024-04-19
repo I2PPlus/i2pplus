@@ -4897,10 +4897,8 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(getQueryString(sort)).append("\">");
         }
         tx = _t("Download Status");
-        toThemeImg(buf, "status", tx,
-                   showRemainingSort ? _t("Sort by {0}", _t("Remaining")) : tx);
-        if (showRemainingSort)
-            buf.append("</a>");
+        toThemeImg(buf, "status", tx, showRemainingSort ? _t("Sort by {0}", _t("Remaining")) : tx);
+        if (showRemainingSort) {buf.append("</a>");}
         if (showPriority) {
             buf.append("</th><th class=\"priority volatile\">");
             if (showSort) {
@@ -4977,19 +4975,13 @@ public class I2PSnarkServlet extends BasicServlet {
                         status = toSVG("tick", "iconStatus", _t("Complete"), _t("Complete"));
                     } else {
                         priority = fai.priority;
-                        if (priority < 0) {
-                            status = "<div class=priorityIndicator>" + toImg("block") + "</div>";
-                        } else if (priority == 0) {
-                            status = "<div class=priorityIndicator>" + toImg("clock") + "</div>";
-                        } else {
-                            status = "<div class=priorityIndicator>" + toImg("clock_red") + "</div>";
-                            long percent = 100 * (length - remaining) / length;
-                            status += " <div class=barOuter>" + "<div class=barInner style=\"width: " +
-                                         percent + "%;\"><div class=barText tabindex=0 title=\"" +
-                                         formatSize(remaining) + ' ' + _t("remaining") +
-                                         "\">" + percent + "%</div></div></div>";
-                        }
-
+                        if (priority < 0) {status = "<div class=priorityIndicator>" + toImg("block") + "</div>";}
+                        else if (priority == 0) {status = "<div class=priorityIndicator>" + toImg("clock") + "</div>";}
+                        else {status = "<div class=priorityIndicator>" + toImg("clock_red") + "</div>";}
+                        long percent = 100 * (length - remaining) / length;
+                        status += " <div class=barOuter>" + "<div class=barInner style=\"width: " + percent + "%;\">" +
+                                   "<div class=barText tabindex=0 title=\"" + formatSize(remaining) + ' ' + _t("remaining") +
+                                   "\">" + percent + "%</div></div></div>";
                     }
                 }
             }
@@ -5001,9 +4993,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String path = addPaths(decodedBase, item.getName());
             if (fai.isDirectory) {
                 complete = true;
-                if (!path.endsWith("/")) {
-                    path=addPaths(path, "/");
-                }
+                if (!path.endsWith("/")) {path=addPaths(path, "/");}
             }
             path = encodePath(path);
             String icon = toIcon(item);
