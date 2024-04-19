@@ -310,7 +310,7 @@ tr:hover .tx{border-color:#747}
 .txBarText{position:relative;z-index:5}
 
 /* torrent info */
-audio,video{width:240px}
+audio,video{width:240px;vertical-align:middle}
 video:fullscreen,video:fullscreen:hover,video:fullscreen:focus{padding:0;border:0;box-shadow:none}
 video::-webkit-media-controls-timeline{padding:0 16px 16px}
 audio::-webkit-media-controls-enclosure{border-radius:0;filter:invert(1)}
@@ -433,8 +433,9 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 /* priority */
 .priority{padding:5px;width:1%;white-space:nowrap;text-align:center}
 .priority::after{content:"";display:inline-block;min-height:30px;vertical-align:middle}
-.priority input[type=radio]{text-align:left;margin:3px}
+.priority input[type=radio]{text-align:left;margin:0}
 .priority input[type=radio]:not(:checked):not(:hover){opacity:.7}
+.priority label{margin-left:4px}
 .priorityHigh,.priorityNormal,.prioritySkip{padding:0;display:inline-block;width:50px;font-size:0;text-align:left;vertical-align:middle;color:transparent;overflow:hidden}
 .priorityHigh{background:url(/i2psnark/.res/icons/clock_red.png) no-repeat left 26px center/18px}
 .priorityNormal{background:url(/i2psnark/.res/icons/clock.png) no-repeat left 26px center/18px}
