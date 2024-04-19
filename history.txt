@@ -1,3 +1,8 @@
+2024-04-19 dr|z3d
+ * SusiDNS: Reverse the order of the subscription logs so newest
+   added domains appear first
+ * I2PSnark: Fix display of progress bars on details page
+
 2024-04-16 dr|z3d
  * Console: Optimize progressx.js and add support for theme-specific colors
 
