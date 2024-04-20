@@ -374,7 +374,7 @@ public class SybilRenderer {
             buf.append(HelperBase.CHECKED);
         buf.append(">").append(_t("Include non-floodfill routers")).append("</label>")
            .append("</span><br>\n<span class=nowrap><b>")
-           .append(_t("Minimum threshold for block")).append(":</b><input type=text name=\"threshold\" pattern=\"^[0-9]{1,4}\.[0-9]{0,1}$\" value=\"")
+           .append(_t("Minimum threshold for block")).append(":</b><input type=text name=\"threshold\" pattern=\"^[0-9]{1,4}\\.[0-9]{0,1}$\" value=\"")
            .append(thresh).append("\">").append(_t("threat points")).append("</span><br>\n<span class=nowrap><b>")
            .append(_t("Enforce block for")).append(":</b><input type=text name=\"days\" pattern=\"^[0-9]{1,4}$\" value=\"")
            .append(days).append("\">").append(_t("days")).append("</span><br>\n</td></tr>\n")
