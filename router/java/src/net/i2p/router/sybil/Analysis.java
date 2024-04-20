@@ -121,7 +121,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     public static final long DEFAULT_BLOCK_TIME = 7*24*60*60*1000L;
     public static final long DEFAULT_REMOVE_TIME = 10*24*60*60*1000L;
     public static final long SHORT_REMOVE_TIME = 2*24*60*60*1000L;
-    public static final long DEFAULT_FREQUENCY = 24*60*60*1000L;
+    //public static final long DEFAULT_FREQUENCY = 24*60*60*1000L;
+    public static final long DEFAULT_FREQUENCY = 60*60*1000L;
     public static final float MIN_BLOCK_POINTS = 12.01f;
     private static final byte[] IPV6_LOCALHOST = new byte[16];
     static { IPV6_LOCALHOST[15] = 1; }
