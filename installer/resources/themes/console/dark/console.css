@@ -1404,7 +1404,8 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #sybilTask .optionlist b{padding-right:5px;display:inline-block;min-width:220px;vertical-align:middle;text-align:right}
 #sybilTask .optionlist,#sybilTask .optionlist:hover{padding:1px 3px 1px 1px;text-align:left;border:0;box-shadow:none;background:#000;columns:500px 3;column-gap:2px}
 #sybilTask select,#sybilTask input{margin:6px}
-#sybilTask select,#sybilTask input[type=text]{width:140px}
+#sybilTask input[type=text]{width:80px}
+#sybilTask select{width:140px}
 #sybilTask td{padding:1px 2px 1px 0;padding:0;background:#000}
 #sybilTask th{padding-left:8px;text-transform:uppercase;letter-spacing:.1em;font-size:11pt;text-align:left}
 #sybil_totals{font-weight:400}

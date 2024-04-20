@@ -1339,7 +1339,8 @@ p.sybil_info,p.family,p.threatpoints,p.hashdist,p.notfound,#sybil_totals{margin:
 #sybilTask .optionlist b{padding-right:5px;display:inline-block;min-width:220px;vertical-align:middle;text-align:right}
 #sybilTask .optionlist,#sybilTask .optionlist:hover{padding:3px 3px 3px 1px;text-align:left;border:0;box-shadow:none;background:var(--bg);columns:500px 3;column-gap:2px}
 #sybilTask select,#sybilTask input{margin:6px}
-#sybilTask select,#sybilTask input[type=text]{width:140px}
+#sybilTask input[type=text]{width:80px}
+#sybilTask select{width:140px}
 #sybilTask input[type=checkbox]{margin:14px 8px}
 #sybilTask tr:last-child{border-top:var(--border)}
 #sybilTask th{padding:0 0 0 8px;text-align:left;letter-spacing:.1em;text-transform:uppercase;font-size:11pt}

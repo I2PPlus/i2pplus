@@ -364,19 +364,19 @@ public class SybilRenderer {
             buf.append("</option>\n");
         }
         buf.append("</select>\n</span><br>\n<span class=nowrap><b>")
-           .append(_t("Automatic blocking")).append(":</b><label><input type=checkbox class=optbox value=1 name=\"block\" ");
+           .append(_t("Automatic blocking")).append(":</b><label><input type=checkbox class=\"optbox slider\" value=1 name=\"block\" ");
         if (auto)
             buf.append(HelperBase.CHECKED);
         buf.append(">").append(_t("Add detected sybils to banlist")).append("</label>")
            .append("</span><br>\n<span class=nowrap><b>")
-           .append(_t("Block all detected sybils")).append(":</b><label><input type=checkbox class=optbox value=1 name=\"nonff\" ");
+           .append(_t("Block all detected sybils")).append(":</b><label><input type=checkbox class=\"optbox slider\" value=1 name=\"nonff\" ");
         if (nonff)
             buf.append(HelperBase.CHECKED);
         buf.append(">").append(_t("Include non-floodfill routers")).append("</label>")
            .append("</span><br>\n<span class=nowrap><b>")
-           .append(_t("Minimum threshold for block")).append(":</b><input type=text name=\"threshold\" value=\"")
+           .append(_t("Minimum threshold for block")).append(":</b><input type=text name=\"threshold\" pattern=\"^[0-9]{1,4}\.[0-9]{0,1}$\" value=\"")
            .append(thresh).append("\">").append(_t("threat points")).append("</span><br>\n<span class=nowrap><b>")
-           .append(_t("Enforce block for")).append(":</b><input type=text name=\"days\" value=\"")
+           .append(_t("Enforce block for")).append(":</b><input type=text name=\"days\" pattern=\"^[0-9]{1,4}$\" value=\"")
            .append(days).append("\">").append(_t("days")).append("</span><br>\n</td></tr>\n")
            .append("<tr><td class=optionsave><input type=submit name=action class=accept value=Save />\n</div>\n</td></tr>\n</table>\n</form>\n");
         writeBuf(out, buf);
