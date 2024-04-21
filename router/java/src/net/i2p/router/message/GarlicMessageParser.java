@@ -76,8 +76,9 @@ public class GarlicMessageParser {
                         _log.debug("ECIES decryption success, cloves: " + rv.getCloveCount());
                     return rv;
                 } else {
-                    if (_log.shouldWarn())
-                        _log.warn("ECIES decryption failure");
+                    // logged elsewhere in more detail
+                    //if (_log.shouldWarn())
+                    //    _log.warn("ECIES decryption failure");
                     return null;
                 }
             } else {
@@ -86,8 +87,10 @@ public class GarlicMessageParser {
                 return null;
             }
         } catch (DataFormatException dfe) {
-            if (_log.shouldWarn())
+            if (_log.shouldInfo())
                 _log.warn("Error decrypting", dfe);
+            else if (_log.shouldWarn())
+                _log.warn("Error decrypting (" + dfe.getMessage() + ")");
             return null;
         }
         if (decrData == null) {
