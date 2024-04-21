@@ -263,7 +263,7 @@ class EstablishmentManager {
             if (state == null) {
                 state = _outboundByClaimedAddress.get(from);
                 if (state != null && _log.shouldInfo())
-                    _log.info("Found by claimed address: " + state);
+                    _log.info("[SSU2] Found by claimed address: " + state);
             }
             // if ( (state == null) && (_log.shouldDebug()) )
             //     _log.debug("No outbound states for " + from + ", with remaining: " + _outboundStates);
@@ -356,8 +356,8 @@ class EstablishmentManager {
                       case IB_STATE_RETRY_SENT:
                         // queue it
                         inState.addMessage(msg);
-                        if (_log.shouldWarn())
-                            _log.debug("Outbound message queued to InboundEstablishState");
+                        if (_log.shouldDebug())
+                            _log.debug("[SSU2] Outbound message queued to InboundEstablishState");
                         break;
 
                       case IB_STATE_COMPLETE:
@@ -392,7 +392,7 @@ class EstablishmentManager {
             if (state == null) {
                 state = _outboundByHash.get(toHash);
                 if (state != null && _log.shouldInfo())
-                    _log.info("Found by hash: " + state);
+                    _log.info("[SSU2] Found by hash: " + state);
             }
             if (state == null) {
                 if (queueIfMaxExceeded && _outboundStates.size() >= getMaxConcurrentEstablish()) {
@@ -404,7 +404,7 @@ class EstablishmentManager {
                         if (queued == null) {
                             queued = newQueued;
                             if (_log.shouldWarn())
-                                _log.warn("Queueing OutboundEstablish to " + to + ", increase " + PROP_MAX_CONCURRENT_ESTABLISH);
+                                _log.warn("[SSU2] Queueing OutboundEstablish to " + to + ", increase " + PROP_MAX_CONCURRENT_ESTABLISH);
                         }
                         // this used to be inside a synchronized (_outboundStates) block,
                         // but that's now a CHM, so protect the ArrayList
@@ -465,7 +465,7 @@ class EstablishmentManager {
                     }
                     if (keyBytes == null) {
                         if (_log.shouldWarn())
-                            _log.warn("No Introduction key\n" + toRouterInfo);
+                            _log.warn("[SSU2] No Introduction key\n" + toRouterInfo);
                         _transport.markUnreachable(toHash);
                         _transport.failed(msg, "Peer has no key, cannot establish connection -> Marking unreachable");
                         return;
@@ -486,7 +486,7 @@ class EstablishmentManager {
                                                                toIdentity, requestIntroduction, sessionKey, ra, addr);
                         } catch (IllegalArgumentException iae) {
                             if (_log.shouldWarn())
-                                _log.warn("OES2 error: " + toRouterInfo, iae);
+                                _log.warn("[SSU2] OES2 error: " + toRouterInfo, iae);
                             _transport.markUnreachable(toHash);
                             _transport.failed(msg, iae.getMessage());
                             return;
@@ -502,7 +502,7 @@ class EstablishmentManager {
                         if (isIndirect && maybeTo != null)
                             _outboundByClaimedAddress.put(maybeTo, state);
                         if (_log.shouldDebug())
-                            _log.debug("Adding new Outbound connection to: " + state);
+                            _log.debug("[SSU2] Adding new Outbound connection to: " + state);
                     } else {
                         // whoops, somebody beat us to it, throw out the state we just created
                         state = oldState;
@@ -524,7 +524,7 @@ class EstablishmentManager {
 
         if (rejected) {
             if (_log.shouldWarn())
-                _log.warn("Too many pending, rejecting OutboundEstablish to " + to);
+                _log.warn("[SSU2] Too many pending connections, rejecting OutboundEstablish to " + to);
             _transport.failed(msg, "Too many pending outbound connections");
             _context.statManager().addRateData("udp.establishRejected", deferred);
             return;
@@ -600,8 +600,7 @@ class EstablishmentManager {
             int percent = probAccept > 128 ? 100 : (probAccept / 128) * 100;
             if (probAccept >= 128 || _context.random().nextInt(128) < probAccept) {
                 if (_log.shouldWarn())
-                    _log.warn("Dropping incoming UDP connection (" + (percent >= 1 ? percent : "1") + "% chance)" +
-                    //_log.warn("Dropping incoming TCP connection (" + probAccept + "/128 chance)" +
+                    _log.warn("[SSU2] Dropping incoming connection (" + (percent >= 1 ? percent : "1") + "% chance)" +
                               " -> Previous/current connections per minute: " + last + " / " + (int) (currentRate * 60*1000));
                 return false;
             }
@@ -628,7 +627,7 @@ class EstablishmentManager {
         if (state == null) {
             if (_context.blocklist().isBlocklisted(fromIP)) {
                 if (_log.shouldInfo())
-                    _log.info("Received SessionRequest from blocklisted IP: " + from);
+                    _log.info("[SSU2] Received SessionRequest from blocklisted IP: " + from);
                 _context.statManager().addRateData("udp.establishBadIP", 1);
                 if (!_context.commSystem().isInStrictCountry())
                     sendTerminationPacket(from, packet, REASON_BANNED);
@@ -755,7 +754,7 @@ class EstablishmentManager {
         if (count > MAX_TERMINATIONS) {
             // not everybody listens or backs off...
             if (_log.shouldWarn())
-                _log.warn("Rate limit of " + MAX_TERMINATIONS + " in 3m exceeded (Count: " + count + ") -> No more termination packets to: " + to);
+                _log.warn("[SSU2] Rate limit of " + MAX_TERMINATIONS + " in 3m exceeded (Count: " + count + ") -> No more termination packets to: " + to);
             return;
         }
         // very basic validation that this is probably in response to a good packet.
@@ -775,8 +774,8 @@ class EstablishmentManager {
         long sendConnID = DataHelper.fromLong8(data, off + SRC_CONN_ID_OFFSET);
         if (rcvConnID == 0 || sendConnID == 0 || rcvConnID == sendConnID)
             return;
-        if (_log.shouldWarn())
-            _log.warn("Sending termination packet (Code: " + terminationCode + ") on type " + type + " to: " + to);
+        if (_log.shouldInfo())
+            _log.warn("[SSU2] Sending termination packet (Code: " + terminationCode + ") on type " + type + " to: " + to);
         UDPPacket packet = _builder2.buildRetryPacket(to, pkt.getSocketAddress(), sendConnID, rcvConnID, terminationCode);
         _transport.send(packet);
     }
