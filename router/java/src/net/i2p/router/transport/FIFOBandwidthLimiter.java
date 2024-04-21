@@ -346,7 +346,7 @@ public class FIFOBandwidthLimiter {
             if (want > (_maxInbound - avi))
                 want = _maxInbound - avi;
             //if (_log.shouldDebug())
-            //    _log.debug("want to pull " + want + " from the inbound burst (" + _unavailableInboundBurst + ") to supplement " + avi + " (max: " + _maxInbound + ")");
+            //    _log.debug("want to pull " + want + " from the inbound burst (" + _unavailableInboundBurst + ") to supplement " + avi + " (Max: " + _maxInbound + ")");
 
             if (want > 0) {
                 int uib = _unavailableInboundBurst.get();
@@ -377,7 +377,7 @@ public class FIFOBandwidthLimiter {
             if (want > (_maxOutbound - avo))
                 want = _maxOutbound - avo;
             //if (_log.shouldDebug())
-            //    _log.debug("want to pull " + want + " from the outbound burst (" + _unavailableOutboundBurst + ") to supplement " + avo + " (max: " + _maxOutbound + ")");
+            //    _log.debug("want to pull " + want + " from the outbound burst (" + _unavailableOutboundBurst + ") to supplement " + avo + " (Max: " + _maxOutbound + ")");
 
             if (want > 0) {
                 int uob = _unavailableOutboundBurst.get();
