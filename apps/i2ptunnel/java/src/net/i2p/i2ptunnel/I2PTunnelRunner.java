@@ -393,7 +393,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 out.write(initialSocketData);
             }
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug("Initial data " + (initialI2PData != null ? initialI2PData.length : 0) 
+                _log.debug("Initial data " + (initialI2PData != null ? initialI2PData.length : 0)
                            + " written to I2P, " + (initialSocketData != null ? initialSocketData.length : 0)
                            + " written to the socket, starting forwarders");
 
@@ -503,7 +503,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         } finally {
             removeRef();
             if (i2pReset) {
-                if (_log.shouldWarn())
+                if (_log.shouldInfo())
                     _log.warn("Received I2P reset, resetting socket...");
                 try {
                     s.setSoLinger(true, 0);
@@ -517,7 +517,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 _keepAliveI2P = false;
                 _keepAliveSocket = false;
             } else if (sockReset) {
-                if (_log.shouldWarn())
+                if (_log.shouldInfo())
                     _log.warn("Received socket reset, resetting I2P socket...");
                 try {
                     i2ps.reset();
