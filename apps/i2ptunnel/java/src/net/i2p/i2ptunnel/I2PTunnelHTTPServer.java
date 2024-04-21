@@ -1612,7 +1612,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         socket.setReadTimeout(timeout);
         while ( (c = in.read()) != -1) {
             if (++i > MAX_LINE_LENGTH)
-                throw new LineTooLongException("Line too long (max: " + MAX_LINE_LENGTH + ")");
+                throw new LineTooLongException("Line too long (Maximum characters permitted: " + MAX_LINE_LENGTH + ")");
             if (c == '\n')
                 break;
             long newTimeout = expires - System.currentTimeMillis();

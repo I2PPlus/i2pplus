@@ -121,7 +121,7 @@ class ConnectionPacketHandler {
             if (size < con.getOptions().getMaxMessageSize()) {
                 if (_log.shouldInfo())
                     _log.info("Received SYN ACK without MTU; reducing MTU to " + size
-                              + " bytes (max: " + con.getOptions().getMaxMessageSize() + ")");
+                              + " bytes (Max: " + con.getOptions().getMaxMessageSize() + ")");
                 con.getOptions().setMaxMessageSize(size);
                 con.getOutputStream().setBufferSize(size);
             }
