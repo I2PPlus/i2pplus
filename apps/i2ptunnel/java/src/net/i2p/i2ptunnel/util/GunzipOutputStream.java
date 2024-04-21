@@ -172,8 +172,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
     @Override
     public void close() throws IOException {
-        if (_log.shouldWarn())
-            _log.warn("Closing " + this);
+        if (_log.shouldInfo()) {_log.info("Closing " + this);}
         _complete = true;
         _state = HeaderState.DONE;
         super.close();
@@ -209,7 +208,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
         long actualCRC = ((CRC32OutputStream) out).getValue();
         long expectedCRC = DataHelper.fromLongLE(footer, 0, 4);
         if (expectedCRC != actualCRC)
-            throw new IOException("gunzip CRC fail expected 0x" + Long.toHexString(expectedCRC) +
+            throw new IOException("Gunzip CRC fail expected 0x" + Long.toHexString(expectedCRC) +
                                   ", got 0x" + Long.toHexString(actualCRC));
     }
 
