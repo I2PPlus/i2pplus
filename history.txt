@@ -1,4 +1,7 @@
 2024-04-19 dr|z3d
+ * SusiDNS: Enhance presentation of subscription logs and linkify new hosts
+
+2024-04-19 dr|z3d
  * SusiDNS: Reverse the order of the subscription logs so newest
    added domains appear first
  * I2PSnark: Fix display of progress bars on details page
