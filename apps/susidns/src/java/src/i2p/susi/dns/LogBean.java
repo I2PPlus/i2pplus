@@ -64,6 +64,7 @@ public class LogBean extends BaseBean
         }
     }
 
+/**
     private void locked_reloadLog() {
         File log = logFile();
         int maxLines = 600;
@@ -83,7 +84,8 @@ public class LogBean extends BaseBean
 
                 for (int i = lines.size() - 1; i >= 0; i--) { // Reverse order, most recent first
                     if (!lines.get(i).contains("Bad hostname")) {
-                        buf.append(lines.get(i).replace(" added to addressbook", "").replace("GMT", "UTC")).append('\n');
+                        buf.append("<li>").append(lines.get(i).replace(" added to addressbook", "")
+                           .replace("GMT", "UTC")).append("</li>\n");
                     }
                 }
                 logged = buf.toString();
@@ -98,6 +100,53 @@ public class LogBean extends BaseBean
             logged = LOG_FILE;
         }
     }
+**/
+
+private void locked_reloadLog() {
+    File log = logFile();
+    int maxLines = 600;
+    if (log.isFile()) {
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(log), "UTF-8"));
+            List<String> lines = new ArrayList<String>(maxLines);
+            String line;
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
+                if (lines.size() >= maxLines) {
+                    lines.remove(0);
+                }
+            }
+            StringBuilder buf = new StringBuilder(maxLines * 80);
+
+            for (int i = lines.size() - 1; i >= 0; i--) { // Reverse order, most recent first
+                if (!lines.get(i).contains("Bad hostname")) {
+                    String[] parts = lines.get(i).split(" -- ");
+                    String date = parts[0].replace("GMT", "UTC");
+                    String message = parts[1];
+                    String[] messageParts = message.split(" ");
+                    String domain = messageParts[2].replace("[","").replace("]","");
+                    String subhost = messageParts[3].replace("http://", "");
+
+                    buf.append("<li><span class=date>").append(date).append("</span> &nbsp;").append(_t("New domain"))
+                       .append(" <a href=http://").append(domain).append("/ target=_blank>").append(domain)
+                       .append("</a> <span class=subhost>").append(subhost).append("</span></li>\n");
+                }
+            }
+            logged = buf.toString();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            if (br != null)
+                try {br.close();} catch (IOException ioe) {}
+        }
+    } else {
+        logged = LOG_FILE;
+    }
+}
+
+
 
     public String getMessages() {
         String message = "";

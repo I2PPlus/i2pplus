@@ -181,7 +181,7 @@ input[type=text]{padding:8px}
 input.update{margin-left:5px}
 input::placeholder{font-weight:400;font-style:italic;color:var(--ink);opacity:.7}
 input:focus::placeholder{opacity:0}
-textarea,#subsLog pre{padding:3px 5px;width:100%;height:200px;resize:none;font:700 8.5pt var(--monospaced);line-height:1.4;color:#7670c2;border:1px solid #26225d;background:#000}
+textarea,#subsLog ul{padding:3px 5px;width:100%;height:200px;resize:none;font:700 8.5pt var(--monospaced);line-height:1.4;color:#7670c2;border:1px solid #26225d;background:#000}
 textarea[cols="70"]{width:100%;height:40px;white-space:pre-wrap}
 textarea:focus::placeholder{opacity:0}
 .fakebutton:hover,.fakebutton:focus{background-size:auto}
@@ -194,8 +194,13 @@ textarea:focus::placeholder{opacity:0}
 #search input[type=text]{padding:7px 8px;min-width:280px;border-radius:1px 0 0 1px;box-shadow:none}
 #search input[type=text]:focus{border:1px solid var(--hover);filter:none;}
 #search input[type=text]:focus ~ input[type=submit]{transition:ease all .1s}
-#subsLog pre{margin-top:-26px;padding-left:10px;width:calc(100% - 17px);height:100%;white-space:pre-wrap;font-weight:400;color:var(--ink);background:#000}
+
+/* subscription log */
+#subsLog ul{margin:-27px 0 0;padding:1px;width:calc(100% - 4px);height:100%;display:inline-block;font-weight:400;color:var(--ink);background:#000}
 #subsLog h3 span{text-transform:none;letter-spacing:0;word-spacing:0;font-weight:500;font-size:90%;opacity:.9}
+#subsLog li{padding:2px 8px 2px 0;list-style:none;font-family:var(--monospaced);font-weight:500;background:#001}
+#subsLog li:nth-child(odd){background:#002}
+#subsLog .date{margin:2px -2px 2px 4px;padding:1px 8px;display:inline-block;box-shadow:var(--highlight);background:var(--badge)}
 
 /* identicon */
 #visualid h3{margin-top:-1px;border-left:0;border-right:0}
@@ -305,29 +310,29 @@ svg #arrow stop:nth-child(2){stop-color:#003}
 svg #arrow stop:last-child{stop-color:#001}
 
 /* iframed */
-.iframed .page{margin:1px 0 0;overflow:hidden;border:0}
-.iframed .headline h3,.iframed h4,.iframed #filtered,.iframed #search,.iframed #helpconfig{margin:-1px 10px 0}
-.iframed #filter{margin:-1px 10px -29px}
-.iframed .headline h3:first-child+h4{margin:13px 10px 0}
-.iframed#dtls .headline h3{margin:-1px 10px 24px}
-.iframed#subsLog .headline h3:first-child+h4{margin:-1px 10px 26px}
 .iframed .book tr.head th{border-top:var(--border);border-bottom:var(--border)}
+.iframed .headline h3:first-child+h4{margin:13px 10px 0}
+.iframed .headline h3,.iframed h4,.iframed #filtered,.iframed #search,.iframed #helpconfig{margin:-1px 10px 0}
+.iframed .page{margin:1px 0 0;overflow:hidden;border:0}
 .iframed #book #host_details{border-top:var(--border)}
 .iframed #book,.iframed #book+#buttons,.iframed #book table{border-top:0;border-bottom:0}
+.iframed #config+#buttons,.iframed #content+#buttons{margin:12px 10px}
 .iframed #emptybook{margin:-15px 10px 20px}
+.iframed #filter{margin:-1px 10px -29px}
+.iframed #helpsubs,.iframed #helpconfig,.iframed #add,.iframed #import,.iframed #book,.iframed #book+#buttons{margin-left:10px;margin-right:10px}
 .iframed #helpsubs{margin-bottom:0}
+.iframed #import{margin:10px 10px 0}
 .iframed input.export{margin-right:14px}
 .iframed #messages>.messages{margin:5px 10px 10px}
+.iframed #messages{top:-4px}
 .iframed #navi{border-right:0;border-left:0}
 .iframed #published{margin-bottom:0}
 .iframed #visualid{margin-bottom:10px}
 .iframed #visualid td[colspan="2"]{padding:22px 19px 20px}
+.iframed#dtls .headline h3{margin:-1px 10px 24px}
 .iframed#sbs #content,.iframed #config,.iframed #config+#buttons,.iframed#subsLog #config{margin:-27px 10px -13px}
-.iframed #helpsubs,.iframed #helpconfig,.iframed #add,.iframed #import,.iframed #book,.iframed #book+#buttons{margin-left:10px;margin-right:10px}
-.iframed#subsLog pre{width:calc(100% - 17px)}
-.iframed #import{margin:10px 10px 0}
-.iframed #config+#buttons,.iframed #content+#buttons{margin:12px 10px}
-.iframed #messages{top:-4px}
+.iframed#subsLog .headline h3:first-child+h4{margin:-1px 10px 26px}
+.iframed#subsLog ul{margin:0}
 
 @keyframes fade-in{from{opacity:0}to{opacity:1}}
 
@@ -361,7 +366,7 @@ form[action="export"]::after{height:21px}
 @media (min-width:1500px){
 a,body,code,h4,.help li,input[type="file"],input[type="file"]::file-selector-button,input[type=reset],input[type=submit],input[type=text],p,select,td,tt,.destaddress,td.names a,#filter p,#navi a,#search td{font-size:10.5pt}
 h3{font-size:12pt}
-textarea,textarea[name="config"],textarea[name="content"],#subsLog pre{font-size:10pt}
+textarea,textarea[name="config"],textarea[name="content"],#subsLog ul{font-size:10pt}
 .destinations textarea{height:34px}
 #addressbook.headline h3{padding-right:45px}
 #content h3{font-size:11.5pt}

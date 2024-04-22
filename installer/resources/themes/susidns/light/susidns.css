@@ -32,7 +32,7 @@ li{font-size:9pt;list-style:square;line-height:140%}
 ol,ul{margin-left:-30px}
 p,#helpconfig{text-align:justify;font-size:9pt}
 table{background:#fafaff}
-textarea,#subsLog pre{padding:1px 3px;width:100%;font-family:var(--monospaced);font-size:9pt;font-weight:500;color:var(--ink);border-radius:2px;border:var(--border_input);resize:none;scrollbar-color:#a7a7be rgba(255,255,255,.4);will-change:transform}
+textarea,#subsLog ul{padding:1px 3px;width:100%;font-family:var(--monospaced);font-size:9pt;font-weight:500;color:var(--ink);border-radius:2px;border:var(--border_input);resize:none;scrollbar-color:#a7a7be rgba(255,255,255,.4);will-change:transform}
 th,td{padding:5px 10px}
 th{font-size:70%;background:linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff)}
 td{font-size:9pt}
@@ -74,7 +74,7 @@ span.addrhlpr{font-size:9pt}
 span.location{word-spacing:normal;letter-spacing:normal;text-transform:none;font-size:9pt;font-weight:400}
 table.book{width:100%}
 table+p.buttons{padding:5px}
-textarea[name="config"],textarea[name="content"],#subsLog pre{margin:auto;padding:3px 6px;width:100%;border:var(--border_inner);border-radius:0;box-shadow:none;background:#fafaff;filter:none}
+textarea[name="config"],textarea[name="content"],#subsLog ul{margin:auto;padding:3px 6px;width:100%;border:var(--border_inner);border-radius:0;box-shadow:none;background:#fafaff;filter:none}
 textarea[name="destination"]{width:calc(100% + 10px)}
 textarea[name="config"]:focus,textarea[name="content"]:focus{background:#fff}
 tr:hover .destaddress{color:#333}
@@ -146,9 +146,6 @@ tr:hover .destaddress{color:#333}
 #subscriptions a{margin:2px 2px 0 0;float:right;font-size:80%}
 #subscriptions h3{background:#fcfcff var(--subscription) no-repeat 6px center/18px}
 #subscriptions h3,.headline#configure h3,.headline#addressbook h3,.headline h3{margin:-8px -5px -6px;padding:9px 5px 8px 30px}
-#subsLog.iframed pre{margin-bottom:10px}
-#subsLog h3 span{margin:2px 4px 0 0;float:right;text-transform:none;letter-spacing:0;word-spacing:0;font-weight:500;font-size:80%;opacity:.9}
-#subsLog pre{margin:0 auto -5px;padding-left:10px;width:calc(100% - 18px);line-height:16px;white-space:pre-wrap;box-shadow:var(--highlight);background:url(/themes/snark/ubergine/images/hat.webp) no-repeat right bottom/auto 160px,repeating-linear-gradient(180deg,#fff,#fff 18px,#f2f2ff 18px,#f2f2ff 34px) left top/100%}
 .iframed div.help{border-radius:0 0 2px 2px}
 .iframed .headline{margin-top:6px}
 .iframed .page{margin:1px;padding:10px 10px 0;min-width:520px;overflow:hidden;background-color:transparent}
@@ -165,6 +162,15 @@ tr:hover .destaddress{color:#333}
 .iframed #messages{border:0}
 #bk.iframed .page{padding-bottom:18px}
 #bk.iframed #published.page{padding-bottom:3px}
+
+/* subscription log */
+#subsLog h3 span{margin:2px 4px 0 0;float:right;text-transform:none;letter-spacing:0;word-spacing:0;font-weight:500;font-size:80%;opacity:.9}
+#subsLog ul{margin:0 0 -5px;padding:1px;width:calc(100% - 4px);display:inline-block}
+#subsLog.iframed ul{margin-bottom:10px}
+#subsLog li{padding:2px 8px 2px 0;list-style:none;font-family:var(--monospaced);font-weight:500;background:#eef}
+#subsLog li:nth-child(odd){background:#ddf}
+#subsLog .date{margin:2px -8px 2px 4px;padding:1px 8px;display:inline-block}
+
 
 /* host list */
 td.destinations{padding:0 4px 0 6px;max-width:50px;border-left:var(--border_soft);border-right:var(--border_soft)}

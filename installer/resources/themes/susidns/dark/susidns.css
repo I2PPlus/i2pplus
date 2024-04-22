@@ -39,7 +39,7 @@ p.buttons,#buttons{margin:5px 0 -5px;padding:0 3px;text-align:right}
 p{color:var(--ink);margin:0 0 4px;font-size:9pt;text-align:justify}
 td{padding:5px;vertical-align:middle;color:var(--ink);font-size:9pt}
 textarea,.destaddress,#helpconfig li b{font-family:var(--monospaced)}
-textarea,#subslog pre{padding:3px 5px;width:100%;height:120px;line-height:1.4;font-weight:700;border:var(--border);box-shadow:var(--highlight)}
+textarea,#subsLog ul{padding:3px 5px;width:100%;height:120px;line-height:1.4;font-weight:700;border:var(--border);box-shadow:var(--highlight)}
 textarea[cols="70"]{width:100%;height:40px}
 textarea[name="config"]{height:250px;overflow-y:scroll;resize:none}
 textarea:focus{filter:none}
@@ -213,18 +213,21 @@ p#filtered{margin:-27px 0 10px;padding:12px 10px 8px 20px;font-size:10pt;box-sha
 #addNotes:placeholder-shown:valid:not(:focus){height:36px!important;min-height:36px}
 #idAddress{text-transform:none;letter-spacing:0}
 
-/* subscriptions */
-#sbs h3 a{margin-right:4px;float:right;font-size:80%}
-#subsLog pre{margin:-25px 0 0;padding:8px 12px;width:calc(100% - 26px);white-space:pre-wrap;color:#bb7;border:var(--border);background:#000}
-
 /* configure */
 #config+#buttons,#content+#buttons{margin-top:-3px;margin-bottom:10px;padding:7px 5px 5px;border:var(--border);background:#000}
-#config>textarea,#content>textarea,#subslog pre{margin:-27px 0 0;padding:6px 12px;border-radius:0}
+#config>textarea,#content>textarea,#subsLog ul{margin:-27px 0 0;padding:6px 12px;border-radius:0}
 #config>textarea:focus,#content:focus{border:var(--border);box-shadow:var(--highlight),inset 4px 4px 4px rgba(0,0,0,.5);filter:none}
 #helpconfig{background:var(--help);background-size:4px 100%}
 #helpconfig li b{color:#990}
 #helpconfig li{margin:0 3px}
 #helpconfig ul{margin:0 0 -5px -40px;display:block;columns:2 500px;column-gap:40px}
+
+/* subscriptions */
+#sbs h3 a{margin-right:4px;float:right;font-size:80%}
+#subsLog ul{margin:-25px 0 0;padding:0;width:calc(100% - 2px);height:auto;display:inline-block;color:#bb7;border:var(--border);background:#000}
+#subsLog li{padding:2px 8px 2px 0;list-style:none;font-family:var(--monospaced);font-weight:500}
+#subsLog li:nth-child(odd){background:#010}
+#subsLog .date{margin:2px -2px 2px 4px;padding:1px 8px;display:inline-block;box-shadow:var(--highlight);background:var(--badge)}
 
 /* imagegen */
 img[src="/imagegen/id?s=256&c="],img[src="/imagegen/id?s=20&c="]{opacity:0}
