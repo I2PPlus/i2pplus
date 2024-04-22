@@ -240,9 +240,6 @@
 <tr><th>i2psnark.maxFilesPerTorrent={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]")%></td></tr>
 
-<tr><th> desktopgui.enabled={true|false}</th></tr>
-<tr><td><%=intl._t("This setting, when set to true, will place an icon in your system tray with basic router control options and support for desktop notifications. [Default is false, restart required]")%></td></tr>
-
 </table>
 
 </div>
