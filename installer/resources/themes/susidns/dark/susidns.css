@@ -10,9 +10,9 @@
 
 ::selection{background:rgba(0,187,0,.99);color:#000;text-shadow:none}
 a:link,#filter a:visited{color:#494;text-decoration:none;font-weight:700;outline:none}
+a:visited{color:#7b7;text-decoration:none}
 a:hover,a:focus{text-decoration:none;color:#f60}
 a:active{color:#f90}
-a:visited{color:#7b7;text-decoration:none}
 body.iframed{margin:0;background:none}
 body,input,input[type=submit],input[type=reset],.fakebutton,#hostNotes td:last-child,#addNotes{font-family:var(--bodyfont)}
 body{margin:0 10px;padding-top:5px;min-width:650px;line-height:1.2;background:repeating-linear-gradient(90deg,rgba(0,16,0,.5) 2px,rgba(0,25,0,.5) 4px),repeating-linear-gradient(180deg,#000 2px,#020 4px),#010;background-size:4px 100%,100% 4px}
@@ -225,8 +225,9 @@ p#filtered{margin:-27px 0 10px;padding:12px 10px 8px 20px;font-size:10pt;box-sha
 /* subscriptions */
 #sbs h3 a{margin-right:4px;float:right;font-size:80%}
 #subsLog ul{margin:-25px 0 0;padding:0;width:calc(100% - 2px);height:auto;display:inline-block;color:#bb7;border:var(--border);background:#000}
-#subsLog li{padding:2px 8px 2px 0;list-style:none;font-family:var(--monospaced);font-weight:500}
+#subsLog li{padding:2px 8px 2px 0;line-height:1.3;list-style:none;font-family:var(--monospaced);font-size:9.5pt;font-weight:500;transition:ease .15s background}
 #subsLog li:nth-child(odd){background:#010}
+#subsLog li:hover{background:#282800;transition:ease .15s background}
 #subsLog .date{margin:2px -2px 2px 4px;padding:1px 8px;display:inline-block;box-shadow:var(--highlight);background:var(--badge)}
 
 /* imagegen */
@@ -298,6 +299,7 @@ svg #arrow stop:last-child{stop-color:#010}
 @keyframes fade-in{from{filter:opacity(0)}to{filter:opacity(1)}}
 
 @media (max-width:1200px){
+.names a[href$=".i2p/"]{max-width:260px;overflow:hidden;text-overflow:ellipsis}
 #current{padding:2px 10px;display:inline-block;font-size:10pt}
 #filter a{margin:3px 1px;padding:0 4px}
 #filtered,#results{font-size:9.5pt}
@@ -306,9 +308,9 @@ svg #arrow stop:last-child{stop-color:#010}
 #paginate{margin:0 6px 0 2px}
 #prev.inactive::after,#next.inactive::after{top:calc(50% - 6px)}
 #prev,#next,#current{font-size:10pt}
+#subsLog li{font-size:9pt}
 .iframed #prev::after,.iframed #next::after{top:calc(50% - 5px)}
 .iframed #prev a,.iframed #next a{padding:11px 16px}
-.names a[href$=".i2p/"]{max-width:260px;overflow:hidden;text-overflow:ellipsis}
 }
 
 @media (max-width:1000px){.illustrate{margin:15px auto 10px;width:90%;min-width:450px}}
@@ -316,7 +318,9 @@ svg #arrow stop:last-child{stop-color:#010}
 @media (max-width:710px){
 #navi a.abook,#navi a#overview,#navi a#subs,#navi a#configlink{padding:5px 8px;background:linear-gradient(180deg,#020 50%,#000 50%)}
 #navi a.abook:hover,#navi a#overview:hover,#navi a#subs:hover,#navi a#configlink:hover,#navi a.abook:focus,#navi a#overview:focus,#navi a#subs:focus,#navi a#configlink:focus{padding:5px 8px;background:#000}
-#navi a.abook:active,#navi a#overview:active,#navi a#subs:active,#navi a#configlink:active{background:#f60}}
+#navi a.abook:active,#navi a#overview:active,#navi a#subs:active,#navi a#configlink:active{background:#f60}
+#subsLog .subhost{display:none}
+}
 
 @media (min-width:1200px){
 #content h3{padding-top:8px;padding-bottom:8px}
