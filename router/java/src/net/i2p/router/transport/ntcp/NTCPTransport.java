@@ -396,7 +396,7 @@ public class NTCPTransport extends TransportImpl {
                                 _conByIdent.put(ih, con);
                             } catch (DataFormatException dfe) {
                                 if (_log.shouldWarn())
-                                    _log.warn("bad address? " + target, dfe);
+                                    _log.warn("[NTCP] BAD published address\n" + target, dfe);
                                 fail = true;
                             }
                         } else {
@@ -412,7 +412,7 @@ public class NTCPTransport extends TransportImpl {
             if (fail) {
                 // race, RI changed out from under us, maybe SSU can handle it
                 if (_log.shouldWarn())
-                    _log.warn("We bid on a peer who doesn't have an ntcp address? " + target);
+                    _log.warn("[NTCP] We bid on a peer without a valid NTCP address\n" + target);
                 afterSend(msg, false);
                 return;
             }
@@ -457,13 +457,13 @@ public class NTCPTransport extends TransportImpl {
                     con.getEstablishState().prepareOutbound();
                 } catch (IOException ioe) {
                     if (_log.shouldError())
-                        _log.error("Error opening a channel \n* IO Exception: " + ioe.getMessage());
+                        _log.error("[NTCP] Error opening a channel \n* IO Exception: " + ioe.getMessage());
                     _context.statManager().addRateData("ntcp.outboundFailedIOEImmediate", 1);
                     con.close();
                     afterSend(msg, false);
                 } catch (IllegalStateException ise) {
                     if (_log.shouldWarn())
-                        _log.warn("Failed opening a channel \n* Illegal State Exception: " +  ise.getMessage());
+                        _log.warn("[NTCP] Failed opening a channel \n* Illegal State Exception: " +  ise.getMessage());
                     afterSend(msg, false);
                 }
             } else {
@@ -552,7 +552,7 @@ public class NTCPTransport extends TransportImpl {
             else
                 _context.banlist().banlistRouterForever(peer, " <b>➜</b> Not in our network: " + nid);
             if (_log.shouldWarn())
-                _log.warn("Not in our network: " + toAddress, new Exception());
+                _log.warn("[NTCP] Not in our network: " + toAddress, new Exception());
             markUnreachable(peer);
             return null;
         }
@@ -891,9 +891,8 @@ public class NTCPTransport extends TransportImpl {
      */
     public synchronized void startListening() {
         // try once again to prevent two pumpers which is fatal
-        if (_pumper.isAlive())
-            return;
-        if (_log.shouldWarn()) _log.warn("Starting NTCP transport listening");
+        if (_pumper.isAlive()) {return;}
+        if (_log.shouldWarn()) {_log.warn("Starting NTCP transport listening...");}
 
         startIt();
         RouterAddress addr = configureLocalAddress();
@@ -1086,7 +1085,7 @@ public class NTCPTransport extends TransportImpl {
                 try {
                     bindToAddr = InetAddress.getByName(bindTo);
                 } catch (UnknownHostException uhe) {
-                    _log.error("Invalid NTCP bind interface specified [" + bindTo + "]", uhe);
+                    _log.error("[NTCP] Invalid bind interface specified [" + bindTo + "]", uhe);
                     // this can be implemented later, just updates some stats
                     // see udp/UDPTransport.java
                     //setReachabilityStatus(CommSystemFacade.STATUS_HOSED);
@@ -1102,7 +1101,7 @@ public class NTCPTransport extends TransportImpl {
                 } else {
                     addr = new InetSocketAddress(bindToAddr, port);
                     if (_log.shouldWarn())
-                        _log.warn("Binding only to " + bindToAddr);
+                        _log.warn("[NTCP] Binding only to " + bindToAddr);
                     OrderedProperties props = new OrderedProperties();
                     props.setProperty(RouterAddress.PROP_HOST, bindTo);
                     props.setProperty(RouterAddress.PROP_PORT, Integer.toString(port));
@@ -1118,7 +1117,7 @@ public class NTCPTransport extends TransportImpl {
                     if (_endpoints.contains(addr) ||
                         (bindToAddr != null && _endpoints.contains(new InetSocketAddress(port)))) {
                         if (_log.shouldWarn())
-                            _log.warn("Already listening on " + addr);
+                            _log.warn("[NTCP] Already listening on " + addr);
                         return null;
                     }
                     // if UDP only changed external port and not internal port,
@@ -1127,7 +1126,7 @@ public class NTCPTransport extends TransportImpl {
                     int iport = _context.getProperty(UDPTransport.PROP_INTERNAL_PORT, 0);
                     if (port == eport && iport > 0 && eport != iport) {
                         if (_log.shouldWarn())
-                            _log.warn("External port changed to " + eport + ", keep listening on internal port " + iport);
+                            _log.warn("[NTCP] External port changed to " + eport + ", keep listening on internal port " + iport);
                         return null;
                     }
                     // FIXME support multiple binds
@@ -1135,22 +1134,22 @@ public class NTCPTransport extends TransportImpl {
                     stopWaitAndRestart();
                 }
                 if (!TransportUtil.isValidPort(port))
-                    _log.error("Specified NTCP port is " + port + ", ports lower than 1024 not recommended");
+                    _log.error("[NTCP] Specified port is " + port + ", ports lower than 1024 not recommended");
                 ServerSocketChannel chan = ServerSocketChannel.open();
                 chan.configureBlocking(false);
                 // TODO retry
                 chan.socket().bind(addr);
                 _endpoints.add(addr);
                 if (_log.shouldInfo())
-                    _log.info("Listening on " + addr);
+                    _log.info("[NTCP] Listening on " + addr);
                 _pumper.register(chan);
             } catch (IOException ioe) {
-                _log.error("Error listening", ioe);
+                _log.error("[NTCP] Error listening", ioe);
                 myAddress = null;
             }
         } else {
             if (_log.shouldInfo())
-                _log.info("Outbound NTCP connections only - no listener configured");
+                _log.info("[NTCP] Outbound connections only - no listener configured");
         }
         return myAddress;
     }
@@ -1462,12 +1461,12 @@ public class NTCPTransport extends TransportImpl {
                     for (byte[] ip : ips) {
                         if (!isValid(ip)) {
                             if (_log.shouldWarn())
-                                _log.warn("skipping invalid " + Addresses.toString(ip) + " for " + h);
+                                _log.warn("[NTCP] Skipping invalid " + Addresses.toString(ip) + " for " + h);
                             continue;
                         }
                         if ((v4 && ip.length == 4) || (v6 && ip.length == 16)) {
                             if (_log.shouldWarn())
-                                _log.warn("skipping additional " + Addresses.toString(ip) + " for " + h);
+                                _log.warn("[NTCP] Skipping additional " + Addresses.toString(ip) + " for " + h);
                             continue;
                         }
                         if (ip.length == 4)
@@ -1476,18 +1475,18 @@ public class NTCPTransport extends TransportImpl {
                             v6 = true;
                         valid++;
                         if (_log.shouldDebug())
-                            _log.debug("Adding " + Addresses.toString(ip) + " for " + h);
+                            _log.debug("[NTCP] Adding " + Addresses.toString(ip) + " for " + h);
                         ipstrings.add(Addresses.toString(ip));
                     }
                 }
                 if (valid == 0)
-                    _log.error("No valid IPs for configured hostname " + h);
+                    _log.error("[NTCP] No valid IPs for configured hostname " + h);
                 continue;
             }
         }
 
         if (ipstrings.isEmpty()) {
-            _log.error("No valid IPs for configuration: " + name);
+            _log.error("[NTCP] No valid IPs for configuration: " + name);
             return null;
         }
 
@@ -1534,7 +1533,7 @@ public class NTCPTransport extends TransportImpl {
         }
         if (ip != null && !isValid(ip) && !allowLocal()) {
             if (_log.shouldWarn())
-                _log.warn("Invalid address: " + Addresses.toString(ip, port) + " from: " + source);
+                _log.warn("[NTCP] Invalid address: " + Addresses.toString(ip, port) + " from: " + source);
             return;
         }
         if (!isAlive()) {
@@ -1580,8 +1579,8 @@ public class NTCPTransport extends TransportImpl {
     @Override
     public void externalAddressRemoved(AddressSource source, boolean ipv6) {
         if (_log.shouldWarn())
-//            _log.warn("Removing external address: (ipv6 enabled? " + ipv6 + ") from: " + source, new Exception());
-            _log.warn("Removing external address: (ipv6 enabled? " + ipv6 + ") from: " + source);
+//            _log.warn("Removing external address: (IPv6 enabled? " + ipv6 + ") from: " + source, new Exception());
+            _log.warn("[NTCP] Removing external address: (IPv6 enabled? " + ipv6 + ") from: " + source);
         // ignore UPnP for now, get everything from SSU if it's enabled
         boolean ssuEnabled = _context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP);
         if (source != SOURCE_SSU && ssuEnabled)
@@ -1603,7 +1602,7 @@ public class NTCPTransport extends TransportImpl {
         Status status = getReachabilityStatus();
         if (status != old) {
             if (_log.shouldWarn())
-                _log.warn("Old status: " + old + " New status: " + status +
+                _log.warn("[NTCP] Old status: " + old + " New status: " + status +
                           " from: ", new Exception("traceback"));
             if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000L) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,
@@ -1663,7 +1662,7 @@ public class NTCPTransport extends TransportImpl {
                 nport = Integer.toString(port);
         }
         if (_log.shouldInfo())
-            _log.info("old port: " + oport + " config: " + cport + " new: " + nport);
+            _log.info("Old port: " + oport + " Config: " + cport + " New: " + nport);
         //if (nport == null || nport.length() <= 0)
         //    return;
         // 0.9.6 change
@@ -1694,18 +1693,18 @@ public class NTCPTransport extends TransportImpl {
         // TODO is this sufficient?
         boolean ssuOK = ip != null;
         if (_log.shouldInfo())
-            _log.info("old: " + ohost + " config: " + name + " auto: " + enabled + " ssuOK? " + ssuOK);
+            _log.info("Old: " + ohost + " Config: " + name + " Auto: " + enabled + " ssuOK? " + ssuOK);
         if (enabled.equals("always") ||
             (Boolean.parseBoolean(enabled) && ssuOK)) {
             if (!ssuOK) {
                 if (_log.shouldWarn())
-                    _log.warn("null address with always config", new Exception());
+                    _log.warn("Null address with always config", new Exception());
                 return false;
             }
             // ip non-null
             String nhost = Addresses.toString(ip);
             if (_log.shouldInfo())
-                _log.info("old: " + ohost + " config: " + name + " new: " + nhost);
+                _log.info("Old: " + ohost + " Config: " + name + " New: " + nhost);
             if (nhost == null || nhost.length() <= 0)
                 return false;
             if (ohost == null || ! ohost.equalsIgnoreCase(nhost)) {
@@ -1721,7 +1720,7 @@ public class NTCPTransport extends TransportImpl {
             // but we probably only get here if the port is auto,
             // otherwise createNTCPAddress() would have done it already
             if (_log.shouldInfo())
-                _log.info("old host: " + ohost + " config: " + name + " new: " + name);
+                _log.info("old host: " + ohost + " Config: " + name + " New: " + name);
             newProps.setProperty(RouterAddress.PROP_HOST, name);
             if (cost == NTCP2_OUTBOUND_COST)
                 newAddr.setCost(DEFAULT_COST);
@@ -1737,12 +1736,12 @@ public class NTCPTransport extends TransportImpl {
                     String caps = v4Addr.getOption("caps");
                     if (caps != null && caps.contains(CAP_IPV6)) {
                         if (_log.shouldInfo())
-                            _log.info("No old host, no new host, no change to NTCP Address");
+                            _log.info("[NTCP] No old host, no new host, no change to address");
                         return false;
                     }
                 }
                 if (_log.shouldInfo())
-                    _log.info("IPv6 now firewalled, adding 6 address");
+                    _log.info("[NTCP] IPv6 now firewalled, adding 6 address");
                 setOutboundNTCP2Address(true);
                 return true;
             }
@@ -1755,7 +1754,7 @@ public class NTCPTransport extends TransportImpl {
             // because UPnP was successful, but a subsequent SSU Peer Test determines
             // we are still firewalled (SW firewall, bad UPnP indication, etc.)
             if (_log.shouldInfo())
-                _log.info("old host: " + ohost + " config: " + name + " new: null");
+                _log.info("Old host: " + ohost + " Config: " + name + " New: null");
             // addNTCP2Options() called below
             newProps.clear();
             newAddr = new RouterAddress(STYLE2, newProps, NTCP2_OUTBOUND_COST);
@@ -1790,7 +1789,7 @@ public class NTCPTransport extends TransportImpl {
             // IPv6
             // We have an IPv4 address, IPv6 transitioned to firewalled,
             if (_log.shouldInfo())
-                _log.info("IPv6 now firewalled, adding 6 address");
+                _log.info("[NTCP] IPv6 now firewalled, adding 6 address");
             setOutboundNTCP2Address(true);
             return true;
         }
@@ -1816,7 +1815,7 @@ public class NTCPTransport extends TransportImpl {
         else
             replaceAddress(newAddr);
         if (_log.shouldWarn())
-            _log.warn("Updating NTCP Address (ipv6? " + isIPv6 + ") with " + newAddr);
+            _log.warn("Updating NTCP Address (IPv6? " + isIPv6 + ") with " + newAddr);
         return true;
     }
 
@@ -1972,7 +1971,7 @@ public class NTCPTransport extends TransportImpl {
      *  before calling startListening() or restartListening()
      */
     public synchronized void stopListening() {
-        if (_log.shouldWarn()) _log.warn("Stopping NTCP transport");
+        if (_log.shouldWarn()) _log.warn("Stopping NTCP transport...");
         _pumper.stopPumping();
         _writer.stopWriting();
         _reader.stopReading();
