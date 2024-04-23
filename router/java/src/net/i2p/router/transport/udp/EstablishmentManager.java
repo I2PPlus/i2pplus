@@ -139,7 +139,8 @@ class EstablishmentManager {
     private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
 
     /** max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
-    private static final int MAX_QUEUED_OUTBOUND = 50;
+//    private static final int MAX_QUEUED_OUTBOUND = 50;
+    private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 64 : 256;
 
     /** max queued msgs per peer while the peer connection is queued */
 //    private static final int MAX_QUEUED_PER_PEER = 16;
@@ -305,7 +306,7 @@ class EstablishmentManager {
         RouterInfo toRouterInfo = msg.getTarget();
         RouterAddress ra = _transport.getTargetAddress(toRouterInfo);
         if (ra == null) {
-            _transport.failed(msg, "Remote peer has no address, cannot establish");
+            _transport.failed(msg, "Remote peer has no address, cannot establish connection");
             return;
         }
         RouterIdentity toIdentity = toRouterInfo.getIdentity();
@@ -619,8 +620,21 @@ class EstablishmentManager {
     void receiveSessionOrTokenRequest(RemoteHostId from, InboundEstablishState2 state, UDPPacket packet) {
         byte[] fromIP = from.getIP();
         if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(fromIP)) {
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("[SSU2] Received SessionRequest from invalid address/port: " + from);
+            }
+
+            if (fromIP != null && !_context.blocklist().isBlocklisted(fromIP)) {
+               _context.blocklist().add(fromIP, "Invalid address/port in SessionRequest");
+               if (_log.shouldWarn()) {
+                    _log.warn("[SSU2] Banning " + from.getIP() + " for duration of session -> Invalid address/port in SessionRequest");
+               }
+            } else if (fromIP != null && _context.blocklist().isBlocklisted(fromIP)) {
+                if (_log.shouldWarn()) {
+                    _log.warn("[SSU2] Not banning " + from.getIP() + " -> Already in blocklist");
+                }
+            }
+
             return;
         }
         boolean isNew = false;
@@ -751,31 +765,47 @@ class EstablishmentManager {
      */
     private void sendTerminationPacket(RemoteHostId to, UDPPacket fromPacket, int terminationCode) {
         int count = _terminationCounter.increment(to);
+
         if (count > MAX_TERMINATIONS) {
             // not everybody listens or backs off...
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("[SSU2] Rate limit of " + MAX_TERMINATIONS + " in 3m exceeded (Count: " + count + ") -> No more termination packets to: " + to);
+            }
+            if (count > MAX_TERMINATIONS*2) {
+                try {
+                    String toIP = InetAddress.getByAddress(to.getIP()).getHostAddress();
+                    String targetIP = toIP.toString().replace("/", "");
+                    byte[] ip = Addresses.getIP(targetIP);
+                    if (ip != null && !_context.blocklist().isBlocklisted(ip)) {
+                        _context.blocklist().add(ip, "Ignores termination packets");
+                        if (_log.shouldWarn()) {
+                            _log.warn("[SSU2] Banning " + targetIP + " for duration of session -> Repeatedly ignoring termination packets");
+                        }
+                    } else if (ip != null && _context.blocklist().isBlocklisted(ip)) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("[SSU2] Not banning " + targetIP + " -> Already in blocklist");
+                        }
+                    }
+                } catch (UnknownHostException uhe) {}
+            }
             return;
         }
         // very basic validation that this is probably in response to a good packet.
         // we don't bother to decrypt the packet, even if it's only a token request
-        if (_transport.isTooClose(to.getIP()))
-            return;
+        if (_transport.isTooClose(to.getIP())) {return;}
         DatagramPacket pkt = fromPacket.getPacket();
         int len = pkt.getLength();
-        if (len < MIN_LONG_DATA_LEN)
-            return;
+        if (len < MIN_LONG_DATA_LEN) {return;}
         int off = pkt.getOffset();
         byte data[] = pkt.getData();
         int type = data[off + TYPE_OFFSET] & 0xff;
-        if (type == SSU2Util.SESSION_REQUEST_FLAG_BYTE && len < MIN_SESSION_REQUEST_LEN)
-            return;
+        if (type == SSU2Util.SESSION_REQUEST_FLAG_BYTE && len < MIN_SESSION_REQUEST_LEN) {return;}
         long rcvConnID = DataHelper.fromLong8(data, off);
         long sendConnID = DataHelper.fromLong8(data, off + SRC_CONN_ID_OFFSET);
-        if (rcvConnID == 0 || sendConnID == 0 || rcvConnID == sendConnID)
-            return;
-        if (_log.shouldInfo())
+        if (rcvConnID == 0 || sendConnID == 0 || rcvConnID == sendConnID) {return;}
+        if (_log.shouldInfo()) {
             _log.warn("[SSU2] Sending termination packet (Code: " + terminationCode + ") on type " + type + " to: " + to);
+        }
         UDPPacket packet = _builder2.buildRetryPacket(to, pkt.getSocketAddress(), sendConnID, rcvConnID, terminationCode);
         _transport.send(packet);
     }
@@ -798,6 +828,23 @@ class EstablishmentManager {
             else if (_log.shouldWarn())
                 _log.warn("[SSU2] Received CORRUPT SessionConfirmed \n* Router: " + state + "\n* " + gse.getMessage());
             // state called fail()
+
+            try {
+                String fromIP = InetAddress.getByAddress(state.getRemoteHostId().getIP()).getHostAddress();
+                String targetIP = fromIP.toString().replace("/", "");
+                byte[] ip = Addresses.getIP(targetIP);
+                if (ip != null && !_context.blocklist().isBlocklisted(ip)) {
+                    _context.blocklist().add(ip, "Corrupt SessionConfirmed");
+                    if (_log.shouldWarn()) {
+                        _log.warn("[SSU2] Banning " + targetIP + " for duration of session -> Corrupt SessionConfirmed");
+                    }
+                } else if (ip != null && _context.blocklist().isBlocklisted(ip)) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("[SSU2] Not banning " + targetIP + " -> Already in blocklist");
+                    }
+                }
+            } catch (UnknownHostException uhe) {}
+
             _inboundStates.remove(state.getRemoteHostId());
             return;
         }
