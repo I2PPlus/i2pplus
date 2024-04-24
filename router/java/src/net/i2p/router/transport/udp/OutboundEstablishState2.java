@@ -517,23 +517,23 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         DatagramPacket pkt = packet.getPacket();
         SocketAddress from = pkt.getSocketAddress();
         if (!from.equals(_bobSocketAddress))
-            throw new GeneralSecurityException("Address mismatch: req: " + _bobSocketAddress + " conf: " + from);
+            throw new GeneralSecurityException("Address mismatch -> Request: " + _bobSocketAddress + " Configured: " + from);
         int off = pkt.getOffset();
         int len = pkt.getLength();
         byte data[] = pkt.getData();
         long rid = DataHelper.fromLong8(data, off);
         if (rid != _rcvConnID)
-            throw new GeneralSecurityException("Conn ID mismatch: 1: " + _rcvConnID + " 2: " + rid);
+            throw new GeneralSecurityException("Connection ID mismatch -> 1: " + _rcvConnID + " 2: " + rid);
         long sid = DataHelper.fromLong8(data, off + SRC_CONN_ID_OFFSET);
         if (sid != _sendConnID)
-            throw new GeneralSecurityException("Conn ID mismatch: 1: " + _sendConnID + " 2: " + sid);
+            throw new GeneralSecurityException("Connection ID mismatch -> 1: " + _sendConnID + " 2: " + sid);
         long token = DataHelper.fromLong8(data, off + TOKEN_OFFSET);
         // continue and decrypt even if token == 0 to get and log termination reason
         if (token != 0) {
             if (token != _token) {
                 if (_currentState == OutboundState.OB_STATE_REQUEST_SENT_NEW_TOKEN) {
                     // we already got a retry with a different token
-                    throw new GeneralSecurityException("Token mismatch: expected: " + _token + " got: " + token);
+                    throw new GeneralSecurityException("Token mismatch -> Expected: " + _token + " Received: " + token);
                 }
                 _token = token;
             }
@@ -558,7 +558,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         }
         // generally will be with termination, so do this check after
         if (token == 0)
-            throw new GeneralSecurityException("Bad token 0 in retry");
+            throw new GeneralSecurityException("BAD token 0 in retry");
         // we do the state check here, after all the validation,
         // so we can check for termination first.
         if (_currentState != OutboundState.OB_STATE_TOKEN_REQUEST_SENT &&
@@ -594,7 +594,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                 byte data[] = pkt.getData();
                 int off = pkt.getOffset();
                 int len = pkt.getLength();
-                _log.debug("SessionCreate error - state at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
+                _log.debug("SessionCreate error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
             }
             // fail inside synch rather than have Est. Mgr. do it to prevent races
             fail();
@@ -619,16 +619,16 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         DatagramPacket pkt = packet.getPacket();
         SocketAddress from = pkt.getSocketAddress();
         if (!from.equals(_bobSocketAddress))
-            throw new GeneralSecurityException("Address mismatch: req: " + _bobSocketAddress + " created: " + from);
+            throw new GeneralSecurityException("Address mismatch -> Request: " + _bobSocketAddress + " Created: " + from);
         int off = pkt.getOffset();
         int len = pkt.getLength();
         byte data[] = pkt.getData();
         long rid = DataHelper.fromLong8(data, off);
         if (rid != _rcvConnID)
-            throw new GeneralSecurityException("Conn ID mismatch: 1: " + _rcvConnID + " 2: " + rid);
+            throw new GeneralSecurityException("Connection ID mismatch -> 1: " + _rcvConnID + " 2: " + rid);
         long sid = DataHelper.fromLong8(data, off + SRC_CONN_ID_OFFSET);
         if (sid != _sendConnID)
-            throw new GeneralSecurityException("Conn ID mismatch: 1: " + _sendConnID + " 2: " + sid);
+            throw new GeneralSecurityException("Connection ID mismatch -> 1: " + _sendConnID + " 2: " + sid);
 
         _handshakeState.mixHash(data, off, LONG_HEADER_SIZE);
         //if (_log.shouldDebug())
@@ -867,13 +867,14 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     @Override
     public String toString() {
+        int count = _introducers != null ? _introducers.size() : 0;
         return "[SSU2] OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId +
                "\n* Lifetime: " + DataHelper.formatDuration(getLifetime()) +
                "; Receive ID: " + _rcvConnID +
                "; Send ID: " + _sendConnID +
                "; Token: " + _token +
                " -> " + _currentState +
-               (_introducers != null ? ("\n* Introducers: " + _introducers.toString()) : "");
+               (_introducers != null && _log.shouldInfo() ? ("\n* Introducers: " + _introducers.toString()) : " (" + count + " introducers)");
     }
 
     /**

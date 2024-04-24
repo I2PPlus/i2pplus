@@ -660,16 +660,16 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         DatagramPacket pkt = packet.getPacket();
         SocketAddress from = pkt.getSocketAddress();
         if (!from.equals(_aliceSocketAddress))
-            throw new GeneralSecurityException("Address mismatch: Request: " + _aliceSocketAddress + " conf: " + from);
+            throw new GeneralSecurityException("Address mismatch -> Request: " + _aliceSocketAddress + " Conf: " + from);
         int off = pkt.getOffset();
         int len = pkt.getLength();
         byte data[] = pkt.getData();
         long rid = DataHelper.fromLong8(data, off);
         if (rid != _rcvConnID)
-            throw new GeneralSecurityException("Connection ID mismatch: 1: " + _rcvConnID + " 2: " + rid);
+            throw new GeneralSecurityException("Connection ID mismatch -> 1: " + _rcvConnID + " 2: " + rid);
         long sid = DataHelper.fromLong8(data, off + 16);
         if (sid != _sendConnID)
-            throw new GeneralSecurityException("Connection ID mismatch: 1: " + _sendConnID + " 2: " + sid);
+            throw new GeneralSecurityException("Connection ID mismatch -> 1: " + _sendConnID + " 2: " + sid);
 
         int type = data[off + TYPE_OFFSET] & 0xff;
         if (_currentState != InboundState.IB_STATE_RETRY_SENT) {
@@ -696,7 +696,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (token != _token) {
             // most likely a retransmitted session request with the old invalid token
             // TODO should we retransmit retry in this case?
-            throw new GeneralSecurityException("Token mismatch: expected: " + _token + " got: " + token);
+            throw new GeneralSecurityException("Token mismatch -> Expected: " + _token + " Received: " + token);
         }
         _handshakeState.start();
         _handshakeState.mixHash(data, off, 32);
@@ -767,19 +767,19 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         DatagramPacket pkt = packet.getPacket();
         SocketAddress from = pkt.getSocketAddress();
         if (!from.equals(_aliceSocketAddress))
-            throw new GeneralSecurityException("Address mismatch: Reqeust: " + _aliceSocketAddress + "; conf: " + from);
+            throw new GeneralSecurityException("Address mismatch -> Request: " + _aliceSocketAddress + " Conf: " + from);
         int off = pkt.getOffset();
         int len = pkt.getLength();
         byte data[] = pkt.getData();
         long rid = DataHelper.fromLong8(data, off);
         if (rid != _rcvConnID)
-            throw new GeneralSecurityException("Connection ID mismatch: Request: " + _rcvConnID + "; conf: " + rid);
+            throw new GeneralSecurityException("Connection ID mismatch -> Request: " + _rcvConnID + " Conf: " + rid);
         byte fragbyte = data[off + SHORT_HEADER_FLAGS_OFFSET];
         int frag = (fragbyte >> 4) & 0x0f;
         // allow both 0/0 (development) and 0/1 to indicate sole fragment
         int totalfrag = fragbyte & 0x0f;
         if (totalfrag > 0 && frag > totalfrag - 1)
-            throw new GeneralSecurityException("[SSU2] Bad SessionConfirmed fragment [" + frag + " / " + totalfrag + "]");
+            throw new GeneralSecurityException("[SSU2] BAD SessionConfirmed fragment [" + frag + " / " + totalfrag + "]");
         if (totalfrag > 1) {
             // Fragment processing. Save fragment.
             // If we have all fragments, reassemble and continue,
