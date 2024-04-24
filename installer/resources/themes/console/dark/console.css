@@ -1628,6 +1628,8 @@ th.th_title{padding:8px 10px;position:static;text-align:left;background:var(--h1
 #config_advanced textarea#advancedsettings{margin:0 0 -3px;padding:8px 10px;width:100%;overflow-x:hidden;word-break:break-all;white-space:pre-wrap;border:0;border-radius:0;resize:none;background:rgba(0,0,0,.3)}
 #configclient{margin-top:-11px}
 #config_family .infohelp{padding:20px 24px 20px 58px;background:var(--family) no-repeat 15px center/28px,var(--msg)}
+#config_family .infohelp{padding:20px 24px 20px 58px;background:var(--family) no-repeat 15px center/28px,var(--msg)}
+#config_family .optionsave {background:#000;box-shadow:none}
 #config_logging h3 a::before,#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before{width:19px;height:15px;display:inline-block;vertical-align:middle;background:var(--eye) no-repeat left center/15px;content:""}
 #config_logging h3 a:hover::before,#config_logging h3 a:focus::before{background:var(--eye_hover) no-repeat left center/15px}
 #config_peers #bannedpeercount{margin:-1px 0}
