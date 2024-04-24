@@ -78,15 +78,15 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         } else if (_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
             if (_log.shouldInfo()) {
                 _log.warn("Dropping " + searchType + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] and banning for 1h -> " +
-                          "Max 10 requests in 30s exceeded [TunnelId " + dlm.getReplyTunnel() + "]");
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] and banning for 3m -> " +
+                          "Max 30 requests in 30s exceeded [TunnelId " + dlm.getReplyTunnel() + "]");
             } else if (_log.shouldWarn()) {
                 _log.warn("Dropping " + searchType + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] and banning for 1h -> " +
-                          "Max 10 requests in 30s exceeded");
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] and banning for 3m -> " +
+                          "Max 30 requests in 30s exceeded");
             }
             if (dlm.getFrom() != null) {
-                _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookup requests", null, null, _context.clock().now() + 60*60*1000);
+                _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookup requests", null, null, _context.clock().now() + 3*60*1000);
                 _context.commSystem().mayDisconnect(dlm.getFrom());
             }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);

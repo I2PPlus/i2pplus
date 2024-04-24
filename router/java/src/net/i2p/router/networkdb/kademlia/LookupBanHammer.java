@@ -19,7 +19,7 @@ class LookupBanHammer {
     private final ObjectCounter<ReplyTunnel> counter;
     /** the id of this is -1 */
     private static final TunnelId DUMMY_ID = new TunnelId();
-    private static final int MAX_LOOKUPS = 10;
+    private static final int MAX_LOOKUPS = 30;
     private static final long CLEAN_TIME = 30*1000;
 
     LookupBanHammer() {
