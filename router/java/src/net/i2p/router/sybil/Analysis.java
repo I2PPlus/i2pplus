@@ -95,8 +95,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private static final double POINTS64 = 2.0;
     private static final double POINTS48 = 0.5;
 
-    private static final double POINTS_FAMILY = -10.0;
+//    private static final double POINTS_FAMILY = -10.0;
 //    private static final double POINTS_FAMILY_VERIFIED = POINTS_FAMILY * 4;
+    private static final double POINTS_FAMILY = -20.0;
     private static final double POINTS_FAMILY_VERIFIED = POINTS_FAMILY * 10;
     private static final double POINTS_NONFF = -5.0;
 //    private static final double POINTS_BAD_FAMILY = 20.0;
@@ -394,16 +395,13 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         if (us == null)
             return points;
         List<RouterInfo> ris;
-        if (includeAll) {
-            ris = getAllRouters(us);
-        } else {
-            ris = getFloodfills(us);
+        if (includeAll) {ris = getAllRouters(us);}
+        else {ris = getFloodfills(us);}
+        if (ris.isEmpty()) {return points;}
+        if (_log.shouldWarn()) {
+            _log.warn("Analyzing " + ris.size() + " routers " +
+                      (includeAll ? "(including non-floodfills)" : "(floodfills only)"));
         }
-        if (ris.isEmpty())
-            return points;
-        if (_log.shouldWarn())
-            _log.warn("Analyzing " + ris.size() + " routers, including non-floodfills? " + includeAll);
-
 
         // IP analysis
         calculateIPGroupsFamily(ris, points);
@@ -440,13 +438,10 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         List<Hash> destinations = new ArrayList<Hash>(clientInboundPools.keySet());
         for (Hash client : destinations) {
             boolean isLocal = _context.clientManager().isLocal(client);
-            if (!isLocal)
-                continue;
-            if (! _context.clientManager().shouldPublishLeaseSet(client))
-                continue;
+            if (!isLocal) {continue;}
+            if (! _context.clientManager().shouldPublishLeaseSet(client)) {continue;}
             LeaseSet ls = _context.netDb().lookupLeaseSetLocally(client);
-            if (ls == null)
-                continue;
+            if (ls == null) {continue;}
             Hash rkey = ls.getRoutingKey();
             TunnelPool in = clientInboundPools.get(client);
             String name = (in != null) ? DataHelper.escapeHTML(in.getSettings().getDestinationNickname()) : client.toBase64().substring(0,4);
@@ -460,8 +455,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         // Profile analysis
         addProfilePoints(ris, points);
         addVersionPoints(ris, points);
-        if (_context.getProperty(PROP_BLOCK, DEFAULT_BLOCK))
-            doBlocking(points);
+        if (_context.getProperty(PROP_BLOCK, DEFAULT_BLOCK)) {doBlocking(points);}
         return points;
     }
 
@@ -484,8 +478,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         long blockUntil = _context.getProperty(Analysis.PROP_BLOCKTIME, DEFAULT_BLOCK_TIME) + now;
         try {
             threshold = Double.parseDouble(_context.getProperty(PROP_THRESHOLD, Double.toString(DEFAULT_BLOCK_THRESHOLD)));
-            if (threshold < MIN_BLOCK_POINTS)
-                threshold = MIN_BLOCK_POINTS;
+            if (threshold < MIN_BLOCK_POINTS) {threshold = MIN_BLOCK_POINTS;}
         } catch (NumberFormatException nfe) {}
         String day = DataHelper.formatTime(now);
         Set<String> blocks = new HashSet<String>();
@@ -498,11 +491,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 if (ri != null) {
                     for (RouterAddress ra : ri.getAddresses()) {
                         byte[] ip = ra.getIP();
-                        if (ip != null)
-                            _context.blocklist().add(ip, "Sybil " + h.toBase64());
+                        if (ip != null) {_context.blocklist().add(ip, "Sybil " + h.toBase64());}
                         String host = ra.getHost();
-                        if (host != null)
-                            blocks.add(host);
+                        if (host != null) {blocks.add(host);}
                     }
                 }
                 String reason = " <b>➜</b> " + day + ": Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)";
@@ -530,13 +521,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         for (int i = 0; i < sz; i++) {
             RouterInfo info1 = ris.get(i);
             // don't do distance calculation for non-floodfills
-            if (!info1.getCapabilities().contains("f"))
-                continue;
+            if (!info1.getCapabilities().contains("f")) {continue;}
             for (int j = i + 1; j < sz; j++) {
                 RouterInfo info2 = ris.get(j);
                 // don't do distance calculation for non-floodfills
-                if (!info2.getCapabilities().contains("f"))
-                    continue;
+                if (!info2.getCapabilities().contains("f")) {continue;}
                 BigInteger dist = HashDistance.getDistance(info1.getHash(), info2.getHash());
                 if (pairs.isEmpty()) {
                     pairs.add(new Pair(info1, info2, dist));
@@ -556,8 +545,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         for (Pair p : pairs) {
             double distance = biLog2(p.dist);
             double point = MIN_CLOSE - distance;
-            if (point < 0)
-                break;  // sorted;
+            if (point < 0) {break;}  // sorted;
             point *= PAIR_DISTANCE_FACTOR;
             String b2 = p.r2.getHash().toBase64();
             addPoints(points, p.r1.getHash(), point, "Very close (" + fmt.format(distance) +
@@ -575,8 +563,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         BigInteger min = BI_MAX;
         for (RouterInfo info : ris) {
             BigInteger dist = HashDistance.getDistance(h, info.getHash());
-            if (dist.compareTo(min) < 0)
-                min = dist;
+            if (dist.compareTo(min) < 0) {min = dist;}
         }
         return biLog2(min);
     }
@@ -585,8 +572,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private static byte[] getIP(RouterInfo ri) {
         for (RouterAddress ra : ri.getAddresses()) {
             byte[] rv = ra.getIP();
-            if (rv != null && rv.length == 4)
-                return rv;
+            if (rv != null && rv.length == 4) {return rv;}
         }
         return null;
     }
