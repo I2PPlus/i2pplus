@@ -488,7 +488,7 @@ public abstract class TransportImpl implements Transport {
     public void send(OutNetMessage msg) {
         if (msg.getTarget() == null) {
             if (_log.shouldError())
-                _log.error("Error - Bad message enqueued (target is null): " + msg, new Exception("Added by"));
+                _log.error("BAD message enqueued (Target is null): " + msg, new Exception("Added by"));
             return;
         }
         try {
