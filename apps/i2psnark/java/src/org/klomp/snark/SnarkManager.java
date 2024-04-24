@@ -347,7 +347,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _trackerMap = new ConcurrentHashMap<String, Tracker>(4);
         _torrentCreateFilterMap = new ConcurrentHashMap<String, TorrentCreateFilter>(3);
         loadConfig(null);
-        if (!ctx.isRouterContext()) {Runtime.getRuntime().addShutdownHook(new Thread(new TempDeleter(_util.getTempDir()), "Snark Temp Dir Deleter"));}
+        if (!ctx.isRouterContext()) {Runtime.getRuntime().addShutdownHook(new Thread(new TempDeleter(_util.getTempDir()), "SnarkDelTemp"));}
     }
 
     /** Caller _must_ call loadConfig(file) before this if setting new values
@@ -371,7 +371,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
             }
         }
-        _monitor = new I2PAppThread(new DirMonitor(), "Snark DirMonitor", true);
+        _monitor = new I2PAppThread(new DirMonitor(), "SnarkDirMonitor", true);
         _monitor.start();
         // only if default instance
         if (_context.isRouterContext() && "i2psnark".equals(_contextName))
@@ -2951,7 +2951,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 // to wait for client manager to be up so we can get bandwidth limits
                 try { Thread.sleep(3000); } catch (InterruptedException ie) {}
             }
-
             // here because we need to delay until I2CP is up
             // although the user will see the default until then
             boolean routerOK = false;
@@ -3015,9 +3014,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                     }
                                 }
                             }
-                            if (routerOK)
+                            if (routerOK) {
                                 addMessage(_t("Down bandwidth limit is {0} KBps", _bwManager.getUpBWLimit() / 1024) + "; " +
                                            _t("Up bandwidth limit is {0} KBps", _util.getMaxUpBW()));
+                            }
                         }
                     } else {
                         autostart = false;
@@ -3055,8 +3055,20 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     // Don't run if there was an error, as we would delete the torrent config
                     // file(s) and we don't want to do that. We'll do the cleanup the next
                     // time i2psnark starts. See ticket #1658.
-                    if (ok)
+                    if (ok) {
                         cleanupTorrentStatus();
+                        long freeSpace = dir.getUsableSpace();
+                        int freeSpaceMB = (int) (freeSpace / (1024 * 1024));
+                        String msg = _t("Storage: {0}MB currently available for downloads on configured data partition", freeSpaceMB);
+                        if (freeSpaceMB < 100) {
+                            msg = _t("Warning - Only {0}MB available for downloads on configured data partition", freeSpaceMB);
+                            if (_log.shouldWarn()) {
+                                _log.warn("[I2PSnark] Partition containing data directory only has " + freeSpaceMB + "MB free");
+                            }
+                         }
+                         addMessage(msg);
+                         if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
+                    }
                     if (!routerOK) {
                         if (_context.isRouterContext()) {
                             addMessage(_t("Unable to connect to I2P"));
@@ -3821,7 +3833,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if (changed)
                     updateStatus(snark);
                 if (_log.shouldWarn())
-                    _log.warn("Finished recheck of " + snark.getBaseName() + " changed? " + changed);
+                    _log.warn("Finished recheck of " + snark.getBaseName() + " -> " + (changed ? "File changes detected" : "Unchanged"));
                 String link = linkify(snark);
                 if (changed) {
                     int pieces = snark.getPieces();
@@ -3833,7 +3845,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
             } catch (IOException e) {
                 _log.error("Error rechecking " + snark.getBaseName(), e);
-                addMessage(_t("Error checking the torrent {0}", snark.getBaseName()) + ": " + e);
+                addMessage(_t("Error checking the torrent {0}", snark.getBaseName()) + " (" + e.getMessage() + ")");
             }
         }
     }
