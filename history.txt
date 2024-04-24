@@ -1,6 +1,8 @@
-2024-04-19 dr|z3d
- * Router: Add bans for routers at the SSU2 Establishment phase for various
-   suspect behaviors
+2024-04-24 dr|z3d
+ * I2PSnark: Display free space info at startup
+
+2024-04-23 dr|z3d
+ * Router: Add bans at SSU2 Establishment phase for various suspect behaviors
 
 2024-04-19 dr|z3d
  * SusiDNS: Enhance presentation of subscription logs and linkify new hosts
