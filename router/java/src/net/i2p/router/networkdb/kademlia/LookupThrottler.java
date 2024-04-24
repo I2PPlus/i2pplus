@@ -20,9 +20,12 @@ class LookupThrottler {
     /** the id of this is -1 */
     private static final TunnelId DUMMY_ID = new TunnelId();
     /** this seems like plenty */
-    private static final int DEFAULT_MAX_LOOKUPS = 14;
-    private static final int DEFAULT_MAX_NON_FF_LOOKUPS = 3;
-    private static final long DEFAULT_CLEAN_TIME = 2*60*1000;
+//    private static final int DEFAULT_MAX_LOOKUPS = 14;
+//    private static final int DEFAULT_MAX_NON_FF_LOOKUPS = 3;
+//    private static final long DEFAULT_CLEAN_TIME = 2*60*1000;
+    private static final int DEFAULT_MAX_LOOKUPS = 60;
+    private static final int DEFAULT_MAX_NON_FF_LOOKUPS = 15;
+    private static final long DEFAULT_CLEAN_TIME = 90*1000;
     private final int MAX_LOOKUPS;
     private final int MAX_NON_FF_LOOKUPS;
     private final long CLEAN_TIME;
