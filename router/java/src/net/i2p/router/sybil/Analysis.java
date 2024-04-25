@@ -73,9 +73,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     public static final String PROP_NONFF = "router.sybilAnalyzeAll";
     public static final String PROP_BLOCKTIME = "router.sybilBlockPeriod";
     public static final String PROP_REMOVETIME = "router.sybilDeleteOld";
-//    private static final long MIN_FREQUENCY = 60*60*1000L;
-    private static final long MIN_FREQUENCY = 15*60*1000L;
+    private static final long MIN_FREQUENCY = 60*60*1000L;
     private static final long MIN_UPTIME = 75*60*1000L;
+    public static final long DEFAULT_FREQUENCY = 4*60*60*1000L;
 
     public static final int PAIRMAX = 20;
     public static final int MAX = 10;
@@ -95,35 +95,34 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private static final double POINTS64 = 2.0;
     private static final double POINTS48 = 0.5;
 
-//    private static final double POINTS_FAMILY = -10.0;
-//    private static final double POINTS_FAMILY_VERIFIED = POINTS_FAMILY * 4;
     private static final double POINTS_FAMILY = -20.0;
     private static final double POINTS_FAMILY_VERIFIED = POINTS_FAMILY * 10;
     private static final double POINTS_NONFF = -5.0;
 //    private static final double POINTS_BAD_FAMILY = 20.0;
-    private static final double POINTS_BAD_FAMILY = 100.0;
+    private static final double POINTS_BAD_FAMILY = 75.0;
     private static final double POINTS_BAD_OUR_FAMILY = 100.0;
     private static final double POINTS_OUR_FAMILY = -100.0;
+//    private static final double POINTS_BAD_VERSION = 20.0;
+    private static final double POINTS_BAD_VERSION = 30.0;
+//    private static final double POINTS_UNREACHABLE = 4.0;
+    private static final double POINTS_UNREACHABLE = 10.0;
+    private static final double POINTS_NEW = 4.0;
+    // since we're blocking by default now, don't make this too high,
+    // so we don't always turn a temporary block into a permanent one.
+//    private static final double POINTS_BANLIST = 10.0;
+    private static final double POINTS_BANLIST = 5.0;
+
     public static final double MIN_CLOSE = 242.0;
     private static final double PAIR_DISTANCE_FACTOR = 2.0;
     private static final double OUR_KEY_FACTOR = 4.0;
 //    private static final double VERSION_FACTOR = 1.0;
     private static final double VERSION_FACTOR = 2.0;
-//    private static final double POINTS_BAD_VERSION = 20.0;
-    private static final double POINTS_BAD_VERSION = 30.0;
-//    private static final double POINTS_UNREACHABLE = 4.0;
-    private static final double POINTS_UNREACHABLE = 15.0;
-    private static final double POINTS_NEW = 4.0;
-    // since we're blocking by default now, don't make this too high,
-    // so we don't always turn a temporary block into a permanent one.
-    private static final double POINTS_BANLIST = 10.0;
+
     public static final boolean DEFAULT_BLOCK = true;
     public static final double DEFAULT_BLOCK_THRESHOLD = 35.0;
     public static final long DEFAULT_BLOCK_TIME = 7*24*60*60*1000L;
     public static final long DEFAULT_REMOVE_TIME = 10*24*60*60*1000L;
     public static final long SHORT_REMOVE_TIME = 2*24*60*60*1000L;
-    //public static final long DEFAULT_FREQUENCY = 24*60*60*1000L;
-    public static final long DEFAULT_FREQUENCY = 60*60*1000L;
     public static final float MIN_BLOCK_POINTS = 12.01f;
     private static final byte[] IPV6_LOCALHOST = new byte[16];
     static { IPV6_LOCALHOST[15] = 1; }
