@@ -115,10 +115,13 @@
 </ul></td></tr>
 
 <tr><th>router.minThrottleTunnels={n}</th></tr>
-<tr><td><%=intl._t("This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]")%></td></tr>
+<tr><td><%=intl._t("This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]")%></td></tr>
 
 <tr><th>router.rebuildKeys={true|false}</th></tr>
 <tr><td><%=intl._t("When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]")%></td></tr>
+
+<tr><th>router.enableTransitThrottle={true|false}</th></tr>
+<tr><td><%=intl._t("When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true]")%></td></tr>
 
 <tr><th>router.tunnelConcurrentBuilds={n}</th></tr>
 <tr><td><%=intl._t("When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]")%></td></tr>
