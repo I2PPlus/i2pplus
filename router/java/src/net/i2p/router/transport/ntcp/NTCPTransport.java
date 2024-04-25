@@ -395,8 +395,12 @@ public class NTCPTransport extends TransportImpl {
                                 // Note that outbound conns go in the map BEFORE establishment
                                 _conByIdent.put(ih, con);
                             } catch (DataFormatException dfe) {
-                                if (_log.shouldWarn())
+/**
+                                if (_log.shouldInfo()) {
                                     _log.warn("[NTCP] BAD published address\n" + target, dfe);
+                                } else if (_log.shouldWarn())
+                                    _log.warn("[NTCP] Router [" + ident.toBase64().substring(0,6) + "] has BAD published address");
+**/
                                 fail = true;
                             }
                         } else {
@@ -410,9 +414,14 @@ public class NTCPTransport extends TransportImpl {
                 }
             }
             if (fail) {
+                long now = _context.clock().now();
                 // race, RI changed out from under us, maybe SSU can handle it
-                if (_log.shouldWarn())
-                    _log.warn("[NTCP] We bid on a peer without a valid NTCP address\n" + target);
+                if (_log.shouldInfo()) {
+                    _log.warn("[NTCP] We bid on a peer without a valid NTCP address, banning for 4h\n" + target);
+                } else if (_log.shouldWarn()) {
+                    _log.warn("[NTCP] Router [" + ident.toBase64().substring(0,6) + "] has no valid NTCP address, banning for 4h" );
+                }
+                _context.banlist().banlistRouter(ih, " <b>➜</b> Invalid NTCP address", null, null, now + 4*60*60*1000);
                 afterSend(msg, false);
                 return;
             }
