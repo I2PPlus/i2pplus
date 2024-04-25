@@ -56,7 +56,8 @@ class RequestThrottler {
     /** increments before checking */
     boolean shouldThrottle(Hash h) {
         RouterInfo ri = context.netDb().lookupRouterInfoLocally(h);
-        boolean isUnreachable = ri != null && ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+        boolean isUnreachable = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0);
         boolean isLowShare = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                              ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                              ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0 ||
@@ -107,7 +108,7 @@ class RequestThrottler {
 
         if (SystemVersion.getCPULoad() > 95 && SystemVersion.getCPULoadAvg() > 95) {
             if (_log.shouldWarn())
-                _log.warn("Rejecting tunnel requests from Router [" + h.toBase64().substring(0,6) + "] -> " +
+                _log.warn("Rejecting tunnel request from Router [" + h.toBase64().substring(0,6) + "] -> " +
                           "CPU is under sustained high load");
         }
 
