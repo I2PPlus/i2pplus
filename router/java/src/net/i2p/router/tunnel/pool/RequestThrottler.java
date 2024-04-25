@@ -111,7 +111,6 @@ class RequestThrottler {
                           "CPU is under sustained high load");
         }
 
-/**
         if (isFF && (noSSU || isUnreachable)) {
             if (noSSU) {
                 context.banlist().banlistRouter(h, " <b>➜</b> Floodfill with SSU disabled", null, null, context.clock().now() + 4*60*60*1000);
@@ -125,6 +124,8 @@ class RequestThrottler {
             if (shouldDisconnect) {
                 context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             }
+        }
+
         if (uptime > 45*1000 && (noCountry && isLowShare) || (noCountry && isUnreachable)) {
             if (noCountry && isLowShare) {
                 context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address and slow", null, null, context.clock().now() + 4*60*60*1000);
@@ -144,7 +145,6 @@ class RequestThrottler {
             if (shouldDisconnect) {
                 context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             }
-        }
         } else if (uptime > 45*1000 && noCountry) {
             if (isFF) {
                 context.banlist().banlistRouter(h, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, context.clock().now() + 4*60*60*1000);
@@ -157,7 +157,8 @@ class RequestThrottler {
             if (shouldDisconnect) {
                 context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             }
-**/
+        }
+
         if (isLTier && isUnreachable && isOld) {
             if (_log.shouldWarn() && !context.banlist().isBanlisted(h)) {
                 _log.warn("Temp banning for 8h and immediately disconnecting from [" + h.toBase64().substring(0,6) + "] -> LU / " + v);
@@ -178,7 +179,7 @@ class RequestThrottler {
                 int bantime = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;
                 int period = bantime / 60 / 1000;
                 if (count == (limit * 5 / 3) + 1) {
-                    context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
+                    context.banlist().banlistRouter(h, " <b>➜</b> Excessive tunnel requests", null, null, context.clock().now() + bantime);
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
                         _log.warn("Temp banning " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
