@@ -9151,7 +9151,7 @@ msgid "Router running a non-native, software emulated version of the Java BigInt
 msgstr "Ruter Java BigInteger kitabxanasının yerli olmayan, proqram təminatı ilə işlənmiş versiyasını işlədir"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:530
-msgid "This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
 msgstr "Bu parametrlər router gözlənilən bant genişliyi tələblərinə əsasən tunel sorğularını rədd etməyə başlamazdan əvvəl ev sahibliyi edilən iştirakçı tunellərinin minimal sayını konfiqurasiya etməyə imkan verir. [Sistem Android ilə işləyirsə standart 100, QOL ilə işləyirsə 800 və 4-dən az nüvə mövcuddursa 1200, QOL və 4 və ya daha çox nüvə ilə işləyirsə əks halda 2500]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:532

@@ -9133,7 +9133,7 @@ msgid "Router running a non-native, software emulated version of the Java BigInt
 msgstr "Bộ định tuyến chạy phiên bản thư viện Java BigInteger không bản địa, được mô phỏng bởi phần mềm"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:530
-msgid "This settings allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
+msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
 msgstr "Cài đặt này cho phép bạn định cấu hình số lượng đường hầm tham gia được lưu trữ tối thiểu trước khi bộ định tuyến bắt đầu từ chối các yêu cầu đường hầm dựa trên các yêu cầu băng thông dự kiến. ."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:532
