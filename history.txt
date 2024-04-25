@@ -1,8 +1,15 @@
+2024-04-25 zzz
+ * Transport: Remove SSU1 code from IMF/IMS (Gitlab MRs !189)
+
 2024-04-24 dr|z3d
  * I2PSnark: Display free space info at startup
 
 2024-04-23 dr|z3d
  * Router: Add bans at SSU2 Establishment phase for various suspect behaviors
+
+2024-04-22 zzz
+ * Profiles: Don't update last heard time on tunnel failure
+ * Transport: Remove SSU1 code from PeerTest and IntroductionManager (Gitlab MRs !185, !186)
 
 2024-04-19 dr|z3d
  * SusiDNS: Enhance presentation of subscription logs and linkify new hosts
@@ -11,6 +18,9 @@
  * SusiDNS: Reverse the order of the subscription logs so newest
    added domains appear first
  * I2PSnark: Fix display of progress bars on details page
+
+2024-04-17 zzz
+ * Build: Update to Tomcat 9.0.88
 
 2024-04-16 dr|z3d
  * Console: Optimize progressx.js and add support for theme-specific colors
