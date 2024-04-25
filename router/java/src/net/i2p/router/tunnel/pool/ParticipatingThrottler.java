@@ -165,7 +165,7 @@ class ParticipatingThrottler {
         if (count > limit && shouldThrottle) {
             if (isFast && !isUnreachable && count > limit * 11 / 9) {
                 if (count == (limit * 11 / 9) + 1) {
-                    context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
+                    context.banlist().banlistRouter(h, " <b>➜</b> Excessive tunnel requests", null, null, context.clock().now() + bantime);
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
@@ -182,7 +182,7 @@ class ParticipatingThrottler {
                 rv = Result.DROP;
             } else if (!isLowShare && !isUnreachable && count > limit * 10 / 9) {
                 if (count == (limit * 10 / 9) + 1) {
-                    context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
+                    context.banlist().banlistRouter(h, " <b>➜</b> Excessive tunnel requests", null, null, context.clock().now() + bantime);
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
@@ -198,7 +198,7 @@ class ParticipatingThrottler {
                 //rv = Result.REJECT; // do we want to signal to the peer that we're busy?
             } else if ((isLowShare || isUnreachable) && count > limit * 7 / 3) {
                 if (count == (limit * 7 / 3) + 1) {
-                    context.banlist().banlistRouter(h, " <b>➜</b> Excessive transit tunnels", null, null, context.clock().now() + bantime);
+                    context.banlist().banlistRouter(h, " <b>➜</b> Excessive tunnel requests", null, null, context.clock().now() + bantime);
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
