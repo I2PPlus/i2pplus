@@ -80,6 +80,8 @@ class BuildHandler implements Runnable {
     private ExplState _explState = ExplState.NONE;
     private final String MIN_VERSION_HONOR_CAPS = "0.9.58";
 
+    private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
+
     private enum ExplState { NONE, IB, OB, BOTH }
 
     /** TODO these may be too high, review and adjust */
@@ -1005,45 +1007,50 @@ class BuildHandler implements Runnable {
         // Check participating throttle counters for previous and next hops
         // This is at the end as it compares to a percentage of created tunnels.
         // We may need another counter above for requests.
-        if (response == 0 && !isInGW && _throttler != null && from != null) {
-            ParticipatingThrottler.Result result = _throttler.shouldThrottle(from);
-            if (result == ParticipatingThrottler.Result.DROP) {
-                if (_log.shouldWarn())
-                    _log.warn("Dropping tunnel request (hop throttle), previous hop -> [" + from.toBase64().substring(0,6) + "] " + req);
-                _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
-                _context.commSystem().mayDisconnect(from);
-                // fake failed so we won't use him for our tunnels
-                _context.profileManager().tunnelFailed(from, 400);
-                 return;
-            }
-            if (result == ParticipatingThrottler.Result.REJECT) {
-                if (_log.shouldWarn())
-                    _log.warn("Rejecting tunnel request (hop throttle), previous hop -> [" + from.toBase64().substring(0,6) + "] " + req);
-                _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
-                response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
-                // fake failed so we won't use him for our tunnels
-                _context.profileManager().tunnelFailed(from, 200);
-            }
-        }
-        if (response == 0 && (!isOutEnd) && _throttler != null) {
-            ParticipatingThrottler.Result result = _throttler.shouldThrottle(nextPeer);
-            if (result == ParticipatingThrottler.Result.DROP) {
-                if (_log.shouldWarn())
-                    _log.warn("Dropping tunnel request (hop throttle), next hop -> [" + nextPeer.toBase64().substring(0,6) + "] " + req);
-                _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
-                if (from != null)
+
+        boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
+
+        if (shouldThrottle) {
+            if (response == 0 && !isInGW && _throttler != null && from != null) {
+                ParticipatingThrottler.Result result = _throttler.shouldThrottle(from);
+                if (result == ParticipatingThrottler.Result.DROP) {
+                    if (_log.shouldWarn())
+                        _log.warn("Dropping tunnel request (hop throttle), previous hop -> [" + from.toBase64().substring(0,6) + "] " + req);
+                    _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                     _context.commSystem().mayDisconnect(from);
-                // fake failed so we won't use him for our tunnels
-                _context.profileManager().tunnelFailed(nextPeer, 400);
-                 return;
+                    // fake failed so we won't use him for our tunnels
+                    _context.profileManager().tunnelFailed(from, 400);
+                     return;
+                }
+                if (result == ParticipatingThrottler.Result.REJECT) {
+                    if (_log.shouldWarn())
+                        _log.warn("Rejecting tunnel request (hop throttle), previous hop -> [" + from.toBase64().substring(0,6) + "] " + req);
+                    _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
+                    response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
+                    // fake failed so we won't use him for our tunnels
+                    _context.profileManager().tunnelFailed(from, 200);
+                }
             }
-            if (result == ParticipatingThrottler.Result.REJECT) {
-                if (_log.shouldWarn())
-                    _log.warn("Rejecting tunnel request (hop throttle), next hop -> [" + nextPeer.toBase64().substring(0,6) + "] " + req);
-                _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
-                response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
-                // fake failed so we won't use him for our tunnels
-                _context.profileManager().tunnelFailed(nextPeer, 200);
+            if (response == 0 && (!isOutEnd) && _throttler != null) {
+                ParticipatingThrottler.Result result = _throttler.shouldThrottle(nextPeer);
+                if (result == ParticipatingThrottler.Result.DROP) {
+                    if (_log.shouldWarn())
+                        _log.warn("Dropping tunnel request (hop throttle), next hop -> [" + nextPeer.toBase64().substring(0,6) + "] " + req);
+                    _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
+                    if (from != null)
+                        _context.commSystem().mayDisconnect(from);
+                    // fake failed so we won't use him for our tunnels
+                    _context.profileManager().tunnelFailed(nextPeer, 400);
+                     return;
+                }
+                if (result == ParticipatingThrottler.Result.REJECT) {
+                    if (_log.shouldWarn())
+                        _log.warn("Rejecting tunnel request (hop throttle), next hop -> [" + nextPeer.toBase64().substring(0,6) + "] " + req);
+                    _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
+                    response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
+                    // fake failed so we won't use him for our tunnels
+                    _context.profileManager().tunnelFailed(nextPeer, 200);
+                }
             }
         }
 
