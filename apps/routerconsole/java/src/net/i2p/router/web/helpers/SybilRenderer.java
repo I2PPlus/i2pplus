@@ -1,5 +1,6 @@
 package net.i2p.router.web.helpers;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
@@ -147,12 +148,19 @@ public class SybilRenderer {
         }
 
         StringBuilder buf = new StringBuilder(4*1024);
+        PersistSybil PS = new PersistSybil(_context);
+        PS.getBlocklistFile();
+        File blocklistFile = PS.getBlocklistFile();
+        boolean blocklistFileExists = blocklistFile.exists();
         buf.append("<div id=sybilnav>\n<ul>\n" +
                    "<li id=reviewStored><a href=\"netdb?f=3\">" + _t("Review stored analysis") + "</a></li>\n" +
                    "<li id=runNew><a href=\"netdb?f=3&amp;m=14\">" + _t("Run new analysis") + "</a></li>\n" +
                    "<li id=configurePeriodic><a href=\"netdb?f=3&amp;m=15\">" + _t("Configure periodic analysis") + "</a></li>\n" +
-                   "<li id=banlisted><a href=\"/profiles?f=3\">" + _t("Review current bans") + "</a></li>\n" +
-                   "<li id=floodfillSummary><a href=\"netdb?f=3&amp;m=1\">" + _t("Floodfill Summary") + "</a></li>\n" +
+                   "<li id=banlisted><a href=\"/profiles?f=3\">" + _t("Review current bans") + "</a></li>\n");
+        if (blocklistFileExists) {
+            buf.append("<li id=purgeBans><a href=\"netdb?f=3&amp;m=100\">" + _t("Delete Sybil Blocklist") + "</a></li>\n");
+        }
+        buf.append("<li id=floodfillSummary><a href=\"netdb?f=3&amp;m=1\">" + _t("Floodfill Summary") + "</a></li>\n" +
                    "<li id=sameFamily><a href=\"netdb?f=3&amp;m=2\">" + _t("Same Family") + "</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=3\">" + _t("IP close to us") + "</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=4\">" + _t("Same IP") + "</a></li>\n" +
@@ -240,6 +248,12 @@ public class SybilRenderer {
         } else if (mode == 15) {
             // show background form
             renderBackgroundForm(out, buf, nonce);
+        } else if (mode == 100) {
+            PersistSybil persistSybil = new PersistSybil(_context);
+            persistSybil.deleteBlocklistFile();
+            out.write("<div class=infohelp id=sybilanalysis>\n<b><i>");
+            out.write("A restart is required to fully purge the sybil blocklist.");
+            out.write("</i></b></div>\n");
         } else {
             out.write("<div class=infohelp id=sybilanalysis>\n<b><i>");
             out.write("Unknown mode " + mode);

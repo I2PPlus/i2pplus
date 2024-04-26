@@ -52,7 +52,7 @@ public class PersistSybil {
     private static final String BLOCKLIST_SYBIL_FILE = "blocklist-sybil.txt";
 
     /** access via Analysis.getPersister() */
-    PersistSybil(I2PAppContext ctx) {
+    public PersistSybil(I2PAppContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(PersistSybil.class);
     }
@@ -243,9 +243,29 @@ public class PersistSybil {
      *
      *  @since 0.9.57
      */
-    File getBlocklistFile() {
+    public File getBlocklistFile() {
         File f = new File(_context.getConfigDir(), SDIR);
         return new File(f, BLOCKLIST_SYBIL_FILE);
+    }
+
+    /**
+     *  Delete the blocklist
+     *
+     * @since 0.9.63+
+     *
+     */
+    public void deleteBlocklistFile() {
+        File blocklistFile = getBlocklistFile();
+        if (blocklistFile.exists()) {
+            boolean deleted = blocklistFile.delete();
+            if (deleted) {
+                System.out.println("Successfully deleted sybil blocklist file: " + blocklistFile);
+            } else {
+                System.err.println("Failed to delete sybil blocklist file:  " + blocklistFile);
+            }
+        } else {
+            System.err.println("Cannot delete non-existent sybil blocklist file: " + blocklistFile);
+        }
     }
 
     /**
