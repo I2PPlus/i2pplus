@@ -133,7 +133,7 @@ class ParticipatingThrottler {
             if (shouldDisconnect) {
                 context.commSystem().forceDisconnect(h);
                 if (_log.shouldWarn())
-                    _log.warn("Temp banning for " + (period*4) + "m and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                    _log.warn("Banning for " + (period*4) + "m and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                               " -> " + v + (caps != "" ? " / " + caps : ""));
             } else {
                 if (_log.shouldWarn())

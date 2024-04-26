@@ -309,7 +309,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 if (shouldDisconnect) {
                     _context.commSystem().forceDisconnect(entry);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning for 4h and immediately disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] " +
+                        _log.warn("Banning for 4h and immediately disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] " +
                                   "-> No SSU transport enabled");
                 } else if (_log.shouldWarn()) {
                     _log.warn("Temp banning Floodfill [" + entry.toBase64().substring(0,6) + "] for 4h -> No SSU transport enabled");
@@ -323,7 +323,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 if (shouldDisconnect) {
                     _context.commSystem().forceDisconnect(entry);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning for 4h and immediately disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] " +
+                        _log.warn("Banning for 4h and immediately disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] " +
                                   "-> No GeoIP resolvable address");
                 } else {
                     if (_log.shouldWarn())
@@ -349,7 +349,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 _context.banlist().banlistRouter(entry, " <b>➜</b> Floodfill has bogus 'salt' cap", null, null, now + 4*60*60*1000);
                 _context.commSystem().forceDisconnect(entry);
                 if (_log.shouldWarn())
-                    _log.warn("Temp banning for 4h and immediately disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> RouterInfo has 'salt' cap");
+                    _log.warn("Banning for 4h and immediately disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> RouterInfo has 'salt' cap");
             } else if (sameIP) {
                 badff.add(entry);
                 if (_log.shouldDebug())
@@ -371,7 +371,7 @@ class FloodfillPeerSelector extends PeerSelector {
                     _context.banlist().banlistRouter(entry, " <b>➜</b> L tier Floodfill", null, null, now + 4*60*60*1000);
                     _context.commSystem().forceDisconnect(entry);
                     if (_log.shouldWarn()) {
-                        _log.warn("Temp banning for 4h and immediately disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> L tier");
+                        _log.warn("Banning for 4h and immediately disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> L tier");
                     }
                 }
             } else {

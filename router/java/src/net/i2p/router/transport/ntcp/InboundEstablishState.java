@@ -713,7 +713,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                                              null, null, _context.clock().now() + 4*60*60*1000);
             _context.commSystem().forceDisconnect(h);
             if (_log.shouldWarn() && !isBanned) {
-                _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                _log.warn("Banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Wrong IP address in RouterInfo (NTCP)");
             }
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
@@ -733,7 +733,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                                              null, _context.clock().now() + 4*60*60*1000);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldWarn() && !isBanned)
-                _log.warn("Temp banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                _log.warn("Banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Old and slow (" + version + " / " + bw + "U)");
             _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             throw new DataFormatException("Old and slow: " + h);

@@ -642,8 +642,9 @@ public final class ECIESAEADEngine {
             state.readMessage(data, 8, 48, ZEROLEN, 0);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn()) {
+                boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
                 _log.warn("Decryption failure of NewSessionReply part 1" +
-                          (gse.getMessage() != null ? " (General Security Exception: " + gse.getMessage() + ")" : ""));
+                          (gseNotNull ? " (General Security Exception: " + gse.getMessage() + ")" : ""));
                 if (_log.shouldDebug()) {_log.debug("State at failure: " + state);}
             }
             // restore original data for subsequent ElG attempt
@@ -672,8 +673,9 @@ public final class ECIESAEADEngine {
             rcvr.decryptWithAd(hash, data, TAGLEN + KEYLEN + MACLEN, payload, 0, payload.length + MACLEN);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn()) {
+                boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
                 _log.warn("Decryption failure of NewSessionReply part 2" +
-                          (gse.getMessage() != null ? " (General Security Exception: " + gse.getMessage() + ")" : ""));
+                          (gseNotNull ? " (General Security Exception: " + gse.getMessage() + ")" : ""));
                 if (_log.shouldDebug()) {_log.debug("State at failure: " + state);}
             }
             state.destroy();
