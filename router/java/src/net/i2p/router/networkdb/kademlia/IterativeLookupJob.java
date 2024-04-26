@@ -36,11 +36,16 @@ class IterativeLookupJob extends JobImpl {
 
     public void runJob() {
                 Hash from = _dsrm.getFromHash();
+                long now = getContext().clock().now();
                 // dsrm.getFromHash() can't be trusted - check against the list of
                 // those we sent the search to in _search
                 if (!_search.wasQueried(from)) {
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("[Job" + _search.getJobId() + "] IterativeLookup -> DbSearchReplyMsg from unqueried peer " + _dsrm);
+                        _log.warn("Banning Router [" + from.toBase64().substring(0,6) + "] for 8 hours -> Sending unsolicited DbSearchReply messages");
+                    }
+                    getContext().banlist().banlistRouter(from, " <b>➜</b> Unsolicited DbSearchReply messages",
+                                                         null, null, now + 8*60*60*1000);
                     return;
                 }
 
