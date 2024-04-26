@@ -1,3 +1,7 @@
+2024-04-26 dr|z3d
+ * Console: Add delete sybil blocklist button to sybil section
+ * Router: Don't tolerate routers sending unsolicited DbSearch reply messages
+
 2024-04-25 zzz
  * Transport: Remove SSU1 code from IMF/IMS (Gitlab MRs !189)
 
@@ -11,7 +15,7 @@
  * Profiles: Don't update last heard time on tunnel failure
  * Transport: Remove SSU1 code from PeerTest and IntroductionManager (Gitlab MRs !185, !186)
 
-2024-04-19 dr|z3d
+2024-04-21 dr|z3d
  * SusiDNS: Enhance presentation of subscription logs and linkify new hosts
 
 2024-04-19 dr|z3d
