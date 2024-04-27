@@ -6,13 +6,23 @@
 
 # Specify input and output file variables
 input_file="torbulkexitlist"
-output_file="tor-blocklist.txt"
+output_file="blocklist_tor.txt"
+
+# Variables for comments
+url="# https://check.torproject.org/torbulkexitlist"
+today="# $(date '+%d %B %Y')"
 
 # Check if the input file exists
 if [ ! -f $input_file ]; then
-  echo "Input file does not exist or is not a regular file." >> $log_file
+  echo "Input file does not exist or is not a regular file."
+  echo "Please ensure $input_file exists and is in the directory this script is being run from"
   exit 1
 fi
+
+# Count the number of IPs in the file
+ips_count=$(wc -l < $input_file)
+echo "Number of IPs in $input_file: $ips_count"
+echo "Sorting IPs and consolidating ranges, please stand by..."
 
 # Sort the list of IPs naturally
 sorted_ips=$(cat $input_file | sort -V)
@@ -47,6 +57,12 @@ done
 
 # Print the last range
 print_range
+
+# Print URL and date to the output file
+output="$url\n$today\n$output"
+
+# Remove trailing newlines from the output
+output=$(echo -e "$output" | sed -e '$ { /^$/d }')
 
 # Output the consolidated IPs to file
 echo "Consolidated IPs saved to: $output_file"
