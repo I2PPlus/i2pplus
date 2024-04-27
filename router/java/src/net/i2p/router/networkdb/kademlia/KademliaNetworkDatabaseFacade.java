@@ -1491,7 +1491,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean isSlow = routerInfo != null && (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                                 routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                                 routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) && !isUs;
-        boolean isUnreachable = routerInfo != null && routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+        boolean isUnreachable = routerInfo != null && (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                                       routerInfo.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0);
         boolean isLTier =  routerInfo != null && routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
         boolean isFF = false;
@@ -1506,9 +1507,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             routerId = routerInfo.getIdentity().getHash().toBase64().substring(0,6);
             caps = routerInfo.getCapabilities().toUpperCase();
             h = routerInfo.getIdentity().getHash();
-            if (caps.contains("F")) {
-                isFF = true;
-            }
+            if (caps.contains("F")) {isFF = true;}
             for (RouterAddress ra : routerInfo.getAddresses()) {
                 if (ra.getTransportStyle().equals("SSU") ||
                     ra.getTransportStyle().equals("SSU2")) {
