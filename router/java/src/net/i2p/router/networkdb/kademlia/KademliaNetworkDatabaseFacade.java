@@ -1541,8 +1541,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 return "Published " + DataHelper.formatDuration(age) + " ago";
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn("Even though peer [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] is stale, we have only " + existing
-                              + " peers left - not dropping...");
+                    _log.warn("Even though peer [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) +
+                              "] is stale, we have only " + existing + " peers left - not dropping...");
                 }
             }
         }
@@ -1589,7 +1589,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (isLTier && isUnreachable && isOlderThanCurrent) {
             if (!_context.banlist().isBanlisted(h)) {
                 if (_log.shouldInfo()) {
-                    _log.info("Dropping RouterInfo [" + routerId + "] -> LU and older than 0.9.61");
+                    _log.info("Dropping RouterInfo [" + routerId + "] -> LU and older than 0.9.62");
                 }
                 if (_log.shouldWarn() && !_context.banlist().isBanlisted(h)) {
                     _log.warn("Temp banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
