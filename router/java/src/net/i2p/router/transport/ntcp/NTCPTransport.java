@@ -417,21 +417,23 @@ public class NTCPTransport extends TransportImpl {
                 long now = _context.clock().now();
                 // race, RI changed out from under us, maybe SSU can handle it
                 if (_log.shouldInfo()) {
-                    _log.warn("[NTCP] We bid on a peer without a valid NTCP address, banning for 4h\n" + target);
+                    _log.warn("[NTCP] We bid on a peer without a valid NTCP address, banning for 8h\n" + target);
                 } else if (_log.shouldWarn()) {
-                    _log.warn("[NTCP] Router [" + ident.toBase64().substring(0,6) + "] has no valid NTCP address, banning for 4h" );
+                    _log.warn("[NTCP] Router [" + ident.toBase64().substring(0,6) + "] has no valid NTCP address, banning for 8h" );
                 }
-                _context.banlist().banlistRouter(ih, " <b>➜</b> Invalid NTCP address", null, null, now + 4*60*60*1000);
+                _context.banlist().banlistRouter(ih, " <b>➜</b> Invalid NTCP address", null, null, now + 8*60*60*1000);
                 afterSend(msg, false);
                 return;
             }
             if (newVersion != 0) {
-                // As of 0.9.12, don't send our info if the first message is
-                // doing the same (common when connecting to a floodfill).
-                // Also, put the info message after whatever we are trying to send
-                // (it's a priority queue anyway and the info is low priority)
-                // Prior to 0.9.12, Bob would not send his RI unless he had ours,
-                // but that's fixed in 0.9.12.
+                /**
+                 *  As of 0.9.12, don't send our info if the first message is
+                 *  doing the same (common when connecting to a floodfill).
+                 *  Also, put the info message after whatever we are trying to send
+                 *  (it's a priority queue anyway and the info is low priority)
+                 *  Prior to 0.9.12, Bob would not send his RI unless he had ours,
+                 *  but that's fixed in 0.9.12.
+                 */
                 boolean shouldSkipInfo = false;
                 boolean shouldFlood = false;
                 I2NPMessage m = msg.getMessage();
@@ -519,7 +521,7 @@ public class NTCPTransport extends TransportImpl {
                     con.close();
                 }
             }
-             */
+            */
         }
     }
 

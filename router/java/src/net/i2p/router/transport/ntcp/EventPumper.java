@@ -1013,9 +1013,10 @@ class EventPumper implements Runnable {
                         processConnect(key);
                     }
                 } catch (IOException ioe) {
-                    if (_log.shouldWarn())
-//                        _log.warn("Error connecting to: " + Addresses.toString(naddr.getIP(), naddr.getPort()), ioe);
-                        _log.warn("Error connecting to: " + Addresses.toString(naddr.getIP(), naddr.getPort()) + "\n* Error: " + ioe.getMessage());
+                    if (_log.shouldWarn()) {
+                        _log.warn("Error connecting to: " + Addresses.toString(naddr.getIP(), naddr.getPort()) +
+                                  "\n* Error: " + ioe.getMessage());
+                    }
                     _context.statManager().addRateData("ntcp.connectFailedIOE", 1);
                     _transport.markUnreachable(con.getRemotePeer().calculateHash());
                     con.close(true);
