@@ -219,7 +219,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             return;
         }
 
-        String MIN_VERSION = "0.9.58";
+        String MIN_VERSION = "0.9.60";
         boolean isHidden = getContext().router().isHidden();
 //        RouterInfo ri = _facade.lookupRouterInfoLocally(_key);
 //        RouterInfo isUs = _facade.lookupRouterInfoLocally(getContext().routerHash());
@@ -229,14 +229,13 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (ri != null && ri != isUs) {
             String v = ri.getVersion();
             String caps = ri.getCapabilities();
-            boolean uninteresting = (caps != null && caps.contains("salt") ||
-                                     caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                     caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                     //caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                     //caps.indexOf(Router.CAPABILITY_BW64) >= 0 ||
-                                     (v.equals("") || VersionComparator.comp(v, MIN_VERSION) < 0)) &&
-//                                     !isHidden && getContext().netDbSegmentor().getKnownRouters() > 1000;
-                                     !isHidden && getContext().netDb().getKnownRouters() > 1000;
+            boolean uninteresting = caps != null && (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                    caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                                    //caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                                    //caps.indexOf(Router.CAPABILITY_BW64) >= 0 ||
+                                    (v.equals("") || VersionComparator.comp(v, MIN_VERSION) < 0)) &&
+//                                    !isHidden && getContext().netDbSegmentor().getKnownRouters() > 1000;
+                                    !isHidden && getContext().netDb().getKnownRouters() > 1000;
             if (uninteresting) {
                 if (_log.shouldInfo())
                     _log.info("[Job " + getJobId() + "] Skipping search for uninteresting Router [" + _key.toBase64().substring(0,6) + "]");
