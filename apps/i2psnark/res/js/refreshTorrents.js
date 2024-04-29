@@ -70,10 +70,14 @@ function refreshTorrents(callback) {
             new Promise(resolve => {
               if (torrents) {
                 const torrentsResponse = xhrsnark.responseXML.getElementById("torrents");
-                torrents.innerHTML = torrentsResponse.innerHTML;
+                window.requestAnimationFrame(() => {
+                  torrents.innerHTML = torrentsResponse.innerHTML;
+                });
                 resolve();
               } else {
-                mainsection.innerHTML = mainsectionResponse.innerHTML;
+                window.requestAnimationFrame(() => {
+                  mainsection.innerHTML = mainsectionResponse.innerHTML;
+                });
               }
             }).then(() => {
               resolve();
@@ -113,12 +117,17 @@ function refreshTorrents(callback) {
         if (activeBadge && activeBadgeResponse && activeBadge.textContent !== activeBadgeResponse.textContent) {
           activeBadge.textContent = activeBadgeResponse.textContent;
         }
+        if (!xhrsnark.responseXML) {return;}
+        const filterBarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
+        if (!filterBar && filterBarResponse) {window.requestAnimationFrame(refreshAll);}
       }
       if (updatingResponse && updating.length === updatingResponse.length) {
         for (let i = 0; i < updating.length; i++) {
           if (updating[i].innerHTML !== updatingResponse[i].innerHTML) {
             if (updating[i].outerHTML !== updatingResponse[i].outerHTML) {
-              updating[i].outerHTML = updatingResponse[i].outerHTML;
+              window.requestAnimationFrame(() => {
+                updating[i].outerHTML = updatingResponse[i].outerHTML;
+              });
               window.requestAnimationFrame(refreshHeaderAndFooter);
               updated = true;
               requireFullRefresh = false;
