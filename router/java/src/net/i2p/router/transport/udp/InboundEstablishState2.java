@@ -324,30 +324,26 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         boolean isBanned = _context.banlist().isBanlisted(h);
         if (isBanned) {
             // validate sig to prevent spoofing
-            if (ri.verifySignature())
-               _context.blocklist().add(_aliceIP);
+            if (ri.verifySignature()) {_context.blocklist().add(_aliceIP);}
             throw new RIException("Router is banned: " + h.toBase64(), REASON_BANNED);
         }
         if (ri.getNetworkId() != _context.router().getNetworkID()) {
-            if (ri.verifySignature())
-               _context.blocklist().add(_aliceIP);
+            if (ri.verifySignature()) {_context.blocklist().add(_aliceIP);}
             throw new RIException("SSU2 network ID mismatch", REASON_NETID);
         }
 
         if (mismatchMessage != null) {
-            _context.banlist().banlistRouter(h, " <b>➜</b> Wrong IP address in RouterInfo (SSU2)",
+            _context.banlist().banlistRouter(h, " <b>➜</b> Invalid SSU address",
                                              null, null, _context.clock().now() + 4*60*60*1000);
             _context.commSystem().forceDisconnect(h);
             if (_log.shouldWarn() && !isBanned)
                 _log.warn("Banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
-                          " -> Wrong IP address in RouterInfo (SSU)");
-            if (ri.verifySignature())
-                _context.blocklist().add(_aliceIP);
+                          " -> Invalid SSU address");
+            if (ri.verifySignature()) {_context.blocklist().add(_aliceIP);}
             throw new RIException(mismatchMessage + ri, REASON_BANNED);
         }
 
-        if (!"2".equals(ra.getOption("v")))
-            throw new RIException("BAD SSU2 v", REASON_VERSION);
+        if (!"2".equals(ra.getOption("v"))) {throw new RIException("BAD SSU2 v", REASON_VERSION);}
 
         String cap = ri.getCapabilities();
         String bw = ri.getBandwidthTier();
@@ -358,10 +354,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         boolean isOld = VersionComparator.comp(version, "0.9.61") < 0;
 
         if (!reachable && isSlow && isOld) {
-            _context.banlist().banlistRouter(h, "<b>➜</b> Old and slow (" + version + " / " + bw + "U)", null,
+            _context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + version + " / " + bw + "U)", null,
                                              null, _context.clock().now() + 4*60*60*1000);
-            if (ri.verifySignature())
-                _context.blocklist().add(_aliceIP);
+            if (ri.verifySignature()) {_context.blocklist().add(_aliceIP);}
             if (_log.shouldWarn() && !isBanned)
                 _log.warn("Banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Old and slow (" + version + " / " + bw + "U)");
