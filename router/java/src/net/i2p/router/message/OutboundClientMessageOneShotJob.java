@@ -629,7 +629,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         _outTunnel = selectOutboundTunnel(_to);
         if (_outTunnel == null) {
             if (_log.shouldWarn())
-                _log.warn("No outbound tunnels found to send payload through; this might take a while...");
+                _log.warn("No outbound tunnels to send payload through; this might take a while...");
             getContext().statManager().addRateData("client.dispatchNoTunnels", now - _start);
             dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS);
             return;
