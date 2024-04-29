@@ -340,6 +340,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     _log.debug("After start: " + _handshakeState.toString());
                 _handshakeState.readMessage(_X, 0, MSG1_SIZE, options, 0);
             } catch (GeneralSecurityException gse) {
+                boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
                 // Read a random number of bytes, store wanted in _padlen1
                 _padlen1 = _context.random().nextInt(PADDING1_FAIL_MAX) - src.remaining();
                 if (_padlen1 > 0) {
@@ -350,7 +351,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                                   " more bytes, waiting for " + _padlen1 + " more bytes", gse);
                     else if (_log.shouldWarn())
                         _log.warn("BAD message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
-                                  " more bytes, waiting for " + _padlen1 + " more bytes \n* General Security Exception: " +  gse.getMessage());
+                                  " more bytes, waiting for " + _padlen1 + " more bytes" +
+                                  (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
                     changeState(State.IB_NTCP2_READ_RANDOM);
                 } else {
                     // got all we need, fail now
@@ -548,6 +550,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             // encrypt in-place
             _handshakeState.writeMessage(tmp, 0, tmp, KEY_SIZE, OPTIONS2_SIZE);
         } catch (GeneralSecurityException gse) {
+            boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
             // buffer length error
             if (!_log.shouldWarn())
 //                _log.error("BAD msg 2 out", gse);
@@ -709,12 +712,12 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         // s is verified, we may now ban the hash
         if (mismatchMessage != null) {
-            _context.banlist().banlistRouter(h, " <b>➜</b> Wrong IP address in RouterInfo (NTCP)",
+            _context.banlist().banlistRouter(h, " <b>➜</b> Invalid NTCP address",
                                              null, null, _context.clock().now() + 4*60*60*1000);
             _context.commSystem().forceDisconnect(h);
             if (_log.shouldWarn() && !isBanned) {
                 _log.warn("Banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
-                          " -> Wrong IP address in RouterInfo (NTCP)");
+                          " -> Invalid NTCP address");
             }
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             throw new DataFormatException(mismatchMessage + ri);
@@ -729,7 +732,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         boolean isOld = VersionComparator.comp(version, "0.9.61") < 0;
 
         if (!reachable && isSlow && isOld) {
-            _context.banlist().banlistRouter(h, "<b>➜</b> Old and slow (" + version + " / " + bw + "U)", null,
+            _context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + version + " / " + bw + "U)", null,
                                              null, _context.clock().now() + 4*60*60*1000);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldWarn() && !isBanned)
