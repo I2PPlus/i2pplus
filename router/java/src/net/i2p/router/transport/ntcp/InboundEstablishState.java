@@ -725,7 +725,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         String cap = ri.getCapabilities();
         String bw = ri.getBandwidthTier();
-        boolean reachable = cap != null && cap.contains("R");
+        boolean reachable = cap != null && cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+        boolean unreachable = cap != null && cap.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") ||
                           bw.equals("L") || bw.equals("M") || bw.equals("N");
         String version = ri.getVersion();
@@ -740,6 +741,17 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                           " -> Old and slow (" + version + " / " + bw + "U)");
             _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             throw new DataFormatException("Old and slow: " + h);
+        }
+
+        if (reachable && unreachable) {
+            _context.banlist().banlistRouter(h, " <b>➜</b> Invalid published capabilities (RU)", null,
+                                             null, _context.clock().now() + 24*60*60*1000);
+            _msg3p2FailReason = NTCPConnection.REASON_BANNED;
+            if (_log.shouldWarn() && !isBanned)
+                _log.warn("Banning for 24h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                          " -> Publishing both R and U caps");
+            _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            throw new DataFormatException("Invalid caps (RU): " + h);
         }
 
         try {
