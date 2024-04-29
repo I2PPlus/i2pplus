@@ -302,7 +302,9 @@ function refreshSidebar() {
       if (sb && xhrsb.responseXML) {
         const sbResponse = xhrsb.responseXML.getElementById("sb");
         if (sbResponse && !Object.is(sb.innerHTML, sbResponse.innerHTML)) {
-          xhrContainer.innerHTML = sbResponse.innerHTML;
+          window.requestAnimationFrame(() => {
+            xhrContainer.innerHTML = sbResponse.innerHTML;
+          });
           window.requestAnimationFrame(sectionToggler);
           window.requestAnimationFrame(countTunnels);
           window.requestAnimationFrame(countNewsItems);
