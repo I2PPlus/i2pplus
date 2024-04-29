@@ -283,7 +283,6 @@ class FloodfillPeerSelector extends PeerSelector {
                 caps = DataHelper.stripHTML(info.getCapabilities());
             }
             boolean isUnreachable = caps != null && !caps.contains("R");
-            boolean hasSalt = caps != null && caps.contains("salt");
             for (String ip : entryIPs) {
                 if (!maskedIPs.add(ip))
                     sameIP = true;
@@ -335,21 +334,13 @@ class FloodfillPeerSelector extends PeerSelector {
                 if (_log.shouldDebug())
                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is unreachable");
 /**
-                _context.banlist().banlistRouter(entry, " <b>➜</b> Floodfill is unreachable/firewalled", null, null, now + 4*60*60*1000);
+                _context.banlist().banlistRouter(entry, " <b>➜</b> Floodfill is unreachable / firewalled", null, null, now + 4*60*60*1000);
                 if (shouldDisconnect) {
                     _context.commSystem().mayDisconnect(entry);
                 }
                 if (_log.shouldWarn())
                     _log.warn("Temp banning Floodfill [" + entry.toBase64().substring(0,6) + "] for 4h -> Unreachable/firewalled");
 **/
-            } else if (info != null && hasSalt) {
-                badff.add(entry);
-                if (_log.shouldDebug())
-                    _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: RouterInfo has bogus 'salt' cap");
-                _context.banlist().banlistRouter(entry, " <b>➜</b> Floodfill has bogus 'salt' cap", null, null, now + 4*60*60*1000);
-                _context.commSystem().forceDisconnect(entry);
-                if (_log.shouldWarn())
-                    _log.warn("Banning for 4h and immediately disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> RouterInfo has 'salt' cap");
             } else if (sameIP) {
                 badff.add(entry);
                 if (_log.shouldDebug())
