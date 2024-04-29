@@ -86,6 +86,7 @@ public class RouterInfo extends DatabaseEntry {
     public static final String PROP_CAPABILITIES = "caps";
     public static final char CAPABILITY_HIDDEN = 'H';
     private static final int MAX_ADDRESSES = 16;
+    private static final int MAX_INTRODUCERS = 3;
 
     /**
      *  All legit RIs are currently under 2KB.
@@ -345,8 +346,8 @@ public class RouterInfo extends DatabaseEntry {
      * @since 0.9.24
      */
     private void writeDataBytes(OutputStream out) throws DataFormatException, IOException {
-        if (_identity == null) throw new DataFormatException("Missing identity");
-        if (_published < 0) throw new DataFormatException("Invalid published date: " + _published);
+        if (_identity == null) {throw new DataFormatException("Missing identity");}
+        if (_published < 0) {throw new DataFormatException("Invalid published date: " + _published);}
 
             _identity.writeBytes(out);
             DataHelper.writeLong(out, 8, _published);
@@ -355,9 +356,7 @@ public class RouterInfo extends DatabaseEntry {
             int sz = _addresses.size();
             out.write((byte) sz);
             if (sz > 0) {
-                for (RouterAddress addr : _addresses) {
-                    addr.writeBytes(out);
-                }
+                for (RouterAddress addr : _addresses) {addr.writeBytes(out);}
             }
             // XXX: what about peers?
             // answer: they're always empty... they're a placeholder for one particular
@@ -477,7 +476,7 @@ public class RouterInfo extends DatabaseEntry {
      * which you probably want if you care about IPv6.
      */
     public RouterAddress getTargetAddress(String transportStyle) {
-        for (RouterAddress addr :  _addresses) {
+        for (RouterAddress addr : _addresses) {
             if (addr.getTransportStyle().equals(transportStyle))
                 return addr;
         }
@@ -491,8 +490,8 @@ public class RouterInfo extends DatabaseEntry {
      */
     public List<RouterAddress> getTargetAddresses(String transportStyle) {
         List<RouterAddress> ret = new ArrayList<RouterAddress>(_addresses.size());
-        for (RouterAddress addr :  _addresses) {
-            if(addr.getTransportStyle().equals(transportStyle))
+        for (RouterAddress addr : _addresses) {
+            if (addr.getTransportStyle().equals(transportStyle))
                 ret.add(addr);
         }
         return ret;
@@ -507,7 +506,7 @@ public class RouterInfo extends DatabaseEntry {
      */
     public List<RouterAddress> getTargetAddresses(String transportStyle1, String transportStyle2) {
         List<RouterAddress> ret = new ArrayList<RouterAddress>(_addresses.size());
-        for (RouterAddress addr :  _addresses) {
+        for (RouterAddress addr : _addresses) {
             String style = addr.getTransportStyle();
             if (style.equals(transportStyle1) || style.equals(transportStyle2))
                 ret.add(addr);
@@ -524,8 +523,10 @@ public class RouterInfo extends DatabaseEntry {
 
         if (!_isValid) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(RouterInfo.class);
-            if (log.shouldWarn()) {
+            if (log.shouldInfo()) {
                 log.warn("Signature verify fail: " + toString(), new Exception("from"));
+            } else if (log.shouldWarn()) {
+                log.warn("RouterInfo [" + _identity.getHash().toBase64().substring(0,6) + "] has invalid signature");
             //} else {
             //    log.error("RI Sig verify fail: " + _identity.getHash());
             }
@@ -562,7 +563,7 @@ public class RouterInfo extends DatabaseEntry {
         // Even if not verifying, we have to construct a Signature object
         // below, which will fail for null type.
         if (type == null)
-            throw new DataFormatException("Unknown signature type");
+            throw new DataFormatException("Unknown Signature Type");
         if (verifySig) {
             if (type != SigType.EdDSA_SHA512_Ed25519) {
                 // This won't work for EdDSA
@@ -587,8 +588,7 @@ public class RouterInfo extends DatabaseEntry {
         _published = DataHelper.readLong(din, 8);
         // EOF will be thrown in properties read below
         int numAddresses = din.read();
-        if (numAddresses > MAX_ADDRESSES)
-            throw new DataFormatException("too many addresses");
+        if (numAddresses > MAX_ADDRESSES) {throw new DataFormatException("Too many addresses");}
         for (int i = 0; i < numAddresses; i++) {
             RouterAddress address = new RouterAddress();
             address.readBytes(din);
@@ -600,6 +600,7 @@ public class RouterInfo extends DatabaseEntry {
             _peers = null;
         } else {
             _peers = new HashSet<Hash>(numPeers);
+            if (numPeers > MAX_INTRODUCERS) {throw new DataFormatException("Too many introducers");}
             for (int i = 0; i < numPeers; i++) {
                 Hash peerIdentityHash = new Hash();
                 peerIdentityHash.readBytes(din);
@@ -617,13 +618,8 @@ public class RouterInfo extends DatabaseEntry {
                 hash.setData(digest.digest());
                 _isValid = DSAEngine.getInstance().verifySignature(_signature, hash, _identity.getSigningPublicKey());
                 _validated = true;
-            } else {
-                // doValidate will log
-                doValidate();
-            }
-            if (!_isValid) {
-                throw new DataFormatException("Bad RouterInfo signature");
-            }
+            } else {doValidate();} // doValidate will log
+            if (!_isValid) {throw new DataFormatException("Bad RouterInfo signature");}
         }
 
         //_log.debug("Read RouterInfo: " + toString());
