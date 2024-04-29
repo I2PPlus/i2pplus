@@ -163,11 +163,13 @@ public class SybilRenderer {
         buf.append("<li id=floodfillSummary><a href=\"netdb?f=3&amp;m=1\">" + _t("Floodfill Summary") + "</a></li>\n" +
                    "<li id=sameFamily><a href=\"netdb?f=3&amp;m=2\">" + _t("Same Family") + "</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=3\">" + _t("IP close to us") + "</a></li>\n" +
+/**
                    "<li><a href=\"netdb?f=3&amp;m=4\">" + _t("Same IP") + "</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=5\">" + _t("Same IPv4") + " /24</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=6\">" + _t("Same IPv4") + " /16</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=17\">"+ _t("Same IPv6") + " /64</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=18\">" + _t("Same IPv6") + " /48</a></li>\n" +
+**/
                    "<li><a href=\"netdb?f=3&amp;m=7\">" + _t("Pair distance") + "</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=8\">" + _t("Close to us") + "</a></li>\n" +
                    "<li><a href=\"netdb?f=3&amp;m=9\">" + _t("Close to us tomorrow") + "</a></li>\n" +
