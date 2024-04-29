@@ -33,67 +33,8 @@ class PacketHandler {
         //_lastDelay = _context.random().nextInt(30*1000);
     }
 
-/** what is the point of this ? */
-/*****
-    private boolean choke(Packet packet) {
-        if (true) return true;
-        //if ( (_dropped == 0) && true ) { //&& (_manager.getSent() <= 0) ) {
-        //    _dropped++;
-        //    return false;
-        //}
-        if (true) {
-            // artificial choke: 2% random drop and a 0-5s
-            // random tiered delay from 0-30s
-            if (_context.random().nextInt(100) >= 98) {
-                displayPacket(packet, "DROP", null);
-                return false;
-            } else {
-                // if (true) return true; // no lag, just drop
-                // int delay = _context.random().nextInt(5*1000);
-                int delay = _context.random().nextInt(1*1000);
-                int delayFactor = _context.random().nextInt(100);
-                if (delayFactor > 80) {
-                    if (delayFactor > 98)
-                        delay *= 5;
-                    else if (delayFactor > 95)
-                        delay *= 4;
-                    else if (delayFactor > 90)
-                        delay *= 3;
-                    else
-                        delay *= 2;
-                }
-
-                if (_context.random().nextInt(100) >= 20)
-                    delay = _lastDelay;
-
-                _lastDelay = delay;
-                SimpleTimer.getInstance().addEvent(new Reinject(packet, delay), delay);
-                return false;
-            }
-        } else {
-            return true;
-        }
-    }
-
-    private class Reinject implements SimpleTimer.TimedEvent {
-        private Packet _packet;
-        private int _delay;
-        public Reinject(Packet packet, int delay) {
-            _packet = packet;
-            _delay = delay;
-        }
-        public void timeReached() {
-            _log.debug("Reinjecting after " + _delay + ": " + _packet);
-            receivePacketDirect(_packet);
-        }
-    }
-*****/
-
-    /** */
     void receivePacket(Packet packet) {
-        //boolean ok = choke(packet);
-        //if (ok)
-            receivePacketDirect(packet, true);
+        receivePacketDirect(packet, true);
     }
 
     void receivePacketDirect(Packet packet, boolean queueIfNoConn) {
@@ -322,7 +263,8 @@ class PacketHandler {
                 // if it has a send ID, it's almost certainly for a recently removed connection.
                 if (_log.shouldWarn()) {
                     boolean recent = _manager.wasRecentlyClosed(packet.getSendStreamId());
-                    _log.warn("Dropping packet " + packet + " with SendStreamID but no connection found -> Recently disconnected? " + recent);
+                    _log.warn("Dropping packet " + packet + " with SendStreamID but no connection found -> " +
+                    (recent ? "Recently disconnected" : "Still connected"));
                 }
                 // don't bother sending reset
                 // TODO send reset if recent && has data?

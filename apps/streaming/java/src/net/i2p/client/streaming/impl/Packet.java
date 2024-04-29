@@ -891,15 +891,13 @@ class Packet {
     }
 
     private final void toFlagString(StringBuilder buf) {
-        if (isFlagSet(FLAG_SYNCHRONIZE)) buf.append(" SYN");
-        if (isFlagSet(FLAG_CLOSE)) buf.append(" CLOSE");
-        if (isFlagSet(FLAG_RESET)) buf.append(" RESET");
-        if (isFlagSet(FLAG_ECHO)) buf.append(" ECHO");
-        if (isFlagSet(FLAG_FROM_INCLUDED)) buf.append(" from ").append(_optionFrom.size()).append(" bytes;");
-        if (isFlagSet(FLAG_NO_ACK))
-            buf.append(" NoACK");
-        else
-            buf.append(" ACK ").append(getAckThrough());
+        if (isFlagSet(FLAG_SYNCHRONIZE)) {buf.append(" SYN");}
+        if (isFlagSet(FLAG_CLOSE)) {buf.append(" CLOSE");}
+        if (isFlagSet(FLAG_RESET)) {buf.append(" RESET");}
+        if (isFlagSet(FLAG_ECHO)) {buf.append(" ECHO");}
+        if (isFlagSet(FLAG_FROM_INCLUDED)) {buf.append(" from ").append(_optionFrom.size()).append(" bytes;");}
+        if (isFlagSet(FLAG_NO_ACK)) {buf.append(" NoACK");}
+        else {buf.append(" ACK ").append(getAckThrough());}
         if (_nacks != null) {
             buf.append(" NACK");
             for (int i = 0; i < _nacks.length; i++) {
@@ -911,18 +909,13 @@ class Packet {
         if (isFlagSet(FLAG_PROFILE_INTERACTIVE)) buf.append(" INTERACTIVE");
         if (isFlagSet(FLAG_SIGNATURE_REQUESTED)) buf.append(" SIGREQ");
         if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {
-            if (_transientExpires != 0)
-                buf.append(" TRANSEXP ").append(new Date(_transientExpires));
-            else
-                buf.append(" (no expiration)");
-            if (_transientSigningPublicKey != null)
+            if (_transientExpires != 0) {buf.append(" TRANSEXP ").append(new Date(_transientExpires));}
+            else {buf.append(" (no expiration)");}
+            if (_transientSigningPublicKey != null) {
                 buf.append(" TRANSKEY ").append(_transientSigningPublicKey.getType()).append(':').append(_transientSigningPublicKey.toBase64());
-            else
-                buf.append(" (no key data)");
-            if (_offlineSignature != null)
-                buf.append("\n* Offline Signature: ").append(_offlineSignature.getType());
-            else
-                buf.append(" (no offline sig data)");
+            } else {buf.append(" (no key data)");}
+            if (_offlineSignature != null) {buf.append("\n* Offline Signature: ").append(_offlineSignature.getType());}
+            else {buf.append(" (no offline sig data)");}
         }
         if (isFlagSet(FLAG_SIGNATURE_INCLUDED)) {
             if (_optionSignature != null)
