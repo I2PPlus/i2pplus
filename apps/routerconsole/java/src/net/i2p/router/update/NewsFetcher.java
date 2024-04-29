@@ -563,7 +563,7 @@ class NewsFetcher extends UpdateRunner {
         // only display if manually initiated
         if (_showStatus) {
             String msg = "Unable to connect to news server " + url + ": " + DataHelper.stripHTML(cause.toString());
-            updateStatus("<b>" + msg + "</b>");
+            updateStatus("<b class=fail>" + msg + "</b>");
             if (_log.shouldWarn())
                 _log.warn(msg);
         }
@@ -579,7 +579,7 @@ class NewsFetcher extends UpdateRunner {
         // only display if manually initiated
         if (_showStatus) {
             String msg = "Failed downloading news from " + url;
-            updateStatus("<b>" + msg + "</b>");
+            updateStatus("<b class=fail>" + msg + "</b>");
             if (_log.shouldWarn())
                 _log.warn(msg);
         }
