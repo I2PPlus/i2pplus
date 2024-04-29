@@ -324,7 +324,6 @@ public class PersistentDataStore extends TransientDataStore {
         boolean isFF = false;
         boolean hasIP = false;
         boolean noSSU = true;
-        boolean hasSalt = false;
         boolean isBadFF = isFF && noSSU;
         boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
         boolean isOlderThanCurrent = VersionComparator.comp(v, CURRENT_VERSION) < 0;
@@ -336,9 +335,6 @@ public class PersistentDataStore extends TransientDataStore {
         boolean noCountry = true;
         if (caps.contains("f")) {
             isFF = true;
-        }
-        if (caps.contains("salt")) {
-            hasSalt = true;
         }
         if (ip != null) {
             hasIP = true;
@@ -356,8 +352,6 @@ public class PersistentDataStore extends TransientDataStore {
             noCountry = false;
         }
 
-//        boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") ||
-//                         bw.equals("M") || bw.equals("N") || isBadFF || noSSU || hasSalt || !hasIP;
         boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") ||
                          bw.equals("M") || bw.equals("N");
         boolean isLTier = bw.equals("L");
@@ -399,7 +393,7 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Router is spoofing our IP address");
                         if (_log.shouldWarn())
-                            _log.warn("Temp banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 72h -> Router is spoofing our IP address!");
+                            _log.warn("Banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 72h -> Router is spoofing our IP address!");
                         _context.banlist().banlistRouter(key, " <b>➜</b> Spoofed IP address (ours)", null, null, _context.clock().now() + 72*60*60*1000);
                         _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
                         dbFile.delete();
@@ -407,7 +401,7 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> LU and older than " + CURRENT_VERSION);
                         if (_log.shouldWarn())
-                            _log.warn("Temp banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 8h -> LU and older than current version");
+                            _log.warn("Banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 8h -> LU and older than current version");
                         _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.59", null, null, _context.clock().now() + 8*60*60*1000);
                         _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
                         dbFile.delete();
@@ -415,9 +409,6 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Unreachable");
                         dbFile.delete();
-                    } else if (hasSalt) {
-                        if (_log.shouldDebug())
-                            _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Invalid 'salt' caps");
                     } else if (isBadFF) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Floodfill with SSU disabled");
@@ -430,20 +421,22 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Older than " + MIN_VERSION);
                         dbFile.delete();
+/**
                     } else if (noCountry && uptime > 10*60*1000) {
                         if (_log.shouldDebug())
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> IP address does not resolve via GeoIP");
                         if (_log.shouldWarn())
-                            _log.warn("Temp banning " + (isFF ? "Floodfill" : "Router") + " [" + key.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP");
+                            _log.warn("Banning " + (isFF ? "Floodfill" : "Router") + " [" + key.toBase64().substring(0,6) + "] for 15m -> Address not resolvable via GeoIP");
                         if (isFF) {
-                            _context.banlist().banlistRouter(key, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, _context.clock().now() + 4*60*60*1000);
+                            _context.banlist().banlistRouter(key, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, _context.clock().now() + 15*60*1000);
                         } else {
-                            _context.banlist().banlistRouter(key, " <b>➜</b> No GeoIP resolvable address", null, null, _context.clock().now() + 4*60*60*1000);
+                            _context.banlist().banlistRouter(key, " <b>➜</b> No GeoIP resolvable address", null, null, _context.clock().now() + 15*60*1000);
                         }
                         if (shouldDisconnect) {
                             _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
                         }
                         dbFile.delete();
+**/
                     } else {
                         // we've already written the file, no need to waste our time
                         if (_log.shouldDebug())
@@ -706,7 +699,6 @@ public class PersistentDataStore extends TransientDataStore {
                     boolean isFF = false;
                     boolean hasIP = false;
                     boolean noSSU = true;
-                    boolean isSalt = false;
                     String caps = "unknown";
                     if (ri != null) {
                         truncHash = h.toBase64().substring(0,6);
@@ -717,9 +709,6 @@ public class PersistentDataStore extends TransientDataStore {
                         }
                         if (ip != null) {
                             hasIP = true;
-                        }
-                        if (caps.contains("salt")) {
-                            isSalt = true;
                         }
                         for (RouterAddress ra : ri.getAddresses()) {
                             if (ra.getTransportStyle().equals("SSU") ||
@@ -753,13 +742,6 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldWarn())
                             _log.warn("Banning: [" + truncHash + "] for 8h -> Floodfill with SSU disabled");
                             _context.banlist().banlistRouter(_key, " <b>➜</b> Floodfill with SSU disabled", null, null, now + 8*60*60*1000);
-                    } else if (isSalt) {
-                        corrupt = true;
-                        if (_log.shouldInfo())
-                            _log.info("Not writing RouterInfo [" + truncHash + "] to disk -> RouterInfo has bogus 'salt' cap");
-                        if (_log.shouldWarn())
-                            _log.warn("Banning: [" + truncHash + "] for 8h -> RouterInfo has bogus 'salt' cap");
-                            _context.banlist().banlistRouter(_key, " <b>➜</b> RouterInfo has bogus 'salt' cap", null, null, now + 8*60*60*1000);
                     } else if (!h.equals(_key)) {
                         // prevent injection from reseeding
                         // this is checked in KNDF.validate() but catch it sooner and log as error.
