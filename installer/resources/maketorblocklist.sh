@@ -4,25 +4,39 @@
 # and then run this script in the same folder to generate
 # a consolidated, sorted list
 
-# Specify input and output file variables
+# Specify input, output, and proxy variables
 input_file="torbulkexitlist"
 output_file="blocklist_tor.txt"
+http_proxy="http://127.0.0.1:4444"
 
 # Variables for comments
 url="# https://check.torproject.org/torbulkexitlist"
 today="# $(date '+%d %B %Y')"
 
-# Check if the input file exists
-if [ ! -f $input_file ]; then
-  echo "Input file does not exist or is not a regular file."
-  echo "Please ensure $input_file exists and is in the directory this script is being run from"
+# Check if curl is installed
+if [ -z "$(which curl)" ]; then
+  echo "> curl is not installed. Please install curl to use this script."
+  exit 1
+fi
+
+# Remove existing input file if it exists
+if [ -f $input_file ]; then
+  rm $input_file
+  echo " > Deleted existing local copy of $input_file"
+fi
+
+# Download the latest list from Tor Project
+echo " > Downloading the latest list from Tor Project via specified proxy $http_proxy..."
+curl -o $input_file -x $http_proxy https://check.torproject.org/torbulkexitlist
+if [ $? -ne 0 ]; then
+  echo " > Failed to download the latest list. Please check your proxy settings and try again."
   exit 1
 fi
 
 # Count the number of IPs in the file
 ips_count=$(wc -l < $input_file)
-echo "Number of IPs in $input_file: $ips_count"
-echo "Sorting IPs and consolidating ranges, please stand by..."
+echo " > Number of IPs in $input_file: $ips_count"
+echo " > Sorting IPs and consolidating ranges, please stand by..."
 
 # Sort the list of IPs naturally
 sorted_ips=$(cat $input_file | sort -V)
@@ -65,5 +79,9 @@ output="$url\n$today\n$output"
 output=$(echo -e "$output" | sed -e '$ { /^$/d }')
 
 # Output the consolidated IPs to file
-echo "Consolidated IPs saved to: $output_file"
 echo -e "$output" > $output_file
+echo " > Consolidated IPs saved to: $output_file"
+
+# Clean up: Remove downloaded input file
+rm $input_file
+echo " > Deleted $input_file"
