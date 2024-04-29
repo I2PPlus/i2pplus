@@ -118,7 +118,7 @@ class ParticipatingThrottler {
             }
             rv = Result.DROP;
             if (_log.shouldWarn())
-                _log.warn("Temp banning " + (caps != "" ? caps : "") +
+                _log.warn("Banning " + (caps != "" ? caps : "") +
                           " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
                           " -> No router version in RouterInfo");
             context.banlist().banlistRouter(h, " <b>➜</b> No version in RouterInfo", null, null, context.clock().now() + bantime);
@@ -126,7 +126,7 @@ class ParticipatingThrottler {
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             rv = Result.DROP;
             if (_log.shouldWarn())
-                _log.warn("Temp banning " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] for 4h" +
+                _log.warn("Banning " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] for 4h" +
                           " -> Compressible RouterInfo / " + v);
             context.banlist().banlistRouter(h, " <b>➜</b> Compressible RouterInfo &amp; older than 0.9.57", null, null, context.clock().now() + 16*60*60*1000);
         } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isLU) {
@@ -137,7 +137,7 @@ class ParticipatingThrottler {
                               " -> " + v + (caps != "" ? " / " + caps : ""));
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Temp banning Router [" + h.toBase64().substring(0,6) + "] for " + (period*16) + "m" +
+                    _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (period*16) + "m" +
                               " -> " + v + (caps != "" ? " / " + caps : ""));
             }
             context.banlist().banlistRouter(h, " <b>➜</b> LU and older than current version", null, null, context.clock().now() + (bantime*4));
@@ -169,7 +169,7 @@ class ParticipatingThrottler {
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning fast " + (caps != "" ? caps : "") +
+                        _log.warn("Banning fast " + (caps != "" ? caps : "") +
                                   " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
                                   "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 11 / 9) +
                                   " in " + 11*60 / LIFETIME_PORTION + "s");
@@ -186,7 +186,7 @@ class ParticipatingThrottler {
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning mid-tier " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                        _log.warn("Banning mid-tier " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
                                   "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 10 / 9) +
                                   " in " + 11*60 / LIFETIME_PORTION + "s");
                 } else {
@@ -202,7 +202,7 @@ class ParticipatingThrottler {
                     // drop after any accepted tunnels have expired
                     context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                     if (_log.shouldWarn())
-                        _log.warn("Temp banning slow or unreachable " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                        _log.warn("Banning slow or unreachable " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
                                   "\n* Excessive tunnel requests -> Count/limit: " + count + "/" + (limit * 7 / 3) +
                                   " in " + 11*60 / LIFETIME_PORTION + "s");
                 } else {
