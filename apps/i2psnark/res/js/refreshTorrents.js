@@ -119,7 +119,11 @@ function refreshTorrents(callback) {
         }
         if (!xhrsnark.responseXML) {return;}
         const filterBarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
-        if (!filterBar && filterBarResponse) {window.requestAnimationFrame(refreshAll);}
+        if (!filterBar && filterBarResponse) {
+          const mainsection = document.getElementById("mainsection");
+          const mainsectionResponse = xhrsnark.responseXML?.getElementById("mainsection");
+          window.requestAnimationFrame(() => {mainsection.innerHTML = mainsectionResponse.innerHTML;});
+        }
       }
       if (updatingResponse && updating.length === updatingResponse.length) {
         for (let i = 0; i < updating.length; i++) {
