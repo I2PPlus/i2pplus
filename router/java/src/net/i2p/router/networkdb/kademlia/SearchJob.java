@@ -305,7 +305,7 @@ class SearchJob extends JobImpl {
             boolean onlyFloodfill = true;
             if (_floodfillPeersExhausted && onlyFloodfill && _state.getPending().isEmpty()) {
                 if (_log.shouldWarn())
-                    _log.warn("[DbId: " + _facade + "] No non-Floodfill peers left, and no more search queries pending. Searched: " +
+                    _log.warn("No non-Floodfill peers left, and no more search queries pending. Searched: " +
                               _state.getAttempted().size() + " Failed: " + _state.getFailed().size());
                 fail();
                 return;
@@ -338,7 +338,7 @@ class SearchJob extends JobImpl {
                         getContext().netDb().lookupRouterInfo(peer, null, null, _timeoutMs);
                     } else if (!(ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {
                         if (_log.shouldWarn())
-                            _log.warn("[DbId: " + _facade + "] Error selecting closest hash that wasn't a router! "
+                            _log.warn("Error selecting closest hash that wasn't a router! "
                                       + peer + " : " + ds.getClass().getName());
                         _state.replyTimeout(peer);
                     } else {
@@ -516,7 +516,7 @@ class SearchJob extends JobImpl {
         I2NPMessage msg = buildMessage(null, to, expiration, router);
         if (msg == null) {
             if (_log.shouldWarn())
-                _log.warn("[DbId: " + _facade + "] Failed to create DatabaseLookupMessage to: " + router);
+                _log.warn("Failed to create DatabaseLookupMessage to: " + router);
             getContext().jobQueue().addJob(new FailedJob(getContext(), router));
             return;
         }
