@@ -63,17 +63,20 @@ class ProfileOrganizerRenderer {
         int ff = 0;
         for (Hash peer : peers) {
             PeerProfile prof = _organizer.getProfileNonblocking(peer);
+            if (prof == null) {break;}
             int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
             int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
-            if (prof == null) continue;
-            if (_organizer.getUs().equals(peer) || prof.getLastHeardFrom() <= 0 || (agreed <= 0 && rejected <= 0)) continue;
+            if (_organizer.getUs().equals(peer) || prof.getLastHeardFrom() <= 0 || (agreed <= 0 && rejected <= 0)) {
+                continue;
+            }
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
             if (mode == 2) {
-                if (info != null && info.getCapabilities().indexOf('f') >= 0)
-                order.add(prof);
-                ff++;
-                continue;
+                if (info != null && info.getCapabilities().indexOf('f') >= 0) {
+                    order.add(prof);
+                    ff++;
+                    continue;
+                }
             }
 //            if (prof.getLastSendSuccessful() <= hideBefore) {
             if (mode != 2 && (prof.getLastHeardFrom() <= hideBefore || prof.getLastSendSuccessful() <= hideBefore) && !prof.getIsActive()) {
@@ -416,7 +419,6 @@ class ProfileOrganizerRenderer {
                 boolean isBanned = _context.banlist().isBanlisted(peer);
                 boolean isUnreachable = info != null && info.getCapabilities().indexOf('U') >= 0;
                 boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
-                boolean hasSalt = info != null && info.getCapabilities().contains("salt");
                 int displayed = 0;
                 boolean isResponding = prof.getDbResponseTime() != null;
                 boolean isGood = prof.getLastSendSuccessful() > 0 && isResponding &&

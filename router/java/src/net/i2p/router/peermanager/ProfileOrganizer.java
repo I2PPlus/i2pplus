@@ -226,7 +226,6 @@ public class ProfileOrganizer {
         String cap = null;
         String version = "0.8";
         boolean noSSU = true;
-        boolean hasSalt = false;
         boolean isFF = false;
         boolean reachable = true;
         if (peerInfo != null) {
@@ -235,7 +234,6 @@ public class ProfileOrganizer {
             version = peerInfo.getVersion();
             reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
             isFF = cap.contains("f");
-            hasSalt = cap != null && cap != "" && cap.contains("salt");
             for (RouterAddress ra : peerInfo.getAddresses()) {
                 if (ra.getTransportStyle().equals("SSU") ||
                     ra.getTransportStyle().equals("SSU2"))
@@ -252,20 +250,15 @@ public class ProfileOrganizer {
                     _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M, N or Unreachable");
                 return null;
             }
-            if (hasSalt) {
-                if (_log.shouldInfo())
-                    _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Invalid caps 'salt' in RouterInfo");
-                return null;
-            }
             if (isFF && noSSU) {
                 if (_log.shouldInfo())
                     _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
                 return null;
             }
 
-            if (VersionComparator.comp(version, "0.9.57") < 0) {
+            if (VersionComparator.comp(version, "0.9.60") < 0) {
                 if (_log.shouldInfo())
-                    _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Older than 0.9.57");
+                    _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Older than 0.9.60");
                return null;
             }
         }
@@ -322,7 +315,6 @@ public class ProfileOrganizer {
         String cap = "";
         String version = "0.8";
         boolean noSSU = true;
-        boolean hasSalt = false;
         boolean isFF = false;
         boolean reachable = true;
         RouterInfo us = _context.netDb().lookupRouterInfoLocally(_context.routerHash());
@@ -336,7 +328,6 @@ public class ProfileOrganizer {
             if (cap != null && !cap.equals("") && !isUs) {
                 reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
                 isFF = cap.contains("f");
-                hasSalt = cap.contains("salt");
             }
             for (RouterAddress ra : peerInfo.getAddresses()) {
                 if (ra.getTransportStyle().equals("SSU") ||
@@ -357,17 +348,13 @@ public class ProfileOrganizer {
             if (_log.shouldInfo())
                 _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M, N or Unreachable");
             return null;
-        } else if (peer != null && hasSalt) {
-            if (_log.shouldInfo())
-                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Invalid caps 'salt' in RouterInfo");
-            return null;
         } else if (peer != null && isFF && noSSU) {
             if (_log.shouldInfo())
                 _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
             return null;
-        } else if (peer != null && VersionComparator.comp(version, "0.9.57") < 0) {
+        } else if (peer != null && VersionComparator.comp(version, "0.9.60") < 0) {
             if (_log.shouldInfo())
-                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Older than 0.9.57");
+                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> Older than 0.9.60");
            return null;
         } else {
             if (_log.shouldInfo())
@@ -391,14 +378,12 @@ public class ProfileOrganizer {
             if (old == null)
                 _notFailingPeersList.add(peer);
             // Add to high cap only if we have room. Don't add to Fast; wait for reorg.
-            if (prof != null && (isSlow || (isFF && noSSU) || hasSalt || (isFF && !reachable))) {
+            if (prof != null && (isSlow || (isFF && noSSU) || (isFF && !reachable))) {
                 prof.setCapacityBonus(-30);
                 _highCapacityPeers.remove(peer, profile);
                 if (_log.shouldInfo()) {
                     if (isFF && !reachable)
                         _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> Unreachable/firewalled Floodfill");
-                    else if (hasSalt)
-                        _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> Invalid caps 'salt' in RouterInfo");
                     else if (isFF && noSSU)
                         _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> Floodfill with SSU disabled ");
                     else if (isSlow)
@@ -407,7 +392,7 @@ public class ProfileOrganizer {
             }
             if (_thresholdCapacityValue <= profile.getCapacityValue() && isSelectable(peer) &&
                 _highCapacityPeers.size() < getMaximumHighCapPeers()) {
-                    if (peerInfo != null && cap != null && reachable && !isSlow && !hasSalt && !(isFF && noSSU))
+                    if (peerInfo != null && cap != null && reachable && !isSlow && !(isFF && noSSU))
                         _highCapacityPeers.put(peer, profile);
             }
             _strictCapacityOrder.add(profile);
