@@ -148,6 +148,7 @@ class RefreshRoutersJob extends JobImpl {
                 boolean isFF = false;
                 String country = "unknown";
                 boolean noCountry = true;
+
                 if (ri != null) {
                     caps = ri.getCapabilities().toUpperCase();
                     if (caps.contains("F")) {
@@ -210,17 +211,17 @@ class RefreshRoutersJob extends JobImpl {
                                    (rapidScan / 60 / 1000) + "m old \n* Published: " + new Date(ri.getPublished()));
                     } else if (uninteresting && !refreshUninteresting && !isHidden) {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> Uninteresting");
-/**
                     } else if (noSSU && isFF) {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
+/**
                     } else if (noCountry && uptime > 45*1000) {
                         _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] -> Address not resolvable via GeoIP");
                         if (_log.shouldWarn())
-                            _log.warn("Temp banning " + (isFF ? "Floodfill" : "Router") + " [" + h.toBase64().substring(0,6) + "] for 4h -> Address not resolvable via GeoIP");
+                            _log.warn("Banning " + (isFF ? "Floodfill" : "Router") + " [" + h.toBase64().substring(0,6) + "] for 15m -> Address not resolvable via GeoIP");
                         if (isFF) {
-                            getContext().banlist().banlistRouter(h, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, getContext().clock().now() + 4*60*60*1000);
+                            getContext().banlist().banlistRouter(h, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, getContext().clock().now() + 15*60*1000);
                         } else {
-                            getContext().banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address", null, null, getContext().clock().now() + 4*60*60*1000);
+                            getContext().banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address", null, null, getContext().clock().now() + 15*60*1000);
                         }
                         if (shouldDisconnect) {
                             getContext().simpleTimer2().addEvent(new Disconnector(h), 3*1000);
