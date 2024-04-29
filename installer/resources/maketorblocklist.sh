@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Download https://check.torproject.org/torbulkexitlist
-# and then run this script in the same folder to generate
-# a consolidated, sorted list
+# Downloads https://check.torproject.org/torbulkexitlist
+# using specified http proxy and then creates a consolidated,
+# sorted list and removes the downloaded file
 
 # Specify input, output, and proxy variables
 input_file="torbulkexitlist"
