@@ -56,7 +56,7 @@ class ProfileOrganizerRenderer {
         boolean ffmode = local != null && local.getCapabilities().indexOf('f') >= 0;
         Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
-        long hideBefore = ffmode ? now - 15*60*1000 : !ffmode && mode == 2 ? now - 60*60*1000 : now - 15*60*1000;
+        long hideBefore = ffmode ? now - 20*60*1000 : !ffmode && mode == 2 ? now - 60*60*1000 : now - 20*60*1000;
         Set<PeerProfile> order = new TreeSet<PeerProfile>(mode == 2 ? new HashComparator() : new ProfileComparator());
         int older = 0;
         int standard = 0;
@@ -66,13 +66,11 @@ class ProfileOrganizerRenderer {
             if (prof == null) {break;}
             int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
             int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
-            if (_organizer.getUs().equals(peer) || prof.getLastHeardFrom() <= 0 || (agreed <= 0 && rejected <= 0)) {
-                continue;
-            }
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
+            if (_organizer.getUs().equals(peer) || prof.getLastHeardFrom() <= 0 || (agreed <= 0 && rejected <= 0)) {continue;}
             if (mode == 2) {
-                if (info != null && info.getCapabilities().indexOf('f') >= 0) {
+                if (isFF) {
                     order.add(prof);
                     ff++;
                     continue;
