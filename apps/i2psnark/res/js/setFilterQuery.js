@@ -20,8 +20,8 @@ function setFilterQuery() {
     }
   });
 
+  if (!cancelSearch) {return;}
   cancelSearch.addEventListener("click", (event) => {
-    if (!cancelSearch) {return;}
     if (event.target.href.includes("i2psnark")) {
       const filter = localStorage.getItem("snarkFilter");
       if (filter && filter !== "all" && filter !== "") {
@@ -33,4 +33,3 @@ function setFilterQuery() {
 }
 
 document.addEventListener("DOMContentLoaded", setFilterQuery);
-

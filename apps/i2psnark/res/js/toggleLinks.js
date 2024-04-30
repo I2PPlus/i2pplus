@@ -58,7 +58,7 @@ function initLinkToggler() {
 }
 
 function attachToggleListener() {
-  if (!main.classList.contains("toggleListenerAttached")) {
+  if (torrentlist && !main.classList.contains("toggleListenerAttached")) {
     torrentlist.addEventListener("click", toggleHandler);
     torrentlist.classList.add("toggleListenerAttached");
   }
