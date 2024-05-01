@@ -5460,7 +5460,7 @@ msgstr[0] "نمایش پروفایل های {0} اخیر."
 msgstr[1] "نمایش مشخصات {0} اخیر."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:99
-msgid "active in the last 15 minutes"
+msgid "active in the last 20 minutes"
 msgstr "در 15 دقیقه گذشته فعال است"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101

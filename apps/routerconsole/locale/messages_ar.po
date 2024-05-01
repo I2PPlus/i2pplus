@@ -5504,7 +5504,7 @@ msgstr[4] "عرض {0} ملفات تعريف حديثة."
 msgstr[5] "عرض {0} ملفات تعريف حديثة."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:99
-msgid "active in the last 15 minutes"
+msgid "active in the last 20 minutes"
 msgstr "نشط في آخر 15 دقيقة"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101

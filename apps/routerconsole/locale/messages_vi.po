@@ -5449,7 +5449,7 @@ msgid_plural "Showing {0} recent profiles."
 msgstr[0] "Hiển thị {0} Hồ sơ gần đây."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:99
-msgid "active in the last 15 minutes"
+msgid "active in the last 20 minutes"
 msgstr "hoạt động trong 15 phút qua"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101

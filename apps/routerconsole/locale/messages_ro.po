@@ -5471,7 +5471,7 @@ msgstr[1] "Afișarea {0} profiluri recente."
 msgstr[2] "Afișarea {0} profiluri recente."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:99
-msgid "active in the last 15 minutes"
+msgid "active in the last 20 minutes"
 msgstr "activ în ultimele 15 minute"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101

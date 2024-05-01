@@ -5460,7 +5460,7 @@ msgstr[0] "{0} aktuelles Profil wird angezeigt."
 msgstr[1] "Es werden {0} aktuelle Profile angezeigt."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:99
-msgid "active in the last 15 minutes"
+msgid "active in the last 20 minutes"
 msgstr "aktiv in den letzten 15 Minuten"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101

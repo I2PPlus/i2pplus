@@ -5449,7 +5449,7 @@ msgid_plural "Showing {0} recent profiles."
 msgstr[0] "최근 프로필 {0}개를 표시 중입니다."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:99
-msgid "active in the last 15 minutes"
+msgid "active in the last 20 minutes"
 msgstr "지난 15분 동안 활성 상태"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101

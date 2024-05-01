@@ -5460,7 +5460,7 @@ msgstr[0] "Εμφάνιση {0} Πρόσφατο προφίλ."
 msgstr[1] "Εμφάνιση {0} Πρόσφατα προφίλ."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:99
-msgid "active in the last 15 minutes"
+msgid "active in the last 20 minutes"
 msgstr "ενεργό τα τελευταία 15 λεπτά"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101

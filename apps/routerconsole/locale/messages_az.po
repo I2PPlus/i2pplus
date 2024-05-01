@@ -5460,7 +5460,7 @@ msgstr[0] "Göstərici {0} son profil."
 msgstr[1] "Göstərmək {0} son profillər."
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:99
-msgid "active in the last 15 minutes"
+msgid "active in the last 20 minutes"
 msgstr "son 15 dəqiqə ərzində aktivdir"
 
 #: ../java/src/net/i2p/router/web/helpers/ProfileOrganizerRenderer.java:101
