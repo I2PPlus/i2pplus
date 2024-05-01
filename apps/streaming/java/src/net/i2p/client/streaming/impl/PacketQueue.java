@@ -295,7 +295,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             case MessageStatusMessage.STATUS_SEND_FAILURE_EXPIRED:
             // overflow in router-side I2CP queue, sent as of 0.9.29, will be retried
             case MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL:
-                if (_log.shouldWarn())
+                if (_log.shouldInfo())
                     _log.warn("Received Soft Failure status [" + status + "] for [MsgID " + msgId + "] \n* " + con);
                 _messageStatusMap.remove(id);
                 break;
