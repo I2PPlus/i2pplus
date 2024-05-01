@@ -62,12 +62,10 @@ class ProfilePersistenceHelper {
         _log = ctx.logManager().getLog(ProfilePersistenceHelper.class);
         String dir = _context.getProperty(PROP_PEER_PROFILE_DIR, DEFAULT_PEER_PROFILE_DIR);
         _profileDir = new SecureDirectory(_context.getRouterDir(), dir);
-        if (!_profileDir.exists())
-            _profileDir.mkdirs();
+        if (!_profileDir.exists()) {_profileDir.mkdirs();}
         for (int j = 0; j < B64.length(); j++) {
             File subdir = new SecureDirectory(_profileDir, DIR_PREFIX + B64.charAt(j));
-            if (!subdir.exists())
-                subdir.mkdir();
+            if (!subdir.exists()) {subdir.mkdir();}
         }
     }
 
@@ -108,17 +106,11 @@ class ProfilePersistenceHelper {
     @SuppressWarnings("deprecation")
     public void writeProfile(PeerProfile profile, OutputStream out, boolean addComments) throws IOException {
         String groups = null;
-        //if (_context.profileOrganizer().isFailing(profile.getPeer())) {
-        //    groups = "Failing";
-        if (!_context.profileOrganizer().isHighCapacity(profile.getPeer())) {
-            groups = "Standard";
-        } else {
-            if (_context.profileOrganizer().isFast(profile.getPeer()))
-                groups = "Fast, High Capacity";
-            else
-                groups = "High Capacity";
-            if (_context.profileOrganizer().isWellIntegrated(profile.getPeer()))
-                groups = groups + ", Integrated";
+        if (!_context.profileOrganizer().isHighCapacity(profile.getPeer())) {groups = "Standard";}
+        else {
+            if (_context.profileOrganizer().isFast(profile.getPeer())) {groups = "Fast, High Capacity";}
+            else {groups = "High Capacity";}
+            if (_context.profileOrganizer().isWellIntegrated(profile.getPeer())) {groups = groups + ", Integrated";}
         }
 
         StringBuilder buf = new StringBuilder(512);
@@ -130,8 +122,7 @@ class ProfilePersistenceHelper {
         if (addComments) {
             buf.append(HR).append(NL);
             buf.append("# Profile for peer: ").append(profile.getPeer().toBase64()).append(NL);
-            if (_us != null)
-                buf.append("# as calculated by ").append(_us.toBase64()).append(NL);
+            if (_us != null) {buf.append("# as calculated by ").append(_us.toBase64()).append(NL);}
             buf.append(HR).append(NL);
             // TODO: copy version, sig, caps to parent header?
             buf.append("#").append(TAB).append("Version:").append(TAB);
@@ -141,12 +132,10 @@ class ProfilePersistenceHelper {
             }
             buf.append(NL);
             buf.append("#").append(TAB).append("Signature:").append(TAB);
-            if (info != null)
-                buf.append(DataHelper.stripHTML(info.getIdentity().getSigningPublicKey().getType().toString()));
+            if (info != null) {buf.append(DataHelper.stripHTML(info.getIdentity().getSigningPublicKey().getType().toString()));}
             buf.append(NL);
             buf.append("#").append(TAB).append("Capabilities:").append(TAB);
-            if (info != null)
-                buf.append(DataHelper.stripHTML(info.getCapabilities()).toUpperCase().replace("XO", "X").replace("PO", "P"));
+            if (info != null) {buf.append(DataHelper.stripHTML(info.getCapabilities()).toUpperCase().replace("XO", "X").replace("PO", "P"));}
             buf.append(NL);
             buf.append("#").append(TAB).append("Speed:").append(TAB).append(TAB).append(speed).append(" Bps").append(NL);
             buf.append("#").append(TAB).append("Capacity:").append(TAB).append(capacity).append(" tunnels/hour").append(NL);
@@ -169,13 +158,12 @@ class ProfilePersistenceHelper {
         if (profile.getLastSendFailed() != 0)
             addDate(buf, addComments, "lastFailedSend", profile.getLastSendFailed(), "Last failed message to sent peer:");
         if (profile.getTunnelTestTimeAverage() != 0 && PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME)
-            add(buf, addComments, "tunnelTestTimeAverage", profile.getTunnelTestTimeAverage(), "Average peer response time: " +  profile.getTunnelTestTimeAverage());
+            add(buf, addComments, "tunnelTestTimeAverage", (long) profile.getTunnelTestTimeAverage(), "Average peer response time: " +  (long) profile.getTunnelTestTimeAverage());
         // TODO: needs clarification - difference between tunnel peak and tunnel peak tunnel? And round down KBps display to 2 decimal places
-        add(buf, addComments, "tunnelPeakThroughput", profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + profile.getPeakThroughputKBps() + " KBps");
-        add(buf, addComments, "tunnelPeakTunnelThroughput", profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput: " + profile.getPeakTunnelThroughputKBps() + " KBps");
-        add(buf, addComments, "tunnelPeakTunnel1mThroughput", profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute: " + profile.getPeakTunnel1mThroughputKBps() + " KBps");
-        if (addComments)
-            buf.append(NL);
+        add(buf, addComments, "tunnelPeakThroughput", (long) profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + (long) profile.getPeakThroughputKBps() + " KBps");
+        add(buf, addComments, "tunnelPeakTunnelThroughput", (long) profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput: " + (long) profile.getPeakTunnelThroughputKBps() + " KBps");
+        add(buf, addComments, "tunnelPeakTunnel1mThroughput", (long) profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute: " + (long) profile.getPeakTunnel1mThroughputKBps() + " KBps");
+        if (addComments) {buf.append(NL);}
 
         out.write(buf.toString().getBytes("UTF-8"));
 
@@ -210,18 +198,8 @@ class ProfilePersistenceHelper {
 
     /** @since 0.8.5 */
     private static void add(StringBuilder buf, boolean addComments, String name, long val, String description) {
-        if (addComments)
-            buf.append("# ").append(description).append(NL);
-        else
-            buf.append(name).append('=').append(val).append(NL);
-    }
-
-    /** @since 0.8.5 */
-    private static void add(StringBuilder buf, boolean addComments, String name, float val, String description) {
-        if (addComments)
-            buf.append("# ").append(description).append(NL);
-        else
-            buf.append(name).append('=').append(val).append(NL);
+        if (addComments) {buf.append("# ").append(description).append(NL);}
+        else {buf.append(name).append('=').append(val).append(NL);}
     }
 
     public List<PeerProfile> readProfiles() {
@@ -246,8 +224,7 @@ class ProfilePersistenceHelper {
             }
         }
         long duration = System.currentTimeMillis() - start;
-        if (_log.shouldInfo())
-            _log.info("Loaded " + count + " profiles in " + duration + "ms");
+        if (_log.shouldInfo()) {_log.info("Loaded " + count + " peer profiles in " + duration + "ms");}
         return profiles;
     }
 
@@ -301,18 +278,17 @@ class ProfilePersistenceHelper {
         List<File> files = selectFiles();
         int i = 0;
         for (File f : files) {
-            if (!f.isFile())
-                continue;
+            if (!f.isFile()) {continue;}
             if (f.lastModified() < cutoff) {
                 i++;
+                f.delete();
                 //_log.warn("Not deleting " + f + " (debugging active)");
-                //f.delete();
             }
         }
         if (_log.shouldWarn()) {
             if (i > 0) {
-                //_log.warn("Deleted " + i + " stale peer profiles");
-                _log.warn("Not deleting " + i + " (stale?) peer profiles -> Will expire when read at startup");
+                _log.warn("Deleted " + i + " stale peer profiles");
+                //_log.warn("Not deleting " + i + " (stale?) peer profiles -> Will expire when read at startup");
             }
         }
         return i;
@@ -332,7 +308,8 @@ class ProfilePersistenceHelper {
         Hash peer = getHash(file.getName());
         try {
             if (peer == null) {
-                _log.error("Peer profile: " + file.getName() + " is not a valid hash");
+                if (_log.shouldError()) {_log.error("Peer profile: " + file.getName() + " is not a valid hash");}
+                file.delete();
                 return null;
             }
             PeerProfile profile = new PeerProfile(_context, peer);
@@ -341,21 +318,23 @@ class ProfilePersistenceHelper {
             loadProps(props, file);
 
             long lastSentToSuccessfully = getLong(props, "lastSentToSuccessfully");
+            long lastHeardFrom = getLong(props, "lastHeardFrom");
             RouterInfo info = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
             String caps = "";
-            if (info != null)
-                caps = DataHelper.stripHTML(info.getCapabilities());
+            if (info != null) {caps = DataHelper.stripHTML(info.getCapabilities());}
+            else {
+                file.delete();
+                return null;
+            }
 
-            if (lastSentToSuccessfully <= cutoff) {
-                if (_log.shouldDebug())
-                    _log.debug("Dropping stale profile: " + file.getName());
+            if (lastSentToSuccessfully <= cutoff && lastHeardFrom <= cutoff) {
+                if (_log.shouldDebug()) {_log.debug("Dropping stale profile: " + file.getName());}
                 file.delete();
                 return null;
             } else if (caps.contains("K") || caps.contains("L") ||
                        caps.contains("M") || caps.contains("N") ||
                        caps.contains("U") || !caps.contains("R")) {
-                if (_log.shouldDebug())
-                    _log.debug("Dropping uninteresting profile: " + file.getName());
+                if (_log.shouldDebug()) {_log.debug("Dropping uninteresting profile: " + file.getName());}
                 file.delete();
                 return null;
             } else if (file.getName().endsWith(OLD_SUFFIX)) {
@@ -363,9 +342,7 @@ class ProfilePersistenceHelper {
                 String newName = file.getAbsolutePath();
                 newName = newName.substring(0, newName.length() - OLD_SUFFIX.length()) + SUFFIX;
                 boolean success = file.renameTo(new File(newName));
-                if (!success)
-                    // new file exists and on Windows?
-                    file.delete();
+                if (!success) {file.delete();} // new file exists and on Windows?
             }
 
             profile.setCapacityBonus((int) getLong(props, "capacityBonus"));
