@@ -33,8 +33,9 @@ class ClientWriterRunner implements Runnable {
     //private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(ClientWriterRunner.class);
 
 //    private static final int MAX_QUEUE_SIZE = 32;
-    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 32 : 256;
-    private static final long MAX_SEND_WAIT = 10*1000;
+//    private static final long MAX_SEND_WAIT = 10*1000;
+    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 32 : SystemVersion.getCores() < 4 ? 128 : 256;
+    private static final long MAX_SEND_WAIT = SystemVersion.isSlow() || SystemVersion.getCores() < 4 ? 10*1000 : 8*1000;
 
     /**
      *  As of 0.9.11 does not start the thread, caller must call startWriting()
@@ -50,6 +51,7 @@ class ClientWriterRunner implements Runnable {
      */
     public void startWriting() {
         Thread t = new I2PAppThread(this, "I2CP Client Writer " + __Id.incrementAndGet(), true);
+        t.setPriority(Thread.MAX_PRIORITY - 1);
         t.start();
     }
 
@@ -73,21 +75,16 @@ class ClientWriterRunner implements Runnable {
      */
     public void stopWriting() {
         _messagesToWrite.clear();
-        try {
-            _messagesToWrite.put(new PoisonI2CPMessage());
-        } catch (InterruptedException ie) {}
+        try {_messagesToWrite.put(new PoisonI2CPMessage());}
+        catch (InterruptedException ie) {}
     }
 
     public void run() {
         I2CPMessage msg;
         while (!_session.isClosed()) {
-            try {
-                msg = _messagesToWrite.take();
-            } catch (InterruptedException ie) {
-                continue;
-            }
-            if (msg.getType() == PoisonI2CPMessage.MESSAGE_TYPE)
-                break;
+            try {msg = _messagesToWrite.take();}
+            catch (InterruptedException ie) {continue;}
+            if (msg.getType() == PoisonI2CPMessage.MESSAGE_TYPE) {break;}
             // only thread, we don't need synchronized
             try {
                 msg.writeMessage(_out);
