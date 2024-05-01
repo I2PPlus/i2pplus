@@ -41,29 +41,24 @@ class SearchReplyJob extends JobImpl {
         _searchJob = job;
         _msg = message;
         _peer = peer;
-        if (duration > 0)
-            _duration = duration;
-        else
-            _duration = 0;
+        if (duration > 0) {_duration = duration;}
+        else {_duration = 0;}
     }
 
     public String getName() { return "Process Kademlia Search Reply"; }
 
     public void runJob() {
         int count = _msg.getNumReplies();
-        for (int i = 0; i < count; i++) {
-            processPeer(i);
-        }
+        int count = Math.min(_msg.getNumReplies(), 2 * SingleLookupJob.MAX_TO_FOLLOW);
+        for (int i = 0; i < count; i++) {processPeer(i);}
 
         if (count == 0 && _log.shouldDebug())
             _log.debug("[Job " + getJobId() + "] DbSearchReply received with no routers referenced");
 
         // either they didn't tell us anything new or we have verified
         // (or failed to verify) all of them.  we're done
-        getContext().profileManager().dbLookupReply(_peer, _newPeers, _seenPeers,
-                                                    0, _duplicatePeers, _duration);
-        if (_newPeers > 0)
-            _searchJob.newPeersFound(_newPeers);
+        getContext().profileManager().dbLookupReply(_peer, _newPeers, _seenPeers, 0, _duplicatePeers, _duration);
+        if (_newPeers > 0) {_searchJob.newPeersFound(_newPeers);}
     }
 
     private void processPeer(int curIndex) {
@@ -99,17 +94,13 @@ class SearchReplyJob extends JobImpl {
                 }
             }
 
-            if (_searchJob.wasAttempted(peer)) {
-                _duplicatePeers++;
-            }
+            if (_searchJob.wasAttempted(peer)) {_duplicatePeers++;}
             if (_log.shouldDebug())
                 _log.debug("[Job " + getJobId() + "] DbSearchReply received on search, referencing Router [" + peer.toBase64().substring(0,6) +
                            "] - Already known? " + (info != null));
             if (shouldAdd) {
-                if (_searchJob.add(peer))
-                    _newPeers++;
-                else
-                    _seenPeers++;
+                if (_searchJob.add(peer)) {_newPeers++;}
+                else {_seenPeers++;}
             }
     }
 }
