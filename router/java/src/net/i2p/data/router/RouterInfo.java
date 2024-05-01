@@ -86,7 +86,7 @@ public class RouterInfo extends DatabaseEntry {
     public static final String PROP_CAPABILITIES = "caps";
     public static final char CAPABILITY_HIDDEN = 'H';
     private static final int MAX_ADDRESSES = 16;
-    private static final int MAX_INTRODUCERS = 3;
+    private static final int MAX_INTRODUCERS = 5;
 
     /**
      *  All legit RIs are currently under 2KB.
