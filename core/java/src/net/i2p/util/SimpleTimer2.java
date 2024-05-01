@@ -136,11 +136,6 @@ public class SimpleTimer2 {
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
             rv.setName(_name + ' ' + _count.incrementAndGet() + '/' + _threads);
-// Uncomment this to test threadgrouping, but we should be all safe now that the constructor preallocates!
-//            String name = rv.getThreadGroup().getName();
-//            if(!name.equals("main")) {
-//                (new Exception("OWCH! DAMN! Wrong ThreadGroup `" + name +"', `" + rv.getName() + "'")).printStackTrace();
-//           }
             rv.setDaemon(true);
             rv.setPriority(Thread.MAX_PRIORITY - 1);
             return rv;
@@ -552,7 +547,7 @@ public class SimpleTimer2 {
             return getClass().getSimpleName();
         }
 
-        /** 
+        /**
          * Simple interface for events to be queued up and notified on expiration
          * the time requested has been reached (this call should NOT block,
          * otherwise the whole SimpleTimer gets backed up)
