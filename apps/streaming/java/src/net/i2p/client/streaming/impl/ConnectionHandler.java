@@ -2,7 +2,8 @@ package net.i2p.client.streaming.impl;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+//import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import net.i2p.I2PAppContext;
@@ -13,6 +14,7 @@ import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.util.SystemVersion;
 
 /**
  * Receive new connection attempts
@@ -27,21 +29,23 @@ class ConnectionHandler {
     private final Log _log;
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
     private final ConnectionManager _manager;
-    private final LinkedBlockingQueue<Packet> _synQueue;
+    private final LinkedBlockingDeque<Packet> _synQueue;
+    //private final LinkedBlockingQueue<Packet> _synQueue;
     private final SimpleTimer2 _timer;
     private volatile boolean _active;
     private int _acceptTimeout;
     private boolean _restartPending;
 
     /** max time after receiveNewSyn() and before the matched accept() */
-    private static final int DEFAULT_ACCEPT_TIMEOUT = 3*1000;
+    //private static final int DEFAULT_ACCEPT_TIMEOUT = 3*1000;
+    private static final int DEFAULT_ACCEPT_TIMEOUT = SystemVersion.isSlow() ? 5*1000 : 4*1000;
 
     /**
      *  This is both SYNs and subsequent packets, and with an initial window size of 12,
      *  this is a backlog of 5 to 64 Syns, which seems like plenty for now
      *  Don't make this too big because the removal by all the TimeoutSyns is O(n**2) - sortof.
      */
-    private static final int MAX_QUEUE_SIZE = 64;
+    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 128;
 
     /** Creates a new instance of ConnectionHandler */
     public ConnectionHandler(I2PAppContext context, ConnectionManager mgr, SimpleTimer2 timer) {
@@ -49,7 +53,8 @@ class ConnectionHandler {
         _log = context.logManager().getLog(ConnectionHandler.class);
         _manager = mgr;
         _timer = timer;
-        _synQueue = new LinkedBlockingQueue<Packet>(MAX_QUEUE_SIZE);
+        //_synQueue = new LinkedBlockingQueue<Packet>(MAX_QUEUE_SIZE);
+        _synQueue = new LinkedBlockingDeque<>(MAX_QUEUE_SIZE);
         _acceptTimeout = DEFAULT_ACCEPT_TIMEOUT;
     }
 
@@ -225,12 +230,8 @@ class ConnectionHandler {
                         }
                     }
                     Connection con = _manager.receiveConnection(syn);
-                    if (con != null)
-                        return con;
-                } else {
-                    reReceivePacket(syn);
-                    // ... and keep looping
-                }
+                    if (con != null) {return con;}
+                } else {reReceivePacket(syn);} // ... and keep looping
             }
             // keep looping...
         }
