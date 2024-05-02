@@ -56,11 +56,12 @@ print_range() {
 }
 
 # Loop through the sorted IPs to find consecutive IPs
+IFS=$'\n'
 for ip in $sorted_ips; do
   if [ "$start_ip" = "" ]; then
     start_ip=$ip
     end_ip=$ip
-  elif [ $(expr $(cut -d\. -f4 <<< $ip) - $(cut -d\. -f4 <<< $end_ip)) -eq 1 ]; then
+  elif [ $(echo "$ip" | awk -F. '{ printf "%03d%03d%03d%03d", $1, $2, $3, $4}') -eq $(echo "$end_ip" | awk -F. '{ printf "%03d%03d%03d%03d", $1, $2, $3, $4 + 1}') ]; then
     end_ip=$ip
   else
     print_range
