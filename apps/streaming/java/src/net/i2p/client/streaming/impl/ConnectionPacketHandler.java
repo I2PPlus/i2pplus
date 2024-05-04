@@ -147,7 +147,7 @@ class ConnectionPacketHandler {
             if (con.getInputStream().isLocallyClosed()) {
                 if (_log.shouldWarn())
                     _log.warn("More data received after local close on " + con +
-                              " -> Sending reset and dropping " + packet);
+                              " -> Sending RESET and dropping " + packet);
                 // the following will send a RESET
                 con.disconnect(false);
             } else {
