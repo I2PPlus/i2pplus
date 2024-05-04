@@ -156,7 +156,7 @@ class PacketHandler {
                     }
                 } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                     if (_log.shouldWarn())
-                        _log.warn("Received a SYN packet " + packet + " with the wrong IDs, sending reset");
+                        _log.warn("Received a SYN packet " + packet + " with the wrong IDs, sending RESET");
                     sendReset(packet);
                     packet.releasePayload();
                 } else {
@@ -263,8 +263,8 @@ class PacketHandler {
                 // if it has a send ID, it's almost certainly for a recently removed connection.
                 if (_log.shouldWarn()) {
                     boolean recent = _manager.wasRecentlyClosed(packet.getSendStreamId());
-                    _log.warn("Dropping packet " + packet + " with SendStreamID but no connection found -> " +
-                    (recent ? "Recently disconnected" : "Still connected"));
+                    _log.warn("Dropping packet " + packet + " with SendStreamID but no connection found" +
+                    (recent ? " -> Recently disconnected" : ""));
                 }
                 // don't bother sending reset
                 // TODO send reset if recent && has data?
