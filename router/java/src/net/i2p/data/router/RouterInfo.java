@@ -217,11 +217,9 @@ public class RouterInfo extends DatabaseEntry {
      * @throws IllegalArgumentException if too many addresses
      */
     public void setAddresses(Collection<RouterAddress> addresses) {
-        if (_signature != null || !_addresses.isEmpty())
-            throw new IllegalStateException();
+        if (_signature != null || !_addresses.isEmpty()) {throw new IllegalStateException();}
         if (addresses != null) {
-            if (addresses.size() > MAX_ADDRESSES)
-                throw new IllegalArgumentException("too many addresses");
+            if (addresses.size() > MAX_ADDRESSES) {throw new IllegalArgumentException("Too many addresses");}
             _addresses.addAll(addresses);
         }
     }
