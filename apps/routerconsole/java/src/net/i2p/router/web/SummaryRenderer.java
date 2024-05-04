@@ -394,11 +394,13 @@ class SummaryRenderer {
             String graphTitle = name;
 
             if (name.startsWith("tunnel.participatingTunnels"))
-                graphTitle = name.replace("tunnel.participatingTunnels", "[Participating] Tunnel Count");
+                graphTitle = name.replace("tunnel.participatingTunnels", "[Transit] Tunnel Count");
             if (name.startsWith("tunnel.participatingMessage"))
-                graphTitle = name.replace("tunnel.participatingMessage", "[Participating] Message");
+                graphTitle = name.replace("tunnel.participatingMessage", "[Transit] Message");
             else if (name.startsWith("tunnel.participating"))
-                graphTitle = name.replace("tunnel.participating", "[Participating]");
+                graphTitle = name.replace("tunnel.participating", "[Transit]");
+            else if (name.startsWith("Tunnel.participating"))
+                graphTitle = name.replace("Tunnel.participating", "[Transit]");
             if (name.startsWith("router."))
                 graphTitle = name.replace("router.", "[Router] ");
             if (name.startsWith("bw."))
