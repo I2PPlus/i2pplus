@@ -275,7 +275,7 @@ public class KeysAndCert extends DataStructureImpl {
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
         String cls = getClass().getSimpleName();
-        buf.append('[').append(cls).append(": ");
+        buf.append(cls);
         buf.append("\n* Hash: ");
         if (cls.equals("Destination"))
             buf.append(getHash().toBase32());
