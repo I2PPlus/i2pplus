@@ -631,7 +631,7 @@ class Packet {
         int numNacks = buffer[cur] & 0xff;
         cur++;
         if (length < 22 + numNacks*4)
-            throw new IllegalArgumentException("Too small with " + numNacks + " nacks: " + length);
+            throw new IllegalArgumentException("Too small with " + numNacks + " NACKS: " + length);
         if (numNacks > 0) {
             long nacks[] = new long[numNacks];
             for (int i = 0; i < numNacks; i++) {
@@ -651,7 +651,7 @@ class Packet {
         cur += 2;
 
         if (length < 22 + numNacks*4 + optionSize)
-            throw new IllegalArgumentException("Too small with " + numNacks + " nacks and "
+            throw new IllegalArgumentException("Too small with " + numNacks + " NACKS and "
                                                + optionSize + " options: " + length);
 
         int payloadBegin = cur + optionSize;
@@ -678,9 +678,9 @@ class Packet {
                 cur += optionFrom.size();
                 _optionFrom = optionFrom;
             } catch (IOException ioe) {
-                throw new IllegalArgumentException("Bad from field", ioe);
+                throw new IllegalArgumentException("BAD from field", ioe);
             } catch (DataFormatException dfe) {
-                throw new IllegalArgumentException("Bad from field", dfe);
+                throw new IllegalArgumentException("BAD from field", dfe);
             }
         }
         if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) {
@@ -694,7 +694,7 @@ class Packet {
             cur += 2;
             SigType type = SigType.getByCode(itype);
             if (type == null || !type.isAvailable())
-                throw new IllegalArgumentException("Unsupported transient signature type: " + itype);
+                throw new IllegalArgumentException("Unsupported transient Signature Type: " + itype);
             _transientSigningPublicKey = new SigningPublicKey(type);
             byte[] buf = new byte[_transientSigningPublicKey.length()];
             System.arraycopy(buffer, cur, buf, 0, buf.length);
@@ -737,7 +737,7 @@ class Packet {
                 }
                 if (type == null) {
                     if (siglen < Signature.SIGNATURE_BYTES)
-                        throw new IllegalArgumentException("Unknown signature type (Size: " + siglen + " bytes)");
+                        throw new IllegalArgumentException("Unknown Signature Type (Size: " + siglen + " bytes)");
                     // Hope it's the default type with some unknown options following;
                     // if not the sig will fail later
                     type = SigType.DSA_SHA1;
@@ -869,20 +869,24 @@ class Packet {
     }
 
     protected StringBuilder formatAsString() {
+        Log l = I2PAppContext.getCurrentContext().logManager().getLog(Packet.class);
         StringBuilder buf = new StringBuilder(64);
-        buf.append(toId(_sendStreamId));
-        buf.append('/');
-        buf.append(toId(_receiveStreamId)).append("\n* ");
-        if (_sequenceNum != 0 || isFlagSet(FLAG_SYNCHRONIZE))
-            buf.append("[").append(_sequenceNum).append("]");
-        // else an ack-only packet
-        //if (_sequenceNum < 10)
-        //    buf.append(" \t"); // so the tab lines up right
-        //else
-        //    buf.append('\t');
-        toFlagString(buf);
-        if ( (_payload != null) && (_payload.getValid() > 0) )
-            buf.append("\n* Data: ").append(_payload.getValid() + " bytes;");
+        if (l.shouldInfo()) {
+            buf.append("[StreamID From: ").append(toId(_receiveStreamId))
+               .append(" / To: ").append(toId(_sendStreamId)).append("]\n* ");
+            if (_sequenceNum != 0 || isFlagSet(FLAG_SYNCHRONIZE))
+                buf.append("[").append(_sequenceNum).append("]");
+            // else an ack-only packet
+            //if (_sequenceNum < 10)
+            //    buf.append(" \t"); // so the tab lines up right
+            //else
+            //    buf.append('\t');
+            toFlagString(buf);
+            if ( (_payload != null) && (_payload.getValid() > 0) )
+                buf.append("\n* Data: ").append(_payload.getValid() + " bytes;");
+        } else {
+            buf.append("");
+        }
         return buf;
     }
 
@@ -891,31 +895,34 @@ class Packet {
     }
 
     private final void toFlagString(StringBuilder buf) {
-        if (isFlagSet(FLAG_SYNCHRONIZE)) {buf.append(" SYN");}
-        if (isFlagSet(FLAG_CLOSE)) {buf.append(" CLOSE");}
-        if (isFlagSet(FLAG_RESET)) {buf.append(" RESET");}
-        if (isFlagSet(FLAG_ECHO)) {buf.append(" ECHO");}
-        if (isFlagSet(FLAG_FROM_INCLUDED)) {buf.append(" from ").append(_optionFrom.size()).append(" bytes;");}
-        if (isFlagSet(FLAG_NO_ACK)) {buf.append(" NoACK");}
-        else {buf.append(" ACK ").append(getAckThrough());}
-        if (_nacks != null) {
-            buf.append(" NACK");
-            for (int i = 0; i < _nacks.length; i++) {
-                buf.append(' ').append(_nacks[i]);
+        Log l = I2PAppContext.getCurrentContext().logManager().getLog(Packet.class);
+        if (l.shouldInfo()) {
+            if (isFlagSet(FLAG_SYNCHRONIZE)) {buf.append(" SYN");}
+            if (isFlagSet(FLAG_CLOSE)) {buf.append(" CLOSE");}
+            if (isFlagSet(FLAG_RESET)) {buf.append(" RESET");}
+            if (isFlagSet(FLAG_ECHO)) {buf.append(" ECHO");}
+            if (isFlagSet(FLAG_FROM_INCLUDED)) {buf.append(" from ").append(_optionFrom.size()).append(" bytes;");}
+            if (isFlagSet(FLAG_NO_ACK)) {buf.append(" NACK");}
+            else {buf.append(" ACK ").append(getAckThrough());}
+            if (_nacks != null) {
+                buf.append(" NACK");
+                for (int i = 0; i < _nacks.length; i++) {
+                    buf.append(' ').append(_nacks[i]);
+                }
             }
-        }
-        if (isFlagSet(FLAG_DELAY_REQUESTED)) buf.append(" DELAY ").append(_optionDelay).append("ms;");
-        if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) buf.append(" MAXSIZE ").append(_optionMaxSize).append(" bytes;");
-        if (isFlagSet(FLAG_PROFILE_INTERACTIVE)) buf.append(" INTERACTIVE");
-        if (isFlagSet(FLAG_SIGNATURE_REQUESTED)) buf.append(" SIGREQ");
-        if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {
-            if (_transientExpires != 0) {buf.append(" TRANSEXP ").append(new Date(_transientExpires));}
-            else {buf.append(" (no expiration)");}
-            if (_transientSigningPublicKey != null) {
-                buf.append(" TRANSKEY ").append(_transientSigningPublicKey.getType()).append(':').append(_transientSigningPublicKey.toBase64());
-            } else {buf.append(" (no key data)");}
-            if (_offlineSignature != null) {buf.append("\n* Offline Signature: ").append(_offlineSignature.getType());}
-            else {buf.append(" (no offline sig data)");}
+            if (isFlagSet(FLAG_DELAY_REQUESTED)) buf.append(" DELAY ").append(_optionDelay).append("ms;");
+            if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) buf.append(" MAXSIZE ").append(_optionMaxSize).append(" bytes;");
+            if (isFlagSet(FLAG_PROFILE_INTERACTIVE)) buf.append(" INTERACTIVE");
+            if (isFlagSet(FLAG_SIGNATURE_REQUESTED)) buf.append(" SIGREQ");
+            if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {
+                if (_transientExpires != 0) {buf.append(" TRANSEXP ").append(new Date(_transientExpires));}
+                else {buf.append(" (No expiration)");}
+                if (_transientSigningPublicKey != null) {
+                    buf.append(" TRANSKEY ").append(_transientSigningPublicKey.getType()).append(':').append(_transientSigningPublicKey.toBase64());
+                } else {buf.append(" (No key data)");}
+                if (_offlineSignature != null) {buf.append("\n* Offline Signature: ").append(_offlineSignature.getType());}
+                else {buf.append(" (No offline signature data)");}
+            }
         }
         if (isFlagSet(FLAG_SIGNATURE_INCLUDED)) {
             if (_optionSignature != null)
@@ -929,9 +936,7 @@ class Packet {
      *  so we can use standard debugging tools.
      */
     public void logTCPDump(Connection con) {
-            try {
-                I2PSocketManagerFull.pcapWriter.write(this, con);
-            } catch (IOException ioe) {
-            }
+        try {I2PSocketManagerFull.pcapWriter.write(this, con);}
+        catch (IOException ioe) {}
     }
 }
