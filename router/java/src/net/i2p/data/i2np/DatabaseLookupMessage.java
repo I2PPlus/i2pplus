@@ -26,6 +26,7 @@ import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.crypto.ratchet.RatchetSessionTag;
+import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;
 
 /**
@@ -35,6 +36,7 @@ import net.i2p.util.VersionComparator;
  * @author jrandom
  */
 public class DatabaseLookupMessage extends FastI2NPMessageImpl {
+    private final static Log _log = new Log(DatabaseLookupMessage.class);
     public final static int MESSAGE_TYPE = 2;
     private Hash _key;
     private Hash _fromHash;
@@ -543,30 +545,41 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("\n DatabaseLookupMessage");
-        buf.append("\n* Search type: ").append(_type);
-        buf.append("\n* Search key: ");
-        if (_type == Type.LS)
-            buf.append(_key.toBase32());
-        else
-            buf.append(_key);
-        if (_replyTunnel != null)
-            buf.append("\n* Reply Gateway: ");
-        else
-            buf.append("\n* From: ");
-        buf.append(_fromHash.toBase64());
-        if (_replyTunnel != null)
-            buf.append("\n* Reply Tunnel: ").append(_replyTunnel);
-        if (_replyKey != null)
-            buf.append("\n* Reply Key: ").append(_replyKey);
-        if (_replyTag != null)
-            buf.append("\n* Reply Tag: ").append(_replyTag);
-        else if (_ratchetReplyTag != null)
-            buf.append("\n* RatchetReply Tag: ").append(_ratchetReplyTag);
-        if (_dontIncludePeers != null) {
-            buf.append("\n* Excluded peers: ");
-            buf.append(_dontIncludePeers.size());
+        String msgType = "ANY";
+        if (_type == Type.LS) {msgType = "LeaseSet";}
+        else if (_type == Type.RI) {msgType = "RouterInfo";}
+        else if (_type == Type.EXPL) {msgType = "Exploratory";}
+
+        if (_log.shouldInfo()) {
+            buf.append("\n* Search type: ").append(_type);
+            buf.append("\n* Search key: ");
+            if (_type == Type.LS)
+                buf.append(_key.toBase32());
+            else
+                buf.append(_key);
+            if (_replyTunnel != null)
+                buf.append("\n* Reply Gateway: ");
+            else
+                buf.append("\n* From: ");
+            buf.append(_fromHash.toBase64());
+            if (_replyTunnel != null)
+                buf.append("\n* Reply Tunnel: ").append(_replyTunnel);
+            if (_replyKey != null)
+                buf.append("\n* Reply Key: ").append(_replyKey);
+            if (_replyTag != null)
+                buf.append("\n* Reply Tag: ").append(_replyTag);
+            else if (_ratchetReplyTag != null)
+                buf.append("\n* RatchetReply Tag: ").append(_ratchetReplyTag);
+            if (_dontIncludePeers != null) {
+                buf.append("\n* Excluded peers: ");
+                buf.append(_dontIncludePeers.size());
+            }
+        } else if (_log.shouldWarn()) {
+            buf.append(msgType);
+            if (msgType.equals("LeaseSet")) {buf.append(" [" + _key.toBase32().substring(0,8) + "...]");}
+            else {buf.append(" [" + _key.toBase64().substring(0,6) + "]");}
         }
         return buf.toString();
     }
+
 }
