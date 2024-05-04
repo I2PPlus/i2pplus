@@ -20,6 +20,7 @@ import net.i2p.util.BandwidthEstimator;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.util.SystemVersion;
 
 /**
  * Maintain the state controlling a streaming connection between two
@@ -99,7 +100,7 @@ class Connection {
     private final AtomicLong _lifetimeDupMessageReceived = new AtomicLong();
 
     public static final int MAX_RESEND_DELAY = 45*1000;
-    public static final int MIN_RESEND_DELAY = 100;
+    public static final int MIN_RESEND_DELAY = SystemVersion.isSlow() ? 100 : 50;
 
     /**
      *  Wait up to 5 minutes after disconnection so we can ack/close packets.
@@ -1331,8 +1332,10 @@ class Connection {
                 case ConnectionOptions.INACTIVITY_ACTION_DISCONNECT:
                     // fall through
                 default:
-                    if (_log.shouldWarn())
-                        _log.warn("Closing inactive connection to " + getRemotePeerString());
+                    if (_log.shouldWarn()) {
+                        int timeout = _options.getInactivityTimeout() / 1000;
+                        _log.warn("Closing inactive connection to " + getRemotePeerString() + " -> " + timeout + "s timeout reached");
+                    }
                     if (_log.shouldDebug()) {
                         StringBuilder buf = new StringBuilder(128);
                         long now = _context.clock().now();
@@ -1394,50 +1397,51 @@ class Connection {
         else
             buf.append("Unknown");
         long now = _context.clock().now();
-        buf.append("\n* Up: ").append(DataHelper.formatDuration(now - _createdOn));
-        buf.append("; Window size: ").append(_options.getWindowSize());
-        buf.append("; Congestion window: ").append(_congestionWindowEnd - _highestAckedThrough);
-        buf.append("; RTT: ").append(_options.getRTT());
-        buf.append("; RTO: ").append(_options.getRTO());
-        // not synchronized to avoid some kooky races
-        buf.append("; UnACKed out: ").append(_outboundPackets.size()).append("; ");
-        /*
-        buf.append(" unacked outbound: ");
-        synchronized (_outboundPackets) {
-            buf.append(_outboundPackets.size()).append(" [");
-            for (Iterator iter = _outboundPackets.keySet().iterator(); iter.hasNext(); ) {
-                buf.append(((Long)iter.next()).longValue()).append(" ");
+        if  (_log.shouldInfo()) {
+            buf.append("\n* Up: ").append(DataHelper.formatDuration(now - _createdOn));
+            buf.append("; Window size: ").append(_options.getWindowSize());
+            buf.append("; Congestion window: ").append(_congestionWindowEnd - _highestAckedThrough);
+            buf.append("; RTT: ").append(_options.getRTT());
+            buf.append("; RTO: ").append(_options.getRTO());
+            // not synchronized to avoid some kooky races
+            buf.append("; UnACKed out: ").append(_outboundPackets.size()).append("; ");
+            /*
+            buf.append(" unacked outbound: ");
+            synchronized (_outboundPackets) {
+                buf.append(_outboundPackets.size()).append(" [");
+                for (Iterator iter = _outboundPackets.keySet().iterator(); iter.hasNext(); ) {
+                    buf.append(((Long)iter.next()).longValue()).append(" ");
+                }
+                buf.append("] ");
             }
-            buf.append("] ");
+             */
+            buf.append("UnACKed in: ").append(getUnackedPacketsReceived());
+            int missing = 0;
+            long nacks[] = _inputStream.getNacks();
+            if (nacks != null) {
+                missing = nacks.length;
+                buf.append(" [").append(missing).append(" missing]");
+            }
+            buf.append("\n* Sent: ").append(1 + _lastSendId.get());
+            buf.append("; Received: ").append(1 + _inputStream.getHighestBlockId() - missing);
+            buf.append("; ACKThru: ").append(_highestAckedThrough);
+            buf.append("; SSThresh: ").append(_ssthresh);
+            buf.append("; MinRTT: ").append(_options.getMinRTT());
+            buf.append("; MaxWin: ").append(_options.getMaxWindowSize());
+            buf.append("; MTU: ").append(_options.getMaxMessageSize());
+            if (getResetSent())
+                buf.append("\n* Reset sent: ").append(DataHelper.formatDuration(now - getResetSentOn())).append(" ago");
+            if (getResetReceived())
+                buf.append("\n* Reset received: ").append(DataHelper.formatDuration(now - getDisconnectScheduledOn())).append(" ago");
+            if (getCloseSentOn() > 0) {
+                buf.append("\n* Close sent: ");
+                long timeSinceClose = now - getCloseSentOn();
+                buf.append(DataHelper.formatDuration(timeSinceClose));
+                buf.append(" ago");
+            }
+            if (getCloseReceivedOn() > 0)
+                buf.append("\n* Close received: ").append(DataHelper.formatDuration(now - getCloseReceivedOn())).append(" ago");
         }
-         */
-        buf.append("UnACKed in: ").append(getUnackedPacketsReceived());
-        int missing = 0;
-        long nacks[] = _inputStream.getNacks();
-        if (nacks != null) {
-            missing = nacks.length;
-            buf.append(" [").append(missing).append(" missing]");
-        }
-
-        buf.append("\n* Sent: ").append(1 + _lastSendId.get());
-        buf.append("; Received: ").append(1 + _inputStream.getHighestBlockId() - missing);
-        buf.append("; ACKThru: ").append(_highestAckedThrough);
-        buf.append("; SSThresh: ").append(_ssthresh);
-        buf.append("; MinRTT: ").append(_options.getMinRTT());
-        buf.append("; MaxWin: ").append(_options.getMaxWindowSize());
-        buf.append("; MTU: ").append(_options.getMaxMessageSize());
-        if (getResetSent())
-            buf.append("\n* Reset sent: ").append(DataHelper.formatDuration(now - getResetSentOn())).append(" ago");
-        if (getResetReceived())
-            buf.append("\n* Reset received: ").append(DataHelper.formatDuration(now - getDisconnectScheduledOn())).append(" ago");
-        if (getCloseSentOn() > 0) {
-            buf.append("\n* Close sent: ");
-            long timeSinceClose = now - getCloseSentOn();
-            buf.append(DataHelper.formatDuration(timeSinceClose));
-            buf.append(" ago");
-        }
-        if (getCloseReceivedOn() > 0)
-            buf.append("\n* Close received: ").append(DataHelper.formatDuration(now - getCloseReceivedOn())).append(" ago");
         return buf.toString();
     }
 
