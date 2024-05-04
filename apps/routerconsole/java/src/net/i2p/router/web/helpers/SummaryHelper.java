@@ -1006,7 +1006,7 @@ public class SummaryHelper extends HelperBase {
             return "0";
         Rate lagRate = rs.getRate(60*1000);
         long maxLag = _context.jobQueue().getMaxLag();
-        if (!isAdvanced() || maxLag == (double)0) {
+        if (!isAdvanced() || maxLag < (double)30) {
             if (lagRate.getAverageValue() < 1)
                 return DataHelper.formatDuration2((double)lagRate.getAverageValue());
             else
@@ -1016,8 +1016,6 @@ public class SummaryHelper extends HelperBase {
                 return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + (double)maxLag + "&nbsp;µs";
             else if (lagRate.getAverageValue() < 1)
                 return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + maxLag + "&nbsp;ms";
-            else if ((double)maxLag < 1)
-                return (long)lagRate.getAverageValue() + "&nbsp;ms" + THINSP + (double)maxLag + "&nbsp;µs";
             else
                 return (long)lagRate.getAverageValue() + THINSP + maxLag + "&nbsp;ms";
         }

@@ -1197,7 +1197,7 @@ class SummaryBarRenderer {
         buf.append("</a><input type=checkbox id=toggle_sb_queue class=\"toggleSection script\" checked hidden></h3>\n<hr class=b>\n")
            .append("<table id=sb_queue>\n")
            .append("<tr title=\"");
-        if (isAdvanced() && maxLag != 0)
+        if (isAdvanced() && maxLag >= 30)
             buf.append(_t("Average job delay / maximum delay"));
         else
             buf.append(_t("Average delay before scheduled jobs are run"));
