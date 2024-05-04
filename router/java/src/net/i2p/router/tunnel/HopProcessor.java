@@ -77,8 +77,7 @@ class HopProcessor {
             } else if (!_config.getReceiveFrom().equals(prev)) {
                 // shouldn't happen now that we have good dup ID detection in BuildHandler
                 if (_log.shouldWarn())
-                    _log.warn("Attempted mid-tunnel injection from " + prev
-                               + ", expected " + _config.getReceiveFrom());
+                    _log.warn("Attempted mid-tunnel injection from: " + prev + "\n* Expected: " + _config.getReceiveFrom());
                 return false;
             }
         }
