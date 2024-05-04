@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  *  CoDel implementation of Active Queue Management.
@@ -81,7 +82,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private final String STAT_DROP;
     private final String STAT_DELAY;
     private static final long[] RATES = {60*1000, 5*60*1000, 60*60*1000};
-    private static final long BACKLOG_TIME = 2*1000;
+//    private static final long BACKLOG_TIME = 2*1000;
+    private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 2*1000 : 1000;
 
     /**
      *  Target 15, interval 100

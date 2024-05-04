@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  *  CoDel implementation of Active Queue Management.
@@ -80,7 +81,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     private static final int[] PRIORITIES = {MIN_PRIORITY, 200, 300, 400, 500};
     /** if priority is &gt;= this, never drop */
     public static final int DONT_DROP_PRIORITY = 1000;
-    private static final long BACKLOG_TIME = 2*1000;
+//    private static final long BACKLOG_TIME = 2*1000;
+    private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 2*1000 : 1000;
 
     /**
      *  @param name for stats
