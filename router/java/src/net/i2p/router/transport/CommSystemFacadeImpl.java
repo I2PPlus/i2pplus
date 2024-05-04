@@ -676,12 +676,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                createRdnsCacheFile();
                ex.printStackTrace();
             }
-            // Print the contents of the rdnsCache map to the console
-            //System.out.println("RDNS cache: " + rdnsCache);
-            //for (Map.Entry<String, CacheEntry> entry : rdnsCache.entrySet()) {
-            //   System.out.println(entry.getKey() + "=" + entry.getValue().getHostname());
-            //}
-
             // Schedule the cache writer to run every 5 minutes
             // TODO: Convert to a standard job
             Timer timer = new Timer();
