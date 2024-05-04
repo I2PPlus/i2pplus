@@ -694,7 +694,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                         fnshd = finished;
                     }
                     if (!fnshd) {
-                        _log.warn(direction + " IO Error - error forwarding (" + ex.getMessage() + ")");
+                        _log.warn(direction + " IO Error -> Error forwarding (" + ex.getMessage() + ")");
                     } else if (_log.shouldDebug()) {
                         _log.debug(direction + " IO Error caused by other direction (" + ex.getMessage() + ")");
                     }
