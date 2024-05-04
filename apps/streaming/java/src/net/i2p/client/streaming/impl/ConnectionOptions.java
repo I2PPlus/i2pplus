@@ -148,7 +148,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final int DEFAULT_INITIAL_ACK_DELAY = 150;
     static final int MIN_WINDOW_SIZE = 1;
     private static final boolean DEFAULT_ANSWER_PINGS = true;
-    private static final int DEFAULT_INACTIVITY_TIMEOUT = 90*1000;
+//    private static final int DEFAULT_INACTIVITY_TIMEOUT = 90*1000;
+    private static final int DEFAULT_INACTIVITY_TIMEOUT = 60*1000;
     private static final int DEFAULT_INACTIVITY_ACTION = INACTIVITY_ACTION_SEND;
     private static final int DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR = 1;
     private static final int DEFAULT_SLOW_START_GROWTH_RATE_FACTOR = 1;
