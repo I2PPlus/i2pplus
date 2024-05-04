@@ -344,8 +344,9 @@ class ProfileOrganizerRenderer {
                    .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a>");
                 buf.append("</td></tr>\n");
                 // let's not build the whole page in memory (~500 bytes per peer)
-                out.write(buf.toString());
-                buf.setLength(0);
+                // let's try rendering to ram and seeing if page load times are less janky
+                //out.write(buf.toString());
+                //buf.setLength(0);
             }
             buf.append("</tbody>\n</table>\n");
 
