@@ -1279,7 +1279,7 @@ class PacketBuilder {
                 (Arrays.equals(iaddr.getAddress(), _transport.getExternalIP()) && !_transport.allowLocal())) {
                 if (_log.shouldWarn())
                     _log.warn("Cannot build a RelayRequest for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
-                              "] \n* Reason: Introducer address is invalid or blocklisted: " + Addresses.toString(iaddr.getAddress(), iport));
+                              "] \n* Reason: Introducer address is INVALID or blocklisted: " + Addresses.toString(iaddr.getAddress(), iport));
                 // TODO implement some sort of introducer banlist
                 continue;
             }

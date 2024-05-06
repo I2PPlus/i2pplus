@@ -132,19 +132,19 @@ class EstablishmentManager {
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
 //    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 20 : 40;
 //    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = 150;
-    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 64 : 256;
-    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 256 : 512;
+    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 64 : SystemVersion.getCores() < 4 ? 256 : 384;
+    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 256 : SystemVersion.getCores() < 4 ? 512 : 1024;
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
     private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 1.5f : 3f;
     private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
 
     /** max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
 //    private static final int MAX_QUEUED_OUTBOUND = 50;
-    private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 64 : 256;
+    private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 48 : SystemVersion.getCores() < 4 ? 128 : 256;
 
     /** max queued msgs per peer while the peer connection is queued */
 //    private static final int MAX_QUEUED_PER_PEER = 16;
-    private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 16 : 64;
+    private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 16 : SystemVersion.getCores() < 4 ? 32 : 64;
 
     private static final long MAX_NONCE = 0xFFFFFFFFl;
 
@@ -157,20 +157,20 @@ class EstablishmentManager {
      * But SSU probably isn't higher priority than NTCP.
      * And it's important to not fail an establishment too soon and waste it.
      */
-    private static final int MAX_OB_ESTABLISH_TIME = 25*1000;
+    private static final int MAX_OB_ESTABLISH_TIME = SystemVersion.isSlow() ? 25*1000 : 15*1000;
 
     /**
      * Kill any inbound that takes more than this
      * One round trip (Created-Confirmed)
      * Note: could be two round trips for SSU2 with retry
      */
-    public static final int MAX_IB_ESTABLISH_TIME = 12*1000;
+    public static final int MAX_IB_ESTABLISH_TIME = SystemVersion.isSlow() ? 12*1000 : 10*1000;
 
     /** max wait before receiving a response to a single message during outbound establishment */
-    public static final int OB_MESSAGE_TIMEOUT = 15*1000;
+    public static final int OB_MESSAGE_TIMEOUT = SystemVersion.isSlow() ? 15*1000 : 12*1000;
 
     /** for the DSM and or netdb store */
-    private static final int DATA_MESSAGE_TIMEOUT = 10*1000;
+    private static final int DATA_MESSAGE_TIMEOUT = SystemVersion.isSlow() ? 10*1000 : 8*1000;
 
     private static final int IB_BAN_TIME = 15*60*1000;
 
@@ -183,7 +183,6 @@ class EstablishmentManager {
     private static final String TOKEN_FILE = "ssu2tokens.txt";
     // max immediate terminations to send to a peer every FAILSAFE_INTERVAL
     private static final int MAX_TERMINATIONS = 2;
-
 
     public EstablishmentManager(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -312,11 +311,16 @@ class EstablishmentManager {
         RouterIdentity toIdentity = toRouterInfo.getIdentity();
         Hash toHash = toIdentity.calculateHash();
         int id = toRouterInfo.getNetworkId();
+        boolean isBanned = toHash != null && _context.banlist().isBanlisted(toHash);
+        long now = _context.clock().now();
+        String truncHash = toHash != null ? toHash.toBase64().substring(0,6) : "";
         if (id != _networkID) {
-            if (id == -1)
-                _context.banlist().banlistRouter(toHash, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
-            else
+            if (id == -1) {
+                _context.banlist().banlistRouter(toHash, " <b>➜</b> No network specified", null, null,
+                                                 _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
+            } else {
                 _context.banlist().banlistRouterForever(toHash, " <b>➜</b> Not in our network: " + id);
+            }
             if (_log.shouldWarn())
                 _log.warn("Not in our network: " + toRouterInfo, new Exception());
             _transport.markUnreachable(toHash);
@@ -332,13 +336,26 @@ class EstablishmentManager {
         // claimed address (which we won't be using if indirect)
         if (remAddr != null && port > 0 && port <= 65535) {
             maybeTo = new RemoteHostId(remAddr.getAddress(), port);
+            String ipAddress = Addresses.toString(remAddr.getAddress());
 
             if ((!_transport.isValid(maybeTo.getIP())) ||
                 (Arrays.equals(maybeTo.getIP(), _transport.getExternalIP()) && !_transport.allowLocal())) {
                 _transport.failed(msg, "Remote peer's IP isn't valid");
                 _transport.markUnreachable(toHash);
-                //_context.banlist().banlistRouter(msg.getTarget().getIdentity().calculateHash(), "Invalid SSU address", UDPTransport.STYLE);
                 _context.statManager().addRateData("udp.establishBadIP", 1);
+                //_context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid SSU address", UDPTransport.STYLE);
+                 if (toHash != null) {
+                     if (!isBanned) {
+                       _context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid SSU address", null, null, now + 8*60*1000);
+                       if (_log.shouldWarn()) {
+                          _log.warn("[SSU2] Banning [" + truncHash + "] for 8h -> Invalid SSU address");
+                       }
+                    }
+                } else {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Invalid or spoofed SSU address detected for: " + ipAddress + ":" + port);
+                     }
+                }
                 return;
             }
 
@@ -378,11 +395,12 @@ class EstablishmentManager {
 
         RemoteHostId to;
         boolean isIndirect = addr.getIntroducerCount() > 0 || maybeTo == null;
-        if (isIndirect) {
-            to = new RemoteHostId(toHash);
-        } else {
-            to = maybeTo;
-        }
+
+        byte[] maybeIP = maybeTo != null ? maybeTo.getIP() : null;
+        int maybePort = maybeTo != null ? maybeTo.getPort() : 0;
+        String ipAddress = maybeTo != null ? Addresses.toString(maybeIP) : "";
+        if (isIndirect) {to = new RemoteHostId(toHash);}
+        else {to = maybeTo;}
 
         OutboundEstablishState state = null;
         int deferred = 0;
@@ -404,8 +422,9 @@ class EstablishmentManager {
                         List<OutNetMessage> queued = _queuedOutbound.putIfAbsent(to, newQueued);
                         if (queued == null) {
                             queued = newQueued;
-                            if (_log.shouldWarn())
+                            if (_log.shouldWarn()) {
                                 _log.warn("[SSU2] Queueing OutboundEstablish to " + to + ", increase " + PROP_MAX_CONCURRENT_ESTABLISH);
+                            }
                         }
                         // this used to be inside a synchronized (_outboundStates) block,
                         // but that's now a CHM, so protect the ArrayList
@@ -429,7 +448,6 @@ class EstablishmentManager {
                     if (isIndirect && version == 2 && ra.getTransportStyle().equals("SSU")) {
                         boolean v2intros = false;
                         int count = addr.getIntroducerCount();
-                        long now = _context.clock().now();
                         for (int i = 0; i < count; i++) {
                             Hash h = addr.getIntroducerHash(i);
                             long exp = addr.getIntroducerExpiration(i);
@@ -452,6 +470,19 @@ class EstablishmentManager {
                             (ourMTU > 0 && ourMTU < PeerState2.MIN_MTU)) {
                             _transport.markUnreachable(toHash);
                             _transport.failed(msg, "MTU too small");
+                            //_context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid MTU", null, null, now + 8*60*1000);
+                            if (toHash != null) {
+                                if (!isBanned) {
+                                    _context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid MTU", null, null, now + 8*60*1000);
+                                    if (_log.shouldWarn()) {
+                                        _log.warn("[SSU2] Banning [" + truncHash + "] for 8h -> Invalid MTU");
+                                    }
+                                }
+                            } else if (ipAddress != "") {
+                                if (_log.shouldWarn()) {
+                                    _log.warn("[SSU2] Router has invalid MTU (too small): " + ipAddress + ":" + maybePort);
+                                }
+                            }
                             return;
                         }
                     }
@@ -465,10 +496,22 @@ class EstablishmentManager {
                             keyBytes = null;
                     }
                     if (keyBytes == null) {
-                        if (_log.shouldWarn())
-                            _log.warn("[SSU2] No Introduction key\n" + toRouterInfo);
+//                        if (_log.shouldWarn())
+//                            _log.warn("[SSU2] No Introduction key\n" + toRouterInfo);
                         _transport.markUnreachable(toHash);
                         _transport.failed(msg, "Peer has no key, cannot establish connection -> Marking unreachable");
+                        if (toHash != null) {
+                            if (!isBanned) {
+                                _context.banlist().banlistRouter(toHash, " <b>➜</b> No Introduction key", null, null, now + 4*60*1000);
+                                if (_log.shouldWarn()) {
+                                    _log.warn("[SSU2] Banning [" + truncHash + "] for 4h -> No Introduction key");
+                                }
+                            }
+                        } else if (ipAddress != "") {
+                            if (_log.shouldWarn()) {
+                                _log.warn("[SSU2] Received no Introduction key from: " + ipAddress + ":" + maybePort);
+                            }
+                        }
                         return;
                     }
                     SessionKey sessionKey;
@@ -477,6 +520,18 @@ class EstablishmentManager {
                     } catch (IllegalArgumentException iae) {
                         _transport.markUnreachable(toHash);
                         _transport.failed(msg, "Peer has BAD key, cannot establish connection -> Marking unreachable");
+                        if (toHash != null) {
+                            if (!isBanned) {
+                                _context.banlist().banlistRouter(toHash, " <b>➜</b> Bad Introduction key", null, null, now + 8*60*1000);
+                                if (_log.shouldWarn()) {
+                                    _log.warn("[SSU2] Banning [" + truncHash + "] for 8h -> Bad Introduction key");
+                                }
+                            }
+                        } else if (ipAddress != "") {
+                            if (_log.shouldWarn()) {
+                                _log.warn("[SSU2] Received Bad Introduction key from: " + ipAddress + ":" + maybePort);
+                            }
+                        }
                         return;
                     }
                     if (version == 2) {
@@ -523,24 +578,25 @@ class EstablishmentManager {
                 }
             }
 
-        if (rejected) {
-            if (_log.shouldWarn())
-                _log.warn("[SSU2] Too many pending connections, rejecting OutboundEstablish to " + to);
-            _transport.failed(msg, "Too many pending outbound connections");
-            _context.statManager().addRateData("udp.establishRejected", deferred);
-            return;
-        }
-        if (queueCount >= MAX_QUEUED_PER_PEER) {
-            _transport.failed(msg, "Too many pending messages for the given peer");
-            _context.statManager().addRateData("udp.establishOverflow", queueCount, deferred);
-            return;
-        }
+            if (rejected) {
+                if (_log.shouldWarn())
+                    _log.warn("[SSU2] Too many pending connections, rejecting OutboundEstablish to " + to);
+                _transport.failed(msg, "Too many pending outbound connections");
+                _context.statManager().addRateData("udp.establishRejected", deferred);
+                return;
+            }
+            if (queueCount >= MAX_QUEUED_PER_PEER) {
+                _transport.failed(msg, "Too many pending messages for the given peer");
+                _context.statManager().addRateData("udp.establishOverflow", queueCount, deferred);
+                return;
+            }
 
-        if (deferred > 0)
-            msg.timestamp("Too many deferred establishers");
-        else if (state != null)
-            msg.timestamp("Establish state already waiting");
-        notifyActivity();
+            if (deferred > 0) {
+                msg.timestamp("Too many deferred establishers");
+            } else if (state != null) {
+                msg.timestamp("Establish state already waiting");
+            }
+            notifyActivity();
     }
 
     /**
@@ -583,8 +639,7 @@ class EstablishmentManager {
         int lastPeriod = 60*1000;
         double avg = ra.getAverage();
         int currentTime = (int) (_context.clock().now() - periodStart);
-        if (currentTime <= 5*1000)
-            return true;
+        if (currentTime <= 5*1000) {return true;}
         // compare incoming conns per ms
         // both of these are scaled by actual period in coalesce
         float lastRate = last / (float) lastPeriod;
@@ -618,30 +673,44 @@ class EstablishmentManager {
      * @since 0.9.54
      */
     void receiveSessionOrTokenRequest(RemoteHostId from, InboundEstablishState2 state, UDPPacket packet) {
+        long now = _context.clock().now();
         byte[] fromIP = from.getIP();
+        int fromPort = from.getPort();
         String ipAddress = Addresses.toString(fromIP);
+        RemoteHostId host = new RemoteHostId(fromIP, fromPort);
+        Hash fromHash = host.getPeerHash();
+        boolean hasIP = fromIP != null;
+        boolean isBlocklisted = hasIP && _context.blocklist().isBlocklisted(fromIP);
+        boolean isBanned = fromHash != null && _context.banlist().isBanlisted(fromHash);
+        String truncHash = fromHash != null ? fromHash.toBase64().substring(0,6) : "";
         if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(fromIP)) {
             if (_log.shouldWarn()) {
                 _log.warn("[SSU2] Received SessionRequest from invalid address/port: " + from);
             }
-
-            if (fromIP != null && !_context.blocklist().isBlocklisted(fromIP)) {
-               _context.blocklist().add(fromIP, "Invalid address/port in SessionRequest");
-               if (_log.shouldWarn()) {
-                    _log.warn("[SSU2] Banning " + ipAddress + " for duration of session -> Invalid address/port in SessionRequest");
-               }
-            } else if (fromIP != null && _context.blocklist().isBlocklisted(fromIP)) {
-                if (_log.shouldInfo()) {
-                    _log.info("[SSU2] Not banning " + ipAddress + " -> Already in blocklist");
+            if (fromHash != null) {
+                if (!isBanned) {
+                   _context.banlist().banlistRouter(fromHash, " <b>➜</b> Invalid address/port in SessionRequest", null, null, now + 8*60*1000);
+                   if (_log.shouldWarn()) {
+                      _log.warn("[SSU2] Banning [" + truncHash + "] for 8h -> Invalid address/port in SessionRequest" + " (" + from + ")");
+                   }
+                } else if (isBanned) {
+                    if (_log.shouldInfo()) {
+                        _log.info("[SSU2] Not banning [" + truncHash + "] -> Already in blocklist (" + from + ")");
+                    }
                 }
             }
             return;
         }
         boolean isNew = false;
         if (state == null) {
-            if (_context.blocklist().isBlocklisted(fromIP)) {
-                if (_log.shouldInfo())
+            if (isBlocklisted) {
+                if (_log.shouldInfo()) {
                     _log.info("[SSU2] Received SessionRequest from blocklisted IP: " + from);
+                } else if (isBanned) {
+                    if (_log.shouldInfo()) {
+                        _log.info("[SSU2] Received SessionRequest from banned Router [" + truncHash + "}");
+                    }
+                }
                 _context.statManager().addRateData("udp.establishBadIP", 1);
                 if (!_context.commSystem().isInStrictCountry())
                     sendTerminationPacket(from, packet, REASON_BANNED);
@@ -682,10 +751,12 @@ class EstablishmentManager {
             try {
                 state = new InboundEstablishState2(_context, _transport, packet);
             } catch (GeneralSecurityException gse) {
+                boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
                 if (_log.shouldDebug())
-                    _log.warn("[SSU2] Received corrupt Session or Token Request from: " + from, gse);
+                    _log.warn("[SSU2] Received CORRUPT Session or Token Request from: " + from, gse);
                 else if (_log.shouldWarn())
-                    _log.warn("[SSU2] Received corrupt Session or Token Request from: " + from + "\n* " + gse.getMessage());
+                    _log.warn("[SSU2] Received CORRUPT Session or Token Request from: " + from +
+                    (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
                 _context.statManager().addRateData("udp.establishDropped", 1);
                 return;
             }
@@ -718,10 +789,12 @@ class EstablishmentManager {
             try {
                 state.receiveSessionOrTokenRequestAfterRetry(packet);
             } catch (GeneralSecurityException gse) {
+                boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
                 if (_log.shouldDebug())
-                    _log.warn("[SSU2] Received corrupt Session or Token Request after Retry \n* Router: " + state, gse);
+                    _log.warn("[SSU2] Received CORRUPT Session or Token Request after Retry \n* Router: " + state, gse);
                 else if (_log.shouldWarn())
-                    _log.warn("[SSU2] Received corrupt Session or Token Request after Retry \n* Router: " + state + "\n* " + gse.getMessage());
+                    _log.warn("[SSU2] Received CORRUPT Session or Token Request after Retry \n* Router: " + state +
+                    (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
                 // state called fail()
                 _inboundStates.remove(state.getRemoteHostId());
                 return;
@@ -1731,7 +1804,7 @@ class EstablishmentManager {
             }
         } else {
             if (_log.shouldWarn())
-                _log.warn("[SSU2] RouterInfo not found for signer: " + signer);
+                _log.warn("[SSU2] RouterInfo not found for Signer: " + signer);
             return;
         }
         if (code == 0) {
@@ -2504,7 +2577,7 @@ class EstablishmentManager {
      */
     public void ipChanged(boolean isIPv6) {
         if (_log.shouldWarn())
-            _log.warn("[SSU2] IP address changed, ipv6? " + isIPv6);
+            _log.warn("[SSU2] IP address changed (" + (isIPv6 ? "IPv6" : "IPv4") + ")");
         int len = isIPv6 ? 16 : 4;
         // expire while we're at it
         long now = _context.clock().now();

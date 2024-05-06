@@ -179,7 +179,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             // send retry with termination
             UDPPacket retry = _transport.getBuilder2().buildRetryPacket(this, SSU2Util.REASON_SKEW);
             _transport.send(retry);
-            throw new GeneralSecurityException("Skew exceeded in Session/Token Request (retry sent): " + _skew + "ms");
+            throw new GeneralSecurityException("Max skew of 2m exceeded (" + _skew + "ms) in Session/Token Request (Retry sent)");
         }
         packetReceived();
         if (_log.shouldDebug())
@@ -196,7 +196,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _log.debug("[SSU2] Processed " + blocks + " blocks on " + this);
         } catch (RIException rie) {
             if (_log.shouldInfo())
-                _log.info("RouterInfo error: " + rie.getMessage());
+                _log.info("[SSU2] RouterInfo error: " + rie.getMessage());
             int reason = rie.getReason();
             PeerStateDestroyed psd = createPeerStateDestroyed(reason);
             _transport.addRecentlyClosed(psd);
@@ -347,7 +347,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
         String cap = ri.getCapabilities();
         String bw = ri.getBandwidthTier();
-        boolean reachable = cap != null && cap.contains("R");
+        boolean reachable = cap != null && cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
         boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") ||
                           bw.equals("L") || bw.equals("M") || bw.equals("N");
         String version = ri.getVersion();
@@ -359,7 +359,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             if (ri.verifySignature()) {_context.blocklist().add(_aliceIP);}
             if (_log.shouldWarn() && !isBanned)
                 _log.warn("Banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
-                          " -> Old and slow (" + version + " / " + bw + "U)");
+                          " -> " + version + " / " + bw + (!reachable ? "U" : ""));
             _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             throw new RIException("Old and slow: " + h, REASON_BANNED);
         }
@@ -431,7 +431,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _introductionRequested = false;
                 String caps = ri.getCapabilities();
                 if (_log.shouldWarn())
-                    _log.warn("Not offering to relay to router version " + ri.getVersion() + " caps " + caps + ": " + this);
+                    _log.warn("[SSU2] Not offering to relay to Router version " + ri.getVersion() + " caps " + caps + ": " + this);
             } else {
                 String caps = ri.getCapabilities();
                 // may be requesting relay for ipv4/6 if reachable on the other
@@ -443,7 +443,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 } else {
                     _introductionRequested = false;
                     if (_log.shouldWarn())
-                        _log.warn("Not offering to relay to router version " + ri.getVersion() + " caps " + caps + ": " + this);
+                        _log.warn("[SSU2] Not offering to relay to Router version " + ri.getVersion() + " caps " + caps + ": " + this);
                 }
             }
         }
@@ -460,7 +460,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     public void gotAddress(byte[] ip, int port) {
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received Address: " + Addresses.toString(ip, port));
+            _log.debug("[SSU2] Received IP address: " + Addresses.toString(ip, port));
         _bobIP = ip;
         // final, see super
         //_bobPort = port;
@@ -499,7 +499,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     public void gotToken(long token, long expires) {
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received token: " + token + " expires " + DataHelper.formatTime(expires) + " on " + this);
+            _log.debug("[SSU2] Received Token: " + token + " expires " + DataHelper.formatTime(expires) + " on " + this);
         if (_receivedConfirmedIdentity == null)
             throw new IllegalStateException("RouterInfo must be sent first");
         _transport.getEstablisher().addOutboundToken(_remoteHostId, token, expires);
@@ -622,7 +622,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             // ensure we expire before retransmitting
             _nextSend = _establishBegin + (5 * RETRANSMIT_DELAY);
             if (_log.shouldWarn())
-                _log.warn("Retransmit retry on " + this);
+                _log.warn("[SSU2] Retransmit RETRY on " + this);
         } else {
         _currentState = InboundState.IB_STATE_RETRY_SENT;
         // Won't really be retransmitted, they have 5 sec to respond or
@@ -670,13 +670,13 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_currentState != InboundState.IB_STATE_RETRY_SENT) {
             // not fatal
             if (_log.shouldWarn())
-                _log.warn("Received out-of-order or retransmit message " + type + " on: " + this);
+                _log.warn("[SSU2] Received out-of-order or RETRANSMIT message " + type + " on: " + this);
             return;
         }
         if (type == TOKEN_REQUEST_FLAG_BYTE) {
             // retransmitted token request
             if (_log.shouldWarn())
-                _log.warn("Received retransmit TokenRequest on: " + this);
+                _log.warn("[SSU2] Received RETRANSMIT TokenRequest on: " + this);
             // Est. mgr will resend retry and call retryPacketSent()
             // Note that Java I2P < 0.9.57 doesn't handle retransmitted retries correctly,
             // so this won't work for them
@@ -686,7 +686,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             return;
         }
         if (_log.shouldDebug())
-            _log.debug("Received SessionRequest after retry on: " + this);
+            _log.debug("[SSU2] Received SessionRequest after retry on: " + this);
         long token = DataHelper.fromLong8(data, off + 24);
         if (token != _token) {
             // most likely a retransmitted session request with the old invalid token
@@ -724,7 +724,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             // send another retry with termination
             UDPPacket retry = _transport.getBuilder2().buildRetryPacket(this, SSU2Util.REASON_SKEW);
             _transport.send(retry);
-            throw new GeneralSecurityException("Skew exceeded in SessionRequest: " + _skew);
+            throw new GeneralSecurityException("Max skew of 2m exceeded (" + _skew + "ms) in SessionRequest");
         }
         _sendHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessCreateHeader");
         _currentState = InboundState.IB_STATE_REQUEST_RECEIVED;
@@ -745,7 +745,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             return locked_receiveSessionConfirmed(packet);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldDebug())
-                _log.debug("SessionConfirmed error", gse);
+                _log.debug("[SSU2] SessionConfirmed error", gse);
             // fail inside synch rather than have Est. Mgr. do it to prevent races
             fail();
             throw gse;
@@ -774,7 +774,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         // allow both 0/0 (development) and 0/1 to indicate sole fragment
         int totalfrag = fragbyte & 0x0f;
         if (totalfrag > 0 && frag > totalfrag - 1)
-            throw new GeneralSecurityException("[SSU2] BAD SessionConfirmed fragment [" + frag + " / " + totalfrag + "]");
+            throw new GeneralSecurityException("BAD SessionConfirmed fragment [" + frag + " / " + totalfrag + "]");
         if (totalfrag > 1) {
             // Fragment processing. Save fragment.
             // If we have all fragments, reassemble and continue,
@@ -788,7 +788,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _nextSend = _lastSend + 60*1000;
             } else {
                 if (_sessConfFragments.length != totalfrag) // total frag changed
-                    throw new GeneralSecurityException("[SSU2] Bad SessionConfirmed fragment [" + frag + " / " + totalfrag + "]");
+                    throw new GeneralSecurityException("BAD SessionConfirmed fragment [" + frag + " / " + totalfrag + "]");
                 if (_sessConfFragments[frag] != null) {
                     if (_log.shouldInfo())
                         _log.info("[SSU2] Received duplicate SessionConfirmed fragment [" + frag + "] on " + this);
@@ -985,7 +985,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_sessCrForReTX == null)
             return null;
         if (_log.shouldInfo())
-            _log.info("Retransmit Session created on " + this);
+            _log.info("[SSU2] RETRANSMIT Session created on " + this);
         UDPPacket packet = UDPPacket.acquire(_context, false);
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
@@ -1054,7 +1054,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("[SSU2] InboundEstablishState ");
+        buf.append("InboundEstablishState ");
         buf.append(Addresses.toString(_aliceIP, _alicePort));
         buf.append("\n* Lifetime: ").append(DataHelper.formatDuration(getLifetime()));
         buf.append("; Receive ID: ").append(_rcvConnID);

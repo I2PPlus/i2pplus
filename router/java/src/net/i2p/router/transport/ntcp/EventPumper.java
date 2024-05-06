@@ -70,36 +70,34 @@ class EventPumper implements Runnable {
 
 //    private static final int BUF_SIZE = 8*1024;
 //    private static final int MAX_CACHE_SIZE = 64; // unused
-    private static final int BUF_SIZE = SystemVersion.isSlow() ? 8*1024 : 16*1024;
+    private static final int BUF_SIZE = SystemVersion.isSlow() ? 8*1024 :
+                                        SystemVersion.getMaxMemory() < 1024*1024*1024 ? 16*1024 : 32*1024;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {
-            if (_useDirect) {
-                return ByteBuffer.allocateDirect(BUF_SIZE);
-            } else {
-                return ByteBuffer.allocate(BUF_SIZE);
-            }
+            if (_useDirect) {return ByteBuffer.allocateDirect(BUF_SIZE);}
+            else {return ByteBuffer.allocate(BUF_SIZE);}
         }
     }
 
-
     /**
-     * every few seconds, iterate across all ntcp connections just to make sure
+     * Every few seconds, iterate across all ntcp connections just to make sure
      * we have their interestOps set properly (and to expire any looong idle cons).
      * as the number of connections grows, we should try to make this happen
      * less frequently (or not at all), but while the connection count is small,
      * the time to iterate across them to check a few flags shouldn't be a problem.
      */
 //    private static final long FAILSAFE_ITERATION_FREQ = 2*1000l;
-    private static final int FAILSAFE_ITERATION_FREQ = 60*1000;
 //    private static final int FAILSAFE_LOOP_COUNT = 512;
-    private static final int FAILSAFE_LOOP_COUNT = 1024;
 //    private static final long SELECTOR_LOOP_DELAY = 200;
+    private static final int FAILSAFE_ITERATION_FREQ = 60*1000;
+    private static final int FAILSAFE_LOOP_COUNT = 1024;
     private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 100 : 50;
     private static final long BLOCKED_IP_FREQ = 12*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
-    private static final long MIN_EXPIRE_IDLE_TIME = 120*1000l;
+    //private static final long MIN_EXPIRE_IDLE_TIME = 120*1000l;
+    private static final long MIN_EXPIRE_IDLE_TIME = 90*1000l;
     private static final long MAX_EXPIRE_IDLE_TIME = 11*60*1000l;
     private static final long MAY_DISCON_TIMEOUT = 10*1000;
     private static final long RI_STORE_INTERVAL = 29*60*1000;
@@ -116,8 +114,8 @@ class EventPumper implements Runnable {
     private static final String PROP_NODELAY = "i2np.ntcp.nodelay";
 
 //    private static final int MIN_MINB = 4;
-    private static final int MIN_MINB = SystemVersion.isSlow() ? 8 : SystemVersion.getMaxMemory() < 512*1024*1024 ? 32 : 64;
 //    private static final int MAX_MINB = 12;
+    private static final int MIN_MINB = SystemVersion.isSlow() ? 8 : SystemVersion.getMaxMemory() < 512*1024*1024 ? 32 : 64;
     private static final int MAX_MINB = SystemVersion.isSlow() ? 32 : SystemVersion.getMaxMemory() < 512*1024*1024 ? 256 : 512;
     public static final String PROP_MAX_MINB = "i2np.ntcp.eventPumperMaxBuffers";
     private static final int MIN_BUFS;
@@ -128,7 +126,7 @@ class EventPumper implements Runnable {
         MIN_BUFS = (int) Math.max(MIN_MINB, Math.max(MAX_MINB, 1 + (maxMemory / (4*1024*1024))));
     }
 
-    private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 1.5f : 3f;
+    private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 1.1f : 1.5f;
     private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
 
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
@@ -334,8 +332,7 @@ class EventPumper implements Runnable {
                                 }
 
                                 final long expire;
-                                if ((!haveCap || !con.isInbound()) &&
-                                    con.getMayDisconnect() &&
+                                if ((!haveCap || !con.isInbound()) && con.getMayDisconnect() &&
                                     con.getMessagesReceived() <= 2 && con.getMessagesSent() <= 1) {
                                     expire = MAY_DISCON_TIMEOUT;
                                     if (_log.shouldInfo())
@@ -384,9 +381,9 @@ class EventPumper implements Runnable {
                    int sysLoad = SystemVersion.getSystemLoad();
                     // another 100% CPU workaround
                     // TODO remove or only if we appear to be looping with no interest ops
-                    int pause = SystemVersion.isSlow() || (cpuLoad > 90 && cpuLoadAvg > 90) ? 50 :
-                                SystemVersion.getCores() < 8 || SystemVersion.getMaxMemory() < 1024*1024*1024 ? 20 :
-                                10;
+                    int pause = SystemVersion.isSlow() || (cpuLoad > 90 && cpuLoadAvg > 90) ? 30 :
+                                SystemVersion.getCores() < 6 || SystemVersion.getMaxMemory() < 768*1024*1024 ? 20 :
+                                5;
                     if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
                         if (_log.shouldInfo())
                             _log.info("EventPumper throttle " + loopCount + " loops in " +
@@ -558,7 +555,7 @@ class EventPumper implements Runnable {
                 if (count > 0) {
                     count = _blockedIPs.increment(ba);
                     if (_log.shouldWarn())
-                       _log.warn("Blocking accept of IP address: " + ba + " (Count: " + count + ")");
+                       _log.warn("Blocking NTCP connection attempt from: " + ba + " (Count: " + count + ")");
                     _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
                     if (count >= 30 && _log.shouldWarn()) {
                         _log.warn("WARNING! IP Address [" + ba + "] is making excessive inbound NTCP connection attempts (Count: " + count + ")");
@@ -817,7 +814,7 @@ class EventPumper implements Runnable {
                 _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Error reading on: " + con + " (" + ioe.getMessage() + ")");
+                    _log.warn("Error reading: " + con + " (" + ioe.getMessage() + ")");
             }
             if (con.isEstablished()) {
                 _context.statManager().addRateData("ntcp.readError", 1);
@@ -837,7 +834,7 @@ class EventPumper implements Runnable {
             // ???
             clearInterest(key, SelectionKey.OP_READ);
             if (_log.shouldWarn())
-                _log.warn("Error reading on: " + con, nyce);
+                _log.warn("Error reading: " + con, nyce);
         }
     }
 

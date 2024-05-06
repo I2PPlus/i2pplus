@@ -154,9 +154,9 @@ public class NTCPConnection implements Closeable {
      *  In the meantime, don't let the transport bid on big messages.
      */
 //    static final int BUFFER_SIZE = 16*1024;
-    static final int BUFFER_SIZE = 32*1024;
+    static final int BUFFER_SIZE = SystemVersion.isSlow() ? 16*1024: 32*1024;
 //    private static final int MAX_DATA_READ_BUFS = 16;
-    private static final int MAX_DATA_READ_BUFS = 32;
+    private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 16 : 32;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
 
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
@@ -181,7 +181,7 @@ public class NTCPConnection implements Closeable {
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
 //    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
-    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = SystemVersion.isSlow() ? 10*1040 : 16*1040;
+    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = SystemVersion.isSlow() ? 5*1040 : 8*1040;
     static final int REASON_UNSPEC = 0;
     static final int REASON_TERMINATION = 1;
     static final int REASON_TIMEOUT = 2;
@@ -1919,15 +1919,15 @@ public class NTCPConnection implements Closeable {
         } else {
             fromIP = null;
         }
-        return "[NTCP" + _version + "] Connection [ID " + _connID + "]\n* " +
-               (_isInbound ? ("From: " + fromIP + ":" + _chan.socket().getPort() + ' ')
+        return (_isInbound ? ("From: " + fromIP + ":" + _chan.socket().getPort() + ' ')
                            : ("Target: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
                (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
                (isEstablished() ? "" : " -> Not established") +
+               (_log.shouldInfo() ? "\n* [NTCP" + _version + "] Connection [ID " + _connID + "]\n* " +
                "\n* Created: " + DataHelper.formatDuration(getTimeSinceCreated()) + " ago;" +
                " Last message sent: " + DataHelper.formatDuration(getTimeSinceSend()) + " ago;" +
                " Last message received: " + DataHelper.formatDuration(getTimeSinceReceive()) + " ago" +
                "\n* Messages sent: " + _messagesWritten + ";" +
-               " Messages received: " + _messagesRead + " ";
+               " Messages received: " + _messagesRead + " " : "");
     }
 }

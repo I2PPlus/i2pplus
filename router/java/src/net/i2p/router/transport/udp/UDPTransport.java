@@ -44,6 +44,8 @@ import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
+import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.transport.Transport;
 import static net.i2p.router.transport.Transport.AddressSource.*;
 import net.i2p.router.transport.TransportBid;
@@ -2486,6 +2488,17 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
 
             if (isUnreachable(to))
                 return null;
+
+
+            // temp, let NTCP2 deal with him (prop. 165)
+            if (toAddress.getCapabilities().indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0) {
+                PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(to);
+                if (prof != null) {
+                    int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
+                    int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
+                    if (prof.getLastHeardFrom() <= 0 || rejected > agreed*2) {return null;}
+                } else  {return null;}
+            }
 
             // Validate his SSU address
             RouterAddress addr = getTargetAddress(toAddress);

@@ -20,6 +20,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.transport.crypto.DHSessionKeyBuilder;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  * Data for a new connection being established, where the remote peer has
@@ -107,7 +108,7 @@ class InboundEstablishState {
      *  Transmissions at 0, 1, 3, 7 sec
      *  This should be a little shorter than for outbound.
      */
-    protected static final long RETRANSMIT_DELAY = 1000;
+    protected static final long RETRANSMIT_DELAY = SystemVersion.isSlow() ? 1000 : 750;
 
     /**
      *  max delay including backoff

@@ -17,6 +17,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.transport.crypto.DHSessionKeyBuilder;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 import java.util.Date;
 
@@ -122,7 +123,7 @@ class OutboundEstablishState {
      *  Transmissions at 0, 1.25, 3.75, 8.75 sec
      *  This should be a little longer than for inbound.
      */
-    protected static final long RETRANSMIT_DELAY = 1250;
+    protected static final long RETRANSMIT_DELAY = SystemVersion.isSlow() ? 1250 : 1000;
 
     /**
      *  max delay including backoff

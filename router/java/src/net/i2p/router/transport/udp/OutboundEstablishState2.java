@@ -144,7 +144,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             try {
                 _bobSocketAddress = new InetSocketAddress(InetAddress.getByAddress(_bobIP), _bobPort);
             } catch (UnknownHostException uhe) {
-                throw new IllegalArgumentException("bad IP", uhe);
+                throw new IllegalArgumentException("BAD IP", uhe);
             }
         }
         // We need the MTU so the Session Confirmed can fit the RI in
@@ -240,7 +240,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         try {
             _bobSocketAddress = new InetSocketAddress(InetAddress.getByAddress(ip), port);
         } catch (UnknownHostException uhe) {
-            throw new IllegalArgumentException("bad IP", uhe);
+            throw new IllegalArgumentException("BAD IP", uhe);
         }
         _token = token;
         createNewState(_routerAddress);
@@ -262,13 +262,13 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             throw new IllegalArgumentException("no SSU2 S");
         byte[] publicKey = Base64.decode(ss);
         if (publicKey == null)
-            throw new IllegalArgumentException("bad SSU2 S");
+            throw new IllegalArgumentException("BAD SSU2 S");
         if (publicKey.length != 32)
-            throw new IllegalArgumentException("bad SSU2 S len");
+            throw new IllegalArgumentException("BAD SSU2 S length");
         try {
             _handshakeState = new HandshakeState(HandshakeState.PATTERN_ID_XK_SSU2, HandshakeState.INITIATOR, _transport.getXDHFactory());
         } catch (GeneralSecurityException gse) {
-            throw new IllegalStateException("bad proto", gse);
+            throw new IllegalStateException("BAD proto", gse);
         }
         _handshakeState.getRemotePublicKey().setPublicKey(publicKey, 0);
         _handshakeState.getLocalKeyPair().setKeys(_transport.getSSU2StaticPrivKey(), 0,
@@ -301,11 +301,11 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
-        throw new DataFormatException("RI in Sess Created");
+        throw new DataFormatException("RouterInfo in SessionCreated");
     }
 
     public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
-        throw new IllegalStateException("RI in Sess Created");
+        throw new IllegalStateException("RouterInfo in SessionCreated");
     }
 
     public void gotAddress(byte[] ip, int port) {
@@ -316,7 +316,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     public void gotRelayTagRequest() {
-        throw new IllegalStateException("Relay tag req in Sess Created");
+        throw new IllegalStateException("Relay tag request in SessionCreated");
     }
 
     public void gotRelayTag(long tag) {
@@ -575,7 +575,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         // _nextSend is now(), from packetReceived()
         _skew = _nextSend - _timeReceived;
         if (_skew > MAX_SKEW || _skew < 0 - MAX_SKEW)
-            throw new GeneralSecurityException("Skew exceeded in Retry: " + _skew);
+            throw new GeneralSecurityException("Max skew of 2m exceeded (" + _skew + "ms) in Retry");
         // required, but we don't really need it until Session Created, just check there
         //if (_aliceIP == null)
         //    throw new GeneralSecurityException("No Address block in Retry");
@@ -609,12 +609,10 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         if (_currentState != OutboundState.OB_STATE_REQUEST_SENT &&
             _currentState != OutboundState.OB_STATE_REQUEST_SENT_NEW_TOKEN) {
             // ignore dups
-            if (_log.shouldWarn())
-                _log.warn("[SSU2] Invalid state for SessionCreated: " + this);
+            if (_log.shouldWarn()) {_log.warn("[SSU2] Invalid state for SessionCreated: " + this);}
             return;
         }
-        if (_log.shouldDebug())
-            _log.debug("[SSU2] Received a SessionCreated on " + this);
+        if (_log.shouldDebug()) {_log.debug("[SSU2] Received a SessionCreated on " + this);}
 
         DatagramPacket pkt = packet.getPacket();
         SocketAddress from = pkt.getSocketAddress();
@@ -669,7 +667,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         // Unlikely, we would have gotten a termination from him and failed already,
         // unless our skew limit is stricter than bob's.
         if (_skew > MAX_SKEW || _skew < 0 - MAX_SKEW)
-            throw new GeneralSecurityException("Skew exceeded in SessionCreated: " + _skew);
+            throw new GeneralSecurityException("Max skew of 2m exceeded (" + _skew + "ms) in SessionCreated");
         _sessReqForReTX = null;
         _sendHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessionConfirmed");
 
@@ -799,8 +797,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      * @return null if not sent or already got the session created
      */
     public synchronized UDPPacket getRetransmitSessionRequestPacket() {
-        if (_sessReqForReTX == null)
-            return null;
+        if (_sessReqForReTX == null) {return null;}
         UDPPacket packet = UDPPacket.acquire(_context, false);
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
@@ -829,14 +826,10 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      */
     public IntroState getIntroState(Hash h) {
         IntroState rv;
-        if (_introducers == null) {
-            rv = IntroState.INTRO_STATE_INVALID;
-        } else {
-            synchronized(_introducers) {
-                rv = _introducers.get(h);
-            }
-            if (rv == null)
-                rv = IntroState.INTRO_STATE_INVALID;
+        if (_introducers == null) {rv = IntroState.INTRO_STATE_INVALID;}
+        else {
+            synchronized(_introducers) {rv = _introducers.get(h);}
+            if (rv == null) {rv = IntroState.INTRO_STATE_INVALID;}
         }
         return rv;
     }
@@ -846,14 +839,12 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      * @since 0.9.55
      */
     public void setIntroState(Hash h, IntroState state) {
-        if (_introducers == null)
-            return;
+        if (_introducers == null) {return;}
         IntroState old;
-        synchronized(_introducers) {
-            old = _introducers.put(h, state);
-        }
-        if (old != state && _log.shouldDebug())
+        synchronized(_introducers) {old = _introducers.put(h, state);}
+        if (old != state && _log.shouldDebug()) {
             _log.debug("Change state for Introducer [" + h.toBase64().substring(0,6) + "] from " + old + " to " + state + " on " + this);
+        }
     }
 
     /**
@@ -869,13 +860,18 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     public String toString() {
         int count = _introducers != null ? _introducers.size() : 0;
         //return "[SSU2] OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId +
-        return "[SSU2] OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " +
+        return "OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " +
                "\n* Lifetime: " + DataHelper.formatDuration(getLifetime()) +
                "; Receive ID: " + _rcvConnID +
                "; Send ID: " + _sendConnID +
                "; Token: " + _token +
                " -> " + _currentState +
                (_introducers != null && _log.shouldInfo() ? ("\n* Introducers: " + _introducers.toString()) : " (" + count + " introducers)");
+    }
+
+    public int countIntroducers() {
+        int count = _introducers != null ? _introducers.size() : 0;
+        return count;
     }
 
     /**

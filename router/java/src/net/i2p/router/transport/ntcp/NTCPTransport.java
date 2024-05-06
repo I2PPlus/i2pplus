@@ -116,7 +116,7 @@ public class NTCPTransport extends TransportImpl {
     private final NTCPSendFinisher _finisher;
     private final X25519KeyFactory _xdhFactory;
     private long _lastBadSkew;
-    private static final long[] RATES = { 60*1000, 10*60*1000 };
+    private static final long[] RATES = { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 };
 
     /**
      *  RI sigtypes supported in 0.9.16
@@ -395,12 +395,6 @@ public class NTCPTransport extends TransportImpl {
                                 // Note that outbound conns go in the map BEFORE establishment
                                 _conByIdent.put(ih, con);
                             } catch (DataFormatException dfe) {
-/**
-                                if (_log.shouldInfo()) {
-                                    _log.warn("[NTCP] BAD published address\n" + target, dfe);
-                                } else if (_log.shouldWarn())
-                                    _log.warn("[NTCP] Router [" + ident.toBase64().substring(0,6) + "] has BAD published address");
-**/
                                 fail = true;
                             }
                         } else {
@@ -413,8 +407,8 @@ public class NTCPTransport extends TransportImpl {
                     }
                 }
             }
+            long now = _context.clock().now();
             if (fail) {
-                long now = _context.clock().now();
                 // race, RI changed out from under us, maybe SSU can handle it
                 if (_log.shouldInfo()) {
                     _log.warn("[NTCP] We bid on a peer without a valid NTCP address, banning for 8h\n" + target);
@@ -634,7 +628,7 @@ public class NTCPTransport extends TransportImpl {
             byte[] ip = addr.getIP();
             if (!TransportUtil.isValidPort(addr.getPort()) || ip == null) {
                 //_context.statManager().addRateData("ntcp.connectFailedInvalidPort", 1);
-                //_context.banlist().banlistRouter(toAddress.getIdentity().calculateHash(), "Invalid NTCP address", STYLE);
+                //_context.banlist().banlistRouter(toAddress.getIdentity().calculateHash(), " <b>➜</b> Invalid NTCP address", STYLE);
                 //if (_log.shouldDebug())
                 //    _log.debug("no bid when trying to send to " + peer + " as they don't have a valid ntcp address");
                 continue;
@@ -888,11 +882,9 @@ public class NTCPTransport extends TransportImpl {
     private static final int MIN_CONCURRENT_WRITERS = 2;  // unless < 32MB
 //    private static final int MAX_CONCURRENT_READERS = 4;
 //    private static final int MAX_CONCURRENT_WRITERS = 4;
-    private static final int MAX_CONCURRENT_READERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
-                                                       SystemVersion.getMaxMemory() < 512*1024*1024) ? 3 : Math.min(SystemVersion.getCores() + 3, 6);
-    private static final int MAX_CONCURRENT_WRITERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
-                                                       SystemVersion.getMaxMemory() < 512*1024*1024) ? 3 : Math.min(SystemVersion.getCores() + 3, 6);
-
+    private static final int MAX_CONCURRENT_READERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 || SystemVersion.getMaxMemory() < 512*1024*1024) ? 3 :
+                                                       SystemVersion.getCores() >= 10 ? 8 : 6;
+    private static final int MAX_CONCURRENT_WRITERS = MAX_CONCURRENT_READERS;
     /**
      *  Called by TransportManager.
      *  Caller should stop the transport first, then
@@ -909,14 +901,9 @@ public class NTCPTransport extends TransportImpl {
         RouterAddress addr = configureLocalAddress();
         boolean ssuDisabled = !_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP);
         int port;
-        if (addr != null)
-            // probably not set
-            port = addr.getPort();
-        else if (ssuDisabled)
-            port = setupPort();
-        else
-            // received by externalAddressReceived() from TransportManager
-            port = _ssuPort;
+        if (addr != null) {port = addr.getPort();} // probably not set
+        else if (ssuDisabled) {port = setupPort();}
+        else {port = _ssuPort;} // received by externalAddressReceived() from TransportManager
         boolean isFixedOrForceFirewalled = _context.getProperty(PROP_I2NP_NTCP_AUTO_IP, "true")
                                            .toLowerCase(Locale.US).equals("false");
         RouterAddress myAddress = bindAddress(port);
@@ -1298,7 +1285,7 @@ public class NTCPTransport extends TransportImpl {
                 if (addr.getPort() <= 0) {
                     addr = null;
                     if (_log.shouldError())
-                        _log.error("NTCP address is outbound only, since the NTCP configuration is invalid");
+                        _log.error("NTCP address is outbound only, since the NTCP configuration is INVALID");
                 } else {
                     if (_log.shouldInfo())
                         _log.info("NTCP address configured: " + addr);

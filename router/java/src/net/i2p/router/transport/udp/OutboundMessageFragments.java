@@ -18,6 +18,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.transport.udp.PacketBuilder.Fragment;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  * Coordinate the outbound fragments and select the next one to be built.
@@ -64,7 +65,7 @@ class OutboundMessageFragments {
     // private static final int MAX_ACTIVE = 64; // not used.
     // don't send a packet more than 10 times
     static final int MAX_VOLLEYS = 10;
-    private static final int MAX_WAIT = 1000;
+    private static final int MAX_WAIT = SystemVersion.isSlow() ? 1000 : 500;
 
     public OutboundMessageFragments(RouterContext ctx, UDPTransport transport, ActiveThrottle throttle) {
         _context = ctx;
@@ -336,7 +337,7 @@ class OutboundMessageFragments {
                         // gets called regularly
                         int toWait = Math.min(Math.max(nextSendDelay, 10), MAX_WAIT);
                         if (_log.shouldDebug())
-                            _log.debug("Waiting for " + toWait + "ms before sending next message...");
+                            _log.debug("Waiting " + toWait + "ms before sending next message...");
 
                         nextSendDelay = Integer.MAX_VALUE;
                         // wait.. or somethin'

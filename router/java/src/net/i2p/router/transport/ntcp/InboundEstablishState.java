@@ -610,8 +610,11 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         byte[] sip_ba = sipkeys[1];
 
         if (_msg3p2FailReason >= 0) {
-            if (_log.shouldWarn())
-                _log.warn("Failed message #3 part 2 (Code: " + _msg3p2FailReason + ") \n* For: " + this);
+            if (_log.shouldInfo()) {
+                _log.warn("Failed message #3 part 2 -> " + parseReason(_msg3p2FailReason) + "\n* For: " + this);
+            } else if (_log.shouldWarn() && !parseReason(_msg3p2FailReason).contains("banned")) {
+                _log.warn("Failed message #3 part 2 -> " + parseReason(_msg3p2FailReason) + "\n* For: " + this);
+            }
             _con.failInboundEstablishment(sender, sip_ba, _msg3p2FailReason);
             changeState(State.CORRUPT);
         } else {
@@ -738,7 +741,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldWarn() && !isBanned)
                 _log.warn("Banning for 4h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
-                          " -> Old and slow (" + version + " / " + bw + "U)");
+                          " -> " + version + " / " + bw + (unreachable ? "U" : ""));
             _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             throw new DataFormatException("Old and slow: " + h);
         }
@@ -845,6 +848,35 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         public Disconnector(Hash h) { this.h = h; }
         public void timeReached() {
             _context.commSystem().forceDisconnect(h);
+        }
+    }
+
+    public static String parseReason(int reasonCode) {
+        switch (reasonCode) {
+            case 0: return "Unspecified";
+            case 1: return "Termination";
+            case 2: return "Timeout";
+            case 3: return "Shutdown";
+            case 4: return "AEAD error";
+            case 5: return "Options error";
+            case 6: return "Signature type error";
+            case 7: return "Excessive clock skew";
+            case 8: return "Padding error";
+            case 9: return "Framing error";
+            case 10: return "Payload error";
+            case 11: return "Message #1 error";
+            case 12: return "Message #2 error";
+            case 13: return "Message #3 error";
+            case 14: return "Frame Timeout";
+            case 15: return "Signature error";
+            case 16: return "S Mismatch";
+            case 17: return "Router is banned";
+            case 18: return "Token error";
+            case 19: return "Limit reached";
+            case 20: return "Incompatible Version";
+            case 21: return "BAD Netid";
+            case 22: return "Replaced connection";
+            default: return "Unknown";
         }
     }
 
