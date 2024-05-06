@@ -93,6 +93,7 @@ import org.jfree.svg.util.GradientPaintKey;
 import org.jfree.svg.util.GraphicsUtils;
 import org.jfree.svg.util.LinearGradientPaintKey;
 import org.jfree.svg.util.RadialGradientPaintKey;
+import static org.jfree.svg.util.RyuDouble.doubleToString;
 
 /**
  * <p>
@@ -198,26 +199,16 @@ public final class SVGGraphics2D extends Graphics2D {
      * The number of decimal places to use when writing the matrix values
      * for transformations.
      */
-    private int transformDP;
-
-    /**
-     * The decimal formatter for transform matrices.
-     */
-    private DecimalFormat transformFormat;
+    private int transformDP = 6;
 
     /**
      * The number of decimal places to use when writing coordinates for
      * geometrical shapes.
      */
-    private int geometryDP;
-
-    /**
-     * The decimal formatter for coordinates of geometrical shapes.
-     */
-    private DecimalFormat geometryFormat;
+    private int geometryDP = 4;
 
     /** The buffer that accumulates the SVG output. */
-    private StringBuilder sb;
+    private final StringBuilder sb;
 
     /**
      * A prefix for the keys used in the DEFS element.  This can be used to
@@ -258,16 +249,16 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * The filename prefix for images that are referenced rather than
      * embedded but don't have an {@code href} supplied via the
-     * {@link #KEY_IMAGE_HREF} hint.
+     * {@link SVGHints#KEY_IMAGE_HREF} hint.
      */
-    private String filePrefix;
+    private String filePrefix = "image-";
 
     /**
      * The filename suffix for images that are referenced rather than
      * embedded but don't have an {@code href} supplied via the
-     * {@link #KEY_IMAGE_HREF} hint.
+     * {@link SVGHints#KEY_IMAGE_HREF} hint.
      */
-    private String fileSuffix;
+    private String fileSuffix = ".png";
 
     /**
      * A list of images that are referenced but not embedded in the SVG.
@@ -304,7 +295,7 @@ public final class SVGGraphics2D extends Graphics2D {
     private double zeroStrokeWidth;
 
     /** The last font that was set. */
-    private Font font;
+    private Font font = new Font("SansSerif", Font.PLAIN, 12);
 
     /**
      * The font render context.  The fractional metrics flag solves the glyph
@@ -425,29 +416,15 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @since 3.2
      */
-    public SVGGraphics2D(int width, int height, SVGUnits units,
-            StringBuilder sb) {
+    public SVGGraphics2D(int width, int height, SVGUnits units, StringBuilder sb) {
         this.width = width;
         this.height = height;
         this.units = units;
-        this.shapeRendering = "auto";
-        this.textRendering = "auto";
-        this.defsKeyPrefix = "_" + String.valueOf(System.nanoTime());
-        this.clip = null;
         this.imageElements = new ArrayList<>();
-        this.filePrefix = "image-";
-        this.fileSuffix = ".png";
-        this.font = new Font("SansSerif", Font.PLAIN, 12);
         this.fontMapper = new StandardFontMapper();
         this.zeroStrokeWidth = 0.1;
         this.sb = sb;
-        this.hints = new RenderingHints(SVGHints.KEY_IMAGE_HANDLING,
-                SVGHints.VALUE_IMAGE_HANDLING_EMBED);
-        // force the formatters to use a '.' for the decimal point
-        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-        dfs.setDecimalSeparator('.');
-        this.transformFormat = new DecimalFormat("0.######", dfs);
-        this.geometryFormat = new DecimalFormat("0.##", dfs);
+        this.hints = new RenderingHints(SVGHints.KEY_IMAGE_HANDLING, SVGHints.VALUE_IMAGE_HANDLING_EMBED);
         this.elementIDs = new HashSet<>();
     }
 
@@ -456,7 +433,7 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param parent  the parent ({@code null} not permitted).
      */
-    private SVGGraphics2D(SVGGraphics2D parent) {
+    private SVGGraphics2D(final SVGGraphics2D parent) {
         this(parent.width, parent.height, parent.units, parent.sb);
         this.shapeRendering = parent.shapeRendering;
         this.textRendering = parent.textRendering;
@@ -657,17 +634,7 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @see #getTransformDP()
      */
-    public void setTransformDP(int dp) {
-        this.transformDP = dp;
-        if (dp < 1 || dp > 10) {
-            this.transformFormat = null;
-            return;
-        }
-        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-        dfs.setDecimalSeparator('.');
-        this.transformFormat = new DecimalFormat("0."
-                + "##########".substring(0, dp), dfs);
-    }
+    public void setTransformDP(final int dp) {this.transformDP = dp;}
 
     /**
      * Returns the number of decimal places used to write the coordinates
@@ -679,9 +646,7 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @return The number of decimal places.
      */
-    public int getGeometryDP() {
-        return this.geometryDP;
-    }
+    public int getGeometryDP() {return this.geometryDP;}
 
     /**
      * Sets the number of decimal places used to write the coordinates of
@@ -696,16 +661,8 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param dp  the number of decimal places (normally 1 to 10).
      */
-    public void setGeometryDP(int dp) {
+    public void setGeometryDP(final int dp) {
         this.geometryDP = dp;
-        if (dp < 1 || dp > 10) {
-            this.geometryFormat = null;
-            return;
-        }
-        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-        dfs.setDecimalSeparator('.');
-        this.geometryFormat = new DecimalFormat("0."
-                + "##########".substring(0, dp), dfs);
     }
 
     /**
@@ -2035,20 +1992,12 @@ public final class SVGGraphics2D extends Graphics2D {
         return CLIP_KEY_PREFIX + index;
     }
 
-    private String transformDP(double d) {
-        if (this.transformFormat != null) {
-            return transformFormat.format(d);
-        } else {
-            return String.valueOf(d);
-        }
+    private String transformDP(final double d) {
+        return doubleToString(d, transformDP);
     }
 
-    private String geomDP(double d) {
-        if (this.geometryFormat != null) {
-            return geometryFormat.format(d);
-        } else {
-            return String.valueOf(d);
-        }
+    private String geomDP(final double d) {
+        return doubleToString(d, geometryDP);
     }
 
     private String getSVGTransform(AffineTransform t) {
@@ -2763,6 +2712,7 @@ public final class SVGGraphics2D extends Graphics2D {
             .replace("style=\"fill:rgb(0,72,8);fill-opacity:.86;stroke:none\"", "fill=\"url(#dark)\"")
             .replace("style=\"fill:rgb(100,160,200);fill-opacity:.78;stroke:none\"", "fill=\"url(#light)\"")
             .replace("stroke:rgb(0,72,8)", "stroke:#00800da0")
+            .replace("stroke:rgb(0,30,110)", "stroke:#003de6a0;fill:none")
             .replace("stroke:rgb(100,160,200);stroke-opacity:.78;", "stroke:#4da3cb99;")
             .replaceAll("/></g><g (style=\"stroke:.*?\").*?</g>", " $1 /></g>")
             .replace("stroke-linecap:square;fill:none", "stroke-linecap:square")
