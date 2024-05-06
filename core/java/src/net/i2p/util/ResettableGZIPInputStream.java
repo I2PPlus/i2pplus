@@ -225,7 +225,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
         c = in.read();
         if (c != 0x8B) throw new IOException("Second magic byte was wrong [" + c + "]");
         c = in.read();
-        if (c != 0x08) throw new IOException("Compression format is invalid [" + c + "]");
+        if (c != 0x08) throw new IOException("Compression format is INVALID [" + c + "]");
 
         int flags = in.read();
 

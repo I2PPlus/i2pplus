@@ -122,7 +122,7 @@ public class InNetMessagePool implements Service {
 
     /**
      * Add a new message to the pool.
-     * If there is 
+     * If there is
      * a HandlerJobBuilder for the inbound message type, the message is loaded
      * into a job created by that builder and queued up for processing instead
      * (though if the builder doesn't create a job, it is added to the pool).
@@ -166,7 +166,7 @@ public class InNetMessagePool implements Service {
         if (_log.shouldDebug())
                 _log.debug("Received " + messageBody.getClass().getSimpleName() +
                            " [MsgID " + messageBody.getUniqueId() + "] " +
-                           " [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) + "]" + 
+                           " [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) + "]" +
                            "\n* Expires: " + new Date(exp));
 
         //if (messageBody instanceof DataMessage) {
@@ -185,16 +185,19 @@ public class InNetMessagePool implements Service {
         }
 
         if (invalidReason != null) {
-            int level = Log.WARN;
-            //if (messageBody instanceof TunnelCreateMessage)
-            //    level = Log.INFO;
-            if (_log.shouldLog(level))
-                _log.log(level, "Dropping " + invalidReason + ' ' + messageBody.getClass().getSimpleName() + 
-                                " [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) + "] -> " + messageBody +
-                                "\n* Expires: " + new Date(exp));
+            if (_log.shouldInfo()) {
+                _log.warn("Dropping DbLookupMessage [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) +
+                          "] -> " + invalidReason.substring(0, 1).toUpperCase() + invalidReason.substring(1) +
+                          messageBody + "\n* Expires: " + new Date(exp));
+            } else if (_log.shouldWarn()) {
+                _log.warn("Dropping DbLookupMessage for " + messageBody + " -> " +
+                          invalidReason.substring(0, 1).toUpperCase() + invalidReason.substring(1));
+            }
             _context.statManager().addRateData("inNetPool.dropped", 1);
             // FIXME not necessarily a duplicate, could be expired too long ago / too far in future
-            _context.statManager().addRateData("inNetPool.duplicate", 1);
+            if (!invalidReason.contains("expire")) {
+                _context.statManager().addRateData("inNetPool.duplicate", 1);
+            }
             if (doHistory) {
                 history.droppedOtherMessage(messageBody, (fromRouter != null ? fromRouter.calculateHash() : fromRouterHash));
                 history.messageProcessingError(messageBody.getUniqueId(msgIDBloomXor),
@@ -261,7 +264,7 @@ public class InNetMessagePool implements Service {
               }
               allowMatches = false;
               if (_log.shouldLog(Log.DEBUG))
-                  _log.debug("Finished processing dsm (allowMatches = false) from router "
+                  _log.debug("Finished processing dsm (allowMatches = false) from Router "
                              + fromRouter + " / " + fromRouterHash
                              + " origMessages.size() = " + sz
                              + " message: " + messageBody);
@@ -338,9 +341,9 @@ public class InNetMessagePool implements Service {
                 } else {
                     if (doHistory) {
                         String mtype = messageBody.getClass().getName();
-                        history.receiveMessage(mtype, messageBody.getUniqueId(msgIDBloomXor), 
-                                               messageBody.getMessageExpiration(), 
-                                               fromRouterHash, true);	
+                        history.receiveMessage(mtype, messageBody.getUniqueId(msgIDBloomXor),
+                                               messageBody.getMessageExpiration(),
+                                               fromRouterHash, true);
                     }
                     return 0; // no queue
                 }
@@ -349,9 +352,9 @@ public class InNetMessagePool implements Service {
 
         if (doHistory) {
             String mtype = messageBody.getClass().getName();
-            history.receiveMessage(mtype, messageBody.getUniqueId(msgIDBloomXor), 
-                                   messageBody.getMessageExpiration(), 
-                                   fromRouterHash, true);	
+            history.receiveMessage(mtype, messageBody.getUniqueId(msgIDBloomXor),
+                                   messageBody.getMessageExpiration(),
+                                   fromRouterHash, true);
         }
         return 0; // no queue
     }

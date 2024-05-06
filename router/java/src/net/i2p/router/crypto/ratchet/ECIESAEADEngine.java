@@ -165,10 +165,10 @@ public final class ECIESAEADEngine {
             return x_decrypt(data, targetPrivateKey, keyManager);
         } catch (DataFormatException dfe) {
             if (_log.shouldWarn())
-                _log.warn("ECIES decrypt error", dfe);
+                _log.warn("ECIES decryption error -> " + dfe.getMessage());
             return NO_CLOVES;
         } catch (Exception e) {
-            _log.error("ECIES decrypt error", e);
+            _log.error("ECIES decryption error", e);
             return NO_CLOVES;
         }
     }
@@ -215,10 +215,10 @@ public final class ECIESAEADEngine {
             return x_decryptFast(data, targetPrivateKey, keyManager);
         } catch (DataFormatException dfe) {
             if (_log.shouldWarn())
-                _log.warn("ECIES decrypt error", dfe);
+                _log.warn("ECIES decryption error -> " +  dfe.getMessage());
             return NO_CLOVES;
         } catch (Exception e) {
-            _log.error("ECIES decrypt error", e);
+            _log.error("ECIES decryption error", e);
             return NO_CLOVES;
         }
     }

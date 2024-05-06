@@ -1208,15 +1208,15 @@ class ClientConnectionRunner {
             if (!alreadyAccepted(_messageId)) {
                 if (_requeueCount++ > MAX_REQUEUE) {
                     // bug requeueing forever? failsafe
-                    _log.error("Abandon update for message " + _messageId + " to "
+                    _log.error("Abandoning update for [MsgID " + _messageId + "] to "
                           + MessageStatusMessage.getStatusString(msg.getStatus())
                           + " for " + _sessId);
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Almost sent an update for message " + _messageId + " to "
+                        _log.warn("Almost sent update for [MsgID " + _messageId + "] to "
                           + MessageStatusMessage.getStatusString(msg.getStatus())
                           + " for " + _sessId
-                          + " before they knew the messageId; delaying for .5s");
+                          + " before they knew the ID -> Delaying for .5s");
                     _lastTried = _context.clock().now();
                     requeue(REQUEUE_DELAY);
                 }

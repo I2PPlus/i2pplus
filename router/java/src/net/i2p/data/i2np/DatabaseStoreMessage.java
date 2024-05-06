@@ -297,7 +297,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("\n\t DbStoreMsg: ");
+        buf.append("\n* DatabaseStore Message");
         buf.append("\n* Expiration: ").append(new Date(_expiration));
         buf.append("\n* Unique ID: ").append(getUniqueId());
         if (_replyToken != 0) {
@@ -305,13 +305,10 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
             buf.append("\n* Reply tunnel: ").append(_replyTunnel);
             buf.append("\n* Reply gateway: ").append(_replyGateway);
         }
-        buf.append("\n* Key: ");
-        if (_dbEntry.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
-            buf.append(getKey());
-        else
-            buf.append(getKey().toBase32());
-        if (_dbEntry != null)
-            buf.append("\n\t Entry: ").append(_dbEntry);
+        if (_dbEntry.getType() != DatabaseEntry.KEY_TYPE_ROUTERINFO) {
+            buf.append("\n* Key: ").append(getKey().toBase32());
+        }
+        if (_dbEntry != null) {buf.append("\n* Entry: ").append(_dbEntry);}
         return buf.toString();
     }
 }

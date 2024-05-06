@@ -44,7 +44,7 @@ public class MessageValidator {
             if (_log.shouldInfo())
                 _log.info("Rejecting message " + messageId + " duplicate", new Exception("Duplicate origin"));
             _context.statManager().addRateData("router.duplicateMessageId", 1);
-            return "duplicate";
+            return "Duplicate message";
         } else {
             //if (_log.shouldDebug())
             //    _log.debug("Accepting message " + messageId + " because it is NOT a duplicate", new Exception("Original origin"));
@@ -61,12 +61,12 @@ public class MessageValidator {
             if (_log.shouldInfo())
                 _log.info("Rejecting message expired " + (now-expiration) + "ms ago");
             _context.statManager().addRateData("router.invalidMessageTime", (now-expiration));
-            return "expired " + (now-expiration) + "ms ago";
+            return "Expired " + (now-expiration) + "ms ago";
         } else if (now + 4*Router.CLOCK_FUDGE_FACTOR < expiration) {
             if (_log.shouldInfo())
                 _log.info("Rejecting message expiring too far in the future (" + (expiration-now) + "ms)");
             _context.statManager().addRateData("router.invalidMessageTime", (now-expiration));
-            return "expire too far in the future (" + (expiration-now) + "ms)";
+            return "Expires too far in the future (" + (expiration-now) + "ms)";
         }
         return null;
     }
@@ -90,7 +90,7 @@ public class MessageValidator {
         if (dup && _log.shouldWarn()) {
             _log.warn("Duplicate with " + _filter.getCurrentDuplicateCount()
                       + " other dups, " + _filter.getInsertedCount()
-                      + " other entries, and a false positive rate of "
+                      + " other entries, and a FALSE POSITIVE rate of "
                       + _filter.getFalsePositiveRate());
         }
         return dup;

@@ -1404,9 +1404,9 @@ public class Router implements RouterClock.ClockShiftListener {
         _context.removeShutdownTasks();
         // hard and ugly
         if (_context.hasWrapper())
-            _log.log(Log.CRIT, "Restarting with new router identity");
+            _log.log(Log.CRIT, "Restarting with new Router Identity");
         else
-            _log.log(Log.CRIT, "Shutting down because old router identity was invalid - restart I2P");
+            _log.log(Log.CRIT, "Shutting down because old Router Identity was INVALID - restart I2P");
         finalShutdown(EXIT_HARD_RESTART);
     }
 

@@ -792,11 +792,11 @@ class ClientManager {
             ClientConnectionRunner runner = getRunner(destHash);
             if (runner == null) {
                 if (_log.shouldLog(Log.WARN))
-                _log.warn("ClientManager got a null runner in getClientFloodfillNetworkDatabaseFacade for [" + destHash.toBase32().substring(0,6) + "]");
+                _log.warn("ClientManager received a NULL runner for [" + destHash.toBase32().substring(0,6) + "]");
                 return null;
             }
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("ClientManager got a runner in getClientFloodfillNetworkDatabaseFacade for [" + destHash.toBase32().substring(0,6) + "]");
+                _log.debug("ClientManager received a runner for [" + destHash.toBase32().substring(0,6) + "]");
             return runner.getFloodfillNetworkDatabaseFacade();
         }
         return null;

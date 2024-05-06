@@ -130,7 +130,7 @@ class RebuildRouterInfoJob extends JobImpl {
             }
 
             if (!info.isValid()) {
-                _log.log(Log.CRIT, "RouterInfo we just built is invalid: " + info, new Exception());
+                _log.log(Log.CRIT, "RouterInfo we just built is INVALID: " + info, new Exception());
                 return;
             }
 
@@ -140,9 +140,9 @@ class RebuildRouterInfoJob extends JobImpl {
                     fos = new SecureFileOutputStream(infoFile);
                     info.writeBytes(fos);
                 } catch (DataFormatException dfe) {
-                    _log.log(Log.CRIT, "Error rebuilding the router information", dfe);
+                    _log.log(Log.CRIT, "Error rebuilding the RouterInfo", dfe);
                 } catch (IOException ioe) {
-                    _log.log(Log.CRIT, "Error writing out the rebuilt router information", ioe);
+                    _log.log(Log.CRIT, "Error writing out the rebuilt RouterInfo", ioe);
                 } finally {
                     if (fos != null) try { fos.close(); } catch (IOException ioe) {}
                 }

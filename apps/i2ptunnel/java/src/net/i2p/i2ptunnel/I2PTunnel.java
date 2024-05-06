@@ -1710,7 +1710,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                     notifyEvent("lookupResult", dest.toBase64());
                 }
             } catch (DataFormatException dfe) {
-                l.log("Unknown or invalid host: " + args[0]);
+                l.log("Unknown or INVALID host: " + args[0]);
                 notifyEvent("lookupResult", "invalid host");
             }
         }

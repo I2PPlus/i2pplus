@@ -1334,7 +1334,7 @@ class Connection {
                 default:
                     if (_log.shouldWarn()) {
                         int timeout = _options.getInactivityTimeout() / 1000;
-                        _log.warn("Closing inactive connection to " + getRemotePeerString() + " -> " + timeout + "s timeout reached");
+                        _log.warn("Closing INACTIVE connection to " + getRemotePeerString() + " -> " + timeout + "s timeout reached");
                     }
                     if (_log.shouldDebug()) {
                         StringBuilder buf = new StringBuilder(128);
@@ -1378,24 +1378,16 @@ class Connection {
         StringBuilder buf = new StringBuilder(256);
         buf.append("Connection: ");
         long id = _receiveStreamId.get();
-        if (id > 0)
-            buf.append(Packet.toId(id));
-        else
-            buf.append("Unknown");
+        if (id > 0) {buf.append(Packet.toId(id));}
+        else {buf.append("Unknown");}
         buf.append('/');
         id = _sendStreamId.get();
-        if (id > 0)
-            buf.append(Packet.toId(id));
-        else
-            buf.append("Unknown");
-        if (_isInbound)
-            buf.append(" from ");
-        else
-            buf.append(" to ");
-        if (_remotePeer != null)
-            buf.append("[").append(_remotePeer.calculateHash().toBase64().substring(0,6)).append("]");
-        else
-            buf.append("Unknown");
+        if (id > 0) {buf.append(Packet.toId(id));}
+        else {buf.append("Unknown");}
+        if (_isInbound) {buf.append(" from ");}
+        else {buf.append(" to ");}
+        if (_remotePeer != null) {buf.append("[").append(_remotePeer.calculateHash().toBase64().substring(0,6)).append("]");}
+        else {buf.append("Unknown");}
         long now = _context.clock().now();
         if  (_log.shouldInfo()) {
             buf.append("\n* Up: ").append(DataHelper.formatDuration(now - _createdOn));

@@ -656,7 +656,7 @@ class SAMv3Handler extends SAMv1Handler
                     }
                 } while (!done);
                 if (_log.shouldWarn())
-                    _log.warn("Detector exit after tunnel build");
+                    _log.warn("Detector exited after tunnel build");
             } catch (IOException ioe) {
                 _log.error("SAM socket closed while waiting for tunnels to build", ioe);
                 _handler.interrupt();
