@@ -2740,7 +2740,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #loggingoptions{margin-bottom:-3px}
 #logs font[color^="#"]::before{margin-right:6px;margin-left:5px;width:7px;height:7px}
 #minigraphcontainer{margin-top:-43px;margin-left:1px;width:234px;height:38px;background-size:248px 40px}
-#minigraph{margin-top:-17px;width:234px;height:40px}
+#minigraph{margin-top:-20px;width:234px;height:44px}
 #netdbcountrylist img{width:24px;height:auto}
 #peerprofiles.widescroll{padding-top:123px}
 #sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_general td::after,#sb_peersadvanced td::after,#sb_peers td::after,#sb_queue td::after,#sb_shortgeneral td::after,#sb_tunnels td::after{min-height:14px}
