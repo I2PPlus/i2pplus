@@ -30,6 +30,7 @@ import org.rrd4j.data.Variable;
 import org.rrd4j.graph.ElementsNames;
 import org.rrd4j.graph.RrdGraph;
 import org.rrd4j.graph.RrdGraphDef;
+import org.rrd4j.graph.SVGImageWorker;
 
 import net.i2p.router.web.helpers.GraphHelper;
 
@@ -62,7 +63,7 @@ class SummaryRenderer {
     private static final Color SHADEA_COLOR_DARK = new Color(0, 0, 0);
     private static final Color SHADEB_COLOR = new Color(255, 255, 255);
     private static final Color SHADEB_COLOR_DARK = new Color(0, 0, 0);
-    private static final Color GRID_COLOR = new Color(100, 100, 100, 75);
+    private static final Color GRID_COLOR = new Color(80, 80, 80, 50);
     private static final Color GRID_COLOR_DARK = new Color(244, 244, 190, 50);
     private static final Color GRID_COLOR_DARK2 = new Color(244, 244, 190, 30);
     private static final Color GRID_COLOR_MIDNIGHT = new Color(201, 206, 255, 50);
@@ -76,9 +77,7 @@ class SummaryRenderer {
     private static final Color FONT_COLOR_MIDNIGHT = new Color(201, 206, 255);
     private static final Color AXIS_COLOR_DARK = new Color(244, 244, 190, 200);
     private static final Color AXIS_COLOR_MIDNIGHT = new Color(201, 206, 255, 200);
-    //private static final Color FRAME_COLOR = new Color(51, 51, 63);
     private static final Color FRAME_COLOR = new Color(0, 0, 0, 0);
-    //private static final Color FRAME_COLOR_DARK = new Color(16, 16, 16);
     private static final Color FRAME_COLOR_DARK = new Color(0 , 0, 0, 0);
     private static final Color AREA_COLOR = new Color(100, 160, 200, 200);
     private static final Color AREA_COLOR_DARK = new Color(0, 72, 8, 220);
@@ -89,20 +88,9 @@ class SummaryRenderer {
     private static final Color LINE_COLOR_MIDNIGHT = new Color(128, 180, 212);
     private static final Color ARROW_COLOR_DARK = new Color(0, 0, 0, 0);
     private static final Color RESTART_BAR_COLOR = new Color(223, 13, 13, 255);
-    //private static final Color RESTART_BAR_COLOR_DARK = new Color(160, 160, 0, 220);
     private static final Color RESTART_BAR_COLOR_DARK = new Color(220, 16, 48, 220);
-/**
-    private static final Color DEFAULT_XAXIS_COLOR = new Color(0 , 0, 0);
-    private static final Color DEFAULT_YAXIS_COLOR = new Color(0 , 0, 0);
-    private static final Color DEFAULT_XAXIS_COLOR_DARK = new Color(0 , 0, 0);
-    private static final Color DEFAULT_YAXIS_COLOR_DARK = new Color(0 , 0, 0);
-    private static final Color DEFAULT_XAXIS_COLOR_MIDNIGHT = new Color(0 , 0, 0);
-    private static final Color DEFAULT_YAXIS_COLOR_MIDNIGHT = new Color(0 , 0, 0);
-**/
 
     private static final boolean IS_WIN = SystemVersion.isWindows();
-//    private static final String DEFAULT_FONT_NAME = System.getProperty("os.name").toLowerCase().contains("windows") ?
-//            "Lucida Console" : "Monospaced";
     String DEFAULT_FONT_NAME = IS_WIN ? "Lucida Console" : "Monospaced";
     String DEFAULT_TITLE_FONT_NAME = "Dialog";
     String DEFAULT_LEGEND_FONT_NAME = "Dialog";
@@ -148,11 +136,9 @@ class SummaryRenderer {
      *
      *  @param endp number of periods before now
      */
-    public void render(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
-                       boolean hideTitle, boolean showEvents, int periodCount,
-                       int endp, boolean showCredit) throws IOException {
-        render(out, width, height, hideLegend, hideGrid, hideTitle,
-               showEvents, periodCount, endp, showCredit, null, null);
+    public void render(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid, boolean hideTitle,
+                       boolean showEvents, int periodCount, int endp, boolean showCredit) throws IOException {
+        render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, endp, showCredit, null, null);
     }
 
     /**
@@ -162,9 +148,9 @@ class SummaryRenderer {
      *  @param titleOverride If non-null, overrides the title
      *  @since 0.9.6 consolidated from StatSummarizer for bw.combined
      */
-    public void render(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
-                       boolean hideTitle, boolean showEvents, int periodCount,
-                       int endp, boolean showCredit, SummaryListener lsnr2, String titleOverride) throws IOException {
+    public void render(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid, boolean hideTitle,
+                       boolean showEvents, int periodCount, int endp, boolean showCredit, SummaryListener lsnr2,
+                       String titleOverride) throws IOException {
         long begin = System.currentTimeMillis();
         // prevent NaNs if we are skewed ahead of system time
         long end = Math.min(_listener.now(), begin - 75*1000);
@@ -240,8 +226,7 @@ class SummaryRenderer {
 
             // improve text legibility
             String lang = Messages.getLanguage(_context);
-            if (lang == null)
-                lang = "en";
+            if (lang == null) {lang = "en";}
 
             int smallSize = SIZE_MONO;
             int legendSize = SIZE_LEGEND;
@@ -268,13 +253,7 @@ class SummaryRenderer {
                     largeSize += 1;
             }
 
-/**
-    private static String DEFAULT_FONT_NAME = IS_WIN ? "Lucida Console" : "Monospaced";
-    private static String DEFAULT_TITLE_FONT_NAME = "Dialog";
-    private static String DEFAULT_LEGEND_FONT_NAME = "Dialog";
-**/
             /* CJK support */
-
             if ("zh".equals(Messages.getLanguage(_context))) {
                 if (fontlist.contains("Noto Sans SC")) {
                     DEFAULT_TITLE_FONT_NAME = "Noto Sans SC";
@@ -589,7 +568,6 @@ class SummaryRenderer {
                 for (Map.Entry<Long, String> event : events.entrySet()) {
                     long started = event.getKey().longValue();
                     if (started > start && started < end) {
-                        // String legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + " UTC " + event.getValue() + "\\l";
                         String legend;
                         if (theme.equals("midnight") || theme.equals("dark")) {
                             // RTL languages
@@ -637,27 +615,22 @@ class SummaryRenderer {
                 def.setDrawXGrid(false);
                 def.setDrawYGrid(false);
             }
-            //System.out.println("rendering: path=" + path + " dsNames[0]=" + dsNames[0] + " dsNames[1]=" + dsNames[1] + " lsnr.getName=" + _listener.getName());
             def.setAntiAliasing(false);
             def.setTextAntiAliasing(true);
             def.setGridStroke(GRID_STROKE);
-            //System.out.println("Rendering: \n" + def.exportXmlTemplate());
-            //System.out.println("*****************\nData: \n" + _listener.getData().dump());
             def.setWidth(width);
             def.setHeight(height);
             def.setImageFormat("PNG");
             def.setLazy(true);
             def.setPoolUsed(true);
             def.setAltYMrtg(true);
-            if (width < 400 || height < 200)
-              def.setNoMinorGrid(true);
-
+            if (width < 400 || height < 200) {
+                def.setNoMinorGrid(true);
+                def.setAltYMrtg(false);
+            }
             if (hiDPI) {
-                if (width < 800 || height < 400)
-                    def.setAltYMrtg(false);
-            } else {
-                if (width < 400 || height < 200)
-                    def.setAltYMrtg(false);
+                if (width < 800 || height < 400) {def.setAltYMrtg(false);}
+                else if (width < 400 || height < 200) {def.setAltYMrtg(false);}
             }
 
             // render unembellished graph if we're on the sidebar or snark
@@ -668,10 +641,15 @@ class SummaryRenderer {
                 def.setColor(RrdGraphDef.COLOR_CANVAS, TRANSPARENT);
                 def.setColor(RrdGraphDef.COLOR_BACK, TRANSPARENT);
             }
+            RrdGraph bitmapGraph;
             RrdGraph graph;
             try {
                 // NPE here if system is missing fonts - see ticket #915
-                graph = new RrdGraph(def);
+                //graph = new RrdGraph(def); // png
+                bitmapGraph = new RrdGraph(def); // png
+                int totalWidth = bitmapGraph.getRrdGraphInfo().getWidth();
+                int totalHeight = bitmapGraph.getRrdGraphInfo().getHeight();
+                graph = new RrdGraph(def, new SVGImageWorker(totalWidth + 10, totalHeight)); // svg
             } catch (NullPointerException npe) {
                 _log.error("Error rendering graph", npe);
                 StatSummarizer.setDisabled(_context);
@@ -682,14 +660,16 @@ class SummaryRenderer {
                 StatSummarizer.setDisabled(_context);
                 throw new IOException("Error rendering - disabling graph generation. Missing font?");
             }
+/* PNG
             int totalWidth = graph.getRrdGraphInfo().getWidth();
             int totalHeight = graph.getRrdGraphInfo().getHeight();
-//            BufferedImage img = new BufferedImage(totalWidth, totalHeight, BufferedImage.TYPE_USHORT_565_RGB);
             BufferedImage img = new BufferedImage(totalWidth, totalHeight, BufferedImage.TYPE_4BYTE_ABGR);
             Graphics gfx = img.getGraphics();
             graph.render(gfx);
             ios = new MemoryCacheImageOutputStream(out);
             ImageIO.write(img, "png", ios);
+*/
+            out.write(graph.getRrdGraphInfo().getBytes());
             _context.statManager().addRateData("graph.renderTime", System.currentTimeMillis() - begin);
         } catch (RrdException re) {
             _log.error("Error rendering", re);

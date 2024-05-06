@@ -3,6 +3,7 @@ package net.i2p.router.web.helpers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -20,7 +21,6 @@ import net.i2p.router.web.SummaryListener;
 import net.i2p.stat.Rate;
 import net.i2p.util.SystemVersion;
 
-import java.util.Date;
 
 /**
  *  /graphs.jsp, including form, and /graph.jsp
@@ -74,7 +74,7 @@ public class GraphHelper extends FormHandler {
             ConfigRestartBean.getRestartTimeRemaining() < (1000 * (_refreshDelaySeconds + 30)))
             return "";
         // shorten the refresh by 3 seconds so we beat the iframe
-        return "<noscript><meta http-equiv=\"refresh\" content=\"" + (_refreshDelaySeconds - 3) + "\"></noscript>";
+        return "<noscript><meta http-equiv=refresh content=\"" + (_refreshDelaySeconds - 3) + "\"></noscript>";
     }
 
     public int getRefreshValue() {
@@ -91,40 +91,32 @@ public class GraphHelper extends FormHandler {
 
     /** @since 0.9 */
     public void setE(String str) {
-        try {
-            _end = Math.max(0, Integer.parseInt(str));
-        } catch (NumberFormatException nfe) {}
+        try {_end = Math.max(0, Integer.parseInt(str));}
+        catch (NumberFormatException nfe) {}
     }
 
     /** @since 0.9 shorter parameter */
     public void setC(String str) {
-        try {
-            _periodCount = Math.max(MIN_C, Math.min(Integer.parseInt(str), MAX_C));
-        } catch (NumberFormatException nfe) {}
+        try {_periodCount = Math.max(MIN_C, Math.min(Integer.parseInt(str), MAX_C));}
+        catch (NumberFormatException nfe) {}
     }
 
     public void setShowEvents(String b) { _showEvents = !"false".equals(b); }
 
-    public void setHeight(String str) {
-        setH(str);
-    }
+    public void setHeight(String str) { setH(str); }
 
     /** @since 0.9 shorter parameter */
     public void setH(String str) {
-        try {
-            _height = Math.max(MIN_Y, Math.min(Integer.parseInt(str), MAX_Y));
-        } catch (NumberFormatException nfe) {}
+        try {_height = Math.max(MIN_Y, Math.min(Integer.parseInt(str), MAX_Y));}
+        catch (NumberFormatException nfe) {}
     }
 
-    public void setWidth(String str) {
-        setW(str);
-    }
+    public void setWidth(String str) { setW(str); }
 
     /** @since 0.9 shorter parameter */
     public void setW(String str) {
-        try {
-            _width = Math.max(MIN_X, Math.min(Integer.parseInt(str), MAX_X));
-        } catch (NumberFormatException nfe) {}
+        try {_width = Math.max(MIN_X, Math.min(Integer.parseInt(str), MAX_X));}
+        catch (NumberFormatException nfe) {}
     }
 
     public void setRefreshDelay(String str) {
@@ -417,9 +409,7 @@ public class GraphHelper extends FormHandler {
     }
 
     /** @since 0.9 */
-    private static String link(String stat, boolean showEvents,
-                               int periodCount, int end,
-                               int width, int height) {
+    private static String link(String stat, boolean showEvents, int periodCount, int end, int width, int height) {
         return
                "<a href=\"graph?stat="
                + stat.replace(" ", "%20")
@@ -556,11 +546,8 @@ public class GraphHelper extends FormHandler {
             boolean warn = _persistent != _context.getBooleanPropertyDefaultTrue(SummaryListener.PROP_PERSISTENT);
             _context.router().saveConfig(changes, null);
             addFormNotice(_t("Graph settings saved") + ".");
-            if (warn)
-                addFormError(_t("Restart required to take effect"));
-        } else {
-            addFormNotice(_t("Graph settings unchanged") + ".");
-        }
+            if (warn) {addFormError(_t("Restart required to take effect"));}
+        } else {addFormNotice(_t("Graph settings unchanged") + ".");}
     }
 
     private static class AlphaComparator implements Comparator<SummaryListener>, Serializable {

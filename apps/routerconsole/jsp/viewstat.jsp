@@ -21,30 +21,20 @@ if (ss == null) {
     return;
 }
 boolean rendered = false;
-/****  unused
-String templateFile = request.getParameter("template");
-if (templateFile != null) {
-  java.io.OutputStream cout = response.getOutputStream();
-  response.setContentType("image/png");
-  rendered = ss.renderPng(cout, templateFile);
-}
-****/
 net.i2p.stat.Rate rate = null;
 String stat = request.getParameter("stat");
 String period = request.getParameter("period");
 boolean fakeBw = (stat != null && ("bw.combined".equals(stat)));
 net.i2p.stat.RateStat rs = null;
-if (stat != null)
-    rs = ctx.statManager().getRate(stat);
+if (stat != null) {rs = ctx.statManager().getRate(stat);}
 if ( !rendered && ((rs != null) || fakeBw) ) {
     long per = -1;
     try {
-        if (fakeBw)
-            per = 60*1000;
-        else
+        if (fakeBw) {per = 60*1000;}
+        else {
             per = Long.parseLong(period);
-        if (!fakeBw)
             rate = rs.getRate(per);
+        }
         if ((rate != null) || (fakeBw)) {
             if (stat != null && (stat.indexOf('\n') >= 0 || stat.indexOf('\r') >= 0)) {
                 response.sendError(403, "param");
@@ -60,8 +50,13 @@ if ( !rendered && ((rs != null) || fakeBw) ) {
                     rendered = ss.getXML(rate, cout);
                 }
             } else {
+                /** PNG
                 response.setContentType("image/png");
                 response.setHeader("Content-Disposition", "inline; filename=\"" + stat + ".png\"");
+                 */
+                response.setContentType("image/svg+xml");
+                response.setCharacterEncoding("UTF-8");
+                response.setHeader("Content-Disposition", "inline; filename=\"" + stat + ".svg\"");
                 // very brief 45 sec expire
                 // response.setDateHeader("Expires", ctx.clock().now() + (45*1000));
                 response.addHeader("Cache-Control", "private, no-cache, max-age=14400");

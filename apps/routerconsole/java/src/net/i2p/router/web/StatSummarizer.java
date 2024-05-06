@@ -47,10 +47,11 @@ public class StatSummarizer implements Runnable, ClientApp {
     private final List<SummaryListener> _listeners;
     //private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? 2 : 3;
     private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? 2 :
-                                                  SystemVersion.getMaxMemory() < 256*1024*1024 ? 4 :
-                                                  SystemVersion.getMaxMemory() < 384*1024*1024 ? 8 :
-                                                  SystemVersion.getMaxMemory() < 512*1024*1024 ? 12 :
-                                                  SystemVersion.getMaxMemory() < 768*1024*1024 ? 16 : 24;
+                                                  SystemVersion.getMaxMemory() < 256*1024*1024 ? 8 :
+                                                  SystemVersion.getMaxMemory() < 384*1024*1024 ? 12 :
+                                                  SystemVersion.getMaxMemory() < 512*1024*1024 ? 16 :
+                                                  SystemVersion.getMaxMemory() < 768*1024*1024 ? 24 : 32;
+
     private final Semaphore _sem;
     private volatile boolean _isRunning;
     private volatile Thread _thread;
@@ -101,9 +102,7 @@ public class StatSummarizer implements Runnable, ClientApp {
             syncThreads = Math.min(rates.length, SystemVersion.isSlow() ? 4 : Math.max(SystemVersion.getCores(), 6));
             // delete files for unconfigured rates
             Set<String> configured = new HashSet<String>(rates.length);
-            for (String r : rates) {
-                configured.add(SummaryListener.createName(_context, r));
-            }
+            for (String r : rates) {configured.add(SummaryListener.createName(_context, r));}
             File rrdDir = new File(_context.getRouterDir(), SummaryListener.RRD_DIR);
             FileFilter filter = new FileSuffixFilter(SummaryListener.RRD_PREFIX, SummaryListener.RRD_SUFFIX);
             File[] files = rrdDir.listFiles(filter);

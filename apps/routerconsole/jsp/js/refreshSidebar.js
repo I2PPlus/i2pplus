@@ -314,9 +314,10 @@ function refreshSidebar() {
       }
     }
 
+    const graphCanvas = document.getElementById("minigraph");
+    const ctx = graphCanvas ? graphCanvas.getContext("2d") : null;
+
     function refreshGraph() {
-      const graphCanvas = document.getElementById("minigraph");
-      const ctx = graphCanvas ? graphCanvas.getContext("2d") : null;
       const graphContainer = document.getElementById("sb_graphcontainer");
       const graphContainerHR = document.querySelector("#sb_graphcontainer + hr");
       const minigraph = document.getElementById("minigraph");
@@ -341,9 +342,7 @@ function refreshSidebar() {
         function renderGraph() {
           minigraph.width = minigraph_width;
           minigraph.height = minigraph_height;
-          if (ctx) {
-            ctx.drawImage(image, 0, 0, minigraph_width, minigraph_height);
-          }
+          if (ctx) {ctx.drawImage(image, 0, 0, minigraph_width, minigraph_height);}
         }
       }
     }
