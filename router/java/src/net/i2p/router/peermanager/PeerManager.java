@@ -47,8 +47,8 @@ class PeerManager {
     private volatile long _lastStore;
 
 //    private static final long REORGANIZE_TIME = 45*1000;
-    private static final long REORGANIZE_TIME = 90*1000;
 //    private static final long REORGANIZE_TIME_MEDIUM = 123*1000;
+    private static final long REORGANIZE_TIME = 90*1000;
     private static final long REORGANIZE_TIME_MEDIUM = 150*1000;
     /**
      *  We don't want this much longer than the average connect time,
@@ -147,13 +147,13 @@ class PeerManager {
                     _log.info("Started writing peer profiles to disk...");
                     storeProfiles();
                     long finished = System.currentTimeMillis();
-/*
+
                     if (shouldDecay) {
                         int count = _persistenceHelper.deleteOldProfiles(EXPIRE_AGE);
                         if (count > 0 && _log.shouldInfo())
                             _log.info("Deleted " + count + " old profiles");
                     }
-*/
+
                     _log.info("Finished writing peer profiles to disk, took " + (finished - start) + "ms");
                 } catch (Throwable t) {
                     _log.log(Log.CRIT, "Error storing profiles", t);

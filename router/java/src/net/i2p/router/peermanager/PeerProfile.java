@@ -136,21 +136,17 @@ public class PeerProfile {
      *  @param expand must be true (see below)
      */
     private PeerProfile(RouterContext context, Hash peer, boolean expand) {
-        if (peer == null)
-            throw new NullPointerException();
+        if (peer == null) {throw new NullPointerException();}
         _context = context;
-        _log = context.logManager().getLog(PeerProfile.class);
+        _log = _context.logManager().getLog(PeerProfile.class);
         _peer = peer;
         _firstHeardAbout = _context.clock().now();
         // this is always true, and there are several places in the router that will NPE
         // if it is false, so all need to be fixed before we can have non-expanded profiles
-        if (expand)
-            expandProfile();
+        if (expand) {expandProfile();}
         Hash us = _context.routerHash();
-        if (us != null)
-            _distance = ((_peer.getData()[0] & 0xff) ^ (us.getData()[0] & 0xff)) - 127;
-        else
-            _distance = 0;
+        if (us != null) {_distance = ((_peer.getData()[0] & 0xff) ^ (us.getData()[0] & 0xff)) - 127;}
+        else {_distance = 0;}
     }
 
     /** what peer is being profiled, non-null */
@@ -170,7 +166,7 @@ public class PeerProfile {
 
     /**
      * Is this peer active at the moment (sending/receiving messages within the last
-     * 1 minute)
+     * 5 minutes)
      */
     public boolean getIsActive() {
         return getIsActive(5*60*1000, _context.clock().now());
@@ -263,8 +259,7 @@ public class PeerProfile {
      *  Package private, only set by profile management subsystem.
      */
     synchronized void setFirstHeardAbout(long when) {
-        if (when < _firstHeardAbout)
-            _firstHeardAbout = when;
+        if (when < _firstHeardAbout) {_firstHeardAbout = when;}
     }
 
     /**
@@ -278,11 +273,9 @@ public class PeerProfile {
      *  Also sets FirstHeardAbout if earlier
      */
     public synchronized void setLastHeardAbout(long when) {
-        if (_lastHeardAbout <= 0 || when > _lastHeardAbout)
-            _lastHeardAbout = when;
+        if (when > _lastHeardAbout) {_lastHeardAbout = when;}
         // this is called by netdb PersistentDataStore, so fixup first heard
-        if (when < _firstHeardAbout)
-            _firstHeardAbout = when;
+        if (when < _firstHeardAbout) {_firstHeardAbout = when;}
     }
 
     /** when did we last send to this peer successfully? */
@@ -390,19 +383,22 @@ public class PeerProfile {
      *  @return 0 always
      */
     @Deprecated
+    @SuppressWarnings("deprecation")
     public float getTunnelTestTimeAverage() { return _tunnelTestResponseTimeAvg; }
 
     /**
      *  @deprecated unused
      */
     @Deprecated
+    @SuppressWarnings("deprecation")
     void setTunnelTestTimeAverage(float avg) { _tunnelTestResponseTimeAvg = avg; }
 
     /**
      *  @deprecated unused
      */
     @Deprecated
-    void updateTunnelTestTimeAverage(long ms) {
+    @SuppressWarnings("deprecation")
+    void updateTunnelTestTimeAverage(float ms) {
 
         if (_tunnelTestResponseTimeAvg <= 0)
             _tunnelTestResponseTimeAvg = 30*1000; // should we instead start at $ms?
@@ -421,7 +417,7 @@ public class PeerProfile {
     public float getPeerTestTimeAverage() { return _peerTestResponseTimeAvg; }
     void setPeerTestTimeAverage(float testAvg) { _peerTestResponseTimeAvg = testAvg; }
 
-    void updatePeerTestTimeAverage(long ms) {
+    void updatePeerTestTimeAverage(float ms) {
         if (_peerTestResponseTimeAvg <= 0)
 //            _peerTestResponseTimeAvg = 10*1000; // default timeout * 2
             _peerTestResponseTimeAvg = 1500; // default timeout * 2
@@ -434,8 +430,7 @@ public class PeerProfile {
 
     public float getPeakThroughputKBps() {
         float rv = 0;
-        for (int i = 0; i < THROUGHPUT_COUNT; i++)
-            rv += _peakThroughput[i];
+        for (int i = 0; i < THROUGHPUT_COUNT; i++) {rv += _peakThroughput[i];}
         rv /= (60 * 1024 * THROUGHPUT_COUNT);
         return rv;
     }
@@ -446,9 +441,7 @@ public class PeerProfile {
     void setPeakThroughputKBps(float kBps) {
         // Set all so the average remains the same
         float speed = kBps * (60 * 1024);
-        for (int i = 0; i < THROUGHPUT_COUNT; i++) {
-            _peakThroughput[i] = speed;
-        }
+        for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakThroughput[i] = speed;}
     }
 
     void dataPushed(int size) { _peakThroughputCurrentTotal += size; }
@@ -469,10 +462,10 @@ public class PeerProfile {
             }
         }
     }
+
     public float getPeakTunnelThroughputKBps() {
         float rv = 0;
-        for (int i = 0; i < THROUGHPUT_COUNT; i++)
-            rv += _peakTunnelThroughput[i];
+        for (int i = 0; i < THROUGHPUT_COUNT; i++) {rv += _peakTunnelThroughput[i];}
         rv /= (10 * 60 * 1024 * THROUGHPUT_COUNT);
         return rv;
     }
@@ -483,9 +476,7 @@ public class PeerProfile {
     void setPeakTunnelThroughputKBps(float kBps) {
         // Set all so the average remains the same
         float speed = kBps * (60 * 10 * 1024);
-        for (int i = 0; i < THROUGHPUT_COUNT; i++) {
-            _peakTunnelThroughput[i] = speed;
-        }
+        for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakTunnelThroughput[i] = speed;}
     }
 
     /** the tunnel pushed that much data in a 1 minute period */
@@ -524,8 +515,7 @@ public class PeerProfile {
      */
     public float getPeakTunnel1mThroughputKBps() {
         float rv = 0;
-        for (int i = 0; i < THROUGHPUT_COUNT; i++)
-            rv += _peakTunnel1mThroughput[i];
+        for (int i = 0; i < THROUGHPUT_COUNT; i++) {rv += _peakTunnel1mThroughput[i];}
         rv /= (60 * 1024 * THROUGHPUT_COUNT);
         return rv;
     }
@@ -536,33 +526,8 @@ public class PeerProfile {
     void setPeakTunnel1mThroughputKBps(float kBps) {
         // Set all so the average remains the same
         float speed = kBps * (60 * 1024);
-        for (int i = 0; i < THROUGHPUT_COUNT; i++) {
-            _peakTunnel1mThroughput[i] = speed;
-        }
+        for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakTunnel1mThroughput[i] = speed;}
     }
-
-    /**
-     * when the given peer is performing so poorly that we don't want to bother keeping
-     * extensive stats on them, call this to discard excess data points.  Specifically,
-     * this drops the rates, the tunnelHistory, and the dbHistory.
-     *
-     * UNUSED for now, will cause NPEs elsewhere
-     */
-/*****
-    public void shrinkProfile() {
-        //_sendSuccessSize = null;
-        //_receiveSize = null;
-        _dbResponseTime = null;
-        _tunnelCreateResponseTime = null;
-        _tunnelTestResponseTime = null;
-        _dbIntroduction = null;
-        _tunnelHistory = null;
-        _dbHistory = null;
-
-        _expanded = false;
-        _expandedDB = false;
-    }
-******/
 
     /**
      * When the given peer is performing well enough that we want to keep detailed
@@ -712,18 +677,14 @@ public class PeerProfile {
      *  Helper for calculators
      *  @since 0.9.2
      */
-    RouterContext getContext() {
-        return _context;
-    }
+    RouterContext getContext() { return _context; }
 
     @Override
     public int hashCode() { return _peer.hashCode(); }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null ||
-            !(obj instanceof PeerProfile))
-            return false;
+        if (obj == null || !(obj instanceof PeerProfile)) {return false;}
         PeerProfile prof = (PeerProfile)obj;
         return _peer.equals(prof._peer);
     }

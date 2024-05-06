@@ -143,26 +143,21 @@ class ProfilePersistenceHelper {
             buf.append("#").append(TAB).append("Groups:").append(TAB).append(groups).append(NL);
             buf.append(HR).append(NL).append(NL);
         }
-        if (profile.getSpeedBonus() != 0)
-            add(buf, addComments, "speedBonus", profile.getSpeedBonus(), "Manual Speed Score adjustment: " +  profile.getSpeedBonus());
-        if (profile.getCapacityBonus() != 0)
-            add(buf, addComments, "capacityBonus", profile.getCapacityBonus(), "Manual Capacity Score adjustment: " +  profile.getCapacityBonus());
-        if (profile.getIntegrationBonus() != 0)
-            add(buf, addComments, "integrationBonus", profile.getIntegrationBonus(), "Manual Integration Score adjustment: " + profile.getIntegrationBonus());
+        if (profile.getSpeedBonus() != 0) {add(buf, addComments, "speedBonus", profile.getSpeedBonus(), "Manual Speed Score adjustment: " +  profile.getSpeedBonus());}
+        if (profile.getCapacityBonus() != 0) {add(buf, addComments, "capacityBonus", profile.getCapacityBonus(), "Manual Capacity Score adjustment: " +  profile.getCapacityBonus());}
+        if (profile.getIntegrationBonus() != 0) {add(buf, addComments, "integrationBonus", profile.getIntegrationBonus(), "Manual Integration Score adjustment: " + profile.getIntegrationBonus());}
         addDate(buf, addComments, "firstHeardAbout", profile.getFirstHeardAbout(), "First reference to peer received:");
         addDate(buf, addComments, "lastHeardAbout", profile.getLastHeardAbout(), "Last reference to peer received:");
-        if (profile.getLastHeardFrom() != 0)
-            addDate(buf, addComments, "lastHeardFrom", profile.getLastHeardFrom(), "Last message from peer received:");
-        if (profile.getLastSendSuccessful() != 0)
-            addDate(buf, addComments, "lastSentToSuccessfully", profile.getLastSendSuccessful(), "Last successful message sent to peer:");
-        if (profile.getLastSendFailed() != 0)
-            addDate(buf, addComments, "lastFailedSend", profile.getLastSendFailed(), "Last failed message to sent peer:");
-        if (profile.getTunnelTestTimeAverage() != 0 && PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME)
+        if (profile.getLastHeardFrom() != 0) {addDate(buf, addComments, "lastHeardFrom", profile.getLastHeardFrom(), "Last message from peer received:");}
+        if (profile.getLastSendSuccessful() != 0) {addDate(buf, addComments, "lastSentToSuccessfully", profile.getLastSendSuccessful(), "Last successful message sent to peer:");}
+        if (profile.getLastSendFailed() != 0) {addDate(buf, addComments, "lastFailedSend", profile.getLastSendFailed(), "Last failed message to sent peer:");}
+        if (profile.getTunnelTestTimeAverage() != 0 && PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
             add(buf, addComments, "tunnelTestTimeAverage", (long) profile.getTunnelTestTimeAverage(), "Average peer response time: " +  (long) profile.getTunnelTestTimeAverage());
+        }
         // TODO: needs clarification - difference between tunnel peak and tunnel peak tunnel? And round down KBps display to 2 decimal places
-        add(buf, addComments, "tunnelPeakThroughput", (long) profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + (long) profile.getPeakThroughputKBps() + " KBps");
-        add(buf, addComments, "tunnelPeakTunnelThroughput", (long) profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput: " + (long) profile.getPeakTunnelThroughputKBps() + " KBps");
-        add(buf, addComments, "tunnelPeakTunnel1mThroughput", (long) profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute: " + (long) profile.getPeakTunnel1mThroughputKBps() + " KBps");
+        add(buf, addComments, "tunnelPeakThroughput", (long) profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + (long) profile.getPeakThroughputKBps() + "KB/s");
+        add(buf, addComments, "tunnelPeakTunnelThroughput", (long) profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput: " + (long) profile.getPeakTunnelThroughputKBps() + "KB/s");
+        add(buf, addComments, "tunnelPeakTunnel1mThroughput", (long) profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute: " + (long) profile.getPeakTunnel1mThroughputKBps() + "KB/s");
         if (addComments) {buf.append(NL);}
 
         out.write(buf.toString().getBytes("UTF-8"));
@@ -191,9 +186,7 @@ class ProfilePersistenceHelper {
         if (addComments) {
             String when = val > 0 ? (new Date(val)).toString() : "Never";
             add(buf, true, name, val, description + ' ' + when);
-        } else {
-            add(buf, false, name, val, description);
-        }
+        } else {add(buf, false, name, val, description);}
     }
 
     /** @since 0.8.5 */
@@ -208,11 +201,10 @@ class ProfilePersistenceHelper {
 //        long cutoff = down < 15*24*60*60*1000L ? start - down - 24*60*60*1000 : start;
         long cutoff = down < 15*24*60*60*1000L ? start - down - 7*24*60*60*1000 : start - 3*24*60*60*1000;
         List<File> files = selectFiles();
-        if (files.size() > LIMIT_PROFILES)
-            Collections.shuffle(files, _context.random());
+        if (files.size() > LIMIT_PROFILES) {Collections.shuffle(files, _context.random());}
         List<PeerProfile> profiles = new ArrayList<PeerProfile>(Math.min(LIMIT_PROFILES, files.size()));
         int count = 0;
-        for (File f :  files) {
+        for (File f : files) {
             if (count >= LIMIT_PROFILES) {
                 f.delete();
                 continue;
@@ -239,16 +231,13 @@ class ProfilePersistenceHelper {
     private List<File> selectFiles() {
         FilenameFilter filter = new ProfileFilter();
         File files[] = _profileDir.listFiles(filter);
-        if (files != null && files.length > 0)
-            migrate(files);
+        if (files != null && files.length > 0) {migrate(files);}
         List<File> rv = new ArrayList<File>(1024);
         for (int j = 0; j < B64.length(); j++) {
             File subdir = new File(_profileDir, DIR_PREFIX + B64.charAt(j));
             files = subdir.listFiles(filter);
-            if (files == null)
-                continue;
-            for (int i = 0; i < files.length; i++)
-                rv.add(files[i]);
+            if (files == null) {continue;}
+            for (int i = 0; i < files.length; i++) {rv.add(files[i]);}
         }
         return rv;
     }
@@ -260,8 +249,7 @@ class ProfilePersistenceHelper {
     private void migrate(File[] files) {
         for (int i = 0; i < files.length; i++) {
             File from = files[i];
-            if (!from.isFile())
-                continue;
+            if (!from.isFile()) {continue;}
             File dir = new File(_profileDir, DIR_PREFIX + from.getName().charAt(PREFIX.length()));
             File to = new File(dir, from.getName());
             FileUtil.rename(from, to);
@@ -287,7 +275,7 @@ class ProfilePersistenceHelper {
         }
         if (_log.shouldWarn()) {
             if (i > 0) {
-                _log.warn("Deleted " + i + " stale peer profiles");
+                _log.warn("Deleted " + i + " STALE peer profiles");
                 //_log.warn("Not deleting " + i + " (stale?) peer profiles -> Will expire when read at startup");
             }
         }
@@ -301,7 +289,7 @@ class ProfilePersistenceHelper {
     public PeerProfile readProfile(File file, long cutoff) {
         if (file.lastModified() < cutoff) {
             if (_log.shouldWarn())
-                _log.warn("Not deleting stale peer profile " + file.getName() + " -> Will expire when read at startup");
+                _log.warn("Not deleting STALE peer profile " + file.getName() + " -> Will expire when read at startup");
             //file.delete();
             return null;
         }
@@ -328,7 +316,7 @@ class ProfilePersistenceHelper {
             }
 
             if (lastSentToSuccessfully <= cutoff && lastHeardFrom <= cutoff) {
-                if (_log.shouldDebug()) {_log.debug("Dropping stale profile: " + file.getName());}
+                if (_log.shouldDebug()) {_log.debug("Dropping STALE profile: " + file.getName());}
                 file.delete();
                 return null;
             } else if (caps.contains("K") || caps.contains("L") ||
@@ -349,8 +337,12 @@ class ProfilePersistenceHelper {
             profile.setIntegrationBonus((int) getLong(props, "integrationBonus"));
             profile.setSpeedBonus((int) getLong(props, "speedBonus"));
 
-            profile.setLastHeardAbout(getLong(props, "lastHeardAbout"));
-            profile.setFirstHeardAbout(getLong(props, "firstHeardAbout"));
+            long fh = getLong(props, "firstHeardAbout");
+            if (fh <= 0) {fh = file.lastModified();}
+            profile.setFirstHeardAbout(fh);
+            long lh = getLong(props, "lastHeardAbout");
+            if (lh <= 0) {lh = fh;}
+            profile.setLastHeardAbout(lh);
             profile.setLastSendSuccessful(getLong(props, "lastSentToSuccessfully"));
             profile.setLastSendFailed(getLong(props, "lastFailedSend"));
             profile.setLastHeardFrom(getLong(props, "lastHeardFrom"));
