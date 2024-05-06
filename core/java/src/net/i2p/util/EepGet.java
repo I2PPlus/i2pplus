@@ -1422,7 +1422,7 @@ public class EepGet {
             return Integer.parseInt(rc);
         } catch (NumberFormatException nfe) {
             if (_log.shouldWarn())
-                _log.warn("Error: status is invalid: " + line, nfe);
+                _log.warn("Error: Status is INVALID: " + line, nfe);
             return -1;
         }
     }
