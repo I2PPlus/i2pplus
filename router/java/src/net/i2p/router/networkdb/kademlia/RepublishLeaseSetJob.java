@@ -50,7 +50,7 @@ class RepublishLeaseSetJob extends JobImpl {
                 if (ls != null) {
                     if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR*2)) {
                         if (_log.shouldWarn())
-                            _log.warn("Not publishing a stale LOCAL LeaseSet [" + _dest.toBase32().substring(0,6) + "]", new Exception("Publish expired LOCAL lease?"));
+                            _log.warn("Not publishing expired LOCAL LeaseSet [" + _dest.toBase32().substring(0,6) + "]", new Exception("Publish expired LOCAL lease?"));
                     } else {
                         if (_log.shouldInfo())
                             _log.info("[Job " + getJobId() + "] Publishing LeaseSet for " + _dest.toBase32());

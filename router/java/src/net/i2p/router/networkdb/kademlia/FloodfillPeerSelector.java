@@ -26,6 +26,7 @@ import net.i2p.kademlia.SelectionCollector;
 import net.i2p.kademlia.XORComparator;
 import net.i2p.router.RouterContext;
 import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
@@ -155,7 +156,7 @@ class FloodfillPeerSelector extends PeerSelector {
         List<Hash> rv = new ArrayList<Hash>(set.size());
         for (Hash h : set) {
             if ((toIgnore != null && toIgnore.contains(h)) || _context.banlist().isBanlisted(h) ||
-                _context.banlist().isBanlistedForever(h))
+                _context.banlist().isBanlistedForever(h) || _context.profileOrganizer().peerSendsBadReplies(h))
                continue;
             rv.add(h);
         }
@@ -190,19 +191,17 @@ class FloodfillPeerSelector extends PeerSelector {
     /** .5 * PublishLocalRouterInfoJob.PUBLISH_DELAY */
 //    private static final int NO_FAIL_STORE_OK = 10*60*1000;
     private static final int NO_FAIL_STORE_OK = 5*60*1000;
-//    private static final int NO_FAIL_STORE_GOOD = NO_FAIL_STORE_OK * 2;
-    private static final int NO_FAIL_STORE_GOOD = NO_FAIL_STORE_OK * 3;
+    private static final int NO_FAIL_STORE_GOOD = NO_FAIL_STORE_OK * 2;
     /** this must be longer than the max streaming timeout (60s) */
     //private static final int NO_FAIL_LOOKUP_OK = 75*1000;
     private static final int NO_FAIL_LOOKUP_OK = 70*1000;
     private static final int NO_FAIL_LOOKUP_GOOD = NO_FAIL_LOOKUP_OK * 3;
 //    private static final int MAX_GOOD_RESP_TIME = 3500;
-    private static final int MAX_GOOD_RESP_TIME = 1500;
+    private static final int MAX_GOOD_RESP_TIME = 2000;
     // TODO we need better tracking of floodfill first-heard-about times
     // before we can do this. Old profiles get deleted.
-    //private static final long HEARD_AGE = 48*60*60*1000L;
     //private static final long HEARD_AGE = 60*60*1000L;
-    private static final long HEARD_AGE = 90*60*1000L;
+    private static final long HEARD_AGE = 45*60*1000L;
     private static final long INSTALL_AGE = HEARD_AGE + (60*60*1000L);
     private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
     private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
@@ -248,7 +247,7 @@ class FloodfillPeerSelector extends PeerSelector {
         boolean shouldDisconnect = _context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
 
         double maxFailRate = 0.95;
-        if (_context.router().getUptime() > 60*60*1000) {
+        if (_context.router().getUptime() > 2*60*60*1000) {
             RateStat rs = _context.statManager().getRate("peer.failedLookupRate");
             if (rs != null) {
                 Rate r = rs.getRate(60*60*1000);

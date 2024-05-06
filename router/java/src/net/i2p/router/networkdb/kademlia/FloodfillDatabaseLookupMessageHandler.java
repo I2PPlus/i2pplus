@@ -53,10 +53,11 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         boolean ourRI = dlm.getSearchKey() != null && dlm.getSearchKey().equals(_context.routerHash());
         Hash us = _context.routerHash();
         boolean ffMode = _context.netDb().floodfillEnabled() || _context.getBooleanProperty("router.floodfillParticipant");
-        String searchType = dlm.getSearchType() != null ? dlm.getSearchType().toString().replace("EXPL", "Exploratory").replace("RI", "RouterInfo") : "";
+        DatabaseLookupMessage.Type type = dlm.getSearchType();
+        String searchType = type != null ? type.toString().replace("EXPL", "Exploratory").replace("RI", "RouterInfo") : "";
         if ((!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
              !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
-             (ffMode || ourRI || dlm.getSearchType() != DatabaseLookupMessage.Type.EXPL)) ||
+             (ffMode || ourRI || type != DatabaseLookupMessage.Type.EXPL)) ||
              _context.routerHash().equals(dlm.getSearchKey()) || dlm.getFrom() == us) {
             if (_log.shouldInfo()) {
                 _log.info("Replying to " + searchType + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
@@ -64,7 +65,18 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             }
             Job j = new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
             return j;
-        } else if (!_context.netDb().floodfillEnabled() && !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
+        } else if (!ffMode && (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY)) {
+            if (_log.shouldInfo()) {
+                _log.warn("Dropping " + searchType + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] -> " +
+                          "We are not a floodfill [TunnelId " + dlm.getReplyTunnel() + "]");
+            } else if (_log.shouldWarn()) {
+                _log.warn("Dropping " + searchType + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] -> We are not a floodfill");
+            }
+            _context.statManager().addRateData("netDb.nonFFLookupsDropped", 1);
+            return null;
+        } else if (!ffMode && !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
             if (_log.shouldInfo()) {
                 _log.warn("Dropping " + searchType + " lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
                           "for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] -> " +

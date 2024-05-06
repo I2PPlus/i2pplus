@@ -48,7 +48,6 @@ class SearchReplyJob extends JobImpl {
     public String getName() { return "Process Kademlia Search Reply"; }
 
     public void runJob() {
-        int count = _msg.getNumReplies();
         int count = Math.min(_msg.getNumReplies(), 2 * SingleLookupJob.MAX_TO_FOLLOW);
         for (int i = 0; i < count; i++) {processPeer(i);}
 

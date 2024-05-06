@@ -25,10 +25,8 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * Search for a particular key iteratively until we either find a value, we run
- * out of peers, or the bucket the key belongs in has sufficient values in it.
- * Well, we're skipping the 'bucket gets filled up' test for now, since it'll never
- * get used (at least for a while).
+ * Send off an exploratory search for a particular key until we
+ * get a DSRM response.
  *
  */
 class ExploreJob extends SearchJob {
@@ -204,12 +202,10 @@ class ExploreJob extends SearchJob {
         boolean isSlow = SystemVersion.isSlow();
         int cpuLoad = SystemVersion.getCPULoad();
         int cpuLoadAvg = SystemVersion.getCPULoadAvg();
-//        if (exploreBredth == null && getContext().netDbSegmentor().getKnownRouters() < 1500 && !isSlow && !isSingleCore && cpuLoad < 95 && cpuLoadAvg < 95) {
         if (exploreBredth == null && getContext().netDb().getKnownRouters() < 1500 && !isSlow && !isSingleCore && cpuLoad < 95 && cpuLoadAvg < 95) {
             if (_log.shouldInfo())
                 _log.info("[Job " + getJobId() + "] Initiating Exploratory Search -> Max " + EXPLORE_BREDTH * 3 + " concurrent (less than 1000 known peers)");
             return EXPLORE_BREDTH * 3;
-//        } else if ((exploreBredth == null && getContext().netDbSegmentor().getKnownRouters() > 3500) || (cpuLoad > 90 && cpuLoadAvg > 90) || (isSlow || isSingleCore)) {
         } else if ((exploreBredth == null && getContext().netDb().getKnownRouters() > 3500) || (cpuLoad > 90 && cpuLoadAvg > 90) || (isSlow || isSingleCore)) {
             if (_log.shouldInfo())
                 if (cpuLoad > 80 || cpuLoadAvg > 80 || isSlow || isSingleCore)

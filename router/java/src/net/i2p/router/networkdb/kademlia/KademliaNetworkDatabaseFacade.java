@@ -317,6 +317,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public void queueForExploration(Collection<Hash> keys) {
         String exploreQueue = _context.getProperty("router.exploreQueue");
         boolean upLongEnough = _context.router().getUptime() > 15*60*1000;
+        if (!upLongEnough) {
+            long down = _context.router().getEstimatedDowntime();
+            upLongEnough = down > 0 && down < 10*60*60*1000L;
+        }
         if (!_initialized || isClientDb()) {
             if (_log.shouldInfo())
                 _log.info("Datastore not initialized, cannot queue keys for exploration");
@@ -996,7 +1000,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                         _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> LU and older than 0.9.61");
                     }
                     if (_log.shouldWarn() && !_context.banlist().isBanlisted(key)) {
-                        _log.warn("Temp banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                        _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
                                   " [" + key.toBase64().substring(0,6) + "] for 4h -> LU and older than 0.9.61");
                     }
                     _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.61", null, null, _context.clock().now() + 4*60*60*1000);
@@ -1268,11 +1272,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             Destination dest = leaseSet.getDestination();
             String id = dest != null ? dest.toBase32() : leaseSet.getHash().toBase32();
             if (_log.shouldWarn())
-                _log.warn("LeaseSet expires too far in the future: ["
-                          + id.substring(0,6)
-                          + "]\n* Expires: " + DataHelper.formatDuration(age) + " from now");
-            return "Future LeaseSet for [" + id.substring(0,6)
-                   + "] expiring in " + DataHelper.formatDuration(age);
+                _log.warn("LeaseSet expires too far in the future: [" + id.substring(0,6) +
+                          "]\n* Expires: " + DataHelper.formatDuration(age) + " from now");
+            return "Future LeaseSet for [" + id.substring(0,6) + "] expiring in " + DataHelper.formatDuration(age);
         }
         return null;
     }
@@ -1491,10 +1493,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean isSlow = routerInfo != null && (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                                 routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                                 routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) && !isUs;
-        boolean isUnreachable = routerInfo != null && (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                                       routerInfo.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0);
+        boolean isUnreachable = routerInfo != null && routerInfo.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0;
         boolean isLTier =  routerInfo != null && routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                            routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
+        boolean isBanned = routerInfo != null && _context.banlist().isBanlisted(routerInfo.getIdentity().getHash());
         boolean isFF = false;
         boolean noSSU = true;
         String caps = "";
@@ -1520,6 +1522,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 noCountry = false;
             }
         }
+        for (RouterAddress ra : routerInfo.getTargetAddresses("NTCP2")) {
+            String i = ra.getOption("i");
+            if (i != null && i.length() != 24) {
+                _context.banlist().banlistRouter(routerInfo.getIdentity().calculateHash(), " <b>➜</b> Invalid NTCP address", null, null, now + 4*60*1000L);
+                if (_log.shouldWarn() && !isBanned) {
+                    _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                              " [" + routerId + "] for 4h -> Invalid NTCP address");
+                }
+                return "Invalid NTCP address";
+            }
+        }
         if (expireRI != null) {
             adjustedExpiration = Integer.valueOf(expireRI)*60*60*1000;
         } else if (floodfillEnabled()) {
@@ -1540,24 +1553,23 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 return "Published " + DataHelper.formatDuration(age) + " ago";
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn("Even though peer [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) +
-                              "] is stale, we have only " + existing + " peers left - not dropping...");
+                    _log.warn("Even though RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) +
+                              "] is STALE, we have only " + existing + " peers left - not dropping...");
                 }
             }
         }
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR && !isUs) {
             long age = routerInfo.getPublished() - now;
-            if (_log.shouldWarn()) {
-                _log.warn("Dropping RouterInfo [" + routerId + "] -> Invalid publication date " +
+            if (_log.shouldWarn() && !isBanned) {
+                _log.warn("Banning [" + routerId + "] for 4h -> RouterInfo from the future!" +
                           "\n* Published: " + new Date(routerInfo.getPublished()));
-                _log.warn("Banning [" + routerId + "] for 4h -> RouterInfo from the future!");
             }
             _context.banlist().banlistRouter(h, " <b>➜</b> RouterInfo from the future (" +
                                              new Date(routerInfo.getPublished()) + ")", null, null, 4*60*60*1000);
             return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " in the future";
         }
         if (noSSU && isFF && !isUs) {
-            if (_log.shouldWarn()) {
+            if (_log.shouldWarn() && !isBanned) {
                 //_log.warn("Dropping RouterInfo [" + riHash + "] -> Floodfill with SSU disabled");
                 _log.warn("Banning [" + routerId + "] for 4h -> Floodfill with SSU disabled");
             }
@@ -1565,33 +1577,27 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                              null, null, 4*60*60*1000);
             return caps + " Router [" + routerId + "] -> Floodfill with SSU disabled";
         } else if (noSSU && !isUs) {
-            if (_log.shouldWarn()) {
+            if (_log.shouldWarn() && !isBanned) {
                 //_log.warn("Dropping RouterInfo [" + riHash + "] -> Router with SSU disabled");
                 _log.warn("Banning [" + routerId + "] for 4h -> Router with SSU disabled");
             }
-            _context.banlist().banlistRouter(h, " <b>➜</b> Router with SSU disabled",
-                                             null, null, 4*60*60*1000);
+            _context.banlist().banlistRouter(h, " <b>➜</b> Router with SSU disabled", null, null, 4*60*60*1000);
             return caps + " Router [" + routerId + "] -> Router with SSU disabled";
-       }
 /**
         } else if (uptime > 45*1000 && noCountry && !isUs) {
-            if (_log.shouldInfo())
-                _log.info("Dropping RouterInfo [" + routerId + "] -> Address not resolvable via GeoIP");
-            if (_log.shouldWarn())
-                _log.warn("Temp banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                          " [" + routerId + "] for 4h -> Address not resolvable via GeoIP");
+            if (_log.shouldWarn() && !isBanned)
+                _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                          " [" + routerId + "] for 15m -> Address not resolvable via GeoIP");
                 if (isFF)
-                    _context.banlist().banlistRouter(h, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, _context.clock().now() + 4*60*60*1000);
+                    _context.banlist().banlistRouter(h, " <b>➜</b> Floodfill without GeoIP resolvable address", null, null, _context.clock().now() + 15*60*1000);
                 else
-                    _context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address", null, null, _context.clock().now() + 4*60*60*1000);
+                    _context.banlist().banlistRouter(h, " <b>➜</b> No GeoIP resolvable address", null, null, _context.clock().now() + 15*60*1000);
 **/
+        }
         if (isLTier && isUnreachable && isOlderThanCurrent) {
-            if (!_context.banlist().isBanlisted(h)) {
-                if (_log.shouldInfo()) {
-                    _log.info("Dropping RouterInfo [" + routerId + "] -> LU and older than 0.9.62");
-                }
+            if (!isBanned) {
                 if (_log.shouldWarn() && !_context.banlist().isBanlisted(h)) {
-                    _log.warn("Temp banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                    _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
                               " [" + routerId + "] for 4h -> LU and older than 0.9.61");
                 }
             }
