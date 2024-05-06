@@ -82,7 +82,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     /** if priority is &gt;= this, never drop */
     public static final int DONT_DROP_PRIORITY = 1000;
 //    private static final long BACKLOG_TIME = 2*1000;
-    private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 2*1000 : 1000;
+    private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 200 : 50;
 
     /**
      *  @param name for stats

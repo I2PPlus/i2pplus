@@ -32,14 +32,12 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
     protected static final long[] RATES = {60*1000, 10*60*1000, 60*60*1000};
 //    protected static final int BACKLOG_SIZE = 256;
 //    protected static final int MAX_SIZE = 512;
-    protected static final int DEFAULT_BACKLOG_SIZE = SystemVersion.isSlow() ? 512 : SystemVersion.getMaxMemory() >= 4*1024*1024*1024 ? 2048 : 1024;
-    protected static final int DEFAULT_MAX_SIZE = SystemVersion.isSlow() ? 1024 : SystemVersion.getMaxMemory() >= 4*1024*1024*1024 ? 8192 : 4096;
+//    protected static final int BACKLOG_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 256 : 384;
+//    protected static final int MAX_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 512 : 1024;
+    protected static final int DEFAULT_BACKLOG_SIZE = SystemVersion.isSlow() ? 128 : SystemVersion.getCores() >= 4 ? 384 : 256;
+    protected static final int DEFAULT_MAX_SIZE = SystemVersion.isSlow() ? 384 : SystemVersion.getCores() >= 4 ? 768 : 512;
     public static final String PROP_MAX_SIZE = "router.codelMaxQueue";
     public static final String PROP_BACKLOG_SIZE = "router.codelBacklog";
-/*
-    protected static final int BACKLOG_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 256 : 384;
-    protected static final int MAX_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 512 : 1024;
-*/
 
     /**
      *  Bounded queue with a hardcoded failsafe max size,

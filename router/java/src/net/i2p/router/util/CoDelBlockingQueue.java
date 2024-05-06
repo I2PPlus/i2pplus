@@ -83,7 +83,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private final String STAT_DELAY;
     private static final long[] RATES = {60*1000, 5*60*1000, 60*60*1000};
 //    private static final long BACKLOG_TIME = 2*1000;
-    private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 2*1000 : 1000;
+    private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 200 : 50;
 
     /**
      *  Target 15, interval 100
