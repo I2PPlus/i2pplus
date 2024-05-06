@@ -391,7 +391,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         if (_destination == null) {buf.append(" Exploratory tunnel");}
         else {buf.append(" Client tunnel [").append(Base64.encode(_destination.getData(), 0, 6)).append("]");}
         int fails = _failures.get();
-        if (fails > 0) {buf.append(" (").append(fails).append("consecutive failures)");}
+        if (fails > 1) {buf.append(" (").append(fails).append(" consecutive failures)");}
         if (_log.shouldInfo()) {
             buf.append("\n* Gateway: ");
             for (int i = 0; i < _peers.length; i++) {
