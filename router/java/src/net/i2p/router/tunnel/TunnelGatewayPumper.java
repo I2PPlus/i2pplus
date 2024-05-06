@@ -43,24 +43,17 @@ class TunnelGatewayPumper implements Runnable {
 //    private static final long REQUEUE_TIME = 50;
     private static final long REQUEUE_TIME = SystemVersion.isSlow() ? 50 :
                                              SystemVersion.getCores() < 4 && SystemVersion.getMaxMemory() < 512*1024*1024 ? 40 :
-                                             SystemVersion.getMaxMemory() > 1024*1024*1024 && SystemVersion.getCores() > 4 ? 15 : 30;
+                                             SystemVersion.getMaxMemory() > 1024*1024*1024 && SystemVersion.getCores() > 4 ? 10 : 30;
 
     /** Creates a new instance of TunnelGatewayPumper */
     public TunnelGatewayPumper(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(TunnelGatewayPumper.class);
-//        _wantsPumping = new LinkedHashSet<PumpedTunnelGateway>(16);
-//        _backlogged = new HashSet<PumpedTunnelGateway>(16);
-        _wantsPumping = new LinkedHashSet<PumpedTunnelGateway>(1024);
-        _backlogged = new HashSet<PumpedTunnelGateway>(1024);
-        _threads = new CopyOnWriteArrayList<Thread>();
-        if (ctx.getBooleanProperty("i2p.dummyTunnelManager")) {
-            _pumpers = 1;
-        } else {
-//            long maxMemory = SystemVersion.getMaxMemory();
-//            _pumpers = (int) Math.max(MIN_PUMPERS, Math.min(MAX_PUMPERS, 1 + (maxMemory / (32*1024*1024))));
-            _pumpers = (int) MAX_PUMPERS;
-        }
+        _wantsPumping = new LinkedHashSet<>(1024);
+        _backlogged = new HashSet<>(1024);
+        _threads = new CopyOnWriteArrayList<>();
+        if (ctx.getBooleanProperty("i2p.dummyTunnelManager")) {_pumpers = 1;}
+        else {_pumpers = (int) MAX_PUMPERS;}
         for (int i = 0; i < _pumpers; i++) {
             Thread t = new I2PThread(this, "TunnGWPumper " + (i+1) + '/' + _pumpers, true);
             t.setPriority(I2PThread.MAX_PRIORITY);
@@ -84,14 +77,9 @@ class TunnelGatewayPumper implements Runnable {
             _log.warn("Router JVM under sustained high CPU load, increasing pump interval from " + REQUEUE_TIME + " to " + adjusted + "ms");
         }
         for (int i = 1; i <= 5 && !_wantsPumping.isEmpty(); i++) {
-            try {
-//                Thread.sleep(i * 50);
-                Thread.sleep(i * adjusted);
-            } catch (InterruptedException ie) {}
+            try {Thread.sleep(i * adjusted);} catch (InterruptedException ie) {}
         }
-        for (Thread t : _threads) {
-            t.interrupt();
-        }
+        for (Thread t : _threads) {t.interrupt();}
         _threads.clear();
         _wantsPumping.clear();
     }
@@ -99,18 +87,14 @@ class TunnelGatewayPumper implements Runnable {
     public void wantsPumping(PumpedTunnelGateway gw) {
         if (!_stop) {
             synchronized (_wantsPumping) {
-                if ((!_backlogged.contains(gw)) && _wantsPumping.add(gw))
-                    _wantsPumping.notify();
+                if ((!_backlogged.contains(gw)) && _wantsPumping.add(gw)) {_wantsPumping.notify();}
             }
         }
     }
 
     public void run() {
-        try {
-            run2();
-        } finally {
-            _threads.remove(Thread.currentThread());
-        }
+        try {run2();}
+        finally {_threads.remove(Thread.currentThread());}
     }
 
     private void run2() {
@@ -147,9 +131,7 @@ class TunnelGatewayPumper implements Runnable {
     private class Requeue implements SimpleTimer.TimedEvent {
         private final PumpedTunnelGateway _ptg;
 
-        public Requeue(PumpedTunnelGateway ptg) {
-            _ptg = ptg;
-        }
+        public Requeue(PumpedTunnelGateway ptg) { _ptg = ptg; }
 
         public void timeReached() {
             synchronized (_wantsPumping) {

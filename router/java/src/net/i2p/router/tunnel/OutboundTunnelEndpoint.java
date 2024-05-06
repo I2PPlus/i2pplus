@@ -1,5 +1,6 @@
 package net.i2p.router.tunnel;
 
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DatabaseStoreMessage;
@@ -68,10 +69,37 @@ class OutboundTunnelEndpoint {
                     _log.warn("Dropping messsage at Outbound Endpoint -> Unsupported delivery instruction type (LOCAL)");
                 return;
             }
-            if (_log.shouldInfo())
+
+            int type = msg.getType();
+            if (type == DatabaseStoreMessage.MESSAGE_TYPE) {
+                DatabaseStoreMessage dsm = (DatabaseStoreMessage) msg;
+                DatabaseEntry entry = dsm.getEntry();
+                if (entry.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
+                    long now = _context.clock().now();
+                    long date = entry.getDate();
+                    if (date < now - 60*60*1000L) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Dropping " + (toTunnel == null ? "DIRECT" : "") +
+                                      " DbStoreMsg of stale RouterInfo [" + dsm.getKey().toBase64().substring(0,6) +
+                                      "] at Outbound Endpoint to Router [" + toRouter.toBase64().substring(0,6) + "]");
+                        }
+                        return;
+                    } else if (date > now + 2*60*1000L) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Dropping " + (toTunnel == null ? "DIRECT" : "") +
+                                      " DbStoreMsg of future RouterInfo [" + dsm.getKey().toBase64().substring(0,6) +
+                                      "] at Outbound Endpoint to Router [" + toRouter.toBase64().substring(0,6) + "]");
+                        }
+                        return;
+                    }
+                }
+            }
+
+            if (_log.shouldInfo()) {
                 _log.info("Outbound tunnel " + _config + " received a full message: " + msg +
-                           " to be forwarded on to [" + toRouter.toBase64().substring(0,6) + "]" +
-                           (toTunnel != null ? ":" + toTunnel.getTunnelId() : ""));
+                          " to be forwarded on to [" + toRouter.toBase64().substring(0,6) + "]" +
+                          (toTunnel != null ? ":" + toTunnel.getTunnelId() : ""));
+            }
             if (toTunnel == null) {
                 int msgtype = msg.getType();
                 if (msgtype == DatabaseStoreMessage.MESSAGE_TYPE) {
@@ -115,8 +143,7 @@ class OutboundTunnelEndpoint {
             int size = msg.getMessageSize();
             // don't drop it if we are the target
             boolean toUs = _context.routerHash().equals(toRouter);
-            if ((!toUs) &&
-                _context.tunnelDispatcher().shouldDropParticipatingMessage(TunnelDispatcher.Location.OBEP, msg.getType(), size))
+            if ((!toUs) && _context.tunnelDispatcher().shouldDropParticipatingMessage(TunnelDispatcher.Location.OBEP, type, size))
                 return;
             // this overstates the stat somewhat, but ok for now
             //int kb = (size + 1023) / 1024;

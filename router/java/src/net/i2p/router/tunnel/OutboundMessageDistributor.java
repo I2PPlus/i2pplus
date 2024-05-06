@@ -6,6 +6,7 @@ import java.util.Set;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.TunnelId;
+import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.TunnelGatewayMessage;
 import net.i2p.router.JobImpl;
@@ -28,7 +29,7 @@ class OutboundMessageDistributor {
     private long _newRouterTime;
 
 //    private static final long MAX_DISTRIBUTE_TIME = 15*1000;
-    private static final long MAX_DISTRIBUTE_TIME = 20*1000;
+    private static final long MAX_DISTRIBUTE_TIME = SystemVersion.isSlow() ? 15*1000 : 10*1000;
     // This is probably too high, to be reduced later
 //    private static final int MAX_ROUTERS_PER_PERIOD = 60;
 //    private static final long NEW_ROUTER_PERIOD = 30*1000;
@@ -36,7 +37,7 @@ class OutboundMessageDistributor {
     private static final int MAX_ROUTERS_PER_PERIOD = SystemVersion.isSlow() ? 16 :
                                                       coreCount < 2 || SystemVersion.getMaxMemory() < 512*1024*1024 ? 32 :
                                                       Math.max(coreCount * 3, 48);
-    private static final long NEW_ROUTER_PERIOD = 5*1000;
+    private static final long NEW_ROUTER_PERIOD = SystemVersion.isSlow() ? 30*1000 : 15*1000;
 
     /**
      *  @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
@@ -49,9 +50,7 @@ class OutboundMessageDistributor {
         if (priority <= OutNetMessage.PRIORITY_PARTICIPATING) {
             _toRouters = new HashSet<Hash>(4);
             _toRouters.add(ctx.routerHash());
-        } else {
-            _toRouters = null;
-        }
+        } else {_toRouters = null;}
         // all createRateStat() in TunnelDispatcher
     }
 
@@ -62,13 +61,28 @@ class OutboundMessageDistributor {
     public void distribute(I2NPMessage msg, Hash target, TunnelId tunnel) {
         if (shouldDrop(target)) {
             _context.statManager().addRateData("tunnel.dropAtOBEP", 1);
-            if (_log.shouldWarn())
-                 _log.warn("Dropping " + msg + " at Outbound Endpoint [TunnelID " + tunnel.getTunnelId() + "] -> New connection throttle \n* Target: ["
-                            + target.toBase64().substring(0,6) + "]");
+            if (_log.shouldInfo()) {
+                 _log.warn("Dropping I2NPMessage to [" + target.toBase64().substring(0,6) + "] at Outbound Endpoint [TunnelID " +
+                           tunnel.getTunnelId() + "] -> New connection throttle" + msg);
+            } else if (_log.shouldWarn()) {
+                 _log.warn("Dropping I2NPMessage (" + msg.getType() + ") to [" + target.toBase64().substring(0,6) + "] " +
+                           "at Outbound Endpoint [TunnelID " + tunnel.getTunnelId() + "] -> New connection throttle");
+            }
             return;
         }
         RouterInfo info = _context.netDb().lookupRouterInfoLocally(target);
         if (info == null) {
+            if (_toRouters != null) {
+                // only if not zero-hop
+                // credit our lookup message as part. traffic
+                if (_context.tunnelDispatcher().shouldDropParticipatingMessage(TunnelDispatcher.Location.OBEP, DatabaseLookupMessage.MESSAGE_TYPE, 1024)) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Dropping I2NPMessage (" + msg.getType() + ") to [" + target.toBase64().substring(0,6) + "] " +
+                                  "at Outbound Endpoint -> Lookup bandwidth throttle");
+                    }
+                    return;
+                }
+            }
             if (_log.shouldInfo())
                 _log.info("Outbound distributor to [" + target.toBase64().substring(0,6)
                            + "]" + (tunnel != null ? "." + tunnel.getTunnelId() + "" : "")
@@ -77,9 +91,7 @@ class OutboundMessageDistributor {
             // or is that a bad idea due to clock skews?
             _context.netDb().lookupRouterInfo(target, new DistributeJob(_context, msg, target, tunnel), null, MAX_DISTRIBUTE_TIME);
             return;
-        } else {
-            distribute(msg, info, tunnel);
-        }
+        } else {distribute(msg, info, tunnel);}
     }
 
     /**
@@ -121,7 +133,7 @@ class OutboundMessageDistributor {
                 _log.debug("Queueing Inbound message to ourselves: " + m);
             // TODO if UnknownI2NPMessage, convert it.
             // See FragmentHandler.receiveComplete()
-            _context.inNetMessagePool().add(m, null, null, 0); 
+            _context.inNetMessagePool().add(m, null, null, 0);
             return;
         } else {
             OutNetMessage out = new OutNetMessage(_context, m, _context.clock().now() + MAX_DISTRIBUTE_TIME, _priority, target);

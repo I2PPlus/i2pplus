@@ -12,6 +12,7 @@ import net.i2p.data.TunnelId;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.networkdb.kademlia.MessageWrapper.OneTimeSession;
+import net.i2p.util.Log;
 
 /**
  * Coordinate the info that the tunnel creator keeps track of, including what
@@ -48,6 +49,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private final byte[][] _AESReplyIVs;
     // short record OBEP only
     private OneTimeSession _garlicReplyKeys;
+    private Log _log;
 
     /**
      *  IV length for {@link #getAESReplyIV}
@@ -382,51 +384,37 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     @Override
     public String toString() {
         // H0:1235 -> H1:2345 -> H2:2345
+        _log = _context.logManager().getLog(TunnelCreatorConfig.class);
         StringBuilder buf = new StringBuilder(128);
-        //buf.append("\n* ");
-        if (_isInbound)
-            buf.append("Inbound");
-        else
-            buf.append("Outbound");
-        if (_destination == null)
-            buf.append(" Exploratory tunnel");
-        else
-            buf.append(" client tunnel [").append(Base64.encode(_destination.getData(), 0, 6)).append("]");
-        buf.append("\n* Gateway: ");
-        for (int i = 0; i < _peers.length; i++) {
-            buf.append("[" + _peers[i].toBase64().substring(0,6) + "]");
-            buf.append(isEC(i) ? " EC:" : " ElG:");
-            long id = _config[i].getReceiveTunnelId();
-            if (id != 0) {
-                // don't show for "me" at OBGW or IBEP
-                if (!_isInbound || i != _peers.length - 1)
-                    buf.append(isEC(i) ? " EC:" : " ElG:");
-                else
-                    buf.append(' ');
-                buf.append(id);
-            } else {
-                buf.append(" local");
-            }
-            id = _config[i].getSendTunnelId();
-            if (id != 0) {
-                buf.append('.');
-                buf.append(id);
-            } else if (_isInbound || i == 0) {
-                buf.append(".local");
-            }
-            if (i + 1 < _peers.length)
-                buf.append(" -> ");
-        }
-
-        buf.append("\n* Expires: ").append(new Date(_expiration));
-        if (_replyMessageId > 0)
-            buf.append("; [ReplyMsgID ").append(_replyMessageId).append("]");
-        if (_messagesProcessed > 0)
-            buf.append(" with ").append(_messagesProcessed).append(" messages (").append(_verifiedBytesTransferred).append(" bytes)");
-
+        if (_isInbound) {buf.append("Inbound");}
+        else {buf.append("Outbound");}
+        if (_destination == null) {buf.append(" Exploratory tunnel");}
+        else {buf.append(" Client tunnel [").append(Base64.encode(_destination.getData(), 0, 6)).append("]");}
         int fails = _failures.get();
-        if (fails > 0)
-            buf.append(" with ").append(fails).append(" consecutive failures");
+        if (fails > 0) {buf.append(" (").append(fails).append("consecutive failures)");}
+        if (_log.shouldInfo()) {
+            buf.append("\n* Gateway: ");
+            for (int i = 0; i < _peers.length; i++) {
+                buf.append("[" + _peers[i].toBase64().substring(0,6) + "]");
+                buf.append(isEC(i) ? " EC:" : " ElG:");
+                long id = _config[i].getReceiveTunnelId();
+                if (id != 0) {
+                    // don't show for "me" at OBGW or IBEP
+                    if (!_isInbound || i != _peers.length - 1) {buf.append(isEC(i) ? " EC:" : " ElG:");}
+                    else {buf.append(' ');}
+                    buf.append(id);
+                } else {buf.append(" local");}
+                id = _config[i].getSendTunnelId();
+                if (id != 0) {buf.append('.').append(id);}
+                else if (_isInbound || i == 0) {buf.append(".local");}
+                if (i + 1 < _peers.length) {buf.append(" -> ");}
+            }
+            buf.append("\n* Expires: ").append(new Date(_expiration));
+            if (_replyMessageId > 0)
+                buf.append("; [ReplyMsgID ").append(_replyMessageId).append("]");
+            if (_messagesProcessed > 0)
+                buf.append(" with ").append(_messagesProcessed).append(" messages (").append(_verifiedBytesTransferred).append(" bytes)");
+        }
         return buf.toString();
     }
 

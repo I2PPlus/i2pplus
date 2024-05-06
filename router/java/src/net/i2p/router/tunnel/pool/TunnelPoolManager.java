@@ -91,20 +91,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         // The following are for TestJob
         long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
-        ctx.statManager().createRequiredRateStat("tunnel.testFailedTime", "Time for tunnel test failure (ms)", "Tunnels",
-                                         RATES);
-        ctx.statManager().createRateStat("tunnel.testExploratoryFailedTime", "Time to fail exploratory tunnel test (max 60s)", "Tunnels [Exploratory]",
-                                         RATES);
-        ctx.statManager().createRateStat("tunnel.testFailedCompletelyTime", "Time to complete fail for tunnel test (max 60s)", "Tunnels",
-                                         RATES);
-        ctx.statManager().createRateStat("tunnel.testExploratoryFailedCompletelyTime", "Time to complete fail for exploratory tunnel (max 60s)", "Tunnels [Exploratory]",
-                                         RATES);
-        ctx.statManager().createRateStat("tunnel.testSuccessLength", "Length (hops) of tunnels passing test", "Tunnels",
-                                         RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.testSuccessTime", "Time for tunnel test success (ms)", "Tunnels",
-                                         RATES);
-        ctx.statManager().createRateStat("tunnel.testAborted", "Time taken by aborted tunnel tests (no available peers)", "Tunnels",
-                                         RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.testFailedTime", "Time for tunnel test failure (ms)", "Tunnels", RATES);
+        ctx.statManager().createRateStat("tunnel.testExploratoryFailedTime", "Time to fail exploratory tunnel test (max 60s)", "Tunnels [Exploratory]", RATES);
+        ctx.statManager().createRateStat("tunnel.testFailedCompletelyTime", "Time to complete fail for tunnel test (max 60s)", "Tunnels", RATES);
+        ctx.statManager().createRateStat("tunnel.testExploratoryFailedCompletelyTime", "Time to complete fail for exploratory tunnel (max 60s)", "Tunnels [Exploratory]", RATES);
+        ctx.statManager().createRateStat("tunnel.testSuccessLength", "Length (hops) of tunnels passing test", "Tunnels", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.testSuccessTime", "Time for tunnel test success (ms)", "Tunnels", RATES);
+        ctx.statManager().createRateStat("tunnel.testAborted", "Time taken by aborted tunnel tests (no available peers)", "Tunnels", RATES);
     }
 
     /**
@@ -137,8 +130,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             return pool.selectTunnel();
         }
         if (_log.shouldWarn())
-            _log.warn("Want the Inbound tunnel for " + destination.toBase32() +
-                     " but there isn't a pool?");
+            _log.warn("Want the Inbound tunnel for " + destination.toBase32() + " but there isn't a pool?");
         return null;
     }
 

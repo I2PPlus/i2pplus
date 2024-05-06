@@ -94,9 +94,12 @@ class TunnelParticipant {
             ok = _inboundEndpointProcessor.retrievePreprocessedData(data, 0, data.length, recvFrom);
 
         if (!ok) {
-            if (_log.shouldWarn())
+            if (_log.shouldInfo()) {
                 _log.warn("Failed to dispatch " + msg + "\n* Processor: " + _processor
                            + "\n* Inbound Endpoint: " + _inboundEndpointProcessor);
+            } else if (_log.shouldWarn()) {
+                _log.warn("Failed to dispatch " + msg + " via " + _processor);
+            }
             if (_config != null)
                 _config.incrementProcessedMessages();
             return;

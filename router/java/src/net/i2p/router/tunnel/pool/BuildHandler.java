@@ -101,10 +101,10 @@ class BuildHandler implements Runnable {
     /** limits on concurrent next-hop RI lookup */
 //    private static final int MIN_LOOKUP_LIMIT = 10;
 //    private static final int MAX_LOOKUP_LIMIT = 100;
-    private static final int MIN_LOOKUP_LIMIT = SystemVersion.isSlow() ? 8 : 16;
-    private static final int MAX_LOOKUP_LIMIT = SystemVersion.isSlow() ? 80 : 128;
-    /** limit lookups to this % of current participating tunnels */
 //    private static final int PERCENT_LOOKUP_LIMIT = 3;
+    private static final int MIN_LOOKUP_LIMIT = SystemVersion.isSlow() ? 8 : SystemVersion.getCores() < 4 ? 16 : 24;
+    private static final int MAX_LOOKUP_LIMIT = SystemVersion.isSlow() ? 80 : SystemVersion.getCores() < 4 ? 128 : 160;
+    /** limit lookups to this % of current participating tunnels */
     private static final int PERCENT_LOOKUP_LIMIT = SystemVersion.isSlow() ? 2 : 5;
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
@@ -122,7 +122,7 @@ class BuildHandler implements Runnable {
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000;
 
 //    private static final long JOB_LAG_LIMIT_TUNNEL = 350;
-    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 400 : 250;
+    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 400 : 200;
 
 //    private static final long[] RATES = { 60*1000, 60*60*1000l };
     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000 };

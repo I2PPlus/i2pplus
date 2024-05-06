@@ -52,11 +52,7 @@ class BuildExecutor implements Runnable {
     /** accept replies up to a minute after we gave up on them */
     private static final long GRACE_PERIOD = 60*1000;
     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
-
-    public boolean fullStats() {
-        return _context.getBooleanProperty("stat.full");
-    }
-
+    public boolean fullStats() {return _context.getBooleanProperty("stat.full");}
 
     /**
      *  @since 0.9.53
@@ -127,10 +123,8 @@ class BuildExecutor implements Runnable {
 
     private int allowed() {
         CommSystemFacade csf = _context.commSystem();
-        if (csf.getStatus() == Status.DISCONNECTED)
-            return 0;
-        if (csf.isDummy() && csf.countActivePeers() <= 0)
-            return 0;
+        if (csf.getStatus() == Status.DISCONNECTED) {return 0;}
+        if (csf.isDummy() && csf.countActivePeers() <= 0) {return 0;}
         int maxKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
 //        int allowed = maxKBps / 6; // Max. 1 concurrent build per 6 KB/s outbound
         int allowed = maxKBps / 4;
