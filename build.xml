@@ -417,7 +417,7 @@
         <copy file="apps/desktopgui/dist/desktopgui.jar" todir="build/" />
     </target>
 
-    <target name="buildRouterConsole" depends="buildrouter, buildSystray, buildDesktopGui, buildJetty, buildJrobin, buildJFreeSVG">
+    <target name="buildRouterConsole" depends="buildrouter, buildSystray, buildDesktopGui, buildJetty, buildJrobin">
         <ant dir="apps/routerconsole/java/" target="jar" />
     </target>
 
@@ -464,6 +464,7 @@
         <copy file="apps/jrobin/java/build/jrobin.jar" todir="build/" />
     </target>
 
+    <!-- not required, jrobin handles this -->
     <target name="buildJFreeSVG" depends="buildProperties">
         <ant dir="apps/jrobin/java/src/org/jfree/svg/" target="jar" />
         <copy file="apps/jrobin/java/src/org/jfree/svg/build/jfreesvg.jar" todir="build/" />
@@ -1861,7 +1862,6 @@
         <!-- removed from updater in 0.9, added back in 0.9.26 -->
         <copy file="build/desktopgui.jar" todir="pkg-temp/lib/" />
         <copy file="build/pack200.jar" todir="pkg-temp/lib" />
-        <copy file="build/jfreesvg.jar" todir="pkg-temp/lib" />
         <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
         <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
         <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
@@ -1910,7 +1910,6 @@
         <!-- Updated in 0.9.28 -->
         <!-- name without version so we can overwrite if we upgrade  -->
         <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
-        <copy file="build/jfreesvg.jar" todir="pkg-temp/lib" />
         <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/" />
         <copy file="build/pack200.jar" todir="pkg-temp/lib" />
         <copy file="build/routerconsole.war" todir="pkg-temp/webapps/" />
@@ -1933,7 +1932,6 @@
         <!-- Updated in 0.9.28 -->
         <!-- name without version so we can overwrite if we upgrade  -->
         <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
-        <copy file="build/jfreesvg.jar" todir="pkg-temp/lib" />
         <copy file="build/i2ptunnel.war" todir="pkg-temp/webapps/" />
         <copy file="build/routerconsole.war" todir="pkg-temp/webapps/" />
         <copy file="build/addressbook.jar" todir="pkg-temp/lib/" />
@@ -1942,8 +1940,6 @@
         <!--
         <copy file="installer/resources/countries.txt" todir="pkg-temp/geoip/" />
         <copy file="installer/resources/continents.txt" todir="pkg-temp/geoip/" />
-        -->
-        <!--
         <copy file="installer/resources/public-suffix-list.txt" todir="pkg-temp/geoip/" />
         -->
     </target>
@@ -1951,9 +1947,7 @@
     <target name="prepupdatecompact" depends="build2, prepupdateEssential, prepProxyDocs, prepCertificates, prep-script-translation, truncatehistory">
         <copy file="build/i2psnark.jar" todir="pkg-temp/lib" />
         <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
-        <!--<copy file="build/imagegen.war" todir="pkg-temp/webapps/" />-->
         <copy file="build/pack200.jar" todir="pkg-temp/lib" />
-        <copy file="build/jfreesvg.jar" todir="pkg-temp/lib" />
         <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
         <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
         <copy file="installer/resources/deletelist.txt" todir="pkg-temp/" />
@@ -1962,6 +1956,7 @@
         <copy file="installer/resources/i2ping" todir="pkg-temp/" />
         <copy file="installer/resources/eepget" todir="pkg-temp/" />
         <copy file="installer/resources/eephead" todir="pkg-temp/" />
+        <!--<copy file="build/imagegen.war" todir="pkg-temp/webapps/" />-->
         <!--<copy file="installer/resources/graceful_update" todir="pkg-temp/" />-->
         <!--<copy file="installer/resources/windows/fixperms2.bat" todir="pkg-temp/scripts/" />-->
     </target>

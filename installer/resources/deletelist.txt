@@ -125,6 +125,7 @@ certificates/plugin/zab_at_mail.i2p.crt
 certificates/reseed/null_at_i2pmail.org.crt
 certificates/reseed/reheatedburger_at_protonmail.com.crt
 certificates/reseed/root_at_bungee.systems.crt
-# i2p+
+# I2P+
 eepsite-jetty9/resources/*
 eepsite-jetty9/resources/
+lib/jfreesvg.jar
