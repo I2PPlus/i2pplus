@@ -2738,6 +2738,11 @@ public final class SVGGraphics2D extends Graphics2D {
                 .append("<stop offset=\"0\" style=\"stop-color:#00660add\" />")
                 .append("<stop offset=\"100%\" style=\"stop-color:#003d06dd\" />")
                 .append("</linearGradient>");
+        } else if (this.sb.toString().contains("rgb(100,160,200)")) {
+            defs.append("<linearGradient id=\"light\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"100%\">")
+                .append("<stop offset=\"0\" style=\"stop-color:#a1c5ded0\" />")
+                .append("<stop offset=\"100%\" style=\"stop-color:#7baed1d0\" />")
+                .append("</linearGradient>");
         }
         defs.append("</defs>");
         svg.append(defs);
@@ -2756,7 +2761,9 @@ public final class SVGGraphics2D extends Graphics2D {
             .replace(";stroke-opacity:.2;stroke-linecap:square\"", "\" class=\"line\"")
             .replace("fill-opacity:0\" /><g style=\"fill", "fill-opacity:0\" /><g id=\"graph\" style=\"fill")
             .replace("style=\"fill:rgb(0,72,8);fill-opacity:.86;stroke:none\"", "fill=\"url(#dark)\"")
+            .replace("style=\"fill:rgb(100,160,200);fill-opacity:.78;stroke:none\"", "fill=\"url(#light)\"")
             .replace("stroke:rgb(0,72,8)", "stroke:#00800da0")
+            .replace("stroke:rgb(100,160,200);stroke-opacity:.78;", "stroke:#4da3cb99;")
             .replaceAll("/></g><g (style=\"stroke:.*?\").*?</g>", " $1 /></g>")
             .replace("stroke-linecap:square;fill:none", "stroke-linecap:square")
             .replace("stroke-opacity:.86;stroke-linecap:square", "stroke-linecap:square")
