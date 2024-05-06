@@ -2721,7 +2721,14 @@ public final class SVGGraphics2D extends Graphics2D {
             .replace("stroke-width:3.0", "stroke-width:3;fill:none")
             .replace("stroke:rgb(100,200,160);stroke-linecap:square", "stroke:#64c8a0cc;stroke-linecap:square;fill:none")
             .replace("stroke:#00800da0;stroke-linecap:square\" /></g><g style=\"stroke-width:3", "stroke:none;stroke-linecap:square\" /></g><g style=\"stroke-width:3")
-            .replace("<rect x=\"0\" y=\"0\" width=\"250\" height=\"50\" style=\"fill:rgb(0,0,0);fill-opacity:0\" />", "");
+            .replace("<rect x=\"0\" y=\"0\" width=\"250\" height=\"50\" style=\"fill:rgb(0,0,0);fill-opacity:0\" />", "")
+            .replace(";stroke-linecap:square", "")
+            .replace("fill:rgb(0,0,0);fill-opacity:0;stroke:none", "opacity:0");
+        if (svgOut.contains("80,80,80")) {
+            svgOut = svgOut.replace(".dash{", ".dash{stroke:#444;")
+                           .replace(".line{", ".line{stroke:#444;")
+                           .replace("style=\"stroke:rgb(80,80,80)\" ", "");
+        }
         return svgOut;
     }
 
