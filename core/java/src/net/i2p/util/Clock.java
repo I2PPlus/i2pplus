@@ -44,13 +44,13 @@ public class Clock implements Timestamper.UpdateListener {
         if (now < min) {
             // positive offset
             _offset = min - now;
-            System.out.println("ERROR: System clock is invalid: " + new Date(now));
+            System.out.println("ERROR: System clock is INVALID: " + new Date(now));
             now = min;
             _isSystemClockBad = true;
         } else if (now > max) {
             // negative offset
             _offset = max - now;
-            System.out.println("ERROR: System clock is invalid: " + new Date(now));
+            System.out.println("ERROR: System clock is INVALID: " + new Date(now));
             now = max;
             _isSystemClockBad = true;
         } else {
