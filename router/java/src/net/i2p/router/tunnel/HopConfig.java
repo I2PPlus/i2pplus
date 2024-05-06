@@ -176,6 +176,7 @@ public class HopConfig {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
+        /**
         if (_receiveTunnel != null) {
             buf.append("\n* Receive on: [TunnelID ");
             buf.append(_receiveTunnel.getTunnelId());
@@ -183,15 +184,18 @@ public class HopConfig {
         }
         if (_sendTo != null) {
             buf.append("\n* Send to: [").append(_sendTo.toBase64().substring(0,6)).append("]");
-            if (_sendTunnel != null)
-                buf.append(":").append(_sendTunnel.getTunnelId());
+            if (_sendTunnel != null) {buf.append(":").append(_sendTunnel.getTunnelId());}
         }
         buf.append("\n* Layer key: ").append(_layerKey);
         buf.append("\n* IV key: ").append(_ivKey);
+        **/
+        buf.append(" to: [").append(_sendTo.toBase64().substring(0,6)).append("]");
         buf.append("\n* Expires: ").append(DataHelper.formatTime(_expiration));
         int messagesProcessed = getProcessedMessagesCount();
-        if (messagesProcessed > 0)
-            buf.append(" (used ").append(messagesProcessed).append("KB)");
+        if (messagesProcessed > 0) {
+            if (messagesProcessed > 1) {buf.append(" (").append(messagesProcessed).append(" messages processed)");}
+            else {buf.append(" (").append(messagesProcessed).append(" message processed)");}
+        }
         return buf.toString();
     }
 }
