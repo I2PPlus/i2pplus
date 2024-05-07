@@ -49,17 +49,7 @@
       var graphWidth = graph.width;
       var graphHeight = graph.height;
       var sheet = window.document.styleSheets[0];
-<%
-    if (graphHelper.getGraphHiDpi()) {
-%>
-      sheet.insertRule(".graphContainer#hidpi {width: " + ((graphWidth / 2) + 8) + "px; height: " + ((graphHeight / 2) + 8) + "px;}", sheet.cssRules.length);
-<%
-    } else {
-%>
       sheet.insertRule(".graphContainer {width: " + (graphWidth + 4) + "px; height: " + (graphHeight + 4) + "px;}", sheet.cssRules.length);
-<%
-    }
-%>
     });
   }
   function initCss() {
@@ -77,37 +67,39 @@
     progressx.show("<%=theme%>");
     var graphs = document.getElementById("allgraphs");
     var nographs = document.getElementById("nographs");
-    var xhrgraphs = new XMLHttpRequest();
-    xhrgraphs.open('GET', '/graphs', true);
-    xhrgraphs.responseType = "document";
-    xhrgraphs.onreadystatechange = function () {
-      if (xhrgraphs.readyState==4) {
-        if (xhrgraphs.status==200) {
-          if (nographs) {
-            nographs.outerHTML = allgraphs.outerHTML;
+    var images = document.getElementsByClassName("statimage");
+    var totalImages = images.length;
+    var imagesLoaded = 0;
+    for (var i = 0; i < totalImages; i++) {
+      var image = images[i];
+      var imageUrl = image.getAttribute('src');
+
+      (function(image, imageUrl) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", imageUrl + "?t=" + Date.now(), true);
+        xhr.onload = function () {
+          if (xhr.status == 200) {
+            image.setAttribute("src", imageUrl + "?t=" + Date.now());
+            imagesLoaded++;
+            if (imagesLoaded === totalImages) {progressx.hide();}
           }
-          var graphsResponse = xhrgraphs.responseXML.getElementById("allgraphs");
-          var graphsParent = graphs.parentNode;
-          graphsParent.replaceChild(graphsResponse, graphs);
-          progressx.hide();
-        } else {
-          function isDown() {
-            if (!nographs) {
-              graphs.innerHTML = "<span id=nographs><b>No connection to Router<\/b><\/span>";
-              progressx.hide();
-            }
-          }
-          setTimeout(isDown, 60000);
-        }
-      }
-    }
-    graph.addEventListener("load", initCss());
-    if (visibility === "visible") {
-      xhrgraphs.send();
-    } else if (xhrgraphs.status !== null) {
-      xhrgraphs.abort();
+        };
+        xhr.send();
+      })(image, imageUrl);
+     }
+  }
+
+  function isDown() {
+    var images = document.getElementsByClassName("statimage");
+    var totalImages = images.length;
+    if (!images.length) {
+      graphs.innerHTML = "<span id=nographs><b>No connection to Router<\/b><\/span>";
+      progressx.hide();
     }
   }
+
+  setTimeout(isDown, 60000);
+
   var refresh = <% out.print(graphHelper.getRefreshValue()); %>;
   var refreshInterval = refresh * 1000;
   var timerId = setInterval(updateGraphs, refreshInterval);

@@ -12,10 +12,10 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("graphs")%>
- <jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request" />
- <jsp:setProperty name="graphHelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request" />
+<jsp:setProperty name="graphHelper" property="contextId" value="<%=i2pcontextId%>" />
 <% /* GraphHelper sets the defaults in setContextId, so setting the properties must be after the context */ %>
- <jsp:setProperty name="graphHelper" property="*" />
+<jsp:setProperty name="graphHelper" property="*" />
 <%
     graphHelper.storeWriter(out);
     graphHelper.storeMethod(request.getMethod());
@@ -45,10 +45,9 @@
 %>
 <h1 class=perf><%=intl._t("Performance Graph")%></h1>
 <div class=main id=graph_single>
- <jsp:getProperty name="graphHelper" property="singleStat" />
+<jsp:getProperty name="graphHelper" property="singleStat" />
 </div>
 <script nonce=<%=cspNonce%>>
-  var main = document.getElementById("perfgraphs");
   var graph = document.getElementById("single");
   var graphImage = document.getElementById("graphSingle");
   var graphWidth = graphImage.naturalWidth;
@@ -59,81 +58,47 @@
   function injectCss() {
     graphImage.addEventListener("load", function() {
       if (document.head.contains(graphcss)) {
-        if (graphcss) {
-          graphcss.remove();
-        }
+        if (graphcss) {graphcss.remove();}
       }
       var s = document.createElement("style");
       s.setAttribute("id", "graphcss");
-<%
-      if (graphHelper.getGraphHiDpi()) {
-%>
-        if (graphWidth !== 0) {
-          var w = graphWidth / 2 + 8;
-        } else {
-          var w = graphImage.width / 2 + 8;
-        }
-        if (graphHeight !== 0) {
-          var h = graphHeight / 2 + 8;
-        } else {
-          var h = graphImage.height / 2 + 8;
-        }
-        s.innerHTML = ".graphContainer#hidpi {width: " + w + "px; height: " + h + "px;}";
-<%
-      } else {
-%>
-        if (graphWidth !== 0) {
-          var w = graphWidth + 4;
-        } else {
-          var w = graphImage.width + 4;
-        }
-        if (graphHeight !== 0) {
-          var h = graphHeight + 4;
-        } else {
-          var h = graphImage.height + 4;
-        }
-        s.innerHTML = ".graphContainer {width: " + w + "px; height: " + h + "px;}";
-<%
-      }
-%>
+      if (graphWidth !== 0) {var w = graphWidth + 4;}
+      else {var w = graphImage.width + 4;}
+      if (graphHeight !== 0) {var h = graphHeight + 4;}
+      else {var h = graphImage.height + 4;}
+      s.innerHTML = ".graphContainer{width: " + w + "px;height: " + h + "px}";
       document.head.appendChild(s);
     });
   }
   function initCss() {
     injectCss();
-    if (timer) {
-      clearInterval(timer);
-    } else if (!graphcss) {
-      var timer = function() {setInterval(injectCss, 500)};
-    }
+    if (timer) {clearInterval(timer);}
+    else if (!graphcss) {var timer = function() {setInterval(injectCss, 500)};}
   }
   initCss();
 <%
     if (graphHelper.getRefreshValue() > 0) {
 %>
-var visibility = document.visibilityState;
-if (graph && visibility == "visible") {
-  setInterval(function() {
-    progressx.show("<%=theme%>");
-    var graphURL = window.location.href + "&t=" + Date.now();
-    var xhrgraph = new XMLHttpRequest();
-    xhrgraph.open('GET', graphURL, true);
-    xhrgraph.responseType = "document";
-    xhrgraph.onreadystatechange = function () {
-      if (xhrgraph.readyState==4 && xhrgraph.status==200) {
-        var graphResponse = xhrgraph.responseXML.getElementById("single");
-        graph.innerHTML = graphResponse.innerHTML;
-        graphImage.addEventListener("load", initCss());
+  var visibility = document.visibilityState;
+  if (graph && visibility == "visible") {
+    setInterval(function() {
+      progressx.show("<%=theme%>");
+      var graphURL = imgSrc + "&t=" + Date.now();
+      var xhrgraph = new XMLHttpRequest();
+      xhrgraph.open('GET', graphURL, true);
+      xhrgraph.responseType = "document";
+      xhrgraph.onreadystatechange = function () {
+        if (xhrgraph.readyState==4 && xhrgraph.status==200) {
+          graphImage.setAttribute('src', graphURL);
+          graphImage.addEventListener("load", initCss());
+        }
         progressx.hide();
-      } else {
-        progress.hide();
       }
-    }
-    xhrgraph.send();
-  }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
-}
+      xhrgraph.send();
+    }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
+  }
 <%  } %>
-window.addEventListener("DOMContentLoaded", progressx.hide);
+  window.addEventListener("DOMContentLoaded", progressx.hide);
 </script>
 </body>
 </html>
