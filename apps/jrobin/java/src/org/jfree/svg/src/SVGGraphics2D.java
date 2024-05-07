@@ -1200,7 +1200,6 @@ public final class SVGGraphics2D extends Graphics2D {
             this.sb.append(">");
             this.sb.append("<path ").append(getSVGPathData(path)).append("/>");
             this.sb.append("</g>");
-            //System.out.println("Path data: " + pathData + "\nOptimized: " + optimizedPath);
         } else {
             draw(new GeneralPath(s)); // handled as a Path2D next time through
         }
