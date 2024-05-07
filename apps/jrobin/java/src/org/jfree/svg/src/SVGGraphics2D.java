@@ -2706,6 +2706,8 @@ public final class SVGGraphics2D extends Graphics2D {
             .replace("<g >", "<g>")
             .replace(":0.", ":.")
             .replace(";\"", "\"")
+            .replace(".0 ", " ")
+            .replace(".0\"", "\"")
             .replace(";stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1\"", "\" class=\"dash\"")
             .replace(";stroke-opacity:.2;stroke-linecap:square\"", "\" class=\"line\"")
             .replace("fill-opacity:0\" /><g style=\"fill", "fill-opacity:0\" /><g id=\"graph\" style=\"fill")
@@ -2723,11 +2725,21 @@ public final class SVGGraphics2D extends Graphics2D {
             .replace("stroke:#00800da0;stroke-linecap:square\" /></g><g style=\"stroke-width:3", "stroke:none;stroke-linecap:square\" /></g><g style=\"stroke-width:3")
             .replace("<rect x=\"0\" y=\"0\" width=\"250\" height=\"50\" style=\"fill:rgb(0,0,0);fill-opacity:0\" />", "")
             .replace(";stroke-linecap:square", "")
-            .replace("fill:rgb(0,0,0);fill-opacity:0;stroke:none", "opacity:0");
+            .replace("fill:rgb(0,0,0);fill-opacity:0;stroke:none", "opacity:0")
+            .replace("fill:none;fill:none", "fill:none")
+            .replace(" style=\"stroke:rgb(0,0,0);stroke-opacity:0\"", "");
         if (svgOut.contains("80,80,80")) {
             svgOut = svgOut.replace(".dash{", ".dash{stroke:#444;")
                            .replace(".line{", ".line{stroke:#444;")
-                           .replace("style=\"stroke:rgb(80,80,80)\" ", "");
+                           .replace("text{", "text{fill:#33333f;")
+                           .replace("style=\"stroke:rgb(80,80,80)\" ", "")
+                           .replace("fill:rgb(51,51,63);", "");
+        } else if (svgOut.contains("244,244,190")) {
+            svgOut = svgOut.replace(".dash{", ".dash{stroke:#f4f4be;")
+                           .replace(".line{", ".line{stroke:#f4f4be;")
+                           .replace("text{", "text{fill:#f4f4be;")
+                           .replace("style=\"stroke:rgb(244,244,190)\" ", "")
+                           .replace("fill:rgb(244,244,190);", "");
         }
         return svgOut;
     }
