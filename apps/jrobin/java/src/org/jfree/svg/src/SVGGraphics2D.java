@@ -1288,25 +1288,25 @@ public final class SVGGraphics2D extends Graphics2D {
             if (lastPoint != null) {b.append(" ");}
             switch (type) {
                 case (PathIterator.SEG_MOVETO):
-                    b.append("M").append(" ").append(geomDP(coords[0])).append(" ").append(geomDP(coords[1]));
+                    b.append("M").append(geomDP(coords[0])).append(" ").append(geomDP(coords[1]));
                     lastPoint = new Point2D.Float(coords[0], coords[1]);
                     lastCommandWasDuplicate = false;
                     break;
                 case (PathIterator.SEG_LINETO):
                     if (lastCommandWasDuplicate || lastPoint == null || lastPoint.getX() != coords[0] || lastPoint.getY() != coords[1]) {
-                        b.append("L").append(" ").append(geomDP(coords[0])).append(" ").append(geomDP(coords[1]));
+                        b.append("L").append(geomDP(coords[0])).append(" ").append(geomDP(coords[1]));
                         lastPoint = new Point2D.Float(coords[0], coords[1]);
                     }
                     lastCommandWasDuplicate = false;
                     break;
                 case (PathIterator.SEG_QUADTO):
-                    b.append("Q ").append(geomDP(coords[0]))
+                    b.append("Q").append(geomDP(coords[0]))
                      .append(" ").append(geomDP(coords[1]))
                      .append(" ").append(geomDP(coords[2]))
                      .append(" ").append(geomDP(coords[3]));
                     break;
                 case (PathIterator.SEG_CUBICTO):
-                    b.append("C ").append(geomDP(coords[0])).append(" ")
+                    b.append("C").append(geomDP(coords[0])).append(" ")
                      .append(geomDP(coords[1])).append(" ")
                      .append(geomDP(coords[2])).append(" ")
                      .append(geomDP(coords[3])).append(" ")
