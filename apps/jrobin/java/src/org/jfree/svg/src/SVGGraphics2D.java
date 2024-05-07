@@ -1200,6 +1200,7 @@ public final class SVGGraphics2D extends Graphics2D {
             this.sb.append(">");
             this.sb.append("<path ").append(getSVGPathData(path)).append("/>");
             this.sb.append("</g>");
+            //System.out.println("Path data: " + pathData + "\nOptimized: " + optimizedPath);
         } else {
             draw(new GeneralPath(s)); // handled as a Path2D next time through
         }
@@ -1275,49 +1276,54 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @return An SVG path string.
      */
+
     private String getSVGPathData(Path2D path) {
         StringBuilder b = new StringBuilder("d=\"");
         float[] coords = new float[6];
-        boolean first = true;
+        Point2D.Float lastPoint = null;
+        boolean lastCommandWasDuplicate = false;
         PathIterator iterator = path.getPathIterator(null);
         while (!iterator.isDone()) {
             int type = iterator.currentSegment(coords);
-            if (!first) {
-                b.append(" ");
-            }
-            first = false;
+            if (lastPoint != null) {b.append(" ");}
             switch (type) {
-            case (PathIterator.SEG_MOVETO):
-                b.append("M ").append(geomDP(coords[0])).append(" ")
-                        .append(geomDP(coords[1]));
-                break;
-            case (PathIterator.SEG_LINETO):
-                b.append("L ").append(geomDP(coords[0])).append(" ")
-                        .append(geomDP(coords[1]));
-                break;
-            case (PathIterator.SEG_QUADTO):
-                b.append("Q ").append(geomDP(coords[0]))
-                        .append(" ").append(geomDP(coords[1]))
-                        .append(" ").append(geomDP(coords[2]))
-                        .append(" ").append(geomDP(coords[3]));
-                break;
-            case (PathIterator.SEG_CUBICTO):
-                b.append("C ").append(geomDP(coords[0])).append(" ")
-                        .append(geomDP(coords[1])).append(" ")
-                        .append(geomDP(coords[2])).append(" ")
-                        .append(geomDP(coords[3])).append(" ")
-                        .append(geomDP(coords[4])).append(" ")
-                        .append(geomDP(coords[5]));
-                break;
-            case (PathIterator.SEG_CLOSE):
-                b.append("Z ");
-                break;
-            default:
-                break;
+                case (PathIterator.SEG_MOVETO):
+                    b.append("M").append(" ").append(geomDP(coords[0])).append(" ").append(geomDP(coords[1]));
+                    lastPoint = new Point2D.Float(coords[0], coords[1]);
+                    lastCommandWasDuplicate = false;
+                    break;
+                case (PathIterator.SEG_LINETO):
+                    if (lastCommandWasDuplicate || lastPoint == null || lastPoint.getX() != coords[0] || lastPoint.getY() != coords[1]) {
+                        b.append("L").append(" ").append(geomDP(coords[0])).append(" ").append(geomDP(coords[1]));
+                        lastPoint = new Point2D.Float(coords[0], coords[1]);
+                    }
+                    lastCommandWasDuplicate = false;
+                    break;
+                case (PathIterator.SEG_QUADTO):
+                    b.append("Q ").append(geomDP(coords[0]))
+                     .append(" ").append(geomDP(coords[1]))
+                     .append(" ").append(geomDP(coords[2]))
+                     .append(" ").append(geomDP(coords[3]));
+                    break;
+                case (PathIterator.SEG_CUBICTO):
+                    b.append("C ").append(geomDP(coords[0])).append(" ")
+                     .append(geomDP(coords[1])).append(" ")
+                     .append(geomDP(coords[2])).append(" ")
+                     .append(geomDP(coords[3])).append(" ")
+                     .append(geomDP(coords[4])).append(" ")
+                     .append(geomDP(coords[5]));
+                    break;
+                case (PathIterator.SEG_CLOSE):
+                    b.append("Z");
+                    lastPoint = null;
+                    lastCommandWasDuplicate = false;
+                    break;
+                default:
+                    break;
             }
             iterator.next();
         }
-        return b.append("\"").toString();
+        return b.append("\"").toString().replaceAll("\\s{2,}", " ");
     }
 
     /**
