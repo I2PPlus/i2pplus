@@ -540,10 +540,10 @@ public class TunnelDispatcher implements Service {
                     _log.warn("Not dispatching GatewayMessage for [TunnelID " + id.getTunnelId()
                                + "]\n* Wrapper's expiration -> " + DataHelper.formatDuration(exp - before)
                                + " and/or content expiration -> " + DataHelper.formatDuration(subexp - before)
-                               + "\n* Type: " + submsg.getClass().getSimpleName() + "[MsgID " + id + "/" + submsg.getUniqueId() + "]");
+                               + "\n* Type: " + submsg.getClass().getSimpleName() + " [MsgID " + id + "/" + submsg.getUniqueId() + "]");
                 return;
             }
-            //_context.messageHistory().tunnelDispatched("message " + msg.getRawUniqueId() + "/" + msg.getMessage().getRawUniqueId() + " on tunnel " 
+            //_context.messageHistory().tunnelDispatched("message " + msg.getRawUniqueId() + "/" + msg.getMessage().getRawUniqueId() + " on tunnel "
             //                                               + msg.getTunnelId().getTunnelId() + " as inbound gateway");
             _context.messageHistory().tunnelDispatched(msg.getUniqueId(),
                                                        submsg.getUniqueId(),
@@ -554,15 +554,13 @@ public class TunnelDispatcher implements Service {
             _context.messageHistory().droppedTunnelGatewayMessageUnknown(msg.getUniqueId(), id.getTunnelId());
             int level = (_context.router().getUptime() > 10*60*1000 ? Log.WARN : Log.INFO);
             if (_log.shouldLog(level))
-                _log.log(level, "No matching tunnel for [TunnelID " + id.getTunnelId()
-                           + "]\n* Gateway message expires: "
-                           + DataHelper.formatDuration(msg.getMessageExpiration() - before)
-                           + "/"
-                           + DataHelper.formatDuration(submsg.getMessageExpiration() - before)
-                           + " [MsgID " + id
-                           + "/" + msg.getMessage().getUniqueId()
-                           + "] Type: " + submsg.getClass().getSimpleName()
-                           + "; Existing: " + _inboundGateways.size());
+                _log.log(level, "No matching tunnel for [TunnelID " + id.getTunnelId() +
+                                "]\n* Gateway message expires: " +
+                                DataHelper.formatDuration(msg.getMessageExpiration() - before) + "/" +
+                                DataHelper.formatDuration(submsg.getMessageExpiration() - before) +
+                                " [MsgID " + id + "/" + msg.getMessage().getUniqueId() +
+                                "] Type: " + submsg.getClass().getSimpleName() +
+                                "; Existing: " + _inboundGateways.size());
         }
 
         //long dispatchTime = _context.clock().now() - before;
