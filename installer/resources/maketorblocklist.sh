@@ -27,7 +27,7 @@ fi
 
 # Download the latest list from Tor Project
 echo " > Downloading the latest list from Tor Project via specified proxy $http_proxy..."
-curl -o $input_file -x $http_proxy https://check.torproject.org/torbulkexitlist
+curl -o $input_file -x $http_proxy https://check.torproject.org/torbulkexitlist 2>/dev/null
 if [ $? -ne 0 ]; then
   echo " > Failed to download the latest list. Please check your proxy settings and try again."
   exit 1

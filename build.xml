@@ -3327,4 +3327,19 @@
       </replaceregexp>
     </target>
 
+    <target name="updateTorBlocklist">
+      <exec executable="/bin/sh" outputproperty="bash.output">
+        <arg value="-c"/>
+        <arg value="cd installer/resources/ &amp;&amp; ./maketorblocklist.sh"/>
+      </exec>
+      <condition property="download.failed">
+        <contains string="${bash.output}" substring="Failed to download the latest list." />
+      </condition>
+      <fail message="Failed to download the latest list.">
+        <condition>
+          <isset property="download.failed" />
+        </condition>
+      </fail>
+    </target>
+
 </project>
