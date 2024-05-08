@@ -85,8 +85,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import org.jfree.svg.util.Args;
 import org.jfree.svg.util.GradientPaintKey;
@@ -1663,38 +1661,22 @@ public final class SVGGraphics2D extends Graphics2D {
      */
     @Override
     public void drawString(String str, float x, float y) {
-        if (str == null) {
-            throw new NullPointerException("Null 'str' argument.");
-        }
-        if (str.isEmpty()) {
-            return;
-        }
-        if (!SVGHints.VALUE_DRAW_STRING_TYPE_VECTOR.equals(
-                this.hints.get(SVGHints.KEY_DRAW_STRING_TYPE))) {
+        if (str == null) {throw new NullPointerException("Null 'str' argument.");}
+        if (str.isEmpty()) {return;}
+        if (!SVGHints.VALUE_DRAW_STRING_TYPE_VECTOR.equals(this.hints.get(SVGHints.KEY_DRAW_STRING_TYPE))) {
             this.sb.append("<g ");
             appendOptionalElementIDFromHint(this.sb);
             if (!this.transform.isIdentity()) {
                 this.sb.append("transform=\"").append(getSVGTransform(
                 this.transform)).append("\"");
             }
-            this.sb.append(">");
-            this.sb.append("<text x=\"").append(geomDP(x))
-                   .append("\" y=\"").append(geomDP(y))
-                   .append("\"");
-            this.sb.append(" style=\"").append(getSVGFontStyle()).append("\"");
-            Object hintValue = getRenderingHint(SVGHints.KEY_TEXT_RENDERING);
-            if (hintValue != null) {
-                String textRenderValue = hintValue.toString();
-                this.sb.append(" text-rendering=\"").append(textRenderValue)
-                       .append("\"");
-            }
-            this.sb.append(" ").append(getClipPathRef());
-            this.sb.append(">");
-            this.sb.append(SVGUtils.escapeForXML(str)).append("</text>");
-            this.sb.append("</g>");
+            this.sb.append("style=\"").append(getSVGFontStyle()).append("\"")
+                   .append(" ").append(getClipPathRef()).append(">")
+                   .append("<text x=\"").append(geomDP(x)).append("\" y=\"").append(geomDP(y)).append("\">")
+                   .append(SVGUtils.escapeForXML(str)).append("</text>")
+                   .append("</g>");
         } else {
-            AttributedString as = new AttributedString(str,
-                    this.font.getAttributes());
+            AttributedString as = new AttributedString(str, this.font.getAttributes());
             drawString(as.getIterator(), x, y);
         }
     }
@@ -1722,18 +1704,15 @@ public final class SVGGraphics2D extends Graphics2D {
      * @param y  the y-coordinate.
      */
     @Override
-    public void drawString(AttributedCharacterIterator iterator, float x,
-            float y) {
+    public void drawString(AttributedCharacterIterator iterator, float x, float y) {
         Set<Attribute> s = iterator.getAllAttributeKeys();
         if (!s.isEmpty()) {
-            TextLayout layout = new TextLayout(iterator,
-                    getFontRenderContext());
+            TextLayout layout = new TextLayout(iterator, getFontRenderContext());
             layout.draw(this, x, y);
         } else {
             StringBuilder strb = new StringBuilder();
             iterator.first();
-            for (int i = iterator.getBeginIndex(); i < iterator.getEndIndex();
-                    i++) {
+            for (int i = iterator.getBeginIndex(); i < iterator.getEndIndex(); i++) {
                 strb.append(iterator.current());
                 iterator.next();
             }
@@ -1949,16 +1928,12 @@ public final class SVGGraphics2D extends Graphics2D {
      */
     @Override
     public Shape getClip() {
-        if (this.clip == null) {
-            return null;
-        }
+        if (this.clip == null) {return null;}
         AffineTransform inv;
         try {
             inv = this.transform.createInverse();
             return inv.createTransformedShape(this.clip);
-        } catch (NoninvertibleTransformException ex) {
-            return null;
-        }
+        } catch (NoninvertibleTransformException ex) {return null;}
     }
 
     /**
@@ -2323,8 +2298,7 @@ public final class SVGGraphics2D extends Graphics2D {
         try {
             ImageIO.write(ri, "png", baos);
         } catch (IOException ex) {
-            Logger.getLogger(SVGGraphics2D.class.getName()).log(Level.SEVERE,
-                    "IOException while writing PNG data.", ex);
+          System.err.println("IOException while writing PNG data (" + ex.getMessage() + ")");
         }
         return baos.toByteArray();
     }
@@ -2385,19 +2359,14 @@ public final class SVGGraphics2D extends Graphics2D {
             appendOptionalElementIDFromHint(this.sb);
             this.sb.append("preserveAspectRatio=\"none\" ");
             this.sb.append("href=\"data:image/png;base64,");
-            this.sb.append(Base64.getEncoder().encodeToString(getPNGBytes(
-                    img)));
+            this.sb.append(Base64.getEncoder().encodeToString(getPNGBytes(img)));
             this.sb.append("\" ");
             this.sb.append(getClipPathRef()).append(" ");
             if (!this.transform.isIdentity()) {
-                this.sb.append("transform=\"").append(getSVGTransform(
-                    this.transform)).append("\" ");
+                this.sb.append("transform=\"").append(getSVGTransform(this.transform)).append("\" ");
             }
-            this.sb.append("x=\"").append(geomDP(x))
-                    .append("\" y=\"").append(geomDP(y))
-                    .append("\" ");
-            this.sb.append("width=\"").append(geomDP(w)).append("\" height=\"")
-                    .append(geomDP(h)).append("\"/>\n");
+            this.sb.append("x=\"").append(geomDP(x)).append("\" y=\"").append(geomDP(y)).append("\" ");
+            this.sb.append("width=\"").append(geomDP(w)).append("\" height=\"").append(geomDP(h)).append("\"/>\n");
             return true;
         } else { // here for SVGHints.VALUE_IMAGE_HANDLING_REFERENCE
             int count = this.imageElements.size();
@@ -2419,11 +2388,8 @@ public final class SVGGraphics2D extends Graphics2D {
             if (!this.transform.isIdentity()) {
                 this.sb.append("transform=\"").append(getSVGTransform(this.transform)).append("\" ");
             }
-            this.sb.append("x=\"").append(geomDP(x))
-                    .append("\" y=\"").append(geomDP(y))
-                    .append("\" ");
-            this.sb.append("width=\"").append(geomDP(w)).append("\" height=\"")
-                    .append(geomDP(h)).append("\"/>\n");
+            this.sb.append("x=\"").append(geomDP(x)).append("\" y=\"").append(geomDP(y)).append("\" ");
+            this.sb.append("width=\"").append(geomDP(w)).append("\" height=\"").append(geomDP(h)).append("\"/>\n");
             return true;
         }
     }
@@ -2496,8 +2462,7 @@ public final class SVGGraphics2D extends Graphics2D {
             int sx1, int sy1, int sx2, int sy2, ImageObserver observer) {
         int w = dx2 - dx1;
         int h = dy2 - dy1;
-        BufferedImage img2 = new BufferedImage(w, h,
-                BufferedImage.TYPE_INT_ARGB);
+        BufferedImage img2 = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = img2.createGraphics();
         g2.drawImage(img, 0, 0, w, h, sx1, sy1, sx2, sy2, null);
         return drawImage(img2, dx1, dy1, null);
@@ -2525,9 +2490,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * @return {@code true} if the image is drawn.
      */
     @Override
-    public boolean drawImage(Image img, int dx1, int dy1, int dx2, int dy2,
-            int sx1, int sy1, int sx2, int sy2, Color bgcolor,
-            ImageObserver observer) {
+    public boolean drawImage(Image img, int dx1, int dy1, int dx2, int dy2, int sx1,
+                             int sy1, int sx2, int sy2, Color bgcolor, ImageObserver observer) {
         Paint saved = getPaint();
         setPaint(bgcolor);
         fillRect(dx1, dy1, dx2 - dx1, dy2 - dy1);
@@ -2677,16 +2641,18 @@ public final class SVGGraphics2D extends Graphics2D {
                .append("\" height=\"").append(this.height).append(unitStr)
                .append("\" ");
             // let's put the viewBox here
-            svg.append("viewBox=\"0,0,").append(this.width).append(",").append(this.height).append("\"");
+            svg.append("viewBox=\"0 0 ").append(this.width).append(" ").append(this.height).append("\"");
         }
         svg.append(">");
 
         StringBuilder defs = new StringBuilder("<defs>");
         for (int i = 0; i < this.clipPaths.size(); i++) {
-            StringBuilder b = new StringBuilder("<clipPath id=\"").append(CLIP_KEY_PREFIX).append(i).append("\">");
-            b.append("<path ").append(this.clipPaths.get(i)).append("/>");
-            b.append("</clipPath>");
-            defs.append(b.toString());
+            if (i != 1) { // no clipPath for entire graph
+                StringBuilder b = new StringBuilder("<clipPath id=\"").append(CLIP_KEY_PREFIX).append(i).append("\">");
+                b.append("<path ").append(this.clipPaths.get(i)).append("/>");
+                b.append("</clipPath>");
+                defs.append(b.toString());
+            }
         } if (this.sb.toString().contains("rgb(0,72,8)")) {
             defs.append("<linearGradient id=\"dark\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"100%\">")
                 .append("<stop offset=\"0\" style=\"stop-color:#00660add\" />")
@@ -2744,7 +2710,9 @@ public final class SVGGraphics2D extends Graphics2D {
                            .replace(".line{", ".line{stroke:#f4f4be;")
                            .replace("text{", "text{fill:#f4f4be;")
                            .replace("style=\"stroke:rgb(244,244,190)\" ", "")
-                           .replace("fill:rgb(244,244,190);", "");
+                           .replace("fill:rgb(244,244,190);", "")
+                           .replaceAll("<g style=\"opacity:0\".*?</g>", "")
+                           .replace(" clip-path=\"url(#clip-1)\"", "");
         }
         return svgOut;
     }
@@ -2800,8 +2768,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * @return The SVG element.
      */
     private String getLinearGradientElement(String id, GradientPaint paint) {
-        StringBuilder b = new StringBuilder("<linearGradient id=\"").append(id)
-                .append("\" ");
+        StringBuilder b = new StringBuilder("<linearGradient id=\"").append(id).append("\" ");
         Point2D p1 = paint.getPoint1();
         Point2D p2 = paint.getPoint2();
         b.append("x1=\"").append(geomDP(p1.getX())).append("\" ");
@@ -2810,21 +2777,17 @@ public final class SVGGraphics2D extends Graphics2D {
         b.append("y2=\"").append(geomDP(p2.getY())).append("\" ");
         b.append("gradientUnits=\"userSpaceOnUse\">");
         Color c1 = paint.getColor1();
-        b.append("<stop offset=\"0%\" stop-color=\"").append(rgbColorStr(c1))
-                .append("\"");
+        b.append("<stop offset=\"0%\" stop-color=\"").append(rgbColorStr(c1)).append("\"");
         if (c1.getAlpha() < 255) {
             double alphaPercent = c1.getAlpha() / 255.0;
-            b.append(" stop-opacity=\"").append(transformDP(alphaPercent))
-                    .append("\"");
+            b.append(" stop-opacity=\"").append(transformDP(alphaPercent)).append("\"");
         }
         b.append("/>");
         Color c2 = paint.getColor2();
-        b.append("<stop offset=\"100%\" stop-color=\"").append(rgbColorStr(c2))
-                .append("\"");
+        b.append("<stop offset=\"100%\" stop-color=\"").append(rgbColorStr(c2)).append("\"");
         if (c2.getAlpha() < 255) {
             double alphaPercent = c2.getAlpha() / 255.0;
-            b.append(" stop-opacity=\"").append(transformDP(alphaPercent))
-                    .append("\"");
+            b.append(" stop-opacity=\"").append(transformDP(alphaPercent)).append("\"");
         }
         b.append("/>");
         return b.append("</linearGradient>").toString();
@@ -2841,8 +2804,7 @@ public final class SVGGraphics2D extends Graphics2D {
      */
     private String getLinearGradientElement(String id,
             LinearGradientPaint paint) {
-        StringBuilder b = new StringBuilder("<linearGradient id=\"").append(id)
-                .append("\" ");
+        StringBuilder b = new StringBuilder("<linearGradient id=\"").append(id).append("\" ");
         Point2D p1 = paint.getStartPoint();
         Point2D p2 = paint.getEndPoint();
         b.append("x1=\"").append(geomDP(p1.getX())).append("\" ");
@@ -2850,21 +2812,17 @@ public final class SVGGraphics2D extends Graphics2D {
         b.append("x2=\"").append(geomDP(p2.getX())).append("\" ");
         b.append("y2=\"").append(geomDP(p2.getY())).append("\" ");
         if (!paint.getCycleMethod().equals(CycleMethod.NO_CYCLE)) {
-            String sm = paint.getCycleMethod().equals(CycleMethod.REFLECT)
-                    ? "reflect" : "repeat";
+            String sm = paint.getCycleMethod().equals(CycleMethod.REFLECT) ? "reflect" : "repeat";
             b.append("spreadMethod=\"").append(sm).append("\" ");
         }
         b.append("gradientUnits=\"userSpaceOnUse\">");
         for (int i = 0; i < paint.getFractions().length; i++) {
             Color c = paint.getColors()[i];
             float fraction = paint.getFractions()[i];
-            b.append("<stop offset=\"").append(geomDP(fraction * 100))
-                    .append("%\" stop-color=\"")
-                    .append(rgbColorStr(c)).append("\"");
+            b.append("<stop offset=\"").append(geomDP(fraction * 100)).append("%\" stop-color=\"").append(rgbColorStr(c)).append("\"");
             if (c.getAlpha() < 255) {
                 double alphaPercent = c.getAlpha() / 255.0;
-                b.append(" stop-opacity=\"").append(transformDP(alphaPercent))
-                        .append("\"");
+                b.append(" stop-opacity=\"").append(transformDP(alphaPercent)).append("\"");
             }
             b.append("/>");
         }
@@ -2881,8 +2839,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * @return The SVG element.
      */
     private String getRadialGradientElement(String id, RadialGradientPaint rgp) {
-        StringBuilder b = new StringBuilder("<radialGradient id=\"").append(id)
-                .append("\" gradientUnits=\"userSpaceOnUse\" ");
+        StringBuilder b = new StringBuilder("<radialGradient id=\"").append(id).append("\" gradientUnits=\"userSpaceOnUse\" ");
         Point2D center = rgp.getCenterPoint();
         Point2D focus = rgp.getFocusPoint();
         float radius = rgp.getRadius();
@@ -2901,8 +2858,7 @@ public final class SVGGraphics2D extends Graphics2D {
             b.append("stop-color=\"").append(rgbColorStr(c)).append("\"");
             if (c.getAlpha() < 255) {
                 double alphaPercent = c.getAlpha() / 255.0;
-                b.append(" stop-opacity=\"").append(transformDP(alphaPercent))
-                        .append("\"");
+                b.append(" stop-opacity=\"").append(transformDP(alphaPercent)).append("\"");
             }
             b.append("/>");
         }
@@ -2916,12 +2872,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * @return A clip path reference.
      */
     private String getClipPathRef() {
-        if (this.clip == null) {
-            return "";
-        }
-        if (this.clipRef == null) {
-            this.clipRef = registerClip(getClip());
-        }
+        if (this.clip == null) {return "";}
+        if (this.clipRef == null) {this.clipRef = registerClip(getClip());}
         StringBuilder b = new StringBuilder();
         b.append("clip-path=\"url(#").append(this.clipRef).append(")\"");
         return b.toString();
@@ -2938,11 +2890,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * @param height  the height.
      */
     private void setRect(int x, int y, int width, int height) {
-        if (this.rect == null) {
-            this.rect = new Rectangle2D.Double(x, y, width, height);
-        } else {
-            this.rect.setRect(x, y, width, height);
-        }
+        if (this.rect == null) {this.rect = new Rectangle2D.Double(x, y, width, height);}
+        else {this.rect.setRect(x, y, width, height);}
     }
 
     /**
@@ -2957,14 +2906,11 @@ public final class SVGGraphics2D extends Graphics2D {
      * @param arcWidth  the arc width.
      * @param arcHeight  the arc height.
      */
-    private void setRoundRect(int x, int y, int width, int height, int arcWidth,
-            int arcHeight) {
+    private void setRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
         if (this.roundRect == null) {
-            this.roundRect = new RoundRectangle2D.Double(x, y, width, height,
-                    arcWidth, arcHeight);
+            this.roundRect = new RoundRectangle2D.Double(x, y, width, height, arcWidth, arcHeight);
         } else {
-            this.roundRect.setRoundRect(x, y, width, height,
-                    arcWidth, arcHeight);
+            this.roundRect.setRoundRect(x, y, width, height, arcWidth, arcHeight);
         }
     }
 
@@ -2980,14 +2926,11 @@ public final class SVGGraphics2D extends Graphics2D {
      * @param startAngle  the start angle in degrees, 0 = 3 o'clock.
      * @param arcAngle  the angle (anticlockwise) in degrees.
      */
-    private void setArc(int x, int y, int width, int height, int startAngle,
-            int arcAngle) {
+    private void setArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
         if (this.arc == null) {
-            this.arc = new Arc2D.Double(x, y, width, height, startAngle,
-                    arcAngle, Arc2D.PIE);
+            this.arc = new Arc2D.Double(x, y, width, height, startAngle, arcAngle, Arc2D.PIE);
         } else {
-            this.arc.setArc(x, y, width, height, startAngle, arcAngle,
-                    Arc2D.PIE);
+            this.arc.setArc(x, y, width, height, startAngle, arcAngle, Arc2D.PIE);
         }
     }
 
@@ -3002,11 +2945,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * @param height  the height.
      */
     private void setOval(int x, int y, int width, int height) {
-        if (this.oval == null) {
-            this.oval = new Ellipse2D.Double(x, y, width, height);
-        } else {
-            this.oval.setFrame(x, y, width, height);
-        }
+        if (this.oval == null) {this.oval = new Ellipse2D.Double(x, y, width, height);}
+        else {this.oval.setFrame(x, y, width, height);}
     }
 
 }
