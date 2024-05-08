@@ -1291,7 +1291,7 @@ public final class SVGGraphics2D extends Graphics2D {
                     break;
                 case (PathIterator.SEG_LINETO):
                     if (lastCommandWasDuplicate || lastPoint == null || lastPoint.getX() != coords[0] || lastPoint.getY() != coords[1]) {
-                        b.append("L").append(geomDP(coords[0])).append(" ").append(geomDP(coords[1]));
+                        b.append("L ").append(geomDP(coords[0])).append(" ").append(geomDP(coords[1]));
                         lastPoint = new Point2D.Float(coords[0], coords[1]);
                     }
                     lastCommandWasDuplicate = false;
@@ -2653,15 +2653,16 @@ public final class SVGGraphics2D extends Graphics2D {
                 b.append("</clipPath>");
                 defs.append(b.toString());
             }
-        } if (this.sb.toString().contains("rgb(0,72,8)")) {
+        }
+        if (this.sb.indexOf("rgb(0,72,8)") != -1) {
             defs.append("<linearGradient id=\"dark\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"100%\">")
-                .append("<stop offset=\"0\" style=\"stop-color:#00660add\" />")
-                .append("<stop offset=\"100%\" style=\"stop-color:#003d06dd\" />")
+                .append("<stop offset=\"0\" style=\"stop-color:#00660add\"/>")
+                .append("<stop offset=\"100%\" style=\"stop-color:#003d06dd\"/>")
                 .append("</linearGradient>");
-        } else if (this.sb.toString().contains("rgb(100,160,200)")) {
+        } else if (this.sb.indexOf("rgb(100,160,200)") != -1) {
             defs.append("<linearGradient id=\"light\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"100%\">")
-                .append("<stop offset=\"0\" style=\"stop-color:#a1c5ded0\" />")
-                .append("<stop offset=\"100%\" style=\"stop-color:#7baed1d0\" />")
+                .append("<stop offset=\"0\" style=\"stop-color:#a1c5ded0\"/>")
+                .append("<stop offset=\"100%\" style=\"stop-color:#7baed1d0\"/>")
                 .append("</linearGradient>");
         }
         defs.append("</defs>");
@@ -2681,31 +2682,33 @@ public final class SVGGraphics2D extends Graphics2D {
             .replace(".0\"", "\"")
             .replace(";stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1\"", "\" class=\"dash\"")
             .replace(";stroke-opacity:.2;stroke-linecap:square\"", "\" class=\"line\"")
-            .replace("fill-opacity:0\" /><g style=\"fill", "fill-opacity:0\" /><g id=\"graph\" style=\"fill")
+            .replace("fill-opacity:0\" /><g style=\"fill", "fill-opacity:0\"/><g id=\"graph\" style=\"fill")
             .replace("style=\"fill:rgb(0,72,8);fill-opacity:.86;stroke:none\"", "fill=\"url(#dark)\"")
             .replace("style=\"fill:rgb(100,160,200);fill-opacity:.78;stroke:none\"", "fill=\"url(#light)\"")
             .replace("stroke:rgb(0,72,8)", "stroke:#00800da0")
             .replace("stroke:rgb(0,30,110)", "stroke:#003de6a0;fill:none")
             .replace("stroke:rgb(100,160,200);stroke-opacity:.78;", "stroke:#4da3cb99;")
-            .replaceAll("/></g><g (style=\"stroke:.*?\").*?</g>", " $1 /></g>")
+            .replaceAll("/></g><g (style=\"stroke:.*?\").*?</g>", " $1/></g>")
             .replace("stroke-linecap:square;fill:none", "stroke-linecap:square")
             .replace("stroke-opacity:.86;stroke-linecap:square", "stroke-linecap:square")
             .replace(");stroke-linecap:square", ");stroke-linecap:square;fill:none")
             .replace("stroke-width:3.0", "stroke-width:3;fill:none")
             .replace("stroke:rgb(100,200,160);stroke-linecap:square", "stroke:#64c8a0cc;stroke-linecap:square;fill:none")
-            .replace("stroke:#00800da0;stroke-linecap:square\" /></g><g style=\"stroke-width:3", "stroke:none;stroke-linecap:square\" /></g><g style=\"stroke-width:3")
+            .replace("stroke:#00800da0;stroke-linecap:square\" /></g><g style=\"stroke-width:3", "stroke:none;stroke-linecap:square\"/></g><g style=\"stroke-width:3")
             .replace("<rect x=\"0\" y=\"0\" width=\"250\" height=\"50\" style=\"fill:rgb(0,0,0);fill-opacity:0\" />", "")
             .replace(";stroke-linecap:square", "")
             .replace("fill:rgb(0,0,0);fill-opacity:0;stroke:none", "opacity:0")
             .replace("fill:none;fill:none", "fill:none")
-            .replace(" style=\"stroke:rgb(0,0,0);stroke-opacity:0\"", "");
-        if (svgOut.contains("80,80,80")) {
+            .replace(" style=\"stroke:rgb(0,0,0);stroke-opacity:0\"", "")
+            .replace(";stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1\"", "\" class=\"dash\"")
+            .replace(" L ", "L");
+        if (svgOut.indexOf("80,80,80") != -1) {
             svgOut = svgOut.replace(".dash{", ".dash{stroke:#444;")
                            .replace(".line{", ".line{stroke:#444;")
                            .replace("text{", "text{fill:#33333f;")
                            .replace("style=\"stroke:rgb(80,80,80)\" ", "")
                            .replace("fill:rgb(51,51,63);", "");
-        } else if (svgOut.contains("244,244,190")) {
+        } else if (svgOut.indexOf("244,244,190") != -1) {
             svgOut = svgOut.replace(".dash{", ".dash{stroke:#f4f4be;")
                            .replace(".line{", ".line{stroke:#f4f4be;")
                            .replace("text{", "text{fill:#f4f4be;")
