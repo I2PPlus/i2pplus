@@ -2658,7 +2658,7 @@ public final class SVGGraphics2D extends Graphics2D {
                 .append("</linearGradient>");
         }
         defs.append("<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\" href=\"/themes/fonts/FiraCode.css\"/>");
-        defs.append("<style>text{font-weight:600;text-rendering:optimizeLegibility}line,path,rect{shape-rendering:crispEdges}")
+        defs.append("<style>text{font-weight:600;text-rendering:optimizeLegibility;white-space:pre}line,path,rect{shape-rendering:crispEdges}")
             .append(".dash{stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1}")
             .append(".line{stroke-opacity:.2;stroke-linecap:square}")
             .append(".mono{font-family:FiraCode,monospace;font-weight:500}</style>");
