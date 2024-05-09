@@ -1,5 +1,8 @@
+2024-05-09 dr|z3d
+ * Console: Update graphs and handle graph manipulation using AJAX
+
 2024-05-06 dr|z3d
- * Console: Display graphs as svgs using jfreesvg library
+ * Console: Display graphs as SVGs using jfreesvg library
    (I2P integration courtesy of zzz)
 
 2024-04-26 dr|z3d
