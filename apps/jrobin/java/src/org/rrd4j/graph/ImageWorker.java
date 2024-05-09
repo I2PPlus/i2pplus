@@ -12,8 +12,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public abstract class ImageWorker {
+
     private static final String DUMMY_TEXT = "Dummy";
-    private static final int IMG_BUFFER_CAPACITY = 10000; // bytes
+//    private static final int IMG_BUFFER_CAPACITY = 10000; // bytes
+    private static final int IMG_BUFFER_CAPACITY = 40*1024; // bytes
     private Graphics2D g2d;
 
     protected void setG2d(Graphics2D g2d) {
@@ -51,15 +53,28 @@ public abstract class ImageWorker {
         for (int[] pos = path.getNextPath(); pos != null; pos = path.getNextPath()) {
             int start = pos[0], end = pos[1], n = end - start;
             int[] xDev = new int[n + 2], yDev = new int[n + 2];
+            int c = 0;
             for (int i = start; i < end; i++) {
-                xDev[i - start] = (int) x[i];
-                yDev[i - start] = (int) yTop[i];
+                int cx = (int) x[i];
+                int cy = (int) yTop[i];
+                if (c == 0 || cx != xDev[c - 1] || cy != yDev[c - 1]) {
+                    if (c >= 2 && cy == yDev[c - 1] && cy == yDev[c - 2]) {
+                        // collapse horizontal lines
+                        xDev[c - 1] = cx;
+                    } else if (c >= 2 && cx == xDev[c - 1] && cx == xDev[c - 2]) {
+                        // collapse vertical lines
+                        yDev[c - 1] = cy;
+                    } else {
+                        xDev[c] = cx;
+                        yDev[c++] = cy;
+                    }
+                }
             }
-            xDev[n] = xDev[n - 1];
-            xDev[n + 1] = xDev[0];
-            yDev[n] = yDev[n + 1] = (int) yBottom;
-            g2d.fillPolygon(xDev, yDev, xDev.length);
-            g2d.drawPolygon(xDev, yDev, xDev.length);
+            xDev[c] = xDev[c - 1];
+            xDev[c + 1] = xDev[0];
+            yDev[c] = yDev[c + 1] = (int) yBottom;
+            g2d.fillPolygon(xDev, yDev, c + 2);
+            g2d.drawPolygon(xDev, yDev, c + 2);
         }
     }
 
@@ -69,13 +84,40 @@ public abstract class ImageWorker {
         for (int[] pos = path.getNextPath(); pos != null; pos = path.getNextPath()) {
             int start = pos[0], end = pos[1], n = end - start;
             int[] xDev = new int[n * 2], yDev = new int[n * 2];
+            int c = 0;
             for (int i = start; i < end; i++) {
-                int ix1 = i - start, ix2 = n * 2 - 1 - i + start;
-                xDev[ix1] = xDev[ix2] = (int) x[i];
-                yDev[ix1] = (int) yTop[i];
-                yDev[ix2] = (int) yBottom[i];
+                int cx = (int) x[i];
+                int cy = (int) yTop[i];
+                if (c == 0 || cx != xDev[c - 1] || cy != yDev[c - 1]) {
+                    if (c >= 2 && cy == yDev[c - 1] && cy == yDev[c - 2]) {
+                        // collapse horizontal lines
+                        xDev[c - 1] = cx;
+                    } else if (c >= 2 && cx == xDev[c - 1] && cx == xDev[c - 2]) {
+                        // collapse vertical lines
+                        yDev[c - 1] = cy;
+                    } else {
+                        xDev[c] = cx;
+                        yDev[c++] = cy;
+                    }
+                }
             }
-            g2d.fillPolygon(xDev, yDev, xDev.length);
+            for (int i = end - 1; i >= start; i--) {
+                int cx = (int) x[i];
+                int cy = (int) yBottom[i];
+                if (c == 0 || cx != xDev[c - 1] || cy != yDev[c - 1]) {
+                    if (c >= 2 && cy == yDev[c - 1] && cy == yDev[c - 2]) {
+                        // collapse horizontal lines
+                        xDev[c - 1] = cx;
+                    } else if (c >= 2 && cx == xDev[c - 1] && cx == xDev[c - 2]) {
+                        // collapse vertical lines
+                        yDev[c - 1] = cy;
+                    } else {
+                        xDev[c] = cx;
+                        yDev[c++] = cy;
+                    }
+                }
+            }
+            g2d.fillPolygon(xDev, yDev, c);
         }
     }
 
@@ -92,11 +134,24 @@ public abstract class ImageWorker {
         for (int[] pos = path.getNextPath(); pos != null; pos = path.getNextPath()) {
             int start = pos[0], end = pos[1];
             int[] xDev = new int[end - start], yDev = new int[end - start];
+            int c = 0;
             for (int i = start; i < end; i++) {
-                xDev[i - start] = (int) x[i];
-                yDev[i - start] = (int) y[i];
+                int cx = (int) x[i];
+                int cy = (int) y[i];
+                if (c == 0 || cx != xDev[c - 1] || cy != yDev[c - 1]) {
+                    if (c >= 2 && cy == yDev[c - 1] && cy == yDev[c - 2]) {
+                        // collapse horizontal lines
+                        xDev[c - 1] = cx;
+                    } else if (c >= 2 && cx == xDev[c - 1] && cx == xDev[c - 2]) {
+                        // collapse vertical lines
+                        yDev[c - 1] = cy;
+                    } else {
+                        xDev[c] = cx;
+                        yDev[c++] = cy;
+                    }
+                }
             }
-            g2d.drawPolyline(xDev, yDev, xDev.length);
+            g2d.drawPolyline(xDev, yDev, c);
         }
     }
 
@@ -134,6 +189,7 @@ public abstract class ImageWorker {
         BufferedImage wpImage = imageSource.apply(w, h).getSubimage(0, 0, w, h);
         g2d.drawImage(wpImage, new AffineTransform(1f, 0f, 0f, 1f, x, y), null);
     }
+
 
     void dispose() {
         if (g2d != null) {
