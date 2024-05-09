@@ -470,7 +470,7 @@ public interface RrdGraphConstants {
     /**
      * Stroke used to draw ticks
      */
-    Stroke TICK_STROKE = new BasicStroke(1);
+    Stroke TICK_STROKE = new BasicStroke(0);
 
     /**
      * Allowed font tag names which can be used in {@link org.rrd4j.graph.RrdGraphDef#setFont(org.rrd4j.graph.RrdGraphConstants.FontTag, java.awt.Font)} method
