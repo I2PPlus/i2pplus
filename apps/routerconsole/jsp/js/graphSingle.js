@@ -55,7 +55,7 @@ function injectCss() {
 }
 
 function refreshGraph() {
-  if (refreshInterval > 0) {
+  if (graphRefreshInterval > 0) {
     var graph = document.getElementById("single");
     graphImage = document.getElementById("graphSingle");
 
@@ -63,18 +63,16 @@ function refreshGraph() {
       var currentImgSrc = graphImage.src;
       var graphURL = currentImgSrc + "&t=" + Date.now();
       graphImage.src = graphURL;
-      graphImage.onload = function() {
-        initCss();
-        progressx.hide();
-      };
+      graphImage.onload = function() {initCss();};
     }
     updateGraphURL();
+
     if (graph && document.visibilityState == "visible") {
       setInterval(function() {
         progressx.show("<%=theme%>");
         updateGraphURL();
         progressx.hide();
-      }, refreshInterval);
+      }, graphRefreshInterval);
     }
   }
 }

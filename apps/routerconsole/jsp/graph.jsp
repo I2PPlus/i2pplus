@@ -23,7 +23,7 @@
     boolean allowRefresh = intl.allowIFrame(request.getHeader("User-Agent"));
     if (allowRefresh) {out.print(graphHelper.getRefreshMeta());}
 %>
-<script nonce="<%=cspNonce%>">var refreshInterval = <% out.print(graphHelper.getRefreshValue() * 1000); %>;</script>
+<script nonce="<%=cspNonce%>">var graphRefreshInterval = <% out.print(graphHelper.getRefreshValue() * 1000); %>;</script>
 <script nonce="<%=cspNonce%>" src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>" src="/js/graphSingle.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
