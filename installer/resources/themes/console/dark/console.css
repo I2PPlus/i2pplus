@@ -523,7 +523,7 @@ input[type=file]::file-selector-button{font-size:8.5pt}
 
 /* graphs */
 .graphContainer{margin:4px 3px;padding:4px 0;max-width:calc(100% - 18px);min-width:140px;min-height:60px;position:relative;display:inline-block;overflow:hidden;vertical-align:middle;text-align:center;border:var(--border);box-shadow:var(--bevel);animation:ease grid-fade 2s forwards}
-.graphspanel{margin:11px 0 -15px 0;padding:0;width:100%;overflow:hidden;text-align:center;background:none}
+.graphspanel{margin:11px 0 -15px 0;padding:9px 0;width:100%;overflow:hidden;text-align:center;background:none}
 .graphspanel form{margin-bottom:25px;padding:0 15px 0 15px;text-align:left}
 .graphspanel img{margin:0;padding:3px 0;text-align:center}
 .graphspanel img:hover{cursor:zoom-in;filter:none;transition:ease border .05s}
