@@ -335,6 +335,7 @@ class SummaryRenderer {
             } else {
                 DEFAULT_TITLE_FONT_NAME = "Dialog";
             }
+/**
             if  (fontlist.contains("Droid Sans Mono")) {
                 DEFAULT_FONT_NAME = "Droid Sans Mono";
                 DEFAULT_LEGEND_FONT_NAME = "Droid Sans Mono";
@@ -348,9 +349,10 @@ class SummaryRenderer {
                 DEFAULT_FONT_NAME = "Lucida Console";
                 DEFAULT_LEGEND_FONT_NAME = "Lucida Console";
             } else {
+**/
                 DEFAULT_FONT_NAME = "Monospaced";
                 DEFAULT_LEGEND_FONT_NAME = "Monospaced";
-            }
+//            }
 
             String ssmall = _context.getProperty(PROP_FONT_MONO, DEFAULT_FONT_NAME);
             String slegend = _context.getProperty(PROP_FONT_TITLE, DEFAULT_TITLE_FONT_NAME);

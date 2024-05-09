@@ -2657,11 +2657,13 @@ public final class SVGGraphics2D extends Graphics2D {
                 .append("<stop offset=\"100%\" style=\"stop-color:#7baed1d0\"/>")
                 .append("</linearGradient>");
         }
+        defs.append("<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\" href=\"/themes/fonts/FiraCode.css\"/>");
+        defs.append("<style>text{font-weight:600;text-rendering:optimizeLegibility}line,path,rect{shape-rendering:crispEdges}")
+            .append(".dash{stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1}")
+            .append(".line{stroke-opacity:.2;stroke-linecap:square}")
+            .append(".mono{font-family:FiraCode,monospace;font-weight:500}</style>");
         defs.append("</defs>");
         svg.append(defs);
-        svg.append("<style>text{font-weight:600;text-rendering:optimizeLegibility}line,path,rect{shape-rendering:crispEdges}")
-           .append(".dash{stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1}")
-           .append(".line{stroke-opacity:.2;stroke-linecap:square}</style>");
         svg.append(this.sb);
         svg.append("</svg>");
         String svgOut = svg.toString()
@@ -2708,6 +2710,9 @@ public final class SVGGraphics2D extends Graphics2D {
                            .replace("fill:rgb(244,244,190);", "")
                            .replaceAll("<g style=\"opacity:0\".*?</g>", "")
                            .replace(" clip-path=\"url(#clip-1)\"", "");
+        }
+        if (svgOut.indexOf("font-family:monospace") != -1) {
+            svgOut = svgOut.replace("style=\"font-family:monospace;", "class=\"mono\" style=\"");
         }
         return svgOut;
     }
