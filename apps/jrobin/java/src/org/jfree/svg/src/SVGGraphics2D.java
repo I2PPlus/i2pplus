@@ -1277,46 +1277,38 @@ public final class SVGGraphics2D extends Graphics2D {
     private String getSVGPathData(Path2D path) {
         StringBuilder b = new StringBuilder("d=\"");
         float[] coords = new float[6];
-        Point2D.Float lastPoint = null;
-        boolean lastCommandWasDuplicate = false;
+        boolean first = true;
         PathIterator iterator = path.getPathIterator(null);
         while (!iterator.isDone()) {
             int type = iterator.currentSegment(coords);
-            if (lastPoint != null) {b.append(" ");}
             switch (type) {
-                case (PathIterator.SEG_MOVETO):
-                    b.append("M").append(geomDP(coords[0])).append(" ").append(geomDP(coords[1]));
-                    lastPoint = new Point2D.Float(coords[0], coords[1]);
-                    lastCommandWasDuplicate = false;
-                    break;
-                case (PathIterator.SEG_LINETO):
-                    if (lastCommandWasDuplicate || lastPoint == null || lastPoint.getX() != coords[0] || lastPoint.getY() != coords[1]) {
-                        b.append("L ").append(geomDP(coords[0])).append(" ").append(geomDP(coords[1]));
-                        lastPoint = new Point2D.Float(coords[0], coords[1]);
-                    }
-                    lastCommandWasDuplicate = false;
-                    break;
-                case (PathIterator.SEG_QUADTO):
-                    b.append("Q").append(geomDP(coords[0]))
-                     .append(" ").append(geomDP(coords[1]))
-                     .append(" ").append(geomDP(coords[2]))
-                     .append(" ").append(geomDP(coords[3]));
-                    break;
-                case (PathIterator.SEG_CUBICTO):
-                    b.append("C").append(geomDP(coords[0])).append(" ")
-                     .append(geomDP(coords[1])).append(" ")
-                     .append(geomDP(coords[2])).append(" ")
-                     .append(geomDP(coords[3])).append(" ")
-                     .append(geomDP(coords[4])).append(" ")
-                     .append(geomDP(coords[5]));
-                    break;
-                case (PathIterator.SEG_CLOSE):
-                    b.append("Z");
-                    lastPoint = null;
-                    lastCommandWasDuplicate = false;
-                    break;
-                default:
-                    break;
+            case (PathIterator.SEG_MOVETO):
+                b.append("M").append(geomDP(coords[0])).append(" ")
+                 .append(geomDP(coords[1]));
+                break;
+            case (PathIterator.SEG_LINETO):
+                b.append(" L ").append(geomDP(coords[0])).append(" ")
+                 .append(geomDP(coords[1]));
+                break;
+            case (PathIterator.SEG_QUADTO):
+                b.append("Q").append(geomDP(coords[0]))
+                 .append(" ").append(geomDP(coords[1]))
+                 .append(" ").append(geomDP(coords[2]))
+                 .append(" ").append(geomDP(coords[3]));
+                break;
+            case (PathIterator.SEG_CUBICTO):
+                b.append("C").append(geomDP(coords[0])).append(" ")
+                 .append(geomDP(coords[1])).append(" ")
+                 .append(geomDP(coords[2])).append(" ")
+                 .append(geomDP(coords[3])).append(" ")
+                 .append(geomDP(coords[4])).append(" ")
+                 .append(geomDP(coords[5]));
+                break;
+            case (PathIterator.SEG_CLOSE):
+                b.append("Z");
+                break;
+            default:
+                break;
             }
             iterator.next();
         }
