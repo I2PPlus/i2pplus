@@ -21,10 +21,13 @@ function injectCss() {
     var graphWidth = graph.width;
     var graphHeight = graph.height;
     var sheet = window.document.styleSheets[0];
+    var widepanel = document.querySelector(".widepanel");
+    widepanel.id = "nographs";
     sheet.insertRule(".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}", sheet.cssRules.length);
     setTimeout(() => {
       container.removeAttribute("style");
       configs.forEach(function(element) {element.removeAttribute("style")});
+      widepanel.removeAttribute("id");
     }, 500);
   });
 }

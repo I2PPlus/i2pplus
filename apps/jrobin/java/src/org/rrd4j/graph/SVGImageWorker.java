@@ -44,4 +44,17 @@ public class SVGImageWorker extends ImageWorker {
     void makeImage(OutputStream os) throws IOException {
         os.write(g2d.getSVGElement().getBytes("UTF-8"));
     }
+
+    @Override
+    void drawString(String text, int x, int y, Font font, Paint paint) {
+        // strip leading spaces caused by %x.y format
+        super.drawString(text.trim(), x, y, font, paint);
+    }
+
+    @Override
+    double getStringWidth(String text, Font font) {
+        // strip leading spaces caused by %x.y format
+        return super.getStringWidth(text.trim(), font);
+    }
+
 }

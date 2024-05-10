@@ -314,7 +314,10 @@ class SummaryRenderer {
                     DEFAULT_FONT_NAME = "Monospaced";
                     DEFAULT_LEGEND_FONT_NAME = "Monospaced";
                 }
-            } else if  (fontlist.contains("Droid Sans")) {
+            } else {
+            // let's handle the fonts in the svg file
+/**
+            } else if (fontlist.contains("Droid Sans")) {
                 DEFAULT_TITLE_FONT_NAME = "Droid Sans";
             } else if (fontlist.contains("Open Sans")) {
                 DEFAULT_TITLE_FONT_NAME = "Open Sans";
@@ -335,7 +338,6 @@ class SummaryRenderer {
             } else {
                 DEFAULT_TITLE_FONT_NAME = "Dialog";
             }
-/**
             if  (fontlist.contains("Droid Sans Mono")) {
                 DEFAULT_FONT_NAME = "Droid Sans Mono";
                 DEFAULT_LEGEND_FONT_NAME = "Droid Sans Mono";
@@ -352,8 +354,9 @@ class SummaryRenderer {
 **/
                 DEFAULT_FONT_NAME = "Monospaced";
                 DEFAULT_LEGEND_FONT_NAME = "Monospaced";
+                DEFAULT_TITLE_FONT_NAME = "SansSerif";
 //            }
-
+            }
             String ssmall = _context.getProperty(PROP_FONT_MONO, DEFAULT_FONT_NAME);
             String slegend = _context.getProperty(PROP_FONT_TITLE, DEFAULT_TITLE_FONT_NAME);
             String stitle = _context.getProperty(PROP_FONT_TITLE, DEFAULT_TITLE_FONT_NAME);

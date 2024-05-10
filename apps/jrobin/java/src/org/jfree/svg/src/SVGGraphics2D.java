@@ -1137,7 +1137,8 @@ public final class SVGGraphics2D extends Graphics2D {
         }
         if (s instanceof Line2D) {
             Line2D l = (Line2D) s;
-            if (!strokeStyle().contains("stroke-opacity:0;")) {
+            if (!strokeStyle().contains("stroke-opacity:0;") &&
+                !strokeStyle().contains("stroke-width:0.1;")) {
                 this.sb.append("<line ");
                 appendOptionalElementIDFromHint(this.sb);
                 this.sb.append("x1=\"").append(geomDP(l.getX1()))
@@ -2661,8 +2662,16 @@ public final class SVGGraphics2D extends Graphics2D {
         defs.append("<style>text{font-weight:600;text-rendering:optimizeLegibility;white-space:pre}line,path,rect{shape-rendering:crispEdges}")
             .append(".dash{stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1}")
             .append(".line{stroke-opacity:.2;stroke-linecap:square}")
-            .append(".mono{font-family:FiraCode,monospace;font-weight:500}</style>");
-        defs.append("</defs>");
+            .append(".mono{font-family:FiraCode,monospace;font-weight:500}")
+            .append(".sans{font-family:Open Sans,Segoe UI,Noto Sans,sans-serif}")
+            .append(".s10{font-size:10px}")
+            .append(".s11{font-size:11px}")
+            .append(".s13{font-size:13px}");
+        if (this.sb.indexOf("rgb(0,72,8)") != -1) {
+            defs.append(".major{stroke:#f4f4beaa}");
+            defs.append(".minor{stroke:#c8c80099}");
+        }
+        defs.append("</style></defs>");
         svg.append(defs);
         svg.append(this.sb);
         svg.append("</svg>");
@@ -2709,10 +2718,19 @@ public final class SVGGraphics2D extends Graphics2D {
                            .replace("style=\"stroke:rgb(244,244,190)\" ", "")
                            .replace("fill:rgb(244,244,190);", "")
                            .replaceAll("<g style=\"opacity:0\".*?</g>", "")
-                           .replace(" clip-path=\"url(#clip-1)\"", "");
+                           .replace(" clip-path=\"url(#clip-1)\"", "")
+                           .replace(" style=\"stroke:rgb(244,244,190);stroke-opacity:.12\" class=\"dash\"", " class=\"dash minor\"")
+                           .replace(" style=\"stroke:rgb(200,200,0)\" class=\"dash\"", " class=\"dash major\"")
+                           .replace("fill:rgb(0,0,0);fill-opacity:0\"", "opacity:0\"");
         }
         if (svgOut.indexOf("font-family:monospace") != -1) {
             svgOut = svgOut.replace("style=\"font-family:monospace;", "class=\"mono\" style=\"");
+            svgOut = svgOut.replace(" class=\"mono\" style=\"font-size:10px\"", " class=\"mono s10\"");
+            svgOut = svgOut.replace(" class=\"mono\" style=\"font-size:11px\"", " class=\"mono s11\"");
+        }
+        if (svgOut.indexOf("font-family:sans-serif") != -1) {
+            svgOut = svgOut.replace(" style=\"font-family:sans-serif;font-size:11px\"", " class=\"sans s11\"");
+            svgOut = svgOut.replace(" style=\"font-family:sans-serif;font-size:13px\"", " class=\"sans s13\"");
         }
         return svgOut;
     }

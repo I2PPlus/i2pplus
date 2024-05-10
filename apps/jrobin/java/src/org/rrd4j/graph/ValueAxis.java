@@ -130,12 +130,15 @@ class ValueAxis extends Axis {
                     String graph_label;
                     if (i == 0 || im.symbol == ' ') {
                         if (fractional) {
+                            graph_label = Util.sprintf(gdef.locale, "%4.1f", scaledstep * i);
+/**
                             if (i != 0 && gdef.altYGrid) {
                                 graph_label = Util.sprintf(gdef.locale, labfmt, scaledstep * i);
                             }
                             else {
                                 graph_label = Util.sprintf(gdef.locale, "%4.1f", scaledstep * i);
                             }
+**/
                         }
                         else {
                             graph_label = Util.sprintf(gdef.locale, "%4.0f", scaledstep * i);
@@ -149,6 +152,7 @@ class ValueAxis extends Axis {
                             graph_label = Util.sprintf(gdef.locale, "%4.0f %c", scaledstep * i, im.symbol);
                         }
                     }
+
                     int length = (int) (worker.getStringWidth(graph_label, font));
                     worker.drawString(graph_label, x0 - length - PADDING_VLABEL, y + labelOffset, font, fontColor);
                     worker.drawLine(x0 - 2, y, x0 + 2, y, mGridColor, gdef.tickStroke);

@@ -313,7 +313,8 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 
 /* ajax router down */
 #down{margin:-4px -6px -5px;width:100%;display:inline-block;line-height:32px;font-size:0;color:#770;box-shadow:0 0 0 1px #800,var(--btn_shadow_active);background:repeating-linear-gradient(135deg,#fffff2,#fffff2 10px,#ddddd2 10px,#ddddd2 20px);background-size:300%;animation:down linear 9s reverse infinite}
-#nographs{font-size:0}
+#nographs{font-size:0;text-align:center}
+#graphs #nographs.widepanel{margin:28px 0 20px;width:100%;display:block}
 #down::after,#nographs::after{width:26px;height:26px;vertical-align:middle;display:inline-block;background:var(--update) no-repeat center center/24px;content:"";mix-blend-mode:luminosity;animation:linear spin 3s forwards infinite}
 #nographs::after{margin-top:2px;width:36px;height:36px;background-size:36px}
 

@@ -224,6 +224,7 @@ p:empty+.sb_notice{margin-top:9px}
 /* sidebar ajax router down */
 #down{margin:-6px 0;padding:6px 5px;width:calc(100% - 8px);display:inline-block;font-size:0;color:#a00;text-shadow:var(--textshadow);box-shadow:0 0 1px 0 #030,var(--highlight),inset 0 0 1px 3px #131,inset 0 0 0 4px #000,inset 0 0 7px 3px #010;background:var(--isdown);background-position:right center;background-size:125%;animation:routerdown linear 3s forwards infinite}
 #nographs{line-height:60px;font-size:0}
+#nographs.widepanel{margin:-40px 0 20px}
 #down::after,#nographs::after{width:26px;height:26px;vertical-align:middle;display:inline-block;background:var(--update) var(--center)/26px;content:"";transform:rotate(0);animation:linear spin 3s forwards infinite}
 #nographs::after{margin:22px 15px 18px;width:48px;height:48px;background-size:48px}
 #routerdown{background:var(--isdown)}

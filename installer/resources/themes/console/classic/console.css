@@ -1098,8 +1098,9 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 #graphs .statimage,#graphs .statimage:hover,#graphs a:hover .statimage,#graph_single .statimage,#graph_single .statimage:hover{border:0;box-shadow:none}
 #graphs .statimage{min-width:180px;min-height:40px}
 #updategraphs .messages{margin-bottom:-11px}
-#nographs{font-size:0}
-#nographs::after{width:36px;height:36px;background-size:32px}
+#nographs{font-size:0;text-align:center}
+#graphs #nographs.widepanel{margin:28px 0;width:100%;display:block}
+#graphs #nographs::after{width:36px;height:36px;background-size:32px;mix-blend-mode:luminosity}
 #graphdisplay a{margin-top:2px}
 
 /* graph options */
