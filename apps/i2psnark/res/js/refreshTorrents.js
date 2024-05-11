@@ -109,6 +109,7 @@ function refreshTorrents(callback) {
     const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr");
     const updatingCells = document.querySelectorAll("#snarkTbody tr.volatile td:not(.magnet):not(.trackerLink):not(.details.data)");
     const updatingCellsResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile td:not(.magnet):not(.trackerLink):not(.details.data)");
+    const filterbar = document.getElementById("torrentDisplay");
 
     if (torrents) {
       if (filterbar) {
@@ -118,9 +119,8 @@ function refreshTorrents(callback) {
           activeBadge.textContent = activeBadgeResponse.textContent;
         }
         if (!xhrsnark.responseXML) {return;}
-        const filterbar = document.getElementById("torrentDisplay");
-        const filterBarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
-        if (!filterBar && filterBarResponse) {
+        const filterbarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
+        if (!filterbar && filterbarResponse) {
           const mainsection = document.getElementById("mainsection");
           const mainsectionResponse = xhrsnark.responseXML?.getElementById("mainsection");
           window.requestAnimationFrame(() => {mainsection.innerHTML = mainsectionResponse.innerHTML;});
