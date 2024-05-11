@@ -537,7 +537,7 @@ input[type=file]::file-selector-button{font-size:8.5pt}
 #graphdisplay{margin:6px -11px 10px;border-color:#252}
 #graphdisplay a{float:right;letter-spacing:normal;text-transform:capitalize;font-size:9pt}
 #graphs{padding:0 10px;text-align:center}
-#graphs .messages{margin:15px 5px -5px}
+#graphs .messages{margin:19px 5px -3px}
 #graphs .widepanel{margin:-4px 0 17px}
 #gform{margin:-11px -11px -18px;padding:0;border:var(--border);border-radius:0 0 3px 3px;background:#000}
 #gform hr{margin:0 -1px 8px}
