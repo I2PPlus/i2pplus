@@ -357,7 +357,6 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         buf.append(DOCTYPE).append("<html style=\"background:").append(pageBackground).append("\">\n")
            .append("<head>\n").append("<meta charset=utf-8>\n");
-        if (!isStandalone()) {buf.append("<script nonce=" + cspNonce + " src=/js/setupIframe.js></script>\n");}
         buf.append("<meta name=viewport content=\"width=device-width\">\n");
         if (!isStandalone() && useSoraFont()) {
             buf.append("<link rel=preload href=/themes/fonts/Sora.css as=style>\n")
@@ -4144,7 +4143,9 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String SHOWPAGE_CSS = "<style>body{display:block!important;pointer-events:auto!important}:-moz-broken{opacity:0}</style>\n";
     private static final String FOOTER = "</div>\n</center>\n<span id=endOfPage data-iframe-height></span>\n" +
                                          "<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
-                                         CoreVersion.VERSION + "\" id=iframeResizer></script>\n" + SHOWPAGE_CSS + "</body>\n</html>";
+                                         CoreVersion.VERSION + "\" id=iframeResizer></script>\n" + SHOWPAGE_CSS +
+                                         "<script src=/js/setupIframe.js></script>\n" +
+                                         "</body>\n</html>";
     private static final String FOOTER_STANDALONE = "</div>\n</center>" + SHOWPAGE_CSS + "</body>\n</html>";
     private static final String IFRAME_FORM = "<iframe name=processForm id=processForm hidden></iframe>\n";
 
@@ -4258,7 +4259,6 @@ public class I2PSnarkServlet extends BasicServlet {
 
         StringBuilder buf=new StringBuilder(6*1024);
         buf.append(DOCTYPE).append("<html>\n<head>\n<meta charset=utf-8>\n");
-        if (!isStandalone()) {buf.append("<script nonce=" + cspNonce + " src=/js/setupIframe.js></script>\n");}
         buf.append("<title>");
         if (title.endsWith("/")) {title = title.substring(0, title.length() - 1);}
         final String directory = title;
