@@ -24,7 +24,10 @@
     boolean allowRefresh = intl.allowIFrame(request.getHeader("User-Agent")); // meta must be inside the head
     if (allowRefresh) {out.print(graphHelper.getRefreshMeta());}
 %>
-<script nonce="<%=cspNonce%>">var graphRefreshInterval = <% out.print(graphHelper.getRefreshValue() * 1000); %>;</script>
+<script nonce="<%=cspNonce%>">
+  var graphRefreshInterval = <% out.print(graphHelper.getRefreshValue() * 1000); %>;
+  var graphCount = <% out.print(graphHelper.countGraphs()); %>;
+</script>
 </head>
 <body id=perfgraphs>
 <script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>

@@ -10,7 +10,8 @@ var visibility = document.visibilityState;
 container.style.display = "none";
 
 function initCss() {
-  if (graph != null || graphWidth != graph.naturalWidth || graphHeight != graph.naturalHeight) {
+  if (graph !== null || (graphWidth !== null && graphWidth != graph.naturalWidth) ||
+      (graphHeight !== null && graphHeight != graph.naturalHeight)) {
     configs.forEach(function(element) {element.style.display = "none";});
     injectCss();
   } else {location.reload(true);}
@@ -28,7 +29,7 @@ function injectCss() {
     container.removeAttribute("style");
     configs.forEach(function(element) {element.removeAttribute("style")});
     widepanel.removeAttribute("id");
-  }, 500);
+  }, Math.max(graphCount*9, 300));
 }
 
 function updateGraphs() {

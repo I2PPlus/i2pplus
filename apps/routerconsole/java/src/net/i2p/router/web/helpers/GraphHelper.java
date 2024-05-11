@@ -173,8 +173,7 @@ public class GraphHelper extends FormHandler {
                 for (Iterator<SummaryListener> iter = ordered.iterator(); iter.hasNext(); ) {
                     SummaryListener lsnr = iter.next();
                     String title = lsnr.getRate().getRateStat().getName();
-                    if (title.equals("bw.sendRate") || title.equals("bw.recvRate"))
-                        iter.remove();
+                    if (title.equals("bw.sendRate") || title.equals("bw.recvRate")) {iter.remove();}
                 }
                 if (hiDPI) {buf.append("<span class=graphContainer id=hidpi>");}
                 else {buf.append("<span class=graphContainer>");}
@@ -233,6 +232,12 @@ public class GraphHelper extends FormHandler {
             ioe.printStackTrace();
         }
         return "";
+    }
+
+    public int countGraphs() {
+        StatSummarizer ss = StatSummarizer.instance(_context);
+        if (ss == null) {return 0;}
+        else {return ss.countGraphs();}
     }
 
     /**
