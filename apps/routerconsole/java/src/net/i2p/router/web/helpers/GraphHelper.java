@@ -224,7 +224,7 @@ public class GraphHelper extends FormHandler {
 
             // FIXME jrobin doesn't support setting the timezone, will have to mod TimeAxis.java
             // 0.9.1 - all graphs currently state UTC on them, so this text blurb is unnecessary
-            //_out.write("<p><i>" + _t("All times are UTC.") + "</i></p>\n");
+            //_out.write("<p><i>" + _t("All times are UTC.").append("</i></p>\n");
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -243,7 +243,7 @@ public class GraphHelper extends FormHandler {
         if (ss == null) {return "";}
         try {
             if (_stat == null) {
-                _out.write("No stat specified");
+                buf.append("No stat specified");
                 return "";
             }
             long period;
@@ -251,11 +251,12 @@ public class GraphHelper extends FormHandler {
             if (_stat.equals("bw.combined")) {
                 period = 60000;
                 name = _stat;
-                displayName = ("[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage"));
+                displayName = "[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage");
             } else {
                 Set<Rate> rates = ss.parseSpecs(_stat);
                 if (rates.size() != 1) {
-                    _out.write("<p class=infohelp>Graphs not enabled for " + _stat + " or the tunnel or service isn't currently running.</p>");
+                    buf.append("<p class=infohelp>Graphs not enabled for ").append(_stat)
+                       .append(" or the tunnel or service isn't currently running.</p>");
                     return "";
                 }
                 Rate r = rates.iterator().next();
@@ -263,115 +264,88 @@ public class GraphHelper extends FormHandler {
                 name = r.getRateStat().getName();
                 displayName = name;
             }
-            _out.write("<h3 id=graphinfo>");
-            _out.write(_t("{0} for {1}", displayName, DataHelper.formatDuration2(_periodCount * period)));
-            if (_end > 0) {
-                _out.write(' ' + _t("ending {0} ago", DataHelper.formatDuration2(_end * period)));
-            }
+            buf.append("<h3 id=graphinfo>");
+            buf.append(_t("{0} for {1}", displayName, DataHelper.formatDuration2(_periodCount * period)));
+            if (_end > 0) {buf.append(' ').append(_t("ending {0} ago", DataHelper.formatDuration2(_end * period)));}
 
             boolean hideLegend = _context.getProperty(PROP_LEGEND, DEFAULT_LEGEND);
             boolean hiDPI = _context.getProperty(PROP_GRAPH_HIDPI, DEFAULT_GRAPH_HIDPI);
-            _out.write("&nbsp;<a href=/graphs>" + _t("Return to main graphs page") + "</a></h3>\n"
-                       + "<div class=graphspanel id=single>\n");
-            if (hiDPI)
-                _out.write("<span class=graphContainer id=hidpi>");
-            else
-                _out.write("<span class=graphContainer>");
-            _out.write("<a class=singlegraph href=/graphs title=\""
-                       + _t("Return to main graphs page") + "\"><img class=statimage id=graphSingle border=0"
-                       + " src=\"viewstat.jsp?stat="
-                       + name.replace(" ", "%20")
-                       + "&amp;showEvents=" + _showEvents
-                       + "&amp;period=" + period
-                       + "&amp;periodCount=" + _periodCount
-                       + "&amp;end=" + _end);
-            if (hiDPI) {
-                _out.write("&amp;width=" + (_width * 2)
-                       + "&amp;height=" + (_height * 2));
-            } else {
-                _out.write("&amp;width=" + _width
-                       + "&amp;height=" + _height);
-            }
-            _out.write("&amp;hideLegend=" + hideLegend
-                       + "&amp;time=" + System.currentTimeMillis()
-                       + "\"></a></span>\n</div>\n<p id=graphopts>\n");
+            buf.append("&nbsp;<a href=/graphs>").append(_t("Return to main graphs page")).append("</a></h3>\n")
+               .append("<div class=graphspanel id=single>\n");
+            if (hiDPI) {buf.append("<span class=graphContainer id=hidpi>");}
+            else {buf.append("<span class=graphContainer>");}
+            buf.append("<a class=singlegraph href=/graphs title=\"").append(_t("Return to main graphs page")).append("\">")
+               .append("<img class=statimage id=graphSingle border=0 src=\"viewstat.jsp?stat=").append(name.replace(" ", "%20"))
+               .append("&amp;showEvents=").append(_showEvents).append("&amp;period=").append(period)
+               .append("&amp;periodCount=").append(_periodCount).append("&amp;end=").append( _end);
+            if (hiDPI) {buf.append("&amp;width=").append(_width * 2).append("&amp;height=").append(_height * 2);}
+            else {buf.append("&amp;width=").append(_width).append("&amp;height=").append(_height);}
+            buf.append("&amp;hideLegend=").append(hideLegend).append("&amp;time=").append(System.currentTimeMillis())
+               .append("\"></a></span>\n</div>\n<p id=graphopts>\n");
 
             if (_width < MAX_X && _height < MAX_Y) {
-                _out.write(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height * 3 / 2));
-                _out.write(_t("Larger"));
-                _out.write("</a> - ");
+                buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height * 3 / 2));
+                buf.append(_t("Larger")).append("</a> - ");
             }
 
             if (_width > MIN_X && _height > MIN_Y) {
-                _out.write(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height * 2 / 3));
-                _out.write(_t("Smaller"));
-                _out.write("</a> - ");
+                buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height * 2 / 3));
+                buf.append(_t("Smaller")).append("</a> - ");
             }
 
             if (_height < MAX_Y) {
-                _out.write(link(_stat, _showEvents, _periodCount, _end, _width, _height * 3 / 2));
-                _out.write(_t("Taller"));
-                _out.write("</a> - ");
+                buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 3 / 2));
+                buf.append(_t("Taller")).append("</a> - ");
             }
 
             if (_height > MIN_Y) {
-                _out.write(link(_stat, _showEvents, _periodCount, _end, _width, _height * 2 / 3));
-                _out.write(_t("Shorter"));
-                _out.write("</a> - ");
+                buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 2 / 3));
+                buf.append(_t("Shorter")).append("</a> - ");
             }
 
             if (_width < MAX_X) {
-                _out.write(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height));
-                _out.write(_t("Wider"));
-                _out.write("</a> - ");
+                buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height));
+                buf.append(_t("Wider")).append("</a> - ");
             }
 
             if (_width > MIN_X) {
-                _out.write(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height));
-                _out.write(_t("Narrower"));
-                _out.write("</a>");
+                buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height));
+                buf.append(_t("Narrower")).append("</a>");
             }
 
-            _out.write("<br>");
+            buf.append("<br>");
             if (_periodCount < MAX_C) {
-                _out.write(link(_stat, _showEvents, _periodCount * 2, _end, _width, _height));
-                _out.write(_t("Larger interval"));
-                _out.write("</a> - ");
+                buf.append(link(_stat, _showEvents, _periodCount * 2, _end, _width, _height));
+                buf.append(_t("Larger interval")).append("</a> - ");
             }
 
             if (_periodCount > MIN_C) {
-                _out.write(link(_stat, _showEvents, _periodCount / 2, _end, _width, _height));
-                _out.write(_t("Smaller interval"));
-                _out.write("</a> - ");
+                buf.append(link(_stat, _showEvents, _periodCount / 2, _end, _width, _height));
+                buf.append(_t("Smaller interval")).append("</a> - ");
             }
 
             if (_periodCount < MAX_C) {
-                _out.write(link(_stat, _showEvents, _periodCount, _end + _periodCount, _width, _height));
-                _out.write(_t("Previous interval"));
-                _out.write("</a>");
+                buf.append(link(_stat, _showEvents, _periodCount, _end + _periodCount, _width, _height));
+                buf.append(_t("Previous interval")).append("</a>");
             }
 
             if (_end > 0) {
                 int end = _end - _periodCount;
-                if (end <= 0)
-                    end = 0;
-                if (_periodCount < MAX_C)
-                    _out.write(" - ");
-                _out.write(link(_stat, _showEvents, _periodCount, end, _width, _height));
-                _out.write(_t("Next interval"));
-                _out.write("</a> ");
+                if (end <= 0) {end = 0;}
+                if (_periodCount < MAX_C) {buf.append(" - ");}
+                buf.append(link(_stat, _showEvents, _periodCount, end, _width, _height));
+                buf.append(_t("Next interval")).append("</a> ");
             }
 
-            _out.write(" - ");
-            _out.write(link(_stat, !_showEvents, _periodCount, _end, _width, _height));
-            if (!_stat.equals("bw.combined"))
-                _out.write(_showEvents ? _t("Plot averages") : _t("plot events"));
-            _out.write("</a>");
-
-            _out.write("\n</p>\n");
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+            buf.append(" - ");
+            buf.append(link(_stat, !_showEvents, _periodCount, _end, _width, _height));
+            if (!_stat.equals("bw.combined")) {buf.append(_showEvents ? _t("Plot averages") : _t("plot events"));}
+            buf.append("</a>");
+            buf.append("\n</p>\n");
+            _out.write(buf.toString());
+            _out.flush();
+            buf.setLength(0);
+        } catch (IOException ioe) {ioe.printStackTrace();}
         return "";
     }
 
@@ -406,7 +380,7 @@ public class GraphHelper extends FormHandler {
                        "<table>\n<tr><td><div class=optionlist>\n<input type=hidden name=action value=Save>\n" +
                        "<input type=hidden name=\"nonce\" value=\"" + nonce + "\" >\n");
             _out.write("<span class=nowrap title=\"" +
-                       _t("Note: Dimensions are for graph only (excludes title, labels and legend).") +"\"><b>");
+                       _t("Note: Dimensions are for graph only (excludes title, labels and legend).") + "\"><b>");
             _out.write(_t("Graph size") + ":</b>&nbsp; <input id=gwidth size=4 type=text name=\"width\" value=\"" + _width + "\">" +
                        _t("pixels wide") + "&nbsp;&nbsp;&nbsp;<input size=4 type=text name=\"height\" value=\"" + _height + "\">" +
                        _t("pixels high") + "</span><br>\n<span class=nowrap>\n<b>");
@@ -417,13 +391,10 @@ public class GraphHelper extends FormHandler {
                 _out.write("<option value=\"");
                 _out.write(Integer.toString(times[i]));
                 _out.write('"');
-                if (times[i] == _refreshDelaySeconds)
-                    _out.write(HelperBase.SELECTED);
+                if (times[i] == _refreshDelaySeconds) {_out.write(HelperBase.SELECTED);}
                 _out.write('>');
-                if (times[i] > 0)
-                    _out.write(DataHelper.formatDuration2(times[i] * 1000));
-                else
-                    _out.write(_t("Never"));
+                if (times[i] > 0) {_out.write(DataHelper.formatDuration2(times[i] * 1000));}
+                else {_out.write(_t("Never"));}
                 _out.write("</option>\n");
             }
             _out.write("</select></span><br>\n<span class=nowrap>\n<b>");
