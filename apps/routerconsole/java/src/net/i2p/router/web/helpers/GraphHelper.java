@@ -341,10 +341,12 @@ public class GraphHelper extends FormHandler {
                 buf.append(_t("Next interval")).append("</a> ");
             }
 
-            buf.append(" - ");
-            buf.append(link(_stat, !_showEvents, _periodCount, _end, _width, _height, _hideLegend));
-            if (!_stat.equals("bw.combined")) {buf.append(_showEvents ? _t("Plot averages") : _t("plot events"));}
-            buf.append("</a>");
+            if (!_stat.equals("bw.combined")) {
+                buf.append(" - ");
+                buf.append(link(_stat, !_showEvents, _periodCount, _end, _width, _height, _hideLegend));
+                buf.append(_showEvents ? _t("Plot averages") : _t("plot events"));
+                buf.append("</a>");
+            }
 
             buf.append(" - ");
             buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height, _hideLegend));
