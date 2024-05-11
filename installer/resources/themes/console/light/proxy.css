@@ -89,7 +89,7 @@ h3{text-transform:uppercase;letter-spacing:.1em;background:var(--h3)}
 #warning2 b{display:inline-block;min-width:120px;margin-right:5px;text-align:right}
 #warning2 h3{margin:-21px -19px 5px;padding:8px 10px;border-width:1px;border-left:0;border-right:0;border-radius:0}
 #warning2 p+h3{margin-top:-10px}
-.iframed#servletError #warning2{margin:-6px 10px 15px}
+.iframed #servletError #warning2{margin:-6px 10px 15px}
 
 @keyframes loader{0%,100%{width:0}99%{width:100%}}
 

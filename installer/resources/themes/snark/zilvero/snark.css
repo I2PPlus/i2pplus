@@ -39,7 +39,7 @@ body,input[type=submit],input[type=text],span,table a,td,textarea,th{font-family
 body,html{min-height:calc(100% - 5px)}
 html{border-right:var(--border);background:repeating-linear-gradient(180deg,#ddd 2px,#bbb 4px) #bbb;background-size:100% 4px;scrollbar-color:#999 #eee}
 body{margin:0;padding:5px 5px 0;min-width:800px;color:var(--ink);background:var(--b_snark_hover),var(--b_snark_active),var(--b_tracker_hover),var(--b_tracker_active),var(--b_forum_hover),var(--b_forum_active);background-size:0}
-body.iframed{min-width:700px;padding:0;background:#777}
+.iframed body{min-width:700px;padding:0;background:#777}
 code{font-weight:700;color:#393}
 form{margin:0}
 hr{background:transparent;color:transparent;height:0;border:0}
@@ -400,7 +400,7 @@ input:checked+#tab_torrentedit{margin-bottom:-6px}
 input:not(:checked)+#tab_comments{margin-bottom:-14px}
 input:not(:checked)+#tab_files{margin-bottom:-8px}
 input:not(:checked)+#tab_torrentedit{margin-bottom:-8px}
-body:not(.iframed) #snarkInfo~#commentSection{margin-top:-7px}
+html:not(.iframed) #snarkInfo~#commentSection{margin-top:-7px}
 .iframed input:checked+#tab_torrentedit{margin-bottom:-7px}
 .iframed input:not(:checked)+#tab_files{margin-bottom:-13px}
 .iframed input:not(:checked)+#tab_torrentedit{margin-bottom:-3px}
@@ -706,8 +706,8 @@ td.details img:not([src$="rateme.svg"]),.dirInfo td:first-child img:not(.thumb){
 #torrentInfoStats .nowrap{margin-right:6px}
 #torrents td:empty,#torrents th:empty{padding:5px;width:0;min-width:0;font-size:0}
 #torrentDisplay .filter{min-width:120px}
-body:not(.iframed) input:checked+#tab_torrentedit{margin-bottom:-7px}
-body:not(.iframed) input:not(:checked)+#tab_torrentedit{margin-bottom:-9px}
+html:not(.iframed) input:checked+#tab_torrentedit{margin-bottom:-7px}
+html:not(.iframed) input:not(:checked)+#tab_torrentedit{margin-bottom:-9px}
 }
 
 @media (forced-colors:active){*{forced-color-adjust:none}}

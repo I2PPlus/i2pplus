@@ -35,6 +35,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<script src=/js/setupIframe.js></script>
 <meta charset=utf-8>
 <title><%=intl._t("configuration")%> - susidns</title>
 <link rel=stylesheet href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">

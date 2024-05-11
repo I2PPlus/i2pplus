@@ -356,8 +356,9 @@ public class I2PSnarkServlet extends BasicServlet {
             pageBackground = "repeating-linear-gradient(180deg,#6f5b4c 1px,#a9927e 1px,#bfa388 4px),#cab39b";
         }
         buf.append(DOCTYPE).append("<html style=\"background:").append(pageBackground).append("\">\n")
-           .append("<head>\n").append("<meta charset=utf-8>\n")
-           .append("<meta name=viewport content=\"width=device-width\">\n");
+           .append("<head>\n").append("<meta charset=utf-8>\n");
+        if (!isStandalone()) {buf.append("<script nonce=" + cspNonce + " src=/js/setupIframe.js></script>\n");}
+        buf.append("<meta name=viewport content=\"width=device-width\">\n");
         if (!isStandalone() && useSoraFont()) {
             buf.append("<link rel=preload href=/themes/fonts/Sora.css as=style>\n")
                .append("<link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
@@ -372,8 +373,9 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<link rel=preload href=\"").append(_themePath).append("snark.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
            .append("<link rel=preload href=\"").append(_themePath).append("images/images.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
            .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n");
-        if (!isStandalone())
+        if (!isStandalone()) {
             buf.append("<link rel=preload href=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" as=script>\n");
+        }
         buf.append("<title>");
         if (_contextName.equals(DEFAULT_NAME))
             buf.append(_t("I2PSnark"));
@@ -459,27 +461,21 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("&hideLegend=true&hideTitle=true&hideGrid=true&t=").append(now).append("\')}\"</style>");
         }
         buf.append("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"").append(_manager.getTheme())
-           .append(" lang_").append(lang).append("\">\n<center>\n")
-           .append(IFRAME_FORM);
+           .append(" lang_").append(lang).append("\">\n");
+        buf.append("<center>\n").append(IFRAME_FORM);
         List<Tracker> sortedTrackers = null;
         List<TorrentCreateFilter> sortedFilters = null;
         if (isConfigure) {
             buf.append("<div id=navbar>\n<a href=\"").append(_contextPath).append("/\" title=\"").append(_t("Torrents"))
                .append("\" class=\"snarkNav nav_main\">");
-            if (_contextName.equals(DEFAULT_NAME)) {
-                buf.append(_t("I2PSnark"));
-            } else {
-                buf.append(_contextName);
-            }
+            if (_contextName.equals(DEFAULT_NAME)) {buf.append(_t("I2PSnark"));}
+            else {buf.append(_contextName);}
             buf.append("</a>\n");
         } else {
             buf.append("<div id=navbar>\n<a href=\"").append(_contextPath).append('/').append(peerString)
                .append("\" title=\"").append(_t("Refresh page")).append("\" class=\"snarkNav nav_main\">");
-            if (_contextName.equals(DEFAULT_NAME)) {
-                buf.append(_t("I2PSnark"));
-            } else {
-                buf.append(_contextName);
-            }
+            if (_contextName.equals(DEFAULT_NAME)) {buf.append(_t("I2PSnark"));}
+            else {buf.append(_contextName);}
             buf.append("</a>\n");
             sortedTrackers = _manager.getSortedTrackers();
             sortedFilters = _manager.getSortedTorrentCreateFilterStrings();
@@ -4261,9 +4257,10 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showPriority = storage != null && !storage.complete() && r.isDirectory();
 
         StringBuilder buf=new StringBuilder(6*1024);
-        buf.append(DOCTYPE).append("<html>\n<head>\n<meta charset=utf-8>\n<title>");
-        if (title.endsWith("/"))
-            title = title.substring(0, title.length() - 1);
+        buf.append(DOCTYPE).append("<html>\n<head>\n<meta charset=utf-8>\n");
+        if (!isStandalone()) {buf.append("<script nonce=" + cspNonce + " src=/js/setupIframe.js></script>\n");}
+        buf.append("<title>");
+        if (title.endsWith("/")) {title = title.substring(0, title.length() - 1);}
         final String directory = title;
         final int dirSlash = directory.indexOf('/');
         final boolean isTopLevel = dirSlash <= 0;
@@ -4310,19 +4307,14 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<script nonce=" + cspNonce + " src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
 **/
 
-        buf.append("</head>\n<body display:none;pointer-events:none class=lang_").append(lang).append(">\n")
-           .append("<center>\n<div id=navbar><a href=\"").append(_contextPath).append("/\" title=Torrents class=\"snarkNav nav_main\">");
-        if (_contextName.equals(DEFAULT_NAME)) {
-            buf.append(_t("I2PSnark"));
-        } else {
-            buf.append(_contextName);
-        }
+        buf.append("</head>\n<body display:none;pointer-events:none class=lang_").append(lang).append(">\n");
+        buf.append("<center>\n<div id=navbar><a href=\"").append(_contextPath).append("/\" title=Torrents class=\"snarkNav nav_main\">");
+        if (_contextName.equals(DEFAULT_NAME)) {buf.append(_t("I2PSnark"));}
+        else {buf.append(_contextName);}
         buf.append("</a>\n</div>\n");
 
-        if (parent) { // always true
-            buf.append("<div class=page id=dirlist>\n");
-        }
-        // for stop/start/check
+        if (parent) {buf.append("<div class=page id=dirlist>\n");} // always true
+         // for stop/start/check
         final boolean er = snark != null && _manager.util().ratingsEnabled();
         final boolean ec = snark != null && _manager.util().commentsEnabled(); // global setting
         final boolean esc = ec && _manager.getSavedCommentsEnabled(snark); // per-torrent setting

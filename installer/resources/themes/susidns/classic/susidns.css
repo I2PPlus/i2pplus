@@ -13,7 +13,7 @@
 }
 
 body{margin:0 5px;background:var(--bodybg) url(/themes/console/light/images/tile2.png) center center}
-body.iframed{background:transparent;margin:0;overflow:hidden}
+.iframed body{background:transparent;margin:0;overflow:hidden}
 a:active{color:#f30}
 a,button,input[type=submit],input[type=reset],select,h3{text-shadow:var(--txt_shadow)}
 a:hover,a:focus,a:active,select:hover,select:focus,select:active,input:hover,input:focus,input:active,button:hover,button:focus,button:active{text-shadow:none}

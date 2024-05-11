@@ -49,6 +49,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<script src=/js/setupIframe.js></script>
 <meta charset=utf-8>
 <title>${book.book} <%=intl._t("address book")%> - susidns</title>
 <link rel=preload href="<%=book.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">

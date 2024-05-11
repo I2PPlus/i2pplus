@@ -17,7 +17,7 @@
 
 html,body{background:#000}
 body{margin:3px;font-size:9pt;animation:fade-in .01s cubic-bezier(.95,.05,.8,.04) .2s both,disappear .01s linear .2s reverse}
-body.iframed{margin:1px 0;background:none}
+.iframed body{margin:1px 0;background:none}
 body::before{width:32px;height:32px;display:inline-block;position:absolute;bottom:0;right:0;z-index:-1;background:var(--snark_hover),var(--forum_hover),var(--tracker_hover),var(--search_hover),var(--snark_active),var(--forum_active),var(--tracker_active),var(--search_active);opacity:0;content:""}
 body,input,select,#commentInfo textarea{font-family:var(--bodyfont)}
 a,a:link,a:visited{color:#7c7}

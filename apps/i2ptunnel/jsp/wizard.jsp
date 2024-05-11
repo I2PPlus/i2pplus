@@ -44,6 +44,7 @@
 %>
 <html id=tman>
 <head>
+<script src=/js/setupIframe.js></script>
 <title><%=intl._t("I2P Tunnel Manager - Tunnel Creation Wizard")%></title>
 <meta charset=utf-8>
 <link rel=icon href="<%=editBean.getTheme()%>images/favicon.svg">

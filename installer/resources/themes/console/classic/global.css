@@ -77,7 +77,7 @@
 html,body{min-height:100%;box-shadow:none!important}
 html{scrollbar-color:var(--scroll) var(--bodybg)}
 body{font:9pt var(--bodyfont);color:var(--ink);scrollbar-color:var(--scroll) var(--bg)}
-body.iframed{margin:0;overflow:hidden;background:none}
+.iframed body{margin:0;overflow:hidden;background:none}
 ::selection{text-shadow:none;color:var(--bg);background:var(--select)}
 a,button,input,select,textarea{outline:none}
 a:link,a:visited{word-wrap:break-word;text-decoration:none;font-weight:700;color:var(--a);outline:none}

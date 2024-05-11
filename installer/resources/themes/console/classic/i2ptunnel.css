@@ -11,7 +11,7 @@
 --create_hover:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23f60' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");}
 
 body{margin:2.5% 2%;padding:0;text-align:center;background:#eef url(images/bg0.png) scroll center center/90px;background-size:90px;image-rendering:-webkit-optimize-contrast}
-body.iframed{margin:0 0 9px}
+.iframed body{margin:0 0 9px}
 b{color:var(--ink_light)}
 div{box-sizing:border-box}
 form{margin:0}
@@ -37,7 +37,7 @@ td.infohelp{padding:10px 10px 10px 38px;text-align:justify;background:var(--info
 #sigType[disabled]{padding-left:18px;background:var(--crypto) no-repeat left center/16px}
 #tunnelEditPage td:not(.buttons):not(.infohelp):not(.infowarn){padding:2px 5px}
 .iframed h2,.iframed h3{margin-top:12px}
-.iframed#tunnelEditPage .panel,.iframed#tunnelRegistration .panel,.iframed#tunnelSSL.panel,.iframed#tunnelWizardPage .panel{margin-top:0;margin-bottom:1px}
+.iframed #tunnelEditPage .panel,.iframed #tunnelRegistration .panel,.iframed #tunnelSSL.panel,.iframed #tunnelWizardPage .panel{margin-top:0;margin-bottom:1px}
 .iframed #page{margin-top:-2px}
 .iframed #page::after{width:100%;height:10px;display:block;content:""}
 .iframed .panel#clients{margin-top:8px;margin-bottom:0}
@@ -48,7 +48,7 @@ td.infohelp{padding:10px 10px 10px 38px;text-align:justify;background:var(--info
 .iframed #globalTunnelControl{margin-bottom:-16px}
 .iframed #globalTunnelControl h2{margin-top:4px}
 .iframed #messages+#globalTunnelControl{margin-top:16px}
-#globalTunnelControl.iframed.panel:first-child~.panel#clients::after{width:100%;height:6px;display:block;content:""}
+.iframed #globalTunnelControl.panel:first-child~.panel#clients::after{width:100%;height:6px;display:block;content:""}
 
 /* status */
 .statusNotRunning{color:#d00;background:var(--tunnelStopped)}
@@ -231,7 +231,7 @@ td[colspan="2"] select#profile{width:calc(50% - 15px)}
 #wizardPanel select{margin-left:0;min-width:160px}
 #wizardPanel .infohelp p{margin:0;padding:0}
 #tunnelWizardPage #targetDestination{width:50%}
-.iframed#tunnelWizardPage .panel{margin-bottom:10px}
+.iframed #tunnelWizardPage .panel{margin-bottom:10px}
 .iframed #wizardPanel::after{height:3px;display:block;content:""}
 
 /* registration */

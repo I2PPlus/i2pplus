@@ -6,7 +6,7 @@
 @import url(images/images.css);
 
 body{margin:3px 4px;background:var(--bg3) url(/themes/console/classic/images/bg0.png) left top/120px}
-body.iframed{margin:5px 0 0 0}
+.iframed body{margin:5px 0 0 0}
 b,th,.mailListSender a{color:var(--ink_light)}
 a:link{color:#6b6b94;text-decoration:none;font-weight:700;word-wrap:break-word}
 a:visited{color:#5c5c8a;text-decoration:none;font-weight:700}

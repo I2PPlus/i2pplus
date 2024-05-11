@@ -13,7 +13,7 @@ a:link,#filter a:visited{color:#494;text-decoration:none;font-weight:700;outline
 a:visited{color:#7b7;text-decoration:none}
 a:hover,a:focus{text-decoration:none;color:#f60}
 a:active{color:#f90}
-body.iframed{margin:0;background:none}
+.iframed body{margin:0;background:none}
 body,input,input[type=submit],input[type=reset],.fakebutton,#hostNotes td:last-child,#addNotes{font-family:var(--bodyfont)}
 body{margin:0 10px;padding-top:5px;min-width:650px;line-height:1.2;background:repeating-linear-gradient(90deg,rgba(0,16,0,.5) 2px,rgba(0,25,0,.5) 4px),repeating-linear-gradient(180deg,#000 2px,#020 4px),#010;background-size:4px 100%,100% 4px}
 form[action="addressbook"]>p.buttons,#filter,#search,#visualid tr:last-child td,#buttons,#add p.buttons,#import p.buttons{box-shadow:var(--bevel);background:repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 4px),linear-gradient(180deg,#020,#000 75%);background-size:4px 100%,100%}

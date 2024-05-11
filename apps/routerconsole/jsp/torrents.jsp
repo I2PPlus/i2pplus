@@ -4,9 +4,8 @@
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="tester" scope="request" />
 <%
    String i2pcontextId1 = null;
-   try {
-       i2pcontextId1 = (String) session.getAttribute("i2p.contextId");
-   } catch (IllegalStateException ise) {}
+   try {i2pcontextId1 = (String) session.getAttribute("i2p.contextId");}
+   catch (IllegalStateException ise) {}
 %>
 <jsp:setProperty name="tester" property="contextId" value="<%=i2pcontextId1%>" />
 <%
@@ -34,7 +33,6 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <%=intl.title("torrents")%>
 </head>
 <body>
@@ -53,12 +51,6 @@
 </iframe>
 </div>
 <script nonce=<%=cspNonce%>>
-  function setupFrame() {
-    f = document.getElementById("i2psnarkframe");
-    f.addEventListener("load", function() {
-      injectClass(f);
-    }, true);
-  }
   document.addEventListener('DOMContentLoaded', function(event) {
     var iframes = iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#i2psnarkframe');
     progressx.hide();
@@ -66,6 +58,5 @@
 </script>
 <style>iframe{display:block;pointer-events:auto}#torrents::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
-</html><%
-    }
-%>
+</html>
+<%  } %>

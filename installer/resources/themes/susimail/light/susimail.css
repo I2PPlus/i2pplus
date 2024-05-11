@@ -13,7 +13,7 @@ a:visited{color:#6b97bf}
 a.fakebutton,a.fakebutton:visited{font-weight:400;color:var(--ink_light)}
 b,h3,.pagenav td,th{color:#5b5b71;text-shadow:var(--txt_shadow)}
 body{margin:5px;background:var(--bodybg) url(/themes/console/light/images/tile2.png)}
-body.iframed{margin:5px 0 0 0;background:transparent}
+.iframed body{margin:5px 0 0 0;background:transparent}
 div.footer{margin:-6px -1px -3px;border:var(--border_inner);border-top:0;box-shadow:var(--highlight);background:linear-gradient(90deg,rgba(232,232,255,.3) 15%,rgba(255,255,255,.8) 50%,rgba(232,232,255,.3) 85%),repeating-linear-gradient(180deg,#fff 1px,#ddf 2px,#fff 3px)}
 div.header,.iframed .header{display:none}
 form{line-height:160%;border-top:0}

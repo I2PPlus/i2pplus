@@ -2510,6 +2510,7 @@ public class WebMail extends HttpServlet
                  */
                 out.print("<!DOCTYPE HTML>\n<html>\n" +
                           "<head>\n" +
+                          "<script src=/js/setupIframe.js></script>" +
                           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" +
                           "<title>" + _t("I2PMail") + " - " + subtitle + "</title>\n" +
                           "<link rel=preload as=style href=\"" + sessionObject.themePath + "../images/images.css?" + CoreVersion.VERSION + "\">\n" +

@@ -40,7 +40,7 @@
 ::selection{color:white;background:#900}
 html{min-height:100%;border-right:var(--border);background:repeating-linear-gradient(180deg,#6f5b4c 1px,#a9927e 1px,#bfa388 4px),#cab39b;background-size:100% 4px;scrollbar-color:#a38a75 #cab39b}
 body{font:9pt var(--bodyfont);color:var(--ink)}
-body.iframed{margin:6px 0}
+.iframed body{margin:6px 0}
 a:link,a:visited{text-decoration:none;color:#cf0f00}
 a:active,a:visited:active,th a:active,th a:visited:active,td a:active,td a:visited:active{color:#f00}
 a:hover img,a:focus img{filter:drop-shadow(0 0 1px #df0067);mix-blend-mode:normal}
@@ -1043,7 +1043,7 @@ thead a img,thead img{max-height:21px}
 
 @media (min-width:1500px){
 .barComplete{margin-top: -1px;padding:2px 0 1px;line-height:1.4}
-body:not(.iframed) .txd{margin:-1px 0 2px}
+html:not(.iframed) .txd{margin:-1px 0 2px}
 body,#torrents td,.snarkAddInfo,th,td,.snarkFileName,a.control,input[type=submit],input[type="reset"],select,button,code,#pagenavbottom{font-size:10pt}
 img[src$="details.png"]{max-height:18px}
 label b,.configOption b,.configOption label,#trackerconfig th{font-size:9pt}

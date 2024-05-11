@@ -12,7 +12,7 @@
 
 html#tman{background:none!important}
 body{margin:24px 8px 12px;padding:0;text-align:center;font-size:9pt;background:repeating-linear-gradient(180deg,rgba(0,0,0,.9) 2px,rgba(0,8,0,.5) 4px),url(images/camotile2.png) top left scroll #010;background-size:100% 4px,175px}
-body.iframed{margin:0;padding:0;overflow:hidden;background:none}
+.iframed body{margin:0;padding:0;overflow:hidden;background:none}
 br{clear:left}
 div{box-sizing:border-box}
 h2 a,h3 a{-webkit-text-stroke:0}
@@ -49,10 +49,10 @@ div[class^="status"]{margin:0;padding:0;width:100%;height:16px;font-size:0;text-
 .panel:first-child{margin-top:0}
 .panel:last-child{margin-bottom:5px}
 .panel#clients{margin-top:-23px}
-body:not(.iframed) .panel,body:not(.iframed) .panel#clients{margin:24px auto 22px;padding:0;max-width:calc(100% - 28px);box-shadow:0 0 0 2px #000,0 0 0 5px #020,0 0 1px 5px #010,0 0 0 7px #000}
-body:not(.iframed) #serverTunnels{margin-bottom:0}
-body#tunnelEditPage:not(.iframed) .panel,body#tunnelRegistration:not(.iframed) .panel,body#tunnelWizardPage:not(.iframed) .panel{margin-top:24px;margin-bottom:24px}
-body:not(.iframed) #globalTunnelControl{margin:1px auto -1px}
+html:not(.iframed) .panel,html:not(.iframed) .panel#clients{margin:24px auto 22px;padding:0;max-width:calc(100% - 28px);box-shadow:0 0 0 2px #000,0 0 0 5px #020,0 0 1px 5px #010,0 0 0 7px #000}
+html:not(.iframed) #serverTunnels{margin-bottom:0}
+html:not(.iframed) body#tunnelEditPage .panel,html:not(.iframed) body#tunnelRegistration .panel,html:not(.iframed) body#tunnelWizardPage .panel{margin-top:24px;margin-bottom:24px}
+html:not(.iframed) #globalTunnelControl{margin:1px auto -1px}
 #globalTunnelControl{margin:-13px auto -13px}
 #serverTunnels{margin:-1px 0 8px}
 .iframed .panel.iframed{margin:0 auto -8px}
@@ -62,13 +62,13 @@ body:not(.iframed) #globalTunnelControl{margin:1px auto -1px}
 .iframed #globalTunnelControl{margin:3px auto -26px}
 .iframed #messages+#globalTunnelControl{margin:6px auto -26px}
 .iframed #messages,.iframed #messages,#tunnelEditPage .panel,#tunnelRegistration .panel,#tunnelWizardPage .panel,#tunnelSSL .panel{margin-top:-5px}
-#globalTunnelControl.iframed.panel:first-child~.panel#clients::after{width:100%;height:5px;display:block;content:""}
+.iframed #globalTunnelControl.panel:first-child~.panel#clients::after{width:100%;height:5px;display:block;content:""}
 
 /* headings */
 h2,h3{margin:10px 0 -1px;padding:8px 10px 8px 34px;word-spacing:.1em;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 1px 1px #000;font-size:11pt;color:#ee9;border:var(--border);box-shadow:var(--highlight),inset 0 0 1px 1px #030;background:var(--heading),linear-gradient(180deg,#004000,#000 75%),url(/themes/console/dark/images/camotile2.png) top left}
 h3{margin-top:12px;border-radius:0}
 h2 span{margin-top:2px}
-body:not(.iframed) .panel h2{margin-top:0}
+html:not(.iframed) .panel h2{margin-top:0}
 #messages h2{background:var(--logs) no-repeat left 8px center,var(--h2);background-size:20px auto,4px 100%,100%}
 #globalTunnelControl h2{background:var(--mouse) no-repeat left 8px center,var(--h2);background-size:20px auto,4px 100%,100%}
 #clients h2,#servers h2{position:relative}

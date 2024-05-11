@@ -15,7 +15,7 @@
 
 /* global */
 body{margin:0;padding:0;text-align:center;background:var(--bodybg) url(images/tile2.png) fixed;background-size:32px;scrollbar-color:#779 #fff}
-body.iframed{margin-bottom:-11px;padding:5px 5px 10px;background:none}
+.iframed body{margin-bottom:-11px;padding:5px 5px 10px;background:none}
 h2,h3,th,.buttons,.newTunnel,.control,label,.infohelp,.infowarn,.nowrap,b,#throttler td{user-select:none}
 a:hover,a:focus,a:active,button:hover,button:focus,button:active,select:hover,select:focus,select:active{text-shadow:none}
 br{clear:left}

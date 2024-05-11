@@ -93,7 +93,7 @@ button::-moz-focus-inner,input::-moz-focus-inner{outline:none;border:0}
 html,body{min-height:100%;background:#000}
 html{scrollbar-color:rgba(16,72,16,.8) rgba(0,16,0,.5)}
 body{font-family:var(--bodyfont);color:var(--ink);background:var(--hstripe);background-size:100% 4px,2048px}
-body.iframed{background:var(--vstripe) #000;background-size:100% 4px}
+.iframed body{background:var(--vstripe) #000;background-size:100% 4px}
 a:link,a:visited{word-wrap:break-word;text-decoration:none;font-weight:700;color:var(--a)}
 a:hover,a:focus{text-decoration:none;color:var(--hover);outline:none}
 a:active{color:var(--active)}

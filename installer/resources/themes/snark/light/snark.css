@@ -24,8 +24,8 @@
 /* globals*/
 body,html{min-height:100%}
 body{margin:3px;background:var(--bodybg) url(/themes/console/light/images/tile2.png) center top/32px;scrollbar-color:#779 rgba(255,255,255,.5)}
-body.iframed{margin:6px 1px 0;background:none}
-body:not(.iframed) #navbar,body:not(.iframed) .page{border:1px solid rgba(168,168,192,.4);border-radius:0;box-shadow:0 0 0 1px rgba(96,96,128,.7)}
+.iframed body{margin:6px 1px 0;background:none}
+html:not(.iframed) #navbar,html:not(.iframed) .page{border:1px solid rgba(168,168,192,.4);border-radius:0;box-shadow:0 0 0 1px rgba(96,96,128,.7)}
 a:link,a:visited{color:#3b6bbf;color:rgba(59,107,191,.85);text-decoration:none;font-weight:700;word-wrap:break-word;font-size:9pt}
 a:hover,a:focus,.trackerName a:visited:hover,.trackerName a:visited:focus{color:var(--hover)}
 a:active{color:#f30}
@@ -800,7 +800,7 @@ form[action^="/i2psnark/configure"]{display:block}
 /* inline notifications */
 
 .notify:not([hidden]){width:calc(100% - 2px)!important;height:calc(100% - 1px)!important;top:1px!important;/*bottom:1px!important;*/left:1px!important;right:1px!important}
-body:not(.iframed) .notify:not([hidden]){height:calc(100% - 2px)!important}
+html:not(.iframed) .notify:not([hidden]){height:calc(100% - 2px)!important}
 
 /* browser specific */
 @supports not (-moz-appearance:none){

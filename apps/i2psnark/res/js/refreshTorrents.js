@@ -118,6 +118,7 @@ function refreshTorrents(callback) {
           activeBadge.textContent = activeBadgeResponse.textContent;
         }
         if (!xhrsnark.responseXML) {return;}
+        const filterbar = document.getElementById("torrentDisplay");
         const filterBarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
         if (!filterBar && filterBarResponse) {
           const mainsection = document.getElementById("mainsection");

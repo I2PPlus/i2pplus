@@ -33,7 +33,6 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <%=intl.title("webmail")%>
 </head>
 <body class=embed>
@@ -51,14 +50,7 @@
 &nbsp;<a href="/susimail/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
 <script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce=<%=cspNonce%>>
-  function setupFrame() {
-    f = document.getElementById("susimailframe");
-    f.addEventListener("load", function() {
-      injectClass(f);
-    }, true);
-  }
   document.addEventListener('DOMContentLoaded', function(event) {
     var iframes = iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#susimailframe');
     progressx.hide();

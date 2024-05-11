@@ -26,6 +26,7 @@ if (tun != null) {
 <jsp:setProperty name="indexBean" property="*" />
 <html id=tman>
 <head>
+<script src=/js/setupIframe.js></script>
 <title><%=intl._t("Tunnel Manager")%> - <%=(__isClient ? intl._t("Edit Client Tunnel") : intl._t("Edit Server Tunnel"))%></title>
 <meta charset=utf-8>
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>

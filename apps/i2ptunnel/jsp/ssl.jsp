@@ -23,6 +23,7 @@
 %>
 <html id=tman>
 <head>
+<script src=/js/setupIframe.js></script>
 <title><%=intl._t("Tunnel Manager")%> - <%=intl._t("SSL Helper")%></title>
 <meta charset=utf-8>
 <link rel=icon href="<%=editBean.getTheme()%>images/favicon.svg">

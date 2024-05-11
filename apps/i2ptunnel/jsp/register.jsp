@@ -25,6 +25,7 @@
 %>
 <html id=tman>
 <head>
+<script src=/js/setupIframe.js></script>
 <title><%=intl._t("Tunnel Manager")%> - <%=intl._t("Registration Helper")%></title>
 <meta charset=utf-8>
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>

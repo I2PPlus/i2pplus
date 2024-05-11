@@ -58,7 +58,7 @@
 
 html,body{min-height:100%;color:var(--ink);scrollbar-color:#225 #001}
 body{font:9pt var(--bodyfont);color:var(--ink)}
-body.iframed{background:none;overflow:hidden}
+.iframed body{background:none;overflow:hidden}
 a,input,button,select,textarea{outline:none}
 a,button,input{-webkit-text-stroke:1px rgba(0,0,0,.3)}
 :-moz-focusring{outline:none}

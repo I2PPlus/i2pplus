@@ -33,6 +33,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<script src=/js/setupIframe.js></script>
 <meta charset=utf-8>
 <title>${book.book} <%=intl._t("addressbook")%> - susidns</title>
 <link rel=stylesheet href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">

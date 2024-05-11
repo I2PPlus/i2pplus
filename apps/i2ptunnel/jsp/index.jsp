@@ -24,6 +24,7 @@
   }
 %>
 <head>
+<script src=/js/setupIframe.js></script>
 <meta charset=utf-8>
 <title><%=intl._t("Tunnel Manager")%></title>
 <link href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" rel=preload as=script> 

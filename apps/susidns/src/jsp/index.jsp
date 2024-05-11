@@ -33,6 +33,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<script src=/js/setupIframe.js></script>
 <link rel=preload href="images/how.svg" as="object">
 <meta charset=utf-8>
 <title><%=intl._t("Introduction")%> - SusiDNS</title>

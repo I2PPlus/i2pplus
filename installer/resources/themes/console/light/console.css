@@ -2398,7 +2398,7 @@ iframe{height:0}
 #tunnelmgr::before,#torrents::before,#webmail::before,#dns::before{width:0;height:4px;display:block;position:absolute;top:0;left:0;right:0;background:linear-gradient(rgba(0,0,0,0) 10%,#d30 10%,var(--hover) 90%,rgba(0,0,0,0) 90%);opacity:.7;content:"";animation:reloader 8s ease-out .5s forwards}
 
 /* Fixes for when app is not started and console error loads inside iframe */
-body.iframed{background:transparent}
+.iframed body{background:transparent}
 .iframed #sb_wrap{display:none}
 .iframed h1{margin:0 10px 10px 7px}
 .iframed .sorry{margin:5px 10px 10px 7px}

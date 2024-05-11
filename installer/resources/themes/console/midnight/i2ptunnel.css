@@ -17,7 +17,7 @@
 a:hover,a:visited:hover,a:focus,a:focus:hover{color:var(--a_hover)}
 a:active,a:visited:active{color:var(--active)}
 body{margin:5px 0 15px;padding:0;text-align:center;background:repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px,rgba(0,0,0,.9) 5px,rgba(0,0,0,.7) 6px),var(--tile),#000010}
-body.iframed{margin:0 5px;padding:0}
+.iframed body{margin:0 5px;padding:0}
 br{clear:left}
 div{box-sizing:border-box}
 form{margin:0}
@@ -59,13 +59,13 @@ div[class^="status"]{margin:0;padding:0;width:100%;height:24px;font-size:0;text-
 .panel#clients{margin-top:-23px}
 .iframed #clients{margin-top:-20px;margin-bottom:10px}
 .iframed .panel{margin:16px auto -8px;width:100%}
-#tunnelRegistration .panel,.iframed#tunnelWizardPage .panel,#tunnelSSL.iframed .panel,#tunnelEditPage.iframed .panel{margin-bottom:10px}
-.iframed#tunnelEditPage .panel,#tunnelRegistration .panel,.iframed#tunnelWizardPage .panel,#tunnelSSL.iframed .panel{margin-top:0}
+#tunnelRegistration .panel,.iframed #tunnelWizardPage .panel,#tunnelSSL.iframed .panel,#tunnelEditPage.iframed .panel{margin-bottom:10px}
+.iframed #tunnelEditPage .panel,#tunnelRegistration .panel,.iframed #tunnelWizardPage .panel,#tunnelSSL.iframed .panel{margin-top:0}
 
 #messages{margin-top:-4px}
 #globalTunnelControl{margin:-13px auto}
 #globalTunnelControl.panel:first-child ~ .panel#clients{margin-bottom:10px}
-#globalTunnelControl.iframed.panel:first-child ~ .panel#clients::after{width:100%;height:8px;display:block;content:""}
+.iframed #globalTunnelControl.panel:first-child ~ .panel#clients::after{width:100%;height:8px;display:block;content:""}
 #serverTunnels{margin:-1px 0 10px}
 .iframed #messages{margin-top:0}
 .iframed #globalTunnelControl{margin:8px auto -26px}

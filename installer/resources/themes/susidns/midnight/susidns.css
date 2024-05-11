@@ -13,7 +13,7 @@
 }
 
 body{margin:0 10px;overflow-x:hidden;font-size:9.5pt;background:repeating-linear-gradient(180deg,rgba(0,0,24,.75) 3px,rgba(0,0,0,.9) 5px,rgba(0,0,0,.7) 6px),var(--tile),#000010}
-body.iframed{margin:0;padding:0}
+.iframed body{margin:0;padding:0}
 h3{padding:7px 10px;word-spacing:.1em;letter-spacing:.08em;font-size:10pt;font-weight:700;color:var(--ink);text-shadow:0 0 2px #010011;border:var(--border);text-transform:uppercase;box-shadow:var(--bevel);background:var(--title)}
 h4{margin-top:-15px;margin-bottom:30px;padding:8px 10px;word-spacing:.1em;font-size:9pt;border:var(--border);background:linear-gradient(90deg,#000,#001)}
 a:hover,a:visited:hover{color:var(--a_hover)}
@@ -329,10 +329,10 @@ svg #arrow stop:last-child{stop-color:#001}
 .iframed #published{margin-bottom:0}
 .iframed #visualid{margin-bottom:10px}
 .iframed #visualid td[colspan="2"]{padding:22px 19px 20px}
-.iframed#dtls .headline h3{margin:-1px 10px 24px}
-.iframed#sbs #content,.iframed #config,.iframed #config+#buttons,.iframed#subsLog #config{margin:-27px 10px -13px}
-.iframed#subsLog .headline h3:first-child+h4{margin:-1px 10px 26px}
-.iframed#subsLog ul{margin:0}
+.iframed #dtls .headline h3{margin:-1px 10px 24px}
+.iframed #sbs #content,.iframed #config,.iframed #config+#buttons,.iframed #subsLog #config{margin:-27px 10px -13px}
+.iframed #subsLog .headline h3:first-child+h4{margin:-1px 10px 26px}
+.iframed #subsLog ul{margin:0}
 
 @keyframes fade-in{from{opacity:0}to{opacity:1}}
 

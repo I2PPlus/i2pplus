@@ -120,10 +120,10 @@ h1+.sorry,#console_404 .sorry{margin:-1px 5px 10px 226px;padding:20px 20px 20px 
 #warning2{margin:-5px 15px 18px 243px;padding:10px 20px 5px;min-width:610px;border:var(--border);background:#010}
 #warning2 p{text-align:left}
 #warning2 p+h3{margin-top:-5px}
-.iframed#servletError{overflow-y:auto}
-.iframed#servletError .logo{display:none}
-.iframed#servletError .warning,.iframed#servletError #warning2{margin:5px}
-.iframed#servletError .warning+#warning2{margin:-3px 4px 5px}
+.iframed #servletError{overflow-y:auto}
+.iframed #servletError .logo{display:none}
+.iframed #servletError .warning,.iframed #servletError #warning2{margin:5px}
+.iframed #servletError .warning+#warning2{margin:-3px 4px 5px}
 
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes loader{from{width:0}99%{width:100%}100%{width:0}}

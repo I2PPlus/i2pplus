@@ -43,7 +43,7 @@
 /* globals */
 ::selection{background:rgba(96,0,96,.8);color:white}
 html{min-height:100%;font:9pt var(--bodyfont);color:var(--ink);background:repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(48,0,48,.5) 4px),repeating-linear-gradient(180deg,#080008 2px,#212 4px),var(--offline) no-repeat,#130313;background-size:4px 100%,100% 4px,0;scrollbar-color:#481840 #180818}
-body.iframed{margin:0}
+.iframed body{margin:0}
 a:link,a:visited{color:#f70;text-decoration:none;font-weight:700;word-wrap:break-word;outline:none}
 a:hover,a:visited:hover,a:focus,a:visited:focus{color:#fb0}
 a:active,a:visited:active{color:#f10}
@@ -123,7 +123,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .snarkNav:last-child{border-radius:0 2px 2px 0}
 .snarkNav:first-child{border-radius:2px 0 0 2px}
 #navbar{margin:-11px 0 10px 0;padding:7px 10px 5px;min-width:600px;width:80%;position:sticky;top:-3px;z-index:99999;text-align:center;border:var(--border_hard);border-radius:0 0 4px 4px;box-shadow:inset 0 0 0 1px rgba(169,61,169,.2),inset 0 0 0 2px #101,inset 0 0 3px 1px #212,0 0 0 1px rgba(0,0,0,.7);background:linear-gradient(180deg,#535,#202 55%,#101,#080008);filter:drop-shadow(0 2px 4px #101)}
-body:not(.iframed) #navbar {transition:width .5s ease-in-out .5s;will-change:transform}
+html:not(.iframed) #navbar {transition:width .5s ease-in-out .5s;will-change:transform}
 #navbar a{display:inline-block;font:700 10.5pt/1.3 var(--bodyfont);letter-spacing:.11em;text-decoration:none;text-transform:uppercase;color:#f70;text-shadow:1px 0 1px rgba(0,0,0,.6),-1px 0 1px rgba(255,240,255,.2);-webkit-text-stroke:.5px rgba(0,0,0,.3);outline:none;border-radius:0;box-shadow:0 0 1px #000,inset 0 0 0 1px rgba(16,0,16,.7),inset 0 0 2px 0 rgba(255,128,0,.5)}
 #navbar a:hover,#navbar a:focus{color:#d2baff;border:1px solid #820b64;box-shadow:0 0 1px #000,inset 0 0 0 1px rgba(16,0,16,.9),inset 0 0 2px 0 #515;transition:ease-in-out box-shadow .01s;will-change:transform}
 #navbar a:active{color:#fff;text-shadow:none;border:1px solid #730;box-shadow:0 0 1px 0 #000,var(--highlight),inset 3px 3px 3px 2px #3f1900;transition:box-shadow ease .01s}
@@ -743,11 +743,11 @@ span.trackerName::before{width:20px;height:20px;display:inline-block;vertical-al
 #trackerselect tr:nth-child(n+2) td{border-right:1px solid rgba(16,0,16,.5)}
 #trackerselect tr:nth-child(n+3) td{border-top:var(--border_hard)}
 #trackerselect td:last-child{text-align:center;width:30%;border-right:0}
-body:not(.iframed) #trackerselect{border-radius:4px}
-body:not(.iframed) #trackerselect tr:first-child td:first-child{border-radius:3px 0 0 0}
-body:not(.iframed) #trackerselect tr:first-child td:last-child{border-radius:0 3px 0 0}
-body:not(.iframed) #trackerselect tr:last-child td:first-child{border-radius:0 0 0 3px}
-body:not(.iframed) #trackerselect tr:last-child td:last-child{border-radius:0 0 3px 0}
+html:not(.iframed) #trackerselect{border-radius:4px}
+html:not(.iframed) #trackerselect tr:first-child td:first-child{border-radius:3px 0 0 0}
+html:not(.iframed) #trackerselect tr:first-child td:last-child{border-radius:0 3px 0 0}
+html:not(.iframed) #trackerselect tr:last-child td:first-child{border-radius:0 0 0 3px}
+html:not(.iframed) #trackerselect tr:last-child td:last-child{border-radius:0 0 3px 0}
 #trackerselect input[type=radio],#trackerselect input[type=checkbox]{margin:2px}
 #trackerselect tr:hover span.trackerName{color:#fff;border:1px solid #202;border:1px solid rgba(34,0,34,.7);box-shadow:inset 0 0 0 1px #414;background:linear-gradient(180deg,#303,#202)}
 #trackerselect tr:hover span.trackerName::before,span.trackerName:hover::before{background:var(--tracker_hover) no-repeat left center/16px}
@@ -857,8 +857,8 @@ th .commentAuthorName{margin-right:-10px;padding-right:6px;font-size:90%}
 .iframed #torrentDisplay{padding:0 0 1px}
 #torrentDisplay .filter.enabled{color:#dad;text-shadow:var(--txt_shadow);box-shadow:var(--highlight),3px 3px 3px rgba(0,0,0,.45) inset;background:radial-gradient(at center bottom,rgba(255,32,160,.25),rgba(128,64,128,.15) 80%,rgba(0,0,0,0)),linear-gradient(180deg,#180818,#280828);pointer-events:none}
 #torrentDisplay .filter{margin:0;padding:3px 2px;display:flex;justify-content:center;flex-grow:.5;font-size:95%;font-weight:700;color:#969;text-shadow:0 0 1px #000;-webkit-text-stroke:1px rgba(45,30,45,.3);border:var(--border_inner);border-right:0;border-radius:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4);background:linear-gradient(180deg,#313,#202 50%,#101 50%)}
-body:not(.iframed) #torrentDisplay .filter:first-of-type{border-radius:3px 0 0 3px}
-body:not(.iframed) #torrentDisplay #stopped{border-radius:0 3px 3px 0}
+html:not(.iframed) #torrentDisplay .filter:first-of-type{border-radius:3px 0 0 3px}
+html:not(.iframed) #torrentDisplay #stopped{border-radius:0 3px 3px 0}
 #torrentDisplay .filter:last-child{border-right:var(--border_inner)}
 #torrentDisplay .filter:hover{box-shadow:var(--highlight),inset 0 0 0 2px rgba(255,128,0,.3);background:var(--btnAction_hover)}
 #torrentDisplay .filter:hover{color:var(--hover)}
@@ -905,12 +905,12 @@ input[type=radio]:checked::before{border-radius:50%}
 .configOption input[type=checkbox]:checked::before,#commentsToggle input[type=checkbox]:checked::before{left:21px}
 .configOption input[type=checkbox]:disabled,.configOption input[type=checkbox]:disabled+label{opacity:.45;pointer-events:none}
 
-body:not(.iframed) .mainsection table{border-collapse:separate;border-radius:4px}
-body:not(.iframed) .mainsection .dirInfo tr:last-child td{border-bottom:1px solid #414}
-body:not(.iframed) .mainsection table tr:last-child td:first-child{border-radius:0 0 0 3px}
-body:not(.iframed) .mainsection table tr:last-child td:last-child{border-radius:0 0 3px 0}
-body:not(.iframed) .mainsection #commentInfo{border-radius:5px 5px 0 0}
-body:not(.iframed) .mainsection #userComments{border-radius:0 0 4px 4px}
+html:not(.iframed) .mainsection table{border-collapse:separate;border-radius:4px}
+html:not(.iframed) .mainsection .dirInfo tr:last-child td{border-bottom:1px solid #414}
+html:not(.iframed) .mainsection table tr:last-child td:first-child{border-radius:0 0 0 3px}
+html:not(.iframed) .mainsection table tr:last-child td:last-child{border-radius:0 0 3px 0}
+html:not(.iframed) .mainsection #commentInfo{border-radius:5px 5px 0 0}
+html:not(.iframed) .mainsection #userComments{border-radius:0 0 4px 4px}
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-right:2px;margin-top:-3px;display:inline-block;vertical-align:middle;text-shadow:0 0 1px #101;font-family:80%/0 400 var(--bodyfont)}
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before{content:"\27A4";transform:rotate(90deg) scaleX(.6)}
 tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4";transform:rotate(-90deg) scaleX(.6)}
@@ -930,11 +930,11 @@ tr:hover .txd .left,tr:hover .txd .right{border-color:#535}
 #dates td img:nth-child(n+2){margin-left:8px}
 
 /* torrent edit */
-body:not(.iframed) #torrentEdit .header:first-of-type th:first-child{border-radius:5px 0 0 0}
-body:not(.iframed) #torrentEdit .header:first-of-type th:last-child{border-radius:0 5px 0 0}
-body:not(.iframed) #torrentEdit tfoot td{border-radius:0 0 5px 5px}
-body:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:first-child{border-radius:5px 0 0 0}
-body:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:last-child{border-radius:0 5px 0 0}
+html:not(.iframed) #torrentEdit .header:first-of-type th:first-child{border-radius:5px 0 0 0}
+html:not(.iframed) #torrentEdit .header:first-of-type th:last-child{border-radius:0 5px 0 0}
+html:not(.iframed) #torrentEdit tfoot td{border-radius:0 0 5px 5px}
+html:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:first-child{border-radius:5px 0 0 0}
+html:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:last-child{border-radius:0 5px 0 0}
 #torrentEdit{margin:7px 0 0;background:none}
 #torrentInfo td,#torrentEdit td{line-height:1.8;border-bottom:1px solid rgba(32,8,32,.9)}
 #torrentEdit th,#torrentEdit td{border-top:0;border-bottom:var(--border_hard)}

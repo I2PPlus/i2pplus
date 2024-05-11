@@ -29,7 +29,7 @@
 }
 
 body{margin:3px 4px;background:var(--bg3) url(/themes/console/classic/images/bg0.png) repeat scroll center bottom/120px}
-body.iframed{margin:1px 0}
+.iframed body{margin:1px 0}
 p{line-height:1.5}
 hr{width:0;height:1px;margin:5px 0 7px 0;text-align:center;color:transparent;background:transparent}
 img{margin:0 3px 1px 3px;vertical-align:middle;line-height:1;border:0}
