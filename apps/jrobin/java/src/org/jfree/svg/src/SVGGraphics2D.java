@@ -1137,22 +1137,23 @@ public final class SVGGraphics2D extends Graphics2D {
         }
         if (s instanceof Line2D) {
             Line2D l = (Line2D) s;
+            String x1 = geomDP(l.getX1());
+            String x2 = geomDP(l.getX2());
+            String y1 = geomDP(l.getY1());
+            String y2 = geomDP(l.getY2());
             if (!strokeStyle().contains("stroke-opacity:0;") &&
                 !strokeStyle().contains("stroke-width:0.1;")) {
                 this.sb.append("<line ");
                 appendOptionalElementIDFromHint(this.sb);
-                this.sb.append("x1=\"").append(geomDP(l.getX1()))
-                       .append("\" y1=\"").append(geomDP(l.getY1()))
-                       .append("\" x2=\"").append(geomDP(l.getX2()))
-                       .append("\" y2=\"").append(geomDP(l.getY2()))
-                       .append("\" style=\"").append(strokeStyle());
-               this.sb.append("\" ");
-               if (!this.transform.isIdentity()) {
+                this.sb.append("x1=\"").append(x1).append("\" y1=\"").append(y1);
+                this.sb.append("\" x2=\"").append(x2).append("\" y2=\"").append(y2);
+                this.sb.append("\" style=\"").append(strokeStyle()).append("\" ");
+                if (!this.transform.isIdentity()) {
                    this.sb.append("transform=\"").append(getSVGTransform(this.transform)).append("\" ");
-               }
-               this.sb.append(getClipPathRef());
-               this.sb.append("/>");
-           }
+                }
+                this.sb.append(getClipPathRef());
+                this.sb.append("/>");
+            }
         } else if (s instanceof Rectangle2D) {
             Rectangle2D r = (Rectangle2D) s;
             if (!strokeStyle().contains("fill-opacity:0\"")) {
@@ -2666,6 +2667,7 @@ public final class SVGGraphics2D extends Graphics2D {
             .append(".sans{font-family:Open Sans,Segoe UI,Noto Sans,sans-serif}")
             .append(".s10{font-size:10px}")
             .append(".s11{font-size:11px}")
+            .append(".s12{font-size:12px}")
             .append(".s13{font-size:13px}");
         if (this.sb.indexOf("rgb(0,72,8)") != -1) {
             defs.append(".major{stroke:#f4f4beaa}");
@@ -2727,10 +2729,13 @@ public final class SVGGraphics2D extends Graphics2D {
             svgOut = svgOut.replace("style=\"font-family:monospace;", "class=\"mono\" style=\"");
             svgOut = svgOut.replace(" class=\"mono\" style=\"font-size:10px\"", " class=\"mono s10\"");
             svgOut = svgOut.replace(" class=\"mono\" style=\"font-size:11px\"", " class=\"mono s11\"");
+            svgOut = svgOut.replace("</text></g><g class=\"mono s11\"><text", "</text><text");
         }
         if (svgOut.indexOf("font-family:sans-serif") != -1) {
             svgOut = svgOut.replace(" style=\"font-family:sans-serif;font-size:11px\"", " class=\"sans s11\"");
+            svgOut = svgOut.replace(" style=\"font-family:sans-serif;font-size:12px\"", " class=\"sans s12\"");
             svgOut = svgOut.replace(" style=\"font-family:sans-serif;font-size:13px\"", " class=\"sans s13\"");
+            svgOut = svgOut.replace("</text></g><g class=\"sans s11\"><text", "</text><text");
         }
         return svgOut;
     }
