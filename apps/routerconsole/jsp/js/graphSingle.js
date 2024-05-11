@@ -25,10 +25,10 @@ function initButtons() {
           graphopts.innerHTML = updatedOpts;
 
           // Update the address bar
-          history.pushState(null, '', href);
+          history.pushState(null, "", href);
           initCss();
         })
-        .catch(error => console.error('Error fetching graph single content:', error));
+        .catch(error => console.error("Error updating graph: ", error));
     }
   });
 }
@@ -61,7 +61,7 @@ function refreshGraph() {
 
     function updateGraphURL() {
       var currentImgSrc = graphImage.src;
-      var graphURL = currentImgSrc + "&t=" + Date.now();
+      var graphURL = currentImgSrc.replace(/time=\d+/, "time=" + Date.now());
       graphImage.src = graphURL;
       graphImage.onload = function() {initCss();};
     }

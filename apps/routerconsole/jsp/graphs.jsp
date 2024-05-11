@@ -12,6 +12,7 @@
 <head>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
+<style id=gwrap></style>
 <%=intl.title("graphs")%>
 <jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request" />
 <jsp:setProperty name="graphHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -20,8 +21,7 @@
 <%
     graphHelper.storeWriter(out);
     graphHelper.storeMethod(request.getMethod());
-    // meta must be inside the head
-    boolean allowRefresh = intl.allowIFrame(request.getHeader("User-Agent"));
+    boolean allowRefresh = intl.allowIFrame(request.getHeader("User-Agent")); // meta must be inside the head
     if (allowRefresh) {out.print(graphHelper.getRefreshMeta());}
 %>
 <script nonce="<%=cspNonce%>">var graphRefreshInterval = <% out.print(graphHelper.getRefreshValue() * 1000); %>;</script>

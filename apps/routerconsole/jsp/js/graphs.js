@@ -7,29 +7,28 @@ var configs = document.querySelectorAll("h3#graphdisplay, #gform");
 var graph = document.getElementsByClassName("statimage")[0];
 var timerId = setInterval(updateGraphs, graphRefreshInterval);
 var visibility = document.visibilityState;
+container.style.display = "none";
 
 function initCss() {
   if (graph != null || graphWidth != graph.naturalWidth || graphHeight != graph.naturalHeight) {
-    container.style.display = "none";
     configs.forEach(function(element) {element.style.display = "none";});
-    graph.addEventListener("load", injectCss());
+    injectCss();
   } else {location.reload(true);}
 }
 
 function injectCss() {
-  graph.addEventListener("load", function() {
-    var graphWidth = graph.width;
-    var graphHeight = graph.height;
-    var sheet = window.document.styleSheets[0];
-    var widepanel = document.querySelector(".widepanel");
-    widepanel.id = "nographs";
-    sheet.insertRule(".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}", sheet.cssRules.length);
-    setTimeout(() => {
-      container.removeAttribute("style");
-      configs.forEach(function(element) {element.removeAttribute("style")});
-      widepanel.removeAttribute("id");
-    }, 500);
-  });
+  if (!graph) {initCss(); return;}
+  var graphWidth = graph.width;
+  var graphHeight = graph.height;
+  var gwrap = document.getElementById("gwrap");
+  var widepanel = document.querySelector(".widepanel");
+  widepanel.id = "nographs";
+  gwrap.innerText = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
+  setTimeout(() => {
+    container.removeAttribute("style");
+    configs.forEach(function(element) {element.removeAttribute("style")});
+    widepanel.removeAttribute("id");
+  }, 500);
 }
 
 function updateGraphs() {
@@ -45,10 +44,11 @@ function updateGraphs() {
     var imageUrl = image.getAttribute('src');
     (function(image, imageUrl) {
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", imageUrl + "?t=" + Date.now(), true);
+      var newUrl = imageUrl.replace(/time=\d+/, "time=" + Date.now());
+      xhr.open("GET", newUrl, true);
       xhr.onload = function () {
         if (xhr.status == 200) {
-          image.setAttribute("src", imageUrl + "?t=" + Date.now());
+          image.setAttribute("src", newUrl);
           imagesLoaded++;
           if (imagesLoaded === totalImages) {progressx.hide();}
         }
@@ -90,6 +90,8 @@ function toggleView() {
 
 toggleView();
 toggle?.addEventListener("click", toggleView);
-graph?.addEventListener("load", initCss());
-window.addEventListener("DOMContentLoaded", progressx.hide);
+window.addEventListener("DOMContentLoaded", function() {
+  progressx.hide();
+  initCss();
+});
 setTimeout(isDown, 60000);
