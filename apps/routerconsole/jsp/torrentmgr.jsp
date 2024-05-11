@@ -16,6 +16,7 @@
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("torrents")%>
+<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
@@ -31,7 +32,6 @@
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/i2psnark/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
-<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce=<%=cspNonce%>>
   document.addEventListener('DOMContentLoaded', function(event) {
     var iframes = iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#i2psnarkframe');
@@ -40,5 +40,6 @@
 </script>
 </div>
 <style>iframe{display:block;pointer-events:auto}#torrents::before{width:100%;animation:fade .3s linear .7s both}</style>
+<script src=/js/iframeTop.js></script>
 </body>
 </html>

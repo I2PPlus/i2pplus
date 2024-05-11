@@ -4,9 +4,8 @@
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="tester" scope="request" />
 <%
    String i2pcontextId1 = null;
-   try {
-       i2pcontextId1 = (String) session.getAttribute("i2p.contextId");
-   } catch (IllegalStateException ise) {}
+   try {i2pcontextId1 = (String) session.getAttribute("i2p.contextId");}
+   catch (IllegalStateException ise) {}
 %>
 <jsp:setProperty name="tester" property="contextId" value="<%=i2pcontextId1%>" />
 <%
@@ -31,8 +30,8 @@
 <head>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
-<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <%=intl.title("Tunnel Manager")%>
+<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
@@ -48,7 +47,6 @@
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/i2ptunnel/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
-<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce=<%=cspNonce%>>
   document.addEventListener('DOMContentLoaded', function(event) {
     var iframes = iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#i2ptunnelframe');
@@ -57,6 +55,7 @@
 </script>
 </div>
 <style>#i2ptunnelframe{display:block;pointer-events:auto}#tunnelmgr::before{width:100%;animation:fade .3s linear .7s both}</style>
+<script src=/js/iframeTop.js></script>
 </body>
 </html><%
     }

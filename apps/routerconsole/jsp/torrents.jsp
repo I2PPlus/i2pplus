@@ -32,8 +32,8 @@
 <head>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
-<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <%=intl.title("torrents")%>
+<script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
@@ -57,6 +57,7 @@
   });
 </script>
 <style>iframe{display:block;pointer-events:auto}#torrents::before{width:100%;animation:fade .3s linear .7s both}</style>
+<script src=/js/iframeTop.js></script>
 </body>
 </html>
 <%  } %>
