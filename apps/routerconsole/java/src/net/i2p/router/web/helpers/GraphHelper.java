@@ -32,7 +32,7 @@ public class GraphHelper extends FormHandler {
     private int _height;
     private int _refreshDelaySeconds;
     private boolean _persistent;
-    private boolean _graphHideLegend;
+    private boolean _hideLegend;
     private String _stat;
     private int _end;
 
@@ -63,6 +63,7 @@ public class GraphHelper extends FormHandler {
         _periodCount = _context.getProperty(PROP_PERIODS, DEFAULT_PERIODS);
         _refreshDelaySeconds = _context.getProperty(PROP_REFRESH, DEFAULT_REFRESH);
         _showEvents = _context.getBooleanProperty(PROP_EVENTS);
+        _hideLegend = _context.getBooleanProperty(PROP_LEGEND);
     }
 
     /**
@@ -103,6 +104,9 @@ public class GraphHelper extends FormHandler {
 
     public void setShowEvents(String b) { _showEvents = !"false".equals(b); }
 
+    /** @since 2.52+ */
+    public void sethideLegend(String b) { _hideLegend = !"false".equals(b); }
+
     public void setHeight(String str) { setH(str); }
 
     /** @since 0.9 shorter parameter */
@@ -133,7 +137,7 @@ public class GraphHelper extends FormHandler {
     public void setPersistent(String foo) { _persistent = true; }
 
     /** @since 0.9.32 */
-    public void setHideLegend(String foo) { _graphHideLegend = true; }
+    public void setHideLegend(String foo) { _hideLegend = true; }
 
     /**
      *  For single stat page
@@ -280,52 +284,52 @@ public class GraphHelper extends FormHandler {
                .append("&amp;periodCount=").append(_periodCount).append("&amp;end=").append( _end);
             if (hiDPI) {buf.append("&amp;width=").append(_width * 2).append("&amp;height=").append(_height * 2);}
             else {buf.append("&amp;width=").append(_width).append("&amp;height=").append(_height);}
-            buf.append("&amp;hideLegend=").append(hideLegend).append("&amp;time=").append(System.currentTimeMillis())
+            buf.append("&amp;hideLegend=").append(_hideLegend).append("&amp;time=").append(System.currentTimeMillis())
                .append("\"></a></span>\n</div>\n<p id=graphopts>\n");
 
             if (_width < MAX_X && _height < MAX_Y) {
-                buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height * 3 / 2));
+                buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height * 3 / 2, _hideLegend));
                 buf.append(_t("Larger")).append("</a> - ");
             }
 
             if (_width > MIN_X && _height > MIN_Y) {
-                buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height * 2 / 3));
+                buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height * 2 / 3, _hideLegend));
                 buf.append(_t("Smaller")).append("</a> - ");
             }
 
             if (_height < MAX_Y) {
-                buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 3 / 2));
+                buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 3 / 2, _hideLegend));
                 buf.append(_t("Taller")).append("</a> - ");
             }
 
             if (_height > MIN_Y) {
-                buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 2 / 3));
+                buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height * 2 / 3, _hideLegend));
                 buf.append(_t("Shorter")).append("</a> - ");
             }
 
             if (_width < MAX_X) {
-                buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height));
+                buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height, _hideLegend));
                 buf.append(_t("Wider")).append("</a> - ");
             }
 
             if (_width > MIN_X) {
-                buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height));
+                buf.append(link(_stat, _showEvents, _periodCount, _end, _width * 2 / 3, _height, _hideLegend));
                 buf.append(_t("Narrower")).append("</a>");
             }
 
             buf.append("<br>");
             if (_periodCount < MAX_C) {
-                buf.append(link(_stat, _showEvents, _periodCount * 2, _end, _width, _height));
+                buf.append(link(_stat, _showEvents, _periodCount * 2, _end, _width, _height, _hideLegend));
                 buf.append(_t("Larger interval")).append("</a> - ");
             }
 
             if (_periodCount > MIN_C) {
-                buf.append(link(_stat, _showEvents, _periodCount / 2, _end, _width, _height));
+                buf.append(link(_stat, _showEvents, _periodCount / 2, _end, _width, _height, _hideLegend));
                 buf.append(_t("Smaller interval")).append("</a> - ");
             }
 
             if (_periodCount < MAX_C) {
-                buf.append(link(_stat, _showEvents, _periodCount, _end + _periodCount, _width, _height));
+                buf.append(link(_stat, _showEvents, _periodCount, _end + _periodCount, _width, _height, _hideLegend));
                 buf.append(_t("Previous interval")).append("</a>");
             }
 
@@ -333,14 +337,20 @@ public class GraphHelper extends FormHandler {
                 int end = _end - _periodCount;
                 if (end <= 0) {end = 0;}
                 if (_periodCount < MAX_C) {buf.append(" - ");}
-                buf.append(link(_stat, _showEvents, _periodCount, end, _width, _height));
+                buf.append(link(_stat, _showEvents, _periodCount, end, _width, _height, _hideLegend));
                 buf.append(_t("Next interval")).append("</a> ");
             }
 
             buf.append(" - ");
-            buf.append(link(_stat, !_showEvents, _periodCount, _end, _width, _height));
+            buf.append(link(_stat, !_showEvents, _periodCount, _end, _width, _height, _hideLegend));
             if (!_stat.equals("bw.combined")) {buf.append(_showEvents ? _t("Plot averages") : _t("plot events"));}
             buf.append("</a>");
+
+            buf.append(" - ");
+            buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height, _hideLegend));
+            buf.append(_hideLegend ? _t("Show Legend") : _t("Hide Legend"));
+            buf.append("</a>");
+
             buf.append("\n</p>\n");
             _out.write(buf.toString());
             _out.flush();
@@ -350,7 +360,7 @@ public class GraphHelper extends FormHandler {
     }
 
     /** @since 0.9 */
-    private static String link(String stat, boolean showEvents, int periodCount, int end, int width, int height) {
+    private static String link(String stat, boolean showEvents, int periodCount, int end, int width, int height, boolean hideLegend) {
         return
                "<a href=\"graph?stat="
                + stat.replace(" ", "%20")
@@ -359,6 +369,7 @@ public class GraphHelper extends FormHandler {
                + "&amp;h=" + height
                + (end > 0 ? "&amp;e=" + end : "")
                + (showEvents ? "&amp;showEvents=1" : "")
+               + (hideLegend ? "&amp;hideLegend=false" : "&amp;hideLegend=true")
                + "\">";
     }
 
@@ -471,7 +482,7 @@ public class GraphHelper extends FormHandler {
             _periodCount != _context.getProperty(PROP_PERIODS, DEFAULT_PERIODS) ||
             _refreshDelaySeconds != _context.getProperty(PROP_REFRESH, DEFAULT_REFRESH) ||
             _showEvents != _context.getBooleanProperty(PROP_EVENTS) ||
-            _graphHideLegend != _context.getProperty(PROP_LEGEND, DEFAULT_LEGEND) ||
+            _hideLegend != _context.getProperty(PROP_LEGEND, DEFAULT_LEGEND) ||
             _persistent != _context.getBooleanPropertyDefaultTrue(SummaryListener.PROP_PERSISTENT)) {
             Map<String, String> changes = new HashMap<String, String>();
             changes.put(PROP_X, Integer.toString(_width));
@@ -479,7 +490,7 @@ public class GraphHelper extends FormHandler {
             changes.put(PROP_PERIODS, Integer.toString(_periodCount));
             changes.put(PROP_REFRESH, Integer.toString(_refreshDelaySeconds));
             changes.put(PROP_EVENTS, Boolean.toString(_showEvents));
-            changes.put(PROP_LEGEND, Boolean.toString(_graphHideLegend));
+            changes.put(PROP_LEGEND, Boolean.toString(_hideLegend));
             changes.put(SummaryListener.PROP_PERSISTENT, Boolean.toString(_persistent));
             boolean warn = _persistent != _context.getBooleanPropertyDefaultTrue(SummaryListener.PROP_PERSISTENT);
             _context.router().saveConfig(changes, null);
