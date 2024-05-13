@@ -257,6 +257,8 @@ WS,Samoa
 XK,Kosovo
 YE,Yemen
 YT,Mayotte
+XX,Unknown
 ZA,South Africa
 ZM,Zambia
 ZW,Zimbabwe
+ZZ,Unknown
