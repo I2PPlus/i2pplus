@@ -4,21 +4,27 @@
 
 function initResizer(frameId) {
   if (!frameId) {
-    setTimeout(function() {initResizer();}, 500);
+    setTimeout(function() {
+      initResizer();
+    }, 500);
     return;
   }
+
   const iframe = document.getElementById(frameId);
-  if (iframe.getAttribute("data-iframe-resized") === "true") {return;}
   const iframeChild = iframe.contentWindow || iframe.contentDocument.defaultView;
+  const bodyTag = iframeChild.document.body;
+
   iFrameResize({
     interval: 0,
     heightCalculationMethod: "taggedElement",
     warningTimeout: 0,
+
     onInit: function() {
-      setTimeout(function() {
-        iframeChild.scrollTo(0,0);
-        window.parent.scrollTo(0,0);
-      }, 0);
+      requestAnimationFrame(() => {
+        iframeChild.scrollTo(0, 0);
+        window.parent.scrollTo(0, 0);
+      });
     }
-  }, "#" + frameId);
+
+  });
 }

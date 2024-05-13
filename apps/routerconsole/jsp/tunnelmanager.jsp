@@ -33,27 +33,20 @@
 <%=intl.title("Tunnel Manager")%>
 <script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/iframeResizer/initResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<style>iframe{display:none;pointer-events:none}</style>
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <h1 class=conf><%=intl._t("Tunnel Manager")%> <a href="/i2ptunnel/" target=_blank title="<%=intl._t("Open in new tab")%>"><span id=newtab><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
 <div class=main id=tunnelmgr>
-<style>iframe{display:none;pointer-events:none}</style>
-<noscript>
-<style>iframe{display:none}</style>
-<p class=infohelp id=jsRequired style=margin:10px>Javascript is required to view <a href="/i2ptunnel/" target=_blank rel=noreferrer>the Tunnel Manager</a> in embedded mode.</p>
-</noscript>
+<noscript><p class=infohelp id=jsRequired style=margin:10px>Javascript is required to view <a href="/i2ptunnel/" target=_blank rel=noreferrer>the Tunnel Manager</a> in embedded mode.</p></noscript>
 <iframe id=i2ptunnelframe class=embed src="/i2ptunnel/" title="I2P+ <%=intl._t("Tunnel Manager")%>" frameborder=0 border=0 width=100% scrolling=no name="i2ptunnelframe" allowtransparency=true>
-<%=intl._t("Your browser does not support iFrames.")%>
-&nbsp;<a href="/i2ptunnel/"><%=intl._t("Click here to continue.")%></a>
+<%=intl._t("Your browser does not support iFrames.")%>&nbsp;<a href="/i2ptunnel/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
 </div>
 <script nonce=<%=cspNonce%>>
-  document.addEventListener("DOMContentLoaded", function() {
-    initResizer("i2ptunnelframe");
-    progressx.hide();
-  });
+  document.addEventListener("DOMContentLoaded", function() {progressx.hide();});
   document.addEventListener("updated", function() {initResizer("i2ptunnelframe");});
 </script>
 <style>#i2ptunnelframe{display:block;pointer-events:auto}#tunnelmgr::before{width:100%;animation:fade .3s linear .7s both}</style>
