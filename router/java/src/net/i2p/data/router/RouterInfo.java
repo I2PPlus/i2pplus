@@ -524,7 +524,7 @@ public class RouterInfo extends DatabaseEntry {
             if (log.shouldInfo()) {
                 log.warn("Signature verify fail: " + toString(), new Exception("from"));
             } else if (log.shouldWarn()) {
-                log.warn("RouterInfo [" + _identity.getHash().toBase64().substring(0,6) + "] has invalid signature");
+                log.warn("RouterInfo [" + _identity.getHash().toBase64().substring(0,6) + "] has INVALID signature");
             //} else {
             //    log.error("RI Sig verify fail: " + _identity.getHash());
             }
