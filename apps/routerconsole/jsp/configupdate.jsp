@@ -15,7 +15,7 @@
 <%=intl.title("config update")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <h1 class=conf><%=intl._t("Router Updates")%></h1>
 <div class=main id=config_update>
@@ -206,7 +206,7 @@
     xhrRefresh.onreadystatechange = function() {
       if (xhrRefresh.readyState === XMLHttpRequest.DONE) {
         if (xhrRefresh.status === 200) {
-          progressx.show("<%=theme%>");
+          progressx.show(theme);
           const messageResponse = xhrRefresh.responseXML.getElementById("statusNews");
           message.innerHTML = messageResponse.innerHTML;
         }
@@ -220,7 +220,7 @@
   let formSubmit = false;
   window.addEventListener("DOMContentLoaded", progressx.hide);
   updatesForm.addEventListener("submit", function() {
-    progressx.show("<%=theme%>");
+    progressx.show(theme);
     formSubmit = true;
   });
   processForm.addEventListener("load", function() {

@@ -16,7 +16,7 @@
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=transitbypeer>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <h1 class=netwrk><%=intl._t("Transit Tunnels by Peer")%></h1>
 <div class=main id=tunnels>
@@ -60,7 +60,7 @@
   }
   function addSortListeners() {
     if (summary) {
-      summary.addEventListener('beforeSort', function() {progressx.show("<%=theme%>");progressx.progress(0.5);});
+      summary.addEventListener('beforeSort', function() {progressx.show(theme);progressx.progress(0.5);});
       summary.addEventListener('afterSort', function() {progressx.hide();});
     }
   }

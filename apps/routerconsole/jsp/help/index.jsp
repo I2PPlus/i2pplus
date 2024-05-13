@@ -32,7 +32,7 @@
 <li id=help_webhosting><a href="webhosting"><b><%=intl._t("Webhosting on I2P")%></b></a><br><%=intl._t("An introduction to hosting websites on the I2P network")%></li>
 </ul>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+
 <%@include file="../summaryajax.jsi" %>
 </body>
 </html>

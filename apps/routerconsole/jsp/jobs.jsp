@@ -16,7 +16,7 @@
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=routerjobs>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %><h1 class=sched><%=intl._t("Job Queue Stats")%></h1>
 <div class=main id=jobs>
 <div class=confignav>
@@ -43,7 +43,7 @@
       xhrjobs.responseType = "document";
       xhrjobs.onload = function () {
         if (!xhrjobs.responseXML) {
-          //alert("Your browser doesn't support ajax. Please upgrade to a newer browser or enable support for xhrjobs requests.");
+          //alert("Your browser doesn't support AJAX. Please upgrade to a newer browser or enable support for XHR requests.");
           return;
         }
         const jobsResponse = xhrjobs.responseXML.getElementById("jobstats");
@@ -81,8 +81,7 @@
       xhrjobs.send();
     }, 10000);
   }
-  window.addEventListener("DOMContentLoaded", progressx.hide);
-  jobs.addEventListener("beforeSort", function() {progressx.show("<%=theme%>");progressx.progress(0.5);});
+  jobs.addEventListener("beforeSort", function() {progressx.show(theme);progressx.progress(0.5);});
   jobs.addEventListener("afterSort", function() {progressx.hide();});
 </script>
 </body>

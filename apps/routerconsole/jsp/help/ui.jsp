@@ -143,7 +143,7 @@
 <%=intl._t("If I2P cannot connect to the internet, a reading of 0ms may be indicated.")%></p>
 </div>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+
 <%@include file="../summaryajax.jsi" %>
 </body>
 </html>

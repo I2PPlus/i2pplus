@@ -4,9 +4,9 @@
 <meta name=viewport content="width=device-width">
 <% if (theme.contains("dark") || theme.contains("night")) { %>
 <style>html{background:#000}</style>
+<% } %>
 <link rel=preload href="<%=themePath%>global.css?<%=net.i2p.CoreVersion.VERSION%>" as=style>
 <link rel=preload href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" as=style>
-<% } %>
 <% if (useSoraFont) { %>
 <link rel=preload href=/themes/fonts/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>
 <link rel=preload href=/themes/fonts/Sora/Sora-Italic.woff2 as=font type=font/woff2 crossorigin>
@@ -48,3 +48,7 @@
 <link href="<%=themePath%>wizard.css" rel=stylesheet>
 <% } %>
 <script nonce="<%=cspNonce%>" src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script nonce="<%=cspNonce%>">
+  const theme = "<%=theme%>";
+  window.addEventListener("DOMContentLoaded", progressx.hide);
+</script>

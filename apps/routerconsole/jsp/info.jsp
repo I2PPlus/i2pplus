@@ -15,7 +15,7 @@
 <%=intl.title("router information")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <h1 class=nfo><%=intl._t("Router Summary")%></h1>
 <div class=main id=routerinformation>
@@ -61,7 +61,7 @@
     xhrInfo.responseType = "document";
     xhrInfo.onreadystatechange = function () {
       if (xhrInfo.readyState === 4 && xhrInfo.status === 200) {
-        progressx.show("<%=theme%>");
+        progressx.show(theme);
         progressx.progress(0.5);
         var updating = document.querySelectorAll(".ajax");
         var updatingResponse = xhrInfo.responseXML.querySelectorAll(".ajax");

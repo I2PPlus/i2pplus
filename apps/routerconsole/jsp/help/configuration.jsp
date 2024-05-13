@@ -80,7 +80,7 @@
 <p><%=intl._t("Note: Most of the options in the Tunnel Manager have tooltips; be sure to check those before you change settings you don't fully understand!")%></p>
 </div>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+
 <%@include file="../summaryajax.jsi" %>
 </body>
 </html>

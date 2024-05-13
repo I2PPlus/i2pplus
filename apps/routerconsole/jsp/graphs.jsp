@@ -30,7 +30,7 @@
 </script>
 </head>
 <body id=perfgraphs>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <h1 class=perf><%=intl._t("Performance Graphs")%></h1>
 <div class=main id=graphs>

@@ -247,7 +247,7 @@
 
 </div>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+
 <%@include file="../summaryajax.jsi" %>
 </body>
 </html>

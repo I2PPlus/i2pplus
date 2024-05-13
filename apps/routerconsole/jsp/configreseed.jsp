@@ -14,7 +14,7 @@
 <%=intl.title("config reseeding")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigReseedHelper" id="reseedHelper" scope="request" />
 <jsp:setProperty name="reseedHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -262,7 +262,7 @@
       if (xhrRefresh.readyState === XMLHttpRequest.DONE) {
         if (xhrRefresh.status === 200) {
           const mainResponse = xhrRefresh.responseXML.getElementById("config_reseed");
-          progressx.show("<%=theme%>");
+          progressx.show(theme);
           main.innerHTML = mainResponse.innerHTML;
         }
       }
@@ -274,7 +274,7 @@
   const processForm = document.getElementById("processForm");
   window.addEventListener("DOMContentLoaded", progressx.hide);
   reseedForm.addEventListener("submit", function() {
-    progressx.show("<%=theme%>");
+    progressx.show(theme);
     formSubmit = true;
   });
   processForm.addEventListener("load", function() {

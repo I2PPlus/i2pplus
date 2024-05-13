@@ -16,7 +16,7 @@
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ProfilesHelper" id="profilesHelper" scope="request" />
 <jsp:setProperty name="profilesHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -82,15 +82,15 @@
   function addSortListeners() {
     if (ff && sorterFF === null) {
       sorterFF = new Tablesort((ff), {descending: true});
-      ff.addEventListener('beforeSort', function() {progressx.show("<%=theme%>");progressx.progress(0.5);});
+      ff.addEventListener('beforeSort', function() {progressx.show(theme);progressx.progress(0.5);});
       ff.addEventListener('afterSort', function() {progressx.hide();});
     } else if (plist && sorterP === null) {
       sorterP = new Tablesort((plist), {descending: true});
-      plist.addEventListener('beforeSort', function() {progressx.show("<%=theme%>");progressx.progress(0.5);});
+      plist.addEventListener('beforeSort', function() {progressx.show(theme);progressx.progress(0.5);});
       plist.addEventListener('afterSort', function() {progressx.hide();});
     } else if (sessionBans && sorterBans === null) {
       sorterBans = new Tablesort((sessionBans), {descending: false});
-      sessionBans.addEventListener('beforeSort', function() {progressx.show("<%=theme%>");progressx.progress(0.5);});
+      sessionBans.addEventListener('beforeSort', function() {progressx.show(theme);progressx.progress(0.5);});
       sessionBans.addEventListener('afterSort', function() {progressx.hide();});
     }
   }
@@ -103,7 +103,7 @@
     xhrprofiles.responseType = "document";
     xhrprofiles.onreadystatechange = function () {
       if (xhrprofiles.readyState === 4 && xhrprofiles.status === 200 && !uri.includes("f=3")) {
-        progressx.show("<%=theme%>");
+        progressx.show(theme);
         if (info) {
           var infoResponse = xhrprofiles.responseXML.getElementById("profiles_overview");
           info.innerHTML = infoResponse.innerHTML;

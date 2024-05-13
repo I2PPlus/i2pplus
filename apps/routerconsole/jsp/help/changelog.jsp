@@ -43,7 +43,7 @@
 <p id=fullhistory><a href="/history.txt" target="_blank" rel="noreferrer"><%=intl._t("View the full change log")%></a></p>
 </div>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+
 <%@include file="../summaryajax.jsi" %>
 </body>
 </html>

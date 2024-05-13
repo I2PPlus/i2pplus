@@ -15,10 +15,7 @@
 <%=intl.title("job queue stats")%>
 </head>
 <body id=routerjobqueue>
-<script nonce=<%=cspNonce%>>
-const theme = "<%=theme%>";
-progressx.show(theme);progressx.progress(0.1);
-</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %><h1 class=sched><%=intl._t("Job Queue")%></h1>
 <div class=main id=jobs>
 <div class=confignav>
@@ -31,9 +28,6 @@ progressx.show(theme);progressx.progress(0.1);
 <jsp:getProperty name="jobQueueHelper" property="jobQueueSummary" />
 </div>
 <script nonce=<%=cspNonce%> src="/js/refreshElements.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script nonce=<%=cspNonce%>>
-window.addEventListener("DOMContentLoaded", progressx.hide);
-refreshElements("#jobs", "/jobqueue", 15000);
-</script>
+<script nonce=<%=cspNonce%>>refreshElements("#jobs", "/jobqueue", 15000);</script>
 </body>
 </html>

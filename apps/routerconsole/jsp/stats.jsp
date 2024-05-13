@@ -15,7 +15,7 @@
 <%=intl.title("statistics")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.OldConsoleHelper" id="oldhelper" scope="request" />
 <jsp:setProperty name="oldhelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -30,7 +30,7 @@
     setInterval(updateStats, 60000);
   }
   function updateStats() {
-    progressx.show("<%=theme%>");
+    progressx.show(theme);
     progressx.progress(0.5);
     var xhrstats = new XMLHttpRequest();
     xhrstats.open('GET', '/stats', true);

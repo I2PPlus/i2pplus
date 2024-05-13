@@ -16,7 +16,7 @@
 <%=intl.title("local tunnels")%>
 </head>
 <body id=routertunnels>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <h1 class=netwrk><%=intl._t("Local Tunnels")%></h1>
 <jsp:useBean class="net.i2p.router.web.helpers.TunnelHelper" id="tunnelHelper" scope="request" />
@@ -43,7 +43,6 @@
 </span>
 </div>
 <noscript><style>#toggleTunnels{display:none}</style></noscript>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
 <script nonce=<%=cspNonce%> src=/js/tunnels.js></script>
 </body>
 </html>

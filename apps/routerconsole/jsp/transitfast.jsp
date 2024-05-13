@@ -16,7 +16,7 @@
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=transit>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <h1 class=netwrk><%=intl._t("Fastest Transit Tunnels")%></h1>
 <div class=main id=tunnels>
@@ -61,7 +61,7 @@
   }
   function addSortListeners() {
     if (tunnels) {
-      tunnels.addEventListener('beforeSort', function() {progressx.show("<%=theme%>");progressx.progress(0.5);});
+      tunnels.addEventListener('beforeSort', function() {progressx.show(theme);progressx.progress(0.5);});
       tunnels.addEventListener('afterSort', function() {progressx.hide();});
     }
   }
@@ -101,7 +101,7 @@
     xhrtunnels.send();
   }
   if (refresh) {
-    refresh.addEventListener("click", function() {progressx.show("<%=theme%>");progressx.progress(0.5);updateTunnels();progressx.hide();});
+    refresh.addEventListener("click", function() {progressx.show(theme);progressx.progress(0.5);updateTunnels();progressx.hide();});
     refresh.addEventListener("mouseenter", removeHref);
   }
   onVisible(main, () => {updateTunnels();});

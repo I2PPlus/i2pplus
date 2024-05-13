@@ -25,7 +25,7 @@
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <h1 class=log><%=intl._t("Event Log")%></h1>
 <div class=main id=events>
@@ -42,6 +42,6 @@
 <script nonce=<%=cspNonce%> src=/js/tablesort/tablesort.date.js></script>
 <script nonce=<%=cspNonce%>>new Tablesort(document.getElementById("eventlog"));</script>
 <script nonce=<%=cspNonce%> src=/js/lazyload.js></script>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+
 </body>
 </html>

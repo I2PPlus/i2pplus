@@ -15,7 +15,7 @@
 <%=intl.title("logs")%>
 </head>
 <body id=i2plogs>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <h1 class=log><%=intl._t("Logs")%></h1>
 <div class=main id=logs>
@@ -167,8 +167,8 @@
     xhrlogs.responseType = "document";
     xhrlogs.onload = function () {
       const mainLogsResponse = xhrlogs.responseXML.getElementById("logs");
-      progressx.show("<%=theme%>");
-      progressx.progress(0.5);
+      progressx.show(theme);
+      progressx.progress(0.3);
 
       if (!xhrlogs.responseXML) {return;}
 
@@ -207,7 +207,6 @@
     }
     xhrlogs.send();
   }
-  window.addEventListener("DOMContentLoaded", progressx.hide);
 
   document.addEventListener("DOMContentLoaded", function() {
     const toggleRefresh = document.getElementById("toggleRefresh");

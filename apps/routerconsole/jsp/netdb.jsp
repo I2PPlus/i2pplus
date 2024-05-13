@@ -16,7 +16,7 @@
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.NetDbHelper" id="formhandler" scope="request" />
 <jsp:setProperty name="formhandler" property="full" value="<%=request.getParameter(\"f\")%>" />
@@ -164,7 +164,7 @@
   document.addEventListener("DOMContentLoaded", initRefresh);
   window.addEventListener("DOMContentLoaded", progressx.hide);
   if (countries) {
-    countries.addEventListener("beforeSort", function() {progressx.show("<%=theme%>");progressx.progress(0.5);});
+    countries.addEventListener("beforeSort", function() {progressx.show(theme);progressx.progress(0.5);});
     countries.addEventListener("afterSort", function() {progressx.hide();});
   }
 </script>

@@ -15,7 +15,7 @@
 <%=intl.title("home")%>
 </head>
 <body id=homepage>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%
     String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
 %>
@@ -105,6 +105,6 @@
 </div>
 </div>
 </div>
-<script nonce=<%=cspNonce%>>window.addEventListener("DOMContentLoaded", progressx.hide);</script>
+
 </body>
 </html>
