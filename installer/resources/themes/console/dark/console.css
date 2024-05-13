@@ -2536,7 +2536,7 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 /* iframes */
 #dns{padding:0;min-width:650px}
 #i2psnarkframe{margin-bottom:-2px}
-#i2ptunnelframe{margin:0 0 -5px}
+#i2ptunnelframe{margin:0 auto -2px 3px;width:calc(100% - 4px)}
 iframe{height:0}
 iframe.iframed{margin:15px 0 0}
 #main#embedded{padding:0}
@@ -2948,7 +2948,8 @@ div[id^="config_"] .confignav{margin-top:-3px}
 }
 
 @media (min-width:1634px){
-.leasesets_container{margin-bottom:8px}th code{font-size:9pt}
+.leasesets_container{margin-bottom:8px}
+th code{font-size:9pt}
 }
 
 @media (min-width:1800px){
