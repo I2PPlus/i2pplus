@@ -1057,23 +1057,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 // drop old references that we had accepted on startup (since
                 // startup allows some lax rules).
                 boolean valid = true;
-                try {
-                    valid = (null == validate((RouterInfo)ds));
-                } catch (IllegalArgumentException iae) {
-                    valid = false;
-                }
+                try {valid = (null == validate((RouterInfo) ds));}
+                catch (IllegalArgumentException iae) {valid = false;}
                 if (!valid) {
                     fail(key);
                     return null;
                 }
-                return (RouterInfo)ds;
+                return (RouterInfo) ds;
             } else {
                 //_log.debug("Looking for a router [" + key + "] but it ISN'T a RouterInfo! " + ds, new Exception("Who thought that lease was a router?"));
                 return null;
             }
-        } else {
-            return null;
-        }
+        } else {return null;}
     }
 
     private static final long PUBLISH_DELAY = 5*1000;
@@ -1525,10 +1520,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         for (RouterAddress ra : routerInfo.getTargetAddresses("NTCP2")) {
             String i = ra.getOption("i");
             if (i != null && i.length() != 24) {
-                _context.banlist().banlistRouter(routerInfo.getIdentity().calculateHash(), " <b>➜</b> Invalid NTCP address", null, null, now + 4*60*1000L);
+                _context.banlist().banlistRouter(routerInfo.getIdentity().calculateHash(), " <b>➜</b> Invalid NTCP address", null, null, now + 24*60*60*1000L);
                 if (_log.shouldWarn() && !isBanned) {
                     _log.warn("Banning " + (caps != "" ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                              " [" + routerId + "] for 4h -> Invalid NTCP address");
+                              " [" + routerId + "] for 24h -> Invalid NTCP address");
                 }
                 return "Invalid NTCP address";
             }
@@ -1573,8 +1568,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 //_log.warn("Dropping RouterInfo [" + riHash + "] -> Floodfill with SSU disabled");
                 _log.warn("Banning [" + routerId + "] for 4h -> Floodfill with SSU disabled");
             }
-            _context.banlist().banlistRouter(h, " <b>➜</b> Floodfill with SSU disabled",
-                                             null, null, 4*60*60*1000);
+            _context.banlist().banlistRouter(h, " <b>➜</b> Floodfill with SSU disabled", null, null, 4*60*60*1000);
             return caps + " Router [" + routerId + "] -> Floodfill with SSU disabled";
         } else if (noSSU && !isUs) {
             if (_log.shouldWarn() && !isBanned) {
@@ -1788,7 +1782,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
         }
         if (_log.shouldWarn())
-            _log.warn("Verify fail, cause unknown: " + entry);
+            _log.warn("RouterInfo verification failure (Unknown cause)\n" + entry);
     }
 
 
