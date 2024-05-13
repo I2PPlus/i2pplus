@@ -8,6 +8,7 @@ function initResizer(frameId) {
   const iframe = document.getElementById(frameId);
   const iframeChild = iframe.contentWindow || iframe.contentDocument.defaultView;
   const bodyTag = iframeChild.document.body;
+  const pageloader = document.getElementById("pageloader");
 
   iFrameResize({
     interval: 0,
@@ -16,8 +17,10 @@ function initResizer(frameId) {
     inPageLinks: true,
     onInit: function() {
       requestAnimationFrame(() => {
-        progressx.show();
-        progressx.progress(0.3);
+        if (pageloader.style.display === "none") {
+          progressx.show();
+          progressx.progress(0.3);
+        }
         iframeChild.scrollTo(0, 0);
         window.parent.scrollTo(0, 0);
         progressx.hide();
