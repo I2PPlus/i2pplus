@@ -167,6 +167,10 @@ function bindToggle() {
 
 function refreshIndex() {
   refreshTunnelStatus();
+  if (!globalControl) {
+    setTimeout(function() {refreshIndex();}, 500);
+    return;
+  }
   if (!globalControl.classList.contains("listener")) {bindToggle();}
   if (!tunnelIndex.classList.contains("listener")) {initTunnelControl();}
 }
