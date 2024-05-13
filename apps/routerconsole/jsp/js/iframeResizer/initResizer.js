@@ -3,12 +3,7 @@
 /* License: AGPL3 or later */
 
 function initResizer(frameId) {
-  if (!frameId) {
-    setTimeout(function() {
-      initResizer();
-    }, 500);
-    return;
-  }
+  if (!frameId) {setTimeout(function() {initResizer();}, 500); return;}
 
   const iframe = document.getElementById(frameId);
   const iframeChild = iframe.contentWindow || iframe.contentDocument.defaultView;
@@ -18,14 +13,16 @@ function initResizer(frameId) {
     interval: 0,
     heightCalculationMethod: "taggedElement",
     warningTimeout: 0,
-
+    inPageLinks: true,
     onInit: function() {
       requestAnimationFrame(() => {
+        progressx.show();
+        progressx.progress(0.3);
         iframeChild.scrollTo(0, 0);
         window.parent.scrollTo(0, 0);
+        progressx.hide();
       });
     }
-
   });
-  progressx.hide();
+
 }

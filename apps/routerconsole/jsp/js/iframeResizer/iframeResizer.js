@@ -1216,11 +1216,11 @@
       init(createOutgoingMsg(iframeId))
       setupIFrameObject()
     } else {
-      warn(iframeId, 'Ignored iFrame, already setup.')
+      //warn(iframeId, 'Ignored iFrame, already setup.')
     }
   }
 
-  function debouce(fn, time) {
+  function debounce(fn, time) {
     if (null === timer) {
       timer = setTimeout(function () {
         timer = null
@@ -1280,7 +1280,7 @@
         'window',
         'Mutation observed: ' + mutations[0].target + ' ' + mutations[0].type
       )
-      debouce(checkIFrames, 16)
+      debounce(checkIFrames, 16)
     }
 
     function createMutationObserver() {
@@ -1310,7 +1310,7 @@
     }
 
     log('window', 'Trigger event: ' + event)
-    debouce(resize, 16)
+    debounce(resize, 16)
   }
 
   // Not testable in PhantomJS
@@ -1322,7 +1322,7 @@
 
     if ('hidden' !== document.visibilityState) {
       log('document', 'Trigger event: Visiblity change')
-      debouce(resize, 16)
+      debounce(resize, 16)
     }
   }
 
