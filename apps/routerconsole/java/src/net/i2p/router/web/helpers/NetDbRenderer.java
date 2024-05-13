@@ -1083,28 +1083,12 @@ class NetDbRenderer {
             }
             buf.append("</p>");
         }
-/*
-        if (log.shouldWarn()) {
-            long end = System.currentTimeMillis();
-            log.warn("part 1 took " + (end - start));
-            start = end;
-        }
-*/
-        if (!showStats) {
 
+        if (!showStats) {
             // the summary table
             buf.append("<table id=netdboverview width=100%>\n<tr><th colspan=3>");
-/*
-            if (client != null) {
-                   buf.append(_t("Network Database Router Statistics for Client " + client));
-            } else if (clientsOnly) {
-                buf.append(_t("Network Database Router Statistics for all Clients" + client));
-            } else {
-                buf.append(_t("Network Database Router Statistics"));
-           }
-*/
-        buf.append(_t("Network Database Router Statistics"));
-        buf.append("</th></tr>\n<tr><td style=vertical-align:top>");
+            buf.append(_t("Network Database Router Statistics"));
+            buf.append("</th></tr>\n<tr><td style=vertical-align:top>");
             // versions table
             List<String> versionList = new ArrayList<String>(versions.objects());
             if (!versionList.isEmpty()) {
@@ -1122,13 +1106,7 @@ class NetDbRenderer {
             buf.append("</td><td style=vertical-align:top>\n");
             out.write(buf.toString());
             buf.setLength(0);
-/*
-            if (log.shouldWarn()) {
-                long end = System.currentTimeMillis();
-                log.warn("part 2 took " + (end - start));
-                start = end;
-            }
-*/
+
             String showAll = _t("Show all routers with this capability in the NetDb");
             buf.append("<table id=netdbtiers>\n");
             buf.append("<thead>\n<tr><th>" + _t("Bandwidth Tier") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
@@ -1183,13 +1161,7 @@ class NetDbRenderer {
                 out.write(buf.toString());
                 buf.setLength(0);
             }
-/*
-            if (log.shouldWarn()) {
-                long end = System.currentTimeMillis();
-                log.warn("part 3 took " + (end - start));
-                start = end;
-            }
-*/
+
             // transports table
             buf.append("<table id=netdbtransports>\n");
             buf.append("<thead>\n<tr><th>" + _t("Transports") + "</th><th>" + _t("Count") + "</th></tr>\n</thead>\n");
@@ -1216,21 +1188,14 @@ class NetDbRenderer {
                     buf.append("<tr><td><a href=\"/netdb?c=").append(country).append("\">");
                     buf.append("<img width=20 height=15 alt=\"").append(country.toUpperCase(Locale.US)).append("\"");
                     buf.append(" src=\"/flags.jsp?c=").append(country).append("\">");
-                    buf.append(getTranslatedCountry(country));
+                    buf.append(getTranslatedCountry(country).replace("xx", _t("Unknown")));
                     buf.append("</a></td><td>").append(num).append("</td></tr>\n");
                 }
                 buf.append("</tbody></table>\n");
             } else {
-                buf.append("<tbody><tr><td colspan=2>").append(_t("Initializing"))
-                   .append("&hellip;</td></tr></tbody></table>\n");
+                buf.append("<tbody><tr><td colspan=2>").append(_t("Initializing")).append("&hellip;</td></tr></tbody></table>\n");
             }
             buf.append("</td></tr>\n</table>\n");
-/*
-            if (log.shouldWarn()) {
-                long end = System.currentTimeMillis();
-                log.warn("part 4 took " + (end - start));
-            }
-*/
         } // if !showStats
         out.write(buf.toString());
         out.flush();
