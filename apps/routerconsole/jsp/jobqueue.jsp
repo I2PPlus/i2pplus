@@ -15,7 +15,10 @@
 <%=intl.title("job queue stats")%>
 </head>
 <body id=routerjobqueue>
-<script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
+<script nonce=<%=cspNonce%>>
+const theme = "<%=theme%>";
+progressx.show(theme);progressx.progress(0.1);
+</script>
 <%@include file="summary.jsi" %><h1 class=sched><%=intl._t("Job Queue")%></h1>
 <div class=main id=jobs>
 <div class=confignav>
@@ -27,28 +30,10 @@
 <% jobQueueHelper.storeWriter(out); %>
 <jsp:getProperty name="jobQueueHelper" property="jobQueueSummary" />
 </div>
+<script nonce=<%=cspNonce%> src="/js/refreshElements.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce=<%=cspNonce%>>
-  const visibility = document.visibilityState;
-  if (visibility == "visible") {
-    setInterval(function() {
-      progressx.show("<%=theme%>");
-      progressx.progress(0.5);
-      const xhrqueue = new XMLHttpRequest();
-      xhrqueue.open('GET', '/jobqueue', true);
-      xhrqueue.responseType = "document";
-      xhrqueue.onload = function () {
-        const jobs = document.getElementById("jobs");
-        const jobsResponse = xhrqueue.responseXML.getElementById("jobs");
-        const jobsParent = jobs.parentNode;
-        if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML)) {
-          jobsParent.replaceChild(jobsResponse, jobs);
-        }
-      }
-      window.addEventListener("DOMContentLoaded", progressx.hide);
-      xhrqueue.send();
-    }, 15000);
-  }
-  window.addEventListener("DOMContentLoaded", progressx.hide);
+window.addEventListener("DOMContentLoaded", progressx.hide);
+refreshElements("#jobs", "/jobqueue", 15000);
 </script>
 </body>
 </html>
