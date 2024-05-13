@@ -19,9 +19,8 @@ function refreshElements(targetSelector, url, delay) {
         requestAnimationFrame(() => {
           targetElements.forEach(function(targetElement, index) {
             let targetElementResponse = targetElementsResponse[index];
-            const targetParent = targetElement.parentNode;
             if (targetElementResponse && !Object.is(targetElement.innerHTML, targetElementResponse.innerHTML)) {
-              targetParent.replaceChild(targetElementResponse, targetElement);
+              targetElement.innerHTML = targetElementResponse.innerHTML;
             }
           });
         });
