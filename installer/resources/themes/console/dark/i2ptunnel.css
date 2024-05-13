@@ -54,11 +54,11 @@ html:not(.iframed) #serverTunnels{margin-bottom:0}
 html:not(.iframed) body#tunnelEditPage .panel,html:not(.iframed) body#tunnelRegistration .panel,html:not(.iframed) body#tunnelWizardPage .panel{margin-top:24px;margin-bottom:24px}
 html:not(.iframed) #globalTunnelControl{margin:1px auto -1px}
 #globalTunnelControl{margin:-13px auto -13px}
-#serverTunnels{margin:-1px 0 8px}
+#serverTunnels{margin:0 0 8px}
 .iframed .panel.iframed{margin:0 auto -8px}
 .iframed .panel{margin:14px auto -10px;width:100%}
 .iframed .panel#clients,#tunnelEditPage .panel,#tunnelRegistration .panel,#tunnelWizardPage .panel,#tunnelSSL .panel{margin-bottom:6px}
-.iframed .panel#clients{margin-top:-18px}
+.iframed .panel#clients{margin-top:-19px}
 .iframed #globalTunnelControl{margin:3px auto -26px}
 .iframed #messages+#globalTunnelControl{margin:6px auto -26px}
 .iframed #messages,.iframed #messages,#tunnelEditPage .panel,#tunnelRegistration .panel,#tunnelWizardPage .panel,#tunnelSSL .panel{margin-top:-5px}
