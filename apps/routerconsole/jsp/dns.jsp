@@ -45,13 +45,7 @@
 <%=intl._t("Your browser does not support iFrames.")%>&nbsp;<a href="/susidns/addressbook?book=router&amp;filter=none"><%=intl._t("Click here to continue.")%></a>
 </iframe>
 </div>
-<script nonce=<%=cspNonce%>>
-  document.addEventListener("DOMContentLoaded", function() {
-    initResizer("susidnsframe");
-    progressx.hide();
-  });
-  document.addEventListener("updated", function() {initResizer("susidnsframe");});
-</script>
+<script nonce=<%=cspNonce%>>document.addEventListener("updated", function() {initResizer("susidnsframe");});</script>
 <style>iframe{display:block;pointer-events:auto}#dns::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
 </html>

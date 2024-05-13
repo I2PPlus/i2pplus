@@ -27,4 +27,5 @@ function initResizer(frameId) {
     }
 
   });
+  progressx.hide();
 }

@@ -46,13 +46,7 @@
 <%=intl._t("Your browser does not support iFrames.")%>&nbsp;<a href="/susimail/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
 </div>
-<script nonce=<%=cspNonce%>>
-  document.addEventListener("DOMContentLoaded", function() {
-    initResizer("susimailframe");
-    progressx.hide();
-  });
-  document.addEventListener("updated", function() {initResizer("susimailframe");});
-</script>
+<script nonce=<%=cspNonce%>>document.addEventListener("updated", function() {initResizer("susimailframe");});</script>
 <style>iframe{display:block;pointer-events:auto}#webmail::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
 </html><%
