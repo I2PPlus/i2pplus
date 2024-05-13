@@ -357,6 +357,10 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         buf.append(DOCTYPE).append("<html style=\"background:").append(pageBackground).append("\">\n")
            .append("<head>\n").append("<meta charset=utf-8>\n");
+        if (!isStandalone()) {
+            buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?").append(CoreVersion.VERSION).append("\" id=iframeResizer></script>\n")
+               .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n");
+        }
         buf.append("<meta name=viewport content=\"width=device-width\">\n");
         if (!isStandalone() && useSoraFont()) {
             buf.append("<link rel=preload href=/themes/fonts/Sora.css as=style>\n")
@@ -372,9 +376,6 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<link rel=preload href=\"").append(_themePath).append("snark.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
            .append("<link rel=preload href=\"").append(_themePath).append("images/images.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
            .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n");
-        if (!isStandalone()) {
-            buf.append("<link rel=preload href=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" as=script>\n");
-        }
         buf.append("<title>");
         if (_contextName.equals(DEFAULT_NAME))
             buf.append(_t("I2PSnark"));
@@ -4141,11 +4142,8 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_Z = "override.css\" rel=stylesheet>";
     private static final String TABLE_HEADER = "<table id=torrents width=100% border=0>\n" + "<thead id=snarkHead>";
     private static final String SHOWPAGE_CSS = "<style>body{display:block!important;pointer-events:auto!important}:-moz-broken{opacity:0}</style>\n";
-    private static final String FOOTER = "</div>\n</center>\n<span id=endOfPage data-iframe-height></span>\n" +
-                                         "<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
-                                         CoreVersion.VERSION + "\" id=iframeResizer></script>\n" + SHOWPAGE_CSS +
-                                         "<script src=/js/setupIframe.js></script>\n" +
-                                         "</body>\n</html>";
+    private static final String FOOTER = "</div>\n</center>\n<span id=endOfPage data-iframe-height></span>\n" + SHOWPAGE_CSS +
+                                         "<script src=/js/setupIframe.js></script>\n" + "</body>\n</html>";
     private static final String FOOTER_STANDALONE = "</div>\n</center>" + SHOWPAGE_CSS + "</body>\n</html>";
     private static final String IFRAME_FORM = "<iframe name=processForm id=processForm hidden></iframe>\n";
 
@@ -4259,6 +4257,10 @@ public class I2PSnarkServlet extends BasicServlet {
 
         StringBuilder buf=new StringBuilder(6*1024);
         buf.append(DOCTYPE).append("<html>\n<head>\n<meta charset=utf-8>\n");
+        if (!isStandalone()) {
+            buf.append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js?").append(CoreVersion.VERSION)
+               .append("\" id=iframeResizer></script>\n");
+        }
         buf.append("<title>");
         if (title.endsWith("/")) {title = title.substring(0, title.length() - 1);}
         final String directory = title;

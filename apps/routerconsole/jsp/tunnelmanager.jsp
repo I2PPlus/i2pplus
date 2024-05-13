@@ -32,6 +32,7 @@
 <%@include file="summaryajax.jsi" %>
 <%=intl.title("Tunnel Manager")%>
 <script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/initResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show("<%=theme%>");progressx.progress(0.1);</script>
@@ -47,15 +48,15 @@
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/i2ptunnel/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
-<script nonce=<%=cspNonce%>>
-  document.addEventListener('DOMContentLoaded', function(event) {
-    var iframes = iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#i2ptunnelframe');
-    progressx.hide()
-  });
-</script>
 </div>
+<script nonce=<%=cspNonce%>>
+  document.addEventListener("DOMContentLoaded", function() {
+    initResizer("i2ptunnelframe");
+    progressx.hide();
+  });
+  document.addEventListener("updated", function() {initResizer("i2ptunnelframe");});
+</script>
 <style>#i2ptunnelframe{display:block;pointer-events:auto}#tunnelmgr::before{width:100%;animation:fade .3s linear .7s both}</style>
-<script src=/js/iframeTop.js></script>
 </body>
 </html><%
     }

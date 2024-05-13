@@ -47,6 +47,7 @@
 %>
 <link rel=stylesheet href="<%=base.getTheme()%>override.css">
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style>body{display:none;pointer-events:none}</style>
 </head>
 <body id=ovrvw>

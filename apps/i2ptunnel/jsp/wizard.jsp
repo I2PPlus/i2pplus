@@ -49,6 +49,7 @@
 <meta charset=utf-8>
 <link rel=icon href="<%=editBean.getTheme()%>images/favicon.svg">
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <link rel=icon href="<%=editBean.getTheme()%>images/favicon.svg">
 <link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>

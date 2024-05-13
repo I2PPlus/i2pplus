@@ -64,6 +64,7 @@
 %>
 <link rel=stylesheet href="<%=book.getTheme()%>override.css">
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>

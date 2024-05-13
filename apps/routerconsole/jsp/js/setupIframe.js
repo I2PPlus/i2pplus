@@ -4,9 +4,6 @@ function setupIframe() {
     if (!html.classList.contains("iframed")) {html.classList.add("iframed");}
     document.addEventListener("DOMContentLoaded", function() {
       endOfPage();
-      setTimeout(function() {
-        window.parent.postMessage("scroll-to-top", "*");
-      }, 50);
     });
   }
 }
@@ -22,9 +19,3 @@ function endOfPage() {
 }
 
 setTimeout(setupIframe, 0);
-
-window.addEventListener("message", function(event) {
-  if (event.data === "scroll-to-top") {
-    window.scrollTo(0, 0);
-  }
-});

@@ -30,6 +30,7 @@ if (tun != null) {
 <title><%=intl._t("Tunnel Manager")%> - <%=(__isClient ? intl._t("Edit Client Tunnel") : intl._t("Edit Server Tunnel"))%></title>
 <meta charset=utf-8>
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <link rel=icon href="<%=editBean.getTheme()%>images/favicon.svg">
 <link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>

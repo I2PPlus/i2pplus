@@ -48,6 +48,7 @@
 <%  } %>
 <link rel=stylesheet href="<%=book.getTheme()%>override.css">
 <script nonce="<%=cspNonce%>" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>" src="/js/textareaResize.js"></script>
 <script nonce="<%=cspNonce%>">
 document.addEventListener("DOMContentLoaded", function() {

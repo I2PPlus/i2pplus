@@ -2177,8 +2177,9 @@ public class WebMail extends HttpServlet
             } catch(URISyntaxException use) {}
             // img-src allows for cid: urls that were fixed up by RegexOutputStream
             // character encoding will be set in sendAttachment()
-            response.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' 'unsafe-inline'; " +
-                               "script-src " + me + "/js/iframeResizer/iframeResizer.contentWindow.js " +
+            response.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' 'unsafe-inline'; " + "script-src " +
+                               me + "/js/iframeResizer/iframeResizer.contentWindow.js " +
+                               me + "/js/iframeResizer/iframeResizer.updatedEvent.js " +
                                me + "/susimail/js/htmlView.js " + me + "/susimail/js/sanitizeHTML.js 'nonce-" + cspNonce + "'; " +
                                "form-action 'none'; frame-ancestors " + me + myself + "; object-src 'none'; media-src 'none'; img-src 'self' " +
                                me + myself + " data:; font-src 'self'; frame-src 'none'; worker-src 'none'");
@@ -2552,6 +2553,7 @@ public class WebMail extends HttpServlet
                 // setup noscript style so we can hide js buttons when js is disabled
                 out.print("<noscript><style>.script{display:none!important}</style></noscript>\n");
                 out.print("<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n");
+                out.print("<script src=\"/js/iframeResizer/updatedEvent.js?" + CoreVersion.VERSION + "\"></script>\n");
 //                out.print("<script src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\"></script>\n");
                 out.print("<style>body{display:none;pointer-events:none}</style>\n");
                 out.print("</head>\n");

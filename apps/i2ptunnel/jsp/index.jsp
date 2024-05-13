@@ -27,7 +27,8 @@
 <script src=/js/setupIframe.js></script>
 <meta charset=utf-8>
 <title><%=intl._t("Tunnel Manager")%></title>
-<link href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" rel=preload as=script> 
+<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <link href="<%=activeTheme%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet> 
 <link href="<%=activeTheme%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=activeTheme%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
@@ -631,9 +632,8 @@ ElGamal-2048
 <%
   }  // !isInitialized()
 %>
-<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
 </div>
+<script src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
 <span data-iframe-height></span>
 <noscript><style>.script{display:none!important}.tunnelInfo{display:table-row!important}#screenlog_buttons{display:table-row!important}</style></noscript>
 <style>body{display:block;pointer-events:auto}</style>
