@@ -19,7 +19,7 @@ function refreshElements(targetSelector, url, delay) {
         requestAnimationFrame(() => {
           targetElements.forEach(function(targetElement, index) {
             let targetElementResponse = targetElementsResponse[index];
-            if (targetElementResponse && !Object.is(targetElement.innerHTML, targetElementResponse.innerHTML)) {
+            if (targetElement && targetElementResponse && !Object.is(targetElement.innerHTML, targetElementResponse.innerHTML)) {
               targetElement.innerHTML = targetElementResponse.innerHTML;
             }
           });
