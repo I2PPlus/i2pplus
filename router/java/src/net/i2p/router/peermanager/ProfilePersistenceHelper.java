@@ -385,7 +385,7 @@ class ProfilePersistenceHelper {
             }
 
             if (_log.shouldDebug())
-                _log.debug("Loaded the profile for [" + peer.toBase64().substring(0,6) + "] from " + file.getName());
+                _log.debug("Loaded profile for [" + peer.toBase64().substring(0,6) + "] from " + file.getName());
 
             fixupFirstHeardAbout(profile);
             return profile;
