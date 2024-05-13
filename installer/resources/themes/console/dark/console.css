@@ -2536,7 +2536,7 @@ ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 /* iframes */
 #dns{padding:0;min-width:650px}
 #i2psnarkframe{margin-bottom:-2px}
-#i2ptunnelframe{margin:0 auto -2px 3px;width:calc(100% - 4px)}
+#i2ptunnelframe{margin:1px auto -1px 3px;width:calc(100% - 4px)}
 iframe{height:0}
 iframe.iframed{margin:15px 0 0}
 #main#embedded{padding:0}
