@@ -83,15 +83,16 @@ public class MessageValidator {
      */
     private boolean noteReception(long messageId, long messageExpiration) {
         long val = messageId;
-        // tweak the high order bits with the message expiration /seconds/
+        double fp = _filter.getFalsePositiveRate();
+        // tweak phe high order bits with the message expiration /seconds/
         ////val ^= (messageExpiration & TIME_MASK) << 16;
         val ^= (messageExpiration & TIME_MASK);
         boolean dup = _filter.add(val);
         if (dup && _log.shouldWarn()) {
-            _log.warn("Duplicate with " + _filter.getCurrentDuplicateCount()
-                      + " other dups, " + _filter.getInsertedCount()
-                      + " other entries, and a FALSE POSITIVE rate of "
-                      + _filter.getFalsePositiveRate());
+            _log.warn("Duplicate message [MsgID " + messageId + "] with " + _filter.getCurrentDuplicateCount()
+                      + " other duplicates, " + _filter.getInsertedCount()
+                      + " other entries" + (fp > 0 ? ", and a FALSE POSITIVE rate of "
+                      + fp : ""));
         }
         return dup;
     }
