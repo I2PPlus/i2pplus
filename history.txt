@@ -1,5 +1,20 @@
+2024-05-12 dr|z3d
+ * Console:
+   - Add Unknown country to NetDb summary for non-GeoIP resolved peers
+   - Ensure pages linked in iframes load at top
+   - Migrate inline javascript on /jobqueue to refreshElements.js
+
+2024-05-11 dr|z3d
+ * Console: Add Show/Hide Legend button on single graph page
+
+2024-05-08 zzz
+ * Router: Publish G cap if symmetric natted
+ * Tunnels: Validate peer RI expiration in TunnelPeerSelector
+
 2024-05-09 dr|z3d
  * Console: Update graphs and handle graph manipulation using AJAX
+
+2024-05-06 2.5.1+ (API 0.9.62) released
 
 2024-05-06 dr|z3d
  * Console: Display graphs as SVGs using jfreesvg library
