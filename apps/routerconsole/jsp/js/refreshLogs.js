@@ -1,3 +1,7 @@
+/* I2P+ refreshLogs.js by dr|z3d */
+/* Refreshes Router Console /logs and enables refresh period configuration */
+/* License: AGPL3 or later */
+
 import {onVisible, onHidden} from "/js/onVisible.js";
 
 function start() {
@@ -57,6 +61,7 @@ function start() {
           if (routerlogsResponse.innerHTML !== routerlogs.innerHTML) {
             routerlogs.innerHTML = routerlogsResponse.innerHTML;
           }
+          linkifyRouterIds();
         }
       }
       if (servicelogs) {
@@ -108,7 +113,28 @@ function start() {
     });
   }
 
+  function linkifyRouterIds() {
+    const liElements = routerlogs.querySelectorAll("li");
+
+    liElements.forEach((li) => {
+      const text = li.textContent;
+      const matches = text.match(/\[([a-zA-Z0-9\~\-]{6})\]/g);
+
+      if (matches) {
+        matches.forEach((match) => {
+          const linkText = match.substring(1, match.length - 1); // remove the square brackets
+          const linkHref = `/netdb?r=${linkText}`;
+          const link = document.createElement("a");
+          link.href = linkHref;
+          link.textContent = linkText;
+          li.innerHTML = li.innerHTML.replace(new RegExp(`\\[${linkText}\\]`, "g"), link.outerHTML);
+        });
+      }
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function() {
+    linkifyRouterIds();
     onVisible(mainLogs, initRefresh);
     onHidden(mainLogs, stopRefresh);
     updateInterval();
