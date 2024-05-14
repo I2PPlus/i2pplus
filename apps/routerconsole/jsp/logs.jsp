@@ -91,7 +91,7 @@
 <%
     }
 %>
-<h3 class=tabletitle><%=intl._t("Router Logs")%>
+<h3 class=tabletitle id=routerlogs_h3><%=intl._t("Router Logs")%>
 <%
     last = logsHelper.getLastMessageNumber();
     if (last >= 0) {
@@ -103,14 +103,9 @@
 &nbsp;<a class=configure title="<%=intl._t("Configure router logging options")%>" href="configlogging">[<%=intl._t("Configure")%>]</a>
 &nbsp;<a id=eventlogLink title="<%=intl._t("View event log")%>" href="/events?from=604800">[<%=intl._t("Events")%>]</a>
 &nbsp;<span id=toggleRefresh></span>
+&nbsp;<span id=refreshPeriod></span>
 </h3>
-<table id=routerlogs class=logtable>
-<tbody>
-<tr><td>
- <jsp:getProperty name="logsHelper" property="logs" />
-</td></tr>
-</tbody>
-</table>
+<table id=routerlogs class=logtable><tbody><tr><td><jsp:getProperty name="logsHelper" property="logs" /></td></tr></tbody></table>
 <h3 class=tabletitle id=servicelogs><%=intl._t("Service (Wrapper) Logs")%>
 <%
     StringBuilder buf = new StringBuilder(24*1024);
@@ -126,109 +121,10 @@
     }
 %>
 </h3>
-<table id=wrapperlogs class=logtable>
-<tbody>
-<tr><td>
-<%
-    out.append(buf);
-%>
-</td></tr>
-</tbody>
-</table>
+<table id=wrapperlogs class=logtable><tbody><tr><td><% out.append(buf);%></td></tr></tbody></table>
 </div>
-<script nonce=<%=cspNonce%> type=module>
-  import {onVisible} from "/js/onVisible.js";
-  const mainLogs = document.getElementById("logs");
-  const criticallogs = document.getElementById("criticallogs");
-  const critLogsHead = document.getElementById("critLogsHead");
-  const noCritLogs = document.querySelector("#criticallogs .nologs");
-  const routerlogs = document.getElementById("routerlogs");
-  const servicelogs = document.getElementById("wrapperlogs");
-  const visible = document.visibilityState;
-  const xhrlogs = new XMLHttpRequest();
-  let refreshId;
-  progressx.hide();
-
-  function initRefresh() {
-    const toggleRefresh = document.getElementById("toggleRefresh");
-    stopRefresh();
-    refreshId = setInterval(refreshLogs, 30000);
-    if (!toggleRefresh.classList.contains("enabled")) {
-      toggleRefresh.classList.add("enabled");
-    }
-  }
-
-  function stopRefresh() {
-    if (refreshId) {clearInterval(refreshId);}
-  }
-
-  function refreshLogs() {
-    xhrlogs.open('GET', '/logs', true);
-    xhrlogs.responseType = "document";
-    xhrlogs.onload = function () {
-      const mainLogsResponse = xhrlogs.responseXML.getElementById("logs");
-      progressx.show(theme);
-      progressx.progress(0.3);
-
-      if (!xhrlogs.responseXML) {return;}
-
-      if (criticallogs) {
-        const criticallogsResponse = xhrlogs.responseXML.getElementById("criticallogs");
-        if (mainLogsResponse && criticallogsResponse && !criticallogs) {
-          mainLogs.innerHTML = mainLogsResponse.innerHTML;
-        } else if (criticallogsResponse && criticallogs !== criticallogsResponse && !noCritLogs) {
-          criticallogs.innerHTML = criticallogsResponse.innerHTML;
-        } else if (noCritLogs) {
-          critLogsHead.remove();
-          criticallogs.remove();
-        }
-      }
-      if (routerlogs) {
-        const routerlogsResponse = xhrlogs.responseXML.getElementById("routerlogs");
-        if (routerlogsResponse) {
-          if (!routerlogs) {
-            mainLogs.innerHTML = mainLogsResponse.innerHTML;
-          } else if (routerlogs !== routerlogsResponse) {
-            routerlogs.innerHTML = routerlogsResponse.innerHTML;
-          }
-        }
-      }
-      if (servicelogs) {
-        const servicelogsResponse = xhrlogs.responseXML.getElementById("wrapperlogs");
-        if (servicelogsResponse) {
-          if (servicelogs !== servicelogsResponse) {
-            servicelogs.innerHTML = servicelogsResponse.innerHTML;
-          }
-        } else {
-          mainLogs.innerHTML = mainLogsResponse.innerHTML;
-        }
-      }
-      progressx.hide();
-    }
-    xhrlogs.send();
-  }
-
-  document.addEventListener("DOMContentLoaded", function() {
-    const toggleRefresh = document.getElementById("toggleRefresh");
-    initRefresh();
-
-    document.addEventListener("click", function(event) {
-      if (event.target === toggleRefresh) {
-        var isRefreshOn = toggleRefresh.classList.contains("enabled");
-        if (isRefreshOn) {
-          toggleRefresh.classList.remove("enabled");
-          toggleRefresh.classList.add("disabled");
-          stopRefresh();
-        } else {
-          toggleRefresh.classList.remove("disabled");
-          toggleRefresh.classList.add("enabled");
-          refreshLogs();
-          initRefresh();
-        }
-      }
-    });
-  });
-</script>
+<script nonce=<%=cspNonce%> type=module src=/js/refreshElements.js></script>
+<script nonce=<%=cspNonce%> type=module src=/themes/js/refreshLogs.js></script>
 <noscript><style>#toggleRefresh{display:none}</style></noscript>
 </body>
 </html>
