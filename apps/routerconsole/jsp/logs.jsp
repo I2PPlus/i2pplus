@@ -123,8 +123,7 @@
 </h3>
 <table id=wrapperlogs class=logtable><tbody><tr><td><% out.append(buf);%></td></tr></tbody></table>
 </div>
-<script nonce=<%=cspNonce%> type=module src=/js/refreshElements.js></script>
-<script nonce=<%=cspNonce%> type=module src=/themes/js/refreshLogs.js></script>
+<script nonce=<%=cspNonce%> type=module src=/js/refreshLogs.js></script>
 <noscript><style>#toggleRefresh{display:none}</style></noscript>
 </body>
 </html>
