@@ -1,3 +1,7 @@
+2024-05-14 dr|z3d
+ * Console: Add refresh interval feature (js) to /logs to permit manually
+   configuring the interval, with persistence via local storage
+
 2024-05-12 dr|z3d
  * Console:
    - Add Unknown country to NetDb summary for non-GeoIP resolved peers
