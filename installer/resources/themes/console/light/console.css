@@ -679,6 +679,9 @@ table[id$="logs"] ul li:last-child{margin-bottom:10px}
 #bugreports td{box-shadow:none}
 #enviro,table[id$="logs"]{font-size:9pt;padding:10px}
 
+#logs li a:not(:hover){color:inherit}
+#logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;background:var(--client) no-repeat center center/16px;content:""}
+
 .main[id^="config_"] th{font-size:9.5pt}
 .main[id^="config_"] .th_title,#configstats th,#config_family th{font-size:11pt}
 .main[id^="config_"] th:first-child{padding-left:10px}

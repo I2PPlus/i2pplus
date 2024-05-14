@@ -1363,6 +1363,9 @@ font[color="#cc0000"]{color:#f00}
 font[color="#000099"]{color:var(--ink)}
 #logs li font[color="#000099"]::before,.log_info{background:var(--ink)}
 
+#logs li a:not(:hover){color:inherit}
+#logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;background:var(--client) no-repeat center center/16px;content:""}
+
 /* profiles */
 a[href^="configpeer?peer"]::after{vertical-align:middle;margin:1px 2px 1px 4px;line-height:0;background:var(--edit) no-repeat center center;background-size:16px;height:20px;width:18px;display:inline-block;content:""}
 a[href^="configpeer?peer"]{font-size:0;filter:drop-shadow(0 0 1px #777)}

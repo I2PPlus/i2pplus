@@ -2378,6 +2378,9 @@ font[color="#006600"]{color:#346}
 font[color="#000099"]{color:#363}
 #logs li font[color="#000099"]::before{background:#363}
 
+#logs li a:not(:hover){color:inherit}
+#logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;background:var(--client) no-repeat center center/16px;content:""}
+
 /* h1 */
 h1::first-letter{margin-right:1px;font-size:110%}
 h1{background:var(--h1_network) no-repeat 10px center,var(--h1)}
