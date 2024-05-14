@@ -404,7 +404,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 // shouldn't happen unless unsupported encryption
                 if (_log.shouldWarn())
 //                    _log.warn("Received Lease but can't send to it, failure code " + rc + " (to=" + _toString + ")");
-                    _log.warn("Received Lease " + _toString + " but can't send to it -> Unsupported encryption");
+                    _log.warn("Received Lease for Router " + _toString + " but can't send to it -> Unsupported encryption");
                 dieFatal(rc);
             }
         }
@@ -430,7 +430,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             if (_leaseSet == null) {
                 // shouldn't happen
                 if (_log.shouldWarn())
-                    _log.warn("LeaseSet for " + _toString + " not found via local lookup");
+                    _log.warn("LeaseSet for Router " + _toString + " not found via local lookup");
                 return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
             } else if (_leaseSet.getReceivedAsPublished()) {
                 if (_log.shouldWarn())
