@@ -1,5 +1,9 @@
+2024-05-15 2.5.2+ (API 0.9.62) released
+
 2024-05-15 dr|z3d
- * Console: Add realtime js logging filter for routerlogs on /logs
+ * Console:
+   - Add realtime js logging filter for router logs on /logs
+   - Linkify ip addresses in router logs on /logs
 
 2024-05-14 zzz
  * I2PTunnel: Fix keepalive bug causing truncation of chunked content
