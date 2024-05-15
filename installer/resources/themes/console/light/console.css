@@ -652,6 +652,15 @@ table[id$="logs"] ul li:last-child{margin-bottom:10px}
 #toggleRefresh.disabled{background:var(--start) no-repeat center center/16px}
 #toggleRefresh.disabled:hover{background:var(--start_hover) no-repeat center center/16px}
 
+#refreshPeriod,#logFilter{width:auto;display:none;float:right;transform:scale(80%)}
+#refreshPeriod{margin:-10px 0}
+#routerlogs tr:first-child:hover #refreshPeriod,#refreshPeriod:focus-within{margin:-26px -14px -4px 0;display:block!important}
+#logFilter{margin:-5px -7px -6px 0;display:block}
+#logFilterInput{margin:-1px -2px -1px 0;padding-left:30px;width:160px;min-width:0;background:#fff var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
+#logRefreshInterval{margin:1px 1px -1px 0;padding-left:28px;width:50px;border:0;background:#fff var(--refresh) no-repeat 6px center/16px}
+#logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:auto}
+#logRefreshInterval:focus{background-blend-mode:normal}
+
 /* critical */
 #logs li font[color="#cc0000"]::before{background:#c00}
 #logs li font[color="#cc0000"]{color:#c00}

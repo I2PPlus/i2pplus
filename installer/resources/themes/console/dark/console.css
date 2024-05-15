@@ -2342,7 +2342,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #routerlogs li::after,#criticallogs li::after{display:none}
 #routerlogs li:hover font[color="#cc0000"],#criticallogs li:hover [color="#cc0000"]{filter:saturate(120%)}
 #routerlogs li:hover font,#criticallogs li:hover font{filter:saturate(200%)}
-#routerlogs td p,#wrapperlogs td p{margin:0}
+#routerlogs td p,#wrapperlogs td p{margin:0;width:fit-content}
 #routerlogs ul,#criticallogs ul{margin:-4px 0;border:0}
 #servicelogs{color:var(--ink)}
 #service_logs{margin:0;padding:4px 6px;width:calc(100% - 12px);max-height:600px;white-space:pre-wrap;resize:none;font-weight:500;color:#8f935c;background:url(images/tank.webp) no-repeat right 12px bottom 12px/14% auto}
@@ -2353,9 +2353,14 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #toggleRefresh:hover{background:var(--pause_hover) no-repeat center center/14px;cursor:pointer}
 #toggleRefresh.disabled{background:var(--start) no-repeat center center/14px}
 #toggleRefresh.disabled:hover{background:var(--start_hover) no-repeat center center/14px}
-#refreshPeriod{margin:-6px 0;width:auto;;display:none;float:right;transform: scale(80%)}
-#routerlogs_h3:hover #refreshPeriod{display:block!important}
-#refreshPeriod input{margin:0 -3px;width:48px}
+#refreshPeriod,#logFilter{width:auto;display:none;float:right;transform:scale(80%)}
+#refreshPeriod{margin:-10px 0}
+#routerlogs tr:first-child:hover #refreshPeriod,#refreshPeriod:focus-within{margin:-26px -14px -4px 0;display:block!important}
+#logFilter{margin:-6px -10px -6px 0;display:block}
+#logFilterInput{margin:-1px -2px -1px 0;padding-left:30px;width:160px;min-width:0;background:#000 var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
+#logRefreshInterval{margin:-1px -2px -1px 0;padding-left:28px;width:50px;background:#000 var(--refresh) no-repeat 6px center/16px}
+#logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:auto}
+#logRefreshInterval:focus{background:var(--refresh) no-repeat 6px center / 16px,var(--input_txt);background-blend-mode:normal}
 
 #logs font[color^="#"]::before{margin-left:0;margin-right:5px;content:"";display:inline-block;width:6px;height:6px;vertical-align:calc(1px);color:#777;border-radius:50%;filter:saturate(1);animation:linear ping .1s}
 /* critical */
@@ -2379,7 +2384,7 @@ font[color="#000099"]{color:#363}
 #logs li font[color="#000099"]::before{background:#363}
 
 #logs li a:not(:hover){color:inherit}
-#logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;background:var(--client) no-repeat center center/16px;content:""}
+#logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;background:var(--client) no-repeat center center/16px;content:"";mix-blend-mode:luminosity}
 
 /* h1 */
 h1::first-letter{margin-right:1px;font-size:110%}

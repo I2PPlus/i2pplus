@@ -10,11 +10,17 @@ function start() {
   const critLogsHead = document.getElementById("critLogsHead");
   const noCritLogs = document.querySelector("#criticallogs .nologs");
   const routerlogs = document.getElementById("routerlogs");
+  const routerlogsFileInfo = document.querySelector("#routerlogs tr:first-child td p");
+  const routerlogsList = document.querySelector("#routerlogs td ul");
   const servicelogs = document.getElementById("wrapperlogs");
+  const refreshSpan = document.getElementById("refreshPeriod");
+  const refreshInput = document.getElementById("logRefreshInterval");
+  const refreshValue = localStorage.getItem("logsRefresh") || "30";
   const toggleRefresh = document.getElementById("toggleRefresh");
   const visible = document.visibilityState;
   const xhrlogs = new XMLHttpRequest();
-  let refreshId;
+  let logsRefreshId;
+  let intervalValue;
 
   function initRefresh() {
     if (!mainLogs || !routerlogs) {
@@ -22,17 +28,22 @@ function start() {
       return;
     }
     stopRefresh();
-    refreshId = setInterval(refreshLogs, 5000);
+    logsRefreshId = setInterval(refreshLogs, refreshValue*1000);
     if (!toggleRefresh.classList.contains("enabled")) {
       toggleRefresh.classList.add("enabled");
     }
   }
 
   function stopRefresh() {
-    if (refreshId) {clearInterval(refreshId);}
+    if (logsRefreshId) {clearInterval(logsRefreshId);}
   }
 
   function refreshLogs() {
+    const storedFilterValue = localStorage.getItem("logFilter");
+    const filterInput = document.getElementById("logFilterInput");
+    let filterValue = filterInput.value.toLowerCase();
+    if (storedFilterValue) {filterValue = storedFilterValue;}
+
     xhrlogs.open("GET", "/logs", true);
     xhrlogs.responseType = "document";
     xhrlogs.onload = function () {
@@ -55,14 +66,18 @@ function start() {
           criticallogs.remove();
         }
       }
-      if (routerlogs) {
-        const routerlogsResponse = xhrlogs.responseXML.getElementById("routerlogs");
-        if (routerlogs && routerlogsResponse) {
-          if (routerlogsResponse.innerHTML !== routerlogs.innerHTML) {
-            routerlogs.innerHTML = routerlogsResponse.innerHTML;
+      if (routerlogsList) {
+        const routerlogsListResponse = xhrlogs.responseXML.querySelector("#routerlogs td ul");
+        const routerlogsFileInfoResponse = xhrlogs.responseXML.querySelector("#routerlogs tr:first-child td p");
+        if (routerlogsListResponse) {
+          if (routerlogsList.innerHTML !== routerlogsListResponse.innerHTML) {
+            routerlogsList.innerHTML = routerlogsListResponse.innerHTML;
           }
-          linkifyRouterIds();
+          if (routerlogsFileInfo.innerHTML !== routerlogsFileInfoResponse.innerHTML) {
+            routerlogsFileInfo.innerHTML = routerlogsFileInfoResponse.innerHTML;
+          }
         }
+        linkifyRouterIds();
       }
       if (servicelogs) {
         const servicelogsResponse = xhrlogs.responseXML.getElementById("wrapperlogs");
@@ -72,49 +87,54 @@ function start() {
           }
         }
       }
+      const liElements = routerlogsList.querySelectorAll("li");
+      liElements.forEach((li) => {
+        const text = li.textContent;
+        if (text.toLowerCase().indexOf(filterValue) !== -1) {li.style.display = "block";}
+        else {li.style.display = "none";}
+      });
       progressx.hide();
-    }
+    };
     xhrlogs.send();
+    updateInterval();
+    addFilterInput();
   }
 
   function updateInterval() {
-    const refreshSpan = document.getElementById("refreshPeriod");
-    const intervalInput = document.createElement("input");
-    refreshSpan.style.display = "none";
-    intervalInput.type = "number";
-    intervalInput.placeholder = "Override interval (in seconds)";
-    intervalInput.min = 0;
-    intervalInput.max = 3600;
+    refreshInput.title = "Refresh interval (seconds)";
+    refreshInput.min = 0;
+    refreshInput.max = 3600;
+    intervalValue = localStorage.getItem("logsRefresh") || "30"; // default value in seconds
+    refreshInput.value = intervalValue;
 
-    refreshSpan.appendChild(intervalInput);
-
-    intervalInput.value = localStorage.getItem("refreshInterval") || "30"; // default value in seconds
-
-    intervalInput.addEventListener("input", () => {
-      const intervalValue = parseInt(intervalInput.value);
-      if (!isNaN(intervalValue)) {
-        if (intervalValue === 0) {
-          clearInterval(refreshId);
-          localStorage.setItem("refreshInterval", "0");
-          if (toggleRefresh.classList.contains("enabled")) {
-            toggleRefresh.classList.remove("enabled");
-            toggleRefresh.classList.add("disabled");
-          }
-        } else {
-          clearInterval(refreshId);
-          refreshId = setInterval(refreshLogs, intervalValue * 1000); // convert seconds to milliseconds
-          localStorage.setItem("refreshInterval", intervalValue.toString());
-          if (toggleRefresh.classList.contains("disabled")) {
-            toggleRefresh.classList.remove("disabled");
-            toggleRefresh.classList.add("enabled");
+    if (!refreshSpan.classList.contains("listening")) {
+      refreshInput.addEventListener("input", () => {
+        refreshSpan.classList.add("listening");
+        intervalValue = refreshInput.value; // update intervalValue with input value
+        if (!Number.isNaN(intervalValue)) {
+          if (intervalValue === 0) {
+            clearInterval(logsRefreshId);
+            localStorage.setItem("logsRefresh", "0");
+            if (toggleRefresh.classList.contains("enabled")) {
+              toggleRefresh.classList.remove("enabled");
+              toggleRefresh.classList.add("disabled");
+            }
+          } else {
+            clearInterval(logsRefreshId);
+            logsRefreshId = setInterval(refreshLogs, intervalValue * 1000);
+            localStorage.setItem("logsRefresh", intervalValue);
+            if (toggleRefresh.classList.contains("disabled")) {
+              toggleRefresh.classList.remove("disabled");
+              toggleRefresh.classList.add("enabled");
+            }
           }
         }
-      }
-    });
+      });
+    }
   }
 
   function linkifyRouterIds() {
-    const liElements = routerlogs.querySelectorAll("li");
+    const liElements = routerlogsList.querySelectorAll("li");
 
     liElements.forEach((li) => {
       const text = li.textContent;
@@ -133,15 +153,41 @@ function start() {
     });
   }
 
+  function addFilterInput() {
+    const filterSpan = document.getElementById("logFilter");
+    const filterInput = document.getElementById("logFilterInput");
+
+    if (!filterSpan.classList.contains("listening")) {
+      filterInput.addEventListener("input", () => {
+        const filterValue = filterInput.value.toLowerCase();
+        const liElements = routerlogsList.querySelectorAll("li");
+        filterSpan.classList.add("listening");
+
+        liElements.forEach((li) => {
+          const text = li.textContent;
+          if (text.toLowerCase().indexOf(filterValue) !== -1) {
+            li.style.display = "block";
+          } else {
+            li.style.display = "none";
+          }
+        });
+      });
+    }
+    // Store the filter value in local storage
+    const storedFilterValue = localStorage.getItem("logFilter");
+    if (storedFilterValue) {filterInput.value = storedFilterValue;}
+  }
+
   document.addEventListener("DOMContentLoaded", function() {
     linkifyRouterIds();
     onVisible(mainLogs, initRefresh);
     onHidden(mainLogs, stopRefresh);
     updateInterval();
+    addFilterInput();
 
     document.addEventListener("click", function(event) {
       if (event.target === toggleRefresh) {
-        var isRefreshOn = toggleRefresh.classList.contains("enabled");
+        let isRefreshOn = toggleRefresh.classList.contains("enabled");
         if (isRefreshOn) {
           toggleRefresh.classList.remove("enabled");
           toggleRefresh.classList.add("disabled");
@@ -149,6 +195,10 @@ function start() {
         } else {
           toggleRefresh.classList.remove("disabled");
           toggleRefresh.classList.add("enabled");
+          if (intervalValue === 0) {
+            intervalValue = 30;
+            localStorage.setItem("logsRefresh", "30");
+          }
           refreshLogs();
           initRefresh();
         }

@@ -85,7 +85,9 @@ public class LogsHelper extends HelperBase {
         String str = formatMessages(_context.logManager().getBuffer().getMostRecentMessages());
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
         return "<p>" + _t("File location") + ": <a href=\"/router.log\" target=_blank>" +
-                DataHelper.escapeHTML(_context.logManager().currentFile()) + "</a></p>" + str;
+                DataHelper.escapeHTML(_context.logManager().currentFile()) + "</a></p>" +
+                "<span id=refreshPeriod style=display:none title=\"" + _t("Refresh interval (seconds)") +
+                "\"><input type=number id=logRefreshInterval></span>" + str;
     }
 
     /**

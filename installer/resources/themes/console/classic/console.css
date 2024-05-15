@@ -1528,6 +1528,15 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 #toggleRefresh.disabled{background:var(--start) no-repeat center center/16px}
 #toggleRefresh:hover{cursor:pointer}
 
+#refreshPeriod,#logFilter{width:auto;display:none;float:right;transform:scale(80%)}
+#refreshPeriod{margin:-22px -12px -10px}
+#routerlogs tr:first-child:hover #refreshPeriod,#refreshPeriod:focus-within{margin:-26px -14px -4px 0;display:block!important}
+#logFilter{margin:-6px -7px -6px 0;display:block}
+#logFilterInput{margin:2px -5px -1px 0;padding-left:30px;width:160px;min-width:0;background:#fff var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
+#logRefreshInterval{margin:5px 3px -1px 0;padding:4px 4px 4px 28px;width:50px;border:0;background:#fff var(--refresh) no-repeat 8px center/16px}
+#logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:auto}
+#logRefreshInterval:focus{background-blend-mode:normal}
+
 /* debug */
 .debug_container{margin-top:-14px;padding:10px 15px;border:var(--border)}
 .debug_container,#debug td{line-height:1.4}

@@ -1343,6 +1343,15 @@ table[id$="logs"] ul{margin:1px 17px -6px -12px}
 #toggleRefresh.disabled{background:url(/themes/console/images/update.svg) no-repeat center center/18px}
 #toggleRefresh:hover{cursor:pointer}
 
+#refreshPeriod,#logFilter{width:auto;display:none;float:right;transform:scale(80%)}
+#refreshPeriod{margin:-10px 0}
+#routerlogs tr:first-child:hover #refreshPeriod,#refreshPeriod:focus-within{margin:-26px -14px -4px 0;display:block!important}
+#logFilter{margin:-6px -8px -6px 0;display:block}
+#logFilterInput{margin:-1px -2px -1px 0;padding-left:30px;width:160px;min-width:0;background:#000 var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
+#logRefreshInterval{margin:-2px 7px -1px 0;padding-left:28px;width:80px;appearance:textfield;background:#000 var(--refresh) no-repeat 6px center/16px}
+#logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:auto}
+#logRefreshInterval:focus{background:var(--refresh) no-repeat 6px center / 16px,var(--text_focus);background-blend-mode:normal}
+
 /* Override error log colors */
 .log_omitted{font-weight:700}
 #logs font[color^="#"]::before{margin-left:0;margin-right:5px;width:6px;height:6px;display:inline-block;vertical-align:calc(1px);border-radius:50%;background:#fff;content:""}

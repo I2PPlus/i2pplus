@@ -81,13 +81,7 @@
 %>
 &nbsp;<a id=clearCritical class=delete title="<%=intl._t("Clear logs")%>" href="logs?crit=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
 </h3>
-<table id=criticallogs class=logtable>
-<tbody>
-<tr><td>
- <jsp:getProperty name="logsHelper" property="criticalLogs" />
-</td></tr>
-</tbody>
-</table>
+<table id=criticallogs class=logtable><tbody><tr><td><jsp:getProperty name="logsHelper" property="criticalLogs" /></td></tr></tbody></table>
 <%
     }
 %>
@@ -103,7 +97,7 @@
 &nbsp;<a class=configure title="<%=intl._t("Configure router logging options")%>" href="configlogging">[<%=intl._t("Configure")%>]</a>
 &nbsp;<a id=eventlogLink title="<%=intl._t("View event log")%>" href="/events?from=604800">[<%=intl._t("Events")%>]</a>
 &nbsp;<span id=toggleRefresh></span>
-&nbsp;<span id=refreshPeriod></span>
+&nbsp;<span id=logFilter title="<%=intl._t("Filter Router log output")%>"><input type=text id=logFilterInput></span>
 </h3>
 <table id=routerlogs class=logtable><tbody><tr><td><jsp:getProperty name="logsHelper" property="logs" /></td></tr></tbody></table>
 <h3 class=tabletitle id=servicelogs><%=intl._t("Service (Wrapper) Logs")%>
@@ -124,6 +118,6 @@
 <table id=wrapperlogs class=logtable><tbody><tr><td><% out.append(buf);%></td></tr></tbody></table>
 </div>
 <script nonce=<%=cspNonce%> type=module src=/js/refreshLogs.js></script>
-<noscript><style>#toggleRefresh{display:none}</style></noscript>
+<noscript><style>#toggleRefresh,#refreshPeriod,#logFilter{display:none!important}</style></noscript>
 </body>
 </html>
