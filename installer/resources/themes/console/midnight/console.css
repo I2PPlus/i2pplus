@@ -1373,7 +1373,10 @@ font[color="#000099"]{color:var(--ink)}
 #logs li font[color="#000099"]::before,.log_info{background:var(--ink)}
 
 #logs li a:not(:hover){color:inherit}
-#logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;background:var(--client) no-repeat center center/16px;content:""}
+#logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;content:""}
+#logs li a[href^="/netdb?r="]::before{background:var(--client) no-repeat center center/16px}
+#logs li a[href^="/netdb?ip"]::before{width:14px;background:url(/themes/console/images/globe.svg) no-repeat center center/14px}
+#logs li a[href^="/netdb?port"]::before{background:url(/themes/console/images/reseed.svg) no-repeat center center/16px}
 
 /* profiles */
 a[href^="configpeer?peer"]::after{vertical-align:middle;margin:1px 2px 1px 4px;line-height:0;background:var(--edit) no-repeat center center;background-size:16px;height:20px;width:18px;display:inline-block;content:""}

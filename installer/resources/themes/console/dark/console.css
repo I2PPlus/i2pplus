@@ -2359,8 +2359,8 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logFilter{margin:-6px -10px -6px 0;display:block}
 #logFilterInput{margin:-1px -2px -1px 0;padding-left:30px;width:160px;min-width:0;background:#000 var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
 #logRefreshInterval{margin:-1px -2px -1px 0;padding-left:28px;width:50px;background:#000 var(--refresh) no-repeat 6px center/16px}
-#logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:auto}
-#logRefreshInterval:focus{background:var(--refresh) no-repeat 6px center / 16px,var(--input_txt);background-blend-mode:normal}
+#logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:#225;background-blend-mode:normal}
+#logRefreshInterval:focus{background:var(--refresh) no-repeat 6px center / 16px,var(--input_txt)}
 
 #logs font[color^="#"]::before{margin-left:0;margin-right:5px;content:"";display:inline-block;width:6px;height:6px;vertical-align:calc(1px);color:#777;border-radius:50%;filter:saturate(1);animation:linear ping .1s}
 /* critical */
@@ -2384,7 +2384,10 @@ font[color="#000099"]{color:#363}
 #logs li font[color="#000099"]::before{background:#363}
 
 #logs li a:not(:hover){color:inherit}
-#logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;background:var(--client) no-repeat center center/16px;content:"";mix-blend-mode:luminosity}
+#logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;content:"";mix-blend-mode:luminosity}
+#logs li a[href^="/netdb?r="]::before{background:var(--client) no-repeat center center/16px}
+#logs li a[href^="/netdb?ip"]::before{width:14px;background:url(/themes/console/images/globe.svg) no-repeat center center/14px}
+#logs li a[href^="/netdb?port"]::before{background:url(/themes/console/images/reseed.svg) no-repeat center center/16px}
 
 /* h1 */
 h1::first-letter{margin-right:1px;font-size:110%}
