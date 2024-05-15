@@ -1,6 +1,7 @@
 /* I2P+ refreshLogs.js by dr|z3d */
 /* Refreshes Router Console /logs, enables refresh period configuration */
-/* and implements a realtime router logs filter */
+/* implements a realtime router logs filter, and linkifies routerid hashes */
+/* and ip addresses */
 /* License: AGPL3 or later */
 
 import {onVisible, onHidden} from "/js/onVisible.js";
@@ -48,6 +49,7 @@ function start() {
     xhrlogs.open("GET", "/logs", true);
     xhrlogs.responseType = "document";
     xhrlogs.onload = function () {
+      if (!xhrlogs.responseXML) {return;}
       const mainLogsResponse = xhrlogs.responseXML.getElementById("logs");
       progressx.show(theme);
       progressx.progress(0.3);
@@ -79,6 +81,8 @@ function start() {
           }
         }
         linkifyRouterIds();
+        linkifyIPv4();
+        linkifyIPv6();
       }
       if (servicelogs) {
         const servicelogsResponse = xhrlogs.responseXML.getElementById("wrapperlogs");
@@ -154,6 +158,50 @@ function start() {
     });
   }
 
+  function linkifyIPv4() {
+    const liElements = routerlogsList.querySelectorAll("li");
+
+    liElements.forEach((li) => {
+      const text = li.textContent;
+      const ipv4Regex = /\b(?:\/?)(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/g;
+      const matches = text.match(ipv4Regex);
+
+      if (matches) {
+        matches.forEach((match) => {
+          var linkText = match;
+          linkText = match.replace(/^\/+/, ""); // Remove leading slash
+          const linkHref = `/netdb?ip=${linkText}`;
+          const link = document.createElement("a");
+          link.href = linkHref;
+          link.textContent = linkText;
+          li.innerHTML = li.innerHTML.replace(new RegExp(`\\b${linkText}\\b`, "g"), link.outerHTML);
+        });
+      }
+    });
+  }
+
+  function linkifyIPv6() {
+    const liElements = routerlogsList.querySelectorAll("li");
+
+    liElements.forEach((li) => {
+      const text = li.textContent;
+      const ipv6Regex = /\b(?:\/?)(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b/g;
+      const matches = text.match(ipv6Regex);
+
+      if (matches) {
+        matches.forEach((match) => {
+          var linkText = match;
+          linkText = match.replace(/^\/+/, ""); // Remove leading slash
+          const linkHref = `/netdb?ipv6=${linkText}`;
+          const link = document.createElement("a");
+          link.href = linkHref;
+          link.textContent = linkText;
+          li.innerHTML = li.innerHTML.replace(new RegExp(`\\b${linkText}\\b`, "g"), link.outerHTML);
+        });
+      }
+    });
+  }
+
   function addFilterInput() {
     const filterSpan = document.getElementById("logFilter");
     const filterInput = document.getElementById("logFilterInput");
@@ -181,6 +229,8 @@ function start() {
 
   document.addEventListener("DOMContentLoaded", function() {
     linkifyRouterIds();
+    linkifyIPv4();
+    linkifyIPv6();
     onVisible(mainLogs, initRefresh);
     onHidden(mainLogs, stopRefresh);
     updateInterval();
