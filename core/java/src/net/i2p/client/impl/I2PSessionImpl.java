@@ -760,9 +760,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                     _reader = new I2CPMessageReader(in, this);
                 }
             }
-            if (_log.shouldDebug()) _log.debug(getPrefix() + "before startReading");
-            _reader.startReading();
-            if (_log.shouldDebug()) _log.debug(getPrefix() + "Before getDate");
+            if (_log.shouldDebug()) {_log.debug(getPrefix() + "before startReading");}
+            if (_reader != null) {_reader.startReading();}
+            if (_log.shouldDebug()) {_log.debug(getPrefix() + "Before getDate");}
             Properties auth = null;
             if ((!_context.isRouterContext()) && _options.containsKey(I2PClient.PROP_USER) && _options.containsKey(I2PClient.PROP_PW)) {
                 // Only supported by routers 0.9.11 or higher, but we don't know the version yet.
