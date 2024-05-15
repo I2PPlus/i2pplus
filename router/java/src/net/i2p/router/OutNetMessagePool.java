@@ -71,7 +71,7 @@ public class OutNetMessagePool {
         }
         if (msg.getExpiration() <= _context.clock().now()) {
             if (_log.shouldWarn())
-                _log.warn("Dropping expired outbound message" + msg, new Exception());
+                _log.warn("Dropping expired Outbound message" + msg, new Exception());
             return false;
         }
         return true;

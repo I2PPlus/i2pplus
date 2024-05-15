@@ -224,7 +224,7 @@ abstract class BuildRequestor {
         }
         if (pairedTunnel == null) {
             if (log.shouldWarn())
-                log.warn("Tunnel build failed -> Can't find a paired tunnel " + cfg);
+                log.warn("Tunnel build failed -> Can't find a paired tunnel for " + cfg);
             exec.buildComplete(cfg, OTHER_FAILURE);
             // Not even an exploratory tunnel? We are in big trouble.
             // Let's not spin through here too fast.
