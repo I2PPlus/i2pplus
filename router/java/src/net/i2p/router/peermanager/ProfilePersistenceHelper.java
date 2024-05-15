@@ -94,9 +94,7 @@ class ProfilePersistenceHelper {
      * write out the data from the profile to the stream
      * includes comments
      */
-    public void writeProfile(PeerProfile profile, OutputStream out) throws IOException {
-        writeProfile(profile, out, true);
-    }
+    public void writeProfile(PeerProfile profile, OutputStream out) throws IOException {writeProfile(profile, out, true);}
 
     /**
      * write out the data from the profile to the stream

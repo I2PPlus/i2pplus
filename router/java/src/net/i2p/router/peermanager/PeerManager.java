@@ -61,8 +61,7 @@ class PeerManager {
     /** After first two hours of uptime ~= 246 */
     static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / REORGANIZE_TIME_LONG);
     //static final int REORGANIZES_PER_DAY = 4;
-//    private static final long STORE_TIME = 2*60*60*1000;
-    private static final long STORE_TIME = 30*60*1000;
+    private static final long STORE_TIME = 2*60*60*1000;
     // for profiles stored to disk
 //    private static final long EXPIRE_AGE = 3*60*60*1000;
     private static final long EXPIRE_AGE = 7*24*60*60*1000;
@@ -132,7 +131,8 @@ class PeerManager {
         public void run() {
             long start = System.currentTimeMillis();
             long uptime = _context.router().getUptime();
-            boolean shouldDecay = uptime > 90*60*1000;
+//            boolean shouldDecay = uptime > 90*60*1000;
+            boolean shouldDecay = uptime > 4*60*60*1000;
             try {
                 _organizer.reorganize(true, shouldDecay);
             } catch (Throwable t) {
@@ -319,33 +319,27 @@ class PeerManager {
      *  @param caps non-null, case is ignored
      */
     public void setCapabilities(Hash peer, String caps) {
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Capabilities for [" + peer.toBase64().substring(0,6) + "] set to " + caps.replace("XO", "X").replace("PO", "P"));
-        caps = caps.toLowerCase(Locale.US);
-
-        String oldCaps = _capabilitiesByPeer.put(peer, caps);
-        if (caps.equals(oldCaps)) {
-            return;
         }
+
+        caps = caps.toLowerCase(Locale.US);
+        String oldCaps = _capabilitiesByPeer.put(peer, caps);
+        if (caps.equals(oldCaps)) {return;}
         if (oldCaps != null) {
             for (int i = 0; i < oldCaps.length(); i++) {
                 char c = oldCaps.charAt(i);
                 if (caps.indexOf(c) < 0) {
                     Set<Hash> peers = locked_getPeers(c);
-                    if (peers != null)
-                        peers.remove(peer);
+                    if (peers != null) {peers.remove(peer);}
                 }
             }
         }
         for (int i = 0; i < caps.length(); i++) {
             char c = caps.charAt(i);
-            if ((oldCaps != null) && (oldCaps.indexOf(c) >= 0)) {
-                continue;
-            }
+            if ((oldCaps != null) && (oldCaps.indexOf(c) >= 0)) {continue;}
             Set<Hash> peers = locked_getPeers(c);
-            if (peers != null) {
-                peers.add(peer);
-            }
+            if (peers != null) {peers.add(peer);}
         }
     }
 
@@ -356,18 +350,13 @@ class PeerManager {
     }
 
     public void removeCapabilities(Hash peer) {
-        if (_log.shouldDebug()) {
-            _log.debug("Removing capabilities from [" + peer.toBase64().substring(0,6) + "]");
-        }
-
+        if (_log.shouldDebug()) {_log.debug("Removing capabilities from [" + peer.toBase64().substring(0,6) + "]");}
         String oldCaps = _capabilitiesByPeer.remove(peer);
         if (oldCaps != null) {
             for (int i = 0; i < oldCaps.length(); i++) {
                 char c = oldCaps.charAt(i);
                 Set<Hash> peers = locked_getPeers(c);
-                if (peers != null) {
-                    peers.remove(peer);
-                }
+                if (peers != null) {peers.remove(peer);}
             }
         }
     }
@@ -392,8 +381,7 @@ class PeerManager {
      */
     public Set<Hash> getPeersByCapability(char capability) {
         Set<Hash> peers = locked_getPeers(capability);
-        if (peers != null)
-            return Collections.unmodifiableSet(peers);
+        if (peers != null) {return Collections.unmodifiableSet(peers);}
         return Collections.emptySet();
     }
 
@@ -404,8 +392,7 @@ class PeerManager {
      */
     public int countPeersByCapability(char capability) {
         Set<Hash> peers = locked_getPeers(capability);
-        if (peers != null)
-            return peers.size();
+        if (peers != null) {return peers.size();}
         return 0;
     }
 }

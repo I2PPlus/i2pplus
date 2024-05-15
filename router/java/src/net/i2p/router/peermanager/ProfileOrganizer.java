@@ -101,7 +101,7 @@ public class ProfileOrganizer {
     public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 300;
     private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 400;
 
-    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+    private static final long[] RATES = { 60*1000l, 5*60*1000l, 10*60*1000l, 30*60*1000l, 60*60*1000l, 24*60*60*1000 };
 
     /** synchronized against this lock when updating the tier that peers are located in (and when fetching them from a peer) */
     private final ReentrantReadWriteLock _reorganizeLock = new ReentrantReadWriteLock(false);
