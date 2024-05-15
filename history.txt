@@ -1,3 +1,6 @@
+2024-05-15 dr|z3d
+ * Console: Add realtime js logging filter for routerlogs on /logs
+
 2024-05-14 dr|z3d
  * Console: Add refresh interval feature (js) to /logs to permit manually
    configuring the interval, with persistence via local storage
