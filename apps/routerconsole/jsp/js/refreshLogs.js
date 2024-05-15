@@ -1,5 +1,6 @@
 /* I2P+ refreshLogs.js by dr|z3d */
-/* Refreshes Router Console /logs and enables refresh period configuration */
+/* Refreshes Router Console /logs, enables refresh period configuration */
+/* and implements a realtime router logs filter */
 /* License: AGPL3 or later */
 
 import {onVisible, onHidden} from "/js/onVisible.js";
