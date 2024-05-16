@@ -2072,14 +2072,19 @@ class EstablishmentManager {
             if (port != fromPort) {
                 // if port mismatch only, use the source port as charlie doesn't know
                 // his port or is behind a symmetric NAT
-                if (_log.shouldWarn())
-                    _log.warn("[SSU2] HolePunch source mismatch on " + state +
+/**
+                if (_log.shouldInfo()) {
+                    _log.warn("[SSU2] HolePunch source mismatch from " + id + " on " + state +
                               "\n* Response block: " + Addresses.toString(ip, port) +
-                              "; Received from: " + id);
+                              "\n* Received from: " + id);
+                }
+**/
+                if (_log.shouldWarn()) {
+                    _log.warn("[SSU2] HolePunch source mismatch (wrong port) from " + id + " -> Published port: " + port);
+                }
                 if (!TransportUtil.isValidPort(fromPort)) {
                     _context.statManager().addRateData("udp.relayBadIP", 1);
-                    _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(),
-                                                     " <b>➜</b> Bad Introduction data", null, null,
+                    _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), " <b>➜</b> Bad Introduction data", null, null,
                                                      _context.clock().now() + 6*60*60*1000);
                     state.fail();
                     return;
@@ -2655,14 +2660,14 @@ class EstablishmentManager {
                 // reuse for the case where we're retransmitting terminations
                 // and it expires no sooner than 2 minutes earlier
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Resending inbound " + old + " for " + peer);
+                    _log.debug("[SSU2] Resending Inbound " + old + " for " + peer);
                 // put it back
                 _inboundTokens.put(peer, old);
                 return old;
             }
         }
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Added Inbound " + tok + " for [" + peer + "]");
+            _log.debug("[SSU2] Added Inbound " + tok + " for " + peer);
         return tok;
     }
 
@@ -2686,7 +2691,7 @@ class EstablishmentManager {
         }
         boolean rv = tok.getExpiration() >= _context.clock().now();
         if (rv && _log.shouldDebug())
-            _log.debug("[SSU2] Using Inbound " + tok + " for [" + peer + "]");
+            _log.debug("[SSU2] Using Inbound " + tok + " for " + peer);
         return rv;
     }
 

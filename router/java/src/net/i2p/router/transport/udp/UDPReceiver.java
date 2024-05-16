@@ -169,7 +169,7 @@ class UDPReceiver {
                         // SSU1 had 0 byte hole punch, SSU2 does not
                         if (_log.shouldWarn()) {
                             String ipAddress = dpacket.getAddress().toString().replace("/", "");
-                            _log.warn("Dropping short " + size + " byte UDP packet from [" + ipAddress + ":" + dpacket.getPort() + "]");
+                            _log.warn("Dropping short " + size + " byte UDP packet from " + ipAddress + ":" + dpacket.getPort());
                         }
                         packet.release();
                     }

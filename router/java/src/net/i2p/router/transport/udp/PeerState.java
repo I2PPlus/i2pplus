@@ -1591,14 +1591,17 @@ public class PeerState {
                     msg.timestamp("Expired in the active pool");
                     _transport.failed(state);
                     if (_log.shouldInfo())
-                        _log.info("Message expired " + state + "\n* Target: " + this);
+                        _log.info("Message expired " + state + this);
                     if (!_isInbound && state.getSeqNum() == 0)
                         totalFail = true; // see below
                 } else {
                     // it can not have an OutNetMessage if the source is the
                     // final after establishment message
-                    if (_log.shouldWarn())
-                        _log.warn("Unable to send direct message " + state + "\n* Target: " + this);
+                    if (_log.shouldInfo()) {
+                        _log.warn("Unable to send direct message " + state + this);
+                    } else if (_log.shouldWarn()) {
+                        _log.warn("Unable to send direct message " + this);
+                    }
                 }
             }
             if (failedSize > 0) {
@@ -1608,7 +1611,7 @@ public class PeerState {
                     // Session Confirmed, we will fail quickly (because we don't have
                     // a separate timer for retransmitting it)
                     if (_log.shouldWarn())
-                        _log.warn("First message failed on " + this);
+                        _log.warn("First Outbound message failed " + this);
                     _transport.sendDestroy(this, SSU2Util.REASON_FRAME_TIMEOUT);
                     _transport.dropPeer(this, true, "OB First Message Fail");
                     return 0;

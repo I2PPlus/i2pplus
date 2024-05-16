@@ -153,9 +153,7 @@ public class Router implements RouterClock.ClockShiftListener {
     private static final int SHUTDOWN_WAIT_SECS = 60;
 
     private static final String PROP_ADVANCED = "routerconsole.advanced";
-    public boolean isAdvanced() {
-        return getContext().getBooleanProperty(PROP_ADVANCED);
-    }
+    public boolean isAdvanced() {return getContext().getBooleanProperty(PROP_ADVANCED);}
 
     private static final String originalTimeZoneID;
     static {
@@ -1689,7 +1687,7 @@ public class Router implements RouterClock.ClockShiftListener {
 
         try {
             _context.elGamalEngine().shutdown();
-        } catch (Throwable t) { _log.log(Log.CRIT, "[elGamal engine] " + t.getMessage()); }
+        } catch (Throwable t) { _log.log(Log.CRIT, "[ElGamal engine] " + t.getMessage()); }
 
         if (contexts.isEmpty()) {
             // any thing else to shut down?
