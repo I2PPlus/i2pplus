@@ -225,7 +225,7 @@ abstract class EstablishBase implements EstablishState {
                 return;
             changeState(State.CORRUPT);
         }
-        if (_log.shouldWarn() && reason != "")
+        if (_log.shouldWarn() && !reason.equals(""))
 //            _log.warn(prefix() + "Failed to establish: " + reason, e);
             _log.warn(prefix() + "\n* Failed to establish: " + reason);
         if (!bySkew)

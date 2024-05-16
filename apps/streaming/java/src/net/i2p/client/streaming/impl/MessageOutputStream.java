@@ -186,9 +186,9 @@ class MessageOutputStream extends OutputStream {
                     if (_log.shouldWarn())
                         _log.warn("Write not accepted of " + ws);
                     if (_writeTimeout > 0)
-                        throw new InterruptedIOException("Write not accepted within timeout: " + ws);
+                        throw new InterruptedIOException("Write not accepted within timeout" + (!ws.toString().equals("") ? ": " + ws : ""));
                     else
-                        throw new IOException("Write not accepted into the queue: " + ws);
+                        throw new IOException("Write not accepted into the queue" + (!ws.toString().equals("") ? ": " + ws : ""));
                 } else {
                     if (_log.shouldInfo())
                         _log.info("After waitForAccept of " + ws);

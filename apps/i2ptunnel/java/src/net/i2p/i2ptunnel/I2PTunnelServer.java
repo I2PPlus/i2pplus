@@ -792,7 +792,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     protected void blockingHandle(I2PSocket socket) {
         if (_log.shouldInfo())
-            _log.info("Incoming connection to " + toString() + " (port " + socket.getLocalPort() + ")" +
+            _log.info("Incoming connection to " + toString().replace("/", "") + " (port " + socket.getLocalPort() + ")" +
                       "\n* From: " + socket.getPeerDestination().calculateHash() + " port " + socket.getPort());
         long afterAccept = getTunnel().getContext().clock().now();
         long afterSocket = -1;
@@ -861,9 +861,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         if (incomingPort != 0 && !_socketMap.isEmpty()) {
             InetSocketAddress isa = _socketMap.get(Integer.valueOf(incomingPort));
             if (isa != null)
-                return isa.toString();
+                return isa.toString().replace("/", "");
         }
-        return remoteHost.toString() + ':' + remotePort;
+        return remoteHost.toString().replace("/", "") + ':' + remotePort;
     }
 
     /**
