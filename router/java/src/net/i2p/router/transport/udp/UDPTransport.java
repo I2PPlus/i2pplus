@@ -1420,7 +1420,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                                          + ourPort
                                          + "\n* Check NAT/firewall configuration, the IANA recommended dynamic outside port range is 49152-65535");
             }
-            //_context.banlist().banlistRouter(from, "They said we had an invalid IP", STYLE);
+            _context.banlist().banlistRouter(from, "Reported our IP address or port as invalid", STYLE);
             return;
         }
 
