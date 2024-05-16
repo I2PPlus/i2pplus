@@ -106,7 +106,6 @@ function start() {
   }
 
   function updateInterval() {
-    refreshInput.title = "Refresh interval (seconds)";
     refreshInput.min = 0;
     refreshInput.max = 3600;
     intervalValue = localStorage.getItem("logsRefresh") || "30"; // default value in seconds
@@ -169,7 +168,7 @@ function start() {
       if (matches) {
         matches.forEach((match) => {
           var linkText = match;
-          linkText = match.replace(/^\/+/, ""); // Remove leading slash
+          linkText = linkText.replace(/^\/+/, ""); // Remove leading slash
           const linkHref = `/netdb?ip=${linkText}`;
           const link = document.createElement("a");
           link.href = linkHref;
@@ -191,7 +190,7 @@ function start() {
       if (matches) {
         matches.forEach((match) => {
           var linkText = match;
-          linkText = match.replace(/^\/+/, ""); // Remove leading slash
+          linkText = linkText.replace(/^\/+/, ""); // Remove leading slash
           const linkHref = `/netdb?ipv6=${linkText}`;
           const link = document.createElement("a");
           link.href = linkHref;
