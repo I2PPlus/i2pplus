@@ -759,10 +759,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                     InputStream in = new BufferedInputStream(_socket.getInputStream(), BUF_SIZE);
                     _reader = new I2CPMessageReader(in, this);
                 }
+                if (_log.shouldDebug()) _log.debug(getPrefix() + "Before startReading");
+                _reader.startReading();
             }
-            if (_log.shouldDebug()) {_log.debug(getPrefix() + "before startReading");}
-            if (_reader != null) {_reader.startReading();}
-            if (_log.shouldDebug()) {_log.debug(getPrefix() + "Before getDate");}
+            if (_log.shouldDebug()) _log.debug(getPrefix() + "Before getDate");
             Properties auth = null;
             if ((!_context.isRouterContext()) && _options.containsKey(I2PClient.PROP_USER) && _options.containsKey(I2PClient.PROP_PW)) {
                 // Only supported by routers 0.9.11 or higher, but we don't know the version yet.
@@ -781,9 +781,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             // wait until we have created a lease set
             int waitcount = 0;
             while (_leaseSet == null) {
-//                if (waitcount++ > 5*60) {
                 if (waitcount++ > 20*60) {
-//                    throw new IOException("No tunnels built after waiting 5 minutes. Your network connection may be down, or there is severe network congestion.");
                     throw new IOException("No tunnels built after waiting 20 minutes. Your network connection may be down, or there is severe network congestion.");
                 }
                 synchronized (_leaseSetWait) {
