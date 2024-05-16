@@ -56,6 +56,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Set;
@@ -841,10 +842,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         int length = domainArray.length;
 
         if (length > 3 && (hostname.endsWith(".uk") ||
-                            hostname.endsWith(".au") || hostname.endsWith(".nz") ||
-                            hostname.contains(".co.") || hostname.contains(".ne.") ||
-                            hostname.contains(".com.") || hostname.contains(".net.") ||
-                            hostname.contains(".org.") || hostname.contains(".gov."))) {
+                           hostname.endsWith(".au") || hostname.endsWith(".nz") ||
+                           hostname.contains(".co.") || hostname.contains(".ne.") ||
+                           hostname.contains(".com.") || hostname.contains(".net.") ||
+                           hostname.contains(".org.") || hostname.contains(".gov."))) {
             return domainArray[length - 3] + "." +
                    domainArray[length - 2] + "." +
                    domainArray[length - 1];
@@ -899,8 +900,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public boolean isInStrictCountry(RouterInfo ri) {
         byte[] ip = getIP(ri);
-        if (ip == null)
-            return false;
+        if (ip == null) {return false;}
         String c = _geoIP.get(ip);
         return c != null && StrictCountries.contains(c);
     }
@@ -917,36 +917,75 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @return two-letter lower-case country code or null
      */
 
+    private static final int MAX_COUNTRY_CACHE_SIZE = 20000;
+    private static final Random random = new Random();
+    private long lastLookupTime = 0;
+    private long lastUnknownPurge = 0;
+    private LinkedHashMap<Hash, String> countryCache = new LinkedHashMap<Hash, String>(MAX_COUNTRY_CACHE_SIZE, 0.75f, true) {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<Hash, String> eldest) {return size() > MAX_COUNTRY_CACHE_SIZE;}
+    };
+
+    /**
+     *  Uses the transport IP first because that lookup is fast,
+     *  then the IP from the netDb.
+     *  Not recommended for our local router hash, as we may not be either in the cache or netdb,
+     *  or may not be publishing an IP.
+     *
+     *  As of 0.9.32, works only for literal IPs, returns null for hostnames.
+     *
+     *  @param peer not ourselves - use getOurCountry() for that
+     *  @return two-letter lower-case country code or xx for non-banned peers, or null otherwise
+     */
     @Override
     public String getCountry(Hash peer) {
-        byte[] ip = TransportImpl.getIP(peer);
-        if (ip != null) {
-            String country = _geoIP.get(ip);
-            return country;
-        } else {
-            if (_log.shouldDebug()) {
-                _log.debug("Cannot identify country for [" + peer.toBase64().substring(0,6) + "] -> IP address not found");
-            }
+        String cachedCountry = countryCache.get(peer);
+        long now = System.currentTimeMillis();
+        long uptime = _context.router().getUptime();
+        if (cachedCountry != null && !cachedCountry.equals("xx")) {return cachedCountry;}
+        else if (cachedCountry != null && cachedCountry.equals("xx") && now - lastUnknownPurge > 5*1000) {
+          countryCache.remove(peer);
+          lastUnknownPurge = System.currentTimeMillis();
         }
-        RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-        //RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer); // this causes a catastrophic fail
-        if (ri == null) {
-            if (_log.shouldDebug()) {
-                _log.debug("No RouterInfo for [" + peer.toBase64().substring(0,6) + "]");
-            }
-            return null;
-        }
-        ip = getValidIP(ri);
-        if (ip != null) {
-            try {
-                String country = _geoIP.get(ip);
-                if (_log.shouldDebug() && country == null) {
-                    _log.debug("Country not found for IP address: " + InetAddress.getByAddress(ip).getHostAddress());
+        if (!_context.banlist().isBanlisted(peer)) {
+            byte[] ip = TransportImpl.getIP(peer);
+            if (ip == null) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Cannot identify country for Router [" + peer.toBase64().substring(0, 6) + "] -> IP address not found");
                 }
-                return country;
-            } catch (UnknownHostException e) {}
-        }
-        return null;
+                return "xx";
+            }
+            String country = _geoIP.get(ip);
+            if (country == null && _log.shouldDebug()) {
+                try {
+                    String hostAddress = InetAddress.getByAddress(ip).getHostAddress();
+                    if (_log.shouldDebug()) {_log.debug("Country not found for IP address: " + hostAddress);}
+                } catch (UnknownHostException e) {
+                    if (_log.shouldDebug()) {_log.debug("Unknown host while attempting to resolve address: " + e.getMessage());}
+                }
+                return "xx";
+            }
+            countryCache.put(peer, country);
+            if (countryCache.size() > MAX_COUNTRY_CACHE_SIZE) {
+                Hash eldestKey = countryCache.keySet().iterator().next();
+                countryCache.remove(eldestKey);
+            }
+/**
+            if (random.nextInt(3) <= 1 && now - lastLookupTime > 5*1000 && uptime > 15*60*1000) {
+                RouterInfo ri = (RouterInfo) _context.netDb().lookupRouterInfoLocally(peer);
+                if (_log.shouldInfo()) {
+                    _log.info("Performing lookup of Router [" + peer.toBase64().substring(0,6) + "] with validation");
+                }
+            } else {
+                RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+                if (_log.shouldInfo()) {
+                    _log.info("Performing lookup of Router [" + peer.toBase64().substring(0,6) + "] without validation");
+                }
+            }
+**/
+            lastLookupTime = System.currentTimeMillis();
+            return country;
+        } else {return null;}
     }
 
     /**
@@ -960,8 +999,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static byte[] getIP(RouterInfo ri) {
         for (RouterAddress ra : ri.getAddresses()) {
             byte[] rv = ra.getIP();
-            if (rv != null)
-                return rv;
+            if (rv != null) {return rv;}
         }
         return null;
     }
