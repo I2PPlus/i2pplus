@@ -519,7 +519,7 @@ class UDPPacketReader {
                         off += bf.getByteLength();
                     }
                 } catch (DataFormatException dfe) {
-                    buf.append(" (CORRUPT)");
+                    buf.append(" (CORRUPT) ");
                     return buf.toString();
                 }
             }

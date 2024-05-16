@@ -723,9 +723,10 @@ class EventPumper implements Runnable {
                             byte[] ip = addr.getAddress();
                             String ba = Addresses.toString(ip).replace("/", "");
                             count = _blockedIPs.increment(ba);
-                            if (_log.shouldWarn())
+                            if (_log.shouldWarn()) {
                                 _log.warn("EOF on Inbound connection before receiving any data " +
-                                          "\n* Blocking IP address: " + ba + " (Count: " + count + ") -> " + con);
+                                          "\n* Blocking IP address: " + ba + " (Count: " + count + ")");
+                            }
                         } else {
                             count = 1;
                             if (_log.shouldWarn())

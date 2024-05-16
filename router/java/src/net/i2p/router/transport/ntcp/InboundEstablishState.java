@@ -876,7 +876,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             case 20: return "Incompatible Version";
             case 21: return "BAD Netid";
             case 22: return "Replaced connection";
-            default: return "Unknown";
+            default: return "Unknown error";
         }
     }
 

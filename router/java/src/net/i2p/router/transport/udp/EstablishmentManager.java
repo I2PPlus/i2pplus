@@ -60,6 +60,7 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
+
 /**
  * Coordinate the establishment of new sessions - both inbound and outbound.
  * This has its own thread to add packets to the packet queue when necessary,
@@ -175,9 +176,9 @@ class EstablishmentManager {
     private static final int IB_BAN_TIME = 15*60*1000;
 
     // SSU 2
-    private static final int MIN_TOKENS = 128;
 //    private static final int MAX_TOKENS = 2048;
-    private static final int MAX_TOKENS = 8192;
+    private static final int MIN_TOKENS = 128;
+    private static final int MAX_TOKENS = SystemVersion.isSlow() ? 4096 : 8192;
     public static final long IB_TOKEN_EXPIRATION = 60*60*1000L;
     private static final long MAX_SKEW = 2*60*1000;
     private static final String TOKEN_FILE = "ssu2tokens.txt";
@@ -305,7 +306,7 @@ class EstablishmentManager {
         RouterInfo toRouterInfo = msg.getTarget();
         RouterAddress ra = _transport.getTargetAddress(toRouterInfo);
         if (ra == null) {
-            _transport.failed(msg, "Remote peer has no address, cannot establish connection");
+            _transport.failed(msg, "Peer has no address, cannot establish connection");
             return;
         }
         RouterIdentity toIdentity = toRouterInfo.getIdentity();
@@ -324,7 +325,7 @@ class EstablishmentManager {
             if (_log.shouldWarn())
                 _log.warn("Not in our network: " + toRouterInfo, new Exception());
             _transport.markUnreachable(toHash);
-            _transport.failed(msg, "Remote peer is on the wrong network, cannot establish connection");
+            _transport.failed(msg, "Peer is on the wrong network, cannot establish connection");
             return;
         }
         UDPAddress addr = new UDPAddress(ra);
@@ -340,7 +341,7 @@ class EstablishmentManager {
 
             if ((!_transport.isValid(maybeTo.getIP())) ||
                 (Arrays.equals(maybeTo.getIP(), _transport.getExternalIP()) && !_transport.allowLocal())) {
-                _transport.failed(msg, "Remote peer's IP isn't valid");
+                _transport.failed(msg, "Peer's IP address isn't valid");
                 _transport.markUnreachable(toHash);
                 _context.statManager().addRateData("udp.establishBadIP", 1);
                 //_context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid SSU address", UDPTransport.STYLE);
@@ -878,7 +879,8 @@ class EstablishmentManager {
         long sendConnID = DataHelper.fromLong8(data, off + SRC_CONN_ID_OFFSET);
         if (rcvConnID == 0 || sendConnID == 0 || rcvConnID == sendConnID) {return;}
         if (_log.shouldInfo()) {
-            _log.warn("[SSU2] Sending termination packet (Code: " + terminationCode + ") on type " + type + " to: " + to);
+            //_log.warn("[SSU2] Sending termination packet (Code: " + terminationCode + ") on type " + type + " to: " + to);
+            _log.warn("[SSU2] Sending termination packet (" + parseReason(terminationCode) + ") on type " + type + " to: " + to);
         }
         UDPPacket packet = _builder2.buildRetryPacket(to, pkt.getSocketAddress(), sendConnID, rcvConnID, terminationCode);
         _transport.send(packet);
@@ -1435,14 +1437,14 @@ class EstablishmentManager {
         switch (istate) {
             case IB_STATE_CREATED_SENT:
                 if (_log.shouldInfo())
-                    _log.info("[SSU2] RetransmitSessionCreated packet sent to: " + state);
+                    _log.info("[SSU2] ResendSessionCreated packet sent to: " + state);
                 // if already sent, get from the state to retx
                 pkt = state2.getRetransmitSessionCreatedPacket();
                 break;
 
               case IB_STATE_REQUEST_RECEIVED:
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Sending Created to: " + state);
+                    _log.debug("[SSU2] Sending SessionCreated to: " + state);
                 pkt = _builder2.buildSessionCreatedPacket(state2);
                 break;
 
@@ -1462,7 +1464,7 @@ class EstablishmentManager {
 
         if (pkt == null) {
             if (_log.shouldWarn())
-                _log.warn("[SSU2] Router " + state + " sent us an invalid IP?");
+                _log.warn("[SSU2] Router " + state + " appears to have sent us an invalid IP address");
             _inboundStates.remove(state.getRemoteHostId());
             state.fail();
             return;
@@ -1548,32 +1550,32 @@ class EstablishmentManager {
             state.setIntroNonce(nonce);
         }
 
-            // walk through the state machine for each SSU2 introducer
-            OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
-            // establish() above ensured there is at least one valid v2 introducer
-            // Look for a connected peer, if found, use the first one only.
-            UDPAddress addr = state.getRemoteAddress();
-            int count = addr.getIntroducerCount();
-            for (int i = 0; i < count; i++) {
-                Hash h = addr.getIntroducerHash(i);
-                if (h != null) {
-                    PeerState bob = null;
-                    OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
-                    switch (istate) {
-                        case INTRO_STATE_INIT:
-                        case INTRO_STATE_CONNECTING:
-                            bob = _transport.getPeerState(h);
-                            if (bob != null) {
-                                if (bob.getVersion() == 2) {
-                                    istate = INTRO_STATE_CONNECTED;
-                                    state2.setIntroState(h, istate);
-                                } else {
-                                    // TODO cross-version relaying, maybe
-                                    istate = INTRO_STATE_REJECTED;
-                                    state2.setIntroState(h, istate);
-                                }
+        // walk through the state machine for each SSU2 introducer
+        OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
+        // establish() above ensured there is at least one valid v2 introducer
+        // Look for a connected peer, if found, use the first one only.
+        UDPAddress addr = state.getRemoteAddress();
+        int count = addr.getIntroducerCount();
+        for (int i = 0; i < count; i++) {
+            Hash h = addr.getIntroducerHash(i);
+            if (h != null) {
+                PeerState bob = null;
+                OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
+                switch (istate) {
+                    case INTRO_STATE_INIT:
+                    case INTRO_STATE_CONNECTING:
+                        bob = _transport.getPeerState(h);
+                        if (bob != null) {
+                            if (bob.getVersion() == 2) {
+                                istate = INTRO_STATE_CONNECTED;
+                                state2.setIntroState(h, istate);
+                            } else {
+                                // TODO cross-version relaying, maybe
+                                istate = INTRO_STATE_REJECTED;
+                                state2.setIntroState(h, istate);
                             }
-                            break;
+                        }
+                        break;
 
                         case INTRO_STATE_CONNECTED:
                             bob = _transport.getPeerState(h);
@@ -1796,7 +1798,7 @@ class EstablishmentManager {
             if (!SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
                                      bobHash, null, data, spk)) {
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] Signature failed RelayResponse (Code: " + code + ") as Alice from:\n" + signerRI);
+                    _log.warn("[SSU2] Signature failed RelayResponse (" + parseReason(code) + ") as Alice from:\n" + signerRI);
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
                 charlie.fail();
@@ -1876,7 +1878,7 @@ class EstablishmentManager {
         } else if (code >= 64) {
             // that's it
             if (_log.shouldDebug())
-                _log.debug("[SSU2] Received RelayResponse rejection (Code: " + code + ") from Charlie " + charlie);
+                _log.debug("[SSU2] Received RelayResponse rejection (" + parseReason(code) + ") from Charlie " + charlie);
             charlie2.setIntroState(bobHash, istate);
             if (code == RELAY_REJECT_CHARLIE_BANNED)
                 _context.banlist().banlistRouter(charlieHash, " <b>➜</b> They banned us", null, null, _context.clock().now() + 6*60*60*1000);
@@ -1886,7 +1888,7 @@ class EstablishmentManager {
             // don't give up, maybe more bobs out there
             // TODO keep track
             if (_log.shouldDebug())
-                _log.debug("[SSU2] Received RelayResponse rejection (Code: " + code + ") from Bob " + bob);
+                _log.debug("[SSU2] Received RelayResponse rejection (" + parseReason(code) + ") from Bob " + bob);
             charlie2.setIntroState(bobHash, istate);
             notifyActivity();
         }
@@ -2717,7 +2719,7 @@ class EstablishmentManager {
         public long getWhenAdded() { return (added & 0xFFFFFFFFL) << 10; }
         /** @since 0.9.57 */
         public String toString() {
-            return "Token " + token + " added " + DataHelper.formatTime(getWhenAdded()) + " expires " + DataHelper.formatTime(getExpiration());
+            return "Token [" + token + "]\n* Added: " + DataHelper.formatTime(getWhenAdded()) + "\n* Expires: " + DataHelper.formatTime(getExpiration());
         }
     }
 
@@ -3151,4 +3153,34 @@ class EstablishmentManager {
             }
         }
     }
+
+    public static String parseReason(int reasonCode) {
+        switch (reasonCode) {
+            case 0: return "Unspecified";
+            case 1: return "Termination";
+            case 2: return "Timeout";
+            case 3: return "Shutdown";
+            case 4: return "AEAD error";
+            case 5: return "Options error";
+            case 6: return "Signature type error";
+            case 7: return "Excessive clock skew";
+            case 8: return "Padding error";
+            case 9: return "Framing error";
+            case 10: return "Payload error";
+            case 11: return "Message #1 error";
+            case 12: return "Message #2 error";
+            case 13: return "Message #3 error";
+            case 14: return "Frame Timeout";
+            case 15: return "Signature error";
+            case 16: return "S Mismatch";
+            case 17: return "Router is banned";
+            case 18: return "Token error";
+            case 19: return "Limit reached";
+            case 20: return "Incompatible Version";
+            case 21: return "BAD Netid";
+            case 22: return "Replaced connection";
+            default: return "Unknown error";
+        }
+    }
+
 }

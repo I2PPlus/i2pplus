@@ -985,7 +985,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_sessCrForReTX == null)
             return null;
         if (_log.shouldInfo())
-            _log.info("[SSU2] RETRANSMIT Session created on " + this);
+            _log.info("[SSU2] RETRANSMIT SessionCreated on " + this);
         UDPPacket packet = UDPPacket.acquire(_context, false);
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
