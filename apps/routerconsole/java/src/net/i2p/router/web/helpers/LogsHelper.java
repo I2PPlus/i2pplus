@@ -361,6 +361,8 @@ public class LogsHelper extends HelperBase {
             msg = msg.replace("\n\t* ", "\n\t&bullet; ");
             msg = msg.replace("\r\n\r\n", "");
             msg = msg.replace("<br>:", " ");
+            msg = msg.replace("<b>", "");
+            msg = msg.replace("</b>", "");
             msg = msg.replace("...", "&hellip;");
             // highlight log level indicators
             msg = msg.replace("| DEBUG", " <span class=\"log_debug\">DEBUG</span> ");
