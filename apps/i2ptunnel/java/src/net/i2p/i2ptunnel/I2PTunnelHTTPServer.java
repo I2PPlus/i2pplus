@@ -310,9 +310,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         Properties opts = getTunnel().getClientOptions();
         String o = opts.getProperty(opt);
         if (o != null) {
-            try {
-                return Integer.parseInt(o);
-            } catch (NumberFormatException nfe) {}
+            try {return Integer.parseInt(o);}
+            catch (NumberFormatException nfe) {}
         }
         return dflt;
     }
@@ -321,63 +320,39 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private final boolean shouldAddResponseHeaderAllow() {
         Properties opts = getTunnel().getClientOptions();
             boolean addAllowHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_ALLOW));
-        if (!addAllowHeader) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    /** @since 0.9.61+ */
-    private final boolean shouldAddResponseHeadercacheControl() {
-        Properties opts = getTunnel().getClientOptions();
-            boolean addCacheControlHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL));
-        if (!addCacheControlHeader) {
-            return false;
-        } else {
-            return true;
-        }
+        if (!addAllowHeader) {return false;}
+        else {return true;}
     }
 
     /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderCacheControl() {
         Properties opts = getTunnel().getClientOptions();
             boolean addCacheControlHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_CACHE_CONTROL));
-        if (!addCacheControlHeader) {
-            return false;
-        } else {
-            return true;
-        }
+        if (!addCacheControlHeader) {return false;}
+        else {return true;}
     }
 
     /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderReferrerPolicy() {
         Properties opts = getTunnel().getClientOptions();
             boolean addReferrerPolicyHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_REFERRER_POLICY));
-        if (!addReferrerPolicyHeader) {
-            return false;
-        } else {
-            return true;
-        }
+        if (!addReferrerPolicyHeader) {return false;}
+        else {return true;}
     }
 
     /** @since 0.9.61+ */
     private final boolean shouldAddResponseHeaderNoSniff() {
         Properties opts = getTunnel().getClientOptions();
             boolean addNoSniffPolicyHeader = Boolean.parseBoolean(opts.getProperty(OPT_ADD_RESPONSE_HEADER_NOSNIFF));
-        if (!addNoSniffPolicyHeader) {
-            return false;
-        } else {
-            return true;
-        }
+        if (!addNoSniffPolicyHeader) {return false;}
+        else {return true;}
     }
 
     /** @since 0.9.9 */
     @Override
     public boolean close(boolean forced) {
         synchronized(this) {
-            if (_postThrottler != null)
-                _postThrottler.stop();
+            if (_postThrottler != null) {_postThrottler.stop();}
         }
         return super.close(forced);
     }
@@ -385,8 +360,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /** @since 0.9.9 */
     @Override
     public void optionsUpdated(I2PTunnel tunnel) {
-        if (getTunnel() != tunnel)
-            return;
+        if (getTunnel() != tunnel) {return;}
         setupPostThrottle();
         Properties props = tunnel.getClientOptions();
         // see TunnelController.setSessionOptions()
@@ -721,12 +695,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             boolean alt = (altEnc != null) && (altEnc.indexOf("x-i2p-gzip") >= 0);
             boolean useGZIP = alt || ( (enc != null) && (enc.indexOf("x-i2p-gzip") >= 0) );
             // Don't pass this on, outproxies should strip so I2P traffic isn't so obvious but they probably don't
-            if (alt)
-                headers.remove("X-Accept-Encoding");
+            if (alt) {headers.remove("X-Accept-Encoding");}
 
             String modifiedHeader = formatHeaders(headers, command);
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("[HTTPServer] Modified headers\n\t" + modifiedHeader);
+            } else if (_log.shouldInfo()) {
+                String compactHeaders = formatHeadersCompact(headers, command);
+                _log.info("[HTTPServer] Received request headers" + compactHeaders);
+            }
 
             boolean compress = allowGZIP && useGZIP;
             //boolean addHeaders = shouldAddResponseHeaders();
@@ -1170,7 +1147,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     s = new Sender(browserout, serverin, "Server -> Client uncompressed", _log);
                 }
                 if (_log.shouldInfo())
-                    _log.info("[HTTPServer] Running server-to-browser: compressed? " + _shouldCompress + " keepalive? " + _keepalive);
+                    _log.info("[HTTPServer] Running server-to-browser: Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive);
                 s.run(); // same thread
             } catch (SSLException she) {
                 _log.error("[HTTPServer] SSL error", she);
@@ -1247,7 +1224,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 try { _webserver.close(); } catch (IOException ioe) {}
                 if (!_keepalive) try { _browser.close(); } catch (IOException ioe) {}
                 if (_log.shouldInfo()) {
-                    _log.info("Finished server-to-browser: compressed? " + _shouldCompress + " keepalive? " + _keepalive);
+                    _log.info("Finished server-to-browser: Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive);
                 }
             }
         }
@@ -1421,11 +1398,30 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         buf.append(command.toString().trim()).append("\r\n");
         for (Map.Entry<String, List<String>> e : headers.entrySet()) {
             String name = e.getKey();
-            for(String val: e.getValue()) {
+            for (String val: e.getValue()) {
                 buf.append(name.trim()).append(": ").append(val.trim()).append("\r\n");
             }
         }
         buf.append("\r\n");
+        return buf.toString();
+    }
+
+    /**
+     *  @return the command followed by the header lines (compact version)
+     */
+    protected static String formatHeadersCompact(Map<String, List<String>> headers, StringBuilder command) {
+        StringBuilder buf = new StringBuilder(command.length() + headers.size() * 64);
+        buf.append(command.toString().trim()).append("\r\n");
+        for (Map.Entry<String, List<String>> e : headers.entrySet()) {
+            String name = e.getKey();
+            if (name.contains("DestHash") || name.contains("DestB64") ||
+                name.contains("Connection") || name.contains("Accept")) {
+                continue;
+            }
+            for (String val: e.getValue()) {
+                buf.append("\n* ").append(name.trim()).append(": ").append(val.trim());
+            }
+        }
         return buf.toString();
     }
 
