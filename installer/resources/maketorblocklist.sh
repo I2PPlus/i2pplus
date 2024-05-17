@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Downloads https://check.torproject.org/torbulkexitlist
 # using specified http proxy and then creates a consolidated,
@@ -7,15 +7,15 @@
 # Specify input, output, and proxy variables
 input_file="torbulkexitlist"
 output_file="blocklist_tor.txt"
-http_proxy="http://127.0.0.1:4444"
+http_proxy=${http_proxy:-"http://127.0.0.1:4444"}
 
-# Variables for comments
-url="# https://check.torproject.org/torbulkexitlist"
-today="# $(date '+%d %B %Y')"
+# Variables
+url="https://check.torproject.org/$input_file"
+today="$(date '+%d %B %Y')"
 
 # Check if curl is installed
 if [ -z "$(which curl)" ]; then
-  echo "> curl is not installed. Please install curl to use this script."
+  echo " > curl is not installed. Please install curl to use this script."
   exit 1
 fi
 
@@ -27,14 +27,14 @@ fi
 
 # Download the latest list from Tor Project
 echo " > Downloading the latest list from Tor Project via specified proxy $http_proxy..."
-curl -o $input_file -x $http_proxy https://check.torproject.org/torbulkexitlist 2>/dev/null
+curl -o $input_file -x $http_proxy $url 2>/dev/null
 if [ $? -ne 0 ]; then
-  echo " > Failed to download the latest list. Please check your proxy settings and try again."
+  echo " > Failed to download the latest list using proxy ${http_proxy}. Please check your proxy settings and try again."
   exit 1
 fi
 
 # Count the number of IPs in the file
-ips_count=$(wc -l < $input_file)
+ips_count=$(wc -l $input_file)
 echo " > Number of IPs in $input_file: $ips_count"
 echo " > Sorting IPs and consolidating ranges, please stand by..."
 
@@ -44,44 +44,39 @@ sorted_ips=$(cat $input_file | sort -V)
 # Initialize variables
 start_ip=""
 end_ip=""
-output=""
+
+cp $output_file ${output_file}.bak
+
+# Print URL and date to the output file
+echo "# $url" > $output_file
+echo "# $today" >> $output_file
 
 # Function to print the IP range
 print_range() {
   if [ "$start_ip" = "$end_ip" ]; then
-    output+="$start_ip\n"
+    echo "$start_ip" >> $output_file
   else
-    output+="$start_ip-$end_ip\n"
+    echo "${start_ip}-${end_ip}" >> $output_file
   fi
 }
 
 # Loop through the sorted IPs to find consecutive IPs
-IFS=$'\n'
 for ip in $sorted_ips; do
   if [ "$start_ip" = "" ]; then
     start_ip=$ip
-    end_ip=$ip
-  elif [ $(echo "$ip" | awk -F. '{ printf "%03d%03d%03d%03d", $1, $2, $3, $4}') -eq $(echo "$end_ip" | awk -F. '{ printf "%03d%03d%03d%03d", $1, $2, $3, $4 + 1}') ]; then
-    end_ip=$ip
-  else
+  elif [ "$ip" != $(echo -n "$end_ip" | awk -F. '{ printf "%d.%d.%d.%d", $1, $2, $3, $4 + 1}') ]; then
     print_range
     start_ip=$ip
-    end_ip=$ip
   fi
+  end_ip=$ip
 done
 
 # Print the last range
 print_range
 
-# Print URL and date to the output file
-output="$url\n$today\n$output"
-
-# Remove trailing newlines from the output
-output=$(echo -e "$output" | sed -e '$ { /^$/d }')
-
-# Output the consolidated IPs to file
-echo -e "$output" > $output_file
 echo " > Consolidated IPs saved to: $output_file"
+ips_count=$(wc -l $output_file)
+echo " > Consolidated IP ranges in $output_file: $(($ips_count - 2))"
 
 # Clean up: Remove downloaded input file
 rm $input_file
