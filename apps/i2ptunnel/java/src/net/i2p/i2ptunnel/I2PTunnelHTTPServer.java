@@ -1529,9 +1529,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 else if ("connection".equals(lcName))
                     name = "Connection";
                 else if (lcName.contains("-encoding") && !lcName.contains("accept")) {
-                    try {socket.close();}
-                    catch (IOException ioe) {}
-                    throw new BadRequestException("Invalid HTTP header: \"" + name + "\" -> Terminating connection...");
+                    if (socket != null) {
+                        try {socket.close();}
+                        catch (IOException ioe) {}
+                        throw new BadRequestException("Invalid HTTP header: \"" + name + "\" -> Terminating connection...");
+                    }
                 }
                 // For incoming, we remove certain headers to prevent spoofing.
                 // For outgoing, we remove certain headers to improve anonymity.
@@ -1594,119 +1596,134 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
+    /** @since 0.9.62+ */
+
     String HTTP_BLOCKLIST = "http_blocklist.txt";
     String HTTP_BLOCKLIST_CLIENTS = "http_blocklist_clients.txt";
+    private int HTTP_BLOCKLIST_CLIENT_LIMIT = 512;
+    private Pattern regexPattern;
+    private long blocklistLastModified;
+    private static List<String> clientBlockList;
+    private static long blocklistClientsLastModified;
+    private static int cachedClientBlockListSize = -1;
     File blocklistFile = new File(I2PAppContext.getGlobalContext().getConfigDir(), HTTP_BLOCKLIST);
     File blocklistClients = new File(I2PAppContext.getGlobalContext().getConfigDir(), HTTP_BLOCKLIST_CLIENTS);
 
-    /** @since 0.9.62+ */
-    private void processBlocklist(I2PSocket socket, StringBuilder command) throws BadRequestException {
-        if (!blocklistFile.exists()) {return;}
-
-        StringBuilder regexBuilder = new StringBuilder();
-        Pattern pattern = null;
-
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(blocklistFile)))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) {continue;}
-
-                // Extract the URL from the request string
-                String url = line;
-
-                // Create regex pattern for URL
-                StringBuilder regex = new StringBuilder();
-                regex.append("(?i)"); // Case-insensitive match
-                regex.append(Pattern.quote(url));
-
-                // Append regex pattern to builder
-                if (regexBuilder.length() > 0) {regexBuilder.append("|");}
-                regexBuilder.append(regex);
-            }
-
-            // Compile regex pattern once all entries have been processed
-            pattern = Pattern.compile(regexBuilder.toString());
-        } catch (IOException ioe) {
-            _log.error("[HTTPServer] Error reading blocklist file", ioe);
+    private void processBlocklist(I2PSocket socket, StringBuilder command) throws BadRequestException, IOException {
+        if (!blocklistFile.exists()) {
+            regexPattern = null;
             return;
         }
-
+        regexPattern = compileRegexPattern(blocklistFile);
+        long currentLastModified = blocklistFile.lastModified();
+        if (currentLastModified != blocklistLastModified || regexPattern == null) {
+            regexPattern = compileRegexPattern(blocklistFile);
+            blocklistLastModified = currentLastModified;
+        }
         // Check if the URL request matches any blocklist string
         String lcCommand = command.toString().toLowerCase(Locale.US);
-        Matcher matcher = pattern.matcher(lcCommand);
+        Matcher matcher = regexPattern.matcher(lcCommand);
         if (matcher.find()) {
             String matchedString = matcher.group(); // retrieve the matched string
             String peerB32 = socket.getPeerDestination().toBase32();
             logBlockedDestination(peerB32);
             try {
-                // we probably just want the client to hang, so don't send a reset packet
-                //try {socket.reset();} catch (IOException ioe) {}
-                try {socket.close();}
-                catch (IOException ioe) {_log.error("[HTTPServer] Error closing socket (" + ioe.getMessage() + ")");}
-                throw new BadRequestException(command.toString() + "-> Matches blocked URL \"" + matchedString + "\"");
-            } catch (BadRequestException bre) {
-                //if (_log.shouldWarn()) {
-                //    _log.warn("[HTTPServer] Blocked request: " + bre.getMessage() + " -> Matches \"" + matchedString + "\"");
-                //}
-                throw bre;
+                if (socket != null) {
+                    // we probably just want the client to hang, so don't send a reset packet
+                    //try {socket.reset();} catch (IOException ioe) {}
+                    try {socket.close();}
+                    catch (IOException ioe) {_log.error("[HTTPServer] Error closing socket (" + ioe.getMessage() + ")");}
+                    throw new BadRequestException(command.toString() + "-> Matches blocklist entry \"" + matchedString + "\"");
+                }
+            } catch (BadRequestException bre) {throw bre;}
+        }
+    }
+
+    private Pattern compileRegexPattern(File blocklistFile) throws IOException {
+        StringBuilder regexBuilder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(blocklistFile)))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) {continue;}
+                // Extract the URL from the request string
+                String url = line;
+                // Create regex pattern for URL
+                StringBuilder regex = new StringBuilder();
+                regex.append("(?i)"); // Case-insensitive match
+                regex.append(Pattern.quote(url));
+                // Append regex pattern to builder
+                if (regexBuilder.length() > 0) {regexBuilder.append("|");}
+                regexBuilder.append(regex);
             }
         }
+        // Compile regex pattern once all entries have been processed
+        return Pattern.compile(regexBuilder.toString());
     }
 
     private synchronized void logBlockedDestination(String destination) {
-        BufferedWriter writer = null;
-        try {
-            if (!existsInClientBlocklist(destination)) {
-                writer = new BufferedWriter(new FileWriter(blocklistClients, true));
+        long currentLastModified = blocklistClients.lastModified();
+        if (currentLastModified != blocklistClientsLastModified) {
+            if (clientBlockList == null) {clientBlockList = new ArrayList<>();}
+            else {clientBlockList.clear();}
+            try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    line = line.trim();
+                    if (!line.isEmpty()) {clientBlockList.add(line);}
+                }
+            } catch (IOException ioe) {
+                _log.error("[HTTPServer] Error logging blocked destination (" + ioe.getMessage() + ")");
+            }
+            blocklistClientsLastModified = currentLastModified;
+        }
+        if (!clientBlockList.contains(destination)) {
+            if (clientBlockList.size() >= HTTP_BLOCKLIST_CLIENT_LIMIT) {clientBlockList.remove(0);}
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(blocklistClients, true))) {
                 writer.write(destination);
                 writer.write(System.lineSeparator());
+            } catch (IOException ioe) {
+                _log.error("[HTTPServer] Error logging blocked destination (" + ioe.getMessage() + ")");
             }
-        } catch (IOException ioe) {
-            _log.error("[HTTPServer] Error logging blocked destination (" + ioe.getMessage() + ")");
-        } finally {
-            if (writer != null) {
-                try { writer.close(); } catch (IOException ioe) {}
-            }
+            clientBlockList.add(destination);
         }
     }
 
-    private int HTTP_BLOCKLIST_CLIENT_LIMIT = 4096;
-
     private boolean existsInClientBlocklist(String destination) throws IOException {
-        if (!blocklistClients.exists()) {Files.createFile(blocklistClients.toPath());}
-
-        int currentClientBlocks = countBlockedDests(blocklistClients);
-
-        if (currentClientBlocks > HTTP_BLOCKLIST_CLIENT_LIMIT) {
-            // remove the first line in the blocklistClients file
-            FileWriter writer = new FileWriter(blocklistClients);
-            BufferedReader reader = new BufferedReader(new FileReader(blocklistClients));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                writer.write(line);
-                writer.write(System.lineSeparator());
+        long currentLastModified = blocklistClients.lastModified();
+        if (currentLastModified != blocklistClientsLastModified) {
+            if (clientBlockList == null) {
+                clientBlockList = new ArrayList<>();
+            } else {clientBlockList.clear();}
+            try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    line = line.trim();
+                    if (!line.isEmpty()) {clientBlockList.add(line);}
+                }
+            } catch (IOException ioe) {
+                _log.error("[HTTPServer] Error reading client blocklist file (" + ioe.getMessage() + ")");
             }
-            reader.close();
-            writer.close();
+            blocklistClientsLastModified = currentLastModified;
         }
-        try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.equals(destination)) {return true;}
-            }
-        } catch (IOException ioe) {
-            _log.error("[HTTPServer] Error reading client blocklist file (" + ioe.getMessage() + ")");
-        }
-        return false;
+        return clientBlockList.contains(destination);
     }
 
     private int countBlockedDests(File blocklistClients) throws IOException {
-        int numLines = 0;
-        try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
-            while (reader.readLine() != null) {numLines++;}
+        long currentLastModified = blocklistClients.lastModified();
+        if (currentLastModified != blocklistClientsLastModified) {
+            synchronized (this) {
+                if (currentLastModified != blocklistClientsLastModified) {
+                    cachedClientBlockListSize = 0;
+                    try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
+                        String line;
+                        while ((line = reader.readLine()) != null) {cachedClientBlockListSize++;}
+                    }
+                    blocklistClientsLastModified = currentLastModified;
+                }
+            }
         }
-        return numLines;
+        return cachedClientBlockListSize;
     }
 
     /**
