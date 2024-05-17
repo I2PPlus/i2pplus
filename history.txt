@@ -1,3 +1,8 @@
+2024-05-17 dr|z3d
+ * I2PTunnel: URL based blocking for HTTP Server Tunnel -
+   enabled with a url blocklist at .i2p/http_blocklist.txt, one
+   entry per line
+
 2024-05-15 2.5.2+ (API 0.9.62) released
 
 2024-05-15 dr|z3d
