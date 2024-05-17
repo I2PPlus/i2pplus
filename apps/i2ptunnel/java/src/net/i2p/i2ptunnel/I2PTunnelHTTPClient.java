@@ -426,11 +426,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     s.setSoTimeout(BROWSER_KEEPALIVE_TIMEOUT);
                 } catch (IOException ioe) {
                     if (_log.shouldInfo())
-                        _log.info("Socket closed before request #" + requestCount);
+                        _log.info("Socket closed (timeout) before request #" + requestCount);
                     return;
                 }
-                if (_log.shouldInfo())
-                    _log.info("Keepalive, awaiting request #" + requestCount);
+                if (_log.shouldDebug())
+                    _log.debug("KeepAlive, awaiting request #" + requestCount);
             }
 
             String line, method = null, protocol = null, host = null, destination = null;
@@ -460,8 +460,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
                 if (method == null) {
                     // first line GET/POST/etc.
-                    if (_log.shouldInfo()) {
-                        _log.info(getPrefix(requestId) + "Request [#" + requestCount + "] \n* First line: " + line);
+                    if (_log.shouldDebug()) {
+                        _log.debug(getPrefix(requestId) + "Request [#" + requestCount + "] \n* First line: " + line);
                     }
 
                     String[] params = DataHelper.split(line, " ", 3);
@@ -583,7 +583,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         }
                     } catch(URISyntaxException use) {
                         if (_log.shouldWarn()) {
-                            _log.warn(getPrefix(requestId) + "Bad request [" + request + "]", use);
+                            _log.warn(getPrefix(requestId) + "BAD request [" + request + "]", use);
                         }
                         try {
                             out.write(getErrorPage("baduri", ERR_BAD_URI).getBytes("UTF-8"));
