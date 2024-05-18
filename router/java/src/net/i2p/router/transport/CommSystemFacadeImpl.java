@@ -965,10 +965,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 }
                 return "xx";
             }
+            Hash eldestKey = null;
             countryCache.put(peer, country);
             if (countryCache.size() > MAX_COUNTRY_CACHE_SIZE) {
-                Hash eldestKey = countryCache.keySet().iterator().next();
-                countryCache.remove(eldestKey);
+                eldestKey = countryCache.keySet().iterator().next();
+                if (eldestKey != null) {
+                    countryCache.remove(eldestKey);
+                }
             }
 /**
             if (random.nextInt(3) <= 1 && now - lastLookupTime > 5*1000 && uptime > 15*60*1000) {
