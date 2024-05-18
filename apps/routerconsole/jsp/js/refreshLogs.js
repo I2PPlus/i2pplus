@@ -138,6 +138,7 @@ function start() {
   }
 
   function linkifyRouterIds() {
+    if (!routerlogsList) {return;}
     const liElements = routerlogsList.querySelectorAll("li");
 
     liElements.forEach((li) => {
@@ -158,6 +159,7 @@ function start() {
   }
 
   function linkifyIPv4() {
+    if (!routerlogsList) {return;}
     const liElements = routerlogsList.querySelectorAll("li");
 
     liElements.forEach((li) => {
@@ -180,6 +182,7 @@ function start() {
   }
 
   function linkifyIPv6() {
+    if (!routerlogsList) {return;}
     const liElements = routerlogsList.querySelectorAll("li");
 
     liElements.forEach((li) => {
