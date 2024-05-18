@@ -60,7 +60,6 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
-
 /**
  * Coordinate the establishment of new sessions - both inbound and outbound.
  * This has its own thread to add packets to the packet queue when necessary,
@@ -1214,17 +1213,11 @@ class EstablishmentManager {
         RouterIdentity remote = state.getConfirmedIdentity();
         PeerState peer;
         int version = state.getVersion();
-        if (version == 1) {
-            peer = new PeerState(_context, _transport,
-                                 state.getSentIP(), state.getSentPort(), remote.calculateHash(), true, state.getRTT(),
-                                 state.getCipherKey(), state.getMACKey());
-            peer.setWeRelayToThemAs(state.getSentRelayTag());
-        } else {
+
             InboundEstablishState2 state2 = (InboundEstablishState2) state;
             peer = state2.getPeerState();
             // now handled in IES2.createPeerState()
             //peer.setWeRelayToThemAs(state.getSentRelayTag());
-        }
 
         if (version == 1) {
             // Lookup the peer's MTU from the netdb, since it isn't included in the protocol setup (yet)
@@ -1348,20 +1341,11 @@ class EstablishmentManager {
         if (claimed != null)
             _outboundByClaimedAddress.remove(claimed, state);
         _outboundByHash.remove(remote.calculateHash(), state);
-        int version = state.getVersion();
-        PeerState peer;
-        if (version == 1) {
-            peer = new PeerState(_context, _transport,
-                                 state.getSentIP(), state.getSentPort(), remote.calculateHash(), false, state.getRTT(),
-                                 state.getCipherKey(), state.getMACKey());
-            int mtu = state.getRemoteAddress().getMTU();
-            if (mtu > 0)
-                peer.setHisMTU(mtu);
-        } else {
+
             OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
             // OES2 sets PS2 MTU
-            peer = state2.getPeerState();
-        }
+            PeerState peer = state2.getPeerState();
+
         peer.setTheyRelayToUsAs(state.getReceivedRelayTag());
         // 0 is the default
         //peer.setWeRelayToThemAs(0);
@@ -1374,12 +1358,6 @@ class EstablishmentManager {
 
         _context.statManager().addRateData("udp.outboundEstablishTime", state.getLifetime(now));
         DatabaseStoreMessage dbsm = null;
-        if (version == 1) {
-            // version 2 sends our RI in handshake
-            if (!state.isFirstMessageOurDSM()) {
-                dbsm = getOurInfo();
-            }
-        }
 
         List<OutNetMessage> msgs = new ArrayList<OutNetMessage>(8);
         OutNetMessage msg;

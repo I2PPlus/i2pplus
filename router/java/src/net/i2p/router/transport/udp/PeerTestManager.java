@@ -138,7 +138,6 @@ class PeerTestManager {
     private final RouterContext _context;
     private final Log _log;
     private final UDPTransport _transport;
-    private final PacketBuilder _packetBuilder;
     private final PacketBuilder2 _packetBuilder2;
     /** map of Long(nonce) to PeerTestState for tests currently in progress (as Bob/Charlie) */
     private final Map<Long, PeerTestState> _activeTests;
@@ -197,7 +196,6 @@ class PeerTestManager {
         _log = context.logManager().getLog(PeerTestManager.class);
         _activeTests = new ConcurrentHashMap<Long, PeerTestState>();
         _recentTests = new LinkedBlockingQueue<Long>();
-        _packetBuilder = transport.getBuilder();
         _packetBuilder2 = transport.getBuilder2();
         _throttle = new IPThrottler(MAX_PER_IP, THROTTLE_CLEAN_TIME);
         _context.statManager().createRateStat("udp.statusKnownCharlie", "Bob we picked passes us to known Charlie (session already established) with", "Transport [UDP]", UDPTransport.RATES);
