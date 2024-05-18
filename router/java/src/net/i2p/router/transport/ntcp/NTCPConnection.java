@@ -1915,14 +1915,14 @@ public class NTCPConnection implements Closeable {
         String fromIP;
         if (_isInbound) {
             InetAddress addr = _chan.socket().getInetAddress();
-            fromIP = addr != null ? addr.getHostAddress() : "unknown";
+            fromIP = addr != null ? addr.getHostAddress() : "Unknown";
         } else {
             fromIP = null;
         }
         return (_isInbound ? ("From: " + fromIP + ":" + _chan.socket().getPort() + ' ')
                            : ("Target: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
                (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
-               (isEstablished() ? "" : " -> Not established") +
+               (isEstablished() ? "" : " -> Not established ") +
                (_log.shouldInfo() ? "\n* [NTCP" + _version + "] Connection [ID " + _connID + "]\n* " +
                "\n* Created: " + DataHelper.formatDuration(getTimeSinceCreated()) + " ago;" +
                " Last message sent: " + DataHelper.formatDuration(getTimeSinceSend()) + " ago;" +
