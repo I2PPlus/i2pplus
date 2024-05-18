@@ -141,7 +141,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         } else {
             // fast MSB check for key < 2^255
             if ((data[off + LONG_HEADER_SIZE + KEY_LEN - 1] & 0x80) != 0)
-                throw new GeneralSecurityException("BAD PK message 1");
+                throw new GeneralSecurityException(" BAD PK message #1");
             // probably don't need again
             _token = token;
             _handshakeState.start();
@@ -156,7 +156,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _handshakeState.readMessage(data, off + LONG_HEADER_SIZE, len - LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE);
             } catch (GeneralSecurityException gse) {
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Session request error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
+                    _log.debug("[SSU2] SessionRequest error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
                 throw gse;
             }
             //if (_log.shouldDebug())

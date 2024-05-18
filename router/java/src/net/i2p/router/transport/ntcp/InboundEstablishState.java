@@ -322,7 +322,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             }
             // fast MSB check for key < 2^255
             if ((_X[KEY_SIZE - 1] & 0x80) != 0) {
-                fail("BAD PK message #1");
+                fail(" BAD PK message #1");
                 return;
             }
 
