@@ -293,7 +293,7 @@ public class RouterThrottleImpl implements RouterThrottle {
             } else {
                 // not yet...
                 //if (_log.shouldInfo())
-                //    _log.info("Accepting tunnel request, since 60m test time average is " + avg10m
+                //    _log.info("Accepting Tunnel Request, since 60m test time average is " + avg10m
                 //              + " and past 1m only has " + avg1m + ")");
             }
         }

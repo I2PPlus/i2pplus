@@ -190,7 +190,7 @@ class RequestThrottler {
                                   " in " + (11*60 / portion) + "s)");
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Rejecting tunnel requests from temp banned Router [" + h.toBase64().substring(0,6) + "] -> " +
+                        _log.info("Rejecting Tunnel Requests from temp banned Router [" + h.toBase64().substring(0,6) + "] -> " +
                                   "(Requested: " + count + " / Hard limit: " + (limit * 5 / 3) + " in " + (11*60 / portion) + "s)");
                     context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
                 }

@@ -146,11 +146,11 @@ class ParticipatingThrottler {
             if (shouldDisconnect) {
                 context.commSystem().forceDisconnect(h);
                 if (_log.shouldWarn())
-                    _log.warn("Ignoring tunnel request and immediately disconnecting from Router [" + h.toBase64().substring(0,6) +
+                    _log.warn("Ignoring Tunnel Request and immediately disconnecting from Router [" + h.toBase64().substring(0,6) +
                               "] -> " + v + (caps != "" ? " / " + caps : ""));
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Ignoring tunnel request from Router [" + h.toBase64().substring(0,6) +
+                    _log.warn("Ignoring Tunnel Request from Router [" + h.toBase64().substring(0,6) +
                               "] -> " + v + (caps != "" ? " / " + caps : ""));
             }
             rv = Result.DROP;
@@ -158,7 +158,7 @@ class ParticipatingThrottler {
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             rv = Result.DROP;
             if (_log.shouldWarn())
-                _log.warn("Ignoring tunnel request from Router [" + h.toBase64().substring(0,6) +
+                _log.warn("Ignoring Tunnel Request from Router [" + h.toBase64().substring(0,6) +
                           "] -> " + v + (caps != "" ? " / " + caps : ""));
         }
 
@@ -176,7 +176,7 @@ class ParticipatingThrottler {
                 } else {
                     context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
                     if (_log.shouldInfo())
-                        _log.info("Ignoring tunnel requests from temp banned " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "]" +
+                        _log.info("Ignoring Tunnel Requests from temp banned " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "]" +
                                   "\n* Count/limit: " + count + "/" + (limit * 11 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
@@ -191,7 +191,7 @@ class ParticipatingThrottler {
                                   " in " + 11*60 / LIFETIME_PORTION + "s");
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Ignoring tunnel requests from temp banned " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "]" +
+                        _log.info("Ignoring Tunnel Requests from temp banned " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "]" +
                                   "\n* Count/limit: " + count + "/" + (limit * 10 / 9) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
@@ -208,20 +208,20 @@ class ParticipatingThrottler {
                 } else {
                     context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
                     if (_log.shouldInfo())
-                        _log.info("Ignoring tunnel requests from temp banned " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "]" +
+                        _log.info("Ignoring Tunnel Requests from temp banned " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "]" +
                                   "\n* Count/limit: " + count + "/" + (limit * 7 / 3) + " in " + (11*60 / LIFETIME_PORTION) + "s");
                 }
                 rv = Result.DROP;
             } else {
                 rv = Result.REJECT;
                 if (_log.shouldWarn())
-                    _log.warn("Rejecting tunnel requests from " + (caps != null ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] " +
+                    _log.warn("Rejecting Tunnel Requests from " + (caps != null ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] " +
                               "\n* High number of requests -> Count/limit: " + count + "/" + limit + " in " + 11*60 / LIFETIME_PORTION + "s");
             }
         } else {
             rv = Result.ACCEPT;
             if (_log.shouldDebug())
-                _log.debug("Accepting tunnel request from " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "]" +
+                _log.debug("Accepting Tunnel Request from " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "]" +
                            "\n* Count: " + count + " in " + 11*60 / LIFETIME_PORTION + "s");
         }
         return rv;
