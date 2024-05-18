@@ -1,7 +1,14 @@
+2024-05-18 zzz
+ * Transport: Remove SSU1 code from PacketBuilder/PeerState/OMF (Gitlab MR !193)
+
 2024-05-17 dr|z3d
  * I2PTunnel: URL based blocking for HTTP Server Tunnel -
    enabled with a url blocklist at .i2p/http_blocklist.txt, one
    entry per line
+
+2024-05-16 zzz
+ * I2CP: Hopefully fix rare NPE
+ * Util: Remove ST2 timers from queue on cancel
 
 2024-05-15 2.5.2+ (API 0.9.62) released
 
@@ -44,7 +51,7 @@
  * Router: Don't tolerate routers sending unsolicited DbSearch reply messages
 
 2024-04-25 zzz
- * Transport: Remove SSU1 code from IMF/IMS (Gitlab MRs !189)
+ * Transport: Remove SSU1 code from IMF/IMS (Gitlab MR !189)
 
 2024-04-24 dr|z3d
  * I2PSnark: Display free space info at startup
