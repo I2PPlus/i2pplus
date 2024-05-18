@@ -92,12 +92,14 @@ function start() {
           }
         }
       }
-      const liElements = routerlogsList.querySelectorAll("li");
-      liElements.forEach((li) => {
-        const text = li.textContent;
-        if (text.toLowerCase().indexOf(filterValue) !== -1) {li.style.display = "block";}
-        else {li.style.display = "none";}
-      });
+      if (routerlogsList) {
+        const liElements = routerlogsList.querySelectorAll("li");
+        liElements.forEach((li) => {
+          const text = li.textContent;
+          if (text.toLowerCase().indexOf(filterValue) !== -1) {li.style.display = "block";}
+          else {li.style.display = "none";}
+        });
+      }
       progressx.hide();
     };
     xhrlogs.send();
