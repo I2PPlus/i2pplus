@@ -213,17 +213,15 @@ function start() {
     if (!filterSpan.classList.contains("listening")) {
       filterInput.addEventListener("input", () => {
         const filterValue = filterInput.value.toLowerCase();
-        const liElements = routerlogsList.querySelectorAll("li");
         filterSpan.classList.add("listening");
-
-        liElements.forEach((li) => {
-          const text = li.textContent;
-          if (text.toLowerCase().indexOf(filterValue) !== -1) {
-            li.style.display = "block";
-          } else {
-            li.style.display = "none";
-          }
-        });
+        if (routerlogsList) {
+          const liElements = routerlogsList.querySelectorAll("li");
+          liElements.forEach((li) => {
+            const text = li.textContent;
+            if (text.toLowerCase().indexOf(filterValue) !== -1) {li.style.display = "block";}
+            else {li.style.display = "none";}
+          });
+        }
       });
     }
     // Store the filter value in local storage
