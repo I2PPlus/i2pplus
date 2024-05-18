@@ -3,15 +3,11 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <%
   // http://www.crazysquirrel.com/computing/general/form-encoding.jspx
-  if (request.getCharacterEncoding() == null)
-      request.setCharacterEncoding("UTF-8");
+  if (request.getCharacterEncoding() == null) {request.setCharacterEncoding("UTF-8");}
   String i2pcontextId = request.getParameter("i2p.contextId");
   try {
-    if (i2pcontextId != null) {
-      session.setAttribute("i2p.contextId", i2pcontextId);
-    } else {
-      i2pcontextId = (String) session.getAttribute("i2p.contextId");
-    }
+    if (i2pcontextId != null) {session.setAttribute("i2p.contextId", i2pcontextId);}
+    else {i2pcontextId = (String) session.getAttribute("i2p.contextId");}
   } catch (IllegalStateException ise) {}
   response.setHeader("Cache-Control", "private, no-cache, max-age=3600");
   response.setHeader("Content-Security-Policy", "default-src 'none'");
@@ -30,9 +26,7 @@
 <%
   net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
   String lang = "en";
-  if (ctx.getProperty("routerconsole.lang") != null) {
-    lang = ctx.getProperty("routerconsole.lang");
-  }
+  if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
 <!DOCTYPE HTML>
 <html lang="<%=lang%>">

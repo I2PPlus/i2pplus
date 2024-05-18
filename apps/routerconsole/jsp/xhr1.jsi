@@ -1,11 +1,6 @@
 <%@page import="net.i2p.router.web.helpers.SummaryHelper" %>
 <%@page trimDirectiveWhitespaces="true"%>
-<%
-/*
- * Note:
- * This is included on every refresh, so keep whitespace etc. to a minimum.
- */
-%>
+<% /* Note: This is included on every refresh, so keep whitespace etc. to a minimum. */ %>
 <jsp:useBean class="net.i2p.router.web.helpers.SummaryHelper" id="helper" scope="request" />
 <jsp:setProperty name="helper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:setProperty name="helper" property="action" value="<%=request.getParameter(\"action\")%>" />
@@ -13,9 +8,7 @@
 <jsp:setProperty name="helper" property="consoleNonce" value="<%=request.getParameter(\"consoleNonce\")%>" />
 <%
 String reqURI = request.getRequestURI();
-if (reqURI.contains("/xhr1")) {
-    reqURI = request.getParameter("requestURI");
-}
+if (reqURI.contains("/xhr1")) {reqURI = request.getParameter("requestURI");}
 helper.setRequestURI(reqURI);
 %>
 <% helper.storeWriter(out); %>
@@ -37,7 +30,4 @@ helper.setRequestURI(reqURI);
 <jsp:useBean class="net.i2p.router.web.UpdateHandler" id="update" scope="request" />
 <jsp:setProperty name="update" property="*" />
 <jsp:setProperty name="update" property="contextId" value="<%=i2pcontextId%>" />
-<%
-// moved to java for ease of translation
-helper.renderSummaryBar();
-%>
+<% helper.renderSummaryBar(); %>

@@ -5,50 +5,22 @@
   import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
   import {stickySidebar} from "/js/stickySidebar.js";
   import {onVisible} from "/js/onVisible.js";
-  var refresh = parseInt(<%=intl.getRefresh()%>, 10);
+  const refresh = parseInt(<%=intl.getRefresh()%>, 10);
   window.refreshInterval = refresh * 1000;
   window.sbRefreshTimerId = null;
-  const sb = document.getElementById("sidebar");
   const initSidebarRefresh = () => {
     clearInterval(sbRefreshTimerId);
-    sbRefreshTimerId = setInterval(() => {
-      window.requestAnimationFrame(refreshSidebar);
-    }, refreshInterval);
+    sbRefreshTimerId = setInterval(() => {requestAnimationFrame(refreshSidebar);}, refreshInterval);
   };
-  const stopSidebarRefresh = () => {
-    clearInterval(sbRefreshTimerId);
-  };
-  onVisible(sb, () => {
-    if (sbRefreshTimerId === null) {
-      initSidebarRefresh();
-    }
-  }, () => {
-    if (sbRefreshTimerId !== null) {
-      stopSidebarRefresh();
-    }
-  });
+  const stopSidebarRefresh = () => {clearInterval(sbRefreshTimerId);};
   const onDomContentLoaded = () => {
+    const sb = document.querySelector("#sidebar");
     sectionToggler();
     stickySidebar();
-    if (sbRefreshTimerId === null) {
-      initSidebarRefresh();
-    }
-    if (sbRefreshTimerId === null && sb) {
-      onVisible(sb, () => {
-        if (sbRefreshTimerId === null) {
-          initSidebarRefresh();
-        }
-      }, () => {
-        if (sbRefreshTimerId !== null) {
-          stopSidebarRefresh();
-        }
-      });
-    }
+    if (sbRefreshTimerId === null) {initSidebarRefresh();}
+    if (sb) {const observer = onVisible(sb, initSidebarRefresh, stopSidebarRefresh);}
   };
-  document.addEventListener("DOMContentLoaded", function() {
-    sectionToggler();
-    stickySidebar();
-  });
+  onVisible(document.body, onDomContentLoaded, onDomContentLoaded);
   window.addEventListener("resize", stickySidebar);
 </script>
 <% } else { %>
@@ -57,10 +29,6 @@
   import {sectionToggler, countTunnels, countNewsItems} from "/js/sectionToggle.js";
   import {stickySidebar} from "/js/stickySidebar.js";
   import {onVisible} from "/js/onVisible.js";
-  function onDomContentLoaded() {
-    sectionToggler();
-    stickySidebar();
-  }
   document.addEventListener("DOMContentLoaded", function() {
     sectionToggler();
     stickySidebar();
