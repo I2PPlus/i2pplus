@@ -430,6 +430,7 @@
             <compilerarg line="${javac.compilerargs}" />
             <classpath>
                 <pathelement location="../../../core/java/build/i2p.jar" />
+                <pathelement location="../../../core/java/build/i2ptest.jar" />
                 <pathelement location="../../ministreaming/java/build/mstreaming.jar" />
                 <pathelement location="${junit.home}/junit4.jar" />
             </classpath>
@@ -442,6 +443,7 @@
                 <pathelement path="${classpath}" />
                 <pathelement location="./build/obj" />
                 <pathelement location="../../../core/java/build/i2p.jar" />
+                <pathelement location="../../../core/java/build/i2ptest.jar" />
                 <pathelement location="../../ministreaming/java/build/mstreaming.jar" />
                 <pathelement location="../../streaming/java/build/streaming.jar" />
                 <pathelement location="${junit.home}/junit4.jar" />
