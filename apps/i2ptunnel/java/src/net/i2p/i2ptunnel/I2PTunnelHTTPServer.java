@@ -1382,16 +1382,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     protected static String formatHeadersCompact(Map<String, List<String>> headers, StringBuilder command) {
         StringBuilder buf = new StringBuilder(command.length() + headers.size() * 64);
-        buf.append("\n* Request: " + command.toString().trim());
+        String request = command.toString().trim();
+        buf.append("\n* Request: " + request);
         for (Map.Entry<String, List<String>> e : headers.entrySet()) {
             String name = e.getKey();
-            String lcName = name.toLowerCase();
-            String value = e.getValue().iterator().next();
+            String lcName = name.toLowerCase().trim();
+            String value = e.getValue().iterator().next().trim();
             boolean hasUA = name.toLowerCase().contains("user-agent") && !value.isEmpty();
             if (lcName.contains("desthash") || lcName.contains("destb64") || lcName.contains("dnt") ||
                 lcName.contains("connection") || lcName.contains("accept") || lcName.contains("cookie") ||
                 lcName.contains("pragma") || lcName.contains("cache-control") || lcName.contains("referer") ||
-                lcName.contains("upgrade-insecure-requests") || (lcName.contains("user-agent") && hasUA && value.contains("MYOB"))) {
+                lcName.contains("upgrade-insecure-requests") || (lcName.equals("content-length") && value.equals("0")) ||
+                (lcName.contains("user-agent") && hasUA && value.contains("MYOB"))) {
                 continue;
             }
             for (String val: e.getValue()) {
