@@ -341,14 +341,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
         public int compare(RouterAddress l, RouterAddress r) {
             int rv = l.getCost() - r.getCost();
-            if (rv != 0)
-                return rv;
+            if (rv != 0) {return rv;}
             int lh = l.hashCode();
             int rh = l.hashCode();
-            if (lh > rh)
-                return 1;
-            if (lh < rh)
-                return -1;
+            if (lh > rh) {return 1;}
+            if (lh < rh) {return -1;}
             return 0;
         }
     }
@@ -529,8 +526,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /* We hope the routerinfos are read in and things have settled down by now, but it's not required to be so */
-    private static final int START_DELAY = SystemVersion.isSlow() ? 60*1000 : 10*1000;
-    private static final int LOOKUP_TIME = 5*60*1000;
+    private static final int START_DELAY = SystemVersion.isSlow() ? 60*1000 : 5*1000;
+    private static final int LOOKUP_TIME = 90*1000;
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {
         return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
@@ -542,9 +539,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     private void startGeoIP() {
         _context.simpleTimer2().addEvent(new QueueAll(), START_DELAY);
-        if (enableReverseLookups()) {
-            readRDNSCacheFromFile();
-        }
+        if (enableReverseLookups()) {readRDNSCacheFromFile();}
     }
 
     /**
@@ -558,11 +553,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             long uptime = _context.router().getUptime();
             for (Hash h : _context.netDb().getAllRouters()) {
                 RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
-                if (ri == null)
-                    continue;
+                if (ri == null) {continue;}
                 byte[] ip = getIP(ri);
-                if (ip == null)
-                    continue;
+                if (ip == null) {continue;}
                 _geoIP.add(ip);
             }
             _context.simpleTimer2().addPeriodicEvent(new Lookup(), 5000, LOOKUP_TIME);
@@ -588,11 +581,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         public void run() {
             long start = System.currentTimeMillis();
-            long uptime = _context.router().getUptime();
             _geoIP.blockingLookup();
-
-            if (_log.shouldInfo())
+            if (_log.shouldInfo()) {
                 _log.info("GeoIP lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
+            }
         }
     }
 
@@ -1029,11 +1021,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /** full name for a country code, or the code if we don't know the name */
     @Override
     public String getCountryName(String c) {
-        if (_geoIP == null)
-            return c;
+        if (_geoIP == null) {return c;}
         String n = _geoIP.fullName(c);
-        if (n == null)
-            return c;
+        if (n == null) {return c;}
         return n;
     }
 
@@ -1044,8 +1034,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.9.53
      */
     public Map<String, String> getCountries() {
-        if (_geoIP == null)
-            return Collections.emptyMap();
+        if (_geoIP == null) {return Collections.emptyMap();}
         return _geoIP.getCountries();
     }
 
@@ -1123,9 +1112,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
         String c = getCountry(peer);
         String h = peer.toBase64();
-        if (!inline) {
-            buf.append("<table class=\"rid ric\"><tr>");
-        }
+        if (!inline) {buf.append("<table class=\"rid ric\"><tr>");}
         if (ri != null) {
             String caps = ri.getCapabilities();
             String v = ri.getVersion();
@@ -1136,44 +1123,27 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             boolean hasG = caps.contains("G");
             boolean isFF = caps.contains("f");
             boolean isU = caps.contains("U");
+            boolean isR =  caps.contains("R");
             buf.append("<td class=\"rbw ").append(getCapacity(peer));
-                if (isFF)
-                    buf.append(" isff");
-                if (isU)
-                    buf.append(" isU");
-                if (hasD)
-                    buf.append(" isD");
-                else if (hasE)
-                    buf.append(" isE");
-                else if (hasG)
-                    buf.append(" isG");
-                buf.append("\"><a href=\"/netdb?caps=");
-                buf.append(getCapacity(peer));
-                if (isFF)
-                    buf.append("f");
-                if (isU) {
-                    buf.append("U");
-                } else {
-                    buf.append("R");
-                }
-                if (hasD)
-                    buf.append("D");
-                if (hasE)
-                    buf.append("E");
-                if (hasG)
-                    buf.append("G");
-                buf.append("\" title=\"");
-                buf.append(_t("Show all routers with this capability in the NetDb"));
-                buf.append("\">");
-                buf.append(capacity.replace("D", "").replace("E", "").replace("G", ""));
-                buf.append("</a>");
-        } else {
-            buf.append("<td class=rbw>?");
-        }
+            if (isFF) {buf.append(" isff");}
+            if (isU) {buf.append(" isU");}
+            if (hasD) {buf.append(" isD");}
+            else if (hasE) {buf.append(" isE");}
+            else if (hasG) {buf.append(" isG");}
+            buf.append("\"><a href=\"/netdb?caps=");
+            buf.append(getCapacity(peer));
+            if (isFF) {buf.append("f");}
+            if (isU) {buf.append("U");}
+            else if (isR) {buf.append("R");}
+            if (hasD) {buf.append("D");}
+            else if (hasE) {buf.append("E");}
+            else if (hasG) {buf.append("G");}
+            buf.append("\" title=\"").append(_t("Show all routers with this capability in the NetDb"))
+               .append("\">").append(capacity.replace("D", "").replace("E", "").replace("G", ""))
+               .append("</a>");
+        } else {buf.append("<td class=rbw>?");}
         buf.append("</td>");
-        if (!inline) {
-            buf.append("</tr></table>\n");
-        }
+        if (!inline) {buf.append("</tr></table>\n");}
         return buf.toString();
     }
 
@@ -1207,14 +1177,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
             }
         } else {
-            c = "a0";
+            c = "xx";
         }
         // add a hidden span to facilitate sorting
         buf.append("<span class=cc hidden>").append(c.toUpperCase(Locale.US)).append("</span>");
         buf.append("<span class=peerFlag title=\"");
         if (ri != null) {
             String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
-            if (c != "a0" && c != null && countryName.length() > 2) {
+            if (c != "xx" && c != null && countryName.length() > 2) {
                 buf.append(countryName);
                 if (ri != null && ip != null)
                     buf.append(" &bullet; ").append(ip);
@@ -1222,16 +1192,16 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 buf.append(_t("unknown"));
             }
             buf.append("\">");
-            if (c != "a0" && c != null) {
+            if (c != "xx" && c != null) {
                 buf.append("<a href=\"/netdb?c=" + c + "\"><img width=24 height=18 alt=\"")
                    .append(c.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=").append(c).append("\" loading=lazy></a>");
             } else {
                 buf.append("<img class=unknownflag width=24 height=18 alt=\"??\"")
-                   .append(" src=\"/flags.jsp?c=a0\">");
+                   .append(" src=\"/flags.jsp?c=xx\">");
             }
         } else {
             buf.append(_t("unknown")).append("\"><img class=unknownflag width=24 height=18 alt=\"??\"" +
-                       " src=\"/flags.jsp?c=a0\" loading=lazy>");
+                       " src=\"/flags.jsp?c=xx\" loading=lazy>");
         }
         buf.append("</span>");
         return buf.toString();

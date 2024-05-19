@@ -205,10 +205,10 @@ class InboundEstablishState {
         if (ext != null && ext.length >= UDPPacket.SESS_REQ_MIN_EXT_OPTIONS_LENGTH) {
             _introductionRequested = (ext[1] & (byte) UDPPacket.SESS_REQ_EXT_FLAG_REQUEST_RELAY_TAG) != 0;
             if (_log.shouldInfo())
-                _log.info("Received SessionRequest with extended options; need intro? " + _introductionRequested + ' ' + this);
+                _log.info("Received Session Request with extended options; need intro? " + _introductionRequested + ' ' + this);
         }
         if (_log.shouldDebug())
-            _log.debug("Received SessionRequest, BobIP = " + Addresses.toString(_bobIP));
+            _log.debug("Received Session Request, BobIP = " + Addresses.toString(_bobIP));
         if (_currentState == InboundState.IB_STATE_UNKNOWN)
             _currentState = InboundState.IB_STATE_REQUEST_RECEIVED;
         packetReceived();

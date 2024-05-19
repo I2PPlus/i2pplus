@@ -104,7 +104,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         long token = DataHelper.fromLong8(data, off + TOKEN_OFFSET);
         if (type == TOKEN_REQUEST_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("[SSU2] Received TokenRequest from: " + _aliceSocketAddress);
+                _log.debug("[SSU2] Received Token Request from: " + _aliceSocketAddress);
             _currentState = InboundState.IB_STATE_TOKEN_REQUEST_RECEIVED;
             // decrypt in-place
             ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
@@ -125,9 +125,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     (ENFORCE_TOKEN && !_transport.getEstablisher().isInboundTokenValid(_remoteHostId, token)))) {
             // i2pd thru 0.9.55 ignores zero token + termination in retry
             if (_log.shouldInfo())
-                _log.info("[SSU2] Invalid token [" + token + "] in SessionRequest from: " + _aliceSocketAddress);
+                _log.info("[SSU2] Invalid token [" + token + "] in Session Request from: " + _aliceSocketAddress);
             if (token == 0)
-                throw new GeneralSecurityException("Zero token in SessionRequest from: " + _aliceSocketAddress);
+                throw new GeneralSecurityException("Zero token in Session Request from: " + _aliceSocketAddress);
             _currentState = InboundState.IB_STATE_REQUEST_BAD_TOKEN_RECEIVED;
             _sendHeaderEncryptKey2 = introKey;
             // Generate token for the retry.
@@ -156,11 +156,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _handshakeState.readMessage(data, off + LONG_HEADER_SIZE, len - LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE);
             } catch (GeneralSecurityException gse) {
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] SessionRequest error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
+                    _log.debug("[SSU2] Session Request error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
                 throw gse;
             }
             //if (_log.shouldDebug())
-            //    _log.debug("[SSU2] State after SessionRequest: " + _handshakeState);
+            //    _log.debug("[SSU2] State after Session Request: " + _handshakeState);
             processPayload(data, off + LONG_HEADER_SIZE, len - (LONG_HEADER_SIZE + KEY_LEN + MAC_LEN), true);
             _sendHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessCreateHeader");
             _currentState = InboundState.IB_STATE_REQUEST_RECEIVED;
@@ -246,7 +246,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         //if (_log.shouldDebug())
         //    _log.debug("[SSU2] Received RouterInfo block: " + ri);
         if (isHandshake)
-            throw new DataFormatException("RouterInfo in SessionRequest");
+            throw new DataFormatException("RouterInfo in Session Request");
         if (_receivedUnconfirmedIdentity != null)
             throw new DataFormatException("Duplicate RouterInfo in SessionConfirmed");
         _receivedUnconfirmedIdentity = ri.getIdentity();
@@ -509,7 +509,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_log.shouldDebug())
             _log.debug("[SSU2] Received I2NP block: " + msg);
         if (getState() != InboundState.IB_STATE_CREATED_SENT)
-            throw new IllegalStateException("I2NP in SessionRequest");
+            throw new IllegalStateException("I2NP in Session Request");
         if (_receivedConfirmedIdentity == null)
             throw new IllegalStateException("RouterInfo must be sent first");
         // pass to PeerState2
@@ -520,7 +520,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_log.shouldDebug())
             _log.debug("[SSU2] Received FRAGMENT block: " + messageID);
         if (getState() != InboundState.IB_STATE_CREATED_SENT)
-            throw new IllegalStateException("I2NP in SessionRequest");
+            throw new IllegalStateException("I2NP in Session Request");
         if (_receivedConfirmedIdentity == null)
             throw new IllegalStateException("RouterInfo must be sent first");
         // pass to PeerState2
@@ -676,7 +676,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (type == TOKEN_REQUEST_FLAG_BYTE) {
             // retransmitted token request
             if (_log.shouldWarn())
-                _log.warn("[SSU2] Received RETRANSMIT TokenRequest on: " + this);
+                _log.warn("[SSU2] Received RETRANSMIT Token Request on: " + this);
             // Est. mgr will resend retry and call retryPacketSent()
             // Note that Java I2P < 0.9.57 doesn't handle retransmitted retries correctly,
             // so this won't work for them
@@ -686,7 +686,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             return;
         }
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received SessionRequest after retry on: " + this);
+            _log.debug("[SSU2] Received Session Request after retry on: " + this);
         long token = DataHelper.fromLong8(data, off + 24);
         if (token != _token) {
             // most likely a retransmitted session request with the old invalid token
@@ -703,20 +703,20 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             _handshakeState.readMessage(data, off + LONG_HEADER_SIZE, len - LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldDebug())
-                _log.debug("[SSU2] SessionRequest error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
+                _log.debug("[SSU2] Session Request error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
             throw gse;
         }
         //if (_log.shouldDebug())
-        //    _log.debug("[SSU2] State after SessionRequest: " + _handshakeState);
+        //    _log.debug("[SSU2] State after Session Request: " + _handshakeState);
         _timeReceived = 0;
         processPayload(data, off + LONG_HEADER_SIZE, len - (LONG_HEADER_SIZE + KEY_LEN + MAC_LEN), true);
         packetReceived();
         if (_currentState == InboundState.IB_STATE_FAILED) {
             // termination block received
-            throw new GeneralSecurityException("Termination block in SessionRequest");
+            throw new GeneralSecurityException("Termination block in Session Request");
         }
         if (_timeReceived == 0)
-            throw new GeneralSecurityException("No DateTime block in SessionRequest");
+            throw new GeneralSecurityException("No DateTime block in Session Request");
         // _nextSend is now(), from packetReceived()
         _rtt = (int) (_nextSend - _lastSend);
         _skew = (_nextSend - _timeReceived) - (_rtt / 2);
@@ -724,7 +724,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             // send another retry with termination
             UDPPacket retry = _transport.getBuilder2().buildRetryPacket(this, SSU2Util.REASON_SKEW);
             _transport.send(retry);
-            throw new GeneralSecurityException("Max skew of 2m exceeded (" + _skew + "ms) in SessionRequest");
+            throw new GeneralSecurityException("Max skew of 2m exceeded (" + _skew + "ms) in Session Request");
         }
         _sendHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessCreateHeader");
         _currentState = InboundState.IB_STATE_REQUEST_RECEIVED;

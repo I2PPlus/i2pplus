@@ -648,7 +648,7 @@ class OutboundEstablishState {
         _requestSentCount++;
         _nextSend = _lastSend + delay;
         if (_log.shouldDebug())
-            _log.debug("Sent a SessionRequest packet; next send in " + delay + "ms on " + this);
+            _log.debug("Sent a Session Request packet; next send in " + delay + "ms on " + this);
         if (_currentState == OutboundState.OB_STATE_UNKNOWN ||
             _currentState == OutboundState.OB_STATE_INTRODUCED)
             _currentState = OutboundState.OB_STATE_REQUEST_SENT;
@@ -726,7 +726,7 @@ class OutboundEstablishState {
             return false;
         long now = _context.clock().now();
         if (_log.shouldInfo())
-            _log.info(toString() + " accelerating SessionRequest by " + (_nextSend - now) + "ms");
+            _log.info(toString() + " accelerating Session Request by " + (_nextSend - now) + "ms");
         _nextSend = now;
         return true;
     }

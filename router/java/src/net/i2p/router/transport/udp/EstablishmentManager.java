@@ -685,13 +685,13 @@ class EstablishmentManager {
         String truncHash = fromHash != null ? fromHash.toBase64().substring(0,6) : "";
         if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(fromIP)) {
             if (_log.shouldWarn()) {
-                _log.warn("[SSU2] Received SessionRequest from invalid address/port: " + from);
+                _log.warn("[SSU2] Received Session Request from invalid address/port: " + from);
             }
             if (fromHash != null) {
                 if (!isBanned) {
-                   _context.banlist().banlistRouter(fromHash, " <b>➜</b> Invalid address/port in SessionRequest", null, null, now + 8*60*1000);
+                   _context.banlist().banlistRouter(fromHash, " <b>➜</b> Invalid address/port in Session Request", null, null, now + 8*60*1000);
                    if (_log.shouldWarn()) {
-                      _log.warn("[SSU2] Banning [" + truncHash + "] for 8h -> Invalid address/port in SessionRequest" + " (" + from + ")");
+                      _log.warn("[SSU2] Banning [" + truncHash + "] for 8h -> Invalid address/port in Session Request" + " (" + from + ")");
                    }
                 } else if (isBanned) {
                     if (_log.shouldInfo()) {
@@ -705,10 +705,10 @@ class EstablishmentManager {
         if (state == null) {
             if (isBlocklisted) {
                 if (_log.shouldInfo()) {
-                    _log.info("[SSU2] Received SessionRequest from blocklisted IP: " + from);
+                    _log.info("[SSU2] Received Session Request from blocklisted IP: " + from);
                 } else if (isBanned) {
                     if (_log.shouldInfo()) {
-                        _log.info("[SSU2] Received SessionRequest from banned Router [" + truncHash + "}");
+                        _log.info("[SSU2] Received Session Request from banned Router [" + truncHash + "}");
                     }
                 }
                 _context.statManager().addRateData("udp.establishBadIP", 1);
@@ -733,7 +733,7 @@ class EstablishmentManager {
                         if (exp.longValue() >= _context.clock().now()) {
                             // this is common, finally get a packet after the IES2 timeout
                             if (_log.shouldInfo())
-                                _log.info("[SSU2] Received SessionRequest from temporarily banned peer: " + from);
+                                _log.info("[SSU2] Received Session Request from temporarily banned peer: " + from);
                              _context.statManager().addRateData("udp.establishBadIP", 1);
                              // use this code for a temp ban
                              sendTerminationPacket(from, packet, REASON_MSG1);
@@ -771,7 +771,7 @@ class EstablishmentManager {
             // So probably don't need a replay detector at all
             if (_replayFilter.add(state.getReceivedX(), 0, 8)) {
                 if (_log.shouldWarn())
-                    _log.warn("Duplicate X in SessionRequest from: " + from);
+                    _log.warn("Duplicate X in Session Request from: " + from);
                 _context.statManager().addRateData("udp.dupDHX", 1);
                 return; // drop the packet
             }
@@ -803,9 +803,9 @@ class EstablishmentManager {
 
         if (_log.shouldDebug()) {
             if (isNew)
-                _log.debug("[SSU2] Received NEW Session/TokenRequest " + state);
+                _log.debug("[SSU2] Received NEW Session/Token Request " + state);
             else
-                _log.debug("[SSU2] Received DUPLICATE Session/TokenRequest \n* Router: " + state);
+                _log.debug("[SSU2] Received DUPLICATE Session/Token Request \n* Router: " + state);
         }
         // Wait until we have RI
         // sentRelayTag remains 0 and will not be sent in SessionConfirmed
@@ -1468,7 +1468,7 @@ class EstablishmentManager {
               case OB_STATE_REQUEST_SENT:
               case OB_STATE_REQUEST_SENT_NEW_TOKEN:
                 if (_log.shouldInfo())
-                    _log.info("[SSU2] Resending SessionRequest packet to: " + state);
+                    _log.info("[SSU2] Resending Session Request packet to: " + state);
                 // if already sent, get from the state to retx
                 packet = state2.getRetransmitSessionRequestPacket();
                 break;
@@ -1476,20 +1476,20 @@ class EstablishmentManager {
               case OB_STATE_NEEDS_TOKEN:
               case OB_STATE_TOKEN_REQUEST_SENT:
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Sending TokenRequest to: " + state);
+                    _log.debug("[SSU2] Sending Token Request to: " + state);
                 packet = _builder2.buildTokenRequestPacket(state2);
                 break;
 
               case OB_STATE_UNKNOWN:
               case OB_STATE_RETRY_RECEIVED:
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Sending SessionRequest to: " + state);
+                    _log.debug("[SSU2] Sending Session Request to: " + state);
                 packet = _builder2.buildSessionRequestPacket(state2);
                 break;
 
               case OB_STATE_INTRODUCED:
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Sending SessionRequest after introduction to: " + state);
+                    _log.debug("[SSU2] Sending Session Request after introduction to: " + state);
                 packet = _builder2.buildSessionRequestPacket(state2);
                 break;
 
@@ -1503,7 +1503,7 @@ class EstablishmentManager {
             _transport.send(packet);
         } else {
             if (_log.shouldWarn())
-                _log.warn("[SSU2] Unable to build a SessionRequest packet for: " + state);
+                _log.warn("[SSU2] Unable to build a Session Request packet for: " + state);
         }
         // PacketBuilder2 told the state
     }
@@ -2105,7 +2105,7 @@ class EstablishmentManager {
             boolean sendNow = state.receiveHolePunch();
             if (sendNow) {
                 if (_log.shouldInfo())
-                    _log.info("[SSU2] Send SessionRequest after HolePunch from " + state);
+                    _log.info("[SSU2] Send Session Request after HolePunch from " + state);
                 notifyActivity();
             }
         } else {

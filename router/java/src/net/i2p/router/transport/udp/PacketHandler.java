@@ -255,7 +255,7 @@ class PacketHandler {
                 header.getVersion() != 2 ||
                 header.getNetID() != _networkID) {
                 if (header != null && _log.shouldInfo())
-                    _log.info("Does not decrypt as Session Request, attempting to decrypt as TokenRequest / PeerTest / HolePunch \n* " + header + " from " + from);
+                    _log.info("Does not decrypt as Session Request, attempting to decrypt as Token Request / PeerTest / HolePunch \n* " + header + " from " + from);
                 // The first 32 bytes were fine, but it corrupted the next 32 bytes
                 // TODO make this more efficient, just take the first 32 bytes
                 header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
@@ -301,7 +301,7 @@ class PacketHandler {
                     packet.getPacket().getLength() == SSU2Util.MIN_HANDSHAKE_DATA_LEN - 1) {
                     // i2pd short 87 byte session request thru 0.9.56, drop packet
                     if (_log.shouldWarn())
-                        _log.warn("Received short SessionRequest (87 bytes) from " + from);
+                        _log.warn("Received short Session Request (87 bytes) from " + from);
                     shouldBan = true;
                     return true;
                 }
@@ -327,7 +327,7 @@ class PacketHandler {
                         packet.getPacket().getLength() == 87) {
                         // i2pd short 87 byte session request thru 0.9.56, drop packet
                         if (_log.shouldWarn())
-                            _log.warn("Received short SessionRequest (87 bytes) after Retry on " + state);
+                            _log.warn("Received short Session Request (87 bytes) after Retry on " + state);
                         shouldBan = true;
                         return true;
                     }
@@ -414,11 +414,11 @@ class PacketHandler {
         SSU2Header.acceptTrialDecrypt(packet, header);
         if (type == SSU2Util.SESSION_REQUEST_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("Received a SessionRequest on " + state);
+                _log.debug("Received a Session Request on " + state);
             _establisher.receiveSessionOrTokenRequest(from, state, packet);
         } else if (type == SSU2Util.TOKEN_REQUEST_FLAG_BYTE) {
             if (_log.shouldDebug())
-                _log.debug("Received a TokenRequest on " + state);
+                _log.debug("Received a Token Request on " + state);
             _establisher.receiveSessionOrTokenRequest(from, state, packet);
         } else if (type == SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
             if (_log.shouldDebug())

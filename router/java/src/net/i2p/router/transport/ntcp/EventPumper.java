@@ -539,14 +539,14 @@ class EventPumper implements Runnable {
             String ba = Addresses.toString(ip).replace("/", "");
             if (_context.blocklist().isBlocklisted(ip)) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Refusing SessionRequest from blocklisted IP: " + ba);
+                    _log.warn("Refusing Session Request from blocklisted IP: " + ba);
                 try { chan.close(); } catch (IOException ioe) { }
                 return;
             }
             if (!_context.commSystem().isExemptIncoming(Addresses.toCanonicalString(ba))) {
                 if (!_transport.allowConnection()) {
                     if (_log.shouldWarn())
-                        _log.warn("Refusing SessionRequest from " + ba + " -> NTCP connection limit reached");
+                        _log.warn("Refusing Session Request from " + ba + " -> NTCP connection limit reached");
                     try { chan.close(); } catch (IOException ioe) { }
                     return;
                 }

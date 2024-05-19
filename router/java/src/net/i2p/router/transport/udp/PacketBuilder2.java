@@ -1148,12 +1148,12 @@ class PacketBuilder2 {
             pkt.setLength(pkt.getLength() + len + MAC_LEN);
         } catch (RuntimeException re) {
             if (!_log.shouldWarn())
-                _log.error("[SSU2] Bad TokenRequest message out", re);
+                _log.error("[SSU2] BAD Token Request message out", re);
             throw re;
         } catch (GeneralSecurityException gse) {
             if (!_log.shouldWarn())
-                _log.error("[SSU2] Bad TokenRequest message out", gse);
-            throw new RuntimeException("Bad token req msg out", gse);
+                _log.error("[SSU2] BAD Token Request message out", gse);
+            throw new RuntimeException("BAD Token Request message out", gse);
         }
         SSU2Header.encryptLongHeader(packet, hdrKey1, hdrKey2);
     }
