@@ -107,16 +107,19 @@ public class GeoIP {
     private static final String UNKNOWN_COUNTRY_CODE = "--";
     /** db-ip.com https://db-ip.com/faq.php */
     private static final String UNKNOWN_COUNTRY_CODE2 = "ZZ";
+    private static final String UNKNOWN_COUNTRY_CODE3 = "XX";
 
     static {
         // To block additional countries b,c,d when blocking country a,
         // put the list a,b,c,d for country a.
-        _associatedCountries = new HashMap<String, List<String>>(2);
-        List<String> c = new ArrayList<String>(2);
+        _associatedCountries = new HashMap<String, List<String>>(3);
+        List<String> c = new ArrayList<String>(3);
         c.add("cn");
         c.add("hk");
+        c.add("mo");
         _associatedCountries.put("cn", c);
         _associatedCountries.put("hk", c);
+        _associatedCountries.put("mo", c);
     }
 
     /**
@@ -160,23 +163,19 @@ public class GeoIP {
      *
      * Public for BundleRouterInfos
      */
+
     public void blockingLookup() {
-        if (! _context.getBooleanPropertyDefaultTrue(PROP_GEOIP_ENABLED)) {
+        if (!_context.getBooleanPropertyDefaultTrue(PROP_GEOIP_ENABLED)) {
             _pendingSearch.clear();
             _pendingIPv6Search.clear();
             return;
         }
-        int pri = Thread.currentThread().getPriority();
-        if (pri > Thread.MIN_PRIORITY)
-            Thread.currentThread().setPriority(pri - 1);
         try {
             LookupJob j = new LookupJob();
             long ts = j.runit();
-            if (ts > 0)
-                updateOurCountry(ts);
-        } finally {
-            if (pri > Thread.MIN_PRIORITY)
-                Thread.currentThread().setPriority(pri);
+            if (ts > 0) {updateOurCountry(ts);}
+        } catch (Exception e) {
+            _log.error("Error during GeoIP lookup (" + e.getMessage() + ")");
         }
     }
 
@@ -203,19 +202,14 @@ public class GeoIP {
             long start = _context.clock().now();
             try {
                 // clear the negative cache every few runs, to prevent it from getting too big
-                if (((++_lookupRunCount) % CLEAR) == 0)
-                    _notFound.clear();
+                if (((++_lookupRunCount) % CLEAR) == 0) {_notFound.clear();}
                 // add our detected addresses
                 Set<String> addrs = Addresses.getAddresses(false, true);
-                for (String ip : addrs) {
-                    add(ip);
-                }
+                for (String ip : addrs) {add(ip);}
                 String lastIP = _context.getProperty(UDPTransport.PROP_IP);
-                if (lastIP != null)
-                    add(lastIP);
+                if (lastIP != null) {add(lastIP);}
                 lastIP = _context.getProperty(UDPTransport.PROP_IPV6);
-                if (lastIP != null)
-                    add(lastIP);
+                if (lastIP != null) {add(lastIP);}
                 // IPv4
                 Long[] search = _pendingSearch.toArray(new Long[_pendingSearch.size()]);
                 _pendingSearch.clear();
@@ -250,16 +244,14 @@ public class GeoIP {
                                         cached = lc;
                                     _IPToCountry.put(ipl, cached);
                                     found++;
-                                } else {
-                                    _notFound.add(ipl);
-                                }
+                                } else {_notFound.add(ipl);}
                             }
                         } catch (IOException ioe) {
                             _log.error("GeoIP failure", ioe);
                         } catch (InvalidDatabaseException ide) {
                             _log.error("GeoIP failure", ide);
                         } finally {
-                            if (ls != null) ls.close();
+                            if (ls != null) {ls.close();}
                         }
                     } else if (geoip2 != null) {
                         // Maxmind v2 database
