@@ -111,7 +111,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #toast b{color:#dd0}
 
 /* screenlog */
-#screenlog{margin:0;padding:2px 5px;width:auto;height:56px;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#778;border-spacing:0;border-bottom:var(--border);background:repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px,rgba(0,0,48,.5) 4px) center center/4px,url(images/chimp.webp) no-repeat right -6px bottom -16px/96px auto,var(--snarkGraph) no-repeat left bottom/calc(100% - 100px) 99%,linear-gradient(180deg,#001,#000008);scrollbar-color:#225 #001;scrollbar-width:thin;contain:paint}
+#screenlog{margin:0;padding:2px 5px;width:auto;height:56px;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#778;border-spacing:0;border-bottom:var(--border);background:repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px,rgba(0,0,48,.5) 4px) center center/4px,url(images/chimp.webp) no-repeat right -6px bottom -16px/96px auto,var(--snarkGraph) no-repeat right 80px bottom/cover,linear-gradient(180deg,#001,#000008);scrollbar-color:#225 #001;scrollbar-width:thin;contain:paint}
 .iframed #screenlog{margin-top:-5px}
 #screenlog:hover,#screenlog:focus{overflow:auto}
 #screenlog:focus{box-shadow:inset 0 0 0 1px #930}

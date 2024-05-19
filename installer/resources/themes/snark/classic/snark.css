@@ -144,7 +144,7 @@ a.controld{display:none}
 #toast b{color:#373}
 
 /* screenlog */
-#screenlog{margin:0;padding:3px 5px;width:auto;height:56px;overflow:hidden;text-align:left;border-bottom:var(--border);box-shadow:inset 0 0 0 1px #f2f2ff;background:url(../ubergine/images/hat.webp) right -4px bottom -10px no-repeat,var(--snarkGraph) no-repeat,linear-gradient(180deg,rgba(240,240,255,.7),rgba(232,232,255,.7));background-size:auto 80px,calc(100% - 88px) calc(100% + 20px),100%;background-position:right -4px bottom -10px,left bottom 1px,center center,center top;background-blend-mode:normal,soft-light,normal}
+#screenlog{margin:0;padding:3px 5px;width:auto;height:56px;overflow:hidden;text-align:left;border-bottom:var(--border);box-shadow:inset 0 0 0 1px #f2f2ff;background:url(../ubergine/images/hat.webp) right -4px bottom -10px no-repeat,var(--snarkGraph) no-repeat,linear-gradient(180deg,rgba(240,240,255,.7),rgba(232,232,255,.7));background-size:auto 80px,cover,100%;background-position:right -4px bottom -10px,right 80px bottom 1px,center center,center top;background-blend-mode:normal,soft-light,normal}
 #screenlog:hover,#screenlog:focus{overflow:auto;overflow-x:hidden}
 #screenlog:empty{display:none}
 #screenlog:focus{box-shadow:inset 0 0 0 1px #f90}

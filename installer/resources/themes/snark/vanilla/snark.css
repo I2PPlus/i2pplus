@@ -127,7 +127,7 @@ th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visi
 
 /* screenlog */
 .logshim{margin-top:-14px}
-#screenlog{margin:2px 1px 11px;padding:0 3px;height:56px;width:calc(100% - 14px);display:inline-block;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);-webkit-text-stroke:2px rgba(78,69,63,.35);color:#f8f1ed;border:1px solid #523d2e;box-shadow:0 0 0 2px #efe6e0,0 0 0 3px #3f3833;background:repeating-linear-gradient(180deg,rgba(77,69,62,.5) 2px,rgba(111,96,90,.3) 4px),url(images/whippy.webp) no-repeat scroll,var(--snarkGraph) no-repeat,linear-gradient(180deg,#5f554d,#3f3833);background-size:100%,60px auto,calc(100% - 80px) 100%,100%;background-position:center center,right -4px bottom -10px,left bottom,center center;background-blend-mode:darken,normal,luminosity,normal,normal}
+#screenlog{margin:2px 1px 11px;padding:0 3px;height:56px;width:calc(100% - 14px);display:inline-block;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);-webkit-text-stroke:2px rgba(78,69,63,.35);color:#f8f1ed;border:1px solid #523d2e;box-shadow:0 0 0 2px #efe6e0,0 0 0 3px #3f3833;background:repeating-linear-gradient(180deg,rgba(77,69,62,.5) 2px,rgba(111,96,90,.3) 4px),url(images/whippy.webp) no-repeat scroll,var(--snarkGraph) no-repeat,linear-gradient(180deg,#5f554d,#3f3833);background-size:100%,60px auto,cover,100%;background-position:center center,right -4px bottom -10px,right 60px bottom -8px,center center;background-blend-mode:darken,normal,luminosity,normal,normal}
 #screenlog.configpage{width:calc(100% - 10px)}
 #screenlog:hover,#screenlog:focus{overflow:auto}
 #screenlog:focus{box-shadow:0 0 0 1px #ff1a85,0 0 0 3px rgba(70,62,57,.5)}
