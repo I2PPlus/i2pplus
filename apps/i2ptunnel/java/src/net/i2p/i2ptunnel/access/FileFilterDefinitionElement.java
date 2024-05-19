@@ -65,7 +65,7 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
                 }
             }
         } catch (InvalidDefinitionException bad32) {
-            throw new IOException("Invalid entry in tunnel filter access list (bad b32)", bad32);
+            throw new IOException("Invalid entry in Tunnel Filter access list (bad b32)", bad32);
         } finally {
             if (reader != null) {
                 try { reader.close(); } catch (IOException ignored) {}

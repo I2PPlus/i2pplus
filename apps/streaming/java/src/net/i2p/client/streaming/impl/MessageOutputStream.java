@@ -97,9 +97,7 @@ class MessageOutputStream extends OutputStream {
     }
 
     public void setWriteTimeout(int ms) {
-        if (_log.shouldDebug())
-            _log.debug("Changing write timeout from " + _writeTimeout + " to " + ms);
-
+        if (_log.shouldDebug()) {_log.debug("Changing write timeout from " + _writeTimeout + " to " + ms);}
         _writeTimeout = ms;
     }
 
@@ -111,8 +109,7 @@ class MessageOutputStream extends OutputStream {
      *  @param size must be greater than 0, and smaller than or equal to bufSize in constructor
      */
     public void setBufferSize(int size) {
-        if (size <= 0 || size > _originalBufferSize)
-            return;
+        if (size <= 0 || size > _originalBufferSize) {return;}
         _nextBufferSize = size;
     }
 
@@ -172,9 +169,10 @@ class MessageOutputStream extends OutputStream {
             if (ws != null) {
                 if (_log.shouldDebug())
                     _log.debug("Waiting " + _writeTimeout + "ms for accept of " + ws);
-                // ok, we've actually added a new packet - lets wait until
-                // its accepted into the queue before moving on (so that we
-                // dont fill our buffer instantly)
+                /**
+                 *  OK, we've actually added a new packet - let's wait until it's accepted into
+                 *  the queue before moving on (so that we don't fill our buffer instantly)
+                 */
                 try {
                     ws.waitForAccept(_writeTimeout);
                 } catch (InterruptedException ie) {
@@ -250,8 +248,7 @@ class MessageOutputStream extends OutputStream {
     }
 
     /**
-     * Flush data that has been enqued but not flushed after a certain
-     * period of inactivity
+     * Flush data that has been enqued but not flushed after a certain period of inactivity
      */
     private class Flusher extends SimpleTimer2.TimedEvent {
         private boolean _enqueued;
@@ -261,39 +258,32 @@ class MessageOutputStream extends OutputStream {
         }
 
         public void enqueue() {
-            // no need to be overly worried about duplicates - it would just
-            // push it further out
+            // no need to be overly worried about duplicates - it would just push it further out
             int pfd = _context.getProperty(PROP_PASSIVE_FLUSH_DELAY, DEFAULT_PASSIVE_FLUSH_DELAY);
             if (!_enqueued) {
-                // Maybe we could just use schedule() here - or even SimpleTimer2 - not sure...
-                // To be safe, use forceReschedule() so we don't get lots of duplicates
-                // We've seen the queue blow up before, maybe it was this before the rewrite...
-                // So perhaps it IS wise to be "overly worried" ...
-//                forceReschedule(_passiveFlushDelay);
+                /**
+                 *  Maybe we could just use schedule() here - or even SimpleTimer2 - not sure...
+                 *  To be safe, use forceReschedule() so we don't get lots of duplicates
+                 *  We've seen the queue blow up before, maybe it was this before the rewrite...
+                 *  So perhaps it IS wise to be "overly worried" ...
+                 */
                 forceReschedule(pfd);
-                if (_log.shouldDebug())
-//                    _log.debug("Rescheduling the flusher to run in " + _passiveFlushDelay + "ms");
-                    _log.debug("Rescheduling the flusher to run in " + pfd + "ms");
+                if (_log.shouldDebug()) {_log.debug("Rescheduling the flusher to run in " + pfd + "ms");}
                 _enqueued = true;
             } else {
-                if (_log.shouldDebug())
-                    _log.debug("NOT rescheduling the flusher");
+                if (_log.shouldDebug()) {_log.debug("NOT rescheduling the flusher");}
             }
         }
 
         public void timeReached() {
-            if (_closed.get())
-                return;
+            if (_closed.get()) {return;}
             _enqueued = false;
             long timeLeft = (_lastBuffered + _passiveFlushDelay - _context.clock().now());
-            if (_log.shouldDebug())
-                _log.debug("Flusher time reached with " + timeLeft + "ms remaining");
-            if (timeLeft > 0)
-                enqueue();
-            else if (_dataReceiver.writeInProcess())
-                enqueue(); // don't passive flush if there is a write being done (unacked outbound)
-            else
-                doFlush();
+            if (_log.shouldDebug()) {_log.debug("Flusher time reached with " + timeLeft + "ms remaining");}
+            if (timeLeft > 0) {enqueue();}
+            // don't passive flush if there is a write being done (unacked outbound)
+            else if (_dataReceiver.writeInProcess()) {enqueue();}
+            else {doFlush();}
         }
 
         private void doFlush() {
@@ -340,9 +330,9 @@ class MessageOutputStream extends OutputStream {
      */
     @Override
     public void flush() throws IOException {
-     /* @throws InterruptedIOException if the write times out
-      * Documented here, but doesn't belong in the javadoc.
-      */
+        /** @throws InterruptedIOException if the write times out
+         *  Documented here, but doesn't belong in the javadoc.
+         */
         flush(true);
     }
 

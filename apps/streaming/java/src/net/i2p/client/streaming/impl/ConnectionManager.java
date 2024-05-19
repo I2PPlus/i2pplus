@@ -775,7 +775,7 @@ class ConnectionManager {
         }
 
         if (!_connectionFilter.allowDestination(from)) {
-            return new Reason("destination blocked by tunnel filter", 0);
+            return new Reason("destination blocked by Tunnel Filter", 0);
         }
 
         return null;

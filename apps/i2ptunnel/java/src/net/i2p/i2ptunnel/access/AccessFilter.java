@@ -237,7 +237,7 @@ class AccessFilter implements StatefulConnectionFilter {
                             syncer.schedule(SYNC_INTERVAL);
                     } catch (IOException bad) {
                         Log log = context.logManager().getLog(AccessFilter.class);
-                       log.log(Log.CRIT, "Syncing access list for tunnel filter failed", bad);
+                       log.log(Log.CRIT, "Syncing access list for Tunnel Filter failed", bad);
                     }
                 }
             });
