@@ -116,10 +116,10 @@ class RequestThrottler {
                 context.banlist().banlistRouter(h, " <b>➜</b> Floodfill with SSU disabled", null, null, context.clock().now() + 4*60*60*1000);
                 if (_log.shouldWarn())
                     _log.warn("Banning Floodfill [" + h.toBase64().substring(0,6) + "] for 4h -> No SSU transport enabled");
-            } else {
-                context.banlist().banlistRouter(h, " <b>➜</b> Floodfill is unreachable / firewalled", null, null, context.clock().now() + 4*60*60*1000);
-                if (_log.shouldWarn())
-                    _log.warn("Banning Floodfill [" + h.toBase64().substring(0,6) + "] for 4h -> Unreachable / firewalled");
+            //} else {
+            //    context.banlist().banlistRouter(h, " <b>➜</b> Floodfill is unreachable / firewalled", null, null, context.clock().now() + 4*60*60*1000);
+            //    if (_log.shouldWarn())
+            //        _log.warn("Banning Floodfill [" + h.toBase64().substring(0,6) + "] for 4h -> Unreachable / firewalled");
             }
             if (shouldDisconnect) {
                 context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
