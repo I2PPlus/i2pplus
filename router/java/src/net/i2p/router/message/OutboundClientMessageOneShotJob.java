@@ -209,7 +209,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         _to = msg.getDestination();
         Hash toHash = _to.calculateHash();
         _hashPair = new OutboundCache.HashPair(_from.calculateHash(), toHash);
-        _toString = "[" + toHash.toBase64().substring(0,6) + "]";
+        _toString = "[" + toHash.toBase64().substring(0,8) + "]";
         // we look up here rather than runJob() so we may adjust the timeout
         _leaseSet = ctx.clientNetDb(_from.calculateHash()).lookupLeaseSetLocally(toHash);
 
@@ -404,7 +404,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 // shouldn't happen unless unsupported encryption
                 if (_log.shouldWarn())
 //                    _log.warn("Received Lease but can't send to it, failure code " + rc + " (to=" + _toString + ")");
-                    _log.warn("Received Lease for Router " + _toString + " but can't send to it -> Unsupported encryption");
+                    _log.warn("Received Lease " + _toString + " but can't send to it -> Unsupported encryption? (Failure code: " + rc  + ")");
                 dieFatal(rc);
             }
         }
@@ -559,16 +559,16 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 break;
             }
             if (_log.shouldWarn())
-                _log.warn("Skipping unreachable gateway [" + l.getGateway().toBase64().substring(0,6) + "] for " + _toString);
+                _log.warn("Skipping UNREACHABLE Gateway [" + l.getGateway().toBase64().substring(0,8) + "] for " + _toString);
         }
         if (_lease == null) {
             _lease = leases.get(0);
             if (_log.shouldWarn())
-                _log.warn("All leases are unreachable for " + _toString);
+                _log.warn("All leases are UNREACHABLE for " + _toString);
         }
         _cache.leaseCache.put(_hashPair, _lease);
         if (_log.shouldInfo())
-            _log.info("[Job " + getJobId() + "] Added to cache - lease for " + _toString);
+            _log.info("[Job " + getJobId() + "] Added to cache - Lease for " + _toString);
         _wantACK = true;
         return 0;
     }
@@ -591,7 +591,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             int cause;
             if (getContext().clientNetDb(_from.calculateHash()).isNegativeCachedForever(_to.calculateHash())) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Unable to send to " + _toString + " because the sig type is unsupported");
+                    _log.warn("Cannot send to " + _toString + " -> Unsupported Signature type");
                 cause = MessageStatusMessage.STATUS_SEND_FAILURE_UNSUPPORTED_ENCRYPTION;
             } else {
                 if (_log.shouldInfo())
