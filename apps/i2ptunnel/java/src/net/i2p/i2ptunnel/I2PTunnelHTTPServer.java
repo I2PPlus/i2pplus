@@ -1289,7 +1289,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     protected static String formatHeadersCompact(Map<String, List<String>> headers, StringBuilder command) {
         StringBuilder buf = new StringBuilder(command.length() + headers.size() * 64);
         String request = command.toString().trim();
-        buf.append("\n* Request: " + request);
+        if (!request.toLowerCase().contains("head")) {buf.append("\n* Request: " + request);}
         for (Map.Entry<String, List<String>> e : headers.entrySet()) {
             String name = e.getKey();
             String lcName = name.toLowerCase().trim();
@@ -1299,7 +1299,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 lcName.contains("connection") || lcName.contains("accept") || lcName.contains("cookie") ||
                 lcName.contains("pragma") || lcName.contains("cache-control") || lcName.contains("referer") ||
                 lcName.contains("upgrade-insecure-requests") || (lcName.equals("content-length") && value.equals("0")) ||
-                (lcName.contains("user-agent") && hasUA && value.contains("MYOB"))) {
+                (lcName.contains("user-agent") && hasUA && value.contains("MYOB")) || !lcName.contains("host")) {
                 continue;
             }
             for (String val: e.getValue()) {
