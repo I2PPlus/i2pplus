@@ -725,7 +725,7 @@ class EventPumper implements Runnable {
                             count = _blockedIPs.increment(ba);
                             if (_log.shouldWarn()) {
                                 _log.warn("EOF on Inbound connection before receiving any data " +
-                                          "\n* Blocking IP address: " + ba + " (Count: " + count + ")");
+                                          "\n* Blocking IP address: " + ba + (count > 1 ? " (Count: " + count + ")" : ""));
                             }
                         } else {
                             count = 1;
@@ -805,12 +805,12 @@ class EventPumper implements Runnable {
                     String ba = Addresses.toString(ip).replace("/", "");
                     count = _blockedIPs.increment(ba);
                     if (_log.shouldWarn())
-                        _log.warn("Blocking IP address " + ba + " (Count: " + count + ") -> " + con +
+                        _log.warn("Blocking IP address " + ba + (count > 1 ? " (Count: " + count + ")" : "") +
                                   "\n* IO Error: " +  ioe.getMessage());
                 } else {
                     count = 1;
                     if (_log.shouldWarn())
-                        _log.warn("IO Error on Inbound before receiving any data: " + con);
+                        _log.warn("IO Error on Inbound connection before receiving any data: " + con);
                 }
                 _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
             } else {
