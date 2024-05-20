@@ -262,6 +262,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     String v = ri.getVersion();
                     boolean noSSU = true;
                     boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+                    boolean isInvalidVersion = VersionComparator.comp(v, "2.5.0") >= 0;
                     String country = "unknown";
                     boolean noCountry = true;
                     long uptime = getContext().router().getUptime();
@@ -283,6 +284,14 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         if (_log.shouldWarn()) {
                             _log.warn("Dropping unsolicited NetDbStore of banned " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "]" + ((isFF && noSSU) ? " -> SSU transport disabled" : ""));
+                        }
+                    } else if (isInvalidVersion) {
+                        shouldStore = false;
+                        wasNew = false;
+                        if (_log.shouldWarn()) {
+                            _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
+                                      " [" + key.toBase64().substring(0,6) + "] and banning for 24h -> Invalid Router version: " + v);
+                            getContext().banlist().banlistRouter(key, " <b>➜</b> Invalid Router version: " + v, null, null, now + 24*60*60*1000);
                         }
                     } else if (noCountry && uptime > 90*1000) {
                         shouldStore = false;

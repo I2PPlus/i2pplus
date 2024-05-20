@@ -734,6 +734,19 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                           bw.equals("L") || bw.equals("M") || bw.equals("N");
         String version = ri.getVersion();
         boolean isOld = VersionComparator.comp(version, "0.9.61") < 0;
+        boolean isInvalidVersion = VersionComparator.comp(version, "2.5.0") >= 0;
+
+        if (isInvalidVersion) {
+            _context.banlist().banlistRouter(h, " <b>➜</b> Invalid Router version (" + version + " / " + bw +
+                                             (unreachable ? "U" : reachable ? "R" : "") + ")", null,
+                                             null, _context.clock().now() + 24*60*60*1000);
+            _msg3p2FailReason = NTCPConnection.REASON_BANNED;
+            if (_log.shouldWarn() && !isBanned)
+                _log.warn("Banning for 24h and immediately disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                          " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
+            _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            throw new DataFormatException("Invalid Router version " + version + ": " + h);
+        }
 
         if (!reachable && isSlow && isOld) {
             _context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + version + " / " + bw + "U)", null,

@@ -321,6 +321,7 @@ public class PersistentDataStore extends TransientDataStore {
         ourIP = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(_context.router().getRouterInfo()));
         long uptime = _context.router().getUptime();
         boolean unreachable = false;
+        boolean reachable = false;
         boolean isFF = false;
         boolean hasIP = false;
         boolean noSSU = true;
@@ -331,6 +332,7 @@ public class PersistentDataStore extends TransientDataStore {
         v = ri.getVersion();
         String caps = ri.getCapabilities();
         unreachable = caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+        reachable = caps.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
         String country = "unknown";
         boolean noCountry = true;
         if (caps.contains("f")) {
@@ -358,6 +360,9 @@ public class PersistentDataStore extends TransientDataStore {
         boolean isBanned = ri != null && (_context.banlist().isBanlistedForever(key) ||
                            _context.banlist().isBanlisted(key) ||
                            _context.banlist().isBanlistedHostile(key));
+
+        String version = ri != null ? ri.getVersion() : "0.8.0";
+        boolean isInvalidVersion = VersionComparator.comp(version, "2.5.0") >= 0;
 
         try {
             if (data.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
@@ -395,6 +400,15 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldWarn())
                             _log.warn("Banning and immediately disconnecting from [" + key.toBase64().substring(0,6) + "] for 72h -> Router is spoofing our IP address!");
                         _context.banlist().banlistRouter(key, " <b>➜</b> Spoofed IP address (ours)", null, null, _context.clock().now() + 72*60*60*1000);
+                        _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
+                        dbFile.delete();
+                    } else if (isInvalidVersion) {
+                        if (_log.shouldWarn() && !isBanned)
+                            _log.warn("Banning for 24h and immediately disconnecting from Router [" + key.toBase64().substring(0,6) + "]" +
+                                      " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
+                        _context.banlist().banlistRouter(key, " <b>➜</b> Invalid Router version (" + version + " / " + bw +
+                                                         (unreachable ? "U" : reachable ? "R" : "") + ")", null,
+                                                          null, _context.clock().now() + 24*60*60*1000);
                         _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
                         dbFile.delete();
                     } else if (isLTier && unreachable && isOlderThanCurrent) {
