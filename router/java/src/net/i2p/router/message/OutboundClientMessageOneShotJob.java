@@ -307,7 +307,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 }
                 if (shouldFetch) {
                     if (_log.shouldInfo())
-                        _log.info(getJobId() + ": RAP LS, firing search: " + _leaseSet.getHash().toBase32());
+                        _log.info("[Job " + getJobId() + "] RAP LeaseSet, initiating search: " + _leaseSet.getHash().toBase32());
                     LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
                     getContext().clientNetDb(_from.calculateHash()).lookupLeaseSetRemotely(_leaseSet.getHash(), success, failed,
                                                                 LS_LOOKUP_TIMEOUT, _from.calculateHash());
@@ -317,7 +317,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 return;
             }
             if (_log.shouldDebug())
-                _log.debug("[Job " + getJobId() + "] Send Outbound client message - LeaseSet found locally for " + _toString);
+                _log.debug("[Job " + getJobId() + "] Send Outbound client message - LeaseSet for " + _toString + " found locally");
             if (!_leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR / 4)) {
                 // If it's about to expire, refetch in the background, we'll
                 // probably need it again. This will prevent stalls later.
@@ -330,7 +330,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 if (shouldFetch) {
                     if (_log.shouldInfo()) {
                         long exp = now - _leaseSet.getLatestLeaseDate();
-                        _log.info("[Job " + getJobId() + "] LeaseSet expired " + DataHelper.formatDuration(exp) + " ago, firing search: " + _leaseSet.getHash().toBase32());
+                        _log.info("[Job " + getJobId() + "] LeaseSet expired " + DataHelper.formatDuration(exp) +
+                                  " ago, initiating search for: " + _leaseSet.getHash().toBase32());
                     }
                     getContext().clientNetDb(_from.calculateHash()).lookupLeaseSetRemotely(_leaseSet.getHash(), _from.calculateHash());
                 }
@@ -339,7 +340,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         } else {
             _leaseSetLookupBegin = getContext().clock().now();
             if (_log.shouldDebug())
-                _log.debug("[Job " + getJobId() + "] Send Outbound client message - sending off LeaseSet Lookup job " + _toString + " from client " + _from.calculateHash().toBase32());
+                _log.debug("[Job " + getJobId() + "] Send Outbound client message - initiating LeaseSet Lookup job " +
+                           _toString + " from client " + _from.calculateHash().toBase32());
             LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
             Hash key = _to.calculateHash();
             getContext().clientNetDb(_from.calculateHash()).lookupLeaseSet(key, success, failed, LS_LOOKUP_TIMEOUT, _from.calculateHash());
@@ -960,52 +962,56 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
         long sendTime = getContext().clock().now() - _start;
         String statusToString = "";
-        if (status == 3)
-            statusToString = "Best effort send failed";
-        if (status == 5)
-            statusToString = "Guaranteed send failed";
-        if (status == 7)
-            statusToString = "Local send failed";
-        if (status == 8)
-            statusToString = "Local router not ready";
-        if (status == 9)
-            statusToString = "Net connection down";
-        if (status == 10)
-            statusToString = "Bad session";
-        if (status == 11)
-            statusToString = "Bad message";
-        if (status == 12)
-            statusToString = "Bad message options";
-        if (status == 13)
-            statusToString = "Queue or buffer full";
-        if (status == 14)
-            statusToString = "Message expired";
-        if (status == 15)
-            statusToString = "Bad local LeaseSet";
-        if (status == 16)
-            statusToString = "No tunnels available";
-        if (status == 17)
-            statusToString = "Unsupported encryption";
-        if (status == 18)
-            statusToString = "Bad remote destination";
-        if (status == 19)
-            statusToString = "Bad remote LeaseSet";
-        if (status == 20)
-            statusToString = "Remote LeaseSet expired";
-        if (status == 21)
-            statusToString = "No remote LeaseSet";
-        if (status == 22)
-            statusToString = "Cannot send to meta-LeaseSet";
+        switch (status) {
+            case 3: statusToString = "Best effort send failed";
+                break;
+            case 5: statusToString = "Guaranteed send failed";
+                break;
+            case 7: statusToString = "Local send failed";
+                break;
+            case 8: statusToString = "Local router not ready";
+                break;
+            case 9: statusToString = "Net connection down";
+                break;
+            case 10: statusToString = "Bad session";
+                break;
+            case 11: statusToString = "Bad message";
+                break;
+            case 12: statusToString = "Bad message options";
+                break;
+            case 13: statusToString = "Queue or buffer full";
+                break;
+            case 14: statusToString = "Message expired";
+                break;
+            case 15: statusToString = "Bad local LeaseSet";
+                break;
+            case 16: statusToString = "No tunnels available";
+                break;
+            case 17: statusToString = "Unsupported encryption";
+                break;
+            case 18: statusToString = "Bad remote destination";
+                break;
+            case 19: statusToString = "Bad remote LeaseSet";
+                break;
+            case 20: statusToString = "Remote LeaseSet expired";
+                break;
+            case 21: statusToString = "No remote LeaseSet";
+                break;
+            case 22: statusToString = "Cannot send to Meta-LeaseSet";
+                break;
+            default: statusToString = "Unknown status"; // handle unknown status
+        }
         if (_log.shouldWarn()) {
-            if (statusToString != "")
+            if (!statusToString.equals("") && !statusToString.equals("Unknown status")) {
                 _log.warn("Sending of " + _clientMessageId + " to " + _toString +
                           " failed after " + sendTime + "ms -> " + statusToString);
-            else
+            } else {
                 _log.warn("Sending of " + _clientMessageId + " to " + _toString +
-                          " failed after " + sendTime + "ms (Status: " + status + ")");
+                          " failed after " + sendTime + "ms (Status code: " + status + ")");
 //                      + "\n\t" + _outTunnel
 //                      + "\n\t" + _inTunnel
 //                      + "\n\t" + _lease + " ACK");
+            }
         }
 
         clearCaches();
