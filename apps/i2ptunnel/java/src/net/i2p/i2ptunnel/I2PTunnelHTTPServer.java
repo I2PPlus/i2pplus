@@ -689,7 +689,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 String modifiedHeader = formatHeaders(headers, command);
                 if (_log.shouldDebug()) {_log.debug("[HTTPServer] Modified headers\n\t" + modifiedHeader);}
-                else if (_log.shouldInfo()) {
+                else if (_log.shouldInfo() && !command.toString().toLowerCase().contains("head")) {
                     String compactHeaders = formatHeadersCompact(headers, command);
                     _log.info("[HTTPServer] Received request headers" + compactHeaders);
                 }
