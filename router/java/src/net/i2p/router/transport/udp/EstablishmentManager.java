@@ -842,7 +842,7 @@ class EstablishmentManager {
         if (count > MAX_TERMINATIONS) {
             // not everybody listens or backs off...
             if (_log.shouldWarn()) {
-                _log.warn("[SSU2] Rate limit of " + MAX_TERMINATIONS + " in 3m exceeded (Count: " + count + ") -> No more termination packets to: " + to);
+                _log.warn("[SSU2] Rate limit of " + MAX_TERMINATIONS + " in 3m exceeded (Count: " + count + ") \n* No more termination packets to: " + to);
             }
             if (count > MAX_TERMINATIONS*2) {
                 try {
@@ -853,10 +853,6 @@ class EstablishmentManager {
                         _context.blocklist().add(ip, "Ignores termination packets");
                         if (_log.shouldWarn()) {
                             _log.warn("[SSU2] Banning " + targetIP + " for duration of session -> Repeatedly ignoring termination packets");
-                        }
-                    } else if (ip != null && _context.blocklist().isBlocklisted(ip)) {
-                        if (_log.shouldInfo()) {
-                            _log.info("[SSU2] Not banning " + targetIP + " -> Already in blocklist");
                         }
                     }
                 } catch (UnknownHostException uhe) {}
@@ -903,7 +899,7 @@ class EstablishmentManager {
                 byte[] ip = Addresses.getIP(targetIP);
                 if (ip != null && _context.blocklist().isBlocklisted(ip)) {
                     if (_log.shouldInfo()) {
-                        _log.info("[SSU2] Ignoring SessionConfirmed from " + targetIP + " -> IP address is in blocklist");
+                        _log.info("[SSU2] Ignoring SessionConfirmed from " + targetIP + " -> IP address is blocklisted");
                     }
                     shouldExit = true;
                 }
@@ -925,10 +921,6 @@ class EstablishmentManager {
                     _context.blocklist().add(ip, "Corrupt SessionConfirmed");
                     if (_log.shouldWarn()) {
                         _log.warn("[SSU2] Banning " + targetIP + " for duration of session -> Corrupt SessionConfirmed");
-                    }
-                } else if (ip != null && _context.blocklist().isBlocklisted(ip)) {
-                    if (_log.shouldInfo()) {
-                        _log.info("[SSU2] Not banning " + targetIP + " -> Already in blocklist");
                     }
                 }
             } catch (UnknownHostException uhe) {}
@@ -967,7 +959,7 @@ class EstablishmentManager {
                 byte[] ip = Addresses.getIP(targetIP);
                 if (ip != null && _context.blocklist().isBlocklisted(ip)) {
                     if (_log.shouldInfo()) {
-                        _log.info("[SSU2] Ignoring SessionCreated from " + targetIP + " -> IP address is in blocklist");
+                        _log.info("[SSU2] Ignoring SessionCreated from " + targetIP + " -> IP address is blocklisted");
                     }
                     shouldExit = true;
                 }
@@ -990,10 +982,6 @@ class EstablishmentManager {
                     _context.blocklist().add(ip, "Corrupt SessionCreated");
                     if (_log.shouldWarn()) {
                         _log.warn("[SSU2] Banning " + targetIP + " for duration of session -> Corrupt SessionCreated");
-                    }
-                } else if (ip != null && _context.blocklist().isBlocklisted(ip)) {
-                    if (_log.shouldInfo()) {
-                        _log.info("[SSU2] Not banning " + targetIP + " -> Already in blocklist");
                     }
                 }
             } catch (UnknownHostException uhe) {}
@@ -1042,10 +1030,6 @@ class EstablishmentManager {
                     _context.blocklist().add(ip, "Corrupt Retry");
                     if (_log.shouldWarn()) {
                         _log.warn("[SSU2] Banning " + targetIP + " for duration of session -> Corrupt Retry");
-                    }
-                } else if (ip != null && _context.blocklist().isBlocklisted(ip)) {
-                    if (_log.shouldInfo()) {
-                        _log.info("[SSU2] Not banning " + targetIP + " -> Already in blocklist");
                     }
                 }
             } catch (UnknownHostException uhe) {}
@@ -1176,7 +1160,7 @@ class EstablishmentManager {
             synchronized (allQueued) {
                 for (OutNetMessage msg : allQueued) {
                     if (now - Router.CLOCK_FUDGE_FACTOR > msg.getExpiration()) {
-                        _transport.failed(msg, "Took too long in est. mgr OB queue");
+                        _transport.failed(msg, "Timed out in EstablishmentManager Outbound queue");
                     } else {
                         queued.add(msg);
                     }

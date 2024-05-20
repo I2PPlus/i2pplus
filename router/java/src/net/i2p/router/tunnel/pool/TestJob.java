@@ -180,7 +180,7 @@ public class TestJob extends JobImpl {
             _otherTunnel.testJobSuccessful(ms);
 
         if (_log.shouldDebug())
-            _log.debug("Tunnel test [" + _id + "] succeeded in " + ms + "ms -> " + _cfg);
+            _log.debug("Tunnel Test [" + _id + "] succeeded in " + ms + "ms -> " + _cfg);
         scheduleRetest();
     }
 
@@ -203,7 +203,7 @@ public class TestJob extends JobImpl {
         else
             getContext().statManager().addRateData("tunnel.testFailedTime", timeToFail);
         if (_log.shouldWarn())
-            _log.warn("Tunnel test [" + _id + "] failed in " + timeToFail + "ms -> " + _cfg);
+            _log.warn("Tunnel Test [" + _id + "] failed in " + timeToFail + "ms -> " + _cfg);
         boolean keepGoing = _cfg.tunnelFailed();
         // blame the expl. tunnel too
         if (_otherTunnel.getLength() > 1)
@@ -342,7 +342,7 @@ public class TestJob extends JobImpl {
 
         public void runJob() {
             if (_log.shouldDebug())
-                _log.debug("Tunnel test [#" + _id + "] timeout -> Found? " + _found);
+                _log.debug("Tunnel Test [#" + _id + "] timeout -> Found? " + _found);
             if (!_found && (_encryptTag != null || _ratchetEncryptTag != null)) {
                 // don't clog up the SKM with old one-tag tagsets
                 SessionKeyManager skm;
