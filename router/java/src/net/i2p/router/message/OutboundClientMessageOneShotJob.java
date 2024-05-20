@@ -515,7 +515,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
         if (leases.isEmpty()) {
             if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] No leases found from " + _leaseSet);
+                _log.info("[Job " + getJobId() + "] No Leases found from " + _leaseSet);
             return MessageStatusMessage.STATUS_SEND_FAILURE_BAD_LEASESET;
         }
 
