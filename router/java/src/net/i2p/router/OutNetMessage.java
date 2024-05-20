@@ -60,15 +60,17 @@ public class OutNetMessage implements CDPQEntry {
      *  @since 0.9.3
      */
     public static final int PRIORITY_HIGHEST = 1000;
+    public static final int PRIORITY_MEDIUM = 400;
+    public static final int PRIORITY_LOWEST = 100;
 //    public static final int PRIORITY_MY_BUILD_REQUEST = 500;
-    public static final int PRIORITY_MY_BUILD_REQUEST = 1000;
+    public static final int PRIORITY_MY_BUILD_REQUEST = PRIORITY_HIGHEST;
 //    public static final int PRIORITY_MY_NETDB_LOOKUP = 500;
-    public static final int PRIORITY_MY_NETDB_LOOKUP = 1000;
+    public static final int PRIORITY_MY_NETDB_LOOKUP = PRIORITY_HIGHEST;
     public static final int PRIORITY_MY_NETDB_STORE = 460;
     public static final int PRIORITY_EXPLORATORY = 455;
     /** may be adjusted +/- 25 for outbound traffic */
 //    public static final int PRIORITY_MY_DATA = 425;
-    public static final int PRIORITY_MY_DATA = 1000;
+    public static final int PRIORITY_MY_DATA = PRIORITY_HIGHEST;
     public static final int PRIORITY_HIS_BUILD_REQUEST = 300;
     public static final int PRIORITY_BUILD_REPLY = 300;
     public static final int PRIORITY_NETDB_REPLY = 300;
@@ -76,9 +78,8 @@ public class OutNetMessage implements CDPQEntry {
     public static final int PRIORITY_NETDB_FLOOD = 200;
     public static final int PRIORITY_PARTICIPATING = 200;
     public static final int PRIORITY_MY_NETDB_STORE_LOW = 150;
-    public static final int PRIORITY_NETDB_EXPLORE = 100;
-    public static final int PRIORITY_NETDB_HARVEST = 100;
-    public static final int PRIORITY_LOWEST = 100;
+    public static final int PRIORITY_NETDB_EXPLORE = PRIORITY_LOWEST;
+    public static final int PRIORITY_NETDB_HARVEST = PRIORITY_LOWEST;
 
     /**
      *  Null msg and target, zero expiration (used in OutboundMessageRegistry only)
