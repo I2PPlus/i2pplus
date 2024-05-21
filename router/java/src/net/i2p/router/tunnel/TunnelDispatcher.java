@@ -11,6 +11,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.OutboundTunnelBuildReplyMessage;
 import net.i2p.data.i2np.ShortTunnelBuildMessage;
 import net.i2p.data.i2np.TunnelBuildMessage;
@@ -540,7 +541,7 @@ public class TunnelDispatcher implements Service {
                     _log.warn("Not dispatching GatewayMessage for [TunnelID " + id.getTunnelId()
                                + "]\n* Wrapper's expiration -> " + DataHelper.formatDuration(exp - before)
                                + " and/or content expiration -> " + DataHelper.formatDuration(subexp - before)
-                               + "\n* Type: " + submsg.getClass().getSimpleName() + " [MsgID " + id + "/" + submsg.getUniqueId() + "]");
+                               + "\n* Type: " + submsg.getType() + " [MsgID " + id + "/" + submsg.getUniqueId() + "]");
                 return;
             }
             //_context.messageHistory().tunnelDispatched("message " + msg.getRawUniqueId() + "/" + msg.getMessage().getRawUniqueId() + " on tunnel "
@@ -559,7 +560,7 @@ public class TunnelDispatcher implements Service {
                                 DataHelper.formatDuration(msg.getMessageExpiration() - before) + "/" +
                                 DataHelper.formatDuration(submsg.getMessageExpiration() - before) +
                                 " [MsgID " + id + "/" + msg.getMessage().getUniqueId() +
-                                "] Type: " + submsg.getClass().getSimpleName() +
+                                "] Type: " + submsg.getType() +
                                 "; Existing: " + _inboundGateways.size());
         }
 
