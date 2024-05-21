@@ -1,9 +1,17 @@
+2024-05-21 zzz
+ * Transport: Remove SSU1 code from IES/OES/PacketReader/HMAC (Gitlab MR !197)
+ * Tunnels: Don't parse messages at the OBEP (Gitlab MR !194)
+
+2024-05-19 zzz
+ * i2psnark: Fix NPE when attempting to create torrent with too many files
+
 2024-05-18 zzz
  * Transport: Remove SSU1 code from PacketBuilder/PeerState/OMF (Gitlab MR !193)
 
 2024-05-17 dr|z3d
  * I2PTunnel: URL based blocking for HTTP Server Tunnel - enabled with a url
-   blocklist at .i2p/http_blocklist.txt, one entry per line
+   blocklist at .i2p/http_blocklist.txt, one entry per line, blocked clients
+   logged at .i2p/http_blocklist_clients.txt for adding to tunnel filter
 
 2024-05-16 zzz
  * I2CP: Hopefully fix rare NPE
