@@ -89,7 +89,7 @@ echo "Old hash: $OLD_HASH"
 echo "New hash: $NEW_HASH"
 
 if [ -n "$OLD_HASH" ] && [ -n "$NEW_HASH" ] && [ "$OLD_HASH" != "$NEW_HASH" ]; then
-    echo " > Updated successful (hashes do not match) -> deleting $FILE.old"
+    echo " > Update successful (hashes do not match) -> deleting $FILE.old"
     #cp -v "$FILE" "./installer/resources/$FILE"
     rm -f "${FILE}.old" >/dev/null 2>&1
 fi
