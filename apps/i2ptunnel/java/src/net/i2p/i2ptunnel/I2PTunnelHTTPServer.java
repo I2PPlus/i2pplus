@@ -1554,13 +1554,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
-                if (line.isEmpty()) {continue;}
+                // Skip empty lines or lines that start with a '#'
+                if (line.isEmpty() || line.startsWith("#")) {continue;}
                 // Extract the URL from the request string
                 String url = line;
+                String escapedUrl = url.replace(".", "\\.").replace("?", "\\?").replace("*", "\\*").replace("+", "\\+")
+                                       .replace(",", "\\,").replace("-", "\\-").replace("{", "\\{").replace("}", "\\}")
+                                       .replace("[", "\\[").replace("]", "\\]").replace("/", "\\/").replace("(" , "\\(")
+                                       .replace(")", "\\)");
                 // Create regex pattern for URL
                 StringBuilder regex = new StringBuilder();
                 regex.append("(?i)"); // Case-insensitive match
-                regex.append(Pattern.quote(url));
+                regex.append(Pattern.quote(escapedUrl));
                 // Append regex pattern to builder
                 if (regexBuilder.length() > 0) {regexBuilder.append("|");}
                 regexBuilder.append(regex);
