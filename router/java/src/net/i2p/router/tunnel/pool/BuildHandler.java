@@ -80,6 +80,7 @@ class BuildHandler implements Runnable {
     private ExplState _explState = ExplState.NONE;
     private final String MIN_VERSION_HONOR_CAPS = "0.9.58";
 
+    private final static boolean DEFAULT_SHOULD_THROTTLE = true;
     private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
 
     private enum ExplState { NONE, IB, OB, BOTH }
@@ -1010,9 +1011,9 @@ class BuildHandler implements Runnable {
 
         boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
 
-        if (response == 0 && !isInGW && _throttler != null && from != null) {
+        if (response == 0 && !isInGW && _throttler != null && from != null && shouldThrottle) {
             ParticipatingThrottler.Result result = _throttler.shouldThrottle(from);
-            if (result == ParticipatingThrottler.Result.DROP && shouldThrottle) {
+            if (result == ParticipatingThrottler.Result.DROP) {
                 if (_log.shouldWarn())
                     _log.warn("Dropping Tunnel Request (hop throttle), previous hop -> [" + from.toBase64().substring(0,6) + "] " + req);
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
@@ -1021,7 +1022,7 @@ class BuildHandler implements Runnable {
                 _context.profileManager().tunnelFailed(from, 400);
                 return;
             }
-            if (result == ParticipatingThrottler.Result.REJECT && shouldThrottle) {
+            if (result == ParticipatingThrottler.Result.REJECT) {
                 if (_log.shouldWarn())
                     _log.warn("Rejecting Tunnel Request (hop throttle), previous hop -> [" + from.toBase64().substring(0,6) + "] " + req);
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
@@ -1030,9 +1031,9 @@ class BuildHandler implements Runnable {
                 _context.profileManager().tunnelFailed(from, 200);
             }
         }
-        if (response == 0 && (!isOutEnd) && _throttler != null) {
+        if (response == 0 && (!isOutEnd) && _throttler != null && shouldThrottle) {
             ParticipatingThrottler.Result result = _throttler.shouldThrottle(nextPeer);
-            if (result == ParticipatingThrottler.Result.DROP && shouldThrottle) {
+            if (result == ParticipatingThrottler.Result.DROP) {
                 if (_log.shouldWarn())
                     _log.warn("Dropping Tunnel Request (hop throttle), next hop -> [" + nextPeer.toBase64().substring(0,6) + "] " + req);
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
@@ -1042,7 +1043,7 @@ class BuildHandler implements Runnable {
                 _context.profileManager().tunnelFailed(nextPeer, 400);
                  return;
             }
-            if (result == ParticipatingThrottler.Result.REJECT && shouldThrottle) {
+            if (result == ParticipatingThrottler.Result.REJECT) {
                 if (_log.shouldWarn())
                     _log.warn("Rejecting Tunnel Request (hop throttle), next hop -> [" + nextPeer.toBase64().substring(0,6) + "] " + req);
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
@@ -1242,6 +1243,7 @@ class BuildHandler implements Runnable {
             // endpoint, receiving the request at the last hop)
             long reqId = receivedMessage.getUniqueId();
             PooledTunnelCreatorConfig cfg = _exec.removeFromBuilding(reqId);
+            boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
             //if (_log.shouldDebug())
             //    _log.debug("Receive tunnel build message " + reqId + " from "
             //               + (from != null ? from.calculateHash() : fromHash != null ? fromHash : "tunnels")
@@ -1249,7 +1251,7 @@ class BuildHandler implements Runnable {
             if (cfg != null) {
                 if (!cfg.isInbound()) {
                     // shouldnt happen - should we put it back?
-                    _log.error("Received TunnelBuildMessage, but it's not inbound? " + cfg);
+                    _log.error("Received TunnelBuildMessage, but it's not Inbound? " + cfg);
                 }
                 BuildEndMessageState state = new BuildEndMessageState(cfg, receivedMessage);
                 handleRequestAsInboundEndpoint(state);
@@ -1268,12 +1270,12 @@ class BuildHandler implements Runnable {
                         long age = _context.clock().now() - cur.recvTime;
                         if (age >= BuildRequestor.REQUEST_TIMEOUT/4) {
                             _context.statManager().addRateData("tunnel.dropLoad", age, sz);
-                            _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping tunnel requests: High load"));
+                            _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Dropping Tunnel Requests: High load"));
                             // if the queue is backlogged, stop adding new messages
                             accept = false;
                         }
                     }
-                    if (accept && _requestThrottler != null) {
+                    if (accept && _requestThrottler != null  && shouldThrottle) {
                         // early request throttle check, before queueing and decryption
                         Hash fh = fromHash;
                         if (fh == null && from != null)
