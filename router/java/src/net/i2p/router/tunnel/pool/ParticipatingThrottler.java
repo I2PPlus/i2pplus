@@ -45,10 +45,12 @@ class ParticipatingThrottler {
     private static boolean isSlow = SystemVersion.isSlow();
     private static boolean isQuadCore = SystemVersion.getCores() >= 4;
     private static boolean isHexaCore = SystemVersion.getCores() >= 6;
-    private final static boolean DEFAULT_SHOULD_THROTTLE = true;
-    private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
+    private final static boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
     private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
+    private final static boolean DEFAULT_SHOULD_THROTTLE = true;
+    private final static String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
     private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
+    private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
 
     /** portion of the tunnel lifetime */
     private static final int LIFETIME_PORTION = 3;
@@ -100,6 +102,7 @@ class ParticipatingThrottler {
         int period = bantime / 60 / 1000;
         boolean shouldThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
         boolean shouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
+        boolean shouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
         String v;
         if (ri != null) {
             if (ri.getVersion() != null) {
@@ -129,7 +132,7 @@ class ParticipatingThrottler {
                 _log.warn("Banning " + (caps != "" ? caps : "") + " Router [" + h.toBase64().substring(0,6) + "] for 4h" +
                           " -> Compressible RouterInfo / " + v);
             context.banlist().banlistRouter(h, " <b>➜</b> Compressible RouterInfo &amp; older than 0.9.57", null, null, context.clock().now() + 16*60*60*1000);
-        } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isLU) {
+        } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isLU && shouldBlockOldRouters) {
             if (shouldDisconnect) {
                 context.commSystem().forceDisconnect(h);
                 if (_log.shouldWarn())
@@ -142,7 +145,7 @@ class ParticipatingThrottler {
             }
             context.banlist().banlistRouter(h, " <b>➜</b> LU and older than current version", null, null, context.clock().now() + (bantime*4));
             rv = Result.DROP;
-        } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isLowShare) {
+        } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isLowShare && shouldBlockOldRouters) {
             if (shouldDisconnect) {
                 context.commSystem().forceDisconnect(h);
                 if (_log.shouldWarn())
@@ -154,7 +157,7 @@ class ParticipatingThrottler {
                               "] -> " + v + (caps != "" ? " / " + caps : ""));
             }
             rv = Result.DROP;
-        } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isUnreachable) {
+        } else if (VersionComparator.comp(v, MIN_VERSION) < 0 && isUnreachable && shouldBlockOldRouters) {
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             rv = Result.DROP;
             if (_log.shouldWarn())

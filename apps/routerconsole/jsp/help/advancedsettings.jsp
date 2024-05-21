@@ -123,6 +123,9 @@
 <tr><th>router.enableTransitThrottle={true|false}</th></tr>
 <tr><td><%=intl._t("When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]")%></td></tr>
 
+<tr><th>router.blockOldRouters={true|false}</th></tr>
+<tr><td><%=intl._t("When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]")%></td></tr>
+
 <tr><th>router.tunnelConcurrentBuilds={n}</th></tr>
 <tr><td><%=intl._t("When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]")%></td></tr>
 

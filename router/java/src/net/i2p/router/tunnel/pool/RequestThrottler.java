@@ -45,6 +45,8 @@ class RequestThrottler {
     private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
     private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
     private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
+    private final static boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
+    private final static String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
 
     RequestThrottler(RouterContext ctx) {
         this.context = ctx;
@@ -66,6 +68,7 @@ class RequestThrottler {
                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
         boolean isLTier = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                           ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0);
+        boolean shouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
         int portion = isSlow ? 6 : 4;
         int min = (isSlow ? MIN_LIMIT / 2 : MIN_LIMIT) / portion;
@@ -167,7 +170,7 @@ class RequestThrottler {
             }
             context.banlist().banlistRouter(h, " <b>➜</b> LU and older than current version", null, null, context.clock().now() + 4*60*60*1000);
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
-        } else if (isOld && (isUnreachable || isLowShare)) {
+        } else if (isOld && (isUnreachable || isLowShare) && shouldBlockOldRouters) {
             if (isUnreachable) {
                 if (_log.shouldWarn())
                     _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Unreachable / " + v);
