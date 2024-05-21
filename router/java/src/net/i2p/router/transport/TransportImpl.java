@@ -135,9 +135,8 @@ public abstract class TransportImpl implements Transport {
         // if the router is slow, or we have the i2prouter script on linux that bumps the ulimit,
         // allow more NTCP2 and less SSU. See getMaxConnections() below.
         String installed = _context.getProperty("router.firstVersion");
-        REBALANCE_NTCP = SystemVersion.isSlow() ||
-                         (!SystemVersion.isMac() && !SystemVersion.isWindows() &&
-                          SystemVersion.hasWrapper() && installed != null && VersionComparator.comp(installed, "0.9.33") >= 0);
+        REBALANCE_NTCP = SystemVersion.isSlow() || (!SystemVersion.isMac() && !SystemVersion.isWindows() &&
+                         SystemVersion.hasWrapper() && installed != null && VersionComparator.comp(installed, "0.9.33") >= 0);
     }
 
     /**
@@ -160,18 +159,13 @@ public abstract class TransportImpl implements Transport {
 
     /** Per-transport connection limit */
     public int getMaxConnections() {
-        if (_context.commSystem().isDummy())
-            // testing
-            return 0;
+        if (_context.commSystem().isDummy()) {return 0;} // testing
         String style = getStyle();
         // object churn
         String maxProp;
-        if (style.equals("SSU"))
-            maxProp = "i2np.udp.maxConnections";
-        else if (style.equals("NTCP"))
-            maxProp = "i2np.ntcp.maxConnections";
-        else // shouldn't happen
-            maxProp = "i2np." + style.toLowerCase(Locale.US) + ".maxConnections";
+        if (style.equals("SSU")) {maxProp = "i2np.udp.maxConnections";}
+        else if (style.equals("NTCP")) {maxProp = "i2np.ntcp.maxConnections";}
+        else {maxProp = "i2np." + style.toLowerCase(Locale.US) + ".maxConnections";} // shouldn't happen
         int def = MAX_CONNECTION_FACTOR;
         // get it from here, not the RI, to avoid deadlock
         char bw = _context.router().getBandwidthClass();
@@ -181,28 +175,21 @@ public abstract class TransportImpl implements Transport {
                 case 'u':  // unknown
                 default:
                     break;
-                case Router.CAPABILITY_BW32:
-                    def *= 2;
+                case Router.CAPABILITY_BW32: def *= 2;
                     break;
-                case Router.CAPABILITY_BW64:
-                    def *= 3;
+                case Router.CAPABILITY_BW64: def *= 3;
                     break;
-                case Router.CAPABILITY_BW128:
-                    def *= 5;
+                case Router.CAPABILITY_BW128: def *= 5;
                     break;
-                case Router.CAPABILITY_BW256:
-                    def *= 9;
+                case Router.CAPABILITY_BW256: def *= 9;
                     break;
-                case Router.CAPABILITY_BW512:
-                    def *= 11;
+                case Router.CAPABILITY_BW512: def *= 11;
                     break;
-                case Router.CAPABILITY_BW_UNLIMITED:
-                    def *= 14;
+                case Router.CAPABILITY_BW_UNLIMITED: def *= 14;
                     break;
             }
 
         if (_context.netDb().floodfillEnabled()) {
-            // && !SystemVersion.isWindows()) {
             def *= 17; def /= 10;
         }
         // increase limit for SSU, for now
@@ -211,39 +198,23 @@ public abstract class TransportImpl implements Transport {
         boolean isSlow = SystemVersion.isSlow();
         if (style.equals("SSU")) {
             if (REBALANCE_NTCP) {
-                if (maxMemory >= 1024*1024*1024 && cores >= 4)
-                    def *= 8;
-                else if (maxMemory >= 512*1024*1024)
-                    def *= 5;
-                else
-                    def *= 5; def /= 2;
-            } else {
-                def *= 3;
-            }
-            if (def > 4000 && maxMemory >= 2048*1024*1024 && cores >= 4 && !isSlow)
-                def = 4000;
-            else if (def > 3000 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
-                def = 3000;
-            else if (def > 2000 && maxMemory >= 512*1024*1024 && cores >= 4 && !isSlow)
-                def = 2000;
-            else if (def > 1500)
-                def = 1500;
+                if (maxMemory >= 1024*1024*1024 && cores >= 4) {def *= 8;}
+                else if (maxMemory >= 512*1024*1024) {def *= 5;}
+                else {def *= 5; def /= 2;}
+            } else {def *= 3;}
+            if (def > 8000 && maxMemory >= 2048*1024*1024 && cores >= 4 && !isSlow) {def = 8000;}
+            else if (def > 5000 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow) {def = 5000;}
+            else if (def > 4000 && maxMemory >= 512*1024*1024 && cores >= 4 && !isSlow) {def = 4000;}
+            else if (def > 3000) {def = 3000;}
         } else if (style.equals("NTCP")) {
             if (REBALANCE_NTCP) {
-                if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
-                    def *= 6;
-                else if (maxMemory >= 512*1024*1024 && cores >= 4 && !isSlow)
-                    def *= 4;
-                else
-                    def *= 3; def /= 2;
-                if (def > 4000 && maxMemory >= 2048*1024*1024 && cores >= 4 && !isSlow)
-                    def = 4000;
-                else if (def > 3000 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
-                    def = 3000;
-                else if (def > 2000 && maxMemory >= 512*1024*1024 && cores >= 4 && !isSlow)
-                    def = 2000;
-                else if (def > 1500)
-                    def = 1500;
+                if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow) {def *= 6;}
+                else if (maxMemory >= 512*1024*1024 && cores >= 4 && !isSlow) {def *= 4;}
+                else {def *= 3; def /= 2;}
+                if (def > 4000 && maxMemory >= 2048*1024*1024 && cores >= 4 && !isSlow) {def = 5000;}
+                else if (def > 4000 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow) {def = 4000;}
+                else if (def > 3000 && maxMemory >= 512*1024*1024 && cores >= 4 && !isSlow) {def = 3000;}
+                else if (def > 2000) {def = 2000;}
             }
         }
         return _context.getProperty(maxProp, def);
@@ -348,7 +319,7 @@ public abstract class TransportImpl implements Transport {
 
         if (msToSend > 1500) {
             if (debug)
-                _log.debug("[" + getStyle() + "] afterSend slow: " + (sendSuccessful ? "success! " : "FAIL! ")
+                _log.debug("[" + getStyle() + "] afterSend slow: " + (sendSuccessful ? "Success! " : "FAIL! ")
                           + "\n* " + msg.getMessageSize() + " byte "
                           + msg.getMessageType() + "[MsgID "+ msg.getMessageId() + "] to ["
                           + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + "] took " + msToSend + " ms");
@@ -362,13 +333,13 @@ public abstract class TransportImpl implements Transport {
             //if (!sendSuccessful)
             //    level = Log.DEBUG;
             if (_log.shouldLog(level))
-                _log.log(level, "[" + getStyle() + "] afterSend slow: " + (sendSuccessful ? "success! " : "FAIL! ")
+                _log.log(level, "[" + getStyle() + "] afterSend slow: " + (sendSuccessful ? "Success! " : "FAIL! ")
                           + "(Lifetime: " + lifetime + "ms / Time taken: " + msToSend + "ms)\n* " + msg.getMessageSize() + " byte "
                           + msg.getMessageType() + " [MsgID " + msg.getMessageId() + "] from [" + _context.routerHash().toBase64().substring(0,6)
                           + "] to [" + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + "]: " + msg.toString());
         } else {
             if (debug)
-                _log.debug("[" + getStyle() + "] afterSend: " + (sendSuccessful ? "success! " : "FAIL! ")
+                _log.debug("[" + getStyle() + "] afterSend: " + (sendSuccessful ? "Success! " : "FAIL! ")
                           + "\n* " + msg.getMessageSize() + " byte "
                           + msg.getMessageType() + " [MsgID " + msg.getMessageId() + "] from [" + _context.routerHash().toBase64().substring(0,6)
                           + "] to [" + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + "] " + msg.toString());
