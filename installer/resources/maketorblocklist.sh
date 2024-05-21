@@ -21,20 +21,19 @@ fi
 
 # Remove existing input file if it exists
 if [ -f $input_file ]; then
-  rm $input_file
-  echo " > Deleted existing local copy of $input_file"
+  rm $input_file && echo " > Deleted existing local copy of $input_file"
 fi
 
 # Download the latest list from Tor Project
 echo " > Downloading the latest list from Tor Project via specified proxy $http_proxy..."
-curl -o $input_file -x $http_proxy $url 2>/dev/null
+curl -s -o $input_file -x $http_proxy $url
 if [ $? -ne 0 ]; then
   echo " > Failed to download the latest list using proxy ${http_proxy}. Please check your proxy settings and try again."
   exit 1
 fi
 
 # Count the number of IPs in the file
-ips_count=$(wc -l $input_file)
+ips_count=$(awk 'END{print NR}' "$input_file")
 echo " > Number of IPs in $input_file: $ips_count"
 echo " > Sorting IPs and consolidating ranges, please stand by..."
 
@@ -74,9 +73,9 @@ done
 # Print the last range
 print_range
 
-echo " > Consolidated IPs saved to: $output_file"
-ips_count=$(wc -l $output_file)
-echo " > Consolidated IP ranges in $output_file: $(($ips_count - 2))"
+output_count=$(wc -l < "$output_file")
+ips_count=$((output_count - 2))
+echo " > $ips_count consolidated IP ranges saved to: $output_file"
 
 # Clean up: Remove downloaded input file
 rm $input_file
