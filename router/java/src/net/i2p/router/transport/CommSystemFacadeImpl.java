@@ -48,6 +48,7 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -931,13 +932,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     @Override
     public String getCountry(Hash peer) {
+        ConcurrentHashMap<Hash, String> countryCache = new ConcurrentHashMap<>();
         String cachedCountry = countryCache.get(peer);
         long now = System.currentTimeMillis();
         long uptime = _context.router().getUptime();
         if (cachedCountry != null && !cachedCountry.equals("xx")) {return cachedCountry;}
         else if (cachedCountry != null && cachedCountry.equals("xx") && now - lastUnknownPurge > 5*1000) {
-          countryCache.remove(peer);
-          lastUnknownPurge = System.currentTimeMillis();
+            countryCache.remove(peer);
+            lastUnknownPurge = System.currentTimeMillis();
         }
         if (!_context.banlist().isBanlisted(peer)) {
             byte[] ip = TransportImpl.getIP(peer);
@@ -958,26 +960,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 return "xx";
             }
             Hash eldestKey = null;
-            countryCache.put(peer, country);
-            if (countryCache.size() > MAX_COUNTRY_CACHE_SIZE) {
-                eldestKey = countryCache.keySet().iterator().next();
-                if (eldestKey != null) {
-                    countryCache.remove(eldestKey);
-                }
+            Iterator<Hash> iterator = countryCache.keySet().iterator();
+            if (countryCache.size() >= MAX_COUNTRY_CACHE_SIZE) {
+                eldestKey = iterator.next(); // Store the eldest key
+                iterator.remove(); // Remove the eldest key
             }
-/**
-            if (random.nextInt(3) <= 1 && now - lastLookupTime > 5*1000 && uptime > 15*60*1000) {
-                RouterInfo ri = (RouterInfo) _context.netDb().lookupRouterInfoLocally(peer);
-                if (_log.shouldInfo()) {
-                    _log.info("Performing lookup of Router [" + peer.toBase64().substring(0,6) + "] with validation");
-                }
-            } else {
-                RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-                if (_log.shouldInfo()) {
-                    _log.info("Performing lookup of Router [" + peer.toBase64().substring(0,6) + "] without validation");
-                }
-            }
-**/
             lastLookupTime = System.currentTimeMillis();
             return country;
         } else {return null;}
