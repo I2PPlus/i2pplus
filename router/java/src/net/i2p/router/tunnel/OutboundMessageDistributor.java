@@ -143,7 +143,7 @@ class OutboundMessageDistributor {
                     msg = umsg.convert();
                 } catch (I2NPMessageException ime) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Unable to convert to standard message class at zero-hop IBGW (" + ime.getMessage() + ")");
+                        _log.warn("Unable to convert to standard message class at zero-hop Inbound Gateway \n* " + ime.getMessage());
                     return;
                 }
             }
