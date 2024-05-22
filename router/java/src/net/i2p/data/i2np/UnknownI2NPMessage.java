@@ -98,7 +98,7 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
         boolean eq = _checksum == calc[0];
         SimpleByteCache.release(calc);
         if (!eq)
-            throw new I2NPMessageException("Bad checksum on " + _data.length + " byte msg type " + _type);
+            throw new I2NPMessageException("BAD checksum on " + _data.length + " byte message (Type: " + _type + ")");
         msg.readMessage(_data, 0, _data.length, _type);
         msg.setUniqueId(getUniqueId());
         msg.setMessageExpiration(_expiration);

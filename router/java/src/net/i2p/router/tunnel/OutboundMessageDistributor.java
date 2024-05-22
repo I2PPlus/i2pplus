@@ -55,7 +55,7 @@ class OutboundMessageDistributor {
         } else {_toRouters = null;}
         // all createRateStat() in TunnelDispatcher
     }
-    
+
     /**
      *  Warning - as of 0.9.63, msg will be an UnknownI2NPMessage,
      *  and must be converted before handling locally.
@@ -143,7 +143,7 @@ class OutboundMessageDistributor {
                     msg = umsg.convert();
                 } catch (I2NPMessageException ime) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Unable to convert to std. msg. class at zero-hop IBGW", ime);
+                        _log.warn("Unable to convert to standard message class at zero-hop IBGW (" + ime.getMessage() + ")");
                     return;
                 }
             }
@@ -160,7 +160,7 @@ class OutboundMessageDistributor {
         if (toUs) {
             if (_log.shouldDebug())
                 _log.debug("Queueing Inbound message to ourselves: " + msg);
-            _context.inNetMessagePool().add(msg, null, null, 0); 
+            _context.inNetMessagePool().add(msg, null, null, 0);
             return;
         } else {
             OutNetMessage out = new OutNetMessage(_context, msg, _context.clock().now() + MAX_DISTRIBUTE_TIME, _priority, target);
