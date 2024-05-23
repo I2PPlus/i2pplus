@@ -856,7 +856,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 String[] requestParts = requestLine.split(" ");
                 url = requestParts[1];
                 host = getHostFromHeaders(_headers);
-                host = (host.contains("b32.i2p") ? host.substring(0, 8) + "...b32.i2p" : host);
+                host = (host.contains("b32.i2p") ? host.substring(0, 12) + "...b32.i2p" : host);
                 req = (host != null && url != null && !url.equals("") ? host + url.replace("//", "/") : "");
 
                 boolean isHead = _headers.startsWith("HEAD ");
