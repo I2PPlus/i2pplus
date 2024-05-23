@@ -855,6 +855,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 String requestLine = requestLines[0];
                 String[] requestParts = requestLine.split(" ");
                 url = requestParts[1];
+                if (url.length() > 100) {
+                    url = url.substring(0, 48) + "..." + url.substring(url.length() - 48);
+                }
                 host = getHostFromHeaders(_headers);
                 host = (host.contains("b32.i2p") ? host.substring(0, 12) + "...b32.i2p" : host);
                 req = (host != null && url != null && !url.equals("") ? host + url.replace("//", "/") : "");
@@ -1041,11 +1044,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (_shouldCompress) {
                     compressedout = new CompressedResponseOutputStream(browserout, _keepalive);
                     compressedout.write(DataHelper.getUTF8(modifiedHeaders));
-                    s = new Sender(compressedout, serverin, "Server -> Client compressor" + (!req.equals("") ? " [" + req + "]" : ""), _log);
+                    s = new Sender(compressedout, serverin, "Server -> Client gzipped " + (!req.equals("") ? "\n* URL: " + req : ""), _log);
                     browserout = compressedout;
                 } else {
                     browserout.write(DataHelper.getUTF8(modifiedHeaders));
-                    s = new Sender(browserout, serverin, "Server -> Client uncompressed" + (!req.equals("") ? " [" + req + "]" : ""), _log);
+                    s = new Sender(browserout, serverin, "Server -> Client uncompressed " + (!req.equals("") ? "\n* URL: " + req : ""), _log);
                 }
                 if (_log.shouldDebug())
                     _log.debug("[HTTPServer] Running server-to-browser Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
