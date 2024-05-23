@@ -3329,18 +3329,32 @@
     </target>
 
     <target name="updateTorBlocklist">
-      <exec executable="/bin/sh" outputproperty="bash.output">
+      <exec executable="/bin/sh" outputproperty="shell.output">
         <arg value="-c"/>
         <arg value="cd installer/resources/ &amp;&amp; ./maketorblocklist.sh"/>
       </exec>
-      <condition property="download.failed">
-        <contains string="${bash.output}" substring="Failed to download the latest list." />
+      <condition property="download.success">
+        <contains string="${shell.output}" substring="consolidated IP ranges saved to: " />
       </condition>
-      <fail message="Failed to download the latest list.">
-        <condition>
-          <isset property="download.failed" />
-        </condition>
-      </fail>
+      <condition property="download.fail">
+        <contains string="${shell.output}" substring="Failed to download the latest list." />
+      </condition>
+      <antcall target="echo.torblocklistsuccess">
+        <param name="condition" value="${download.success}" />
+      </antcall>
+      <antcall target="echo.torblocklistfail">
+        <param name="condition" value="${download.fail}" />
+      </antcall>
+    </target>
+
+    <target name="echo.torblocklistsuccess" if="${condition}">
+      <property name="message" value="Successfully updated the Tor blocklist."/>
+      <echo level="info" message="${message}"/>
+    </target>
+
+    <target name="echo.torblocklistfail" if="${condition}">
+      <property name="message" value="Failed to update the Tor blocklist."/>
+      <echo level="error" message="${message}"/>
     </target>
 
 </project>
