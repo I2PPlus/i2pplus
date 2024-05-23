@@ -840,6 +840,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             Sender s = null;
             Sender sender = null;
             IOException ioex = null;
+            String host = null;
+            String url = null;
+            String req = null;
             try {
                 serverout = _webserver.getOutputStream();
                 serverout.write(DataHelper.getUTF8(_headers));
@@ -851,7 +854,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 String[] requestLines = _headers.split("\r\n");
                 String requestLine = requestLines[0];
                 String[] requestParts = requestLine.split(" ");
-                String url = requestParts[1];
+                url = requestParts[1];
+                host = getHostFromHeaders(_headers);
+                host = (host.contains("b32.i2p") ? host.substring(0, 8) + "...b32.i2p" : host);
+                req = (host != null && url != null && !url.equals("") ? host + url.replace("//", "/") : "");
 
                 boolean isHead = _headers.startsWith("HEAD ");
                 boolean isGet = _headers.startsWith("GET ");
@@ -1035,14 +1041,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (_shouldCompress) {
                     compressedout = new CompressedResponseOutputStream(browserout, _keepalive);
                     compressedout.write(DataHelper.getUTF8(modifiedHeaders));
-                    s = new Sender(compressedout, serverin, "Server -> Client compressor", _log);
+                    s = new Sender(compressedout, serverin, "Server -> Client compressor" + (!req.equals("") ? " for: " + req : ""), _log);
                     browserout = compressedout;
                 } else {
                     browserout.write(DataHelper.getUTF8(modifiedHeaders));
-                    s = new Sender(browserout, serverin, "Server -> Client uncompressed", _log);
+                    s = new Sender(browserout, serverin, "Server -> Client uncompressed" + (!req.equals("") ? " for: " + req : ""), _log);
                 }
                 if (_log.shouldDebug())
-                    _log.debug("[HTTPServer] Running server-to-browser: Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive);
+                    _log.debug("[HTTPServer] Running server-to-browser Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive);
                 s.run(); // same thread
             } catch (SSLException she) {
                 if (_log.shouldError()) {_log.error("[HTTPServer] SSL error", she);}
@@ -1055,8 +1061,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 } catch (IOException ioe) {}
                 _keepalive = false;
             } catch (IOException ioe) {
-                if (_log.shouldWarn())
-                    _log.warn("[HTTPServer] Error compressing: " + ioe.getMessage());
+                if (_log.shouldWarn()) {
+                    _log.warn("[HTTPServer] Error compressing: " + req + " -> " + ioe.getMessage());
+                }
                 ioex = ioe;
                 _keepalive = false;
             } finally {
@@ -1075,7 +1082,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         i2pReset = status == I2PSocketException.STATUS_CONNECTION_RESET;
                         if (i2pReset) {
                             if (_log.shouldDebug())
-                                _log.warn("[HTTPServer] Received I2P reset, resetting socket...");
+                                _log.warn("[HTTPServer] Received I2P RESET while serving: " + req + " -> Resetting socket...");
                             try {
                                 _webserver.setSoLinger(true, 0);
                             } catch (IOException ioe) {}
@@ -1086,7 +1093,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         boolean sockReset = msg != null && msg.contains("reset");
                         if (sockReset) {
                             if (_log.shouldDebug())
-                                _log.warn("[HTTPServer] Received socket reset, resetting I2P socket...");
+                                _log.warn("[HTTPServer] Received socket RESET while serving: " + req + " ->  Resetting I2P socket...");
                             try {
                                 _browser.reset();
                             } catch (IOException ioe) {}
@@ -1121,6 +1128,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
             }
         }
+    }
+
+    /** @since 0.9.63+ */
+    private static synchronized String getHostFromHeaders(String headers) {
+        String[] headerLines = headers.split("\r\n");
+        for (String headerLine : headerLines) {
+            if (headerLine.startsWith("Host:")) {
+                String hostHeader = headerLine.substring(6).trim();
+                int index = hostHeader.indexOf(":");
+                return index != -1 ? hostHeader.substring(0, index) : hostHeader;
+            }
+        }
+        return null;
     }
 
     private static class Sender implements Runnable {
