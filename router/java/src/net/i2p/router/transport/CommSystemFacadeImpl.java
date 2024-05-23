@@ -960,10 +960,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 return "xx";
             }
             Hash eldestKey = null;
-            Iterator<Hash> iterator = countryCache.keySet().iterator();
             if (countryCache.size() >= MAX_COUNTRY_CACHE_SIZE) {
-                eldestKey = iterator.next(); // Store the eldest key
-                iterator.remove(); // Remove the eldest key
+                Set<Hash> keySet = new HashSet<>(countryCache.keySet());
+                Iterator<Hash> iterator = keySet.iterator();
+                while (iterator.hasNext()) {
+                    eldestKey = iterator.next();
+                    iterator.remove(); // Remove the oldest key
+                }
             }
             lastLookupTime = System.currentTimeMillis();
             return country;
