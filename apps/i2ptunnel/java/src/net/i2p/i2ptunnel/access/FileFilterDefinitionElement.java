@@ -54,8 +54,9 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
         try {
             reader = new BufferedReader(new FileReader(file));
             String b32;
-            // ignore files with no entries
-            if ((b32 = reader.readLine()) == null) {return;}
+            // ignore empty files
+            int fileLength = (int) file.length();
+            if (fileLength == 0) {return;}
             while((b32 = reader.readLine()) != null) {
                 Hash hash = fromBase32(b32);
                 if (map.containsKey(hash)) {continue;}
@@ -64,7 +65,7 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
                 synchronized (lastLoaded) {lastLoaded.put(hash, newTracker);}
             }
         } catch (InvalidDefinitionException bad32) {
-            throw new IOException("Invalid entry in Tunnel Filter access list (bad b32)", bad32);
+            throw new IOException("Invalid entry in Tunnel Filter access list (Bad b32)", bad32);
         } finally {
             if (reader != null) {
                 try {reader.close();}
