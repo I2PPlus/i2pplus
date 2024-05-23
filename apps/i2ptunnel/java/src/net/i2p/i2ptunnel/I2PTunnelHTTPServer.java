@@ -1550,7 +1550,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             regexPattern = null;
             return;
         }
-        regexPattern = compileRegexPattern(blocklistFile);
         long currentLastModified = blocklistFile.lastModified();
         if (currentLastModified != blocklistLastModified || regexPattern == null) {
             regexPattern = compileRegexPattern(blocklistFile);
