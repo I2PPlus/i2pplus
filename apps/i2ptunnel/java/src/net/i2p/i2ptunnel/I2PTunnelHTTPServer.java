@@ -1167,14 +1167,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
         public void run() {
             if (_log.shouldDebug())
-                _log.debug("[HTTPServer] Begin sending (" + _name + ")");
+                _log.debug("[HTTPServer] Begin sending " + _name);
             try {
                 DataHelper.copy(_in, _out);
                 if (_log.shouldDebug())
-                    _log.debug("[HTTPServer] Done sending (" + _name + ")");
+                    _log.debug("[HTTPServer] Done sending " + _name);
             } catch (IOException ioe) {
                 if (_log.shouldInfo())
-                    _log.warn("[HTTPServer] Error sending (" + _name + ") -> " + ioe.getMessage());
+                    _log.warn("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());
                 synchronized(this) {
                     _failure = ioe;
                 }
