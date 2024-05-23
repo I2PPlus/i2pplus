@@ -54,22 +54,23 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
         try {
             reader = new BufferedReader(new FileReader(file));
             String b32;
+            // ignore files with no entries
+            if ((b32 = reader.readLine()) == null) {return;}
             while((b32 = reader.readLine()) != null) {
                 Hash hash = fromBase32(b32);
-                if (map.containsKey(hash))
-                    continue;
+                if (map.containsKey(hash)) {continue;}
                 DestTracker newTracker = new DestTracker(hash, threshold);
                 map.put(hash, newTracker);
-                synchronized (lastLoaded) {
-                    lastLoaded.put(hash, newTracker);
-                }
+                synchronized (lastLoaded) {lastLoaded.put(hash, newTracker);}
             }
         } catch (InvalidDefinitionException bad32) {
             throw new IOException("Invalid entry in Tunnel Filter access list (bad b32)", bad32);
         } finally {
             if (reader != null) {
-                try { reader.close(); } catch (IOException ignored) {}
+                try {reader.close();}
+                catch (IOException ignored) {}
             }
         }
     }
+
 }
