@@ -1041,11 +1041,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (_shouldCompress) {
                     compressedout = new CompressedResponseOutputStream(browserout, _keepalive);
                     compressedout.write(DataHelper.getUTF8(modifiedHeaders));
-                    s = new Sender(compressedout, serverin, "Server -> Client compressor" + (!req.equals("") ? " for: " + req : ""), _log);
+                    s = new Sender(compressedout, serverin, "Server -> Client compressor" + (!req.equals("") ? " [" + req + "]" : ""), _log);
                     browserout = compressedout;
                 } else {
                     browserout.write(DataHelper.getUTF8(modifiedHeaders));
-                    s = new Sender(browserout, serverin, "Server -> Client uncompressed" + (!req.equals("") ? " for: " + req : ""), _log);
+                    s = new Sender(browserout, serverin, "Server -> Client uncompressed" + (!req.equals("") ? " [" + req + "]" : ""), _log);
                 }
                 if (_log.shouldDebug())
                     _log.debug("[HTTPServer] Running server-to-browser Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
@@ -1167,14 +1167,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
         public void run() {
             if (_log.shouldDebug())
-                _log.debug("[HTTPServer] " + _name + ": Begin sending");
+                _log.debug("[HTTPServer] Begin sending (" + _name + ")");
             try {
                 DataHelper.copy(_in, _out);
                 if (_log.shouldDebug())
-                    _log.debug("[HTTPServer] " + _name + ": Done sending");
+                    _log.debug("[HTTPServer] Done sending (" + _name + ")");
             } catch (IOException ioe) {
                 if (_log.shouldInfo())
-                    _log.warn("[HTTPServer] " + _name + ": Error sending -> " + ioe.getMessage());
+                    _log.warn("[HTTPServer] Error sending (" + _name + ") -> " + ioe.getMessage());
                 synchronized(this) {
                     _failure = ioe;
                 }
