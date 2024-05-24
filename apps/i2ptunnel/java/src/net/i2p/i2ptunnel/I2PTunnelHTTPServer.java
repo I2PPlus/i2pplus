@@ -855,13 +855,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 String requestLine = requestLines[0];
                 String[] requestParts = requestLine.split(" ");
                 url = requestParts[1];
-                if (url.length() > 100) {
-                    url = url.substring(0, 48) + "..." + url.substring(url.length() - 48);
-                }
+                if (url != null && url.length() > 100) {url = url.substring(0, 48) + "..." + url.substring(url.length() - 48);}
                 host = getHostFromHeaders(_headers);
-                host = (host.contains("b32.i2p") ? host.substring(0, 12) + "...b32.i2p" : host);
-                req = (host != null && url != null && !url.equals("") ? host + url.replace("//", "/") : "");
-
+                if (host != null) {
+                    host = (host.contains("b32.i2p") ? host.substring(0, 12) + "...b32.i2p" : host);
+                    req = (url != null ? host + url.replace("//", "/") : "");
+                }
                 boolean isHead = _headers.startsWith("HEAD ");
                 boolean isGet = _headers.startsWith("GET ");
                 boolean isPost = _headers.startsWith("POST ");
@@ -882,11 +881,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 _webserver.setSoTimeout(timeout);
                 browserout = _browser.getOutputStream();
 
-                try {
-                    serverin = new BufferedInputStream(_webserver.getInputStream(), BUF_SIZE);
-                } catch (NullPointerException npe) {
-                    throw new IOException("getInputStream NPE");
-                }
+                try {serverin = new BufferedInputStream(_webserver.getInputStream(), BUF_SIZE);}
+                catch (NullPointerException npe) {throw new IOException("getInputStream NPE");}
                 StringBuilder command = new StringBuilder(512);
                 // Change headers to protect server identity
                 Map<String, List<String>> headers = readHeaders(null, serverin, command, SERVER_SKIPHEADERS, _ctx, timeout);
