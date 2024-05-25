@@ -33,30 +33,28 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
 
     @Override
     public void update(Map<Hash, DestTracker> map) throws IOException {
-        if (!(file.exists() && file.isFile()))
-            return;
+        if (!(file.exists() && file.isFile())) {return;}
         if (file.lastModified() <= lastLoading) {
             synchronized (lastLoaded) {
                 for (Map.Entry<Hash, DestTracker> entry : lastLoaded.entrySet()) {
-                    if (!map.containsKey(entry.getKey()))
+                    if (!map.containsKey(entry.getKey())) {
                         map.put(entry.getKey(),entry.getValue());
+                    }
                 }
             }
             return;
         }
 
         lastLoading = System.currentTimeMillis();
-        synchronized (lastLoaded) {
-            lastLoaded.clear();
-        }
+        synchronized (lastLoaded) {lastLoaded.clear();}
 
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(file));
             String b32;
-            // ignore empty or non-existent files
+            // ignore empty files
             int fileLength = (int) file.length();
-            if (!file.exists() || fileLength == 0) {return;}
+            if (fileLength == 0) {return;}
             while((b32 = reader.readLine()) != null) {
                 Hash hash = fromBase32(b32);
                 if (map.containsKey(hash)) {continue;}
