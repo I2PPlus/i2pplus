@@ -14,7 +14,7 @@ function refreshGraph() {
                        "hideTitle=true&hideGrid=true&";
 
   // check if at least 5 minutes has elapsed since last refresh
-  if (now - lastRefresh < 5*60*1000) {return;}
+  if (now - lastSnarkGraphRefresh < 5*60*1000) {return;}
 
   // update last refresh time
   lastSnarkGraphRefresh = now;
