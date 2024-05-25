@@ -3,7 +3,7 @@
 /* License: AGPL3 or later */
 
 import {onVisible} from "./onVisible.js";
-import {initFilterBar, showBadge} from "./torrentDisplay.js";
+import {initFilterBar, showBadge} from "./filterBar.js";
 import {initLinkToggler} from "./toggleLinks.js";
 import {initToggleLog} from "./toggleLog.js";
 import {Lightbox} from "./lightbox.js";

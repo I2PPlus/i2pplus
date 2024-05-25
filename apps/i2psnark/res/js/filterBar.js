@@ -1,4 +1,4 @@
-/* torrentDisplay.js by dr|z3d */
+/* filterBar.js by dr|z3d */
 /* Setup torrent display buttons so we can show/hide snarks based on status */
 /* License: AGPL3 or later */
 
