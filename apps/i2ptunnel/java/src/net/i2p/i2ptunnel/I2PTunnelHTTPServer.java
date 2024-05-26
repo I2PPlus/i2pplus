@@ -1535,7 +1535,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     String HTTP_BLOCKLIST = "http_blocklist.txt";
     String HTTP_BLOCKLIST_CLIENTS = "http_blocklist_clients.txt";
     private int HTTP_BLOCKLIST_CLIENT_LIMIT = 512;
-    private Pattern regexPattern;
+    private Pattern regexPattern = null;
     private long blocklistLastModified;
     private static List<String> clientBlockList;
     private static long blocklistClientsLastModified;
