@@ -52,9 +52,9 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
         try {
             reader = new BufferedReader(new FileReader(file));
             String b32;
-            // ignore empty files
-            int fileLength = (int) file.length();
-            if (fileLength == 0) {return;}
+            // ignore empty files?
+            //int fileLength = (int) file.length();
+            //if (fileLength == 0) {return;}
             while((b32 = reader.readLine()) != null) {
                 Hash hash = fromBase32(b32);
                 if (map.containsKey(hash)) {continue;}
