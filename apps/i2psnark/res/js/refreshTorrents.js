@@ -3,7 +3,8 @@
 /* License: AGPL3 or later */
 
 import {onVisible} from "./onVisible.js";
-import {initFilterBar, showBadge} from "./filterBar.js";
+import {showBadge} from "./filterBar.js";
+import {snarkSort} from "./snarkSort.js";
 import {initLinkToggler} from "./toggleLinks.js";
 import {initToggleLog} from "./toggleLog.js";
 import {Lightbox} from "./lightbox.js";
@@ -14,15 +15,15 @@ const files = document.getElementById("dirInfo");
 const filterbar = document.getElementById("torrentDisplay");
 const home = document.querySelector(".nav_main");
 const mainsection = document.getElementById("mainsection");
-const query = window.location.search;
+const query = window.location.search !== null ? window.location.search : "";
 const screenlog = document.getElementById("screenlog");
 const snarkHead = document.getElementById("snarkHead");
 const storageRefresh = window.localStorage.getItem("snarkRefresh");
 const torrents = document.getElementById("torrents");
-const xhrsnark = new XMLHttpRequest();
-let refreshIntervalId;
+let xhrsnark = new XMLHttpRequest();
+let snarkRefreshIntervalId;
 let screenLogIntervalId;
-let refreshTimeoutId;
+let snarkRefreshTimeoutId;
 let debugging = false;
 
 function refreshTorrents(callback) {
@@ -114,16 +115,24 @@ function refreshTorrents(callback) {
     if (torrents) {
       if (filterbar) {
         const activeBadge = filterbar.querySelector("#torrentDisplay .filter .badge:not(:empty)");
-        const activeBadgeResponse = xhrsnark.responseXML?.querySelector("#torrentDisplay .filter .badge:not(:empty)");
+        const activeBadgeResponse = xhrsnark.responseXML?.querySelector("#torrentDisplay .filter.enabled .badge:not(:empty)");
         if (activeBadge && activeBadgeResponse && activeBadge.textContent !== activeBadgeResponse.textContent) {
           activeBadge.textContent = activeBadgeResponse.textContent;
         }
         if (!xhrsnark.responseXML) {return;}
-        const filterbarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
-        if (!filterbar && filterbarResponse) {
+        const pagenavtop = document.getElementById("pagenavtop");
+        const pagenavtopResponse = xhrsnark.responseXML?.getElementById("pagenavtop");
+        const filterbarResponse = xhrsnark.responseXML?.getElementById("torrentDisplay");
+        if ((!filterbar && filterbarResponse) || (!pagenavtop && pagenavtopResponse !== null)) {
+          const torrentForm = document.getElementById("torrentlist");
+          const torrentFormResponse = xhrsnark.responseXML.getElementById("torrentlist");
           const mainsection = document.getElementById("mainsection");
           const mainsectionResponse = xhrsnark.responseXML?.getElementById("mainsection");
-          window.requestAnimationFrame(() => {mainsection.innerHTML = mainsectionResponse.innerHTML;});
+          //window.requestAnimationFrame(() => {mainsection.innerHTML = mainsectionResponse.innerHTML;});
+          window.requestAnimationFrame(() => {torrentForm.innerHTML = torrentFormResponse.innerHTML;});
+          initHandlers();
+        } else if (pagenavtop && pagenavtopResponse && pagenavtop.outerHTML !== pagenavtopResponse.outerHTML) {
+          window.requestAnimationFrame(() => {pagenavtop.outerHTML = pagenavtopResponse.outerHTML;});
         }
       }
       if (updatingResponse && updating.length === updatingResponse.length) {
@@ -176,9 +185,7 @@ function refreshTorrents(callback) {
         }
       }
     }
-    if (debugging) {
-      console.log("updateVolatile()");
-    }
+    if (debugging) {console.log("updateVolatile()");}
   }
 
   function refreshHeaderAndFooter() {
@@ -205,10 +212,8 @@ function refreshTorrents(callback) {
 
   xhrsnark.onerror = function (error) {
     noAjax(5000);
-    if (refreshTimeoutId) {
-      clearTimeout(refreshTimeoutId);
-    }
-    refreshTimeoutId = setTimeout(() => refreshTorrents(initHandlers), 1000);
+    if (snarkRefreshTimeoutId) {clearTimeout(snarkRefreshTimeoutId);}
+    snarkRefreshTimeoutId = setTimeout(() => refreshTorrents(initHandlers), 1000);
   };
 
 }
@@ -247,21 +252,18 @@ function refreshScreenLog(callback) {
 }
 
 function getURL() {
-  const baseUrl = "/i2psnark/.ajax/xhr1.html";
-  var url = baseUrl + query;
-  return url;
+  var currentURL = new URL(window.location.href);
+  var ajaxURL = currentURL.toString().replace("/i2psnark/", "/i2psnark/.ajax/xhr1.html");
+  return ajaxURL;
 }
 
 function initHandlers() {
   window.requestAnimationFrame(() => {
     setLinks();
     initLinkToggler();
-    if (screenlog) {
-      initSnarkAlert();
-    }
-    if (filterbar) {
-      showBadge();
-    }
+    if (screenlog) {initSnarkAlert();}
+    if (filterbar) {showBadge();}
+    if (torrents) {snarkSort();}
     if (debugging) {console.log("initHandlers()");}
   });
 }
@@ -285,14 +287,14 @@ function noAjax(delay) {
 }
 
 async function initSnarkRefresh() {
-  if (refreshIntervalId) {
-    clearInterval(refreshIntervalId);
+  if (snarkRefreshIntervalId) {
+    clearInterval(snarkRefreshIntervalId);
   }
   onVisible(mainsection, () => {
       const refreshInterval = (parseInt(storageRefresh) || 5) * 1000;
       const screenLogInterval = 3000;
     try {
-      refreshIntervalId = setInterval(async () => {
+      snarkRefreshIntervalId = setInterval(async () => {
         try {
           await doRefresh();
           await refreshScreenLog();
@@ -314,23 +316,22 @@ async function initSnarkRefresh() {
 }
 
 const REQUEST_TIMEOUT = 5000;
-function doRefresh() {
-  return new Promise((resolve, reject) => {
-    xhrsnark.timeout = REQUEST_TIMEOUT;
-    xhrsnark.open("GET", getURL(), true);
-    xhrsnark.responseType = "document";
-    xhrsnark.onload = () => {
-      isXHRSynced();
-      window.requestAnimationFrame(refreshTorrents);
-      initHandlers();
-      resolve();
-    };
-    xhrsnark.onerror = () => {
-      reject(xhrsnark.status);
-    };
-    xhrsnark.send();
-  }).finally(() => {
-  });
+function doRefresh(url, callback) {
+  if (url) {xhrsnark.open("GET", url, true);}
+  else {xhrsnark.open("GET", getURL(), true);}
+  xhrsnark.timeout = REQUEST_TIMEOUT;
+  xhrsnark.responseType = "document";
+  xhrsnark.onload = () => {
+    if (debugging) {isXHRSynced();}
+    window.requestAnimationFrame(refreshTorrents);
+    initHandlers();
+  };
+  xhrsnark.onerror = () => {
+    if (xhrsnark.readyState === 4) {
+      if (xhrsnark.status === 0) {setTimeout(() => {doRefresh(url, callback);}, REQUEST_TIMEOUT);}
+    }
+  };
+  xhrsnark.send();
 }
 
 function isXHRSynced() {
@@ -360,8 +361,8 @@ function refreshOnSubmit() {
 }
 
 function countSnarks() {
-  const rowCount = document.querySelectorAll("tr.volatile").length;
-  return rowCount;
+  var count = document.querySelectorAll("tr.volatile").length;
+  return count;
 }
 
-export {initSnarkRefresh, refreshTorrents, refreshScreenLog, xhrsnark, refreshIntervalId, getURL, countSnarks};
+export {initSnarkRefresh, refreshTorrents, refreshScreenLog, xhrsnark, snarkRefreshIntervalId, getURL, countSnarks, xhrsnark, doRefresh};

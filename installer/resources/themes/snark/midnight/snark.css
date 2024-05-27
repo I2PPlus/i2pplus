@@ -706,7 +706,6 @@ form[action^="/i2psnark/configure"]{display:block}
 /* torrent filter bar */
 #torrentDisplay{margin:-1px 0;width:calc(100% - 2px);padding:0;display:block;display:flex;position:sticky;top:47px;z-index:500;line-height:1.5;border:var(--border);box-shadow:var(--highlight);background:linear-gradient(180deg,#001,#00000d);contain:paint}
 .iframed #torrentDisplay{margin:-1px 0 1px;position:static;border-left:0;border-right:0}
-#torrentDisplay input{position:absolute;opacity:0;z-index:-1;height:0;width:0}
 #torrentDisplay .filter{padding:4px 10px;min-width:82px;display:inline-block;display:flex;flex-grow:.5;justify-content:center;box-sizing:border-box;font-size:9pt;font-weight:700;color:#89f;border-right:1px solid #171c3f;box-shadow:var(--highlight);background:var(--badge)}
 #torrentDisplay .filter:first-of-type{border-left:0}
 #torrentDisplay .filter:last-of-type{border-right:0}
@@ -715,23 +714,23 @@ form[action^="/i2psnark/configure"]{display:block}
 #torrentDisplay .filter:active{color:#943d94;background:var(--nav_active)}
 #torrentDisplay .filter.enabled{color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.5);background:#113;pointer-events:none}
 #filtercount:not(:empty){margin-left:5px;padding:2px 3px 1px;min-width:16px;display:inline-block!important;vertical-align:middle;line-height:1;font-size:85%;box-shadow:0 0 0 1px #225,var(--highlight);background:#113}
-#filtercount+#filtercount,#torrentDisplay .filterbutton:not(.enabled) #filtercount,label[for="all"] #filtercount{display:none!important}
+.filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
 
 /* peerid + client */
-#torrents code{display:inline-block;letter-spacing:.1em;font-family:var(--monospaced);font-weight:700}
-.peerdata{padding-left:0}
-.peerclient{margin:1px 2px 1px 0;padding:1px 0;border-radius:2px;background:#2a316f;contain:layout}
-#ourDest{margin-left:4px;padding:0 1px 0 4px;display:inline-block;line-height:1.3;border-radius:2px;background:#2a316f;contain:paint}
-#ourDest code,.peerinfo code{color:#bb0;text-shadow:0 1px 1px rgba(0,0,0,.7);background:#3f49a6}
-#ourDest code{margin:0 0 0 5px;padding:3px 3px 2px 5px;border-radius:0 2px 2px 0}
-.peerclient,.peerinfo code,.clientid{line-height:1.2;vertical-align:middle}
-.peerinfo code{margin:-2px 1px -2px -1px;margin-right:0;padding:3px 5px;border-radius:2px 0 0 2px}
-.clientid{margin:0 0 0 -4px;padding:4px 2px;width:52px;display:inline-block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:85%;line-height:1.3;text-align:center;border-radius:0 2px 2px 0;background:#2a316f}
 .clientversion{display:none}
+.clientid,.peerclient,.peerinfo code{line-height:1.2;vertical-align:middle}
+.clientid{margin:0 0 0 -4px;padding:4px 2px;width:52px;display:inline-block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:85%;line-height:1.3;text-align:center;border-radius:0 2px 2px 0;background:#2a316f}
+.peerclient{margin:1px 2px 1px 0;padding:1px 0;border-radius:2px;background:#2a316f;contain:layout}
+.peerdata{padding-left:0}
+.peerinfo code{margin:-2px 1px -2px -1px;margin-right:0;padding:3px 5px;border-radius:2px 0 0 2px}
 .peerinfo td>*{vertical-align:middle}
 .peerSeed{width:84px;display:inline-block;vertical-align:middle;text-align:center}
 .peerSeed img{font-size:0;opacity:.7;transform:scale(1)}
 .active .peerSeed img{opacity:1;animation:scale .2s linear 3s 2 forwards}
+#ourDest{margin-left:4px;padding:0 1px 0 4px;display:inline-block;line-height:1.3;border-radius:2px;background:#2a316f;contain:paint}
+#torrents code{display:inline-block;letter-spacing:.1em;font-family:var(--monospaced);font-weight:700}
+#ourDest code,.peerinfo code{color:#bb0;text-shadow:0 1px 1px rgba(0,0,0,.7);background:#3f49a6}
+#ourDest code{margin:0 0 0 5px;padding:3px 3px 2px 5px;border-radius:0 2px 2px 0}
 
 .inactivity{margin-left:10px;height:4px;max-width:400px;min-width:5px;display:inline-block;border-radius:3px;box-shadow:0 0 0 1px #010;background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 15px,rgba(0,0,0,.6) 15px,rgba(0,0,0,.6) 16px,rgba(0,0,0,0) 16px),linear-gradient(180deg,rgba(255,255,255,.3) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#440 40px,#730 100px,#900);transition:ease width 3s}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}

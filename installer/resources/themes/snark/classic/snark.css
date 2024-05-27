@@ -162,18 +162,21 @@ a.controld{display:none}
 .logshim{margin-top:1px}
 
 /* pagenav */
-.pagenavcontrols{padding:2px 10px;display:inline-block;line-height:1.2;font-weight:700}
-#pagenavtop.pagenavcontrols{margin:-28px 0 0;padding:6px 0 0;display:block;position:relative;top:28px}
-.pagenavcontrols img{margin:0 3px;padding:2px;display:inline-block;vertical-align:middle;width:15px;border:var(--border);border-radius:2px;box-shadow:var(--highlight);background:var(--btn)}
-.pagenavcontrols a img:hover,.pagenavcontrols a img:focus{border:1px solid var(--hover);background:var(--btn_hover);filter:none}
+.pagenavcontrols{padding:2px 10px;display:inline-block;line-height:1.2;font-weight:700;transform:none}
+.pagenavcontrols.hidden,.pagenavcontrols:empty,#pagenavbottom{display:none!important}
 .pagenavcontrols a{overflow:visible}
-.pagenavcontrols a:active img{box-shadow:var(--btn_shadow_active);background:var(--bg4)}
-.pagenavcontrols img{opacity:.9}
 .pagenavcontrols a:hover img,.pagenavcontrols a:focus img{opacity:1}
-.pagenavcontrols img.disable,.pagenavcontrols img.disable:hover{opacity:.3}
+.pagenavcontrols a:active img{box-shadow:var(--btn_shadow_active);background:var(--bg4)}
+.pagenavcontrols a img:hover,.pagenavcontrols a img:focus{border:1px solid var(--hover);background:var(--btn_hover);filter:none}
 .pagenavcontrols .disabled{opacity:.5;pointer-events:none}
+.pagenavcontrols img.disable,.pagenavcontrols img.disable:hover{opacity:.3}
+.pagenavcontrols img{margin:0 3px;padding:2px;display:inline-block;vertical-align:middle;width:15px;border:var(--border);border-radius:2px;box-shadow:var(--highlight);background:var(--btn)}
+.pagenavcontrols img{opacity:.9}
 #pagecount{margin:0 6px;padding:2px 10px 1px;display:inline-block;vertical-align:middle;letter-spacing:.2em;font-size:10pt;color:var(--ink_light);border-radius:1px;border:var(--border_soft);background:linear-gradient(180deg,var(--bg),var(--bg3))}
-#pagenavbottom td{text-align:center}
+#pagenav #pagecount{padding:3px 15px}
+#pagenav .pagenavcontrols{margin:1px 0 0;padding:2px 0 2px;position:static}
+#pagenavtop.pagenavcontrols{margin:-28px 0 0;padding:6px 0 0;display:block;position:relative;top:28px}
+#pagenav>*{vertical-align:middle}
 
 /* table sort indicators */
 .sortIcon{position:relative}
@@ -642,16 +645,11 @@ td.peerCount,.nopeers td.peerCount{text-align:center;white-space:nowrap}
 #torrentDisplay .filter:last-child{border-right:var(--border)}
 #torrentDisplay .filter:hover,#torrentDisplay .filter:focus{color:var(--hover);background:var(--btn_hover2)}
 #torrentDisplay .filter:active{color:var(--bg);box-shadow:var(--btn_shadow_active);background:var(--btn_active)}
-#torrentDisplay input:checked + label,#torrentDisplay input:checked + label:hover,#torrentDisplay input:checked + label:focus{color:#66a;box-shadow:var(--btn_shadow_active);background:var(--btn_hover2);cursor:default}
+#torrentDisplay .filter.enabled{color:#66a;box-shadow:var(--btn_shadow_active);background:var(--btn_active2) #fff;cursor:default}
 #torrentDisplay input:checked + label{color:#88c;box-shadow:var(--label_shadow_active);background:linear-gradient(180deg,var(--bg2),var(--bg2));pointer-events:none}
 #filtercount:not(:empty){margin-left:4px;padding:0 3px;min-width:18px;display:inline-block!important;line-height:1.1;font-size:90%;border-radius:1px;box-shadow:0 0 0 1px #ddf;background:var(--bg2)}
-#filtercount+#filtercount,#torrentDisplay input:not(:checked)+label>#filtercount,label[for="all"] #filtercount{display:none!important}
+.filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
 
-#pagenavbottom{display:none}
-.pagenavcontrols{transform:none}
-#pagenav .pagenavcontrols{margin:1px 0 0;padding:2px 0 2px;position:static}
-#pagenav #pagecount{padding:3px 15px}
-#pagenav > *{vertical-align:middle}
 td.peerCount{padding-left:0;width:1%;white-space:nowrap;text-align:left;font-weight:700}
 .peerCount .left,.peerCount .right{min-width:20px;display:inline-block}
 .peerCount .left{padding-left:2px;text-align:left}

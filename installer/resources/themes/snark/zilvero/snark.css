@@ -183,6 +183,7 @@ input[type=submit]:active,a.control:active,.snarkNav:active,#torrentDisplay .fil
 
 /* pagenav */
 .pagenavcontrols{padding:5px;border:var(--border);border-bottom:0}
+.pagenavcontrols:empty,.pagenavcontrols.hidden{display:none}
 .pagenavcontrols img{margin:0 3px;display:none}
 .pagenavcontrols span:not(#pagecount){margin:0 3px;border:var(--border);border-radius:1px;background-size:16px;background-repeat:no-repeat;background-position:center center;background-color:#fff}
 .pagenavcontrols span:not(#pagecount):hover{border:1px solid #b23}
@@ -522,7 +523,7 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 #torrentDisplay input{width:0;height:0;position:absolute;opacity:0;z-index:-1}
 #torrentDisplay .filter.enabled,#torrentDisplay .filter.enabled:active{color:var(--ink);text-shadow:0 1px 1px #fff;box-shadow:var(--btn_shadow_active);background:linear-gradient(180deg,#ddd,#fff);cursor:default}
 #filtercount:not(:empty){margin-left:5px;padding:2px 2px 0;min-width:16px;display:inline-block!important;line-height:1;font-size:85%;box-shadow:0 0 0 1px #bbb,var(--highlight);background:#f2f2f2}
-#filtercount+#filtercount,#torrentDisplay input:not(:checked)+label>#filtercount,label[for="all"] #filtercount{display:none!important}
+#filtercount+#filtercount,#torrentDisplay input:not(:checked)+label>#filtercount,label[for="all"] #filtercount,#filtercount[hidden]{display:none!important}
 
 /* table sort indicators */
 .sortIcon{position:relative;display:inline-block}

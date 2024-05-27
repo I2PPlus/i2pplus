@@ -427,10 +427,9 @@ public class I2PSnarkServlet extends BasicServlet {
         // selected theme inserted here
         buf.append(HEADER_A + _themePath + HEADER_B + "\n");
         buf.append(HEADER_A + _themePath + HEADER_I + "\n"); // load css image assets
-        String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
-                           java.io.File.separatorChar + "docs" + java.io.File.separatorChar + "themes" +
-                           java.io.File.separatorChar + "snark" + java.io.File.separatorChar + _manager.getTheme() +
-                           java.io.File.separatorChar;
+        String slash = String.valueOf(java.io.File.separatorChar);
+        String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash + "docs" + slash + "themes" +
+                           slash + "snark" + slash + _manager.getTheme() + slash;
         File override = new File(themeBase + "override.css");
         int rnd = _context.random().nextInt(3);
         if (!isStandalone() && rnd == 0 && _manager.getTheme().equals("light")) {
@@ -864,6 +863,8 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<div class=pagenavcontrols id=pagenavtop hidden>");
             writePageNav(out, req, start, pageSize, total, filter, noThinsp);
             out.write("</div>");
+        } else {
+            out.write("<div class=pagenavcontrols id=pagenavtop hidden></div>");
         }
 
         out.write(TABLE_HEADER);
@@ -891,7 +892,7 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 sort = "2";
             }
-            hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+            hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
             hbuf.append(separator).append(filterQuery);
             hbuf.append("\">");
         }
@@ -915,9 +916,9 @@ public class I2PSnarkServlet extends BasicServlet {
             tx = peerParam != null ? _t("Hide Peers") : _t("Show Peers");
             String img = peerParam != null ? "hidepeers" : "showpeers";
             if (peerParam == null) {
-                hbuf.append(" <a href=\"" + link.replace("filter", "&filter") + "\">");
+                hbuf.append(" <a class=sorter href=\"" + link.replace("filter", "&filter") + "\">");
             } else {
-                hbuf.append(" <a href=\"" + link.replace("filter", "?filter") + "\">");
+                hbuf.append(" <a class=sorter href=\"" + link.replace("filter", "?filter") + "\">");
             }
             hbuf.append(toThemeImg(img, tx, tx)).append("</a>\n");
         }
@@ -942,7 +943,7 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 sort = "";
             }
-            hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+            hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
             hbuf.append(separator).append(filterQuery);
             hbuf.append("\">");
         }
@@ -975,7 +976,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         sort = "-4";
                         hbuf.append("<span class=ascending></span>");
                     }
-                    hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+                    hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
                     hbuf.append(separator).append(filterQuery);
                     hbuf.append("\">");
                 }
@@ -1010,7 +1011,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 } else {
                     sort = "-5";
                 }
-                hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+                hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
                 hbuf.append(separator).append(filterQuery);
                 hbuf.append("\">");
             }
@@ -1046,9 +1047,9 @@ public class I2PSnarkServlet extends BasicServlet {
                         sort = "-8";
                     }
                     if (peerParam != null) {
-                        hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, "1", sort, filter, null));
+                        hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, "1", sort, filter, null));
                     } else {
-                        hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, "0", sort, filter, null));
+                        hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, "0", sort, filter, null));
                     }
                     hbuf.append(separator).append(filterQuery);
                     hbuf.append("\">");
@@ -1085,7 +1086,7 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 sort = "-7";
             }
-            hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+            hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
             hbuf.append(separator).append(filterQuery);
             hbuf.append("\">");
         }
@@ -1118,7 +1119,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     } else {
                         sort = "-9";
                     }
-                    hbuf.append("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
+                    hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
                     hbuf.append(separator).append(filterQuery);
                     hbuf.append("\">");
                 }
@@ -1198,9 +1199,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 writePageNav(tempPrintWriter, req, start, pageSize, total, filter, noThinsp);
                 tempPrintWriter.flush();
                 footer.append(stringWriter.getBuffer().toString());
-                footer.append("</div></td></tr>\n</tbody>\n");
+                footer.append("</div></td></tr>\n");
+            } else {
+                footer.append("<tr id=pagenavbottom hidden><td colspan=12><div class=pagenavcontrols></div></td></tr>\n");
             }
-            footer.append("<tfoot id=snarkFoot><tr class=volatile><th id=torrentTotals align=left colspan=6>");
+            footer.append("</tbody>\n<tfoot id=snarkFoot><tr class=volatile><th id=torrentTotals align=left colspan=6>");
             footer.append("<span id=totals><span class=canhide>");
             footer.append(_t("Totals"));
             footer.append(":&nbsp;</span>");
