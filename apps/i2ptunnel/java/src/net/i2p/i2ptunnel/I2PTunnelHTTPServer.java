@@ -1578,18 +1578,27 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
+/**
+                // basic support for regex characters ^, $ and *
+                if (line.startsWith("^")) {
+                    regex.append("^."); // Match from the start of the URL
+                    url = line.substring(1); // Skip the ^
+                } else if (line.endsWith("$")) {
+                    regex.append("."); // Match until the end of the URL
+                    url = line.substring(0, line.length() - 1); // Skip the $
+                } else if (line.contains("*")) {
+                    regex.append(".*"); // Match any characters (0 or more)
+                    url = line.replaceFirst("[*]", ".*"); // Replace * with .* regex
+                }
+**/
                 // Skip empty lines or lines that start with a '#'
                 if (line.isEmpty() || line.startsWith("#")) {continue;}
                 // Extract the URL from the request string
                 String url = line;
-                String escapedUrl = url.replace(".", "\\.").replace("?", "\\?").replace("*", "\\*").replace("+", "\\+")
-                                       .replace(",", "\\,").replace("-", "\\-").replace("{", "\\{").replace("}", "\\}")
-                                       .replace("[", "\\[").replace("]", "\\]").replace("/", "\\/").replace("(" , "\\(")
-                                       .replace(")", "\\)");
                 // Create regex pattern for URL
                 StringBuilder regex = new StringBuilder();
                 regex.append("(?i)"); // Case-insensitive match
-                regex.append(Pattern.quote(escapedUrl));
+                regex.append(Pattern.quote(url));
                 // Append regex pattern to builder
                 if (regexBuilder.length() > 0) {regexBuilder.append("|");}
                 regexBuilder.append(regex);
