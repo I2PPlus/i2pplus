@@ -1,5 +1,6 @@
-/* filterBar.js by dr|z3d */
-/* Setup torrent display buttons so we can show/hide snarks based on status */
+/* I2P+ filterBar.js by dr|z3d */
+/* Setup I2PSnark torrent display buttons so we can show/hide snarks
+/* based on status and load filtered content via AJAX calls */
 /* License: AGPL3 or later */
 
 import {refreshTorrents, xhrsnark, doRefresh, getURL} from "./refreshTorrents.js";

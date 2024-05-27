@@ -1,10 +1,9 @@
-/* filterBar.js by dr|z3d */
-/* Setup torrent display buttons so we can show/hide snarks based on status */
+/* I2P+ snarkSort.js by dr|z3d */
+/* Navigate I2PSnark torrent sorters via AJAX calls */
 /* License: AGPL3 or later */
 
 import {xhrsnark, doRefresh, getURL} from "./refreshTorrents.js";
 import {updateURLs} from "./filterBar.js";
-
 
 function snarkSort() {
   let sortURL;
