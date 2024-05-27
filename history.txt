@@ -1,3 +1,7 @@
+2024-05-27 dr|z3d
+ * I2PSnark: Use AJAX for torrent filters and sort navigation
+
+
 2024-05-21 zzz
  * Transport: Remove SSU1 code from IES/OES/PacketReader/HMAC (Gitlab MR !197)
  * Tunnels: Don't parse messages at the OBEP (Gitlab MR !194)
