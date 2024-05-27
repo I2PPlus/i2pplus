@@ -1,4 +1,4 @@
-/* I2PSnark refreshTorrents.js by dr|z3d */
+/* I2P+ I2PSnark refreshTorrents.js by dr|z3d */
 /* Selective refresh torrents and other volatile elements in the I2PSnark UI */
 /* License: AGPL3 or later */
 
@@ -42,6 +42,10 @@ function refreshTorrents(callback) {
     if (snarkHead !== null) {
       document.getElementById("snarkHead").classList.add("initializing");
       childElems.forEach((elem) => {elem.style.opacity = "0";});
+      setTimeout(() => {
+        document.getElementById("snarkHead").classList.remove("initializing");
+        childElems.forEach((elem) => {elem.style.opacity = "";});
+      }, 10000);
     }
   }
 
@@ -251,10 +255,27 @@ function refreshScreenLog(callback) {
   if (debugging) {console.log("Updated screenlog");}
 }
 
-function getURL() {
+function getURL(window) {
   var currentURL = new URL(window.location.href);
-  var ajaxURL = currentURL.toString().replace("/i2psnark/", "/i2psnark/.ajax/xhr1.html");
-  return ajaxURL;
+  return window ? currentURL.toString() : currentURL.toString().replace("/i2psnark/", "/i2psnark/.ajax/xhr1.html");
+}
+
+function saveURLtoStorage() {
+  localStorage.setItem("SnarkCurrentURL", getURL(window));
+}
+
+function getURLfromStorage() {
+  const url = localStorage.getItem("SnarkCurrentURL");
+  return url !== null && url !== undefined ? url : "";
+}
+
+function setURL() {
+  const currentURL = getURLfromStorage();
+  if (currentURL && currentURL !== "") {window.location.href = currentURL;}
+  window.addEventListener("popstate", () => {
+    const newURL = getURL(window);
+    saveURLtoStorage();
+  });
 }
 
 function initHandlers() {
