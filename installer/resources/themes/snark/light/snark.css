@@ -928,8 +928,8 @@ td.peerCount{padding-left:0;padding-right:3px;width:1%;white-space:nowrap;font-w
 .peerCount b:hover a:hover::after,.peerCount b:hover a:focus::after{border-color:transparent transparent #f60 transparent}
 .peerCount b:hover a[href*="?p="]:hover::after,.peerCount b:hover a[href*="?p="]:focus::after{border-color:#f60 transparent transparent transparent}
 .peerCount b .left{margin-right:0}
-.peerCount b .left,.peerCount b .right{margin:0 1px;padding:2px 3px 1px;min-width:39px;display:inline-block;text-align:center;color:#eee;border-radius:1px;box-shadow:0 0 0 1px rgba(32,32,32,.4),inset 2px 2px 2px rgba(0,0,0,.2);background:linear-gradient(180deg,rgba(128,128,180,.2),rgba(192,192,220,.2))}
-.peerCount b{padding:4px 2px 4px 3px;min-width:104px;display:inline-block;position:relative;line-height:1;text-align:center;font-size:95%;color:#ddd;text-shadow:1px 1px 1px rgba(0,0,0,.6);-webkit-text-stroke:0;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px rgba(0,0,0,.6)) drop-shadow(0 0 1px rgba(16,16,48,.7));filter:drop-shadow(0 0 1px #555)}
+.peerCount b .left,.peerCount b .right{margin:0 1px;padding:2px 3px 1px;min-width:36px;display:inline-block;text-align:center;color:#eee;border-radius:1px;box-shadow:0 0 0 1px rgba(32,32,32,.4),inset 2px 2px 2px rgba(0,0,0,.2);background:linear-gradient(180deg,rgba(128,128,180,.2),rgba(192,192,220,.2))}
+.peerCount b{padding:4px 2px 4px 3px;min-width:101px;display:inline-block;position:relative;line-height:1;text-align:center;font-size:95%;color:#ddd;text-shadow:1px 1px 1px rgba(0,0,0,.6);-webkit-text-stroke:0;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px rgba(0,0,0,.6)) drop-shadow(0 0 1px rgba(16,16,48,.7));filter:drop-shadow(0 0 1px #555)}
 .peerCount b .right{margin-left:0}
 .percentDownloaded{pointer-events:none}
 .rateUp:not(:empty),#torrents tfoot th.rateUp:not(:empty),.peerinfo .rateUp:not(:empty){padding-right:10px}
@@ -946,7 +946,7 @@ td.peerCount{padding-left:0;padding-right:3px;width:1%;white-space:nowrap;font-w
 #trackerconfig input.trackername{width:180px;max-width:180px}
 #trackerconfig th:nth-child(7),#trackerconfig td:nth-child(7){padding-left:50px}
 #torrentDisplay{display:flex;justify-content:center}
-#torrentDisplay .filter{display:flex;flex-grow:.15;justify-content:center}
+#torrentDisplay .filter{display:flex;flex-grow:.15;justify-content:center;font-size:95%}
 }
 
 @media (min-width:1400px){
