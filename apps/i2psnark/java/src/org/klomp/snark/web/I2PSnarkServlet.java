@@ -2460,6 +2460,8 @@ public class I2PSnarkServlet extends BasicServlet {
     private String snarkStatus;
     private String filterParam;
     private boolean filterEnabled;
+    private String sortParam;
+    private boolean sortEnabled;
     private void displaySnark(PrintWriter out, HttpServletRequest req,
                               Snark snark, String uri, int row, long stats[], boolean showPeers,
                               boolean isDegraded, boolean noThinsp, boolean showDebug, boolean statsOnly,
@@ -2517,6 +2519,8 @@ public class I2PSnarkServlet extends BasicServlet {
         int knownPeers = Math.max(curPeers, snark.getTrackerSeenPeers());
         filterParam = req.getParameter("filter");
         filterEnabled = filterParam != null && !filterParam.equals("all") && !filterParam.equals("");
+        sortParam = req.getParameter("sort");
+        sortEnabled = sortParam != null && !sortParam.equals("");
 
         String statusString;
         // add status to table rows so we can selectively show/hide snarks and style based on status
@@ -2566,17 +2570,18 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 if (curPeers > 0 && !showPeers) {
                     statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>" +
-                                   "<td class=peerCount><b>" +
-                                   "<a href=\"" +
-                                   uri + getQueryString(req, b64, null, null, filterParam) + "\"><span class=right>" +
-                                   curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
+                                   "<td class=peerCount><b><a href=\"" + uri + getQueryString(req, b64, null, null, null) +
+                                   (filterEnabled ? "&amp;filter=" + filterParam : "") + "\"><span class=right>" + curPeers +
+                                   "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
                     if (upBps > 0) {snarkStatus = "active seeding complete connected";}
                     else {snarkStatus = "inactive seeding complete connected";}
                 } else if (curPeers > 0) {
                     statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>" +
-                                   "<td class=peerCount><b><a href=\"" + uri + "\" title=\"" +
-                                   _t("Hide Peers") + "\">" + "<span class=right>" + curPeers + "</span>" + thinsp(noThinsp) +
-                                   "<span class=left>" + knownPeers + "</span></a>";
+                                   "<td class=peerCount><b><a href=\"" + uri + (sortEnabled ? "?sort=" + sortParam : "") +
+                                   (sortEnabled && filterEnabled ? "&amp;" : !sortEnabled && filterEnabled ? "?" : "") +
+                                   (filterEnabled? "filter=" + filterParam : "") + "\" title=\"" + _t("Hide Peers") + "\">" +
+                                   "<span class=right>" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" +
+                                   knownPeers + "</span></a>";
                     if (upBps > 0) {snarkStatus = "active seeding complete connected";}
                     else {snarkStatus = "inactive seeding complete connected";}
                 } else {
