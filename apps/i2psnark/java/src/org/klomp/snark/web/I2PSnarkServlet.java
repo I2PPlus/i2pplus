@@ -2516,6 +2516,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String err = snark.getTrackerProblems();
         int knownPeers = Math.max(curPeers, snark.getTrackerSeenPeers());
         filterParam = req.getParameter("filter");
+        filterEnabled = filterParam != null && !filterParam.equals("all") && !filterParam.equals("");
 
         String statusString;
         // add status to table rows so we can selectively show/hide snarks and style based on status
@@ -2523,21 +2524,18 @@ public class I2PSnarkServlet extends BasicServlet {
         String rowClass = (row % 2 == 0 ? "rowEven" : "rowOdd");
         if (snark.isChecking()) {
             (new DecimalFormat("0.00%")).format(snark.getCheckingProgress());
-            statusString = toSVGWithDataTooltip("processing", "", _t("Checking")) + "</td>" +
-                                 "<td class=peerCount><b><span class=right>" +
-                                 curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+            statusString = toSVGWithDataTooltip("processing", "", _t("Checking")) + "</td>" + "<td class=peerCount><b><span class=right>" +
+                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
             snarkStatus = "active starting processing";
         } else if (snark.isAllocating()) {
-            statusString = toSVGWithDataTooltip("processing", "", _t("Allocating")) + "</td>" +
-                           "<td class=peerCount><b>";
+            statusString = toSVGWithDataTooltip("processing", "", _t("Allocating")) + "</td>" + "<td class=peerCount><b>";
             snarkStatus = "active starting processing";
         } else if (err != null && isRunning && curPeers == 0) {
             statusString = toSVGWithDataTooltip("error", "", err) + "</td>" + "<td class=peerCount><b><span class=right>" +
                            curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
             snarkStatus = "inactive downloading incomplete neterror";
         } else if (snark.isStarting()) {
-            statusString = toSVGWithDataTooltip("stalled", "", _t("Starting")) + "</td>" +
-                           "<td class=peerCount><b>";
+            statusString = toSVGWithDataTooltip("stalled", "", _t("Starting")) + "</td>" + "<td class=peerCount><b>";
             snarkStatus = "active starting";
         } else if (remaining == 0 || needed == 0) {  // < 0 means no meta size yet
             // partial complete or seeding
@@ -2549,11 +2547,11 @@ public class I2PSnarkServlet extends BasicServlet {
                     img = "seeding";
                     txt = _t("Seeding");
                     tooltip = ngettext("Seeding to {0} peer", "Seeding to {0} peers", curPeers);
-                    if (curPeers > 0 && upBps <= 0)
-                        snarkStatus = "inactive seeding complete connected";
-                    else if (curPeers > 0)
+                    if (curPeers > 0 && upBps <= 0) {snarkStatus = "inactive seeding complete connected";}
+                    else if (curPeers > 0) {
                         snarkStatus = "active seeding complete connected";
                         img = "seeding_active";
+                    }
                 } else {
                     // partial
                     img = "complete";
@@ -2562,100 +2560,84 @@ public class I2PSnarkServlet extends BasicServlet {
                     snarkStatus = "complete";
                     if (curPeers > 0) {
                         tooltip = txt + " (" + _t("Seeding to {0} of {1} peers in swarm", curPeers, knownPeers) + ")";
-                        if (upBps > 0) {
-                            snarkStatus = "active seeding complete connected";
-                        } else {
-                            snarkStatus = "inactive seeding complete connected";
-                        }
+                        if (upBps > 0) {snarkStatus = "active seeding complete connected";}
+                        else {snarkStatus = "inactive seeding complete connected";}
                     }
                 }
                 if (curPeers > 0 && !showPeers) {
                     statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>" +
-                                         "<td class=peerCount><b>" +
-                                         "<a href=\"" +
-                                         uri + getQueryString(req, b64, null, null, filterParam) + "\"><span class=right>" +
-                                         curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
-                    if (upBps > 0) {
-                        snarkStatus = "active seeding complete connected";
-                    } else {
-                        snarkStatus = "inactive seeding complete connected";
-                    }
+                                   "<td class=peerCount><b>" +
+                                   "<a href=\"" +
+                                   uri + getQueryString(req, b64, null, null, filterParam) + "\"><span class=right>" +
+                                   curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
+                    if (upBps > 0) {snarkStatus = "active seeding complete connected";}
+                    else {snarkStatus = "inactive seeding complete connected";}
                 } else if (curPeers > 0) {
                     statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>" +
-                                         "<td class=peerCount><b><a href=\"" + uri + "\" title=\"" +
-                                         _t("Hide Peers") + "\">" + "<span class=right>" + curPeers + "</span>" + thinsp(noThinsp) +
-                                         "<span class=left>" + knownPeers + "</span></a>";
-                    if (upBps > 0) {
-                        snarkStatus = "active seeding complete connected";
-                    } else {
-                        snarkStatus = "inactive seeding complete connected";
-                    }
+                                   "<td class=peerCount><b><a href=\"" + uri + "\" title=\"" +
+                                   _t("Hide Peers") + "\">" + "<span class=right>" + curPeers + "</span>" + thinsp(noThinsp) +
+                                   "<span class=left>" + knownPeers + "</span></a>";
+                    if (upBps > 0) {snarkStatus = "active seeding complete connected";}
+                    else {snarkStatus = "inactive seeding complete connected";}
                 } else {
                     statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>" +
-                               "<td class=peerCount><b><span class=right>" + curPeers +
-                               "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
-                    if (upBps > 0 && curPeers > 0) {
-                        snarkStatus = "active seeding complete connected";
-                    } else if (upBps <= 0 && curPeers > 0) {
-                        snarkStatus = "inactive seeding complete connected";
-                    } else {
-                        snarkStatus = "inactive seeding complete";
-                    }
+                                   "<td class=peerCount><b><span class=right>" + curPeers +
+                                   "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+                    if (upBps > 0 && curPeers > 0) {snarkStatus = "active seeding complete connected";}
+                    else if (upBps <= 0 && curPeers > 0) {snarkStatus = "inactive seeding complete connected";}
+                    else {snarkStatus = "inactive seeding complete";}
                 }
             } else {
-                statusString = toSVGWithDataTooltip("complete", "", _t("Complete")) + "</td>" +
-                                     "<td class=peerCount><b>‒";
+                statusString = toSVGWithDataTooltip("complete", "", _t("Complete")) + "</td>" + "<td class=peerCount><b>‒";
                 snarkStatus = "inactive complete stopped zero";
             }
         } else {
             if (isRunning && curPeers > 0 && downBps > 0 && !showPeers) {
                 statusString = toSVGWithDataTooltip("downloading", "", _t("OK") +
-                                     " (" + _t("Downloading from {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>" +
-                                     "<td class=peerCount><b><a href=\"" +
-                                     uri + getQueryString(req, b64, null, null, filterParam) + "\"><span class=right>" +
-                                     curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
+                               " (" + _t("Downloading from {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>" +
+                               "<td class=peerCount><b><a href=\"" +
+                               uri + getQueryString(req, b64, null, null, null) + (filterEnabled ? "&amp;filter=" + filterParam : "") +
+                               "\"><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
                 snarkStatus = "active downloading incomplete connected";
             } else if (isRunning && curPeers > 0 && downBps > 0) {
                 statusString = toSVGWithDataTooltip("downloading", "", _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) + "</td>" +
-                                     "<td class=peerCount><b><a href=\"" +
-                                     uri + "\" title=\"" + _t("Hide Peers") + "\"><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) +
-                                     "<span class=left>" + knownPeers + "</span></a>";
+                               "<td class=peerCount><b><a href=\"" +
+                               uri + "\" title=\"" + _t("Hide Peers") + "\"><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) +
+                               "<span class=left>" + knownPeers + "</span></a>";
                 snarkStatus = "active downloading incomplete connected";
             } else if (isRunning && curPeers > 0 && !showPeers) {
                 statusString = toSVGWithDataTooltip("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers) + ")") + "</td>" +
-                                     "<td class=peerCount><b><a href=\"" +
-                                     uri + getQueryString(req, b64, null, null, filterParam) + "\"><span class=right>" +
-                                     curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
+                               "<td class=peerCount><b><a href=\"" +
+                               uri + getQueryString(req, b64, null, null, null) + (filterEnabled ? "&amp;filter=" + filterParam : "") +
+                               "\"><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
                 snarkStatus = "inactive downloading incomplete connected";
             } else if (isRunning && curPeers > 0) {
                 statusString = toSVGWithDataTooltip("stalled", "", _t("Stalled") +
-                                     " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>" +
-                                     "<td class=peerCount><b><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") +
-                                     "\"><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
+                               " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>" +
+                               "<td class=peerCount><b><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") +
+                               "\"><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
                 snarkStatus = "inactive downloading incomplete connected";
             } else if (isRunning && knownPeers > 0) {
                 statusString = toSVGWithDataTooltip("nopeers", "", _t("No Peers") +
-                                     " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>" +
-                                     "<td class=peerCount><b><span class=right>0</span>" +
-                                     thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+                               " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>" +
+                               "<td class=peerCount><b><span class=right>0</span>" +
+                               thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
                 snarkStatus = "inactive downloading incomplete nopeers";
             } else if (isRunning) {
                 statusString = toSVGWithDataTooltip("nopeers", "", _t("No Peers")) + "</td>" +
-                                     "<td class=peerCount><b>‒";
+                               "<td class=peerCount><b>‒";
                 snarkStatus = "inactive downloading incomplete nopeers zero";
             } else {
                 statusString = toSVGWithDataTooltip("stopped", "", _t("Stopped")) + "</td>" +
-                                     "<td class=peerCount><b>‒";
+                               "<td class=peerCount><b>‒";
                 snarkStatus = "inactive incomplete stopped zero";
             }
         }
 
         String rowStatus = (rowClass + ' ' + snarkStatus);
         StringBuilder buf = new StringBuilder(2*1024);
-        filterEnabled = filterParam != null && !filterParam.equals("all") && !filterParam.equals("");
         if (!filterEnabled || snarkMatchesFilter(snark, filterParam)) {
-            buf.append("<tr class=\"" + rowStatus + " volatile\">").append("<td class=status>")
-               .append(statusString);
+            buf.append("<tr class=\"" + rowStatus + " volatile\">").append("<td class=status>").append(statusString);
 
             // link column
             buf.append("</b></td><td class=trackerLink>");
