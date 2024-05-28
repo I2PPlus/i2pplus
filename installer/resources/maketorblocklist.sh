@@ -60,6 +60,7 @@ print_range() {
 }
 
 # Loop through the sorted IPs to find consecutive IPs
+start_time=$(date +%s)
 for ip in $sorted_ips; do
   if [ "$start_ip" = "" ]; then
     start_ip=$ip
@@ -69,6 +70,8 @@ for ip in $sorted_ips; do
   fi
   end_ip=$ip
 done
+end_time=$(date +%s)
+echo " > Time taken to process ips and identify ranges: $(($end_time - $start_time)) seconds"
 
 # Print the last range
 print_range
