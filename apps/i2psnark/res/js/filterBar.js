@@ -72,7 +72,6 @@ function filterNav() {
   if (!filterbar) {return;}
   const torrents = document.getElementById("torrents");
   const torrentForm = document.getElementById("torrentlist");
-  const filterbar = document.getElementById("torrentDisplay");
   const pagenavtop = document.getElementById("pagenavtop");
   let filterURL;
   let xhrURL;
