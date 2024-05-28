@@ -65,7 +65,8 @@
         <echo message=" installer-nowindows / installer5-nowindows   Build GUI installer without Windows support (IzPack4 / IzPack5) &#10140; i2pinstall&#8230;.jar" />
         <echo message=" installer-osx                                Build OS X GUI installer &#10140; ./i2pinstall&#8230;osx.tar.bz2" />
         <echo message=" installer-windows / installer5-windows       Build Windows GUI installer (IzPack4 / IzPack5) &#10140; ./i2pinstall&#8230;windows.exe" />
-        <echo message=" javadoc                                      Create javadocs for project &#10140; ./build/javadoc &amp; ./javadoc.zip" />
+        <echo message=" javadoc                                      Create javadocs for project &#10140; ./build/javadoc" />
+        <echo message=" javadoc-zip                                  Create javadocs zip for project &#10140; ./javadoc.zip" />
         <echo message=" javadoc-test                                 Javadocs for unit test classes &#10140; ./build/javadoc-test" />
         <echo message=" pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)" />
         <echo message=" pkg-portable-win32                           Build a minimal, portable install for Win32 &#10140; ./portable-win32.zip" />
