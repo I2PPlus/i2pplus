@@ -385,7 +385,7 @@ form:last-child .configPanel{margin-top:10px}
 .iframed #editSection{margin-top:-3px}
 .iframed #mainsection>#screenlog+#torrentlist,.iframed #mainsection>#screenlog + script+#torrentlist{margin-top:0}
 .iframed #mainsection>#torrentlist{margin-top:-11px}
-.iframed #mainsection>#torrentlist:not(.filterbarActive){margin-top:0}
+.iframed #mainsection>#torrentlist{margin-top:0}
 .iframed #snarkFiles{margin-top:-2px}
 .iframed #snarkInfo~.mainsection{border-top:var(--border_soft)}
 .iframed #snarkInfo~.mainsection:last-child{margin-bottom:-5px}
