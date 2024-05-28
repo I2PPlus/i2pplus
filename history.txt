@@ -1,3 +1,9 @@
+2024-05-28 dr|z3d
+ * I2PSnark:
+   - Fixes for single torrent peer toggle
+   - Distinguish between active and inactive seeding torrents
+ * Console: Display I2PChat icon instead of server icon in sidebar when active
+
 2024-05-27 dr|z3d
  * I2PSnark: Use AJAX for torrent filters and sort navigation
 
