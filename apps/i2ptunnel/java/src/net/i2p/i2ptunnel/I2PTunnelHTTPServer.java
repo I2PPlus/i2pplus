@@ -1612,7 +1612,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         long currentLastModified = blocklistClients.lastModified();
         if (currentLastModified != blocklistClientsLastModified) {
             if (clientBlockList == null) {clientBlockList = new ArrayList<>();}
-            else {clientBlockList.clear();}
+            if (!blocklistClients.exists()) {
+                try {blocklistClients.createNewFile();}
+                catch (IOException e) {
+                    _log.error("[HTTPServer] Error creating file for blocked destination (" + e.getMessage() + ")");
+                }
+            }
             try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -1629,8 +1634,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(blocklistClients, true))) {
                 writer.write(destination);
                 writer.write(System.lineSeparator());
+                writer.close();
             } catch (IOException ioe) {
                 _log.error("[HTTPServer] Error logging blocked destination (" + ioe.getMessage() + ")");
+                return;
             }
             clientBlockList.add(destination);
         }
@@ -1641,7 +1648,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         if (currentLastModified != blocklistClientsLastModified) {
             if (clientBlockList == null) {
                 clientBlockList = new ArrayList<>();
-            } else {clientBlockList.clear();}
+            }
             try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
