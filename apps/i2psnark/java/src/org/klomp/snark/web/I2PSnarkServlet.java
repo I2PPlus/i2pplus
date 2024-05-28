@@ -2568,20 +2568,10 @@ public class I2PSnarkServlet extends BasicServlet {
                         else {snarkStatus = "inactive seeding complete connected";}
                     }
                 }
-                if (curPeers > 0 && !showPeers) {
+                if (curPeers > 0) {
                     statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>" +
-                                   "<td class=peerCount><b><a href=\"" + uri + getQueryString(req, b64, null, null, null) +
-                                   (filterEnabled ? "&amp;filter=" + filterParam : "") + "\"><span class=right>" + curPeers +
-                                   "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
-                    if (upBps > 0) {snarkStatus = "active seeding complete connected";}
-                    else {snarkStatus = "inactive seeding complete connected";}
-                } else if (curPeers > 0) {
-                    statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>" +
-                                   "<td class=peerCount><b><a href=\"" + uri + (sortEnabled ? "?sort=" + sortParam : "") +
-                                   (sortEnabled && filterEnabled ? "&amp;" : !sortEnabled && filterEnabled ? "?" : "") +
-                                   (filterEnabled? "filter=" + filterParam : "") + "\" title=\"" + _t("Hide Peers") + "\">" +
-                                   "<span class=right>" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" +
-                                   knownPeers + "</span></a>";
+                                   "<td class=peerCount><b><span class=right>" + curPeers +
+                                   "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
                     if (upBps > 0) {snarkStatus = "active seeding complete connected";}
                     else {snarkStatus = "inactive seeding complete connected";}
                 } else {
@@ -2597,30 +2587,17 @@ public class I2PSnarkServlet extends BasicServlet {
                 snarkStatus = "inactive complete stopped zero";
             }
         } else {
-            if (isRunning && curPeers > 0 && downBps > 0 && !showPeers) {
-                statusString = toSVGWithDataTooltip("downloading", "", _t("OK") +
-                               " (" + _t("Downloading from {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>" +
-                               "<td class=peerCount><b><a href=\"" +
-                               uri + getQueryString(req, b64, null, null, null) + (filterEnabled ? "&amp;filter=" + filterParam : "") +
-                               "\"><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
+            if (isRunning && curPeers > 0 && downBps > 0) {
+                statusString = toSVGWithDataTooltip("downloading", "", _t("OK") + ", " +
+                               ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) + "</td>" +
+                               "<td class=peerCount><b><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) +
+                               "<span class=left>" + knownPeers + "</span>";
                 snarkStatus = "active downloading incomplete connected";
-            } else if (isRunning && curPeers > 0 && downBps > 0) {
-                statusString = toSVGWithDataTooltip("downloading", "", _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) + "</td>" +
-                               "<td class=peerCount><b><a href=\"" +
-                               uri + "\" title=\"" + _t("Hide Peers") + "\"><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) +
-                               "<span class=left>" + knownPeers + "</span></a>";
-                snarkStatus = "active downloading incomplete connected";
-            } else if (isRunning && curPeers > 0 && !showPeers) {
-                statusString = toSVGWithDataTooltip("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers) + ")") + "</td>" +
-                               "<td class=peerCount><b><a href=\"" +
-                               uri + getQueryString(req, b64, null, null, null) + (filterEnabled ? "&amp;filter=" + filterParam : "") +
-                               "\"><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
-                snarkStatus = "inactive downloading incomplete connected";
             } else if (isRunning && curPeers > 0) {
                 statusString = toSVGWithDataTooltip("stalled", "", _t("Stalled") +
                                " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>" +
-                               "<td class=peerCount><b><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") +
-                               "\"><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span></a>";
+                               "<td class=peerCount><b><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) +
+                               "<span class=left>" + knownPeers + "</span>";
                 snarkStatus = "inactive downloading incomplete connected";
             } else if (isRunning && knownPeers > 0) {
                 statusString = toSVGWithDataTooltip("nopeers", "", _t("No Peers") +
