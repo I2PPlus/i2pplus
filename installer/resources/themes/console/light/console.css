@@ -112,6 +112,7 @@ h4.sb_info{margin-top:-11px}
 #sb_localtunnels td img{opacity:0}
 #sb_localtunnels td:last-child{padding:2px 0 2px 2px;width:16px;text-align:right;border-radius:0 2px 2px 0;background-image:var(--local_inprogress);background-position:right center;background-repeat:no-repeat;background-size:16px}
 #sb_localtunnels td.ping,#sb_localtunnels tr:hover td.ping{background-image:var(--ping)}
+#sb_localtunnels td.tunnelI2PChat,#sb_localtunnels tr:hover td.tunnelI2PChat{background-image:url(/themes/console/images/i2pchat.svg)}
 #sb_localtunnels td.tunnelI2PSnark,#sb_localtunnels tr:hover td.tunnelI2PSnark{background-image:url(/themes/console/images/snark.svg)}
 #sb_localtunnels td.tunnelReady{background-image:var(--local_up)}
 #sb_localtunnels td.tunnelRebuilding{background-image:var(--local_down)}

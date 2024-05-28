@@ -116,6 +116,7 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar #sb_localtunnels td:nth-child(2){padding-left:0}
 #sidebar #sb_localtunnels td:last-child{padding:2px 6px 2px 0;width:1%;min-width:18px;text-align:right;background:var(--local_inprogress) no-repeat right 5px center/16px}
 #sidebar #sb_localtunnels td.ping{background-image:var(--ping)}
+#sidebar #sb_localtunnels td.tunnelI2PChat{background-image:url(/themes/console/images/i2pchat.svg)}
 #sidebar #sb_localtunnels td.tunnelI2PSnark{background-image:url(/themes/console/images/snark.svg)}
 #sidebar #sb_localtunnels td.tunnelReady{background:var(--local_up) no-repeat right 5px center/16px}
 #sidebar #sb_localtunnels td.tunnelRebuilding{background:var(--local_down) no-repeat right 5px center/16px}

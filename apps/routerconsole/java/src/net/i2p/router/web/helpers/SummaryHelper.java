@@ -788,10 +788,13 @@ public class SummaryHelper extends HelperBase {
                 Boolean server = _context.clientManager().shouldPublishLeaseSet(h);
                 Boolean isPing = (name.startsWith("Ping") && name.contains("[")) || name.equals("I2Ping");
                 Boolean isSnark = name.equals(_t("I2PSnark"));
+                Boolean isI2PChat = name.equals(_t("Messenger") || name.toLowerCase().equals(_t("i2pchat"));
 
                 buf.append("<tr><td ");
                 if (isSnark)
                     buf.append("class=tunnelI2PSnark ");
+                else if (isI2PChat)
+                    buf.append("class=tunnelI2PChat ");
                 else if (server)
                     buf.append("class=tunnelServer ");
                 else if (isPing)
@@ -799,6 +802,8 @@ public class SummaryHelper extends HelperBase {
                 buf.append("><img src=/themes/console/images/");
                 if (isSnark) {
                     buf.append("snark.svg alt=I2PSnark title=\"").append(_t("Torrents"));
+                else if (isI2PChat) {
+                    buf.append("snark.svg alt=I2PChat title=\"").append(_t("I2PChat"));
                 } else if (server) {
                     buf.append("server.svg alt=Server title=\"").append(_t("Server"));
                     if (!isAdvanced()) {
