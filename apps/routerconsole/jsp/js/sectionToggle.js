@@ -391,16 +391,18 @@ function sectionToggler() {
     if (sb_localtunnels !== null) {
       sb_localtunnels.hidden = true;
       sb_localtunnels.classList.add("collapsed");
-      var clients = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/client.svg"]').length;
-      var clientSpan = '<span id="clientCount" class="count_' + clients + '">' + clients + ' x <img src="/themes/console/images/client.svg"></span>';
-      var pings = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/ping.svg"]').length;
-      var pingSpan = '<span id="pingCount" class="count_' + pings + '">' + pings + ' x <img src="/themes/console/images/ping.svg"></span>';
-      var servers = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/server.svg"]').length;
-      var serverSpan = '<span id="serverCount" class="count_' + servers + '">' + servers + ' x <img src="/themes/console/images/server.svg"></span>';
-      var snarks = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/snark.svg"]').length;
-      var snarkSpan = '<span id="snarkCount" class="count_' + snarks + '">' + snarks + ' x <img src="/themes/console/images/snark.svg"></span>';
-      var summary = snarkSpan + " " + serverSpan + " " + clientSpan + " " + pingSpan;
-      var summaryTable = '<table id="localtunnelSummary"><tr id="localtunnelsActive"><td>' + summary + '</td></tr></table>';
+      const clients = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/client.svg"]').length;
+      const clientSpan = '<span id=clientCount class="count_' + clients + '">' + clients + ' x <img src="/themes/console/images/client.svg"></span>';
+      const i2pchats = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/i2pchat.svg"]').length;
+      const i2pchatSpan = '<span id=i2pchatCount class="count_' + i2pchats + '">' + i2pchats + ' x <img src="/themes/console/images/i2pchat.svg"></span>';
+      const pings = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/ping.svg"]').length;
+      const pingSpan = '<span id=pingCount class="count_' + pings + '">' + pings + ' x <img src="/themes/console/images/ping.svg"></span>';
+      const servers = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/server.svg"]').length;
+      const serverSpan = '<span id=serverCount class="count_' + servers + '">' + servers + ' x <img src="/themes/console/images/server.svg"></span>';
+      const snarks = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/snark.svg"]').length;
+      const snarkSpan = '<span id=snarkCount class="count_' + snarks + '">' + snarks + ' x <img src="/themes/console/images/snark.svg"></span>';
+      const summary = serverSpan + " " + clientSpan + " " + snarkSpan + " " + i2pchatSpan + " " + pingSpan;
+      const summaryTable = '<table id=localtunnelSummary><tr id=localtunnelsActive><td>' + summary + '</td></tr></table>';
       if (localtunnelSummary !== null) {
         localtunnelSummary.hidden = null;
         localtunnelSummary.outerHTML = summaryTable;

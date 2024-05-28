@@ -188,15 +188,17 @@ function refreshSidebar() {
       }
       if (localtunnelSummary) {
         const clients = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/client.svg"]').length;
-        const clientSpan = '<span id="clientCount" class="count_' + clients + '">' + clients + ' x <img src="/themes/console/images/client.svg"></span>';
+        const clientSpan = '<span id=clientCount class="count_' + clients + '">' + clients + ' x <img src="/themes/console/images/client.svg"></span>';
+        const i2pchats = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/i2pchat.svg"]').length;
+        const i2pchatSpan = '<span id=i2pchatCount class="count_' + i2pchats + '">' + i2pchats + ' x <img src="/themes/console/images/i2pchat.svg"></span>';
         const pings = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/ping.svg"]').length;
-        const pingSpan = '<span id="pingCount" class="count_' + pings + '">' + pings + ' x <img src="/themes/console/images/ping.svg"></span>';
+        const pingSpan = '<span id=pingCount class="count_' + pings + '">' + pings + ' x <img src="/themes/console/images/ping.svg"></span>';
         const servers = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/server.svg"]').length;
-        const serverSpan = '<span id="serverCount" class="count_' + servers + '">' + servers + ' x <img src="/themes/console/images/server.svg"></span>';
+        const serverSpan = '<span id=serverCount class="count_' + servers + '">' + servers + ' x <img src="/themes/console/images/server.svg"></span>';
         const snarks = document.querySelectorAll('#sb_localtunnels img[src="/themes/console/images/snark.svg"]').length;
-        const snarkSpan = '<span id="snarkCount" class="count_' + snarks + '">' + snarks + ' x <img src="/themes/console/images/snark.svg"></span>';
-        const summary = snarkSpan + " " + serverSpan + " " + clientSpan + " " + pingSpan;
-        const summaryTable = '<tr id="localtunnelsActive"><td>' + summary + '</td></tr>';
+        const snarkSpan = '<span id=snarkCount class="count_' + snarks + '">' + snarks + ' x <img src="/themes/console/images/snark.svg"></span>';
+        const summary = serverSpan + " " + clientSpan + " " + snarkSpan + " " + i2pchatSpan + " " + pingSpan;
+        const summaryTable = '<tr id=localtunnelsActive><td>' + summary + '</td></tr>';
         const localtunnelsHeading = document.getElementById("sb_localTunnelsHeading");
         const localtunnelsHeadingResponse = xhrsb.responseXML.getElementById("sb_localTunnelsHeading");
 
@@ -207,9 +209,7 @@ function refreshSidebar() {
       }
       if (tunnelCount) {
         const doubleCount = document.querySelector("#tunnelCount + #tunnelCount");
-        if (doubleCount) {
-          doubleCount.remove();
-        }
+        if (doubleCount) {doubleCount.remove();}
       }
       if (peers && !peers?.hasAttribute("hidden")) {
         if (peersResponse && !Object.is(peers.innerHTML, peersResponse.innerHTML)) {
@@ -241,9 +241,7 @@ function refreshSidebar() {
       }
       if (updateForm && updateFormResponse && !Object.is(updateForm.innerHTML, updateFormResponse.innerHTML)) {
         updateForm.innerHTML = updateFormResponse.innerHTML;
-        if (updateSectionHR.hidden === true) {
-            updateSectionHR.hidden = null;
-        }
+        if (updateSectionHR.hidden === true) {updateSectionHR.hidden = null;}
       }
       if (updateStatus && updateStatusResponse && !Object.is(updateStatus.innerHTML, updateStatusResponse.innerHTML)) {
         updateStatus.innerHTML = updateStatusResponse.innerHTML;
@@ -261,16 +259,12 @@ function refreshSidebar() {
       }
       if (notice && noticeResponse && !Object.is(notice.innerHTML, noticeResponse.innerHTML)) {
         notice.innerHTML = noticeResponse.innerHTML;
-      } else if (noticeResponse && noticeResponse === null) {
-        notice.remove();
-      }
+      } else if (noticeResponse && noticeResponse === null) {notice.remove();}
       if (shutdownStatus && shutdownStatusResponse && !Object.is(shutdownStatus.innerHTML, shutdownStatusResponse.innerHTML)) {
         shutdownStatus.innerHTML = shutdownStatusResponse.innerHTML;
-      } else if (shutdownStatus && shutdownStatusResponse === null) {
-        shutdownStatus.remove();
-      }
+      } else if (shutdownStatus && shutdownStatusResponse === null) {shutdownStatus.remove();}
       if (routerControl && routerControlResponse && routerControl?.classList.contains("statusDown") &&
-         !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
+          !Object.is(routerControl.innerHTML, routerControlResponse.innerHTML)) {
         routerControl.outerHTML = routerControlResponse.outerHTML;
       }
       if (internals && internalsResponse && !Object.is(internals.innerHTML, internalsResponse.innerHTML)) {
