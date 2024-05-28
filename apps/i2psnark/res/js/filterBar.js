@@ -10,6 +10,7 @@ const filterbar = document.getElementById("torrentDisplay");
 let snarkCount;
 
 function showBadge() {
+  if (!filterbar) {return;}
   const query = new URLSearchParams(window.location.search);
   const filterQuery = query.get("filter");
   const allFilters = filterbar.querySelectorAll(".filter");
@@ -68,6 +69,7 @@ function checkIfVisible() {
 }
 
 function filterNav() {
+  if (!filterbar) {return;}
   const torrents = document.getElementById("torrents");
   const torrentForm = document.getElementById("torrentlist");
   const filterbar = document.getElementById("torrentDisplay");
