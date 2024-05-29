@@ -1040,12 +1040,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (_shouldCompress) {
                     compressedout = new CompressedResponseOutputStream(browserout, _keepalive);
                     compressedout.write(DataHelper.getUTF8(modifiedHeaders));
-                    s = new Sender(compressedout, serverin, "Server -> Client gzipped " +
+                    s = new Sender(compressedout, serverin, "Server -> Client (Gzipped) " +
                                    (req != null && !req.equals("") ? "\n* URL: " + req : ""), _log);
                     browserout = compressedout;
                 } else {
                     browserout.write(DataHelper.getUTF8(modifiedHeaders));
-                    s = new Sender(browserout, serverin, "Server -> Client uncompressed " +
+                    s = new Sender(browserout, serverin, "Server -> Client (No Gzip compression) " +
                                    (req != null && !req.equals("") ? "\n* URL: " + req : ""), _log);
                 }
                 if (_log.shouldDebug())
@@ -1609,9 +1609,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     private synchronized void logBlockedDestination(String destination) {
+        if (clientBlockList == null) {clientBlockList = new ArrayList<>();}
         long currentLastModified = blocklistClients.lastModified();
         if (currentLastModified != blocklistClientsLastModified) {
-            if (clientBlockList == null) {clientBlockList = new ArrayList<>();}
             if (!blocklistClients.exists()) {
                 try {blocklistClients.createNewFile();}
                 catch (IOException e) {
@@ -1629,11 +1629,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             }
             blocklistClientsLastModified = currentLastModified;
         }
-        if (!clientBlockList.contains(destination)) {
+        if (clientBlockList != null && !clientBlockList.contains(destination)) {
             if (clientBlockList.size() >= HTTP_BLOCKLIST_CLIENT_LIMIT) {clientBlockList.remove(0);}
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(blocklistClients, true))) {
                 writer.write(destination);
-                writer.write(System.lineSeparator());
+                writer.newLine();
                 writer.close();
             } catch (IOException ioe) {
                 _log.error("[HTTPServer] Error logging blocked destination (" + ioe.getMessage() + ")");
@@ -1663,18 +1663,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         return clientBlockList.contains(destination);
     }
 
+    private final Object lock = new Object();
+
     private int countBlockedDests(File blocklistClients) throws IOException {
         long currentLastModified = blocklistClients.lastModified();
-        if (currentLastModified != blocklistClientsLastModified) {
-            synchronized (this) {
-                if (currentLastModified != blocklistClientsLastModified) {
-                    cachedClientBlockListSize = 0;
-                    try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
-                        String line;
-                        while ((line = reader.readLine()) != null) {cachedClientBlockListSize++;}
-                    }
-                    blocklistClientsLastModified = currentLastModified;
+        synchronized (lock) {
+            if (currentLastModified != blocklistClientsLastModified) {
+                cachedClientBlockListSize = 0;
+                try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {cachedClientBlockListSize++;}
                 }
+                blocklistClientsLastModified = currentLastModified;
             }
         }
         return cachedClientBlockListSize;
