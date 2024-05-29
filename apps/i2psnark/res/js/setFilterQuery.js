@@ -1,7 +1,6 @@
-/* setFilterQuery.js by dr|z3d */
+/* I2P+ I2PSnark setFilterQuery.js by dr|z3d */
 /* Assign filter parameter to main snark navigation and cancel search buttons */
 /* License: AGPL3 or later */
-
 
 const navbar = document.getElementById("navbar");
 const filterLinks = document.querySelectorAll("#torrentDisplay .filter");

@@ -3,13 +3,14 @@
 /* based on status and load filtered content via AJAX calls */
 /* License: AGPL3 or later */
 
-import {refreshTorrents, xhrsnark, doRefresh, getURL} from "./refreshTorrents.js";
+import {refreshTorrents, xhrsnark, doRefresh} from "./refreshTorrents.js";
 import {onVisible} from "./onVisible.js";
 
-const filterbar = document.getElementById("torrentDisplay");
+let filterbar;
 let snarkCount;
 
 function showBadge() {
+  filterbar = document.getElementById("torrentDisplay")
   if (!filterbar) {return;}
   const query = new URLSearchParams(window.location.search);
   const filterQuery = query.get("filter");
@@ -69,7 +70,8 @@ function checkIfVisible() {
 }
 
 function filterNav() {
-  if (!filterbar) {return;}
+  filterbar = document.getElementById("torrentDisplay")
+  if (!filterbar) {setTimeout(() => {filterNav();}, 1000); return;}
   const torrents = document.getElementById("torrents");
   const torrentForm = document.getElementById("torrentlist");
   const pagenavtop = document.getElementById("pagenavtop");
