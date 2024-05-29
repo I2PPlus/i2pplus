@@ -63,8 +63,7 @@ class UnsignedUpdateChecker extends UpdateRunner {
             proxyHost.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST) &&
             _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY) < 0) {
             String msg = _t("HTTP client proxy tunnel must be running");
-            if (_log.shouldWarn())
-                _log.warn(msg);
+            if (_log.shouldWarn()) {_log.warn("Cannot check for updates -> " + msg);}
             updateStatus("<b>" + msg + "</b>");
             return false;
         }
@@ -86,7 +85,7 @@ class UnsignedUpdateChecker extends UpdateRunner {
                                                         newVersion, "");
                         } else {
                             String ourJava = System.getProperty("java.version");
-                            String msg = _mgr._t("Requires Java version {0} but installed Java version is {1}", "1.7", ourJava);
+                            String msg = _mgr._t("Requires Java version {0} but installed Java version is {1}", "1.8", ourJava);
                             _log.logAlways(Log.WARN, "Cannot update to version " + newVersion + ": " + msg);
                             _mgr.notifyVersionConstraint(this, _urls.get(0), getType(), "", newVersion, msg);
                         }
@@ -99,17 +98,17 @@ class UnsignedUpdateChecker extends UpdateRunner {
                 if (status == 504 || status <= 0) {
                     msg = _mgr._t("Unable to connect to update server ") + _currentURI.getHost();
                     if (url.contains("skank.i2p")) {
-                        msg = msg.replace("update", "I2P+ update");
+                        msg = msg.replace("update", "I2P+ update").replace("http://", "");
                     }
                 } else if (status == 500) {
                     msg = _mgr._t("Update server {0} not found in address book", _currentURI.getHost());
                     if (url.contains("skank.i2p")) {
-                        msg = msg.replace("Update", "I2P+ update");
+                        msg = msg.replace("Update", "I2P+ update").replace("http://", "");
                     }
                 } else if (status == 404) {
                     msg = _mgr._t("Update file not found at {0}", url);
                     if (url.contains("skank.i2p")) {
-                        msg = msg.replace("Update", "I2P+ update");
+                        msg = msg.replace("Update", "I2P+ update").replace("http://", "");
                     }
                 } else {
                     msg = status + " " + DataHelper.stripHTML(get.getStatusText());
