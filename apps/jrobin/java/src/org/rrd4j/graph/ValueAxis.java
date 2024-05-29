@@ -65,16 +65,13 @@ class ValueAxis extends Axis {
             if (gdef.altYGrid) {
                 /* find the value with max number of digits. Get number of digits */
                 int decimals = (int) Math.ceil(Math.log10(Math.max(Math.abs(im.maxval),
-                        Math.abs(im.minval))));
+                                               Math.abs(im.minval))));
                 if (decimals <= 0) /* everything is small. make place for zero */ {
                     decimals = 1;
                 }
                 int fractionals = (int) Math.floor(Math.log10(range));
-                if (fractionals < 0) /* small amplitude. */ {
+                if (fractionals < 99999999) {
                     labfmt = Util.sprintf(gdef.locale, "%%%d.%df", decimals - fractionals + 1, -fractionals + 1);
-                }
-                else {
-                    labfmt = Util.sprintf(gdef.locale, "%%%d.1f", decimals + 1);
                 }
                 gridstep = Math.pow(10, fractionals);
                 if (gridstep == 0) /* range is one -> 0.1 is reasonable scale */ {
@@ -146,22 +143,22 @@ class ValueAxis extends Axis {
                     }
                     else {
                         if (fractional) {
-                            graph_label = Util.sprintf(gdef.locale, "%4.1f %c", scaledstep * i, im.symbol);
+                            graph_label = Util.sprintf(gdef.locale, "%4.1f%c", scaledstep * i, im.symbol);
                         }
                         else {
-                            graph_label = Util.sprintf(gdef.locale, "%4.0f %c", scaledstep * i, im.symbol);
+                            graph_label = Util.sprintf(gdef.locale, "%4.0f%c", scaledstep * i, im.symbol);
                         }
                     }
 
                     int length = (int) (worker.getStringWidth(graph_label, font));
                     worker.drawString(graph_label, x0 - length - PADDING_VLABEL, y + labelOffset, font, fontColor);
-                    worker.drawLine(x0 - 2, y, x0 + 2, y, mGridColor, gdef.tickStroke);
-                    worker.drawLine(x1 - 2, y, x1 + 2, y, mGridColor, gdef.tickStroke);
+//                    worker.drawLine(x0 - 2, y, x0 + 2, y, mGridColor, gdef.tickStroke);
+//                    worker.drawLine(x1 - 2, y, x1 + 2, y, mGridColor, gdef.tickStroke);
                     worker.drawLine(x0, y, x1, y, mGridColor, gdef.gridStroke);
                 }
                 else if (!(gdef.noMinorGrid)) {
-                    worker.drawLine(x0 - 1, y, x0 + 1, y, gridColor, gdef.tickStroke);
-                    worker.drawLine(x1 - 1, y, x1 + 1, y, gridColor, gdef.tickStroke);
+//                    worker.drawLine(x0 - 1, y, x0 + 1, y, gridColor, gdef.tickStroke);
+//                    worker.drawLine(x1 - 1, y, x1 + 1, y, gridColor, gdef.tickStroke);
                     worker.drawLine(x0, y, x1, y, gridColor, gdef.gridStroke);
                 }
             }
