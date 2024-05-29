@@ -2648,19 +2648,25 @@ public final class SVGGraphics2D extends Graphics2D {
                 defs.append(b.toString());
             }
         }
-        if (this.sb.indexOf("rgb(0,72,8)") != -1) {
+        if (this.sb.indexOf("rgb(0,72,8)") != -1) { // dark
             defs.append("<linearGradient id=\"dark\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"100%\">")
                 .append("<stop offset=\"0\" style=\"stop-color:#00660add\"/>")
                 .append("<stop offset=\"100%\" style=\"stop-color:#003d06dd\"/>")
                 .append("</linearGradient>");
-        } else if (this.sb.indexOf("rgb(100,160,200)") != -1) {
+        } else if (this.sb.indexOf("rgb(100,160,200)") != -1) { //light
             defs.append("<linearGradient id=\"light\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"100%\">")
                 .append("<stop offset=\"0\" style=\"stop-color:#a1c5ded0\"/>")
                 .append("<stop offset=\"100%\" style=\"stop-color:#7baed1d0\"/>")
                 .append("</linearGradient>");
+        } else if (this.sb.indexOf("rgb(0,72,160)") != -1) { // midnight
+            defs.append("<linearGradient id=\"midnight\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"100%\">")
+                .append("<stop offset=\"0\" style=\"stop-color:#338fffd0\"/>")
+                .append("<stop offset=\"100%\" style=\"stop-color:#0050b3d0\"/>")
+                .append("</linearGradient>");
         }
         defs.append("<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\" href=\"/themes/fonts/FiraCode.css\"/>");
         defs.append("<style>text{font-weight:600;text-rendering:optimizeLegibility;white-space:pre}line,path,rect{shape-rendering:crispEdges}")
+            .append(".axis{stroke-width:2;stroke-linecap:round}")
             .append(".dash{stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1}")
             .append(".line{stroke-opacity:.2;stroke-linecap:square}")
             .append(".mono{font-family:FiraCode,monospace;font-weight:500}")
@@ -2669,9 +2675,11 @@ public final class SVGGraphics2D extends Graphics2D {
             .append(".s11{font-size:11px}")
             .append(".s12{font-size:12px}")
             .append(".s13{font-size:13px}");
-        if (this.sb.indexOf("rgb(0,72,8)") != -1) {
+        if (this.sb.indexOf("rgb(0,72,8)") != -1) { // dark
             defs.append(".major{stroke:#f4f4beaa}");
             defs.append(".minor{stroke:#c8c80099}");
+        } else if (this.sb.indexOf("201,206,255") != -1) { // midnight
+            defs.append("#graph{stroke:#1a81ffaa}");
         }
         defs.append("</style></defs>");
         svg.append(defs);
@@ -2690,6 +2698,7 @@ public final class SVGGraphics2D extends Graphics2D {
             .replace("fill-opacity:0\" /><g style=\"fill", "fill-opacity:0\"/><g id=\"graph\" style=\"fill")
             .replace("style=\"fill:rgb(0,72,8);fill-opacity:.86;stroke:none\"", "fill=\"url(#dark)\"")
             .replace("style=\"fill:rgb(100,160,200);fill-opacity:.78;stroke:none\"", "fill=\"url(#light)\"")
+            .replace("style=\"fill:rgb(0,72,160);fill-opacity:.78;stroke:none\"", "fill=\"url(#midnight)\"")
             .replace("stroke:rgb(0,72,8)", "stroke:#00800da0")
             .replace("stroke:rgb(0,30,110)", "stroke:#003de6a0;fill:none")
             .replace("stroke:rgb(100,160,200);stroke-opacity:.78;", "stroke:#4da3cb99;")
@@ -2698,6 +2707,7 @@ public final class SVGGraphics2D extends Graphics2D {
             .replace("stroke-opacity:.86;stroke-linecap:square", "stroke-linecap:square")
             .replace(");stroke-linecap:square", ");stroke-linecap:square;fill:none")
             .replace("stroke-width:3.0", "stroke-width:3;fill:none")
+            .replaceAll(" style=\"stroke-width:5.*?\"", " class=\"axis\"")
             .replace("stroke:rgb(100,200,160);stroke-linecap:square", "stroke:#64c8a0cc;stroke-linecap:square;fill:none")
             .replace("stroke:#00800da0;stroke-linecap:square\" /></g><g style=\"stroke-width:3", "stroke:none;stroke-linecap:square\"/></g><g style=\"stroke-width:3")
             .replace("<rect x=\"0\" y=\"0\" width=\"250\" height=\"50\" style=\"fill:rgb(0,0,0);fill-opacity:0\" />", "")
@@ -2707,14 +2717,17 @@ public final class SVGGraphics2D extends Graphics2D {
             .replace(" style=\"stroke:rgb(0,0,0);stroke-opacity:0\"", "")
             .replace(";stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1\"", "\" class=\"dash\"")
             .replace(" L ", "L");
-        if (svgOut.indexOf("80,80,80") != -1) {
-            svgOut = svgOut.replace(".dash{", ".dash{stroke:#444;")
+        if (svgOut.indexOf("80,80,80") != -1) { // light/classic
+            svgOut = svgOut.replace(".axis{", ".axis{stroke:#33333f;")
+                           .replace(".dash{", ".dash{stroke:#444;")
                            .replace(".line{", ".line{stroke:#444;")
                            .replace("text{", "text{fill:#33333f;")
                            .replace("style=\"stroke:rgb(80,80,80)\" ", "")
                            .replace("fill:rgb(51,51,63);", "");
-        } else if (svgOut.indexOf("244,244,190") != -1) {
-            svgOut = svgOut.replace(".dash{", ".dash{stroke:#f4f4be;")
+
+        } else if (svgOut.indexOf("244,244,190") != -1) { // dark
+            svgOut = svgOut.replace(".axis{", ".axis{stroke:#eea;")
+                           .replace(".dash{", ".dash{stroke:#f4f4be;")
                            .replace(".line{", ".line{stroke:#f4f4be;")
                            .replace("text{", "text{fill:#f4f4be;")
                            .replace("style=\"stroke:rgb(244,244,190)\" ", "")
@@ -2724,6 +2737,11 @@ public final class SVGGraphics2D extends Graphics2D {
                            .replace(" style=\"stroke:rgb(244,244,190);stroke-opacity:.12\" class=\"dash\"", " class=\"dash minor\"")
                            .replace(" style=\"stroke:rgb(200,200,0)\" class=\"dash\"", " class=\"dash major\"")
                            .replace("fill:rgb(0,0,0);fill-opacity:0\"", "opacity:0\"");
+        } else if (svgOut.indexOf("201,206,255") != -1) { // midnight
+            svgOut = svgOut.replace(".axis{", ".axis{stroke:#a6b3e8;")
+                           .replace("</style>", "#path2{stroke-width:2;stroke:#5af2f2aa;fill:none}</style>")
+                           .replace(" style=\"stroke:rgb(0,72,160);stroke-opacity:.78\"", "")
+                           .replace(" style=\"stroke-width:2.0;stroke:rgb(128,180,212);fill:none\"", " id=\"path2\"");
         }
         if (svgOut.indexOf("font-family:monospace") != -1) {
             svgOut = svgOut.replace("style=\"font-family:monospace;", "class=\"mono\" style=\"");

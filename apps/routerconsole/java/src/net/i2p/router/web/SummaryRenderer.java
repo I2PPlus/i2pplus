@@ -314,9 +314,8 @@ class SummaryRenderer {
                     DEFAULT_FONT_NAME = "Monospaced";
                     DEFAULT_LEGEND_FONT_NAME = "Monospaced";
                 }
-            } else {
-            // let's handle the fonts in the svg file
 /**
+            // if we offer a png output option, this may still be useful
             } else if (fontlist.contains("Droid Sans")) {
                 DEFAULT_TITLE_FONT_NAME = "Droid Sans";
             } else if (fontlist.contains("Open Sans")) {
@@ -350,12 +349,12 @@ class SummaryRenderer {
             } else if (fontlist.contains("Lucida Console")) {
                 DEFAULT_FONT_NAME = "Lucida Console";
                 DEFAULT_LEGEND_FONT_NAME = "Lucida Console";
-            } else {
 **/
+            } else {
+                // let's handle the fonts in the svg file
                 DEFAULT_FONT_NAME = "Monospaced";
                 DEFAULT_LEGEND_FONT_NAME = "Monospaced";
                 DEFAULT_TITLE_FONT_NAME = "SansSerif";
-//            }
             }
             String ssmall = _context.getProperty(PROP_FONT_MONO, DEFAULT_FONT_NAME);
             String slegend = _context.getProperty(PROP_FONT_TITLE, DEFAULT_TITLE_FONT_NAME);
@@ -371,8 +370,6 @@ class SummaryRenderer {
             def.setFont(RrdGraphDef.FONTTAG_UNIT, small);
             def.setFont(RrdGraphDef.FONTTAG_LEGEND, legnd);
             def.setFont(RrdGraphDef.FONTTAG_TITLE, large);
-
-
             def.setMinValue(0d);
             String name = _listener.getRate().getRateStat().getName();
             String graphTitle = name;
@@ -452,17 +449,16 @@ class SummaryRenderer {
                 String p;
 
                 // we want the formatting and translation of formatDuration2(), except not zh, and not the &nbsp;
-                if (IS_WIN && "zh".equals(Messages.getLanguage(_context)))
+                if (IS_WIN && "zh".equals(Messages.getLanguage(_context))) {
                     p = DataHelper.formatDuration(period);
-                else
+                } else {
                     p = DataHelper.formatDuration2(period).replace("&nbsp;", " ");
-                if (showEvents)
+                }
+                if (showEvents) {
                     title = graphTitle + ' ' + _t("events in {0}", p);
-                else
-//                    title = name + ' ' + _t("{0} avg", p);
-                    // hide the '60 sec avg' since everything is now averaged to 60s
-                    title = graphTitle.replaceAll("(?<=[a-z])([A-Z])", " $1");
-                    title = title.substring(0, 1).toUpperCase() + title.substring(1);
+                }
+                title = graphTitle.replaceAll("(?<=[a-z])([A-Z])", " $1");
+                title = title.substring(0, 1).toUpperCase() + title.substring(1);
                 def.setTitle(title);
             }
             String path = _listener.getData().getPath();
@@ -491,23 +487,14 @@ class SummaryRenderer {
             if (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid) {
                 def.area(plotName, AREA_COLOR_NEUTRAL);
             } else if (theme.equals("dark")) {
-                if (descr.length() > 0) {
-                    def.area(plotName, AREA_COLOR_DARK, descr + "\\l");
-                } else {
-                    def.area(plotName, AREA_COLOR_DARK);
-                }
+                if (descr.length() > 0) {def.area(plotName, AREA_COLOR_DARK, descr + "\\l");}
+                else {def.area(plotName, AREA_COLOR_DARK);}
             } else if (theme.equals("midnight")) {
-                if (descr.length() > 0) {
-                    def.area(plotName, AREA_COLOR_MIDNIGHT, descr + "\\l");
-                } else {
-                    def.area(plotName, AREA_COLOR_MIDNIGHT);
-                }
+                if (descr.length() > 0) {def.area(plotName, AREA_COLOR_MIDNIGHT, descr + "\\l");}
+                else {def.area(plotName, AREA_COLOR_MIDNIGHT);}
             } else {
-                if (descr.length() > 0) {
-                    def.area(plotName, AREA_COLOR, descr + "\\l");
-                } else {
-                    def.area(plotName, AREA_COLOR);
-                }
+                if (descr.length() > 0) {def.area(plotName, AREA_COLOR, descr + "\\l");}
+                else {def.area(plotName, AREA_COLOR);}
             }
             if (!hideLegend) {
                 Variable var = new Variable.MIN();

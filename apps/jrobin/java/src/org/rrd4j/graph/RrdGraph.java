@@ -372,40 +372,10 @@ public class RrdGraph implements RrdGraphConstants {
             Paint gridColor = gdef.getColor(ElementsNames.grid);
             Paint xaxisColor = gdef.getColor(ElementsNames.xaxis);
             Paint yaxisColor = gdef.getColor(ElementsNames.yaxis);
-            Paint arrowColor = gdef.getColor(ElementsNames.arrow);
             Stroke stroke = new BasicStroke(1);
-            worker.drawLine(im.xorigin + im.xsize, im.yorigin, im.xorigin + im.xsize, im.yorigin - im.ysize,
-                    gridColor, stroke);
-            worker.drawLine(im.xorigin, im.yorigin - im.ysize, im.xorigin + im.xsize, im.yorigin - im.ysize,
-                    gridColor, stroke);
-            worker.drawLine(im.xorigin - 4, im.yorigin, im.xorigin + im.xsize + 4, im.yorigin,
-                    xaxisColor, stroke);
-            worker.drawLine(im.xorigin, im.yorigin + 4, im.xorigin, im.yorigin - im.ysize - 4,
-                    yaxisColor, stroke);
-            //Do X axis arrow
-            double[] Xarrow_x = {
-                    im.xorigin + im.xsize + 4,
-                    im.xorigin + im.xsize + 9,
-                    im.xorigin + im.xsize + 4,
-            };
-            double[] Xarrow_y = {
-                    im.yorigin - 3, im.yorigin,
-                    im.yorigin + 3,
-            };
-            worker.fillPolygon(Xarrow_x, im.yorigin + 3.0, Xarrow_y, arrowColor);
-
-            //Do y axis arrow
-            double[] Yarrow_x = {
-                    im.xorigin - 3,
-                    im.xorigin,
-                    im.xorigin + 3,
-            };
-            double[] Yarrow_y = {
-                    im.yorigin - im.ysize - 4,
-                    im.yorigin - im.ysize - 9,
-                    im.yorigin - im.ysize - 4,
-            };
-            worker.fillPolygon(Yarrow_x, im.yorigin - im.ysize - 4.0, Yarrow_y, arrowColor);
+            if (im.xsize >= 600 && im.ysize >= 200) {stroke = new BasicStroke(5);}
+            worker.drawLine(im.xorigin, im.yorigin, im.xorigin + im.xsize, im.yorigin, xaxisColor, stroke);
+            worker.drawLine(im.xorigin, im.yorigin - im.ysize, im.xorigin, im.yorigin, yaxisColor, stroke);
         }
     }
 
