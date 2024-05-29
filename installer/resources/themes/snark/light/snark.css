@@ -119,7 +119,7 @@ td{padding:3px 4px;color:var(--ink_light);opacity:1;font-size:9pt}
 #toast b{color:#373}
 
 /* screenlog */
-#screenlog{margin:-2px 0 0;padding:3px 5px 3px 5px;min-width:810px;height:56px;width:auto;font-size:8.5pt;text-align:left;overflow:hidden;color:#6e6eb7;border-top:var(--border_soft);border-bottom:var(--border_soft);border-spacing:0;box-shadow:var(--highlight);background:url(images/kitty.png) no-repeat right center,repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),var(--snarkGraph) no-repeat,var(--th);background-size:60px auto,100%,cover,100%;background-position:right bottom,center center,calc(100% - 72px) bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal;transition:ease all .15s;scrollbar-color:#779 rgba(0,0,0,0);contain:paint}
+#screenlog{margin:-2px 0 0;padding:3px 5px 3px 5px;min-width:810px;height:56px;width:auto;font-size:8.5pt;text-align:left;overflow:hidden;color:#6e6eb7;border-top:var(--border_soft);border-bottom:var(--border_soft);border-spacing:0;box-shadow:var(--highlight);background:url(images/kitty.png) no-repeat right center,repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),var(--snarkGraph) no-repeat,var(--th);background-size:60px auto,100%,cover!important;background-position:right bottom,center center,calc(100% - 72px) bottom, center center!important;background-blend-mode:multiply,overlay,luminosity,normal;transition:ease all .15s;scrollbar-color:#779 rgba(0,0,0,0);contain:paint}
 #screenlog .infohash{font-weight:700}
 #screenlog:empty{display:none}
 #screenlog:hover,#screenlog:focus{overflow-y:auto}
