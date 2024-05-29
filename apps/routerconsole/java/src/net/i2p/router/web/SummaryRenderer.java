@@ -451,14 +451,9 @@ class SummaryRenderer {
                 String p;
 
                 // we want the formatting and translation of formatDuration2(), except not zh, and not the &nbsp;
-                if (IS_WIN && "zh".equals(Messages.getLanguage(_context))) {
-                    p = DataHelper.formatDuration(period);
-                } else {
-                    p = DataHelper.formatDuration2(period).replace("&nbsp;", " ");
-                }
-                if (showEvents) {
-                    title = graphTitle + ' ' + _t("events in {0}", p);
-                }
+                if (IS_WIN && "zh".equals(Messages.getLanguage(_context))) {p = DataHelper.formatDuration(period);}
+                else {p = DataHelper.formatDuration2(period).replace("&nbsp;", " ");}
+                if (showEvents) {title = graphTitle + ' ' + _t("events in {0}", p);}
                 title = graphTitle.replaceAll("(?<=[a-z])([A-Z])", " $1");
                 title = title.substring(0, 1).toUpperCase() + title.substring(1);
                 def.setTitle(title);
