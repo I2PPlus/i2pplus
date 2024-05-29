@@ -1674,9 +1674,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
                 int size = 0;
                 String line;
-                while ((line = reader.readLine()) != null) {
-                    size++;
-                }
+                while ((line = reader.readLine()) != null) {size++;}
                 cachedClientBlockListSize = size;
             }
             blocklistClientsLastModified = currentLastModified;
