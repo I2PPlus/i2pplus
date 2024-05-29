@@ -1611,6 +1611,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private synchronized void logBlockedDestination(String destination) {
         if (clientBlockList == null) {clientBlockList = new ArrayList<>();}
         long currentLastModified = blocklistClients.lastModified();
+        int blockedDests = 0;
+        try {blockedDests = blocklistClients.exists() && blocklistClients.length() > 0 ? countBlockedDests() : 0;}
+        catch (IOException ioe) { _log.error("[HTTPServer] Cannot open client blocklist file (" + ioe.getMessage() + ")");}
         if (currentLastModified != blocklistClientsLastModified) {
             if (!blocklistClients.exists()) {
                 try {blocklistClients.createNewFile();}
@@ -1630,7 +1633,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             blocklistClientsLastModified = currentLastModified;
         }
         if (clientBlockList != null && !clientBlockList.contains(destination)) {
-            if (clientBlockList.size() >= HTTP_BLOCKLIST_CLIENT_LIMIT) {clientBlockList.remove(0);}
+            if (blockedDests >= HTTP_BLOCKLIST_CLIENT_LIMIT) {clientBlockList.remove(0);}
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(blocklistClients, true))) {
                 writer.write(destination);
                 writer.newLine();
@@ -1665,17 +1668,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     private final Object lock = new Object();
 
-    private int countBlockedDests(File blocklistClients) throws IOException {
+    private synchronized int countBlockedDests() throws IOException {
         long currentLastModified = blocklistClients.lastModified();
-        synchronized (lock) {
-            if (currentLastModified != blocklistClientsLastModified) {
-                cachedClientBlockListSize = 0;
-                try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {cachedClientBlockListSize++;}
+        if (currentLastModified != blocklistClientsLastModified) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
+                int size = 0;
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    size++;
                 }
-                blocklistClientsLastModified = currentLastModified;
+                cachedClientBlockListSize = size;
             }
+            blocklistClientsLastModified = currentLastModified;
         }
         return cachedClientBlockListSize;
     }
