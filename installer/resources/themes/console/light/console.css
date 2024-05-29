@@ -2810,7 +2810,8 @@ h4#updateplugins,#news p{font-size:10pt}
 body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_internals.collapsed,body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_advanced.collapsed{margin-bottom:-5px}
 #sb_advancedgeneral:not([hidden])~#sb_peers_condensed{margin-bottom:-4px}
 #sidebar #sb_shutdownStatus{padding:8px 4px 9px;line-height:1.2}
-#sidebar table[id^="sb_"]{width:238px}
+#sidebar table[id^="sb_"],#sidebar #localtunnelSummary{width:238px}
+#sidebar #localtunnelSummary{margin-left:-5px}
 #statlist li a[href^="graph"]::before,#statlist li::before{margin:0 10px -30px -17px;height:6px;width:6px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.8)}
 #statlist li{padding:0 10px}
 #statlist>li>ul b{margin:0;display:block!important}
