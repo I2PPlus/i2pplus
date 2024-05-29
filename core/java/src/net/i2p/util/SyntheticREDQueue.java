@@ -123,7 +123,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
         _bwBpms = bwBps / 1000f;
         _tQSize = _tAck;
         if (_log.shouldDebug())
-            _log.debug("Configured " + bwBps + " BPS; Min: " + minThB + "B; Max: " + maxThB + "B");
+            _log.debug("Configured " + bwBps + " Bytes/s; Min: " + minThB + "B; Max: " + maxThB + "B");
     }
 
     /**
@@ -363,7 +363,7 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     public synchronized String toString() {
         return "\n* Queue: " +
                 DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) +
-                "Bps -> Average size / limit: " + DataHelper.formatSize2((long) _avgQSize, false) + "B / " + 
-                DataHelper.formatSize2Decimal((long) _bwBps, false) + "Bps";
+                "Bytes/s -> Average size / limit: " + DataHelper.formatSize2((long) _avgQSize, false) + "B / " +
+                DataHelper.formatSize2Decimal((long) _bwBps, false) + "B/s";
     }
 }

@@ -1281,7 +1281,7 @@ public class Router implements RouterClock.ClockShiftListener {
                             messagesPerTunnel = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE;
                         double bpsAllocated = messagesPerTunnel * numTunnels * 1024 / (10 * 60);
                         if (_log.shouldInfo())
-                            _log.info("bps allocated: " + bpsAllocated + " bw limit: " + bwLim);
+                            _log.info("b/s allocated: " + bpsAllocated + " -> Bandwidth limit: " + bwLim);
                         if (bpsAllocated > 0.9 * bwLim)
                             cong = CAPABILITY_CONGESTION_SEVERE;
                         else if (bpsAllocated > 0.8 * bwLim)

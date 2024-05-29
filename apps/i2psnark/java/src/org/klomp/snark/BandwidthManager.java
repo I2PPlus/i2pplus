@@ -121,7 +121,7 @@ public class BandwidthManager implements BandwidthListener {
     public boolean shouldSend(int size) {
         boolean rv = _up.offer(size, 1.0f);
         if (!rv && _log.shouldWarn())
-            _log.warn("Deny sending " + size + " bytes, upload rate " + DataHelper.formatSize(getUploadRate()) + "Bps");
+            _log.warn("Deny sending " + size + " bytes, upload rate " + DataHelper.formatSize(getUploadRate()) + "B/s");
         return rv;
     }
 

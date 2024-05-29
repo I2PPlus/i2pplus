@@ -76,7 +76,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         //_context.statManager().createRateStat("router.throttleTunnelProbTestSlow", "How slow are our tunnel tests when our average exceeds the old average and we throttle?", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelBandwidthExceeded", "Bandwidth allocated when we refuse to build tunnel (bandwidth exceeded)", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelBytesAllowed", "Bytes permitted to be sent when we get a tunnel request", "Router [Throttle]", RATES);
-        _context.statManager().createRateStat("router.throttleTunnelBytesUsed", "Used Bps at request (period = max KBps)", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelBytesUsed", "Used B/s at request (period = max KB/s)", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelFailCount1m", "Average message send fails in last 2 minutes (failure spike throttle)", "Router [Throttle]", RATES);
         //_context.statManager().createRateStat("router.throttleTunnelQueueOverload", "How many pending tunnel request messages have we received when we reject them due to overload (period = time to process each)?", "Router [Throttle]", RATES);
     }
@@ -383,7 +383,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         if (availBps < MIN_AVAILABLE_BPS) {
 //            if (_log.shouldWarn())
             _log.warn("Rejecting participating tunnel requests \n* Available bandwidth (" + availBps +
-                      "Bps) is less than minimum required (" + MIN_AVAILABLE_BPS + "Bps)");
+                      "B/s) is less than minimum required (" + MIN_AVAILABLE_BPS + "B/s)");
             setTunnelStatus("[rejecting/max]" + LIMIT_STR);
             return false;
         }

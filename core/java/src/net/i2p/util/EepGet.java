@@ -576,7 +576,7 @@ public class EepGet {
                             long lifetime = _context.clock().now() - _startedOn;
                             double lifetimeKBps = (1000.0d*(_written)/(lifetime*1024.0d));
                             fmt.format("%7.2f", Double.valueOf(lifetimeKBps));
-                            buf.append(" KBps");
+                            buf.append(" KB/s");
 */
                             if (SystemVersion.isWindows())
                                 System.out.println(" ◼ " + buf.toString());
@@ -628,7 +628,7 @@ public class EepGet {
                         timeToSend = 1;
                     long kbps = (long) (1000.0d * transferred / timeToSend);
                     buf.append(DataHelper.formatSize2Decimal(kbps, false));
-                    buf.append("Bps");
+                    buf.append("B/s");
                     System.out.println(buf.toString());
                     long sz = (new File(outputFile)).length();
                     if (sz <= 0)
@@ -666,7 +666,7 @@ public class EepGet {
             long kbps = (long) (1000.0d * bytesTransferred / timeToSend);
             buf.append(" @ ");
             buf.append(DataHelper.formatSize2Decimal(kbps, false));
-            buf.append("Bps");
+            buf.append("B/s");
             System.out.println(buf.toString());
         }
 

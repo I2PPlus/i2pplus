@@ -436,6 +436,8 @@ class SummaryRenderer {
                 graphTitle = name.replace("InBps", "Inbound B/s");
             if (name.endsWith("OutBps"))
                 graphTitle = name.replace("OutBps", "Outbound B/s");
+            if (name.endsWith("Bps"))
+                graphTitle = name.replace("Bps", "B/s");
             graphTitle = CSSHelper.StringFormatter.capitalizeWord(graphTitle);
             // heuristic to set K=1024
             if ((name.indexOf("Size") >= 0 || name.indexOf("memory") >= 0) ||
