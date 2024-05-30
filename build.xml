@@ -1073,7 +1073,7 @@
         <property name="release.number" value="unknown" />
         <property name="api.version" value="unknown" />
         <echo message="Release number: ${release.number}" />
-        <echo message="API version:    ${api.version}" />
+        <echo message="API version: ${api.version}" />
         <fail message="Bad API version, must start with 0.9.">
             <condition>
                 <not>
