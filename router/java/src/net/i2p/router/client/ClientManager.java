@@ -135,12 +135,10 @@ class ClientManager {
         ClientListenerRunner listener;
         if (SystemVersion.isAndroid()) {
             try {
-                Class<? extends ClientListenerRunner> clazz = Class.forName(
-                        "net.i2p.router.client.DomainClientListenerRunner"
-                    ).asSubclass(ClientListenerRunner.class);
+                Class<? extends ClientListenerRunner> clazz = Class.forName("net.i2p.router.client.DomainClientListenerRunner")
+                                                                   .asSubclass(ClientListenerRunner.class);
                 Constructor<? extends ClientListenerRunner> ctor =
-                    clazz.getDeclaredConstructor(RouterContext.class,
-                                                 ClientManager.class);
+                    clazz.getDeclaredConstructor(RouterContext.class, ClientManager.class);
                 listener = ctor.newInstance(_ctx, this);
                 Thread t = new I2PThread(listener, "DomainClientListener", true);
                 t.start();
@@ -371,7 +369,7 @@ class ClientManager {
             }
         }
         if (rv == SessionStatusMessage.STATUS_DUP_DEST) {
-            _log.log(Log.CRIT, "Client attempted to register duplicate destination: " + dest.toBase32());
+            _log.log(Log.CRIT, "Client attempted to register DUPLICATE destination: " + dest.toBase32());
         } else if (rv == SessionStatusMessage.STATUS_REFUSED) {
             _log.error("Max sessions exceeded for: " + dest.toBase32());
         }
@@ -390,7 +388,7 @@ class ClientManager {
      */
     public boolean registerEncryptedDestination(ClientConnectionRunner runner, Hash hash) {
         if (_log.shouldDebug())
-            _log.debug("New encrypted LeaseSet " + hash.toBase32());
+            _log.debug("New ENCRYPTED LeaseSet " + hash.toBase32());
 
         boolean rv;
         synchronized (_runners) {
@@ -475,7 +473,7 @@ class ClientManager {
         }
         if (runner != null) {
             if (_log.shouldDebug())
-                _log.debug("[Message " + msgId + "] is targeting a local destination; distribute it as such");
+                _log.debug("[Message " + msgId + "] is targeting a LOCAL destination; distribute it as such");
             if (runner != sender) {
             // run this inline so we don't clog up the job queue
             Job j = new DistributeLocal(toDest, runner, sender, fromDest, payload, msgId, messageNonce);
