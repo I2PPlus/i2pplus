@@ -1,4 +1,10 @@
 2024-05-28 dr|z3d
+ * I2PSnark: Don't display toggle peers icon when no peers connected
+
+2024-05-28 dr|z3d
+ * Graphs: Various presentational improvements
+
+2024-05-28 dr|z3d
  * I2PSnark:
    - Fixes for single torrent peer toggle
    - Distinguish between active and inactive seeding torrents
