@@ -874,7 +874,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String url = req.getRequestURL().toString();
         filterParam = req.getParameter("filter") != null ? req.getParameter("filter") : "";
         String filterQuery = "";
-        String separator = "&";
+        String separator = url.contains("?") ? "&" : "?";
         filterQuery = "filter=" + (filterParam.isEmpty() ? "all" : filterParam);
         boolean showSort = total > 1;
         StringBuilder hbuf = new StringBuilder(2*1024);
@@ -885,8 +885,9 @@ public class I2PSnarkServlet extends BasicServlet {
             hbuf.append("<span class=sortIcon>");
             if (currentSort == null || "-2".equals(currentSort)) {
                 sort = "2";
-                if ( "-2".equals(currentSort))
+                if ( "-2".equals(currentSort)) {
                     hbuf.append("<span class=ascending></span>");
+                }
             } else if ("2".equals(currentSort)) {
                 sort = "-2";
                 hbuf.append("<span class=descending></span>");
@@ -916,12 +917,14 @@ public class I2PSnarkServlet extends BasicServlet {
             String link = _contextPath + '/' + queryString + filterQuery;
             tx = peerParam != null ? _t("Hide Peers") : _t("Show Peers");
             String img = peerParam != null ? "hidepeers" : "showpeers";
-            if (peerParam == null) {
-                hbuf.append(" <a class=sorter href=\"" + link.replace("filter", "&filter") + "\">");
-            } else {
-                hbuf.append(" <a class=sorter href=\"" + link.replace("filter", "?filter") + "\">");
+            if (hasPeers) {
+                if (peerParam == null) {
+                    hbuf.append(" <a class=\"sorter showPeers " + (!hasPeers ? "noPeers" : "") + "\" href=\"" + link.replace("filter", "&filter") + "\">");
+                } else {
+                    hbuf.append(" <a class=\"sorter hidePeers " + (!hasPeers ? "noPeers" : "") + "\" href=\"" + link.replace("filter", "?filter") + "\">");
+                }
+                hbuf.append(toThemeImg(img, tx, tx)).append("</a>\n");
             }
-            hbuf.append(toThemeImg(img, tx, tx)).append("</a>\n");
         }
         hbuf.append("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden=hidden></th>");
         hbuf.append("<th id=torrentSort>");
