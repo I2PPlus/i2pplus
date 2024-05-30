@@ -780,7 +780,7 @@ class Connection {
             if (_inputStream.getHighestBlockId() >= 0 && !getResetReceived()) {
                 // only send a RESET if we ever got something (and he didn't RESET us),
                 // otherwise don't waste the crypto and tags
-                if (_log.shouldWarn()) {
+                if (_log.shouldInfo()) {
                     _log.warn("Hard disconnecting, sending RESET to " + getRemotePeerString() + " -> " +
                               (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
                 }
