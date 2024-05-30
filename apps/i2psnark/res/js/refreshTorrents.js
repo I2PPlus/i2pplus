@@ -25,6 +25,7 @@ let snarkRefreshIntervalId;
 let screenLogIntervalId;
 let snarkRefreshTimeoutId;
 let debugging = false;
+let initialized = false;
 
 function refreshTorrents(callback) {
   const complete = document.getElementsByClassName("completed");
@@ -37,16 +38,19 @@ function refreshTorrents(callback) {
   const notfound = document.getElementById("NotFound");
   const storage = window.localStorage.getItem("snarkFilter");
 
-  if (document.getElementById("ourDest") === null) {
-    const childElems = document.querySelectorAll("#snarkHead th:not(.torrentAction)>*");
-    if (snarkHead !== null) {
-      document.getElementById("snarkHead").classList.add("initializing");
-      childElems.forEach((elem) => {elem.style.opacity = "0";});
+  if (!initialized && !noload) {
+    initialized = true;
+    if (document.getElementById("ourDest") === null) {
+      const childElems = document.querySelectorAll("#snarkHead th:not(.torrentAction)>*");
+      if (snarkHead !== null) {
+        document.getElementById("snarkHead").classList.add("initializing");
+        childElems.forEach((elem) => {elem.style.opacity = "0";});
+      }
+      setTimeout(() => {
+        document.getElementById("snarkHead").classList.remove("initializing");
+        childElems.forEach((elem) => {elem.style.opacity = "";});
+      }, 10000);
     }
-    setTimeout(() => {
-      document.getElementById("snarkHead").classList.remove("initializing");
-      childElems.forEach((elem) => {elem.style.opacity = "";});
-    }, 10000);
   }
 
   if (!storageRefresh) {
@@ -330,8 +334,8 @@ function doRefresh(url, callback) {
     initHandlers();
   };
   xhrsnark.onerror = () => {
-    if (xhrsnark.readyState === 4) {
-      if (xhrsnark.status === 0) {setTimeout(() => {doRefresh(url, callback);}, REQUEST_TIMEOUT);}
+    if (xhrsnark.readyState === 4 && xhrsnark.status === 0) {
+      setTimeout(() => doRefresh(url, callback), REQUEST_TIMEOUT);
     }
   };
   xhrsnark.send();

@@ -872,9 +872,10 @@ public class I2PSnarkServlet extends BasicServlet {
 
         String currentSort = req.getParameter("sort");
         String url = req.getRequestURL().toString();
+        boolean hasQueryParams = req.getQueryString() != null && !req.getQueryString().isEmpty();
         filterParam = req.getParameter("filter") != null ? req.getParameter("filter") : "";
         String filterQuery = "";
-        String separator = url.contains("?") ? "&" : "?";
+        String separator = hasQueryParams ? "&" : "?";
         filterQuery = "filter=" + (filterParam.isEmpty() ? "all" : filterParam);
         boolean showSort = total > 1;
         StringBuilder hbuf = new StringBuilder(2*1024);
@@ -919,9 +920,9 @@ public class I2PSnarkServlet extends BasicServlet {
             String img = peerParam != null ? "hidepeers" : "showpeers";
             if (hasPeers) {
                 if (peerParam == null) {
-                    hbuf.append(" <a class=\"sorter showPeers " + (!hasPeers ? "noPeers" : "") + "\" href=\"" + link.replace("filter", "&filter") + "\">");
+                    hbuf.append(" <a class=\"sorter showPeers" + (!hasPeers ? " noPeers" : "") + "\" href=\"" + link.replace("filter", "&filter") + "\">");
                 } else {
-                    hbuf.append(" <a class=\"sorter hidePeers " + (!hasPeers ? "noPeers" : "") + "\" href=\"" + link.replace("filter", "?filter") + "\">");
+                    hbuf.append(" <a class=\"sorter hidePeers" + (!hasPeers ? " noPeers" : "") + "\" href=\"" + link.replace("filter", "?filter") + "\">");
                 }
                 hbuf.append(toThemeImg(img, tx, tx)).append("</a>\n");
             }
