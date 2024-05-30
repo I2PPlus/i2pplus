@@ -9,7 +9,9 @@ function snarkSort() {
   if (!snarkHead) {return;}
   snarkHead.removeEventListener("click", sortListener);
   snarkHead.addEventListener("click", sortListener);
-  snarkHead.querySelectorAll(".sorter").forEach((sorter) => {sorter.pointerEvents = "";});
+  snarkHead.querySelectorAll(".sorter").forEach((sorter) => {
+    setTimeout(() => {sorter.pointerEvents = "";}, 0);
+  });
 }
 
 let sortListener = function(event) {
