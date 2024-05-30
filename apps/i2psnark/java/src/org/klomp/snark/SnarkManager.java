@@ -2052,6 +2052,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (fis != null) try { fis.close(); fis = null; } catch (IOException ioe2) {}
                     String err = _t("Torrent in \"{0}\" is invalid", sfile.toString()) + ": " + ioe.getLocalizedMessage();
                     addMessage(err);
+                    if (!_context.isRouterContext()) {System.out.println(" • " + err);}
                     _log.error(err, ioe);
                     disableTorrentFile(filename);
                     return false;
@@ -2064,7 +2065,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
             }
         } else {
-            addMessage(_t("Torrent already running: {0}", filename));
+            msg = _t("Torrent already running: {0}", filename);
+            addMessage(msg);
+            if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
             return false;
         }
         // ok, snark created, now let's start it up or configure it further
@@ -2084,8 +2087,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (!dontAutoStart && shouldAutoStart() && running) {
             if (!_util.connected()) {
                 msg = _t("Initializing I2PSnark and opening tunnels") + "...";
-                if (!_context.isRouterContext())
-                    System.out.println(" • " + msg);
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 boolean ok = _util.connect();
                 if (!ok) {
                     if (_context.isRouterContext()) {
@@ -2173,9 +2175,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (snark != null) {
                 msg = _t("Torrent with this info hash is already running: {0}", snark.getBaseName());
                 addMessage(msg);
-                if (!_context.isRouterContext()) {
-                    System.out.println(" • " + msg);
-                }
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 return null;
             }
             // Tell the dir monitor not to delete us
@@ -2196,16 +2196,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 msg = _t("Open trackers are disabled and we have no DHT peers. " +
                          "Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT.", name);
                 addMessage(msg);
-                if (!_context.isRouterContext()) {
-                    System.out.println(" • " + msg);
-                }
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
             }
         } else {
             msg = _t("Adding {0}", name);
             addMessage(msg);
-            if (!_context.isRouterContext()) {
-                System.out.println(" • " + msg);
-            }
+            if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
         }
         return torrent;
     }
@@ -2240,9 +2236,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (snark != null) {
                 String msg = _t("Download already running: {0}", snark.getBaseName());
                 addMessage(msg);
-                if (!_context.isRouterContext()) {
-                    System.out.println(" • " + msg);
-                }
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 return;
             }
             String name = torrent.getName();
@@ -2279,9 +2273,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (snark != null) {
                 msg = _t("Torrent with this info hash is already running: {0}", snark.getBaseName());
                 addMessage(msg);
-                if (!_context.isRouterContext()) {
-                    System.out.println(" • " + msg);
-                }
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 return false;
             }
             String filtered = Storage.filterName(metainfo.getName());
@@ -2289,9 +2281,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (snark != null) {
                 msg = _t("Torrent with the same data location is already running: {0}", snark.getBaseName());
                 addMessage(msg);
-                if (!_context.isRouterContext()) {
-                    System.out.println(" • " + msg);
-                }
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 return false;
             }
             if (bitfield != null) {
@@ -2303,9 +2293,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if (f.exists()) {
                     msg = _t("Failed to copy torrent file to {0}", f.getAbsolutePath()) + _t(" - torrent file already exists");
                     addMessage(msg);
-                    if (!_context.isRouterContext()) {
-                        System.out.println(" • " + msg);
-                    }
+                    if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                     _log.error("[I2PSnark] Torrent file already exists: " + f);
                 }
                 filename = f.getAbsolutePath();
@@ -2315,7 +2303,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 // hold the lock for a long time
                 return addTorrent(filename, baseFile, dontAutoStart);
             } catch (IOException ioe) {
-                addMessage(_t("Failed to copy torrent file to {0}", filename));
+                msg = _t("Failed to copy torrent file to {0}", filename);
+                addMessage(msg);
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 _log.error("[I2PSnark] Failed to write torrent file", ioe);
                 return false;
             }
