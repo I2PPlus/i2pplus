@@ -196,7 +196,8 @@ function refreshTorrents(callback) {
     const snarkHeadResponse = xhrsnark.responseXML?.getElementById("snarkHead");
 
     if (snarkHead && snarkHeadResponse && snarkHead.innerHTML !== snarkHeadResponse.innerHTML) {
-      snarkHead.innerHTML = snarkHeadResponse.innerHTML
+      snarkHead.innerHTML = snarkHeadResponse.innerHTML;
+      snarkSort();
     }
 
     if (snarkFoot && snarkFootResponse && snarkFoot.innerHTML !== snarkFootResponse.innerHTML) {

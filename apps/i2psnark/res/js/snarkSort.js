@@ -9,7 +9,7 @@ function snarkSort() {
   if (!snarkHead) {return;}
   snarkHead.removeEventListener("click", sortListener);
   snarkHead.addEventListener("click", sortListener);
-  snarkHead.querySelectorAll(".sorter").forEach((sorter) => {sorter.pointerEvents = "";}
+  snarkHead.querySelectorAll(".sorter").forEach((sorter) => {sorter.pointerEvents = "";});
 }
 
 let sortListener = function(event) {
@@ -20,10 +20,10 @@ let sortListener = function(event) {
     const clickedElement = event.target;
     sortURL = new URL(event.target.closest(".sorter").href);
     if (sortURL) {
-      snarkHead.querySelectorAll(".sorter").forEach((sorter) => {sorter.pointerEvents = "none";}
+      snarkHead.querySelectorAll(".sorter").forEach((sorter) => {sorter.pointerEvents = "none";});
       xhrSortURL = "/i2psnark/.ajax/xhr1.html" + sortURL.search;
       history.replaceState({}, "", sortURL);
-      doRefresh(xhrSortURL, snarkSort);
+      doRefresh(xhrSortURL);
     }
   }
 };
