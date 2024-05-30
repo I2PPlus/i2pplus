@@ -282,9 +282,11 @@ class ClientManager {
         if (_log.shouldWarn())
             if (ids != null && !ids.isEmpty()) {
                 _log.warn("Dropping client connection with IDs: " + ids);
-            } else {
-                _log.warn("Dropping a client connection...");
             }
+            // uninformative, tells us nothing useful
+            // else {
+            //    _log.warn("Dropping a client connection...");
+            //}
         synchronized (_runners) {
             for (SessionId id : ids) {
                 _runnerSessionIds.remove(id);
@@ -330,7 +332,7 @@ class ClientManager {
      */
     public void unregisterEncryptedDestination(ClientConnectionRunner runner, Hash hash) {
         if (_log.shouldWarn())
-            _log.warn("Unregistering encrypted LS "  + hash.toBase32());
+            _log.warn("Unregistering ENCRYPTED LeaseSet "  + hash.toBase32());
         synchronized (_runners) {
             _runnersByHash.remove(hash);
         }
@@ -388,7 +390,7 @@ class ClientManager {
      */
     public boolean registerEncryptedDestination(ClientConnectionRunner runner, Hash hash) {
         if (_log.shouldDebug())
-            _log.debug("New encrypted LS " + hash.toBase32());
+            _log.debug("New encrypted LeaseSet " + hash.toBase32());
 
         boolean rv;
         synchronized (_runners) {
@@ -397,7 +399,7 @@ class ClientManager {
                 _runnersByHash.put(hash, runner);
         }
         if (!rv)
-            _log.error("Encrypted dest collision " + hash.toBase32());
+            _log.error("Encrypted destination collision " + hash.toBase32());
         return rv;
     }
 
@@ -442,7 +444,7 @@ class ClientManager {
             return null;
         int max = Math.max(1, Math.min(2048, _ctx.getProperty(PROP_MAX_SESSIONS, DEFAULT_MAX_SESSIONS)));
         if (_runnerSessionIds.size() >= max) {
-            _log.logAlways(Log.WARN, "Session refused, max is " + max + "; increase " + PROP_MAX_SESSIONS);
+            _log.logAlways(Log.WARN, "Session refused, maximum sessions (" + max + ") exceeded -> Increase via: " + PROP_MAX_SESSIONS);
             return null;
         }
         for (int i = 0; i < 100; i++) {
