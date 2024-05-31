@@ -10,7 +10,7 @@ function snarkSort() {
   snarkHead.removeEventListener("click", sortListener);
   snarkHead.addEventListener("click", sortListener);
   snarkHead.querySelectorAll(".sorter").forEach((sorter) => {
-    setTimeout(() => {sorter.pointerEvents = "";}, 0);
+    setTimeout(() => {sorter.style.pointerEvents = "";}, 0);
   });
 }
 
@@ -22,7 +22,7 @@ let sortListener = function(event) {
     const clickedElement = event.target;
     sortURL = new URL(event.target.closest(".sorter").href);
     if (sortURL) {
-      snarkHead.querySelectorAll(".sorter").forEach((sorter) => {sorter.pointerEvents = "none";});
+      snarkHead.querySelectorAll(".sorter").forEach((sorter) => {sorter.style.pointerEvents = "none";});
       xhrSortURL = "/i2psnark/.ajax/xhr1.html" + sortURL.search;
       history.replaceState({}, "", sortURL);
       doRefresh(xhrSortURL);
