@@ -440,8 +440,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     } else {
                         try {sendError(socket, ERR_REQUEST_TIMEOUT);}
                         catch (IOException ioe) {}
-                        if (_log.shouldLog(Log.WARN))
-                            _log.warn("[HTTPServer] Request error: " + ste.getMessage() + " \n* Client: " + peerB32);
+                        if (_log.shouldLog(Log.WARN)) {
+                            if (!ste.getMessage().equals("null") && ste.getMessage() != null) {
+                                _log.warn("[HTTPServer] Request error: " + ste.getMessage() + " \n* Client: " + peerB32);
+                            }
+                        }
                     }
                     try {socket.close();}
                     catch (IOException ioe) {}
@@ -454,7 +457,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         try {sendError(socket, ERR_BAD_REQUEST);}
                         catch (IOException ioe) {}
                         if (_log.shouldWarn()) {
-                            _log.warn("[HTTPServer] Request error: " + eofe.getMessage() + " \n* Client: " + peerB32);
+                            if (!eofe.getMessage().equals("null") && eofe.getMessage() != null) {
+                                _log.warn("[HTTPServer] Request error: " + eofe.getMessage() + " \n* Client: " + peerB32);
+                            }
                         }
                     }
                     try {socket.close();}
@@ -490,7 +495,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         catch (IOException ioe) {}
                     }
                     if (_log.shouldLog(Log.WARN)) {
-                        _log.warn("[HTTPServer] Request error: " + bre.getMessage() + " \n* Client: " + peerB32);
+                        if (!bre.getMessage().equals("null") && bre.getMessage() != null) {
+                            _log.warn("[HTTPServer] Request error: " + bre.getMessage() + " \n* Client: " + peerB32);
+                        }
                     }
                     return;
                 }
@@ -1040,12 +1047,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (_shouldCompress) {
                     compressedout = new CompressedResponseOutputStream(browserout, _keepalive);
                     compressedout.write(DataHelper.getUTF8(modifiedHeaders));
-                    s = new Sender(compressedout, serverin, "Server -> Client (Gzipped) " +
+                    s = new Sender(compressedout, serverin, "Server -> Client (Gzip) " +
                                    (req != null && !req.equals("") ? "\n* URL: " + req : ""), _log);
                     browserout = compressedout;
                 } else {
                     browserout.write(DataHelper.getUTF8(modifiedHeaders));
-                    s = new Sender(browserout, serverin, "Server -> Client (No Gzip compression) " +
+                    s = new Sender(browserout, serverin, "Server -> Client " +
                                    (req != null && !req.equals("") ? "\n* URL: " + req : ""), _log);
                 }
                 if (_log.shouldDebug())
