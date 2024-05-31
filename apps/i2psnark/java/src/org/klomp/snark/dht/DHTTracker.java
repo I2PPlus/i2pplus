@@ -141,9 +141,11 @@ class DHTTracker {
      * Debug info, HTML formatted
      */
     public void renderStatusHTML(StringBuilder buf) {
-        buf.append("<div id=debugDHT><b>DHT tracker:</b> ").append(_torrentCount).append(" torrents &bullet; ")
-           .append(_peerCount).append(" peers &bullet; ")
-           .append(DataHelper.formatDuration(_expireTime)).append(" expiration</div><hr class=debug>");
+        buf.append("<div id=debugDHT><b>DHT tracker:</b> ")
+           .append("<span class=dht>").append(_torrentCount).append(" torrents</span> ")
+           .append("&bullet; <span class=dht>").append(_peerCount).append(" peers</span> ")
+           .append("&bullet; <span class=dht>").append(DataHelper.formatDuration(_expireTime)).append(" expiration</span>")
+           .append("</div><hr class=debug>");
     }
 
     private class Cleaner extends SimpleTimer2.TimedEvent {

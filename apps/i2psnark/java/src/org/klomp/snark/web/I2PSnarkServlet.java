@@ -1336,22 +1336,20 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 footer.append("</tr>\n");
 
-                if (showDebug) {
-                    footer.append("<tr id=dhtDebug>");
-                    footer.append("<th colspan=12><span class=volatile>");
-                    if (dht != null) {
-                        footer.append("<span id=bwManager hidden>")
-                              .append(_manager.getBandwidthListener().toString())
-                              .append("</span>")
-                              .append(dht.renderStatusHTML());
-                    } else {
-                        footer.append("<b>");
-                        footer.append(_t("No DHT Peers"));
-                        footer.append("</b>");
-                    }
-                    footer.append("</span></th></tr>");
+                if (showDebug) {footer.append("<tr id=dhtDebug>");}
+                else {footer.append("<tr id=dhtDebug hidden>");}
+                footer.append("<th colspan=12><span class=volatile>");
+                if (dht != null) {
+                    footer.append("<span id=bwManager hidden>")
+                          .append(_manager.getBandwidthListener().toString())
+                          .append("</span>")
+                          .append(dht.renderStatusHTML());
+                } else {
+                    footer.append("<b>");
+                    footer.append(_t("No DHT Peers"));
+                    footer.append("</b>");
                 }
-                footer.append("</tfoot>\n");
+                footer.append("</span></th></tr>").append("</tfoot>\n");
             }
 
             footer.append("</table>\n");
@@ -2861,9 +2859,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         if (showPeers && isRunning && curPeers > 0) {
             List<Peer> peers = snark.getPeerList();
-            if (!showDebug) {
-                Collections.sort(peers, new PeerComparator());
-            }
+            if (!showDebug) {Collections.sort(peers, new PeerComparator());}
             for (Peer peer : peers) {
                 long t = peer.getInactiveTime();
                 if ((peer.getUploadRate() > 0 || peer.getDownloadRate() > 0) && t < 60 * 1000) {
@@ -2872,12 +2868,8 @@ public class I2PSnarkServlet extends BasicServlet {
                         snarkStatus += " TX";
                     if (peer.getDownloadRate() > 0 && !peer.isInterested() && !peer.isChoked())
                         snarkStatus += " RX";
-                } else {
-                    snarkStatus = "inactive";
-                }
-                if (!peer.isConnected()) {
-                    continue;
-                }
+                } else {snarkStatus = "inactive";}
+                if (!peer.isConnected()) {continue;}
                 buf.append("<tr class=\"peerinfo " + snarkStatus + " volatile\">\n<td class=status title=\"");
                 buf.append(_t("Peer attached to swarm"));
                 buf.append("\"></td><td class=peerdata colspan=5>");
@@ -3076,13 +3068,12 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("</td>");
                 buf.append("<td class=tAction>");
                 buf.append("</td></tr>\n");
-                if (showDebug) {
-                    buf.append("<tr class=\"debuginfo volatile " + rowClass + "\">\n<td class=status></td>" +
-                               "<td colspan=12>" + peer.getSocket()
-                               .replaceAll("Connection", "<b>Connection</b>").replaceAll(";", " &bullet;").replaceAll("\\* ", "")
-                               .replaceAll("from", "<span class=from>⇦</span>").replaceAll("to", "<span class=to>⇨</span>") +
-                               "</td></tr>");
-                }
+                if (showDebug) {buf.append("<tr class=\"debuginfo volatile ").append(rowClass).append("\">\n");}
+                else {buf.append("<tr class=\"debuginfo volatile ").append(rowClass).append("\" hidden>\n");}
+                buf.append("<td class=status></td><td colspan=12>")
+                   .append(peer.getSocket().replaceAll("Connection", "<b>Connection</b>").replaceAll(";", " &bullet;").replaceAll("\\* ", "")
+                                           .replaceAll("from", "<span class=from>⇦</span>").replaceAll("to", "<span class=to>⇨</span>"))
+                   .append("</td></tr>");
             }
         }
         out.write(buf.toString());

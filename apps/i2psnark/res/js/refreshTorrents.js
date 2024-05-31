@@ -4,6 +4,7 @@
 
 import {onVisible} from "./onVisible.js";
 import {showBadge} from "./filterBar.js";
+import {toggleDebug} from "./toggleDebug.js";
 import {snarkSort} from "./snarkSort.js";
 import {initLinkToggler} from "./toggleLinks.js";
 import {initToggleLog} from "./toggleLog.js";
@@ -107,10 +108,8 @@ function refreshTorrents(callback) {
 
   function updateVolatile() {
     if (!xhrsnark.responseXML) {return;}
-    const updating = document.querySelectorAll("#snarkTbody tr");
-    const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr");
-    const updatingCells = document.querySelectorAll("#snarkTbody tr.volatile td:not(.magnet):not(.trackerLink):not(.details.data)");
-    const updatingCellsResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile td:not(.magnet):not(.trackerLink):not(.details.data)");
+    const updating = document.querySelectorAll("#snarkTbody tr, #dhtDebug .dht");
+    const updatingResponse = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr, #dhtDebug .dht");
     const filterbar = document.getElementById("torrentDisplay");
 
     if (torrents) {
@@ -118,7 +117,7 @@ function refreshTorrents(callback) {
         const activeBadge = filterbar.querySelector("#torrentDisplay .filter .badge:not(:empty)");
         const activeBadgeResponse = xhrsnark.responseXML?.querySelector("#torrentDisplay .filter.enabled .badge:not(:empty)");
         if (activeBadge && activeBadgeResponse && activeBadge.textContent !== activeBadgeResponse.textContent) {
-          activeBadge.textContent = activeBadgeResponse.textContent;
+          requestAnimationFrame(() => {activeBadge.textContent = activeBadgeResponse.textContent;});
         }
         if (!xhrsnark.responseXML) {return;}
         const pagenavtop = document.getElementById("pagenavtop");
@@ -127,15 +126,14 @@ function refreshTorrents(callback) {
         if ((!filterbar && filterbarResponse) || (!pagenavtop && pagenavtopResponse !== null)) {
           const torrentForm = document.getElementById("torrentlist");
           const torrentFormResponse = xhrsnark.responseXML.getElementById("torrentlist");
-          const mainsection = document.getElementById("mainsection");
-          const mainsectionResponse = xhrsnark.responseXML?.getElementById("mainsection");
           requestAnimationFrame(() => {torrentForm.innerHTML = torrentFormResponse.innerHTML;});
           initHandlers();
         } else if (pagenavtop && pagenavtopResponse && pagenavtop.outerHTML !== pagenavtopResponse.outerHTML) {
           requestAnimationFrame(() => {pagenavtop.outerHTML = pagenavtopResponse.outerHTML;});
+          requireFullRefresh = true;
         }
       }
-      if (updatingResponse && updating.length === updatingResponse.length) {
+      if (updatingResponse && updating.length === updatingResponse.length && !requireFullRefresh) {
         for (let i = 0; i < updating.length; i++) {
           if (updating[i].innerHTML !== updatingResponse[i].innerHTML) {
             if (updating[i].outerHTML !== updatingResponse[i].outerHTML) {
@@ -202,6 +200,7 @@ function refreshTorrents(callback) {
 
     if (snarkFoot && snarkFootResponse && snarkFoot.innerHTML !== snarkFootResponse.innerHTML) {
       snarkFoot.innerHTML = snarkFootResponse.innerHTML;
+      toggleDebug();
     }
   }
 
@@ -220,11 +219,12 @@ function getRefreshInterval() {
 }
 
 function refreshScreenLog(callback) {
+  const screenlog = document.getElementById("messages");
+  if (!screenlog) {return;}
   const xhrsnarklog = new XMLHttpRequest();
   const lowerSection = document.getElementById("lowersection");
   const addNotify = lowerSection.querySelector("#addNotify");
   const createNotify = lowerSection.querySelector("#createNotify");
-  const screenlog = document.getElementById("messages");
   const toast = document.getElementById("toast");
   xhrsnarklog.open("GET", "/i2psnark/.ajax/xhrscreenlog.html");
   xhrsnarklog.responseType = "document";
@@ -259,12 +259,14 @@ function getURL() {
 }
 
 function initHandlers() {
+  const snarkFoot = document.getElementById("snarkFoot");
   requestAnimationFrame(() => {
     setLinks();
     initLinkToggler();
     if (screenlog) {initSnarkAlert();}
     if (filterbar) {showBadge();}
     if (torrents) {snarkSort();}
+    if (snarkFoot) {toggleDebug();}
     if (debugging) {console.log("initHandlers()");}
   });
 }

@@ -693,18 +693,18 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     public String renderStatusHTML() {
         long uptime = Math.max(1000, _context.clock().now() - _started);
         StringBuilder buf = new StringBuilder(256);
-        buf.append("<div id=debugStats>" +
-                   "<b>TX:</b> ").append(_txPkts.get()).append(" packets / ")
+        buf.append("<div id=debugStats>")
+           .append("<b>TX:</b> <span class=dht>").append(_txPkts.get()).append(" packets / ")
            .append(DataHelper.formatSize2(_txBytes.get())).append("B / ")
-           .append(DataHelper.formatSize2Decimal(_txBytes.get() * 1000 / uptime)).append("Bps &nbsp;&bullet;&nbsp; " +
-                   "<b>RX:</b> ").append(_rxPkts.get()).append(" packets / ")
+           .append(DataHelper.formatSize2Decimal(_txBytes.get() * 1000 / uptime)).append("B/s</span>")
+           .append(" &nbsp;&bullet;&nbsp; <b>RX:</b> <span class=dht>").append(_rxPkts.get()).append(" packets / ")
            .append(DataHelper.formatSize2(_rxBytes.get())).append("B / ")
-           .append(DataHelper.formatSize2Decimal(_rxBytes.get() * 1000 / uptime)).append("Bps<br>" +
-                   "<b>DHT Peers:</b> ").append( _knownNodes.size()).append(" &nbsp;&bullet;&nbsp; " +
-                   "<b>Blacklisted:</b> ").append(_blacklist.size()).append(" &nbsp;&bullet;&nbsp; " +
-                   "<b>Sent tokens:</b> ").append(_outgoingTokens.size()).append(" &nbsp;&bullet;&nbsp; " +
-                   "<b>Received tokens:</b> ").append(_incomingTokens.size()).append(" &nbsp;&bullet;&nbsp; " +
-                   "<b>Pending queries:</b> ").append(_sentQueries.size()).append("</div>");
+           .append(DataHelper.formatSize2Decimal(_rxBytes.get() * 1000 / uptime)).append("B/s</span><br>")
+           .append("<b>DHT Peers:</b> <span class=dht>").append( _knownNodes.size()).append("</span>")
+           .append(" &nbsp;&bullet;&nbsp; <b>Blacklisted:</b> <span class=dht>").append(_blacklist.size()).append("</span>")
+           .append(" &nbsp;&bullet;&nbsp; <b>Sent tokens:</b> <span class=dht>").append(_outgoingTokens.size()).append("</span>")
+           .append(" &nbsp;&bullet;&nbsp; <b>Received tokens:</b> <span class=dht>").append(_incomingTokens.size()).append("</span>")
+           .append(" &nbsp;&bullet;&nbsp; <b>Pending queries:</b> <span class=dht>").append(_sentQueries.size()).append("</span></div>");
         _tracker.renderStatusHTML(buf);
 //        _knownNodes.renderStatusHTML(buf);
         return buf.toString();
