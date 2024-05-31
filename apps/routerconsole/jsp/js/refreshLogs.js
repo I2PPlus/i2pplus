@@ -72,7 +72,7 @@ function start() {
       if (routerlogsList) {
         const routerlogsListResponse = xhrlogs.responseXML.querySelector("#routerlogs td ul");
         const routerlogsFileInfoResponse = xhrlogs.responseXML.querySelector("#routerlogs tr:first-child td p");
-        if (routerlogsListResponse) {
+        if (routerlogsList && routerlogsListResponse) {
           if (routerlogsList.innerHTML !== routerlogsListResponse.innerHTML) {
             routerlogsList.innerHTML = routerlogsListResponse.innerHTML;
           }
@@ -80,10 +80,16 @@ function start() {
             routerlogsFileInfo.innerHTML = routerlogsFileInfoResponse.innerHTML;
           }
         }
-        linkifyRouterIds();
-        linkifyIPv4();
-        linkifyIPv6();
+      } else if (routerlogs) {
+        routerlogsTr = routerlogs.querySelector("tr:nth-child(2)");
+        routerlogsTrResponse = xhrlogs.responseXML.querySelector("#routerlogs tr:nth-child(2)");
+        if (routerlogsTr && routerlogsTrResponse && routerlogsTr !== routerlogsTrResponse) {
+          routerlogsTr.innerHTML = routerlogsTrResponse.innerHTML;
+        }
       }
+      linkifyRouterIds();
+      linkifyIPv4();
+      linkifyIPv6();
       if (servicelogs) {
         const servicelogsResponse = xhrlogs.responseXML.getElementById("wrapperlogs");
         if (servicelogs && servicelogsResponse) {
