@@ -441,7 +441,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         try {sendError(socket, ERR_REQUEST_TIMEOUT);}
                         catch (IOException ioe) {}
                         if (_log.shouldLog(Log.WARN)) {
-                            if (!ste.getMessage().equals("null") && ste.getMessage() != null) {
+                            if (ste.getMessage() != null) {
                                 _log.warn("[HTTPServer] Request error: " + ste.getMessage() + " \n* Client: " + peerB32);
                             }
                         }
@@ -457,7 +457,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         try {sendError(socket, ERR_BAD_REQUEST);}
                         catch (IOException ioe) {}
                         if (_log.shouldWarn()) {
-                            if (!eofe.getMessage().equals("null") && eofe.getMessage() != null) {
+                            if (eofe.getMessage() != null) {
                                 _log.warn("[HTTPServer] Request error: " + eofe.getMessage() + " \n* Client: " + peerB32);
                             }
                         }
@@ -495,7 +495,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         catch (IOException ioe) {}
                     }
                     if (_log.shouldLog(Log.WARN)) {
-                        if (!bre.getMessage().equals("null") && bre.getMessage() != null) {
+                        if (bre.getMessage() != null) {
                             _log.warn("[HTTPServer] Request error: " + bre.getMessage() + " \n* Client: " + peerB32);
                         }
                     }
