@@ -220,7 +220,7 @@ function getRefreshInterval() {
 
 function refreshScreenLog(callback) {
   const screenlog = document.getElementById("messages");
-  if (!screenlog) {return;}
+  if (!screenlog || screenlog.getAttribute("hidden")) {return;}
   const xhrsnarklog = new XMLHttpRequest();
   const lowerSection = document.getElementById("lowersection");
   const addNotify = lowerSection.querySelector("#addNotify");
@@ -259,7 +259,7 @@ function getURL() {
 }
 
 function initHandlers() {
-  const snarkFoot = document.getElementById("snarkFoot");
+  const debugMode = document.getElementById("debugMode")
   const topNav = document.getElementById("pagenavtop");
   requestAnimationFrame(() => {
     setLinks();
@@ -268,7 +268,7 @@ function initHandlers() {
     if (topNav) {pageNav();}
     if (filterbar) {showBadge();}
     if (torrents) {snarkSort();}
-    if (snarkFoot) {toggleDebug();}
+    if (debugMode) {toggleDebug();}
     if (debugging) {console.log("initHandlers()");}
   });
 }
