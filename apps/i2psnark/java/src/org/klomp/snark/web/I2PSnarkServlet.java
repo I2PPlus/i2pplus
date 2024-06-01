@@ -602,9 +602,9 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder headers = new StringBuilder(1024);
         headers.append("Cache-Control: private, no-cache, max-age=60\r\n");
         headers.append("Content-Security-Policy: default-src 'none'\r\n");
-        headers.append("Referrer-Policy: same-origin\r\n");
-        headers.append("X-Content-Type-Options: nosniff\r\n");
-        headers.append("X-XSS-Protection: 1; mode=block\r\n");
+        //headers.append("Referrer-Policy: same-origin\r\n");
+        //headers.append("X-Content-Type-Options: nosniff\r\n");
+        //headers.append("X-XSS-Protection: 1; mode=block\r\n");
         //headers.append("Accept-Ranges: bytes\r\n");
         //headers.append("X-Snark-Pagesize: ").append(pageSize).append("\r\n");
         //headers.append("X-Snark-Refresh-Interval: ").append(refresh).append("\r\n");
@@ -681,8 +681,8 @@ public class I2PSnarkServlet extends BasicServlet {
             if (!_manager.util().connected()) {
                 mbuf.append("<noscript>\n<li class=noscriptWarning>");
                 mbuf.append(_t("Warning! Javascript is disabled in your browser. " +
-                          "If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs.",
-                          "<a href=\"configure\">" + _t("page refresh") + "</a>"));
+                            "If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs.",
+                            "<a href=\"configure\">" + _t("page refresh") + "</a>"));
                 mbuf.append("</li>\n</noscript>\n");
             }
 
