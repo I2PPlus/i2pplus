@@ -29,7 +29,7 @@ function showBadge() {
       activeFilter.classList.add("enabled");
       window.localStorage.setItem("snarkFilter", activeFilter.id);
     }
-    snarkCount = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile:not(.peerinfo)").length;
+    snarkCount = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile:not(.peerinfo):not(.debuginfo)").length;
     const activeBadge = activeFilter.querySelector(".badge");
     const filterAll = torrentDisplay.querySelector(".filter#all");
     activeBadge.id = "filtercount";
