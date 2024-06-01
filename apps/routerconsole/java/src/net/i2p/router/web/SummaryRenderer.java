@@ -549,7 +549,11 @@ class SummaryRenderer {
                     def.gprint("last2", " " + _t("Now") + ": %.2f%S\\l");
                 }
             }
+
             SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm");
+            int count = 0;
+            Color RESTART_COLOR = theme.equals("midnight") || theme.equals("dark") ? RESTART_BAR_COLOR_DARK : RESTART_BAR_COLOR;
+
             if (!hideLegend) {
                 // '07 Jul 21:09' with month name in the system locale
                 // TODO: Fix Arabic time display
@@ -558,25 +562,12 @@ class SummaryRenderer {
                     long started = event.getKey().longValue();
                     if (started > start && started < end) {
                         String legend;
-                        if (theme.equals("midnight") || theme.equals("dark")) {
-                            // RTL languages
-                            if (Messages.isRTL(lang)) {
-                                legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + " - " + event.getValue() + "\\l";
-                                def.vrule(started / 1000, RESTART_BAR_COLOR_DARK, legend, 1.0f);
-                            } else {
-                                legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + "  [" + event.getValue() + "]\\l";
-                                def.vrule(started / 1000, RESTART_BAR_COLOR_DARK, legend, 1.0f);
-                            }
-                        } else {
-                            // RTL languages
-                            if (Messages.isRTL(lang)) {
-                                legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + " - " + event.getValue() + "\\l";
-                                def.vrule(started / 1000, RESTART_BAR_COLOR, legend, 2.0f);
-                            } else {
-                                legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + "  [" + event.getValue() + "]\\l";
-                                def.vrule(started / 1000, RESTART_BAR_COLOR, legend, 2.0f);
-                            }
-                        }
+                        if (count < 1) {
+                            legend = _t("Router restarted") + "\\l";
+                            //legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + "  [" + event.getValue() + "]\\l";
+                        } else {legend = null;}
+                        def.vrule(started / 1000, RESTART_COLOR, legend, 1.0f);
+                        count ++;
                     }
                 }
                 def.comment(sdf.format(new Date(start)) + " — " + sdf.format(new Date(end)) + " UTC\\r");
@@ -585,10 +576,8 @@ class SummaryRenderer {
             if (!showCredit) {
                 def.setShowSignature(false);
             } else if (hideLegend) {
-                if (height > 65)
-                    def.setSignature("    " + sdf.format(new Date(end)) + " UTC");
-                else
-                    def.setSignature(sdf.format(new Date(end)) + " UTC");
+                if (height > 65) {def.setSignature("    " + sdf.format(new Date(end)) + " UTC");}
+                else {def.setSignature(sdf.format(new Date(end)) + " UTC");}
             }
             /*
             // these four lines set up a graph plotting both values and events on the same chart
