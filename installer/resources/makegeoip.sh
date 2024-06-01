@@ -35,24 +35,24 @@ if [ -f "$FILE" ]; then
     mv -v "$FILE" "${FILE}.old" >/dev/null 2>&1
 fi
 
-if command -v curl &> /dev/null; then
-    curl -x $HTTP_PROXY https://download.db-ip.com/free/$DL -o $FILE || {
+if [ -x "$(command -v curl)" ]; then
     echo " > Attempting to download https://download.db-ip.com/free/$DL using curl..."
-        if command -v wget &> /dev/null; then
-            wget $HTTP_PROXY https://download.db-ip.com/free/$DL -O $FILE || exit 1
-        else
-            echo " ! Warning: curl is not detected, falling back to wget for download."
-            echo " > Attempting to download https://download.db-ip.com/free/$DL using wget..."
-            wget -e use_proxy=yes -e http_proxy=$HTTP_PROXY https://download.db-ip.com/free/$DL -O $FILE || exit 1
-        fi
-    }
-else
-    if command -v wget &> /dev/null; then
-        wget -e use_proxy=yes -e http_proxy=$HTTP_PROXY https://download.db-ip.com/free/$DL -O $FILE || exit 1
+    curl_out=$(curl -s -I -H 'Accept: */*' -x $HTTP_PROXY https://download.db-ip.com/free/$DL -o /dev/null)
+    content_length=$(echo "$curl_out" | grep -oE 'Content-Length: [0-9]+')
+    if [ -z "$content_length" ]; then
+        echo " ! Error: Unable to determine file size, unable to download."
     else
-        echo "! Error: Neither curl nor wget is installed. Please install curl or wget before running this command."
-        exit 1
+        content_length_value=$(echo "$content_length" | cut -d ' ' -f2)
+        if [ $content_length_value -lt 3145728 ]; then # 3MB = 3145728 bytes
+            echo " ! Error: File size is too small (less than 3MB), unable to download."
+        else
+            echo " > Downloading https://download.db-ip.com/free/$DL using curl..."
+            curl -s -x $HTTP_PROXY https://download.db-ip.com/free/$DL -o $FILE
+        fi
     fi
+else
+    echo " ! Error: Please install curl before running this command."
+    exit 1
 fi
 
 # Exit on download error
@@ -67,7 +67,7 @@ fi
 
 # Check if downloaded file exists
 if [ ! -f $FILE ]; then
-    echo " ! Error: Downloaded file $FILE is not found. Please check your internet connection and try again."
+    echo " ! Error: Downloaded file $FILE not found. Please check your internet connection and try again."
     if [ -f "$FILE.old" ]; then
         echo " > The file ${FILE}.old has been restored"
         mv -v "${FILE}.old" "$FILE" >/dev/null 2>&1
@@ -85,8 +85,8 @@ echo " > Checking file permissions and hash"
 ls -l "$FILE"
 OLD_HASH=$(sha256sum "./$FILE.old" | cut -f 1 -d ' ')
 NEW_HASH=$(sha256sum "./$FILE" | cut -f 1 -d ' ')
-echo "Old hash: $OLD_HASH"
-echo "New hash: $NEW_HASH"
+echo " > Old hash: $OLD_HASH"
+echo " > New hash: $NEW_HASH"
 
 if [ -n "$OLD_HASH" ] && [ -n "$NEW_HASH" ] && [ "$OLD_HASH" != "$NEW_HASH" ]; then
     echo " > Update successful (hashes do not match) -> deleting $FILE.old"
