@@ -946,7 +946,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 isTypeSort = true;
                 hbuf.append("<span class=ascending></span>");
             } else {
-                sort = "";
+                sort = "1";
             }
             hbuf.append("<a class=sorter href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
             hbuf.append(separator).append(filterQuery);

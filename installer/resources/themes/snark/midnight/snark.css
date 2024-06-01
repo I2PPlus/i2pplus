@@ -818,6 +818,7 @@ hr.debug{margin:3px 0 -5px;width:100%;display:none;background:#120f35}
 #debugMode:hover{opacity:1}
 #dhtDebug th{border-top:var(--border);text-align:center;font-weight:400;background:linear-gradient(180deg,#001,#000)}
 #torrents th a#debugMode{display:inline-block;vertical-align:middle}
+body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 
 /* Resource Errors */
 .resourceError{margin-bottom:0;border:0}

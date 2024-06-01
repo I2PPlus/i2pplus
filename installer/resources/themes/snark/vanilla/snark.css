@@ -501,6 +501,7 @@ input:checked+label+hr+table,input:checked+label+hr+table+table{display:table}
 .debuginfo b{text-transform:capitalize;font-family:var(--bodyfont)}
 #dhtDebug th{ text-align:center;font-weight:400}
 hr.debug{margin:5px 0;width:100%;height:1px;display:none;position:relative;z-index:10}
+body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 
 /* Comments Section */
 #commentInfo,#userComments,#mediaContainer{margin:10px 0 0;border:var(--border_hard);border-top:0;border-bottom:0;border-collapse:separate}

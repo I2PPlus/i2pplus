@@ -5,26 +5,27 @@
 import {doRefresh} from "./refreshTorrents.js";
 
 function snarkSort() {
+  const bodyTag = document.body;
+  const active = bodyTag.classList.contains("sortListener");
   const snarkHead = document.getElementById("snarkHead");
-  if (!snarkHead) {return;}
-  snarkHead.removeEventListener("click", sortListener);
-  snarkHead.addEventListener("click", sortListener);
-  snarkHead.querySelectorAll(".sorter").forEach((sorter) => {
-    setTimeout(() => {sorter.style.pointerEvents = "";}, 0);
-  });
+  if (!snarkHead || active) {return;}
+  bodyTag.classList.add("sortListener");
+  document.addEventListener("click", sortListener);
 }
 
 let sortListener = function(event) {
   let sortURL;
+  let sortURLString;
   let xhrSortURL;
   if (event.target.closest(".sorter")) {
     event.preventDefault();
     const clickedElement = event.target;
     sortURL = new URL(event.target.closest(".sorter").href);
     if (sortURL) {
-      snarkHead.querySelectorAll(".sorter").forEach((sorter) => {sorter.style.pointerEvents = "none";});
+      sortURLString = sortURL.toString().replace("html&", "html?").replace("/&", "/?");
       xhrSortURL = "/i2psnark/.ajax/xhr1.html" + sortURL.search;
-      history.replaceState({}, "", sortURL);
+      xhrSortURL = xhrSortURL.replace("html&", "html?").replace("/&", "/?");
+      history.replaceState({}, "", new URL(sortURLString));
       doRefresh(xhrSortURL);
     }
   }

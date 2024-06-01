@@ -400,6 +400,7 @@ hr.debug{display:none}
 #debugMode{margin-top:-2px;padding:8px;display:inline-block;vertical-align:middle;line-height:0;box-sizing:border-box;font-size:0;background:var(--debug) no-repeat center center;opacity:0}
 #debugMode:hover{opacity:1}
 #torrents #dhtDebug th{text-align:center}
+body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 
 /* priority */
 .priority{width:1%;max-width:160px;vertical-align:middle;font-size:8pt}

@@ -443,6 +443,7 @@ input:checked + label + hr + table,input:checked + label + hr + table + table{di
 .debugConnStat b{margin-right:0;font-family:var(--bodyfont);color:#272e3f}
 #dhtDebug th{text-align:center;font-weight:400}
 hr.debug{display:none}
+body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 
 /* Resource Errors */
 .resourceError{border:1px solid #89f;border-bottom:2px solid #89f;margin-bottom:0}

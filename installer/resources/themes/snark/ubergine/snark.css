@@ -1020,6 +1020,7 @@ hr.debug{display:none}
 #dhtDebug .dht{font-weight:500;color:#f5eff1}
 #torrents tbody .debuginfo td{padding-top:7px;padding-bottom:7px;color:var(--ink);color:#bdb}
 #torrents tbody .debuginfo:hover{background:#252}
+body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 
 /* Resource Errors */
 .resourceError,.resourceError#NotFound{margin-bottom:9px;border:var(--border_hard)}

@@ -683,6 +683,7 @@ td.peerCount{padding-left:0;width:1%;white-space:nowrap;text-align:left;font-wei
 .debuginfo td:first-child{padding:3px;background:var(--debuginfo) no-repeat center center/14px;background-blend-mode:luminosity}
 .debuginfo td{line-height:1.2}
 .debuginfo b{text-transform:capitalize}
+body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 
 /* debug panel */
 #dhtDebug th{text-align:center;font-weight:400}

@@ -200,7 +200,6 @@ function refreshTorrents(callback) {
 
     if (snarkFoot && snarkFootResponse && snarkFoot.innerHTML !== snarkFootResponse.innerHTML) {
       snarkFoot.innerHTML = snarkFootResponse.innerHTML;
-      toggleDebug();
     }
   }
 
