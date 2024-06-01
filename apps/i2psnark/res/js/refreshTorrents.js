@@ -3,9 +3,10 @@
 /* License: AGPL3 or later */
 
 import {onVisible} from "./onVisible.js";
+import {pageNav} from "./pageNav.js";
 import {showBadge} from "./filterBar.js";
-import {toggleDebug} from "./toggleDebug.js";
 import {snarkSort} from "./snarkSort.js";
+import {toggleDebug} from "./toggleDebug.js";
 import {initLinkToggler} from "./toggleLinks.js";
 import {initToggleLog} from "./toggleLog.js";
 import {Lightbox} from "./lightbox.js";
@@ -259,10 +260,12 @@ function getURL() {
 
 function initHandlers() {
   const snarkFoot = document.getElementById("snarkFoot");
+  const topNav = document.getElementById("pagenavtop");
   requestAnimationFrame(() => {
     setLinks();
     initLinkToggler();
     if (screenlog) {initSnarkAlert();}
+    if (topNav) {pageNav();}
     if (filterbar) {showBadge();}
     if (torrents) {snarkSort();}
     if (snarkFoot) {toggleDebug();}

@@ -3068,12 +3068,14 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("</td>");
                 buf.append("<td class=tAction>");
                 buf.append("</td></tr>\n");
+/**
                 if (showDebug) {buf.append("<tr class=\"debuginfo volatile ").append(rowClass).append("\">\n");}
                 else {buf.append("<tr class=\"debuginfo volatile ").append(rowClass).append("\" hidden>\n");}
                 buf.append("<td class=status></td><td colspan=12>")
                    .append(peer.getSocket().replaceAll("Connection", "<b>Connection</b>").replaceAll(";", " &bullet;").replaceAll("\\* ", "")
                                            .replaceAll("from", "<span class=from>⇦</span>").replaceAll("to", "<span class=to>⇨</span>"))
                    .append("</td></tr>");
+**/
             }
         }
         out.write(buf.toString());
