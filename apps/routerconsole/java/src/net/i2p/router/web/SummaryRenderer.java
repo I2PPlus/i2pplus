@@ -558,6 +558,8 @@ class SummaryRenderer {
                 // '07 Jul 21:09' with month name in the system locale
                 // TODO: Fix Arabic time display
                 Map<Long, String> events = ((RouterContext)_context).router().eventLog().getEvents(EventLog.STARTED, start);
+                String prev = null;
+                String now = null;
                 for (Map.Entry<Long, String> event : events.entrySet()) {
                     long started = event.getKey().longValue();
                     if (started > start && started < end) {
