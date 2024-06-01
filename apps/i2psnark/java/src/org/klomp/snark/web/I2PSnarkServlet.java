@@ -1552,13 +1552,13 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.6
      */
 
-    private void writePageNav(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total, String filter, boolean noThinsp) {
+    private void writePageNav(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total, String search, boolean noThinsp) {
         StringBuilder buf = new StringBuilder(1024);
 
         // First
         buf.append("<a href=\"")
            .append(_contextPath)
-           .append(getQueryString(req, null, "", null, filter))
+           .append(getQueryString(req, null, "", null, null))
            .append("\"")
            .append(start > 0 ? "" : " class=disabled")
            .append("><span id=first>")
@@ -1569,7 +1569,7 @@ public class I2PSnarkServlet extends BasicServlet {
         int prev = Math.max(0, start - pageSize);
         buf.append("<a href=\"")
            .append(_contextPath)
-           .append(getQueryString(req, null, String.valueOf(prev), null, filter))
+           .append(getQueryString(req, null, String.valueOf(prev), null, null))
            .append("\"")
            .append(prev > 0 ? "" : " class=disabled")
            .append("><span id=previous>")
@@ -1594,7 +1594,7 @@ public class I2PSnarkServlet extends BasicServlet {
         int next = start + pageSize;
         buf.append("<a href=\"")
            .append(_contextPath)
-           .append(getQueryString(req, null, String.valueOf(next), null, filter))
+           .append(getQueryString(req, null, String.valueOf(next), null, null))
            .append("\"")
            .append(next + pageSize < total ? "" : " class=disabled")
            .append("><span id=next>")
@@ -1605,7 +1605,7 @@ public class I2PSnarkServlet extends BasicServlet {
         int last = ((total - 1) / pageSize) * pageSize;
         buf.append("<a href=\"")
            .append(_contextPath)
-           .append(getQueryString(req, null, String.valueOf(last), null, filter))
+           .append(getQueryString(req, null, String.valueOf(last), null, null))
            .append("\"")
            .append(start + pageSize < total ? "" : " class=disabled")
            .append("><span id=last>")
