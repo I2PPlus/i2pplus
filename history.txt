@@ -1,3 +1,6 @@
+2024-05-31 dr|z3d
+ * I2PSnark: Toggle debug mode inline without page reload
+
 2024-05-30 dr|z3d
  * I2PSnark: Don't display toggle peers icon when no peers connected
 
