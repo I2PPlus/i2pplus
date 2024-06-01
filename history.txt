@@ -1,3 +1,6 @@
+2024-06-01 dr|z3d
+ * I2PSnark: Use AJAX for page navigation
+
 2024-05-31 dr|z3d
  * I2PSnark: Toggle debug mode inline without page reload
 
