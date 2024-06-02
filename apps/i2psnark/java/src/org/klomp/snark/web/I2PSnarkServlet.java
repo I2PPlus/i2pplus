@@ -581,6 +581,7 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder csp = new StringBuilder("default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; ");
         csp.append("script-src 'self' 'nonce-").append(cspNonce).append("'; ");
         csp.append("object-src 'none'; media-src '").append(allowMedia ? "self" : "none").append("'");
+        headers.append("Accept-Ranges: bytes\r\n");
         headers.append("Content-Security-Policy: ").append(csp).append("\r\n");
         headers.append("Permissions-Policy: fullscreen=(self)\r\n");
         headers.append("Referrer-Policy: same-origin\r\n");
