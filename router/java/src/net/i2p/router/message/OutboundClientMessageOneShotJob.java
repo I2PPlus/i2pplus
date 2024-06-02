@@ -432,7 +432,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             if (_leaseSet == null) {
                 // shouldn't happen
                 if (_log.shouldWarn())
-                    _log.warn("LeaseSet for Router " + _toString + " not found via local lookup");
+                    _log.warn("Router LeaseSet " + _toString + " not found via local lookup");
                 return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
             } else if (_leaseSet.getReceivedAsPublished()) {
                 if (_log.shouldWarn())
