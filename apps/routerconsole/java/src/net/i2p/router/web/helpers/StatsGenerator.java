@@ -231,7 +231,7 @@ public class StatsGenerator {
                 buf.append("&amp;w=600&amp;h=200&amp;showEvents=true\">").append(_t("Graph Event Count")).append("</a> ");
                 // This can really blow up your browser if you click on it
                 // added download attribute to force download instead of loading inline
-                buf.append(" <a class=graphstat href=\"viewstat.jsp?stat=").append(name);
+                buf.append(" <a class=graphstat href=\"/viewstat.jsp?stat=").append(name);
                 buf.append("&amp;period=").append(periods[i]);
                 buf.append("&amp;format=xml\" download=\"graphdata.xml\">").append(_t("Export Data as XML")).append("</a>");
                 buf.append("</span>");

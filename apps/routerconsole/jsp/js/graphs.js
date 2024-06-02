@@ -4,59 +4,58 @@
 
 var container = document.getElementById("allgraphs");
 var configs = document.querySelectorAll("h3#graphdisplay, #gform");
-var graph = document.getElementsByClassName("statimage")[0];
 var timerId = setInterval(updateGraphs, graphRefreshInterval);
 var visibility = document.visibilityState;
+configs.forEach(function(element) {element.style.display = "none";});
 container.style.display = "none";
 
 function initCss() {
-  if (graph !== null || (graphWidth !== null && graphWidth != graph.naturalWidth) ||
-      (graphHeight !== null && graphHeight != graph.naturalHeight)) {
-    configs.forEach(function(element) {element.style.display = "none";});
-    injectCss();
-  } else {location.reload(true);}
+  var graph = document.getElementsByClassName("statimage")[0];
+  if (graph === null) {location.reload(true);}
+  else {injectCss();}
 }
 
 function injectCss() {
-  if (!graph) {initCss(); return;}
-  var graphWidth = graph.width;
-  var graphHeight = graph.height;
-  var gwrap = document.getElementById("gwrap");
+  var graph = document.getElementsByClassName("statimage")[0];
   var widepanel = document.querySelector(".widepanel");
+  if (graph === null) {return;}
   widepanel.id = "nographs";
-  gwrap.innerText = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
+  var gwrap = document.getElementById("gwrap");
+  var graphWidth = graph.naturalWidth || graph.width;
+  var graphHeight = graph.naturalHeight || graph.height;
+  gwrap.innerHTML = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
+  var delay =  Math.max(graphCount*5, 180);
   setTimeout(() => {
-    container.removeAttribute("style");
-    configs.forEach(function(element) {element.removeAttribute("style")});
-    widepanel.removeAttribute("id");
-  }, Math.max(graphCount*9, 300));
+    container.style.display = "";
+    configs.forEach(function(element) {element.style.display = "";});
+    widepanel.id = "";
+  }, delay);
 }
 
 function updateGraphs() {
   if (graphRefreshInterval <= 0) {return;}
-  progressx.show("<%=theme%>");
   var graphs = document.getElementById("allgraphs");
   var nographs = document.getElementById("nographs");
   var images = document.getElementsByClassName("statimage");
   var totalImages = images.length;
   var imagesLoaded = 0;
+  var now = Date.now();
+  progressx.show(theme);
+  progressx.progress(0.5);
   for (var i = 0; i < totalImages; i++) {
     var image = images[i];
-    var imageUrl = image.getAttribute('src');
-    (function(image, imageUrl) {
-      var xhr = new XMLHttpRequest();
-      var newUrl = imageUrl.replace(/time=\d+/, "time=" + Date.now());
-      xhr.open("GET", newUrl, true);
-      xhr.onload = function () {
-        if (xhr.status == 200) {
-          image.setAttribute("src", newUrl);
+    var imageSrc = image.getAttribute("src");
+    (function(image, imageSrc) {
+      imageSrc = imageSrc.replace(/time=\d+/, "time=" + now);
+      fetch(imageSrc).then((response) => {
+        if (response.ok) {
+          image.src = imageSrc;
           imagesLoaded++;
-          if (imagesLoaded === totalImages) {progressx.hide();}
         }
-      };
-      xhr.send();
-    })(image, imageUrl);
+      }).catch((error) => {});
+    })(image, imageSrc);
   }
+  setTimeout(() => {progressx.hide();}, 180);
 }
 
 function isDown() {

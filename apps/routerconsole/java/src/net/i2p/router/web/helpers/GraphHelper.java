@@ -161,7 +161,6 @@ public class GraphHelper extends FormHandler {
             else if (title.equals("bw.recvRate")) hasRx = true;
         }
         boolean hideLegend = _context.getProperty(PROP_HIDE_LEGEND, DEFAULT_HIDE_LEGEND);
-        boolean hiDPI = _context.getProperty(PROP_GRAPH_HIDPI, DEFAULT_GRAPH_HIDPI);
 
         if (hasTx && hasRx && !_showEvents) {
             // remove individual tx/rx graphs if displaying combined
@@ -170,27 +169,19 @@ public class GraphHelper extends FormHandler {
                 String title = lsnr.getRate().getRateStat().getName();
                 if (title.equals("bw.sendRate") || title.equals("bw.recvRate")) {iter.remove();}
             }
-            if (hiDPI) {buf.append("<span class=graphContainer id=hidpi>");}
-            else {buf.append("<span class=graphContainer>");}
-            buf.append("<a href=\"graph?stat=bw.combined").append("&amp;c=").append(3 * _periodCount)
+            buf.append("<span class=graphContainer>");
+            buf.append("<a href=\"/graph?stat=bw.combined").append("&amp;c=").append(3 * _periodCount)
                .append("&amp;w=1000&amp;h=280\">");
             String title = _t("Combined bandwidth graph");
-            if (hiDPI) {
-                buf.append("<img class=statimage src=\"viewstat.jsp?stat=bw.combined")
-                   .append("&amp;periodCount=" + _periodCount).append("&amp;width=").append(_width * 2);
-            } else {
-                buf.append("<img class=statimage src=\"viewstat.jsp?stat=bw.combined")
-                   .append("&amp;periodCount=").append(_periodCount).append("&amp;width=").append(_width);
-            }
+            buf.append("<img class=statimage src=\"/viewstat.jsp?stat=bw.combined")
+               .append("&amp;periodCount=").append(_periodCount).append("&amp;width=").append(_width);
             if (!hideLegend) {
                  // bw.combined graph has two entries in its legend
                  // -26 pixels equalizes its height with the other images (standard dpi)
-                if (hiDPI) {buf.append("&amp;height=").append((_height * 2) - 52);}
-                else {buf.append("&amp;height=").append(_height - 26);}
+                buf.append("&amp;height=").append(_height - 26);
             } else {
                 // no legend, no height difference needed
-                if (hiDPI) {buf.append("&amp;height=").append(_height * 2);}
-                else {buf.append("&amp;height=").append(_height);}
+                buf.append("&amp;height=").append(_height);
             }
             buf.append("&amp;hideLegend=" + hideLegend).append("&amp;time=").append(System.currentTimeMillis())
                .append("\" alt=\"").append(title).append("\" title=\"").append(title).append("\"></a></span>\n");
@@ -200,19 +191,16 @@ public class GraphHelper extends FormHandler {
             Rate r = lsnr.getRate();
             // e.g. "statname for 60m"
             String title = _t("{0} for {1}", r.getRateStat().getName(), DataHelper.formatDuration2(_periodCount * r.getPeriod()));
-            if (hiDPI) {buf.append("<span class=graphContainer id=hidpi>");}
-            else {buf.append("<span class=graphContainer>");}
-            buf.append("<a href=\"graph?stat=").append(r.getRateStat().getName().replace(" ", "%20")).append(".")
+            buf.append("<span class=graphContainer>");
+            buf.append("<a href=\"/graph?stat=").append(r.getRateStat().getName().replace(" ", "%20")).append(".")
                .append(r.getPeriod()).append("&amp;c=").append(3 * _periodCount);
             // let's set width & height predictably and reduce chance of downscaling
-            if (hiDPI) {buf.append("&amp;w=2000&amp;h=560");}
-            else {buf.append("&amp;w=1000&amp;h=280");}
+            buf.append("&amp;w=1000&amp;h=280");
             buf.append((_showEvents ? "&amp;showEvents=1" : "")).append("\">");
-            buf.append("<img class=statimage border=0 src=\"viewstat.jsp?stat=").append(r.getRateStat().getName().replace(" ", "%20"))
+            buf.append("<img class=statimage border=0 src=\"/viewstat.jsp?stat=").append(r.getRateStat().getName().replace(" ", "%20"))
                .append("&amp;showEvents=").append(_showEvents).append("&amp;period=").append(r.getPeriod())
                .append("&amp;periodCount=").append(_periodCount);
-            if (hiDPI) {buf.append("&amp;width=").append(_width * 2).append("&amp;height=").append(_height * 2);}
-            else {buf.append("&amp;width=").append(_width).append("&amp;height=").append(_height);}
+            buf.append("&amp;width=").append(_width).append("&amp;height=").append(_height);
             buf.append("&amp;hideLegend=").append(hideLegend).append("&amp;time=").append(System.currentTimeMillis())
                .append("\" alt=\"").append(title).append("\" title=\"").append(title).append("\"></a></span>\n");
         }
@@ -268,7 +256,7 @@ public class GraphHelper extends FormHandler {
            .append("<div class=graphspanel id=single>\n")
            .append("<span class=graphContainer>")
            .append("<a class=singlegraph href=/graphs title=\"").append(_t("Return to main graphs page")).append("\">")
-           .append("<img class=statimage id=graphSingle border=0 src=\"viewstat.jsp?stat=").append(name.replace(" ", "%20"))
+           .append("<img class=statimage id=graphSingle border=0 src=\"/viewstat.jsp?stat=").append(name.replace(" ", "%20"))
            .append("&amp;showEvents=").append(_showEvents).append("&amp;period=").append(period)
            .append("&amp;periodCount=").append(_periodCount).append("&amp;end=").append( _end)
            .append("&amp;width=").append(_width).append("&amp;height=").append(_height)
@@ -359,7 +347,7 @@ public class GraphHelper extends FormHandler {
     /** @since 0.9 */
     private static String link(String stat, boolean showEvents, int periodCount, int end, int width, int height, boolean singleHideLegend) {
         return
-               "<a href=\"graph?stat="
+               "<a href=\"/graph?stat="
                + stat.replace(" ", "%20")
                + "&amp;c=" + periodCount
                + "&amp;w=" + width
