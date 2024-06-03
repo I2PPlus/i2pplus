@@ -705,6 +705,7 @@ input.trackerhome,input.trackerannounce{width:210px}
 #torrentDisplay .filter:hover{color:#d50;background:radial-gradient(at center bottom,rgba(255,96,0,.2),rgba(0,0,0,0) 80%),var(--btnAction_hover)}
 #torrentDisplay .filter:active,#torrentDisplay .filter.enabled{color:#b40;text-shadow:none;box-shadow:var(--highlight),inset 2px 2px 2px rgba(0,0,0,.7);background:radial-gradient(at center bottom,rgba(255,96,0,.2),rgba(0,0,0,0) 40%),linear-gradient(180deg,#100800,#200800)}
 #torrentDisplay .filter.enabled{color:#3b3;text-shadow:0 0 1px #000,0 1px 2px #010;background:radial-gradient(at center bottom,rgba(16,72,16,.3),rgba(0,0,0,0) 50%),linear-gradient(180deg,#000a00,#020);pointer-events:none}
+#torrentDisplay .filter[hidden]{display:none!important}
 
 /* sections */
 .page #snarkInfo~.mainsection{margin:10px 0;border-bottom:var(--border)}

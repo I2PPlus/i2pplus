@@ -714,7 +714,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #torrentDisplay .filter:active{color:#943d94;background:var(--nav_active)}
 #torrentDisplay .filter.enabled{color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.5);background:#113;pointer-events:none}
 #filtercount:not(:empty){margin-left:5px;padding:2px 3px 1px;min-width:16px;display:inline-block!important;vertical-align:middle;line-height:1;font-size:85%;box-shadow:0 0 0 1px #225,var(--highlight);background:#113}
-.filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
+.filter[hidden],.filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
 
 /* peerid + client */
 .clientversion{display:none}

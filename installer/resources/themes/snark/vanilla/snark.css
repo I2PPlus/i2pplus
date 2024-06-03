@@ -153,7 +153,7 @@ th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visi
 #torrentDisplay .filter#all{border-left:var(--border_hard)}
 #torrentDisplay .filter.enabled{text-shadow:0 1px 1px #ebe5e0;box-shadow:inset 0 0 0 1px #efe6e0,inset 2px 2px 3px 1px #59513b,0 0 0 1px rgba(77,69,62,0.1);background:linear-gradient(180deg,rgba(207,193,181,.6),#d7cbc1),repeating-linear-gradient(45deg,#75604e 1px,#a09286 1px,#bfafa2 2px);transition:ease background .15s;pointer-events:none}
 #filtercount:not(:empty){margin-left:4px;padding:0 3px;min-width:18px;display:inline-block!important;line-height:1.1;font-size:90%;border-radius:1px;box-shadow:0 0 0 1px #59513b,var(--highlight);background:#efe6e0}
-.filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
+.filter[hidden],.filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
 
 /* main torrents listing */
 img[src$="details.png"]{max-height:16px}

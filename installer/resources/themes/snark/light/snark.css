@@ -636,7 +636,7 @@ th img{filter:none;opacity:.85}
 #torrentDisplay .filter:active{box-shadow:var(--highlight),inset 2px 2px 3px #7f3000;transition:ease box-shadow .05s;background:var(--hover);color:#fff}
 #torrentDisplay .filter.enabled{color:#559;text-shadow:var(--txt_shadow);box-shadow:var(--highlight),inset 2px 2px 2px #99b;background:linear-gradient(180deg,#f2f2ff,#f6f6ff);cursor:default}
 #filtercount:not(:empty){margin-left:5px;padding:0 3px;min-width:18px;display:inline-block!important;line-height:1.1;font-size:90%;border-radius:1px;box-shadow:0 0 0 1px #bbc;background:#f2f2f2}
-.filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
+.filter[hidden],.filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
 
 /* pagenav */
 .pagenavcontrols,.pagenavcontrols::before,#pagecount{display:inline-block;vertical-align:middle}

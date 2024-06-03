@@ -648,7 +648,7 @@ td.peerCount,.nopeers td.peerCount{text-align:center;white-space:nowrap}
 #torrentDisplay .filter.enabled{color:#66a;box-shadow:var(--btn_shadow_active);background:var(--btn_active2) #fff;cursor:default}
 #torrentDisplay input:checked + label{color:#88c;box-shadow:var(--label_shadow_active);background:linear-gradient(180deg,var(--bg2),var(--bg2));pointer-events:none}
 #filtercount:not(:empty){margin-left:4px;padding:0 3px;min-width:18px;display:inline-block!important;line-height:1.1;font-size:90%;border-radius:1px;box-shadow:0 0 0 1px #ddf;background:var(--bg2)}
-.filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
+.filter[hidden],.filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
 
 td.peerCount{padding-left:0;width:1%;white-space:nowrap;text-align:left;font-weight:700}
 .peerCount .left,.peerCount .right{min-width:20px;display:inline-block}
