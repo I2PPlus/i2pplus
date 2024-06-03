@@ -257,7 +257,7 @@ class ConnectionManager {
         Destination from = synPacket.getOptionalFrom();
         if (from == null) {
             if (_log.shouldWarn())
-                _log.warn("SYN w/o FROM: " + synPacket);
+                _log.warn("Received a SYN packet without FROM: " + synPacket);
             return null;
         }
         ByteArray ba = _cache.acquire();
@@ -278,7 +278,8 @@ class ConnectionManager {
                                 DataHelper.toLong(g, j << 2, 4, nacks[j]);
                             }
                             Hash ghash = new Hash(g);
-                            _log.warn("Sig passed but hash failed, expected: " + hash.toBase32() + " got: " + ghash.toBase32());
+                            if (_log.shouldWarn())
+                                _log.warn("Signature passed but hash failed \n* Expected: " + hash.toBase32() + "\n* Received: " + ghash.toBase32());
                         }
                         sigOk = false;
                         break;
@@ -290,7 +291,7 @@ class ConnectionManager {
         }
         if (!sigOk) {
             if (_log.shouldWarn())
-                _log.warn("Received unsigned / forged SYN apparently from " + from.toBase32() + ": " + synPacket);
+                _log.warn("Received UNSIGNED / FORGED SYN packet apparently from " + from.toBase32() + ": " + synPacket);
             return null;
         }
 
