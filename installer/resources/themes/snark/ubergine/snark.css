@@ -1022,7 +1022,7 @@ hr.debug{display:none}
 #torrents tbody .debuginfo td{padding-top:7px;padding-bottom:7px;color:var(--ink);color:#bdb}
 #torrents tbody .debuginfo:hover{background:#252}
 body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
-#bwManager br,#dhtDebug .bullet{display:none}
+#dhtDebug .bullet{display:none}
 #dhtDebug b,#dhtDebug .dbug,#dhtDebug .stat{margin:2px 0;padding:0 8px;display:inline-block;border-radius:2px;color:#f5eff1;background:#313}
 #dhtDebug b{border-radius:2px 0 0 2px}
 #dhtDebug .dbug{margin:-2px -1px -2px -4px;padding:2px 10px;min-width:24px;border-radius:0 2px 2px 0;background:#414}

@@ -73,8 +73,8 @@ code{margin:0 2px}
 #torrentInfo tr:last-child td{border-top:var(--border)}
 #navbar a,#tab_config a:not(:hover):not(:focus):not(:active),#tab_config a:not(:hover):not(:focus):not(:active):visited,.toggleview,a.control,a.control:visited{color:#777}
 #screenlog a:focus,.tName a:focus,.knownTracker a:focus,th.suboption a:focus{color:#fff;border-radius:1px;background:var(--a)}
-#torrents tr:hover,.dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover{background:var(--tr_hover)}
-#torrents tr:hover th,.dirInfo tr:hover th{color:#333;background:#eee}
+#torrents #snarkTbody tr:hover,.dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover{background:var(--tr_hover)}
+#torrents :not #snarkFoot tr:hover th,.dirInfo tr:hover th{color:#333;background:#eee}
 
 /* inputs */
 .control,input[type=submit],input[type=reset]{margin:1px 2px;padding:6px 10px;display:inline-block;white-space:nowrap;font-size:105%;color:var(--ink);text-shadow:0 1px 1px #fff;box-shadow:var(--highlight);border:var(--border);border-radius:3px;background:#fff}
@@ -470,8 +470,16 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 #debugMode{width:50px;line-height:1;white-space:normal;font-size:70%;opacity:0}
 #debugMode:hover{opacity:1}
 #dhtDebug hr{display:none}
+#torrents #dhtDebug tr{opacity:1}
 #torrents #dhtDebug th{padding:3px 8px 5px;text-align:center;font-weight:400;border-top:var(--border)}
 body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
+#dhtDebug .bullet{display:none}
+#dhtDebug b,#dhtDebug .dbug,#dhtDebug .stat{margin:2px 0;padding:0 8px;display:inline-block;color:#fff}
+#dhtDebug b{border-radius:2px 0 0 2px}
+#dhtDebug .stat{margin:3px 2px;padding:0;text-shadow: 1px 1px 1px rgba(0,0,0,.4);box-shadow:0 0 0 1px #887a7a, 0 0 0 1px #eee0e0 inset;background:#887a7a;contain:paint}
+#dhtDebug .dbug{margin:-2px -1px -2px -4px;padding:2px 10px;min-width:24px;color:#444;text-shadow:none;background:#eee0e0}
+#noDHTPeers{margin:6px 0}
+#dhtDebug .volatile {margin:1px 0 -1px;width:100%;display:inline-block}
 
 /* comments */
 .commentAuthor .commentAuthorName{width:calc(100% - 20px);overflow:hidden;text-overflow:ellipsis;border-radius:1px;box-shadow:inset 0 0 0 1px #bbb;background:#fff var(--user) no-repeat 4px center;background-size:14px}
