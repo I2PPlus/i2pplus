@@ -444,6 +444,13 @@ input:checked + label + hr + table,input:checked + label + hr + table + table{di
 #dhtDebug th{text-align:center;font-weight:400}
 hr.debug{display:none}
 body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
+#dhtDebug .bullet{display:none}
+#dhtDebug b,#dhtDebug .dbug,#dhtDebug .stat{margin:2px 0;padding:0 8px;display:inline-block}
+#dhtDebug b{color:var(--ink);border-radius:2px 0 0 2px}
+#dhtDebug .stat{margin:3px 2px;padding:0;box-shadow:0 0 0 1px #d3d3ff, 0 0 0 1px #fff inset;background:#eaeaff;contain:paint}
+#dhtDebug .dbug{margin:-2px -1px -2px -4px;padding:2px 10px;min-width:24px;color:var(--ink);background:#f8f8ff}
+#noDHTPeers{margin:6px 0}
+#dhtDebug .volatile {margin:1px 0 0;width:100%;display:inline-block}
 
 /* Resource Errors */
 .resourceError{border:1px solid #89f;border-bottom:2px solid #89f;margin-bottom:0}
