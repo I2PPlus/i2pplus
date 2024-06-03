@@ -694,14 +694,15 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         long uptime = Math.max(1000, _context.clock().now() - _started);
         StringBuilder buf = new StringBuilder(256);
         String separator = " <span class=bullet>&nbsp;&bullet;&nbsp;</span> ";
+        String bullet = " &bullet; ";
         buf.append("<div class=debugStats>")
-           .append("<span class=stat><b>Sent:</b> <span class=dbug>").append(_txPkts.get()).append(" packets / ")
-           .append(DataHelper.formatSize2(_txBytes.get()).replace("i", "")).append("B / ").append(separator)
-           .append(DataHelper.formatSize2Decimal(_txBytes.get() * 1000 / uptime)).append("B/s / ")
+           .append("<span class=stat><b>Sent:</b> <span class=dbug>").append(_txPkts.get()).append(" packets").append(bullet)
+           .append(DataHelper.formatSize2(_txBytes.get()).replace("i", "")).append("B").append(bullet)
+           .append(DataHelper.formatSize2Decimal(_txBytes.get() * 1000 / uptime)).append("B/s").append(bullet)
            .append(_outgoingTokens.size()).append(" tokens</span></span>").append(separator)
-           .append("<span class=stat><b>Received:</b> <span class=dbug>").append(_rxPkts.get()).append(" packets / ")
-           .append(DataHelper.formatSize2(_rxBytes.get()).replace("i", "")).append("B / ")
-           .append(DataHelper.formatSize2Decimal(_rxBytes.get() * 1000 / uptime)).append("B/s / ")
+           .append("<span class=stat><b>Received:</b> <span class=dbug>").append(_rxPkts.get()).append(" packets").append(bullet)
+           .append(DataHelper.formatSize2(_rxBytes.get()).replace("i", "")).append("B").append(bullet)
+           .append(DataHelper.formatSize2Decimal(_rxBytes.get() * 1000 / uptime)).append("B/s").append(bullet)
            .append(_incomingTokens.size()).append(" tokens</span></span>").append(separator)
            .append("<span class=stat><b>Queries pending:</b> <span class=dbug>").append(_sentQueries.size()).append("</span></span>");
         _tracker.renderStatusHTML(buf);
