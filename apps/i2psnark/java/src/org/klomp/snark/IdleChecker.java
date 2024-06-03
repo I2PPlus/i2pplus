@@ -108,7 +108,6 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         int ibtunnels = Integer.parseInt(_util.getI2CPOptions().get("inbound.quantity"));
         int obtunnels = Integer.parseInt(_util.getI2CPOptions().get("outbound.quantity"));
         if (ibtunnels > 1 || obtunnels > 1)
-//            _mgr.addMessage(_util.getString("Idle connection, reducing tunnel count; will restore tunnels when needed."));
         if (_log.shouldInfo())
             _log.info("Reducing I2PSnark tunnels on idle");
         setTunnels("1", "1", "0", "0");

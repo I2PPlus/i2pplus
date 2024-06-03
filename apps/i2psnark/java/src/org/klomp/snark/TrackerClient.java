@@ -76,23 +76,18 @@ public class TrackerClient implements Runnable {
   private static final String NOT_REGISTERED  = "torrent not registered"; //bytemonsoon
   private static final String NOT_REGISTERED_2  = "torrent not found";    // diftracker
   private static final String NOT_REGISTERED_3  = "torrent unauthorised"; // vuze
-  private static final String ERROR_GOT_HTML  = "received html (invalid response)";             // fake return
+  private static final String ERROR_GOT_HTML  = "received html (invalid response)"; // fake return
 
   private final static int SLEEP = 5; // 5 minutes.
   private final static int DELAY_MIN = 2000; // 2 secs.
   private final static int DELAY_RAND = 6*1000;
   private final static int MAX_REGISTER_FAILS = 15; // * INITIAL_SLEEP = 15m to register
   private final static int INITIAL_SLEEP = 90*1000;
-//  private final static int MAX_CONSEC_FAILS = 5;    // slow down after this
   private final static int MAX_CONSEC_FAILS = 10;    // slow down after this
-//  private final static int LONG_SLEEP = 30*60*1000; // sleep a while after lots of fails
   private final static int LONG_SLEEP = 10*60*1000; // sleep a while after lots of fails
-//  private final static long MIN_TRACKER_ANNOUNCE_INTERVAL = 15*60*1000;
   private final static long MIN_TRACKER_ANNOUNCE_INTERVAL = 10*60*1000;
-//  private final static long MIN_DHT_ANNOUNCE_INTERVAL = 39*60*1000;
   private final static long MIN_DHT_ANNOUNCE_INTERVAL = 15*60*1000;
   /** No guidance in BEP 5; standard practice is K (=8) */
-//  private static final int DHT_ANNOUNCE_PEERS = 4;
   private static final int DHT_ANNOUNCE_PEERS = 8;
   public static final int PORT = 6881;
   private static final int MAX_TRACKERS = 12;
