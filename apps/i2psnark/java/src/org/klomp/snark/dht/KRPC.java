@@ -693,20 +693,21 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     public String renderStatusHTML() {
         long uptime = Math.max(1000, _context.clock().now() - _started);
         StringBuilder buf = new StringBuilder(256);
-        buf.append("<div id=debugStats>")
-           .append("<b>TX:</b> <span class=dht>").append(_txPkts.get()).append(" packets / ")
-           .append(DataHelper.formatSize2(_txBytes.get())).append("B / ")
-           .append(DataHelper.formatSize2Decimal(_txBytes.get() * 1000 / uptime)).append("B/s</span>")
-           .append(" &nbsp;&bullet;&nbsp; <b>RX:</b> <span class=dht>").append(_rxPkts.get()).append(" packets / ")
-           .append(DataHelper.formatSize2(_rxBytes.get())).append("B / ")
-           .append(DataHelper.formatSize2Decimal(_rxBytes.get() * 1000 / uptime)).append("B/s</span><br>")
-           .append("<b>DHT Peers:</b> <span class=dht>").append( _knownNodes.size()).append("</span>")
-           .append(" &nbsp;&bullet;&nbsp; <b>Blacklisted:</b> <span class=dht>").append(_blacklist.size()).append("</span>")
-           .append(" &nbsp;&bullet;&nbsp; <b>Sent tokens:</b> <span class=dht>").append(_outgoingTokens.size()).append("</span>")
-           .append(" &nbsp;&bullet;&nbsp; <b>Received tokens:</b> <span class=dht>").append(_incomingTokens.size()).append("</span>")
-           .append(" &nbsp;&bullet;&nbsp; <b>Pending queries:</b> <span class=dht>").append(_sentQueries.size()).append("</span></div>");
+        String separator = " <span class=bullet>&nbsp;&bullet;&nbsp;</span> ";
+        buf.append("<div class=debugStats>")
+           .append("<span class=stat><b>Sent:</b> <span class=dbug>").append(_txPkts.get()).append(" packets / ")
+           .append(DataHelper.formatSize2(_txBytes.get()).replace("i", "")).append("B / ").append(separator)
+           .append(DataHelper.formatSize2Decimal(_txBytes.get() * 1000 / uptime)).append("B/s / ")
+           .append(_outgoingTokens.size()).append(" tokens</span></span>").append(separator)
+           .append("<span class=stat><b>Received:</b> <span class=dbug>").append(_rxPkts.get()).append(" packets / ")
+           .append(DataHelper.formatSize2(_rxBytes.get()).replace("i", "")).append("B / ")
+           .append(DataHelper.formatSize2Decimal(_rxBytes.get() * 1000 / uptime)).append("B/s / ")
+           .append(_incomingTokens.size()).append(" tokens</span></span>").append(separator)
+           .append("<span class=stat><b>Queries pending:</b> <span class=dbug>").append(_sentQueries.size()).append("</span></span>");
         _tracker.renderStatusHTML(buf);
-//        _knownNodes.renderStatusHTML(buf);
+        buf.append("<span class=stat><b>Blacklisted Peers:</b> <span class=dbug>").append(_blacklist.size()).append("</span></span>")
+           .append("</div>");
+        //_knownNodes.renderStatusHTML(buf);
         return buf.toString();
     }
 

@@ -141,11 +141,12 @@ class DHTTracker {
      * Debug info, HTML formatted
      */
     public void renderStatusHTML(StringBuilder buf) {
-        buf.append("<div id=debugDHT><b>DHT tracker:</b> ")
-           .append("<span class=dht>").append(_torrentCount).append(" torrents</span> ")
-           .append("&bullet; <span class=dht>").append(_peerCount).append(" peers</span> ")
-           .append("&bullet; <span class=dht>").append(DataHelper.formatDuration(_expireTime)).append(" expiration</span>")
-           .append("</div><hr class=debug>");
+        String separator = " <span class=bullet>&nbsp;&bullet;&nbsp;</span> ";
+        buf.append("<div class=debugStats>")
+           .append("<span class=stat><b>DHT Torrents:</b> <span class=dbug>").append(_torrentCount).append("</span></span>").append(separator)
+           .append("<span class=stat><b>DHT Tracker Peers:</b> <span class=dbug>").append(_peerCount).append("</span></span>").append(separator)
+           .append("<span class=stat><b>Peer Expiration:</b> <span class=dbug>").append(DataHelper.formatDuration(_expireTime)).append("</span></span>")
+           .append(separator); // append blacklisted peers info here
     }
 
     private class Cleaner extends SimpleTimer2.TimedEvent {

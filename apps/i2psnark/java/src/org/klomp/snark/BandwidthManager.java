@@ -121,7 +121,7 @@ public class BandwidthManager implements BandwidthListener {
     public boolean shouldSend(int size) {
         boolean rv = _up.offer(size, 1.0f);
         if (!rv && _log.shouldWarn())
-            _log.warn("Deny sending " + size + " bytes, upload rate " + DataHelper.formatSize(getUploadRate()) + "B/s");
+            _log.warn("Declining send request for " + size + " bytes -> Upload rate: " + DataHelper.formatSize(getUploadRate()) + "B/s");
         return rv;
     }
 
@@ -133,8 +133,8 @@ public class BandwidthManager implements BandwidthListener {
     public boolean shouldRequest(Peer peer, int size) {
         boolean rv = !overDownBWLimit() && _req.offer(size, 1.0f);
         if (!rv && _log.shouldWarn())
-            _log.warn("Deny requesting " + size + " bytes, download rate " + DataHelper.formatSize(getDownloadRate()) + "Bps" +
-                      ", request rate " + DataHelper.formatSize(getRequestRate()) + "Bps");
+            _log.warn("Not requesting " + size + " bytes (bandwidth limit exceeded) -> Download / Request rate: " +
+                      DataHelper.formatSize(getDownloadRate()) + "B/s" + " / " + DataHelper.formatSize(getRequestRate()) + "B/s");
         return rv;
     }
 
@@ -171,9 +171,11 @@ public class BandwidthManager implements BandwidthListener {
      */
     @Override
     public String toString() {
-        return "<br><b>Bandwidth Limiters</b><br><b>Up:</b> " + _up +
-               "<br><b>Down:</b> " + _down +
-               "<br><b>Req:</b> " + _req +
-               "<br>";
+        String separator = " <span class=bullet>&nbsp;&bullet;&nbsp;</span> ";
+        return "<div class=debugStats id=bwManager>" +
+               "<span class=stat><b>Bandwidth Out:</b> <span class=dbug>" + _up.toString().replace("* ", "") + "</span></span>" + separator +
+               "<span class=stat><b>Bandwidth In:</b> <span class=dbug>" + _down.toString().replace("* ", "") + "</span></span>" +
+               //"<span class=stat><b>Requests:</b> <span class=dbug>" + _req.toString().replace("* ", "") + "</span></span>" +
+               "</div>";
     }
 }

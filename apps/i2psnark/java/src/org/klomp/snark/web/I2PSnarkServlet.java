@@ -408,8 +408,10 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(_t("Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?")).append("\";\n")
                .append("  const snarkPageSize = " + pageSize + ";\n")
                .append("  const snarkRefreshDelay = " + delay + ";\n")
+               .append("  const totalSnarks = " + _manager.listTorrentFiles().size() + ";\n")
                .append("  window.snarkPageSize = snarkPageSize;\n")
-               .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n</script>\n")
+               .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
+               .append("  window.totalSnarks = totalSnarks;\n</script>\n")
                .append("<script nonce=" + cspNonce + " type=module>\n")
                .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js").append("\";\n")
                .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n")
@@ -495,12 +497,13 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         if (_manager.getTorrents().size() > 1) {
             String s = req.getParameter("search");
+            boolean searchActive = (s != null && !s.equals(""));
             buf.append("<form id=snarkSearch action=\"").append(_contextPath).append("\" method=GET hidden>\n")
                .append("<span id=searchwrap><input id=searchInput type=search required name=search size=20 placeholder=\"")
                .append(_t("Search torrents"))
                .append("\"");
-            if (s != null) {
-                buf.append(" value=\"").append(DataHelper.escapeHTML(s)).append('"');
+            if (searchActive) {
+                buf.append(" value=\"").append(DataHelper.escapeHTML(s).trim()).append('"');
             }
             buf.append("><a href=").append(_contextPath).append(" title=\"").append(_t("Clear search"))
                .append("\" hidden>x</a></span><input type=submit value=\"Search\">\n").append("</form>\n");
@@ -731,7 +734,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String filter = req.getParameter("filter") != null ? req.getParameter("filter") : "";
         String peerParam = req.getParameter("p");
         String psize = req.getParameter("ps");
-        String srch = req.getParameter("search");
+        String search = req.getParameter("search");
         String srt = req.getParameter("sort");
         String stParam = req.getParameter("st");
         int refresh = _manager.getRefreshDelaySeconds();
@@ -741,6 +744,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showStatusFilter = _manager.util().showStatusFilter();
         filterParam = filter;
         filterEnabled = filterParam != null && !filterParam.equals("all") && !filterParam.equals("");
+        boolean searchActive = (search != null && !search.equals("") && search.length() > 0);
         if (isForm) {
             StringBuilder buf = new StringBuilder(1280);
             if (showStatusFilter && !snarks.isEmpty() && _manager.util().connected()) {
@@ -748,52 +752,38 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 buf.append("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");
             }
+
+            // selective display of torrents based on status
             if (showStatusFilter) {
-                // selective display of torrents based on status
                 if (!snarks.isEmpty() && _manager.util().connected()) {
                     StringBuilder activeQuery = new StringBuilder("/i2psnark/?");
-                    if (peerParam != null) {
-                        activeQuery.append("p=" + peerParam + "&");
-                    }
-                    if (srt != null) {
-                        activeQuery.append("sort=" + srt + "&");
-                    }
-                    if (srch != null) {
-                        activeQuery.append("search=" + srch + "&");
-                    }
-                    if (psize != null) {
-                        activeQuery.append("ps=" + psize + "&");
-                    }
+                    if (peerParam != null) {activeQuery.append("p=" + peerParam + "&");}
+                    if (srt != null) {activeQuery.append("sort=" + srt + "&");}
+                    if (searchActive) {activeQuery.append("search=" + search + "&");}
+                    if (psize != null) {activeQuery.append("ps=" + psize + "&");}
                     if (filterEnabled) {
-                        // remove existing filter parameter
-                        String existingFilter = "filter=" + filterParam;
+                        String existingFilter = "filter=" + filterParam;  // remove existing filter parameter
                         int filterIndex = activeQuery.indexOf(existingFilter);
-                        if (filterIndex >= 0) {
-                            activeQuery.delete(filterIndex, filterIndex + existingFilter.length());
-                        }
+                        if (filterIndex >= 0) {activeQuery.delete(filterIndex, filterIndex + existingFilter.length());}
                     }
                     activeQuery.setLength(activeQuery.length() - 1);
                     String buttonUrl = activeQuery.toString();
                     int pageSizeConf = _manager.getPageSize();
                     buttonUrl += (buttonUrl.contains("=") ? "&amp;filter=" : "?filter=");
-                    buf.append("<noscript><style>.script{display:none}</style></noscript>\n")
-                       .append("<div id=torrentDisplay class=script>")
-                       .append("<a class=filter id=all href=\"").append(buttonUrl).append("all\"><span>");
-                    if (srch != null) {
-                        buf.append(_t("Search"));
-                    } else {
-                       buf.append(_t("Show All"));
-                    }
-                    buf.append("<span class=badge hidden>");
-                    if (srch == null && Math.max(pageSizeConf, 10) < total) {
-                        buf.append(Math.max(pageSizeConf, 10)).append(" / ").append(total);
-                    } else if (searchResults > Math.max(pageSizeConf, 10)) {
+                    buf.append("<div id=torrentDisplay>")
+                       .append("<a class=filter id=search href=\"").append(buttonUrl).append("all\"")
+                       .append(searchActive ? "" : " hidden").append("><span>").append(_t("Search"))
+                       .append("<span class=badge").append(searchActive ? "" : " hidden").append(">");
+                    if (searchResults > Math.max(pageSizeConf, 10)) {
                         buf.append(Math.max(pageSizeConf, 10)).append(" / ").append(searchResults);
-                    } else if (srch != null && searchResults < Math.max(pageSizeConf, 10)) {
-                        buf.append(searchResults);
-                    } else {
-                        buf.append(total);
-                    }
+                    } else if (searchActive) {buf.append(searchResults);}
+                    buf.append("</span></span></a>")
+                       .append("<a class=filter id=all href=\"").append(buttonUrl).append("all\"")
+                       .append(!searchActive ? "" : " hidden").append("><span>").append(_t("Show All"))
+                       .append("<span class=badge hidden>");
+                    if (Math.max(pageSizeConf, 10) < total) {
+                        buf.append(Math.max(pageSizeConf, 10)).append(" / ").append(total);
+                    } else {buf.append(total);}
                     buf.append("</span></span></a>")
                         .append("<a class=filter id=active href=\"").append(buttonUrl).append("active\"><span>")
                         .append(_t("Active")).append("<span class=badge></span></span></a>")
@@ -828,9 +818,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // search
         boolean isSearch = false;
-        String search = req.getParameter("search");
-        boolean searchActive = search != null && search.length() > 0;
-        if (search != null && search.length() > 0) {
+        if (searchActive) {
             List<Snark> matches = search(search, snarks);
             if (matches != null) {
                 snarks = matches;
@@ -842,17 +830,15 @@ public class I2PSnarkServlet extends BasicServlet {
         // pages
         int start = 0;
         if (stParam != null) {
-            try {
-                start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam)));
-            } catch (NumberFormatException nfe) {}
+            try {start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam)));}
+            catch (NumberFormatException nfe) {}
         }
         int pageSize = filterEnabled ? 9999 : Math.max(_manager.getPageSize(), 10);
         String ps = req.getParameter("ps");
-        if (ps == "null") {
-            ps = String.valueOf(pageSize);
-        }
+        if (ps == "null") {ps = String.valueOf(pageSize);}
         if (ps != null) {
-            try { pageSize = Integer.parseInt(ps); } catch (NumberFormatException nfe) {}
+            try {pageSize = Integer.parseInt(ps);}
+            catch (NumberFormatException nfe) {}
         }
         // move pagenav here so we can align it nicely without resorting to hacks
         if (isForm && total > 0 && (start > 0 || total > pageSize)) {
@@ -1190,9 +1176,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             footer.append("</i></td></tr></tbody>\n");
             footer.append("<tfoot id=\"snarkFoot");
-            if (_manager.util().isConnecting()) {
-                footer.append("\" class=\"initializing");
-            }
+            if (_manager.util().isConnecting()) {footer.append("\" class=\"initializing");}
             footer.append("\"><tr><th id=torrentTotals align=left colspan=12></th></tr></tfoot>\n");
         } else if (snarks.size() > 0) {
 
@@ -1323,13 +1307,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 footer.append("</th>");
                 footer.append("<th class=tAction>");
                 if (dht != null && (!"2".equals(peerParam))) {
-                    footer.append("<a id=debugMode href=\"?p=2\" title=\"");
-                    footer.append(_t("Enable Debug Mode") + "\">");
-                    footer.append(_t("Debug Mode") + "</a>");
+                    footer.append("<a id=debugMode href=\"?p=2\" title=\"").append(_t("Enable Debug Mode") + "\">").append(_t("Debug Mode") + "</a>");
                 } else if (dht != null) {
-                    footer.append("<a id=debugMode href=\"?p\" title=\"");
-                    footer.append(_t("Disable Debug Mode") + "\">");
-                    footer.append(_t("Normal Mode") + "</a>");
+                    footer.append("<a id=debugMode href=\"?p\" title=\"").append(_t("Disable Debug Mode") + "\">").append(_t("Normal Mode") + "</a>");
                 }
                 footer.append("</th>");
                 } else {
@@ -1341,22 +1321,16 @@ public class I2PSnarkServlet extends BasicServlet {
                 else {footer.append("<tr id=dhtDebug hidden>");}
                 footer.append("<th colspan=12><span class=volatile>");
                 if (dht != null) {
-                    footer.append("<span id=bwManager hidden>")
-                          .append(_manager.getBandwidthListener().toString())
-                          .append("</span>")
+                    footer.append(_manager.getBandwidthListener().toString())
                           .append(dht.renderStatusHTML());
                 } else {
-                    footer.append("<b>");
-                    footer.append(_t("No DHT Peers"));
-                    footer.append("</b>");
+                    footer.append("<b id=noDHTpeers>").append(_t("No DHT Peers")).append("</b>");
                 }
                 footer.append("</span></th></tr>").append("</tfoot>\n");
             }
 
             footer.append("</table>\n");
-            if (isForm) {
-                footer.append("</form>");
-            }
+            if (isForm) {footer.append("</form>");}
 
             out.write(footer.toString());
             footer.setLength(0);
@@ -2952,13 +2926,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append(client + "</span></span>");
                 }
                 if (t >= 5000) {
-                    if (showDebug) {
-                        buf.append(" &#10140; <i>" + _t("inactive") + "&nbsp;" + (t / 1000) + "s</i>");
-                    } else {
-                        buf.append("<span class=inactivity style=\"width:" + (t / 2000) +
-                                  "px\" title=\"" + _t("Inactive") + ": " +
-                                  (t / 1000) + ' ' + _t("seconds") + "\"></span>");
-                    }
+                    buf.append("<span class=inactivity style=\"width:" + (t / 2000) +
+                               "px\" title=\"" + _t("Inactive") + ": " +
+                               (t / 1000) + ' ' + _t("seconds") + "\"></span>");
                 }
                 buf.append("</td>");
                 buf.append("<td class=ETA>");

@@ -361,9 +361,8 @@ public class SyntheticREDQueue implements BandwidthEstimator {
 
     @Override
     public synchronized String toString() {
-        return "\n* Queue: " +
-                DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) +
-                "Bytes/s -> Average size / limit: " + DataHelper.formatSize2((long) _avgQSize, false) + "B / " +
-                DataHelper.formatSize2Decimal((long) _bwBps, false) + "B/s";
+        return "\n* " + (_bKFiltered > 0 ?" Queue: " + DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) + "Bytes/s " : "") +
+               (_avgQSize > 0 ? "Average size / " : "") + "Limit: " + (_avgQSize > 0 ? DataHelper.formatSize2((long) _avgQSize, false) + "B / " : "") +
+               DataHelper.formatSize2Decimal((long) _bwBps, false) + "B/s";
     }
 }
