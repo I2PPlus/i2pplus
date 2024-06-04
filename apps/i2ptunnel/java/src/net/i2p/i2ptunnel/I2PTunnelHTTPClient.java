@@ -576,8 +576,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         }
                         if (requestURI.getPath() == null || requestURI.getPath().length() <= 0) {
                             // Add a path
-                            if (_log.shouldWarn()) {
-                                _log.warn(getPrefix(requestId) + "Adding / path to [" + request + "]");
+                            if (_log.shouldDebug()) {
+                                _log.debug(getPrefix(requestId) + "Adding / path to [" + request + "]");
                             }
                             requestURI = changeURI(requestURI, null, 0, "/");
                         }
@@ -1375,32 +1375,27 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             if (clientDest == null) {
                 //l.log("Could not resolve " + destination + ".");
                 if (_log.shouldWarn()) {
-                    _log.warn("[HTTPClient] Unable to resolve " + destination + "-> Proxy? " + usingWWWProxy + "\n* Request: " + targetRequest);
+                    _log.warn("[HTTPClient] Unable to resolve " + destination.substring(0,12) + "..." +
+                              (usingWWWProxy ? " (Outproxy)" : "") + "\n* Request: " + targetRequest);
                 }
                 String header;
                 String jumpServers = null;
                 String extraMessage = null;
-                if (usingWWWProxy) {
-                    header = getErrorPage("dnfp", ERR_DESTINATION_UNKNOWN);
-                } else if (ahelperPresent) {
-                    header = getErrorPage("dnfb", ERR_DESTINATION_UNKNOWN);
-                } else if (destination.length() >= 60 && destination.toLowerCase(Locale.US).endsWith(".b32.i2p")) {
+                if (usingWWWProxy) {header = getErrorPage("dnfp", ERR_DESTINATION_UNKNOWN);}
+                else if (ahelperPresent) {header = getErrorPage("dnfb", ERR_DESTINATION_UNKNOWN);}
+                else if (destination.length() >= 60 && destination.toLowerCase(Locale.US).endsWith(".b32.i2p")) {
                     header = getErrorPage("nols", ERR_DESTINATION_UNKNOWN);
                     extraMessage = _t("Destination LeaseSet not found");
                 } else {
                     header = getErrorPage("dnfh", ERR_DESTINATION_UNKNOWN);
                     jumpServers = getTunnel().getClientOptions().getProperty(PROP_JUMP_SERVERS);
-                    if (jumpServers == null) {
-                        jumpServers = DEFAULT_JUMP_SERVERS;
-                    }
+                    if (jumpServers == null) {jumpServers = DEFAULT_JUMP_SERVERS;}
                     int jumpDelay = 400 + _context.random().nextInt(256);
-                    try {
-                        Thread.sleep(jumpDelay);
-                    } catch (InterruptedException ie) {}
+                    try {Thread.sleep(jumpDelay);}
+                    catch (InterruptedException ie) {}
                 }
-                try {
-                    writeErrorMessage(header, extraMessage, out, targetRequest, usingWWWProxy, destination, jumpServers);
-                } catch (IOException ioe) {} // ignore
+                try {writeErrorMessage(header, extraMessage, out, targetRequest, usingWWWProxy, destination, jumpServers);}
+                catch (IOException ioe) {} // ignore
                 return;
             }
 
@@ -1408,13 +1403,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             if (isConnect && !usingWWWProxy &&
                 getTunnel().getClientOptions().getProperty(PROP_SSL_SET) != null &&
                 !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_INTERNAL_SSL, "true"))) {
-                try {
-                    writeErrorMessage(ERR_INTERNAL_SSL, out, targetRequest, false, destination);
-                } catch (IOException ioe) {
-                    // ignore
-                }
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("SSL to i2p destinations denied by configuration: " + targetRequest);
+                try {writeErrorMessage(ERR_INTERNAL_SSL, out, targetRequest, false, destination);}
+                catch (IOException ioe) {}  // ignore
+                if (_log.shouldLog(Log.WARN)) {_log.warn("SSL to i2p destinations denied by configuration: " + targetRequest);}
                 return;
             }
 
@@ -1424,9 +1415,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             if (ahelperNew && "GET".equals(method) &&
                     (userAgent == null || !userAgent.startsWith("Wget")) &&
                     !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_DISABLE_HELPER))) {
-                try {
-                    writeHelperSaveForm(out, destination, ahelperKey, targetRequest, referer);
-                } catch (IOException ioe) {} // ignore
+                try {writeHelperSaveForm(out, destination, ahelperKey, targetRequest, referer);}
+                catch (IOException ioe) {} // ignore
                 return;
             }
 
@@ -1436,9 +1426,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // Syndie can't handle a redirect of a POST
             if (ahelperPresent && !"POST".equals(method) && !"PUT".equals(method)) {
                 String uri = targetRequest;
-                if (_log.shouldDebug()) {
-                    _log.debug("[HTTPClient] Auto redirecting to " + uri);
-                }
+                if (_log.shouldDebug()) {_log.debug("[HTTPClient] Auto redirecting to " + uri);}
                 try {
                     out.write(("HTTP/1.1 301 Address Helper Accepted\r\n" +
                         "Location: " + uri + "\r\n" +
@@ -1462,9 +1450,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 remotePort != i2ps.getPort() ||
                 !clientDest.equals(i2ps.getPeerDestination())) {
                 if (i2ps != null) {
-                    if (_log.shouldInfo())
-                        _log.info("Old socket closed or different dest/port, opening new one");
-                    try { i2ps.close(); } catch (IOException ioe) {}
+                    if (_log.shouldInfo()) {_log.info("Old socket closed or different dest/port, opening new one");}
+                    try {i2ps.close();}
+                    catch (IOException ioe) {}
                 }
             Properties opts = new Properties();
             //opts.setProperty("i2p.streaming.inactivityTimeout", ""+120*1000);
@@ -1472,22 +1460,18 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // dont want to hard link to here
             //opts.setProperty("i2p.streaming.inactivityTimeoutAction", ""+1);
             I2PSocketOptions sktOpts;
-            try {
-                sktOpts = getDefaultOptions(opts);
-            } catch (RuntimeException re) {
+            try {sktOpts = getDefaultOptions(opts);}
+            catch (RuntimeException re) {
                 // tunnel build failure
                 StringBuilder buf = new StringBuilder(128);
                 buf.append("HTTP/1.1 503 Service Unavailable");
-                if (re.getMessage() != null)
-                    buf.append(" - ").append(re.getMessage());
+                if (re.getMessage() != null) {buf.append(" - ").append(re.getMessage());}
                 buf.append("\r\n\r\n");
-                try {
-                    out.write(buf.toString().getBytes("UTF-8"));
-                } catch (IOException ioe) {}
+                try {out.write(buf.toString().getBytes("UTF-8"));}
+                catch (IOException ioe) {}
                 throw re;
             }
-            if (remotePort > 0)
-                sktOpts.setPort(remotePort);
+            if (remotePort > 0) {sktOpts.setPort(remotePort);}
             i2ps = createI2PSocket(clientDest, sktOpts);
             }
 

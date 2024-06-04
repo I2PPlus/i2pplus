@@ -394,8 +394,8 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             }
             if (_log.shouldLog(Log.DEBUG)) {
                 _log.debug("Initial data " + (initialI2PData != null ? initialI2PData.length : 0)
-                           + " written to I2P, " + (initialSocketData != null ? initialSocketData.length : 0)
-                           + " written to the socket, starting forwarders");
+                           + " bytes written to I2P, " + (initialSocketData != null ? initialSocketData.length : 0)
+                           + " bytes written to the socket, starting forwarders...");
 
             }
             if (_keepAliveSocket) {
@@ -420,7 +420,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 }
             }
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Both forwarders completed: " + totalSent + "B sent, " +  totalReceived + "B received");
+                _log.debug("Both forwarders completed -> " + totalSent + " bytes sent, " +  totalReceived + " bytes received");
 
             // this task is useful for the httpclient
             if ((onTimeout != null || _onFail != null) && totalReceived <= 0) {
@@ -626,8 +626,8 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
 
         @Override
         public void run() {
-            String from = i2ps.getThisDestination().calculateHash().toBase64().substring(0,6);
-            String to = i2ps.getPeerDestination().calculateHash().toBase64().substring(0,6);
+            String from = i2ps.getThisDestination().calculateHash().toBase64().substring(0,8);
+            String to = i2ps.getPeerDestination().calculateHash().toBase64().substring(0,8);
 
             if (_log.shouldLog(Log.DEBUG)) {
                 _log.debug(direction + " Forwarding between [" + from + "] and [" + to + "]");
@@ -711,8 +711,8 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                     keepAliveTo = _keepAliveSocket;
                 }
                 if (_log.shouldLog(Log.INFO)) {
-                    _log.info(direction + " Done forwarding " + (_toI2P ? totalSent : totalReceived) + " bytes from [" + from +
-                              "] to [" + to + "] -> KeepAlive from? " + keepAliveFrom + " KeepAlive to? " + keepAliveTo);
+                    _log.info(direction + " Done forwarding " + (_toI2P ? totalSent : totalReceived) + " bytes from [" + from + "] " +
+                              (keepAliveFrom ? "(KeepAlive)" : "") + " to [" + to + "] " + (keepAliveTo ? "(KeepAlive)" : ""));
                 }
                 if (!keepAliveFrom) {
                     try {
