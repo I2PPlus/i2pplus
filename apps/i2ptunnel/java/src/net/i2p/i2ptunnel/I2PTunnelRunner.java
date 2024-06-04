@@ -47,9 +47,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      * api's job...
      */
     static int MAX_PACKET_SIZE = 16 * 1024;
-
     static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE * 4;
-
     private final Socket s;
     private final I2PSocket i2ps;
     private final Object slock, finishLock = new Object();
@@ -393,7 +391,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 out.write(initialSocketData);
             }
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug("Initial data " + (initialI2PData != null ? initialI2PData.length : 0)
+                _log.debug("Initial data -> " + (initialI2PData != null ? initialI2PData.length : 0)
                            + " bytes written to I2P, " + (initialSocketData != null ? initialSocketData.length : 0)
                            + " bytes written to the socket, starting forwarders...");
 
