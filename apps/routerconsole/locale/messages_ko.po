@@ -713,7 +713,7 @@ msgstr "업데이트 서버 {0}을(를) 주소록에서 찾을 수 없습니다.
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:110
 #, java-format
-msgid "Update file not found at {0}"
+msgid "Update not found:<br>{0}"
 msgstr "업데이트 파일을 {0}에서 찾을 수 없습니다."
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateHandler.java:93

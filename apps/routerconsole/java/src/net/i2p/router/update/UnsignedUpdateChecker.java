@@ -98,20 +98,20 @@ class UnsignedUpdateChecker extends UpdateRunner {
                 if (status == 504 || status <= 0) {
                     msg = _mgr._t("Unable to connect to update server ") + _currentURI.getHost();
                     if (url.contains("skank.i2p")) {
-                        msg = msg.replace("update", "I2P+ update").replace("http://", "");
+                        msg = msg.replace("update", "I2P+ update");
                     }
                 } else if (status == 500) {
                     msg = _mgr._t("Update server {0} not found in address book", _currentURI.getHost());
                     if (url.contains("skank.i2p")) {
-                        msg = msg.replace("Update", "I2P+ update").replace("http://", "");
+                        msg = msg.replace("Update", "I2P+ Update");
                     }
                 } else if (status == 404) {
-                    msg = _mgr._t("Update file not found at {0}", url);
+                    msg = _mgr._t("Update not found:<br>{0}", url);
                     if (url.contains("skank.i2p")) {
-                        msg = msg.replace("Update", "I2P+ update").replace("http://", "");
+                        msg = msg.replace("Update", "I2P+ update");
                     }
                 } else {
-                    msg = status + " " + DataHelper.stripHTML(get.getStatusText());
+                    msg = status + " " + DataHelper.stripHTML(get.getStatusText().replace("http://", ""));
                 }
                 updateStatus("<b>" + msg + "</b>");
             }

@@ -713,7 +713,7 @@ msgstr "Không tìm thấy máy chủ cập nhật {0} trong sổ địa chỉ"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:110
 #, java-format
-msgid "Update file not found at {0}"
+msgid "Update not found:<br>{0}"
 msgstr "Không tìm thấy tệp cập nhật tại {0}"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateHandler.java:93

@@ -715,7 +715,7 @@ msgstr "Le serveur de mise à jour {0} n'a pas été trouvé dans le carnet d'ad
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:110
 #, java-format
-msgid "Update file not found at {0}"
+msgid "Update not found:<br>{0}"
 msgstr "Fichier de mise à jour introuvable sur {0}"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateHandler.java:93

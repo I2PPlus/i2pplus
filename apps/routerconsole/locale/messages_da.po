@@ -715,7 +715,7 @@ msgstr "Opdateringsserver {0} blev ikke fundet i adressebogen"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateChecker.java:110
 #, java-format
-msgid "Update file not found at {0}"
+msgid "Update not found:<br>{0}"
 msgstr "Opdateringsfil blev ikke fundet på {0}"
 
 #: ../java/src/net/i2p/router/update/UnsignedUpdateHandler.java:93
