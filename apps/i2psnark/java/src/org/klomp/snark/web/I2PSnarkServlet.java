@@ -2871,7 +2871,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("\">" + peer.toString().substring(5, 9)+ "</code>&nbsp;");
                     if (hasVersion) {buf.append("<span class=clientid title=\"").append(version).append("\">");}
                     else {buf.append("<span class=clientid>");}
-                    if ("AwMD".equals(ch)) {client = ">" +_t("I2PSnark");}
+                    if ("AwMD".equals(ch)) {client = "I2PSnark";}
                     else if ("LUFa".equals(ch)) {client = "Vuze";}
                     else if ("LUJJ".equals(ch)) {client = "BiglyBT";}
                     else if ("LVhE".equals(ch)) {client = "XD";}
@@ -2912,7 +2912,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         if (id != null && id[0] == '-')
                             client += getAzVersion(id);
                     }
-                    buf.append(client + "</span>");
+                    buf.append(client + "</span></span>");
                 }
                 if (t >= 5000) {
                     buf.append("<span class=inactivity style=\"width:" + (t / 2000) +
