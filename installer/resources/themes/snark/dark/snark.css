@@ -380,10 +380,10 @@ tr:hover .barText{opacity:1}
 .peerinfo td:first-child{background:var(--peer) no-repeat 9px center/18px}
 .peerinfo td,.debuginfo td{padding-top:4px;padding-bottom:4px}
 .peerinfo td:first-child::before,.debuginfo td:first-child::before{min-height:28px;display:inline-block;vertical-align:middle;content:""}
-.peerclient{margin:3px 0;padding:1px;border-radius:1px;background:#000;box-shadow:0 0 0 1px #020}
+.peerclient{margin:3px 0;padding:1px;border-radius:1px;background:#000;box-shadow:0 0 0 1px #020;contain:paint}
 .peerclient,.peerinfo code,.clientid{display:inline-block;vertical-align:middle;line-height:1.2}
 .peerinfo code{margin:0;padding:2px 9px 2px 5px;font-size:85%;color:#bb0;border-radius:4px 0 0 4px;background:none}
-.clientid{margin-left:-8px;padding:2px 4px;width:57px;display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:middle;text-overflow:ellipsis;font-size:85%;text-align:center;background:var(--badge)}
+.clientid{margin-left:-8px;padding:3px 2px 3px 4px;width:57px;display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:middle;text-overflow:ellipsis;font-size:85%;text-align:center;background:var(--badge)}
 .clientVersion{display:none}
 .peerinfo td>*{vertical-align:middle}
 .peerdata{padding-left:0}
@@ -399,7 +399,7 @@ hr.debug{display:none}
 .debuginfo b{text-transform:capitalize}
 #debugMode{margin-top:-2px;padding:8px;display:inline-block;vertical-align:middle;line-height:0;box-sizing:border-box;font-size:0;background:var(--debug) no-repeat center center;opacity:0}
 #debugMode:hover{opacity:1}
-#torrents #dhtDebug th{text-align:center}
+#torrents #dhtDebug th{text-align:center;border-top:2px solid #242}
 body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #dhtDebug .bullet{display:none}
 #dhtDebug b,#dhtDebug .dbug,#dhtDebug .stat{margin:2px 0;padding:0 8px;display:inline-block}
