@@ -2772,12 +2772,12 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 buf.append("\"><span class=txBarText><span class=right>");
                 buf.append(formatSize(uploaded).replaceAll("iB","")
-                                              .replace("B", "</span><span class=left>B</span>")
-                                              .replace("K", "</span><span class=left>K</span>")
-                                              .replace("M", "</span><span class=left>M</span>")
-                                              .replace("G", "</span><span class=left>G</span>")
-                                              .replace("T", "</span><span class=left>T</span>"));
-                buf.append("</span><span class=txBarInner style=\"width:calc(" + txPercentBar + " - 2px)\"></span></span>");
+                                               .replace("B", "</span><span class=left>B</span>")
+                                               .replace("K", "</span><span class=left>K</span>")
+                                               .replace("M", "</span><span class=left>M</span>")
+                                               .replace("G", "</span><span class=left>G</span>")
+                                               .replace("T", "</span><span class=left>T</span>"));
+                buf.append("</span> <span class=txBarInner style=\"width:calc(" + txPercentBar + " - 2px)\"></span></span>");
             }
         }
         buf.append("</td>");
@@ -2850,6 +2850,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append(_t("Peer attached to swarm"));
                 buf.append("\"></td><td class=peerdata colspan=5>");
                 PeerID pid = peer.getPeerID();
+                String client = null;
                 String ch = pid != null ? pid.toString() : "????";
                 if (ch.startsWith("WebSeed@")) {
                     buf.append(ch);
@@ -2863,43 +2864,31 @@ public class I2PSnarkServlet extends BasicServlet {
                     // Base64 encode '\3\3\3' = AwMD
                     boolean addVersion = true;
                     ch = ch.substring(0, 4);
-                    String client;
+                    String version = ("ZV".equals(ch.substring(2,4)) || "VUZP".equals(ch) ? getRobtVersion(pid.getID()) : getAzVersion(pid.getID()));
+                    boolean hasVersion = version != null && !version.equals("");
                     buf.append("<span class=peerclient><code title=\"");
                     buf.append(_t("Destination (identity) of peer"));
                     buf.append("\">" + peer.toString().substring(5, 9)+ "</code>&nbsp;");
-                    buf.append("<span class=clientid>");
-                    if ("AwMD".equals(ch))
-                        client = _t("I2PSnark");
-                    else if ("LUFa".equals(ch))
-                        client = "Vuze" + (showDebug ? "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>" : "");
-                    else if ("LUJJ".equals(ch))
-                        client = "BiglyBT" + (showDebug ? "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>" : "");
-                    else if ("LVhE".equals(ch))
-                        client = "XD" + (showDebug ? "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>" : "");
-                    else if (ch.startsWith("LV")) // LVCS 1.0.2?; LVRS 1.0.4
-                       client = "Transmission" + (showDebug ? "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>" : "");
-                    else if ("LUtU".equals(ch))
-                        client = "KTorrent" + (showDebug ? "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>" : "");
+                    if (hasVersion) {buf.append("<span class=clientid title=\"").append(version).append("\">");}
+                    else {buf.append("<span class=clientid>");}
+                    if ("AwMD".equals(ch)) {client = ">" +_t("I2PSnark");}
+                    else if ("LUFa".equals(ch)) {client = "Vuze";}
+                    else if ("LUJJ".equals(ch)) {client = "BiglyBT";}
+                    else if ("LVhE".equals(ch)) {client = "XD";}
+                    else if (ch.startsWith("LV")) {client = "Transmission";} // LVCS 1.0.2?; LVRS 1.0.4
+                    else if ("LUtU".equals(ch)) {client = "KTorrent";}
                     // libtorrent and downstreams
                     // https://www.libtorrent.org/projects.html
-                    else if ("LURF".equals(ch))  // DL
-                        client = "Deluge";
-                    else if ("LXFC".equals(ch))  // qB
-                        client = "qBitorrent";
-                    else if ("LUxU".equals(ch))  // LT
-                        client = "libtorrent";
+                    else if ("LURF".equals(ch)) {client = "Deluge";} // DL
+                    else if ("LXFC".equals(ch)) {client = "qBitorrent";} // qB
+                    else if ("LUxU".equals(ch)) {client = "libtorrent";} // LT
                     // ancient below here
-                    else if ("ZV".equals(ch.substring(2,4)) || "VUZP".equals(ch))
-                        client = "Robert" + (showDebug ? "<span class=clientVersion><i>" + getRobtVersion(pid.getID()) + "</i></span>" : "");
-                    else if ("CwsL".equals(ch))
-                        client = "I2PSnarkXL";
-                    else if ("BFJT".equals(ch))
-                        client = "I2PRufus";
-                    else if ("TTMt".equals(ch))
-                        client = "I2P-BT";
+                    else if ("ZV".equals(ch.substring(2,4)) || "VUZP".equals(ch)) {client = "Robert";}
+                    else if ("CwsL".equals(ch)) {client = "I2PSnarkXL";}
+                    else if ("BFJT".equals(ch)) {client = "I2PRufus";}
+                    else if ("TTMt".equals(ch)) {client = "I2P-BT";}
                     else {
-                        // get client + version from handshake
-                        client = null;
+                        // get client + version from handshake when client = null;
                         Map<String, BEValue> handshake = peer.getHandshakeMap();
                         if (handshake != null) {
                             BEValue bev = handshake.get("v");
@@ -2915,8 +2904,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                  } catch (InvalidBEncodingException ibee) {}
                              }
                          }
-                         if (client == null)
-                            client = _t("Unknown") + " (" + ch + ')';
+                         if (client == null) {client = ch;}
                     }
 
                     if (addVersion) {
@@ -2924,7 +2912,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         if (id != null && id[0] == '-')
                             client += getAzVersion(id);
                     }
-                    buf.append(showDebug ? client + "</span></span>" : client + "</span>");
+                    buf.append(client + "</span>");
                 }
                 if (t >= 5000) {
                     buf.append("<span class=inactivity style=\"width:" + (t / 2000) +
@@ -2937,15 +2925,15 @@ public class I2PSnarkServlet extends BasicServlet {
                 float pct;
                 if (isValid) {
                     pct = (float) (100.0 * peer.completed() / meta.getPieces());
-                    if (pct >= 100.0)
-                        buf.append("<span class=\"peerSeed\" title=\"" + _t("Seed") + "\">" + toSVG("peerseed", _t("Seed"), "") + "</span>");
-                    else {
+                    if (pct >= 100.0) {
+                        buf.append("<span class=\"peerSeed\" title=\"" + _t("Seed") + "\">" +
+                                   toSVG("peerseed", _t("Seed"), "") + "</span>");
+                    } else {
                         String ps = String.valueOf(pct);
-                        if (ps.length() > 5)
-                            ps = ps.substring(0, 5);
-                        buf.append("<div class=barOuter title=\"" + ps + "%\">");
-                        buf.append("<div class=barInner style=\"width:" + ps + "%;\">");
-                        buf.append("</div></div>");
+                        if (ps.length() > 5) {ps = ps.substring(0, 5);}
+                        buf.append("<div class=barOuter title=\"" + ps + "%\">")
+                           .append("<div class=barInner style=\"width:" + ps + "%;\">")
+                           .append("</div></div>");
                     }
                 } else {
                     pct = (float) 101.0;
@@ -2954,21 +2942,19 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 buf.append("</td>");
                 buf.append("<td class=\"rateDown");
-                if (peer.getDownloadRate() >= 100000) {
-                    buf.append(" hundred");
-                } else if (peer.getDownloadRate() >= 10000) {
-                    buf.append(" ten");
-                }
+                if (peer.getDownloadRate() >= 100000) {buf.append(" hundred");}
+                else if (peer.getDownloadRate() >= 10000) {buf.append(" ten");}
                 buf.append("\">");
                 if (needed > 0) {
                     if (peer.isInteresting() && !peer.isChoked() && peer.getDownloadRate() > 0) {
                         buf.append("<span class=unchoked><span class=right>");
-                        buf.append(formatSize(peer.getDownloadRate()).replace("iB","")
-                                                                     .replace("B", "</span><span class=left>B")
-                                                                     .replace("K", "</span><span class=left>K")
-                                                                     .replace("M", "</span><span class=left>M")
-                                                                     .replace("G", "</span><span class=left>G")
-                                                                     + "/s</span></span>");
+                        buf.append(formatSize(peer.getDownloadRate())
+                                                  .replace("iB","")
+                                                  .replace("B", "</span><span class=left>B")
+                                                  .replace("K", "</span><span class=left>K")
+                                                  .replace("M", "</span><span class=left>M")
+                                                  .replace("G", "</span><span class=left>G"));
+                        buf.append("/s</span></span>");
                     } else if (peer.isInteresting() && !peer.isChoked()) {
                         buf.append("<span class=\"unchoked idle\"></span>");
                     } else {
@@ -2979,24 +2965,23 @@ public class I2PSnarkServlet extends BasicServlet {
                             buf.append(_t("Choked (The peer is not allowing us to request pieces)"));
                         }
                         buf.append("\"><span class=right>");
-                        buf.append(formatSize(peer.getDownloadRate()).replace("iB","")
-                                                                     .replace("B", "</span><span class=left>B")
-                                                                     .replace("K", "</span><span class=left>K")
-                                                                     .replace("M", "</span><span class=left>M")
-                                                                     .replace("G", "</span><span class=left>G")
-                                                                     + "/s</span></span>");
+                        buf.append(formatSize(peer.getDownloadRate())
+                                                  .replace("iB","")
+                                                  .replace("B", "</span><span class=left>B")
+                                                  .replace("K", "</span><span class=left>K")
+                                                  .replace("M", "</span><span class=left>M")
+                                                  .replace("G", "</span><span class=left>G"));
+                        buf.append("/s</span></span>");
                     }
                 } else if (!isValid) {
-                    //if (peer supports metadata extension) {
                         buf.append("<span class=unchoked><span class=right>");
-                        buf.append(formatSize(peer.getDownloadRate()).replace("iB","")
-                                                                     .replace("B", "</span><span class=left>B")
-                                                                     .replace("K", "</span><span class=left>K")
-                                                                     .replace("M", "</span><span class=left>M")
-                                                                     .replace("G", "</span><span class=left>G")
-                                                                     + "/s</span></span>");
-                    //} else {
-                    //}
+                        buf.append(formatSize(peer.getDownloadRate())
+                                                  .replace("iB","")
+                                                  .replace("B", "</span><span class=left>B")
+                                                  .replace("K", "</span><span class=left>K")
+                                                  .replace("M", "</span><span class=left>M")
+                                                  .replace("G", "</span><span class=left>G"));
+                        buf.append("/s</span></span>");
                 }
                 buf.append("</td>");
                 buf.append("<td class=txd>");
@@ -3010,12 +2995,13 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (isValid && pct < 100.0) {
                     if (peer.isInterested() && !peer.isChoking() && peer.getUploadRate() > 0) {
                         buf.append("<span class=unchoked><span class=right>");
-                        buf.append(formatSize(peer.getUploadRate()).replace("iB","")
-                                                                   .replace("B", "</span><span class=left>B")
-                                                                   .replace("K", "</span><span class=left>K")
-                                                                   .replace("M", "</span><span class=left>M")
-                                                                   .replace("G", "</span><span class=left>G")
-                                                                   + "/s</span></span>");
+                        buf.append(formatSize(peer.getUploadRate())
+                                                  .replace("iB","")
+                                                  .replace("B", "</span><span class=left>B")
+                                                  .replace("K", "</span><span class=left>K")
+                                                  .replace("M", "</span><span class=left>M")
+                                                  .replace("G", "</span><span class=left>G"));
+                        buf.append("/s</span></span>");
                     } else if (peer.isInterested() && !peer.isChoking()) {
                         buf.append("<span class=\"unchoked idle\" title=\"");
                         buf.append(_t("Peer is interested but currently idle"));
@@ -3028,12 +3014,13 @@ public class I2PSnarkServlet extends BasicServlet {
                             buf.append(_t("Choking (We are not allowing the peer to request pieces)"));
                         }
                         buf.append("\"><span class=right>");
-                        buf.append(formatSize(peer.getUploadRate()).replace("iB","")
-                                                                   .replace("B", "</span><span class=left>B")
-                                                                   .replace("K", "</span><span class=left>K")
-                                                                   .replace("M", "</span><span class=left>M")
-                                                                   .replace("G", "</span><span class=left>G")
-                                                                   + "/s</span></span>");
+                        buf.append(formatSize(peer.getUploadRate())
+                                                  .replace("iB","")
+                                                  .replace("B", "</span><span class=left>B")
+                                                  .replace("K", "</span><span class=left>K")
+                                                  .replace("M", "</span><span class=left>M")
+                                                  .replace("G", "</span><span class=left>G"));
+                        buf.append("/s</span></span>");
                     }
                 }
                 buf.append("</td>");
