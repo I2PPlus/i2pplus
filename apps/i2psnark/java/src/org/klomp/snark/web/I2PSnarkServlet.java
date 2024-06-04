@@ -2834,7 +2834,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
         if (showPeers && isRunning && curPeers > 0) {
             List<Peer> peers = snark.getPeerList();
-            if (!showDebug) {Collections.sort(peers, new PeerComparator());}
+            //if (!showDebug) {Collections.sort(peers, new PeerComparator());}
+            Collections.sort(peers, new PeerComparator());
             for (Peer peer : peers) {
                 long t = peer.getInactiveTime();
                 if ((peer.getUploadRate() > 0 || peer.getDownloadRate() > 0) && t < 60 * 1000) {
@@ -2870,15 +2871,15 @@ public class I2PSnarkServlet extends BasicServlet {
                     if ("AwMD".equals(ch))
                         client = _t("I2PSnark");
                     else if ("LUFa".equals(ch))
-                        client = "Vuze" + "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>";
+                        client = "Vuze" + (showDebug ? "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>" : "");
                     else if ("LUJJ".equals(ch))
-                        client = "BiglyBT" + "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>";
+                        client = "BiglyBT" + (showDebug ? "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>" : "");
                     else if ("LVhE".equals(ch))
-                        client = "XD" + "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>";
+                        client = "XD" + (showDebug ? "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>" : "");
                     else if (ch.startsWith("LV")) // LVCS 1.0.2?; LVRS 1.0.4
-                       client = "Transmission" + "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>";
+                       client = "Transmission" + (showDebug ? "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>" : "");
                     else if ("LUtU".equals(ch))
-                        client = "KTorrent" + "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>";
+                        client = "KTorrent" + (showDebug ? "<span class=clientVersion><i>" + getAzVersion(pid.getID()) + "</i></span>" : "");
                     // libtorrent and downstreams
                     // https://www.libtorrent.org/projects.html
                     else if ("LURF".equals(ch))  // DL
@@ -2889,7 +2890,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         client = "libtorrent";
                     // ancient below here
                     else if ("ZV".equals(ch.substring(2,4)) || "VUZP".equals(ch))
-                        client = "Robert" + "<span class=clientVersion><i>" + getRobtVersion(pid.getID()) + "</i></span>";
+                        client = "Robert" + (showDebug ? "<span class=clientVersion><i>" + getRobtVersion(pid.getID()) + "</i></span>" : "");
                     else if ("CwsL".equals(ch))
                         client = "I2PSnarkXL";
                     else if ("BFJT".equals(ch))
@@ -2923,7 +2924,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         if (id != null && id[0] == '-')
                             client += getAzVersion(id);
                     }
-                    buf.append(client + "</span></span>");
+                    buf.append(showDebug ? client + "</span></span>" : client + "</span>");
                 }
                 if (t >= 5000) {
                     buf.append("<span class=inactivity style=\"width:" + (t / 2000) +
@@ -2931,8 +2932,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                (t / 1000) + ' ' + _t("seconds") + "\"></span>");
                 }
                 buf.append("</td>");
-                buf.append("<td class=ETA>");
-                buf.append("</td>");
+                buf.append("<td class=ETA></td>");
                 buf.append("<td class=rxd>");
                 float pct;
                 if (isValid) {
