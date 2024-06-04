@@ -2,29 +2,34 @@
 /* Ajax graph refresh and configuration toggle */
 /* License: AGPL3 or later */
 
-var container = document.getElementById("allgraphs");
-var configs = document.querySelectorAll("h3#graphdisplay, #gform");
-var timerId = setInterval(updateGraphs, graphRefreshInterval);
-var visibility = document.visibilityState;
+const config = document.getElementById("gform");
+const h3 = document.getElementById("graphdisplay");
+const sb = document.getElementById("sidebar");
+const toggle = document.getElementById("toggleSettings");
+const configs = document.querySelectorAll("h3#graphdisplay, #gform");
+const container = document.getElementById("allgraphs");
+const visibility = document.visibilityState;
+let timerId = setInterval(updateGraphs, graphRefreshInterval);
 configs.forEach(function(element) {element.style.display = "none";});
 container.style.display = "none";
+toggle.hidden = true;
 
 function initCss() {
-  var graph = document.getElementsByClassName("statimage")[0];
+  const graph = document.getElementsByClassName("statimage")[0];
   if (graph === null) {location.reload(true);}
   else {injectCss();}
 }
 
 function injectCss() {
-  var graph = document.getElementsByClassName("statimage")[0];
-  var widepanel = document.querySelector(".widepanel");
+  const graph = document.getElementsByClassName("statimage")[0];
+  const widepanel = document.querySelector(".widepanel");
   if (graph === null) {return;}
   widepanel.id = "nographs";
-  var gwrap = document.getElementById("gwrap");
-  var graphWidth = graph.naturalWidth || graph.width;
-  var graphHeight = graph.naturalHeight || graph.height;
+  const gwrap = document.getElementById("gwrap");
+  const graphWidth = graph.naturalWidth || graph.width;
+  const graphHeight = graph.naturalHeight || graph.height;
   gwrap.innerHTML = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
-  var delay =  Math.max(graphCount*5, 180);
+  let delay =  Math.max(graphCount*5, 180);
   setTimeout(() => {
     container.style.display = "";
     configs.forEach(function(element) {element.style.display = "";});
@@ -34,44 +39,31 @@ function injectCss() {
 
 function updateGraphs() {
   if (graphRefreshInterval <= 0) {return;}
-  var graphs = document.getElementById("allgraphs");
-  var nographs = document.getElementById("nographs");
-  var images = document.getElementsByClassName("statimage");
-  var totalImages = images.length;
-  var imagesLoaded = 0;
-  var now = Date.now();
+  const images = document.querySelectorAll(".statimage");
+  const now = Date.now();
+  let imagesLoaded = 0;
   progressx.show(theme);
   progressx.progress(0.5);
-  for (var i = 0; i < totalImages; i++) {
-    var image = images[i];
-    var imageSrc = image.getAttribute("src");
-    (function(image, imageSrc) {
-      imageSrc = imageSrc.replace(/time=\d+/, "time=" + now);
-      fetch(imageSrc).then((response) => {
-        if (response.ok) {
-          image.src = imageSrc;
-          imagesLoaded++;
-        }
-      }).catch((error) => {});
-    })(image, imageSrc);
-  }
+  images.forEach((image) => {
+    const imageSrc = image.getAttribute("src").replace(/time=\d+/, "time=" + now);
+    fetch(imageSrc).then((response) => {
+      if (response.ok) {
+        requestAnimationFrame(() => {image.src = imageSrc;});
+        imagesLoaded++;
+      }
+    }).catch((error) => {});
+  });
   setTimeout(() => {progressx.hide();}, 180);
 }
 
 function isDown() {
-  var images = document.getElementsByClassName("statimage");
-  var totalImages = images.length;
+  const images = document.querySelectorAll(".statimage");
+  let totalImages = images.length;
   if (!images.length) {
     graphs.innerHTML = "<span id=nographs><b>No connection to Router<\/b><\/span>";
     progressx.hide();
   }
 }
-
-var config = document.getElementById("gform");
-var toggle = document.getElementById("toggleSettings");
-var h3 = document.getElementById("graphdisplay");
-var sb = document.getElementById("sidebar");
-toggle.hidden = true;
 
 function toggleView() {
   if (!toggle) {return;}
