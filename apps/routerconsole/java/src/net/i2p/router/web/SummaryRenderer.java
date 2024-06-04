@@ -562,22 +562,17 @@ class SummaryRenderer {
                 String now = null;
                 for (Map.Entry<Long, String> event : events.entrySet()) {
                     long started = event.getKey().longValue();
-                    if (started > start && started < end) {
-                        String legend;
-                        if (count < 1) {
-                            legend = _t("Router restarted") + "\\l";
-                            //legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + "  [" + event.getValue() + "]\\l";
-                        } else {legend = null;}
-                        def.vrule(started / 1000, RESTART_COLOR, legend, 1.0f);
-                        count ++;
-                    }
+                    if (started >= end) {break;}
+                    String legend;
+                    if (count < 1) {legend = _t("Router restarted") + "\\l";}
+                    else {legend = null;}
+                    def.vrule(started / 1000, RESTART_COLOR, legend, 1.0f);
+                    count ++;
                 }
                 def.comment(sdf.format(new Date(start)) + " — " + sdf.format(new Date(end)) + " UTC\\r");
             }
-
-            if (!showCredit) {
-                def.setShowSignature(false);
-            } else if (hideLegend) {
+            if (!showCredit) {def.setShowSignature(false);}
+            else if (hideLegend) {
                 if (height > 65) {def.setSignature("    " + sdf.format(new Date(end)) + " UTC");}
                 else {def.setSignature(sdf.format(new Date(end)) + " UTC");}
             }
@@ -589,8 +584,7 @@ class SummaryRenderer {
                 def.area(dsNames[0], AREA_COLOR, _listener.getRate().getRateStat().getDescription());
                 def.line(dsNames[1], LINE_COLOR, "Events per period");
             */
-            if (hideLegend)
-                def.setNoLegend(true);
+            if (hideLegend) {def.setNoLegend(true);}
             if (hideGrid) {
                 def.setDrawXGrid(false);
                 def.setDrawYGrid(false);
@@ -607,10 +601,6 @@ class SummaryRenderer {
             if (width < 400 || height < 200) {
                 def.setNoMinorGrid(true);
                 def.setAltYMrtg(false);
-            }
-            if (hiDPI) {
-                if (width < 800 || height < 400) {def.setAltYMrtg(false);}
-                else if (width < 400 || height < 200) {def.setAltYMrtg(false);}
             }
 
             // render unembellished graph if we're on the sidebar or snark
