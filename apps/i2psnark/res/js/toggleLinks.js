@@ -42,9 +42,7 @@ function initLinkToggler() {
   if (!main.classList.contains("toggleListenerAttached")) {
     attachToggleListener();
     main.classList.add("toggleListenerAttached");
-    if (debugging) {
-      console.log("toggleListenerAttached class not present -> toggle listener attached");
-    }
+    if (debugging) {console.log("toggleListenerAttached class not present -> toggle listener attached");}
   }
   config = localStorage.getItem("linkToggle");
   toggleCss = document.querySelector("#toggleLinks");
@@ -94,7 +92,6 @@ function attachMagnetListeners() {
 
   function copiedToClipboard(event, anchor) {
     const toast = document.getElementById("toast");
-    clearTimeout(toastTimeoutId);
     event.preventDefault();
     toast.removeAttribute("hidden");
     toast.style.display = "block";
@@ -102,9 +99,7 @@ function attachMagnetListeners() {
     if (!link || !link.startsWith("magnet:?xt=urn:btih:")) {
       if (debugging) {console.log("Magnet link not valid");}
       return;
-    } else {
-      if (debugging) {console.log("Magnet link: " + link + " copied to clipboard");}
-    }
+    } else if (debugging) {console.log("Magnet link: " + link + " copied to clipboard");}
     let magnetHash = link.substring(link.indexOf(":") + 1, link.indexOf("&"));
     let magnetName = link.substring(link.lastIndexOf("=") + 1);
     magnetName = decodeURIComponent(magnetName);
@@ -114,9 +109,10 @@ function attachMagnetListeners() {
     tempInput.select();
     document.execCommand("copy");
     document.body.removeChild(tempInput);
-    toast.innerHTML = "Magnet link copied to clipboard" + (magnetName !== null ? ": <b> " +
+    toast.innerHTML = "Magnet link copied to clipboard" + (magnetName !== null ? ": <b>" +
                        magnetName + "</b>" : "") + "<br>Hash: <b>" + magnetHash + "</b>";
     if (debugging) {console.log("Magnet link copied to clipboard: " + link);}
+    if (toastTimeoutId !== null) {clearTimeout(toastTimeoutId);}
     toastTimeoutId = setTimeout(function() {
       toast.style.display = "none";
       toast.textContent = "";
@@ -129,9 +125,7 @@ function attachMagnetListeners() {
          event.target.setAttribute("data-click", true);
         const anchor = event.target.parentNode.href;
         if (debugging) {console.log("anchor reported as: " + anchor);}
-        if (toastTimeoutId) {
-          clearTimeout(toastTimeoutId);
-        }
+        if (toastTimeoutId) {clearTimeout(toastTimeoutId);}
         copiedToClipboard(event, anchor);
       }
     }
