@@ -36,13 +36,13 @@
 <div class=main id=graphs>
 <div class=widepanel>
 <jsp:getProperty name="graphHelper" property="allMessages" />
-<div class=graphspanel id=allgraphs>
+<div class=graphspanel id=allgraphs hidden>
 <jsp:getProperty name="graphHelper" property="images" />
 </div>
-<jsp:getProperty name="graphHelper" property="form" />
+<span id=graphConfigs hidden><jsp:getProperty name="graphHelper" property="form" /></span>
 </div>
 </div>
-<script nonce="<%=cspNonce%>" src="/js/graphs.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<noscript><style>#gform{display:block!important}#graphdisplay{margin-bottom:15px!important;color:var(--ink)!important;cursor:default!important}</style></noscript>
+<script nonce="<%=cspNonce%>" src="/js/graphs.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
+<noscript><style>#allgraphs,#gform,#graphConfigs{display:block!important}#graphdisplay{margin-bottom:15px!important;color:var(--ink)!important;cursor:default!important}</style></noscript>
 </body>
 </html>

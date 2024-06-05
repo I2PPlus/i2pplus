@@ -588,9 +588,9 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 .notice li{margin-right:15px;display:inline-block;list-style:none;background:var(--yes) no-repeat left center/16px}
 #config_update .messages{margin-bottom:11px;padding:20px 20px 20px 53px;background:var(--news) no-repeat 15px center/28px,url(/themes/snark/ubergine/images/hat.webp) no-repeat bottom right/auto 100%,var(--div_infohelp)}
 #events .messages{margin-bottom:0}
-#graphs .messages{margin-bottom:-5px}
 #messages li{color:var(--ink_light)}
 #messages .error li{color:#900}
+.main#graphs .messages{margin:20px auto 8px}
 
 td.optionsave{padding:5px;text-align:right;border-top:var(--border_inner);background:#fafaff}
 td.optionsave,.formaction,form[action="configpeer"] tr:last-child td,#addkeyring tr:last-child td{border-top:var(--border_inner);border-bottom:var(--border_inner);background:var(--th)}

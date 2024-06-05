@@ -1962,11 +1962,9 @@ html,body{height:100%}
 /* sidebar ajax router down */
 #down{margin:-6px 0 -7px -3px;padding:8px 5px;width:calc(100% - 4px);display:inline-block;font-size:0;color:#a00;text-shadow:0 1px 1px #000;box-shadow:0 0 1px 0 #003,var(--highlight),inset 0 0 1px 3px #113,inset 0 0 0 4px #000,inset 0 0 7px 3px #100;background:repeating-linear-gradient(135deg,#113,#113 10px,#001 10px,#001 20px);background-position:right center;background-size:125% 125%;animation:routerdown linear 3s forwards infinite}
 #nographs{line-height:40px;text-align:center;font-size:0}
-#graphs #nographs.widepanel{margin:16px auto 28px;width:100%;display:block}
 #down::after,#nographs::after{width:24px;height:24px;vertical-align:middle;display:inline-block;background:var(--update) no-repeat center center;background-size:24px;content:"";transform:rotate(0);animation:linear spin 3s forwards infinite;mix-blend-mode:luminosity}
-#graphs #nographs.widepanel{margin:8px auto 44px;width:100%;display:block}
+#graphs #nographs.widepanel{margin:30px auto;width:100%;display:block}
 #graphs #nographs::after{width:48px;height:48px;background-size:48px}
-
 #lookupCondensed{display:none}
 
 /* info */
@@ -2285,7 +2283,7 @@ h1::first-letter{font-size:107%}
 /* slide-up messages */
 .main:not(#config_update) .messages,#config_update #messages{margin-left:-11px;margin-right:-11px;width:calc(100% - 20px);position:absolute;top:3px;z-index:100;box-shadow:var(--highlight),inset 0 0 2px 1px #808;background:var(--infohelp) no-repeat 15px center,var(--close) right 6px top 6px no-repeat,#000;background-size:28px,14px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5));animation:2s hide-up 8s ease-out forwards}
 .main:not(#config_update) .messages:hover,#config_update #messages:hover{cursor:crosshair}
-#graphs .messages{top:-16px;z-index:999}
+.main#graphs .messages{margin:10px auto;position:static}
 #config_homepage .tabletitle:first-of-type{margin-top:-4px}
 #bannedpeers{margin-bottom:-15px}
 #config_peers #bannedpeercount{margin-bottom:-1px}
