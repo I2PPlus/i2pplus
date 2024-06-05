@@ -25,14 +25,11 @@ function injectCss() {
   const widepanel = document.querySelector(".widepanel");
   const delay =  Math.max(graphCount*5, 120);
   widepanel.id = "nographs";
-
-  if (graph === null || allgraphs === null || configs === null) {return;}
-  graph.addEventListener("load", () => {
-    const gwrap = document.getElementById("gwrap");
-    const graphWidth = graph.naturalWidth || graph.offsetWidth;
-    const graphHeight = graph.naturalHeight || graph.offsetHeight;
-    gwrap.innerHTML = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
-  });
+  const gwrap = document.head.querySelector("style#gwrap");
+  const graphWidth = graph.naturalWidth || graph.offsetWidth;
+  const graphHeight = graph.naturalHeight || graph.offsetHeight;
+  //console.log("width = " + graphWidth + " - height = " + graphHeight);
+  gwrap.innerText = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
 
   setTimeout(() => {
     widepanel.id = "";
@@ -93,7 +90,7 @@ function toggleView() {
   }
 }
 
-window.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() {
   progressx.hide();
   initCss();
   onVisible(allgraphs, updateGraphs);
