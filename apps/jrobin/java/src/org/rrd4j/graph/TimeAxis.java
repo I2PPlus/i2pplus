@@ -73,7 +73,7 @@ class TimeAxis extends Axis {
                 if (status == 0) {
                     long time = calendar.getTime().getTime() / 1000L;
                     int x = mapper.xtr(time);
-                    worker.drawLine(x, y0 - 1, x, y0 + 1, color, gdef.tickStroke);
+                    //worker.drawLine(x, y0 - 1, x, y0 + 1, color, gdef.tickStroke);
                     worker.drawLine(x, y0, x, y1, color, gdef.gridStroke);
                 }
                 findNextTime(tickSetting.minorUnit, tickSetting.minorUnitCount);
@@ -89,12 +89,15 @@ class TimeAxis extends Axis {
             if (status == 0) {
                 long time = calendar.getTime().getTime() / 1000L;
                 int x = mapper.xtr(time);
-                worker.drawLine(x, y0 - 2, x, y0 + 2, color, gdef.tickStroke);
+                //worker.drawLine(x, y0 - 2, x, y0 + 2, color, gdef.tickStroke);
                 worker.drawLine(x, y0, x, y1, color, gdef.gridStroke);
             }
             findNextTime(tickSetting.majorUnit, tickSetting.majorUnitCount);
         }
     }
+
+    private int prevLabel = 0;
+    private int prevLabelInterval = 0;
 
     private void drawLabels() {
         Font font = gdef.getFont(FONTTAG_AXIS);
@@ -108,7 +111,15 @@ class TimeAxis extends Axis {
             int x2 = mapper.xtr(time + tickSetting.labelSpan);
             int labelWidth = (int) worker.getStringWidth(label, font);
             int x = x1 + (x2 - x1 - labelWidth) / 2;
-            if (x >= im.xorigin && x + labelWidth <= im.xorigin + im.xsize) {
+            if (im.xsize < 400 || im.ysize < 200) {
+                if (x >= im.xorigin && x + labelWidth <= im.xorigin + im.xsize) {
+                    if (x - prevLabel >= prevLabelInterval) {
+                        worker.drawString(label, x, y, font, color);
+                        prevLabel = x;
+                        prevLabelInterval = tickSetting.labelUnit * (int) tickSetting.labelUnitCount;
+                    }
+                }
+            } else if (x >= im.xorigin && x + labelWidth <= im.xorigin + im.xsize) {
                 worker.drawString(label, x, y, font, color);
             }
             findNextTime(tickSetting.labelUnit, tickSetting.labelUnitCount);
