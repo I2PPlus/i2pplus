@@ -21,15 +21,18 @@ function initCss() {
 }
 
 function injectCss() {
-  const graph = document.getElementsByClassName("statimage")[0];
+  const graph = document.querySelector(".statimage");
   const widepanel = document.querySelector(".widepanel");
   if (graph === null) {return;}
   widepanel.id = "nographs";
-  const gwrap = document.getElementById("gwrap");
-  const graphWidth = graph.naturalWidth || graph.width;
-  const graphHeight = graph.naturalHeight || graph.height;
-  gwrap.innerHTML = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
-  let delay =  Math.max(graphCount*5, 180);
+  graph.addEventListener("load", () => {
+    const gwrap = document.getElementById("gwrap");
+    const graphWidth = graph.naturalWidth || graph.offsetWidth;
+    const graphHeight = graph.naturalHeight || graph.offsetHeight;
+    gwrap.innerHTML = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
+  });
+  if (container === null || configs === null) {return;}
+  let delay =  Math.max(graphCount*5, 120);
   setTimeout(() => {
     container.style.display = "";
     configs.forEach(function(element) {element.style.display = "";});
@@ -63,6 +66,7 @@ function isDown() {
     graphs.innerHTML = "<span id=nographs><b>No connection to Router<\/b><\/span>";
     progressx.hide();
   }
+  setTimeout(() => {initCss();}, 5*1000);
 }
 
 function toggleView() {
