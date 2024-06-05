@@ -324,8 +324,8 @@ public class IndexBean {
         }
         List<UIMessages.Message> msgs = _messages.getMessages();
         if (!msgs.isEmpty()) {
+            Collections.reverse(msgs);
             for (UIMessages.Message msg : msgs) {
-//                buf.append(msg.message).append('\n');
                 buf.append("• ").append(msg.message.replace("->", "➜")).append("\n");
             }
         }
