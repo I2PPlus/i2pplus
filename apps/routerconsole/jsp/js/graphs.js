@@ -31,7 +31,7 @@ function injectCss() {
     const gwrap = document.getElementById("gwrap");
     const graphWidth = graph.naturalWidth || graph.offsetWidth;
     const graphHeight = graph.naturalHeight || graph.offsetHeight;
-    gwrap.innerHTML = ".graphallgraphs{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
+    gwrap.innerHTML = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
   });
 
   setTimeout(() => {
