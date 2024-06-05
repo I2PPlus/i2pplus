@@ -435,12 +435,12 @@ msgstr "HTTP 클라이언트 프록시 터널이 반드시 작동중이여야 �
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1114
 #, java-format
-msgid "Install failed from {0}"
+msgid "Install failed:{0}"
 msgstr "{0}에서 설치하는것을 실패했습니다"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1116
 #, java-format
-msgid "Transfer failed from {0}"
+msgid "Transfer failed:{0}"
 msgstr "{0}에서 이동하는것을 실패했습니다"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1119

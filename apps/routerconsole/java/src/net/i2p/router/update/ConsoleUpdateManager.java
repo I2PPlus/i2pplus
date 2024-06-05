@@ -1111,9 +1111,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             String uri = task.getURI().toString();
             if (uri.startsWith("file:") || task.getMethod() == FILE) {
                 uri = DataHelper.stripHTML(task.getURI().getPath());
-                buf.append(_t("Install failed from {0}", uri).replace("http://", ""));
+                buf.append(_t("Install failed:{0}", "<br>" + uri).replace("http://", ""));
             } else {
-                buf.append(_t("Transfer failed from {0}", uri).replace("http://", ""));
+                buf.append(_t("Transfer failed:{0}", "<br>" + uri).replace("http://", ""));
             }
             if (reason != null && reason.length() > 0) {
                 String trimmed = reason.replace("http://", "").replace("java.io.IOException", _t("Error")).replaceAll("for content.*", "");

@@ -435,12 +435,12 @@ msgstr "HTTP 客户端代理隧道必须运行"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1114
 #, java-format
-msgid "Install failed from {0}"
+msgid "Install failed:{0}"
 msgstr "从 {0} 安装失败"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1116
 #, java-format
-msgid "Transfer failed from {0}"
+msgid "Transfer failed:{0}"
 msgstr "传输 {0} 的数据失败"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1119

@@ -435,12 +435,12 @@ msgstr "HTTPクライアントプロキシトンネルが起動している必�
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1114
 #, java-format
-msgid "Install failed from {0}"
+msgid "Install failed:{0}"
 msgstr "{0} からのインストールに失敗"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1116
 #, java-format
-msgid "Transfer failed from {0}"
+msgid "Transfer failed:{0}"
 msgstr "{0} からの転送に失敗しました"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1119

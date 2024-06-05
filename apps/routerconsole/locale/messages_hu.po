@@ -437,12 +437,12 @@ msgstr "HTTP kliens proxy alagútnak futnia kell"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1114
 #, java-format
-msgid "Install failed from {0}"
+msgid "Install failed:{0}"
 msgstr "Sikertelen telepítés tőle: {0}"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1116
 #, java-format
-msgid "Transfer failed from {0}"
+msgid "Transfer failed:{0}"
 msgstr "Sikertelen átvitel a következőtől: {0}"
 
 #: ../java/src/net/i2p/router/update/ConsoleUpdateManager.java:1119
