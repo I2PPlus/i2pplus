@@ -1661,14 +1661,13 @@ public final class SVGGraphics2D extends Graphics2D {
             this.sb.append("<g ");
             appendOptionalElementIDFromHint(this.sb);
             if (!this.transform.isIdentity()) {
-                this.sb.append("transform=\"").append(getSVGTransform(
-                this.transform)).append("\"");
+                this.sb.append("transform=\"").append(getSVGTransform(this.transform)).append("\"");
             }
             this.sb.append("style=\"").append(getSVGFontStyle()).append("\"")
                    .append(" ").append(getClipPathRef()).append(">")
                    .append("<text x=\"").append(geomDP(x)).append("\" y=\"").append(geomDP(y)).append("\">")
-                   .append(SVGUtils.escapeForXML(str)).append("</text>")
-                   .append("</g>");
+                   .append(SVGUtils.escapeForXML(str))
+                   .append("</text>").append("</g>");
         } else {
             AttributedString as = new AttributedString(str, this.font.getAttributes());
             drawString(as.getIterator(), x, y);

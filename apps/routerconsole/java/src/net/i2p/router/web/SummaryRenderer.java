@@ -71,7 +71,6 @@ class SummaryRenderer {
     private static final Color MGRID_COLOR = new Color(255, 91, 91, 110);
     private static final Color MGRID_COLOR_DARK = new Color(200, 200, 0, 50);
     private static final Color MGRID_COLOR_MIDNIGHT = new Color(240, 32, 192, 110);
-    private static final Color MGRID_COLOR_DARK_HIDPI = new Color(255, 91, 91, 160);
     private static final Color FONT_COLOR = new Color(51, 51, 63);
     private static final Color FONT_COLOR_DARK = new Color(244, 244, 190);
     private static final Color FONT_COLOR_MIDNIGHT = new Color(201, 206, 255);
@@ -165,7 +164,7 @@ class SummaryRenderer {
 
         try {
             RrdGraphDef def = new RrdGraphDef(start/1000, end/1000);
-            boolean hiDPI = _context.getBooleanProperty("routerconsole.graphHiDpi");
+            // sidebar minigraph
             if ((width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) ||
                 (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid)) {
                 def.setColor(ElementsNames.xaxis, TRANSPARENT);
@@ -235,22 +234,10 @@ class SummaryRenderer {
                 smallSize += 2;
                 legendSize += 2;
                 largeSize += 3;
-            }
-            if (hiDPI) {
-                def.setTimeAxis(RrdGraphDef.MINUTE, 15, RrdGraphDef.HOUR, 1, RrdGraphDef.HOUR, 1, 0, "%H:00");
-                if (width >= 1600) {
-                    smallSize = 18;
-                    legendSize = 18;
-                    largeSize = 20;
-                } else {
-                    smallSize = 16;
-                    legendSize = 16;
-                    largeSize = 18;
-                }
             } else if (width >= 800) {
-                    smallSize += 1;
-                    legendSize += 1;
-                    largeSize += 1;
+                smallSize += 1;
+                legendSize += 1;
+                largeSize += 1;
             }
 
             /* CJK support */
@@ -371,77 +358,54 @@ class SummaryRenderer {
             def.setFont(RrdGraphDef.FONTTAG_LEGEND, legnd);
             def.setFont(RrdGraphDef.FONTTAG_TITLE, large);
             def.setMinValue(0d);
+
             String name = _listener.getRate().getRateStat().getName();
             String graphTitle = name;
+            if (name.startsWith("tunnel.participatingTunnels")) {graphTitle = graphTitle.replaceAll("tunnel.participatingTunnels", "[Transit] Tunnel Count");}
+            if (name.startsWith("tunnel.participatingMessage")) {graphTitle = graphTitle.replaceAll("tunnel.participatingMessage", "[Transit] Message");}
+            else if (name.startsWith("tunnel.participating")) {graphTitle = graphTitle.replaceAll("tunnel.participating", "[Transit]");}
+            else if (name.startsWith("Tunnel.participating")) {graphTitle = graphTitle.replaceAll("Tunnel.participating", "[Transit]");}
+            if (name.startsWith("router.")) {graphTitle = graphTitle.replaceAll("router.", "[Router] ");}
+            if (name.startsWith("bw.")) {graphTitle = graphTitle.replaceAll("bw.", "[Router] ");}
+            if (name.startsWith("Bandwidth usage")) {graphTitle = graphTitle.replaceAll("Bandwidth usage", "[Router] Bandwidth Usage");}
+            if (name.startsWith("tunnel.buildRatio.exploratory.")) {graphTitle = graphTitle.replaceAll("tunnel.buildRatio.exploratory.", "[Exploratory] Build Ratio");}
+            if (name.startsWith("tunnel.buildExploratory")) {graphTitle = graphTitle.replaceAll("tunnel.buildExploratory", "[Exploratory] Build");}
+            if (name.startsWith("tunnel.buildClient")) {graphTitle = graphTitle.replaceAll("tunnel.buildClient", "[Tunnel] BuildClient");}
+            else if (name.startsWith("tunnel.build")) {graphTitle = graphTitle.replaceAll("tunnel.build", "[Tunnel] Build");}
+            else if (name.startsWith("tunnel.")) {graphTitle = graphTitle.replaceAll("tunnel.", "[Tunnel] ");}
+            if (name.contains("MessageCountAvg")) {graphTitle = graphTitle.replaceAll("MessageCountAvg", "Messsage Count Average");}
+            if (name.startsWith("netDb.")) {graphTitle = graphTitle.replaceAll("netDb.", "[NetDb] ");}
+            if (name.startsWith("jobQueue.")) {graphTitle = graphTitle.replaceAll("jobQueue.", "[JobQueue] ");}
+            if (name.startsWith("udp.")) {graphTitle = graphTitle.replaceAll("udp.", "[UDP] ");}
+            if (name.startsWith("ntcp.")) {graphTitle = graphTitle.replaceAll("ntcp.", "[NTCP] ");}
+            if (name.startsWith("transport.")) {graphTitle = graphTitle.replaceAll("transport.", "[Transport] ");}
+            if (name.startsWith("client.")) {graphTitle = graphTitle.replaceAll("client.", "[Client] ");}
+            if (name.startsWith("peer.")) {graphTitle = graphTitle.replaceAll("peer.", "[Peer] ");}
+            if (name.startsWith("prng.")) {graphTitle = graphTitle.replaceAll("prng.", "[Crypto] pnrg.");}
+            if (name.startsWith("crypto.")) {graphTitle = graphTitle.replaceAll("crypto.", "[Crypto] ");}
+            if (name.startsWith("bwLimiter.")) {graphTitle = graphTitle.replaceAll("bwLimiter.", "[BWLimiter] ");}
+            if (name.startsWith("pbq.")) {graphTitle = graphTitle.replaceAll("pbq.", "[Router] PBQ.");}
+            if (name.startsWith("codel.")) {graphTitle = graphTitle.replaceAll("codel.", "[Router] CODEL.");}
+            if (name.startsWith("SDSCache.")) {graphTitle = graphTitle.replaceAll("SDSCache.", "[Router] SDSCache.");}
+            if (name.startsWith("byteCache.memory.")) {graphTitle = graphTitle.replaceAll("byteCache.memory.", "[Router] ByteCache:");}
+            if (name.startsWith("stream.")) {graphTitle = graphTitle.replaceAll("stream.", "[Stream] ");}
+            if (name.equals("clock.skew")) {graphTitle = graphTitle.replaceAll("clock.skew", "[Router] Clock Skew");}
+            if (name.endsWith("InBps")) {graphTitle = graphTitle.replaceAll("InBps", "Inbound B/s");}
+            if (name.endsWith("OutBps")) {graphTitle = graphTitle.replaceAll("OutBps", "Outbound B/s");}
+            if (name.endsWith("Bps")) {graphTitle = graphTitle.replaceAll("Bps", "B/s");}
 
-            if (name.startsWith("tunnel.participatingTunnels"))
-                graphTitle = name.replace("tunnel.participatingTunnels", "[Transit] Tunnel Count");
-            if (name.startsWith("tunnel.participatingMessage"))
-                graphTitle = name.replace("tunnel.participatingMessage", "[Transit] Message");
-            else if (name.startsWith("tunnel.participating"))
-                graphTitle = name.replace("tunnel.participating", "[Transit]");
-            else if (name.startsWith("Tunnel.participating"))
-                graphTitle = name.replace("Tunnel.participating", "[Transit]");
-            if (name.startsWith("router."))
-                graphTitle = name.replace("router.", "[Router] ");
-            if (name.startsWith("bw."))
-                graphTitle = name.replace("bw.", "[Router] ");
-            if (name.startsWith("Bandwidth usage"))
-                graphTitle = name.replace("Bandwidth usage", "[Router] Bandwidth Usage");
-            if (name.startsWith("tunnel.buildRatio.exploratory."))
-                graphTitle = name.replace("tunnel.buildRatio.exploratory.", "[Exploratory] BuildRatio");
-            if (name.startsWith("tunnel.buildExploratory"))
-                graphTitle = name.replace("tunnel.buildExploratory", "[Exploratory] Build");
-            if (name.startsWith("tunnel.buildClient"))
-                graphTitle = name.replace("tunnel.buildClient", "[Tunnel] BuildClient");
-            else if (name.startsWith("tunnel.build"))
-                graphTitle = name.replace("tunnel.build", "[Tunnel] Build");
-            else if (name.startsWith("tunnel."))
-                graphTitle = name.replace("tunnel.", "[Tunnel] ");
-            if (name.contains("MessageCountAvg"))
-                graphTitle = name.replace("MessageCountAvg", "MsgCountAvg");
-            if (name.startsWith("netDb."))
-                graphTitle = name.replace("netDb.", "[NetDb] ");
-            if (name.startsWith("jobQueue."))
-                graphTitle = name.replace("jobQueue.", "[JobQueue] ");
-            if (name.startsWith("udp."))
-                graphTitle = name.replace("udp.", "[UDP] ");
-            if (name.startsWith("ntcp."))
-                graphTitle = name.replace("ntcp.", "[NTCP] ");
-            if (name.startsWith("transport."))
-                graphTitle = name.replace("transport.", "[Transport] ");
-            if (name.startsWith("client."))
-                graphTitle = name.replace("client.", "[Client] ");
-            if (name.startsWith("peer."))
-                graphTitle = name.replace("peer.", "[Peer] ");
-            if (name.startsWith("prng."))
-                graphTitle = name.replace("prng.", "[Crypto] pnrg.");
-            if (name.startsWith("crypto."))
-                graphTitle = name.replace("crypto.", "[Crypto] ");
-            if (name.startsWith("bwLimiter."))
-                graphTitle = name.replace("bwLimiter.", "[BWLimiter] ");
-            if (name.startsWith("pbq."))
-                graphTitle = name.replace("pbq.", "[Router] pbq.");
-            if (name.startsWith("codel."))
-                graphTitle = name.replace("codel.", "[Router] codel.");
-            if (name.startsWith("SDSCache."))
-                graphTitle = name.replace("SDSCache.", "[Router] SDSCache.");
-            if (name.startsWith("byteCache.memory."))
-                graphTitle = name.replace("byteCache.memory.", "[Router] ByteCache:");
-            if (name.startsWith("stream."))
-                graphTitle = name.replace("stream.", "[Stream] ");
-            if (name.equals("clock.skew"))
-                graphTitle = name.replace("clock.skew", "[Router] Clock Skew");
-            if (name.endsWith("InBps"))
-                graphTitle = name.replace("InBps", "Inbound B/s");
-            if (name.endsWith("OutBps"))
-                graphTitle = name.replace("OutBps", "Outbound B/s");
-            if (name.endsWith("Bps"))
-                graphTitle = name.replace("Bps", "B/s");
             graphTitle = CSSHelper.StringFormatter.capitalizeWord(graphTitle);
+            graphTitle = graphTitle.replace("[Tunnel] Tunnel", "[Tunnel]")
+                                   .replace("Tunnel.participating", "[Transit]")
+                                   .replace("[Tunnel] Participating Tunnels", "[Transit] Tunnel Count")
+                                   .replace("Cpu", "CPU")
+                                   .replace("CPULoad", "CPU Load")
+                                   .replace(" Avg", " Average")
+                                   .replace("[Tunnel]Build", "[Tunnel] Build");
+
             // heuristic to set K=1024
-            if ((name.indexOf("Size") >= 0 || name.indexOf("memory") >= 0) ||
-                name.contains("B/s") || name.contains("Bandwidth") && !showEvents) {
+            if ((name.indexOf("Size") >= 0 || name.indexOf("memory") >= 0 || name.contains("B/s") ||
+                name.contains("Bandwidth") || name.contains("byteCache")) && !showEvents) {
                 def.setBase(1024);
             }
             if (titleOverride != null) {
@@ -456,6 +420,9 @@ class SummaryRenderer {
                 if (showEvents) {title = graphTitle + ' ' + _t("events in {0}", p);}
                 title = graphTitle.replaceAll("(?<=[a-z])([A-Z])", " $1");
                 title = title.substring(0, 1).toUpperCase() + title.substring(1);
+                title = title.replace("[Tunnel] [Tunnel]", "[Tunnel]")
+                             .replace("Uild Success Avg", "Build Success (percent)")
+                             .replace(" Avg", "Average");
                 def.setTitle(title);
             }
             String path = _listener.getData().getPath();
@@ -515,19 +482,9 @@ class SummaryRenderer {
                 String descr2 = _t(lsnr2.getRate().getRateStat().getDescription());
                 def.datasource(plotName2, path2, plotName2, SummaryListener.CF, lsnr2.getBackendFactory());
                 int linewidth = 2;
-                if (hiDPI) {
-                    if (periodCount >= 720 || (periodCount >= 480 && width <= 800))
-                        linewidth = 2;
-                    // sidebar graph
-                    else if (width == 250 && height == 50 && hideTitle && hideLegend && hideGrid)
-                        linewidth = 3;
-                } else {
-                    if (periodCount >= 720 || (periodCount >= 480 && width <= 600))
-                        linewidth = 1;
-                    // sidebar graph
-                    else if (width == 250 && height == 50 && hideTitle && hideLegend && hideGrid)
-                        linewidth = 3;
-                }
+                // sidebar graph
+                if (width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) {linewidth = 3;}
+                else if (periodCount >= 720 || (periodCount >= 480 && width <= 600)) {linewidth = 1;}
                 if (theme.equals("midnight"))
                     def.line(plotName2, LINE_COLOR_MIDNIGHT, descr2 + "\\l", linewidth);
                 else if (theme.equals("dark"))
