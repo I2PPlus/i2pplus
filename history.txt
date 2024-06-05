@@ -1,6 +1,8 @@
-2024-06-03 dr|z3d
+2024-06-05 dr|z3d
  * Router: Don't temp ban peers for sending unsolicted NetDb store requests
  * Console: Improve graphs loading and detecting/setting dimensions
+ * Graphs: Only show time label every other major gridline if width < 400px
+   or height < 200px
 
 2024-06-03 dr|z3d
  * I2PSnark: Enhance and streamline debug panel presentation
