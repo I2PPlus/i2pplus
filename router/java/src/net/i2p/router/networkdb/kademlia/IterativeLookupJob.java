@@ -45,12 +45,12 @@ class IterativeLookupJob extends JobImpl {
                         //_log.warn("[Job" + _search.getJobId() + "] IterativeLookup -> DbSearchReplyMsg from unqueried peer " + _dsrm);
                         _log.warn("Received unsolicited DbSearchReply message from [" + from.toBase64().substring(0,6) + "]" +
                                   (isBanlisted ? " (Router is banlisted)" : ""));
-                        if (!isBanlisted) {
-                            _log.warn("Banning Router [" + from.toBase64().substring(0,6) + "] for 15m -> Sending unsolicited DbSearchReply messages");
-                        }
+                        //if (!isBanlisted) {
+                        //    _log.warn("Banning Router [" + from.toBase64().substring(0,6) + "] for 15m -> Sending unsolicited DbSearchReply messages");
+                        //}
                     }
-                    getContext().banlist().banlistRouter(from, " <b>➜</b> Unsolicited DbSearchReply messages",
-                                                         null, null, now + 15*60*1000);
+                    //getContext().banlist().banlistRouter(from, " <b>➜</b> Unsolicited DbSearchReply messages",
+                    //                                     null, null, now + 15*60*1000);
                     return;
                 }
 
