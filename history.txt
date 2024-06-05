@@ -1,4 +1,8 @@
 2024-06-03 dr|z3d
+ * Router: Don't temp ban peers for sending unsolicted NetDb store requests
+ * Console: Improve graphs loading and detecting/setting dimensions
+
+2024-06-03 dr|z3d
  * I2PSnark: Enhance and streamline debug panel presentation
 
 2024-06-01 dr|z3d
