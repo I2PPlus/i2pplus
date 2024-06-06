@@ -2670,7 +2670,7 @@ public final class SVGGraphics2D extends Graphics2D {
         defs.append("<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\" href=\"/themes/fonts/FiraCode.css\"/>");
         defs.append("<style>text{font-weight:600;text-rendering:optimizeLegibility;white-space:pre}line,path,rect{shape-rendering:crispEdges}")
             .append(".axis{stroke-width:2;stroke-linecap:round}")
-            .append(".bold{font-weight:700}")
+            .append(".bold,.sans.s12 text,.sans.s13 text,.sans.s14 text{font-weight:700}")
             .append(".dash{stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1}")
             .append(".line{stroke-opacity:.2;stroke-linecap:square}")
             .append(".mono{font-family:FiraCode,monospace;font-weight:500}")
@@ -2678,7 +2678,8 @@ public final class SVGGraphics2D extends Graphics2D {
             .append(".s10{font-size:10px}")
             .append(".s11{font-size:11px}")
             .append(".s12{font-size:12px}")
-            .append(".s13{font-size:13px}");
+            .append(".s13{font-size:13px}")
+            .append(".s14{font-size:14px}");
         if (this.sb.indexOf("rgb(0,72,8)") != -1) { // dark
             defs.append(".major{stroke:#f4f4beaa}")
                 .append(".minor{stroke:#c8c80099}");
@@ -2761,6 +2762,7 @@ public final class SVGGraphics2D extends Graphics2D {
             svgOut = svgOut.replace(" style=\"font-family:sans-serif;font-size:11px\"", " class=\"sans s11\"");
             svgOut = svgOut.replace(" style=\"font-family:sans-serif;font-size:12px\"", " class=\"sans s12\"");
             svgOut = svgOut.replace(" style=\"font-family:sans-serif;font-size:13px\"", " class=\"sans s13\"");
+            svgOut = svgOut.replace(" style=\"font-family:sans-serif;font-size:14px\"", " class=\"sans s14\"");
             svgOut = svgOut.replace("</text></g><g class=\"sans s11\"><text", "</text><text");
         }
         return svgOut;

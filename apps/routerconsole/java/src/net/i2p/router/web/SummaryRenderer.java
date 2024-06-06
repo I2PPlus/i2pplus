@@ -237,7 +237,7 @@ class SummaryRenderer {
             } else if (width >= 800) {
                 smallSize += 1;
                 legendSize += 1;
-                largeSize += 1;
+                largeSize += 2;
             }
 
             /* CJK support */
