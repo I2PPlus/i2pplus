@@ -768,9 +768,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      *
      * @param colorTag Color tag, as explained above.
      * @param color    Any color (paint) you like
-     * @deprecated Using {@link #setColor(ElementsNames, Paint)}
      */
-    @Deprecated
     public void setColor(int colorTag, Paint color) {
         if (colorTag >= 0 && colorTag < colors.length) {
             colors[colorTag] = color;
@@ -797,7 +795,6 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * @param color     Any color (paint) you like
      * @deprecated Using {@link #setColor(ElementsNames, Paint)}
      */
-    @Deprecated
     public void setColor(String colorName, Paint color) {
         setColor(ElementsNames.valueOf(colorName.toLowerCase(Locale.ENGLISH)).ordinal(), color);
     }
@@ -837,7 +834,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * @param title Graph title.
      */
     public void setTitle(String title) {
-        this.title = title;
+        this.title = title.trim();
     }
 
     /**

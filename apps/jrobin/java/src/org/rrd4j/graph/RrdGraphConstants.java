@@ -111,57 +111,46 @@ public interface RrdGraphConstants {
     /**
      * Index of the canvas color. Used in {@link RrdGraphDef#setColor(int, java.awt.Paint)}
      */
-    @Deprecated
     int COLOR_CANVAS = 0;
     /**
      * Index of the background color. Used in {@link RrdGraphDef#setColor(int, java.awt.Paint)}
      */
-    @Deprecated
     int COLOR_BACK = 1;
     /**
      * Index of the top-left graph shade color. Used in {@link RrdGraphDef#setColor(int, java.awt.Paint)}
      */
-    @Deprecated
     int COLOR_SHADEA = 2;
     /**
      * Index of the bottom-right graph shade color. Used in {@link RrdGraphDef#setColor(int, java.awt.Paint)}
      */
-    @Deprecated
     int COLOR_SHADEB = 3;
     /**
      * Index of the minor grid color. Used in {@link RrdGraphDef#setColor(int, java.awt.Paint)}
      */
-    @Deprecated
     int COLOR_GRID = 4;
     /**
      * Index of the major grid color. Used in {@link RrdGraphDef#setColor(int, java.awt.Paint)}
      */
-    @Deprecated
     int COLOR_MGRID = 5;
     /**
      * Index of the font color. Used in {@link RrdGraphDef#setColor(int, java.awt.Paint)}
      */
-    @Deprecated
     int COLOR_FONT = 6;
     /**
      * Index of the frame color. Used in {@link RrdGraphDef#setColor(int, java.awt.Paint)}
      */
-    @Deprecated
     int COLOR_FRAME = 7;
     /**
      * Index of the arrow color. Used in {@link RrdGraphDef#setColor(int, java.awt.Paint)}
      */
-    @Deprecated
     int COLOR_ARROW = 8;
     /**
      * Index of the x-axis color. Used in {@link RrdGraphDef#setColor(int, java.awt.Paint)}
      */
-    @Deprecated
     int COLOR_XAXIS = 9;
     /**
      * Index of the yaxis color. Used in {@link RrdGraphDef#setColor(int, java.awt.Paint)}
      */
-    @Deprecated
     int COLOR_YAXIS = 10;
 
     /**

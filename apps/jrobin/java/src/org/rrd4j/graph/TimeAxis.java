@@ -103,6 +103,7 @@ class TimeAxis extends Axis {
         int y = im.yorigin + (int) worker.getFontHeight(font) + 2;
         int prevLabel = 0;
         int prevLabelInterval = 0;
+
         for (int status = getTimeShift(); status <= 0; status = getTimeShift()) {
             String label = tickSetting.format.format(calendar, gdef.locale);
             long time = calendar.getTime().getTime() / 1000L;
@@ -110,11 +111,18 @@ class TimeAxis extends Axis {
             int x2 = mapper.xtr(time + tickSetting.labelSpan);
             int labelWidth = (int) worker.getStringWidth(label, font);
             int x = x1 + (x2 - x1 - labelWidth) / 2;
-            if (x >= im.xorigin && x + labelWidth <= im.xorigin + im.xsize) {
-                if (x - prevLabel >= prevLabelInterval) {
+            boolean inRange = x >= im.xorigin && x + labelWidth <= im.xorigin + im.xsize;
+            //System.out.println("graph label width: " + labelWidth + "px - label spacing: " + labelWidth + "px");
+
+            if (inRange) {
+                if (x2 - x1 + (labelWidth / 2) >= labelWidth) {
                     worker.drawString(label, x, y, font, color);
-                    prevLabel = x;
-                    prevLabelInterval = tickSetting.labelUnit * (int) tickSetting.labelUnitCount;
+                } else {
+                    if (x - prevLabel >= prevLabelInterval) {
+                        worker.drawString(label, x, y, font, color);
+                        prevLabel = x;
+                        prevLabelInterval = tickSetting.labelUnit * (int) tickSetting.labelUnitCount;
+                    }
                 }
             }
             findNextTime(tickSetting.labelUnit, tickSetting.labelUnitCount);
