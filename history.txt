@@ -1,3 +1,6 @@
+2024-06-06 dr|z3d
+ * Graphs: Don't display legend values with decimal places
+
 2024-06-05 dr|z3d
  * Router: Don't temp ban peers for sending unsolicted NetDb store requests
  * Console: Improve graphs loading and detecting/setting dimensions
