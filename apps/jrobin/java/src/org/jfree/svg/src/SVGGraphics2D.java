@@ -1666,8 +1666,12 @@ public final class SVGGraphics2D extends Graphics2D {
             this.sb.append("style=\"").append(getSVGFontStyle()).append("\"")
                    .append(" ").append(getClipPathRef()).append(">")
                    .append("<text x=\"").append(geomDP(x)).append("\" y=\"").append(geomDP(y)).append("\">")
-                   .append(SVGUtils.escapeForXML(str))
-                   .append("</text>").append("</g>");
+                   .append(SVGUtils.escapeForXML(str)
+                                   .replace("Min:", "<tspan class=\"bold\">Min:</tspan>")
+                                   .replace("Avg:", "<tspan class=\"bold\">Avg:</tspan>")
+                                   .replace("Max:", "<tspan class=\"bold\">Max:</tspan>")
+                                   .replace("Now:", "<tspan class=\"bold\">Now:</tspan>"));
+            this.sb.append("</text>").append("</g>");
         } else {
             AttributedString as = new AttributedString(str, this.font.getAttributes());
             drawString(as.getIterator(), x, y);
@@ -2666,6 +2670,7 @@ public final class SVGGraphics2D extends Graphics2D {
         defs.append("<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\" href=\"/themes/fonts/FiraCode.css\"/>");
         defs.append("<style>text{font-weight:600;text-rendering:optimizeLegibility;white-space:pre}line,path,rect{shape-rendering:crispEdges}")
             .append(".axis{stroke-width:2;stroke-linecap:round}")
+            .append(".bold{font-weight:700}")
             .append(".dash{stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1}")
             .append(".line{stroke-opacity:.2;stroke-linecap:square}")
             .append(".mono{font-family:FiraCode,monospace;font-weight:500}")

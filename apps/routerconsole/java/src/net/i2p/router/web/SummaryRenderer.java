@@ -404,8 +404,10 @@ class SummaryRenderer {
                                    .replace("[Tunnel]Build", "[Tunnel] Build");
 
             // heuristic to set K=1024
-            if ((name.indexOf("Size") >= 0 || name.indexOf("memory") >= 0 || name.contains("B/s") ||
-                name.contains("Bandwidth") || name.contains("byteCache")) && !showEvents) {
+            if ((name.toLowerCase().indexOf("size") >= 0 || name.toLowerCase().indexOf("memory") >= 0 ||
+                name.toLowerCase().indexOf("b/s") >= 0 || name.toLowerCase().indexOf("bps") >= 0 ||
+                name.toLowerCase().indexOf("bandwidth") >= 0 || name.toLowerCase().indexOf("bytecache") >= 0)
+                && !showEvents) {
                 def.setBase(1024);
             }
             if (titleOverride != null) {
@@ -462,7 +464,7 @@ class SummaryRenderer {
             }
 
             boolean noDecimalPlace = true;
-            String numberFormat = noDecimalPlace ? "%.0f%S" : "%.2f%S";
+            String numberFormat = noDecimalPlace ? "%.0f%s" : "%.2f%s";
             if (!hideLegend) {
                 Variable var = new Variable.MIN();
                 def.datasource("min", plotName, var);
@@ -506,7 +508,7 @@ class SummaryRenderer {
                     def.gprint("avg2", " " + _t("Avg") + ": " + numberFormat);
                     var = new Variable.LAST();
                     def.datasource("last2", plotName2, var);
-                    def.gprint("last2", " " + _t("Now")+ ": " + numberFormat + "\\l");
+                    def.gprint("last2", " " + _t("Now") + ": " + numberFormat + "\\l");
                 }
             }
 
@@ -567,7 +569,6 @@ class SummaryRenderer {
             if ((width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) ||
                 (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid)) {
                 def.setOnlyGraph(true);
-                //if (theme.equals("classic") || theme.equals("light"))
                 def.setColor(RrdGraphDef.COLOR_CANVAS, TRANSPARENT);
                 def.setColor(RrdGraphDef.COLOR_BACK, TRANSPARENT);
             }
