@@ -82,10 +82,10 @@ public class ProfileOrganizer {
 //    public static final int DEFAULT_MINIMUM_FAST_PEERS = 8;
 //    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 40;
 //    private static final int ABSOLUTE_MAX_FAST_PEERS = 75;
-    public static final int DEFAULT_MINIMUM_FAST_PEERS = 200;
+    public static final int DEFAULT_MINIMUM_FAST_PEERS = 300;
     /** this is misnamed, it is really the max minimum number. */
-    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 300;
-    private static final int ABSOLUTE_MAX_FAST_PEERS = 350;
+    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 350;
+    private static final int ABSOLUTE_MAX_FAST_PEERS = 400;
 
 //    private final int known = net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade.getKnownRouters();
 
@@ -98,8 +98,8 @@ public class ProfileOrganizer {
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
 //    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 25;
 //    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 150;
-    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 300;
-    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 400;
+    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 400;
+    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 500;
 
     private static final long[] RATES = { 60*1000l, 5*60*1000l, 10*60*1000l, 30*60*1000l, 60*60*1000l, 24*60*60*1000 };
 
