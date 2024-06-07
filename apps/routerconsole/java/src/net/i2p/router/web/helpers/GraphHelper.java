@@ -42,11 +42,9 @@ public class GraphHelper extends FormHandler {
     private static final String PROP_PERIODS = "routerconsole.graphPeriods";
     private static final String PROP_EVENTS = "routerconsole.graphEvents";
     private static final String PROP_HIDE_LEGEND = "routerconsole.graphHideLegend";
-    private static final String PROP_GRAPH_HIDPI = "routerconsole.graphHiDpi";
     private static final int DEFAULT_REFRESH = 1*60;
     private static final int DEFAULT_PERIODS = 60;
     private static final boolean DEFAULT_HIDE_LEGEND = false;
-    private static final boolean DEFAULT_GRAPH_HIDPI = false;
     private static final int MIN_X = 160;
     private static final int MIN_Y = 40;
     //private static final int MIN_C = 20;
@@ -79,10 +77,6 @@ public class GraphHelper extends FormHandler {
 
     public int getRefreshValue() {
         return _refreshDelaySeconds;
-    }
-
-    public boolean getGraphHiDpi() {
-        return _context.getBooleanProperty(PROP_GRAPH_HIDPI);
     }
 
     public void setPeriodCount(String str) {

@@ -16,7 +16,7 @@ if (configs !== null) {toggle.hidden = true;}
 
 function initCss() {
   const graph = document.querySelector(".statimage");
-  if (graph === null) {location.reload(true);}
+  if (graph === null) {location.reload();}
   else {injectCss();}
 }
 
@@ -26,27 +26,29 @@ function injectCss() {
   const delay =  Math.max(graphCount*5, 120);
   widepanel.id = "nographs";
   const gwrap = document.head.querySelector("style#gwrap");
-  const graphWidth = graph.naturalWidth || graph.offsetWidth;
-  const graphHeight = graph.naturalHeight || graph.offsetHeight;
+  const graphWidth = graph.naturalWidth > 40 ? graph.naturalWidth : 0;
+  const graphHeight = graph.naturalHeight;
+  const dimensions = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
   //console.log("width = " + graphWidth + " - height = " + graphHeight);
-  gwrap.innerText = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
+  if (graphWidth !== "auto" && graphWidth !== "0" && graphWidth !== "4") {gwrap.innerText = dimensions;}
+  else {grwrap.innerText = "";}
 
+  let retryCount = 0;
   function checkGwrap() {
-    if (gwrap.textContent === "") {
-      setTimeout(() => {
-        injectCss();
-      }, 20);
-    } else {
+    if (gwrap.innerText === dimensions) {
       setTimeout(() => {
         widepanel.id = "";
         allgraphs.removeAttribute("hidden");
         configs.removeAttribute("hidden");
       }, delay);
+      updateGraphs();
+    } else {
+      retryCount++;
+      if (retryCount < 10) {setTimeout(() => {checkGwrap();}, 20);}
+      else {setTimeout(() => {location.reload();}, delay);}
     }
   }
-
   checkGwrap();
-  updateGraphs();
 }
 
 function updateGraphs() {
