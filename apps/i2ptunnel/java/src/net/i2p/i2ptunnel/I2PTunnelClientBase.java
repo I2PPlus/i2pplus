@@ -221,8 +221,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                            Boolean.parseBoolean(getTunnel().getClientOptions().getProperty("i2cp.newDestOnResume"))) {
                     // build a new socket manager and a new dest if the session is closed.
                     getTunnel().removeSession(sess);
-                    if (_log.shouldWarn())
-                        _log.warn("[" + getTunnel().getClientOptions().getProperty("inbound.nickname") + "] Built new destination for client tunnel on resume");
+                    if (_log.shouldInfo())
+                        _log.info("[" + getTunnel().getClientOptions().getProperty("inbound.nickname") + "] Built new destination for client tunnel on resume");
                     // make sure the old one is closed
                     // if it's shared client, it will be destroyed in getSocketManager()
                     // with the correct locking
