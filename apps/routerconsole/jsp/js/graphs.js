@@ -31,12 +31,21 @@ function injectCss() {
   //console.log("width = " + graphWidth + " - height = " + graphHeight);
   gwrap.innerText = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
 
-  setTimeout(() => {
-    widepanel.id = "";
-    allgraphs.removeAttribute("hidden");
-    configs.removeAttribute("hidden");
-  }, delay);
+  function checkGwrap() {
+    if (gwrap.textContent === "") {
+      setTimeout(() => {
+        injectCss();
+      }, 20);
+    } else {
+      setTimeout(() => {
+        widepanel.id = "";
+        allgraphs.removeAttribute("hidden");
+        configs.removeAttribute("hidden");
+      }, delay);
+    }
+  }
 
+  checkGwrap();
   updateGraphs();
 }
 
