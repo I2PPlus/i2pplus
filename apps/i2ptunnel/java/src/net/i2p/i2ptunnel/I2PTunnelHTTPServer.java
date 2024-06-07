@@ -1317,6 +1317,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /**
      *  @return the command followed by the header lines (compact version for logging)
+     *
+     *  @since 0.9.63+
      */
     protected static String formatHeadersCompact(Map<String, List<String>> headers, StringBuilder command) {
         StringBuilder buf = new StringBuilder(command.length() + headers.size() * 64);
