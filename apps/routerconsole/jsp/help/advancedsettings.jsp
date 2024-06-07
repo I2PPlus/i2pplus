@@ -228,9 +228,6 @@
 <tr><th>router.validateRoutersAfter={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting (in minutes) allows you to manually configure how long to wait after startup before RouterInfos in the NetDb are checked for validity, after which point only valid routers will be accepted for inclusion. When the validation occurs, expired RouterInfos and unresponsive peers only accessible via SSU will be removed from the NetDb. [Default is 60 minutes] Note: This setting has no bearing on older routers (older than 0.9.29 by default) which are removed from the NetDb and banned for the router session as soon as a NetDb store is attempted.")%></td></tr>
 
-<tr><th>routerconsole.graphHiDpi={true|false} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting, when set to true, will enable HiDPI mode for the graphs on <a href=/graphs>the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]")%></td></tr>
-
 <tr><th>routerconsole.showPeerTestAvg={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]")%></td></tr>
 
