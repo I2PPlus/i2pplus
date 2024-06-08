@@ -936,11 +936,10 @@ form[action="events"]>.formaction{margin-bottom:-11px;margin-right:-21px;margin-
 #gatherstats{margin:-4px 0 24px}
 
 /* tunnels */
-
-h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .bar{padding-right:8px;width:5%}
 .direction .small{margin-left:-2px;width:12px}
 .ff,#capabilities_key a .ff{background:linear-gradient(180deg,#730,#310)}
+h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .hidden,#capabilities_key a .hidden{background:linear-gradient(180deg,#777,#333)}
 .ibgw::after,.obep::after,.ptcp::after{width:26px;height:26px;display:inline-block;background:var(--ibgw) var(--center);content:""}
 .inbound,.outbound{width:14px;height:14px;display:inline-block;vertical-align:middle;background:var(--in) var(--center)/14px}
@@ -955,14 +954,13 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .small img{margin:0;padding:0}
 .ssutesting,#capabilities_key a .ssuintro{background:linear-gradient(180deg,#515,#313)}
 .ssutesting,#capabilities_key a .ssutesting{background:linear-gradient(180deg,#770,#330)}
-.statusnotes:last-child{margin-bottom:10px}
 .statusnotes{margin:-2px 0 5px 0;padding:10px 7px;font-style:italic;font-size:105%;text-align:center;border:var(--border);background:#000800}
+.statusnotes:last-child{margin-bottom:10px}
 .statusnotes+.statusnotes{margin-top:-6px}
 .tier,#capabilities_key b{background:var(--tier)}
 .tier.isD{background:var(--isD),var(--tier)}
 .tier.isE{background:var(--isE),var(--tier)}
 .tier.isG{background:var(--isG),var(--tier)}
-
 .tunnel_cap{box-shadow:var(--outline)}
 .tunnel_cap:empty::after{content:"?"}
 .tunnel_cap,.tier,.ff,.unreachable,.reachable,#capabilities_key b{margin:1px 2px;padding:3px 2px;display:inline-block;min-width:20px;color:#bb7;text-shadow:var(--textshadow);text-align:center;border:var(--border_badge);box-shadow:var(--outline)}
@@ -971,26 +969,62 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .tunnel_id{margin:1px 2px 1px 5px;padding:4px 2px;min-width:78px;display:inline-block;line-height:1.25;color:#bb7;text-shadow:var(--textshadow);text-align:right}
 .tunnel_peer:empty{vertical-align:top}
 .tunnel_peer{min-width:56px;display:inline-block;text-align:right}
-.tunnel_local{margin-right:2px;padding:2px 0 2px;line-height:1.35;font-size:8pt;text-transform:lowercase;text-align:center;box-shadow:var(--outline);background:var(--badge)}
+.tunnel_peer.tunnel_local{margin-right:2px;padding:2px 0 2px;line-height:1.5;font-size:8pt;text-transform:lowercase;text-align:center;box-shadow:var(--outline);background:var(--badge)}
 .tunnels_client th:first-child::after{vertical-align:middle;line-height:0;letter-spacing:-0.25em;font-size:11pt;content:"\21E9\21E7"}
 .tunnels_client th:first-child,.tunnels_client td:first-child{width:4%}
 .tunnels_client th:nth-child(2),.tunnels_client th:nth-child(3),.tunnels_client td:nth-child(2),.tunnels_client td:nth-child(3){width:7%;white-space:nowrap}
+.tunnelsHidden .statusnotes,.tunnelsHidden .statusnotes+.statusnotes{margin:-1px 0 9px}
+.tunnelsHidden #tunnels{padding-bottom:2px}
+.tunnelsHidden #tunnels h3[id]:nth-child(n+2){margin-top:-10px}
 .unreachable,#capabilities_key a .unreachable{background:linear-gradient(180deg,#500,#100)}
-
 #allTransit~.statusnotes:last-of-type{margin-bottom:9px}
+#country,#router,th#version,#tier,#edit,#data,.tcount{width:2%;white-space:nowrap}
+#data{width:10%}
 #exploratorytunnels{margin-top:15px}
-#participating a::after,#peercount a::after{margin:-10px 0 -15px -12px;padding:9px 2px 9px 0}
+#participating a,#peercount a{border-left:var(--border)}
+#participating a::after,#peercount a::after{margin:-2px 0 -2px 2px;width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--refresh) var(--center)/18px;content:""}
+#participating a:hover::after,#participating a:focus::after,#peercount a:hover::after,#peercount a:focus::after{background:var(--refresh_hover) var(--center)/18px}
+#participating a:active::after,#peercount a:active::after{opacity:.7;transform:rotate(90deg);transition:ease transform .15s}
+#participating img,#peercount img{width:0;height:0}
 #participating,#participating~h3{padding-bottom:8px}
 #participatingtunnels .statusnotes:last-of-type{margin-bottom:10px}
+#peercount img,#participating img{margin:0 0 -2px;padding:8px 6px 6px;vertical-align:middle;border:0}
+#peercount{margin-bottom:-3px;background:var(--hardhat) no-repeat 8px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #refreshPage{cursor:pointer}
+#thresholds th{font-weight:inherit}
+#transitSummary{margin-bottom:10px}
+#transitSummary .peerFlag::before,#tunnels #tunnelPeerCount .peerFlag::before{display:inline-block;position:absolute;top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px);background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1));content:"";pointer-events:none}
+#transitSummary .peerFlag img,#tunnels #tunnelPeerCount .peerFlag img{margin:0;padding:1px;width:24px;height:18px;box-shadow:var(--highlight)}
+#transitSummary .peerFlag,#tunnels #tunnelPeerCount .peerFlag{margin:0;width:26px;height:20px;display:inline-block;position:relative;vertical-align:middle;box-shadow:0 0 0 1px #131;background:#151}
+#transitSummary td:not(.rih):not(.rbw){padding:3px 6px}
+#transitSummary td:not(.rih):not(.rbw):first-child img{width:24px;height:18px;display:inline-block;vertical-align:middle}
+#transitSummary th,#transitSummary td{vertical-align:middle;white-space:nowrap}
+#transitSummary th{position:relative}
+#transitSummary th.tcount::after{right:-4px;z-index:10}
 #tunnel_defs{margin-top:-1px;margin-bottom:10px}
 #tunnel_defs td:first-child,#tunnel_defs td:nth-child(even){width:1%;white-space:nowrap}
 #tunnel_defs td:first-child{display:none}
 #tunnel_defs td:nth-child(2){border-left:0}
 #tunnel_defs td:nth-child(odd){text-align:left}
-#tunnelPeerCount .configpeer img{padding:3px}
-#tunnels #exploratory a,#tunnels h3.server a,#tunnels h3.client a{margin:-8px 0 -8px 0;padding:7px 4px 14px 10px}
+#tunnelPeerCount{margin-bottom:9px}
+#tunnelPeerCount .configpeer{display:inline-block;vertical-align:middle}
+#tunnelPeerCount .configpeer img{margin:0;padding:3px}
+#tunnelPeerCount .ipaddress{text-align:right}
+#tunnelPeerCount td{white-space:nowrap}
+#tunnelPeerCount td:nth-child(5) a{white-space:normal;word-break:break-all}
+#tunnelPeerCount td:not(.rih):not(.rbw):last-child{border-right:var(--border)}
+#tunnelPeerCount tbody td:not(.rih):not(.rbw):first-child,#transitSummary tbody tr td:not(.rih):not(.rbw):first-child{border-left:var(--border)}
+#tunnelPeerCount tbody td:not(.rih):not(.rbw):last-child,#transitSummary tbody tr td:not(.rih):not(.rbw):last-child{border-right:var(--border)}
+#tunnelPeerCount tbody tr:hover td:not(.rih):not(.rbw){background:#040}
+#tunnelPeerCount tbody tr:last-child td:not(.rih):not(.rbw){border-bottom:var(--border)}
+#tunnelPeerCount tbody tr td:not(.rih):not(.rbw),#transitSummary tbody tr td:not(.rih):not(.rbw){padding:4px;border:var(--border_softer)}
+#tunnelPeerCount tfoot td{padding:3px 5px 6px;font-size:85%;border-top:var(--border);background:#000}
+#tunnelPeerCount th:first-child,#tunnels #tunnelPeerCount td:first-child{border-left:var(--border)}
+#tunnelPeerCount th:first-child,#transitSummary th:first-child{font-size:0}
+#tunnelPeerCount th:first-child::before,#transitSummary th:first-child::before{width:12px;height:10px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/planet.svg) no-repeat left center/10px;content:""}
+#tunnelPeerCount tr:last-child td:not(.rih):not(.rbw),#transitSummary tr:last-child td:not(.rih):not(.rbw){border-bottom:var(--border)}
 #tunnels #exploratory{padding-left:35px;background:var(--globe) no-repeat 9px center/18px,var(--title)}
+#tunnels #exploratory a,#tunnels h3.server a,#tunnels h3.client a{margin:-8px 0 -8px 0;padding:7px 4px 14px 10px}
 #tunnels h3 a{float:right}
 #tunnels h3 a[href^="/configtunnels#"]:active::after,#tunnels h3 a[href$="/i2ptunnelmgr"]:active::after,#logs a.configure:active::after,#applinks a:active::after,#sitelinks a:active::after{opacity:.7;transform:rotate(90deg);transition:linear transform .2s}
 #tunnels h3 a[href^="/configtunnels#"]::after,#tunnels h3 a[href$="/i2ptunnelmgr"]::after,#logs a.configure::after,#logs a.delete::after,#applinks a::after,#sitelinks a::after{width:16px;height:16px;float:right;background:var(--settings) var(--center),var(--settings_hover) var(--center);background-size:16px,0;content:"";filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #000)}
@@ -1001,84 +1035,43 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels h3 a:not(.refreshpage):first-child{padding:8px 4px 14px 22px;border-left:0}
 #tunnels h3 a:not(.refreshpage) img,#tunnels h3 a:not(.refreshpage):first-child{margin:-8px 0 -8px 0;padding:9px 2px 9px 0;border-left:var(--border)}
 #tunnels h3.client{padding-left:35px;background:var(--client) no-repeat 9px center/18px,var(--title)}
-#tunnels h3+h3 a{display:none}
-#tunnels h3+h3{margin-top:-1px;display:none}
-#tunnels h3 img:first-of-type{margin-left:-1px;border-right:var(--border)}
-#tunnels h3:last-of-type{padding-left:35px;padding-bottom:7px;background:var(--speed) no-repeat no-repeat 9px center/18px,var(--title)}
 #tunnels h3{padding-right:5px;padding-bottom:2px;position:relative;z-index:0}
+#tunnels h3.server{padding-left:35px;background:var(--server) no-repeat 9px center/18px,var(--title)}
+#tunnels h3:last-of-type{padding-left:35px;padding-bottom:7px;background:var(--speed) no-repeat no-repeat 9px center/18px,var(--title)}
+#tunnels h3+h3{margin-top:-1px;display:none}
+#tunnels h3+h3 a{display:none}
+#tunnels h3 img:first-of-type{margin-left:-1px;border-right:var(--border)}
 #tunnels h3.ping{padding-left:35px;background:var(--ping) no-repeat 9px center/18px,var(--title)}
 #tunnels h3 .refreshpage,#tunnels h3 .refreshpage img{margin:-7px 1px -7px 0;padding:8px 0 9px;border:0}
-#tunnels h3.server{padding-left:35px;background:var(--server) no-repeat 9px center/18px,var(--title)}
 #tunnels img{font-size:0}
-#tunnels .percentBarInner{height:14px;display:inline-block}
-#tunnels table{position:relative;z-index:1}
-#tunnels .tab,#tunnels .tab2{min-width:140px}
-#tunnels td{text-align:center}
-#tunnels tbody td{border:var(--border_softer)}
-#tunnels td:not(.rif):not(.rih):not(.rbw):first-child,#tunnels #tunnelPeerCount td:first-child{border-left:var(--border)}
-#tunnels td:not(.rif):not(.rih):not(.rbw):last-child,#tunnels #tunnelPeerCount td:last-child{border-right:var(--border)}
-#tunnels td:not(.rif):not(.rih):not(.rbw)>*{vertical-align:middle}
-#tunnels th{font-size:85%;position:relative;user-select:none}
-#tunnels th#tier[role="columnheader"]:not([data-sort-method="none"])::after,#tunnels th#router[role="columnheader"]:not([data-sort-method="none"])::after,#tunnels th#version[role="columnheader"]:not([data-sort-method="none"])::after{right:-2px;z-index:999}
-#tunnels .tunnel_cap{padding:3px 2px;border-radius:0}
-#tunnels .tunnels_client th:first-child{font-size:0}
-#tunnels .tunnels_participating .cells:first-child{font-size:0}
-#tunnels td:not(.rif):not(.rih):not(.rbw).tcount,#tunnels #tunnelPeerCount .bar{width:1%;white-space:nowrap}
-#tunnels tr:last-child td{border-bottom:var(--border)}
-#tunnels #participating{padding:6px 6px 4px 35px;letter-spacing:.1em;background:var(--share) no-repeat 10px center/18px,var(--title)}
-#tunnels #peercount{background:url(/themes/console/images/peers.svg) no-repeat 9px center/18px,var(--title)}
 #tunnels img[src$="bound.png"],#peers img[src$="bound.png"]{opacity:0}
-#tunnels span[hidden]{display:none}
 #tunnels .left,#tunnels .right{margin:0;width:50%;display:inline-block;vertical-align:middle}
+#tunnels .percentBarInner{height:14px;display:inline-block}
 #tunnels .percentBarInner{text-align:center;background:#030}
 #tunnels .percentBarOuter:hover .percentBarInner{background:rgba(0,48,0,.8)}
 #tunnels .percentBarOuter{margin:-2px 2px 0 4px;position:relative;text-align:left;background:#000}
 #tunnels .percentBarOuter,#tunnels .PercentBarInner,#tunnels .percentBarText{display:inline-block;vertical-align:middle}
 #tunnels .percentBarOuter,#tunnels .percentBarText{width:100px}
 #tunnels .percentBarText{position:absolute;top:0;left:0;bottom:0;right:0;width:100%;height:unset;font-size:80%}
-
-/* tunnel peer count */
-#country,#router,th#version,#tier,#edit,#data,.tcount{width:2%;white-space:nowrap}
-#data{width:10%}
-#participating a,#peercount a{border-left:var(--border)}
-#participating a::after,#peercount a::after{margin:-2px 0 -2px 2px;width:18px;height:18px;display:inline-block;vertical-align:middle;background:var(--refresh) var(--center)/18px;content:""}
-#participating a:hover::after,#participating a:focus::after,#peercount a:hover::after,#peercount a:focus::after{background:var(--refresh_hover) var(--center)/18px}
-#participating a:active::after,#peercount a:active::after{opacity:.7;transform:rotate(90deg);transition:ease transform .15s}
-#participating img,#peercount img{width:0;height:0}
-#peercount img,#participating img{margin:0 0 -2px;padding:8px 6px 6px;vertical-align:middle;border:0}
-#peercount{margin-bottom:-3px;background:var(--hardhat) no-repeat 8px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
-#thresholds th{font-weight:inherit}
-#tunnelPeerCount a.script[href^="https://gwhois.org"]::after{margin:-1px 0 1px 3px;width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--search) no-repeat center center/11px;opacity:.7;content:""}
-#tunnelPeerCount .configpeer{display:inline-block;vertical-align:middle}
-#tunnelPeerCount .configpeer img{margin:0}
-#tunnelPeerCount .ipaddress{text-align:right}
-#tunnelPeerCount{margin-bottom:9px}
-#tunnelPeerCount th:first-child::before,#transitSummary th:first-child::before{width:12px;height:10px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/planet.svg) no-repeat left center/10px;content:""}
-#tunnelPeerCount th:first-child,#transitSummary th:first-child{font-size:0}
-#tunnelPeerCount th:first-child,#tunnels #tunnelPeerCount td:first-child{border-left:var(--border)}
-#tunnelPeerCount td{white-space:nowrap}
-#tunnelPeerCount td:not(.rih):not(.rbw):last-child{border-right:var(--border)}
-#tunnelPeerCount td:nth-child(5) a{white-space:normal;word-break:break-all}
-#tunnelPeerCount tbody td:not(.rih):not(.rbw):first-child,#transitSummary tbody tr td:not(.rih):not(.rbw):first-child{border-left:var(--border)}
-#tunnelPeerCount tbody td:not(.rih):not(.rbw):last-child,#transitSummary tbody tr td:not(.rih):not(.rbw):last-child{border-right:var(--border)}
-#tunnelPeerCount tbody tr:hover td:not(.rih):not(.rbw){background:#040}
-#tunnelPeerCount tbody tr:last-child td:not(.rih):not(.rbw){border-bottom:var(--border)}
-#tunnelPeerCount tbody tr td:not(.rih):not(.rbw),#transitSummary tbody tr td:not(.rih):not(.rbw){padding:4px;border:var(--border_softer)}
+#tunnels span[hidden]{display:none}
+#tunnels table{position:relative;z-index:1}
+#tunnels .tab,#tunnels .tab2{min-width:140px}
+#tunnels #participating{padding:6px 6px 4px 35px;letter-spacing:.1em;background:var(--share) no-repeat 10px center/18px,var(--title)}
+#tunnels #peercount{background:url(/themes/console/images/peers.svg) no-repeat 9px center/18px,var(--title)}
+#tunnels tbody td{border:var(--border_softer)}
+#tunnels td:not(.rif):not(.rih):not(.rbw):first-child,#tunnels #tunnelPeerCount td:first-child{border-left:var(--border)}
+#tunnels td:not(.rif):not(.rih):not(.rbw):last-child,#tunnels #tunnelPeerCount td:last-child{border-right:var(--border)}
+#tunnels td:not(.rif):not(.rih):not(.rbw).tcount,#tunnels #tunnelPeerCount .bar{width:1%;white-space:nowrap}
+#tunnels td:not(.rif):not(.rih):not(.rbw)>*{vertical-align:middle}
+#tunnels td{text-align:center}
+#tunnels th{font-size:85%;position:relative;user-select:none}
+#tunnels th#tier[role="columnheader"]:not([data-sort-method="none"])::after,#tunnels th#router[role="columnheader"]:not([data-sort-method="none"])::after,#tunnels th#version[role="columnheader"]:not([data-sort-method="none"])::after{right:-2px;z-index:999}
+#tunnels tr:last-child td{border-bottom:var(--border)}
+#tunnels .tunnel_cap{padding:3px 2px;border-radius:0}
 #tunnels #tunnelPeerCount td.bar{border-left:0}
 #tunnels #tunnelPeerCount td.tcount{padding:3px 0 3px 4px;min-width:16px;text-align:right;border-right:0}
-#tunnelPeerCount tfoot td{padding:3px 5px 6px;font-size:85%;border-top:var(--border);background:#000}
-#tunnelPeerCount tr:last-child td:not(.rih):not(.rbw),#transitSummary tr:last-child td:not(.rih):not(.rbw){border-bottom:var(--border)}
-
-/* transit summary */
-#transitSummary th,#transitSummary td{vertical-align:middle;white-space:nowrap}
-#transitSummary th{position:relative}
-#transitSummary th.tcount::after{right:-4px;z-index:10}
-#transitSummary td:not(.rih):not(.rbw){padding:3px 6px}
-#transitSummary{margin-bottom:10px}
-#transitSummary td:not(.rih):not(.rbw):first-child img{width:24px;height:18px;display:inline-block;vertical-align:middle}
-#transitSummary .peerFlag::before,#tunnels #tunnelPeerCount .peerFlag::before{display:inline-block;position:absolute;top:1px;left:1px;bottom:1px;right:1px;width:calc(100% - 2px);background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1));content:"";pointer-events:none}
-#transitSummary .peerFlag img,#tunnels #tunnelPeerCount .peerFlag img{margin:0;padding:1px;width:24px;height:18px;box-shadow:var(--highlight)}
-#transitSummary .peerFlag,#tunnels #tunnelPeerCount .peerFlag{margin:0;width:26px;height:20px;display:inline-block;position:relative;vertical-align:middle;box-shadow:0 0 0 1px #131;background:#151}
+#tunnels .tunnels_client th:first-child{font-size:0}
+#tunnels .tunnels_participating .cells:first-child{font-size:0}
 
 /* netdb */
 #netdb #netdboverview td{border-right:var(--border)}
@@ -1631,7 +1624,7 @@ th.th_title{padding:8px 10px;position:static;text-align:left;background:var(--h1
 #configclient{margin-top:-11px}
 #config_family .infohelp{padding:20px 24px 20px 58px;background:var(--family) no-repeat 15px center/28px,var(--msg)}
 #config_family .infohelp{padding:20px 24px 20px 58px;background:var(--family) no-repeat 15px center/28px,var(--msg)}
-#config_family .optionsave {background:#000;box-shadow:none}
+#config_family .optionsave{background:#000;box-shadow:none}
 #config_logging h3 a::before,#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before{width:19px;height:15px;display:inline-block;vertical-align:middle;background:var(--eye) no-repeat left center/15px;content:""}
 #config_logging h3 a:hover::before,#config_logging h3 a:focus::before{background:var(--eye_hover) no-repeat left center/15px}
 #config_peers #bannedpeercount{margin:-1px 0}
@@ -2957,7 +2950,7 @@ span#newtab{margin-top:4px}
 #udpconnections .cells td:first-child,#ntcpconnections .cells td:first-child{padding-right:8px;width:55px}
 }
 
-@media (min-width:1600px) {
+@media (min-width:1600px){
 div[id^="config_"] .confignav{margin-top:-3px}
 #clock{padding-bottom:7px}
 }

@@ -1220,6 +1220,9 @@ h3+.statusnotes{margin-top:2px}
 #tunnels .percentBarOuter:hover .percentBarInner{box-shadow:none;background:transparent}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
 #participatingTunnels #tunnels th{position:relative}
+.tunnelsHidden #tunnels {padding-bottom:11px}
+.tunnelsHidden #tunnels h3[id]:nth-child(n+2) {margin-top:-6px}
+.tunnelsHidden table+.statusnotes{margin-top:2px;border-top:1px solid var(--border_inner)}
 
 /* transit summary */
 #tunnels .cc{display:none}

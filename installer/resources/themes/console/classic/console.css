@@ -2072,7 +2072,7 @@ span.b32:active{box-shadow:0 0 0 1px var(--border_color),var(--btn_shadow_active
 .routerHash{letter-spacing:.1em;font-family:var(--monospaced)}
 .tunnel_local{width:97px;box-sizing:border-box}
 .statusnotes{margin:-6px 0 7px;padding:8px 0;color:var(--ink);font-style:italic;font-size:9pt;text-align:center;border:var(--border);background:var(--bg)}
-.tunnel_id{margin-left:4px;padding:2px 4px;min-width:78px;display:inline-block;line-height:1.45;vertical-align:middle;text-align:right;border-radius:0;box-shadow:var(--box_border_badge);background:var(--hardhat) no-repeat 3px center / 16px,var(--badge)}
+.tunnel_id{margin-left:4px;padding:2px 4px 2px 20px;min-width:84px;display:inline-block;line-height:1.45;vertical-align:middle;text-align:right;border-radius:0;box-shadow:var(--box_border_badge);background:var(--hardhat) no-repeat 3px center/16px,var(--badge)}
 .tunnel_id:empty{opacity:0}
 .tunneldisplay td{padding-top:4px;padding-bottom:4px}
 .tunnel_peer:empty{vertical-align:middle}
@@ -2089,18 +2089,23 @@ span.b32:active{box-shadow:0 0 0 1px var(--border_color),var(--btn_shadow_active
 #tunnels h3 a[href^="/configtunnels#"]:hover::after,#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,#logs h3 a:hover::after{background:var(--settings_hover) no-repeat center center/18px}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
 #tunnels th,#tunnels tfoot td{font-size:90%}
+#routertunnels #tunnels .tunneldisplay th:first-child{font-size:0}
 #tunnels td{border:var(--border_soft)}
 #tunnels td:first-child{border-left:var(--border)}
 #tunnels td:last-child{border-right:var(--border)}
-#tunnels td>*{vertical-align:middle}
-#tunnels .rif{padding:0 1px;width:unset;vertical-align:middle}
-#tunnels .tunnel_display td:first-child{width:64px}
+#tunnels .rif{padding:0 1px;width:unset}
+#routertunnels #tunnels td:last-child .tunnel_peer .rid{margin-right:10px}
+#routertunnels.idsHidden #tunnels td:last-child .tunnel_peer .rid{margin-right:0}
 #tunnel_defs td:nth-child(even),#tunnel_defs td:first-child{width:1%}
 #tunnel_defs tr:first-child td{border-top:var(--border)}
 #tunnels h3 a img{margin:3px 3px 0 0}
 #refreshPage{cursor:pointer}
-#tunnels td:last-child .tunnel_peer:not(.tunnel_local){margin-left:-12px}
 #tunnels #transitPeers td:first-child{width:unset}
+.tunnelsHidden .statusnotes{margin:0 0 -15px}
+#routertunnels.tunnelsHidden #tunnels{padding-bottom:30px}
+#tunnels .lsview{margin:1px 4px 0}
+#tunnels h3 a:not(.lsview), #logs h3 a{margin:-1px 2px 0}
+
 
 /* transit summary */
 #tunnels #transitSummary th{position:relative}
@@ -2485,7 +2490,7 @@ th code{font-size:9pt}
 /* router down */
 #sidebar #sb_status.statusDown,#sidebar #sb_tunnelstatus.statusDown,#sidebar #sb_routerControl.statusDown{padding:18px;border:0;box-shadow:none;background:var(--isdown);opacity:.3;pointer-events:none}
 #sidebar #sb_status.statusDown>*,#sidebar #sb_tunnelstatus.statusDown>*,#sidebar #sb_routerControl.statusDown>*,#sidebar #sb_status.statusDown::before,#sidebar #sb_tunnelstatus.statusDown::before,#sidebar #sb_routerControl.statusDown::before,#sidebar #sb_status.statusDown::after,#sidebar #sb_tunnelstatus.statusDown::after,#sidebar #sb_routerControl.statusDown::before{display:none}
-body.isDown {margin:0;height:100vh;overflow:hidden;contain:paint}
+body.isDown{margin:0;height:100vh;overflow:hidden;contain:paint}
 body.isDown::after,body.isDown::before{height:100vh;width:100%;display:block;position:absolute;top:0;left:0;bottom:0;right:0;overflow:hidden;content:"";contain:paint}
 body.isDown::before{background:linear-gradient(90deg,rgba(220,220,255,.8),#eef,rgba(220,220,255,.8));backdrop-filter:saturate(.3) blur(5px);z-index:9998}
 body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 40px);background:var(--update) center center/80px;content:"";transform:rotate(0);animation:linear spin 3s forwards infinite;z-index:9999}

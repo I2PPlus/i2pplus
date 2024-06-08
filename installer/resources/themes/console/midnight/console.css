@@ -933,6 +933,8 @@ input[type="hidden"]+p+p{border:var(--border_inner);padding:10px;margin-top:20px
 #tunnelconfig th:not([colspan="4"]):first-child,#tunnelconfig th:not([colspan="4"]):last-child{width:30%}
 #tunnelconfig th:not(.th_title)[colspan="4"]{padding:10px 10px 10px 34px;text-transform:none;letter-spacing:0;word-spacing:0;text-shadow:var(--textshadow);background:var(--infowarn) no-repeat 10px center/20px,var(--th)}
 #tunnels td:not(.rif):not(.rih):not(.rbw){text-align:center}
+.tunnelsHidden .statusnotes,.tunnelsHidden .statusnotes+.statusnotes{margin-bottom:-11px}
+#routertunnels #tunnelsContainer{margin:-4px 0 0}
 
 /* transit summary */
 #tunnels #transitSummary th.tcount{min-width:64px}
