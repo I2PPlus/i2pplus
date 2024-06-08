@@ -1,26 +1,77 @@
+/* I2P+ tunnels.js by dr|z3d */
+/* Handle automatic refresh for console tunnels page and */
+/* enable persistent toggling of tunnel ids and tunnel rows */
+/* License: AGPL3 or later */
+
+const bodyTag = document.querySelector("body");
+const container = document.querySelector("#tunnelsContainer");
 const nav = document.querySelector(".confignav");
-const toggle = document.getElementById("toggleTunnels");
+const tables = document.querySelectorAll("#tunnels table");
+const toggleIds = document.getElementById("toggleTunnelIds");
+const toggleTunnels = document.getElementById("toggleTunnels");
+const tunnelIdsHidden = document.querySelector(".idsHidden");
+const tunnelsHidden = document.querySelector(".tunnelsHidden");
+let tunnelTableVisibility = localStorage.getItem("tunnelTableVisibility");
+let tunnelIdVisibility = localStorage.getItem("tunnelIdVisibility");
 
-function applyHiddenClass() {
-  const tunnelElements = document.querySelectorAll(".tunnel_id");
-  const tunnelVisibility = localStorage.getItem("tunnelVisibility");
-
-  if (tunnelVisibility !== "visible") {
-    tunnelElements.forEach(function(tunnelElement) {
-      tunnelElement.classList.add("hidden");
-    });
-
-    if (!toggle.classList.contains("off")) {
-      toggle.classList.add("off");
+nav.addEventListener("click", function(event) {
+  if (event.target.id === "toggleTunnels") {
+    const isHidden = document.querySelector("body").classList.contains("tunnelsHidden");
+    if (isHidden) {
+      bodyTag.classList.remove("tunnelsHidden");
+      if (toggleTunnels.classList.contains("off")) {toggleTunnels.classList.remove("off");}
+      localStorage.removeItem("tunnelTableVisibility");
+    } else {
+      bodyTag.classList.add("tunnelsHidden");
+      if (!toggleTunnels.classList.contains("off")) {toggleTunnels.classList.add("off");}
+      localStorage.setItem("tunnelTableVisibility", "hidden");
     }
-  } else if (toggle.classList.contains("off")) {
-    toggle.classList.remove("off");
+  }
+  if (event.target.id === "toggleTunnelIds") {
+    const isHidden = document.querySelector("body").classList.contains("idsHidden");
+    if (isHidden) {
+      bodyTag.classList.remove("idsHidden");
+      if (toggleIds.classList.contains("off")) {toggleIds.classList.remove("off");}
+      localStorage.removeItem("tunnelIdVisibility");
+    } else {
+      bodyTag.classList.add("idsHidden");
+      if (!toggleIds.classList.contains("off")) {toggleIds.classList.add("off");}
+      localStorage.setItem("tunnelIdVisibility", "hidden");
+    }
+  }
+});
+
+function persistTunnelTableVisibility() {
+  if (tunnelTableVisibility) {
+    if (!tunnelsHidden) {
+      bodyTag.classList.add("tunnelsHidden");
+      if (!toggleTunnels.classList.contains("off")) {toggleTunnels.classList.add("off");}
+    }
+  } else {
+    bodyTag.classList.remove("tunnelsHidden");
+    if (toggleTunnels.classList.contains("off")) {toggleTunnels.classList.remove("off");}
+    localStorage.removeItem("tunnelTableVisibility");
+  }
+}
+
+function persistTunnelIdVisibility() {
+  if (tunnelIdVisibility) {
+    if (!tunnelIdsHidden) {
+      document.querySelector("body").classList.add("idsHidden");
+      if (!toggleIds.classList.contains("off")) {toggleIds.classList.add("off");}
+    }
+  } else {
+    document.querySelector("body").classList.remove("idsHidden");
+    if (toggleIds.classList.contains("off")) {toggleIds.classList.remove("off");}
+    localStorage.removeItem("tunnelIdVisibility");
   }
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  applyHiddenClass();
-
+  persistTunnelTableVisibility();
+  persistTunnelIdVisibility();
+  bodyTag.classList.add("js");
+  document.querySelector("body").classList.add("js");
   const visibility = document.visibilityState;
   if (visibility === "visible") {
     setInterval(function() {
@@ -29,43 +80,12 @@ document.addEventListener("DOMContentLoaded", function() {
       xhrtunn.responseType = "document";
       xhrtunn.onload = function () {
         const tunnels = document.getElementById("tunnelsContainer");
-        const tunnelsResponse = xhrtunn.responseXML.getElementById("tunnelsContainer");
-        const tunnelsParent = tunnels.parentNode;
-        if (!Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML)) {
-          tunnelsParent.replaceChild(tunnelsResponse, tunnels);
-          applyHiddenClass();
+        const tunnelsResponse = xhrtunn.responseXML?.getElementById("tunnelsContainer");
+        if (tunnels.innerHTML !== tunnelsResponse.innerHTML) {
+          tunnels.innerHTML !== tunnelsResponse.innerHTML;
         }
       }
       xhrtunn.send();
     }, 15000);
-  }
-});
-
-nav.addEventListener("click", function(event) {
-  const isOff = toggle.classList.contains("off");
-
-  if (event.target.id === "toggleTunnels") {
-    const tunnelElements = document.querySelectorAll(".tunnel_id");
-
-    if (tunnelElements.length > 0) {
-      const firstTunnelElement = tunnelElements[0];
-      const isHidden = firstTunnelElement.classList.contains("hidden");
-
-      tunnelElements.forEach(function(tunnelElement) {
-        tunnelElement.classList.toggle("hidden", !isHidden);
-      });
-
-      event.target.classList.toggle("off");
-
-      if (isHidden) {
-        localStorage.setItem("tunnelVisibility", "visible");
-      } else {
-        localStorage.removeItem("tunnelVisibility");
-      }
-    }
-  }
-
-  if (event.target.id === "toggleTunnels") {
-    toggle.classList.toggle("off", !isOff);
   }
 });

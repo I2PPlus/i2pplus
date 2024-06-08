@@ -35,14 +35,14 @@
 <span class=tab><a href="/transitfast"><%=intl._t("Transit")%>  (<%=intl._t("Fastest")%>)</a></span>
 <span class=tab title="<%=intl._t("Top 50 peers by transit tunnel requests")%>"><a href="/transitsummary"><%=intl._t("Transit by Peer")%></a></span>
 <span class=tab><a href="/tunnelpeercount">Tunnel Count by Peer</a></span>
-<span id=toggleTunnels></span>
+<span id=toggleTunnelIds></span><span id=toggleTunnels></span>
 </div>
-<span id=tunnelsContainer>
+<span id=tunnelsContainer hidden>
 <% tunnelHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelHelper" property="tunnelSummary" />
 </span>
 </div>
-<noscript><style>#toggleTunnels{display:none}</style></noscript>
-<script nonce=<%=cspNonce%> src=/js/tunnels.js></script>
+<noscript><style>#toggleTunnels,#toggleTunnelIds{display:none}#tunnelsContainer{display:block}</style></noscript>
+<script nonce=<%=cspNonce%> src=/js/tunnels.js type=module></script>
 </body>
 </html>

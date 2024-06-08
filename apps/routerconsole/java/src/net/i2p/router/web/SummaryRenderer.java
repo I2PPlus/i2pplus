@@ -500,6 +500,7 @@ class SummaryRenderer {
                 if (theme.equals("midnight")) {def.line(plotName2, LINE_COLOR_MIDNIGHT, descr2 + "\\l", linewidth);}
                 else if (theme.equals("dark")) {def.line(plotName2, LINE_COLOR_DARK, descr2 + "\\l", linewidth);}
                 else {def.line(plotName2, LINE_COLOR, descr2 + "\\l", linewidth);}
+
                 if (!hideLegend) {
                     Variable var = new Variable.MAX();
                     def.datasource("max2", plotName2, var);

@@ -507,6 +507,8 @@ class TunnelRenderer {
             if (!participating.isEmpty()) {
                 sb.append("<th class=tcount colspan=2 data-sortable data-sort-method=natural data-sort-column-key=transitCount>")
                   .append(_t("Transit")).append("</th>");
+            } else {
+                sb.append("<th></th>");
             }
             sb.append("<th id=edit data-sort-method=none>").append(_t("Edit")).append("</th>");
             sb.append("</tr>\n</thead>\n<tbody id=allPeers>\n");
@@ -563,10 +565,11 @@ class TunnelRenderer {
                 } else {
                     sb.append("<span hidden>&ndash;</span>");
                 }
+                sb.append("</td>");
                 if (!participating.isEmpty()) {
                     int transitTunnelCount = transitCount.count(h);
                     if (transitTunnelCount > 0) {
-                        sb.append(String.format("</td><td class=tcount data-sort-column-key=transitCount>%d</td><td class=bar data-sort-column-key=transitCount>", transitTunnelCount));
+                        sb.append(String.format("<td class=tcount data-sort-column-key=transitCount>%d</td><td class=bar data-sort-column-key=transitCount>", transitTunnelCount));
                         sb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\">" +
                                                 "<span class=percentBarText>%d%%</span></span></span>",
                                                 fmt.format(transitTunnelCount * 100 / partCount).replace(".00", ""),
@@ -590,6 +593,8 @@ class TunnelRenderer {
             sb.append("<td colspan=2><b>").append(tunnelCount).append(" ").append(_t("local")).append("</b></td>");
             if (!participating.isEmpty()) {
                 sb.append("<td colspan=2><b>").append(partCount).append(" ").append(_t("transit")).append("</b></td>");
+            } else {
+              sb.append("<td></td>");
             }
             sb.append("<td></td></tr>\n</tfoot>\n</table>\n");
             out.write(sb.toString());
@@ -851,7 +856,7 @@ class TunnelRenderer {
             List<?> pendingIn = in.listPending();
             List<?> pendingOut = outPool.listPending();
             if ((!pendingIn.isEmpty()) || (!pendingOut.isEmpty())) {
-                buf.append("<div class=statusnotes><center><b>" + _t("Build in progress") + ":&nbsp;");
+                buf.append("<div class=\"statusnotes building\"><center><b>" + _t("Build in progress") + ":&nbsp;");
                 if (in != null) {
                     // PooledTunnelCreatorConfig
 //                    List<?> pending = in.listPending();
@@ -871,11 +876,13 @@ class TunnelRenderer {
                 buf.append("</b></center></div>\n");
             }
         }
-        if (live <= 0)
+        if (live <= 0) {
             buf.append("<div class=statusnotes><center><b>" + _t("none") + "</b></center></div>\n");
+        } else {
         buf.append("<div class=statusnotes><center><b>" + _t("Lifetime bandwidth usage") + ":&nbsp;&nbsp;" +
                   DataHelper.formatSize2(processedIn*1024, true).replace("i", "") + "B " + _t("in") + ", " +
                   DataHelper.formatSize2(processedOut*1024, true).replace("i", "") + "B " + _t("out") + "</b></center></div>");
+        }
         out.write(buf.toString());
         out.flush();
         buf.setLength(0);
