@@ -29,11 +29,13 @@ function injectCss() {
   const graphWidth = graph.naturalWidth > 40 ? graph.naturalWidth : 0;
   const graphHeight = graph.naturalHeight;
   const dimensions = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
-  //console.log("width = " + graphWidth + " - height = " + graphHeight);
-  if (graphWidth !== "auto" && graphWidth !== "0" && graphWidth !== "4") {gwrap.innerText = dimensions;}
-  else {grwrap.innerText = "";}
-
   let retryCount = 0;
+  //console.log("width = " + graphWidth + " - height = " + graphHeight);
+  if (graphWidth !== "auto" && graphWidth !== "0" && dimensions.indexOf("width:4px") === -1) {
+    gwrap.innerText = dimensions;
+  }
+  else {gwrap.innerText = "";}
+
   function checkGwrap() {
     if (gwrap.innerText === dimensions) {
       setTimeout(() => {
