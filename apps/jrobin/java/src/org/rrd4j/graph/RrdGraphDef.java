@@ -29,6 +29,10 @@ import org.rrd4j.data.DataProcessor;
 import org.rrd4j.data.IPlottable;
 import org.rrd4j.data.Variable;
 
+//import eu.bengreen.data.utility.LargestTriangleThreeBuckets;
+//import eu.bengreen.data.utility.LargestTriangleThreeBucketsTime;
+//import org.rrd4j.data.CubicSplineInterpolator;
+
 /**
  * <p>Class which should be used to define new Rrd4j graph. Once constructed and populated with data
  * object of this class should be passed to the constructor of the {@link org.rrd4j.graph.RrdGraph} class which
@@ -170,6 +174,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     boolean showSignature = true;
     Stroke gridStroke = GRID_STROKE;
     Stroke tickStroke = TICK_STROKE;
+    //DownSampler downsampler = new LargestTriangleThreeBucketsTime(500);
     DownSampler downsampler = null;
 
     final List<Source> sources = new ArrayList<>();

@@ -423,8 +423,8 @@ public class GraphHelper extends FormHandler {
             addFormNotice("OS: " +  System.getProperty("os.name") + ' ' +
                                     System.getProperty("os.arch") + ' ' +
                                     System.getProperty("os.version"));
-            if (!SystemVersion.isMac() && !SystemVersion.isWindows())
-                addFormNotice("Installing the fonts-open-sans package and then restarting I2P+ may resolve the issue.");
+            //if (!SystemVersion.isMac() && !SystemVersion.isWindows())
+            //    addFormNotice("Installing the fonts-open-sans package and then restarting I2P+ may resolve the issue.");
             addFormNotice("Check logs for more information.");
             if (_context.getProperty(PROP_REFRESH, 0) >= 0) {
                 // force no refresh, save silently

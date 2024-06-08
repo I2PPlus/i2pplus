@@ -394,6 +394,7 @@ class SummaryRenderer {
             if (name.endsWith("OutBps")) {graphTitle = graphTitle.replaceAll("OutBps", "Outbound B/s");}
             if (name.endsWith("Bps")) {graphTitle = graphTitle.replaceAll("Bps", "B/s");}
 
+            boolean singleDecimalPlace = true;
             graphTitle = CSSHelper.StringFormatter.capitalizeWord(graphTitle);
             graphTitle = graphTitle.replace("[Tunnel] Tunnel", "[Tunnel]")
                                    .replace("Tunnel.participating", "[Transit]")
@@ -409,6 +410,7 @@ class SummaryRenderer {
                 name.toLowerCase().indexOf("bandwidth") >= 0 || name.toLowerCase().indexOf("bytecache") >= 0)
                 && !showEvents) {
                 def.setBase(1024);
+                singleDecimalPlace = false;
             }
             if (titleOverride != null) {
                 def.setTitle(titleOverride);
@@ -424,7 +426,12 @@ class SummaryRenderer {
                 title = title.substring(0, 1).toUpperCase() + title.substring(1);
                 title = title.replace("[Tunnel] [Tunnel]", "[Tunnel]")
                              .replace("Uild Success Avg", "Build Success (percent)")
-                             .replace(" Avg", "Average");
+                             .replace(" Avg", "Average")
+                             .replace(".drop", " Drop")
+                             .replace(".delay", " Delay")
+                             .replace("Participating", "Transit")
+                             .replace("RILookup", "RouterInfo Lookup")
+                             .replace(" Per Second", "/s");
                 def.setTitle(title);
             }
             String path = _listener.getData().getPath();
@@ -463,8 +470,8 @@ class SummaryRenderer {
                 else {def.area(plotName, AREA_COLOR);}
             }
 
-            boolean noDecimalPlace = true;
-            String numberFormat = noDecimalPlace ? "%.0f%s" : "%.2f%s";
+            String numberFormat = singleDecimalPlace ? "%.1f%s" : "%.2f%s";
+
             if (!hideLegend) {
                 Variable var = new Variable.MIN();
                 def.datasource("min", plotName, var);
@@ -490,12 +497,9 @@ class SummaryRenderer {
                 // sidebar graph
                 if (width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) {linewidth = 3;}
                 else if (periodCount >= 720 || (periodCount >= 480 && width <= 600)) {linewidth = 1;}
-                if (theme.equals("midnight"))
-                    def.line(plotName2, LINE_COLOR_MIDNIGHT, descr2 + "\\l", linewidth);
-                else if (theme.equals("dark"))
-                    def.line(plotName2, LINE_COLOR_DARK, descr2 + "\\l", linewidth);
-                else
-                    def.line(plotName2, LINE_COLOR, descr2 + "\\l", linewidth);
+                if (theme.equals("midnight")) {def.line(plotName2, LINE_COLOR_MIDNIGHT, descr2 + "\\l", linewidth);}
+                else if (theme.equals("dark")) {def.line(plotName2, LINE_COLOR_DARK, descr2 + "\\l", linewidth);}
+                else {def.line(plotName2, LINE_COLOR, descr2 + "\\l", linewidth);}
                 if (!hideLegend) {
                     Variable var = new Variable.MAX();
                     def.datasource("max2", plotName2, var);
@@ -584,12 +588,12 @@ class SummaryRenderer {
             } catch (NullPointerException npe) {
                 _log.error("Error rendering graph", npe);
                 StatSummarizer.setDisabled(_context);
-                throw new IOException("Error rendering - disabling graph generation. Missing font?");
+                throw new IOException("Error rendering - disabling graph generation.");
             } catch (Error e) {
                 // Docker InternalError see Gitlab #383
                 _log.error("Error rendering graph", e);
                 StatSummarizer.setDisabled(_context);
-                throw new IOException("Error rendering - disabling graph generation. Missing font?");
+                throw new IOException("Error rendering - disabling graph generation.");
             }
 /* PNG
             int totalWidth = graph.getRrdGraphInfo().getWidth();
