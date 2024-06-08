@@ -94,11 +94,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final String DEST64_HEADER = "X-I2P-DestB64";
     private static final String DEST32_HEADER = "X-I2P-DestB32";
     private static final String PROXY_CONN_HEADER = "proxy-connection";
+    private static final String PRIORITY_HEADER = "Priority";
+
     /** MUST ALL BE LOWER CASE */
-    private static final String[] CLIENT_SKIPHEADERS = {HASH_HEADER.toLowerCase(Locale.US),
-                                                        DEST64_HEADER.toLowerCase(Locale.US),
-                                                        DEST32_HEADER.toLowerCase(Locale.US),
-                                                        PROXY_CONN_HEADER};
+    private static final String[] CLIENT_SKIPHEADERS = {
+        HASH_HEADER.toLowerCase(Locale.US),
+        DEST64_HEADER.toLowerCase(Locale.US),
+        DEST32_HEADER.toLowerCase(Locale.US),
+        PRIORITY_HEADER.toLowerCase(Locale.US),
+        PROXY_CONN_HEADER
+    };
+
     private static final String AGE_HEADER = "age"; // possible anonymity implications, informational
     private static final String ALT_SVC_HEADER = "alt-svc"; // superfluous
     private static final String DATE_HEADER = "date";
@@ -116,25 +122,46 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final String X_GOOG_HASH_HEADER = "x-goog-hash"; // superfluous
     private static final String X_GUPLOADER_UPLOADID_HEADER = "x-guploader-uploadid"; // superfluous
     private static final String X_HACKER_HEADER = "x-hacker"; // Wordpress
+    private static final String X_NANANANA_HEADER = "x-nananana"; // wordpress batcache, informational
     private static final String X_PANTHEON_STYX_HOSTNAME_HEADER = "x-pantheon-styx-hostname"; // possible anonymity implications, informational
     private static final String X_POWERED_BY_HEADER = "x-powered-by";
     private static final String X_RUNTIME_HEADER = "x-runtime"; // Rails
     private static final String X_SERVED_BY_HEADER = "x-served-by"; // possible anonymity implications, informational
     private static final String X_STYX_REQ_ID_HEADER = "x-styx-req-id"; // possible anonymity implications, informational
     private static final String X_TIMER_HEADER = "x-timer"; // possible anonymity implications, informational
-    private static final String X_NANANANA_HEADER = "x-nananana"; // wordpress batcache, informational
 
     // https://httpoxy.org
     private static final String PROXY_HEADER = "proxy";
     /** MUST ALL BE LOWER CASE */
-    private static final String[] SERVER_SKIPHEADERS = {AGE_HEADER, ALT_SVC_HEADER, DATE_HEADER, EXPIRES_HEADER, PRAGMA_HEADER, PROXY_HEADER,
-                                                        PROXY_CONN_HEADER, REFERER_HEADER, SERVER_HEADER, STRICT_TRANSPORT_SECURITY_HEADER, VIA_HEADER,
-                                                        X_CACHE_HEADER, X_CACHE_HITS_HEADER, X_CLOUD_TRACE_CONTEXT_HEADER, X_CONTEXTID_HEADER,
-                                                        X_GOOG_GENERATION_HEADER, X_GOOG_HASH_HEADER, X_GUPLOADER_UPLOADID_HEADER, X_HACKER_HEADER,
-                                                        X_NANANANA_HEADER, X_PANTHEON_STYX_HOSTNAME_HEADER, X_POWERED_BY_HEADER, X_RUNTIME_HEADER,
-                                                        X_SERVED_BY_HEADER, X_STYX_REQ_ID_HEADER};
+    private static final String[] SERVER_SKIPHEADERS = {
+        AGE_HEADER,
+        ALT_SVC_HEADER,
+        DATE_HEADER,
+        EXPIRES_HEADER,
+        PRAGMA_HEADER,
+        PROXY_CONN_HEADER,
+        PROXY_HEADER,
+        REFERER_HEADER,
+        SERVER_HEADER,
+        STRICT_TRANSPORT_SECURITY_HEADER,
+        VIA_HEADER,
+        X_CACHE_HEADER,
+        X_CACHE_HITS_HEADER,
+        X_CLOUD_TRACE_CONTEXT_HEADER,
+        X_CONTEXTID_HEADER,
+        X_GOOG_GENERATION_HEADER,
+        X_GOOG_HASH_HEADER,
+        X_GUPLOADER_UPLOADID_HEADER,
+        X_HACKER_HEADER,
+        X_NANANANA_HEADER,
+        X_PANTHEON_STYX_HOSTNAME_HEADER,
+        X_POWERED_BY_HEADER,
+        X_RUNTIME_HEADER,
+        X_SERVED_BY_HEADER,
+        X_STYX_REQ_ID_HEADER
+    };
+
     /** timeout for first request line */
-//    private static final long HEADER_TIMEOUT = 30*1000;
     private static final long HEADER_TIMEOUT = 45*1000;
     /** timeout for the rest of the request headers */
     private static final long HEADER_FINISH_TIMEOUT = HEADER_TIMEOUT;
@@ -151,7 +178,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     // Set a relatively short timeout for GET/HEAD,
     // and a long failsafe timeout for POST/CONNECT, since the user
     // could be POSTing a massive file
-//    private static final int SERVER_READ_TIMEOUT_GET = 60*1000;
     private static final int SERVER_READ_TIMEOUT_GET = 90*1000;
     private static final int SERVER_READ_TIMEOUT_MEDIUM = 5*60*1000;
     private static final int SERVER_READ_TIMEOUT_POST = 4*60*60*1000;
