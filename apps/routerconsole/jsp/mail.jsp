@@ -5,7 +5,7 @@
  * IllegalStateExceptions !!!
  */
 
-    // Redirect from /tunnelsparticipating to /transit
+    // Redirect from /mail to /webmail
     response.setStatus(301);
     response.setHeader("Cache-Control","immutable");
     response.setHeader("Location","/webmail");

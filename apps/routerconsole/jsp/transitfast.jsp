@@ -22,9 +22,9 @@
 <div class=main id=tunnels>
 <div class=confignav>
 <span class=tab title="<%=intl._t("Locally hosted tunnels (exploratory and client)")%>"><a href="/tunnels">Local</a></span>
-<span class=tab><a href="/tunnelsparticipating"><%=intl._t("Transit")%> (<%=intl._t("Most Recent")%>)</a></span>
+<span class=tab><a href="/transit"><%=intl._t("Transit")%> (<%=intl._t("Most Recent")%>)</a></span>
 <span class=tab2><%=intl._t("Transit")%>  (<%=intl._t("Fastest")%>)</span>
-<span class=tab title="<%=intl._t("Top 50 peers by transit tunnel requests")%>"><a href="/tunnelsparticipatingsummary"><%=intl._t("Transit by Peer")%></a></span>
+<span class=tab title="<%=intl._t("Top 50 peers by transit tunnel requests")%>"><a href="/transitsummary"><%=intl._t("Transit by Peer")%></a></span>
 <span class=tab><a href="/tunnelpeercount"><%=intl._t("All Tunnels by Peer")%></a></span>
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.TunnelParticipatingFastestHelper" id="tunnelParticipatingFastestHelper" scope="request" />
@@ -78,7 +78,7 @@
     }
   }
   function updateTunnels() {
-    xhrtunnels.open('GET', '/tunnelsparticipatingfastest', true);
+    xhrtunnels.open('GET', '/transitfast', true);
     xhrtunnels.responseType = "document";
     xhrtunnels.onreadystatechange = function () {
       if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {

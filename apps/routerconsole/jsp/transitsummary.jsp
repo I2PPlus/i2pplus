@@ -65,7 +65,7 @@
     }
   }
   function updateTunnels() {
-    xhrtunnels.open('GET', '/tunnelsparticipatingsummary', true);
+    xhrtunnels.open('GET', '/transitsummary', true);
     xhrtunnels.responseType = "document";
     xhrtunnels.onreadystatechange = function () {
       if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {

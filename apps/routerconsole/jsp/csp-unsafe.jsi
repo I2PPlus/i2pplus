@@ -1,4 +1,0 @@
-<%
-      // Add this AFTER css.jsi if there's any onclick attributes in the page
-      response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'unsafe-inline'; object-src 'none'; media-src 'none'");
-%>

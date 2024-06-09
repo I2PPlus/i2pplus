@@ -35,7 +35,7 @@
 <span class=tab><a href="/transitfast"><%=intl._t("Transit")%>  (<%=intl._t("Fastest")%>)</a></span>
 <span class=tab title="<%=intl._t("Top 50 peers by transit tunnel requests")%>"><a href="/transitsummary"><%=intl._t("Transit by Peer")%></a></span>
 <span class=tab><a href="/tunnelpeercount">Tunnel Count by Peer</a></span>
-<span id=toggleTunnelIds></span><span id=toggleTunnels></span>
+<span id=toggleTunnelIds title="<%=intl._t("Toggle Tunnel Ids")%>"></span><span id=toggleTunnels title="<%=intl._t("Toggle Tunnels")%>"></span>
 </div>
 <span id=tunnelsContainer hidden>
 <% tunnelHelper.storeWriter(out); %>
