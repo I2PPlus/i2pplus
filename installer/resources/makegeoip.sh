@@ -37,26 +37,26 @@ fi
 
 if [ -x "$(command -v curl)" ]; then
     echo " > Attempting to download https://download.db-ip.com/free/$DL using curl..."
-    curl_out=$(curl -s -I -H 'Accept: */*' -x $HTTP_PROXY https://download.db-ip.com/free/$DL -o /dev/null)
-    content_length=$(echo "$curl_out" | grep -oE 'Content-Length: [0-9]+')
-    if [ -z "$content_length" ]; then
-        echo " ! Error: Unable to determine file size, unable to download."
-    else
-        content_length_value=$(echo "$content_length" | cut -d ' ' -f2)
-        if [ $content_length_value -lt 3145728 ]; then # 3MB = 3145728 bytes
-            echo " ! Error: File size is too small (less than 3MB), unable to download."
-        else
-            echo " > Downloading https://download.db-ip.com/free/$DL using curl..."
-            curl -s -x $HTTP_PROXY https://download.db-ip.com/free/$DL -o $FILE
-        fi
-    fi
+    curl -s -x $HTTP_PROXY https://download.db-ip.com/free/$DL -o $FILE
 else
     echo " ! Error: Please install curl before running this command."
     exit 1
 fi
 
+# Check if downloaded file is smaller than 2MB
+if [ -f "$FILE" ]; then
+    downloaded_file_size=$(stat -c%s "$FILE")
+    if [ $downloaded_file_size -lt 2097152 ]; then # 2MB = 2097152 bytes
+        echo " ! Error: File size is too small (less than 2MB), restoring original file."
+        if [ -f "$FILE.old" ]; then
+            mv -v "${FILE}.old" "$FILE" >/dev/null 2>&1
+        fi
+        exit 1
+    fi
+fi
+
 # Exit on download error
-if [ $? -ne 0 ]; then
+if [ ! -f "$FILE" ]; then
     echo " ! Error: Failed to download the file using the proxy. Please check your proxy configuration and try again."
     if [ -f "$FILE.old" ]; then
         echo " > The file ${FILE}.old has been restored"
