@@ -881,9 +881,10 @@ html:not(.iframed) #torrentDisplay #stopped{border-radius:0 3px 3px 0}
 .peerdata{padding-left:2px}
 .peerinfo td>*{vertical-align:middle}
 .peerinfo code{margin-left:0;margin-right:0;padding:2px 5px;border-radius:4px 0 0 4px}
-#ourDest{margin:-3px 0;padding:1px 0 1px 4px;display:inline-block;border:1px solid #000;border-radius:4px;box-shadow:inset 0 0 0 1px #101;background:#313}
-#ourDest code{margin:0 0 0 4px;padding:2px 3px 2px 4px;display:inline-block;background:#212}
+#ourDest{margin:-3px 0;padding:1px 0 1px 6px;display:inline-block;font-size:95%;text-shadow:1px 1px 1px #000a;border:1px solid #000;border-radius:2px;box-shadow:var(--highlight);background:#313}
+#ourDest code{margin:0 0 0 4px;padding:2px 6px 2px 4px;display:inline-block;background:#212}
 
+/* radio / checkbox */
 input[type=radio]:checked::before{border-radius:50%}
 .active .tAction{background:linear-gradient(to left,#dd0 1px,rgba(255,255,0,0) 1px);animation:ease-out active .5s forwards}
 .optbox,.optbox:checked,.optbox:not(:checked),.optbox[disabled],.optbox:not(:checked)[disabled]{width:22px;height:22px;position:relative;vertical-align:middle;border:var(--border_hard);border-radius:2px;box-shadow:inset 1px 1px 1px rgba(72,0,72,.6),inset -1px -1px 1px #101,inset 2px 2px 3px rgba(0,0,0,.8);background:#101 var(--tile);background-size:96px;box-sizing:border-box;appearance:none}
@@ -1025,8 +1026,8 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #dhtDebug .bullet{display:none}
 #dhtDebug b,#dhtDebug .dbug,#dhtDebug .stat{margin:2px 0;padding:0 8px;display:inline-block;border-radius:2px;color:#f5eff1;background:#313}
 #dhtDebug b{border-radius:2px 0 0 2px}
-#dhtDebug .dbug{margin:-2px -1px -2px -4px;padding:2px 10px;min-width:24px;border-radius:0 2px 2px 0;background:#414}
-#dhtDebug .stat{margin:3px 2px;padding:0;box-shadow:0 0 0 1px #414}
+#dhtDebug .dbug{margin:-2px 0 -2px -4px;padding:2px 8px;min-width:24px;border-radius:0 2px 2px 0;background:#414}
+#dhtDebug .stat{margin:3px 2px;padding:1px;box-shadow:0 0 0 1px #414,var(--highlight)}
 #noDHTPeers{margin:6px 0;border-radius:2px}
 
 /* Resource Errors */
@@ -1177,9 +1178,9 @@ td.status img{margin-left:1px;height:20px;width:auto}
 @media (max-width:1000px){
 td.status img{margin-left:4px}
 .newTab{margin:-1px 4px 0}
-#torrentInfo td{padding:6px 5px}
 .tName a{max-width:280px}
 .trackerLink img{height:17px}
+#torrentInfo td{padding:6px 5px}
 }
 
 @media (max-width:950px){
