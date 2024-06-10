@@ -756,7 +756,7 @@ abstract class StoreJob extends JobImpl {
      * Short ECIES tunnel build messages (1.5.0)
      * @since 0.9.28
      */
-    public static final String MIN_STORE_VERSION = "0.9.51";
+    public static final String MIN_STORE_VERSION = "0.9.60";
 
     /**
      * Is it new enough?
@@ -776,7 +776,7 @@ abstract class StoreJob extends JobImpl {
     }
 
     /** @since 0.9.38 */
-    public static final String MIN_STORE_LS2_VERSION = "0.9.51";
+    public static final String MIN_STORE_LS2_VERSION = "0.9.60";
 
     /**
      * Is it new enough?
@@ -791,7 +791,7 @@ abstract class StoreJob extends JobImpl {
      * Was supported in 38, but they're now sigtype 11 which wasn't added until 39
      * @since 0.9.39
      */
-    public static final String MIN_STORE_ENCLS2_VERSION = "0.9.51";
+    public static final String MIN_STORE_ENCLS2_VERSION = "0.9.60";
 
     /**
      * Is it new enough?
