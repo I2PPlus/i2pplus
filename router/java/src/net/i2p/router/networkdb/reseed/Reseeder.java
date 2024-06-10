@@ -40,6 +40,7 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SSLEepGet;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
+import net.i2p.util.VersionComparator;
 
 /**
  * Moved from ReseedHandler in routerconsole. See ReseedChecker for additional comments.
