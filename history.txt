@@ -1,5 +1,9 @@
+2024-06-10 dr|z3d
+ * Console: Move "Select Stats" link on /graphs config panel header to button
+   inside panel and indicate panel toggle status on header
+
 2024-06-08 dr|z3d
- Console: Add toggle for inbound/outbound tunnels on /tunnels page
+ * Console: Add toggle for inbound/outbound tunnels on /tunnels page
 
 2024-06-06 dr|z3d
  * Graphs: Tweak decimal places on legends
