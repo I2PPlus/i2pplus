@@ -1,0 +1,11 @@
+/* I2P+ graphConfig.css by dr|z3d */
+/* Handles toggle states for /graphs config panel */
+/* when javascript is enabled */
+/* License: AGPL3 or later */
+
+#graphdisplay{position:relative}
+#graphdisplay:not(.visible)::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
+#graphdisplay:not(.visible):hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+#graphdisplay.visible::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}
+#graphdisplay.visible:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:""}
+#toggleSettings{display:none}
