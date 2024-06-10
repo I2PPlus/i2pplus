@@ -136,7 +136,7 @@
 <table id=serverTunnels>
 <tr>
 <th class=tunnelName><%=intl._t("Name")%></th>
-<th class=tunnelHelper></th>
+<th class=tunnelHelper><%=intl._t("Helper")%></th>
 <th class=tunnelType><%=intl._t("Type")%></th>
 <th class=tunnelLocation><%=intl._t("Points at")%></th>
 <th class=tunnelPreview><%=intl._t("Preview")%></th>
@@ -398,7 +398,7 @@ ElGamal-2048
 <table id=clientTunnels>
 <tr>
 <th class=tunnelName><%=intl._t("Name")%></th>
-<th class=tunnelHelper></th>
+<th class=tunnelHelper><%=intl._t("Helper")%></th>
 <th class=tunnelType><%=intl._t("Type")%></th>
 <th class=tunnelInterface><%=intl._t("Interface")%></th>
 <th class=tunnelPort><%=intl._t("Port")%></th>
