@@ -556,6 +556,8 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 #graphs hr{display:none}
 #gform input,#gform select{margin:3px 5px 3px 0;vertical-align:middle}
 #gform input[type=text]{width:70px;min-width:70px;text-align:right}
+#gform .fakebutton{padding:5px 9px 5px 24px}
+#gform .fakebutton::before{margin:0 4px 0 -16px;width:14px;height:14px;display:inline-block;vertical-align:middle;background:var(--configure) no-repeat center center/14px;content:""}
 #graphs .optionlist{border:0;column-gap:2px;columns:500px auto;background:#fff}
 #graphs .optionlist:hover{box-shadow:none}
 #graphs .nowrap{width:calc(100% - 10px);display:inline-block;margin:1px 0;padding:2px 5px;background:#eaeaff;line-height:1}
@@ -570,6 +572,7 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 #graph_single .graphContainer{padding:6px 6px 6px 0;max-width:calc(100% - 32px);box-sizing:content-box;background:#fff;animation:ease grid-fade 2s forwards}
 #graphdisplay:not(.visible){margin-bottom:5px}
 #graphdisplay:hover,#graphdisplay:focus{color:var(--hover)}
+#toggleSettings{display:none}
 #updategraphs .messages{margin-bottom:4px}
 
 /* notifications */
@@ -2706,7 +2709,7 @@ th.queue{white-space:nowrap}
 }
 
 @media (min-width:1500px){
-body,button,input,select,th,.infohelp,.infowarn,.main,.main li b,.main td,.newscontent p,.news p,.percentBarText,.statusnotes,.tab,.tab2,.themelabel,.ui_lang,#configinfo,#configinfo th,#help code,#news p,#peerdefs,#profile_defs,#sidebar button.download,#sidebar .cancel,#sidebar .reload[value="restartImmediate"],#thresholds{font-size:10pt}
+body,button,input,select,th,.fakebutton,.infohelp,.infowarn,.main,.main li b,.main td,.newscontent p,.news p,.percentBarText,.statusnotes,.tab,.tab2,.themelabel,.ui_lang,#configinfo,#configinfo th,#help code,#news p,#peerdefs,#profile_defs,#sidebar button.download,#sidebar .cancel,#sidebar .reload[value="restartImmediate"],#thresholds{font-size:10pt}
 body:not(#homepage) #sb_advancedgeneral:not([hidden])~#sb_tunnels{margin-bottom:-8px}
 button.control{padding:14px}
 .applabel a,.main[id^="config_"] th,#changelog pre,#logs li,#news tt,#updateAvailable{font-size:9.5pt}

@@ -628,6 +628,8 @@ form[action="graphs"],form[action="/updategraphs"]{margin-top:-11px;margin-botto
 #gform table{border:0;margin:0}
 #gform input[type="hidden"]{display:none}
 #gform input[type=text]{min-width:70px;text-align:right}
+#gform .fakebutton{margin-right:6px;padding-left:24px;padding-right:9px}
+#gform .fakebutton::before{margin:-1px 4px 0 -16px;width:14px;height:14px;display:inline-block;vertical-align:middle;background:var(--configure) no-repeat center center/14px;content:""}
 #graphs .messages{margin-top:15px;margin-bottom:-8px}
 #graphs .nowrap{line-height:3;display:inline-block}
 #graphs .nowrap b{min-width:150px;text-align:right;display:inline-block;margin-right:5px}
@@ -2696,11 +2698,11 @@ h3.tabletitle a,#version.tabletitle a{padding-left:18px}
 }
 
 @media (min-width:1500px){
-body,.main,.main td,.news p,#news p,.statusnotes,textarea,th,.applabel a,tt,code,.messages,.messages #newsStatus,#news li,#sidebar h4,#sidebar h4 a{font-size:10pt}
+body,.main,.main td,.news p,#news p,.statusnotes,textarea,th,.applabel a,tt,code,.fakebutton,.messages,.messages #newsStatus,#news li,#sidebar h4,#sidebar h4 a{font-size:10pt}
 h1{padding:14px 15px 15px 62px;font-size:19pt;background-position:14px center}
 h2{font-size:14pt}
 img.app,img#sitelinks{margin-top:-5px;padding:14px 61px 44px}
-select,.main input[type=submit],.main input[type=reset],.main input[type=submit]:hover,.main input[type=reset]:hover,.main input[type=submit]:focus,.main input[type=reset]:focus,.main input[type=submit]:active,.main input[type=reset]:active,input.download[value^="Dump"]:hover,input.download[value^="Dump"]:focus{padding-top:7px;padding-bottom:7px}
+select,.main input[type=submit],.main input[type=reset],.main input[type=submit]:hover,.main input[type=reset]:hover,.main input[type=submit]:focus,.main input[type=reset]:focus,.main input[type=submit]:active,.main input[type=reset]:active,input.download[value^="Dump"]:hover,input.download[value^="Dump"]:focus,.fakebutton{padding-top:7px;padding-bottom:7px}
 .appicon{padding-top:4px;height:50px}
 .applabel a,.applabel a:hover{padding:3px 0;max-width:146px}
 .applabel{width:150px}

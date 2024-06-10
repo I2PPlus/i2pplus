@@ -307,9 +307,6 @@ textarea{margin:2px 0 2px 5px;padding:3px 4px;width:calc(100% - 5px);min-height:
 textarea:focus,.main .tabletextarea textarea:focus{color:var(--ink);box-shadow:inset 0 0 0 1px var(--hover);background:var(--bg);outline:none}
 
 /* graphical buttons */
-input[type=submit],input[type=reset],button{margin:3px 8px 3px 0;padding:4px 5px;text-decoration:none;font:9pt var(--bodyfont);color:var(--ink_light);border:var(--border);border-radius:3px;box-shadow:var(--btn_shadow);background:var(--btn);background-size:14px,100%}
-button:hover,input[type=submit]:hover,input[type=reset]:hover,button:focus,input[type=submit]:focus,input[type=reset]:focus{color:var(--ink);border:var(--border);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover)}
-button:active,input[type=submit]:active,input[type=reset]:active{color:#555;border:1px solid #999;box-shadow:var(--btn_shadow_active);background-color:#ddd;background-blend-mode:luminosity}
 input.accept,button.accept{padding:5px 8px 5px 22px;background:var(--yes) no-repeat 8px center/12px,var(--btn)}
 input.accept:hover,button.accept:hover,input.accept:focus,button.accept:focus{background:var(--yes) no-repeat 8px center/12px,var(--btn_hover)}
 input.accept[value^="Unban"]{padding:5px 8px 5px 24px;background:var(--unban) no-repeat 8px center/14px,var(--btn)}
@@ -1093,6 +1090,8 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 .graphspanel a{font-size:0}
 .graphspanel hr{margin:10px 0}
 .graphspanel form:last-child{text-align:left;margin:0 20px}
+#gform .fakebutton{padding:5px 9px 5px 24px}
+#gform .fakebutton::before{margin:-2px 4px 0 -16px;width:14px;height:14px;display:inline-block;vertical-align:middle;background:var(--configure) no-repeat center center/14px;content:""}
 #graphdisplay{margin:12px -16px 10px;padding:8px 10px;line-height:1}
 #graphs .graphspanel{margin:-16px}
 #graph_single .graphContainer{padding-top:4px}
@@ -2408,7 +2407,7 @@ a.graphstat{margin-right:2px;font-size:90%}
 #stats ul#statlist{margin-top:10px;padding-bottom:0;width:100%;border:0;background:none}
 }
 @media (min-width:1500px){
-body,.main,.main td,.news p,#news p,.tab,.tab2,.main li b,.joblog li,.themelabel,.ui_lang,.statusnotes,#sidebar button.download,#consolepass td,#peerdefs,#profile_defs,#thresholds,#configinfo,.infohelp,.infowarn,button,input,select,textarea,.netdbentry th,.configtable th,#statlist a[name],#statlist b,#statlist li b,#statlist a[name]:hover,div.messages,th,label,input,input[type="submit"],input[type="reset"],button{font-size:10pt}
+body,.main,.main td,.news p,#news p,.tab,.tab2,.main li b,.joblog li,.themelabel,.ui_lang,.statusnotes,#sidebar button.download,#consolepass td,#peerdefs,#profile_defs,#thresholds,#configinfo,.infohelp,.infowarn,button,input,select,textarea,.netdbentry th,.configtable th,#statlist a[name],#statlist b,#statlist li b,#statlist a[name]:hover,div.messages,th,label,input,input[type="submit"],input[type="reset"],button,.fakebutton{font-size:10pt}
 body{overflow-x:hidden}
 button.control{padding:14px}
 code,pre,tt,tt a,.applabel a,.bucket,.tabletextarea textarea,#logs li,#routerlogs li,#servicelogs li,#updateAvailable{font-size:9.5pt}

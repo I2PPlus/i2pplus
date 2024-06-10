@@ -366,8 +366,7 @@ public class GraphHelper extends FormHandler {
         StringBuilder buf = new StringBuilder(3*1024);
 
         buf.append("<br><input type=checkbox id=toggleSettings hidden>")
-           .append("<label for=toggleSettings><h3 id=graphdisplay tabindex=0>").append(_t("Configure Graph Display"))
-           .append(" <a href=\"configstats\">").append(_t("Select Stats")).append("</a></h3></label>")
+           .append("<label for=toggleSettings><h3 id=graphdisplay tabindex=0>").append(_t("Configure Graph Display")).append("</h3></label>")
            .append("<form id=gform action=\"/updategraphs\" method=POST>\n")
            .append("<table>\n<tr><td><div class=optionlist>\n<input type=hidden name=action value=Save>\n")
            .append("<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n")
@@ -403,8 +402,10 @@ public class GraphHelper extends FormHandler {
            .append(_t("Persistence")).append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=\"persistent\"");
         if (persistent) {buf.append(HelperBase.CHECKED);}
         buf.append(">").append(_t("Store graph data on disk")).append("</label></span>\n</div>\n</td></tr>\n</table>\n")
-           .append("<hr>\n<div class=formaction id=graphing><input type=submit class=accept value=\"")
-           .append(_t("Save settings and redraw graphs")).append("\"></div>\n</form>\n");
+           .append("<hr>\n<div class=formaction id=graphing>")
+           .append("<a class=fakebutton href=/configstats>").append(_t("Select Stats")).append("</a> ")
+           .append("<input type=submit class=accept value=\"").append(_t("Save settings and redraw graphs")).append("\">")
+           .append("</div>\n</form>\n");
         return buf.toString();
     }
 

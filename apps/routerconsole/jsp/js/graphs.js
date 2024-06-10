@@ -30,10 +30,7 @@ function injectCss() {
   const graphHeight = graph.naturalHeight;
   const dimensions = ".graphContainer{width:" + (graphWidth + 4) + "px;height:" + (graphHeight + 4) + "px}";
   let retryCount = 0;
-  //console.log("width = " + graphWidth + " - height = " + graphHeight);
-  if (graphWidth !== "auto" && graphWidth !== "0" && dimensions.indexOf("width:4px") === -1) {
-    gwrap.innerText = dimensions;
-  }
+  if (graphWidth !== "auto" && graphWidth !== "0" && dimensions.indexOf("width:4px") === -1) {gwrap.innerText = dimensions;}
   else {gwrap.innerText = "";}
 
   function checkGwrap() {
@@ -94,10 +91,12 @@ function toggleView() {
   if (!toggle) {return;}
   if (toggle.checked === false) {
     config.hidden = true;
+    toggle.removeAttribute("checked");
     if (h3.classList.contains("visible")) {h3.classList.remove("visible");}
   } else {
     config.hidden = false;
-    h3.classList.add("visible");
+    toggle.setAttribute("checked", "checked");
+    if (!h3.classList.contains("visible")) {h3.classList.add("visible");}
     document.getElementById("gwidth").focus();
     if (sb !== null && sb.scrollHeight < document.body.scrollHeight) {
       setTimeout(() => {window.scrollTo({top: document.body.scrollHeight, behavior: "smooth"});}, 500);
@@ -105,11 +104,22 @@ function toggleView() {
   }
 }
 
+function loadToggleCss() {
+  const css = document.querySelector("#graphToggleCss");
+  if (css) {return;}
+  const link = document.createElement("link");
+  link.href = "/themes/console/graphConfig.css";
+  link.rel = "stylesheet";
+  link.id = "graphToggleCss";
+  document.head.appendChild(link);
+}
+
 document.addEventListener("DOMContentLoaded", function() {
   progressx.hide();
   initCss();
   onVisible(allgraphs, updateGraphs);
   onHidden(allgraphs, stopRefresh);
+  loadToggleCss();
   toggleView();
   toggle?.addEventListener("click", toggleView);
 });

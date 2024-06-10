@@ -71,12 +71,12 @@ a{text-decoration:none}
 a:link,a:visited{color:var(--a);text-decoration:none;font-weight:700;word-wrap:break-word;outline:none}
 a:link:hover,a:hover,a:visited:hover,a:visited:focus{color:#f60;text-decoration:none;text-shadow:none}
 a:active,a:visited:active{color:#f30}
-input[type=file],input[type=submit],input[type=reset],button,label,select,.fakebutton.optbox{font-family:var(--bodyfont);cursor:pointer}
-input,input:visited,button,button:visited{margin:3px;padding:5px;line-height:1.4;font-size:9pt;color:var(--ink_light);text-decoration:none;text-shadow:var(--txt_shadow);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:var(--btn);background-size:14px,100%;opacity:1;filter:var(--filter_shadow)}
+input[type=file],input[type=submit],input[type=reset],button,label,select,.fakebutton,.optbox{font-family:var(--bodyfont);cursor:pointer}
+input,input:visited,button,button:visited,.fakebutton,.fakebutton:visited{margin:3px;padding:5px;display:inline-block;line-height:1.4;vertical-align:middle;font-size:9pt;color:var(--ink_light);text-decoration:none;text-shadow:var(--txt_shadow);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:var(--btn);background-size:14px,100%;opacity:1;filter:var(--filter_shadow)}
 button a,button a:visited{font-weight:400;color:var(--ink_light)}
-button:hover,input[type=submit]:hover,input[type=reset]:hover,button:focus,input[type=submit]:focus,input[type=reset]:focus{color:var(--ink_dark);border:1px solid var(--hover);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover);filter:saturate(100%) drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
+button:hover,input[type=submit]:hover,input[type=reset]:hover,button:focus,input[type=submit]:focus,input[type=reset]:focus,.fakebutton:hover,.fakebutton:visited:hover,.fakebutton:focus,.fakebutton:visited:focus{color:var(--ink_dark);border:1px solid var(--hover);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover);filter:saturate(100%) drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
 button:hover a{color:var(--ink_dark)}
-button:active,input[type=submit]:active,input[type=reset]:active{color:var(--ink_active);box-shadow:var(--btn_shadow_active);background-blend-mode:luminosity;transition:none}
+button:active,input[type=submit]:active,input[type=reset]:active,.fakebutton:active,.fakebutton:visited:active{color:var(--ink_active);box-shadow:var(--btn_shadow_active);background-blend-mode:luminosity;transition:none}
 button a:active{color:var(--ink_active)}
 b{color:var(--ink_light)}
 button::-moz-focus-inner,input[type=submit]::-moz-focus-inner,input[type=reset]::-moz-focus-inner,.control::-moz-focus-inner,select::-moz-focus-inner{outline:none;border:0}
