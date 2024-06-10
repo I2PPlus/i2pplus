@@ -17,7 +17,8 @@ function showBadge() {
   const searchQuery = query.get("search");
   const allFilters = filterbar.querySelectorAll(".filter");
   let activeFilter;
-  if (searchQuery !== null) {activeFilter = document.querySelector("filter#search");}
+
+  if (searchQuery !== null) {activeFilter = document.querySelector(".filter#search");}
   else {const activeFilter = document.querySelector(".filter[id='" + (filterQuery !== null ? filterQuery : "all") + "']");}
   allFilters.forEach(filter => {
     const badges = filter.querySelectorAll(".filter:not(.enabled):not(#all) .badge");
@@ -27,12 +28,13 @@ function showBadge() {
       badges.forEach(badge => badge.hidden = true);
     } else {badges.forEach(badge => badge.hidden = "");}
   });
+
   if (activeFilter) {
     if (!activeFilter.classList.contains("enabled")) {
       activeFilter.classList.add("enabled");
       window.localStorage.setItem("snarkFilter", activeFilter.id);
     }
-    snarkCount = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile:not(.peerinfo):not(.debuginfo)").length;
+    snarkCount = xhrsnark.responseXML?.querySelectorAll("#snarkTbody tr.volatile:not(.peerinfo)").length;
     const activeBadge = activeFilter.querySelector(".badge");
     const filterAll = torrentDisplay.querySelector(".filter#all");
     activeBadge.id = "filtercount";
