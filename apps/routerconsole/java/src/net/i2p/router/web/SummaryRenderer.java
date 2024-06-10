@@ -425,7 +425,7 @@ class SummaryRenderer {
                 title = graphTitle.replaceAll("(?<=[a-z])([A-Z])", " $1");
                 title = title.substring(0, 1).toUpperCase() + title.substring(1);
                 title = title.replace("[Tunnel] [Tunnel]", "[Tunnel]")
-                             .replace("Uild Success Avg", "Build Success (percent)")
+                             .replace("Uild Success Avg", "Build Success Average")
                              .replace(" Avg", "Average")
                              .replace(".drop", " Drop")
                              .replace(".delay", " Delay")
