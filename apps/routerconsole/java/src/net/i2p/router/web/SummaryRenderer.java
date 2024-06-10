@@ -504,13 +504,13 @@ class SummaryRenderer {
                 if (!hideLegend) {
                     Variable var = new Variable.MAX();
                     def.datasource("max2", plotName2, var);
-                    def.gprint("max2", " " + _t("Max") + ": " + numberFormat);
+                    def.gprint("max2", " " + _t("Max") + ": " + numberFormat + " ");
                     var = new Variable.MIN();
                     def.datasource("min2", plotName, var);
-                    def.gprint("min2", " " + _t("Min") + ": " + numberFormat);
+                    def.gprint("min2", " " + _t("Min") + ": " + numberFormat + " ");
                     var = new Variable.AVERAGE();
                     def.datasource("avg2", plotName2, var);
-                    def.gprint("avg2", " " + _t("Avg") + ": " + numberFormat);
+                    def.gprint("avg2", " " + _t("Avg") + ": " + numberFormat + " ");
                     var = new Variable.LAST();
                     def.datasource("last2", plotName2, var);
                     def.gprint("last2", " " + _t("Now") + ": " + numberFormat + "\\l");
