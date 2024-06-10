@@ -14,8 +14,11 @@ function showBadge() {
   if (!filterbar) {return;}
   const query = new URLSearchParams(window.location.search);
   const filterQuery = query.get("filter");
+  const searchQuery = query.get("search");
   const allFilters = filterbar.querySelectorAll(".filter");
-  const activeFilter = document.querySelector(".filter[id='" + (filterQuery != null ? filterQuery : "all") + "']");
+  let activeFilter;
+  if (searchQuery !== null) {activeFilter = document.querySelector("filter#search");}
+  else {const activeFilter = document.querySelector(".filter[id='" + (filterQuery !== null ? filterQuery : "all") + "']");}
   allFilters.forEach(filter => {
     const badges = filter.querySelectorAll(".filter:not(.enabled):not(#all) .badge");
     if (filter !== activeFilter) {
