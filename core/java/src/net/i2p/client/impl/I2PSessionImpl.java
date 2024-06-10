@@ -967,8 +967,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             if (!toCheck.isEmpty()) {
                 for (Long msgId : toCheck) {
                     MessagePayloadMessage removed = _availableMessages.remove(msgId);
-                    if (removed != null)
-                        _log.error(getPrefix() + " Client not responding? Message not processed! [MsgID " + msgId + "] " + removed);
+                    if (removed != null && _log.shouldWarn()) {
+                        _log.warn(getPrefix() + " Unresponsive client, failed to process [MsgID " + msgId + "] " + removed);
+                    }
                 }
                 toCheck.clear();
             }
@@ -1440,7 +1441,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         }
 
         if (_log.shouldError())
-            _log.error(getPrefix() + "Disconnected from the router, and not trying to reconnect");
+            _log.error(getPrefix() + "Disconnected from the router, not trying to reconnect...");
 
         closeSocket();
         changeState(State.CLOSED);
@@ -1459,7 +1460,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     protected boolean reconnect() {
         closeSocket();
-        if (_log.shouldInfo()) _log.info(getPrefix() + "Reconnecting...");
+        if (_log.shouldInfo()) {_log.info(getPrefix() + "Reconnecting...");}
         int i = 0;
         while (true) {
             long delay = BASE_RECONNECT_DELAY << i;
@@ -1479,7 +1480,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                 return true;
             } catch (I2PSessionException ise) {
                 if (_log.shouldError())
-                    _log.error(getPrefix() + "Error reconnecting on attempt " + i, ise);
+                    _log.error(getPrefix() + "Error reconnecting on attempt " + i + " -> " + ise.getMessage());
             }
         }
     }
@@ -1489,10 +1490,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     protected String getPrefix() {
         StringBuilder buf = new StringBuilder();
-        buf.append(" [");
+        buf.append(" Tunnel ");
         getName(buf);
-        buf.append('(').append(_state.toString()).append(')');
-        buf.append("]: ");
+        buf.append(" (").append(_state.toString()).append(")");
+        buf.append(" -> ");
         return buf.toString();
     }
 
@@ -1514,9 +1515,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             buf.append(s);
         else
             buf.append(getClass().getSimpleName());
-        SessionId id = _sessionId;
-        if (id != null)
-            buf.append(" #").append(id.getSessionId());
+        //SessionId id = _sessionId;
+        //if (id != null && _log.shouldInfo())
+        //    buf.append("  / SessionID: ").append(id.getSessionId());
     }
 
     /**
