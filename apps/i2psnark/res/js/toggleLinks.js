@@ -11,9 +11,8 @@ const linkCss =    "#torrents #linkswitch::before{background:url(/i2psnark/.res/
                    "@media(min-width:1500px){#torrents td.trackerLink img{margin:0;width:20px!important;height:20px!important}";
 
 const magnetCss =  "#torrents #linkswitch::before{background:url(/i2psnark/.res/icons/magnet.svg) no-repeat center center/20px!important}" +
-                   "#snarkTbody .trackerLink,#snarkTbody .trackerLink:empty{padding:0;width:0;font-size:0}#snarkTbody .trackerLink>*{display:none!important}" +
+                   "#snarkHead .trackerLink,#snarkTbody .trackerLink{padding:0;width:0;font-size:0}#snarkTbody .trackerLink>*{display:none!important}" +
                    "#snarkTbody .magnet{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}#snarkTbody .magnet>*{display:inline-block!important}" +
-                   "#torrents td.trackerLink img{margin:0;width:18px!important;height:18px!important}" +
                    "@media(min-width:1500px){#torrents td.magnet img{margin:0;width:20px!important;height:20px!important}}";
 
 const magnetBtn =  "#snarkTbody .magnetlink{position:relative}#snarkTbody .copyMagnet{width:100%;height:100%;position:absolute;top:0;right:0;bottom:0;left:0;" +
@@ -49,9 +48,13 @@ function initLinkToggler() {
   if (config === "magnets" || !config) {
     toggleCss.textContent = magnetCss + magnetBtn;
     toggle.checked = true;
+    if (document.querySelector("body").classList.contains("tlinks")) {document.querySelector("body").classList.remove("tlinks");}
+    if (!document.querySelector("body").classList.contains("magnets")) {document.querySelector("body").classList.add("magnets");}
   } else {
     toggleCss.textContent = linkCss;
     toggle.checked = false;
+    if (document.querySelector("body").classList.contains("magnets")) {document.querySelector("body").classList.remove("magnets");}
+    if (!document.querySelector("body").classList.contains("tlinks")) {document.querySelector("body").classList.add("tlinks");}
   }
 }
 
@@ -76,10 +79,14 @@ function doToggle() {
     toggleCss.textContent = linkCss;
     toggle.checked = false;
     localStorage["linkToggle"] = "links";
+    if (document.querySelector("body").classList.contains("magnets")) {document.querySelector("body").classList.remove("magnets");}
+    if (!document.querySelector("body").classList.contains("tlinks")) {document.querySelector("body").classList.add("tlinks");}
   } else {
     toggleCss.textContent = magnetCss + magnetBtn;
     toggle.checked = true;
     localStorage["linkToggle"] = "magnets";
+    if (document.querySelector("body").classList.contains("tlinks")) {document.querySelector("body").classList.remove("tlinks");}
+    if (!document.querySelector("body").classList.contains("magnets")) {document.querySelector("body").classList.add("magnets");}
   }
   if (debugging) {console.log("#toggleLinks = " + toggleCss.innerHTML);}
 }
