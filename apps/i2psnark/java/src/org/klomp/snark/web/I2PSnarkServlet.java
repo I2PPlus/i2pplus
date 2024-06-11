@@ -2835,7 +2835,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("<span class=peerclient><code title=\"");
                     buf.append(_t("Destination (identity) of peer"));
                     buf.append("\">").append(peer.toString().substring(5, 9)).append("</code>&nbsp;");
-                    if (hasVersion) {buf.append("<span class=clientid title=\"").append(version).append("\">");}
+                    if (hasVersion) {buf.append("<span class=clientid title=\"").append(_t("Version")).append(": ").append(version).append("\">");}
                     else {buf.append("<span class=clientid>");}
                     if ("AwMD".equals(ch)) {client = "I2PSnark";}
                     else if ("LUFa".equals(ch)) {client = "Vuze";}
@@ -2873,11 +2873,11 @@ public class I2PSnarkServlet extends BasicServlet {
                          if (client == null) {client = ch;}
                     }
 
-                    if (addVersion) {
-                        byte[] id = pid.getID();
-                        if (id != null && id[0] == '-')
-                            client += getAzVersion(id);
-                    }
+                    //if (addVersion) {
+                    //    byte[] id = pid.getID();
+                    //    if (id != null && id[0] == '-')
+                    //        client += getAzVersion(id);
+                    //}
                     buf.append(client + "</span></span>");
                 }
                 if (t >= 5000) {
@@ -3028,19 +3028,15 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.14
      */
     private static String getAzVersion(byte[] id) {
-        if (id[7] != '-')
-            return "";
+        if (id[7] != '-') {return "";}
         StringBuilder buf = new StringBuilder(8);
         buf.append(' ');
         for (int i = 3; i <= 6; i++) {
             int val = id[i] - '0';
-            if (val < 0)
-                return "";
-            if (val > 9)
-                val = id[i] - 'A';
+            if (val < 0) {return "";}
+            if (val > 9) {val = id[i] - 'A';}
             if (i != 6 || val != 0) {
-                if (i != 3)
-                    buf.append('.');
+                if (i != 3) {buf.append('.');}
                 buf.append(val);
             }
         }
@@ -3057,10 +3053,8 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append(' ');
         for (int i = 3; i <= 5; i++) {
             int val = id[i];
-            if (val < 0)
-                return "";
-            if (i != 3)
-                buf.append('.');
+            if (val < 0) {return "";}
+            if (i != 3) {buf.append('.');}
             buf.append(val);
         }
         return buf.toString();
@@ -3068,8 +3062,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /** @since 0.8.2 */
     private static String thinsp(boolean disable) {
-        if (disable)
-            return " / ";
+        if (disable) {return " / ";}
         return ("&thinsp;/&thinsp;");
     }
 
@@ -3081,8 +3074,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         public int compare(Peer l, Peer r) {
             int diff = r.completed() - l.completed();      // reverse
-            if (diff != 0)
-                return diff;
+            if (diff != 0) {return diff;}
             return l.toString().substring(5, 9).compareTo(r.toString().substring(5, 9));
         }
     }
