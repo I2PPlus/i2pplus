@@ -1072,7 +1072,7 @@
         </loadfile>
         <property name="release.number" value="unknown" />
         <property name="api.version" value="unknown" />
-        <echo message="Release number: ${release.number}" />
+        <echo message="Release version: ${release.number}" />
         <echo message="API version: ${api.version}" />
         <fail message="Bad API version, must start with 0.9.">
             <condition>
@@ -1081,7 +1081,7 @@
                 </not>
             </condition>
         </fail>
-        <fail message="Release number / API version mismatch">
+        <fail message="Release version / API version mismatch">
             <condition>
                 <and>
                     <not>
@@ -1122,11 +1122,11 @@
         </loadfile>
         <property name="i2p.build.number" value="??" />
         <property name="build.extra" value="" />
-        <echo message="Build number is ${i2p.build.number}${build.extra}" />
+        <echo message="Build sub-version: ${i2p.build.number}${build.extra}" />
     </target>
 
     <target name="verifyReleaseBuildNumbers" depends="getReleaseNumber, getBuildNumber">
-        <fail message="Bad release number: ${release.number}">
+        <fail message="Bad release version: ${release.number}">
             <condition>
                 <or>
                     <equals arg1="${release.number}" arg2="unknown" />
@@ -1134,7 +1134,7 @@
                 </or>
             </condition>
         </fail>
-        <fail message="Non-zero build number: ${i2p.build.number}">
+        <fail message="Non-zero build sub-version: ${i2p.build.number}">
             <condition>
                 <not>
                     <equals arg1="${i2p.build.number}" arg2="0" />
