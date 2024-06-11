@@ -395,6 +395,7 @@ class SummaryRenderer {
             if (name.endsWith("Bps")) {graphTitle = graphTitle.replaceAll("Bps", "B/s");}
 
             boolean singleDecimalPlace = true;
+            boolean noDecimalPlace = false;
             graphTitle = CSSHelper.StringFormatter.capitalizeWord(graphTitle);
             graphTitle = graphTitle.replace("[Tunnel] Tunnel", "[Tunnel]")
                                    .replace("Tunnel.participating", "[Transit]")
@@ -411,6 +412,11 @@ class SummaryRenderer {
                 && !showEvents) {
                 def.setBase(1024);
                 singleDecimalPlace = false;
+            } else if ((name.toLowerCase().indexOf("peers") >= 0 || (name.toLowerCase().indexOf("councurrent") >= 0) ||
+                       (name.toLowerCase().indexOf("retries") >= 0)) && !showEvents) {
+                noDecimalPlace = true;
+                def.setUnit("");
+                def.setUnitsExponent(0);
             }
             if (titleOverride != null) {
                 def.setTitle(titleOverride);
@@ -470,7 +476,7 @@ class SummaryRenderer {
                 else {def.area(plotName, AREA_COLOR);}
             }
 
-            String numberFormat = singleDecimalPlace ? "%.1f%s" : "%.2f%s";
+            String numberFormat = noDecimalPlace ? "%.0f%s" : singleDecimalPlace ? "%.1f%s" : "%.2f%s";
 
             if (!hideLegend) {
                 Variable var = new Variable.MIN();
