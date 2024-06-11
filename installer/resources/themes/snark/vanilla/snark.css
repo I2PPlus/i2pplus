@@ -32,7 +32,7 @@
 --tab_section:var(--th);
 --tab_section_hover:linear-gradient(180deg,#fff7ef,#ddcabb 50%,#c4a38777 50%);
 --tab_section_active:linear-gradient(180deg,#baa397,#e5d2c8);
---th:linear-gradient(180deg,#efefef,#cfc7c2);
+--th:linear-gradient(180deg,#f5f0ed,#e4d6ce);
 --th_config:linear-gradient(180deg,#f4f2f1,#cfc7c2 75%,#c7bdb8,#bcb0a9);
 }
 
@@ -242,6 +242,7 @@ td.details{padding-left:0}
 body.magnets #snarkHead .trackerLink,body.magnets #snarkTbody .trackerLink{padding:0!important;width:0;min-width:0!important;font-size:0}
 
 /* download bars */
+.barComplete{padding:3px 0 2px;display:inline-block;min-width:84px;line-height:1.5;vertical-align:middle;text-align:center;border-radius:20px;box-shadow:inset 0 0 0 1px #b5a79b,inset 0 0 0 2px #fff5,inset 0 2px 2px 2px rgba(239,231,224,.4),inset 0 -2px 2px 2px rgba(236,200,172,.4);background:linear-gradient(180deg,#fffbef,#dfd7d1)}
 .active .barComplete{color:#ad681f;box-shadow:inset 0 0 0 1px #b5a79b,inset 0 2px 2px 2px rgba(239,231,224,.6),inset 0 -2px 2px 2px rgba(236,200,172,.6);background:radial-gradient(at center bottom,rgba(220,180,0,.1) 10%,rgba(0,0,0,0) 70%),linear-gradient(180deg,#fffbef,#f0d6c2)}
 .active .txBarInner{background:rgba(255,64,220,.35)}
 .active .txBarInner[style="width:calc(100% - 2px)"]{background:linear-gradient(180deg,rgba(255,96,224,.35) 50%,rgba(255,32,192,.35))}
@@ -251,7 +252,6 @@ body.magnets #snarkHead .trackerLink,body.magnets #snarkTbody .trackerLink{paddi
 .inactive .barOuter{background:repeating-linear-gradient(90deg,#f8f2ec 1px,#f8f2ec 5px,#f2e5d9 6px,#f2e5d9 11px)}
 .inactive .barText{color:#777}
 .inactive .rxd .barInner{background:linear-gradient(90deg,rgba(128,32,0,.15) 20px,rgba(128,128,0,.15) 50px,rgba(0,128,0,.15)),linear-gradient(180deg,rgba(255,255,255,.1),rgba(0,0,0,.1)),rgba(255,255,255,.5)}
-.barComplete{padding:3px 0 2px;display:inline-block;min-width:84px;line-height:1.5;vertical-align:middle;text-align:center;border-radius:20px;box-shadow:inset 0 0 0 1px #b5a79b,inset 0 2px 2px 2px rgba(239,231,224,.3),inset 0 -2px 2px 2px rgba(236,200,172,.3);background:linear-gradient(180deg,#fffbef,#dfd7d1)}
 .barInner,.tx{height:16px;vertical-align:middle;border:0;border-right:1px solid #998;border-radius:1px;box-shadow:var(--highlight);background:linear-gradient(180deg,rgba(255,247,239,.8) 50%,rgba(207,193,181,.9) 50%,rgba(207,193,181,1))}
 .barOuter{margin:0;display:inline-block;border:1px solid #998;border-radius:1px;box-shadow:var(--highlight),inset 2px 2px 3px rgba(0,0,0,.4);background:repeating-linear-gradient(135deg,#fff7ef 1px,#fff7ef 5px,#efdfd1 6px,#efdfd1 11px);opacity:1}
 .barOuter,.barText{width:84px;vertical-align:middle}
@@ -638,20 +638,19 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 
 /* create torrent file filtering */
 form[action^="/i2psnark/configure"]{display:block}
-.createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-weight:600;font-style:italic;border:var(--btn_border);box-shadow:var(--highlight);background:var(--nav);transform: translateY(2px)}
-.createFilterToggle.starts_with{border-left-width:5px}
-.createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
-.createFilterToggle.ends_with{border-right-width:5px}
-.createFilterToggle:hover{border:var(--btn_border_hover);background:var(--nav_hover)}
-.createFilterToggle:active{box-shadow:var(--btn_shadow_inset)}
 #addFileFilter input[type=text]{width:200px}
-#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-style:normal;box-shadow:var(--btn_shadow_inset);background:var(--delete) no-repeat 8px center/10px,var(--nav_depressed)}
 #contentFilter{margin:0 0 -3px -2px;width:calc(100% - 189px);display:flex;flex-wrap:wrap;align-items:center}
 #contentFilter input[type=checkbox]{display:none}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-style:normal;box-shadow:var(--btn_shadow_inset);background:var(--delete) no-repeat 8px center/10px,var(--nav_depressed)}
+#contentFilter .createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-weight:600;font-style:italic;border:var(--btn_border);box-shadow:var(--highlight);background:var(--nav);transform: translateY(2px)}
+#contentFilter .createFilterToggle.starts_with{border-left-width:5px}
+#contentFilter .createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
+#contentFilter .createFilterToggle.ends_with{border-right-width:5px}
+#contentFilter .createFilterToggle:hover{border-color:#4f3927;background:var(--nav_hover)}
+#contentFilter .createFilterToggle:active{box-shadow:var(--btn_shadow_inset)}
 #createTorrentFilters{display:table-row}
 #createTorrentFilters td{padding:5px 8px 0}
 #fileFilter{margin:0 auto;display:block;margin-bottom:10px}
-.iframed #fileFilter{margin-top:-11px}
 #fileFilter input[type=submit]{margin:2px 6px}
 #fileFilter input.accept[type=submit]{float:right;margin-right:1px}
 #fileFilter .add{float:right}
@@ -664,6 +663,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #fileFilter tr:nth-last-child(4) td{padding:7px 4px;border-top:var(--border_hard)}
 #fileFilter th:nth-child(n+4),#fileFilter td:nth-child(n+4){text-align:center}
 #fileFilter .createFilterString td:nth-child(n+4):not(:last-child){background:#fff2}
+.iframed #fileFilter{margin-top:-11px}
 
 /* language overrides */
 .lang_fr .optionlist,.lang_hu .optionlist,.lang_in .optionlist,.lang_it .optionlist,.lang_sk .optionlist,.lang_nl .optionlist,.lang_pl .optionlist,.lang_pt .optionlist,.lang_ro .optionlist,.lang_sv .optionlist,.lang_tr .optionlist,.lang_uk .optionlist{columns:500px auto}
