@@ -10,7 +10,7 @@ let filterbar;
 let snarkCount;
 
 function showBadge() {
-  filterbar = document.getElementById("torrentDisplay")
+  filterbar = document.getElementById("torrentDisplay");
   if (!filterbar) {return;}
   const query = new URLSearchParams(window.location.search);
   const filterQuery = query.get("filter");
@@ -19,7 +19,7 @@ function showBadge() {
   let activeFilter;
 
   if (searchQuery !== null) {activeFilter = document.querySelector(".filter#search");}
-  else {const activeFilter = document.querySelector(".filter[id='" + (filterQuery !== null ? filterQuery : "all") + "']");}
+  else {activeFilter = document.querySelector(".filter[id='" + (filterQuery !== null ? filterQuery : "all") + "']");}
   allFilters.forEach(filter => {
     const badges = filter.querySelectorAll(".filter:not(.enabled):not(#all) .badge");
     if (filter !== activeFilter) {
@@ -41,9 +41,7 @@ function showBadge() {
     if (!filterAll.classList.contains("enabled")) {
       filterAll.querySelector(".badge").setAttribute("hidden", "");
       activeBadge.textContent = snarkCount;
-    } else {
-      filterAll.querySelector(".badge").removeAttribute("hidden");
-    }
+    } else {filterAll.querySelector(".badge").removeAttribute("hidden");}
   }
 }
 
@@ -68,9 +66,7 @@ function updateURLs() {
 function checkIfVisible() {
   const torrentform = document.getElementById("torrentlist");
   if (torrentform !== null) {
-    onVisible(torrentform, () => {
-      updateURLs();
-    });
+    onVisible(torrentform, () => {updateURLs();});
   }
 }
 
