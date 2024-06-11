@@ -32,6 +32,9 @@ import org.rrd4j.graph.RrdGraph;
 import org.rrd4j.graph.RrdGraphDef;
 import org.rrd4j.graph.SVGImageWorker;
 
+import eu.bengreen.data.utility.LargestTriangleThreeBuckets;
+import eu.bengreen.data.utility.LargestTriangleThreeBucketsTime;
+
 import net.i2p.router.web.helpers.GraphHelper;
 
 
@@ -154,16 +157,17 @@ class SummaryRenderer {
         // prevent NaNs if we are skewed ahead of system time
         long end = Math.min(_listener.now(), begin - 75*1000);
         long period = _listener.getRate().getPeriod();
-        if (endp > 0)
-            end -= period * endp;
-        if (periodCount <= 0 || periodCount > _listener.getRows())
-            periodCount = _listener.getRows();
+        if (endp > 0) {end -= period * endp;}
+        if (periodCount <= 0 || periodCount > _listener.getRows()) {periodCount = _listener.getRows();}
         long start = end - (period * periodCount);
         ImageOutputStream ios = null;
         String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
 
         try {
             RrdGraphDef def = new RrdGraphDef(start/1000, end/1000);
+            if (periodCount >= 10080) {def.setDownsampler(new LargestTriangleThreeBucketsTime(100));} // 1 week
+            else if (periodCount >= 2480) {def.setDownsampler(new LargestTriangleThreeBucketsTime(200));} // 2 days
+            else if (periodCount >= 1440) {def.setDownsampler(new LargestTriangleThreeBucketsTime(500));} // 1 day
             // sidebar minigraph
             if ((width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) ||
                 (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid)) {
@@ -412,12 +416,15 @@ class SummaryRenderer {
                 && !showEvents) {
                 def.setBase(1024);
                 singleDecimalPlace = false;
-            } else if ((name.toLowerCase().indexOf("peers") >= 0 || (name.toLowerCase().indexOf("councurrent") >= 0) ||
-                       (name.toLowerCase().indexOf("retries") >= 0)) && !showEvents) {
+            }
+/**
+            else if ((name.toLowerCase().indexOf("peers") >= 0 || (name.toLowerCase().indexOf("concurrent") >= 0) ||
+                     (name.toLowerCase().indexOf("retries") >= 0)) && !showEvents) {
                 noDecimalPlace = true;
                 def.setUnit("");
                 def.setUnitsExponent(0);
             }
+**/
             if (titleOverride != null) {
                 def.setTitle(titleOverride);
             } else if (!hideTitle) {
@@ -479,6 +486,19 @@ class SummaryRenderer {
             String numberFormat = noDecimalPlace ? "%.0f%s" : singleDecimalPlace ? "%.1f%s" : "%.2f%s";
 
             if (!hideLegend) {
+/*
+                if (descr != null && !descr.equals("") &&
+                    (descr.toLowerCase().indexOf("peers") >= 0 ||
+                    descr.toLowerCase().indexOf("councurrent") >= 0 ||
+                    descr.toLowerCase().indexOf("retries") >= 0 ||
+                    descr.toLowerCase().indexOf("queries") >= 0 ||
+                    descr.toLowerCase().indexOf("lookups") >= 0 ||
+                    descr.toLowerCase().indexOf("number of") >= 0) && !showEvents) {
+                    noDecimalPlace = true;
+                    def.setUnit("");
+                    def.setUnitsExponent(0);
+                }
+*/
                 Variable var = new Variable.MIN();
                 def.datasource("min", plotName, var);
                 def.gprint("min", " " + _t("Min") + ": " + numberFormat);
