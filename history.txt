@@ -1,4 +1,7 @@
 2024-06-10 dr|z3d
+ * I2PSnark: If peer client has version string, display on tooltip only
+
+2024-06-10 dr|z3d
  * Console: Move "Select Stats" link on /graphs config panel header to button
    inside panel and indicate panel toggle status on header
 
