@@ -1,5 +1,6 @@
-2024-06-10 dr|z3d
+2024-06-11 dr|z3d
  * I2PSnark: If peer client has version string, display on tooltip only
+ * Graphs: Downsample graph data progressively as the display period increases
 
 2024-06-10 dr|z3d
  * Console: Move "Select Stats" link on /graphs config panel header to button
