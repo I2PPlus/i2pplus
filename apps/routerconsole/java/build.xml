@@ -1,396 +1,426 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="routerconsole">
-    <target name="all" depends="clean, build" />
-    <target name="build" depends="builddep, jar" />
-    <target name="builddep">
-        <!-- run from top level build.xml to get dependencies built -->
-    </target>
-    <target name="prepare">
-        <!-- run from top level build.xml to get dependencies built -->
-    </target>
-    <condition property="no.bundle">
-        <isfalse value="${require.gettext}" />
-    </condition>
-    <condition property="depend.available">
-        <typefound name="depend" />
-    </condition>
-    <target name="depend" if="depend.available">
-        <depend
-            cache="../../../build"
-            srcdir="./src"
-            destdir="./build/obj" >
-            <!-- Depend on classes instead of jars where available -->
-            <classpath>
-                <pathelement location="../../../core/java/build/obj" />
-                <pathelement location="../../../core/java/build/gnu-getopt.jar" />
-                <pathelement location="../../../router/java/build/obj" />
-                <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar" />
-                <pathelement location="../../jetty/jettylib/jetty-util.jar" />
-                <pathelement location="../../jetty/jettylib/javax.servlet.jar" />
-                <pathelement location="../../jetty/jettylib/jetty-i2p.jar" />
-                <pathelement location="../../systray/java/build/obj" />
-                <pathelement location="../../desktopgui/build" />
-                <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar" />
-                <pathelement location="../../jrobin/java/build/jrobin.jar" />
-            </classpath>
-        </depend>
-    </target>
-    <target name="dependVersion">
-        <!-- Force the dependency on the RouterVersion as depend doesn't recognize constant changes  -->
-        <dependset>
-             <srcfilelist dir="." files="../../../router/java/build/obj/net/i2p/router/RouterVersion.class" />
-             <targetfilelist dir="." files="build/obj/net/i2p/router/web/NewsFetcher.class" />
-             <targetfilelist dir="." files="build/obj/net/i2p/router/web/OldConsoleHelper.class" />
-             <targetfilelist dir="." files="build/obj/net/i2p/router/web/PluginStarter.class" />
-             <targetfilelist dir="." files="build/obj/net/i2p/router/web/SummaryHelper.class" />
-             <targetfilelist dir="." files="build/obj/net/i2p/router/web/UpdateHandler.class" />
-        </dependset>
-    </target>
+  <target name="all" depends="clean, build" />
+  <target name="build" depends="builddep, jar" />
+  <target name="builddep">
+    <!-- run from top level build.xml to get dependencies built -->
+  </target>
+  <target name="prepare">
+    <!-- run from top level build.xml to get dependencies built -->
+  </target>
+  <condition property="no.bundle">
+    <isfalse value="${require.gettext}" />
+  </condition>
+  <condition property="depend.available">
+    <typefound name="depend" />
+  </condition>
+  <target name="depend" if="depend.available">
+    <depend
+      cache="../../../build"
+      srcdir="./src"
+      destdir="./build/obj">
+      <!-- Depend on classes instead of jars where available -->
+      <classpath>
+        <pathelement location="../../../core/java/build/obj" />
+        <pathelement location="../../../core/java/build/gnu-getopt.jar" />
+        <pathelement location="../../../router/java/build/obj" />
+        <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-util.jar" />
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-i2p.jar" />
+        <pathelement location="../../systray/java/build/obj" />
+        <pathelement location="../../desktopgui/build" />
+        <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar" />
+        <pathelement location="../../jrobin/java/build/jrobin.jar" />
+      </classpath>
+    </depend>
+  </target>
+  <target name="dependVersion">
+    <!-- Force the dependency on the RouterVersion as depend doesn't recognize constant changes  -->
+    <dependset>
+      <srcfilelist dir="." files="../../../router/java/build/obj/net/i2p/router/RouterVersion.class" />
+      <targetfilelist dir="." files="build/obj/net/i2p/router/web/NewsFetcher.class" />
+      <targetfilelist dir="." files="build/obj/net/i2p/router/web/OldConsoleHelper.class" />
+      <targetfilelist dir="." files="build/obj/net/i2p/router/web/PluginStarter.class" />
+      <targetfilelist dir="." files="build/obj/net/i2p/router/web/SummaryHelper.class" />
+      <targetfilelist dir="." files="build/obj/net/i2p/router/web/UpdateHandler.class" />
+    </dependset>
+  </target>
 
-    <!-- only used if not set by a higher build.xml -->
-    <property name="javac.compilerargs" value="" />
-    <property name="javac.version" value="1.8" />
-    <property name="javac.release" value="8" />
-    <property name="manifest.classpath.name" value="Class-Path" />
+  <!-- only used if not set by a higher build.xml -->
+  <property name="javac.compilerargs" value="" />
+  <property name="javac.version" value="1.8" />
+  <property name="javac.release" value="8" />
+  <property name="manifest.classpath.name" value="Class-Path" />
 
-    <target name="compile" depends="prepare, depend, dependVersion">
-        <mkdir dir="./build" />
-        <mkdir dir="./build/obj" />
-        <javac
-            srcdir="./src"
-            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
-            release="${javac.release}"
-            includeAntRuntime="false"
-            encoding="UTF-8"
-            destdir="./build/obj">
-            <compilerarg line="${javac.compilerargs}" />
-            <classpath>
-                <pathelement location="../../../core/java/build/i2p.jar" />
-                <!-- gnu-getopt.jar only present for debian builds -->
-                <pathelement location="../../../core/java/build/gnu-getopt.jar" />
-                <pathelement location="../../../router/java/build/router.jar" />
-                <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar" />
-                <pathelement location="../../jetty/jettylib/jetty-http.jar" />
-                <pathelement location="../../jetty/jettylib/jetty-io.jar" />
-                <pathelement location="../../jetty/jettylib/jetty-security.jar" />
-                <pathelement location="../../jetty/jettylib/jetty-servlet.jar" />
-                <pathelement location="../../jetty/jettylib/jetty-servlets.jar" />
-                <pathelement location="../../jetty/jettylib/jetty-util.jar" />
-                <pathelement location="../../jetty/jettylib/jetty-webapp.jar" />
-                <pathelement location="../../jetty/jettylib/javax.servlet.jar" />
-                <pathelement location="../../jetty/jettylib/jasper-runtime.jar" />
-                <pathelement location="../../jetty/jettylib/jetty-i2p.jar" />
-                <pathelement location="../../systray/java/build/systray.jar" />
-                <pathelement location="../../desktopgui/dist/desktopgui.jar" />
-                <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar" />
-                <pathelement location="../../jrobin/java/build/jrobin.jar" />
+  <target name="compile" depends="prepare, depend, dependVersion">
+    <mkdir dir="./build" />
+    <mkdir dir="./build/obj" />
+    <javac
+      srcdir="./src"
+      debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      includeAntRuntime="false"
+      encoding="UTF-8"
+      destdir="./build/obj">
+      <compilerarg line="${javac.compilerargs}" />
+      <classpath>
+        <pathelement location="../../../core/java/build/i2p.jar" />
+        <!-- gnu-getopt.jar only present for debian builds -->
+        <pathelement location="../../../core/java/build/gnu-getopt.jar" />
+        <pathelement location="../../../router/java/build/router.jar" />
+        <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-http.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-io.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-security.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-servlet.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-servlets.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-util.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-webapp.jar" />
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar" />
+        <pathelement location="../../jetty/jettylib/jasper-runtime.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-i2p.jar" />
+        <pathelement location="../../systray/java/build/systray.jar" />
+        <pathelement location="../../desktopgui/dist/desktopgui.jar" />
+        <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar" />
+        <pathelement location="../../jrobin/java/build/jrobin.jar" />
 
-                <!-- following jars only present for debian builds -->
-                <pathelement location="../../jetty/jettylib/tomcat-api.jar" />
-                <pathelement location="../../../core/java/build/json-simple.jar" />
-            </classpath>
-        </javac>
-    </target>
+        <!-- following jars only present for debian builds -->
+        <pathelement location="../../jetty/jettylib/tomcat-api.jar" />
+        <pathelement location="../../../core/java/build/json-simple.jar" />
+      </classpath>
+    </javac>
+  </target>
 
-    <!-- newsxml.jar only (subset of routerconsole, no war) for Android -->
-    <target name="compileNewsOnly" depends="prepare, depend, dependVersion">
-        <mkdir dir="./build" />
-        <mkdir dir="./build/obj" />
-        <javac
-            srcdir="./src"
-            includes="net/i2p/router/news/*.java"
-            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
-            release="${javac.release}"
-            includeAntRuntime="false"
-            encoding="UTF-8"
-            destdir="./build/obj">
-            <compilerarg line="${javac.compilerargs}" />
-            <classpath>
-                <pathelement location="../../../core/java/build/i2p.jar" />
-                <pathelement location="../../../router/java/build/router.jar" />
-            </classpath>
-        </javac>
-    </target>
+  <!-- newsxml.jar only (subset of routerconsole, no war) for Android -->
+  <target name="compileNewsOnly" depends="prepare, depend, dependVersion">
+    <mkdir dir="./build" />
+    <mkdir dir="./build/obj" />
+    <javac
+      srcdir="./src"
+      includes="net/i2p/router/news/*.java"
+      debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      includeAntRuntime="false"
+      encoding="UTF-8"
+      destdir="./build/obj">
+      <compilerarg line="${javac.compilerargs}" />
+      <classpath>
+        <pathelement location="../../../core/java/build/i2p.jar" />
+        <pathelement location="../../../router/java/build/router.jar" />
+      </classpath>
+    </javac>
+  </target>
 
-    <!-- the jar with the latest message classes from the jsps, and the war too -->
-    <target name="jar" depends="jar1, war, bundle" />
+  <!-- the jar with the latest message classes from the jsps, and the war too -->
+  <target name="jar" depends="jar1, war, bundle" />
 
-    <!-- the jar without the latest message classes from the jsps -->
-    <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges" >
-        <exec executable="mtn" outputproperty="workspace.changes.j" errorproperty="mtn.error2" failifexecutionfails="false" >
-            <arg value="list" />
-            <arg value="changed" />
-            <arg value="." />
-            <arg value="../locale" />
-        </exec>
-        <!-- \n in an attribute value generates an invalid manifest -->
-        <exec executable="tr" inputstring="${workspace.changes.j}" outputproperty="workspace.changes.j.tr" errorproperty="mtn.error2" failifexecutionfails="false" >
-            <arg value="-s" />
-            <arg value="[:space:]" />
-            <arg value="," />
-        </exec>
-    </target>
+  <!-- the jar without the latest message classes from the jsps -->
+  <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges">
+    <exec executable="mtn" outputproperty="workspace.changes.j" errorproperty="mtn.error2"
+      failifexecutionfails="false">
+      <arg value="list" />
+      <arg value="changed" />
+      <arg value="." />
+      <arg value="../locale" />
+    </exec>
+    <!-- \n in an attribute value generates an invalid manifest -->
+    <exec executable="tr" inputstring="${workspace.changes.j}"
+      outputproperty="workspace.changes.j.tr" errorproperty="mtn.error2"
+      failifexecutionfails="false">
+      <arg value="-s" />
+      <arg value="[:space:]" />
+      <arg value="," />
+    </exec>
+  </target>
 
-    <target name="jar1" depends="compile, bundle-news, bundle-countries, jarUpToDate, listChangedFiles" unless="jar.uptodate" >
-        <!-- set if unset -->
-        <property name="workspace.changes.j.tr" value="" />
-        <!-- copy the NDT translations, strip the countries -->
-        <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_en_US.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs.properties" />
-        <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_ca_ES.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_ca.properties" />
-        <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_el_GR.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_el.properties" />
-        <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_fr_FR.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_fr.properties" />
-        <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_nb_NO.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_nb.properties" />
-        <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_nl_NL.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_nl.properties" />
-        <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_pt_BR.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_pt.properties" />
-        <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_ru_RU.properties" tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_ru.properties" />
-        <jar destfile="./build/routerconsole.jar" basedir="./build/obj" excludes="net/i2p/router/web/helpers/* net/i2p/router/web/servlets/* net/i2p/router/web/resources/**/*">
-            <manifest>
-                <!-- DTG added in 0.8.4, not in the classpath for very old installs, before we changed wrapper.config to specify * -->
-                <!-- very old installs don't have i2psnark,jstl,standard in the classpath... not added in WebAppConfiguration any more -->
-                <!-- All new jetty 7 jars should have been in 0.9.6, added in 0.9.7 -->
-                <attribute name="${manifest.classpath.name}" value="i2p.jar router.jar jrobin.jar desktopgui.jar i2psnark.jar jstl.jar standard.jar jstlel.jar jetty-continuation.jar jetty-http.jar jetty-io.jar jetty-security.jar jetty-servlet.jar jetty-servlets.jar jetty-util.jar jetty-webapp.jar" />
-                <attribute name="Implementation-Version" value="${full.version}" />
-                <attribute name="Built-By" value="${build.built-by}" />
-                <attribute name="Build-Date" value="${build.timestamp}" />
-                <attribute name="Base-Revision" value="${workspace.version}" />
-                <attribute name="Main-Class" value="net.i2p.router.news.CommandLine" />
-                <attribute name="Workspace-Changes" value="${workspace.changes.j.tr}" />
-                <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-                <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
-            </manifest>
-        </jar>
-    </target>
+  <target name="jar1"
+    depends="compile, bundle-news, bundle-countries, jarUpToDate, listChangedFiles"
+    unless="jar.uptodate">
+    <!-- set if unset -->
+    <property name="workspace.changes.j.tr" value="" />
+    <!-- copy the NDT translations, strip the countries -->
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_en_US.properties"
+      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs.properties" />
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_ca_ES.properties"
+      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_ca.properties" />
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_el_GR.properties"
+      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_el.properties" />
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_fr_FR.properties"
+      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_fr.properties" />
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_nb_NO.properties"
+      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_nb.properties" />
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_nl_NL.properties"
+      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_nl.properties" />
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_pt_BR.properties"
+      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_pt.properties" />
+    <copy file="src/edu/internet2/ndt/locale/Tcpbw100_msgs_ru_RU.properties"
+      tofile="build/obj/edu/internet2/ndt/locale/Tcpbw100_msgs_ru.properties" />
+    <jar destfile="./build/routerconsole.jar" basedir="./build/obj"
+      excludes="net/i2p/router/web/helpers/* net/i2p/router/web/servlets/* net/i2p/router/web/resources/**/*">
+      <manifest>
+        <!-- DTG added in 0.8.4, not in the classpath for very old installs, before we changed
+        wrapper.config to specify * -->
+        <!-- very old installs don't have i2psnark,jstl,standard in the classpath... not added in
+        WebAppConfiguration any more -->
+        <!-- All new jetty 7 jars should have been in 0.9.6, added in 0.9.7 -->
+        <attribute name="${manifest.classpath.name}"
+          value="i2p.jar router.jar jrobin.jar desktopgui.jar i2psnark.jar jstl.jar standard.jar jstlel.jar jetty-continuation.jar jetty-http.jar jetty-io.jar jetty-security.jar jetty-servlet.jar jetty-servlets.jar jetty-util.jar jetty-webapp.jar" />
+        <attribute name="Implementation-Version" value="${full.version}" />
+        <attribute name="Built-By" value="${build.built-by}" />
+        <attribute name="Build-Date" value="${build.timestamp}" />
+        <attribute name="Base-Revision" value="${workspace.version}" />
+        <attribute name="Main-Class" value="net.i2p.router.news.CommandLine" />
+        <attribute name="Workspace-Changes" value="${workspace.changes.j.tr}" />
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+      </manifest>
+    </jar>
+  </target>
 
-    <!-- newsxml.jar only (subset of routerconsole, no war) for Android -->
-    <target name="newsxmljar" depends="compileNewsOnly" >
-        <jar destfile="./build/newsxml.jar" basedir="./build/obj" includes="**/*.class">
-        </jar>
-    </target>
+  <!-- newsxml.jar only (subset of routerconsole, no war) for Android -->
+  <target name="newsxmljar" depends="compileNewsOnly">
+    <jar destfile="./build/newsxml.jar" basedir="./build/obj" includes="**/*.class">
+    </jar>
+  </target>
 
-    <!-- this is tricky because the message classes go in the jar, not in the war -->
-    <target name="bundle" depends="jar1, precompilejsp" unless="no.bundle">
-        <mkdir dir="build/messages-src" />
-        <!-- Update the messages_*.po files.
+  <!-- this is tricky because the message classes go in the jar, not in the war -->
+  <target name="bundle" depends="jar1, precompilejsp" unless="no.bundle">
+    <mkdir dir="build/messages-src" />
+    <!-- Update the messages_*.po files.
              We need to supply the bat file for windows, and then change the fail property to true -->
-        <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}" >
-            <env key="JAVA_HOME" value="${java.home}" />
-            <arg value="./bundle-messages.sh" />
-        </exec>
-        <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}" >
-            <arg value="./bundle-messages.sh" />
-        </exec>
-        <!-- multi-lang is optional -->
-        <exec executable="sh" osfamily="windows" failifexecutionfails="false" >
-            <arg value="./bundle-messages.sh" />
-        </exec>
-        <javac source="${javac.version}" target="${javac.version}"
-               release="${javac.release}"
-               includeAntRuntime="false"
-               encoding="UTF-8"
-               srcdir="build/messages-src" destdir="build/obj">
-            <compilerarg line="${javac.compilerargs}" />
-        </javac>
-        <!-- jar again to get the latest messages_*.class files -->
-        <jar destfile="./build/routerconsole.jar" basedir="./build/obj" includes="**/messages_*.class" update="true" />
-    </target>
+    <exec executable="sh" osfamily="unix" failifexecutionfails="true"
+      failonerror="${require.gettext}">
+      <env key="JAVA_HOME" value="${java.home}" />
+      <arg value="./bundle-messages.sh" />
+    </exec>
+    <exec executable="sh" osfamily="mac" failifexecutionfails="true"
+      failonerror="${require.gettext}">
+      <arg value="./bundle-messages.sh" />
+    </exec>
+    <!-- multi-lang is optional -->
+    <exec executable="sh" osfamily="windows" failifexecutionfails="false">
+      <arg value="./bundle-messages.sh" />
+    </exec>
+    <javac source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      includeAntRuntime="false"
+      encoding="UTF-8"
+      srcdir="build/messages-src" destdir="build/obj">
+      <compilerarg line="${javac.compilerargs}" />
+    </javac>
+    <!-- jar again to get the latest messages_*.class files -->
+    <jar destfile="./build/routerconsole.jar" basedir="./build/obj" includes="**/messages_*.class"
+      update="true" />
+  </target>
 
-    <target name="jarUpToDate">
-        <uptodate property="jar.uptodate" targetfile="build/routerconsole.jar" >
-            <srcfiles dir= "build/obj" includes="**/*.class" />
-        </uptodate>
-        <condition property="shouldListChanges" >
-            <and>
-                <not>
-                    <isset property="jar.uptodate" />
-                </not>
-                <isset property="mtn.available" />
-            </and>
-        </condition>
-    </target>
+  <target name="jarUpToDate">
+    <uptodate property="jar.uptodate" targetfile="build/routerconsole.jar">
+      <srcfiles dir="build/obj" includes="**/*.class" />
+    </uptodate>
+    <condition property="shouldListChanges">
+      <and>
+        <not>
+          <isset property="jar.uptodate" />
+        </not>
+        <isset property="mtn.available" />
+      </and>
+    </condition>
+  </target>
 
-    <target name="poupdate" depends="precompilejsp">
-        <!-- Update the messages_*.po files.
+  <target name="poupdate" depends="precompilejsp">
+    <!-- Update the messages_*.po files.
              We need to supply the bat file for windows, and then change the fail property to true -->
-        <!-- set if unset -->
-        <property name="lg2" value="" />
-        <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true" >
-            <env key="LG2" value="${lg2}" />
-            <arg value="./bundle-messages.sh" />
-            <arg value="-p" />
-        </exec>
-        <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true" >
-            <env key="LG2" value="${lg2}" />
-            <arg value="./bundle-messages.sh" />
-            <arg value="-p" />
-        </exec>
-        <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true" >
-            <env key="LG2" value="${lg2}" />
-            <arg value="./bundle-messages.sh" />
-            <arg value="-p" />
-        </exec>
-    </target>
+    <!-- set if unset -->
+    <property name="lg2" value="" />
+    <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}" />
+      <arg value="./bundle-messages.sh" />
+      <arg value="-p" />
+    </exec>
+    <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}" />
+      <arg value="./bundle-messages.sh" />
+      <arg value="-p" />
+    </exec>
+    <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}" />
+      <arg value="./bundle-messages.sh" />
+      <arg value="-p" />
+    </exec>
+  </target>
 
-    <target name="bundle-news" unless="no.bundle">
-        <mkdir dir="build/messages-news-src" />
-        <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}" >
-            <env key="JAVA_HOME" value="${java.home}" />
-            <arg value="./bundle-messages-news.sh" />
-        </exec>
-        <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}" >
-            <arg value="./bundle-messages-news.sh" />
-        </exec>
-        <exec executable="sh" osfamily="windows" failifexecutionfails="false" >
-            <arg value="./bundle-messages-news.sh" />
-        </exec>
-        <javac source="${javac.version}" target="${javac.version}"
-               release="${javac.release}"
-               includeAntRuntime="false"
-               encoding="UTF-8"
-               srcdir="build/messages-news-src" destdir="build/obj">
-            <compilerarg line="${javac.compilerargs}" />
-        </javac>
-    </target>
+  <target name="bundle-news" unless="no.bundle">
+    <mkdir dir="build/messages-news-src" />
+    <exec executable="sh" osfamily="unix" failifexecutionfails="true"
+      failonerror="${require.gettext}">
+      <env key="JAVA_HOME" value="${java.home}" />
+      <arg value="./bundle-messages-news.sh" />
+    </exec>
+    <exec executable="sh" osfamily="mac" failifexecutionfails="true"
+      failonerror="${require.gettext}">
+      <arg value="./bundle-messages-news.sh" />
+    </exec>
+    <exec executable="sh" osfamily="windows" failifexecutionfails="false">
+      <arg value="./bundle-messages-news.sh" />
+    </exec>
+    <javac source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      includeAntRuntime="false"
+      encoding="UTF-8"
+      srcdir="build/messages-news-src" destdir="build/obj">
+      <compilerarg line="${javac.compilerargs}" />
+    </javac>
+  </target>
 
-    <target name="bundle-countries" unless="no.bundle">
-        <mkdir dir="build/messages-countries-src" />
-        <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}" >
-            <env key="JAVA_HOME" value="${java.home}" />
-            <arg value="./bundle-messages-countries.sh" />
-        </exec>
-        <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}" >
-            <arg value="./bundle-messages-countries.sh" />
-        </exec>
-        <exec executable="sh" osfamily="windows" failifexecutionfails="false" >
-            <arg value="./bundle-messages-countries.sh" />
-        </exec>
-        <javac source="${javac.version}" target="${javac.version}"
-               release="${javac.release}"
-               includeAntRuntime="false"
-               encoding="UTF-8"
-               srcdir="build/messages-countries-src" destdir="build/obj">
-            <compilerarg line="${javac.compilerargs}" />
-        </javac>
-    </target>
+  <target name="bundle-countries" unless="no.bundle">
+    <mkdir dir="build/messages-countries-src" />
+    <exec executable="sh" osfamily="unix" failifexecutionfails="true"
+      failonerror="${require.gettext}">
+      <env key="JAVA_HOME" value="${java.home}" />
+      <arg value="./bundle-messages-countries.sh" />
+    </exec>
+    <exec executable="sh" osfamily="mac" failifexecutionfails="true"
+      failonerror="${require.gettext}">
+      <arg value="./bundle-messages-countries.sh" />
+    </exec>
+    <exec executable="sh" osfamily="windows" failifexecutionfails="false">
+      <arg value="./bundle-messages-countries.sh" />
+    </exec>
+    <javac source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      includeAntRuntime="false"
+      encoding="UTF-8"
+      srcdir="build/messages-countries-src" destdir="build/obj">
+      <compilerarg line="${javac.compilerargs}" />
+    </javac>
+  </target>
 
-    <target name="extractProxyTags">
-        <java classname="net.i2p.util.TranslateReader" fork="true" failonerror="true">
-            <classpath>
-                <pathelement location="../../../build/i2p.jar" />
-            </classpath>
-            <arg value="tag" />
-            <arg value="../../../installer/resources/initialNews/initialNews.xml" />
-            <arg value="build/News.java" />
-        </java>
-    </target>
+  <target name="extractProxyTags">
+    <java classname="net.i2p.util.TranslateReader" fork="true" failonerror="true">
+      <classpath>
+        <pathelement location="../../../build/i2p.jar" />
+      </classpath>
+      <arg value="tag" />
+      <arg value="../../../installer/resources/initialNews/initialNews.xml" />
+      <arg value="build/News.java" />
+    </java>
+  </target>
 
-    <target name="poupdate-news" depends="extractProxyTags">
-        <!-- set if unset -->
-        <property name="lg2" value="" />
-        <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true" >
-            <env key="LG2" value="${lg2}" />
-            <arg value="./bundle-messages-news.sh" />
-            <arg value="-p" />
-        </exec>
-        <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true" >
-            <env key="LG2" value="${lg2}" />
-            <arg value="./bundle-messages-news.sh" />
-            <arg value="-p" />
-        </exec>
-        <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true" >
-            <env key="LG2" value="${lg2}" />
-            <arg value="./bundle-messages-news.sh" />
-            <arg value="-p" />
-        </exec>
-    </target>
+  <target name="poupdate-news" depends="extractProxyTags">
+    <!-- set if unset -->
+    <property name="lg2" value="" />
+    <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}" />
+      <arg value="./bundle-messages-news.sh" />
+      <arg value="-p" />
+    </exec>
+    <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}" />
+      <arg value="./bundle-messages-news.sh" />
+      <arg value="-p" />
+    </exec>
+    <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}" />
+      <arg value="./bundle-messages-news.sh" />
+      <arg value="-p" />
+    </exec>
+  </target>
 
-    <target name="poupdate-countries" depends="extractProxyTags">
-        <!-- set if unset -->
-        <property name="lg2" value="" />
-        <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true" >
-            <env key="LG2" value="${lg2}" />
-            <arg value="./bundle-messages-countries.sh" />
-            <arg value="-p" />
-        </exec>
-        <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true" >
-            <env key="LG2" value="${lg2}" />
-            <arg value="./bundle-messages-countries.sh" />
-            <arg value="-p" />
-        </exec>
-        <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true" >
-            <env key="LG2" value="${lg2}" />
-            <arg value="./bundle-messages-countries.sh" />
-            <arg value="-p" />
-        </exec>
-    </target>
+  <target name="poupdate-countries" depends="extractProxyTags">
+    <!-- set if unset -->
+    <property name="lg2" value="" />
+    <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}" />
+      <arg value="./bundle-messages-countries.sh" />
+      <arg value="-p" />
+    </exec>
+    <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}" />
+      <arg value="./bundle-messages-countries.sh" />
+      <arg value="-p" />
+    </exec>
+    <exec executable="sh" osfamily="windows" failifexecutionfails="true" failonerror="true">
+      <env key="LG2" value="${lg2}" />
+      <arg value="./bundle-messages-countries.sh" />
+      <arg value="-p" />
+    </exec>
+  </target>
 
-    <target name="listChangedFiles2" depends="warUpToDate" if="shouldListChanges2" >
-        <exec executable="mtn" outputproperty="workspace.changes.w" errorproperty="mtn.error2" failifexecutionfails="false" >
-            <arg value="list" />
-            <arg value="changed" />
-            <arg value="../jsp" />
-        </exec>
-        <!-- \n in an attribute value generates an invalid manifest -->
-        <exec executable="tr" inputstring="${workspace.changes.w}" outputproperty="workspace.changes.w.tr" errorproperty="mtn.error2" failifexecutionfails="false" >
-            <arg value="-s" />
-            <arg value="[:space:]" />
-            <arg value="," />
-        </exec>
-    </target>
+  <target name="listChangedFiles2" depends="warUpToDate" if="shouldListChanges2">
+    <exec executable="mtn" outputproperty="workspace.changes.w" errorproperty="mtn.error2"
+      failifexecutionfails="false">
+      <arg value="list" />
+      <arg value="changed" />
+      <arg value="../jsp" />
+    </exec>
+    <!-- \n in an attribute value generates an invalid manifest -->
+    <exec executable="tr" inputstring="${workspace.changes.w}"
+      outputproperty="workspace.changes.w.tr" errorproperty="mtn.error2"
+      failifexecutionfails="false">
+      <arg value="-s" />
+      <arg value="[:space:]" />
+      <arg value="," />
+    </exec>
+  </target>
 
-    <!-- does NOT update the message classes, as those go in the jar -->
-    <target name="war" depends="precompilejsp, warUpToDate, listChangedFiles2" unless="war.uptodate" >
-        <!-- set if unset -->
-        <property name="workspace.changes.w.tr" value="" />
-        <!-- Don't include the css in the war, the main build.xml will copy it to docs/themes/console/ -->
-        <mkdir dir="build/obj/net/i2p/router/web/resources" />
-        <copy todir="build/obj/net/i2p/router/web/resources" >
-            <fileset dir="../resources" />
-        </copy>
-        <war destfile="build/routerconsole.war" webxml="../jsp/web-out.xml"
-             basedir="../jsp/" excludes="web.xml, *.css, **/*.java, *.jsp, *.jsi, web-fragment.xml, web-out.xml">
-            <manifest>
-                <attribute name="Implementation-Version" value="${full.version}" />
-                <attribute name="Built-By" value="${build.built-by}" />
-                <attribute name="Build-Date" value="${build.timestamp}" />
-                <attribute name="Base-Revision" value="${workspace.version}" />
-                <attribute name="Workspace-Changes" value="${workspace.changes.w.tr}" />
-                <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
-                <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
-            </manifest>
-            <classes dir="./build/obj" includes="net/i2p/router/web/helpers/* net/i2p/router/web/servlets/* net/i2p/router/web/resources/**/*" />
-        </war>
-    </target>
+  <!-- does NOT update the message classes, as those go in the jar -->
+  <target name="war" depends="precompilejsp, warUpToDate, listChangedFiles2" unless="war.uptodate">
+    <!-- set if unset -->
+    <property name="workspace.changes.w.tr" value="" />
+    <!-- Don't include the css in the war, the main build.xml will copy it to docs/themes/console/ -->
+    <mkdir dir="build/obj/net/i2p/router/web/resources" />
+    <copy todir="build/obj/net/i2p/router/web/resources">
+      <fileset dir="../resources" />
+    </copy>
+    <war destfile="build/routerconsole.war" webxml="../jsp/web-out.xml"
+      basedir="../jsp/"
+      excludes="web.xml, *.css, **/*.java, *.jsp, *.jsi, web-fragment.xml, web-out.xml">
+      <manifest>
+        <attribute name="Implementation-Version" value="${full.version}" />
+        <attribute name="Built-By" value="${build.built-by}" />
+        <attribute name="Build-Date" value="${build.timestamp}" />
+        <attribute name="Base-Revision" value="${workspace.version}" />
+        <attribute name="Workspace-Changes" value="${workspace.changes.w.tr}" />
+        <attribute name="X-Compile-Source-JDK" value="${javac.version}" />
+        <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
+      </manifest>
+      <classes dir="./build/obj"
+        includes="net/i2p/router/web/helpers/* net/i2p/router/web/servlets/* net/i2p/router/web/resources/**/*" />
+    </war>
+  </target>
 
-    <target name="warUpToDate">
-        <uptodate property="war.uptodate" targetfile="build/routerconsole.war" >
-            <srcfiles dir= "../jsp" excludes="web.xml, web-fragment.xml, *.css, **/*.java, *.jsp, *.jsi" />
-            <srcfiles dir= "build/obj" includes="net/i2p/router/web/helpers/*.class net/i2p/router/web/servlets/*.class" />
-        </uptodate>
-        <condition property="shouldListChanges" >
-            <and>
-                <not>
-                    <isset property="jar.uptodate" />
-                </not>
-                <isset property="mtn.available" />
-            </and>
-        </condition>
-    </target>
+  <target name="warUpToDate">
+    <uptodate property="war.uptodate" targetfile="build/routerconsole.war">
+      <srcfiles dir="../jsp" excludes="web.xml, web-fragment.xml, *.css, **/*.java, *.jsp, *.jsi" />
+      <srcfiles dir="build/obj"
+        includes="net/i2p/router/web/helpers/*.class net/i2p/router/web/servlets/*.class" />
+    </uptodate>
+    <condition property="shouldListChanges">
+      <and>
+        <not>
+          <isset property="jar.uptodate" />
+        </not>
+        <isset property="mtn.available" />
+      </and>
+    </condition>
+  </target>
 
-    <target name="precompilejsp" depends="jar1" unless="precompilejsp.uptodate">
-        <delete dir="../jsp/WEB-INF/" />
-        <delete file="../jsp/web-fragment.xml" />
-        <delete file="../jsp/web-out.xml" />
-        <mkdir dir="../jsp/WEB-INF/" />
-        <mkdir dir="../jsp/WEB-INF/classes" />
+  <target name="precompilejsp" depends="jar1" unless="precompilejsp.uptodate">
+    <delete dir="../jsp/WEB-INF/" />
+    <delete file="../jsp/web-fragment.xml" />
+    <delete file="../jsp/web-out.xml" />
+    <mkdir dir="../jsp/WEB-INF/" />
+    <mkdir dir="../jsp/WEB-INF/classes" />
 
-        <!-- There are various jspc ant tasks, but they all seem a bit flakey.
+    <!-- There are various jspc ant tasks, but they all seem a bit flakey.
              Warning - jspC will fail on unknown options,
              check oldest libtomcat8-java distro package version we use.
              Jessie has 8.0.14; xenial has 8.0.32; we bundle for precise/trusty.
              Add below to get supported options:
                 <arg value="-help" />
           -->
-        <!--
+    <!--
            **     Usage: jspc <options> <jsp files>
            **     where jsp files is
            **         -webapp <dir>      A directory containing a web-app, whose JSP pages
@@ -426,7 +456,7 @@
            **                               (default one per core)
            **                               ("2.0C" means two threads per core)
         -->
-        <!--
+    <!--
            **  Simply call org.apache.jasper.JspC, then exit.
            **
            **  As of Tomcat 8.5.33, forking their JspC won't complete,
@@ -441,254 +471,262 @@
            **
            **  We could set fork=false in build.xml, but then the paths are all wrong.
         -->
-        <java classname="net.i2p.servlet.util.JspC" fork="true" failonerror="true">
-            <!-- this prevents tomcat from complaining in debian builds -->
-            <jvmarg value="-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=commons-collections.jar,junit.jar,junit4.jar" />
-            <!-- these are to detect tomcat version and reproducible build setting -->
-            <jvmarg value="-Dbuild.reproducible=${build.reproducible}" />
-            <jvmarg value="-Dwith-libtomcat8-java=${with-libtomcat8-java}" />
-            <jvmarg value="-Dwith-libtomcat9-java=${with-libtomcat9-java}" />
-            <jvmarg value="-Djasper.jar=../../jetty/jettylib/jasper-runtime.jar" />
-            <classpath>
-                <pathelement location="../../jetty/jettylib/jasper-runtime.jar" />
-                <pathelement location="../../jetty/jettylib/javax.servlet.jar" />
+    <java classname="net.i2p.servlet.util.JspC" fork="true" failonerror="true">
+      <!-- this prevents tomcat from complaining in debian builds -->
+      <jvmarg
+        value="-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=commons-collections.jar,junit.jar,junit4.jar" />
+      <!-- these are to detect tomcat version and reproducible build setting -->
+      <jvmarg value="-Dbuild.reproducible=${build.reproducible}" />
+      <jvmarg value="-Dwith-libtomcat8-java=${with-libtomcat8-java}" />
+      <jvmarg value="-Dwith-libtomcat9-java=${with-libtomcat9-java}" />
+      <jvmarg value="-Djasper.jar=../../jetty/jettylib/jasper-runtime.jar" />
+      <classpath>
+        <pathelement location="../../jetty/jettylib/jasper-runtime.jar" />
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar" />
 
-                <!-- following jars only present for debian builds -->
-                <pathelement location="../../jetty/jettylib/commons-logging.jar" />
-                <pathelement location="../../jetty/jettylib/jsp-api.jar" />
-                <pathelement location="../../jetty/jettylib/tomcat-api.jar" />
-                <pathelement location="../../jetty/jettylib/jasper-el.jar" />
-                <pathelement location="../../jetty/jettylib/tomcat-util.jar" />
-                <pathelement location="../../jetty/jettylib/tomcat-util-scan.jar" />
+        <!-- following jars only present for debian builds -->
+        <pathelement location="../../jetty/jettylib/commons-logging.jar" />
+        <pathelement location="../../jetty/jettylib/jsp-api.jar" />
+        <pathelement location="../../jetty/jettylib/tomcat-api.jar" />
+        <pathelement location="../../jetty/jettylib/jasper-el.jar" />
+        <pathelement location="../../jetty/jettylib/tomcat-util.jar" />
+        <pathelement location="../../jetty/jettylib/tomcat-util-scan.jar" />
 
-                <pathelement location="../../jetty/jettylib/commons-el.jar" />
-                <pathelement location="../../jetty/jettylib/jetty-util.jar" />
-                <pathelement location="${ant.home}/lib/ant.jar" />
-                <pathelement location="../../jetty/jettylib/jetty-i2p.jar" />
-                <pathelement location="../../systray/java/build/obj" />
-                <pathelement location="../../desktopgui/dist/desktopgui.jar" />
-                <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar" />
-                <pathelement location="build/obj/" />
-                <pathelement location="../../../router/java/build/router.jar" />
-                <pathelement location="../../../core/java/build/i2p.jar" />
-            </classpath>
-            <arg value="-d" />
-            <arg value="../jsp/WEB-INF/classes" />
-            <arg value="-v" />
-            <arg value="-p" />
-            <arg value="net.i2p.router.web.jsp" />
-            <arg value="-webinc" />
-            <arg value="../jsp/web-fragment.xml" />
-            <arg value="-webapp" />
-            <arg value="../jsp/" />
-            <arg value="-die" />
-        </java>
+        <pathelement location="../../jetty/jettylib/commons-el.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-util.jar" />
+        <pathelement location="${ant.home}/lib/ant.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-i2p.jar" />
+        <pathelement location="../../jetty/jettylib/jspc.jar" />
+        <pathelement location="../../systray/java/build/obj" />
+        <pathelement location="../../desktopgui/dist/desktopgui.jar" />
+        <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar" />
+        <pathelement location="build/obj/" />
+        <pathelement location="../../../router/java/build/router.jar" />
+        <pathelement location="../../../core/java/build/i2p.jar" />
+      </classpath>
+      <arg value="-d" />
+      <arg value="../jsp/WEB-INF/classes" />
+      <arg value="-v" />
+      <arg value="-p" />
+      <arg value="net.i2p.router.web.jsp" />
+      <arg value="-webinc" />
+      <arg value="../jsp/web-fragment.xml" />
+      <arg value="-webapp" />
+      <arg value="../jsp/" />
+      <arg value="-die" />
+    </java>
 
-        <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
-               release="${javac.release}"
-               encoding="UTF-8"
-               includeAntRuntime="false"
-               destdir="../jsp/WEB-INF/classes/"
-               srcdir="../jsp/WEB-INF/classes" includes="**/*.java">
-            <compilerarg line="${javac.compilerargs}" />
-            <classpath>
-                <pathelement location="../../jetty/jettylib/jasper-runtime.jar" />
-                <pathelement location="../../jetty/jettylib/javax.servlet.jar" />
+    <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      encoding="UTF-8"
+      includeAntRuntime="false"
+      destdir="../jsp/WEB-INF/classes/"
+      srcdir="../jsp/WEB-INF/classes" includes="**/*.java">
+      <compilerarg line="${javac.compilerargs}" />
+      <classpath>
+        <pathelement location="../../jetty/jettylib/jasper-runtime.jar" />
+        <pathelement location="../../jetty/jettylib/javax.servlet.jar" />
 
-                <!-- following jars only present for debian builds -->
-                <pathelement location="../../jetty/jettylib/jsp-api.jar" />
-                <pathelement location="../../jetty/jettylib/tomcat-api.jar" />
-                <pathelement location="../../jetty/jettylib/tomcat-util.jar" />
-                <pathelement location="../../jetty/jettylib/tomcat-util-scan.jar" />
+        <!-- following jars only present for debian builds -->
+        <pathelement location="../../jetty/jettylib/jsp-api.jar" />
+        <pathelement location="../../jetty/jettylib/tomcat-api.jar" />
+        <pathelement location="../../jetty/jettylib/tomcat-util.jar" />
+        <pathelement location="../../jetty/jettylib/tomcat-util-scan.jar" />
 
-                <pathelement location="../../jetty/jettylib/commons-el.jar" />
-                <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar" />
-                <pathelement location="../../jetty/jettylib/jetty-util.jar" />
-                <pathelement location="../../jetty/jettylib/jetty-i2p.jar" />
-                <pathelement location="../../systray/java/build/obj" />
-                <pathelement location="../../desktopgui/dist/desktopgui.jar" />
-                <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar" />
-                <pathelement location="build/obj/" />
-                <pathelement location="../../../router/java/build/router.jar" />
-                <pathelement location="../../../core/java/build/i2p.jar" />
-            </classpath>
-        </javac>
+        <pathelement location="../../jetty/jettylib/commons-el.jar" />
+        <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-util.jar" />
+        <pathelement location="../../jetty/jettylib/jetty-i2p.jar" />
+        <pathelement location="../../systray/java/build/obj" />
+        <pathelement location="../../desktopgui/dist/desktopgui.jar" />
+        <pathelement location="../../../installer/lib/wrapper/all/wrapper.jar" />
+        <pathelement location="build/obj/" />
+        <pathelement location="../../../router/java/build/router.jar" />
+        <pathelement location="../../../core/java/build/i2p.jar" />
+      </classpath>
+    </javac>
 
-        <!-- save these so we can run gettext on the generated java files later
+    <!-- save these so we can run gettext on the generated java files later
         <delete>
             <fileset dir="../jsp/WEB-INF/" includes="**/*.java" />
             <fileset dir="../jsp/WEB-INF/" includes="**/*.jsp" />
         </delete>
         -->
-        <copy file="../jsp/web.xml" tofile="../jsp/web-out.xml" />
-        <loadfile property="jspc.web.fragment" srcfile="../jsp/web-fragment.xml" />
-        <replace file="../jsp/web-out.xml">
-            <replacefilter token="&lt;!-- precompiled servlets --&gt;" value="${jspc.web.fragment}" />
-        </replace>
-        <!-- Add multipart config to servlets that need them -->
-        <property name="__match1" value="&lt;servlet-class&gt;net.i2p.router.web.jsp." />
-        <property name="__match2" value="_jsp&lt;/servlet-class&gt;" />
-        <property name="__class1" value="${__match1}configplugins${__match2}" />
-        <property name="__class2" value="${__match1}configfamily${__match2}" />
-        <property name="__class3" value="${__match1}configreseed${__match2}" />
-        <property name="__multipart" value="&#10;
+    <copy file="../jsp/web.xml" tofile="../jsp/web-out.xml" />
+    <loadfile property="jspc.web.fragment" srcfile="../jsp/web-fragment.xml" />
+    <replace file="../jsp/web-out.xml">
+      <replacefilter token="&lt;!-- precompiled servlets --&gt;" value="${jspc.web.fragment}" />
+    </replace>
+    <!-- Add multipart config to servlets that need them -->
+    <property name="__match1" value="&lt;servlet-class&gt;net.i2p.router.web.jsp." />
+    <property name="__match2" value="_jsp&lt;/servlet-class&gt;" />
+    <property name="__class1" value="${__match1}configplugins${__match2}" />
+    <property name="__class2" value="${__match1}configfamily${__match2}" />
+    <property name="__class3" value="${__match1}configreseed${__match2}" />
+    <property name="__multipart"
+      value="&#10;
        &lt;multipart-config&gt;&#10;
            &lt;max-file-size&gt;134217728&lt;/max-file-size&gt;&#10;
            &lt;max-request-size&gt;134217728&lt;/max-request-size&gt;&#10;
            &lt;file-size-threshold&gt;262144&lt;/file-size-threshold&gt;&#10;
        &lt;/multipart-config&gt;" />
-        <replace file="../jsp/web-out.xml">
-            <replacefilter token="${__class1}" value="${__class1}${__multipart}" />
-            <replacefilter token="${__class2}" value="${__class2}${__multipart}" />
-            <replacefilter token="${__class3}" value="${__class3}${__multipart}" />
-        </replace>
-    </target>
+    <replace file="../jsp/web-out.xml">
+      <replacefilter token="${__class1}" value="${__class1}${__multipart}" />
+      <replacefilter token="${__class2}" value="${__class2}${__multipart}" />
+      <replacefilter token="${__class3}" value="${__class3}${__multipart}" />
+    </replace>
+  </target>
 
-    <uptodate property="precompilejsp.uptodate" targetfile="../jsp/web-out.xml">
-        <srcfiles dir= "../jsp" includes="**/*.jsp, help/*.jsp, *.jsi, **/*.html, *.css, susimail/susimail, web.xml"/>
-        <!-- so the version is right on logs.jsp -->
-        <srcfiles dir= "../../../router/java/src/net/i2p/router" includes="RouterVersion.java"/>
-    </uptodate>
+  <uptodate property="precompilejsp.uptodate" targetfile="../jsp/web-out.xml">
+    <srcfiles dir="../jsp"
+      includes="**/*.jsp, help/*.jsp, *.jsi, **/*.html, *.css, susimail/susimail, web.xml" />
+    <!-- so the version is right on logs.jsp -->
+    <srcfiles dir="../../../router/java/src/net/i2p/router" includes="RouterVersion.java" />
+  </uptodate>
 
-    <target name="javadoc">
-        <mkdir dir="./build" />
-        <mkdir dir="./build/javadoc" />
-        <javadoc
-            sourcepath="./src:../../../core/java/src:../../../router/java/src:../../systray/java/src:../../desktopgui/src" destdir="./build/javadoc"
-            packagenames="*"
-            use="true"
-            splitindex="true"
-            windowtitle="Router Console" />
-    </target>
+  <target name="javadoc">
+    <mkdir dir="./build" />
+    <mkdir dir="./build/javadoc" />
+    <javadoc
+      sourcepath="./src:../../../core/java/src:../../../router/java/src:../../systray/java/src:../../desktopgui/src"
+      destdir="./build/javadoc"
+      packagenames="*"
+      use="true"
+      splitindex="true"
+      windowtitle="Router Console" />
+  </target>
 
-    <!-- scala paths -->
-    <target name="scala.init">
-        <property name="scala-library.jar" value="${scalatest.libs}/scala-library.jar" />
-        <property name="scala-xml.jar" value="${scalatest.libs}/scala-xml.jar" />
-        <property name="scalactic.jar" value="${scalatest.libs}/scalactic.jar" />
-        <property name="scalatest.jar" value="${scalatest.libs}/scalatest.jar" />
-        <property name="mockito.home" value="${ant.home}/lib" />
-        <taskdef resource="scala/tools/ant/antlib.xml">
-            <classpath>
-                <pathelement location="${scalatest.libs}/scala-compiler.jar" />
-                <pathelement location="${scalatest.libs}/scala-reflect.jar" />
-                <pathelement location="${scala-library.jar}" />
-            </classpath>
-        </taskdef>
-    </target>
+  <!-- scala paths -->
+  <target name="scala.init">
+    <property name="scala-library.jar" value="${scalatest.libs}/scala-library.jar" />
+    <property name="scala-xml.jar" value="${scalatest.libs}/scala-xml.jar" />
+    <property name="scalactic.jar" value="${scalatest.libs}/scalactic.jar" />
+    <property name="scalatest.jar" value="${scalatest.libs}/scalatest.jar" />
+    <property name="mockito.home" value="${ant.home}/lib" />
+    <taskdef resource="scala/tools/ant/antlib.xml">
+      <classpath>
+        <pathelement location="${scalatest.libs}/scala-compiler.jar" />
+        <pathelement location="${scalatest.libs}/scala-reflect.jar" />
+        <pathelement location="${scala-library.jar}" />
+      </classpath>
+    </taskdef>
+  </target>
 
-    <!-- unit tests -->
-    <target name="builddepscalatest">
-        <ant dir="../../../router/java/" target="jar" />
-        <ant dir="../../../router/java/" target="jarScalaTest" />
-    </target>
-    <target name="scalatest.compileTest" depends="builddepscalatest, compile, scala.init">
-        <mkdir dir="./build" />
-        <mkdir dir="./build/obj_scala" />
-        <scalac srcdir="./test/scalatest" destdir="./build/obj_scala" deprecation="on" >
-            <classpath>
-                <pathelement location="${scala-library.jar}" />
-                <pathelement location="${scalactic.jar}" />
-                <pathelement location="${scalatest.jar}" />
-                <pathelement location="${mockito.home}/byte-buddy.jar" />
-                <pathelement location="${mockito.home}/objenesis.jar" />
-                <pathelement location="${mockito.home}/mockito-core.jar" />
-                <pathelement location="../../../core/java/build/i2pscalatest.jar" />
-                <pathelement location="../../../router/java/build/routerscalatest.jar" />
-                <pathelement location="./build/obj" />
-            </classpath>
-        </scalac>
-    </target>
-    <!-- preparation of code coverage tool of choice -->
-    <target name="prepareClover" depends="compile" if="with.clover">
-        <taskdef resource="clovertasks"/>
-        <mkdir dir="../../../reports/apps/routerconsole/clover" />
-        <clover-setup initString="../../../reports/apps/routerconsole/clover/coverage.db"/>
-    </target>
-    <target name="prepareCobertura" depends="compile" if="with.cobertura">
-        <taskdef classpath="${with.cobertura}" resource="tasks.properties" onerror="report" />
-        <mkdir dir="./build/obj_cobertura" />
-        <delete file="./cobertura.ser" />
-        <cobertura-instrument todir="./build/obj_cobertura">
-            <fileset dir="./build/obj">
-                <include name="**/*.class"/>
-                <exclude name="**/*Test.class" />
-            </fileset>
-        </cobertura-instrument>
-    </target>
-    <target name="prepareTest" depends="prepareClover, prepareCobertura" />
-    <!-- end preparation of code coverage tool -->
-    <target name="scalatest.test" depends="clean, scalatest.compileTest, prepareTest">
-        <mkdir dir="../../../reports/apps/routerconsole/scalatest/" />
-        <delete>
-            <fileset dir="../../../reports/apps/routerconsole/scalatest">
-                <include name="TEST-*.xml"/>
-            </fileset>
-        </delete>
-        <taskdef name="scalatest" classname="org.scalatest.tools.ScalaTestAntTask">
-            <classpath>
-                <pathelement location="${classpath}" />
-                <pathelement location="${scala-library.jar}" />
-                <pathelement location="${scala-xml.jar}" />
-                <pathelement location="${scalactic.jar}" />
-                <pathelement location="${scalatest.jar}" />
-                <pathelement location="./build/obj_cobertura" />
-                <pathelement location="./build/obj" />
-                <pathelement location="${with.clover}" />
-                <pathelement location="${with.cobertura}" />
-            </classpath>
-        </taskdef>
-        <scalatest runpath="./build/obj_scala" fork="yes" maxmemory="384M">
-            <tagsToExclude>
-                SlowTests
-            </tagsToExclude>
-            <reporter type="stdout" />
-            <reporter type="junitxml" directory="../../../reports/apps/routerconsole/scalatest/" />
-        </scalatest>
-        <!-- fetch the real hostname of this machine -->
-        <exec executable="hostname" outputproperty="host.name"/>
-        <!-- set if unset -->
-        <property name="host.fakename" value="i2ptester" />
-        <!-- replace hostname that junit inserts into reports with fake one -->
-        <replace dir="../../../reports/apps/routerconsole/scalatest/" token="${host.name}" value="${host.fakename}"/>
-    </target>
-    <target name="test" depends="scalatest.test"/>
-    <!-- test reports -->
-    <target name="scalatest.report">
-        <junitreport todir="../../../reports/apps/routerconsole/scalatest">
-            <fileset dir="../../../reports/apps/routerconsole/scalatest">
-                <include name="TEST-*.xml"/>
-            </fileset>
-            <report format="frames" todir="../../../reports/apps/routerconsole/html/scalatest"/>
-        </junitreport>
-    </target>
-    <target name="clover.report" depends="test" if="with.clover">
-        <clover-report>
-            <current outfile="../../../reports/apps/routerconsole/html/clover">
-                <format type="html"/>
-            </current>
-        </clover-report>
-    </target>
-    <target name="cobertura.report" depends="test" if="with.cobertura">
-        <mkdir dir="../../../reports/apps/routerconsole/cobertura" />
-        <cobertura-report format="xml" srcdir="./src" destdir="../../../reports/apps/routerconsole/cobertura" />
-        <mkdir dir="../../../reports/apps/routerconsole/html/cobertura" />
-        <cobertura-report format="html" srcdir="./src" destdir="../../../reports/apps/routerconsole/html/cobertura" />
-        <delete file="./cobertura.ser" />
-    </target>
-    <target name="test.report" depends="scalatest.report, clover.report, cobertura.report"/>
-    <!-- end test reports -->
-    <target name="fulltest" depends="cleandep, test, test.report" />
-    <!-- end unit tests -->
+  <!-- unit tests -->
+  <target name="builddepscalatest">
+    <ant dir="../../../router/java/" target="jar" />
+    <ant dir="../../../router/java/" target="jarScalaTest" />
+  </target>
+  <target name="scalatest.compileTest" depends="builddepscalatest, compile, scala.init">
+    <mkdir dir="./build" />
+    <mkdir dir="./build/obj_scala" />
+    <scalac srcdir="./test/scalatest" destdir="./build/obj_scala" deprecation="on">
+      <classpath>
+        <pathelement location="${scala-library.jar}" />
+        <pathelement location="${scalactic.jar}" />
+        <pathelement location="${scalatest.jar}" />
+        <pathelement location="${mockito.home}/byte-buddy.jar" />
+        <pathelement location="${mockito.home}/objenesis.jar" />
+        <pathelement location="${mockito.home}/mockito-core.jar" />
+        <pathelement location="../../../core/java/build/i2pscalatest.jar" />
+        <pathelement location="../../../router/java/build/routerscalatest.jar" />
+        <pathelement location="./build/obj" />
+      </classpath>
+    </scalac>
+  </target>
+  <!-- preparation of code coverage tool of choice -->
+  <target name="prepareClover" depends="compile" if="with.clover">
+    <taskdef resource="clovertasks" />
+    <mkdir dir="../../../reports/apps/routerconsole/clover" />
+    <clover-setup initString="../../../reports/apps/routerconsole/clover/coverage.db" />
+  </target>
+  <target name="prepareCobertura" depends="compile" if="with.cobertura">
+    <taskdef classpath="${with.cobertura}" resource="tasks.properties" onerror="report" />
+    <mkdir dir="./build/obj_cobertura" />
+    <delete file="./cobertura.ser" />
+    <cobertura-instrument todir="./build/obj_cobertura">
+      <fileset dir="./build/obj">
+        <include name="**/*.class" />
+        <exclude name="**/*Test.class" />
+      </fileset>
+    </cobertura-instrument>
+  </target>
+  <target name="prepareTest" depends="prepareClover, prepareCobertura" />
+  <!-- end preparation of code coverage tool -->
+  <target name="scalatest.test" depends="clean, scalatest.compileTest, prepareTest">
+    <mkdir dir="../../../reports/apps/routerconsole/scalatest/" />
+    <delete>
+      <fileset dir="../../../reports/apps/routerconsole/scalatest">
+        <include name="TEST-*.xml" />
+      </fileset>
+    </delete>
+    <taskdef name="scalatest" classname="org.scalatest.tools.ScalaTestAntTask">
+      <classpath>
+        <pathelement location="${classpath}" />
+        <pathelement location="${scala-library.jar}" />
+        <pathelement location="${scala-xml.jar}" />
+        <pathelement location="${scalactic.jar}" />
+        <pathelement location="${scalatest.jar}" />
+        <pathelement location="./build/obj_cobertura" />
+        <pathelement location="./build/obj" />
+        <pathelement location="${with.clover}" />
+        <pathelement location="${with.cobertura}" />
+      </classpath>
+    </taskdef>
+    <scalatest runpath="./build/obj_scala" fork="yes" maxmemory="384M">
+      <tagsToExclude>
+        SlowTests
+      </tagsToExclude>
+      <reporter type="stdout" />
+      <reporter type="junitxml" directory="../../../reports/apps/routerconsole/scalatest/" />
+    </scalatest>
+    <!-- fetch the real hostname of this machine -->
+    <exec executable="hostname" outputproperty="host.name" />
+    <!-- set if unset -->
+    <property name="host.fakename" value="i2ptester" />
+    <!-- replace hostname that junit inserts into reports with fake one -->
+    <replace dir="../../../reports/apps/routerconsole/scalatest/" token="${host.name}"
+      value="${host.fakename}" />
+  </target>
+  <target name="test" depends="scalatest.test" />
+  <!-- test reports -->
+  <target name="scalatest.report">
+    <junitreport todir="../../../reports/apps/routerconsole/scalatest">
+      <fileset dir="../../../reports/apps/routerconsole/scalatest">
+        <include name="TEST-*.xml" />
+      </fileset>
+      <report format="frames" todir="../../../reports/apps/routerconsole/html/scalatest" />
+    </junitreport>
+  </target>
+  <target name="clover.report" depends="test" if="with.clover">
+    <clover-report>
+      <current outfile="../../../reports/apps/routerconsole/html/clover">
+        <format type="html" />
+      </current>
+    </clover-report>
+  </target>
+  <target name="cobertura.report" depends="test" if="with.cobertura">
+    <mkdir dir="../../../reports/apps/routerconsole/cobertura" />
+    <cobertura-report format="xml" srcdir="./src"
+      destdir="../../../reports/apps/routerconsole/cobertura" />
+    <mkdir dir="../../../reports/apps/routerconsole/html/cobertura" />
+    <cobertura-report format="html" srcdir="./src"
+      destdir="../../../reports/apps/routerconsole/html/cobertura" />
+    <delete file="./cobertura.ser" />
+  </target>
+  <target name="test.report" depends="scalatest.report, clover.report, cobertura.report" />
+  <!-- end test reports -->
+  <target name="fulltest" depends="cleandep, test, test.report" />
+  <!-- end unit tests -->
 
-    <target name="clean">
-        <delete dir="./build" />
-        <delete dir="../jsp/WEB-INF/" />
-        <delete file="../jsp/web-fragment.xml" />
-        <delete file="../jsp/web-out.xml" />
-    </target>
-    <target name="cleandep" depends="clean">
-    </target>
-    <target name="distclean" depends="clean">
-    </target>
+  <target name="clean">
+    <delete dir="./build" />
+    <delete dir="../jsp/WEB-INF/" />
+    <delete file="../jsp/web-fragment.xml" />
+    <delete file="../jsp/web-out.xml" />
+  </target>
+  <target name="cleandep" depends="clean">
+  </target>
+  <target name="distclean" depends="clean">
+  </target>
 </project>
