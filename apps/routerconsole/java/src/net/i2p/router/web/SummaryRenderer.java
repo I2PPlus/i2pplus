@@ -166,7 +166,7 @@ class SummaryRenderer {
         try {
             RrdGraphDef def = new RrdGraphDef(start/1000, end/1000);
             if (periodCount >= 10080) {def.setDownsampler(new LargestTriangleThreeBucketsTime(100));} // 1 week
-            else if (periodCount >= 2480) {def.setDownsampler(new LargestTriangleThreeBucketsTime(200));} // 2 days
+            else if (periodCount >= 2880) {def.setDownsampler(new LargestTriangleThreeBucketsTime(200));} // 2 days
             else if (periodCount >= 1440) {def.setDownsampler(new LargestTriangleThreeBucketsTime(500));} // 1 day
             // sidebar minigraph
             if ((width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) ||
