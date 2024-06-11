@@ -2603,13 +2603,10 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</b></td><td class=trackerLink>");
             if (isValid) {
                 String announce = meta.getAnnounce();
-                if (announce == null)
-                    announce = snark.getTrackerURL();
+                if (announce == null) {announce = snark.getTrackerURL();}
                 if (announce != null) {
-                    // Link to tracker details page
-                    String trackerLink = getTrackerLink(announce, snark.getInfoHash());
-                    if (trackerLink != null)
-                        buf.append(trackerLink);
+                    String trackerLink = getTrackerLink(announce, snark.getInfoHash()); // Link to tracker details page
+                    if (trackerLink != null) {buf.append(trackerLink);}
                 }
             }
 
@@ -2632,11 +2629,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
             // File type icon column
             buf.append("</td><td class=\"details");
-            if (!isValid && !isMultiFile) {
-                buf.append(" fetching");
-            } else {
-                buf.append(" data");
-            }
+            if (!isValid && !isMultiFile) {buf.append(" fetching");}
+            else {buf.append(" data");}
             buf.append("\">");
             if (isValid) {
                 CommentSet comments = snark.getComments();
@@ -2651,32 +2645,21 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
             String icon;
-            if (isMultiFile)
-                icon = "folder";
-            else if (isValid)
-                icon = toIcon(meta.getName());
-            else if (snark instanceof FetchAndAdd)
-                icon = "download";
-            else
-                icon = "magnet";
-            if (isValid) {
-                buf.append(toSVG(icon));
-                buf.append("</a></span>");
-            } else {
-                buf.append(toSVG(icon));
-            }
+            if (isMultiFile) {icon = "folder";}
+            else if (isValid) {icon = toIcon(meta.getName());}
+            else if (snark instanceof FetchAndAdd) {icon = "download";}
+            else {icon = "magnet";}
+            if (isValid) {buf.append(toSVG(icon)).append("</a></span>");}
+            else {buf.append(toSVG(icon));}
 
             // Torrent name column
             buf.append("</td><td class=tName>");
             if (remaining == 0 || isMultiFile) {
                 buf.append("<a href=\"").append(encodedBaseName);
-                if (isMultiFile)
-                    buf.append('/');
+                if (isMultiFile) {buf.append('/');}
                 buf.append("\" title=\"");
-                if (isMultiFile)
-                    buf.append(_t("View files"));
-                else
-                    buf.append(_t("Open file"));
+                if (isMultiFile) {buf.append(_t("View files"));}
+                else {buf.append(_t("Open file"));}
                 buf.append("\">");
             }
             if (basename.contains("Magnet")) {
@@ -2696,80 +2679,65 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<td class=rxd>");
             if (remaining > 0) {
                 long percent = 100 * (total - remaining) / total;
-                buf.append("<div class=barOuter>");
-                buf.append("<div class=barInner style=\"width: " + percent + "%;\">");
-                buf.append("<div class=barText tabindex=0 title=\"");
-                buf.append(percent + "% " + _t("complete") + "; " + formatSize(remaining) + ' ' + _t("remaining"));
-                buf.append("\">");
-                buf.append(formatSize(total-remaining).replaceAll("iB","") + thinsp(noThinsp) + formatSize(total).replaceAll("iB",""));
-                buf.append("</div></div></div>");
+                buf.append("<div class=barOuter>")
+                   .append("<div class=barInner style=\"width: " + percent + "%;\">")
+                   .append("<div class=barText tabindex=0 title=\"")
+                   .append(percent + "% " + _t("complete") + "; " + formatSize(remaining) + ' ' + _t("remaining"))
+                   .append("\">")
+                   .append(formatSize(total-remaining).replaceAll("iB","") + thinsp(noThinsp) + formatSize(total).replaceAll("iB",""))
+                   .append("</div></div></div>");
             } else if (remaining == 0) {
                 // needs locale configured for automatic translation
                 SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy");
                 fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
                 long[] dates = _manager.getSavedAddedAndCompleted(snark);
                 String date = fmt.format(new Date(dates[1]));
-                buf.append("<div class=barComplete title=\"");
-                buf.append(_t("Completed") + ": " + date + "\">");
-                buf.append(formatSize(total).replaceAll("iB","")); // 3GB
-                buf.append("</div>");
-                }
+                buf.append("<div class=barComplete title=\"")
+                   .append(_t("Completed") + ": " + date + "\">")
+                   .append(formatSize(total).replaceAll("iB","")) // 3GB
+                   .append("</div>");
+            }
             buf.append("</td>");
             buf.append("<td class=\"rateDown");
-            if (downBps >= 100000)
-                buf.append(" hundred");
-            else if (downBps >= 10000)
-                buf.append(" ten");
+            if (downBps >= 100000) {buf.append(" hundred");}
+            else if (downBps >= 10000) {buf.append(" ten");}
             buf.append("\">");
             // we may only be uploading to peers, so hide when downrate <= 0
             if (isRunning && needed > 0 && downBps > 0 && curPeers > 0) {
-                buf.append("<span class=right>");
-                buf.append(formatSize(downBps).replaceAll("iB", "")
-                                             .replace("B", "</span><span class=left>B")
-                                             .replace("K", "</span><span class=left>K")
-                                             .replace("M", "</span><span class=left>M")
-                                             .replace("G", "</span><span class=left>G")
-                                             + "/s</span>");
+                buf.append("<span class=right>")
+                   .append(formatSize(downBps).replaceAll("iB", "")
+                                              .replace("B", "</span><span class=left>B")
+                                              .replace("K", "</span><span class=left>K")
+                                              .replace("M", "</span><span class=left>M")
+                                              .replace("G", "</span><span class=left>G"));
+                buf.append("/s</span>");
             }
             buf.append("</td>");
             buf.append("<td class=txd>");
             if (isValid) {
                 double ratio = uploaded / ((double) total);
-                if (total <= 0)
-                    ratio = 0;
+                if (total <= 0) {ratio = 0;}
                 String txPercent = (new DecimalFormat("0")).format(ratio * 100);
                 String txPercentBar = txPercent + "%";
-                if (ratio > 1)
-                    txPercentBar = "100%";
-                if (ratio <= 0.01 && ratio > 0)
-                    txPercent = (new DecimalFormat("0.00")).format(ratio * 100);
+                if (ratio > 1) {txPercentBar = "100%";}
+                if (ratio <= 0.01 && ratio > 0) {txPercent = (new DecimalFormat("0.00")).format(ratio * 100);}
                 if (showRatios) {
                     if (total > 0) {
-                    buf.append("<span class=tx><span class=txBarText>");
-                    buf.append(txPercent);
-                    buf.append("&#8239;%");
-                    buf.append("</span><span class=txBarInner style=\"width:calc(" + txPercentBar + " - 2px)\"></span>");
-                    buf.append("</span>");
+                    buf.append("<span class=tx><span class=txBarText>").append(txPercent).append("&#8239;%")
+                       .append("</span><span class=txBarInner style=\"width:calc(").append(txPercentBar)
+                       .append(" - 2px)\"></span></span>");
                 } else {
                     buf.append("‒");
                 }
             } else if (uploaded > 0) {
-                buf.append("<span class=tx title=\"");
-                buf.append(_t("Upload ratio").replace("Upload", "Share"));
-                buf.append(": ");
-                buf.append(txPercent);
-                buf.append("&#8239;%");
+                buf.append("<span class=tx title=\"").append(_t("Upload ratio").replace("Upload", "Share"))
+                   .append(": ").append(txPercent).append("&#8239;%");
                 SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy");
                 fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
                 Storage storage = snark.getStorage();
                 long lastActive = storage.getActivity();
                 String date = fmt.format(new Date(lastActive));
-                if (storage != null) {
-                    buf.append(" &bullet; ");
-                    buf.append(_t("Last activity"));
-                    buf.append(": ");
-                    buf.append(date);
-                }
+                if (storage != null) {buf.append(" &bullet; ").append(_t("Last activity")).append(": ").append(date);}
                 buf.append("\"><span class=txBarText><span class=right>");
                 buf.append(formatSize(uploaded).replaceAll("iB","")
                                                .replace("B", "</span><span class=left>B</span>")
@@ -2777,7 +2745,8 @@ public class I2PSnarkServlet extends BasicServlet {
                                                .replace("M", "</span><span class=left>M</span>")
                                                .replace("G", "</span><span class=left>G</span>")
                                                .replace("T", "</span><span class=left>T</span>"));
-                buf.append("</span> <span class=txBarInner style=\"width:calc(" + txPercentBar + " - 2px)\"></span></span>");
+                buf.append("</span> <span class=txBarInner style=\"width:calc(").append(txPercentBar)
+                   .append(" - 2px)\"></span></span>");
             }
         }
         buf.append("</td>");
@@ -2793,8 +2762,8 @@ public class I2PSnarkServlet extends BasicServlet {
                                         .replace("B", "</span><span class=left>B")
                                         .replace("K", "</span><span class=left>K")
                                         .replace("M", "</span><span class=left>M")
-                                        .replace("G", "</span><span class=left>G")
-                                        + "/s</span>");
+                                        .replace("G", "</span><span class=left>G"));
+            buf.append("/s</span>");
         }
         buf.append("</td>");
         buf.append("<td class=tAction>");
@@ -2803,31 +2772,29 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<span class=isChecking></span>");
         } else if (isRunning) {
             // Stop Button
-            buf.append("<input type=submit class=actionStop name=\"action_Stop_" + b64 + "\" value=\"" +
-                      _t("Stop") + "\" title=\"" + _t("Stop the torrent").replace(" the", "") + "\">");
-
+            buf.append("<input type=submit class=actionStop name=\"action_Stop_").append(b64).append("\" value=\"")
+               .append(_t("Stop")).append("\" title=\"").append(_t("Stop the torrent").replace(" the", "")).append("\">");
         } else if (!snark.isStarting()) {
             if (!_manager.isStopping()) {
                 // Start Button
-                buf.append("<input type=submit class=actionStart name=\"action_Start_" + b64 + "\" value=\"" +
-                          _t("Start") + "\" title=\"" + _t("Start the torrent").replace(" the", "") + "\">");
-
+                buf.append("<input type=submit class=actionStart name=\"action_Start_").append(b64).append("\" value=\"")
+                   .append(_t("Start")).append("\" title=\"").append(_t("Start the torrent").replace(" the", "")).append("\">");
             }
             if (isValid && canWrite) {
                 // Remove Button
-                buf.append("<input type=submit class=actionRemove name=\"action_Remove_" + b64 + "\" value=\"" +
-                          _t("Remove") + "\" title=\"" + _t("Remove the torrent from the active list, deleting the .torrent file")
-                          .replace("Remove the torrent from the active list, deleting the .torrent file", "Remove and delete torrent, retaining downloaded files") +
-                          "\" client=\"" + escapeJSString(snark.getName()) + "\">");
+                buf.append("<input type=submit class=actionRemove name=\"action_Remove_").append(b64).append("\" value=\"")
+                   .append(_t("Remove")).append("\" title=\"").append(_t("Remove the torrent from the active list, deleting the .torrent file")
+                   .replace("Remove the torrent from the active list, deleting the .torrent file", "Remove and delete torrent, retaining downloaded files"));
+                buf.append("\" client=\"").append(escapeJSString(snark.getName())).append("\">");
             }
 
             // We can delete magnets without write privs
             if (!isValid || canWrite) {
                 // Delete Button
-                buf.append("<input type=submit class=actionDelete name=\"action_Delete_" + b64 + "\" value=\"" +
-                          _t("Delete") + "\" title=\"" + _t("Delete the .torrent file and the associated data files")
-                          .replace("the .torrent file", "torrent file").replace("and the associated", "and associated") +
-                          "\" client=\"" + escapeJSString(snark.getName()) + "\">");
+                buf.append("<input type=submit class=actionDelete name=\"action_Delete_").append(b64).append("\" value=\"")
+                   .append(_t("Delete")).append("\" title=\"").append(_t("Delete the .torrent file and the associated data files")
+                   .replace("the .torrent file", "torrent file").replace("and the associated", "and associated"));
+                buf.append("\" client=\"").append(escapeJSString(snark.getName())).append("\">");
             }
         }
         buf.append("</td></tr>\n");
@@ -2846,15 +2813,14 @@ public class I2PSnarkServlet extends BasicServlet {
                         snarkStatus += " RX";
                 } else {snarkStatus = "inactive";}
                 if (!peer.isConnected()) {continue;}
-                buf.append("<tr class=\"peerinfo " + snarkStatus + " volatile\">\n<td class=status title=\"");
+                buf.append("<tr class=\"peerinfo ").append(snarkStatus).append(" volatile\">\n<td class=status title=\"");
                 buf.append(_t("Peer attached to swarm"));
                 buf.append("\"></td><td class=peerdata colspan=5>");
                 PeerID pid = peer.getPeerID();
                 String client = null;
                 String ch = pid != null ? pid.toString() : "????";
-                if (ch.startsWith("WebSeed@")) {
-                    buf.append(ch);
-                } else {
+                if (ch.startsWith("WebSeed@")) {buf.append(ch);}
+                else {
                     // most clients start -xx, see
                     // BT spec or libtorrent identify_client.cpp
                     // Base64 encode -xx
@@ -2868,7 +2834,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     boolean hasVersion = version != null && !version.equals("");
                     buf.append("<span class=peerclient><code title=\"");
                     buf.append(_t("Destination (identity) of peer"));
-                    buf.append("\">" + peer.toString().substring(5, 9)+ "</code>&nbsp;");
+                    buf.append("\">").append(peer.toString().substring(5, 9)).append("</code>&nbsp;");
                     if (hasVersion) {buf.append("<span class=clientid title=\"").append(version).append("\">");}
                     else {buf.append("<span class=clientid>");}
                     if ("AwMD".equals(ch)) {client = "I2PSnark";}
@@ -2915,9 +2881,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append(client + "</span></span>");
                 }
                 if (t >= 5000) {
-                    buf.append("<span class=inactivity style=\"width:" + (t / 2000) +
-                               "px\" title=\"" + _t("Inactive") + ": " +
-                               (t / 1000) + ' ' + _t("seconds") + "\"></span>");
+                    buf.append("<span class=inactivity style=\"width:").append(t / 2000)
+                       .append("px\" title=\"").append(_t("Inactive")).append(": ")
+                       .append(t / 1000).append(' ').append(_t("seconds")).append("\"></span>");
                 }
                 buf.append("</td>");
                 buf.append("<td class=ETA></td>");
@@ -2926,13 +2892,13 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (isValid) {
                     pct = (float) (100.0 * peer.completed() / meta.getPieces());
                     if (pct >= 100.0) {
-                        buf.append("<span class=\"peerSeed\" title=\"" + _t("Seed") + "\">" +
-                                   toSVG("peerseed", _t("Seed"), "") + "</span>");
+                        buf.append("<span class=\"peerSeed\" title=\"").append(_t("Seed")).append("\">")
+                           .append(toSVG("peerseed", _t("Seed"), "")).append("</span>");
                     } else {
                         String ps = String.valueOf(pct);
                         if (ps.length() > 5) {ps = ps.substring(0, 5);}
-                        buf.append("<div class=barOuter title=\"" + ps + "%\">")
-                           .append("<div class=barInner style=\"width:" + ps + "%;\">")
+                        buf.append("<div class=barOuter title=\"").append(ps).append("%\">")
+                           .append("<div class=barInner style=\"width:").append(ps).append("%;\">")
                            .append("</div></div>");
                     }
                 } else {
