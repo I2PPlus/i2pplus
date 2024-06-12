@@ -185,6 +185,20 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private long _startedOn = 0L;
     private ConnThrottler _postThrottler;
 
+    private final static String ERR_NOT_FOUND =
+         "HTTP/1.1 404 Not Found\r\n" +
+         "Content-Type: text/html; charset=utf-8\r\n" +
+         "Cache-Control: no-cache\r\n" +
+         "Connection: close\r\n" +
+         "\r\n" +
+         "<html>\n" +
+         "<head><title>404 Not Found</title></head>\n" +
+         "<body>\n" +
+         "<center><h1>404 Not Found</h1></center>\n" +
+         "<hr>\n" +
+         "</body>\n" +
+         "</html>";
+
     private final static String ERR_UNAVAILABLE =
          "HTTP/1.1 503 Service Unavailable\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n" +
@@ -529,6 +543,38 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
                 long afterHeaders = getTunnel().getContext().clock().now();
 
+                /** Block requests to localhost or loopback addresses via hostname
+                 *
+                 *  @ since 0.9.63+
+                 */
+                String host = headers.get("Host").get(0);
+                if (!host.endsWith(".i2p")) {
+                    try {
+                        InetAddress address = InetAddress.getByName(host);
+                        if (address.isLinkLocalAddress() || address.isLoopbackAddress()) {
+                            if (_log.shouldLog(Log.WARN)) {
+                                _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address [" + host + "] " +
+                                          "-> Adding dest to clients blocklist file \n* Client: " + peerB32);
+                            }
+                            logBlockedDestination(peerB32);
+                            // let the client hang...
+                            socket.close();
+                        }
+                    } catch (UnknownHostException e) {
+                        if (_log.shouldLog(Log.WARN)) {
+                            _log.warn("[HTTPServer] Could not resolve hostname: " + host + " \n* Client: " + peerB32);
+                        }
+                        try {sendError(socket, ERR_NOT_FOUND);}
+                        catch (IOException ioe) {}
+                    } finally {
+                        try {
+                        socket.close();
+                        } catch (IOException ioe) {
+                            _log.warn("[HTTPServer] Error closing socket: " + ioe.getMessage());
+                        }
+                    }
+                }
+
                 Properties opts = getTunnel().getClientOptions();
                 if (Boolean.parseBoolean(opts.getProperty(OPT_REJECT_INPROXY)) &&
                     (headers.containsKey("X-Forwarded-For") ||
@@ -678,37 +724,41 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // process http_blocklist.txt entries
                 if (command.length() > 0) {processBlocklist(socket, command);}
 
-                // HTTP Persistent Connections (RFC 2616)
-                // for the I2P socket.
-                // Keep it very simple.
-                // Will be set to false for non-GET/HEAD, non-HTTP/1.1,
-                // Connection: close, InternalSocket,
-                // or after analysis of the response headers in CompressedOutputStream,
-                // or on errors in I2PTunnelRunner.
-                // We do NOT support keepalive on the server socket.
+                /**
+                 * HTTP Persistent Connections (RFC 2616)
+                 * for the I2P socket.
+                 * Keep it very simple.
+                 * Will be set to false for non-GET/HEAD, non-HTTP/1.1,
+                 * Connection: close, InternalSocket,
+                 * or after analysis of the response headers in CompressedOutputStream,
+                 * or on errors in I2PTunnelRunner.
+                 * We do NOT support keepalive on the server socket.
+                 */
                 String cmd = command.toString().trim();
                 if (!cmd.endsWith(" HTTP/1.1") || !(cmd.startsWith("GET ") || cmd.startsWith("HEAD "))) {
                     keepalive = false;
                 }
 
-                // we keep the enc sent by the browser before clobbering it, since it may have
-                // been x-i2p-gzip
+                // we keep the enc sent by the browser before clobbering it, since it may have been x-i2p-gzip
                 String enc = getEntryOrNull(headers, "Accept-Encoding");
                 String altEnc = getEntryOrNull(headers, "X-Accept-Encoding");
 
-                // according to rfc2616 s14.3, this *should* force identity, even if
-                // "identity;q=1, *;q=0" didn't.
-                // as of 0.9.23, the client passes this header through, and we do the same,
-                // so if the server and browser can do the compression/decompression, we don't have to
-                //setEntry(headers, "Accept-Encoding", "");
+                /**
+                 *  According to rfc2616 s14.3, this *should* force identity, even if 'identity;q=1, *;q=0' didn't.
+                 *  As of 0.9.23, the client passes this header through, and we do the same, so if the server and browser
+                 *  can do the compression/decompression, we don't have to setEntry(headers, "Accept-Encoding", "");
+                 */
 
                 socket.setReadTimeout(readTimeout);
                 Socket s = getSocket(socket.getPeerDestination().calculateHash(), socket.getLocalPort());
                 long afterSocket = getTunnel().getContext().clock().now();
-                // instead of i2ptunnelrunner, use something that reads the HTTP
-                // request from the socket, modifies the headers, sends the request to the
-                // server, reads the response headers, rewriting to include Content-Encoding: x-i2p-gzip
-                // if it was one of the Accept-Encoding: values, and gzip the payload
+
+                /**
+                 *  Instead of i2ptunnelrunner, use something that reads the HTTP request from the socket,
+                 *  modifies the headers, sends the request to the server, reads the response headers,
+                 *  rewriting to include 'Content-Encoding: x-i2p-gzip' if it was one of the
+                 *  Accept-Encoding: values, and gzip the payload
+                 */
                 boolean allowGZIP = true;
                 String val = opts.getProperty(TunnelController.PROP_TUN_GZIP);
                 if ((val != null) && (!Boolean.parseBoolean(val))) {allowGZIP = false;}
