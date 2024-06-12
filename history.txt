@@ -1,3 +1,8 @@
+2024-06-12 dr|z3d
+ * I2PTunnel: Resolve non-i2p addresses served by the HTTP Server tunnel to
+   identify 404s and block attempts to access localhost/loopback addresses via
+   hostname
+
 2024-06-11 dr|z3d
  * I2PSnark: If peer client has version string, display on tooltip only
  * Graphs: Downsample graph data progressively as the display period increases
