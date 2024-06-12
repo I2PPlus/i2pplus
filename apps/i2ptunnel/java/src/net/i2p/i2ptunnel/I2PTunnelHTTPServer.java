@@ -547,33 +547,51 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  *
                  *  @ since 0.9.63+
                  */
-                String host = headers.get("Host").get(0);
-                if (!host.endsWith(".i2p")) {
-                    try {
-                        InetAddress address = InetAddress.getByName(host);
-                        if (address.isLinkLocalAddress() || address.isLoopbackAddress()) {
-                            if (_log.shouldLog(Log.WARN)) {
-                                _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address [" + host + "] " +
-                                          "-> Adding dest to clients blocklist file \n* Client: " + peerB32);
-                            }
-                            logBlockedDestination(peerB32);
-                            // let the client hang...
-                            socket.close();
-                        }
-                    } catch (UnknownHostException e) {
-                        if (_log.shouldLog(Log.WARN)) {
-                            _log.warn("[HTTPServer] Could not resolve hostname: " + host + " \n* Client: " + peerB32);
-                        }
-                        try {sendError(socket, ERR_NOT_FOUND);}
-                        catch (IOException ioe) {}
-                    } finally {
+                try {
+                    long timeout = requestCount > 0 ? I2PTunnelHTTPClient.BROWSER_KEEPALIVE_TIMEOUT + 10*1000 : HEADER_TIMEOUT;
+                    headers = readHeaders(socket, null, command, CLIENT_SKIPHEADERS, getTunnel().getContext(), timeout);
+                    String host = null;
+                    if (!headers.containsKey("Host")) {return;}
+                    List<String> hostList = headers.get("Host");
+                    if (hostList != null && !hostList.isEmpty()) {host = hostList.get(0);}
+                    String hostname = host != null ? host.trim() : null;
+/**
+                    String hostname = getHostFromHeaders(getResponseHeader("Host"));
+                    if (hostname != null) {
+                        int port = hostname.indexOf(":");
+                        if (port != -1) {hostname = hostname.substring(0, port);}
+                    }
+**/
+                    if (hostname != null && !hostname.endsWith(".i2p")) {
+                        if (_log.shouldInfo()) {_log.info("[HTTPServer] Validating non-i2p hostname: " + hostname + "...");}
                         try {
-                        socket.close();
-                        } catch (IOException ioe) {
-                            _log.warn("[HTTPServer] Error closing socket: " + ioe.getMessage());
+                            InetAddress address = InetAddress.getByName(hostname);
+                            if (address.isLinkLocalAddress() || address.isLoopbackAddress()) {
+                                if (_log.shouldLog(Log.WARN)) {
+                                    _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "] " +
+                                              "-> Adding dest to clients blocklist file \n* Client: " + peerB32);
+                                }
+                                logBlockedDestination(peerB32);
+                                // let the client hang...
+                                socket.close();
+                            } else {
+                                if (_log.shouldInfo()) {_log.info("[HTTPServer] Hostname " + hostname + " validated -> Resolves to: " + address);}
+                            }
+                        } catch (UnknownHostException e) {
+                            if (_log.shouldLog(Log.WARN)) {
+                                _log.warn("[HTTPServer] Could not resolve hostname: " + hostname + " \n* Client: " + peerB32);
+                            }
+                            try {sendError(socket, ERR_NOT_FOUND);}
+                            catch (IOException ioe) {}
+                        } finally {
+                            try {
+                            socket.close();
+                            } catch (IOException ioe) {
+                                _log.warn("[HTTPServer] Error closing socket: " + ioe.getMessage());
+                            }
                         }
                     }
-                }
+                } catch (IOException ioe) {}
 
                 Properties opts = getTunnel().getClientOptions();
                 if (Boolean.parseBoolean(opts.getProperty(OPT_REJECT_INPROXY)) &&
@@ -937,14 +955,21 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 String[] requestLines = _headers.split("\r\n");
                 String requestLine = requestLines[0];
                 String[] requestParts = requestLine.split(" ");
-                url = requestParts != null ? requestParts[1] : null;
-                if (url != null && url.length() > 100) {url = url.substring(0, 48) + "..." + url.substring(url.length() - 48);}
-                String[] urlParts = url.split("/");
-                host = (urlParts != null && !urlParts.equals("") ? urlParts[0] + "//" + urlParts[2] : null);
-                if (host != null) {
-                    host = (host.contains("b32.i2p") ? host.substring(0, 12) + "...b32.i2p" : host);
-                    req = (url != null ? host + url.replace("//", "/") : "");
+                url = requestParts.length > 1 ? requestParts[1] : null;
+                if (url != null) {
+                    if (url.startsWith("http://")) {url = url.replace("http://", "");}
+                    if (url.length() > 100) {url = url.substring(0, 48) + "..." + url.substring(url.length() - 48);}
+                    String[] urlParts = url.split("/");
+                    if (urlParts.length > 0) {
+                        host = urlParts[0];
+                        for (int i = 1; i < urlParts.length; i++) {
+                            if (!urlParts[i].trim().isEmpty()) {host += "/" + urlParts[i];}
+                        }
+                    }
                 }
+                if (host != null && host.contains("b32.i2p")) {host = host.substring(0, 12) + "...b32.i2p";}
+                req = host != null ? host : "Unknown request";
+
                 boolean isHead = _headers.startsWith("HEAD ");
                 boolean isGet = _headers.startsWith("GET ");
                 boolean isPost = _headers.startsWith("POST ");
