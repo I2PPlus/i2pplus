@@ -1425,6 +1425,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     protected static String formatHeadersCompact(Map<String, List<String>> headers, StringBuilder command) {
         StringBuilder buf = new StringBuilder(command.length() + headers.size() * 64);
         String request = command.toString().trim();
+        if (request.contains("peer_id")) {
+          int ampersand = request.indexOf("&");
+          String truncatedRequest = request.substring(0, ampersand) + "...";
+          if (request.endsWith("HTTP/1.1")) {truncatedRequest += " HTTP/1.1";}
+          else if (request.endsWith("HTTP/1.0")) {truncatedRequest += " HTTP/1.0";}
+          request = truncatedRequest;
+        }
         if (!request.toLowerCase().contains("head")) {buf.append("\n* Request: " + request);}
         for (Map.Entry<String, List<String>> e : headers.entrySet()) {
             String name = e.getKey();
