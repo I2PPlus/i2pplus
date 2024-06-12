@@ -366,9 +366,9 @@ input[name="nofilter_commentsName"]{width:250px}
 input[type=submit]{color:#4d2200;border:var(--btn_border)}
 input[type=submit]:hover,input[type=submit]:focus,a.control:hover,a.control:focus{color:#4d2100;border:var(--btn_border_hover);box-shadow:var(--highlight)7ef,inset 0 0 0 2px #d50;-webkit-text-stroke:1px rgba(77,34,0,.1);background-blend-mode:luminosity}
 input[type=submit]:active,a.control:active{color:#70645c;box-shadow:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.5);-webkit-text-stroke:0}
-input[type=text],input.r,textarea,input[name="nofilter_dataDir"]{padding:5px 8px;vertical-align:middle;box-shadow:var(--highlight),inset 3px 3px 3px rgba(16,12,0,.25)}
+input[type=text],input.r,textarea,input[name="nofilter_dataDir"]{padding:5px 8px;vertical-align:middle;box-shadow:var(--highlight),inset 2px 2px 2px rgba(16,12,0,.3)}
 input[name="i2cpOpts"],input[name="nofilter_dataDir"]{font-size:90%}
-input[type=text]:focus,input[type=text]:focus,input.r:focus,textarea:focus,input[name="nofilter_dataDir"]:focus{background:#fffcdf;color:#5f1227;text-shadow:none;transition:ease box-shadow .3s}
+input[type=text]:focus,input[type=text]:focus,input.r:focus,textarea:focus,input[name="nofilter_dataDir"]:focus{background:#fffcdf;color:#5f1227;text-shadow:none;border:var(--btn_border_hover);box-shadow:var(--highlight),inset 3px 3px 3px rgba(16,12,0,.4);transition:ease box-shadow .15s}
 input.default{width:1px;height:1px;display:none;visibility:hidden}
 input.disabled,input.disabled:hover,input.disabled:focus,input.disabled:active,a.controld,a.controld:hover,a.controld:focus,a.controld:active{font-weight:400;opacity:.6;color:#4d2200;box-shadow:none;cursor:not-allowed;background-blend-mode:luminosity;filter:none}
 a.controld img,a.controld:hover img,a.controld:focus img,a.controld:active img{mix-blend-mode:luminosity}
@@ -402,7 +402,6 @@ input.stoptorrent:active{background:var(--stop) no-repeat 8px center/10px,linear
 select{margin:2px 0 2px 4px;padding:5px 22px 5px 5px;font:8pt var(--bodyfont);font-weight:400;color:#4d2200;border-radius:2px;border:var(--btn_border);box-shadow:var(--highlight),0 0 1px 0 rgba(77,69,62,.3);background:#efe6e0 var(--dropdown) no-repeat right 7px center;background-size:10px;appearance:none}
 select:hover,select:focus{color:#5f1227;border:var(--btn_border_hover);background:#fffcdf var(--dropdown_hover) no-repeat right 7px center/10px}
 textarea,input[name="nofilter_dataDir"]{margin-left:4px;padding:5px 8px;width:70%;font-family:var(--bodyfont);font-size:8pt;font-weight:400;border-radius:2px;border:var(--btn_border);background:#efe6e0}
-.r:focus,input[type=text]:focus,select:focus,input[name="nofilter_dataDir"]:focus,.optbox[type=checkbox]:focus,.optbox[type=radio]:focus{border:var(--btn_border_hover);box-shadow:var(--highlight),inset 0 0 0 1px rgba(16,12,0,.25),0 0 1px rgba(223,0,103,.6);transition:ease box-shadow .15s}
 textarea{margin-top:2px;padding:4px;height:26px;resize:none;font-size:8pt;color:#4d2200}
 #configs #configureAuthor input{max-width:180px}
 
@@ -574,14 +573,17 @@ td .commentAuthorName{margin-left:8px;width:120px;overflow:hidden;text-overflow:
 
 /* configs */
 input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 172px)}
-.configOption{margin:5px 0;padding:4px 5px 4px 0;width:calc(100% - 10px);display:inline-block;white-space:nowrap;vertical-align:middle;text-align:left;border-radius:2px;box-shadow:0 0 0 1px #afa399,inset 0 0 0 1px #fef6f0,0 0 2px #aaa;background:linear-gradient(180deg,#d7d0cc,#d2cac6);transition:ease-in-out box-shadow .1s}
-.configOption:hover{box-shadow:0 0 0 1px #afa399,inset 0 0 0 1px #f50,0 0 2px #aaa;background:linear-gradient(180deg,#ffd8,#ffc8),#d2cac6;transition:ease-in-out all .1s}
+.configOption{margin:5px 0;padding:4px 5px 4px 0;width:calc(100% - 10px);display:inline-block;position:relative;white-space:nowrap;vertical-align:middle;text-align:left;border-radius:2px;box-shadow:0 0 0 1px #afa399,inset 0 0 0 1px #fef6f0,0 0 2px #aaa;background:linear-gradient(180deg,#d7d0cc,#d2cac6);transition:ease-in-out box-shadow .1s}
+.configOption:hover{box-shadow:0 0 0 1px #afa399,inset 0 0 0 1px #cf0f00,0 0 2px #aaa;transition:ease-in-out .1s all .1s}
 .configOption::after{height:40px;display:inline-block;vertical-align:middle;content:""}
+.configOption::before{display:block;width:calc(100% - 4px);height:calc(100% - 4px);position:absolute;top:2px;left:2px;z-index:0;background:linear-gradient(180deg,#ffea,#ffc5);opacity:0;content:""}
+.configOption:hover::before{opacity:.5;pointer-events:none;transition:ease .1s opacity .1s}
+.configOption>*{position:relative;z-index:10}
 .configOption a{color:transparent!important;background:var(--configure) no-repeat left center/18px;mix-blend-mode:multiply}
-.configOption a:hover,.configOption a:focus{mix-blend-mode:normal}
+.configOption a:hover,.configOption a:focus{background-image:var(--configure_hover);mix-blend-mode:normal}
 .knownTracker .optbox[type=radio],.knownTracker .optbox[type=radio]:hover{opacity:.3;cursor:default}
 .knownTracker .optbox[type=radio]:checked,.knownTracker .optbox[type=radio]:checked:hover{opacity:.5}
-.numeric{max-width:60px;min-width:60px}
+.numeric{max-width:64px;min-width:64px}
 .numeric:focus{text-align:center}
 .optionlist{margin:0;padding:7px 6px 6px;columns:400px 3;column-gap:5px;transition:ease-in-out .5s box-shadow}
 .suboption{box-shadow:var(--highlight),0 1px 1px #a5968d55}
@@ -601,9 +603,11 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 #configs td b::after{content:":"}
 #configs td label b:hover{color:#4d2200}
 #snarkLang{margin:0 5px;padding:2px 8px;display:inline-block;vertical-align:middle;line-height:1.6;font-weight:700;text-align:center;border-radius:2px;background:#fef6f0}
-#configs #bwAllocation .numeric,#configs .numeric[name="upLimit"]{min-width:48px}
+#configs #bwAllocation .numeric,#configs .numeric[name="upLimit"],#configs .numeric[name="startupDelay"],#configs .numeric[name="pageSize"]{min-width:48px}
+#configs .numeric[name="maxFiles"]{min-width:68px;max-width:68px;text-align:center}
 #configs #bwAllocation{font-size:9pt}
 #configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}
+#configs a[href^="/config"]{display:inline-block;vertical-align:middle}
 #embed,#fullscreen{margin:0 -3px -1px 0;padding:0 5px;float:right;font-size:8pt;color:#cf0f00;box-shadow:0 0 0 1px #afa399;background:var(--th)}
 #fullscreen{display:none}
 .iframed #embed{display:none}
