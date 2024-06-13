@@ -548,7 +548,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 /** Block requests to localhost or loopback addresses via hostname
                  *
-                 *  @ since 0.9.63+
+                 *  @since 0.9.63+
                  */
                 try {
                     long timeout = requestCount > 0 ? I2PTunnelHTTPClient.BROWSER_KEEPALIVE_TIMEOUT + 10*1000 : HEADER_TIMEOUT;
@@ -559,10 +559,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                     if (cmd != null) {
                         String[] parts = cmd.split(" ");
-                        if (!parts[0].startsWith("/") || !parts[0].endsWith(".i2p")) {
-                            hostname = parts[0].split(":")[0];
+                        if (!parts[0].endsWith(".i2p")) {
+                            if (parts[0].contains("/")) {
+                                hostname = parts[0].substring(0, parts[0].indexOf("/"));
+                            } else if (parts[0].contains(":")) {
+                                hostname = parts[0].split(":")[0];
+                            } else {
+                                hostname = parts[0];
+                            }
                         }
                     }
+
                     if (hostname == null && !headers.containsKey("Host")) {return;}
                     List<String> hostList = headers.get("Host");
                     if (hostList != null && !hostList.isEmpty()) {host = hostList.get(0);}
