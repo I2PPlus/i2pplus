@@ -128,52 +128,47 @@ public class InfoHelper extends HelperBase {
 
     public String bwIn() {
         String in = _context.getProperty("i2np.bandwidth.inboundKBytesPerSecond");
-        if (in != null)
-            return in;
-        else
-//            return "512";
-            return "1024";
+        if (in != null) {return in;}
+        else {return "1024";}
     }
 
     public String bwOut() {
         String out = _context.getProperty("i2np.bandwidth.outboundKBytesPerSecond");
-        if (out != null)
-            return out;
-        else
-//            return "48";
-            return "512";
+        if (out != null) {return out;}
+        else {return "512";}
     }
 
     public String bwShare() {
         String share = _context.getProperty("router.sharePercentage");
-        if (share != null)
-            return share;
-        else
-            return "80";
+        if (share != null) {return share;}
+        else {return "80";}
     }
 
     public String codelInterval() {
         String interval = _context.getProperty("router.codelInterval");
-        if (interval != null)
-            return interval;
-        else
-            return "750";
+        if (interval != null) {return interval;}
+        else {return "750";}
     }
 
     public String codelTarget() {
         String target = _context.getProperty("router.codelTarget");
-        if (target != null)
-            return target;
-        else
-            return "40";
+        if (target != null) {return target;}
+        else {return "40";}
+    }
+
+    public String getFamily() {
+        RouterInfo ri = _context.router().getRouterInfo();
+        String family = ri.getOption("family");
+        if (family != null) {return family;}
+        else {return null;}
     }
 
     private void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
+        RouterInfo ri = _context.router().getRouterInfo();
         Hash h = _context.routerHash();
         Date installDate = new Date();
-        if (installDate != null)
-            installDate.setTime(Long.parseLong(firstInstalled()));
+        if (installDate != null) {installDate.setTime(Long.parseLong(firstInstalled()));}
         Date lastUpdate = new Date();
         lastUpdate.setTime(Long.parseLong(lastUpdated()));
         float bwO = Integer.parseInt(bwOut());
@@ -190,7 +185,9 @@ public class InfoHelper extends HelperBase {
         buf.append("<table>\n");
         if (h != null) {
             buf.append("<tr><td><b>").append(_t("Identity")).append(":</b></td><td><code><a href=\"/netdb?r=.\" title =\"")
-               .append(_t("Network Database entry")).append("\">").append(h.toBase64()).append("</a></code></td></tr>\n");
+               .append(_t("Network Database entry")).append("\">").append(h.toBase64()).append("</a></code>");
+            if (getFamily() != null) {buf.append("&ensp;<b>").append(_t("Family")).append(":</b> ").append(getFamily());}
+            buf.append("</td></tr>\n");
         }
         if (getUdpIP() != null && getUdpPort() != null) {
             buf.append("<tr><td><b>").append(_t("IP Address")).append(":</b></td><td class=ajax>").append(getUdpIP());
@@ -207,7 +204,8 @@ public class InfoHelper extends HelperBase {
         if (bwIn() != null && bwOut() != null && bwShare() != null) {
             buf.append("<tr><td><b>").append(_t("Bandwidth")).append(":</b></td><td><b>").append( _t("Inbound")).append(":</b> ")
                .append(bwIn()).append("KB/s &ensp;<b>").append(_t("Outbound")).append(":</b> ").append(bwOut()).append("KB/s &ensp;<b>")
-               .append(_t("Shared")).append(":</b> ").append(bwShare()).append("% (").append(shareBW).append("KB/s) &ensp;<a href=\"/config\">")
+               .append(_t("Shared")).append(":</b> ").append(bwShare()).append("% (").append(shareBW).append("KB/s) &ensp;<b>")
+               .append(_t("Tier")).append(":</b> ").append(ri.getBandwidthTier()).append("&ensp;<a href=\"/config\">")
                .append(_t("Configure")).append("</a></td></tr>\n");
         }
         buf.append("<tr><td><b>").append(_t("Performance")).append(":</b></td><td><b>").append(_t("Available CPU Cores")).append(":</b> ")
