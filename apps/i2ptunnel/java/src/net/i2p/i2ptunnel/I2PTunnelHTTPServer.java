@@ -92,11 +92,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /** what Host: should we seem to be to the webserver? */
     private String _spoofHost;
+
+    /** client request headers to remove */
     private static final String HASH_HEADER = "X-I2P-DestHash";
     private static final String DEST64_HEADER = "X-I2P-DestB64";
     private static final String DEST32_HEADER = "X-I2P-DestB32";
     private static final String PROXY_CONN_HEADER = "proxy-connection";
     private static final String PRIORITY_HEADER = "Priority";
+    private static final String SEC_GPC_HEADER = "Sec-GPC";
 
     /** MUST ALL BE LOWER CASE */
     private static final String[] CLIENT_SKIPHEADERS = {
@@ -104,9 +107,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         DEST64_HEADER.toLowerCase(Locale.US),
         DEST32_HEADER.toLowerCase(Locale.US),
         PRIORITY_HEADER.toLowerCase(Locale.US),
-        PROXY_CONN_HEADER
+        PROXY_CONN_HEADER,
+        SEC_GPC_HEADER.toLowerCase(Locale.US)
     };
 
+    /** server response headers to remove */
     private static final String AGE_HEADER = "age"; // possible anonymity implications, informational
     private static final String ALT_SVC_HEADER = "alt-svc"; // superfluous
     private static final String DATE_HEADER = "date";
@@ -555,10 +560,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     headers = readHeaders(socket, null, command, CLIENT_SKIPHEADERS, getTunnel().getContext(), timeout);
                     String host = null;
                     String hostname = null;
-                    String cmd = command.toString().trim();
+                    String commandLine = command.toString().trim();
 
-                    if (cmd != null) {
-                        String[] parts = cmd.split(" ");
+                    if (commandLine != null) {
+                        String[] parts = commandLine.split(" ");
                         if (!parts[0].endsWith(".i2p")) {
                             if (parts[0].contains("/")) {
                                 hostname = parts[0].substring(0, parts[0].indexOf("/"));
@@ -570,7 +575,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         }
                     }
 
-                    if (hostname == null && !headers.containsKey("Host")) {return;}
+                    //if (hostname == null && !headers.containsKey("Host")) {return;}
                     List<String> hostList = headers.get("Host");
                     if (hostList != null && !hostList.isEmpty()) {host = hostList.get(0);}
                     hostname = hostname != null ? hostname : host != null ? host.trim() : null;
@@ -585,13 +590,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             if (_log.shouldLog(Log.WARN)) {
                                 _log.warn("[HTTPServer] WARNING! Attempt to access private IPv4 address [" + address + "] " +
                                 "-> Adding dest to clients blocklist file \n* Client: " + peerB32);
-                             }
-                             logBlockedDestination(peerB32);
-                             // let the client hang...
-                             socket.close();
+                            }
+                            logBlockedDestination(peerB32);
+                            // let the client hang...
+                            try {socket.close();}
+                            catch (IOException ioe) {}
+                            return;
                         } else if (Arrays.equals(ipBytes, new byte[] {0, 0, 0, 0})) { // 0.0.0.0 (returned by purokishi when host is blocked)
                             try {sendError(socket, ERR_FORBIDDEN);}
                             catch (IOException ioe) {}
+                            try {socket.close();}
+                            catch (IOException ioe) {}
+                            return;
                         }
                     } else if (address instanceof Inet6Address) {
                         Inet6Address inet6Address = (Inet6Address) address;
@@ -605,7 +615,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             }
                             logBlockedDestination(peerB32);
                             // let the client hang...
-                            socket.close();
+                            try {socket.close();}
+                            catch (IOException ioe) {}
+                            return;
                           }
                     } else if (hostname != null && !hostname.endsWith(".i2p")) {
                         if (_log.shouldInfo()) {_log.info("[HTTPServer] Validating non-i2p hostname: " + hostname + "...");}
@@ -618,6 +630,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                 logBlockedDestination(peerB32);
                                 // let the client hang...
                                 socket.close();
+                                return;
                             } else {
                                 if (_log.shouldInfo()) {_log.info("[HTTPServer] Hostname " + hostname + " validated -> Resolves to: " + address);}
                             }
@@ -627,12 +640,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             }
                             try {sendError(socket, ERR_NOT_FOUND);}
                             catch (IOException ioe) {}
+                            try {socket.close();}
+                            catch (IOException ioe) {}
+                            return;
                         } finally {
-                            try {
-                            socket.close();
-                            } catch (IOException ioe) {
-                                _log.warn("[HTTPServer] Error closing socket: " + ioe.getMessage());
-                            }
+                            try {socket.close();}
+                            catch (IOException ioe) {_log.warn("[HTTPServer] Error closing socket: " + ioe.getMessage());}
+                            return;
                         }
                     }
                 } catch (IOException ioe) {}
@@ -645,7 +659,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                      headers.containsKey("X-Forwarded-Host"))) {
                     if (_log.shouldWarn()) {
                         StringBuilder buf = new StringBuilder();
-                        buf.append("[HTTPServer] Refusing inproxy access \n* Client: ").append(peerB32);
+                        buf.append("[HTTPServer] Refusing Inproxy access \n* Client: ").append(peerB32);
                         List<String> h = headers.get("X-Forwarded-For");
                         if (h != null)
                             buf.append("\n* X-Forwarded-For: ").append(h.get(0));
@@ -1194,16 +1208,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     compressedout = new CompressedResponseOutputStream(browserout, _keepalive);
                     compressedout.write(DataHelper.getUTF8(modifiedHeaders));
                     s = new Sender(compressedout, serverin, "Server -> Client (Gzip) " +
-                                   (req != null && !req.equals("") ? "\n* URL: " + req : ""), _log);
+                                   (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""), _log);
                     browserout = compressedout;
                 } else {
                     browserout.write(DataHelper.getUTF8(modifiedHeaders));
                     s = new Sender(browserout, serverin, "Server -> Client " +
-                                   (req != null && !req.equals("") ? "\n* URL: " + req : ""), _log);
+                                   (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""), _log);
                 }
                 if (_log.shouldDebug())
                     _log.debug("[HTTPServer] Running server-to-browser Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
-                               (req != null && !req.equals("") ? "\n* URL: " + req : ""));
+                               (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                 s.run(); // same thread
             } catch (SSLException she) {
                 if (_log.shouldError()) {_log.error("[HTTPServer] SSL error", she);}
@@ -1218,7 +1232,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } catch (IOException ioe) {
                 if (_log.shouldWarn()) {
                     _log.warn("[HTTPServer] Error compressing -> " + ioe.getMessage()  +
-                              (req != null && !req.equals("") ? "\n* URL: " + req : ""));
+                              (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                 }
                 ioex = ioe;
                 _keepalive = false;
@@ -1238,7 +1252,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         if (i2pReset) {
                             if (_log.shouldDebug()) {
                                 _log.warn("[HTTPServer] Received I2P RESET -> Resetting socket..." +
-                                          (req != null && !req.equals("") ? "\n* URL: " + req : ""));
+                                          (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                             }
                             try {_webserver.setSoLinger(true, 0);}
                             catch (IOException ioe) {}
@@ -1250,7 +1264,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         if (sockReset) {
                             if (_log.shouldDebug()) {
                                 _log.warn("[HTTPServer] Received socket RESET ->  Resetting I2P socket..." +
-                                          (req != null && !req.equals("") ? "\n* URL: " + req : ""));
+                                          (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                             }
                             try {_browser.reset();}
                             catch (IOException ioe) {}
@@ -1282,7 +1296,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (!_keepalive) try { _browser.close(); } catch (IOException ioe) {}
                 if (_log.shouldDebug()) {
                     _log.debug("Finished server-to-browser: Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
-                               (req != null && !req.equals("") ? "\n* URL: " + req : ""));
+                               (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                 }
             }
         }
@@ -1502,9 +1516,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     private static void addEntry(Map<String, List<String>> headers, String key, String value) {
         List<String> entry = headers.get(key);
-        if (entry == null) {
-            headers.put(key, entry = new ArrayList<String>(1));
-        }
+        if (entry == null) {headers.put(key, entry = new ArrayList<String>(1));}
         entry.add(value);
     }
 
