@@ -846,7 +846,7 @@ class SummaryBarRenderer {
            .append(": ")
            .append(reachability.getMessage());
         if (floodfillEnabled() && !reachability.getMessage().contains(_t("Floodfill"))) {
-            buf.append(" [").append(_t("Floodfill enabled")).append("]");
+            buf.append(" <span id=ffenabled>").append(_t("Floodfill enabled")).append("</span>");
         }
         buf.append("</span></h4>\n");
         if (!SigType.ECDSA_SHA256_P256.isAvailable()) {

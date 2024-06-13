@@ -240,13 +240,14 @@ p:empty+.sb_notice{margin-top:9px}
 .sb_netstatus.testing::before{background:var(--net_starting) var(--center)/16px;filter:drop-shadow(0 0 2px #000) drop-shadow(0 0 4px #000) drop-shadow(0 0 10px rgba(255,255,0,.3))}
 .sb_netstatus.hidden::before{background:var(--net_hidden) var(--center)}
 .sb_netstatus.running::before{background:var(--net_ok) var(--center);filter:drop-shadow(0 0 4px #000)}
-.sb_netstatus.running.floodfill::before{width:40px;background:var(--net_ok) no-repeat left center,var(--floodfill) no-repeat right center!important}
 .sb_netstatus.firewalled::before{background:var(--net_firewalled) var(--center);filter:drop-shadow(0 0 4px #000) drop-shadow(0 0 6px rgba(192,64,64,.3))}
 .sb_netstatus.vmcomm::before{background:var(--net_vm) var(--center)}
 .sb_netstatus.clockskew::before{background:var(--net_clockskew) var(--center)/14px}
-.sb_netstatus.running:not(:hover)::before,.sb_netstatus.hidden:not(:hover)::before,.sb_netstatus.firewalled:not(:hover)::before,.sb_netstatus.testing:not(:hover)::before{margin:-3px 0;height:24px;width:40px;background-size:20px}
+.sb_netstatus.running:not(:hover)::before,.sb_netstatus.hidden:not(:hover)::before,.sb_netstatus.firewalled:not(:hover)::before,.sb_netstatus.testing:not(:hover)::before{margin:-3px 0;width:40px;height:24px;background-size:20px}
 .sb_netstatus.testing,.sb_netstatus.running,.sb_netstatus.hidden,.sb_netstatus.firewalled{font-size:0}
 .sb_netstatus.running:hover,.sb_netstatus.hidden:hover,.sb_netstatus.firewalled:hover,.sb_netstatus.testing:hover{font-size:inherit}
+.sb_netstatus.running.floodfill::before{width:50px;height:24px;background-size:16px}
+.sb_netstatus.running.floodfill::before{background:var(--net_ok) no-repeat left center,var(--floodfill) no-repeat right center!important}
 #sb_shutdownStatus{width:calc(100% - 3px)}
 #sb_shutdownStatus span{margin:3px 0;padding:2px 4px;display:inline-block}
 #sidebar h4 a{width:auto;display:inline}
@@ -267,6 +268,7 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar #sb_localtunnels td[colspan="3"],#sidebar #sb_localtunnels tr:hover td[colspan="3"]{width:100%;line-height:12px;font-size:0;background-size:400%!important}
 #sidebar .testing,.tunnelBuildStatus.starting,#sb_localtunnels td[colspan="3"],#sidebar #routerdown td{color:#aa3;box-shadow:var(--highlight),inset 0 0 2px 1px #bb0;background:repeating-linear-gradient(135deg,rgba(0,0,0,.5),rgba(0,0,0,.5) 10px,rgba(56,56,0,.5) 10px,rgba(48,48,0,.5) 20px) repeat center center/400%!important}
 #sidebar #routerdown td{padding:5px 0;width:100%;max-width:unset}
+.sb_netstatus:hover #ffenabled{margin:2px 0 0 2px;padding:1px 3px;display:inline-block;white-space:nowrap;border-radius:1px;background:#020}
 
 /* tunnel build status */
 #sidebar .tunnelBuildStatus{color:#ee9}
@@ -2636,6 +2638,8 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 .netdbStats li{margin:1px 5px}
 .newsAuthor{padding-top:2px}
 .sb_netstatus.running:not(:hover)::before,.sb_netstatus.hidden:not(:hover)::before,.sb_netstatus.firewalled:not(:hover)::before,.sb_netstatus.testing:not(:hover)::before{margin:0;height:18px;width:18px;background-size:18px}
+.sb_netstatus.running:not(:hover)::before{width:40px}
+.sb_netstatus.running.floodfill:not(:hover)::before,.sb_netstatus.running.floodfill:hover::before{width:32px;height:16px}
 .sb_update b{margin:3px 0 0}
 .sitemapLink,.sitemapLabel,#sitemap .applink,#sitemap .applabel{width:160px;min-width:160px}
 .tunnelBuildStatus{font-size:90%}
@@ -2869,6 +2873,8 @@ span#newtab{margin-top:4px}
 .sb_info .percentBarText{margin-top:-1px}
 .sb_info.sb_update{padding:5px 5px 6px}
 .sb_netstatus::before,.tunnelBuildStatus::before{margin:0 2px}
+.sb_netstatus.running.floodfill::before{margin:1px 2px;width:48px;height:22px}
+.sb_netstatus.running.floodfill:hover::before{width:44px;margin:1px 4px 1px 2px}
 .sb_update{padding-bottom:3px}
 .search td{padding:6px 6px 6px 5px}
 .search td:last-child{padding-left:0;padding-right:0}

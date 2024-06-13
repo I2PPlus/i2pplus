@@ -176,6 +176,7 @@ p:empty+.sb_notice{margin-top:7px}
 .sb_netstatus.clockskew::before{background:var(--net_clockskew) no-repeat center center}
 .sb_netstatus::before{background-size:16px}
 .sb_netstatus.running:not(:hover)::before,.sb_netstatus.hidden:not(:hover)::before,.sb_netstatus.firewalled:not(:hover)::before,.sb_netstatus.testing:not(:hover)::before{background-size:18px}
+.sb_netstatus:hover #ffenabled{margin:2px;display:inline-block;white-space:nowrap}
 
 /* tunnel build status */
 .tunnelBuildStatus{color:#393}
