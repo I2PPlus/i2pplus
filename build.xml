@@ -3328,6 +3328,7 @@
   </target>
 
   <target name="updateTorBlocklist">
+    <echo message="Updating Tor blocklist..." />
     <exec executable="/bin/sh" outputproperty="shell.output">
       <arg value="-c" />
       <arg value="cd installer/resources/ &amp;&amp; ./maketorblocklist.sh" />
