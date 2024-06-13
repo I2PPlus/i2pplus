@@ -1,4 +1,7 @@
 2024-06-12 dr|z3d
+ * Console: Add floodfill indicator to sidebar network status when ff is active
+
+2024-06-12 dr|z3d
  * I2PTunnel: Resolve non-i2p addresses served by the HTTP Server tunnel to
    identify 404s and block attempts to access localhost/loopback addresses via
    hostname
