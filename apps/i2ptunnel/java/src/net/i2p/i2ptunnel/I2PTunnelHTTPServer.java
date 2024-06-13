@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -229,7 +231,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</html>";
 
     // TODO https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
-    private final static String ERR_INPROXY =
+    private final static String ERR_FORBIDDEN =
 
          "HTTP/1.1 403 Denied\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n"+
@@ -442,12 +444,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     catch (IOException ioe) {}
                     return;
                 }
-                // We don't know if this is GET or POST or what, set a huge
-                // timeout and rely on the server to do the actual timeout
+
+                /**
+                 *  We don't know if this is GET or POST or what,
+                 *  set a huge timeout and rely on the server to do the actual timeout
+                 */
                 socket.setReadTimeout(SERVER_READ_TIMEOUT_POST);
                 Socket s = getSocket(socket.getPeerDestination().calculateHash(), 443);
-                Runnable t = new I2PTunnelRunner(s, socket, slock, null, null,
-                                                 null, (I2PTunnelRunner.FailCallback) null);
+                Runnable t = new I2PTunnelRunner(s, socket, slock, null, null, null, (I2PTunnelRunner.FailCallback) null);
                 _clientExecutor.execute(t);
                 return;
             }
@@ -459,8 +463,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             do {
 
                 if (requestCount > 0) {
-                    if (_log.shouldDebug())
-                        _log.debug("[HTTPServer] KeepAlive, awaiting request [#" + requestCount + "]");
+                    if (_log.shouldDebug()) {_log.debug("[HTTPServer] KeepAlive, awaiting request [#" + requestCount + "]");}
                 }
 
                 // The headers _should_ be in the first packet, but
@@ -551,22 +554,56 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     long timeout = requestCount > 0 ? I2PTunnelHTTPClient.BROWSER_KEEPALIVE_TIMEOUT + 10*1000 : HEADER_TIMEOUT;
                     headers = readHeaders(socket, null, command, CLIENT_SKIPHEADERS, getTunnel().getContext(), timeout);
                     String host = null;
-                    if (!headers.containsKey("Host")) {return;}
+                    String hostname = null;
+                    String cmd = command.toString().trim();
+
+                    if (cmd != null) {
+                        String[] parts = cmd.split(" ");
+                        if (!parts[0].startsWith("/") || !parts[0].endsWith(".i2p")) {
+                            hostname = parts[0].split(":")[0];
+                        }
+                    }
+                    if (hostname == null && !headers.containsKey("Host")) {return;}
                     List<String> hostList = headers.get("Host");
                     if (hostList != null && !hostList.isEmpty()) {host = hostList.get(0);}
-                    String hostname = host != null ? host.trim() : null;
-/**
-                    String hostname = getHostFromHeaders(getResponseHeader("Host"));
-                    if (hostname != null) {
-                        int port = hostname.indexOf(":");
-                        if (port != -1) {hostname = hostname.substring(0, port);}
-                    }
-**/
-                    if (hostname != null && !hostname.endsWith(".i2p")) {
+                    hostname = hostname != null ? hostname : host != null ? host.trim() : null;
+                    InetAddress address = InetAddress.getByName(hostname);
+
+                    if (address instanceof Inet4Address) {
+                        Inet4Address inet4Address = (Inet4Address) address;
+                        byte[] ipBytes = inet4Address.getAddress();
+                        if (ipBytes[0] == (byte) 10 || // 10.0.0.0/8
+                            ipBytes[0] == (byte) 172 && ipBytes[1] >= (byte) 16 && ipBytes[1] <= (byte) 31 || // 172.16.0.0/12
+                            ipBytes[0] == (byte) 192 && ipBytes[1] == (byte) 168) { // 192.168.0.0/16
+                            if (_log.shouldLog(Log.WARN)) {
+                                _log.warn("[HTTPServer] WARNING! Attempt to access private IPv4 address [" + address + "] " +
+                                "-> Adding dest to clients blocklist file \n* Client: " + peerB32);
+                             }
+                             logBlockedDestination(peerB32);
+                             // let the client hang...
+                             socket.close();
+                        } else if (Arrays.equals(ipBytes, new byte[] {0, 0, 0, 0})) { // 0.0.0.0 (returned by purokishi when host is blocked)
+                            try {sendError(socket, ERR_FORBIDDEN);}
+                            catch (IOException ioe) {}
+                        }
+                    } else if (address instanceof Inet6Address) {
+                        Inet6Address inet6Address = (Inet6Address) address;
+                        byte[] ipBytes = inet6Address.getAddress();
+                        String ipHex = inet6Address.getHostAddress();
+                        if (ipHex.startsWith("fd") || ipHex.startsWith("fec0") || ipHex.equals("::1")) {
+                            // Check for private IPv6 addresses
+                            if (_log.shouldLog(Log.WARN)) {
+                                _log.warn("[HTTPServer] WARNING! Attempt to access private IPv6 address [" + address + "] " +
+                                "-> Adding dest to clients blocklist file \n* Client: " + peerB32);
+                            }
+                            logBlockedDestination(peerB32);
+                            // let the client hang...
+                            socket.close();
+                          }
+                    } else if (hostname != null && !hostname.endsWith(".i2p")) {
                         if (_log.shouldInfo()) {_log.info("[HTTPServer] Validating non-i2p hostname: " + hostname + "...");}
                         try {
-                            InetAddress address = InetAddress.getByName(hostname);
-                            if (address.isLinkLocalAddress() || address.isLoopbackAddress()) {
+                            if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
                                 if (_log.shouldLog(Log.WARN)) {
                                     _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "] " +
                                               "-> Adding dest to clients blocklist file \n* Client: " + peerB32);
@@ -618,7 +655,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     }
                     // Send a 403, so the user doesn't get an HTTP Proxy error message
                     // and blame his router or the network.
-                    try {sendError(socket, ERR_INPROXY);}
+                    try {sendError(socket, ERR_FORBIDDEN);}
                     catch (IOException ioe) {}
                     try {socket.close();}
                     catch (IOException ioe) {}
@@ -638,7 +675,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                     _log.warn("[HTTPServer] Refusing access (Bad referer) \n* Client: " + peerB32 +
                                               "\n* Referer: " + referer);
                                 }
-                                try {sendError(socket, ERR_INPROXY);}
+                                try {sendError(socket, ERR_FORBIDDEN);}
                                 catch (IOException ioe) {}
                                 try {socket.close();}
                                 catch (IOException ioe) {}
@@ -662,7 +699,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                         if (_log.shouldWarn()) {
                                             _log.warn("[HTTPServer] Refusing access: Blacklisted User Agent (" + ua + ") \n* Client: " + peerB32);
                                         }
-                                        try {sendError(socket, ERR_INPROXY);}
+                                        try {sendError(socket, ERR_FORBIDDEN);}
                                         catch (IOException ioe) {}
                                         try {socket.close();}
                                         catch (IOException ioe) {}
@@ -682,7 +719,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                     if (_log.shouldWarn()) {
                                         _log.warn("[HTTPServer] Refusing access: User Agent header is blank \n* Client: " + peerB32);
                                     }
-                                    try {sendError(socket, ERR_INPROXY);}
+                                    try {sendError(socket, ERR_FORBIDDEN);}
                                     catch (IOException ioe) {}
                                     try {socket.close();}
                                     catch (IOException ioe) {}
