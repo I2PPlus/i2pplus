@@ -268,7 +268,7 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar #sb_localtunnels td[colspan="3"],#sidebar #sb_localtunnels tr:hover td[colspan="3"]{width:100%;line-height:12px;font-size:0;background-size:400%!important}
 #sidebar .testing,.tunnelBuildStatus.starting,#sb_localtunnels td[colspan="3"],#sidebar #routerdown td{color:#aa3;box-shadow:var(--highlight),inset 0 0 2px 1px #bb0;background:repeating-linear-gradient(135deg,rgba(0,0,0,.5),rgba(0,0,0,.5) 10px,rgba(56,56,0,.5) 10px,rgba(48,48,0,.5) 20px) repeat center center/400%!important}
 #sidebar #routerdown td{padding:5px 0;width:100%;max-width:unset}
-.sb_netstatus:hover #ffenabled{margin:2px 0 0 2px;padding:1px 3px;display:inline-block;white-space:nowrap;border-radius:1px;background:#020}
+.sb_netstatus:hover #ffenabled{margin:2px 0 0 4px;padding:1px 3px;display:inline-block;white-space:nowrap;box-shadow:var(--highlight),0 0 0 1px #131;background:var(--badge)}
 
 /* tunnel build status */
 #sidebar .tunnelBuildStatus{color:#ee9}
@@ -2651,6 +2651,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #clock{padding-top:9px;font-size:16pt}
 #help h3,#faq h3{font-size:10.5pt}
 #i2pclientconfig a,#pluginmanage a{transform:translateY(-1px)}
+.sb_netstatus:hover #ffenabled{margin:2px 0 0 2px}
 #jardump a[href^="https://gitlab.com/i2pplus"]{padding-left:11px;background-size:8px;background-position:left top}
 #netdboverview th[colspan="3"]{font-size:11pt}
 #news li::before{height:8px;background-size:7px}
@@ -2873,8 +2874,8 @@ span#newtab{margin-top:4px}
 .sb_info .percentBarText{margin-top:-1px}
 .sb_info.sb_update{padding:5px 5px 6px}
 .sb_netstatus::before,.tunnelBuildStatus::before{margin:0 2px}
-.sb_netstatus.running.floodfill::before{margin:1px 2px;width:48px;height:22px}
-.sb_netstatus.running.floodfill:hover::before{width:44px;margin:1px 4px 1px 2px}
+.sb_netstatus.running.floodfill::before{margin:1px 2px 0;width:48px;height:21px;background-position:left center,right calc(50% + 2px)}
+.sb_netstatus.running.floodfill:hover::before{width:44px;margin:0 4px 0 2px}
 .sb_update{padding-bottom:3px}
 .search td{padding:6px 6px 6px 5px}
 .search td:last-child{padding-left:0;padding-right:0}
