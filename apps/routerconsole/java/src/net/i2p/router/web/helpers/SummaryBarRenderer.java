@@ -87,6 +87,10 @@ class SummaryBarRenderer {
         return _context.getBooleanProperty(PROP_ADVANCED);
     }
 
+    public boolean floodfillEnabled() {
+        return _context.netDb().floodfillEnabled();
+    }
+
     /**
      *  Note - ensure all links in here are absolute, as the summary bar may be displayed
      *         on lower-level directory errors.
@@ -836,16 +840,18 @@ class SummaryBarRenderer {
             default:
                 buf.append("testing");
         }
+        if (floodfillEnabled()) {buf.append(" floodfill");}
         buf.append("\">")
            .append(_t("Status"))
            .append(": ")
-           .append(reachability.getMessage())
-           .append("</span></h4>\n");
+           .append(reachability.getMessage());
+        if (floodfillEnabled() && !reachability.getMessage().contains(_t("Floodfill"))) {
+            buf.append(" [").append(_t("Floodfill enabled")).append("]");
+        }
+        buf.append("</span></h4>\n");
         if (!SigType.ECDSA_SHA256_P256.isAvailable()) {
             buf.append("<hr>\n<h4><span class=warn><a href=\"http://trac.i2p2.i2p/wiki/Crypto/ECDSA");
-            if ("ru".equals(Messages.getLanguage(_context))) {
-                buf.append("-ru");
-            }
+            if ("ru".equals(Messages.getLanguage(_context))) {buf.append("-ru");}
             buf.append("\" target=_top title=\"")
                .append(_t("See more information on the wiki"))
                .append("\">")

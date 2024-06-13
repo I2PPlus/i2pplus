@@ -170,6 +170,7 @@ p:empty+.sb_notice{margin-top:7px}
 .sb_netstatus.testing::before{background:var(--net_starting) no-repeat center center}
 .sb_netstatus.hidden::before{background:var(--net_hidden) no-repeat center center}
 .sb_netstatus.running::before{background:var(--net_ok) no-repeat center center}
+.sb_netstatus.running.floodfill::before{width:40px;background:var(--net_ok) no-repeat left center,var(--floodfill) no-repeat right center!important}
 .sb_netstatus.firewalled::before{background:var(--net_firewalled) no-repeat center center}
 .sb_netstatus.vmcomm::before{background:var(--net_vm) no-repeat center center}
 .sb_netstatus.clockskew::before{background:var(--net_clockskew) no-repeat center center}

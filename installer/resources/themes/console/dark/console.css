@@ -240,6 +240,7 @@ p:empty+.sb_notice{margin-top:9px}
 .sb_netstatus.testing::before{background:var(--net_starting) var(--center)/16px;filter:drop-shadow(0 0 2px #000) drop-shadow(0 0 4px #000) drop-shadow(0 0 10px rgba(255,255,0,.3))}
 .sb_netstatus.hidden::before{background:var(--net_hidden) var(--center)}
 .sb_netstatus.running::before{background:var(--net_ok) var(--center);filter:drop-shadow(0 0 4px #000)}
+.sb_netstatus.running.floodfill::before{width:40px;background:var(--net_ok) no-repeat left center,var(--floodfill) no-repeat right center!important}
 .sb_netstatus.firewalled::before{background:var(--net_firewalled) var(--center);filter:drop-shadow(0 0 4px #000) drop-shadow(0 0 6px rgba(192,64,64,.3))}
 .sb_netstatus.vmcomm::before{background:var(--net_vm) var(--center)}
 .sb_netstatus.clockskew::before{background:var(--net_clockskew) var(--center)/14px}
