@@ -488,7 +488,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     } else {
                         try {sendError(socket, ERR_REQUEST_TIMEOUT);}
                         catch (IOException ioe) {}
-                        if (_log.shouldLog(Log.WARN)) {
+                        if (_log.shouldWarn()) {
                             if (ste.getMessage() != null) {
                                 _log.warn("[HTTPServer] Request error: " + ste.getMessage() + " \n* Client: " + peerB32);
                             }
@@ -542,7 +542,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         try {socket.close();}
                         catch (IOException ioe) {}
                     }
-                    if (_log.shouldLog(Log.WARN)) {
+                    if (_log.shouldWarn()) {
                         if (bre.getMessage() != null) {
                             _log.warn("[HTTPServer] Request error: " + bre.getMessage() + " \n* Client: " + peerB32);
                         }
@@ -555,101 +555,37 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  *
                  *  @since 0.9.63+
                  */
-                try {
-                    long timeout = requestCount > 0 ? I2PTunnelHTTPClient.BROWSER_KEEPALIVE_TIMEOUT + 10*1000 : HEADER_TIMEOUT;
-                    headers = readHeaders(socket, null, command, CLIENT_SKIPHEADERS, getTunnel().getContext(), timeout);
-                    String host = null;
-                    String hostname = null;
-                    String commandLine = command.toString().trim();
+                long timeout = requestCount > 0 ? I2PTunnelHTTPClient.BROWSER_KEEPALIVE_TIMEOUT + 10*1000 : HEADER_TIMEOUT;
+                String hostname = null;
+                String commandLine = command.toString().trim();
 
-                    if (commandLine != null) {
-                        String[] parts = commandLine.split(" ");
-                        if (!parts[0].endsWith(".i2p")) {
-                            if (parts[0].contains("/")) {
-                                hostname = parts[0].substring(0, parts[0].indexOf("/"));
-                            } else if (parts[0].contains(":")) {
-                                hostname = parts[0].split(":")[0];
-                            } else {
-                                hostname = parts[0];
-                            }
-                        }
+                if (commandLine != null) {
+                    String[] parts = commandLine.split(" ");
+                    if (!parts[0].endsWith(".i2p")) {
+                        if (parts[0].contains("/")) {hostname = parts[0].substring(0, parts[0].indexOf("/"));}
+                        else if (parts[0].contains(":")) {hostname = parts[0].split(":")[0];}
+                        else {hostname = parts[0];}
                     }
+                }
 
-                    //if (hostname == null && !headers.containsKey("Host")) {return;}
-                    List<String> hostList = headers.get("Host");
-                    if (hostList != null && !hostList.isEmpty()) {host = hostList.get(0);}
-                    hostname = hostname != null ? hostname : host != null ? host.trim() : null;
-                    InetAddress address = InetAddress.getByName(hostname);
-
-                    if (address instanceof Inet4Address) {
-                        Inet4Address inet4Address = (Inet4Address) address;
-                        byte[] ipBytes = inet4Address.getAddress();
-                        if (ipBytes[0] == (byte) 10 || // 10.0.0.0/8
-                            ipBytes[0] == (byte) 172 && ipBytes[1] >= (byte) 16 && ipBytes[1] <= (byte) 31 || // 172.16.0.0/12
-                            ipBytes[0] == (byte) 192 && ipBytes[1] == (byte) 168) { // 192.168.0.0/16
-                            if (_log.shouldLog(Log.WARN)) {
-                                _log.warn("[HTTPServer] WARNING! Attempt to access private IPv4 address [" + address + "] " +
-                                "-> Adding dest to clients blocklist file \n* Client: " + peerB32);
+                List<String> host = headers.get("Host");
+                if (host != null) {hostname = host.get(0);}
+                if (_log.shouldInfo()) {_log.info("[HTTPServer] Incoming request for: " + hostname);}
+                if (hostname != null && !hostname.endsWith(".i2p")) {
+                    InetAddress address = hostname != null ? InetAddress.getByName(hostname) : null;
+                    if (address != null) {
+                        if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
+                            if (_log.shouldWarn()) {
+                                _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "] " +
+                                          "-> Adding dest to clients blocklist file \n* Client: " + peerB32);
                             }
                             logBlockedDestination(peerB32);
-                            // let the client hang...
-                            try {socket.close();}
-                            catch (IOException ioe) {}
-                            return;
-                        } else if (Arrays.equals(ipBytes, new byte[] {0, 0, 0, 0})) { // 0.0.0.0 (returned by purokishi when host is blocked)
-                            try {sendError(socket, ERR_FORBIDDEN);}
-                            catch (IOException ioe) {}
-                            try {socket.close();}
-                            catch (IOException ioe) {}
-                            return;
-                        }
-                    } else if (address instanceof Inet6Address) {
-                        Inet6Address inet6Address = (Inet6Address) address;
-                        byte[] ipBytes = inet6Address.getAddress();
-                        String ipHex = inet6Address.getHostAddress();
-                        if (ipHex.startsWith("fd") || ipHex.startsWith("fec0") || ipHex.equals("::1")) {
-                            // Check for private IPv6 addresses
-                            if (_log.shouldLog(Log.WARN)) {
-                                _log.warn("[HTTPServer] WARNING! Attempt to access private IPv6 address [" + address + "] " +
-                                "-> Adding dest to clients blocklist file \n* Client: " + peerB32);
-                            }
-                            logBlockedDestination(peerB32);
-                            // let the client hang...
-                            try {socket.close();}
-                            catch (IOException ioe) {}
-                            return;
-                          }
-                    } else if (hostname != null && !hostname.endsWith(".i2p")) {
-                        if (_log.shouldInfo()) {_log.info("[HTTPServer] Validating non-i2p hostname: " + hostname + "...");}
-                        try {
-                            if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
-                                if (_log.shouldLog(Log.WARN)) {
-                                    _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "] " +
-                                              "-> Adding dest to clients blocklist file \n* Client: " + peerB32);
-                                }
-                                logBlockedDestination(peerB32);
-                                // let the client hang...
-                                socket.close();
-                                return;
-                            } else {
-                                if (_log.shouldInfo()) {_log.info("[HTTPServer] Hostname " + hostname + " validated -> Resolves to: " + address);}
-                            }
-                        } catch (UnknownHostException e) {
-                            if (_log.shouldLog(Log.WARN)) {
-                                _log.warn("[HTTPServer] Could not resolve hostname: " + hostname + " \n* Client: " + peerB32);
-                            }
-                            try {sendError(socket, ERR_NOT_FOUND);}
-                            catch (IOException ioe) {}
-                            try {socket.close();}
-                            catch (IOException ioe) {}
-                            return;
-                        } finally {
-                            try {socket.close();}
-                            catch (IOException ioe) {_log.warn("[HTTPServer] Error closing socket: " + ioe.getMessage());}
-                            return;
+                            if (socket != null) {socket.close();}
+                        } else {
+                            if (_log.shouldInfo()) {_log.info("[HTTPServer] Hostname " + hostname + " validated -> Resolves to: " + address);}
                         }
                     }
-                } catch (IOException ioe) {}
+                }
 
                 Properties opts = getTunnel().getClientOptions();
                 if (Boolean.parseBoolean(opts.getProperty(OPT_REJECT_INPROXY)) &&
