@@ -542,52 +542,70 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         try {socket.close();}
                         catch (IOException ioe) {}
                     }
-                    if (_log.shouldWarn()) {
+                    if (_log.shouldDebug()) {
                         if (bre.getMessage() != null) {
                             _log.warn("[HTTPServer] Request error: " + bre.getMessage() + " \n* Client: " + peerB32);
                         }
                     }
                     return;
                 }
-                long afterHeaders = getTunnel().getContext().clock().now();
 
-                /** Block requests to localhost or loopback addresses via hostname
+                /**
+                 *  Block requests to localhost or loopback addresses via hostname
+                 *  and send client a suitable error reponse where applicable
                  *
                  *  @since 0.9.63+
                  */
-                long timeout = requestCount > 0 ? I2PTunnelHTTPClient.BROWSER_KEEPALIVE_TIMEOUT + 10*1000 : HEADER_TIMEOUT;
                 String hostname = null;
-                String commandLine = command.toString().trim();
-
-                if (commandLine != null) {
-                    String[] parts = commandLine.split(" ");
-                    if (!parts[0].endsWith(".i2p")) {
-                        if (parts[0].contains("/")) {hostname = parts[0].substring(0, parts[0].indexOf("/"));}
-                        else if (parts[0].contains(":")) {hostname = parts[0].split(":")[0];}
-                        else {hostname = parts[0];}
-                    }
-                }
-
+                boolean isValidRequest = true;
                 List<String> host = headers.get("Host");
-                if (host != null) {hostname = host.get(0);}
+
+                if (host != null) {
+                    hostname = host.get(0);
+                    int port = hostname.indexOf(":");
+                    if (port != -1) {hostname = hostname.substring(0, port);}
+                }
                 if (_log.shouldInfo()) {_log.info("[HTTPServer] Incoming request for: " + hostname);}
                 if (hostname != null && !hostname.endsWith(".i2p")) {
                     InetAddress address = hostname != null ? InetAddress.getByName(hostname) : null;
                     if (address != null) {
                         if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
                             if (_log.shouldWarn()) {
-                                _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "] " +
-                                          "-> Adding dest to clients blocklist file \n* Client: " + peerB32);
+                                _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "]" +
+                                          " -> Adding dest to clients blocklist file \n* Client: " + peerB32);
                             }
                             logBlockedDestination(peerB32);
-                            if (socket != null) {socket.close();}
+                            isValidRequest = false;
+                        } else if (address.isAnyLocalAddress()) { // check for 0.0.0.0 response (DNS blocking)
+                            if (_log.shouldInfo()) {
+                                _log.info("[HTTPServer] DNS server appears to be blocking requests to " + hostname +
+                                          " -> Sending Error 403 \n* Client: " + peerB32);
+                            }
+                            sendError(socket, ERR_FORBIDDEN);
+                            isValidRequest = false;
                         } else {
-                            if (_log.shouldInfo()) {_log.info("[HTTPServer] Hostname " + hostname + " validated -> Resolves to: " + address);}
+                            if (_log.shouldInfo()) {
+                                _log.info("[HTTPServer] Hostname " + hostname + " validated" +
+                                          " -> Resolves to: " + address.getHostAddress());
+                            }
                         }
+                    } else {
+                        if (_log.shouldInfo()) {
+                            _log.info("[HTTPServer] Could not resolve " + hostname + " to IP address" +
+                                      " -> Sending Error 404 \n* Client: " + peerB32);
+                        }
+                        sendError(socket, ERR_NOT_FOUND);
+                        isValidRequest = false;
+                    }
+                    if (!isValidRequest && socket != null) {
+                        try {socket.close();}
+                        catch (IOException e) {}
                     }
                 }
 
+                long afterHeaders = getTunnel().getContext().clock().now();
                 Properties opts = getTunnel().getClientOptions();
+
                 if (Boolean.parseBoolean(opts.getProperty(OPT_REJECT_INPROXY)) &&
                     (headers.containsKey("X-Forwarded-For") ||
                      headers.containsKey("X-Forwarded-Server") ||
