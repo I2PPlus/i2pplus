@@ -884,7 +884,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 socket.close();
             } catch (IOException ioe) {}
             if (_log.shouldWarn())
-                _log.warn("[HTTPServer] Request error \n* Client: " + peerB32 + "\n* " + ex.getMessage());
+                if (ex.getMessage().indexOf("Name or service not known") >= 0) {
+                    _log.warn("[HTTPServer] Request error: DNS error (blocked?) for: " +
+                              ex.getMessage().replace(": Name or service not known", "") + " \n* Client: " + peerB32);
+                } else {
+                    _log.warn("[HTTPServer] Request error: " + ex.getMessage() + " \n* Client: " + peerB32);
+                }
         } catch (OutOfMemoryError oom) {
             // Often actually a file handle limit problem so we can safely send a response
             // java.lang.OutOfMemoryError: unable to create new native thread
