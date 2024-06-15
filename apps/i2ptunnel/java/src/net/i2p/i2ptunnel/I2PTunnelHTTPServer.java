@@ -578,8 +578,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             logBlockedDestination(peerB32);
                             isValidRequest = false;
                         } else if (address.isAnyLocalAddress()) { // check for 0.0.0.0 response (DNS blocking)
-                            if (_log.shouldInfo()) {
-                                _log.info("[HTTPServer] DNS server appears to be blocking requests to " + hostname +
+                            if (_log.shouldWarn()) {
+                                _log.warn("[HTTPServer] DNS server appears to be blocking requests to " + hostname +
                                           " -> Sending Error 403 \n* Client: " + peerB32);
                             }
                             sendError(socket, ERR_FORBIDDEN);
