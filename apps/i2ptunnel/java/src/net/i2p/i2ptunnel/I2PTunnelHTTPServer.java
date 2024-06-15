@@ -566,7 +566,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     int port = hostname.indexOf(":");
                     if (port != -1) {hostname = hostname.substring(0, port);}
                 }
-                if (_log.shouldDebug()) {_log.debug("[HTTPServer] Incoming request for: " + hostname);}
+                if (_log.shouldDebug()) {_log.debug("[HTTPServer] Incoming request for: " + hostname + "\n* Client: " + peerB32);}
                 if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {
                     InetAddress address = hostname != null ? InetAddress.getByName(hostname) : null;
                     if (address != null) {
@@ -591,8 +591,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             }
                         }
                     } else {
-                        if (_log.shouldInfo()) {
-                            _log.info("[HTTPServer] Could not resolve " + hostname + " to IP address" +
+                        if (_log.shouldWarn()) {
+                            _log.warn("[HTTPServer] Could not resolve " + hostname + " to IP address" +
                                       " -> Sending Error 404 \n* Client: " + peerB32);
                         }
                         sendError(socket, ERR_NOT_FOUND);
