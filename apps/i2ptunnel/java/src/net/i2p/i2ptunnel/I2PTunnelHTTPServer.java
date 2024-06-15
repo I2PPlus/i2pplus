@@ -566,8 +566,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     int port = hostname.indexOf(":");
                     if (port != -1) {hostname = hostname.substring(0, port);}
                 }
-                if (_log.shouldInfo()) {_log.info("[HTTPServer] Incoming request for: " + hostname);}
-                if (hostname != null && !hostname.endsWith(".i2p")) {
+                if (_log.shouldDebug()) {_log.debug("[HTTPServer] Incoming request for: " + hostname);}
+                if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {
                     InetAddress address = hostname != null ? InetAddress.getByName(hostname) : null;
                     if (address != null) {
                         if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
