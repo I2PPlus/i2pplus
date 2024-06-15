@@ -300,8 +300,7 @@ class ConnectionManager {
 
             if (locked_tooManyStreams()) {
                 if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn())
-                    _log.logAlways(Log.WARN, "Refusing connection: maximum of "
-                              + _defaultOptions.getMaxConns() + " simultaneous connections exceeded");
+                    _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + _defaultOptions.getMaxConns() + " concurrent streams exceeded");
                 reject = true;
                 retryAfter = 120;
             } else {
@@ -309,7 +308,7 @@ class ConnectionManager {
                 Reason why = shouldRejectConnection(synPacket);
                 if (why != null) {
                     if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn())
-                        _log.logAlways(Log.WARN, "Refusing connection: " + why +
+                        _log.logAlways(Log.WARN, "Refusing connection -> " + why +
                            (synPacket.getOptionalFrom() == null ? "" : "\n* Client: " + synPacket.getOptionalFrom().toBase32()));
                     reject = true;
                     retryAfter = why.getSeconds();
@@ -566,48 +565,42 @@ class ConnectionManager {
      * @return new connection, or null if we have exceeded our limit
      */
     public Connection connect(Destination peer, ConnectionOptions opts, I2PSession session) {
-        if (peer == null)
-            throw new NullPointerException();
+        if (peer == null) {throw new NullPointerException();}
         Connection con = null;
         long expiration = _context.clock().now();
         long tmout = opts.getConnectTimeout();
-        if (tmout <= 0)
-            expiration += DEFAULT_STREAM_DELAY_MAX;
-        else
-            expiration += tmout;
+        int max = _defaultOptions.getMaxConns();
+        if (tmout <= 0) {expiration += DEFAULT_STREAM_DELAY_MAX;}
+        else {expiration += tmout;}
         _numWaiting.incrementAndGet();
         while (true) {
             long remaining = expiration - _context.clock().now();
             if (remaining <= 0) {
-                _log.logAlways(Log.WARN, "Refusing connection as we have exceeded our max of "
-                          + _defaultOptions.getMaxConns());
+                _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + max + " concurrent streams exceeded");
                 _numWaiting.decrementAndGet();
                 return null;
             }
 
-                if (locked_tooManyStreams()) {
-                    int max = _defaultOptions.getMaxConns();
-                    // allow a full buffer of pending/waiting streams
-                    if (_numWaiting.get() > max) {
-                        _log.logAlways(Log.WARN, "Refusing connection as we have exceeded our max of "
-                                      + max + " and there are " + _numWaiting
-                                      + " waiting already");
-                        _numWaiting.decrementAndGet();
-                        return null;
-                    }
-
-                    // no remaining streams, let's wait a bit
-                    // got rid of the lock, so just sleep (fixme?)
-                    // try { _connectionLock.wait(remaining); } catch (InterruptedException ie) {}
-                    try { Thread.sleep(remaining/4); } catch (InterruptedException ie) {}
-                } else {
-                    con = new Connection(_context, this, session, _schedulerChooser, _timer,
-                                         _outboundQueue, _conPacketHandler, opts, false);
-                    con.setRemotePeer(peer);
-                    assignReceiveStreamId(con);
-                    break; // stop looping as a psuedo-wait
+            if (locked_tooManyStreams()) {
+                // allow a full buffer of pending/waiting streams
+                if (_numWaiting.get() > max) {
+                    _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + max + " concurrent streams exceeded, with " +
+                                             _numWaiting + " queued");
+                    _numWaiting.decrementAndGet();
+                    return null;
                 }
 
+                // no remaining streams, let's wait a bit
+                // got rid of the lock, so just sleep (fixme?)
+                // try { _connectionLock.wait(remaining); } catch (InterruptedException ie) {}
+                try { Thread.sleep(remaining/4); } catch (InterruptedException ie) {}
+            } else {
+                con = new Connection(_context, this, session, _schedulerChooser, _timer,
+                                     _outboundQueue, _conPacketHandler, opts, false);
+                con.setRemotePeer(peer);
+                assignReceiveStreamId(con);
+                break; // stop looping as a psuedo-wait
+            }
         }
 
         // ok we're in...
@@ -734,7 +727,6 @@ class ConnectionManager {
             _defaultOptions.getBlacklist().contains(h))
             return new Reason("blacklisted", MAX_TIME);
 
-
         if (_dayThrottler != null && _dayThrottler.shouldThrottle(h)) {
             _context.statManager().addRateData("stream.con.throttledDay", 1);
             if (_defaultOptions.getMaxConnsPerDay() <= 0)
@@ -776,7 +768,7 @@ class ConnectionManager {
         }
 
         if (!_connectionFilter.allowDestination(from)) {
-            return new Reason("destination blocked by Tunnel Filter", 0);
+            return new Reason("Destination blocked by Tunnel Filter", 0);
         }
 
         return null;
