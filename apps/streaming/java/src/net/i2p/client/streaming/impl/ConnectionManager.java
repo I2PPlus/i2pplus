@@ -300,7 +300,7 @@ class ConnectionManager {
 
             if (locked_tooManyStreams()) {
                 if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn())
-                    _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + _defaultOptions.getMaxConns() + " concurrent streams exceeded");
+                    _log.warn("Refusing connection -> Maximum " + _defaultOptions.getMaxConns() + " concurrent streams exceeded");
                 reject = true;
                 retryAfter = 120;
             } else {
@@ -308,7 +308,7 @@ class ConnectionManager {
                 Reason why = shouldRejectConnection(synPacket);
                 if (why != null) {
                     if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn())
-                        _log.warn(Log.WARN, "Refusing connection -> " + why +
+                        _log.warn("Refusing connection -> " + why +
                            (synPacket.getOptionalFrom() == null ? "" : "\n* Client: " + synPacket.getOptionalFrom().toBase32()));
                     reject = true;
                     retryAfter = why.getSeconds();
