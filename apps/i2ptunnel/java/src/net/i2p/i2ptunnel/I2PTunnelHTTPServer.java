@@ -551,8 +551,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
 
                 /**
-                 *  Block requests to localhost or loopback addresses via hostname
-                 *  and send client a suitable error reponse where applicable
+                 *  Block requests to localhost or loopback addresses via hostname,
+                 *  attempt to validate non-i2p hostnames, and send client a suitable
+                 *  error response where applicable
                  *
                  *  @since 0.9.63+
                  */
