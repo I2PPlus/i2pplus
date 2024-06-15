@@ -308,7 +308,7 @@ class ConnectionManager {
                 Reason why = shouldRejectConnection(synPacket);
                 if (why != null) {
                     if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn())
-                        _log.logAlways(Log.WARN, "Refusing connection -> " + why +
+                        _log.warn(Log.WARN, "Refusing connection -> " + why +
                            (synPacket.getOptionalFrom() == null ? "" : "\n* Client: " + synPacket.getOptionalFrom().toBase32()));
                     reject = true;
                     retryAfter = why.getSeconds();
