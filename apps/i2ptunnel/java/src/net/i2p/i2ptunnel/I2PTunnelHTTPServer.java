@@ -1358,6 +1358,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     ((!_contentType.startsWith("audio/")) &&
                      (!_contentType.equals("image/gif")) &&
                      (!_contentType.equals("image/jpeg")) &&
+                     (!_contentType.equals("image/jpg")) &&
                      (!_contentType.equals("image/png")) &&
                      (!_contentType.equals("image/tiff")) &&
                      (!_contentType.equals("image/webp")) &&
