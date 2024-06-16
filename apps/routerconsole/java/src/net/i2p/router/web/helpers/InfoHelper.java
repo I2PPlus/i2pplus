@@ -209,9 +209,9 @@ public class InfoHelper extends HelperBase {
                .append(_t("Tier")).append(":</b> ").append(ri.getBandwidthTier());
             if (congestionCap != null && !congestionCap.equals("Unknown")) {
                 buf.append("&ensp;<b>").append(_t("Congestion Cap")).append(":</b> ").append(congestionCap);
-                if (congestionCap.equals("D") {buf.append(" (").append(_t("Moderate")).append(")");}
-                else if (congestionCap.equals("E") {buf.append(" (").append(_t("Severe")).append(")");}
-                else if (congestionCap.equals("G") {buf.append(" (").append(_t("No transit tunnels")).append(")");}
+                if (congestionCap.equals("D")) {buf.append(" (").append(_t("Moderate")).append(")");}
+                else if (congestionCap.equals("E")) {buf.append(" (").append(_t("Severe")).append(")");}
+                else if (congestionCap.equals("G")) {buf.append(" (").append(_t("No transit tunnels")).append(")");}
             }
         }
         buf.append("&ensp;<a href=\"/config\">").append(_t("Configure")).append("</a></td></tr>\n");
