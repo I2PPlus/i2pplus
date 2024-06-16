@@ -946,7 +946,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             targetRequest = requestURI.toASCIIString();
                             String outproxyName = destination;
                             if (destination != null && destination.length() > 20) {
-                                outproxyName = destination.substring(0,12) + "...";
+                                outproxyName = destination.substring(0,15) + "...";
                             }
                             if (_log.shouldDebug()) {
                                 _log.debug(getPrefix(requestId) + " for [" + host + "] forwarded via outproxy: " + outproxyName);
@@ -991,7 +991,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
                     String outproxyName = destination;
                     if (destination != null && destination.length() > 20) {
-                        outproxyName = destination.substring(0,12) + "...";
+                        outproxyName = destination.substring(0,15) + "...";
                     }
 
                     if (_log.shouldDebug()) {
@@ -1366,7 +1366,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             } else {
                 String destName = destination;
                 if (destination != null && destination.length() > 20)
-                    destName = destination.substring(0,12) + "...";
+                    destName = destination.substring(0,15) + "...";
                 if (_log.shouldInfo())
                     _log.info("[HTTPClient] Looking up hostname: " + destName);
                 clientDest = _context.namingService().lookup(destination);
@@ -1375,7 +1375,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             if (clientDest == null) {
                 //l.log("Could not resolve " + destination + ".");
                 if (_log.shouldWarn()) {
-                    _log.warn("[HTTPClient] Unable to resolve " + destination.substring(0,12) + "..." +
+                    String destName = destination;
+                    if (destination != null && destination.length() > 20) {
+                        destName = destination.substring(0,15) + "...";
+                    }
+                    _log.warn("[HTTPClient] Unable to resolve " + destName + "..." +
                               (usingWWWProxy ? " (Outproxy)" : "") + "\n* Request: " + targetRequest);
                 }
                 String header;
@@ -1405,7 +1409,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_INTERNAL_SSL, "true"))) {
                 try {writeErrorMessage(ERR_INTERNAL_SSL, out, targetRequest, false, destination);}
                 catch (IOException ioe) {}  // ignore
-                if (_log.shouldLog(Log.WARN)) {_log.warn("SSL to i2p destinations denied by configuration: " + targetRequest);}
+                if (_log.shouldLog(Log.WARN)) {_log.warn("SSL to I2P destinations denied by configuration: " + targetRequest);}
                 return;
             }
 
