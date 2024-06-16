@@ -585,7 +585,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             sendError(socket, ERR_FORBIDDEN);
                             isValidRequest = false;
                         } else {
-                            if (_log.shouldInfo()) {
+                            if (_log.shouldInfo() && !hostname.equals(address.getHostAddress())) {
                                 _log.info("[HTTPServer] Hostname " + hostname + " validated" +
                                           " -> Resolves to: " + address.getHostAddress());
                             }
@@ -998,7 +998,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                             SERVER_READ_TIMEOUT_MEDIUM :   // medium
                                             SERVER_READ_TIMEOUT_POST);     // long
                     _keepalive = false;
-                    sender = new Sender(serverout, browserin, "Server: Client -> Server", _log);
+                    sender = new Sender(serverout, browserin, "from Client -> Server", _log);
                     // run in the unlimited client pool
                     _tpe.execute(sender);
                 }
@@ -1294,18 +1294,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         public void run() {
-            if (_log.shouldDebug())
-                _log.debug("[HTTPServer] Begin sending " + _name);
+            if (_log.shouldDebug()) {_log.debug("[HTTPServer] Begin sending " + _name);}
             try {
                 DataHelper.copy(_in, _out);
-                if (_log.shouldDebug())
-                    _log.debug("[HTTPServer] Done sending " + _name);
+                if (_log.shouldDebug()) {_log.debug("[HTTPServer] Done sending " + _name);}
             } catch (IOException ioe) {
-                if (_log.shouldInfo())
-                    _log.warn("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());
-                synchronized(this) {
-                    _failure = ioe;
+                if (ioe.getMessage().indexOf("Input stream closed") > 0) {
+                    // client closed connection early?
+                    if (_log.shouldDebug()) {_log.debug("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
+                } else {
+                    if (_log.shouldWarn()) {_log.warn("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
                 }
+                synchronized(this) {_failure = ioe;}
             }
         }
 
