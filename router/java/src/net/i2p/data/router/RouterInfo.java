@@ -110,6 +110,16 @@ public class RouterInfo extends DatabaseEntry {
         Router.CAPABILITY_BW32 +
         Router.CAPABILITY_BW12;
 
+    /** Public string of chars which serve as bandwidth congestion markers
+     * NOTE: individual chars defined in Router.java
+     *
+     * @since 0.9.63+
+     */
+    public static final String CONGESTION_CAPABILITY_CHARS = "" +
+        Router.CAPABILITY_CONGESTION_MODERATE +
+        Router.CAPABILITY_CONGESTION_SEVERE +
+        Router.CAPABILITY_NO_TUNNELS;
+
     public RouterInfo() {
         _addresses = new ArrayList<RouterAddress>(2);
         _options = new OrderedProperties();
@@ -450,6 +460,26 @@ public class RouterInfo extends DatabaseEntry {
             }
         }
         return (bwTier);
+    }
+
+    /**
+     * Return a string representation of this node's congestion cap,
+     * or "Unknown"
+     *
+     * @since 0.9.63+
+     */
+    public String getCongestionCap() {
+        String congestionCaps = CONGESTION_CAPABILITY_CHARS;
+        String congestionCap = "Unknown";
+        String capabilities = getCapabilities();
+        // Iterate through capabilities, searching for known bandwidth tier
+        for (int i = 0; i < capabilities.length(); i++) {
+            if (congestionCaps.indexOf(capabilities.charAt(i)) != -1) {
+                congestionCap = String.valueOf(capabilities.charAt(i));
+                break;
+            }
+        }
+        return (congestionCap);
     }
 
     /**

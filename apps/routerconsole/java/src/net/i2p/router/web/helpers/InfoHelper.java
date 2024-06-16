@@ -180,6 +180,7 @@ public class InfoHelper extends HelperBase {
         String configDir = _context.getProperty("i2p.dir.config") + slash;
         Boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
         Boolean rdnsEnabled = _context.getBooleanProperty("routerconsole.enableReverseLookups");
+        String congestionCap = ri.getCongestionCap();
 
         // basic router information
         buf.append("<table>\n");
@@ -205,9 +206,15 @@ public class InfoHelper extends HelperBase {
             buf.append("<tr><td><b>").append(_t("Bandwidth")).append(":</b></td><td><b>").append( _t("Inbound")).append(":</b> ")
                .append(bwIn()).append("KB/s &ensp;<b>").append(_t("Outbound")).append(":</b> ").append(bwOut()).append("KB/s &ensp;<b>")
                .append(_t("Shared")).append(":</b> ").append(bwShare()).append("% (").append(shareBW).append("KB/s) &ensp;<b>")
-               .append(_t("Tier")).append(":</b> ").append(ri.getBandwidthTier()).append("&ensp;<a href=\"/config\">")
-               .append(_t("Configure")).append("</a></td></tr>\n");
+               .append(_t("Tier")).append(":</b> ").append(ri.getBandwidthTier());
+            if (congestionCap != null && !congestionCap.equals("Unknown")) {
+                buf.append("&ensp;<b>").append(_t("Congestion Cap")).append(":</b> ").append(congestionCap);
+                if (congestionCap.equals("D") {buf.append(" (").append(_t("Moderate")).append(")");
+                else if (congestionCap.equals("E") {buf.append(" (").append(_t("Severe")).append(")");
+                else if (congestionCap.equals("G") {buf.append(" (").append(_t("No transit tunnels")).append(")");
+            }
         }
+        buf.append("&ensp;<a href=\"/config\">").append(_t("Configure")).append("</a></td></tr>\n");
         buf.append("<tr><td><b>").append(_t("Performance")).append(":</b></td><td><b>").append(_t("Available CPU Cores")).append(":</b> ")
            .append(getCoreCount()).append("&ensp;<b>").append(_t("Classified as slow")).append(":</b>");
         if (isRouterSlow()) {buf.append(" <span class=\"yes\">").append(_t("Yes")).append("</span>");}
