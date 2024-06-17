@@ -131,7 +131,7 @@ tr:hover .destaddress{color:#333}
 #filter,#search{margin-bottom:-1px;padding:5px 15px;text-align:center;border:var(--border_inner);background:#fafaff}
 #filter{margin:-2px 0 11px;padding:6px 6px 4px;font-weight:700;text-align:center}
 #filtered,#paginate,#results{margin-right:4px;float:right;word-spacing:0;letter-spacing:0;text-transform:none}
-#filtered,#results{font-size:10pt}
+#filtered,#results{margin:2px 44px 0 0;font-size:10pt}
 #import input[type="file"]{width:calc(100% - 7px)}
 #messages{margin:0 3%;padding:5px 20px;top:0;left:0;right:0;position:fixed;z-index:999;line-height:150%;text-align:center;opacity:.9;border-radius:0 0 4px 4px;box-shadow:0 1px 2px rgba(100,100,200,.7);background:#113 var(--no) no-repeat right 8px top 8px/12px;cursor:crosshair;animation:2s hide-up 5s ease-out forwards}
 #messages:hover{background:#113 var(--no) no-repeat right 8px top 8px/12px}
@@ -140,7 +140,7 @@ tr:hover .destaddress{color:#333}
 #messages+p,.headline+p{margin:1px 0 -1px;padding:10px;border:var(--border_inner)}
 #ovrvw .page{margin:0}
 #paginate,#showing{display:inline-block}
-#paginate{margin:-2px 40px 0 0;position:relative;overflow:hidden;font-size:0;text-align:center;border:var(--border_inner);border-radius:2px;background:var(--row)}
+#paginate{margin:-3px 8px 0 0;position:relative;overflow:hidden;font-size:0;text-align:center;border:var(--border_inner);border-radius:2px;background:var(--row)}
 #search{margin:1px 0 -2px;padding-top:4px;position:sticky;top:40px;z-index:999}
 #showing{margin-left:5px}
 #subscriptions a{margin:2px 2px 0 0;float:right;font-size:80%}
@@ -254,7 +254,7 @@ input.download,input.update{margin-top:5px;padding:5px 7px 5px 21px;background:v
 input.download:hover,input.download:focus,input.update:hover,input.update:focus{background:var(--download) no-repeat 6px center/13px,var(--btn_hover)}
 input.reload{padding:5px 7px 5px 22px;background:var(--refresh) no-repeat 6px center/14px,var(--btn)}
 input.reload:hover,input.reload:focus{background:var(--refresh_hover) no-repeat 6px center,var(--btn_hover);background-size:14px,100%}
-input.search[type=submit]{margin-left:3px;padding:6px 5px;width:44px;vertical-align:middle;color:transparent;text-shadow:none;border-radius:0 2px 2px 0;background:var(--search) no-repeat center center/14px,var(--btn);background-blend-mode:luminosity}
+input.search[type=submit]{margin-left:3px;padding:6.5px 5px 6px;width:44px;vertical-align:middle;color:transparent;text-shadow:none;border-radius:0 2px 2px 0;background:var(--search) no-repeat center center/14px,var(--btn);background-blend-mode:luminosity}
 input.search[type=submit]:hover,input.search[type=submit]:focus{background:var(--search) no-repeat center center/14px,var(--btn_hover);background-blend-mode:normal}
 input.search[type=text]{margin:1px -10px 0 0;padding:6px 8px;vertical-align:middle;border-radius:2px 0 0 2px;transition:none}
 input.search[type=text]:focus,input.search[type=text]:focus-within~input.search[type=submit]{border:1px solid var(--hover);filter:none;transition:none}
