@@ -214,7 +214,8 @@ td.destinations textarea{height:28px;box-shadow:none}
 
 /* identicon + qr image */
 .identicon {margin:4px 2px;padding:1px;vertical-align:middle;border-radius:1px;box-shadow:0 0 0 1px #fff,0 0 0 2px #ddf;background:#fff}
-.info a:hover .identicon{box-shadow:0 0 0 1px #000,0 0 0 2px #f60}
+.info a:hover .identicon{box-shadow:0 0 0 1px #fff,0 0 0 2px #f60}
+.info a:active .identicon{box-shadow:0 0 0 1px #fff,0 0 0 3px var(--hover),var(--btn_shadow_active);transform:scale(0.9)}
 #visualid{margin-top:-1px;padding-top:0;border:var(--border_inner);border-radius:2px;background:#fafaff}
 #visualid h3{margin-top:0;padding:8px 10px 6px;border-bottom:var(--border_inner);box-shadow:var(--highlight);background:linear-gradient(180deg,#fcfcff 50%,#eef 50%)}
 #idAddress{text-transform:none;letter-spacing:0}
