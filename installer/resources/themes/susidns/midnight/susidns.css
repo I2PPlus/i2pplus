@@ -54,38 +54,35 @@ td{padding:5px}
 #navi #overview.selected{var(--overview) no-repeat 6px center/14px,var(--nav_selected)}
 #navi a.selected{box-shadow:var(--btn_shadow_active);pointer-events:none}
 
-p.buttons,.buttons{margin:5px 0 -5px;padding:0 3px;text-align:right}
-p.buttons{padding:8px 5px;border:var(--border)}
-p#filtered{margin:-26px 0 10px}
+.addrhlpr{font-size:8pt}
+.book td:first-child{font-weight:700}
 .checkbox input{margin:0}
+.headline+#book>table td.destinations{padding:0}
+.headline+#book>table td:first-child{width:120px;white-space:nowrap;text-align:right}
+.headline+#book>table td{padding:5px}
 .headline h3:first-child+h4{margin-top:-25px;margin-bottom:25px}
 .headline h3:first-child{margin-bottom:24px;border-radius:0}
 .headline h3{margin-top:-10px;border-radius:2px 2px 0 0}
 .headline{margin-top:-16px}
-.headline+#book>table td{padding:5px}
-.headline+#book>table td.destinations{padding:0}
-.headline+#book>table td:first-child{width:120px;white-space:nowrap;text-align:right}
-
 .help h3:first-child{margin-top:-21px}
 .help h3{margin:10px -31px;border-radius:0}
 .help{margin-bottom:5px;padding:20px 30px;border:var(--border);background:#001}
 .help p{border:0;padding:0}
 .help ul li:last-child{margin-bottom:-10px}
-
-#search{margin-top:-1px;margin-bottom:20px}
-.addrhlpr{font-size:8pt}
+p.buttons,.buttons{margin:5px 0 -5px;padding:0 3px;text-align:right}
+p.buttons{padding:8px 5px;border:var(--border)}
 td.checkbox{width:40px;text-align:center}
-td.search>*{vertical-align:middle}
 td.names a{font-size:9pt}
-.book td:first-child{font-weight:700}
-#activefilter{padding:4px 8px 3px}
+td.search>*{vertical-align:middle}
 #bk h4{display:none}
+p#filtered{margin:-26px 0 10px}
+#search{margin-top:-1px;margin-bottom:20px}
 
 #book,#emptybook{margin:-15px 0 -10px;padding:0}
 #book,#filter,#search{background:#001}
 #book table{width:100%;border:var(--border)}
 #book table th{font-size:8.5pt;border-bottom:var(--border);background:linear-gradient(180deg,#080818,#000008 75%)}
-#book table tr:hover{background:#1e0b28}
+#book :not(#visualid) table tr:not(#hostNotes):hover{background:#1e0b28}
 #book table tr:hover textarea{color:var(--ink)}
 #book th:last-child{padding:0;font-size:0;background:var(--nuke) no-repeat center center/14px,linear-gradient(180deg,#080818,#000008 75%)}
 #book td{border-bottom:var(--border_soft)}
@@ -273,9 +270,10 @@ tr:hover td.destinations{color:#aa0}
 
 #showing,#paginate{display:inline-block}
 #showing{margin-left:4px}
-#paginate,#filtered,#results{margin-right:4px;float:right;word-spacing:0;letter-spacing:0;text-transform:none}
+#paginate,#filtered,#results{margin:0 10px;float:right;word-spacing:0;letter-spacing:0;text-transform:none}
 #addressbook.headline h3{margin-bottom:0;padding-right:44px;position:relative}
 #activefilter,.selected{font-weight:700;color:#999;box-shadow:var(--highlight),inset 2px 2px 2px rgba(0,0,0,.9)}
+#activefilter{padding:2px 8px;color:#000;background:var(--a)}
 .active{color:#ff6}
 #showing{margin-left:6px}
 #filtered,#results{font-size:10pt}
@@ -364,6 +362,7 @@ form[action="export"]::after{height:21px}
 
 @media (min-width:1200px){
 #filter a{font-size:10pt;margin:0 2px -5px;display:inline-block;min-width:12px}
+#activefilter{padding:3px 8px}
 }
 
 @media (min-width:1500px){
@@ -374,7 +373,7 @@ textarea,textarea[name="config"],textarea[name="content"],#subsLog ul{font-size:
 #addressbook.headline h3{padding-right:45px}
 #content h3{font-size:11.5pt}
 #export{padding-left:4px;height:40px;position:absolute;top:-1px;right:6px}
-#filter a{font-size:12pt;min-width:16px}
+#filter a,#activefilter{font-size:12pt;min-width:16px}
 #host_list td.b32link a::after,#host_list td.helper a::after{width:18px;height:18px}
 input#exporthosts{margin:6px 0 -2px 2px}
 #ovrvw #content p{line-height:1.6}
