@@ -1,3 +1,6 @@
+2024-06-19 dr|z3d
+ * SusiDNS: SVG identicons with fallback to original bitmaps when no js
+
 2024-06-12 dr|z3d
  * Console: Add floodfill indicator to sidebar network status when ff is active
 
