@@ -3560,10 +3560,10 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<span id=bwAllocation class=configOption title=\"").append(_t("Half available bandwidth recommended.")).append("\">")
            .append("<b>").append(_t("Bandwidth limit")).append("</b> ")
            .append("<span id=bwDown></span><input type=text name=downBW class=\"r numeric\" value=\"")
-           .append(_manager.getBandwidthListener().getDownBWLimit() / 1024).append("\" size=5 maxlength=5 pattern=\"[0-9]{1,5}\"")
+           .append(_manager.getBandwidthListener().getDownBWLimit() / 1024).append("\" size=5 maxlength=4 pattern=\"[0-9]{1,4}\"")
            .append(" title=\"").append(_t("Maximum bandwidth allocated for downloading")).append("\"> KB/s down")
            .append(" <span id=bwUp></span><input type=text name=upBW class=\"r numeric\" value=\"")
-           .append(_manager.util().getMaxUpBW()).append("\" size=5 maxlength=5 pattern=\"[0-9]{1,5}\"")
+           .append(_manager.util().getMaxUpBW()).append("\" size=5 maxlength=4 pattern=\"[0-9]{1,4}\"")
            .append(" title=\"").append(_t("Maximum bandwidth allocated for uploading")).append("\"> KB/s up");
         if (_context.isRouterContext()) {
             buf.append(" <a href=\"/config.jsp\" target=_blank title=\"")
