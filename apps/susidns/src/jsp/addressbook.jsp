@@ -68,6 +68,13 @@
 <script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script nonce="<%=cspNonce%>">
+window.jdenticon_config = {
+  padding: 0,
+  saturation: {color: 1, grayscale: 0}
+};
+</script>
+<script nonce="<%=cspNonce%>" src="/js/jdenticon.js"></script>
 <%
     //String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
     String query = request.getQueryString();
@@ -417,7 +424,7 @@
         boolean haveImagegen = book.haveImagegen();
         if (haveImagegen) {
 %>
-<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><img src="/imagegen/id?s=24&amp;c=${addr.b32}" loading=lazy></a>
+<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><svg width="24" height="24" class=identicon data-jdenticon-value="${addr.b32}" xmlns="http://www.w3.org/2000/svg"></svg><noscript><img src="/imagegen/id?s=24&amp;c=${addr.b32}" loading=lazy></noscript></a>
 <%
         }  else { // haveImagegen
 %>

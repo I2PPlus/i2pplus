@@ -51,11 +51,16 @@
 <script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>" src="/js/textareaResize.js"></script>
 <script nonce="<%=cspNonce%>">
+window.jdenticon_config = {
+  padding: 0,
+  saturation: {color: 1, grayscale: 0}
+};
 document.addEventListener("DOMContentLoaded", function() {
   const myTextarea = document.getElementById("addNotes");
   addResizeListener(addNotes);
 });
 </script>
+<script nonce="<%=cspNonce%>" src="/js/jdenticon.js"></script>
 <%  String query = request.getQueryString(); %>
 </head>
 <body id=dtls style=display:none;pointer-events:none>
@@ -170,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <h3><%=intl._t("Visual Identification for")%>&nbsp;<span id=idAddress><%=addr.getName()%></span></h3>
 <table>
 <tr>
-<td><img src="/imagegen/id?s=256&amp;c=<%=addr.getB64().replace("=", "%3d")%>" width=256 height=256></td>
+<td><svg class=identicon width="256" height="256" data-jdenticon-value="<%=addr.getB32()%>" xmlns="http://www.w3.org/2000/svg"></svg><noscript><img src="/imagegen/id?s=256&amp;c=<%=addr.getB64().replace("=", "%3d")%>" width=256 height=256></noscript></td>
 <td><img src="/imagegen/qr?s=256&amp;t=<%=addr.getName()%>&amp;c=http%3a%2f%2f<%=addr.getName()%>%2f%3fi2paddresshelper%3d<%=addr.getDestination()%>"></td>
 </tr>
 <tr>

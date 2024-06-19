@@ -121,6 +121,9 @@ td.names a{font-size:9pt}
 form[action="subscriptions"]{margin:0}
 #helpsubs{margin:-16px 0 -11px;padding:20px 15px 15px 48px;background:#001 var(--infohelp) no-repeat 12px center/24px}
 #host_list tr{background:var(--row)}
+.identicon {margin:0 2px;padding:1px;vertical-align:middle;border-radius:1px;box-shadow:0 0 0 1px #000,0 0 0 2px #225;background:#000}
+.info a:hover .identicon{box-shadow:0 0 0 1px #000,0 0 0 2px var(--hover)}
+td>img[width="320"],td>img[src^="/imagegen"],#visualid .identicon{margin:10px 3px;padding:5px;width:240px;height:240px;display:inline-block;vertical-align:middle;box-shadow:none;border-radius:2px;border:var(--border);background:#000}
 img[src="/imagegen/id?s=256&c="],img[src="/imagegen/id?s=20&c="]{opacity:0}
 
 #messages+p,p.book{padding:20px 20px 20px 42px;border:var(--border);background:#001 var(--addressbook) no-repeat 10px center/24px}
@@ -134,7 +137,6 @@ img[src="/imagegen/id?s=256&c="],img[src="/imagegen/id?s=20&c="]{opacity:0}
 #messages p:hover{background-blend-mode:normal;cursor:crosshair}
 
 #ovrvw #content p{margin-bottom:10px;line-height:1.5}
-td>img[width="320"],td>img[src^="/imagegen"]{margin:10px 3px;padding:5px;width:240px;height:240px;border-radius:2px;border:var(--border);background:#000}
 textarea[name="config"],textarea[name="content"]{margin:-27px 0 0;resize:none;font-size:8.5pt;border:var(--border);border-radius:0}
 textarea[name="config"]{height:220px;overflow-y:scroll;resize:none}
 
