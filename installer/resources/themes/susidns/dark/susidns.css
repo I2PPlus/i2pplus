@@ -76,6 +76,7 @@ th{padding:5px 10px;text-align:left;color:var(--ink);font-size:8.5pt}
 #navi a#overview:active{background:#f60 var(--overview_active) no-repeat 6px center/14px}
 #navi a#overview.selected{background:var(--overview) no-repeat 6px center/14px,var(--nav_selected)}
 #navi a.selected{pointer-events:none}
+
 /* pagenav */
 #paginate,#filtered,#results{margin-right:4px;float:right;word-spacing:0;letter-spacing:0;text-transform:none}
 #filtered:empty,#results:empty{display:none}
