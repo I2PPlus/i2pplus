@@ -213,6 +213,7 @@ td.destinations textarea{height:28px;box-shadow:none}
 
 /* identicon + qr image */
 .identicon {margin:4px 1px;padding:1px;vertical-align:middle;border-radius:1px;box-shadow:0 0 0 1px #fff,0 0 0 2px #ddf;background:#fff;opacity:1}
+.identicon>path{transform-origin:center center;animation:scaledown .2s ease .15s both}
 .info a:hover .identicon{box-shadow:var(--highlight),0 0 0 2px #f60}
 .info a:active .identicon{box-shadow:0 0 0 1px #fff,0 0 0 3px var(--hover),var(--btn_shadow_active);transform:scale(0.9)}
 #visualid{margin-top:-1px;padding-top:0;border:var(--border_inner);border-radius:2px;background:#fafaff}
@@ -285,6 +286,7 @@ svg{opacity:.9}
 .iframed .illustrate:hover{background:#fff}
 
 @keyframes hide-up{from{margin-top:0}to{margin-top:-300px}}
+@keyframes scaledown{from{transform:scale(3)}to{transform:scale(1)}}
 
 /* responsive layout */
 @media (max-width:1499px){
