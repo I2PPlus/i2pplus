@@ -1,3 +1,7 @@
+2024-06-20 dr|z3d
+ * Console: Add configuration routerconsole.pageTitlePrefix={text} to set a
+   prefix for console page titles (requested by postman) and associated help
+
 2024-06-19 dr|z3d
  * SusiDNS: SVG identicons with fallback to original bitmaps when no js
 
