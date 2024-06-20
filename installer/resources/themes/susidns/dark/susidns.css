@@ -236,6 +236,7 @@ img[src="/imagegen/id?s=256&c="],img[src="/imagegen/id?s=20&c="]{opacity:0}
 .identicon>path{transform-origin:center center;animation:scaledown .2s ease .15s both}
 .info a:hover .identicon{box-shadow:0 0 0 1px #000,0 0 0 3px var(--hover),var(--highlight)}
 .info a:active .identicon{box-shadow:0 0 0 1px #000,0 0 0 3px var(--hover),var(--btn_shadow_active);background:linear-gradient(180deg,#9307,#b307);transform:scale(0.9)}
+.info a:hover .identicon>path{transform:scale(1.4);transition:ease all .2s;animation:none}
 td>img[width="320"],td>img[src^="/imagegen"],#visualid .identicon{margin:10px 3px;padding:5px;vertical-align:middle;border-radius:1px;border:var(--border);box-shadow:var(--highlight);background:#000}
 #visualid h3{margin:19px 0 -1px}
 #visualid table{width:100%;border:var(--border);border-collapse:collapse;border-spacing:0;background:#000900}
