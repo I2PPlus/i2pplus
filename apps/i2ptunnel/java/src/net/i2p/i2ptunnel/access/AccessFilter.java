@@ -43,7 +43,6 @@ import net.i2p.client.streaming.StatefulConnectionFilter;
 class AccessFilter implements StatefulConnectionFilter {
 
     private static final long PURGE_INTERVAL = 1000;
-//    private static final long SYNC_INTERVAL = 10 * 1000;
     private static final long SYNC_INTERVAL = 5 * 1000;
 
     /**
