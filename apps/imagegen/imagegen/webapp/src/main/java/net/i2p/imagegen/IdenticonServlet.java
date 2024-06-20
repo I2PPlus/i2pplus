@@ -106,7 +106,7 @@ public class IdenticonServlet extends HttpServlet {
 		String codeParam = request.getParameter(PARAM_IDENTICON_CODE_SHORT);
 		boolean codeSpecified = codeParam != null && codeParam.length() > 0;
 		if (!codeSpecified) {
-			response.setStatus(403);
+			response.setStatus(404);
 			return;
 		}
 		String sizeParam = request.getParameter(PARAM_IDENTICON_SIZE_SHORT);
@@ -155,7 +155,7 @@ public class IdenticonServlet extends HttpServlet {
 					// java.lang.NoClassDefFoundError: Could not initialize class java.awt.GraphicsEnvironment$LocalGE
 					Log log = I2PAppContext.getGlobalContext().logManager().getLog(IdenticonServlet.class);
 					log.logAlways(Log.WARN, "Identicon render failure: " + t);
-					response.setStatus(403);
+					response.setStatus(404);
 					return;
 				}
 				ImageIO.write(image, IDENTICON_IMAGE_FORMAT, byteOut);
@@ -164,7 +164,7 @@ public class IdenticonServlet extends HttpServlet {
 					cache.add(identiconETag, imageBytes);
 			} else {
 				// FIXME this sends 403 if cached
-				response.setStatus(403);
+				response.setStatus(404);
 				return;
 			}
 

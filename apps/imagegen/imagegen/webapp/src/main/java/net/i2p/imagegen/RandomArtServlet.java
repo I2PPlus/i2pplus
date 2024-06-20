@@ -38,7 +38,7 @@ public class RandomArtServlet extends HttpServlet {
 		String codeParam = request.getParameter(PARAM_IDENTICON_CODE_SHORT);
 		boolean codeSpecified = codeParam != null && codeParam.length() > 0;
 		if (!codeSpecified) {
-			response.setStatus(403);
+			response.setStatus(404);
 			return;
                 }
 		String modeParam = request.getParameter(PARAM_IDENTICON_MODE_SHORT);
@@ -52,7 +52,7 @@ public class RandomArtServlet extends HttpServlet {
 		} else {
 			Hash h = ConvertToHash.getHash(codeParam);
 			if (h == null) {
-				response.setStatus(403);
+				response.setStatus(404);
 			} else {
 				StringBuilder buf = new StringBuilder(512);
 				if (html) {
