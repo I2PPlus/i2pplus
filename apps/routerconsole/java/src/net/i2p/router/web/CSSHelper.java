@@ -187,13 +187,18 @@ public class CSSHelper extends HelperBase {
     public String title(String s) {
          StringBuilder buf = new StringBuilder(128);
          String lang = _context.getProperty("routerconsole.lang");
+         String pageTitlePrefix = _context.getProperty("routerconsole.pageTitlePrefix");
          if ((lang == null || lang.equals("en")) && s.startsWith("config ")) {
              s = s.replace(_t("config"), _t("Configure"));
          }
          if ((lang == null || lang.equals("en")) && s.contains("i2cp")) {
              s = s.replace("i2cp", "I2CP");
          }
-         buf.append("<title>").append(StringFormatter.capitalizeWord(_t(s))).append(" - I2P+").append("</title>");
+         buf.append("<title>");
+         if (pageTitlePrefix != null && !pageTitlePrefix.equals("")) {
+             buf.append(pageTitlePrefix).append(" ");
+         }
+         buf.append(StringFormatter.capitalizeWord(_t(s))).append(" - I2P+").append("</title>");
          return buf.toString();
     }
 

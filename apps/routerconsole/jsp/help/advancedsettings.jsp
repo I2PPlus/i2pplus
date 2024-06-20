@@ -234,6 +234,9 @@
 <tr><th>routerconsole.sitemapSites={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]")%></td></tr>
 
+<tr><th>routerconsole.pageTitlePrefix={string} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them.%></td></tr>
+
 <tr id=ntpserverconfig><th>time.sntpServerList={server1,server2}</th></tr>
 <tr><td><%=intl._t("This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]")%></td></tr>
 
