@@ -27,7 +27,11 @@
   boolean hasOverride = themeOverride.exists();
   boolean useSoraFont = intl.useSoraDisplayFont();
   response.setHeader("Accept-Ranges", "bytes");
-  response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'nonce-" + cspNonce + "'; font-src 'self'; object-src 'none'; media-src 'none';");
+  if (uri.contains("netdbmap")) {
+      response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-eval' 'nonce-" + cspNonce + "'; font-src 'self'; object-src 'none'; media-src 'none';");
+  } else {
+      response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'nonce-" + cspNonce + "'; font-src 'self'; object-src 'none'; media-src 'none';");
+  }
   response.setHeader("X-XSS-Protection", "1; mode=block");
   response.setHeader("X-Content-Type-Options", "nosniff");
   response.setHeader("Referrer-Policy", "same-origin");

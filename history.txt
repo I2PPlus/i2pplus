@@ -1,3 +1,6 @@
+2024-06-23 dr|z3d
+ * Console: Add experimental router world map at /netdbmap
+
 2024-06-20 dr|z3d
  * Console: Add configuration routerconsole.pageTitlePrefix={text} to set a
    prefix for console page titles (requested by postman) and associated help
