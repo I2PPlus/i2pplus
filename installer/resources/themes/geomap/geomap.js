@@ -1,3 +1,6 @@
+/* I2P+ geomap.js by dr|z3d */
+/* Heavily modified from https://cartosvg.com/mercator */
+
 (function () {
 
   const geomap = document.querySelector("#geomap");
@@ -59,7 +62,7 @@
         China: { region: "Asia", code: "cn" },
         Colombia: { region: "Americas", code: "co" },
         Comoros: { region: "Africa", code: "km" },
-        "Congo, Democratic Republic of the": { region: "Africa", code: "cd" },
+        "Congo (Democratic Republic)": { region: "Africa", code: "cd" },
         Congo: { region: "Africa", code: "cg" },
         "Costa Rica": { region: "Americas", code: "cr" },
         "Côte d'Ivoire": { region: "Africa", code: "ci" },
@@ -100,7 +103,7 @@
         Iceland: { region: "Europe", code: "is" },
         India: { region: "Asia", code: "in" },
         Indonesia: { region: "Asia", code: "id" },
-        "Iran (Islamic Republic of)": { region: "Asia", code: "ir" },
+        "Iran": { region: "Asia", code: "ir" },
         Iraq: { region: "Asia", code: "iq" },
         Ireland: { region: "Europe", code: "ie" },
         Israel: { region: "Asia", code: "il" },
@@ -111,8 +114,8 @@
         Kazakhstan: { region: "Asia", code: "kz" },
         Kenya: { region: "Africa", code: "ke" },
         Kiribati: { region: "Oceania", code: "ki" },
-        "Korea (Democratic People's Republic of)": { region: "Asia", code: "kp" },
-        "Korea, Republic of": { region: "Asia", code: "kr" },
+        "North Korea": { region: "Asia", code: "kp" },
+        "South Korea": { region: "Asia", code: "kr" },
         Kuwait: { region: "Asia", code: "kw" },
         Kyrgyzstan: { region: "Asia", code: "kg" },
         "Lao People's Democratic Republic": { region: "Asia", code: "la" },
@@ -133,7 +136,7 @@
         Mauritius: { region: "Africa", code: "mu" },
         Mexico: { region: "Americas", code: "mx" },
         "Micronesia (Federated States of)": { region: "Oceania", code: "fm" },
-        "Moldova, Republic of": { region: "Europe", code: "md" },
+        "Moldova": { region: "Europe", code: "md" },
         Mongolia: { region: "Asia", code: "mn" },
         Montenegro: { region: "Europe", code: "me" },
         Morocco: { region: "Africa", code: "ma" },
@@ -188,9 +191,9 @@
         Sweden: { region: "Europe", code: "se" },
         Switzerland: { region: "Europe", code: "ch" },
         "Syrian Arab Republic": { region: "Asia", code: "sy" },
-        "Taiwan, Province of China": { region: "Asia", code: "tw" },
+        Taiwan: { region: "Asia", code: "tw" },
         Tajikistan: { region: "Asia", code: "tj" },
-        "Tanzania, United Republic of": { region: "Africa", code: "tz" },
+        "Tanzania": { region: "Africa", code: "tz" },
         Thailand: { region: "Asia", code: "th" },
         "Timor-Leste": { region: "Asia", code: "tl" },
         Togo: { region: "Africa", code: "tg" },
@@ -207,7 +210,7 @@
         Uruguay: { region: "Americas", code: "uy" },
         Uzbekistan: { region: "Asia", code: "uz" },
         Vanuatu: { region: "Oceania", code: "vu" },
-        "Venezuela (Bolivarian Republic of)": { region: "Americas", code: "ve" },
+        Venezuela: { region: "Americas", code: "ve" },
         "Viet Nam": { region: "Asia", code: "vn" },
         Yemen: { region: "Asia", code: "ye" },
         Zambia: { region: "Africa", code: "zm" },
@@ -216,8 +219,8 @@
     },
 
     tooltips: {
-      countries: '<div id="tooltip-preview-countries"><div>\n' +
-                 "<span><b>Country: </b>${shapeId} (${data.code})</span><br>" +
+      countries: '<div id="mapTooltip"><div>\n' +
+                 '<span><b>Country: </b> <img class=mapflag width=9 height=6 src="/flags.jsp?c=${data.code}"> ${shapeId} (${data.code})</span><br>' +
                  "<span><b>Region: </b>${data.region}</span><br>\n" +
                  "<span><b>Routers: 0</b></span>\n" + "</div>\n </div>",
     },
@@ -249,7 +252,7 @@
         } else {
           // Clear local storage on error and schedule another check
           localStorage.removeItem("routerCounts");
-          setTimeout(storeRouterCounts, 30000);
+          setTimeout(storeRouterCounts, 15000);
         }
       }
     };
@@ -370,15 +373,13 @@ function debounce(func, wait, immediate) {
           replaceAndSetNewElement(tooltipInfo.element, newElement, shapeId, xPosition, yPosition, opacity);
         }
       }
-    } else {
-      hideTooltip();
-    }
+    } else {hideTooltip();}
   }, 50);
 
   geomap.addEventListener("mousemove", handleEvent);
   geomap.addEventListener("mouseout", hideTooltip);
 
-  // Don"t forget to clean up the event listener when it"s no longer needed
+  // Don"t forget to clean up the event listener when it's no longer needed
   function destroyTooltipHandling() {
     geomap.removeEventListener("mousemove", handleEvent);
     geomap.removeEventListener("mouseout", hideTooltip);
@@ -388,9 +389,7 @@ function debounce(func, wait, immediate) {
     element.setAttribute("x", x);
     element.setAttribute("y", y);
     element.firstChild.style.position = "absolute";
-    setTimeout(() => {
-      element.firstChild.style.position = "fixed";
-    }, 0);
+    setTimeout(() => {element.firstChild.style.position = "fixed";}, 0);
     element.style.display = "block";
     element.style.opacity = opacity;
   }
@@ -423,12 +422,8 @@ function debounce(func, wait, immediate) {
     const container = event.target.parentNode;
     if (event.target.tagName === "path" && container.tagName === "g") {
       const currentPathIndex = findPathIndex(event.target, container);
-      if (!event.target.previousPos) {
-        event.target.previousPos = currentPathIndex;
-      }
-      if (event.target !== container.lastElementChild) {
-        movePathToBack(event.target, container);
-      }
+      if (!event.target.previousPos) {event.target.previousPos = currentPathIndex;}
+      if (event.target !== container.lastElementChild) {movePathToBack(event.target, container);}
     }
   });
 

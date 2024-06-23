@@ -3,7 +3,7 @@
 #geomap text{font-family:Open Sans,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Helvetica Neue,sans-serif}
 #geomap .country{stroke:#020a;stroke-width:1px;fill:#ffe;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke;filter:none!important}
 #geomap .country:not(:hover){fill:#444;stroke:#222}
-#geomap .country:hover{fill:#555;stroke:#888;stroke-width:2px}
+#geomap .country:hover{fill:#555;stroke:#aaa;stroke-width:2px;stroke-dasharray:1,4}
 #geomap .country.count_1{fill:#755c3f}
 #geomap .country.count_10{fill:#840b}
 #geomap .country.count_50{fill:#a60b}
@@ -15,9 +15,11 @@
 #geomap #container{pointer-events:none;fill:#116}
 #geomap #frame{fill:none}
 #geomap #land{pointer-events:none;fill:#ffe}
-#geomap #tooltip{position:absolute;border-radius:2px}
-#geomap #tooltip-preview-countries{will-change:opacity;line-height:1.4;text-align:left;font-size:7px;font-weight:600;color:rgb(32,32,32);padding:2px 5px 3px;background-color:rgb(255,255,220);border:1px solid rgb(192,64,0);max-width:20rem;width:max-content;border-radius:2px;box-shadow:0 0 0 1px #fff inset,2px 2px 2px #0003;animation:fade 240ms ease 0s both;contain:paint}
-#geomap #tooltip-preview-countries > b{font-weight:700}
+#geomap #tooltip{position:absolute;border-radius:2px;font-weight:500}
+#geomap #mapTooltip{will-change:opacity;line-height:1.4;text-align:left;font-size:7px;color:rgb(32,32,32);padding:2px 5px 3px;background-color:rgb(255,255,220);border:1px solid rgb(192,64,0);max-width:20rem;width:max-content;border-radius:2px;box-shadow:0 0 0 1px #fff inset,2px 2px 2px #0003;animation:fadein 240ms ease 0s both;contain:paint}
+#geomap #mapTooltip>b{font-weight:700}
+#mapTooltip>span{display:inline-block}
+#geomap #mapTooltip .mapflag{margin:-2px 0 0 1px;display:inline-block;vertical-align:middle}
 #netdbmap{position:relative}
 #netdbRouterMap{padding:0;position:relative}
 #netdbmapLegend{position:absolute;bottom:20px;left:20px;display:inline-block}
@@ -30,4 +32,4 @@
 #legend_300 .legend_color{background:#f40b}
 #legend_400 .legend_color{background:#f20b}
 #legend_500 .legend_color{background:#f00b}
-@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
