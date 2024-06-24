@@ -103,7 +103,7 @@
         Iceland: { region: "Europe", code: "is" },
         India: { region: "Asia", code: "in" },
         Indonesia: { region: "Asia", code: "id" },
-        "Iran": { region: "Asia", code: "ir" },
+        Iran: { region: "Asia", code: "ir" },
         Iraq: { region: "Asia", code: "iq" },
         Ireland: { region: "Europe", code: "ie" },
         Israel: { region: "Asia", code: "il" },
@@ -164,7 +164,7 @@
         Portugal: { region: "Europe", code: "pt" },
         Qatar: { region: "Asia", code: "qa" },
         Romania: { region: "Europe", code: "ro" },
-        "Russia": { region: "Europe", code: "ru" },
+        Russia: { region: "Europe", code: "ru" },
         Rwanda: { region: "Africa", code: "rw" },
         "Saint Kitts and Nevis": { region: "Americas", code: "kn" },
         "Saint Lucia": { region: "Americas", code: "lc" },
@@ -190,7 +190,7 @@
         Suriname: { region: "Americas", code: "sr" },
         Sweden: { region: "Europe", code: "se" },
         Switzerland: { region: "Europe", code: "ch" },
-        "Syrian Arab Republic": { region: "Asia", code: "sy" },
+        Syria: { region: "Asia", code: "sy" },
         Taiwan: { region: "Asia", code: "tw" },
         Tajikistan: { region: "Asia", code: "tj" },
         "Tanzania": { region: "Africa", code: "tz" },
@@ -301,14 +301,29 @@
 
   function createTooltip(data, tooltipTemplate, shapeId) {
     if (!data) return;
-    const a = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
-    a.setAttribute("width", 1), a.setAttribute("height", 1), (a.style.overflow = "visible");
-    const n = parser.parseFromString(eval("`" + tooltipTemplate + "`"), "text/html").querySelector("body");
-    return (n.style.position = "fixed"), a.appendChild(n), a;
+    const foreignObject = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+    foreignObject.setAttribute("width", "1");
+    foreignObject.setAttribute("height", "1");
+    foreignObject.style.overflow = "visible";
+
+    // Generate the tooltip HTML using the template string and eval statement
+    const tooltipHTML = eval("`" + tooltipTemplate + "`");
+    const htmlDoc = new DOMParser().parseFromString(tooltipHTML, "text/html");
+    const tooltipElement = htmlDoc.querySelector("body");
+
+    // Set the tooltip element's style properties and append it to the foreignObject element
+    requestAnimationFrame(() => {
+      tooltipElement.style.position = "fixed";
+      foreignObject.appendChild(tooltipElement);
+    });
+
+    return foreignObject;
   }
 
   function hideTooltip() {
-    (tooltipInfo.element.style.display = "none"), (tooltipInfo.element.style.opacity = 0);
+    const tooltip = document.querySelector("#mapTooltip");
+    if (!tooltip) {return;}
+    requestAnimationFrame(() => {tooltip.classList.add("hidden");});
   }
 
 function debounce(func, wait, immediate) {
@@ -331,7 +346,7 @@ function debounce(func, wait, immediate) {
     const targetParent = target.parentNode;
 
     // Check if the target is a path element and has an ID
-    if (target.matches("path") && target.hasAttribute("id")) {
+    if (target && target.matches && target.hasAttribute && target.matches("path") && target.hasAttribute("id")) {
       const containerRect = geomap.querySelector("#container").getBoundingClientRect();
       const scaleWidth = width / containerRect.width;
       const scaleHeight = height / containerRect.height;
@@ -369,8 +384,9 @@ function debounce(func, wait, immediate) {
             return;
           }
 
-          const newElement = createTooltip(data, m.tooltips[sectionId].replace(/<b>Routers: 0<\/b>/g, "<b>Routers: </b>" + routerCount + "</span>"), shapeId, scaleWidth, scaleHeight);
-          replaceAndSetNewElement(tooltipInfo.element, newElement, shapeId, xPosition, yPosition, opacity);
+          const newElement = createTooltip(data, m.tooltips[sectionId].replace(/<b>Routers: 0<\/b>/g, "<b>Routers: </b>" + routerCount + "</span>"),
+                                           shapeId, scaleWidth, scaleHeight);
+          requestAnimationFrame(() => {replaceAndSetNewElement(tooltipInfo.element, newElement, shapeId, xPosition, yPosition, opacity);});
         }
       }
     } else {hideTooltip();}
@@ -388,6 +404,7 @@ function debounce(func, wait, immediate) {
   function updateShapePosition(element, x, y, opacity) {
     element.setAttribute("x", x);
     element.setAttribute("y", y);
+    if (!element.firstChild) {return;}
     element.firstChild.style.position = "absolute";
     setTimeout(() => {element.firstChild.style.position = "fixed";}, 0);
     element.style.display = "block";
