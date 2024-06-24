@@ -1188,6 +1188,7 @@ p.family a{display:inline-block}
 #view_profile pre{margin:0;padding:20px;width:calc(100% - 40px);line-height:20px;background:var(--pre)}
 #view_profile span{padding:5px;float:right}
 #view_profile .identicon{margin-top:-6px;margin-right:5px;height:100%;width:auto;position:absolute;right:54px;border-right:var(--border)}
+#geomap{margin:1px!important}
 
 /* leasesets */
 .debugMode .netdb_leases li b:first-child{min-width:60px;text-align:right}
