@@ -310,6 +310,7 @@
     const tooltipHTML = eval("`" + tooltipTemplate + "`");
     const htmlDoc = new DOMParser().parseFromString(tooltipHTML, "text/html");
     const tooltipElement = htmlDoc.querySelector("body");
+    tooltipElement.style.background = "none";
 
     // Set the tooltip element's style properties and append it to the foreignObject element
     requestAnimationFrame(() => {
@@ -323,7 +324,7 @@
   function hideTooltip() {
     const tooltip = document.querySelector("#mapTooltip");
     if (!tooltip) {return;}
-    requestAnimationFrame(() => {tooltip.classList.add("hidden");});
+    tooltip.classList.add("hidden");
   }
 
 function debounce(func, wait, immediate) {
@@ -347,7 +348,7 @@ function debounce(func, wait, immediate) {
 
     // Check if the target is a path element and has an ID
     if (target && target.matches && target.hasAttribute && target.matches("path") && target.hasAttribute("id")) {
-      const containerRect = geomap.querySelector("#container").getBoundingClientRect();
+      const containerRect = geomap.getBoundingClientRect();
       const scaleWidth = width / containerRect.width;
       const scaleHeight = height / containerRect.height;
       const shapeRect = tooltipInfo.element.firstChild?.firstChild?.getBoundingClientRect();
@@ -368,9 +369,7 @@ function debounce(func, wait, immediate) {
         }
       } else if (shapeId && sectionId in m.data) {
         opacity = 0;
-        setTimeout(() => {
-          handleEvent(event);
-        }, 0);
+        setTimeout(() => {handleEvent(event);}, 0);
       }
 
       if (sectionId in m.data) {
@@ -404,7 +403,6 @@ function debounce(func, wait, immediate) {
   function updateShapePosition(element, x, y, opacity) {
     element.setAttribute("x", x);
     element.setAttribute("y", y);
-    if (!element.firstChild) {return;}
     element.firstChild.style.position = "absolute";
     setTimeout(() => {element.firstChild.style.position = "fixed";}, 0);
     element.style.display = "block";

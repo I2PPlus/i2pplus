@@ -1,7 +1,7 @@
 .legend_color {width:24px;display:inline-block;position:absolute;left:1px;top:1px;bottom:1px}
 #geomap{margin:2px 1px 1px;display:block!important;height:auto;position:relative}
 #geomap text{font-family:Open Sans,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Helvetica Neue,sans-serif}
-#geomap .country{stroke:#020a;stroke-width:1px;fill:#444;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke;will-change:transform}
+#geomap .country{stroke:#020a;stroke-width:1px;fill:#444;stroke-linejoin:round;stroke-linecap:round;will-change:transform;vector-effect:non-scaling-stroke}
 #geomap .country:not(:hover){stroke:#222}
 #geomap .country:hover{stroke:#aaa;stroke-width:2px;stroke-dasharray:1,2}
 #geomap .country.count_1{fill:#755c3f}
@@ -14,11 +14,11 @@
 #geomap .country.count_500{fill:#f00b}
 #geomap #container{pointer-events:none;fill:#116}
 #geomap #frame{fill:none}
-#geomap #land{pointer-events:none;fill:#373}
+#geomap #land{pointer-events:none;fill:none;stroke:#333c;stroke-width:.5px;vector-effect:non-scaling-stroke;animation:nostroke 1s ease-out 0s both}
 #geomap #tooltip{position:absolute;font-weight:500}
-#geomap #mapTooltip{padding:2px 5px 3px;max-width:20rem;width:max-content;line-height:1.4;text-align:left;font-size:7px;color:rgb(32,32,32);border-radius:2px;border:1px solid rgb(192,64,0);border-radius:0px;box-shadow:0 0 0 1px #ffe8 inset,0 0 0 1px #510,2px 2px 2px #0003;background:linear-gradient(#ffd,#ffb);animation:fadein 60ms ease 0s both;will-change:transform}
+#geomap #mapTooltip{padding:2px 5px 3px;max-width:20rem;width:max-content;line-height:1.4;text-align:left;font-size:7px;color:#222;border-radius:2px;border:1px solid rgb(192,64,0);border-radius:0px;box-shadow:0 0 0 1px #ffe8 inset,0 0 0 1px #510,2px 2px 2px #0003;background:linear-gradient(#ffd,#ffb);animation:fadein 60ms ease 0s both}
 #geomap #mapTooltip.hidden{animation:fadeout 60ms ease 0s both}
-#geomap #mapTooltip>b{font-weight:700}
+#geomap #mapTooltip>b,#netdbRouterMap #mapTooltip>b{font-weight:700;color:#222!important}
 #mapTooltip>span{display:inline-block}
 #geomap #mapTooltip .mapflag{margin:-2px 0 0 1px;display:inline-block;vertical-align:middle}
 #netdbmap{position:relative}
@@ -35,3 +35,4 @@
 #legend_500 .legend_color{background:#f00b}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 @keyframes fadeout{from{opacity:1}to{opacity:0}}
+@keyframes nostroke{to{stroke-width:0}}
