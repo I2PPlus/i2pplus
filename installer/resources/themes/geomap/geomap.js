@@ -164,7 +164,7 @@
         Portugal: { region: "Europe", code: "pt" },
         Qatar: { region: "Asia", code: "qa" },
         Romania: { region: "Europe", code: "ro" },
-        "Russian Federation": { region: "Europe", code: "ru" },
+        "Russia": { region: "Europe", code: "ru" },
         Rwanda: { region: "Africa", code: "rw" },
         "Saint Kitts and Nevis": { region: "Americas", code: "kn" },
         "Saint Lucia": { region: "Americas", code: "lc" },

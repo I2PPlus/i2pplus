@@ -428,6 +428,9 @@ public class NetDbHelper extends FormHandler {
             buf.append("<center>");
         int tab = getTab();
         for (int i = 0; i < titles.length; i++) {
+            if (i == 1) {
+                buf.append("<span class=tab><a href=/netdbmap>").append(_t("Router Map")).append("</a></span>\n");
+            }
             if (i == 2 && tab != 2)
                 continue;   // can't nav to lookup
             if (i == 9 && tab != 9)

@@ -1,9 +1,9 @@
 .legend_color {width:24px;display:inline-block;position:absolute;left:1px;top:1px;bottom:1px}
 #geomap{margin:2px 1px 1px;display:block!important;height:auto;position:relative}
 #geomap text{font-family:Open Sans,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Helvetica Neue,sans-serif}
-#geomap .country{stroke:#020a;stroke-width:1px;fill:#ffe;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke;filter:none!important}
+#geomap .country{stroke:#020a;stroke-width:1px;fill:#ffe;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
 #geomap .country:not(:hover){fill:#444;stroke:#222}
-#geomap .country:hover{fill:#555;stroke:#aaa;stroke-width:2px;stroke-dasharray:1,4}
+#geomap .country:hover{fill:#555;stroke:#aaa;stroke-width:2px;stroke-dasharray:1,2}
 #geomap .country.count_1{fill:#755c3f}
 #geomap .country.count_10{fill:#840b}
 #geomap .country.count_50{fill:#a60b}
