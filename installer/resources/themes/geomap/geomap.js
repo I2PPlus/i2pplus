@@ -44,7 +44,7 @@
         Belize: { region: "Americas", code: "bz" },
         Benin: { region: "Africa", code: "bj" },
         Bhutan: { region: "Asia", code: "bt" },
-        "Bolivia (Plurinational State of)": { region: "Americas", code: "bo" },
+        Bolivia: { region: "Americas", code: "bo" },
         "Bosnia and Herzegovina": { region: "Europe", code: "ba" },
         Botswana: { region: "Africa", code: "bw" },
         Brazil: { region: "Americas", code: "br" },
@@ -245,6 +245,7 @@
               routerCounts[code] = row.children[1].textContent.trim();
             }
           });
+
           localStorage.setItem("routerCounts", JSON.stringify(routerCounts));
           Object.keys(m.data.countries).forEach((shapeId) => {
             updateShapeClass(shapeId);
@@ -430,6 +431,23 @@ function debounce(func, wait, immediate) {
     container.insertBefore(path, container.children[previousPos]);
   }
 
+  let preloadedFlags = [];
+
+  function preloadFlags(codes) {
+    const flagContainer = document.createElement("div");
+    flagContainer.style.display = "none";
+    document.body.appendChild(flagContainer);
+
+    codes.forEach(code => {
+      if (!preloadedFlags.includes(code)) {
+        const img = new Image();
+        img.src = `/flags.jsp?c=${code}`;
+        flagContainer.appendChild(img);
+        preloadedFlags.push(code);
+      }
+    });
+  }
+
   geomap.addEventListener("mouseleave", hideTooltip);
 
   geomap.addEventListener("mousemove", (event) => {
@@ -454,6 +472,9 @@ function debounce(func, wait, immediate) {
   storeRouterCounts();
 
   document.addEventListener("DOMContentLoaded", () => {
+    const codes = Object.values(m.data.countries).map(country => country.code);
+    preloadFlags(codes);
+
     Object.keys(m.data.countries).forEach((shapeId) => {
       const code = m.data.countries[shapeId].code || "";
       const routerCount = getRouterCount(shapeId);
