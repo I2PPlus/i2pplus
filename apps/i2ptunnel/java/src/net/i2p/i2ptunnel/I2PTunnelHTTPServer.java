@@ -1299,13 +1299,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 DataHelper.copy(_in, _out);
                 if (_log.shouldDebug()) {_log.debug("[HTTPServer] Done sending " + _name);}
             } catch (IOException ioe) {
-                if (ioe.getMessage().indexOf("Input stream closed") >= 0 ||
-                    ioe.getMessage().indexOf("Input stream error") >= 0 ||
-                    ioe.getMessage().indexOf("Socket closed") >= 0) {
-                    // client closed connection early?
-                    if (_log.shouldDebug()) {_log.debug("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
-                } else {
-                    if (_log.shouldWarn()) {_log.warn("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
+                if (ioe.getMessage != null) {
+                    if (ioe.getMessage().indexOf("Input stream closed") >= 0 ||
+                        ioe.getMessage().indexOf("Input stream error") >= 0 ||
+                        ioe.getMessage().indexOf("Socket closed") >= 0) {
+                        // client closed connection early?
+                            if (_log.shouldDebug()) {_log.debug("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
+                    } else {
+                        if (_log.shouldWarn()) {_log.warn("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
+                    }
                 }
                 synchronized(this) {_failure = ioe;}
             }
