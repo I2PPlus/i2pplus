@@ -4,13 +4,13 @@
 #geomap .country{stroke:#020a;stroke-width:1px;fill:#444;stroke-linejoin:round;stroke-linecap:round;will-change:transform;vector-effect:non-scaling-stroke}
 #geomap .country:not(:hover){stroke:#222}
 #geomap .country:hover{stroke:#aaa;stroke-width:2px;stroke-dasharray:1,2}
-#geomap .country.count_1{fill:#755c3f}
+#geomap .country.count_1{fill:#630}
 #geomap .country.count_10{fill:#840}
 #geomap .country.count_50{fill:#a60}
-#geomap .country.count_100{fill:#f80}
-#geomap .country.count_200{fill:#f60}
-#geomap .country.count_300{fill:#f40}
-#geomap .country.count_400{fill:#f20}
+#geomap .country.count_100{fill:#f90}
+#geomap .country.count_200{fill:#f70}
+#geomap .country.count_300{fill:#f50}
+#geomap .country.count_400{fill:#f30}
 #geomap .country.count_500{fill:#f00}
 #geomap #tooltip{position:absolute;font-weight:500}
 #geomap #mapTooltip{padding:2px 5px 3px;max-width:20rem;width:max-content;line-height:1.4;text-align:left;font-size:7px;color:#222;border-radius:2px;border:1px solid rgb(192,64,0);border-radius:0px;box-shadow:0 0 0 1px #ffe8 inset,0 0 0 1px #510,2px 2px 2px #0003;background:linear-gradient(#ffd,#ffb);animation:fadein 60ms ease 0s both}
@@ -22,13 +22,13 @@
 #netdbRouterMap{padding:0;position:relative}
 #netdbmapLegend{position:absolute;bottom:20px;left:20px;display:inline-block}
 [id^="legend_"]{margin:4px;padding:4px 8px 4px 34px;width:30px;display:block;position:relative;text-align:right;font-weight:600;color:#222;border:1px solid #222;background:#ffec}
-#legend_1 .legend_color{background:#755c3f}
+#legend_1 .legend_color{background:#630}
 #legend_10 .legend_color{background:#840}
 #legend_50 .legend_color{background:#a60}
-#legend_100 .legend_color{background:#f80}
-#legend_200 .legend_color{background:#f60}
-#legend_300 .legend_color{background:#f40}
-#legend_400 .legend_color{background:#f20}
+#legend_100 .legend_color{background:#f90}
+#legend_200 .legend_color{background:#f70}
+#legend_300 .legend_color{background:#f50}
+#legend_400 .legend_color{background:#f30}
 #legend_500 .legend_color{background:#f00}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 @keyframes fadeout{from{opacity:1}to{opacity:0}}
