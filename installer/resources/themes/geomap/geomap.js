@@ -448,6 +448,9 @@ function debounce(func, wait, immediate) {
     });
   }
 
+  const codes = Object.values(m.data.countries).map(country => country.code);
+  preloadFlags(codes);
+
   geomap.addEventListener("mouseleave", hideTooltip);
 
   geomap.addEventListener("mousemove", (event) => {
@@ -472,9 +475,6 @@ function debounce(func, wait, immediate) {
   storeRouterCounts();
 
   document.addEventListener("DOMContentLoaded", () => {
-    const codes = Object.values(m.data.countries).map(country => country.code);
-    preloadFlags(codes);
-
     Object.keys(m.data.countries).forEach((shapeId) => {
       const code = m.data.countries[shapeId].code || "";
       const routerCount = getRouterCount(shapeId);
