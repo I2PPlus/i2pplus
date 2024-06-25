@@ -135,6 +135,14 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
+     *  @return not a copy, do not modify, or null
+     *  @since 0.9.63
+     */
+    public Properties getOptions() {
+        return _options;
+    }
+
+    /**
      *  If more than one key, return the first supported one.
      *  If none supported, return the first one.
      *
@@ -231,14 +239,10 @@ public class LeaseSet2 extends LeaseSet {
      * @throws IllegalStateException if LeaseSet2 is already signed
      */
     public void setOptions(Properties options) {
-        if (_signature != null)
-            throw new IllegalStateException();
-        if (_options != null)
-            _options.clear();
-        else
-            _options = new OrderedProperties();
-        if (options != null)
-            _options.putAll(options);
+        if (_signature != null) {throw new IllegalStateException();}
+        if (_options != null) {_options.clear();}
+        else {_options = new OrderedProperties();}
+        _options.putAll(options);
     }
 
     public boolean isOffline() {
