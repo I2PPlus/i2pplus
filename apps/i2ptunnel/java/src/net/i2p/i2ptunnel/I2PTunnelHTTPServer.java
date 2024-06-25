@@ -1299,7 +1299,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 DataHelper.copy(_in, _out);
                 if (_log.shouldDebug()) {_log.debug("[HTTPServer] Done sending " + _name);}
             } catch (IOException ioe) {
-                if (ioe.getMessage != null) {
+                if (ioe.getMessage() != null) {
                     if (ioe.getMessage().indexOf("Input stream closed") >= 0 ||
                         ioe.getMessage().indexOf("Input stream error") >= 0 ||
                         ioe.getMessage().indexOf("Socket closed") >= 0) {
