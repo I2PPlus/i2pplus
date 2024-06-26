@@ -1,10 +1,10 @@
 /* I2P+ Router Map by dr|z3d */
 
 #geomap{margin:2px 1px 1px;display:block!important;height:auto;position:relative}
-#geomap path{stroke:#020a;stroke-width:1px;fill:#444;stroke-linejoin:round;stroke-linecap:round;paint-order:stroke;vector-effect:non-scaling-stroke;will-change:transform}
+#geomap path{stroke:#000;stroke-width:1px;fill:#444;stroke-linejoin:round;stroke-linecap:round;paint-order:stroke;vector-effect:non-scaling-stroke;will-change:transform}
 #geomap path:not([id]){pointer-events:none}
 #geomap path:not(:hover){stroke:#222}
-#geomap path:hover{position:relative;z-index:999;stroke:#aaa;stroke-width:2px;stroke-dasharray:1,2;paint-order:fill}
+#geomap path:hover{position:relative;z-index:999;stroke:#fff;stroke-width:3px;stroke-dasharray:1,2}
 #geomap .count_1{fill:#630}
 #geomap .count_10{fill:#840}
 #geomap .count_50{fill:#a60}
@@ -18,7 +18,7 @@
 /* tooltip */
 #geomap #mapTooltip{padding:2px 5px 3px;max-width:20rem;width:max-content;line-height:1.4;text-align:left;font-size:7px;font-weight:500;color:#222;border-radius:2px;border:1px solid rgb(192,64,0);border-radius:0px;box-shadow:0 0 0 1px #ffe8 inset,0 0 0 1px #510,2px 2px 2px #0003;background:linear-gradient(#ffd,#ffb);animation:fadein 20ms ease 0s both}
 #geomap #mapTooltip.hidden{animation:fadeout 40ms ease 0s both}
-#geomap #mapTooltip>b,#netdbRouterMap #mapTooltip>b{font-weight:700;color:#222!important}
+#netdbRouterMap foreignObject b{font-weight:700;color:#222!important}
 #mapTooltip>span{display:inline-block}
 #geomap #mapTooltip .mapflag{margin:-2px 0 0 1px;display:inline-block;vertical-align:middle}
 
