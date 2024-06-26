@@ -329,7 +329,7 @@
     tooltip.classList.add("hidden");
   }
 
-function debounce(func, wait, immediate) {
+  function debounce(func, wait, immediate) {
     let timeout;
     return function() {
       const context = this, args = arguments;
@@ -391,16 +391,7 @@ function debounce(func, wait, immediate) {
         }
       }
     } else {hideTooltip();}
-  }, 20);
-
-  geomap.addEventListener("mousemove", handleEvent);
-  geomap.addEventListener("mouseout", hideTooltip);
-
-  // Don"t forget to clean up the event listener when it's no longer needed
-  function destroyTooltipHandling() {
-    geomap.removeEventListener("mousemove", handleEvent);
-    geomap.removeEventListener("mouseout", hideTooltip);
-  }
+  }, 10);
 
   function updateShapePosition(element, x, y, opacity) {
     element.setAttribute("x", x);
@@ -452,7 +443,18 @@ function debounce(func, wait, immediate) {
   const codes = Object.values(m.data.countries).map(country => country.code);
   preloadFlags(codes);
 
-  geomap.addEventListener("mouseleave", hideTooltip);
+  setInterval(storeRouterCounts, 60 * 1000);
+  storeRouterCounts();
+
+  geomap.addEventListener("mouseenter", handleEvent);
+  geomap.addEventListener("mouseout", (event) => {
+    hideTooltip(event);
+    if (event.target.previousPos) {
+      const previousPos = event.target.previousPos;
+      const container = event.target.parentNode;
+      restorePathPosition(event.target, previousPos, container);
+    }
+  });
 
   geomap.addEventListener("mousemove", (event) => {
     handleEvent(event);
@@ -464,16 +466,17 @@ function debounce(func, wait, immediate) {
     }
   });
 
-  geomap.addEventListener("mouseout", (event) => {
-    if (event.target.previousPos) {
-      const previousPos = event.target.previousPos;
-      const container = event.target.parentNode;
-      restorePathPosition(event.target, previousPos, container);
-    }
-  });
-
-  setInterval(storeRouterCounts, 60 * 1000);
-  storeRouterCounts();
+  function destroyTooltipHandling() {
+    geomap.removeEventListener("mouseenter", handleEvent);
+    geomap.removeEventListener("mouseout", (event) => {
+      hideTooltip(event);
+      if (event.target.previousPos) {
+        const previousPos = event.target.previousPos;
+        const container = event.target.parentNode;
+        restorePathPosition(event.target, previousPos, container);
+      }
+    });
+  }
 
   document.addEventListener("DOMContentLoaded", () => {
     Object.keys(m.data.countries).forEach((shapeId) => {
