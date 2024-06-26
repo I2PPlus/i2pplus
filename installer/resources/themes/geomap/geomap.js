@@ -312,6 +312,7 @@
     const htmlDoc = new DOMParser().parseFromString(tooltipHTML, "text/html");
     const tooltipElement = htmlDoc.querySelector("body");
     tooltipElement.style.background = "none";
+    tooltipElement.style.pointerEvents = "none";
 
     // Set the tooltip element's style properties and append it to the foreignObject element
     requestAnimationFrame(() => {
@@ -390,7 +391,7 @@ function debounce(func, wait, immediate) {
         }
       }
     } else {hideTooltip();}
-  }, 50);
+  }, 20);
 
   geomap.addEventListener("mousemove", handleEvent);
   geomap.addEventListener("mouseout", hideTooltip);

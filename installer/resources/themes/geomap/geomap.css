@@ -1,7 +1,9 @@
+/* I2P+ Router Map by dr|z3d */
+
 #geomap{margin:2px 1px 1px;display:block!important;height:auto;position:relative}
 #geomap path{stroke:#020a;stroke-width:1px;fill:#444;stroke-linejoin:round;stroke-linecap:round;will-change:transform;vector-effect:non-scaling-stroke}
 #geomap path:not(:hover){stroke:#222}
-#geomap path:hover{position:relative;z-index:999;stroke:#aaa;stroke-width:2px;stroke-dasharray:1,2}
+#geomap path:hover{position:relative;z-index:999;stroke:#aaa;stroke-width:2px;stroke-dasharray:1,2;pointer-events:all}
 #geomap .count_1{fill:#630}
 #geomap .count_10{fill:#840}
 #geomap .count_50{fill:#a60}
@@ -10,16 +12,19 @@
 #geomap .count_300{fill:#f50}
 #geomap .count_400{fill:#f30}
 #geomap .count_500{fill:#f00}
-#geomap #tooltip{position:absolute;font-weight:500}
-#geomap #mapTooltip{padding:2px 5px 3px;max-width:20rem;width:max-content;line-height:1.4;text-align:left;font-size:7px;color:#222;border-radius:2px;border:1px solid rgb(192,64,0);border-radius:0px;box-shadow:0 0 0 1px #ffe8 inset,0 0 0 1px #510,2px 2px 2px #0003;background:linear-gradient(#ffd,#ffb);animation:fadein 60ms ease 0s both}
+#geomap #countries{animation:fadein .25s ease .75s both}
+
+/* tooltip */
+#geomap #mapTooltip{padding:2px 5px 3px;max-width:20rem;width:max-content;line-height:1.4;text-align:left;font-size:7px;font-weight:500;color:#222;border-radius:2px;border:1px solid rgb(192,64,0);border-radius:0px;box-shadow:0 0 0 1px #ffe8 inset,0 0 0 1px #510,2px 2px 2px #0003;background:linear-gradient(#ffd,#ffb);animation:fadein 60ms ease 0s both}
 #geomap #mapTooltip.hidden{animation:fadeout 60ms ease 0s both}
 #geomap #mapTooltip>b,#netdbRouterMap #mapTooltip>b{font-weight:700;color:#222!important}
 #mapTooltip>span{display:inline-block}
 #geomap #mapTooltip .mapflag{margin:-2px 0 0 1px;display:inline-block;vertical-align:middle}
+
 #netdbmap{position:relative}
 #netdbRouterMap{padding:0;position:relative}
-#netdbmapLegend{position:absolute;bottom:20px;left:20px;display:inline-block}
 
+#netdbmapLegend{position:absolute;bottom:20px;left:20px;display:inline-block}
 [id^="legend_"]{margin:4px;padding:4px 8px 4px 34px;width:30px;display:block;position:relative;text-align:right;font-weight:600;color:#222;border:1px solid #222;background:#ffec}
 .legend_color {width:24px;display:inline-block;position:absolute;left:1px;top:1px;bottom:1px}
 #legend_1 .legend_color{background:#630}
@@ -33,4 +38,3 @@
 
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 @keyframes fadeout{from{opacity:1}to{opacity:0}}
-@keyframes nostroke{to{stroke-width:0;stroke-color:#333}}
