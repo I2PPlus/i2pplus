@@ -374,7 +374,7 @@ textarea,textarea[name="config"],textarea[name="content"],#subsLog ul{font-size:
 #addressbook.headline h3{padding-right:45px}
 #content h3{font-size:11.5pt}
 #export{padding-left:4px;height:40px;position:absolute;top:-1px;right:6px}
-#filter a,#activefilter{font-size:12pt;min-width:16px}
+#filter a,#activefilter{font-size:12pt;padding:2px 8px!important}
 #host_list td.b32link a::after,#host_list td.helper a::after{width:18px;height:18px}
 input#exporthosts{margin:6px 0 -2px 2px}
 #ovrvw #content p{line-height:1.6}
