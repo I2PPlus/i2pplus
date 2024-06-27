@@ -1,10 +1,9 @@
 /* I2P+ Router Map by dr|z3d */
 
 #geomap{margin:2px 1px 1px;display:block!important;height:auto;position:relative}
-#geomap path{stroke:#000;stroke-width:1px;fill:#444;stroke-linejoin:round;stroke-linecap:round;paint-order:stroke;vector-effect:non-scaling-stroke;will-change:transform}
+#geomap path{stroke:#181818;stroke-width:1.5px;fill:#444;stroke-linejoin:round;stroke-linecap:round;paint-order:stroke;vector-effect:non-scaling-stroke;will-change:transform}
 #geomap path:not([id]){pointer-events:none}
-#geomap path:not(:hover){stroke:#222}
-#geomap path:hover{position:relative;z-index:999;stroke:#fff;stroke-width:3px;stroke-dasharray:1,2}
+#geomap path:hover{position:relative;z-index:999;stroke:#fff;stroke-width:3px;stroke-dasharray:1,2;filter:drop-shadow(0 2px 2px #0005)}
 #geomap .count_1{fill:#630}
 #geomap .count_10{fill:#840}
 #geomap .count_50{fill:#a60}
