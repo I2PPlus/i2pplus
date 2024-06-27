@@ -276,7 +276,8 @@ tr:hover td.destinations{color:#aa0}
 #activefilter{padding:2px 8px;color:#000;background:var(--a)}
 .active{color:#ff6}
 #showing{margin-left:6px}
-#filtered,#results{font-size:10pt}
+#filtered,#results{padding:4px 8px;font-size:10pt;float:none;background:#113}
+#filtered:empty,#results:empty{display:none}
 
 /* paginate */
 #paginate{margin:-4px 4px 0 0;position:relative;overflow:hidden;font-size:0;text-align:center;border:1px solid #26225d;background:var(--title);background-size:4px 100%,100%}
