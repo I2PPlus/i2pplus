@@ -8,6 +8,7 @@ h1{font-weight:800}
 h2,.headline h3,.tab2,#sidebar h3,#sidebar h3 a,.main h3,.main h4{font-weight:700}
 .infohash,.infohelp,.infowarn,.listDate,#navi a,#torrents .infohash,.names a[href$=".i2p/"],#host_list td.b32link a,#host_list td.helper a,.lightbox-caption #caption{font-weight:500!important}
 input[type=password],input[type=search],input[type=text]{font-family:var(--bodyfont)}
+.ETA{font-weight:700}
 .tab a{padding:4px 12px}
 .tunnel_id{min-width:102px;font-size:90%}
 .ui_lang{font-size:88%}

@@ -192,8 +192,9 @@ th.peerCount{text-align:center}
 .tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 6px);left:30px;border-width:6px;border-style:solid;border-color:transparent #cca transparent transparent;content:"";animation:fade-in .1s ease 3s reverse both}
 .tAction{padding:1px 2px 1px 1px;width:1%;white-space:nowrap;text-align:center}
 .rxd{padding:2px;vertical-align:middle}
-.ETA{line-height:1.2;text-align:center;font-weight:700;font-style:italic}
+.ETA{line-height:1.2;text-align:center;font-weight:700!important;font-style:italic}
 .ETA,.txd,.rateDown,.rateUp{width:5%;min-width:40px;white-space:nowrap}
+.txd span,.rateDown span,.rateUp span{font-weight:700!important}
 .tName{padding-left:5px;line-height:1.1;text-align:left}
 .tName a,.dirInfo .snarkFileName a{padding:4px 0;font-weight:700}
 .tName a:hover,.snarkFileName a:hover,.tName:hover a,.dirInfo:hover a{box-shadow:none;background:none}
@@ -210,8 +211,8 @@ td.details{padding-left:0}
 .choked{color:#a00000}
 .choked::after,.idle::after{width:8px;height:8px;display:inline-block;border-radius:50%;background:#395;content:""}
 .choked::after{background:#900}
-.unchoked{color:#395}
-.choked .left,.choked .right,.unchoked .left,.unchoked .right{display:none!important}
+.unchoked{color:#395;font-weight:700}
+.choked .left,.choked .right{display:none!important}
 #linkswitch{margin:0}
 #snarkTbody td{border-top:1px solid rgba(111,83,62,.6);border-bottom:1px solid rgba(0,0,0,0)}
 #snarkTbody tr:first-child td{border-top:1px solid rgba(0,0,0,0)}
