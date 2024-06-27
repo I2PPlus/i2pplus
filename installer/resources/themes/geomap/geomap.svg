@@ -1,10 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" id="geomap" viewBox="0 0 720 475">
   <rect id="sea" width="100%" height="100%" x="0" y="0" fill="#227b"/>
   <g id="countries" style="opacity:0">
-    <path d="M385 243v-1l-1-1v-1h2l-1-1h1l1 1 1 1-1 1h-1Z"/>
-    <path d="M402 316v1h-2v-2h2Zm98-57h1l2-1 2 1v2l-1 1-1 1h-1l1 1h-1v-1l1-1-2-1Zm4 11 1 1-1-1Zm-2-1h1v1Zm0-1Zm0-1v1-1Zm0-1Zm0 0Zm1-1 1 1h-1Zm-132-32Zm152 45Z"/>
-    <path d="M224 459Zm-3-2Zm1 0Zm3-1-1 2h-1l-1 1v-1h1l-1-1h1l-1-1h3Zm-1 0Zm-1 0Zm1 0Zm2 0h2v1l-3 2h-1l1-1 1-1-1-1Zm187-187Zm94 3h-1Z"/>
-    <path d="M228 399Zm270-140h2l-1 1Zm-83 8v2h-1l1-1h-1v-1l1-1Zm-1 10Zm-1 0Zm-86 1v3h-7v6h-1l-1 1v4h-8v1-3h1l1-2v-2l2-2v-1l1-2 2-1 1-2Z"/>
+    <path d="M 385,243 V 242 L 384,241 V 240 H 386 L 385,239 H 386 L 387,240 388,241 387,242 H 386Z"/>
+    <path d="M 402,316 V 317 H 400 V 315 H 402Z"/>
+    <path d="M 415,267 V 269 H 414 L 415,268 H 414 V 267 L 415,266Z"/>
+    <path d="M 498,259 H 500 L 499,260Z"/>
+    <path d="M 502,267 V 268Z"/>
+    <path d="M 502,269 H 503 V 270Z"/>
+    <path d="M 503,265 504,266 H 503Z"/>
+    <path d="M 504,270 505,271Z"/>
     <path id="Afghanistan" d="M480 269h-2l-1 1v3h-3l-1 1h-4l-3-1 1-1 1-2v-1h-2v-5l-1-1 1-1v-1l1-1v-1h1l1 1h1l1-1v-1h2l1-1v-2h2v-1l1 1h3l1 1v-1h2l1-1h1v-1l1-1h1v1h1l-1 2 1 1h1l1-1 1-1 1 1h2l-1 1h-3l-2 1-1 1 1 1v1l-1 1v1l-1 1h-2l1 1v1h-1l-1 2v1l-1 1v-1h-1Z"/>
     <path id="Albania" d="M385 243v1l1 1v3h-1v1h-1v-1l-1-1v-5l1-1 1 1v1Z"/>
     <path id="Algeria" d="m362 267 1 5 1 2v6l-1 1 1 2v1l1 1h2v1l1 1-4 2-5 4-3 3h-3v5-5l-2 1-1-1 1-1-2-1h-1l-1-1h-1v-1l-4-3-3-2-5-3-6-4-1-1v-4l2-1 1-1v1l2-1 1 1v-1l2-2h2v-1h-1l1-1 1-1v-1h4v-1h-1v-3l-1-2h1l-1-1h1l1-1 1-1h1l1-1h1l3-1h8v-1l1 1v-1l2 1h1l-1 1h1v4l-1 1-1 1 1 2 1 1Z"/>
@@ -63,6 +67,7 @@
     <path id="Estonia" d="M391 190Zm0 0-2 1h-1v-1l1-1 1 1Zm1 1Zm2 1h-1v-2l-1 1v-1l-1-1v-2h1l1-1h8l-1 2h-1l-1 1 2 3-1 2-1-1-1 1v-1l-1-1h-1Zm-4-4v1h-1v-1Zm1 0Z"/>
     <path id="Eswatini" d="m408 390 1 1h-1v2l-1-1-1-1 1-2Z"/>
     <path id="Ethiopia" d="m429 310-1 2v1h2v2l1 1 2 1 5 2h2l-4 4-2 3h-4v1h-1l-1 1h-1l-1-1-2 1-1 1-2-1-3-1h-2v-2h-1l-1-1v-1l-1-2h-1v-1h-1l-1-1h2l1-1-1-2 1-1v-1l1-1v1-2l1-1 1-1h1v-3h1l1-1v1l1-2 1 1h4l1 1 1 1 1 1Z"/>
+    <path id="Falkland Islands" d="M 225,456 224,458 H 223 L 222,459 V 458 H 223 L 222,457 H 223 L 222,456ZM 226,456 H 228 V 457 L 225,459 H 224 L 225,458 226,457 225,456Z"/>
     <path id="Fiji" d="M705 370Zm1 0Zm-1-1v1h-2l-1-1h2l1-1-1 1Zm-3 5Zm0-3 1 1-2 1h-1v-1l1-1h1Z"/>
     <path id="Finland" d="M396 183Zm-1 0Zm-10-42h1l1-1 2 2v1l2 1 1-1 2 1 2-2v-4l2-2 2-1 1 2 2 1v1l-1 1v1l-1 1h1l-1 2 1 2 1 1 1 2v1l-2 2v1l2 4 1 2-2 2 1 2v2l1 1v1l-1 1 1 1 2 1v4l-4 5h-1l-2 3h-1l-3 1h-2l-1 1-3 1v-2h-1v-1h-2v-8l-1-1 1-3 1 1 1-1v-1l1-1 1-1 1-2 1-1v-1h2v-3l-1-1-2-1v-5l-1-1 1-2h-1v-4h-1l-2-2Zm7 43Zm-2 0Zm-3-3Zm1 1Zm1 1Zm0 0Zm-1-1Zm0 0Zm-1 0Zm3 2Zm-3 0Zm2-1h1v1Zm-1 0Zm0 0Zm-1 0Zm2 0Zm0 0Zm0 0Zm0 0Zm-1-1Zm6-20Zm-7 10Zm3-4Zm-1 2Zm-3 0Zm1 0Zm10 13Zm-11 1Zm-1 0Zm-1 0Zm1-1Zm1 0Zm-1 0Zm-1 0Zm0 0v-1l1 1Z"/>
     <path id="France" d="M347 241v-1h-2v1h-1l-1-1-2-1h-1l1-1 1-3v-2h1l-1-1v-1l-2-1v-2l-2-1-2-1h-1v-1l-1-1 1-1h3l1 1v-1h2v-1l-1-1v-1h1l1 1h3l-1-1h2l1-1v-2l2-1v1h1l1 1 2 1h1v1h2v1h1l1 1h3l-1 2-1 1v2h-1l-1 2-1 1v1l1-1h1v3l-1 1 1 1v1l1 1v-1 2l-1 1h-1l-1 1-1-1h-2v-1h-1l-2 1v2l-1 1-1-1Zm-8-12Zm1 0Zm-2-2Zm3 4Zm0 0Zm22 12v1h-1v-1l-1-1 1-1h1v-1 2Z"/>
@@ -175,6 +180,7 @@
     <path id="Tajikistan" d="M494 255h-2l-1-1-1 1-1 1h-1l-1-1 1-2h-1v-1h-1l-1 1v1h-1l-1 1h-2v1l-1-1v-1l1-2v-2h-2v-1h3v-2h1v-1h1l1-1 1 1-1 1h1v1l-1-1-1 1h-1v1h5v1l1-1h3v2h1l1 1 1 2-1 1Zm-8-7Z"/>
     <path id="Tanzania" d="m406 352-1-2-1-1-1-2h1l-1-2v-1h1l1-1 1-1v-1h-1v-1h1v-1l-1-1h7l7 3 1 2 3 2v1l-1 2 1 2v3l1 1v2h1v1l-2 1h-1l-1 1v-1h-1v1h-6v-2l-1-1-1-1h-1l-1-1h-2l-1-1h-1Zm18-1Zm-1-3v1-2Zm1-2v-1Z"/>
     <path id="Thailand" d="M555 306v1l-1-1h-2l-1 1-2 1 1 2v1l1 1-1-1h-1l-1-1h-2l1-2h-2v3l-1 2-1 2v2h1l1 1v1l1 2-1-1 1 1 1 1h1l1 1v1h-2v-1l-2-1v1l-1-1v-1h-1v-2h-1l-1-1v-1l1-2v-1l1-1 1-1v-2l-1-1v-2l-1-1-1-1 1-1v-3l-2-2v-4h3v-1h3v1h1v5-1l2-1 1 1h1l1-1h1v1l1 1v2l1 1h1v3Zm-10 10Zm-1 0Zm1 0Zm5-5Zm0 1Zm-8 7-1 1v-1Zm2 2Zm-2-1Zm0-1Zm-1-2Zm2 3Zm0 0Zm0 2Zm1 0Z"/>
+    <path id="Tibet" d="M 500,259 H 501 L 503,258 505,259 V 261 L 504,262 503,263 H 502 L 503,264 H 502 V 263 L 503,262 501,261Z"/>
     <path id="Timor-Leste" d="M594 354v1l-1-1Zm1 1v-2h3l1-1h1l-1 1-1 1h-2Zm1-3Z"/>
     <path id="Togo" d="m344 313 2 1v1h1v7l1 1h-2l-1-2v-2h1l-1-1v-3l-1-1v-1Z"/>
     <path id="Tonga" d="M715 376Zm-1-9Zm1 12Zm2-5Zm-2 6Z"/>
@@ -192,6 +198,7 @@
     <path id="Vanuatu" d="M679 367Zm1 0Zm-1-1 1 1h-1l-1-1h1Zm1-2Zm0-1Zm0 0Zm0 1Zm-2-2Zm0 0Zm3 5Zm0-1Zm1 2Zm-1 0Zm1 1Zm-2-1 1 1h-1v-1Zm2 4v-1 1Zm0-2Zm3 7Zm-1-2Zm0-1h-1Z"/>
     <path id="Venezuela" d="m210 333-1-2-1-1 1-1v-1h-1v-4l1-1h-4l-2-2h-4v-2l-1-1v-1h-1l1-1v-2l1-1 1-1v2l-1 2 1 1h1v-2l-1-1 1-1h1l2-1h-1v-1h1v1h2l1 1v1h4l1 1h2l1-1h1-1 4-1l1 2v-1l1 1h2v2h2v1l-1 1h-1v1h1l-1 1h-1v1l1 2v1h-1l-1 1h-2v1h-2l-1-1h-1l1 2 1 2h1l-2 1-1 1-1 1h-2Zm12-16Zm-6-3Zm-1-1h1Zm-2 0Zm-2-1Zm3 0Z"/>
     <path id="Viet Nam" d="m554 314 2-1 1 1v-2h1v-1h2v-3l-1-1 1-1v-2l-1-1-1-1v-1l-2-2v-1h-1v-1h-1l-1-1v-1h1l1-1-1-1-1-1-1 1h-1v-2h-1v-1l-1-1h2v-1l1 1v-1l1 1v-1 1l2-1h-1l1-1 2 1h1v2l2 1h1l-1 1h-2v2l-2 1v2l1 1 1 1 1 2 1 1 1 1 1 1h1v4l1 1-1 1v3l-4 2v-1l-1 2h-1v1h-1l-1 1h-1l1-2v-1Zm1 4Zm3 0Zm0-25Zm-5 22h-1Zm10-9Zm-3-14Zm0 0Zm0 0Zm-3 24Zm1-1Zm0 0Z"/>
+    <path id="Western Sahara" d="M 327,278 V 281 H 320 V 287 H 319 L 318,288 V 292 H 310 V 293 290 H 311 L 312,288 V 286 L 314,284 V 283 L 315,281 317,280 318,278Z"/>
     <path id="Yemen" d="m448 297 3 5h-2v2l-2 1h-2l-2 1-1 1h-2l-1 1h-3l-2 2h-3v-2l-1-2v-4h1v-2h7v1h1l1-1 1-2 2-1h3Zm-19 8Zm1-1Zm0 4Zm0-1Zm-1-3Zm20 7Zm3-1h1v1h-1l-1-1Zm-2 1Z"/>
     <path id="Zambia" d="m391 371-3-2v-7h4v-5l1 1v1l1-1h1v1l1 1h2v-1l1 1h1l1 1 1 1v1l1-1 1 1v-3h-1v1h-1l-1-2v-2l1-2-1-1 1-1 3-1h1v1h1l1 1h2l1 1v1l1 1h-1v4h-1v3h1l-6 2v1h-2l-1 1v1l-2 1-1 1-1 1h-3l-1-1h-1Z"/>
     <path id="Zimbabwe" d="M403 381h-1v-1h-2v-2h-1v-1l-1-1h-1l-1-2-1-1v-1h3l1-1 1-1 2-1v-1l1-1h2v1h2l1 1h1l1 1v7l-1 1v1l-2 3-1-1-1 1-1-1Z"/>
