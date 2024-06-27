@@ -206,12 +206,12 @@ td.details{padding-left:0}
 .details img,.commentDetails img,.dirInfo td:first-child img:not(.thumb){margin:0;padding:3px;border:1px solid transparent}
 .peerSeed img{font-size:0;opacity:.7;transform:scale(1)}
 .active .peerSeed img{opacity:1;animation:scale .2s linear 3s 2 forwards}
-.choked::after{background:#900}
+.choked,.idle{display:inline-block;vertical-align:middle;line-height:0;text-align:center;font-size:0}
 .choked{color:#a00000}
-.choked,.idle{width:48px;display:inline-block;vertical-align:middle;line-height:0;text-align:center;font-size:0}
-.choked,.unchoked{font-weight:700}
+.choked::after,.idle::after{width:8px;height:8px;display:inline-block;border-radius:50%;background:#395;content:""}
+.choked::after{background:#900}
 .unchoked{color:#395}
-.idle::after,.choked::after{width:8px;height:8px;display:inline-block;border-radius:50%;background:#395;content:""}
+.choked .left,.choked .right,.unchoked .left,.unchoked .right{display:none!important}
 #linkswitch{margin:0}
 #snarkTbody td{border-top:1px solid rgba(111,83,62,.6);border-bottom:1px solid rgba(0,0,0,0)}
 #snarkTbody tr:first-child td{border-top:1px solid rgba(0,0,0,0)}
