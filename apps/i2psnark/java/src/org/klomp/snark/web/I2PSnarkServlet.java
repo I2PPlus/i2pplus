@@ -4085,28 +4085,18 @@ public class I2PSnarkServlet extends BasicServlet {
             if (val != null) {
                 String nonce = val[0];
                 if (String.valueOf(_nonce).equals(nonce)) {
-                    if (postParams.get("savepri") != null) {
-                        savePriorities(snark, postParams);
-                    } else if (postParams.get("addComment") != null) {
-                        saveComments(snark, postParams);
-                    } else if (postParams.get("deleteComments") != null) {
-                        deleteComments(snark, postParams);
-                    } else if (postParams.get("setCommentsEnabled") != null) {
-                        saveCommentsSetting(snark, postParams);
-                    } else if (postParams.get("stop") != null) {
-                        _manager.stopTorrent(snark, false);
-                    } else if (postParams.get("start") != null) {
-                        _manager.startTorrent(snark);
-                    } else if (postParams.get("recheck") != null) {
-                        _manager.recheckTorrent(snark);
-                    } else if (postParams.get("editTorrent") != null) {
-                        saveTorrentEdit(snark, postParams);
-                    } else if (postParams.get("setInOrderEnabled") != null) {
+                    if (postParams.get("savepri") != null) {savePriorities(snark, postParams);}
+                    else if (postParams.get("addComment") != null) {saveComments(snark, postParams);}
+                    else if (postParams.get("deleteComments") != null) {deleteComments(snark, postParams);}
+                    else if (postParams.get("setCommentsEnabled") != null) {saveCommentsSetting(snark, postParams);}
+                    else if (postParams.get("stop") != null) {_manager.stopTorrent(snark, false);}
+                    else if (postParams.get("start") != null) {_manager.startTorrent(snark);}
+                    else if (postParams.get("recheck") != null) {_manager.recheckTorrent(snark);}
+                    else if (postParams.get("editTorrent") != null) {saveTorrentEdit(snark, postParams);}
+                    else if (postParams.get("setInOrderEnabled") != null) {
                         _manager.saveTorrentStatus(snark);
                         _manager.addMessage("Sequential piece or file order not saved - feature currently broken.");
-                    } else {
-                        _manager.addMessage("Unknown command");
-                    }
+                    } else {_manager.addMessage("Unknown command");}
                 } else {
                     _manager.addMessage("Please retry form submission (bad nonce)");
                 }
@@ -5013,7 +5003,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
            */
                .append("<input type=submit class=accept value=\"").append(_t("Save priorities"))
-               .append("\" name=savpri>\n").append("</th></tr></thead>\n");
+               .append("\" name=\"savepri\">\n").append("</th></tr></thead>\n");
         }
         buf.append("</table>\n</div>\n");
 
