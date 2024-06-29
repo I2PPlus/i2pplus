@@ -48,12 +48,18 @@ public class BandwidthManager implements BandwidthListener {
     BandwidthManager(I2PAppContext ctx, int upLimit, int downLimit) {
         _context = ctx;
         _log = ctx.logManager().getLog(BandwidthManager.class);
-        _up = new SyntheticREDQueue(ctx, upLimit);
-        _down = new SyntheticREDQueue(ctx, downLimit);
+        int absoluteUpLimit = 9999*1024;
+        int absoluteDownLimit = 9999*1024;
+
+        int up = Math.min(upLimit, absoluteUpLimit);
+        int down = Math.min(downLimit, absoluteDownLimit);
+
+        _up = new SyntheticREDQueue(ctx, up);
+        _down = new SyntheticREDQueue(ctx, down);
         // Allow down limit a little higher based on testing
         // Allow req limit a little higher still because it uses RED
         // so it actually kicks in sooner.
-        _req = new SyntheticREDQueue(ctx, downLimit * 110 / 100);
+        _req = new SyntheticREDQueue(ctx, down * 110 / 100);
     }
 
     /**
