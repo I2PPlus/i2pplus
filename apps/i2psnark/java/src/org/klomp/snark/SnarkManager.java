@@ -1084,8 +1084,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         int up = limits[1];
         if (up > 0) {
             int maxup = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
-            _util.setMaxUpBW(up);
-            _bwManager.setUpBWLimit(Math.min(up, maxup) * 1000L);
+            if (maxup > up) {maxup = up;}
+            _util.setMaxUpBW(maxup);
+            _bwManager.setUpBWLimit(maxup * 1000L);
         }
         int down = limits[0];
         if (down > 0) {
@@ -1129,32 +1130,26 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         boolean bOT = useOT == null || Boolean.parseBoolean(useOT);
         _util.setUseOpenTrackers(bOT);
         // careful, so we can switch default to true later
-        _util.setUseDHT(Boolean.parseBoolean(_config.getProperty(PROP_USE_DHT,
-                                          Boolean.toString(I2PSnarkUtil.DEFAULT_USE_DHT))));
+        _util.setUseDHT(Boolean.parseBoolean(_config.getProperty(PROP_USE_DHT, Boolean.toString(I2PSnarkUtil.DEFAULT_USE_DHT))));
         _util.setRatingsEnabled(Boolean.parseBoolean(_config.getProperty(PROP_RATINGS, "true")));
         _util.setCommentsEnabled(Boolean.parseBoolean(_config.getProperty(PROP_COMMENTS, "true")));
         _util.setCommentsName(_config.getProperty(PROP_COMMENTS_NAME, ""));
-        _util.setCollapsePanels(Boolean.parseBoolean(_config.getProperty(PROP_COLLAPSE_PANELS,
-                                          Boolean.toString(I2PSnarkUtil.DEFAULT_COLLAPSE_PANELS))));
-        _util.setShowStatusFilter(Boolean.parseBoolean(_config.getProperty(PROP_SHOW_STATUSFILTER,
-                                          Boolean.toString(I2PSnarkUtil.DEFAULT_SHOW_STATUSFILTER))));
-        _util.setEnableLightbox(Boolean.parseBoolean(_config.getProperty(PROP_ENABLE_LIGHTBOX,
-                                          Boolean.toString(I2PSnarkUtil.DEFAULT_ENABLE_LIGHTBOX))));
+        _util.setCollapsePanels(Boolean.parseBoolean(_config.getProperty(PROP_COLLAPSE_PANELS, Boolean.toString(I2PSnarkUtil.DEFAULT_COLLAPSE_PANELS))));
+        _util.setShowStatusFilter(Boolean.parseBoolean(_config.getProperty(PROP_SHOW_STATUSFILTER, Boolean.toString(I2PSnarkUtil.DEFAULT_SHOW_STATUSFILTER))));
+        _util.setEnableLightbox(Boolean.parseBoolean(_config.getProperty(PROP_ENABLE_LIGHTBOX, Boolean.toString(I2PSnarkUtil.DEFAULT_ENABLE_LIGHTBOX))));
         File dd = getDataDir();
 
         if (dd.isDirectory()) {
             if (!dd.canWrite()) {
                 msg = _t("No write permissions for data directory") + ": " + dd;
                 addMessage(msg);
-                if (!_context.isRouterContext())
-                    System.out.println(" • " + msg);
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
             }
         } else {
             if (!dd.mkdirs()) {
                 msg = _t("Data directory cannot be created") + ": " + dd;
                 addMessage(msg);
-                if (!_context.isRouterContext())
-                    System.out.println(" • " + msg);
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
             }
         }
         initTrackerMap();
