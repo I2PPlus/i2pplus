@@ -8,6 +8,7 @@
 --border:1px solid #463e39;
 --border_filtered:var(--border_hard);
 --border_hard:1px solid #6f533e;
+--border_soft:1px solid #6f533e55;
 --btnAction_active:linear-gradient(180deg,#e1d8d1,#fff2e6);
 --btnAction_hover:linear-gradient(180deg,#ffeee6,#ffeadf 50%,#ffdecc 50%,#ae836b);
 --btnAction:linear-gradient(180deg,#f4f2f1,#e9e4e2 50%,#d2cbc6 50%,#bcb1a9);
@@ -455,7 +456,7 @@ input:checked+.toggleview:active::after{transform:rotate(-90deg) scale(.9);trans
 #fileFilter th,#trackerconfig th{font-size:90%;background:var(--th_config)}
 #fileFilter th:first-child, #trackerconfig th:first-child{border-radius:2px 0 0 0;border-left:var(--border_hard);background:var(--nuke) center right 8px no-repeat,var(--th_config);background-size:14px,100%}
 #fileFilter td:first-child,#trackerconfig td:first-child{text-align:right}
-#fileFilter input[type=text],#trackerconfig input[type=text]{margin-left:0}
+#fileFilter input[type=text],#trackerconfig input[type=text]{margin-left:-2px}
 #fileFilter th:first-child,#fileFilter td:first-child,#trackerconfig th:first-child,#trackerconfig td:first-child{padding-left:0;width:1%;white-space:nowrap}
 #fileFilter th:last-child,#trackerconfig th:last-child{border-radius:0 2px 0 0;border-right:var(--border_hard)}
 #fileFilter th:nth-child(n+4),#fileFilter th:nth-child(n+5),#fileFilter td:nth-child(n+4),#fileFilter td:nth-child(n+5),#trackerconfig th:nth-child(n+4),#trackerconfig th:nth-child(n+5),#trackerconfig td:nth-child(n+4),#trackerconfig td:nth-child(n+5){text-align:center}
@@ -505,12 +506,12 @@ hr.debug{margin:5px 0;width:100%;height:1px;display:none;position:relative;z-ind
 #debugMode{margin:0;display:inline-block;vertical-align:middle;width:16px;height:16px;font-size:0;opacity:0;background:var(--debug) no-repeat center center/16px}
 #debugMode:hover{opacity:1}
 #debugMode:active{transform:scale(.9)}
-#dhtDebug th{ text-align:center;font-weight:400}
-#dhtDebug .bullet{display:none}
+#dhtDebug th{text-align:center;font-weight:400;background:url(/themes/snark/vanilla/images/fly.webp) no-repeat left 16px center/auto 70%,url(/themes/snark/vanilla/images/flies.webp) no-repeat right 6px bottom/auto 93%;mix-blend-mode:luminosity}
 #dhtDebug b,#dhtDebug .dbug,#dhtDebug .stat{margin:2px 0;padding:0 8px;display:inline-block}
 #dhtDebug b{color:#faf9f9;border-radius:2px 0 0 2px}
-#dhtDebug .stat{margin:3px 0 3px 2px;padding:0;text-shadow:1px 1px 1px rgba(0,0,0,.6);box-shadow:0 0 0 1px #5d5551,var(--highlight);background:#715b4f;contain:paint}
+#dhtDebug .bullet{display:none}
 #dhtDebug .dbug{margin:-2px -1px -2px -4px;padding:2px 10px;min-width:24px;color:var(--ink_light);text-shadow:none;background:#ebeaea}
+#dhtDebug .stat{margin:3px 0 3px 2px;padding:0;text-shadow:1px 1px 1px rgba(0,0,0,.6);box-shadow:0 0 0 1px #5d5551,var(--highlight);background:#715b4f;contain:paint}
 #noDHTPeers{margin:6px 0}
 #dhtDebug .volatile {margin:1px 0 0;width:100%;display:inline-block}
 body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
@@ -620,6 +621,10 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 .iframed #embed{display:none}
 .iframed #fullscreen{display:inline-block}
 
+.knownTracker td:nth-child(4),#fileFilter .createFilterString  td:nth-child(4){border-left:var(--border_soft)}
+.knownTracker td:nth-child(6),#fileFilter .createFilterString td:nth-child(6){border-right:var(--border_soft)}
+.knownTracker td:first-child .optbox,#fileFilter td:first-child .optbox{margin-right:6px}
+
 /* tracker config */
 .knownTracker:nth-child(odd),.createFilterString:nth-child(odd){background:#e8dfda}
 .knownTracker:nth-child(even),.createFilterString:nth-child(even){background:#d4cac4}
@@ -646,6 +651,7 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 #trackerconfig input.delete[type=submit]{margin-left:1px}
 #trackerconfig .add{float:right}
 #trackerconfig .delete,#trackerconfig .reload{margin:6px 12px 6px -3px;float:left}
+#trackerconfig .knownTracker td:first-child {padding-left: 4px !important}
 
 /* create torrent file filtering */
 form[action^="/i2psnark/configure"]{display:block}
@@ -653,6 +659,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #contentFilter{margin:0 0 -3px -2px;width:calc(100% - 189px);display:flex;flex-wrap:wrap;align-items:center}
 #contentFilter input[type=checkbox]{display:none}
 #contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-style:normal;box-shadow:var(--btn_shadow_inset);background:var(--delete) no-repeat 8px center/10px,var(--nav_depressed)}
+#addFileFilter td:first-child b{background-position:center center}
 #contentFilter .createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-weight:600;font-style:italic;border:var(--btn_border);box-shadow:var(--highlight);background:var(--nav);transform: translateY(2px)}
 #contentFilter .createFilterToggle.starts_with{border-left-width:5px}
 #contentFilter .createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
@@ -672,7 +679,9 @@ form[action^="/i2psnark/configure"]{display:block}
 #fileFilter th:last-child,#fileFilter td:last-child{width:1%;min-width:120px;text-align:center;white-space:nowrap}
 #fileFilter tr:last-child, #fileFilter tr.spacer{display:none}
 #fileFilter tr:nth-last-child(4) td{padding:7px 4px;border-top:var(--border_hard)}
+#fileFilter th:first-child{background-position:center center}
 #fileFilter th:nth-child(n+4),#fileFilter td:nth-child(n+4){text-align:center}
+#fileFilter th:first-child,#fileFilter .createFilterString td:first-child,#fileFilter #addFileFilter td:first-child{text-align:center}
 #fileFilter .createFilterString td:nth-child(n+4):not(:last-child){background:#fff2}
 .iframed #fileFilter{margin-top:-11px}
 
