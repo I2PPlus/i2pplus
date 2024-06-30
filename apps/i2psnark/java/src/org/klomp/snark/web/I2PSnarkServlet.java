@@ -2846,7 +2846,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     // libtorrent and downstreams
                     // https://www.libtorrent.org/projects.html
                     else if ("LURF".equals(ch)) {client = "Deluge";} // DL
-                    else if ("LXFC".equals(ch)) {client = "qBitorrent";} // qB
+                    else if ("LXFC".equals(ch)) {client = "qBittorrent";} // qB
                     else if ("LUxU".equals(ch)) {client = "libtorrent";} // LT
                     // ancient below here
                     else if ("ZV".equals(ch.substring(2,4)) || "VUZP".equals(ch)) {client = "Robert";}
