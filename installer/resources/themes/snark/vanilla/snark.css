@@ -40,7 +40,7 @@
 /* globals */
 ::selection{color:white;background:#900}
 html{min-height:100%;border-right:var(--border);background:repeating-linear-gradient(180deg,#6f5b4c 1px,#a9927e 1px,#bfa388 4px),#cab39b;background-size:100% 4px;scrollbar-color:#a38a75 #cab39b}
-body{font:9pt var(--bodyfont);color:var(--ink)}
+body{min-width:900px;font:9pt var(--bodyfont);color:var(--ink)}
 .iframed body{margin:6px 0}
 a:link,a:visited{text-decoration:none;color:#cf0f00}
 a:active,a:visited:active,th a:active,th a:visited:active,td a:active,td a:visited:active{color:#f00}
@@ -506,7 +506,7 @@ hr.debug{margin:5px 0;width:100%;height:1px;display:none;position:relative;z-ind
 #debugMode{margin:0;display:inline-block;vertical-align:middle;width:16px;height:16px;font-size:0;opacity:0;background:var(--debug) no-repeat center center/16px}
 #debugMode:hover{opacity:1}
 #debugMode:active{transform:scale(.9)}
-#dhtDebug th{text-align:center;font-weight:400;background:url(/themes/snark/vanilla/images/fly.webp) no-repeat left 16px center/auto 70%,url(/themes/snark/vanilla/images/flies.webp) no-repeat right 6px bottom/auto 93%;mix-blend-mode:luminosity}
+#dhtDebug th{text-align:center;font-weight:400;box-shadow:var(--highlight);background:repeating-linear-gradient(180deg,#c7bdb888 2px,#bcb0a966 4px),repeating-linear-gradient(90deg,#c7bdb866 2px,#bcb0a944 4px),url(/themes/snark/vanilla/images/fly.webp) no-repeat left 12px center/auto 70%,url(/themes/snark/vanilla/images/flies.webp) no-repeat right 6px bottom/auto 93%,linear-gradient(180deg,#f6f1ee,#eee4dd);background-blend-mode:multiply,overlay,luminosity,luminosity}
 #dhtDebug b,#dhtDebug .dbug,#dhtDebug .stat{margin:2px 0;padding:0 8px;display:inline-block}
 #dhtDebug b{color:#faf9f9;border-radius:2px 0 0 2px}
 #dhtDebug .bullet{display:none}
