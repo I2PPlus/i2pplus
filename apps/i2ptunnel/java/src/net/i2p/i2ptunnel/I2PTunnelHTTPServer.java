@@ -1771,7 +1771,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             }
             blocklistClientsLastModified = currentLastModified;
         }
-        if (clientBlockList != null && !clientBlockList.contains(destination)) {
+        if (clientBlockList != null && clientBlockList.size() > 0 && !clientBlockList.contains(destination)) {
             if (blockedDests >= HTTP_BLOCKLIST_CLIENT_LIMIT) {clientBlockList.remove(0);}
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(blocklistClients, true))) {
                 writer.write(destination);
