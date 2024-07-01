@@ -285,8 +285,8 @@ class ConnectionManager {
                         break;
                     }
                 }
-                if (sigOk && _log.shouldWarn())
-                    _log.warn("Validated SYN NACKS from: " + from.toBase32());
+                if (sigOk && _log.shouldInfo())
+                    _log.info("Validated SYN NACKS from: " + from.toBase32());
             }
         }
         if (!sigOk) {
