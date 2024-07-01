@@ -972,7 +972,7 @@ class ClientConnectionRunner {
                      ( (granted != null) && (granted.getEarliestLeaseDate() > ours) ) ) {
                     // theirs is newer
                     if (_log.shouldDebug())
-                        _log.debug("Already requesting, theirs is newer; doing nothing... " + state);
+                        _log.debug("Already requesting, theirs is newer -> Doing nothing... " + state);
                 } else {
                     // ours is newer, so wait a few secs and retry
                     set.setDestination(dest);
@@ -980,7 +980,7 @@ class ClientConnectionRunner {
                     sp.rerequestTimer = timer;
                     timer.schedule(3*1000);
                     if (_log.shouldDebug())
-                        _log.debug("Already requesting, ours is newer; waiting 3 sec... " + state);
+                        _log.debug("Already requesting, ours is newer -> Waiting for 3 sec... " + state);
                 }
                 // fire onCreated?
                 return; // already requesting
@@ -1036,13 +1036,13 @@ class ClientConnectionRunner {
             SessionParams sp = _sessions.get(h);
             if (sp == null) {
                 if (_log.shouldWarn())
-                    _log.warn("Cancelling rerequest for LeaseSet destination [" + h.toBase64().substring(0,6) +"] -> Session disappeared");
+                    _log.warn("Cancelling rerequest for LeaseSet destination [" + h.toBase64().substring(0,8) +"] -> Session disappeared");
                 return;
             }
             synchronized(ClientConnectionRunner.this) {
                 if (sp.rerequestTimer != Rerequest.this) {
                     if (_log.shouldWarn())
-                        _log.warn("Cancelling rerequest for LeaseSet destination [" + h.toBase64().substring(0,6) + "] -> Received newer request");
+                        _log.warn("Cancelling rerequest for LeaseSet destination [" + h.toBase64().substring(0,8) + "] -> Received newer request");
                     return;
                 }
             }
@@ -1152,7 +1152,7 @@ class ClientConnectionRunner {
      *
      */
     private final static long REQUEUE_DELAY = 500;
-    private static final int MAX_REQUEUE = 60;  // 30 sec.
+    private static final int MAX_REQUEUE = 60;  // retries
 
     /**
      * Get the FloodfillNetworkDatabaseFacade for this runner. This is the client netDb.
@@ -1208,17 +1208,17 @@ class ClientConnectionRunner {
             if (!alreadyAccepted(_messageId)) {
                 if (_requeueCount++ > MAX_REQUEUE) {
                     // bug requeueing forever? failsafe
-                    _log.error("Abandoning update for [MsgID " + _messageId + "] to "
-                          + MessageStatusMessage.getStatusString(msg.getStatus())
-                          + " for " + _sessId);
+                    _log.error("Abandoning update for [MsgID " + _messageId + "] to " +
+                                MessageStatusMessage.getStatusString(msg.getStatus()) + " for " + _sessId);
                 } else {
+                    long delay = REQUEUE_DELAY;
+                    if (_requeueCount < 10) {delay = REQUEUE_DELAY / 5;}
+                    else if (_requeueCount < 20) {delay = REQUEUE_DELAY / 2;}
                     if (_log.shouldWarn())
-                        _log.warn("Almost sent update for [MsgID " + _messageId + "] to "
-                          + MessageStatusMessage.getStatusString(msg.getStatus())
-                          + " for " + _sessId
-                          + " before they knew the ID -> Delaying for .5s");
+                        _log.warn("Almost sent update for [MsgID " + _messageId + "] to " +
+                                  MessageStatusMessage.getStatusString(msg.getStatus()) + " for " + _sessId +
+                                  " before they knew the ID -> Delaying for " + delay + "ms...");
                     _lastTried = _context.clock().now();
-                    requeue(REQUEUE_DELAY);
                 }
                 return;
             }
