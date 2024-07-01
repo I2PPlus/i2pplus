@@ -226,38 +226,32 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         PeerProfile prof = ctx.profileOrganizer().getProfileNonblocking(h);
         if (prof != null) {
             long cutoff = ctx.clock().now() - (20*1000);
-            if (prof.getTunnelHistory().getLastRejectedBandwidth() > cutoff)
-                return true;
+            if (prof.getTunnelHistory().getLastRejectedBandwidth() > cutoff) {return true;}
         }
 
         // the transport layer thinks is unreachable
-        if (ctx.commSystem().wasUnreachable(h))
-            return true;
+        if (ctx.commSystem().wasUnreachable(h)) {return true;}
 
         // Here, we use validation, because BuildRequestor does,
         // so if we don't skip old routers here, it gets all the way to BuildRequestor
         // before failing.
         RouterInfo info = (RouterInfo) ctx.netDb().lookupLocally(h);
-        if (info == null)
-            return true;
+        if (info == null) {return true;}
 
         // reduce load on floodfills
         String caps = info.getCapabilities();
-        if (isExploratory &&
-            caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0 &&
-            ctx.random().nextInt(4) != 0)
-            return true;
+        boolean isFF = caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
+        if (isFF && caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) {return true;}
+        if (isExploratory && isFF && ctx.random().nextInt(4) != 0) {return true;}
 
         if (filterUnreachable(isInbound, isExploratory)) {
-            if (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0)
-                return true;
+            if (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) {return true;}
         }
 
         if (filterSlow(isInbound, isExploratory)) {
             // NOTE: filterSlow always returns true
             String excl = getExcludeCaps(ctx);
-            if (shouldExclude(info, excl))
-                return true;
+            if (shouldExclude(info, excl)) {return true;}
         }
 
         return false;
