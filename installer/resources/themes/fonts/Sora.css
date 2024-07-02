@@ -27,7 +27,7 @@ html[lang="zh"] #sidebar h3,html[lang="zh"] #sidebar h3 a{font-weight:500!import
 #torrents tfoot tr:first-child th{min-width:80px}
 #torrents .clientid{font-size:75%;font-weight:600}
 #totals .canhide{display:none}
-#torrents .tName,#configs input.r,#configs input[type=text]{font-weight:500!important}
+#torrents .tName,#configs input.r,#configs input[type=text],#dhtDebug .dbug{font-weight:500!important}
 #torrents .barComplete,#torrents #totals{font-weight:600}
 
 @font-face{font-display:swap;font-family:Sora;font-style:normal;font-weight:100,200,300,400,500,600,700,800;src:url(/themes/fonts/Sora/Sora.woff2);format("woff2")}
