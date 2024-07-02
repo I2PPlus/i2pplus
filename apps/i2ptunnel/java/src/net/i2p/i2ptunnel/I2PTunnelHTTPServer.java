@@ -1676,7 +1676,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private int HTTP_BLOCKLIST_CLIENT_LIMIT = 512;
     private Pattern regexPattern = null;
     private long blocklistLastModified;
-    private static List<String> clientBlockList;
+    private List<String> clientBlockList = new ArrayList<>();
     private static long blocklistClientsLastModified;
     private static int cachedClientBlockListSize = -1;
     File blocklistFile = new File(I2PAppContext.getGlobalContext().getConfigDir(), HTTP_BLOCKLIST);
@@ -1747,78 +1747,59 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         return Pattern.compile(regexBuilder.toString());
     }
 
-    private synchronized void logBlockedDestination(String destination) {
-        if (clientBlockList == null) {clientBlockList = new ArrayList<>();}
-        long currentLastModified = blocklistClients.lastModified();
-        int blockedDests = 0;
-        try {blockedDests = blocklistClients.exists() && blocklistClients.length() > 0 ? countBlockedDests() : 0;}
-        catch (IOException ioe) { _log.error("[HTTPServer] Cannot open client blocklist file (" + ioe.getMessage() + ")");}
-        if (currentLastModified != blocklistClientsLastModified) {
-            if (!blocklistClients.exists()) {
-                try {blocklistClients.createNewFile();}
-                catch (IOException e) {
-                    _log.error("[HTTPServer] Error creating file for blocked destination (" + e.getMessage() + ")");
-                }
+    private synchronized void logBlockedDestination(String destination) throws IOException {
+        if (!blocklistClients.exists()) {
+            try {
+                blocklistClients.createNewFile();
+                blocklistClientsLastModified = blocklistClients.lastModified();
+            } catch (IOException e) {
+                _log.error("[HTTPServer] Error creating file for blocked destination (" + e.getMessage() + ")");
+                return;
             }
-            try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    line = line.trim();
-                    if (!line.isEmpty()) {clientBlockList.add(line);}
-                }
-            } catch (IOException ioe) {
-                _log.error("[HTTPServer] Error logging blocked destination (" + ioe.getMessage() + ")");
-            }
-            blocklistClientsLastModified = currentLastModified;
         }
-        if (clientBlockList != null && clientBlockList.size() > 0 && !clientBlockList.contains(destination)) {
-            if (blockedDests >= HTTP_BLOCKLIST_CLIENT_LIMIT) {clientBlockList.remove(0);}
+        try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (!line.isEmpty() && !clientBlockList.contains(line)) {
+                    clientBlockList.add(line);
+                }
+            }
+        } catch (IOException ioe) {
+            _log.error("[HTTPServer] Error logging blocked destination (" + ioe.getMessage() + ")");
+        }
+        if (!clientBlockList.contains(destination)) {
+            if (clientBlockList.size() >= HTTP_BLOCKLIST_CLIENT_LIMIT) {
+                clientBlockList.remove(0);
+            }
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(blocklistClients, true))) {
                 writer.write(destination);
                 writer.newLine();
-                writer.close();
             } catch (IOException ioe) {
                 _log.error("[HTTPServer] Error logging blocked destination (" + ioe.getMessage() + ")");
-                return;
             }
-            clientBlockList.add(destination);
+            blocklistClientsLastModified = blocklistClients.lastModified();
         }
     }
 
-    private boolean existsInClientBlocklist(String destination) throws IOException {
+    private synchronized boolean existsInClientBlocklist(String destination) throws IOException {
         long currentLastModified = blocklistClients.lastModified();
         if (currentLastModified != blocklistClientsLastModified) {
-            if (clientBlockList == null) {
-                clientBlockList = new ArrayList<>();
-            }
             try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     line = line.trim();
-                    if (!line.isEmpty()) {clientBlockList.add(line);}
+                    if (!line.isEmpty()) {
+                        clientBlockList.add(line);
+                    }
                 }
             } catch (IOException ioe) {
                 _log.error("[HTTPServer] Error reading client blocklist file (" + ioe.getMessage() + ")");
+                throw ioe;
             }
             blocklistClientsLastModified = currentLastModified;
         }
         return clientBlockList.contains(destination);
-    }
-
-    private final Object lock = new Object();
-
-    private synchronized int countBlockedDests() throws IOException {
-        long currentLastModified = blocklistClients.lastModified();
-        if (currentLastModified != blocklistClientsLastModified) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
-                int size = 0;
-                String line;
-                while ((line = reader.readLine()) != null) {size++;}
-                cachedClientBlockListSize = size;
-            }
-            blocklistClientsLastModified = currentLastModified;
-        }
-        return cachedClientBlockListSize;
     }
 
     /**
