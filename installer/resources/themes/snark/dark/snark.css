@@ -771,14 +771,14 @@ input:checked+.toggleview:active .tab_label::after{box-shadow:0 0 0 2px rgb(153,
 #tab_torrentedit .tab_label::after{background:var(--edit) no-repeat scroll center center/16px,var(--tabIcon)}
 
 /* torrent file filter */
-.createFilterToggle{margin:0 4px 4px 0;padding:2px 12px;display:inline-block;position:relative;vertical-align:middle;text-align:left;font-style:italic;box-shadow:var(--highlight);border:var(--border);background:var(--badge)}
+.createFilterToggle{margin:0 4px 4px 0;padding:2px 12px 4px;display:inline-block;position:relative;line-height:1.3;vertical-align:middle;text-align:left;font-size:90%;font-style:italic;box-shadow:var(--highlight);border:var(--border);background:var(--glow_top),var(--badge)}
 .createFilterToggle.starts_with{border-left-width:5px}
 .createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
 .createFilterToggle.ends_with{border-right-width:5px}
 #createTorrentFilters{display:table-row}
 #contentFilter{width:calc(100% - 200px);margin:3px 0 0 3px}
 #contentFilter input[type=checkbox]{display:none}
-#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 10px 1px 24px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_active);background:var(--delete_hover) no-repeat 10px calc(50% + 1px)/10px,var(--badge_active);background-blend-mode:hard-light}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:2px 8px 4px 22px;font-weight:600;font-style:normal;text-shadow:1px 1px 1px #0008;box-shadow:var(--highlight),2px 2px 2px #0008 inset;background:var(--delete_hover) no-repeat 8px center/10px,var(--glow_bottom_hover),var(--badge_active);background-blend-mode:hard-light,normal}
 #fileFilter{width:calc(100% - 2px);margin:0 auto;display:block}
 #fileFilter th,#fileFilter td{text-align:left}
 #fileFilter th{white-space:nowrap;border-bottom:0;padding-top:7px;padding-bottom:7px}
