@@ -1297,7 +1297,8 @@ th{font-size:9pt;background:#101}
 }
 
 @media (min-width:1200px){
-input[type=text],input.r,select{min-width:132px}
+input[type=text],select{min-width:132px}
+input.r{min-width:0;max-width:92px}
 td.details img,.dirInfo td:first-child img:not(.thumb){width:18px;height:18px}
 #trackerconfig input.trackername{width:180px;max-width:180px}
 #trackerconfig th:last-child,#trackerconfig td:last-child{padding-left:50px}
