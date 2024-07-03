@@ -13,6 +13,9 @@
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 --tabIcon:linear-gradient(180deg,#000 50%,#040 50%);
 --tr:linear-gradient(180deg,rgba(0,24,0,.5),rgba(0,8,0,.5));
+--tr_snark:linear-gradient(90deg,#373 1px,#0000 1px),linear-gradient(180deg,rgba(0,24,0,.5),rgba(0,8,0,.5));
+--tr_snark_odd:linear-gradient(90deg,#5a5 1px,#0000 1px),linear-gradient(180deg,rgba(0,24,0,.5),rgba(0,8,0,.5));
+--tr_snark_hover:linear-gradient(90deg,#f60 1px,#0000 1px),#030;
 }
 
 html,body{background:#000}
@@ -146,8 +149,6 @@ select{margin:2px 4px 2px 0;padding:7px 24px 7px 12px;min-width:120px;font-size:
 #screenlog+.logshim{margin-top:10px}
 
 /* filter bar*/
-#filterResults,#filterResults td{animation:disappear .1s linear 2.5s both}
-#torrents #filterResults td,#torrents #filterResults tr:hover td{padding:4px 8px 8px;text-align:center;vertical-align:middle;line-height:2.5;font-weight:700;font-style:italic;border-bottom:var(--border);background:linear-gradient(180deg,#002000,#001000)}
 #torrents .noneLoaded,#torrents .noneLoaded:hover{font-size:10pt;font-weight:700;border-bottom:var(--border);background:#000}
 #torrents .noneLoaded td,#torrents .noneLoaded:hover td{padding:10px;text-align:center;background:transparent}
 .filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
@@ -274,10 +275,14 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 #pagenav,th.ETA,th.rxd,th.txd,th.rateDown,th.rateUp,th.SnarkTorrentAction{text-align:center}
 #snarkhead th{background:none}
 #snarkhead tr{background:var(--title);background-size:4px 100%,100%}
+#snarkTbody tr{background:var(--tr_snark)}
+#snarkTbody tr:nth-child(odd){background:var(--tr_snark_odd)}
+#snarkTbody #pagenavbottom,#snarkTbody #pagenavbottom:hover,#snarkTbody #pagenavbottom:hover td{background:var(--tr)}
 #torrents{margin:-1px 0 12px;border-bottom:var(--border)}
 .iframed #torrents{margin-bottom:11px}
-#torrents tr:hover td,.dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover,#trackerconfig tr:nth-child(n+2):hover,.peerinfo:hover td,.peerinfo:hover+.debuginfo,#torrents tbody td,.debuginfo.rowOdd td,.debuginfo.rowEven td{border-top:1px solid #001b00;border-bottom:1px solid #001b00}
+#torrents tr:not(#pagenavbottom):hover td,.dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover,#trackerconfig tr:nth-child(n+2):hover,.peerinfo:hover td,.peerinfo:hover+.debuginfo{border-top:1px solid #001b00;border-bottom:1px solid #001b00}
 #torrents tr:hover td,.dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover,#trackerconfig tr:nth-child(n+2):hover,#fileFilter tr:nth-last-child(n+5):not(:first-child):hover{background:#030}
+#torrents #snarkTbody tr:not(#pagenavbottom):hover .status{background:var(--tr_snark_hover)}
 #torrents thead{box-shadow:none}
 #torrents th{text-align:center}
 #torrents th.status{padding-left:2px;text-align:left}
