@@ -4887,10 +4887,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     if (isAudio) {buf.append("<audio");}
                     else {buf.append("<video");}
                     buf.append(" controls><source src=\"").append(ppath);
-                    if (isVideo) {
-                        // display video 20 seconds in for a better chance of a thumbnail
-                        buf.append("#t=20");
-                    }
+                    // display video 20 seconds in for a better chance of a thumbnail
+                    if (isVideo) {buf.append("#t=20");}
                     buf.append("\" type=\"").append(mime).append("\">");
                 }
                 buf.append("<a href=\"").append(ppath).append("\">");
@@ -5055,14 +5053,10 @@ public class I2PSnarkServlet extends BasicServlet {
         try {
             URI uri = new URI(url);
             String method = uri.getScheme();
-            if (!"http".equals(method) && !"https".equals(method))
-                return false;
+            if (!"http".equals(method) && !"https".equals(method)) {return false;}
             String host = uri.getHost();
-            if (host == null || !host.endsWith(".i2p"))
-                return false;
-        } catch (URISyntaxException use) {
-            return false;
-        }
+            if (host == null || !host.endsWith(".i2p")) {return false;}
+        } catch (URISyntaxException use) {return false;}
         return true;
     }
 
@@ -5071,9 +5065,10 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.44
      */
     private static boolean isAudio(String mime) {
-        // don't include playlist files as the browser doesn't support them
-        // in the HTML5 player,
-        // and if it did and prefetched, that could be a security issue
+        /**
+         *  Don't include playlist files as the browser doesn't support them in the HTML5 player,
+         *  and if it did and prefetched, that could be a security issue
+         */
         return (mime.startsWith("audio/") && !mime.equals("audio/mpegurl") && !mime.equals("audio/x-scpls")) ||
                 mime.equals("application/ogg");
     }
