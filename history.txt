@@ -1,4 +1,18 @@
-2024-06-29 dr|Z3d
+2024-07-02 zzz
+ * Jetty: Don't show null exception message in XSSFilter
+
+2024-07-01 zzz
+ * Tunnels: Peer selection tweak
+
+2024-06-30 zzz
+ * Router: Remove ancient test code for variable leasesets
+ * Tunnels: Remove old check for buggy routers now that MIN_VERSION is higher
+
+2024-06-29 zzz
+ * I2PSnark: Fix config display of limit for max up bw after restart (Github #75)
+ * Util: Remove discontinued DoH server (Github PR #79)
+
+2024-06-29 dr|z3d
  * I2PSnark: Enforce absolute max down/up speeds of 9999KB in Bandwidth Manager
 
 2024-06-29 zzz
