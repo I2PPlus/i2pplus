@@ -291,7 +291,7 @@ tr:hover .magnetLabel{opacity:1}
 #torrents thead img{vertical-align:middle}
 #torrents thead a img{display:inline-block}
 #torrents td{width:1%;white-space:nowrap}
-#torrents td:empty,#torrents th:empty{padding:3px;width:0;min-width:0;font-size:0}
+#torrents td:empty,#torrents th:empty{padding:3px;width:0;min-width:0!important;font-size:0}
 #torrents td.magnet:empty,#torrents td.trackerLink:empty{padding:0}
 #torrents td.rxd,#torrents td.txd,.tAction{width:1%;white-space:nowrap}
 #torrents td.tName{padding-left:8px;width:99%;font-weight:700;white-space:normal}
@@ -728,7 +728,7 @@ td.trackerLink a{background-size:18px}
 #torrentInfo th a img{margin:0 0 0 4px}
 #actionStopAll,#actionStartAll{padding:11px 18px}
 #torrentInfoStats .nowrap{margin-right:6px}
-#torrents td:not(.trackerLink):empty,#torrents th:empty{padding:5px;width:0;min-width:0;font-size:0}
+#torrents td:not(.trackerLink):empty,#torrents th:empty{padding:5px}
 #torrentDisplay .filter{min-width:120px}
 html:not(.iframed) input:checked+#tab_torrentedit{margin-bottom:-7px}
 html:not(.iframed) input:not(:checked)+#tab_torrentedit{margin-bottom:-9px}
