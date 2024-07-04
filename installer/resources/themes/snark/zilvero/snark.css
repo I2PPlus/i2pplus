@@ -406,16 +406,16 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 input.toggle_input+label+hr+table{display:none}
 input.toggle_input:checked+label+hr+table{margin-top:20px;display:table}
 #torrentInfo,#commentInfo{border-top:0}
-input:checked+#tab_comments{margin-bottom:-6px}
+input:checked+#tab_comments{margin-top:-3px;margin-bottom:-6px}
 input:checked+#tab_files{margin-bottom:-6px}
 input:checked+#tab_torrentedit{margin-bottom:-6px}
-input:not(:checked)+#tab_comments{margin-bottom:-14px}
+input:not(:checked)+#tab_comments{margin-top:-3px;margin-bottom:-14px}
 input:not(:checked)+#tab_files{margin-bottom:-8px}
 input:not(:checked)+#tab_torrentedit{margin-bottom:-8px}
 html:not(.iframed) #snarkInfo~#commentSection{margin-top:-7px}
-.iframed input:checked+#tab_torrentedit{margin-bottom:-7px}
+.iframed input:checked+#tab_torrentedit{margin-bottom:-6px}
 .iframed input:not(:checked)+#tab_files{margin-bottom:-13px}
-.iframed input:not(:checked)+#tab_torrentedit{margin-bottom:-3px}
+.iframed input:not(:checked)+#tab_torrentedit{margin-bottom:-13px}
 .iframed #snarkInfo~#snarkFiles{margin:-13px 0 -9px}
 .snarkFilename .targetfile,.snarkFilename:hover .tags,.snarkFileName a:empty{display:none}
 .snarkFilename:hover .targetfile{display:inline-block}
@@ -460,7 +460,7 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 #snarkInfo~.mainsection input:checked+.toggleview+hr+table{margin-top:-7px;margin-bottom:0}
 #snarkInfo~.mainsection,#snarkInfo+#editSection{margin:-1px 0 -6px;border:var(--border)}
 #snarkInfo~.mainsection table{border:0}
-#stopfirst{display:inline-block;font-weight:700}
+#stopfirst{margin-bottom:-7px;display:block;font-weight:700}
 #stopfirst::before{margin-top:-2px;width:15px;height:12px;display:inline-block;vertical-align:middle;background:url(images/details.svg) no-repeat left center/12px;content:"";filter:saturate(0)}
 #tab_torrentedit{margin:-1px -1px -2px}
 #torrentEdit tbody th:first-child,#torrentEdit tbody td:first-child:not(#addCommentText){padding-left:20px;width:20%;text-align:left}
@@ -499,7 +499,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 .commentRating img{height:12px;width:13px}
 .commentRating{width:1%;white-space:nowrap}
 .commentText .commentWrapper{margin:5px 0}
-.commentWrapper{margin:6px;padding:9px 10px 10px;height:28px;max-height:300px;overflow:auto;resize:vertical;box-shadow:0 0 0 1px #ccc,inset 0 0 0 1px #f2f2f2;background:#ddd}
+.commentWrapper{margin:6px;padding:9px 10px 10px;height:44px;max-height:300px;overflow:auto;resize:vertical;box-shadow:0 0 0 1px #ccc,var(--highlight);background:linear-gradient(180deg,#f2f2f2,#eee)}
 .commentText .commentWrapper{height:auto;resize:none}
 .newTab{margin:1px 4px -2px;float:right}
 .commented{display:inline-block;position:absolute;top:-3px;right:0;z-index:20;line-height:0;font-size:0}
