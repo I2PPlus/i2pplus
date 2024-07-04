@@ -9,13 +9,13 @@
 --bar_active:repeating-linear-gradient(135deg,#1b981bcc 1px,#1b981bcc 6px,#81e481cc 6px,#81e481cc 11px);
 --bar:repeating-linear-gradient(90deg,#d1cbc7,#d1cbc7 10%,#b9b1ac 10%,#b9b1ac 20%);
 --bevel_notify:0 0 0 1px #777,var(--highlight),inset 0 0 3px 0 var(--a);
---bg:url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
+--bg:url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23fefefe'/%3E%3C/svg%3E");
 --border:1px solid #bbb;
 --border_filtered:none;
 --border_hard:1px solid #777;
 --btn_active:linear-gradient(180deg,#f2f2f2,#f8f8f8);
 --btn_hover:linear-gradient(180deg,#fff,#ddd);
---btn:linear-gradient(180deg,#fff,#eee);
+--btn:linear-gradient(180deg,#f8f8f8,#eaeaea);
 --btn_shadow_active:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.4);
 --bullet:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='31' fill='%23384'/%3E%3Cg stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' transform='matrix(.90207 0 0 .90192 3.3 3.4)'%3E%3Cpath id='a' fill='%23fff' stroke='%23fff' stroke-dasharray='none' stroke-linecap='round' stroke-linejoin='round' d='M31.7 2.2c-2.8 7-7.9 13.3-8 20.5.2 4.1 2.6 7.1 5.7 8.9-15 0-14.6 12.8-22.4 16.8 12.2 0 20.8 1.8 24.7-6v.1V2.3s0 0 0 0zM7 48.4h-.1 0z'/%3E%3Cuse href='%23a' width='100%25' height='100%25' transform='matrix(-1 0 0 1 63.6 0)'/%3E%3C/g%3E%3C/svg%3E");
 --debug:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABMlBMVEUALQAAMAAANAAAOAAAPAAAQQAARAAASQAATAAAUgABOgEBOwEBQgECUAICVQIDaQMDbAMDbgMDcwMDdQMDdgP///8AMAAANQAATAAAQQACXwIDZgMANAAATwADawMAMAAATwADdAMAOgACWQIALAAAPAADdAMBNwEALwAAPAAARwADbAMALAACXwIASQABQwEAMQADdQMDbgMAMQAAUAABOQENbg0CUgIBNwEJQAkZbxkcahwvgS8iYSI5kzk8hTw+hz42eTY/lD9Am0BXoVdAg0Bit2JAqkBHrkc0eDQ1eTU3ezc6fjo7gDs8gTw9hD0/jT9AmUBBp0FHiUdInkhKkEpMk0xOm05Osk5UmVRUrFRZqVlanVpfqV9htmFlrmVntWdptWluvW5xwXF2y3az5uaxb3lQAAAASXRSTlMAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwsLDRkZJDNDTWBgZmhxdneJioqRmaCqs7i5vr/GxsfHycrN3eDg5fDy8vT1+/v8/P3+rh2WawAAANBJREFUGBlVwctOg0AUAND7mBkBobSFMTEa3PoB/f/vcGMTlmqoWGQYAper256DHm4ZVYVyD//6H0BEAlA9nApfnA6qAMBpNWb7sTkW7TotPiCJ3aWusWobl+6sgNH+mJkQF5NwHS4KJNc2mvsafW5jexWgIOLKRVCW0okE4Kf6RSjFmMh3eHSJUB7P87ptvG3rfI45mDfU3SqMKmv8RPWM9FCxZMLdTDpBxgafQ7xTN4SvWFwoNQz2vbKqQ//bvTIAO6RpxAk/ho5pQocebv0BWUBmIEF8V0EAAAAASUVORK5CYII=");
@@ -26,12 +26,13 @@
 --shadow_inline:2px 2px 2px #ccc inset;
 --softborder:0 0 0 1px #bbb;
 --td_dl:linear-gradient(270deg,#3d3 3px,rgba(0,0,0,0) 3px);
---th:var(--bg),linear-gradient(180deg,#fff,#ddd);
---tr:var(--bg),linear-gradient(180deg,#fefefe,#ededed);
---tr_hover:#dcd8d5;
---tr_snark:linear-gradient(90deg,#894129aa 2px,#0000 2px),var(--tr);
---tr_snark_odd:linear-gradient(90deg,#ca6d4eaa 2px,#0000 2px),var(--tr);
---tr_snark_hover:linear-gradient(90deg,#d00 2px,#0000 2px),var(--tr_hover);
+--th:linear-gradient(180deg,#fff,#ddd);
+--tr:var(--bg),linear-gradient(180deg,#fefefe,#ebebeb);
+--tr_odd:var(--bg),linear-gradient(180deg,#fcfcfc,#e4e4e4);
+--tr_hover:var(--bg),linear-gradient(180deg,#fff0f0,#ffe8e8);
+--tr_snark:linear-gradient(90deg,#0000 1px,#894129aa 1px,#894129aa 3px,#0000 3px),var(--tr);
+--tr_snark_odd:linear-gradient(90deg,#0000 1px,#ca6d4eaa 1px,#ca6d4eaa 3px,#0000 3px),var(--tr);
+--tr_snark_hover:linear-gradient(90deg,#0000 1px,#d00 1px,#d00 3px,#0000 3px),var(--bg),var(--tr_hover);
 }
 
 *::selection{color:#fff;background:#b23}
@@ -68,20 +69,18 @@ code{margin:0 2px}
 .noneLoaded td{border-bottom:var(--border)}
 .noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 .peerinfo:hover td,#torrentEdit tr:hover td{background-color:var(--tr_hover)}
-.rowOdd,.rowEven{background:var(--tr)}
-.rowOdd,#torrentInfo tr:nth-child(odd),#trackerselect tr:nth-child(2n+2),.knownTracker:nth-child(odd),#mediaContainer th,#commentInfo tr:first-child,#torrentEdit tr:nth-child(even){background:#fafafa}
-.rowEven,#torrentInfo tr:nth-child(even),#trackerselect tr:nth-child(2n+3),.knownTracker:nth-child(even){background:#f0f0f0}
+.rowOdd,.rowEven,.knownTracker,.createFilterString{box-shadow:var(--highlight);background:var(--tr)}
+.rowOdd,#torrentInfo tr:nth-child(odd),#trackerselect tr:nth-child(n+2),.knownTracker:nth-child(odd),.createFilterString:nth-child(odd),#mediaContainer th,#commentInfo tr:first-child,#torrentEdit tr:nth-child(even){background:var(--tr)}
 .rowOdd td,.rowEven td,#filterResults td{border-top:1px solid #fff;border-bottom:var(--border)}
 .snarkNav,.toggleview,.configTitle,.suboption,input[type=submit],a.control{font-weight:700;box-shadow:var(--highlight);background:var(--btn)}
 #torrentInfo td{padding-top:5px;padding-bottom:5px}
 #torrentInfo tr:last-child td{border-top:var(--border)}
 #navbar a,#tab_config a:not(:hover):not(:focus):not(:active),#tab_config a:not(:hover):not(:focus):not(:active):visited,.toggleview,a.control,a.control:visited{color:#777}
-#snarkTbody tr:not(#pagenavbottom):nth-child(even) .status{background:var(--tr_snark)}
-#snarkTbody tr:not(#pagenavbottom):nth-child(odd) .status{background:var(--tr_snark_odd)}
-#snarkTbody tr:not(#pagenavbottom):hover .status {background:var(--tr_snark_hover)}
+#torrents #snarkTbody tr:hover,.dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover,.knownTracker:hover,.createFilterString:hover{background:var(--tr_hover)}
+#snarkTbody tr:not(#pagenavbottom):nth-child(even){background:var(--tr_snark)}
+#snarkTbody tr:not(#pagenavbottom):nth-child(odd){background:var(--tr_snark_odd)}
+#torrents #snarkTbody tr:not(#pagenavbottom):hover{background:var(--tr_snark_hover)}
 #screenlog a:focus,.tName a:focus,.knownTracker a:focus,th.suboption a:focus{color:#fff;border-radius:1px;background:var(--a)}
-#torrents #snarkTbody tr:hover,.dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover{background:var(--tr_hover)}
-#torrents :not(#snarkFoot) tr:hover th,.dirInfo tr:hover th{color:#333;background:#eee}
 
 /* inputs */
 .control,input[type=submit],input[type=reset]{margin:1px 2px;padding:6px 10px;display:inline-block;white-space:nowrap;font-size:105%;color:var(--ink);text-shadow:0 1px 1px #fff;box-shadow:var(--highlight);border:var(--border);border-radius:3px;background:#fff}
@@ -110,7 +109,9 @@ input[type=submit],a.control{margin:2px 4px;float:right;color:var(--ink);font-we
 input[type=submit]:hover,a.control:hover{color:var(--a);border:1px solid #b32;background:var(--btn_hover)}
 input[type=submit]:active,a.control:active{background:var(--btn_active)}
 input[type=text]{margin:1px 2px;padding:5px;color:#555;font-weight:700;border:var(--border);border-radius:1px;box-shadow:var(--shadow_inline);background:#f8f8f8}
+input.r{text-align:right}
 input[type=text]:focus{color:#b23;box-shadow:inset 0 0 0 1px #d30;background:#fff}
+input.r:focus{text-align:center}
 select{margin:2px 4px 2px 0;padding:6px 16px 6px 6px;min-width:120px;color:var(--ink);font:700 9pt var(--bodyfont);border:var(--border);border-radius:3px;box-shadow:var(--highlight);background:var(--dropdown) no-repeat right 6px center/10px,var(--btn);appearance:none}
 select:hover,select:focus{color:#b23;border:1px solid #b23;background:var(--dropdown_hover) no-repeat right 6px center #fff;background-size:10px}
 textarea{padding:8px 10px;width:100%;height:40px;min-height:40px;resize:vertical;color:#555;box-shadow:inset 2px 2px 2px #ddd;border:var(--border);background:#eee}
@@ -140,7 +141,7 @@ textarea[name="nofilter_newComment"]:focus{min-height:64px;box-shadow:inset 0 0 
 .nav_tracker:hover,.nav_tracker:focus{background:var(--b_tracker_hover) no-repeat 10px center/16px,var(--btn_hover)}
 .nav_tracker:active{background:var(--b_tracker_active) no-repeat 10px center/16px,var(--btn_active)}
 .snarkNav,.snarkNav:visited{margin:2px -3px;display:inline-block;font-weight:700;border:var(--border);background:#fff}
-.snarkNav,.snarkNav:hover,.snarkNav:focus,.snarkNav:active{padding:5px 10px 5px 28px;line-height:1.3;background-size:16px,100%,100%;background-position:10px center;background-repeat:no-repeat,repeat}
+.snarkNav,.snarkNav:hover,.snarkNav:focus,.snarkNav:active{padding:4px 10px 4px 28px;line-height:1.3;box-shadow:var(--highlight);background-size:16px,100%,100%;background-position:10px center;background-repeat:no-repeat,repeat}
 .snarkNav:hover{border:1px solid var(--a);position:relative;z-index:2;box-shadow:var(--highlight)}
 .snarkNav:active{border:var(--border)}
 .snarkNav.nav_main:last-child{border-radius:1px}
@@ -489,7 +490,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #dhtDebug .stat{margin:3px 2px;padding:0;text-shadow: 1px 1px 1px rgba(0,0,0,.4);box-shadow:0 0 0 1px #887a7a, 0 0 0 1px #eee0e0 inset;background:#887a7a;contain:paint}
 #dhtDebug .dbug{margin:-2px -1px -2px -4px;padding:2px 10px;min-width:24px;color:#444;text-shadow:none;background:#f6efef}
 #noDHTPeers{margin:6px 0}
-#dhtDebug .volatile {margin:1px 0 -1px;width:100%;display:inline-block}
+#dhtDebug .volatile{margin:1px 0 -1px;width:100%;display:inline-block}
 
 /* comments */
 .commentAuthor .commentAuthorName{width:calc(100% - 20px);overflow:hidden;text-overflow:ellipsis;border-radius:1px;box-shadow:inset 0 0 0 1px #bbb;background:#fff var(--user) no-repeat 4px center;background-size:14px}
@@ -565,7 +566,6 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 .configOption>*{vertical-align:middle}
 .iframed #embed,#fullscreen{display:none}
 .iframed #fullscreen{display:inline-block}
-.knownTracker:hover td{background:#ccc}
 .knownTracker input[disabled]{opacity:.5}
 .knownTracker+.spacer,#addtracker~.spacer,.knownTracker+.spacer td,#addtracker~.spacer td{display:none}
 .knownTracker+.spacer td,#addtracker+.spacer td{padding:4px 0;font-size:0;border-bottom:var(--border)}
@@ -600,7 +600,7 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #addtracker td input{margin-left:0}
 #addtracker:hover td:first-child b,#addtracker:focus-within td:first-child b{mix-blend-mode:normal}
 #bwHoverHelp img{height:16px;width:16px;margin:0 4px;vertical-align:text-top}
-#configs,#trackerconfig{margin:10px 10px 0;width:80%;width:calc(100% - 20px)}
+#configs,#trackerconfig{margin:0 10px;width:calc(100% - 20px)}
 #configs .accept{margin-right:0}
 #configs a[href^="/config"]{font-size:0}
 #configs a[href^="/config"]::after{width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--config) no-repeat center center/16px;content:""}
@@ -619,7 +619,7 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #trackers .knownTracker td,#trackers #addtracker td,#trackers #trackerconfig td[colspan="7"]{border-bottom:0}
 #trackers #trackerconfig{margin-top:0}
 #trackers #trackerconfig td[colspan="7"]{padding:5px 3px 5px 0}
-#trackers #addtracker td{padding-top:10px;padding-bottom:10px}
+#trackers #addtracker td{padding-top:8px;padding-bottom:8px}
 #configs a[href^="/config"],#configs .numeric[name="upBW"]{margin-left:8px}
 
 /* create torrent file filters */
@@ -634,7 +634,7 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #fileFilter table{margin:0 auto 4px;width:calc(100% - 20px);border:0}
 #fileFilter th,#fileFilter td{text-align:left}
 #fileFilter th{font-size:85%;white-space:nowrap;border-bottom:0}
-#fileFilter th:first-child {width:32px;background: var(--nuke) no-repeat center center/14px,var(--th)}
+#fileFilter th:first-child{width:32px;background: var(--nuke) no-repeat center center/14px,var(--th)}
 #fileFilter th:last-child,#fileFilter td:last-child{width:1%;text-align:center}
 #fileFilter th,#fileFilter td{padding: 6px 4px 4px;border-top:var(--border)}
 #fileFilter th:first-child,#fileFilter td:first-child{border-left:var(--border)}
@@ -649,7 +649,7 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #fileFilter input.delete[type=submit]{margin:6px 3px 6px 0}
 form[action^="/i2psnark/configure"]{display:block}
 #createTorrentFilters{display:table-row}
-#addFileFilter td{padding-top:10px;padding-bottom:8px}
+#addFileFilter td{padding-top:8px;padding-bottom:8px}
 #addFileFilter td:first-child{text-align:center}
 
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
