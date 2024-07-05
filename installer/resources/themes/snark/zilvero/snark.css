@@ -305,8 +305,9 @@ tr:hover .magnetLabel{opacity:1}
 .tAction{padding-right:5px;white-space:nowrap}
 .active .tAction,.active:hover .tAction{background:linear-gradient(270deg,#cb4dcb 3px,rgba(0,0,0,0) 3px);animation:ease-in-out active .5s 3s forwards}
 #torrents .tAction{padding-right:4px;text-align:center}
-#torrents .tAction input{margin:0 2px;padding:11px;display:inline-block;min-width:0;float:none;font-size:0;border-radius:2px;box-shadow:var(--highlight);background-blend-mode:luminosity}
-#torrents #actionStopAll,#torrents #actionStartAll{padding:10px 16px}
+#torrents .tAction input{margin:0 2px;padding:11px;min-width:0;display:inline-block;float:none;vertical-align:middle;font-size:0;border-radius:2px;box-shadow:var(--highlight);background-blend-mode:luminosity}
+#torrents th.tAction input{margin-top:1px}
+#torrents #actionStopAll,#torrents #actionStartAll{padding:11px 18px}
 #torrents .actionStart{background:var(--start) no-repeat center center/14px,var(--btn)}
 #torrents .actionStop{background:var(--stop) no-repeat center center/14px,var(--btn)}
 #torrents .actionRemove{background:var(--remove) no-repeat center center/14px,var(--btn)}
