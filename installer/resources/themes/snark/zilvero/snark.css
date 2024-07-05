@@ -56,7 +56,7 @@ table{border-collapse:separate;border-spacing:0;background:#eee}
 table table{border:0}
 thead a img:hover{filter:drop-shadow(0 0 1px #b23) drop-shadow(0 0 1px #b23)}
 thead img{font-size:0}
-th img{max-height:24px}
+th img{max-height:24px;display:inline-block;vertical-align:middle}
 tr{contain:layout}
 th{padding-top:7px;padding-bottom:7px;vertical-align:middle;border-top:var(--border);border-bottom:var(--border);background:var(--th)}
 td{padding:3px}
