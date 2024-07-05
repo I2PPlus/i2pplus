@@ -240,7 +240,7 @@ tr:hover .magnetLabel{opacity:1}
 .choked::after,.idle::after{margin:0 20px;width:8px;height:8px;display:inline-block;border-radius:50%;background:#373;content:""}
 .choked::after{background:#900}
 .status{width:48px}
-.inactivity{margin-left:10px;max-width:400px;min-width:5px;height:5px;display:inline-block;vertical-align:middle;border-radius:6px;box-shadow:0 0 0 1px #aaa,0 0 0 1px #fffa inset;background:#900;background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 15px,rgba(128,128,128,.5) 15px,rgba(128,128,128,.5) 16px,rgba(0,0,0,0) 16px),linear-gradient(180deg,#fff1,#fff2 50%,#0001 50%,#0002),linear-gradient(90deg,#bb0 50px,#900)}
+.inactivity{margin-left:15px;max-width:400px;min-width:5px;height:5px;display:inline-block;vertical-align:middle;border-radius:6px;box-shadow:0 0 0 1px #aaa,0 0 0 1px #fffa inset;background:#900;background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 15px,rgba(128,128,128,.5) 15px,rgba(128,128,128,.5) 16px,rgba(0,0,0,0) 16px),linear-gradient(180deg,#fff1,#fff2 50%,#0001 50%,#0002),linear-gradient(90deg,#bb0 50px,#900)}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 .infohash{padding:0 3px 0 15px;width:100px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;color:#393;font-family:var(--monospaced);border-radius:1px;background:#fff var(--hash) no-repeat left center/12px;user-select:all}
 .infohash::selection{background:#393}
