@@ -5825,15 +5825,11 @@ public class I2PSnarkServlet extends BasicServlet {
             // strip non-i2p trackers
             for (List<String> alist2 : alist) {
                 for (String s : alist2) {
-                    if (isI2PTracker(s)) {
-                        annlist.add(s);
-                    }
+                    if (isI2PTracker(s)) {annlist.add(s);}
                 }
             }
         }
-        if (announce != null) {
-            annlist.add(announce);
-        }
+        if (announce != null) {annlist.add(announce);}
         if (!annlist.isEmpty()) {
             buf.append("<tr class=header><th>").append(_t("Active Trackers")).append("</th><th>").append(_t("Announce URL")).append("</th><th>")
                .append(_t("Primary")).append("</th><th id=remove>").append(_t("Delete")).append("</th></tr>\n");
@@ -5892,16 +5888,11 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         String com = meta.getComment();
-        if (com == null) {
-            com = "";
-        } else if (com.length() > 0) {
-            //com = DataHelper.escapeHTML(com).replace("\r\n", "<br>").replace("\n", "<br>");
-            com = DataHelper.escapeHTML(com);
-        }
+        if (com == null) {com = "";}
+        else if (com.length() > 0) {com = DataHelper.escapeHTML(com);}
         buf.append("<tr class=header><th colspan=4>").append(_t("Torrent Comment")).append("</th></tr>\n")
            .append("<tr><td colspan=4 id=addCommentText><textarea name=nofilter_newTorrentComment cols=88 rows=4");
-        if (isRunning)
-            buf.append(" readonly");
+        if (isRunning) {buf.append(" readonly");}
         buf.append(">").append(com).append("</textarea></td>").append("</tr>\n");
         if (isRunning) {
             buf.append("<tfoot><tr><td colspan=4><span id=stopfirst>")
