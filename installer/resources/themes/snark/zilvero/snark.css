@@ -320,7 +320,7 @@ tr:hover .magnetLabel{opacity:1}
 #torrents .tAction input:active,#actionStartAll:active,#actionStopAll:active{background-size:auto 12px}
 
 /* status bars */
-.barComplete{padding:0 0 2px;width:84px;text-align:center;font-weight:700;color:#fff;text-shadow:0 1px 1px #333;border:var(--border_hard);box-shadow:inset 0 0 0 1px #ddd}
+.barComplete{padding:0 0 2px;width:84px;text-align:center;font-weight:700;color:#fff;text-shadow:1px 1px 1px #333;border:var(--border_hard);box-shadow:inset 0 0 0 1px #ddd}
 .active .barComplete{background:#cf7d47}
 .inactive:not(.stopped) .barComplete{background:#ce84ce}
 .stopped .barComplete{background:#007a99}
@@ -344,16 +344,16 @@ tr:hover .magnetLabel{opacity:1}
 .stopped .txBarInner{background:#007a9988}
 .txBarInner:hover{background:#f6f8}
 .txBarInner[style="width:calc(100% - 2px)"]{box-shadow:0 7px 7px 1px #fff7 inset,0 -7px 7px 1px #0003 inset}
-.txBarText{margin-top:1px;display:inline-block;position:relative;z-index:5;font-weight:700;transform:translateY(-1px)}
-.active .tx{background-size:400% 400%;animation:progressTX 1s linear both;will-change:transform}
+.txBarText{margin-top:1px;display:inline-block;position:relative;z-index:5;vertical-align:middle;font-weight:700}
+.active .tx{background-size:400% 400%;animation:progressTX 1s linear both}
 tr:not(.peerinfo).active.downloading .barOuter{background:var(--bar_active)}
-tr:not(.peerinfo).active.downloading:hover .barInner{background:#47d16a;will-change:transform}
-tr:hover .fileStatus .barText,.txBarText{color:#fff;text-shadow:0 1px 1px #111}
+tr:not(.peerinfo).active.downloading:hover .barInner{background:#47d16a}
+tr:hover .fileStatus .barText,.txBarText{color:#fff;text-shadow:1px 1px 1px #333}
 tr:hover .peerinfo .barInner{background:#d1b666a}
 tr.active:hover .barComplete,tr.active:hover .txBarInner{background:#f50a}
 tr.inactive:not(.stopped):hover .barComplete,tr.inactive:not(.stopped):hover .txBarInner{background:#ff66ceaa}
 tr.stopped:hover .barComplete,tr.stopped:hover .txBarInner{background:#00b8e6aa}
-tr:hover .barText{line-height:1.2;color:#333;opacity:1}
+tr:hover .barText{color:#333;opacity:1}
 
 /* details */
 audio,video,.thumb{margin:1px 0 2px -5px;padding:2px;border:var(--border_hard);box-shadow:inset 0 0 0 2px #fff}
@@ -504,14 +504,14 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 #debugMode:hover{opacity:1}
 #dhtDebug hr{display:none}
 #torrents #dhtDebug th{padding:3px 8px 5px;text-align:center;font-weight:400;border-top:var(--border);background:url(images/dbug.webp) no-repeat right 12px bottom 8px/auto 80%}
-body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
+body.debug #dhtDebug{display:table-row;box-shadow:var(--highlight);background:linear-gradient(180deg,#fffc 2px,#0000 2px),radial-gradient(circle at top,#fff 70%,#ddd)}
 #dhtDebug .bullet{display:none}
 #dhtDebug b,#dhtDebug .dbug,#dhtDebug .stat{margin:2px 0;padding:0 8px;display:inline-block;color:#fff}
 #dhtDebug b{border-radius:2px 0 0 2px}
 #dhtDebug .stat{margin:3px 2px;padding:0;text-shadow: 1px 1px 1px rgba(0,0,0,.4);box-shadow:0 0 0 1px #887a7a, 0 0 0 1px #eee0e0 inset;background:#887a7a;contain:paint}
 #dhtDebug .dbug{margin:-2px -1px -2px -4px;padding:2px 10px;min-width:24px;color:#444;text-shadow:none;background:#f6efef}
-#noDHTPeers{margin:6px 0}
 #dhtDebug .volatile{margin:1px 0 -1px;width:100%;display:inline-block}
+#noDHTPeers{margin:6px 0}
 
 /* comments */
 .commentAuthor .commentAuthorName{width:calc(100% - 20px);overflow:hidden;text-overflow:ellipsis;border-radius:1px;box-shadow:inset 0 0 0 1px #bbb;background:#fff var(--user) no-repeat 4px center;background-size:14px}
