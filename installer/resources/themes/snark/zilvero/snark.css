@@ -18,11 +18,12 @@
 --btn_active:linear-gradient(180deg,#f2f2f2,#f8f8f8);
 --btn_hover:linear-gradient(180deg,#fff,#ddd);
 --btn:linear-gradient(180deg,#f8f8f8,#eaeaea);
---btn_shadow_active:var(--highlight),inset 3px 3px 3px rgba(0,0,0,.4);
+--btn_shadow_active:var(--highlight),inset 3px 3px 3px #0008;
 --bullet:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='31' fill='%23384'/%3E%3Cg stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' transform='matrix(.90207 0 0 .90192 3.3 3.4)'%3E%3Cpath id='a' fill='%23fff' stroke='%23fff' stroke-dasharray='none' stroke-linecap='round' stroke-linejoin='round' d='M31.7 2.2c-2.8 7-7.9 13.3-8 20.5.2 4.1 2.6 7.1 5.7 8.9-15 0-14.6 12.8-22.4 16.8 12.2 0 20.8 1.8 24.7-6v.1V2.3s0 0 0 0zM7 48.4h-.1 0z'/%3E%3Cuse href='%23a' width='100%25' height='100%25' transform='matrix(-1 0 0 1 63.6 0)'/%3E%3C/g%3E%3C/svg%3E");
 --debug:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABMlBMVEUALQAAMAAANAAAOAAAPAAAQQAARAAASQAATAAAUgABOgEBOwEBQgECUAICVQIDaQMDbAMDbgMDcwMDdQMDdgP///8AMAAANQAATAAAQQACXwIDZgMANAAATwADawMAMAAATwADdAMAOgACWQIALAAAPAADdAMBNwEALwAAPAAARwADbAMALAACXwIASQABQwEAMQADdQMDbgMAMQAAUAABOQENbg0CUgIBNwEJQAkZbxkcahwvgS8iYSI5kzk8hTw+hz42eTY/lD9Am0BXoVdAg0Bit2JAqkBHrkc0eDQ1eTU3ezc6fjo7gDs8gTw9hD0/jT9AmUBBp0FHiUdInkhKkEpMk0xOm05Osk5UmVRUrFRZqVlanVpfqV9htmFlrmVntWdptWluvW5xwXF2y3az5uaxb3lQAAAASXRSTlMAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwsLDRkZJDNDTWBgZmhxdneJioqRmaCqs7i5vr/GxsfHycrN3eDg5fDy8vT1+/v8/P3+rh2WawAAANBJREFUGBlVwctOg0AUAND7mBkBobSFMTEa3PoB/f/vcGMTlmqoWGQYAper256DHm4ZVYVyD//6H0BEAlA9nApfnA6qAMBpNWb7sTkW7TotPiCJ3aWusWobl+6sgNH+mJkQF5NwHS4KJNc2mvsafW5jexWgIOLKRVCW0okE4Kf6RSjFmMh3eHSJUB7P87ptvG3rfI45mDfU3SqMKmv8RPWM9FCxZMLdTDpBxgafQ7xTN4SvWFwoNQz2vbKqQ//bvTIAO6RpxAk/ho5pQocebv0BWUBmIEF8V0EAAAAASUVORK5CYII=");
---highlight:0 0 0 1px #fffd inset;
+--highlight:0 0 0 1px #fffc inset;
 --ink:#555;
+--ink_light:#888;
 --notify:var(--th);
 --row_filtered:#fafafa;
 --shadow_inline:2px 2px 2px #ccc inset;
@@ -111,7 +112,7 @@ input[type=checkbox]:not(:checked),input[type=radio]:not(:checked){box-shadow:va
 input[type=radio][disabled],input[type=radio][disabled]:checked{background:#bbb}
 input[type=submit],a.control{margin:2px 4px;float:right;color:var(--ink);font-weight:700}
 input[type=submit]:hover,a.control:hover{color:var(--a);border:1px solid #b32;background:var(--btn_hover)}
-input[type=submit]:active,a.control:active{background:var(--btn_active)}
+input[type=submit]:active,a.control:active{box-shadow:var(--btn_shadow_active);background:var(--btn_active)}
 input[type=text]{margin:1px 2px;padding:5px;color:#555;font-weight:700;border:var(--border);border-radius:1px;box-shadow:var(--shadow_inline);background:#f8f8f8}
 input.r{text-align:right}
 input[type=text]:focus{color:#b23;box-shadow:inset 0 0 0 1px #d30;background:#fff}
@@ -335,15 +336,15 @@ tr:hover .magnetLabel{opacity:1}
 .peerinfo:not(.active) .barInner{background:#fffd}
 .peerinfo .barOuter,.peerinfo .barInner{height:10px}
 .rxd .barInner,.rxd .barOuter{max-width:84px}
-.rxd .barText{padding:3px;width:140px;display:inline-block;position:relative;top:-18px;left:-30px;z-index:10;border-radius:1px;background:#eee;filter:drop-shadow(0 0 1px #999)}
+.rxd .barText{margin-top:1px;padding:3px;width:140px;display:inline-block;position:relative;top:-18px;left:-30px;z-index:10;border-radius:1px;background:#eee;filter:drop-shadow(0 0 1px #999)}
 .rxd .barText::after{margin-left:-7px;position:absolute;top:90%;left:50%;border-width:7px;border-style:solid;border-color:#eee transparent transparent transparent;content:""}
-.txBarInner{height:calc(100% - 2px);display:inline-block;position:absolute;top:1px;left:1px;box-shadow:inset 0 3px 3px #0005;background:#f6f8}
+.tx{padding:.5px 0;min-width:68px;height:auto;display:inline-block;position:relative;vertical-align:middle;border:var(--border_hard);border-left-width:5px;box-shadow:var(--btn_shadow_active);background:var(--bar_upload_active)}
+.active .txBarInner{height:calc(100% - 2px);display:inline-block;position:absolute;top:1px;left:1px;box-shadow:inset 0 3px 3px rgba(0,0,0,.3);background:#f608}
+.txBarInner{height:calc(100% - 2px);display:inline-block;position:absolute;top:1px;left:1px;box-shadow:inset 0 3px 3px #0008;background:#f6f8}
 .stopped .txBarInner{background:#007a9988}
 .txBarInner:hover{background:#f6f8}
 .txBarInner[style="width:calc(100% - 2px)"]{box-shadow:0 7px 7px 1px #fff7 inset,0 -7px 7px 1px #0003 inset}
-.active .txBarInner{height:calc(100% - 2px);display:inline-block;position:absolute;top:1px;left:1px;box-shadow:inset 0 3px 3px rgba(0,0,0,.3);background:#f608}
 .txBarText{margin-top:1px;display:inline-block;position:relative;z-index:5;font-weight:700;transform:translateY(-1px)}
-.tx{min-width:68px;height:auto;display:inline-block;position:relative;vertical-align:middle;border:var(--border_hard);border-left-width:5px;box-shadow:var(--btn_shadow_active);background:var(--bar_upload_active)}
 .active .tx{background-size:400% 400%;animation:progressTX 1s linear both;will-change:transform}
 tr:not(.peerinfo).active.downloading .barOuter{background:var(--bar_active)}
 tr:not(.peerinfo).active.downloading:hover .barInner{background:#47d16a;will-change:transform}
@@ -560,6 +561,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #torrentDisplay .filter{margin:0;padding:2px 12px;display:inline-block;min-width:84px;line-height:1.6;font-weight:700;color:#777;border-left:var(--border);box-shadow:var(--highlight);background:var(--btn)}
 #torrentDisplay .filter:last-child{border-right:var(--border)}
 #torrentDisplay .filter:hover{color:var(--a);cursor:pointer}
+#torrentDisplay .filter:active{color:var(--ink_light);box-shadow:var(--btn_shadow_active);background:var(--btn_active)}
 #torrentDisplay input{width:0;height:0;position:absolute;opacity:0;z-index:-1}
 #torrentDisplay .filter.enabled,#torrentDisplay .filter.enabled:active{color:var(--ink);text-shadow:0 1px 1px #fff;box-shadow:var(--highlight),2px 2px 2px #0006 inset;background:linear-gradient(180deg,#ddd,#fff);cursor:default}
 #torrentDisplay .filter.enabled span:not(#filtercount.badge){display:inline-block;transform:translateY(1px)}
