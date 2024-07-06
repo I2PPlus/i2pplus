@@ -59,7 +59,7 @@ class RefreshRoutersJob extends JobImpl {
 //    private final static long EXPIRE = 2*60*60*1000;
     private final static long EXPIRE = 7*24*60*60*1000;
     private final static long OLDER = 2*60*60*1000;
-    private static long RESTART_DELAY_MS = 5*60*1000;
+    private static long RESTART_DELAY_MS = 60*1000;
     private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
     private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
@@ -79,9 +79,7 @@ class RefreshRoutersJob extends JobImpl {
         long uptime = getContext().router().getUptime();
         boolean isCpuHighLoad = SystemVersion.getCPULoad() > 80;
         boolean shouldDisconnect = getContext().getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
-        if (_facade.isInitialized() && lag < 500 &&
-            getContext().commSystem().getStatus() != Status.DISCONNECTED &&
-            netDbCount < 5000 && uptime > 60*1000) {
+        if (_facade.isInitialized() && lag < 500 && getContext().commSystem().getStatus() != Status.DISCONNECTED && uptime > 60*1000) {
             if (_routers == null || _routers.isEmpty()) {
                 // make a list of all routers, floodfill first
                 _routers = _facade.getFloodfillPeers();
@@ -96,18 +94,15 @@ class RefreshRoutersJob extends JobImpl {
             if (_routers.isEmpty()) {
                 _routers = null;
                 if (getContext().router().getUptime() < 60*60*1000) {
-                    RESTART_DELAY_MS = 60*1000;
-                } else if (netDbCount > 5000 && getContext().router().getUptime() > 60*60*1000) {
-                    RESTART_DELAY_MS *= 12;
-                } else if (netDbCount > 3000) {
-                    RESTART_DELAY_MS *= rand.nextInt(12) + 1;
-                } else if (netDbCount > 1000 || isCpuHighLoad) {
-                    RESTART_DELAY_MS *= rand.nextInt(3) + 1;
-                    requeue(RESTART_DELAY_MS);
+                    RESTART_DELAY_MS = 30*1000;
+                } else if (netDbCount > 10000) {
+                    RESTART_DELAY_MS *= 3;
+                } else if (netDbCount > 6000) {
+                    RESTART_DELAY_MS *= 2;
                 } else {
                     requeue(RESTART_DELAY_MS);
                 }
-                if (netDbCount > 5000)
+                if (netDbCount > 10000)
                     _log.info("Finished refreshing NetDb; over 5000 known routers, job will rerun in " + (RESTART_DELAY_MS / 1000 / 60) + "m");
                 else
                     _log.info("Finished refreshing NetDb routers; job will rerun in " + (RESTART_DELAY_MS / 1000) + "s");
@@ -121,7 +116,6 @@ class RefreshRoutersJob extends JobImpl {
                     continue;
                 if (_log.shouldDebug())
                     _log.debug("Checking RouterInfo [" + h.toBase64().substring(0,6) + "]");
-//                RouterInfo ri = _facade.lookupRouterInfoLocally(h);
                 RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(h);
                 if (ri == null)
                     continue;
@@ -132,7 +126,7 @@ class RefreshRoutersJob extends JobImpl {
                 String refreshTimeout = getContext().getProperty("router.refreshTimeout");
                 int routerAge = 15*60*1000;
                 String v = ri.getVersion();
-                String MIN_VERSION = "0.9.58";
+                String MIN_VERSION = "0.9.60";
                 Hash us = getContext().routerHash();
                 boolean isUs = us.equals(ri.getIdentity().getHash());
                 boolean isHidden = getContext().router().isHidden();
@@ -140,7 +134,7 @@ class RefreshRoutersJob extends JobImpl {
                                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                          VersionComparator.comp(v, MIN_VERSION) < 0) &&
-                                         getContext().netDb().getKnownRouters() > 3000 &&
+                                         getContext().netDb().getKnownRouters() > 5000 &&
                                          uptime > 15*60*1000 && !isHidden && !isUs;
                 boolean refreshUninteresting = getContext().getBooleanProperty(PROP_ROUTER_REFRESH_UNINTERESTING);
                 String caps = "unknown";
@@ -151,34 +145,24 @@ class RefreshRoutersJob extends JobImpl {
 
                 if (ri != null) {
                     caps = ri.getCapabilities().toUpperCase();
-                    if (caps.contains("F")) {
-                        isFF = true;
-                    }
+                    if (caps.contains("F")) {isFF = true;}
                     country = getContext().commSystem().getCountry(h);
-                    if (country != null && country != "unknown") {
-                        noCountry = false;
-                    }
+                    if (country != null && country != "unknown") {noCountry = false;}
                 }
                 if (ri != null) {
                     for (RouterAddress ra : ri.getAddresses()) {
-                        if (ra.getTransportStyle().equals("SSU") ||
-                            ra.getTransportStyle().equals("SSU2")) {
+                        if (ra.getTransportStyle().equals("SSU") || ra.getTransportStyle().equals("SSU2")) {
                             noSSU = false;
                             break;
                         }
                     }
                 }
                 int rapidScan = 10*60*1000;
-                if (uninteresting || (isFF && noSSU)) {
-                    routerAge = rapidScan;
-                } else if (freshness == null) {
-                    if (netDbCount > 4000)
-                        routerAge = 6*60*60*1000;
-                    if (netDbCount > 6000)
-                        routerAge = 8*60*60*1000;
-                } else {
-                    routerAge = Integer.valueOf(freshness)*60*60*1000;
-                }
+                if (uninteresting || (isFF && noSSU)) {routerAge = rapidScan;}
+                else if (freshness == null) {
+                    if (netDbCount > 4000) {routerAge = 6*60*60*1000;}
+                    if (netDbCount > 6000) {routerAge = 8*60*60*1000;}
+                } else {routerAge = Integer.valueOf(freshness)*60*60*1000;}
 //                if (ri.getPublished() < older) {
                 if (older > routerAge) {
                     if (_log.shouldInfo())
@@ -235,9 +219,7 @@ class RefreshRoutersJob extends JobImpl {
                 }
             }
         } else {
-            if (netDbCount > 5000) {
-                _log.info("Over 5000 known routers, suspending Refresh Routers job...");
-            } else if (lag > 500) {
+            if (lag > 500) {
                 _log.info("Job lag over 500ms, suspending Refresh Routers job...");
             } else if (getContext().commSystem().getStatus() == Status.DISCONNECTED) {
                 _log.info("Network disconnected, suspending Refresh Routers job...");
@@ -246,10 +228,10 @@ class RefreshRoutersJob extends JobImpl {
 
         int randomDelay = (1500 * (rand.nextInt(3) + 1)) + rand.nextInt(1000) + rand.nextInt(1000) + (rand.nextInt(1000) * (rand.nextInt(3) + 1)); // max 9.5 seconds
         String refresh = getContext().getProperty("router.refreshRouterDelay");
-        if (netDbCount > 3000) {
+        if (netDbCount > 10000) {
             randomDelay *= 10 ;
             if (_log.shouldDebug())
-                _log.debug("Over 3000 known peers, queuing next RouterInfo check to run in " + randomDelay / 1000 + "s...");
+                _log.debug("Over 10000 known peers, queuing next RouterInfo check to run in " + randomDelay / 1000 + "s...");
         } else if (refresh == null) {
             if (getContext().jobQueue().getMaxLag() > 150 || getContext().throttle().getMessageDelay() > 750)
                 randomDelay = randomDelay * (rand.nextInt(3) + 1);
@@ -279,4 +261,3 @@ class RefreshRoutersJob extends JobImpl {
         }
     }
 }
-
