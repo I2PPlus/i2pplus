@@ -289,7 +289,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 #torrents tfoot th{padding:6px 5px;border-top:0;border-bottom:0;background:#fff}
 #torrents .ETA,#torrents .rateDown,#torrents .rateUp{padding:2px 8px;min-width:80px;text-align:center;font-weight:700}
 #torrents .infohash{padding:2px 4px 2px 18px;display:inline-block;border-radius:1px;box-shadow:0 0 0 1px #7a7,var(--highlight);background:var(--hash) no-repeat 4px center/12px,linear-gradient(180deg,#efe,#e6ffe6)}
-#torrents tfoot th.rateUp{padding-right:8px!important;text-align:right!important}
+#torrents tfoot th.rateUp:not(:empty){padding-left:0!important;padding-right:12px!important;text-align:right!important}
 #torrents #snarkTbody .peerinfo{box-shadow:var(--highlight);background:var(--tr_peer)}
 #torrents #snarkTbody .peerinfo.active{box-shadow:var(--highlight);background:var(--tr_peer_active)}
 #torrents #snarkTbody .peerinfo .status{background:var(--client) no-repeat center center/20px}
@@ -694,6 +694,8 @@ td.status{background-size:24px auto}
 .peerclient{width:90px}
 .peerCount .left,.peerCount .right{padding:4px 3px 3px;}
 #torrents .infohash{width:60px}
+#torrents .magnetlink img{width:18px;height:18px}
+#torrents .txd{padding-left:0;padding-right:0}
 #screenlog li::before{margin-top:-1px}
 }
 
@@ -756,6 +758,7 @@ td.trackerLink a{background-size:18px}
 #actionStopAll,#actionStartAll{padding:11px 18px}
 #torrentInfoStats .nowrap{margin-right:6px}
 #torrents td:not(.trackerLink):empty,#torrents th:empty{padding:5px}
+#torrents tfoot th.rateUp:not(:empty){padding-right:15px!important}
 #torrentDisplay .filter{min-width:120px}
 html:not(.iframed) input:checked+#tab_torrentedit{margin-bottom:-7px}
 html:not(.iframed) input:not(:checked)+#tab_torrentedit{margin-bottom:-8px}
