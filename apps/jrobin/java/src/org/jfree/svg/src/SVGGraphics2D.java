@@ -1280,31 +1280,49 @@ public final class SVGGraphics2D extends Graphics2D {
         StringBuilder b = new StringBuilder("d=\"");
         float[] coords = new float[6];
         boolean first = true;
+        float prevX = 0;
+        float prevY = 0;
         PathIterator iterator = path.getPathIterator(null);
         while (!iterator.isDone()) {
             int type = iterator.currentSegment(coords);
             switch (type) {
             case (PathIterator.SEG_MOVETO):
-                b.append("M").append(geomDP(coords[0])).append(" ")
-                 .append(geomDP(coords[1]));
+                if (first) {
+                    b.append("M").append(geomDP(coords[0])).append(" ")
+                     .append(geomDP(coords[1]));
+                    prevX = coords[0];
+                    prevY = coords[1];
+                    first = false;
+                } else {
+                    b.append("m").append(geomDP(coords[0] - prevX)).append(" ")
+                     .append(geomDP(coords[1] - prevY));
+                    prevX = coords[0];
+                    prevY = coords[1];
+                }
                 break;
             case (PathIterator.SEG_LINETO):
-                b.append(" L ").append(geomDP(coords[0])).append(" ")
-                 .append(geomDP(coords[1]));
+                b.append("l").append(geomDP(coords[0] - prevX)).append(" ")
+                 .append(geomDP(coords[1] - prevY));
+                prevX = coords[0];
+                prevY = coords[1];
                 break;
             case (PathIterator.SEG_QUADTO):
-                b.append("Q").append(geomDP(coords[0]))
-                 .append(" ").append(geomDP(coords[1]))
-                 .append(" ").append(geomDP(coords[2]))
-                 .append(" ").append(geomDP(coords[3]));
+                b.append("q").append(geomDP(coords[0] - prevX))
+                 .append(" ").append(geomDP(coords[1] - prevY))
+                 .append(" ").append(geomDP(coords[2] - coords[0]))
+                 .append(" ").append(geomDP(coords[3] - coords[1]));
+                prevX = coords[2];
+                prevY = coords[3];
                 break;
             case (PathIterator.SEG_CUBICTO):
-                b.append("C").append(geomDP(coords[0])).append(" ")
-                 .append(geomDP(coords[1])).append(" ")
-                 .append(geomDP(coords[2])).append(" ")
-                 .append(geomDP(coords[3])).append(" ")
-                 .append(geomDP(coords[4])).append(" ")
-                 .append(geomDP(coords[5]));
+                b.append("c").append(geomDP(coords[0] - prevX)).append(" ")
+                 .append(geomDP(coords[1] - prevY)).append(" ")
+                 .append(geomDP(coords[2] - coords[0])).append(" ")
+                 .append(geomDP(coords[3] - coords[1])).append(" ")
+                 .append(geomDP(coords[4] - coords[2])).append(" ")
+                 .append(geomDP(coords[5] - coords[3]));
+                prevX = coords[4];
+                prevY = coords[5];
                 break;
             case (PathIterator.SEG_CLOSE):
                 b.append("Z");
@@ -1314,7 +1332,7 @@ public final class SVGGraphics2D extends Graphics2D {
             }
             iterator.next();
         }
-        return b.append("\"").toString().replaceAll("\\s{2,}", " ");
+        return b.append("\"").toString().replaceAll("\\.0l","l").replaceAll(" 0\\.","\\.").replaceAll("\\s{2,}", " ");
     }
 
     /**
@@ -2668,7 +2686,8 @@ public final class SVGGraphics2D extends Graphics2D {
                 .append("</linearGradient>");
         }
         defs.append("<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\" href=\"/themes/fonts/FiraCode.css\"/>");
-        defs.append("<style>text{font-weight:600;text-rendering:optimizeLegibility;white-space:pre}line,path,rect{shape-rendering:crispEdges}")
+        defs.append("<style>text{font-weight:600;text-rendering:optimizeLegibility;white-space:pre}")
+            .append("line,path,rect{shape-rendering:crispEdges;vector-effect:non-scaling-stroke}")
             .append(".axis{stroke-width:2;stroke-linecap:round}")
             .append(".bold,.sans.s12 text,.sans.s13 text,.sans.s14 text{font-weight:700}")
             .append(".dash{stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1}")
