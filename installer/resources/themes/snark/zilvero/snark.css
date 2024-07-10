@@ -746,6 +746,7 @@ tr:hover td.trackerLink,tr:hover td.details,tr:hover td.tName,tr:hover td.rxd,tr
 @media (min-width:1500px){
 body,td,th:not(.suboption),span,table a,input[type=submit],input[type=text],textarea{font-size:9.5pt}
 label b,.configOption b{font-size:9pt}
+select{padding-left:8px}
 td.status img{width:26px;height:26px}
 td.details img:not([src$="rateme.svg"]),.dirInfo td:first-child img:not(.thumb){width:23px;height:23px}
 td.trackerLink a{background-size:18px}
@@ -766,6 +767,6 @@ html:not(.iframed) input:checked+#tab_torrentedit{margin-bottom:-7px}
 html:not(.iframed) input:not(:checked)+#tab_torrentedit{margin-bottom:-8px}
 }
 
-@media (min-width:1600px){.lang_en .configOption b{min-width:180px}.lang_en .optionlist{columns:3 520px}}
+@media (min-width:1600px){.lang_en input[name="i2cpOpts"],.lang_en input[name="nofilter_dataDir"]{width:calc(100% - 190px)}.lang_en .configOption b{min-width:170px}.lang_en .optionlist{columns:3 520px}}
 
 @media (forced-colors:active){*{forced-color-adjust:none}}
