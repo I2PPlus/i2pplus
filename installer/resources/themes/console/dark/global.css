@@ -27,7 +27,7 @@
 --btnAction_hover:var(--nav_hover);
 --btnAction:linear-gradient(180deg,#030,#020 50%,#010 50%);
 --btn_hover:linear-gradient(180deg,#000,#010);
---btn_hover_radial:radial-gradient(at center bottom,rgba(96,48,0,.4) 0,rgba(0,0,0,0) 80%),#000;
+--btn_hover_radial:radial-gradient(at center bottom,rgba(96,48,0,.4) 0,#0000 80%),#000;
 --btn:linear-gradient(180deg,#001000,#000 5%,#000 95%,#001000);
 --btn_shadow_active:var(--highlight),inset 3px 3px 3px 3px rgba(0,0,0,.8),0 0 0 1px #000;
 --btn_shadow_hover:var(--highlight),inset 0 0 2px 1px rgba(255,96,0,.8),inset 0 0 4px 0 rgba(255,96,0,.8),inset 0 0 0 3px #000;
@@ -38,16 +38,16 @@
 --dotted:1px dotted #252;
 --download_bar:repeating-linear-gradient(135deg,#000 1px,#000 5px,#010 6px,#010 11px);
 --footer:linear-gradient(180deg,#020,#000 75%);
---glow_bottom:radial-gradient(at center bottom,rgba(16,72,16,.3),rgba(0,0,0,0) 50%);
---glow_bottom_hover:radial-gradient(at center bottom,rgba(255,96,0,.25),rgba(0,0,0,0) 50%);
---glow_top:radial-gradient(at center -45px,rgba(16,72,16,.3),rgba(0,0,0,0) 85%);
---graphoverlay:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.4)),repeating-linear-gradient(90deg,rgba(192,255,192,.01) 2px,rgba(0,0,0,.1) 4px) center center/4px 100%,repeating-linear-gradient(180deg,rgba(0,0,0,.2) 2px,rgba(192,255,192,.01) 4px) center center/100% 4px;
+--glow_bottom:radial-gradient(at center bottom,rgba(16,72,16,.3),#0000 50%);
+--glow_bottom_hover:radial-gradient(at center bottom,rgba(255,96,0,.25),#0000 50%);
+--glow_top:radial-gradient(at center -45px,rgba(16,72,16,.3),#0000 85%);
+--graphoverlay:linear-gradient(180deg,#0000,rgba(0,0,0,.4)),repeating-linear-gradient(90deg,rgba(192,255,192,.01) 2px,rgba(0,0,0,.1) 4px) center center/4px 100%,repeating-linear-gradient(180deg,rgba(0,0,0,.2) 2px,rgba(192,255,192,.01) 4px) center center/100% 4px;
 --h1:var(--bg_title) left top/2px,repeating-linear-gradient(to bottom,rgba(0,24,0,.3) 2px,rgba(0,0,0,.3) 4px) center center/100% 4px,linear-gradient(180deg,#020,#010 50%,#010 50%,#000),var(--camotile) left top /256px,#000;
 --h2:repeating-linear-gradient(90deg,rgba(0,0,0,.4) 2px,rgba(0,32,0,.6) 4px) center center/4px 100%,linear-gradient(180deg,#001800,#000 75%);
 --h3_blend:normal,normal,normal,exclusion;
 --h3_fade:linear-gradient(180deg,#005000,#000 75%);
 --h3:var(--bg_title);
---heading:linear-gradient(180deg,rgba(0,0,0,0) 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 4px);
+--heading:linear-gradient(180deg,#0000 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 4px);
 --helpbox:linear-gradient(135deg,#000d00,#000900);
 --help:repeating-linear-gradient(90deg,#000 2px,#010 4px);
 --highlight_badge:inset 0 0 0 1px #010,0 0 0 1px #000;
@@ -111,7 +111,7 @@ input[type=submit],input[type=reset],button,.control,.fakebutton,.fakebutton:vis
 input[type=submit]:hover,input[type=reset]:hover,input[type=submit]:focus,input[type=reset]:focus,button:hover,button:focus,.control:hover,.control:focus,.fakebutton:hover,.fakebutton:focus{color:var(--hover);border:1px solid var(--hover);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover_radial);cursor:pointer}
 input[type=submit]:active,input[type=reset]:active,button:active,.control:active,.fakebutton:active{color:var(--ink);text-shadow:none;border:1px solid var(--hover);box-shadow:var(--btn_shadow_active);background:var(--hover)}
 input[type=file]{margin:5px 8px;padding:0;font-weight:400;color:var(--ink);box-shadow:none;border:0;background:#000;cursor:pointer}
-input[type=file]:hover{border-radius:0 15px 15px 0;background:linear-gradient(90deg,rgba(0,0,0,0),#000)}
+input[type=file]:hover{border-radius:0 15px 15px 0;background:linear-gradient(90deg,#0000,#000)}
 input[type=file]:hover,input[type=file]:active{color:var(--hover)}
 input[type=file]::file-selector-button{margin:2px 10px 2px 3px;padding:7px 12px;min-width:75px;vertical-align:middle;font:700 9pt var(--bodyfont);text-align:center;text-decoration:none;color:var(--a);border:1px solid #000;border-radius:2px;box-shadow:var(--btn_shadow);background:#000}
 input[type=file]:hover::file-selector-button,input[type=file]:focus::file-selector-button{color:var(--hover);border:1px solid var(--hover);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover_radial);cursor:pointer}
@@ -126,7 +126,7 @@ label{cursor:pointer}
 label[disabled],label[disabled]:hover{opacity:.45;cursor:default}
 p{text-align:justify;line-height:1.6}
 p:empty{display:none}
-pre,textarea,.widescroll{scrollbar-color:rgba(16,48,16,.4) rgba(0,0,0,0);transition:ease scrollbar-color .5s}
+pre,textarea,.widescroll{scrollbar-color:rgba(16,48,16,.4) #0000;transition:ease scrollbar-color .5s}
 pre{overflow-x:auto;text-align:left;font:500 8.5pt var(--monospaced)}
 pre:hover,textarea:hover,.widescroll:hover{scrollbar-color:rgba(24,80,24,.8) rgba(0,0,0,.9);transition:ease scrollbar-color .2s}
 select{margin:5px 10px;padding:7px 24px 7px 12px;min-width:110px;color:var(--a);font-size:8pt;font-weight:700;text-overflow:ellipsis;outline:none;box-shadow:var(--btn_shadow);border:1px solid #000;border-radius:2px;background:var(--dropdown) no-repeat right 10px center/10px,var(--btn);cursor:pointer;-moz-appearance:none;-webkit-appearance:none;appearance:none}

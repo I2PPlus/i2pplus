@@ -260,8 +260,8 @@ th.peerCount{text-align:center}
 #torrents .rateUp,#torrents .rateDown,#torrents .rxd,#torrents .txd{text-align:center}
 #torrents th img{padding:1px;max-height:22px}
 #torrents tr{border-bottom:1px solid var(--border_softer)}
-#torrents tr.active .tAction,#torrents tr.active:hover .tAction{background:linear-gradient(-90deg,#7f7 2px,rgba(0,0,0,0) 2px)}
-#torrents tr.active.seeding .tAction,#torrents tr.active.seeding:hover .tAction,#torrents tr.peerinfo.active .tAction,#torrents tr.peerinfo.active:hover .tAction{background:linear-gradient(-90deg,#f7f 2px,rgba(0,0,0,0) 2px)}
+#torrents tr.active .tAction,#torrents tr.active:hover .tAction{background:linear-gradient(-90deg,#7f7 2px,#0000 2px)}
+#torrents tr.active.seeding .tAction,#torrents tr.active.seeding:hover .tAction,#torrents tr.peerinfo.active .tAction,#torrents tr.peerinfo.active:hover .tAction{background:linear-gradient(-90deg,#f7f 2px,#0000 2px)}
 #torrents th:empty,#torrents td:empty,.ETA:empty,.rateUp:empty,.txd:empty,.rateDown:empty{width:0;min-width:0;max-width:0;padding:0;font-size:0}
 #torrents tr:hover,.dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover td,.peerinfo:hover,.peerinfo:hover td{background:var(--row_hover)}
 #torrents thead th:nth-child(2){text-align:center}
@@ -674,7 +674,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #dhtDebug th{text-align:center;font-weight:400}
 hr.debug{margin:10px 0 -5px;width:100%;display:none;color:#efefff;border:0;background:linear-gradient(90deg,var(--bg3),#ccf,var(--bg3))}
 
-.inactivity{margin-left:12px;min-width:5px;max-width:400px;height:4px;display:inline-block;border-radius:2px;box-shadow:0 0 0 1px #bbf,var(--highlight);background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 15px,rgba(220,220,255,.9) 15px,rgba(220,220,255,.9) 16px,rgba(0,0,0,0) 16px),linear-gradient(90deg,#ee0 100px,#900)}
+.inactivity{margin-left:12px;min-width:5px;max-width:400px;height:4px;display:inline-block;border-radius:2px;box-shadow:0 0 0 1px #bbf,var(--highlight);background:repeating-linear-gradient(90deg,#0000,#0000 15px,rgba(220,220,255,.9) 15px,rgba(220,220,255,.9) 16px,#0000 16px),linear-gradient(90deg,#ee0 100px,#900)}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 
 .magnetlink img,.torrentlink img,.magnetlink img:hover,.torrentlink img:hover{margin:-2px 0 0;padding:0;display:inline-block;vertical-align:middle;filter:none}

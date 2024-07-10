@@ -29,7 +29,7 @@ h2,h3{margin:12px 0 -1px;padding:8px 10px 8px 30px;position:relative;z-index:10;
 .iframed h2,.iframed h3{margin:14px 0 -1px}
 h2 span{margin-top:4px}
 table{background:#000}
-textarea{scrollbar-color:rgba(16,16,48,.8) rgba(0,0,0,0);transition:ease scrollbar-color .2s}
+textarea{scrollbar-color:rgba(16,16,48,.8) #0000;transition:ease scrollbar-color .2s}
 th,.tunnelOpts tr:nth-child(even) td,#throttler tr:nth-child(even) td{font-size:85%}
 th{padding:6px 5px;text-align:left;text-transform:capitalize;font-size:9.5pt;border-top:var(--border);border-bottom:var(--border);background:var(--title);background-size:4px 100%,100%}
 th:last-child,td:last-child{border-right:var(--border)}

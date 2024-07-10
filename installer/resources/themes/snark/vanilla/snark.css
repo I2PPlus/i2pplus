@@ -23,7 +23,7 @@
 --nav_hover:linear-gradient(180deg,#ffeadf,#cfb6a8);
 --nav_active:linear-gradient(180deg,#af9178,#dfb899);
 --nav_depressed:linear-gradient(180deg,#cfc7c2,#fff7ef);
---notify:linear-gradient(to bottom,rgba(0,0,0,0),#e9e5e2),var(--panel);
+--notify:linear-gradient(to bottom,#0000,#e9e5e2),var(--panel);
 --panel:linear-gradient(180deg,#dfd7d1,#cfc7c2);
 --row_odd:linear-gradient(90deg,#72665f 2px,#0000 2px),linear-gradient(180deg,#f6f1ee,#eee4dd);
 --row_even:linear-gradient(90deg,#998e88 2px,#0000 2px),linear-gradient(180deg,#f6f1ee,#eee4dd);
@@ -82,8 +82,8 @@ th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visi
 #navbar{margin:-11px 0 10px 0;padding:12px 10px 11px;position:sticky;top:-2px;z-index:999;width:70%;border:var(--border);border-radius:0 0 2px 2px;box-shadow:var(--highlight),0 0 0 1px rgba(111,96,90,.3);background:var(--navbar);text-align:center;transition:ease width .5s .5s}
 .iframed #navbar{margin:-6px 0;padding-top:11px;position:static;width:auto;border-radius:0;box-shadow:var(--highlight);background:var(--th)}
 #navbar a:not(:hover):not(:focus):not(:active){color:#3f271b}
-.snarkNav,.snarkNav:visited{margin:-3px -4px -4px 0;padding:4px 10px 4px 28px;display:inline-block;position:relative;z-index:30;line-height:1.3;font-family:var(--bodyfont);font-size:10pt;font-weight:700!important;color:#3f271b;text-shadow:0 0 1px #fff5ef;text-decoration:none;text-transform:uppercase;letter-spacing:.08em;border:var(--border);border-radius:0;box-shadow:var(--highlight),inset 0 0 0 rgba(0,0,0,0),0 0 0 1px rgba(77,69,62,.1);background-size:17px,100%,100%,17px,17px;background-position:12px center,center center,center center;background-repeat:no-repeat;animation:fade-in .25s ease .5s both}
-.snarkNav:hover,.snarkNav:focus{z-index:50;color:#930;text-decoration:none;text-shadow:none;box-shadow:var(--highlight),inset 0 0 0 rgba(0,0,0,0),0 0 0 1px rgba(77,69,62,.1)}
+.snarkNav,.snarkNav:visited{margin:-3px -4px -4px 0;padding:4px 10px 4px 28px;display:inline-block;position:relative;z-index:30;line-height:1.3;font-family:var(--bodyfont);font-size:10pt;font-weight:700!important;color:#3f271b;text-shadow:0 0 1px #fff5ef;text-decoration:none;text-transform:uppercase;letter-spacing:.08em;border:var(--border);border-radius:0;box-shadow:var(--highlight),inset 0 0 0 #0000,0 0 0 1px rgba(77,69,62,.1);background-size:17px,100%,100%,17px,17px;background-position:12px center,center center,center center;background-repeat:no-repeat;animation:fade-in .25s ease .5s both}
+.snarkNav:hover,.snarkNav:focus{z-index:50;color:#930;text-decoration:none;text-shadow:none;box-shadow:var(--highlight),inset 0 0 0 #0000,0 0 0 1px rgba(77,69,62,.1)}
 .snarkNav:active{text-shadow:none;box-shadow:var(--btn_shadow_inset);transition:ease box-shadow .01s}
 .nav_main{background:var(--b_snark) no-repeat 9px center/16px,var(--nav),var(--b_snark_hover) no-repeat 9px center/16px,var(--b_snark_active) no-repeat 9px center/16px}
 .nav_main:hover,.nav_main:focus{background:var(--b_snark_hover) no-repeat 9px center/18px,var(--nav_hover);background-size:18px,100%}
@@ -163,8 +163,8 @@ td:hover .barText{opacity:1}
 body.magnets #snarkHead .trackerLink,body.magnets #snarkTbody .trackerLink{padding:0!important;width:0;min-width:0!important;font-size:0}
 .iframed #torrents,.iframed #torrentEdit{border-radius:0}
 .nopeers.zero td.peerCount,.stopped.zero td.peerCount{text-align:center}
-.active .tAction,.active:hover .tAction{background:linear-gradient(to left,#cb4dcb 3px,rgba(0,0,0,0) 3px);animation:ease-in-out active .5s 3s forwards}
-.active.downloading .tAction,.active.downloading:hover .tAction,.active.RX .tAction,.active.RX:hover .tAction{background:linear-gradient(to left,#3d3 3px,rgba(0,0,0,0) 3px);animation:ease-in-out downloading .5s 3s forwards}
+.active .tAction,.active:hover .tAction{background:linear-gradient(to left,#cb4dcb 3px,#0000 3px);animation:ease-in-out active .5s 3s forwards}
+.active.downloading .tAction,.active.downloading:hover .tAction,.active.RX .tAction,.active.RX:hover .tAction{background:linear-gradient(to left,#3d3 3px,#0000 3px);animation:ease-in-out downloading .5s 3s forwards}
 .dirInfo td:first-child img:not(.thumb){margin:0 2px}
 .status,.magnet{width:1%;white-space:nowrap;text-align:center}
 .status img{width:auto;height:22px}
@@ -205,7 +205,7 @@ th.peerCount img{margin-left:6px}
 .tName{padding-left:5px;line-height:1.1;text-align:left}
 .tName a,.dirInfo .snarkFileName a{padding:4px 0;font-weight:700}
 .tName a:hover,.snarkFileName a:hover,.tName:hover a,.dirInfo:hover a{box-shadow:none;background:none}
-.tName a:hover,.snarkFileName a:hover{border-radius:0 15px 15px 0;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(155,108,46,.2) 40%)}
+.tName a:hover,.snarkFileName a:hover{border-radius:0 15px 15px 0;background:linear-gradient(90deg,#0000,rgba(155,108,46,.2) 40%)}
 .tName a:active,.snarkFileName a:active{box-shadow:inset 2px 2px 2px 1px rgba(32,32,0,.3);border:0}
 .txd{padding-left:10px;color:#67594c}
 td.details{padding-left:0}
@@ -221,8 +221,8 @@ td.details{padding-left:0}
 .unchoked{color:#395;font-weight:700}
 .choked .left,.choked .right{display:none!important}
 #linkswitch{margin:0}
-#snarkTbody td{border-top:1px solid rgba(111,83,62,.6);border-bottom:1px solid rgba(0,0,0,0)}
-#snarkTbody tr:first-child td{border-top:1px solid rgba(0,0,0,0)}
+#snarkTbody td{border-top:1px solid rgba(111,83,62,.6);border-bottom:1px solid #0000}
+#snarkTbody tr:first-child td{border-top:1px solid #0000}
 #snarkTbody tr:nth-child(odd){background:var(--row_odd)}
 #snarkTbody tr:nth-child(even){background:var(--row_even)}
 #torrentInfo tr:nth-child(10) a{display:inline-block;word-break:break-all}
@@ -251,7 +251,7 @@ td.details{padding-left:0}
 .barInner,.barOuter{max-width:84px}
 .barText{padding:3px;min-width:140px;display:inline-block;position:relative;top:-22px;left:-32px;border-radius:2px;background:#ffe;filter:drop-shadow(0 0 1px #776)}
 .barComplete{padding:3px 0 2px;display:inline-block;min-width:84px;line-height:1.5;vertical-align:middle;text-align:center;border-radius:20px;box-shadow:inset 0 0 0 1px #b5a79b,inset 0 0 0 2px #fff5,inset 0 2px 2px 2px rgba(239,231,224,.4),inset 0 -2px 2px 2px rgba(236,200,172,.4);background:linear-gradient(180deg,#fffbef,#dfd7d1)}
-.active .barComplete{color:#ad681f;box-shadow:inset 0 0 0 1px #b5a79b,inset 0 2px 2px 2px rgba(239,231,224,.6),inset 0 -2px 2px 2px rgba(236,200,172,.6);background:radial-gradient(at center bottom,rgba(220,180,0,.1) 10%,rgba(0,0,0,0) 70%),linear-gradient(180deg,#fffbef,#f0d6c2)}
+.active .barComplete{color:#ad681f;box-shadow:inset 0 0 0 1px #b5a79b,inset 0 2px 2px 2px rgba(239,231,224,.6),inset 0 -2px 2px 2px rgba(236,200,172,.6);background:radial-gradient(at center bottom,rgba(220,180,0,.1) 10%,#0000 70%),linear-gradient(180deg,#fffbef,#f0d6c2)}
 .active .txBarInner{background:rgba(255,64,220,.35)}
 .active .txBarInner[style="width:calc(100% - 2px)"]{background:linear-gradient(180deg,rgba(255,96,224,.35) 50%,rgba(255,32,192,.35))}
 .dirInfo .barInner{background:linear-gradient(180deg,rgba(255,247,239,.75) 50%,rgba(207,193,181,.8) 50%,rgba(207,193,181,.9)),linear-gradient(90deg,rgba(255,100,0,.5) 30px,rgba(255,255,0,.5) 60px,rgba(0,255,0,.5))}
@@ -748,7 +748,7 @@ form[action^="/i2psnark/configure"]{display:block}
 .downloading.active .barOuter,.peerinfo.active .barOuter{background:repeating-linear-gradient(135deg,#fff7ef,#fff7ef 5px,#efdfd1 5px,#efdfd1 10px);background-size:200%;animation:downloadbar 1s linear 2s both;opacity:1}
 .iframed #configSection,.iframed #trackers,.iframed .mainsection#snarkInfo{margin-bottom:0}
 img{font-size:0;overflow:hidden}
-.inactivity{margin-left:10px;height:6px;min-width:5px;max-width:400px;display:inline-block;background:#900;background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 10px,rgba(255,255,255,.6) 10px,rgba(255,255,255,.6) 11px,rgba(0,0,0,0) 11px),linear-gradient(180deg,rgba(255,255,255,.3) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#aa0 40px,#d30 100px,#900);border-radius:3px;box-shadow:inset 0 0 0 1px rgba(160,152,146,.8)}
+.inactivity{margin-left:10px;height:6px;min-width:5px;max-width:400px;display:inline-block;background:#900;background:repeating-linear-gradient(90deg,#0000,#0000 10px,rgba(255,255,255,.6) 10px,rgba(255,255,255,.6) 11px,#0000 11px),linear-gradient(180deg,rgba(255,255,255,.3) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#aa0 40px,#d30 100px,#900);border-radius:3px;box-shadow:inset 0 0 0 1px rgba(160,152,146,.8)}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 #metacomment div{padding:4px 4px 4px 0}
 #metacomment{padding:0;line-height:1.4;text-align:justify}
@@ -871,10 +871,10 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 #DoesNotExist{margin-top:10px}
 
 /* animations */
-@keyframes active{from{background:linear-gradient(to left,#f3c 3px,rgba(0,0,0,0) 3px)}to{background:linear-gradient(to left,#cb4dcb 3px,rgba(0,0,0,0) 3px)}}
+@keyframes active{from{background:linear-gradient(to left,#f3c 3px,#0000 3px)}to{background:linear-gradient(to left,#cb4dcb 3px,#0000 3px)}}
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
 @keyframes downloadbar{0%{background-position:left center}100%{background-position:-29.5px center}}
-@keyframes downloading{from{background:linear-gradient(to left,#3d3 3px,rgba(0,0,0,0) 3px)}to{background:linear-gradient(to left,#7f7 3px,rgba(0,0,0,0) 3px)}}
+@keyframes downloading{from{background:linear-gradient(to left,#3d3 3px,#0000 3px)}to{background:linear-gradient(to left,#7f7 3px,#0000 3px)}}
 @keyframes fade-in{0%{filter:opacity(0)}100%{filter:opacity(1)}}
 @keyframes scale{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
 @keyframes uploading{from{background-position:left center}to{background-position:20% center}}

@@ -249,7 +249,7 @@ img.sort:active{box-shadow:var(--highlight),inset 2px 2px 2px #000}
 #dologin input[name="pass"]{background:#000 var(--key) no-repeat 7px center/16px}
 #dologin input[name="user"]:focus,#dologin input[name="pass"]:focus{background-color:#010;background-blend-mode:normal}
 #dologin input[name="user"],#dologin input[name="pass"],#dologin input[name="host"]{margin-right:5px;max-width:300px}
-#dologin hr{margin:0 0 4px;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,128,0,.8) 45%,rgba(0,128,0,.8) 55%,rgba(0,0,0,0))}
+#dologin hr{margin:0 0 4px;background:linear-gradient(90deg,#0000,rgba(0,128,0,.8) 45%,rgba(0,128,0,.8) 55%,#0000)}
 #dologin hr:first-of-type{margin-top:10px}
 #dologin tr:last-child hr{margin-top:3px}
 #dologin table{margin-top:20px}
@@ -381,7 +381,7 @@ tr:hover .listDate{box-shadow:0 0 0 1px #000,inset 0 0 0 1px #262;opacity:.9}
 tr:hover .listSize{box-shadow:0 0 0 1px #262;color:var(--ink)}
 tr:hover .mailListAttachment.isAttached{background:var(--attach_hover) no-repeat center center/14px}
 tr:hover .mailListAttachment.isAttached.htmlMessage{background:var(--html_hover) no-repeat center center/20px}
-tr:hover td.mailListSubject a{width:calc(100% - 2px);border-radius:2px 15px 15px 2px;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,64,0,.9) 20%)}
+tr:hover td.mailListSubject a{width:calc(100% - 2px);border-radius:2px 15px 15px 2px;background:linear-gradient(90deg,#0000,rgba(0,64,0,.9) 20%)}
 tr:active td.mailListSubject a{box-shadow:inset 2px 2px 1px #000}
 tr.pagenavcontrols:hover .pagenavcontrols td,.topbuttons td,.topbuttons:hover td,.topbuttons tr:hover td,.topbuttons:hover td,#mailbox tr:hover,#mailbox tr:hover td{box-shadow:none}
 .folders{display:inline-block;margin:0}

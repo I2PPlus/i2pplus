@@ -4,7 +4,7 @@
   cursor:pointer!important;
 }
 ::-webkit-scrollbar-track{
-  background:rgba(0,0,0,0);
+  background:#0000;
   border-radius:0;
 }
 ::-webkit-scrollbar-track:hover{

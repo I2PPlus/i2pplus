@@ -21,11 +21,11 @@
 --hover:#f60;
 --ink:#e4d3d7;
 --ink_btn:#2f1d30;
---isDown:repeating-linear-gradient(90deg,#101,rgba(0,0,0,0),#101),linear-gradient(90deg,#303,#101,#303) center center,#101;
+--isDown:repeating-linear-gradient(90deg,#101,#0000,#101),linear-gradient(90deg,#303,#101,#303) center center,#101;
 --link:linear-gradient(180deg,#313 50%,#101 50%);
---nav_active:radial-gradient(at center bottom,rgba(255,200,0,.5) 0,rgba(0,0,0,0) 70%),linear-gradient(180deg,#f50,#f70);
---nav_hover:radial-gradient(at center bottom,rgba(200,96,200,.6) 0,rgba(0,0,0,0) 90%),linear-gradient(180deg,#a15b73,#7e4062 50%,#591c3e 51%,#46133e);
---nav:radial-gradient(at center bottom,rgba(148,48,0,.25),rgba(80,16,0,.15) 80%,rgba(0,0,0,0)),linear-gradient(180deg,#a68058 1%,#7a6045 27%,#5e4730 50%,#2e1700 51%,#1f0f00);
+--nav_active:radial-gradient(at center bottom,rgba(255,200,0,.5) 0,#0000 70%),linear-gradient(180deg,#f50,#f70);
+--nav_hover:radial-gradient(at center bottom,rgba(200,96,200,.6) 0,#0000 90%),linear-gradient(180deg,#a15b73,#7e4062 50%,#591c3e 51%,#46133e);
+--nav:radial-gradient(at center bottom,rgba(148,48,0,.25),rgba(80,16,0,.15) 80%,#0000),linear-gradient(180deg,#a68058 1%,#7a6045 27%,#5e4730 50%,#2e1700 51%,#1f0f00);
 --notify:var(--panel);
 --panel:linear-gradient(180deg,#545,#434);
 --row:linear-gradient(90deg,#808 2px,#0000 2px),linear-gradient(180deg,#260d26,#1f001f);
@@ -186,7 +186,7 @@ tr a,td.peerCount{-webkit-text-stroke:1px rgba(0,0,0,.3)}
 tr:hover a,tr a:hover,tr:hover td.peerCount{-webkit-text-stroke:0}
 tr:hover .ParentDir a:active{padding-left:0}
 tr:hover .barText{text-shadow:0 1px 1px #313;opacity:1}
-tr:hover .tName a:hover,tr:hover .snarkFileName a:hover,tr:active .ParentDir a{border-radius:2px 15px 15px 2px;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.2) 70%)}
+tr:hover .tName a:hover,tr:hover .snarkFileName a:hover,tr:active .ParentDir a{border-radius:2px 15px 15px 2px;background:linear-gradient(90deg,#0000,rgba(0,0,0,.2) 70%)}
 tr:hover .tName a:active,tr:hover .snarkFileName a:active{padding-left:5px;box-shadow:inset 3px 3px 3px #101;background:#303}
 tr[id]+.peerinfo td{padding-top:4px}
 .active.downloading .barOuter::before,.peerinfo.RX .barOuter::before,#dirlist .volatile .barOuter::before{top:0;left:1px;background:#d40;animation:bar .2s steps(2) forwards}
@@ -223,7 +223,7 @@ td.status img{margin:-2px 3px -2px 1px;height:23px;width:auto;display:inline-blo
 #torrents #snarkTbody tr:last-child td{border-bottom:var(--border_hard)}
 #torrents tfoot{line-height:.5;background:linear-gradient(180deg,#180018,#080008)}
 #torrents tfoot th{padding:3px 2px;font-weight:400;vertical-align:middle}
-#snarkFoot tr:not(#dhtDebug) th[colspan="11"]{padding:0 1px 4px;background:linear-gradient(180deg,#101 1px,rgba(0,0,0,0) 1px),linear-gradient(90deg,#940,rgba(0,0,0,0) 3%,rgba(0,0,0,0) 97%,#940);background-size:200% 100%;background-position:100%;animation:linear initializing 5s alternate 10}
+#snarkFoot tr:not(#dhtDebug) th[colspan="11"]{padding:0 1px 4px;background:linear-gradient(180deg,#101 1px,#0000 1px),linear-gradient(90deg,#940,#0000 3%,#0000 97%,#940);background-size:200% 100%;background-position:100%;animation:linear initializing 5s alternate 10}
 #torrents tfoot tr:first-child th{padding:2px 2px 0;vertical-align:middle;font-weight:700;color:var(--ink);border-top:var(--border_inner)}
 #torrents tfoot tr:first-child th.rateUp,#torrents tfoot tr:first-child th.txd{color:#bbb}
 #torrents code{font:8.5pt var(--monospaced);font-weight:700;color:#cc0;margin-right:2px;letter-spacing:.1em}
@@ -275,24 +275,24 @@ td.peerCount:empty{text-align:center}
 /* download bars */
 .barInner,.barOuter{height:14px;max-width:80px}
 .barOuter,.barText{width:80px;display:inline-block;vertical-align:middle;text-align:center}
-.barOuter{margin:0;border:1px solid #414;border-bottom:1px solid #212;border-right:1px solid #212;box-shadow:0 0 0 1px rgba(0,0,0,.7),inset 0 0 0 1px #080008,var(--shadow_inset);background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 7px,rgba(64,0,64,.6) 7px,rgba(64,0,64,.6) 8px,rgba(0,0,0,0) 8px) #101}
+.barOuter{margin:0;border:1px solid #414;border-bottom:1px solid #212;border-right:1px solid #212;box-shadow:0 0 0 1px rgba(0,0,0,.7),inset 0 0 0 1px #080008,var(--shadow_inset);background:repeating-linear-gradient(90deg,#0000,#0000 7px,rgba(64,0,64,.6) 7px,rgba(64,0,64,.6) 8px,#0000 8px) #101}
 .barInner,.txBarInner{height:100%;border:0;border-right:1px solid rgba(64,16,64,.8);box-shadow:inset 0 0 0 1px #101;background:linear-gradient(180deg,#414,#313 50%,#101 50%,#000)}
 .barText{padding:1px 0;min-width:140px;display:block;position:relative;top:-18px;left:-32px;z-index:10;white-space:nowrap;text-align:center;font-weight:700;color:#dd7;border-radius:2px;background:#000;opacity:0;transition:ease opacity .15s;filter:drop-shadow(0 0 1px #737)}
 .barText::after{margin-left:-7px;position:absolute;top:90%;left:50%;border-width:7px;border-style:solid;border-color:#000 transparent transparent transparent;content:""}
-.barComplete{margin:0;padding:3px 0;min-width:84px;display:inline-block;line-height:1.25;vertical-align:middle;text-align:center;text-shadow:var(--txt_shadow);box-shadow:inset 0 0 0 1px rgba(16,0,16,.85),inset 0 1px 2px rgba(128,96,128,.3),inset 0 -1px 3px rgba(0,0,0,.75),inset 0 0 2px 1px rgba(92,0,92,.7);border-radius:15px;background:radial-gradient(at center bottom,rgba(64,16,64,.5) 10%,rgba(16,0,16,.1) 80%,rgba(0,0,0,0) 70%),linear-gradient(180deg,rgba(64,24,64,.9),rgba(16,0,16,.9))}
-.active.peerinfo .barOuter{box-shadow:0 0 0 1px rgba(0,0,0,.5),inset 0 0 0 1px rgba(16,0,16,.5),var(--shadow_inset);background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 7px,rgba(0,0,0,.2) 7px,rgba(0,0,0,.2) 8px,rgba(0,0,0,0) 8px),linear-gradient(90deg,#202,#303,#404)}
+.barComplete{margin:0;padding:3px 0;min-width:84px;display:inline-block;line-height:1.25;vertical-align:middle;text-align:center;text-shadow:var(--txt_shadow);box-shadow:inset 0 0 0 1px rgba(16,0,16,.85),inset 0 1px 2px rgba(128,96,128,.3),inset 0 -1px 3px rgba(0,0,0,.75),inset 0 0 2px 1px rgba(92,0,92,.7);border-radius:15px;background:radial-gradient(at center bottom,rgba(64,16,64,.5) 10%,rgba(16,0,16,.1) 80%,#0000 70%),linear-gradient(180deg,rgba(64,24,64,.9),rgba(16,0,16,.9))}
+.active.peerinfo .barOuter{box-shadow:0 0 0 1px rgba(0,0,0,.5),inset 0 0 0 1px rgba(16,0,16,.5),var(--shadow_inset);background:repeating-linear-gradient(90deg,#0000,#0000 7px,rgba(0,0,0,.2) 7px,rgba(0,0,0,.2) 8px,#0000 8px),linear-gradient(90deg,#202,#303,#404)}
 .active .barComplete{animation:ease seeding 1.5s forwards}
-.active .barInner{background:repeating-linear-gradient(135deg,rgba(0,0,0,0) 1px,rgba(0,0,0,0) 6px,rgba(48,0,48,.3) 6px,rgba(48,0,48,.3) 11px),linear-gradient(180deg,rgba(102,17,102,.65),rgba(85,17,85,.65) 50%,rgba(17,0,17,.65) 50%,rgba(0,0,0,.75))}
-.active .barOuter{box-shadow:0 0 0 1px rgba(0,0,0,.7),inset 0 0 0 1px rgba(16,0,16,.75),var(--shadow_inset);background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 7px,rgba(0,0,0,.2) 7px,rgba(0,0,0,.2) 8px,rgba(0,0,0,0) 8px),linear-gradient(to left,rgba(0,255,0,.25),rgba(255,255,0,.25),rgba(255,0,0,.25));opacity:1}
-.active.seeding .barComplete{color:#86b;box-shadow:inset 0 0 0 1px rgba(16,0,16,.9),inset 0 1px 3px rgba(192,160,192,.1),inset 0 -1px 3px rgba(64,0,64,.75),inset 0 -1px 1px 2px rgba(18,4,12,.2);background:radial-gradient(at center bottom,rgba(96,32,64,.5) 10%,rgba(0,0,0,0) 60%),linear-gradient(180deg,rgba(72,16,48,.9),rgba(16,0,16,.9))}
+.active .barInner{background:repeating-linear-gradient(135deg,#0000 1px,#0000 6px,rgba(48,0,48,.3) 6px,rgba(48,0,48,.3) 11px),linear-gradient(180deg,rgba(102,17,102,.65),rgba(85,17,85,.65) 50%,rgba(17,0,17,.65) 50%,rgba(0,0,0,.75))}
+.active .barOuter{box-shadow:0 0 0 1px rgba(0,0,0,.7),inset 0 0 0 1px rgba(16,0,16,.75),var(--shadow_inset);background:repeating-linear-gradient(90deg,#0000,#0000 7px,rgba(0,0,0,.2) 7px,rgba(0,0,0,.2) 8px,#0000 8px),linear-gradient(to left,rgba(0,255,0,.25),rgba(255,255,0,.25),rgba(255,0,0,.25));opacity:1}
+.active.seeding .barComplete{color:#86b;box-shadow:inset 0 0 0 1px rgba(16,0,16,.9),inset 0 1px 3px rgba(192,160,192,.1),inset 0 -1px 3px rgba(64,0,64,.75),inset 0 -1px 1px 2px rgba(18,4,12,.2);background:radial-gradient(at center bottom,rgba(96,32,64,.5) 10%,#0000 60%),linear-gradient(180deg,rgba(72,16,48,.9),rgba(16,0,16,.9))}
 .active .peerSeed img{opacity:1;animation:scale .2s linear 3s 2 forwards}
-.active.seeding:hover .barComplete{color:#97c;box-shadow:inset 0 0 0 1px rgba(16,0,16,.95),inset 0 1px 3px rgba(192,96,192,.9),inset 0 -1px 3px rgba(0,0,0,.9);background:radial-gradient(at center bottom,rgba(128,48,72,.4) 10%,rgba(16,0,16,.1) 50%,rgba(0,0,0,0) 90%),linear-gradient(180deg,rgba(72,20,52,.9),rgba(16,0,16,.9))}
+.active.seeding:hover .barComplete{color:#97c;box-shadow:inset 0 0 0 1px rgba(16,0,16,.95),inset 0 1px 3px rgba(192,96,192,.9),inset 0 -1px 3px rgba(0,0,0,.9);background:radial-gradient(at center bottom,rgba(128,48,72,.4) 10%,rgba(16,0,16,.1) 50%,#0000 90%),linear-gradient(180deg,rgba(72,20,52,.9),rgba(16,0,16,.9))}
 .peerinfo .barOuter,.peerinfo .barInner{height:12px}
 .peerinfo.TX .barOuter::after{top:auto;left:auto;bottom:0;right:1px;background:#242;animation:bar .2s steps(2) reverse}
 .peerSeed img{font-size:0;opacity:.7;transform:scale(1)}
 tr:hover .barInner,tr:hover .peerinfo .barInner{border-right:1px solid #808;box-shadow:none;background:linear-gradient(180deg,#404,#303);opacity:1}
 tr:hover .barOuter,tr:hover .peerinfo .barOuter{border:1px solid #808;box-shadow:0 0 0 1px #000;background:#000;opacity:1;filter:none}
-tr:hover .barComplete{color:#8d7cc1;box-shadow:inset 0 0 0 1px rgba(16,0,16,.95),inset 0 1px 3px rgba(192,96,192,.7),inset 0 -1px 3px rgba(48,0,48,.75);background:radial-gradient(at center bottom,rgba(80,40,80,.6) 10%,rgba(64,16,64,.15) 60%,rgba(0,0,0,0) 70%),linear-gradient(180deg,rgba(72,32,72,.9),rgba(16,0,16,.9))}
+tr:hover .barComplete{color:#8d7cc1;box-shadow:inset 0 0 0 1px rgba(16,0,16,.95),inset 0 1px 3px rgba(192,96,192,.7),inset 0 -1px 3px rgba(48,0,48,.75);background:radial-gradient(at center bottom,rgba(80,40,80,.6) 10%,rgba(64,16,64,.15) 60%,#0000 70%),linear-gradient(180deg,rgba(72,32,72,.9),rgba(16,0,16,.9))}
 tr.active:hover .barInner,tr.active:hover .peerinfo .barInner{background:repeating-linear-gradient(135deg,rgba(0,0,0,.5) 1px,rgba(0,0,0,.5) 6px,rgba(48,0,48,.5) 6px,rgba(48,0,48,.5) 11px),linear-gradient(180deg,#404,#303)}
 .iframed .barText,.iframed .barText:hover,.iframed .barText:focus{transition:none}
 
@@ -377,7 +377,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #enableInOrder{margin-left:4px;margin-right:8px}
 #mediaContainer th{padding:8px 5px 8px 30px;background:url(/i2psnark/.res/icons/video.png) no-repeat 8px center/16px,var(--th)}
 #mediaContainer th.audio{padding:8px 5px 8px 30px;background:url(/i2psnark/.res/icons/music.png) no-repeat 8px center/16px,var(--th)}
-#mediaContainer td{padding:15px;text-align:center;background:linear-gradient(135deg,rgba(0,0,0,.1),rgba(16,0,16,.5),rgba(16,0,16,.8),#101),linear-gradient(135deg,rgba(0,0,0,0),rgba(16,0,16,.5))}
+#mediaContainer td{padding:15px;text-align:center;background:linear-gradient(135deg,rgba(0,0,0,.1),rgba(16,0,16,.5),rgba(16,0,16,.8),#101),linear-gradient(135deg,#0000,rgba(16,0,16,.5))}
 #mediaContainer audio,#mediaContainer video{width:auto;max-width:100%}
 #setPriority>*{vertical-align:middle}
 #torrentInfo{margin:1px 0}
@@ -385,7 +385,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #torrentInfo,.dirInfo,#mediaContainer{margin:0;border:var(--border_hard);background:#270027;filter:drop-shadow(0 0 1px rgba(16,8,16,.7))}
 #torrentInfo img{max-height:16px;filter:drop-shadow(0 0 1px #000)}
 #torrentInfo tr:first-child{background:var(--th)}
-#torrentInfo tr:not(:last-child),#commentInfo tr:nth-child(n+2),#userComments tr{background:linear-gradient(135deg,rgba(0,0,0,.1),rgba(16,0,16,.5),rgba(16,0,16,.8),#101),linear-gradient(135deg,rgba(0,0,0,0),rgba(16,0,16,.5))}
+#torrentInfo tr:not(:last-child),#commentInfo tr:nth-child(n+2),#userComments tr{background:linear-gradient(135deg,rgba(0,0,0,.1),rgba(16,0,16,.5),rgba(16,0,16,.8),#101),linear-gradient(135deg,#0000,rgba(16,0,16,.5))}
 #torrentInfo td a,#torrents td a,.dirInfo td a{text-shadow:var(--txt_shadow)}
 #torrentInfo th,.dirInfo th{border-bottom:var(--border_inner)}
 #torrentInfo th,#torrentInfo td{padding:8px 5px;vertical-align:middle;text-align:left;font-weight:inherit}
@@ -853,7 +853,7 @@ th .commentAuthorName{margin-right:-10px;padding-right:6px;font-size:90%}
 #filtercount:not(:empty):not([hidden]){margin-left:4px;padding:0 4px;min-width:18px;display:inline-block!important;font-size:90%;border-radius:1px;box-shadow:0 0 0 1px #313,0 0 0 1px rgba(184,72,184,.2) inset;background:linear-gradient(180deg,#414,#212)}
 #torrentDisplay{margin:1px 0 -1px;padding:2px;display:flex;position:relative;z-index:500;border-bottom:var(--border_inner);border-radius:4px 4px 0 0;background:var(--th);filter:drop-shadow(0 1px 1px #101)}
 .iframed #torrentDisplay{padding:0 0 1px}
-#torrentDisplay .filter.enabled{color:#dad;text-shadow:var(--txt_shadow);box-shadow:var(--highlight),3px 3px 3px rgba(0,0,0,.45) inset;background:radial-gradient(at center bottom,rgba(255,32,160,.25),rgba(128,64,128,.15) 80%,rgba(0,0,0,0)),linear-gradient(180deg,#180818,#280828);pointer-events:none}
+#torrentDisplay .filter.enabled{color:#dad;text-shadow:var(--txt_shadow);box-shadow:var(--highlight),3px 3px 3px rgba(0,0,0,.45) inset;background:radial-gradient(at center bottom,rgba(255,32,160,.25),rgba(128,64,128,.15) 80%,#0000),linear-gradient(180deg,#180818,#280828);pointer-events:none}
 #torrentDisplay .filter{margin:0;padding:3px 2px;display:flex;justify-content:center;flex-grow:.5;font-size:95%;font-weight:700;color:#969;text-shadow:0 0 1px #000;-webkit-text-stroke:1px rgba(45,30,45,.3);border:var(--border_inner);border-right:0;border-radius:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4);background:linear-gradient(180deg,#313,#202 50%,#101 50%)}
 html:not(.iframed) #torrentDisplay .filter:first-of-type{border-radius:3px 0 0 3px}
 html:not(.iframed) #torrentDisplay #stopped{border-radius:0 3px 3px 0}
@@ -920,7 +920,7 @@ tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before{content:"\27A4";transform:rotate(90deg) scaleX(.6)}
 tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4";transform:rotate(-90deg) scaleX(.6)}
 .choked .left,.choked .right{display:none!important}
-.inactivity{margin-left:10px;max-width:400px;min-width:5px;height:4px;display:inline-block;border-radius:3px;box-shadow:0 0 0 1px #200;background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 15px,rgba(0,0,0,.5) 15px,rgba(0,0,0,.5) 16px,rgba(0,0,0,0) 16px),linear-gradient(180deg,rgba(255,255,255,.3) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#770 50px,#900)}
+.inactivity{margin-left:10px;max-width:400px;min-width:5px;height:4px;display:inline-block;border-radius:3px;box-shadow:0 0 0 1px #200;background:repeating-linear-gradient(90deg,#0000,#0000 15px,rgba(0,0,0,.5) 15px,rgba(0,0,0,.5) 16px,#0000 16px),linear-gradient(180deg,rgba(255,255,255,.3) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#770 50px,#900)}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 .peerinfo .rateDown .left,.peerinfo .rateDown .right,.peerinfo .rateUp .left,.peerinfo .rateUp .right{opacity:.5;text-shadow:0 0 1px #000}
 .peerinfo .rateDown.ten .left,.peerinfo .rateDown.ten .right,.peerinfo .rateUp.ten .left,.peerinfo .rateUp.ten .right{opacity:.75}
@@ -1048,7 +1048,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 @keyframes position{from{position:absolute;transform:translateX(6px);display:none}100%{position:static;transform:translateX(0);display:inline-block}}
 @keyframes routerdown{from{background-size:50% 100%,200% 100%}}
 @keyframes scale{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
-@keyframes seeding{from{box-shadow:inset 0 0 0 1px rgba(16,0,16,.9),inset 0 1px 3px rgba(255,96,0,.4),inset 0 -1px 4px rgba(128,48,0,.4);background:radial-gradient(at center bottom,rgba(128,32,64,.6) 10%,rgba(0,0,0,0) 60%),linear-gradient(180deg,rgba(80,16,48,.9),rgba(16,0,16,.9))}}
+@keyframes seeding{from{box-shadow:inset 0 0 0 1px rgba(16,0,16,.9),inset 0 1px 3px rgba(255,96,0,.4),inset 0 -1px 4px rgba(128,48,0,.4);background:radial-gradient(at center bottom,rgba(128,32,64,.6) 10%,#0000 60%),linear-gradient(180deg,rgba(80,16,48,.9),rgba(16,0,16,.9))}}
 @keyframes slide-in{0%{transform:translateY(-50px)}100%{transform:translateY(0)}}
 @keyframes slide-right{from{transform:translateX(-30px) rotate(-90deg);filter:blur(1px)}to{transform:translateX(0) rotate(0);filter:blur(0)}}
 @keyframes spin{from{transform:rotate(360deg)}}

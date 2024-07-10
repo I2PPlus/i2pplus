@@ -129,7 +129,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 .iframed .logshim{margin-top:20px}
 
 /* torrents */
-.active td.tAction{background:linear-gradient(to left,rgba(0,0,0,0) 1px,#b3b 2px,rgba(0,0,0,0) 2px);animation:ease active 2s forwards}
+.active td.tAction{background:linear-gradient(to left,#0000 1px,#b3b 2px,#0000 2px);animation:ease active 2s forwards}
 .choked{color:#900}
 .unchoked{color:#090}
 .choked,.unchoked{font-weight:700;font-style:italic}
@@ -153,7 +153,7 @@ td.details img:not([src$="rateme.svg"]),.dirInfo td:first-child img:not(.thumb){
 .ETA,.txd,.rateDown,.rateUp{width:5%;min-width:40px;white-space:nowrap;text-align:center;font-weight:700}
 .tName a:active,.snarkFileName a:active{color:var(--active);box-shadow:inset 3px 3px 3px 3px rgba(0,0,0,.3)}
 .tName a,.dirInfo .snarkFileName a{padding:3px 0;width:100%;display:inline-block;font-weight:700}
-.tName a:hover,.snarkFileName a:hover{border-radius:0 15px 15px 0;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(16,0,16,.5) 40%)}
+.tName a:hover,.snarkFileName a:hover{border-radius:0 15px 15px 0;background:linear-gradient(90deg,#0000,rgba(16,0,16,.5) 40%)}
 .tName{padding-left:4px;line-height:1.1}
 .txd,.rateUp,.rateDown{padding-right:8px;padding-left:8px;min-width:80px;text-align:center;color:#9fa4c6}
 .details a:active img:not([src$="rateme.svg"]),.dirInfo td:first-child a:active img{border:1px solid var(--active);box-shadow:inset 3px 3px 3px 3px #000;transform:scale(0.9)}
@@ -284,19 +284,19 @@ tr:hover .barText{opacity:.9}
 .barInner{height:100%;border:0;border-right:1px solid #225;border-radius:1px;box-shadow:var(--highlight);background:linear-gradient(180deg,#33a,#226 50%,#003 50%,#000) right center/200%;opacity:.8}
 .peerinfo .barOuter{opacity:.8}
 .peerinfo .barOuter,.peerinfo .barInner{height:12px}
-.rxd .barInner{background:linear-gradient(90deg,rgba(0,0,0,0),rgba(255,255,0,.05) 70px,rgba(0,255,0,.1)),linear-gradient(180deg,rgba(100,100,220,.5),rgba(70,70,120,.5) 50%,rgba(0,0,50,.5) 50%,rgba(0,0,0,.5))}
-.active:not(.peerinfo) .rxd .barInner{background:linear-gradient(90deg,rgba(0,0,0,0),rgba(255,255,0,.05) 70px,rgba(0,255,0,.1)),linear-gradient(180deg,rgba(250,250,248,.5),rgba(140,140,135,.5) 50%,rgba(50,50,0,.5) 50%,rgba(20,20,0,.5))}
-.dirInfo .barInner{background:linear-gradient(90deg,rgba(0,0,0,0),rgba(255,255,0,.05) 55px,rgba(0,255,0,.1)),linear-gradient(180deg,rgba(100,100,220,.5),rgba(70,70,120,.5) 50%,rgba(0,0,50,.5) 50%,rgba(0,0,0,.5))}
+.rxd .barInner{background:linear-gradient(90deg,#0000,rgba(255,255,0,.05) 70px,rgba(0,255,0,.1)),linear-gradient(180deg,rgba(100,100,220,.5),rgba(70,70,120,.5) 50%,rgba(0,0,50,.5) 50%,rgba(0,0,0,.5))}
+.active:not(.peerinfo) .rxd .barInner{background:linear-gradient(90deg,#0000,rgba(255,255,0,.05) 70px,rgba(0,255,0,.1)),linear-gradient(180deg,rgba(250,250,248,.5),rgba(140,140,135,.5) 50%,rgba(50,50,0,.5) 50%,rgba(20,20,0,.5))}
+.dirInfo .barInner{background:linear-gradient(90deg,#0000,rgba(255,255,0,.05) 55px,rgba(0,255,0,.1)),linear-gradient(180deg,rgba(100,100,220,.5),rgba(70,70,120,.5) 50%,rgba(0,0,50,.5) 50%,rgba(0,0,0,.5))}
 .dirInfo .barInner[style="width:0%;"] .barText{opacity:.9}
 .barText,.barOuter{text-align:center;height:16px;vertical-align:middle;width:80px}
 .barText{text-align:center;font-weight:700;line-height:17px;white-space:nowrap;display:block;color:#00ecff;color:#ccf;text-shadow:0 0 1px rgba(0,0,0,.8);opacity:0;transition:ease opacity .05s}
 .dirInfo .barText{height:120%}
 .barText:hover,.barText:focus{opacity:.9;transition:ease opacity .05s}
-.barComplete{margin-bottom:-1px;padding:2px 0;width:84px;display:inline-block;vertical-align:middle;line-height:1.4;color:#a7acff;text-align:center;text-shadow:0 1px 1px #000;box-shadow:var(--highlight),inset 0 1px 1px 1px #225,inset 0 -1px 1px 1px #000028;border-radius:15px;background:radial-gradient(at center bottom,rgba(32,32,80,.55) 10%,rgba(16,16,64,.1) 60%,rgba(0,0,0,0) 70%),linear-gradient(180deg,#113,#000008)}
-.active .barComplete{box-shadow:var(--highlight),inset 0 1px 1px 1px #404,inset 0 -1px 1px 1px #202;background:radial-gradient(at center bottom,rgba(64,0,64,.55) 10%,rgba(16,0,16,.1) 60%,rgba(0,0,0,0) 70%),linear-gradient(180deg,#202,#080008);animation:ease seeding 1.5s forwards}
+.barComplete{margin-bottom:-1px;padding:2px 0;width:84px;display:inline-block;vertical-align:middle;line-height:1.4;color:#a7acff;text-align:center;text-shadow:0 1px 1px #000;box-shadow:var(--highlight),inset 0 1px 1px 1px #225,inset 0 -1px 1px 1px #000028;border-radius:15px;background:radial-gradient(at center bottom,rgba(32,32,80,.55) 10%,rgba(16,16,64,.1) 60%,#0000 70%),linear-gradient(180deg,#113,#000008)}
+.active .barComplete{box-shadow:var(--highlight),inset 0 1px 1px 1px #404,inset 0 -1px 1px 1px #202;background:radial-gradient(at center bottom,rgba(64,0,64,.55) 10%,rgba(16,0,16,.1) 60%,#0000 70%),linear-gradient(180deg,#202,#080008);animation:ease seeding 1.5s forwards}
 tr:hover .barInner{background:#117}
-tr:hover .barComplete{text-shadow:0 1px 1px #000,0 0 2px #337;box-shadow:var(--highlight),inset 0 1px 1px 1px #336,inset 0 -1px 1px 1px #003;background:radial-gradient(at center bottom,rgba(48,48,96,.65) 10%,rgba(32,32,80,.1) 60%,rgba(0,0,0,0) 70%),linear-gradient(180deg,#114,#001)}
-.active:hover .barComplete{box-shadow:var(--highlight),inset 0 1px 1px 1px #404,inset 0 -1px 1px 1px #202;background:radial-gradient(at center bottom,rgba(80,0,80,.55) 10%,rgba(32,0,32,.1) 60%,rgba(0,0,0,0) 70%),linear-gradient(180deg,#303,#101)}
+tr:hover .barComplete{text-shadow:0 1px 1px #000,0 0 2px #337;box-shadow:var(--highlight),inset 0 1px 1px 1px #336,inset 0 -1px 1px 1px #003;background:radial-gradient(at center bottom,rgba(48,48,96,.65) 10%,rgba(32,32,80,.1) 60%,#0000 70%),linear-gradient(180deg,#114,#001)}
+.active:hover .barComplete{box-shadow:var(--highlight),inset 0 1px 1px 1px #404,inset 0 -1px 1px 1px #202;background:radial-gradient(at center bottom,rgba(80,0,80,.55) 10%,rgba(32,0,32,.1) 60%,#0000 70%),linear-gradient(180deg,#303,#101)}
 
 /* details */
 #torrentInfo th:first-child img,#torrentInfoStats img,#trackers img{margin:-1px 5px 1px 6px;max-height:16px;mix-blend-mode:luminosity}
@@ -731,7 +731,7 @@ form[action^="/i2psnark/configure"]{display:block}
 #ourDest code,.peerinfo code{color:#bb0;text-shadow:0 1px 1px rgba(0,0,0,.7);background:#3f49a6}
 #ourDest code{margin:0 0 0 5px;padding:3px 3px 2px 5px;border-radius:0 2px 2px 0}
 
-.inactivity{margin-left:10px;height:4px;max-width:400px;min-width:5px;display:inline-block;border-radius:3px;box-shadow:0 0 0 1px #010;background:repeating-linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,0) 15px,rgba(0,0,0,.6) 15px,rgba(0,0,0,.6) 16px,rgba(0,0,0,0) 16px),linear-gradient(180deg,rgba(255,255,255,.3) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#440 40px,#730 100px,#900);transition:ease width 3s}
+.inactivity{margin-left:10px;height:4px;max-width:400px;min-width:5px;display:inline-block;border-radius:3px;box-shadow:0 0 0 1px #010;background:repeating-linear-gradient(90deg,#0000,#0000 15px,rgba(0,0,0,.6) 15px,rgba(0,0,0,.6) 16px,#0000 16px),linear-gradient(180deg,rgba(255,255,255,.3) 50%,rgba(0,0,0,.3) 50%),linear-gradient(90deg,#440 40px,#730 100px,#900);transition:ease width 3s}
 .inactivity[style="width:0px"],.inactivity[style="width:1px"],.inactivity[style="width:2px"],.inactivity[style="width:3px"],.inactivity[style="width:4px"],.inactivity[style="width:5px"]{display:none}
 .magnetLabel{font-style:italic;display:inline-block;color:#9fa4c6}
 .magnetLabel,#torrents .infohash{vertical-align:text-bottom;line-height:1.3}
@@ -838,7 +838,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #NotFound{border:var(--border)}
 
 /* animations */
-@keyframes active{from{background:linear-gradient(to left,rgba(0,0,0,0) 1px,#f5f 3px,rgba(0,0,0,0) 3px)}}
+@keyframes active{from{background:linear-gradient(to left,#0000 1px,#f5f 3px,#0000 3px)}}
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
 @keyframes downloading{from{background-position:center center,left center}to{background-position:center center,-43px center}}
 @keyframes fade-in{0%,20%{filter:opacity(0)}100%{filter:opacity(1)}}

@@ -6,7 +6,7 @@
 @import url(images/images.css);
 @import url(../lazyload.css);
 
-:root{--nav_selected:radial-gradient(at center 115%,rgba(0,72,0,.4) 0,rgba(0,0,0,0) 80%),linear-gradient(180deg,#010,#002900)}
+:root{--nav_selected:radial-gradient(at center 115%,rgba(0,72,0,.4) 0,#0000 80%),linear-gradient(180deg,#010,#002900)}
 
 ::selection{background:rgba(0,187,0,.99);color:#000;text-shadow:none}
 a:link,#filter a:visited{color:#494;text-decoration:none;font-weight:700;outline:none}
@@ -127,7 +127,7 @@ td.checkbox{padding:3px 10px;width:1%}
 .names a[href$=".i2p/"],#host_list td.b32link a,#host_list td.helper a{width:100%;display:inline-block;vertical-align:middle}
 .destaddress:hover,textarea:hover{scrollbar-color:rgba(24,80,24,.9) rgba(0,0,0,.9)}
 .destaddress::selection{background:rgba(255,255,0,.99)}
-.destaddress,textarea{scrollbar-color:rgba(16,48,16,.4) rgba(0,0,0,0)}
+.destaddress,textarea{scrollbar-color:rgba(16,48,16,.4) #0000}
 #book+#buttons{margin-top:3px;padding:0 0 10px;border:var(--border)}
 #book,#emptybook{margin:-29px 0 -5px;padding:0}
 #empty{margin-top:-4px;width:100%;border-bottom:var(--border)}
@@ -137,7 +137,7 @@ td.checkbox{padding:3px 10px;width:1%}
 #book table{width:100%;border:var(--border);border-collapse:separate}
 #book table th{font-size:90%;border-bottom:var(--border)}
 #book th:last-child{background:var(--nuke) no-repeat center center/15px}
-#book tr.head{background:linear-gradient(180deg,rgba(0,0,0,0) 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 4px),linear-gradient(180deg,#002000,#000 75%);background-size:100%,4px 100%,100%}
+#book tr.head{background:linear-gradient(180deg,#0000 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 4px),linear-gradient(180deg,#002000,#000 75%);background-size:100%,4px 100%,100%}
 #host_list tr,#host_details tr{background:#010 var(--row)}
 #host_list th{padding:6px 9px}
 #host_list td{padding:4px 8px;border-right:1px solid #131;border-bottom:1px solid #131;box-shadow:var(--highlight),inset 0 0 2px 0 #040}
@@ -260,7 +260,7 @@ td>img[width="320"],td>img[src^="/imagegen"],#visualid .identicon{margin:10px 3p
 #content h3{padding-top:5px;padding-bottom:5px}
 #content h3:first-child{margin-top:-15px}
 #content h3::first-letter{font-size:114%}
-#content h3{padding-left:34px;letter-spacing:.12em;word-spacing:.1em;border:var(--border);background:var(--question) no-repeat 8px center,linear-gradient(180deg,rgba(0,0,0,0) 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 4px),linear-gradient(180deg,#004000,#000 75%);background-size:18px,100%,4px 100%,100%}
+#content h3{padding-left:34px;letter-spacing:.12em;word-spacing:.1em;border:var(--border);background:var(--question) no-repeat 8px center,linear-gradient(180deg,#0000 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 4px),linear-gradient(180deg,#004000,#000 75%);background-size:18px,100%,4px 100%,100%}
 #content p{margin-bottom:8px;padding:0 10px;line-height:1.6;font-size:110%}
 #ovrvw #content{padding:10px 10px 20px}
 #helpsubs{padding:15px 0 10px 40px;background:var(--infohelp) no-repeat 15px center,var(--help);background-size:32px,4px 100%}
@@ -269,7 +269,7 @@ td>img[width="320"],td>img[src^="/imagegen"],#visualid .identicon{margin:10px 3p
 /* svg */
 .illustrate{margin:20px auto 10px;padding:0 11px;max-width:700px;height:auto;font-size:10pt;border:var(--border);border-radius:4px;box-shadow:var(--highlight),inset 0 0 2px 1px #242;background:#000;opacity:.8}
 .illustrate:hover{opacity:1}
-#ovrvw p:last-of-type::after{margin:20px 0 25px;width:100%;height:1px;display:block;background:#131;background:linear-gradient(90deg,rgba(0,0,0,0) 15%,#131,rgba(0,0,0,0) 85%);content:"";filter:drop-shadow(0 1px 1px #000)}
+#ovrvw p:last-of-type::after{margin:20px 0 25px;width:100%;height:1px;display:block;background:#131;background:linear-gradient(90deg,#0000 15%,#131,#0000 85%);content:"";filter:drop-shadow(0 1px 1px #000)}
 svg #space,svg .subs{fill:#010;stroke:#242}
 svg .subs{filter:drop-shadow(0 0 1px #000)}
 svg .a.tooltip,svg .private{fill:#030;stroke:#272}

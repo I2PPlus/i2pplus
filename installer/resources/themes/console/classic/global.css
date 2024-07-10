@@ -43,7 +43,7 @@
 --header_active:linear-gradient(180deg,#ffd,#ffe);
 --header_hover:linear-gradient(180deg,var(--bg) 50%,var(--row_hover) 50%);
 --header:linear-gradient(180deg,var(--bg) 50%,var(--bg2) 50%);
---header_shiney:linear-gradient(90deg,rgba(255,255,255,.3),rgba(0,0,0,0)),linear-gradient(180deg,var(--bg) 50%,var(--bg4) 50%);
+--header_shiney:linear-gradient(90deg,rgba(255,255,255,.3),#0000),linear-gradient(180deg,var(--bg) 50%,var(--bg4) 50%);
 --heading:linear-gradient(180deg,#fff,#fafbff);
 --highlight_active:inset 3px 3px 3px 1px #5f2400;
 --highlight_hover:inset 0 0 0 1px #a79;
@@ -59,7 +59,7 @@
 --membarinner_mobile:linear-gradient(90deg,rgba(0,255,0,.1) 65px,rgba(255,255,0,.1) 110px,rgba(255,128,0,.1) 175px,rgba(255,0,0,.1)),linear-gradient(180deg,rgba(255,255,255,.9),rgba(240,240,250,.7) 50%,rgba(220,220,255,.7) 50%,rgba(140,140,220,.9));box-shadow:var(--highlight);
 --note:#1f7096;
 --pad_info:20px 25px 20px 55px;
---reload:linear-gradient(90deg,rgba(0,0,0,0) 85%,rgba(64,255,64,.15)),linear-gradient(90deg,#bcf,#def);
+--reload:linear-gradient(90deg,#0000 85%,rgba(64,255,64,.15)),linear-gradient(90deg,#bcf,#def);
 --row_hover:#ffd;
 --scroll:#acafb9;
 --select:#4a90d9;

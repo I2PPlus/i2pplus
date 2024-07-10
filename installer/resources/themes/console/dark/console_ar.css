@@ -26,7 +26,7 @@ h3#iptransport a,th#upnpconfig a,h3#bwlimiter a,#config_stats h3 a,#config_loggi
 .h3navlinks,h3#servicedebug a,h3#graphinfo a,#config_stats.main h3 a,#config_logging.main h3 a,#configstats th a{float:left}
 .homelinkedit th:nth-child(3),.homelinkedit th:last-child{text-align:right}
 input.search,input.search:focus{padding:4px 24px 4px 3px;background-position:right 4px center}
-input[type="file"]:hover{border-radius:15px 0 0 15px;background:linear-gradient(to left,rgba(0,0,0,0),#010)}
+input[type="file"]:hover{border-radius:15px 0 0 15px;background:linear-gradient(to left,#0000,#010)}
 table#addkeyring td.infohelp{text-align:right}
 table{direction:rtl}
 table#netconfig th,table#externali2cp th,table#plugininstall th,table#plugininstall2 th,.configtable th,th.th_title{text-align:right}

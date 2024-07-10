@@ -327,7 +327,7 @@ div[lang="ar"] ul,div[lang="ar"] p{margin:10px}
 #portfaq{width:auto;margin:16px 0 5px}
 #help h3{border-width:1px 5px 1px 1px}
 #help.main td.infohelp,#help.main td.infowarn{padding-right:46px;padding-left:15px}
-#faq h3{background:var(--question) no-repeat,linear-gradient(180deg,#fff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,240,.4)) repeat scroll 0 0%,rgba(0,0,0,0) linear-gradient(to left,#fff 5%,rgba(231,231,255,.8) 15%);background-position:right 6px center,right center,right center;padding-right:30px;background-size:18px 18px,100%,100%}
+#faq h3{background:var(--question) no-repeat,linear-gradient(180deg,#fff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,240,.4)) repeat scroll 0 0%,#0000 linear-gradient(to left,#fff 5%,rgba(231,231,255,.8) 15%);background-position:right 6px center,right center,right center;padding-right:30px;background-size:18px 18px,100%,100%}
 
 @media (min-width:800px){
 #console{overflow:hidden}
