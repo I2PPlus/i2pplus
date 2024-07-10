@@ -18,7 +18,8 @@
 --btn_active:linear-gradient(180deg,#f2f2f2,#f8f8f8);
 --btn_hover:linear-gradient(180deg,#fff,#ddd);
 --btn:linear-gradient(180deg,#f8f8f8,#eaeaea);
---btn_shadow_active:var(--highlight),inset 3px 3px 3px #0008;
+--btn_shadow_active:var(--highlight),3px 3px 3px #0008 inset;
+--btn_shadow_depressed:var(--highlight),2px 2px 2px #0006 inset;
 --bullet:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='31' fill='%23384'/%3E%3Cg stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' transform='matrix(.90207 0 0 .90192 3.3 3.4)'%3E%3Cpath id='a' fill='%23fff' stroke='%23fff' stroke-dasharray='none' stroke-linecap='round' stroke-linejoin='round' d='M31.7 2.2c-2.8 7-7.9 13.3-8 20.5.2 4.1 2.6 7.1 5.7 8.9-15 0-14.6 12.8-22.4 16.8 12.2 0 20.8 1.8 24.7-6v.1V2.3s0 0 0 0zM7 48.4h-.1 0z'/%3E%3Cuse href='%23a' width='100%25' height='100%25' transform='matrix(-1 0 0 1 63.6 0)'/%3E%3C/g%3E%3C/svg%3E");
 --debug:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAABMlBMVEUALQAAMAAANAAAOAAAPAAAQQAARAAASQAATAAAUgABOgEBOwEBQgECUAICVQIDaQMDbAMDbgMDcwMDdQMDdgP///8AMAAANQAATAAAQQACXwIDZgMANAAATwADawMAMAAATwADdAMAOgACWQIALAAAPAADdAMBNwEALwAAPAAARwADbAMALAACXwIASQABQwEAMQADdQMDbgMAMQAAUAABOQENbg0CUgIBNwEJQAkZbxkcahwvgS8iYSI5kzk8hTw+hz42eTY/lD9Am0BXoVdAg0Bit2JAqkBHrkc0eDQ1eTU3ezc6fjo7gDs8gTw9hD0/jT9AmUBBp0FHiUdInkhKkEpMk0xOm05Osk5UmVRUrFRZqVlanVpfqV9htmFlrmVntWdptWluvW5xwXF2y3az5uaxb3lQAAAASXRSTlMAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwsLDRkZJDNDTWBgZmhxdneJioqRmaCqs7i5vr/GxsfHycrN3eDg5fDy8vT1+/v8/P3+rh2WawAAANBJREFUGBlVwctOg0AUAND7mBkBobSFMTEa3PoB/f/vcGMTlmqoWGQYAper256DHm4ZVYVyD//6H0BEAlA9nApfnA6qAMBpNWb7sTkW7TotPiCJ3aWusWobl+6sgNH+mJkQF5NwHS4KJNc2mvsafW5jexWgIOLKRVCW0okE4Kf6RSjFmMh3eHSJUB7P87ptvG3rfI45mDfU3SqMKmv8RPWM9FCxZMLdTDpBxgafQ7xTN4SvWFwoNQz2vbKqQ//bvTIAO6RpxAk/ho5pQocebv0BWUBmIEF8V0EAAAAASUVORK5CYII=");
 --highlight:0 0 0 1px #fffc inset;
@@ -30,7 +31,7 @@
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 --softborder:0 0 0 1px #bbb;
 --td_dl:linear-gradient(270deg,#3d3 3px,#0000 3px);
---th:linear-gradient(180deg,#fff,#ddd);
+--th:linear-gradient(180deg,#fff,#e8e8e8);
 --tr:var(--bg),linear-gradient(180deg,#fefefe,#ebebeb);
 --tr_odd:var(--bg),linear-gradient(180deg,#fcfcfc,#e4e4e4);
 --tr_hover:var(--bg),linear-gradient(180deg,#fff0f0,#ffe8e8);
@@ -468,10 +469,12 @@ body:not(.lang_en) #addSection input[type=text],#createSection input[type=text]{
 #createSection td:first-child{padding-right:10px;text-align:right;font-weight:700}
 #createSection td:nth-child(2) td:first-child{text-align:left}
 #createSection #trackerselect{margin:5px 0 8px 2px;width:100%;border:var(--border);border-collapse:separate;border-spacing:0;border-radius:4px}
+#createSection #trackerselect tr:first-child{box-shadow:var(--highlight);background:var(--th)}
+#createSection #trackerselect tr:first-child td{font-size:85%;font-weight:700;border:0}
+#createSection #trackerselect tr:nth-child(n+2) td{box-shadow:var(--highlight)}
 #createSection #trackerselect td{padding:8px;text-align:center;border-top:var(--border);border-right:var(--border)}
 #createSection #trackerselect td:first-child{font-weight:400}
 #createSection #trackerselect td:last-child{text-align:center;border-right:0}
-#createSection #trackerselect tr:first-child td{font-size:85%;font-weight:700;border:0;background:#fff}
 #createSection #trackerselect .optbox{margin:0}
 #editSection+#commentSection{margin-top:-13px}
 #metainfo{padding:4px 8px 4px 4px;line-height:1.5;white-space:nowrap;border:1px solid #aaa;box-shadow:var(--highlight);background:#ffe}
@@ -564,7 +567,7 @@ body.debug #dhtDebug{display:table-row;box-shadow:var(--highlight);background:li
 #torrentDisplay .filter:hover{color:var(--a);cursor:pointer}
 #torrentDisplay .filter:active{color:var(--ink_light);box-shadow:var(--btn_shadow_active);background:var(--btn_active)}
 #torrentDisplay input{width:0;height:0;position:absolute;opacity:0;z-index:-1}
-#torrentDisplay .filter.enabled,#torrentDisplay .filter.enabled:active{color:var(--ink);text-shadow:0 1px 1px #fff;box-shadow:var(--highlight),2px 2px 2px #0006 inset;background:linear-gradient(180deg,#ddd,#fff);cursor:default}
+#torrentDisplay .filter.enabled,#torrentDisplay .filter.enabled:active{color:var(--ink);text-shadow:0 1px 1px #fff;box-shadow:var(--btn_shadow_depressed);background:linear-gradient(180deg,#ddd,#fff);cursor:default}
 #torrentDisplay .filter.enabled span:not(#filtercount.badge){display:inline-block;transform:translateY(1px)}
 #filtercount:not(:empty){margin-left:5px;padding:2px 2px 0;min-width:16px;display:inline-block!important;line-height:1;font-size:85%;box-shadow:0 0 0 1px #bbb,var(--highlight);background:#f2f2f2}
 .filter[hidden],.filter:not(.enabled) .badge,.filter:not(.enabled) #filtercount{display:none!important}
@@ -654,7 +657,7 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 .createFilterToggle.ends_with{border-right-width:5px}
 #contentFilter{width:100%;margin:2px 0 -4px 2px;display:flex;flex-wrap:wrap}
 #contentFilter input[type=checkbox]{display:none}
-#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_active);background:#eee var(--delete) no-repeat 8px calc(50% + 1px)/10px}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_depressed);background:var(--delete) no-repeat 8px calc(50% + 1px)/10px,linear-gradient(180deg,#eaeaea,#fff)}
 #fileFilter{width:calc(100% - 2px);margin:0 auto;display:block}
 #fileFilter table{margin:0 auto 4px;width:calc(100% - 20px);border:0}
 #fileFilter th,#fileFilter td{text-align:left}
@@ -767,6 +770,9 @@ html:not(.iframed) input:checked+#tab_torrentedit{margin-bottom:-7px}
 html:not(.iframed) input:not(:checked)+#tab_torrentedit{margin-bottom:-8px}
 }
 
-@media (min-width:1600px){.lang_en input[name="i2cpOpts"],.lang_en input[name="nofilter_dataDir"]{width:calc(100% - 190px)}.lang_en .configOption b{min-width:170px}.lang_en .optionlist{columns:3 520px}}
+@media (min-width:1600px){
+.lang_en input[name="i2cpOpts"],.lang_en input[name="nofilter_dataDir"]{width:calc(100% - 190px)}.lang_en .configOption b{min-width:170px}.lang_en .optionlist{columns:3 520px}
+#createSection input[type=text]{width:calc(100% - 126px)}
+}
 
 @media (forced-colors:active){*{forced-color-adjust:none}}
