@@ -115,16 +115,17 @@ certificates/ssl/us.reseed.i2p2.no.crt
 certificates/ssl/webpack.de.crt
 # vanished
 certificates/news/killyourtv_at_mail.i2p.crt
-certificates/router/killyourtv_at_mail.i2p.crt
+certificates/plugin/str4d_at_mail.i2p.crt
+certificates/plugin/zab_at_mail.i2p.crt
 certificates/reseed/atomike_at_mail.i2p.crt
-certificates/reseed/reseedi2pnetin_at_mail.i2p.crt
 certificates/reseed/backup_at_mail.i2p.crt
 certificates/reseed/bugme_at_mail.i2p.crt
-certificates/ssl/i2p.mooo.com.crt
-certificates/plugin/zab_at_mail.i2p.crt
 certificates/reseed/null_at_i2pmail.org.crt
 certificates/reseed/reheatedburger_at_protonmail.com.crt
+certificates/reseed/reseedi2pnetin_at_mail.i2p.crt
 certificates/reseed/root_at_bungee.systems.crt
+certificates/router/killyourtv_at_mail.i2p.crt
+certificates/ssl/i2p.mooo.com.crt
 # I2P+
 eepsite-jetty9/resources/*
 eepsite-jetty9/resources/
