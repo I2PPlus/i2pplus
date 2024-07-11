@@ -634,7 +634,7 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 #trackerconfig td:nth-child(4),#trackerconfig td:nth-child(5),#trackerconfig td:nth-child(6),.knownTracker td:first-child{text-align:center}
 #addtracker td{padding-top:10px;padding-bottom:8px;border-top:var(--border);background:#fff}
 #addtracker td:first-child b,#fileFilter td:first-child b{width:22px;height:22px;display:inline-block;vertical-align:middle;font-size:0;background:var(--add) no-repeat center center/22px;mix-blend-mode:luminosity}
-#addtracker td input{margin-left:0}
+#addFileFilter td input[type=text],#addtracker td input[type=text]{margin-left:0}
 #addtracker:hover td:first-child b,#addtracker:focus-within td:first-child b,#addFileFilter:hover td:first-child b,#addFileFilter:focus-within td:first-child b{mix-blend-mode:normal}
 #bwHoverHelp img{height:16px;width:16px;margin:0 4px;vertical-align:text-top}
 #configs,#trackerconfig{margin:0 10px;width:calc(100% - 20px)}
