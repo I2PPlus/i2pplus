@@ -450,7 +450,7 @@ html:not(.iframed) #snarkInfo~#commentSection{margin-top:4px}
 .snarkFilename:hover .targetfile{display:inline-block}
 #addSection,#createSection,#configSection,.configPanel{border:var(--border)}
 #addSection,#createSection,#configSection,.configPanel,.snarkConfig,#navbar,#screenlog,#torrentDisplay,.pagenavcontrols{box-shadow:var(--highlight);background:#eee;background:var(--noise),linear-gradient(180deg,#fff,#f8f8f8);background-size:248px,100%;background-blend-mode:multiply,normal}
-#addSection,#createSection{padding-bottom:5px;transition:ease box-shadow .3s}
+#addSection,#createSection{padding-bottom:5px;transition:ease box-shadow .3s;user-select:none}
 #addSection:hover,#createSection:hover,#addSection:hover .toggleview,#createSection:hover .toggleview,#tab_config:hover,#torrentDisplay .filter:hover,.mainsection:hover .toggleview{box-shadow:inset 0 0 0 1px rgba(200,32,48,.5),inset 0 0 0 2px #fff;transition:ease box-shadow .3s}
 #addSection{margin-top:-1px}
 #addSection:hover .toggleview:active,#createSection:hover .toggleview:active,.toggleview:hover,.toggleview:active{color:#bbb}
@@ -659,13 +659,14 @@ input:not(:checked)+#tab_newtorrent,input:not(:checked)+#tab_addtorrent{margin-b
 
 /* create torrent file filters */
 .createFilterString td:nth-child(2){font-weight:500}
-.createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-style:italic;border:var(--border);cursor:pointer}
+.createFilterToggle{margin:0 4px 4px 0;padding:2px 11px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-style:italic;color:#777;border:1px solid #777;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff,#eee);cursor:pointer}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-weight:600;font-style:normal;color:#ba2131;border-color:#ba2131;box-shadow:var(--btn_shadow_depressed);background:var(--delete) no-repeat 8px calc(50% + 1px)/10px,linear-gradient(180deg,#e0e0e0,#fff)}
+.createFilterToggle:hover,#contentFilter input[type=checkbox]:checked+.createFilterToggle:hover{border-color:#d23}
 .createFilterToggle.starts_with{border-left-width:5px}
 .createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
 .createFilterToggle.ends_with{border-right-width:5px}
 #contentFilter{width:100%;margin:2px 0 -4px 2px;display:flex;flex-wrap:wrap}
 #contentFilter input[type=checkbox]{display:none}
-#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:3px 6px 1px 20px;font-weight:600;font-style:normal;box-shadow:var(--btn_shadow_depressed);background:var(--delete) no-repeat 8px calc(50% + 1px)/10px,linear-gradient(180deg,#eaeaea,#fff)}
 #fileFilter{width:calc(100% - 2px);margin:0 auto;display:block}
 #fileFilter table{margin:0 auto 4px;width:calc(100% - 20px);border:0}
 #fileFilter th,#fileFilter td{text-align:left}
