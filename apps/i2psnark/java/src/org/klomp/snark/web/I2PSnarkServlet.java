@@ -3365,6 +3365,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean noCollapse = noCollapsePanels(req);
 
 // configuration
+
         StringBuilder buf = new StringBuilder(16*1024);
         buf.append("<form action=\"").append(_contextPath).append("/configure\" method=POST>")
            .append("<div class=\"configPanel lang_").append(lang).append("\"><div class=snarkConfig>\n");
@@ -3861,7 +3862,8 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeConfigLink(PrintWriter out) throws IOException {
         StringBuilder buf = new StringBuilder(192);
         buf.append("<div id=configSection>\n<span class=snarkConfig>")
-           .append("<span id=tab_config class=configTitle><a href=\"configure\"><span class=tab_label>")
+           .append("<span id=tab_config class=configTitle><a href=\"")
+           .append(_contextPath).append("/configure\"><span class=tab_label>")
            .append(_t("Configuration"))
            .append("</span></a></span></span>\n</div>\n");
         out.write(buf.toString());
@@ -3876,7 +3878,7 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private void addMagnet(String url, File dataDir) {
         if (url.startsWith(MagnetURI.MAGNET_FULL_V2)) {
-            _manager.addMessage("Cannot add magnet: version 2 magnet links are not supported");
+            _manager.addMessage(_t("Cannot add magnet: Version 2 magnet links are not supported"));
             return;
         }
         try {
