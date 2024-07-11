@@ -1,3 +1,11 @@
+2024-07-09 dr|z3d
+ * I2PSnark:
+   - Complete overhaul of zilvero theme
+   - Fix link to config section in multipage view when not on first page
+
+2024-07-09 dr|z3d
+ * Graphs: Use relative coordinates for svg paths to reduce filesize
+
 2024-07-02 zzz
  * Jetty: Don't show null exception message in XSSFilter
 
