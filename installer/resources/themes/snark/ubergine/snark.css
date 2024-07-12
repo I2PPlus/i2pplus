@@ -757,7 +757,7 @@ html:not(.iframed) #trackerselect tr:last-child td:last-child{border-radius:0 0 
 .commentAction,.commentDelete{padding-left:1px;width:1%;white-space:nowrap}
 .commentAction input[type=submit]{margin:8px}
 .commentAuthor{max-width:160px;width:160px;white-space:nowrap}
-.commentAuthorName{margin:3px 0 -3px;padding-left:18px;display:inline-block;vertical-align:middle;background:var(--user) no-repeat left center/14px}
+.commentAuthorName{padding-left:18px;display:inline-block;vertical-align:middle;background:var(--user) no-repeat left center/14px}
 .commentDelete .optbox{margin:0}
 .commentRating,.commentAuthor{width:1%}
 .commentRating{padding-right:10px;white-space:nowrap;text-align:left}
@@ -775,7 +775,7 @@ th .commentAuthorName{margin-right:-10px;padding-right:6px;font-size:90%}
 #commentInfo textarea,#commentInfo textarea:focus{margin:0 0 -3px;width:calc(100% - 16px);min-height:64px;height:64px;resize:vertical;font-family:var(--bodyfont);font-weight:400}
 #commentInfo td:first-child{font-weight:700}
 #commentInfo td:first-child::after,#userComments td:first-child::after{min-height:32px;display:inline-block;vertical-align:middle;content:""}
-#commentInfo th,#mediaContainer th{padding:5px 5px 5px 30px;background:var(--comment) no-repeat 8px center/16px,var(--th)}
+#commentInfo th,#mediaContainer th{padding:8px 8px 8px 30px;background:var(--comment) no-repeat 8px center/16px,var(--th)}
 #commentInfo td:first-child,#userComments td:first-child{min-width:160px;max-width:160px;width:160px;padding-right:2px}
 #commentInfo td:first-child{white-space:nowrap}
 #commentInfo td,#userComments td{padding:8px 5px}

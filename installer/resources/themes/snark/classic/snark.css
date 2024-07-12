@@ -578,7 +578,7 @@ td.commentAuthor{padding-left:5px}
 #commentInfo textarea{font-family:var(--bodyfont);font-weight:400;width:100%;min-height:64px;height:64px;resize:vertical;opacity:.8}
 #commentInfo textarea:focus{opacity:1}
 #commentInfo th,#userComments th,#mediaContainer th{padding:8px 5px}
-#commentInfo th{padding:3px 5px}
+#commentInfo th{padding:5px}
 #commentInfo tr:nth-child(even),#userComments tr:nth-child(odd),#torrentEdit tr:nth-child(odd){background:rgba(240,240,255,.5) var(--bg)}
 #commentInfo tr:nth-child(odd),#userComments tr:nth-child(even),#torrentEdit tr:nth-child(even){border-top:var(--border);background:rgba(220,220,255,.5)}
 #commentSection .commentDelete{background:var(--nuke) no-repeat scroll 2px center/14px;text-align:left;padding-left:24px}
@@ -693,7 +693,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 
 #commentstoggle{margin-left:10px;display:inline-block;vertical-align:middle}
 #commentstoggle input{margin-left:4px;margin-right:0;display:inline-block}
-th #nameRequired,th .commentAuthorName{margin-top:8px;vertical-align:middle}
+th #nameRequired,th .commentAuthorName{vertical-align:middle}
 .iframed #configSection,.iframed #trackers,.iframed .mainsection#snarkInfo{margin-bottom:-6px}
 .iframed #torrentInfoControl td{border-left:0;border-right:0}
 
