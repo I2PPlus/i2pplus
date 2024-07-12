@@ -1288,43 +1288,47 @@ public final class SVGGraphics2D extends Graphics2D {
             switch (type) {
             case (PathIterator.SEG_MOVETO):
                 if (first) {
-                    b.append("M").append(geomDP(coords[0])).append(" ")
-                     .append(geomDP(coords[1]));
+                    b.append("M").append((int)coords[0]).append(" ")
+                     .append((int)coords[1]);
                     prevX = coords[0];
                     prevY = coords[1];
                     first = false;
                 } else {
-                    b.append("m").append(geomDP(coords[0] - prevX)).append(" ")
-                     .append(geomDP(coords[1] - prevY));
+                    b.append("m").append((int)(coords[0] - prevX)).append(" ")
+                     .append((int)(coords[1] - prevY));
                     prevX = coords[0];
                     prevY = coords[1];
                 }
                 break;
             case (PathIterator.SEG_LINETO):
-                b.append("l").append(geomDP(coords[0] - prevX)).append(" ")
-                 .append(geomDP(coords[1] - prevY));
+                b.append("l").append((int)(coords[0] - prevX)).append(" ")
+                 .append((int)(coords[1] - prevY));
                 prevX = coords[0];
                 prevY = coords[1];
                 break;
             case (PathIterator.SEG_QUADTO):
-                b.append("q").append(geomDP(coords[0] - prevX))
-                 .append(" ").append(geomDP(coords[1] - prevY))
-                 .append(" ").append(geomDP(coords[2] - coords[0]))
-                 .append(" ").append(geomDP(coords[3] - coords[1]));
+                b.append("q").append((int)(coords[0] - prevX))
+                 .append(" ").append((int)(coords[1] - prevY))
+                 .append(" ").append((int)(coords[2] - coords[0]))
+                 .append(" ").append((int)(coords[3] - coords[1]));
                 prevX = coords[2];
                 prevY = coords[3];
                 break;
             case (PathIterator.SEG_CUBICTO):
-                b.append("c").append(geomDP(coords[0] - prevX)).append(" ")
-                 .append(geomDP(coords[1] - prevY)).append(" ")
-                 .append(geomDP(coords[2] - coords[0])).append(" ")
-                 .append(geomDP(coords[3] - coords[1])).append(" ")
-                 .append(geomDP(coords[4] - coords[2])).append(" ")
-                 .append(geomDP(coords[5] - coords[3]));
+                b.append("c").append((int)(coords[0] - prevX)).append(" ")
+                 .append((int)(coords[1] - prevY)).append(" ")
+                 .append((int)(coords[2] - coords[0])).append(" ")
+                 .append((int)(coords[3] - coords[1])).append(" ")
+                 .append((int)(coords[4] - coords[2])).append(" ")
+                 .append((int)(coords[5] - coords[3]));
                 prevX = coords[4];
                 prevY = coords[5];
                 break;
             case (PathIterator.SEG_CLOSE):
+                if (!first) {
+                    b.append("L").append((int)coords[0])
+                     .append(" ").append((int)coords[1]);
+                }
                 b.append("Z");
                 break;
             default:
@@ -1332,7 +1336,7 @@ public final class SVGGraphics2D extends Graphics2D {
             }
             iterator.next();
         }
-        return b.append("\"").toString().replaceAll("\\.0l","l").replaceAll(" 0\\.","\\.").replaceAll("\\s{2,}", " ");
+        return b.append("\"").toString();
     }
 
     /**
