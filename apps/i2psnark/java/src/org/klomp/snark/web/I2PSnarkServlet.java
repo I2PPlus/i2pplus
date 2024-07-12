@@ -5262,20 +5262,20 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append("</span></span>");
             }
 
+/**
             buf.append("<span id=commentstoggle><label><input type=checkbox class=optbox name=enableComments id=enableComments title=\"")
                .append(_t("Enable viewing and posting comments for this torrent")).append("\" ");
-            if (esc) {
-                buf.append("checked=checked");
-            } else if (!ec) {
-                buf.append("disabled=disabled");
-            }
+            if (esc) {buf.append("checked=checked");}
+            else if (!ec) {buf.append("disabled=disabled");}
             buf.append(">&nbsp;").append("</label> &nbsp;");
             if (ec) {
                 buf.append("<input type=submit name=setCommentsEnabled value=\"")
                    .append(_t("Save Preference"))
                    .append("\" class=accept>");
             }
-            buf.append("</span></th></tr>\n");
+            buf.append("</span>
+**/
+            buf.append("</th></tr>\n");
 
             // new rating / comment form
             if (canRate) {
@@ -5284,37 +5284,22 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("<td>\n<select name=myRating>\n");
                     for (int i = 5; i >= 0; i--) {
                         buf.append("<option value=\"").append(i).append("\" ");
-                        if (i == myRating) {
-                            buf.append("selected=selected");
-                        }
+                        if (i == myRating) {buf.append("selected=selected");}
                         buf.append('>');
                         if (i != 0) {
-                            for (int j = 0; j < i; j++) {
-                                buf.append("★");
-                            }
+                            for (int j = 0; j < i; j++) {buf.append("★");}
                             buf.append(' ').append(ngettext("1 star", "{0} stars", i));
-                        } else {
-                            buf.append("☆ ").append(_t("No rating"));
-                        }
+                        } else {buf.append("☆ ").append(_t("No rating"));}
                         buf.append("</option>\n");
                     }
                     buf.append("</select>\n</td>");
-                } else {
-                    buf.append("<td></td>");
-                }
-                if (esc) {
-                    buf.append("<td id=addCommentText><textarea name=nofilter_newComment cols=44 rows=4></textarea></td>");
-                } else {
-                    buf.append("<td></td>");
-                }
+                } else {buf.append("<td></td>");}
+                if (esc) {buf.append("<td id=addCommentText><textarea name=nofilter_newComment cols=44 rows=4></textarea></td>");}
+                else {buf.append("<td></td>");}
                 buf.append("<td class=commentAction><input type=submit name=addComment value=\"");
-                if (er && esc) {
-                    buf.append(_t("Rate and Comment"));
-                } else if (er) {
-                    buf.append(_t("Rate Torrent"));
-                } else {
-                    buf.append(_t("Add Comment"));
-                }
+                if (er && esc) {buf.append(_t("Rate and Comment"));}
+                else if (er) {buf.append(_t("Rate Torrent"));}
+                else {buf.append(_t("Add Comment"));}
                 buf.append("\" class=accept></td>");
                 buf.append("</tr>\n");
             }
@@ -5328,9 +5313,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         if (myRating > 0) {
                             buf.append(_t("My Rating")).append(":</td><td colspan=2 class=commentRating>");
                             String img = toSVG("rateme", "★", "");
-                            for (int i = 0; i < myRating; i++) {
-                                buf.append(img);
-                            }
+                            for (int i = 0; i < myRating; i++) {buf.append(img);}
                         }
                         buf.append("</td></tr>");
                     }
@@ -5348,8 +5331,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                     if (ec) {
                         int sz = comments.size();
-                        if (sz > 0)
-                            iter = comments.iterator();
+                        if (sz > 0) {iter = comments.iterator();}
                     }
                 }
             }
