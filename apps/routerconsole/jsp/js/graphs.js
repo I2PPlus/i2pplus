@@ -43,9 +43,7 @@ function injectCss() {
       updateGraphs();
     } else {
       retryCount++;
-      if (retryCount < 10) {setTimeout(() => {checkGwrap();}, 20);}
-      else if (retryCount < 20) {setTimeout(() => {checkGwrap();}, 50);}
-      else if (retryCount < 30) {setTimeout(() => {checkGwrap();}, 100);}
+      if (retryCount < 3) {setTimeout(() => {checkGwrap();}, 20);}
       else {setTimeout(() => {location.reload(true);}, delay);}
     }
   }
