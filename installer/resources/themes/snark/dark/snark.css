@@ -414,6 +414,7 @@ hr.debug{display:none}
 #noDHTPeers{margin:6px 0}
 #dhtDebug .volatile {margin:1px 0 0;width:100%;display:inline-block}
 .debug #dhtDebug{display:table-row!important}
+#dhtDebug span+.bullet{display:none}
 
 /* priority */
 .priority{width:1%;max-width:160px;vertical-align:middle;font-size:8pt}
