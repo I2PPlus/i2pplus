@@ -82,7 +82,7 @@ select{margin:2px 4px 2px 0;padding:7px 24px 7px 12px;min-width:120px;font-size:
 
 /* topnav */
 #navbar{margin:0 0 -6px;padding:9px 0;min-width:888px;position:sticky;top:-2px;z-index:999;text-align:center;border:var(--border);box-shadow:var(--highlight),inset 0 0 1px 1px #050;background:var(--topnav);will-change:transform}
-.iframed #navbar{margin-top:-2px;padding:8px 0 7px;position:static}
+.iframed #navbar{margin:-2px auto -5px;padding:8px 0 7px;position:static}
 #navbar a:not(:hover):not(:focus):not(:active){color:#32ff32}
 .nav_main{border-radius:1px 0 0 1px;padding-left:24px;background:#000 var(--snark) no-repeat 7px center}
 .nav_forum{background:#000 var(--forum) no-repeat 7px center}
