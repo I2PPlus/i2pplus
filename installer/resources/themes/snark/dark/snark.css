@@ -283,7 +283,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 .iframed #torrents{margin-bottom:11px}
 #torrents tr:not(#pagenavbottom):hover td,.dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover,#trackerconfig tr:nth-child(n+2):hover,.peerinfo:hover td,.peerinfo:hover+.debuginfo{border-top:1px solid #001b00;border-bottom:1px solid #001b00}
 #torrents tr:hover td,.dirInfo tr:hover,#trackerselect tr:nth-child(n+2):hover,#trackerconfig tr:nth-child(n+2):hover,#fileFilter tr:nth-last-child(n+5):not(:first-child):hover{background:#030}
-#torrents #snarkTbody tr:not(#pagenavbottom):hover .status{background:var(--tr_snark_hover)}
+#torrents #snarkTbody tr:not(.peerinfo):not(#pagenavbottom):hover .status{background:var(--tr_snark_hover)}
 #torrents thead{box-shadow:none}
 #torrents th{text-align:center}
 #torrents th.status{padding-left:2px;text-align:left}
@@ -394,7 +394,7 @@ tr:hover .barText{opacity:1}
 .peerinfo td>*{vertical-align:middle}
 .peerdata{padding-left:0}
 #torrents .peerinfo .rxd{text-align:center}
-#torrents .peerinfo:hover td:first-child{background:#030 var(--peer) no-repeat 9px center/18px}
+#torrents tr.peerinfo:hover td:first-child{background:var(--peer) no-repeat 9px center/18px,var(--tr_snark_hover)}
 #ourDest{margin-left:4px;padding:1px 0 1px 4px;display:inline-block;line-height:1.1;border:1px solid #020;border-radius:1px;box-shadow:var(--highlight);background:var(--badge)}
 #ourDest code{margin:0 1px 0 4px;padding:2px 4px 2px 6px;display:inline-block;line-height:1.2;color:#bb0;text-shadow:0 1px 1px #000;border-radius:0 1px 1px 0;background:#010}
 
