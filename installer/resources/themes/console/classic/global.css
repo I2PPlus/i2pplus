@@ -127,7 +127,7 @@ select option{background:var(--bg)}
 .optbox:not([disabled]):hover,.optbox:not([disabled]):focus{border:1px solid var(--hover);background:var(--bg)}
 .optbox:checked::before,.optbox:not(:checked)::before{position:absolute;transition:linear all .05s;transform:scale(1)}
 .optbox:checked::before{line-height:.8;background:#67f;content:""}
-.optbox:not(:checked)::before{color:transparent;background:transparent;transform:scale(0)}
+.optbox:not(:checked)::before{color:#0000;background:#0000;transform:scale(0)}
 .optbox:checked:hover::before,.optbox:checked:focus::before{background:var(--hover)}
 
 /* sliders */

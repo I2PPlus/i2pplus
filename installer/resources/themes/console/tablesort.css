@@ -12,7 +12,7 @@ th[role=columnheader]:not([data-sort-method="none"])::after{
   right:4px;
   border-width:3px 3px 0;
   border-style:solid;
-  border-color:var(--ink) transparent;
+  border-color:var(--ink) #0000;
   visibility:hidden;
   opacity:0;
   content:"";
@@ -30,7 +30,7 @@ th[aria-sort]:not([data-sort-method="none"])::after{
 }
 
 th[role=columnheader]:not([data-sort-method="none"]):hover::after{
-  border-color:var(--hover) transparent;
+  border-color:var(--hover) #0000;
   visibility:visible;
   opacity:1;
 }

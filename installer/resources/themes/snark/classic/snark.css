@@ -31,7 +31,7 @@
 body{margin:3px 4px;background:var(--bg3) url(/themes/console/classic/images/bg0.png) repeat scroll center bottom/120px}
 .iframed body{margin:1px 0}
 p{line-height:1.5}
-hr{width:0;height:1px;margin:5px 0 7px 0;text-align:center;color:transparent;background:transparent}
+hr{width:0;height:1px;margin:5px 0 7px 0;text-align:center;color:#0000;background:#0000}
 img{margin:0 3px 1px 3px;vertical-align:middle;line-height:1;border:0}
 code,.bucket{font:700 8.5pt var(--monospaced);padding:0 2px;color:#050}
 .center{text-align:center}
@@ -43,7 +43,7 @@ code,.bucket{font:700 8.5pt var(--monospaced);padding:0 2px;color:#050}
 table{margin:0 0 10px 0;padding:0;border:0;border-spacing:0;border-collapse:collapse}
 thead,tfoot{background:var(--bg)}
 thead{border-bottom:1px solid #101}
-thead img{margin:0 2px;padding:0;opacity:1;border:0 none transparent;border-radius:3px}
+thead img{margin:0 2px;padding:0;opacity:1;border:0 none #0000;border-radius:3px}
 thead img,thead img:hover{opacity:.8}
 thead a:active img{transform:scale(.9)}
 th{padding:3px 2px;border-top:var(--border);border-bottom:var(--border);background:var(--th)}
@@ -123,13 +123,13 @@ a.controld{display:none}
 
 /* search */
 #snarkSearch{display:block;position:absolute;right:6px;top:2px}
-#snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:8px;border:0;box-shadow:none;background:transparent}
+#snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:8px;border:0;box-shadow:none;background:#0000}
 #snarkSearch input[type=search]{padding:4px 6px;color:var(--ink_light);border-bottom:1px solid #ddf;transform:translateY(-2px);cursor:text;-webkit-appearance:none}
 #snarkSearch input[type=search]:not(:focus){opacity:0}
 #snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus,#snarkSearch input[type=search][value]{opacity:1}
 #snarkSearch input[type=search]::placeholder{font-weight:600;font-style:italic;opacity:.5;color:var(--ink)}
 #snarkSearch input[type=search]:focus::placeholder{opacity:0}
-#snarkSearch input[type="submit"]{padding:8px 0;width:28px;min-width:0;color:transparent;text-shadow:none;background:var(--search) no-repeat center right/24px;opacity:.5}
+#snarkSearch input[type="submit"]{padding:8px 0;width:28px;min-width:0;color:#0000;text-shadow:none;background:var(--search) no-repeat center right/24px;opacity:.5}
 #snarkSearch input[type="submit"]:hover{background-size:26px}
 #snarkSearch input[type="submit"]:active{background-size:22px;filter:none}
 #snarkSearch:hover input[type="submit"]{opacity:.8}
@@ -181,10 +181,10 @@ a.controld{display:none}
 /* table sort indicators */
 .sortIcon{position:relative}
 .sortIcon:hover .ascending,.sortIcon:hover .descending{transform:rotate(180deg);transition:linear transform .1s}
-.ascending,.descending{position:absolute;top:-2px;right:-8px;display:inline-block;border-width:4px;border-style:solid;border-color:transparent transparent var(--bg5) transparent}
-.descending{top:2px;border-color:var(--bg5) transparent transparent transparent}
-.sortIcon:hover .ascending{top:2px;border-color:transparent transparent var(--hover) transparent}
-.sortIcon:hover .descending{top:-2px;border-color:var(--hover) transparent transparent transparent}
+.ascending,.descending{position:absolute;top:-2px;right:-8px;display:inline-block;border-width:4px;border-style:solid;border-color:#0000 #0000 var(--bg5) #0000}
+.descending{top:2px;border-color:var(--bg5) #0000 #0000 #0000}
+.sortIcon:hover .ascending{top:2px;border-color:#0000 #0000 var(--hover) #0000}
+.sortIcon:hover .descending{top:-2px;border-color:var(--hover) #0000 #0000 #0000}
 #torrentSort .ascending,th#torrentSort .descending{right:-11px}
 .ascending,.descending{filter:opacity(0);animation:ease fade-in .2s .6s forwards}
 
@@ -249,7 +249,7 @@ td.status{padding-left:5px}
 td.peerCount,.nopeers td.peerCount{text-align:center;white-space:nowrap}
 td.peerCount{padding-left:0;width:1%;white-space:nowrap;text-align:left;font-weight:700}
 th.peerCount{text-align:center}
-.rowOdd:not(.peerinfo) .rxd .barText::after,.rowEven:not(.peerinfo) .rxd .barText::after{margin-left:-7px;position:absolute;top:90%;left:50%;border-width:7px;border-style:solid;border-color:var(--bg) transparent transparent transparent;content:""}
+.rowOdd:not(.peerinfo) .rxd .barText::after,.rowEven:not(.peerinfo) .rxd .barText::after{margin-left:-7px;position:absolute;top:90%;left:50%;border-width:7px;border-style:solid;border-color:var(--bg) #0000 #0000 #0000;content:""}
 .rowOdd:not(.peerinfo) .rxd .barText,.rowEven:not(.peerinfo) .rxd .barText{padding:3px;min-width:140px;position:relative;top:-18px;left:-32px;border-radius:2px;background:var(--bg)}
 .status img{width:auto;height:22px}
 .rateUp,.txd{font-style:italic}
@@ -471,7 +471,7 @@ input#toggle_addtorrent:checked + label + hr + table,input#toggle_createtorrent:
 .priorityHigh{background:url(/i2psnark/.res/icons/clock_red.png) no-repeat left 26px center}
 .priorityNormal{background:url(/i2psnark/.res/icons/clock.png) no-repeat left 26px center}
 .prioritySkip{background:url(/i2psnark/.res/icons/block.png) no-repeat left 26px center}
-.priorityHigh,.priorityNormal,.prioritySkip,.priorityHigh:hover,.priorityNormal:hover,.prioritySkip:hover{width:52px;display:inline-block;color:transparent;background-size:18px}
+.priorityHigh,.priorityNormal,.prioritySkip,.priorityHigh:hover,.priorityNormal:hover,.prioritySkip:hover{width:52px;display:inline-block;color:#0000;background-size:18px}
 
 /* configure */
 input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_dataDir"]{width:calc(100% - 176px)}
@@ -610,7 +610,7 @@ td.commentAuthor{padding-left:5px}
 /* tooltip */
 .tooltipped{display:inline-block;position:relative;z-index:99;content:""}
 .tooltipped:hover{filter:drop-shadow(0 0 1px rgba(0,0,0,.4))}
-.tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 6px);left:30px;border-width:6px;border-style:solid;border-color:transparent #bbc transparent transparent;content:"";animation:fade-in .1s ease 3s reverse both}
+.tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 6px);left:30px;border-width:6px;border-style:solid;border-color:#0000 #bbc #0000 #0000;content:"";animation:fade-in .1s ease 3s reverse both}
 .tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:0;left:32px;font-weight:600;border:1px solid #bbc;border-radius:2px;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff,#eef);content:attr(data-tooltip);animation:fade-in .1s ease 3s reverse both}
 .tooltipped:hover::before,.tooltipped:active::before,.tooltipped:hover::after,.tooltipped:active::after{position:absolute;display:inline-block}
 
@@ -852,7 +852,7 @@ td#bwHelp{background:url(images/details.svg) no-repeat left 10px center/14px}
 @media (max-width:800px){
 .page{min-width:680px}
 #navbar{min-width:688px}
-.snarkNav.nav_main:not(:last-child),.snarkNav.nav_forum{padding-left:8px;width:12px;text-indent:-999999px;color:transparent}
+.snarkNav.nav_main:not(:last-child),.snarkNav.nav_forum{padding-left:8px;width:12px;text-indent:-999999px;color:#0000}
 .ETA a img,.trackerLink a img{display:none}
 .ascending,.descending{top:-12px}
 #torrents td{padding-top:2px;padding-bottom:2px}
@@ -864,7 +864,7 @@ td.status img{margin-left:1px}
 .txd,.rateUp,.peerinfo,.debuginfo,.alwaysShow{display:none}
 .barText{font-size:8pt}
 .peerCount{font-weight:700}
-.ETA,.trackerLink{padding:0;width:0;max-width:0;min-width:0;overflow:hidden;font-size:0;color:transparent}
+.ETA,.trackerLink{padding:0;width:0;max-width:0;min-width:0;overflow:hidden;font-size:0;color:#0000}
 .commentDetails{padding-left:10px;padding-right:5px}
 #totals{margin-left:2px}
 #addSection td:first-child,#createSection td:first-child{width:20%}

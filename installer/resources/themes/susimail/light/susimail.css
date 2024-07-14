@@ -13,7 +13,7 @@ a:visited{color:#6b97bf}
 a.fakebutton,a.fakebutton:visited{font-weight:400;color:var(--ink_light)}
 b,h3,.pagenav td,th{color:#5b5b71;text-shadow:var(--txt_shadow)}
 body{margin:5px;background:var(--bodybg) url(/themes/console/light/images/tile2.png)}
-.iframed body{margin:5px 0 0 0;background:transparent}
+.iframed body{margin:5px 0 0 0;background:#0000}
 div.footer{margin:-6px -1px -3px;border:var(--border_inner);border-top:0;box-shadow:var(--highlight);background:linear-gradient(90deg,rgba(232,232,255,.3) 15%,rgba(255,255,255,.8) 50%,rgba(232,232,255,.3) 85%),repeating-linear-gradient(180deg,#fff 1px,#ddf 2px,#fff 3px)}
 div.header,.iframed .header{display:none}
 form{line-height:160%;border-top:0}
@@ -38,7 +38,7 @@ tr.mailbody,#message_full tr:first-child{box-shadow:var(--highlight);background:
 .header+form{margin-bottom:10px;border:var(--border_inner);border-radius:2px 2px 0 0;box-shadow:0 0 1px 1px rgba(220,220,255,.3);background:linear-gradient(180deg,#f8f8ff,#f2f2ff)}
 .iframed .footer{display:none}
 .iframed form{margin-bottom:4px}
-.iframed .page{margin:0;padding:1px;min-width:600px;border:0;border-radius:0;box-shadow:none;background:transparent}
+.iframed .page{margin:0;padding:1px;min-width:600px;border:0;border-radius:0;box-shadow:none;background:#0000}
 .linknew{color:#327b40}
 .linkold{color:#327bbf}
 .linkspam{color:#927b40}
@@ -203,7 +203,7 @@ div.pagenav{border-top:1px solid #555;padding:10px 5px 0;font-size:9.5pt;border-
 #dologin td{padding:3px;font-weight:700;color:#5b5b71}
 #dologin td:first-child{white-space:nowrap}
 #dologin td:last-child{width:80%}
-#dologin tr:last-child td{color:transparent;color:rgba(119,120,159,0)}
+#dologin tr:last-child td{color:#0000;color:rgba(119,120,159,0)}
 .iframed #dologin h1{display:none}
 .iframed #dologin table{margin-top:30px}
 .iframed #dologin tr:nth-child(6) hr{margin-top:5px}
@@ -354,7 +354,7 @@ td.mailListAttachment.isAttached.htmlMessage{background:var(--html) no-repeat ce
 
 /* loading mail */
 select{margin:5px;padding:5px 24px 5px 5px;min-width:120px;text-align:left;font-size:9pt;color:var(--ink_light);border:var(--border_input);border-radius:2px;box-shadow:0 2px 0 rgba(255,255,255,.85) inset,0 0 10px rgba(0,0,0,.1) inset,0 1px 1px rgba(0,0,0,.05),0 7px 4px -4px rgba(0,0,0,.1);background:var(--dropdown) no-repeat right 8px center/10px,var(--btn);appearance:none;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
-select:-moz-focusring{outline:1px solid transparent}
+select:-moz-focusring{outline:1px solid #0000}
 select option{background:#fff}
 select:hover,select:active{cursor:pointer;color:var(--ink);box-shadow:var(--highlight);background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}
 select:focus{color:var(--ink);box-shadow:0 0 1px #89f;background:var(--dropdown_hover) no-repeat right 8px center/10px,var(--btn_hover)}

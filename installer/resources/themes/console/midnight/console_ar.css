@@ -63,7 +63,7 @@ p.infowarn,td.infowarn{background:#000 url(images/infowarn.png) no-repeat right 
 .themechoice,.langselect{float:right}
 .themechoice{padding:5px}
 .themechoice .optbox{position:absolute;padding:2px;margin-right:-33px;margin-left:0;min-height:78px}
-.themechoice .optbox + img{border:1px solid transparent}
+.themechoice .optbox + img{border:1px solid #0000}
 .themechoice .optbox + img,.themechoice .optbox:checked + img{margin:5px;padding:0}
 .themelabel{margin:0 -5px -5px}
 

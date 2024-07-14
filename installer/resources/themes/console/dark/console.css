@@ -173,7 +173,7 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar tr:last-child td.digits span{margin:0 0 1px}
 #sidebar tr td.digits span{margin:0;vertical-align:middle}
 #sidebar .refresh{margin-top:-10px;margin-bottom:-4px;padding:2px 0 0 0}
-#sidebar .separator hr,#sidebar .separator hr:last-child{margin:4px 0 3px;height:1px;display:block;border-bottom:1px dotted #141;background:transparent}
+#sidebar .separator hr,#sidebar .separator hr:last-child{margin:4px 0 3px;height:1px;display:block;border-bottom:1px dotted #141;background:#0000}
 #sidebar #sb_general tr:hover a:not(:hover):not(:focus):not(:active),#sidebar #sb_shortgeneral tr:hover a:not(:hover):not(:focus):not(:active),#sidebar #sb_advancedgeneral tr:hover a:not(:hover):not(:focus):not(:active),#sidebar #sb_peers tr:hover a:not(:hover):not(:focus):not(:active),#sidebar #sb_tunnels tr:hover a:not(:hover):not(:focus):not(:active){color:#ff5}
 #sidebar #sb_internals td,#sidebar #sb_advanced td,#sidebar #sb_services td,#sidebar #sb_help td{padding:4px 5px 6px;text-align:center}
 #sidebar #sb_localtunnels a{margin-top:-1px;padding:3px 0;width:100%;max-width:156px;display:inline-block;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1;border-radius:0 10px 10px 0;box-shadow:none}
@@ -208,7 +208,7 @@ p:empty+.sb_notice{margin-top:9px}
 #sb_memoryBar.percentBarOuter,#sb_CPUBar.percentBarOuter{margin:-6px 0 -8px}
 #sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{width:70%;line-height:22px;float:none;position:absolute;top:-23px;left:15%;right:15%;font-size:110%;border-radius:3px;background:#010;filter:drop-shadow(0 0 1px #252) drop-shadow(0 0 1px #000);transition:opacity .2s ease}
 #sb_memoryBar.percentBarOuter:hover .percentBarText,#sb_CPUBar.percentBarOuter:hover .percentBarText{transition:opacity .2s ease .5s;pointer-events:none}
-#sb_memoryBar .percentBarText::after,#sb_CPUBar .percentBarText::after{width:0;height:0;position:absolute;left:calc(50% - 5px);bottom:-14px;border-style:solid;border-width:8px;border-color:#010 transparent transparent transparent;content:""}
+#sb_memoryBar .percentBarText::after,#sb_CPUBar .percentBarText::after{width:0;height:0;position:absolute;left:calc(50% - 5px);bottom:-14px;border-style:solid;border-width:8px;border-color:#010 #0000 #0000 #0000;content:""}
 
 /* update bar */
 .sb_update b{margin:5px 5px 3px;display:block;color:var(--ink)}
@@ -369,7 +369,7 @@ div[id^="config_"].main{padding-bottom:14px}
 #netdb{padding-bottom:1px}
 
 /* news */
-.messages #newsDisplay{margin-right:4px;float:right;white-space:nowrap;color:transparent}
+.messages #newsDisplay{margin-right:4px;float:right;white-space:nowrap;color:#0000}
 .messages #newsDisplay a:first-child{display:none}
 .messages #newsDisplay a:last-child{font-size:smaller}
 .newsAuthor{margin-right:2px;padding:0 0 0 18px;float:right;font-size:8pt;text-transform:none;background:var(--user) no-repeat 2px center/12px;opacity:.7}
@@ -384,7 +384,7 @@ div[id^="config_"].main{padding-bottom:14px}
 #news li::before{width:20px;height:10px;display:inline-block;list-style:none;background:var(--tunn_active) no-repeat left center/8px;content:""}
 #news #newsDisplay a:active,#graphopts a:active,#routerinformation tr:nth-child(n+2) a:not(#revision):active,#fullhistory a:active,.graphstat:active{box-shadow:inset 2px 2px 2px #000;background:#020}
 #news #newsDisplay a:hover,#news #newsDisplay a:focus,#graphopts a:hover,#graphopts a:focus,.graphstat:hover,.graphstat:focus,#routerinformation tr:nth-child(n+2) a:not(#revision):hover,#routerinformation tr:nth-child(n+2) a:not(#revision):focus,#fullhistory a:hover,#fullhistory a:focus{border:var(--border_badge);background:linear-gradient(180deg,#030 50%,#010 50%)}
-#news #newsDisplay,#graphopts{color:transparent}
+#news #newsDisplay,#graphopts{color:#0000}
 #news #newsDisplay,#news #newsStatus{margin-top:3px;display:inline-block}
 #news .newsentry:first-child{margin-top:-3px}
 #news .newsentry h3,#newspage .newsentry h3{letter-spacing:.03em;text-align:left;font-size:10pt}
@@ -462,7 +462,7 @@ input[type=file]{background:none}
 
 /* Show text on context specific buttons (eg deferred shutdown) */
 #sidebar .reload[value="restartImmediate"],#sidebar .stop[value="shutdownImmediate"],#sb_manualReseed,#sb_manualReseed:hover,#sb_manualReseed:focus{padding-left:24px;text-indent:0;text-align:left;text-transform:capitalize;background-size:14px,100%}
-#sidebar .reload[value="restartImmediate"]{padding-left:24px;color:transparent!important;text-shadow:none!important;background:var(--warning) no-repeat calc(50% - 9px) center/16px,var(--restart) no-repeat calc(50% + 9px) center/12px,var(--btn)}
+#sidebar .reload[value="restartImmediate"]{padding-left:24px;color:#0000!important;text-shadow:none!important;background:var(--warning) no-repeat calc(50% - 9px) center/16px,var(--restart) no-repeat calc(50% + 9px) center/12px,var(--btn)}
 #sidebar .reload[value="restartImmediate"]:hover,#sidebar .reload[value="restartImmediate"]:focus{background:var(--warning) no-repeat calc(50% - 9px) center/16px,var(--restart_hover) no-repeat calc(50% + 9px) center/12px,var(--btn_hover_radial);color:#f00}
 #sidebar .cancel{text-transform:capitalize}
 #sidebar .stop[value="shutdownImmediate"]{width:auto;background:var(--shutdown) no-repeat 8px center/12px,var(--btn)}
@@ -663,7 +663,7 @@ h3.stats{border:var(--border);border-radius:0}
 #stats .confignav{display:flex;position:sticky;top:-1px;z-index:999;flex-wrap:wrap}
 #stats .noevents,#statlist li li:last-child::after{margin-bottom:0}
 #stats .noevents{margin-bottom:5px;padding:5px 0 20px}
-#stats .noevents::after,#statlist li li:last-child::after{margin-bottom:0;padding-bottom:0;border-bottom-color:transparent}
+#stats .noevents::after,#statlist li li:last-child::after{margin-bottom:0;padding-bottom:0;border-bottom-color:#0000}
 #stats .noevents::after{margin-top:6px;margin-bottom:0;margin-right:20px;padding-bottom:10px}
 #stats #statlist{margin:0 0 50px;padding:0;border:0;background:none}
 #stats .statsName{margin:0 6px 10px 0;padding:10px 10px 0 10px;width:calc(100% - 22px);display:inline-block;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:#000800}
@@ -1176,7 +1176,7 @@ p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,l
 .netdb_ouraddresses .netdb_transport{margin:-1px 5px 0 -6px;padding:2px;display:inline-block}
 .netdbstats .hide+hr{display:none}
 .netdbstats hr#expl,.netdbstats hr#hrd{display:block}
-.netdbStats hr,.sybil_routerinfo hr{margin:2px 0;display:block;color:transparent;opacity:.5;border-bottom:var(--border_badge);background:none}
+.netdbStats hr,.sybil_routerinfo hr{margin:2px 0;display:block;color:#0000;opacity:.5;border-bottom:var(--border_badge);background:none}
 .netdbStats li .bullet:last-of-type{opacity:0}
 .netdbStats li{padding:1px 0;margin:0 5px 0 0;display:inline-block;vertical-align:middle;white-space:normal;list-style:none}
 .signingkey.encryption{padding-left:20px;background:var(--lock) no-repeat 5px center/12px,var(--badge)}
@@ -1270,7 +1270,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .netdb_leases li{margin:1px 4px 1px 0;padding:1px 5px 1px 0;display:inline-block;white-space:nowrap;list-style:none}
 .netdb_leases li b:first-child{margin:0;padding:0;min-width:60px;display:inline-block;text-align:right}
 .netdb_leases li b.leaseNumber{margin-right:0;padding:1px 0 0;min-width:22px;position:relative;vertical-align:middle;text-align:center;text-shadow:var(--textshadow);background:#020;border-radius:2px 0 0 2px;filter:drop-shadow(0 0 1px #000)}
-.netdb_leases li b.leaseNumber::after{width:0;height:0;position:absolute;right:-10px;bottom:calc(50% - 5px);border-color:transparent transparent transparent #020;border-style:solid;border-width:5px;content:""}
+.netdb_leases li b.leaseNumber::after{width:0;height:0;position:absolute;right:-10px;bottom:calc(50% - 5px);border-color:#0000 #0000 #0000 #020;border-style:solid;border-width:5px;content:""}
 .netdb_leases .netdb_tunnel{margin:0;padding:0;border:0;box-shadow:none;background:none}
 .netdb_leases .tunnel_id{margin:0 2px 0 -1px;min-width:100px;vertical-align:middle;text-align:center}
 .netdb_leases .tunnel_peer,.tunneldisplay .tunnel_peer{min-width:64px}
@@ -1478,7 +1478,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 .applink:active .applabel,.sitemapLink:active .sitemapLabel{color:var(--ink);box-shadow:var(--depress);background:var(--hover)}
 .applink:active .applabel a{color:var(--ink)}
 .applink:active img,.sitemapLink:active img{transform:scale(0.9)!important}
-.appicon .extlink::after,.sitemapLink.extlink::after{width:22px;height:19px;position:absolute;top:-1px;right:-1px;display:inline-block;border:1px solid #000;background:transparent;opacity:0;content:"";transform:scale(0)}
+.appicon .extlink::after,.sitemapLink.extlink::after{width:22px;height:19px;position:absolute;top:-1px;right:-1px;display:inline-block;border:1px solid #000;background:#0000;opacity:0;content:"";transform:scale(0)}
 .appicon .extlink::after{top:-3px}
 .applink:hover .extlink::after,.sitemapLink.extlink:hover::after{border:1px solid #f50;background:#000 var(--newtab_hover) no-repeat 4.5px center/13px 11px;opacity:1;transform:scale(1);pointer-events:none}
 .applink img,.sitemapLink img{filter:sepia(100%) hue-rotate(70deg) grayscale(.3)}
@@ -1573,7 +1573,7 @@ td.optionsave,.buckets,.formaction,#certs h4,#certs p,#certs textarea,#config_ad
 .configtable th{word-spacing:0;letter-spacing:0;text-transform:none}
 #config_advanced td.optionsave,#config_bandwidth td.optionsave,#config_clients .formaction,#config_homepage .formaction,#config_i2cp td.optionsave,#config_keyring .optionsave,#config_logging td.optionsave,#config_network td.optionsave,#config_peers .configtable tr:last-child td,#config_peers .configtable tr:nth-child(4) td,#config_service .formaction,#configstats tr.tablefooter,#config_summarybar .formaction,#config_ui .formaction,#graphing.formaction,#config_update tr:nth-child(2),#config_update tr.tablefooter,#pluginconfigactions.formaction,#reseedconfig td.optionsave,#sidebarconf tr:last-child,#sybilTask .optionsave,#tunnelconfigsave.formaction,#webappconfigactions.formaction{background:var(--h3),var(--footer);background-size:2px,100%}
 #externali2cp tr,#config_update tr,#joinfamily tr,#manualreseed tr,#netconfig tr,#newfamily tr:last-child,#plugininstall,#plugininstall2,#reseedconfig tr{box-shadow:var(--highlight),inset 0 0 1px 1px #040;background:none}
-#configstats tr.tablefooter td.optionsave,#sidebarconf tr:last-child td,#config_update tr.tablefooter td{background:transparent }
+#configstats tr.tablefooter td.optionsave,#sidebarconf tr:last-child td,#config_update tr.tablefooter td{background:#0000 }
 #externali2cp input[name="port"]{margin-left:6px}
 #externali2cp td{padding:5px}
 #netconfig .suboption,#externali2cp .suboption{padding-top:3px;padding-bottom:3px}
@@ -1706,7 +1706,7 @@ th.th_title{padding:8px 10px;position:static;text-align:left;background:var(--h1
 /* bandwidth */
 #config_bandwidth .h3navlinks a:active{filter:none;transform:scale(.9)}
 #config_bandwidth .h3navlinks a:hover{filter:drop-shadow(0 0 1px #f60) drop-shadow(0 0 2px #f60)}
-#config_bandwidth .h3navlinks a{margin-bottom:-12px;padding-top:12px;width:24px;color:transparent;background:url(../images/networkconfig.svg) no-repeat calc(100% - 6px) 4px/22px;text-shadow:none;border:0;contain:paint}
+#config_bandwidth .h3navlinks a{margin-bottom:-12px;padding-top:12px;width:24px;color:#0000;background:url(../images/networkconfig.svg) no-repeat calc(100% - 6px) 4px/22px;text-shadow:none;border:0;contain:paint}
 #config_bandwidth .h3navlinks{margin:-10px 0 -11px;padding:11px 0 10px;display:inline-block;border-left:var(--border)}
 #configbandwidth img{margin:-1px 10px 0;display:inline-block}
 
@@ -2183,7 +2183,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 /* jardump */
 .revision,.sha256,.unsignedmod{display:inline-block;user-select:all}
 .revision code::selection,.sha256 code::selection,#help code::selection,#configinfo th::selection,#console code::selection{background:#bb0;color:#000}
-.revision br::selection,.sha256 br::selection{background:transparent}
+.revision br::selection,.sha256 br::selection{background:#0000}
 .sha256 code{letter-spacing:-.03em;font-size:90%}
 .subheading.routerfiles{background:url(images/favicon.svg) no-repeat right 5px center/16px,linear-gradient(90deg,#000,#001000 40%);background-blend-mode:luminosity,normal}
 .subheading.pluginfiles{background:var(--plugin) no-repeat right 5px center/16px,linear-gradient(90deg,#000,#001000 40%);background-blend-mode:luminosity,normal}
@@ -2205,9 +2205,9 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #jarfiles tr:hover td:first-child{padding-left:26px;padding-right:0}
 #jarfiles td:nth-child(2){padding-right:8px;white-space:nowrap;text-align:right;font-weight:700;font-style:italic}
 #jarfiles td:last-child{padding:0;text-align:left;word-break:break-all;border-right:0}
-#jarfiles tr:hover td{background:#001800;color:var(--ink);border:1px solid #151;border-left:1px solid transparent;border-right:1px solid transparent}
+#jarfiles tr:hover td{background:#001800;color:var(--ink);border:1px solid #151;border-left:1px solid #0000;border-right:1px solid #0000}
 #jarfiles tr:hover .unsignedmod:not(:empty){background:#700;color:#fff}
-#jarfiles tr:hover hr{background:transparent}
+#jarfiles tr:hover hr{background:#0000}
 #jarfiles tr:hover tt{color:#dd0}
 #jarfiles a[href^="https://gitlab.com/i2pplus"]{margin-left:-4px;padding-left:14px;background:var(--gitlab) no-repeat left center;background-size:11px}
 #jarfiles font[color="red"]{color:#d00}
@@ -2316,7 +2316,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logs #enviro:hover{user-select:all;cursor:text}
 #logs #enviro td{padding:7px 10px;font-weight:400;border-right:1px inset #131;box-shadow:var(--highlight)}
 #logs #enviro td:first-child{width:1%;white-space:nowrap;text-align:right}
-#logs #enviro:hover td{color:#9d0;border-top:1px inset transparent;border-bottom:1px inset transparent;border-right:1px inset transparent;box-shadow:none;background:#010}
+#logs #enviro:hover td{color:#9d0;border-top:1px inset #0000;border-bottom:1px inset #0000;border-right:1px inset #0000;box-shadow:none;background:#010}
 #logs #eventlogLink{margin-right:7px;display:inline-block;font-size:0;border-bottom:0;background:none}
 #logs #eventlogLink::after{width:18px;height:16px;float:right;background:url(/themes/console/images/logs.svg) var(--center)/14px;content:"";filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #000)}
 #logs #eventlogLink:hover::after{transform:scale(1.2)}

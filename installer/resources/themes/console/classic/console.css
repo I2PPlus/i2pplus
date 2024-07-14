@@ -207,7 +207,7 @@ p:empty+.sb_notice{margin-top:7px}
 .percentBarText{white-space:nowrap;text-align:center;font-weight:700;color:var(--ink);text-shadow:0 1px 1px rgba(255,255,255,.8);float:left;width:100%;height:14px;padding:0;opacity:0;transition:ease opacity .2s}
 .percentBarOuter:hover .percentBarText{opacity:1;transition:ease opacity .2s;pointer-events:none}
 #sb_memoryBar .percentBarText,#sb_CPUBar .percentBarText{padding:1px 0 4px;width:90%;float:none;position:absolute;top:-20px;left:5%;right:5%;z-index:9999;vertical-align:middle;font-size:105%;border-radius:1px;background:#eef;filter:drop-shadow(0 0 1px #ddf) drop-shadow(0 0 1px #779);pointer-events:none}
-#sb_memoryBar .percentBarText::after,#sb_CPUBar .percentBarText::after{width:0;height:0;position:absolute;left:calc(50% - 5px);bottom:-15px;border-style:solid;border-width:8px;border-color:#eef transparent transparent transparent;content:""}
+#sb_memoryBar .percentBarText::after,#sb_CPUBar .percentBarText::after{width:0;height:0;position:absolute;left:calc(50% - 5px);bottom:-15px;border-style:solid;border-width:8px;border-color:#eef #0000 #0000 #0000;content:""}
 #sb_CPUBar .percentBarInner{border:0;box-shadow:var(--highlight);background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(240,240,250,.5) 50%,rgba(220,220,255,.5) 50%,rgba(140,140,220,.5)),repeating-linear-gradient(90deg,var(--bg4),var(--bg4) 4px,#bbc 5px,#bbc 10px) left center/10px 100%,linear-gradient(90deg,#0000 150px,rgba(0,128,0,.3) 150px,rgba(255,96,0,.4),rgba(255,0,0,.5))}
 
 /* updates download bar */
@@ -1015,7 +1015,7 @@ h2#jobrunners{display:none}
 #finishedjobs{margin-top:15px}
 #finishedjobs+ol li,#scheduledjobs+ol li,#activejobs+ol li,#readyjobs+ol li{width:100%;list-style:none}
 #activejobs+ol li::before,#scheduledjobs+ol li::before,#readyjobs+ol li::before,#finishedjobs+ol li::before,.jobcount::before{margin:0 8px 0 -24px;width:12px;height:12px;display:inline-block;background:var(--timer) no-repeat center center/12px;content:""}
-#activejobs+ol li::before{margin-right:6px;margin-left:-20px;height:0;width:0;border:5px solid #f00;border-color:transparent transparent transparent #373;background:none}
+#activejobs+ol li::before{margin-right:6px;margin-left:-20px;height:0;width:0;border:5px solid #f00;border-color:#0000 #0000 #0000 #373;background:none}
 #finishedjobs+ol li::before{background:var(--yes) no-repeat center center/12px}
 #scheduledjobs+ol li::before,.jobcount::before{opacity:.7}
 #scheduledjobs+ol li::before{color:#970}
@@ -1123,10 +1123,10 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 #graph_single{padding-left:0;padding-right:0}
 #graph_single>.infohelp{margin:3px 20px 10px}
 #graph_single .graphspanel{margin:0 -1px -13px;padding:3px 0 0}
-#graphopts{margin:25px -1px -11px;padding:10px 10px 9px;text-align:center;color:transparent;text-transform:capitalize;border:var(--border);background:rgba(255,255,255,.8)}
+#graphopts{margin:25px -1px -11px;padding:10px 10px 9px;text-align:center;color:#0000;text-transform:capitalize;border:var(--border);background:rgba(255,255,255,.8)}
 #graphinfo{margin:0 15px 9px;text-transform:capitalize}
 #graphopts+p{margin:-1px -5px 0;padding:10px;display:none;text-align:right;border:var(--border);background:var(--bg)}
-#newsDisplay{color:transparent}
+#newsDisplay{color:#0000}
 .messages #newsDisplay{margin:-4px 5px 0 0;float:right}
 #newsDisplay a:first-child{margin-right:-5px}
 .messages #newsDisplay a:first-child{display:none}
@@ -1489,7 +1489,7 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 #logs #eventlogLink::after{width:19px;height:16px;padding:12px 8px 8px 4px;display:inline-block;background:url(/themes/console/images/logs.svg) no-repeat center center/16px;content:""}
 #logs #eventlogLink:hover::after{transform:scale(1.2)}
 #logs #enviro{user-select:all;cursor:text}
-#logs #enviro:hover tr,#logs #enviro:hover td{background:var(--row_hover);border-top:1px inset transparent;border-bottom:1px inset transparent}
+#logs #enviro:hover tr,#logs #enviro:hover td{background:var(--row_hover);border-top:1px inset #0000;border-bottom:1px inset #0000}
 #enviro td,#eventlogs td{padding:5px 10px}
 #logs #enviro td:first-child{padding-right:0;width:1%;text-align:right;white-space:nowrap}
 #enviro td:last-child b{margin-left:8px;margin-right:5px}
@@ -1520,7 +1520,7 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 #logs li:last-child::after{border:0;margin:-4px}
 #logs li:first-child{padding-top:0;margin-top :1px}
 #logs ul{margin-left:-5px;margin-bottom:-3px;padding-left:0;padding-right:0;width:calc(100% + 10px);margin-right:-20px}
-#logs li{padding:0 2px 4px 22px;width:100%;width:calc(100% - 24px);border-top:var(--border_softer);border-bottom:var(--border_softer);background:transparent;opacity:.85;animation:ease logupdate 1s}
+#logs li{padding:0 2px 4px 22px;width:100%;width:calc(100% - 24px);border-top:var(--border_softer);border-bottom:var(--border_softer);background:#0000;opacity:.85;animation:ease logupdate 1s}
 #logs li:first-child,#logs li:first-child:hover{border-top:0}
 #logs li:nth-child(n+2){margin-top:-1px}
 #logs li:hover{position:relative;z-index:10;border-top:var(--border_soft);border-bottom:var(--border_soft);background:var(--row_hover);opacity:1;transition:ease all .15s}
@@ -2122,7 +2122,7 @@ span.b32:active{box-shadow:0 0 0 1px var(--border_color),var(--btn_shadow_active
 /* tunnelpeercount */
 #peerdefs li{line-height:1.6}
 #tunnels .percentBarInner{background:var(--flatbar)}
-#tunnels .percentBarOuter:hover .percentBarInner{box-shadow:none;background:transparent}
+#tunnels .percentBarOuter:hover .percentBarInner{box-shadow:none;background:#0000}
 #tunnels .percentBarOuter,#tunnels .percentbarInner,#tunnels .percentBarText{display:inline-block}
 #tunnels .percentBarOuter,#tunnels .percentBarText{width:100px}
 #tunnels .percentBarOuter{background:var(--bg2);text-align:left}

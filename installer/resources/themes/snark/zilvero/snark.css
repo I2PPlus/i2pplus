@@ -54,7 +54,7 @@ body{margin:0;padding:5px 5px 0;min-width:800px;color:var(--ink);background:var(
 .iframed body{min-width:700px;padding:0;background:#777}
 code{font-weight:700;color:#393}
 form{margin:0}
-hr{background:transparent;color:transparent;height:0;border:0}
+hr{background:#0000;color:#0000;height:0;border:0}
 img{font-size:0}
 table{border-collapse:separate;border-spacing:0;background:#eee}
 table table{border:0}
@@ -173,11 +173,11 @@ input[type=submit]:active,a.control:active,.snarkNav:active,#torrentDisplay .fil
 /* search */
 #snarkSearch{margin-left:8px;display:block;position:absolute;right:12px;top:10px}
 .iframed #snarkSearch{top:5px;right:8px}
-#snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:12px 8px 4px;height:28px;border:0;box-shadow:none;background:transparent}
+#snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:12px 8px 4px;height:28px;border:0;box-shadow:none;background:#0000}
 #snarkSearch input[type=search]:hover,#snarkSearch input[type=search]:focus,#snarkSearch input[type=search][value]{padding-right:22px;border-bottom:1px solid #ccc;opacity:1;appearance:none}
 #snarkSearch input[type=search]::placeholder{font-weight:600;font-style:italic;opacity:.4}
 #snarkSearch:not(:hover) input[type=search]::placeholder,#snarkSearch input[type=search]:focus::placeholder{opacity:0}
-#snarkSearch input[type="submit"]{width:28px;min-width:unset;font-size:0;color:transparent;background:var(--b_search) no-repeat bottom right/24px;opacity:.5}
+#snarkSearch input[type="submit"]{width:28px;min-width:unset;font-size:0;color:#0000;background:var(--b_search) no-repeat bottom right/24px;opacity:.5}
 #snarkSearch input[type="submit"]:hover{background-size:26px}
 #snarkSearch input[type="submit"]:active{background-size:22px;filter:none}
 #snarkSearch:hover input[type="submit"],#snarkSearch:focus-within input[type="submit"]{opacity:1}
@@ -349,7 +349,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 .peerinfo .barOuter,.peerinfo .barInner{height:10px}
 .rxd .barInner,.rxd .barOuter{max-width:84px}
 .rxd .barText{margin-top:1px;padding:3px;width:140px;display:inline-block;position:relative;top:-18px;left:-30px;z-index:10;border-radius:1px;background:#eee;filter:drop-shadow(0 0 1px #999)}
-.rxd .barText::after{margin-left:-7px;position:absolute;top:90%;left:50%;border-width:7px;border-style:solid;border-color:#eee transparent transparent transparent;content:""}
+.rxd .barText::after{margin-left:-7px;position:absolute;top:90%;left:50%;border-width:7px;border-style:solid;border-color:#eee #0000 #0000 #0000;content:""}
 .tx{padding:.5px 0;min-width:68px;height:auto;display:inline-block;position:relative;vertical-align:middle;border:var(--border_hard);border-left-width:5px;box-shadow:var(--btn_shadow_active);background:var(--bar_upload_inactive)}
 .txBarInner{height:calc(100% - 2px);display:inline-block;position:absolute;top:1px;left:1px;box-shadow:inset 0 3px 3px #0008;background:#f6f8}
 .stopped .txBarInner{background:#007a9988}
@@ -395,7 +395,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .priorityIndicator{display:none}
 .priority input[type=radio]{text-align:left;margin:3px}
 .priority input[type=radio]:not(:checked):not(:hover){opacity:.7}
-.priorityHigh,.priorityNormal,.prioritySkip{padding:0;width:52px;display:inline-block;vertical-align:middle;overflow:hidden;text-align:left;font-size:0;color:transparent}
+.priorityHigh,.priorityNormal,.prioritySkip{padding:0;width:52px;display:inline-block;vertical-align:middle;overflow:hidden;text-align:left;font-size:0;color:#0000}
 .priorityHigh{background:url(/i2psnark/.res/icons/clock_red.png) no-repeat left 26px center/18px}
 .priorityNormal{background:url(/i2psnark/.res/icons/clock.png) no-repeat left 26px center/18px}
 .prioritySkip{background:url(/i2psnark/.res/icons/block.png) no-repeat left 26px center/18px}
@@ -560,9 +560,9 @@ body.debug #dhtDebug{display:table-row;box-shadow:var(--highlight);background:li
 .tooltipped:hover{filter:drop-shadow(0 0 1px rgba(0,0,0,.2))}
 .tooltipped:hover::before,.tooltipped:active::before,.tooltipped:hover::after,.tooltipped:active::after{position:absolute;display:inline-block}
 .tooltipped:hover::after,.tooltipped:active::after{padding:3px 6px;top:0;left:32px;font-weight:600;border:1px solid #cca;border-radius:2px;box-shadow:var(--highlight);background:linear-gradient(180deg,#fff,#ffd);content:attr(data-tooltip);animation:fade-in .1s ease 3s reverse both}
-.tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 4px);left:30px;border-width:6px;border-style:solid;border-color:transparent #cca transparent transparent;content:"";animation:fade-in .1s ease 3s reverse both}
+.tooltipped:hover::before,.tooltipped:active::before{margin-left:-10px;top:calc(50% - 4px);left:30px;border-width:6px;border-style:solid;border-color:#0000 #cca #0000 #0000;content:"";animation:fade-in .1s ease 3s reverse both}
 #bwHelp{visibility:hidden;background:#fff url(/i2psnark/.res/icons/favicon.svg) no-repeat 10px center/28px;text-align:center;padding:15px 15px 15px 55px;border-radius:3px;width:320px;position:absolute;z-index:2000;bottom:125%;left:0;margin-left:-183px;display:block;white-space:normal;font-size:10pt;filter:drop-shadow(0 0 1px #999);opacity:0}
-#bwhelp::after{content:"";position:absolute;top:100%;left:50%;margin-left:-10px;border-width:10px;border-style:solid;border-color:#fff transparent transparent transparent}
+#bwhelp::after{content:"";position:absolute;top:100%;left:50%;margin-left:-10px;border-width:10px;border-style:solid;border-color:#fff #0000 #0000 #0000}
 #bwHoverHelp img{margin-right:5px;width:16px;height:16px;filter:saturate(0) opacity(.5)}
 #bwHoverHelp:hover img{filter:none}
 #bwHoverHelp:hover #bwHelp,#bwHoverHelp:active #bwHelp{visibility:visible;text-align:center;color:#333;opacity:1;transition:ease opacity .3s}
@@ -583,11 +583,11 @@ body.debug #dhtDebug{display:table-row;box-shadow:var(--highlight);background:li
 
 /* table sort indicators */
 .sortIcon{position:relative;display:inline-block}
-.ascending,.descending{display:inline-block;position:absolute;top:-2px;right:-8px;border-width:4px;border-style:solid;border-color:transparent transparent #999 transparent;filter:opacity(0);animation:ease fade-in .2s .6s forwards}
-.descending{top:2px;border-color:#999 transparent transparent transparent}
+.ascending,.descending{display:inline-block;position:absolute;top:-2px;right:-8px;border-width:4px;border-style:solid;border-color:#0000 #0000 #999 #0000;filter:opacity(0);animation:ease fade-in .2s .6s forwards}
+.descending{top:2px;border-color:#999 #0000 #0000 #0000}
 .sortIcon:hover .ascending,.sortIcon:hover .descending{transform:rotate(180deg);transition:linear transform .1s}
-.sortIcon:hover .ascending{top:2px;border-color:transparent transparent #d30 transparent}
-.sortIcon:hover .descending{top:-2px;border-color:#d30 transparent transparent transparent}
+.sortIcon:hover .ascending{top:2px;border-color:#0000 #0000 #d30 #0000}
+.sortIcon:hover .descending{top:-2px;border-color:#d30 #0000 #0000 #0000}
 #torrentSort .ascending,th#torrentSort .descending{right:-14px}
 
 /* configure */

@@ -134,7 +134,7 @@ select:hover,select:focus{color:var(--hover);border:1px solid #f60}
 select:hover,select:focus,select:active{color:var(--hover);box-shadow:var(--btn_shadow_hover);background:#000 var(--dropdown_hover) no-repeat right 10px center/10px}
 select[disabled],select[disabled]:hover{color:#494;border:0;box-shadow:var(--btn_shadow);background:var(--dropdown) no-repeat right 10px center,var(--btn)/10px;opacity:.7;cursor:not-allowed}
 select option{font-weight:400;font-size:9.5pt;color:var(--hover);background:#000}
-select:-moz-focusring{outline:1px solid transparent}
+select:-moz-focusring{outline:1px solid #0000}
 select::-moz-focus-inner{outline:none;border:0}
 table{width:100%;border-spacing:0}
 textarea{margin:10px;padding:5px;width:calc(100% - 15px);min-height:100px;resize:none;text-align:left;font:500 8.5pt var(--monospaced);color:#bb7;border:var(--border_hard);border-radius:1px;box-shadow:var(--highlight);background:linear-gradient(180deg,#000,#010)}

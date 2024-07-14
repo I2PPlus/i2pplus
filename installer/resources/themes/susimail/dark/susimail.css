@@ -11,7 +11,7 @@ a:visited{color:#252}
 b,h3,.pagenav td,th{color:var(--ink);text-shadow:var(--txt_shadow)}
 body,input,select,.fakebutton{vertical-align:middle;font-family:var(--bodyfont);font-size:9pt}
 body{margin:5px;min-width:920px}
-.iframed body{margin:-1px -1px -5px;background:var(--compose_hover),var(--login_hover),var(--logout_hover),var(--offline_hover),var(--save_hover),var(--send_hover),var(--configure_hover),var(--refresh_hover),var(--dropdown_hover),transparent;background-size:0}
+.iframed body{margin:-1px -1px -5px;background:var(--compose_hover),var(--login_hover),var(--logout_hover),var(--offline_hover),var(--save_hover),var(--send_hover),var(--configure_hover),var(--refresh_hover),var(--dropdown_hover),#0000;background-size:0}
 form{line-height:1.6;border-top:0}
 hr{margin:5px;width:100%;height:1px;border:0;background:#252;opacity:.5}
 html{background:none}
@@ -257,7 +257,7 @@ img.sort:active{box-shadow:var(--highlight),inset 2px 2px 2px #000}
 #dologin tr:last-child a{margin:12px -4px 8px;padding:3px 15px;min-width:120px;display:inline-block;color:#373;text-shadow:var(--txt_shadow);border-radius:25px;background:var(--glow_bottom);transition:ease all .05s}
 #dologin tr:last-child a:hover{color:#494;box-shadow:0 0 0 1px #020;background:var(--glow_bottom),var(--th);transition:ease all .1s}
 #dologin tr:last-child a:active{color:#f90;box-shadow:0 0 1px #020,inset 3px 3px 3px #000;transition:ease all .05s}
-#dologin tr:last-child td{color:transparent}
+#dologin tr:last-child td{color:#0000}
 #toggle{margin:0;height:20px;width:20px;min-width:0;vertical-align:middle;font-size:0;border:0;box-shadow:none;background:var(--show) no-repeat center center/20px;cursor:pointer;mix-blend-mode:luminosity}
 #toggle.hidepass{background:var(--hide) no-repeat center center/20px}
 #toggle:hover{mix-blend-mode:normal}

@@ -13,7 +13,7 @@
 }
 
 body{margin:0 5px;background:var(--bodybg) url(/themes/console/light/images/tile2.png) center center}
-.iframed body{background:transparent;margin:0;overflow:hidden}
+.iframed body{background:#0000;margin:0;overflow:hidden}
 a:active{color:#f30}
 a,button,input[type=submit],input[type=reset],select,h3{text-shadow:var(--txt_shadow)}
 a:hover,a:focus,a:active,select:hover,select:focus,select:active,input:hover,input:focus,input:active,button:hover,button:focus,button:active{text-shadow:none}
@@ -148,7 +148,7 @@ tr:hover .destaddress{color:#333}
 #subscriptions h3,.headline#configure h3,.headline#addressbook h3,.headline h3{margin:-8px -5px -6px;padding:9px 5px 8px 30px}
 .iframed div.help{border-radius:0 0 2px 2px}
 .iframed .headline{margin-top:6px}
-.iframed .page{margin:1px;padding:10px 10px 0;min-width:520px;overflow:hidden;background-color:transparent}
+.iframed .page{margin:1px;padding:10px 10px 0;min-width:520px;overflow:hidden;background-color:#0000}
 .iframed #add{margin:12px 0 10px}
 .iframed #add p.buttons{margin-bottom:0;border-bottom:0}
 .iframed #book,.iframed #emptybook{margin-bottom:0}
@@ -202,14 +202,14 @@ td.destinations textarea{height:28px;box-shadow:none}
 #host_details td:nth-child(2) b{margin:0 4px 0 8px}
 #hostNotes td:first-child{vertical-align:top}
 #hostNotes td:last-child{padding:0 0 1px;font-family:var(--bodyfont);background:linear-gradient(180deg,#fafaff 90px,rgba(220,220,255,.3)),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 5px) #fafaff}
-#hostNotes:hover td{background:transparent}
+#hostNotes:hover td{background:#0000}
 #hostNotes:hover td:first-child,#hostNotes:hover textarea{background:#ffe}
 #hostNotes td:last-child input[type=submit]{margin:10px;float:right;display:none}
 #hostNotes td:last-child textarea:focus+input[type=submit]{display:inline-block}
-#addNotes{margin:0;padding:5px 8px;border:1px solid transparent;border-left:0;border-right:0;border-radius:0;background:#fafaff}
+#addNotes{margin:0;padding:5px 8px;border:1px solid #0000;border-left:0;border-right:0;border-radius:0;background:#fafaff}
 #addNotes:hover,#addNotes:focus{border:1px solid var(--hover);border-right:0;border-left:0;background:#fff}
 #addNotes::placeholder{font-style:italic}
-#addNotes:focus::placeholder{color:transparent}
+#addNotes:focus::placeholder{color:#0000}
 #lastMod:empty::after{content:"n/a"}
 
 /* identicon + qr image */
@@ -257,7 +257,7 @@ input.download,input.update{margin-top:5px;padding:5px 7px 5px 21px;background:v
 input.download:hover,input.download:focus,input.update:hover,input.update:focus{background:var(--download) no-repeat 6px center/13px,var(--btn_hover)}
 input.reload{padding:5px 7px 5px 22px;background:var(--refresh) no-repeat 6px center/14px,var(--btn)}
 input.reload:hover,input.reload:focus{background:var(--refresh_hover) no-repeat 6px center,var(--btn_hover);background-size:14px,100%}
-input.search[type=submit]{margin-left:3px;padding:6px 5px;width:44px;vertical-align:middle;color:transparent;text-shadow:none;border-radius:0 2px 2px 0;background:var(--search) no-repeat center center/14px,var(--btn);background-blend-mode:luminosity}
+input.search[type=submit]{margin-left:3px;padding:6px 5px;width:44px;vertical-align:middle;color:#0000;text-shadow:none;border-radius:0 2px 2px 0;background:var(--search) no-repeat center center/14px,var(--btn);background-blend-mode:luminosity}
 input.search[type=submit]:hover,input.search[type=submit]:focus{background:var(--search) no-repeat center center/14px,var(--btn_hover);background-blend-mode:normal}
 input.search[type=text]{margin:1px -10px 0 0;padding:6px 8px;vertical-align:middle;border-radius:2px 0 0 2px;transition:none}
 input.search[type=text]:focus,input.search[type=text]:focus-within~input.search[type=submit]{border:1px solid var(--hover);filter:none;transition:none}
@@ -268,15 +268,15 @@ input.update{margin-left:5px}
 
 /* page nav buttons */
 #next,#prev{position:relative;display:inline-block;line-height:0;vertical-align:middle}
-#next::after,#prev::after{height:0;width:0;position:absolute;top:calc(50% - 6px);right:calc(50% - 3px);border-width:6px;border-style:solid;border-color:transparent #575779 transparent transparent;content:"";pointer-events:none}
+#next::after,#prev::after{height:0;width:0;position:absolute;top:calc(50% - 6px);right:calc(50% - 3px);border-width:6px;border-style:solid;border-color:#0000 #575779 #0000 #0000;content:"";pointer-events:none}
 #next.inactive,#prev.inactive{padding:12px 10px;border:0}
 #next.inactive::after,#prev.inactive::after{opacity:.6}
 #next a,#prev a{margin:0;padding:12px 10px;font-size:0}
 #next a,#next.inactive{border-radius:0 2px 2px 0}
-#next:not(.inactive):hover::after,#next:not(.inactive) a:focus::after{border-color:transparent transparent transparent var(--hover)}
-#next::after{left:calc(50% - 3px);right:0;border-color:transparent transparent transparent #575779}
+#next:not(.inactive):hover::after,#next:not(.inactive) a:focus::after{border-color:#0000 #0000 #0000 var(--hover)}
+#next::after{left:calc(50% - 3px);right:0;border-color:#0000 #0000 #0000 #575779}
 #prev a,#prev.inactive{border-radius:2px 0 0 2px}
-#prev:not(.inactive):hover::after,#prev:not(.inactive) a:focus::after{border-color:transparent var(--hover) transparent transparent}
+#prev:not(.inactive):hover::after,#prev:not(.inactive) a:focus::after{border-color:#0000 var(--hover) #0000 #0000}
 
 /* help page */
 svg{opacity:.9}

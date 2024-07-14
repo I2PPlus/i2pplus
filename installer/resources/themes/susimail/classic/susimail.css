@@ -121,7 +121,7 @@ tr.bottombuttons table.pagenav{margin:0;width:100%;border-bottom:1px solid #555}
 #dologin tr:last-child a{margin:6px -2px 6px;padding:3px 10px;display:inline-block;font-size:90%;border:1px solid rgba(119,120,159,.3);border-radius:25px;box-shadow:0 0 1px rgba(255,255,255,0);background:linear-gradient(90deg,#f2f2ff,#f6f6ff,#f2f2ff);transition:ease all .1s}
 #dologin tr:last-child a:hover{border:1px solid #77789f;border:1px solid rgba(119,120,159,.5);background:#f2f2ff;background:linear-gradient(180deg,#fafaff 50%,#e8e8ff 50%) #f2f2ff;box-shadow:0 0 1px #ccf;transition:ease all .1s}
 #dologin tr:last-child a:active{border:1px solid rgba(119,120,159,.3);background:#e2e2ff;background:linear-gradient(180deg,#eaeaff 50%,#d9d9ff 50%);box-shadow:inset 3px 3px 3px #779;transition:ease all .1s;color:rgba(65,70,95,.8);color:#99a5df}
-#dologin tr:last-child td{color:transparent;color:rgba(119,120,159,0)}
+#dologin tr:last-child td{color:#0000;color:rgba(119,120,159,0)}
 #toggle{height:20px;width:24px;vertical-align:middle;font-size:0;border:0;box-shadow:none;background:var(--show) no-repeat center center/20px;cursor:pointer;mix-blend-mode:luminosity}
 #toggle:hover{mix-blend-mode:normal}
 #toggle.hidepass{background:var(--hide) no-repeat center center/20px}
@@ -288,7 +288,7 @@ tr:hover .listDate{opacity:.9}
 .iframed #message_full{margin-bottom:-1px}
 .iframed #messagenav{padding-bottom:0}
 .iframed #nukemail{top:230px}
-.iframed .page{margin:-6px 1px 11px;min-width:580px;border:0;box-shadow:none;background:transparent}
+.iframed .page{margin:-6px 1px 11px;min-width:580px;border:0;box-shadow:none;background:#0000}
 .iframed p.mailbody{margin:0;padding:15px 20px}
 .iframed .topbuttons,.iframed p.error,.iframed p.info{margin:-1px -11px;border:var(--border);border-left:0;border-right:0}
 .iframed .topbuttons{margin:0 0 -2px;padding:6px 0 1px}

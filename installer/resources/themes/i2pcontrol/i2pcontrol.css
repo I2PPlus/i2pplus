@@ -77,8 +77,8 @@ input[type=submit]:hover{
 
 hr{
   height:1px;
-  color:transparent;
-  background:transparent;
+  color:#0000;
+  background:#0000;
   border-bottom:1px solid #101020;
 }
 

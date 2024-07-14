@@ -122,7 +122,7 @@ th.tunnelLocation{text-transform:none}
 .tunnelHelper a:hover{transform:scale(1.2)}
 .tunnelHelper a:active{transform:scale(.95)}
 .tunnelName{width:25%;min-width:150px}
-.tunnelName a{margin-left:5px;padding:5px 5px 5px 25px;width:calc(100% - 20px);display:inline-block;box-sizing:border-box;font-weight:700;border:1px solid transparent;border-radius:1px 15px 15px 1px;background:var(--settings) no-repeat 6px center/14px}
+.tunnelName a{margin-left:5px;padding:5px 5px 5px 25px;width:calc(100% - 20px);display:inline-block;box-sizing:border-box;font-weight:700;border:1px solid #0000;border-radius:1px 15px 15px 1px;background:var(--settings) no-repeat 6px center/14px}
 .tunnelName a:hover,.tunnelName a:focus{border:var(--border);background:var(--settings_hover) no-repeat 6px center/14px,linear-gradient(180deg,#113,#001);background-size:14px,100%}
 .tunnelName a:active{color:var(--active);border:var(--border_active);box-shadow:var(--highlight),inset 3px 3px 3px #000;background:var(--settings_active) no-repeat 6px center/14px,var(--btn_active)}
 .tunnelType{width:25%}
@@ -149,7 +149,7 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 .control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--a_hover);background:var(--btn_hover)}
 .control:active,button:active{text-decoration:none;background:var(--hover)}
 #serverTunnels .iconize,#clientTunnels .iconize{min-width:80px}
-.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:transparent;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover),var(--start_active);-webkit-text-stroke:0}
+.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:#0000;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover),var(--start_active);-webkit-text-stroke:0}
 .control.stop{background:var(--stop) no-repeat center center/14px,var(--btn),var(--stop_hover),var(--start_active)}
 .control.preview{background:var(--eye) no-repeat center center/19px,var(--btn),var(--eye_hover),var(--eye_active)}
 .control.create{background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover),var(--create_active)}
