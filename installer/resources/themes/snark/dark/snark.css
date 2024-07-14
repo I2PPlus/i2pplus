@@ -31,7 +31,7 @@ a.control:hover img{filter:sepia(100%) hue-rotate(10deg)}
 a.control img,a.controld img,a.control:hover img,a.control img:hover{width:14px;height:14px;margin:0;padding:0;vertical-align:middle;filter:none}
 code{padding:0 2px;font-size:8.5pt;color:#ff6}
 form{margin-bottom:0}
-hr{margin:5px 0 7px;width:0;height:1px;color:transparent;opacity:0}
+hr{margin:5px 0 7px;width:0;height:1px;opacity:0}
 input.default{width:1px;height:1px;visibility:hidden}
 input.disabled,a.controld{opacity:.5;cursor:not-allowed}
 input[type=submit],input.disabled:hover,a.control{padding:8px 12px;min-width:95px;font-size:8.5pt;font-weight:700;text-align:center;color:#494;border:1px solid #000;border-radius:2px;background:var(--btn);filter:none}
@@ -405,7 +405,7 @@ hr.debug{display:none}
 .debuginfo b{text-transform:capitalize}
 #debugMode{margin-top:-2px;padding:8px;display:inline-block;vertical-align:middle;line-height:0;box-sizing:border-box;font-size:0;background:var(--debug) no-repeat center center;opacity:0}
 #debugMode:hover{opacity:1}
-#torrents #dhtDebug th{text-align:center;border-top:2px solid #242;box-shadow:var(--highlight);background:repeating-linear-gradient(180deg,#0205 2px,#0108 4px),url(images/sniper.svg) no-repeat 8px bottom / auto 92%,linear-gradient(180deg,#020,#010)}}
+#torrents #dhtDebug th{text-align:center;border-top:2px solid #242;box-shadow:var(--highlight);background:repeating-linear-gradient(180deg,#0205 2px,#0108 4px),var(--sniper) no-repeat 8px bottom / auto 92%,linear-gradient(180deg,#020,#010)}}
 #dhtDebug .bullet{display:none}
 #dhtDebug b,#dhtDebug .dbug,#dhtDebug .stat{margin:2px 0;padding:0 8px;display:inline-block}
 #dhtDebug b{color:var(--ink);border-radius:2px 0 0 2px}
