@@ -974,11 +974,12 @@ html:not(.iframed) #torrentEdit :not(tfoot) tr:first-child td:last-child{border-
 #torrentSort .ascending,th#torrentSort .descending{right:-11px}
 
 /* create torrent file filtering */
-.createFilterToggle{margin:0 4px 4px 0;padding:2px 6px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-weight:600;font-style:italic;border:var(--border_inner);box-shadow:var(--highlight_light);background:linear-gradient(180deg,#616,#414);transform: translateY(2px)}
+.createFilterToggle{margin:0 4px 4px 0;padding:2px 7px;display:inline-block;display:flex;flex-grow:.01;justify-content:center;position:relative;vertical-align:middle;text-align:center;font-weight:600;font-style:italic;border:var(--border_inner);box-shadow:var(--highlight_light);background:linear-gradient(180deg,#616,#414);transform:translateY(2px)}
 .createFilterToggle.starts_with{border-left-width:5px}
 .createFilterToggle.contains{border-left-width:5px;border-right-width:5px}
 .createFilterToggle.ends_with{border-right-width:5px}
-#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:2px 5px 2px 18px;font-style:normal;border-color:#bd0f80;box-shadow:0 0 0 1px #0004 inset,var(--shadow_inset);background:var(--delete) no-repeat 5px center/10px,linear-gradient(180deg,#313,#515);background-blend-mode:hard-light}
+#contentFilter input[type=checkbox]:checked+.createFilterToggle{padding:2px 5px 2px 18px;font-style:normal;border-color:#bd0f80cc;box-shadow:0 0 0 1px #0004 inset,var(--shadow_inset);background:var(--delete) no-repeat 5px center/10px,linear-gradient(180deg,#313,#515);background-blend-mode:hard-light}
+.createFilterToggle:hover,#contentFilter input[type=checkbox]:checked+.createFilterToggle:hover{border-color:var(--hover);box-shadow:0 0 0 1px #0008,var(--highlight)}
 #contentFilter{margin:0;width:80%;display:flex;flex-wrap:wrap;align-items:center}
 #contentFilter input[type=checkbox]{display:none}
 #fileFilter{margin:0 auto;display:block;margin-bottom:10px}
@@ -1019,7 +1020,8 @@ hr.debug{display:none}
 #debugMode:hover{opacity:1}
 #debugMode:active{transform:scale(.9)}
 #dhtDebug{line-height:1.5}
-#dhtDebug th{text-align:center;border-top:var(--border_inner);border-bottom:0;border-radius:0 0 4px 4px}
+#dhtDebug span::selection,#dhtDebug span b::selection{color:#000;background:#ff0}
+#dhtDebug th{text-align:center;border-top:var(--border_inner);border-bottom:0;border-radius:0 0 4px 4px;background:linear-gradient(180deg,#6061,#0002),repeating-linear-gradient(180deg,#212 2px,#000 4px)}
 #dhtDebug th b{font-weight:700;color:var(--ink)}
 #dhtDebug .dht{font-weight:500;color:#f5eff1}
 body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
