@@ -276,6 +276,7 @@ tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{content:"\27A4"
 #snarkhead th{background:none}
 #snarkhead tr{background:var(--title);background-size:4px 100%,100%}
 #snarkTbody tr{background:var(--tr_snark)}
+#snarkTbody tr:not(:last-child) td{border-bottom:1px solid #1317}
 #snarkTbody tr:nth-child(odd){background:var(--tr_snark_odd)}
 #snarkTbody tr#noload{background:#000}
 #snarkTbody #pagenavbottom,#snarkTbody #pagenavbottom:hover,#snarkTbody #pagenavbottom:hover td{background:var(--tr)}
@@ -972,13 +973,7 @@ body,#torrents td,.snarkAddInfo,th,td,code,textarea,input,input[type=submit],inp
 }
 
 @media (min-width:1200px){
-.active.downloading .peerCount b{background:repeating-linear-gradient(135deg,#252,#252 8px,#141 9px,#141 17px)}
-.active.downloading .peerCount b::before{border-color:#0000 #252 #0000 #0000}
-.active.seeding.complete .peerCount b{background:repeating-linear-gradient(135deg,#937,#937 8px,#826 9px,#826 17px)}
-.active.seeding.complete .peerCount b::before{border-color:#0000 #937 #0000 #0000}
-.configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active{font-size:11pt}
-.configPanel .snarkConfigtitle{font-size:12pt}
-.peerCount b{padding:4px 3px;min-width:104px;display:inline-block;position:relative;line-height:1;text-align:center;font-size:95%;color:#eee;text-shadow:0 1px 1px #000;-webkit-text-stroke:0;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
+.peerCount b{margin:4px 0;padding:4px 3px;min-width:104px;display:inline-block;position:relative;vertical-align:middle;line-height:1;text-align:center;font-size:95%;color:#eee;text-shadow:0 1px 1px #000;-webkit-text-stroke:0;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
 .peerCount b a{color:#fff}
 .peerCount b a[href*="?p="]:hover::after{top:calc(50% - 2px);border-color:#fff #0000 #0000 #0000}
 .peerCount b::before{width:0;height:0;position:absolute;top:calc(50% - 5px);left:-10px;border-width:5px;border-style:solid;border-color:#0000 #ac5390 #0000 #0000;content:""}
@@ -991,6 +986,12 @@ body,#torrents td,.snarkAddInfo,th,td,code,textarea,input,input[type=submit],inp
 .peerCount b a:hover .left,.peerCount b a:hover .right{min-width:32px;color:var(--hover);background:linear-gradient(180deg,rgba(220,80,0,.3),rgba(255,96,0,.3))}
 .peerCount b a:hover .right{margin-left:-9px}
 .peerCount b a:hover,.peerCount b a:focus{color:var(--hover)}
+.active.downloading .peerCount b{background:repeating-linear-gradient(135deg,#252,#252 8px,#141 9px,#141 17px)}
+.active.downloading .peerCount b::before{border-color:#0000 #252 #0000 #0000}
+.active.seeding.complete .peerCount b{background:repeating-linear-gradient(135deg,#937,#937 8px,#826 9px,#826 17px)}
+.active.seeding.complete .peerCount b::before{border-color:#0000 #937 #0000 #0000}
+.configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active{font-size:11pt}
+.configPanel .snarkConfigtitle{font-size:12pt}
 .inactive.downloading .peerCount b,.peerCount b .right,.peerCount b .left{text-shadow:0 1px 1px #222}
 .inactive.downloading .peerCount b,.active.starting.processing .peerCount b{color:#101;background:#bb0}
 .inactive.downloading .peerCount b::before,.active.starting.processing .peerCount b::before{border-color:#0000 #bb0 #0000 #0000}
