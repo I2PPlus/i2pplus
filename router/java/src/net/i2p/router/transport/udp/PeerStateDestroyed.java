@@ -194,7 +194,8 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         if (!from.equals(_remoteHostId)) {
             // TODO, QUIC says we can respond, or not...
             if (_log.shouldWarn())
-                _log.warn("Inbound packet from [" + from + "] on " + this);
+                //_log.warn("Inbound packet from [" + from + "] on " + this);
+                _log.warn("Dropping irregular packet from " + from + " -> Host/packet ID mimsmatch");
         }
         DatagramPacket dpacket = packet.getPacket();
         byte[] data = dpacket.getData();
@@ -240,7 +241,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
             SSU2Payload.processPayload(_context, this, data, off + SHORT_HEADER_SIZE, payloadLen, false, from);
         } catch (Exception e) {
             if (_log.shouldWarn())
-                _log.warn("BAD encrypted packet on: " + this, e);
+                _log.warn("BAD encrypted packet on: " + this + " (" + e.getMessage() + ")");
         }
     }
 
