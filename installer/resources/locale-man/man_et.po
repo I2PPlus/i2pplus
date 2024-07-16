@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P man pages\n"
-"Language: en\n"
+"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,381 +18,381 @@ msgstr ""
 #: man/eepget.1:1
 #, no-wrap
 msgid "EEPGET"
-msgstr ""
+msgstr "EEPGET"
 
 #. type: TH
 #: man/eepget.1:1 man/i2prouter.1:1 man/i2prouter-nowrapper.1:1
 #, no-wrap
 msgid "January 26, 2017"
-msgstr ""
+msgstr "26. jaanuar 2017"
 
 #. type: TH
 #: man/eepget.1:1 man/i2prouter.1:1 man/i2prouter-nowrapper.1:1
 #, no-wrap
 msgid "I2P"
-msgstr ""
+msgstr "I2P"
 
 #. type: SH
 #: man/eepget.1:3 man/i2prouter.1:3 man/i2prouter-nowrapper.1:3
 #, no-wrap
 msgid "NAME"
-msgstr ""
+msgstr "NIMI"
 
 #. type: Plain text
 #: man/eepget.1:5
 msgid "Eepget - I2P downloader"
-msgstr ""
+msgstr "Eepget - I2P allalaadimine"
 
 #. type: SH
 #: man/eepget.1:6 man/i2prouter.1:6 man/i2prouter-nowrapper.1:6
 #, no-wrap
 msgid "SYNOPSIS"
-msgstr ""
+msgstr "ÜLESANNETEKST"
 
 #. type: Plain text
 #: man/eepget.1:9
 msgid "B<eepget> [I<options>]I<URL>"
-msgstr ""
+msgstr "B<eepget> [I<valikud>]I<URL>"
 
 #. type: SH
 #: man/eepget.1:11 man/i2prouter.1:11 man/i2prouter-nowrapper.1:10
 #, no-wrap
 msgid "DESCRIPTION"
-msgstr ""
+msgstr "KIRJELDUS"
 
 #. type: Plain text
 #: man/eepget.1:15
 msgid "Download a file non-interactively via HTTP. Transfers through both I2P and the regular Internet are supported."
-msgstr ""
+msgstr "Allalaadi fail HTTP kaudu mitte-interaktiivselt. Toimingud läbi I2P ja tavapärase Interneti toetatakse."
 
 #. type: Plain text
 #: man/eepget.1:21
 msgid "Eepget is able to cope with slow or unstable network connections; if a download is not successful because of a network problem, it will keep retrying until the whole file has been retrieved (if the -n option is set).  If supported by the remote server, eepget will instruct the server to continue the download from the point of interruption."
-msgstr ""
+msgstr "Eepget suudab hakkama saada aeglasete või ebastabiilsete veebisühete juures; kui allalaadimine ei õnnestu veebisüsteemi probleemide tõttu, siis see proovib pidevalt kuni kogu fail on allalaaditud (kui on seatud valik -n). Kui kaugserver toetab, siis eepget juhib serverit jätkama allalaadimist katkestuse punktist."
 
 #. type: SH
 #: man/eepget.1:22
 #, no-wrap
 msgid "OPTIONS"
-msgstr ""
+msgstr "VALIKUD"
 
 #. type: Plain text
 #: man/eepget.1:25
 msgid "B<-c>"
-msgstr ""
+msgstr "B<-c>"
 
 #. type: TP
 #: man/eepget.1:25
 #, no-wrap
 msgid "Clearnet. Do not use a proxy. Same as B<-p> :0 ."
-msgstr ""
+msgstr "Clearnet. Ära kasuta proxy-d. Sarnane B<-p> :0 ."
 
 #. type: Plain text
 #: man/eepget.1:31
 msgid "B<-e> etag"
-msgstr ""
+msgstr "B<-e> etag"
 
 #. type: TP
 #: man/eepget.1:31
 #, no-wrap
 msgid "Sets the etag value in the request headers."
-msgstr ""
+msgstr "Seab etagi väärtuse päringu pealkirjades."
 
 #. type: Plain text
 #: man/eepget.1:37
 msgid "B<-h> name=value"
-msgstr ""
+msgstr "B<-h> nimi=väärtus"
 
 #. type: TP
 #: man/eepget.1:37
 #, no-wrap
 msgid "Adds an arbitrary request header with the given name and value."
-msgstr ""
+msgstr "Lisa ükski päringu pealkiri, millel on antud nimi ja väärtus."
 
 #. type: Plain text
 #: man/eepget.1:43
 msgid "B<-l> lineLen"
-msgstr ""
+msgstr "B<-l> ridaPikkus"
 
 #. type: TP
 #: man/eepget.1:43
 #, no-wrap
 msgid "Controls the progress display. B<\\ lineLen > is the length of one progress line in characters. The default is 40."
-msgstr ""
+msgstr "Kontrollib edasiliikumise kuvamist. B<\\ lineLen > on ühe edasiliikumise rida pikkus tähtedena. Vaikimisi on see 40."
 
 #. type: Plain text
 #: man/eepget.1:49
 msgid "B<-m> markSize"
-msgstr ""
+msgstr "B<-m> märkPikkus"
 
 #. type: TP
 #: man/eepget.1:49
 #, no-wrap
 msgid "Controls the progress display. B<\\ markSize > is the number of bytes one '#' character represents. The default is 1024."
-msgstr ""
+msgstr "Kontrollib edasiliikumise kuvamist. B<\\ markSize > on arv baitidest, mida esindab üks '#' märk. Vaikimisi on see 1024."
 
 #. type: Plain text
 #: man/eepget.1:55
 msgid "B<-n> retries"
-msgstr ""
+msgstr "B<-n> uuestiProovi"
 
 #. type: TP
 #: man/eepget.1:55
 #, no-wrap
 msgid "Specify the number of times to retry downloading if the download isn't successful. If this option is not specified, eepget will not retry."
-msgstr ""
+msgstr "Määra mitu korda proovida allalaadimist uuesti, kui allalaadimine ei õnnestu. Kui seda valikut ei ole määratud, siis eepget ei proovi uuesti."
 
 #. type: Plain text
 #: man/eepget.1:61
 msgid "B<-o> file"
-msgstr ""
+msgstr "B<-o> fail"
 
 #. type: TP
 #: man/eepget.1:61
 #, no-wrap
 msgid "Sets the output file to write to. If this option is not given, the output filename will be determined by the URL."
-msgstr ""
+msgstr "Seab väljundfaili, mida kirjutatakse. Kui seda valikut ei antud, siis väljundfaili nimi määrab URL."
 
 #. type: Plain text
 #: man/eepget.1:67
 msgid "B<-p> proxy_host[:port]"
-msgstr ""
+msgstr "B<-p> proxy_host[:port]"
 
 #. type: TP
 #: man/eepget.1:67
 #, no-wrap
 msgid "Specify an I2P proxy server (eeproxy) to use. If the port is not specified, eepget will use 4444. If this option is not specified, eepget will use 127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
-msgstr ""
+msgstr "Määra I2P proxy-server (eeproxy), mida kasutada. Kui port ei ole määratud, siis eeproxy kasutab 4444. Kui seda valikut ei ole määratud, siis eeproxy kasutab 127.0.0.1:4444. Määra B<-c> või B<-p> :0 eeproxy-i keelamiseks."
 
 #. type: Plain text
 #: man/eepget.1:73
 msgid "B<-t> seconds"
-msgstr ""
+msgstr "B<-t> sekundit"
 
 #. type: TP
 #: man/eepget.1:73
 #, no-wrap
 msgid "Sets the inactivity timeout. The default is 60 seconds."
-msgstr ""
+msgstr "Seab inaktiivsuse ajaluba. Vaikimisi on see 60 sekundit."
 
 #. type: Plain text
 #: man/eepget.1:79
 msgid "B<-u> username"
-msgstr ""
+msgstr "B<-u> kasutajanimi"
 
 #. type: TP
 #: man/eepget.1:79
 #, no-wrap
 msgid "Sets the username for proxy authorization, if required."
-msgstr ""
+msgstr "Seab kasutajanime proxy autentimiseks, kui see on vaja."
 
 #. type: Plain text
 #: man/eepget.1:85
 msgid "B<-x> password"
-msgstr ""
+msgstr "B<-x> parool"
 
 #. type: TP
 #: man/eepget.1:85
 #, no-wrap
 msgid "Sets the password for proxy authorization, if required. If a username is specified but not a password, EepGet will prompt for the password."
-msgstr ""
+msgstr "Seab parooli proxy autentimiseks, kui see on vaja. Kui on määratud kasutajanimi, kuid mitte parool, siis EepGet küsib parooli."
 
 #. type: SH
 #: man/eepget.1:89
 #, no-wrap
 msgid "EXIT STATUS"
-msgstr ""
+msgstr "VÄLJUKSE TÕENDE"
 
 #. type: Plain text
 #: man/eepget.1:93
 msgid "B<eepget> exits with status zero upon successful transfer and non-zero if there were problems with the download."
-msgstr ""
+msgstr "B<eepget> lahkub olekus null edukas ülekandmine ja mitte-null, kui allalaadimisega oli probleeme."
 
 #. type: SH
 #: man/eepget.1:94 man/i2prouter.1:54 man/i2prouter-nowrapper.1:24
 #, no-wrap
 msgid "REPORTING BUGS"
-msgstr ""
+msgstr "VIGADE TEATAMINE"
 
 #. type: Plain text
 #: man/eepget.1:99 man/i2prouter.1:59 man/i2prouter-nowrapper.1:29
 msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> the I2P Bug Tracker  E<.UE .>"
-msgstr ""
+msgstr "Palun sisesta lipp E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> I2P vigade jälgija E<.UE .>"
 
 #. type: SH
 #: man/eepget.1:100 man/i2prouter.1:60 man/i2prouter-nowrapper.1:30
 #, no-wrap
 msgid "SEE ALSO"
-msgstr ""
+msgstr "VAATA KA"
 
 #. type: Plain text
 #: man/eepget.1:104
 msgid "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
-msgstr ""
+msgstr "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
 
 #. type: TH
 #: man/i2prouter.1:1
 #, no-wrap
 msgid "I2PROUTER"
-msgstr ""
+msgstr "I2PROUTER"
 
 #. type: Plain text
 #: man/i2prouter.1:5
 msgid "i2prouter - start and stop the I2P router"
-msgstr ""
+msgstr "i2prouter - käivita ja peata I2P ruuter"
 
 #. type: Plain text
 #: man/i2prouter.1:9
 msgid "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
-msgstr ""
+msgstr "B<i2prouter> {I<konsol>|I<käivita>|I<peata>|I<armas>|I<taaskäivita>|I<olukorrataaskäivita>|I<olekus>|I<purge>|I<installeeri>|I<eemalda>}"
 
 #. type: Plain text
 #: man/i2prouter.1:13
 msgid "Control the I2P service."
-msgstr ""
+msgstr "Kontrolli I2P teenust."
 
 #. type: IP
 #: man/i2prouter.1:15
 #, no-wrap
 msgid "B<console>"
-msgstr ""
+msgstr "B<konsol>"
 
 #. type: Plain text
 #: man/i2prouter.1:17
 msgid "Runs I2P as a console application under the current user."
-msgstr ""
+msgstr "Käivitab I2P konsolirakenduse praeguse kasutaja all."
 
 #. type: IP
 #: man/i2prouter.1:19
 #, no-wrap
 msgid "B<start>"
-msgstr ""
+msgstr "B<käivita>"
 
 #. type: Plain text
 #: man/i2prouter.1:21
 msgid "Starts the I2P service."
-msgstr ""
+msgstr "Käivitab I2P teenuse."
 
 #. type: IP
 #: man/i2prouter.1:23
 #, no-wrap
 msgid "B<stop>"
-msgstr ""
+msgstr "B<peata>"
 
 #. type: Plain text
 #: man/i2prouter.1:25
 msgid "Stops the I2P service."
-msgstr ""
+msgstr "Peatab I2P teenuse."
 
 #. type: IP
 #: man/i2prouter.1:27
 #, no-wrap
 msgid "B<restart>"
-msgstr ""
+msgstr "B<taaskäivita>"
 
 #. type: Plain text
 #: man/i2prouter.1:29
 msgid "Stops the I2P service and then starts it."
-msgstr ""
+msgstr "Peatab I2P teenuse ja seejärel käivitab selle."
 
 #. type: IP
 #: man/i2prouter.1:31
 #, no-wrap
 msgid "B<condrestart>"
-msgstr ""
+msgstr "B<olukorrataaskäivita>"
 
 #. type: Plain text
 #: man/i2prouter.1:33
 msgid "Restart the I2P service only if it is already running."
-msgstr ""
+msgstr "Taaskäivita I2P teenus vaid siis, kui see juba töötab."
 
 #. type: IP
 #: man/i2prouter.1:35
 #, no-wrap
 msgid "B<graceful>"
-msgstr ""
+msgstr "B<armas>"
 
 #. type: Plain text
 #: man/i2prouter.1:37
 msgid "Stop I2P gracefully (may take up to 11 minutes)"
-msgstr ""
+msgstr "Peata I2P armasalt (võib võtta kuni 11 minutit)"
 
 #. type: IP
 #: man/i2prouter.1:39
 #, no-wrap
 msgid "B<install>"
-msgstr ""
+msgstr "B<installeeri>"
 
 #. type: Plain text
 #: man/i2prouter.1:41
 msgid "Install initscript to start I2P automatically when the system boots."
-msgstr ""
+msgstr "Installeeri initscript, et käivitada I2P automaatselt süsteemi käivitamisel."
 
 #. type: IP
 #: man/i2prouter.1:43
 #, no-wrap
 msgid "B<remove>"
-msgstr ""
+msgstr "B<eemalda>"
 
 #. type: Plain text
 #: man/i2prouter.1:45
 msgid "Uninstall initscript that was installed with B<install>"
-msgstr ""
+msgstr "Eemalda initscript, mis installeeriti B<installeeri> abil"
 
 #. type: IP
 #: man/i2prouter.1:47
 #, no-wrap
 msgid "B<status>"
-msgstr ""
+msgstr "B<olekus>"
 
 #. type: Plain text
 #: man/i2prouter.1:49
 msgid "Prints whether the I2P service is running."
-msgstr ""
+msgstr "Trükkib, kas I2P teenus töötab."
 
 #. type: IP
 #: man/i2prouter.1:51
 #, no-wrap
 msgid "B<dump>"
-msgstr ""
+msgstr "B<purge>"
 
 #. type: Plain text
 #: man/i2prouter.1:53
 msgid "Dumps the current threads into B<wrapper.log>."
-msgstr ""
+msgstr "Purjeerib praegused thread'id B<wrapper.log>."
 
 #. type: Plain text
 #: man/i2prouter.1:61
 msgid "B<i2prouter-nowrapper>(1)"
-msgstr ""
+msgstr "B<i2prouter-nowrapper>(1)"
 
 #. type: TH
 #: man/i2prouter-nowrapper.1:1
 #, no-wrap
 msgid "I2PROUTER-NOWRAPPER"
-msgstr ""
+msgstr "I2PROUTER-NOWRAPPER"
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:5
 msgid "i2prouter-nowrapper - start the I2P router"
-msgstr ""
+msgstr "i2prouter-nowrapper - käivita I2P ruuter"
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:8
 msgid "B<i2prouter-nowrapper>"
-msgstr ""
+msgstr "B<i2prouter-nowrapper>"
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:14
 msgid "Start the I2P router, without the service wrapper.  This means the router will not restart if it crashes.  Also, it will use the default memory size, which may not be enough for I2P."
-msgstr ""
+msgstr "Käivita I2P ruuter ilma teenuse hüvedeta. See tähendab, et ruuter ei taaskäivitu, kui see kukub alla. Samuti kasutatakse vaikimisi mälu suurust, mis võib mitte piisata I2P jaoks."
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:23
 msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
-msgstr ""
+msgstr "Te peaksite tegelikult kasutama B<i2prouter>(1)  skripti. Valikuid ei ole. Ruuteri peatamiseks kasutage oma brauserit E<.UR http://localhost:7657/> ruuterikonsoli juurdepääsuks E<.UE .>"
 
 #. type: Plain text
 #: man/i2prouter-nowrapper.1:31
 msgid "B<i2prouter>(1)"
-msgstr ""
+msgstr "B<i2prouter>(1)"

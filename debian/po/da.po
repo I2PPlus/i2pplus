@@ -1,0 +1,71 @@
+# I2P+ Debian package
+# This file is distributed under the same license as the i2p package.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: I2P+\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: boolean
+#. Beskrivelse
+#: ../i2p.templates:2001
+msgid "Should the I2P router be started at boot?"
+msgstr "Skal I2P-routen startes ved opstart?"
+
+#. Type: boolean
+#. Beskrivelse
+#: ../i2p.templates:2001
+msgid "The I2P router can be run as a daemon that starts automatically when your computer boots up. This is the recommended configuration."
+msgstr "I2P-routen kan køres som en daemon, der starter automatisk, når din computer starter op. Dette er den anbefalede konfiguration."
+
+#. Type: string
+#. Beskrivelse
+#: ../i2p.templates:3001
+msgid "I2P daemon user:"
+msgstr "I2P daemon bruger:"
+
+#. Type: string
+#. Beskrivelse
+#: ../i2p.templates:3001
+msgid "By default I2P is configured to run under the account i2psvc when running as a daemon. To use an existing I2P profile you may enter a different account name here. For example, if your previous I2P installation is at /home/user/i2p, you may enter 'user' here."
+msgstr "Som standard er I2P konfigureret til at køre under kontoen i2psvc, når den køres som en daemon. For at bruge en eksisterende I2P-profil kan du indtaste et andet kontonavn her. For eksempel, hvis din tidligere I2P-installation er på /home/bruger/i2p, kan du indtaste 'bruger' her."
+
+#. Type: string
+#. Beskrivelse
+#: ../i2p.templates:3001
+msgid "Very important: If a user other than the default of 'i2psvc' is entered here, the chosen username MUST already exist."
+msgstr "Væsentligt: Hvis et brugernavn andet end det standard 'i2psvc' indtastes her, skal det valgte brugernavn MÅSTE allerede eksistere."
+
+#. Type: string
+#. Beskrivelse
+#: ../i2p.templates:4001
+msgid "Memory that can be allocated to I2P:"
+msgstr "Hukommelse, der kan tildeltes I2P:"
+
+#. Type: string
+#. Beskrivelse
+#: ../i2p.templates:4001
+msgid "By default, I2P will only be allowed to use up to 128MB of RAM."
+msgstr "Som standard vil I2P kun være tilladt at bruge op til 128MB RAM."
+
+#. Type: string
+#. Beskrivelse
+#: ../i2p.templates:4001
+msgid "High bandwidth routers, as well as routers with a lot of active torrents / plugins, may need to have this value increased."
+msgstr "Routere med høj båndbredde samt routere med mange aktive torrents / plugins måske skal have denne værdi øget."
+
+#. Type: boolean
+#. Beskrivelse
+#: ../i2p.templates:5001
+msgid "Should the I2P daemon be confined with AppArmor?"
+msgstr "Bør I2P daemon være begrænset med AppArmor?"
+
+#. Type: boolean
+#. Beskrivelse
+#: ../i2p.templates:5001
+msgid "With this option enabled I2P will be sandboxed with AppArmor, restricting which files and directories may be accessed by I2P."
+msgstr "Med denne mulighed aktiveret vil I2P være isoleret med AppArmor, hvilket begrænser, hvilke filer og mapper I2P har adgang til."
