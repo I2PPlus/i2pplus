@@ -53,10 +53,9 @@ public class TranslationStatus {
                                             "susidns.war", "susimail.war" };
 
     // Java lang codes, see notes below
-    private static final String[] LANGS = { "ar", "az", "bg", "ca", "cs", "da", "de", "el", "es", "et", "fa",
-                                            "fi", "fr", "gl", "hi", "hr", "hu", "in", "it", "iw", "ja", "ko",
-                                            "mg", "nb", "nl", "nn", "pl", "pt", "ro", "ru", "sk", "sl", "sq",
-                                            "sr", "sv", "tk", "tr", "uk", "vi", "zh" };
+    private static final String[] LANGS = { "ar", "az", "cs", "da", "de", "el", "es", "et", "fa", "fi", "fr",
+                                            "hu", "in", "it", "ja", "ko", "nb", "nl", "pl", "pt", "ro", "ru",
+                                            "sv", "tr", "uk", "vi", "zh" };
 /**
     private static final String[] LANGS = { "ar", "az", "bg", "ca", "cs", "da", "de", "el", "es", "es_AR",
                                             "et", "fa", "fi", "fr", "gl", "hi", "hr", "hu", "in", "it", "iw",
@@ -64,6 +63,7 @@ public class TranslationStatus {
                                             "ro", "ru", "sk", "sl", "sq", "sr", "sv", "tk", "tr", "uk", "vi",
                                             "zh", "zh_TW" };
 **/
+
     private static final String[] FILES = { "core/java/src/gnu/getopt/MessagesBundle.properties",
                                             "installer/resources/readme/readme.html",               // no country variants supported
                                             "installer/resources/eepsite/docroot/help/index.html",
