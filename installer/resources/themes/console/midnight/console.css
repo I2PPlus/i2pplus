@@ -2078,6 +2078,7 @@ p#upnpstatus{margin-top:10px;padding-left:50px}
 #portmapper td{padding:5px 10px}
 #portmapper th,#portmapper td{text-align:left}
 .skm_key td:first-child b{font-family:var(--bodyfont);color:var(--ink)}
+#debug #tx_summary .percentBarInner{height:100%!important}
 
 /* certs */
 #certs{padding-top:3px}

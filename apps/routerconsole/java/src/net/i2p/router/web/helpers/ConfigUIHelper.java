@@ -158,7 +158,6 @@ public class ConfigUIHelper extends HelperBase {
         //{ "zh_TW", "tw", "Chinese 中文", "Taiwan" },
     };
 
-
     public String getLangSettings() {
         String clang = Messages.getLanguage(_context);
         String current = clang;
