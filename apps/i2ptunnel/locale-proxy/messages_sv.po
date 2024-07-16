@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-16 14:18+0000\n"
 "PO-Revision-Date: 2023-12-12 05:36+0000\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
@@ -96,11 +97,16 @@ msgstr "Hjälp"
 
 #: ../java/build/Proxy.java:12
 msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr "Den begärde URI:n är ogiltig och innehåller troligtvis ogiltiga tecken."
+msgstr ""
+"Den begärde URI:n är ogiltig och innehåller troligtvis ogiltiga tecken."
 
 #: ../java/build/Proxy.java:13
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "Om du klicka på en länk, kontrollera slutet av URI:n efter andra tecken som webbläsaren av misstag lagt till."
+msgid ""
+"If you clicked a link, check the end of the URI for any characters the "
+"browser has mistakenly added on."
+msgstr ""
+"Om du klicka på en länk, kontrollera slutet av URI:n efter andra tecken som "
+"webbläsaren av misstag lagt till."
 
 #: ../java/build/Proxy.java:14 ../java/build/Proxy.java:20
 #: ../java/build/Proxy.java:126 ../java/build/Proxy.java:132
@@ -112,8 +118,11 @@ msgid "The connection to the website was reset while the page was loading."
 msgstr "Anslutningen till webbplatsen startade om medan sidan laddades."
 
 #: ../java/build/Proxy.java:22
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Webbplatsen kan vara tillfälligt onåbar, belastad, eller ha blockerat dig."
+msgid ""
+"The website could be temporarily unavailable, too busy, or it has blocked "
+"your access."
+msgstr ""
+"Webbplatsen kan vara tillfälligt onåbar, belastad, eller ha blockerat dig."
 
 #: ../java/build/Proxy.java:23 ../java/build/Proxy.java:72
 #: ../java/build/Proxy.java:124 ../java/build/Proxy.java:169
@@ -126,8 +135,12 @@ msgstr "Du kanske vill {0}försöka igen{1}."
 #: ../java/build/Proxy.java:137 ../java/build/Proxy.java:150
 #: ../java/build/Proxy.java:170
 #, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "Om du lämnar den här sidan öppen kommer den automatiskt att försöka ansluta till webbplatsen var {0} sekund efter ett misslyckat anslutningsförsök."
+msgid ""
+"If you leave this page open, it will automatically retry connecting to the "
+"website every {0} seconds after a failed connection attempt."
+msgstr ""
+"Om du lämnar den här sidan öppen kommer den automatiskt att försöka ansluta "
+"till webbplatsen var {0} sekund efter ett misslyckat anslutningsförsök."
 
 #: ../java/build/Proxy.java:25 ../java/build/Proxy.java:62
 #: ../java/build/Proxy.java:74 ../java/build/Proxy.java:87
@@ -158,8 +171,12 @@ msgid "Warning: No Outproxy Configured"
 msgstr "Varning: Ingen utproxy inställd"
 
 #: ../java/build/Proxy.java:43
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "Din förfrågan var för en sida utanför I2P, men du har ingen HTTP utproxy inställd."
+msgid ""
+"Your request was for a site outside of I2P, but you have no HTTP outproxy "
+"configured."
+msgstr ""
+"Din förfrågan var för en sida utanför I2P, men du har ingen HTTP utproxy "
+"inställd."
 
 #: ../java/build/Proxy.java:44
 msgid "Please configure an outproxy in I2PTunnel."
@@ -178,12 +195,22 @@ msgid "Your browser is misconfigured."
 msgstr "Din webbläsare är felkonfigurerad."
 
 #: ../java/build/Proxy.java:48
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "Använd inte proxyn för åtkomst till routerkonsolen, localhost eller lokala LAN mål."
+msgid ""
+"Do not use the proxy to access the router console, localhost, or local LAN "
+"destinations."
+msgstr ""
+"Använd inte proxyn för åtkomst till routerkonsolen, localhost eller lokala "
+"LAN mål."
 
 #: ../java/build/Proxy.java:49
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "Du måste förhindra att 127.0.0.1 (eller adressen du har åtkomst till I2P-konsolen på) dirigeras via I2P:s http-proxy, vanligtvis genom att exkludera adressen i din webbläsares proxykonfigurationssektion."
+msgid ""
+"You need to prevent 127.0.0.1 (or the address you're accessing the I2P "
+"console on) from being routed via I2P's http proxy, usually by excluding the "
+"address in your browser's proxy configuration section."
+msgstr ""
+"Du måste förhindra att 127.0.0.1 (eller adressen du har åtkomst till I2P-"
+"konsolen på) dirigeras via I2P:s http-proxy, vanligtvis genom att exkludera "
+"adressen i din webbläsares proxykonfigurationssektion."
 
 #: ../java/build/Proxy.java:50
 msgid "Website Unknown"
@@ -207,13 +234,21 @@ msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
 msgstr "Om du har en Base64-adress, {0}lägg till den till din adressbok{1}."
 
 #: ../java/build/Proxy.java:60
-msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
-msgstr "Annars, hitta en Base32 eller adresshjälpar-länk eller använder en hopp-tjänst länk nedan."
+msgid ""
+"Otherwise, find a Base 32 or address helper link, or use a jump service link "
+"below."
+msgstr ""
+"Annars, hitta en Base32 eller adresshjälpar-länk eller använder en hopp-"
+"tjänst länk nedan."
 
 #: ../java/build/Proxy.java:61
 #, java-format
-msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
-msgstr "Ser du den här sidan ofta? Se {0}vanliga frågor{1} efter hjälp med att {2}lägga till några prenumerationer{3} till din adressbok."
+msgid ""
+"Seeing this page often? See {0}the FAQ{1} for help in {2}adding some "
+"subscriptions{3} to your addressbook."
+msgstr ""
+"Ser du den här sidan ofta? Se {0}vanliga frågor{1} efter hjälp med att {2}"
+"lägga till några prenumerationer{3} till din adressbok."
 
 #: ../java/build/Proxy.java:63 ../java/build/Proxy.java:69
 #: ../java/build/Proxy.java:160 ../java/build/Proxy.java:166
@@ -224,11 +259,15 @@ msgstr "Webbplatsen onåbar"
 
 #: ../java/build/Proxy.java:70
 msgid "The website was not reachable, because its lease set was not found."
-msgstr "Denna webbplats var inte nåbar, eftersom dess leaseset inte kunde hittas."
+msgstr ""
+"Denna webbplats var inte nåbar, eftersom dess leaseset inte kunde hittas."
 
 #: ../java/build/Proxy.java:71
-msgid "The website is probably down, but there could also be network congestion."
-msgstr "Webbplatsen är förmodligen nere, men det kan också vara överbelastning på nätverket."
+msgid ""
+"The website is probably down, but there could also be network congestion."
+msgstr ""
+"Webbplatsen är förmodligen nere, men det kan också vara överbelastning på "
+"nätverket."
 
 #: ../java/build/Proxy.java:75 ../java/build/Proxy.java:81
 #: ../java/build/Proxy.java:139 ../java/build/Proxy.java:145
@@ -240,28 +279,45 @@ msgid "The HTTP Outproxy was not found."
 msgstr "HTTP-utproxyn hittades inte."
 
 #: ../java/build/Proxy.java:83
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Den är antingen frånkopplad, nätverket är under stor belastning eller så är din router ännu inte väl integrerad med noder."
+msgid ""
+"It is offline, there is network congestion, or your router is not yet well-"
+"integrated with peers."
+msgstr ""
+"Den är antingen frånkopplad, nätverket är under stor belastning eller så är "
+"din router ännu inte väl integrerad med noder."
 
 #: ../java/build/Proxy.java:84 ../java/build/Proxy.java:105
 #: ../java/build/Proxy.java:135 ../java/build/Proxy.java:148
 #, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "Du kanske vill {0}försöka igen{1} eftersom en ny utproxy kommer väljas slumpmässigt utav de som är definierade {2}här{3} (om du har mer än en inställd)."
+msgid ""
+"You may want to {0}retry{1} as this will randomly reselect an outproxy from "
+"the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr ""
+"Du kanske vill {0}försöka igen{1} eftersom en ny utproxy kommer väljas "
+"slumpmässigt utav de som är definierade {2}här{3} (om du har mer än en "
+"inställd)."
 
 #: ../java/build/Proxy.java:85 ../java/build/Proxy.java:106
 #: ../java/build/Proxy.java:136 ../java/build/Proxy.java:149
 #, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "Om du fortsätter att ha problem, så kanske du vill ändra din utproxy-liste {0}här{1}."
+msgid ""
+"If you continue to have trouble you may want to edit your outproxy list {0}"
+"here{1}."
+msgstr ""
+"Om du fortsätter att ha problem, så kanske du vill ändra din utproxy-liste "
+"{0}här{1}."
 
 #: ../java/build/Proxy.java:88 ../java/build/Proxy.java:94
 msgid "Warning: Request Denied"
 msgstr "Varning: Förfrågan Nekad"
 
 #: ../java/build/Proxy.java:95
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "Den här adressen verkar vara felaktig. Vänligen kontrollera att du har angett en giltig adress!"
+msgid ""
+"This address appears to be malformed. Please verify you have supplied a "
+"valid address!"
+msgstr ""
+"Den här adressen verkar vara felaktig. Vänligen kontrollera att du har "
+"angett en giltig adress!"
 
 #: ../java/build/Proxy.java:96
 msgid "You attempted to connect to a non-I2P website or location."
@@ -272,8 +328,12 @@ msgid "Outproxy Unreachable"
 msgstr "Utproxy Onåbar"
 
 #: ../java/build/Proxy.java:104
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "HTTP-proxyn kunde inte nås eftersom den använder krypteringsinställningar som inte stöd av din I2P eller Java-version."
+msgid ""
+"The HTTP outproxy was not reachable, because it uses encryption options that "
+"are not supported by your I2P or Java version."
+msgstr ""
+"HTTP-proxyn kunde inte nås eftersom den använder krypteringsinställningar "
+"som inte stöd av din I2P eller Java-version."
 
 #: ../java/build/Proxy.java:108 ../java/build/Proxy.java:159
 #: ../java/build/Proxy.java:209
@@ -290,17 +350,26 @@ msgstr "I2P HTTP Proxy Tillstånd Krävs"
 
 #: ../java/build/Proxy.java:111
 msgid "This proxy is configured to require a username and password for access."
-msgstr "Denna proxy är inställd till att kräva användarnamn och lösenord för åtkomst."
+msgstr ""
+"Denna proxy är inställd till att kräva användarnamn och lösenord för åtkomst."
 
 #: ../java/build/Proxy.java:112
 #, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "Vänligen ange ditt användarnamn och lösenord eller kontrollera din {0}router-konfiguration{1} eller {2}I2PTunnel-konfiguration{3}."
+msgid ""
+"Please enter your username and password, or check your {0}router "
+"configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr ""
+"Vänligen ange ditt användarnamn och lösenord eller kontrollera din {0}router-"
+"konfiguration{1} eller {2}I2PTunnel-konfiguration{3}."
 
 #: ../java/build/Proxy.java:113
 #, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "För att slå av autentisering, ta bort inställningen {0}i2ptunnel.proxy.auth=basic{1}, stanna och starta sedan om  HTTP Porxy tunneln."
+msgid ""
+"To disable authorization, remove the configuration {0}i2ptunnel.proxy."
+"auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr ""
+"För att slå av autentisering, ta bort inställningen {0}i2ptunnel.proxy."
+"auth=basic{1}, stanna och starta sedan om  HTTP Porxy tunneln."
 
 #: ../java/build/Proxy.java:114 ../java/build/Proxy.java:120
 #: ../java/build/Proxy.java:188
@@ -308,12 +377,18 @@ msgid "Warning: Invalid Destination"
 msgstr "Varning: Ogiltigt Mål"
 
 #: ../java/build/Proxy.java:121
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "Webbplatsens angivna destination var inte giltig, eller på annat sätt onåbar."
+msgid ""
+"The website destination specified was not valid, or was otherwise "
+"unreachable."
+msgstr ""
+"Webbplatsens angivna destination var inte giltig, eller på annat sätt onåbar."
 
 #: ../java/build/Proxy.java:122
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "Kanske kopierade du in fel Base64 sträng eller så är länken du följer dålig."
+msgid ""
+"Perhaps you pasted in the wrong Base 64 string or the link you are following "
+"is bad."
+msgstr ""
+"Kanske kopierade du in fel Base64 sträng eller så är länken du följer dålig."
 
 #: ../java/build/Proxy.java:123
 msgid "The I2P host could also be offline."
@@ -324,16 +399,24 @@ msgid "The connection to the proxy was reset."
 msgstr "Anslutningen till proxyn startades om."
 
 #: ../java/build/Proxy.java:134
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Proxyn kanske är tillfälligt off-line, under hög belastning, eller har blockerat dig."
+msgid ""
+"The proxy could be temporarily unavailable, too busy, or it has blocked your "
+"access."
+msgstr ""
+"Proxyn kanske är tillfälligt off-line, under hög belastning, eller har "
+"blockerat dig."
 
 #: ../java/build/Proxy.java:146
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgid ""
+"The HTTP outproxy was not reachable, because its lease set was not found."
 msgstr "HTTP-outproxyn kunde inte nås, eftersom dess leaseset inte hittades."
 
 #: ../java/build/Proxy.java:147
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "Outproxyn är förmodligen nere, men det kan också vara överbelastning på  nätverket."
+msgid ""
+"The outproxy is probably down, but there could also be network congestion."
+msgstr ""
+"Outproxyn är förmodligen nere, men det kan också vara överbelastning på  "
+"nätverket."
 
 #: ../java/build/Proxy.java:152 ../java/build/Proxy.java:158
 msgid "Warning: Authorization Required"
@@ -344,24 +427,42 @@ msgid "The website was not reachable."
 msgstr "Webbplatsen var inte nåbar."
 
 #: ../java/build/Proxy.java:168
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Webbplatsen är frånkopplad, nätverket är under stor belastning eller så är din router inte välintegrerad med noder."
+msgid ""
+"The website is offline, there is network congestion, or your router is not "
+"yet well-integrated with peers."
+msgstr ""
+"Webbplatsen är frånkopplad, nätverket är under stor belastning eller så är "
+"din router inte välintegrerad med noder."
 
 #: ../java/build/Proxy.java:172 ../java/build/Proxy.java:178
 msgid "Warning: Destination Key Conflict"
 msgstr "Varning: Konflikt för Mål-nyckeln"
 
 #: ../java/build/Proxy.java:179
-msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
-msgstr "Adressens hjälplänk som du följde, anger en annan destinationsnyckel än vad som anges i adressboken."
+msgid ""
+"The address helper link you followed specifies a different destination key "
+"than the entry in your address book."
+msgstr ""
+"Adressens hjälplänk som du följde, anger en annan destinationsnyckel än vad "
+"som anges i adressboken."
 
 #: ../java/build/Proxy.java:180
-msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
-msgstr "Någon kanske försöker imitera en annan webbplats, eller så har människor givit två olika webbplatser samma namn."
+msgid ""
+"Someone could be trying to impersonate another website, or people have given "
+"two websites identical names."
+msgstr ""
+"Någon kanske försöker imitera en annan webbplats, eller så har människor "
+"givit två olika webbplatser samma namn."
 
 #: ../java/build/Proxy.java:181
-msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
-msgstr "Lös konflikten genom att välja vilken nyckel du litar på. Sedan kan du antingen ignorera adressens hjälplänk eller radera posten från din adressbok och klicka på adressens hjälplänk igen."
+msgid ""
+"Resolve the conflict by deciding which key you trust, and then either ignore "
+"the address helper link, or delete the host entry from your address book and "
+"click the address helper link again."
+msgstr ""
+"Lös konflikten genom att välja vilken nyckel du litar på. Sedan kan du "
+"antingen ignorera adressens hjälplänk eller radera posten från din adressbok "
+"och klicka på adressens hjälplänk igen."
 
 #: ../java/build/Proxy.java:189
 msgid "The Base32 address is invalid."
@@ -374,19 +475,28 @@ msgstr "Varning: Dålig Adresshjälpare"
 #: ../java/build/Proxy.java:198
 #, java-format
 msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "Hjälpar-nyckeln i URL:en ({0}i2paddresshelper={1}) är inte möjlig att hitta."
+msgstr ""
+"Hjälpar-nyckeln i URL:en ({0}i2paddresshelper={1}) är inte möjlig att hitta."
 
 #: ../java/build/Proxy.java:199
 msgid "It seems to be garbage data, or a mistyped Base 32 address."
 msgstr "Det verkar vara skräp-data eller en felskriven Base32 adress."
 
 #: ../java/build/Proxy.java:200
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "Kontrollera din URL för att försöka fixa hjälpar-nyckeln så att den är ett giltigt Base32 värdnamn eller Base64 nyckel."
+msgid ""
+"Check your URL to try and fix the helper key to be a valid Base 32 hostname "
+"or Base 64 key."
+msgstr ""
+"Kontrollera din URL för att försöka fixa hjälpar-nyckeln så att den är ett "
+"giltigt Base32 värdnamn eller Base64 nyckel."
 
 #: ../java/build/Proxy.java:208
-msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "Webbplatsen kunde inte nås eftersom den använder krypteringsalternativ som inte stöds av din I2P eller Java-version."
+msgid ""
+"The website was not reachable, because it uses encryption options that are "
+"not supported by your I2P or Java version."
+msgstr ""
+"Webbplatsen kunde inte nås eftersom den använder krypteringsalternativ som "
+"inte stöds av din I2P eller Java-version."
 
 #: ../java/build/Proxy.java:210
 msgid "Information: New Host Name"
@@ -397,164 +507,212 @@ msgid "Information: New Host Name with Address Helper"
 msgstr "Information: Nytt Värdnamn med Adresshjälpare"
 
 #: ../java/build/Proxy.java:217
-msgid "The address helper link you followed is for a new host name that is not in your address book."
-msgstr "Adressjälpar-länken du följde är för ett nytt värdnamn som inte är i din adressbok."
+msgid ""
+"The address helper link you followed is for a new host name that is not in "
+"your address book."
+msgstr ""
+"Adressjälpar-länken du följde är för ett nytt värdnamn som inte är i din "
+"adressbok."
 
 #: ../java/build/Proxy.java:218
 msgid "You may save this host name to your local address book."
 msgstr "Du kan spara detta värdnamn i din lokala adressbok."
 
 #: ../java/build/Proxy.java:219
-msgid "If you save it to your address book, you will not see this message again."
-msgstr "Om du sparar det i din adressbok, så kommer du inte se det här meddelandet igen."
+msgid ""
+"If you save it to your address book, you will not see this message again."
+msgstr ""
+"Om du sparar det i din adressbok, så kommer du inte se det här meddelandet "
+"igen."
 
 #: ../java/build/Proxy.java:220
-msgid "If you do not save it, the host name will be forgotten after the next router restart."
-msgstr "Om du inte sparar det, så kommer värdnamnet glömmas bort efter nästa router-omstart."
+msgid ""
+"If you do not save it, the host name will be forgotten after the next router "
+"restart."
+msgstr ""
+"Om du inte sparar det, så kommer värdnamnet glömmas bort efter nästa router-"
+"omstart."
 
 #: ../java/build/Proxy.java:221
-msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
-msgstr "Om du inte vill besöka värden, klicka på \"tillbaka\"-knappen i din webbläsare."
+msgid ""
+"If you do not wish to visit this host, click the \"back\" button on your "
+"browser."
+msgstr ""
+"Om du inte vill besöka värden, klicka på \"tillbaka\"-knappen i din "
+"webbläsare."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:716
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:734
 msgid "This seems to be a bad destination:"
 msgstr "Detta verkar vara ett felaktigt mål:"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:717
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:735
 msgid "i2paddresshelper cannot help you with a destination like that!"
 msgstr "i2padresshjälp kan inte hjälpa dig med ett sådant  mål!"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:789
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:807
 #, java-format
-msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr "Klicka <a href=\"{0}\">här</a> för att besöka destinationen i din adressbok. Klicka <a href=\"{1}\">här</a> om du vill besöka den motstridiga adresshjälpardestinationen."
+msgid ""
+"To visit the destination in your addressbook, click <a href=\"{0}\">here</"
+"a>. To visit the conflicting addresshelper destination, click <a "
+"href=\"{1}\">here</a>."
+msgstr ""
+"Klicka <a href=\"{0}\">här</a> för att besöka destinationen i din adressbok. "
+"Klicka <a href=\"{1}\">här</a> om du vill besöka den motstridiga "
+"adresshjälpardestinationen."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:799
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:817
 #, java-format
 msgid "Destination for {0} in addressbook"
 msgstr "Destination för {0} i adressboken"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:802
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:820
 msgid "Conflicting address helper destination"
 msgstr "Motstridig hjälparadress destination"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1273
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1306
 msgid "Corrupt Base32 address"
 msgstr "Korrupt Base32-adress"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1356
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1392
 msgid "Destination LeaseSet not found"
 msgstr "Destination LeaseSet hittades inte"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1499
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1566
 msgid "Host"
 msgstr "Värd"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1503
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1564
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1570
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1631
 msgid "Base32"
 msgstr "Base32"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1507
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1574
 msgid "Destination"
 msgstr "Mål"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1512
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1579
 #, java-format
 msgid "Continue to {0} without saving"
 msgstr "Fortsätt till {0} utan att spara"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1513
-msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr "Du kan bläddra till webbplatsen utan att spara den i adressboken. Adressen kommer att komma ihåg tills du startar om din I2P-router."
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1580
+msgid ""
+"You can browse to the site without saving it to the addressbook. The address "
+"will be remembered until you restart your I2P router."
+msgstr ""
+"Du kan bläddra till webbplatsen utan att spara den i adressboken. Adressen "
+"kommer att komma ihåg tills du startar om din I2P-router."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1514
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1581
 msgid "Continue without saving"
 msgstr "Fortsätt utan att spara"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1521
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1588
 #, java-format
 msgid "Save {0} to router address book and continue to website"
 msgstr "Spara {0} till routerns adressbok och fortsätt till webbplatsen"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1522
-msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr "Denna adress kommer att sparas i din routeradressbok där dina prenumerationsbaserade adresser lagras."
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1589
+msgid ""
+"This address will be saved to your Router addressbook where your "
+"subscription-based addresses are stored."
+msgstr ""
+"Denna adress kommer att sparas i din routeradressbok där dina "
+"prenumerationsbaserade adresser lagras."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1525
-msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr "Om du vill hålla reda på webbplatser som du har lagt till manuellt, lägg till i din Master eller Privata adressbok istället."
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1592
+msgid ""
+"If you want to keep track of sites you have added manually, add to your "
+"Master or Private addressbook instead."
+msgstr ""
+"Om du vill hålla reda på webbplatser som du har lagt till manuellt, lägg "
+"till i din Master eller Privata adressbok istället."
 
 #. FIXME wasn't escaped
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1528
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1604
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1595
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1671
 msgid "Save & continue"
 msgstr "Spara & fortsätt"
 
 #. only blockfile supports multiple books
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1535
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1602
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Spara {0} i huvudadressboken och fortsätt till webbplatsen"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1536
-msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr "Den här adressen kommer att sparas i din masteradressbok. Välj det här alternativet för adresser som du vill hålla åtskilda från huvudrouterns adressbok, men inte har något emot att publicera."
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1603
+msgid ""
+"This address will be saved to your Master addressbook. Select this option "
+"for addresses you wish to keep separate from the main router address book, "
+"but don't mind publishing."
+msgstr ""
+"Den här adressen kommer att sparas i din masteradressbok. Välj det här "
+"alternativet för adresser som du vill hålla åtskilda från huvudrouterns "
+"adressbok, men inte har något emot att publicera."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1541
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1608
 #, java-format
 msgid "Save {0} to private addressbook and continue to website"
 msgstr "Spara {0} i privat adressbok och fortsätt till webbplatsen"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1542
-msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr "Den här adressen kommer att sparas i din privata adressbok, vilket säkerställer att den aldrig publiceras."
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1609
+msgid ""
+"This address will be saved to your Private addressbook, ensuring it is never "
+"published."
+msgstr ""
+"Den här adressen kommer att sparas i din privata adressbok, vilket "
+"säkerställer att den aldrig publiceras."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1567
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1634
 msgid "Base32 address requires lookup password"
 msgstr "Base32-adress kräver uppslagslösenord"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1569
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1636
 msgid "Base32 address requires encryption key"
 msgstr "Base32-adress kräver krypteringsnyckel"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1571
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1638
 msgid "Base32 address requires encryption key and lookup password"
 msgstr "Base32-adress kräver krypteringsnyckel och uppslagslösenord"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1573
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1640
 msgid "Base32 address decryption failure, check encryption key"
 msgstr "Base32-adressdekrypteringsfel, kontrollera krypteringsnyckeln"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1584
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1651
 msgid "Generate"
 msgstr "Generera"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1585
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1652
 msgid "Encryption key"
 msgstr "Krypteringsnyckel"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1586
-msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr "Du måste antingen ange en PSK-krypteringsnyckel som tillhandahålls av serveroperatören, eller generera en DH-krypteringsnyckel och skicka den till serveroperatören."
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1653
+msgid ""
+"You must either enter a PSK encryption key provided by the server operator, "
+"or generate a DH encryption key and send that to the server operator."
+msgstr ""
+"Du måste antingen ange en PSK-krypteringsnyckel som tillhandahålls av "
+"serveroperatören, eller generera en DH-krypteringsnyckel och skicka den till "
+"serveroperatören."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1588
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1655
 msgid "Ask the server operator for help."
 msgstr "Be serveroperatören om hjälp."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1589
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1656
 msgid "Enter PSK encryption key"
 msgstr "Ange PSK-krypteringsnyckel"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1591
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1658
 msgid "Generate new DH encryption key"
 msgstr "Generera ny DH-krypteringsnyckel"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1598
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1665
 msgid "Lookup password"
 msgstr "Sök lösenord"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1599
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1666
 msgid "You must enter the password provided by the server operator."
 msgstr "Du måste ange lösenordet från serveroperatören."
 

@@ -5,13 +5,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-16 14:18+0000\n"
 "PO-Revision-Date: 2023-12-12 09:19+0000\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?"
+"2:1));\n"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:132
 #, java-format
@@ -38,8 +40,12 @@ msgstr "Numele de gazdă nu poate conține \"{0}\""
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:159
 #, java-format
-msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
-msgstr "Numele de gazdă \"{0}\", necesită o conversie a ASCII, dar biblioteca de conversie nu este disponibilă în acest JVM"
+msgid ""
+"Host name \"{0}\" requires conversion to ASCII but the conversion library is "
+"unavailable in this JVM"
+msgstr ""
+"Numele de gazdă \"{0}\", necesită o conversie a ASCII, dar biblioteca de "
+"conversie nu este disponibilă în acest JVM"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:224
 msgid "None"
@@ -107,14 +113,14 @@ msgstr[2] "{0} intrări"
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:254
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1025
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1033
 msgid "Add"
 msgstr "Adăuga"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:261
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:995
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1003
 msgid "Replace"
 msgstr "Înlocuiește"
 
@@ -127,8 +133,12 @@ msgstr "Numele de gazdă {0} este deja în agendă, neschimbat."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:262
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:255
 #, java-format
-msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
-msgstr "Numele de gazdă {0} este deja în agendă cu o destinație diferită. Faceți clic pe \"Înlocuiți\" pentru a suprascrie."
+msgid ""
+"Host name {0} is already in address book with a different destination. Click "
+"\"Replace\" to overwrite."
+msgstr ""
+"Numele de gazdă {0} este deja în agendă cu o destinație diferită. Faceți "
+"clic pe \"Înlocuiți\" pentru a suprascrie."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:282
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:289
@@ -181,14 +191,14 @@ msgstr "Vă rugăm să introduceți un nume de gazdă și de destinație"
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:348
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:382
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:384
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:388
 msgid "Delete Entry"
 msgstr "Șterge intrarea"
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:743
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:921
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:749
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:929
 msgid "Delete Selected"
 msgstr "Ștergeți selectate"
 
@@ -220,7 +230,7 @@ msgstr "Nici o intrare selectată pentru ștergere."
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:291
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:298
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:312
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1003
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1011
 msgid "Add Alternate"
 msgstr "Adăugați o alternativă"
 
@@ -232,7 +242,9 @@ msgstr "Agendă salvată."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:364
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:386
 msgid "Browse away from this addressbook and return to see update."
-msgstr "Răsfoiți din această agendă de adrese și reveniți pentru a vedea actualizarea."
+msgstr ""
+"Răsfoiți din această agendă de adrese și reveniți pentru a vedea "
+"actualizarea."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:367
 msgid "ERROR: Could not write addressbook file."
@@ -242,20 +254,29 @@ msgstr "EROARE: Nu sa putut scrie fișierul agendă."
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:163
-msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
-msgstr "Trimiterea formularului este invalidă, probabil pentru că ați folosit butonul \"reîncarcă\" de pe browser-ul dumneavoastră sau butonul \"înapoi\". Vă rugăm retrimiteți."
+msgid ""
+"Invalid form submission, probably because you used the \"back\" or "
+"\"reload\" button on your browser. Please resubmit."
+msgstr ""
+"Trimiterea formularului este invalidă, probabil pentru că ați folosit "
+"butonul \"reîncarcă\" de pe browser-ul dumneavoastră sau butonul \"înapoi\". "
+"Vă rugăm retrimiteți."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Dacă problema persistă, verificați dacă aveți activate cookie-urile în browser-ul dumneavoastră."
+msgid ""
+"If the problem persists, verify that you have cookies enabled in your "
+"browser."
+msgstr ""
+"Dacă problema persistă, verificați dacă aveți activate cookie-urile în "
+"browser-ul dumneavoastră."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:136
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:246
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:244
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:248
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:246
 msgid "Save"
 msgstr "Salvează"
 
@@ -265,7 +286,7 @@ msgstr "Configurare salvată."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:102
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:158
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:244
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:246
 msgid "Reload"
 msgstr "Reîncarcă"
 
@@ -273,7 +294,11 @@ msgstr "Reîncarcă"
 msgid "Configuration reloaded."
 msgstr "Configurare reîncărcată."
 
-#: ../src/java/src/i2p/susi/dns/LogBean.java:108
+#: ../src/java/src/i2p/susi/dns/LogBean.java:131
+msgid "New domain"
+msgstr ""
+
+#: ../src/java/src/i2p/susi/dns/LogBean.java:156
 msgid "Subscription log reloaded."
 msgstr "Jurnalul de abonament a fost reîncărcat."
 
@@ -302,7 +327,7 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Ștergerea destinației pentru {0} la serviciul-nume {1} a eșuat"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:407
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:368
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:372
 msgid "Save Notes"
 msgstr "Salvați note"
 
@@ -357,7 +382,7 @@ msgstr "Subscrieri salvate."
 #. // config reload and fetch.
 #. ******
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:149
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:242
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:244
 msgid "Update"
 msgstr "Actualizare"
 
@@ -374,7 +399,7 @@ msgid "Subscriptions reloaded."
 msgstr "Subscrieri reîncărcate."
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:208
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1043
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1051
 msgid "Import"
 msgstr "Importă"
 
@@ -382,172 +407,172 @@ msgstr "Importă"
 msgid "address book"
 msgstr "Agendă"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:275
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:216
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:221
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:207
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:218
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:216
-msgid "Router"
-msgstr "Ruter"
-
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:279
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:281
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:218
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:225
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:209
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:220
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:218
-msgid "Master"
-msgstr "Maestru"
+msgid "Router"
+msgstr "Ruter"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:283
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:285
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:220
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:229
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:211
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:222
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:220
-msgid "Private"
-msgstr "Privat"
+msgid "Master"
+msgstr "Maestru"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:287
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:289
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:222
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:233
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:213
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:224
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:222
-msgid "Published"
-msgstr "Publicat"
+msgid "Private"
+msgstr "Privat"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:289
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:293
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:224
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:235
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:237
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:215
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:226
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:224
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:230 build/HowSVG.java:15
-msgid "Subscriptions"
-msgstr "Abonamente"
+msgid "Published"
+msgstr "Publicat"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:291
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:295
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:226
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:230
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:237
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:239
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:217
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:228
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:226
-msgid "Configuration"
-msgstr "Configurație"
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:232 build/HowSVG.java:15
+msgid "Subscriptions"
+msgstr "Abonamente"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:293
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:297
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:228
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:239
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:232
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:241
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:219
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:230
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:228
+msgid "Configuration"
+msgstr "Configurație"
+
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:299
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:230
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:243
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:221
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:232
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:230
 msgid "Help"
 msgstr "Ajutor"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:295
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:287
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:301
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:291
 msgid "Book"
 msgstr "Cartea"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:312
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:318
 msgid "No entries"
 msgstr "Fără intrări"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:356
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:366
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:362
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:372
 msgid "Export in hosts.txt format"
 msgstr "Exportare în format hosts.txt"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:358
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:364
 msgid "Export results in hosts.txt format"
 msgstr "Exportați rezultatele în format hosts.txt"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:368
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:374
 msgid "Export book in hosts.txt format"
 msgstr "Exportați cartea în format hosts.txt"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:415
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:421
 msgid "Search"
 msgstr "Caută"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:693
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:699
 msgid "other"
 msgstr "altul"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:705
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:711
 msgid "clear filter"
 msgstr "ștergeți filtrul"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:749
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:755
 msgid "Info"
 msgstr "Informații"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:751
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:967
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:281
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:757
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:975
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:285
 msgid "Hostname"
 msgstr "Nume host "
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:753
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:759
 msgid "Link (b32)"
 msgstr "Link (b32)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:755
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:353
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:761
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:357
 msgid "Destination"
 msgstr "Destinație"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:769
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:775
 msgid "Select hosts for deletion from addressbook"
 msgstr "Selectați gazdele pentru ștergere din agenda de adrese"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:814
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:826
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:820
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:834
 msgid "More information on this entry"
 msgstr "Mai multe informații despre această intrare"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:838
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:846
 msgid "Base 32 address"
 msgstr "Adresa Base32"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:844
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:852
 msgid "Helper link to share host address with option to add to addressbook"
 msgstr "Selectați gazdele pentru ștergere din agenda de adrese"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:864
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:872
 msgid "Mark for deletion"
 msgstr "Marcați pentru ștergere"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:919
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:979
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1041
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:927
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:987
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1049
 msgid "Cancel"
 msgstr "Anulează"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:965
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:973
 msgid "Add new destination"
 msgstr "Adăuga o destinație nouă"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:971
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:979
 msgid "e.g. newdomain.i2p"
 msgstr "de ex. newdomain.i2p"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:973
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:981
 msgid "B64 or B32"
 msgstr "B64 sau B32"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:977
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:985
 msgid "Full destination or b32 address"
 msgstr "Destinație completă sau adresa b32"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1037
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1045
 msgid "Import from hosts.txt file"
 msgstr "Importați din fișierul hosts.txt"
 
-#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1039
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1047
 msgid "Select file"
 msgstr "Selectați fișierul"
 
@@ -555,177 +580,216 @@ msgstr "Selectați fișierul"
 msgid "configuration"
 msgstr "configurație"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:232
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:236
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:232
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:234
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:238
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:234
 msgid "File location"
 msgstr "Locația fișierului"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:248
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:250
 msgid "Hints"
 msgstr "Sugestii"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:250
-msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
-msgstr "Căile pentru fișiere și directoare aici sunt relative la directorul de lucru al agendei, care este în mod normal ~/.i2p/addressbook/ (Linux) sau %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
-
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:252
-msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
-msgstr "Dacă doriți să adăugați manual linii la o agendă, adăugați-le la privat sau în agenda de administrator."
+msgid ""
+"File and directory paths here are relative to the addressbook's working "
+"directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%"
+"\\I2P\\addressbook\\ (Windows)."
+msgstr ""
+"Căile pentru fișiere și directoare aici sunt relative la directorul de lucru "
+"al agendei, care este în mod normal ~/.i2p/addressbook/ (Linux) sau "
+"%LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:254
-msgid "The router addressbook and the published addressbook are updated by the addressbook application."
-msgstr "Agenda router și agenda publicată sunt actualizate de aplicația agendei."
+msgid ""
+"If you want to manually add lines to an addressbook, add them to the private "
+"or master addressbooks."
+msgstr ""
+"Dacă doriți să adăugați manual linii la o agendă, adăugați-le la privat sau "
+"în agenda de administrator."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:256
-msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
-msgstr "Când publicați agenda dumneavoastră, toate destinațiile din agendele de administrator și router apar acolo."
+msgid ""
+"The router addressbook and the published addressbook are updated by the "
+"addressbook application."
+msgstr ""
+"Agenda router și agenda publicată sunt actualizate de aplicația agendei."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:258
-msgid "Use the private addressbook for private destinations, these are not published."
-msgstr "Utilizați agenda privată pentru destinații private, acestea nu sunt publicate."
+msgid ""
+"When you publish your addressbook, ALL destinations from the master and "
+"router addressbooks appear there."
+msgstr ""
+"Când publicați agenda dumneavoastră, toate destinațiile din agendele de "
+"administrator și router apar acolo."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:260
+msgid ""
+"Use the private addressbook for private destinations, these are not "
+"published."
+msgstr ""
+"Utilizați agenda privată pentru destinații private, acestea nu sunt "
+"publicate."
+
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:262
 msgid "Options"
 msgstr "Opțiuni"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:262
-msgid "File containing the list of subscriptions URLs (no need to change)"
-msgstr "Fișierul care conține lista de abonamente URL-uri (nu este nevoie să se schimbe)"
-
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:264
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr ""
+"Fișierul care conține lista de abonamente URL-uri (nu este nevoie să se "
+"schimbe)"
+
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:266
 msgid "Update interval in hours"
 msgstr "Interval de actualizare in ore"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:266
-msgid "Your public hosts.txt file (choose a path within your webserver document root)"
-msgstr "Fișierul dvs. Hosts.txt public (alege o cale în rădăcina documentului web server)"
-
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:268
+msgid ""
+"Your public hosts.txt file (choose a path within your webserver document "
+"root)"
+msgstr ""
+"Fișierul dvs. Hosts.txt public (alege o cale în rădăcina documentului web "
+"server)"
+
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:270
 msgid "Your hosts.txt (don't change)"
 msgstr "Fișierul dvs. hosts.txt (nu schimbați)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:270
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:272
 msgid "Your personal addressbook, these hosts will be published"
 msgstr "Agenda ta personala, aceste gazde vor fi publicate"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:272
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:274
 msgid "Your private addressbook, it is never published"
 msgstr "Aceasta este agenda dvs. privată, care nu este publicată niciodată"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:274
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:276
 msgid "Port for your eepProxy (no need to change)"
 msgstr "Port pentru eepProxy-ul dvs. (nu necesita modificare)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:276
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:278
 msgid "Hostname for your eepProxy (no need to change)"
 msgstr "Nume gazdă pentru eepProxy-ul dvs. (nu necesita modificare)"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:278
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:280
 msgid "Whether to update the published addressbook"
 msgstr "Fie pentru a actualiza agenda publicată"
 
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:280
-msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
-msgstr "Fișier care conține antetul eTags din subscrile aduse din adresele URL (nu este necesara modificare)"
-
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:282
-msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
-msgstr "Fișier care conține amprenta de timp pentru fiecare subscriere adusă de URL (nu necesită schimbare)"
+msgid ""
+"File containing the etags header from the fetched subscription URLs (no need "
+"to change)"
+msgstr ""
+"Fișier care conține antetul eTags din subscrile aduse din adresele URL (nu "
+"este necesara modificare)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:284
-msgid "File to log activity to (change to /dev/null if you like)"
-msgstr "Fișier la jurnalul de activitate pentru ( modifică cu /dev/null dacă vă place)"
+msgid ""
+"File containing the modification timestamp for each fetched subscription URL "
+"(no need to change)"
+msgstr ""
+"Fișier care conține amprenta de timp pentru fiecare subscriere adusă de URL "
+"(nu necesită schimbare)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:286
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr ""
+"Fișier la jurnalul de activitate pentru ( modifică cu /dev/null dacă vă "
+"place)"
+
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:288
 msgid "Name of override theme to use (defaults to console-selected theme)"
-msgstr "Numele temei de înlocuire de utilizat (implicit pentru tema selectată de consolă)"
+msgstr ""
+"Numele temei de înlocuire de utilizat (implicit pentru tema selectată de "
+"consolă)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:193
 msgid "addressbook"
 msgstr "agenda"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:262
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:266
 msgid "Details"
 msgstr "Detalii"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:291
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:295
 msgid "Address Helper"
 msgstr "Adresa helper"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:297
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:301
 msgid "link"
 msgstr "link"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:301
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:305
 msgid "Encoded Name"
 msgstr "Nume codificat"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:309
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:313
 msgid "Base 32 Address"
 msgstr "Adresa Base32"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:315
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:319
 msgid "Base 64 Hash"
 msgstr "Base64 Hash"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:319
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:323
 msgid "Public Key"
 msgstr "Cheie publică"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:321
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:325
 msgid "ElGamal 2048 bit"
 msgstr "ElGamal 2048 bit"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:323
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:327
 msgid "Signing Key"
 msgstr "Cheie de semnare "
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:327
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:331
 msgid "Certificate"
 msgstr "Certificat"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:331
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:335
 msgid "Validated"
 msgstr "validat"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:333
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:337
 msgid "no"
 msgstr "Nu"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:333
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:337
 msgid "yes"
 msgstr "da"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:335
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:339
 msgid "Source"
 msgstr "Sursă"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:339
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:343
 msgid "Added Date"
 msgstr "Data adăugării"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:347
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:351
 msgid "Last Modified"
 msgstr "Ultima modificare"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:361
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:365
 msgid "Notes"
 msgstr "Notițe"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:363
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:367
 msgid "Add notes about domain"
 msgstr "Adăugați note despre domeniu"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:388
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:392
 msgid "Visual Identification for"
 msgstr "Identificare vizuală pentru"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:400
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:406
 msgid "Create your own identification images"
 msgstr "Creați propriile imagini de identificare"
 
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:402
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:408
 msgid "Launch Image Generator"
 msgstr "Lansați generatorul de imagini"
 
@@ -733,63 +797,98 @@ msgstr "Lansați generatorul de imagini"
 msgid "Introduction"
 msgstr "Introducere"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:221
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:223
 msgid "What is the addressbook?"
 msgstr "Ce este agenda?"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:223
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:225
 msgid "The addressbook application is part of your I2P installation."
 msgstr "Aplicația agendă este parte a instalării I2P."
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:225
-msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
-msgstr "Îți actualizează periodic fișierul Hosts.txt din surse distribuite sau \"subscrieri\"."
-
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:227
-msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
-msgstr "Abonarea la site-uri suplimentare este ușor, doar adăugați-le la<a href=\"subscriptions\">abonamentele dvs</a>"
+msgid ""
+"It regularly updates your hosts.txt file from distributed sources or "
+"\"subscriptions\"."
+msgstr ""
+"Îți actualizează periodic fișierul Hosts.txt din surse distribuite sau "
+"\"subscrieri\"."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:229
-msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
-msgstr "Pentru mai multe informații despre denumirea în I2P, consultați <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>prezentarea generală</a>."
+msgid ""
+"Subscribing to additional sites is easy, just add them to your <a "
+"href=\"subscriptions\">subscriptions</a> file."
+msgstr ""
+"Abonarea la site-uri suplimentare este ușor, doar adăugați-le la<a "
+"href=\"subscriptions\">abonamentele dvs</a>"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:231
+msgid ""
+"For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/"
+"naming.html\" target=_blank>the overview</a>."
+msgstr ""
+"Pentru mai multe informații despre denumirea în I2P, consultați <a "
+"href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>prezentarea "
+"generală</a>."
+
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:233
 msgid "How does the addressbook application work?"
 msgstr "Cum funcționează aplicația Agenda?"
 
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:233
-msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
-msgstr "Aplicația \"Agenda\" sondează în mod regulat abonamentele și comasează conținutul lor în agenda dumneavoastră \"router\" ."
-
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:235
-msgid "Then it merges your \"master\" address book into the router address book as well."
-msgstr "Apoi comasează agenda \"master\" în agenda ruter de asemenea."
+msgid ""
+"The addressbook application regularly polls your subscriptions and merges "
+"their content into your \"router\" address book."
+msgstr ""
+"Aplicația \"Agenda\" sondează în mod regulat abonamentele și comasează "
+"conținutul lor în agenda dumneavoastră \"router\" ."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:237
-msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
-msgstr "Dacă este configurat, agenda router-ului este acum scrisa la  agenda \"publica\", care va fi disponibile publicului dacă este pornit un eepsite."
+msgid ""
+"Then it merges your \"master\" address book into the router address book as "
+"well."
+msgstr "Apoi comasează agenda \"master\" în agenda ruter de asemenea."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:239
-msgid "The router also uses a private address book, which is not merged or published."
-msgstr "Routerul folosește, de asemenea, o carte de adrese private, care nu este contopită sau publicată."
+msgid ""
+"If configured, the router address book is now written to the \"published\" "
+"address book, which will be publicly available if you are running an eepsite."
+msgstr ""
+"Dacă este configurat, agenda router-ului este acum scrisa la  agenda "
+"\"publica\", care va fi disponibile publicului dacă este pornit un eepsite."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:241
-msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
-msgstr "Gazdele din agenda privata pot fi accesate de către dumneavoastră, dar adresele lor nu sunt distribuite la alții."
+msgid ""
+"The router also uses a private address book, which is not merged or "
+"published."
+msgstr ""
+"Routerul folosește, de asemenea, o carte de adrese private, care nu este "
+"contopită sau publicată."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:243
-msgid "The private address book can also be used for aliases of hosts in your other address books."
-msgstr "Agenda privată poate fi de asemenea utilizată pentru poreclele de gazde în alte agende ale dumneavoastră."
+msgid ""
+"Hosts in the private address book can be accessed by you but their addresses "
+"are never distributed to others."
+msgstr ""
+"Gazdele din agenda privata pot fi accesate de către dumneavoastră, dar "
+"adresele lor nu sunt distribuite la alții."
+
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:245
+msgid ""
+"The private address book can also be used for aliases of hosts in your other "
+"address books."
+msgstr ""
+"Agenda privată poate fi de asemenea utilizată pentru poreclele de gazde în "
+"alte agende ale dumneavoastră."
 
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:196
 msgid "subscription log"
 msgstr "jurnal de abonament"
 
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:232
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:234
 msgid "Subscription Log"
 msgstr "Jurnal de abonament"
 
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:234
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:236
 msgid "Most recent (excluding bad domains)"
 msgstr "Cel mai recent (excluzând domeniile proaste)"
 
@@ -797,45 +896,67 @@ msgstr "Cel mai recent (excluzând domeniile proaste)"
 msgid "subscriptions"
 msgstr "subscrieri"
 
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:246
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:248
 msgid "The subscription file contains a list of i2p URLs."
 msgstr "Fișierul subscriere conține o listă de adrese URL I2P."
 
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:248
-msgid "The addressbook application regularly checks this list for new eepsites."
-msgstr "Aplicația de agenda verifică în mod regulat această listă de noi eepsites."
-
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:250
+msgid ""
+"The addressbook application regularly checks this list for new eepsites."
+msgstr ""
+"Aplicația de agenda verifică în mod regulat această listă de noi eepsites."
+
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:252
 msgid "Those URLs refer to published hosts.txt files."
 msgstr "Aceste adrese URL se referă la fișiere Hosts.txt publicate."
 
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:252
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:254
 msgid "See the FAQ for a list of subscription URLs."
 msgstr "Vezi FAQ pentru o listă de adrese URL abonament."
 
 #: build/HowSVG.java:5
-msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Dacă SusiDNS este configurat pentru a publica agenda dvs. de adrese de router, intrările vor apărea în agenda dvs. de adrese publicate și salvate într-un fișier hosts.txt pentru partajare."
+msgid ""
+"If SusiDNS is configured to publish your Router address book, the entries "
+"will appear in your Published address book and saved to a hosts.txt file for "
+"sharing."
+msgstr ""
+"Dacă SusiDNS este configurat pentru a publica agenda dvs. de adrese de "
+"router, intrările vor apărea în agenda dvs. de adrese publicate și salvate "
+"într-un fișier hosts.txt pentru partajare."
 
 #: build/HowSVG.java:6
 msgid "Published Addressbook"
 msgstr "Carnet de adrese publicat"
 
 #: build/HowSVG.java:7
-msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Pentru a configura SusiDNS să împingă agenda de adrese a routerului în agenda de adrese publicată, setați „should_publish = true” pe pagina de configurare."
+msgid ""
+"To configure SusiDNS to push your Router address book to your Published "
+"address book, set 'should_publish=true' on the configuration page."
+msgstr ""
+"Pentru a configura SusiDNS să împingă agenda de adrese a routerului în "
+"agenda de adrese publicată, setați „should_publish = true” pe pagina de "
+"configurare."
 
 #: build/HowSVG.java:8
-msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
-msgstr "Toate gazdele derivate din abonamente vor apărea în această agendă de adrese, în plus față de orice adăugați manual aici sau în agenda de adrese Master."
+msgid ""
+"All hosts derived from subscriptions will appear in this address book, in "
+"addition to any you manually add here or to your Master address book."
+msgstr ""
+"Toate gazdele derivate din abonamente vor apărea în această agendă de "
+"adrese, în plus față de orice adăugați manual aici sau în agenda de adrese "
+"Master."
 
 #: build/HowSVG.java:9
 msgid "Router Addressbook"
 msgstr "Carnet de adrese de router"
 
 #: build/HowSVG.java:10
-msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
-msgstr "Gazdele pe care le adăugați manual aici nu vor fi niciodată publicate. Puteți adăuga, de asemenea, aliasuri la gazde în alte cărți de adrese aici."
+msgid ""
+"Hosts you manually add here will never be published. You can also add "
+"aliases to hosts in other address books here."
+msgstr ""
+"Gazdele pe care le adăugați manual aici nu vor fi niciodată publicate. "
+"Puteți adăuga, de asemenea, aliasuri la gazde în alte cărți de adrese aici."
 
 #: build/HowSVG.java:11
 msgid "Private Addressbook"
@@ -846,24 +967,40 @@ msgid "Local Records"
 msgstr "Înregistrări locale"
 
 #: build/HowSVG.java:13
-msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
-msgstr "Aplicațiile I2P (inclusiv proxy-ul HTTP) folosesc gazdele din agenda dvs. de adrese locale pentru a rezolva numele de host .i2p."
+msgid ""
+"I2P applications (including the HTTP proxy) use the hosts in your local "
+"address books to resolve .i2p hostnames."
+msgstr ""
+"Aplicațiile I2P (inclusiv proxy-ul HTTP) folosesc gazdele din agenda dvs. de "
+"adrese locale pentru a rezolva numele de host .i2p."
 
 #: build/HowSVG.java:14
-msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
-msgstr "Abonamente suplimentare pot fi găsite în secțiunea FAQ a paginii de ajutor a Router-ului."
+msgid ""
+"Additional subscriptions can be found in the FAQ section of the Router help "
+"page."
+msgstr ""
+"Abonamente suplimentare pot fi găsite în secțiunea FAQ a paginii de ajutor a "
+"Router-ului."
 
 #: build/HowSVG.java:16
-msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
-msgstr "Gazdele provenite din abonamentele dvs. sunt adăugate în agenda dvs. de adrese de router și sunt sincronizate automat (implicit la fiecare 12 ore)."
+msgid ""
+"Hosts sourced from your subscriptions are added to your Router address book, "
+"and are automatically synced (by default every 12 hours)."
+msgstr ""
+"Gazdele provenite din abonamentele dvs. sunt adăugate în agenda dvs. de "
+"adrese de router și sunt sincronizate automat (implicit la fiecare 12 ore)."
 
 #: build/HowSVG.java:17
 msgid "Configure Subscriptions"
 msgstr "Configurați abonamente"
 
 #: build/HowSVG.java:18
-msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
-msgstr "Dacă adăugați aici gazdele manual, acestea vor fi incluse în agenda de adrese publicate (dacă este configurată)."
+msgid ""
+"If you manually add hosts here, they will be included your Published address "
+"book (if configured)."
+msgstr ""
+"Dacă adăugați aici gazdele manual, acestea vor fi incluse în agenda de "
+"adrese publicate (dacă este configurată)."
 
 #: build/HowSVG.java:19
 msgid "Master Addressbook"
@@ -878,8 +1015,12 @@ msgid "I2P applications"
 msgstr "Aplicații I2P"
 
 #: build/HowSVG.java:22
-msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
-msgstr "Carnetele de adrese Master, Router și Private servesc în mod colectiv ca autoritate DNS pentru aplicațiile I2P."
+msgid ""
+"The Master, Router and Private address books collectively serve as the DNS "
+"authority for I2P applications."
+msgstr ""
+"Carnetele de adrese Master, Router și Private servesc în mod colectiv ca "
+"autoritate DNS pentru aplicațiile I2P."
 
 #: build/HowSVG.java:23
 msgid "Optional,"
@@ -890,13 +1031,27 @@ msgid "for websites"
 msgstr "pentru site-uri web"
 
 #: build/HowSVG.java:25
-msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Dacă configurați SusiDNS pentru a publica agenda dvs. de adrese, va exporta un fișier hosts.txt care conține toate gazdele (implicit la rădăcina eepsitului)."
+msgid ""
+"If you configure SusiDNS to publish your Router address book, it will export "
+"a hosts.txt file containing all the hosts (by default to the root of your "
+"eepsite)."
+msgstr ""
+"Dacă configurați SusiDNS pentru a publica agenda dvs. de adrese, va exporta "
+"un fișier hosts.txt care conține toate gazdele (implicit la rădăcina "
+"eepsitului)."
 
 #: build/HowSVG.java:26
-msgid "Addresses manually added to your Master address book will merge with your Router address book."
-msgstr "Adresele adăugate manual în agenda dvs. de adrese Master se vor contopi cu agenda de adrese a Routerului."
+msgid ""
+"Addresses manually added to your Master address book will merge with your "
+"Router address book."
+msgstr ""
+"Adresele adăugate manual în agenda dvs. de adrese Master se vor contopi cu "
+"agenda de adrese a Routerului."
 
 #: build/HowSVG.java:27
-msgid "Hosts you receive from your subscriptions will merge with your Router address book."
-msgstr "Gazdele pe care le primiți de la abonamentele dvs. se vor contopi cu agenda de adrese a routerului."
+msgid ""
+"Hosts you receive from your subscriptions will merge with your Router "
+"address book."
+msgstr ""
+"Gazdele pe care le primiți de la abonamentele dvs. se vor contopi cu agenda "
+"de adrese a routerului."

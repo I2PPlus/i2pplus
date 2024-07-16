@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"POT-Creation-Date: 2023-12-12 04:56+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-16 14:17+0000\n"
 "PO-Revision-Date: 2023-12-12 06:10+0000\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -24,30 +25,52 @@ msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr "Odota {0}kärsivällisesti{1} kuin I2P+ käynnistyy ja löytää vertaisia."
 
 #, java-format
-msgid "While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}configuration page{3}."
+msgid ""
+"While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}"
+"configuration page{3}."
 msgstr "Odottaessasi {0}säädä kaistanleveysasetuksesi{1} {2}asetussivulta{3}."
 
 #, java-format
-msgid "You can also run the bandwidth test via the {0}Setup Wizard{1} to help with determining your bandwidth, and a guide for new users and additional documentation including an FAQ is available in the {2}help section{1}."
-msgstr "Voit myös suorittaa {0} kaistanleveystestin {1}, ja siellä on {2} ohjeosasto ja UKK {1}."
+msgid ""
+"You can also run the bandwidth test via the {0}Setup Wizard{1} to help with "
+"determining your bandwidth, and a guide for new users and additional "
+"documentation including an FAQ is available in the {2}help section{1}."
+msgstr ""
+"Voit myös suorittaa {0} kaistanleveystestin {1}, ja siellä on {2} ohjeosasto "
+"ja UKK {1}."
 
 #, java-format
-msgid "You may also wish to enable I2P+ updates on {0}the update configuration page{1}."
-msgstr "Voit myös ottaa I2p+ -päivitykset käyttöön {0} päivityksen määrityssivulla {1}."
+msgid ""
+"You may also wish to enable I2P+ updates on {0}the update configuration "
+"page{1}."
+msgstr ""
+"Voit myös ottaa I2p+ -päivitykset käyttöön {0} päivityksen määrityssivulla "
+"{1}."
 
 msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
-msgstr "Voit myös asettaa selaimesi käyttämään I2P-välityspalvelinta päästäksesi eepsiteille."
+msgstr ""
+"Voit myös asettaa selaimesi käyttämään I2P-välityspalvelinta päästäksesi "
+"eepsiteille."
 
-msgid "Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your browser settings."
-msgstr "Riittää, kun laitat selaimen asetuksiin http-välityspalvelimeksi 127.0.0.1 (tai localhost) ja portti 4444."
+msgid ""
+"Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your "
+"browser settings."
+msgstr ""
+"Riittää, kun laitat selaimen asetuksiin http-välityspalvelimeksi 127.0.0.1 "
+"(tai localhost) ja portti 4444."
 
 msgid "Do not use SOCKS for this."
 msgstr "Älä käytä SOCKS:ia tähän."
 
 #, java-format
-msgid "More information can be found on the {0}I2P browser proxy setup page{1}."
+msgid ""
+"More information can be found on the {0}I2P browser proxy setup page{1}."
 msgstr "Lisää tietoa löytyy {0}I2P-selaimen välityspalvelinasetussivulta{1}."
 
 #, java-format
-msgid "Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#saltR{3}."
-msgstr "Osoita IRC-asiakasohjelmasi osoitteeseen {0}localhost:6668{1} ja tule tervehtimään meitä {2}#saltR{3}-kanavalle."
+msgid ""
+"Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}"
+"#saltR{3}."
+msgstr ""
+"Osoita IRC-asiakasohjelmasi osoitteeseen {0}localhost:6668{1} ja tule "
+"tervehtimään meitä {2}#saltR{3}-kanavalle."

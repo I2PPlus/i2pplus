@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"POT-Creation-Date: 2023-12-12 04:57+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-16 14:18+0000\n"
 "PO-Revision-Date: 2023-12-12 05:37+0000\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
@@ -99,8 +100,12 @@ msgid "The request URI is invalid, and probably contains illegal characters."
 msgstr "URI yêu cầu không hợp lệ và có thể chứa các ký tự không hợp lệ."
 
 #: ../java/build/Proxy.java:13
-msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
-msgstr "Nếu bạn nhấp vào một liên kết, hãy kiểm tra phần cuối của URI xem có bất kỳ ký tự nào mà trình duyệt đã thêm nhầm vào không."
+msgid ""
+"If you clicked a link, check the end of the URI for any characters the "
+"browser has mistakenly added on."
+msgstr ""
+"Nếu bạn nhấp vào một liên kết, hãy kiểm tra phần cuối của URI xem có bất kỳ "
+"ký tự nào mà trình duyệt đã thêm nhầm vào không."
 
 #: ../java/build/Proxy.java:14 ../java/build/Proxy.java:20
 #: ../java/build/Proxy.java:126 ../java/build/Proxy.java:132
@@ -112,8 +117,12 @@ msgid "The connection to the website was reset while the page was loading."
 msgstr "Kết nối tới trang web được đặt lại trong khi trang đang tải."
 
 #: ../java/build/Proxy.java:22
-msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Trang web có thể tạm thời không khả dụng, quá bận hoặc đã chặn quyền truy cập của bạn."
+msgid ""
+"The website could be temporarily unavailable, too busy, or it has blocked "
+"your access."
+msgstr ""
+"Trang web có thể tạm thời không khả dụng, quá bận hoặc đã chặn quyền truy "
+"cập của bạn."
 
 #: ../java/build/Proxy.java:23 ../java/build/Proxy.java:72
 #: ../java/build/Proxy.java:124 ../java/build/Proxy.java:169
@@ -126,8 +135,12 @@ msgstr "Bạn có thể muốn {0}thử lại{1}."
 #: ../java/build/Proxy.java:137 ../java/build/Proxy.java:150
 #: ../java/build/Proxy.java:170
 #, java-format
-msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
-msgstr "Nếu bạn để trang này mở, nó sẽ tự động thử kết nối lại với trang web mỗi {0} giây sau lần thử kết nối không thành công."
+msgid ""
+"If you leave this page open, it will automatically retry connecting to the "
+"website every {0} seconds after a failed connection attempt."
+msgstr ""
+"Nếu bạn để trang này mở, nó sẽ tự động thử kết nối lại với trang web mỗi {0} "
+"giây sau lần thử kết nối không thành công."
 
 #: ../java/build/Proxy.java:25 ../java/build/Proxy.java:62
 #: ../java/build/Proxy.java:74 ../java/build/Proxy.java:87
@@ -158,8 +171,12 @@ msgid "Warning: No Outproxy Configured"
 msgstr "Cảnh báo: Không có cấu hình Outproxy"
 
 #: ../java/build/Proxy.java:43
-msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
-msgstr "Yêu cầu của bạn dành cho một trang web bên ngoài I2P nhưng bạn chưa định cấu hình proxy ngoài HTTP."
+msgid ""
+"Your request was for a site outside of I2P, but you have no HTTP outproxy "
+"configured."
+msgstr ""
+"Yêu cầu của bạn dành cho một trang web bên ngoài I2P nhưng bạn chưa định cấu "
+"hình proxy ngoài HTTP."
 
 #: ../java/build/Proxy.java:44
 msgid "Please configure an outproxy in I2PTunnel."
@@ -178,12 +195,22 @@ msgid "Your browser is misconfigured."
 msgstr "Trình duyệt của bạn bị định cấu hình sai."
 
 #: ../java/build/Proxy.java:48
-msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
-msgstr "Không sử dụng proxy để truy cập bảng điều khiển bộ định tuyến, máy chủ cục bộ hoặc đích mạng LAN cục bộ."
+msgid ""
+"Do not use the proxy to access the router console, localhost, or local LAN "
+"destinations."
+msgstr ""
+"Không sử dụng proxy để truy cập bảng điều khiển bộ định tuyến, máy chủ cục "
+"bộ hoặc đích mạng LAN cục bộ."
 
 #: ../java/build/Proxy.java:49
-msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
-msgstr "Bạn cần ngăn không cho 127.0.0.1 (hoặc địa chỉ bạn đang truy cập vào bảng điều khiển I2P) được định tuyến qua proxy http của I2P, thường bằng cách loại trừ địa chỉ đó trong phần cấu hình proxy của trình duyệt của bạn."
+msgid ""
+"You need to prevent 127.0.0.1 (or the address you're accessing the I2P "
+"console on) from being routed via I2P's http proxy, usually by excluding the "
+"address in your browser's proxy configuration section."
+msgstr ""
+"Bạn cần ngăn không cho 127.0.0.1 (hoặc địa chỉ bạn đang truy cập vào bảng "
+"điều khiển I2P) được định tuyến qua proxy http của I2P, thường bằng cách "
+"loại trừ địa chỉ đó trong phần cấu hình proxy của trình duyệt của bạn."
 
 #: ../java/build/Proxy.java:50
 msgid "Website Unknown"
@@ -204,16 +231,25 @@ msgstr "Kiểm tra liên kết hoặc tìm địa chỉ Base 32 hoặc Base 64."
 #: ../java/build/Proxy.java:59
 #, java-format
 msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
-msgstr "Nếu bạn có địa chỉ Base 64, hãy {0}thêm địa chỉ đó vào sổ địa chỉ của bạn{1}."
+msgstr ""
+"Nếu bạn có địa chỉ Base 64, hãy {0}thêm địa chỉ đó vào sổ địa chỉ của bạn{1}."
 
 #: ../java/build/Proxy.java:60
-msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
-msgstr "Nếu không, hãy tìm liên kết trợ giúp Địa chỉ hoặc Cơ sở 32 hoặc sử dụng liên kết dịch vụ nhảy bên dưới."
+msgid ""
+"Otherwise, find a Base 32 or address helper link, or use a jump service link "
+"below."
+msgstr ""
+"Nếu không, hãy tìm liên kết trợ giúp Địa chỉ hoặc Cơ sở 32 hoặc sử dụng liên "
+"kết dịch vụ nhảy bên dưới."
 
 #: ../java/build/Proxy.java:61
 #, java-format
-msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
-msgstr "Nhìn thấy trang này thường xuyên? Xem {0} Câu hỏi thường gặp {1} để được trợ giúp trong {2} Thêm một số đăng ký {3} vào sổ địa chỉ của bạn."
+msgid ""
+"Seeing this page often? See {0}the FAQ{1} for help in {2}adding some "
+"subscriptions{3} to your addressbook."
+msgstr ""
+"Nhìn thấy trang này thường xuyên? Xem {0} Câu hỏi thường gặp {1} để được trợ "
+"giúp trong {2} Thêm một số đăng ký {3} vào sổ địa chỉ của bạn."
 
 #: ../java/build/Proxy.java:63 ../java/build/Proxy.java:69
 #: ../java/build/Proxy.java:160 ../java/build/Proxy.java:166
@@ -224,10 +260,12 @@ msgstr "Trang web không thể truy cập được"
 
 #: ../java/build/Proxy.java:70
 msgid "The website was not reachable, because its lease set was not found."
-msgstr "Không thể truy cập trang web vì không tìm thấy tập hợp hợp đồng thuê của nó."
+msgstr ""
+"Không thể truy cập trang web vì không tìm thấy tập hợp hợp đồng thuê của nó."
 
 #: ../java/build/Proxy.java:71
-msgid "The website is probably down, but there could also be network congestion."
+msgid ""
+"The website is probably down, but there could also be network congestion."
 msgstr "Trang web có thể không hoạt động nhưng cũng có thể do tắc nghẽn mạng."
 
 #: ../java/build/Proxy.java:75 ../java/build/Proxy.java:81
@@ -240,28 +278,45 @@ msgid "The HTTP Outproxy was not found."
 msgstr "Không tìm thấy HTTP Outproxy."
 
 #: ../java/build/Proxy.java:83
-msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Nó ngoại tuyến, tắc nghẽn mạng hoặc bộ định tuyến của bạn chưa tích hợp tốt với các thiết bị ngang hàng."
+msgid ""
+"It is offline, there is network congestion, or your router is not yet well-"
+"integrated with peers."
+msgstr ""
+"Nó ngoại tuyến, tắc nghẽn mạng hoặc bộ định tuyến của bạn chưa tích hợp tốt "
+"với các thiết bị ngang hàng."
 
 #: ../java/build/Proxy.java:84 ../java/build/Proxy.java:105
 #: ../java/build/Proxy.java:135 ../java/build/Proxy.java:148
 #, java-format
-msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr "Bạn có thể muốn {0}thử lại{1} vì thao tác này sẽ ngẫu nhiên chọn lại một đại diện bên ngoài từ nhóm bạn đã xác định {2}tại đây{3} (nếu bạn có nhiều hơn một đại diện được định cấu hình)."
+msgid ""
+"You may want to {0}retry{1} as this will randomly reselect an outproxy from "
+"the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr ""
+"Bạn có thể muốn {0}thử lại{1} vì thao tác này sẽ ngẫu nhiên chọn lại một đại "
+"diện bên ngoài từ nhóm bạn đã xác định {2}tại đây{3} (nếu bạn có nhiều hơn "
+"một đại diện được định cấu hình)."
 
 #: ../java/build/Proxy.java:85 ../java/build/Proxy.java:106
 #: ../java/build/Proxy.java:136 ../java/build/Proxy.java:149
 #, java-format
-msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
-msgstr "Nếu tiếp tục gặp sự cố, bạn có thể chỉnh sửa danh sách ủy quyền bên ngoài của mình {0}tại đây{1}."
+msgid ""
+"If you continue to have trouble you may want to edit your outproxy list {0}"
+"here{1}."
+msgstr ""
+"Nếu tiếp tục gặp sự cố, bạn có thể chỉnh sửa danh sách ủy quyền bên ngoài "
+"của mình {0}tại đây{1}."
 
 #: ../java/build/Proxy.java:88 ../java/build/Proxy.java:94
 msgid "Warning: Request Denied"
 msgstr "Cảnh báo: Yêu cầu bị từ chối"
 
 #: ../java/build/Proxy.java:95
-msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
-msgstr "Địa chỉ này dường như bị dị tật. Vui lòng xác minh bạn đã cung cấp một địa chỉ hợp lệ!"
+msgid ""
+"This address appears to be malformed. Please verify you have supplied a "
+"valid address!"
+msgstr ""
+"Địa chỉ này dường như bị dị tật. Vui lòng xác minh bạn đã cung cấp một địa "
+"chỉ hợp lệ!"
 
 #: ../java/build/Proxy.java:96
 msgid "You attempted to connect to a non-I2P website or location."
@@ -272,8 +327,12 @@ msgid "Outproxy Unreachable"
 msgstr "Không thể truy cập được Outproxy"
 
 #: ../java/build/Proxy.java:104
-msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "Không thể truy cập HTTP outproxy vì nó sử dụng các tùy chọn mã hóa không được phiên bản I2P hoặc Java của bạn hỗ trợ."
+msgid ""
+"The HTTP outproxy was not reachable, because it uses encryption options that "
+"are not supported by your I2P or Java version."
+msgstr ""
+"Không thể truy cập HTTP outproxy vì nó sử dụng các tùy chọn mã hóa không "
+"được phiên bản I2P hoặc Java của bạn hỗ trợ."
 
 #: ../java/build/Proxy.java:108 ../java/build/Proxy.java:159
 #: ../java/build/Proxy.java:209
@@ -290,17 +349,26 @@ msgstr "Cho phép Outproxy"
 
 #: ../java/build/Proxy.java:111
 msgid "This proxy is configured to require a username and password for access."
-msgstr "Proxy này được cấu hình để yêu cầu tên người dùng và mật khẩu để truy cập."
+msgstr ""
+"Proxy này được cấu hình để yêu cầu tên người dùng và mật khẩu để truy cập."
 
 #: ../java/build/Proxy.java:112
 #, java-format
-msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr "Vui lòng nhập tên người dùng và mật khẩu của bạn hoặc kiểm tra {0}cấu hình bộ định tuyến{1} hoặc {2}cấu hình I2PTunnel{3} của bạn."
+msgid ""
+"Please enter your username and password, or check your {0}router "
+"configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr ""
+"Vui lòng nhập tên người dùng và mật khẩu của bạn hoặc kiểm tra {0}cấu hình "
+"bộ định tuyến{1} hoặc {2}cấu hình I2PTunnel{3} của bạn."
 
 #: ../java/build/Proxy.java:113
 #, java-format
-msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr "Để tắt ủy quyền, hãy xóa cấu hình {0}i2ptunnel.proxy.auth=basic{1}, sau đó dừng và khởi động lại đường hầm HTTP Proxy."
+msgid ""
+"To disable authorization, remove the configuration {0}i2ptunnel.proxy."
+"auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr ""
+"Để tắt ủy quyền, hãy xóa cấu hình {0}i2ptunnel.proxy.auth=basic{1}, sau đó "
+"dừng và khởi động lại đường hầm HTTP Proxy."
 
 #: ../java/build/Proxy.java:114 ../java/build/Proxy.java:120
 #: ../java/build/Proxy.java:188
@@ -308,12 +376,18 @@ msgid "Warning: Invalid Destination"
 msgstr "Điểm đến nội bộ"
 
 #: ../java/build/Proxy.java:121
-msgid "The website destination specified was not valid, or was otherwise unreachable."
-msgstr "Đích trang web được chỉ định không hợp lệ hoặc không thể truy cập được."
+msgid ""
+"The website destination specified was not valid, or was otherwise "
+"unreachable."
+msgstr ""
+"Đích trang web được chỉ định không hợp lệ hoặc không thể truy cập được."
 
 #: ../java/build/Proxy.java:122
-msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
-msgstr "Có lẽ bạn đã dán sai chuỗi Base 64 hoặc liên kết bạn đang theo dõi không tốt."
+msgid ""
+"Perhaps you pasted in the wrong Base 64 string or the link you are following "
+"is bad."
+msgstr ""
+"Có lẽ bạn đã dán sai chuỗi Base 64 hoặc liên kết bạn đang theo dõi không tốt."
 
 #: ../java/build/Proxy.java:123
 msgid "The I2P host could also be offline."
@@ -324,16 +398,24 @@ msgid "The connection to the proxy was reset."
 msgstr "Kết nối tới proxy đã được đặt lại."
 
 #: ../java/build/Proxy.java:134
-msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
-msgstr "Proxy có thể tạm thời không khả dụng, quá bận hoặc đã chặn quyền truy cập của bạn."
+msgid ""
+"The proxy could be temporarily unavailable, too busy, or it has blocked your "
+"access."
+msgstr ""
+"Proxy có thể tạm thời không khả dụng, quá bận hoặc đã chặn quyền truy cập "
+"của bạn."
 
 #: ../java/build/Proxy.java:146
-msgid "The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr "Không thể truy cập được HTTP outproxy vì không tìm thấy tập hợp thuê của nó."
+msgid ""
+"The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr ""
+"Không thể truy cập được HTTP outproxy vì không tìm thấy tập hợp thuê của nó."
 
 #: ../java/build/Proxy.java:147
-msgid "The outproxy is probably down, but there could also be network congestion."
-msgstr "Outproxy có thể không hoạt động nhưng cũng có thể xảy ra tắc nghẽn mạng."
+msgid ""
+"The outproxy is probably down, but there could also be network congestion."
+msgstr ""
+"Outproxy có thể không hoạt động nhưng cũng có thể xảy ra tắc nghẽn mạng."
 
 #: ../java/build/Proxy.java:152 ../java/build/Proxy.java:158
 msgid "Warning: Authorization Required"
@@ -344,24 +426,42 @@ msgid "The website was not reachable."
 msgstr "Trang web không thể truy cập được."
 
 #: ../java/build/Proxy.java:168
-msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
-msgstr "Trang web đang ngoại tuyến, tắc nghẽn mạng hoặc bộ định tuyến của bạn chưa tích hợp tốt với các thiết bị ngang hàng."
+msgid ""
+"The website is offline, there is network congestion, or your router is not "
+"yet well-integrated with peers."
+msgstr ""
+"Trang web đang ngoại tuyến, tắc nghẽn mạng hoặc bộ định tuyến của bạn chưa "
+"tích hợp tốt với các thiết bị ngang hàng."
 
 #: ../java/build/Proxy.java:172 ../java/build/Proxy.java:178
 msgid "Warning: Destination Key Conflict"
 msgstr "Cảnh báo: Xung đột khóa đích"
 
 #: ../java/build/Proxy.java:179
-msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
-msgstr "Liên kết trợ giúp địa chỉ mà bạn theo dõi chỉ định khóa đích khác với mục nhập trong sổ địa chỉ của bạn."
+msgid ""
+"The address helper link you followed specifies a different destination key "
+"than the entry in your address book."
+msgstr ""
+"Liên kết trợ giúp địa chỉ mà bạn theo dõi chỉ định khóa đích khác với mục "
+"nhập trong sổ địa chỉ của bạn."
 
 #: ../java/build/Proxy.java:180
-msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
-msgstr "Ai đó có thể đang cố mạo danh một trang web khác hoặc mọi người đã đặt hai tên giống hệt nhau cho hai trang web."
+msgid ""
+"Someone could be trying to impersonate another website, or people have given "
+"two websites identical names."
+msgstr ""
+"Ai đó có thể đang cố mạo danh một trang web khác hoặc mọi người đã đặt hai "
+"tên giống hệt nhau cho hai trang web."
 
 #: ../java/build/Proxy.java:181
-msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
-msgstr "Giải quyết xung đột bằng cách quyết định khóa nào bạn tin cậy, sau đó bỏ qua liên kết trợ giúp địa chỉ hoặc xóa mục nhập máy chủ khỏi sổ địa chỉ của bạn và nhấp lại vào liên kết trợ giúp địa chỉ."
+msgid ""
+"Resolve the conflict by deciding which key you trust, and then either ignore "
+"the address helper link, or delete the host entry from your address book and "
+"click the address helper link again."
+msgstr ""
+"Giải quyết xung đột bằng cách quyết định khóa nào bạn tin cậy, sau đó bỏ qua "
+"liên kết trợ giúp địa chỉ hoặc xóa mục nhập máy chủ khỏi sổ địa chỉ của bạn "
+"và nhấp lại vào liên kết trợ giúp địa chỉ."
 
 #: ../java/build/Proxy.java:189
 msgid "The Base32 address is invalid."
@@ -374,19 +474,28 @@ msgstr "Cảnh báo: Trình trợ giúp địa chỉ sai"
 #: ../java/build/Proxy.java:198
 #, java-format
 msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr "Khóa trợ giúp trong URL ({0}i2paddresshelper={1}) không thể phân giải được."
+msgstr ""
+"Khóa trợ giúp trong URL ({0}i2paddresshelper={1}) không thể phân giải được."
 
 #: ../java/build/Proxy.java:199
 msgid "It seems to be garbage data, or a mistyped Base 32 address."
 msgstr "Có vẻ như đó là dữ liệu rác hoặc địa chỉ Base 32 bị nhập sai."
 
 #: ../java/build/Proxy.java:200
-msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
-msgstr "Kiểm tra URL của bạn để thử và sửa khóa trợ giúp thành tên máy chủ Base 32 hoặc khóa Base 64 hợp lệ."
+msgid ""
+"Check your URL to try and fix the helper key to be a valid Base 32 hostname "
+"or Base 64 key."
+msgstr ""
+"Kiểm tra URL của bạn để thử và sửa khóa trợ giúp thành tên máy chủ Base 32 "
+"hoặc khóa Base 64 hợp lệ."
 
 #: ../java/build/Proxy.java:208
-msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
-msgstr "Không thể truy cập trang web vì nó sử dụng các tùy chọn mã hóa không được phiên bản I2P hoặc Java của bạn hỗ trợ."
+msgid ""
+"The website was not reachable, because it uses encryption options that are "
+"not supported by your I2P or Java version."
+msgstr ""
+"Không thể truy cập trang web vì nó sử dụng các tùy chọn mã hóa không được "
+"phiên bản I2P hoặc Java của bạn hỗ trợ."
 
 #: ../java/build/Proxy.java:210
 msgid "Information: New Host Name"
@@ -397,164 +506,209 @@ msgid "Information: New Host Name with Address Helper"
 msgstr "Thông tin: Tên máy chủ mới với Trình trợ giúp địa chỉ"
 
 #: ../java/build/Proxy.java:217
-msgid "The address helper link you followed is for a new host name that is not in your address book."
-msgstr "Liên kết trợ giúp địa chỉ mà bạn theo dõi là dành cho tên máy chủ mới không có trong sổ địa chỉ của bạn."
+msgid ""
+"The address helper link you followed is for a new host name that is not in "
+"your address book."
+msgstr ""
+"Liên kết trợ giúp địa chỉ mà bạn theo dõi là dành cho tên máy chủ mới không "
+"có trong sổ địa chỉ của bạn."
 
 #: ../java/build/Proxy.java:218
 msgid "You may save this host name to your local address book."
 msgstr "Bạn có thể lưu tên máy chủ này vào sổ địa chỉ cục bộ của mình."
 
 #: ../java/build/Proxy.java:219
-msgid "If you save it to your address book, you will not see this message again."
+msgid ""
+"If you save it to your address book, you will not see this message again."
 msgstr "Nếu bạn lưu nó vào sổ địa chỉ, bạn sẽ không thấy thông báo này nữa."
 
 #: ../java/build/Proxy.java:220
-msgid "If you do not save it, the host name will be forgotten after the next router restart."
-msgstr "Nếu bạn không lưu nó, tên máy chủ sẽ bị quên sau khi khởi động lại bộ định tuyến tiếp theo."
+msgid ""
+"If you do not save it, the host name will be forgotten after the next router "
+"restart."
+msgstr ""
+"Nếu bạn không lưu nó, tên máy chủ sẽ bị quên sau khi khởi động lại bộ định "
+"tuyến tiếp theo."
 
 #: ../java/build/Proxy.java:221
-msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
-msgstr "Nếu bạn không muốn truy cập máy chủ này, hãy nhấp vào nút \"quay lại\" trên trình duyệt của bạn."
+msgid ""
+"If you do not wish to visit this host, click the \"back\" button on your "
+"browser."
+msgstr ""
+"Nếu bạn không muốn truy cập máy chủ này, hãy nhấp vào nút \"quay lại\" trên "
+"trình duyệt của bạn."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:716
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:734
 msgid "This seems to be a bad destination:"
 msgstr "Đây có vẻ là một điểm đến tồi tệ:"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:717
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:735
 msgid "i2paddresshelper cannot help you with a destination like that!"
 msgstr "i2padaddresshelper không thể giúp bạn với đích đến như vậy!"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:789
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:807
 #, java-format
-msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr "Để truy cập điểm đến trong sổ địa chỉ của bạn, hãy nhấp vào <a href=\"{0}\">đây</a>. Để truy cập địa chỉ mâu thuẫn đích đến, nhấp vào <a href=\"{1}\">đây</a>"
+msgid ""
+"To visit the destination in your addressbook, click <a href=\"{0}\">here</"
+"a>. To visit the conflicting addresshelper destination, click <a "
+"href=\"{1}\">here</a>."
+msgstr ""
+"Để truy cập điểm đến trong sổ địa chỉ của bạn, hãy nhấp vào <a "
+"href=\"{0}\">đây</a>. Để truy cập địa chỉ mâu thuẫn đích đến, nhấp vào <a "
+"href=\"{1}\">đây</a>"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:799
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:817
 #, java-format
 msgid "Destination for {0} in addressbook"
 msgstr "Đích của {0} trong sổ địa chỉ"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:802
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:820
 msgid "Conflicting address helper destination"
 msgstr "Đích của trình trợ giúp địa chỉ xung đột"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1273
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1306
 msgid "Corrupt Base32 address"
 msgstr "Địa chỉ Base32 bị hỏng"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1356
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1392
 msgid "Destination LeaseSet not found"
 msgstr "Không tìm thấy Bộ hợp đồng thuê đích"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1499
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1566
 msgid "Host"
 msgstr "Máy chủ"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1503
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1564
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1570
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1631
 msgid "Base32"
 msgstr "Cơ sở32"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1507
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1574
 msgid "Destination"
 msgstr "Đích đến"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1512
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1579
 #, java-format
 msgid "Continue to {0} without saving"
 msgstr "Tiếp tục tới {0} mà không lưu"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1513
-msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr "Bạn có thể duyệt đến trang web mà không lưu nó vào sổ địa chỉ. Địa chỉ sẽ được ghi nhớ cho đến khi bạn khởi động lại bộ định tuyến I2P của mình."
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1580
+msgid ""
+"You can browse to the site without saving it to the addressbook. The address "
+"will be remembered until you restart your I2P router."
+msgstr ""
+"Bạn có thể duyệt đến trang web mà không lưu nó vào sổ địa chỉ. Địa chỉ sẽ "
+"được ghi nhớ cho đến khi bạn khởi động lại bộ định tuyến I2P của mình."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1514
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1581
 msgid "Continue without saving"
 msgstr "Tiếp tục mà không lưu"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1521
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1588
 #, java-format
 msgid "Save {0} to router address book and continue to website"
 msgstr "Lưu {0} vào sổ địa chỉ bộ định tuyến và tiếp tục truy cập trang web"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1522
-msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr "Địa chỉ này sẽ được lưu vào sổ địa chỉ Bộ định tuyến nơi lưu trữ các địa chỉ dựa trên đăng ký của bạn."
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1589
+msgid ""
+"This address will be saved to your Router addressbook where your "
+"subscription-based addresses are stored."
+msgstr ""
+"Địa chỉ này sẽ được lưu vào sổ địa chỉ Bộ định tuyến nơi lưu trữ các địa chỉ "
+"dựa trên đăng ký của bạn."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1525
-msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr "Nếu bạn muốn theo dõi các trang web bạn đã thêm theo cách thủ công, thay vào đó hãy thêm vào sổ địa chỉ Chính hoặc Riêng."
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1592
+msgid ""
+"If you want to keep track of sites you have added manually, add to your "
+"Master or Private addressbook instead."
+msgstr ""
+"Nếu bạn muốn theo dõi các trang web bạn đã thêm theo cách thủ công, thay vào "
+"đó hãy thêm vào sổ địa chỉ Chính hoặc Riêng."
 
 #. FIXME wasn't escaped
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1528
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1604
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1595
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1671
 msgid "Save & continue"
 msgstr "Lưu"
 
 #. only blockfile supports multiple books
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1535
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1602
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
 msgstr "Lưu {0} vào sổ địa chỉ chính và tiếp tục trang web"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1536
-msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr "Địa chỉ này sẽ được lưu vào sổ địa chỉ chính của bạn. Chọn tùy chọn này cho các địa chỉ bạn muốn giữ tách biệt với sổ địa chỉ bộ định tuyến chính, nhưng đừng bận tâm xuất bản."
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1603
+msgid ""
+"This address will be saved to your Master addressbook. Select this option "
+"for addresses you wish to keep separate from the main router address book, "
+"but don't mind publishing."
+msgstr ""
+"Địa chỉ này sẽ được lưu vào sổ địa chỉ chính của bạn. Chọn tùy chọn này cho "
+"các địa chỉ bạn muốn giữ tách biệt với sổ địa chỉ bộ định tuyến chính, nhưng "
+"đừng bận tâm xuất bản."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1541
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1608
 #, java-format
 msgid "Save {0} to private addressbook and continue to website"
 msgstr "Lưu {0} vào sổ địa chỉ riêng và tiếp tục trang web"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1542
-msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr "Địa chỉ này sẽ được lưu vào sổ địa chỉ riêng của bạn, đảm bảo nó không bao giờ được xuất bản."
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1609
+msgid ""
+"This address will be saved to your Private addressbook, ensuring it is never "
+"published."
+msgstr ""
+"Địa chỉ này sẽ được lưu vào sổ địa chỉ riêng của bạn, đảm bảo nó không bao "
+"giờ được xuất bản."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1567
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1634
 msgid "Base32 address requires lookup password"
 msgstr "Địa chỉ Base32 yêu cầu mật khẩu tra cứu"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1569
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1636
 msgid "Base32 address requires encryption key"
 msgstr "Địa chỉ Base32 yêu cầu khóa mã hóa"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1571
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1638
 msgid "Base32 address requires encryption key and lookup password"
 msgstr "Địa chỉ Base32 yêu cầu khóa mã hóa và mật khẩu tra cứu"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1573
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1640
 msgid "Base32 address decryption failure, check encryption key"
 msgstr "Base32 Lỗi giải mã địa chỉ, kiểm tra khóa mã hóa"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1584
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1651
 msgid "Generate"
 msgstr "Phát ra"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1585
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1652
 msgid "Encryption key"
 msgstr "Khóa mã hóa"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1586
-msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr "Bạn phải nhập khóa mã hóa PSK do toán tử máy chủ cung cấp hoặc tạo khóa mã hóa DH và gửi nó cho toán tử máy chủ."
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1653
+msgid ""
+"You must either enter a PSK encryption key provided by the server operator, "
+"or generate a DH encryption key and send that to the server operator."
+msgstr ""
+"Bạn phải nhập khóa mã hóa PSK do toán tử máy chủ cung cấp hoặc tạo khóa mã "
+"hóa DH và gửi nó cho toán tử máy chủ."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1588
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1655
 msgid "Ask the server operator for help."
 msgstr "Yêu cầu người điều hành máy chủ trợ giúp."
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1589
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1656
 msgid "Enter PSK encryption key"
 msgstr "Nhập khóa mã hóa PSK"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1591
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1658
 msgid "Generate new DH encryption key"
 msgstr "Tạo khóa mã hóa DH mới"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1598
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1665
 msgid "Lookup password"
 msgstr "Tra cứu mật khẩu"
 
-#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1599
+#: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1666
 msgid "You must enter the password provided by the server operator."
 msgstr "Bạn phải nhập mật khẩu do nhà điều hành máy chủ cung cấp."
 

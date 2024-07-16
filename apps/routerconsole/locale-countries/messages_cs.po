@@ -5,13 +5,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"POT-Creation-Date: 2023-10-23 13:20+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-16 14:17+0000\n"
 "PO-Revision-Date: 2023-12-12 06:18+0000\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
+"<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
 msgid "Anonymous Proxy"
 msgstr "Anonymní proxy"
@@ -762,6 +764,9 @@ msgstr "Yemen"
 
 msgid "Mayotte"
 msgstr "Mayotte"
+
+msgid "Unknown"
+msgstr ""
 
 msgid "South Africa"
 msgstr "South Africa"

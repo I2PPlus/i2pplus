@@ -5,7 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P+\n"
-"POT-Creation-Date: 2023-12-12 04:56+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-16 14:17+0000\n"
 "PO-Revision-Date: 2023-12-12 06:09+0000\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -24,30 +25,47 @@ msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr "在 I2P+ 启动和搜索对等节点时，请{0}保持耐心{1}。"
 
 #, java-format
-msgid "While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}configuration page{3}."
+msgid ""
+"While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}"
+"configuration page{3}."
 msgstr "等待的过程中，请到{2}配置页面{3}{0}调整您的带宽设置{1}。"
 
 #, java-format
-msgid "You can also run the bandwidth test via the {0}Setup Wizard{1} to help with determining your bandwidth, and a guide for new users and additional documentation including an FAQ is available in the {2}help section{1}."
-msgstr "您还可以通过{0}设置向导{1}来运行带宽测试，以帮助确定带宽，并在{2}帮助部分{1}中提供新用户指南和其他文档（包括FAQ）。"
+msgid ""
+"You can also run the bandwidth test via the {0}Setup Wizard{1} to help with "
+"determining your bandwidth, and a guide for new users and additional "
+"documentation including an FAQ is available in the {2}help section{1}."
+msgstr ""
+"您还可以通过{0}设置向导{1}来运行带宽测试，以帮助确定带宽，并在{2}帮助部分{1}"
+"中提供新用户指南和其他文档（包括FAQ）。"
 
 #, java-format
-msgid "You may also wish to enable I2P+ updates on {0}the update configuration page{1}."
+msgid ""
+"You may also wish to enable I2P+ updates on {0}the update configuration "
+"page{1}."
 msgstr "您也可以在更新配置页面{0}{1}中启用 I2P+ 更新。"
 
 msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
 msgstr "同时您也可以设置您的浏览器使用 I2P 代理访问匿名网站。"
 
-msgid "Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your browser settings."
-msgstr "只需在您的浏览器设置中输入 127.0.0.1（或 localhost）端口 4444 作为 http 代理即可。"
+msgid ""
+"Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your "
+"browser settings."
+msgstr ""
+"只需在您的浏览器设置中输入 127.0.0.1（或 localhost）端口 4444 作为 http 代理"
+"即可。"
 
 msgid "Do not use SOCKS for this."
 msgstr "请不要作为 SOCKS 代理使用。"
 
 #, java-format
-msgid "More information can be found on the {0}I2P browser proxy setup page{1}."
+msgid ""
+"More information can be found on the {0}I2P browser proxy setup page{1}."
 msgstr "详情请参见 {0}I2P 浏览器代理设置页面{1}。"
 
 #, java-format
-msgid "Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#saltR{3}."
-msgstr "将您的 IRC 客户端指向 {0}localhost:6668{1} 并在 {2}#saltR{3} 上和我们打招呼。"
+msgid ""
+"Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}"
+"#saltR{3}."
+msgstr ""
+"将您的 IRC 客户端指向 {0}localhost:6668{1} 并在 {2}#saltR{3} 上和我们打招呼。"
