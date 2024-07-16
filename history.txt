@@ -1,3 +1,7 @@
+2024-07-16 zzz / dr|z3d
+ * Console: Add translation report to debug section as per upstream MR and
+   add flags and percentage bars and enhance presentation
+
 2024-07-09 dr|z3d
  * I2PSnark:
    - Complete overhaul of zilvero theme
