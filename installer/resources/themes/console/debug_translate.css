@@ -5,13 +5,13 @@
 #debug .tx th,#debug .tx td{text-align:center}
 #debug .tx th:first-child,#debug .tx td:first-child{text-align:left}
 #debug .tx th:not([colspan]){font-size:85%}
-#debug .no,#debug .yes{width:16px;height:16px;display:inline-block;vertical-align:middle;font-size:0;background:var(--yes) no-repeat center center/16px}
-#debug .no{background:var(--no) no-repeat center center/14px}
 #debug #tx_summary h2,#debug .tx{margin:10px auto}
 #debug #tx_summary h2:first-of-type{margin:15px auto 10px}
 #debug #tx_summary hr:last-of-type{margin:0 0 -12px;opacity:0}
 #debug #tx_summary th:first-child,#debug #tx_summary td:first-child{width:40%}
 #debug #tx_summary th:nth-child(n+2),#debug #tx_summary td:nth-child(n+2){width:15%}
 #debug #tx_summary th:last-child,#debug #tx_summary td:last-child{width:30%}
+#debug #tx_summary .no,#debug .yes{margin:-1px 0 0;width:16px;height:16px;display:inline-block;vertical-align:middle;font-size:0;background:var(--yes) no-repeat center center/16px}
+#debug #tx_summary .no{background:var(--no) no-repeat center center/14px}
 #debug #tx_summary .percentBarInner,#debug .percentBarOuter{margin:0;width:140px;height:14px;display:inline-block;vertical-align:middle;text-align:left;font-size:0}
 #debug #tx_summary .percentBarOuter{margin-top:-1px;contain:paint}
