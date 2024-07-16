@@ -476,7 +476,8 @@ public class TranslationStatus {
     private static String getCountryCode(Locale loc) {
         String langCode = loc.getLanguage();
         String countryCode = "xx";
-        if (langCode.equals("ca")) {countryCode = "lang_ca";}
+        if (langCode.equals("ar")) {countryCode = "lang_ar";}
+        else if (langCode.equals("ca")) {countryCode = "lang_ca";}
         else if (langCode.equals("cs")) {countryCode = "cz";}
         else if (langCode.equals("da")) {countryCode = "dk";}
         else if (langCode.equals("el")) {countryCode = "gr";}
