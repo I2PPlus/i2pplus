@@ -424,6 +424,7 @@ msgstr "Abunələr"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:297
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:228
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:232
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:241
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:219
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:230

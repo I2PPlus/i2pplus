@@ -1986,7 +1986,7 @@ msgid "Skip"
 msgstr "Välista"
 
 #. TODO: fixup so works with ajax refresh
-#. "<span class=script>);
+#. "<span class=script>");
 #. if (!inOrder) {
 #. buf.append("<a class=control id=setallhigh href=#>")
 #. .append(toImg("clock_red")).append(_t("Set all high")).append("</a>\n");

@@ -492,6 +492,11 @@ msgstr "I2P에 연결중"
 msgid "Starting up torrent {0}"
 msgstr "토렌트 시작: {0}"
 
+#: ../java/src/org/klomp/snark/SnarkManager.java:3003
+#, java-format
+msgid "Down bandwidth limit is {0} KBps"
+msgstr ""
+
 #: ../java/src/org/klomp/snark/SnarkManager.java:3004
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -543,6 +548,11 @@ msgstr "토렌트 시작: {0}"
 #: ../java/src/org/klomp/snark/SnarkManager.java:3486
 #: ../java/src/org/klomp/snark/SnarkManager.java:3495
 msgid "Unable to load torrent create file filter config: "
+msgstr ""
+
+#: ../java/src/org/klomp/snark/SnarkManager.java:3573
+#: ../java/src/org/klomp/snark/SnarkManager.java:3574
+msgid "Unable to save torrent create file filter config: "
 msgstr ""
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:3590
@@ -1175,9 +1185,22 @@ msgstr "기본값으로"
 msgid "Restored default trackers"
 msgstr "기존 트래커로"
 
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2302
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3754
+msgid "Save Filter Configuration"
+msgstr ""
+
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2344
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3756
 msgid "Add File Filter"
+msgstr ""
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2354
+msgid "Enter valid name and filter pattern"
+msgstr ""
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2358
+msgid "Restored default torrent create filters"
 msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2509
@@ -1398,6 +1421,14 @@ msgstr "시딩할 파일 혹은 디렉토리 (full path or within the directory 
 msgid "Create torrent"
 msgstr "토렌트 만들기"
 
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3277
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr ""
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3278
+msgid "Content Filters"
+msgstr ""
+
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3296
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3771
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4420
@@ -1586,6 +1617,14 @@ msgstr "토렌트 옵션"
 msgid "Half available bandwidth recommended."
 msgstr "대역폭 절반값을 추천합니다."
 
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3562
+msgid "Bandwidth limit"
+msgstr ""
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3565
+msgid "Maximum bandwidth allocated for downloading"
+msgstr ""
+
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3568
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "업로드에 할당된 최대 대역폭"
@@ -1702,6 +1741,10 @@ msgstr "설정 저장"
 msgid "Torrent Create File Filtering"
 msgstr ""
 
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3714
+msgid "Mark filter for deletion"
+msgstr ""
+
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3715
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3775
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4742
@@ -1712,12 +1755,20 @@ msgstr "이름"
 msgid "Filter Pattern"
 msgstr ""
 
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3717
+msgid "Starts With"
+msgstr ""
+
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3718
 msgid "Contains"
 msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3719
 msgid "Ends With"
+msgstr ""
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3720
+msgid "Enabled by Default"
 msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3744

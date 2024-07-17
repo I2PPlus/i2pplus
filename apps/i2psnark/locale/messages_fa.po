@@ -492,6 +492,11 @@ msgstr "اتصال به I2P"
 msgid "Starting up torrent {0}"
 msgstr "راه اندازی تورنت {0}"
 
+#: ../java/src/org/klomp/snark/SnarkManager.java:3003
+#, java-format
+msgid "Down bandwidth limit is {0} KBps"
+msgstr ""
+
 #: ../java/src/org/klomp/snark/SnarkManager.java:3004
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -543,6 +548,11 @@ msgstr "شروع تورنت: {0}"
 #: ../java/src/org/klomp/snark/SnarkManager.java:3486
 #: ../java/src/org/klomp/snark/SnarkManager.java:3495
 msgid "Unable to load torrent create file filter config: "
+msgstr ""
+
+#: ../java/src/org/klomp/snark/SnarkManager.java:3573
+#: ../java/src/org/klomp/snark/SnarkManager.java:3574
+msgid "Unable to save torrent create file filter config: "
 msgstr ""
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:3590
@@ -1178,9 +1188,22 @@ msgstr "بازیابی پیش فرض ها"
 msgid "Restored default trackers"
 msgstr "ردیاب های پیش فرض بازیابی شد"
 
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2302
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3754
+msgid "Save Filter Configuration"
+msgstr ""
+
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2344
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3756
 msgid "Add File Filter"
+msgstr ""
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2354
+msgid "Enter valid name and filter pattern"
+msgstr ""
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2358
+msgid "Restored default torrent create filters"
 msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2509
@@ -1403,6 +1426,14 @@ msgstr "فایل یا دایرکتوری به seed (مسیر کامل یا دا�
 msgid "Create torrent"
 msgstr "ایجاد تورنت"
 
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3277
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr ""
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3278
+msgid "Content Filters"
+msgstr ""
+
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3296
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3771
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4420
@@ -1591,6 +1622,14 @@ msgstr "گزینه های تورنت"
 msgid "Half available bandwidth recommended."
 msgstr "نصف پهنای باند موجود توصیه می شود."
 
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3562
+msgid "Bandwidth limit"
+msgstr ""
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3565
+msgid "Maximum bandwidth allocated for downloading"
+msgstr ""
+
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3568
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "حداکثر پهنای باند اختصاص داده شده برای آپلود"
@@ -1707,6 +1746,10 @@ msgstr "ذخیره سازی پیکربندی"
 msgid "Torrent Create File Filtering"
 msgstr ""
 
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3714
+msgid "Mark filter for deletion"
+msgstr ""
+
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3715
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3775
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4742
@@ -1717,12 +1760,20 @@ msgstr "نام"
 msgid "Filter Pattern"
 msgstr ""
 
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3717
+msgid "Starts With"
+msgstr ""
+
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3718
 msgid "Contains"
 msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3719
 msgid "Ends With"
+msgstr ""
+
+#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3720
+msgid "Enabled by Default"
 msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3744

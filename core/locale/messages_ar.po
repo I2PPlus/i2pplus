@@ -17,7 +17,6 @@ msgstr ""
 #. Note to translators, may be negative or zero, 2999 maximum.
 #. {0,number,####} prevents 1234 from being output as 1,234 in the English locale.
 #. If you want the digit separator in your locale, translate as {0}.
-
 #. alternates: msec, msecs
 #: ../java/src/net/i2p/data/DataHelper.java:1421
 #: ../java/src/net/i2p/data/DataHelper.java:1474

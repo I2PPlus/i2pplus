@@ -536,6 +536,8 @@ msgstr "Endirmə tamamlandı: {0}"
 msgid "I2PSnark"
 msgstr "I2PSnark"
 
+#. addMessage(_t("Metainfo received for {0}", snark.getName()));
+#. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
 #: ../java/src/org/klomp/snark/SnarkManager.java:3151
 #: ../java/src/org/klomp/snark/SnarkManager.java:3606
 #, java-format
@@ -605,24 +607,29 @@ msgid "Updating from {0}"
 msgstr "{0}-dan yenilənir"
 
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:81
+#, java-format
 msgid "Downloading {0}"
 msgstr "{0} endirilir"
 
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:94
+#, java-format
 msgid "Requesting torrent file: {0}"
 msgstr "Torrent faylı tələb olunur: {0}"
 
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:104
+#, java-format
 msgid "Failed to retrieve torrent file: {0}"
 msgstr "Torrent faylı {0}-dan almaq uğursuz oldu"
 
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:158
+#, java-format
 msgid "Torrent downloaded from {0}"
 msgstr "Torrent {0}-dan endirildi"
 
 #: ../java/src/org/klomp/snark/web/FetchAndAdd.java:181
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1647
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1787
+#, java-format
 msgid "Torrent already in the queue: {0}"
 msgstr "Torrent artıq siyahıda var: {0}"
 
@@ -941,6 +948,7 @@ msgstr "daxil"
 msgid "out"
 msgstr "çıxış"
 
+#. Only truncate if it's an actual dest
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1237
 msgid "Our destination (identity) for this session"
 msgstr "Bu sessiya üçün mənim hədəflərim (kimliyim)"

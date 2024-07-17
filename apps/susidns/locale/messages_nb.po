@@ -740,12 +740,12 @@ msgid "It regularly updates your hosts.txt file from distributed sources or \"su
 msgstr "Den oppdaterer regelbundet din hosts.txt-fil fra distribuerte kilder eller \"abonnementer\"."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:229
-msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions file."
-msgstr "Å abonnere på ekstra nettsider er enkelt, legg bare til dem i din <a href=\"subscriptions\">abonnementer-fil."
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr ""
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:231
-msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview."
-msgstr "For mer informasjon om navngiving i I2P, se <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>oversikten."
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr ""
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:233
 msgid "How does the addressbook application work?"
@@ -894,3 +894,9 @@ msgstr "Adresser som legges til manuelt i din Hoved adressebok vil bli slått sa
 #: build/HowSVG.java:27
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Vertene du mottar fra dine abonnementer vil bli slått sammen med din Ruter adressebok."
+
+#~ msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions file."
+#~ msgstr "Å abonnere på ekstra nettsider er enkelt, legg bare til dem i din <a href=\"subscriptions\">abonnementer-fil."
+
+#~ msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview."
+#~ msgstr "For mer informasjon om navngiving i I2P, se <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>oversikten."
