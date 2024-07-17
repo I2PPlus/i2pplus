@@ -480,6 +480,7 @@ public class TranslationStatus {
         else if (langCode.equals("ca")) {countryCode = "lang_ca";}
         else if (langCode.equals("cs")) {countryCode = "cz";}
         else if (langCode.equals("da")) {countryCode = "dk";}
+        else if (langCode.equals("et")) {countryCode = "ee";}
         else if (langCode.equals("el")) {countryCode = "gr";}
         else if (langCode.equals("hi")) {countryCode = "in";}
         else if (langCode.equals("fa")) {countryCode = "ir";}
