@@ -17,6 +17,7 @@ msgstr ""
 #. Note to translators, may be negative or zero, 2999 maximum.
 #. {0,number,####} prevents 1234 from being output as 1,234 in the English locale.
 #. If you want the digit separator in your locale, translate as {0}.
+
 #. alternates: msec, msecs
 #: ../java/src/net/i2p/data/DataHelper.java:1421
 #: ../java/src/net/i2p/data/DataHelper.java:1474
@@ -37,12 +38,12 @@ msgstr[5] ""
 #, java-format
 msgid "{0} sec"
 msgid_plural "{0} sec"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} ثانية"
+msgstr[1] "{0} ثانية"
+msgstr[2] "{0} ثانيتان"
+msgstr[3] "{0} ثوان"
+msgstr[4] "{0} ثوان"
+msgstr[5] "{0} ثوان"
 
 #. minutes
 #. alternates: mins, min. 'minutes' is probably too long.
@@ -51,12 +52,12 @@ msgstr[5] ""
 #, java-format
 msgid "{0} min"
 msgid_plural "{0} min"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} دقيقة"
+msgstr[1] "{0} دقيقة"
+msgstr[2] "{0} دقيقتان"
+msgstr[3] "{0} دقائق"
+msgstr[4] "{0} دقائق"
+msgstr[5] "{0} دقائق"
 
 #. hours
 #. alternates: hrs, hr., hrs.
@@ -65,12 +66,12 @@ msgstr[5] ""
 #, java-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} ساعة"
+msgstr[1] "{0} ساعة"
+msgstr[2] "{0} ساعتان"
+msgstr[3] "{0} ساعات"
+msgstr[4] "{0} ساعات"
+msgstr[5] "{0} ساعات"
 
 #. days
 #: ../java/src/net/i2p/data/DataHelper.java:1436
@@ -78,12 +79,12 @@ msgstr[5] ""
 #, java-format
 msgid "{0} day"
 msgid_plural "{0} days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} يوم"
+msgstr[1] "{0} يوم"
+msgstr[2] "{0} يومان"
+msgstr[3] "{0} أيام"
+msgstr[4] "{0} أيام"
+msgstr[5] "{0} أيام"
 
 #. years
 #: ../java/src/net/i2p/data/DataHelper.java:1439
@@ -91,12 +92,12 @@ msgstr[5] ""
 #, java-format
 msgid "{0} year"
 msgid_plural "{0} years"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} سنة"
+msgstr[1] "{0} سنة"
+msgstr[2] "{0} سنتان"
+msgstr[3] "{0} سنوات"
+msgstr[4] "{0} سنوات"
+msgstr[5] "{0} سنوات"
 
 #: ../java/src/net/i2p/data/DataHelper.java:1441
 #: ../java/src/net/i2p/data/DataHelper.java:1488
@@ -150,9 +151,9 @@ msgstr "تحذير"
 #, java-format
 msgid "{0} similar message omitted"
 msgid_plural "{0} similar messages omitted"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "تم تجاهل رسالة مشابهة واحدة"
+msgstr[1] "تم تجاهل رسالة مشابهة واحدة"
+msgstr[2] "تم تجاهل رسالتين مشابهتين"
+msgstr[3] "تم تجاهل {0} رسائل مشابهة"
+msgstr[4] "تم تجاهل {0} رسائل مشابهة"
+msgstr[5] "تم تجاهل {0} رسائل مشابهة"
