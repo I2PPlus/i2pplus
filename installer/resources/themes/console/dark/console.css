@@ -786,7 +786,7 @@ td.ipv6{width:1%;max-width:24px}
 #udpconnections td,#ntcpconnections td,.tunneldisplay td{color:#bb7}
 #udpconnections tfoot td:not(last-child),#ntcpconnections tfoot td:not(last-child){border-right:0}
 #udpconnections th{padding:5px 2px;vertical-align:top;text-align:center}
-#udpconnections tr:hover,#ntcpconnections tr:hover,#transportSummary tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#netdboverview table tr:hover,#portfaq tr:hover,.tunneldisplay tr:hover,#tunnels tr:hover{background:#020}
+#udpconnections tr:hover,#ntcpconnections tr:hover,#transportSummary tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#netdboverview table tr:hover,#portfaq tr:hover,.tunneldisplay tr:hover,#tunnels tr:hover,.tx tr:hover td{background:#020}
 #udpconnections tr:hover td,#ntcpconnections tr:hover td,.tunneldisplay tr:hover td{color:var(--ink)}
 
 /* profiles */

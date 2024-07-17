@@ -1456,7 +1456,7 @@ h3[id="udpcon"]{width:auto}
 #udpconnections tfoot:hover td{border-top:var(--border_inner)}
 #udpconnections tfoot td{color:var(--ink)}
 #udpconnections tfoot td:first-child{padding-left:9px}
-#udpconnections tr:hover,#ntcpconnections tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#jardump tr:hover,#sidebarconf tr:hover,#webappconfig tr:hover td,.tunneldisplay tr:hover td:not(.rif):not(.rih):not(.rbw),#profilelist tr:hover,#floodfills tr:hover,.eventspanel tr:hover,#profiles tr:hover td:not(.rif):not(.rih):not(.rbw){background:#202;color:#eff1ff}
+#udpconnections tr:hover,#ntcpconnections tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#jardump tr:hover,#sidebarconf tr:hover,#webappconfig tr:hover td,.tunneldisplay tr:hover td:not(.rif):not(.rih):not(.rbw),#profilelist tr:hover,#floodfills tr:hover,.eventspanel tr:hover,#profiles tr:hover td:not(.rif):not(.rih):not(.rbw),.tx tr:hover td{background:#202;color:#eff1ff}
 #udpconnections tr:hover td:not(.rif):not(.rbw):not(.rih),#ntcpconnections tr:hover td:not(.rif):not(.rbw):not(.rih){color:var(--ink)}
 .unreachable,#profiles .unreachable{background:linear-gradient(180deg,#300,#200)}
 #view_profile h3 a{letter-spacing:0;font-size:90%;text-transform:none}
@@ -2078,7 +2078,7 @@ p#upnpstatus{margin-top:10px;padding-left:50px}
 #portmapper td{padding:5px 10px}
 #portmapper th,#portmapper td{text-align:left}
 .skm_key td:first-child b{font-family:var(--bodyfont);color:var(--ink)}
-#debug #tx_summary .percentBarInner{height:100%!important}
+#debug #tx_summary .percentBarInner{margin:0 0 3px!important;height:100%!important;}
 
 /* certs */
 #certs{padding-top:3px}

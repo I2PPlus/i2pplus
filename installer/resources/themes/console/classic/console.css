@@ -555,7 +555,7 @@ a.viewfullentry:hover{filter:drop-shadow(0 0 1px var(--hover))}
 #thresholds tr:last-child:hover td{background:var(--bg)}
 #thresholds p{margin-top:0;padding:0 10px 0 5px}
 #profilelist{margin:0}
-#profilelist tr:hover,#floodfills tr:hover,#ntcpconnections tr:hover,#udpconnections tr:hover,.homelinkedit tr:hover,#portmapper tr:hover{color:var(--ink_hover);background:var(--row_hover)}
+#profilelist tr:hover,#floodfills tr:hover,#ntcpconnections tr:hover,#udpconnections tr:hover,.homelinkedit tr:hover,#portmapper tr:hover,.tx tr:hover td{color:var(--ink_hover);background:var(--row_hover)}
 #profilelist th,#profilelist td{text-align:center}
 #profilelist th{padding:3px 4px;white-space:nowrap;font-size:90%}
 #profilelist td[colspan="10"],#profilelist tr td[colspan="10"]:hover{padding:1px;background:var(--border_soft)}
