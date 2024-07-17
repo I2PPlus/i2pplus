@@ -1,5 +1,4 @@
 # I2P+ Debian package
-# This file is distributed under the same license as the i2p package.
 #
 msgid ""
 msgstr ""

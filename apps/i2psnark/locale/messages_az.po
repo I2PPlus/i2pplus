@@ -1,7 +1,5 @@
 # I2P
 # Copyright (C) 2009 The I2P Project
-# This file is distributed under the same license as the i2psnark package.
-# foo <foo@bar>, 2009.
 #
 msgid ""
 msgstr ""
