@@ -13,5 +13,7 @@
 #debug #tx_summary th:last-child,#debug #tx_summary td:last-child{width:30%}
 #debug #tx_summary .no,#debug .yes{margin:-1px 0 0;width:16px;height:16px;display:inline-block;vertical-align:middle;font-size:0;background:var(--yes) no-repeat center center/16px}
 #debug #tx_summary .no{background:var(--no) no-repeat center center/14px}
-#debug #tx_summary .percentBarInner,#debug .percentBarOuter{margin:0;width:140px;height:14px;display:inline-block;vertical-align:middle;text-align:left;font-size:0}
+#debug #tx_summary .percentBarInner,#debug .percentBarOuter{margin:0;width:90%;max-width:250px;height:14px;display:inline-block;vertical-align:middle;text-align:left;font-size:0}
+#debug #tx_summary .percentBarInner{background:linear-gradient(180deg,#fff2,#eee2 50%,#0002 50%,#0003),#aa07}
+#debug #tx_summary .percentBarInner[style="width:100.0%"]{background:linear-gradient(180deg,#fff2,#eee2 50%,#0002 50%,#0003),#0907}
 #debug #tx_summary .percentBarOuter{margin-top:-1px;contain:paint}
