@@ -1561,6 +1561,7 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 .debug_outboundtarget td,.skm_key td{background:linear-gradient(180deg,#fcfcff,#fafaff 51%,#f6f6ff 100%)}
 .debug_outboundtarget td:first-child{padding-left:3%}
 .debug_outboundtarget td:last-child,.skm_key td:last-child{width:1%;white-space:nowrap}
+#bucketSet{margin-bottom:5px}
 #debug{padding-bottom:14px}
 #debug h2{padding:8px 10px;font-size:12pt}
 #debug h3{padding:5px 10px}
@@ -1578,18 +1579,18 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 #debug td{padding:5px;border:var(--border)}
 #debug th:first-child,#debug td:first-child{padding-left:10px}
 #debug td:last-child{text-align:right;vertical-align:top;padding-right:10px}
-#portmapper td:first-child,#sockets td:first-child{font-weight:700;color:var(--ink_light)}
-#portmapper th:last-child,#portmapper td:last-child,#sockets td:last-child{text-align:left}
 #debug ul{margin:0 0 10px}
 #debug .expiry ul{margin:3px 0 10px -35px}
 #debug li{padding:0}
 #debug li{margin-left:-5px;margin-bottom:-2px;list-style:none;line-height:1.5}
 #debug li:first-child{padding:10px 0 0}
 #debug li:last-child{margin-bottom:-9px;padding-bottom:0}
-#bucketSet{margin-bottom:5px}
 #debug .buckets{padding-bottom:0;word-break:break-all}
 #debug .buckets .bucketsContainer:last-child{margin-bottom:0}
 #debug .bucketsContainer+br{display:none}
+#debug .tx_header th::before{background:url(images/favicon.svg) no-repeat center center/20px}
+#portmapper td:first-child,#sockets td:first-child{font-weight:700;color:var(--ink_light)}
+#portmapper th:last-child,#portmapper td:last-child,#sockets td:last-child{text-align:left}
 
 /* jar dump */
 .sha256 code,.revision code{font-weight:400}

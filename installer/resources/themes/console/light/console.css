@@ -1812,15 +1812,16 @@ a[href^="configpeer?peer"]:hover::after{background:var(--edit_hover) no-repeat c
 #debug h3.debug_inboundsessions{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/18px,linear-gradient(180deg,#fcfcff 50%,rgba(255,255,255,.6) 50%,rgba(240,240,255,.4)),linear-gradient(90deg,#fcfcff 5%,rgba(231,231,255,.8) 25%)}
 #debug h3+table{margin-top:-16px}
 #debug td{padding-top:5px;padding-bottom:5px}
+#debug h2,#debug h3{position:relative;z-index:100}
 #debug h2{background:var(--bug) no-repeat right 6px center,var(--h2);background-size:20px,100%,100%;background-blend-mode:luminosity,normal,normal}
 #debug h3{padding-left:10px}
-#skm_dest{vertical-align:middle;line-height:1;word-spacing:0;letter-spacing:0;white-space:nowrap;text-transform:none;font-size:80%}
 #debug .skm_key td:first-child,.debug_pubkey,.debug_sesskey{font-family:var(--monospaced);font-weight:700;color:var(--ink_code)}
 #debug .skm_key td:first-child b{font-family:var(--bodyfont)}
-#debug h2,#debug h3{position:relative;z-index:100}
+#debug .tx_header th::before{background:url(images/favicon.svg) no-repeat center center/20px}
+#debug .tx_flag{box-shadow:0 0 0 1px #bbc8}
 #debug #tx_summary hr{display:block}
 #debug #tx_summary hr:last-of-type{margin:0 0 -8px!important}
-#debug .tx_flag{box-shadow:0 0 0 1px #bbc8}
+#skm_dest{vertical-align:middle;line-height:1;word-spacing:0;letter-spacing:0;white-space:nowrap;text-transform:none;font-size:80%}
 #portmapper td:first-child,#sockets td:first-child{font-weight:700}
 #portmapper tr:hover td:first-child,#sockets tr:hover td:first-child{color:#363b4f}
 #portmapper td:last-child,#sockets td:last-child{text-align:left}

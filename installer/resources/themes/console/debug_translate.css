@@ -1,6 +1,14 @@
 #debug .tx+hr{margin:5px auto}
 #debug .tx_flag{margin:-1px 8px 0 0;vertical-align:middle;border-radius:2px}
 #debug .tx_header th{padding:12px 10px !important;text-transform:uppercase;letter-spacing:0.08em;font-size:120%}
+#debug .tx_header th::before{margin-right:8px;width:20px;height:20px;display:inline-block;vertical-align:middle;content:""}
+#debug .tx_header.tx_console th::before{background-image:url(images/sidebar.svg)}
+#debug .tx_header.tx_dns th::before{background-image:url(images/addressbook.svg)}
+#debug .tx_header.tx_i2ptunnel th::before{background-image:url(images/tunnelmanager.svg)}
+#debug .tx_header.tx_netdb th::before{background-image:url(images/globe.svg)}
+#debug .tx_header.tx_news th::before{background-image:url(images/news.svg)}
+#debug .tx_header.tx_snark th::before{background-image:url(images/snark.svg)}
+#debug .tx_header.tx_webmail th::before{background-image:url(images/mail.svg)}
 #debug .tx_notranslate{padding:12px 10px;font-weight:400!important}
 #debug .tx th,#debug .tx td{text-align:center}
 #debug .tx th:first-child,#debug .tx td:first-child{text-align:left}
