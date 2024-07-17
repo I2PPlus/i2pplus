@@ -112,7 +112,7 @@ msgstr[3] "{0,number,####} μs"
 #. just for tagging
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "CRIT"
-msgstr "CRIT"
+msgstr "KRIT"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "DEBUG"
@@ -120,7 +120,7 @@ msgstr "DEBUG"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "ERROR"
-msgstr "ERROR"
+msgstr "CHYBA"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "INFO"
@@ -128,7 +128,7 @@ msgstr "INFO"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "WARN"
-msgstr ""
+msgstr "VAROV"
 
 #: ../java/src/net/i2p/util/LogWriter.java:166
 #, java-format
