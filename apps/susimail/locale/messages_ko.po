@@ -68,24 +68,12 @@ msgstr "대량 메일"
 msgid "Inbox"
 msgstr "Inbox"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "새 메시지가 없습니다."
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "첨부파일 있는 메세지"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "알수없는"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -270,9 +258,7 @@ msgstr "삭제하려는 메세지 없음."
 #: src/src/i2p/susi/webmail/WebMail.java:1970
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"호스트가 변경되지 않았습니다. 호스트를 바꾸지 않았습니다. 설정 파일 {0}을 편"
-"집해 호스트를 변경하세요."
+msgstr "호스트가 변경되지 않았습니다. 호스트를 바꾸지 않았습니다. 설정 파일 {0}을 편집해 호스트를 변경하세요."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1990
 msgid "Configuration saved"
@@ -534,11 +520,6 @@ msgstr "큭"
 msgid "Mark for deletion"
 msgstr "삭제표시"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "새로운 메세지"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "새로운 메세지"
@@ -631,11 +612,6 @@ msgstr "폴더로 돌아가기"
 msgid "Move to Folder"
 msgstr "폴더로 이동"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "새로운 메세지"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "폴더 페이지 크기"
@@ -664,8 +640,7 @@ msgstr "서버 응답 없음"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"메일 서버 로그인에 실패했습니다. 사용자 이름이나 비밀번호가 잘못되었습니다."
+msgstr "메일 서버 로그인에 실패했습니다. 사용자 이름이나 비밀번호가 잘못되었습니다."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."

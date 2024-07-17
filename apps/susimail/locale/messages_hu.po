@@ -69,24 +69,12 @@ msgstr "Tömeges küldemény"
 msgid "Inbox"
 msgstr "Bejövő Üzenetek"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Nincsenek új üzenetek"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "Az üzenetnek melléklete van"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "ismeretlen"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -272,9 +260,7 @@ msgstr "Nincs kijelölve üzenet törlésre."
 #: src/src/i2p/susi/webmail/WebMail.java:1970
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"A gazdagép változatlan. Szerkessze a konfigurációs fájlt {0} a gazdagép "
-"módosításához."
+msgstr "A gazdagép változatlan. Szerkessze a konfigurációs fájlt {0} a gazdagép módosításához."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1990
 msgid "Configuration saved"
@@ -538,11 +524,6 @@ msgstr "Méret"
 msgid "Mark for deletion"
 msgstr "Törlésre kijelöl"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "Az üzenet új"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "Az üzenet új"
@@ -635,11 +616,6 @@ msgstr "Visszatérés Mappához"
 msgid "Move to Folder"
 msgstr "Ugrás a mappába"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "Az üzenet új"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "Mappa oldalmérete"
@@ -668,14 +644,11 @@ msgstr "Nincs válasz a szervertől"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"A levelezőszerver bejelentkezés sikertelen, rossz felhasználónév vagy jelszó."
+msgstr "A levelezőszerver bejelentkezés sikertelen, rossz felhasználónév vagy jelszó."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Jelentkezzen ki, majd jelentkezzen be újra a megfelelő felhasználónévvel és "
-"jelszóval."
+msgstr "Jelentkezzen ki, majd jelentkezzen be újra a megfelelő felhasználónévvel és jelszóval."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

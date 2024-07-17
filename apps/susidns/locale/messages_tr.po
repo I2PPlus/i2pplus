@@ -39,14 +39,8 @@ msgstr "Sunucu adında \"{0}\" bulunamaz"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:159
 #, java-format
-msgid ""
-"Host name \"{0}\" requires conversion to ASCII but the conversion library is "
-"unavailable in this JVM"
-msgstr ""
-"\"{0}\" ana bilgisayar adı ASCII'ye dönüştürülmeyi gerektiriyor ancak "
-"dönüştürme kitaplığı bu JVM'de kullanılamıyor\"{0}\" sunucu adının ASCII "
-"karakterlerine dönüştürülmesi gerekiyor ancak bu JVM için dönüştürme "
-"kitaplığı kullanılamıyor"
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "\"{0}\" ana bilgisayar adı ASCII'ye dönüştürülmeyi gerektiriyor ancak dönüştürme kitaplığı bu JVM'de kullanılamıyor\"{0}\" sunucu adının ASCII karakterlerine dönüştürülmesi gerekiyor ancak bu JVM için dönüştürme kitaplığı kullanılamıyor"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:224
 msgid "None"
@@ -130,13 +124,8 @@ msgstr "{0} sunucu adı zaten adres defterinde var, değiştirilmedi."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:262
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:255
 #, java-format
-msgid ""
-"Host name {0} is already in address book with a different destination. Click "
-"\"Replace\" to overwrite."
-msgstr ""
-"{0} ana bilgisayar adı zaten farklı bir hedefle adres defterinde bulunuyor. "
-"{0} sunucu adı zaten adres defterinde var ancak farklı bir hedefi "
-"gösteriyor. Değiştirmek için \"Değiştir\" üzerine tıklayın."
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "{0} ana bilgisayar adı zaten farklı bir hedefle adres defterinde bulunuyor. {0} sunucu adı zaten adres defterinde var ancak farklı bir hedefi gösteriyor. Değiştirmek için \"Değiştir\" üzerine tıklayın."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:282
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:289
@@ -249,25 +238,15 @@ msgstr "HATA: Adres defteri dosyasına yazılamadı."
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:163
-msgid ""
-"Invalid form submission, probably because you used the \"back\" or "
-"\"reload\" button on your browser. Please resubmit."
-msgstr ""
-"Geçersiz form gönderimi, muhtemelen tarayıcınızda \"geri\" veya \"yeniden "
-"yükle\" düğmesini kullandığınızdan kaynaklanmaktadır. Büyük olasılıkla web "
-"tarayıcınızdaki \"Geri\" ya da \"Yenile\" düğmesine tıkladığınızdan, "
-"gönderilen form geçersiz sayıldı. Lütfen yeniden gönderin."
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "Geçersiz form gönderimi, muhtemelen tarayıcınızda \"geri\" veya \"yeniden yükle\" düğmesini kullandığınızdan kaynaklanmaktadır. Büyük olasılıkla web tarayıcınızdaki \"Geri\" ya da \"Yenile\" düğmesine tıkladığınızdan, gönderilen form geçersiz sayıldı. Lütfen yeniden gönderin."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
-msgid ""
-"If the problem persists, verify that you have cookies enabled in your "
-"browser."
-msgstr ""
-"Sorun devam ederse tarayıcınızda çerezlerin etkinleştirildiğini doğrulayın."
-"Sorun sürerse, tarayıcınızda çerezlerin etkinleştirilmiş olduğuna emin olun."
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Sorun devam ederse tarayıcınızda çerezlerin etkinleştirildiğini doğrulayın.Sorun sürerse, tarayıcınızda çerezlerin etkinleştirilmiş olduğuna emin olun."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:136
@@ -534,10 +513,7 @@ msgstr "Base 32 adresi"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:852
 msgid "Helper link to share host address with option to add to addressbook"
-msgstr ""
-"Adres defterine ekleme seçeneğiyle ana bilgisayar adresini paylaşmak için "
-"yardımcı bağlantıAdres defterine ekleme seçeneği ile sunucu adresini "
-"paylaşmaya yardımcı olan bağlantı"
+msgstr "Adres defterine ekleme seçeneğiyle ana bilgisayar adresini paylaşmak için yardımcı bağlantıAdres defterine ekleme seçeneği ile sunucu adresini paylaşmaya yardımcı olan bağlantı"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:872
 msgid "Mark for deletion"
@@ -588,48 +564,23 @@ msgid "Hints"
 msgstr "İpuçları"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:252
-msgid ""
-"File and directory paths here are relative to the addressbook's working "
-"directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%"
-"\\I2P\\addressbook\\ (Windows)."
-msgstr ""
-"Buradaki dosya ve dizin yolları, normalde ~/.i2p/addressbook/ (Linux) veya "
-"%LOCALAPPDATA%\\I2P\\addressbook\\ (Windows) olan adres defterinin çalışma "
-"dizinine göredir.Buradaki dosya ve klasör yolları, normal durumda ~i2p/"
-"addressbook/ (Linux) ya da %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows) "
-"şeklinde olan adres defteri klasörüne göre yazılmıştır."
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Buradaki dosya ve dizin yolları, normalde ~/.i2p/addressbook/ (Linux) veya %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows) olan adres defterinin çalışma dizinine göredir.Buradaki dosya ve klasör yolları, normal durumda ~i2p/addressbook/ (Linux) ya da %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows) şeklinde olan adres defteri klasörüne göre yazılmıştır."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:254
-msgid ""
-"If you want to manually add lines to an addressbook, add them to the private "
-"or master addressbooks."
-msgstr ""
-"Bir adres defterine manuel olarak satır eklemek istiyorsanız, bunları özel "
-"veya ana adres defterlerine ekleyin.El ile eklenen satırlar kişisel ya da "
-"genel adres defterine eklenmelidir."
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Bir adres defterine manuel olarak satır eklemek istiyorsanız, bunları özel veya ana adres defterlerine ekleyin.El ile eklenen satırlar kişisel ya da genel adres defterine eklenmelidir."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:256
-msgid ""
-"The router addressbook and the published addressbook are updated by the "
-"addressbook application."
-msgstr ""
-"Yönlendirici adres defteri ve yayınlanan adres defteri, adres defteri "
-"uygulaması tarafından güncelleniyor.Adres defteri uygulaması yöneltici ve "
-"yayınlanan adres defterlerini güncelledi."
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Yönlendirici adres defteri ve yayınlanan adres defteri, adres defteri uygulaması tarafından güncelleniyor.Adres defteri uygulaması yöneltici ve yayınlanan adres defterlerini güncelledi."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:258
-msgid ""
-"When you publish your addressbook, ALL destinations from the master and "
-"router addressbooks appear there."
-msgstr ""
-"Adres defterinizi yayınladığınızda, ana ve yönlendirici adres "
-"defterlerindeki TÜM hedefler orada görünür.Adres defteri yayınlandığında, "
-"genel ve yöneltici adres defterlerindeki TÜM hedefler burada görüntülenir."
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Adres defterinizi yayınladığınızda, ana ve yönlendirici adres defterlerindeki TÜM hedefler orada görünür.Adres defteri yayınlandığında, genel ve yöneltici adres defterlerindeki TÜM hedefler burada görüntülenir."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:260
-msgid ""
-"Use the private addressbook for private destinations, these are not "
-"published."
+msgid "Use the private addressbook for private destinations, these are not published."
 msgstr "Kişisel adres defterine kaydedilen hedefler yayınlanmaz."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:262
@@ -638,22 +589,15 @@ msgstr "Ayarlar"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:264
 msgid "File containing the list of subscriptions URLs (no need to change)"
-msgstr ""
-"Abonelik URL'lerinin listesini içeren dosya (değiştirmeye gerek yok)Abonelik "
-"İnternet adreslerini içeren dosya (değiştirilmesine gerek yok)"
+msgstr "Abonelik URL'lerinin listesini içeren dosya (değiştirmeye gerek yok)Abonelik İnternet adreslerini içeren dosya (değiştirilmesine gerek yok)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:266
 msgid "Update interval in hours"
 msgstr "Saat cinsinden güncelleme aralığı"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:268
-msgid ""
-"Your public hosts.txt file (choose a path within your webserver document "
-"root)"
-msgstr ""
-"Genel hosts.txt dosyanız (web sunucusu belge kökünden bir yol seçin)Herkese "
-"açık hosts.txt dosyası (web sunucunuzun belge kök klasörü altında bir yol "
-"seçin)"
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Genel hosts.txt dosyanız (web sunucusu belge kökünden bir yol seçin)Herkese açık hosts.txt dosyası (web sunucunuzun belge kök klasörü altında bir yol seçin)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:270
 msgid "Your hosts.txt (don't change)"
@@ -680,34 +624,20 @@ msgid "Whether to update the published addressbook"
 msgstr "Yayınlanmış adres defteri güncellensin"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:282
-msgid ""
-"File containing the etags header from the fetched subscription URLs (no need "
-"to change)"
-msgstr ""
-"Getirilen abonelik URL'lerinden etags başlığını içeren dosya (değiştirmeye "
-"gerek yok)Alınan abonelik adresinde etags üst bilgisini içeren dosya "
-"(değiştirilmesine gerek yok)"
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Getirilen abonelik URL'lerinden etags başlığını içeren dosya (değiştirmeye gerek yok)Alınan abonelik adresinde etags üst bilgisini içeren dosya (değiştirilmesine gerek yok)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:284
-msgid ""
-"File containing the modification timestamp for each fetched subscription URL "
-"(no need to change)"
-msgstr ""
-"Getirilen her abonelik URL'si için değişiklik zaman damgasını içeren dosya "
-"(değiştirmeye gerek yok)Alınan her bir abonelik adresi için değişiklik zaman "
-"damgasını içeren dosya (değiştirilmesine gerek yok)"
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Getirilen her abonelik URL'si için değişiklik zaman damgasını içeren dosya (değiştirmeye gerek yok)Alınan her bir abonelik adresi için değişiklik zaman damgasını içeren dosya (değiştirilmesine gerek yok)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:286
 msgid "File to log activity to (change to /dev/null if you like)"
-msgstr ""
-"Etkinliğin kaydedileceği dosya (isterseniz /dev/null olarak değiştirin)İşlem "
-"günlük kayıtlarının yazılacağı dosya (/dev/null olarak değiştirebilirsiniz)"
+msgstr "Etkinliğin kaydedileceği dosya (isterseniz /dev/null olarak değiştirin)İşlem günlük kayıtlarının yazılacağı dosya (/dev/null olarak değiştirebilirsiniz)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:288
 msgid "Name of override theme to use (defaults to console-selected theme)"
-msgstr ""
-"Kullanılacak geçersiz kılma temasının adı (varsayılan olarak konsol "
-"tarafından seçilen temadır)"
+msgstr "Kullanılacak geçersiz kılma temasının adı (varsayılan olarak konsol tarafından seçilen temadır)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:193
 msgid "addressbook"
@@ -810,93 +740,44 @@ msgid "The addressbook application is part of your I2P installation."
 msgstr "Adres defteri uygulaması I2P kurulumunun bir parçasıdır."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:227
-msgid ""
-"It regularly updates your hosts.txt file from distributed sources or "
-"\"subscriptions\"."
-msgstr ""
-"Hosts.txt dosyanızı dağıtılmış kaynaklardan veya \"aboneliklerden\" düzenli "
-"olarak günceller.hosts.txt dosyanızı düzenli olarak dağıtılmışkaynaklar ya "
-"da \"aboneliklerden\" günceller."
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Hosts.txt dosyanızı dağıtılmış kaynaklardan veya \"aboneliklerden\" düzenli olarak günceller.hosts.txt dosyanızı düzenli olarak dağıtılmışkaynaklar ya da \"aboneliklerden\" günceller."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:229
-msgid ""
-"Subscribing to additional sites is easy, just add them to your <a "
-"href=\"subscriptions\">subscriptions</a> file."
-msgstr ""
-"Ek sitelere abone olmak kolaydır; bunları <a "
-"href=\"subscriptions\">abonelikler</a> dosyanıza eklemeniz yeterlidir.Ek "
-"sitelere kolayca abone olabilirsiniz. Yalnızca siteleri <a "
-"href=\"subscriptions\">subscriptions</a> dosyasına ekleyin."
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Ek sitelere abone olmak kolaydır; bunları <a href=\"subscriptions\">abonelikler</a> dosyanıza eklemeniz yeterlidir.Ek sitelere kolayca abone olabilirsiniz. Yalnızca siteleri <a href=\"subscriptions\">subscriptions</a> dosyasına ekleyin."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:231
-msgid ""
-"For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/"
-"naming.html\" target=_blank>the overview</a>."
-msgstr ""
-"I2P'de adlandırma hakkında daha fazla bilgi için <a href=\"http://i2p-"
-"projekt.i2p/naming.html\" target=_blank>genel bakışa</a> bakın."
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "I2P'de adlandırma hakkında daha fazla bilgi için <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>genel bakışa</a> bakın."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:233
 msgid "How does the addressbook application work?"
 msgstr "Adres defteri uygulaması nasıl çalışır?"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:235
-msgid ""
-"The addressbook application regularly polls your subscriptions and merges "
-"their content into your \"router\" address book."
-msgstr ""
-"Adres defteri uygulaması düzenli olarak aboneliklerinizi yoklar ve "
-"içeriklerini \"yönlendirici\" adres defterinizle birleştirir.Adres defteri "
-"uygulaması düzenli olarak aboneliklerinizi denetleyerek içeriklerini "
-"\"yöneltici\" adres defterinize aktarır."
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Adres defteri uygulaması düzenli olarak aboneliklerinizi yoklar ve içeriklerini \"yönlendirici\" adres defterinizle birleştirir.Adres defteri uygulaması düzenli olarak aboneliklerinizi denetleyerek içeriklerini \"yöneltici\" adres defterinize aktarır."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:237
-msgid ""
-"Then it merges your \"master\" address book into the router address book as "
-"well."
-msgstr ""
-"Daha sonra \"ana\" adres defterinizi de yönlendiricinin adres defteriyle "
-"birleştirir.Ardından \"ana\" adres defterinizi yönelticinin adres defterine "
-"aktarır."
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Daha sonra \"ana\" adres defterinizi de yönlendiricinin adres defteriyle birleştirir.Ardından \"ana\" adres defterinizi yönelticinin adres defterine aktarır."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:239
-msgid ""
-"If configured, the router address book is now written to the \"published\" "
-"address book, which will be publicly available if you are running an eepsite."
-msgstr ""
-"Yapılandırıldıysa, yönlendirici adres defteri artık \"yayınlanan\" adres "
-"defterine yazılır; bir eepsite çalıştırıyorsanız bu, herkese açık olacaktır."
-"Eepsite çalıştırıyorsanız ve uygun seçeneği etkinleştirdiyseniz, yöneltici "
-"adres defteri herkes tarafından görülebilecek \"yayınlanmış\" adres "
-"defterine yazılır."
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Yapılandırıldıysa, yönlendirici adres defteri artık \"yayınlanan\" adres defterine yazılır; bir eepsite çalıştırıyorsanız bu, herkese açık olacaktır.Eepsite çalıştırıyorsanız ve uygun seçeneği etkinleştirdiyseniz, yöneltici adres defteri herkes tarafından görülebilecek \"yayınlanmış\" adres defterine yazılır."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:241
-msgid ""
-"The router also uses a private address book, which is not merged or "
-"published."
-msgstr ""
-"Yönlendirici ayrıca birleştirilmeyen veya yayınlanmayan özel bir adres "
-"defteri kullanıyor.Yöneltici ayrıca aktarılmayan ya da yayınlanmayan bir "
-"kişisel adres defteri kullanır."
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Yönlendirici ayrıca birleştirilmeyen veya yayınlanmayan özel bir adres defteri kullanıyor.Yöneltici ayrıca aktarılmayan ya da yayınlanmayan bir kişisel adres defteri kullanır."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:243
-msgid ""
-"Hosts in the private address book can be accessed by you but their addresses "
-"are never distributed to others."
-msgstr ""
-"Özel adres defterindeki ana bilgisayarlara sizin tarafınızdan erişilebilir "
-"ancak adresleri asla başkalarına dağıtılmaz.Kişisel adres defterindeki "
-"sunuculara yalnız siz erişebilirsiniz. Bu adresler asla diğer kişiler ile "
-"paylaşılmaz."
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Özel adres defterindeki ana bilgisayarlara sizin tarafınızdan erişilebilir ancak adresleri asla başkalarına dağıtılmaz.Kişisel adres defterindeki sunuculara yalnız siz erişebilirsiniz. Bu adresler asla diğer kişiler ile paylaşılmaz."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:245
-msgid ""
-"The private address book can also be used for aliases of hosts in your other "
-"address books."
-msgstr ""
-"Özel adres defteri aynı zamanda diğer adres defterlerinizdeki ana "
-"bilgisayarların takma adları için de kullanılabilir.Kişisel adres defteri "
-"ayrıca diğer adres defterlerinizdeki sunucu kısaltmaları için kullanılabilir."
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Özel adres defteri aynı zamanda diğer adres defterlerinizdeki ana bilgisayarların takma adları için de kullanılabilir.Kişisel adres defteri ayrıca diğer adres defterlerinizdeki sunucu kısaltmaları için kullanılabilir."
 
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:196
 msgid "subscription log"
@@ -919,12 +800,8 @@ msgid "The subscription file contains a list of i2p URLs."
 msgstr "Abonelik dosyasında I2P İnternet adreslerinin listesi bulunur."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:250
-msgid ""
-"The addressbook application regularly checks this list for new eepsites."
-msgstr ""
-"Adres defteri uygulaması bu listeyi yeni eepsiteler için düzenli olarak "
-"kontrol ediyor.Adres defteri uygulaması düzenli olarak yeni eepsiteleri için "
-"bu listeyi denetler."
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Adres defteri uygulaması bu listeyi yeni eepsiteler için düzenli olarak kontrol ediyor.Adres defteri uygulaması düzenli olarak yeni eepsiteleri için bu listeyi denetler."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:252
 msgid "Those URLs refer to published hosts.txt files."
@@ -932,61 +809,31 @@ msgstr "Bu İnternet adresleri yayınlanmış hosts.txt dosyalarını gösterir.
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:254
 msgid "See the FAQ for a list of subscription URLs."
-msgstr ""
-"Abonelik URL'lerinin listesi için SSS'ye bakın.Abonelik İnternet "
-"adreslerinin listesi için SSS bölümüne bakabilirsiniz."
+msgstr "Abonelik URL'lerinin listesi için SSS'ye bakın.Abonelik İnternet adreslerinin listesi için SSS bölümüne bakabilirsiniz."
 
 #: build/HowSVG.java:5
-msgid ""
-"If SusiDNS is configured to publish your Router address book, the entries "
-"will appear in your Published address book and saved to a hosts.txt file for "
-"sharing."
-msgstr ""
-"SusiDNS, Yönlendirici adres defterinizi yayınlayacak şekilde "
-"yapılandırıldıysa, girişler Yayınlanan adres defterinizde görünecek ve "
-"paylaşım için bir hosts.txt dosyasına kaydedilecektir.SusiDNS Yönelticinizin "
-"adres defterini yayınlayacak şekilde yapılandırılmış ise, Kayıtlar "
-"yayınlanmış adres defterinizde görüntülenir ve paylaşılması için hosts.txt "
-"dosyasına kaydedilir."
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "SusiDNS, Yönlendirici adres defterinizi yayınlayacak şekilde yapılandırıldıysa, girişler Yayınlanan adres defterinizde görünecek ve paylaşım için bir hosts.txt dosyasına kaydedilecektir.SusiDNS Yönelticinizin adres defterini yayınlayacak şekilde yapılandırılmış ise, Kayıtlar yayınlanmış adres defterinizde görüntülenir ve paylaşılması için hosts.txt dosyasına kaydedilir."
 
 #: build/HowSVG.java:6
 msgid "Published Addressbook"
 msgstr "Yayınlanmış Adres Defteri"
 
 #: build/HowSVG.java:7
-msgid ""
-"To configure SusiDNS to push your Router address book to your Published "
-"address book, set 'should_publish=true' on the configuration page."
-msgstr ""
-"SusiDNS'yi Yönlendirici adres defterinizi Yayınlanan adres defterinize "
-"gönderecek şekilde yapılandırmak için, yapılandırma sayfasında "
-"'should_publish=true' değerini ayarlayın.SusiDNS tarafından Yöneltici "
-"adresinizin yayınlanmış adres defterine gönderilmesini sağlamak için, "
-"yapılandırma bölümünden 'should_publish=true' seçeneğini ayarlayın."
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "SusiDNS'yi Yönlendirici adres defterinizi Yayınlanan adres defterinize gönderecek şekilde yapılandırmak için, yapılandırma sayfasında 'should_publish=true' değerini ayarlayın.SusiDNS tarafından Yöneltici adresinizin yayınlanmış adres defterine gönderilmesini sağlamak için, yapılandırma bölümünden 'should_publish=true' seçeneğini ayarlayın."
 
 #: build/HowSVG.java:8
-msgid ""
-"All hosts derived from subscriptions will appear in this address book, in "
-"addition to any you manually add here or to your Master address book."
-msgstr ""
-"Aboneliklerden türetilen tüm ana bilgisayarlar, buraya veya Ana adres "
-"defterinize manuel olarak eklediğinizlere ek olarak bu adres defterinde "
-"görünecek.Aboneliklerden aktarılan tüm sunucular bu adres defterinde el ile "
-"ekledikleriniz ve Ana adres defterinden gelen kayıtlar ile birlikte "
-"görüntülenir."
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "Aboneliklerden türetilen tüm ana bilgisayarlar, buraya veya Ana adres defterinize manuel olarak eklediğinizlere ek olarak bu adres defterinde görünecek.Aboneliklerden aktarılan tüm sunucular bu adres defterinde el ile ekledikleriniz ve Ana adres defterinden gelen kayıtlar ile birlikte görüntülenir."
 
 #: build/HowSVG.java:9
 msgid "Router Addressbook"
 msgstr "Yöneltici Adres Defteri"
 
 #: build/HowSVG.java:10
-msgid ""
-"Hosts you manually add here will never be published. You can also add "
-"aliases to hosts in other address books here."
-msgstr ""
-"Buraya manuel olarak eklediğiniz ana bilgisayarlar hiçbir zaman "
-"yayınlanmayacak. Buraya eklediğiniz sunucular hiç bir zaman yayınlanmaz. "
-"Ayrıca buradan defterlerdeki sunucular için kısaltmalar da ekleyebilirsiniz."
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "Buraya manuel olarak eklediğiniz ana bilgisayarlar hiçbir zaman yayınlanmayacak. Buraya eklediğiniz sunucular hiç bir zaman yayınlanmaz. Ayrıca buradan defterlerdeki sunucular için kısaltmalar da ekleyebilirsiniz."
 
 #: build/HowSVG.java:11
 msgid "Private Addressbook"
@@ -997,44 +844,24 @@ msgid "Local Records"
 msgstr "Yerel Kayıtlar"
 
 #: build/HowSVG.java:13
-msgid ""
-"I2P applications (including the HTTP proxy) use the hosts in your local "
-"address books to resolve .i2p hostnames."
-msgstr ""
-"I2P uygulamaları (HTTP proxy dahil), .i2p ana bilgisayar adlarını çözümlemek "
-"için yerel adres defterlerinizdeki ana bilgisayarları kullanır.I2P "
-"uygulamaları (HTTP vekil sunucu dahil) .i2p sunucu adlarını çözümlemek için "
-"yerel adres defterlerindeki sunucu kayıtlarını kullanır."
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "I2P uygulamaları (HTTP proxy dahil), .i2p ana bilgisayar adlarını çözümlemek için yerel adres defterlerinizdeki ana bilgisayarları kullanır.I2P uygulamaları (HTTP vekil sunucu dahil) .i2p sunucu adlarını çözümlemek için yerel adres defterlerindeki sunucu kayıtlarını kullanır."
 
 #: build/HowSVG.java:14
-msgid ""
-"Additional subscriptions can be found in the FAQ section of the Router help "
-"page."
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
 msgstr "Ek abonelikler Yöneltici yardım sayfasının SSS bölümünde bulunabilir."
 
 #: build/HowSVG.java:16
-msgid ""
-"Hosts sourced from your subscriptions are added to your Router address book, "
-"and are automatically synced (by default every 12 hours)."
-msgstr ""
-"Aboneliklerinizden elde edilen ana bilgisayarlar Yönlendiricinizin adres "
-"defterine eklenir ve otomatik olarak senkronize edilir (varsayılan olarak "
-"her 12 saatte bir).Aboneliklerinizden kaynaklanan sunucular Yöneltici adres "
-"defterine eklenir ve otomatik olarak eşitlenir (varsayılan olarak 12 saatte "
-"bir)."
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "Aboneliklerinizden elde edilen ana bilgisayarlar Yönlendiricinizin adres defterine eklenir ve otomatik olarak senkronize edilir (varsayılan olarak her 12 saatte bir).Aboneliklerinizden kaynaklanan sunucular Yöneltici adres defterine eklenir ve otomatik olarak eşitlenir (varsayılan olarak 12 saatte bir)."
 
 #: build/HowSVG.java:17
 msgid "Configure Subscriptions"
 msgstr "Abonelikleri Yapılandır"
 
 #: build/HowSVG.java:18
-msgid ""
-"If you manually add hosts here, they will be included your Published address "
-"book (if configured)."
-msgstr ""
-"Eğer ana bilgisayarları buraya manuel olarak eklerseniz, Yayınlanmış adres "
-"defterinize (yapılandırılmışsa) eklenecekler.Buraya el ile ekleyeceğiniz "
-"sunucular yayınlanmış adres defterinize katılır (yapılandırılmış ise)."
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "Eğer ana bilgisayarları buraya manuel olarak eklerseniz, Yayınlanmış adres defterinize (yapılandırılmışsa) eklenecekler.Buraya el ile ekleyeceğiniz sunucular yayınlanmış adres defterinize katılır (yapılandırılmış ise)."
 
 #: build/HowSVG.java:19
 msgid "Master Addressbook"
@@ -1049,13 +876,8 @@ msgid "I2P applications"
 msgstr "I2P uygulamaları"
 
 #: build/HowSVG.java:22
-msgid ""
-"The Master, Router and Private address books collectively serve as the DNS "
-"authority for I2P applications."
-msgstr ""
-"Ana, Yönlendirici ve Özel adres defterleri toplu olarak I2P uygulamaları "
-"için DNS yetkilisi olarak görev yapar.Ana, Yöneltici ve Özel adres "
-"defterleri I2P uygulamaları için bir arada çalışarak DNS hizmeti sunar."
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "Ana, Yönlendirici ve Özel adres defterleri toplu olarak I2P uygulamaları için DNS yetkilisi olarak görev yapar.Ana, Yöneltici ve Özel adres defterleri I2P uygulamaları için bir arada çalışarak DNS hizmeti sunar."
 
 #: build/HowSVG.java:23
 msgid "Optional,"
@@ -1066,32 +888,13 @@ msgid "for websites"
 msgstr "web siteleri için"
 
 #: build/HowSVG.java:25
-msgid ""
-"If you configure SusiDNS to publish your Router address book, it will export "
-"a hosts.txt file containing all the hosts (by default to the root of your "
-"eepsite)."
-msgstr ""
-"SusiDNS'yi Yönlendirici adres defterinizi yayınlayacak şekilde "
-"yapılandırırsanız, tüm ana bilgisayarları içeren bir hosts.txt dosyasını "
-"(varsayılan olarak eepsitenizin köküne) aktaracaktır.Yönelticinizin adres "
-"defterini yayınlamak için SusiDNS kullanıyorsanız, tüm sunucu kayıtlarının "
-"bulunduğu bir hosts.txt dosyası dışa aktarılır (varsayılan olarak "
-"eepsitenizin kök klasörüne)."
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "SusiDNS'yi Yönlendirici adres defterinizi yayınlayacak şekilde yapılandırırsanız, tüm ana bilgisayarları içeren bir hosts.txt dosyasını (varsayılan olarak eepsitenizin köküne) aktaracaktır.Yönelticinizin adres defterini yayınlamak için SusiDNS kullanıyorsanız, tüm sunucu kayıtlarının bulunduğu bir hosts.txt dosyası dışa aktarılır (varsayılan olarak eepsitenizin kök klasörüne)."
 
 #: build/HowSVG.java:26
-msgid ""
-"Addresses manually added to your Master address book will merge with your "
-"Router address book."
-msgstr ""
-"Ana adres defterinize manuel olarak eklenen adresler, Yönlendirici adres "
-"defterinizle birleşecektir.Ana adres defterine el ile eklenmiş adresler "
-"Yöneltici adres defteriniz ile birleştirilir."
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "Ana adres defterinize manuel olarak eklenen adresler, Yönlendirici adres defterinizle birleşecektir.Ana adres defterine el ile eklenmiş adresler Yöneltici adres defteriniz ile birleştirilir."
 
 #: build/HowSVG.java:27
-msgid ""
-"Hosts you receive from your subscriptions will merge with your Router "
-"address book."
-msgstr ""
-"Aboneliklerinizden aldığınız ana bilgisayarlar Yönlendiricinizin adres "
-"defteriyle birleşecek.Aboneliklerden gelen sunucular Yöneltici adres "
-"defteriniz ile birleştirilir."
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "Aboneliklerinizden aldığınız ana bilgisayarlar Yönlendiricinizin adres defteriyle birleşecek.Aboneliklerden gelen sunucular Yöneltici adres defteriniz ile birleştirilir."

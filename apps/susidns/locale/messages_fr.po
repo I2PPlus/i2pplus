@@ -39,14 +39,8 @@ msgstr "Le nom d’hôte ne peut pas contenir « {0} »"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:159
 #, java-format
-msgid ""
-"Host name \"{0}\" requires conversion to ASCII but the conversion library is "
-"unavailable in this JVM"
-msgstr ""
-"Le nom d'hôte \"{0}\" nécessite une conversion en ASCII mais la bibliothèque "
-"de conversion n'est pas disponible dans cette JVMLe nom d’hôte « {0} » exige "
-"une conversion en ASCII, mais la bibliothèque de conversion n’est pas "
-"proposée dans cette MVJ"
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "Le nom d'hôte \"{0}\" nécessite une conversion en ASCII mais la bibliothèque de conversion n'est pas disponible dans cette JVMLe nom d’hôte « {0} » exige une conversion en ASCII, mais la bibliothèque de conversion n’est pas proposée dans cette MVJ"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:224
 msgid "None"
@@ -125,20 +119,13 @@ msgstr "Remplacer"
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:251
 #, java-format
 msgid "Host name {0} is already in address book, unchanged."
-msgstr ""
-"Le nom d'hôte {0} est déjà dans le carnet d'adresses, inchangé.Le nom d’hôte "
-"{0} est déjà dans le carnet d’adresses. Pas de changement."
+msgstr "Le nom d'hôte {0} est déjà dans le carnet d'adresses, inchangé.Le nom d’hôte {0} est déjà dans le carnet d’adresses. Pas de changement."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:262
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:255
 #, java-format
-msgid ""
-"Host name {0} is already in address book with a different destination. Click "
-"\"Replace\" to overwrite."
-msgstr ""
-"Le nom d'hôte {0} est déjà dans le carnet d'adresses avec une destination "
-"différente. Le nom d’hôte {0} est déjà dans le carnet d’adresses avec une "
-"destination différente. Cliquer sur Remplacer pour le remplacer."
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "Le nom d'hôte {0} est déjà dans le carnet d'adresses avec une destination différente. Le nom d’hôte {0} est déjà dans le carnet d’adresses avec une destination différente. Cliquer sur Remplacer pour le remplacer."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:282
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:289
@@ -251,26 +238,15 @@ msgstr "ERREUR : Impossible d’écrire dans le fichier du carnet d’adresses.
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:163
-msgid ""
-"Invalid form submission, probably because you used the \"back\" or "
-"\"reload\" button on your browser. Please resubmit."
-msgstr ""
-"Soumission de formulaire invalide, probablement parce que vous avez utilisé "
-"le bouton « retour » ou « recharger » de votre navigateur. L’envoi du "
-"formulaire est invalide, car vous avez probablement utilisé le bouton "
-"« Retour » ou « Recharger » de votre navigateur. Veuillez le renvoyer."
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "Soumission de formulaire invalide, probablement parce que vous avez utilisé le bouton « retour » ou « recharger » de votre navigateur. L’envoi du formulaire est invalide, car vous avez probablement utilisé le bouton « Retour » ou « Recharger » de votre navigateur. Veuillez le renvoyer."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
-msgid ""
-"If the problem persists, verify that you have cookies enabled in your "
-"browser."
-msgstr ""
-"Si le problème persiste, vérifiez que les cookies sont activés dans votre "
-"navigateur.Si le problème persiste, vérifier que les témoins sont activés "
-"dans votre navigateur."
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Si le problème persiste, vérifiez que les cookies sont activés dans votre navigateur.Si le problème persiste, vérifier que les témoins sont activés dans votre navigateur."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:136
@@ -385,15 +361,11 @@ msgstr "Mise à jour"
 
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:152
 msgid "Attempting to update addressbook from subscription sources..."
-msgstr ""
-"Tentative de mise à jour du carnet d'adresses à partir de sources "
-"d'abonnement..."
+msgstr "Tentative de mise à jour du carnet d'adresses à partir de sources d'abonnement..."
 
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:156
 msgid "Cannot update subscriptions: HTTP proxy is not running!"
-msgstr ""
-"Impossible de mettre à jour les abonnements : le proxy HTTP n'est pas en "
-"cours d'exécution !"
+msgstr "Impossible de mettre à jour les abonnements : le proxy HTTP n'est pas en cours d'exécution !"
 
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:160
 msgid "Subscriptions reloaded."
@@ -541,10 +513,7 @@ msgstr "Adresse Base32"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:852
 msgid "Helper link to share host address with option to add to addressbook"
-msgstr ""
-"lien d'aide pour partager l'adresse de l'hôte avec option d'ajout au carnet "
-"d'adressesLien d’aide pour partager une adresse d’hôte, avec l’option de "
-"l’ajouter au carnet d’adresses"
+msgstr "lien d'aide pour partager l'adresse de l'hôte avec option d'ajout au carnet d'adressesLien d’aide pour partager une adresse d’hôte, avec l’option de l’ajouter au carnet d’adresses"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:872
 msgid "Mark for deletion"
@@ -595,56 +564,24 @@ msgid "Hints"
 msgstr "Astuces"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:252
-msgid ""
-"File and directory paths here are relative to the addressbook's working "
-"directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%"
-"\\I2P\\addressbook\\ (Windows)."
-msgstr ""
-"Les chemins de fichiers et de répertoires ici sont relatifs au répertoire de "
-"travail du carnet d'adresses, qui est normalement ~/.i2p/addressbook/ "
-"(Linux) ou %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows).Les chemins de "
-"fichier et dossier indiqués ici sont relatifs au répertoire de travail du "
-"carnet d’adresses, qui est normalement ~/.i2p/addressbook/ (Linux) ou "
-"%LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Les chemins de fichiers et de répertoires ici sont relatifs au répertoire de travail du carnet d'adresses, qui est normalement ~/.i2p/addressbook/ (Linux) ou %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows).Les chemins de fichier et dossier indiqués ici sont relatifs au répertoire de travail du carnet d’adresses, qui est normalement ~/.i2p/addressbook/ (Linux) ou %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:254
-msgid ""
-"If you want to manually add lines to an addressbook, add them to the private "
-"or master addressbooks."
-msgstr ""
-"Si vous souhaitez ajouter manuellement des lignes à un carnet d'adresses, "
-"ajoutez-les aux carnets d'adresses privé ou principal.Si vous voulez ajouter "
-"manuellement des lignes dans un carnet d’adresses, faites-le dans le carnet "
-"d’adresses privé ou maître."
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Si vous souhaitez ajouter manuellement des lignes à un carnet d'adresses, ajoutez-les aux carnets d'adresses privé ou principal.Si vous voulez ajouter manuellement des lignes dans un carnet d’adresses, faites-le dans le carnet d’adresses privé ou maître."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:256
-msgid ""
-"The router addressbook and the published addressbook are updated by the "
-"addressbook application."
-msgstr ""
-"Le carnet d'adresses du routeur et le carnet d'adresses publié sont mis à "
-"jour par l'application Carnet d'adresses.Le carnet d’adresses du routeur et "
-"le carnet d’adresses publié sont mis à jour par l’application de carnet "
-"d’adresses."
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Le carnet d'adresses du routeur et le carnet d'adresses publié sont mis à jour par l'application Carnet d'adresses.Le carnet d’adresses du routeur et le carnet d’adresses publié sont mis à jour par l’application de carnet d’adresses."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:258
-msgid ""
-"When you publish your addressbook, ALL destinations from the master and "
-"router addressbooks appear there."
-msgstr ""
-"Lorsque vous publiez votre carnet d'adresses, TOUTES les destinations des "
-"carnets d'adresses maître et routeur y apparaissent.Quand vous publiez votre "
-"carnet d’adresses, TOUTES les destinations des carnet d’adresses maître et "
-"carnet d’adresses du routeur y apparaissent."
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Lorsque vous publiez votre carnet d'adresses, TOUTES les destinations des carnets d'adresses maître et routeur y apparaissent.Quand vous publiez votre carnet d’adresses, TOUTES les destinations des carnet d’adresses maître et carnet d’adresses du routeur y apparaissent."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:260
-msgid ""
-"Use the private addressbook for private destinations, these are not "
-"published."
-msgstr ""
-"Utilisez le carnet d'adresses privé pour les destinations privées, celles-ci "
-"ne sont pas publiées.Utiliser le carnet d’adresses privé pour les "
-"destinations privées. Elles ne sont pas publiées."
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Utilisez le carnet d'adresses privé pour les destinations privées, celles-ci ne sont pas publiées.Utiliser le carnet d’adresses privé pour les destinations privées. Elles ne sont pas publiées."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:262
 msgid "Options"
@@ -652,23 +589,15 @@ msgstr "Options"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:264
 msgid "File containing the list of subscriptions URLs (no need to change)"
-msgstr ""
-"Fichier contenant la liste des URL des abonnements (pas besoin de "
-"changer)Fichier contenant la liste des URL d’abonnement (inutile de le "
-"modifier)"
+msgstr "Fichier contenant la liste des URL des abonnements (pas besoin de changer)Fichier contenant la liste des URL d’abonnement (inutile de le modifier)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:266
 msgid "Update interval in hours"
 msgstr "Intervalle de mise à jour en heures"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:268
-msgid ""
-"Your public hosts.txt file (choose a path within your webserver document "
-"root)"
-msgstr ""
-"Votre fichier hosts.txt public (choisissez un chemin dans la racine du "
-"document de votre serveur Web)Votre fichier hosts.txt public (choisir un "
-"chemin sous la racine de votre serveur Web)"
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Votre fichier hosts.txt public (choisissez un chemin dans la racine du document de votre serveur Web)Votre fichier hosts.txt public (choisir un chemin sous la racine de votre serveur Web)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:270
 msgid "Your hosts.txt (don't change)"
@@ -695,35 +624,20 @@ msgid "Whether to update the published addressbook"
 msgstr "Le carnet d’adresses publié doit-il être mis à jour ou non"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:282
-msgid ""
-"File containing the etags header from the fetched subscription URLs (no need "
-"to change)"
-msgstr ""
-"Fichier contenant l'en-tête etags des URL d'abonnement récupérées (pas "
-"besoin de modifier)Fichier contenant les en-têtes etags des URL d’abonnement "
-"récupérées (inutile de le modifier)"
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Fichier contenant l'en-tête etags des URL d'abonnement récupérées (pas besoin de modifier)Fichier contenant les en-têtes etags des URL d’abonnement récupérées (inutile de le modifier)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:284
-msgid ""
-"File containing the modification timestamp for each fetched subscription URL "
-"(no need to change)"
-msgstr ""
-"Fichier contenant l'horodatage de modification pour chaque URL d'abonnement "
-"récupérée (pas besoin de modifier)Fichier contenant l’estampille temporelle "
-"de modification de chaque URL d’abonnement récupérée (inutile de le modifier)"
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Fichier contenant l'horodatage de modification pour chaque URL d'abonnement récupérée (pas besoin de modifier)Fichier contenant l’estampille temporelle de modification de chaque URL d’abonnement récupérée (inutile de le modifier)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:286
 msgid "File to log activity to (change to /dev/null if you like)"
-msgstr ""
-"Fichier dans lequel enregistrer l'activité (remplacez par /dev/null si vous "
-"le souhaitez)Fichier vers lequel journaliser l’activité (modifier en /dev/"
-"null si vous le souhaitez)"
+msgstr "Fichier dans lequel enregistrer l'activité (remplacez par /dev/null si vous le souhaitez)Fichier vers lequel journaliser l’activité (modifier en /dev/null si vous le souhaitez)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:288
 msgid "Name of override theme to use (defaults to console-selected theme)"
-msgstr ""
-"Nom du thème de remplacement à utiliser (par défaut, thème sélectionné par "
-"la console)"
+msgstr "Nom du thème de remplacement à utiliser (par défaut, thème sélectionné par la console)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:193
 msgid "addressbook"
@@ -823,99 +737,47 @@ msgstr "Qu’est-ce que le carnet d’adresses ?"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:225
 msgid "The addressbook application is part of your I2P installation."
-msgstr ""
-"L'application Carnet d'adresses fait partie de votre installation I2P."
-"L’application de carnet d’adresses fait partie de votre installation d’I2P."
+msgstr "L'application Carnet d'adresses fait partie de votre installation I2P.L’application de carnet d’adresses fait partie de votre installation d’I2P."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:227
-msgid ""
-"It regularly updates your hosts.txt file from distributed sources or "
-"\"subscriptions\"."
-msgstr ""
-"Il met régulièrement à jour votre fichier hosts.txt à partir de sources "
-"distribuées ou de \"abonnements\".Actualise régulièrement votre fichier "
-"hosts.txt à partir de sources distribuées ou « abonnements »."
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Il met régulièrement à jour votre fichier hosts.txt à partir de sources distribuées ou de \"abonnements\".Actualise régulièrement votre fichier hosts.txt à partir de sources distribuées ou « abonnements »."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:229
-msgid ""
-"Subscribing to additional sites is easy, just add them to your <a "
-"href=\"subscriptions\">subscriptions</a> file."
-msgstr ""
-"L'abonnement à des sites supplémentaires est simple, il suffit de les "
-"ajouter à votre fichier <a href=\"subscriptions\">abonnements</a>.Il est "
-"facile de s’abonner à des sites supplémentaires. Il vous suffit de les "
-"ajouter à votre fichier <a href=\"subscriptions\">d’abonnements</a>."
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "L'abonnement à des sites supplémentaires est simple, il suffit de les ajouter à votre fichier <a href=\"subscriptions\">abonnements</a>.Il est facile de s’abonner à des sites supplémentaires. Il vous suffit de les ajouter à votre fichier <a href=\"subscriptions\">d’abonnements</a>."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:231
-msgid ""
-"For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/"
-"naming.html\" target=_blank>the overview</a>."
-msgstr ""
-"Pour plus d'informations sur la dénomination dans I2P, consultez la <a "
-"href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>la présentation</"
-"a>."
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Pour plus d'informations sur la dénomination dans I2P, consultez la <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>la présentation</a>."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:233
 msgid "How does the addressbook application work?"
 msgstr "Comment l’application de carnet d’adresses fonctionne-t-elle ?"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:235
-msgid ""
-"The addressbook application regularly polls your subscriptions and merges "
-"their content into your \"router\" address book."
-msgstr ""
-"L'application de carnet d'adresses interroge régulièrement vos abonnements "
-"et fusionne leur contenu dans votre carnet d'adresses « routeur »."
-"L’application carnet d’adresses interroge régulièrement vos abonnements et "
-"fusionne leur contenu dans le carnet d’adresses de votre routeur."
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "L'application de carnet d'adresses interroge régulièrement vos abonnements et fusionne leur contenu dans votre carnet d'adresses « routeur ».L’application carnet d’adresses interroge régulièrement vos abonnements et fusionne leur contenu dans le carnet d’adresses de votre routeur."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:237
-msgid ""
-"Then it merges your \"master\" address book into the router address book as "
-"well."
-msgstr ""
-"Ensuite, il fusionne également votre carnet d'adresses « maître » dans le "
-"carnet d'adresses du routeur.Puis elle fusionne aussi votre carnet "
-"d’adresses « maître » dans le carnet d’adresses du routeur. "
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Ensuite, il fusionne également votre carnet d'adresses « maître » dans le carnet d'adresses du routeur.Puis elle fusionne aussi votre carnet d’adresses « maître » dans le carnet d’adresses du routeur. "
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:239
-msgid ""
-"If configured, the router address book is now written to the \"published\" "
-"address book, which will be publicly available if you are running an eepsite."
-msgstr ""
-"S'il est configuré, le carnet d'adresses du routeur est désormais écrit dans "
-"le carnet d'adresses \"publié\", qui sera accessible au public si vous "
-"utilisez un site eep.Si configuré ainsi, le carnet d’adresses du routeur est "
-"alors écrit vers le carnet d’adresses « publié » qui sera proposé "
-"publiquement si vous faites tourner un site eep."
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "S'il est configuré, le carnet d'adresses du routeur est désormais écrit dans le carnet d'adresses \"publié\", qui sera accessible au public si vous utilisez un site eep.Si configuré ainsi, le carnet d’adresses du routeur est alors écrit vers le carnet d’adresses « publié » qui sera proposé publiquement si vous faites tourner un site eep."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:241
-msgid ""
-"The router also uses a private address book, which is not merged or "
-"published."
-msgstr ""
-"Le routeur utilise également un carnet d'adresses privé, qui n'est ni "
-"fusionné ni publié.Le routeur utilise aussi un carnet d’adresses privé qui "
-"n’est ni fusionné ni publié"
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Le routeur utilise également un carnet d'adresses privé, qui n'est ni fusionné ni publié.Le routeur utilise aussi un carnet d’adresses privé qui n’est ni fusionné ni publié"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:243
-msgid ""
-"Hosts in the private address book can be accessed by you but their addresses "
-"are never distributed to others."
-msgstr ""
-"Vous pouvez accéder aux hôtes du carnet d'adresses privé, mais leurs "
-"adresses ne sont jamais distribuées à d'autres.Vous pouvez accéder aux hôtes "
-"du carnet d’adresses privé, mais leurs adresses ne sont distribuées à "
-"personne."
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Vous pouvez accéder aux hôtes du carnet d'adresses privé, mais leurs adresses ne sont jamais distribuées à d'autres.Vous pouvez accéder aux hôtes du carnet d’adresses privé, mais leurs adresses ne sont distribuées à personne."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:245
-msgid ""
-"The private address book can also be used for aliases of hosts in your other "
-"address books."
-msgstr ""
-"Le carnet d'adresses privé peut également être utilisé pour les alias des "
-"hôtes dans vos autres carnets d'adresses.Le carnet d’adresses privé peut "
-"aussi être utilisé pour les alias d’hôtes dans vos autres carnets d’adresses."
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Le carnet d'adresses privé peut également être utilisé pour les alias des hôtes dans vos autres carnets d'adresses.Le carnet d’adresses privé peut aussi être utilisé pour les alias d’hôtes dans vos autres carnets d’adresses."
 
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:196
 msgid "subscription log"
@@ -938,12 +800,8 @@ msgid "The subscription file contains a list of i2p URLs."
 msgstr "Le fichier d’abonnements contient une liste d’URL i2p."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:250
-msgid ""
-"The addressbook application regularly checks this list for new eepsites."
-msgstr ""
-"L'application de carnet d'adresses vérifie régulièrement cette liste pour "
-"détecter de nouveaux sites eeps.L’application de carnet d’adresses vérifie "
-"régulièrement la présence de nouveaux sites eep sur cette liste."
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "L'application de carnet d'adresses vérifie régulièrement cette liste pour détecter de nouveaux sites eeps.L’application de carnet d’adresses vérifie régulièrement la présence de nouveaux sites eep sur cette liste."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:252
 msgid "Those URLs refer to published hosts.txt files."
@@ -954,57 +812,28 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Voir la FAQ pour une liste d’URL d’abonnement."
 
 #: build/HowSVG.java:5
-msgid ""
-"If SusiDNS is configured to publish your Router address book, the entries "
-"will appear in your Published address book and saved to a hosts.txt file for "
-"sharing."
-msgstr ""
-"Si SusiDNS est configuré pour publier le carnet d'adresses de votre routeur, "
-"les entrées apparaîtront dans votre carnet d'adresses publié et enregistrées "
-"dans un fichier hosts.txt pour le partage.Si SusiDNS est configurée pour "
-"publier votre Carnet d'adresses du routeur, les entrées apparaîtront dans "
-"votre Carnet d'adresses publié et seront enregistrées dans un fichier hosts."
-"txt pour le partage."
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "Si SusiDNS est configuré pour publier le carnet d'adresses de votre routeur, les entrées apparaîtront dans votre carnet d'adresses publié et enregistrées dans un fichier hosts.txt pour le partage.Si SusiDNS est configurée pour publier votre Carnet d'adresses du routeur, les entrées apparaîtront dans votre Carnet d'adresses publié et seront enregistrées dans un fichier hosts.txt pour le partage."
 
 #: build/HowSVG.java:6
 msgid "Published Addressbook"
 msgstr "Carnet d'adresses publié"
 
 #: build/HowSVG.java:7
-msgid ""
-"To configure SusiDNS to push your Router address book to your Published "
-"address book, set 'should_publish=true' on the configuration page."
-msgstr ""
-"Pour configurer SusiDNS afin qu'il transmette le carnet d'adresses de votre "
-"routeur à votre carnet d'adresses publié, définissez « should_publish=true » "
-"sur la page de configuration.Pour configurer SusiDNS pour pousser votre "
-"Carnet d'adresses du routeur dans votre Carnet d'adresses publié, définir "
-"'should_publish=true' sur la page de configuration."
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "Pour configurer SusiDNS afin qu'il transmette le carnet d'adresses de votre routeur à votre carnet d'adresses publié, définissez « should_publish=true » sur la page de configuration.Pour configurer SusiDNS pour pousser votre Carnet d'adresses du routeur dans votre Carnet d'adresses publié, définir 'should_publish=true' sur la page de configuration."
 
 #: build/HowSVG.java:8
-msgid ""
-"All hosts derived from subscriptions will appear in this address book, in "
-"addition to any you manually add here or to your Master address book."
-msgstr ""
-"Tous les hôtes dérivés des abonnements apparaîtront dans ce carnet "
-"d'adresses, en plus de ceux que vous ajoutez manuellement ici ou à votre "
-"carnet d'adresses principal.Tous les hôtes provenant d'abonnements "
-"apparaîtront dans ce carnet d'adresses, en plus de ceux que vous ajouterez "
-"manuel ici ou dans votre Carnet d'adresses maître."
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "Tous les hôtes dérivés des abonnements apparaîtront dans ce carnet d'adresses, en plus de ceux que vous ajoutez manuellement ici ou à votre carnet d'adresses principal.Tous les hôtes provenant d'abonnements apparaîtront dans ce carnet d'adresses, en plus de ceux que vous ajouterez manuel ici ou dans votre Carnet d'adresses maître."
 
 #: build/HowSVG.java:9
 msgid "Router Addressbook"
 msgstr "Carnet d'adresses du routeur"
 
 #: build/HowSVG.java:10
-msgid ""
-"Hosts you manually add here will never be published. You can also add "
-"aliases to hosts in other address books here."
-msgstr ""
-"Les hôtes que vous ajoutez manuellement ici ne seront jamais publiés. Les "
-"hôtes que vous ajoutez manuellement ici ne seront jamais publiés. Vous "
-"pouvez aussi ajouter ici des alias vers des hôtes dans d’autres carnets "
-"d'adresses."
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "Les hôtes que vous ajoutez manuellement ici ne seront jamais publiés. Les hôtes que vous ajoutez manuellement ici ne seront jamais publiés. Vous pouvez aussi ajouter ici des alias vers des hôtes dans d’autres carnets d'adresses."
 
 #: build/HowSVG.java:11
 msgid "Private Addressbook"
@@ -1015,48 +844,24 @@ msgid "Local Records"
 msgstr "Enregistrements locaux"
 
 #: build/HowSVG.java:13
-msgid ""
-"I2P applications (including the HTTP proxy) use the hosts in your local "
-"address books to resolve .i2p hostnames."
-msgstr ""
-"Les applications I2P (y compris le proxy HTTP) utilisent les hôtes de vos "
-"carnets d'adresses locaux pour résoudre les noms d'hôte .i2p.Les "
-"applications I2P (dont le mandataire HTTP) utilisent les hôtes de vos "
-"carnets d'adresses locaux pour résoudre les noms d'hôtes .i2p."
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "Les applications I2P (y compris le proxy HTTP) utilisent les hôtes de vos carnets d'adresses locaux pour résoudre les noms d'hôte .i2p.Les applications I2P (dont le mandataire HTTP) utilisent les hôtes de vos carnets d'adresses locaux pour résoudre les noms d'hôtes .i2p."
 
 #: build/HowSVG.java:14
-msgid ""
-"Additional subscriptions can be found in the FAQ section of the Router help "
-"page."
-msgstr ""
-"Des abonnements supplémentaires sont disponibles dans la section FAQ de la "
-"page d'aide du routeur.Des abonnements supplémentaires se trouvent dans la "
-"section FAQ de la page d’aide du routeur."
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "Des abonnements supplémentaires sont disponibles dans la section FAQ de la page d'aide du routeur.Des abonnements supplémentaires se trouvent dans la section FAQ de la page d’aide du routeur."
 
 #: build/HowSVG.java:16
-msgid ""
-"Hosts sourced from your subscriptions are added to your Router address book, "
-"and are automatically synced (by default every 12 hours)."
-msgstr ""
-"les hôtes provenant de vos abonnements sont ajoutés au carnet d'adresses de "
-"votre routeur et sont automatiquement synchronisés (par défaut toutes les "
-"12 heures).Les hôtes provenant de vos abonnements sont ajoutés au Carnet "
-"d'adresses de votre routeur et sont synchronisés automatiquement (par défaut "
-"toutes les 12 heures)"
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "les hôtes provenant de vos abonnements sont ajoutés au carnet d'adresses de votre routeur et sont automatiquement synchronisés (par défaut toutes les 12 heures).Les hôtes provenant de vos abonnements sont ajoutés au Carnet d'adresses de votre routeur et sont synchronisés automatiquement (par défaut toutes les 12 heures)"
 
 #: build/HowSVG.java:17
 msgid "Configure Subscriptions"
 msgstr "Configurer des abonnements"
 
 #: build/HowSVG.java:18
-msgid ""
-"If you manually add hosts here, they will be included your Published address "
-"book (if configured)."
-msgstr ""
-"Si vous ajoutez manuellement des hôtes ici, ils seront inclus dans votre "
-"carnet d'adresses publié (si configuré).Si vous ajoutez des hôtes "
-"manuellement ici, ils seront inclus dans votre Carnet d'adresses publié "
-"(s'il est configuré)."
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "Si vous ajoutez manuellement des hôtes ici, ils seront inclus dans votre carnet d'adresses publié (si configuré).Si vous ajoutez des hôtes manuellement ici, ils seront inclus dans votre Carnet d'adresses publié (s'il est configuré)."
 
 #: build/HowSVG.java:19
 msgid "Master Addressbook"
@@ -1071,14 +876,8 @@ msgid "I2P applications"
 msgstr "Applications I2P"
 
 #: build/HowSVG.java:22
-msgid ""
-"The Master, Router and Private address books collectively serve as the DNS "
-"authority for I2P applications."
-msgstr ""
-"Les carnets d'adresses maître, routeur et privé servent collectivement "
-"d'autorité DNS pour les applications I2P.Les carnets d'adresses Maître, "
-"Routeur et Privé servent collectivement d’autorité DNS pour les applications "
-"I2P."
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "Les carnets d'adresses maître, routeur et privé servent collectivement d'autorité DNS pour les applications I2P.Les carnets d'adresses Maître, Routeur et Privé servent collectivement d’autorité DNS pour les applications I2P."
 
 #: build/HowSVG.java:23
 msgid "Optional,"
@@ -1089,32 +888,13 @@ msgid "for websites"
 msgstr "pour les sites Web"
 
 #: build/HowSVG.java:25
-msgid ""
-"If you configure SusiDNS to publish your Router address book, it will export "
-"a hosts.txt file containing all the hosts (by default to the root of your "
-"eepsite)."
-msgstr ""
-"Si vous configurez SusiDNS pour publier le carnet d'adresses de votre "
-"routeur, il exportera un fichier hosts.txt contenant tous les hôtes (par "
-"défaut à la racine de votre eepsite).Si vous configurez SusiDNS pour publier "
-"votre Carnet d'adresse du routeur, elle exportera un fichier hosts.txt "
-"contenant tous les hôtes (par défaut sur la racine de votre site eep)."
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "Si vous configurez SusiDNS pour publier le carnet d'adresses de votre routeur, il exportera un fichier hosts.txt contenant tous les hôtes (par défaut à la racine de votre eepsite).Si vous configurez SusiDNS pour publier votre Carnet d'adresse du routeur, elle exportera un fichier hosts.txt contenant tous les hôtes (par défaut sur la racine de votre site eep)."
 
 #: build/HowSVG.java:26
-msgid ""
-"Addresses manually added to your Master address book will merge with your "
-"Router address book."
-msgstr ""
-"les adresses ajoutées manuellement à votre carnet d'adresses principal "
-"fusionneront avec le carnet d'adresses de votre routeur.Les adresses "
-"ajoutées manuellement dans votre Carnet d'adresses maître seront fusionnées "
-"avec votre Carnet d'adresses du routeur."
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "les adresses ajoutées manuellement à votre carnet d'adresses principal fusionneront avec le carnet d'adresses de votre routeur.Les adresses ajoutées manuellement dans votre Carnet d'adresses maître seront fusionnées avec votre Carnet d'adresses du routeur."
 
 #: build/HowSVG.java:27
-msgid ""
-"Hosts you receive from your subscriptions will merge with your Router "
-"address book."
-msgstr ""
-"Les hôtes que vous recevez de vos abonnements seront fusionnés avec le "
-"carnet d'adresses de votre routeur.Les hôtes que vous recevez de vos "
-"abonnements seront fusionnés avec votre Carnet d'adresses du routeur"
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "Les hôtes que vous recevez de vos abonnements seront fusionnés avec le carnet d'adresses de votre routeur.Les hôtes que vous recevez de vos abonnements seront fusionnés avec votre Carnet d'adresses du routeur"

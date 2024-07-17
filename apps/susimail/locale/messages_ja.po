@@ -68,24 +68,12 @@ msgstr "バルクメール"
 msgid "Inbox"
 msgstr "受信ボックス"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "新しいメッセージはありません"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "添付ファイルがあります"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "不明"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -532,11 +520,6 @@ msgstr "サイズ"
 msgid "Mark for deletion"
 msgstr "削除にマーク"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "新着メールです"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "新着メールです"
@@ -629,11 +612,6 @@ msgstr "フォルダーに戻る"
 msgid "Move to Folder"
 msgstr "フォルダへ移動"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "新着メールです"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "フォルダーのページサイズ"
@@ -662,14 +640,11 @@ msgstr "サーバーからの応答がありません"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"メールサーバーへのログインに失敗しました。ユーザー名またはパスワードが間違っ"
-"ています。"
+msgstr "メールサーバーへのログインに失敗しました。ユーザー名またはパスワードが間違っています。"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"ログアウトし、正しいユーザー名とパスワードを使用して再度ログインします。"
+msgstr "ログアウトし、正しいユーザー名とパスワードを使用して再度ログインします。"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

@@ -12,8 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?"
-"2:1));\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
 #: ../java/build/Proxy.java:5 ../java/build/Proxy.java:11
 msgid "Warning: Invalid Request URI"
@@ -101,14 +100,8 @@ msgid "The request URI is invalid, and probably contains illegal characters."
 msgstr "Cererea URI este incorecta, și, probabil, contine caractere ilegale."
 
 #: ../java/build/Proxy.java:13
-msgid ""
-"If you clicked a link, check the end of the URI for any characters the "
-"browser has mistakenly added on."
-msgstr ""
-"Dacă ați făcut clic pe un link, verificați la sfârșitul URI-ului orice "
-"caractere pe care browserul le-a adăugat din greșeală.Dacă ați făcut clic pe "
-"un link, verificați sfârșitul URI pentru orice caractere, pe care browser-ul "
-"a adăugat din greșeală ."
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Dacă ați făcut clic pe un link, verificați la sfârșitul URI-ului orice caractere pe care browserul le-a adăugat din greșeală.Dacă ați făcut clic pe un link, verificați sfârșitul URI pentru orice caractere, pe care browser-ul a adăugat din greșeală ."
 
 #: ../java/build/Proxy.java:14 ../java/build/Proxy.java:20
 #: ../java/build/Proxy.java:126 ../java/build/Proxy.java:132
@@ -117,18 +110,11 @@ msgstr "Resetare conexiune"
 
 #: ../java/build/Proxy.java:21
 msgid "The connection to the website was reset while the page was loading."
-msgstr ""
-"Conexiunea la site-ul web a fost resetată în timp ce pagina se încărca."
-"Conexiunea la site-ul web a fost resetată în timp ce pagina se încărca."
+msgstr "Conexiunea la site-ul web a fost resetată în timp ce pagina se încărca.Conexiunea la site-ul web a fost resetată în timp ce pagina se încărca."
 
 #: ../java/build/Proxy.java:22
-msgid ""
-"The website could be temporarily unavailable, too busy, or it has blocked "
-"your access."
-msgstr ""
-"Site-ul web ar putea fi temporar indisponibil, prea ocupat sau v-a blocat "
-"accesul.Site-ul web ar putea fi temporar indisponibil, prea ocupat sau v-a "
-"blocat accesul."
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Site-ul web ar putea fi temporar indisponibil, prea ocupat sau v-a blocat accesul.Site-ul web ar putea fi temporar indisponibil, prea ocupat sau v-a blocat accesul."
 
 #: ../java/build/Proxy.java:23 ../java/build/Proxy.java:72
 #: ../java/build/Proxy.java:124 ../java/build/Proxy.java:169
@@ -141,12 +127,8 @@ msgstr "Este posibil să doriți să {0} {1} încercați din nou."
 #: ../java/build/Proxy.java:137 ../java/build/Proxy.java:150
 #: ../java/build/Proxy.java:170
 #, java-format
-msgid ""
-"If you leave this page open, it will automatically retry connecting to the "
-"website every {0} seconds after a failed connection attempt."
-msgstr ""
-"Dacă lăsați această pagină deschisă, va încerca automat să se conecteze la "
-"site-ul web la fiecare {0} secunde după o încercare eșuată de conectare."
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Dacă lăsați această pagină deschisă, va încerca automat să se conecteze la site-ul web la fiecare {0} secunde după o încercare eșuată de conectare."
 
 #: ../java/build/Proxy.java:25 ../java/build/Proxy.java:62
 #: ../java/build/Proxy.java:74 ../java/build/Proxy.java:87
@@ -177,13 +159,8 @@ msgid "Warning: No Outproxy Configured"
 msgstr "Atenție: Outproxy nu este configurată"
 
 #: ../java/build/Proxy.java:43
-msgid ""
-"Your request was for a site outside of I2P, but you have no HTTP outproxy "
-"configured."
-msgstr ""
-"Solicitarea dvs. a fost pentru un site în afara I2P, dar nu aveți configurat "
-"un proxy HTTP.Cererea Dvs a fost de un site in afara de I2P, dar nu aveți "
-"nici HTTP outproxy configurat."
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "Solicitarea dvs. a fost pentru un site în afara I2P, dar nu aveți configurat un proxy HTTP.Cererea Dvs a fost de un site in afara de I2P, dar nu aveți nici HTTP outproxy configurat."
 
 #: ../java/build/Proxy.java:44
 msgid "Please configure an outproxy in I2PTunnel."
@@ -202,23 +179,12 @@ msgid "Your browser is misconfigured."
 msgstr "Browser-ul dumneavoastră este configurat incorect."
 
 #: ../java/build/Proxy.java:48
-msgid ""
-"Do not use the proxy to access the router console, localhost, or local LAN "
-"destinations."
-msgstr ""
-"Nu utilizați proxy-ul pentru a accesa consola routerului, localhost sau "
-"destinațiile LAN locale.Nu utilizați proxy pentru a accesa consola router, "
-"localhost, sau destinații LAN locale."
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Nu utilizați proxy-ul pentru a accesa consola routerului, localhost sau destinațiile LAN locale.Nu utilizați proxy pentru a accesa consola router, localhost, sau destinații LAN locale."
 
 #: ../java/build/Proxy.java:49
-msgid ""
-"You need to prevent 127.0.0.1 (or the address you're accessing the I2P "
-"console on) from being routed via I2P's http proxy, usually by excluding the "
-"address in your browser's proxy configuration section."
-msgstr ""
-"Trebuie să preveniți direcționarea 127.0.0.1 (sau adresa pe care accesați "
-"consola I2P) prin intermediul proxy-ului http I2P, de obicei excluzând "
-"adresa din secțiunea de configurare a proxy-ului browserului dvs."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Trebuie să preveniți direcționarea 127.0.0.1 (sau adresa pe care accesați consola I2P) prin intermediul proxy-ului http I2P, de obicei excluzând adresa din secțiunea de configurare a proxy-ului browserului dvs."
 
 #: ../java/build/Proxy.java:50
 msgid "Website Unknown"
@@ -242,22 +208,13 @@ msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
 msgstr "Dacă aveți adresa Base 64, {0} adăugați-l la Agenda dvs. {1}."
 
 #: ../java/build/Proxy.java:60
-msgid ""
-"Otherwise, find a Base 32 or address helper link, or use a jump service link "
-"below."
-msgstr ""
-"În caz contrar, găsiți un link de ajutor de bază 32 sau adresa sau utilizați "
-"un link de serviciu de salt de mai jos.În caz contrar, găsiți o bază 32 sau "
-"link-ul adress helper, sau folositi  link-ul de serviciu-salt de mai jos."
+msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
+msgstr "În caz contrar, găsiți un link de ajutor de bază 32 sau adresa sau utilizați un link de serviciu de salt de mai jos.În caz contrar, găsiți o bază 32 sau link-ul adress helper, sau folositi  link-ul de serviciu-salt de mai jos."
 
 #: ../java/build/Proxy.java:61
 #, java-format
-msgid ""
-"Seeing this page often? See {0}the FAQ{1} for help in {2}adding some "
-"subscriptions{3} to your addressbook."
-msgstr ""
-"Vezi des această pagină? Vedeti aceasta pagina des? Vezi {0}  FAQ {1} pentru "
-"ajutor în {2} adăugarea unor abonamente {3} la Agenda dumneavoastră."
+msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
+msgstr "Vezi des această pagină? Vedeti aceasta pagina des? Vezi {0}  FAQ {1} pentru ajutor în {2} adăugarea unor abonamente {3} la Agenda dumneavoastră."
 
 #: ../java/build/Proxy.java:63 ../java/build/Proxy.java:69
 #: ../java/build/Proxy.java:160 ../java/build/Proxy.java:166
@@ -268,18 +225,11 @@ msgstr "Site-ul web nu este accesibil"
 
 #: ../java/build/Proxy.java:70
 msgid "The website was not reachable, because its lease set was not found."
-msgstr ""
-"Site-ul web nu a fost accesibil, deoarece setul de închiriere nu a fost "
-"găsit.Site-ul nu a fost accesibil, deoarece setul său de închiriere nu a "
-"fost găsit."
+msgstr "Site-ul web nu a fost accesibil, deoarece setul de închiriere nu a fost găsit.Site-ul nu a fost accesibil, deoarece setul său de închiriere nu a fost găsit."
 
 #: ../java/build/Proxy.java:71
-msgid ""
-"The website is probably down, but there could also be network congestion."
-msgstr ""
-"Probabil site-ul web nu este, dar ar putea exista și congestie în rețea."
-"Website-ul este probabil scăzut, dar ar putea exista și congestionarea "
-"rețelei."
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Probabil site-ul web nu este, dar ar putea exista și congestie în rețea.Website-ul este probabil scăzut, dar ar putea exista și congestionarea rețelei."
 
 #: ../java/build/Proxy.java:75 ../java/build/Proxy.java:81
 #: ../java/build/Proxy.java:139 ../java/build/Proxy.java:145
@@ -291,50 +241,28 @@ msgid "The HTTP Outproxy was not found."
 msgstr "HTTP Outproxy nu a fost găsit."
 
 #: ../java/build/Proxy.java:83
-msgid ""
-"It is offline, there is network congestion, or your router is not yet well-"
-"integrated with peers."
-msgstr ""
-"Este offline, există congestie în rețea sau routerul dvs. nu este încă bine "
-"integrat cu colegii.Acesta este deconectat, este congestionarea rețelei, sau "
-"router-ul nu este încă bine integrat cu colegii."
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Este offline, există congestie în rețea sau routerul dvs. nu este încă bine integrat cu colegii.Acesta este deconectat, este congestionarea rețelei, sau router-ul nu este încă bine integrat cu colegii."
 
 #: ../java/build/Proxy.java:84 ../java/build/Proxy.java:105
 #: ../java/build/Proxy.java:135 ../java/build/Proxy.java:148
 #, java-format
-msgid ""
-"You may want to {0}retry{1} as this will randomly reselect an outproxy from "
-"the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr ""
-"Este posibil să doriți să {0}reîncercați{1}, deoarece aceasta va reselege "
-"aleatoriu un outproxy din grupul pe care l-ați definit {2}aici{3} (dacă "
-"aveți mai multe configurate).Este posibil să doriți să {0}  încercați din "
-"nou {1} ca acest lucru se va selecta din nou la întâmplare un outproxy din "
-"pool pe care l-ați definit {2} aici {3} (dacă aveți mai mult de unul "
-"configurate)."
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Este posibil să doriți să {0}reîncercați{1}, deoarece aceasta va reselege aleatoriu un outproxy din grupul pe care l-ați definit {2}aici{3} (dacă aveți mai multe configurate).Este posibil să doriți să {0}  încercați din nou {1} ca acest lucru se va selecta din nou la întâmplare un outproxy din pool pe care l-ați definit {2} aici {3} (dacă aveți mai mult de unul configurate)."
 
 #: ../java/build/Proxy.java:85 ../java/build/Proxy.java:106
 #: ../java/build/Proxy.java:136 ../java/build/Proxy.java:149
 #, java-format
-msgid ""
-"If you continue to have trouble you may want to edit your outproxy list {0}"
-"here{1}."
-msgstr ""
-"Dacă întâmpinați probleme în continuare, vă recomandăm să editați lista de "
-"outproxy {0}aici{1}.Dacă aveți în continuare probleme, este posibil să "
-"doriți să editați lista de outproxy {0} aici {1}."
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Dacă întâmpinați probleme în continuare, vă recomandăm să editați lista de outproxy {0}aici{1}.Dacă aveți în continuare probleme, este posibil să doriți să editați lista de outproxy {0} aici {1}."
 
 #: ../java/build/Proxy.java:88 ../java/build/Proxy.java:94
 msgid "Warning: Request Denied"
 msgstr "Atenție: Cerere interzisa"
 
 #: ../java/build/Proxy.java:95
-msgid ""
-"This address appears to be malformed. Please verify you have supplied a "
-"valid address!"
-msgstr ""
-"Această adresă pare a fi malformată. Vă rugăm să verificați că ați furnizat "
-"o adresă validă!"
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Această adresă pare a fi malformată. Vă rugăm să verificați că ați furnizat o adresă validă!"
 
 #: ../java/build/Proxy.java:96
 msgid "You attempted to connect to a non-I2P website or location."
@@ -345,14 +273,8 @@ msgid "Outproxy Unreachable"
 msgstr "Outproxy Nu este accesibil"
 
 #: ../java/build/Proxy.java:104
-msgid ""
-"The HTTP outproxy was not reachable, because it uses encryption options that "
-"are not supported by your I2P or Java version."
-msgstr ""
-"Proxy-ul de ieșire HTTP nu a fost accesibil, deoarece utilizează opțiuni de "
-"criptare care nu sunt acceptate de versiunea dvs. I2P sau Java.Outproxy HTTP "
-"nu a fost accesibil, deoarece utilizează opțiuni de criptare care nu sunt "
-"acceptate de versiunea dvs. I2P sau Java."
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "Proxy-ul de ieșire HTTP nu a fost accesibil, deoarece utilizează opțiuni de criptare care nu sunt acceptate de versiunea dvs. I2P sau Java.Outproxy HTTP nu a fost accesibil, deoarece utilizează opțiuni de criptare care nu sunt acceptate de versiunea dvs. I2P sau Java."
 
 #: ../java/build/Proxy.java:108 ../java/build/Proxy.java:159
 #: ../java/build/Proxy.java:209
@@ -369,32 +291,17 @@ msgstr "Autentificare I2P HTTP proxy necesară"
 
 #: ../java/build/Proxy.java:111
 msgid "This proxy is configured to require a username and password for access."
-msgstr ""
-"Acest proxy este configurat să necesite un nume de utilizator și o parolă "
-"pentru acces.Acest proxy este configurat pentru a necesita un nume de "
-"utilizator și o parolă de acces."
+msgstr "Acest proxy este configurat să necesite un nume de utilizator și o parolă pentru acces.Acest proxy este configurat pentru a necesita un nume de utilizator și o parolă de acces."
 
 #: ../java/build/Proxy.java:112
 #, java-format
-msgid ""
-"Please enter your username and password, or check your {0}router "
-"configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr ""
-"Introduceți numele dvs. de utilizator și parola sau verificați {0}"
-"configurația routerului{1} sau {2}configurația I2PTunnel{3}.Va rugam sa "
-"introduceti numele de utilizator si parola, sau verifica {0} configurația "
-"router {1} sau {2} configurare I2PTunnel {3}."
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Introduceți numele dvs. de utilizator și parola sau verificați {0}configurația routerului{1} sau {2}configurația I2PTunnel{3}.Va rugam sa introduceti numele de utilizator si parola, sau verifica {0} configurația router {1} sau {2} configurare I2PTunnel {3}."
 
 #: ../java/build/Proxy.java:113
 #, java-format
-msgid ""
-"To disable authorization, remove the configuration {0}i2ptunnel.proxy."
-"auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr ""
-"Pentru a dezactiva autorizarea, eliminați configurația {0}i2ptunnel.proxy."
-"auth=basic{1}, apoi opriți și reporniți tunelul HTTP Proxy.Pentru a "
-"dezactiva autorizare, stergeti  configurarea {0} i2ptunnel.proxy.auth = "
-"basic {1}, apoi opriți și reporniți tunelul proxy HTTP."
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Pentru a dezactiva autorizarea, eliminați configurația {0}i2ptunnel.proxy.auth=basic{1}, apoi opriți și reporniți tunelul HTTP Proxy.Pentru a dezactiva autorizare, stergeti  configurarea {0} i2ptunnel.proxy.auth = basic {1}, apoi opriți și reporniți tunelul proxy HTTP."
 
 #: ../java/build/Proxy.java:114 ../java/build/Proxy.java:120
 #: ../java/build/Proxy.java:188
@@ -402,22 +309,12 @@ msgid "Warning: Invalid Destination"
 msgstr "Atenție: Destinație incorecta"
 
 #: ../java/build/Proxy.java:121
-msgid ""
-"The website destination specified was not valid, or was otherwise "
-"unreachable."
-msgstr ""
-"Destinația site-ului web specificată nu a fost validă sau nu a fost în alt "
-"mod inaccesabilă.Destinația site-ului specificat nu a fost validă sau nu a "
-"putut fi atinsă."
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "Destinația site-ului web specificată nu a fost validă sau nu a fost în alt mod inaccesabilă.Destinația site-ului specificat nu a fost validă sau nu a putut fi atinsă."
 
 #: ../java/build/Proxy.java:122
-msgid ""
-"Perhaps you pasted in the wrong Base 64 string or the link you are following "
-"is bad."
-msgstr ""
-"Poate că ați lipit în șirul Base 64 greșit sau linkul pe care îl urmăriți "
-"este prost.Poate că ați inserat șir Base 64 greșit sau link-ul pe care "
-"urmează este incorect."
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Poate că ați lipit în șirul Base 64 greșit sau linkul pe care îl urmăriți este prost.Poate că ați inserat șir Base 64 greșit sau link-ul pe care urmează este incorect."
 
 #: ../java/build/Proxy.java:123
 msgid "The I2P host could also be offline."
@@ -428,29 +325,16 @@ msgid "The connection to the proxy was reset."
 msgstr "Conectarea la proxy a fost resetată."
 
 #: ../java/build/Proxy.java:134
-msgid ""
-"The proxy could be temporarily unavailable, too busy, or it has blocked your "
-"access."
-msgstr ""
-"Proxy-ul ar putea fi temporar indisponibil, prea ocupat sau v-a blocat "
-"accesul.Proxy-ul ar putea fi temporar indisponibil, prea ocupat sau v-a "
-"blocat accesul."
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Proxy-ul ar putea fi temporar indisponibil, prea ocupat sau v-a blocat accesul.Proxy-ul ar putea fi temporar indisponibil, prea ocupat sau v-a blocat accesul."
 
 #: ../java/build/Proxy.java:146
-msgid ""
-"The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr ""
-"Proxy-ul de ieșire HTTP nu a fost accesibil, deoarece setul său de "
-"închiriere nu a fost găsit.Procesul HTTP nu a fost accesibil, deoarece setul "
-"său de închiriere nu a fost găsit."
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "Proxy-ul de ieșire HTTP nu a fost accesibil, deoarece setul său de închiriere nu a fost găsit.Procesul HTTP nu a fost accesibil, deoarece setul său de închiriere nu a fost găsit."
 
 #: ../java/build/Proxy.java:147
-msgid ""
-"The outproxy is probably down, but there could also be network congestion."
-msgstr ""
-"Proxy-ul extern este probabil inactiv, dar ar putea exista și congestie în "
-"rețea.Procesul este probabil scăzut, dar ar putea exista și congestionarea "
-"rețelei."
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Proxy-ul extern este probabil inactiv, dar ar putea exista și congestie în rețea.Procesul este probabil scăzut, dar ar putea exista și congestionarea rețelei."
 
 #: ../java/build/Proxy.java:152 ../java/build/Proxy.java:158
 msgid "Warning: Authorization Required"
@@ -461,49 +345,24 @@ msgid "The website was not reachable."
 msgstr "Site-ul nu a fost accesibil."
 
 #: ../java/build/Proxy.java:168
-msgid ""
-"The website is offline, there is network congestion, or your router is not "
-"yet well-integrated with peers."
-msgstr ""
-"Site-ul web este offline, există congestie în rețea sau routerul dvs. nu "
-"este încă bine integrat cu colegii.The website is offline, there is network "
-"congestion, or your router is not yet well-integrated with peers."
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Site-ul web este offline, există congestie în rețea sau routerul dvs. nu este încă bine integrat cu colegii.The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
 
 #: ../java/build/Proxy.java:172 ../java/build/Proxy.java:178
 msgid "Warning: Destination Key Conflict"
 msgstr "Atenție: Conflictul destinație-cheie"
 
 #: ../java/build/Proxy.java:179
-msgid ""
-"The address helper link you followed specifies a different destination key "
-"than the entry in your address book."
-msgstr ""
-"Link-ul de ajutor pentru adrese pe care l-ați urmat specifică o cheie de "
-"destinație diferită de intrarea din agenda dvs. de adrese.Linkul de "
-"asistență de adresă pe care l-ați urmat specifică o cheie de destinație "
-"diferită de cea din rubrica de adrese."
+msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
+msgstr "Link-ul de ajutor pentru adrese pe care l-ați urmat specifică o cheie de destinație diferită de intrarea din agenda dvs. de adrese.Linkul de asistență de adresă pe care l-ați urmat specifică o cheie de destinație diferită de cea din rubrica de adrese."
 
 #: ../java/build/Proxy.java:180
-msgid ""
-"Someone could be trying to impersonate another website, or people have given "
-"two websites identical names."
-msgstr ""
-"Cineva ar putea încerca să uzurpare identitatea unui alt site web sau "
-"oamenii au dat două site-uri web nume identice.Cineva ar putea încerca să "
-"înlocuiască un alt site web sau oamenii au dat două site-uri web identice."
+msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
+msgstr "Cineva ar putea încerca să uzurpare identitatea unui alt site web sau oamenii au dat două site-uri web nume identice.Cineva ar putea încerca să înlocuiască un alt site web sau oamenii au dat două site-uri web identice."
 
 #: ../java/build/Proxy.java:181
-msgid ""
-"Resolve the conflict by deciding which key you trust, and then either ignore "
-"the address helper link, or delete the host entry from your address book and "
-"click the address helper link again."
-msgstr ""
-"Rezolvați conflictul decidând în ce cheie aveți încredere și apoi fie "
-"ignorați linkul de ajutor pentru adresă, fie ștergeți intrarea gazdă din "
-"agenda dvs. și faceți clic din nou pe linkul de ajutor pentru adresă."
-"Rezolvați conflictul, hotărând în ce cheie aveți încredere, apoi ignorați "
-"legătura de asistență de adresă, sau ștergeți intrarea gazdă din agenda de "
-"adrese și faceți clic din nou pe linkul de asistență de adrese."
+msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
+msgstr "Rezolvați conflictul decidând în ce cheie aveți încredere și apoi fie ignorați linkul de ajutor pentru adresă, fie ștergeți intrarea gazdă din agenda dvs. și faceți clic din nou pe linkul de ajutor pentru adresă.Rezolvați conflictul, hotărând în ce cheie aveți încredere, apoi ignorați legătura de asistență de adresă, sau ștergeți intrarea gazdă din agenda de adrese și faceți clic din nou pe linkul de asistență de adrese."
 
 #: ../java/build/Proxy.java:189
 msgid "The Base32 address is invalid."
@@ -516,34 +375,19 @@ msgstr "Atenție: Adress Helper incorect"
 #: ../java/build/Proxy.java:198
 #, java-format
 msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr ""
-"Cheia de ajutor din adresa URL ({0}i2paddresshelper={1}) nu poate fi "
-"rezolvată.Cheia ajutor în URL-ul ({0} i2paddresshelper = {1}) nu este "
-"rezolvabila."
+msgstr "Cheia de ajutor din adresa URL ({0}i2paddresshelper={1}) nu poate fi rezolvată.Cheia ajutor în URL-ul ({0} i2paddresshelper = {1}) nu este rezolvabila."
 
 #: ../java/build/Proxy.java:199
 msgid "It seems to be garbage data, or a mistyped Base 32 address."
 msgstr "Se pare a fi date de gunoi, sau de o bază adresa 32 introdusă greșit."
 
 #: ../java/build/Proxy.java:200
-msgid ""
-"Check your URL to try and fix the helper key to be a valid Base 32 hostname "
-"or Base 64 key."
-msgstr ""
-"Verificați adresa URL pentru a încerca să remediați cheia de ajutor pentru a "
-"fi un nume de gazdă validă Base 32 sau cheie Base 64.Verificați URL-ul dvs. "
-"pentru a încercarea și stabilirea cheii de ajutor pentru a fi nume de gazdă "
-"Base34 sau cheie Base 64 validă."
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Verificați adresa URL pentru a încerca să remediați cheia de ajutor pentru a fi un nume de gazdă validă Base 32 sau cheie Base 64.Verificați URL-ul dvs. pentru a încercarea și stabilirea cheii de ajutor pentru a fi nume de gazdă Base34 sau cheie Base 64 validă."
 
 #: ../java/build/Proxy.java:208
-msgid ""
-"The website was not reachable, because it uses encryption options that are "
-"not supported by your I2P or Java version."
-msgstr ""
-"Site-ul web nu a fost accesibil, deoarece folosește opțiuni de criptare care "
-"nu sunt acceptate de versiunea dvs. I2P sau Java.Site-ul nu a fost "
-"accesibil, deoarece utilizează opțiuni de criptare care nu sunt acceptate de "
-"versiunea dvs. I2P sau Java."
+msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "Site-ul web nu a fost accesibil, deoarece folosește opțiuni de criptare care nu sunt acceptate de versiunea dvs. I2P sau Java.Site-ul nu a fost accesibil, deoarece utilizează opțiuni de criptare care nu sunt acceptate de versiunea dvs. I2P sau Java."
 
 #: ../java/build/Proxy.java:210
 msgid "Information: New Host Name"
@@ -554,39 +398,24 @@ msgid "Information: New Host Name with Address Helper"
 msgstr "Informații:Nume de gazda nou cu adress helper"
 
 #: ../java/build/Proxy.java:217
-msgid ""
-"The address helper link you followed is for a new host name that is not in "
-"your address book."
-msgstr ""
-"Link-ul de ajutor pentru adresă pe care l-ați urmat este pentru un nou nume "
-"de gazdă care nu se află în agenda dvs. de adrese.Link-ul de adress helper "
-"pe care a urmat este pentru un nume de gazdă nou, care nu este în agendă."
+msgid "The address helper link you followed is for a new host name that is not in your address book."
+msgstr "Link-ul de ajutor pentru adresă pe care l-ați urmat este pentru un nou nume de gazdă care nu se află în agenda dvs. de adrese.Link-ul de adress helper pe care a urmat este pentru un nume de gazdă nou, care nu este în agendă."
 
 #: ../java/build/Proxy.java:218
 msgid "You may save this host name to your local address book."
 msgstr "Puteți salva acest nume gazdă în agenda dvs. locală."
 
 #: ../java/build/Proxy.java:219
-msgid ""
-"If you save it to your address book, you will not see this message again."
+msgid "If you save it to your address book, you will not see this message again."
 msgstr "Dacă-l salvați în agenda dvs., nu veți mai vedea acest mesaj."
 
 #: ../java/build/Proxy.java:220
-msgid ""
-"If you do not save it, the host name will be forgotten after the next router "
-"restart."
-msgstr ""
-"Dacă nu îl salvați, numele gazdei va fi uitat după următoarea repornire a "
-"routerului.Dacă nu-l salvați, numele de gazdă va fi uitat după următoarea "
-"repornire router."
+msgid "If you do not save it, the host name will be forgotten after the next router restart."
+msgstr "Dacă nu îl salvați, numele gazdei va fi uitat după următoarea repornire a routerului.Dacă nu-l salvați, numele de gazdă va fi uitat după următoarea repornire router."
 
 #: ../java/build/Proxy.java:221
-msgid ""
-"If you do not wish to visit this host, click the \"back\" button on your "
-"browser."
-msgstr ""
-"Dacă nu doriți să vizitați această gazdă, faceți clic pe butonul „Înapoi” "
-"din browser."
+msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
+msgstr "Dacă nu doriți să vizitați această gazdă, faceți clic pe butonul „Înapoi” din browser."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:734
 msgid "This seems to be a bad destination:"
@@ -598,14 +427,8 @@ msgstr "i2paddresshelper nu vă poate ajuta cu o destinație de genul asta!"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:807
 #, java-format
-msgid ""
-"To visit the destination in your addressbook, click <a href=\"{0}\">here</"
-"a>. To visit the conflicting addresshelper destination, click <a "
-"href=\"{1}\">here</a>."
-msgstr ""
-"Pentru a vizita destinația în manualul dvs. de adrese, faceți clic pe <a "
-"href=\"{0}\">aici</a>. Pentru a vizita destinația Conflicting AddressHelper, "
-"faceți clic pe <a href=\"{1}\">aici</a>."
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Pentru a vizita destinația în manualul dvs. de adrese, faceți clic pe <a href=\"{0}\">aici</a>. Pentru a vizita destinația Conflicting AddressHelper, faceți clic pe <a href=\"{1}\">aici</a>."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:817
 #, java-format
@@ -643,12 +466,8 @@ msgid "Continue to {0} without saving"
 msgstr "Continuați {0} fără salvare"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1580
-msgid ""
-"You can browse to the site without saving it to the addressbook. The address "
-"will be remembered until you restart your I2P router."
-msgstr ""
-"Puteți naviga pe site fără să -l salvați în cartea de adrese. Adresa va fi "
-"amintită până când reporniți routerul I2P."
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Puteți naviga pe site fără să -l salvați în cartea de adrese. Adresa va fi amintită până când reporniți routerul I2P."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1581
 msgid "Continue without saving"
@@ -660,20 +479,12 @@ msgid "Save {0} to router address book and continue to website"
 msgstr "Salvați {0} în agenda de adrese de router și continuați pe site-ul web"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1589
-msgid ""
-"This address will be saved to your Router addressbook where your "
-"subscription-based addresses are stored."
-msgstr ""
-"Această adresă va fi salvată în agenda de adrese a routerului, unde sunt "
-"stocate adresele bazate pe abonament."
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "Această adresă va fi salvată în agenda de adrese a routerului, unde sunt stocate adresele bazate pe abonament."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1592
-msgid ""
-"If you want to keep track of sites you have added manually, add to your "
-"Master or Private addressbook instead."
-msgstr ""
-"Dacă doriți să urmăriți site-urile pe care le-ați adăugat manual, adăugați "
-"în agenda dvs. principală sau privată."
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Dacă doriți să urmăriți site-urile pe care le-ați adăugat manual, adăugați în agenda dvs. principală sau privată."
 
 #. FIXME wasn't escaped
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1595
@@ -688,14 +499,8 @@ msgid "Save {0} to master addressbook and continue to website"
 msgstr "Salvați {0} în agenda principală și continuați pe site"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1603
-msgid ""
-"This address will be saved to your Master addressbook. Select this option "
-"for addresses you wish to keep separate from the main router address book, "
-"but don't mind publishing."
-msgstr ""
-"Această adresă va fi salvată în manualul dvs. de adrese master. Selectați "
-"această opțiune pentru adresele pe care doriți să le păstrați separat de "
-"agenda principală de adrese a routerului, dar nu vă deranjează publicarea."
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "Această adresă va fi salvată în manualul dvs. de adrese master. Selectați această opțiune pentru adresele pe care doriți să le păstrați separat de agenda principală de adrese a routerului, dar nu vă deranjează publicarea."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1608
 #, java-format
@@ -703,12 +508,8 @@ msgid "Save {0} to private addressbook and continue to website"
 msgstr "Salvați {0} în agenda privată și continuați pe site"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1609
-msgid ""
-"This address will be saved to your Private addressbook, ensuring it is never "
-"published."
-msgstr ""
-"Această adresă va fi salvată în agenda dvs. privată, asigurându-vă că nu "
-"este niciodată publicată."
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "Această adresă va fi salvată în agenda dvs. privată, asigurându-vă că nu este niciodată publicată."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1634
 msgid "Base32 address requires lookup password"
@@ -735,15 +536,8 @@ msgid "Encryption key"
 msgstr "Cheia de criptare"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1653
-msgid ""
-"You must either enter a PSK encryption key provided by the server operator, "
-"or generate a DH encryption key and send that to the server operator."
-msgstr ""
-"Trebuie fie să introduceți o cheie de criptare PSK furnizată de operatorul "
-"serverului, fie să generați o cheie de criptare DH și să o trimiteți "
-"operatorului serverului.Trebuie să introduceți o cheie de criptare PSK "
-"furnizată de operatorul serverului, sau să generați o cheie de criptare DH "
-"și să o trimiteți operatorului de server."
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Trebuie fie să introduceți o cheie de criptare PSK furnizată de operatorul serverului, fie să generați o cheie de criptare DH și să o trimiteți operatorului serverului.Trebuie să introduceți o cheie de criptare PSK furnizată de operatorul serverului, sau să generați o cheie de criptare DH și să o trimiteți operatorului de server."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1655
 msgid "Ask the server operator for help."

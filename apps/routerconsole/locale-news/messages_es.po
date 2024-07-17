@@ -22,63 +22,33 @@ msgstr "&iexcl;Bienvenido a I2P+!"
 
 #, java-format
 msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
-msgstr ""
-"¡Por favor, tenga {0}paciencia{1} mientras I2P se arranca y encuentra otros "
-"pares!"
+msgstr "¡Por favor, tenga {0}paciencia{1} mientras I2P se arranca y encuentra otros pares!"
 
 #, java-format
-msgid ""
-"While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}"
-"configuration page{3}."
-msgstr ""
-"Este es el momento ideal para adaptar tu {0}configuraci&oacute;n del ancho "
-"de banda{1} en la {2}p&aacute;gina de configuraci&oacute;n{3}."
+msgid "While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}configuration page{3}."
+msgstr "Este es el momento ideal para adaptar tu {0}configuraci&oacute;n del ancho de banda{1} en la {2}p&aacute;gina de configuraci&oacute;n{3}."
 
 #, java-format
-msgid ""
-"You can also run the bandwidth test via the {0}Setup Wizard{1} to help with "
-"determining your bandwidth, and a guide for new users and additional "
-"documentation including an FAQ is available in the {2}help section{1}."
-msgstr ""
-"También puede ejecutar la prueba de ancho de banda a través {0}del Asistente "
-"de configuración{1} para ayudar a determinar su ancho de banda, y una guía "
-"para nuevos usuarios y documentación adicional, incluida una FAQ, está "
-"disponible en {2}la sección de ayuda{1}."
+msgid "You can also run the bandwidth test via the {0}Setup Wizard{1} to help with determining your bandwidth, and a guide for new users and additional documentation including an FAQ is available in the {2}help section{1}."
+msgstr "También puede ejecutar la prueba de ancho de banda a través {0}del Asistente de configuración{1} para ayudar a determinar su ancho de banda, y una guía para nuevos usuarios y documentación adicional, incluida una FAQ, está disponible en {2}la sección de ayuda{1}."
 
 #, java-format
-msgid ""
-"You may also wish to enable I2P+ updates on {0}the update configuration "
-"page{1}."
-msgstr ""
-"También es posible que desee habilitar las actualizaciones I2P+ en {0}la "
-"página de configuración de actualización{1}."
+msgid "You may also wish to enable I2P+ updates on {0}the update configuration page{1}."
+msgstr "También es posible que desee habilitar las actualizaciones I2P+ en {0}la página de configuración de actualización{1}."
 
 msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
-msgstr ""
-"También puede configurar su navegador para usar el proxy de I2P para ver las "
-"eepsites."
+msgstr "También puede configurar su navegador para usar el proxy de I2P para ver las eepsites."
 
-msgid ""
-"Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your "
-"browser settings."
-msgstr ""
-"Simplemente escriba 127.0.0.1 (o localhost) puerto 4444 en la configuración "
-"de proxy de su navegador."
+msgid "Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your browser settings."
+msgstr "Simplemente escriba 127.0.0.1 (o localhost) puerto 4444 en la configuración de proxy de su navegador."
 
 msgid "Do not use SOCKS for this."
 msgstr "No use SOCKS para esto."
 
 #, java-format
-msgid ""
-"More information can be found on the {0}I2P browser proxy setup page{1}."
-msgstr ""
-"Puede encontrarse más información en la web{1} de configuración del proxy "
-"del navegador de {0}I2P."
+msgid "More information can be found on the {0}I2P browser proxy setup page{1}."
+msgstr "Puede encontrarse más información en la web{1} de configuración del proxy del navegador de {0}I2P."
 
 #, java-format
-msgid ""
-"Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}"
-"#saltR{3}."
-msgstr ""
-"Dirija su cliente de IRC hacia {0}localhost:6668{1} y salúdenos en {2}"
-"#saltR{3}."
+msgid "Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#saltR{3}."
+msgstr "Dirija su cliente de IRC hacia {0}localhost:6668{1} y salúdenos en {2}#saltR{3}."

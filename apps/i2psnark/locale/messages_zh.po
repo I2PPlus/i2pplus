@@ -160,8 +160,7 @@ msgid "I2CP settings changed to {0}"
 msgstr "I2CP设置改为{0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1496
-msgid ""
-"Unable to connect with the new settings, reverting to the old I2CP settings"
+msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
 msgstr "无法通过新设置连接，恢复I2CP的旧设置"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1504
@@ -263,9 +262,7 @@ msgid "Add and Create sections enabled on all torrent listing pages."
 msgstr "在所有洪流列表页上启用了添加和创建部分。"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1672
-msgid ""
-"Add and Create sections to display only on first page of multipage torrent "
-"listing pages."
+msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "添加和创建部分，只在多页洪流列表页的第一页显示。"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1683
@@ -345,31 +342,18 @@ msgstr "错误 - 私有种子\"{0}\"中缺少 I2P Tracker"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2014
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and "
-"DHT only."
-msgstr ""
-"警告 - “{0}”中没有 I2P 跟踪器，将仅向 I2P 开放跟踪器和 DHT 通告。警告 - "
-"\"{0}\"中缺少 I2P Tracker，程序将仅通过 I2P 中的OpenTracker 和 DHT 下载。"
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "警告 - “{0}”中没有 I2P 跟踪器，将仅向 I2P 开放跟踪器和 DHT 通告。警告 - \"{0}\"中缺少 I2P Tracker，程序将仅通过 I2P 中的OpenTracker 和 DHT 下载。"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2016
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will "
-"announce to DHT only."
-msgstr ""
-"警告 - “{0}”中没有 I2P 跟踪器，并且开放跟踪器被禁用，将仅向 DHT 通告。警告 - "
-"\"{0}\"中缺少 I2P Tracker，已禁用 I2P  Open Tracker，程序将仅通过 DHT 下载。"
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "警告 - “{0}”中没有 I2P 跟踪器，并且开放跟踪器被禁用，将仅向 DHT 通告。警告 - \"{0}\"中缺少 I2P Tracker，已禁用 I2P  Open Tracker，程序将仅通过 DHT 下载。"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2018
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", and DHT and open trackers are "
-"disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr ""
-"警告 - “{0}”中没有 I2P 跟踪器，并且 DHT 和开放式跟踪器被禁用，您应该在启动 "
-"torrent 之前启用开放式跟踪器或 DHT。警告 - \"{0}\"中缺少 I2P Tracker，已禁用 "
-"I2P  Open Tracker 和 DHT，下载先您需要先启用  OpenTracker 或 DHT 。"
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "警告 - “{0}”中没有 I2P 跟踪器，并且 DHT 和开放式跟踪器被禁用，您应该在启动 torrent 之前启用开放式跟踪器或 DHT。警告 - \"{0}\"中缺少 I2P Tracker，已禁用 I2P  Open Tracker 和 DHT，下载先您需要先启用  OpenTracker 或 DHT 。"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2048
 #, java-format
@@ -407,12 +391,8 @@ msgstr "正在获取{0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2191
 #, java-format
-msgid ""
-"Open trackers are disabled and we have no DHT peers. Fetch of {0} may not "
-"succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr ""
-"开放跟踪器已禁用，我们没有 DHT 对等点。OpenTracker被禁用，程序目前没有DHT节"
-"点。{0}的下载不会成功，直到您启动另一个种子的下载、重新启用OpenTracker或DHT。"
+msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
+msgstr "开放跟踪器已禁用，我们没有 DHT 对等点。OpenTracker被禁用，程序目前没有DHT节点。{0}的下载不会成功，直到您启动另一个种子的下载、重新启用OpenTracker或DHT。"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:2197
 #, java-format
@@ -516,11 +496,6 @@ msgstr "正在连接到I2P"
 msgid "Starting up torrent {0}"
 msgstr "正在启动种子{0}"
 
-#: ../java/src/org/klomp/snark/SnarkManager.java:3003
-#, fuzzy, java-format
-msgid "Down bandwidth limit is {0} KBps"
-msgstr "最小上传带宽限制为 {0} KB/s"
-
 #: ../java/src/org/klomp/snark/SnarkManager.java:3004
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -533,20 +508,17 @@ msgstr "I2P+ I2PSnark单机版{0}启动"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:3037
 #, java-format
-msgid ""
-"Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "上传带宽限制为{0}KBps，最多{1}个对等节点。"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:3047
 #, java-format
-msgid ""
-"Storage: {0}MB currently available for downloads on configured data partition"
+msgid "Storage: {0}MB currently available for downloads on configured data partition"
 msgstr ""
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:3049
 #, java-format
-msgid ""
-"Warning - Only {0}MB available for downloads on configured data partition"
+msgid "Warning - Only {0}MB available for downloads on configured data partition"
 msgstr ""
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:3084
@@ -576,12 +548,6 @@ msgstr "正在启动种子{0}"
 #: ../java/src/org/klomp/snark/SnarkManager.java:3495
 msgid "Unable to load torrent create file filter config: "
 msgstr ""
-
-#: ../java/src/org/klomp/snark/SnarkManager.java:3573
-#: ../java/src/org/klomp/snark/SnarkManager.java:3574
-#, fuzzy
-msgid "Unable to save torrent create file filter config: "
-msgstr "无法保存设置到{0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:3590
 msgid "Torrent not found"
@@ -687,16 +653,12 @@ msgstr "匿名的 BitTorrent 客户端"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:406
 #, java-format
-msgid ""
-"Are you sure you want to delete the file \\''{0}\\'' (downloaded data will "
-"not be deleted) ?"
+msgid "Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?"
 msgstr "你确定你要删除文件 \\“{0} \\” (下载的数据不会被删除)？"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:408
 #, java-format
-msgid ""
-"Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded "
-"data?"
+msgid "Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?"
 msgstr "您确定要删除种子“{0}”(下载的数据文件会一并被删除)?"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:422
@@ -757,12 +719,8 @@ msgstr "收缩"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:687
 #, java-format
-msgid ""
-"Warning! Javascript is disabled in your browser. If {0} is enabled, you will "
-"lose any input in the add/create torrent sections when a refresh occurs."
-msgstr ""
-"警告！ 警告! 您的浏览器中禁用了Javascript。如果{0}被启用，当刷新时，您将失去"
-"在添加/创建种子部分的任何输入。"
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "警告！ 警告! 您的浏览器中禁用了Javascript。如果{0}被启用，当刷新时，您将失去在添加/创建种子部分的任何输入。"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:689
 msgid "page refresh"
@@ -1154,9 +1112,7 @@ msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2134
 #, java-format
-msgid ""
-"The following files or folders were excluded from \"{0}\" due to filter "
-"rules: "
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
 msgstr ""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2137
@@ -1166,13 +1122,8 @@ msgstr "种子创建成功\"{0}\""
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2139
 #, java-format
-msgid ""
-"Many I2P trackers require you to register new torrents before seeding - "
-"please do so before starting \"{0}\""
-msgstr ""
-"许多 I2P 跟踪器要求您在播种前注册新的种子 - 请在开始“{0}”之前注册新的种子多数"
-"I2PTracker需要用户在做种前注册新种子 - 请在启动 \"{0}\"前到所使用的Tracker进"
-"行注册。"
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "许多 I2P 跟踪器要求您在播种前注册新的种子 - 请在开始“{0}”之前注册新的种子多数I2PTracker需要用户在做种前注册新种子 - 请在启动 \"{0}\"前到所使用的Tracker进行注册。"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2141
 #, java-format
@@ -1228,26 +1179,10 @@ msgstr "恢复默认值"
 msgid "Restored default trackers"
 msgstr "恢复默认 Tracker"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2302
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3754
-#, fuzzy
-msgid "Save Filter Configuration"
-msgstr "保存 Tracker 设置"
-
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2344
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3756
 msgid "Add File Filter"
 msgstr ""
-
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2354
-#, fuzzy
-msgid "Enter valid name and filter pattern"
-msgstr "请输入有效的 Tracker 名称与链接"
-
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2358
-#, fuzzy
-msgid "Restored default torrent create filters"
-msgstr "恢复默认 Tracker"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2509
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4536
@@ -1429,11 +1364,8 @@ msgid "From URL"
 msgstr "从URL"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3239
-msgid ""
-"Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr ""
-"输入 torrent 文件下载 URL（仅限 I2P）、磁力链接或信息哈希输入种子文件的下载链"
-"接(仅支持I2P网络链接)，magnet, maggot 链接或信息散列值"
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "输入 torrent 文件下载 URL（仅限 I2P）、磁力链接或信息哈希输入种子文件的下载链接(仅支持I2P网络链接)，magnet, maggot 链接或信息散列值"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3242
 msgid "Add torrent"
@@ -1469,16 +1401,6 @@ msgstr "要做种的文件或目录（完整路径或包含在 {0} 目录中）"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3275
 msgid "Create torrent"
 msgstr "创建种子"
-
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3277
-#, fuzzy
-msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr "取消下载任务并删除对应种子文件"
-
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3278
-#, fuzzy
-msgid "Content Filters"
-msgstr "Torrent过滤栏"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3296
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3771
@@ -1599,9 +1521,7 @@ msgid "Your browser does not support this feature."
 msgstr "您的浏览器不支持这个特性."
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3497
-msgid ""
-"Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and "
-"collapse by default in non-embedded mode"
+msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
 msgstr "允许 \"添加种子 \"和 \"创建种子 \"面板折叠，并在非嵌入模式下默认折叠"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3501
@@ -1630,9 +1550,7 @@ msgid "Persist Add/Create"
 msgstr "坚持添加/创建"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3524
-msgid ""
-"Display the 'Add' and 'Create' sections on all torrent listing pages when in "
-"multipage mode"
+msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
 msgstr "在多页面模式下，在所有洪流列表页面上显示 \"添加 \"和 \"创建 \"部分"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3531
@@ -1672,16 +1590,6 @@ msgstr "种子选项"
 msgid "Half available bandwidth recommended."
 msgstr "推荐设置为可用带宽的一半。"
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3562
-#, fuzzy
-msgid "Bandwidth limit"
-msgstr "上传带宽限制"
-
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3565
-#, fuzzy
-msgid "Maximum bandwidth allocated for downloading"
-msgstr "最大上传带宽"
-
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3568
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "最大上传带宽"
@@ -1707,9 +1615,7 @@ msgid "Use open trackers also"
 msgstr "同时使用OpenTracker"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3592
-msgid ""
-"Announce torrents to open trackers as well as trackers listed in the torrent "
-"file"
+msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
 msgstr "在向种子内的Tracker发布的同时向OpenTracker发布"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3595
@@ -1725,9 +1631,7 @@ msgid "Auto start torrents"
 msgstr "自动开始种子"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3606
-msgid ""
-"Automatically start torrents when added and restart torrents when I2PSnark "
-"starts"
+msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
 msgstr "当种子添加后自动启动种子且当I2PSnark启动时自动启动种子"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3611
@@ -1759,9 +1663,7 @@ msgid "Files readable by all"
 msgstr "文件对所有人可读"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3635
-msgid ""
-"Set file permissions to allow other local users to access the downloaded "
-"files"
+msgid "Set file permissions to allow other local users to access the downloaded files"
 msgstr "设置文件的权限以允许其他本地用户浏览下载"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3638
@@ -1769,15 +1671,8 @@ msgid "Max files per torrent"
 msgstr "每个洪流的最大文件数"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3640
-msgid ""
-"Maximum number of files permitted per torrent - note that trackers may set "
-"their own limits, and your OS may limit the number of open files, preventing "
-"torrents with many files (and subsequent torrents) from loading"
-msgstr ""
-"每个 torrent 允许的最大文件数 - 请注意，跟踪器可能会设置自己的限制，并且您的"
-"操作系统可能会限制打开文件的数量，从而阻止加载包含许多文件的 torrent（以及后"
-"续 torrent）每个种子允许的最大文件数--注意tracker可能会有他们自己的限制，你的"
-"操作系统可能会限制打开的文件数，防止有许多文件的种子（以及后续的种子）被加载"
+msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
+msgstr "每个 torrent 允许的最大文件数 - 请注意，跟踪器可能会设置自己的限制，并且您的操作系统可能会限制打开文件的数量，从而阻止加载包含许多文件的 torrent（以及后续 torrent）每个种子允许的最大文件数--注意tracker可能会有他们自己的限制，你的操作系统可能会限制打开的文件数，防止有许多文件的种子（以及后续的种子）被加载"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3647
 msgid "Tunnel Configuration"
@@ -1811,11 +1706,6 @@ msgstr "保存设置"
 msgid "Torrent Create File Filtering"
 msgstr ""
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3714
-#, fuzzy
-msgid "Mark filter for deletion"
-msgstr "标记删除Tracker"
-
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3715
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3775
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4742
@@ -1826,11 +1716,6 @@ msgstr "名称"
 msgid "Filter Pattern"
 msgstr ""
 
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3717
-#, fuzzy
-msgid "Starts With"
-msgstr "正在启动"
-
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3718
 msgid "Contains"
 msgstr ""
@@ -1838,11 +1723,6 @@ msgstr ""
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3719
 msgid "Ends With"
 msgstr ""
-
-#: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3720
-#, fuzzy
-msgid "Enabled by Default"
-msgstr "启用自动启动"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3744
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3835
@@ -1890,20 +1770,12 @@ msgid_plural "{0} tunnels"
 msgstr[0] "{0}隧道"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3915
-msgid ""
-"This configures the maximum number of tunnels to open, determined by the "
-"number of connected peers (actual usage may be less)"
-msgstr ""
-"这配置了打开的最大隧道数量，由连接的对等点数量决定（实际使用量可能会更少）这"
-"配置了要打开的最大隧道数，由连接的对等体数量决定（实际使用可能更少）。"
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "这配置了打开的最大隧道数量，由连接的对等点数量决定（实际使用量可能会更少）这配置了要打开的最大隧道数，由连接的对等体数量决定（实际使用可能更少）。"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3919
-msgid ""
-"Changing this setting to less than 3 hops may improve speed at the expense "
-"of anonymity and is not recommended"
-msgstr ""
-"将此设置更改为少于 3 跳可能会提高速度，但会牺牲匿名性，因此不建议将此设置改为"
-"小于3跳，可能会以牺牲匿名性为代价来提高速度，因此不建议这样做"
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "将此设置更改为少于 3 跳可能会提高速度，但会牺牲匿名性，因此不建议将此设置改为小于3跳，可能会以牺牲匿名性为代价来提高速度，因此不建议这样做"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4226
 msgid "Info hash"
@@ -1941,9 +1813,7 @@ msgstr "已跳过"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4416
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4478
-msgid ""
-"Only I2P trackers will be used; non-I2P trackers are displayed for "
-"informational purposes only"
+msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
 msgstr "只有I2P追踪器会被使用；非I2P追踪器的显示只是为了提供信息"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:4482

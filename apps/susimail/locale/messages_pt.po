@@ -69,24 +69,12 @@ msgstr "Correio em massa"
 msgid "Inbox"
 msgstr "Caixa de Entrada"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Sem novas mensagens"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "A mensagem tem um anexo"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "desconhecido"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -272,9 +260,7 @@ msgstr "Nenhuma mensagem marcada para eliminação."
 #: src/src/i2p/susi/webmail/WebMail.java:1970
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"Host inalteradoHost inalterado. Editar arquivo de configação {0} para "
-"alterar o host."
+msgstr "Host inalteradoHost inalterado. Editar arquivo de configação {0} para alterar o host."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1990
 msgid "Configuration saved"
@@ -538,11 +524,6 @@ msgstr "Tamanho"
 msgid "Mark for deletion"
 msgstr "Marcar para excluir"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "A mensagem é nova"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "A mensagem é nova"
@@ -635,11 +616,6 @@ msgstr "Voltar à Pasta"
 msgid "Move to Folder"
 msgstr "Mover para pasta"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "A mensagem é nova"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "Tamanho da página da pasta"
@@ -668,8 +644,7 @@ msgstr "Nenhuma resposta do servidor"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"Falha no login do servidor de e-mail, nome de usuário ou senha incorretos."
+msgstr "Falha no login do servidor de e-mail, nome de usuário ou senha incorretos."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."

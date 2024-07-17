@@ -69,24 +69,12 @@ msgstr "Toplu E-posta"
 msgid "Inbox"
 msgstr "Gelen Kutusu"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Yeni bir ileti yok"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "İletinin ek dosyası var"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "bilinmiyor"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -272,9 +260,7 @@ msgstr "Silinmek üzere işaretlenmiş bir ileti yok."
 #: src/src/i2p/susi/webmail/WebMail.java:1970
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"Sunucu değiştirilmedi. Sunucuyu değiştirmek için {0} ayar dosyasını "
-"düzenleyin."
+msgstr "Sunucu değiştirilmedi. Sunucuyu değiştirmek için {0} ayar dosyasını düzenleyin."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1990
 msgid "Configuration saved"
@@ -538,11 +524,6 @@ msgstr "Boyut"
 msgid "Mark for deletion"
 msgstr "Silinmek üzere işaretleyin"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "İleti yeni"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "İleti yeni"
@@ -634,11 +615,6 @@ msgstr "Klasöre Geri Dön"
 #: src/src/i2p/susi/webmail/WebMail.java:3867
 msgid "Move to Folder"
 msgstr "Klasöre Taşı"
-
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "İleti yeni"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"

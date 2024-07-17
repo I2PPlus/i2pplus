@@ -69,24 +69,12 @@ msgstr "Joukkoposti"
 msgid "Inbox"
 msgstr "Tulevat"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Ei uusia viestejä"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "Viestissä on liite"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "tuntematon"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -536,11 +524,6 @@ msgstr "Koko"
 msgid "Mark for deletion"
 msgstr "Merkitse poistettavaksi"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "Viesti on uusi"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "Viesti on uusi"
@@ -633,11 +616,6 @@ msgstr "Takaisin kansioon"
 msgid "Move to Folder"
 msgstr "Siirrä kansioon"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "Viesti on uusi"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "Kansiosivukoko"
@@ -666,15 +644,11 @@ msgstr "Palvelin ei vastaa"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"Sähköpostipalvelimeen kirjautuminen epäonnistui, väärä käyttäjätunnus tai "
-"salasana."
+msgstr "Sähköpostipalvelimeen kirjautuminen epäonnistui, väärä käyttäjätunnus tai salasana."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Kirjaudu ulos ja kirjaudu sitten uudelleen sisään oikealla "
-"käyttäjätunnuksella ja salasanalla."
+msgstr "Kirjaudu ulos ja kirjaudu sitten uudelleen sisään oikealla käyttäjätunnuksella ja salasanalla."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

@@ -4,7 +4,6 @@
 # To contribute translations, see https://www.transifex.com/otf/I2P/dashboard/
 # zzz <zzz@mail.i2p>, 2017.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P man pages\n"
@@ -12,7 +11,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. type: TH
 #: man/eepget.1:1
@@ -255,144 +254,4 @@ msgstr "Kontrolli I2P teenust."
 #: man/i2prouter.1:15
 #, no-wrap
 msgid "B<console>"
-msgstr "B<konsol>"
-
-#. type: Plain text
-#: man/i2prouter.1:17
-msgid "Runs I2P as a console application under the current user."
-msgstr "Käivitab I2P konsolirakenduse praeguse kasutaja all."
-
-#. type: IP
-#: man/i2prouter.1:19
-#, no-wrap
-msgid "B<start>"
-msgstr "B<käivita>"
-
-#. type: Plain text
-#: man/i2prouter.1:21
-msgid "Starts the I2P service."
-msgstr "Käivitab I2P teenuse."
-
-#. type: IP
-#: man/i2prouter.1:23
-#, no-wrap
-msgid "B<stop>"
-msgstr "B<peata>"
-
-#. type: Plain text
-#: man/i2prouter.1:25
-msgid "Stops the I2P service."
-msgstr "Peatab I2P teenuse."
-
-#. type: IP
-#: man/i2prouter.1:27
-#, no-wrap
-msgid "B<restart>"
-msgstr "B<taaskäivita>"
-
-#. type: Plain text
-#: man/i2prouter.1:29
-msgid "Stops the I2P service and then starts it."
-msgstr "Peatab I2P teenuse ja seejärel käivitab selle."
-
-#. type: IP
-#: man/i2prouter.1:31
-#, no-wrap
-msgid "B<condrestart>"
-msgstr "B<olukorrataaskäivita>"
-
-#. type: Plain text
-#: man/i2prouter.1:33
-msgid "Restart the I2P service only if it is already running."
-msgstr "Taaskäivita I2P teenus vaid siis, kui see juba töötab."
-
-#. type: IP
-#: man/i2prouter.1:35
-#, no-wrap
-msgid "B<graceful>"
-msgstr "B<armas>"
-
-#. type: Plain text
-#: man/i2prouter.1:37
-msgid "Stop I2P gracefully (may take up to 11 minutes)"
-msgstr "Peata I2P armasalt (võib võtta kuni 11 minutit)"
-
-#. type: IP
-#: man/i2prouter.1:39
-#, no-wrap
-msgid "B<install>"
-msgstr "B<installeeri>"
-
-#. type: Plain text
-#: man/i2prouter.1:41
-msgid "Install initscript to start I2P automatically when the system boots."
-msgstr "Installeeri initscript, et käivitada I2P automaatselt süsteemi käivitamisel."
-
-#. type: IP
-#: man/i2prouter.1:43
-#, no-wrap
-msgid "B<remove>"
-msgstr "B<eemalda>"
-
-#. type: Plain text
-#: man/i2prouter.1:45
-msgid "Uninstall initscript that was installed with B<install>"
-msgstr "Eemalda initscript, mis installeeriti B<installeeri> abil"
-
-#. type: IP
-#: man/i2prouter.1:47
-#, no-wrap
-msgid "B<status>"
-msgstr "B<olekus>"
-
-#. type: Plain text
-#: man/i2prouter.1:49
-msgid "Prints whether the I2P service is running."
-msgstr "Trükkib, kas I2P teenus töötab."
-
-#. type: IP
-#: man/i2prouter.1:51
-#, no-wrap
-msgid "B<dump>"
-msgstr "B<purge>"
-
-#. type: Plain text
-#: man/i2prouter.1:53
-msgid "Dumps the current threads into B<wrapper.log>."
-msgstr "Purjeerib praegused thread'id B<wrapper.log>."
-
-#. type: Plain text
-#: man/i2prouter.1:61
-msgid "B<i2prouter-nowrapper>(1)"
-msgstr "B<i2prouter-nowrapper>(1)"
-
-#. type: TH
-#: man/i2prouter-nowrapper.1:1
-#, no-wrap
-msgid "I2PROUTER-NOWRAPPER"
-msgstr "I2PROUTER-NOWRAPPER"
-
-#. type: Plain text
-#: man/i2prouter-nowrapper.1:5
-msgid "i2prouter-nowrapper - start the I2P router"
-msgstr "i2prouter-nowrapper - käivita I2P ruuter"
-
-#. type: Plain text
-#: man/i2prouter-nowrapper.1:8
-msgid "B<i2prouter-nowrapper>"
-msgstr "B<i2prouter-nowrapper>"
-
-#. type: Plain text
-#: man/i2prouter-nowrapper.1:14
-msgid "Start the I2P router, without the service wrapper.  This means the router will not restart if it crashes.  Also, it will use the default memory size, which may not be enough for I2P."
-msgstr "Käivita I2P ruuter ilma teenuse hüvedeta. See tähendab, et ruuter ei taaskäivitu, kui see kukub alla. Samuti kasutatakse vaikimisi mälu suurust, mis võib mitte piisata I2P jaoks."
-
-#. type: Plain text
-#: man/i2prouter-nowrapper.1:23
-msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
-msgstr "Te peaksite tegelikult kasutama B<i2prouter>(1)  skripti. Valikuid ei ole. Ruuteri peatamiseks kasutage oma brauserit E<.UR http://localhost:7657/> ruuterikonsoli juurdepääsuks E<.UE .>"
-
-#. type: Plain text
-#: man/i2prouter-nowrapper.1:31
-msgid "B<i2prouter>(1)"
-msgstr "B<i2prouter>(1)"
+msgstr "B<console>"

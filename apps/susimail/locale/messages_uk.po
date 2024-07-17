@@ -12,8 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 
 #: src/src/i2p/susi/webmail/MailCache.java:548
 #: src/src/i2p/susi/webmail/WebMail.java:2619
@@ -71,24 +70,12 @@ msgstr "Об'ємна пошта"
 msgid "Inbox"
 msgstr "Вхідні"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Немає нових повідомлень"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "Повідомлення містить прикріплені файли"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "Невідомий"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -541,11 +528,6 @@ msgstr "Розмір"
 msgid "Mark for deletion"
 msgstr "Позначити для видалення"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "Нове повідомлення"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "Нове повідомлення"
@@ -638,11 +620,6 @@ msgstr "Назад в Папку"
 msgid "Move to Folder"
 msgstr "Перемістити до папки"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "Нове повідомлення"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "Кількість листів на сторінці"
@@ -671,13 +648,11 @@ msgstr "Немає відповіді від сервера"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"Помилка входу на поштовий сервер, неправильне ім’я користувача або пароль."
+msgstr "Помилка входу на поштовий сервер, неправильне ім’я користувача або пароль."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Вийдіть, а потім увійдіть знову з правильним іменем користувача та паролем."
+msgstr "Вийдіть, а потім увійдіть знову з правильним іменем користувача та паролем."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

@@ -70,24 +70,12 @@ msgstr "Hromadná pošta"
 msgid "Inbox"
 msgstr "Doručené"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Žádné nové zprávy"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "Zpráva obsahuje přílohu"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "neznámý"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -540,11 +528,6 @@ msgstr "Velikost"
 msgid "Mark for deletion"
 msgstr "Označit pro smazání"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "Zpráva je nová"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "Zpráva je nová"
@@ -637,11 +620,6 @@ msgstr "Zpět do složky"
 msgid "Move to Folder"
 msgstr "Přesunout do složky"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "Zpráva je nová"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "Velikost stránky složky"
@@ -670,15 +648,11 @@ msgstr "Žádná odpověď od serveru"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"Přihlášení k poštovnímu serveru se nezdařilo, nesprávné uživatelské jméno "
-"nebo heslo."
+msgstr "Přihlášení k poštovnímu serveru se nezdařilo, nesprávné uživatelské jméno nebo heslo."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Odhlaste se a poté se znovu přihlaste se správným uživatelským jménem a "
-"heslem."
+msgstr "Odhlaste se a poté se znovu přihlaste se správným uživatelským jménem a heslem."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

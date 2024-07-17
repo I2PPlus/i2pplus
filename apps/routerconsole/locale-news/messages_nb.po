@@ -22,60 +22,33 @@ msgstr "Velkommen til I2P+!"
 
 #, java-format
 msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
-msgstr ""
-"{0}vær tolmodig{1} i påvente av I2P+-oppstart og tilknytning til likemenn."
+msgstr "{0}vær tolmodig{1} i påvente av I2P+-oppstart og tilknytning til likemenn."
 
 #, java-format
-msgid ""
-"While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}"
-"configuration page{3}."
-msgstr ""
-"Mens du venter, {0}gjør båndbreddeinnstillinger{1} på {2}oppsettssiden{3}."
+msgid "While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}configuration page{3}."
+msgstr "Mens du venter, {0}gjør båndbreddeinnstillinger{1} på {2}oppsettssiden{3}."
 
 #, java-format
-msgid ""
-"You can also run the bandwidth test via the {0}Setup Wizard{1} to help with "
-"determining your bandwidth, and a guide for new users and additional "
-"documentation including an FAQ is available in the {2}help section{1}."
-msgstr ""
-"Du kan også kjøre båndbredde -testen via {0} Setup Wizard {1} for å hjelpe "
-"deg med å bestemme båndbredden din, og en guide for nye brukere og "
-"tilleggsdokumentasjon inkludert en FAQ er tilgjengelig i {2} Hjelp -"
-"seksjonen {1}."
+msgid "You can also run the bandwidth test via the {0}Setup Wizard{1} to help with determining your bandwidth, and a guide for new users and additional documentation including an FAQ is available in the {2}help section{1}."
+msgstr "Du kan også kjøre båndbredde -testen via {0} Setup Wizard {1} for å hjelpe deg med å bestemme båndbredden din, og en guide for nye brukere og tilleggsdokumentasjon inkludert en FAQ er tilgjengelig i {2} Hjelp -seksjonen {1}."
 
 #, java-format
-msgid ""
-"You may also wish to enable I2P+ updates on {0}the update configuration "
-"page{1}."
-msgstr ""
-"Det kan også være lurt å aktivere I2P+ oppdateringer på {0}"
-"Oppdateringskonfigurasjonssiden{1}."
+msgid "You may also wish to enable I2P+ updates on {0}the update configuration page{1}."
+msgstr "Det kan også være lurt å aktivere I2P+ oppdateringer på {0}Oppdateringskonfigurasjonssiden{1}."
 
 msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
-msgstr ""
-"Du kan også sette opp din nettleser for bruk med I2P-mellomtjener for å nå "
-"eep-sider."
+msgstr "Du kan også sette opp din nettleser for bruk med I2P-mellomtjener for å nå eep-sider."
 
-msgid ""
-"Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your "
-"browser settings."
-msgstr ""
-"Skriv inn 127.0.0.1 (eller localhost) port 4444 som en http-mellomtjener i "
-"dine nettleserinnstillinger."
+msgid "Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your browser settings."
+msgstr "Skriv inn 127.0.0.1 (eller localhost) port 4444 som en http-mellomtjener i dine nettleserinnstillinger."
 
 msgid "Do not use SOCKS for this."
 msgstr "Ikke bruk SOCKS for dette."
 
 #, java-format
-msgid ""
-"More information can be found on the {0}I2P browser proxy setup page{1}."
-msgstr ""
-"Mer informasjon er å finne på {0}oppsettssiden for I2P-mellomtjener{1}."
+msgid "More information can be found on the {0}I2P browser proxy setup page{1}."
+msgstr "Mer informasjon er å finne på {0}oppsettssiden for I2P-mellomtjener{1}."
 
 #, java-format
-msgid ""
-"Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}"
-"#saltR{3}."
-msgstr ""
-"Rett din IRC-klient inn mot {0}localhost:6668{1} og si hei til oss på {2}"
-"#saltR{3}."
+msgid "Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#saltR{3}."
+msgstr "Rett din IRC-klient inn mot {0}localhost:6668{1} og si hei til oss på {2}#saltR{3}."

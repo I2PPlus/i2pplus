@@ -69,24 +69,12 @@ msgstr "Massepost"
 msgid "Inbox"
 msgstr "Indbakke"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Ingen nye beskeder"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "Besked har en vedhæftet fil"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "ukendt"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -536,11 +524,6 @@ msgstr "Størrelse"
 msgid "Mark for deletion"
 msgstr "Marker for sletning"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "Besked er ny"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "Besked er ny"
@@ -633,11 +616,6 @@ msgstr "Tilbage til mappe"
 msgid "Move to Folder"
 msgstr "Flyt til mappe"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "Besked er ny"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "Mappe Sidestørrelse"
@@ -670,8 +648,7 @@ msgstr "Mail server login mislykkedes, forkert brugernavn eller adgangskode."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Log ud og log derefter på igen med det korrekte brugernavn og password."
+msgstr "Log ud og log derefter på igen med det korrekte brugernavn og password."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

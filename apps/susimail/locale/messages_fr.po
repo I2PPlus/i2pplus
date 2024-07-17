@@ -69,24 +69,12 @@ msgstr "Courriel de masse"
 msgid "Inbox"
 msgstr "Boîte de réception"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Aucun nouveau message"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "Le message contient un fichier joint"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "inconnu"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -272,9 +260,7 @@ msgstr "Aucun message n’est marqué pour suppression."
 #: src/src/i2p/susi/webmail/WebMail.java:1970
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"L’hôte est inchangé. Modifier le fichier de configuration {0} pour changer "
-"l’hôte."
+msgstr "L’hôte est inchangé. Modifier le fichier de configuration {0} pour changer l’hôte."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1990
 msgid "Configuration saved"
@@ -282,8 +268,7 @@ msgstr "La configuration a été enregistrée"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2012
 msgid "Invalid pagesize number, resetting to default value."
-msgstr ""
-"La taille de page est invalide, réinitialisation à la valeur par défaut."
+msgstr "La taille de page est invalide, réinitialisation à la valeur par défaut."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2477
 #: src/src/i2p/susi/webmail/WebMail.java:3454
@@ -539,11 +524,6 @@ msgstr "Taille"
 msgid "Mark for deletion"
 msgstr "Marquer pour suppression"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "Le message est nouveau"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "Le message est nouveau"
@@ -636,11 +616,6 @@ msgstr "Retour au dossier"
 msgid "Move to Folder"
 msgstr "Déplacer vers le dossier"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "Le message est nouveau"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "Taille de la page du dossier"
@@ -669,15 +644,11 @@ msgstr "Aucune réponse du serveur"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"Échec de connexion au serveur de courriel, nom d'utilisateur ou mot de passe "
-"erroné."
+msgstr "Échec de connexion au serveur de courriel, nom d'utilisateur ou mot de passe erroné."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Déconnectez-vous puis reconnectez-vous avec le bon nom d'utilisateur et le "
-"bon mot de passe."
+msgstr "Déconnectez-vous puis reconnectez-vous avec le bon nom d'utilisateur et le bon mot de passe."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

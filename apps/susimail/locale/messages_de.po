@@ -69,24 +69,12 @@ msgstr "Bulk Email"
 msgid "Inbox"
 msgstr "Posteingang"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Keine neue Nachricht"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "Nachricht hat einen Anhang"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "unbekannt"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -115,8 +103,7 @@ msgstr "Teil ({0}) aufgrund von {1} nicht angezeigt"
 
 #: src/src/i2p/susi/webmail/WebMail.java:647
 msgid "Reloading the page may fix the error."
-msgstr ""
-"Durch Neuladen der Seite kann der Fehler möglicherweise behoben werden."
+msgstr "Durch Neuladen der Seite kann der Fehler möglicherweise behoben werden."
 
 #: src/src/i2p/susi/webmail/WebMail.java:671
 msgid "File"
@@ -273,9 +260,7 @@ msgstr "Keine Nachrichten zum Löschen markiert"
 #: src/src/i2p/susi/webmail/WebMail.java:1970
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"Host unverändert. Ändern Sie die Konfigurationsdatei {0} um den Host zu "
-"ändern."
+msgstr "Host unverändert. Ändern Sie die Konfigurationsdatei {0} um den Host zu ändern."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1990
 msgid "Configuration saved"
@@ -539,11 +524,6 @@ msgstr "Größe"
 msgid "Mark for deletion"
 msgstr "Zur Löschung markieren"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "Nachricht ist neu"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "Nachricht ist neu"
@@ -636,11 +616,6 @@ msgstr "Zurück zur Übersicht"
 msgid "Move to Folder"
 msgstr "Zu Verzeichnis wechseln"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "Nachricht ist neu"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "Seitengröße im Ordner"
@@ -673,8 +648,7 @@ msgstr "Mail Sever Login fehlgeschlagen, falscher Benutzername oder Passwort"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Ausloggen und neu einloggen mit dem korrektem Benutzernamen und Passwort."
+msgstr "Ausloggen und neu einloggen mit dem korrektem Benutzernamen und Passwort."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

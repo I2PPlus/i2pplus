@@ -68,24 +68,12 @@ msgstr "Bulk Mail"
 msgid "Inbox"
 msgstr "Kotak masuk"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Tidak ada pesan baru"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "Pesan memiliki lampiran"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "tidak diketahui"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -532,11 +520,6 @@ msgstr "Ukuran"
 msgid "Mark for deletion"
 msgstr "Tandai untuk dihapus"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "Pesan ini baru"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "Pesan ini baru"
@@ -628,11 +611,6 @@ msgstr "Kembali ke Folder"
 #: src/src/i2p/susi/webmail/WebMail.java:3867
 msgid "Move to Folder"
 msgstr "Ubah ke Folder"
-
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "Pesan ini baru"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"

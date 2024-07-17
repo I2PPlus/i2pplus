@@ -12,8 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?"
-"2:1));\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
 #: src/src/i2p/susi/webmail/MailCache.java:548
 #: src/src/i2p/susi/webmail/WebMail.java:2619
@@ -71,24 +70,12 @@ msgstr "E-Mail În Vrac "
 msgid "Inbox"
 msgstr "Căsuță"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Nu sunt mesaje noi"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "Mesajul are un atașament."
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "necunoscut"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -275,9 +262,7 @@ msgstr "Nu sunt mesaje marcate pentru ștergere."
 #: src/src/i2p/susi/webmail/WebMail.java:1970
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"Gazda neschimbată. Editează fișierul de configurare {0} pentru a schimba "
-"gazda."
+msgstr "Gazda neschimbată. Editează fișierul de configurare {0} pentru a schimba gazda."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1990
 msgid "Configuration saved"
@@ -543,11 +528,6 @@ msgstr "Dimensiune"
 msgid "Mark for deletion"
 msgstr "Marcați pentru ștergere"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "Mesajul e nou."
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "Mesajul e nou."
@@ -640,11 +620,6 @@ msgstr "Înapoi la Dosar"
 msgid "Move to Folder"
 msgstr "Mută dosarul"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "Mesajul e nou."
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "Dimensiunea Paginii Dosarului"
@@ -673,14 +648,11 @@ msgstr "Nici un răspuns de la server"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"Conectare server Mail nu a reușit, nume de utilizator greșit sau parolă."
+msgstr "Conectare server Mail nu a reușit, nume de utilizator greșit sau parolă."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Logare și apoi autentificare din nou cu numele de utilizator corect și "
-"parola."
+msgstr "Logare și apoi autentificare din nou cu numele de utilizator corect și parola."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

@@ -69,24 +69,12 @@ msgstr "Bulkpost"
 msgid "Inbox"
 msgstr "Postvak IN"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Geen nieuwe berichten"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "Bericht heeft een bijlage"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "onbekend"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -272,9 +260,7 @@ msgstr "Geen berichten gemarkeerd voor verwijdering."
 #: src/src/i2p/susi/webmail/WebMail.java:1970
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"Host onveranderd. Pas het configuratiebestand {0} aan om de host aan te "
-"passen."
+msgstr "Host onveranderd. Pas het configuratiebestand {0} aan om de host aan te passen."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1990
 msgid "Configuration saved"
@@ -538,11 +524,6 @@ msgstr "Grootte"
 msgid "Mark for deletion"
 msgstr "Markeren voor verwijdering"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "Bericht is nieuw"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "Bericht is nieuw"
@@ -635,11 +616,6 @@ msgstr "Terug naar map"
 msgid "Move to Folder"
 msgstr "Verplaats naar map"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "Bericht is nieuw"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "Mappaginagrootte"
@@ -668,8 +644,7 @@ msgstr "Geen antwoord van server"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"Inloggen op mailserver mislukt, verkeerde gebruikersnaam of wachtwoord."
+msgstr "Inloggen op mailserver mislukt, verkeerde gebruikersnaam of wachtwoord."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."

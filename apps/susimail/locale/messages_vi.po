@@ -68,24 +68,12 @@ msgstr "Thư hàng loạt"
 msgid "Inbox"
 msgstr "Hộp thư đến"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Không có tin nhắn mới"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "Tin nhắn có tệp đính kèm"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "không biết"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -270,8 +258,7 @@ msgstr "Không có thư nào chờ xóa."
 #: src/src/i2p/susi/webmail/WebMail.java:1970
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"Máy chủ không thay đổi. Chỉnh sửa tệp cấu hình {0} để thay đổi máy chủ."
+msgstr "Máy chủ không thay đổi. Chỉnh sửa tệp cấu hình {0} để thay đổi máy chủ."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1990
 msgid "Configuration saved"
@@ -533,11 +520,6 @@ msgstr "Kích thước"
 msgid "Mark for deletion"
 msgstr "Đánh dấu để xóa"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "Tin nhắn mới"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "Tin nhắn mới"
@@ -630,11 +612,6 @@ msgstr "Trở lại thư mục"
 msgid "Move to Folder"
 msgstr "Di chuyển đến thư mục"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "Tin nhắn mới"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "Kích thước trang thư mục"
@@ -663,13 +640,11 @@ msgstr "Không có phản hồi từ máy chủ"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"Đăng nhập máy chủ thư không thành công, sai tên người dùng hoặc mật khẩu."
+msgstr "Đăng nhập máy chủ thư không thành công, sai tên người dùng hoặc mật khẩu."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Đăng xuất và sau đó đăng nhập lại với tên người dùng và mật khẩu chính xác."
+msgstr "Đăng xuất và sau đó đăng nhập lại với tên người dùng và mật khẩu chính xác."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

@@ -39,12 +39,8 @@ msgstr "Isäntänimi ei voi sisältää \"{0}\""
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:159
 #, java-format
-msgid ""
-"Host name \"{0}\" requires conversion to ASCII but the conversion library is "
-"unavailable in this JVM"
-msgstr ""
-"Isäntänimi \"{0}\" vaatii muuntamisen ASCII:ksi, mutta muunnoskirjasto ei "
-"ole käytettävissä tässä JVM:ssä"
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "Isäntänimi \"{0}\" vaatii muuntamisen ASCII:ksi, mutta muunnoskirjasto ei ole käytettävissä tässä JVM:ssä"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:224
 msgid "None"
@@ -128,9 +124,7 @@ msgstr "Isäntänimi {0} on jo osoitekirjassa, muuttumattomana."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:262
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:255
 #, java-format
-msgid ""
-"Host name {0} is already in address book with a different destination. Click "
-"\"Replace\" to overwrite."
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
 msgstr "Isäntänimi {0} on jo osoitekirjassa, jossa on eri kohde. "
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:282
@@ -244,20 +238,14 @@ msgstr "VIRHE: Osoitekirjatiedostoa ei voitu kirjoittaa."
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:163
-msgid ""
-"Invalid form submission, probably because you used the \"back\" or "
-"\"reload\" button on your browser. Please resubmit."
-msgstr ""
-"Virheellinen lomakkeen lähetys, luultavasti siksi, että käytit selaimesi "
-"\"takaosaa\" tai \"lataa\" -painiketta. Lähetä uudelleen."
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "Virheellinen lomakkeen lähetys, luultavasti siksi, että käytit selaimesi \"takaosaa\" tai \"lataa\" -painiketta. Lähetä uudelleen."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
-msgid ""
-"If the problem persists, verify that you have cookies enabled in your "
-"browser."
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Jos pulma jatkuu, vahvista, että evästeet ovar käytössä selaimessasi."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
@@ -525,8 +513,7 @@ msgstr "Base 32 -osoite"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:852
 msgid "Helper link to share host address with option to add to addressbook"
-msgstr ""
-"Apulinkki isäntäosoitteen jakamiseen ja mahdollisuus lisätä osoitekirjaan"
+msgstr "Apulinkki isäntäosoitteen jakamiseen ja mahdollisuus lisätä osoitekirjaan"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:872
 msgid "Mark for deletion"
@@ -577,45 +564,24 @@ msgid "Hints"
 msgstr "Vihjeet"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:252
-msgid ""
-"File and directory paths here are relative to the addressbook's working "
-"directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%"
-"\\I2P\\addressbook\\ (Windows)."
-msgstr ""
-"Tiedosto- ja hakemistopolut tässä ovat suhteessa osoitekirjan "
-"työhakemistoon, joka on tavallisesti ~/.i2p/addressbook/ (Linux) tai "
-"%LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Tiedosto- ja hakemistopolut tässä ovat suhteessa osoitekirjan työhakemistoon, joka on tavallisesti ~/.i2p/addressbook/ (Linux) tai %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:254
-msgid ""
-"If you want to manually add lines to an addressbook, add them to the private "
-"or master addressbooks."
-msgstr ""
-"Jos haluat lisätä rivejä manuaalisesti osoitekirjaan, lisää ne yksityisiin "
-"tai pääosoitteisiin."
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Jos haluat lisätä rivejä manuaalisesti osoitekirjaan, lisää ne yksityisiin tai pääosoitteisiin."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:256
-msgid ""
-"The router addressbook and the published addressbook are updated by the "
-"addressbook application."
-msgstr ""
-"Osoitekirjasovellus päivittää reitittimen osoitekirjan ja julkaistun "
-"osoitekirjan."
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Osoitekirjasovellus päivittää reitittimen osoitekirjan ja julkaistun osoitekirjan."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:258
-msgid ""
-"When you publish your addressbook, ALL destinations from the master and "
-"router addressbooks appear there."
-msgstr ""
-"Kun julkaiset osoitekirjan, KAIKKI kohteet isäntä- ja reitittimen "
-"osoitekirjoista näkyvät siellä."
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Kun julkaiset osoitekirjan, KAIKKI kohteet isäntä- ja reitittimen osoitekirjoista näkyvät siellä."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:260
-msgid ""
-"Use the private addressbook for private destinations, these are not "
-"published."
-msgstr ""
-"Käytä yksityistä osoitekirjaa yksityisiin kohteisiin, niitä ei julkaista."
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Käytä yksityistä osoitekirjaa yksityisiin kohteisiin, niitä ei julkaista."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:262
 msgid "Options"
@@ -623,21 +589,15 @@ msgstr "Valitsimet"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:264
 msgid "File containing the list of subscriptions URLs (no need to change)"
-msgstr ""
-"Tiedosto, joka sisältää luettelon tilaus-URL-osoitteista (ei tarvitse "
-"muuttaa)"
+msgstr "Tiedosto, joka sisältää luettelon tilaus-URL-osoitteista (ei tarvitse muuttaa)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:266
 msgid "Update interval in hours"
 msgstr "Päivitysväli tunteina"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:268
-msgid ""
-"Your public hosts.txt file (choose a path within your webserver document "
-"root)"
-msgstr ""
-"Julkinen hosts.txt-tiedostosi (valitse polku verkkopalvelimen asiakirjan "
-"juuresta)"
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Julkinen hosts.txt-tiedostosi (valitse polku verkkopalvelimen asiakirjan juuresta)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:270
 msgid "Your hosts.txt (don't change)"
@@ -664,25 +624,16 @@ msgid "Whether to update the published addressbook"
 msgstr "Päivitetäänkö julkaistu osoitekirja"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:282
-msgid ""
-"File containing the etags header from the fetched subscription URLs (no need "
-"to change)"
-msgstr ""
-"Tiedosto, joka sisältää etags-otsikon haetuista tilaus-URL-osoitteista (ei "
-"tarvitse muuttaa)"
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Tiedosto, joka sisältää etags-otsikon haetuista tilaus-URL-osoitteista (ei tarvitse muuttaa)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:284
-msgid ""
-"File containing the modification timestamp for each fetched subscription URL "
-"(no need to change)"
-msgstr ""
-"Tiedosto, joka sisältää muokkausaikaleiman jokaiselle haetulle tilaus-URL-"
-"osoitteelle (ei tarvitse muuttaa)"
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Tiedosto, joka sisältää muokkausaikaleiman jokaiselle haetulle tilaus-URL-osoitteelle (ei tarvitse muuttaa)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:286
 msgid "File to log activity to (change to /dev/null if you like)"
-msgstr ""
-"Tiedosto, johon toiminta kirjataan (vaihda tiedostoon /dev/null, jos haluat)"
+msgstr "Tiedosto, johon toiminta kirjataan (vaihda tiedostoon /dev/null, jos haluat)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:288
 msgid "Name of override theme to use (defaults to console-selected theme)"
@@ -789,79 +740,44 @@ msgid "The addressbook application is part of your I2P installation."
 msgstr "Osoitekirjasovellus on osa I2P-asennusta."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:227
-msgid ""
-"It regularly updates your hosts.txt file from distributed sources or "
-"\"subscriptions\"."
-msgstr ""
-"Se päivittää säännöllisesti hosts.txt-tiedostosi hajautetuista lähteistä tai "
-"\"tilauksista\"."
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Se päivittää säännöllisesti hosts.txt-tiedostosi hajautetuista lähteistä tai \"tilauksista\"."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:229
-msgid ""
-"Subscribing to additional sites is easy, just add them to your <a "
-"href=\"subscriptions\">subscriptions</a> file."
-msgstr ""
-"Lisäsivustojen tilaaminen on helppoa, lisää vain ne <a "
-"href=\"subscriptions\">tilaustiedostoosi</a>."
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Lisäsivustojen tilaaminen on helppoa, lisää vain ne <a href=\"subscriptions\">tilaustiedostoosi</a>."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:231
-msgid ""
-"For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/"
-"naming.html\" target=_blank>the overview</a>."
-msgstr ""
-"Lisätietoja nimeämisestä I2P:ssä, katso <a href=\"http://i2p-projekt.i2p/"
-"naming.html\" target=_blank>yleiskatsaus</a>."
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Lisätietoja nimeämisestä I2P:ssä, katso <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>yleiskatsaus</a>."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:233
 msgid "How does the addressbook application work?"
 msgstr "Kuinka osoitekirjasovellus toimii?"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:235
-msgid ""
-"The addressbook application regularly polls your subscriptions and merges "
-"their content into your \"router\" address book."
-msgstr ""
-"Osoitekirjasovellus tekee säännöllisesti kyselyn tilauksistasi ja yhdistää "
-"niiden sisällön \"reitittimen\" osoitekirjaasi."
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Osoitekirjasovellus tekee säännöllisesti kyselyn tilauksistasi ja yhdistää niiden sisällön \"reitittimen\" osoitekirjaasi."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:237
-msgid ""
-"Then it merges your \"master\" address book into the router address book as "
-"well."
-msgstr ""
-"Sitten se yhdistää \"master\"-osoitekirjasi myös reitittimen osoitekirjaan."
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Sitten se yhdistää \"master\"-osoitekirjasi myös reitittimen osoitekirjaan."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:239
-msgid ""
-"If configured, the router address book is now written to the \"published\" "
-"address book, which will be publicly available if you are running an eepsite."
-msgstr ""
-"Jos määritetty, reitittimen osoitekirja kirjoitetaan nyt \"julkaistu\" "
-"osoitekirjaan, joka on julkisesti saatavilla, jos käytät eepsite-sivustoa."
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Jos määritetty, reitittimen osoitekirja kirjoitetaan nyt \"julkaistu\" osoitekirjaan, joka on julkisesti saatavilla, jos käytät eepsite-sivustoa."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:241
-msgid ""
-"The router also uses a private address book, which is not merged or "
-"published."
-msgstr ""
-"Reititin käyttää myös yksityistä osoitekirjaa, jota ei yhdistetä tai "
-"julkaista."
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Reititin käyttää myös yksityistä osoitekirjaa, jota ei yhdistetä tai julkaista."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:243
-msgid ""
-"Hosts in the private address book can be accessed by you but their addresses "
-"are never distributed to others."
-msgstr ""
-"Voit käyttää yksityisen osoitekirjan isäntiä, mutta niiden osoitteita ei "
-"koskaan jaeta muille."
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Voit käyttää yksityisen osoitekirjan isäntiä, mutta niiden osoitteita ei koskaan jaeta muille."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:245
-msgid ""
-"The private address book can also be used for aliases of hosts in your other "
-"address books."
-msgstr ""
-"Yksityistä osoitekirjaa voidaan käyttää myös muiden osoitekirjojen isäntien "
-"aliaksina."
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Yksityistä osoitekirjaa voidaan käyttää myös muiden osoitekirjojen isäntien aliaksina."
 
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:196
 msgid "subscription log"
@@ -884,11 +800,8 @@ msgid "The subscription file contains a list of i2p URLs."
 msgstr "Tilaustiedosto sisältää luettelon i2p-URL-osoitteista."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:250
-msgid ""
-"The addressbook application regularly checks this list for new eepsites."
-msgstr ""
-"Osoitekirjasovellus tarkistaa säännöllisesti tästä luettelosta uusia eep-"
-"sivustoja."
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Osoitekirjasovellus tarkistaa säännöllisesti tästä luettelosta uusia eep-sivustoja."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:252
 msgid "Those URLs refer to published hosts.txt files."
@@ -899,46 +812,28 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Katso UKK-kohdasta luettelo tilaus-URL-osoitteista."
 
 #: build/HowSVG.java:5
-msgid ""
-"If SusiDNS is configured to publish your Router address book, the entries "
-"will appear in your Published address book and saved to a hosts.txt file for "
-"sharing."
-msgstr ""
-"Jos SusiDNS on määritetty julkaisemaan reitittimen osoitekirjasi, merkinnät "
-"näkyvät julkaistussa osoitekirjassasi ja tallennetaan hosts.txt-tiedostoon "
-"jakamista varten."
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "Jos SusiDNS on määritetty julkaisemaan reitittimen osoitekirjasi, merkinnät näkyvät julkaistussa osoitekirjassasi ja tallennetaan hosts.txt-tiedostoon jakamista varten."
 
 #: build/HowSVG.java:6
 msgid "Published Addressbook"
 msgstr "Julkaistu osoitekirja"
 
 #: build/HowSVG.java:7
-msgid ""
-"To configure SusiDNS to push your Router address book to your Published "
-"address book, set 'should_publish=true' on the configuration page."
-msgstr ""
-"Jos haluat määrittää SusiDNS:n työntämään reitittimen osoitekirjaasi "
-"julkaistuun osoitekirjaasi, määritä asetussivulla 'should_publish=true'."
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "Jos haluat määrittää SusiDNS:n työntämään reitittimen osoitekirjaasi julkaistuun osoitekirjaasi, määritä asetussivulla 'should_publish=true'."
 
 #: build/HowSVG.java:8
-msgid ""
-"All hosts derived from subscriptions will appear in this address book, in "
-"addition to any you manually add here or to your Master address book."
-msgstr ""
-"Kaikki tilauksista johdetut isännät näkyvät tässä osoitekirjassa niiden "
-"lisäksi, jotka lisäät manuaalisesti tähän tai pääosoitekirjaasi."
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "Kaikki tilauksista johdetut isännät näkyvät tässä osoitekirjassa niiden lisäksi, jotka lisäät manuaalisesti tähän tai pääosoitekirjaasi."
 
 #: build/HowSVG.java:9
 msgid "Router Addressbook"
 msgstr "Reitittimen osoitekirja"
 
 #: build/HowSVG.java:10
-msgid ""
-"Hosts you manually add here will never be published. You can also add "
-"aliases to hosts in other address books here."
-msgstr ""
-"Täällä lisäämäsi isäntä ei koskaan julkaista. Voit myös lisätä aliaksia "
-"täällä muiden osoitekirjojen isäntille."
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "Täällä lisäämäsi isäntä ei koskaan julkaista. Voit myös lisätä aliaksia täällä muiden osoitekirjojen isäntille."
 
 #: build/HowSVG.java:11
 msgid "Private Addressbook"
@@ -949,38 +844,24 @@ msgid "Local Records"
 msgstr "Paikalliset Levyt"
 
 #: build/HowSVG.java:13
-msgid ""
-"I2P applications (including the HTTP proxy) use the hosts in your local "
-"address books to resolve .i2p hostnames."
-msgstr ""
-"I2P-sovellukset (mukaan lukien HTTP-välityspalvelin) käyttävät paikallisten "
-"osoitekirjojen isäntiä .i2p-isäntänimien ratkaisemiseen."
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "I2P-sovellukset (mukaan lukien HTTP-välityspalvelin) käyttävät paikallisten osoitekirjojen isäntiä .i2p-isäntänimien ratkaisemiseen."
 
 #: build/HowSVG.java:14
-msgid ""
-"Additional subscriptions can be found in the FAQ section of the Router help "
-"page."
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
 msgstr "Lisätilauksia löytyy reitittimen ohjesivun UKK-osiosta."
 
 #: build/HowSVG.java:16
-msgid ""
-"Hosts sourced from your subscriptions are added to your Router address book, "
-"and are automatically synced (by default every 12 hours)."
-msgstr ""
-"Tilauksistasi hankitut isännät lisätään reitittimen osoitekirjaasi ja "
-"synkronoidaan automaattisesti (oletusarvoisesti 12 tunnin välein)."
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "Tilauksistasi hankitut isännät lisätään reitittimen osoitekirjaasi ja synkronoidaan automaattisesti (oletusarvoisesti 12 tunnin välein)."
 
 #: build/HowSVG.java:17
 msgid "Configure Subscriptions"
 msgstr "Määritä tilaukset"
 
 #: build/HowSVG.java:18
-msgid ""
-"If you manually add hosts here, they will be included your Published address "
-"book (if configured)."
-msgstr ""
-"Jos lisäät isäntiä tähän manuaalisesti, ne sisällytetään julkaistuun "
-"osoitekirjaasi (jos se on määritetty)."
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "Jos lisäät isäntiä tähän manuaalisesti, ne sisällytetään julkaistuun osoitekirjaasi (jos se on määritetty)."
 
 #: build/HowSVG.java:19
 msgid "Master Addressbook"
@@ -995,12 +876,8 @@ msgid "I2P applications"
 msgstr "I2P-sovelluksia"
 
 #: build/HowSVG.java:22
-msgid ""
-"The Master, Router and Private address books collectively serve as the DNS "
-"authority for I2P applications."
-msgstr ""
-"Pää-, reititin- ja yksityinen osoitekirjat toimivat yhdessä I2P-sovellusten "
-"DNS-valtuutettuna."
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "Pää-, reititin- ja yksityinen osoitekirjat toimivat yhdessä I2P-sovellusten DNS-valtuutettuna."
 
 #: build/HowSVG.java:23
 msgid "Optional,"
@@ -1011,25 +888,13 @@ msgid "for websites"
 msgstr "verkkosivustoille"
 
 #: build/HowSVG.java:25
-msgid ""
-"If you configure SusiDNS to publish your Router address book, it will export "
-"a hosts.txt file containing all the hosts (by default to the root of your "
-"eepsite)."
-msgstr ""
-"Jos määrität SusiDNS:n julkaisemaan reitittimen osoitekirjaasi, se vie "
-"kaikki isännät sisältävän hosts.txt-tiedoston (oletusarvoisesti eep-"
-"sivustosi juureen)."
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "Jos määrität SusiDNS:n julkaisemaan reitittimen osoitekirjaasi, se vie kaikki isännät sisältävän hosts.txt-tiedoston (oletusarvoisesti eep-sivustosi juureen)."
 
 #: build/HowSVG.java:26
-msgid ""
-"Addresses manually added to your Master address book will merge with your "
-"Router address book."
-msgstr ""
-"Pääosoitekirjaasi manuaalisesti lisätyt osoitteet yhdistetään reitittimen "
-"osoitekirjaasi."
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "Pääosoitekirjaasi manuaalisesti lisätyt osoitteet yhdistetään reitittimen osoitekirjaasi."
 
 #: build/HowSVG.java:27
-msgid ""
-"Hosts you receive from your subscriptions will merge with your Router "
-"address book."
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tilauksistasi saamasi isännät yhdistetään reitittimen osoitekirjaasi."

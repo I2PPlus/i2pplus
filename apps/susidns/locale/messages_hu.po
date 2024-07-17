@@ -39,12 +39,8 @@ msgstr "Hoszt név nem tartalmahatja a következőt: \"{0}\""
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:159
 #, java-format
-msgid ""
-"Host name \"{0}\" requires conversion to ASCII but the conversion library is "
-"unavailable in this JVM"
-msgstr ""
-"ASCII átalakításra van szükség a következő hoszton \"{0}\", azonban az "
-"átalakító könyvtár nem érhető el ezen a Java Virtuális Gépen"
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "ASCII átalakításra van szükség a következő hoszton \"{0}\", azonban az átalakító könyvtár nem érhető el ezen a Java Virtuális Gépen"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:224
 msgid "None"
@@ -128,12 +124,8 @@ msgstr "Hosztnév {0} már a címjegyzékben, változatlanul hagyva."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:262
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:255
 #, java-format
-msgid ""
-"Host name {0} is already in address book with a different destination. Click "
-"\"Replace\" to overwrite."
-msgstr ""
-"A {0} host neve már a címjegyzékben van egy másik rendeltetési helygel. A "
-"felülíráshoz kattintson a \"Csere\" gombra."
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "A {0} host neve már a címjegyzékben van egy másik rendeltetési helygel. A felülíráshoz kattintson a \"Csere\" gombra."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:282
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:289
@@ -236,9 +228,7 @@ msgstr "Címjegyzés elmentve."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:364
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:386
 msgid "Browse away from this addressbook and return to see update."
-msgstr ""
-"Tallózzon ki ebből a címjegyzékből, és térjen vissza a frissítés "
-"megtekintéséhez."
+msgstr "Tallózzon ki ebből a címjegyzékből, és térjen vissza a frissítés megtekintéséhez."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:367
 msgid "ERROR: Could not write addressbook file."
@@ -248,23 +238,15 @@ msgstr "HIBA: Nem sikerült a címjegyzék-fálj írása."
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:163
-msgid ""
-"Invalid form submission, probably because you used the \"back\" or "
-"\"reload\" button on your browser. Please resubmit."
-msgstr ""
-"Úrlap küldése sikertelen, valószínűleg a \"vissza\" vagy az \"újratöltés\" "
-"gombokat használtad a böngészőben. Kérlek, hogy küldd újra."
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "Úrlap küldése sikertelen, valószínűleg a \"vissza\" vagy az \"újratöltés\" gombokat használtad a böngészőben. Kérlek, hogy küldd újra."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
-msgid ""
-"If the problem persists, verify that you have cookies enabled in your "
-"browser."
-msgstr ""
-"Ha a probléma fennáll, ellenőrizd, hogy a sütik engedélyezve vannak-e a "
-"böngésződben."
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Ha a probléma fennáll, ellenőrizd, hogy a sütik engedélyezve vannak-e a böngésződben."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:136
@@ -531,9 +513,7 @@ msgstr "Bázis 32 cím"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:852
 msgid "Helper link to share host address with option to add to addressbook"
-msgstr ""
-"Segítőhivatkozás a gazdagép címének megosztásához, a címjegyzékhez való "
-"hozzáadásának lehetőségével"
+msgstr "Segítőhivatkozás a gazdagép címének megosztásához, a címjegyzékhez való hozzáadásának lehetőségével"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:872
 msgid "Mark for deletion"
@@ -584,45 +564,24 @@ msgid "Hints"
 msgstr "Tippek"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:252
-msgid ""
-"File and directory paths here are relative to the addressbook's working "
-"directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%"
-"\\I2P\\addressbook\\ (Windows)."
-msgstr ""
-"A fájl- és könyvtárútvonal itt a címjegyzék munkakönyvtárához viszonyított, "
-"amely általában ~/.i2p/addressbook/ (Linux) vagy %LOCALAPPDATA%"
-"\\I2P\\addressbook\\ (Windows)."
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "A fájl- és könyvtárútvonal itt a címjegyzék munkakönyvtárához viszonyított, amely általában ~/.i2p/addressbook/ (Linux) vagy %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:254
-msgid ""
-"If you want to manually add lines to an addressbook, add them to the private "
-"or master addressbooks."
-msgstr ""
-"Ha kézi hozzáadást szeretnél a címjegyzékhez, add hozzá a privát- vagy a fő "
-"címjegyzékhez."
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Ha kézi hozzáadást szeretnél a címjegyzékhez, add hozzá a privát- vagy a fő címjegyzékhez."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:256
-msgid ""
-"The router addressbook and the published addressbook are updated by the "
-"addressbook application."
-msgstr ""
-"A címjegyzék alkalmazás frissítette a router- és a közzétett címjegyzéket."
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "A címjegyzék alkalmazás frissítette a router- és a közzétett címjegyzéket."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:258
-msgid ""
-"When you publish your addressbook, ALL destinations from the master and "
-"router addressbooks appear there."
-msgstr ""
-"Címjegyzéked közzétételekor MINDEN célállomás a fő és a router címjegyzékből "
-"megjelenik ott."
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Címjegyzéked közzétételekor MINDEN célállomás a fő és a router címjegyzékből megjelenik ott."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:260
-msgid ""
-"Use the private addressbook for private destinations, these are not "
-"published."
-msgstr ""
-"A privát címjegyzéket a privát célállomásokhoz használd, ezek nem kerülnek "
-"közlésre."
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "A privát címjegyzéket a privát célállomásokhoz használd, ezek nem kerülnek közlésre."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:262
 msgid "Options"
@@ -630,21 +589,15 @@ msgstr "Opciók"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:264
 msgid "File containing the list of subscriptions URLs (no need to change)"
-msgstr ""
-"A fájl tartalmazza a feliratkozások URL listáját (változtatásra nincs "
-"szükség)"
+msgstr "A fájl tartalmazza a feliratkozások URL listáját (változtatásra nincs szükség)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:266
 msgid "Update interval in hours"
 msgstr "Frissítési időköz órában"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:268
-msgid ""
-"Your public hosts.txt file (choose a path within your webserver document "
-"root)"
-msgstr ""
-"A nyilvános hosts.txt fájlod (válassz elérési utat a webszervered dokumentum "
-"főkönyvtárán belül)"
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "A nyilvános hosts.txt fájlod (válassz elérési utat a webszervered dokumentum főkönyvtárán belül)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:270
 msgid "Your hosts.txt (don't change)"
@@ -671,31 +624,20 @@ msgid "Whether to update the published addressbook"
 msgstr "Frissítsem a közzétett címjegyzéket?"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:282
-msgid ""
-"File containing the etags header from the fetched subscription URLs (no need "
-"to change)"
-msgstr ""
-"A fájl, mely a leszedett feliratkozási URL-ek e-címkék fejlécét tartalmazza "
-"(nincs szükség változtatásra)"
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "A fájl, mely a leszedett feliratkozási URL-ek e-címkék fejlécét tartalmazza (nincs szükség változtatásra)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:284
-msgid ""
-"File containing the modification timestamp for each fetched subscription URL "
-"(no need to change)"
-msgstr ""
-"A fájl, mely minden leszedett feliratkozási URL módosítási időbélyegzőjét "
-"tartalmazza (nincs szükség változtatásra)"
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "A fájl, mely minden leszedett feliratkozási URL módosítási időbélyegzőjét tartalmazza (nincs szükség változtatásra)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:286
 msgid "File to log activity to (change to /dev/null if you like)"
-msgstr ""
-"Fájl, ami a működést naplózza (megváltoztathatod /dev/null -ra, ha akarod)"
+msgstr "Fájl, ami a működést naplózza (megváltoztathatod /dev/null -ra, ha akarod)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:288
 msgid "Name of override theme to use (defaults to console-selected theme)"
-msgstr ""
-"A használandó felülbíráló téma neve (alapértelmezett a konzol által "
-"kiválasztott téma)"
+msgstr "A használandó felülbíráló téma neve (alapértelmezett a konzol által kiválasztott téma)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:193
 msgid "addressbook"
@@ -798,79 +740,44 @@ msgid "The addressbook application is part of your I2P installation."
 msgstr "A címjegyzék alkalmazás az I2P installációd része."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:227
-msgid ""
-"It regularly updates your hosts.txt file from distributed sources or "
-"\"subscriptions\"."
-msgstr ""
-"Elosztott források vagy \"feliratkozások\" használata a hosts.txt fájlod "
-"rendszeres frissítéséhez."
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Elosztott források vagy \"feliratkozások\" használata a hosts.txt fájlod rendszeres frissítéséhez."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:229
-msgid ""
-"Subscribing to additional sites is easy, just add them to your <a "
-"href=\"subscriptions\">subscriptions</a> file."
-msgstr ""
-"További oldalakra való feliratkozás egyszerű, pusztán add hozzá a saját <a "
-"href=\"feliratkozások\">feliratkozások</a> fájlodhoz."
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "További oldalakra való feliratkozás egyszerű, pusztán add hozzá a saját <a href=\"feliratkozások\">feliratkozások</a> fájlodhoz."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:231
-msgid ""
-"For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/"
-"naming.html\" target=_blank>the overview</a>."
-msgstr ""
-"Az I2P-ben történő elnevezéssel kapcsolatos további információkért tekintse "
-"meg az <a href=\"http://i2p-projekt.i2p/naming.html\" "
-"target=_blank>áttekintést</a>."
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Az I2P-ben történő elnevezéssel kapcsolatos további információkért tekintse meg az <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>áttekintést</a>."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:233
 msgid "How does the addressbook application work?"
 msgstr "Hogyan működik a címjegyzék alkalmazás?"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:235
-msgid ""
-"The addressbook application regularly polls your subscriptions and merges "
-"their content into your \"router\" address book."
-msgstr ""
-"A címjegyzék alkalmazás rendszeresen meghívja feliratkozásaidat és "
-"összevonja őket a saját \"router\" címjegyzékedben."
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "A címjegyzék alkalmazás rendszeresen meghívja feliratkozásaidat és összevonja őket a saját \"router\" címjegyzékedben."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:237
-msgid ""
-"Then it merges your \"master\" address book into the router address book as "
-"well."
-msgstr ""
-"Ezután összevonja saját \"master\" címjegyzékedet is a router címjegyzékedbe."
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Ezután összevonja saját \"master\" címjegyzékedet is a router címjegyzékedbe."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:239
-msgid ""
-"If configured, the router address book is now written to the \"published\" "
-"address book, which will be publicly available if you are running an eepsite."
-msgstr ""
-"Ha be van állítva, a router címjegyzék most a \"közzétett\" címjegyzékbe "
-"lesz felírva, mely nyilvánosan hozzáférhető, amennyiben eep oldalt futtatsz."
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Ha be van állítva, a router címjegyzék most a \"közzétett\" címjegyzékbe lesz felírva, mely nyilvánosan hozzáférhető, amennyiben eep oldalt futtatsz."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:241
-msgid ""
-"The router also uses a private address book, which is not merged or "
-"published."
-msgstr ""
-"Az útválasztó privát címjegyzéket is használ, amelyet nem egyesít és nem "
-"tesz közzé."
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Az útválasztó privát címjegyzéket is használ, amelyet nem egyesít és nem tesz közzé."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:243
-msgid ""
-"Hosts in the private address book can be accessed by you but their addresses "
-"are never distributed to others."
-msgstr ""
-"A privát címjegyzékben szereplő hosztok általad elérhetők, de a címeik mások "
-"számára soha nem kerülnek közlésre."
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "A privát címjegyzékben szereplő hosztok általad elérhetők, de a címeik mások számára soha nem kerülnek közlésre."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:245
-msgid ""
-"The private address book can also be used for aliases of hosts in your other "
-"address books."
-msgstr ""
-"A privát címjegyzéked hosztok álneveihez is használható más címjegyzékeidben."
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "A privát címjegyzéked hosztok álneveihez is használható más címjegyzékeidben."
 
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:196
 msgid "subscription log"
@@ -893,10 +800,8 @@ msgid "The subscription file contains a list of i2p URLs."
 msgstr "A feliratkzoások fájl tartalmaz egy i2p URL listát."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:250
-msgid ""
-"The addressbook application regularly checks this list for new eepsites."
-msgstr ""
-"A címjegyzék alkalmazás rendszeresen átnézi ezt a listát új eep oldalakért."
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "A címjegyzék alkalmazás rendszeresen átnézi ezt a listát új eep oldalakért."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:252
 msgid "Those URLs refer to published hosts.txt files."
@@ -907,48 +812,28 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "Lásd a GYIK-et feliratkozási URL listáért."
 
 #: build/HowSVG.java:5
-msgid ""
-"If SusiDNS is configured to publish your Router address book, the entries "
-"will appear in your Published address book and saved to a hosts.txt file for "
-"sharing."
-msgstr ""
-"Ha a SusiDNS úgy van konfigurálva, hogy közzétegye az útválasztó "
-"címjegyzékét, a bejegyzések megjelennek a Közzétett címjegyzékben, és egy "
-"hosts.txt fájlba kerülnek megosztás céljából."
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "Ha a SusiDNS úgy van konfigurálva, hogy közzétegye az útválasztó címjegyzékét, a bejegyzések megjelennek a Közzétett címjegyzékben, és egy hosts.txt fájlba kerülnek megosztás céljából."
 
 #: build/HowSVG.java:6
 msgid "Published Addressbook"
 msgstr "Kiadott címjegyzék"
 
 #: build/HowSVG.java:7
-msgid ""
-"To configure SusiDNS to push your Router address book to your Published "
-"address book, set 'should_publish=true' on the configuration page."
-msgstr ""
-"Ha be szeretné állítani a SusiDNS-t, hogy az útválasztó címjegyzékét a "
-"közzétett címjegyzékbe helyezze, állítsa be a 'should_publish=true' értéket "
-"a konfigurációs oldalon."
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "Ha be szeretné állítani a SusiDNS-t, hogy az útválasztó címjegyzékét a közzétett címjegyzékbe helyezze, állítsa be a 'should_publish=true' értéket a konfigurációs oldalon."
 
 #: build/HowSVG.java:8
-msgid ""
-"All hosts derived from subscriptions will appear in this address book, in "
-"addition to any you manually add here or to your Master address book."
-msgstr ""
-"Az előfizetésekből származó összes gazdagép megjelenik ebben a "
-"címjegyzékben, azon kívül, amelyet kézzel hozzáadott ide vagy a fő "
-"címjegyzékhez."
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "Az előfizetésekből származó összes gazdagép megjelenik ebben a címjegyzékben, azon kívül, amelyet kézzel hozzáadott ide vagy a fő címjegyzékhez."
 
 #: build/HowSVG.java:9
 msgid "Router Addressbook"
 msgstr "Router címjegyzéke"
 
 #: build/HowSVG.java:10
-msgid ""
-"Hosts you manually add here will never be published. You can also add "
-"aliases to hosts in other address books here."
-msgstr ""
-"Az itt kézzel hozzáadott gazdagépek soha nem lesznek közzétéve. Itt "
-"álneveket is hozzáadhat más címjegyzékek gazdagépeihez."
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "Az itt kézzel hozzáadott gazdagépek soha nem lesznek közzétéve. Itt álneveket is hozzáadhat más címjegyzékek gazdagépeihez."
 
 #: build/HowSVG.java:11
 msgid "Private Addressbook"
@@ -959,39 +844,24 @@ msgid "Local Records"
 msgstr "Helyi Rekordok"
 
 #: build/HowSVG.java:13
-msgid ""
-"I2P applications (including the HTTP proxy) use the hosts in your local "
-"address books to resolve .i2p hostnames."
-msgstr ""
-"Az I2P-alkalmazások (beleértve a HTTP-proxyt is) a helyi címjegyzékekben "
-"található gazdagépeket használják az .i2p gazdagépnevek feloldásához."
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "Az I2P-alkalmazások (beleértve a HTTP-proxyt is) a helyi címjegyzékekben található gazdagépeket használják az .i2p gazdagépnevek feloldásához."
 
 #: build/HowSVG.java:14
-msgid ""
-"Additional subscriptions can be found in the FAQ section of the Router help "
-"page."
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
 msgstr "További előfizetések a Router súgóoldalának GYIK részében találhatók."
 
 #: build/HowSVG.java:16
-msgid ""
-"Hosts sourced from your subscriptions are added to your Router address book, "
-"and are automatically synced (by default every 12 hours)."
-msgstr ""
-"Az előfizetésekből származó gazdagépek hozzáadódnak az útválasztó "
-"címjegyzékéhez, és automatikusan szinkronizálódnak (alapértelmezés szerint "
-"12 óránként)."
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "Az előfizetésekből származó gazdagépek hozzáadódnak az útválasztó címjegyzékéhez, és automatikusan szinkronizálódnak (alapértelmezés szerint 12 óránként)."
 
 #: build/HowSVG.java:17
 msgid "Configure Subscriptions"
 msgstr "Előfizetések konfigurálása"
 
 #: build/HowSVG.java:18
-msgid ""
-"If you manually add hosts here, they will be included your Published address "
-"book (if configured)."
-msgstr ""
-"Ha manuálisan adja hozzá a gazdagépeket, akkor azok megjelennek a közzétett "
-"címjegyzékében (ha be van állítva)."
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "Ha manuálisan adja hozzá a gazdagépeket, akkor azok megjelennek a közzétett címjegyzékében (ha be van állítva)."
 
 #: build/HowSVG.java:19
 msgid "Master Addressbook"
@@ -1006,12 +876,8 @@ msgid "I2P applications"
 msgstr "I2P alkalmazások"
 
 #: build/HowSVG.java:22
-msgid ""
-"The Master, Router and Private address books collectively serve as the DNS "
-"authority for I2P applications."
-msgstr ""
-"A mester, az útválasztó és a privát címjegyzék együttesen az I2P-"
-"alkalmazások DNS-hatóságaként szolgál."
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "A mester, az útválasztó és a privát címjegyzék együttesen az I2P-alkalmazások DNS-hatóságaként szolgál."
 
 #: build/HowSVG.java:23
 msgid "Optional,"
@@ -1022,26 +888,13 @@ msgid "for websites"
 msgstr "webhelyekhez"
 
 #: build/HowSVG.java:25
-msgid ""
-"If you configure SusiDNS to publish your Router address book, it will export "
-"a hosts.txt file containing all the hosts (by default to the root of your "
-"eepsite)."
-msgstr ""
-"Ha a SusiDNS-t úgy konfigurálja, hogy közzétegye az útválasztó címjegyzékét, "
-"akkor exportál egy hosts.txt fájlt, amely tartalmazza az összes gazdagépet "
-"(alapértelmezés szerint az eepsite gyökérkönyvtárába)."
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "Ha a SusiDNS-t úgy konfigurálja, hogy közzétegye az útválasztó címjegyzékét, akkor exportál egy hosts.txt fájlt, amely tartalmazza az összes gazdagépet (alapértelmezés szerint az eepsite gyökérkönyvtárába)."
 
 #: build/HowSVG.java:26
-msgid ""
-"Addresses manually added to your Master address book will merge with your "
-"Router address book."
-msgstr ""
-"A fő címjegyzékbe kézzel hozzáadott címek egyesülnek az útválasztó "
-"címjegyzékével."
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "A fő címjegyzékbe kézzel hozzáadott címek egyesülnek az útválasztó címjegyzékével."
 
 #: build/HowSVG.java:27
-msgid ""
-"Hosts you receive from your subscriptions will merge with your Router "
-"address book."
-msgstr ""
-"Az előfizetésekből kapott gazdagépek egyesülnek az útválasztó címjegyzékével."
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "Az előfizetésekből kapott gazdagépek egyesülnek az útválasztó címjegyzékével."

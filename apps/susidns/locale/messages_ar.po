@@ -12,8 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:132
 #, java-format
@@ -40,13 +39,8 @@ msgstr "لا يمكن ان يحتوي اسم العنوان على \"{0}\""
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:159
 #, java-format
-msgid ""
-"Host name \"{0}\" requires conversion to ASCII but the conversion library is "
-"unavailable in this JVM"
-msgstr ""
-"اسم المضيف \"{0}\" يتطلب التحويل إلى ASCII ولكن مكتبة التحويل غير متوفرة في "
-"JVM هذااسم العنوان \"{0}\" يحتاج للتحويل إلى صيغة آسكي ولكن برنامج التحويل "
-"غير متوفر."
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "اسم المضيف \"{0}\" يتطلب التحويل إلى ASCII ولكن مكتبة التحويل غير متوفرة في JVM هذااسم العنوان \"{0}\" يحتاج للتحويل إلى صيغة آسكي ولكن برنامج التحويل غير متوفر."
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:224
 msgid "None"
@@ -146,9 +140,7 @@ msgstr "اسم المضيف {0} موجود بالفعل في دفتر العنا
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:262
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:255
 #, java-format
-msgid ""
-"Host name {0} is already in address book with a different destination. Click "
-"\"Replace\" to overwrite."
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
 msgstr "اسم المضيف {0} موجود بالفعل في دفتر العناوين بوجهة مختلفة. "
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:282
@@ -266,21 +258,14 @@ msgstr "خطأ: لم يتم حفظ دفتر العناوين"
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:163
-msgid ""
-"Invalid form submission, probably because you used the \"back\" or "
-"\"reload\" button on your browser. Please resubmit."
-msgstr ""
-"إرسال نموذج غير صالح، ربما لأنك استخدمت زر \"رجوع\" أو \"إعادة تحميل\" في "
-"متصفحك. فشل في الارسال، ربما لاستعمال زر \"رجوع\" او  \"أنعش\". قم بالارسال "
-"مرة أخرى."
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "إرسال نموذج غير صالح، ربما لأنك استخدمت زر \"رجوع\" أو \"إعادة تحميل\" في متصفحك. فشل في الارسال، ربما لاستعمال زر \"رجوع\" او  \"أنعش\". قم بالارسال مرة أخرى."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
-msgid ""
-"If the problem persists, verify that you have cookies enabled in your "
-"browser."
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "إذا استمرت المشكلة، فتأكد من تمكين ملفات تعريف الارتباط في متصفحك."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
@@ -607,42 +592,23 @@ msgid "Hints"
 msgstr "إشارة"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:252
-msgid ""
-"File and directory paths here are relative to the addressbook's working "
-"directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%"
-"\\I2P\\addressbook\\ (Windows)."
-msgstr ""
-"ترتبط مسارات الملفات والدليل هنا بدليل عمل دفتر العناوين، والذي يكون عادةً ~/."
-"i2p/addressbook/ (Linux) أو %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "ترتبط مسارات الملفات والدليل هنا بدليل عمل دفتر العناوين، والذي يكون عادةً ~/.i2p/addressbook/ (Linux) أو %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:254
-msgid ""
-"If you want to manually add lines to an addressbook, add them to the private "
-"or master addressbooks."
-msgstr ""
-"إذا كنت تريد إضافة خطوط يدويًا إلى دفتر العناوين، قم بإضافتها إلى دفاتر "
-"العناوين الخاصة أو الرئيسية.اذا اردت اضافة العناوين الى دفتر العناوين، اضفها "
-"مباشرة الى دفتر العناوين الرئيسي."
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "إذا كنت تريد إضافة خطوط يدويًا إلى دفتر العناوين، قم بإضافتها إلى دفاتر العناوين الخاصة أو الرئيسية.اذا اردت اضافة العناوين الى دفتر العناوين، اضفها مباشرة الى دفتر العناوين الرئيسي."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:256
-msgid ""
-"The router addressbook and the published addressbook are updated by the "
-"addressbook application."
-msgstr ""
-"يتم تحديث دفتر عناوين جهاز التوجيه ودفتر العناوين المنشور بواسطة تطبيق دفتر "
-"العناوين.يتم تحديث دفتر العناوين الخاص و  دفتر العناوين العمومي من طرف "
-"تطبيق  دفتر العناوين."
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "يتم تحديث دفتر عناوين جهاز التوجيه ودفتر العناوين المنشور بواسطة تطبيق دفتر العناوين.يتم تحديث دفتر العناوين الخاص و  دفتر العناوين العمومي من طرف تطبيق  دفتر العناوين."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:258
-msgid ""
-"When you publish your addressbook, ALL destinations from the master and "
-"router addressbooks appear there."
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
 msgstr "عندما تنشر دفتر العناوين، ستظهر جميع المواقع هنا."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:260
-msgid ""
-"Use the private addressbook for private destinations, these are not "
-"published."
+msgid "Use the private addressbook for private destinations, these are not published."
 msgstr "استعمل دفتر العناوين الخاص من أجل العناوين الخاصة التي لن يتم نشرها."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:262
@@ -658,9 +624,7 @@ msgid "Update interval in hours"
 msgstr "تحديث الفاصل الزمني في ساعات"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:268
-msgid ""
-"Your public hosts.txt file (choose a path within your webserver document "
-"root)"
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
 msgstr "hosts.txt ملف"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:270
@@ -688,15 +652,11 @@ msgid "Whether to update the published addressbook"
 msgstr "تعديل دفتر العناوين المنشور"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:282
-msgid ""
-"File containing the etags header from the fetched subscription URLs (no need "
-"to change)"
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
 msgstr "ملف يحتوي على قائمة عناوين الاشتراك"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:284
-msgid ""
-"File containing the modification timestamp for each fetched subscription URL "
-"(no need to change)"
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
 msgstr "ملف يحتوي على تاريخ التحديث"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:286
@@ -705,9 +665,7 @@ msgstr "ملف لحفظ الأخطاء"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:288
 msgid "Name of override theme to use (defaults to console-selected theme)"
-msgstr ""
-"اسم سمة التجاوز المطلوب استخدامها (الإعداد الافتراضي للسمات المحددة بواسطة "
-"وحدة التحكم)"
+msgstr "اسم سمة التجاوز المطلوب استخدامها (الإعداد الافتراضي للسمات المحددة بواسطة وحدة التحكم)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:193
 msgid "addressbook"
@@ -810,75 +768,44 @@ msgid "The addressbook application is part of your I2P installation."
 msgstr "تطبيق دفتر العناوين هو ضمن مجموعة برامج i2p"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:227
-msgid ""
-"It regularly updates your hosts.txt file from distributed sources or "
-"\"subscriptions\"."
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
 msgstr "يقوم بتحديث ملف hosts.txt من عدة مصادر"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:229
-msgid ""
-"Subscribing to additional sites is easy, just add them to your <a "
-"href=\"subscriptions\">subscriptions</a> file."
-msgstr ""
-"الاشتراك في مواقع إضافية أمر سهل، فقط قم بإضافتها إلى ملف <a "
-"href=\"subscriptions\">الاشتراكات</a> الخاص بك."
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "الاشتراك في مواقع إضافية أمر سهل، فقط قم بإضافتها إلى ملف <a href=\"subscriptions\">الاشتراكات</a> الخاص بك."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:231
-msgid ""
-"For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/"
-"naming.html\" target=_blank>the overview</a>."
-msgstr ""
-"لمزيد من المعلومات حول التسمية في I2P، راجع <a href=\"http://i2p-projekt.i2p/"
-"naming.html\" target=_blank>نظرة عامة</a>."
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "لمزيد من المعلومات حول التسمية في I2P، راجع <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>نظرة عامة</a>."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:233
 msgid "How does the addressbook application work?"
 msgstr "كيف يشتغل دفتر العناوين؟"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:235
-msgid ""
-"The addressbook application regularly polls your subscriptions and merges "
-"their content into your \"router\" address book."
-msgstr ""
-"يقوم تطبيق دفتر العناوين بانتظام باستقصاء اشتراكاتك ودمج محتواها في دفتر "
-"عناوين \"جهاز التوجيه\" الخاص بك.دفتر العناوين الخاص بك يقوم بستمرار من "
-"الحصول على الاشتراكات و حفظ العناولن الجديدة في ملف hosts.txt."
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "يقوم تطبيق دفتر العناوين بانتظام باستقصاء اشتراكاتك ودمج محتواها في دفتر عناوين \"جهاز التوجيه\" الخاص بك.دفتر العناوين الخاص بك يقوم بستمرار من الحصول على الاشتراكات و حفظ العناولن الجديدة في ملف hosts.txt."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:237
-msgid ""
-"Then it merges your \"master\" address book into the router address book as "
-"well."
+msgid "Then it merges your \"master\" address book into the router address book as well."
 msgstr "ثم اضافة العناوين الى دفتر العناوين الرئيسي أيضا."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:239
-msgid ""
-"If configured, the router address book is now written to the \"published\" "
-"address book, which will be publicly available if you are running an eepsite."
-msgstr ""
-"إذا تم تكوينه، فسيتم الآن كتابة دفتر عناوين جهاز التوجيه في دفتر العناوين "
-"\"المنشور\"، والذي سيكون متاحًا للعامة إذا كنت تقوم بتشغيل موقع eepsite.اذا "
-"قمت بالاختيار، سيتم نشر دفتر العناوين العام الذي يستطيع الأخرون الوصول اليه."
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "إذا تم تكوينه، فسيتم الآن كتابة دفتر عناوين جهاز التوجيه في دفتر العناوين \"المنشور\"، والذي سيكون متاحًا للعامة إذا كنت تقوم بتشغيل موقع eepsite.اذا قمت بالاختيار، سيتم نشر دفتر العناوين العام الذي يستطيع الأخرون الوصول اليه."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:241
-msgid ""
-"The router also uses a private address book, which is not merged or "
-"published."
+msgid "The router also uses a private address book, which is not merged or published."
 msgstr "يستخدم جهاز التوجيه أيضًا دفتر عناوين خاصًا، ولم يتم دمجه أو نشره."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:243
-msgid ""
-"Hosts in the private address book can be accessed by you but their addresses "
-"are never distributed to others."
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
 msgstr "العناوين في دفتر العناوين الخاص لايمكن الوصول اليها من طرف الآخرين. "
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:245
-msgid ""
-"The private address book can also be used for aliases of hosts in your other "
-"address books."
-msgstr ""
-"يمكن أيضًا استخدام دفتر العناوين الخاص للأسماء المستعارة للمضيفين في دفاتر "
-"العناوين الأخرى.ويمكن أيضا أن تستعمل دفتر العناوين الخاص  لأجل الأسماء "
-"المستعارة لأخرى الخاصة بك."
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "يمكن أيضًا استخدام دفتر العناوين الخاص للأسماء المستعارة للمضيفين في دفاتر العناوين الأخرى.ويمكن أيضا أن تستعمل دفتر العناوين الخاص  لأجل الأسماء المستعارة لأخرى الخاصة بك."
 
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:196
 msgid "subscription log"
@@ -901,8 +828,7 @@ msgid "The subscription file contains a list of i2p URLs."
 msgstr "ملف الاشتراك يحتوي على قائمة مواقع i2p."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:250
-msgid ""
-"The addressbook application regularly checks this list for new eepsites."
+msgid "The addressbook application regularly checks this list for new eepsites."
 msgstr "دفتر العناوين تقوم يستمرار بالتحقق من قائمة eepsites."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:252
@@ -914,43 +840,27 @@ msgid "See the FAQ for a list of subscription URLs."
 msgstr "أنظر الأسئلة الشائعة للخصول على قائمة بالعناوين"
 
 #: build/HowSVG.java:5
-msgid ""
-"If SusiDNS is configured to publish your Router address book, the entries "
-"will appear in your Published address book and saved to a hosts.txt file for "
-"sharing."
-msgstr ""
-"إذا تم تكوين SusiDNS لنشر دفتر عناوين جهاز التوجيه الخاص بك، فستظهر "
-"الإدخالات في دفتر العناوين المنشور الخاص بك ويتم حفظها في ملف hosts.txt "
-"للمشاركة."
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "إذا تم تكوين SusiDNS لنشر دفتر عناوين جهاز التوجيه الخاص بك، فستظهر الإدخالات في دفتر العناوين المنشور الخاص بك ويتم حفظها في ملف hosts.txt للمشاركة."
 
 #: build/HowSVG.java:6
 msgid "Published Addressbook"
 msgstr "دفتر العناوين المنشور"
 
 #: build/HowSVG.java:7
-msgid ""
-"To configure SusiDNS to push your Router address book to your Published "
-"address book, set 'should_publish=true' on the configuration page."
-msgstr ""
-"لتكوين SusiDNS لدفع دفتر عناوين جهاز التوجيه الخاص بك إلى دفتر العناوين "
-"المنشور، قم بتعيين \"should_publish=true\" في صفحة التكوين."
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "لتكوين SusiDNS لدفع دفتر عناوين جهاز التوجيه الخاص بك إلى دفتر العناوين المنشور، قم بتعيين \"should_publish=true\" في صفحة التكوين."
 
 #: build/HowSVG.java:8
-msgid ""
-"All hosts derived from subscriptions will appear in this address book, in "
-"addition to any you manually add here or to your Master address book."
-msgstr ""
-"ستظهر جميع المضيفات المشتقة من الاشتراكات في دفتر العناوين هذا، بالإضافة إلى "
-"أي مضيف تضيفه يدويًا هنا أو إلى دفتر العناوين الرئيسي الخاص بك."
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "ستظهر جميع المضيفات المشتقة من الاشتراكات في دفتر العناوين هذا، بالإضافة إلى أي مضيف تضيفه يدويًا هنا أو إلى دفتر العناوين الرئيسي الخاص بك."
 
 #: build/HowSVG.java:9
 msgid "Router Addressbook"
 msgstr "دفتر عناوين جهاز التوجيه"
 
 #: build/HowSVG.java:10
-msgid ""
-"Hosts you manually add here will never be published. You can also add "
-"aliases to hosts in other address books here."
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
 msgstr "لن يتم نشر المضيفين الذين تضيفهم يدويًا هنا أبدًا. "
 
 #: build/HowSVG.java:11
@@ -962,40 +872,24 @@ msgid "Local Records"
 msgstr "السجلات المحلية"
 
 #: build/HowSVG.java:13
-msgid ""
-"I2P applications (including the HTTP proxy) use the hosts in your local "
-"address books to resolve .i2p hostnames."
-msgstr ""
-"تستخدم تطبيقات I2P (بما في ذلك وكيل HTTP) المضيفين في دفاتر العناوين المحلية "
-"الخاصة بك لحل أسماء مضيفات .i2p."
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "تستخدم تطبيقات I2P (بما في ذلك وكيل HTTP) المضيفين في دفاتر العناوين المحلية الخاصة بك لحل أسماء مضيفات .i2p."
 
 #: build/HowSVG.java:14
-msgid ""
-"Additional subscriptions can be found in the FAQ section of the Router help "
-"page."
-msgstr ""
-"يمكن العثور على اشتراكات إضافية في قسم الأسئلة الشائعة بصفحة تعليمات جهاز "
-"التوجيه."
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "يمكن العثور على اشتراكات إضافية في قسم الأسئلة الشائعة بصفحة تعليمات جهاز التوجيه."
 
 #: build/HowSVG.java:16
-msgid ""
-"Hosts sourced from your subscriptions are added to your Router address book, "
-"and are automatically synced (by default every 12 hours)."
-msgstr ""
-"تتم إضافة المضيفين الذين تم الحصول عليهم من اشتراكاتك إلى دفتر عناوين جهاز "
-"التوجيه الخاص بك، وتتم مزامنتهم تلقائيًا (افتراضيًا كل 12 ساعة)."
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "تتم إضافة المضيفين الذين تم الحصول عليهم من اشتراكاتك إلى دفتر عناوين جهاز التوجيه الخاص بك، وتتم مزامنتهم تلقائيًا (افتراضيًا كل 12 ساعة)."
 
 #: build/HowSVG.java:17
 msgid "Configure Subscriptions"
 msgstr "تكوين الاشتراكات"
 
 #: build/HowSVG.java:18
-msgid ""
-"If you manually add hosts here, they will be included your Published address "
-"book (if configured)."
-msgstr ""
-"إذا قمت بإضافة مضيفين هنا يدويًا، فسيتم تضمينهم في دفتر العناوين المنشور (إذا "
-"تم تكوينه)."
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "إذا قمت بإضافة مضيفين هنا يدويًا، فسيتم تضمينهم في دفتر العناوين المنشور (إذا تم تكوينه)."
 
 #: build/HowSVG.java:19
 msgid "Master Addressbook"
@@ -1010,12 +904,8 @@ msgid "I2P applications"
 msgstr "تطبيقات I2P"
 
 #: build/HowSVG.java:22
-msgid ""
-"The Master, Router and Private address books collectively serve as the DNS "
-"authority for I2P applications."
-msgstr ""
-"تعمل دفاتر العناوين الرئيسية وجهاز التوجيه والخاصة بشكل جماعي بمثابة سلطة "
-"DNS لتطبيقات I2P."
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "تعمل دفاتر العناوين الرئيسية وجهاز التوجيه والخاصة بشكل جماعي بمثابة سلطة DNS لتطبيقات I2P."
 
 #: build/HowSVG.java:23
 msgid "Optional,"
@@ -1026,27 +916,13 @@ msgid "for websites"
 msgstr "للمواقع الإلكترونية"
 
 #: build/HowSVG.java:25
-msgid ""
-"If you configure SusiDNS to publish your Router address book, it will export "
-"a hosts.txt file containing all the hosts (by default to the root of your "
-"eepsite)."
-msgstr ""
-"إذا قمت بتكوين SusiDNS لنشر دفتر عناوين جهاز التوجيه الخاص بك، فسوف يقوم "
-"بتصدير ملف hosts.txt الذي يحتوي على جميع المضيفين (افتراضيًا إلى جذر eepsite "
-"الخاص بك)."
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "إذا قمت بتكوين SusiDNS لنشر دفتر عناوين جهاز التوجيه الخاص بك، فسوف يقوم بتصدير ملف hosts.txt الذي يحتوي على جميع المضيفين (افتراضيًا إلى جذر eepsite الخاص بك)."
 
 #: build/HowSVG.java:26
-msgid ""
-"Addresses manually added to your Master address book will merge with your "
-"Router address book."
-msgstr ""
-"العناوين التي تمت إضافتها يدويًا إلى دفتر العناوين الرئيسي الخاص بك سيتم "
-"دمجها مع دفتر عناوين جهاز التوجيه الخاص بك."
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "العناوين التي تمت إضافتها يدويًا إلى دفتر العناوين الرئيسي الخاص بك سيتم دمجها مع دفتر عناوين جهاز التوجيه الخاص بك."
 
 #: build/HowSVG.java:27
-msgid ""
-"Hosts you receive from your subscriptions will merge with your Router "
-"address book."
-msgstr ""
-"سيتم دمج المضيفين الذين تستقبلهم من اشتراكاتك مع دفتر عناوين جهاز التوجيه "
-"الخاص بك."
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "سيتم دمج المضيفين الذين تستقبلهم من اشتراكاتك مع دفتر عناوين جهاز التوجيه الخاص بك."

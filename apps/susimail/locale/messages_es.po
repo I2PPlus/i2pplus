@@ -69,24 +69,12 @@ msgstr "Correo masivo"
 msgid "Inbox"
 msgstr "Bandeja de entrada"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "No hay mensajes nuevos"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "El mensaje tiene un adjunto"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "desconocido"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -129,8 +117,7 @@ msgstr "Descargar adjunto {0}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:691
 msgid "File is packed into a zipfile for security reasons."
-msgstr ""
-"El archivo está empaquetado en un archivo zip por razones de seguridad."
+msgstr "El archivo está empaquetado en un archivo zip por razones de seguridad."
 
 #: src/src/i2p/susi/webmail/WebMail.java:695
 #, java-format
@@ -273,9 +260,7 @@ msgstr "No hay mensajes marcados para su eliminación."
 #: src/src/i2p/susi/webmail/WebMail.java:1970
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"No se cambió el servidor. Edite el fichero de configuración {0} para cambiar "
-"de servidor."
+msgstr "No se cambió el servidor. Edite el fichero de configuración {0} para cambiar de servidor."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1990
 msgid "Configuration saved"
@@ -283,8 +268,7 @@ msgstr "Configuración guardada"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2012
 msgid "Invalid pagesize number, resetting to default value."
-msgstr ""
-"Tamaño de página no válida, restableciendo los valores predeterminados."
+msgstr "Tamaño de página no válida, restableciendo los valores predeterminados."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2477
 #: src/src/i2p/susi/webmail/WebMail.java:3454
@@ -540,11 +524,6 @@ msgstr "Tamaño"
 msgid "Mark for deletion"
 msgstr "Marcar para borrado"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "El mensaje es nuevo"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "El mensaje es nuevo"
@@ -637,11 +616,6 @@ msgstr "Volver a la carpeta"
 msgid "Move to Folder"
 msgstr "Mover a la carpeta"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "El mensaje es nuevo"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "Tamaño de página de la carpeta"
@@ -670,15 +644,11 @@ msgstr "No hay respuesta del servidor"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"Error al iniciar sesión en el servidor de correo, nombre de usuario o "
-"contraseña incorrectos."
+msgstr "Error al iniciar sesión en el servidor de correo, nombre de usuario o contraseña incorrectos."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Salga y vuelva a iniciar sesión con el nombre de usuario y la contraseña "
-"correctos."
+msgstr "Salga y vuelva a iniciar sesión con el nombre de usuario y la contraseña correctos."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

@@ -12,10 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
 #: ../java/build/Proxy.java:5 ../java/build/Proxy.java:11
 msgid "Warning: Invalid Request URI"
@@ -103,12 +100,8 @@ msgid "The request URI is invalid, and probably contains illegal characters."
 msgstr "URI запиту недійсний і, ймовірно, містить недопустимі символи."
 
 #: ../java/build/Proxy.java:13
-msgid ""
-"If you clicked a link, check the end of the URI for any characters the "
-"browser has mistakenly added on."
-msgstr ""
-"Якщо ви клацнули посилання, перевірте кінець URI на наявність символів, які "
-"браузер помилково додав."
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Якщо ви клацнули посилання, перевірте кінець URI на наявність символів, які браузер помилково додав."
 
 #: ../java/build/Proxy.java:14 ../java/build/Proxy.java:20
 #: ../java/build/Proxy.java:126 ../java/build/Proxy.java:132
@@ -120,13 +113,8 @@ msgid "The connection to the website was reset while the page was loading."
 msgstr "Під час завантаження сторінки з'єднання з сайтом було обірвано."
 
 #: ../java/build/Proxy.java:22
-msgid ""
-"The website could be temporarily unavailable, too busy, or it has blocked "
-"your access."
-msgstr ""
-"Веб-сайт може бути тимчасово недоступним, занадто зайнятим або він "
-"заблокував ваш доступ.Веб-сайт може бути тимчасово недоступний, занадто "
-"зайнятий або заблокований."
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Веб-сайт може бути тимчасово недоступним, занадто зайнятим або він заблокував ваш доступ.Веб-сайт може бути тимчасово недоступний, занадто зайнятий або заблокований."
 
 #: ../java/build/Proxy.java:23 ../java/build/Proxy.java:72
 #: ../java/build/Proxy.java:124 ../java/build/Proxy.java:169
@@ -139,12 +127,8 @@ msgstr "Ви можете {0} повторно {1}."
 #: ../java/build/Proxy.java:137 ../java/build/Proxy.java:150
 #: ../java/build/Proxy.java:170
 #, java-format
-msgid ""
-"If you leave this page open, it will automatically retry connecting to the "
-"website every {0} seconds after a failed connection attempt."
-msgstr ""
-"Якщо ви залишите цю сторінку відкритою, вона автоматично повторюватиме "
-"підключення до веб-сайту кожні {0} секунд після невдалої спроби підключення."
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Якщо ви залишите цю сторінку відкритою, вона автоматично повторюватиме підключення до веб-сайту кожні {0} секунд після невдалої спроби підключення."
 
 #: ../java/build/Proxy.java:25 ../java/build/Proxy.java:62
 #: ../java/build/Proxy.java:74 ../java/build/Proxy.java:87
@@ -175,12 +159,8 @@ msgid "Warning: No Outproxy Configured"
 msgstr "Попередження: вихідний проксі не налаштовано"
 
 #: ../java/build/Proxy.java:43
-msgid ""
-"Your request was for a site outside of I2P, but you have no HTTP outproxy "
-"configured."
-msgstr ""
-"Ваш запит стосувався сайту за межами I2P, але у вас не налаштовано вихідний "
-"проксі HTTP."
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "Ваш запит стосувався сайту за межами I2P, але у вас не налаштовано вихідний проксі HTTP."
 
 #: ../java/build/Proxy.java:44
 msgid "Please configure an outproxy in I2PTunnel."
@@ -192,33 +172,19 @@ msgstr "Помилка: запит відхилено"
 
 #: ../java/build/Proxy.java:46
 msgid "Error: Cannot Access Router Console via I2P Proxy"
-msgstr ""
-"Помилка: неможливо отримати доступ до консолі маршрутизатора через проксі-"
-"сервер I2P"
+msgstr "Помилка: неможливо отримати доступ до консолі маршрутизатора через проксі-сервер I2P"
 
 #: ../java/build/Proxy.java:47
 msgid "Your browser is misconfigured."
 msgstr "Ваш браузер неправильно налаштований."
 
 #: ../java/build/Proxy.java:48
-msgid ""
-"Do not use the proxy to access the router console, localhost, or local LAN "
-"destinations."
-msgstr ""
-"Не використовуйте проксі для доступу до консолі маршрутизатора, локального "
-"хосту або місць призначення локальної локальної мережі.Не використовуйте "
-"проксі для доступу до консолі роутеру, localhost чи будь-якого хосту у "
-"локальній мережі."
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Не використовуйте проксі для доступу до консолі маршрутизатора, локального хосту або місць призначення локальної локальної мережі.Не використовуйте проксі для доступу до консолі роутеру, localhost чи будь-якого хосту у локальній мережі."
 
 #: ../java/build/Proxy.java:49
-msgid ""
-"You need to prevent 127.0.0.1 (or the address you're accessing the I2P "
-"console on) from being routed via I2P's http proxy, usually by excluding the "
-"address in your browser's proxy configuration section."
-msgstr ""
-"Вам потрібно запобігти маршрутизації 127.0.0.1 (або адреси, з якої ви "
-"отримуєте доступ до консолі I2P) через http-проксі I2P, як правило, шляхом "
-"виключення адреси в розділі налаштування проксі-сервера вашого браузера."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Вам потрібно запобігти маршрутизації 127.0.0.1 (або адреси, з якої ви отримуєте доступ до консолі I2P) через http-проксі I2P, як правило, шляхом виключення адреси в розділі налаштування проксі-сервера вашого браузера."
 
 #: ../java/build/Proxy.java:50
 msgid "Website Unknown"
@@ -242,21 +208,13 @@ msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
 msgstr "Якщо ви маєте Base 64 адресу, то {0}додайте її до адресної книги{1}."
 
 #: ../java/build/Proxy.java:60
-msgid ""
-"Otherwise, find a Base 32 or address helper link, or use a jump service link "
-"below."
-msgstr ""
-"Інакше знайдіть посилання Base 32 або допоміжного адреса, або скористайтеся "
-"посиланням служби переходу нижче."
+msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
+msgstr "Інакше знайдіть посилання Base 32 або допоміжного адреса, або скористайтеся посиланням служби переходу нижче."
 
 #: ../java/build/Proxy.java:61
 #, java-format
-msgid ""
-"Seeing this page often? See {0}the FAQ{1} for help in {2}adding some "
-"subscriptions{3} to your addressbook."
-msgstr ""
-"Бачити цю сторінку часто? Див. {0} FAQ {1} для довідки в {2} Додавання "
-"деяких підписки {3} до вашої адресної книги."
+msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
+msgstr "Бачити цю сторінку часто? Див. {0} FAQ {1} для довідки в {2} Додавання деяких підписки {3} до вашої адресної книги."
 
 #: ../java/build/Proxy.java:63 ../java/build/Proxy.java:69
 #: ../java/build/Proxy.java:160 ../java/build/Proxy.java:166
@@ -270,10 +228,8 @@ msgid "The website was not reachable, because its lease set was not found."
 msgstr "Веб-сайт недоступний, оскільки його набір оренди не знайдено."
 
 #: ../java/build/Proxy.java:71
-msgid ""
-"The website is probably down, but there could also be network congestion."
-msgstr ""
-"Веб-сайт, ймовірно, не працює, але також може бути перевантаження мережі."
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Веб-сайт, ймовірно, не працює, але також може бути перевантаження мережі."
 
 #: ../java/build/Proxy.java:75 ../java/build/Proxy.java:81
 #: ../java/build/Proxy.java:139 ../java/build/Proxy.java:145
@@ -285,47 +241,28 @@ msgid "The HTTP Outproxy was not found."
 msgstr "Вихідний проксі для HTTP не знайдено."
 
 #: ../java/build/Proxy.java:83
-msgid ""
-"It is offline, there is network congestion, or your router is not yet well-"
-"integrated with peers."
-msgstr ""
-"Він офлайн, мережа перевантажена, або ваш маршрутизатор ще не добре "
-"інтегрований з одноранговими вузлами.Він знаходиться в автономному режимі, є "
-"перевантаження мережі або ваш маршрутизатор ще не інтегрований з "
-"одноранговими пристроями."
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Він офлайн, мережа перевантажена, або ваш маршрутизатор ще не добре інтегрований з одноранговими вузлами.Він знаходиться в автономному режимі, є перевантаження мережі або ваш маршрутизатор ще не інтегрований з одноранговими пристроями."
 
 #: ../java/build/Proxy.java:84 ../java/build/Proxy.java:105
 #: ../java/build/Proxy.java:135 ../java/build/Proxy.java:148
 #, java-format
-msgid ""
-"You may want to {0}retry{1} as this will randomly reselect an outproxy from "
-"the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr ""
-"Ви можете {0}повторити спробу{1}, оскільки це призведе до випадкового "
-"повторного вибору вихідного проксі-сервера з пулу, який ви визначили {2}"
-"тут{3} (якщо у вас налаштовано більше одного)."
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Ви можете {0}повторити спробу{1}, оскільки це призведе до випадкового повторного вибору вихідного проксі-сервера з пулу, який ви визначили {2}тут{3} (якщо у вас налаштовано більше одного)."
 
 #: ../java/build/Proxy.java:85 ../java/build/Proxy.java:106
 #: ../java/build/Proxy.java:136 ../java/build/Proxy.java:149
 #, java-format
-msgid ""
-"If you continue to have trouble you may want to edit your outproxy list {0}"
-"here{1}."
-msgstr ""
-"Якщо проблеми не зникають, ви можете відредагувати свій список проксі-"
-"серверів {0}тут{1}."
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Якщо проблеми не зникають, ви можете відредагувати свій список проксі-серверів {0}тут{1}."
 
 #: ../java/build/Proxy.java:88 ../java/build/Proxy.java:94
 msgid "Warning: Request Denied"
 msgstr "Попередження: запит відхилено"
 
 #: ../java/build/Proxy.java:95
-msgid ""
-"This address appears to be malformed. Please verify you have supplied a "
-"valid address!"
-msgstr ""
-"Ця адреса, здається, є неправильною. Будь ласка, переконайтеся, що ви "
-"постачали дійсну адресу!"
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Ця адреса, здається, є неправильною. Будь ласка, переконайтеся, що ви постачали дійсну адресу!"
 
 #: ../java/build/Proxy.java:96
 msgid "You attempted to connect to a non-I2P website or location."
@@ -336,14 +273,8 @@ msgid "Outproxy Unreachable"
 msgstr "Outproxy Недоступний"
 
 #: ../java/build/Proxy.java:104
-msgid ""
-"The HTTP outproxy was not reachable, because it uses encryption options that "
-"are not supported by your I2P or Java version."
-msgstr ""
-"HTTP-проксі-сервер недоступний, оскільки він використовує параметри "
-"шифрування, які не підтримуються вашою версією I2P або Java.Вихідний проксі "
-"HTTP недоступний, бо використовує опції шифрування, які не підтримуються "
-"вашим I2P або версією Java."
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "HTTP-проксі-сервер недоступний, оскільки він використовує параметри шифрування, які не підтримуються вашою версією I2P або Java.Вихідний проксі HTTP недоступний, бо використовує опції шифрування, які не підтримуються вашим I2P або версією Java."
 
 #: ../java/build/Proxy.java:108 ../java/build/Proxy.java:159
 #: ../java/build/Proxy.java:209
@@ -360,30 +291,17 @@ msgstr "Авторизація outproxy"
 
 #: ../java/build/Proxy.java:111
 msgid "This proxy is configured to require a username and password for access."
-msgstr ""
-"Цей проксі-сервер налаштовано на вимогу імені користувача та пароля для "
-"доступу.Цей проксі налаштований конечно вимагати ім'я користувача і пароль "
-"для доступу."
+msgstr "Цей проксі-сервер налаштовано на вимогу імені користувача та пароля для доступу.Цей проксі налаштований конечно вимагати ім'я користувача і пароль для доступу."
 
 #: ../java/build/Proxy.java:112
 #, java-format
-msgid ""
-"Please enter your username and password, or check your {0}router "
-"configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr ""
-"Будь ласка, введіть своє ім’я користувача та пароль або перевірте {0}"
-"конфігурацію маршрутизатора{1} або {2}конфігурацію I2PTunnel{3}.Будь ласка, "
-"ввести ваш логін і пароль, або перевірити {0}router configuration{1} або {2}"
-"I2PTunnel configuration{3}."
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Будь ласка, введіть своє ім’я користувача та пароль або перевірте {0}конфігурацію маршрутизатора{1} або {2}конфігурацію I2PTunnel{3}.Будь ласка, ввести ваш логін і пароль, або перевірити {0}router configuration{1} або {2}I2PTunnel configuration{3}."
 
 #: ../java/build/Proxy.java:113
 #, java-format
-msgid ""
-"To disable authorization, remove the configuration {0}i2ptunnel.proxy."
-"auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr ""
-"Щоб вимкнути авторизацію, видаліть конфігурацію {0}i2ptunnel.proxy."
-"auth=basic{1}, а потім зупиніть і перезапустіть тунель HTTP-проксі."
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Щоб вимкнути авторизацію, видаліть конфігурацію {0}i2ptunnel.proxy.auth=basic{1}, а потім зупиніть і перезапустіть тунель HTTP-проксі."
 
 #: ../java/build/Proxy.java:114 ../java/build/Proxy.java:120
 #: ../java/build/Proxy.java:188
@@ -391,18 +309,12 @@ msgid "Warning: Invalid Destination"
 msgstr "Локальний адрес призначення"
 
 #: ../java/build/Proxy.java:121
-msgid ""
-"The website destination specified was not valid, or was otherwise "
-"unreachable."
+msgid "The website destination specified was not valid, or was otherwise unreachable."
 msgstr "Вказаний цільовий веб-сайт недійсний або недосяжний з інших причин."
 
 #: ../java/build/Proxy.java:122
-msgid ""
-"Perhaps you pasted in the wrong Base 64 string or the link you are following "
-"is bad."
-msgstr ""
-"Можливо, ви вставили неправильний рядок Base 64 або посилання, за яким ви "
-"переходите, неправильне."
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Можливо, ви вставили неправильний рядок Base 64 або посилання, за яким ви переходите, неправильне."
 
 #: ../java/build/Proxy.java:123
 msgid "The I2P host could also be offline."
@@ -413,23 +325,15 @@ msgid "The connection to the proxy was reset."
 msgstr "З’єднання з проксі скинуто."
 
 #: ../java/build/Proxy.java:134
-msgid ""
-"The proxy could be temporarily unavailable, too busy, or it has blocked your "
-"access."
-msgstr ""
-"Проксі може бути тимчасово недоступним, занадто зайнятим або заблокував ваш "
-"доступ."
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Проксі може бути тимчасово недоступним, занадто зайнятим або заблокував ваш доступ."
 
 #: ../java/build/Proxy.java:146
-msgid ""
-"The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr ""
-"Вихідний проксі-сервер HTTP недоступний, оскільки його набір оренди не "
-"знайдено."
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "Вихідний проксі-сервер HTTP недоступний, оскільки його набір оренди не знайдено."
 
 #: ../java/build/Proxy.java:147
-msgid ""
-"The outproxy is probably down, but there could also be network congestion."
+msgid "The outproxy is probably down, but there could also be network congestion."
 msgstr "Можливо, вихідний проксі не працює, або мережа перенавантажена."
 
 #: ../java/build/Proxy.java:152 ../java/build/Proxy.java:158
@@ -441,42 +345,24 @@ msgid "The website was not reachable."
 msgstr "Веб-сайт був недоступний."
 
 #: ../java/build/Proxy.java:168
-msgid ""
-"The website is offline, there is network congestion, or your router is not "
-"yet well-integrated with peers."
-msgstr ""
-"Веб-сайт офлайн, мережа перевантажена, або ваш маршрутизатор ще не добре "
-"інтегрований з одноранговими вузлами."
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Веб-сайт офлайн, мережа перевантажена, або ваш маршрутизатор ще не добре інтегрований з одноранговими вузлами."
 
 #: ../java/build/Proxy.java:172 ../java/build/Proxy.java:178
 msgid "Warning: Destination Key Conflict"
 msgstr "Попередження: конфлікт ключа призначення"
 
 #: ../java/build/Proxy.java:179
-msgid ""
-"The address helper link you followed specifies a different destination key "
-"than the entry in your address book."
-msgstr ""
-"Допоміжне посилання адреси, за яким ви перейшли, визначає інший ключ "
-"призначення, ніж запис у вашій адресній книзі."
+msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
+msgstr "Допоміжне посилання адреси, за яким ви перейшли, визначає інший ключ призначення, ніж запис у вашій адресній книзі."
 
 #: ../java/build/Proxy.java:180
-msgid ""
-"Someone could be trying to impersonate another website, or people have given "
-"two websites identical names."
-msgstr ""
-"Хтось може намагатися видати себе за інший веб-сайт, або люди дали двом веб-"
-"сайтам однакові назви."
+msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
+msgstr "Хтось може намагатися видати себе за інший веб-сайт, або люди дали двом веб-сайтам однакові назви."
 
 #: ../java/build/Proxy.java:181
-msgid ""
-"Resolve the conflict by deciding which key you trust, and then either ignore "
-"the address helper link, or delete the host entry from your address book and "
-"click the address helper link again."
-msgstr ""
-"Вирішіть конфлікт, вирішивши, якому ключу ви довіряєте, а потім або "
-"проігноруйте посилання допоміжної адреси, або видаліть запис хоста з вашої "
-"адресної книги та знову клацніть посилання допоміжної адреси."
+msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
+msgstr "Вирішіть конфлікт, вирішивши, якому ключу ви довіряєте, а потім або проігноруйте посилання допоміжної адреси, або видаліть запис хоста з вашої адресної книги та знову клацніть посилання допоміжної адреси."
 
 #: ../java/build/Proxy.java:189
 msgid "The Base32 address is invalid."
@@ -489,28 +375,19 @@ msgstr "Попередження: Помічник неправильної ад
 #: ../java/build/Proxy.java:198
 #, java-format
 msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
-msgstr ""
-"Допоміжний ключ в URL-адресі ({0}i2paddresshelper={1}) не розпізнається."
+msgstr "Допоміжний ключ в URL-адресі ({0}i2paddresshelper={1}) не розпізнається."
 
 #: ../java/build/Proxy.java:199
 msgid "It seems to be garbage data, or a mistyped Base 32 address."
 msgstr "Здається, це сміттєві дані або неправильно введена адреса Base 32."
 
 #: ../java/build/Proxy.java:200
-msgid ""
-"Check your URL to try and fix the helper key to be a valid Base 32 hostname "
-"or Base 64 key."
-msgstr ""
-"Перевірте свою URL-адресу, щоб спробувати виправити допоміжний ключ на "
-"дійсне ім’я хосту Base 32 або ключ Base 64."
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Перевірте свою URL-адресу, щоб спробувати виправити допоміжний ключ на дійсне ім’я хосту Base 32 або ключ Base 64."
 
 #: ../java/build/Proxy.java:208
-msgid ""
-"The website was not reachable, because it uses encryption options that are "
-"not supported by your I2P or Java version."
-msgstr ""
-"Веб-сайт недоступний, оскільки він використовує параметри шифрування, які не "
-"підтримуються вашою версією I2P або Java."
+msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "Веб-сайт недоступний, оскільки він використовує параметри шифрування, які не підтримуються вашою версією I2P або Java."
 
 #: ../java/build/Proxy.java:210
 msgid "Information: New Host Name"
@@ -521,39 +398,24 @@ msgid "Information: New Host Name with Address Helper"
 msgstr "Інформація: нове ім’я хосту з помічником адрес"
 
 #: ../java/build/Proxy.java:217
-msgid ""
-"The address helper link you followed is for a new host name that is not in "
-"your address book."
-msgstr ""
-"Допоміжне посилання адреси, за яким ви перейшли, призначене для нового імені "
-"хоста, якого немає у вашій адресній книзі."
+msgid "The address helper link you followed is for a new host name that is not in your address book."
+msgstr "Допоміжне посилання адреси, за яким ви перейшли, призначене для нового імені хоста, якого немає у вашій адресній книзі."
 
 #: ../java/build/Proxy.java:218
 msgid "You may save this host name to your local address book."
 msgstr "Ви можете зберегти це ім'я хоста у вашій локальній адресній книзі."
 
 #: ../java/build/Proxy.java:219
-msgid ""
-"If you save it to your address book, you will not see this message again."
-msgstr ""
-"Якщо ви збережете його в адресній книзі, ви більше не побачите це "
-"повідомлення."
+msgid "If you save it to your address book, you will not see this message again."
+msgstr "Якщо ви збережете його в адресній книзі, ви більше не побачите це повідомлення."
 
 #: ../java/build/Proxy.java:220
-msgid ""
-"If you do not save it, the host name will be forgotten after the next router "
-"restart."
-msgstr ""
-"Якщо ви не збережете його, ім’я хоста буде забуто після наступного "
-"перезапуску маршрутизатора."
+msgid "If you do not save it, the host name will be forgotten after the next router restart."
+msgstr "Якщо ви не збережете його, ім’я хоста буде забуто після наступного перезапуску маршрутизатора."
 
 #: ../java/build/Proxy.java:221
-msgid ""
-"If you do not wish to visit this host, click the \"back\" button on your "
-"browser."
-msgstr ""
-"Якщо ви не бажаєте відвідувати цей хост, натисніть кнопку \"назад\" у вашому "
-"браузері."
+msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
+msgstr "Якщо ви не бажаєте відвідувати цей хост, натисніть кнопку \"назад\" у вашому браузері."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:734
 msgid "This seems to be a bad destination:"
@@ -565,14 +427,8 @@ msgstr "i2paddresshelper не може допомогти Вам з місцем
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:807
 #, java-format
-msgid ""
-"To visit the destination in your addressbook, click <a href=\"{0}\">here</"
-"a>. To visit the conflicting addresshelper destination, click <a "
-"href=\"{1}\">here</a>."
-msgstr ""
-"Щоб відвідати пункт призначення у вашій адресній книжці, натисніть <a "
-"href=\"{0}\"> тут </a>. Щоб відвідати конфліктну адресу призначення, "
-"натисніть <a href=\"{1}\"> тут </a>."
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Щоб відвідати пункт призначення у вашій адресній книжці, натисніть <a href=\"{0}\"> тут </a>. Щоб відвідати конфліктну адресу призначення, натисніть <a href=\"{1}\"> тут </a>."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:817
 #, java-format
@@ -610,12 +466,8 @@ msgid "Continue to {0} without saving"
 msgstr "Продовжити до {0} без збереження"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1580
-msgid ""
-"You can browse to the site without saving it to the addressbook. The address "
-"will be remembered until you restart your I2P router."
-msgstr ""
-"Ви можете переглядати на Сайт, не зберігаючи його до адресної книжки. Адреса "
-"запам'ятається, поки ви не перезапустите свій маршрутизатор I2P."
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Ви можете переглядати на Сайт, не зберігаючи його до адресної книжки. Адреса запам'ятається, поки ви не перезапустите свій маршрутизатор I2P."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1581
 msgid "Continue without saving"
@@ -627,20 +479,12 @@ msgid "Save {0} to router address book and continue to website"
 msgstr "Збережіть {0} в адресній книзі маршрутизатора та перейдіть на веб-сайт"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1589
-msgid ""
-"This address will be saved to your Router addressbook where your "
-"subscription-based addresses are stored."
-msgstr ""
-"Ця адреса буде збережена в адресній книзі вашого маршрутизатора, де "
-"зберігаються ваші адреси на основі підписки."
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "Ця адреса буде збережена в адресній книзі вашого маршрутизатора, де зберігаються ваші адреси на основі підписки."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1592
-msgid ""
-"If you want to keep track of sites you have added manually, add to your "
-"Master or Private addressbook instead."
-msgstr ""
-"Якщо ви хочете відстежувати сайти, які ви додали вручну, додайте натомість "
-"до вашої головної або приватної адресної книги."
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Якщо ви хочете відстежувати сайти, які ви додали вручну, додайте натомість до вашої головної або приватної адресної книги."
 
 #. FIXME wasn't escaped
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1595
@@ -655,14 +499,8 @@ msgid "Save {0} to master addressbook and continue to website"
 msgstr "Зберегти {0} для майстер -адреси та продовжуйте веб -сайт"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1603
-msgid ""
-"This address will be saved to your Master addressbook. Select this option "
-"for addresses you wish to keep separate from the main router address book, "
-"but don't mind publishing."
-msgstr ""
-"Ця адреса буде збережена у вашій головній адресній книжці. Виберіть цю опцію "
-"для адрес, які ви хочете зберегти окремо від головної адреси маршрутизатора, "
-"але не проти публікації."
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "Ця адреса буде збережена у вашій головній адресній книжці. Виберіть цю опцію для адрес, які ви хочете зберегти окремо від головної адреси маршрутизатора, але не проти публікації."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1608
 #, java-format
@@ -670,12 +508,8 @@ msgid "Save {0} to private addressbook and continue to website"
 msgstr "Зберегти {0} до приватної адреси та продовжуйте веб -сайт"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1609
-msgid ""
-"This address will be saved to your Private addressbook, ensuring it is never "
-"published."
-msgstr ""
-"Цю адресу буде збережено у вашій приватній адресній книзі, щоб вона ніколи "
-"не була опублікована."
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "Цю адресу буде збережено у вашій приватній адресній книзі, щоб вона ніколи не була опублікована."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1634
 msgid "Base32 address requires lookup password"
@@ -702,12 +536,8 @@ msgid "Encryption key"
 msgstr "Ключ шифрування"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1653
-msgid ""
-"You must either enter a PSK encryption key provided by the server operator, "
-"or generate a DH encryption key and send that to the server operator."
-msgstr ""
-"Ви повинні або ввести ключ шифрування PSK, наданий оператором сервера, або "
-"створити ключ шифрування DH і надіслати його оператору сервера."
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Ви повинні або ввести ключ шифрування PSK, наданий оператором сервера, або створити ключ шифрування DH і надіслати його оператору сервера."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1655
 msgid "Ask the server operator for help."

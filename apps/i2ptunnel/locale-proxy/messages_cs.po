@@ -12,8 +12,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n "
-"<= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
 #: ../java/build/Proxy.java:5 ../java/build/Proxy.java:11
 msgid "Warning: Invalid Request URI"
@@ -98,17 +97,11 @@ msgstr "Pomoc"
 
 #: ../java/build/Proxy.java:12
 msgid "The request URI is invalid, and probably contains illegal characters."
-msgstr ""
-"Identifikátor URI požadavku je neplatný a pravděpodobně obsahuje nepovolené "
-"znaky."
+msgstr "Identifikátor URI požadavku je neplatný a pravděpodobně obsahuje nepovolené znaky."
 
 #: ../java/build/Proxy.java:13
-msgid ""
-"If you clicked a link, check the end of the URI for any characters the "
-"browser has mistakenly added on."
-msgstr ""
-"Pokud jste klikli na odkaz, zkontrolujte na konci URI znaky, které prohlížeč "
-"omylem přidal."
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Pokud jste klikli na odkaz, zkontrolujte na konci URI znaky, které prohlížeč omylem přidal."
 
 #: ../java/build/Proxy.java:14 ../java/build/Proxy.java:20
 #: ../java/build/Proxy.java:126 ../java/build/Proxy.java:132
@@ -120,12 +113,8 @@ msgid "The connection to the website was reset while the page was loading."
 msgstr "Při načítání stránky bylo resetováno připojení k webu."
 
 #: ../java/build/Proxy.java:22
-msgid ""
-"The website could be temporarily unavailable, too busy, or it has blocked "
-"your access."
-msgstr ""
-"Webová stránka může být dočasně nedostupná, příliš zaneprázdněná nebo vám "
-"zablokovala přístup."
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Webová stránka může být dočasně nedostupná, příliš zaneprázdněná nebo vám zablokovala přístup."
 
 #: ../java/build/Proxy.java:23 ../java/build/Proxy.java:72
 #: ../java/build/Proxy.java:124 ../java/build/Proxy.java:169
@@ -138,12 +127,8 @@ msgstr "Můžete to {0}zkusit znovu{1}."
 #: ../java/build/Proxy.java:137 ../java/build/Proxy.java:150
 #: ../java/build/Proxy.java:170
 #, java-format
-msgid ""
-"If you leave this page open, it will automatically retry connecting to the "
-"website every {0} seconds after a failed connection attempt."
-msgstr ""
-"Pokud necháte tuto stránku otevřenou, pokusí se automaticky znovu připojit k "
-"webu každých {0} sekund po neúspěšném pokusu o připojení."
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Pokud necháte tuto stránku otevřenou, pokusí se automaticky znovu připojit k webu každých {0} sekund po neúspěšném pokusu o připojení."
 
 #: ../java/build/Proxy.java:25 ../java/build/Proxy.java:62
 #: ../java/build/Proxy.java:74 ../java/build/Proxy.java:87
@@ -174,12 +159,8 @@ msgid "Warning: No Outproxy Configured"
 msgstr "VAROVÁNÍ: Žádná nakonfigurovaná outproxy"
 
 #: ../java/build/Proxy.java:43
-msgid ""
-"Your request was for a site outside of I2P, but you have no HTTP outproxy "
-"configured."
-msgstr ""
-"Váš požadavek byl pro web mimo I2P, ale nemáte nakonfigurovaný žádný HTTP "
-"outproxy."
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "Váš požadavek byl pro web mimo I2P, ale nemáte nakonfigurovaný žádný HTTP outproxy."
 
 #: ../java/build/Proxy.java:44
 msgid "Please configure an outproxy in I2PTunnel."
@@ -198,22 +179,12 @@ msgid "Your browser is misconfigured."
 msgstr "Váš prohlížeč je špatně nakonfigurován."
 
 #: ../java/build/Proxy.java:48
-msgid ""
-"Do not use the proxy to access the router console, localhost, or local LAN "
-"destinations."
-msgstr ""
-"Nepoužívejte proxy pro přístup ke konzole routeru, localhost nebo místním "
-"cílům LAN."
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Nepoužívejte proxy pro přístup ke konzole routeru, localhost nebo místním cílům LAN."
 
 #: ../java/build/Proxy.java:49
-msgid ""
-"You need to prevent 127.0.0.1 (or the address you're accessing the I2P "
-"console on) from being routed via I2P's http proxy, usually by excluding the "
-"address in your browser's proxy configuration section."
-msgstr ""
-"Musíte zabránit tomu, aby 127.0.0.1 (nebo adresa, na které přistupujete ke "
-"konzole I2P) byla směrována přes http proxy I2P, obvykle vyloučením adresy v "
-"sekci konfigurace proxy vašeho prohlížeče."
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Musíte zabránit tomu, aby 127.0.0.1 (nebo adresa, na které přistupujete ke konzole I2P) byla směrována přes http proxy I2P, obvykle vyloučením adresy v sekci konfigurace proxy vašeho prohlížeče."
 
 #: ../java/build/Proxy.java:50
 msgid "Website Unknown"
@@ -237,21 +208,13 @@ msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
 msgstr "Pokud máte adresu Base 64, {0}přidejte ji do svého adresáře{1}."
 
 #: ../java/build/Proxy.java:60
-msgid ""
-"Otherwise, find a Base 32 or address helper link, or use a jump service link "
-"below."
-msgstr ""
-"V opačném případě najděte Base 32 nebo odkaz na pomocnou adresu nebo "
-"použijte odkaz na službu skoku níže."
+msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
+msgstr "V opačném případě najděte Base 32 nebo odkaz na pomocnou adresu nebo použijte odkaz na službu skoku níže."
 
 #: ../java/build/Proxy.java:61
 #, java-format
-msgid ""
-"Seeing this page often? See {0}the FAQ{1} for help in {2}adding some "
-"subscriptions{3} to your addressbook."
-msgstr ""
-"Vidíte tuto stránku často? Viz {0} FAQ {1} pro pomoc při {2} přidání "
-"některých předplatných {3} do vaší adresy."
+msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
+msgstr "Vidíte tuto stránku často? Viz {0} FAQ {1} pro pomoc při {2} přidání některých předplatných {3} do vaší adresy."
 
 #: ../java/build/Proxy.java:63 ../java/build/Proxy.java:69
 #: ../java/build/Proxy.java:160 ../java/build/Proxy.java:166
@@ -262,16 +225,11 @@ msgstr "Web je nedostupný"
 
 #: ../java/build/Proxy.java:70
 msgid "The website was not reachable, because its lease set was not found."
-msgstr ""
-"Webová stránka nebyla dostupná, protože nebyla nalezena její sada pro "
-"pronájem."
+msgstr "Webová stránka nebyla dostupná, protože nebyla nalezena její sada pro pronájem."
 
 #: ../java/build/Proxy.java:71
-msgid ""
-"The website is probably down, but there could also be network congestion."
-msgstr ""
-"Webové stránky pravděpodobně nefungují, ale také může docházet k přetížení "
-"sítě."
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Webové stránky pravděpodobně nefungují, ale také může docházet k přetížení sítě."
 
 #: ../java/build/Proxy.java:75 ../java/build/Proxy.java:81
 #: ../java/build/Proxy.java:139 ../java/build/Proxy.java:145
@@ -283,45 +241,28 @@ msgid "The HTTP Outproxy was not found."
 msgstr "HTTP Outproxy nebyl nalezen."
 
 #: ../java/build/Proxy.java:83
-msgid ""
-"It is offline, there is network congestion, or your router is not yet well-"
-"integrated with peers."
-msgstr ""
-"Je offline, dochází k přetížení sítě nebo váš router ještě není dobře "
-"integrován s partnery."
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Je offline, dochází k přetížení sítě nebo váš router ještě není dobře integrován s partnery."
 
 #: ../java/build/Proxy.java:84 ../java/build/Proxy.java:105
 #: ../java/build/Proxy.java:135 ../java/build/Proxy.java:148
 #, java-format
-msgid ""
-"You may want to {0}retry{1} as this will randomly reselect an outproxy from "
-"the pool you have defined {2}here{3} (if you have more than one configured)."
-msgstr ""
-"Můžete to {0}zkusit znovu{1}, protože to náhodně znovu vybere outproxy z "
-"fondu, který jste definovali {2}zde{3} (pokud jich máte nakonfigurováno "
-"více)."
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Můžete to {0}zkusit znovu{1}, protože to náhodně znovu vybere outproxy z fondu, který jste definovali {2}zde{3} (pokud jich máte nakonfigurováno více)."
 
 #: ../java/build/Proxy.java:85 ../java/build/Proxy.java:106
 #: ../java/build/Proxy.java:136 ../java/build/Proxy.java:149
 #, java-format
-msgid ""
-"If you continue to have trouble you may want to edit your outproxy list {0}"
-"here{1}."
-msgstr ""
-"Pokud budete mít i nadále potíže, možná budete chtít upravit svůj seznam "
-"outproxy {0}zde{1}."
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Pokud budete mít i nadále potíže, možná budete chtít upravit svůj seznam outproxy {0}zde{1}."
 
 #: ../java/build/Proxy.java:88 ../java/build/Proxy.java:94
 msgid "Warning: Request Denied"
 msgstr "Varování: Požadavek zamítnut"
 
 #: ../java/build/Proxy.java:95
-msgid ""
-"This address appears to be malformed. Please verify you have supplied a "
-"valid address!"
-msgstr ""
-"Tato adresa se zdá být malformovaná. Ověřte prosím, že jste dodali platnou "
-"adresu!"
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Tato adresa se zdá být malformovaná. Ověřte prosím, že jste dodali platnou adresu!"
 
 #: ../java/build/Proxy.java:96
 msgid "You attempted to connect to a non-I2P website or location."
@@ -332,12 +273,8 @@ msgid "Outproxy Unreachable"
 msgstr "Outproxy nedosažitelný"
 
 #: ../java/build/Proxy.java:104
-msgid ""
-"The HTTP outproxy was not reachable, because it uses encryption options that "
-"are not supported by your I2P or Java version."
-msgstr ""
-"HTTP outproxy nebyl dosažitelný, protože používá možnosti šifrování, které "
-"vaše verze I2P nebo Java nepodporuje."
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "HTTP outproxy nebyl dosažitelný, protože používá možnosti šifrování, které vaše verze I2P nebo Java nepodporuje."
 
 #: ../java/build/Proxy.java:108 ../java/build/Proxy.java:159
 #: ../java/build/Proxy.java:209
@@ -354,27 +291,17 @@ msgstr "Vyžaduje se autorizace I2P HTTP proxy"
 
 #: ../java/build/Proxy.java:111
 msgid "This proxy is configured to require a username and password for access."
-msgstr ""
-"Tento proxy je nakonfigurován tak, aby pro přístup vyžadoval uživatelské "
-"jméno a heslo."
+msgstr "Tento proxy je nakonfigurován tak, aby pro přístup vyžadoval uživatelské jméno a heslo."
 
 #: ../java/build/Proxy.java:112
 #, java-format
-msgid ""
-"Please enter your username and password, or check your {0}router "
-"configuration{1} or {2}I2PTunnel configuration{3}."
-msgstr ""
-"Zadejte své uživatelské jméno a heslo nebo zkontrolujte {0}konfiguraci "
-"routeru{1} nebo {2}konfiguraci I2PTunnel{3}."
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Zadejte své uživatelské jméno a heslo nebo zkontrolujte {0}konfiguraci routeru{1} nebo {2}konfiguraci I2PTunnel{3}."
 
 #: ../java/build/Proxy.java:113
 #, java-format
-msgid ""
-"To disable authorization, remove the configuration {0}i2ptunnel.proxy."
-"auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
-msgstr ""
-"Chcete-li autorizaci deaktivovat, odeberte konfiguraci {0}i2ptunnel.proxy."
-"auth=basic{1}, poté zastavte a restartujte tunel HTTP proxy."
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Chcete-li autorizaci deaktivovat, odeberte konfiguraci {0}i2ptunnel.proxy.auth=basic{1}, poté zastavte a restartujte tunel HTTP proxy."
 
 #: ../java/build/Proxy.java:114 ../java/build/Proxy.java:120
 #: ../java/build/Proxy.java:188
@@ -382,18 +309,12 @@ msgid "Warning: Invalid Destination"
 msgstr "Cíl tunelu"
 
 #: ../java/build/Proxy.java:121
-msgid ""
-"The website destination specified was not valid, or was otherwise "
-"unreachable."
+msgid "The website destination specified was not valid, or was otherwise unreachable."
 msgstr "Zadaný cíl webu nebyl platný nebo byl jinak nedostupný."
 
 #: ../java/build/Proxy.java:122
-msgid ""
-"Perhaps you pasted in the wrong Base 64 string or the link you are following "
-"is bad."
-msgstr ""
-"Možná jste vložili nesprávný řetězec Base 64 nebo odkaz, který sledujete, je "
-"špatný."
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Možná jste vložili nesprávný řetězec Base 64 nebo odkaz, který sledujete, je špatný."
 
 #: ../java/build/Proxy.java:123
 msgid "The I2P host could also be offline."
@@ -404,25 +325,16 @@ msgid "The connection to the proxy was reset."
 msgstr "Spojení s proxy bylo resetováno."
 
 #: ../java/build/Proxy.java:134
-msgid ""
-"The proxy could be temporarily unavailable, too busy, or it has blocked your "
-"access."
-msgstr ""
-"Proxy může být dočasně nedostupný, příliš zaneprázdněný nebo vám zablokoval "
-"přístup."
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Proxy může být dočasně nedostupný, příliš zaneprázdněný nebo vám zablokoval přístup."
 
 #: ../java/build/Proxy.java:146
-msgid ""
-"The HTTP outproxy was not reachable, because its lease set was not found."
-msgstr ""
-"Outproxy HTTP nebyl dosažitelný, protože nebyla nalezena jeho sada zapůjčení."
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "Outproxy HTTP nebyl dosažitelný, protože nebyla nalezena jeho sada zapůjčení."
 
 #: ../java/build/Proxy.java:147
-msgid ""
-"The outproxy is probably down, but there could also be network congestion."
-msgstr ""
-"Outproxy je pravděpodobně mimo provoz, ale také může docházet k přetížení "
-"sítě."
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Outproxy je pravděpodobně mimo provoz, ale také může docházet k přetížení sítě."
 
 #: ../java/build/Proxy.java:152 ../java/build/Proxy.java:158
 msgid "Warning: Authorization Required"
@@ -433,42 +345,24 @@ msgid "The website was not reachable."
 msgstr "Webová stránka nebyla dostupná."
 
 #: ../java/build/Proxy.java:168
-msgid ""
-"The website is offline, there is network congestion, or your router is not "
-"yet well-integrated with peers."
-msgstr ""
-"Webové stránky jsou offline, dochází k přetížení sítě nebo váš router ještě "
-"není dobře integrován s partnery."
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Webové stránky jsou offline, dochází k přetížení sítě nebo váš router ještě není dobře integrován s partnery."
 
 #: ../java/build/Proxy.java:172 ../java/build/Proxy.java:178
 msgid "Warning: Destination Key Conflict"
 msgstr "VAROVÁNÍ: Konflikt cílového klíče"
 
 #: ../java/build/Proxy.java:179
-msgid ""
-"The address helper link you followed specifies a different destination key "
-"than the entry in your address book."
-msgstr ""
-"Pomocný odkaz adresy, který jste použili, určuje jiný cílový klíč než záznam "
-"ve vašem adresáři."
+msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
+msgstr "Pomocný odkaz adresy, který jste použili, určuje jiný cílový klíč než záznam ve vašem adresáři."
 
 #: ../java/build/Proxy.java:180
-msgid ""
-"Someone could be trying to impersonate another website, or people have given "
-"two websites identical names."
-msgstr ""
-"Někdo se možná pokouší vydávat za jinou webovou stránku nebo lidé dali dvěma "
-"webům stejná jména."
+msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
+msgstr "Někdo se možná pokouší vydávat za jinou webovou stránku nebo lidé dali dvěma webům stejná jména."
 
 #: ../java/build/Proxy.java:181
-msgid ""
-"Resolve the conflict by deciding which key you trust, and then either ignore "
-"the address helper link, or delete the host entry from your address book and "
-"click the address helper link again."
-msgstr ""
-"Vyřešte konflikt tím, že se rozhodnete, kterému klíči důvěřujete, a potom "
-"buď ignorujte odkaz na pomocnou adresu adresy, nebo odstraňte položku "
-"hostitele z adresáře a znovu klepněte na odkaz pomocné adresy adresy."
+msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
+msgstr "Vyřešte konflikt tím, že se rozhodnete, kterému klíči důvěřujete, a potom buď ignorujte odkaz na pomocnou adresu adresy, nebo odstraňte položku hostitele z adresáře a znovu klepněte na odkaz pomocné adresy adresy."
 
 #: ../java/build/Proxy.java:189
 msgid "The Base32 address is invalid."
@@ -488,20 +382,12 @@ msgid "It seems to be garbage data, or a mistyped Base 32 address."
 msgstr "Zdá se, že jsou to nesmyslná data nebo chybně zadaná adresa Base 32."
 
 #: ../java/build/Proxy.java:200
-msgid ""
-"Check your URL to try and fix the helper key to be a valid Base 32 hostname "
-"or Base 64 key."
-msgstr ""
-"Zkontrolujte svou adresu URL a pokuste se opravit pomocný klíč tak, aby byl "
-"platným názvem hostitele Base 32 nebo klíčem Base 64."
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Zkontrolujte svou adresu URL a pokuste se opravit pomocný klíč tak, aby byl platným názvem hostitele Base 32 nebo klíčem Base 64."
 
 #: ../java/build/Proxy.java:208
-msgid ""
-"The website was not reachable, because it uses encryption options that are "
-"not supported by your I2P or Java version."
-msgstr ""
-"Webové stránky nebyly dostupné, protože používají možnosti šifrování, které "
-"vaše verze I2P nebo Java nepodporuje."
+msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "Webové stránky nebyly dostupné, protože používají možnosti šifrování, které vaše verze I2P nebo Java nepodporuje."
 
 #: ../java/build/Proxy.java:210
 msgid "Information: New Host Name"
@@ -512,37 +398,24 @@ msgid "Information: New Host Name with Address Helper"
 msgstr "Informace: Nový název hostitele s pomocníkem adresy"
 
 #: ../java/build/Proxy.java:217
-msgid ""
-"The address helper link you followed is for a new host name that is not in "
-"your address book."
-msgstr ""
-"Pomocný odkaz adresy, který jste použili, je pro nový název hostitele, který "
-"není ve vašem adresáři."
+msgid "The address helper link you followed is for a new host name that is not in your address book."
+msgstr "Pomocný odkaz adresy, který jste použili, je pro nový název hostitele, který není ve vašem adresáři."
 
 #: ../java/build/Proxy.java:218
 msgid "You may save this host name to your local address book."
 msgstr "Tento název hostitele můžete uložit do místního adresáře."
 
 #: ../java/build/Proxy.java:219
-msgid ""
-"If you save it to your address book, you will not see this message again."
+msgid "If you save it to your address book, you will not see this message again."
 msgstr "Pokud ji uložíte do svého adresáře, tato zpráva se vám již nezobrazí."
 
 #: ../java/build/Proxy.java:220
-msgid ""
-"If you do not save it, the host name will be forgotten after the next router "
-"restart."
-msgstr ""
-"Pokud jej neuložíte, název hostitele bude po příštím restartu routeru "
-"zapomenut."
+msgid "If you do not save it, the host name will be forgotten after the next router restart."
+msgstr "Pokud jej neuložíte, název hostitele bude po příštím restartu routeru zapomenut."
 
 #: ../java/build/Proxy.java:221
-msgid ""
-"If you do not wish to visit this host, click the \"back\" button on your "
-"browser."
-msgstr ""
-"Pokud si nepřejete navštívit tohoto hostitele, klikněte ve svém prohlížeči "
-"na tlačítko \"zpět\"."
+msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
+msgstr "Pokud si nepřejete navštívit tohoto hostitele, klikněte ve svém prohlížeči na tlačítko \"zpět\"."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:734
 msgid "This seems to be a bad destination:"
@@ -554,14 +427,8 @@ msgstr "i2paddresshelper vám nemůže pomoci s takovým cílem!"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:807
 #, java-format
-msgid ""
-"To visit the destination in your addressbook, click <a href=\"{0}\">here</"
-"a>. To visit the conflicting addresshelper destination, click <a "
-"href=\"{1}\">here</a>."
-msgstr ""
-"Chcete-li navštívit cíl ve svém adresáři, klikněte <a href=\"{0}\">sem</a>. "
-"Chcete -li navštívit konfliktní cíl adresy, klikněte na <a href=\"{1}\"> zde "
-"</a>."
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Chcete-li navštívit cíl ve svém adresáři, klikněte <a href=\"{0}\">sem</a>. Chcete -li navštívit konfliktní cíl adresy, klikněte na <a href=\"{1}\"> zde </a>."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:817
 #, java-format
@@ -599,12 +466,8 @@ msgid "Continue to {0} without saving"
 msgstr "Pokračujte na {0} bez uložení"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1580
-msgid ""
-"You can browse to the site without saving it to the addressbook. The address "
-"will be remembered until you restart your I2P router."
-msgstr ""
-"Na web můžete procházet bez uložení do adresářů. Adresa bude zapamatována, "
-"dokud restartujete router i2p."
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Na web můžete procházet bez uložení do adresářů. Adresa bude zapamatována, dokud restartujete router i2p."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1581
 msgid "Continue without saving"
@@ -616,20 +479,12 @@ msgid "Save {0} to router address book and continue to website"
 msgstr "Uložte {0} do adresáře routeru a pokračujte na web"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1589
-msgid ""
-"This address will be saved to your Router addressbook where your "
-"subscription-based addresses are stored."
-msgstr ""
-"Tato adresa bude uložena do vašeho adresáře směrovače, kde jsou uloženy vaše "
-"předplatné adresy."
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "Tato adresa bude uložena do vašeho adresáře směrovače, kde jsou uloženy vaše předplatné adresy."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1592
-msgid ""
-"If you want to keep track of sites you have added manually, add to your "
-"Master or Private addressbook instead."
-msgstr ""
-"Pokud chcete mít přehled o stránkách, které jste přidali ručně, přidejte je "
-"do hlavního nebo soukromého adresáře."
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Pokud chcete mít přehled o stránkách, které jste přidali ručně, přidejte je do hlavního nebo soukromého adresáře."
 
 #. FIXME wasn't escaped
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1595
@@ -644,14 +499,8 @@ msgid "Save {0} to master addressbook and continue to website"
 msgstr "Uložte {0} do hlavního adresáře a pokračujte na web"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1603
-msgid ""
-"This address will be saved to your Master addressbook. Select this option "
-"for addresses you wish to keep separate from the main router address book, "
-"but don't mind publishing."
-msgstr ""
-"Tato adresa bude uložena do vaší hlavní adresy. Vyberte tuto možnost pro "
-"adresy, které si přejete ponechat oddělenou od hlavního adresáře routeru, "
-"ale nevadí vám publikování."
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "Tato adresa bude uložena do vaší hlavní adresy. Vyberte tuto možnost pro adresy, které si přejete ponechat oddělenou od hlavního adresáře routeru, ale nevadí vám publikování."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1608
 #, java-format
@@ -659,12 +508,8 @@ msgid "Save {0} to private addressbook and continue to website"
 msgstr "Uložte {0} do soukromého adresáře a pokračujte na web"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1609
-msgid ""
-"This address will be saved to your Private addressbook, ensuring it is never "
-"published."
-msgstr ""
-"Tato adresa bude uložena do vašeho soukromého adresáře, což zajistí, že "
-"nebude nikdy zveřejněna."
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "Tato adresa bude uložena do vašeho soukromého adresáře, což zajistí, že nebude nikdy zveřejněna."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1634
 msgid "Base32 address requires lookup password"
@@ -691,12 +536,8 @@ msgid "Encryption key"
 msgstr "Bezpečnostní kód"
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1653
-msgid ""
-"You must either enter a PSK encryption key provided by the server operator, "
-"or generate a DH encryption key and send that to the server operator."
-msgstr ""
-"Musíte buď zadat šifrovací klíč PSK poskytnutý provozovatelem serveru, nebo "
-"vygenerovat šifrovací klíč DH a odeslat jej provozovateli serveru."
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Musíte buď zadat šifrovací klíč PSK poskytnutý provozovatelem serveru, nebo vygenerovat šifrovací klíč DH a odeslat jej provozovateli serveru."
 
 #: ../java/src/net/i2p/i2ptunnel/I2PTunnelHTTPClient.java:1655
 msgid "Ask the server operator for help."

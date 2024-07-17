@@ -69,24 +69,12 @@ msgstr "نامه انبوه"
 msgid "Inbox"
 msgstr "اینباکس"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "هیچ پیام جدید"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "پیام دارای یک پیوست است"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "ناشناخته"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -272,8 +260,7 @@ msgstr "هیچ پیامی برای حذف علامت زده نشد."
 #: src/src/i2p/susi/webmail/WebMail.java:1970
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"میزبان بدون تغییر. برای تغییر میزبان ، فایل کنفرانس {0} را ویرایش کنید."
+msgstr "میزبان بدون تغییر. برای تغییر میزبان ، فایل کنفرانس {0} را ویرایش کنید."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1990
 msgid "Configuration saved"
@@ -537,11 +524,6 @@ msgstr "اندازه"
 msgid "Mark for deletion"
 msgstr "علامت دهی برای حذف"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "پیام جدید می باشد"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "پیام جدید می باشد"
@@ -633,11 +615,6 @@ msgstr "بازگشت به پوشه"
 #: src/src/i2p/susi/webmail/WebMail.java:3867
 msgid "Move to Folder"
 msgstr "انتقال به پوشه"
-
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "پیام جدید می باشد"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"

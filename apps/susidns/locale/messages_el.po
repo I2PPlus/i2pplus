@@ -39,12 +39,8 @@ msgstr "Το όνομα κεντρικού υπολογιστή δεν μπορ�
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:159
 #, java-format
-msgid ""
-"Host name \"{0}\" requires conversion to ASCII but the conversion library is "
-"unavailable in this JVM"
-msgstr ""
-"Το όνομα κεντρικού υπολογιστή \"{0}\" απαιτεί μετατροπή σε ASCII, αλλά η "
-"βιβλιοθήκη μετατροπών δεν είναι διαθέσιμη σε αυτό το JVM"
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "Το όνομα κεντρικού υπολογιστή \"{0}\" απαιτεί μετατροπή σε ASCII, αλλά η βιβλιοθήκη μετατροπών δεν είναι διαθέσιμη σε αυτό το JVM"
 
 #: ../src/java/src/i2p/susi/dns/AddressBean.java:224
 msgid "None"
@@ -123,20 +119,13 @@ msgstr "Αντικατάσταση"
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:251
 #, java-format
 msgid "Host name {0} is already in address book, unchanged."
-msgstr ""
-"Το όνομα κεντρικού υπολογιστή {0} βρίσκεται ήδη στο βιβλίο διευθύνσεων, δεν "
-"έχει αλλάξει."
+msgstr "Το όνομα κεντρικού υπολογιστή {0} βρίσκεται ήδη στο βιβλίο διευθύνσεων, δεν έχει αλλάξει."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:262
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:255
 #, java-format
-msgid ""
-"Host name {0} is already in address book with a different destination. Click "
-"\"Replace\" to overwrite."
-msgstr ""
-"Όνομα κεντρικού υπολογιστή {0} βρίσκεται ήδη σε βιβλίο διευθύνσεων με "
-"διαφορετικό προορισμό. Κάντε κλικ στο \"Αντικατάσταση\" για να "
-"αντικαταστήσετε."
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "Όνομα κεντρικού υπολογιστή {0} βρίσκεται ήδη σε βιβλίο διευθύνσεων με διαφορετικό προορισμό. Κάντε κλικ στο \"Αντικατάσταση\" για να αντικαταστήσετε."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:282
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:289
@@ -160,8 +149,7 @@ msgstr "Αλλαγή προορισμού για {0}."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:311
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:317
 msgid "Warning - host name does not end with \".i2p\""
-msgstr ""
-"Προειδοποίηση - το όνομα κεντρικού υπολογιστή δεν τελειώνει με \".i2p\""
+msgstr "Προειδοποίηση - το όνομα κεντρικού υπολογιστή δεν τελειώνει με \".i2p\""
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:318
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:329
@@ -240,9 +228,7 @@ msgstr "Το βιβλίο διευθύνσεων αποθηκεύτηκε."
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:364
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:386
 msgid "Browse away from this addressbook and return to see update."
-msgstr ""
-"Ξεκινήστε από αυτό το βιβλίο διευθύνσεων και επιστρέψτε για να δείτε την "
-"ενημέρωση."
+msgstr "Ξεκινήστε από αυτό το βιβλίο διευθύνσεων και επιστρέψτε για να δείτε την ενημέρωση."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:367
 msgid "ERROR: Could not write addressbook file."
@@ -252,23 +238,15 @@ msgstr "ΣΦΑΛΜΑ: Δεν μπόρεσε να εγγραφεί το αρχε�
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:163
-msgid ""
-"Invalid form submission, probably because you used the \"back\" or "
-"\"reload\" button on your browser. Please resubmit."
-msgstr ""
-"Άκυρη αποστολή φόρμας, πιθανότατα γιατί χρησιμοποιήσατε το πλήκτρο \"πίσω\" "
-"ή \"επαναφόρτωση\" στον φυλλομετρητή σας. Παρακαλώ στείλατε πάλι."
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "Άκυρη αποστολή φόρμας, πιθανότατα γιατί χρησιμοποιήσατε το πλήκτρο \"πίσω\" ή \"επαναφόρτωση\" στον φυλλομετρητή σας. Παρακαλώ στείλατε πάλι."
 
 #: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
-msgid ""
-"If the problem persists, verify that you have cookies enabled in your "
-"browser."
-msgstr ""
-"Αν το πρόβλημα επιμένει, βεβαιωθείτε ότι ο περιηγητής ιστού σας αποδέχεται "
-"τα cookies."
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Αν το πρόβλημα επιμένει, βεβαιωθείτε ότι ο περιηγητής ιστού σας αποδέχεται τα cookies."
 
 #: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:136
@@ -321,8 +299,7 @@ msgstr "Απέτυχε η προσθήκη Προορισμού για το {0} 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:365
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
-msgstr ""
-"Αποτυχία διαγραφής προορισμού για {0} από την υπηρεσία ονοματοδοσίας {1}"
+msgstr "Αποτυχία διαγραφής προορισμού για {0} από την υπηρεσία ονοματοδοσίας {1}"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:407
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:372
@@ -388,9 +365,7 @@ msgstr "Προσπάθεια ενημέρωσης του βιβλίου διευ
 
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:156
 msgid "Cannot update subscriptions: HTTP proxy is not running!"
-msgstr ""
-"Δεν είναι δυνατή η ενημέρωση των συνδρομών: Ο διακομιστής μεσολάβησης HTTP "
-"δεν εκτελείται!"
+msgstr "Δεν είναι δυνατή η ενημέρωση των συνδρομών: Ο διακομιστής μεσολάβησης HTTP δεν εκτελείται!"
 
 #: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:160
 msgid "Subscriptions reloaded."
@@ -538,9 +513,7 @@ msgstr "Διεύθυνση βάσης 32"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:852
 msgid "Helper link to share host address with option to add to addressbook"
-msgstr ""
-"Σύνδεσμος βοήθειας για κοινή χρήση διεύθυνσης κεντρικού υπολογιστή με "
-"επιλογή προσθήκης στο βιβλίο διευθύνσεων"
+msgstr "Σύνδεσμος βοήθειας για κοινή χρήση διεύθυνσης κεντρικού υπολογιστή με επιλογή προσθήκης στο βιβλίο διευθύνσεων"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:872
 msgid "Mark for deletion"
@@ -591,46 +564,24 @@ msgid "Hints"
 msgstr "Συμβουλές"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:252
-msgid ""
-"File and directory paths here are relative to the addressbook's working "
-"directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%"
-"\\I2P\\addressbook\\ (Windows)."
-msgstr ""
-"Οι διαδρομές αρχείου και καταλόγου εδώ σχετίζονται με τον κατάλογο εργασίας "
-"του βιβλίου διευθύνσεων, ο οποίος είναι συνήθως ~/.i2p/addressbook/ (Linux) "
-"ή %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Οι διαδρομές αρχείου και καταλόγου εδώ σχετίζονται με τον κατάλογο εργασίας του βιβλίου διευθύνσεων, ο οποίος είναι συνήθως ~/.i2p/addressbook/ (Linux) ή %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:254
-msgid ""
-"If you want to manually add lines to an addressbook, add them to the private "
-"or master addressbooks."
-msgstr ""
-"Εάν θέλετε να προσθέσετε με μη αυτόματο τρόπο γραμμές σε ένα βιβλίο "
-"διευθύνσεων, προσθέστε τες στα ιδιωτικά ή κύρια βιβλία διευθύνσεων."
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Εάν θέλετε να προσθέσετε με μη αυτόματο τρόπο γραμμές σε ένα βιβλίο διευθύνσεων, προσθέστε τες στα ιδιωτικά ή κύρια βιβλία διευθύνσεων."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:256
-msgid ""
-"The router addressbook and the published addressbook are updated by the "
-"addressbook application."
-msgstr ""
-"Το βιβλίο διευθύνσεων του δρομολογητή και το δημοσιευμένο βιβλίο διευθύνσεων "
-"ενημερώνονται από την εφαρμογή βιβλίου διευθύνσεων."
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Το βιβλίο διευθύνσεων του δρομολογητή και το δημοσιευμένο βιβλίο διευθύνσεων ενημερώνονται από την εφαρμογή βιβλίου διευθύνσεων."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:258
-msgid ""
-"When you publish your addressbook, ALL destinations from the master and "
-"router addressbooks appear there."
-msgstr ""
-"Όταν δημοσιεύετε το βιβλίο διευθύνσεών σας, ΟΛΟΙ οι προορισμοί από τα βιβλία "
-"διευθύνσεων του κύριου και του δρομολογητή εμφανίζονται εκεί."
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Όταν δημοσιεύετε το βιβλίο διευθύνσεών σας, ΟΛΟΙ οι προορισμοί από τα βιβλία διευθύνσεων του κύριου και του δρομολογητή εμφανίζονται εκεί."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:260
-msgid ""
-"Use the private addressbook for private destinations, these are not "
-"published."
-msgstr ""
-"Χρησιμοποιήστε το ιδιωτικό βιβλίο διευθύνσεων για ιδιωτικούς προορισμούς, "
-"αυτοί δεν δημοσιεύονται."
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Χρησιμοποιήστε το ιδιωτικό βιβλίο διευθύνσεων για ιδιωτικούς προορισμούς, αυτοί δεν δημοσιεύονται."
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:262
 msgid "Options"
@@ -638,21 +589,15 @@ msgstr "Παράμετροι"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:264
 msgid "File containing the list of subscriptions URLs (no need to change)"
-msgstr ""
-"Αρχείο που περιέχει τη λίστα των διευθύνσεων URL συνδρομών (δεν χρειάζεται "
-"αλλαγή)"
+msgstr "Αρχείο που περιέχει τη λίστα των διευθύνσεων URL συνδρομών (δεν χρειάζεται αλλαγή)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:266
 msgid "Update interval in hours"
 msgstr "Διάστημα ανανέωσης σε ώρες"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:268
-msgid ""
-"Your public hosts.txt file (choose a path within your webserver document "
-"root)"
-msgstr ""
-"Το δημόσιο αρχείο σας hosts.txt (επιλέξτε μια διαδρομή στη ρίζα του εγγράφου "
-"του διακομιστή ιστού)"
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Το δημόσιο αρχείο σας hosts.txt (επιλέξτε μια διαδρομή στη ρίζα του εγγράφου του διακομιστή ιστού)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:270
 msgid "Your hosts.txt (don't change)"
@@ -660,8 +605,7 @@ msgstr "Το hosts.txt σας (μην αλλάξει)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:272
 msgid "Your personal addressbook, these hosts will be published"
-msgstr ""
-"Το προσωπικό σας βιβλίο διευθύνσεων, αυτοί οι οικοδεσπότες θα δημοσιευτούν"
+msgstr "Το προσωπικό σας βιβλίο διευθύνσεων, αυτοί οι οικοδεσπότες θα δημοσιευτούν"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:274
 msgid "Your private addressbook, it is never published"
@@ -680,31 +624,20 @@ msgid "Whether to update the published addressbook"
 msgstr "Εάν θα ενημερωθεί το δημοσιευμένο βιβλίο διευθύνσεων"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:282
-msgid ""
-"File containing the etags header from the fetched subscription URLs (no need "
-"to change)"
-msgstr ""
-"Αρχείο που περιέχει την κεφαλίδα ετικετών από τις ληφθείσες διευθύνσεις URL "
-"συνδρομής (δεν χρειάζεται αλλαγή)"
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Αρχείο που περιέχει την κεφαλίδα ετικετών από τις ληφθείσες διευθύνσεις URL συνδρομής (δεν χρειάζεται αλλαγή)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:284
-msgid ""
-"File containing the modification timestamp for each fetched subscription URL "
-"(no need to change)"
-msgstr ""
-"Αρχείο που περιέχει τη χρονική σήμανση τροποποίησης για κάθε ληφθείσα "
-"διεύθυνση URL συνδρομής (δεν χρειάζεται αλλαγή)"
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Αρχείο που περιέχει τη χρονική σήμανση τροποποίησης για κάθε ληφθείσα διεύθυνση URL συνδρομής (δεν χρειάζεται αλλαγή)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:286
 msgid "File to log activity to (change to /dev/null if you like)"
-msgstr ""
-"Αρχείο για καταγραφή της δραστηριότητας (αλλάξτε σε /dev/null αν θέλετε)"
+msgstr "Αρχείο για καταγραφή της δραστηριότητας (αλλάξτε σε /dev/null αν θέλετε)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:288
 msgid "Name of override theme to use (defaults to console-selected theme)"
-msgstr ""
-"Όνομα του θέματος παράκαμψης προς χρήση (προεπιλογή σε θέμα που έχει "
-"επιλεγεί από την κονσόλα)"
+msgstr "Όνομα του θέματος παράκαμψης προς χρήση (προεπιλογή σε θέμα που έχει επιλεγεί από την κονσόλα)"
 
 #: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:193
 msgid "addressbook"
@@ -807,82 +740,44 @@ msgid "The addressbook application is part of your I2P installation."
 msgstr "Η εφαρμογή βιβλίου διευθύνσεων είναι μέρος της εγκατάστασης I2P."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:227
-msgid ""
-"It regularly updates your hosts.txt file from distributed sources or "
-"\"subscriptions\"."
-msgstr ""
-"Ενημερώνει τακτικά το αρχείο hosts.txt από διανεμημένες πηγές ή "
-"\"συνδρομές\"."
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Ενημερώνει τακτικά το αρχείο hosts.txt από διανεμημένες πηγές ή \"συνδρομές\"."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:229
-msgid ""
-"Subscribing to additional sites is easy, just add them to your <a "
-"href=\"subscriptions\">subscriptions</a> file."
-msgstr ""
-"Η εγγραφή σε επιπλέον ιστότοπους είναι εύκολη, απλώς προσθέστε τους στο "
-"αρχείο <a href=\"subscriptions\">συνδρομές</a> σας."
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Η εγγραφή σε επιπλέον ιστότοπους είναι εύκολη, απλώς προσθέστε τους στο αρχείο <a href=\"subscriptions\">συνδρομές</a> σας."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:231
-msgid ""
-"For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/"
-"naming.html\" target=_blank>the overview</a>."
-msgstr ""
-"Για περισσότερες πληροφορίες σχετικά με την ονομασία στο I2P, ανατρέξτε στην "
-"<a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>την επισκόπηση</"
-"a>."
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Για περισσότερες πληροφορίες σχετικά με την ονομασία στο I2P, ανατρέξτε στην <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>την επισκόπηση</a>."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:233
 msgid "How does the addressbook application work?"
 msgstr "Πώς λειτουργεί η εφαρμογή βιβλίου διευθύνσεων;"
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:235
-msgid ""
-"The addressbook application regularly polls your subscriptions and merges "
-"their content into your \"router\" address book."
-msgstr ""
-"Η εφαρμογή βιβλίου διευθύνσεων ελέγχει τακτικά τις συνδρομές σας και "
-"συγχωνεύει το περιεχόμενό τους στο βιβλίο διευθύνσεών σας \"router\"."
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Η εφαρμογή βιβλίου διευθύνσεων ελέγχει τακτικά τις συνδρομές σας και συγχωνεύει το περιεχόμενό τους στο βιβλίο διευθύνσεών σας \"router\"."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:237
-msgid ""
-"Then it merges your \"master\" address book into the router address book as "
-"well."
-msgstr ""
-"Στη συνέχεια, συγχωνεύει το βιβλίο διευθύνσεών σας \"κύριο\" στο βιβλίο "
-"διευθύνσεων του δρομολογητή επίσης."
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Στη συνέχεια, συγχωνεύει το βιβλίο διευθύνσεών σας \"κύριο\" στο βιβλίο διευθύνσεων του δρομολογητή επίσης."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:239
-msgid ""
-"If configured, the router address book is now written to the \"published\" "
-"address book, which will be publicly available if you are running an eepsite."
-msgstr ""
-"Εάν έχει ρυθμιστεί, το βιβλίο διευθύνσεων του δρομολογητή είναι πλέον "
-"γραμμένο στο βιβλίο διευθύνσεων \"δημοσιευμένο\", το οποίο θα είναι "
-"διαθέσιμο δημόσια εάν εκτελείτε έναν ιστότοπο eepsite."
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Εάν έχει ρυθμιστεί, το βιβλίο διευθύνσεων του δρομολογητή είναι πλέον γραμμένο στο βιβλίο διευθύνσεων \"δημοσιευμένο\", το οποίο θα είναι διαθέσιμο δημόσια εάν εκτελείτε έναν ιστότοπο eepsite."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:241
-msgid ""
-"The router also uses a private address book, which is not merged or "
-"published."
-msgstr ""
-"Ο δρομολογητής χρησιμοποιεί επίσης ένα ιδιωτικό βιβλίο διευθύνσεων, το οποίο "
-"δεν συγχωνεύεται ούτε δημοσιεύεται."
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Ο δρομολογητής χρησιμοποιεί επίσης ένα ιδιωτικό βιβλίο διευθύνσεων, το οποίο δεν συγχωνεύεται ούτε δημοσιεύεται."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:243
-msgid ""
-"Hosts in the private address book can be accessed by you but their addresses "
-"are never distributed to others."
-msgstr ""
-"Οι κεντρικοί υπολογιστές στο ιδιωτικό βιβλίο διευθύνσεων είναι προσβάσιμοι "
-"από εσάς, αλλά οι διευθύνσεις τους δεν διανέμονται ποτέ σε άλλους."
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Οι κεντρικοί υπολογιστές στο ιδιωτικό βιβλίο διευθύνσεων είναι προσβάσιμοι από εσάς, αλλά οι διευθύνσεις τους δεν διανέμονται ποτέ σε άλλους."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:245
-msgid ""
-"The private address book can also be used for aliases of hosts in your other "
-"address books."
-msgstr ""
-"Το ιδιωτικό βιβλίο διευθύνσεων μπορεί επίσης να χρησιμοποιηθεί για ψευδώνυμα "
-"κεντρικών υπολογιστών στα άλλα βιβλία διευθύνσεών σας."
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Το ιδιωτικό βιβλίο διευθύνσεων μπορεί επίσης να χρησιμοποιηθεί για ψευδώνυμα κεντρικών υπολογιστών στα άλλα βιβλία διευθύνσεών σας."
 
 #: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:196
 msgid "subscription log"
@@ -905,11 +800,8 @@ msgid "The subscription file contains a list of i2p URLs."
 msgstr "Το αρχείο συνδρομής περιέχει μια λίστα με διευθύνσεις URL i2p."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:250
-msgid ""
-"The addressbook application regularly checks this list for new eepsites."
-msgstr ""
-"Η εφαρμογή βιβλίου διευθύνσεων ελέγχει τακτικά αυτήν τη λίστα για νέους "
-"eepsites."
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Η εφαρμογή βιβλίου διευθύνσεων ελέγχει τακτικά αυτήν τη λίστα για νέους eepsites."
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:252
 msgid "Those URLs refer to published hosts.txt files."
@@ -917,52 +809,31 @@ msgstr "Αυτές οι διευθύνσεις URL αναφέρονται σε �
 
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:254
 msgid "See the FAQ for a list of subscription URLs."
-msgstr ""
-"Δείτε τις Συνήθεις Ερωτήσεις για μια λίστα με διευθύνσεις URL συνδρομής."
+msgstr "Δείτε τις Συνήθεις Ερωτήσεις για μια λίστα με διευθύνσεις URL συνδρομής."
 
 #: build/HowSVG.java:5
-msgid ""
-"If SusiDNS is configured to publish your Router address book, the entries "
-"will appear in your Published address book and saved to a hosts.txt file for "
-"sharing."
-msgstr ""
-"Εάν το SusiDNS έχει ρυθμιστεί να δημοσιεύει το βιβλίο διευθύνσεων του "
-"δρομολογητή σας, οι εγγραφές θα εμφανιστούν στο Δημοσιευμένο βιβλίο "
-"διευθύνσεων και θα αποθηκευτούν σε ένα αρχείο hosts.txt για κοινή χρήση."
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "Εάν το SusiDNS έχει ρυθμιστεί να δημοσιεύει το βιβλίο διευθύνσεων του δρομολογητή σας, οι εγγραφές θα εμφανιστούν στο Δημοσιευμένο βιβλίο διευθύνσεων και θα αποθηκευτούν σε ένα αρχείο hosts.txt για κοινή χρήση."
 
 #: build/HowSVG.java:6
 msgid "Published Addressbook"
 msgstr "Δημοσιευμένο Βιβλίο Διευθύνσεων"
 
 #: build/HowSVG.java:7
-msgid ""
-"To configure SusiDNS to push your Router address book to your Published "
-"address book, set 'should_publish=true' on the configuration page."
-msgstr ""
-"Για να διαμορφώσετε το SusiDNS ώστε να ωθεί το βιβλίο διευθύνσεων του "
-"δρομολογητή σας στο Δημοσιευμένο βιβλίο διευθύνσεων, ορίστε το "
-"'should_publish=true' στη σελίδα διαμόρφωσης."
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "Για να διαμορφώσετε το SusiDNS ώστε να ωθεί το βιβλίο διευθύνσεων του δρομολογητή σας στο Δημοσιευμένο βιβλίο διευθύνσεων, ορίστε το 'should_publish=true' στη σελίδα διαμόρφωσης."
 
 #: build/HowSVG.java:8
-msgid ""
-"All hosts derived from subscriptions will appear in this address book, in "
-"addition to any you manually add here or to your Master address book."
-msgstr ""
-"Όλοι οι κεντρικοί υπολογιστές που προέρχονται από συνδρομές θα εμφανίζονται "
-"σε αυτό το βιβλίο διευθύνσεων, εκτός από οποιονδήποτε προσθέτετε χειροκίνητα "
-"εδώ ή στο Βιβλίο διευθύνσεων Master."
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "Όλοι οι κεντρικοί υπολογιστές που προέρχονται από συνδρομές θα εμφανίζονται σε αυτό το βιβλίο διευθύνσεων, εκτός από οποιονδήποτε προσθέτετε χειροκίνητα εδώ ή στο Βιβλίο διευθύνσεων Master."
 
 #: build/HowSVG.java:9
 msgid "Router Addressbook"
 msgstr "Βιβλίο διευθύνσεων δρομολογητή"
 
 #: build/HowSVG.java:10
-msgid ""
-"Hosts you manually add here will never be published. You can also add "
-"aliases to hosts in other address books here."
-msgstr ""
-"Οι κεντρικοί υπολογιστές που προσθέτετε χειροκίνητα εδώ δεν θα δημοσιευτούν "
-"ποτέ."
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "Οι κεντρικοί υπολογιστές που προσθέτετε χειροκίνητα εδώ δεν θα δημοσιευτούν ποτέ."
 
 #: build/HowSVG.java:11
 msgid "Private Addressbook"
@@ -973,42 +844,24 @@ msgid "Local Records"
 msgstr "Τοπικά Αρχεία"
 
 #: build/HowSVG.java:13
-msgid ""
-"I2P applications (including the HTTP proxy) use the hosts in your local "
-"address books to resolve .i2p hostnames."
-msgstr ""
-"Οι εφαρμογές του I2P (συμπεριλαμβανομένου του HTTP proxy) χρησιμοποιούν τους "
-"κόμβους στα τοπικά βιβλία διευθύνσεών σας για να επιλύουν τα ονόματα "
-"κεντρικών κόμβων .i2p."
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "Οι εφαρμογές του I2P (συμπεριλαμβανομένου του HTTP proxy) χρησιμοποιούν τους κόμβους στα τοπικά βιβλία διευθύνσεών σας για να επιλύουν τα ονόματα κεντρικών κόμβων .i2p."
 
 #: build/HowSVG.java:14
-msgid ""
-"Additional subscriptions can be found in the FAQ section of the Router help "
-"page."
-msgstr ""
-"Μπορείτε να βρείτε πρόσθετες συνδρομές στην ενότητα Συχνές ερωτήσεις της "
-"σελίδας βοήθειας του δρομολογητή."
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "Μπορείτε να βρείτε πρόσθετες συνδρομές στην ενότητα Συχνές ερωτήσεις της σελίδας βοήθειας του δρομολογητή."
 
 #: build/HowSVG.java:16
-msgid ""
-"Hosts sourced from your subscriptions are added to your Router address book, "
-"and are automatically synced (by default every 12 hours)."
-msgstr ""
-"Οι κεντρικοί υπολογιστές που προέρχονται από τις συνδρομές σας προστίθενται "
-"στο βιβλίο διευθύνσεων του δρομολογητή σας και συγχρονίζονται αυτόματα (από "
-"προεπιλογή κάθε 12 ώρες)."
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "Οι κεντρικοί υπολογιστές που προέρχονται από τις συνδρομές σας προστίθενται στο βιβλίο διευθύνσεων του δρομολογητή σας και συγχρονίζονται αυτόματα (από προεπιλογή κάθε 12 ώρες)."
 
 #: build/HowSVG.java:17
 msgid "Configure Subscriptions"
 msgstr "Διαμόρφωση συνδρομών"
 
 #: build/HowSVG.java:18
-msgid ""
-"If you manually add hosts here, they will be included your Published address "
-"book (if configured)."
-msgstr ""
-"Εάν προσθέσετε με μη αυτόματο τρόπο κεντρικούς υπολογιστές εδώ, θα "
-"συμπεριληφθούν το Δημοσιευμένο βιβλίο διευθύνσεών σας (αν έχουν ρυθμιστεί)."
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "Εάν προσθέσετε με μη αυτόματο τρόπο κεντρικούς υπολογιστές εδώ, θα συμπεριληφθούν το Δημοσιευμένο βιβλίο διευθύνσεών σας (αν έχουν ρυθμιστεί)."
 
 #: build/HowSVG.java:19
 msgid "Master Addressbook"
@@ -1023,12 +876,8 @@ msgid "I2P applications"
 msgstr "Εφαρμογές I2P"
 
 #: build/HowSVG.java:22
-msgid ""
-"The Master, Router and Private address books collectively serve as the DNS "
-"authority for I2P applications."
-msgstr ""
-"Τα βιβλία διευθύνσεων Master, Router και Private λειτουργούν συλλογικά ως "
-"αρχή DNS για εφαρμογές I2P."
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "Τα βιβλία διευθύνσεων Master, Router και Private λειτουργούν συλλογικά ως αρχή DNS για εφαρμογές I2P."
 
 #: build/HowSVG.java:23
 msgid "Optional,"
@@ -1039,27 +888,13 @@ msgid "for websites"
 msgstr "για ιστότοπους"
 
 #: build/HowSVG.java:25
-msgid ""
-"If you configure SusiDNS to publish your Router address book, it will export "
-"a hosts.txt file containing all the hosts (by default to the root of your "
-"eepsite)."
-msgstr ""
-"Εάν διαμορφώσετε το SusiDNS ώστε να δημοσιεύει το βιβλίο διευθύνσεων του "
-"δρομολογητή σας, θα εξαγάγει ένα αρχείο hosts.txt που περιέχει όλους τους "
-"κεντρικούς υπολογιστές (από προεπιλογή στη ρίζα του eepsite σας)."
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "Εάν διαμορφώσετε το SusiDNS ώστε να δημοσιεύει το βιβλίο διευθύνσεων του δρομολογητή σας, θα εξαγάγει ένα αρχείο hosts.txt που περιέχει όλους τους κεντρικούς υπολογιστές (από προεπιλογή στη ρίζα του eepsite σας)."
 
 #: build/HowSVG.java:26
-msgid ""
-"Addresses manually added to your Master address book will merge with your "
-"Router address book."
-msgstr ""
-"Οι διευθύνσεις που προστέθηκαν χειροκίνητα στο Βιβλίο διευθύνσεων Master θα "
-"συγχωνευθούν με το βιβλίο διευθύνσεων του δρομολογητή."
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "Οι διευθύνσεις που προστέθηκαν χειροκίνητα στο Βιβλίο διευθύνσεων Master θα συγχωνευθούν με το βιβλίο διευθύνσεων του δρομολογητή."
 
 #: build/HowSVG.java:27
-msgid ""
-"Hosts you receive from your subscriptions will merge with your Router "
-"address book."
-msgstr ""
-"Οι κεντρικοί υπολογιστές που λαμβάνετε από τις συνδρομές σας θα συγχωνευθούν "
-"με το βιβλίο διευθύνσεων του δρομολογητή σας."
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "Οι κεντρικοί υπολογιστές που λαμβάνετε από τις συνδρομές σας θα συγχωνευθούν με το βιβλίο διευθύνσεων του δρομολογητή σας."

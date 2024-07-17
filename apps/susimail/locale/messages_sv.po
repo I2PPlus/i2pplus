@@ -69,24 +69,12 @@ msgstr "Massmejl"
 msgid "Inbox"
 msgstr "Inkorg"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Inga nya meddelanden"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "Meddelandet har en bilaga"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "okänd"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -536,11 +524,6 @@ msgstr "Storlek"
 msgid "Mark for deletion"
 msgstr "Markera för borttagning"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "Meddelandet är nytt"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "Meddelandet är nytt"
@@ -633,11 +616,6 @@ msgstr "Tillbaka till mapp"
 msgid "Move to Folder"
 msgstr "Flytta till mapp"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "Meddelandet är nytt"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "Katalogsidans storlek"
@@ -666,8 +644,7 @@ msgstr "Inget svar från servern"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"E-postserverinloggningen misslyckades, fel användarnamn eller lösenord."
+msgstr "E-postserverinloggningen misslyckades, fel användarnamn eller lösenord."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."

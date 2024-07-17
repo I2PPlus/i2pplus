@@ -69,24 +69,12 @@ msgstr "Μαζική αλληλογραφία"
 msgid "Inbox"
 msgstr "Εισερχόμενα"
 
-#: src/src/i2p/susi/webmail/WebMail.java:540
-#, fuzzy
-msgid "View message as HTML"
-msgstr "Κανένα νέο μήνυμα"
-
-#: src/src/i2p/susi/webmail/WebMail.java:550
-#, fuzzy
-msgid "View message as plain text"
-msgstr "Το μήνυμα έχει συνημμένο"
-
 #: src/src/i2p/susi/webmail/WebMail.java:573
 msgid "unknown"
 msgstr "άγνωστο"
 
 #: src/src/i2p/susi/webmail/WebMail.java:601
-msgid ""
-"To protect your privacy, SusiMail is blocking Javascript and any remote "
-"content contained in this HTML message."
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
 msgstr ""
 
 #: src/src/i2p/susi/webmail/WebMail.java:602
@@ -272,9 +260,7 @@ msgstr "Κανένα μήνυμα δεν έχει επισημανθεί για 
 #: src/src/i2p/susi/webmail/WebMail.java:1970
 #, java-format
 msgid "Host unchanged. Edit configation file {0} to change host."
-msgstr ""
-"Οικοδεσπότη αμετάβλητος. Επεξεργασία αρχείου παραγωγής {0} για να αλλάξετε "
-"τον κεντρικό υπολογιστή."
+msgstr "Οικοδεσπότη αμετάβλητος. Επεξεργασία αρχείου παραγωγής {0} για να αλλάξετε τον κεντρικό υπολογιστή."
 
 #: src/src/i2p/susi/webmail/WebMail.java:1990
 msgid "Configuration saved"
@@ -282,8 +268,7 @@ msgstr "Η διαμόρφωση αποθηκεύτηκε"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2012
 msgid "Invalid pagesize number, resetting to default value."
-msgstr ""
-"Μη έγκυρος αριθμός μεγέθους σελίδας, επαναφορά στην προεπιλεγμένη τιμή."
+msgstr "Μη έγκυρος αριθμός μεγέθους σελίδας, επαναφορά στην προεπιλεγμένη τιμή."
 
 #: src/src/i2p/susi/webmail/WebMail.java:2477
 #: src/src/i2p/susi/webmail/WebMail.java:3454
@@ -539,11 +524,6 @@ msgstr "Μέγεθος"
 msgid "Mark for deletion"
 msgstr "Επιλογή προς διαγραφή"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3637
-#, fuzzy
-msgid "Message contains HTML"
-msgstr "Το μήνυμα είναι νέο"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3649
 msgid "Message is new"
 msgstr "Το μήνυμα είναι νέο"
@@ -636,11 +616,6 @@ msgstr "Πίσω στο Φάκελο"
 msgid "Move to Folder"
 msgstr "Μετακίνηση στο φάκελο"
 
-#: src/src/i2p/susi/webmail/WebMail.java:3891
-#, fuzzy
-msgid "View message in new tab"
-msgstr "Το μήνυμα είναι νέο"
-
 #: src/src/i2p/susi/webmail/WebMail.java:3947
 msgid "Folder Page Size"
 msgstr "Μέγεθος σελίδας φακέλου"
@@ -669,15 +644,11 @@ msgstr "Καμία απάντηση από τον διακομιστή"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
-"Η σύνδεση στο διακομιστή αλληλογραφίας απέτυχε, λάθος όνομα χρήστη ή κωδικός "
-"πρόσβασης."
+msgstr "Η σύνδεση στο διακομιστή αλληλογραφίας απέτυχε, λάθος όνομα χρήστη ή κωδικός πρόσβασης."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
-"Αποσυνδεθείτε και, στη συνέχεια, συνδεθείτε ξανά με το σωστό όνομα χρήστη "
-"και κωδικό πρόσβασης."
+msgstr "Αποσυνδεθείτε και, στη συνέχεια, συνδεθείτε ξανά με το σωστό όνομα χρήστη και κωδικό πρόσβασης."
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240
