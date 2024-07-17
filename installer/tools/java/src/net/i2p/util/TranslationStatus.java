@@ -218,19 +218,18 @@ public class TranslationStatus {
         // from here down to buf2 so we can output it first
         String h = "Translation Summary (" + resources + " resources, " + langs.size() + " languages, " + grandtot + " strings)";
         if (_html) {
-            buf2.append("<span id=tx_summary>\n<h2>" + h + "</h2>\n")
-                .append("<p class=infohelp>Percentage translated includes compiled resources only.</p>\n");
+            buf2.append("<span id=tx_summary>\n")
+                .append("<p class=infohelp>Note: Percentage translated is only displayed for compiled resources.</p>\n");
         } else {
             buf2.append(h).append("\n\n% translated includes compiled resources only\n\n");
         }
         if (_html) {
-            buf2.append("<table class=tx id=tx_total>")
+            buf2.append("<table class=tx id=tx_total>\n")
+                .append("<tr class=tx_header><th colspan=4>").append(h).append("</th></tr>\n")
                 .append("<tr><th>Language</th><th>Language Code</th><th>Missing Resources</th><th>% Translated</th></tr>\n");
         } else {
-            buf2.append("Code\t   %TX\tMissing\tLanguage");
-            nl();
-            buf2.append("----\t------\t--------\t-------");
-            nl();
+            buf2.append("Code\t   %TX\tMissing\tLanguage\n");
+            buf2.append("----\t------\t--------\t-------\n");
         }
         List<Locale> sorted = counts.sortedObjects();
         for (Locale loc : sorted) {
@@ -271,24 +270,24 @@ public class TranslationStatus {
     }
 
     private void report(String clz, int max, List<ResourceBundle> buns) {
-        if (clz.endsWith(".messages"))
-            clz = clz.substring(0, clz.length() - 9);
+        if (clz.endsWith(".messages")) {clz = clz.substring(0, clz.length() - 9);}
+        String classTitle = "";
+        if (clz.contains("snark")) {classTitle = "tx_snark";}
+        else if (clz.contains("i2ptunnel.web")) {classTitle = "tx_i2ptunnel";}
+        else if (clz.contains("router.countries")) {classTitle = "tx_netdb";}
+        else if (clz.contains("router.news")) {classTitle = "tx_news";}
+        else if (clz.contains("router.web")) {classTitle = "tx_console";}
+        else if (clz.contains("susi.dns")) {classTitle = "tx_dns";}
+        else if (clz.contains("webmail")) {classTitle = "tx_webmail";}
         if (!_html) {
-            nl();
-            buf.append("\nTranslations for " + clz + " (" + max + " strings, " + buns.size() + " translations)\n");
-        }
-        if (_html) {
-            buf.append("<table class=tx id=tx_resource>")
-               .append("<tr class=tx_header><th colspan=4>Translations for " + clz +
-                       " (" + max + " strings, " + buns.size() + " translations)</th></tr>")
-               .append("<tr><th>Language</th><th>Language Code</th><th>Translated</th><th>% Translated</th></tr>");
+            buf.append("\n\nTranslations for " + clz + " (" + max + " strings, " + buns.size() + " translations)\n");
+            buf.append("Code\t  TX\t   %TX\tLanguage\n");
+            buf.append("----\t----\t------\t--------\n");
         } else {
-            //buf.append("Code\t  TX\tEngl\tTotal\t   %TX\tLanguage");
-            buf.append("Code\t  TX\t   %TX\tLanguage");
-            nl();
-            //buf.append("----\t----\t----\t-----\t------\t--------");
-            buf.append("----\t----\t------\t--------");
-            nl();
+            buf.append("<table class=tx id=tx_resource>\n")
+               .append("<tr class=\"tx_header ").append(classTitle).append("\"><th colspan=4>Translations for ").append(clz)
+               .append(" (").append(max).append(" strings, ").append(buns.size()).append(" translations)</th></tr>\n")
+               .append("<tr><th>Language</th><th>Language Code</th><th>Translated</th><th>% Translated</th></tr>\n");
         }
         Set<String> missing = new TreeSet<String>(langs);
         for (ResourceBundle bun : buns) {
@@ -364,7 +363,7 @@ public class TranslationStatus {
             }
         }
         if (_html)
-            buf.append("</th></tr>\n</table>\n<hr>\n");
+            buf.append("</table>\n<hr>\n");
         else
             nl();
     }
