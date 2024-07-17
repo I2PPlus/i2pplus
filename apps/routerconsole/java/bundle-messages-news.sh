@@ -81,7 +81,7 @@ do
 			RC=1
 			break
 		fi
-		msgmerge -U --backup=none $i ${i}t
+		msgmerge -U -N --backup=none $i ${i}t
 		if [ $? -ne 0 ]
 		then
 			echo "ERROR - msgmerge failed on ${i}, not updating translations"

@@ -70,7 +70,7 @@ do
 		# To start a new translation, copy the header from an old translation to the new .po file,
 		# then ant distclean updater.
 		find $JPATHS -name *.java > $TMPFILE
-		xgettext -f $TMPFILE -F -L java --from-code=UTF-8 --width=0 --add-comments \
+		xgettext -f $TMPFILE -F -L java --from-code=UTF-8 --width=0 --no-wrap --add-comments \
 	                 --keyword=_t --keyword=_x --keyword=intl._ --keyword=intl.title --keyword=unlessAdvanced \
 		         -o ${i}t
 		if [ $? -ne 0 ]
@@ -80,7 +80,7 @@ do
 			RC=1
 			break
 		fi
-		msgmerge -U --backup=none $i ${i}t
+		msgmerge -U -N --backup=none $i ${i}t
 		if [ $? -ne 0 ]
 		then
 			echo "ERROR - msgmerge failed on ${i}, not updating translations"
