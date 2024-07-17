@@ -1,3 +1,8 @@
+2024-07-16 dr|z3d
+ * Scripts: add remove_fuzzies.sh script to purge all .po files in specified
+   dir and sub-dirs recursively of fuzzy translations with optional --no-wrap
+   flag to remove wrapping
+
 2024-07-16 zzz / dr|z3d
  * Console: Add translation report to debug section as per upstream MR and
    add flags and percentage bars and enhance presentation
@@ -9,6 +14,12 @@
 
 2024-07-09 dr|z3d
  * Graphs: Use relative coordinates for svg paths to reduce filesize
+
+2024-07-06 zzz
+ * Console: Fix tunnel.Bps.* graphs sometimes not rendering
+
+2024-07-05 zzz
+ * I2CP: Send DestroySessionMessage with dummy SessionID if unset
 
 2024-07-02 zzz
  * Jetty: Don't show null exception message in XSSFilter
