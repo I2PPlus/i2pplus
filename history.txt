@@ -1,4 +1,8 @@
 2024-07-16 dr|z3d
+ * Console: Add js toggle to translation report to permit toggling of
+   completed translations
+
+2024-07-16 dr|z3d
  * Scripts: add remove_fuzzies.sh script to purge all .po files in specified
    dir and sub-dirs recursively of fuzzy translations with optional --no-wrap
    flag to remove wrapping
