@@ -23,12 +23,12 @@ msgstr ""
 #, java-format
 msgid "{0,number,####} ms"
 msgid_plural "{0,number,####} ms"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0,number,####} ميليسكonde"
+msgstr[1] "{0,number,####} ميليسكوند"
+msgstr[2] "{0,number,####} ميليسكوندين"
+msgstr[3] "{0,number,####} ميليسكوند"
+msgstr[4] "{0,number,####} ميليسكوندين"
+msgstr[5] "{0,number,####} ميليسكوند"
 
 #. seconds
 #. alternates: secs, sec. 'seconds' is probably too long.
@@ -107,23 +107,23 @@ msgstr "غير متوفر"
 #, java-format
 msgid "{0,number,####} ns"
 msgid_plural "{0,number,###} ns"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0,number,####} نانو ثانية"
+msgstr[1] "{0,number,####} نانو ثانية"
+msgstr[2] "{0,number,####} نانو ثانية"
+msgstr[3] "{0,number,####} نانو ثوانٍ"
+msgstr[4] "{0,number,####} نانو ثوانٍ"
+msgstr[5] "{0,number,####} نانو ثوانٍ"
 
 #: ../java/src/net/i2p/data/DataHelper.java:1472
 #, java-format
 msgid "{0,number,####} μs"
 msgid_plural "{0,number,###} μs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0,number,####} ميكرو ثانية"
+msgstr[1] "{0,number,####} ميكرو ثانية"
+msgstr[2] "{0,number,####} ميكرو ثانية"
+msgstr[3] "{0,number,####} ميكرو ثوانٍ"
+msgstr[4] "{0,number,####} ميكرو ثوانٍ"
+msgstr[5] "{0,number,####} ميكرو ثوانٍ"
 
 #. just for tagging
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107

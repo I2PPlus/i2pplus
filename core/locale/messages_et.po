@@ -71,8 +71,8 @@ msgstr[1] "{0} päeva"
 #, java-format
 msgid "{0} year"
 msgid_plural "{0} years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} aasta"
+msgstr[1] "{0} aastat"
 
 #: ../java/src/net/i2p/data/DataHelper.java:1441
 #: ../java/src/net/i2p/data/DataHelper.java:1488
@@ -96,7 +96,7 @@ msgstr[1] "{0,number,###} μs"
 #. just for tagging
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "CRIT"
-msgstr "CRIT"
+msgstr "KRIT"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "DEBUG"
@@ -104,7 +104,7 @@ msgstr "DEBUG"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "ERROR"
-msgstr "ERROR"
+msgstr "VIGA"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "INFO"
@@ -112,11 +112,11 @@ msgstr "INFO"
 
 #: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "WARN"
-msgstr "WARN"
+msgstr "HOIAT"
 
 #: ../java/src/net/i2p/util/LogWriter.java:166
 #, java-format
 msgid "{0} similar message omitted"
 msgid_plural "{0} similar messages omitted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} sarnase sõnumi määramata jäetud"
+msgstr[1] "{0} sarnast sõnumit määramata jäetud"
