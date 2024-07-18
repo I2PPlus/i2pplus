@@ -2076,7 +2076,8 @@ p#upnpstatus{margin-top:10px;padding-left:50px}
 #debug td span{max-width:300px;display:inline-block;vertical-align:text-bottom;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #debug ul,.debug_targetinfo{margin:0;text-align:left;columns:400px 2;column-rule:var(--border_badge);column-gap:30px}
 #debug .tx_header th::before{background:url(images/favicon.svg) no-repeat center center/20px}
-#debug #tx_summary .percentBarInner{margin:0 0 3px!important;height:100%!important;}
+#debug #tx_summary .percentBarInner{margin:0 0 3px!important;height:100%!important}
+#debug #tx_summary button{top:6px!important}
 #portmapper td:first-child,#sockets td:first-child{font-weight:700}
 #portmapper td{padding:5px 10px}
 #portmapper th,#portmapper td{text-align:left}
@@ -2736,6 +2737,7 @@ select,.main input[type=submit],.main input[type=reset],.main input[type=submit]
 button.control[class],button.control[class]:hover,button.control[class]:focus{padding:14px;font-size:0;background-position:center center}
 #clientconf.infohelp{margin:12px 0 -13px}
 #clientconfig{margin-top:14px}
+#debug #tx_summary button{top:7px!important}
 #externali2cp .optionlist label::before,#externali2cp .optionlist .nowrap::before,#netconfig label::before,#reseedconfig .nowrap::before,#manualreseed .nowrap::before,#graphs .nowrap::before{min-height:50px}
 #i2pclientconfig,#pconfig,#pluginfromurl,#pluginfromfile,#clientconf.infohelp,#webappconfiguration{margin:-4px 0 -15px}
 #i2pclientconfig{margin-bottom:3px}

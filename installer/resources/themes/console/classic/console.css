@@ -1589,6 +1589,7 @@ font[color="#006600"] span{color:var(--bg);background:#444}
 #debug .buckets .bucketsContainer:last-child{margin-bottom:0}
 #debug .bucketsContainer+br{display:none}
 #debug .tx_header th::before{background:url(images/favicon.svg) no-repeat center center/20px}
+#debug #tx_summary button{top:7px!important}
 #portmapper td:first-child,#sockets td:first-child{font-weight:700;color:var(--ink_light)}
 #portmapper th:last-child,#portmapper td:last-child,#sockets td:last-child{text-align:left}
 

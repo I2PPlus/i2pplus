@@ -2178,6 +2178,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #debug ul,#debug li{margin:0;text-align:left}
 #debug ul,.debug_targetinfo{columns:400px 2;column-rule:var(--border_soft);column-gap:30px}
 #debug .tx_header th::before{background:url(images/favicon.svg) no-repeat center center/20px}
+#debug #tx_summary .infohelp{margin:15px auto 5px}
 #portmapper th:last-child,#portmapper td:last-child,#sockets td:last-child{text-align:left}
 #portmapper td:first-child,#sockets td:first-child{font-weight:700}
 

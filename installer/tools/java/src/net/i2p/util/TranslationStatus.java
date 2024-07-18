@@ -195,7 +195,7 @@ public class TranslationStatus {
                 // in this pass we just calculate the max strings
                 buns.add(bun);
                 Set<String> keys = bun.keySet();
-                int tot = keys.size();
+                int tot = keys.size() - 1; // subtract empty header string
                 if (tot > max)
                     max = tot;
             }
@@ -225,7 +225,7 @@ public class TranslationStatus {
         }
         if (_html) {
             buf2.append("<table class=tx id=tx_total>\n")
-                .append("<tr class=tx_header><th colspan=4>").append(h).append("</th></tr>\n")
+                .append("<tr class=tx_header><th colspan=4>").append(h).append("</th>")
                 .append("<tr><th>Language</th><th>Language Code</th><th>Missing Resources</th><th>% Translated</th></tr>\n");
         } else {
             buf2.append("Code\t   %TX\tMissing\tLanguage\n");
@@ -260,7 +260,10 @@ public class TranslationStatus {
             nl();
         }
         if (_html)
-            buf2.append("<h2>Compiled Resources</h2>\n");
+            buf2.append("<h2>Compiled Resources")
+                .append("&nbsp;<span class=script><button id=tx_toggle_compiled>")
+                .append("Show Complete Translations</button></span>")
+                .append("</h2>\n");
         else
             buf2.append("Compiled Resources\n\n");
         String rv = buf2.toString() + buf.toString();
@@ -272,22 +275,56 @@ public class TranslationStatus {
     private void report(String clz, int max, List<ResourceBundle> buns) {
         if (clz.endsWith(".messages")) {clz = clz.substring(0, clz.length() - 9);}
         String classTitle = "";
-        if (clz.contains("snark")) {classTitle = "tx_snark";}
-        else if (clz.contains("i2ptunnel.web")) {classTitle = "tx_i2ptunnel";}
-        else if (clz.contains("router.countries")) {classTitle = "tx_netdb";}
-        else if (clz.contains("router.news")) {classTitle = "tx_news";}
-        else if (clz.contains("router.web")) {classTitle = "tx_console";}
-        else if (clz.contains("susi.dns")) {classTitle = "tx_dns";}
-        else if (clz.contains("webmail")) {classTitle = "tx_webmail";}
+        String location = "";
+        if (clz.contains("snark")) {
+            classTitle = "tx_snark";
+            location = "apps/i2psnark/locale";
+        } else if (clz.contains("i2ptunnel.web")) {
+            classTitle = "tx_i2ptunnel";
+            location = "apps/i2ptunnel/locale";
+        } else if (clz.contains("i2ptunnel.proxy")) {
+            classTitle = "tx_proxy";
+            location = "apps/i2ptunnel/locale-proxy";
+        } else if (clz.contains("router.countries")) {
+            classTitle = "tx_netdb";
+            location = "apps/routerconsole/locale-countries";
+        } else if (clz.contains("router.news")) {
+            classTitle = "tx_news";
+            location = "apps/routerconsole/locale-news";
+        } else if (clz.contains("router.web")) {
+            classTitle = "tx_console";
+            location = "apps/routerconsole/locale";
+        } else if (clz.contains("susi.dns")) {
+            classTitle = "tx_dns";
+            location = "apps/susidns/locale";
+        } else if (clz.contains("webmail")) {
+            classTitle = "tx_webmail";
+            location = "apps/susimail/locale";
+        } else if (clz.contains("router.util")) {
+            classTitle = "tx_router";
+            location = "router/locale";
+        } else if (clz.contains("net.i2p.util")) {
+            classTitle = "tx_router";
+            location = "core/locale";
+        } else if (clz.contains("client.streaming")) {
+            classTitle = "tx_streaming";
+            location = "apps/ministreaming/locale";
+        } else if (clz.contains("desktopgui")) {
+            classTitle = "tx_dtg";
+            location = "apps/desktopgui/locale";
+        }
         if (!_html) {
             buf.append("\n\nTranslations for " + clz + " (" + max + " strings, " + buns.size() + " translations)\n");
             buf.append("Code\t  TX\t   %TX\tLanguage\n");
             buf.append("----\t----\t------\t--------\n");
         } else {
-            buf.append("<table class=tx id=tx_resource>\n")
-               .append("<tr class=\"tx_header ").append(classTitle).append("\"><th colspan=4>Translations for ").append(clz)
-               .append(" (").append(max).append(" strings, ").append(buns.size()).append(" translations)</th></tr>\n")
-               .append("<tr><th>Language</th><th>Language Code</th><th>Translated</th><th>% Translated</th></tr>\n");
+            buf.append("<table class=\"tx tx_compiled\">\n<thead>\n")
+               .append("<tr class=\"tx_header ").append(classTitle).append("\">")
+               .append("<th colspan=2>").append(clz).append(" (").append(max).append(" strings, ")
+               .append(buns.size()).append(" translations)</th>")
+               .append("<th colspan=2 class=tx_location><span>").append(location).append("</span></th></tr>\n")
+               .append("<tr><th>Language</th><th>Language Code</th><th>Translated</th><th>% Translated</th></tr>\n")
+               .append("</thead>\n<tbody>\n");
         }
         Set<String> missing = new TreeSet<String>(langs);
         for (ResourceBundle bun : buns) {
@@ -295,7 +332,7 @@ public class TranslationStatus {
             //int same = 0;
             //int tx = 0;
             Set<String> keys = bun.keySet();
-            int tot = keys.size();
+            int tot = keys.size() - 1; // subtract empty header string
          /*
             for (String k : keys) {
                 try {
@@ -324,21 +361,24 @@ public class TranslationStatus {
             missing.remove(lang);
             counts.add(loc, tot);
             bundles.increment(loc);
+            boolean incomplete = tot < max;
+            String row = incomplete ? "<tr class=incomplete>" : "<tr class=complete>";
             if (_html) {
                 //buf.append(String.format(Locale.US, "<tr><td>%s %s<td>%s<td>%4d<td>%4d<td>%4d<td>%5.1f%%\n", dlang, country, lang, tx, same, tot, 100f * (tx + same) / max));
-                buf.append(String.format(Locale.US, "<tr><td>%s %s %s</td><td>%s</td><td>%4d</td>" +
+                buf.append(String.format(Locale.US, "%s<td>%s %s %s</td><td>%s</td><td>%4d</td>" +
                                                     "<td><span class=percentBarOuter title=\"%5.1f%%\">" +
                                                     "<span class=percentBarInner style=\"width:%5.1f%%\"></span></span></td></tr>\n",
-                                                    flag, dlang, country, lang, tot, 100f * tot / max, 100f * tot / max));
+                                                    row, flag, dlang, country, lang, tot, 100f * tot / max, 100f * tot / max));
             } else {
                 //buf.append(String.format("%s\t%4d\t%4d\t%4d\t%5.1f%%\t%s %s\n", lang, tx, same, tot, 100f * (tx + same) / max, dlang, country));
                 buf.append(String.format("%s\t%4d\t%5.1f%%\t%s %s\n", lang, tot, 100f * tot / max, dlang, country));
             }
         }
+        buf.append("</tbody>");
 
         if (!missing.isEmpty()) {
             if (_html)
-                buf.append("<tr><th class=tx_notranslate colspan=4><b>Not translated:</b>\n");
+                buf.append("<tfoot><tr><th class=tx_notranslate colspan=4><b>Not translated:</b>\n");
             else
                 buf.append("Not translated:\n");
             for (String s : missing) {
@@ -361,6 +401,7 @@ public class TranslationStatus {
                 if (_html) {buf.append(" &bullet; ").append(dlang);}
                 else {buf.append(s).append("\t--\t--\t").append(dlang).append(country).append('\n');}
             }
+            if (_html) {buf.append("</tfoot>\n");}
         }
         if (_html)
             buf.append("</table>\n<hr>\n");
@@ -371,7 +412,9 @@ public class TranslationStatus {
     private int nonCompiledStatus() {
         int rv  = 0;
         if (_html) {
-            buf.append("<h2>Other Resources</h2>\n");
+            buf.append("<h2>Other Resources")
+               .append("&nbsp;<span class=script><button id=tx_toggle_files>")
+               .append("Show Complete Translations</button></span></h2>\n");
         } else {
             buf.append("\nOther Resources\n\n");
         }
@@ -391,8 +434,8 @@ public class TranslationStatus {
                 continue;
             rv++;
             if (_html) {
-                buf.append("<table class=\"tx\" id=tx_file>\n")
-                   .append("<tr class=tx_header><th colspan=4>Translations for " + file + "</th></tr>\n")
+                buf.append("<table class=\"tx tx_file\">\n")
+                   .append("<tr class=tx_header><th colspan=4>").append(file).append("</th></tr>\n")
                    .append("<tr><th>Language</th><th>Language Code</th><th></th><th>Translated</th></tr>\n");
             } else {
                 buf.append("\nTranslations for " + file + "\n")
@@ -431,10 +474,13 @@ public class TranslationStatus {
                 }
                 String dlang = loc.getDisplayLanguage();
                 String sok = (noCountries && c >= 0) ? "n/a" : (ok ? "yes" : "no");
+                boolean complete = sok.equals("yes");
+                String row = "<tr class=incomplete>";
+                if (complete) {row = "<tr class=complete>";}
                 String cc = getCountryCode(loc);
                 String flag = "<img class=tx_flag src=\"/flags.jsp?c=" + cc + "\" width=24>";
                 if (_html) {
-                    buf.append("<tr><td>").append(flag).append(dlang).append(country).append("</td><td>")
+                    buf.append(row).append("<td>").append(flag).append(dlang).append(country).append("</td><td>")
                        .append(lg).append("</td><td></td><td>").append("<span class=").append(sok).append(">").append(sok).append("</span></td></tr>\n");
                 } else {
                     buf.append(lg).append('\t').append(sok).append('\t').append(dlang).append(country).append("\n");

@@ -148,11 +148,13 @@ if (dd == null || dd.equals("0")) {
         } finally {
             if (br != null) try { br.close(); } catch (java.io.IOException ioe) {}
         }
+        out.println("<script src=/js/translationReport.js></script>");
+        out.println("<noscript><style>.complete{display:table-row!important}.script{display:none!important}</style></noscript>");
     }
 }
 
 %>
-</div>
 
+</div>
 </body>
 </html>
