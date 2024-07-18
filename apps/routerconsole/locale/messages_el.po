@@ -9910,7 +9910,7 @@ msgstr "Μια εναλλακτική υλοποίηση ενός δρομολο
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:534
 msgid "A fork of the <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>Snark BitTorrent client</a> refactored for use on the I2P network. Usually supplied as part of the default suite of applications with Java I2P, and also available as a <a href=http://skank.i2p/#download class=sitelink target=_blank rel=noreferrer>standalone Java application</a>."
-msgstr "Ένα διακλάδωμα του πελάτη BitTorrent <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>Snark</a> που έχει αναδιαρθρωθεί για χρήση στο δίκτυο I2P. Συνήθως παρέχεται ως μέρος της προεπιλεγμένης συλλογής εφαρμογών με το Java I2P και είναι επίσης διαθέσιμο ως <a href=http:// skank.i2p/#download class= sitelink target=_blank rel=noreferrer>ανεξάρτητη εφαρμογή Java</a>."
+msgstr "Ένα διακλάδωμα του πελάτη BitTorrent <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>Snark</a> που έχει αναδιαρθρωθεί για χρήση στο δίκτυο I2P. Συνήθως παρέχεται ως μέρος της προεπιλεγμένης συλλογής εφαρμογών με το Java I2P και είναι επίσης διαθέσιμο ως <a href=http://skank.i2p/#download class= sitelink target=_blank rel=noreferrer>ανεξάρτητη εφαρμογή Java</a>."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/glossary_jsp.java:536
 msgid "Introducer"
@@ -10429,8 +10429,8 @@ msgid "Getting Support Online"
 msgstr "Λήψη υποστήριξης στο διαδίκτυο"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:500
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "Μπορείτε επίσης να ελέγξετε τις πληροφορίες στην ιστοσελίδα του <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P</a>, να αναρτήσετε μηνύματα στο <a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank rel=noreferrer>φόρουμ συζήτησης</a> του I2P ή να επισκεφτείτε τα κανάλια <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> ή <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> στο εσωτερικό IRC δίκτυο του I2P."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
+msgstr "Μπορείτε επίσης να ελέγξετε τις πληροφορίες στην ιστοσελίδα του <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P</a>, να αναρτήσετε μηνύματα στο <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>φόρουμ συζήτησης</a> του I2P ή να επισκεφτείτε τα κανάλια <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> ή <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> στο εσωτερικό IRC δίκτυο του I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:502
 msgid "Reporting Bugs"

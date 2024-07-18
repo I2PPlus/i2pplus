@@ -10411,8 +10411,8 @@ msgid "Getting Support Online"
 msgstr "온라인 지원"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:500
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "또한 <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P 웹 사이트</a>의 정보를 확인하거나 <a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank rel=noreferrer>I2P 토론 포럼</a>에 메시지를 게시하거나 I2P의 내부 IRC 네트워크인 <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> 또는 <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a>에 들러 볼 수도 있습니다."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
+msgstr "또한 <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P 웹 사이트</a>의 정보를 확인하거나 <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P 토론 포럼</a>에 메시지를 게시하거나 I2P의 내부 IRC 네트워크인 <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> 또는 <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a>에 들러 볼 수도 있습니다."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:502
 msgid "Reporting Bugs"

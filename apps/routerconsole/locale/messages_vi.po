@@ -3079,7 +3079,7 @@ msgstr "{0} cho {1}"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:224
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Không có gì để hiển thị - không có số liệu thống kê nào được chỉ định!"
 
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:247
 #, java-format
@@ -6475,13 +6475,13 @@ msgstr "Bộ định tuyến hoặc hiệu suất mạng đang cản trở việ
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1303
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "Máy chủ đang lưu trữ số lượng tối đa đường hầm trung chuyển đã cấu hình"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1305
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "Máy chủ đang sử dụng băng thông chia sẻ tối đa đã cấu hình" 
 
-#: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1307
+#: ../java/src/net/i2p/router/web/helper/SummaryBarRenderer.java:1307
 msgid "Router is ready to build participating tunnels"
 msgstr "Bộ định tuyến đã sẵn sàng để xây dựng các đường hầm tham gia"
 
@@ -6566,15 +6566,15 @@ msgstr "I2PSnark"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:791
 msgid "Messenger"
-msgstr ""
+msgstr "Tin nhắn"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:791
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:806
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryHelper.java:808
 msgid "Server"
@@ -6732,7 +6732,7 @@ msgstr "Xem lại các lệnh cấm hiện tại"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:161
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Xóa danh sách chặn Sybil"
 
 #: ../java/src/net/i2p/router/web/helpers/SybilRenderer.java:163
 msgid "Floodfill Summary"
@@ -9114,11 +9114,11 @@ msgstr "Khi được đặt thành True, bộ định tuyến sẽ thay đổi d
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:524
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "Khi đặt thành false, máy chủ sẽ không giới hạn yêu cầu xây dựng đường hầm từ các máy chủ khác, và nên được sử dụng với sự thận trọng. [Mặc định là true, yêu cầu khởi động lại]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:526
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "Khi đặt thành false, máy chủ sẽ không chặn yêu cầu xây dựng đường hầm từ các máy chủ chạy chậm hơn hoặc không thể truy cập được chạy phiên bản cũ hơn. [Mặc định là true, yêu cầu khởi động lại]"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:528
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
@@ -9266,7 +9266,7 @@ msgstr "Cài đặt này, khi được đặt thành True, sẽ hiển thị cá
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:600
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Cài đặt này cho phép đặt một tiền tố văn bản tùy chỉnh cho tiêu đề trang trên các trang console máy chủ, có thể hữu ích khi bạn mở nhiều console trên các tab trình duyệt và muốn có phương pháp dễ dàng để phân biệt giữa chúng."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/advancedsettings_jsp.java:602
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -10411,8 +10411,8 @@ msgid "Getting Support Online"
 msgstr "Nhận hỗ trợ trực tuyến"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:500
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "Bạn cũng có thể muốn xem lại thông tin trên <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>trang web I2P</a>, đăng thông báo lên <a href=http:// i2pforum.i2p/viewforum.php?f=8 target=_blank rel=noreferrer>Diễn đàn thảo luận I2P</a> hoặc truy cập <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR< /a> hoặc <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> trên mạng IRC nội bộ của I2P."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
+msgstr "Bạn cũng có thể muốn xem lại thông tin trên <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>trang web I2P</a>, đăng thông báo lên <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>Diễn đàn thảo luận I2P</a> hoặc truy cập <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> hoặc <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> trên mạng IRC nội bộ của I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:502
 msgid "Reporting Bugs"
@@ -10981,7 +10981,7 @@ msgstr "Theo mặc định, I2P được cung cấp một máy chủ web để l
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:453
 msgid "To serve your own static content, you only need to edit or replace the files in the webserver's root directory, and the site will be available on the I2P network after you've followed the instructions below. Additionally, cgi and python scripts can be run from the <code>cgi-bin</code> directory immediately above <code>docroot</code> if you have <a href=https://www.perl.org/about.html target=_blank rel=noreferrer class='sitelink external'>perl</a> and <a href=https://www.python.org/ target=_blank rel=noreferrer class='sitelink external'>python</a> installed."
-msgstr "Để phục vụ nội dung tĩnh của riêng bạn, bạn chỉ cần chỉnh sửa hoặc thay thế các tệp trong thư mục gốc của máy chủ web và trang web sẽ có sẵn trên mạng I2P sau khi bạn làm theo hướng dẫn bên dưới. Ngoài ra, các tập lệnh cgi và python có thể chạy từ thư mục <code>cgi-bin</code> ngay phía trên <code>docroot</code> nếu bạn có <a href=https://www.perl.org/about .html target=_blank rel=noreferrer class='sitelink external'>perl</a> và <a href=https://www.python.org/ target=_blank rel=noreferrer class='sitelink external'>python< /a> đã được cài đặt."
+msgstr "Để phục vụ nội dung tĩnh của riêng bạn, bạn chỉ cần chỉnh sửa hoặc thay thế các tệp trong thư mục gốc của máy chủ web và trang web sẽ có sẵn trên mạng I2P sau khi bạn làm theo hướng dẫn bên dưới. Ngoài ra, các tập lệnh cgi và python có thể chạy từ thư mục <code>cgi-bin</code> ngay phía trên <code>docroot</code> nếu bạn có <a href=https://www.perl.org/about .html target=_blank rel=noreferrer class='sitelink external'>perl</a> và <a href=https://www.python.org/ target=_blank rel=noreferrer class='sitelink external'>python</a> đã được cài đặt."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:455
 msgid "Directory listings (sometimes referred to as virtual directories) are enabled by default, so you can host files from a sub-directory of <code>docroot</code> without providing a page with links to the files. You can also serve content that exists outside of <code>docroot</code> by using a <a href=https://en.wikipedia.org/wiki/Symbolic_link target=_blank rel=noreferrer class='sitelink external'>symbolic link</a> to the desired directory."
@@ -11105,7 +11105,7 @@ msgstr "Cách củng cố trang web WordPress của bạn"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/webhosting_jsp.java:515
 msgid "<b>Note:</b> On some Apache installations, the <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> and <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> modules are enabled by default. It is important to disable these, or otherwise protect access to the urls, to avoid compromising the anonymity and security of your server."
-msgstr "<b>Lưu ý:</b> Trên một số bản cài đặt Apache, <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status< /a> và mô-đun <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> được bật theo mặc định. Điều quan trọng là phải vô hiệu hóa những tính năng này hoặc bảo vệ quyền truy cập vào các url để tránh ảnh hưởng đến tính ẩn danh và bảo mật của máy chủ của bạn."
+msgstr "<b>Lưu ý:</b> Trên một số bản cài đặt Apache, <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> và mô-đun <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> được bật theo mặc định. Điều quan trọng là phải vô hiệu hóa những tính năng này hoặc bảo vệ quyền truy cập vào các url để tránh ảnh hưởng đến tính ẩn danh và bảo mật của máy chủ của bạn."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/home_jsp.java:289
 msgid "home"

@@ -10429,8 +10429,8 @@ msgid "Getting Support Online"
 msgstr "Obtenha suporte online"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:500
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "Você também pode querer revisar as informações no <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>site do I2P</a>, postar mensagens no <a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank rel=noreferrer>fórum de discussão do I2P</a> ou visitar <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> ou <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> na rede IRC interna do I2P."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
+msgstr "Você também pode querer revisar as informações no <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>site do I2P</a>, postar mensagens no <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>fórum de discussão do I2P</a> ou visitar <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> ou <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> na rede IRC interna do I2P."
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:502
 msgid "Reporting Bugs"

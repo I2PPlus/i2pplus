@@ -10411,8 +10411,8 @@ msgid "Getting Support Online"
 msgstr "寻找在线帮助"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:500
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "您也可以查看<a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P 官网</a>上的信息，在<a href=http://i2pforum.i2p/viewforum.php?f=8 target=_blank rel=noreferrer>I2P 论坛</a>上发帖，或在I2P的内部IRC网络上浏览<a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> 和 <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a>。"
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a> on I2P's internal IRC network."
+msgstr "您也可以查看<a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P 官网</a>上的信息，在<a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P 论坛</a>上发帖，或在I2P的内部IRC网络上浏览<a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> 和 <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p</a>。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/troubleshoot_jsp.java:502
 msgid "Reporting Bugs"
