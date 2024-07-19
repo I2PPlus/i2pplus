@@ -196,7 +196,7 @@ public class TranslationStatus {
                 buns.add(bun);
                 Set<String> keys = bun.keySet();
                 int tot = keys.size() - 1; // subtract empty header string
-                if (tot != max)
+                if (tot > max)
                     max = tot;
             }
             if (!buns.isEmpty()) {

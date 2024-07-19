@@ -9,54 +9,74 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
 
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:132
 #, java-format
 msgid "Host name \"{0}\" contains illegal character {1}"
 msgstr "Jméno hostitele \"{0}\" obsahuje zakázané znaky {1}"
 
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:145
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:147
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:154
 #, java-format
 msgid "Host name cannot start with \"{0}\""
 msgstr "Jméno hostitele nemůže začínat na  \"{0}\""
 
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:149
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:151
 #, java-format
 msgid "Host name cannot end with \"{0}\""
 msgstr "Jméno hostitele nesmí končit na \"{0}\""
 
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:156
 #, java-format
 msgid "Host name cannot contain \"{0}\""
 msgstr "Jméno hostitele nesmí obsahovat \"{0}\""
 
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:159
 #, java-format
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Název hostitele \"{0}\" vyžaduje převod do ASCII, ale knihovna převodu není v tomto JVM dostupnáJméno hostitele \"{0}\" vyžaduje konverzi do ASCII ale konverzní knihovna je na tomto JVM nedostupná"
 
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:224
 msgid "None"
 msgstr "Žádný"
 
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:232
 msgid "Hashcash"
 msgstr "Hashcash"
 
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:234
 msgid "Hidden"
 msgstr "Skryté"
 
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:236
 msgid "Signed"
 msgstr "Podepsáno"
 
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:238
 msgid "Key"
 msgstr "Klíč"
 
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:240
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:265
 #, java-format
 msgid "Type {0}"
 msgstr "Typ {0}"
 
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:252
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:259
+#: ../src/java/src/i2p/susi/dns/AddressBean.java:262
 msgid "DSA 1024 bit"
 msgstr "DSA 1024 bit"
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:184
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "Vyhledejte <span class=active>"
 msgstr[1] "Vyhledejte <span class=active>"
 msgstr[2] "Vyhledejte <span class=active>"
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:189
 #, java-format
 msgid "Filtered list contains 1 entry."
 msgid_plural "Filtered list contains {0} entries."
@@ -64,6 +84,7 @@ msgstr[0] "Filtrovaný seznam obsahuje 1 záznam."
 msgstr[1] "Filtrovaný seznam obsahuje {0} záznamů."
 msgstr[2] "Filtrovaný seznam obsahuje {0} záznamů."
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:195
 #, java-format
 msgid "One result for: <span class=active>"
 msgid_plural "{0} results for: <span class=active>"
@@ -71,6 +92,7 @@ msgstr[0] "Jeden výsledek pro: <span class=active>"
 msgstr[1] "{0} výsledků pro: <span class=active>"
 msgstr[2] "{0} výsledků pro: <span class=active>"
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:204
 #, java-format
 msgid "1 entry"
 msgid_plural "{0} entries"
@@ -78,60 +100,104 @@ msgstr[0] "1 záznam"
 msgstr[1] "Počet záznamů: {0}"
 msgstr[2] "Počet záznamů: {0}"
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:254
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1033
 msgid "Add"
 msgstr "Přídat"
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:251
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:261
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1003
 msgid "Replace"
 msgstr "Nahradit"
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:260
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:251
 #, java-format
 msgid "Host name {0} is already in address book, unchanged."
 msgstr "Název hostitele {0} je již v adresáři, nezměněn."
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:262
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:255
 #, java-format
 msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
 msgstr "Název hostitele {0} je již ve vašem adresáři s jiným cílem. Klikněte na \"Nahradit\" pro přepsání."
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:282
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:289
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:274
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:281
 msgid "Unable to resolve Base 32 address"
 msgstr "Nelze vyřešit adresu Base 32"
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:307
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:313
 #, java-format
 msgid "Destination added for {0}."
 msgstr "Přídán cíl pro {0}"
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:309
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:315
 #, java-format
 msgid "Destination changed for {0}."
 msgstr "Cíl pro {0} změněn."
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:311
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:317
 msgid "Warning - host name does not end with \".i2p\""
 msgstr "Upozornění - název hostitele nekončí \".i2p\""
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:318
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:329
 msgid "Invalid Base 32 host name."
 msgstr "Neplatný název hostitele Base 32."
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:320
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:331
 msgid "Invalid Base 64 destination."
 msgstr "Neplatný cíl ve formátu Base 64."
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:327
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:337
 #, java-format
 msgid "Invalid host name \"{0}\"."
 msgstr "Neplatný název hostitele \"{0}\"."
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:330
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:340
 msgid "Please enter a host name and destination"
 msgstr "Prosím vložte jméno hostitele a cíl"
 
 #. clear search when deleting
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:355
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:348
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:382
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:388
 msgid "Delete Entry"
 msgstr "Smazat záznam"
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:334
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:344
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:749
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:929
 msgid "Delete Selected"
 msgstr "Zvoleno smazání"
 
 #. parameter is a host name
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:348
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:374
 #, java-format
 msgid "Destination {0} deleted."
 msgstr "Cíl {0} byl smazán."
 
 #. parameter will always be >= 2
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:351
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:377
 #, java-format
 msgid "1 destination deleted."
 msgid_plural "{0} destinations deleted."
@@ -139,80 +205,125 @@ msgstr[0] "1 cíl smazán."
 msgstr[1] "Počet smazaných cílů: {0}."
 msgstr[2] "Počet smazaných cílů: {0}."
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:353
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:379
 msgid "No entries selected to delete."
 msgstr "Nejsou vybrány žádné položky k odstranění."
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:357
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:241
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:252
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:291
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:298
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:312
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1011
 msgid "Add Alternate"
 msgstr "Přidat náhradníka"
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:364
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:386
 msgid "Address book saved."
 msgstr "Adresář uložen."
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:364
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:386
 msgid "Browse away from this addressbook and return to see update."
 msgstr "Vyhledejte tento adresář a vraťte se, abyste viděli aktualizaci."
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:367
 msgid "ERROR: Could not write addressbook file."
 msgstr "ERROR: Nelze zapsat soubor adresáře.Chyba: nepodařilo se zapsat do souboru knihy kontaktů. Zkontrolujte přístupová práva k souboru a místo na disku."
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:372
+#: ../src/java/src/i2p/susi/dns/ConfigBean.java:108
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:390
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:163
 msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
 msgstr "Neplatné odeslání formuláře, pravděpodobně proto, že jste v prohlížeči použili tlačítko „Zpět“ nebo „Znovu načíst“. Prosím znovu odeslává."
 
+#: ../src/java/src/i2p/susi/dns/AddressbookBean.java:373
+#: ../src/java/src/i2p/susi/dns/ConfigBean.java:110
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:392
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:164
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Pokud problém přetrvává, ověřte, zda máte ve svém prohlížeči povoleny soubory cookie."
 
+#: ../src/java/src/i2p/susi/dns/ConfigBean.java:99
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:136
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:248
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:246
 msgid "Save"
 msgstr "Uložit"
 
+#: ../src/java/src/i2p/susi/dns/ConfigBean.java:101
 msgid "Configuration saved."
 msgstr "Nastavení uloženo."
 
+#: ../src/java/src/i2p/susi/dns/ConfigBean.java:102
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:158
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:246
 msgid "Reload"
 msgstr "Načíst znovu"
 
+#: ../src/java/src/i2p/susi/dns/ConfigBean.java:104
 msgid "Configuration reloaded."
 msgstr "Konfigurace znovu načtena."
 
+#: ../src/java/src/i2p/susi/dns/LogBean.java:131
 msgid "New domain"
 msgstr ""
 
+#: ../src/java/src/i2p/susi/dns/LogBean.java:156
 msgid "Subscription log reloaded."
 msgstr "Znovu načten protokol předplatného."
 
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:114
 #, java-format
 msgid "{0} address book in {1} database"
 msgstr "{0} adresář v databázi {1}"
 
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:253
 #, java-format
 msgid "Host name {0} is not in  the address book."
 msgstr "Název hostitele {0} není v adresáři."
 
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:296
 msgid "Manually added via SusiDNS"
 msgstr "Ručně přidáno přes SusiDNS"
 
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:322
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Nepodařilo se přidat cíl pro {0} do služby pojmenování {1}"
 
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:365
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Nepodařilo se odstranit cíl pro {0} ze služby pojmenování {1}"
 
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:407
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:372
 msgid "Save Notes"
 msgstr "Uložit poznámky"
 
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:550
 msgid "You must enter a file"
 msgstr "Musíte zadat soubor"
 
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:566
 msgid "No entries found in file"
 msgstr "V souboru nebyly nalezeny žádné záznamy"
 
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:576
 #, java-format
 msgid "Imported from file {0}"
 msgstr "Importováno ze souboru {0}"
 
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:578
 msgid "Imported from file"
 msgstr "Importováno ze souboru"
 
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:590
 #, java-format
 msgid "Loaded {0} entry from file"
 msgid_plural "Loaded {0} entries from file"
@@ -220,6 +331,7 @@ msgstr[0] "Načten záznam {0} ze souboru"
 msgstr[1] "Načteno {0} záznamů ze souboru"
 msgstr[2] "Načteno {0} záznamů ze souboru"
 
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:594
 #, java-format
 msgid "Skipped {0} duplicate entry from file"
 msgid_plural "Skipped {0} duplicate entries from file"
@@ -227,9 +339,11 @@ msgstr[0] "Vynechán {0} duplicitní záznam ze souboru"
 msgstr[1] "Vynecháno {0} duplicitních záznamů ze souboru"
 msgstr[2] "Vynecháno {0} duplicitních záznamů ze souboru"
 
+#: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:600
 msgid "Import from file failed"
 msgstr "Import ze souboru se nezdařil"
 
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:138
 msgid "Subscriptions saved."
 msgstr "Předplatné uloženo."
 
@@ -242,374 +356,547 @@ msgstr "Předplatné uloženo."
 #. // with the correct parameters will kick off a
 #. // config reload and fetch.
 #. ******
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:149
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:244
 msgid "Update"
 msgstr "Aktualizace"
 
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:152
 msgid "Attempting to update addressbook from subscription sources..."
 msgstr "Pokus o aktualizaci adresáře ze zdrojů předplatného..."
 
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:156
 msgid "Cannot update subscriptions: HTTP proxy is not running!"
 msgstr "Nelze aktualizovat odběry: HTTP proxy neběží!"
 
+#: ../src/java/src/i2p/susi/dns/SubscriptionsBean.java:160
 msgid "Subscriptions reloaded."
 msgstr "Předplatné znovu načteno."
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:208
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1051
 msgid "Import"
 msgstr "Import"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:220
 msgid "address book"
 msgstr "adresář"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:281
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:218
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:225
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:209
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:220
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:218
 msgid "Router"
 msgstr "Router"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:285
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:220
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:229
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:211
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:222
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:220
 msgid "Master"
 msgstr "Mistr"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:289
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:222
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:233
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:213
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:224
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:222
 msgid "Private"
 msgstr "Soukromé"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:293
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:224
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:237
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:215
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:226
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:224
 msgid "Published"
 msgstr "Zveřejněný"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:295
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:226
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:239
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:217
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:228
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:226
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:232 build/HowSVG.java:15
 msgid "Subscriptions"
 msgstr "Předplatné"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:297
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:228
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:232
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:241
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:219
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:230
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:228
 msgid "Configuration"
 msgstr "Konfigurace"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:299
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:230
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:243
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:221
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:232
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:230
 msgid "Help"
 msgstr "Pomoc"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:301
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:291
 msgid "Book"
 msgstr "Kniha"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:318
 msgid "No entries"
 msgstr "Žádné záznamy"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:362
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:372
 msgid "Export in hosts.txt format"
 msgstr "Export ve formátu hosts.txt"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:364
 msgid "Export results in hosts.txt format"
 msgstr "Exportujte výsledky ve formátu hosts.txt"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:374
 msgid "Export book in hosts.txt format"
 msgstr "Exportujte knihu ve formátu hosts.txt"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:421
 msgid "Search"
 msgstr "Hledat"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:699
 msgid "other"
 msgstr "ostatní"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:711
 msgid "clear filter"
 msgstr "průhledný filtr"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:755
 msgid "Info"
 msgstr "Informace"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:757
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:975
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:285
 msgid "Hostname"
 msgstr "Hostitelské jméno"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:759
 msgid "Link (b32)"
 msgstr "Link (B32)"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:761
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:357
 msgid "Destination"
 msgstr "Cíl"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:775
 msgid "Select hosts for deletion from addressbook"
 msgstr "Vyberte hostitele pro smazání z adresáře"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:820
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:834
 msgid "More information on this entry"
 msgstr "Více informací o tomto záznamu"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:846
 msgid "Base 32 address"
 msgstr "Adresa základny 32"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:852
 msgid "Helper link to share host address with option to add to addressbook"
 msgstr "Odkaz pomocníka pro sdílení adresy hostitele s možností přidání do adresáře"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:872
 msgid "Mark for deletion"
 msgstr "Označit pro smazání"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:927
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:987
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1049
 msgid "Cancel"
 msgstr "Zrušit"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:973
 msgid "Add new destination"
 msgstr "Přidat nový cíl"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:979
 msgid "e.g. newdomain.i2p"
 msgstr "např. newdomain.i2p"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:981
 msgid "B64 or B32"
 msgstr "B64 nebo B32"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:985
 msgid "Full destination or b32 address"
 msgstr "Úplný cíl nebo adresa b32"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1045
 msgid "Import from hosts.txt file"
 msgstr "Import ze souboru hosts.txt"
 
+#: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:1047
 msgid "Select file"
 msgstr "Vyberte soubor"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:194
 msgid "configuration"
 msgstr "konfigurace"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:234
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:238
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:234
 msgid "File location"
 msgstr "Umístění souboru"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:250
 msgid "Hints"
 msgstr "Rady"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:252
 msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
 msgstr "Cesty k souborům a adresářům zde jsou relativní k pracovnímu adresáři adresáře, kterým je normálně ~/.i2p/addressbook/ (Linux) nebo %LOCALAPPDATA%\\I2P\\adresář\\ (Windows)."
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:254
 msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
 msgstr "Pokud chcete ručně přidat řádky do adresáře, přidejte je do soukromých nebo hlavních adresářů."
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:256
 msgid "The router addressbook and the published addressbook are updated by the addressbook application."
 msgstr "Adresář směrovače a publikovaný adresář jsou aktualizovány aplikací adresáře."
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:258
 msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
 msgstr "Když publikujete svůj adresář, objeví se zde VŠECHNY cíle z hlavního adresáře a adresáře routeru."
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:260
 msgid "Use the private addressbook for private destinations, these are not published."
 msgstr "Pro soukromé cíle použijte soukromý adresář, tyto nejsou publikovány."
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:262
 msgid "Options"
 msgstr "Možnosti"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:264
 msgid "File containing the list of subscriptions URLs (no need to change)"
 msgstr "Soubor obsahující seznam adres URL odběrů (není třeba měnit)"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:266
 msgid "Update interval in hours"
 msgstr "Interval aktualizace v hodinách"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:268
 msgid "Your public hosts.txt file (choose a path within your webserver document root)"
 msgstr "Váš veřejný soubor hosts.txt (vyberte cestu v kořenovém adresáři dokumentu vašeho webového serveru)"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:270
 msgid "Your hosts.txt (don't change)"
 msgstr "Váš soubor hosts.txt (neměnit)"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:272
 msgid "Your personal addressbook, these hosts will be published"
 msgstr "Váš osobní adresář (pozor, bude zveřejněn)"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:274
 msgid "Your private addressbook, it is never published"
 msgstr "Váš soukromý adresář (není nikdy zveřejněn)"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:276
 msgid "Port for your eepProxy (no need to change)"
 msgstr "Port pro vaši eepProxy (není třeba měnit)"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:278
 msgid "Hostname for your eepProxy (no need to change)"
 msgstr "Hostname pro vaši eepProxy (není třeba měnit)"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:280
 msgid "Whether to update the published addressbook"
 msgstr "Zda aktualizovat publikovaný adresář"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:282
 msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
 msgstr "Soubor obsahující hlavičku etags z načtených adres URL předplatného (není třeba měnit)"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:284
 msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
 msgstr "Soubor obsahující časové razítko úpravy pro každou načtenou adresu URL předplatného (není třeba měnit)"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:286
 msgid "File to log activity to (change to /dev/null if you like)"
 msgstr "File, do kterého se má zaznamenávat aktivita (změňte na /dev/null, chcete-li)"
 
+#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:288
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Název přepsaného motivu, který se má použít (výchozí pro motiv vybraný v konzole)"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:193
 msgid "addressbook"
 msgstr "adresář"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:266
 msgid "Details"
 msgstr "Podrobnosti"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:295
 msgid "Address Helper"
 msgstr "Pomocník s adresou"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:301
 msgid "link"
 msgstr "odkaz"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:305
 msgid "Encoded Name"
 msgstr "Zakódované jméno"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:313
 msgid "Base 32 Address"
 msgstr "Adresa základny 32"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:319
 msgid "Base 64 Hash"
 msgstr "Základ 64 Hash"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:323
 msgid "Public Key"
 msgstr "Veřejný klíč"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:325
 msgid "ElGamal 2048 bit"
 msgstr "ElGamal 2048 bit"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:327
 msgid "Signing Key"
 msgstr "Podpisový klíč"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:331
 msgid "Certificate"
 msgstr "Certifikát"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:335
 msgid "Validated"
 msgstr "Ověřeno"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:337
 msgid "no"
 msgstr "č"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:337
 msgid "yes"
 msgstr "ano"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:339
 msgid "Source"
 msgstr "Zdrojový kód"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:343
 msgid "Added Date"
 msgstr "Datum přidání"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:351
 msgid "Last Modified"
 msgstr "Poslední úprava"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:365
 msgid "Notes"
 msgstr "Poznámky"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:367
 msgid "Add notes about domain"
 msgstr "Přidejte poznámky o doméně"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:392
 msgid "Visual Identification for"
 msgstr "Vizuální identifikace pro"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:406
 msgid "Create your own identification images"
 msgstr "Vytvořte si vlastní identifikační obrázky"
 
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:408
 msgid "Launch Image Generator"
 msgstr "Spusťte generátor obrázků"
 
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:185
 msgid "Introduction"
 msgstr "Úvod"
 
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:223
 msgid "What is the addressbook?"
 msgstr "Co je to adresář?"
 
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:225
 msgid "The addressbook application is part of your I2P installation."
 msgstr "Aplikace adresáře je součástí vaší instalace I2P."
 
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:227
 msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
 msgstr "Pravidelně aktualizuje váš soubor hosts.txt z distribuovaných zdrojů nebo \"předplatných\"."
 
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:229
 msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
 msgstr "Přihlášení k odběru dalších stránek je snadné, stačí je přidat do souboru <a href=\"subscriptions\">předplatná</a>."
 
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:231
 msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
 msgstr "Další informace o pojmenovávání v I2P naleznete v <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>přehledu</a>."
 
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:233
 msgid "How does the addressbook application work?"
 msgstr "Jak funguje aplikace adresáře?"
 
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:235
 msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
 msgstr "Aplikace adresáře pravidelně dotazuje vaše odběry a slučuje jejich obsah do vašeho adresáře \"směrovače\"."
 
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:237
 msgid "Then it merges your \"master\" address book into the router address book as well."
 msgstr "Pak sloučí váš \"master\" adresář také do adresáře routeru."
 
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:239
 msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
 msgstr "Pokud je nakonfigurován, adresář routeru je nyní zapsán do adresáře \"published\", který bude veřejně dostupný, pokud provozujete eepsite."
 
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:241
 msgid "The router also uses a private address book, which is not merged or published."
 msgstr "Směrovač také používá soukromý adresář, který se neslučuje ani nepublikuje."
 
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:243
 msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
 msgstr "Hostitelé v soukromém adresáři jsou přístupní vám, ale jejich adresy nejsou nikdy distribuovány ostatním."
 
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:245
 msgid "The private address book can also be used for aliases of hosts in your other address books."
 msgstr "Soukromý adresář lze také použít pro aliasy hostitelů ve vašich ostatních adresářích."
 
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:196
 msgid "subscription log"
 msgstr "deník předplatného"
 
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:234
 msgid "Subscription Log"
 msgstr "Protokol předplatného"
 
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:236
 msgid "Most recent (excluding bad domains)"
 msgstr "Nejnovější (kromě špatných domén)"
 
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:194
 msgid "subscriptions"
 msgstr "předplatné"
 
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:248
 msgid "The subscription file contains a list of i2p URLs."
 msgstr "Soubor předplatného obsahuje seznam i2p URL."
 
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:250
 msgid "The addressbook application regularly checks this list for new eepsites."
 msgstr "Aplikace adresáře pravidelně kontroluje tento seznam, zda neobsahuje nové eepsites."
 
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:252
 msgid "Those URLs refer to published hosts.txt files."
 msgstr "Tyto adresy URL odkazují na publikované soubory hosts.txt."
 
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:254
 msgid "See the FAQ for a list of subscription URLs."
 msgstr "Viz FAQ pro seznam adres URL předplatného."
 
+#: build/HowSVG.java:5
 msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
 msgstr "Pokud je SusiDNS nakonfigurováno pro publikování vašeho adresáře směrovače, položky se objeví ve vašem Publikovaném adresáři a uloží se do souboru hosts.txt pro sdílení."
 
+#: build/HowSVG.java:6
 msgid "Published Addressbook"
 msgstr "Publikovaný adresář"
 
+#: build/HowSVG.java:7
 msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
 msgstr "Chcete-li nakonfigurovat SusiDNS tak, aby vložil váš adresář routeru do vašeho publikovaného adresáře, nastavte na konfigurační stránce 'should_publish=true'."
 
+#: build/HowSVG.java:8
 msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
 msgstr "V tomto adresáři se objeví všichni hostitelé odvození z předplatných, kromě těch, které ručně přidáte sem nebo do hlavního adresáře."
 
+#: build/HowSVG.java:9
 msgid "Router Addressbook"
 msgstr "Adresář směrovače"
 
+#: build/HowSVG.java:10
 msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
 msgstr "Hosts, které zde ručně přidáte, nikdy nebudou zveřejněny. Zde můžete také přidat aliasy k hostitelům v jiných adresních knihách."
 
+#: build/HowSVG.java:11
 msgid "Private Addressbook"
 msgstr "Soukromý adresář"
 
+#: build/HowSVG.java:12
 msgid "Local Records"
 msgstr "Místní záznamy"
 
+#: build/HowSVG.java:13
 msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
 msgstr "I2P aplikace (včetně HTTP proxy) používají hostitele ve vašich lokálních adresářích k překladu názvů hostitelů .i2p."
 
+#: build/HowSVG.java:14
 msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
 msgstr "Další odběry lze nalézt v sekci FAQ na stránce nápovědy routeru."
 
+#: build/HowSVG.java:16
 msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
 msgstr "Hostitelé pocházející z vašich předplatných jsou přidáni do vašeho adresáře routeru a jsou automaticky synchronizováni (ve výchozím nastavení každých 12 hodin)."
 
+#: build/HowSVG.java:17
 msgid "Configure Subscriptions"
 msgstr "Konfigurace předplatného"
 
+#: build/HowSVG.java:18
 msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
 msgstr "Pokud sem ručně přidáte hostitele, budou zahrnuti do vašeho Publikovaného adresáře (pokud je nakonfigurován)."
 
+#: build/HowSVG.java:19
 msgid "Master Addressbook"
 msgstr "Hlavní adresář"
 
+#: build/HowSVG.java:20
 msgid "Searchable by"
 msgstr "Lze vyhledávat"
 
+#: build/HowSVG.java:21
 msgid "I2P applications"
 msgstr "I2P aplikace"
 
+#: build/HowSVG.java:22
 msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
 msgstr "Adresář Master, Router a Private společně slouží jako autorita DNS pro aplikace I2P."
 
+#: build/HowSVG.java:23
 msgid "Optional,"
 msgstr "Volitelné,"
 
+#: build/HowSVG.java:24
 msgid "for websites"
 msgstr "pro webové stránky"
 
+#: build/HowSVG.java:25
 msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
 msgstr "Pokud nakonfigurujete SusiDNS pro publikování vašeho adresáře směrovače, exportuje soubor hosts.txt obsahující všechny hostitele (ve výchozím nastavení do kořenového adresáře vašeho eepsite)."
 
+#: build/HowSVG.java:26
 msgid "Addresses manually added to your Master address book will merge with your Router address book."
 msgstr "Adresy ručně přidané do hlavního adresáře se sloučí s adresářem směrovače."
 
+#: build/HowSVG.java:27
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Hostitelé, které obdržíte z vašich předplatných, se sloučí s vaším adresářem routeru."

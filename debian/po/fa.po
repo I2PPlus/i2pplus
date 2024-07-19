@@ -9,50 +9,60 @@ msgstr ""
 
 #. Type: boolean
 #. Description
+#: ../i2p.templates:2001
 msgid "Should the I2P router be started at boot?"
 msgstr "هل ينبغي بدء تشغيل جهاز الراوتر I2P عند التشغيل؟"
 
 #. Type: boolean
 #. Description
+#: ../i2p.templates:2001
 msgid "The I2P router can be run as a daemon that starts automatically when your computer boots up. This is the recommended configuration."
 msgstr "يمكن تشغيل جهاز الراوتر I2P كدايمون يبدأ تلقائيًا عند تشغيل الكمبيوتر. هذه هي التكوين الموصى به."
 
 #. Type: string
 #. Description
+#: ../i2p.templates:3001
 msgid "I2P daemon user:"
 msgstr "مستخدم الـ I2P daemon:"
 
 #. Type: string
 #. Description
+#: ../i2p.templates:3001
 msgid "By default I2P is configured to run under the account i2psvc when running as a daemon. To use an existing I2P profile you may enter a different account name here. For example, if your previous I2P installation is at /home/user/i2p, you may enter 'user' here."
 msgstr "بافتراضي يتم تكوين I2P للتشغيل تحت الحساب i2psvc عند التشغيل كـ daemon. لاستخدام ملف تعريف I2P القائم يمكنك إدخال اسم حساب مختلف هنا. على سبيل المثال ، إذا كان تركيب I2P السابق لديك موجودًا في / home / user / i2p ، يمكنك إدخال 'user' هنا."
 
 #. Type: string
 #. Description
+#: ../i2p.templates:3001
 msgid "Very important: If a user other than the default of 'i2psvc' is entered here, the chosen username MUST already exist."
 msgstr "جداً هام: إذا تم إدخال مستخدم آخر غير الافتراضي 'i2psvc' هنا، يجب أن يكون الاسم المستخدم المختار موجوداً بالفعل."
 
 #. Type: string
 #. Description
+#: ../i2p.templates:4001
 msgid "Memory that can be allocated to I2P:"
 msgstr "الذاكرة التي يمكن تخصيصها لـ I2P:"
 
 #. Type: string
 #. Description
+#: ../i2p.templates:4001
 msgid "By default, I2P will only be allowed to use up to 128MB of RAM."
 msgstr "بافتراضي ، سيتم السماح فقط لـ I2P باستخدام ما يصل إلى 128MB من ذاكرة الوصول العشوائي."
 
 #. Type: string
 #. Description
+#: ../i2p.templates:4001
 msgid "High bandwidth routers, as well as routers with a lot of active torrents / plugins, may need to have this value increased."
 msgstr "قد يحتاج الراوترات ذات النطاق الترددي العالي ، بالإضافة إلى الراوترات التي تحتوي على الكثير من البرامج الفرعية النشطة / الإضافات ، إلى زيادة هذا القيمة."
 
 #. Type: boolean
 #. Description
+#: ../i2p.templates:5001
 msgid "Should the I2P daemon be confined with AppArmor?"
 msgstr "هل ينبغي حصر الـ I2P daemon بواسطة AppArmor؟"
 
 #. Type: boolean
 #. Description
+#: ../i2p.templates:5001
 msgid "With this option enabled I2P will be sandboxed with AppArmor, restricting which files and directories may be accessed by I2P."
 msgstr "مع تمكين هذا الخيار ، سيتم عزل I2P بواسطة AppArmor ، مما يحد من الملفات والمجلدات التي يمكن الوصول إليها بواسطة I2P."

@@ -11,50 +11,60 @@ msgstr ""
 
 #. Type: boolean
 #. Description
+#: ../i2p.templates:2001
 msgid "Should the I2P router be started at boot?"
 msgstr "Soll der I2P-Router beim Hochfahren mitgestartet werden?"
 
 #. Type: boolean
 #. Description
+#: ../i2p.templates:2001
 msgid "The I2P router can be run as a daemon that starts automatically when your computer boots up. This is the recommended configuration."
 msgstr "Der I2P-Router kann als Dämon laufen und beim Hochfahren des Betriebssystems mitgestartet werden. Diese Option wird empfohlen."
 
 #. Type: string
 #. Description
+#: ../i2p.templates:3001
 msgid "I2P daemon user:"
 msgstr "Benutzer für den I2P-Dämon"
 
 #. Type: string
 #. Description
+#: ../i2p.templates:3001
 msgid "By default I2P is configured to run under the account i2psvc when running as a daemon. To use an **existing** I2P profile you may enter a different account name here. For example, if your previous I2P installation is at /home/user/i2p, you may enter 'user' here."
 msgstr "Standardmäßig ist I2P so eingestellt, dass es im Dämonmodus der unter dem Benutzer i2psvc läuft. Um ein bereits **vorhandenes** I2P-Profil zu benutzen, kannst du hier einen anderen Benutzer angeben. Beispiel: Wenn deine alte I2P-Installation in /home/ich/i2p residiert, gib hier 'ich' ein."
 
 #. Type: string
 #. Description
+#: ../i2p.templates:3001
 msgid "Very important: If a user other than the default of 'i2psvc' is entered here, the chosen username *MUST* already exist."
 msgstr "Achtung: Wenn etwas anderes als das standardmäßige 'i2psvc' hier eingetrangen ist, musst du einen Benutzernamen angeben der schon existiert."
 
 #. Type: string
 #. Description
+#: ../i2p.templates:4001
 msgid "Memory that can be allocated to I2P:"
 msgstr "Arbeitsspeicher der I2P zugewiesen werden darf:"
 
 #. Type: string
 #. Description
+#: ../i2p.templates:4001
 msgid "By default, I2P will only be allowed to use up to 128MB of RAM."
 msgstr "Standardmäßig kann I2P bist zu 128 MB RAM belegen."
 
 #. Type: string
 #. Description
+#: ../i2p.templates:4001
 msgid "High bandwidth routers, as well as routers with a lot of active torrents / plugins, may need to have this value increased."
 msgstr "Router mit hoher Bandbreite, sowie vielen aktiven Torrents oder Plugins, müssen gegebenenfalls diesen Wert erhöhen."
 
 #. Type: boolean
 #. Description
+#: ../i2p.templates:5001
 msgid "Should the I2P daemon be confined with AppArmor?"
 msgstr "Soll der I2P-Daemon mit AppArmor eingeschränkt werden?"
 
 #. Type: boolean
 #. Description
+#: ../i2p.templates:5001
 msgid "With this option enabled I2P will be sandboxed with AppArmor, restricting which files and directories may be accessed by I2P."
 msgstr "Wenn diese Option aktiviert ist, läuft I2P in einer AppArmor-Sandbox, welche den Zugriff von I2P auf Dateien und Verzeichnisse beschränkt."

@@ -9,56 +9,75 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:69
 msgid "Message timeout"
 msgstr "メッセージタイムアウト"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:72
 msgid "Failed delivery to local destination"
 msgstr "ローカル宛先への配信失敗"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:75
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:108
 msgid "Local router failure"
 msgstr "ローカルルーターフェイル"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:78
 msgid "Local network failure"
 msgstr "ローカルネットワークエラー"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:81
 msgid "Session closed"
 msgstr "セッション閉鎖"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:84
 msgid "Invalid message"
 msgstr "無効なメッセージ"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:87
 msgid "Invalid message options"
 msgstr "無効なメッセージオプション"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:90
 msgid "Buffer overflow"
 msgstr "バッファオーバーフロー"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:93
 msgid "Message expired"
 msgstr "メッセージ期限切れ"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:96
 msgid "Local lease set invalid"
 msgstr "ローカルリースセット無効"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:99
 msgid "No local tunnels"
 msgstr "ローカルトンネルなし"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:102
 msgid "Unsupported encryption options"
 msgstr "サポートされていない暗号化オプション"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:105
 msgid "Invalid destination"
 msgstr "無効な宛先"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:111
 msgid "Destination lease set expired"
 msgstr "宛先リースセット期限切れ"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:114
 msgid "Destination lease set not found"
 msgstr "宛先リースセット未発見"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:124
 msgid "Local destination shutdown"
 msgstr "ローカル宛先シャットダウン"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:127
 msgid "Connection was reset"
 msgstr "接続がリセットされました"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:134
 msgid "Failure code"
 msgstr "エラーコード"

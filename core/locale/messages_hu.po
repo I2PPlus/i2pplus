@@ -17,6 +17,8 @@ msgstr ""
 #. {0,number,####} prevents 1234 from being output as 1,234 in the English locale.
 #. If you want the digit separator in your locale, translate as {0}.
 #. alternates: msec, msecs
+#: ../java/src/net/i2p/data/DataHelper.java:1421
+#: ../java/src/net/i2p/data/DataHelper.java:1474
 #, java-format
 msgid "{0,number,####} ms"
 msgid_plural "{0,number,####} ms"
@@ -25,6 +27,8 @@ msgstr[1] "{0,number,####} ms"
 
 #. seconds
 #. alternates: secs, sec. 'seconds' is probably too long.
+#: ../java/src/net/i2p/data/DataHelper.java:1425
+#: ../java/src/net/i2p/data/DataHelper.java:1476
 #, java-format
 msgid "{0} sec"
 msgid_plural "{0} sec"
@@ -33,6 +37,8 @@ msgstr[1] "{0} mperc"
 
 #. minutes
 #. alternates: mins, min. 'minutes' is probably too long.
+#: ../java/src/net/i2p/data/DataHelper.java:1429
+#: ../java/src/net/i2p/data/DataHelper.java:1478
 #, java-format
 msgid "{0} min"
 msgid_plural "{0} min"
@@ -41,6 +47,8 @@ msgstr[1] "{0} perc"
 
 #. hours
 #. alternates: hrs, hr., hrs.
+#: ../java/src/net/i2p/data/DataHelper.java:1433
+#: ../java/src/net/i2p/data/DataHelper.java:1480
 #, java-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
@@ -48,6 +56,8 @@ msgstr[0] "{0} óra"
 msgstr[1] "{0} órák"
 
 #. days
+#: ../java/src/net/i2p/data/DataHelper.java:1436
+#: ../java/src/net/i2p/data/DataHelper.java:1483
 #, java-format
 msgid "{0} day"
 msgid_plural "{0} days"
@@ -55,21 +65,27 @@ msgstr[0] "{0} nap"
 msgstr[1] "{0} napok"
 
 #. years
+#: ../java/src/net/i2p/data/DataHelper.java:1439
+#: ../java/src/net/i2p/data/DataHelper.java:1486
 #, java-format
 msgid "{0} year"
 msgid_plural "{0} years"
 msgstr[0] "{0} év"
 msgstr[1] "{0} évek"
 
+#: ../java/src/net/i2p/data/DataHelper.java:1441
+#: ../java/src/net/i2p/data/DataHelper.java:1488
 msgid "n/a"
 msgstr "n/a"
 
+#: ../java/src/net/i2p/data/DataHelper.java:1470
 #, java-format
 msgid "{0,number,####} ns"
 msgid_plural "{0,number,###} ns"
 msgstr[0] "{0,number,####} ns"
 msgstr[1] "{0,number,###} ns"
 
+#: ../java/src/net/i2p/data/DataHelper.java:1472
 #, java-format
 msgid "{0,number,####} μs"
 msgid_plural "{0,number,###} μs"
@@ -77,21 +93,27 @@ msgstr[0] "{0,number,####} μs"
 msgstr[1] "{0,number,###} μs"
 
 #. just for tagging
+#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "CRIT"
 msgstr "KRIK"
 
+#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "DEBUG"
 msgstr "DEBUG"
 
+#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "ERROR"
 msgstr "HIBA"
 
+#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "INFO"
 msgstr "INFO"
 
+#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "WARN"
 msgstr "FIGY"
 
+#: ../java/src/net/i2p/util/LogWriter.java:166
 #, java-format
 msgid "{0} similar message omitted"
 msgid_plural "{0} similar messages omitted"

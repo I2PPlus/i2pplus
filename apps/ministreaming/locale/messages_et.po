@@ -9,56 +9,75 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:69
 msgid "Message timeout"
 msgstr "Sõnumi aegumine"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:72
 msgid "Failed delivery to local destination"
 msgstr "Kohaliku sihtkoha kandmine ebaõnnestus"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:75
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:108
 msgid "Local router failure"
 msgstr "Kohaliku ruuteri tõrge"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:78
 msgid "Local network failure"
 msgstr "Kohaliku võrgu tõrge"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:81
 msgid "Session closed"
 msgstr "Sessioon sulgetud"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:84
 msgid "Invalid message"
 msgstr "Vigane sõnum"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:87
 msgid "Invalid message options"
 msgstr "Vigased sõnumi valikud"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:90
 msgid "Buffer overflow"
 msgstr "Puhver ülelaadimine"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:93
 msgid "Message expired"
 msgstr "Sõnum aegus"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:96
 msgid "Local lease set invalid"
 msgstr "Kohaliku laenutuse komplekt vigane"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:99
 msgid "No local tunnels"
 msgstr "Ei ole kohalikke tunnelid"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:102
 msgid "Unsupported encryption options"
 msgstr "Toetamata krüpteerimisvalikud"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:105
 msgid "Invalid destination"
 msgstr "Vigane sihtkoht"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:111
 msgid "Destination lease set expired"
 msgstr "Sihtkoha laenutuse komplekt aegus"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:114
 msgid "Destination lease set not found"
 msgstr "Sihtkoha laenutuse komplekti ei leitud"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:124
 msgid "Local destination shutdown"
 msgstr "Kohaliku sihtkoha väljalülitamine"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:127
 msgid "Connection was reset"
 msgstr "Ühendus lüliti vabalt"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:134
 msgid "Failure code"
 msgstr "Tõrgekood"

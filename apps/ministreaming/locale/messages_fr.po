@@ -9,57 +9,76 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:69
 msgid "Message timeout"
 msgstr "Temporisation du message"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:72
 msgid "Failed delivery to local destination"
 msgstr "Échec de livraison à la destination locale"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:75
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:108
 msgid "Local router failure"
 msgstr "Défaillance du routeur local"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:78
 msgid "Local network failure"
 msgstr "Défaillance du réseau local"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:81
 msgid "Session closed"
 msgstr "La session est fermée"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:84
 msgid "Invalid message"
 msgstr "Le message est invalide"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:87
 msgid "Invalid message options"
 msgstr "Les options de message sont invalides"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:90
 msgid "Buffer overflow"
 msgstr "Dépassement de mémoire tampon"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:93
 msgid "Message expired"
 msgstr "Le message est expiré"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:96
 msgid "Local lease set invalid"
 msgstr "Le jeu de baux local est invalide"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:99
 msgid "No local tunnels"
 msgstr "Aucun tunnel local"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:102
 msgid "Unsupported encryption options"
 msgstr "Les options de chiffrement ne sont pas prises en charge"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:105
 msgid "Invalid destination"
 msgstr "La destination est invalide"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:111
 msgid "Destination lease set expired"
 msgstr "Le jeu de baux de la destination est expiré"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:114
 msgid "Destination lease set not found"
 msgstr "Le jeu de baux de la destination est introuvable"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:117
 msgid "Local destination shutdown"
 msgstr "Fermeture de la destination locale"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:120
 msgid "Connection was reset"
 msgstr "La connexion a été réinitialisée"
 
 #. Translate this one here, can't do it later
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:127
 msgid "Failure code"
 msgstr "Code d’échec"

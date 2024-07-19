@@ -10,58 +10,75 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. * IPv4 OK, IPv6 OK or disabled or no address
+#: ../java/src/net/i2p/router/CommSystemFacade.java:426
 msgid "OK"
 msgstr "正常"
 
+#: ../java/src/net/i2p/router/CommSystemFacade.java:427
 msgid "IPv4: OK; IPv6: Testing"
 msgstr "IPv4: 正常; IPv6: 测试中"
 
+#: ../java/src/net/i2p/router/CommSystemFacade.java:428
 msgid "IPv4: OK; IPv6: Firewalled"
 msgstr "IPv4: 正常; IPv6: 受到防火墙限制"
 
+#: ../java/src/net/i2p/router/CommSystemFacade.java:429
 msgid "IPv4: Testing; IPv6: OK"
 msgstr "IPv4: 测试中; IPv6: 正常"
 
+#: ../java/src/net/i2p/router/CommSystemFacade.java:430
 msgid "IPv4: Firewalled; IPv6: OK"
 msgstr "IPv4: 受到防火墙限制; IPv6: 正常"
 
+#: ../java/src/net/i2p/router/CommSystemFacade.java:431
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr "IPv4: 已禁用; IPv6: 正常"
 
 #. * IPv4 symmetric NAT (not source NAT)
+#: ../java/src/net/i2p/router/CommSystemFacade.java:433
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr "IPv4: 对称 NAT; IPv6: 正常"
 
 #. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
+#: ../java/src/net/i2p/router/CommSystemFacade.java:435
 msgid "Symmetric NAT"
 msgstr "对称 NAT"
 
 #. * IPv4 symmetric NAT (not source NAT)
+#: ../java/src/net/i2p/router/CommSystemFacade.java:437
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr "IPv4: 对称 NAT; IPv6: 测试中"
 
+#: ../java/src/net/i2p/router/CommSystemFacade.java:438
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr "IPv4: 受到防火墙限制; IPv6: 测试中"
 
 #. * IPv4 firewalled, IPv6 firewalled or disabled or no address
+#: ../java/src/net/i2p/router/CommSystemFacade.java:440
 msgid "Firewalled"
 msgstr "受到防火墙限制"
 
+#: ../java/src/net/i2p/router/CommSystemFacade.java:441
 msgid "IPv4: Testing; IPv6: Firewalled"
 msgstr "IPv4: 测试中; IPv6: 受到防火墙限制"
 
+#: ../java/src/net/i2p/router/CommSystemFacade.java:442
 msgid "IPv4: Disabled; IPv6: Testing"
 msgstr "IPv4: 已禁用; IPv6: 测试中"
 
+#: ../java/src/net/i2p/router/CommSystemFacade.java:443
 msgid "IPv4: Disabled; IPv6: Firewalled"
 msgstr "IPv4: 已禁用; IPv6: 受到防火墙限制"
 
+#: ../java/src/net/i2p/router/CommSystemFacade.java:444
 msgid "Disconnected"
 msgstr "已断开"
 
+#: ../java/src/net/i2p/router/CommSystemFacade.java:445
 msgid "Port Conflict"
 msgstr "端口冲突"
 
+#: ../java/src/net/i2p/router/CommSystemFacade.java:446
 msgid "Testing"
 msgstr "测试中"
 
@@ -71,49 +88,72 @@ msgstr "测试中"
 #. setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
 #. else
 #. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:92
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:152
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:575
 msgid "Starting up"
 msgstr "启动"
 
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
 msgid "Declining all tunnel requests:<br>"
 msgstr "拒绝所有隧道请求：<br>"
 
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 msgid "Hidden Mode"
 msgstr "隐藏模式"
 
 #. }
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
 msgid "Declining tunnel requests:<br>"
 msgstr "拒绝隧道请求：<br>"
 
 #. }
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
 msgid "High message delay"
 msgstr "高消息延迟"
 
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Declining requests: "
 msgstr "拒绝请求： "
 
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Limit reached"
 msgstr "达到限制"
 
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 msgid "Participation disabled"
 msgstr "参与已禁用"
 
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
 msgid "High system load"
 msgstr "系统负载高"
 
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
 msgid "Rejecting all tunnel requests:<br>"
 msgstr "拒绝所有隧道请求：<br>"
 
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
 msgid "High number of requests"
 msgstr "请求数量较多"
 
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
 msgid "Rejecting most tunnel requests:<br>"
 msgstr "拒绝大多数隧道请求：<br>"
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:262
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:469
 msgid "Accepting most tunnel requests"
 msgstr "接受大多数隧道请求"
 
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:264
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:471
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:591
 msgid "Accepting tunnel requests"
 msgstr "接受隧道请求"
 
@@ -124,42 +164,57 @@ msgstr "接受隧道请求"
 #. hard to do {0} from here
 #. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
 #. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:369
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:465
 msgid "Declining requests: Bandwidth limit"
 msgstr "拒绝请求：带宽限制"
 
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 msgid "Declining requests"
 msgstr "拒绝请求"
 
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 msgid "Shutting down"
 msgstr "关闭"
 
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
 msgid "Declining tunnel requests"
 msgstr "拒绝隧道请求"
 
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:302
 msgid "Dropping tunnel requests: Too slow"
 msgstr "忽略共享隧道请求：速度太慢"
 
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:311
 msgid "Dropping tunnel requests: High job lag"
 msgstr "忽略共享隧道请求：高作业延迟"
 
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:320
 msgid "Dropping tunnel requests:<br>High CPU load"
 msgstr "删除隧道请求：<br>CPU 负载过高"
 
 #. don't even bother, since we are so overloaded locally
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:587
 msgid "Dropping tunnel requests: Overloaded"
 msgstr "忽略共享隧道请求：路由过载"
 
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 msgid "Declining requests:"
 msgstr "拒绝请求："
 
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
 msgid "Request overload"
 msgstr "请求过载"
 
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
 msgid "Connection limit reached"
 msgstr "达到连接限制"
 
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1267
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1302
 msgid "Dropping tunnel requests: High load"
 msgstr "忽略共享隧道请求：高负载"
 
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1385
 msgid "Dropping tunnel requests: Queue time"
 msgstr "忽略共享隧道请求：队列积压"

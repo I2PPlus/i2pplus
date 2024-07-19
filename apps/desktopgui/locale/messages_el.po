@@ -9,56 +9,85 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: src/net/i2p/desktopgui/ExternalTrayManager.java:31
 msgid "Start I2P"
 msgstr "Έναρξη Ι2Ρ"
 
+#: src/net/i2p/desktopgui/ExternalTrayManager.java:44
+#: src/net/i2p/desktopgui/InternalTrayManager.java:55
 msgid "I2P is starting!"
 msgstr "Το Ι2Ρ ξεκίνησε!"
 
+#: src/net/i2p/desktopgui/ExternalTrayManager.java:44
+#: src/net/i2p/desktopgui/InternalTrayManager.java:55
 msgid "Starting"
 msgstr "Έναρξη"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:65
+#: src/net/i2p/desktopgui/InternalTrayManager.java:221
 msgid "Launch I2P Browser"
 msgstr "Έναρξη φυλλομετρητή Ι2Ρ"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:86
+#: src/net/i2p/desktopgui/InternalTrayManager.java:242
 msgid "Configure I2P System Tray"
 msgstr "Ρύθμιση της γραμμής εργασιών του I2P"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:88
+#: src/net/i2p/desktopgui/InternalTrayManager.java:244
 msgid "Disable system tray"
 msgstr "Απενεργοποιήστε το δίσκο συστήματος"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:104
+#: src/net/i2p/desktopgui/InternalTrayManager.java:260
 msgid "Restart I2P"
 msgstr "Επανεκκίνηση Ι2Ρ"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:121
+#: src/net/i2p/desktopgui/InternalTrayManager.java:277
 msgid "Stop I2P"
 msgstr "Τερματισμός Ι2Ρ"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:137
+#: src/net/i2p/desktopgui/InternalTrayManager.java:293
 msgid "Restart I2P Immediately"
 msgstr "Άμεση επανεκκίνηση του Ι2Ρ"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:154
+#: src/net/i2p/desktopgui/InternalTrayManager.java:310
 msgid "Stop I2P Immediately"
 msgstr "Άμεση διακοπή του I2P"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:168
+#: src/net/i2p/desktopgui/InternalTrayManager.java:324
 msgid "Cancel I2P Shutdown"
 msgstr "Ακύρωση τερματισμού λειτουργίας του I2P"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:381
 #, java-format
 msgid "Shutdown in {0}"
 msgstr "Σβήσιμο σε {0}"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:383
 msgid "Shutdown imminent"
 msgstr "Επίκειται σβήσιμο"
 
 #. status translations are in the console bundle
+#: src/net/i2p/desktopgui/InternalTrayManager.java:388
 msgid "Network"
 msgstr "Δίκτυο "
 
 #. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
+#: src/net/i2p/desktopgui/TrayManager.java:74
 msgid "I2P: Right-click for menu"
 msgstr "I2P: Κάντε δεξί κλικ για το μενού"
 
+#: src/net/i2p/desktopgui/TrayManager.java:301
+#: src/net/i2p/desktopgui/TrayManager.java:338
 msgid "Enable notifications"
 msgstr "Ενεργοποίηση ειδοποιήσεων"
 
+#: src/net/i2p/desktopgui/TrayManager.java:316
+#: src/net/i2p/desktopgui/TrayManager.java:353
 msgid "Disable notifications"
 msgstr "Απενεργοποιήστε τις ειδοποιήσεις"

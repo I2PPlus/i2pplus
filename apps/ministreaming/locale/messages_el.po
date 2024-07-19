@@ -9,56 +9,75 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:69
 msgid "Message timeout"
 msgstr "Απόπειρα λήψης μηνύματος έληξε"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:72
 msgid "Failed delivery to local destination"
 msgstr "Αποτυχημένη παράδοση στον τοπικό προορισμό"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:75
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:108
 msgid "Local router failure"
 msgstr "Αποτυχία του τοπικού διαδρομολόγηση"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:78
 msgid "Local network failure"
 msgstr "Αποτυχία του τοπικού δικτύου"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:81
 msgid "Session closed"
 msgstr "Η σύνδεση έκλεισε"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:84
 msgid "Invalid message"
 msgstr "Μη έγκυρο μήνυμα"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:87
 msgid "Invalid message options"
 msgstr "Μη έγκυρες επιλογές μηνύματος"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:90
 msgid "Buffer overflow"
 msgstr "Υπερβολή βιβλιοθήκης"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:93
 msgid "Message expired"
 msgstr "Έληξε το μήνυμα"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:96
 msgid "Local lease set invalid"
 msgstr "Ο τοπικός αριθμός ενοικίασης είναι μη έγκυρος"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:99
 msgid "No local tunnels"
 msgstr "Δεν υπάρχουν τοπικές συρμές"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:102
 msgid "Unsupported encryption options"
 msgstr "Μη υποστηριζόμενες επιλογές κρυπτογράφησης"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:105
 msgid "Invalid destination"
 msgstr "Μη έγκυρος προορισμός"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:111
 msgid "Destination lease set expired"
 msgstr "Έληξε η διάρκεια του προορισμού"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:114
 msgid "Destination lease set not found"
 msgstr "Δεν βρέθηκε ο αριθμός ενοικίασης προορισμού"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:124
 msgid "Local destination shutdown"
 msgstr "Τερματισμός του τοπικού προορισμού"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:127
 msgid "Connection was reset"
 msgstr "Η σύνδεση επαναφορτώθηκε"
 
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:134
 msgid "Failure code"
 msgstr "Κωδικός αποτυχίας"

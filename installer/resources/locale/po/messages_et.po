@@ -9,137 +9,184 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: ../i2prouter:236
 msgid "Failed to load the wrapper"
 msgstr "Pakendi laadimine ebaõnnestus"
 
+#: ../i2prouter:1021 ../i2prouter:1049 ../i2prouter:1123 ../i2prouter:1151
+#: ../i2prouter:1172
 #, sh-format
 msgid "$APP_LONG_NAME is already running."
 msgstr "$APP_LONG_NAME on juba käimas."
 
+#: ../i2prouter:1032
 #, sh-format
 msgid "Running $APP_LONG_NAME"
 msgstr "$APP_LONG_NAME käivitamine"
 
+#: ../i2prouter:1056
 #, sh-format
 msgid "Waiting for $APP_LONG_NAME"
 msgstr "$APP_LONG_NAME ootamisel"
 
+#: ../i2prouter:1103
 #, sh-format
 msgid "WARNING: $APP_LONG_NAME may have failed to start."
 msgstr "HOIATUS: $APP_LONG_NAME võib mitte õnnestunud käivitada."
 
+#: ../i2prouter:1117 ../i2prouter:1145 ../i2prouter:1351 ../i2prouter:1640
 msgid "Must be root to perform this action."
 msgstr "Peab olema juur kasutaja selle tegevuse tegemiseks."
 
+#: ../i2prouter:1161
 #, sh-format
 msgid "Starting $APP_LONG_NAME"
 msgstr "$APP_LONG_NAME käivitamine"
 
+#: ../i2prouter:1183
 #, sh-format
 msgid "Stopping $APP_LONG_NAME"
 msgstr "$APP_LONG_NAME peatamine"
 
+#: ../i2prouter:1187 ../i2prouter:1255 ../i2prouter:1808
 #, sh-format
 msgid "$APP_LONG_NAME was not running."
 msgstr "$APP_LONG_NAME ei olnud käimas."
 
+#: ../i2prouter:1200 ../i2prouter:1208 ../i2prouter:1270 ../i2prouter:1278
 #, sh-format
 msgid "Unable to stop $APP_LONG_NAME."
 msgstr "$APP_LONG_NAME peatamine ei ole võimalik."
 
+#: ../i2prouter:1226
 #, sh-format
 msgid "Waiting for $APP_LONG_NAME to exit"
 msgstr "$APP_LONG_NAME vahetamisel ootamine"
 
+#: ../i2prouter:1240
 #, sh-format
 msgid "Failed to stop $APP_LONG_NAME."
 msgstr "$APP_LONG_NAME peatamine ebaõnnestus."
 
+#: ../i2prouter:1243
 #, sh-format
 msgid "Stopped $APP_LONG_NAME."
 msgstr "$APP_LONG_NAME on peatatud."
 
+#: ../i2prouter:1251
 #, sh-format
 msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "$APP_LONG_NAME õrnalt peatamine"
 
+#: ../i2prouter:1297
 #, sh-format
 msgid "$APP_LONG_NAME is not running."
 msgstr "$APP_LONG_NAME ei ole käimas."
 
+#: ../i2prouter:1302
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid"
 msgstr "$APP_LONG_NAME on käimas: PID:$pid"
 
+#: ../i2prouter:1305
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
 msgstr "$APP_LONG_NAME on käimas: PID:$pid, Pakend:$STATUS, Java:$JAVASTATUS"
 
+#: ../i2prouter:1358 ../i2prouter:1370 ../i2prouter:1389 ../i2prouter:1406
+#: ../i2prouter:1473 ../i2prouter:1493 ../i2prouter:1507 ../i2prouter:1521
+#: ../i2prouter:1549 ../i2prouter:1587 ../i2prouter:1622
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "$APP_LONG_NAME daemon on juba paigaldatud."
 
+#: ../i2prouter:1361 ../i2prouter:1376 ../i2prouter:1478 ../i2prouter:1510
+#: ../i2prouter:1524 ../i2prouter:1538 ../i2prouter:1552 ../i2prouter:1590
+#: ../i2prouter:1625
 #, sh-format
 msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "$APP_LONG_NAME daemoni paigaldamine"
 
+#: ../i2prouter:1632
 #, sh-format
 msgid "Install not currently supported for $DIST_OS"
 msgstr "Paigaldamine ei ole hetkel toetatud $DIST_OS jaoks"
 
+#: ../i2prouter:1648 ../i2prouter:1661 ../i2prouter:1675 ../i2prouter:1684
+#: ../i2prouter:1694 ../i2prouter:1718 ../i2prouter:1731 ../i2prouter:1743
+#: ../i2prouter:1761 ../i2prouter:1774 ../i2prouter:1788
 #, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "$APP_LONG_NAME daemon eemaldamine"
 
+#: ../i2prouter:1654 ../i2prouter:1669 ../i2prouter:1678 ../i2prouter:1688
+#: ../i2prouter:1699 ../i2prouter:1712 ../i2prouter:1724 ../i2prouter:1737
+#: ../i2prouter:1755 ../i2prouter:1768 ../i2prouter:1782 ../i2prouter:1793
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "$APP_LONG_NAME daemon ei ole hetkel paigaldatud."
 
+#: ../i2prouter:1797
 #, sh-format
 msgid "Remove not currently supported for $DIST_OS"
 msgstr "Eemaldamine ei ole hetkel toetatud $DIST_OS jaoks"
 
+#: ../i2prouter:1884
 msgid "Commands:"
 msgstr "Käsklused:"
 
+#: ../i2prouter:1885
 msgid "Launch in the current console."
 msgstr "Käivita praeguses konsoolis."
 
+#: ../i2prouter:1886
 msgid "Start in the background as a daemon process."
 msgstr "Alusta taustal kui daemon protsess."
 
+#: ../i2prouter:1887
 msgid "Stop if running as a daemon or in another console."
 msgstr "Peata kui käimas daemonina või teises konsoolis."
 
+#: ../i2prouter:1888
 msgid "Stop gracefully, may take up to 11 minutes or more."
 msgstr "Peata õrnalt, võib võtta kuni 11 minutit või rohkem."
 
+#: ../i2prouter:1889
 msgid "Restart gracefully, may take up to 11 minutes or more."
 msgstr "Taaskäivita õrnalt, võib võtta kuni 11 minutit või rohkem."
 
+#: ../i2prouter:1890
 msgid "Stop if running and then start."
 msgstr "Peata kui käimas ja seejärel käivita."
 
+#: ../i2prouter:1891
 msgid "Restart only if already running."
 msgstr "Taaskäivita vaid kui juba käimas."
 
+#: ../i2prouter:1892
 msgid "Query the current status."
 msgstr "Päring praeguse oleku kohta."
 
+#: ../i2prouter:1893
 msgid "Install to start automatically when system boots."
 msgstr "Paigalda automaatse käivitamiseks süsteemi käivitamisel."
 
+#: ../i2prouter:1894
 msgid "Uninstall."
 msgstr "Eemalda."
 
+#: ../i2prouter:1895
 msgid "Request a Java thread dump if running."
 msgstr "Nõua Java niidi dump kui käimas."
 
+#: ../i2prouter:1908
 msgid "Please edit i2prouter and set the variable RUN_AS_USER"
 msgstr "Palun muuda i2prouter ja määra muutuja RUN_AS_USER"
 
+#: ../i2prouter:1913
 msgid "Running I2P as the root user is *not* recommended."
 msgstr "I2P käivitamine juur kasutajana *ei ole* soovitatav."
 
+#: ../i2prouter:1916
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Kui soovite siiski käivitada juurina, muuda i2prouter ja määra ALLOW_ROOT tõene."

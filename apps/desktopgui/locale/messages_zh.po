@@ -9,56 +9,85 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+#: src/net/i2p/desktopgui/ExternalTrayManager.java:31
 msgid "Start I2P"
 msgstr "启动 I2P"
 
+#: src/net/i2p/desktopgui/ExternalTrayManager.java:44
+#: src/net/i2p/desktopgui/InternalTrayManager.java:55
 msgid "I2P is starting!"
 msgstr "正在启动 I2P !"
 
+#: src/net/i2p/desktopgui/ExternalTrayManager.java:44
+#: src/net/i2p/desktopgui/InternalTrayManager.java:55
 msgid "Starting"
 msgstr "正在启动"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:65
+#: src/net/i2p/desktopgui/InternalTrayManager.java:221
 msgid "Launch I2P Browser"
 msgstr "启动 I2P 浏览器"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:86
+#: src/net/i2p/desktopgui/InternalTrayManager.java:242
 msgid "Configure I2P System Tray"
 msgstr "配置 I2P 系统托盘"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:88
+#: src/net/i2p/desktopgui/InternalTrayManager.java:244
 msgid "Disable system tray"
 msgstr "禁用系统托盘"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:104
+#: src/net/i2p/desktopgui/InternalTrayManager.java:260
 msgid "Restart I2P"
 msgstr "重启 I2P"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:121
+#: src/net/i2p/desktopgui/InternalTrayManager.java:277
 msgid "Stop I2P"
 msgstr "停止 I2P"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:137
+#: src/net/i2p/desktopgui/InternalTrayManager.java:293
 msgid "Restart I2P Immediately"
 msgstr "立即重启 I2P"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:154
+#: src/net/i2p/desktopgui/InternalTrayManager.java:310
 msgid "Stop I2P Immediately"
 msgstr "立即停止 I2P"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:168
+#: src/net/i2p/desktopgui/InternalTrayManager.java:324
 msgid "Cancel I2P Shutdown"
 msgstr "取消 I2P 关闭"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:381
 #, java-format
 msgid "Shutdown in {0}"
 msgstr "{0} 后关闭"
 
+#: src/net/i2p/desktopgui/InternalTrayManager.java:383
 msgid "Shutdown imminent"
 msgstr "立即关闭"
 
 #. status translations are in the console bundle
+#: src/net/i2p/desktopgui/InternalTrayManager.java:388
 msgid "Network"
 msgstr "网络"
 
 #. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
+#: src/net/i2p/desktopgui/TrayManager.java:74
 msgid "I2P: Right-click for menu"
 msgstr "I2P：右击获得菜单"
 
+#: src/net/i2p/desktopgui/TrayManager.java:301
+#: src/net/i2p/desktopgui/TrayManager.java:338
 msgid "Enable notifications"
 msgstr "启用通知"
 
+#: src/net/i2p/desktopgui/TrayManager.java:316
+#: src/net/i2p/desktopgui/TrayManager.java:353
 msgid "Disable notifications"
 msgstr "禁用通知"

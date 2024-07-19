@@ -9,137 +9,184 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+#: ../i2prouter:236
 msgid "Failed to load the wrapper"
 msgstr "封装程序载入失败"
 
+#: ../i2prouter:1021 ../i2prouter:1049 ../i2prouter:1123 ../i2prouter:1151
+#: ../i2prouter:1172
 #, sh-format
 msgid "$APP_LONG_NAME is already running."
 msgstr "$APP_LONG_NAME 已运行。"
 
+#: ../i2prouter:1032
 #, sh-format
 msgid "Running $APP_LONG_NAME"
 msgstr "正在运行 $APP_LONG_NAME"
 
+#: ../i2prouter:1056
 #, sh-format
 msgid "Waiting for $APP_LONG_NAME"
 msgstr "正在等待 $APP_LONG_NAME"
 
+#: ../i2prouter:1103
 #, sh-format
 msgid "WARNING: $APP_LONG_NAME may have failed to start."
 msgstr "警告：$APP_LONG_NAME 可能启动失败。"
 
+#: ../i2prouter:1117 ../i2prouter:1145 ../i2prouter:1351 ../i2prouter:1640
 msgid "Must be root to perform this action."
 msgstr "root 才能执行此操作。"
 
+#: ../i2prouter:1161
 #, sh-format
 msgid "Starting $APP_LONG_NAME"
 msgstr "正在启动 $APP_LONG_NAME"
 
+#: ../i2prouter:1183
 #, sh-format
 msgid "Stopping $APP_LONG_NAME"
 msgstr "正在停止 $APP_LONG_NAME"
 
+#: ../i2prouter:1187 ../i2prouter:1255 ../i2prouter:1808
 #, sh-format
 msgid "$APP_LONG_NAME was not running."
 msgstr "$APP_LONG_NAME 未运行"
 
+#: ../i2prouter:1200 ../i2prouter:1208 ../i2prouter:1270 ../i2prouter:1278
 #, sh-format
 msgid "Unable to stop $APP_LONG_NAME."
 msgstr "无法停止 $APP_LONG_NAME"
 
+#: ../i2prouter:1226
 #, sh-format
 msgid "Waiting for $APP_LONG_NAME to exit"
 msgstr "正在等待 $APP_LONG_NAME 退出"
 
+#: ../i2prouter:1240
 #, sh-format
 msgid "Failed to stop $APP_LONG_NAME."
 msgstr "无法停止 $APP_LONG_NAME。"
 
+#: ../i2prouter:1243
 #, sh-format
 msgid "Stopped $APP_LONG_NAME."
 msgstr "$APP_LONG_NAME 已停止。"
 
+#: ../i2prouter:1251
 #, sh-format
 msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "正在等待 $APP_LONG_NAME 自然关闭"
 
+#: ../i2prouter:1297
 #, sh-format
 msgid "$APP_LONG_NAME is not running."
 msgstr "$APP_LONG_NAME 未运行"
 
+#: ../i2prouter:1302
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid"
 msgstr "$APP_LONG_NAME 已运行：PID:$pid"
 
+#: ../i2prouter:1305
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
 msgstr "$APP_LONG_NAME 已运行：PID:$pid, 封装:$STATUS, Java:$JAVASTATUS"
 
+#: ../i2prouter:1358 ../i2prouter:1370 ../i2prouter:1389 ../i2prouter:1406
+#: ../i2prouter:1473 ../i2prouter:1493 ../i2prouter:1507 ../i2prouter:1521
+#: ../i2prouter:1549 ../i2prouter:1587 ../i2prouter:1622
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "后台服务 $APP_LONG_NAME 已运行。"
 
+#: ../i2prouter:1361 ../i2prouter:1376 ../i2prouter:1478 ../i2prouter:1510
+#: ../i2prouter:1524 ../i2prouter:1538 ../i2prouter:1552 ../i2prouter:1590
+#: ../i2prouter:1625
 #, sh-format
 msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "正在安装后台服务 $APP_LONG_NAME"
 
+#: ../i2prouter:1632
 #, sh-format
 msgid "Install not currently supported for $DIST_OS"
 msgstr "暂不支持 $DIST_OS 平台上的安装"
 
+#: ../i2prouter:1648 ../i2prouter:1661 ../i2prouter:1675 ../i2prouter:1684
+#: ../i2prouter:1694 ../i2prouter:1718 ../i2prouter:1731 ../i2prouter:1743
+#: ../i2prouter:1761 ../i2prouter:1774 ../i2prouter:1788
 #, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "正在删除后台服务 $APP_LONG_NAME"
 
+#: ../i2prouter:1654 ../i2prouter:1669 ../i2prouter:1678 ../i2prouter:1688
+#: ../i2prouter:1699 ../i2prouter:1712 ../i2prouter:1724 ../i2prouter:1737
+#: ../i2prouter:1755 ../i2prouter:1768 ../i2prouter:1782 ../i2prouter:1793
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "后台服务 $APP_LONG_NAME 未安装。"
 
+#: ../i2prouter:1797
 #, sh-format
 msgid "Remove not currently supported for $DIST_OS"
 msgstr "暂不支持 $DIST_OS 平台上的删除"
 
+#: ../i2prouter:1884
 msgid "Commands:"
 msgstr "命令："
 
+#: ../i2prouter:1885
 msgid "Launch in the current console."
 msgstr "从当前控制台中启动。"
 
+#: ../i2prouter:1886
 msgid "Start in the background as a daemon process."
 msgstr "作为服务进程从后台启动。"
 
+#: ../i2prouter:1887
 msgid "Stop if running as a daemon or in another console."
 msgstr "关闭作为服务进程或从其他控制台启动的I2P。"
 
+#: ../i2prouter:1888
 msgid "Stop gracefully, may take up to 11 minutes or more."
 msgstr "自然关闭，可以需要最多11分钟。"
 
+#: ../i2prouter:1889
 msgid "Restart gracefully, may take up to 11 minutes or more."
 msgstr "自然关闭，可以需要最多11分钟。"
 
+#: ../i2prouter:1890
 msgid "Stop if running and then start."
 msgstr "先终止（如果运行）再启动。"
 
+#: ../i2prouter:1891
 msgid "Restart only if already running."
 msgstr "重启(仅在已运行时)。"
 
+#: ../i2prouter:1892
 msgid "Query the current status."
 msgstr "查询当前状态。"
 
+#: ../i2prouter:1893
 msgid "Install to start automatically when system boots."
 msgstr "安装为随系统启动。"
 
+#: ../i2prouter:1894
 msgid "Uninstall."
 msgstr "卸载。"
 
+#: ../i2prouter:1895
 msgid "Request a Java thread dump if running."
 msgstr "请求Java转储(如果在运行)。"
 
+#: ../i2prouter:1908
 msgid "Please edit i2prouter and set the variable RUN_AS_USER"
 msgstr "请编辑 i2prouter 设置 RUN_AS_USER 变量"
 
+#: ../i2prouter:1913
 msgid "Running I2P as the root user is *not* recommended."
 msgstr "推荐 *不要* 以 root 身份运行 I2P 。"
 
+#: ../i2prouter:1916
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "要以root运行，请编辑 i2prouter 并设置 ALLOW_ROOT=true。"

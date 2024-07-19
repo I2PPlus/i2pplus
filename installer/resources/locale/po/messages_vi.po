@@ -9,137 +9,184 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: ../i2prouter:236
 msgid "Failed to load the wrapper"
 msgstr "Không thể tải trình bọc."
 
+#: ../i2prouter:1021 ../i2prouter:1049 ../i2prouter:1123 ../i2prouter:1151
+#: ../i2prouter:1172
 #, sh-format
 msgid "$APP_LONG_NAME is already running."
 msgstr "$APP_LONG_NAME đang chạy."
 
+#: ../i2prouter:1032
 #, sh-format
 msgid "Running $APP_LONG_NAME"
 msgstr "Đang chạy $APP_LONG_NAME"
 
+#: ../i2prouter:1056
 #, sh-format
 msgid "Waiting for $APP_LONG_NAME"
 msgstr "Đang chờ $APP_LONG_NAME"
 
+#: ../i2prouter:1103
 #, sh-format
 msgid "WARNING: $APP_LONG_NAME may have failed to start."
 msgstr "CẢNH BÁO: $APP_LONG_NAME có thể đã không khởi động thành công."
 
+#: ../i2prouter:1117 ../i2prouter:1145 ../i2prouter:1351 ../i2prouter:1640
 msgid "Must be root to perform this action."
 msgstr "Phải là root để thực hiện hành động này."
 
+#: ../i2prouter:1161
 #, sh-format
 msgid "Starting $APP_LONG_NAME"
 msgstr "Khởi động $APP_LONG_NAME"
 
+#: ../i2prouter:1183
 #, sh-format
 msgid "Stopping $APP_LONG_NAME"
 msgstr "Dừng $APP_LONG_NAME"
 
+#: ../i2prouter:1187 ../i2prouter:1255 ../i2prouter:1808
 #, sh-format
 msgid "$APP_LONG_NAME was not running."
 msgstr "$APP_LONG_NAME không đang chạy."
 
+#: ../i2prouter:1200 ../i2prouter:1208 ../i2prouter:1270 ../i2prouter:1278
 #, sh-format
 msgid "Unable to stop $APP_LONG_NAME."
 msgstr "Không thể dừng $APP_LONG_NAME."
 
+#: ../i2prouter:1226
 #, sh-format
 msgid "Waiting for $APP_LONG_NAME to exit"
 msgstr "Đang chờ $APP_LONG_NAME thoát"
 
+#: ../i2prouter:1240
 #, sh-format
 msgid "Failed to stop $APP_LONG_NAME."
 msgstr "Không thể dừng $APP_LONG_NAME."
 
+#: ../i2prouter:1243
 #, sh-format
 msgid "Stopped $APP_LONG_NAME."
 msgstr "Đã dừng $APP_LONG_NAME."
 
+#: ../i2prouter:1251
 #, sh-format
 msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "Dừng $APP_LONG_NAME một cách nhã nhặn"
 
+#: ../i2prouter:1297
 #, sh-format
 msgid "$APP_LONG_NAME is not running."
 msgstr "$APP_LONG_NAME không đang chạy."
 
+#: ../i2prouter:1302
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid"
 msgstr "$APP_LONG_NAME đang chạy: PID:$pid"
 
+#: ../i2prouter:1305
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
 msgstr "$APP_LONG_NAME đang chạy: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
 
+#: ../i2prouter:1358 ../i2prouter:1370 ../i2prouter:1389 ../i2prouter:1406
+#: ../i2prouter:1473 ../i2prouter:1493 ../i2prouter:1507 ../i2prouter:1521
+#: ../i2prouter:1549 ../i2prouter:1587 ../i2prouter:1622
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "Quỷ $APP_LONG_NAME đã được cài đặt."
 
+#: ../i2prouter:1361 ../i2prouter:1376 ../i2prouter:1478 ../i2prouter:1510
+#: ../i2prouter:1524 ../i2prouter:1538 ../i2prouter:1552 ../i2prouter:1590
+#: ../i2prouter:1625
 #, sh-format
 msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "Đang cài đặt quỷ $APP_LONG_NAME"
 
+#: ../i2prouter:1632
 #, sh-format
 msgid "Install not currently supported for $DIST_OS"
 msgstr "Cài đặt không được hỗ trợ cho $DIST_OS hiện tại"
 
+#: ../i2prouter:1648 ../i2prouter:1661 ../i2prouter:1675 ../i2prouter:1684
+#: ../i2prouter:1694 ../i2prouter:1718 ../i2prouter:1731 ../i2prouter:1743
+#: ../i2prouter:1761 ../i2prouter:1774 ../i2prouter:1788
 #, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "Loại bỏ quỷ $APP_LONG_NAME"
 
+#: ../i2prouter:1654 ../i2prouter:1669 ../i2prouter:1678 ../i2prouter:1688
+#: ../i2prouter:1699 ../i2prouter:1712 ../i2prouter:1724 ../i2prouter:1737
+#: ../i2prouter:1755 ../i2prouter:1768 ../i2prouter:1782 ../i2prouter:1793
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "Quỷ $APP_LONG_NAME hiện không được cài đặt."
 
+#: ../i2prouter:1797
 #, sh-format
 msgid "Remove not currently supported for $DIST_OS"
 msgstr "Xóa không được hỗ trợ cho $DIST_OS hiện tại"
 
+#: ../i2prouter:1884
 msgid "Commands:"
 msgstr "Lệnh:"
 
+#: ../i2prouter:1885
 msgid "Launch in the current console."
 msgstr "Khởi chạy trong console hiện tại."
 
+#: ../i2prouter:1886
 msgid "Start in the background as a daemon process."
 msgstr "Khởi chạy ở nền như một tiến trình quỷ."
 
+#: ../i2prouter:1887
 msgid "Stop if running as a daemon or in another console."
 msgstr "Dừng nếu đang chạy như một quỷ hoặc trên một console khác."
 
+#: ../i2prouter:1888
 msgid "Stop gracefully, may take up to 11 minutes or more."
 msgstr "Dừng một cách nhã nhặn, có thể mất đến 11 phút hoặc lâu hơn."
 
+#: ../i2prouter:1889
 msgid "Restart gracefully, may take up to 11 minutes or more."
 msgstr "Khởi động lại một cách nhã nhặn, có thể mất đến 11 phút hoặc lâu hơn."
 
+#: ../i2prouter:1890
 msgid "Stop if running and then start."
 msgstr "Dừng nếu đang chạy sau đó bắt đầu."
 
+#: ../i2prouter:1891
 msgid "Restart only if already running."
 msgstr "Khởi động lại chỉ khi đã đang chạy."
 
+#: ../i2prouter:1892
 msgid "Query the current status."
 msgstr "Truy vấn trạng thái hiện tại."
 
+#: ../i2prouter:1893
 msgid "Install to start automatically when system boots."
 msgstr "Cài đặt để tự động khởi động khi hệ thống khởi động."
 
+#: ../i2prouter:1894
 msgid "Uninstall."
 msgstr "Gỡ cài đặt."
 
+#: ../i2prouter:1895
 msgid "Request a Java thread dump if running."
 msgstr "Yêu cầu đổ bộ nhớ luồng Java nếu đang chạy."
 
+#: ../i2prouter:1908
 msgid "Please edit i2prouter and set the variable RUN_AS_USER"
 msgstr "Vui lòng chỉnh sửa i2prouter và đặt biến RUN_AS_USER"
 
+#: ../i2prouter:1913
 msgid "Running I2P as the root user is *not* recommended."
 msgstr "Chạy I2P dưới dạng người dùng root *không* được khuyến nghị."
 
+#: ../i2prouter:1916
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Để chạy như root bất kể điều gì, chỉnh sửa i2prouter và đặt ALLOW_ROOT=true."
