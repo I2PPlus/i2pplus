@@ -110,7 +110,7 @@
 </span>
 </a>
 
-<a href="/help/changelog">
+<a href="/changelog">
 <span class=sitemapLink title="<%=intl._t("Review recent updates to I2P")%>">
 <img src="/themes/console/images/changelog.svg">
 <span class=sitemapLabel><%=intl._t("Change Log")%></span>
@@ -219,6 +219,13 @@
 <span class=sitemapLink title="<%=intl._t("Textual router performance statistics")%>">
 <img src="/themes/console/images/textstats.svg">
 <span class=sitemapLabel><%=intl._t("Statistics")%></span>
+</span>
+</a>
+
+<a href="/debug?d=6">
+<span class=sitemapLink title="<%=intl._t("Current console and webapp translation report")%>">
+<img src="/themes/console/images/translation.svg">
+<span class=sitemapLabel><%=intl._t("Translation Status")%></span>
 </span>
 </a>
 
