@@ -1,7 +1,5 @@
 # I2P
 # Copyright (C) 2017 The I2P Project
-# This file is distributed under the same license as the routerconsole package.
-
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P man pages\n"
@@ -61,7 +59,6 @@ msgstr "BESKRIVELSE"
 #: man/eepget.1:15
 msgid "Download a file non-interactively via HTTP. Transfers through both I2P and the regular Internet are supported."
 msgstr "Last ned en fil ikke-tiltaksgenom HTTP. Overføringer gjennom både I2P og den vanlige internettet er støttet."
-
 
 #. type: Plain text
 #: man/eepget.1:21

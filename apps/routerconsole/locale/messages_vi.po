@@ -1179,6 +1179,10 @@ msgstr "Trung bình"
 msgid "Now"
 msgstr "Bây giờ"
 
+#: ../java/src/net/i2p/router/web/SummaryRenderer.java:560
+msgid "Router restarted"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:53
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:180
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHelper.java:72
@@ -3139,6 +3143,14 @@ msgstr "Cốt truyện trung bình"
 msgid "plot events"
 msgstr "các sự kiện cốt truyện"
 
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:323
+msgid "Hide Legend"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:323
+msgid "Show Legend"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:369
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:706
 msgid "Configure Graph Display"
@@ -3751,6 +3763,10 @@ msgstr "Nhà cung cấp dịch vụ lưu trữ web và dịch vụ VPN tôn tr�
 msgid "Tor-focused Search Engine"
 msgstr "Công cụ tìm kiếm tập trung vào Tor"
 
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
+msgid "Pinterest Image Search Engine"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Công cụ tìm kiếm Clearnet BitTorrent DHT"
@@ -4245,6 +4261,18 @@ msgstr "Cấp"
 msgid "Congestion Cap"
 msgstr "Mũ tắc nghẽn"
 
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:212
+msgid "Moderate"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:213
+msgid "Severe"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:214
+msgid "No transit tunnels"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:218
 msgid "Available CPU Cores"
 msgstr "Lõi CPU có sẵn"
@@ -4411,6 +4439,10 @@ msgstr "Tóm tắt"
 msgid "File location"
 msgstr "Vị trí tệp"
 
+#: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:89
+msgid "Refresh interval (seconds)"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:253
 msgid "File not found"
 msgstr "Không tìm thấy tập tin"
@@ -4479,6 +4511,10 @@ msgstr "Tất cả các bộ định tuyến (Client NetDb)"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:560
 msgid "Sybil Analysis"
 msgstr "Phân tích âm tiết"
+
+#: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:432
+msgid "Router Map"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:166
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
@@ -4683,6 +4719,10 @@ msgstr "Từ chối tất cả các yêu cầu về đường hầm"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1167
 msgid "Transports"
 msgstr "Giao thông"
+
+#: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1191
+msgid "Unknown"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1196
 msgid "Initializing"
@@ -6225,6 +6265,10 @@ msgstr "I2P đang sử dụng bao nhiêu RAM/ tổng RAM khả dụng cho I2P (k
 msgid "Memory"
 msgstr "Bộ nhớ"
 
+#: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:849
+msgid "Floodfill enabled"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:856
 msgid "See more information on the wiki"
 msgstr "Xem thêm thông tin trên wiki"
@@ -6479,9 +6523,9 @@ msgstr "Máy chủ đang lưu trữ số lượng tối đa đường hầm trun
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1305
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "Máy chủ đang sử dụng băng thông chia sẻ tối đa đã cấu hình" 
+msgstr "Máy chủ đang sử dụng băng thông chia sẻ tối đa đã cấu hình"
 
-#: ../java/src/net/i2p/router/web/helper/SummaryBarRenderer.java:1307
+#: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:1307
 msgid "Router is ready to build participating tunnels"
 msgstr "Bộ định tuyến đã sẵn sàng để xây dựng các đường hầm tham gia"
 
@@ -8725,6 +8769,10 @@ msgstr "sự kiện"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:504
 msgid "Event Log"
 msgstr "Nhật ký sự kiện"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:291
+msgid "graph"
+msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:451
 msgid "Performance Graph"
@@ -11217,6 +11265,10 @@ msgstr "Xóa nhật ký"
 msgid "Configure router logging options"
 msgstr "Cấu hình tùy chọn ghi nhật ký bộ định tuyến"
 
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:562
+msgid "Filter Router log output"
+msgstr ""
+
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:566
 msgid "Service (Wrapper) Logs"
 msgstr "Nhật ký dịch vụ (Trình bao bọc)"
@@ -11224,6 +11276,14 @@ msgstr "Nhật ký dịch vụ (Trình bao bọc)"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:292
 msgid "network database"
 msgstr "cơ sở dữ liệu mạng"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdbmap_jsp.java:300
+msgid "network database router map"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdbmap_jsp.java:416
+msgid "Network Database Router Map"
+msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/news_jsp.java:291
 msgid "News"
@@ -11570,6 +11630,14 @@ msgstr "đường hầm địa phương"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:410
 msgid "Local Tunnels"
 msgstr "Đường hầm địa phương"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:444
+msgid "Toggle Tunnel Ids"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:446
+msgid "Toggle Tunnels"
+msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:291
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:409

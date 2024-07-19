@@ -1179,6 +1179,10 @@ msgstr "平均"
 msgid "Now"
 msgstr "现在"
 
+#: ../java/src/net/i2p/router/web/SummaryRenderer.java:560
+msgid "Router restarted"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:53
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:180
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHelper.java:72
@@ -3139,6 +3143,14 @@ msgstr "事件均值"
 msgid "plot events"
 msgstr "事件数量"
 
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:323
+msgid "Hide Legend"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:323
+msgid "Show Legend"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:369
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:706
 msgid "Configure Graph Display"
@@ -3751,6 +3763,10 @@ msgstr "尊重隐私的网络托管和VPN服务提供商"
 msgid "Tor-focused Search Engine"
 msgstr "以.Onion网站为中心的搜索引擎"
 
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
+msgid "Pinterest Image Search Engine"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "表网种子搜索引擎"
@@ -4245,6 +4261,18 @@ msgstr "层"
 msgid "Congestion Cap"
 msgstr "拥堵旗"
 
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:212
+msgid "Moderate"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:213
+msgid "Severe"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:214
+msgid "No transit tunnels"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:218
 msgid "Available CPU Cores"
 msgstr "可用的CPU核心"
@@ -4411,6 +4439,10 @@ msgstr "摘要"
 msgid "File location"
 msgstr "文件位置"
 
+#: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:89
+msgid "Refresh interval (seconds)"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:253
 msgid "File not found"
 msgstr "文件未找到"
@@ -4479,6 +4511,10 @@ msgstr "所有路由器（客户端NETDB）"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:560
 msgid "Sybil Analysis"
 msgstr "Sybil分析"
+
+#: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:432
+msgid "Router Map"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:166
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
@@ -4683,6 +4719,10 @@ msgstr "拒绝所有隧道请求"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1167
 msgid "Transports"
 msgstr "传输"
+
+#: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1191
+msgid "Unknown"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1196
 msgid "Initializing"
@@ -6224,6 +6264,10 @@ msgstr "I2P 使用的内存 / I2P 可用的总内存（排除分配给 JVM 的�
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:484
 msgid "Memory"
 msgstr "内存"
+
+#: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:849
+msgid "Floodfill enabled"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:856
 msgid "See more information on the wiki"
@@ -8726,6 +8770,10 @@ msgstr "事件"
 msgid "Event Log"
 msgstr "事件日志"
 
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:291
+msgid "graph"
+msgstr ""
+
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:451
 msgid "Performance Graph"
 msgstr "性能统计图"
@@ -11217,6 +11265,10 @@ msgstr "清空日志"
 msgid "Configure router logging options"
 msgstr "配置路由器日志选项"
 
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:562
+msgid "Filter Router log output"
+msgstr ""
+
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:566
 msgid "Service (Wrapper) Logs"
 msgstr "服务（封装）日志"
@@ -11224,6 +11276,14 @@ msgstr "服务（封装）日志"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:292
 msgid "network database"
 msgstr "网络数据库"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdbmap_jsp.java:300
+msgid "network database router map"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdbmap_jsp.java:416
+msgid "Network Database Router Map"
+msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/news_jsp.java:291
 msgid "News"
@@ -11570,6 +11630,14 @@ msgstr "本地隧道"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:410
 msgid "Local Tunnels"
 msgstr "本地隧道"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:444
+msgid "Toggle Tunnel Ids"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:446
+msgid "Toggle Tunnels"
+msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:291
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:409

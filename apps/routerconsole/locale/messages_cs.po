@@ -1185,6 +1185,10 @@ msgstr "Prům"
 msgid "Now"
 msgstr "Teď"
 
+#: ../java/src/net/i2p/router/web/SummaryRenderer.java:560
+msgid "Router restarted"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:53
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:180
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHelper.java:72
@@ -3155,6 +3159,14 @@ msgstr "Graf průměrů"
 msgid "plot events"
 msgstr "zápletka událostí"
 
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:323
+msgid "Hide Legend"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:323
+msgid "Show Legend"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:369
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:706
 msgid "Configure Graph Display"
@@ -3767,6 +3779,10 @@ msgstr "Poskytovatel soukromí s ohledem na webhosting a služby VPN"
 msgid "Tor-focused Search Engine"
 msgstr "Vyhledávač zaměřený na Tor"
 
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
+msgid "Pinterest Image Search Engine"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Vyhledávač Clearnet BitTorrent DHT"
@@ -4261,6 +4277,18 @@ msgstr "Úroveň"
 msgid "Congestion Cap"
 msgstr "Čepice přetížení"
 
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:212
+msgid "Moderate"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:213
+msgid "Severe"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:214
+msgid "No transit tunnels"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:218
 msgid "Available CPU Cores"
 msgstr "Dostupná jádra CPU"
@@ -4427,6 +4455,10 @@ msgstr "Shrnutí"
 msgid "File location"
 msgstr "Umístění souboru"
 
+#: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:89
+msgid "Refresh interval (seconds)"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:253
 msgid "File not found"
 msgstr "Soubor nenalezen"
@@ -4495,6 +4527,10 @@ msgstr "Všechny směrovače (klient NetDb)"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:560
 msgid "Sybil Analysis"
 msgstr "Analýza sybil"
+
+#: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:432
+msgid "Router Map"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:166
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
@@ -4699,6 +4735,10 @@ msgstr "Odmítnutí všech požadavků na tunel"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1167
 msgid "Transports"
 msgstr "Doprava"
+
+#: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1191
+msgid "Unknown"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1196
 msgid "Initializing"
@@ -6260,6 +6300,10 @@ msgstr "Kolik RAM I2P využívá / celková RAM dostupná pro I2P (nezahrnuje RA
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:484
 msgid "Memory"
 msgstr "Paměť"
+
+#: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:849
+msgid "Floodfill enabled"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:856
 msgid "See more information on the wiki"
@@ -8762,6 +8806,10 @@ msgstr "události"
 msgid "Event Log"
 msgstr "Záznam událostí"
 
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:291
+msgid "graph"
+msgstr ""
+
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:451
 msgid "Performance Graph"
 msgstr "Graf výkonu"
@@ -11259,6 +11307,10 @@ msgstr "Vymažte protokoly"
 msgid "Configure router logging options"
 msgstr "Konfigurace možností protokolování routeru"
 
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:562
+msgid "Filter Router log output"
+msgstr ""
+
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:566
 msgid "Service (Wrapper) Logs"
 msgstr "Protokoly služby (Wrapper)."
@@ -11266,6 +11318,14 @@ msgstr "Protokoly služby (Wrapper)."
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:292
 msgid "network database"
 msgstr "síťová databáze"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdbmap_jsp.java:300
+msgid "network database router map"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdbmap_jsp.java:416
+msgid "Network Database Router Map"
+msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/news_jsp.java:291
 msgid "News"
@@ -11612,6 +11672,14 @@ msgstr "místní tunely"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:410
 msgid "Local Tunnels"
 msgstr "Místní tunely"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:444
+msgid "Toggle Tunnel Ids"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:446
+msgid "Toggle Tunnels"
+msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:291
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:409

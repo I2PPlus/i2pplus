@@ -1179,6 +1179,10 @@ msgstr "평균"
 msgid "Now"
 msgstr "지금"
 
+#: ../java/src/net/i2p/router/web/SummaryRenderer.java:560
+msgid "Router restarted"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:53
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:180
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHelper.java:72
@@ -3139,6 +3143,14 @@ msgstr "플롯 평균"
 msgid "plot events"
 msgstr "플롯 이벤트"
 
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:323
+msgid "Hide Legend"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:323
+msgid "Show Legend"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:369
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:706
 msgid "Configure Graph Display"
@@ -3751,6 +3763,10 @@ msgstr "웹 호스팅 및 VPN 서비스와 관련한 개인 정보 보호 제공
 msgid "Tor-focused Search Engine"
 msgstr "Tor 중심 검색 엔진"
 
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
+msgid "Pinterest Image Search Engine"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Clearnet BitTorrent DHT 검색 엔진"
@@ -4245,6 +4261,18 @@ msgstr "계층"
 msgid "Congestion Cap"
 msgstr "혼잡 한도"
 
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:212
+msgid "Moderate"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:213
+msgid "Severe"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:214
+msgid "No transit tunnels"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:218
 msgid "Available CPU Cores"
 msgstr "사용 가능한 CPU 코어"
@@ -4411,6 +4439,10 @@ msgstr "요약"
 msgid "File location"
 msgstr "파일 위치"
 
+#: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:89
+msgid "Refresh interval (seconds)"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:253
 msgid "File not found"
 msgstr "파일 발견되지 않음"
@@ -4479,6 +4511,10 @@ msgstr "모든 라우터(클라이언트 NetDb)"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:560
 msgid "Sybil Analysis"
 msgstr "시빌 분석"
+
+#: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:432
+msgid "Router Map"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:166
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
@@ -4683,6 +4719,10 @@ msgstr "모든 터널 요청을 거부합니다"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1167
 msgid "Transports"
 msgstr "전송"
+
+#: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1191
+msgid "Unknown"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1196
 msgid "Initializing"
@@ -6224,6 +6264,10 @@ msgstr "I2P가 사용하고 있는 RAM 양 / I2P에 사용 가능한 총 RAM(JVM
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:484
 msgid "Memory"
 msgstr "메모리"
+
+#: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:849
+msgid "Floodfill enabled"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:856
 msgid "See more information on the wiki"
@@ -8726,6 +8770,10 @@ msgstr "이벤트"
 msgid "Event Log"
 msgstr "이벤트 로그"
 
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:291
+msgid "graph"
+msgstr ""
+
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:451
 msgid "Performance Graph"
 msgstr "성능 그래프"
@@ -11217,6 +11265,10 @@ msgstr "로그 비우기"
 msgid "Configure router logging options"
 msgstr "라우터 로깅 옵션 구성"
 
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:562
+msgid "Filter Router log output"
+msgstr ""
+
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:566
 msgid "Service (Wrapper) Logs"
 msgstr "서비스 (Wrapper) 로그"
@@ -11224,6 +11276,14 @@ msgstr "서비스 (Wrapper) 로그"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:292
 msgid "network database"
 msgstr "네트워크 데이터베이스"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdbmap_jsp.java:300
+msgid "network database router map"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdbmap_jsp.java:416
+msgid "Network Database Router Map"
+msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/news_jsp.java:291
 msgid "News"
@@ -11570,6 +11630,14 @@ msgstr "로컬 터널"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:410
 msgid "Local Tunnels"
 msgstr "로컬 터널"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:444
+msgid "Toggle Tunnel Ids"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:446
+msgid "Toggle Tunnels"
+msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:291
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:409

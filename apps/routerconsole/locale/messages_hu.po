@@ -1182,6 +1182,10 @@ msgstr "Átlag"
 msgid "Now"
 msgstr "Most"
 
+#: ../java/src/net/i2p/router/web/SummaryRenderer.java:560
+msgid "Router restarted"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/BanlistRenderer.java:53
 #: ../java/src/net/i2p/router/web/helpers/ConfigKeyringHelper.java:180
 #: ../java/src/net/i2p/router/web/helpers/ConfigPeerHelper.java:72
@@ -3147,6 +3151,14 @@ msgstr "Ábrázolt átlagok"
 msgid "plot events"
 msgstr "ábrázolt események"
 
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:323
+msgid "Hide Legend"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:323
+msgid "Show Legend"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/GraphHelper.java:369
 #: ../java/src/net/i2p/router/web/helpers/TunnelRenderer.java:706
 msgid "Configure Graph Display"
@@ -3759,6 +3771,10 @@ msgstr "Adatvédelmi szolgáltató, tiszteletben tartva a webtárhely- és VPN-s
 msgid "Tor-focused Search Engine"
 msgstr "Tor-központú keresőmotor"
 
+#: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:175
+msgid "Pinterest Image Search Engine"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/HomeHelper.java:176
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Clearnet BitTorrent DHT kereső"
@@ -4253,6 +4269,18 @@ msgstr "Szint"
 msgid "Congestion Cap"
 msgstr "Duguláskorlát"
 
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:212
+msgid "Moderate"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:213
+msgid "Severe"
+msgstr ""
+
+#: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:214
+msgid "No transit tunnels"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/InfoHelper.java:218
 msgid "Available CPU Cores"
 msgstr "Rendelkezésre álló CPU magok"
@@ -4419,6 +4447,10 @@ msgstr "Összegzés"
 msgid "File location"
 msgstr "Fájl helye"
 
+#: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:89
+msgid "Refresh interval (seconds)"
+msgstr ""
+
 #: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:253
 msgid "File not found"
 msgstr "Fájl nem található"
@@ -4487,6 +4519,10 @@ msgstr "Minden útválasztó (Client NetDb)"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/sitemap_jsp.java:560
 msgid "Sybil Analysis"
 msgstr "Sybil Elemzés"
+
+#: ../java/src/net/i2p/router/web/helpers/NetDbHelper.java:432
+msgid "Router Map"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:166
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
@@ -4691,6 +4727,10 @@ msgstr "Minden alagútkérelem elutasítása"
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1167
 msgid "Transports"
 msgstr "Átvitel"
+
+#: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1191
+msgid "Unknown"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/NetDbRenderer.java:1196
 msgid "Initializing"
@@ -6242,6 +6282,10 @@ msgstr "Mennyi RAM-ot használ az I2P/az I2P számára elérhető összes RAM (k
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help/ui_jsp.java:484
 msgid "Memory"
 msgstr "Memória"
+
+#: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:849
+msgid "Floodfill enabled"
+msgstr ""
 
 #: ../java/src/net/i2p/router/web/helpers/SummaryBarRenderer.java:856
 msgid "See more information on the wiki"
@@ -8744,6 +8788,10 @@ msgstr "események"
 msgid "Event Log"
 msgstr "Eseménynapló"
 
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:291
+msgid "graph"
+msgstr ""
+
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/graph_jsp.java:451
 msgid "Performance Graph"
 msgstr "Teljesítménygrafikon"
@@ -11235,6 +11283,10 @@ msgstr "Tiszta naplók"
 msgid "Configure router logging options"
 msgstr "Az útválasztó naplózási beállításainak konfigurálása"
 
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:562
+msgid "Filter Router log output"
+msgstr ""
+
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/logs_jsp.java:566
 msgid "Service (Wrapper) Logs"
 msgstr "Szolgáltatás (Wrapper) Napló"
@@ -11242,6 +11294,14 @@ msgstr "Szolgáltatás (Wrapper) Napló"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdb_jsp.java:292
 msgid "network database"
 msgstr "hálózati adatbázis"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdbmap_jsp.java:300
+msgid "network database router map"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/netdbmap_jsp.java:416
+msgid "Network Database Router Map"
+msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/news_jsp.java:291
 msgid "News"
@@ -11588,6 +11648,14 @@ msgstr "helyi alagutak"
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:410
 msgid "Local Tunnels"
 msgstr "Helyi Alagutak"
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:444
+msgid "Toggle Tunnel Ids"
+msgstr ""
+
+#: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/tunnels_jsp.java:446
+msgid "Toggle Tunnels"
+msgstr ""
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:291
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/viewprofile_jsp.java:409

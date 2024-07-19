@@ -280,8 +280,8 @@ msgstr "{0} aadressiraamat {1} andmebaas"
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:253
 #, java-format
-msgid "Host name {0} is not in the address book."
-msgstr "Määri nimi {0} ei ole aadressiraamatust."
+msgid "Host name {0} is not in  the address book."
+msgstr ""
 
 #: ../src/java/src/i2p/susi/dns/NamingServiceBean.java:296
 msgid "Manually added via SusiDNS"
@@ -414,10 +414,9 @@ msgstr "Avaldatud"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:295
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:226
-#: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:232
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:241
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:219
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:230
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:239
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:217
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:228
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:226
 #: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:232 build/HowSVG.java:15
 msgid "Subscriptions"
@@ -435,10 +434,10 @@ msgstr "Seaded"
 
 #: ../src/tmp/i2p/susi/dns/jsp/addressbook_jsp.java:299
 #: ../src/tmp/i2p/susi/dns/jsp/config_jsp.java:230
-#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:245
-#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:223
-#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:234
-#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:232
+#: ../src/tmp/i2p/susi/dns/jsp/details_jsp.java:243
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:221
+#: ../src/tmp/i2p/susi/dns/jsp/log_jsp.java:232
+#: ../src/tmp/i2p/susi/dns/jsp/subscriptions_jsp.java:230
 msgid "Help"
 msgstr "Abi"
 
@@ -741,16 +740,20 @@ msgid "It regularly updates your hosts.txt file from distributed sources or \"su
 msgstr "See uuendab regulaarselt sinu hosts.txt faili hajutatud allikatest või \"tellimustest\"."
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:229
-msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions file."
-msgstr "Lisateenusite tellimine on lihtne, liida need lihtsalt oma <a href=\"tellimused\">tellimuste faili."
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr ""
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:231
-msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview."
-msgstr "Lisateavet nimetamise kohta I2Ps, vaata <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank> ülevaadet."
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr ""
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:233
 msgid "How does the addressbook application work?"
 msgstr "Kuidas aadressiraamatu rakendus töötab?"
+
+#: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:235
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr ""
 
 #: ../src/tmp/i2p/susi/dns/jsp/index_jsp.java:237
 msgid "Then it merges your \"master\" address book into the router address book as well."
@@ -891,3 +894,13 @@ msgstr "Käsitselt põhi aadressiraamatusse lisatud aadressid ühendatakse sinu 
 #: build/HowSVG.java:27
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tellimuste kaudu saadud hostid ühendatakse sinu Rooteri aadressiraamatusse."
+
+#, java-format
+#~ msgid "Host name {0} is not in the address book."
+#~ msgstr "Määri nimi {0} ei ole aadressiraamatust."
+
+#~ msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions file."
+#~ msgstr "Lisateenusite tellimine on lihtne, liida need lihtsalt oma <a href=\"tellimused\">tellimuste faili."
+
+#~ msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview."
+#~ msgstr "Lisateavet nimetamise kohta I2Ps, vaata <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank> ülevaadet."
