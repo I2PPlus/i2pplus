@@ -9,76 +9,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:69
 msgid "Message timeout"
 msgstr "اتمام وقت پیام"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:72
 msgid "Failed delivery to local destination"
 msgstr "تحویل ناموفق به مقصد محلی"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:75
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:108
 msgid "Local router failure"
 msgstr "خرابی روتر محلی"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:78
 msgid "Local network failure"
 msgstr "خرابی شبکه محلی"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:81
 msgid "Session closed"
 msgstr "نشست بسته شد"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:84
 msgid "Invalid message"
 msgstr "پیام نامعتبر"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:87
 msgid "Invalid message options"
 msgstr "گزینه های پیام نامعتبر"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:90
 msgid "Buffer overflow"
 msgstr "سرریز بافر"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:93
 msgid "Message expired"
 msgstr "پیام انقضا یافت"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:96
 msgid "Local lease set invalid"
 msgstr "مجموعه اجاره محلی نامعتبر است"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:99
 msgid "No local tunnels"
 msgstr "هیچ تونل محلی"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:102
 msgid "Unsupported encryption options"
 msgstr "گزینه های رمزگذاری پشتیبانی نشده"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:105
 msgid "Invalid destination"
 msgstr "مقصد نامعتبر"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:111
 msgid "Destination lease set expired"
 msgstr "مجموعه اجاره مقصد منقضی شده است"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:114
 msgid "Destination lease set not found"
 msgstr "مجموعه اجاره مقصد پیدا نشد"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:121
 msgid "Local destination shutdown"
 msgstr "خاموش شدن مقصد محلی"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:124
 msgid "Connection was reset"
 msgstr "اتصال دوباره تنظیم شد"
 
 #. Translate this one here, can't do it later
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:131
 msgid "Failure code"
 msgstr "کد خطا"

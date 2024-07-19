@@ -10,75 +10,58 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. * IPv4 OK, IPv6 OK or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:426
 msgid "OK"
 msgstr "OK"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:427
 msgid "IPv4: OK; IPv6: Testing"
 msgstr "IPv4: OK; IPv6: Tester"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:428
 msgid "IPv4: OK; IPv6: Firewalled"
 msgstr "IPv4: OK; IPv6: Bak brannmur"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:429
 msgid "IPv4: Testing; IPv6: OK"
 msgstr "IPv4: Tester; IPv6: OK"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:430
 msgid "IPv4: Firewalled; IPv6: OK"
 msgstr "IPv4: Bak brannmur; IPv6: OK"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:431
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr "IPv4: Avskrudd; IPv6: OK"
 
 #. * IPv4 symmetric NAT (not source NAT)
-#: ../java/src/net/i2p/router/CommSystemFacade.java:433
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr "IPv4: Symmetrisk NAT; IPv6: OK"
 
 #. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:435
 msgid "Symmetric NAT"
 msgstr "Symmetrisk NAT"
 
 #. * IPv4 symmetric NAT (not source NAT)
-#: ../java/src/net/i2p/router/CommSystemFacade.java:437
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr "IPv4: Symmetrisk NAT; IPv6: Tester"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:438
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr "IPv4: Bak brannmur; IPv6: Tester"
 
 #. * IPv4 firewalled, IPv6 firewalled or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:440
 msgid "Firewalled"
 msgstr "Bak brannmur"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:441
 msgid "IPv4: Testing; IPv6: Firewalled"
 msgstr "IPv4: Tester; IPv6: Bak brannmur"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:442
 msgid "IPv4: Disabled; IPv6: Testing"
 msgstr "IPv4: Avskrudd; IPv6: Tester"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:443
 msgid "IPv4: Disabled; IPv6: Firewalled"
 msgstr "IPv4: Avskrudd; IPv6: Bak brannmur"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:444
 msgid "Disconnected"
 msgstr "Frakoblet"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:445
 msgid "Port Conflict"
 msgstr "Portkonflikt"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:446
 msgid "Testing"
 msgstr "Tester"
 
@@ -88,72 +71,49 @@ msgstr "Tester"
 #. setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
 #. else
 #. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:92
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:152
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:575
 msgid "Starting up"
 msgstr "Oppstart"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
 msgid "Declining all tunnel requests:<br>"
 msgstr "Avslår alle tunnelforespørsler:<br>"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:154
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 msgid "Hidden Mode"
 msgstr "Skjult modus"
 
 #. }
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
 msgid "Declining tunnel requests:<br>"
 msgstr "Avvisende tunnelforespørsler:<br>"
 
 #. }
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:200
 msgid "High message delay"
 msgstr "Høy meldingsforsinkelse"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Declining requests: "
 msgstr "Avvisende forespørsler: "
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:213
 msgid "Limit reached"
 msgstr "Grensen nådd"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:218
 msgid "Participation disabled"
 msgstr "Deltakelse deaktivert"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
 msgid "High system load"
 msgstr "Høy systembelastning"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:232
 msgid "Rejecting all tunnel requests:<br>"
 msgstr "Avviser alle tunnelforespørsler:<br>"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
 msgid "High number of requests"
 msgstr "Høyt antall forespørsler"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:260
 msgid "Rejecting most tunnel requests:<br>"
 msgstr "Avviser de fleste tunnelforespørsler:<br>"
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:262
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:469
 msgid "Accepting most tunnel requests"
 msgstr "Godtar de fleste tunnelforespørsler"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:264
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:471
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:591
 msgid "Accepting tunnel requests"
 msgstr "Godta tunnelforespørsler"
 
@@ -164,57 +124,42 @@ msgstr "Godta tunnelforespørsler"
 #. hard to do {0} from here
 #. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
 #. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:369
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:465
 msgid "Declining requests: Bandwidth limit"
 msgstr "Avvisende forespørsler: Båndbreddegrense"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 msgid "Declining requests"
 msgstr "Avvisende forespørsler"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:580
 msgid "Shutting down"
 msgstr "Avslutning"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:593
 msgid "Declining tunnel requests"
 msgstr "Avvisende tunnelforespørsler"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:302
 msgid "Dropping tunnel requests: Too slow"
 msgstr "Dropper tunnelforespørsler: For treg"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:311
 msgid "Dropping tunnel requests: High job lag"
 msgstr "Slippe tunnelforespørsler: Høy jobbetterslep"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:320
 msgid "Dropping tunnel requests:<br>High CPU load"
 msgstr "Slipper tunnelforespørsler:<br>Høy CPU-belastning"
 
 #. don't even bother, since we are so overloaded locally
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:587
 msgid "Dropping tunnel requests: Overloaded"
 msgstr "Dropper tunnelforespørsler: Overbelastet"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:930
 msgid "Declining requests:"
 msgstr "Avvisende forespørsler:"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:968
 msgid "Request overload"
 msgstr "Be om overbelastning"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:999
 msgid "Connection limit reached"
 msgstr "Tilkoblingsgrense nådd"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1267
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1302
 msgid "Dropping tunnel requests: High load"
 msgstr "Dropper tunnelforespørsler: Høy last"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1385
 msgid "Dropping tunnel requests: Queue time"
 msgstr "Dropper tunneler forespørsler: Køtid"

@@ -9,76 +9,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:69
 msgid "Message timeout"
 msgstr "Meddelande-timeout"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:72
 msgid "Failed delivery to local destination"
 msgstr "Leverans till lokal destination misslyckades"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:75
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:108
 msgid "Local router failure"
 msgstr "Lokalt routerfel"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:78
 msgid "Local network failure"
 msgstr "Lokalt nätverksfel"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:81
 msgid "Session closed"
 msgstr "Sessionen stängd"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:84
 msgid "Invalid message"
 msgstr "Ogiltigt meddelande"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:87
 msgid "Invalid message options"
 msgstr "Ogiltigt meddelandealternativ"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:90
 msgid "Buffer overflow"
 msgstr "Buffer overflow"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:93
 msgid "Message expired"
 msgstr "Meddelande utgånget"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:96
 msgid "Local lease set invalid"
 msgstr "Lokalt leaseset ogiltigt"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:99
 msgid "No local tunnels"
 msgstr "Inga lokala tunnlar"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:102
 msgid "Unsupported encryption options"
 msgstr "Krypteringsalternativ som inte stöds"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:105
 msgid "Invalid destination"
 msgstr "Ogiltig destination"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:111
 msgid "Destination lease set expired"
 msgstr "Destinationens leaseset har gått ut."
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:114
 msgid "Destination lease set not found"
 msgstr "Destinationens leaseset hittades inte"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:117
 msgid "Local destination shutdown"
 msgstr "Lokal destination stäng av"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:120
 msgid "Connection was reset"
 msgstr "Anslutningen startades om"
 
 #. Translate this one here, can't do it later
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:127
 msgid "Failure code"
 msgstr "Felkod"

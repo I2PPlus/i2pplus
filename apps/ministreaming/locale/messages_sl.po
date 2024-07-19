@@ -9,76 +9,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:69
 msgid "Message timeout"
 msgstr "Iztek časa sporočila"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:72
 msgid "Failed delivery to local destination"
 msgstr "Neuspešna dostava na lokalni cilj"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:75
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:108
 msgid "Local router failure"
 msgstr "Napaka lokalnega usmerjevalnika"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:78
 msgid "Local network failure"
 msgstr "Napaka lokalnega omrežja"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:81
 msgid "Session closed"
 msgstr "Seja zaključena"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:84
 msgid "Invalid message"
 msgstr "Neveljavno sporočilo"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:87
 msgid "Invalid message options"
 msgstr "Neveljavne možnosti sporočila"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:90
 msgid "Buffer overflow"
 msgstr "Pretok medpomnilnika"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:93
 msgid "Message expired"
 msgstr "Sporočilo je poteklo"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:96
 msgid "Local lease set invalid"
 msgstr "Lokalni nabor najema ni veljaven"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:99
 msgid "No local tunnels"
 msgstr "Brez lokalnih predorov"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:102
 msgid "Unsupported encryption options"
 msgstr "Nepodprte možnosti šifriranja"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:105
 msgid "Invalid destination"
 msgstr "Neveljaven cilj"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:111
 msgid "Destination lease set expired"
 msgstr "Ciljni nabor najema je potekel"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:114
 msgid "Destination lease set not found"
 msgstr "Ciljni nabor najema ni bil najden"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:121
 msgid "Local destination shutdown"
 msgstr "Zaustavitev lokalnega cilja"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:124
 msgid "Connection was reset"
 msgstr "Povezava je bila ponastavljena"
 
 #. Translate this one here, can't do it later
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:131
 msgid "Failure code"
 msgstr "Koda napake"

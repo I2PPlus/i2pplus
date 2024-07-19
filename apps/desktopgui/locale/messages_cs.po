@@ -9,85 +9,56 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: src/net/i2p/desktopgui/ExternalTrayManager.java:31
 msgid "Start I2P"
 msgstr "Spustit I2P"
 
-#: src/net/i2p/desktopgui/ExternalTrayManager.java:44
-#: src/net/i2p/desktopgui/InternalTrayManager.java:55
 msgid "I2P is starting!"
 msgstr "I2P startuje!"
 
-#: src/net/i2p/desktopgui/ExternalTrayManager.java:44
-#: src/net/i2p/desktopgui/InternalTrayManager.java:55
 msgid "Starting"
 msgstr "Startuji"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:65
-#: src/net/i2p/desktopgui/InternalTrayManager.java:221
 msgid "Launch I2P Browser"
 msgstr "Spouštím I2P Browser"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:86
-#: src/net/i2p/desktopgui/InternalTrayManager.java:242
 msgid "Configure I2P System Tray"
 msgstr "Nakonfigurujte zásobník systému I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:88
-#: src/net/i2p/desktopgui/InternalTrayManager.java:244
 msgid "Disable system tray"
 msgstr "Zakázat zásobník systému"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:104
-#: src/net/i2p/desktopgui/InternalTrayManager.java:260
 msgid "Restart I2P"
 msgstr "Restart I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:121
-#: src/net/i2p/desktopgui/InternalTrayManager.java:277
 msgid "Stop I2P"
 msgstr "Zastavit I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:137
-#: src/net/i2p/desktopgui/InternalTrayManager.java:293
 msgid "Restart I2P Immediately"
 msgstr "Okamžitě restartujte I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:154
-#: src/net/i2p/desktopgui/InternalTrayManager.java:310
 msgid "Stop I2P Immediately"
 msgstr "Okamžitě zastavte I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:168
-#: src/net/i2p/desktopgui/InternalTrayManager.java:324
 msgid "Cancel I2P Shutdown"
 msgstr "Zrušit vypnutí I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:381
 #, java-format
 msgid "Shutdown in {0}"
 msgstr "Vypnutí v {0}"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:383
 msgid "Shutdown imminent"
 msgstr "Vypnutí bezprostřední"
 
 #. status translations are in the console bundle
-#: src/net/i2p/desktopgui/InternalTrayManager.java:388
 msgid "Network"
 msgstr "Síť"
 
 #. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
-#: src/net/i2p/desktopgui/TrayManager.java:74
 msgid "I2P: Right-click for menu"
 msgstr "I2P: Klepněte pravým tlačítkem myši na nabídku"
 
-#: src/net/i2p/desktopgui/TrayManager.java:301
-#: src/net/i2p/desktopgui/TrayManager.java:338
 msgid "Enable notifications"
 msgstr "Povolit oznámení"
 
-#: src/net/i2p/desktopgui/TrayManager.java:316
-#: src/net/i2p/desktopgui/TrayManager.java:353
 msgid "Disable notifications"
 msgstr "Zakázat oznámení"
