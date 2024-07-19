@@ -222,17 +222,17 @@
 </span>
 </a>
 
-<a href="/debug?d=6">
-<span class=sitemapLink title="<%=intl._t("Current console and webapp translation report")%>">
-<img src="/themes/console/images/translation.svg">
-<span class=sitemapLabel><%=intl._t("Translation Status")%></span>
-</span>
-</a>
-
 <a href="/netdb?f=3">
 <span class=sitemapLink title="<%=intl._t("Review possible sybils in network database")%>">
 <img src="/themes/console/images/sybil.svg">
 <span class=sitemapLabel><%=intl._t("Sybil Analysis")%></span>
+</span>
+</a>
+
+<a href="/debug?d=6">
+<span class=sitemapLink title="<%=intl._t("Current console and webapp translation report")%>">
+<img src="/themes/console/images/translation.svg">
+<span class=sitemapLabel><%=intl._t("Translation Status")%></span>
 </span>
 </a>
 
