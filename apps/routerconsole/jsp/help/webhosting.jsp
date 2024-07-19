@@ -2,10 +2,21 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
 <!DOCTYPE HTML>
-<html>
+<%
+    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = "en";
+    String pageTitlePrefix = "";
+    if (ctx.getProperty("routerconsole.lang") != null) {
+        lang = ctx.getProperty("routerconsole.lang");
+    }
+    if (ctx.getProperty("routerconsole.pageTitlePrefix") != null) {
+        pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix");
+    }
+%>
+<html lang="<%=lang%>">
 <head>
 <%@include file="../css.jsi" %>
-<title><%=intl._t("Web Hosting")%> - I2P+</title>
+<title><%=pageTitlePrefix%><%=intl._t("Web Hosting")%> - I2P+</title>
 </head>
 <body>
 <%@include file="../summary.jsi" %>

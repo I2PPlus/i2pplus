@@ -5,12 +5,17 @@
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null)
+    String pageTitlePrefix = "";
+    if (ctx.getProperty("routerconsole.lang") != null) {
         lang = ctx.getProperty("routerconsole.lang");
+    }
+    if (ctx.getProperty("routerconsole.pageTitlePrefix") != null) {
+        pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix");
+    }
 %>
 <html lang="<%=lang%>">
 <head>
-<title>Sitemap - I2P+</title>
+<title><%=pageTitlePrefix%>Sitemap - I2P+</title>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 </head>

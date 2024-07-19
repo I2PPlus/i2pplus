@@ -112,7 +112,6 @@ public class I2PSnarkUtil implements DisconnectListener {
         PROP_MAX_BW, "inbound.length", "outbound.length", "inbound.quantity", "outbound.quantity"
     });
 
-
     public I2PSnarkUtil(I2PAppContext ctx) {
         this(ctx, "i2psnark", null);
     }
@@ -942,7 +941,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             if (in != null) try { in.close(); } catch (IOException ioe) {}
         }
     }
-    
+
     /**
      *  Same as DataHelper.loadProps() but allows '#' in values,
      *  so we can have filenames with '#' in them in torrent config files.
