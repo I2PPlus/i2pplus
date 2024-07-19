@@ -1,6 +1,9 @@
+2024-07-19 2.6.0+ (API 0.9.63) released
+
 2024-07-19 dr|z3d
  * Console: Ensure /help section and /sitemap also display
    routerconsole.pageTitlePrefix when configured
+ * Scripts: Add --no-location optional flag to remove_fuzzies.sh
 
 2024-07-16 dr|z3d
  * Console: Add js toggle to translation report to permit toggling of
