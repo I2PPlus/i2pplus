@@ -9,184 +9,137 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: ../i2prouter:236
 msgid "Failed to load the wrapper"
 msgstr "Не удалось загрузить оболочку"
 
-#: ../i2prouter:1021 ../i2prouter:1049 ../i2prouter:1123 ../i2prouter:1151
-#: ../i2prouter:1172
 #, sh-format
 msgid "$APP_LONG_NAME is already running."
 msgstr "Приложение \"$APP_LONG_NAME\" уже запущено."
 
-#: ../i2prouter:1032
 #, sh-format
 msgid "Running $APP_LONG_NAME"
 msgstr "Приложение \"$APP_LONG_NAME\" запущено"
 
-#: ../i2prouter:1056
 #, sh-format
 msgid "Waiting for $APP_LONG_NAME"
 msgstr "Ожидание приложения \"$APP_LONG_NAME\""
 
-#: ../i2prouter:1103
 #, sh-format
 msgid "WARNING: $APP_LONG_NAME may have failed to start."
 msgstr "Внимание: возможно, не удалось запустить $APP_LONG_NAME."
 
-#: ../i2prouter:1117 ../i2prouter:1145 ../i2prouter:1351 ../i2prouter:1640
 msgid "Must be root to perform this action."
 msgstr "Для выполнения этого действия необходимо быть root-пользователем."
 
-#: ../i2prouter:1161
 #, sh-format
 msgid "Starting $APP_LONG_NAME"
 msgstr "Запуск приложения \"$APP_LONG_NAME\""
 
-#: ../i2prouter:1183
 #, sh-format
 msgid "Stopping $APP_LONG_NAME"
 msgstr "Остановка приложения \"$APP_LONG_NAME\""
 
-#: ../i2prouter:1187 ../i2prouter:1255 ../i2prouter:1808
 #, sh-format
 msgid "$APP_LONG_NAME was not running."
 msgstr "Приложение \"$APP_LONG_NAME\" не было запущено."
 
-#: ../i2prouter:1200 ../i2prouter:1208 ../i2prouter:1270 ../i2prouter:1278
 #, sh-format
 msgid "Unable to stop $APP_LONG_NAME."
 msgstr "Невозможно остановить приложение \"$APP_LONG_NAME\"."
 
-#: ../i2prouter:1226
 #, sh-format
 msgid "Waiting for $APP_LONG_NAME to exit"
 msgstr "Ожидание завершения работы приложения \"$APP_LONG_NAME\""
 
-#: ../i2prouter:1240
 #, sh-format
 msgid "Failed to stop $APP_LONG_NAME."
 msgstr "Ошибка остановки $APP_LONG_NAME."
 
-#: ../i2prouter:1243
 #, sh-format
 msgid "Stopped $APP_LONG_NAME."
 msgstr "Остановленно $APP_LONG_NAME."
 
-#: ../i2prouter:1251
 #, sh-format
 msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "$APP_LONG_NAME мягко останавливается"
 
-#: ../i2prouter:1297
 #, sh-format
 msgid "$APP_LONG_NAME is not running."
 msgstr "$APP_LONG_NAME не запущен."
 
-#: ../i2prouter:1302
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid"
 msgstr "$APP_LONG_NAME запущено: PID:$pid"
 
-#: ../i2prouter:1305
 #, sh-format
 msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
 msgstr "$APP_LONG_NAME запущено: PID:$pid, Оболочка:$STATUS, Java:$JAVASTATUS"
 
-#: ../i2prouter:1358 ../i2prouter:1370 ../i2prouter:1389 ../i2prouter:1406
-#: ../i2prouter:1473 ../i2prouter:1493 ../i2prouter:1507 ../i2prouter:1521
-#: ../i2prouter:1549 ../i2prouter:1587 ../i2prouter:1622
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "Демон $APP_LONG_NAME уже установлен."
 
-#: ../i2prouter:1361 ../i2prouter:1376 ../i2prouter:1478 ../i2prouter:1510
-#: ../i2prouter:1524 ../i2prouter:1538 ../i2prouter:1552 ../i2prouter:1590
-#: ../i2prouter:1625
 #, sh-format
 msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "Установка демона $APP_LONG_NAME"
 
-#: ../i2prouter:1632
 #, sh-format
 msgid "Install not currently supported for $DIST_OS"
 msgstr "В данный момент установка на $DIST_OS не поддерживается"
 
-#: ../i2prouter:1648 ../i2prouter:1661 ../i2prouter:1675 ../i2prouter:1684
-#: ../i2prouter:1694 ../i2prouter:1718 ../i2prouter:1731 ../i2prouter:1743
-#: ../i2prouter:1761 ../i2prouter:1774 ../i2prouter:1788
 #, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "Удаляется демон $APP_LONG_NAME"
 
-#: ../i2prouter:1654 ../i2prouter:1669 ../i2prouter:1678 ../i2prouter:1688
-#: ../i2prouter:1699 ../i2prouter:1712 ../i2prouter:1724 ../i2prouter:1737
-#: ../i2prouter:1755 ../i2prouter:1768 ../i2prouter:1782 ../i2prouter:1793
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "$APP_LONG_NAME демон сейчас не установлен."
 
-#: ../i2prouter:1797
 #, sh-format
 msgid "Remove not currently supported for $DIST_OS"
 msgstr "Установка не поддерживается для $DIST_OS"
 
-#: ../i2prouter:1884
 msgid "Commands:"
 msgstr "Команды:"
 
-#: ../i2prouter:1885
 msgid "Launch in the current console."
 msgstr "Запустить в текущей консоли."
 
-#: ../i2prouter:1886
 msgid "Start in the background as a daemon process."
 msgstr "Запустить в фоне как демона."
 
-#: ../i2prouter:1887
 msgid "Stop if running as a daemon or in another console."
 msgstr "Остановить, если демон запущен в другой консоли."
 
-#: ../i2prouter:1888
 msgid "Stop gracefully, may take up to 11 minutes or more."
 msgstr "Остановитесь изящно, это может занять до 11 минут."
 
-#: ../i2prouter:1889
 msgid "Restart gracefully, may take up to 11 minutes or more."
 msgstr "Перезапустите корректно. Это может занять до 11 минут."
 
-#: ../i2prouter:1890
 msgid "Stop if running and then start."
 msgstr "Остановить если запущен и запустить."
 
-#: ../i2prouter:1891
 msgid "Restart only if already running."
 msgstr "Перезапустить только если уже запущен."
 
-#: ../i2prouter:1892
 msgid "Query the current status."
 msgstr "Текущий статус очереди."
 
-#: ../i2prouter:1893
 msgid "Install to start automatically when system boots."
 msgstr "Установка запустится автоматически, во время запуска системы."
 
-#: ../i2prouter:1894
 msgid "Uninstall."
 msgstr "Удаление."
 
-#: ../i2prouter:1895
 msgid "Request a Java thread dump if running."
 msgstr "Запросить дамп нитей Java, если запущено."
 
-#: ../i2prouter:1908
 msgid "Please edit i2prouter and set the variable RUN_AS_USER"
 msgstr "Пожалуйста, отредактируйте i2prouter и установите переменную RUN_AS_USER"
 
-#: ../i2prouter:1913
 msgid "Running I2P as the root user is *not* recommended."
 msgstr "Запускать I2P от имени root'а *НЕ* рекомендуется."
 
-#: ../i2prouter:1916
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Чтобы всё равно запустить под root'ом, отредактируйте i2prouter и установите ALLOW_ROOT=true."

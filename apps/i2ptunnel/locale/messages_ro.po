@@ -9,12 +9,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
-#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:498
-#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:508
 msgid "internal"
 msgstr "intern"
 
-#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:547
 #, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
@@ -22,7 +19,6 @@ msgstr[0] "{0} tunel de intrare"
 msgstr[1] "{0} tuneluri de intrare"
 msgstr[2] "{0} tuneluri de intrare"
 
-#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:549
 #, java-format
 msgid "{0} outbound tunnel"
 msgid_plural "{0} outbound tunnels"
@@ -30,7 +26,6 @@ msgstr[0] "{0} tunel de ieșire"
 msgstr[1] "{0} tuneluri de ieșire"
 msgstr[2] "{0} tuneluri de ieșire"
 
-#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:551
 #, java-format
 msgid "{0} inbound, {0} outbound tunnel"
 msgid_plural "{0} inbound, {0} outbound tunnels"
@@ -38,592 +33,340 @@ msgstr[0] "{0} de intrare, {0} tuneluri de ieșire"
 msgstr[1] "{0} de intrare, {0} tuneluri de ieșire"
 msgstr[2] "{0} de intrare, {0} tuneluri de ieșire"
 
-#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:555
 msgid "lower bandwidth and reliability"
 msgstr "lățime de bandă și fiabilitate joasa"
 
-#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:557
 msgid "standard bandwidth and reliability"
 msgstr "lățime de bandă și fiabilitate standarda"
 
-#: ../java/src/net/i2p/i2ptunnel/web/EditBean.java:559
 msgid "higher bandwidth and reliability"
 msgstr "lățime de bandă și fiabilitate inalta"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:191
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:333
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Transmiterea formularului invalid, probabil pentru că ați folosit butonul \"reload\" sau \"inapoi\" din browser-ul dumneavoastră. Vă rugăm retrimiteți."
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:193
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:335
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Dacă problema persistă, verificați dacă aveți activate cookie-urile în browser-ul dumneavoastră."
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:250
 msgid "Configuration reloaded for all tunnels"
 msgstr "Configurare reîncărcata pentru toate tunelurile"
 
 #. and give them something to look at in any case
 #. FIXME name will be HTML escaped twice
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:264
 msgid "Starting tunnel"
 msgstr "Pornirea tunelului"
 
 #. and give them something to look at in any case
 #. FIXME name will be HTML escaped twice
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:278
 msgid "Stopping tunnel"
 msgstr "Oprirea tunelului"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:431
 msgid "New Tunnel"
 msgstr "Tunel nou"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:451
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:481
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:567
 msgid "Port not set"
 msgstr "Portul nu este setat"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:454
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:569
 msgid "Invalid port"
 msgstr "Port incorect"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:457
 msgid "Warning - ports less than 1024 are not recommended"
 msgstr "Atenție - nu sunt recomandate porturi mai mici de 1024"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:474
 msgid "Warning - duplicate port"
 msgstr "Atenție - port duplicat"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:493
 msgid "Standard client"
 msgstr "Client standart"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:494
 msgid "HTTP/HTTPS client"
 msgstr "Client HTTP/HTTPS"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:495
 msgid "IRC client"
 msgstr "Client IRC"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:496
 msgid "Standard server"
 msgstr "Server standard"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:497
 msgid "HTTP server"
 msgstr "Server HTTP"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:498
 msgid "SOCKS 4/4a/5 proxy"
 msgstr "SOCKS 4/4a/5 proxy"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:499
 msgid "SOCKS IRC proxy"
 msgstr "SOCKS IRC proxy"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:500
 msgid "CONNECT/SSL/HTTPS proxy"
 msgstr "CONNECTEAZA/SSL/HTTPS proxy"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:501
 msgid "IRC server"
 msgstr "Server IRC"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:502
 msgid "Streamr client"
 msgstr "Client Streamr"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:503
 msgid "Streamr server"
 msgstr "Server streamr"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:504
 msgid "HTTP bidir"
 msgstr "HTTP bidir"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:561
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:694
 msgid "Host not set"
 msgstr "Gazdă nu este setata"
 
-#: ../java/src/net/i2p/i2ptunnel/web/IndexBean.java:563
 msgid "Invalid address"
 msgstr "Adresă nevalidă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:178
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:165
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:188
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:181
 msgid "Tunnel Manager"
 msgstr "Manager de tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:182
 msgid "Edit Client Tunnel"
 msgstr "Editare client tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:182
 msgid "Edit Server Tunnel"
 msgstr "Editați tunelul serverului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:222
 msgid "Are you sure you want to delete?"
 msgstr "Sigur doriți să ștergeți?"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:241
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "Tunnelul și toate celelalte tuneluri client partajate trebuie oprite pentru a schimba această configurație"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:242
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1241
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1798
 msgid "Tunnel must be stopped to change this configuration"
 msgstr "Tunnelul trebuie oprit pentru a schimba această configurație"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:258
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1212
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:829
 msgid "Configuration"
 msgstr "Configurare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:268
 msgid "New Client Configuration"
 msgstr "Configurare client nou"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:320
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1292
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:283
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:634
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:443
 msgid "Name"
 msgstr "Nume"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:322
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1298
 msgid "Auto Start Tunnel"
 msgstr "Pornire automată a tunelului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:324
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1300
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:445
 msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
 msgstr "Numele tunelului care va fi afișat pe pagina de start a Managerului de tunel și pe bara laterală a consolei routerului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:328
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1304
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:634
 msgid "Enable this option to ensure this service is available when the router starts"
 msgstr "Activați această opțiune pentru a vă asigura că acest serviciu este disponibil la pornirea routerului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:332
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1308
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:638
 msgid "Automatically start tunnel when router starts"
 msgstr "Porniți automat tunelul la pornirea routerului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:334
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1310
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:449
 msgid "Description"
 msgstr "Descriere"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:339
 msgid "Shared Client"
 msgstr "Client Comun"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:344
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1323
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:451
 msgid "Description of tunnel to be displayed on Tunnel Manager home page"
 msgstr "Descrierea tunelului care va fi afișat pe pagina de start a Managerului de tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:352
 msgid "Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together."
 msgstr "Traficul tuturor clienților cu această caracteristică activată va fi dirijat pe același set de tuneluri. Acest lucru va face profilarea mai grea a tunelurilor de către un adversar, dar va lega clienții împreună."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:368
 msgid "Share tunnels with other configured clients"
 msgstr "Partajați tunelurile cu alți clienți configurați"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:384
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1347
 msgid "Target"
 msgstr "Destinație"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:388
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1342
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1436
 msgid "Access Point"
 msgstr "Punct de acces"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:395
 msgid "Use Outproxy Plugin"
 msgstr "Utilizați Outproxy Plugin"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:399
 msgid "Enable DCC"
 msgstr "Activează DCC"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:404
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:708
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1373
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1438
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2178
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:640
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:545
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:567
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:744
 msgid "Port"
 msgstr "Port"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:410
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:419
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:433
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:442
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:560
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1379
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1388
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1444
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1453
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1471
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1480
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1082
 msgid "required"
 msgstr "necesar"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:415
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:569
 msgid "Specify the local port this service should be accessible from"
 msgstr "Specificați portul local din care ar trebui accesat acest serviciu"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:427
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:702
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1361
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2172
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:523
 msgid "Host"
 msgstr "Gazdă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:438
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1363
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:525
 msgid "Hostname or IP address of the target server"
 msgstr "Numele de gazdă sau adresa IP a serverului țintă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:450
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1396
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:594
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:752
 msgid "Reachable by"
 msgstr "Accesibil cu"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:452
 msgid "Local interface (ip address) the client tunnel will be reachable from"
 msgstr "Interfața locală (adresa IP) din tunelul client va putea fi accesată"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:474
 msgid "If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P"
 msgstr "Dacă este instalat un plugin outproxy (de ex. Orchid), utilizați acest lucru în locul oricărui program configurat pentru a accesa site-uri web în afara I2P"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:478
 msgid "Use plugin instead of proxies listed below if available"
 msgstr "Folosiți pluginul în loc de proxy-urile enumerate mai jos, dacă sunt disponibile"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:484
 msgid "Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended."
 msgstr "Permite chatul direct și transferurile de fișiere, ocolind I2P."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:488
 msgid "Enable Direct Client-to-Client protocol"
 msgstr "Activați protocolul Direct Client-la-Client"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:499
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:475
 msgid "Outproxies"
 msgstr "Outproxy"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:504
 msgid "SSL Outproxies"
 msgstr "Rezultate SSL"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:509
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:519
 msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
 msgstr "Specificați adresa .i2p sau destinația (b32 sau b64) a outproxy-ului aici."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:511
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:521
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:567
 msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
 msgstr "Pentru o selecție aleatorie dintr-un pool, separați cu virgule, de ex. server1.i2p, server2.i2p"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:534
 msgid "Outproxy Type"
 msgstr "Tip Outproxy"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:547
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:496
 msgid "Tunnel Destination"
 msgstr "Destinație tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:552
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1349
 msgid "Use SSL"
 msgstr "Folosiți SSL"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:565
 msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
 msgstr "Specificați adresa .i2p sau destinația (b32 sau b64) a tunelului aici."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:571
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:502
 msgid "name, name:port, or destination"
 msgstr "nume, nume: port, sau destinație"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:577
 msgid "If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL."
 msgstr "Dacă accesați un serviciu pe un router I2P de la distanță, poate doriți să vă conectați la SSL pentru a evita interceptarea traficului. Aplicația client ar trebui să fie, de asemenea, configurată pentru a utiliza SSL."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:581
 msgid "Clients use SSL to connect to tunnel"
 msgstr "Clienții folosesc SSL pentru a se conecta la tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:587
 msgid "Please specify the full b64 destination."
 msgstr "Vă rugăm să specificați destinația completă a b64."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:602
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1459
 msgid "Local destination"
 msgstr "Destinația locala"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:604
 msgid "Local Base32"
 msgstr "Locală Base32"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:606
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1463
 msgid "Read Only: Local Destination (if known)"
 msgstr "Numai citire: Destinație locală (dacă se cunoaște)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:627
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1169
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:431
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:484
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:724
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:740
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:771
 msgid "Stop"
 msgstr "Stop"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:633
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1175
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:495
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:782
 msgid "Start this Tunnel"
 msgstr "Porniți acest tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:642
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1184
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:502
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:789
 msgid "Start"
 msgstr "Start"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:648
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1190
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1670
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2730
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:601
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:795
 msgid "Cancel"
 msgstr "Renunță"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:650
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1192
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1672
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2732
 msgid "Delete this tunnel (cannot be undone)"
 msgstr "Ștergeți acest tunel (nu poate fi anulat)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:653
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1195
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1675
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2735
 msgid "Delete"
 msgstr "Șterge"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:655
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1197
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1677
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2526
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2737
 msgid "Save"
 msgstr "Salvează"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:657
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1679
 msgid "Advanced networking options"
 msgstr "Opțiuni avansate de rețea"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:664
 msgid "Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels."
 msgstr "Notă: Când acest client este configurat să partajeze tuneluri, aceste opțiuni se aplică tuturor clienților configurați să partajeze tuneluri."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:671
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1685
 msgid "Profile"
 msgstr "Profil"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:673
 msgid "Delay Connect"
 msgstr "întârziere Connectarii"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:675
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1699
 msgid "Connection Profile"
 msgstr "Profil de conexiune"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:681
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1705
 msgid "interactive connection"
 msgstr "conexiune interactiva"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:685
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1709
 msgid "bulk connection (downloads/websites/BT)"
 msgstr "conexiune în vrac (download-uri / site-uri / BT)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:687
 msgid "Delay Connection"
 msgstr "întârziere conectarii"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:691
 msgid "for request/response connections"
 msgstr "pentru conexiuni de cerere/răspuns"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:700
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2170
 msgid "Router I2CP Address"
 msgstr "Router I2CP Adresa"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:704
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2174
 msgid "I2CP Hostname or IP"
 msgstr "I2CP nume gazdă sau IP"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:710
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2180
 msgid "I2CP Port Number"
 msgstr "Număr port I2CP"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:720
 msgid "Delay tunnel open until required"
 msgstr "Întârziere tunelului deschis până este necesar"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:722
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:732
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1697
 msgid "Signature type"
 msgstr "Tip semnătură"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:724
 msgid "Conserve resources by only creating tunnels when required"
 msgstr "Conservați resursele creând tuneluri doar atunci când este necesar"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:728
 msgid "Don't open tunnel until activity is detected on port"
 msgstr "Nu deschideți tunelul până când nu este detectată activitate în port"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:753
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1772
 msgid "This is the default, recommended option"
 msgstr "Aceasta este opțiunea implicită, recomandată"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:781
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1743
 msgid "Legacy option (deprecated), provided for backward compatibility"
 msgstr "Opțiunea moștenire (învechită), furnizată pentru o compatibilitate înapoi"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:801
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1792
 msgid "Encryption types"
 msgstr "Tipuri de criptare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:824
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1816
 msgid "Both encryption types"
 msgstr "Ambele tipuri de criptare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:826
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1820
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1824
 msgid "Tunnel Options"
 msgstr "Opțiuni de tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:828
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1828
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1836
 msgid "Length"
 msgstr "Durată"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:830
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1832
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1840
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:452
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:754
 msgid "Count"
 msgstr "Număr"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:832
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1842
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1906
 msgid "Length of each Tunnel"
 msgstr "Lungimea fiecărui tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:840
 msgid "0 hop tunnel (no anonymity)"
 msgstr "0 tunel hop (fara anonimat)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:844
 msgid "1 hop tunnel (low anonymity)"
 msgstr "1 tunel hop (anonimat mic)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:848
 msgid "2 hop tunnel (medium anonymity)"
 msgstr "2 tunel hop (anonimat mediu)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:852
 msgid "3 hop tunnel (high anonymity)"
 msgstr "3 tunel hop (anonimat maxim)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:860
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:864
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:868
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:872
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:880
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1850
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1856
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1862
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1868
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1876
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1880
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1884
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1888
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1896
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1912
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1916
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1920
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1924
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1928
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1932
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1936
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1940
 #, java-format
 msgid "{0} hop tunnel"
 msgid_plural "{0} hop tunnel"
@@ -631,107 +374,54 @@ msgstr[0] "{0} tunel de hop"
 msgstr[1] "{0} tunel de hop"
 msgstr[2] "{0} tunel de hop"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:886
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1902
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1942
 msgid "Number of Tunnels in Group"
 msgstr "Numărul de tuneluri în grup"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:894
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1952
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1960
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:464
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:759
 msgid "Variance"
 msgstr "Varianță"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:896
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1956
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1964
 msgid "Backup Count"
 msgstr "Numar de rezervă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:898
 msgid "Level of Randomization for Tunnel Length"
 msgstr "Nivelul aleatorizării pentru lungimea tunelului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:906
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1974
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2077
 msgid "0 hop variance"
 msgstr "0 variație de hamei"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:907
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1970
 msgid "no randomization, consistent performance"
 msgstr "fără randomizare, performanță consistentă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:911
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1980
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2081
 msgid "+ 0-1 hop variance"
 msgstr "Varianta de hamei 0-1"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:912
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1976
 msgid "medium randomization, lower performance"
 msgstr "randomizare medie, performanță scăzută"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:916
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1986
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2085
 msgid "+ 0-2 hop variance"
 msgstr "Varianta de hamei 0-2"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:917
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1982
 msgid "high randomization, very low performance"
 msgstr "randomizare ridicată, performanță foarte scăzută"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:921
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1998
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2093
 msgid "+/- 0-1 hop variance"
 msgstr "/- 0-1 varianță de hamei"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:922
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1994
 msgid "standard randomization, standard performance"
 msgstr "randomizare standard, performanță standard"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:926
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2004
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2097
 msgid "+/- 0-2 hop variance"
 msgstr "/- 0-2 varianță de hamei"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:927
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2000
 msgid "not recommended"
 msgstr "nu este recomandat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:939
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2022
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2113
 msgid "hop variance"
 msgstr "hop variație"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:945
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2027
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2119
 msgid "Number of Reserve Tunnels"
 msgstr "Numărul tunelurilor de rezervă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:953
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:958
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:963
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:968
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:977
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2037
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2043
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2049
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2055
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2063
 #, java-format
 msgid "{0} backup tunnel"
 msgid_plural "{0} backup tunnels"
@@ -739,1591 +429,1083 @@ msgstr[0] "{0} tunel de rezervă"
 msgstr[1] "{0} tunel de rezervă"
 msgstr[2] "{0} tunel de rezervă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:954
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2033
 msgid "no redundancy, no added resource usage"
 msgstr "fără redundanță, fără utilizare suplimentară a resurselor"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:959
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2039
 msgid "low redundancy, low resource usage"
 msgstr "redundanță scăzută, utilizare redusă a resurselor"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:964
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2045
 msgid "medium redundancy, medium resource usage"
 msgstr "redundanță medie, utilizare medie a resurselor"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:969
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2051
 msgid "high redundancy, high resource usage"
 msgstr "redundanță ridicată, utilizare mare a resurselor"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:987
 msgid "Reduce tunnel quantity"
 msgstr "Reduceți cantitatea de tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:989
 msgid "Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
 msgstr "Reduceți numărul de tuneluri atunci când este inactiv pentru a conserva resursele, dar mențineți tunelul deschis (pentru a asigura disponibilitatea imediată)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:993
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2188
 msgid "Reduce tunnel quantity when idle"
 msgstr "Reducerea cantitatii tunelilor atunci când este inactiva"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:995
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1015
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2194
 msgid "Idle period"
 msgstr "Perioada inactivă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:997
 msgid "Reduced Tunnel Idle Time"
 msgstr "Timpul inactiv al tunelului redus"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1001
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2202
 msgid "Reduced count"
 msgstr "Număr redus"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1003
 msgid "Reduced tunnel count"
 msgstr "Scăderea numărului de tunelu"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1007
 msgid "Close tunnels when idle"
 msgstr "Inchiderea tunelurilor când e  inactiv"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1009
 msgid "To conserve resources, close tunnels when not in use"
 msgstr "Pentru a economisi resurse, închideți tunelurile atunci când nu folosiți"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1013
 msgid "Close client tunnels after specified idle period"
 msgstr "Închideți tunelurile clientului după o perioadă de repaus specificată"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1017
 msgid "Close Tunnel Idle Time"
 msgstr "Închideți timpul inactiv al tunelului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1021
 msgid "New Keys on Reopen"
 msgstr "Tastele noi la fiecare redeschidere"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1023
 msgid "Change tunnel identity (destination) when tunnels reopen"
 msgstr "Schimbați identitatea tunelului (destinația) la redeschiderea tunelurilor"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1027
 msgid "Enable"
 msgstr "Activează"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1029
 msgid "Retain tunnel identity (destination) when tunnels reopen"
 msgstr "Păstrați identitatea tunelului (destinația) la redeschiderea tunelurilor"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1033
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2294
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2305
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2556
 msgid "Disable"
 msgstr "Deactivare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1039
 msgid "Persistent private key"
 msgstr "Cheie privată persistenta"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1041
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1461
 msgid "Private key file"
 msgstr "Fișier cheie privată"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1043
 msgid "Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering features based on destination e.g. IRC user authentication"
 msgstr "Activarea acestei funcții va asigura identitatea tunelului (destinația) dvs. rămâne statică, pentru serviciile care oferă funcții bazate pe destinație, de ex. Autentificare utilizator IRC"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1047
 msgid "Generate key to enable persistent client tunnel identity"
 msgstr "Generați cheie pentru a activa identitatea persistentă a tunelului clientului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1049
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1476
 msgid "Path to Private Key File"
 msgstr "Calea către fișierul cu cheie privată"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1058
 msgid "HTTP Filtering"
 msgstr "Filtrare HTTP"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1060
 msgid "When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity"
 msgstr "Când este activat, agentul utilizator al browserului dvs. Web sau al clientului http nu va fi afectat, reducând potențial anonimatul"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1064
 msgid "Do not spoof User-Agent header"
 msgstr "Nu deteriorați antetul User-Agent"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1066
 msgid "When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity"
 msgstr "Când este activat, pagina de început (pagina de origine) a solicitărilor dvs. web nu va fi filtrată, ceea ce vă poate reduce anonimatul"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1070
 msgid "Do not block Referer header"
 msgstr "Nu blocați antetul Referer"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1072
 msgid "When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity"
 msgstr "Când este activat, anteturile de acceptare (suport pentru tipurile mime) difuzate de browserul dvs. web nu vor fi filtrate, reducând potențial anonimatul"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1076
 msgid "Do not block Accept headers"
 msgstr "Nu blocați \"Acceptați anteturile\""
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1078
 msgid "Allow SSL to I2P addresses when enabled"
 msgstr "Permiteți adresele SSL către I2P atunci când sunt activate"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1082
 msgid "Allow SSL to I2P addresses"
 msgstr "Permiteți SSL adreselor I2P"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1089
 msgid "Local Authorization"
 msgstr "Autorizare locala"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1091
 msgid "Local Credentials"
 msgstr "Acreditări locale"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1093
 msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
 msgstr "Puteți solicita un nume de utilizator și o parolă pentru a accesa acest serviciu local (de exemplu, dacă este găzduit pe un LAN)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1097
 msgid "Require local authorization for this service"
 msgstr "Necesită autorizare locală pentru acest serviciu"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1099
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1103
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1121
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1127
 msgid "Username"
 msgstr "Numele utilizatorului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1101
 msgid "Set username required to access this service"
 msgstr "Setați numele de utilizator necesar pentru a accesa acest serviciu"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1105
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1109
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1129
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1135
 msgid "Password"
 msgstr "Parolă"
 
 #. && editBean.isAdvanced()
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1107
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2390
 msgid "Set password required to access this service"
 msgstr "Setați parola necesară pentru a accesa acest serviciu"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1111
 msgid "Outproxy Authorization"
 msgstr "Outproxy Autorizare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1113
 msgid "Remote Credentials"
 msgstr "Acreditări de la distanță"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1115
 msgid "Enable if the outproxy a username and password to access"
 msgstr "Activați dacă accesați outproxy un nume de utilizator și o parolă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1119
 msgid "Outproxy requires authorization"
 msgstr "Outproxy necesită autorizare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1123
 msgid "Enter username required by outproxy"
 msgstr "Introduceți numele de utilizator solicitat de outproxy"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1131
 msgid "Enter password required by outproxy"
 msgstr "Introduceți parola solicitată de outproxy"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1142
 msgid "Jump URL List"
 msgstr "Sari la Lista de URL"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1144
 msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
 msgstr "Lista adreselor URL de asistență care furnizează link-uri de salt atunci când o gazdă nu este găsită în agenda ta"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1152
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2724
 msgid "Custom options"
 msgstr "Opțiuni personalizate"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1154
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2726
 msgid "Advanced tunnel, streaming, and I2CP options"
 msgstr "Opțiuni avansate de tunel, streaming și I2CP"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1222
 msgid "New Server Configuration"
 msgstr "Configurare server nouă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1286
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:522
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:683
 msgid "Hostname"
 msgstr "Nume host"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1315
 msgid "Website Hostname"
 msgstr "Nume gazdă site"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1317
 msgid "(leave blank for outproxies)"
 msgstr "(lăsați gol pentru outproxies)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1331
 msgid "Website Hostname e.g. mysite.i2p"
 msgstr "Numele gazdelor site-ului, de ex. mysite.i2p"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1384
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:547
 msgid "Specify the port the server is running on"
 msgstr "Specificați portul pe care rulează serverul"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1398
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:596
 msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
 msgstr "Interfață de ascultare (adresă IP) pentru accesul clientului (în mod normal 127.0.0.1)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1422
 msgid "To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections."
 msgstr "Pentru a evita adulmecarea traficului dacă vă conectați la un server la distanță, puteți activa o conexiune SSL. Rețineți că serverul țintă trebuie configurat pentru a accepta conexiuni SSL."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1426
 msgid "Use SSL to connect to target"
 msgstr "Utilizează SSL pentru conectarea la țintă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1449
 msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
 msgstr "Port necesar pentru a accesa serviciul (acesta poate fi un port diferit de portul pe care este găzduit serviciul)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1503
 msgid "Generate a QR Code for this domain"
 msgstr "Generați un cod QR pentru acest domeniu"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1511
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1640
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1648
 msgid "Generate QR Code"
 msgstr "Generați codul QR"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1518
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1655
 msgid "Add to Private addressbook"
 msgstr "Adăugați în agenda de adrese private"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1524
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1661
 msgid "Add to local addressbook"
 msgstr "Adauga la agenda locala"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1530
 msgid "Register, unregister or change details for hostname"
 msgstr "Înregistrați, anulați înregistrarea sau modificați detaliile pentru numele de gazdă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1535
 msgid "Registration Authentication"
 msgstr "Autentificare de înregistrare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1541
 msgid "HTTPS configuration"
 msgstr "Configurație HTTPS"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1546
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:666
 msgid "SSL Wizard"
 msgstr "Asistent SSL"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1556
 msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
 msgstr "Notă: Pentru a activa generarea de coduri QR sau autentificarea înregistrării, configurați câmpul Nume gazdă site-ului (pentru site-uri web) sau câmpul Nume (orice altceva) de mai sus cu un nume de gază sufixat .i2p, de ex. mynewserver.i2p"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1569
 msgid "Absolute path to Private Key File (will be created if it does not exist)"
 msgstr "Calea absolută către fișierul cheii private (va fi creată dacă nu există)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1575
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1583
 msgid "Alternate private key file"
 msgstr "Fișier cu cheie privată alternativă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1581
 msgid "Alternate local destination"
 msgstr "Destinație locală alternativă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1597
 msgid "Absolute path for new key (will be created)"
 msgstr "Calea absolută pentru cheia nouă (va fi creată)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1608
 msgid "Read Only: Alternate Local Destination"
 msgstr "Numai în citire: altă destinație locală"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1619
 msgid "Specify filename or full path for new key"
 msgstr "Specificați numele fișierului sau calea completă pentru cheia nouă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1688
 msgid "Configuration cannot be changed after destination is created"
 msgstr "Configurația nu poate fi schimbată după ce destinația este creată"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1715
 msgid "Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel."
 msgstr "Configurarea tipului de semnătură este posibilă numai când tunelul este creat pentru prima dată."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1735
 msgid "Legacy option, with alternate key configured"
 msgstr "Opțiune moștenită, cu cheie alternativă configurată"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1781
 msgid "Recommended for blinded and encrypted destinations"
 msgstr "Recomandat pentru destinații orbite și criptate"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1818
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1826
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1830
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1950
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1954
 msgid "Inbound"
 msgstr "Intrare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1822
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1834
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1838
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1958
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1962
 msgid "Outbound"
 msgstr "Ieșire"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1846
 msgid "no anonymity"
 msgstr "fără anonimat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1852
 msgid "low anonymity"
 msgstr "anonimat scăzut"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1858
 msgid "medium anonymity"
 msgstr "anonimat mediu"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1864
 msgid "high anonymity"
 msgstr "anonimat ridicat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1966
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2069
 msgid "Level of Randomization for Tunnel Depth"
 msgstr "Nivelul aleatorizării pentru adâncimea tunelului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1988
 msgid "very high randomization, very low performance"
 msgstr "randomizare foarte mare, performanță foarte scăzută"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1992
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2089
 msgid "+ 0-3 hop variance"
 msgstr "Varianta de hamei 0-3"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2006
 msgid "definitely not recommended"
 msgstr "cu siguranță nu este recomandat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2010
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2101
 msgid "+/- 0-3 hop variance"
 msgstr "/- 0-3 varianță de hamei"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2129
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2135
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2141
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2147
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2156
 msgid "backup tunnels"
 msgstr "tuneluri de rezervă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2192
 msgid "Reduce tunnels to conserve resources"
 msgstr "Reduceți tunelurile pentru a conserva resursele"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2196
 msgid "Period of inactivity before tunnel number is reduced"
 msgstr "Perioada de inactivitate înainte de numărul tunelului este redusă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2200
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2672
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2690
 msgid "minutes"
 msgstr "minute"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2204
 msgid "Number of tunnels to keep open to maintain availability of service"
 msgstr "Numărul de tuneluri de menținut deschis pentru a menține disponibilitatea serviciului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2208
 msgid "Server Access Options"
 msgstr "Opțiuni de acces server"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2214
 msgid "Prevent clients from accessing this service via an inproxy"
 msgstr "Împiedicați clienții să acceseze acest serviciu printr-o informație"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2218
 msgid "Block Access via Inproxies"
 msgstr "Blocați accesul prin inproxii"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2222
 msgid "Block Accesses containing Referers"
 msgstr "Blocați accesele care conțin Referers"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2228
 msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
 msgstr "Utilizați adrese IP unice pentru fiecare client conectat (numai servere locale non-SSL)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2232
 msgid "Unique Local Address per Client"
 msgstr "Adresa locală unică pe client"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2234
 msgid "Only enable if you are hosting this service on multiple routers"
 msgstr "Activare numai dacă găzduiești acest serviciu pe mai multe routere"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2240
 msgid "Optimize for Multihoming"
 msgstr "Optimizați pentru multihoming"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2246
 msgid "Deny User-Agents matching these strings (probably from inproxies)"
 msgstr "Refuză agenții de utilizator care se potrivesc cu aceste șiruri (probabil din neproxii)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2250
 msgid "Block these User-Agents"
 msgstr "Blocați acești User-Agents"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2252
 msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
 msgstr "separate cu virgule, de ex. Mozilla, Opera (sensibil la majuscule)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2263
 msgid "Encrypt Leaseset"
 msgstr "Criptarea Leaseset"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2276
 msgid "Optional Lookup Password"
 msgstr "Parolă de căutare opțională"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2281
 msgid "Keyring Manager"
 msgstr "Manager de chei"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2289
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2300
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2552
 msgid "Allow all clients to connect to this service"
 msgstr "Permiteți tuturor clienților să se conecteze la acest serviciu"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2311
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2339
 msgid "Send key to all users."
 msgstr "Trimite cheie tuturor utilizatorilor."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2316
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2344
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:574
 msgid "Encrypted"
 msgstr "Criptat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2321
 msgid "Prevents server discovery by floodfills"
 msgstr "Previne descoperirea serverului prin inundații"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2326
 msgid "Blinded"
 msgstr "Orbit"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2332
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2361
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2376
 msgid "Send password to all users."
 msgstr "Trimiteți parola tuturor utilizatorilor."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2337
 msgid "Blinded with lookup password"
 msgstr "Orbit cu parola de căutare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2346
 msgid "Send key and password to all users."
 msgstr "Trimite cheie și parolă tuturor utilizatorilor."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2351
 msgid "Encrypted with lookup password"
 msgstr "Criptat cu parola de căutare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2353
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2360
 msgid "Send individual key to each user."
 msgstr "Trimiteți cheie individuală fiecărui utilizator."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2358
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2373
 msgid "Encrypted with per-user key"
 msgstr "Criptat cu cheia per utilizator"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2366
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2381
 msgid "Encrypted with lookup password and per-user key"
 msgstr "Criptat cu parola de căutare și cheie per utilizator"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2368
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2375
 msgid "Enter key from each user."
 msgstr "Introduceți cheia de la fiecare utilizator."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2417
 msgid "Encryption Key"
 msgstr "Cheie de criptare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2419
 msgid "Generate New Key"
 msgstr "Generare cheie nouă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2435
 msgid "Encryption key required to access this service"
 msgstr "Cheia de criptare necesară pentru a accesa acest serviciu"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2439
 msgid "Generate new encryption key"
 msgstr "Generați o nouă cheie de criptare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2442
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:606
 msgid "Generate"
 msgstr "Generează"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2444
 msgid "Tunnel must be stopped first"
 msgstr "Tunelul trebuie oprit mai întâi"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2454
 msgid "Client Manager"
 msgstr "Manager client"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2462
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2500
 msgid "Client Name"
 msgstr "Numele clientului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2464
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2508
 msgid "Client Key"
 msgstr "Cheia clientului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2466
 msgid "Revoke"
 msgstr "Revoca"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2483
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2516
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:247
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:265
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:280
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:291
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:309
 msgid "Client"
 msgstr "Client"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2514
 msgid "Add"
 msgstr "Adaugă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2534
 msgid "Restricted Access List"
 msgstr "Lista de acces restricționat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2540
 msgid "Activate to enable editing"
 msgstr "Activați pentru a activa editarea"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2546
 msgid "Tunnel Filter"
 msgstr "Filtru de tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2548
 msgid "Help with defining tunnel filters"
 msgstr "Ajutor la definirea filtrelor de tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2558
 msgid "Prevent listed clients from connecting to this service"
 msgstr "Împiedicați conectarea clienților enumerați la acest serviciu"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2562
 msgid "Blacklist"
 msgstr "Listă de blocare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2564
 msgid "Only allow listed clients to connect to this service"
 msgstr "Permiteți doar clienților enumerați să se conecteze la acest serviciu"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2568
 msgid "Whitelist"
 msgstr "Listă de excepții"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2570
 msgid "Absolute path to file containing filter definition"
 msgstr "Calea absolută către fișier care conține definiția filtrului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2574
 msgid "Absolute path to filter definition"
 msgstr "Calea absolută către definirea filtrului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2580
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2582
 msgid "Specify client destinations, 1 per line"
 msgstr "Specificați destinațiile clientului, 1 pe linie"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2590
 msgid "Server Throttling"
 msgstr "Serviciul de accelerare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2592
 msgid "Inbound connection limits"
 msgstr "Limite de conexiune de intrare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2594
 msgid "Per Minute"
 msgstr "Pe minut"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2596
 msgid "Per Hour"
 msgstr "Pe ora"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2598
 msgid "Per Day"
 msgstr "Pe zi"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2600
 msgid "Concurrent"
 msgstr "Concurente"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2602
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2660
 msgid "Per Client"
 msgstr "Per Client"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2604
 msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
 msgstr "Numărul maxim de solicitări de pagini web pe minut pentru un client unic înainte ca accesul la server să fie blocat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2606
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2612
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2618
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2626
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2632
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2638
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2644
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2664
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2682
 msgid "(0 = unlimited)"
 msgstr "(0 = nelimitat)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2610
 msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
 msgstr "Numărul maxim de solicitări de pagini web pe oră pentru un client unic înainte ca accesul la server să fie blocat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2616
 msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
 msgstr "Numărul maxim de solicitări de pagini web pe zi pentru un client unic înainte ca accesul la server să fie blocat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2622
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2678
 msgid "Total"
 msgstr "Total"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2624
 msgid "Total number of web page requests per minute before access to the server is blocked"
 msgstr "Numărul total de solicitări de pagini web pe minut înainte ca accesul la server să fie blocat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2630
 msgid "Total number of web page requests per hour before access to the server is blocked"
 msgstr "Numărul total de solicitări de pagini web pe oră înainte ca accesul la server să fie blocat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2636
 msgid "Total number of web page requests per day before access to the server is blocked"
 msgstr "Numărul total de solicitări de pagini web pe zi înainte ca accesul la server să fie blocat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2642
 msgid "Maximum number of simultaneous client connections"
 msgstr "Număr maxim de conexiuni simultane cu clientul"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2652
 msgid "POST limits"
 msgstr "limitele POST"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2654
 msgid "Per Period"
 msgstr "Per Perioada"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2656
 msgid "Ban Duration"
 msgstr "Durata interdicției"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2658
 msgid "POST limit period"
 msgstr "Perioada limită POST"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2662
 msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
 msgstr "Numărul maxim de solicitări de post permise pentru un client unic pentru perioada de timp configurată"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2668
 msgid "If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes"
 msgstr "Dacă un client depășește numărul maxim de solicitări de post pe perioada alocată, aplică o interdicție pentru acest număr de minute"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2674
 msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
 msgstr "Perioada de timp pentru numărul maxim de solicitări de post înainte de a declanșa interdicția"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2680
 msgid "Total number of post requests permitted for the configured timespan"
 msgstr "Numărul total de solicitări de post permise pentru intervalul de timp configurat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2686
 msgid "If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes"
 msgstr "Dacă se depășește numărul maxim de solicitări postale pe perioadă alocată, se aplică o interdicție globală de acces pentru acest număr de minute"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2700
 msgid "Custom HTTP Headers"
 msgstr "Anteturi HTTP personalizate"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2702
 msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
 msgstr "Notă: Aceste antete personalizate vor fi activate numai pentru fișierele difuzate care nu au antetul relevant deja setat."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2704
 msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
 msgstr "Setați antetul Allow la „GET, POST, HEAD” pentru fișierele html, xml, json și text"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2706
 msgid "Allow"
 msgstr "Permite"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2708
 msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
 msgstr "Activați anteturile Cache-Control (fără cache pentru html, xml, json și text, imuabil pentru orice altceva)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2710
 msgid "Cache-Control"
 msgstr "Cache-Control"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2712
 msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
 msgstr "Setați antetul Referrer-Policy la „same-origin” pentru fișierele html, xml, json și text"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2714
 msgid "Referrer-Policy"
 msgstr "Referitor-Politica"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2716
 msgid "Set the X-Content-Type-Options header to 'nosniff'"
 msgstr "Setați antetul X-Content-Type-Options la „nosniff”"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2718
 msgid "X-Content-Type-Options"
 msgstr "X-Content-Type-Options"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2747
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:924
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:616
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1138
 #, java-format
 msgid "Initializing Tunnel Manager{0}"
 msgstr "Inițializarea Tunnel Manager{0}"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2749
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:926
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:618
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1140
 msgid "Tunnels not initialized yet; please retry in a few moments."
 msgstr "Tunelele nu au fost inițializate încă; vă rugăm să încercați în câteva momente."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:224
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:658
 msgid "Status Messages"
 msgstr "Mesaje de status"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:234
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:253
 msgid "Clear"
 msgstr "Curăță"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:242
 msgid "Refresh"
 msgstr "Reîmprospătează"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:264
 msgid "Global Tunnel Control"
 msgstr "Controlul global al tunelului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:266
 msgid "Tunnel Wizard"
 msgstr "Expert tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:270
 msgid "Stop All"
 msgstr "Oprește toate"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:274
 msgid "Start All"
 msgstr "Pornește toate"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:278
 msgid "Restart All"
 msgstr "Repornește toate"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:281
 msgid "I2P Server Tunnels"
 msgstr "Tunele de server I2P"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:285
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:636
 msgid "Type"
 msgstr "Tip"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:287
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:736
 msgid "Points at"
 msgstr "Puncte la"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:289
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:396
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:738
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:752
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:821
 msgid "Preview"
 msgstr "Previzualizare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:291
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:642
 msgid "Status"
 msgstr "Stare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:293
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:644
 msgid "Control"
 msgstr "Control"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:318
 msgid "Edit Server Tunnel Settings for"
 msgstr "Editați Setările tunelului serverului pentru"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:361
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Testați serverul HTTPS, ocolind I2P"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:369
 msgid "Test HTTP server, bypassing I2P"
 msgstr "Testați serverul HTTP, ocolind I2P"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:392
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:746
 msgid "Test HTTP server through I2P"
 msgstr "Testați serverul HTTP prin I2P"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:402
 msgid "Base32 Address"
 msgstr "Adresa Base32"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:410
 msgid "No Preview"
 msgstr "Nici o previzualizare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:420
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:422
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:713
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:715
 msgid "Starting..."
 msgstr "Pornire..."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:424
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:477
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:717
 msgid "Stop this Tunnel"
 msgstr "Opriți acest tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:438
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:475
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:747
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:764
 msgid "Running"
 msgstr "În execuţie"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:440
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:749
 msgid "Hops"
 msgstr "Hamei"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:445
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:457
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:469
 msgid "in"
 msgstr "în"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:450
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:462
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:473
 msgid "out"
 msgstr "afară"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:491
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:493
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:778
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:780
 msgid "Stopped"
 msgstr "Oprit"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:515
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:582
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:812
 msgid "Destination"
 msgstr "Destinație"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:529
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:848
 msgid "Signature"
 msgstr "Semnătură"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:559
 msgid "Alternate"
 msgstr "Supleant"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:590
 msgid "Alt Destination"
 msgstr "Destinație alternativă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:602
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:888
 msgid "Encryption"
 msgstr "Criptare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:626
 msgid "New server tunnel"
 msgstr "Noul tunel de server"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:628
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:913
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:368
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:393
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:414
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:420
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:683
 msgid "Standard"
 msgstr "Standard"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:630
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:915
 msgid "Create"
 msgstr "Creează"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:632
 msgid "I2P Client Tunnels"
 msgstr "I2P Tunnel client"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:638
 msgid "Interface"
 msgstr "Interfață"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:669
 msgid "Edit Tunnel Settings for"
 msgstr "Editați Setările tunelului pentru"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:731
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:733
 msgid "Standby"
 msgstr "Stare de veghe"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:804
 msgid "Outproxy"
 msgstr "Outproxy"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:821
 msgid "internal plugin"
 msgstr "extensie internă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:841
 msgid "none"
 msgstr "nici unul"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:911
 msgid "New client tunnel"
 msgstr "Tunel client nou"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:192
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:239
 msgid "Registration Helper"
 msgstr "Ajutor de înregistrare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:269
 msgid "This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled."
 msgstr "Acest serviciu utilizează seturi de închiriere criptate. Înregistrarea nu este recomandată. Autentificarea înregistrării este dezactivată."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:275
 msgid "Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site"
 msgstr "Vă rugăm să vă asigurați că selectați, copiați și lipiți întregul conținut al datelor de autentificare corespunzătoare în forma site-ului dvs. de înregistrare preferat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:277
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:700
 msgid "Tunnel name"
 msgstr "Numele tunelului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:285
 msgid "Website name"
 msgstr "Numele site-ului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:293
 msgid "Local Destination"
 msgstr "Destinație locală"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:301
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:692
 msgid "Local destination is not available. Start the tunnel."
 msgstr "Destinația locală nu este disponibilă. Porniți tunelul."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:308
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:699
 msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
 msgstr "Pentru a activa verificarea înregistrării, editați tunelul și setați numele (sau numele site-ului) la un nume de gazdă valabil care se încheie în „.i2p”"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:314
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:705
 msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
 msgstr "Pentru a activa verificarea înregistrării, editați tunelul și setați numele la un nume gazdă valabil care se încheie în '.i2p'"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:323
 msgid "Destination signing key is not available. Start the tunnel."
 msgstr "Cheia de semnare a destinației nu este disponibilă. Porniți tunelul."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:329
 msgid "Destination signing key is offline. Use CLI tools on the offline machine."
 msgstr "Cheia de semnare a destinației este offline. Utilizați instrumente CLI pe mașina offline."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:339
 #, java-format
 msgid "Authentication for adding host {0}"
 msgstr "Autentificare pentru adăugarea gazdei {0}"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:341
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:356
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:394
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:423
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:454
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:485
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:519
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:552
 msgid "Copy and paste this to the registration site"
 msgstr "Copiați și lipiți acest lucru pe site-ul de înregistrare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:346
 msgid "Advanced authentication strings"
 msgstr "Șiruri de autentificare avansate"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:354
 #, java-format
 msgid "Authentication for removing host {0}"
 msgstr "Autentificare pentru eliminarea gazdei {0}"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:385
 msgid "Authentication for changing name"
 msgstr "Autentificare pentru schimbarea numelui"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:399
 #, java-format
 msgid "This will change the name from {0} to {1}, using the same destination"
 msgstr "Acest lucru va schimba numele din {0} în {1}, folosind aceeași destinațieAceasta va schimba numele de la {0} la {1}, folosind aceeași destinație"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:405
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:434
 msgid "This tunnel must be configured with the new host name."
 msgstr "Acest tunel trebuie configurat cu noul nume de gazdă."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:407
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:436
 msgid "Enter old hostname below."
 msgstr "Introdu mai jos numele vechi de gazdă."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:414
 msgid "Authentication for adding alias"
 msgstr "Autentificare pentru adăugarea de alias"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:428
 #, java-format
 msgid "This will add an alias {0} for {1}, using the same destination"
 msgstr "Aceasta va adăuga un alias {0} pentru {1}, folosind aceeași destinație"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:444
 msgid "Authentication for changing destination"
 msgstr "Autentificare pentru schimbarea destinației"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:459
 #, java-format
 msgid "This will change the destination for {0}"
 msgstr "Aceasta va schimba destinația pentru {0}"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:465
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:530
 msgid "This tunnel must be configured with the new destination."
 msgstr "Acest tunel trebuie configurat cu noua destinație."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:467
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:532
 msgid "Enter old destination below."
 msgstr "Introduceți mai jos destinația veche."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:475
 msgid "Authentication for adding alternate destination"
 msgstr "Autentificare pentru adăugarea unei destinații alternative"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:490
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:524
 #, java-format
 msgid "This will add an alternate destination for {0}"
 msgstr "Aceasta va adăuga o altă destinație pentru {0}"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:541
 msgid "Authentication for adding subdomain"
 msgstr "Autentificare pentru adăugarea subdomeniului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:557
 #, java-format
 msgid "This will add a subdomain {0} of {1}, with a different destination"
 msgstr "Aceasta va adăuga un subdomeniu {0} din {1}, cu o altă destinație"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:563
 msgid "This tunnel must be configured with the new subdomain and destination."
 msgstr "Acest tunel trebuie configurat cu noul subdomeniu și destinație."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:565
 msgid "Enter higher-level domain and destination below."
 msgstr "Introduceți mai jos un domeniu și o destinație la nivel superior."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:577
 msgid "Return to Tunnel Configuration"
 msgstr "Reveniți la configurația tunelului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:584
 msgid "Specify old name and destination"
 msgstr "Specificați numele și destinația veche"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:586
 msgid "This is only required for advanced authentication."
 msgstr "Aceasta este necesară numai pentru autentificare avansată."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:588
 msgid "See above for required items."
 msgstr "Vezi mai sus pentru articolele solicitate."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:595
 msgid "Old / parent hostname "
 msgstr "Nume de gazdă vechi / părinte "
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:599
 msgid "Private key file for old destination / sub-domain parent"
 msgstr "Fișier cheie privată pentru destinația veche/părinte subdomeniu"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:603
 msgid "Generate Authentication"
 msgstr "Generați autentificare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:185
 msgid "SSL Helper"
 msgstr "SSL Helper"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:677
 msgid "Experts only!"
 msgstr "Numai experți!"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:713
 msgid "Base32"
 msgstr "Base32"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:721
 msgid "Alt Base32"
 msgstr "Alt Base32"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:730
 msgid "Incoming I2P Port Routing"
 msgstr "Rutare port I2P"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:732
 msgid "Virtual Host"
 msgstr "Gazdă virtuală"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:734
 msgid "Via SSL?"
 msgstr "Prin SSL?"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:809
 msgid "Test HTTPS server through I2P"
 msgstr "Testează serverul HTTPS prin I2P"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:827
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:251
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:269
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:295
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:313
 msgid "Server"
 msgstr "Server"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:831
 msgid "SSL Activation"
 msgstr "Activare SSL"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:884
 msgid "I2P webserver (eepsite)"
 msgstr "I2P webserver (eepsite)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1066
 msgid "Disable SSL"
 msgstr "Dezactivează SSL"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1072
 msgid "Enable SSL"
 msgstr "Activați SSL"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1078
 msgid "New Certificate Password"
 msgstr "Parolă certificat nouă"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1080
 msgid "Password (required to encrypt the certificate)"
 msgstr "Parolă (necesară pentru a cripta certificatul)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1088
 msgid "Generate new SSL certificate"
 msgstr "Generați nou certificat SSL"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1094
 msgid "Generate SSL certificate and enable"
 msgstr "Generați certificat SSL și activați"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1108
 #, java-format
 msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
 msgstr "Nu se poate configura, nu a fost găsit niciun server Jetty în {0}configurațiile clientului{1} care se potrivesc cu acest tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1110
 msgid "Support for non-Jetty servers will be added in a future release"
 msgstr "Suportul pentru serverele non-Jetty va fi adăugat într-o versiune viitoare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1117
 msgid "Return to Tunnel Manager Index"
 msgstr "Reveniți la Indexul Tunnel Manager"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:1128
 msgid "Return to Tunnel Editor"
 msgstr "Reveniți la Editorul tunelului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:194
 msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
 msgstr "I2P Tunnel manager - Expert Crearea Tunnel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:236
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:675
 msgid "Server or client tunnel?"
 msgstr "Server sau tunel client?"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:242
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:679
 msgid "Tunnel type"
 msgstr "Tipul tunerului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:260
 msgid "Tunnel name and description"
 msgstr "Numele tunel și descrierea"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:278
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:711
 msgid "Tunnel destination"
 msgstr "Destinație tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:286
 msgid "Binding address and port"
 msgstr "Adresa de legare și de port"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:304
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:760
 msgid "Tunnel auto-start"
 msgstr "Tunel auto-start"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:322
 msgid "Wizard completed"
 msgstr "Expertul finalizat"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:337
 msgid "This wizard will take you through the various options available for creating tunnels in I2P."
 msgstr "Acest asistent vă va lua prin diferite opțiuni disponibile pentru crearea tunelurilor în I2P."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:339
 msgid "The first thing to decide is whether you want to create a server or a client tunnel."
 msgstr "Primul lucru este de a decide dacă doriți să creați un server sau un tunel client."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:340
 msgid "If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel."
 msgstr "Dacă aveți nevoie pentru a vă conecta la un serviciu de la distanță, cum ar fi un server de IRC în interiorul I2P sau un depozit de cod, atunci veți avea nevoie de un tunel CLIENT."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:341
 msgid "On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel."
 msgstr "Pe de altă parte, dacă doriți să găzduiti un serviciu pentru alții veți avea nevoie pentru a crea un server de tunel."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:343
 msgid "Server Tunnel"
 msgstr "Tunnel serverului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:345
 msgid "Client Tunnel"
 msgstr "Tunnel client"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:362
 msgid "There are several types of tunnels to choose from:"
 msgstr "Există mai multe tipuri de tuneluri pentru a alege din:"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:370
 msgid "Basic tunnel for connecting to a single service inside I2P."
 msgstr "Tunel de bază pentru conectarea la un singur serviciu în interiorul I2P."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:371
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:396
 msgid "Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need."
 msgstr "Încercați acest lucru dacă nici unul dintre tipurile de tunel de mai jos se potrivesc cerințelor dumneavoastră, sau nu stiti ce tip de tunel de care aveți nevoie."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:373
 msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
 msgstr "Tunel care actioneaza ca un proxy HTTP pentru a ajunge la eepsites din interiorul I2P."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:374
 msgid "Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux."
 msgstr "Setati browser-ul pentru a utiliza acest tunel ca un proxy HTTP, sau pentru a seta variabila de mediu \"http_proxy\", pentru aplicații de linie de comandă în GNU / Linux."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:375
 msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
 msgstr "Site-uri din afara I2P poate fi atins în cazul în care un proxy HTTP în I2P este cunoscut."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:377
 msgid "Customised client tunnel specific for IRC connections."
 msgstr "Tunel client personalizate specific pentru conexiuni de IRC."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:378
 msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
 msgstr "Cu acest tip tunel, clientul tau de IRC va fi capabil să se conecteze la o retea IRC din interiorul I2P."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:379
 msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
 msgstr "Fiecare rețea de IRC în I2P la care doriți să vă conectați pentru a va necesita propriul tunel. (A se vedea de asemenea, SOCKS IRC)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:381
 msgid "A tunnel that implements the SOCKS protocol."
 msgstr "Un tunel care implementează protocolul SOCKS."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:382
 msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
 msgstr "Acest lucru permite conexiunile cit TCP atât si UDP să se facă printr-un SOCKS outproxy în I2P."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:384
 msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
 msgstr "Un tunel client de punere în aplicare protocolul SOCKS, care este personalizat pentru conectarea la retele de IRC."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:385
 msgid "With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel."
 msgstr "Cu acest tip tunel, retele de IRC din I2P poate ajunge tastând adresa I2P in clientul tau de IRC, și configurarea clientul IRC pentru a utiliza acest tunel SOCKS."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:386
 msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
 msgstr "Aceasta înseamnă că este necesar doar un tunel I2P mai degrabă decât un tunel separat pentru fiecare rețea IRC."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:387
 msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
 msgstr "Retele IRC din afara I2P pot fi ajunse, de asemenea, în cazul în care SOCKS outproxy în I2P este cunoscut, deși aceasta depinde dacă  outproxy a fost blocat sau nu de către rețeaua IRC."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:395
 msgid "A basic server tunnel for hosting a generic service inside I2P."
 msgstr "Un tunel de server de bază pentru găzduirea un serviciu generic în interiorul I2P."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:398
 msgid "A server tunnel that is customised for HTTP connections."
 msgstr "Un tunel de server, care este personalizat pentru conexiuni HTTP."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:399
 msgid "Use this tunnel type if you want to host an eepsite."
 msgstr "Utilizați acest tip tunel, dacă doriți să găzduiti un eepsite."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:401
 msgid "A customised server tunnel for hosting IRC networks inside I2P."
 msgstr "Un tunel de server personalizat pentru găzduirea retelei de IRC în interiorul I2P."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:402
 msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
 msgstr "De obicei, un tunel separat trebuie să fie creat pentru fiecare server de IRC, care să fie accesibil în interiorul I2P."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:408
 msgid "Select tunnel type"
 msgstr "Selectați tipul de tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:440
 msgid "Choose a name and description for your tunnel."
 msgstr "Alegeți un nume și o descriere pentru tunelul dumneavoastră."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:441
 msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
 msgstr "Acestea pot fi orice vrei - acestea sunt doar pentru a facilita identificarea tunelului în routerconsole."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:472
 msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
 msgstr "Dacă știți de orice outproxies pentru acest tip de tunel (fie HTTP sau SOCKS), completaile-le mai jos."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:473
 msgid "Separate multiple proxies with commas."
 msgstr "Mai multe proxy-uri separate prin virgula."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:477
 msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
 msgstr "Lista destinațiilor de procesare I2P, separate cu virgule (de exemplu, proxy1.i2p, proxy2.i2p)"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:493
 msgid "Type in the I2P destination of the service that this client tunnel should connect to."
 msgstr "Tapati în destinația I2P a serviciului cu care acest tunel client trebuie să se conecteze."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:494
 msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
 msgstr "Aceasta ar putea fi cheia de destinație completă a Base64 sau o adresă URL I2P din agenda dvs. de adrese."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:498
 msgid "Enter a b64 or .i2p address here"
 msgstr "Introduceți aici o adresă b64 sau .i2p"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:520
 msgid "This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
 msgstr "Acesta este IP la care serviciul se execută, aceasta este, de obicei pe aceeași mașină, astfel 127.0.0.1 este autofilled."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:543
 msgid "This is the port that the service is accepting connections on."
 msgstr "Acesta este portul pe care serviciul  accepta conexiuni."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:565
 msgid "This is the port that the client tunnel will be accessed from locally."
 msgstr "Acesta este portul la care tunelul client va fi accesat de la nivel local."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:587
 msgid "How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
 msgstr "Cum vrei ca acest tunel sa fie accesat? Doar de la această mașină, întreaga subrețea, sau internet extern?"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:588
 msgid "You will most likely want to just allow 127.0.0.1"
 msgstr "Veți dori, cel mai probabil, pentru a permite doar 127.0.0.1"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:631
 msgid "The I2P router can automatically start this tunnel for you when the router is started."
 msgstr "Router-ul I2P poate porni automat acest tunel pentru tine atunci când este pornit router-ul."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:632
 msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
 msgstr "Acest lucru poate fi util pentru tuneluri utilizate frecvent (mai ales tuneluri server), dar pentru tuneluri care sunt utilizate doar ocazional, aceasta ar însemna că router-ul I2P  creaza și menține tuneluri inutile."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:657
 msgid "The wizard has now collected enough information to create your tunnel."
 msgstr "Expertul a colectat acum suficiente informații pentru a crea tunel dumneavoastră."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:658
 msgid "Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page."
 msgstr "La clic pe butonul Save de mai jos, expertul va configura tunelul, și te duce înapoi la pagina principală I2PTunnel."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:662
 msgid "Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further."
 msgstr "Pentru că ați ales să pornească automat tunel când router-ul începe, nu trebuie să faci nimic mai mult."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:663
 msgid "The router will start the tunnel once it has been set up."
 msgstr "Router-ul va începe tunelul după ce a fost creat."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:667
 msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
 msgstr "Pentru că ați ales să nu se pornească automat tunel, va trebui să-l porniți manual."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:668
 msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
 msgstr "Puteți face acest lucru făcând clic pe butonul Start de pe pagina principală, care corespunde cu noul tunel."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:673
 msgid "Below is a summary of the options you chose:"
 msgstr "Mai jos este un rezumat al opțiunilor alese de tine:"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:704
 msgid "Tunnel description"
 msgstr "Descrierea tunelului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:728
 msgid "Binding address"
 msgstr "Adresa de legare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:736
 msgid "Tunnel port"
 msgstr "Port tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:774
 msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
 msgstr "Alături de aceste setări de bază, există o serie de opțiuni avansate de configurare tunel."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:775
 msgid "The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page."
 msgstr "Expertul va stabili valorile implicite rezonabil sensibile pentru acestea, dar puteți vizualiza și/sau edita acestea, făcând clic pe numele tunelului pe pagina principală I2PTunnel."
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:793
 msgid "Cancel the wizard and return to Tunnel Manager home page"
 msgstr "Anulați asistentul și reveniți la pagina principală a Managerului de tunel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:801
 msgid "Return to previous page"
 msgstr "Întoarce-te la pagina anterioară"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:804
 msgid "Previous"
 msgstr "Precedent"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:813
 msgid "Save tunnel configuration"
 msgstr "Salvați configurația tunelului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:816
 msgid "Save Tunnel"
 msgstr "Salvare Tunnel"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:822
 msgid "Finish Wizard and review tunnel settings"
 msgstr "Finalizați asistentul și consultați setările tunelului"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:825
 msgid "Finish"
 msgstr "Sfârșit"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:831
 msgid "Advance to next page"
 msgstr "Advance la pagina următoare"
 
-#: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:834
 msgid "Next"
 msgstr "Următorul"

@@ -9,85 +9,56 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/net/i2p/desktopgui/ExternalTrayManager.java:31
 msgid "Start I2P"
 msgstr "I2P 시작"
 
-#: src/net/i2p/desktopgui/ExternalTrayManager.java:44
-#: src/net/i2p/desktopgui/InternalTrayManager.java:55
 msgid "I2P is starting!"
 msgstr "I2P 시작중!"
 
-#: src/net/i2p/desktopgui/ExternalTrayManager.java:44
-#: src/net/i2p/desktopgui/InternalTrayManager.java:55
 msgid "Starting"
 msgstr "시작중"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:65
-#: src/net/i2p/desktopgui/InternalTrayManager.java:221
 msgid "Launch I2P Browser"
 msgstr "I2P 브라우저 실행"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:86
-#: src/net/i2p/desktopgui/InternalTrayManager.java:242
 msgid "Configure I2P System Tray"
 msgstr "I2P 시스템 트레이 설정"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:88
-#: src/net/i2p/desktopgui/InternalTrayManager.java:244
 msgid "Disable system tray"
 msgstr "시스템 트레이를 비활성화합니다"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:104
-#: src/net/i2p/desktopgui/InternalTrayManager.java:260
 msgid "Restart I2P"
 msgstr "I2P 재시작"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:121
-#: src/net/i2p/desktopgui/InternalTrayManager.java:277
 msgid "Stop I2P"
 msgstr "I2P 정지"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:137
-#: src/net/i2p/desktopgui/InternalTrayManager.java:293
 msgid "Restart I2P Immediately"
 msgstr "I2P 즉시 재시작"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:154
-#: src/net/i2p/desktopgui/InternalTrayManager.java:310
 msgid "Stop I2P Immediately"
 msgstr "I2P 즉시 정지"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:168
-#: src/net/i2p/desktopgui/InternalTrayManager.java:324
 msgid "Cancel I2P Shutdown"
 msgstr "I2P 종료 취소"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:381
 #, java-format
 msgid "Shutdown in {0}"
 msgstr "{0} 안에 종료"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:383
 msgid "Shutdown imminent"
 msgstr "즉시 종료"
 
 #. status translations are in the console bundle
-#: src/net/i2p/desktopgui/InternalTrayManager.java:388
 msgid "Network"
 msgstr "네트워크"
 
 #. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
-#: src/net/i2p/desktopgui/TrayManager.java:74
 msgid "I2P: Right-click for menu"
 msgstr "I2P: 메뉴는 오른쪽 클릭"
 
-#: src/net/i2p/desktopgui/TrayManager.java:301
-#: src/net/i2p/desktopgui/TrayManager.java:338
 msgid "Enable notifications"
 msgstr "알림을 활성화합니다"
 
-#: src/net/i2p/desktopgui/TrayManager.java:316
-#: src/net/i2p/desktopgui/TrayManager.java:353
 msgid "Disable notifications"
 msgstr "알림을 비활성화합니다"

@@ -9,76 +9,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:69
 msgid "Message timeout"
 msgstr "Timeout del messaggio"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:72
 msgid "Failed delivery to local destination"
 msgstr "Spedizione fallita alla destinazione locale"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:75
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:108
 msgid "Local router failure"
 msgstr "Errore del router locale"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:78
 msgid "Local network failure"
 msgstr "Errore della rete locale"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:81
 msgid "Session closed"
 msgstr "Sessione chiusa"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:84
 msgid "Invalid message"
 msgstr "Messaggio non valido"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:87
 msgid "Invalid message options"
 msgstr "Opzioni del messaggio non valide"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:90
 msgid "Buffer overflow"
 msgstr "Errore di buffer overflow"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:93
 msgid "Message expired"
 msgstr "Messaggio scaduto"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:96
 msgid "Local lease set invalid"
 msgstr "Set di lease locale non valido"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:99
 msgid "No local tunnels"
 msgstr "Nessun tunnel locale"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:102
 msgid "Unsupported encryption options"
 msgstr "Opzioni di cifratura non supportate"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:105
 msgid "Invalid destination"
 msgstr "Destinazione non valida"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:111
 msgid "Destination lease set expired"
 msgstr "Set di lease di destinazione scaduto"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:114
 msgid "Destination lease set not found"
 msgstr "Set di lease di destinazione non trovato"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:117
 msgid "Local destination shutdown"
 msgstr "Arresto della destinazione locale"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:120
 msgid "Connection was reset"
 msgstr "La connessione è stata resettata"
 
 #. Translate this one here, can't do it later
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:127
 msgid "Failure code"
 msgstr "Codice d'errore"

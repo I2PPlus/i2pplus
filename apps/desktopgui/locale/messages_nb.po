@@ -9,85 +9,56 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/net/i2p/desktopgui/ExternalTrayManager.java:31
 msgid "Start I2P"
 msgstr "Start I2P"
 
-#: src/net/i2p/desktopgui/ExternalTrayManager.java:44
-#: src/net/i2p/desktopgui/InternalTrayManager.java:55
 msgid "I2P is starting!"
 msgstr "I2P starter opp!"
 
-#: src/net/i2p/desktopgui/ExternalTrayManager.java:44
-#: src/net/i2p/desktopgui/InternalTrayManager.java:55
 msgid "Starting"
 msgstr "Starter opp"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:65
-#: src/net/i2p/desktopgui/InternalTrayManager.java:221
 msgid "Launch I2P Browser"
 msgstr "Kjør I2P-nettleser"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:86
-#: src/net/i2p/desktopgui/InternalTrayManager.java:242
 msgid "Configure I2P System Tray"
 msgstr "Sett opp I2P-systemkruv"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:88
-#: src/net/i2p/desktopgui/InternalTrayManager.java:244
 msgid "Disable system tray"
 msgstr "Deaktiver systembrett"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:104
-#: src/net/i2p/desktopgui/InternalTrayManager.java:260
 msgid "Restart I2P"
 msgstr "Omstart av I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:121
-#: src/net/i2p/desktopgui/InternalTrayManager.java:277
 msgid "Stop I2P"
 msgstr "Stopp I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:137
-#: src/net/i2p/desktopgui/InternalTrayManager.java:293
 msgid "Restart I2P Immediately"
 msgstr "Umiddelbar omstart av I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:154
-#: src/net/i2p/desktopgui/InternalTrayManager.java:310
 msgid "Stop I2P Immediately"
 msgstr "Umiddelbar stopp av I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:168
-#: src/net/i2p/desktopgui/InternalTrayManager.java:324
 msgid "Cancel I2P Shutdown"
 msgstr "Avbryt nedstenging av I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:381
 #, java-format
 msgid "Shutdown in {0}"
 msgstr "Skrur av om {0}"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:383
 msgid "Shutdown imminent"
 msgstr "Skru av med en gang"
 
 #. status translations are in the console bundle
-#: src/net/i2p/desktopgui/InternalTrayManager.java:388
 msgid "Network"
 msgstr "Nettverk"
 
 #. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
-#: src/net/i2p/desktopgui/TrayManager.java:74
 msgid "I2P: Right-click for menu"
 msgstr "Høyreklikk-meny i I2P"
 
-#: src/net/i2p/desktopgui/TrayManager.java:301
-#: src/net/i2p/desktopgui/TrayManager.java:338
 msgid "Enable notifications"
 msgstr "Aktiver varsler"
 
-#: src/net/i2p/desktopgui/TrayManager.java:316
-#: src/net/i2p/desktopgui/TrayManager.java:353
 msgid "Disable notifications"
 msgstr "Deaktiver varsler"

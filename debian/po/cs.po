@@ -11,60 +11,50 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../i2p.templates:2001
 msgid "Should the I2P router be started at boot?"
 msgstr "Spustit I2P routr při spuštění počítače?"
 
 #. Type: boolean
 #. Description
-#: ../i2p.templates:2001
 msgid "The I2P router can be run as a daemon that starts automatically when your computer boots up. This is the recommended configuration."
 msgstr "I2P routr bude spuštěn při startu počítače jako služba na pozadí (démon). Toto je doporučené nastavení."
 
 #. Type: string
 #. Description
-#: ../i2p.templates:3001
 msgid "I2P daemon user:"
 msgstr "Jméno uživatele I2P démona (daemon user):"
 
 #. Type: string
 #. Description
-#: ../i2p.templates:3001
 msgid "By default I2P is configured to run under the account i2psvc when running as a daemon. To use an **existing** I2P profile you may enter a different account name here. For example, if your previous I2P installation is at /home/user/i2p, you may enter 'user' here."
 msgstr "I2P démon je ve výchozím stavu nakonfigurován aby běžel pod uživatelským účtem i2psvc. Pokud chcete použít **existující** I2P profil zadejte přihlašovací jméno (login) jiného uživatelského účtu. Například pokud se Vaše předchozí instalace I2P nachází v adresáři /home/franta/i2p, zadejte sem franta."
 
 #. Type: string
 #. Description
-#: ../i2p.templates:3001
 msgid "Very important: If a user other than the default of 'i2psvc' is entered here, the chosen username *MUST* already exist."
 msgstr "Důležité: pokud zadáte jiné jméno uživatele než je výchozí i2psvc, jeho účet už musí předem existovat."
 
 #. Type: string
 #. Description
-#: ../i2p.templates:4001
 msgid "Memory that can be allocated to I2P:"
 msgstr "Kolik paměti může I2P použít:"
 
 #. Type: string
 #. Description
-#: ../i2p.templates:4001
 msgid "By default, I2P will only be allowed to use up to 128MB of RAM."
 msgstr "Standardně I2P použije nanejvýš 128MB RAM."
 
 #. Type: string
 #. Description
-#: ../i2p.templates:4001
 msgid "High bandwidth routers, as well as routers with a lot of active torrents / plugins, may need to have this value increased."
 msgstr "Pokud máte velmi rychlé připojení, používáte hodně pluginů a nebo stahujete velké množství torrentů, zvyšte tuto hodnotu."
 
 #. Type: boolean
 #. Description
-#: ../i2p.templates:5001
 msgid "Should the I2P daemon be confined with AppArmor?"
 msgstr "Měla by být služba I2P omezena s AppArmorem?"
 
 #. Type: boolean
 #. Description
-#: ../i2p.templates:5001
 msgid "With this option enabled I2P will be sandboxed with AppArmor, restricting which files and directories may be accessed by I2P."
 msgstr "S touto možností bude I2P sandboxed s AppArmorem, což omezí, ke kterým souborům a adresářem může být přistupován I2P."

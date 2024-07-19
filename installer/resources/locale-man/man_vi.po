@@ -10,384 +10,314 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. type: TH
-#: man/eepget.1:1
 #, no-wrap
 msgid "EEPGET"
 msgstr "EEPGET"
 
 #. type: TH
-#: man/eepget.1:1 man/i2prouter.1:1 man/i2prouter-nowrapper.1:1
 #, no-wrap
 msgid "January 26, 2017"
 msgstr "26 tháng 1 năm 2017"
 
 #. type: TH
-#: man/eepget.1:1 man/i2prouter.1:1 man/i2prouter-nowrapper.1:1
 #, no-wrap
 msgid "I2P"
 msgstr "I2P"
 
 #. type: SH
-#: man/eepget.1:3 man/i2prouter.1:3 man/i2prouter-nowrapper.1:3
 #, no-wrap
 msgid "NAME"
 msgstr "Tên"
 
 #. type: Plain text
-#: man/eepget.1:5
 msgid "Eepget - I2P downloader"
 msgstr "Eepget - người tải xuống I2P"
 
 #. type: SH
-#: man/eepget.1:6 man/i2prouter.1:6 man/i2prouter-nowrapper.1:6
 #, no-wrap
 msgid "SYNOPSIS"
 msgstr "TỔNG QUAN"
 
 #. type: Plain text
-#: man/eepget.1:9
 msgid "B<eepget> [I<options>]I<URL>"
 msgstr "B<eepget> [I<tuỳ chọn>]I<URL>"
 
 #. type: SH
-#: man/eepget.1:11 man/i2prouter.1:11 man/i2prouter-nowrapper.1:10
 #, no-wrap
 msgid "DESCRIPTION"
 msgstr "MÔ TẢ"
 
 #. type: Plain text
-#: man/eepget.1:15
 msgid "Download a file non-interactively via HTTP. Transfers through both I2P and the regular Internet are supported."
 msgstr "Tải xuống một tệp không tương tác qua HTTP. Việc chuyển đổi qua cả I2P và Internet thông thường đều được hỗ trợ."
 
 #. type: Plain text
-#: man/eepget.1:21
 msgid "Eepget is able to cope with slow or unstable network connections; if a download is not successful because of a network problem, it will keep retrying until the whole file has been retrieved (if the -n option is set).  If supported by the remote server, eepget will instruct the server to continue the download from the point of interruption."
 msgstr "Eepget có khả năng đối phó với kết nối mạng chậm hoặc không ổn định; nếu việc tải xuống không thành công do vấn đề mạng, nó sẽ tiếp tục thử lại cho đến khi đã lấy toàn bộ tệp (nếu tùy chọn -n được đặt). Nếu được máy chủ từ xa hỗ trợ, eepget sẽ hướng dẫn máy chủ tiếp tục tải xuống từ điểm gián đoạn."
 
 #. type: SH
-#: man/eepget.1:22
 #, no-wrap
 msgid "OPTIONS"
 msgstr "TUỲ CHỌN"
 
 #. type: Plain text
-#: man/eepget.1:25
 msgid "B<-c>"
 msgstr "B<-c>"
 
 #. type: TP
-#: man/eepget.1:25
 #, no-wrap
 msgid "Clearnet. Do not use a proxy. Same as B<-p> :0 ."
 msgstr "Clearnet. Không sử dụng proxy. Giống như B<-p> :0 ."
 
 #. type: Plain text
-#: man/eepget.1:31
 msgid "B<-e> etag"
 msgstr "B<-e> etag"
 
 #. type: TP
-#: man/eepget.1:31
 #, no-wrap
 msgid "Sets the etag value in the request headers."
 msgstr "Đặt giá trị etag trong tiêu đề yêu cầu."
 
 #. type: Plain text
-#: man/eepget.1:37
 msgid "B<-h> name=value"
 msgstr "B<-h> tên=gía trị"
 
 #. type: TP
-#: man/eepget.1:37
 #, no-wrap
 msgid "Adds an arbitrary request header with the given name and value."
 msgstr "Thêm tiêu đề yêu cầu tùy ý với tên và giá trị đã cho."
 
 #. type: Plain text
-#: man/eepget.1:43
 msgid "B<-l> lineLen"
 msgstr "B<-l> độ dài dòng"
 
 #. type: TP
-#: man/eepget.1:43
 #, no-wrap
 msgid "Controls the progress display. B<\\ lineLen > is the length of one progress line in characters. The default is 40."
 msgstr "Kiểm soát màn hình tiến trình. B<\\ lineLen > là chiều dài của một dòng tiến trình trong các ký tự. Mặc định là 40."
 
 #. type: Plain text
-#: man/eepget.1:49
 msgid "B<-m> markSize"
 msgstr "B<-m> kích thước dấu"
 
 #. type: TP
-#: man/eepget.1:49
 #, no-wrap
 msgid "Controls the progress display. B<\\ markSize > is the number of bytes one '#' character represents. The default is 1024."
 msgstr "Kiểm soát màn hình tiến trình. B<\\ markSize > là số byte mà ký tự '#' đại diện. Mặc định là 1024."
 
 #. type: Plain text
-#: man/eepget.1:55
 msgid "B<-n> retries"
 msgstr "B<-n> thử lại"
 
 #. type: TP
-#: man/eepget.1:55
 #, no-wrap
 msgid "Specify the number of times to retry downloading if the download isn't successful. If this option is not specified, eepget will not retry."
 msgstr "Chỉ định số lần thử lại tải xuống nếu tải xuống không thành công. Nếu tùy chọn này không được chỉ định, eepget sẽ không thử lại."
 
 #. type: Plain text
-#: man/eepget.1:61
 msgid "B<-o> file"
 msgstr "B<-o> tệp"
 
 #. type: TP
-#: man/eepget.1:61
 #, no-wrap
 msgid "Sets the output file to write to. If this option is not given, the output filename will be determined by the URL."
 msgstr "Đặt tệp đầu ra để viết vào. Nếu tùy chọn này không được đưa ra, tên tệp đầu ra sẽ được xác định bởi URL."
 
 #. type: Plain text
-#: man/eepget.1:67
 msgid "B<-p> proxy_host[:port]"
 msgstr "B<-p> máy chủ_proxy[:cổng]"
 
 #. type: TP
-#: man/eepget.1:67
 #, no-wrap
 msgid "Specify an I2P proxy server (eeproxy) to use. If the port is not specified, eepget will use 4444. If this option is not specified, eepget will use 127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
 msgstr "Chỉ định máy chủ proxy I2P (eeproxy) để sử dụng. Nếu cổng không được chỉ định, eepget sẽ sử dụng 4444. Nếu tùy chọn này không được chỉ định, eepget sẽ sử dụng 127.0.0.1:4444. Chỉ định B<-c> hoặc B<-p> :0 để vô hiệu hóa eeproxy."
 
 #. type: Plain text
-#: man/eepget.1:73
 msgid "B<-t> seconds"
 msgstr "B<-t> giây"
 
 #. type: TP
-#: man/eepget.1:73
 #, no-wrap
 msgid "Sets the inactivity timeout. The default is 60 seconds."
 msgstr "Đặt thời gian chờ không hoạt động. Mặc định là 60 giây."
 
 #. type: Plain text
-#: man/eepget.1:79
 msgid "B<-u> username"
 msgstr "B<-u> tên đăng nhập"
 
 #. type: TP
-#: man/eepget.1:79
 #, no-wrap
 msgid "Sets the username for proxy authorization, if required."
 msgstr "Đặt tên người dùng cho ủy quyền proxy nếu cần thiết."
 
 #. type: Plain text
-#: man/eepget.1:85
 msgid "B<-x> password"
 msgstr "B<-x> mật khẩu"
 
 #. type: TP
-#: man/eepget.1:85
 #, no-wrap
 msgid "Sets the password for proxy authorization, if required. If a username is specified but not a password, EepGet will prompt for the password."
 msgstr "Đặt mật khẩu cho ủy quyền proxy nếu cần thiết. Nếu đã chỉ định tên người dùng nhưng không chỉ định mật khẩu, EepGet sẽ yêu cầu nhập mật khẩu."
 
 #. type: SH
-#: man/eepget.1:89
 #, no-wrap
 msgid "EXIT STATUS"
 msgstr "TRẠNG THÁI RA ĐI"
 
 #. type: Plain text
-#: man/eepget.1:93
 msgid "B<eepget> exits with status zero upon successful transfer and non-zero if there were problems with the download."
 msgstr "B<eepget> thoát với trạng thái không khi chuyển tiếp thành công và không phải không nếu có vấn đề với việc tải xuống."
 
 #. type: SH
-#: man/eepget.1:94 man/i2prouter.1:54 man/i2prouter-nowrapper.1:24
 #, no-wrap
 msgid "REPORTING BUGS"
 msgstr "BÁO CÁO LỖI"
 
 #. type: Plain text
-#: man/eepget.1:99 man/i2prouter.1:59 man/i2prouter-nowrapper.1:29
 msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> the I2P Bug Tracker  E<.UE .>"
 msgstr "Vui lòng nhập một vé trên E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> trình theo dõi lỗi I2P  E<.UE .>"
 
 #. type: SH
-#: man/eepget.1:100 man/i2prouter.1:60 man/i2prouter-nowrapper.1:30
 #, no-wrap
 msgid "SEE ALSO"
 msgstr "XEM CŨNG"
 
 #. type: Plain text
-#: man/eepget.1:104
 msgid "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
 msgstr "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
 
 #. type: TH
-#: man/i2prouter.1:1
 #, no-wrap
 msgid "I2PROUTER"
 msgstr "I2PROUTER"
 
 #. type: Plain text
-#: man/i2prouter.1:5
 msgid "i2prouter - start and stop the I2P router"
 msgstr "i2prouter - bắt đầu và dừng router I2P"
 
 #. type: Plain text
-#: man/i2prouter.1:9
 msgid "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
 msgstr "B<i2prouter> {I<konsol>|I<bắt đầu>|I<dừng>|I<nghĩa cử>|I<tái khởi động>|I<tái khởi động điều kiện>|I<trạng thái>|I<xả>|I<cài đặt>|I<xóa>}"
 
 #. type: Plain text
-#: man/i2prouter.1:13
 msgid "Control the I2P service."
 msgstr "Kiểm soát dịch vụ I2P."
 
 #. type: IP
-#: man/i2prouter.1:15
 #, no-wrap
 msgid "B<console>"
 msgstr "B<konsol>"
 
 #. type: Plain text
-#: man/i2prouter.1:17
 msgid "Runs I2P as a console application under the current user."
 msgstr "Chạy I2P như một ứng dụng konsol dưới người dùng hiện tại."
 
 #. type: IP
-#: man/i2prouter.1:19
 #, no-wrap
 msgid "B<start>"
 msgstr "B<bắt đầu>"
 
 #. type: Plain text
-#: man/i2prouter.1:21
 msgid "Starts the I2P service."
 msgstr "Bắt đầu dịch vụ I2P."
 
 #. type: IP
-#: man/i2prouter.1:23
 #, no-wrap
 msgid "B<stop>"
 msgstr "B<dừng>"
 
 #. type: Plain text
-#: man/i2prouter.1:25
 msgid "Stops the I2P service."
 msgstr "Dừng dịch vụ I2P."
 
 #. type: IP
-#: man/i2prouter.1:27
 #, no-wrap
 msgid "B<restart>"
 msgstr "B<tái khởi động>"
 
 #. type: Plain text
-#: man/i2prouter.1:29
 msgid "Stops the I2P service and then starts it."
 msgstr "Dừng dịch vụ I2P và sau đó bắt đầu nó."
 
 #. type: IP
-#: man/i2prouter.1:31
 #, no-wrap
 msgid "B<condrestart>"
 msgstr "B<tái khởi động điều kiện>"
 
 #. type: Plain text
-#: man/i2prouter.1:33
 msgid "Restart the I2P service only if it is already running."
 msgstr "Chỉ tái khởi động dịch vụ I2P nếu nó đang chạy."
 
 #. type: IP
-#: man/i2prouter.1:35
 #, no-wrap
 msgid "B<graceful>"
 msgstr "B<nghĩa cử>"
 
 #. type: Plain text
-#: man/i2prouter.1:37
 msgid "Stop I2P gracefully (may take up to 11 minutes)"
 msgstr "Dừng I2P một cách nghĩa cử (có thể mất đến 11 phút)"
 
 #. type: IP
-#: man/i2prouter.1:39
 #, no-wrap
 msgid "B<install>"
 msgstr "B<cài đặt>"
 
 #. type: Plain text
-#: man/i2prouter.1:41
 msgid "Install initscript to start I2P automatically when the system boots."
 msgstr "Cài đặt initscript để tự động bắt đầu I2P khi hệ thống khởi động."
 
 #. type: IP
-#: man/i2prouter.1:43
 #, no-wrap
 msgid "B<remove>"
 msgstr "B<xóa>"
 
 #. type: Plain text
-#: man/i2prouter.1:45
 msgid "Uninstall initscript that was installed with B<install>"
 msgstr "Gỡ cài đặt initscript đã được cài đặt với B<cài đặt>"
 
 #. type: IP
-#: man/i2prouter.1:47
 #, no-wrap
 msgid "B<status>"
 msgstr "B<trạng thái>"
 
 #. type: Plain text
-#: man/i2prouter.1:49
 msgid "Prints whether the I2P service is running."
 msgstr "In ra liệu dịch vụ I2P đang chạy hay không."
 
 #. type: IP
-#: man/i2prouter.1:51
 #, no-wrap
 msgid "B<dump>"
 msgstr "B<xả>"
 
 #. type: Plain text
-#: man/i2prouter.1:53
 msgid "Dumps the current threads into B<wrapper.log>."
 msgstr "Xả các luồng hiện tại vào B<wrapper.log>."
 
 #. type: Plain text
-#: man/i2prouter.1:61
 msgid "B<i2prouter-nowrapper>(1)"
 msgstr "B<i2prouter-nowrapper>(1)"
 
 #. type: TH
-#: man/i2prouter-nowrapper.1:1
 #, no-wrap
 msgid "I2PROUTER-NOWRAPPER"
 msgstr "I2PROUTER-NOWRAPPER"
 
 #. type: Plain text
-#: man/i2prouter-nowrapper.1:5
 msgid "i2prouter-nowrapper - start the I2P router"
 msgstr "i2prouter-nowrapper - bắt đầu router I2P"
 
 #. type: Plain text
-#: man/i2prouter-nowrapper.1:8
 msgid "B<i2prouter-nowrapper>"
 msgstr "B<i2prouter-nowrapper>"
 
 #. type: Plain text
-#: man/i2prouter-nowrapper.1:14
 msgid "Start the I2P router, without the service wrapper.  This means the router will not restart if it crashes.  Also, it will use the default memory size, which may not be enough for I2P."
 msgstr "Bắt đầu router I2P, không có lớp bọc dịch vụ. Điều này có nghĩa là router sẽ không tái khởi động nếu nó gặp sự cố. Ngoài ra, nó sẽ sử dụng kích thước bộ nhớ mặc định, có thể không đủ cho I2P."
 
 #. type: Plain text
-#: man/i2prouter-nowrapper.1:23
 msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
 msgstr "Bạn thực sự nên sử dụng B<i2prouter>(1)  thay vào đó. Không có tùy chọn nào. Để dừng router, hãy sử dụng trình duyệt của bạn để truy cập E<.UR http://localhost:7657/> giao diện quản lý router E<.UE .>"
 
 #. type: Plain text
-#: man/i2prouter-nowrapper.1:31
 msgid "B<i2prouter>(1)"
 msgstr "B<i2prouter>(1)"

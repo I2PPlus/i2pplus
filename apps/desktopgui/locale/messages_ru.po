@@ -9,85 +9,56 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: src/net/i2p/desktopgui/ExternalTrayManager.java:31
 msgid "Start I2P"
 msgstr "Запустить I2P"
 
-#: src/net/i2p/desktopgui/ExternalTrayManager.java:44
-#: src/net/i2p/desktopgui/InternalTrayManager.java:55
 msgid "I2P is starting!"
 msgstr "I2P запускается!"
 
-#: src/net/i2p/desktopgui/ExternalTrayManager.java:44
-#: src/net/i2p/desktopgui/InternalTrayManager.java:55
 msgid "Starting"
 msgstr "Запускается"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:65
-#: src/net/i2p/desktopgui/InternalTrayManager.java:221
 msgid "Launch I2P Browser"
 msgstr "Запустить браузер I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:86
-#: src/net/i2p/desktopgui/InternalTrayManager.java:242
 msgid "Configure I2P System Tray"
 msgstr "Настроить системный трей I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:88
-#: src/net/i2p/desktopgui/InternalTrayManager.java:244
 msgid "Disable system tray"
 msgstr "Отключить системный поднос"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:104
-#: src/net/i2p/desktopgui/InternalTrayManager.java:260
 msgid "Restart I2P"
 msgstr "Перезапустить I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:121
-#: src/net/i2p/desktopgui/InternalTrayManager.java:277
 msgid "Stop I2P"
 msgstr "Остановить I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:137
-#: src/net/i2p/desktopgui/InternalTrayManager.java:293
 msgid "Restart I2P Immediately"
 msgstr "Перезапустить I2P немедленно"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:154
-#: src/net/i2p/desktopgui/InternalTrayManager.java:310
 msgid "Stop I2P Immediately"
 msgstr "Остановить I2P немедленно"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:168
-#: src/net/i2p/desktopgui/InternalTrayManager.java:324
 msgid "Cancel I2P Shutdown"
 msgstr "Отменить выключение I2P"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:381
 #, java-format
 msgid "Shutdown in {0}"
 msgstr "Выключение через {0}"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:383
 msgid "Shutdown imminent"
 msgstr "Неотменяемое выключение"
 
 #. status translations are in the console bundle
-#: src/net/i2p/desktopgui/InternalTrayManager.java:388
 msgid "Network"
 msgstr "Сеть"
 
 #. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
-#: src/net/i2p/desktopgui/TrayManager.java:74
 msgid "I2P: Right-click for menu"
 msgstr "I2P: Правый щелчок для вызова меню"
 
-#: src/net/i2p/desktopgui/TrayManager.java:301
-#: src/net/i2p/desktopgui/TrayManager.java:338
 msgid "Enable notifications"
 msgstr "Включить уведомления"
 
-#: src/net/i2p/desktopgui/TrayManager.java:316
-#: src/net/i2p/desktopgui/TrayManager.java:353
 msgid "Disable notifications"
 msgstr "Отключить уведомления"

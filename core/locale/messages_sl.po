@@ -17,8 +17,6 @@ msgstr ""
 #. {0,number,####} prevents 1234 from being output as 1,234 in the English locale.
 #. If you want the digit separator in your locale, translate as {0}.
 #. alternates: msec, msecs
-#: ../java/src/net/i2p/data/DataHelper.java:1421
-#: ../java/src/net/i2p/data/DataHelper.java:1474
 #, java-format
 msgid "{0,number,####} ms"
 msgid_plural "{0,number,####} ms"
@@ -29,8 +27,6 @@ msgstr[3] "{0,number,####} milisekund"
 
 #. seconds
 #. alternates: secs, sec. 'seconds' is probably too long.
-#: ../java/src/net/i2p/data/DataHelper.java:1425
-#: ../java/src/net/i2p/data/DataHelper.java:1476
 #, java-format
 msgid "{0} sec"
 msgid_plural "{0} sec"
@@ -41,8 +37,6 @@ msgstr[3] "{0} sekund"
 
 #. minutes
 #. alternates: mins, min. 'minutes' is probably too long.
-#: ../java/src/net/i2p/data/DataHelper.java:1429
-#: ../java/src/net/i2p/data/DataHelper.java:1478
 #, java-format
 msgid "{0} min"
 msgid_plural "{0} min"
@@ -53,8 +47,6 @@ msgstr[3] "{0} minut"
 
 #. hours
 #. alternates: hrs, hr., hrs.
-#: ../java/src/net/i2p/data/DataHelper.java:1433
-#: ../java/src/net/i2p/data/DataHelper.java:1480
 #, java-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
@@ -64,8 +56,6 @@ msgstr[2] "{0} uri"
 msgstr[3] "{0} ur"
 
 #. days
-#: ../java/src/net/i2p/data/DataHelper.java:1436
-#: ../java/src/net/i2p/data/DataHelper.java:1483
 #, java-format
 msgid "{0} day"
 msgid_plural "{0} days"
@@ -75,8 +65,6 @@ msgstr[2] "{0} dni"
 msgstr[3] "{0} dni"
 
 #. years
-#: ../java/src/net/i2p/data/DataHelper.java:1439
-#: ../java/src/net/i2p/data/DataHelper.java:1486
 #, java-format
 msgid "{0} year"
 msgid_plural "{0} years"
@@ -85,12 +73,9 @@ msgstr[1] "{0} leti"
 msgstr[2] "{0} leta"
 msgstr[3] "{0} let"
 
-#: ../java/src/net/i2p/data/DataHelper.java:1441
-#: ../java/src/net/i2p/data/DataHelper.java:1488
 msgid "n/a"
 msgstr "Ni na voljo"
 
-#: ../java/src/net/i2p/data/DataHelper.java:1470
 #, java-format
 msgid "{0,number,####} ns"
 msgid_plural "{0,number,###} ns"
@@ -99,7 +84,6 @@ msgstr[1] "{0,number,###} nanosekundi"
 msgstr[2] "{0,number,####} nanosekunde"
 msgstr[3] "{0,number,###} nanosekund"
 
-#: ../java/src/net/i2p/data/DataHelper.java:1472
 #, java-format
 msgid "{0,number,####} μs"
 msgid_plural "{0,number,###} μs"
@@ -109,27 +93,21 @@ msgstr[2] "{0,number,###} mikrosekunde"
 msgstr[3] "{0,number,###} mikrosekund"
 
 #. just for tagging
-#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "CRIT"
 msgstr "KRITIČNO"
 
-#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "DEBUG"
 msgstr "RAZHROŠČEVANJE"
 
-#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "ERROR"
 msgstr "NAPAKA"
 
-#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "INFO"
 msgstr "PODATKI"
 
-#: ../java/src/net/i2p/util/LogRecordFormatter.java:107
 msgid "WARN"
 msgstr "OPOZORILO"
 
-#: ../java/src/net/i2p/util/LogWriter.java:166
 #, java-format
 msgid "{0} similar message omitted"
 msgid_plural "{0} similar messages omitted"
