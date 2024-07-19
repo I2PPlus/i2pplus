@@ -48,7 +48,7 @@ while IFS= read -r po_file; do
   eval $msgattrib_cmd
 
   # Remove the specified header lines using sed
-  sed -i '/^"Report-Msgid-Bugs-To:.*$/d; /^"POT-Creation-Date:.*$/d' "$po_file"
+  sed -i '/^"Report-Msgid-Bugs-To:.*$/d; /^"POT-Creation-Date:.*$/d; /^"Project-Id-Version:.*$/d' "$po_file"
 
   # Increment file counter
   num_files=$((num_files + 1))
