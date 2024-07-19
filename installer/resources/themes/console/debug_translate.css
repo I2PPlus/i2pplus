@@ -8,9 +8,8 @@
 #debug #tx_summary button{margin:0;font-size:9pt;position:absolute;top:5px;right:36px;display:inline-block;vertical-align:middle;line-height:1}
 #debug #tx_summary .tx.hidden,#debug #tx_summary .tx.hidden+hr{display:none}
 #debug .tx+hr{margin:5px auto}
-#debug .tx_flag{margin:-1px 8px 0 0;vertical-align:middle;border-radius:2px}
-#debug .tx_header th{padding:12px 10px !important;text-transform:uppercase;letter-spacing:0.08em;font-size:120%}
-#debug .tx_header th:first-child::before{margin-right:8px;width:20px;height:20px;display:inline-block;vertical-align:middle;content:""}
+#debug .tx_header th{padding:9px 10px!important;text-transform:uppercase;letter-spacing:0.08em;font-size:120%}
+#debug .tx_header th:first-child::before{margin-right:8px;width:22px;height:22px;display:inline-block;vertical-align:middle;content:""}
 #debug .tx_header.tx_console th:first-child::before{background-image:url(images/sidebar.svg)}
 #debug .tx_header.tx_dns th:first-child::before{background-image:url(images/addressbook.svg)}
 #debug .tx_header.tx_dtg th:first-child::before{background-image:url(images/webapps.svg)}
@@ -18,21 +17,27 @@
 #debug .tx_header.tx_netdb th:first-child::before{background-image:url(images/globe.svg)}
 #debug .tx_header.tx_news th:first-child::before{background-image:url(images/news.svg)}
 #debug .tx_header.tx_proxy th:first-child::before{background-image:url(images/webserver.svg)}
-#debug .tx_header.tx_snark th:first-child::before{background-image:url(images/snark.svg)}
+#debug .tx_header.tx_snark th:first-child::before{background-image:url(images/snark.svg);background-size:22px}
 #debug .tx_header.tx_router th:first-child::before{background-image:url(images/service.svg)}
 #debug .tx_header.tx_webmail th:first-child::before{background-image:url(images/mail.svg)}
 #debug .tx_header th.tx_location{text-align:right;letter-spacing:0;text-transform:none;font-size:95%;font-weight:600}
 #debug .tx_header th.tx_location:not(:empty)::before{margin-right:5px;width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--folder) no-repeat center center/20px;content:""}
 #debug .tx_notranslate{padding:12px 10px;font-weight:400!important}
+#debug .tx th,#debug .tx td,#debug .tx span{line-height:1.5}
 #debug .tx th,#debug .tx td{text-align:center}
 #debug .tx th:first-child,#debug .tx td:first-child{text-align:left}
 #debug .tx th:not([colspan]){font-size:85%}
+#debug .tx .langflag,#debug .tx .langflag .tx_flag{width:24px;height:18px;line-height:0}
+#debug .tx .langflag{margin:2px 8px 2px 0;border-radius:2px;contain:paint}
+#debug .tx .langflag::before{border-radius:2px}
+#debug .tx .langflag .tx_flag{margin:0;vertical-align:middle;border-radius:2px}
+#debug .tx_flag{box-shadow:none!important}
 #debug #tx_summary h2:first-of-type{margin:15px auto 10px}
 #debug #tx_summary hr:last-of-type{margin:0 0 -12px;opacity:0}
 #debug #tx_summary th:first-child,#debug #tx_summary td:first-child{width:40%}
 #debug #tx_summary th:nth-child(n+2),#debug #tx_summary td:nth-child(n+2){width:15%}
 #debug #tx_summary th:last-child,#debug #tx_summary td:last-child{width:30%}
-#debug #tx_summary .no,#debug .yes{margin:-1px 0 0;width:16px;height:16px;display:inline-block;vertical-align:middle;font-size:0;background:var(--yes) no-repeat center center/16px}
+#debug #tx_summary .no,#debug .yes{margin:0 0 0;width:16px;height:16px;display:inline-block;vertical-align:middle;font-size:0;background:var(--yes) no-repeat center center/16px}
 #debug #tx_summary .no{background:var(--no) no-repeat center center/14px}
 #debug #tx_summary .percentBarInner,#debug .percentBarOuter{margin:0;width:90%;max-width:250px;height:14px;display:inline-block;vertical-align:middle;text-align:left;font-size:0}
 #debug #tx_summary .percentBarInner{box-shadow:var(--highlight),0 4px 4px 2px #fff2 inset;background:linear-gradient(180deg,#fff2,#eee1 50%,#0002),#aa07}

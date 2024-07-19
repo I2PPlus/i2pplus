@@ -237,7 +237,7 @@ public class TranslationStatus {
             String lang = loc.getDisplayLanguage();
             String country = loc.getCountry();
             String cc = getCountryCode(loc);
-            String flag = "<img class=tx_flag src=\"/flags.jsp?c=" + cc + "\" width=24>";
+            String flag = "<span class=langflag><img class=tx_flag src=\"/flags.jsp?c=" + cc + "\" width=24></span>";
             if (country.length() > 0) {
                 s += '_' + country;
                 country = '(' + loc.getDisplayCountry() + ')';
@@ -352,7 +352,7 @@ public class TranslationStatus {
             String lang = loc.getLanguage();
             String country = loc.getCountry();
             String cc = getCountryCode(loc);
-            String flag = "<img class=tx_flag src=\"/flags.jsp?c=" + cc + "\" width=24>";
+            String flag = "<span class=langflag><img class=tx_flag src=\"/flags.jsp?c=" + cc + "\" width=24></span>";
             String dlang = loc.getDisplayLanguage();
             if (country.length() > 0) {
                 lang += '_' + country;
@@ -478,7 +478,7 @@ public class TranslationStatus {
                 String row = "<tr class=incomplete>";
                 if (complete) {row = "<tr class=complete>";}
                 String cc = getCountryCode(loc);
-                String flag = "<img class=tx_flag src=\"/flags.jsp?c=" + cc + "\" width=24>";
+                String flag = "<span class=langflag><img class=tx_flag src=\"/flags.jsp?c=" + cc + "\" width=24></span>";
                 if (_html) {
                     buf.append(row).append("<td>").append(flag).append(dlang).append(country).append("</td><td>")
                        .append(lg).append("</td><td></td><td>").append("<span class=").append(sok).append(">").append(sok).append("</span></td></tr>\n");
