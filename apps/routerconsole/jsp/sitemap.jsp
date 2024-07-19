@@ -15,7 +15,7 @@
 %>
 <html lang="<%=lang%>">
 <head>
-<title><%=pageTitlePrefix%>Sitemap - I2P+</title>
+<title><%=pageTitlePrefix%> Sitemap - I2P+</title>
 <%@include file="css.jsi" %>
 <%@include file="summaryajax.jsi" %>
 </head>

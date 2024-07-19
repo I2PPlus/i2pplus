@@ -1,3 +1,7 @@
+2024-07-19 dr|z3d
+ * Console: Ensure /help section and /sitemap also display
+   routerconsole.pageTitlePrefix when configured
+
 2024-07-16 dr|z3d
  * Console: Add js toggle to translation report to permit toggling of
    completed translations
