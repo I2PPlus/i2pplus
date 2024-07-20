@@ -70,7 +70,7 @@
 
 2024-06-20 zzz
  * SusiMail: Update size limits to match current postman limits
- *I2PTunnel: Reduce severity of access filter errors (Gitlab #483)
+ * I2PTunnel: Reduce severity of access filter errors (Gitlab #483)
 
 2024-06-19 dr|z3d
  * SusiDNS: SVG identicons with fallback to original bitmaps when no js

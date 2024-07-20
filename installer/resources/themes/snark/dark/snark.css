@@ -114,12 +114,12 @@ select{margin:2px 4px 2px 0;padding:7px 24px 7px 12px;min-width:120px;font-size:
 #snarkSearch input[type="submit"]{width:28px;min-width:0;color:#0000;text-shadow:none;background:var(--search) no-repeat center right/24px;opacity:.4}
 #snarkSearch input[type="submit"]:hover{background-size:26px}
 #snarkSearch input[type="submit"]:active{background-size:22px;filter:none}
-#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus,#snarkSearch input[type=search][value]{padding:6px 22px 6px 6px;border-bottom:1px solid #131;opacity:1;transform:translateY(-10px);-webkit-appearance:none}
+#snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus,#snarkSearch input[type=search][value]{padding:6px 22px 6px 6px;border-bottom:1px solid #131;opacity:1;transform:translateY(-2px);-webkit-appearance:none}
 #snarkSearch:hover input[type="submit"],#snarkSearch:focus-within input[type="submit"]{opacity:.8}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch input[type=search][value]+a[href="/i2psnark"]{opacity:.5}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover{opacity:1}
 #searchwrap{position:relative}
-#searchwrap a[href="/i2psnark"]{height:12px;width:12px;display:inline-block;position:absolute;top:calc(50% - 14px);right:4px;font-size:0;background:url(images/delete.svg) no-repeat center center/12px;border:0;box-shadow:none;opacity:0;filter:none}
+#searchwrap a[href="/i2psnark"]{height:12px;width:12px;display:inline-block;position:absolute;top:calc(50% - 6px);right:4px;font-size:0;background:url(images/delete.svg) no-repeat center center/12px;border:0;box-shadow:none;opacity:0;filter:none}
 
 /* toast notifications */
 #toast{left:0;right:0;box-shadow:var(--bevel_notify);background:var(--notify)}
@@ -716,7 +716,7 @@ input.trackerhome,input.trackerannounce{width:210px}
 #torrentDisplay{margin:-1px 0 -1px;padding:0;display:block;position:sticky;top:44px;z-index:500;border:var(--border);border-left:0;border-right:0;box-shadow:var(--highlight);background:linear-gradient(180deg,#0000 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 1px,rgba(0,16,0,.5) 2px,rgba(0,16,0,.5) 3px),linear-gradient(180deg,#004000,#000 75%);background-size:100%,4px 100%,100%;contain:paint}
 .iframed #torrentDisplay{margin:-1px 0;position:static}
 #torrentDisplay .filter{padding:2px 10px;min-width:80px;box-sizing:border-box;display:inline-block;font-weight:700;font-size:9pt;color:#494;text-shadow:0 1px 1px #000;border-right:var(--border);box-shadow:var(--highlight);background:var(--btnAction)}
-#torrentDisplay .filter#all{border-left:var(--border)}
+#torrentDisplay .filter#all,#torrentDisplay .filter#search{border-left:var(--border)}
 #torrentDisplay .filter:hover{color:#d50;background:radial-gradient(at center bottom,rgba(255,96,0,.2),#0000 80%),var(--btnAction_hover)}
 #torrentDisplay .filter:active,#torrentDisplay .filter.enabled{color:#b40;text-shadow:none;box-shadow:var(--highlight),inset 2px 2px 2px rgba(0,0,0,.7);background:radial-gradient(at center bottom,rgba(255,96,0,.2),#0000 40%),linear-gradient(180deg,#100800,#200800)}
 #torrentDisplay .filter.enabled{color:#3b3;text-shadow:0 0 1px #000,0 1px 2px #010;background:radial-gradient(at center bottom,rgba(16,72,16,.3),#0000 50%),linear-gradient(180deg,#000a00,#020);pointer-events:none}
@@ -878,6 +878,10 @@ td#bwHelp a{margin-left:2px}
 #torrents #actionStopAll,#torrents #actionStartAll{margin-top:0;padding:10px 16px}
 #torrentDisplay .filter{font-size:8.5pt}
 #trackerselect a{max-width:300px}
+#snarkSearch{margin-top:-4px}
+#snarkSearch input[type=search],#snarkSearch:hover input[type=search]#snarkSearch input[type=search],#snarkSearch input[type=search]:focus{padding:2px 20px 2px 2px;max-width:180px;transform:translateY(0)}
+#snarkSearch input[type="submit"],#snarkSearch:hover input[type="submit"]{translate:transformY(3px)}
+#searchwrap a[href="/i2psnark"]{top:calc(50% - 7px)}
 }
 
 @media (max-width:1100px){
