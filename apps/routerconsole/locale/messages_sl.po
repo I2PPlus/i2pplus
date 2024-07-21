@@ -1958,7 +1958,7 @@ msgid "Show list of all known I2P routers"
 msgstr "Prikaži seznam vseh znanih usmerjevalnikov I2P"
 
 msgid "Router Info"
-msgstr "Informacije o usmerjevalniku"
+msgstr "Info o usmerj."
 
 msgid "Summary of router properties"
 msgstr "Pregled lastnosti usmerjevalnika"

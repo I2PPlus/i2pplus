@@ -528,6 +528,7 @@ public class TranslationStatus {
         else if (langCode.equals("et")) {countryCode = "ee";}
         else if (langCode.equals("el")) {countryCode = "gr";}
         else if (langCode.equals("hi")) {countryCode = "in";}
+        else if (langCode.equals("in")) {countryCode = "id";}
         else if (langCode.equals("fa")) {countryCode = "ir";}
         else if (langCode.equals("iw")) {countryCode = "il";}
         else if (langCode.equals("ja")) {countryCode = "jp";}
@@ -535,6 +536,7 @@ public class TranslationStatus {
         else if (langCode.equals("nb")) {countryCode = "no";}
         else if (langCode.equals("nn")) {countryCode = "no";}
         else if (langCode.equals("sq")) {countryCode = "al";}
+        else if (langCode.equals("sq")) {countryCode = "sk";}
         else if (langCode.equals("sv")) {countryCode = "se";}
         else if (langCode.equals("uk")) {countryCode = "ua";}
         else if (langCode.equals("zh")) {countryCode = "cn";}

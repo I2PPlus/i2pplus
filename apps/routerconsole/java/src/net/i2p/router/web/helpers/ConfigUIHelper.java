@@ -142,7 +142,7 @@ public class ConfigUIHelper extends HelperBase {
         { "pt", "pt", "Português", null },
         { "ro", "ro", "Română", null },
         { "ru", "ru", "Russian Русский", null },
-        { "sk", "sk", "Slovenčina", null },
+        { "sl", "sk", "Slovenčina", null },
         { "sv", "se", "Svenska", null },
         { "tr", "tr", "Türkçe", null },
         { "uk", "ua", "Ukraine Українська", null },
