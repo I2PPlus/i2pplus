@@ -51,6 +51,7 @@ public class ConfigUIHelper {
         { "pt", "pt", "Português", null },
         { "ro", "ro", "Română", null },
         { "ru", "ru", "Russian Русский", null },
+        { "sk", "sk", "Slovenčina", null },
         { "sv", "se", "Svenska", null },
         { "tr", "tr", "Türkçe", null },
         { "uk", "ua", "Ukrainian Українська", null },
@@ -60,7 +61,6 @@ public class ConfigUIHelper {
         //{ "gl", "lang_gl", "Galego", null },
         //{ "mg", "mg", "Malagasy", null },
         //{ "pt_BR", "br", "Português", "Brazil" },
-        //{ "sk", "sk", "Slovenčina", null },
         //{ "zh_TW", "tw", "Chinese 中文", "Taiwan" },
     };
 

@@ -142,6 +142,7 @@ public class ConfigUIHelper extends HelperBase {
         { "pt", "pt", "Português", null },
         { "ro", "ro", "Română", null },
         { "ru", "ru", "Russian Русский", null },
+        { "sk", "sk", "Slovenčina", null },
         { "sv", "se", "Svenska", null },
         { "tr", "tr", "Türkçe", null },
         { "uk", "ua", "Ukraine Українська", null },
@@ -153,7 +154,6 @@ public class ConfigUIHelper extends HelperBase {
         //{ "ku", "ku", "Kurdî", null },
         //{ "mg", "mg", "Malagasy", null },
         //{ "pt_BR", "br", "Português", "Brazil" },
-        //{ "sk", "sk", "Slovenčina", null },
         //{ "tk", "tm", "Türkmen", null },
         //{ "zh_TW", "tw", "Chinese 中文", "Taiwan" },
     };

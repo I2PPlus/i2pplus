@@ -55,7 +55,7 @@ public class TranslationStatus {
     // Java lang codes, see notes below
     private static final String[] LANGS = { "ar", "az", "cs", "da", "de", "el", "es", "et", "fa", "fi", "fr",
                                             "hu", "in", "it", "ja", "ko", "nb", "nl", "pl", "pt", "ro", "ru",
-                                            "sv", "tr", "uk", "vi", "zh" };
+                                            "sl", "sv", "tr", "uk", "vi", "zh" };
 /**
     private static final String[] LANGS = { "ar", "az", "bg", "ca", "cs", "da", "de", "el", "es", "es_AR",
                                             "et", "fa", "fi", "fr", "gl", "hi", "hr", "hu", "in", "it", "iw",
