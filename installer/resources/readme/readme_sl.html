@@ -1,0 +1,71 @@
+<div lang="sl">
+
+<ul class="links">
+
+<li><b>Zagon</b><br>
+Če ste pravkar zagnali I2P+, se število <i>Aktivnih sosedov</i>, prikazano pod sekcijo <i>Sosedov</i> na strani, naj bi v naslednjih minutah začelo rasti, in tudi videli <i>Lokalni cilj</i> z imenom <i>Deljeni klienti</i> v sekciji <i>Storitveni tuneli</i>. Mogoče boste videli tudi druge kliente in strežnike, odvisno od nastavitev I2P. Ti <i>Lokalni cilji</i> zagotavljajo povezave do storitev na različnih <a class="consolelink" title="Seznam pogosto uporabljanih vrat" href="/help/faq#portfaq">vrat</a> I2P omrežja, omogočajo pa BitTorrent, elektronsko pošto, spletni proxy in druge storitve. Vaš <a class="consolelink" href="/netdb">Bazo omrežja</a> prikazuje vse lokalno znane sosedove v omrežju. Tudi lahko nadzorujete obstoječe <a class="consolelink" href="/peers">povezave sosedov</a>, pregledate <a class="consolelink" href="/profiles?f=1">profil izvedbe sosedov</a>, in ogledate aktivne <a class="consolelink" href="/tunnels">tunele</a> in njihovo stanje.</li>
+
+<li><b>Nasprotna spletovanje omrežja</b><br>
+Prvič, ko zagnate I2P+, lahko potrebuje nekaj minut, da se bodo podatki omrežja začeli ujemati (integrirati) in najdemo dodatne sosedove za optimizacijo vaše integracije, zato prosimo za trpljenje. Ko bodo pod <i>Storitveni tuneli</i> na strani prikazane zelene zvezdice ob vaših <i>Lokalnih ciljih</i>, je mogoče storiti različne stvari z I2P, in spodaj vas bomo posodobili o nekaterih od njih.</li>
+
+<li><b>Stanje omrežja</b><br>
+Ko I2P+ ima čas, da preizkusi vaše omrežno povezanost, idealno bi indikator Stanja omrežja na strani pokazal "V redu". Če status indikira "Zaščiteno z firewallom", bo I2P+ še vedno deloval, omrežna zmogljivost pa ne bo optimalna, in vaša zmogljivost prispevka širinevja omrežja bo ovirana. Za optimalno zmogljivost, prosimo, da razmotrite otroke vašega <a class="consolelink" href="/confignet#udpconfig">zunanje vrata I2P+</a> na firewallu in maršrutirniku, ki ga ponuja vaš ISP. Več informacij o sporočilih o stanju je na voljo na <a class="consolelink" href="/help/ui#reachabilityhelp">Pomoč strani uporabniškega vmesnika</a>.</li>
+
+<li><b>Subskricije v imeniku</b><br>
+Da bi lahko I2P+ samodejno razrešil imena gostiteljev .i2p, se osredotoča predvsem na subskricije storitev, ki zagotavljajo prevajanje DNS za znane gostitelje. Če ste namestili I2P+ namesto nadgradnje iz I2P, boste že imeli dovolj <a class="consolelink" href="/susidns/subscriptions">subskricij v imeniku</a> nastavljene; po namestitvi bi se v vaš <a class="consolelink" href="/dns">imenik</a> treba samodejno zapolnili imena gostiteljev za dejanske storitve v omrežju brez vmešavanja. Če ste nadgradili iz I2P, preverite <a class="consolelink" href="/help/faq#addressbooksubs">sekcijo o subskricijah v imeniku</a> v <a class="consolelink" href="/help/faq">FAQ</a> za pomoč pri dodajanju dodatnih subskricij.
+</li>
+
+<li><b>Nastavitev brskalnika</b><br>
+Da bi obiskali spletna mesta v omrežju, boste morali nastaviti svoj brskalnik, da uporablja privzeto HTTP proxy nastavljeno na vratah 4444, ki prav tako zagotavlja <i>outproxy</i>, ki dovoli anonimno brskanje po spletnih mestih clearnet. Na strani za Nastavitev je na voljo <a class="consolelink" href="/help/configuration#browserconfig">mini-ukaznik za nastavitev Firefox</a>, ali pa se obrnite na sekcijo spodaj za povezavo do ukaznika za nastavitev večjega brskalnika. Ko boste konfigurirali svoj brskalnik in subskricije v imeniku, <a href="http://notbob.i2p/" target="_blank" rel="noopener noreferrer">notbob.i2p</a> je odlično mesto za odkrivanje vsebine v omrežju.
+</li>
+
+</ul>
+
+<h3>Storitve na I2P</h3>
+
+<ul class="links twocol">
+
+<li><b>Nevidna interneta &amp; anonimnega brskanja po javnem spletu</b><br>
+Na I2P lahko dostopate do spletnih strani gostiteljenih na I2P ("eepsite") ali anonimno brskate po normalnem spletu prek vgrajenega web proxyja (outproxy) I2P. <a rel="noopener noreferrer" class="sitelink external" href="https://geti2p.net/en/about/browser-config" target="_blank">Nastavite svoj brskalnik</a>, da uporabi HTTP proxy na <code>127.0.0.1 vrata 4444</code>, nato pa obiskate skrito storitev spletno mesto ali normalno, nešifrirano <code>http://</code> naslov. Da onemogočite ali spremenite dostop outproxy do normalnega interneta, odstranite ali spremenite vnos outproxy za <code>false.i2p</code> ali <code>purokishi.i2p</code> pod <i>Outproxies</i> sekcijo na <a class="consolelink" rel="noreferrer" href="/i2ptunnel/edit?tunnel=0">strani za urejanje</a> HTTP Proxy klienta tunela v <a class="consolelink" href="/i2ptunnelmgr">Upravitelju tunelov</a>.</li>
+
+<li><b>Neodvisna elektronska pošta</b><br>
+Poštna sistema I2P, Postman, se lahko dostopa prek <a class="consolelink" href="/webmail">vgrajenega klienta pošte I2P</a> (Susimail) ali kakršnokoli standardnega klienta pošte. Poštna vrata omogoča prejem pošte iz normalnih internetskih naslovov; vaš naslov <code>@mail.i2p</code> je tudi dosegljiv prek <code>@i2pmail.org</code>. Za račun, obiščite <a rel="noopener noreferrer" class="sitelink" href="http://hq.postman.i2p/" target="_blank">hq.postman.i2p</a>.</li>
+
+<li><b>Neodvisno prenos datotek</b><br>
+<a class="consolelink" href="/torrents">I2PSnark</a> je vključen v I2P, zagotavlja pa anonimne, šifrirane prenose BitTorrent. Namesto tega je tudi <a rel="noopener noreferrer" class="sitelink external" href="https://wiki.biglybt.com/w/I2P" target="_blank">BiglyBT</a> (naslednik Azureus/Vuze), BitTorrent klient, ki podpira torrentanje preko I2P, in <a rel="noopener noreferrer" class="sitelink external" href="https://github.com/majestrate/XD" target="_blank">XD</a>, BitTorrent klient, ki deluje le na I2P, napisan v go. Dodatne storitve vključujejo brskalnik, ki je na voljo za gostiteljenje datotek, kot je <a rel="noopener noreferrer" class="sitelink" href="http://cake.i2p/" target="_blank">cake.i2p</a> in <a rel="noopener noreferrer" class="sitelink" href="http://fs.i2p/" target="_blank">fs.i2p</a>.</li>
+
+<li><b>Neodvisno klepetanje</b><br>
+Zaženite svoj IRC klient (npr. <a rel="noopener noreferrer" class="sitelink external" href="https://hexchat.github.io/" target="_blank">HexChat</a>) in povežite se z <a class="chatlink">strežnikom</a> na <code>127.0.0.1 vrata 6668</code>. V vašem IRC klientu ne potrebujete nastaviti proxyja; I2P vam zagotavlja lokalni IRC tunel (nastavljen v vašem IRC klientu kot IRC strežnik ali oddaljena gostitelja). Ko ste tam, <code>#saltr</code>, in <code>#i2p-dev</code> sta le dve od kanalov, ki jih morda želite pridružiti. Obstaja tudi vseplatformna aplikacija za klepet na podlagi I2P, na voljo na <a rel="noopener noreferrer" class="sitelink external" href="https://vituperative.github.io/i2pchat/" target="_blank">Github</a>.</li>
+
+<li><b>Neodvisno šifrirano gostiteljenje spletne strani</b><br>
+I2P pride z strežnikom za gostiteljenje svojega spletnega mesta v omrežju I2P: <a rel="noopener noreferrer" class="sitelink external" href="https://www.eclipse.org/jetty/" target="_blank">Jetty</a> primer, ki posluša na <a rel="noopener noreferrer" class="consolelink" href="http://127.0.0.1:7658/" target="_blank">http://127.0.0.1:7658/</a>. Po zagonu preoblikovanega <a rel="noreferrer" class="consolelink" href="/i2ptunnelmgr">I2P Webserver Tunel</a>, bo vaša stran vidna (vendar ne odkrita) drugim. Ukazki za nastavitev vaše strani in registracijo domene .i2p so na voljo v <a class="consolelink" href="http://127.0.0.1:7658/help/webhosting" target="_blank" rel="noopener noreferrer">sekciji za pomoč</a>.</li>
+
+<li><b>Vstavke za I2P</b><br>
+Obiščite <a rel="noopener noreferrer" class="sitelink" href="http://stats.i2p/i2p/plugins/" target="_blank">stran z vstavkami zzz</a> za neposredne povezave za prenos več vstavek. Če ste razvijalec, je na voljo jezikovno neodvisen <a rel="noopener noreferrer" class="sitelink" href="http://i2p-projekt.i2p/plugins.html" target="_blank">okvir</a> za pisanje svojih vstavek.
+</li>
+
+</ul>
+
+<h3 id="trouble">Informacije za razvijalce &amp; prispevke</h3>
+
+<ul class="links">
+
+<li><b>Poročanje o napakah</b><br>
+Da poročate o napaki, prosimo, da vnesete vnos na <a rel="noopener noreferrer" class="sitelink" href="http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" target="_blank">git.idk.i2p</a>. Za razprave, povezane z razvijalci, prosimo, da obiščete <a rel="noopener noreferrer" class="sitelink" href="http://zzz.i2p/" target="_blank">razvojne fora zzz</a> ali <a class="chatlink">kanal za razvojce</a> (#i2p-dev) na IRC omrežju I2P.</li>
+
+<li><b>Razvijanje na I2P</b><br>
+Če ste razvijalec, morda razmislite o pisanju svojih <a rel="noopener noreferrer" class="sitelink" href="http://i2p-projekt.i2p/applications.html" target="_blank">aplikacij I2P</a> ali izboljšate varnost svoje aplikacije z izkoriščanjem omrežja I2P. Dostopna sta <a rel="noopener noreferrer" class="sitelink external" href="https://wikipedia.org/wiki/User_Datagram_Protocol" target="_blank">UDP</a> in <a rel="noopener noreferrer" class="sitelink external" href="https://wikipedia.org/wiki/Transmission_Control_Protocol" target="_blank">TCP</a> protokoli <a rel="noopener noreferrer" class="sitelink" href="http://i2p-projekt.i2p/techintro.html#op.transport" target="_blank">predlagana</a>, in <a rel="noopener noreferrer" class="sitelink" href="http://i2p-projekt.i2p/streaming.html" target="_blank">resnično streaming</a> je tudi mogoče. Prav tako ponujamo celoten dostop do <a rel="noopener noreferrer" class="sitelink" href="http://javadoc.skank.i2p/" target="_blank">Java API</a>, in ključne knjižnice I2P so gostiteljene na <a rel="noopener noreferrer" class="sitelink external" href="https://mvnrepository.com/artifact/net.i2p" target="_blank">repozitoriju Apache Maven</a>. Razvijalci lahko brskajo v viri na <a rel="noopener noreferrer" class="sitelink external" href="https://github.com/i2p/i2p.i2p" target="_blank">Github</a> (I2P) ali <a rel="noopener noreferrer" class="sitelink external" href="https://gitlab.com/i2pplus/I2P.Plus" target="_blank">Gitlab</a> (I2P+), in nadzorujte trenutni status gradnje prek <a rel="noopener noreferrer" class="sitelink external" href="https://travis-ci.org/i2p/i2p.i2p" target="_blank">Travis</a> platforma za neprestano integracijo (I2P) ali pa preko <a rel="noopener noreferrer" class="sitelink external" href="https://gitlab.com/i2pplus/I2P.Plus/pipelines" target="_blank">Gitlab</a> (I2P+). <a rel="noopener noreferrer" class="sitelink external" href="https://wikipedia.org/wiki/Java_SDK" target="_blank">Java SDK</a> in <a rel="noopener noreferrer" class="sitelink external" href="http://ant.apache.org/" target="_blank">Apache Ant</a> sta potrebna za gradnjo iz vira.</li>
+
+</ul>
+
+<ul class="links twocol">
+
+<li><b>Udeležite se!</b><br>
+I2P se razvija in vzdržuje predvsem skozi nesfinancirano, prostovoljno udeležbo članov skupnosti. Več informacij o tem, kako lahko sodelujete, je na voljo na <a rel="noopener noreferrer" class="sitelink" href="http://i2p-projekt.i2p/getinvolved.html" target="_blank">strani prostovoljcev</a> na službeni spletni strani.</li>
+
+<li><b>I2P+</b><br>
+Za več informacij o I2P+, prosimo, da obiščete <a rel="noopener noreferrer" class="sitelink" href="http://skank.i2p/" target="_blank">skank.i2p</a> ali <a rel="noopener noreferrer" class="sitelink external" href="https://i2pplus.github.io/" target="_blank">i2pplus.github.io</a>, ali se pridružite kanalu <a class="chatlink">#saltR</a> na IRC omrežju I2P. Vstopi za I2P+ so dobrodošli; prosimo, da predložite zahteve za vstop prek <a rel="noopener noreferrer" class="sitelink external" href="https://gitlab.com/i2pplus/I2P.Plus/" target="_blank">Gitlab</a>.</li>
+
+</ul>
+
+</div>
