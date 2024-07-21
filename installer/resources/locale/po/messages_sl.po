@@ -1,0 +1,146 @@
+# I2P
+# Copyright (C) 2012 The I2P Project
+#
+msgid ""
+msgstr ""
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n%100<=4 ? 2 : 3);\n"
+
+msgid "Failed to load the wrapper"
+msgstr "Nalaganje obloge ni uspelo"
+
+#, sh-format
+msgid "$APP_LONG_NAME is already running."
+msgstr "$APP_LONG_NAME že deluje."
+
+#, sh-format
+msgid "Running $APP_LONG_NAME"
+msgstr "Deluje $APP_LONG_NAME"
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME"
+msgstr "Počakaj na $APP_LONG_NAME"
+
+#, sh-format
+msgid "WARNING: $APP_LONG_NAME may have failed to start."
+msgstr "OPAZNO: $APP_LONG_NAME morda ni uspel zagnati."
+
+msgid "Must be root to perform this action."
+msgstr "Za izvedbo te dejanje mora biti uporabnik root."
+
+#, sh-format
+msgid "Starting $APP_LONG_NAME"
+msgstr "Zagon $APP_LONG_NAME"
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME"
+msgstr "Ustavljanje $APP_LONG_NAME"
+
+#, sh-format
+msgid "$APP_LONG_NAME was not running."
+msgstr "$APP_LONG_NAME ni deloval."
+
+#, sh-format
+msgid "Unable to stop $APP_LONG_NAME."
+msgstr "Ustavljanje $APP_LONG_NAME ni mogoče."
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME to exit"
+msgstr "Počakaj, da se $APP_LONG_NAME izključi"
+
+#, sh-format
+msgid "Failed to stop $APP_LONG_NAME."
+msgstr "Ustavljanje $APP_LONG_NAME ni uspelo."
+
+#, sh-format
+msgid "Stopped $APP_LONG_NAME."
+msgstr "Ustavljeno $APP_LONG_NAME."
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME gracefully"
+msgstr "Ustavljanje $APP_LONG_NAME v civiliziran način"
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME ne deluje."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME deluje: PID:$pid"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+msgstr "$APP_LONG_NAME deluje: PID:$pid, Obložen:$STATUS, Java:$JAVASTATUS"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is already installed."
+msgstr "Demone $APP_LONG_NAME je že nameščen."
+
+#, sh-format
+msgid "Installing the $APP_LONG_NAME daemon"
+msgstr "Nameščanje demona $APP_LONG_NAME"
+
+#, sh-format
+msgid "Install not currently supported for $DIST_OS"
+msgstr "Nameščanje trenutno ni podprto za $DIST_OS"
+
+#, sh-format
+msgid "Removing $APP_LONG_NAME daemon"
+msgstr "Odstranitev demona $APP_LONG_NAME"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is not currently installed."
+msgstr "Demone $APP_LONG_NAME trenutno ni nameščen."
+
+#, sh-format
+msgid "Remove not currently supported for $DIST_OS"
+msgstr "Odstranitev trenutno ni podprta za $DIST_OS"
+
+msgid "Commands:"
+msgstr "Ukazi:"
+
+msgid "Launch in the current console."
+msgstr "Zagon v trenutni konzoli."
+
+msgid "Start in the background as a daemon process."
+msgstr "Zaženi v ozadju kot demon proces."
+
+msgid "Stop if running as a daemon or in another console."
+msgstr "Ustavi, če deluje kot demon ali v drugi konzoli."
+
+msgid "Stop gracefully, may take up to 11 minutes or more."
+msgstr "Ustavi v civiliziran način, morda potrebuje do 11 minut ali več."
+
+msgid "Restart gracefully, may take up to 11 minutes or more."
+msgstr "Znova zaženi v civiliziran način, morda potrebuje do 11 minut ali več."
+
+msgid "Stop if running and then start."
+msgstr "Ustavi, če deluje, nato zaženi."
+
+msgid "Restart only if already running."
+msgstr "Znova zaženi le, če je že deluje."
+
+msgid "Query the current status."
+msgstr "Oprošaj o trenutnem stanju."
+
+msgid "Install to start automatically when system boots."
+msgstr "Nameščanje za samodejni zagon ob zagonu sistema."
+
+msgid "Uninstall."
+msgstr "Odnameščanje."
+
+msgid "Request a Java thread dump if running."
+msgstr "Zahtevaj Java ničelne kopije vlakna, če deluje."
+
+msgid "Please edit i2prouter and set the variable RUN_AS_USER"
+msgstr "Prosimo, da uredite i2prouter in nastavite spremenljivko RUN_AS_USER"
+
+msgid "Running I2P as the root user is not recommended."
+msgstr "Delovanje I2P kot root uporabnik ni priporočljivo."
+
+msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
+msgstr "Če želite delati kot root, uredite i2prouter in nastavite ALLOW_ROOT=true."
+
