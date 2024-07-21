@@ -13,22 +13,6 @@ msgid "internal"
 msgstr "notranji"
 
 #, java-format
-msgid "{0} inbound tunnel"
-msgid_plural "{0} notranjih tuneljev"
-msgstr[0] "{0} notranji tunelj"
-msgstr[1] "{0} notranji tunelja"
-msgstr[2] "{0} notranji tunelje"
-msgstr[3] "{0} notranjih tuneljev"
-
-#, java-format
-msgid "{0} outbound tunnel"
-msgid_plural "{0} izhodnih tuneljev"
-msgstr[0] "{0} izhodni tunelj"
-msgstr[1] "{0} izhodni tunelja"
-msgstr[2] "{0} izhodni tunelje"
-msgstr[3] "{0} izhodnih tuneljev"
-
-#, java-format
 msgid "{0} inbound, {0} outbound tunnel"
 msgid_plural "{0} inbound, {0} outbound tunnels"
 msgstr[0] "{0} notranji, {0} izhodni tunelj"
@@ -229,6 +213,21 @@ msgstr "SSL Outproxy-ji"
 msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
 msgstr "Tukaj določite .i2p naslov ali destinacijo (b32 ali b64) outproxy-ja."
 
+msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
+msgstr ""
+
+msgid "Outproxy Type"
+msgstr ""
+
+msgid "Tunnel Destination"
+msgstr ""
+
+msgid "Use SSL"
+msgstr ""
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgstr ""
+
 msgid "name, name:port, or destination"
 msgstr "ime, ime:vrata, ali destinacija"
 
@@ -355,14 +354,6 @@ msgstr "2 skoka tunelj (srednja anonimnost)"
 msgid "3 hop tunnel (high anonymity)"
 msgstr "3 skoka tunelj (visoka anonimnost)"
 
-#, java-format
-msgid "{0} hop tunnel"
-msgid_plural "{0} skokov tunelj"
-msgstr[0] "{0} skok tunelj"
-msgstr[1] "{0} skoka tunelja"
-msgstr[2] "{0} skoka tunelje"
-msgstr[3] "{0} skokov tuneljev"
-
 msgid "Number of Tunnels in Group"
 msgstr "Število tuneljev v skupini"
 
@@ -410,14 +401,6 @@ msgstr "skok razlika"
 
 msgid "Number of Reserve Tunnels"
 msgstr "Število rezervnih tuneljev"
-
-#, java-format
-msgid "{0} backup tunnel"
-msgid_plural "{0} rezervnih tuneljev"
-msgstr[0] "{0} rezervni tunelj"
-msgstr[1] "{0} rezervnih tuneljev"
-msgstr[2] "{0} rezervnih tuneljev"
-msgstr[3] "{0} rezervnih tuneljev"
 
 msgid "no redundancy, no added resource usage"
 msgstr "brez presežka, brez dodatnega uporabe vir"
