@@ -1,0 +1,1510 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+#
+msgid ""
+msgstr ""
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n%100<=4 ? 2 : 3);\n"
+
+msgid "No more torrents running."
+msgstr "Več torrentov ni v teku."
+
+msgid "I2P tunnel closed."
+msgstr "I2P tunel je zaprt."
+
+msgid "Magnet"
+msgstr "Magnet"
+
+msgid "Unable to connect to I2P"
+msgstr "Povezava z I2P ni mogoča"
+
+msgid "Error connecting to I2P - check your I2CP settings!"
+msgstr "Napaka pri povezovanju z I2P - preverite nastavitve I2CP!"
+
+msgid "Configuring I2PSnark with I2CP options"
+msgstr "Nastavitev I2PSnark z možnostmi I2CP"
+
+msgid "No write permissions for data directory"
+msgstr "Nimate pisnih dovoljenj za podatkovno mapo"
+
+msgid "Data directory cannot be created"
+msgstr "Podatkovne mape ni mogoče ustvariti"
+
+#, java-format
+msgid "Total uploaders limit changed to {0}"
+msgstr "Omejitev celotnih pošiljateljev spremenjena na {0}"
+
+#, java-format
+msgid "Minimum total uploaders limit is {0}"
+msgstr "Minimalna omejitev celotnih pošiljateljev je {0}"
+
+#, java-format
+msgid "Up BW limit changed to {0}KBps"
+msgstr "Omejitev zgornjega BW spremenjena na {0}KBps"
+
+#, java-format
+msgid "Minimum up bandwidth limit is {0}KBps"
+msgstr "Minimalna omejitev zgornjega prenosnega širinevja je {0}KBps"
+
+#, java-format
+msgid "Startup delay changed to {0}"
+msgstr "Zamik pri zagonu spremenjen na {0}"
+
+#, java-format
+msgid "Refresh time changed to {0}"
+msgstr "Čas osveževanja spremenjen na {0}"
+
+msgid "Refresh disabled"
+msgstr "Osveževanje onemogočeno"
+
+#, java-format
+msgid "Page size changed to {0}"
+msgstr "Velikost strani spremenjena na {0}"
+
+msgid "New files will be publicly readable"
+msgstr "Novi datoteki bodo javno prebrani"
+
+msgid "New files will not be publicly readable"
+msgstr "Novi datoteki ne bodo javno prebrani"
+
+msgid "Stop all torrents before changing data directory"
+msgstr "Prekličite vse torrente pred spremembo podatkovne mape"
+
+msgid "Data directory must be an absolute path"
+msgstr "Podatkovna mapa mora biti absolutni pot"
+
+msgid "Data directory does not exist"
+msgstr "Podatkovne mape ne obstaja"
+
+msgid "Not a directory"
+msgstr "Ni mapa"
+
+msgid "Unreadable"
+msgstr "Nečitljivo"
+
+#, java-format
+msgid "Data directory changed to {0}"
+msgstr "Podatkovna mapa spremenjena na {0}"
+
+msgid "I2CP and tunnel changes will take effect after stopping all torrents"
+msgstr "Spremembe I2CP in tunela se bodo izvedle po preklicu vseh torrentov"
+
+#, java-format
+msgid "I2CP options changed to {0}"
+msgstr "Možnosti I2CP spremenjene na {0}"
+
+msgid "Disconnecting old I2CP destination"
+msgstr "Razpoznavanje prejšnjega cilja I2CP"
+
+#, java-format
+msgid "I2CP settings changed to {0}"
+msgstr "Nastavitve I2CP spremenjene na {0}"
+
+msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
+msgstr "Povezava z novimi nastavitvami ni mogoča, vrnevanje na stare nastavitve I2CP"
+
+msgid "Unable to reconnect with the old settings!"
+msgstr "Ponovna povezava z starimi nastavitvami ni mogoča!"
+
+msgid "Reconnected on the new I2CP destination"
+msgstr "Ponovno povezan na novo destinacijo I2CP"
+
+#, java-format
+msgid "I2CP listener restarted for \"{0}\""
+msgstr "Poslušalnik I2CP ponovno zagnan za \"{0}\""
+
+msgid "Enabled autostart"
+msgstr "Samodejni zagon omogočen"
+
+msgid "Disabled autostart"
+msgstr "Samodejni zagon onemogočen"
+
+msgid "Enabled smart sort"
+msgstr "Pametno urejanje omogočeno"
+
+msgid "Disabled smart sort"
+msgstr "Pametno urejanje onemogočeno"
+
+msgid "Enabled open trackers - torrent restart required to take effect."
+msgstr "Odpri trackerji omogočeni - za uveljavitev je potrebno ponovno zagon torrenta."
+
+msgid "Disabled open trackers - torrent restart required to take effect."
+msgstr "Odpri trackerji onemogočeni - za uveljavitev je potrebno ponovno zagon torrenta."
+
+msgid "Enabled DHT."
+msgstr "DHT omogočen."
+
+msgid "Disabled DHT."
+msgstr "DHT onemogočen."
+
+msgid "DHT change requires tunnel shutdown and reopen"
+msgstr "Sprememba DHT zahteva prekinitev in ponovno odprtje tunela"
+
+msgid "Enabled Ratings."
+msgstr "Oceni omogočene."
+
+msgid "Disabled Ratings."
+msgstr "Oceni onemogočene."
+
+msgid "Enabled Comments."
+msgstr "Komentarji omogočeni."
+
+msgid "Disabled Comments."
+msgstr "Komentarji onemogočeni."
+
+#, java-format
+msgid "Comments name set to {0}."
+msgstr "Ime komentarjev nastavljeno na {0}."
+
+msgid "Collapsible panels enabled."
+msgstr "Stisnevi paneli omogočeni."
+
+msgid "Collapsible panels disabled."
+msgstr "Stisnevi paneli onemogočeni."
+
+msgid "Torrent filter bar enabled."
+msgstr "Vrsta filtriranja torrentov omogočena."
+
+msgid "Torrent filter bar disabled."
+msgstr "Vrsta filtriranja torrentov onemogočena."
+
+msgid "Lightbox enabled for image thumbnails."
+msgstr "Lightbox omogočen za miniaturke slik."
+
+msgid "Lightbox disabled for image thumbnails."
+msgstr "Lightbox onemogočen za miniaturke slik."
+
+msgid "Add and Create sections enabled on all torrent listing pages."
+msgstr "Dodaj in Ustvari sekcije omogočene na vseh straneh zoznamov torrentov."
+
+msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
+msgstr "Dodaj in Ustvari sekcije se bodo prikazale le na prvi strani večstranih strani zoznamov torrentov."
+
+msgid "Configuration unchanged."
+msgstr "Konfiguracija nespremenjena."
+
+msgid "Open Tracker list changed - torrent restart required to take effect."
+msgstr "Seznam Odprih trackerjev spremenjen - za uveljavitev je potrebno ponovno zagon torrenta."
+
+msgid "Private tracker list changed - affects newly created torrents only."
+msgstr "Seznam Zasebnih trackerjev spremenjen - vpliva le na novo ustvarjene torrente."
+
+#, java-format
+msgid "Unable to save the config to {0}"
+msgstr "Shranjevanje konfiguracije v {0} ni mogoče"
+
+#, java-format
+msgid "Torrent file deleted: {0}"
+msgstr "Datoteka torrenta izbrisana: {0}"
+
+#, java-format
+msgid "Torrent file moved from {0} to {1}"
+msgstr "Datoteka torrenta premaknjena iz {0} v {1}"
+
+#, java-format
+msgid "Error: Could not add torrent: {0}"
+msgstr "Napaka: Torrent {0} ni mogoče dodati"
+
+#, java-format
+msgid "Torrent already running: {0}"
+msgstr "Torrent že v teku: {0}"
+
+#. catch this here so we don't try do delete it below
+#, java-format
+msgid "Cannot open \"{0}\""
+msgstr "Datoteke \"{0}\" ni mogoče odpreti"
+
+#. TODO - if the existing one is a magnet, delete it and add the metainfo instead?
+#, java-format
+msgid "Torrent with this info hash is already running: {0}"
+msgstr "Torrent s tem informacijskim hash-om že deluje: {0}"
+
+#, java-format
+msgid "Torrent with the same data location is already running: {0}"
+msgstr "Torrent z istim lokacijo podatkov že deluje: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "NAPAKA - V zasebnem torrentu \"{0}\" ni I2P trackerjev"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Opozorilo - V \"{0}\" ni I2P trackerjev, bodo obvestila poslana samo na I2P odpri trackerje in DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Opozorilo - V \"{0}\" ni I2P trackerjev, in so odpri trackerji onemogočeni, bodo obvestila poslana samo na DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Opozorilo - V \"{0}\" ni I2P trackerjev, in so DHT in odpri trackerji onemogočeni, pred zagonom torrenta bi morali omogočiti odpri trackerje ali DHT."
+
+#, java-format
+msgid "Torrent in \"{0}\" is invalid"
+msgstr "Torrent v \"{0}\" je neveljaven"
+
+#, java-format
+msgid "ERROR - Out of memory, cannot create torrent from {0}"
+msgstr "NAPAKA - Pomanjkanje pomnilnika, iz {0} ni mogoče ustvariti torrenta"
+
+msgid "Initializing I2PSnark and opening tunnels"
+msgstr "Inicializacija I2PSnark in odpiranje tunelov"
+
+#, java-format
+msgid "Torrent added and started: {0}"
+msgstr "Torrent dodan in zagnan: {0}"
+
+#, java-format
+msgid "Torrent added: {0}"
+msgstr "Torrent dodan: {0}"
+
+#, java-format
+msgid "Fetching {0}"
+msgstr "Pridobivanje {0}"
+
+#, java-format
+msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
+msgstr "Odpri trackerji so onemogočeni in nimamo DHT sosedov. Pridobivanje {0} morda ne bo uspešno dokler ne zagnate drugega torrenta, ne omogočite odprih trackerjev ali ne omogočite DHT."
+
+#, java-format
+msgid "Adding {0}"
+msgstr "Dodajanje {0}"
+
+#, java-format
+msgid "Download already running: {0}"
+msgstr "Prenos že v teku: {0}"
+
+msgid " - torrent file already exists"
+msgstr " - datoteka torrenta že obstaja"
+
+#, java-format
+msgid "Failed to copy torrent file to {0}"
+msgstr "Kopiranje datoteke torrenta v {0} ni uspelo"
+
+#, java-format
+msgid "Too many files in \"{0}\" ({1})!"
+msgstr "V \"{0}\" je preveč datotek ({1})!"
+
+#, java-format
+msgid "Torrent file \"{0}\" cannot end in \".torrent\"!"
+msgstr "Datoteka torrenta \"{0}\" ne sme končati z \".torrent\"!"
+
+#, java-format
+msgid "No pieces in \"{0}\"!"
+msgstr "V \"{0}\" ni delcev!"
+
+#, java-format
+msgid "Too many pieces in \"{0}\", limit is {1}!"
+msgstr "V \"{0}\" je preveč delcev, omejitev je {1}!"
+
+#, java-format
+msgid "Pieces are too large in \"{0}\" ({1}B)!"
+msgstr "Delci so preveliki v \"{0}\" ({1}B)!"
+
+#, java-format
+msgid "Limit is {0}B"
+msgstr "Omejitev je {0}B"
+
+#, java-format
+msgid "Torrent \"{0}\" has no data!"
+msgstr "Torrent \"{0}\" ni vsebinjenih podatkov!"
+
+#.
+#. System.out.println("torrent info: " + info.toString());
+#. List lengths = info.getLengths();
+#. if (lengths != null)
+#. for (int i = 0; i < lengths.size(); i++)
+#. System.out.println("File " + i + " is " + lengths.get(i) + " long.");
+#.
+#, java-format
+msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
+msgstr "Torrenti večji od {0}B trenutno še niso podprti \"{1}\"!"
+
+#, java-format
+msgid "Error: Could not remove the torrent {0}"
+msgstr "Napaka: Torrent {0} ni mogoče odstraniti"
+
+#, java-format
+msgid "Torrent stopped: {0}"
+msgstr "Torrent ustavljen: {0}"
+
+#, java-format
+msgid "Torrent removed: \"{0}\""
+msgstr "Torrent odstranjen: \"{0}\""
+
+#, java-format
+msgid "Adding torrents in {0}…"
+msgstr "Dodajanje torrentov v {0}…"
+
+msgid "Connecting to I2P"
+msgstr "Povezovanje z I2P"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "Zagon torrenta {0}"
+
+#, java-format
+msgid "Down bandwidth limit is {0} KBps"
+msgstr "Omejitev dolavnega širinevja je {0} KBps"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KBps"
+msgstr "Omejitev zgornjega širinevja je {0} KBps"
+
+#, java-format
+msgid "I2P+ I2PSnark standalone version {0} started"
+msgstr "Začetek samostojne različice I2P+ I2PSnark {0}"
+
+#, java-format
+msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgstr "Omejitev zgornjega širinevja je {0} KBps do maksimuma {1} hkrasnega sosedov."
+
+#, java-format
+msgid "Storage: {0}MB currently available for downloads on configured data partition"
+msgstr "Shramba: trenutno je na nastavljeni podatkovni razdelki {0}MB razpoložljivo za prenose."
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured data partition"
+msgstr "Opozorilo - za prenose na nastavljeni podatkovni razdelki je razpoložljivih le {0}MB"
+
+#, java-format
+msgid "Download finished: {0}"
+msgstr "Prenos končan: {0}"
+
+msgid "I2PSnark"
+msgstr "I2PSnark"
+
+#. addMessage(_t("Metainfo received for {0}", snark.getName()));
+#. addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
+#, java-format
+msgid "Starting torrent: {0}"
+msgstr "Zagon torrenta: {0}"
+
+msgid "Unable to load torrent create file filter config: "
+msgstr "Naloženje konfiguracije filtra za ustvarjanje datotek torrenta ni mogoče: "
+
+msgid "Unable to save torrent create file filter config: "
+msgstr "Shranjevanje konfiguracije filtra za ustvarjanje datotek torrenta ni mogoče: "
+
+msgid "Torrent not found"
+msgstr "Torrent ni najden"
+
+msgid "Opening the I2P tunnel"
+msgstr "Odpiranje tunela I2P"
+
+msgid "Opening the I2P tunnel and starting all torrents."
+msgstr "Odpiranje tunela I2P in zagon vseh torrentov."
+
+msgid "Stopping all torrents and closing the I2P tunnel."
+msgstr "Ustavljanje vseh torrentov in zapiranje tunela I2P."
+
+msgid "Closing I2P tunnel after notifying trackers."
+msgstr "Zapiranje tunela I2P po obvestitvi trackerjev."
+
+#, java-format
+msgid "Finished recheck of torrent {0}, now {1} complete"
+msgstr "Preverjanje torrenta {0} končano, zdaj je {1} popolnoma preneseno"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, unchanged"
+msgstr "Preverjanje torrenta {0} končano, ne spremenjeno"
+
+#, java-format
+msgid "Error checking the torrent {0}"
+msgstr "Napaka pri preverjanju torrenta {0}"
+
+#, java-format
+msgid "No valid trackers for {0} - enable opentrackers or DHT?"
+msgstr "Za {0} ni veljavnih trackerjev - omogočiti odpri trackerje ali DHT?"
+
+msgid "Updating"
+msgstr "Posodabljanje"
+
+#, java-format
+msgid "Updating from {0}"
+msgstr "Posodabljanje iz {0}"
+
+#, java-format
+msgid "Downloading {0}"
+msgstr "Prenos {0}"
+
+#, java-format
+msgid "Requesting torrent file: {0}"
+msgstr "Zahtevek za datoteko torrenta: {0}"
+
+#, java-format
+msgid "Failed to retrieve torrent file: {0}"
+msgstr "Pridobivanje datoteke torrenta {0} ni uspelo"
+
+#, java-format
+msgid "Torrent downloaded from {0}"
+msgstr "Torrent prenesen iz {0}"
+
+#, java-format
+msgid "Torrent already in the queue: {0}"
+msgstr "Torrent že v vrsti: {0}"
+
+#, java-format
+msgid "Torrent at {0} was not valid"
+msgstr "Torrent v {0} ni bil veljaven"
+
+msgid "Configuration"
+msgstr "Nastavitve"
+
+msgid "Debug Mode"
+msgstr "Način razhroščanja"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "Nepoznat BitTorrent odjemalnik"
+
+#, java-format
+msgid "Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?"
+msgstr "Ali ste prepričani, da želite izbrisati datoteko \\''{0}\\'' (preneseni podatki ne bodo izbrisani)?"
+
+#, java-format
+msgid "Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?"
+msgstr "Ali ste prepričani, da želite izbrisati torrent \\''{0}\\'' in vse prenesene podatke?"
+
+msgid "I2PSnark has stopped"
+msgstr "I2PSnark je ustal"
+
+msgid "Router is down"
+msgstr "Maršrutirnik je padel"
+
+msgid "Torrents"
+msgstr "Torrenti"
+
+msgid "Refresh page"
+msgstr "Osveži stran"
+
+msgid "Forum"
+msgstr "Foruma"
+
+msgid "Torrent & filesharing forum"
+msgstr "Foruma za torrente & deljenje datotek"
+
+msgid "BTDigg"
+msgstr "BTDigg"
+
+msgid "I2P-based search engine for clearnet-hosted torrents"
+msgstr "Iskanje na podlagi I2P za torrente gostiteljev clearnet"
+
+msgid "Search torrents"
+msgstr "Iskanje torrentov"
+
+msgid "Clear search"
+msgstr "Počisti iskanje"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Kliknite gumb \"Dodaj torrent\", da pridobite torrent"
+
+msgid "clear messages"
+msgstr "počisti sporočila"
+
+msgid "Expand"
+msgstr "Razširi"
+
+msgid "Shrink"
+msgstr "Skmoraj"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "Opozorilo! Javascript je onemogočen v vašem brskalniku. Če je {0} omogočen, boste izgubili vse vložene podatke v sekcijah Dodaj/Ustvari torrent ob ponovnem osveževanju."
+
+msgid "page refresh"
+msgstr "osveževanje strani"
+
+msgid "Warning - No I2P"
+msgstr "Opozorilo - Ni I2P"
+
+msgid "Search"
+msgstr "Iskanje"
+
+msgid "Show All"
+msgstr "Pokaži vse"
+
+msgid "Active"
+msgstr "Aktivni"
+
+msgid "Inactive"
+msgstr "Neaktivni"
+
+msgid "Connected"
+msgstr "Povezan"
+
+msgid "Downloading"
+msgstr "Prenos"
+
+msgid "Seeding"
+msgstr "Sejanje"
+
+msgid "Complete"
+msgstr "Končano"
+
+msgid "Incomplete"
+msgstr "Nekončano"
+
+msgid "Stopped"
+msgstr "Ustavljeno"
+
+msgid "Status"
+msgstr "Stanje"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "Uredi po {0}"
+
+msgid "Hide Peers"
+msgstr "Skrij sosedove"
+
+msgid "Show Peers"
+msgstr "Prikaži sosedove"
+
+msgid "Torrent"
+msgstr "Torrent"
+
+msgid "File type"
+msgstr "Vrsta datoteke"
+
+msgid "Torrent name"
+msgstr "Ime torrenta"
+
+msgid "ETA"
+msgstr "ETA"
+
+msgid "Estimated time remaining"
+msgstr "Ocenjeno preostalo časovno trajanje"
+
+msgid "RX"
+msgstr "RX"
+
+msgid "Downloaded"
+msgstr "Preneseno"
+
+msgid "Size"
+msgstr "Velikost"
+
+msgid "RX Rate"
+msgstr "RX hitrost"
+
+msgid "Down Rate"
+msgstr "Dolavna hitrost"
+
+msgid "TX"
+msgstr "TX"
+
+msgid "Upload ratio"
+msgstr "Odnos pošiljanja"
+
+msgid "Uploaded"
+msgstr "Pošiljano"
+
+msgid "TX Rate"
+msgstr "TX hitrost"
+
+msgid "Up Rate"
+msgstr "Hitrost pošiljanja"
+
+msgid "Stop All"
+msgstr "Ustavi vse"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "Ustavi vse torrente in tunel I2P"
+
+msgid "Start All"
+msgstr "Zaženi vse"
+
+msgid "Start all stopped torrents"
+msgstr "Zaženi vse ustavljene torrente"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Zaženi vse torrente in tunel I2P"
+
+msgid "No torrents found."
+msgstr "Torrentov ni najdenih."
+
+msgid "No torrents loaded."
+msgstr "Ni naloženih torrentov."
+
+msgid "Totals"
+msgstr "Vsota"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "{0} torrent"
+msgstr[1] "{0} torrenti"
+msgstr[2] "{0} torrentov"
+msgstr[3] "{0} torrentov"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} connected peers"
+msgstr[0] "{0} povezan sosed"
+msgstr[1] "{0} povezani sosedovi"
+msgstr[2] "{0} povezanih sosedov"
+msgstr[3] "{0} povezanih sosedov"
+
+#, java-format
+msgid "1 DHT peer"
+msgid_plural "{0} DHT peers"
+msgstr[0] "{0} DHT sosed"
+msgstr[1] "{0} DHT sosedovi"
+msgstr[2] "{0} DHT sosedov"
+msgstr[3] "{0} DHT sosedov"
+
+msgid "Configured maximum (actual usage may be less)"
+msgstr "Nastavljen maksimum (resnično uporaba lahko ni manj)"
+
+msgid "Tunnels"
+msgstr "Tuneli"
+
+msgid "in"
+msgstr "v"
+
+msgid "out"
+msgstr "iz"
+
+#. Only truncate if it's an actual dest
+msgid "Our destination (identity) for this session"
+msgstr "Naslov (identiteta) za to sejo"
+
+msgid "Dest."
+msgstr "Dest."
+
+msgid "Estimated download time for all torrents"
+msgstr "Ocena časa za prenos vseh torrentov"
+
+msgid "Data downloaded this session"
+msgstr "Podatki, ki so bili preneseni v tej seji"
+
+msgid "Total download speed"
+msgstr "Skupna dolavna hitrost"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "Skupni podatki, ki so bili pošiljani (za navedene torrente)"
+
+msgid "Total upload speed"
+msgstr "Skupna hitrost pošiljanja"
+
+msgid "Enable Debug Mode"
+msgstr "Omogoči način razhroščanja"
+
+msgid "Disable Debug Mode"
+msgstr "Onemogoči način razhroščanja"
+
+msgid "Normal Mode"
+msgstr "Normalni način"
+
+msgid "No DHT Peers"
+msgstr "Ni DHT sosedov"
+
+msgid "First"
+msgstr "Prvi"
+
+msgid "First page"
+msgstr "Prva stran"
+
+msgid "Prev"
+msgstr "Prejšnja"
+
+msgid "Previous page"
+msgstr "Prejšnja stran"
+
+msgid "Next"
+msgstr "Naslednja"
+
+msgid "Next page"
+msgstr "Naslednja stran"
+
+msgid "Last"
+msgstr "Zadnja"
+
+msgid "Last page"
+msgstr "Zadnja stran"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "Torrent {0} ni mogoče dodati v drug torrent: {1}"
+
+#. TODO
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "Prenos iz lokacije, ki ni I2P {0}, ni podprt"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "Neveljavna URL: Morajo začeti z \"{0}\" ali \"{1}\""
+
+#. no file or URL specified
+msgid "Enter URL or select torrent file"
+msgstr "Vnesite URL ali izberite datoteko torrenta"
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "Magnet izbrisan: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "Datoteke torrenta ni mogoče izbrisati: {0}"
+
+#, java-format
+msgid "Download deleted: {0}"
+msgstr "Prenos izbrisan: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "Datoteka podatkov izbrisana: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "Datoteke podatkov ni mogoče izbrisati: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "Mape ni mogoče izbrisati: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "Mapa izbrisana: {0}"
+
+#, java-format
+msgid "Cannot add a torrent ending in \".torrent\": {0}"
+msgstr "Torrenta, ki konča z \".torrent\", ni mogoče dodati: {0}"
+
+#, java-format
+msgid "Torrent with this name is already running: {0}"
+msgstr "Torrent s tem imenom že deluje: {0}"
+
+#, java-format
+msgid "Cannot add a torrent including an I2P directory: {0}"
+msgstr "Torrenta, ki vključuje mapo I2P, ni mogoče dodati: {0}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "Torrenta {0}, ki vključuje drug torrent: {1}, ni mogoče dodati"
+
+msgid "Error - Cannot include alternate trackers without a primary tracker"
+msgstr "Napaka - Ne morete vključiti nadomestnih trackerjev brez glavnega trackerja"
+
+msgid "Error - Cannot mix private and public trackers in a torrent"
+msgstr "Napaka - V torrentu ne morete mešati zasebnih in javnih trackerjev"
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr "Datoteke ali mape so bile izključene iz \"{0}\" zaradi pravil filtra."
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "Naslednje datoteke ali mape so bile izključene iz \"{0}\" zaradi pravil filtra: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "Torrent ustvarjen za \"{0}\""
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "Večina I2P trackerjev zahteva registracijo novih torrentov pred sejanjem - to naredite pred zagonom \"{0}\""
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "Napaka pri ustvarjanju torrenta za \"{0}\""
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "Torrenta za neobstoječe podatke ni mogoče ustvariti: {0}"
+
+msgid "Error creating torrent - you must enter a file or directory"
+msgstr "Napaka pri ustvarjanju torrenta - morate vnesti datoteko ali mapo"
+
+msgid "Delete selected"
+msgstr "Izbriši izbrane"
+
+msgid "Save tracker configuration"
+msgstr "Shrani konfiguracijo trackerja"
+
+msgid "Removed"
+msgstr "Odstranjen"
+
+msgid "Add tracker"
+msgstr "Dodaj tracker"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "Vnesite veljavno ime trackerja in URL-je"
+
+msgid "Restore defaults"
+msgstr "Obnovi privzeto"
+
+msgid "Restored default trackers"
+msgstr "Obnovljeni privzeti trackerji"
+
+msgid "Save Filter Configuration"
+msgstr "Shrani konfiguracijo filtra"
+
+msgid "Add File Filter"
+msgstr "Dodaj filtr datoteke"
+
+msgid "Enter valid name and filter pattern"
+msgstr "Vnesite veljavno ime in vzorec filtra"
+
+msgid "Restored default torrent create filters"
+msgstr "Obnovljeni privzeti filtri za ustvarjanje torrenta"
+
+msgid "Checking"
+msgstr "Preverjanje"
+
+msgid "Allocating"
+msgstr "Dodeljevanje"
+
+msgid "Starting"
+msgstr "Zagon"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Sejanje {0} sosedovi"
+msgstr[1] "Sejanje {0} sosedov"
+msgstr[2] "Sejanje {0} sosedov"
+msgstr[3] "Sejanje {0} sosedov"
+
+#, java-format
+msgid "Seeding to {0} of {1} peers in swarm"
+msgstr "Sejanje {0} od {1} sosedov v grudbi"
+
+msgid "OK"
+msgstr "V redu"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Prenos iz {0} sosedov"
+msgstr[1] "Prenos iz {0} sosedov"
+msgstr[2] "Prenos iz {0} sosedov"
+msgstr[3] "Prenos iz {0} sosedov"
+
+msgid "Stalled"
+msgstr "Zastavljen"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Povezan z {0} od {1} sosedov v grudbi"
+
+msgid "No Peers"
+msgstr "Ni sosedov"
+
+msgid "Torrent details"
+msgstr "Podrobnosti torrenta"
+
+msgid "Torrent has comments"
+msgstr "Torrent ima komentarje"
+
+msgid "View files"
+msgstr "Oglej datoteke"
+
+msgid "Open file"
+msgstr "Odpri datoteko"
+
+msgid "complete"
+msgstr "popolnoma"
+
+msgid "remaining"
+msgstr "preostalo"
+
+msgid "Completed"
+msgstr "Končano"
+
+msgid "Last activity"
+msgstr "Zadnja dejavnost"
+
+msgid "Stop"
+msgstr "Ustavi"
+
+msgid "Stop the torrent"
+msgstr "Ustavi torrent"
+
+msgid "Start"
+msgstr "Zaženi"
+
+msgid "Start the torrent"
+msgstr "Zaženi torrent"
+
+msgid "Remove"
+msgstr "Odstrani"
+
+msgid "Remove the torrent from the active list, deleting the .torrent file"
+msgstr "Odstrani torrent iz aktivne seznama, izbrisati .torrent datoteko"
+
+msgid "Delete"
+msgstr "Izbriši"
+
+msgid "Delete the .torrent file and the associated data files"
+msgstr "Izbriši .torrent datoteko in povezane datoteke podatkov"
+
+msgid "Peer attached to swarm"
+msgstr "Sosed priložen k grudbi"
+
+msgid "Destination (identity) of peer"
+msgstr "Cilj (identiteta) sosedov"
+
+msgid "Version"
+msgstr "Različica"
+
+msgid "seconds"
+msgstr "sekunde"
+
+msgid "Seed"
+msgstr "Sej"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "Neinteresantno (Sosed nima delcev, ki jih potrebujemo)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "Ustavljen (Sosed nam ne dovoli zahtevanja delcev)"
+
+msgid "Peer is interested but currently idle"
+msgstr "Sosed je zainteresiran, trenutno pa nečist"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "Neinteresantno (Nismo v posesu delcev, ki jih potrebuje sosed)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "Ustavljen (Ne dovoljemo sosedu zahtevanja delcev)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "Podrobnosti na trackerju {0}"
+
+msgid "Info"
+msgstr "Informacije"
+
+msgid "Add Torrent"
+msgstr "Dodaj torrent"
+
+msgid "From URL"
+msgstr "Iz URL"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "Vnesite URL za prenos datoteke torrenta (le I2P), magnet povezavo ali informacijski hash"
+
+msgid "Add torrent"
+msgstr "Dodaj torrent"
+
+msgid "Torrent file"
+msgstr "Datoteka torrenta"
+
+msgid "Data dir"
+msgstr "Podatkovna mapa"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "Vnesite mapo za shranjevanje podatkov (privzeto {0})"
+
+msgid "Create Torrent"
+msgstr "Ustvari torrent"
+
+msgid "Data to seed"
+msgstr "Podatki za sejanje"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "Datoteka ali mapa za sejanje (celoten pot ali v mapi {0})"
+
+msgid "Create torrent"
+msgstr "Ustvari torrent"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "Izključite datoteke iz torrenta, če se nahajajo v mapi torrenta"
+
+msgid "Content Filters"
+msgstr "Filtriraj vsebino"
+
+msgid "Trackers"
+msgstr "Trackerji"
+
+msgid "Primary"
+msgstr "Glavni"
+
+msgid "Alternates"
+msgstr "Nadomestni"
+
+msgid "Tracker Type"
+msgstr "Vrsta trackerja"
+
+msgid "Standard"
+msgstr "Standard"
+
+msgid "Open"
+msgstr "Odpri"
+
+msgid "Private"
+msgstr "Zasebni"
+
+msgid "none"
+msgstr "nič"
+
+msgid "User Interface"
+msgstr "Uporabniški vmesnik"
+
+msgid "Switch to Embedded Mode"
+msgstr "Preklopi v vgrajeni način"
+
+msgid "Switch to Fullscreen Mode"
+msgstr "Preklopi v način celozaslonskega videza"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "To change themes manually, disable universal theming"
+msgstr "Da boste ročno spreminjali teme, onemogočite univerzalno tematizacijo"
+
+msgid "Universal theming is enabled."
+msgstr "Univerzalna tematizacija je omogočena."
+
+msgid "Configure"
+msgstr "Nastavi"
+
+msgid "Refresh time"
+msgstr "Čas osveževanja"
+
+msgid "How frequently torrent status is updated on the main page"
+msgstr "Kako pogosto se stanje torrenta osvežuje na glavni strani"
+
+msgid "Never"
+msgstr "Nikoli"
+
+msgid "Page size"
+msgstr "Velikost strani"
+
+msgid "Maximum number of torrents to display per page"
+msgstr "Maksimalna število torrentov, ki se prikažejo na strani"
+
+msgid "torrents"
+msgstr "torrenti"
+
+#. If we get to here, we have the language settings
+msgid "Language"
+msgstr "Jezik"
+
+msgid "Smart torrent sorting"
+msgstr "Pametno ureditev torrentov"
+
+msgid "Ignore words such as 'a' and 'the' when sorting"
+msgstr "Pri ureditvi prezrite besede kot so 'a' in 'the'"
+
+msgid "Collapsible panels"
+msgstr "Strisnevi paneli"
+
+msgid "Your browser does not support this feature."
+msgstr "Vaš brskalnik ta funkcija ne podpira."
+
+msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
+msgstr "Dovoli, da se ploščad 'Dodaj torrent' in 'Ustvari torrent' zasedejo, in se zasedejo privzeto v nevgrajenem načinu"
+
+msgid "Torrent filter bar"
+msgstr "Vrsta filtriranja torrentov"
+
+msgid "Show filter bar above torrents for selective display based on status"
+msgstr "Prikaži vrsto filtriranja nad torrenti za izbirno prikaz na podlagi stanja"
+
+msgid "requires javascript"
+msgstr "zahteva javascript"
+
+msgid "Enable lightbox"
+msgstr "Omogoči lightbox"
+
+msgid "Use a lightbox to display images when thumbnails are clicked"
+msgstr "Uporabi lightbox za prikaz slik, ko se klikne na miniaturke"
+
+msgid "Persist Add/Create"
+msgstr "Ohranjaj Dodaj/Ustvari"
+
+msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
+msgstr "Prikaži sekcije 'Dodaj' in 'Ustvari' na vseh straneh zoznamov torrentov, ko je vključen način z več strani"
+
+msgid "Comments & Ratings"
+msgstr "Komentarji & ocene"
+
+msgid "Enable Ratings"
+msgstr "Omogoči ocene"
+
+msgid "Show ratings on torrent pages"
+msgstr "Prikaži ocene na straneh torrentov"
+
+msgid "Enable Comments"
+msgstr "Omogoči komentarje"
+
+msgid "Show comments on torrent pages"
+msgstr "Prikaži komentarje na straneh torrentov"
+
+msgid "Comment Author"
+msgstr "Avtor komentarja"
+
+msgid "Set the author name for your comments and ratings"
+msgstr "Nastavi ime avtorja za svoje komentarje in ocene"
+
+msgid "Torrent Options"
+msgstr "Možnosti torrenta"
+
+msgid "Half available bandwidth recommended."
+msgstr "Priporočljivo je polovica razpoložljivega širinevja."
+
+msgid "Bandwidth limit"
+msgstr "Omejitev širinevja"
+
+msgid "Maximum bandwidth allocated for downloading"
+msgstr "Maksimalno širinevje, namenjeno za prenos"
+
+msgid "Maximum bandwidth allocated for uploading"
+msgstr "Maksimalno širinevje, namenjeno za pošiljanje"
+
+msgid "View or change router bandwidth"
+msgstr "Oglej ali spremeni širinevje maršrutirnika"
+
+msgid "Total uploader limit"
+msgstr "Skupno omejitev pošiljateljev"
+
+msgid "Maximum number of peers to upload to"
+msgstr "Maksimalna število sosedov za pošiljanje"
+
+msgid "peers"
+msgstr "sosedov"
+
+msgid "Use open trackers also"
+msgstr "Uporabi tudi odpri trackerje"
+
+msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
+msgstr "Obvesti torrente tudi odpri trackerji ter tudi tiste, ki so navedeni v datoteki torrenta"
+
+msgid "Enable DHT"
+msgstr "Omogoči DHT"
+
+msgid "Use DHT to find additional peers"
+msgstr "Uporabi DHT za iskanje dodatnih sosedov"
+
+msgid "Auto start torrents"
+msgstr "Samodejno zaženi torrente"
+
+msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
+msgstr "Samodejno zaženi torrente ob dodajanju in znova zaženi torrente, ko se I2PSnark začne"
+
+msgid "Startup delay"
+msgstr "Zamik pri zagonu"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts"
+msgstr "Kako dolgo preden se samodejno zažeti torrenti naložijo, ko se I2PSnark začne"
+
+msgid "minutes"
+msgstr "minute"
+
+msgid "Data Storage"
+msgstr "Shramba podatkov"
+
+msgid "Data directory"
+msgstr "Podatkovna mapa"
+
+msgid "Directory where torrents and downloaded/shared files are stored"
+msgstr "Mapa, v kateri so shranjeni torrenti in prenesene/deljene datoteke"
+
+msgid "Files readable by all"
+msgstr "Datoteke prebrane od vseh"
+
+msgid "Set file permissions to allow other local users to access the downloaded files"
+msgstr "Nastavi dovoljenja za datoteke, da jim omogočiš dostop drugim lokalnim uporabnikom do prenesenih datotek"
+
+msgid "Max files per torrent"
+msgstr "Maksimalno število datotek na torrent"
+
+msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
+msgstr "Maksimalna število datotek, dovoljeno za vsak torrent - vendar trackerji lahko določijo svoje omejitve in vaš operacijski sistem lahko omejuje število odprtih datotek, kar prepreči nalaganje torrentov z veliko datotek (in naslednjih torrentov)"
+
+msgid "Tunnel Configuration"
+msgstr "Konfiguracija tunela"
+
+msgid "Inbound Settings"
+msgstr "Nastavitve vhodov"
+
+msgid "Outbound Settings"
+msgstr "Nastavitve izhodov"
+
+msgid "I2CP host"
+msgstr "Gostitelj I2CP"
+
+msgid "I2CP port"
+msgstr "Vrata I2CP"
+
+msgid "I2CP options"
+msgstr "Možnosti I2CP"
+
+msgid "Save configuration"
+msgstr "Shrani konfiguracijo"
+
+msgid "Torrent Create File Filtering"
+msgstr "Filtriranje datotek za ustvarjanje torrenta"
+
+msgid "Mark filter for deletion"
+msgstr "Označi filtr za izbris"
+
+msgid "Name"
+msgstr "Ime"
+
+msgid "Filter Pattern"
+msgstr "Vzorec filtra"
+
+msgid "Starts With"
+msgstr "Začne z"
+
+msgid "Contains"
+msgstr "Vsebuje"
+
+msgid "Ends With"
+msgstr "Konča z"
+
+msgid "Enabled by Default"
+msgstr "Privzeto omogočeno"
+
+msgid "Add"
+msgstr "Dodaj"
+
+msgid "Select trackers for removal from I2PSnark's known list"
+msgstr "Izberite trackerje za odstranitev iz seznama znanih I2PSnarkovih trackerjev"
+
+msgid "Website URL"
+msgstr "URL spletnega mesta"
+
+msgid "Announce URL"
+msgstr "URL za obvestila"
+
+msgid "Mark tracker for deletion"
+msgstr "Označi tracker za izbris"
+
+msgid "Cannot add magnet: Version 2 magnet links are not supported"
+msgstr "Magnet ni mogoče dodati: Magnet povezave različice 2 niso podprte"
+
+#, java-format
+msgid "Invalid magnet URL {0}"
+msgstr "Neveljavna magnet URL {0}"
+
+#. * dummies for translation
+#, java-format
+msgid "1 hop"
+msgid_plural "{0} hops"
+msgstr[0] "{0} skok"
+msgstr[1] "{0} skoka"
+msgstr[2] "{0} skokov"
+msgstr[3] "{0} skokov"
+
+#, java-format
+msgid "1 tunnel"
+msgid_plural "{0} tunnels"
+msgstr[0] "{0} tunel"
+msgstr[1] "{0} tunela"
+msgstr[2] "{0} tunelov"
+msgstr[3] "{0} tunelov"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "Ta nastavitev določa maksimalno število odprtnih tunelov, ki je določeno s štetjem povezanih sosedov (resnično uporaba lahko ni manj)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "Sprememba nastavitve na manj kot 3 skoka lahko izboljša hitrost, vendar na strošek anonimnosti, kar ni priporočljivo"
+
+msgid "Info hash"
+msgstr "Informacijski hash"
+
+msgid "Created"
+msgstr "Ustvarjeno"
+
+msgid "Files"
+msgstr "Datoteke"
+
+msgid "Added"
+msgstr "Dodano"
+
+msgid "Pieces"
+msgstr "Delci"
+
+msgid "Completion"
+msgstr "Končanje"
+
+msgid "Remaining"
+msgstr "Preostalo"
+
+msgid "Skipped"
+msgstr "Preskočeno"
+
+msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
+msgstr "Uporabljene bodo le I2P trackerje; ne-I2P trackerji so prikazani le za informacijske namene"
+
+msgid "Tracker"
+msgstr "Tracker"
+
+msgid "Web Seeds"
+msgstr "Web seme"
+
+msgid "Refresh page for results"
+msgstr "Osveži stran za rezultate"
+
+msgid "Force Recheck"
+msgstr "Prisili preverjanje"
+
+msgid "Stop the torrent in order to check file integrity"
+msgstr "Ustavite torrent, da preverite celovitost datotek"
+
+msgid "Check integrity of the downloaded files"
+msgstr "Preveri celovitost prenesenih datotek"
+
+msgid "Resource Not found"
+msgstr "Vira ni najdena"
+
+msgid "Base"
+msgstr "Baza"
+
+msgid "Resource Does Not Exist"
+msgstr "Vira ne obstaja"
+
+msgid "Resource"
+msgstr "Vira"
+
+msgid "Audio file: "
+msgstr "Audioklips: "
+
+msgid "Video file: "
+msgstr "Video datoteka: "
+
+msgid "Directory"
+msgstr "Mapa"
+
+msgid "Download Status"
+msgstr "Stanje prenosa"
+
+msgid "Download Priority"
+msgstr "Prioriteta prenosa"
+
+msgid "Up to higher level directory"
+msgstr "Nadaljevanje do višje mape"
+
+msgid "Audio Playlist"
+msgstr "Seznam reprodukcije zvoka"
+
+#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
+msgid "Not found"
+msgstr "Ni najdeno"
+
+msgid "Torrent not found?"
+msgstr "Torrent ni najden?"
+
+msgid "File not found in torrent?"
+msgstr "Datoteke ni mogoče najeti v torrentu?"
+
+#. status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
+msgid "Unrecognized"
+msgstr "Neznan"
+
+msgid "Preview"
+msgstr "Predogled"
+
+msgid "Download file at high priority"
+msgstr "Prenesi datoteko na visoki prioriteti"
+
+msgid "High"
+msgstr "Visoko"
+
+msgid "Download file at normal priority"
+msgstr "Prenesi datoteko na normalni prioriteti"
+
+msgid "Normal"
+msgstr "Normalno"
+
+msgid "Do not download this file"
+msgstr "Datoteko ne prenesi"
+
+msgid "Skip"
+msgstr "Preskoči"
+
+#. TODO: fixup so works with ajax refresh
+#. "");
+#. if (!inOrder) {
+#. buf.append("")
+#. .append(toImg("clock_red")).append(_t("Set all high")).append("\n");
+#. }
+#. buf.append("")
+#. .append(toImg("clock")).append(_t("Set all normal")).append("\n")
+#. .append("")
+#. .append(toImg("block")).append(_t("Skip all")).append("\n");
+#.
+msgid "Save priorities"
+msgstr "Shrani prioritete"
+
+msgid "Comments"
+msgstr "Komentarji"
+
+msgid "Ratings and Comments"
+msgstr "Ocene in komentarji"
+
+msgid "Author name required to rate or comment"
+msgstr "Za ocenjevanje ali komentiranje je potrebno ime avtorja"
+
+msgid "Your author name for published comments and ratings"
+msgstr "Vaše ime avtorja za objavljene komentarje in ocene"
+
+#, java-format
+msgid "1 star"
+msgid_plural "{0} zvezdice"
+msgstr[0] "{0} zvezdica"
+msgstr[1] "{0} zvezdic"
+msgstr[2] "{0} zvezdic"
+msgstr[3] "{0} zvezdic"
+
+msgid "No rating"
+msgstr "Brez ocene"
+
+msgid "Rate and Comment"
+msgstr "Oceni in komentiraj"
+
+msgid "Rate Torrent"
+msgstr "Oceni torrent"
+
+msgid "Add Comment"
+msgstr "Dodaj komentar"
+
+msgid "My Rating"
+msgstr "Moja ocena"
+
+msgid "Average Rating"
+msgstr "Povprečna ocena"
+
+msgid "No community ratings currently available"
+msgstr "Trenutno niso na voljo ocene skupnosti"
+
+msgid "Submitted"
+msgstr "Oddano"
+
+msgid "Mark for deletion"
+msgstr "Označi za izbris"
+
+msgid "Delete Selected"
+msgstr "Izbriši izbrane"
+
+msgid "Edit Torrent"
+msgstr "Uredi torrent"
+
+msgid "Active Trackers"
+msgstr "Aktivni trackerji"
+
+msgid "Add Tracker"
+msgstr "Dodaj tracker"
+
+msgid "Torrent Comment"
+msgstr "Komentar torrenta"
+
+msgid "Torrent must be stopped in order to edit"
+msgstr "Torrent mora biti ustavljen, da ga lahko uredite"
+
+msgid "Save Changes"
+msgstr "Shrani spremembe"
+
+#. shouldn't happen
+msgid "Torrent must be stopped"
+msgstr "Torrent mora biti ustavljen"

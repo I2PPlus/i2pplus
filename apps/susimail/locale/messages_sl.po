@@ -1,0 +1,480 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+#
+msgid ""
+msgstr ""
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n%100<=4 ? 2 : 3);\n"
+
+#, java-format
+msgid "{0} new message"
+msgid_plural "{0} new messages"
+msgstr[0] "{0} novo sporočilo"
+msgstr[1] "{0} nova sporočila"
+msgstr[2] "{0} novih sporočil"
+msgstr[3] "{0} novih sporočil"
+
+msgid "Email"
+msgstr "E-pošta"
+
+#, java-format
+msgid "No encoder found for encoding \\''{0}\\''."
+msgstr "Noben kodiralec ni bil najden za kodiranje \\''{0}\\''."
+
+#. tagged in WebMail
+msgid "Re:"
+msgstr "Po:"
+
+msgid "Fwd:"
+msgstr "Naprej:"
+
+#. MailDir-like
+msgid "Drafts"
+msgstr "Osnovi"
+
+#. MailDir-like
+msgid "Sent"
+msgstr "Poslano"
+
+#. MailDir-like
+msgid "Trash"
+msgstr "Kos"
+
+#. MailDir-like
+msgid "Bulk Mail"
+msgstr "Množična pošta"
+
+#. untranslated, translate on use
+msgid "Inbox"
+msgstr "Vhodna pošta"
+
+msgid "View message as HTML"
+msgstr "Oglej sporočilo kot HTML"
+
+msgid "View message as plain text"
+msgstr "Oglej sporočilo kot navaden tekst"
+
+msgid "unknown"
+msgstr "neznano"
+
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
+msgstr "Da bi zaščitili vaše zasebnost, blokira SusiMail Javascript in vse oddaljeno vsebino vključeno v to HTML sporočilo."
+
+msgid "Enable Javascript for enhanced presentation and additional features."
+msgstr "Omogočite Javascript za izboljšano predstavitev in dodatne funkcionalnosti."
+
+#, java-format
+msgid "Tracking images removed from message: {0}"
+msgstr "Sledilne slike so bile odstranjen iz sporočila: {0}"
+
+#, java-format
+msgid "Blocked images not displayed: {0}"
+msgstr "Blokirane slike niso prikazane: {0}"
+
+#, java-format
+msgid "Charset \\''{0}\\'' not supported."
+msgstr "Nabor znakov \\''{0}\\'' ni podprt."
+
+#, java-format
+msgid "Part ({0}) not shown, because of {1}"
+msgstr "Del ({0}) ni prikazan zaradi {1}"
+
+msgid "Reloading the page may fix the error."
+msgstr "Osveževanje strani morda popravi napako."
+
+msgid "File"
+msgstr "Datoteka"
+
+#, java-format
+msgid "Download attachment {0}"
+msgstr "Prenesi priložilo {0}"
+
+msgid "File is packed into a zipfile for security reasons."
+msgstr "Datoteka je zaradi varnostnih razlogov pakirana v zip datoteko."
+
+#, java-format
+msgid "Attachment ({0})."
+msgstr "Priložilo ({0})."
+
+msgid "Need username for authentication."
+msgstr "Potrebujem uporabniško ime za overjanje."
+
+msgid "Do not include @mail.i2p in the username"
+msgstr "Ne vključite @mail.i2p v uporabniško ime"
+
+msgid "Need password for authentication."
+msgstr "Potrebujem geslo za overjanje."
+
+msgid "Need hostname for connect."
+msgstr "Potrebujem domensko ime za povezavo."
+
+msgid "Need port number for pop3 connect."
+msgstr "Potrebujem številko vrata za pop3 povezavo."
+
+msgid "POP3 port number is not in range 0..65535."
+msgstr "Številka vrata POP3 ni v obsegu 0..65535."
+
+msgid "POP3 port number is invalid."
+msgstr "Številka vrata POP3 je neveljavna."
+
+msgid "Need port number for smtp connect."
+msgstr "Potrebujem številko vrata za smtp povezavo."
+
+msgid "SMTP port number is not in range 0..65535."
+msgstr "Številka vrata SMTP ni v obsegu 0..65535."
+
+msgid "SMTP port number is invalid."
+msgstr "Številka vrata SMTP je neveljavna."
+
+msgid "Cannot connect"
+msgstr "Ne morem se povezati"
+
+msgid "Error connecting to server"
+msgstr "Napaka pri povezovanju na strežnik"
+
+msgid "Draft saved."
+msgstr "Osnova shranjena."
+
+msgid "Unable to save mail."
+msgstr "Ne morem shraniti pošte."
+
+#, java-format
+msgid "On {0} {1} wrote:"
+msgstr "Na {0} {1} je napisal:"
+
+#, java-format
+msgid "Error reading uploaded file: {0}"
+msgstr "Napaka pri branju nalaganega datoteke: {0}"
+
+msgid "begin forwarded mail"
+msgstr "začetek preusmerjene pošte"
+
+msgid "end forwarded mail"
+msgstr "konec preusmerjene pošte"
+
+msgid "Could not fetch mail body."
+msgstr "Ne morem pridobiti telo pošte."
+
+msgid "Message id not valid."
+msgstr "Id sporočila ni veljaven."
+
+msgid "Internal error, lost connection."
+msgstr "Notranja napaka, izgubljena povezava."
+
+#, java-format
+msgid "No Encoding found for {0}"
+msgstr "Ni najdenega kodiranja za {0}"
+
+msgid "Attachment not found."
+msgstr "Priložilo ni bilo najdeno."
+
+#. error if we get here
+msgid "Message not found."
+msgstr "Sporočilo ni bilo najdeno."
+
+#, java-format
+msgid "1 message deleted."
+msgid_plural "{0} messages deleted."
+msgstr[0] "{0} sporočilo izbrisano."
+msgstr[1] "{0} sporočila izbrisana."
+msgstr[2] "{0} sporočil izbrisanih."
+msgstr[3] "{0} sporočil izbrisanih."
+
+msgid "No messages marked for deletion."
+msgstr "Ni sporočil označenih za izbrisanje."
+
+#, java-format
+msgid "Host unchanged. Edit configation file {0} to change host."
+msgstr "Domena ostane nespremenjena. Uredi konfiguracijsko datoteko {0}, da spremeniš domeno."
+
+msgid "Configuration saved"
+msgstr "Konfiguracija shranjena"
+
+msgid "Invalid pagesize number, resetting to default value."
+msgstr "Neveljavna številka velikosti strani, nastavljanje na privzeto vrednost."
+
+msgid "Login"
+msgstr "Prijava"
+
+msgid "Loading messages, please wait..."
+msgstr "Nalaganje sporočil, prosim počakajte..."
+
+#, java-format
+msgid "1 message"
+msgid_plural "{0} messages"
+msgstr[0] "{0} sporočilo"
+msgstr[1] "{0} sporočila"
+msgstr[2] "{0} sporočil"
+msgstr[3] "{0} sporočil"
+
+msgid "No messages"
+msgstr "Brez sporočil"
+
+msgid "Show Message"
+msgstr "Prikaži sporočilo"
+
+msgid "New Message"
+msgstr "Novo sporočilo"
+
+msgid "Configuration"
+msgstr "Konfiguracija"
+
+msgid "I2PMail"
+msgstr "I2PMail"
+
+msgid "No new messages"
+msgstr "Ni novih sporočil"
+
+msgid "Checking for new messages on server"
+msgstr "Preverjam novih sporočil na strežniku"
+
+msgid "Refresh the page for updates"
+msgstr "Osveži stran za posodobitve"
+
+#, java-format
+msgid "{0} is an I2P-exclusive service provided by {1}."
+msgstr "{0} je storitev, ki jo pruža {1} izključno za I2P."
+
+#, java-format
+msgid "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} spletni klient za e-pošto &copy Susi 2004-2005."
+
+msgid "Removed tracking image placeholder"
+msgstr "Odstranjen omenjak sledilne slike"
+
+msgid "no subject"
+msgstr "brez naslova"
+
+msgid "Found no valid sender address."
+msgstr "Veljavnega naslovodajalca ni bilo mogoče najti."
+
+#, java-format
+msgid "Found no valid address in \\''{0}\\''."
+msgstr "Veljavne naslove ni bilo mogoče najti v \\''{0}\\''."
+
+msgid "No recipients found."
+msgstr "Noben prejemnik ni bil najden."
+
+#, java-format
+msgid "Email is too large, max is {0}"
+msgstr "E-pošta je prevelika, največja velikost je {0}"
+
+msgid "Sending mail."
+msgstr "Pošiljanje e-pošte."
+
+msgid "Error sending mail"
+msgstr "Napaka pri pošiljanju e-pošte"
+
+msgid "Mail sent."
+msgstr "E-pošta je bila poslana."
+
+msgid "Send"
+msgstr "Pošlji"
+
+msgid "Save as Draft"
+msgstr "Shrani kot osnovo"
+
+msgid "Cancel"
+msgstr "Prekliči"
+
+msgid "From"
+msgstr "Od"
+
+msgid "To"
+msgstr "Za"
+
+msgid "Cc"
+msgstr "Cc"
+
+msgid "Bcc"
+msgstr "Bcc"
+
+msgid "Subject"
+msgstr "Naslov"
+
+msgid "Add Attachment"
+msgstr "Dodaj priložilo"
+
+#. TODO: reset button label to "add attachment" when no attachments are visible (currently counts attachments added per session)
+msgid "Add attachment"
+msgstr "Dodaj priložilo"
+
+msgid "Attachments"
+msgstr "Priložila"
+
+msgid "Delete selected attachments"
+msgstr "Izbriši izbrane priložila"
+
+msgid "I2PMail Login"
+msgstr "Prijava I2PMail"
+
+msgid "User"
+msgstr "Uporabnik"
+
+msgid "Username"
+msgstr "Uporabniško ime"
+
+msgid "Password"
+msgstr "Geslo"
+
+msgid "Toggle password visibility"
+msgstr "Preklopi vidljivost gesla"
+
+msgid "Host"
+msgstr "Domena"
+
+msgid "POP3 Port"
+msgstr "Vrata POP3"
+
+msgid "SMTP Port"
+msgstr "Vrata SMTP"
+
+msgid "Read Mail Offline"
+msgstr "Branje pošte brez povezave"
+
+msgid "Settings"
+msgstr "Nastavitve"
+
+msgid "Learn about I2PMail"
+msgstr "O I2PMail"
+
+msgid "Create Account"
+msgstr "Ustvari račun"
+
+msgid "New"
+msgstr "Nov"
+
+msgid "Check Mail"
+msgstr "Preveri pošto"
+
+msgid "Refresh Page"
+msgstr "Osveži stran"
+
+#, java-format
+msgid "1 Message"
+msgid_plural "{0} Messages"
+msgstr[0] "{0} Sporočilo"
+msgstr[1] "{0} Sporočila"
+msgstr[2] "{0} Sporočil"
+msgstr[3] "{0} Sporočil"
+
+msgid "Logout"
+msgstr "Odjava"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Size"
+msgstr "Velikost"
+
+msgid "Mark for deletion"
+msgstr "Označi za izbrisanje"
+
+msgid "Message contains HTML"
+msgstr "Sporočilo vsebuje HTML"
+
+msgid "Message is new"
+msgstr "Sporočilo je novo"
+
+msgid "Message is spam"
+msgstr "Sporočilo je spam"
+
+msgid "Message body not downloaded"
+msgstr "Telo sporočila ni bilo preneseno"
+
+#. TODO ngettext
+msgid "Really delete the marked messages?"
+msgstr "Res želite izbrisati označena sporočila?"
+
+msgid "Yes, really delete them!"
+msgstr "Da, res izbriši!"
+
+msgid "Delete Selected"
+msgstr "Izbriši izbrane"
+
+msgid "Mark All"
+msgstr "Označi vse"
+
+msgid "Clear All"
+msgstr "Počisti vse"
+
+msgid "Change to Folder"
+msgstr "Spremeni v mapo"
+
+msgid "First"
+msgstr "Prvi"
+
+msgid "Previous"
+msgstr "Prejšnji"
+
+msgid "Next"
+msgstr "Naslednji"
+
+msgid "Last"
+msgstr "Zadnji"
+
+msgid "Really delete this message?"
+msgstr "Res želite izbrisati to sporočilo?"
+
+msgid "Yes, really delete it!"
+msgstr "Da, res izbriši!"
+
+msgid "Reply"
+msgstr "Odgovori"
+
+msgid "Reply All"
+msgstr "Odgovori vsem"
+
+msgid "Forward"
+msgstr "Naprej"
+
+msgid "Save As"
+msgstr "Shrani kot"
+
+msgid "Delete"
+msgstr "Izbriši"
+
+msgid "Back to Folder"
+msgstr "Nazaj v mapo"
+
+msgid "Move to Folder"
+msgstr "Premakni v mapo"
+
+msgid "View message in new tab"
+msgstr "Oglej sporočilo v novem zavihku"
+
+msgid "Folder Page Size"
+msgstr "Velikost strani mape"
+
+msgid "Set"
+msgstr "Nastavi"
+
+msgid "Advanced Configuration"
+msgstr "Napredna konfiguracija"
+
+msgid "Save Configuration"
+msgstr "Shrani konfiguracijo"
+
+#. this appears in the UI so translate
+msgid "No response from server"
+msgstr "Brez odgovora strežnika"
+
+msgid "Mail server login failed, wrong username or password."
+msgstr "Prijava na strežnik e-pošte je spodletela, napačno uporabniško ime ali geslo."
+
+msgid "Logout and then login again with the correct username and password."
+msgstr "Odjava in potem se prijavite znova z pravilnim uporabniškim imenom in geslom."
+
+msgid "Login failed"
+msgstr "Prijava je spodletela"
+
+msgid "Server refused connection"
+msgstr "Strežnik je zavrnal povezavo"
+
+#. TODO which recipient?
+msgid "Mail rejected"
+msgstr "Pošta je bila zavrnjena"
+
