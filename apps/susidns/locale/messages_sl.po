@@ -1,0 +1,622 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+#
+msgid ""
+msgstr ""
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n%100<=4 ? 2 : 3);\n"
+
+#, java-format
+msgid "Host name \"{0}\" contains illegal character {1}"
+msgstr "Ime gostitelja \"{0}\" vsebuje nezakonito znako {1}"
+
+#, java-format
+msgid "Host name cannot start with \"{0}\""
+msgstr "Ime gostitelja ne more začetega z \"{0}\""
+
+#, java-format
+msgid "Host name cannot end with \"{0}\""
+msgstr "Ime gostitelja ne more končati z \"{0}\""
+
+#, java-format
+msgid "Host name cannot contain \"{0}\""
+msgstr "Ime gostitelja ne more vsebovati \"{0}\""
+
+#, java-format
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "Ime gostitelja \"{0}\" zahteva pretvorbo v ASCII, vendar je knjižnica za pretvorbo v tem JVM neodvisna"
+
+msgid "None"
+msgstr "Brez"
+
+msgid "Hashcash"
+msgstr "Hashcash"
+
+msgid "Hidden"
+msgstr "Skrito"
+
+msgid "Signed"
+msgstr "Podpisano"
+
+msgid "Key"
+msgstr "Ključ"
+
+#, java-format
+msgid "Type {0}"
+msgstr "Vrsta {0}"
+
+msgid "DSA 1024 bit"
+msgstr "DSA 1024 bit"
+
+msgid "Search for "
+msgid_plural "Iskanje "
+msgstr[0] "Iskanje po "
+msgstr[1] "Iskanje po "
+msgstr[2] "Iskanje po "
+msgstr[3] "Iskanje po "
+
+#, java-format
+msgid "Filtered list contains 1 entry."
+msgid_plural "Filtered list contains {0} entries."
+msgstr[0] "Filtrirana seznama vsebuje {0} vnos."
+msgstr[1] "Filtrirana seznama vsebuje {0} vnosov."
+msgstr[2] "Filtrirana seznama vsebuje {0} vnosov."
+msgstr[3] "Filtrirana seznama vsebuje {0} vnosov."
+
+#, java-format
+msgid "One result for: "
+msgid_plural "{0} results for: "
+msgstr[0] "{0} rezultat za: "
+msgstr[1] "{0} rezultatov za: "
+msgstr[2] "{0} rezultatov za: "
+msgstr[3] "{0} rezultatov za: "
+
+#, java-format
+msgid "1 entry"
+msgid_plural "{0} entries"
+msgstr[0] "{0} vnos"
+msgstr[1] "{0} vnosa"
+msgstr[2] "{0} vnosa"
+msgstr[3] "{0} vnosa"
+
+msgid "Add"
+msgstr "Dodaj"
+
+msgid "Replace"
+msgstr "Zamenjaj"
+
+#, java-format
+msgid "Host name {0} is already in address book, unchanged."
+msgstr "Ime gostitelja {0} je že v imeniku naslovov, ne spremenjeno."
+
+#, java-format
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "Ime gostitelja {0} je že v imeniku naslovov s drugačnim destinacijo. Kliknite na \"Zamenjaj\", da prepisete."
+
+msgid "Unable to resolve Base 32 address"
+msgstr "Ni mogoče razrešiti naslova Base 32"
+
+#, java-format
+msgid "Destination added for {0}."
+msgstr "Destinacija dodana za {0}."
+
+#, java-format
+msgid "Destination changed for {0}."
+msgstr "Destinacija spremenjena za {0}."
+
+msgid "Warning - host name does not end with \".i2p\""
+msgstr "Opozorilo - ime gostitelja ne konča z \".i2p\""
+
+msgid "Invalid Base 32 host name."
+msgstr "Neveljavno ime gostitelja Base 32."
+
+msgid "Invalid Base 64 destination."
+msgstr "Neveljavna destinacija Base 64."
+
+#, java-format
+msgid "Invalid host name \"{0}\"."
+msgstr "Neveljavno ime gostitelja \"{0}\"."
+
+msgid "Please enter a host name and destination"
+msgstr "Prosim, vnesite ime gostitelja in destinacijo"
+
+#. clear search when deleting
+msgid "Delete Entry"
+msgstr "Izbriši vnos"
+
+msgid "Delete Selected"
+msgstr "Izbriši izbrane"
+
+#. parameter is a host name
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Destinacija {0} izbrisana."
+
+#. parameter will always be >= 2
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "{0} destinacija izbrisana."
+msgstr[1] "{0} destinacij izbrisanih."
+msgstr[2] "{0} destinacij izbrisanih."
+msgstr[3] "{0} destinacij izbrisanih."
+
+msgid "No entries selected to delete."
+msgstr "Nobenega vnosa ni izbrano za izbris."
+
+msgid "Add Alternate"
+msgstr "Dodaj alternativo"
+
+msgid "Address book saved."
+msgstr "Imenik naslovov shranjen."
+
+msgid "Browse away from this addressbook and return to see update."
+msgstr "Brskanje stran od tega imenika naslovov in vrnite se, da vidite posodobitev."
+
+msgid "ERROR: Could not write addressbook file."
+msgstr "NAPAKA: Datoteko imenika naslovov ni mogoče zapisati."
+
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "Neveljavna oddaja obrazca, verjetno zaradi uporabe gumba \"nazaj\" ali \"osveži\" v brskalniku. Prosim, poskusite ponovno."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Če težava obstaja, preverite, ali so v vašem brskalniku omogočeni piškotki."
+
+msgid "Save"
+msgstr "Shrani"
+
+msgid "Configuration saved."
+msgstr "Konfiguracija shranjena."
+
+msgid "Reload"
+msgstr "Osveži"
+
+msgid "Configuration reloaded."
+msgstr "Konfiguracija ponovno naložena."
+
+msgid "New domain"
+msgstr "Novo domeno"
+
+msgid "Subscription log reloaded."
+msgstr "Dnevnik prijav ponovno naložen."
+
+#, java-format
+msgid "{0} address book in {1} database"
+msgstr "{0} imenik naslovov v {1} podatkovniku"
+
+#, java-format
+msgid "Host name {0} is not in the address book."
+msgstr "Ime gostitelja {0} ni v imeniku naslovov."
+
+msgid "Manually added via SusiDNS"
+msgstr "Ročno dodano preko SusiDNS"
+
+#, java-format
+msgid "Failed to add Destination for {0} to naming service {1}"
+msgstr "Dodajanje destinacije za {0} v storitev imenovanja {1} je spodletelo"
+
+#, java-format
+msgid "Failed to delete Destination for {0} from naming service {1}"
+msgstr "Brisanje destinacije za {0} iz storitve imenovanja {1} je spodletelo"
+
+msgid "Save Notes"
+msgstr "Shrani bilance"
+
+msgid "You must enter a file"
+msgstr "Morate vnesti datoteko"
+
+msgid "No entries found in file"
+msgstr "V datoteki ni najdenih vnosov"
+
+#, java-format
+msgid "Imported from file {0}"
+msgstr "Uvoženo iz datoteke {0}"
+
+msgid "Imported from file"
+msgstr "Uvoženo iz datoteke"
+
+#, java-format
+msgid "Loaded {0} entry from file"
+msgid_plural "Loaded {0} entries from file"
+msgstr[0] "Naložen {0} vnos iz datoteke"
+msgstr[1] "Naloženi {0} vnosa iz datoteke"
+msgstr[2] "Naloženi {0} vnosa iz datoteke"
+msgstr[3] "Naloženi {0} vnosa iz datoteke"
+
+#, java-format
+msgid "Skipped {0} duplicate entry from file"
+msgid_plural "Skipped {0} duplicate entries from file"
+msgstr[0] "Preskočen {0} ponavljajoči se vnos iz datoteke"
+msgstr[1] "Preskočeni {0} ponavljajočih se vnosov iz datoteke"
+msgstr[2] "Preskočeni {0} ponavljajočih se vnosov iz datoteke"
+msgstr[3] "Preskočeni {0} ponavljajočih se vnosov iz datoteke"
+
+msgid "Import from file failed"
+msgstr "Uvoz iz datoteke je spodletel"
+
+msgid "Subscriptions saved."
+msgstr "Prijave shranjene."
+
+#. ******
+#. String nonce = System.getProperty("addressbook.nonce");
+#. if (nonce != null) {
+#. // Yes this is a hack.
+#. // No it doesn't work on a text-mode browser.
+#. // Fetching from the addressbook servlet
+#. // with the correct parameters will kick off a
+#. // config reload and fetch.
+#. ******
+msgid "Update"
+msgstr "Posodobi"
+
+msgid "Attempting to update addressbook from subscription sources..."
+msgstr "Poskuša posodobiti imenik naslovov iz virov prijav..."
+
+msgid "Cannot update subscriptions: HTTP proxy is not running!"
+msgstr "Ne moremo osvežiti prijav: HTTP posredniški strežnik ne deluje!"
+
+msgid "Subscriptions reloaded."
+msgstr "Prijave ponovno naložene."
+
+msgid "Import"
+msgstr "Uvozi"
+
+msgid "address book"
+msgstr "imenik naslovov"
+
+msgid "Router"
+msgstr "Maršrutnik"
+
+msgid "Master"
+msgstr "Glavni"
+
+msgid "Private"
+msgstr "Zasebno"
+
+msgid "Published"
+msgstr "Objavljeno"
+
+msgid "Subscriptions"
+msgstr "Prijave"
+
+msgid "Configuration"
+msgstr "Konfiguracija"
+
+msgid "Help"
+msgstr "Pomoč"
+
+msgid "Book"
+msgstr "Knjiga"
+
+msgid "No entries"
+msgstr "Brez vnosov"
+
+msgid "Export in hosts.txt format"
+msgstr "Izvozi v formatu hosts.txt"
+
+msgid "Export results in hosts.txt format"
+msgstr "Izvozi rezultate v formatu hosts.txt"
+
+msgid "Export book in hosts.txt format"
+msgstr "Izvozi knjigo v formatu hosts.txt"
+
+msgid "Search"
+msgstr "Iskanje"
+
+msgid "other"
+msgstr "drugo"
+
+msgid "clear filter"
+msgstr "počisti filtr"
+
+msgid "Info"
+msgstr "Informacije"
+
+msgid "Hostname"
+msgstr "Ime gostitelja"
+
+msgid "Link (b32)"
+msgstr "Povezava (b32)"
+
+msgid "Destination"
+msgstr "Destinacija"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Izberite gostitelje za izbris iz imenika naslovov"
+
+msgid "More information on this entry"
+msgstr "Več informacij o tem vnosu"
+
+msgid "Base 32 address"
+msgstr "Naslov Base 32"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Pomožna povezava za deljenje naslova gostitelja z možnostjo dodajanja v imenik naslovov"
+
+msgid "Mark for deletion"
+msgstr "Označi za izbris"
+
+msgid "Cancel"
+msgstr "Prekliči"
+
+msgid "Add new destination"
+msgstr "Dodaj novo destinacijo"
+
+msgid "e.g. newdomain.i2p"
+msgstr "npr. newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 ali B32"
+
+msgid "Full destination or b32 address"
+msgstr "Celotna destinacija ali naslov b32"
+
+msgid "Import from hosts.txt file"
+msgstr "Uvozi iz datoteke hosts.txt"
+
+msgid "Select file"
+msgstr "Izberi datoteko"
+
+msgid "configuration"
+msgstr "konfiguracija"
+
+msgid "File location"
+msgstr "Lokacija datoteke"
+
+msgid "Hints"
+msgstr "Navodila"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Poti do datotek in imenikov tukaj so relativne glede na delovno mapo imenika naslovov, ki je običajno ~/.i2p/addressbook/ (Linux) ali %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Če želite ročno dodati vrstice v imenik naslovov, jih dodajte v zaseben ali glavni imenik naslovov."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Imenik naslovov maršrutnika in objavljeni imenik naslovov se posodablja z aplikacijo imenika naslovov."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Ko objavite svoj imenik naslovov, SE VSE destinacije iz glavnega in imenika naslovov maršrutnika pojavitve tukaj."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Uporabite zaseben imenik naslovov za zasebne destinacije, te se ne objavljajo."
+
+msgid "Options"
+msgstr "Možnosti"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "Datoteka, ki vsebuje seznam URL-jev prijav (niste morali spremeniti)"
+
+msgid "Update interval in hours"
+msgstr "Interval osveževanja v urah"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Vaš javni datoteka hosts.txt (izberite pot v korenu dokumenta vašega strežnika spletnih strani)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "Vaš hosts.txt (ne sprememljajte)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Vaš osebni imenik naslovov, ti gostitelji bodo objavljeni"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Vaš zaseben imenik naslovov, nikoli se ne objavi"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "Vrata za vaš eepProxy (niste morali spremeniti)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "Ime gostitelja za vaš eepProxy (niste morali spremeniti)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Ali posodobiti objavljeni imenik naslovov"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Datoteka, ki vsebuje zaglavje etags iz pridobljenih URL-jev prijav (niste morali spremeniti)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Datoteka, ki vsebuje časovni žig spremembe za vsak pridobljen URL prijave (niste morali spremeniti)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "Datoteka za dnevnik dejavnosti (premenite na /dev/null, če želite)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "Ime nadomestnega teme za uporabo (privzeto je teme izbrano v konzoli)"
+
+msgid "addressbook"
+msgstr "imenik naslovov"
+
+msgid "Details"
+msgstr "Podrobnosti"
+
+msgid "Address Helper"
+msgstr "Pomočnik za naslove"
+
+msgid "link"
+msgstr "povezava"
+
+msgid "Encoded Name"
+msgstr "Kodiran naziv"
+
+msgid "Base 32 Address"
+msgstr "Naslov Base 32"
+
+msgid "Base 64 Hash"
+msgstr "Dolgina Base 64"
+
+msgid "Public Key"
+msgstr "Javni ključ"
+
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 bit"
+
+msgid "Signing Key"
+msgstr "Podpisni ključ"
+
+msgid "Certificate"
+msgstr "Potrdilo"
+
+msgid "Validated"
+msgstr "Preverjeno"
+
+msgid "no"
+msgstr "ne"
+
+msgid "yes"
+msgstr "da"
+
+msgid "Source"
+msgstr "Vir"
+
+msgid "Added Date"
+msgstr "Datum dodajanja"
+
+msgid "Last Modified"
+msgstr "Zadnja sprememba"
+
+msgid "Notes"
+msgstr "Bilance"
+
+msgid "Add notes about domain"
+msgstr "Dodaj bilance o domeni"
+
+msgid "Visual Identification for"
+msgstr "Vizualna identifikacija za"
+
+msgid "Create your own identification images"
+msgstr "Ustvarite svoje slike za identifikacijo"
+
+msgid "Launch Image Generator"
+msgstr "Zaženi generator slik"
+
+msgid "Introduction"
+msgstr "Vstopno besedilo"
+
+msgid "What is the addressbook?"
+msgstr "Kaj je imenik naslovov?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "Aplikacija za imenik naslovov je del vaše namestitve I2P."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Redno posodablja vašo datoteko hosts.txt iz razpršenih virov ali \"prijava\"."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions file."
+msgstr "Prijavo na dodatne strani je enostavno, dodajte jih v svojo datoteko <a href=\"subscriptions\">prijava."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview."
+msgstr "Za dodatne informacije o imenovanju v I2P, glejte <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>pregled."
+
+msgid "How does the addressbook application work?"
+msgstr "Kako deluje aplikacija za imenik naslovov?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Aplikacija za imenik naslovov redno preverja vaše prijave in združi njihovo vsebino z vašim \"maršrutnikom\" imenika naslovov."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Nato združi tudi vaš \"glavni\" imenik naslovov z imenikom naslovov maršrutnika."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Če je nastavljeno, je imenik naslovov maršrutnika zdaj zapisan v \"objavljeni\" imenik naslovov, ki bo javno dostopen, če izvajate eepsite."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Maršrutnik prav tako uporablja zaseben imenik naslovov, ki ni združen ali objavljen."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Gostitelji v zasebnem imeniku naslovov so dostopni za vas, vendar so njihovi naslovi nikoli razdeljeni z drugimi."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Zaseben imenik naslovov se lahko uporablja tudi za aliase gostiteljev v vaših drugih imenikih naslovov."
+
+msgid "subscription log"
+msgstr "dnevnik prijav"
+
+msgid "Subscription Log"
+msgstr "Dnevnik prijav"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Najnovejši (brez slabih domen)"
+
+msgid "subscriptions"
+msgstr "prijava"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "Datoteka prijav vsebuje seznam URL-jev i2p."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Aplikacija za imenik naslovov redno preverja ta seznam za nove eepsite."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "Ti URL-ji se sklicujejo na objavljene datoteke hosts.txt."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Oglejte FAQ za seznam URL-jev prijav."
+
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "Če je SusiDNS nastavljen na objavo vašega imenika naslovov maršrutnika, se vnos v vašem objavljenem imeniku naslovov pojavi in shrani v datoteko hosts.txt za deljenje."
+
+msgid "Published Addressbook"
+msgstr "Objavljeni imenik naslovov"
+
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "Da nastavite SusiDNS, da vaš imenik naslovov maršrutnika pošlje v vaš objavljeni imenik naslovov, nastavite 'should_publish=true' na strani konfiguracije."
+
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "Vsi gostitelji, ki so izvedeni iz prijav, se bodo pojavili v tem imeniku naslovov, poleg tistih, ki jih ročno dodate tukaj ali v svoj glavni imenik naslovov."
+
+msgid "Router Addressbook"
+msgstr "Imenik naslovov maršrutnika"
+
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "Gostitelji, ki jih ročno dodate tukaj, se nikoli ne bodo objavljali. Tukaj lahko dodate tudi aliase gostiteljev iz drugih imenikov naslovov."
+
+msgid "Private Addressbook"
+msgstr "Zaseben imenik naslovov"
+
+msgid "Local Records"
+msgstr "Lokalne zapisi"
+
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "Aplikacije I2P (vključno z posredniškim strežnikom HTTP) uporabljajo gostitelje v vaših lokalnih imenikih naslovov za razrešitev gostiteljskih imen .i2p."
+
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "Dodatne prijave lahko najdete v poglavju FAQ na strani za pomoč maršrutnika."
+
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "Gostitelji, ki jih pridobite iz vaših prijav, se dodajo v vaš imenik naslovov maršrutnika in se samodejno sinhronizirajo (privzeto vsake 12 ur)."
+
+msgid "Configure Subscriptions"
+msgstr "Nastavi prijave"
+
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "Če ročno dodate gostitelje tukaj, se bodo vključili v vaš objavljeni imenik naslovov (če je nastavljeno)."
+
+msgid "Master Addressbook"
+msgstr "Glavni imenik naslovov"
+
+msgid "Searchable by"
+msgstr "Iščljivo po"
+
+msgid "I2P applications"
+msgstr "aplikacije I2P"
+
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "Glavni, Maršrutnik in Zaseben imeniki naslovov skupaj služijo kot DNS autoritet za aplikacije I2P."
+
+msgid "Optional,"
+msgstr "Po izbiri,"
+
+msgid "for websites"
+msgstr "za spletna mesta"
+
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "Če nastavite SusiDNS, da objavi vaš imenik naslovov maršrutnika, bo izvozil datoteko hosts.txt, ki vsebuje vse gostitelje (privzeto v korena vašega eepsite)."
+
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "Naslovi, ki jih ročno dodate v svoj glavni imenik naslovov, se bodo združili z vašim imenikom naslovov maršrutnika."
+
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "Gostitelji, ki jih prejmete iz svojih prijav, se bodo združili z vašim imenikom naslovov maršrutnika."
