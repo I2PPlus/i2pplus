@@ -39,10 +39,10 @@ msgstr "Začetek ponovnega semenjenja"
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Pridobljena je le {0} informacija o usmerjevalniku od gostiteljev ponovnega zalaganja"
+msgstr[1] "Pridobljene so le {0} informacije o usmerjevalniku od gostiteljev ponovnega zalaganja"
+msgstr[2] "Pridobljene so le {0} informacije o usmerjevalniku od gostiteljev ponovnega zalaganja"
+msgstr[3] "Pridobljene so le {0} informacije o usmerjevalniku od gostiteljev ponovnega zalaganja"
 
 #. remove dupe error msgs
 #, java-format
@@ -221,16 +221,16 @@ msgstr "UPnP poroča, da je maksimalna dolazna stopnja bitov {0}bitov/sek."
 msgid "UPnP reports the maximum upstream bit rate is {0}bits/sec"
 msgstr "UPnP poroča, da je maksimalna gorazna stopnja bitov {0}bitov/sek."
 
-#. {0} is TCP or UDP
-#. {1,number,#####} prevents 12345 from being output as 12,345 in the English locale.
-#. If you want the digit separator in your locale, translate as {1}.
+#. {0} je TCP ali UDP
+#. {1,number,#####} prepreči, da se 12345 izpise kot 12,345 v angleškem lokaliziranem okolju.
+#. Če želite ločilo števil v svojem lokaliziranem okolju, prevedite kot {1}.
 #, java-format
-msgid "{0} port {1,number,#####} was successfully forwarded by UPnP."
-msgstr ""
+msgid "{0} vrata {1,number,#####} je uspešno usmerjeno z UPnP."
+msgstr "{0} vrata {1,number,#####} je bila uspešno usmerjena z UPnP."
 
 #, java-format
-msgid "{0} port {1,number,#####} was not forwarded by UPnP."
-msgstr ""
+msgid "{0} vrata {1,number,#####} ni bila usmerjena z UPnP."
+msgstr "{0} vrata {1,number,#####} ni bila usmerjena z UPnP."
 
 msgid "Router"
 msgstr "Usmerjevalnik"
@@ -3628,53 +3628,53 @@ msgstr[2] "{0} dogodki"
 msgstr[3] "{0} dogodki"
 
 msgid "rate"
-msgstr ""
+msgstr "mera"
 
 msgid "Average"
-msgstr ""
+msgstr "Povprečje"
 
 msgid "Highest average"
-msgstr ""
+msgstr "Najvišje povprečje"
 
 msgid "Highest total in a period"
-msgstr ""
+msgstr "Najvišja skupaj v obdobju"
 
 msgid "Average event count"
-msgstr ""
+msgstr "Povprečno število dogodkov"
 
 msgid "Events in peak period"
-msgstr ""
+msgstr "Dogodki v vrhu obdobja"
 
 msgid "Events in this period"
-msgstr ""
+msgstr "Dogodki v tem obdobju"
 
 #, java-format
 msgid "ended {0} ago"
-msgstr ""
+msgstr "končalo {0} nazaj"
 
 msgid "No events"
-msgstr ""
+msgstr "Brez dogodkov"
 
 msgid "Graph Data"
-msgstr ""
+msgstr "Podatki grafa"
 
 msgid "Graph Event Count"
-msgstr ""
+msgstr "Število dogodkov grafa"
 
 msgid "Export Data as XML"
-msgstr ""
+msgstr "Izvozi podatke kot XML"
 
 #. Display the strict average
 msgid "Lifetime average value"
-msgstr ""
+msgstr "Povprečna vrednost življenjskega cikla"
 
 #, java-format
 msgid "1 event"
 msgid_plural "{0} events"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{0} dogodek"
+msgstr[1] "{0} dogodki"
+msgstr[2] "{0} dogodki"
+msgstr[3] "{0} dogodki"
 
 msgid "Help &amp; FAQ"
 msgstr "Pomoč &amp; ČPP"
@@ -5603,22 +5603,22 @@ msgid "I2P proxy port"
 msgstr "Vrata posredniškega strežnika I2P"
 
 msgid "News URL"
-msgstr ""
+msgstr "URL novice"
 
 msgid "If I2P cannot update via BitTorrent, it will try these addresses in the order they are listed"
-msgstr ""
+msgstr "Če I2P ne more posodobiti prek BitTorrent, bo poskušal dostopati do teh naslovov v vrstnem redu, v katerem so navedeni"
 
 msgid "Update URLs"
-msgstr ""
+msgstr "URL-ji posodobitve"
 
 msgid "These keys are used to validate official router updates, signed development builds and the official news feed"
-msgstr ""
+msgstr "Ti ključi se uporabljajo za preverjanje pravilnosti uradnih posodobitve strežnika, podpisanih razvojnih izgradb in uradnega vira s novicmi"
 
 msgid "Trusted keys"
-msgstr ""
+msgstr "Pouzdani ključi"
 
 msgid "Updates will be dispatched via your package manager."
-msgstr ""
+msgstr "Posodobitve bodo pošiljane prek vašega upravitelja paketov."
 
 msgid "config webapps"
 msgstr "konfig webapps"
@@ -5721,19 +5721,19 @@ msgid "The router configuration options listed below are not available in the us
 msgstr "Nastavitve konfiguracije usmerjevalnika, navedene spodaj, niso na voljo v uporabniškem vmesniku, običajno zaradi manjšega uporabe ali ker omogočajo dostop do naprednih nastavitev, ki jih večina uporabnikov ne potrebuje. To ni celovit seznam. Nekatere nastavitve zahtevajo ponovni zagon usmerjevalnika za učinkovanje. Opomba: vse nastavitve so osjetljive na velikost crk. Morate urediti svojo datoteko <code>router.config</code>, da dodate možnosti, ali pa, ko dodate <code>routerconsole.advanced=true</code> v datoteko router.config, lahko nastavite nastavitve v konzoli na strani <a href=/configadvanced>Napredna konfiguracija</a>."
 
 msgid "When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href=/configadvanced>Advanced Configuration page</a>. Extra display options are provided in the <a href=/netdb>Network Database section</a>, including the <a href='/netdb?f=3'>Sybil Analysis tool</a>, and there are additional configuration options on the <a href=/configclients>Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar."
-msgstr ""
+msgstr "Ko je nastavljeno na true, v konzoli bo omogočena dodatna funkcionalnost in uporabnik bo lahko direktno uredil nastavitve na <a href=/configadvanced>Strani za napredno konfiguracijo</a>. Dodatna možnost prikaza je dodeljena v <a href=/netdb>sekciji Baza podatkov omrežja</a>, vključno s <a href='/netdb?f=3>Alat za analizo Sybil</a>, in na <a href=/configclients>Strani za konfiguracijo klientov</a> obstajajo dodatne možnosti konfiguracije. To bo tudi omogočilo namestitev nepodpisanih posodobitev, ročno konfiguracijo URL-ja s novice, in dodatne sekcije na vrstnici."
 
 msgid "Plugins signed with the cryptographic key of the developer are the recommended format, but if you wish to install unsigned plugins (.zip) you can set this to true. Note that you may still encounter issues attempting to install an unsigned plugin if the developer has included additional checks in the plugin build process."
-msgstr ""
+msgstr "Vstavki, podpisani z kriptografskim ključem razvijalca, so priporočeni format, vendar če želite namestiti nepodpisane vstavke (.zip), lahko to nastavite na true. Opomba: morda se naletite na težave pri poskusu namestitve nepodpisane vstavke, če je razvijalec vključil dodatne preglede v postopek izdelave vstavke."
 
 msgid "This setting allows the manual selection of the browser which I2P will launch on startup (if the console is <a href=/configservice#browseronstart>configured</a> to launch a browser on startup), overriding the OS default browser. For more information, see the <a href=#alternative_browser>FAQ entry</a> above."
-msgstr ""
+msgstr "Ta nastavitev omogoča ročno izbiro brskalnika, ki ga bo I2P zagnal ob zagonu (če je konzola <a href=/configservice#browseronstart>nastavljena</a> za zagon brskalnika ob zagonu), s čimer nadomešča privzeti brskalnik operacijskega sistema. Za več informacij glejte <a href=#alternative_browser>vnos ČPP</a> zgoraj."
 
 msgid "When set to true, this enables gzip compression for the router console and default web applications. [Enabled by default]"
-msgstr "Če je nastavljeno na true, omogoči gzip kompresijo za konzolo usmerjevalnika in privzete spletna aplikacije. [Omogočeno privzeto]"
+msgstr "Ko je nastavljeno na true, omogoči gzip kompresijo za konzolo usmerjevalnika in privzete spletna aplikacije. [Omogočeno privzeto]"
 
 msgid "When set to true, this enables plugin installation on the <a href=/configplugins>Plugin Configuration page</a>. [Enabled by default]"
-msgstr ""
+msgstr "Ko je nastavljeno na true, omogoča namestitev vstavka na <a href=/configplugins>Strani za konfiguracijo vstavka</a>. [Omogočeno privzeto]"
 
 msgid "When set to true, this setting enables reverse DNS lookups for peers, triggered when displaying the country flag of a peer or when the hostname or domain is explicitly displayed in the console, or when the peer's RouterInfo is written to disk. In order to avoid repeat lookups, it's recommended to configure a generous caching policy for DNS lookups of 10 minutes or more, and to configure a privacy respecting DNS server in your operating system. [Disabled by default, restart required]"
 msgstr "Če je nastavljeno na true, ta nastavitev omogoča obratne iskanje DNS za parterje, sproženo pri prikazu zastave države parterja ali ko je ime gostitelja ali domena jasno prikazana v konzoli, ali ko je RouterInfo parterja zapisan na disk. Da bi se izognili ponovnim iskanjem, je priporočljivo konfigurirati nenehno politiko predpomnilnika za iskanje DNS, ki traja 10 minut ali več, in konfigurirati DNS strežnik, ki spoštuje zasebnost, v vašem operacijskem sistemu. [Onemogočeno privzeto, potreben je ponovni zagon]"
@@ -5757,52 +5757,52 @@ msgid "Allocate number of processor threads for building tunnels. If your proces
 msgstr "Dodelite število nitij procesorja za izgradnjo tuneljev. Če vaš procesor podpira hiper-niti ali hkratno večnitje, lahko pomnožite število jezgr procesorja z 2, da dobite maksimalno število nitij za dodelitev, v nasprotnem primeru število jezgr procesorja = maksimalno število na voljo nitij. Opomba: morda želite dodeliti manj kot teoreticno maksimum, da se prepričate, da imate preprosto razpoložljivo za druge naloge."
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
-msgstr ""
+msgstr "Ta nastavitev, v milisekundah, nadomesti privzeto omejitev obdelave sporočil (prikazano kot <i>Zamik sporočil</i> v sekciji vrstnice Zasnemljenost) preden se usmerjevalnik določi kot prenatljen in zahteve za tranzitne tunele se zavrnejo. [Privzeto je 750ms ali 1500ms, če je usmerjevalnik označen kot počasen]"
 
 msgid "Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]"
-msgstr ""
+msgstr "Redno preverite tunele, da določite povprečen zamik, in prikažite rezultate v sekciji vrstnice Zasnemljenost. Da omogočite, nastavite to vrednost na false. [Privzeto je false]"
 
 msgid "When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]"
-msgstr ""
+msgstr "Ko je nastavljeno na true, bo usmerjevalnik vsakič, ko se usmerjevalnik ponovno zagni, spremenil svojo identiteto in UDP vrata. [Privzeto je false]"
 
 msgid "This setting determines which <a href=/profiles#profile_defs>peer capabilities</a> will not be used to build your router's tunnels. e.g. <code>router.excludePeerCaps=LMN</code>"
-msgstr ""
+msgstr "Ta nastavitev določa, katere <a href=/profiles#profile_defs>možnosti sosednjega strežnika</a> ne bodo uporabljene za izgradnjo tunelov vašega usmerjevalnika. npr. <code>router.excludePeerCaps=LMN</code>"
 
 msgid "When set to true, if your router is serving as a floodfill for the network, your <a href=/configadvanced#ffconf>floodfill participation</a> will be hidden from other routers."
-msgstr ""
+msgstr "Ko je nastavljeno na true, če služi vaš usmerjevalnik kot floodfill za omrežje, bo vaše <a href=/configadvanced#ffconf>učestvo floodfill</a> skrito pred drugimi usmerjevalniki."
 
 msgid "Defines the maximum number of parallel <a href=/jobs>jobs</a> that can be run. The default value is determined by the amount of memory allocated to the JVM via <code>wrapper.config</code>, and is set at 3 for less than 64MB, 4 for less than 256M, or 5 for more than 256MB. Note: A change to this setting requires a restart of the router."
-msgstr ""
+msgstr "Določi maksimalno število hkrasnega <a href=/jobs>nalog</a>, ki jih lahko izvede. Privzeta vrednost se določi glede na količino pomnilnika, dodeljene JVM preko <code>wrapper.config</code>, in je nastavljena na 3 za manj kot 64MB, 4 za manj kot 256M, ali 5 za več kot 256MB. Opomba: Sprememba te nastavitve zahteva ponovni zagon usmerjevalnika."
 
 msgid "Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Default is 8000, or 2000 if running on Arm or Android]"
-msgstr ""
+msgstr "Določi maksimalno število sodelujocih tunelov, ki jih lahko usmerjevalnik izgradi. Da v celoti onemogočite sodelovanje, nastavite na 0. [Privzeto je 8000, ali 2000, če delate na Arm ali Android]"
 
 msgid "Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 10% in I2P+, 33% in I2P]"
-msgstr ""
+msgstr "Določi maksimalni odstotek aktivnih lokalnih tunelov (klient in raziskovalni), ki jih bo sosednji strežnik uporabil. [Privzeto je 10% v I2P+, 33% v I2P]"
 
 msgid "When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories. [Default is false]"
-msgstr ""
+msgstr "Ko je nastavljeno na true, datoteke informacij o usmerjevalniku, shranjene v mapi netDB vašega profila, ne bodo razdeljene na 64 podmapi. [Privzeto je false]"
 
 msgid "When set to true, your router will not be classified as slow, regardless of the specifications of your host system. Ordinarily, routers running on hosts with the following characteristics will be classified as slow, and various performance-related router options will be modified accordingly:"
-msgstr ""
+msgstr "Ko je nastavljeno na true, vaš usmerjevalnik ne bo razredil kot počasen, ne glede na specifikacije vašega gostiteljskega sistema. Običajno bodo usmerjevalniki, ki delajo na gostiteljih z naslednjimi značilnostmi, razredili kot počasni, in različne možnosti usmerjevalnika, povezane z zmogljivostjo, bodo prilagojene ustrezno:"
 
 msgid "Host OS running Android"
-msgstr ""
+msgstr "Gostitelj OS delajo Android"
 
 msgid "Host OS running on ARM (MacOS excepted)"
-msgstr ""
+msgstr "Gostitelj OS delajo na ARM (MacOS izključen)"
 
 msgid "32bit host OS running with less than 4 detected cores"
-msgstr ""
+msgstr "32bit gostitelj OS delajo z manj kot 4 zaznanimi jezgri"
 
 msgid "64bit host OS running with 1 detected core and less than 384MB allocated to the JVM"
-msgstr ""
+msgstr "64bit gostitelj OS delajo z 1 zaznanim jezgre in manj kot 384MB dodeljeno JVM"
 
 msgid "Less than 256MB allocated to the JVM"
-msgstr ""
+msgstr "Manj kot 256MB dodeljeno JVM"
 
 msgid "Router running a non-native, software emulated version of the Java BigInteger library"
-msgstr ""
+msgstr "Usmerjevalnik delajo neautohtona, verzija programske opreme Java BigInteger knjižnice"
 
 msgid "This setting allows you to configure the minimum number of hosted participating tunnels before the router starts to reject tunnel requests based on anticipated bandwidth requirements. [Default is 100 if system is running Android, 800 if system is running on ARM and less than 4 cores available, 1200 if system is running on ARM and 4 or more cores available, otherwise 2500]"
 msgstr "Ta nastavitev vam omogoča konfiguracijo minimalnega števila gostiteljstva sodelujočih tuneljev preden usmerjevalnik začne zavrniti zahteve za tunelj na podlagi očakovanja zahtev po širini pasma. [Privzeto je 100, če sistem deluje Android, 800, če sistem deluje na ARM in je na voljo manj kot 4 jezgre, 1200, če sistem deluje na ARM in je na voljo 4 ali več jezgre, v nasprotnem primeru 2500]"
@@ -5817,55 +5817,49 @@ msgid "When set to false, the router will not block tunnel build requests from s
 msgstr "Če je nastavljeno na false, usmerjevalnik ne bo blokiriral zahtev za izgradnjo tuneljev iz počasnejših ali nedosegljivih usmerjevalnikov, ki delujejo starejše različice. [Privzeto je true, potreben je ponovni zagon]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
-msgstr ""
+msgstr "Ko je nastavljeno, določi tvrdi omejitev števila tunelov, ki jih lahko usmerjevalnik izgradi hkrasno. Po privzemu uporablja usmerjevalnik povprečno obdobje izgradnje in trenutno izhodno širino pasma za določanje optimalne hitrosti izgradnje. [Ponovni zagon zahtoven]"
 
 msgid "If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href=/configupdate#i2pupdates>unsigned updates</a> is enabled by default."
-msgstr ""
+msgstr "Če želite namestiti nepodpisane (.zip) posodobitve I2P, to mora biti dodano v vaš <code>router.config</code> datoteko, razen če ste že nastavili <code>routerconsole.advanced=true</code>, v katerem primeru je ta možnost že zagotovljena. Opomba: od I2P+ 0.9.48+, namestitev <a href=/configupdate#i2pupdates>nepodpisanih posodobitev</a> je omogočena privzeto."
 
 msgid "This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!"
-msgstr ""
+msgstr "Ta nastavitev vam omogoča konfiguracijo URL-ja za posodobitve nepodpisanih posodobitev, če je omogočeno. URL mora končati z <code>/i2pupdate.zip</code>. Opomba: nepodpisane posodobitve ne namestite, razen če zaupate v vir posodobitve!"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
-msgstr ""
+msgstr "Ta nastavitev dovoljuje onemogočanje SSU preizkusov za določanje, ali je vaš usmerjevalnik omejen, in se lahko omogoči za usmerjevalnike, ki so zanesljivo neomejeni, vendar doživljajo nepredvidljive težave z omejevalcem. Če je testiranje onemogočeno, bi morala SSU in NTCP poročata o vašem trenutnem javnem ip naslovu na <a href=/info>strani za informacije o usmerjevalniku</a>. [Ponovni zagon zahtoven]"
 
 msgid "This setting determines which transport takes priority when communicating with peers. By default, NTCP is favored over UDP (SSU). By setting the value to true, UDP will be favored unless a pre-existing NTCP connection exists; when set to always, UDP will always be used regardless of any pre-existing NTCP connection. [Default is false]"
-msgstr ""
+msgstr "Ta nastavitev določa, kateri prenos ima prednost pri komunikaciji z sosednjimi strežniki. Po privzemu je NTCP izbran pred UDP (SSU). Če nastavite vrednost na true, bo UDP izbran, razen če obstaja predhodno vzpostavljena povezava NTCP; ko je nastavljeno na vedno, bo UDP vedno uporabljen, ne glede na katero koli predhodno vzpostavljeno povezavo NTCP. [Privzeto je false]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
-msgstr ""
+msgstr "Ta nastavitev specifična za tunel vam omogoča omogočanje ali onemogočanje odgovorov na pings, poslane na strežnike gostiteljene s strani usmerjevalnika. Da onemogočite pings, morate dodati vrstico <code>i2p.streaming.answerPings=false</code> v sekcijo <i>Prilagojene možnosti</i> za konfiguracijo strežnika v Menedžer tunela."
 
 msgid "When set to true, I2P runs without network connectivity, which is helpful if you are constantly restarting the router to test code updates as this prevents network disruption."
-msgstr ""
+msgstr "Ko je nastavljeno na true, deluje I2P brez omrežne povezanosti, kar je uporabno, če neprestano ponovno zagnate usmerjevalnik za preizpito posodobitve kode, saj to prepreči prekinitev omrežja."
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. [Restart required]"
-msgstr ""
-
-msgid "This setting, when enabled, modifies the maximum additional random pong delay introduced for ping-enabled servers, if <code>i2p.streaming.enablePongDelay</code> is also enabled. Unless explicitly set, the default value of 50ms will be used."
-msgstr ""
-
-msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
-msgstr ""
+msgstr "Ta nastavitev, ko je omogočena, vnesi naključen pong zamik do 50ms za vse ping-omogočene strežnike gostiteljene s strani usmerjevalnika. Privzeto je onemogočeno. [Ponovni zagon zahtoven]"
 
 msgid "This setting determines the maximum number of messages in the outbound queue before it is marked as full. [Default is 768]"
-msgstr ""
+msgstr "Ta nastavitev določa maksimalno število sporočil v izhodnem redu preden je označen kot poln. [Privzeto je 768]"
 
 msgid "This setting determines the maximum number of messages above the maximum queue value before further messages are dropped. [Default is 128]"
-msgstr ""
+msgstr "Ta nastavitev določa maksimalno število sporočil nad maksimalno vrednostjo vrste preden so nadaljnja sporočila zavržena. [Privzeto je 128]"
 
 msgid "This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]"
-msgstr ""
+msgstr "Ta nastavitev (v milisekundah) vam omogoča ročno konfiguracijo ciljne vrednosti zamika vrste za sistem upravljanja vrste CoDel. Privzeto je 50ms. [Ponovni zagon zahtoven]"
 
 msgid "This setting (in hours) determines how old a RouterInfo in the NetDb is (its last known publication date) before it's classified as stale and deleted. [Default is 28 hours unless the router is a Floodfill, in which case the default is 8 hours]"
-msgstr ""
+msgstr "Ta nastavitev (v urah) določa, kako star je RouterInfo v NetDb (njegova zadnja znana datum izdaje) preden je razvrščen kot zastarel in izbrisan. [Privzeto je 28 ur, razen če je usmerjevalnik Floodfill, v katerem primeru je privzeto 8 ur]"
 
 msgid "This setting determines the number of peers to explore in parallel when the Peer Exploration Job runs [default is 1 peer at a time when more than 3000 peers are known]. Note that increasing this value will increase the bandwidth requirements for the exploration, and setting this value too high may cause excessive message delay and interfere with other services, so use with caution!"
-msgstr ""
+msgstr "Ta nastavitev določa število sosednjih strežnikov, ki jih je treba preiskati hkrasno, ko se izvede delo Peer Exploration [privzeto je 1 sosednji strežnik začasno, ko je znanih več kot 3000 sosednjih strežnikov]. Opomba: povečanje te vrednosti poveča zahteve po širini pasma za preiskavo, in nastavljanje te vrednosti previsoko lahko povzroči prevelik zamik sporočil in vpliva na druge storitve, zato uporabljajte s skrbi!"
 
 msgid "This setting determines the number of NetDb DHT buckets the Peer Exploration Job will reference when run. By default, the number of buckets to explore will vary depending on whether the router has been running for over an hour, if the router is hidden or in the 'K' bandwidth tier, and the number of known routers."
-msgstr ""
+msgstr "Ta nastavitev določa število vедерov DHT NetDb, ki jih bo delo Peer Exploration upoštevalo pri izvedbi. Po privzemu se število vедерov, ki jih je treba preiskati, bo razlikovalo glede na to, ali je usmerjevalnik delal več kot uro, ali je usmerjevalnik skrit ali v vrstici širine pasma 'K', in število znanih usmerjevalnikov."
 
 msgid "This setting (in seconds) allows you to override the delay between runs of the Peer Exploration Job which attempts to locate new peers to add to the NetDb. The job will run every 80 seconds by default, or if the router is experiencing job or message lag, every 3 minutes. If the size of the NetDb reaches 4000 peers, the pause will increase to 15 minutes. You may wish to increase the delay if your NetDb is well-populated (over 2000 peers), or if you wish to reduce overall bandwidth usage. Note: For Floodfill routers, this job does not run."
-msgstr ""
+msgstr "Ta nastavitev (v sekundah) vam omogoča nadomestiti zamik med poskusami delo Peer Exploration, ki poskuša najti nove sosednje strežnike za dodajanje v NetDb. Delo se bo izvedlo vsake 80 sekund po privzemu, ali pa, če usmerjevalnik doživlja zamik nalog ali sporočil, vsake 3 minute. Če je velikost NetDb dosegle 4000 sosednjih strežnikov, počitnice se bo povečala na 15 minut. Morda bi želeli povečati zamik, če je vaš NetDb dobro naseljen (več kot 2000 sosednjih strežnikov), ali pa če želite zmanjšati skupno uporabo širine pasma. Opomba: Za usmerjevalnike Floodfill, to delo ne deluje."
 
 msgid "This setting determines the maximum number of peer hashes to queue for exploration. In I2P the maximum is 128, and in I2P+ the default value is 512."
 msgstr "Ta nastavitev določa maksimalno število dijev parterjev za vrstico za raziskavo. V I2P je maksimum 128, in v I2P+ je privzeta vrednost 512."
@@ -5934,7 +5928,7 @@ msgid "If set to true, this option will place an icon in the system tray / notif
 msgstr "Če je nastavljeno na true, ta možnost bo postavila ikono v sistemske vrstice / območje obvestil, z osnovnimi možnostmi kontrole storitve. [Onemogočeno privzeto]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]"
-msgstr ""
+msgstr "Ta nastavitev omogoča konfiguracijo maksimalnega števila datotek na torrent, ki ga bo dovolil I2PSnark, ko prenaša ali ustvari torrent. Opomba: značajno povečanje vrednosti iz privzeta 2000 datotek morda zahteva dodatno konfiguracijo na gostiteljskem sistemu, da poveča maksimalno število odprtyh datotek, ki jih operacijski sistem dovoli (npr. <code>ulimit -n</code> na Linuxu). Da spremeniš, dodaj v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Ponovni zagon I2PSnark ali usmerjevalnika zahtoven]"
 
 msgid "Recent I2P+ Changes"
 msgstr "Nedavne spremembe I2P+"
@@ -6099,7 +6093,7 @@ msgid "How do I configure I2P to open at startup in a specific web browser?"
 msgstr "Kako konfiguriram I2P, da se odpre v določenem spletnem brskalniku pri zagonu?"
 
 msgid "By default, I2P will use the system configured default browser to launch at startup. If you wish to nominate an alternative browser, you will need to edit your router.config file (or the <a href=/configadvanced>Advanced Configuration page</a> if you have enabled advanced console mode) and add a new configuration line <code>routerconsole.browser=/path/to/browser</code> or <code>routerconsole.browser=\\path\\to\\browser.exe</code> if using Windows, replacing <code>\\path\\to\\browser</code> with the location of the browser you wish to use. Note: If the path to your chosen browser contains spaces, you may need to encase the path in quotes e.g. <code>routerconsole.browser=\"C:\\Program Files\\Mozilla\\Firefox.exe\"</code>"
-msgstr ""
+msgstr "Po privzemu bo I2P uporabil privzeti brskalnik, nastavljen v sistemu, za zagon ob zagonu sistema. Če želite predlagati alternativen brskalnik, boste morali urediti svojo datoteko router.config (ali pa <a href=/configadvanced>stran za napredno konfiguracijo</a>, če ste omogočili napredni način konzole) in dodati novo konfiguracijsko vrstico <code>routerconsole.browser=/path/to/browser</code> ali <code>routerconsole.browser=\\path\\to\\browser.exe</code>, če uporabljate Windows, zamenjajte <code>\\path\\to\\browser</code> s pot do brskalnika, ki ga želite uporabiti. Opomba: Če pot do izbranega brskalnika vsebuje presledke, morda boste morali pot obklopiti z navodili, npr. <code>routerconsole.browser=\"C:\\Program Files\\Mozilla\\Firefox.exe\"</code>"
 
 msgid "How do I configure my browser to access .i2p websites?"
 msgstr "Kako konfiguriram brskalnik, da dostopam do spletnih strani .i2p?"
@@ -6228,22 +6222,22 @@ msgid "UDP for SAM bridge"
 msgstr "UDP za most SAM"
 
 msgid "A higher level socket API for clients. Only opened when a SAM V3 client requests a UDP session. Can be enabled/disabled on the <a href=/configclients> Client Configuration page</a>. Can be changed in the <code>clients.config</code> file with the SAM command line option <code>sam.udp.port=nnnn</code>."
-msgstr ""
+msgstr "Nadomestna raven vmesnika za vajalce. Odpre se le, ko vajaLEC SAM V3 zahteva UDP sejo. Omogočite/onemogočite na <a href=/configclients>Strani za konfiguracijo klienta</a>. Lahko spremenite v datoteki <code>clients.config</code> z ukazno vrsto SAM opcije <code>sam.udp.port=nnnn</code>."
 
 msgid "SAM bridge"
-msgstr ""
+msgstr "SAM most"
 
 msgid "A higher level socket API for clients. Can be enabled/disabled on the <a href=/configclients>Client Configuration page</a>. Can be changed in the <code>clients.config</code> file. [Disabled by default]"
-msgstr ""
+msgstr "Nadomestna raven vmesnika za vajaLCE. Omogočite/onemogočite na <a href=/configclients>Strani za konfiguracijo klienta</a>. Lahko spremenite v datoteki <code>clients.config</code>. [Onemogočeno privzeto]"
 
 msgid "I2P Router Console (Web interface)"
-msgstr "Konzola I2P maršrutizatorja (Spletna vmesnik)"
+msgstr "Konzola I2P maršrutizatorja (Spletne vmesnike)"
 
 msgid "Can be disabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces. If you make the Router Console available over the network, you might wish to <a href=/configui#passwordheading>enforce an access password</a> to prevent unauthorized access."
-msgstr ""
+msgstr "Lahko onemogočite v datoteki <code>clients.config</code>. Lahko tudi konfigurirate za vez na specifičen vmesnik ali vse vmesnike v datoteki <code>jetty.xml</code>. Če ponudite Konzolo maršrutizatorja preko omrežja, morda želite <a href=/configui#passwordheading>zahtevati geslo dostopa</a>, da preprečite neovlaščen dostop."
 
 msgid "Can be disabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces in the <code>jetty.xml</code> file."
-msgstr ""
+msgstr "Lahko onemogočite v datoteki <code>clients.config</code>. Lahko tudi konfigurirate vez na specifičen vmesnik ali vse vmesnike v datoteki <code>jetty.xml</code>."
 
 msgid "Outgoing mail to smtp.postman.i2p"
 msgstr "Odhoče pošte na smtp.postman.i2p"
@@ -6255,70 +6249,70 @@ msgid "I2P Router Console (https://)"
 msgstr "Konzola I2P maršrutizatorja (https://)"
 
 msgid "Can be enabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces. If both http and https are enabled, automatic redirection to https is enabled by default. If you make the Router Console available over the network, you might wish to <a href=/configui#passwordheading>enforce an access password</a> to prevent unauthorized access."
-msgstr ""
+msgstr "Lahko se omogoči v datoteki <code>clients.config</code>. Lahko tudi konfigurirate vez na specifičen vmesnik ali vse vmesnike. Če sta http in https omogočeni, je samodejno preusmerjanje na https privzeto omogočeno. Če ponudite Konzolo strežnika preko omrežja, morda želite <a href=/configui#passwordheading>zahtevati geslo dostopa</a>, da preprečite neovlaščen dostop."
 
 msgid "Local connection to wrapper control channel port"
 msgstr "Lokalna povezava z vratnikom za nadzorno kanalov"
 
 msgid "Outbound to 32000 only, does not listen on this port. Starts at 31000 and will increment until 31999 looking for a free port. To change, see the <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper documentation</a>."
-msgstr ""
+msgstr "Izhodno le do 32000, na tem vratih ne posluša. Začne pri 31000 in bo povečevalo do 31999, iskalo brezplačnih vrata. Da spremeniš, glej <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>dokumentacijo wrapper</a>."
 
 msgid "Local control channel for the service wrapper"
 msgstr "Lokalen nadzoren kanal za vratnik storitve"
 
 msgid "To change, see the <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>wrapper documentation</a>."
-msgstr ""
+msgstr "Da spremeniš, glej <a href=https://wrapper.tanukisoftware.com/doc/english/prop-port.html target=_blank rel=noreferrer class='sitelink external'>dokumentacijo wrapper</a>."
 
 msgid "INTERNET FACING PORTS"
 msgstr "VRATNIKI SOČLANENI S SPLETOM"
 
 msgid "I2P selects a random port between 9000 and 31000 to communicate with other routers when the program is run for the first time, or when your external IP address changes when running in <a href=/confignet#ipchange>Laptop Mode</a>. The <a href=/confignet#udpconfig>selected port</a> is shown on the <a href=/confignet>Network Configuration page</a>."
-msgstr ""
+msgstr "I2P izbere naključno vrata med 9000 in 31000 za komunikacijo z drugimi usmerjevalniki, ko se programa prvič zagni, ali ko se spremeni vaš zunanji IP naslov ob delovanju v <a href=/confignet#ipchange>Način prijenosnega računalnika</a>. <a href=/confignet#udpconfig>Izbrane vrata</a> so prikazane na <a href=/confignet>Strani za konfiguracijo omrežja</a>."
 
 msgid "Outbound UDP from the <a href=/confignet#udpconfig>random port</a> noted on the Network Configuration page to arbitrary remote UDP ports, allowing replies."
-msgstr ""
+msgstr "Izhodni UDP od <a href=/confignet#udpconfig>naključnega vrata</a>, opomnjenega na strani za konfiguracijo omrežja, do poljubnih daljanskih UDP vrata, dovoljuje odgovore."
 
 msgid "Outbound TCP from random high ports to arbitrary remote TCP ports."
 msgstr "Odhoče TCP iz naključnih viših vratar do poljubnih oddaljenih TCP vratar."
 
 msgid "Inbound UDP to the <a href=/confignet#udpconfig>port</a> noted on the Network Configuration page from arbitrary locations (optional, but recommended)."
-msgstr ""
+msgstr "Vhodni UDP do <a href=/confignet#udpconfig>vrata</a>, opomnjenega na Strani za konfiguracijo omrežja, iz poljubnih lokacij (neobvezno, vendar priporočljivo)."
 
 msgid "Inbound TCP to the <a href=/confignet#externaltcp>port</a> noted on the Network Configuration page from arbitrary locations (optional, but recommended). <a href=/confignet#tcpconfig>Inbound TCP</a> may be disabled on the Network Configuration page."
-msgstr ""
+msgstr "Vhodni TCP do <a href=/confignet#externaltcp>vrata</a>, opomnjenega na Strani za konfiguracijo omrežja, iz poljubnih lokacij (neobvezno, vendar priporočljivo). <a href=/confignet#tcpconfig>Vhodni TCP</a> ga lahko onemogočite na Strani za konfiguracijo omrežja."
 
 msgid "Outbound UDP on port 123, allowing replies: this is necessary for I2P's internal time sync (via SNTP - querying a random SNTP host in <code>pool.ntp.org</code> or <a href=/help/advancedsettings#ntpserverconfig>another server you specify</a>)."
-msgstr ""
+msgstr "Izhodni UDP na vrata 123, dovoljuje odgovore: to je potrebno za notranjo usinhronizirano čas I2P (prek SNTP - vprašanje naključnega gostitelja SNTP v <code>pool.ntp.org</code> ali <a href=/help/advancedsettings#ntpserverconfig>druga strežnika, ki ga določite</a>)."
 
 msgid "I2P Terminology"
 msgstr "Terminologija I2P"
 
 msgid "An I2P web application that manages service destinations for the network, mapping B64 hashes to human-readable names. Destinations may be added manually, or via subscriptions to hosts.txt files. Also referred to as SusiDNS. For more information, see the <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "I2P spletna aplikacija, ki upravlja namene storitev za omrežje, zasnovala B64 hash-je na človeško berljive imena. Namene se lahko dodajo ročno, ali pa preko pretplatnic na datoteke hosts.txt. Tudi se omenja kot SusiDNS. Za več informacij, glejte <a href=https://geti2p.net/en/docs/naming class='sitelink external' target=_blank rel=noreferrer>spletno dokumentacijo</a>."
 
 msgid "Base32 (B32) / Base64 (B64)"
 msgstr "Base32 (B32) / Base64 (B64)"
 
 msgid "A <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> link (which always ends with .b32.i2p) is a hash of a <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> destination. For services on the network, the Base64 hash is often mapped to an .i2p domain in the addressbook."
-msgstr ""
+msgstr "Povezava <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> (ki konča z .b32.i2p) je hash <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> namene. Za storitve na omrežju je Base64 hash pogosto zasnoval na domeno .i2p v imeniku."
 
 msgid "B33"
 msgstr "B33"
 
-msgid "An address containing an encrypted LeaseSet is informally referred to as a b33 address, an extension of a base32 address with the host's public key and signature type encoded into the address instead of a lookup hash. This address type is required for blinded Leasesets. More information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 Specification</a>"
-msgstr ""
+msgid "An address containing an encrypted LeaseSet is informally referred to as a b33 address, an extension of a base32 address with the host's public key and signature type encoded into the address instead of a lookup hash. This address type is required for blinded Leasesets. More information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>Specifikacija B33</a>"
+msgstr "Naslov, ki vsebuje šifrirani LeaseSet, se nenavadno omenja kot naslov b33, razširitev naslova base32 z javnim ključem gostitelja in vrsto podpisa kodirani v naslov namesto iskalnega hash-a. Ta vrsta naslova je zahtevana za zamučene LeaseSet-e. Več informacij: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>Specifikacija B33</a>"
 
 msgid "BOB"
 msgstr "BOB"
 
 msgid "BOB (Basic Open Bridge) is a (now-deprecated) simple application-to-router protocol, superseded by <i>SAM</i>. For more information, see the <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "BOB (Osnovni odprt most) je (sedaj prenehen) enostaven protokol aplikacija-do-usmerjevalnika, nadomesten z <i>SAM</i>. Za več informacij, glejte <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>spletno dokumentacijo</a>."
 
 msgid "Clearnet"
 msgstr "Jasno omrežje"
 
 msgid "Clearnet normally refers to the publicly accessible internet, the opposite of the darknet that typically describes the encrypted, anonymous services built on I2P, Tor etc. For more information, see the <a href=https://en.wikipedia.org/wiki/Clearnet_(networking) class='sitelink external' target=_blank rel=noreferrer>Wikipedia article</a>."
-msgstr ""
+msgstr "Jasno omrežje običajno se nanaša na javno dostopno internet, nasprotno s tem je darknet, ki tipično opisuje šifrirane, anonimne storitve, izgrajene na I2P, Tor itd. Za več informacij, glejte <a href=https://en.wikipedia.org/wiki/Clearnet_(networking) class='sitelink external' target=_blank rel=noreferrer>članek Wikipedia</a>."
 
 msgid "The unique cryptographic identity of the inbound endpoint of a tunnel providing access to a service on the I2P network, represented as a Base32 or Base64 hash of the public key. Equivalent to an IP address and port."
 msgstr "Edinstvena kriptografska identiteta vhodnega konca tunela, ki zagotavlja dostop do storitve na omrežju I2P, predstavljena kot Base32 ali Base64 hash javnega ključa. Enakovredno s IP naslovom in vrata."
@@ -6327,70 +6321,70 @@ msgid "Eepget"
 msgstr "Eepget"
 
 msgid "A command-line application supplied with I2P that is used to request URL resources, similar to <a href=https://www.gnu.org/software/wget/ class='sitelink external' target=_blank rel=noreferrer>wget</a> or <a href=https://curl.haxx.se/ class='sitelink external' target=_blank rel=noreferrer>curl</a>. Eepget is also used internally by the router, for example to reseed from remote hosts. By default, eepget uses the HTTP proxy on <code>127.0.0.1:4444</code>."
-msgstr ""
+msgstr "Naredilna vrstica aplikacija, ki jo ponuja I2P, in ki se uporablja za zahteve URL virov, podobno kot <a href=https://www.gnu.org/software/wget/ class='sitelink external' target=_blank rel=noreferrer>wget</a> ali <a href=https://curl.haxx.se/ class='sitelink external' target=_blank rel=noreferrer>curl</a>. Eepget se tudi uporablja notranje s strani usmerjevalnika, na primer za ponovno zalaganje iz oddaljenih gostiteljev. Po privzemu, uporablja eepget HTTP posredniški strežnik na <code>127.0.0.1:4444</code>."
 
 msgid "Eephead"
 msgstr "Eephead"
 
 msgid "A command-line application supplied with I2P+ (Linux/MacOS) that is used to perform a <code>head</code> request on a specified http resource on the network, returning various response headers from the remote server. By default, eephead uses the HTTP proxy on <code>127.0.0.1:4444</code>."
-msgstr ""
+msgstr "Naredilna vrstica aplikacija, ki jo ponuja I2P+ (Linux/MacOS), ki se uporablja za izvedbo zahtevka <code>head</code> za določeno http vire na omrežju, vrnitev različnih odgovorov glavice od oddaljenega strežnika. Po privzemu, uporablja eephead HTTP posredniški strežnik na <code>127.0.0.1:4444</code>."
 
 msgid "Eepsite"
 msgstr "Eepsite"
 
 msgid "A website hosted on the I2P network. By default, a <a href=https://www.eclipse.org/jetty/about.html class='sitelink external' target=_blank rel=noreferrer>Jetty webserver</a> is configured and running on <a href=http://127.0.0.1:7658/ target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>."
-msgstr ""
+msgstr "Spletna stran gostiteljena na omrežju I2P. Po privzemu, <a href=https://www.eclipse.org/jetty/about.html class='sitelink external' target=_blank rel=noreferrer>Jetty spletne strežnik</a> je konfiguriran in deluje na <a href=http://127.0.0.1:7658/ target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>."
 
 msgid "Exploratory Tunnel"
 msgstr "Raziskovalni tunel"
 
 msgid "A tunnel used by the router for communicating with other routers to perform various \"housekeeping\" functions such as learning and publishing <i>leasesets</i>, testing client tunnels, and learning about and validating other routers in the network. These tunnels are normally low-bandwidth."
-msgstr ""
+msgstr "Tunel, ki ga uporablja usmerjevalnik za komunikacijo z drugimi usmerjevalniki za izvedbo različnih \"čiščenjskih\" funkcij, kot so učenje in objavljivanje <i>leaseset-ov</i>, testiranje klientnih tunelov, in učenje o in preverjanje drugih usmerjevalnikov v omrežju. Ti tuneli so običajno z majhno širino pasma."
 
 msgid "A router on the network tasked with providing and receiving information about other routers and services on the network. The current minimum share bandwidth for a router to be considered as capable of performing floodfill duties is 128 KBytes/sec, though it's possible to override this requirement and force a router to be a floodfill on the <a href=/configadvanced>Advanced Configuration page</a>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Usmerjevalnik na omrežju, ki je nalogovana z zagotavljanjem in prejemanjem informacij o drugih usmerjevalnikeh in storitvah na omrežju. Sedajnja minimalna dodeljena širina pasma za usmerjevalnik, da se obravnava kot sposoben opravljanja nalog floodfill, je 128 KBytes / sec, vendar je mogoče prenesti to zahtevo in prisiliti usmerjevalnik, da je floodfill na <a href=/configadvanced>Strani za napredno konfiguracijo</a>. Za več informacij, glejte <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>spletna dokumentacija</a>."
 
 msgid "Garlic Routing"
 msgstr "Rutevanje češnjake"
 
 msgid "A variant of onion routing that encrypts multiple messages together to make it more difficult for attackers to perform traffic analysis and to increase the speed of data transfer. For more information, see the <a href=https://geti2p.net/en/docs/how/garlic-routing class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Različica lukovnice usmerjanja, ki šifrirajo več sporočil skupaj, da težko naredi za napadljike za analizo prometa in povečanje hitrosti prenosa podatkov. Za več informacij, glejte <a href=https://geti2p.net/en/docs/how/garlic-routing class='sitelink external' target=_blank rel=noreferrer>spletna dokumentacija</a>."
 
 msgid "Hidden Mode"
-msgstr "Skrito način"
+msgstr "Skrito stanje"
 
 msgid "A router configured to run in Hidden Mode will not publish its details to the <i>Network Database</i> and will not participate in routing traffic for other routers. Routers operating in countries designated as strict and routers manually configured run in Hidden Mode."
-msgstr ""
+msgstr "Usmerjevalnik, nastavljen za delovanje v skriti način, ne bo objavil svojih podrobnosti v <i>Bazi podatkov omrežja</i> in ne bo sodeloval v usmerjanju prometa za druge usmerjevalnike. Usmerjevalniki, ki delajo v državah, označenih kot stroge, in usmerjevalniki, ročno nastavljeni, delajo v skriti način."
 
 msgid "The I2P Client Protocol (I2CP) enables external applications (clients) to communicate with I2P over single TCP socket, by default using port 7654. For more information, see the <a href=https://geti2p.net/en/docs/protocol/i2cp class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Protokol I2P Klienta (I2CP) omogoča komunikacijo zunanjih aplikacij (klientov) z I2P preko enega TCP vrat, po privzemu uporablja vrata 7654. Za več informacij, glejte <a href=https://geti2p.net/en/docs/protocol/i2cp class='sitelink external' target=_blank rel=noreferrer>spletna dokumentacija</a>."
 
 msgid "I2NP"
 msgstr "I2NP"
 
 msgid "The I2P Network Protocol (I2NP) manages the routing and mixing of messages between routers, in addition to the transport selection (where more than one is supported) when communicating with a peer. For more information, see the <a href=https://geti2p.net/en/docs/protocol/i2np class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Protokol omrežja I2P (I2NP) upravlja usmerjanjem in mešanjem sporočil med usmerjevalniki, poleg izbora prevoza (kjer je podprto več kot en) pri komunikaciji s sosednjim strežnikom. Za več informacij, glejte <a href=https://geti2p.net/en/docs/protocol/i2np class='sitelink external' target=_blank rel=noreferrer>spletna dokumentacija</a>."
 
 msgid "I2P+"
 msgstr "I2P+"
 
 msgid "A soft fork of the Java I2P software which retains full compatibility, providing an enhanced user interface and improvements to network performance. See <a href=http://skank.i2p/ class=sitelink target=_blank rel=noreferrer>http://skank.i2p/</a> or <a href=https://i2pplus.github.io class='sitelink external' target=_blank rel=noreferrer>https://i2pplus.github.io</a>for more information."
-msgstr ""
+msgstr "Mekan odsek programske opreme Java I2P, ki ohranja popolno soglasje, ponuja pa izboljšano uporabniški vmesnik in izboljšanja zmogljivosti omrežja. Za več informacij glejte <a href=http://skank.i2p/ class=sitelink target=_blank rel=noreferrer>http://skank.i2p/</a> ali <a href=https://i2pplus.github.io class='sitelink external' target=_blank rel=noreferrer>https://i2pplus.github.io</a>."
 
 msgid "I2PBote (plugin)"
-msgstr "I2PBote (dodatek)"
+msgstr "I2PBote (vstavek)"
 
 msgid "An unmaintained I2P plugin that provides serverless, end-to-end encrypted e-mail within the I2P network. For more information, see <a href=http://bote.i2p/ class=sitelink target=_blank rel=noreferrer>http://bote.i2p/</a>. Source code is available on <a href=https://github.com/i2p/i2p.i2p-bote class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgstr "Neobstojen vstavek I2P, ki zagotavlja brez strežnika, šifrirano sporočilo od konca do konca v omrežju I2P. Za več informacij, glejte <a href=http://bote.i2p/ class=sitelink target=_blank rel=noreferrer>http://bote.i2p/</a>. Izvorne kode je mogoče pridobiti na <a href=https://github.com/i2p/i2p.i2p-bote class='sitelink external' target=_blank rel=noreferrer>github</a>."
 
 msgid "i2pd"
 msgstr "i2pd"
 
 msgid "An alternative implementation of an I2P router coded in C++. For more information, see <a href=https://i2pd.website/ class='sitelink external' target=_blank rel=noreferrer>https://i2pd.website/</a> Source code is available on <a href=https://github.com/PurpleI2P/i2pd class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgstr "Namenjena implementacija usmerjevalnika I2P, kodirana v C++. Za več informacij, glejte <a href=https://i2pd.website/ class='sitelink external' target=_blank rel=noreferrer>https://i2pd.website/</a>. Izvirna koda je na voljo na <a href=https://github.com/PurpleI2P/i2pd class='sitelink external' target=_blank rel=noreferrer>github</a>."
 
 msgid "A fork of the <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>Snark BitTorrent client</a> refactored for use on the I2P network. Usually supplied as part of the default suite of applications with Java I2P, and also available as a <a href=http://skank.i2p/#download class=sitelink target=_blank rel=noreferrer>standalone Java application</a>."
-msgstr ""
+msgstr "Odsek <a href=http://www.klomp.org/snark/ class='sitelink external' target=_blank rel=noreferrer>klienta Snark BitTorrent</a>, prilagojen za uporabo na omrežju I2P. Običajno je ponujen kot del privzete vrste aplikacij z Java I2P, in je tudi na voljo kot <a href=http://skank.i2p/#download class=sitelink target=_blank rel=noreferrer>samostojna Java aplikacija</a>."
 
 msgid "Introducer"
 msgstr "Predstavnik"
@@ -6402,19 +6396,19 @@ msgid "Jump Service"
 msgstr "Skokovna storitev"
 
 msgid "A simple CGI application that takes a hostname as a parameter and returns a 301 redirect to the proper URL with a <code>?i2paddresshelper=key</code> string appended. The HTTP proxy will interpret the appended string and use the key as the actual destination. In addition, the proxy will cache the key so the address helper is not necessary until restart, and offer the option to add the resolved address to the addressbook."
-msgstr ""
+msgstr "Enostavna CGI aplikacija, ki prejme ime gostitelja kot parameter in vrne 301 preusmeritev na pravilen URL z <code>?i2paddresshelper=key</code> nizom, dodan na konec. HTTP posredniški strežnik interpretira niz, dodan na konec, in uporabi ključ kot resnični namen. Poleg tega bo posredniški strežnik zapomnil ključ, tako da je pomočnik naslova nenehna do ponovnega zagona, in ponudil možnost, da dodate rešeni naslov v imenik."
 
 msgid "Laptop Mode"
 msgstr "Način prijenosa"
 
 msgid "An <a href=/confignet#ipchange>optional configuration</a> that automatically changes your <a href=/netdb?r=.>router identity</a> and <a href=/confignet#udpconfig>external port</a> when the public ip address your system is on changes. This can prevent an adversary from correlating your router identity and ip address in scenarios where your ip address may change frequently, for example when you're running I2P on a laptop from multiple locations."
-msgstr ""
+msgstr "Obvezna <a href=/confignet#ipchange>nastavitev</a>, ki samodejno spremeni svojo <a href=/netdb?r=.>identiteto strežnika</a> in <a href=/confignet#udpconfig>zunanje vrata</a>, ko se javni ip naslov, na katerem je vaš sistem, spremeni. To lahko prepreči nasprotnika, da ujema vašo identiteto strežnika in ip naslov v scenarijih, kjer se vaš ip naslov morda spreminja pogosto, na primer, ko pokrečete I2P na prijenosnem računalniku iz več mest."
 
 msgid "The information that defines the authorization for a particular tunnel to receive messages targeting a <i>Destination</i>."
-msgstr ""
+msgstr "Informacija, ki določa ovlastilo za določen tunel, da prejme sporočila, ki ciljijo na <i>Namenski</i>."
 
 msgid "A group of tunnel entry points (leases) for a <i>destination</i>. Note: A 0-hop server tunnel will only have one lease, regardless of the number of tunnels configured."
-msgstr ""
+msgstr "Skupina točk vstopa v tunel (najemnine) za <i>namenski</i>. Opomba: 0-hop strežniški tunel bo imel le eno najemnino, ne glede na število konfiguriranih tunelov."
 
 msgid "Monotone / mtn"
 msgstr "Monoton / mtn"
@@ -6429,25 +6423,25 @@ msgid "Services may be hosted on multiple routers simultaneously, by sharing the
 msgstr "Storitve lahko gostijo na več maršrutizatorjih hkrati, s podelitvijo istega zasebnega ključa za destinacijo. Večdomčanje lahko še bolj izboljša varnost in stabilnost strežnika, saj zagotavlja presežek; če je strežnik večdomčan, ko gre strežnik v bazenu offline, bo storitev še vedno na voljo, kar ga teže povezati s časom neaktivnosti strežnika in maršrutizatorja, ki gre offline."
 
 msgid "A distributed database containing router contact information (RouterInfos) and destination contact information (LeaseSets). A single router maintains its own (partial) database for communicating with other routers on the network; no single router will maintain a list of all routers. The RouterInfos are stored on disk and read into memory when the router starts, or when new RouterInfos are acquired. Also referred to as the <i>NetDb</i>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "Razširjena baza podatkov, ki vsebuje informacije o kontaktu usmerjevalnika (RouterInfos) in informacije o kontaktu namenskega (LeaseSets). En samostojen usmerjevalnik vzdržuje svojo (delno) bazo podatkov za komunikacijo z drugimi usmerjevalniki na omrežju; noben samostojen usmerjevalnik ne bo vzdrževal seznama vseh usmerjevalnikov. RouterInfos so shranjeni na disk in prebrani v pomnilnik, ko se usmerjevalnik zagni, ali ko so pridobljeni novi RouterInfos. Tudi se omenja kot <i>NetDb</i>. Za več informacij, glejte <a href=https://geti2p.net/en/docs/how/network-database class='sitelink external' target=_blank rel=noreferrer>spletna dokumentacija</a>."
 
 msgid "NTCP / NTCP2"
 msgstr "NTCP / NTCP2"
 
 msgid "NTCP (NIO-based TCP) and NTCP2 are TCP-based network transports which use Java's NIO (New I/O) TCP implementation to deliver I2NP messages between routers on the network. NTCP2 improves the resistance of NTCP to various attacks and automated traffic identification methods. For more information, see the <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "NTCP (TCP, temelječ na NIO) in NTCP2 sta omrežni prenosna sredstva, temelječa na TCP, ki uporabljata Java's NIO (Nova I/O) TCP izvedbo za dostavo I2NP sporočil med usmerjevalniki na omrežju. NTCP2 izboljša odpornost NTCP na različne napade in avtomatizirane metode identifikacije prometa. Za več informacij, glejte <a href=https://geti2p.net/en/docs/transport/ntcp class='sitelink external' target=_blank rel=noreferrer>spletna dokumentacija</a>."
 
 msgid "Orchid (plugin)"
-msgstr "Orhideja (dodatek)"
+msgstr "Orhideja (vstavek)"
 
 msgid "A java implementation of a Tor client, available as an I2P plugin. Can be used as the default <i>outproxy</i> if configured in the relevant SOCKS or HTTP client tunnel in the <i>Tunnel Manager</i>. Available from <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Source code is available on <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>."
-msgstr ""
+msgstr "Java izvedba Tor klienta, na voljo kot I2P vstavek. Lahko se uporabi kot privzeti <i>outproxy</i>, če je nastavljen v ustreznem SOCKS ali HTTP klientnem tunelu v <i>Menedžer tunela</i>. Na voljo je na <a href=http://stats.i2p/i2p/plugins class=sitelink>http://stats.i2p/i2p/plugins</a>. Izvirna koda je na voljo na <a href=https://github.com/i2p/i2p.plugins.orchid class='sitelink external' target=_blank rel=noreferrer>github</a>."
 
 msgid "Outproxy"
 msgstr "Outproxy"
 
 msgid "A service on the network that provides a proxy connection to the <i>clearnet</i>. By default, I2P has an HTTP outproxy configured for web browsing on <code>127.0.0.1:4444</code>."
-msgstr ""
+msgstr "Storitev na omrežju, ki pruža posredniško povezavo do <i>jasne mreže</i>. Po privzemu je I2P konfiguriran z HTTP outproxy za spletno brskanje na <code>127.0.0.1:4444</code>."
 
 msgid "Participation"
 msgstr "Sodelovanje"
@@ -6456,40 +6450,40 @@ msgid "The act of contributing to the network by permitting other routers to bui
 msgstr "Dejanje prispevka k omrežju, dovolitev drugim maršrutizatorjem, da izgrajajo tunele, uporabljajo vaš maršrutizator v verigi tunelov. Za omogočanje sodelovanja je zahtevana vsaj 12KB/s gornjega širinev ban (delitev omrežja). Opomba: Maršrutizatorji zaščiteni z firewallom bodo omejeni glede na to, koliko prispevajo k sodelovanju, in maršrutizator, označen kot Skrito, ne bo vključen v sodelovanje v absolutni meri."
 
 msgid "The process of acquiring router identities, normally via <i>clearnet</i> servers, to ensure your router can communicate and build tunnels with other routers on the network. When a router has no router identities for other peers (usually immediately after installation), the process of reseeding is also referred to as <i>bootstrapping</i>."
-msgstr ""
+msgstr "Postopek pridobivanja identitet usmerjevalnika, običajno prek strežnikov <i>jasnega omrežja</i>, da se zagotovi, da lahko vaš usmerjevalnik komunicira in izgradi tunele z drugimi usmerjevalniki na omrežju. Ko usmerjevalnik nimajo identitet usmerjevalnika za druge sosednje strežnike (običajno takoj po namestitvi), je postopek ponovnega zalaganja tudi poimenovana kot <i>ujemanje</i>."
 
 msgid "The core I2P software, which routes encrypted packets on the I2P network. All routers by default participate in the network except routers running in countries considered hostile (see <i>Strict Countries</i>), which both helps the network and provides cover traffic for any clients or servers connecting to the I2P network through the router."
-msgstr ""
+msgstr "Splošna programska oprema I2P, ki usmerja šifrirane pakete na omrežju I2P. Vsi usmerjevalniki privzeto sodelujejo v omrežju, razen usmerjevalniki, ki delajo v državah, ki jih obravnavamo kot vpadljive (glejte <i>Stroge države</i>), kar pomaga omrežju in pruža pokrivalni promet za vse kliente ali strežnike, ki se povezujejo z omrežjem I2P skozi usmerjevalnik."
 
 msgid "Router Identity"
 msgstr "Identiteta maršrutizatorja"
 
 msgid "Information defining the unique identity of a router on the network which includes its IP address (or the IP addresses of intermediate introducers) and listening port, public signing and encryption keys. Router identities correlate to peers in the NetDB. Also referred to as a <i>RouterInfo</i>."
-msgstr ""
+msgstr "Informacija, ki določa edinstveno identiteto usmerjevalnika na omrežju, ki vključuje njegov IP naslov (ali IP naslove medstojnikov), vrata za poslušanje, javne podpisne in šifrirne ključe. Identitete usmerjevalnika so povezane z sosednjimi strežniki v NetDB. Tudi se omenja kot <i>RouterInfo</i>."
 
 msgid "SAM (Simple Anonymous Messaging) is a protocol which allows a client application written in any programming language to communicate over I2P, by using a socket-based interface to the I2P router. For more information, see the <a href=https://geti2p.net/en/docs/api/samv3 class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "SAM (Enostavno anonimno sporočanje) je protokol, ki omogoča klientu aplikacijo, napisano v kateri koli programski jezik, da komunicira preko I2P, tako da uporablja vmesnik temelječ na vratih za I2P usmerjevalnik. Za več informacij, glejte <a href=https://geti2p.net/en/docs/api/samv3 class='sitelink external' target=_blank rel=noreferrer>spletna dokumentacija</a>."
 
 msgid "Shared Client"
 msgstr "Določena stranka"
 
 msgid "In order to use a single set of tunnels for multiple client services, clients can be configured from the <i>Tunnel Manager</i> to operate in <i>Shared Client</i> mode. This mode conserves resources and blends the traffic from multiple clients into a single set of tunnels, making traffic analysis harder. Clients configured as Shared Clients share the same tunnel options."
-msgstr ""
+msgstr "Da bi uporabili en nabor tunelov za več klientnih storitev, lahko klienti iz <i>Menedžer tunela</i> nastavljene v način <i>Določena stranka</i>. Ta način ohranja vire in meša promet iz več klientov v en nabor tunelov, kar težko naredi analizo prometa. Klienti, konfigurirani kot določene stranke, delijo iste možnosti tunela."
 
 msgid "SSU (Secure Semi-reliable UDP) is an I2P network transport providing encrypted, connection-oriented, point-to-point connections, in addition to IP address detection and NAT traversal services. For more information, see the <a href=https://geti2p.net/en/docs/transport/ssu class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "SSU (UDP, ki je varno polzanesljivo) je prenos I2P omrežja, ki pruža šifrirane, usmerjene po povezavi, točka do točke povezave, poleg zaznavanja IP naslova in storitev za prehod NAT. Za več informacij, glejte <a href=https://geti2p.net/en/docs/transport/ssu class='sitelink external' target=_blank rel=noreferrer>spletna dokumentacija</a>."
 
 msgid "Strict Countries"
 msgstr "Stroge države"
 
 msgid "A list of countries derived from the <a href=https://freedomhouse.org/report/countries-world-freedom-2019 class='sitelink external' target=_blank rel=noreferrer>World Freedom Report</a> with a poor civil liberties reputation. This list is used to place routers running in the specified countries in <i>Hidden Mode</i> to provide enhanced security for users. The following countries are designated as strict: Afghanistan, Azerbaijan, Bahrain, Belarus, Brunei, Burundi, Cameroon, Central African Republic, Chad, China, Cuba, Democratic Republic of the Congo, Egypt, Equatorial Guinea, Eritrea, Ethiopia, Iran, Kazakhstan, Laos, Libya, Myanmar, North Korea, Palestinian Territories, Rwanda, Saudi Arabia, Somalia, South Sudan, Sudan, Eswatini (Swaziland), Syria, Tajikistan, Thailand, Turkey, Turkmenistan, Venezuela, United Arab Emirates, Uzbekistan, Western Sahara, Yemen."
-msgstr ""
+msgstr "Seznam držav, izveden iz <a href=https://freedomhouse.org/report/countries-world-freedom-2019 class='sitelink external' target=_blank rel=noreferrer>Poročila o svetu in svobodi</a>, z slabo reputacijo v zvezi z civilnimi svoboščami. Ta seznam se uporablja za postavljanje usmerjevalnikov, ki delajo v določenih državah, v <i>Skrito stanje</i>, da uporabnikom pruži izboljšano varnost. Naslednje države so označene kot stroge: Afganistan, Azerbajdžan, Bahrajn, Berala, Brunaj, Burundi, Kamerun, Središnja Afriška republika, Čad, Kitajska, Kuba, Demokratična republika Kongo, Egipt, Ravninska Gvineja, Eritreja, Etiopija, Iran, Kazahstan, Laosi, Libija, Mjanmar, Severna Koreja, Palestinska ozemlja, Ruanda, Saoudska Arabija, Somalija, Južni Sudani, Sudani, Esvatini (Swaziland), Sirija, Tadžikistan, Tajland, Turčija, Turkmenistan, Venecuela, Združeni Arabski Emirati, Uzbekistan, Zahodna Sara, Jemen."
 
 msgid "Tunnel"
 msgstr "Tunel"
 
 msgid "A <a href=https://geti2p.net/en/docs/tunnels/unidirectional class='sitelink external' target=_blank rel=noreferrer>unidirectional</a> encrypted communication pathway between a client or server on the I2P network. Similar to a circuit in Tor, except that Tor circuits are bidirectional."
-msgstr ""
+msgstr "Enosmerno šifrirano komunikacijsko pot med klientom ali strežnikom na omrežju I2P. Podobno krožnici v Tor, razen če Tor krožnice so dvosmerne."
 
 msgid "Tunnel Endpoint"
 msgstr "Končna točka tunela"
@@ -7167,25 +7161,25 @@ msgid "Please configure a TCP host and port on the Network Configuration page or
 msgstr "Prosim, da konfigurirate gostitelja TCP in vrata na strani za konfiguracijo omrežja ali omogočite UDP."
 
 msgid "ERR - Client Manager I2CP Error - check logs"
-msgstr ""
+msgstr "NAPAKA - Napaka menedžerja klienta I2CP - preverite dnevnike"
 
 msgid "This is usually due to a port 7654 conflict. Check the logs to verify."
-msgstr ""
+msgstr "To je običajno posledica konflikta na vratih 7654. Preverite dnevnike za potrditev."
 
 msgid "Do you have another I2P instance running? Stop the conflicting program and restart I2P."
-msgstr ""
+msgstr "Ali imate drugo instanco I2P, ki se izvaja? Ustavite konflikt program in ponovno zagnite I2P."
 
 msgid "The skew (offset) of your computer's clock relative to the network-synced time."
-msgstr ""
+msgstr "Premik (premak) uro vašega računalnika v odnosu do časa sinhroniziranega z omrežjem."
 
 msgid "I2P requires your computer's time be accurate."
-msgstr ""
+msgstr "I2P zahteva, da je čas vašega računalnika natančen."
 
 msgid "If the skew is more than a few seconds, please correct the problem by adjusting your computer's time."
-msgstr ""
+msgstr "Če je premik več kot nekaj sekund, prosim, popravite težavo tako, da prilagodite čas vašega računalnika."
 
 msgid "If I2P cannot connect to the internet, a reading of 0ms may be indicated."
-msgstr ""
+msgstr "Če I2P ne more povezati z interneto, se lahko prikaže branje 0ms."
 
 msgid "Web hosting on I2P"
 msgstr "Spletno gostovanje na I2P"
@@ -7281,16 +7275,16 @@ msgid "Be aware that a poorly configured webserver or web appplication can leak 
 msgstr "Ostarejte, da slabokonfigurirani spletne strežnik ali aplikacija spletnega mesta lahko izkriva informacije, kot sta vaš pravi IP naslov ali podrobnosti strežnika, ki lahko zmanjšata vaš anonimnost ali pomagajo hakiru. Če uporabljate alternativno platformo, se prepričajte, da je varna, preden jo postavite na splet. Če obstaja dvoma, posvetujte s spletnimi vodili o varnostnem oblikovanju spletne strežnika in varenjih spletnih aplikacij, npr:"
 
 msgid "Apache Web Server Security Guide"
-msgstr ""
+msgstr "Vodilo za varnost spletne strežnika Apache"
 
 msgid "Nginx Web Server Security Guide"
-msgstr ""
+msgstr "Vodilo za varnost spletne strežnika Nginx"
 
 msgid "How to Harden Your WordPress Site"
-msgstr ""
+msgstr "Kako izboljšati varnost vašega WordPress mesta"
 
 msgid "<b>Note:</b> On some Apache installations, the <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> and <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> modules are enabled by default. It is important to disable these, or otherwise protect access to the urls, to avoid compromising the anonymity and security of your server."
-msgstr ""
+msgstr "<b>Opomba:</b> Na nekaterih namestitvah Apache, so moduli <a href=https://httpd.apache.org/docs/2.4/mod/mod_status.html target=_blank class='sitelink external'>mod_status</a> in <a href=https://httpd.apache.org/docs/2.4/mod/mod_info.html target=_blank class='sitelink external'>mod_info</a> omogočeni privzeto. Je pomembno, da onemogočite te, ali pa drugače zaščitite dostop do URL-jev, da preprečite kompromis anonimnosti in varnosti vašega strežnika."
 
 msgid "home"
 msgstr "doma"
@@ -7490,10 +7484,10 @@ msgid "Statistics"
 msgstr "Statistika"
 
 msgid "Current console and webapp translation report"
-msgstr ""
+msgstr "Trenutno poročilo o prevedbi konzole in spletnih aplikacij"
 
 msgid "Translation Status"
-msgstr ""
+msgstr "Stanje prevoza"
 
 msgid "View active tunnels"
 msgstr "Oglejte aktivne tunele"
