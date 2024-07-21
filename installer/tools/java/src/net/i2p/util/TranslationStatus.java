@@ -535,8 +535,8 @@ public class TranslationStatus {
         else if (langCode.equals("ko")) {countryCode = "kr";}
         else if (langCode.equals("nb")) {countryCode = "no";}
         else if (langCode.equals("nn")) {countryCode = "no";}
+        else if (langCode.equals("sl")) {countryCode = "sk";}
         else if (langCode.equals("sq")) {countryCode = "al";}
-        else if (langCode.equals("sq")) {countryCode = "sk";}
         else if (langCode.equals("sv")) {countryCode = "se";}
         else if (langCode.equals("uk")) {countryCode = "ua";}
         else if (langCode.equals("zh")) {countryCode = "cn";}
