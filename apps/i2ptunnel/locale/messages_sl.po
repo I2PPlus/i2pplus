@@ -1,0 +1,1504 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+#
+msgid ""
+msgstr ""
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n%100<=4 ? 2 : 3);\n"
+
+msgid "internal"
+msgstr "notranji"
+
+#, java-format
+msgid "{0} inbound tunnel"
+msgid_plural "{0} notranjih tuneljev"
+msgstr[0] "{0} notranji tunelj"
+msgstr[1] "{0} notranji tunelja"
+msgstr[2] "{0} notranji tunelje"
+msgstr[3] "{0} notranjih tuneljev"
+
+#, java-format
+msgid "{0} outbound tunnel"
+msgid_plural "{0} izhodnih tuneljev"
+msgstr[0] "{0} izhodni tunelj"
+msgstr[1] "{0} izhodni tunelja"
+msgstr[2] "{0} izhodni tunelje"
+msgstr[3] "{0} izhodnih tuneljev"
+
+#, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} notranji, {0} izhodni tunelj"
+msgstr[1] "{0} notranji, {0} izhodni tunelja"
+msgstr[2] "{0} notranji, {0} izhodni tunelje"
+msgstr[3] "{0} notranjih, {0} izhodnih tuneljev"
+
+msgid "lower bandwidth and reliability"
+msgstr "manjša širina pasma in pouzdanost"
+
+msgid "standard bandwidth and reliability"
+msgstr "standardna širina pasma in pouzdanost"
+
+msgid "higher bandwidth and reliability"
+msgstr "višja širina pasma in pouzdanost"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Neveljavno pošiljanje obrazca, verjetno zaradi uporabe gumba 'nazaj' ali 'osveži' v brskalniku. Prosim poskusite znova."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Če težava obstaja, preverite, ali imate omogočene piškotke v brskalniku."
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Nastavitve ponovno naložene za vse tunelje"
+
+#. and give them something to look at in any case
+#. FIXME name will be HTML escaped twice
+msgid "Starting tunnel"
+msgstr "Zagon tunelja"
+
+#. and give them something to look at in any case
+#. FIXME name will be HTML escaped twice
+msgid "Stopping tunnel"
+msgstr "Ustavitev tunelja"
+
+msgid "New Tunnel"
+msgstr "Nov tunelj"
+
+msgid "Port not set"
+msgstr "Vrata niso nastavljena"
+
+msgid "Invalid port"
+msgstr "Neveljavna vrata"
+
+msgid "Warning - ports less than 1024 are not recommended"
+msgstr "Opozorilo - vrata manjša od 1024 niso priporočena"
+
+msgid "Warning - duplicate port"
+msgstr "Opozorilo - podobna vrata"
+
+msgid "Standard client"
+msgstr "Standardni odjemalec"
+
+msgid "HTTP/HTTPS client"
+msgstr "HTTP/HTTPS odjemalec"
+
+msgid "IRC client"
+msgstr "IRC odjemalec"
+
+msgid "Standard server"
+msgstr "Standardni strežnik"
+
+msgid "HTTP server"
+msgstr "HTTP strežnik"
+
+msgid "SOCKS 4/4a/5 proxy"
+msgstr "SOCKS 4/4a/5 proxy"
+
+msgid "SOCKS IRC proxy"
+msgstr "SOCKS IRC proxy"
+
+msgid "CONNECT/SSL/HTTPS proxy"
+msgstr "CONNECT/SSL/HTTPS proxy"
+
+msgid "IRC server"
+msgstr "IRC strežnik"
+
+msgid "Streamr client"
+msgstr "Streamr odjemalec"
+
+msgid "Streamr server"
+msgstr "Streamr strežnik"
+
+msgid "HTTP bidir"
+msgstr "HTTP dvosmeren"
+
+msgid "Host not set"
+msgstr "Strežnik ni nastavljen"
+
+msgid "Invalid address"
+msgstr "Neveljavna naslov"
+
+msgid "Tunnel Manager"
+msgstr "Upravitelj tuneljev"
+
+msgid "Edit Client Tunnel"
+msgstr "Uredi odjemalniški tunelj"
+
+msgid "Edit Server Tunnel"
+msgstr "Uredi strežniški tunelj"
+
+msgid "Are you sure you want to delete?"
+msgstr "Ste prepričani, da želite izbrisati?"
+
+msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
+msgstr "Tunelj in vse druge deljene odjemalniške tunelje morajo biti ustavljeni za spremembo tega nastavitve"
+
+msgid "Tunnel must be stopped to change this configuration"
+msgstr "Tunelj mora biti ustavljen, da se spremeni ta konfiguracija"
+
+msgid "Configuration"
+msgstr "Nastavitve"
+
+msgid "New Client Configuration"
+msgstr "Nova konfiguracija odjemalca"
+
+msgid "Name"
+msgstr "Ime"
+
+msgid "Auto Start Tunnel"
+msgstr "Samodejni zagon tunelja"
+
+msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
+msgstr "Ime tunelja, ki bo prikazano na domači strani Upravitelja tuneljev in v sestrani konzole maršrutera"
+
+msgid "Enable this option to ensure this service is available when the router starts"
+msgstr "Omogočite to možnost, da se zagotovi, da je ta storitev na voljo, ko se maršruter zagnal"
+
+msgid "Automatically start tunnel when router starts"
+msgstr "Samodejno zagoni tunelj, ko se maršruter zagnal"
+
+msgid "Description"
+msgstr "Opis"
+
+msgid "Shared Client"
+msgstr "Delen odjemalec"
+
+msgid "Description of tunnel to be displayed on Tunnel Manager home page"
+msgstr "Opis tunelja, ki bo prikazan na domači strani Upravitelja tuneljev"
+
+msgid "Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together."
+msgstr "Promet iz vseh odjemalcev z omogočeno toliko funkcijo bo usmerjen skozi enako skupino tuneljev. To bo težje za napadenca za profiliranje tuneljev, vendar pa bodo odjemalci povezani med seboj."
+
+msgid "Share tunnels with other configured clients"
+msgstr "Deli tunelje z drugimi nastavljenimi odjemalci"
+
+msgid "Target"
+msgstr "Cilj"
+
+msgid "Access Point"
+msgstr "Točka dostopa"
+
+msgid "Use Outproxy Plugin"
+msgstr "Uporaba vstavek Outproxy"
+
+msgid "Enable DCC"
+msgstr "Omogoči DCC"
+
+msgid "Port"
+msgstr "Vrata"
+
+msgid "required"
+msgstr "potrebno"
+
+msgid "Specify the local port this service should be accessible from"
+msgstr "Določite lokalna vrata, od kjer bi ta storitev morala biti dostopna"
+
+msgid "Host"
+msgstr "Strežnik"
+
+msgid "Hostname or IP address of the target server"
+msgstr "Ime strežnika ali IP naslov ciljnega strežnika"
+
+msgid "Reachable by"
+msgstr "Dostopen preko"
+
+msgid "Local interface (ip address) the client tunnel will be reachable from"
+msgstr "Lokalni vmesnik (ip naslov), od katerega bo odjemalniški tunelj dosegljiv"
+
+msgid "If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P"
+msgstr "Če je nameščena vstavka outproxy (npr. Orchid), uporabite to namig umesto konfiguriranih outproxy-jev za dostop do spletnih strani zunaj I2P"
+
+msgid "Use plugin instead of proxies listed below if available"
+msgstr "Če je na voljo, uporabite vstavko namesto zapisanih proxy-jev spodaj"
+
+msgid "Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended."
+msgstr "Omogoča neposredno klepetanje in prenos datotek, izhajajoč iz I2P. Opomba: To bo ogrožalo vaš anonimnost in ni priporočeno."
+
+msgid "Enable Direct Client-to-Client protocol"
+msgstr "Omogoči Direktni protokol odjemalca do odjemalca"
+
+msgid "Outproxies"
+msgstr "Outproxy-ji"
+
+msgid "SSL Outproxies"
+msgstr "SSL Outproxy-ji"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgstr "Tukaj določite .i2p naslov ali destinacijo (b32 ali b64) outproxy-ja."
+
+msgid "name, name:port, or destination"
+msgstr "ime, ime:vrata, ali destinacija"
+
+msgid "If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL."
+msgstr "Če pristopate do storitve na oddaljenem maršrutiru I2P, morda želite povezati z SSL, da izognete prekinitvi prometa. Odjemalna aplikacija bi morala biti tudi konfigurirana za uporabo SSL."
+
+msgid "Clients use SSL to connect to tunnel"
+msgstr "Odjemalci uporabljajo SSL za povezavo z tuneljem"
+
+msgid "Please specify the full b64 destination."
+msgstr "Prosim, določite celoten b64 destinacijo."
+
+msgid "Local destination"
+msgstr "Lokalna destinacija"
+
+msgid "Local Base32"
+msgstr "Lokalni Base32"
+
+msgid "Read Only: Local Destination (if known)"
+msgstr "Samo za branje: Lokalna destinacija (če znano)"
+
+msgid "Stop"
+msgstr "Ustavi"
+
+msgid "Start this Tunnel"
+msgstr "Zaženi ta tunelj"
+
+msgid "Start"
+msgstr "Zaženi"
+
+msgid "Cancel"
+msgstr "Prekliči"
+
+msgid "Delete this tunnel (cannot be undone)"
+msgstr "Izbriši ta tunelj (ne more biti razveljavljen)"
+
+msgid "Delete"
+msgstr "Izbriši"
+
+msgid "Save"
+msgstr "Shrani"
+
+msgid "Advanced networking options"
+msgstr "Napredne možnosti omrežja"
+
+msgid "Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels."
+msgstr "Opomba: Ko je ta odjemalec konfiguriran za deljenje tuneljev, veljajo te možnosti za vse odjemalce, ki so konfigurirani za deljenje tuneljev."
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "Delay Connect"
+msgstr "Zaostro povezavo"
+
+msgid "Connection Profile"
+msgstr "Profil povezave"
+
+msgid "interactive connection"
+msgstr "interaktivna povezava"
+
+msgid "bulk connection (downloads/websites/BT)"
+msgstr "večkratna povezava (premiki/spletne strani/BT)"
+
+msgid "Delay Connection"
+msgstr "Zaostro povezavo"
+
+msgid "for request/response connections"
+msgstr "za zahteve/odgovore povezave"
+
+msgid "Router I2CP Address"
+msgstr "Naslov maršrutera I2CP"
+
+msgid "I2CP Hostname or IP"
+msgstr "Ime gostitelja ali IP I2CP"
+
+msgid "I2CP Port Number"
+msgstr "Številka vrata I2CP"
+
+msgid "Delay tunnel open until required"
+msgstr "Zaostro odprtje tunelja, dokler ni potrebno"
+
+msgid "Signature type"
+msgstr "Vrsta podpisa"
+
+msgid "Conserve resources by only creating tunnels when required"
+msgstr "Ohranjajte vir, tako da ustvarite tunelje le, ko je to potrebno"
+
+msgid "Don't open tunnel until activity is detected on port"
+msgstr "Ne odpirajte tunelja, dokler na vratah ni zaznane dejavnosti"
+
+msgid "This is the default, recommended option"
+msgstr "To je privzeto, priporočeno možnost"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Starodavna možnost (prestopana), zagotovljena za obratno združljivost"
+
+msgid "Encryption types"
+msgstr "Vrste šifriranja"
+
+msgid "Both encryption types"
+msgstr "Oba tipa šifriranja"
+
+msgid "Tunnel Options"
+msgstr "Možnosti tunelja"
+
+msgid "Length"
+msgstr "Dolžina"
+
+msgid "Count"
+msgstr "Štetje"
+
+msgid "Length of each Tunnel"
+msgstr "Dolžina vsakega tunelja"
+
+msgid "0 hop tunnel (no anonymity)"
+msgstr "0 skokov tunelj (brez anonimnosti)"
+
+msgid "1 hop tunnel (low anonymity)"
+msgstr "1 skok tunelj (nizka anonimnost)"
+
+msgid "2 hop tunnel (medium anonymity)"
+msgstr "2 skoka tunelj (srednja anonimnost)"
+
+msgid "3 hop tunnel (high anonymity)"
+msgstr "3 skoka tunelj (visoka anonimnost)"
+
+#, java-format
+msgid "{0} hop tunnel"
+msgid_plural "{0} skokov tunelj"
+msgstr[0] "{0} skok tunelj"
+msgstr[1] "{0} skoka tunelja"
+msgstr[2] "{0} skoka tunelje"
+msgstr[3] "{0} skokov tuneljev"
+
+msgid "Number of Tunnels in Group"
+msgstr "Število tuneljev v skupini"
+
+msgid "Variance"
+msgstr "Razlika"
+
+msgid "Backup Count"
+msgstr "Štetje rezervnih kopij"
+
+msgid "Level of Randomization for Tunnel Length"
+msgstr "Raven naključnosti za dolžino tunelja"
+
+msgid "0 hop variance"
+msgstr "0 skoka razlika"
+
+msgid "no randomization, consistent performance"
+msgstr "brez naključnosti, konzistentna zmogljivost"
+
+msgid "+ 0-1 hop variance"
+msgstr "+ 0-1 skoka razlika"
+
+msgid "medium randomization, lower performance"
+msgstr "srednja naključnost, nižja zmogljivost"
+
+msgid "+ 0-2 hop variance"
+msgstr "+ 0-2 skoka razlika"
+
+msgid "high randomization, very low performance"
+msgstr "visoka naključnost, zelo nizka zmogljivost"
+
+msgid "+/- 0-1 hop variance"
+msgstr "+/- 0-1 skoka razlika"
+
+msgid "standard randomization, standard performance"
+msgstr "standardna naključnost, standardna zmogljivost"
+
+msgid "+/- 0-2 hop variance"
+msgstr "+/- 0-2 skoka razlika"
+
+msgid "not recommended"
+msgstr "ni priporočeno"
+
+msgid "hop variance"
+msgstr "skok razlika"
+
+msgid "Number of Reserve Tunnels"
+msgstr "Število rezervnih tuneljev"
+
+#, java-format
+msgid "{0} backup tunnel"
+msgid_plural "{0} rezervnih tuneljev"
+msgstr[0] "{0} rezervni tunelj"
+msgstr[1] "{0} rezervnih tuneljev"
+msgstr[2] "{0} rezervnih tuneljev"
+msgstr[3] "{0} rezervnih tuneljev"
+
+msgid "no redundancy, no added resource usage"
+msgstr "brez presežka, brez dodatnega uporabe vir"
+
+msgid "low redundancy, low resource usage"
+msgstr "nizka presežna, nizka uporaba vir"
+
+msgid "medium redundancy, medium resource usage"
+msgstr "srednja presežka, srednja uporaba vir"
+
+msgid "high redundancy, high resource usage"
+msgstr "visoka presežka, visoka uporaba vir"
+
+msgid "Reduce tunnel quantity"
+msgstr "Zmanjšajte količino tuneljev"
+
+msgid "Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
+msgstr "Zmanjšajte število tuneljev, ko je neuporabljeno, da ohranjate vir, hkrati pa ostanejo odprti tunelji (da se zagotovi takojšnja razpoložljivost)"
+
+msgid "Reduce tunnel quantity when idle"
+msgstr "Zmanjšajte količino tuneljev, ko je neuporabljeno"
+
+msgid "Idle period"
+msgstr "Neuporabljeno obdobje"
+
+msgid "Reduced Tunnel Idle Time"
+msgstr "Zmanjšano časovno omejitev neuporabljene tunelje"
+
+msgid "Reduced count"
+msgstr "Zmanjšano število"
+
+msgid "Reduced tunnel count"
+msgstr "Zmanjšano število tuneljev"
+
+msgid "Close tunnels when idle"
+msgstr "Zaprite tunelje, ko so neuporabljena"
+
+msgid "To conserve resources, close tunnels when not in use"
+msgstr "Da bi ohranjali vir, zaprite tunelje, ko jih ne uporabljate"
+
+msgid "Close client tunnels after specified idle period"
+msgstr "Po določenem obdobju neuporabljene, zaprite odjemalniške tunelje"
+
+msgid "Close Tunnel Idle Time"
+msgstr "Časovna omejitev zaprtja tunelja"
+
+msgid "New Keys on Reopen"
+msgstr "Nova ključi ob ponovnem odprtju"
+
+msgid "Change tunnel identity (destination) when tunnels reopen"
+msgstr "Spremeni identiteto tunelja (destinacija) ko se tunelji ponovno odprejo"
+
+msgid "Enable"
+msgstr "Omogoči"
+
+msgid "Retain tunnel identity (destination) when tunnels reopen"
+msgstr "Ohraniti identiteto tunelja (destinacija) ko se tunelji ponovno odprejo"
+
+msgid "Disable"
+msgstr "Onemogoči"
+
+msgid "Persistent private key"
+msgstr "Neprestanec lastni ključ"
+
+msgid "Private key file"
+msgstr "Datoteka zasebnega ključa"
+
+msgid "Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering features based on destination e.g. IRC user authentication"
+msgstr "Omogočanje te funkcije zagotovi, da vaša identiteta tunelja (destinacija) ostane statična, za storitve, ki ponujajo funkcije temelječe na destinaciji, npr. overjanje uporabnikov IRC"
+
+msgid "Generate key to enable persistent client tunnel identity"
+msgstr "Ustvari ključ za omogočitev neprestanega identiteta odjemalniškega tunelja"
+
+msgid "Path to Private Key File"
+msgstr "Pot do datoteke zasebnega ključa"
+
+msgid "HTTP Filtering"
+msgstr "Filtriranje HTTP"
+
+msgid "When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity"
+msgstr "Ko je omogočeno, uporabniški agent vašega spletnega brskalnika ali http odjemalca ne bo lažen, kar lahko zmanjša vaš anonimnost"
+
+msgid "Do not spoof User-Agent header"
+msgstr "Ne laži glavičke User-Agent"
+
+msgid "When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity"
+msgstr "Ko je omogočeno, začetna stran (referer) vaših spletne zahtev ne bo filtrirana, kar lahko zmanjša vaš anonimnost"
+
+msgid "Do not block Referer header"
+msgstr "Ne blokira glavičke Referer"
+
+msgid "When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity"
+msgstr "Ko je omogočeno, glavičke akceptiranja (podpora mime vrst) poslanih s spletnim brskalnikom ne bodo filtrirane, kar lahko zmanjša vaš anonimnost"
+
+msgid "Do not block Accept headers"
+msgstr "Ne blokiraj glavičk akceptiranja"
+
+msgid "Allow SSL to I2P addresses when enabled"
+msgstr "Ob uporabi omogoči SSL za naslove I2P"
+
+msgid "Allow SSL to I2P addresses"
+msgstr "Dovoli SSL za naslove I2P"
+
+msgid "Local Authorization"
+msgstr "Lokalna avtentikacija"
+
+msgid "Local Credentials"
+msgstr "Lokalni prislovlja"
+
+msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
+msgstr "Omogoči zahtevanje uporabniškega imena in gesla za dostop do tega lokalnega servisa (npr. za gostiteljstvo na LAN-u)"
+
+msgid "Require local authorization for this service"
+msgstr "Zahtevaj lokalno avtentikacijo za ta servis"
+
+msgid "Username"
+msgstr "Uporabniško ime"
+
+msgid "Set username required to access this service"
+msgstr "Nastavi uporabniško ime, potrebno za dostop do tega servisa"
+
+msgid "Password"
+msgstr "Geslo"
+
+#. && editBean.isAdvanced()
+msgid "Set password required to access this service"
+msgstr "Nastavi geslo, potrebno za dostop do tega servisa"
+
+msgid "Outproxy Authorization"
+msgstr "Avtentikacija outproxy"
+
+msgid "Remote Credentials"
+msgstr "Oddaljeni prislovlja"
+
+msgid "Enable if the outproxy a username and password to access"
+msgstr "Omogoči, če outproxy zahteva uporabniško ime in geslo za dostop"
+
+msgid "Outproxy requires authorization"
+msgstr "Outproxy zahteva avtentikacijo"
+
+msgid "Enter username required by outproxy"
+msgstr "Vnesite uporabniško ime, zahtevano od outproxy"
+
+msgid "Enter password required by outproxy"
+msgstr "Vnesite geslo, zahtevano od outproxy"
+
+msgid "Jump URL List"
+msgstr "Seznam skočnih URL-jev"
+
+msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
+msgstr "Seznam pomožnih URL-jev, ki ponujajo skočne povezave, ko gostitelj ni najden v vašem imeniku"
+
+msgid "Custom options"
+msgstr "Prilagojene možnosti"
+
+msgid "Advanced tunnel, streaming, and I2CP options"
+msgstr "Napredne možnosti tunelja, streamiranja in I2CP"
+
+msgid "New Server Configuration"
+msgstr "Nova konfiguracija strežnika"
+
+msgid "Hostname"
+msgstr "Ime gostitelja"
+
+msgid "Website Hostname"
+msgstr "Ime spletne strani"
+
+msgid "(leave blank for outproxies)"
+msgstr "(pustite prazno za outproxy-je)"
+
+msgid "Website Hostname e.g. mysite.i2p"
+msgstr "Ime spletne strani, npr. mojgosoc.i2p"
+
+msgid "Specify the port the server is running on"
+msgstr "Določite vrata, na katerih strežnik deluje"
+
+msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
+msgstr "Vmesnik za posluskanje (IP naslov) za dostop odjemalca (običajno 127.0.0.1)"
+
+msgid "To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections."
+msgstr "Da bi se izognili snifingu prometa pri povezovanju z oddaljenim strežnikom, lahko omogočite SSL povezavo. Opomba: Ciljni strežnik mora biti konfiguriran za sprejem SSL povezav."
+
+msgid "Use SSL to connect to target"
+msgstr "Uporabi SSL za povezavo z ciljem"
+
+msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
+msgstr "Vrata, potrebna za dostop do storitve (to lahko ni ista vrata kot ta, na kateri je gostitelj storitve)"
+
+msgid "Generate a QR Code for this domain"
+msgstr "Ustvari QR kodo za to domeno"
+
+msgid "Generate QR Code"
+msgstr "Ustvari QR kodo"
+
+msgid "Add to Private addressbook"
+msgstr "Dodaj v zasebni imenik"
+
+msgid "Add to local addressbook"
+msgstr "Dodaj v lokalni imenik"
+
+msgid "Register, unregister or change details for hostname"
+msgstr "Registriraj, odregistriraj ali spremeni podatke za ime gostitelja"
+
+msgid "Registration Authentication"
+msgstr "Avtentikacija registracije"
+
+msgid "HTTPS configuration"
+msgstr "Konfiguracija HTTPS"
+
+msgid "SSL Wizard"
+msgstr "Vodnik SSL"
+
+msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgstr "Opomba: Da bi omogočili generiranje QR kode ali avtentikacijo registracije, nastavite polje Ime spletne strani (za spletne strani) ali polje Ime (vse ostalo) z imenom gostitelja, končanim s .i2p, npr. mojnovigostitelj.i2p"
+
+msgid "Absolute path to Private Key File (will be created if it does not exist)"
+msgstr "Absolutna pot do datoteke zasebnega ključa (ce ne obstaja, bo ustvarjena)"
+
+msgid "Alternate private key file"
+msgstr "Namenjena datoteka zasebnega ključa"
+
+msgid "Alternate local destination"
+msgstr "Namenjena lokalna destinacija"
+
+msgid "Absolute path for new key (will be created)"
+msgstr "Absolutna pot za novo ključ (bo ustvarjen)"
+
+msgid "Read Only: Alternate Local Destination"
+msgstr "Samo za branje: Namenjena lokalna destinacija"
+
+msgid "Specify filename or full path for new key"
+msgstr "Določite ime datoteke ali celotno pot za nov ključ"
+
+msgid "Configuration cannot be changed after destination is created"
+msgstr "Nastavitve se ne morejo spremeniti po ustvaritvi destinacije"
+
+msgid "Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel."
+msgstr "Nastavitev vrste podpisa je mogoča le ob prvotnem ustvarjanju tunelja. Za spremembo morate ustvariti nov tunelj."
+
+msgid "Legacy option, with alternate key configured"
+msgstr "Starodavna možnost, z namerjeno ključem nastavljen"
+
+msgid "Recommended for blinded and encrypted destinations"
+msgstr "Priporočeno za zavarovane in šifrirane destinacije"
+
+msgid "Inbound"
+msgstr "Vhodni"
+
+msgid "Outbound"
+msgstr "Izhodni"
+
+msgid "no anonymity"
+msgstr "brez anonimnosti"
+
+msgid "low anonymity"
+msgstr "nizka anonimnost"
+
+msgid "medium anonymity"
+msgstr "srednja anonimnost"
+
+msgid "high anonymity"
+msgstr "visoka anonimnost"
+
+msgid "Level of Randomization for Tunnel Depth"
+msgstr "Raven naključnosti za globino tunelja"
+
+msgid "very high randomization, very low performance"
+msgstr "zelo visoka naključnost, zelo nizka zmogljivost"
+
+msgid "+ 0-3 hop variance"
+msgstr "+ 0-3 razlika skokov"
+
+msgid "definitely not recommended"
+msgstr "odsebno ni priporočeno"
+
+msgid "+/- 0-3 hop variance"
+msgstr "+/- 0-3 razlika skokov"
+
+msgid "backup tunnels"
+msgstr "rezervni tunelji"
+
+msgid "Reduce tunnels to conserve resources"
+msgstr "Zmanjšajte tunelje, da ohranjate vir"
+
+msgid "Period of inactivity before tunnel number is reduced"
+msgstr "Obdobje neuporabljeno pred zmanjšanjem števila tuneljev"
+
+msgid "minutes"
+msgstr "minute"
+
+msgid "Number of tunnels to keep open to maintain availability of service"
+msgstr "Število odprti tuneljev, potrebnih za ohranjanje dostopnosti storitve"
+
+msgid "Server Access Options"
+msgstr "Možnosti dostopa do strežnika"
+
+msgid "Prevent clients from accessing this service via an inproxy"
+msgstr "Prepreči dostop odjemalcev do tega servisa prek inproxy"
+
+msgid "Block Access via Inproxies"
+msgstr "Blokiraj dostop prek inproxy"
+
+msgid "Block Accesses containing Referers"
+msgstr "Blokiraj dostope, ki vsebujejo refererje"
+
+msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
+msgstr "Uporabi edinstvene IP naslove za vsak povezanega odjemalca (le za lokalne strežnike brez SSL)"
+
+msgid "Unique Local Address per Client"
+msgstr "Edinstvena lokalna naslov po vsakem odjemalcu"
+
+msgid "Only enable if you are hosting this service on multiple routers"
+msgstr "Omogoči le, če gostiteljstvujete ta servis na več maršrutirih"
+
+msgid "Optimize for Multihoming"
+msgstr "Optimiziraj za multihoming"
+
+msgid "Deny User-Agents matching these strings (probably from inproxies)"
+msgstr "Zavrnejo uporabnike, ujemajoče se s temi nizi (verjetno iz inproxy-jev)"
+
+msgid "Block these User-Agents"
+msgstr "Blokiraj te uporabnike"
+
+msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
+msgstr "ločeno z vejico, npr. Mozilla,Opera (če osjetljivo na velika črka)"
+
+msgid "Encrypt Leaseset"
+msgstr "Šifriraj zbirko najemov"
+
+msgid "Optional Lookup Password"
+msgstr "Neobvezno geslo za preiskavo"
+
+msgid "Keyring Manager"
+msgstr "Upravitelj ključnega kruga"
+
+msgid "Allow all clients to connect to this service"
+msgstr "Dovoli vsem odjemalcem, da se povežejo do tega servisa"
+
+msgid "Send key to all users."
+msgstr "Pošlji ključ vsem uporabnikom."
+
+msgid "Encrypted"
+msgstr "Šifrirano"
+
+msgid "Prevents server discovery by floodfills"
+msgstr "Prepreči odkrivanje strežnika s preplavami"
+
+msgid "Blinded"
+msgstr "Oslep"
+
+msgid "Send password to all users."
+msgstr "Pošlji geslo vsem uporabnikom."
+
+msgid "Blinded with lookup password"
+msgstr "Osmetljeno z geslom za preiskavo"
+
+msgid "Send key and password to all users."
+msgstr "Pošlji ključ in geslo vsem uporabnikom."
+
+msgid "Encrypted with lookup password"
+msgstr "Šifrirano z geslom za preiskavo"
+
+msgid "Send individual key to each user."
+msgstr "Pošlji posamezen ključ vsakemu uporabniku."
+
+msgid "Encrypted with per-user key"
+msgstr "Šifrirano z ključem za vsak uporabnika"
+
+msgid "Encrypted with lookup password and per-user key"
+msgstr "Šifrirano z geslom za preiskavo in ključem za vsak uporabnika"
+
+msgid "Enter key from each user."
+msgstr "Vnesite ključ iz vsakega uporabnika."
+
+msgid "Encryption Key"
+msgstr "Ključ šifriranja"
+
+msgid "Generate New Key"
+msgstr "Ustvari nov ključ"
+
+msgid "Encryption key required to access this service"
+msgstr "Šifrirni ključ, potreben za dostop do tega servisa"
+
+msgid "Generate new encryption key"
+msgstr "Ustvari nov šifrirni ključ"
+
+msgid "Generate"
+msgstr "Ustvari"
+
+msgid "Tunnel must be stopped first"
+msgstr "Tunelj mora biti prvi ustavljen"
+
+msgid "Client Manager"
+msgstr "Upravitelj odjemalca"
+
+msgid "Client Name"
+msgstr "Ime odjemalca"
+
+msgid "Client Key"
+msgstr "Ključ odjemalca"
+
+msgid "Revoke"
+msgstr "Prekliči"
+
+msgid "Client"
+msgstr "Odjemalec"
+
+msgid "Add"
+msgstr "Dodaj"
+
+msgid "Restricted Access List"
+msgstr "Omejena seznama dostopa"
+
+msgid "Activate to enable editing"
+msgstr "Aktiviraj za omogočitev urejanja"
+
+msgid "Tunnel Filter"
+msgstr "Filter tunelja"
+
+msgid "Help with defining tunnel filters"
+msgstr "Pomoč pri definiranju filterjev tunelja"
+
+msgid "Prevent listed clients from connecting to this service"
+msgstr "Prepreči, da odjemalci iz seznama se povežejo do tega servisa"
+
+msgid "Blacklist"
+msgstr "Črna lista"
+
+msgid "Only allow listed clients to connect to this service"
+msgstr "Dovoli le odjemalce iz seznama, da se povežejo do tega servisa"
+
+msgid "Whitelist"
+msgstr "Bela lista"
+
+msgid "Absolute path to file containing filter definition"
+msgstr "Absolutna pot do datoteke, ki vsebuje definicijo filtra"
+
+msgid "Absolute path to filter definition"
+msgstr "Absolutna pot do definicije filtra"
+
+msgid "Specify client destinations, 1 per line"
+msgstr "Določite destinacije odjemalca, 1 na vrstico"
+
+msgid "Server Throttling"
+msgstr "Omejevanje strežnika"
+
+msgid "Inbound connection limits"
+msgstr "Omejitve vhodnih povezav"
+
+msgid "Per Minute"
+msgstr "Na minuto"
+
+msgid "Per Hour"
+msgstr "Na uro"
+
+msgid "Per Day"
+msgstr "Na dan"
+
+msgid "Concurrent"
+msgstr "Hkrati"
+
+msgid "Per Client"
+msgstr "Po odjemalcu"
+
+msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
+msgstr "Maksimalno število zahtev za spletne strani na minuto za edinstvenega odjemalca preden je dostop do strežnika blokiran"
+
+msgid "(0 = unlimited)"
+msgstr "(0 = neomejeno)"
+
+msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
+msgstr "Maksimalno število zahtev za spletne strani na uro za edinstvenega odjemalca preden je dostop do strežnika blokiran"
+
+msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
+msgstr "Maksimalno število zahtev za spletne strani na dan za edinstvenega odjemalca preden je dostop do strežnika blokiran"
+
+msgid "Total"
+msgstr "Skupaj"
+
+msgid "Total number of web page requests per minute before access to the server is blocked"
+msgstr "Skupno število zahtev za spletne strani na minuto preden je dostop do strežnika blokiran"
+
+msgid "Total number of web page requests per hour before access to the server is blocked"
+msgstr "Skupno število zahtev za spletne strani na uro preden je dostop do strežnika blokiran"
+
+msgid "Total number of web page requests per day before access to the server is blocked"
+msgstr "Skupno število zahtev za spletne strani na dan preden je dostop do strežnika blokiran"
+
+msgid "Maximum number of simultaneous client connections"
+msgstr "Maksimalno število hkratnih odjemalnih povezav"
+
+msgid "POST limits"
+msgstr "Omejitve POST"
+
+msgid "Per Period"
+msgstr "Na obdobje"
+
+msgid "Ban Duration"
+msgstr "Trajanje prepovedi"
+
+msgid "POST limit period"
+msgstr "Obdobje omejitve POST"
+
+msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
+msgstr "Maksimalno število zahtev POST, dovoljeno za edinstvenega odjemalca za nastavljeno obdobje"
+
+msgid "If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes"
+msgstr "Če odjemalec preseže maksimalno število zahtev POST na dodeljeno obdobje, izvedi prepoved za to število minut"
+
+msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
+msgstr "Obdobje za dosego maksimalnega števila zahtev POST pred izvedbo prepovedi"
+
+msgid "Total number of post requests permitted for the configured timespan"
+msgstr "Skupno število dovoljenih zahtev POST za nastavljeno obdobje"
+
+msgid "If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes"
+msgstr "Če je preseženo maksimalno število zahtev POST na dodeljeno obdobje, izvedi globalno prepoved dostopa za to število minut"
+
+msgid "Custom HTTP Headers"
+msgstr "Prilagojene glavičke HTTP"
+
+msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
+msgstr "Opomba: Te prilagojene glavičke bodo omogočene le za posluge datoteke, ki še nimajo ustrezne glavičke nastavljene."
+
+msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
+msgstr "Nastavi glavičko Allow na 'GET, POST, HEAD' za datoteke html, xml, json in text"
+
+msgid "Allow"
+msgstr "Dovoli"
+
+msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
+msgstr "Omogoči glavičke Cache-Control (no-cache za html, xml, json in text, immutable za vse ostalo)"
+
+msgid "Cache-Control"
+msgstr "Cache-kontrola"
+
+msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
+msgstr "Nastavi glavičko Referrer-Policy na 'same-origin' za datoteke html, xml, json in text"
+
+msgid "Referrer-Policy"
+msgstr "Politika referentov"
+
+msgid "Set the X-Content-Type-Options header to 'nosniff'"
+msgstr "Nastavi glavičko X-Content-Type-Options na 'nosniff'"
+
+msgid "X-Content-Type-Options"
+msgstr "Možnosti X-Content-Type"
+
+#, java-format
+msgid "Initializing Tunnel Manager{0}"
+msgstr "Inicializacija Upravitelja tuneljev{0}"
+
+msgid "Tunnels not initialized yet; please retry in a few moments."
+msgstr "Tunelji še niso inicializirani; prosimo poskusite znova čez nekaj trenutkov."
+
+msgid "Status Messages"
+msgstr "Sporočila stanja"
+
+msgid "Clear"
+msgstr "Počisti"
+
+msgid "Refresh"
+msgstr "Osveži"
+
+msgid "Global Tunnel Control"
+msgstr "Globalno nadzorno plošča tuneljev"
+
+msgid "Tunnel Wizard"
+msgstr "Vodnik tuneljev"
+
+msgid "Stop All"
+msgstr "Ustavi vse"
+
+msgid "Start All"
+msgstr "Zaženi vse"
+
+msgid "Restart All"
+msgstr "Znova zaženi vse"
+
+msgid "I2P Server Tunnels"
+msgstr "Tunelji strežnika I2P"
+
+msgid "Helper"
+msgstr "Pomočnik"
+
+msgid "Type"
+msgstr "Vrsta"
+
+msgid "Points at"
+msgstr "Pokazuje na"
+
+msgid "Preview"
+msgstr "Predogled"
+
+msgid "Status"
+msgstr "Stanje"
+
+msgid "Control"
+msgstr "Nadzor"
+
+msgid "Edit Server Tunnel Settings for"
+msgstr "Uredi nastavitve strežniškega tunelja za"
+
+msgid "Test HTTPS server, bypassing I2P"
+msgstr "Test HTTPS strežnika, izhajajoč iz I2P"
+
+msgid "Test HTTP server, bypassing I2P"
+msgstr "Test HTTP strežnika, izhajajoč iz I2P"
+
+msgid "Test HTTP server through I2P"
+msgstr "Test HTTP strežnika skozi I2P"
+
+msgid "Base32 Address"
+msgstr "Naslov Base32"
+
+msgid "No Preview"
+msgstr "Brez predogleda"
+
+msgid "Starting..."
+msgstr "Zagon..."
+
+msgid "Stop this Tunnel"
+msgstr "Ustavi ta tunelj"
+
+msgid "Running"
+msgstr "Deluje"
+
+msgid "Hops"
+msgstr "Skoki"
+
+msgid "in"
+msgstr "v"
+
+msgid "out"
+msgstr "iz"
+
+msgid "Stopped"
+msgstr "Ustavljen"
+
+msgid "Destination"
+msgstr "Destinacija"
+
+msgid "Signature"
+msgstr "Podpis"
+
+msgid "Alternate"
+msgstr "Namenjeno"
+
+msgid "Alt Destination"
+msgstr "Namenjena destinacija"
+
+msgid "Encryption"
+msgstr "Šifriranje"
+
+msgid "New server tunnel"
+msgstr "Nov strežniški tunelj"
+
+msgid "Standard"
+msgstr "Standardno"
+
+msgid "Create"
+msgstr "Ustvari"
+
+msgid "I2P Client Tunnels"
+msgstr "Tunelji odjemalca I2P"
+
+msgid "Interface"
+msgstr "Vmesnik"
+
+msgid "Edit Tunnel Settings for"
+msgstr "Uredi nastavitve tunelja za"
+
+msgid "Standby"
+msgstr "V pripravljenosti"
+
+msgid "Outproxy"
+msgstr "Outproxy"
+
+msgid "internal plugin"
+msgstr "notranja vstavka"
+
+msgid "none"
+msgstr "nič"
+
+msgid "New client tunnel"
+msgstr "Nov odjemalniški tunelj"
+
+msgid "Registration Helper"
+msgstr "Pomočnik registracije"
+
+msgid "This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled."
+msgstr "Ta storitev uporablja šifrirane zbirke najemov. Registracija ni priporočena. Avtentikacija registracije je onemogočena."
+
+msgid "Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site"
+msgstr "Prosimo, da se prepričate, da izberete, kopirate in prilepite celoten vsebino ustrezne avtentikacijske podatke v obrazec na svojem priljubljenem mestu za registracijo"
+
+msgid "Tunnel name"
+msgstr "Ime tunelja"
+
+msgid "Website name"
+msgstr "Ime spletne strani"
+
+msgid "Local Destination"
+msgstr "Lokalna destinacija"
+
+msgid "Local destination is not available. Start the tunnel."
+msgstr "Lokalna destinacija ni na voljo. Zaženi tunelj."
+
+msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
+msgstr "Da bi omogočili preverjanje registracije, uredite tunelj in nastavite ime (ali ime spletne strani) na veljaven ime gostitelja, končano s '.i2p'"
+
+msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
+msgstr "Da bi omogočili preverjanje registracije, uredite tunelj in nastavite ime na veljaven ime gostitelja, končano s '.i2p'"
+
+msgid "Destination signing key is not available. Start the tunnel."
+msgstr "Ključ za podpisovanje destinacije ni na voljo. Zaženi tunelj."
+
+msgid "Destination signing key is offline. Use CLI tools on the offline machine."
+msgstr "Ključ za podpisovanje destinacije je izključen. Uporabi CLI orodja na izključenem stroju."
+
+#, java-format
+msgid "Authentication for adding host {0}"
+msgstr "Avtentikacija za dodajanje gostitelja {0}"
+
+msgid "Copy and paste this to the registration site"
+msgstr "Kopirajte in prilepite to na mesto za registracijo"
+
+msgid "Advanced authentication strings"
+msgstr "Napredne nize za avtentikacijo"
+
+#, java-format
+msgid "Authentication for removing host {0}"
+msgstr "Avtentikacija za odstranjevanje gostitelja {0}"
+
+msgid "Authentication for changing name"
+msgstr "Avtentikacija za spremembo imena"
+
+#, java-format
+msgid "This will change the name from {0} to {1}, using the same destination"
+msgstr "To bo spremenilo ime iz {0} v {1}, uporabljaje pa isto destinacijo"
+
+msgid "This tunnel must be configured with the new host name."
+msgstr "Ta tunelj mora biti konfiguriran z novim imenom gostitelja."
+
+msgid "Enter old hostname below."
+msgstr "Vpišite stare ime gostitelja spodaj."
+
+msgid "Authentication for adding alias"
+msgstr "Avtentikacija za dodajanje alična"
+
+#, java-format
+msgid "This will add an alias {0} for {1}, using the same destination"
+msgstr "To bo dodalo alično {0} za {1}, uporabljaje pa isto destinacijo"
+
+msgid "Authentication for changing destination"
+msgstr "Avtentikacija za spremembo destinacije"
+
+#, java-format
+msgid "This will change the destination for {0}"
+msgstr "To bo spremenilo destinacijo za {0}"
+
+msgid "This tunnel must be configured with the new destination."
+msgstr "Ta tunelj mora biti konfiguriran z novo destinacijo."
+
+msgid "Enter old destination below."
+msgstr "Vpišite staro destinacijo spodaj."
+
+msgid "Authentication for adding alternate destination"
+msgstr "Avtentikacija za dodajanje namenjene destinacije"
+
+#, java-format
+msgid "This will add an alternate destination for {0}"
+msgstr "To bo dodalo namenjeno destinacijo za {0}"
+
+msgid "Authentication for adding subdomain"
+msgstr "Avtentikacija za dodajanje poddomene"
+
+#, java-format
+msgid "This will add a subdomain {0} of {1}, with a different destination"
+msgstr "To bo dodalo poddomeno {0} za {1}, z različno destinacijo"
+
+msgid "This tunnel must be configured with the new subdomain and destination."
+msgstr "Ta tunelj mora biti konfiguriran z novo poddomeno in destinacijo."
+
+msgid "Enter higher-level domain and destination below."
+msgstr "Vpišite višjo raven domene in destinacijo spodaj."
+
+msgid "Return to Tunnel Configuration"
+msgstr "Povrni se na konfiguracijo tunelja"
+
+msgid "Specify old name and destination"
+msgstr "Določite staro ime in destinacijo"
+
+msgid "This is only required for advanced authentication."
+msgstr "To je zahtevano le za napredno avtentikacijo."
+
+msgid "See above for required items."
+msgstr "Oglejte zgorenje za zahtevane elemente."
+
+msgid "Old / parent hostname "
+msgstr "Staro / roditeljsko ime gostitelja "
+
+msgid "Private key file for old destination / sub-domain parent"
+msgstr "Datoteka zasebnega ključa za staro destinacijo / poddomeno roditelja"
+
+msgid "Generate Authentication"
+msgstr "Ustvari avtentikacijo"
+
+msgid "SSL Helper"
+msgstr "Pomočnik SSL"
+
+msgid "Experts only!"
+msgstr "Le za strokovnjake!"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Alt Base32"
+msgstr "Namenjena Base32"
+
+msgid "Incoming I2P Port Routing"
+msgstr "Usmerjevanje vhodnih vratar I2P"
+
+msgid "Virtual Host"
+msgstr "Virtuelni gostitelj"
+
+msgid "Via SSL?"
+msgstr "Ce z SSL?"
+
+msgid "Test HTTPS server through I2P"
+msgstr "Test HTTPS strežnika skozi I2P"
+
+msgid "Server"
+msgstr "Strežnik"
+
+msgid "SSL Activation"
+msgstr "Aktivacija SSL"
+
+msgid "I2P webserver (eepsite)"
+msgstr "Spletni strežnik I2P (eepsite)"
+
+msgid "Disable SSL"
+msgstr "Onemogoči SSL"
+
+msgid "Enable SSL"
+msgstr "Omogoči SSL"
+
+msgid "New Certificate Password"
+msgstr "Novo geslo certifikata"
+
+msgid "Password (required to encrypt the certificate)"
+msgstr "Geslo (potrebno za šifriranje certifikata)"
+
+msgid "Generate new SSL certificate"
+msgstr "Ustvari nov SSL certifikat"
+
+msgid "Generate SSL certificate and enable"
+msgstr "Ustvari SSL certifikat in omogoči"
+
+#, java-format
+msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
+msgstr "Ne morem konfigurirati, v {0}konfiguracijah odjemalca{1} ni najdem strežnika Jetty, ki bi ustrezoval temu tunelju"
+
+msgid "Support for non-Jetty servers will be added in a future release"
+msgstr "Podpora za strežnike različne od Jetty bo dodana v prihodnji različici"
+
+msgid "Return to Tunnel Manager Index"
+msgstr "Povrni se na indeks Upravitelja tuneljev"
+
+msgid "Return to Tunnel Editor"
+msgstr "Povrni se na urejevalnik tuneljev"
+
+msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
+msgstr "Upravitelj tuneljev I2P - Vodnik za ustvarjanje tuneljev"
+
+msgid "Server or client tunnel?"
+msgstr "Strežniški ali odjemalniški tunelj?"
+
+msgid "Tunnel type"
+msgstr "Vrsta tunelja"
+
+msgid "Tunnel name and description"
+msgstr "Ime in opis tunelja"
+
+msgid "Tunnel destination"
+msgstr "Destinacija tunelja"
+
+msgid "Binding address and port"
+msgstr "Vmesnik in vrata za vezavo"
+
+msgid "Tunnel auto-start"
+msgstr "Samodejni zagon tunelja"
+
+msgid "Wizard completed"
+msgstr "Vodnik je končan"
+
+msgid "This wizard will take you through the various options available for creating tunnels in I2P."
+msgstr "Ta vodnik vas bo vodil skozi različne možnosti za ustvarjanje tuneljev v I2P."
+
+msgid "The first thing to decide is whether you want to create a server or a client tunnel."
+msgstr "Prva stvar, ki jo morate odločiti, je, ali želite ustvariti strežniški ali odjemalniški tunelj."
+
+msgid "If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel."
+msgstr "Če morate povezati z oddaljeno storitev, kot je IRC strežnik v I2P ali repozitorij kode, boste potrebovali ODJEMALNIŠKI tunelj."
+
+msgid "On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel."
+msgstr "S druge strani, če želite gostiti storitev za druge, da se povežejo do vas, boste morali ustvariti STREŽNIŠKI tunelj."
+
+msgid "Server Tunnel"
+msgstr "Strežniški tunelj"
+
+msgid "Client Tunnel"
+msgstr "Odjemalniški tunelj"
+
+msgid "There are several types of tunnels to choose from:"
+msgstr "Izberite med večjim številom tipov tuneljev:"
+
+msgid "Basic tunnel for connecting to a single service inside I2P."
+msgstr "Osnovni tunelj za povezavo z eno storitev v I2P."
+
+msgid "Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need."
+msgstr "Poskusite to, če noben od spodnjih tipov tuneljev ne ustreza vašim zahtevam, ali če ne veste, katere vrste tunelja potrebujete."
+
+msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
+msgstr "Tunelj, ki deluje kot HTTP proxy za dostop do eepsite-jev v I2P."
+
+msgid "Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux."
+msgstr "Nastavite svoj brskalnik, da uporablja ta tunelj kot http proxy, ali nastavite okoljsko spremenljivko \"http_proxy\" za ukazne vrstice v GNU/Linux."
+
+msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
+msgstr "Spletne strani izven I2P so tudi dosegljive, če je znano HTTP proxy v I2P."
+
+msgid "Customised client tunnel specific for IRC connections."
+msgstr "Prilagojen odjemalniški tunelj, poseben za IRC povezave."
+
+msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
+msgstr "Z tipom tunelja bodo vaši IRC odjemalci lahko povezani z IRC omrežjem v I2P."
+
+msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
+msgstr "Vsako IRC omrežje v I2P, s katerim želite povezati, bo potrebovalo svoj lasten tunelj. (Poglejte tudi, SOCKS IRC)"
+
+msgid "A tunnel that implements the SOCKS protocol."
+msgstr "Tunelj, ki implementira protokol SOCKS."
+
+msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
+msgstr "To omogoča vzpostavitev povezav TCP in UDP skozi SOCKS outproxy v I2P."
+
+msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
+msgstr "Odjemalniški tunelj, ki implementira protokol SOCKS, prilagojen za povezavo z IRC omrežji."
+
+msgid "With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel."
+msgstr "Z tipom tunelja so IRC omrežja v I2P dosegljiva, če vpišete I2P naslov v vaš IRC odjemalca, in konfigurirate IRC odjemalca, da uporabi ta SOCKS tunelj."
+
+msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
+msgstr "To pomeni, da je potreben le en I2P tunelj, namesto ločenega tunelja za vsako IRC omrežje."
+
+msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
+msgstr "IRC omrežja izven I2P so tudi dosegljiva, če je znano SOCKS outproxy v I2P, vendar to zavisi od tega, ali je outproxy blokiran s strani IRC omrežja."
+
+msgid "A basic server tunnel for hosting a generic service inside I2P."
+msgstr "Osnovni strežniški tunelj za gostiteljstvo splošne storitve v I2P."
+
+msgid "A server tunnel that is customised for HTTP connections."
+msgstr "Strežniški tunelj, prilagojen za povezave HTTP."
+
+msgid "Use this tunnel type if you want to host an eepsite."
+msgstr "Uporabite ta tip tunelja, če želite gostiti eepsite."
+
+msgid "A customised server tunnel for hosting IRC networks inside I2P."
+msgstr "Prilagojen strežniški tunelj za gostiteljstvo IRC omrežij v I2P."
+
+msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
+msgstr "Običajno je potreben ločen tunelj za vsak IRC strežnik, ki je dosegljiv v I2P."
+
+msgid "Select tunnel type"
+msgstr "Izberite vrsto tunelja"
+
+msgid "Choose a name and description for your tunnel."
+msgstr "Izberite ime in opis za vaš tunelj."
+
+msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
+msgstr "To lahko vstavite kar koli želite - to je samo za olajšanje identifikacije tunelja v konzoli maršrutera."
+
+msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
+msgstr "Če znate kakšne outproxy-je za ta tip tunelja (HTTP ali SOCKS), jih vpišite spodaj."
+
+msgid "Separate multiple proxies with commas."
+msgstr "Ločite večje število proxy-jev z vejicami."
+
+msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
+msgstr "Seznam destinacij outproxy-jev I2P, ločen z vejicami (npr. proxy1.i2p,proxy2.i2p)"
+
+msgid "Type in the I2P destination of the service that this client tunnel should connect to."
+msgstr "Vpišite destinacijo I2P storitve, do katere bi moral ta odjemalniški tunelj povezati."
+
+msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
+msgstr "To lahko je celoten ključ destinacije Base64, ali pa I2P URL iz vašega imenika."
+
+msgid "Enter a b64 or .i2p address here"
+msgstr "Vpišite b64 ali .i2p naslov tukaj"
+
+msgid "This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
+msgstr "To je IP, na katerem deluje vaša storitev, to je običajno na istem stroju, zato je samodejno vneseno 127.0.0.1."
+
+msgid "This is the port that the service is accepting connections on."
+msgstr "To so vrata, na katerih sprejema povezave storitev."
+
+msgid "This is the port that the client tunnel will be accessed from locally."
+msgstr "To so vrata, od koder bo odjemalniški tunelj dostopen lokalno."
+
+msgid "How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
+msgstr "Kako želite, da se ta tunelj dostopa? Samo z tem strokom, celotno podmrežjo, ali z zunanjo interneto?"
+
+msgid "You will most likely want to just allow 127.0.0.1"
+msgstr "Verjetno boste želeli le dopustiti 127.0.0.1"
+
+msgid "The I2P router can automatically start this tunnel for you when the router is started."
+msgstr "Maršruter I2P lahko ta tunelj samodejno zažene, ko se maršruter zagnal."
+
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgstr "To je uporabno za pogosto uporabljene tunelje (osebno strežniške tunelje), vendar za tunelje, ki se uporabljajo le povsod, bi to pomenilo, da maršruter I2P ustvarja in vzdržuje nepotrebnih tuneljev."
+
+msgid "The wizard has now collected enough information to create your tunnel."
+msgstr "Vodnik je zdaj zbral dovolj informacij za ustvarjanje vašega tunelja."
+
+msgid "Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page."
+msgstr "Po kliku na gumb Shrani spodaj bo vodnik nastavil tunelj in te vrnal nazaj na glavno stran I2PTunnel."
+
+msgid "Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further."
+msgstr "Ker ste izbrali, da se tunelj samodejno zažene, ko se maršruter zagnal, ni potrebno storiti nič drugega."
+
+msgid "The router will start the tunnel once it has been set up."
+msgstr "Maršruter bo zaželel tunelj, ko bo bil nastavljen."
+
+msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
+msgstr "Ker ste izbrali, da se tunelj ne zažene samodejno, ga boste morali zažeti ročno."
+
+msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
+msgstr "To lahko storite tako, da kliknete na gumb Zaženi na glavni strani, ki se nanaša na nov tunelj."
+
+msgid "Below is a summary of the options you chose:"
+msgstr "Spodaj je pregled možnosti, ki jih ste izbrali:"
+
+msgid "Tunnel description"
+msgstr "Opis tunelja"
+
+msgid "Binding address"
+msgstr "Naslov vezave"
+
+msgid "Tunnel port"
+msgstr "Vrata tunelja"
+
+msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
+msgstr "Ob teh osnovnih nastavitvah obstajajo številne napredne možnosti za konfiguracijo tunelja."
+
+msgid "The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page."
+msgstr "Vodnik bo za te nastavitve razumno in smiselne privzete vrednosti, vendar jih lahko ogledate in/ali uredite tako, da kliknete na ime tunelja na glavni strani I2PTunnel."
+
+msgid "Cancel the wizard and return to Tunnel Manager home page"
+msgstr "Prekliči vodnika in vrni se na domačo stran Upravitelja tuneljev"
+
+msgid "Return to previous page"
+msgstr "Vrni se na prejšnjo stran"
+
+msgid "Previous"
+msgstr "Prejšnja"
+
+msgid "Save tunnel configuration"
+msgstr "Shrani konfiguracijo tunelja"
+
+msgid "Save Tunnel"
+msgstr "Shrani Tunelj"
+
+msgid "Finish Wizard and review tunnel settings"
+msgstr "Končaj vodnika in preglej nastavitve tunelja"
+
+msgid "Finish"
+msgstr "Končaj"
+
+msgid "Advance to next page"
+msgstr "Napreduj na naslednjo stran"
+
+msgid "Next"
+msgstr "Naslednja"
