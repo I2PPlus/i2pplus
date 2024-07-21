@@ -1253,8 +1253,8 @@ msgstr "Enthält"
 msgid "Ends With"
 msgstr "Endet mit"
 
-msgid "Enabled"
-msgstr "Aktiviert"
+msgid "Enabled by Default"
+msgstr ""
 
 msgid "Add"
 msgstr "Hinzufügen"
@@ -1493,6 +1493,9 @@ msgstr "Änderungen speichern"
 #. shouldn't happen
 msgid "Torrent must be stopped"
 msgstr "Torrent muss gestoppt werden"
+
+#~ msgid "Enabled"
+#~ msgstr "Aktiviert"
 
 #, java-format
 #~ msgid "Downloading from {0} of {1} peers in swarm"
