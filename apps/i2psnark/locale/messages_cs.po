@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "Nové soubory nebudou veřejně přístupné"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "Zastavte všechny torrenty před změnou datového adresáře"
 
 msgid "Data directory must be an absolute path"
 msgstr "Datový adresář musí být absolutní cesta"
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "Stahování již běží: {0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - soubor torrent již existuje"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "Spouštění torrentu {0}"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "Dolní limit propustnosti je {0} KB/s"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -359,16 +359,12 @@ msgid "I2P+ I2PSnark standalone version {0} started"
 msgstr "I2p+ I2PSnark samostatná verze {0} spuštěna"
 
 #, java-format
-msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
-msgstr "Limit šířky pásma nahrávání je {0} kB/s pro maximálně {1} souběžných účastníků."
-
-#, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Uložiště: {0} MB je momentálně k dispozici pro stažení na nakonfigurovaném oddílu dat"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "Varování - Pro stahování na nakonfigurovaném oddílu dat je dostupno pouze {0} MB"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +380,10 @@ msgid "Starting torrent: {0}"
 msgstr "Spuštění torrentu: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "Nelze načíst konfiguraci filtru pro vytváření souborů torrent: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "Nelze uložit konfiguraci filtru pro vytváření souborů torrent: "
 
 msgid "Torrent not found"
 msgstr "Torrent nenalezen"
@@ -792,11 +788,11 @@ msgstr "Error - Nelze kombinovat soukromé a veřejné trackery v torrentu"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr " soubory nebo složky byly vyloučeny z \"{0}\" kvůli pravidlům filtru."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "Následující soubory nebo složky byly vyloučeny z \"{0}\" kvůli pravidlům filtru: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -839,16 +835,16 @@ msgid "Restored default trackers"
 msgstr "Obnovené výchozí sledovače"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "Uložit konfiguraci filtru"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "Přidat filtr souboru"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "Zadejte platné jméno a vzor filtru"
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "Obnoveno výchozí nastavení filtrů pro vytváření torrentů"
 
 msgid "Checking"
 msgstr "Kontroluji"
@@ -945,7 +941,7 @@ msgid "Destination (identity) of peer"
 msgstr "Cíl (identita) partnera"
 
 msgid "Version"
-msgstr ""
+msgstr "Verze"
 
 msgid "seconds"
 msgstr "sekund"
@@ -1012,10 +1008,10 @@ msgid "Create torrent"
 msgstr "Vytvořit torrent"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "Vyloučit soubory z torrentu, pokud se nacházejí v adresáři torrentu"
 
 msgid "Content Filters"
-msgstr ""
+msgstr "Filtrování obsahu"
 
 msgid "Trackers"
 msgstr "Trackery"
@@ -1148,10 +1144,10 @@ msgid "Half available bandwidth recommended."
 msgstr "Doporučuje se poloviční dostupná šířka pásma."
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "Omezení šířky pásma"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "Maximální šířka pásma vyhrazená pro stahování"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "Maximální šířka pásma přidělená pro nahrávání"
@@ -1238,28 +1234,28 @@ msgid "Save configuration"
 msgstr "Uložte konfiguraci"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "Filtrování souborů pro vytváření torrentů"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "Označit filtr pro smazání"
 
 msgid "Name"
-msgstr "Jméno"
+msgstr "Název"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "Vzor filtru"
 
 msgid "Starts With"
-msgstr ""
+msgstr "Začíná na"
 
 msgid "Contains"
-msgstr ""
+msgstr "Obsahuje"
 
 msgid "Ends With"
-msgstr ""
+msgstr "Končí na"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "Povoleno výchozím nastavením"
 
 msgid "Add"
 msgstr "Přidat"
@@ -1277,7 +1273,7 @@ msgid "Mark tracker for deletion"
 msgstr "Označte tracker pro smazání"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "Nelze přidat magnet: Odkazy magnet verze 2 nejsou podporovány"
 
 #, java-format
 msgid "Invalid magnet URL {0}"

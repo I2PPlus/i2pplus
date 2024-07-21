@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "Τα νέα αρχεία δεν θα είναι δημόσια αναγνώσιμα"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "Σταματήστε όλα τα torrents πριν αλλάξετε τον κατάλογο δεδομένων"
 
 msgid "Data directory must be an absolute path"
 msgstr "Ο κατάλογος δεδομένων πρέπει να είναι μια απόλυτη διαδρομή"
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "Η λήψη εκτελείται ήδη: {0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - ο αρχείο-torrent υπάρχει ήδη"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "Εκκίνηση torrent {0}"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "Το όριο κατεβαίνουσας ρυθμισμένης μετάδοσης είναι {0} KBps"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -364,11 +364,11 @@ msgstr "Το όριο εύρους ζώνης μεταφόρτωσης είνα�
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Αποθήκευση: {0}MB είναι σήμερα διαθέσιμα για λήψεις στην ρυθμισμένη διαμορφώση δεδομένων"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "Προειδοποίηση - Μόνο {0}MB είναι διαθέσιμα για λήψεις στην ρυθμισμένη διαμορφώση δεδομένων"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +384,10 @@ msgid "Starting torrent: {0}"
 msgstr "Έναρξη torrent: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "Δεν είναι δυνατή η φόρτωση της διαδικασίας δημιουργίας αρχείου φίλτρου torrent: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "Δεν είναι δυνατή η αποθήκευση της διαδικασίας δημιουργίας αρχείου φίλτρου torrent: "
 
 msgid "Torrent not found"
 msgstr "Το torrent δεν βρέθηκε"
@@ -789,11 +789,11 @@ msgstr "Σφάλμα - Δεν είναι δυνατή η ανάμειξη ιδι
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr " τα αρχεία ή τα φακέλα αποκλείθηκαν από \"{0}\" λόγω κανόνων φίλτρου."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "Τα εξής αρχεία ή φακέλα αποκλείθηκαν από \"{0}\" λόγω κανόνων φίλτρου: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -836,16 +836,16 @@ msgid "Restored default trackers"
 msgstr "Επαναφορά προεπιλεγμένων ιχνηλατών"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "Αποθήκευση Διατύπωσης Φίλτρου"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "Προσθήκη Φίλτρου Αρχείου"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "Εισάγετε έγκυρο όνομα και σχεματισμό φίλτρου"
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "Επαναφορά προεπιλεγμένων φίλτρων δημιουργίας torrent"
 
 msgid "Checking"
 msgstr "Γίνεται έλεγχος"
@@ -940,7 +940,7 @@ msgid "Destination (identity) of peer"
 msgstr "Προορισμός (ταυτότητα) συνομήλικου"
 
 msgid "Version"
-msgstr ""
+msgstr "Έκδοση"
 
 msgid "seconds"
 msgstr "δευτερόλεπτα"
@@ -1007,10 +1007,10 @@ msgid "Create torrent"
 msgstr "Δημιουργία torrent"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "Αποκλείστε τα αρχεία από το torrent αν βρίσκονται στο φάκελο torrent"
 
 msgid "Content Filters"
-msgstr ""
+msgstr "Φίλτρα Περιεχομένου"
 
 msgid "Trackers"
 msgstr "Ιχνηλάτες"
@@ -1143,10 +1143,10 @@ msgid "Half available bandwidth recommended."
 msgstr "Συνιστάται το μισό διαθέσιμο εύρος ζώνης."
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "Όριο εύροςάνδα"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "Μέγιστο εύροςάνδα που διατίθεται για λήψη"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "Μέγιστο εύρος ζώνης που εκχωρείται για μεταφόρτωση"
@@ -1233,28 +1233,28 @@ msgid "Save configuration"
 msgstr "Αποθήκευση διαμόρφωσης"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "Φίλτρα Δημιουργίας Αρχείου Torrent"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "Σήμανση φίλτρου για διαγραφή"
 
 msgid "Name"
 msgstr "Όνομα"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "Σχεματισμός Φίλτρου"
 
 msgid "Starts With"
-msgstr ""
+msgstr "Άρχισε με"
 
 msgid "Contains"
-msgstr ""
+msgstr "Περιλαμβάνει"
 
 msgid "Ends With"
-msgstr ""
+msgstr "Λήγει με"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "Ενεργοποιημένο Κατ' Ορισμό"
 
 msgid "Add"
 msgstr "Προσθηκη"
@@ -1272,7 +1272,7 @@ msgid "Mark tracker for deletion"
 msgstr "Επισήμανση παρακολούθησης για διαγραφή"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "Δεν μπορώ να προσθέσω magnet: Οι συνδέσεις magnet της έκδοσης 2 δεν υποστηρίζονται"
 
 #, java-format
 msgid "Invalid magnet URL {0}"

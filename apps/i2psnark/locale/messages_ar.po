@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "لن تكون الملفات الجديدة قابلة للقراءة بشكل عام"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "توقف كل التورنتات قبل تغيير مسار البيانات"
 
 msgid "Data directory must be an absolute path"
 msgstr "يجب أن يكون دليل البيانات مسارًا مطلقًا"
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "التنزيل قيد التشغيل بالفعل: {0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - ملف التورنت بالفعل موجود"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "بدء تشغيل السيل {0}"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "حد السرعة للتحميل هو {0} كيلوبايت في الثانية"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -364,11 +364,11 @@ msgstr "حد النطاق الترددي للتحميل هو {0} كيلو باي
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "تخزين: {0}MB متاح حالياً للتنزيلات على قسم البيانات المكوّن"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "تحذير - فقط {0}MB متاح للتنزيلات على قسم البيانات المكوّن"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +384,10 @@ msgid "Starting torrent: {0}"
 msgstr "بدء السيل: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "غير قادر على تحميل تنظيف ملف إعدادات إنشاء التورنت: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "غير قادر على حفظ تنظيف ملف إعدادات إنشاء التورنت: "
 
 msgid "Torrent not found"
 msgstr "لم يتم العثور على تورنت"
@@ -801,15 +801,15 @@ msgstr "خطأ - لا يمكن خلط أدوات التتبع الخاصة وا�
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr " تم استبعاد الملفات أو المجلدات من {0} بسبب قواعد التنقيح."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "تم استبعاد الملفات أو المجلدات التالية من {0} بسبب قواعد التنقيح: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
-msgstr "تم انشاء تورنت لـ \"{0}\""
+msgstr "تم انشاء تورنت لـ {0}"
 
 #, java-format
 msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
@@ -848,16 +848,16 @@ msgid "Restored default trackers"
 msgstr "استعادة أجهزة التتبع الافتراضية"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "حفظ تكوين التنقية"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "إضافة تنقية الملف"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "أدخل الاسم والنمط الصحيح للتنقية"
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "استعادة تنقية إنشاء التورنت الافتراضية"
 
 msgid "Checking"
 msgstr "الفحص"
@@ -960,7 +960,7 @@ msgid "Destination (identity) of peer"
 msgstr "الوجهة (الهوية) للنظير"
 
 msgid "Version"
-msgstr ""
+msgstr "الإصدار"
 
 msgid "seconds"
 msgstr "ثواني"
@@ -1027,10 +1027,10 @@ msgid "Create torrent"
 msgstr "أنشئ تورنت"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "استبعد الملفات من التورنت إذا كانت تقع في مجلد التورنت"
 
 msgid "Content Filters"
-msgstr ""
+msgstr "فلاتر المحتوى"
 
 msgid "Trackers"
 msgstr "أجهزة التتبع"
@@ -1163,10 +1163,10 @@ msgid "Half available bandwidth recommended."
 msgstr "ينصح باستعمال نصف سرعة الشبكة."
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "حد السرعة النقل"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "الحد الأقصى للسرعة المخصصة للتحميل"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "الحد الأقصى لعرض النطاق الترددي المخصص للتحميل"
@@ -1253,28 +1253,28 @@ msgid "Save configuration"
 msgstr "حفظ الاعدادات"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "تنقية ملف إنشاء التورنت"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "أعد تنقية للازالة"
 
 msgid "Name"
 msgstr "الاسم"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "نمط التنقية"
 
 msgid "Starts With"
-msgstr ""
+msgstr "يبدأ بـ"
 
 msgid "Contains"
-msgstr ""
+msgstr "يحتوي على"
 
 msgid "Ends With"
-msgstr ""
+msgstr "ينتهي بـ"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "مُمكّن افتراضياً"
 
 msgid "Add"
 msgstr "إضافة"
@@ -1292,7 +1292,7 @@ msgid "Mark tracker for deletion"
 msgstr "وضع علامة على المتعقب للحذف"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "لا يمكن إضافة الرابط المغناطيسي: لا يدعم الروابط المغناطيسية الإصدار 2"
 
 #, java-format
 msgid "Invalid magnet URL {0}"
