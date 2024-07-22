@@ -759,7 +759,7 @@ msgid "Now"
 msgstr "İndi"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Ruter yenidən başlatıldı"
 
 msgid "none"
 msgstr "heç biri"
@@ -1801,7 +1801,7 @@ msgid "{0} for {1}"
 msgstr "{0} {1} üçün"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Göstərmək üçün heç bir statistika belirtilmedi!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1847,10 +1847,10 @@ msgid "plot events"
 msgstr "hadisələrin süjeti"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Mitqanı gizlət"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Mitqanı göstər"
 
 msgid "Configure Graph Display"
 msgstr "Qrafik Ekranı konfiqurasiya edin"
@@ -2195,7 +2195,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Tor mərkəzli Axtarış Motoru"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Pinterest Şəkil Axtarış Motoru"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Clearnet BitTorrent DHT axtarış motoru"
@@ -2566,13 +2566,13 @@ msgid "Congestion Cap"
 msgstr "Tıxac qapağı"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Orta"
 
 msgid "Severe"
-msgstr ""
+msgstr "Yaxşılaşdırılmış"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Keçid tonnlari yoxdur"
 
 msgid "Available CPU Cores"
 msgstr "Mövcud CPU nüvələri"
@@ -2694,7 +2694,7 @@ msgid "File location"
 msgstr "Fayl yeri"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Yenilənmə muddəti (saniyələr)"
 
 msgid "File not found"
 msgstr "Fayl tapılmadı"
@@ -2740,7 +2740,7 @@ msgid "Sybil Analysis"
 msgstr "Sibil təhlili"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Ruter Xəritəsi"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Heç vaxt marşrutlaşdırıcınızın kimliyini heç kimə açıqlamayın, çünki o, şəbəkə verilənlər bazasındakı IP ünvanınızla unikal şəkildə əlaqələndirilir."
@@ -2874,7 +2874,7 @@ msgid "Transports"
 msgstr "Nəqliyyatlar"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Bilinmeyen"
 
 msgid "Initializing"
 msgstr "Başlanğıc"
@@ -3880,7 +3880,7 @@ msgid "Memory"
 msgstr "Yaddaş"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Floodfill aktivdir"
 
 msgid "See more information on the wiki"
 msgstr "Vikidə daha çox məlumata baxın"
@@ -4045,10 +4045,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "Router və ya şəbəkə performansı iştirakçı tunellərin qurulmasına mane olur"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "Ruter əmrləndirilmiş maksimum keçid tonnellarını həyata keçirir"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "Ruter əmrləndirilmiş maksimum paylaşım bant genişi istifadə edir"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "Router iştirakçı tunellər qurmağa hazırdır"
@@ -4109,13 +4109,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "Xəbərdar"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2P Xəbərdarlığı"
 
 msgid "Server"
 msgstr "Server"
@@ -4231,7 +4231,7 @@ msgid "Review current bans"
 msgstr "Cari qadağaları nəzərdən keçirin"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Sybil bloklanma siyahısını sil"
 
 msgid "Floodfill Summary"
 msgstr "Daşqın xülasəsi"
@@ -5653,7 +5653,7 @@ msgid "Event Log"
 msgstr "Hadisə jurnalı"
 
 msgid "graph"
-msgstr ""
+msgstr "Gráfik"
 
 msgid "Performance Graph"
 msgstr "Performans Qrafiki"
@@ -5791,10 +5791,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "Əslinə qaldıqda, router router yenidən başladıqda kimliyini və UDP portunu dəyişəcək və sonrakı dəyişikliklərin qarşısını almaq üçün router.config düyməsini siləcək. [Standart yanlışdır]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "Yanlış kimi qoyulsa, ruter digər ruterlərdən tonnel qurma tələblərinə dayanmaqdan imtina edəcək. Qəribə halda istifadə etmək lazımdır. [Standart dəyər doğrudur, yenidən başlama lazımdır]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "Yanlış kimi qoyulsa, ruter yavaş və ya çatışmaz olan daha qədim versiyalarda çalışan ruterlərdən tonnel qurma tələblərini bloklamaqdan imtina edəcək. [Standart dəyər doğrudur, yenidən başlama lazımdır]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Konfiqurasiya edildikdə, bu, routerin eyni vaxtda qurulmasına icazə verilən tunel sayı üçün çətin bir limit təyin edir. Standart olaraq router optimal qurma dərəcəsini müəyyən etmək üçün orta qurma müddəti və cari kənar bant genişliyindən istifadə edir. [Yenidən başladın tələb olunur]"
@@ -5905,7 +5905,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Bu parametr doğrulandıqda, <i>faiz linkləri sayt</i> xəritəsində <a href=/sitemap>göstəriləcək</a>. [Standart yanlışdır]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Bu ayar, ruter konsol səhifələrinin başlığı üçün özgün mətn ön əlavəsinin qoyulmasına icazə verir, birdən çox konsolun brauzer qutularında açılırsa və onları asanlıqla fərqləndirmək istəndikdə faydalıdır."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Bu parametr ruterinizin dəqiq saat vaxtını qoruduğuna əmin olmaq üçün tələb olunan alternativ NTP serverlərinin konfiqurasiyasına icazə verir. [Standart 0.pool.ntp.org ,1.pool.ntp.org,2.pool.ntp.org]"
@@ -7343,7 +7343,7 @@ msgid "Configure router logging options"
 msgstr "Router qeyd seçimlərini konfiqurasiya edin"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Ruter loq outputunu filtrele"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Xidmət (Qaydalayıcı) Qeydləri"
@@ -7352,10 +7352,10 @@ msgid "network database"
 msgstr "şəbəkə verilənlər bazası"
 
 msgid "network database router map"
-msgstr ""
+msgstr "Şəbəkə bazası ruter xəritəsi"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Şəbəkə bazası Ruter Xəritəsi"
 
 msgid "News"
 msgstr "Xəbərlər"
@@ -7590,10 +7590,10 @@ msgid "Local Tunnels"
 msgstr "Yerli tunellər"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Tonnel İD-lərini aktiv-passiv döndür"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Tonnelleri aktiv-passiv döndür"
 
 msgid "Peer Profile"
 msgstr "Həmyaşıd profili"

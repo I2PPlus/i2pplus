@@ -762,7 +762,7 @@ msgid "Now"
 msgstr "Teď"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Router byl restartován"
 
 msgid "none"
 msgstr "žádný"
@@ -1809,7 +1809,7 @@ msgid "{0} for {1}"
 msgstr "{0} pro {1}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Nic k zobrazení - nebyl specifikován žádný stav!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1855,10 +1855,10 @@ msgid "plot events"
 msgstr "zápletka událostí"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Skrytý legendu"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Zobrazit legendu"
 
 msgid "Configure Graph Display"
 msgstr "Konfigurace zobrazení grafu"
@@ -2203,7 +2203,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Vyhledávač zaměřený na Tor"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Vyhledávač obrázků Pinterest"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Vyhledávač Clearnet BitTorrent DHT"
@@ -2574,13 +2574,13 @@ msgid "Congestion Cap"
 msgstr "Čepice přetížení"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Střední"
 
 msgid "Severe"
-msgstr ""
+msgstr "Závažné"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Žádné přesunové tunely"
 
 msgid "Available CPU Cores"
 msgstr "Dostupná jádra CPU"
@@ -2702,7 +2702,7 @@ msgid "File location"
 msgstr "Umístění souboru"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Interval obnovy (sekundy)"
 
 msgid "File not found"
 msgstr "Soubor nenalezen"
@@ -2748,7 +2748,7 @@ msgid "Sybil Analysis"
 msgstr "Analýza sybil"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Mapa Routeru"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Nikdy nikomu neprozrazujte identitu vašeho routeru, protože je jednoznačně spojena s vaší IP adresou v síťové databázi."
@@ -2882,7 +2882,7 @@ msgid "Transports"
 msgstr "Doprava"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Neznámý"
 
 msgid "Initializing"
 msgstr "Inicializace"
@@ -3898,7 +3898,7 @@ msgid "Memory"
 msgstr "Paměť"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Floodfill je povolen"
 
 msgid "See more information on the wiki"
 msgstr "Více informací naleznete na wiki"
@@ -4063,10 +4063,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "Výkon směrovače nebo sítě brání budování zúčastněných tunelů"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "Router aktuálně hostuje maximální počet nakonfigurovaných přesunových tunelů"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "Router aktuálně používá maximální nastavenou šířku pásma pro sdílení"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "Router je připraven vybudovat zúčastněné tunely"
@@ -4127,13 +4127,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "Zprávy"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "Server"
@@ -4249,7 +4249,7 @@ msgid "Review current bans"
 msgstr "Zkontrolujte aktuální zákazy"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Smazat blokovací seznam Sybil"
 
 msgid "Floodfill Summary"
 msgstr "Shrnutí Floodfill"
@@ -5671,7 +5671,7 @@ msgid "Event Log"
 msgstr "Záznam událostí"
 
 msgid "graph"
-msgstr ""
+msgstr "Graf"
 
 msgid "Performance Graph"
 msgstr "Graf výkonu"
@@ -5809,10 +5809,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "Pokud je nastaveno na hodnotu true, směrovač změní svou identitu a UDP port, když směrovač restartuje, a poté odstraní klíč z router.config, aby zabránil dalším změnám. [Výchozí hodnota je false]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "Pokud je nastaveno na Nepravda, router nebude omezovat žádosti o vytváření tunelů od ostatních routerů a má se používat s opatrností. [Výchozí hodnota je Pravda, vyžaduje se restart]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "Pokud je nastaveno na Nepravda, router nebude blokovat žádosti o vytváření tunelů od pomalejších nebo nedosažitelných routerů s staršími verzemi. [Výchozí hodnota je Pravda, vyžaduje se restart]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Pokud je nakonfigurováno, nastaví pevný limit pro počet tunelů, které je směrovač povolen stavět souběžně. Výchozí hodnota je průměrný čas stavby a současná odchozí šířka pásma, které směrovač používá k určení optimální rychlosti stavby. [Je vyžadován restart]"
@@ -5923,7 +5923,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Toto nastavení, když je nastaveno na true, zobrazí odkazy na <i>Sites of Interest</i> na <a href=/sitemap>mapě stránek</a>. [Výchozí hodnota je false]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Tato nastavení umožňuje nastavit vlastní prefix textu pro název stránky na stránkách konzoly routeru, což může být užitečné, pokud máte více konzolí otevřených na záložkách prohlížeče a chcete snadný způsob, jak je rozlišit."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Toto nastavení umožňuje konfiguraci alternativních NTP serverů, které jsou potřebné pro zajištění přesného času ve vašem směrovači. [Výchozí hodnota je 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -7367,7 +7367,7 @@ msgid "Configure router logging options"
 msgstr "Konfigurace možností protokolování routeru"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Filtrovat výstup logu routeru"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Protokoly služby (Wrapper)."
@@ -7376,10 +7376,10 @@ msgid "network database"
 msgstr "síťová databáze"
 
 msgid "network database router map"
-msgstr ""
+msgstr "Mapa routeru v síťové databázi"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Mapa routeru síťové databáze"
 
 msgid "News"
 msgstr "Novinky"
@@ -7614,10 +7614,10 @@ msgid "Local Tunnels"
 msgstr "Místní tunely"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Přepnout ID tunelů"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Přepnout tunely"
 
 msgid "Peer Profile"
 msgstr "Profil peeru"

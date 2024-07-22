@@ -771,7 +771,7 @@ msgid "Now"
 msgstr "الآن"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "تم إعادة تشغيل ال router"
 
 msgid "none"
 msgstr "لا شيء"
@@ -1833,7 +1833,7 @@ msgid "{0} for {1}"
 msgstr "{0} لـ {1}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "لا يوجد شيء لعرضه - لم يتم تحديد إحصاء!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1879,10 +1879,10 @@ msgid "plot events"
 msgstr "ارسم الأحداث"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "إخفاء التفسير"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "عرض التفسير"
 
 msgid "Configure Graph Display"
 msgstr "اعدادات الرسم بياني"
@@ -2227,7 +2227,7 @@ msgid "Tor-focused Search Engine"
 msgstr "محرك بحث يركز على تور"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "محرك بحث الصور Pinterest"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "محرك بحث Clearnet BitTorrent DHT"
@@ -2598,13 +2598,13 @@ msgid "Congestion Cap"
 msgstr "غطاء الازدحام"
 
 msgid "Moderate"
-msgstr ""
+msgstr "متوسط"
 
 msgid "Severe"
-msgstr ""
+msgstr "شديد"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "لا توجد أنفاق انتقالية"
 
 msgid "Available CPU Cores"
 msgstr "نوى وحدة المعالجة المركزية المتاحة"
@@ -2726,7 +2726,7 @@ msgid "File location"
 msgstr "عنوان الملف"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "فترة التجديد (بالثواني)"
 
 msgid "File not found"
 msgstr "ملف غير موجود"
@@ -2772,7 +2772,7 @@ msgid "Sybil Analysis"
 msgstr "تحليل سيبيل"
 
 msgid "Router Map"
-msgstr ""
+msgstr "خريطة ال router"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "لا تكشف أبدًا عن هوية جهاز التوجيه الخاص بك لأي شخص، لأنه مرتبط بشكل فريد بعنوان IP الخاص بك في قاعدة بيانات الشبكة."
@@ -2906,7 +2906,7 @@ msgid "Transports"
 msgstr "نقل"
 
 msgid "Unknown"
-msgstr ""
+msgstr "غير معروف"
 
 msgid "Initializing"
 msgstr "جار تهيئة"
@@ -3952,7 +3952,7 @@ msgid "Memory"
 msgstr "الذاكرة"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "تم تمكين floodfill"
 
 msgid "See more information on the wiki"
 msgstr "انظر المزيد من المعلومات على الويكي"
@@ -4117,10 +4117,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "يعيق أداء جهاز التوجيه أو الشبكة بناء الأنفاق المشاركة"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "ال router يقوم حالياً باستضافتهدف العدد الأقصى المحدد من الأنفاق الانتقالية"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "ال router يستخدم حالياً سرعة الإشتراك الأقصى المحددة"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "جهاز التوجيه جاهز لبناء الأنفاق المشاركة"
@@ -4181,13 +4181,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark برنامج تورنت"
 
 msgid "Messenger"
-msgstr ""
+msgstr "محادثة"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "محادثة I2P"
 
 msgid "Server"
 msgstr "الخادم"
@@ -4303,7 +4303,7 @@ msgid "Review current bans"
 msgstr "مراجعة الحظر الحالي"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "حذف قائمة حظر Sybil"
 
 msgid "Floodfill Summary"
 msgstr "ملخص الفيضانات"
@@ -5725,7 +5725,7 @@ msgid "Event Log"
 msgstr "سجل الأحداث"
 
 msgid "graph"
-msgstr ""
+msgstr "رسم بياني"
 
 msgid "Performance Graph"
 msgstr "الرسم البياني للأداء"
@@ -5863,10 +5863,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "عند تعيينه على صحيح، سيغير الراوتر هويته ومنفذ UDP عند إعادة تشغيله ثم حذف المفتاح من router.config لمنع أي تغييرات لاحقة. [الافتراضي هو خطأ]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "عند تحديده على خاطئ، لن يقيّد router طلبات بناء الأنفاق من الروترات الأخرى، ويجب استخدام هذا الإعداد بحذر. [الافتراضي صحيح، يتطلب إعادة التشغيل]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "عند وضعها على خاطئ، لن يمنع router طلبات بناء الأنفاق من الروترات البطيئة أو غير القابلة للوصول التي تعمل على إصدارات قديمة. [الافتراضي صحيح، يتطلب إعادة التشغيل]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "عند التكويف، هذا يضع حداً صلباً لعدد الأنفاق التي يُسمح للراوتر ببنائها بشكل متزامن. بشكل افتراضي، الراوتر يستخدم الوقت المتوسط للبناء وعرض النطاق الخارجي الحالي لتحديد معدل بناء مثالي. [إعادة تشغيل مطلوبة]"
@@ -5977,7 +5977,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "هذا الإعداد عند تهيئته على صحيح، سيعرض روابط <i>المواقع ذات الاهتمام</i> على <a href=/sitemap>خريطة الموقع</a>. [الافتراضي هو خطأ]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "هذه الإعدادات تسمح بإدخال سطر نصي مخصص للعنوان على صفحات واجهة ال router، وهو مفيد عندما تكون لديك عدة واجهات مفتوحة في علامات التبويب في المتصفح وتريد طريقة سهلة للتعرف بينها."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "يسمح هذا الإعداد بتكويف خوادم NTP بديلة لضمان أن يحافظ راوترك على الوقت بدقة. [الافتراضي هو 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -7415,7 +7415,7 @@ msgid "Configure router logging options"
 msgstr "تكوين خيارات تسجيل جهاز التوجيه"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "فلتر خرج سجل router"
 
 msgid "Service (Wrapper) Logs"
 msgstr "سجلات الخدمة (المجمع)."
@@ -7424,10 +7424,10 @@ msgid "network database"
 msgstr "قاعدة بيانات الشبكة"
 
 msgid "network database router map"
-msgstr ""
+msgstr "خريطة router قاعدة البيانات الشبكة"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "خريطة router قاعدة بيانات الشبكة"
 
 msgid "News"
 msgstr "الأخبار"
@@ -7662,10 +7662,10 @@ msgid "Local Tunnels"
 msgstr "الأنفاق المحلية"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "تبديل أرقام الأنفاق"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "تبديل الأنفاق"
 
 msgid "Peer Profile"
 msgstr "ملف تعريف الأقران"
