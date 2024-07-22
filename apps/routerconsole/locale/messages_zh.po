@@ -7451,6 +7451,12 @@ msgstr "查看有关路由器和运行环境的信息"
 msgid "Statistics"
 msgstr "统计数据"
 
+msgid "Current console and webapp translation report"
+msgstr ""
+
+msgid "Translation Status"
+msgstr ""
+
 msgid "View active tunnels"
 msgstr "查看活动隧道"
 

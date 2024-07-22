@@ -143,4 +143,3 @@ msgstr "Delovanje I2P kot root uporabnik ni priporočljivo."
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Če želite delati kot root, uredite i2prouter in nastavite ALLOW_ROOT=true."
-

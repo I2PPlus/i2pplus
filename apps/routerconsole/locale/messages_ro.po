@@ -7487,6 +7487,12 @@ msgstr "Vizualizați informații despre router și mediul de rulare"
 msgid "Statistics"
 msgstr "Statistici"
 
+msgid "Current console and webapp translation report"
+msgstr ""
+
+msgid "Translation Status"
+msgstr ""
+
 msgid "View active tunnels"
 msgstr "Vezi tunelurile active"
 

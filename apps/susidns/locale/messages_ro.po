@@ -183,7 +183,7 @@ msgid "{0} address book in {1} database"
 msgstr "{0} agende în {1} baza de date"
 
 #, java-format
-msgid "Host name {0} is not in  the address book."
+msgid "Host name {0} is not in the address book."
 msgstr "Numele gazdei {0} nu se află în agenda de adrese."
 
 msgid "Manually added via SusiDNS"

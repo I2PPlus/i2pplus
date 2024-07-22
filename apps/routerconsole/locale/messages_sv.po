@@ -7469,6 +7469,12 @@ msgstr "Visa information om router och körmiljö"
 msgid "Statistics"
 msgstr "Statistik"
 
+msgid "Current console and webapp translation report"
+msgstr ""
+
+msgid "Translation Status"
+msgstr ""
+
 msgid "View active tunnels"
 msgstr "Visa aktiva tunnlar"
 

@@ -7451,6 +7451,12 @@ msgstr "ルーターと実行環境に関する情報を表示する"
 msgid "Statistics"
 msgstr "統計"
 
+msgid "Current console and webapp translation report"
+msgstr ""
+
+msgid "Translation Status"
+msgstr ""
+
 msgid "View active tunnels"
 msgstr "アクティブなトンネルの表示"
 

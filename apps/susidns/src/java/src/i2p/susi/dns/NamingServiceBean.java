@@ -250,7 +250,7 @@ public class NamingServiceBean extends AddressbookBean
                             if (oldDest != null && destination.equals(oldDest.toBase64())) {
                                 message = _t("Host name {0} is already in address book, unchanged.", displayHost);
                             } else if (oldDest == null && action.equals(_t("Add Alternate"))) {
-                                message = _t("Host name {0} is not in  the address book.", displayHost);
+                                message = _t("Host name {0} is not in the address book.", displayHost);
                             } else if (oldDest != null && action.equals(_t("Add"))) {
                                 message = _t("Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite.", displayHost);
                             } else {

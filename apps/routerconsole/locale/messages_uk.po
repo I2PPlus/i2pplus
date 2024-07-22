@@ -7487,6 +7487,12 @@ msgstr "Перегляд інформації про маршрутизатор 
 msgid "Statistics"
 msgstr "Статистика"
 
+msgid "Current console and webapp translation report"
+msgstr ""
+
+msgid "Translation Status"
+msgstr ""
+
 msgid "View active tunnels"
 msgstr "Перегляд активних тунелів"
 

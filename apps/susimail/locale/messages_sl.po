@@ -477,4 +477,3 @@ msgstr "Strežnik je zavrnal povezavo"
 #. TODO which recipient?
 msgid "Mail rejected"
 msgstr "Pošta je bila zavrnjena"
-

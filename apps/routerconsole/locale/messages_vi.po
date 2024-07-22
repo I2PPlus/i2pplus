@@ -7451,6 +7451,12 @@ msgstr "Xem thông tin về bộ định tuyến và môi trường đang chạy
 msgid "Statistics"
 msgstr "Số liệu thống kê"
 
+msgid "Current console and webapp translation report"
+msgstr ""
+
+msgid "Translation Status"
+msgstr ""
+
 msgid "View active tunnels"
 msgstr "Xem các đường hầm đang hoạt động"
 

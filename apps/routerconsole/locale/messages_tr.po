@@ -7469,6 +7469,12 @@ msgstr "Yönlendirici ve çalışma ortamı hakkındaki bilgileri görüntüleyi
 msgid "Statistics"
 msgstr "İstatistikler"
 
+msgid "Current console and webapp translation report"
+msgstr ""
+
+msgid "Translation Status"
+msgstr ""
+
 msgid "View active tunnels"
 msgstr "Aktif tünelleri görüntüle"
 

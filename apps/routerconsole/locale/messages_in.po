@@ -7451,6 +7451,12 @@ msgstr "Melihat informasi tentang router dan lingkungan yang berjalan"
 msgid "Statistics"
 msgstr "Statistik"
 
+msgid "Current console and webapp translation report"
+msgstr ""
+
+msgid "Translation Status"
+msgstr ""
+
 msgid "View active tunnels"
 msgstr "Lihat terowongan aktif"
 

@@ -7469,6 +7469,12 @@ msgstr "Információk megtekintése az útválasztóról és a futó környezetr
 msgid "Statistics"
 msgstr "Statisztika"
 
+msgid "Current console and webapp translation report"
+msgstr ""
+
+msgid "Translation Status"
+msgstr ""
+
 msgid "View active tunnels"
 msgstr "Aktív alagutak megtekintése"
 

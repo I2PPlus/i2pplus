@@ -183,7 +183,7 @@ msgid "{0} address book in {1} database"
 msgstr "{0} adresář v databázi {1}"
 
 #, java-format
-msgid "Host name {0} is not in  the address book."
+msgid "Host name {0} is not in the address book."
 msgstr "Název hostitele {0} není v adresáři."
 
 msgid "Manually added via SusiDNS"

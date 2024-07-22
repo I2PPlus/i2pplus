@@ -7451,6 +7451,12 @@ msgstr "라우터 및 실행 환경에 대한 정보 보기"
 msgid "Statistics"
 msgstr "통계"
 
+msgid "Current console and webapp translation report"
+msgstr ""
+
+msgid "Translation Status"
+msgstr ""
+
 msgid "View active tunnels"
 msgstr "활성 터널을 봅니다"
 

@@ -178,7 +178,7 @@ msgid "{0} address book in {1} database"
 msgstr "{0} adres defteri {1} veritabanında"
 
 #, java-format
-msgid "Host name {0} is not in  the address book."
+msgid "Host name {0} is not in the address book."
 msgstr "{0} sunucu adı adres defterinde yok."
 
 msgid "Manually added via SusiDNS"

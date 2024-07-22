@@ -7470,6 +7470,12 @@ msgstr "Visualizza informazioni sul router e sull'ambiente in esecuzione"
 msgid "Statistics"
 msgstr "Statistiche"
 
+msgid "Current console and webapp translation report"
+msgstr ""
+
+msgid "Translation Status"
+msgstr ""
+
 msgid "View active tunnels"
 msgstr "Visualizza tunnel attivi"
 

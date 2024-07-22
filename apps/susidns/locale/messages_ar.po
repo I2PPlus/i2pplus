@@ -198,7 +198,7 @@ msgid "{0} address book in {1} database"
 msgstr "{0} دفتر عناوين في {1} قاعدة البيانات"
 
 #, java-format
-msgid "Host name {0} is not in  the address book."
+msgid "Host name {0} is not in the address book."
 msgstr "اسم المضيف {0} غير موجود في دفتر العناوين."
 
 msgid "Manually added via SusiDNS"
