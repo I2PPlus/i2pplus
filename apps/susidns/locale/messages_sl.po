@@ -51,12 +51,13 @@ msgstr "Vrsta {0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024 bit"
 
-msgid "Search for "
-msgid_plural "Iskanje "
-msgstr[0] "Iskanje po "
-msgstr[1] "Iskanje po "
-msgstr[2] "Iskanje po "
-msgstr[3] "Iskanje po "
+msgid "Search for <span class=active>"
+msgid_plural "Search for <span class=active>"
+msgstr[0] "Iskanje po <span class=active>"
+msgstr[1] "Iskanje po <span class=active>"
+msgstr[2] "Iskanje po <span class=active>"
+msgstr[3] "Iskanje po <span class=active>"
+
 
 #, java-format
 msgid "Filtered list contains 1 entry."
@@ -67,12 +68,12 @@ msgstr[2] "Filtrirana seznama vsebuje {0} vnosov."
 msgstr[3] "Filtrirana seznama vsebuje {0} vnosov."
 
 #, java-format
-msgid "One result for: "
-msgid_plural "{0} results for: "
-msgstr[0] "{0} rezultat za: "
-msgstr[1] "{0} rezultatov za: "
-msgstr[2] "{0} rezultatov za: "
-msgstr[3] "{0} rezultatov za: "
+msgid "One result for: <span class=active>"
+msgid_plural "{0} results for: <span class=active>"
+msgstr[0] "{0} rezultat za: <span class=active>"
+msgstr[1] "{0} rezultatov za: <span class=active>"
+msgstr[2] "{0} rezultatov za: <span class=active>"
+msgstr[3] "{0} rezultatov za: <span class=active>"
 
 #, java-format
 msgid "1 entry"
@@ -504,11 +505,11 @@ msgstr "Aplikacija za imenik naslovov je del vaše namestitve I2P."
 msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
 msgstr "Redno posodablja vašo datoteko hosts.txt iz razpršenih virov ali \"prijava\"."
 
-msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions file."
-msgstr "Prijavo na dodatne strani je enostavno, dodajte jih v svojo datoteko <a href=\"subscriptions\">prijava."
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Prijavo na dodatne strani je enostavno, dodajte jih v svojo datoteko <a href=\"subscriptions\">prijava</a>."
 
-msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview."
-msgstr "Za dodatne informacije o imenovanju v I2P, glejte <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>pregled."
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Za dodatne informacije o imenovanju v I2P, glejte <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>pregled</a>."
 
 msgid "How does the addressbook application work?"
 msgstr "Kako deluje aplikacija za imenik naslovov?"
