@@ -762,7 +762,7 @@ msgid "Now"
 msgstr "Acum"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Routerul a fost repornit"
 
 msgid "none"
 msgstr "nici unul"
@@ -1809,7 +1809,7 @@ msgid "{0} for {1}"
 msgstr "{0} pentru {1}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Nimic de afișat - nicio statistică specificată!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1855,10 +1855,10 @@ msgid "plot events"
 msgstr "plot events"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Ascunde legendă"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Arată legendă"
 
 msgid "Configure Graph Display"
 msgstr "Configurare Ecran Grafic"
@@ -2203,7 +2203,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Motor de căutare axat pe Tor"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Motor de căutare de imagini Pinterest"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Motorul de căutare Clearnet BitTorrent DHT"
@@ -2574,13 +2574,13 @@ msgid "Congestion Cap"
 msgstr "Cap de congestie"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Moderat"
 
 msgid "Severe"
-msgstr ""
+msgstr "Grav"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Niciun tunel de tranzit"
 
 msgid "Available CPU Cores"
 msgstr "Nuclee CPU disponibile"
@@ -2702,7 +2702,7 @@ msgid "File location"
 msgstr "Locația fișierului"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Interval de reîmprospătare (secunde)"
 
 msgid "File not found"
 msgstr "Fișierul nu a fost găsit"
@@ -2748,7 +2748,7 @@ msgid "Sybil Analysis"
 msgstr "Analiza Sybil"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Harta routerului"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Nu dezvălui niciodată identitatea routerului nimănui, deoarece este legată în mod unic de adresa dvs. IP din baza de date a rețelei."
@@ -2882,7 +2882,7 @@ msgid "Transports"
 msgstr "Transporturi"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Necunoscut"
 
 msgid "Initializing"
 msgstr "Inițializarea"
@@ -3898,7 +3898,7 @@ msgid "Memory"
 msgstr "Memorie"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Floodfill activat"
 
 msgid "See more information on the wiki"
 msgstr "Vedeți mai multe informații pe wiki"
@@ -4063,10 +4063,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "Performanța routerului sau a rețelei împiedică construirea tunelurilor participante"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "Routerul gazduiește în prezent numărul maxim de tuneluri de tranzit configurat"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "Routerul folosește în prezent banda de împărțire maximă configurată"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "Routerul este gata să construiască tuneluri participante"
@@ -4127,13 +4127,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "Mesager"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "Server"
@@ -4249,7 +4249,7 @@ msgid "Review current bans"
 msgstr "Examinați interdicțiile actuale"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Șterge lista de blocare Sybil"
 
 msgid "Floodfill Summary"
 msgstr "Rezumatul inundației"
@@ -5671,7 +5671,7 @@ msgid "Event Log"
 msgstr "Jurnal de evenimente"
 
 msgid "graph"
-msgstr ""
+msgstr "grafic"
 
 msgid "Performance Graph"
 msgstr "Graficul de performanță"
@@ -5809,10 +5809,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "Dacă este setat pe true, routerul își va schimba identitatea și portul UDP când acesta repornește, apoi va șterge cheia din router.config pentru a preveni alte modificări. [Valoarea implicită este false]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "Când este setat pe fals, routerul nu va limita cererile de construire de tuneluri de la alte routeri și ar trebui să fie folosit cu precauție. [Valoarea implicită este adevărat, este necesară o restartare]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "Când este setat pe fals, routerul nu va bloca cererile de construire de tuneluri de la routeri mai lente sau necapabile care rulează versiuni mai vechi. [Valoarea implicită este adevărat, este necesară o restartare]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Când este configurat, stabilește o limită strictă pentru numărul de tuneluri pe care routerul are voie să le construiască în mod concomitent. În mod implicit, routerul utilizează timpul mediu de construire și lățimea de bandă de ieșire curentă pentru a determina rata de construire optimă. [Este necesară repornirea]"
@@ -5923,7 +5923,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Această setare, când este setată la adevărat, va afișa linkurile <i>Sites of Interest</i> în <a href=/sitemap>harta site-ului</a>. [Implicit este fals]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Această setare permite stabilirea unui prefix de text personalizat pentru titlul paginii pe paginile consolei routerului, potrivit în cazul în care aveți mai multe consolide deschise pe taburile browserului și doriți o metodă simplă de a le diferenția."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Această setare permite configurarea serverelor alternative NTP necesare pentru a asigura că routerul dvs. menține ora exactă. [Implicit este 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -7361,7 +7361,7 @@ msgid "Configure router logging options"
 msgstr "Configurați opțiunile de înregistrare a routerului"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Filtrează ieșirea log-ului routerului"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Servicii (Wrapper) jurnale"
@@ -7370,10 +7370,10 @@ msgid "network database"
 msgstr "baza de date a rețelei"
 
 msgid "network database router map"
-msgstr ""
+msgstr "Harta routerului din bază de date de rețea"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Harta routerului din bază de date de rețea"
 
 msgid "News"
 msgstr "Noutați"
@@ -7608,10 +7608,10 @@ msgid "Local Tunnels"
 msgstr "Tuneluri locale"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Comută identificatorii tunelurilor"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Comută tunelurile"
 
 msgid "Peer Profile"
 msgstr "Profil partener"

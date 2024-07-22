@@ -762,7 +762,7 @@ msgid "Now"
 msgstr "Сейчас"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Роутер перезагружен"
 
 msgid "none"
 msgstr "ничего"
@@ -1809,7 +1809,7 @@ msgid "{0} for {1}"
 msgstr "{0} за {1}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Нечего показывать - статистика не указана!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1855,10 +1855,10 @@ msgid "plot events"
 msgstr "строить график количества событий"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Скрыть легенду"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Показать легенду"
 
 msgid "Configure Graph Display"
 msgstr "Настройка отображения графиков"
@@ -2203,7 +2203,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Поисковая система, ориентированная на Tor"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Поисковый движок изображений Pinterest"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Поисковая система Clearnet BitTorrent DHT"
@@ -2574,13 +2574,13 @@ msgid "Congestion Cap"
 msgstr "Крышка перегрузки"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Средний"
 
 msgid "Severe"
-msgstr ""
+msgstr "Серьезный"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Нет транзитных туннелей"
 
 msgid "Available CPU Cores"
 msgstr "Доступные ядра ЦП"
@@ -2702,7 +2702,7 @@ msgid "File location"
 msgstr "Расположение файла"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Интервал обновления (секунды)"
 
 msgid "File not found"
 msgstr "Файл не найден"
@@ -2748,7 +2748,7 @@ msgid "Sybil Analysis"
 msgstr "Анализ Сивиллы"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Карта роутера"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Никогда никому не сообщайте информацию о вашем маршрутизаторе, так как она уникальна для каждого IP-адреса в сетевой базе данных."
@@ -2882,7 +2882,7 @@ msgid "Transports"
 msgstr "Транспортный протокол"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Неизвестно"
 
 msgid "Initializing"
 msgstr "Инициализация"
@@ -3898,7 +3898,7 @@ msgid "Memory"
 msgstr "Память"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Функция floodfill включена"
 
 msgid "See more information on the wiki"
 msgstr "Подробнее в wiki"
@@ -4063,10 +4063,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "Маршрутизатор или производительность сети препятствуют созданию участвующих туннелей"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "Роутер в данный момент поддерживает максимальное количество транзитных туннелей, настроенных"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "Роутер в настоящее время использует максимальную настроенную ширину полосы пропускания для обмена"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "Роутер готов построить участвующие туннели"
@@ -4127,13 +4127,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "Мессенджер"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "Сервер"
@@ -4249,7 +4249,7 @@ msgid "Review current bans"
 msgstr "Просмотрите текущие запреты"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Удалить список блокировки Sybil"
 
 msgid "Floodfill Summary"
 msgstr "Сводная информация о наводнении"
@@ -5671,7 +5671,7 @@ msgid "Event Log"
 msgstr "Журнал событий"
 
 msgid "graph"
-msgstr ""
+msgstr "График"
 
 msgid "Performance Graph"
 msgstr "Производительный график"
@@ -5809,10 +5809,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "Если установлено значение true, маршрутизатор изменит свой идентификатор и порт UDP при перезагрузке маршрутизатора, а затем удалит ключ из router.config, чтобы предотвратить дальнейшие изменения. [По умолчанию неверно]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "При установке в ложь, роутер не будет ограничивать запросы на создание туннелей от других роутеров и следует использовать с осторожностью. [По умолчанию истина, требуется перезагрузка]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "При установке в ложь, роутер не блокирует запросы на создание туннелей от медленных или недоступных роутеров с более старыми версиями. [По умолчанию истина, требуется перезагрузка]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "При настройке это устанавливает жесткое ограничение на количество туннелей, которые маршрутизатору разрешено строить одновременно. По умолчанию маршрутизатор использует среднее время построения и текущую исходящую пропускную способность для определения оптимальной скорости построения. [Требуется перезагрузка]"
@@ -5923,7 +5923,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Этот параметр, при установке в значение true, будет отображать ссылки на <i>Интересные сайты</i> на карте сайта. [По умолчанию значение false]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Это настройка позволяет установить пользовательский префикс текста для заголовка страницы на страницах консоли роутера, что может быть полезно, когда у вас открыто несколько консолей на вкладках браузера, и вы хотите простой способ отличить их друг от друга."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Этот параметр, при установке в значение true, будет отображать ссылки на <i>Интересные сайты</i> на карте сайта. [По умолчанию значение false]"
@@ -7361,7 +7361,7 @@ msgid "Configure router logging options"
 msgstr "Настройка опций журналирования маршрутизатора"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Фильтрация вывода журнала роутера"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Журналы службы"
@@ -7370,10 +7370,10 @@ msgid "network database"
 msgstr "сетевая БД"
 
 msgid "network database router map"
-msgstr ""
+msgstr "Карта роутера базы данных сети"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Карта роутера базы данных сети"
 
 msgid "News"
 msgstr "Новости"
@@ -7608,10 +7608,10 @@ msgid "Local Tunnels"
 msgstr "Локальные туннели"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Переключение ИД туннелей"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Переключение туннелей"
 
 msgid "Peer Profile"
 msgstr "Профиль узла"
