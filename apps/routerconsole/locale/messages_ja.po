@@ -756,7 +756,7 @@ msgid "Now"
 msgstr "現在"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "ルーターが再起動しました"
 
 msgid "none"
 msgstr "なし"
@@ -1793,7 +1793,7 @@ msgid "{0} for {1}"
 msgstr "{1} 間 {0}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "表示するものがありません - 指定された統計情報なし！"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1839,10 +1839,10 @@ msgid "plot events"
 msgstr "イベントを図示"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "凡例を非表示"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "凡例を表示"
 
 msgid "Configure Graph Display"
 msgstr "グラフ表示を設定"
@@ -2187,7 +2187,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Tor中心の検索エンジン"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Pinterest画像検索エンジン"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Clearnet BitTorrent DHT検索エンジン"
@@ -2558,13 +2558,13 @@ msgid "Congestion Cap"
 msgstr "混雑キャップ"
 
 msgid "Moderate"
-msgstr ""
+msgstr "中程度"
 
 msgid "Severe"
-msgstr ""
+msgstr "重大"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "トランジットトンネルはありません"
 
 msgid "Available CPU Cores"
 msgstr "利用可能なCPUコア"
@@ -2686,7 +2686,7 @@ msgid "File location"
 msgstr "ファイル位置"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "更新間隔（秒）"
 
 msgid "File not found"
 msgstr "ファイル未検出"
@@ -2732,7 +2732,7 @@ msgid "Sybil Analysis"
 msgstr "シビル分析"
 
 msgid "Router Map"
-msgstr ""
+msgstr "ルーター地図"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "ルーターのアイデンティティはネットワーク データベース内の IP アドレスに一意にリンクされているため、決して他人に明かさないでください。"
@@ -2866,7 +2866,7 @@ msgid "Transports"
 msgstr "トランスポート"
 
 msgid "Unknown"
-msgstr ""
+msgstr "不明"
 
 msgid "Initializing"
 msgstr "初期化"
@@ -3862,7 +3862,7 @@ msgid "Memory"
 msgstr "記憶"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Floodfill機能有効"
 
 msgid "See more information on the wiki"
 msgstr "Wiki 上で詳細を表示"
@@ -4027,10 +4027,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "ルーターまたはネットワークのパフォーマンスが参加トンネルの構築を妨げている"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "ルーターは現在、設定された最大トランジットトンネル数をホストしています"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "ルーターは現在、設定された最大共有帯域幅を使用しています"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "ルーターは参加トンネルを構築する準備ができています"
@@ -4091,13 +4091,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "メッセンジャー"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "サーバー"
@@ -4213,7 +4213,7 @@ msgid "Review current bans"
 msgstr "現在の禁止事項を確認する"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Sybilブロックリストを削除"
 
 msgid "Floodfill Summary"
 msgstr "フラッドフィルの概要"
@@ -5635,7 +5635,7 @@ msgid "Event Log"
 msgstr "イベントログ"
 
 msgid "graph"
-msgstr ""
+msgstr "グラフ"
 
 msgid "Performance Graph"
 msgstr "パフォーマンスグラフ"
@@ -5773,10 +5773,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "trueに設定すると、ルータが再起動するときにそのアイデンティティとUDPポートを変更し、その後、router.configからキーを削除して追加の変更を防止します。[デフォルトはfalse]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "falseに設定すると、ルーターは他のルーターからのトンネル構築リクエストを制限しません。注意して使用してください。[デフォルトはtrue、再起動が必要]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "falseに設定すると、古いバージョンを実行している遅いまたは到達できないルーターからのトンネル構築リクエストはブロックされません。[デフォルトはtrue、再起動が必要]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "設定すると、これにより、ルータが同時に構築を許可されるトンネルの数に対する厳しい制限が設定されます。デフォルトでは、ルータは平均構築時間と現在の送信帯域幅を使用して最適な構築速度を決定します。[再起動が必要です]"
@@ -5887,7 +5887,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "この設定をtrueにすると、<a href=/sitemap>サイトマップ</a>に<i>興味のあるサイト</i>のリンクが表示されます。[デフォルトはfalse]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "この設定により、ルーターのコンソールページのページタイトルにカスタムテキストプレフィックスを設定することができます。ブラウザのタブで複数のコンソールを開いている場合、それらを簡単に区別するために役立ちます。"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "この設定は、ルーターが正確な時刻を維持するために必要な代替NTPサーバーの設定を許可します。[デフォルトは0.pool.ntp.org、1.pool.ntp.org、2.pool.ntp.org]"
@@ -7325,7 +7325,7 @@ msgid "Configure router logging options"
 msgstr "ルーターのログオプションを構成する"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "ルーターのログ出力をフィルター"
 
 msgid "Service (Wrapper) Logs"
 msgstr "サービス(ラッパー)ログ"
@@ -7334,10 +7334,10 @@ msgid "network database"
 msgstr "ネットワークデータベース"
 
 msgid "network database router map"
-msgstr ""
+msgstr "ネットワークデータベースルータマップ"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "ネットワークデータベースルータマップ"
 
 msgid "News"
 msgstr "ニュース"
@@ -7572,10 +7572,10 @@ msgid "Local Tunnels"
 msgstr "ローカルトンネル"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "トンネルIDを切り替え"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "トンネルを切り替え"
 
 msgid "Peer Profile"
 msgstr "ピアプロフィール"

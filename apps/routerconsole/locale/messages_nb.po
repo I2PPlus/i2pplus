@@ -759,7 +759,7 @@ msgid "Now"
 msgstr "Nå"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Router startet på nytt"
 
 msgid "none"
 msgstr "ingen"
@@ -1801,7 +1801,7 @@ msgid "{0} for {1}"
 msgstr "{0} for {1}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Ingenting å vise - ingen statistikk angitt!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1847,10 +1847,10 @@ msgid "plot events"
 msgstr "Grafhendelser"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Skjul legende"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Vis legende"
 
 msgid "Configure Graph Display"
 msgstr "Sett opp grafvisning"
@@ -2195,7 +2195,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Tor-fokusert søkemotor"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Pinterest bilde-søkemotor"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Clearnet BitTorrent DHT søkemotor"
@@ -2566,13 +2566,13 @@ msgid "Congestion Cap"
 msgstr "Overbelastningsgrense"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Moderat"
 
 msgid "Severe"
-msgstr ""
+msgstr "Alvorlig"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Ingen transit-tunneler"
 
 msgid "Available CPU Cores"
 msgstr "Tilgjengelige CPU-kjerner"
@@ -2694,7 +2694,7 @@ msgid "File location"
 msgstr "Filplassering"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Oppdateringsintervall (sekunder)"
 
 msgid "File not found"
 msgstr "Fil ikke funnet"
@@ -2740,7 +2740,7 @@ msgid "Sybil Analysis"
 msgstr "Sybilanalyse"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Routerkart"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Avslør aldri ruterens identitet til noen, siden den er unikt knyttet til IP-adressen din i nettverksdatabasen."
@@ -2874,7 +2874,7 @@ msgid "Transports"
 msgstr "Overføringer"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Ukjent"
 
 msgid "Initializing"
 msgstr "Initialiserer"
@@ -3880,7 +3880,7 @@ msgid "Memory"
 msgstr "Minne"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Floodfill er slått på"
 
 msgid "See more information on the wiki"
 msgstr "Se mer informasjon på wiki-en"
@@ -4045,10 +4045,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "Ruter- eller nettverksytelse hindrer byggingen av deltakende tunneler"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "Routeren hoster for øyeblikket det konfigurerte maksimumtallet av transit-tunneler"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "Routeren bruker for øyeblikket det konfigurerte maksimumsbredbåndet for deling"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "Ruteren er klar til å bygge deltakende tunneler"
@@ -4109,13 +4109,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "Messenger"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "Server"
@@ -4231,7 +4231,7 @@ msgid "Review current bans"
 msgstr "Gjennomgå gjeldende forbud"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Slett Sybil blokkeringsliste"
 
 msgid "Floodfill Summary"
 msgstr "Fromfyllingssammendrag"
@@ -5653,7 +5653,7 @@ msgid "Event Log"
 msgstr "Hendelseslogg"
 
 msgid "graph"
-msgstr ""
+msgstr "graf"
 
 msgid "Performance Graph"
 msgstr "Ytelsesgraf"
@@ -5791,10 +5791,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "Når den er satt til true, vil ruteren endre sin identitet og UDP-port når ruteren starter på nytt, og deretter slette nøkkelen fra router.config for å forhindre ytterligere endringer. [Standard er false]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "Når satt til feil, vil routeren ikke begrense tunnel-byggeforespørsler fra andre router, og bør brukes med forsiktighet. [Standard er sant, start på nytt kreves]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "Når satt til feil, vil routeren ikke blokkere tunnel-byggeforespørsler fra langsommere eller utilgjengelige router som kjører eldre versjoner. [Standard er sant, start på nytt kreves]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Når det er konfigurert, angir dette en hard grense for antallet tunneler ruteren kan bygge samtidig. Som standard bruker ruteren gjennomsnittlig byggetid og gjeldende utgående båndbredde for å bestemme den optimale byggehastigheten. [Restart required]"
@@ -5905,7 +5905,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Denne innstillingen, når den er satt til true, viser koblinger til <i>Interessante nettsteder</i> på <a href=/sitemap>nettstedskart</a>. [Standard er false]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Dette innstillingen gir deg lov til å sette en tilpasset tekstprefiks for sidetittel på router-konsollsidene, som kan være nyttig når du har flere konsoller åpne i nettleserfaner og ønsker en enkel måte å skille dem fra hverandre på."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Denne innstillingen tillater konfigurasjon av alternative NTP-servere som er nødvendige for å sikre at ruteren din opprettholder nøyaktig klokkeslett. [Standard er 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -7343,7 +7343,7 @@ msgid "Configure router logging options"
 msgstr "Sett opp ruterloggingsvalg"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Filtrer routerloggen"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Service (Wrapper) logger"
@@ -7352,10 +7352,10 @@ msgid "network database"
 msgstr "nettverksdatabase"
 
 msgid "network database router map"
-msgstr ""
+msgstr "Nettverksdatabase-routerkart"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Nettverksdatabase-routerkart"
 
 msgid "News"
 msgstr "Nyheter"
@@ -7590,10 +7590,10 @@ msgid "Local Tunnels"
 msgstr "Lokale tunneler"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Bytt mellom tunnel-IDer"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Bytt mellom tunneler"
 
 msgid "Peer Profile"
 msgstr "Likemannsprofil"

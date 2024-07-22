@@ -759,7 +759,7 @@ msgid "Now"
 msgstr "Nu"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Router is herstart"
 
 msgid "none"
 msgstr "geen"
@@ -1801,7 +1801,7 @@ msgid "{0} for {1}"
 msgstr "{0} voor {1}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Niets om weer te geven - geen status opgegeven!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1847,10 +1847,10 @@ msgid "plot events"
 msgstr "teken gebeurtenissen"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Legenda verbergen"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Legenda weergeven"
 
 msgid "Configure Graph Display"
 msgstr "Configureer Grafiek Weergave"
@@ -2195,7 +2195,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Tor-gerichte zoekmachine"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Pinterest-beeldzoekmachine"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Clearnet BitTorrent DHT-zoekmachine"
@@ -2566,13 +2566,13 @@ msgid "Congestion Cap"
 msgstr "Congestiekap"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Matig"
 
 msgid "Severe"
-msgstr ""
+msgstr "Erger"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Geen transit-tunnels"
 
 msgid "Available CPU Cores"
 msgstr "Beschikbare CPU-kernen"
@@ -2694,7 +2694,7 @@ msgid "File location"
 msgstr "Bestands lokatie"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Verversingsinterval (seconden)"
 
 msgid "File not found"
 msgstr "Bestand niet gevonden"
@@ -2740,7 +2740,7 @@ msgid "Sybil Analysis"
 msgstr "Sybil-analyse"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Routerkaart"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Onthul nooit uw routeridentiteit aan iemand, aangezien deze uniek gekoppeld is aan uw IP-adres in de netwerkdatabase."
@@ -2874,7 +2874,7 @@ msgid "Transports"
 msgstr "Transports"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Onbekend"
 
 msgid "Initializing"
 msgstr "Initialiseren"
@@ -3880,7 +3880,7 @@ msgid "Memory"
 msgstr "Geheugen"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Floodfill ingeschakeld"
 
 msgid "See more information on the wiki"
 msgstr "Bekijk de wiki voor meer informatie"
@@ -4045,10 +4045,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "De prestaties van de router of het netwerk belemmeren de bouw van deelnemende tunnels"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "De router draagt momenteel het maximum aantal transit-tunnels dat is ingesteld"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "De router gebruikt momenteel het maximum gedeelde bandbreedte dat is ingesteld"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "Router is klaar om deelnemende tunnels te bouwen"
@@ -4109,13 +4109,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "Berichten"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "Server"
@@ -4231,7 +4231,7 @@ msgid "Review current bans"
 msgstr "Bekijk huidige verboden"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Sybil-blocklijst verwijderen"
 
 msgid "Floodfill Summary"
 msgstr "Samenvatting van de overstroming"
@@ -5653,7 +5653,7 @@ msgid "Event Log"
 msgstr "Evenementenlogboek"
 
 msgid "graph"
-msgstr ""
+msgstr "grafiek"
 
 msgid "Performance Graph"
 msgstr "Prestatiegrafiek"
@@ -5791,10 +5791,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "Wanneer ingesteld op true, zal de router zijn identiteit en UDP-poort wijzigen wanneer de router wordt herstart en vervolgens de sleutel uit router.config verwijderen om verdere wijzigingen te voorkomen. [Standaard is dit false]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "Als deze ingesteld is op onwaar, zal de router geen beperkingen opleggen aan tunnelopbouwverzoeken van andere routers, maar gebruik ervan moet voorzichtig zijn. [Standaard waar, herstart vereist]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "Als deze ingesteld is op onwaar, zal de router geen tunnelopbouwverzoeken van langzamere of niet-bereikbare routers met oudere versies blokkeren. [Standaard waar, herstart vereist]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Wanneer geconfigureerd, stelt dit een harde limiet in voor het aantal tunnels dat de router gelijktijdig kan bouwen. Standaard gebruikt de router de gemiddelde bouwtijd en de huidige uitgaande bandbreedte om de optimale bouwsnelheid te bepalen. [Herstart vereist]"
@@ -5905,7 +5905,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Deze instelling, wanneer ingesteld op true, toont de links <i>Interessante sites</i> op <a href=/sitemap>de sitemap-pagina</a>. [Standaard is false]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Deze instelling stelt u in staat een aangepaste tekstvoorvoegsel in te stellen voor de paginatitel op routerconsolepagina's, wat handig kan zijn als u meerdere consoles hebt geopend in browser-tabs en een eenvoudige methode nodig heeft om ze te onderscheiden."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Deze instelling maakt de configuratie van alternatieve NTP-servers mogelijk die nodig zijn om ervoor te zorgen dat je router een nauwkeurige kloktijd behoudt. [Standaard zijn 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -7343,7 +7343,7 @@ msgid "Configure router logging options"
 msgstr "Configureer opties voor routerlogboekregistratie"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Routerloguitvoer filteren"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Service (Wrapper) Logs"
@@ -7352,10 +7352,10 @@ msgid "network database"
 msgstr "netwerk database"
 
 msgid "network database router map"
-msgstr ""
+msgstr "Netwerkdatabase-routerkaart"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Netwerkdatabase-routerkaart"
 
 msgid "News"
 msgstr "Nieuws"
@@ -7590,10 +7590,10 @@ msgid "Local Tunnels"
 msgstr "Lokale tunnels"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Tunnel-Ids wisselen"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Tunnels wisselen"
 
 msgid "Peer Profile"
 msgstr "Peer Profiel"
