@@ -759,7 +759,7 @@ msgid "Now"
 msgstr "در این لحظه"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "روتر بازیابی شد"
 
 msgid "none"
 msgstr "هیچکدام"
@@ -1801,7 +1801,7 @@ msgid "{0} for {1}"
 msgstr "{0} برای {1}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "چیزی برای نمایش وجود ندارد - هیچ آمار مشخص نشده است!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1847,10 +1847,10 @@ msgid "plot events"
 msgstr "وقایع را ترسیم کنید"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "پوشش دهید افسانه"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "نمایش افسانه"
 
 msgid "Configure Graph Display"
 msgstr "نمایش گراف را پیکربندی کنید"
@@ -2195,7 +2195,7 @@ msgid "Tor-focused Search Engine"
 msgstr "موتور جستجوی Tor-focused"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "موتور جستجو تصاویر پینترست"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "موتور جستجوی Clearnet BitTorrent DHT"
@@ -2566,13 +2566,13 @@ msgid "Congestion Cap"
 msgstr "درپوش ازدحام"
 
 msgid "Moderate"
-msgstr ""
+msgstr "متوسط"
 
 msgid "Severe"
-msgstr ""
+msgstr "شدید"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "هیچ تونل انتقالی وجود ندارد"
 
 msgid "Available CPU Cores"
 msgstr "هسته های CPU موجود"
@@ -2694,7 +2694,7 @@ msgid "File location"
 msgstr "موقعیت فایل"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "تازه‌سازی مدت زمان (ثانیه)"
 
 msgid "File not found"
 msgstr "فایل یافت نشد"
@@ -2740,7 +2740,7 @@ msgid "Sybil Analysis"
 msgstr "تجزیه و تحلیل سیبیل"
 
 msgid "Router Map"
-msgstr ""
+msgstr " نقشه روتر"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "هرگز هویت روتر خود را برای کسی فاش نکنید، زیرا به صورت منحصر به فرد به آدرس IP شما در پایگاه داده شبکه مرتبط است."
@@ -2874,7 +2874,7 @@ msgid "Transports"
 msgstr "انتقال ها"
 
 msgid "Unknown"
-msgstr ""
+msgstr "ناشناس"
 
 msgid "Initializing"
 msgstr "مقدار دهی اولیه"
@@ -3880,7 +3880,7 @@ msgid "Memory"
 msgstr "حافظه"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "فعال کردن floodfill"
 
 msgid "See more information on the wiki"
 msgstr "اطلاعات بیشتر را در ویکی ببینید"
@@ -4045,10 +4045,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "عملکرد روتر یا شبکه مانع ساخت تونل های شرکت کننده می شود"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "روتر در حال حاضر تعداد حداکثر تونل‌های انتقالی را که تنظیم شده است، ارائه می‌دهد"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "روتر در حال حاضر از باند‌بندی حداکثر مشترک تنظیم شده استفاده می‌کند"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "روتر آماده ساخت تونل های مشارکت کننده است"
@@ -4109,13 +4109,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "رسانه"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "چت I2P"
 
 msgid "Server"
 msgstr "سرور"
@@ -4231,7 +4231,7 @@ msgid "Review current bans"
 msgstr "تحریم های فعلی را مرور کنید"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "حذف فهرست بلاک‌سیبل"
 
 msgid "Floodfill Summary"
 msgstr "خلاصه سیل"
@@ -5653,7 +5653,7 @@ msgid "Event Log"
 msgstr "گزارش رویداد"
 
 msgid "graph"
-msgstr ""
+msgstr "گراف"
 
 msgid "Performance Graph"
 msgstr "نمودار عملکرد"
@@ -5791,10 +5791,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "وقتی روی true تنظیم شود، روتر هویت و پورت UDP خود را با راه اندازی مجدد روتر تغییر می دهد و سپس کلید را از router.config حذف می کند تا از تغییرات بیشتر جلوگیری شود. "
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "وقتی به غلط تنظیم شود، روتر درخواست‌های ساخت تونل از سوی دیگر روترها را محدود نخواهد کرد و باید با حرص استفاده شود. [پیش فرض صحیح است، باز شروع الزامی]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "وقتی به غلط تنظیم شود، روتر از جلوگیری از درخواست‌های ساخت تونل از روترهای آرامتر یا دسترس نشدنی که نسخه‌های قدیمی را اجرا می‌کنند، خودداری نخواهد کرد. [پیش فرض صحیح است، باز شروع الزامی]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "هنگامی که پیکربندی می شود، محدودیت سختی برای تعداد تونل هایی که روتر مجاز به ساخت همزمان است تعیین می کند. "
@@ -5905,7 +5905,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "این تنظیم، وقتی روی true تنظیم شود، پیوندهای <i>سایت های مورد علاقه</i> را در <a href=/sitemap>نقشه سایت</a> نمایش می دهد. "
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "این تنظیم اجازه می‌دهد تا پیشوند متنی سفارشی برای عنوان صفحات کنسول روتر تعیین شود، که ممکن است وقتی که چند کنسول در تب‌های مرورگر باز هستند و به روشی ساده برای تمایز بین آن‌ها نیاز دارید، مفید باشد."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "این تنظیم به پیکربندی سرورهای NTP جایگزین مورد نیاز برای اطمینان از اینکه روتر شما زمان دقیق ساعت را حفظ می کند، اجازه می دهد. "
@@ -7343,7 +7343,7 @@ msgid "Configure router logging options"
 msgstr "گزینه های گزارش روتر را پیکربندی کنید"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "فیلتر کردن خروجی روتر"
 
 msgid "Service (Wrapper) Logs"
 msgstr "سیاهههای مربوط به سرویس (Wrapper)"
@@ -7352,10 +7352,10 @@ msgid "network database"
 msgstr "پایگاه داده شبکه"
 
 msgid "network database router map"
-msgstr ""
+msgstr "نقشه روتر بانک اطلاعاتی شبکه"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "نقشه روتر بانک اطلاعاتی شبکه"
 
 msgid "News"
 msgstr "اخبار"
@@ -7590,10 +7590,10 @@ msgid "Local Tunnels"
 msgstr "تونل های محلی"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "باز و بستن شناسه‌های تونل"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "باز و بستن تونل‌ها"
 
 msgid "Peer Profile"
 msgstr "پروفایل همتا"

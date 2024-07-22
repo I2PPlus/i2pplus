@@ -759,7 +759,7 @@ msgid "Now"
 msgstr "Τώρα"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Το διακομιστήριο ξεκίνησε επανεκκίνηση"
 
 msgid "none"
 msgstr "κανένα"
@@ -1801,7 +1801,7 @@ msgid "{0} for {1}"
 msgstr "{0} για {1}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Τίποτα να εμφανίσει - δεν έχει καθοριστεί καμία συντάξη!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1847,10 +1847,10 @@ msgid "plot events"
 msgstr "πλοκή γεγονότων"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Απόκρυψη Λεζάντας"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Εμφάνιση Λεζάντας"
 
 msgid "Configure Graph Display"
 msgstr "Ρύθμιση εμφάνισης γραφημάτων"
@@ -2195,7 +2195,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Μηχανή αναζήτησης με εστίαση στον Tor"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Μηχανή αναζήτησης εικόνων Pinterest"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Μηχανή αναζήτησης Clearnet BitTorrent DHT"
@@ -2566,13 +2566,13 @@ msgid "Congestion Cap"
 msgstr "Καπάκι συμφόρησης"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Μέσος"
 
 msgid "Severe"
-msgstr ""
+msgstr "Σοβαρός"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Κανένα διάδρομο διαμετακόμισης"
 
 msgid "Available CPU Cores"
 msgstr "Διαθέσιμοι πυρήνες CPU"
@@ -2694,7 +2694,7 @@ msgid "File location"
 msgstr "Τοποθεσία αρχείου"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Διάστημα ανανέωσης (δευτερόλεπτα)"
 
 msgid "File not found"
 msgstr "Το αρχείο δεν βρέθηκε"
@@ -2740,7 +2740,7 @@ msgid "Sybil Analysis"
 msgstr "Ανάλυση Sybil"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Χάρτης Διακομιστή"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Ποτέ μην αποκαλύπτετε την ταυτότητα του δρομολογητή σας σε κανέναν, καθώς είναι μοναδικά συνδεδεμένος με τη διεύθυνση IP σας στη βάση δεδομένων δικτύου."
@@ -2874,7 +2874,7 @@ msgid "Transports"
 msgstr "Μεταφορές"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Άγνωστο"
 
 msgid "Initializing"
 msgstr "Αρχικοποίηση"
@@ -3880,7 +3880,7 @@ msgid "Memory"
 msgstr "Μνήμη"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Η λειτουργία Floodfill είναι ενεργοποιημένη"
 
 msgid "See more information on the wiki"
 msgstr "Δείτε περισσότερες πληροφορίες για το wiki"
@@ -4045,10 +4045,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "Η απόδοση του δρομολογητή ή του δικτύου εμποδίζει την κατασκευή των σηράγγων που συμμετέχουν"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "Το διακομιστήριο φιλοξενεί τώρα τον μέγιστο αριθμό διαμετακομιστικών διαδρόμων που έχει ρυθμιστεί"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "Το διακομιστήριο χρησιμοποιεί τώρα την καθορισμένη μέγιστη διακομιστική ταχύτητα μετάδοσης"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "Ο δρομολογητής είναι έτοιμος να κατασκευάσει συμμετέχουσες σήραγγες"
@@ -4109,13 +4109,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "Messenger"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "Διακομιστής"
@@ -4231,7 +4231,7 @@ msgid "Review current bans"
 msgstr "Εξετάστε τις τρέχουσες απαγορεύσεις"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Διαγραφή λίστας αποκλεισμού Sybil"
 
 msgid "Floodfill Summary"
 msgstr "Σύνοψη Floodfill"
@@ -5653,7 +5653,7 @@ msgid "Event Log"
 msgstr "Αρχείο καταγραφής συμβάντων"
 
 msgid "graph"
-msgstr ""
+msgstr "Γράφημα"
 
 msgid "Performance Graph"
 msgstr "Γράφημα απόδοσης"
@@ -5791,10 +5791,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "Όταν οριστεί σε true, ο δρομολογητής θα αλλάξει την ταυτότητά του και τη θύρα UDP όταν επανεκκινείται ο δρομολογητής και στη συνέχεια θα διαγράψει το κλειδί από το αρχείο router.config για να αποτρέψει περαιτέρω αλλαγές. [Το προεπιλεγμένο είναι ψευδές]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "Όταν ορίζεται ως ψευδές, το διακομιστήριο δεν θα περιορίζει τις αιτήσεις δημιουργίας διαδρόμων από άλλα διακομιστήρια και πρέπει να χρησιμοποιείται με προσοχή. [Το προεπιλεγμένο είναι αληθές, απαιτείται επανεκκίνηση]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "Όταν ορίζεται ως ψευδές, το διακομιστήριο δεν θα αποκλείει αιτήσεις δημιουργίας διαδρόμων από πιο αργά ή μη προσβάσιμα διακομιστήρια που τρέχουν παλαιότερες εκδόσεις. [Το προεπιλεγμένο είναι αληθές, απαιτείται επανεκκίνηση]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Όταν ρυθμίζεται, αυτό θέτει ένα αυστηρό όριο για τον αριθμό των τούνελ που ο δρομολογητής επιτρέπεται να χτίσει ταυτόχρονα. Από προεπιλογή, ο δρομολογητής χρησιμοποιεί το μέσο χρόνο εποικοδομήσεως και το τρέχον εξερχόμενο εύρος ζώνης για να καθορίσει το βέλτιστο ρυθμό εποικοδομήσεων. [Απαιτείται επανεκκίνηση]"
@@ -5905,7 +5905,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημένη, θα εμφανίσει τους συνδέσμους <i>Τοποθεσίες ενδιαφέροντος</i> στην <a href=/sitemap>σελίδα χάρτης του δικτύου</a>. [Η προεπιλογή είναι ψευδής]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Αυτή η ρύθμιση επιτρέπει τη ρύθμιση προεπιλεγμένου κειμένου προέλευσης για τον τίτλο της σελίδας στις σελίδες του διακομιστή, πιθανόν χρήσιμη όταν έχετε ανοιχτές πολλαπλές οθόνες διαχείρισης σε καρτέλες του προγράμματος περιήγησης και θέλετε ένα απλό μέσο διακριτικότητας μεταξύ τους."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Αυτή η ρύθμιση επιτρέπει τη διαμόρφωση εναλλακτικών διακομιστών NTP που απαιτούνται για να διατηρείται η ακριβής χρονική στιγμή του δρομολογητή σας. [Η προεπιλογή είναι 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -7343,7 +7343,7 @@ msgid "Configure router logging options"
 msgstr "Διαμόρφωση επιλογών καταγραφής δρομολογητή"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Φίλτρα αποτελεσμάτων καταγραφής διακομιστή"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Logs του Service (Wrapper)"
@@ -7352,10 +7352,10 @@ msgid "network database"
 msgstr "βάση δεδομένων δικτύου"
 
 msgid "network database router map"
-msgstr ""
+msgstr "Χάρτης διακομιστή βάσης δεδομένων δικτύου"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Χάρτης διακομιστή βάσης δεδομένων δικτύου"
 
 msgid "News"
 msgstr "Νέα"
@@ -7590,10 +7590,10 @@ msgid "Local Tunnels"
 msgstr "Τοπικές σήραγγες"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Εναλλαγή Αναγνωριστικών Διαδρόμων"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Εναλλαγή Διαδρόμων"
 
 msgid "Peer Profile"
 msgstr "Προφίλ Ομότιμου"

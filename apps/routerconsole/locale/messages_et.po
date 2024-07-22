@@ -760,7 +760,7 @@ msgid "Now"
 msgstr "Nüüd"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Routter taaskäivitati"
 
 msgid "none"
 msgstr "puudub"
@@ -1802,7 +1802,7 @@ msgid "{0} for {1}"
 msgstr "{0} for {1}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Midagi ei kuvata - statistikat ei määratleta!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1848,10 +1848,10 @@ msgid "plot events"
 msgstr "joonista sündmused"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Peida legendaar"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Näita legendaari"
 
 msgid "Configure Graph Display"
 msgstr "Häälesta graafikute näitamist"
@@ -2196,7 +2196,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Torile keskendunud otsingumootor"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Pinteresti pildisõitmismootor"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Clearnet BitTorrent DHT otsingumootor"
@@ -2567,13 +2567,13 @@ msgid "Congestion Cap"
 msgstr "ummikupiirang"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Mõõdukat"
 
 msgid "Severe"
-msgstr ""
+msgstr "Tõsine"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Ülekanne-tunneleid ei ole"
 
 msgid "Available CPU Cores"
 msgstr "Saadaolevad protsessori tuumad"
@@ -2695,7 +2695,7 @@ msgid "File location"
 msgstr "Faili asukoht"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Värskendusintervall (sekundites)"
 
 msgid "File not found"
 msgstr "Faili ei leitud"
@@ -2741,7 +2741,7 @@ msgid "Sybil Analysis"
 msgstr "Sybil -analüüs"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Routteri kaart"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Ärge kunagi avaldage kellelegi oma ruuteri identiteeti, kuna see on võrguandmebaasis unikaalselt seotud teie IP-aadressiga."
@@ -2875,7 +2875,7 @@ msgid "Transports"
 msgstr "Transpordid"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Teadmatu"
 
 msgid "Initializing"
 msgstr "Initsialiseerimine"
@@ -3881,7 +3881,7 @@ msgid "Memory"
 msgstr "Mälu"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Ülekannefunktsioon lubatud"
 
 msgid "See more information on the wiki"
 msgstr "Vaadake lisateavet vikis"
@@ -4046,10 +4046,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "ruuteri või võrgu jõudlus takistab osalevate tunnelite ehitamist"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "Routter pakub hetkel konfigureeritud maksimaalse hulga ülekanne-tunneleid"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "Routter kasutab hetkel konfigureeritud maksimaalset jagamisvõimsust"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "ruuter on valmis ehitama osalevaid tunneleid"
@@ -4110,13 +4110,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "Messenger"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "server"
@@ -4232,7 +4232,7 @@ msgid "Review current bans"
 msgstr "vaadake üle kehtivad keelud"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Kustuta Sybil-blokeerimine"
 
 msgid "Floodfill Summary"
 msgstr "Üleujutuse kokkuvõte"
@@ -5654,7 +5654,7 @@ msgid "Event Log"
 msgstr "Sündmuste logi"
 
 msgid "graph"
-msgstr ""
+msgstr "Gráfik"
 
 msgid "Performance Graph"
 msgstr "Toimivusgraafik"
@@ -5792,10 +5792,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "Kui true, siis ruuter muudab oma identiteeti ja UDP pordi, kui ruuter taaskäivitatakse, ning seejärel kustutab võtme ruuter.config'ist edasiste muudatuste vältimiseks. [Vaikimisi on false]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "Kui see on määratud valeks, ei piirdu routter tunnelite loomise päringuid teistelt routteritelt ning selle kasutamisel tuleb olla ettevaatlik. [Vaikimisi on tõene, vajalik on taaskäivitamine]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "Kui see on määratud valeks, ei blokeeri routter tunnelite loomise päringuid aeglasematest või kättesaadamatutest routteritest vanemates versioonides. [Vaikimisi on tõene, vajalik on taaskäivitamine]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Kui konfigureeritud, seab see kindla piirmäära, kui palju tunnelit ruuter võib samaaegselt luua. Vaikimisi kasutab ruuter keskmist ehitusaega ja praegust väljaminevat ribalaiust, et määrata optimaalne ehituskiirus. [Nõutav taaskäivitamine]"
@@ -5906,7 +5906,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Selle seadistuse märkimisel tõeks kuvatakse <i>Huvipakkuva saidi</i> lingid <a href=/sitemap>saidikaardil</a>. [Vaikimisi on väär]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "See seade võimaldab määrata kohandatud tekstiprefixi lehe pealkirjale routteri konsolilehekülgedel, mis võib olla kasulik, kui sul on brauseri vahekaartidel mitu konsolit avatud ning soovid lihtsat viisi nende eristamiseks."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "See seadistus võimaldab alternatiivsete NTP serverite seadistamist, mis on vajalikud selleks, et teie marsruuter hoiaks täpset kellaega. [Vaikimisi on 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -7344,7 +7344,7 @@ msgid "Configure router logging options"
 msgstr "konfigureerige ruuteri logimissuvandid"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Filtreeri routteri logi väljundit"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Teenuse (ümbrise) logid"
@@ -7353,10 +7353,10 @@ msgid "network database"
 msgstr "võrgu andmebaas"
 
 msgid "network database router map"
-msgstr ""
+msgstr "Võrguandmebaasi routteri kaart"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Võrguandmebaasi routteri kaart"
 
 msgid "News"
 msgstr "Uudised"
@@ -7591,10 +7591,10 @@ msgid "Local Tunnels"
 msgstr "Kohalikud tunnelid"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Läbi- ja väljutünnelite ID-d"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Läbi- ja väljutunneleid"
 
 msgid "Peer Profile"
 msgstr "Ruuteri profiil"
