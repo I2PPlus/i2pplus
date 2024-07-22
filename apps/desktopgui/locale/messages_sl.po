@@ -1,0 +1,64 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+#
+msgid ""
+msgstr ""
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n%100<=4 ? 2 : 3);\n"
+
+msgid "Start I2P"
+msgstr "Započni I2P"
+
+msgid "I2P is starting!"
+msgstr "I2P se začne!"
+
+msgid "Starting"
+msgstr "Započetek"
+
+msgid "Launch I2P Browser"
+msgstr "Lance I2P brskalnik"
+
+msgid "Configure I2P System Tray"
+msgstr "Nastavitev I2P sistema"
+
+msgid "Disable system tray"
+msgstr "Onemogoči sistemski trg"
+
+msgid "Restart I2P"
+msgstr "Preklikni I2P"
+
+msgid "Stop I2P"
+msgstr "Prekini I2P"
+
+msgid "Restart I2P Immediately"
+msgstr "Skratko preklikni I2P"
+
+msgid "Stop I2P Immediately"
+msgstr "Skratko prekini I2P"
+
+msgid "Cancel I2P Shutdown"
+msgstr "Prekliči izhod iz I2P"
+
+#, java-format
+msgid "Shutdown in {0}"
+msgstr "Izvod v {0}"
+
+msgid "Shutdown imminent"
+msgstr "Izvod prihaja"
+
+#. status translations are in the console bundle
+msgid "Network"
+msgstr "Omrežje"
+
+#. Windows typically has tooltips; Linux (at least Ubuntu) doesn't
+msgid "I2P: Right-click for menu"
+msgstr "I2P: Klikni desnim gumbom za meni"
+
+msgid "Enable notifications"
+msgstr "Omogoči obvestila"
+
+msgid "Disable notifications"
+msgstr "Onemogoči obvestila"

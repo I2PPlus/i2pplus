@@ -1,0 +1,425 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+#
+msgid ""
+msgstr ""
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n%100<=4 ? 2 : 3);\n"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Opozorilo: Neveljavna zahtevek URI"
+
+msgid "Router Console"
+msgstr "Konzola dostavilnika"
+
+msgid "I2P Router Console"
+msgstr "Konzola dostavilnika I2P"
+
+msgid "Addressbook"
+msgstr "Seznam naslovov"
+
+msgid "Configuration"
+msgstr "Nastavitev"
+
+msgid "Help"
+msgstr "Pomoč"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "Zahtevek URI je neveljav, verjetno vsebuje nepravilne znake."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Kadar kliknete na povezavo, preverite konec URI za vsako znak, ki ga je brskalnik načrtoma dodal."
+
+msgid "Connection Reset"
+msgstr "Povezava ponovno vzpostavljena"
+
+msgid "The connection to the website was reset while the page was loading."
+msgstr "Povezava z spletnim mestom je bila ponovno vzpostavljena med obdobjem za loadiranje strani."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Spletno mesto lahko ni sprejalo dostopa v trenutku, je lahko preveč zaposlenega ali je blokiral dostop."
+
+#, java-format
+msgid "You may want to {0}retry{1}."
+msgstr "Lahko želite {0}ponovno poskus{1}."
+
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Če si ostali stran odprto, bo avtomatsko poskušal povezave na spletni strani vsakega {0} sekund po neuspeli povezavi."
+
+msgid "Could not find the following destination:"
+msgstr "Ni mogoče najti naslednje destinacije:"
+
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Opozorilo: Nesprejemljiv protokol"
+
+msgid "The request uses a bad protocol."
+msgstr "Zahtevek uporablja slab protokol."
+
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2P HTTP proxy podržava samo zahteve HTTP in HTTPS."
+
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Drug protokoli, kot na primer FTP, niso dovoljeni."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Opozorilo: Ni nastavljen izhodni proxy"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "Vaš zahtevek je bil za spletno mesto zunaj I2P, vendar ni nastavljen izhodni proxy."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Posečete izberite izhodni preklopilnik v I2PTunnelu."
+
+msgid "Error: Request Denied"
+msgstr "Napaka: Zadaja je bila zavrnjena"
+
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Napaka: Nekaj dosega dostopati do konzole robota prek I2P proxyja"
+
+msgid "Your browser is misconfigured."
+msgstr "Vaš brskalnik je napačno konfiguriran."
+
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Ne uporabite proxyja za dostop do konzole robota, localhost ali lokalnih LAN naslovov."
+
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Morate preprečiti, da se naslov 127.0.0.1 (ali naslov, na katerem dostopate do I2P konzole), routeje skozi HTTP proxyja I2P, običajno tako, da izločite naslov v sekciji konfiguracije proxyja brskalnika."
+
+msgid "Website Unknown"
+msgstr "Stran neznana"
+
+msgid "Website Not Found in Addressbook"
+msgstr "Stran ni bila najdena v knjigi naslovov"
+
+msgid "The website was not found in your router's addressbook."
+msgstr "Stran ni bila najdena v vaši knjigi naslovov robota."
+
+msgid "Check the link or find a Base 32 or Base 64 address."
+msgstr "Preverite povezavo ali najdite Base 32 ali Base 64 naslov."
+
+#, java-format
+msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
+msgstr "Kadar imate Base 64 naslov, {0}dodajte ga v vašo knjigo naslovov{1}."
+
+msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
+msgstr "V njenoč pa najdite povezavo pomagalka Base 32 ali uporabite povezavo jump service spodaj."
+
+#, java-format
+msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
+msgstr "Kadar pogosto vidite ta spletni strani? Glejte {0}FAQ{1} za pomoč pri {2}dodajanju nekaterih podpisov{3} v vaši knjigi naslovov."
+
+msgid "Website Unreachable"
+msgstr "Stran ni dosegljiva"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "Stran ni bila dosegljiva, ker ni bilo najdeno njeno zasedbo."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Stran je verjetno na prehodu, ampak lahko je tudi morda problem z omrežjem."
+
+msgid "Outproxy Not Found"
+msgstr "Izhodni preklopilnik ni bil najden"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "Izvedenega HTTP izhodnega preklopilnika ni bilo."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Je offline, obstaja problem z omrežjem ali vaš rober še ni popolnoma integriran z kolegi."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Morda bi radi {0}ponovno poskusili{1}, ker bo ta izvedel izhodni preklopilnik iz vam določenega {2}tukaj{3} (če imate več kot enega nastavljenega)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Kadar imate še težave, bi radi urejali seznam izhodnih preklopilk {0}tukaj{1}."
+
+msgid "Warning: Request Denied"
+msgstr "Opozorilo: Zadaja je bila zavrnjena"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Ta naslov se zdi deformiran. Prosimo, potrdite, da ste vnesli veljaven naslov!"
+
+msgid "You attempted to connect to a non-I2P website or location."
+msgstr "Poskusili ste povezati se z spletnim mestom ali lokacijo, ki ni I2P."
+
+msgid "Outproxy Unreachable"
+msgstr "Izhodni preklopilnik ni dosegljiv"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "Izvedenega HTTP izhodnega preklopilnika ni bilo, ker uporablja kriptne opcije, ki niso podporljive vašega I2P ali različice Jave."
+
+msgid "Could not connect to the following destination:"
+msgstr "Ni moglo povezati se na naslednje destinacijo:"
+
+msgid "Proxy Authorization Required"
+msgstr "Potreben je proxy za avtorizacijo"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "Potreben je proxy za avtorizacijo I2P HTTP"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "Ta proxy je nastavljen, da za dostop zahteva uporabniško ime in geslo."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Prosimo, vnesite vašo uporabniško ime in geslo, ali preverite nastavitve {0}roberja{1} ali {2}nastavitve I2PTunnela{3}."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Da bi zaprli avtorizacijo, odstranite nastavitev {0}i2ptunnel.proxy.auth=basic{1}, nato ustavite in ponovno začnite HTTP Proxy tunnel."
+
+msgid "Warning: Invalid Destination"
+msgstr "Opozorilo: Neveljavno naslovišče"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "Naslovišče, ki ga ste specifikirali, ni veljalo ali pa ni bilo dostopno."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Morda ste napačno kopirali Base 64 vrstico ali povezano povezavo, ki jo sledite."
+
+msgid "The I2P host could also be offline."
+msgstr "I2P gostitelj lahko tudi ni dostopen."
+
+msgid "The connection to the proxy was reset."
+msgstr "Povezava do posrednika je bila ponovno nastavljena."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Posrednik lahko bistveno ni dostopen, je preveč zaposlen ali pa je blokiral vaš dostop."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "HTTP izhodni posrednik ni bil dostopen, ker ni bilo najdenega njegovega časovna lepega nastavljene postavitve."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Izhodni posrednik verjetno deluje ne ravno, a je tudi mogoče, da je mrežna kongestija."
+
+msgid "Warning: Authorization Required"
+msgstr "Opozorilo: Potrebno avtorizacija"
+
+msgid "The website was not reachable."
+msgstr "Spletne strani ni bilo dostopenega."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Spletne strani je offline, pridejo kongestija mreže ali pa vaš router še ni še tako integriran z raznimi."
+
+msgid "Warning: Destination Key Conflict"
+msgstr "Opozorilo: Konflikt destinacijske ključne"
+
+msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
+msgstr "Povezava pomagalskega naslova, ki jo ste sledili, specifična drugačno destinacijsko ključno kot v vaši knjigi naslovov."
+
+msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
+msgstr "Kdo koli lahko poskuša oblikovati za druge spletne strani ali pa ljudje so dali istim imenom dve spletnej strani."
+
+msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
+msgstr "Rešitev konflika je odločitev o tem, katere ključ zaupate, in nato bodite igležati povezano pomagalsko naslove ali pa izbrisati gostiteljsko vstopnico iz vaše knjige naslovov in kliknite na povezano pomagalsko naslove ponovno."
+
+msgid "The Base32 address is invalid."
+msgstr "Base32 naslov ni veljaven."
+
+msgid "Warning: Bad Address Helper"
+msgstr "Opozorilo: Slabo pomagalsko naslove"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "Pomagalska ključna v URL-u ({0}i2paddresshelper={1}) ni rešljiva."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Izgleda, da je to odpadek podatkov ali napačno tipkano Base 32 naslove."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Preverite vaš URL, da bi si poskusili popraviti pomagalski ključ tako, da je veljavno Base 32 imenom domena ali ključ Base 64."
+
+msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "Spletne strani ni bilo dostopenega, ker uporablja šifrirne opzioni, ki niso podporjave vašega I2P ali različice Java."
+
+msgid "Information: New Host Name"
+msgstr "Informacija: Novo imeno domena"
+
+msgid "Information: New Host Name with Address Helper"
+msgstr "Informacija: Novo imeno domena z pomagalsko naslove"
+
+msgid "The address helper link you followed is for a new host name that is not in your address book."
+msgstr "Povezava pomagalskega naslova, ki jo ste sledili, je za novo imeno domena, ki ni v vaši knjigi naslovov."
+
+msgid "You may save this host name to your local address book."
+msgstr "Morda lahko shranite to imeno domeno v svojo lokalno knjigo naslovov."
+
+msgid "If you save it to your address book, you will not see this message again."
+msgstr "Ko jo shranite v vaši knjigi naslovov, ne boste videli te sporočiloma več."
+
+msgid "If you do not save it, the host name will be forgotten after the next router restart."
+msgstr "Ko jo ne shranite, bo se imeno domeno izbrisalo po novem ponastavitvi routersa."
+
+msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
+msgstr "Ko ne želite obiskati te spletne strani, kliknite gumb \"nazaj\" v vašem brskalniku."
+
+msgid "This seems to be a bad destination:"
+msgstr "To zelo deluje kot slabo destinacijo:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2p naslovni pomočnik ne more pomagati z destinacijo te vrste!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Da obiščete destinacijo v svojih naslovnikih, kliknite tukaj <a href=\"{0}\">tukaj</a>. Za obisk konfliktnije destinacije pri i2p naslovnem pomočniku, kliknite tukaj <a href=\"{1}\">tukaj</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Destinacija za {0} v naslovniku"
+
+msgid "Conflicting address helper destination"
+msgstr "Konfliktna destinacija pri i2p naslovnem pomočniku"
+
+msgid "Corrupt Base32 address"
+msgstr "Poškodovana Base32 naslovna koda"
+
+msgid "Destination LeaseSet not found"
+msgstr "Ni bilo mogoče najti dogovora o izdaji z naslovom destinacije"
+
+msgid "Host"
+msgstr "Gostitelj"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "Destinacija"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Nadaljuj z obiskom {0} brez shranjevanja"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Lahko obiščete spletišče brez shranjevanja v naslovnik. Naslov bo shranjen do ponovnega zaganjanja vašega I2P routeja."
+
+msgid "Continue without saving"
+msgstr "Nadaljuj brez shranjevanja"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "Shrani {0} v upravljalčev naslovnik in nadaljuj z obiskom spletišča"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "To naslov bo shranjen v zbirko naslovov s prijavno obveznim sistemom."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Če želite beležiti spletišča, ki ste jih dodali sami, dodajte jih v zbirko Master ali Private namesto v Upravljalčev naslovnik."
+
+#. FIXME wasn't escaped
+msgid "Save & continue"
+msgstr "Shrani & nadaljuj"
+
+#. only blockfile supports multiple books
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "Shrani {0} v zbirko Master in nadaljuj z obiskom spletišča"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "To naslov bo shranjen v zbirko Master. Pozabite na to izbiritev za naslove, ki jih želite shraniti ločeno od zbirke Naslovi, a se jim ne boste slipli."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "Shrani {0} v zbirko Privatni in nadaljuj z obiskom spletišča"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "To naslov bo shranjen v zbirko Privatni z garancijo, da ne bo nikoli objavljen."
+
+msgid "Base32 address requires lookup password"
+msgstr "Potrebeno je geslo za pregled iz podatkovnega gradiva z Base32 naslovom"
+
+msgid "Base32 address requires encryption key"
+msgstr "Osnovni c32 naslov zahteva šifrirno ključ"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Osnovni c32 naslov zahteva šifrirno ključ in geslo za iskanje"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Napaka pri dešifriranju c32 naslova, preverite šifrirno ključ"
+
+msgid "Generate"
+msgstr "Ustvari"
+
+msgid "Encryption key"
+msgstr "Šifrirno ključ"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Morate vnesti PSK šifrirno ključ, ki jo je določil upravljavec strežnika, ali generirati DH šifrirno ključ in pošiljat to upravljavec strežnika."
+
+msgid "Ask the server operator for help."
+msgstr "Prosite pomoči upravljavca strežnika."
+
+msgid "Enter PSK encryption key"
+msgstr "Vnesite PSK šifrirno ključ"
+
+msgid "Generate new DH encryption key"
+msgstr "Ustvari novo DH šifrirno ključ"
+
+msgid "Lookup password"
+msgstr "Geslo za iskanje"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Morate vnesti geslo, ki ga je določil upravljavca strežnika."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Dodano prek pomočnika z očo v {0}"
+
+msgid "Added via address helper"
+msgstr "Dodano preko pomočnika z očo"
+
+msgid "Missing lookup password"
+msgstr "Premalo geslo za iskanje"
+
+msgid "Missing private key"
+msgstr "Manjkajoča zasebna ključ"
+
+msgid "Invalid private key"
+msgstr "Neveljavna zasebna ključ"
+
+msgid "Your new encryption key"
+msgstr "Vaše novo šifrirno ključ"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Kopirajte ključ in pošiljte ga upravljavcu strežnika."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "Po tem, ko ste prejeli dovoljenje, lahko nadaljujete na spletni strani."
+
+msgid "Go back and fix the error"
+msgstr "Pojdite nazaj in popravite napako"
+
+msgid "router"
+msgstr "Ruter"
+
+msgid "master"
+msgstr "Glavni"
+
+msgid "private"
+msgstr "Zasebne"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Preusmerjanje na {0}"
+
+msgid "Redirection in progress"
+msgstr "Preusmerjanje poteka"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0} shranjena v knjigo telefonskih zapisov {1} in trenutno preusmerjai."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "Neuspešno shranjevanje {0} v knjigo telefonskih zapisov {1}, trenutno preusmerjam."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "Kliknite tukaj, če si ne preusmerjeno avtomatsko."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Shranjeni so podatki za vstop v {0} in trenutno preusmerjam."
