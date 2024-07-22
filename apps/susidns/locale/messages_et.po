@@ -179,7 +179,7 @@ msgstr "{0} aadressiraamat {1} andmebaas"
 
 #, java-format
 msgid "Host name {0} is not in the address book."
-msgstr ""
+msgstr "Määri nimi {0} ei ole aadressiraamatust."
 
 msgid "Manually added via SusiDNS"
 msgstr "Manuaalselt lisatud läbi SusiDNS"
@@ -491,16 +491,16 @@ msgid "It regularly updates your hosts.txt file from distributed sources or \"su
 msgstr "See uuendab regulaarselt sinu hosts.txt faili hajutatud allikatest või \"tellimustest\"."
 
 msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
-msgstr ""
+msgstr "Lisateavet nimetamise kohta I2Ps, vaata <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank> ülevaadet</a>."
 
 msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
-msgstr ""
+msgstr "Lisateavet nimetamise kohta I2Ps, vaata <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank> ülevaadet</a>."
 
 msgid "How does the addressbook application work?"
 msgstr "Kuidas aadressiraamatu rakendus töötab?"
 
 msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
-msgstr ""
+msgstr "Aadressiteatis programm regulaarselt uurib teie alamandmeid ja liidab neid sisu teie võrgu seadmesse aadresskirja."
 
 msgid "Then it merges your \"master\" address book into the router address book as well."
 msgstr "See pärast ühendab ka sinu \"põhi\" aadressiraamatu rooteri aadressiraamatusse."
@@ -606,13 +606,3 @@ msgstr "Käsitselt põhi aadressiraamatusse lisatud aadressid ühendatakse sinu 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tellimuste kaudu saadud hostid ühendatakse sinu Rooteri aadressiraamatusse."
-
-#, java-format
-#~ msgid "Host name {0} is not in the address book."
-#~ msgstr "Määri nimi {0} ei ole aadressiraamatust."
-
-#~ msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions file."
-#~ msgstr "Lisateenusite tellimine on lihtne, liida need lihtsalt oma <a href=\"tellimused\">tellimuste faili."
-
-#~ msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview."
-#~ msgstr "Lisateavet nimetamise kohta I2Ps, vaata <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank> ülevaadet."
