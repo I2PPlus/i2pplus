@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "فایل های جدید به صورت عمومی قابل خواندن نخواهند بود"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "قبل از تغییر دایرکتوری داده ها، تمام تورنت ها را متوقف کنید"
 
 msgid "Data directory must be an absolute path"
 msgstr "دایرکتوری داده باید یک مسیر مطلق باشد"
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "بارگیری از قبل در حال اجرا است: {0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - فایل تورنت قبلاً وجود دارد"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "راه اندازی تورنت {0}"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "محدودیت باند پهن زیرین {0} کیلوبایت در ثانیه است"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -364,11 +364,11 @@ msgstr "محدودیت پهنای باند آپلود {0} کیلوبایت بر 
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr " ذخیره سازی: {0} مگابایت برای دانلود در بخش داده های تنظیم شده در حال حاضر در دسترس است"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "هشدار - فقط {0} مگابایت برای دانلود در بخش داده های تنظیم شده در دسترس است"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +384,10 @@ msgid "Starting torrent: {0}"
 msgstr "شروع تورنت: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "عدم توانایی بارگذاری تنظیمات فیلتر ساخت فایل تورنت: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "عدم توانایی ذخیره سازی تنظیمات فیلتر ساخت فایل تورنت: "
 
 msgid "Torrent not found"
 msgstr "تورنت یافت نشد"
@@ -789,11 +789,11 @@ msgstr "خطا - نمی توان ردیاب های خصوصی و عمومی را
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr "فایل ها یا پوشه ها به علت قوانین فیلتر از \"{0}\" استثنا شدند."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "فایل ها یا پوشه ها به علت قوانین فیلتر از \"{0}\" استثنا شدند."
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -836,16 +836,16 @@ msgid "Restored default trackers"
 msgstr "ردیاب های پیش فرض بازیابی شد"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "ذخیره سازی تنظیمات فیلتر"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "افزودن فیلتر فایل"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "نام و الگوی معتبر را وارد کنید"
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "بازیابی فیلترهای پیش فرض ساخت تورنت"
 
 msgid "Checking"
 msgstr "چک کردن"
@@ -940,7 +940,7 @@ msgid "Destination (identity) of peer"
 msgstr "مقصد (هویت) همتا"
 
 msgid "Version"
-msgstr ""
+msgstr "نسخه"
 
 msgid "seconds"
 msgstr "ثانیه"
@@ -1007,10 +1007,10 @@ msgid "Create torrent"
 msgstr "ایجاد تورنت"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "اگر فایل ها در پوشه تورنت قرار دارند، آنها را از تورنت حذف کنید"
 
 msgid "Content Filters"
-msgstr ""
+msgstr "فیلترهای محتوا"
 
 msgid "Trackers"
 msgstr "ردیاب ها"
@@ -1143,10 +1143,10 @@ msgid "Half available bandwidth recommended."
 msgstr "نصف پهنای باند موجود توصیه می شود."
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "محدودیت باند پهن"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "حداکثر باند پهن اختصاص یافته برای دانلود"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "حداکثر پهنای باند اختصاص داده شده برای آپلود"
@@ -1233,28 +1233,28 @@ msgid "Save configuration"
 msgstr "ذخیره سازی پیکربندی"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "فیلتر سازی فایل ساخت تورنت"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "برای حذف فیلتر را نشان دهید"
 
 msgid "Name"
 msgstr "نام"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "الگوی فیلتر"
 
 msgid "Starts With"
-msgstr ""
+msgstr "شروع با"
 
 msgid "Contains"
-msgstr ""
+msgstr "شامل"
 
 msgid "Ends With"
-msgstr ""
+msgstr "پایان با"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "به طور پیش فرض فعال"
 
 msgid "Add"
 msgstr "اضافه کردن"
@@ -1272,7 +1272,7 @@ msgid "Mark tracker for deletion"
 msgstr "علامت زدن ردیاب برای حذف"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "نمیتوان مغناطیس را اضافه کرد: لینک های مغناطیس نسخه 2 پشتیبانی نمیشوند"
 
 #, java-format
 msgid "Invalid magnet URL {0}"

@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "File baru tidak akan dapat dibaca publik"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "Hentikan semua torrent sebelum mengubah direktori data"
 
 msgid "Data directory must be an absolute path"
 msgstr "Direktori data harus berupa absolute path"
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "Download sudah berjalan: {0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - berkas torrent sudah ada"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "Memulai torrent {0}"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "Batas lebar band unduh adalah {0} KBps"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -364,11 +364,11 @@ msgstr "Batas bandwidth unggahan adalah {0} KBps hingga maksimum {1} rekan seren
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Penyimpanan: {0}MB saat ini tersedia untuk unduhan pada partisi data yang dikonfigurasi"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "Peringatan - Hanya {0}MB tersedia untuk unduhan pada partisi data yang dikonfigurasi"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +384,10 @@ msgid "Starting torrent: {0}"
 msgstr "Memulai torrent: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "Tidak dapat memuat konfigurasi filter berkas pembuatan torrent: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "Tidak dapat menyimpan konfigurasi filter berkas pembuatan torrent: "
 
 msgid "Torrent not found"
 msgstr "Torrent tidak ditemukan"
@@ -786,11 +786,11 @@ msgstr "Kesalahan - Tidak dapat menggabungkan pelacak pribadi dan publik dalam t
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr " berkas atau folder telah dikecualikan dari \"{0}\" karena aturan filter."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "Berkas atau folder berikut telah dikecualikan dari \"{0}\" karena aturan filter: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -833,16 +833,16 @@ msgid "Restored default trackers"
 msgstr "Tracker default yang telah dikembalikan"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "Simpan Konfigurasi Filter"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "Tambahkan Filter Berkas"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "Masukkan nama dan pola filter yang valid"
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "Filter pembuatan torrent bawaan telah dipulihkan"
 
 msgid "Checking"
 msgstr "Memeriksa"
@@ -935,7 +935,7 @@ msgid "Destination (identity) of peer"
 msgstr "Destinasi (identitas) peer"
 
 msgid "Version"
-msgstr ""
+msgstr "Versi"
 
 msgid "seconds"
 msgstr "detik"
@@ -1002,10 +1002,10 @@ msgid "Create torrent"
 msgstr "Buat torrent"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "Nonaktifkan berkas dari torrent jika berkas tersebut berada dalam folder torrent"
 
 msgid "Content Filters"
-msgstr ""
+msgstr "Filter Konten"
 
 msgid "Trackers"
 msgstr "Trackers"
@@ -1138,10 +1138,10 @@ msgid "Half available bandwidth recommended."
 msgstr "Setengah bandwidth yang tersedia direkomendasikan."
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "Batas lebar band"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "Lebar band maksimum yang dialokasikan untuk mengunduh"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "Bandwidth maksimum yang dialokasikan untuk meng-upload"
@@ -1228,28 +1228,28 @@ msgid "Save configuration"
 msgstr "Simpan konfigurasi"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "Penyaringan Berkas Pembuatan Torrent"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "Tandai filter untuk penghapusan"
 
 msgid "Name"
 msgstr "Nama"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "Pola Filter"
 
 msgid "Starts With"
-msgstr ""
+msgstr "Dimulai Dengan"
 
 msgid "Contains"
-msgstr ""
+msgstr "Mengandung"
 
 msgid "Ends With"
-msgstr ""
+msgstr "Berakhir Dengan"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "Diaktifkan Secara Otomatis"
 
 msgid "Add"
 msgstr "Tambahkan"
@@ -1267,7 +1267,7 @@ msgid "Mark tracker for deletion"
 msgstr "Tandai tracker untuk dihapus"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "Tidak dapat menambahkan magnet: Tautan magnet versi 2 tidak didukung"
 
 #, java-format
 msgid "Invalid magnet URL {0}"

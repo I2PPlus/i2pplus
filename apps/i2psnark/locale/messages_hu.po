@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "Az új fájlok nyilvánosan nem lesznek olvashatók"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "Az összes torrent megállítása a adatkönyvtár változtatásának előtt"
 
 msgid "Data directory must be an absolute path"
 msgstr "Az adatkönyvtár elérési útjának abszolútnak kell lennie"
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "Futó letöltés: {0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - a torrent fájl már létezik"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "A torrent indítása {0}"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "A letöltési sávszélesség korlátozása {0} KBps"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -364,11 +364,11 @@ msgstr "A feltöltési sávszélesség korlátja {0} KB/s, maximum {1} egyidejű
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Tároló: {0}MB jelenleg elérhető letöltésre a konfigurált adatcímterületen"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "Figyelmeztetés - Csak {0}MB elérhető letöltésre a konfigurált adatcímterületen"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +384,10 @@ msgid "Starting torrent: {0}"
 msgstr "Torrent indítása: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "Nem tudom betölteni a torrent létrehozási fájl szűrő beállításokat: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "Nem tudom menteni a torrent létrehozási fájl szűrő beállításokat: "
 
 msgid "Torrent not found"
 msgstr "Torrent nem található"
@@ -789,11 +789,11 @@ msgstr "Hiba – A privát és a nyilvános nyomkövetők nem keverhetők egy to
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr "fájlok vagy mappák kizártak a \"{0}\"-ből szűrési szabályok miatt."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "Az alábbiakban a következő fájlok vagy mappák kizártak a \"{0}\"-ből szűrési szabályok miatt: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -836,16 +836,16 @@ msgid "Restored default trackers"
 msgstr "Alapértelmezett követők (trackerek) visszaállítva"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "Szűrőbeállítások mentése"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "Fájlszűrő hozzáadása"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "Adjon meg érvényes nevet és szűrés mintát"
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "Alapértelmezett torrent létrehozási szűrők visszaállítva"
 
 msgid "Checking"
 msgstr "Ellenőrzés"
@@ -940,7 +940,7 @@ msgid "Destination (identity) of peer"
 msgstr "A társ rendeltetési helye (identitása)"
 
 msgid "Version"
-msgstr ""
+msgstr "Verzió"
 
 msgid "seconds"
 msgstr "másodperc"
@@ -1007,10 +1007,10 @@ msgid "Create torrent"
 msgstr "Torrent létrehozása"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "Kizárja a fájlokat a torrentből, ha azok a torrent mappában találhatók"
 
 msgid "Content Filters"
-msgstr ""
+msgstr "Tartalom szűrők"
 
 msgid "Trackers"
 msgstr "Követők (trackerek)"
@@ -1143,10 +1143,10 @@ msgid "Half available bandwidth recommended."
 msgstr "A rendelkezésre álló sávszélesség fele javasolt."
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "Sávszélesség korlátozás"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "A letöltéshez rendelt maximális sávszélesség"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "A feltöltéshez lefoglalt maximális sávszélesség"
@@ -1233,28 +1233,28 @@ msgid "Save configuration"
 msgstr "Beállítások mentése"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "Torrent létrehozó fájl szűrése"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "Szűrő jelölése törlésre"
 
 msgid "Name"
 msgstr "Név"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "Szűrés minta"
 
 msgid "Starts With"
-msgstr ""
+msgstr "Kezdődik"
 
 msgid "Contains"
-msgstr ""
+msgstr "Tartalmaz"
 
 msgid "Ends With"
-msgstr ""
+msgstr "Vége"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "Alapértelmezett engedélyezve"
 
 msgid "Add"
 msgstr "Hozzáadás"
@@ -1272,7 +1272,7 @@ msgid "Mark tracker for deletion"
 msgstr "Jelölje meg a nyomkövetőt törlésre"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "Nem tudom hozzáadni a magnezt: A verzió 2-as magnezt link nem támogatott"
 
 #, java-format
 msgid "Invalid magnet URL {0}"
