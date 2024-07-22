@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "新文件不会对公共可读"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "更改数据目录之前，请停止所有种子"
 
 msgid "Data directory must be an absolute path"
 msgstr "数据存放目录必须是绝对路径"
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "已经在下载中:{0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - 种子文件已存在"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "正在启动种子{0}"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "下载带宽限制为 {0} KBps"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -364,11 +364,11 @@ msgstr "上传带宽限制为{0}KBps，最多{1}个对等节点。"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "存储：当前配置的数据分区可下载的存储空间为 {0}MB"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "警告 - 配置的数据分区仅剩 {0}MB 可供下载"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +384,10 @@ msgid "Starting torrent: {0}"
 msgstr "正在启动种子{0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "无法加载创建种子文件过滤器配置："
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "无法保存创建种子文件过滤器配置："
 
 msgid "Torrent not found"
 msgstr "种子未找到"
@@ -786,11 +786,11 @@ msgstr "错误 - PT和公共Tracker无法在同一种子中混用"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr " 由于过滤规则，从“{0}”中排除了 {0} 个文件或文件夹。"
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "根据过滤规则，以下文件或文件夹被从“{0}”中排除："
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -833,16 +833,16 @@ msgid "Restored default trackers"
 msgstr "恢复默认 Tracker"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "保存过滤器设置"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "添加文件过滤器"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "请输入有效名称和过滤模式"
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "已恢复默认的创建种子过滤器"
 
 msgid "Checking"
 msgstr "正在检查"
@@ -935,7 +935,7 @@ msgid "Destination (identity) of peer"
 msgstr "用户的信息"
 
 msgid "Version"
-msgstr ""
+msgstr "版本"
 
 msgid "seconds"
 msgstr "秒"
@@ -1002,10 +1002,10 @@ msgid "Create torrent"
 msgstr "创建种子"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "如果文件位于种子文件夹中，则从种子中排除这些文件"
 
 msgid "Content Filters"
-msgstr ""
+msgstr "内容过滤器"
 
 msgid "Trackers"
 msgstr "Tracker"
@@ -1138,10 +1138,10 @@ msgid "Half available bandwidth recommended."
 msgstr "推荐设置为可用带宽的一半。"
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "带宽限制"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "分配给下载的最大带宽"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "最大上传带宽"
@@ -1228,28 +1228,28 @@ msgid "Save configuration"
 msgstr "保存设置"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "创建种子文件过滤"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "标记为删除的过滤器"
 
 msgid "Name"
 msgstr "名称"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "过滤模式"
 
 msgid "Starts With"
-msgstr ""
+msgstr "以...开始"
 
 msgid "Contains"
-msgstr ""
+msgstr "包含"
 
 msgid "Ends With"
-msgstr ""
+msgstr "以...结束"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "默认启用"
 
 msgid "Add"
 msgstr "添加"
@@ -1267,7 +1267,7 @@ msgid "Mark tracker for deletion"
 msgstr "标记删除Tracker"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "无法添加磁链：不支持版本2的磁链链接"
 
 #, java-format
 msgid "Invalid magnet URL {0}"

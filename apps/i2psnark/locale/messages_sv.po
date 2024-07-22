@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "Nya filer kommer inte vara offentligt läsbara"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "Stoppa alla torrenter innan du ändrar datakatalogen"
 
 msgid "Data directory must be an absolute path"
 msgstr "Datamappen måste vara en absolut sökväg"
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "Hämtar redan: {0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - torrentfilen finns redan"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "Starta torrent {0}"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "Nedladdningsbandbreddsbegränsning är {0} KBps"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -364,11 +364,11 @@ msgstr "Uppladdningsbandbreddsgränsen är {0} KBps till maximalt {1} samtidiga 
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Lagring: För närvarande tillgängligt {0}MB för nedladdningar på konfigurerad datadiskpartition"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "Varning - Endast {0}MB tillgängligt för nedladdningar på konfigurerad datadiskpartition"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +384,10 @@ msgid "Starting torrent: {0}"
 msgstr "Starta torrent: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "Kan inte ladda inställningar för filfilter vid torrentskapande: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "Kan inte spara inställningar för filfilter vid torrentskapande: "
 
 msgid "Torrent not found"
 msgstr "Torrent hittades inte"
@@ -789,11 +789,11 @@ msgstr "Fel - Kan inte blanda privata och offentliga bevakare i samma torrent"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr " filer eller mappar har uteslutits från \"{0}\" på grund av filterregler."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "Följande filer eller mappar har uteslutits från \"{0}\" på grund av filterregler: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -836,16 +836,16 @@ msgid "Restored default trackers"
 msgstr "Återställ standard bevakare"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "Spara filterinställningar"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "Lägg till filfilter"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "Ange ett giltigt namn och filtermönster"
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "Återställda standardfilter för torrentskapande"
 
 msgid "Checking"
 msgstr "Kontrollerar"
@@ -940,7 +940,7 @@ msgid "Destination (identity) of peer"
 msgstr "Destinat (identitet) för jämlike"
 
 msgid "Version"
-msgstr ""
+msgstr "Version"
 
 msgid "seconds"
 msgstr "sekunder"
@@ -1007,10 +1007,10 @@ msgid "Create torrent"
 msgstr "Skapa torrent"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "Uteslut filer från torrenten om de befinner sig i torrentmappen"
 
 msgid "Content Filters"
-msgstr ""
+msgstr "Innehållsfiltrar"
 
 msgid "Trackers"
 msgstr "Bevakare"
@@ -1143,10 +1143,10 @@ msgid "Half available bandwidth recommended."
 msgstr "Hälften av tillgänglig bandbredd rekommenderas."
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "Bandbreddsbegränsning"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "Maximalt tilldelat bandbredd för nedladdning"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "Maximal bandbredd avsedd för uppladdning"
@@ -1233,28 +1233,28 @@ msgid "Save configuration"
 msgstr "Spara inställningar"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "Filtrering av filer vid torrentskapande"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "Markera filter för borttagning"
 
 msgid "Name"
 msgstr "Namn"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "Filtermönster"
 
 msgid "Starts With"
-msgstr ""
+msgstr "Börjar med"
 
 msgid "Contains"
-msgstr ""
+msgstr "Innehåller"
 
 msgid "Ends With"
-msgstr ""
+msgstr "Slutar med"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "Aktiverat som standard"
 
 msgid "Add"
 msgstr "Lägg till"
@@ -1272,7 +1272,7 @@ msgid "Mark tracker for deletion"
 msgstr "Markera bevakare för borttagning"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "Kan inte lägga till magnetlänk: Stöd för magnetlänkar version 2 saknas"
 
 #, java-format
 msgid "Invalid magnet URL {0}"

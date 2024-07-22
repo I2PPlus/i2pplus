@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "No more torrents running."
 msgstr "Çalışan başka bir torrent yok."
@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "Yeni dosyalar herkes tarafından okunamaz"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "Veri dizini değiştirmeden önce tüm torrentleri durdurun"
 
 msgid "Data directory must be an absolute path"
 msgstr "Veri klasörü yolu mutlak olmalıdır"
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "Zaten indiriliyor: {0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - torrent dosyası zaten var"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "Torrent başlatılıyor {0}"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "İndirme bant genişliği sınırı {0} KBps"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -364,11 +364,11 @@ msgstr "Yükleme bant genişliği sınırı, maksimum {1} eşzamanlı eşe yöne
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Depolama: Yeni ayarlanmış veri bölümünde şu anda {0}MB indirme alanı mevcut"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "Uyarı - Yeni ayarlanmış veri bölümünde sadece {0}MB indirme alanı mevcut"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +384,10 @@ msgid "Starting torrent: {0}"
 msgstr "Torrent başlatılıyor: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "Torrent oluşturma dosya filtresi yapılandırmasını yükleyemiyorum: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "Torrent oluşturma dosya filtresi yapılandırmasını kaydedemiyorum: "
 
 msgid "Torrent not found"
 msgstr "Torrent bulunamadı"
@@ -789,11 +789,11 @@ msgstr "Hata - Torrentte özel ve genel izleyiciler karıştırılamıyorHata - 
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr " dosya veya klasör, filtre kuralları nedeniyle \"{0}\" dan çıkarıldı."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "Aşağıdaki dosyalar veya klasörler, filtre kuralları nedeniyle \"{0}\" dan çıkarıldı: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -836,16 +836,16 @@ msgid "Restored default trackers"
 msgstr "Varsayılan izleyiciler geri yüklendi"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "Filtre Ayarlarını Kaydet"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "Dosya Filtresi Ekle"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "Geçerli bir ad ve filtre kalibi girin"
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "Varsayılan torrent oluşturma filtrelerine geri dönüldü"
 
 msgid "Checking"
 msgstr "Denetleniyor"
@@ -940,7 +940,7 @@ msgid "Destination (identity) of peer"
 msgstr "Eşin hedefi (kimliği)"
 
 msgid "Version"
-msgstr ""
+msgstr "Versiyon"
 
 msgid "seconds"
 msgstr "saniye"
@@ -1007,10 +1007,10 @@ msgid "Create torrent"
 msgstr "Torrent oluştur"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "Torrent klasöründe bulunan dosyaları torrentten hariç tut"
 
 msgid "Content Filters"
-msgstr ""
+msgstr "İçerik Filtreleri"
 
 msgid "Trackers"
 msgstr "İzleyiciler"
@@ -1143,10 +1143,10 @@ msgid "Half available bandwidth recommended."
 msgstr "Kullanılabilecek bant genişliğinin yarısının ayrılması önerilir."
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "Bant Genişliği Sınırı"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "İndirme için ayrılan maksimum bant genişliği"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "Yükleme için kullanılabilecek en fazla bant genişliği"
@@ -1233,28 +1233,28 @@ msgid "Save configuration"
 msgstr "Yapılandırmayı kaydet"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "Torrent Oluşturma Dosya Filtrelemesi"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "Silme için filtre işaretle"
 
 msgid "Name"
 msgstr "Ad"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "Filtre Kalibi"
 
 msgid "Starts With"
-msgstr ""
+msgstr "Başlarla"
 
 msgid "Contains"
-msgstr ""
+msgstr "İçerir"
 
 msgid "Ends With"
-msgstr ""
+msgstr "Bitirir"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "Varsayılan olarak etkin"
 
 msgid "Add"
 msgstr "Ekle"
@@ -1272,7 +1272,7 @@ msgid "Mark tracker for deletion"
 msgstr "İzleyiciyi silinmek üzere işaretle"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "Magnet ekleyemem: Versiyon 2 magnet bağlantıları desteklenmiyor"
 
 #, java-format
 msgid "Invalid magnet URL {0}"

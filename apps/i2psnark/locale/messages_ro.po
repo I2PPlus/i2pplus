@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "Fișierele noi nu vor putea fi citite public"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "Opriți toate torrentele înainte de a schimba directorul de date"
 
 msgid "Data directory must be an absolute path"
 msgstr "Directorul de date trebuie să fie o cale absolută"
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "Descărcarea rulează deja: {0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - fișierul torrent există deja"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "Pornirea torrentului {0}"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "Limita de bandă descărcare este de {0} KBps"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -364,11 +364,11 @@ msgstr "Limita lățimii de bandă de încărcare este de {0} KBps până la max
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Stocare: În prezent sunt disponibile {0}MB pentru descărcări pe partea de date configurată"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "Avertisment - Doar {0}MB sunt disponibile pentru descărcări pe partea de date configurată"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +384,10 @@ msgid "Starting torrent: {0}"
 msgstr "Se pornește torrent: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "Nu se poate încărca configurația filtrului de fișiere pentru crearea torrentului: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "Nu se poate salva configurația filtrului de fișiere pentru crearea torrentului: "
 
 msgid "Torrent not found"
 msgstr "Torrent nu a fost găsit"
@@ -792,11 +792,11 @@ msgstr "Eroare - Nu se pot amesteca trackere private și publice într-un torren
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr " fișiere sau foldere au fost excluse din \"{0}\" din cauza regulilor de filtrare."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "Următoarele fișiere sau foldere au fost excluse din \"{0}\", conform regulilor de filtrare: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -839,16 +839,16 @@ msgid "Restored default trackers"
 msgstr "Restabiliți la setările de bază trackerele"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "Salvare Configurație Filtru"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "Adaugă Filtru Fișier"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "Introduceți un nume valid și un model de filtru"
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "S-au restaurat filtrele implicite pentru crearea torrentelor"
 
 msgid "Checking"
 msgstr "Se verifică"
@@ -945,7 +945,7 @@ msgid "Destination (identity) of peer"
 msgstr "Destinația (identitatea) semenului"
 
 msgid "Version"
-msgstr ""
+msgstr "Versiune"
 
 msgid "seconds"
 msgstr "secunde"
@@ -1012,10 +1012,10 @@ msgid "Create torrent"
 msgstr "Creează un torrent"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "Excluderea fișierelor din torrent dacă acestea se află în folderul torrent"
 
 msgid "Content Filters"
-msgstr ""
+msgstr "Filtre Conținut"
 
 msgid "Trackers"
 msgstr "Trackere"
@@ -1148,10 +1148,10 @@ msgid "Half available bandwidth recommended."
 msgstr "Jumătate de lățime de bandă disponibilă este recomandată."
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "Limită Bandă Largă"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "Bandă largă maximă alocată pentru descărcare"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "Lățime maximă de bandă alocată pentru încărcare"
@@ -1238,28 +1238,28 @@ msgid "Save configuration"
 msgstr "Salvare configurări"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "Filtrare Fișiere Creare Torrent"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "Marchează filtrul pentru ștergere"
 
 msgid "Name"
 msgstr "Nume"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "Model Filtru"
 
 msgid "Starts With"
-msgstr ""
+msgstr "Începe cu"
 
 msgid "Contains"
-msgstr ""
+msgstr "Conține"
 
 msgid "Ends With"
-msgstr ""
+msgstr "Se termină cu"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "Activat implicit"
 
 msgid "Add"
 msgstr "Adaugă"
@@ -1277,7 +1277,7 @@ msgid "Mark tracker for deletion"
 msgstr "Marcați trackerul pentru ștergere"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "Nu se poate adăuga magnet: Linkurile magnet V2 nu sunt susținute"
 
 #, java-format
 msgid "Invalid magnet URL {0}"

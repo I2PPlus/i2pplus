@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "새 파일들이 공개적으로 읽기가능 설정되지 않습니다"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "데이터 디렉토리를 변경하기 전에 모든 토렌트를 중지하세요."
 
 msgid "Data directory must be an absolute path"
 msgstr "데이터 디렉토리는 반드시 절대경로로 설정되어야 합니다."
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "이미 다운로드 중입니다: {0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - 토렌트 파일이 이미 존재합니다."
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "토렌트 시작: {0}"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "다운로드 대역폭 제한은 {0} KBps입니다"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -364,11 +364,11 @@ msgstr "업로드 대역폭 제한은 최대 {1}개의 동시 피어에 대해 {
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "저장소: 현재 구성된 데이터 파티션에서 {0}MB의 다운로드 용량이 있습니다"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "경고 - 구성된 데이터 파티션에서 다운로드 가능한 용량은 오직 {0}MB 입니다"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +384,10 @@ msgid "Starting torrent: {0}"
 msgstr "토렌트 시작: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "토렌트 생성 파일 필터 설정을 로드할 수 없습니다: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "토렌트 생성 파일 필터 설정을 저장할 수 없습니다: "
 
 msgid "Torrent not found"
 msgstr "토렌트를 찾을 수 없음"
@@ -786,11 +786,11 @@ msgstr "오류 - 사설 트래커와 공개 트래커를 함께 가질 수 없�
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr "\"{0}\"에서 {0}개의 파일이나 폴더가 필터 규칙으로 제외되었습니다."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "\"{0}\"에서 다음 파일이나 폴더가 필터 규칙으로 제외되었습니다: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -833,16 +833,16 @@ msgid "Restored default trackers"
 msgstr "기존 트래커로"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "필터 설정 저장"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "파일 필터 추가"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "유효한 이름과 필터 패턴을 입력하세요."
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "기본 토렌트 생성 필터 복원"
 
 msgid "Checking"
 msgstr "확인중"
@@ -926,7 +926,7 @@ msgid "Delete"
 msgstr "삭제"
 
 msgid "Delete the .torrent file and the associated data files"
-msgstr "Torrent 파일 및 관련 데이터 파일을 삭제합니다."
+msgstr "Torrent 파일 및 관련 데이터 파일을 삭제합니다"
 
 msgid "Peer attached to swarm"
 msgstr "떼에 연결된 피어"
@@ -935,7 +935,7 @@ msgid "Destination (identity) of peer"
 msgstr "피어의 대상(ID)"
 
 msgid "Version"
-msgstr ""
+msgstr "버전"
 
 msgid "seconds"
 msgstr "초"
@@ -1002,10 +1002,10 @@ msgid "Create torrent"
 msgstr "토렌트 만들기"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "토렌트 폴더에 있는 파일을 토렌트에서 제외합니다."
 
 msgid "Content Filters"
-msgstr ""
+msgstr "콘텐츠 필터"
 
 msgid "Trackers"
 msgstr "트래커"
@@ -1138,10 +1138,10 @@ msgid "Half available bandwidth recommended."
 msgstr "대역폭 절반값을 추천합니다."
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "대역폭 제한"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "다운로드에 할당된 최대 대역폭"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "업로드에 할당된 최대 대역폭"
@@ -1228,28 +1228,28 @@ msgid "Save configuration"
 msgstr "설정 저장"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "토렌트 생성 파일 필터링"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "삭제를 위한 필터 마킹"
 
 msgid "Name"
 msgstr "이름"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "필터 패턴"
 
 msgid "Starts With"
-msgstr ""
+msgstr "시작은"
 
 msgid "Contains"
-msgstr ""
+msgstr "포함"
 
 msgid "Ends With"
-msgstr ""
+msgstr "종료는"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "기본적으로 활성화됨"
 
 msgid "Add"
 msgstr "추가"
@@ -1267,7 +1267,7 @@ msgid "Mark tracker for deletion"
 msgstr "추적기를 삭제용으로 표시"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "마그넷 추가 불가: 버전 2 마그넷 링크는 지원되지 않습니다"
 
 #, java-format
 msgid "Invalid magnet URL {0}"
@@ -1315,7 +1315,7 @@ msgid "Skipped"
 msgstr "스킵된"
 
 msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
-msgstr "I2P 추적기만 사용됩니다."
+msgstr "I2P 추적기만 사용됩니다"
 
 msgid "Tracker"
 msgstr "트래커"

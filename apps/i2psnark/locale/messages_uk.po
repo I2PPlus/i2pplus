@@ -47,7 +47,7 @@ msgstr "Обмеження збільшення BW змінено на {0}KBps"
 
 #, java-format
 msgid "Minimum up bandwidth limit is {0}KBps"
-msgstr "мінімальна пропускна здатність становить {0}KBps"
+msgstr "Mінімальна пропускна здатність становить {0}KBps"
 
 #, java-format
 msgid "Startup delay changed to {0}"
@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "Нові файли не будуть доступні для читання публічно"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "Зупиніть всі торенти перед зміною каталогу даних"
 
 msgid "Data directory must be an absolute path"
 msgstr "Директорія даних повинна бути абсолютним шляхом"
@@ -160,7 +160,7 @@ msgid "Comments name set to {0}."
 msgstr "Назву коментаря встановлено на {0}."
 
 msgid "Collapsible panels enabled."
-msgstr "увімкнено складні панелі."
+msgstr "Yвімкнено складні панелі."
 
 msgid "Collapsible panels disabled."
 msgstr "Збірні панелі вимкнено."
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "Завантаження вже запущено: {0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - Файл торента вже існує"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "Запуск торрента {0}"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "Ліміт завантаження швидкості - {0} KBps"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -364,11 +364,11 @@ msgstr "Обмеження пропускної здатності завант�
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Зберігання: наразі доступно {0}МБ для завантажень на конфігурованому розділі даних"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "Попередження - доступно лише {0}МБ для завантажень на конфігурованому розділі даних"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +384,10 @@ msgid "Starting torrent: {0}"
 msgstr "Запуск торрента: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "Неможливо завантажити конфігурацію фільтру файлів для створення торенту: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "Неможливо зберегти конфігурацію фільтру файлів для створення торенту: "
 
 msgid "Torrent not found"
 msgstr "Торрент не знайдено"
@@ -792,11 +792,11 @@ msgstr "Помилка - Неможливо поєднати приватні т
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr " файлів або каталогів було виключено з \"{0}\" через правила фільтрації."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "Наступні файли або каталоги були виключені з \"{0}\", відповідно до правил фільтрації: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -839,16 +839,16 @@ msgid "Restored default trackers"
 msgstr "Відновлено стандартні трекери"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "Зберегти конфігурацію фільтру"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "Додати фільтр файлів"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "Введіть дійсне ім'я та шаблон фільтру"
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "Відновлено за замовчуванням фільтри створення торенту"
 
 msgid "Checking"
 msgstr "Перевірка"
@@ -945,7 +945,7 @@ msgid "Destination (identity) of peer"
 msgstr "Призначення (ідентифікація) партнера"
 
 msgid "Version"
-msgstr ""
+msgstr "Версія"
 
 msgid "seconds"
 msgstr "секунди"
@@ -1012,10 +1012,10 @@ msgid "Create torrent"
 msgstr "Створити торрент"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "Виключити файли з торенту, якщо вони знаходяться в каталозі торенту"
 
 msgid "Content Filters"
-msgstr ""
+msgstr "Фільтри вмісту"
 
 msgid "Trackers"
 msgstr "Трекери"
@@ -1148,10 +1148,10 @@ msgid "Half available bandwidth recommended."
 msgstr "Рекомендована половина доступної смуги пропускання."
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "Ліміт швидкості"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "Максимальний обсяг пропускної здатності, виділений для завантаження"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "Максимальна пропускна здатність, виділена для завантаження"
@@ -1238,28 +1238,28 @@ msgid "Save configuration"
 msgstr "Зберегти налаштування"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "Фільтрація файлів при створенні торенту"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "Позначити фільтр для видалення"
 
 msgid "Name"
 msgstr "Назва"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "Шаблон фільтру"
 
 msgid "Starts With"
-msgstr ""
+msgstr "Починається з"
 
 msgid "Contains"
-msgstr ""
+msgstr "Містить"
 
 msgid "Ends With"
-msgstr ""
+msgstr "Закінчується на"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "Активовано за замовчуванням"
 
 msgid "Add"
 msgstr "Додати"
@@ -1277,7 +1277,7 @@ msgid "Mark tracker for deletion"
 msgstr "Позначити трекер для видалення"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "Неможливо додати магнет-посилання: підтримка магнет-посилань версії 2 відсутня"
 
 #, java-format
 msgid "Invalid magnet URL {0}"
@@ -1441,7 +1441,7 @@ msgid "Author name required to rate or comment"
 msgstr "для оцінки чи коментаря потрібно вказати ім’я автора"
 
 msgid "Your author name for published comments and ratings"
-msgstr "ім’я вашого автора для опублікованих коментарів і оцінок"
+msgstr "Iм’я вашого автора для опублікованих коментарів і оцінок"
 
 #, java-format
 msgid "1 star"

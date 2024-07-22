@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "Nieuwe bestanden zullen niet publiek bereikbaar zijn"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "Stop alle torrents voordat u de gegevensmap verandert"
 
 msgid "Data directory must be an absolute path"
 msgstr "Data-directory moet een absoluut pad zijn"
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "Download is al bezig: {0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - Torrentbestand bestaat al"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "Torrent opstarten {0}"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "Downloadbandbreedte limiet is {0} KBps"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -364,11 +364,11 @@ msgstr "De uploadbandbreedtelimiet is {0} KBps tot maximaal {1} ​​gelijktijd
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Opslag: Momenteel {0}MB beschikbaar voor downloads op geconfigureerde gegevenspartitie"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "Waarschuwing - Alleen {0}MB beschikbaar voor downloads op geconfigureerde gegevenspartitie"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +384,10 @@ msgid "Starting torrent: {0}"
 msgstr "Torrent starten: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "Kon de configuratie van het torrent-aanmaakbestandsfilter niet laden: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "Kon de configuratie van het torrent-aanmaakbestandsfilter niet opslaan: "
 
 msgid "Torrent not found"
 msgstr "Torrent niet gevonden"
@@ -789,11 +789,11 @@ msgstr "Fout - Kan privé en publieke trackers in een torrent niet mengen"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr " bestanden of mappen werden uitgesloten van \"{0}\" vanwege filterregels."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "De volgende bestanden of mappen werden uitgesloten van \"{0}\" vanwege filterregels: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -836,16 +836,16 @@ msgid "Restored default trackers"
 msgstr "Standaardtrackers hersteld"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "Filterconfiguratie opslaan"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "Bestandsfilter toevoegen"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "Voer een geldige naam en filterpatroon in"
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "Standaardfilters voor het maken van torrents hersteld"
 
 msgid "Checking"
 msgstr "Bezig met controleren"
@@ -940,7 +940,7 @@ msgid "Destination (identity) of peer"
 msgstr "Bestemming (identiteit) van peer"
 
 msgid "Version"
-msgstr ""
+msgstr "Versie"
 
 msgid "seconds"
 msgstr "seconden"
@@ -1007,10 +1007,10 @@ msgid "Create torrent"
 msgstr "Creëer torrent"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "Bestanden uitsluiten van de torrent als ze zich bevinden in de torrent-map"
 
 msgid "Content Filters"
-msgstr ""
+msgstr "Inhoudsfilters"
 
 msgid "Trackers"
 msgstr "Trackers"
@@ -1143,10 +1143,10 @@ msgid "Half available bandwidth recommended."
 msgstr "Helft van beschikbare bandbreedte aanbevolen."
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "Bandbreedtelimiet"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "Maximale bandbreedte toegewezen aan downloads"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "Maximale bandbreedte toegewezen voor uploaden"
@@ -1233,28 +1233,28 @@ msgid "Save configuration"
 msgstr "Configuratie opslaan"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "Bestandsfiltering bij het maken van torrents"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "Filter markeren voor verwijdering"
 
 msgid "Name"
 msgstr "Naam"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "Filterpatroon"
 
 msgid "Starts With"
-msgstr ""
+msgstr "Beginnt met"
 
 msgid "Contains"
-msgstr ""
+msgstr "Bevat"
 
 msgid "Ends With"
-msgstr ""
+msgstr "Eindigt met"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "Standaard ingeschakeld"
 
 msgid "Add"
 msgstr "Toevoegen"
@@ -1272,7 +1272,7 @@ msgid "Mark tracker for deletion"
 msgstr "Markeer tracker voor verwijdering"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "Kan magnet niet toevoegen: Ondersteuning voor Magnet-links versie 2 ontbreekt"
 
 #, java-format
 msgid "Invalid magnet URL {0}"

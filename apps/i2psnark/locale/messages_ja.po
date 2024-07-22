@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "新しいファイルは一般公開されません"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "データディレクトリを変更する前にすべてのトロントを停止してください"
 
 msgid "Data directory must be an absolute path"
 msgstr "フォルダは絶対パスでなければいけません"
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "すでにダウンロードされています {0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - トロントファイルが 이미存在しています"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "トレント {0} の起動"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "ダウンロード帯域制限は {0} KBpsです"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -364,11 +364,11 @@ msgstr "アップロード帯域幅制限は、最大 {1} 個の同時ピアに�
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "ストレージ: 設定されたデータパーティションで現在 {0}MB のダウンロード容量があります"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "警告 - 設定されたデータパーティション上でダウンロードができる容量は {0}MBだけです"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +384,10 @@ msgid "Starting torrent: {0}"
 msgstr "トレントの開始: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "トロント作成ファイルフィルターの設定を読み込むことができません: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "トロント作成ファイルフィルターの設定を保存することができません: "
 
 msgid "Torrent not found"
 msgstr "トレントが見つかりません"
@@ -786,11 +786,11 @@ msgstr "エラー - トレント内でプライベート トラッカーとパ�
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr " \"{0}\"から {0} 個のファイルやフォルダーがフィルター規則により除外されました。"
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "\"{0}\"から以下のファイルやフォルダーがフィルター規則により除外されました: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -833,16 +833,16 @@ msgid "Restored default trackers"
 msgstr "デフォルトのトラッカーを復元しました"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "フィルター設定の保存"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "ファイルフィルターの追加"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "有効な名前とフィルターパターンを入力してください"
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "標準のトロント作成フィルターを復元しました"
 
 msgid "Checking"
 msgstr "チェック中"
@@ -935,7 +935,7 @@ msgid "Destination (identity) of peer"
 msgstr "ピアの宛先(アイデンティティ)"
 
 msgid "Version"
-msgstr ""
+msgstr "バージョン"
 
 msgid "seconds"
 msgstr "秒"
@@ -1002,10 +1002,10 @@ msgid "Create torrent"
 msgstr "トレントの作成"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "トロントフォルダー内にあるファイルをトロントから除外する"
 
 msgid "Content Filters"
-msgstr ""
+msgstr "コンテンツフィルター"
 
 msgid "Trackers"
 msgstr "トラッカー"
@@ -1138,10 +1138,10 @@ msgid "Half available bandwidth recommended."
 msgstr "利用可能な帯域幅の半分を推奨します。"
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "帯域制限"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "ダウンロードに割り当てられる最大帯域幅"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "アップロードに割り当てられる最大帯域幅"
@@ -1228,28 +1228,28 @@ msgid "Save configuration"
 msgstr "設定の保存"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "トロント作成時のファイルフィルタリング"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "削除用にフィルターをマークする"
 
 msgid "Name"
 msgstr "名前"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "フィルターパターン"
 
 msgid "Starts With"
-msgstr ""
+msgstr "始めは"
 
 msgid "Contains"
-msgstr ""
+msgstr "含む"
 
 msgid "Ends With"
-msgstr ""
+msgstr "終わりは"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "初期設定で有効"
 
 msgid "Add"
 msgstr "追加"
@@ -1267,7 +1267,7 @@ msgid "Mark tracker for deletion"
 msgstr "トラッカーに削除のマークを付ける"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "マグネットリンクを追加できません: バージョン2のマグネットリンクはサポートされていません"
 
 #, java-format
 msgid "Invalid magnet URL {0}"

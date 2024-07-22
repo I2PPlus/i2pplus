@@ -71,7 +71,7 @@ msgid "New files will not be publicly readable"
 msgstr "Các tệp mới sẽ không thể đọc được công khai"
 
 msgid "Stop all torrents before changing data directory"
-msgstr ""
+msgstr "Dừng tất cả torrent trước khi thay đổi thư mục dữ liệu"
 
 msgid "Data directory must be an absolute path"
 msgstr "Thư mục dữ liệu phải là đường dẫn tuyệt đối"
@@ -278,7 +278,7 @@ msgid "Download already running: {0}"
 msgstr "Tải xuống đã chạy: {0}"
 
 msgid " - torrent file already exists"
-msgstr ""
+msgstr " - Tập tin torrent đã tồn tại"
 
 #, java-format
 msgid "Failed to copy torrent file to {0}"
@@ -348,7 +348,7 @@ msgstr "Đang khởi động torrent {0}"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KBps"
-msgstr ""
+msgstr "Hạn chế tốc độ tải xuống là {0} KBps"
 
 #, java-format
 msgid "Up bandwidth limit is {0} KBps"
@@ -364,11 +364,11 @@ msgstr "Giới hạn băng thông tải lên là {0} KBps cho tối đa {1} thi�
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Lưu trữ: Hiện tại có sẵn {0}MB cho tải xuống trên phân vùng dữ liệu được cấu hình"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
+msgstr "Cảnh báo - Chỉ có {0}MB sẵn dùng cho tải xuống trên phân vùng dữ liệu được cấu hình"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -384,10 +384,10 @@ msgid "Starting torrent: {0}"
 msgstr "Đang bắt đầu torrent: {0}"
 
 msgid "Unable to load torrent create file filter config: "
-msgstr ""
+msgstr "Không thể tải cấu hình bộ lọc tập tin tạo torrent: "
 
 msgid "Unable to save torrent create file filter config: "
-msgstr ""
+msgstr "Không thể lưu cấu hình bộ lọc tập tin tạo torrent: "
 
 msgid "Torrent not found"
 msgstr "Không tìm thấy torrent"
@@ -786,11 +786,11 @@ msgstr "Lỗi - Không thể kết hợp trình theo dõi riêng tư và công k
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
+msgstr " tập tin hoặc thư mục đã bị loại bỏ khỏi \"{0}\" vì quy tắc lọc."
 
 #, java-format
 msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
-msgstr ""
+msgstr "Các tập tin hoặc thư mục sau đã bị loại bỏ khỏi \"{0}\", theo quy tắc lọc: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
@@ -833,16 +833,16 @@ msgid "Restored default trackers"
 msgstr "Khôi phục trình theo dõi mặc định"
 
 msgid "Save Filter Configuration"
-msgstr ""
+msgstr "Lưu cấu hình bộ lọc"
 
 msgid "Add File Filter"
-msgstr ""
+msgstr "Thêm Bộ lọc Tập tin"
 
 msgid "Enter valid name and filter pattern"
-msgstr ""
+msgstr "Nhập tên hợp lệ và mẫu bộ lọc"
 
 msgid "Restored default torrent create filters"
-msgstr ""
+msgstr "Khôi phục bộ lọc tạo torrent mặc định"
 
 msgid "Checking"
 msgstr "Đang kiểm tra"
@@ -935,7 +935,7 @@ msgid "Destination (identity) of peer"
 msgstr "Đích (danh tính) của ngang hàng"
 
 msgid "Version"
-msgstr ""
+msgstr "Phiên bản"
 
 msgid "seconds"
 msgstr "giây"
@@ -1002,10 +1002,10 @@ msgid "Create torrent"
 msgstr "Tạo torrent"
 
 msgid "Exclude files from the torrent if they reside in the torrent folder"
-msgstr ""
+msgstr "Loại bỏ tập tin khỏi torrent nếu chúng nằm trong thư mục torrent"
 
 msgid "Content Filters"
-msgstr ""
+msgstr "Bộ lọc Nội dung"
 
 msgid "Trackers"
 msgstr "Máy theo dõi"
@@ -1138,10 +1138,10 @@ msgid "Half available bandwidth recommended."
 msgstr "Khuyến nghị một nửa băng thông khả dụng."
 
 msgid "Bandwidth limit"
-msgstr ""
+msgstr "Hạn chế băng thông"
 
 msgid "Maximum bandwidth allocated for downloading"
-msgstr ""
+msgstr "Băng thông tối đa được cấp cho tải xuống"
 
 msgid "Maximum bandwidth allocated for uploading"
 msgstr "Băng thông tối đa được phân bổ để tải lên"
@@ -1228,28 +1228,28 @@ msgid "Save configuration"
 msgstr "Lưu cấu hình"
 
 msgid "Torrent Create File Filtering"
-msgstr ""
+msgstr "Bộ lọc Tập tin Tạo Torrent"
 
 msgid "Mark filter for deletion"
-msgstr ""
+msgstr "Đánh dấu bộ lọc để xóa"
 
 msgid "Name"
 msgstr "Tên"
 
 msgid "Filter Pattern"
-msgstr ""
+msgstr "Mẫu Bộ lọc"
 
 msgid "Starts With"
-msgstr ""
+msgstr "Bắt đầu với"
 
 msgid "Contains"
-msgstr ""
+msgstr "Chứa"
 
 msgid "Ends With"
-msgstr ""
+msgstr "Kết thúc với"
 
 msgid "Enabled by Default"
-msgstr ""
+msgstr "Bật theo mặc định"
 
 msgid "Add"
 msgstr "Thêm vào"
@@ -1267,7 +1267,7 @@ msgid "Mark tracker for deletion"
 msgstr "Đánh dấu theo dõi để xóa"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
+msgstr "Không thể thêm magnet: Liên kết磁 v2 không được hỗ trợ"
 
 #, java-format
 msgid "Invalid magnet URL {0}"
