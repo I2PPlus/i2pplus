@@ -759,7 +759,7 @@ msgid "Now"
 msgstr "Most"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Router újraindítva"
 
 msgid "none"
 msgstr "semmi"
@@ -1801,7 +1801,7 @@ msgid "{0} for {1}"
 msgstr "{0} {1} számára."
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Nincs mit megjeleníteni - nem adták meg az állapotot!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1847,10 +1847,10 @@ msgid "plot events"
 msgstr "ábrázolt események"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Legendát elrejt"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Legendát mutat"
 
 msgid "Configure Graph Display"
 msgstr "Ábra Kijelzés Beállítása"
@@ -2195,7 +2195,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Tor-központú keresőmotor"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Pinterest képesítő motor"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Clearnet BitTorrent DHT kereső"
@@ -2566,13 +2566,13 @@ msgid "Congestion Cap"
 msgstr "Duguláskorlát"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Közepes"
 
 msgid "Severe"
-msgstr ""
+msgstr "Súlyos"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Nincsenek átjáró alagutak"
 
 msgid "Available CPU Cores"
 msgstr "Rendelkezésre álló CPU magok"
@@ -2694,7 +2694,7 @@ msgid "File location"
 msgstr "Fájl helye"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Frissítési időköz (mp)"
 
 msgid "File not found"
 msgstr "Fájl nem található"
@@ -2740,7 +2740,7 @@ msgid "Sybil Analysis"
 msgstr "Sybil Elemzés"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Router térkép"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Soha ne tegye fel az útválasztó identitását, mivel felhasználható a helyének azonosításához."
@@ -2874,7 +2874,7 @@ msgid "Transports"
 msgstr "Átvitel"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Ismeretlen"
 
 msgid "Initializing"
 msgstr "Inicializálás"
@@ -3880,7 +3880,7 @@ msgid "Memory"
 msgstr "Memória"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Floodfill engedélyezve"
 
 msgid "See more information on the wiki"
 msgstr "További információ a wikiről"
@@ -4045,10 +4045,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "Az útválasztó vagy a hálózat teljesítménye akadályozza a részt vevő alagutak építését"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "A router jelenleg a konfigurált maximális számú átjáró alagutat szolgáltatja"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "A router jelenleg a konfigurált maximális megosztott sávszélességet használja"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "A router készen áll a részt vevő alagutak építésére"
@@ -4109,13 +4109,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "Üzenetküldő"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "Szerver"
@@ -4231,7 +4231,7 @@ msgid "Review current bans"
 msgstr "A jelenlegi tilalmak áttekintése"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Sybil blokklistájának törlése"
 
 msgid "Floodfill Summary"
 msgstr "Árvízi kitöltés összefoglalása"
@@ -5653,7 +5653,7 @@ msgid "Event Log"
 msgstr "Eseménynapló"
 
 msgid "graph"
-msgstr ""
+msgstr "Grafikon"
 
 msgid "Performance Graph"
 msgstr "Teljesítménygrafikon"
@@ -5791,10 +5791,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "Ha az érték igazra van állítva, a router az újraindítás során megváltoztatja az azonosítását és az UDP portját, majd törli a kulcsot a router.config fájlból, hogy további változtatásokat megakadályozzon. [Alapértelmezett érték: hamis]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "Amikor hamisra van állítva, a router nem korlátozza a többi router által küldött alagút létrehozási kérelmeket, és óvatosan kell használni. [Alapértelmezés szerint igaz, újraindítás szükséges]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "Amikor hamisra van állítva, a router nem blokkolja az alacsonyabb sebességű vagy elérhetetlen, régebbi verziójú routerektől érkező alagút létrehozási kérelmeket. [Alapértelmezés szerint igaz, újraindítás szükséges]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Amikor konfigurálva van, ez meghatározza a router által egyszerre felépíthető alagutak általános korlátát. Alapértelmezés szerint a router az átlagos felépítési időt és a jelenlegi kimenő sávszélességet használja az optimális felépítési sebesség meghatározásához. [Újraindítás szükséges]"
@@ -5905,7 +5905,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Ez a beállítás, amikor igazra van állítva, megjeleníti az érdekes oldalak linkeit a <a href=/sitemap>webhelytérképen</a>. [Az alapértelmezett érték hamis]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Ez a beállítás lehetővé teszi egyéni szövegprefix beállítását a router konzol lapjainak címéhez, ami akkor hasznos lehet, ha több konzolt is nyitottál böngészőfülekben, és egyszerű módot szeretnél találni a különbségek jelölésére."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Ez a beállítás lehetővé teszi alternatív NTP szerverek beállítását, amelyek szükségesek ahhoz, hogy a router pontos időtartamot tartsa. [Az alapértelmezett érték: 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -7343,7 +7343,7 @@ msgid "Configure router logging options"
 msgstr "Az útválasztó naplózási beállításainak konfigurálása"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Router naplófájl kimenetének szűrése"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Szolgáltatás (Wrapper) Napló"
@@ -7352,10 +7352,10 @@ msgid "network database"
 msgstr "hálózati adatbázis"
 
 msgid "network database router map"
-msgstr ""
+msgstr "Hálózati adatbázis router térképe"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Hálózati adatbázis router térképe"
 
 msgid "News"
 msgstr "Hírek"
@@ -7590,10 +7590,10 @@ msgid "Local Tunnels"
 msgstr "Helyi Alagutak"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Alagútazonosítók váltása"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Alagutak váltása"
 
 msgid "Peer Profile"
 msgstr "Társ Profil"

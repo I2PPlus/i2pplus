@@ -756,7 +756,7 @@ msgid "Now"
 msgstr "Sekarang"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Router telah dimulai ulang"
 
 msgid "none"
 msgstr "Tidak ada"
@@ -1793,7 +1793,7 @@ msgid "{0} for {1}"
 msgstr "{0} untuk {1}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Tidak ada yang ditampilkan - tidak ada statistik yang ditentukan!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1839,10 +1839,10 @@ msgid "plot events"
 msgstr "Event plot"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Sembunyikan Legenda"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Tampilkan Legenda"
 
 msgid "Configure Graph Display"
 msgstr "Atur Tampilan Grafik"
@@ -2187,7 +2187,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Mesin Pencari yang berfokus pada Tor"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Mesin Pencarian Gambar Pinterest"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Mesin pencari Clearnet BitTorrent DHT"
@@ -2558,13 +2558,13 @@ msgid "Congestion Cap"
 msgstr "Tutup Kemacetan"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Moderat"
 
 msgid "Severe"
-msgstr ""
+msgstr "Parah"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Tidak ada terowongan transit"
 
 msgid "Available CPU Cores"
 msgstr "Inti CPU yang Tersedia"
@@ -2686,7 +2686,7 @@ msgid "File location"
 msgstr "Lokasi file"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Interval pembaruan (detik)"
 
 msgid "File not found"
 msgstr "File tidak ditemukan"
@@ -2732,7 +2732,7 @@ msgid "Sybil Analysis"
 msgstr "Analisis Sybil"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Peta Router"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Jangan pernah mengungkapkan identitas router Anda kepada siapa pun, karena identitas tersebut tertaut secara unik ke alamat IP Anda di database jaringan."
@@ -2866,7 +2866,7 @@ msgid "Transports"
 msgstr "Transport"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Tidak Diketahui"
 
 msgid "Initializing"
 msgstr "Inisialisasi"
@@ -3862,7 +3862,7 @@ msgid "Memory"
 msgstr "Memori"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Floodfill diaktifkan"
 
 msgid "See more information on the wiki"
 msgstr "Lihat informasi lebih lanjut di wiki"
@@ -4027,10 +4027,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "Kinerja router atau jaringan menghambat pembangunan terowongan yang berpartisipasi"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "Router saat ini menyediakan jumlah maksimal terowongan transit yang dikonfigurasi"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "Router saat ini menggunakan bandwith bagian terbesar yang dikonfigurasi"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "Router siap membangun terowongan yang berpartisipasi"
@@ -4091,13 +4091,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark "
 
 msgid "Messenger"
-msgstr ""
+msgstr "Messenger"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "Server"
@@ -4213,7 +4213,7 @@ msgid "Review current bans"
 msgstr "Tinjau larangan saat ini"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Hapus Daftar Blokir Sybil"
 
 msgid "Floodfill Summary"
 msgstr "Ringkasan Penimbunan Banjir"
@@ -5635,7 +5635,7 @@ msgid "Event Log"
 msgstr "Catatan Peristiwa"
 
 msgid "graph"
-msgstr ""
+msgstr "Grafik"
 
 msgid "Performance Graph"
 msgstr "Grafik Kinerja"
@@ -5773,10 +5773,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "Ketika diatur menjadi true, router akan mengubah identitas dan port UDP saat router dijalankan ulang dan kemudian menghapus kunci dari router.config untuk mencegah perubahan lebih lanjut. [Default adalah false]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "Ketika diatur menjadi salah, router tidak akan membatasi permintaan pembuatan terowongan dari router lain, dan harus digunakan dengan hati-hati. [Default adalah benar, perlu restrukturisasi]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "Ketika diatur menjadi salah, router tidak akan menghentikan permintaan pembuatan terowongan dari router yang lebih lambat atau tidak dapat dijangkau yang menjalankan versi lama. [Default adalah benar, perlu restrukturisasi]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Ketika dikonfigurasi, ini menetapkan batasan ketat untuk jumlah terowongan yang diizinkan router untuk membangun secara bersamaan. Sebagai default router menggunakan waktu rata-rata pembangunan dan jalur keluar saat ini untuk menentukan laju pembangunan optimum. [Restart diperlukan]"
@@ -5887,7 +5887,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Pengaturan ini, ketika diatur menjadi true, akan menampilkan tautan <i>Situs Penting</i> pada <a href=/sitemap>peta situs</a>. [Default adalah false]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Pengaturan ini memungkinkan pra-penulisan teks kustom untuk judul halaman pada halaman konsol router, yang bisa berguna jika Anda memiliki beberapa konsol terbuka dalam tab browser dan ingin metode mudah untuk membedakannya."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Pengaturan ini mengijinkan konfigurasi server NTP alternatif yang diperlukan untuk memastikan bahwa router Anda mempertahankan waktu jam yang akurat. [Defaultnya adalah 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -7325,7 +7325,7 @@ msgid "Configure router logging options"
 msgstr "Konfigurasi pilihan router log"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Filtrasi keluaran log router"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Service (Wrapper) Logs "
@@ -7334,10 +7334,10 @@ msgid "network database"
 msgstr "database jaringan"
 
 msgid "network database router map"
-msgstr ""
+msgstr "Peta router basis data jaringan"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Peta Router Basis Data Jaringan"
 
 msgid "News"
 msgstr "Berita"
@@ -7572,10 +7572,10 @@ msgid "Local Tunnels"
 msgstr "Local Tunnel"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Beralih ID Terowongan"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Beralih Terowongan"
 
 msgid "Peer Profile"
 msgstr "Peer Profile "

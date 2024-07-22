@@ -759,7 +759,7 @@ msgid "Now"
 msgstr "Nyt"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Reititin uudelleenkäynnistettiin"
 
 msgid "none"
 msgstr "ei mitään"
@@ -1801,7 +1801,7 @@ msgid "{0} for {1}"
 msgstr "{0} {1}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Ei näyttää mitään - tilaa ei ole määritelty!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1847,10 +1847,10 @@ msgid "plot events"
 msgstr "juonen tapahtumat"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Piilota selite"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Näytä selite"
 
 msgid "Configure Graph Display"
 msgstr "Määritä kuvaajan näyttö"
@@ -2195,7 +2195,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Toriin keskittyvä hakukone"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Pinterestin kuva-hakuohjelma"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Clearnet BitTorrent DHT -hakukone"
@@ -2566,13 +2566,13 @@ msgid "Congestion Cap"
 msgstr "Ruuhkarajoitus"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Keskitaso"
 
 msgid "Severe"
-msgstr ""
+msgstr "vakava"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Ei siirtotunnelia"
 
 msgid "Available CPU Cores"
 msgstr "Saatavilla olevat CPU-ytimet"
@@ -2694,7 +2694,7 @@ msgid "File location"
 msgstr "Tiedoston sijainti"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Päivitysväli (sekuntina)"
 
 msgid "File not found"
 msgstr "Tiedostoa ei löydy"
@@ -2740,7 +2740,7 @@ msgid "Sybil Analysis"
 msgstr "Sybil -analyysi"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Reititin kartta"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Älä koskaan paljasta reitittimesi identiteettiäsi kenellekään, koska se on yksilöllisesti linkitetty IP-osoitteeseesi verkkotietokannassa."
@@ -2874,7 +2874,7 @@ msgid "Transports"
 msgstr "Siirrot"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Tuntematon"
 
 msgid "Initializing"
 msgstr "Alustus"
@@ -3880,7 +3880,7 @@ msgid "Memory"
 msgstr "Muisti"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Floodfill käytössä"
 
 msgid "See more information on the wiki"
 msgstr "Katso lisätietoja wikistä"
@@ -4045,10 +4045,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "Reitittimen tai verkon suorituskyky estää osallistuvien tunnelien rakentamisen"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "Reititin isännöi tällä hetkellä konfiguroituja maksimimäärää siirtotunnelia"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "Reititin käyttää tällä hetkellä konfiguroitua maksimijako-kaistanleveyttä"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "Reititin on valmis rakentamaan osallistuvia tunneleita"
@@ -4109,13 +4109,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "Messenger"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "Palvelin"
@@ -4231,7 +4231,7 @@ msgid "Review current bans"
 msgstr "Tarkista nykyiset kiellot"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Poista Sybil-suojalista"
 
 msgid "Floodfill Summary"
 msgstr "Floodfill yhteenveto"
@@ -5653,7 +5653,7 @@ msgid "Event Log"
 msgstr "Tapahtumaloki"
 
 msgid "graph"
-msgstr ""
+msgstr "Grafiikki"
 
 msgid "Performance Graph"
 msgstr "Suorituskykykaavio"
@@ -5791,10 +5791,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "Jos asetetaan todeksi, reititin vaihtaa identiteettinsä ja UDP-porttinsa, kun reititin käynnistyy uudelleen, ja poistaa sitten avaimen router.configista estääkseen muutokset. [Oletusarvo on epätosi]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "Kun asetetaan epätosi, reititin ei rajoita muita reittejä käyttävien tunnelien luontipyyntöjä ja sen käyttö vaatii varovaisuutta. [Oletusarvo on totta, tarvitsee uudelleenkäynnistys]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "Kun asetetaan epätosi, reititin ei estä tunnelien luomisen pyyntöjä hitaammilta tai saavuttamattomilta reitteiltä, joissa käytetään vanhempaa versiota. [Oletusarvo on totta, tarvitsee uudelleenkäynnistys]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Kun konfiguroidaan, tämä asettaa kovan rajan reitittimen luvan rakentaa tunnelit samanaikaisesti. Oletusarvoisesti reititin käyttää keskimääräistä rakennusaikaa ja nykyistä lähtevää kaistanleveyttä määrittääkseen optimaalisen rakennusnopeuden. [Vaaditaan uudelleenkäynnistys]"
@@ -5905,7 +5905,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Tämän asetuksen asettaminen todeksi näyttää <i>Kiinnostuksen kohteet</i> -linkit <a href=/sitemap>sivukartassa</a>. [Oletuksena false]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Tämä asetus sallii mukautetun tekstin etuliitteen asettamisen reititin valikon sivun otsikkoon, mikä voi olla hyödyllistä, kun useita konsolleja on auki selaimen välilehdillä ja haluat helpon menetelmän niiden erotteluun."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Tämä asetus mahdollistaa vaihtoehtoisten NTP-palvelinten määrittämisen, joita tarvitaan varmistamaan, että reititin ylläpitää tarkkaa kellonaikaa. [Oletuksena 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -7343,7 +7343,7 @@ msgid "Configure router logging options"
 msgstr "Määritä reitittimen lokiasetukset"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Suodata reititin lokitehdas"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Palvelus (Wrapper) lokit"
@@ -7352,10 +7352,10 @@ msgid "network database"
 msgstr "verkkotietokanta"
 
 msgid "network database router map"
-msgstr ""
+msgstr "Verkkotietokanta-reittikartta"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Verkkotietokanta-reittikartta"
 
 msgid "News"
 msgstr "Uutiset"
@@ -7590,10 +7590,10 @@ msgid "Local Tunnels"
 msgstr "Paikalliset tunnelit"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Käytä/loptaa tunneltunnisteita"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Käytä/loptaa tuneleja"
 
 msgid "Peer Profile"
 msgstr "Vertaisprofiili"

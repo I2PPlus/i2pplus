@@ -760,7 +760,7 @@ msgid "Now"
 msgstr "Ora"
 
 msgid "Router restarted"
-msgstr ""
+msgstr "Il router è stato riavviato"
 
 msgid "none"
 msgstr "nessuno"
@@ -1802,7 +1802,7 @@ msgid "{0} for {1}"
 msgstr "{0} per {1}"
 
 msgid "Nothing to display - no stat specified!"
-msgstr ""
+msgstr "Niente da mostrare - nessuna statistica specificata!"
 
 #, java-format
 msgid "ending {0} ago"
@@ -1848,10 +1848,10 @@ msgid "plot events"
 msgstr "disegna gli eventi come grafico"
 
 msgid "Hide Legend"
-msgstr ""
+msgstr "Nascondi legenda"
 
 msgid "Show Legend"
-msgstr ""
+msgstr "Mostra legenda"
 
 msgid "Configure Graph Display"
 msgstr "Configura la Visualizzazione del Grafico"
@@ -2196,7 +2196,7 @@ msgid "Tor-focused Search Engine"
 msgstr "Motore di ricerca incentrato su Tor"
 
 msgid "Pinterest Image Search Engine"
-msgstr ""
+msgstr "Motore di ricerca immagini Pinterest"
 
 msgid "Clearnet BitTorrent DHT search engine"
 msgstr "Motore di ricerca Clearnet BitTorrent DHT"
@@ -2567,13 +2567,13 @@ msgid "Congestion Cap"
 msgstr "Limite di congestione"
 
 msgid "Moderate"
-msgstr ""
+msgstr "Moderato"
 
 msgid "Severe"
-msgstr ""
+msgstr "Grave"
 
 msgid "No transit tunnels"
-msgstr ""
+msgstr "Nessun tunnel di transito"
 
 msgid "Available CPU Cores"
 msgstr "Core CPU disponibili"
@@ -2695,7 +2695,7 @@ msgid "File location"
 msgstr "Posizione file"
 
 msgid "Refresh interval (seconds)"
-msgstr ""
+msgstr "Intervallo di aggiornamento (secondi)"
 
 msgid "File not found"
 msgstr "File non trovato"
@@ -2741,7 +2741,7 @@ msgid "Sybil Analysis"
 msgstr "Analisi Sybil"
 
 msgid "Router Map"
-msgstr ""
+msgstr "Mappa del router"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
 msgstr "Non rivelare mai la tua identità del router a qualcuno, è collegata direttamente al tuo indirizzo IP nel database di rete."
@@ -2875,7 +2875,7 @@ msgid "Transports"
 msgstr "Trasporti"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Sconosciuto"
 
 msgid "Initializing"
 msgstr "Inizializzazione in corso"
@@ -3881,7 +3881,7 @@ msgid "Memory"
 msgstr "Memoria"
 
 msgid "Floodfill enabled"
-msgstr ""
+msgstr "Floodfill abilitato"
 
 msgid "See more information on the wiki"
 msgstr "Leggi più informazioni sulla wiki"
@@ -4046,10 +4046,10 @@ msgid "Router or network performance is impeding the building of transit tunnels
 msgstr "Le prestazioni del router o della rete stanno impedendo la costruzione di tunnel partecipanti"
 
 msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
+msgstr "Il router sta attualmente ospitando il numero massimo di tunnel di transito configurato"
 
 msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
+msgstr "Il router sta attualmente utilizzando la larghezza di banda di condivisione massima configurata"
 
 msgid "Router is ready to build participating tunnels"
 msgstr "Il router è pronto per costruire i tunnel partecipanti"
@@ -4110,13 +4110,13 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "Messenger"
-msgstr ""
+msgstr "Messaggero"
 
 msgid "i2pchat"
-msgstr ""
+msgstr "i2pchat"
 
 msgid "I2PChat"
-msgstr ""
+msgstr "I2PChat"
 
 msgid "Server"
 msgstr "Server"
@@ -4232,7 +4232,7 @@ msgid "Review current bans"
 msgstr "Rivedi i divieti attuali"
 
 msgid "Delete Sybil Blocklist"
-msgstr ""
+msgstr "Cancella lista blocco Sybil"
 
 msgid "Floodfill Summary"
 msgstr "Riepilogo Floodfill"
@@ -5654,7 +5654,7 @@ msgid "Event Log"
 msgstr "Registro Eventi"
 
 msgid "graph"
-msgstr ""
+msgstr "grafico"
 
 msgid "Performance Graph"
 msgstr "Grafico delle prestazioni"
@@ -5792,10 +5792,10 @@ msgid "When set to true, the router will change its identity and UDP port when t
 msgstr "Quando impostato su true, il router cambierà la sua identità e la porta UDP quando il router si riavvia e quindi eliminerà la chiave da router.config per impedire ulteriori modifiche. [Il valore predefinito è false]"
 
 msgid "When set to false, the router will not throttle tunnel build requests from other routers, and should be used with caution. [Default is true, restart required]"
-msgstr ""
+msgstr "Quando impostato su falso, il router non limita le richieste di creazione di tunnel provenienti da altri router e dovrebbe essere utilizzato con cautela. [Predefinito vero, richiede riavvio]"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
-msgstr ""
+msgstr "Quando impostato su falso, il router non blocca le richieste di creazione di tunnel da router più lenti o non raggiungibili che eseguono versioni precedenti. [Predefinito vero, richiede riavvio]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Quando configurato, questo imposta un limite rigido per il numero di tunnel che il router è autorizzato a costruire contemporaneamente. Per impostazione predefinita, il router utilizza il tempo medio di creazione e la larghezza di banda in uscita corrente per determinare il tasso di costruzione ottimale. [Richiede riavvio]"
@@ -5906,7 +5906,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Questa impostazione, quando impostata su true, visualizzerà i link <i>Siti di interesse</ i> sulla <a href=/sitemap> mappa del sito </a>. [Il valore predefinito è false]"
 
 msgid "This setting permits a custom text prefix to be set for the page title on router console pages, potentially useful when you have multiple consoles open on browser tabs and want an easy method to differentiate between them."
-msgstr ""
+msgstr "Questa impostazione consente di impostare un prefisso di testo personalizzato per il titolo della pagina nelle pagine della console del router, potenzialmente utile quando hai aperto più console su schede del browser e vuoi un metodo semplice per differenziarle."
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Questa impostazione consente la configurazione di server NTP alternativi necessari per garantire che il router mantenga un orario preciso. [Il valore predefinito è 0.pool.ntp.org, 1.pool.ntp.org, 2.pool.ntp.org]"
@@ -7344,7 +7344,7 @@ msgid "Configure router logging options"
 msgstr "Configura opzioni di log del router"
 
 msgid "Filter Router log output"
-msgstr ""
+msgstr "Filtra l'output del log del router"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Log (Wrapper) dei servizi"
@@ -7353,10 +7353,10 @@ msgid "network database"
 msgstr "database della rete"
 
 msgid "network database router map"
-msgstr ""
+msgstr "Mappa del router della base dati di rete"
 
 msgid "Network Database Router Map"
-msgstr ""
+msgstr "Mappa del router della base dati di rete"
 
 msgid "News"
 msgstr "Notizie"
@@ -7591,10 +7591,10 @@ msgid "Local Tunnels"
 msgstr "Tunnel Locali"
 
 msgid "Toggle Tunnel Ids"
-msgstr ""
+msgstr "Attiva/Disattiva ID tunnel"
 
 msgid "Toggle Tunnels"
-msgstr ""
+msgstr "Attiva/Disattiva tunnel"
 
 msgid "Peer Profile"
 msgstr "Profilo del peer"
